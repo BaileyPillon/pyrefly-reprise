@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vite/
+*.log
+.DS_Store
+Thumbs.db
+# local-only hi-fi asset drop-in (never committed)
+public/assets/hifi/
+# playwright / critic outputs
+test-results/
+playwright-report/
+critic/screens/
