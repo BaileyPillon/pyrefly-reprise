@@ -8,15 +8,20 @@
     <title>Pyrefly Reprise</title>
     <style>
       /* ---- font stack ------------------------------------------------------
-         Real OFL webfonts are dropped in later by the assets agent; they will
-         register the families "Pyrefly Display" and "Pyrefly Text" via @font-face.
-         Until then these fall through to the system stack below.            */
+         Self-hosted OFL webfonts (see research/assets-and-tech.md §1). The
+         @font-face rules themselves live in src/ui/common/fonts.css, imported
+         from src/main.ts; these variables are also set here, synchronously,
+         so the pre-boot markup below (#boot) already asks for the right
+         family instead of flashing a mismatched fallback while main.ts's
+         module script loads. Fallback chains are unchanged from the
+         placeholder stack this replaces.                                    */
       :root {
-        --font-display: 'Pyrefly Display', 'Cinzel', 'Trajan Pro', 'Iowan Old Style',
+        --font-display: 'Chakra Petch', 'Cinzel', 'Trajan Pro', 'Iowan Old Style',
           'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
-        --font-text: 'Pyrefly Text', 'Inter', 'Segoe UI Variable Text', 'Segoe UI',
+        --font-text: 'Exo 2', 'Inter', 'Segoe UI Variable Text', 'Segoe UI',
           system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-        --font-mono: 'Cascadia Mono', 'Consolas', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --font-mono: 'Silkscreen', 'Cascadia Mono', 'Consolas', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --font-numbers: 'Rajdhani', 'Exo 2', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
 
         --ink: #eaf2ff;
         --ink-dim: #9fb3cf;

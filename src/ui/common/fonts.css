@@ -1,0 +1,122 @@
+/*
+ * Self-hosted OFL webfonts for Pyrefly Reprise.
+ *
+ * Font files live in public/fonts/<family>/ (each with its own OFL.txt) and
+ * are served from the site root, so `/fonts/...` below resolves under Vite's
+ * configured `base` in both dev and the production build (see vite.config.ts).
+ *
+ * Picks and roles are pinned in research/assets-and-tech.md §1.2/§1.4:
+ *   - Exo 2       -> primary UI / menus / dialogue text (the "FFX register")
+ *   - Chakra Petch-> FFX-2 UI / display headers, wide + squared + techno
+ *   - Rajdhani    -> condensed numerals: HP/MP bars, stat readouts, timers
+ *   - Silkscreen  -> pixel font: small UI, tooltips, debug HUD
+ *
+ * Self-hosting (rather than the Google Fonts CDN) is a deliberate choice —
+ * see §1.4: the offline zip build has no network, and Playwright screenshot
+ * determinism (§5.3) would break under a CDN that can change subsets.
+ *
+ * Damage numbers are rendered to a canvas texture, not the DOM (§1.5), and
+ * reference 'Chakra Petch' directly in that code path rather than through a
+ * CSS variable.
+ */
+
+@font-face {
+  font-family: 'Exo 2';
+  src: url('/fonts/exo2/Exo2-Variable-wght.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Exo 2';
+  src: url('/fonts/exo2/Exo2-Italic-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/chakra-petch/ChakraPetch-Regular-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/chakra-petch/ChakraPetch-BoldItalic-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('/fonts/rajdhani/Rajdhani-Regular-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('/fonts/rajdhani/Rajdhani-Medium-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('/fonts/rajdhani/Rajdhani-SemiBold-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('/fonts/rajdhani/Rajdhani-Bold-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/silkscreen/Silkscreen-Regular-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/silkscreen/Silkscreen-Bold-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* FFX-2 UI / display headers, title marks, menu chrome (wide, squared, techno) */
+  --font-display: 'Chakra Petch', 'Cinzel', 'Trajan Pro', 'Iowan Old Style',
+    'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+  /* Primary UI / menus / dialogue text (the "FFX register") */
+  --font-text: 'Exo 2', 'Inter', 'Segoe UI Variable Text', 'Segoe UI',
+    system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  /* Pixel font: small UI, tooltips, debug HUD, console */
+  --font-mono: 'Silkscreen', 'Cascadia Mono', 'Consolas', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Condensed numerals: HP/MP bars, stat readouts, timers */
+  --font-numbers: 'Rajdhani', 'Exo 2', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+}

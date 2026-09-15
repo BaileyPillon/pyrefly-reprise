@@ -1,3 +1,4 @@
+import './ui/common/fonts.css';
 import { App } from './app/App.ts';
 import { audio } from './audio/index.ts';
 import { DemoScene } from './app/screens/DemoScene.ts';

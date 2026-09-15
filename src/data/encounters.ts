@@ -1,0 +1,271 @@
+/**
+ * The five chapters.
+ *
+ * **Contract file.** `ChapterSelect`, `PartyPrep`, the cutscene runner, the
+ * battle screens and the debug API all key off {@link ChapterId}. Everything
+ * else about a chapter hangs off the record here, so adding content means
+ * editing the referenced data module, not this file.
+ *
+ * Scope is fixed by `docs/ARCHITECTURE.md` and confirmed in
+ * `research/writing-bible.md` §0.1. Note two things the research settles:
+ * - Braska's Final Aeon, the possessed aeons and Yu Yevon are **one** chapter.
+ * - FFX-2 Bahamut is a chapter in its own right, and its story knowledge state
+ *   is **Chapter 2, Limbo** even though we label it chapter 4
+ *   [writing-bible §0.3].
+ */
+
+import type {
+  EnemyGroupDef,
+  FFXPartyBuild,
+  FFX2PartyBuild,
+  GameId,
+  MusicKey,
+} from '../battle/common/types.ts';
+import type { ChapterScripts } from '../story/dsl.ts';
+
+import { gagazetBuild } from './ffx/builds/gagazet.ts';
+import { zanarkandBuild } from './ffx/builds/zanarkand.ts';
+import { dreamsEndBuild } from './ffx/builds/dreams-end.ts';
+import { seymourFluxGroup } from './ffx/enemies/seymour-flux.ts';
+import { yunalescaGroup } from './ffx/enemies/yunalesca.ts';
+import { braskasFinalAeonGroup } from './ffx/enemies/braskas-final-aeon.ts';
+
+import { bevelleBuild } from './ffx2/builds/bevelle.ts';
+import { farplaneBuild } from './ffx2/builds/farplane.ts';
+import { bahamutGroup } from './ffx2/enemies/bahamut.ts';
+import { vegnagunTailGroup } from './ffx2/enemies/vegnagun-shuyin.ts';
+
+import { seymourFluxScripts } from '../story/scripts/seymour-flux.ts';
+import { yunalescaScripts } from '../story/scripts/yunalesca.ts';
+import { braskasFinalAeonScripts } from '../story/scripts/braskas-final-aeon.ts';
+import { ffx2BahamutScripts } from '../story/scripts/ffx2-bahamut.ts';
+import { ffx2VegnagunShuyinScripts } from '../story/scripts/ffx2-vegnagun-shuyin.ts';
+
+/** The five chapter ids. Also the keys used in `SaveData.chapters`. */
+export type ChapterId =
+  | 'seymour-flux'
+  | 'yunalesca'
+  | 'braskas-final-aeon'
+  | 'ffx2-bahamut'
+  | 'ffx2-vegnagun-shuyin';
+
+/** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
+export interface ChapterMusic {
+  /** Plays over the pre-battle cutscene. */
+  scene: MusicKey;
+  /** The battle theme. */
+  battle: MusicKey;
+  /** Swapped in at the chapter's phase break, when it has one. */
+  phase2?: MusicKey;
+  /** Victory fanfare. Chapter 4 is deliberately silent — see its record. */
+  victory?: MusicKey;
+  /** Plays over the post-battle cutscene. */
+  post: MusicKey;
+}
+
+/** One chapter: everything the app needs to select, stage, fight and resolve it. */
+export interface Chapter {
+  id: ChapterId;
+  game: GameId;
+  /** Display order on the chapter-select screen, 1–5. */
+  number: 1 | 2 | 3 | 4 | 5;
+  /** Card title. The encounter's name. */
+  title: string;
+  /** Card subtitle. One clause, no period. */
+  subtitle: string;
+  /** Where it happens, as the player would say it. */
+  location: string;
+  /** Two or three sentences in FFX's register for the chapter-select card. Short. */
+  blurb: string;
+  /** Diorama builder key in `src/scenes/`. */
+  sceneKey: string;
+  /** Chapter-select card art key. */
+  thumbnailKey: string;
+  /** The party at this chapter's build point. */
+  buildRef: FFXPartyBuild | FFX2PartyBuild;
+  /** The first (or only) enemy formation. Chained encounters link on via `nextGroupId`. */
+  enemyGroupRef: EnemyGroupDef;
+  /** Pre/post cutscenes, mid-battle triggers and victory quips. */
+  scriptsRef: ChapterScripts;
+  music: ChapterMusic;
+  /**
+   * Targeting-bar Sensor lines, keyed by enemy combatant id. Duplicated from
+   * the enemy records so the Sensor panel has one lookup, and so a chapter can
+   * override a line without editing the stat block.
+   * [writing-bible §5.3 — Sensor text is in-world advice and is allowed to be wrong.]
+   */
+  sensorTexts: Record<string, string>;
+}
+
+/** Chapter 1. */
+export const SEYMOUR_FLUX: Chapter = {
+  id: 'seymour-flux',
+  game: 'ffx',
+  number: 1,
+  title: 'Seymour Flux',
+  subtitle: 'The mountain of the Ronso, and what was done to them',
+  location: 'Mt. Gagazet — the Prominence',
+  blurb:
+    'The Ronso held the gate so the summoner could pass. Seymour calls it mercy. ' +
+    'He is still unsent, he is waiting on the trail, and everything he says about Jecht is true.',
+  sceneKey: 'gagazet',
+  thumbnailKey: 'chapter-seymour-flux',
+  buildRef: gagazetBuild,
+  enemyGroupRef: seymourFluxGroup,
+  scriptsRef: seymourFluxScripts,
+  music: {
+    scene: 'boss-dread',
+    battle: 'battle-ffx',
+    victory: 'title',
+    post: 'title',
+  },
+  sensorTexts: {
+    'seymour-flux': 'Turns healing into a weapon. Kill the floating thing before it finishes counting.',
+    mortiorchis: 'It is not attacking you. It is waiting for a number to fill.',
+  },
+};
+
+/** Chapter 2. */
+export const YUNALESCA: Chapter = {
+  id: 'yunalesca',
+  game: 'ffx',
+  number: 2,
+  title: 'Lady Yunalesca',
+  subtitle: 'The first summoner, and the price she set',
+  location: 'Zanarkand Dome — the great hall',
+  blurb:
+    'A thousand years of pilgrims came here to be told what it costs. ' +
+    'She will explain it kindly. She will change twice. Someone has to refuse her.',
+  sceneKey: 'zanarkand-dome',
+  thumbnailKey: 'chapter-yunalesca',
+  buildRef: zanarkandBuild,
+  enemyGroupRef: yunalescaGroup,
+  scriptsRef: yunalescaScripts,
+  music: {
+    scene: 'boss-dread',
+    battle: 'battle-ffx',
+    phase2: 'boss-dread',
+    victory: 'title',
+    post: 'title',
+  },
+  sensorTexts: {
+    yunalesca: 'Weak to Holy, they say. They have been saying it for a thousand years.',
+  },
+};
+
+/** Chapter 3 — one continuous chapter, four battles deep. */
+export const BRASKAS_FINAL_AEON: Chapter = {
+  id: 'braskas-final-aeon',
+  game: 'ffx',
+  number: 3,
+  title: "Braska's Final Aeon",
+  subtitle: 'A father, a promise, and the thing that was wearing him',
+  location: "Dream's End — inside Sin",
+  blurb:
+    'The arena is a stadium remembered wrong. Jecht is waiting in it, and he is not sorry, ' +
+    'and he cannot stop. Afterwards the aeons come back one at a time, wearing someone else.',
+  sceneKey: 'dreams-end',
+  thumbnailKey: 'chapter-braskas-final-aeon',
+  buildRef: dreamsEndBuild,
+  enemyGroupRef: braskasFinalAeonGroup,
+  scriptsRef: braskasFinalAeonScripts,
+  music: {
+    scene: 'boss-dread',
+    battle: 'battle-ffx',
+    phase2: 'boss-dread',
+    victory: 'title',
+    post: 'title',
+  },
+  sensorTexts: {
+    'braskas-final-aeon': 'The pillars keep it standing. Take the pillars.',
+    'yu-pagoda-left': 'Every kindness it performs is aimed at you.',
+    'yu-pagoda-right': 'Every kindness it performs is aimed at you.',
+    'yu-yevon': 'It cannot be reasoned with. It stopped being anyone a long time ago.',
+  },
+};
+
+/**
+ * Chapter 4.
+ *
+ * Uniquely, this fight has **no victory pose and no fanfare** — the Results
+ * screen comes up silent [writing-bible §5.4], which is why `music.victory` is
+ * absent rather than set to a track.
+ */
+export const FFX2_BAHAMUT: Chapter = {
+  id: 'ffx2-bahamut',
+  game: 'ffx2',
+  number: 4,
+  title: 'Bahamut',
+  subtitle: 'Something she used to call by name',
+  location: 'Bevelle Underground — Limbo',
+  blurb:
+    'Under the temple, in the hangar where Vegnagun used to stand, an aeon is waiting ' +
+    'and it is not itself. Nobody cheers when this one is over.',
+  sceneKey: 'bevelle-underground',
+  thumbnailKey: 'chapter-ffx2-bahamut',
+  buildRef: bevelleBuild,
+  enemyGroupRef: bahamutGroup,
+  scriptsRef: ffx2BahamutScripts,
+  music: {
+    scene: 'boss-dread',
+    battle: 'battle-ffx',
+    // No `victory`: the flourish is suppressed for this chapter.
+    post: 'title',
+  },
+  sensorTexts: {
+    bahamut: 'An aeon that once fought alongside Yuna.',
+  },
+};
+
+/** Chapter 5 — five battles with no menu between. */
+export const FFX2_VEGNAGUN_SHUYIN: Chapter = {
+  id: 'ffx2-vegnagun-shuyin',
+  game: 'ffx2',
+  number: 5,
+  title: 'Vegnagun',
+  subtitle: 'Take it apart before it finishes the note',
+  location: 'Heart of the Farplane — Vegnagun’s chamber',
+  blurb:
+    'A thousand-year gun the size of a cathedral, and a boy inside it who has been ' +
+    'grieving for just as long. Tail, leg, body, head. Then the boy.',
+  sceneKey: 'farplane',
+  thumbnailKey: 'chapter-ffx2-vegnagun-shuyin',
+  buildRef: farplaneBuild,
+  enemyGroupRef: vegnagunTailGroup,
+  scriptsRef: ffx2VegnagunShuyinScripts,
+  music: {
+    scene: 'boss-dread',
+    battle: 'battle-ffx',
+    phase2: 'boss-dread',
+    victory: 'title',
+    post: 'title',
+  },
+  sensorTexts: {
+    'vegnagun-tail': 'Kill the arms before you look it in the face.',
+    'vegnagun-head': 'Kill the arms before you look it in the face.',
+    shuyin: 'Fights like someone you loved. He is not.',
+  },
+};
+
+/** All five, in play order. */
+export const CHAPTERS: readonly Chapter[] = [
+  SEYMOUR_FLUX,
+  YUNALESCA,
+  BRASKAS_FINAL_AEON,
+  FFX2_BAHAMUT,
+  FFX2_VEGNAGUN_SHUYIN,
+] as const;
+
+/** Chapter ids, in play order. */
+export const CHAPTER_IDS: readonly ChapterId[] = [
+  'seymour-flux',
+  'yunalesca',
+  'braskas-final-aeon',
+  'ffx2-bahamut',
+  'ffx2-vegnagun-shuyin',
+] as const;
+
+/** Look a chapter up by id. Returns `undefined` for an unknown id. */
+export function getChapter(id: string): Chapter | undefined {
+  return CHAPTERS.find((c) => c.id === id);
+}

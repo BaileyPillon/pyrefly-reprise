@@ -12,10 +12,10 @@ Why not Unreal: the user has UE 5.8 installed, but Unreal would mean multi-GB bu
 
 | # | Game | Encounter | Location | Party build point |
 |---|------|-----------|----------|-------------------|
-| 1 | FFX | Seymour Flux + Mortibody | Mt. Gagazet trail | Post-Ronso, pre-summit |
+| 1 | FFX | Seymour Flux + Mortiorchis | Mt. Gagazet trail | Post-Ronso, pre-summit |
 | 2 | FFX | Lady Yunalesca (3 forms) | Zanarkand Dome great hall | After the Chamber of the Fayth |
 | 3 | FFX | Braska's Final Aeon (2 forms) → possessed aeons → Yu Yevon | Dream's End / Inside Sin | Endgame, no superboss grinding |
-| 4 | FFX-2 | Bahamut | Bevelle Underground (Ch. 3) | Level ~32 |
+| 4 | FFX-2 | Bahamut | Bevelle Underground (Ch. 2) | Level ~25 |
 | 5 | FFX-2 | Vegnagun parts → Shuyin | Farplane (Ch. 5) | Level ~48 |
 
 ## Runtime flow
