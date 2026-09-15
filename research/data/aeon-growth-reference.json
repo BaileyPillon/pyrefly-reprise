@@ -1,0 +1,466 @@
+{
+  "source": "https://github.com/Grayfox96/FFX-RNG-tracker/blob/0acf1ac3190c4b75b6a8e9f02eb47897da20c680/ffx_rng_tracker/data/constants.py",
+  "calculationSource": "https://github.com/Grayfox96/FFX-RNG-tracker/blob/0acf1ac3190c4b75b6a8e9f02eb47897da20c680/ffx_rng_tracker/gamestate.py",
+  "formula": "For each stat take max(floor(YunaStat*xPercent/100)+floor(YunaPower*yNumerator/yDenominator),floor(encounterStat*xPercent/100)+floor(encounterPower*yNumerator/yDenominator)), then add any trained aeon stat bonus. Luck follows Yuna plus bonus.",
+  "powerFormula": "floor(min(HP,9999)/100)+floor(min(MP,999)/10)+STR+DEF+MAG+MDEF+AGI+EVA+ACC",
+  "encounterTier": "clamp(floor((encounters-30)/30),0,19)",
+  "coefficients": {
+    "valefor": {
+      "HP": {
+        "xPercent": 20,
+        "yNumerator": 6,
+        "yDenominator": 1
+      },
+      "MP": {
+        "xPercent": 4,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "STRENGTH": {
+        "xPercent": 60,
+        "yNumerator": 1,
+        "yDenominator": 7
+      },
+      "DEFENSE": {
+        "xPercent": 50,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "MAGIC": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 70
+      },
+      "MAGIC_DEFENSE": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 30
+      },
+      "AGILITY": {
+        "xPercent": 50,
+        "yNumerator": 1,
+        "yDenominator": 20
+      },
+      "EVASION": {
+        "xPercent": 50,
+        "yNumerator": 1,
+        "yDenominator": 24
+      },
+      "ACCURACY": {
+        "xPercent": 200,
+        "yNumerator": 1,
+        "yDenominator": 20
+      }
+    },
+    "ifrit": {
+      "HP": {
+        "xPercent": 70,
+        "yNumerator": 5,
+        "yDenominator": 1
+      },
+      "MP": {
+        "xPercent": 3,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "STRENGTH": {
+        "xPercent": 80,
+        "yNumerator": 1,
+        "yDenominator": 7
+      },
+      "DEFENSE": {
+        "xPercent": 170,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "MAGIC": {
+        "xPercent": 90,
+        "yNumerator": 1,
+        "yDenominator": 33
+      },
+      "MAGIC_DEFENSE": {
+        "xPercent": 90,
+        "yNumerator": 1,
+        "yDenominator": 34
+      },
+      "AGILITY": {
+        "xPercent": 40,
+        "yNumerator": 1,
+        "yDenominator": 20
+      },
+      "EVASION": {
+        "xPercent": 30,
+        "yNumerator": 1,
+        "yDenominator": 70
+      },
+      "ACCURACY": {
+        "xPercent": 200,
+        "yNumerator": 1,
+        "yDenominator": 20
+      }
+    },
+    "ixion": {
+      "HP": {
+        "xPercent": 55,
+        "yNumerator": 6,
+        "yDenominator": 1
+      },
+      "MP": {
+        "xPercent": 5,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "STRENGTH": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 7
+      },
+      "DEFENSE": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "MAGIC": {
+        "xPercent": 90,
+        "yNumerator": 1,
+        "yDenominator": 38
+      },
+      "MAGIC_DEFENSE": {
+        "xPercent": 130,
+        "yNumerator": 1,
+        "yDenominator": 30
+      },
+      "AGILITY": {
+        "xPercent": 30,
+        "yNumerator": 1,
+        "yDenominator": 20
+      },
+      "EVASION": {
+        "xPercent": 30,
+        "yNumerator": 1,
+        "yDenominator": 47
+      },
+      "ACCURACY": {
+        "xPercent": 250,
+        "yNumerator": 1,
+        "yDenominator": 20
+      }
+    },
+    "shiva": {
+      "HP": {
+        "xPercent": 40,
+        "yNumerator": 6,
+        "yDenominator": 1
+      },
+      "MP": {
+        "xPercent": 7,
+        "yNumerator": 1,
+        "yDenominator": 5
+      },
+      "STRENGTH": {
+        "xPercent": 120,
+        "yNumerator": 1,
+        "yDenominator": 8
+      },
+      "DEFENSE": {
+        "xPercent": 40,
+        "yNumerator": 1,
+        "yDenominator": 7
+      },
+      "MAGIC": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 28
+      },
+      "MAGIC_DEFENSE": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 25
+      },
+      "AGILITY": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 23
+      },
+      "EVASION": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 44
+      },
+      "ACCURACY": {
+        "xPercent": 200,
+        "yNumerator": 1,
+        "yDenominator": 20
+      }
+    },
+    "bahamut": {
+      "HP": {
+        "xPercent": 100,
+        "yNumerator": 7,
+        "yDenominator": 1
+      },
+      "MP": {
+        "xPercent": 5,
+        "yNumerator": 3,
+        "yDenominator": 10
+      },
+      "STRENGTH": {
+        "xPercent": 160,
+        "yNumerator": 1,
+        "yDenominator": 7
+      },
+      "DEFENSE": {
+        "xPercent": 200,
+        "yNumerator": 1,
+        "yDenominator": 6
+      },
+      "MAGIC": {
+        "xPercent": 90,
+        "yNumerator": 1,
+        "yDenominator": 250
+      },
+      "MAGIC_DEFENSE": {
+        "xPercent": 100,
+        "yNumerator": 1,
+        "yDenominator": 12
+      },
+      "AGILITY": {
+        "xPercent": 50,
+        "yNumerator": 1,
+        "yDenominator": 20
+      },
+      "EVASION": {
+        "xPercent": 50,
+        "yNumerator": 1,
+        "yDenominator": 20
+      },
+      "ACCURACY": {
+        "xPercent": 200,
+        "yNumerator": 1,
+        "yDenominator": 20
+      }
+    }
+  },
+  "encounterFloorYunaStats": {
+    "HP": [
+      475,
+      475,
+      675,
+      875,
+      875,
+      1075,
+      1075,
+      1075,
+      1275,
+      1475,
+      1475,
+      1475,
+      1675,
+      1875,
+      1875,
+      1875,
+      2075,
+      2075,
+      2275,
+      2275
+    ],
+    "MP": [
+      84,
+      104,
+      104,
+      104,
+      124,
+      144,
+      144,
+      164,
+      184,
+      184,
+      204,
+      204,
+      224,
+      224,
+      244,
+      244,
+      264,
+      264,
+      304,
+      304
+    ],
+    "STRENGTH": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "DEFENSE": [
+      5,
+      5,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      15,
+      15,
+      15,
+      15,
+      15
+    ],
+    "MAGIC": [
+      20,
+      23,
+      26,
+      26,
+      29,
+      29,
+      32,
+      36,
+      40,
+      40,
+      44,
+      44,
+      48,
+      48,
+      52,
+      52,
+      56,
+      56,
+      60,
+      60
+    ],
+    "MAGIC_DEFENSE": [
+      20,
+      23,
+      23,
+      26,
+      29,
+      32,
+      36,
+      36,
+      36,
+      40,
+      40,
+      44,
+      48,
+      48,
+      52,
+      52,
+      52,
+      56,
+      56,
+      60
+    ],
+    "AGILITY": [
+      10,
+      10,
+      13,
+      13,
+      13,
+      16,
+      16,
+      20,
+      20,
+      24,
+      24,
+      28,
+      28,
+      32,
+      32,
+      36,
+      36,
+      36,
+      40,
+      40
+    ],
+    "LUCK": [
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17
+    ],
+    "EVASION": [
+      30,
+      32,
+      32,
+      32,
+      32,
+      36,
+      36,
+      36,
+      40,
+      40,
+      44,
+      44,
+      44,
+      48,
+      48,
+      52,
+      52,
+      56,
+      56,
+      60
+    ],
+    "ACCURACY": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ]
+  }
+}

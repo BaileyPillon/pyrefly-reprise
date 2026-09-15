@@ -1,0 +1,380 @@
+/**
+ * Unified input: keyboard, gamepad and pointer, reduced to a small set of
+ * abstract buttons that every screen and menu speaks.
+ *
+ * The game never listens to raw events. Once per frame {@link Input.update} is
+ * called, and screens receive the resulting {@link InputSnapshot}.
+ */
+
+export type Button =
+  | 'up'
+  | 'down'
+  | 'left'
+  | 'right'
+  | 'confirm'
+  | 'cancel'
+  | 'triangle'
+  | 'start'
+  | 'select'
+  | 'l1'
+  | 'r1';
+
+export const BUTTONS: readonly Button[] = [
+  'up',
+  'down',
+  'left',
+  'right',
+  'confirm',
+  'cancel',
+  'triangle',
+  'start',
+  'select',
+  'l1',
+  'r1',
+];
+
+const DIRECTIONS: readonly Button[] = ['up', 'down', 'left', 'right'];
+
+/** KeyboardEvent.code -> abstract button. */
+const KEY_MAP: Record<string, Button> = {
+  ArrowUp: 'up',
+  KeyW: 'up',
+  ArrowDown: 'down',
+  KeyS: 'down',
+  ArrowLeft: 'left',
+  KeyA: 'left',
+  ArrowRight: 'right',
+  KeyD: 'right',
+
+  Enter: 'confirm',
+  NumpadEnter: 'confirm',
+  Space: 'confirm',
+  KeyZ: 'confirm',
+
+  Escape: 'cancel',
+  KeyX: 'cancel',
+  Backspace: 'cancel',
+
+  ShiftLeft: 'triangle',
+  ShiftRight: 'triangle',
+  Tab: 'triangle',
+  KeyQ: 'triangle',
+
+  KeyE: 'start',
+  KeyC: 'start',
+
+  KeyM: 'select',
+  KeyV: 'select',
+
+  KeyR: 'r1',
+  PageDown: 'r1',
+  KeyF: 'l1',
+  PageUp: 'l1',
+};
+
+/** Standard-gamepad button index -> abstract button. */
+const PAD_MAP: Record<number, Button> = {
+  0: 'confirm', // cross / A
+  1: 'cancel', // circle / B
+  3: 'triangle', // triangle / Y
+  4: 'l1',
+  5: 'r1',
+  8: 'select', // select / back / share
+  9: 'start',
+  12: 'up',
+  13: 'down',
+  14: 'left',
+  15: 'right',
+};
+
+const AXIS_DEADZONE = 0.45;
+const REPEAT_DELAY_MS = 360;
+const REPEAT_INTERVAL_MS = 110;
+
+/** Read-only view of this frame's input, handed to `Screen.handleInput`. */
+export interface InputSnapshot {
+  /** Held right now. */
+  pressed(button: Button): boolean;
+  /** Went down this frame (directions also fire on auto-repeat). */
+  justPressed(button: Button): boolean;
+  /** Came up this frame. */
+  justReleased(button: Button): boolean;
+  /** Consume a just-pressed edge so a parent screen does not also see it. */
+  consume(button: Button): boolean;
+  /** -1..1 analogue/dpad axes, dpad and WASD included. */
+  readonly axis: { x: number; y: number };
+  /** `data-action` values clicked/tapped this frame, in order. */
+  readonly actions: readonly string[];
+  /** True while any gamepad is connected. */
+  readonly gamepadConnected: boolean;
+  /** Most recent input device, for showing the right button prompts. */
+  readonly lastDevice: 'keyboard' | 'gamepad' | 'pointer';
+}
+
+interface ButtonState {
+  down: boolean;
+  downPrev: boolean;
+  /** Timestamp (ms) at which the next auto-repeat edge is due. */
+  nextRepeatAt: number;
+  /** Extra edge injected by auto-repeat this frame. */
+  repeated: boolean;
+  consumed: boolean;
+  /**
+   * Set by a press, cleared at the end of the frame that reports it. Without it
+   * a tap that goes down and up between two frames — synthetic keystrokes in
+   * e2e, a very fast real tap — would be swallowed entirely.
+   */
+  latched: boolean;
+}
+
+export interface InputOptions {
+  /** Element pointer clicks are listened on. Defaults to #ui, else document.body. */
+  pointerRoot?: HTMLElement;
+  /** Keyboard target. Defaults to window. */
+  keyboardTarget?: EventTarget;
+}
+
+export class Input implements InputSnapshot {
+  private readonly state = new Map<Button, ButtonState>();
+  private readonly heldKeys = new Set<string>();
+  private readonly pendingActions: string[] = [];
+  private frameActions: string[] = [];
+  private readonly pointerRoot: HTMLElement;
+  private readonly keyboardTarget: EventTarget;
+
+  private _axis = { x: 0, y: 0 };
+  private _gamepadConnected = false;
+  private _lastDevice: 'keyboard' | 'gamepad' | 'pointer' = 'keyboard';
+  private padDown = new Set<Button>();
+  private attached = false;
+  private now = 0;
+
+  constructor(opts: InputOptions = {}) {
+    this.pointerRoot =
+      opts.pointerRoot ?? (document.getElementById('ui') as HTMLElement | null) ?? document.body;
+    this.keyboardTarget = opts.keyboardTarget ?? window;
+    for (const b of BUTTONS) {
+      this.state.set(b, {
+        down: false,
+        downPrev: false,
+        nextRepeatAt: Infinity,
+        repeated: false,
+        consumed: false,
+        latched: false,
+      });
+    }
+  }
+
+  // ------------------------------------------------------------------ wiring
+
+  attach(): void {
+    if (this.attached) return;
+    this.attached = true;
+    this.keyboardTarget.addEventListener('keydown', this.onKeyDown as EventListener);
+    this.keyboardTarget.addEventListener('keyup', this.onKeyUp as EventListener);
+    window.addEventListener('blur', this.onBlur);
+    this.pointerRoot.addEventListener('click', this.onClick as EventListener);
+    window.addEventListener('gamepadconnected', this.onGamepadChange);
+    window.addEventListener('gamepaddisconnected', this.onGamepadChange);
+  }
+
+  detach(): void {
+    if (!this.attached) return;
+    this.attached = false;
+    this.keyboardTarget.removeEventListener('keydown', this.onKeyDown as EventListener);
+    this.keyboardTarget.removeEventListener('keyup', this.onKeyUp as EventListener);
+    window.removeEventListener('blur', this.onBlur);
+    this.pointerRoot.removeEventListener('click', this.onClick as EventListener);
+    window.removeEventListener('gamepadconnected', this.onGamepadChange);
+    window.removeEventListener('gamepaddisconnected', this.onGamepadChange);
+  }
+
+  private readonly onKeyDown = (e: KeyboardEvent): void => {
+    const button = KEY_MAP[e.code];
+    if (!button) return;
+    // Tab and the arrows would otherwise scroll or move focus out of the game.
+    if (e.code === 'Tab' || e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
+    if (e.repeat) return;
+    this.heldKeys.add(e.code);
+    this._lastDevice = 'keyboard';
+    this.press(button);
+  };
+
+  private readonly onKeyUp = (e: KeyboardEvent): void => {
+    const button = KEY_MAP[e.code];
+    if (!button) return;
+    this.heldKeys.delete(e.code);
+    // Another key bound to the same button may still be held.
+    const stillHeld = Object.entries(KEY_MAP).some(
+      ([code, b]) => b === button && this.heldKeys.has(code),
+    );
+    if (!stillHeld && !this.padDown.has(button)) this.release(button);
+  };
+
+  private readonly onBlur = (): void => {
+    this.heldKeys.clear();
+    this.padDown.clear();
+    for (const b of BUTTONS) this.release(b);
+  };
+
+  private readonly onClick = (e: Event): void => {
+    const target = e.target as HTMLElement | null;
+    const el = target?.closest?.('[data-action]') as HTMLElement | null;
+    if (!el) return;
+    const action = el.dataset['action'];
+    if (!action) return;
+    this._lastDevice = 'pointer';
+    this.pendingActions.push(action);
+  };
+
+  private readonly onGamepadChange = (): void => {
+    this._gamepadConnected = this.readPads().length > 0;
+  };
+
+  // ------------------------------------------------------------------- state
+
+  private press(button: Button): void {
+    const s = this.state.get(button)!;
+    if (!s.down) {
+      s.down = true;
+      s.nextRepeatAt = this.now + REPEAT_DELAY_MS;
+      s.latched = true;
+    }
+  }
+
+  private release(button: Button): void {
+    const s = this.state.get(button)!;
+    s.down = false;
+    s.nextRepeatAt = Infinity;
+  }
+
+  private readPads(): Gamepad[] {
+    const pads = navigator.getGamepads?.() ?? [];
+    return Array.from(pads).filter((p): p is Gamepad => p !== null && p.connected);
+  }
+
+  private pollGamepads(): void {
+    const pads = this.readPads();
+    this._gamepadConnected = pads.length > 0;
+    const next = new Set<Button>();
+    let ax = 0;
+    let ay = 0;
+
+    for (const pad of pads) {
+      for (const [indexStr, button] of Object.entries(PAD_MAP)) {
+        if (pad.buttons[Number(indexStr)]?.pressed) next.add(button);
+      }
+      const x = pad.axes[0] ?? 0;
+      const y = pad.axes[1] ?? 0;
+      if (Math.abs(x) > AXIS_DEADZONE) {
+        next.add(x < 0 ? 'left' : 'right');
+        ax = x;
+      }
+      if (Math.abs(y) > AXIS_DEADZONE) {
+        next.add(y < 0 ? 'up' : 'down');
+        ay = -y;
+      }
+    }
+
+    if (next.size > 0 && this.padDown.size === 0) this._lastDevice = 'gamepad';
+
+    for (const b of next) if (!this.padDown.has(b)) this.press(b);
+    for (const b of this.padDown) {
+      if (next.has(b)) continue;
+      const keyHeld = Object.entries(KEY_MAP).some(
+        ([code, mapped]) => mapped === b && this.heldKeys.has(code),
+      );
+      if (!keyHeld) this.release(b);
+    }
+    this.padDown = next;
+
+    if (ax !== 0 || ay !== 0) this._axis = { x: ax, y: ay };
+  }
+
+  /** Advance one frame. Call before dispatching to the active screen. */
+  update(nowMs: number = performance.now()): InputSnapshot {
+    this.now = nowMs;
+    this.pollGamepads();
+
+    for (const b of BUTTONS) {
+      const s = this.state.get(b)!;
+      s.repeated = false;
+      s.consumed = false;
+      if (s.down && s.downPrev && DIRECTIONS.includes(b) && nowMs >= s.nextRepeatAt) {
+        s.repeated = true;
+        s.nextRepeatAt = nowMs + REPEAT_INTERVAL_MS;
+      }
+    }
+
+    // Keyboard axis, only when the pad is not driving it.
+    if (this.padDown.size === 0) {
+      this._axis = {
+        x: (this.pressed('right') ? 1 : 0) - (this.pressed('left') ? 1 : 0),
+        y: (this.pressed('up') ? 1 : 0) - (this.pressed('down') ? 1 : 0),
+      };
+    }
+
+    this.frameActions = this.pendingActions.splice(0, this.pendingActions.length);
+    return this;
+  }
+
+  /** Call at the very end of the frame to roll edges forward. */
+  endFrame(): void {
+    for (const b of BUTTONS) {
+      const s = this.state.get(b)!;
+      s.downPrev = s.down;
+      s.latched = false;
+    }
+  }
+
+  // --------------------------------------------------------------- snapshot
+
+  pressed(button: Button): boolean {
+    return this.state.get(button)?.down ?? false;
+  }
+
+  justPressed(button: Button): boolean {
+    const s = this.state.get(button);
+    if (!s || s.consumed) return false;
+    return (s.down && !s.downPrev) || s.repeated || s.latched;
+  }
+
+  justReleased(button: Button): boolean {
+    const s = this.state.get(button);
+    if (!s) return false;
+    return !s.down && s.downPrev;
+  }
+
+  consume(button: Button): boolean {
+    const was = this.justPressed(button);
+    const s = this.state.get(button);
+    if (s && was) s.consumed = true;
+    return was;
+  }
+
+  get axis(): { x: number; y: number } {
+    return this._axis;
+  }
+
+  get actions(): readonly string[] {
+    return this.frameActions;
+  }
+
+  get gamepadConnected(): boolean {
+    return this._gamepadConnected;
+  }
+
+  get lastDevice(): 'keyboard' | 'gamepad' | 'pointer' {
+    return this._lastDevice;
+  }
+
+  /** Testing / debug hook: synthesise a button press for one frame. */
+  injectPress(button: Button): void {
+    this.press(button);
+  }
+
+  /** Testing / debug hook: synthesise a `data-action` click. */
+  injectAction(action: string): void {
+    this.pendingActions.push(action);
+  }
+}

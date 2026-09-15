@@ -10,3 +10,5 @@ public/assets/hifi/
 test-results/
 playwright-report/
 critic/screens/
+# sprite / tool render output
+build/
