@@ -31,3 +31,7 @@ public/art/
 # previews only and regenerate with `node tools/render-track.mjs all`.
 # (Four early previews were committed before this rule and remain tracked.)
 docs/audio/*.wav
+
+# local release zips and release build output
+releases/
+dist-release/
