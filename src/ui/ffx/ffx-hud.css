@@ -1,0 +1,250 @@
+/*
+ * The real FFX battle HUD, composed from the shared Ink & Gold layer
+ * (`src/ui/inkgold/`: tokens.css/slabs.css/screens.css, imported by
+ * FFXBattleHud.ts via `installInkGoldStyles()`). This file holds only what
+ * that shared layer does not: the 640x360 letterbox stage (same convention
+ * `HudMock.ts` and `tokens.css`'s authoring note both use), a handful of
+ * small local pieces Ink & Gold has no mocked component for (Sensor panel,
+ * telegraph banner, command-stack chrome extras), and the tiny functional
+ * badges (Overdrive-ready, charge stage, statuses) that intentionally stay
+ * off the one-gold-accent system because they carry state, not emphasis.
+ *
+ * Everything here is a descendant of `.ig` (set on the HUD root in
+ * FFXBattleHud.ts), so `var(--ig-*)` resolves throughout.
+ */
+
+.ffxhud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ffxhud[hidden] {
+  display: none !important;
+}
+
+.ffxhud__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+  font-family: var(--ig-font-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* An unscaled sibling layer for screen-space elements (damage numbers, target
+   cursors) positioned directly from the presenter's projector callback. */
+.ffxhud__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------- portrait fallback */
+
+/* Ink monogram chip behind a portrait <img> that removes itself on error
+   (portraits.ts); sized per context below since .ig-* face/tile classes
+   don't share one font-size. */
+.ffx-portrait-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  color: rgba(244, 241, 232, 0.8);
+}
+.ffxhud .ig-ctb__tile .ffx-portrait-fallback { font-size: 8px; }
+.ffxhud .ig-stat__face .ffx-portrait-fallback { font-size: 12px; }
+.ffx-trigger__face .ffx-portrait-fallback { font-size: 10px; }
+
+/* ------------------------------------------------------------ CTB extras */
+
+/* Not part of Ink & Gold's component set (no accent may compete with gold) -
+   small functional dots so Overdrive-ready and a charging boss stay legible. */
+.ffxhud .ig-ctb__tile { position: relative; }
+.ffx-ctb-od {
+  position: absolute; left: -2px; top: -2px; width: 5px; height: 5px;
+  background: var(--ig-accent); transform: rotate(45deg);
+  box-shadow: 0 0 4px rgba(227, 185, 74, 0.9);
+}
+.ffx-ctb-charge {
+  position: absolute; left: -2px; bottom: -2px; width: 5px; height: 5px;
+  transform: rotate(45deg);
+}
+.ffx-ctb-statuses {
+  position: absolute; right: -3px; top: 0;
+  display: flex; flex-direction: column; gap: 1px;
+}
+.ffx-ctb-statuses i { width: 4px; height: 4px; display: block; }
+
+/* --------------------------------------------------------- party extras */
+
+.ffxhud .ig-stat { position: relative; transition: opacity 0.2s ease; }
+.ffxhud .ig-stat__value { transition: color 0.2s ease; }
+.ffx-stat__value--crit { color: #f2d24a !important; }
+.ffx-stat__value--danger { color: #f28a2e !important; }
+.ffx-stat__value--ko { color: #9fb0c4 !important; }
+.ffx-stat--ko { opacity: 0.5; filter: grayscale(1); }
+.ffx-stat--ko .ig-stat__name { text-decoration: line-through; }
+.ffx-stat--hurt { animation: ffx-hurt-flash 0.3s ease; }
+@keyframes ffx-hurt-flash {
+  0%, 100% { filter: brightness(1); }
+  40% { filter: brightness(1.6); }
+}
+.ffx-stat__statuses {
+  position: absolute; left: 8px; bottom: 2px;
+  display: flex; gap: 2px;
+}
+.ffx-stat__statuses i { width: 5px; height: 5px; background: var(--ig-spira-sky); display: block; }
+
+/* ------------------------------------------------------------- reticle */
+
+.ffx-reticle--dim { opacity: 0.55; }
+
+/* --------------------------------------------------------- command stack */
+
+/* Anchors the stack, its breadcrumb and the highlighted row's description
+   together bottom-up: column-reverse puts the first DOM child (the stack
+   itself) at the anchored bottom edge, so the other two float above it
+   regardless of how many rows the stack currently holds. Position matches
+   the spec's "Command stack (bottom-left 68 from left, 58 from bottom)"
+   converted to logical px (/2.25). */
+.ffx-cmd-area {
+  position: absolute; left: 30.22px; bottom: 25.78px;
+  display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 6px;
+  pointer-events: none;
+}
+.ffx-cmd-area .ig-cmd-stack,
+.ffx-cmd-area .ffx-cmd-breadcrumb,
+.ffx-cmd-area .ffx-cmd-info {
+  pointer-events: auto;
+}
+/* .ig-cmd-stack is `position: absolute` in slabs.css by design (the HUD
+   owner normally anchors it directly with left/right/bottom) -- that takes
+   it out of flow entirely, so our column-reverse stacking above never sees
+   it and the info/breadcrumb end up overlapping it. Putting it back in flow
+   here is what makes the shared anchor work as a flex item instead. */
+.ffx-cmd-area .ig-cmd-stack { position: static; }
+.ffx-cmd-breadcrumb {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 8px;
+  letter-spacing: 0.3em; color: var(--ig-accent); text-transform: uppercase;
+}
+.ffx-cmd-more {
+  align-self: center; color: var(--ig-gold-on-paper); font-size: 8px; line-height: 1;
+}
+.ffxhud .ig-cmd-stack--shake,
+.ffx-cmd-stack--shake { animation: ffx-shake 0.2s linear; }
+@keyframes ffx-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.ffx-cmd--trigger .ig-cmd__ready,
+.ffx-cmd--trigger > span { color: var(--ig-gold-on-paper); }
+
+/* Reusing .ig-cutin__info (designed for the turn cut-in's absolute
+   positioning) inside our own flex flow needs it to lay out in-flow instead. */
+.ffx-cmd-info { position: relative !important; max-width: 240px; }
+.ffx-cmd-info .ig-cutin__info-desc { font-style: normal; font-size: 8.5px; }
+
+/* -------------------------------------------------------------- sensor */
+
+/* Not part of Ink & Gold's mocked component set - a small ink info card;
+   gold marks a genuine weakness only, everything else stays neutral so it
+   doesn't compete with the accent's meaning elsewhere. Position kept from
+   the pre-restyle FFX layout (x360 y44 w180 h78 on this same 640x360 grid;
+   no @1440 conversion applies since it was never part of the Ink & Gold
+   mockups). */
+.ffx-sensor {
+  position: absolute; left: 200px; top: 24px; width: 100px;
+  padding: 6px 8px; background: var(--ig-ink-panel);
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+.ffx-sensor[hidden] { display: none; }
+.ffx-sensor > * { transform: skewX(var(--ig-skew-inverse)); }
+.ffx-sensor__name {
+  font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
+  font-size: 11px; color: var(--ig-paper); margin-bottom: 3px;
+}
+.ffx-sensor__hp { font-family: var(--ig-font-numeral); font-size: 10px; color: var(--ig-paper); margin-bottom: 2px; }
+.ffx-sensor__bar { width: 100%; height: 4px; background: #2a3246; margin-bottom: 4px; }
+.ffx-sensor__bar i { display: block; height: 100%; background: var(--ig-blood); }
+.ffx-sensor__chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.ffx-sensor__chip {
+  height: 13px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--ig-font-display); font-size: 6px; letter-spacing: 0.04em;
+  color: rgba(244, 241, 232, 0.4); background: rgba(11, 10, 18, 0.4);
+}
+.ffx-sensor__chip--weak { color: var(--ig-accent); }
+.ffx-sensor__chip--res, .ffx-sensor__chip--null, .ffx-sensor__chip--abs { color: rgba(244, 241, 232, 0.7); }
+.ffx-sensor__failed { font-size: 8px; color: rgba(244, 241, 232, 0.5); margin-top: 6px; }
+
+/* ----------------------------------------------------- telegraph banner */
+
+/* Not part of Ink & Gold's mocked component set - composed as an ink slab.
+   Amber/red are the sole exception to the one-gold-accent rule (see
+   TelegraphBanner.ts's header comment). Position kept from the pre-restyle
+   FFX layout for the same reason as .ffx-sensor above. */
+.ffx-telegraph {
+  position: absolute; left: 50%; top: 28px; transform: translateX(-50%) skewX(var(--ig-skew));
+  background: var(--ig-ink-panel); padding: 6px 28px; text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.ffx-telegraph--visible { opacity: 1; }
+.ffx-telegraph--stage-1 { border-bottom: 3px solid #f2a33a; }
+.ffx-telegraph--stage-2 { border-bottom: 3px solid #e8412e; animation: ffx-telegraph-pulse 0.5s ease-in-out infinite alternate; }
+@keyframes ffx-telegraph-pulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
+.ffx-telegraph__content { transform: skewX(var(--ig-skew-inverse)); }
+.ffx-telegraph__actor {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 8px;
+  letter-spacing: 0.2em; color: rgba(244, 241, 232, 0.7);
+}
+.ffx-telegraph__state { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: 18px; }
+.ffx-telegraph--stage-1 .ffx-telegraph__state { color: #f2a33a; }
+.ffx-telegraph--stage-2 .ffx-telegraph__state { color: #e8412e; }
+.ffx-screen-border {
+  position: absolute; inset: 2px; border: 1px solid #e8412e;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+}
+.ffx-screen-border--visible { opacity: 1; }
+
+/* -------------------------------------------------------- damage numerals */
+
+.ffx-numerals-layer { position: absolute; inset: 0; pointer-events: none; }
+
+.ffxhud .ig-damage {
+  transform: scale(1.3);
+  opacity: 1;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.4, 1), opacity 0.4s ease 0.5s;
+}
+/* Scoped to match `.ffxhud .ig-damage` above (0,2,0). Left at `.ffx-damage--settle`
+   it would be 0,1,0 and lose the `transform` contest, so numerals would pop in
+   and never settle — a silent regression from scoping the rule above. */
+.ffxhud .ffx-damage--settle { transform: translateY(-14px) scale(1); }
+.ffxhud .ffx-damage--settle.ffx-damage--spawn { opacity: 1; }
+
+.ffx-numeral-chip {
+  position: absolute; transform: translate(-50%, -50%);
+  font-family: var(--ig-font-numeral); font-weight: 700; font-size: 13px;
+  color: var(--ig-paper); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  opacity: 1; transition: transform 0.5s ease, opacity 0.4s ease 0.4s;
+}
+.ffx-numeral-chip.ffx-damage--settle { transform: translate(-50%, -150%); opacity: 0; }
+.ffx-numeral-chip--mp { color: var(--ig-spira-sky); font-size: 11px; }
+.ffx-numeral-chip--miss { color: rgba(244, 241, 232, 0.75); letter-spacing: 0.1em; font-size: 11px; }
+
+/* --------------------------------------------------------------- caption */
+
+.ffx-caption {
+  position: absolute; left: 16px; top: 4px;
+  font-family: var(--ig-font-text); font-size: 7px; line-height: 12px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.5);
+}

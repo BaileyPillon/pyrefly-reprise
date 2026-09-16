@@ -358,4 +358,6 @@ export type AccessoryId =
   | 'favorite-outfit'
   | 'ribbon'
   | 'adamantite'
-  | 'shmooth-shailing';
+  | 'shmooth-shailing'
+  /** Curseproof, Def +4 / MDef +4. Bahamut's own drop (common AND rare slot) [ffx2-bahamut §1.6]. */
+  | 'gris-gris-bag';

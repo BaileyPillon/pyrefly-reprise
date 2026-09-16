@@ -10,8 +10,10 @@ Five files are written first and imported by everyone else:
 | `src/data/encounters.ts` | The five `Chapter` records |
 | `src/data/ffx/ids.ts`, `src/data/ffx2/ids.ts` | Every string-literal id union |
 
-Plus the two that already existed: `src/sprites/format.ts` and
-`src/engine/SpriteActor.ts` (see `docs/ENGINE-API.md`).
+`src/sprites/format.ts` and `src/engine/SpriteActor.ts` were on this list while
+the game was pixel-art. They are **retired** — the game renders painted 2.5D
+through `src/engine/PaintedActor.ts` — and nothing in the app imports them any
+more. Do not build against them; see `docs/ENGINE-API.md`.
 
 **Do not edit a contract file without adding a note to
 `docs/CONTRACT-CHANGES.md`, newest first.** Additive changes (a new optional

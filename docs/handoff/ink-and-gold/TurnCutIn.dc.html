@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Rajdhani:wght@600;700&display=swap">
+  <style>
+    body { margin: 0; background: #0B0A12; }
+    a { color: #E3B94A; } a:hover { color: #F4F1E8; }
+    .frame { position: relative; width: 1440px; height: 810px; overflow: hidden; background: #0B0A12; font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif; color: #F4F1E8; }
+    .serif { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+    .num { font-family: 'Rajdhani', 'Bahnschrift', sans-serif; }
+    .cmd { display: flex; align-items: center; gap: 18px; width: 380px; height: 66px; padding: 0 26px 0 28px; background: #F4F1E8; color: #0B0A12; font-weight: 700; font-size: 28px; letter-spacing: 0.12em; text-transform: uppercase; transform: skewX(-12deg); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5); }
+    .cmd > * { transform: skewX(12deg); }
+    .cmd.sel { background: #E3B94A; }
+    .cmd small { margin-left: auto; font-size: 12px; letter-spacing: 0.22em; font-weight: 700; }
+  </style>
+</helmet>
+<div class="frame">
+  <img src="bg-gagazet.jpg" alt="" style="position: absolute; left: -20px; top: -20px; width: 1480px; height: 850px; object-fit: cover; filter: blur(7px) brightness(0.55) saturate(0.85);">
+  <img src="char-seymour.webp" alt="" style="position: absolute; left: 960px; top: 200px; height: 520px; filter: blur(3px) brightness(0.6);">
+  <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11, 10, 18, 0.1) 0%, rgba(11, 10, 18, 0.65) 100%);"></div>
+
+  <div class="serif" style="position: absolute; left: 470px; top: 60px; font-size: 300px; font-weight: 700; font-style: italic; line-height: 0.8; color: #E3B94A; opacity: 0.16; letter-spacing: -0.03em; white-space: nowrap;">TIDUS</div>
+
+  <div style="position: absolute; left: -90px; top: -30px; width: 620px; height: 880px; background: #F4F1E8; transform: skewX(-12deg); overflow: hidden; box-shadow: 30px 0 60px rgba(0, 0, 0, 0.55);">
+    <img src="portrait-tidus.webp" alt="" style="position: absolute; left: 60px; top: 0; height: 940px; transform: skewX(12deg); object-fit: cover;">
+    <div style="position: absolute; left: 0; bottom: 0; width: 100%; height: 220px; background: linear-gradient(180deg, rgba(244, 241, 232, 0) 0%, rgba(244, 241, 232, 0.95) 70%);"></div>
+  </div>
+  <div style="position: absolute; left: 512px; top: -30px; width: 8px; height: 880px; background: #E3B94A; transform: skewX(-12deg);"></div>
+
+  <div style="position: absolute; left: 60px; bottom: 60px; display: flex; flex-direction: column; gap: 4px;">
+    <div style="font-size: 14px; font-weight: 700; letter-spacing: 0.34em; color: #B8862A;">YOUR TURN · CTB 1 OF 3</div>
+    <div class="serif" style="font-size: 92px; font-weight: 700; font-style: italic; line-height: 0.9; color: #0B0A12; letter-spacing: -0.02em;">Tidus</div>
+  </div>
+
+  <div style="position: absolute; left: 640px; top: 176px; display: flex; flex-direction: column; gap: 10px;">
+    <div class="cmd sel" style="margin-left: 0;"><svg width="14" height="18" viewBox="0 0 14 18" xmlns="http://www.w3.org/2000/svg"><path d="M1 1 L13 9 L1 17 Z" fill="#0B0A12"></path></svg><span>Attack</span></div>
+    <div class="cmd" style="margin-left: 22px;"><span>Skills</span></div>
+    <div class="cmd" style="margin-left: 44px;"><span>Magic</span><span class="num" style="margin-left: auto; font-size: 24px; color: #3C79AE;">8</span></div>
+    <div class="cmd" style="margin-left: 66px;"><span>Items</span></div>
+    <div class="cmd" style="margin-left: 88px; background: #0B0A12; color: #E3B94A; border: 2px solid #E3B94A;"><span>Overdrive</span><small style="color: #F4F1E8;">READY</small></div>
+  </div>
+
+  <div style="position: absolute; left: 720px; top: 590px; width: 420px; padding: 18px 22px; background: rgba(11, 10, 18, 0.82); border-left: 4px solid #E3B94A; transform: skewX(-12deg);">
+    <div style="transform: skewX(12deg);">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.3em; color: #E3B94A;">SWORDPLAY — SLICE &amp; DICE</div>
+      <div class="serif" style="margin-top: 6px; font-size: 22px; font-style: italic; color: #F4F1E8; line-height: 1.2;">Hits every enemy in a rising arc. Land the cursor in the gold zone for up to six strikes.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

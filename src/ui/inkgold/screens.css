@@ -1,0 +1,247 @@
+/**
+ * Ink & Gold — screen-level component classes (Direction A, round 2).
+ *
+ * Traces to docs/handoff/presentation-ink-and-gold.md ("Screens" > the
+ * "round 2" bullet) and docs/handoff/ink-and-gold/{Title,PartyPrep,Dialogue,
+ * Swordplay,BattleFfx2}.dc.html. Same conversion rule as slabs.css: trailing
+ * comments give the spec's literal value(s) at its 1440px authoring width,
+ * the CSS value is that number / 2.25. Percents, em units, opacities and
+ * colours are copied verbatim — they don't scale; degrees don't either
+ * (skew/rotate angles are unitless-of-grid).
+ *
+ * Title, party prep and dialogue are FFX-1-only in the approved mockups (no
+ * .ig--ffx2 variant was mocked for them), so their slabs read --ig-skew/
+ * --ig-skew-inverse for consistency with the rest of the system but carry no
+ * FFX-2 override — if a FFX-2 title/prep/dialogue screen is ever built it
+ * inherits the mirror for free. .ig-minigame is shared by both chapter
+ * families as-is (Swordplay's mock has no accent-colour tell either way).
+ * .ig-bosshp is FFX-2-only per the spec bullet that introduces it.
+ */
+
+/* ---------------------------------------------------------------- title */
+
+/* ig-title: title screen. Slab from the left edge holding the game name;
+   Title.dc.html. */
+.ig-title { position: absolute; inset: 0; overflow: hidden; }
+.ig-title__slab {
+  position: absolute; left: -26.67px; top: 66.67px; width: 311.11px; height: 208.89px; /* -60 150 700 470 */
+  background: var(--ig-paper); transform: skewX(var(--ig-skew));
+  box-shadow: 13.33px 0 26.67px rgba(0, 0, 0, 0.5); /* 30 0 60 */
+}
+.ig-title__stripe {
+  position: absolute; left: 280.89px; top: 66.67px; width: 3.56px; height: 208.89px; /* 632 150 8 470 */
+  background: var(--ig-accent); transform: skewX(var(--ig-skew));
+}
+.ig-title__content { position: absolute; left: 32px; top: 87.11px; display: flex; flex-direction: column; } /* 72 196 */
+.ig-title__eyebrow { font-size: 6.22px; font-weight: 700; letter-spacing: 0.4em; color: var(--ig-gold-on-paper); } /* 14 */
+.ig-title__name {
+  margin-top: 9.78px; font-family: var(--ig-font-serif); font-size: 69.33px; /* 22 156 */
+  font-weight: 700; font-style: italic; line-height: 0.84; letter-spacing: -0.03em; color: var(--ig-ink);
+}
+.ig-title__name--second { margin-left: 48.89px; } /* 110, second line indented */
+.ig-title__rule { margin-top: 13.33px; margin-left: 2.67px; width: 160px; height: 1.33px; background: var(--ig-ink); } /* 30 6 360 3 */
+/* PRESS ENTER chip: draw its 10x14 right-pointing triangle inline as
+   `<svg viewBox="0 0 10 14"><path d="M1 1 L9 7 L1 13 Z" fill="#E3B94A"/></svg>` (4.44x6.22px). */
+.ig-title__chip {
+  margin-top: 11.56px; margin-left: 2.67px; align-self: flex-start; /* 26 6 */
+  display: inline-flex; align-items: center; gap: 6.22px; /* 14 */
+  padding: 5.33px 9.78px; background: var(--ig-ink); color: var(--ig-accent); /* 12 22 */
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 6.67px; letter-spacing: 0.34em; /* 15 */
+}
+.ig-title__caption {
+  position: absolute; left: 622.22px; top: 66.67px; white-space: nowrap; /* 1400 150 */
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 5.78px; letter-spacing: 0.36em; /* 13 */
+  color: var(--ig-accent); transform: rotate(90deg); transform-origin: left top;
+}
+
+/* ---------------------------------------------------------- party prep */
+
+/* ig-prep: party prep screen. PartyPrep.dc.html. */
+.ig-prep { position: absolute; inset: 0; }
+.ig-prep__eyebrow { position: absolute; left: 28.44px; top: 19.56px; display: flex; align-items: center; gap: 9.78px; } /* 64 44 22 */
+.ig-prep__eyebrow-bar { width: 24px; height: 1.78px; background: var(--ig-accent); } /* 54 4 */
+.ig-prep__eyebrow-label { font-size: 7.11px; font-weight: 700; letter-spacing: 0.4em; color: var(--ig-accent); } /* 16 */
+.ig-prep__chapter { position: absolute; right: 28.44px; top: 20.44px; font-size: 5.78px; font-weight: 700; letter-spacing: 0.3em; color: rgba(244, 241, 232, 0.7); } /* 64 46 13 */
+
+/* Roster: fixed rows, each indented 10px @1440 further than the last (a
+   HUD-owner-driven cascade, same convention as .ig-cmd-stack). */
+.ig-prep__roster { position: absolute; left: 32px; top: 48.89px; display: flex; flex-direction: column; gap: 3.56px; --ig-roster-step: 4.44px; } /* 72 110 8 10 */
+.ig-prep__member {
+  display: flex; align-items: center; gap: 6.22px; /* 14 */
+  width: 133.33px; height: 27.56px; padding-right: 7.11px; /* 300 62 16 */
+  background: var(--ig-ink-panel); border-left: 2.67px solid var(--ig-paper); /* 6 */
+  transform: skewX(var(--ig-skew));
+}
+.ig-prep__member > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-prep__member--selected { background: var(--ig-paper); color: var(--ig-ink); border-left-color: var(--ig-accent); }
+.ig-prep__face { width: 24.89px; height: 24.89px; margin-left: 1.78px; overflow: hidden; background: #1a1526; flex: none; } /* 56 4 */
+.ig-prep__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+.ig-prep__name { font-family: var(--ig-font-serif); font-size: 10.67px; font-weight: 700; font-style: italic; } /* 24 */
+.ig-prep__level { margin-left: auto; font-family: var(--ig-font-numeral); font-size: 6.67px; font-weight: 700; color: var(--ig-accent); } /* 15 */
+.ig-prep__member--selected .ig-prep__level { color: var(--ig-gold-on-paper); }
+
+.ig-prep__tabs { position: absolute; left: 231.11px; top: 49.78px; display: flex; gap: 17.78px; } /* 520 112 40 */
+.ig-prep__tab { font-size: 6.67px; font-weight: 700; letter-spacing: 0.22em; color: rgba(244, 241, 232, 0.6); padding-bottom: 4.44px; } /* 15 10 */
+.ig-prep__tab--active { color: var(--ig-paper); border-bottom: 1.78px solid var(--ig-accent); } /* 4 */
+
+/* Stats ledger: a lighter -8deg skew, distinct from the -12deg slab skew and
+   not part of the .ig--ffx2 mirror (no FFX-2 party prep was mocked) — see
+   the module comment above. Two-column grid, 10 rows of key/value. */
+.ig-prep__ledger {
+  position: absolute; left: 231.11px; top: 75.56px; width: 364.44px; /* 520 170 820 */
+  padding: 10.67px 15.11px 9.78px; background: var(--ig-paper); /* 24 34 22 */
+  transform: skewX(-8deg); box-shadow: 0 7.11px 17.78px rgba(0, 0, 0, 0.5); /* 16 40 */
+}
+.ig-prep__ledger-grid { transform: skewX(8deg); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 21.33px; } /* 48 */
+.ig-prep__row { display: flex; align-items: baseline; justify-content: space-between; padding: 4px 0 3.11px; border-bottom: 0.89px solid var(--ig-ink); } /* 9 7 2 */
+.ig-prep__row--last { border-bottom: 0; }
+.ig-prep__row-key { font-size: 5.78px; font-weight: 700; letter-spacing: 0.24em; color: var(--ig-gold-on-paper); } /* 13 */
+.ig-prep__row-value { font-family: var(--ig-font-numeral); font-size: 13.33px; font-weight: 700; line-height: 1; color: var(--ig-ink); } /* 30 */
+
+.ig-prep__slots { position: absolute; left: 32px; bottom: 26.67px; display: flex; gap: 9.78px; align-items: center; } /* 72 60 22 */
+.ig-prep__slot {
+  display: flex; align-items: center; gap: 7.11px; /* 16 */
+  width: 177.78px; height: 40.89px; padding-right: 8.89px; /* 400 92 20 */
+  background: var(--ig-paper); color: var(--ig-ink);
+  transform: skewX(var(--ig-skew)); box-shadow: 0 4.44px 10.67px rgba(0, 0, 0, 0.5); /* 10 24 */
+}
+.ig-prep__slot > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-prep__slot-face { width: 32px; height: 32px; margin-left: 5.33px; overflow: hidden; background: #1a1526; flex: none; } /* 72 12 */
+.ig-prep__slot-face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+.ig-prep__slot-name { font-family: var(--ig-font-serif); font-size: 12.44px; font-weight: 700; font-style: italic; line-height: 1; } /* 28 */
+.ig-prep__slot-status { margin-top: 1.78px; font-family: var(--ig-font-numeral); font-size: 6.67px; font-weight: 700; color: #2a2533; } /* 4 15 */
+.ig-prep__slot-role { margin-left: auto; font-size: 4.89px; font-weight: 700; letter-spacing: 0.24em; color: var(--ig-gold-on-paper); } /* 11 */
+
+/* Primary action (e.g. "START BATTLE"): its 12x16 triangle draws inline the
+   same way as .ig-cmd__cursor (see slabs.css), sized 5.33x7.11px here. */
+.ig-prep__confirm {
+  position: absolute; right: 26.67px; bottom: 79.11px; /* 60 178 */
+  display: inline-flex; align-items: center; gap: 6.22px; /* 14 */
+  padding: 7.11px 11.56px; background: var(--ig-accent); color: var(--ig-ink); /* 16 26 */
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 8px; letter-spacing: 0.3em; /* 18 */
+  transform: skewX(var(--ig-skew)); box-shadow: 0 4.44px 10.67px rgba(0, 0, 0, 0.5); /* 10 24 */
+}
+.ig-prep__confirm > * { transform: skewX(var(--ig-skew-inverse)); }
+
+.ig-prep__hint { position: absolute; left: 231.11px; top: 213.33px; font-size: 4.89px; letter-spacing: 0.22em; color: rgba(244, 241, 232, 0.55); } /* 520 480 11 */
+.ig-prep__hint b { color: var(--ig-accent); }
+
+/* -------------------------------------------------------------- dialogue */
+
+/* ig-dialogue: cutscene dialogue box. Dialogue.dc.html. */
+.ig-dialogue { position: absolute; inset: 0; }
+.ig-dialogue__eyebrow { position: absolute; left: 26.67px; top: 17.78px; display: flex; align-items: center; gap: 8px; } /* 60 40 18 */
+.ig-dialogue__eyebrow-bar { width: 19.56px; height: 1.33px; background: var(--ig-accent); } /* 44 3 */
+.ig-dialogue__eyebrow-label { font-size: 5.78px; font-weight: 700; letter-spacing: 0.36em; color: var(--ig-accent); } /* 13 */
+
+.ig-dialogue__slab {
+  position: absolute; left: 40px; bottom: 31.11px; width: 400px; height: 84.44px; /* 90 70 900 190 */
+  background: var(--ig-paper); transform: skewX(var(--ig-skew)); box-shadow: 0 7.11px 17.78px rgba(0, 0, 0, 0.55); /* 16 40 */
+}
+.ig-dialogue__edge {
+  position: absolute; left: 40px; bottom: 31.11px; width: 3.56px; height: 84.44px; /* 90 70 8 190 */
+  background: var(--ig-accent); transform: skewX(var(--ig-skew));
+}
+/* The portrait cut-in overlaps the slab's top edge by ~100px @1440 (its own
+   box is taller and sits higher than the slab) — both boxes are positioned
+   independently from the same frame origin, not nested, so they line up. */
+.ig-dialogue__portrait {
+  position: absolute; left: 52.44px; bottom: 26.67px; width: 97.78px; height: 133.33px; /* 118 60 220 300 */
+  overflow: hidden; transform: skewX(var(--ig-skew)); box-shadow: 6.22px 0 13.33px rgba(0, 0, 0, 0.45); /* 14 0 30 */
+}
+.ig-dialogue__portrait img { position: absolute; left: -17.78px; top: 0; width: 133.33px; transform: skewX(var(--ig-skew-inverse)); } /* -40 300 */
+
+.ig-dialogue__text { position: absolute; left: 165.33px; bottom: 42.67px; width: 257.78px; display: flex; flex-direction: column; gap: 5.33px; } /* 372 96 580 12 */
+.ig-dialogue__speaker { display: inline-flex; align-items: center; gap: 5.33px; align-self: flex-start; } /* 12 */
+.ig-dialogue__name { font-family: var(--ig-font-serif); font-size: 15.11px; font-weight: 700; font-style: italic; line-height: 1; color: var(--ig-ink); } /* 34 */
+.ig-dialogue__role { padding: 1.78px 4.44px; background: var(--ig-ink); color: var(--ig-accent); font-family: var(--ig-font-display); font-weight: 700; font-size: 4.89px; letter-spacing: 0.28em; } /* 4 10 11 */
+.ig-dialogue__line { font-family: var(--ig-font-text); font-size: 10.67px; line-height: 1.4; color: var(--ig-ink); } /* 24 */
+/* Advance triangle: 16x12, drawn inline as
+   `<svg viewBox="0 0 16 12"><path d="M1 1 L15 1 L8 11 Z" fill="#E3B94A"/></svg>` (7.11x5.33px). */
+.ig-dialogue__advance { position: absolute; left: 416px; bottom: 40px; width: 7.11px; height: 5.33px; } /* 936 90 16 12 */
+
+/* --------------------------------------------------------------- shared hint chip */
+
+/* ig-hint-chip: the boxed key-legend chip used by both Title and Dialogue
+   (Title.dc.html padding 9px/16px, Dialogue.dc.html 8px/16px @1440 — a
+   0.44px logical difference, treated as the same value here). Party prep's
+   hint (below) is plain text with no box, so it doesn't use this class. */
+.ig-hint-chip {
+  display: inline-block; padding: 4px 7.11px; /* 9 16 */
+  background: var(--ig-ink-panel); border-left: 1.33px solid var(--ig-accent); /* 3 */
+  font-size: 5.33px; letter-spacing: 0.2em; color: rgba(244, 241, 232, 0.85); white-space: nowrap; /* 12 */
+}
+.ig-hint-chip b { color: var(--ig-accent); }
+.ig-title__hint { position: absolute; left: 32px; bottom: 19.56px; } /* 72 44 */
+.ig-dialogue__hint { position: absolute; left: 50%; bottom: 9.78px; transform: translateX(-50%); } /* 22 */
+
+/* --------------------------------------------------------------- minigame */
+
+/* ig-minigame: the Overdrive/limit-break overlay shell. Swordplay.dc.html
+   (the action banner above it is plain .ig-banner — nothing new to add).
+   The command stack is hidden while this is open (spec), so it isn't part
+   of this class. */
+.ig-minigame {
+  position: absolute; left: 24.89px; top: 56px; width: 320px; /* 56 126 720 */
+  padding: 9.78px 16px 13.33px; background: var(--ig-paper); /* 22 36 30 */
+  transform: skewX(var(--ig-skew)); box-shadow: 0 8.89px 22.22px rgba(0, 0, 0, 0.6); /* 20 50 */
+}
+.ig-minigame > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-minigame__head { display: flex; align-items: baseline; gap: 8px; } /* 18 */
+.ig-minigame__title { font-family: var(--ig-font-serif); font-size: 16.89px; font-weight: 700; font-style: italic; line-height: 1; color: var(--ig-ink); white-space: nowrap; } /* 38 */
+.ig-minigame__subtitle { font-size: 5.33px; font-weight: 700; letter-spacing: 0.26em; color: var(--ig-gold-on-paper); white-space: nowrap; } /* 12 */
+.ig-minigame__meter { margin-left: auto; display: flex; align-items: center; gap: 6.22px; } /* 14 */
+/* ig-minigame__ring: sized wrapper for the inline timer-ring SVG — draw its
+   contents verbatim in a `viewBox="0 0 52 52"` (own coordinate space, not
+   page px, same convention as ig-damage__splash in slabs.css):
+   `<circle cx="26" cy="26" r="21" fill="none" stroke="var(--ig-ink)"
+      stroke-opacity=".15" stroke-width="5"/>
+    <circle cx="26" cy="26" r="21" fill="none" stroke="var(--ig-accent)"
+      stroke-width="5" stroke-dasharray="132" stroke-dashoffset="{46 * (1 - progress)}"
+      stroke-linecap="butt" transform="rotate(-90 26 26)"/>
+    <text x="26" y="31" text-anchor="middle" font-family="Rajdhani, sans-serif"
+      font-size="17" font-weight="700" fill="var(--ig-ink)">{secondsLeft}</text>` */
+.ig-minigame__ring { width: 23.11px; height: 23.11px; } /* 52 */
+.ig-minigame__bonus { padding: 2.67px 5.33px; background: var(--ig-ink); color: var(--ig-accent); font-family: var(--ig-font-display); font-weight: 700; font-size: 5.78px; letter-spacing: 0.2em; } /* 6 12 13 */
+
+/* The timing bar: one element, positioned by the three custom properties
+   below (set inline per frame/minigame instance). Zone and cursor read them
+   through ordinary CSS inheritance — no extra wiring needed per row. */
+.ig-minigame__bar {
+  position: relative; margin-top: 9.78px; height: 11.56px; background: var(--ig-ink); /* 22 26 */
+  --ig-zone-start: 61%; --ig-zone-width: 13%; --ig-cursor-pos: 30%; /* Swordplay.dc.html's mocked frame; callers override per instance */
+}
+.ig-minigame__zone { position: absolute; left: var(--ig-zone-start); top: 0; width: var(--ig-zone-width); height: 100%; background: var(--ig-accent); }
+.ig-minigame__cursor {
+  position: absolute; left: var(--ig-cursor-pos); top: -2.67px; width: 2.22px; height: 16.89px; /* -6 5 38 */
+  background: var(--ig-paper); box-shadow: 0 0 4.44px rgba(244, 241, 232, 0.9); /* 10 */
+}
+.ig-minigame__labels { position: absolute; left: 0; right: 0; bottom: -8px; display: flex; justify-content: space-between; } /* -18 */
+.ig-minigame__label { font-family: var(--ig-font-display); font-weight: 700; font-size: 4.44px; letter-spacing: 0.24em; color: var(--ig-gold-on-paper); } /* 10 */
+
+/* Extrapolated — not mocked (spec: "Other minigame overlays ... follow the
+   Swordplay slab pattern"). Slots' reel row and Bushido's button-sequence
+   row swap the continuous zone/cursor bar for discrete segments; both reuse
+   .ig-minigame's slab/head/ring/bonus above and only replace .ig-minigame__bar. */
+.ig-minigame__bar--reel { display: flex; gap: 1.78px; background: none; } /* 4 */
+.ig-minigame__reel {
+  flex: 1; height: 100%; background: var(--ig-ink); display: flex; align-items: center; justify-content: center;
+  font-family: var(--ig-font-numeral); font-weight: 700; font-size: 8px; color: var(--ig-paper); /* 18, matches .ig-ctb__mono */
+}
+.ig-minigame__reel--win { background: var(--ig-accent); color: var(--ig-ink); }
+.ig-minigame__bar--sequence { display: flex; align-items: center; gap: 3.56px; background: none; height: auto; } /* 8 */
+.ig-minigame__key {
+  display: flex; align-items: center; justify-content: center; width: 11.56px; height: 11.56px; /* 26 */
+  background: var(--ig-ink); color: var(--ig-paper); font-family: var(--ig-font-display); font-weight: 700; font-size: 6.22px; /* 14 */
+}
+.ig-minigame__key--done { background: var(--ig-accent); color: var(--ig-ink); }
+
+/* -------------------------------------------------------------- boss hp */
+
+/* ig-bosshp: FFX-2 boss HP bar, top-left (BattleFfx2.dc.html). Always
+   top-left regardless of .ig--ffx2's left/right chrome mirroring — the spec
+   places it there unconditionally, it isn't part of the anchored-chrome set. */
+.ig-bosshp { position: absolute; left: 21.33px; top: 17.78px; display: flex; align-items: center; gap: 6.22px; } /* 48 40 14 */
+.ig-bosshp__name { font-family: var(--ig-font-serif); font-size: 11.56px; font-weight: 700; font-style: italic; color: var(--ig-paper); } /* 26 */
+.ig-bosshp__track { position: relative; width: 133.33px; height: 3.56px; background: rgba(11, 10, 18, 0.7); } /* 300 8 */
+.ig-bosshp__fill { position: absolute; inset: 0 auto 0 0; display: block; background: var(--ig-accent); } /* width set inline per HP% */

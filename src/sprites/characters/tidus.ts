@@ -1,4 +1,13 @@
 /**
+ * RETIRED — the pixel-art path.
+ *
+ * The game renders painted 2.5D (`src/engine/PaintedActor.ts`, backdrops and
+ * character PNGs generated through `docs/ART-PIPELINE.md`). Nothing here is
+ * reachable from `src/main.ts`; `node tools/orphans.mjs` lists this file as an
+ * orphan by design. Kept for reference only — do not extend it, and do not
+ * build new work against it.
+ */
+/**
  * Tidus — 48x64, roughly six heads tall, facing +x.
  *
  * Yellow hooded vest over a black chest panel, black knee-length shorts with

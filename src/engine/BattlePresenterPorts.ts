@@ -1,0 +1,206 @@
+/**
+ * Everything {@link BattlePresenter} talks to, as interfaces.
+ *
+ * **This module imports nothing but battle types.** No `three`, no DOM — which
+ * is what lets `tests/unit/presenter-*.test.ts` run the whole playback loop in
+ * Node against fakes. The real implementations live in
+ * `BattlePresenterStage.ts` (Three.js) and `BattlePresenterFallbacks.ts` (DOM).
+ *
+ * `PaintedActor` satisfies {@link ActorHandle} structurally, so the stage hands
+ * its actors straight through without an adapter.
+ */
+
+import type {
+  BattleEvent,
+  CameraRigId,
+  CombatantId,
+  MessageKind,
+  VfxKey,
+} from '../battle/common/types.ts';
+import type { StoryScript } from '../story/dsl.ts';
+
+/** A point on the field, in world units. */
+export interface Point3 {
+  x: number;
+  y: number;
+  z: number;
+}
+
+/** A point on screen, in CSS pixels relative to the canvas. */
+export interface Point2 {
+  x: number;
+  y: number;
+}
+
+/**
+ * One painted fighter, as the presenter uses it.
+ *
+ * Deliberately the subset of {@link import('./PaintedActor.ts').PaintedActor}
+ * the playback loop needs, so a test double is ten lines.
+ */
+export interface ActorHandle {
+  readonly position: Point3;
+  setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
+  flash(colour?: number | string, ms?: number, peak?: number): void;
+  shake(amount?: number, ms?: number): void;
+  lunge(distance?: number, ms?: number): Promise<void>;
+  recoil(ms?: number, distance?: number): Promise<void>;
+  squash(ms?: number, amount?: number): Promise<void>;
+  hop(height?: number, ms?: number): Promise<void>;
+  fadeTo(alpha: number, ms?: number): Promise<void>;
+  setAlpha(alpha: number): void;
+  dissolveTo(value: number, ms?: number, colour?: number | string): Promise<void>;
+  setDissolve(value: number): void;
+  moveTo(pos: Point3, ms?: number): Promise<void>;
+  setFacing(dir: 1 | -1): void;
+  setBrightness(mult: number): void;
+  centerPoint(): Point3;
+  headPoint(): Point3;
+}
+
+/** Camera rigs plus the two impact moves. */
+export interface CameraPort {
+  moveTo(rig: CameraRigId, ms?: number): Promise<void>;
+  snapTo(rig: CameraRigId): void;
+  shake(amplitude?: number, ms?: number): void;
+  punch(fraction?: number, ms?: number): Promise<void>;
+  readonly rigNames: string[];
+  readonly rigName: string;
+}
+
+/** One-shot effects, keyed by `VfxKey` from the event stream. */
+export interface VfxPort {
+  /** Play `key` on a combatant, or `'screen'` for a full-screen effect. */
+  play(key: VfxKey, at: CombatantId | 'screen'): Promise<void>;
+  /** The generic impact used when an event carries no `vfxKey`. */
+  impact(at: CombatantId, opts?: { element?: string; crit?: boolean }): Promise<void>;
+  /** Full-screen colour wash — battle start, form change, defeat. */
+  screenFlash(colour?: string, ms?: number): void;
+}
+
+/** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */
+export interface DamageNumbersPort {
+  show(n: {
+    /** Screen position of the target, in CSS pixels. */
+    x: number;
+    y: number;
+    kind: 'damage' | 'heal' | 'mp-damage' | 'mp-heal' | 'miss' | 'label';
+    /** Absolute magnitude. Ignored for `'miss'` and `'label'`. */
+    amount?: number;
+    /** Printed instead of `amount` — `MISS`, `IMMUNE`, `ABSORBED`. */
+    text?: string;
+    crit?: boolean;
+    /** Multi-hit stacking: numerals climb a rising diagonal ladder. */
+    hitIndex?: number;
+    hitCount?: number;
+  }): void;
+  clear(): void;
+}
+
+/** The battle message bar. */
+export interface MessageBarPort {
+  show(text: string, kind: MessageKind, ms?: number): Promise<void> | void;
+  clear(): void;
+}
+
+/** The cutscene runner (`src/story/runner`), wired in when it lands. */
+export interface CutsceneRunnerPort {
+  play(script: StoryScript, opts?: { midBattle?: boolean }): Promise<void>;
+  /**
+   * Resolve dialogue lines without waiting for input.
+   *
+   * A mid-battle beat normally blocks on the player pressing Confirm. Under
+   * auto-battle, e2e or the critic there is nobody to press it, and the battle
+   * would sit on that line forever — so the presenter switches this on
+   * whenever it is driving itself.
+   */
+  setAutoAdvance?(on: boolean): void;
+}
+
+/** The subset of `AudioManager` the presenter uses. */
+export interface AudioPort {
+  playSfx(key: string, opts?: { volume?: number; delay?: number; pan?: number }): void;
+  playMusic(key: string, opts?: { fade?: number }): Promise<void> | void;
+  stopMusic(fade?: number): void;
+}
+
+/** The HUD, from `src/engine/HudPort.ts`. Re-exported for convenience. */
+export type { HudPort } from './HudPort.ts';
+
+/**
+ * The field: actors, camera, VFX and the world->screen projection.
+ *
+ * Implemented by `PaintedStage` over Three.js; faked in unit tests.
+ */
+export interface BattleStage {
+  readonly camera: CameraPort;
+  readonly vfx: VfxPort;
+  /** Live actor for a combatant, or `undefined` if it has none (hidden parts). */
+  actor(id: CombatantId): ActorHandle | undefined;
+  /** Which team a staged combatant fights for. Drives KO and victory poses. */
+  sideOf(id: CombatantId): 'party' | 'enemy' | 'aeon' | undefined;
+  /** Ids currently on the field, party/aeon first. */
+  staged(): CombatantId[];
+  /** Screen position of a combatant's head, for cursors and numerals. */
+  project(id: CombatantId): Point2 | null;
+  /** Swap a combatant's painted art — `form-change`, X-2 spherechange. */
+  setArt(id: CombatantId, artId: string): Promise<void>;
+  /** Stage a combatant that was not on the field at battle start (a summon). */
+  addCombatant(id: CombatantId, opts: { artId: string; side: 'party' | 'enemy' | 'aeon'; slot: number }): Promise<ActorHandle | undefined>;
+  /** Take a combatant off the field (dismiss, eject, destroyed part). */
+  removeCombatant(id: CombatantId): void;
+}
+
+/** Playback speed, driven by the skip/fast-forward controls. */
+export type PlaybackSpeed = 'normal' | 'fast' | 'skip';
+
+/** What the presenter needs from the outside world. */
+export interface PresenterDeps {
+  stage: BattleStage;
+  hud?: import('./HudPort.ts').HudPort | null;
+  damageNumbers?: DamageNumbersPort | null;
+  messageBar?: MessageBarPort | null;
+  cutscenes?: CutsceneRunnerPort | null;
+  audio?: AudioPort | null;
+  /** Mid-battle scripts by `MidBattleTrigger.script`, from `ChapterScripts`. */
+  midScripts?: Record<string, StoryScript>;
+  /** Sleep hook. Tests pass a no-op so the loop runs instantly. */
+  sleep?: (ms: number) => Promise<void>;
+  /** Overall pacing multiplier applied to every wait. 1 = authored timing. */
+  timeScale?: number;
+}
+
+/** One line of the presenter's own trace, for the debug API and e2e. */
+export interface PlaybackTrace {
+  seq: number;
+  type: BattleEvent['type'];
+  /** ms the presenter spent on this event. */
+  ms: number;
+}
+
+/** Cue names the presenter asks the audio port for, with graceful fallbacks. */
+export const SFX_FALLBACKS: Readonly<Record<string, string>> = {
+  damage: 'hit-1',
+  'damage-crit': 'critical',
+  heal: 'cure',
+  miss: 'cancel',
+  attack: 'sword-slash-1',
+  cast: 'magic-charge',
+  ko: 'ko-fall',
+  victory: 'victory-fanfare',
+  charge: 'boss-roar',
+  summon: 'summon',
+  'form-change': 'boss-roar',
+  status: 'status-applied',
+  overdrive: 'overdrive-full',
+  generic: 'hit-1',
+} as const;
+
+/** Elemental cue for a `damage` event, when the ability named none. */
+export const ELEMENT_SFX: Readonly<Record<string, string>> = {
+  fire: 'fire',
+  ice: 'ice',
+  lightning: 'thunder',
+  water: 'water',
+  holy: 'holy',
+} as const;

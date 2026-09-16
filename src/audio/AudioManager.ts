@@ -3,14 +3,21 @@
  *
  * Nothing is created until the first user gesture (browsers refuse to start an
  * AudioContext before one). Music is synthesised by `render.ts` inside a Web
- * Worker and cached as an AudioBuffer with exact loop points; SFX are
- * synthesised on the main thread at startup because each one costs a few
- * milliseconds. No audio files are fetched — every sound is generated code.
+ * Worker and cached as an AudioBuffer with exact loop points; on unlock, the
+ * queued music's render is posted to that worker first so it never waits
+ * behind SFX warm-up. SFX are warmed the same way, off the main thread, but a
+ * few cues at a time (see SfxWarmer.ts) so a later music request only ever
+ * waits behind one small chunk — falling back to a time-sliced main-thread
+ * render if Workers are unavailable or the worker dies mid-batch. Either way,
+ * `playSfx` on a cue that isn't warmed yet renders it on the main thread on
+ * demand, exactly as before. No audio files are fetched — every sound is
+ * generated code.
  */
 
 import { MusicLoader } from './MusicLoader.ts';
 import { TRACK_BLURBS, hasTrack, trackNames } from './tracks/index.ts';
-import { SFX, hasSfx, renderSfx, sfxNames } from './sfx/index.ts';
+import { SFX, SFX_GROUPS, hasSfx, renderSfx, sfxNames } from './sfx/index.ts';
+import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 
 export interface AudioManagerOptions {
   masterVolume?: number;
@@ -111,12 +118,15 @@ export class AudioManager {
     this.duckBus.connect(this.master);
     this.sfxBus.connect(this.master);
     this.master.connect(ctx.destination);
-    this.warmSfx();
+    // Post the queued track's render to the worker before SFX warm-up starts,
+    // so the title theme's first request lands ahead of it in the worker's
+    // (single-threaded, FIFO) message queue and doesn't wait behind the bank.
     if (this.queuedMusic) {
       const queued = this.queuedMusic;
       this.queuedMusic = null;
       void this.playMusic(queued.name, queued.options);
     }
+    this.warmSfx();
     return true;
   }
 
@@ -217,11 +227,27 @@ export class AudioManager {
 
   // ------------------------------------------------------------------ sfx ---
 
-  /** Synthesise the SFX bank a few cues at a time so the frame never stalls. */
+  /** Warm the SFX bank off the main thread, a few cues at a time (see
+   *  SfxWarmer.ts for the chunking/priority order and why), falling back to
+   *  a time-sliced main-thread render if Workers are unavailable or the
+   *  worker dies mid-batch. */
   warmSfx(): void {
     if (this.warmed || !this.ctx) return;
     this.warmed = true;
-    const names = sfxNames();
+    const names = orderSfxForWarmup(SFX_GROUPS);
+    const worker = this.loader.getWorker();
+    if (!worker) {
+      this.warmSfxOnMainThread(names);
+      return;
+    }
+    warmSfxViaWorker(worker, names, this.ctx.sampleRate, {
+      cacheBuffer: (name, left, right) => this.cacheSfxBuffer(name, left, right),
+      renderOnMainThread: (remaining) => this.warmSfxOnMainThread(remaining),
+    });
+  }
+
+  /** Original fallback: synthesise a few cues at a time so the frame never stalls. */
+  private warmSfxOnMainThread(names: string[]): void {
     let index = 0;
     const step = (): void => {
       const deadline = Date.now() + 6;
@@ -231,6 +257,17 @@ export class AudioManager {
       if (index < names.length) setTimeout(step, 0);
     };
     setTimeout(step, 0);
+  }
+
+  /** Build an AudioBuffer from a worker's rendered cue and cache it — overwriting
+   *  harmlessly if `playSfx` already rendered this cue on the main thread first. */
+  private cacheSfxBuffer(name: string, left: Float32Array, right: Float32Array): void {
+    const ctx = this.ctx;
+    if (!ctx) return;
+    const buffer = ctx.createBuffer(2, left.length, ctx.sampleRate);
+    buffer.getChannelData(0).set(left);
+    buffer.getChannelData(1).set(right);
+    this.sfxCache.set(name, buffer);
   }
 
   private getSfxBuffer(name: string): AudioBuffer | null {

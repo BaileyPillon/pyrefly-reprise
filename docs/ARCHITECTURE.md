@@ -4,9 +4,11 @@ Working title: **Pyrefly Reprise**. An unofficial HD-2D fan tribute that recreat
 
 ## Engine decision
 
-**Web: Vite + TypeScript + Three.js (HD-2D).** Pixel-art billboard sprites over small 3D dioramas, with a post-processing chain (bloom, tilt-shift depth of field, vignette, colour grade), an HTML/CSS overlay for the FFX/FFX-2 menus, and Web Audio synthesis for original music and SFX. Deployed to GitHub Pages so it is a link friends can open.
+**Web: Vite + TypeScript + Three.js, painted 2.5D.** AI-painted matte backdrops and cut-out character key-poses composed as lit billboards in small 3D dioramas, with a post-processing chain (bloom, tilt-shift depth of field, vignette, colour grade), an HTML/CSS overlay for the FFX/FFX-2 menus ("Ink & Gold" cinematic chrome, see below), and Web Audio synthesis for original music and SFX. Deployed to GitHub Pages so it is a link friends can open.
 
-Why not Unreal: the user has UE 5.8 installed, but Unreal would mean multi-GB builds to share, binary Blueprints that agents cannot iterate on, and slow screenshot loops. Web gives a same-day turnaround, deterministic headless testing (Playwright + WebGL), and a shareable URL. HD-2D is the natural "2.5D" look (Octopath Traveler / Live A Live) and reads as cute, pretty and modern.
+Why not Unreal: the user has UE 5.8 installed, but Unreal would mean multi-GB builds to share, binary Blueprints that agents cannot iterate on, and slow screenshot loops. Web gives a same-day turnaround, deterministic headless testing (Playwright + WebGL), and a shareable URL.
+
+The original plan was hand-authored pixel-art HD-2D sprites (`src/sprites/`, now legacy — see below). That pipeline produced flat, generic-looking characters agents couldn't iterate on fast enough to hit the visual bar. It was replaced with a painted 2.5D pipeline: a local ComfyUI (Animagine XL 4.0 + IP-Adapter for pose/identity consistency) paints each character's key poses and each location's backdrop, `rembg` cuts the characters out, and the engine composes the results as lit, shaded billboards in the same camera-and-diorama structure the HD-2D plan always called for. This reads as painted, pretty and modern — closer to Octopath Traveler's polygon-and-painting hybrid than to pixel art — and the offline art step keeps the runtime free of any network dependency.
 
 ## The five chapters
 
@@ -33,7 +35,7 @@ The battle engines are **pure TypeScript with zero DOM/Three.js imports**, deter
 
 ```
 battle/ffx  (CTB)   ─┐
-battle/ffx2 (ATB)   ─┼─ events ──▶ BattlePresenter ──▶ SpriteActors / VFX / HUD / Audio
+battle/ffx2 (ATB)   ─┼─ events ──▶ BattlePresenter ──▶ PaintedActors / VFX / HUD / Audio
 battle/common        ┘   ◀─ commands ─ Command UI (player) or AI script (enemy)
 ```
 
@@ -44,8 +46,8 @@ index.html
 src/
   main.ts                     boot
   app/                        App state machine, Screen base, SaveData, Input (keyboard+gamepad+mouse)
-  engine/                     Renderer (Three + post chain), SpriteActor, BattleCamera, Particles, VFX, Diorama helpers
-  sprites/                    sprite DSL types + rasterizer + authored sprite data (characters/, bosses/, aeons/, ffx2/, portraits/, fx/)
+  engine/                     Renderer (Three + post chain), PaintedActor/PaintedArt/Backdrop/Lighting (painted 2.5D), BattleCamera, Particles, VFX, ScenePalettes; SpriteActor/Diorama (retired pixel path; see docs/ENGINE-API.md)
+  sprites/                    legacy pixel-art sprite DSL + rasterizer + authored sprite data — unused, kept for reference only
   battle/common/              RNG, BattleEvent types, shared status/element enums
   battle/ffx/                 CTB engine: TurnQueue, Formulas, Statuses, Abilities, Items, Overdrives, Aeons, AI, BattleState
   battle/ffx2/                ATB engine: Gauges, Chain, Dresspheres, Spherechange, Formulas, AI, BattleState
@@ -56,18 +58,19 @@ src/
   ui/ffx/                     BattleHUD (CTB list, command window, party status), PartyPrep menus, Sphere Grid, overdrive minigames
   ui/ffx2/                    BattleHUD (ATB), Spherechange wheel, Garment Grid, Trigger Happy / reels minigames
   story/                      Cutscene DSL + runner; scripts/ per chapter (pre, post, mid-battle triggers)
-  scenes/                     one diorama builder per chapter (gagazet, zanarkand-dome, dreams-end, bevelle-underground, farplane)
+  scenes/                     types.ts (scene-builder contract); one diorama builder per chapter (gagazet, zanarkand-dome, dreams-end, bevelle-underground, farplane), each with a debug variant; index.ts, placeholder-sprites.ts
   audio/                      Synth instruments, Sequencer, tracks/ (original compositions), sfx, AudioManager
   debug/                      window.__pyrefly test API (jump to chapter, force command, skip cutscene, set seed, snapshot state)
-tools/                        render-sprite.mjs (sprite → PNG + 8x preview), render-track.mjs (track → WAV), screenshot.mjs
+tools/                        render-sprite.mjs (legacy sprite → PNG preview), render-track.mjs (track → WAV), screenshot.mjs
+tools/gen/                    painted-art generation: comfy.mjs (ComfyUI driver), cast.json (roster work order), rembg.py, sheet.py/sheet-poc.json (contact sheets), qc.py, strip.py, whitekey.py
 tests/unit/                   vitest: formulas vs known values, CTB ordering, statuses, AI scripts, builds sanity
 tests/e2e/                    playwright: boot, chapter select, scripted full wins per chapter, screenshot gallery
 critic/                       RUBRIC.md, rounds/
 research/                     the research corpus (source of truth for numbers; every data file cites it)
-docs/                         this file, CONTROLS.md, CREDITS.md
+docs/                         this file, ART-PIPELINE.md, ENGINE-API.md, CONTROLS.md, CREDITS.md, handoff/ (presentation-ink-and-gold.md + mockups)
 ```
 
-Ownership for parallel agents: one agent per top-level folder (or sub-folder for `data/` and `sprites/`). Shared contracts live in `src/battle/common/types.ts`, `src/sprites/format.ts`, `src/story/dsl.ts`, `src/data/encounters.ts` and are written **first**; other agents import them and do not edit them without a note in `docs/CONTRACT-CHANGES.md`.
+Ownership for parallel agents: one agent per top-level folder (or sub-folder for `data/` and `sprites/`). Shared contracts live in `src/battle/common/types.ts`, `src/scenes/types.ts`, `src/story/dsl.ts`, `src/data/encounters.ts` and are written **first**; other agents import them and do not edit them without a note in `docs/CONTRACT-CHANGES.md`.
 
 ## Battle engine contracts (summary; see `src/battle/common/types.ts`)
 
@@ -78,15 +81,31 @@ Ownership for parallel agents: one agent per top-level folder (or sub-folder for
 - FFX-2 ATB: per-combatant gauge with agility-driven fill, charge time per ability, recovery; `Chain` tracks hits within the window and the multiplier.
 - All numbers come from `data/` files that cite `research/*.md` by section.
 
-## Sprite pipeline
+## Sprite pipeline (legacy)
 
-`src/sprites/format.ts` defines `SpriteDef` (size, palette, named animation states → frames). A frame is either rows of palette characters (pixel grid) or a list of shape ops (`ellipse`, `rect`, `poly`, `line`, `pixels`) rasterized to the grid with an automatic 1px outline and optional light/shadow passes. `tools/render-sprite.mjs` renders any sprite to PNG with an 8x nearest-neighbour preview so an agent can look at its work and iterate. At runtime the same rasterizer produces a canvas → `THREE.CanvasTexture` (NearestFilter) per frame.
+`src/sprites/` was the original pixel-art pipeline: `format.ts` defined `SpriteDef` (size, palette, named animation states → frames), rasterized to a canvas → `THREE.CanvasTexture` at runtime, rendered standalone via `tools/render-sprite.mjs`. It is unused by any current scene or screen and kept only for reference; do not add to it. Its runtime counterpart, `SpriteActor`, is documented in `docs/ENGINE-API.md` for the same reason.
 
-Targets: party members 48×64 logical px (about 6 heads tall, anime proportion), aeons 96×96 to 160×128, bosses 128×160 to 256×192, portraits 32×32. Palette ≤ 24 colours per sprite. States: idle, ready, attack, cast, item, hurt, ko, victory, defend; bosses add per-attack states and forms.
+## Painted art pipeline
 
-## HD-2D rendering
+Art is authored offline with a local ComfyUI (Animagine XL 4.0 checkpoint, IP-Adapter for pose/identity consistency across a character's states, `rembg` for cutouts) driven by `tools/gen/comfy.mjs`, one subject at a time from the work order in `tools/gen/cast.json`. Full setup, prompt contract and troubleshooting: `docs/ART-PIPELINE.md`. Nothing about this touches the network at runtime — the game only ever loads finished PNGs.
 
-Perspective camera (fov 32–38°) looking slightly down at a diorama built from procedural-texture planes and simple meshes. Sprites are billboards with pixel snapping and a blob shadow. Post chain: RenderPass → UnrealBloomPass (threshold ≈ 0.82, strength ≈ 0.55) → tilt-shift depth of field (blur by depth band) → vignette + grade. Particles via `THREE.Points` with custom shaders: pyreflies, snow, embers, petals. Every scene defines a light rig (key, fill, rim, one or two coloured point lights) and 2–3 camera rigs (idle, action, victory).
+File conventions (no manifest to keep in sync; the engine resolves art by path):
+
+```
+public/art/characters/<id>/<state>.png   transparent cutout, variable size
+public/art/characters/<id>/<state>.json  sidecar: width, height, baselineY, seed, prompt
+public/art/backdrops/<scene>.png         wide matte painting, opaque
+public/art/backdrops/<scene>.json        sidecar: seed, prompt
+public/art/portraits/<id>.png            head-and-shoulders, for dialogue/CTB/menus
+```
+
+`<id>` is lowercase kebab; `<state>` is one of `idle, attack, cast, hurt, ko, victory`. `baselineY` is the bottom row of opaque pixels in the cropped PNG — the engine re-derives it from alpha at load time (`fitBaselineFromAlpha`) rather than trusting the sidecar's value, so a figure's feet land on the ground plane regardless.
+
+## Painted 2.5D rendering
+
+Perspective camera (fov 32–38°) looking slightly down at a diorama. Backdrops are turned into a parallax stack (`src/engine/Backdrop.ts`): the painting on a far plane, masked parallax layers cut from bands of the same painting, a lit 3D ground plane tinted from the painting's own bottom rows, drifting mist, matched fog and background. Characters are `PaintedActor`s (`src/engine/PaintedActor.ts`) — two crossfading textured planes plus a soft contact shadow, sized by world height rather than pixels, unlit (their material carries the painting's own lighting) but rim-lit and bounce-lit from a `LightRig` (`src/engine/Lighting.ts`) whose colours are sampled from the backdrop's own palette. `PaintedArt.ts` is the loader: it never rejects, falling back state→idle→a grey silhouette so a scene is composable and screenshot-able before any PNG exists.
+
+Post chain: RenderPass → UnrealBloomPass (threshold ≈ 0.90 — raised from the visual bible's selective-bloom range because an AI-painted backdrop has bright paint everywhere) → tilt-shift depth of field (blur by depth band, focused on the actors) → vignette + grade, per-scene via `ScenePalette` (`src/engine/ScenePalettes.ts`). Particles via `THREE.Points` with custom shaders: pyreflies, snow, embers, petals. Every scene builds against the scene-builder contract in `src/scenes/types.ts` (full spec in `docs/ENGINE-API.md`): it owns the backdrop, light rig, particles, ground and camera rigs, and publishes four rigs (`intro`, `idle`, `action`, `victory`) plus seven party slots and a row of enemy slots; it owns no actors, battle state or UI, so scene, battle and presenter agents can build in parallel against one interface. `src/scenes/demo.ts` (`buildGagazetScene`) is the reference implementation.
 
 ## UI
 

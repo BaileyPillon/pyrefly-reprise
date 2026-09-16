@@ -1,0 +1,101 @@
+/* X-2 party-prep menus: dressphere / Garment Grid / accessories / items. */
+
+.ffx2prep {
+  position: relative;
+  width: 480px;
+  min-height: 320px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ffx2prep__members {
+  display: flex;
+  gap: 10px;
+}
+.ffx2prep__member {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(90, 42, 78, 0.35);
+  font-size: 11px;
+  cursor: pointer;
+}
+.ffx2prep__member--sel {
+  background: linear-gradient(90deg, var(--x2-border-inner), transparent);
+  box-shadow: inset 0 0 0 1px var(--x2-text-hi);
+}
+
+.ffx2prep__tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--x2-link-idle);
+  padding-bottom: 6px;
+}
+.ffx2prep__tab {
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--x2-text-dim);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.ffx2prep__tab--sel {
+  color: var(--x2-text-hi);
+  background: rgba(176, 72, 158, 0.35);
+}
+
+.ffx2prep__body {
+  flex: 1;
+  min-height: 140px;
+}
+.ffx2prep__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ffx2prep__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.ffx2prep__row:hover {
+  background: rgba(176, 72, 158, 0.2);
+}
+.ffx2prep__row--sel {
+  background: rgba(176, 72, 158, 0.35);
+  box-shadow: inset 0 0 0 1px var(--x2-text-hi);
+}
+.ffx2prep__row > span:last-child {
+  margin-left: auto;
+}
+
+.ffx2prep__gridname {
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+.ffx2prep__gridstrip {
+  display: flex;
+  align-items: center;
+}
+.ffx2prep__gridlink {
+  width: 16px;
+  height: 1px;
+  background: var(--x2-link-idle);
+}
+.ffx2prep__grid-fallback {
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.ffx2prep__gil {
+  text-align: right;
+  font-size: 10px;
+}

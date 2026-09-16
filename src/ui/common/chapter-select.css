@@ -1,0 +1,249 @@
+/*
+ * Chapter select — "Ink & Gold" (docs/handoff/presentation-ink-and-gold.md,
+ * approved 2026-09-15; mockup docs/screenshots/mockups/A-chapter-select.jpg,
+ * reference source docs/handoff/ink-and-gold/ChapterSelect.dc.html).
+ *
+ * Authored on the 640x360 logical grid; every literal below carries the
+ * mockup's 1440-grid value in a comment (logical = 1440 value / 2.25).
+ * Shared primitives (slab geometry, grain, vignette, hint chip) come from
+ * src/ui/inkgold; only this screen's own layout lives here.
+ */
+
+.cselect {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0b0a12;
+}
+
+/* Blurred backdrop of the selected chapter, spec "blurred dome backdrop at .32". */
+.cselect__wash {
+  position: absolute;
+  inset: -2%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(4.44px) brightness(0.32) saturate(0.7); /* 10 */
+  transition: background-image 200ms linear;
+}
+.cselect__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 10, 18, 0.6) 0%,
+    rgba(11, 10, 18, 0.2) 40%,
+    rgba(11, 10, 18, 0.85) 100%
+  );
+}
+
+/* ----------------------------------------------------------------- eyebrow */
+
+.cselect__eyebrow {
+  position: absolute;
+  left: 28.44px; /* 64 */
+  top: 23.11px; /* 52 */
+  display: flex;
+  align-items: center;
+  gap: 9.78px; /* 22 */
+  font-family: var(--ig-font-display);
+  font-size: 7.11px; /* 16 */
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--ig-accent);
+}
+.cselect__eyebrow i {
+  display: block;
+  width: 24px; /* 54 */
+  height: 1.78px; /* 4 */
+  background: var(--ig-accent);
+}
+
+/* -------------------------------------------------------------------- hero */
+
+/* The selected chapter: 560x336 slab with a 3px gold border and a soft halo. */
+.cselect__hero {
+  position: absolute;
+  left: 28.44px; /* 64 */
+  top: 57.78px; /* 130 */
+  width: 248.89px; /* 560 */
+  height: 149.33px; /* 336 */
+  background: #15121e;
+  border: 1.33px solid var(--ig-accent); /* 3 */
+  transform: skewX(-8deg);
+  overflow: hidden;
+  box-shadow:
+    0 13.33px 26.67px rgba(0, 0, 0, 0.65), /* 30 60 */
+    0 0 0 4.44px rgba(227, 185, 74, 0.12); /* 10 */
+  cursor: pointer;
+}
+.cselect__hero img {
+  position: absolute;
+  left: -10%;
+  top: 0;
+  width: 120%;
+  height: 100%;
+  object-fit: cover;
+  transform: skewX(8deg);
+}
+.cselect__hero-ramp {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 55%;
+  background: linear-gradient(180deg, rgba(11, 10, 18, 0) 0%, rgba(11, 10, 18, 0.85) 100%);
+}
+.cselect__hero-label {
+  position: absolute;
+  left: 13.33px; /* 30 */
+  bottom: 11.56px; /* 26 */
+  transform: skewX(8deg);
+}
+.cselect__hero-chapter {
+  font-family: var(--ig-font-display);
+  font-size: 5.78px; /* 13 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--ig-accent);
+}
+.cselect__hero-name {
+  font-family: var(--ig-font-serif);
+  font-size: 28.44px; /* 64 */
+  font-weight: 700;
+  font-style: italic;
+  line-height: 0.95;
+  color: var(--ig-paper);
+}
+
+/* ------------------------------------------------------------------- cards */
+
+/* The four unselected chapters, in fixed slots so nothing re-centres. */
+.cselect__card {
+  position: absolute;
+  width: 111.11px; /* 250 */
+  height: 66.67px; /* 150 */
+  background: #15121e;
+  border: 0.89px solid rgba(244, 241, 232, 0.35); /* 2 */
+  transform: skewX(-8deg);
+  overflow: hidden;
+  box-shadow: 0 6.22px 13.33px rgba(0, 0, 0, 0.55); /* 14 30 */
+  cursor: pointer;
+}
+.cselect__card img {
+  position: absolute;
+  left: -10%;
+  top: 0;
+  width: 120%;
+  height: 100%;
+  object-fit: cover;
+  transform: skewX(8deg);
+}
+.cselect__card-ramp {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(180deg, rgba(11, 10, 18, 0) 0%, rgba(11, 10, 18, 0.88) 100%);
+}
+/* Numeral over name, two lines — the boss titles ("Braska's Final Aeon") are
+   half again as long as the mockup's location labels, and a single tracked
+   line clipped mid-word reads as a bug rather than an abbreviation. */
+.cselect__card-label {
+  position: absolute;
+  left: 6.22px; /* 14 */
+  right: 6.22px;
+  bottom: 4.44px; /* 10 */
+  transform: skewX(8deg);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.cselect__card-num {
+  display: block;
+  font-size: 4.89px; /* 11 */
+  letter-spacing: 0.34em;
+  color: var(--ig-accent);
+}
+.cselect__card-name {
+  display: block;
+  font-size: 5.33px; /* 12 */
+  letter-spacing: 0.18em;
+  color: rgba(244, 241, 232, 0.88);
+}
+.cselect__cleared {
+  position: absolute;
+  right: 5.33px; /* 12 */
+  top: 4.44px; /* 10 */
+  transform: skewX(8deg);
+  font-size: 6.22px;
+  color: var(--ig-accent);
+  text-shadow: 0 0.44px 0.89px rgba(11, 10, 18, 0.9);
+}
+
+/* -------------------------------------------------------------------- info */
+
+.cselect__info {
+  position: absolute;
+  left: 28.44px; /* 64 */
+  top: 226.67px; /* 510 */
+  width: 400px; /* 900 */
+  padding: 11.56px 15.11px 12.44px; /* 26 34 28 */
+  background: var(--ig-paper);
+  color: var(--ig-ink);
+  transform: skewX(-8deg);
+  box-shadow: 0 7.11px 17.78px rgba(0, 0, 0, 0.5); /* 16 40 */
+}
+.cselect__info-inner {
+  transform: skewX(8deg);
+}
+.cselect__info-head {
+  display: flex;
+  align-items: baseline;
+  gap: 9.78px; /* 22 */
+}
+.cselect__info-title {
+  font-family: var(--ig-font-serif);
+  font-size: 17.78px; /* 40 */
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+}
+.cselect__badge {
+  padding: 1.78px 4.44px; /* 4 10 */
+  border: 0.89px solid var(--ig-ink); /* 2 */
+  font-family: var(--ig-font-display);
+  font-size: 5.33px; /* 12 */
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+.cselect__info-location {
+  margin-left: auto;
+  font-family: var(--ig-font-display);
+  font-size: 5.33px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--ig-gold-on-paper);
+  white-space: nowrap;
+}
+.cselect__info-premise {
+  margin-top: 4.44px; /* 10 */
+  font-family: var(--ig-font-text);
+  font-size: 8.44px; /* 19 */
+  color: #2a2533;
+}
+.cselect__info-meta {
+  margin-top: 8px; /* 18 */
+  display: flex;
+  gap: 17.78px; /* 40 */
+  font-family: var(--ig-font-text);
+  font-size: 7.11px; /* 16 */
+}
+.cselect__info-meta b {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5.78px;
+  letter-spacing: 0.12em;
+  color: var(--ig-gold-on-paper);
+  margin-right: 4.44px; /* 10 */
+}

@@ -63,6 +63,18 @@ export class BattleCamera {
   private swayScale = 1;
   private readonly scratch = new Vector3();
 
+  /** Impact shake, in world units, damping out over its lifetime. */
+  private shakeAmp = 0;
+  private shakeLeftMs = 0;
+  private shakeTotalMs = 1;
+  private shakePhase = 0;
+  /**
+   * Dolly punch: a fraction of the camera-to-subject distance the camera is
+   * pushed in by, on top of whatever rig is active. Never touches `fov` — the
+   * texel ratio has to stay put (visual-bible §6.3).
+   */
+  private punchAmount = 0;
+
   constructor(camera: PerspectiveCamera, opts: BattleCameraOptions = {}) {
     this.camera = camera;
     this.swayAmplitude = opts.swayAmplitude ?? 0.055;
@@ -163,9 +175,46 @@ export class BattleCamera {
     this.targetPos.add(this.scratch.set(dx, dy, dz));
   }
 
+  /**
+   * Impact shake. `amplitude` is in world units (0.05–0.2 reads well at the
+   * battle distance) and damps linearly over `ms`.
+   */
+  shake(amplitude = 0.1, ms = 260): void {
+    // Re-triggering during a shake takes the stronger of the two.
+    if (this.shakeLeftMs > 0 && amplitude < this.shakeAmp) return;
+    this.shakeAmp = amplitude;
+    this.shakeLeftMs = ms;
+    this.shakeTotalMs = Math.max(1, ms);
+    this.shakePhase = Math.random() * Math.PI * 2;
+  }
+
+  /**
+   * Punch in toward the look-at point by `fraction` of the current distance and
+   * ease back out. FOV is never animated; this is a dolly.
+   */
+  punch(fraction = 0.12, ms = 420): Promise<void> {
+    const inMs = Math.max(1, ms * 0.28);
+    this.tweens.to(this.punchAmount, fraction, {
+      durationMs: inMs,
+      easing: 'cubicOut',
+      onUpdate: (v) => {
+        this.punchAmount = v;
+      },
+    });
+    return this.tweens.toAsync(fraction, 0, {
+      durationMs: ms - inMs,
+      delayMs: inMs,
+      easing: 'quadInOut',
+      onUpdate: (v) => {
+        this.punchAmount = v;
+      },
+    });
+  }
+
   /** @param dt seconds */
   update(dt: number): void {
     this.tweens.update(dt);
+    if (this.shakeLeftMs > 0) this.shakeLeftMs -= dt * 1000;
     if (!this.tweening) {
       // Ease toward the rig target; lets offsetTarget() settle naturally.
       this.curPos.set(
@@ -186,11 +235,29 @@ export class BattleCamera {
   private apply(clock: number): void {
     const a = this.swayAmplitude * this.swayScale;
     const s = this.swaySpeed;
-    const ox = Math.sin(clock * s) * a + Math.sin(clock * s * 0.37 + 1.1) * a * 0.4;
-    const oy = Math.sin(clock * s * 0.73 + 2.2) * a * 0.55;
+    let ox = Math.sin(clock * s) * a + Math.sin(clock * s * 0.37 + 1.1) * a * 0.4;
+    let oy = Math.sin(clock * s * 0.73 + 2.2) * a * 0.55;
     const oz = Math.sin(clock * s * 0.51 + 0.4) * a * 0.3;
 
-    this.camera.position.set(this.curPos.x + ox, this.curPos.y + oy, this.curPos.z + oz);
+    // Dolly punch: slide the camera along its own view vector.
+    this.scratch.subVectors(this.curLook, this.curPos);
+    const px = this.scratch.x * this.punchAmount;
+    const py = this.scratch.y * this.punchAmount;
+    const pz = this.scratch.z * this.punchAmount;
+
+    if (this.shakeLeftMs > 0) {
+      const k = Math.max(0, this.shakeLeftMs / this.shakeTotalMs);
+      const damp2 = k * k;
+      this.shakePhase += 0.9;
+      ox += Math.sin(this.shakePhase * 2.7) * this.shakeAmp * damp2;
+      oy += Math.sin(this.shakePhase * 3.9 + 1.7) * this.shakeAmp * damp2 * 0.8;
+    }
+
+    this.camera.position.set(
+      this.curPos.x + ox + px,
+      this.curPos.y + oy + py,
+      this.curPos.z + oz + pz,
+    );
     this.camera.lookAt(
       this.curLook.x + ox * 0.18,
       this.curLook.y + oy * 0.18,

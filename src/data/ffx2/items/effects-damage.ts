@@ -1,0 +1,130 @@
+/**
+ * Damage item-effect abilities [ffx2-combat-core §2.9.3, §5.5,
+ * verified: 2 sources]. `damage = power * 50` under the `'fixed'` formula,
+ * cross-checked against the twelve independently-published Mix values in
+ * §2.9.3. See `effects-recovery.ts` and `effects-status.ts` for the rest of
+ * this ability set.
+ */
+
+import type { AbilityDef } from '../../../battle/common/types.ts';
+import { CT_LONG, CT_MEDIUM } from '../abilities/helpers.ts';
+
+export const damageEffectAbilities: AbilityDef[] = [
+  {
+    id: 'x2-item-poison-fang',
+    name: 'Poison Fang',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 8, // 400 damage
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'single-enemy',
+    hits: 1,
+    statusEffects: [{ status: 'poison', chance: 100, duration: 255 }],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit'],
+    messageTemplate: '{user} throws a Poison Fang',
+  },
+  {
+    id: 'x2-item-grenade',
+    name: 'Grenade',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 4, // 200 damage, all
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'all-enemies',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit', 'crit-eligible'],
+    bonusCrit: 100,
+    messageTemplate: '{user} throws a Grenade',
+  },
+  {
+    id: 'x2-item-fire-gem',
+    name: 'Fire Gem',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 2, // 100 damage x6 hits
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['fire'],
+    targeting: 'random-enemy',
+    hits: 6,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit'],
+    messageTemplate: '{user} throws a Fire Gem',
+  },
+  {
+    id: 'x2-item-shining-gem',
+    name: 'Shining Gem',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 30, // ~1500 damage
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'single-enemy',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit'],
+    messageTemplate: '{user} throws a Shining Gem',
+  },
+  {
+    id: 'x2-item-dark-matter',
+    name: 'Dark Matter',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    chargeTicks: CT_LONG,
+    recoveryTicks: 70,
+    power: 200, // 10,000, hard-capped to 9,999 by the item rule [ffx2-combat-core §2.9.3]
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'all-enemies',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit'],
+    messageTemplate: '{user} unleashes Dark Matter',
+  },
+  {
+    id: 'x2-item-stamina-spring',
+    name: 'Stamina Spring',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 12, // absorbs ~600 HP
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'single-enemy',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['drains', 'never-break-damage-limit'],
+    messageTemplate: '{user} uses a Stamina Spring',
+  },
+];
+
+export default damageEffectAbilities;

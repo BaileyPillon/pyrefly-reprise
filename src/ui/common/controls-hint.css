@@ -1,0 +1,47 @@
+/* ControlsHint — the "Arrows choose - Enter select" strip shared by chapter
+   select, results and the cutscene screens.
+
+   "Ink & Gold" (docs/handoff/presentation-ink-and-gold.md): the same boxed,
+   gold-edged key legend the title screen uses (`.ig-hint-chip`), restated here
+   because this strip mounts on the screen root rather than inside a 640x360
+   stage — so its sizes are device px, not logical px. */
+
+.chint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) skewX(-8deg);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 18px;
+  border-left: 3px solid var(--ig-accent, #e3b94a);
+  background: rgba(11, 10, 18, 0.72);
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.85);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 8;
+}
+.chint[hidden] {
+  display: none !important;
+}
+.chint__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  transform: skewX(8deg);
+}
+.chint__item b {
+  color: var(--ig-accent, #e3b94a);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+.chint__sep {
+  transform: skewX(8deg);
+  color: rgba(244, 241, 232, 0.35);
+}

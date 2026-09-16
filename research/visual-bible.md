@@ -2,7 +2,9 @@
 
 **Scope:** art direction, sprite design sheets, location sheets, battle-UI specification, title/chapter-select, and Three.js HD-2D technique notes for the five recreated encounters.
 **Audience:** pixel artists working in code (sprites authored as pixel grids / shape lists) and Three.js scene builders who have **not** played *Final Fantasy X* or *X-2*.
-**Last updated:** 2026-09-15
+**Last updated:** 2026-09-15 (gap-fill pass — see **§7.1** for the nine resolved conflicts and **§10** for the log)
+
+> **Read §7.1 before implementing anything in §2, §3, §4 or §6.** Nine implementation-blocking conflicts between this document and `assets-and-tech.md` were arbitrated on 2026-09-15. The renderer architecture (§6.7), the post-processing chain (§6.4), the font stack (§3.9), the design canvas (§3.0, §6.1) and the camera presets (§2.0, §6.3) all changed. Where a value was superseded, the old value and the reason are kept inline so nothing is silently lost.
 
 ---
 
@@ -22,7 +24,7 @@ Every load-bearing number or factual claim carries one of:
 
 ### 0.2 Legal / originality constraint
 
-All art described here must be **drawn from scratch**. Nothing in this document instructs anyone to rip, trace, or re-encode Square Enix assets. Descriptions are functional specifications ("red coat, worn off the left shoulder") so an artist can produce an original pixel sprite in the house style. Do not ship extracted textures, fonts, or UI atlases. Fonts recommended in §5.9 are OFL/Apache only.
+All art described here must be **drawn from scratch**. Nothing in this document instructs anyone to rip, trace, or re-encode Square Enix assets. Descriptions are functional specifications ("red coat, worn off the left shoulder") so an artist can produce an original pixel sprite in the house style. Do not ship extracted textures, fonts, or UI atlases. Fonts recommended in §3.9 are OFL/Apache only.
 
 ### 0.3 House pixel-art rules (apply to every sprite)
 
@@ -2037,7 +2039,7 @@ FFX-2 is a different game visually: faster, brighter, girlier, and pink/violet w
 | It is "the classic Active Time Battle **but faster**", and **party members can act simultaneously**, unlike earlier one-at-a-time ATB | `[single source]` |
 | **Dresspheres determine the character's weapon, base stats, and appearance**; there is **no equipment** controlling those | `[single source]` |
 | **Garment Grids** allocate which dresspheres each character may use | `[single source]` |
-| **Spherechange can be done at any time**, **halts time**, grants **immunity to enemy attacks** during the change, and is the **one action that still permits a normal action immediately afterwards** | `[single source]` |
+| ~~**Spherechange can be done at any time**, **halts time**, grants **immunity to enemy attacks** during the change, and is the **one action that still permits a normal action immediately afterwards**~~ — **SUPERSEDED, see §4.5.** The guide-derived flow in `ffx2-combat-core.md` §4.2 is explicit that spherechange is available **only on the girl's full-ATB turn**, is opened with **L1**, **consumes the entire turn**, and is restricted to a destination **one link away**. The time-halt is the general **Wait-mode** submenu rule, not a property of spherechange. Use the corrected table in §4.5 | ~~`[single source]`~~ superseded by `[verified: 2 sources]` |
 | **Chaining**: landing multiple hits on an enemy within a short window produces a chain, shown by a chain counter | `[single source]` |
 | Each character/dressphere combination has its **own avatar portrait** (the wiki lists 16 separate X-2 avatars for Yuna) | `[single source]` |
 
@@ -2701,7 +2703,7 @@ Every diorama is built in five depth bands. Keep to them rigidly; it is what mak
 
 **Ground plane.** A single subdivided plane (32x32 segments) with a **pixel-art texture at 16 px per world unit**, nearest-filtered, plus a vertex-coloured darkening toward the edges so the diorama fades into the void instead of ending abruptly. **`receiveShadow` is `false`** — corrected; see §6.7. There are no shadow maps in this project, so `receiveShadow` would cost a depth pass and change nothing. Contact shadows are the blob quads described immediately below.
 
-**Contact shadows.** Do not rely on shadow maps for characters. Under each sprite, draw a separate **blob-shadow quad**: a radial-gradient texture, `#0B0A12` at 55% centre to 0 at edge, scaled to 0.75x the sprite's width, lying flat at y=0.002, with `depthWrite: false`. Cheap, always readable, and correct for billboards.
+**Contact shadows.** There are no shadow maps at all in this project. Under each sprite, draw a separate **blob-shadow quad**. The authoritative spec is **§6.7.3** — a procedurally generated 64x64 radial-gradient `CanvasTexture`, `depthWrite: false`, `polygonOffset` on, `y = 0.012`, `renderOrder = 1`, radius `spriteWidthTexels / 64 x 0.55` world units, and tinted to the scene's ground colour rather than pure black. Cheap, always readable, and correct for billboards. (The earlier `y = 0.002` / flat `0.75x width` figures here are superseded by §6.7.3.)
 
 **Parallax.** Because the camera is perspective, parallax is free for real geometry. For painted far plates, add a manual `plate.position.x = -camera.position.x * 0.08` to exaggerate it.
 
@@ -3082,3 +3084,59 @@ Each claim below was checked against an independent second source where possible
 | 24 | Published character heights (Tidus 175cm, Auron 183cm, Kimahri 204cm, Wakka 188cm) (§0.4 table, lines 54-66) | Unverifiable — neither confirmed nor contradicted | en.wikipedia.org/wiki/Tidus (no height listed at all) |
 
 No claim in this pass was rated "contradicted"; therefore no CONFLICT notes were added to the body text. One claim (#2) was upgraded to `[verified: 2 sources]` in §3.0, and the GamerGuides Braska's Final Aeon bestiary page was added to §8 Sources as the independent source checked for claim #1 (including its unused BFA HP-pool figures, noted as a candidate for a future combat-mechanics document).
+
+---
+
+## 10. Gap-fill log (2026-09-15)
+
+Nine implementation-blocking gaps were raised against this document; all nine are now filled in place. §7.1 is the resolution index. This log records **what was newly verified**, **what remains an estimate and why**, and **what is still open**.
+
+### 10.1 Newly verified this pass
+
+| # | Claim | Verdict | Source |
+|---|---|---|---|
+| 1 | Auron was **25 when he died**, and the scar / shut right eye / sunglasses are acquired, not original | **verified** `[single source]` — enables §1.22.2's memory-Auron delta sheet | FF Wiki *Auron* §Appearance |
+| 2 | Braska's robe is **red overlapping petals**, sash **grey with connecting circles** bearing the Yevon "A", headdress **dark blue** with a stone band and two pale-blue tassels | **verified** `[single source]` | FF Wiki *Lord Braska* |
+| 3 | Zaon wears **golden knight's armour with four horn-like ornaments and a white cape** | **verified** `[single source]` — the horn **count** is the identity | FF Wiki *Zaon* |
+| 4 | Kelk is the **only Ronso in Yevonite attire** (orange maester's robe), horn **almost black**; Biran's fur is **more grey than blue** with a **blond** mane; Yenke is **light-skinned** with **brownish** hair, a **dark** horn, and leather on **forearms and chest only** | **verified** `[single source each]` — three visually distinct Ronso, which the corpse staging needs | FF Wiki *Kelk Ronso*, *Biran Ronso*, *Yenke Ronso* |
+| 5 | Magus Sisters: **Sandy** tall/slim/**red**/mantis, **Cindy** rotund/**blue-and-red**/ladybug, **Mindy** smallest/**orange**/bee and **hovers in battle** | **verified** `[single source]` — no heights are published anywhere | FF Wiki *Magus Sisters (FFX)* |
+| 6 | Nooj is **188 cm**; Baralai is **176 cm**; ages: Logos **26**, Ormi **22**, Gippal **18**, Nooj **21**, Baralai **20**, Brother **20** in X-2 | **verified** `[single source]` (infoboxes) | FF Wiki, respective pages |
+| 7 | Nooj's prosthetics are on the **left** arm and leg; Gippal's eye-patch is over the **right** eye | **verified** `[single source each]` — sidedness drives the staging rule in §1.23.4 | FF Wiki *Nooj*, *Gippal* |
+| 8 | Shinra's face is **never shown**; **ochre visor**, brown bodysuit, **lime green mittens**, blue collar | **verified** `[single source]` — drives the "no mouth frame, visor pulse instead" portrait rule | FF Wiki *Shinra (FFX-2)* |
+| 9 | Wakka's Slots is **three reels + a 20-second timer**, reels stopped individually, and a three-match is called "**Jackpot!**" | **verified** `[verified: 2 sources]` — Jegged plus `ffx-combat-core.md` §5.6 | jegged.com Slots |
+| 10 | The FFX-2 ATB gauge colour code is **green / purple (CTIM) / red (Haste) / gold (Slow) / white (Stop)**, and HP is **white ≥ 33%, yellow < 33%, red at 0** | **verified** `[verified: 2 sources]` for the ATB code — supersedes §4.3's FFX-inherited 50% HP threshold | `ffx2-combat-core.md` §6.1 |
+| 11 | Spherechange **consumes the whole turn** and is restricted to **one link**; travelled links are drawn **blue** | `[verified: 2 sources]` for turn cost and adjacency; `[single source]` for the blue line — supersedes the old "free action" wheel spec | `ffx2-combat-core.md` §4.1/§4.2 |
+| 12 | `postprocessing@6.39.5` peer range is `three: ">= 0.168.0 < 0.187.0"`; the project pins `three@0.186.0` | **verified** `[verified: 2 sources]` — the decisive fact behind conflict B | `assets-and-tech.md` §2.1 |
+
+### 10.2 Contradiction found and recorded
+
+| Claim | Source A | Source B | Handling |
+|---|---|---|---|
+| The colour of Tidus's Swordplay success zone | `ffx-combat-core.md` §5.3: a **white** zone in the middle of the bar `[single source]` | Jegged Swordplay: "the highlighted **yellow** centre section of the bar" `[single source]` | **Unresolved; both single-sourced, neither decompile-derived.** §3.11.1 implements a **white fill with a 2 px yellow inner border**, which satisfies both readings and is more legible than either. Recorded rather than silently picked |
+
+### 10.3 Derived, not found — and the reasoning
+
+| Value | Why it is `[estimate]` | How it was derived |
+|---|---|---|
+| Swordplay **zone widths (68 / 44 / 28 / 16 px)** and **cursor speeds (260 / 340 / 430 / 540 px/s)** | Nothing publishes FFX's minigame geometry; Jegged states only that the zone is "smaller" for stronger abilities, and ranks Spiral Cut easiest / Blitz Ace hardest | Chosen so the per-pass window (262 / 129 / 65 / 30 ms) falls monotonically in that published order **and** every ability still permits at least two full sweeps inside the verified 3 000 ms timer |
+| Every **pixel rect, hex and duration** in §3.11–§3.16, §4.5, §4.10 and §4.11 | §3.0 and §4.0 already establish that everything outside their small verified-fact tables is our convention | Sized against the 640 × 360 authoring grid and reusing §3.3 / §4.2 chrome, so nothing new is invented visually |
+| The bloom conversion constants **×0.85 (strength)** and **×0.80 (threshold)** | No published equivalence exists between pmndrs `BloomEffect` and `UnrealBloomPass`; they use different accumulation and a different knee | Eyeball-matching factors, stated explicitly alongside the reason each argument differs, and flagged "tune against a reference frame, then freeze" |
+| The per-scene **tilt-shift uniforms** | `focusRange` was a *depth* band; `uBand` is a *screen-Y* band. There is no arithmetic conversion | Re-derived from the same one-sentence art intent that produced the DOF values |
+| The per-scene **grade presets** | A 32³ LUT is not buildable by this toolchain, and §0.2 discourages shipping authored image assets | Each LUT direction sentence translated to lift/gain/gamma/saturation/shadow-tint, with the original sentence preserved in the table so the intent survives the conversion |
+| Magus Sisters' **px heights** | No heights published for any of the three | Ranked from the verified "tall and slim / rotund / smallest" wording against the existing aeon band in §0.4 |
+| Body heights for **Leblanc, Logos, Ormi, Gippal, Brother, Buddy, Shinra** | Not published | Derived from the wiki's body-type words ("tall slim", "short stout") anchored to the two published X-2 heights, Nooj 188 cm and Baralai 176 cm |
+| The **camera preset re-derivation** | The tech doc's presets do not satisfy its own `S ≈ 2.0` assert — they give 2.92 / 4.73 / 2.04 / 5.39 / 6.45 | Every preset's **direction** kept; its **distance** solved from `d = 35.68 / S` so `S` is an integer 2–6 |
+
+### 10.4 Still open
+
+1. **Swordplay zone colour** — white vs yellow, above. Settleable only from a screenshot or a decompile of the minigame's UI data.
+2. **Cursor speed and zone width, actual values.** Not published anywhere. A frame-counted capture of each of the four Swordplay abilities would settle it in minutes and is the single highest-value outstanding measurement in this document.
+3. **Lulu's Fury rotation-size formula.** `ffx-combat-core.md` §5.7 confirms the requirement grows with Magic and with rotations already made, and that a rotation can become 720°, but no source gives the function. §3.11.4's concentric-arc display is correct for any function; the function itself is unknown.
+4. **Whether the original FFX draws the Overdrive minigames over a dimmed scene or a full-screen panel.** §3.11.0 assumes a dimmed scene with a floating overlay. Unverified.
+5. **Canonical heights for Leblanc, Logos, Ormi, Gippal, Buddy, Brother and Shinra.** Absent from the wiki infoboxes; the Ultimania may carry them.
+6. **The FFX-2 Garment Grid overlay's real on-screen proportions.** The *arrangement* (full screen, battle minimised upper-right) is sourced; the rects in §4.5.1 are ours.
+7. **Whether the pre-battle Trigger Command previews its stat bonus in the original.** §3.12.1 shows `STR +10` / `MDEF +10` as a deliberate, flagged deviation, because without it the mechanic is invisible to the player.
+
+### 10.5 Access note
+
+`finalfantasy.fandom.com` returned **HTTP 402 Payment Required** to the plain fetch path throughout this session (the same failure recorded against claims 9, 10, 16–21 in §9). Every wiki citation added in this pass was therefore read through the browser tool instead, and the quoted Appearance text was transcribed from the live page on 2026-09-15. `strategywiki.org` remained blocked (403), so §4.0's two StrategyWiki-sourced rows are still single-sourced — but the spherechange row among them has now been **superseded** by the guide-derived flow in `ffx2-combat-core.md`, which is the better source regardless.

@@ -3,6 +3,10 @@ import { Renderer } from '../engine/Renderer.ts';
 import { Input } from './Input.ts';
 import { SaveStore } from './SaveData.ts';
 import type { Screen } from './Screen.ts';
+import { FFX2HudMockScreen } from '../ui/ffx2/FFX2HudMockScreen.ts';
+import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleScreenFlow.ts';
+import type { BattleScreenResult } from './screens/BattleScreen.ts';
+import type { ChapterId } from '../data/encounters.ts';
 
 export interface AppOptions {
   /** Container for the WebGL canvas. Defaults to #game. */
@@ -31,6 +35,12 @@ export class App {
   readonly save: SaveStore;
   readonly uiRoot: HTMLElement;
   readonly fadeRoot: HTMLElement | null;
+  /**
+   * The chapter flow: Title -> ChapterSelect -> PartyPrep -> Cutscene(pre) ->
+   * Battle -> Cutscene(post) -> Results -> ChapterSelect. See
+   * `app/screens/BattleScreenFlow.ts`.
+   */
+  readonly flow: GameFlow;
 
   /** Seconds since `start()`. */
   elapsed = 0;
@@ -57,6 +67,21 @@ export class App {
     this.renderer = new Renderer({ container: gameRoot, fov: 34 });
     this.input = new Input({ pointerRoot: this.uiRoot });
     this.save = new SaveStore();
+    this.flow = new GameFlow(this);
+    // ffx2 UI agent: live-driven HUD/spherechange demo screen, `?screen=hud2-mock`.
+    this.register('hud2-mock', () => new FFX2HudMockScreen());
+  }
+
+  // ------------------------------------------------------------------- flow
+
+  /** Enter the chapter loop: chapter select, then a chapter, then repeat. */
+  startFlow(): Promise<void> {
+    return this.flow.start();
+  }
+
+  /** Run one chapter end to end. The debug API's `gotoChapter` uses this. */
+  runChapter(id: ChapterId, opts: RunChapterOptions = {}): Promise<BattleScreenResult | null> {
+    return this.flow.runChapter(id, opts);
   }
 
   // ---------------------------------------------------------------- screens
@@ -203,6 +228,8 @@ export class App {
       elapsed: Number(this.elapsed.toFixed(3)),
       registered: this.registered,
       save: this.save.snapshot(),
+      flowStep: this.flow.step,
+      flowScreens: flowReport(),
       screenState: this.current?.snapshot() ?? {},
     };
   }

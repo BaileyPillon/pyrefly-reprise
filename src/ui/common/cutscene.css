@@ -1,0 +1,69 @@
+/*
+ * CutsceneScreen — a backdrop image (or gradient fallback) behind the
+ * `DialogueBox`. Full scene staging (actors, 3D camera rigs) is out of this
+ * agent's ownership (`src/engine/**`, `src/scenes/**`); this is the DOM-only
+ * shell the presenter/scene agent wires real ports into (see
+ * `CutsceneScreen`'s `ports` option).
+ */
+
+.cutscene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #04060b;
+  background-size: cover;
+  background-position: center 35%;
+}
+
+.cutscene::after {
+  /* legibility scrim so dialogue text reads over a bright backdrop */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 4, 10, 0) 55%, rgba(2, 4, 10, 0.55) 100%);
+  pointer-events: none;
+}
+
+.cutscene__flash {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity linear;
+  z-index: 9;
+}
+
+.cutscene__shake {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+ * Chapter eyebrow, top-left (mockup: gold rule at 64,48 + a 15 px label
+ * tracked 0.34em). Viewport-relative like the dialogue box, which shares this
+ * screen's device-pixel root rather than a letterboxed stage.
+ */
+.cutscene__eyebrow {
+  position: absolute;
+  left: 4.44vw; /* 64 */
+  top: 3.9vw; /* 48 (of 810 -> read off the 1440 width for a single scale) */
+  display: flex;
+  align-items: center;
+  gap: 1.1vw; /* 16 */
+  pointer-events: none;
+  z-index: 7;
+}
+.cutscene__eyebrow-rule {
+  width: 3.05vw; /* 44 */
+  height: 0.21vw; /* 3 */
+  background: var(--ig-accent, #e3b94a);
+}
+.cutscene__eyebrow-label {
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  font-size: max(9px, 1.04vw); /* 15 */
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  color: var(--ig-accent, #e3b94a);
+  text-shadow: 0 0.14vw 0.7vw rgba(2, 4, 10, 0.8);
+}

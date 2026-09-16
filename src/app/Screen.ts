@@ -47,6 +47,15 @@ export abstract class Screen {
     return null;
   }
 
+  /**
+   * Fire a named beat for the debug API, the screenshot tool and e2e tests —
+   * `'attack'`, `'cast'`, `'hud:off'`, and so on. Returns false when the screen
+   * does not know the name.
+   */
+  trigger(_name: string): boolean {
+    return false;
+  }
+
   /** Arbitrary state for `window.__pyrefly.snapshotState()`. */
   snapshot(): Record<string, unknown> {
     return {};

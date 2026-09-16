@@ -1,0 +1,357 @@
+/*
+ * PartyPrepScreen — "Ink & Gold" (docs/handoff/presentation-ink-and-gold.md,
+ * approved 2026-09-15 round 2; mockup docs/screenshots/mockups/A-party-prep.jpg,
+ * source docs/handoff/ink-and-gold/PartyPrep.dc.html).
+ *
+ * The chapter's own backdrop blurred back to a ground, a cascading roster
+ * column down the left, the selected member's sheet on an ivory slab, the
+ * three who actually walk in along the bottom, and one gold button.
+ *
+ * Authored on the shared 640x360 grid (`LetterboxStage.ts`): every literal is
+ * its 1440 mockup value / 2.25 and carries that value in a comment.
+ *
+ * Scoping (docs/CONTRACT-CHANGES.md decision 10): this is a consumer
+ * stylesheet, so it declares no bare `.ig-*` rules — only `.prep*` classes,
+ * reading the shared layer through its custom properties.
+ */
+
+.prep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ig-ink, #0b0a12);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  color: var(--ig-paper, #f4f1e8);
+  -webkit-font-smoothing: antialiased;
+
+  /* The sheet leans at 8deg, not the 12deg every other slab uses, so it needs
+     its own pair rather than --ig-skew. FFX-2 mirrors it below, the same way
+     tokens.css mirrors --ig-skew. */
+  --prep-sheet-skew: -8deg;
+  --prep-sheet-skew-inverse: 8deg;
+}
+/* Co-class, not a bare .ig-* rule [CONTRACT-CHANGES decision 10]. */
+.prep.ig--ffx2 {
+  --prep-sheet-skew: 8deg;
+  --prep-sheet-skew-inverse: -8deg;
+}
+
+/* ----------------------------------------------------------------- ground */
+
+.prep__wash {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 35%;
+  filter: blur(4.44px) brightness(0.3) saturate(0.7); /* 10 */
+  transform: scale(1.06);
+}
+.prep__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 10, 18, 0.55) 0%,
+    rgba(11, 10, 18, 0.25) 45%,
+    rgba(11, 10, 18, 0.85) 100%
+  );
+}
+
+/* ---------------------------------------------------------------- eyebrow */
+
+.prep__eyebrow {
+  position: absolute;
+  left: 28.44px; /* 64 */
+  top: 19.56px; /* 44 */
+  display: flex;
+  align-items: center;
+  gap: 9.78px; /* 22 */
+}
+.prep__eyebrow-rule {
+  width: 24px; /* 54 */
+  height: 1.78px; /* 4 */
+  background: var(--ig-accent, #e3b94a);
+}
+.prep__eyebrow-label {
+  font-size: 7.11px; /* 16 */
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--ig-accent, #e3b94a);
+}
+.prep__where {
+  position: absolute;
+  right: 28.44px; /* 64 */
+  top: 20.44px; /* 46 */
+  font-size: 5.78px; /* 13 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: rgba(244, 241, 232, 0.7);
+}
+
+/* ----------------------------------------------------------------- roster */
+
+.prep__roster {
+  position: absolute;
+  left: 32px; /* 72 */
+  top: 48.89px; /* 110 */
+  display: flex;
+  flex-direction: column;
+  gap: 3.56px; /* 8 */
+}
+/* Each row steps 10px further right than the one above [spec: cascade]. */
+.prep__member {
+  display: flex;
+  align-items: center;
+  gap: 6.22px; /* 14 */
+  width: 133.33px; /* 300 */
+  height: 27.56px; /* 62 */
+  padding-right: 7.11px; /* 16 */
+  box-sizing: border-box;
+  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+  /* 6px edge on the leading side — left in FFX, right in FFX-2. The widths
+     are driven by --ig-edge so no .ig--ffx2 override is needed (see the
+     comment on --ig-edge in src/ui/inkgold/tokens.css). */
+  border-style: solid;
+  border-color: var(--ig-paper, #f4f1e8);
+  border-left-width: calc(2.67px * (1 - var(--ig-edge, 0))); /* 6 */
+  border-right-width: calc(2.67px * var(--ig-edge, 0));
+  border-top-width: 0;
+  border-bottom-width: 0;
+  transform: skewX(var(--ig-skew, -12deg));
+  cursor: pointer;
+}
+.prep__member > * {
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.prep__member--sel {
+  background: var(--ig-paper, #f4f1e8);
+  color: var(--ig-ink, #0b0a12);
+  border-color: var(--ig-accent, #e3b94a);
+}
+.prep__face {
+  width: 24.89px; /* 56 */
+  height: 24.89px;
+  margin-left: 1.78px; /* 4 */
+  flex: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #1a1526;
+  color: var(--ig-paper, #f4f1e8);
+  font-size: 8.89px;
+  font-weight: 700;
+}
+.prep__face span {
+  position: absolute;
+}
+.prep__face img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 8%;
+  display: block;
+}
+.prep__member-name {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 10.67px; /* 24 */
+  font-weight: 700;
+  font-style: italic;
+  white-space: nowrap;
+}
+.prep__member-lv {
+  margin-left: auto;
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 6.67px; /* 15 */
+  font-weight: 700;
+  color: var(--ig-accent, #e3b94a);
+  white-space: nowrap;
+}
+.prep__member--sel .prep__member-lv {
+  color: var(--ig-accent-on-paper, #b8862a);
+}
+
+/* ------------------------------------------------------------------- tabs */
+
+.prep__tabs {
+  position: absolute;
+  left: 231.11px; /* 520 */
+  top: 49.78px; /* 112 */
+  display: flex;
+  gap: 17.78px; /* 40 */
+}
+.prep__tab {
+  font-size: 6.67px; /* 15 */
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(244, 241, 232, 0.6);
+  padding-bottom: 4.44px; /* 10 */
+  border-bottom: 1.78px solid transparent; /* 4 */
+  cursor: pointer;
+}
+.prep__tab[aria-selected='true'] {
+  color: var(--ig-paper, #f4f1e8);
+  border-bottom-color: var(--ig-accent, #e3b94a);
+}
+
+/* ------------------------------------------------------------------ sheet */
+
+.prep__sheet {
+  position: absolute;
+  left: 231.11px; /* 520 */
+  top: 75.56px; /* 170 */
+  width: 364.44px; /* 820 */
+  min-height: 62.22px; /* 140 — a sheet never collapses to a sliver */
+  padding: 10.67px 15.11px 9.78px; /* 24 34 22 */
+  box-sizing: border-box;
+  background: var(--ig-paper, #f4f1e8);
+  color: var(--ig-ink, #0b0a12);
+  transform: skewX(var(--prep-sheet-skew));
+  box-shadow: 0 7.11px 17.78px rgba(0, 0, 0, 0.5); /* 16 40 */
+}
+.prep__sheet-inner {
+  transform: skewX(var(--prep-sheet-skew-inverse));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 21.33px; /* 0 48 */
+}
+/* A registered panel gets the slab to itself — it draws its own contents. */
+.prep__sheet-inner--panel {
+  display: block;
+}
+.prep__stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4.44px;
+  padding: 4px 0 3.11px; /* 9 0 7 */
+  border-bottom: 0.89px solid var(--ig-ink, #0b0a12); /* 2 */
+}
+/* The last row of each column closes the block instead of ruling under it. */
+.prep__stat--last {
+  border-bottom: 0;
+}
+.prep__stat-k {
+  font-size: 5.78px; /* 13 */
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--ig-accent-on-paper, #b8862a);
+  white-space: nowrap;
+}
+.prep__stat-v {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 13.33px; /* 30 */
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ig-ink, #0b0a12);
+}
+/* A value that is a word, not a number (a dressphere name). */
+.prep__stat-v--text {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 9.78px; /* 22 */
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------- hint */
+
+.prep__hint {
+  position: absolute;
+  left: 231.11px; /* 520 */
+  top: 213.33px; /* 480 */
+  font-size: 4.89px; /* 11 */
+  letter-spacing: 0.22em;
+  color: rgba(244, 241, 232, 0.55);
+}
+.prep__hint b {
+  color: var(--ig-accent, #e3b94a);
+}
+
+/* ------------------------------------------------------------------ start */
+
+.prep__start {
+  position: absolute;
+  right: 26.67px; /* 60 */
+  bottom: 79.11px; /* 178 */
+  display: inline-flex;
+  align-items: center;
+  padding: 7.11px 11.56px; /* 16 26 */
+  background: var(--ig-accent, #e3b94a);
+  color: var(--ig-ink, #0b0a12);
+  font-size: 8px; /* 18 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  transform: skewX(var(--ig-skew, -12deg));
+  box-shadow: 0 4.44px 10.67px rgba(0, 0, 0, 0.5); /* 10 24 */
+  cursor: pointer;
+}
+.prep__start > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6.22px; /* 14 */
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.prep__start-tri {
+  width: 0;
+  height: 0;
+  border-top: 3.56px solid transparent; /* 8 */
+  border-bottom: 3.56px solid transparent;
+  border-left: 5.33px solid var(--ig-ink, #0b0a12); /* 12 */
+}
+
+/* ------------------------------------------------------------- field slots */
+
+.prep__slots {
+  position: absolute;
+  left: 32px; /* 72 */
+  bottom: 26.67px; /* 60 */
+  display: flex;
+  align-items: center;
+  gap: 9.78px; /* 22 */
+}
+.prep__slot {
+  display: flex;
+  align-items: center;
+  gap: 7.11px; /* 16 */
+  width: 177.78px; /* 400 */
+  height: 40.89px; /* 92 */
+  padding-right: 8.89px; /* 20 */
+  box-sizing: border-box;
+  background: var(--ig-paper, #f4f1e8);
+  color: var(--ig-ink, #0b0a12);
+  transform: skewX(var(--ig-skew, -12deg));
+  box-shadow: 0 4.44px 10.67px rgba(0, 0, 0, 0.5); /* 10 24 */
+}
+.prep__slot > * {
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.prep__slot .prep__face {
+  width: 32px; /* 72 */
+  height: 32px;
+  margin-left: 5.33px; /* 12 */
+  color: var(--ig-paper, #f4f1e8);
+}
+.prep__slot-name {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 12.44px; /* 28 */
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+}
+.prep__slot-sub {
+  margin-top: 1.78px; /* 4 */
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 6.67px; /* 15 */
+  font-weight: 700;
+  color: #2a2533;
+  white-space: nowrap;
+}
+.prep__slot-role {
+  margin-left: auto;
+  font-size: 4.89px; /* 11 */
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--ig-accent-on-paper, #b8862a);
+  white-space: nowrap;
+}

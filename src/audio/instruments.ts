@@ -21,6 +21,15 @@ import {
 } from './voices/sustained.ts';
 import { crash, hat, kick, shaker, snare, taiko, timpani, tom } from './voices/percussion.ts';
 import { sfxBlip, sfxNoise, sfxShimmer, sfxSweep, sfxZap } from './voices/sfxfamily.ts';
+import {
+  arpPluck,
+  clap,
+  kick808,
+  snare909,
+  supersaw,
+  synthBass,
+} from './voices/electronic.ts';
+import { epiano, flute, guitarDist, metalHit, organ } from './voices/band.ts';
 import type { Voice, VoiceCtx } from './voices/common.ts';
 
 export type { Voice, VoiceCtx };
@@ -60,6 +69,20 @@ export const INSTRUMENTS: Record<string, Voice> = {
   'sfx-noise': sfxNoise,
   'sfx-zap': sfxZap,
   'sfx-shimmer': sfxShimmer,
+  // Electronic / pop
+  supersaw,
+  'synth-bass': synthBass,
+  'arp-pluck': arpPluck,
+  // Band
+  epiano,
+  organ,
+  'guitar-dist': guitarDist,
+  flute,
+  // Electronic drum kit
+  'kick-808': kick808,
+  clap,
+  'snare-909': snare909,
+  'metal-hit': metalHit,
 };
 
 export const INSTRUMENT_NOTES: Record<string, string> = {
@@ -92,6 +115,17 @@ export const INSTRUMENT_NOTES: Record<string, string> = {
   'sfx-noise': 'Band-passed noise burst.',
   'sfx-zap': 'FM zap / crackle.',
   'sfx-shimmer': 'Detuned high partial shimmer.',
+  supersaw: 'Seven-saw unison stack with stereo spread; velocity opens the filter.',
+  'synth-bass': 'Mono saw+square through a resonant filter with a fast pluck envelope.',
+  'arp-pluck': 'Bright saw pluck with a very fast filter decay, for 16th-note arps.',
+  epiano: 'FM tine electric piano; bright attack mellows, gentle stereo tremolo.',
+  organ: 'Drawbar additive organ (16/8/4/2 2-3/2) with key click and slow rotary tremolo.',
+  'guitar-dist': 'Overdriven two-layer rock guitar; short notes read as palm mutes.',
+  flute: 'Breathy sine flute with light harmonics, breath noise and delayed vibrato.',
+  'kick-808': 'Long pitched sub boom with a click; note duration sets the decay.',
+  clap: 'Three flammed noise bursts plus a short band-passed tail.',
+  'snare-909': 'Tight electronic snare: tuned sine body under bright noise.',
+  'metal-hit': 'Industrial inharmonic FM anvil hit; pitch follows the note.',
 };
 
 export function instrumentNames(): string[] {

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Chakra+Petch:wght@500;700&display=swap">
+  <style>
+    body { margin: 0; background: #0B0A12; }
+    a { color: #E3B94A; } a:hover { color: #F4F1E8; }
+    .frame { position: relative; width: 1440px; height: 810px; overflow: hidden; background: #0B0A12; font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif; color: #F4F1E8; }
+    .serif { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+  </style>
+</helmet>
+<div class="frame">
+  <img src="bg-title.jpg" alt="" style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; filter: saturate(0.95) contrast(1.05);">
+  <div style="position: absolute; inset: 0; background: radial-gradient(120% 90% at 60% 40%, rgba(11, 10, 18, 0) 40%, rgba(11, 10, 18, 0.6) 100%), linear-gradient(90deg, rgba(11, 10, 18, 0.55) 0%, rgba(11, 10, 18, 0) 55%);"></div>
+  <svg style="position: absolute; inset: 0; width: 1440px; height: 810px; opacity: 0.13; mix-blend-mode: overlay; pointer-events: none;" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#grain)"></rect></svg>
+
+  <div style="position: absolute; left: -60px; top: 150px; width: 700px; height: 470px; background: #F4F1E8; transform: skewX(-12deg); box-shadow: 30px 0 60px rgba(0, 0, 0, 0.5);"></div>
+  <div style="position: absolute; left: 632px; top: 150px; width: 8px; height: 470px; background: #E3B94A; transform: skewX(-12deg);"></div>
+
+  <div style="position: absolute; left: 72px; top: 196px; display: flex; flex-direction: column; gap: 0;">
+    <div style="font-size: 14px; font-weight: 700; letter-spacing: 0.4em; color: #B8862A;">AN UNOFFICIAL FAN TRIBUTE</div>
+    <div class="serif" style="margin-top: 22px; font-size: 156px; font-weight: 700; font-style: italic; line-height: 0.84; color: #0B0A12; letter-spacing: -0.03em;">Pyrefly</div>
+    <div class="serif" style="font-size: 156px; font-weight: 700; font-style: italic; line-height: 0.84; color: #0B0A12; letter-spacing: -0.03em; margin-left: 110px;">Reprise</div>
+    <div style="margin-top: 30px; margin-left: 6px; width: 360px; height: 3px; background: #0B0A12;"></div>
+    <div style="margin-top: 26px; margin-left: 6px; display: inline-flex; align-items: center; gap: 14px; padding: 12px 22px; background: #0B0A12; color: #E3B94A; font-size: 15px; font-weight: 700; letter-spacing: 0.34em; align-self: flex-start;"><svg width="10" height="14" viewBox="0 0 10 14" xmlns="http://www.w3.org/2000/svg"><path d="M1 1 L9 7 L1 13 Z" fill="#E3B94A"></path></svg>PRESS ENTER</div>
+  </div>
+
+  <div style="position: absolute; left: 1400px; top: 150px; font-size: 13px; font-weight: 700; letter-spacing: 0.36em; color: #E3B94A; white-space: nowrap; transform: rotate(90deg); transform-origin: left top;">FIVE ENCOUNTERS · FINAL FANTASY X AND X-2</div>
+
+  <div style="position: absolute; left: 72px; bottom: 44px; padding: 9px 16px; background: rgba(11, 10, 18, 0.7); border-left: 3px solid #E3B94A; font-size: 12px; letter-spacing: 0.2em; color: rgba(244, 241, 232, 0.85);"><b style="color: #E3B94A;">ARROWS / WASD</b> MOVE &nbsp;·&nbsp; <b style="color: #E3B94A;">ENTER</b> CONFIRM &nbsp;·&nbsp; <b style="color: #E3B94A;">ESC</b> CANCEL</div>
+</div>
+</x-dc>
+</body>
+</html>

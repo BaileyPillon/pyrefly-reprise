@@ -12,3 +12,22 @@ playwright-report/
 critic/screens/
 # sprite / tool render output
 build/
+# pre-cutout renders and rejected batch variants from tools/gen/comfy.mjs
+public/art/**/*.raw.png
+public/art/**/*.[0-9].png
+public/art/**/*.[0-9].json
+__pycache__/
+
+# ---------------------------------------------------------------------------
+# Generated binaries: regenerable, large, and rewritten under the same names on
+# every run, so git history is the wrong place for them.
+#
+# Painted art from tools/gen/comfy.mjs. The art track re-renders these hourly;
+# the real backup is robocopy snapshots under D:\Tools\pyrefly-art-backup\.
+public/art/
+#
+# Audio previews from tools/render-track.mjs (~10 MB each). Nothing ships as an
+# audio file — the game synthesises everything at runtime — so these are
+# previews only and regenerate with `node tools/render-track.mjs all`.
+# (Four early previews were committed before this rule and remain tracked.)
+docs/audio/*.wav

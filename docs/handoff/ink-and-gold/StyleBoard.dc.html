@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Rajdhani:wght@600;700&family=Exo+2:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #F4F1E8; }
+    a { color: #B8862A; } a:hover { color: #0B0A12; }
+    .frame { position: relative; width: 1440px; height: 900px; overflow: hidden; background: #F4F1E8; font-family: 'Exo 2', 'Segoe UI', sans-serif; color: #0B0A12; padding: 56px 64px; box-sizing: border-box; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+    .serif { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+    .label { font-family: 'Chakra Petch', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.32em; color: #B8862A; }
+    h2 { margin: 0 0 18px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.32em; color: #B8862A; }
+    .sw { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; font-size: 15px; }
+    .sw i { width: 44px; height: 30px; display: block; border: 1px solid rgba(11, 10, 18, 0.2); flex: none; }
+    .sw code { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 600; color: #5b5566; margin-left: auto; }
+    ul { margin: 0; padding-left: 18px; font-size: 16px; line-height: 1.5; }
+    li { margin-bottom: 8px; }
+    li b { font-family: 'Chakra Petch', sans-serif; font-size: 13px; letter-spacing: 0.16em; color: #0B0A12; }
+  </style>
+</helmet>
+<div class="frame">
+  <div style="grid-column: 1 / -1; display: flex; align-items: baseline; gap: 24px; border-bottom: 3px solid #0B0A12; padding-bottom: 16px;">
+    <div class="serif" style="font-size: 54px; font-weight: 700; font-style: italic; line-height: 1;">Ink &amp; Gold</div>
+    <div class="label">DIRECTION A · PRESENTATION SYSTEM FOR PYREFLY REPRISE</div>
+    <div style="margin-left: auto; font-size: 15px; color: #5b5566;">Painted 2.5D art unchanged. Chrome, cut-ins, transitions and type change.</div>
+  </div>
+
+  <div>
+    <h2>TYPE</h2>
+    <div class="serif" style="font-size: 72px; font-weight: 700; font-style: italic; line-height: 0.95;">Seymour</div>
+    <div style="margin-top: 6px; font-size: 13px; color: #5b5566;">Cormorant Garamond Bold Italic — names, banners, results, damage numerals</div>
+    <div style="margin-top: 22px; font-family: 'Chakra Petch', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: 0.14em;">ATTACK · SKILLS · OVERDRIVE</div>
+    <div style="margin-top: 6px; font-size: 13px; color: #5b5566;">Chakra Petch Bold, tracked — commands, labels, chips (already the game's display face)</div>
+    <div style="margin-top: 22px; font-family: 'Rajdhani', sans-serif; font-size: 44px; font-weight: 700; line-height: 1;">2419 <span style="font-size: 20px; color: #5b5566;">/2600</span></div>
+    <div style="margin-top: 6px; font-size: 13px; color: #5b5566;">Rajdhani Bold — HP, MP, tallies (already the game's numeral face)</div>
+    <div style="margin-top: 22px; font-size: 18px;">Exo 2 — descriptions and dialogue, unchanged.</div>
+  </div>
+
+  <div>
+    <h2>COLOR</h2>
+    <div class="sw"><i style="background: #0B0A12;"></i>Ink — panels, type on ivory<code>#0B0A12</code></div>
+    <div class="sw"><i style="background: #F4F1E8;"></i>Paper — slabs, banners, results<code>#F4F1E8</code></div>
+    <div class="sw"><i style="background: #E3B94A;"></i>Yevon gold — the one accent: acting, selected, ready<code>#E3B94A</code></div>
+    <div class="sw"><i style="background: #B02A2A;"></i>Blood — enemies only<code>#B02A2A</code></div>
+    <div class="sw"><i style="background: #7FC6E8;"></i>Spira sky — MP<code>#7FC6E8</code></div>
+    <div class="sw"><i style="background: #F7B6D9;"></i>Farplane pink — swaps in for gold in FFX-2 chapters<code>#F7B6D9</code></div>
+    <div style="margin-top: 16px; font-size: 15px; line-height: 1.5;">All six are the existing visual-bible tokens. Gold is the complement of the blue world, so the chrome pops without recolouring a single painting. One accent per context, never two.</div>
+  </div>
+
+  <div>
+    <h2>MOTION &amp; CAMERA</h2>
+    <ul>
+      <li><b>TURN CUT-IN</b> — the portrait slab slams in from the left in 180 ms, overshoots 12° of skew and settles to −12°; the command stack cascades in 40 ms per row.</li>
+      <li><b>DAMAGE</b> — gold ink-splash pops 0→1.1→1 in 120 ms, numerals stamp in on top a frame later.</li>
+      <li><b>SECTION WIPES</b> — every screen change is a diagonal ivory wipe at the same 19° angle (battle start, results, chapter select).</li>
+      <li><b>CAMERA</b> — a −4° roll on every attack, an 8° push-in for Overdrive, backdrop depth-of-field while a menu is open.</li>
+      <li><b>GRAIN</b> — 12 % film grain over the whole frame so paint and chrome share one surface.</li>
+      <li><b>FFX-2</b> — same system, pink accent, cut-ins slide from the right, wipes at −19°.</li>
+    </ul>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,90 +1,143 @@
 /**
  * Chapter 3 enemy groups — Braska's Final Aeon -> possessed aeons -> Yu Yevon.
  *
- * Source: `research/ffx-bfa-yu-yevon.md`. BFA is bestiary #233; the Yu Pagodas
- * are `m173`/`m174`; Yu Yevon's shell holds 99 999 HP.
+ * Source: `research/ffx-bfa-yu-yevon.md`. BFA is bestiary #233; the Yu
+ * Pagodas are `m173`/`m174`; Yu Yevon's shell holds 99,999 HP. Boss-only
+ * `AbilityDef`s live in `./braskas-final-aeon-abilities.ts`.
  *
  * This chapter is a **chain**: one continuous run of battles with no menu
- * between, linked by {@link EnemyGroupDef.nextGroupId}. Two Yu Pagodas are
- * present in every battle from the BFA fight onward.
+ * between, linked by {@link EnemyGroupDef.nextGroupId} exactly like
+ * `data/ffx2/enemies/vegnagun-shuyin.ts`'s four-part chain. Two Yu Pagodas
+ * are present in every battle from the BFA fight onward.
  *
- * Verified headline numbers:
- *   BFA form 1   HP 60 000, form 2 HP 120 000, overkill 20 000, MP 100,
- *                STR 45 -> 50, DEF 100, MAG 50, MDEF 100, AGI 44, LUCK 15,
- *                EVA 0, ACC 10, AP 0, gil 0, poison tick 1% of max HP.
- *                Steal: common Turbo Ether, rare Elixir. No drops.
- *                **Regen-immune.** Zanmato level 6.
- *   Yu Pagoda    overkill 5 000; uses the #210 Power Wave variant, which strips
- *                Poison / Zombie / **Reflect**.
- *   Yu Yevon     HP 99 999, MP 1, STR 1, MAG 200, AGI 44, poison tick 10% of
- *                max HP = 9 999/tick, Doom counter 3 turns.
+ * **The possessed-aeon gauntlet is dynamic, not a fixed formation list**
+ * [§2.1, §2.2, verified: 2 sources]: only aeons Yuna actually owns are
+ * fought, one at a time, in acquisition order, and each fights with a
+ * **live copy of the player's own aeon stats** (Luck forced to 1). A single
+ * static `EnemyGroupDef` chain can't express "skip the aeons this player
+ * doesn't have", so this file exports a builder,
+ * {@link buildPossessedAeonChain}, that the battle screen calls with the
+ * player's owned aeon ids to produce the correctly-chained sequence ending
+ * at `'yu-yevon'`. `possessedAeonGroups` below is that chain pre-built for
+ * {@link MANDATORY_AEON_IDS} (Valefor/Ifrit/Ixion/Shiva/Bahamut) — the
+ * `dreams-end` build's default roster — for anything that just wants "the
+ * chain a non-grinding player sees".
  *
- * TODO(data-agent): transcribe the full records.
- *   - §1.2 elemental/status tables, §1.3 action rows, §1.6 the Overdrive gauge
- *     model (+20% per Yu Pagoda Power Wave, +0–10% per turn) and the **Talk**
- *     trigger command: two charges, effect lands on BFA's next turn which he
- *     then loses, offered a useless third time [visual-bible §3.12.2].
- *   - §1.6: the gauge **carries over** across the form transition; do not reset.
- *   - §2.2 possessed aeons **mirror the player's own aeon stats live**, Luck
- *     forced to 1. The stat blocks below are placeholders the engine overwrites
- *     at setup; only aeons Yuna actually owns appear.
- *   - §2.3: from the possessed-aeon fights onward the party carries a
- *     permanent, non-consumable Auto-Life. Model it as an encounter flag.
- *   - §3 Yu Yevon's script.
+ * **Contract gap worth flagging** (see the final report): neither
+ * `EnemyDef` nor `EnemyFields` has a place to carry the Yu Pagoda's revive
+ * timer (new max HP = 5,000 + excess damage, back after ~63 ticks in the
+ * BFA fight / ~72 ticks in the aeon and Yu Yevon fights, §1.4) or Yu
+ * Yevon's Curaga counter-eligibility rule (fires at most once per
+ * player-side damaging *action*, never on his own Gravija, a Poison tick,
+ * or a Yu Pagoda's Power Wave, §3.4.1). Both are documented in comments
+ * below for the engine agent since there's no data field to hold them.
  */
 
+import type { AeonId, BraskasFinalAeonEnemyId } from '../ids.ts';
+import { MANDATORY_AEON_IDS, POSSESSED_AEON_ORDER } from '../ids.ts';
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 
-/** TODO(data-agent): §1.4 — the two Yu Pagodas, identical except for slot. */
-function todoYuPagoda(id: string, slot: number): EnemyDef {
+// ---------------------------------------------------------------------------
+// Yu Pagodas
+// ---------------------------------------------------------------------------
+
+/**
+ * §1.4 [verified: 3 sources]. The struct's raw HP field (65535) is a
+ * placeholder; the real fightable HP is the struct's `overkill` field,
+ * 5,000. Two are present in every battle from the BFA fight onward and
+ * cannot be permanently killed — see the revive-timer note in the file
+ * header. `bfa` context: Agility 40, Power Wave heals BFA +20% Overdrive
+ * gauge. `aeon`/`yu-yevon` context: Agility 30, Power Wave strips only
+ * Poison/Zombie/Reflect and carries no gauge bonus.
+ */
+function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, context: 'bfa' | 'aeon-or-yu-yevon'): EnemyDef {
   return {
     id,
     name: 'Yu Pagoda',
     spriteKey: 'yu-pagoda',
     slot,
     stats: {
-      hp: 65535,
-      mp: 0,
+      hp: 5000, // §1.4 [verified: 3 sources] — not the struct's 65535 HP placeholder
+      mp: 5000, // §1.4 [verified: 2 sources]
       str: 1,
-      def: 1,
-      mag: 1,
-      mdef: 1,
-      agi: 1,
-      luck: 1,
+      def: 0, // §1.4 [single source] — immaterial, never attacked for damage-reduction purposes
+      mag: 20,
+      mdef: 50,
+      agi: context === 'bfa' ? 40 : 30, // §1.4 [single source: wiki]
+      luck: 15,
       eva: 0,
       acc: 0,
-      maxHp: 65535,
-      maxMp: 0,
-    }, // TODO(data-agent): §1.4
-    hp: 65535,
-    mp: 0,
-    affinities: {}, // TODO(data-agent): §1.4
-    immunities: {}, // TODO(data-agent): §1.4
+      maxHp: 5000,
+      maxMp: 5000,
+    },
+    hp: 5000,
+    mp: 5000,
+    affinities: {},
+    // §1.4 [verified: 2 sources]: "immune to essentially everything except
+    // Slow (resist 50) and Delay" — Slow is a Ward-level partial
+    // resistance, not immune, and Delay is NOT immune at all (no
+    // `immune-to-delay` flag below — Slowga/Silver Hourglass can lock a
+    // Pagoda out of turns entirely).
+    immunities: {
+      ko: 255,
+      zombie: 255,
+      petrify: 255,
+      poison: 255,
+      sleep: 255,
+      silence: 255,
+      darkness: 255,
+      confuse: 255,
+      berserk: 255,
+      provoke: 255,
+      doom: 255,
+      eject: 255,
+      curse: 255,
+      'auto-life': 255,
+      'power-break': 255,
+      'magic-break': 255,
+      'armor-break': 255,
+      'mental-break': 255,
+      slow: 50,
+    },
     immunityFlags: ['immune-to-regen'],
-    forms: [{ name: 'Yu Pagoda', spriteKey: 'yu-pagoda', hp: 65535 }],
-    aiScriptId: 'yu-pagoda', // TODO(data-agent): Power Wave #210 variant
-    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 5000, drops: [] },
-    abilityIds: [], // TODO(data-agent)
+    forms: [{ name: 'Yu Pagoda', spriteKey: 'yu-pagoda', hp: 5000 }],
+    aiScriptId: context === 'bfa' ? 'yu-pagoda-bfa' : 'yu-pagoda-aeon',
+    // §1.4: not directly killable for reward purposes — it revives instead
+    // of staying dead. `overkillThreshold` is set high so a normal hit
+    // never reads as an overkill.
+    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] },
+    abilityIds:
+      context === 'bfa'
+        ? ['power-wave-bfa', 'yu-pagoda-curse', 'osmose']
+        : ['power-wave-aeon', 'yu-pagoda-curse', 'osmose'],
     flags: { isPart: true },
+    zanmatoLevel: 5, // §1.4 [single source]
     sensorText: 'Every kindness it performs is aimed at you.',
     scanText:
       'Support construct. Restores HP, removes ailments and accelerates its master’s Overdrive. Destroying both halts all three.',
   };
 }
 
+// ---------------------------------------------------------------------------
+// Braska's Final Aeon (Jecht) — battle 1
+// ---------------------------------------------------------------------------
+
 /** Battle 1 of the chapter: BFA (two forms) plus the two Yu Pagodas. */
 export const braskasFinalAeonGroup: EnemyGroupDef = {
   id: 'braskas-final-aeon',
   game: 'ffx',
   canEscape: false,
-  nextGroupId: 'possessed-aeons',
+  nextGroupId: 'possessed-aeons', // superseded at runtime by buildPossessedAeonChain's first link — see file header
   enemies: [
     {
       id: 'braskas-final-aeon',
       name: "Braska's Final Aeon",
-      spriteKey: 'bfa-form-1',
+      spriteKey: 'braskas-final-aeon-1',
       slot: 0,
-      // §1.1 verified values for form 1; form 2 overrides STR 45 -> 50.
+      // §1.1 [verified: 2-4 sources per field]. Form 2 overrides Strength 45 -> 50.
+      // MP 100 (decompile) vs wiki 106, and AGI 44 (decompile) vs wiki 40, are
+      // both open, non-load-bearing conflicts [§1.1, §8] — decompile kept per
+      // the research's source-tier policy.
       stats: {
         hp: 60000,
         mp: 100,
@@ -101,68 +154,240 @@ export const braskasFinalAeonGroup: EnemyGroupDef = {
       },
       hp: 60000,
       mp: 100,
-      affinities: {}, // TODO(data-agent): §1.2
-      immunities: {}, // TODO(data-agent): §1.2
-      immunityFlags: ['boss', 'immune-to-regen'],
+      affinities: {}, // §1.2 [verified: 2 sources] all five elements Neutral
+      // §1.2 [verified: 2 sources for the whole table].
+      immunities: {
+        ko: 255, // Death
+        petrify: 255,
+        sleep: 255,
+        darkness: 255, // Dark
+        slow: 255,
+        doom: 255,
+        eject: 255,
+        zombie: 50, // landable — the key exploitable status, §1.6
+        silence: 75,
+        poison: 90,
+      },
+      immunityFlags: [
+        'boss',
+        'immune-to-regen', // §1.2 [verified: 2 sources]
+        'immune-to-bribe',
+        'immune-to-delay',
+        'immune-to-percentage-damage',
+        'immune-to-life', // §1.2 — Phoenix Down/Mega Phoenix/Elixir/Megalixir/X-Potion/Healing Water/Tetra Elemental do nothing, even on a living Zombie
+      ],
+      threatenChance: 0, // §1.2 [verified: 2 sources] immune
       forms: [
-        { name: "Braska's Final Aeon", spriteKey: 'bfa-form-1', hp: 60000, aiScriptId: 'bfa-form-1' },
         {
           name: "Braska's Final Aeon",
-          spriteKey: 'bfa-form-2',
-          hp: 120000,
-          statOverrides: { str: 50 },
+          spriteKey: 'braskas-final-aeon-1',
+          hp: 60000,
+          aiScriptId: 'bfa-form-1',
+        },
+        {
+          name: "Braska's Final Aeon",
+          spriteKey: 'braskas-final-aeon-2',
+          hp: 120000, // §0, §1.1 [verified: 4 sources] — the struct's own 60000 HP field is form-1 only; the battle script overrides to 120,000 on transformation
+          statOverrides: { str: 50 }, // §1.1 [verified: 2 sources] — cross-validated against the Ultimate Jecht Shot damage band in §1.5
           aiScriptId: 'bfa-form-2',
         },
       ],
-      aiScriptId: 'bfa-form-1', // TODO(data-agent): §1.6
+      aiScriptId: 'bfa-form-1',
       rewards: {
         ap: 0,
         apOverkill: 0,
         gil: 0,
-        overkillThreshold: 20000,
+        overkillThreshold: 20000, // §1.7 [verified: 2 sources] cosmetic — no AP either way
         drops: [],
         steal: {
-          baseChance: 100, // TODO(data-agent): confirm against §1.1
+          baseChance: 100, // [estimate — no percentage published in the research; only the item table is sourced]
           common: { itemId: 'turbo-ether', count: 1 },
           rare: { itemId: 'elixir', count: 1 },
         },
       },
-      abilityIds: [], // TODO(data-agent): §1.3
+      abilityIds: [
+        'left-arm-strike', // §1.3 — form 1
+        'jecht-beam', // §1.3 — both forms
+        'triumphant-grasp', // §1.3, §1.6 — form 1 Overdrive
+        'jecht-bomber', // §1.3, §1.6 — form 1 anti-aeon Overdrive
+        'draws-sword', // §1.3 — 1->2 transformation cue
+        'left-arm-strike-2', // §1.3 — form 2
+        'blade-blitz', // §1.3, §1.6 — form 2 opener, then a growing share of form-2 normal turns
+        'triumphant-grasp-2', // §1.3, §1.6 — form 2 Overdrive, HP > 50%
+        'ultimate-jecht-shot', // §1.3, §1.6 — form 2 Overdrive, HP <= 50%
+        'jecht-bomber-2', // §1.3, §1.6 — form 2 anti-aeon Overdrive
+      ],
       flags: { isBoss: true },
       sensorText: 'The pillars keep it standing. Take the pillars.',
       scanText:
         'A man made into a weapon. Petrifies with light. Its supports heal it, cleanse it, and feed its fury. When it takes up the sword, no one is safe from a single swing.',
-      poisonTickPercent: 1,
-      zanmatoLevel: 6,
+      poisonTickPercent: 1, // §1.1 [verified: 2 sources] — same 1% in both forms (600 -> 1,200 as maxHP doubles)
+      zanmatoLevel: 6, // §1.2 [verified: 2 sources] HD Remaster value; 5 in the original JP/NA release. A stray FFX-Info monster page shows 4 for this monster — unresolved, not acted on (§8 stray discrepancy).
     },
-    todoYuPagoda('yu-pagoda-left', 1),
-    todoYuPagoda('yu-pagoda-right', 2),
+    yuPagoda('yu-pagoda-left', 1, 'bfa'),
+    yuPagoda('yu-pagoda-right', 2, 'bfa'),
   ],
-  musicCues: [
-    // TODO(data-agent): original composition for Dream's End.
-    { at: 'start', track: 'boss-dread', fadeMs: 800 },
-  ],
+  musicCues: [{ at: 'start', track: 'boss-jecht', fadeMs: 800 }],
+};
+
+// ---------------------------------------------------------------------------
+// Possessed aeons — battle 2..n, one aeon at a time
+// ---------------------------------------------------------------------------
+
+/**
+ * Ability ids each possessed aeon may select, split into its ordinary
+ * "special" command and its Overdrive. See
+ * `braskas-final-aeon-abilities.ts` for the numbers and their confidence
+ * tags — the five mandatory aeons' Overdrive powers are
+ * `[verified: derived + 1 guide]`; everything else here is `[estimate]`.
+ */
+const POSSESSED_AEON_ABILITY_IDS: Record<BraskasFinalAeonEnemyId, string[]> = {
+  'possessed-valefor': ['possessed-valefor-sonic-wings', 'possessed-valefor-energy-ray', 'possessed-valefor-energy-blast'],
+  'possessed-ifrit': ['possessed-ifrit-meteor-strike', 'possessed-ifrit-hellfire'],
+  'possessed-ixion': ['possessed-ixion-aerospark', 'possessed-ixion-thors-hammer'],
+  'possessed-shiva': ['possessed-shiva-heavenly-strike', 'possessed-shiva-diamond-dust'],
+  'possessed-bahamut': ['possessed-bahamut-impulse', 'possessed-bahamut-mega-flare'],
+  'possessed-anima': ['possessed-anima-pain', 'possessed-anima-oblivion'],
+  'possessed-yojimbo': ['possessed-yojimbo-daigoro', 'possessed-yojimbo-zanmato'],
+  'possessed-cindy': ['possessed-cindy-camisade', 'possessed-cindy-delta-attack', 'curaga'],
+  'possessed-sandy': ['possessed-sandy-razzia', 'haste', 'reflect'],
+  'possessed-mindy': ['possessed-mindy-passado'],
+  // Unused keys required by the BraskasFinalAeonEnemyId union — never built by buildPossessedAeonChain.
+  'braskas-final-aeon': [],
+  'yu-pagoda-left': [],
+  'yu-pagoda-right': [],
+  'yu-yevon': [],
+};
+
+/** Sensor lines, our own wording, inspired by the possessed aeons' short in-game lines [§2.2, verified: 2 sources]. */
+const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string>> = {
+  'possessed-valefor': 'Strike true. It wants this to end.',
+  'possessed-ifrit': 'The fire remembers you. It still obeys.',
+  'possessed-ixion': 'Lightning without a summoner to aim it.',
+  'possessed-shiva': 'Cold all the way through, now.',
+  'possessed-bahamut': 'Soon, it thinks. Soon it can rest.',
+  'possessed-anima': 'It atones by attacking you.',
+  'possessed-yojimbo': 'Paid for by someone who is no longer here.',
 };
 
 /**
- * Battle 2..n: the possessed-aeon gauntlet, fought one aeon at a time in
- * acquisition order, always with the two Yu Pagodas. The engine builds the
- * actual roster at setup from the aeons Yuna owns and copies their live stats
- * in [§2.2], so this group carries only the Pagodas plus one placeholder slot.
- *
- * TODO(data-agent): §2.1/§2.2 movesets per aeon and the scripted opening beat
- * "Possessed by Yu Yevon!".
+ * Builds one possessed-aeon's `EnemyDef`. **Stats are placeholders** —
+ * `mirrorsLiveAeonStats` in `flags`... no such field exists, so this is
+ * documented in a comment instead: the engine must overwrite `stats`/`hp`/
+ * `mp` at battle setup with a live copy of the corresponding
+ * `AeonBuild` from the party's own roster, Luck forced to 1 [§2.2, verified:
+ * 2 sources]. Everything else (immunities, ability ids, flags) is real data
+ * and ships as-is.
  */
-export const possessedAeonsGroup: EnemyGroupDef = {
-  id: 'possessed-aeons',
-  game: 'ffx',
-  canEscape: false,
-  nextGroupId: 'yu-yevon',
-  enemies: [todoYuPagoda('yu-pagoda-left', 1), todoYuPagoda('yu-pagoda-right', 2)],
-  musicCues: [{ at: 'start', track: 'boss-dread', fadeMs: 800 }],
-};
+function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
+  return {
+    id: aeonId,
+    name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`,
+    spriteKey: aeonId.replace('possessed-', ''), // reuses the aeon's own sprite per the art session's convention
+    slot,
+    // Placeholder — the engine overwrites this from the live `AeonBuild`,
+    // Luck forced to 1. See the function doc comment above.
+    stats: { hp: 1, mp: 1, str: 1, def: 1, mag: 1, mdef: 1, agi: 1, luck: 1, eva: 0, acc: 0, maxHp: 1, maxMp: 1 },
+    hp: 1,
+    mp: 1,
+    affinities: {}, // mirrors the live aeon's own affinities at setup
+    // §2.2 [verified: 2 sources]: aeons are immune to every negative status
+    // except Curse and Delay (the "Aeon Ribbon" rule) — that holds for a
+    // possessed aeon too; only the controller changed.
+    immunities: {
+      ko: 255,
+      zombie: 255,
+      petrify: 255,
+      poison: 255,
+      sleep: 255,
+      silence: 255,
+      darkness: 255,
+      confuse: 255,
+      berserk: 255,
+      provoke: 255,
+      doom: 255,
+      eject: 255,
+      'power-break': 255,
+      'magic-break': 255,
+      'armor-break': 255,
+      'mental-break': 255,
+      'auto-life': 255,
+    },
+    immunityFlags: ['boss', 'immune-to-scan'],
+    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '')}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
+    aiScriptId: 'possessed-aeon',
+    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] }, // §2.3 — no AP/gil for these
+    abilityIds: POSSESSED_AEON_ABILITY_IDS[aeonId],
+    flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
+    threatenChance: 0,
+    sensorText: POSSESSED_AEON_SENSOR_TEXT[aeonId] ?? 'Possessed. It used to be an ally.',
+    scanText: 'Yu Yevon wears it now. Destroying it is the only mercy left.',
+  };
+}
 
-/** The last battle. Cannot be lost: the party carries the fayth's Auto-Life. */
+/**
+ * One possessed-aeon battle: the given aeon plus the two Yu Pagodas
+ * (`power-wave-aeon` variant, Agility 30). `id`/`nextGroupId` are set by
+ * {@link buildPossessedAeonChain}.
+ */
+function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: string): EnemyGroupDef {
+  return {
+    id: `possessed-${aeonId.replace('possessed-', '')}`,
+    game: 'ffx',
+    canEscape: false,
+    nextGroupId,
+    enemies: [
+      possessedAeonEnemyDef(aeonId, 0),
+      yuPagoda('yu-pagoda-left', 1, 'aeon-or-yu-yevon'),
+      yuPagoda('yu-pagoda-right', 2, 'aeon-or-yu-yevon'),
+    ],
+    musicCues: [{ at: 'start', track: 'boss-jecht', fadeMs: 800 }],
+  };
+}
+
+/**
+ * Builds the possessed-aeon gauntlet for whichever aeons the player owns,
+ * in the fixed order {@link POSSESSED_AEON_ORDER} uses (acquisition order),
+ * chained via `nextGroupId` and ending at `'yu-yevon'`. Pass the player's
+ * owned `AeonId`s (e.g. from `FFXPartyBuild.aeons`); the Magus Sisters
+ * count as owned via `'magus-sisters'` and expand to all three
+ * `possessed-cindy/sandy/mindy` battles in sequence.
+ */
+export function buildPossessedAeonChain(ownedAeonIds: readonly AeonId[]): EnemyGroupDef[] {
+  const owned = new Set(ownedAeonIds);
+  const sequence: BraskasFinalAeonEnemyId[] = POSSESSED_AEON_ORDER.filter((id) => {
+    if (id === 'possessed-cindy' || id === 'possessed-sandy' || id === 'possessed-mindy') {
+      return owned.has('magus-sisters');
+    }
+    const aeon = id.replace('possessed-', '') as AeonId;
+    return owned.has(aeon);
+  });
+
+  return sequence.map((aeonId, i) => {
+    const next = sequence[i + 1];
+    const nextGroupId = next !== undefined ? `possessed-${next.replace('possessed-', '')}` : 'yu-yevon';
+    return possessedAeonBattle(aeonId, nextGroupId);
+  });
+}
+
+/**
+ * The default chain for the `dreams-end` build's roster (the five mandatory
+ * aeons). `possessedAeonsGroup` is the first link, kept for anything that
+ * just wants a single representative formation (e.g. a Sensor/gallery
+ * preview) rather than the full chain.
+ */
+export const possessedAeonGroups: EnemyGroupDef[] = buildPossessedAeonChain(MANDATORY_AEON_IDS);
+const firstPossessedAeonGroup = possessedAeonGroups[0];
+if (firstPossessedAeonGroup === undefined) {
+  throw new Error('buildPossessedAeonChain(MANDATORY_AEON_IDS) produced no battles — check MANDATORY_AEON_IDS/POSSESSED_AEON_ORDER.');
+}
+export const possessedAeonsGroup: EnemyGroupDef = firstPossessedAeonGroup;
+
+// ---------------------------------------------------------------------------
+// Yu Yevon — the last battle
+// ---------------------------------------------------------------------------
+
+/** The last battle. Cannot be lost: the party carries the fayth's permanent Auto-Life [§2.3, verified: 3 sources]. */
 export const yuYevonGroup: EnemyGroupDef = {
   id: 'yu-yevon',
   game: 'ffx',
@@ -173,14 +398,14 @@ export const yuYevonGroup: EnemyGroupDef = {
       name: 'Yu Yevon',
       spriteKey: 'yu-yevon',
       slot: 0,
-      // §3.1 verified values.
+      // §3.1 [verified: 2-3 sources per field].
       stats: {
         hp: 99999,
         mp: 1,
         str: 1,
-        def: 0,
+        def: 0, // §3.1 [conflict, immaterial] wiki says 1
         mag: 200,
-        mdef: 0,
+        mdef: 0, // §3.1 [conflict, immaterial] wiki says 1
         agi: 44,
         luck: 1,
         eva: 0,
@@ -190,24 +415,47 @@ export const yuYevonGroup: EnemyGroupDef = {
       },
       hp: 99999,
       mp: 1,
-      affinities: {}, // TODO(data-agent): §3
-      immunities: {}, // TODO(data-agent): §3
-      immunityFlags: ['boss'],
+      affinities: {}, // §3.2 [verified: 2 sources] all five Neutral
+      // §3.2 [verified: 2 sources]. Deliberately, famously incomplete —
+      // "the programmers made the mistake of not making him invulnerable to
+      // status effects" (wiki, quoted for design intent). Zombie, Doom,
+      // Poison and all four Breaks are landable (0, omitted below); Shell/
+      // Protect/Reflect/Regen/Haste/Slow are also landable and are real
+      // strategies (Reflect bounces his Curaga onto the party).
+      immunities: {
+        ko: 255, // Death
+        petrify: 255,
+        sleep: 255,
+        silence: 255,
+        darkness: 255, // Dark
+        confuse: 255,
+        berserk: 255,
+        provoke: 255,
+        eject: 255,
+      },
+      immunityFlags: ['boss', 'immune-to-bribe', 'immune-to-scan', 'immune-to-sensor'],
+      threatenChance: 0, // §3.2 [verified: 2 sources] immune
       forms: [{ name: 'Yu Yevon', spriteKey: 'yu-yevon', hp: 99999 }],
-      aiScriptId: 'yu-yevon', // TODO(data-agent): §3
+      aiScriptId: 'yu-yevon',
       rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] },
-      abilityIds: [], // TODO(data-agent): §3
+      abilityIds: [
+        'gravija', // §3.3, §3.4 — scheduled turns, alternating with a no-op
+        'curaga', // §3.3 [verified: 2 sources] shared id — his damage counter, capped at 9,999 by the engine's standard cap
+        'osmose', // §3.3 — the 7th-Curaga escalation step, party-wide
+        'ultima', // §3.3 — the 8th-Curaga escalation step, party-wide, capped at 9,999
+        'yu-yevon-command-254', // §3.3 — no-damage possession/Auto-Life bookkeeping hook
+      ],
       flags: { isBoss: true },
       sensorText: 'It cannot be reasoned with. It stopped being anyone a long time ago.',
       scanText:
         'A summoner’s remnant, still casting. Hides inside whatever will hold it. Drains life from all, then heals itself endlessly. You cannot be killed here. You can only be delayed.',
-      poisonTickPercent: 10,
-      doomTurns: 3,
+      poisonTickPercent: 10, // §3.1 [verified: 2 sources] 10% of 99,999 = 9,999/tick
+      doomTurns: 3, // §3.1 [verified: 2 sources] — documents "a Candle of Life kills him in exactly 3 turns", not something Yu Yevon inflicts on the party
     },
-    todoYuPagoda('yu-pagoda-left', 1),
-    todoYuPagoda('yu-pagoda-right', 2),
+    yuPagoda('yu-pagoda-left', 1, 'aeon-or-yu-yevon'),
+    yuPagoda('yu-pagoda-right', 2, 'aeon-or-yu-yevon'),
   ],
-  musicCues: [{ at: 'start', track: 'boss-dread', fadeMs: 800 }],
+  musicCues: [{ at: 'start', track: 'boss-yu-yevon', fadeMs: 800 }],
 };
 
 export default braskasFinalAeonGroup;

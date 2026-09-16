@@ -1,0 +1,199 @@
+/*
+ * In-battle Garment Grid overlay — composes the shared Ink & Gold layer
+ * (`.ig-slab` for the panel chrome, palette/type tokens throughout) but has
+ * no exact FFX-2 mock to quote pixel values from (only battle chrome was
+ * approved in round 2), so the node graph, gate colours and layout below are
+ * this component's own, built from the tokens rather than a spec rect list.
+ * See `research/visual-bible.md` §4.5 for the mechanic this composes.
+ */
+
+.ffx2sc {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(11, 10, 18, 0.55);
+  z-index: 20;
+  font-family: var(--ig-font-text);
+}
+
+.ffx2sc__panel {
+  width: 300px;
+  height: 260px;
+  background: var(--ig-paper);
+  box-shadow: 0 8.89px 22.22px rgba(0, 0, 0, 0.6);
+}
+.ffx2sc__content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px;
+  color: var(--ig-ink);
+}
+
+.ffx2sc__title {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ig-ink);
+}
+.ffx2sc__gridname {
+  float: right;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--ig-gold-on-paper);
+}
+
+/* Shared 272x150 coordinate frame: the SVG's viewBox and every node div's
+   inline `left`/`top` are the same numbers, 1:1, so lines and tiles can
+   never drift apart (see `GRAPH_W`/`GRAPH_H`/`nodePos()` in the .ts file). */
+.ffx2sc__graph {
+  position: absolute;
+  left: 14px;
+  top: 24px;
+  width: 272px;
+  height: 150px;
+}
+.ffx2sc__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.ffx2sc__link {
+  stroke: rgba(11, 10, 18, 0.25);
+  stroke-width: 2;
+}
+.ffx2sc__link--travelled {
+  stroke: var(--ig-accent);
+}
+.ffx2sc__gate {
+  stroke: var(--ig-ink);
+  stroke-width: 1;
+}
+
+.ffx2sc__node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: default;
+}
+.ffx2sc__node:not(.ffx2sc__node--unreachable) {
+  cursor: pointer;
+}
+
+.ffx2sc__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--ig-ink);
+  color: var(--ig-paper);
+  border: 2px solid var(--ig-paper);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 11px;
+}
+.ffx2sc__tile--worn {
+  border-color: var(--ig-accent);
+  color: var(--ig-accent);
+  box-shadow: 0 0 6px 1px rgba(247, 182, 217, 0.6);
+  animation: ffx2sc-breathe 1.25s ease-in-out infinite;
+}
+.ffx2sc__tile--reachable {
+  animation: ffx2sc-pulse 0.83s ease-in-out infinite alternate;
+}
+.ffx2sc__tile--unreachable {
+  opacity: 0.4;
+}
+.ffx2sc__tile--empty {
+  background: transparent;
+  border-style: dashed;
+  border-color: rgba(11, 10, 18, 0.35);
+  color: rgba(11, 10, 18, 0.35);
+}
+.ffx2sc__node--sel .ffx2sc__tile {
+  filter: drop-shadow(0 0 4px var(--ig-accent));
+}
+@keyframes ffx2sc-breathe {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+@keyframes ffx2sc-pulse {
+  from {
+    border-color: var(--ig-paper);
+  }
+  to {
+    border-color: var(--ig-accent);
+  }
+}
+
+.ffx2sc__sdsp {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 46px;
+  padding: 4px 0;
+  text-align: center;
+  background: var(--ig-ink);
+  color: var(--ig-accent);
+  border: 2px solid var(--ig-accent);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  animation: ffx2sc-sdsp-pulse 0.66s ease-in-out infinite alternate;
+}
+@keyframes ffx2sc-sdsp-pulse {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.2);
+  }
+}
+
+.ffx2sc__detail {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 22px;
+  font-size: 10px;
+}
+.ffx2sc__detail--dim {
+  color: rgba(11, 10, 18, 0.55);
+}
+.ffx2sc__detail-name {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ig-ink);
+}
+.ffx2sc__gate-line {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.ffx2sc__cost {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 6px;
+  font-family: var(--ig-font-display);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: var(--ig-gold-on-paper);
+}

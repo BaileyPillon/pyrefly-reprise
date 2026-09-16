@@ -1,104 +1,98 @@
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
-import { DemoScene } from './DemoScene.ts';
-
-const STYLE_ID = 'title-screen-style';
-
-const CSS = `
-.title-screen {
-  display: grid;
-  place-items: center;
-  text-align: center;
-  background:
-    radial-gradient(120% 90% at 50% 18%, rgba(28, 58, 108, 0.55), transparent 62%),
-    radial-gradient(80% 60% at 50% 100%, rgba(10, 22, 44, 0.9), transparent 70%),
-    #04060b;
-}
-.title-screen__inner { pointer-events: auto; }
-.title-screen__mark {
-  font-family: var(--font-display);
-  font-size: clamp(34px, 7.2vw, 78px);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin: 0;
-  color: #f2f7ff;
-  text-shadow:
-    0 0 26px rgba(125, 255, 200, 0.28),
-    0 0 70px rgba(70, 140, 220, 0.35),
-    0 2px 0 rgba(0, 0, 0, 0.6);
-}
-.title-screen__rule {
-  width: min(60vw, 520px);
-  height: 1px;
-  margin: 22px auto 18px;
-  background: linear-gradient(90deg, transparent, rgba(180, 220, 255, 0.65), transparent);
-}
-.title-screen__sub {
-  margin: 0 0 46px;
-  font-size: clamp(10px, 1.3vw, 13px);
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: #8fa8c9;
-}
-.title-screen__prompt {
-  display: inline-block;
-  padding: 10px 26px;
-  border: 1px solid rgba(160, 200, 255, 0.35);
-  border-radius: 2px;
-  background: linear-gradient(180deg, rgba(22, 46, 92, 0.75), rgba(6, 12, 26, 0.85));
-  font-size: 13px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #dfeaff;
-  cursor: pointer;
-  animation: title-pulse 1.9s ease-in-out infinite;
-}
-.title-screen__prompt:hover { border-color: rgba(200, 235, 255, 0.7); }
-.title-screen__hint {
-  margin-top: 26px;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  color: #6c819d;
-}
-@keyframes title-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.45; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .title-screen__prompt { animation: none; }
-}
-`;
+import { artUrl } from '../../engine/PaintedArt.ts';
+import { audio } from '../../audio/index.ts';
+import { installInkGoldStyles, playWipe } from '../../ui/inkgold/index.ts';
 
 /**
- * Placeholder title card. The real one gets art, a music cue and a chapter
- * list; for now it proves the screen stack, input and fade all work.
+ * Title card in the approved "Ink & Gold" presentation
+ * (docs/handoff/presentation-ink-and-gold.md; mockup docs/screenshots/mockups/
+ * A-title.jpg, reference source docs/handoff/ink-and-gold/Title.dc.html).
+ *
+ * Everything visual comes from `src/ui/inkgold` — this screen only composes
+ * the classes, supplies the copy and the painting, and owns the transition
+ * out. Authored on the same 640x360 logical grid the HUD uses (§ "Mockups are
+ * authored at 1440x810 ... divide every px by 2.25"), letterbox-scaled with a
+ * single transform exactly as `src/ui/ffx/HudMock.ts` does.
  */
 export class TitleScreen extends Screen {
   readonly name = 'title';
   private advancing = false;
+  private stage: HTMLElement | null = null;
+  private readonly onResize = (): void => this.layout();
 
   override enter(): void {
-    if (!document.getElementById(STYLE_ID)) {
-      const style = document.createElement('style');
-      style.id = STYLE_ID;
-      style.textContent = CSS;
-      document.head.appendChild(style);
-    }
+    installInkGoldStyles();
+    this.root.className = 'screen ig-title-screen';
+    this.root.style.cssText = 'position:absolute;inset:0;overflow:hidden;background:#0B0A12;';
 
-    this.root.className = 'screen title-screen';
-    this.root.innerHTML = `
-      <div class="title-screen__inner">
-        <h1 class="title-screen__mark">Pyrefly Reprise</h1>
-        <div class="title-screen__rule"></div>
-        <p class="title-screen__sub">An unofficial fan tribute</p>
-        <div class="title-screen__prompt" data-action="confirm" role="button" tabindex="0">
-          Press Enter
+    const stage = document.createElement('div');
+    stage.className = 'ig';
+    stage.style.cssText =
+      'position:absolute;left:0;top:0;width:640px;height:360px;transform-origin:0 0;pointer-events:auto;';
+    stage.innerHTML = this.markup();
+    this.root.appendChild(stage);
+    this.stage = stage;
+
+    window.addEventListener('resize', this.onResize, { passive: true });
+    this.layout();
+
+    void audio.playMusic('title', { fade: 1.6 }).catch(() => {
+      /* audio stays locked until the first gesture; AudioManager queues it */
+    });
+    void this.app.fade('clear', 700);
+  }
+
+  override exit(): void {
+    window.removeEventListener('resize', this.onResize);
+    this.stage = null;
+  }
+
+  private markup(): string {
+    const painting = artUrl('art/backdrops/title.png');
+    return `
+      <div class="ig-title">
+        <img alt="" src="${painting}"
+             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"
+             onerror="this.style.display='none'">
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,10,18,0.55) 0%,rgba(11,10,18,0) 55%);"></div>
+        <div class="ig-surface">
+          <div class="ig-surface__grain"></div>
+          <div class="ig-surface__vignette"></div>
         </div>
-        <p class="title-screen__hint">Arrows / WASD &middot; Enter confirm &middot; Esc cancel</p>
+
+        <div class="ig-title__slab"></div>
+        <div class="ig-title__stripe"></div>
+
+        <div class="ig-title__content">
+          <div class="ig-title__eyebrow">AN UNOFFICIAL FAN TRIBUTE</div>
+          <div class="ig-title__name">Pyrefly</div>
+          <div class="ig-title__name ig-title__name--second">Reprise</div>
+          <div class="ig-title__rule"></div>
+          <div class="ig-title__chip" data-action="confirm" role="button" tabindex="0">
+            <svg viewBox="0 0 10 14" width="4.44" height="6.22" aria-hidden="true">
+              <path d="M1 1 L9 7 L1 13 Z" fill="currentColor"></path>
+            </svg>PRESS ENTER
+          </div>
+        </div>
+
+        <div class="ig-title__caption">FIVE ENCOUNTERS &middot; FINAL FANTASY X AND X-2</div>
+        <div class="ig-hint-chip ig-title__hint">
+          <b>ARROWS / WASD</b> MOVE &nbsp;&middot;&nbsp; <b>ENTER</b> CONFIRM &nbsp;&middot;&nbsp; <b>ESC</b> CANCEL
+        </div>
       </div>
     `;
-    void this.app.fade('clear', 700);
+  }
+
+  /** Letterbox the 640x360 grid into whatever the viewport is. */
+  private layout(): void {
+    if (!this.stage) return;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const scale = Math.min(w / 640, h / 360);
+    const x = (w - 640 * scale) / 2;
+    const y = (h - 360 * scale) / 2;
+    this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
   }
 
   override handleInput(input: InputSnapshot): void {
@@ -107,14 +101,29 @@ export class TitleScreen extends Screen {
     if (input.actions.includes('confirm')) void this.advance();
   }
 
+  /**
+   * Spec "Motion & camera": every screen change is the diagonal ivory wipe.
+   * The chapter loop is started at full cover so the wipe clears onto chapter
+   * select rather than back onto the title.
+   */
   private async advance(): Promise<void> {
     if (this.advancing) return;
     this.advancing = true;
-    await this.app.fade('opaque', 320);
-    await this.app.replace(new DemoScene());
+    audio.playSfx('battle-start');
+    await playWipe(this.app.uiRoot, {
+      onCover: () => {
+        void this.app.startFlow();
+      },
+    });
+  }
+
+  override trigger(name: string): boolean {
+    if (name !== 'confirm' && name !== 'start') return false;
+    void this.advance();
+    return true;
   }
 
   override snapshot(): Record<string, unknown> {
-    return { advancing: this.advancing };
+    return { advancing: this.advancing, skin: 'ink-and-gold' };
   }
 }

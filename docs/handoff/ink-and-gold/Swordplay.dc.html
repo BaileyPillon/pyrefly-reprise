@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Chakra+Petch:wght@500;700&family=Rajdhani:wght@600;700&display=swap">
+  <style>
+    body { margin: 0; background: #0B0A12; }
+    a { color: #E3B94A; } a:hover { color: #F4F1E8; }
+    .frame { position: relative; width: 1440px; height: 810px; overflow: hidden; background: #0B0A12; font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif; color: #F4F1E8; }
+    .serif { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+    .num { font-family: 'Rajdhani', 'Bahnschrift', sans-serif; }
+    .stat { display: flex; align-items: center; gap: 16px; width: 450px; height: 62px; padding-right: 18px; background: rgba(11, 10, 18, 0.84); border-left: 6px solid #F4F1E8; transform: skewX(-12deg); }
+    .stat > * { transform: skewX(12deg); }
+    .stat.acting { border-left-color: #E3B94A; background: rgba(11, 10, 18, 0.94); }
+    .face { width: 62px; height: 62px; overflow: hidden; background: #1A1526; flex: none; margin-left: 6px; }
+    .face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+    .name { width: 96px; font-size: 24px; font-weight: 700; font-style: italic; color: #F4F1E8; }
+    .val { display: flex; align-items: baseline; gap: 3px; font-weight: 700; font-size: 26px; line-height: 1; color: #F4F1E8; }
+    .val small { font-size: 13px; color: #9fb0c4; font-weight: 600; }
+    .val.mp { color: #7FC6E8; }
+    .bar { position: relative; width: 120px; height: 8px; background: #2a3246; margin-left: auto; }
+    .bar i { position: absolute; inset: 0 auto 0 0; display: block; background: #E3B94A; }
+    .mono { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: rgba(244, 241, 232, 0.8); }
+  </style>
+</helmet>
+<div class="frame">
+  <img src="bg-gagazet.jpg" alt="" style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; filter: saturate(0.85) brightness(0.62);">
+  <img src="char-yuna.webp" alt="" style="position: absolute; left: 292px; top: 342px; height: 300px; filter: brightness(0.6);">
+  <img src="char-tidus-attack.webp" alt="" style="position: absolute; left: 468px; top: 274px; height: 386px; filter: drop-shadow(0 0 30px rgba(227, 185, 74, 0.45));">
+  <img src="char-seymour.webp" alt="" style="position: absolute; left: 912px; top: 168px; height: 540px; filter: brightness(0.7);">
+  <div style="position: absolute; inset: 0; background: radial-gradient(120% 90% at 55% 40%, rgba(11, 10, 18, 0) 45%, rgba(11, 10, 18, 0.6) 100%), linear-gradient(180deg, rgba(11, 10, 18, 0.45) 0%, rgba(11, 10, 18, 0) 25%, rgba(11, 10, 18, 0) 68%, rgba(11, 10, 18, 0.62) 100%);"></div>
+  <svg style="position: absolute; inset: 0; width: 1440px; height: 810px; opacity: 0.13; mix-blend-mode: overlay; pointer-events: none;" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#grain)"></rect></svg>
+
+  <div style="position: absolute; left: 48px; top: 40px; display: flex; align-items: center; gap: 18px; padding: 10px 34px 12px 28px; background: #F4F1E8; border-bottom: 4px solid #E3B94A; transform: skewX(-12deg); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+    <div class="serif" style="transform: skewX(12deg); font-size: 46px; font-weight: 700; font-style: italic; color: #0B0A12; line-height: 1;">Tidus</div>
+    <div style="transform: skewX(12deg); padding: 7px 12px; background: #0B0A12; color: #E3B94A; font-weight: 700; font-size: 14px; letter-spacing: 0.26em;">OVERDRIVE</div>
+  </div>
+
+  <div style="position: absolute; left: 56px; top: 126px; width: 720px; padding: 22px 36px 30px; background: #F4F1E8; transform: skewX(-12deg); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);">
+    <div style="transform: skewX(12deg);">
+      <div style="display: flex; align-items: baseline; gap: 18px;">
+        <div class="serif" style="font-size: 38px; font-weight: 700; font-style: italic; line-height: 1; color: #0B0A12; white-space: nowrap;">Slice &amp; Dice</div>
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.26em; color: #B8862A; white-space: nowrap;">SWORDPLAY · CONFIRM IN THE GOLD ZONE</div>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 14px;">
+          <svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><circle cx="26" cy="26" r="21" fill="none" stroke="#0B0A12" stroke-opacity="0.15" stroke-width="5"></circle><circle cx="26" cy="26" r="21" fill="none" stroke="#E3B94A" stroke-width="5" stroke-dasharray="132" stroke-dashoffset="46" stroke-linecap="butt" transform="rotate(-90 26 26)"></circle><text x="26" y="31" text-anchor="middle" font-family="Rajdhani, sans-serif" font-size="17" font-weight="700" fill="#0B0A12">2.6</text></svg>
+          <div style="padding: 6px 12px; background: #0B0A12; color: #E3B94A; font-size: 13px; font-weight: 700; letter-spacing: 0.2em;">+43%</div>
+        </div>
+      </div>
+      <div style="position: relative; margin-top: 22px; height: 26px; background: #0B0A12;">
+        <div style="position: absolute; left: 61%; top: 0; width: 13%; height: 100%; background: #E3B94A;"></div>
+        <div style="position: absolute; left: 30%; top: -6px; width: 5px; height: 38px; background: #F4F1E8; box-shadow: 0 0 10px rgba(244, 241, 232, 0.9);"></div>
+        <div style="position: absolute; left: 0; right: 0; bottom: -18px; display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; letter-spacing: 0.24em; color: #B8862A;"><span>MISS</span><span>HIT ×2</span><span>HIT ×4</span><span>HIT ×6</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; right: 52px; bottom: 54px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+    <div class="stat acting"><div class="face"><img src="portrait-tidus.webp" alt=""></div><div class="name serif" style="color: #E3B94A;">Tidus</div><div class="val num">2419<small>/2600</small></div><div class="val num mp">68<small>/92</small></div><div class="bar"><i style="width: 100%;"></i></div></div>
+    <div class="stat" style="margin-right: 16px;"><div class="face"><img src="portrait-yuna.webp" alt=""></div><div class="name serif">Yuna</div><div class="val num">1782<small>/1900</small></div><div class="val num mp">240<small>/312</small></div><div class="bar"><i style="width: 58%;"></i></div></div>
+    <div class="stat" style="margin-right: 32px;"><div class="face"><div class="mono" style="position: static; height: 62px;">A</div></div><div class="name serif">Auron</div><div class="val num">3080<small>/3080</small></div><div class="val num mp">34<small>/60</small></div><div class="bar"><i style="width: 24%;"></i></div></div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,263 @@
+/*
+ * Pre-battle "Party & Sphere Grid" screen [research/visual-bible.md §5.4].
+ * Same 640x360 authoring grid and letterbox stage as the battle HUD, reusing
+ * `.ffxhud-win` chrome from ffx-hud.css (imported by PartyPrep.ts) so the
+ * windows read as the same game.
+ */
+
+.ffxprep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  font-family: var(--font-text);
+}
+.ffxprep__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+}
+
+.ffxprep-roster {
+  left: 12px;
+  top: 12px;
+  width: 152px;
+  height: 248px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.ffxprep-roster__row {
+  position: relative;
+  height: 34px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.ffxprep-roster__row--selected {
+  background: rgba(46, 90, 158, 0.55);
+  box-shadow: inset 0 0 0 1px var(--ffx-border-inner);
+}
+.ffxprep-roster__row--active {
+  border-left: 3px solid var(--ffx-od-fill-lo);
+  padding-left: 3px;
+}
+.ffxprep-roster__portrait {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid #5a7fa8;
+}
+.ffxprep-roster__info {
+  flex: 1;
+  min-width: 0;
+}
+.ffxprep-roster__name {
+  font-size: 10px;
+  color: var(--ffx-text);
+}
+.ffxprep-roster__slv {
+  font-size: 8px;
+  color: #c8d4e4;
+}
+.ffxprep-roster__bar {
+  width: 60px;
+  height: 4px;
+  background: var(--ffx-od-track);
+  margin-top: 2px;
+}
+.ffxprep-roster__bar i {
+  display: block;
+  height: 100%;
+  background: var(--ffx-hp);
+}
+.ffxprep-roster__bar--od i {
+  background: linear-gradient(90deg, var(--ffx-od-fill-lo), var(--ffx-od-fill-hi));
+}
+
+.ffxprep-detail {
+  left: 176px;
+  top: 12px;
+  width: 452px;
+  height: 248px;
+  padding: 6px 12px;
+  overflow: hidden;
+}
+.ffxprep-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.ffxprep-tab {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  color: var(--ffx-text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.ffxprep-tab--active {
+  color: var(--ffx-text-hi);
+  border-bottom-color: var(--ffx-od-fill-lo);
+}
+.ffxprep-detail__body {
+  height: 200px;
+  overflow-y: auto;
+}
+
+.ffxprep-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+.ffxprep-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 16px;
+  font-size: 9px;
+  color: var(--ffx-text);
+}
+.ffxprep-stat-row__label {
+  width: 90px;
+  color: #8fa4bc;
+}
+.ffxprep-stat-row__bar {
+  flex: 1;
+  height: 4px;
+  background: var(--ffx-od-track);
+}
+.ffxprep-stat-row__bar i {
+  display: block;
+  height: 100%;
+  background: var(--ffx-mp);
+}
+.ffxprep-stat-row__value {
+  width: 30px;
+  text-align: right;
+  font-family: var(--font-numbers);
+}
+
+.ffxprep-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 10px;
+}
+.ffxprep-chip {
+  font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--ffx-border-inner);
+  color: #c8d4e4;
+}
+
+.ffxprep-list-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 20px;
+  font-size: 10px;
+  color: var(--ffx-text);
+  cursor: pointer;
+  padding: 0 4px;
+}
+.ffxprep-list-row--selected {
+  background: rgba(46, 90, 158, 0.5);
+  border-radius: 3px;
+}
+.ffxprep-list-row__qty {
+  margin-left: auto;
+  font-family: var(--font-numbers);
+  color: #c8d4e4;
+}
+.ffxprep-mode-desc {
+  margin-top: 8px;
+  font-size: 9px;
+  color: #c8d4e4;
+  line-height: 1.5;
+}
+
+.ffxprep-grid {
+  left: 176px;
+  top: 12px;
+  width: 452px;
+  height: 248px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+.ffxprep-grid canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.ffxprep-grid__header {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  font-size: 12px;
+  color: var(--ffx-text-hi);
+  pointer-events: none;
+}
+
+.ffxprep-active {
+  left: 12px;
+  top: 270px;
+  width: 616px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+}
+.ffxprep-active__slot {
+  flex: 1;
+  height: 62px;
+  border: 1px dashed #4e5a70;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.ffxprep-active__slot--filled {
+  border-style: solid;
+  border-color: var(--ffx-border-inner);
+}
+.ffxprep-active__name {
+  font-size: 10px;
+  color: var(--ffx-text);
+}
+.ffxprep-active__hpmp {
+  font-size: 8px;
+  color: #8fa4bc;
+}
+.ffxprep-start {
+  position: absolute;
+  left: 520px;
+  top: 318px;
+  width: 104px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ffx-text-hi);
+  cursor: pointer;
+}
+.ffxprep-start[disabled] {
+  color: var(--ffx-text-dim);
+  cursor: not-allowed;
+  opacity: 0.6;
+}

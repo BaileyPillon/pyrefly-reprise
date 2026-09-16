@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Rajdhani:wght@600;700&display=swap">
+  <style>
+    body { margin: 0; background: #F4F1E8; }
+    a { color: #B8862A; } a:hover { color: #0B0A12; }
+    .frame { position: relative; width: 1440px; height: 810px; overflow: hidden; background: #F4F1E8; font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif; color: #0B0A12; }
+    .serif { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+    .num { font-family: 'Rajdhani', 'Bahnschrift', sans-serif; }
+    .line { display: flex; align-items: baseline; gap: 24px; padding: 14px 0 12px; border-bottom: 2px solid #0B0A12; }
+    .line .k { width: 150px; font-size: 14px; font-weight: 700; letter-spacing: 0.3em; color: #B8862A; }
+    .line .v { font-size: 54px; font-weight: 700; line-height: 1; }
+    .line .d { margin-left: auto; font-size: 15px; letter-spacing: 0.1em; color: #5b5566; }
+    .pl { display: flex; align-items: center; gap: 14px; }
+    .pl .f { width: 48px; height: 48px; overflow: hidden; background: #0B0A12; border: 2px solid #0B0A12; }
+    .pl .f img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+    .pl b { font-size: 20px; font-style: italic; }
+    .pl .num { font-size: 26px; font-weight: 700; margin-left: auto; }
+    .pl .num small { font-size: 13px; color: #B8862A; margin-left: 6px; letter-spacing: 0.2em; }
+  </style>
+</helmet>
+<div class="frame">
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; background: #0B0A12; clip-path: polygon(62% 0, 100% 0, 100% 100%, 48% 100%);"></div>
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; background: #E3B94A; clip-path: polygon(60.6% 0, 62% 0, 48% 100%, 46.6% 100%);"></div>
+  <img src="portrait-yuna.webp" alt="" style="position: absolute; left: 820px; top: -40px; height: 900px; filter: drop-shadow(0 0 40px rgba(227, 185, 74, 0.25));">
+  <div style="position: absolute; left: 1396px; top: 60px; font-size: 14px; font-weight: 700; letter-spacing: 0.34em; color: #E3B94A; white-space: nowrap; transform: rotate(90deg); transform-origin: left top;">MT. GAGAZET — THE PROMINENCE · CLEARED</div>
+
+  <div style="position: absolute; left: 72px; top: 64px;">
+    <div style="display: inline-block; padding: 6px 14px; background: #0B0A12; color: #E3B94A; font-size: 13px; font-weight: 700; letter-spacing: 0.34em;">RESULTS · 1:42 · OVERKILL ×1</div>
+    <div class="serif" style="margin-top: 8px; font-size: 200px; font-weight: 700; font-style: italic; line-height: 0.82; letter-spacing: -0.03em; color: #0B0A12;">Victory</div>
+    <div style="margin-top: 14px; margin-left: 8px; width: 300px; height: 6px; background: #E3B94A;"></div>
+  </div>
+
+  <div style="position: absolute; left: 76px; top: 310px; width: 560px; display: flex; flex-direction: column;">
+    <div class="line"><div class="k">AP</div><div class="v num">36</div><div class="d">×3 PARTY</div></div>
+    <div class="line"><div class="k">GIL</div><div class="v num">1 240</div></div>
+    <div class="line"><div class="k">ITEMS</div><div class="v serif" style="font-size: 30px; font-style: italic;">Elixir, Level 3 Key Sphere</div></div>
+  </div>
+
+  <div style="position: absolute; left: 76px; bottom: 56px; width: 560px; display: flex; flex-direction: column; gap: 12px;">
+    <div class="pl"><div class="f"><img src="portrait-tidus.webp" alt=""></div><b class="serif">Tidus</b><div class="num">+36<small>AP</small></div></div>
+    <div class="pl"><div class="f"><img src="portrait-yuna.webp" alt=""></div><b class="serif">Yuna</b><div class="num">+36<small>AP</small></div></div>
+    <div class="pl"><div class="f" style="display: flex; align-items: center; justify-content: center; color: #F4F1E8; font-weight: 700;">A</div><b class="serif">Auron</b><div class="num">+36<small>AP</small></div></div>
+  </div>
+
+  <div style="position: absolute; right: 60px; bottom: 52px; padding: 12px 22px; background: #F4F1E8; color: #0B0A12; font-size: 14px; font-weight: 700; letter-spacing: 0.3em; transform: skewX(-12deg);"><span style="display: inline-block; transform: skewX(12deg);">CONFIRM ▸</span></div>
+</div>
+</x-dc>
+</body>
+</html>

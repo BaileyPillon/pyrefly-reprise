@@ -1,0 +1,78 @@
+/**
+ * Ink & Gold — design tokens (Direction A, approved 2026-09-15).
+ *
+ * Source of truth: docs/handoff/presentation-ink-and-gold.md ("Tokens" /
+ * "Type" tables) and docs/handoff/ink-and-gold/*.dc.html (exact CSS values).
+ *
+ * AUTHORING CONVENTION — read this before touching slabs.css:
+ * the spec's mockups are built on a 1440x810 canvas. The live HUD is authored
+ * on the 640x360 logical grid that `src/ui/ffx/HudMock.ts` letterbox-scales
+ * onto the real viewport with one `translate(...) scale(...)` transform
+ * (scale = min(w/640, h/360)). 1440 / 640 = 2.25, so every "px @1440" number
+ * in the spec becomes `spec-px / 2.25` logical px in this module. slabs.css
+ * comments each converted value with its spec source number so it can be
+ * checked against docs/handoff/presentation-ink-and-gold.md by inspection.
+ */
+
+.ig {
+  /* Palette — spec "Tokens" table / research/visual-bible.md §0.5. */
+  --ig-ink: #0b0a12;
+  --ig-paper: #f4f1e8;
+  --ig-gold: #e3b94a;
+  --ig-gold-on-paper: #b8862a; /* tracked labels on paper: darker for contrast */
+  --ig-blood: #b02a2a; /* enemies only */
+  --ig-spira-sky: #7fc6e8; /* MP */
+  --ig-pyre-pink: #f7b6d9; /* replaces gold as the FFX-2 accent */
+
+  /* Ink alpha for chrome laid over painted backgrounds, spec "Tokens" note. */
+  --ig-ink-panel: rgba(11, 10, 18, 0.84);
+  --ig-ink-acting: rgba(11, 10, 18, 0.94);
+  --ig-ink-chip: rgba(11, 10, 18, 0.62);
+
+  /* "One accent per context, never two" — everything reads --ig-accent;
+     .ig--ffx2 below is the only thing that ever repoints it. */
+  --ig-accent: var(--ig-gold);
+  /* The same accent role on an ivory/paper ground, where the bright accent
+     has too little contrast to set type in (results ledger, info slabs). */
+  --ig-accent-on-paper: var(--ig-gold-on-paper);
+
+  /* Type stacks — spec "Type" table. Cormorant Garamond's face declaration
+     lives in src/ui/common/fonts.css (--font-serif there) — already loaded
+     by the existing UI — so this only falls back to it, plus a hard-coded
+     chain in case that stylesheet is ever missing (see README.md). */
+  --ig-font-serif: var(--font-serif, 'Cormorant Garamond', 'Georgia', serif);
+  --ig-font-display: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  --ig-font-numeral: 'Rajdhani', 'Bahnschrift', sans-serif;
+  --ig-font-text: 'Exo 2', 'Segoe UI', sans-serif;
+
+  /* Geometry — spec "Components" bullets + "Motion & camera". */
+  --ig-skew: -12deg; /* every slab: skewX(-12deg); .ig--ffx2 flips this to 12deg */
+  --ig-skew-inverse: 12deg; /* content counter-skew, the exact negation of --ig-skew */
+  --ig-edge: 0; /* 0 = accent border on the left/start edge; 1 under .ig--ffx2. A
+    unitless number (not "left"/"right") because CSS can't parameterize a
+    property NAME with a custom property — components that need a side-
+    dependent border instead split it into border-left-width/border-right-
+    width and multiply each by (1 - --ig-edge) / --ig-edge (see slabs.css's
+    .ig-stat and .ig-reticle__name), which needs no .ig--ffx2 override rule
+    at all. Positions (left/right anchors) can't use the same calc() trick —
+    the unused side must be `auto`, which calc() cannot produce — so those
+    few cases (.ig-banner, .ig-stat-list, .ig-reticle__name) get a small,
+    targeted `.ig--ffx2 .ig-whatever { left: auto; right: ... }` override
+    instead of a full duplicated block. */
+  --ig-wipe-angle: 19deg; /* every screen-change wipe; FFX-2 chapters use -19deg */
+}
+
+/* FFX-2 chapters: same system, pink accent, mirrored slabs/chrome (spec
+   "Screens" round-2 bullet + BattleFfx2.dc.html). Callers add this class
+   alongside .ig on the same root. Repoints the accent AND the three
+   mirroring variables above; every slab/border/anchor rule in slabs.css
+   that reads --ig-skew / --ig-skew-inverse / --ig-edge picks up the flip
+   automatically — see the comment on --ig-edge for what still needs a
+   small override rule instead of a pure variable flip. */
+.ig--ffx2 {
+  --ig-accent: var(--ig-pyre-pink);
+  --ig-accent-on-paper: #b8437e; /* pyre pink darkened for paper, as #b8862a is for gold */
+  --ig-skew: 12deg;
+  --ig-skew-inverse: -12deg;
+  --ig-edge: 1;
+}

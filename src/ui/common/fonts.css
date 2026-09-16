@@ -93,6 +93,27 @@
   font-display: swap;
 }
 
+/*
+ * Cormorant Garamond — the "Ink & Gold" presentation face (approved 2026-09-15,
+ * docs/handoff/presentation-ink-and-gold.md): names, banners, results, damage
+ * numerals, always Bold Italic or Semibold. Google's build is variable, so one
+ * file per style covers the 300–700 range.
+ */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Silkscreen';
   src: url('/fonts/silkscreen/Silkscreen-Regular-400.woff2') format('woff2');
@@ -119,4 +140,6 @@
   --font-mono: 'Silkscreen', 'Cascadia Mono', 'Consolas', ui-monospace, SFMono-Regular, Menlo, monospace;
   /* Condensed numerals: HP/MP bars, stat readouts, timers */
   --font-numbers: 'Rajdhani', 'Exo 2', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  /* Ink & Gold presentation serif: names, banners, results, damage numerals (italic 600–700) */
+  --font-serif: 'Cormorant Garamond', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
 }

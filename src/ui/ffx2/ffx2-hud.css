@@ -1,0 +1,260 @@
+/*
+ * Live FFX-2 battle HUD — HUD-owned layout and state on top of the shared
+ * Ink & Gold layer (`src/ui/inkgold/`, imported by `FFX2BattleHud.ts`).
+ *
+ * Everything with an `.ig-*` class name is styled by the shared layer
+ * (tokens.css/slabs.css); this file only adds what `src/ui/inkgold/README.md`
+ * says stays with the HUD owner: positioning specific to this screen (the
+ * command stack's FFX-2 anchor — mirrored from `BattleFfx2.dc.html`'s
+ * `right:40,bottom:262 @1440`, i.e. `/2.25` here), state-dependent colour
+ * modifiers the shared layer has no opinion on (ATB haste/slow/stop/charge,
+ * HP-critical), and the letterbox/overlay scaffolding `HudMock.ts` also uses.
+ *
+ * `.ffx2hud__overlay` is deliberately NOT part of the scaled 640x360 stage:
+ * it is a full-size sibling so the chain pop and targeting reticles can be
+ * positioned directly from the presenter's projected screen coordinates
+ * (`HudPort.setProjector`), which are real pixels, not authoring-grid ones.
+ */
+
+.ffx2hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ffx2hud[hidden] {
+  display: none !important;
+}
+
+.ffx2hud__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+}
+
+.ffx2hud__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+/* ------------------------------------------------------------ enemy strip */
+
+/* Multiple `.ig-bosshp` rows stack via each row's own inline `top` override
+   (set in FFX2BattleHud.ts); this wrapper needs no CSS of its own. */
+
+/* ------------------------------------------------------------ telegraph */
+
+/* `.ig-banner` sets `display: flex`, which — same specificity as the UA's
+   `[hidden]` rule, wins by source order — needs this explicit override,
+   same fix as the party/command windows below. */
+.ffx2hud__telegraph[hidden] {
+  display: none;
+}
+.ffx2hud__telegraph--s2 {
+  animation: ffx2-telegraph-flash 0.5s ease-in-out infinite alternate;
+}
+@keyframes ffx2-telegraph-flash {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.35);
+  }
+}
+
+/* ------------------------------------------------------------ party status */
+
+.ffx2party__status {
+  display: flex;
+  gap: 2px;
+  margin-left: 4px;
+}
+.ffx2-status-chip {
+  font-size: 6px;
+  line-height: 10px;
+  padding: 0 2px;
+  background: var(--ig-ink);
+  color: var(--ig-accent);
+  border-radius: 2px;
+}
+
+/* `.ig-stat__od` ships a fixed 53.33px width and a plain accent fill; the HUD
+   overrides the width per row (`required`-proportional runway) and adds the
+   state colours/charge overlay the shared layer has no opinion on. */
+.ffx2atb--haste .ffx2atb__fill {
+  background: var(--ig-blood) !important;
+}
+.ffx2atb--slow .ffx2atb__fill {
+  background: #c9a227 !important;
+}
+.ffx2atb--stop .ffx2atb__fill {
+  background: var(--ig-paper) !important;
+}
+.ffx2atb--ready {
+  box-shadow: 0 0 5px 1px rgba(247, 182, 217, 0.75);
+  animation: ffx2-shimmer 0.25s steps(2, end) infinite;
+}
+@keyframes ffx2-shimmer {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.4);
+  }
+}
+.ffx2atb__charge {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #b048f0;
+  opacity: 0.85;
+}
+/* HP colour states — not part of the shared spec (Rajdhani ivory only);
+   meaningful gameplay information, so a small HUD-owned addition. */
+.ffx2-hp--crit {
+  color: #e3b94a !important;
+}
+.ffx2-hp--ko {
+  color: var(--ig-blood) !important;
+}
+
+/* -------------------------------------------------------------- command window */
+
+.ffx2hud__command {
+  position: absolute;
+  right: 17.78px;
+  bottom: 116.44px; /* BattleFfx2.dc.html: right 40, bottom 262 @1440 */
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  pointer-events: auto;
+  /* A long dressphere ability list scrolls rather than clipping silently —
+     see CommandMenu.ts's module comment on the ability-table wiring fix. */
+}
+/* `.ig-cmd-stack` ships `position: absolute` (its own anchor is meant to be
+   set directly by the HUD owner, per README.md) — nested one level inside
+   this already-positioned/anchored wrapper instead, it needs to fall back
+   into normal flow so it actually gives `.ffx2hud__command` a size to
+   scroll/clip; without this the wrapper collapses to 0x0 (its only child is
+   out of flow) and the whole command window silently fails to render. */
+.ffx2hud__command .ig-cmd-stack {
+  position: static;
+}
+.ffx2hud__command[hidden] {
+  display: none;
+}
+.ffx2cmd__title {
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  background: var(--ig-ink-panel);
+  border-right: 2px solid var(--ig-accent);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ig-paper);
+  text-align: right;
+}
+/* `.ig-cmd`'s row height is fixed (23.11px); a long ability name (once the
+   dressphere tables are wired up — see CommandMenu.ts's module comment)
+   would otherwise wrap to two lines and overflow it. `min-width: 0` is the
+   standard fix for a flex item that needs to actually shrink below its
+   content size before `text-overflow` can kick in. */
+.ffx2cmd__label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ffx2cmd__mp {
+  flex: none;
+  font-family: var(--ig-font-numeral);
+  font-size: 9px;
+  color: var(--ig-spira-sky);
+}
+.ffx2cmd__reason {
+  flex: none;
+  font-size: 8px;
+  color: rgba(11, 10, 18, 0.55);
+}
+.ffx2hud .ig-cmd--disabled .ffx2cmd__reason {
+  color: rgba(244, 241, 232, 0.7);
+}
+.ffx2cmd__arrow {
+  margin-left: auto;
+  color: var(--ig-accent);
+}
+
+/* -------------------------------------------------------------- minigames */
+
+.ffx2hud__minigame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------- chain pop */
+
+/* `.ig-damage`'s own children (`__splash`, `__value`, `__chain`) already
+   carry the mock's exact styling; these modifiers are the HUD-owned
+   escalation states (visual-bible §4.6) layered on top. */
+.ffx2chain--pop .ffx2chain__num {
+  animation: ffx2-chain-pop 0.18s ease-out;
+}
+@keyframes ffx2-chain-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.ffx2chain--warm .ig-damage__splash {
+  filter: drop-shadow(0 0 6px rgba(227, 185, 74, 0.7));
+}
+.ffx2chain--hot .ig-damage__splash {
+  fill: #f2712e;
+}
+.ffx2chain--hot .ffx2chain__num {
+  color: #fff0a8;
+}
+.ffx2chain--flash::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--ig-accent);
+  opacity: 0.15;
+}
+
+/* ----------------------------------------------------------- target reticle */
+
+/* `.ig-reticle` ships with no width/height (the shared layer has no bounding
+   size to draw from — `HudPort.setProjector` gives a point, not a box), so
+   the HUD picks a fixed bracket size here; a documented simplification. */
+.ffx2hud .ig-reticle {
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.ffx2hud .ig-reticle--selected .ig-reticle__corner {
+  filter: drop-shadow(0 0 4px rgba(247, 182, 217, 0.9)) brightness(1.3);
+}
+.ffx2hud .ig-reticle--list {
+  width: auto;
+  height: auto;
+  transform: none;
+  background: var(--ig-ink-panel);
+  color: var(--ig-paper);
+  font-family: var(--ig-font-display);
+  font-size: 10px;
+  padding: 3px 10px;
+  border-left: 2px solid var(--ig-accent);
+}

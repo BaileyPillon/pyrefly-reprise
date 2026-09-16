@@ -3,12 +3,14 @@
  *
  * Split out of AudioManager so the mixer only deals with playback: this class
  * owns the worker, the in-flight requests, the fallback to a synchronous render
- * and the cache of finished buffers.
+ * and the cache of finished buffers. AudioManager also borrows this worker to
+ * warm up the SFX bank (see `getWorker()`) rather than spawning a second one;
+ * SFX messages carry `kind: 'sfx'` and this class's own listener ignores them.
  */
 
 import { renderTrack } from './render.ts';
 import { getTrack } from './tracks/index.ts';
-import type { RenderRequest, RenderResponse } from './worker.ts';
+import type { RenderRequest, RenderResponse, WorkerResponse } from './worker.ts';
 
 export interface LoopedBuffer {
   buffer: AudioBuffer;
@@ -86,36 +88,47 @@ export class MusicLoader {
   }
 
   private renderViaWorker(name: string, sampleRate: number): Promise<RenderResponse | null> {
-    if (!this.useWorker || this.workerBroken || typeof Worker === 'undefined') {
-      return Promise.resolve(null);
-    }
+    const worker = this.getWorker();
+    if (!worker) return Promise.resolve(null);
+    const id = this.nextRequestId++;
+    const request: RenderRequest = { id, name, sampleRate };
+    return new Promise<RenderResponse | null>((resolve) => {
+      this.pending.set(id, resolve);
+      worker.postMessage(request);
+    });
+  }
+
+  /**
+   * The shared render worker, created (and its listeners wired up) on first
+   * use. Returns null when Workers are unavailable or the worker has died —
+   * callers should fall back to a main-thread render in that case, same as
+   * `load()` does for music.
+   */
+  getWorker(): Worker | null {
+    if (!this.useWorker || this.workerBroken || typeof Worker === 'undefined') return null;
+    if (this.worker) return this.worker;
     try {
-      if (!this.worker) {
-        this.worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
-        this.worker.onmessage = (event: MessageEvent<RenderResponse>) => {
-          const resolve = this.pending.get(event.data.id);
-          if (resolve) {
-            this.pending.delete(event.data.id);
-            resolve(event.data);
-          }
-        };
-        this.worker.onerror = () => {
-          this.workerBroken = true;
-          for (const [id, resolve] of [...this.pending]) {
-            this.pending.delete(id);
-            resolve(null);
-          }
-        };
-      }
-      const id = this.nextRequestId++;
-      const request: RenderRequest = { id, name, sampleRate };
-      return new Promise<RenderResponse | null>((resolve) => {
-        this.pending.set(id, resolve);
-        this.worker?.postMessage(request);
+      const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
+      worker.addEventListener('message', (event: MessageEvent<WorkerResponse>) => {
+        if (event.data.kind === 'sfx') return; // handled by AudioManager's own listener
+        const resolve = this.pending.get(event.data.id);
+        if (resolve) {
+          this.pending.delete(event.data.id);
+          resolve(event.data);
+        }
       });
+      worker.addEventListener('error', () => {
+        this.workerBroken = true;
+        for (const [id, resolve] of [...this.pending]) {
+          this.pending.delete(id);
+          resolve(null);
+        }
+      });
+      this.worker = worker;
+      return worker;
     } catch {
       this.workerBroken = true;
-      return Promise.resolve(null);
+      return null;
     }
   }
 

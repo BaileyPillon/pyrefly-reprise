@@ -9,15 +9,28 @@ import { panGains } from '../dsp/shaper.ts';
 import { uiSfx } from './ui.ts';
 import { battleSfx } from './battle.ts';
 import { magicSfx } from './magic.ts';
+import { weaponSfx } from './weapons.ts';
+import { enemySfx } from './enemy.ts';
+import { flowSfx } from './flow.ts';
+import { spellSfx } from './spells.ts';
+import { supportSfx } from './support.ts';
 import type { SfxDef } from './kit.ts';
 
 export type { SfxDef };
 
-export const SFX: Record<string, SfxDef> = {
-  ...uiSfx,
-  ...battleSfx,
-  ...magicSfx,
+/** Every file's cues, in registration order. A name must appear in exactly one file. */
+export const SFX_GROUPS: Record<string, Record<string, SfxDef>> = {
+  ui: uiSfx,
+  battle: battleSfx,
+  magic: magicSfx,
+  weapons: weaponSfx,
+  enemy: enemySfx,
+  flow: flowSfx,
+  spells: spellSfx,
+  support: supportSfx,
 };
+
+export const SFX: Record<string, SfxDef> = Object.assign({}, ...Object.values(SFX_GROUPS));
 
 export function sfxNames(): string[] {
   return Object.keys(SFX);

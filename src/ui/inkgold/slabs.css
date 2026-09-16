@@ -1,0 +1,257 @@
+/**
+ * Ink & Gold — component classes (Direction A).
+ *
+ * Traces to docs/handoff/presentation-ink-and-gold.md ("Components") and the
+ * matching docs/handoff/ink-and-gold/*.dc.html. Trailing comments give the
+ * spec's literal value(s) at its 1440px authoring width; the CSS value is
+ * that number / 2.25 (see tokens.css's authoring-convention note). Percents,
+ * em units, opacities and colours are copied verbatim — they don't scale.
+ *
+ * `.ig-wipe` and `.ig-cutin*` back wipe.ts / cutin.ts. They're not in the
+ * spec's static "Components" list (no single markup rect to quote), because
+ * they're animated compositions of the slab primitives below; their geometry
+ * is documented at the point of use in those two files. `index.ts` loads
+ * this file and tokens.css only, so anything either module needs lives here.
+ */
+
+/* ig-slab: the unit of chrome — skew the box, counter-skew the content.
+   Both angles read --ig-skew/--ig-skew-inverse (tokens.css), so every slab
+   in this file mirrors automatically under .ig--ffx2 — see tokens.css's
+   --ig-edge comment for the (few) things a variable flip can't reach. */
+.ig-slab { position: relative; transform: skewX(var(--ig-skew)); box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45); } /* 8 20 */
+.ig-slab__content { display: block; transform: skewX(var(--ig-skew-inverse)); }
+
+/* ig-banner: action banner, top-left 48,40 @1440. FFX-2 anchors it top-RIGHT
+   at the same offset (BattleFfx2.dc.html: right:48,top:40) — left/right is
+   a physical property pair calc() can't flip (the idle side must be `auto`,
+   which calc() cannot produce), so it's the one targeted override below
+   rather than a variable read. */
+.ig-banner {
+  position: absolute; left: 21.33px; top: 17.78px; /* 48 40 */
+  display: flex; align-items: center; gap: 8px; /* 18 */
+  padding: 4.44px 15.11px 5.33px 12.44px; /* 10 34 12 28 */
+  background: var(--ig-paper); border-bottom: 1.78px solid var(--ig-accent); /* 4 */
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 4.44px 13.33px rgba(0, 0, 0, 0.5); /* 10 30 */
+}
+.ig-banner > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig--ffx2 .ig-banner { left: auto; right: 21.33px; } /* 48 */
+.ig-banner__name { font-family: var(--ig-font-serif); font-size: 20.44px; font-weight: 700; font-style: italic; color: var(--ig-ink); line-height: 1; } /* 46 */
+.ig-banner__chip {
+  padding: 3.11px 5.33px; /* 7 12 */
+  background: var(--ig-ink); color: var(--ig-accent);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 6.22px; /* 14 */
+  letter-spacing: 0.26em; text-transform: uppercase;
+}
+
+/* ig-cmd-stack: bottom-left 68,58 @1440 in FFX-1 chapters; BattleFfx2.dc.html
+   anchors it bottom-RIGHT instead (right:40,bottom:262 — a different offset,
+   not a mirror of the same numbers, since the stack sits beside whichever
+   edge the FFX-2 HUD anchors its chrome to). Either way the anchor itself
+   is left unset here — the HUD owner positions the stack's `left`/`right`/
+   `bottom` per screen, same as it already drives the cascade below. Rows
+   cascade further left than the last (16px default / 22px --lg): the HUD
+   owner sets, per row, `style="margin-left: calc(var(--ig-cascade-step) *
+   index)"` in FFX-1 chapters, or `margin-right` for a right-anchored FFX-2
+   stack (row count is data-driven, same as HudMock's CTB rows setting their
+   own `top`). The cursor triangle (below) also mirrors by hand: FFX-2's is
+   `<path d="M11 1 L1 8 L11 15 Z"/>` (points left, sits after the label) vs
+   FFX-1's `<path d="M1 1 L11 8 L1 15 Z"/>` (points right, sits before it) —
+   the cursor always points from the row's outer edge in toward the label. */
+.ig-cmd-stack { position: absolute; display: flex; flex-direction: column; gap: 3.56px; --ig-cascade-step: 7.11px; } /* 8 16 */
+.ig-cmd-stack--lg { --ig-cascade-step: 9.78px; gap: 4.44px; } /* 22 10 */
+.ig-cmd {
+  display: flex; align-items: center; gap: 6.22px; /* 14 */
+  width: 129.78px; height: 23.11px; /* 292 52 */
+  padding: 0 9.78px 0 10.67px; /* 0 22 0 24 */
+  background: var(--ig-paper); color: var(--ig-ink);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 9.78px; /* 22 */
+  letter-spacing: 0.12em; text-transform: uppercase;
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45); /* 8 20 */
+}
+.ig-cmd > * { display: inline-block; transform: skewX(var(--ig-skew-inverse)); }
+.ig-cmd--selected { background: var(--ig-accent); }
+.ig-cmd--disabled { opacity: 0.42; }
+.ig-cmd--overdrive { background: var(--ig-ink); color: var(--ig-accent); border: 0.89px solid var(--ig-accent); } /* 2 */
+.ig-cmd__ready { margin-left: auto; font-size: 4.89px; letter-spacing: 0.2em; color: var(--ig-paper); } /* 11 */
+/* the 12x16 ink cursor triangle: draw inline as
+   `<svg viewBox="0 0 12 16"><path d="M1 1 L11 8 L1 15 Z" fill="#0B0A12"/></svg>` sized to this class
+   (FFX-2: `<path d="M11 1 L1 8 L11 15 Z"/>`, see the comment above). */
+.ig-cmd__cursor { display: inline-block; width: 5.33px; height: 7.11px; transform: skewX(var(--ig-skew-inverse)); flex: none; } /* 12 16 */
+.ig-cmd-stack--lg .ig-cmd {
+  gap: 8px; width: 168.89px; height: 29.33px; /* 18 380 66 */
+  padding: 0 11.56px 0 12.44px; font-size: 12.44px; /* 0 26 0 28, 28 */
+  box-shadow: 0 4.44px 10.67px rgba(0, 0, 0, 0.5); /* 10 24 */
+}
+.ig-cmd-stack--lg .ig-cmd__ready { font-size: 5.33px; letter-spacing: 0.22em; } /* 12 */
+.ig-cmd-stack--lg .ig-cmd__cursor { width: 6.22px; height: 8px; } /* 14 18 */
+
+/* ig-ctb: queue, right 44, top 112 @1440. Six rows visible; each row shifts
+   -8px further left than the last via the HUD owner setting
+   `style="transform: translateX(calc(var(--ig-ctb-step) * index))"`. */
+.ig-ctb {
+  position: absolute; right: 19.56px; top: 49.78px; /* 44 112 */
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px; /* 9 */
+  --ig-ctb-step: -3.56px; /* -8 */
+}
+.ig-ctb__row { display: flex; align-items: center; justify-content: flex-end; gap: 4.44px; } /* 10 */
+.ig-ctb__name {
+  font-family: var(--ig-font-display); font-size: 4.89px; font-weight: 700; /* 11 */
+  letter-spacing: 0.2em; color: var(--ig-paper); text-shadow: 0 0.44px 0.89px var(--ig-ink); /* 1 2 */
+  padding: 1.33px 3.56px; background: var(--ig-ink-chip); /* 3 8 */
+}
+.ig-ctb__tile {
+  position: relative; width: 20.44px; height: 20.44px; /* 46 */
+  border: 0.89px solid var(--ig-paper); background: var(--ig-ink); overflow: hidden; /* 2 */
+  box-shadow: 0 1.78px 4.44px rgba(0, 0, 0, 0.55); flex: none; /* 4 10 */
+}
+.ig-ctb__tile img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%; display: block; }
+.ig-ctb__tile--enemy { border-color: var(--ig-blood); background: #2a0f12; }
+.ig-ctb__tile--now {
+  width: 28.44px; height: 28.44px; border: 1.33px solid var(--ig-accent); /* 64 3 */
+  box-shadow: 0 0 0 0.89px var(--ig-ink), 0 0 8.89px rgba(227, 185, 74, 0.6); /* 2 20 */
+}
+.ig-ctb__tag { position: absolute; right: 0.89px; bottom: 0; font-size: 5.33px; font-weight: 700; color: var(--ig-paper); text-shadow: 0.44px 0.44px 0 var(--ig-ink); } /* 2 12 1 1 */
+.ig-ctb__mono { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: rgba(244, 241, 232, 0.8); } /* 18 */
+
+/* ig-stat: party status, right 52, bottom 54 @1440. Rows cascade right-to-
+   left 16px @1440: the HUD owner sets `style="margin-right: calc(var(--ig-stat-step) * index)"`.
+   FFX-2 anchors the list left instead (BattleFfx2.dc.html: left:52,bottom:54,
+   same offset, `align-items: flex-start`, cascade via `margin-left`) — the
+   anchor side is a physical-property pair calc() can't flip (see tokens.css's
+   --ig-edge comment), hence the one targeted override below. */
+.ig-stat-list {
+  position: absolute; right: 23.11px; bottom: 24px; /* 52 54 */
+  display: flex; flex-direction: column; align-items: flex-end; gap: 3.56px; /* 8 */
+  --ig-stat-step: 7.11px; /* 16 */
+}
+.ig--ffx2 .ig-stat-list { right: auto; left: 23.11px; align-items: flex-start; } /* 52 */
+.ig-stat {
+  display: flex; align-items: center; gap: 7.11px; /* 16 */
+  width: 200px; height: 27.56px; padding-right: 8px; /* 450 62 18 */
+  background: var(--ig-ink-panel);
+  transform: skewX(var(--ig-skew));
+  /* Accent edge: FFX-1 borders the left, FFX-2 the right (BattleFfx2.dc.html:
+     border-right instead of border-left). Both widths are declared and
+     multiplied by --ig-edge / (1 - --ig-edge) so the flip is a pure variable
+     read — no .ig--ffx2 override rule needed, unlike the anchor above. */
+  border-left-style: solid; border-right-style: solid;
+  border-left-width: calc((1 - var(--ig-edge)) * 2.67px); /* 6 */
+  border-right-width: calc(var(--ig-edge) * 2.67px);
+  border-left-color: var(--ig-paper); border-right-color: var(--ig-paper);
+}
+.ig-stat > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-stat--acting { border-left-color: var(--ig-accent); border-right-color: var(--ig-accent); background: var(--ig-ink-acting); }
+.ig-stat__face { width: 27.56px; height: 27.56px; overflow: hidden; background: #1a1526; flex: none; margin-left: 2.67px; } /* 62 6 */
+.ig-stat__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+/* ig-stat__sphere: BattleFfx2.dc.html's dressphere monogram tile — the FFX-2
+   swap for .ig-stat__face's portrait <img> (a plain glyph instead of a
+   crop). Use one or the other as the row's first child, not both. */
+.ig-stat__sphere {
+  position: relative; width: 22.22px; height: 22.22px; margin-left: 5.33px; /* 50 12 */
+  border: 0.89px solid var(--ig-paper); background: var(--ig-ink); flex: none; /* 2 */
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 8.89px; color: var(--ig-paper); /* 20 */
+}
+.ig-stat--acting .ig-stat__sphere { border-color: var(--ig-accent); color: var(--ig-accent); }
+.ig-stat__name { width: 42.67px; font-family: var(--ig-font-serif); font-size: 10.67px; font-weight: 700; font-style: italic; color: var(--ig-paper); } /* 96 24 */
+.ig-stat--acting .ig-stat__name { color: var(--ig-accent); }
+.ig-stat__value { display: flex; align-items: baseline; gap: 1.33px; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 11.56px; line-height: 1; color: var(--ig-paper); } /* 3 26 */
+.ig-stat__value small { font-size: 5.78px; font-weight: 600; color: #9fb0c4; } /* 13 */
+.ig-stat__value--mp { color: var(--ig-spira-sky); }
+/* ig-stat__od: labelled "Overdrive bar" by the base spec; BattleFfx2.dc.html
+   reuses the identical element as the ATB bar (FFX-2 has no Overdrive) — same
+   class, just a different fill semantic, so no FFX-2 variant is needed here. */
+.ig-stat__od { position: relative; width: 53.33px; height: 3.56px; margin-left: auto; background: #2a3246; } /* 120 8 */
+.ig-stat__od i { position: absolute; inset: 0 auto 0 0; display: block; background: var(--ig-accent); }
+
+/* ig-reticle: four 30px corners @1440, 3px gold, glow. The name plate hangs
+   off the bracket's left edge; the mock places it at a scene-specific 118px
+   down a 560px box (not a fixed ratio), so this centers it vertically by
+   default (`top: 50%`) and leaves it open for the caller to override per
+   target box — documented approximation, see README.md / final report. */
+.ig-reticle { position: absolute; }
+.ig-reticle__corner { position: absolute; width: 13.33px; height: 13.33px; border: 0 solid var(--ig-accent); filter: drop-shadow(0 0 1.78px rgba(227, 185, 74, 0.6)); } /* 30 4 */
+.ig-reticle__corner--tl { left: 0; top: 0; border-left-width: 1.33px; border-top-width: 1.33px; } /* 3 */
+.ig-reticle__corner--tr { right: 0; top: 0; border-right-width: 1.33px; border-top-width: 1.33px; }
+.ig-reticle__corner--bl { left: 0; bottom: 0; border-left-width: 1.33px; border-bottom-width: 1.33px; }
+.ig-reticle__corner--br { right: 0; bottom: 0; border-right-width: 1.33px; border-bottom-width: 1.33px; }
+.ig-reticle__name {
+  position: absolute; left: -8px; top: 50%; /* -18 */
+  transform: translateY(-50%) skewX(var(--ig-skew));
+  padding: 3.11px 8.89px 3.56px; background: var(--ig-ink); white-space: nowrap; /* 7 20 8 */
+  /* Accent edge flips via --ig-edge (see .ig-stat above and tokens.css); the
+     -8px hang-off point is a physical left/right pair calc() can't produce
+     `auto` for, so BattleFfx2.dc.html's mirrored `right: -18px` is the one
+     targeted override below. */
+  border-left-style: solid; border-right-style: solid;
+  border-left-width: calc((1 - var(--ig-edge)) * 1.78px); /* 4 */
+  border-right-width: calc(var(--ig-edge) * 1.78px);
+  border-left-color: var(--ig-accent); border-right-color: var(--ig-accent);
+}
+.ig--ffx2 .ig-reticle__name { left: auto; right: -8px; } /* -18 */
+.ig-reticle__name > * { display: inline-block; transform: skewX(var(--ig-skew-inverse)); }
+.ig-reticle__name-text { font-family: var(--ig-font-serif); font-size: 10.67px; font-weight: 700; font-style: italic; letter-spacing: 0.08em; color: var(--ig-paper); } /* 24 */
+
+/* ig-damage: numeral on its ink-splash (128px Cormorant on a ~380x190
+   12-point splash). The splash is an SVG path, not a CSS length, so it's
+   quoted here rather than converted: draw it as
+   `<svg class="ig-damage__splash" viewBox="0 0 380 190">
+      <path d="M18 96 L58 34 L142 54 L206 8 L266 62 L352 42 L326 112 L364 166
+               L252 146 L182 182 L118 136 L36 158 Z"/></svg>`
+   (viewBox stays in spec px — it's the SVG's own coordinate space, not a
+   page length; only the rendered width/height below are converted). */
+.ig-damage { position: absolute; }
+.ig-damage__splash { position: absolute; left: -20.44px; top: -15.11px; width: 168.89px; height: 84.44px; fill: var(--ig-accent); opacity: 0.94; } /* -46 -34 380 190 */
+.ig-damage__value { position: relative; display: block; font-family: var(--ig-font-serif); font-size: 56.89px; font-weight: 700; font-style: italic; letter-spacing: -0.02em; line-height: 1; color: var(--ig-ink); } /* 128 */
+/* Enemy damage on the party inverts (ivory numeral on ink splash) per spec;
+   not mocked in the source renders, so this extrapolates the stated rule
+   rather than quoting a value. */
+.ig-damage--enemy .ig-damage__splash { fill: var(--ig-ink); }
+.ig-damage--enemy .ig-damage__value { color: var(--ig-paper); }
+/* ig-damage__chain: FFX-2's "CHAIN ×N" tag on the splash (BattleFfx2.dc.html),
+   positioned relative to the same .ig-damage box as the splash/value above. */
+.ig-damage__chain {
+  position: absolute; left: 111.11px; top: 48.89px; /* 250 110 */
+  padding: 2.67px 6.22px; background: var(--ig-ink); color: var(--ig-accent); /* 6 14 */
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 7.11px; /* 16 */
+  letter-spacing: 0.2em; transform: rotate(-8deg); white-space: nowrap;
+}
+
+/* ig-surface: grain + vignette over the whole frame. The grain filter params
+   (baseFrequency 0.85, numOctaves 2, stitchTiles) are copied from the
+   dc.html sources' inline <svg><filter> verbatim into this data URI. */
+.ig-surface { position: absolute; inset: 0; pointer-events: none; }
+.ig-surface__grain {
+  position: absolute; inset: 0; opacity: 0.13; mix-blend-mode: overlay; background-size: cover;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ig-surface__vignette {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 90% at 55% 40%, transparent 45%, rgba(11, 10, 18, 0.55) 100%),
+    linear-gradient(180deg, rgba(11, 10, 18, 0.35) 0%, rgba(11, 10, 18, 0) 22%, rgba(11, 10, 18, 0) 68%, rgba(11, 10, 18, 0.62) 100%);
+}
+
+/* ig-wipe: backs wipe.ts. A parallelogram wider/taller than the frame so its
+   skewed edge fully covers regardless of aspect ratio; wipe.ts drives the
+   sweep by animating `transform: translateX(...)`. */
+.ig-wipe { position: absolute; top: -20%; left: -60%; width: 220%; height: 140%; transform: skewX(19deg); will-change: transform; }
+
+/* ig-cutin: backs cutin.ts's turn-start slab. Geometry (620x880 slab, 940
+   tall portrait, 300px ghost name, etc., all @1440) is documented next to
+   its use in cutin.ts; only the static structural rules live here. */
+.ig-cutin { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.ig-cutin__ghost { position: absolute; font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; color: var(--ig-accent); opacity: 0.16; white-space: nowrap; line-height: 0.8; }
+.ig-cutin__slab { position: absolute; background: var(--ig-paper); overflow: hidden; box-shadow: 13.33px 0 26.67px rgba(0, 0, 0, 0.55); } /* 30 0 60 */
+.ig-cutin__portrait { position: absolute; object-fit: cover; }
+.ig-cutin__fade { position: absolute; left: 0; bottom: 0; width: 100%; height: 97.78px; background: linear-gradient(180deg, rgba(244, 241, 232, 0) 0%, rgba(244, 241, 232, 0.95) 70%); } /* 220 */
+.ig-cutin__stripe { position: absolute; background: var(--ig-accent); }
+.ig-cutin__label { position: absolute; display: flex; flex-direction: column; gap: 1.78px; } /* 4 */
+.ig-cutin__ctb { font-family: var(--ig-font-display); font-weight: 700; font-size: 6.22px; letter-spacing: 0.34em; color: var(--ig-gold-on-paper); } /* 14 */
+.ig-cutin__name { font-family: var(--ig-font-serif); font-size: 40.89px; font-weight: 700; font-style: italic; line-height: 0.9; letter-spacing: -0.02em; color: var(--ig-ink); } /* 92 */
+.ig-cutin__info { position: absolute; padding: 8px 9.78px; background: var(--ig-ink-panel); border-left: 1.78px solid var(--ig-accent); transform: skewX(var(--ig-skew)); } /* 18 22 4 */
+.ig-cutin__info > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-cutin__info-label { font-family: var(--ig-font-display); font-weight: 700; font-size: 5.33px; letter-spacing: 0.3em; color: var(--ig-accent); text-transform: uppercase; } /* 12 */
+.ig-cutin__info-desc { margin-top: 2.67px; font-family: var(--ig-font-serif); font-size: 9.78px; font-style: italic; line-height: 1.2; color: var(--ig-paper); } /* 6 22 */

@@ -18,6 +18,9 @@ step; the game only ever loads the finished PNGs that land in `public/art/`.
 | Checkpoint | `...\ComfyUI\models\checkpoints\animagine-xl-4.0-opt.safetensors` | Animagine XL 4.0 Opt, CreativeML Open RAIL++-M |
 | Upscaler | `...\ComfyUI\models\upscale_models\RealESRGAN_x4plus.pth` | BSD-3-Clause |
 | Cutout | `rembg` in the embedded python | `isnet-anime` weights cached in `D:\Tools\ComfyUI\rembg-models` |
+| IP-Adapter node | `...\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus` | cubiq, GPL-3.0. This is what `--ref` runs on |
+| IP-Adapter weights | `...\ComfyUI\models\ipadapter\ip-adapter-plus_sdxl_vit-h.safetensors` | h94/IP-Adapter, Apache-2.0 |
+| CLIP-Vision | `...\ComfyUI\models\clip_vision\CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors` | h94's `models/image_encoder/model.safetensors`, **renamed** |
 | Output scratch | `D:\Tools\ComfyUI\output\` | raw renders; the repo only keeps the chosen ones |
 
 The machine's system Python 3.14 is **not** used by any of this. Every python
@@ -53,6 +56,36 @@ Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
 The web UI at <http://127.0.0.1:8188/> is useful for eyeballing a prompt by
 hand, but everything reproducible goes through the CLI below.
 
+### Installing the reference-consistency stack (one-off, already done)
+
+```bash
+git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus \
+  D:/Tools/ComfyUI/ComfyUI/custom_nodes/ComfyUI_IPAdapter_plus
+
+curl -L -o D:/Tools/ComfyUI/ComfyUI/models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors \
+  https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors
+
+curl -L -o D:/Tools/ComfyUI/ComfyUI/models/ipadapter/ip-adapter-plus_sdxl_vit-h.safetensors \
+  https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors
+```
+
+**The clip_vision filename is not cosmetic.** The file on the Hub is called
+`model.safetensors`; ComfyUI lists `models/clip_vision/` by filename, and both
+this doc and `comfy.mjs` name it
+`CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors` — which is what those weights
+actually are. Save it under another name and the workflow fails validation with
+an unhelpful enum error naming every file in the folder except the one you
+wanted.
+
+Custom nodes are only scanned at boot, so restart ComfyUI and check it took:
+
+```bash
+curl -s http://127.0.0.1:8188/object_info | grep -o '"IPAdapterAdvanced"'
+```
+
+Nothing back means the node did not load — read ComfyUI's console, it prints
+the import traceback there and nowhere else.
+
 ---
 
 ## 2. The style prompt contract
@@ -65,8 +98,19 @@ live in exactly one place — the exported constants at the top of
 ```js
 export const STYLE_TAGS   = 'official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed';
 export const QUALITY_TAGS = 'masterpiece, high score, great score, absurdres';
-export const CHARACTER_COMPOSITION = 'full body, standing on ground, simple background, white background';
+export const CHARACTER_COMPOSITION = 'straight-on, full body, standing, feet visible, simple background, white background';
 ```
+
+**The composition block moved in v2** (2026-09-15). The proof-of-concept round
+closed with the observation that about one variant in three was framed usably
+and that the misses were nearly always *camera* — bird's-eye, or a hard dutch
+tilt — rather than costume. `straight-on, feet visible` is that experiment,
+adopted. `standing on ground` lost its "on ground" because the phrase kept
+summoning a textured floor plane into what is supposed to be a flat white
+cyclorama. Style and quality tags did **not** change.
+
+Everything rendered before this change is in the old framing.
+`tools/gen/cast.json` is the work order for the re-render.
 
 Two tags were tried on a fixed seed and deliberately **rejected** — don't add
 them back without re-testing:
@@ -87,6 +131,15 @@ Rules:
 3. The negative prompt is likewise shared (`BASE_NEGATIVE`), and includes the
    multi-subject bans (`multiple views, 2girls, 2boys`, …) that otherwise turn
    a sprite sheet into a group photo.
+4. Sprites carry a second negative block on top, `SPRITE_NEGATIVE`
+   (`paint splatter, ink splash, colorful background, abstract background`).
+   `motion lines` and `action pose` in a pose prompt reliably spray a coloured
+   swirl around the figure on this checkpoint — the same failure that got
+   `painterly` struck from the style block. It is not just ugly: rembg keeps
+   every opaque swirl, so the crop box comes back as the whole 832×1216 frame
+   and `baselineY` lands on a ribbon of paint instead of a boot. Backdrops
+   deliberately do *not* inherit it — `chapter-select` is supposed to be an
+   abstract coloured field.
 
 ### Tag ordering (Animagine XL 4.0)
 
@@ -147,7 +200,132 @@ the rest. **Judge on costume accuracy first** — the model knows the characters
 but it drifts on outfit details more than on faces.
 
 Flags: `--seed`, `--steps`, `--cfg`, `--batch`, `--margin`, `--width`,
-`--height`, `--sampler`, `--scheduler`, `--composition`.
+`--height`, `--size`, `--sampler`, `--scheduler`, `--composition`, `--negAdd`,
+`--ref`, `--refWeight`, `--refStart`, `--refEnd`, `--refWeightType`,
+`--refScaling`, `--img2img`, `--denoise`.
+
+`--size WxH` is shorthand for `--width`/`--height`, and rejects anything that
+is not a multiple of 8 — SDXL's VAE strides by 8, and other values round
+silently and shift the framing.
+
+`--composition` now takes `full | portrait | prone | boss`.
+
+### Reference consistency — `--ref`
+
+The proof-of-concept generated every pose independently, and it showed: each
+render drifted toward a slightly different Tidus. `--ref` pins the identity to
+an image you have already approved.
+
+```bash
+node tools/gen/comfy.mjs character --name tidus \
+  --tags "1boy, tidus, final fantasy x, safe, solo, blonde hair, ..." \
+  --pose cast --poseTags "raising hand, arm up, casting spell, magic, glowing magic circle" \
+  --ref public/art/characters/tidus/idle.png \
+  --out public/art/characters/tidus/cast.png --batch 3
+```
+
+The reference is copied into ComfyUI's `input/` folder (LoadImage takes a
+filename, not a path) and **flattened onto white** on the way — our sprites are
+cutouts, LoadImage hands CLIP-Vision the RGB channels and routes alpha to a
+MASK output nobody connected, and the RGB under a transparent pixel is rembg's
+dark fringe. Un-flattened, the adapter sees a character in a black void and the
+black leaks into the render.
+
+**Generate `idle` first, pick a keeper, then point every other state at it.**
+That is what the `refState` field in `cast.json` records.
+
+#### The settings, and why they are what they are
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--refWeight` | `0.65` | How hard the reference pulls |
+| `--refStart` | `0.25` | When it switches **on**, as a fraction of the denoise |
+| `--refEnd` | `0.85` | When it switches **off** |
+| `--refWeightType` | `linear` | IP-Adapter weight curve |
+| `--refScaling` | `K+V` | How the embeds are applied |
+
+`--refStart`, not `--refWeight`, is the flag that makes this usable, and it is
+not the one you reach for first. Tuned on Tidus, fixed seed, the `attack`
+prompt against his approved `idle`:
+
+- **weight 0.65, start 0.0** — the pose prompt was ignored. The render came
+  back in the idle's planted stance with the legs cropped, and the whole image
+  turned glossy: chrome highlights, rainbow gradients on the blade, cel shading
+  gone.
+- **weight 0.45, start 0.0** — the same failure, slightly quieter. Weight was
+  not the variable.
+- **start 0.0, end 0.4** — cutting the adapter off early changed nothing about
+  the pose. Composition is decided in the *first* steps; by the time you switch
+  it off, the damage is done.
+- **start 0.25** — the prompt lays the figure out unassisted, the adapter
+  switches on once a pose exists, and it lands the face, hair and costume on
+  top of it. This is the fix.
+
+Two different mechanisms, needing two different flags:
+
+1. **Pose capture** happens at the *start* of the denoise. Cure with
+   `--refStart`.
+2. **Material bleed** happens at the *end*. The adapter carries the
+   reference's local surfaces and not just its identity — Tidus's idle handed
+   every later pose its iridescent blade and red-and-blue shoulder plate as an
+   all-over gloss. Cure with `--refEnd`; the default 0.85 hands the last steps
+   back to the checkpoint and the style tags.
+
+And the caveat that is easy to miss: **`--ref` propagates the reference's
+mistakes too.** The approved Tidus idle wears an armoured forearm that is not
+canon, and every `--ref` render inherits it. That is the deal — consistency is
+consistency — so be fussier about an `idle` than about any other frame in the
+set, because the whole character is downstream of it.
+
+For a *variant* of an existing subject (Shuyin from Tidus, the X-2 Bahamut from
+the FFX one) drop to about `0.45` and let the tags do the recolouring. At 0.65
+the reference's palette arrives with the face.
+
+### img2img — `--img2img`
+
+The blunter fallback, for a form so far from anything the checkpoint knows that
+no prompt reaches it:
+
+```bash
+node tools/gen/comfy.mjs boss --name seymour-flux-body \
+  --tags "..." --img2img sketch.png --denoise 0.55 \
+  --out public/art/characters/seymour-flux-body/idle.png
+```
+
+It starts from the pixels of the given image instead of from noise and redraws
+them at `--denoise` — 0.55 keeps the silhouette and repaints everything else;
+lower keeps more, higher keeps less. The init image is scaled to the target
+bucket first, because `VAEEncode` will not resize for you. `--ref` and
+`--img2img` compose: a rough pose sketch for the layout, an approved idle for
+the identity.
+
+### Bosses
+
+```bash
+node tools/gen/comfy.mjs boss --name mortiorchis \
+  --tags "no humans, floating skull, skeletal machine, insect, mandibles, ..." \
+  --negAdd "1girl, 1boy, human, face, person" \
+  --out public/art/characters/mortiorchis/idle.png --batch 3
+```
+
+Same style contract, same cutout, same sidecar as `character`. It differs only
+in its defaults: **1216×832** landscape and `--composition boss`
+(`straight-on, full body, centered, imposing, …`). Bosses are rarely bipeds
+standing politely on a floor, so `standing, feet visible` is wrong for them and
+actively fights forms like Yu Yevon or Vegnagun.
+
+Pick the canvas per subject — `cast.json` carries one in `sizeHint`:
+
+| Shape | `--size` | Examples |
+| --- | --- | --- |
+| Wider than tall | `1216x832` (default) | Mortiorchis, Ixion, Valefor, Vegnagun's tail |
+| Square-ish | `1024x1024` | Ifrit, Bahamut, Braska's Final Aeon, Yu Yevon |
+| Tall | `832x1216` | Anima, Shiva, Yunalesca 1, Vegnagun's leg |
+
+`--negAdd` matters more here than anywhere else, because boss names collide
+with plain English once CLIP has them: `pagoda` renders an entire Japanese
+temple in a landscape unless you ban buildings, and `core` and `flux` drift the
+same way.
 
 ### Portraits
 
@@ -181,17 +359,74 @@ the parallax illusion the moment a real sprite walks in front of them.
 ### Contact sheets
 
 ```bash
-D:\Tools\ComfyUI\python_embeded\python.exe -s tools/gen/sheet.py build --spec <spec>.json
-D:\Tools\ComfyUI\python_embeded\python.exe -s tools/gen/sheet.py thumb --in a.png --out b.png --width 1600
+# the proof-of-concept sheet -> docs/screenshots/04-art-poc-sheet.png
+D:\Tools\ComfyUI\python_embeded\python.exe -s tools/gen/sheet.py build \
+  --spec tools/gen/sheet-poc.json --root .
+
+# one image, downscaled, for sending on its own
+D:\Tools\ComfyUI\python_embeded\python.exe -s tools/gen/sheet.py thumb \
+  --in public/art/backdrops/gagazet.png --out docs/screenshots/concept-gagazet.png --width 1600
 ```
 
 The sheet builder bottom-aligns character cells on a shared ground line using
 each sprite's `baselineY`, so the sheet doubles as a check that the whole cast
-stands on the same floor.
+stands on the same floor. `tools/gen/sheet-poc.json` is the committed spec —
+add rows to it as the cast grows rather than building sheets by hand.
 
 ---
 
-## 4. File conventions
+## 4. The cast manifest
+
+`tools/gen/cast.json` is the work order for the whole roster: 72 subjects — the
+FFX party, the FFX and X-2 bosses, the aeons, the X-2 dresspheres, four
+backdrops and twenty portraits — each with its identity tags, its states, its
+framing and its canvas.
+
+Nothing reads it at runtime. It exists so that a generation session is "work
+the list" rather than "reinvent Auron's coat from memory", and so that two
+people rendering two different characters produce two characters that belong in
+the same game.
+
+```jsonc
+{
+  "id": "auron",
+  "kind": "party",
+  "cmd": "character",          // which comfy.mjs preset
+  "composition": "full",
+  "sizeHint": "832x1216",
+  "refState": "idle",          // generate this first, --ref the rest at it
+  "tags": "1boy, auron (ff10), final fantasy x, safe, solo, ...",
+  "states": {
+    "idle": { "poseTags": "standing, arm in sleeve, katana held low, ..." },
+    "ko":   { "poseTags": "...", "composition": "prone", "sizeHint": "1216x832",
+              "ref": "auron/idle" }
+  },
+  "notes": "The coat worn off the left shoulder with the arm inside the sleeve is the silhouette..."
+}
+```
+
+Style and quality tags are deliberately **not** in this file. They live in
+`comfy.mjs` and the generator appends them, so a cast row physically cannot
+drift from the house style. `tags` is identity; `poseTags` is action.
+
+The `notes` field is the reason the file is worth keeping in the repo. It is
+where "the belt skirt is a stack of individual leather belts, not a pleated
+skirt" and "write `animal ears (costume)`, or the model commits to a
+kemonomimi girl" get written down the first time somebody loses an hour to
+them.
+
+A few conventions inside it:
+
+- **KO states** carry `"composition": "prone"` and `"sizeHint": "1216x832"`.
+  A body lying down wastes two thirds of the portrait bucket.
+- **Boss forms are separate subjects** (`yunalesca-1/-2/-3`), each `--ref`'d at
+  the one before it, so a transformation reads as the same character.
+- **Seymour Flux is split in two** — `seymour-flux-body` and `mortiorchis` —
+  and composited by the engine. See §7.
+
+---
+
+## 5. File conventions
 
 The engine resolves art by convention — no manifest to keep in sync.
 
@@ -207,15 +442,49 @@ public/art/
 - `<id>` is lowercase kebab: `tidus`, `yuna`, `seymour-flux`.
 - `<pose>` is one of `idle`, `attack`, `cast`, `hurt`, `ko`, `victory`.
 - **`baselineY` is the contract.** It is the bottom row of opaque pixels in the
-  cropped PNG — the character's feet. The renderer plants a sprite by aligning
-  `baselineY` to the ground plane, *not* the bottom of the image, which is why
-  the 16 px crop margin doesn't make everyone float.
+  cropped PNG. The renderer plants a sprite by aligning `baselineY` to the
+  ground plane, *not* the bottom of the image, which is why the 16 px crop
+  margin doesn't make everyone float.
+
+  > **Caveat — `baselineY` is the lowest *pixel*, not the lowest *foot*.**
+  > For a pose where something hangs below the feet — a downward-pointing
+  > sword, a trailing sash, a cape — the lowest pixel is that prop, so aligning
+  > it to the ground plants the blade tip on the floor and floats the
+  > character. Two ways to deal with it, in order of preference:
+  >
+  > 1. **Prefer variants whose feet are the lowest content** when judging a
+  >    batch. Usually one of three is.
+  > 2. **Hand-correct the sidecar.** `baselineY` is a plain number in a JSON
+  >    file; measuring the feet in an image editor and writing that value in is
+  >    a thirty-second fix, and nothing regenerates it unless you re-run the
+  >    pose.
+  >
+  > When you do correct one by hand, keep the machine's value alongside it so
+  > the edit is obvious and re-runnable:
+  >
+  > ```json
+  > {
+  >   "baselineY": 1081,
+  >   "baselineYAuto": 1156,
+  >   "baselineNote": "Blade points past the feet; 1081 is the boot soles."
+  > }
+  > ```
+  >
+  > `public/art/characters/tidus/idle.json` is the worked example — the
+  > Brotherhood hangs 75 px below his boots.
+  >
+  > The `ko` pose is deliberately exempt — a downed character has no feet
+  > baseline, and the whole silhouette should sit on the floor.
+
+  A quick way to spot the problem across a whole character: the real body mass
+  ends where the widest opaque rows stop. If the lowest opaque pixel sits far
+  below that, something is dangling.
 - `*.raw.png` files are the pre-cutout renders. They are debugging aids; they
   are not shipped and should stay out of `public/` in a final build.
 
 ---
 
-## 5. Judging a batch
+## 6. Judging a batch
 
 The failure modes worth rejecting on, in order:
 
@@ -234,7 +503,55 @@ The failure modes worth rejecting on, in order:
 
 ---
 
-## 6. Licensing
+## 7. What's in the repo now
+
+The proof-of-concept round produced everything below; the v2 pass regenerated
+part of it. Sheets: `docs/screenshots/04-art-poc-sheet.png` (v1) and
+`docs/screenshots/05-art-v2-tidus-sheet.png` (v2). The three backdrops also
+exist as standalone `docs/screenshots/concept-<name>.png` at 1600 px wide.
+
+| Asset | Notes |
+| --- | --- |
+| `characters/tidus/{idle,attack,hurt,victory}.png` | v1 framing. `idle` is the reference the rest of him is pinned to. |
+| `characters/tidus/cast.png` | **v2**, `--ref idle.png`. Replaced the v1 render, which had the Brotherhood floating detached in mid-air behind him. |
+| `characters/tidus/ko.png` | **v2**, `--composition prone --size 1216x832`. The v1 `ko` was the crouch the prone block exists to prevent — a curled figure at a 30° tilt that read as falling, not downed. |
+| `characters/yuna/idle.png` | Heterochromia and summoner staff both landed. Skirt renders shorter than canon. |
+| `characters/seymour-flux/idle.png` | **Not the true Flux form** — see below. |
+| `portraits/{tidus,yuna}.png` | `--composition portrait`. |
+| `backdrops/{gagazet,zanarkand-dome,farplane}.png` | 2688×1536. |
+
+### What the v2 validation actually showed
+
+Tidus's `attack` was regenerated with `--ref` and the v1 render was **kept** —
+the v2 candidates were more consistent with the idle but less accurate to the
+character, because they faithfully inherited the idle's non-canon armoured
+forearm and gained red leggings with it. `cast` and `ko` were replaced. One
+state in three is a fair expectation for a re-render pass, not a disappointment:
+`--ref` buys consistency, and consistency is only worth having once the
+reference itself is right.
+
+So, in order, before the roster re-render:
+
+1. **Re-shoot Tidus's `idle`** against the v2 composition block and judge it
+   harder than anything else. Every other state inherits whatever it gets wrong.
+2. Then work `cast.json` top to bottom: `refState` first, `--batch 3`, pick,
+   then the remaining states with `--ref`.
+
+### Still open
+
+- **Seymour Flux never appeared as one image.** Across three variants the model
+  produced robed Seymour with a dark aura — striking, usable as a boss, but not
+  the multi-armed monstrosity. Animagine knows `seymour guado`; it does not
+  know `seymour flux` as a distinct form. `cast.json` splits him into
+  `seymour-flux-body` (the pale torso rising from the bone frame, `--ref`'d at
+  the existing approved render so the face matches) and `mortiorchis` (the
+  mount), for the engine to composite. If that still misses, `--img2img` off a
+  rough sketch is the next lever — this is exactly the case it was added for.
+- **Hanging props still need a hand-corrected `baselineY`.** `--ref` does not
+  help here; if anything it makes it more likely, since a reference holding a
+  sword encourages later poses to hold it the same way. See §5.
+
+## 8. Licensing
 
 - **Animagine XL 4.0 Opt** — CreativeML Open RAIL++-M. Permits commercial and
   non-commercial use with use-based restrictions; the restrictions must travel
@@ -242,6 +559,13 @@ The failure modes worth rejecting on, in order:
   the weights.
 - **RealESRGAN_x4plus** — BSD-3-Clause.
 - **ComfyUI** — GPL-3.0.
+- **ComfyUI_IPAdapter_plus** (cubiq) — GPL-3.0. A ComfyUI custom node; it runs
+  beside ComfyUI under the same licence and is not redistributed by us.
+- **IP-Adapter weights and the CLIP-ViT-H-14 image encoder** (h94/IP-Adapter) —
+  Apache-2.0. The encoder is LAION's CLIP-ViT-H-14-laion2B-s32B-b79K, MIT.
+
+All of these are installed under `D:\Tools\`, outside the repository. Nothing
+in `public/art/` is a model weight; the repo holds generated images only.
 
 This project is an unofficial fan tribute. Final Fantasy characters and settings
 are property of Square Enix; generated likenesses inherit that and are not

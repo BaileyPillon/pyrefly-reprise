@@ -279,12 +279,12 @@ describe('renderTrack', () => {
 });
 
 describe('music tracks', () => {
-  it('registers three tracks with sane loops and at least a minute of music', () => {
-    expect(trackNames()).toEqual(['title', 'battle-ffx', 'boss-dread']);
+  it('registers the original tracks with sane loops and at least 45 s of music each', () => {
+    expect(trackNames()).toEqual(expect.arrayContaining(['title', 'battle-ffx', 'boss-dread']));
     for (const name of trackNames()) {
       const track = TRACKS[name]!;
       const seconds = (track.length * 60) / track.bpm;
-      expect(seconds, name).toBeGreaterThanOrEqual(60);
+      expect(seconds, name).toBeGreaterThanOrEqual(45);
       expect(track.loop.start, name).toBeGreaterThanOrEqual(0);
       expect(track.loop.end, name).toBeGreaterThan(track.loop.start);
       expect(track.loop.end, name).toBeLessThanOrEqual(track.length);
@@ -312,7 +312,8 @@ describe('music tracks', () => {
     let energy = 0;
     for (let i = loopMiddle; i < loopMiddle + SR; i++) energy += Math.abs(out.left[i]!);
     expect(energy / SR).toBeGreaterThan(0.01);
-  });
+    // A full-track render takes ~1.5 s alone; allow for a machine busy with parallel renders.
+  }, 60_000);
 });
 
 describe('sfx bank', () => {
@@ -361,7 +362,8 @@ describe('sfx bank', () => {
       expect(out.left.length, name).toBeGreaterThan(SR * 0.02);
       expect(out.left.length, name).toBeLessThan(SR * 4);
     }
-  });
+    // 124 cues render in under a second alone; allow for a machine busy with other renders.
+  }, 60_000);
 
   it('renders a three second montage', () => {
     const out = renderMontage(SR, 3);

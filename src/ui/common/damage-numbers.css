@@ -1,0 +1,68 @@
+/*
+ * DamageNumbers — floating DOM numerals. Colours/outline from
+ * `research/visual-bible.md` §3.6; motion is computed per-frame in
+ * `DamageNumbers.ts` (see `damageLadder.ts`), this file only styles the glyph.
+ */
+
+.dnum-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 6;
+}
+
+.dnum {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-damage, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  will-change: transform, opacity;
+  color: #ffffff;
+  background: linear-gradient(180deg, #ffffff 0%, #d8dee8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 1px #141420) drop-shadow(0 1px 0 #141420) drop-shadow(1px 0 0 #141420)
+    drop-shadow(-1px 0 0 #141420) drop-shadow(0 -1px 0 #141420) drop-shadow(0 2px 3px rgba(11, 10, 18, 0.55));
+}
+
+.dnum--critical {
+  background: linear-gradient(180deg, #fff0a8 0%, #f2c21e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.dnum--heal {
+  background: linear-gradient(180deg, #8be8b0 0%, #3fa870 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.dnum--mp {
+  background: linear-gradient(180deg, #8fd0f0 0%, #3a8fd0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.dnum--miss {
+  background: linear-gradient(180deg, #c8d4e4 0%, #8fa4bc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-style: normal;
+}
+.dnum--immune {
+  color: #6c7b90;
+  background: none;
+  -webkit-text-fill-color: #6c7b90;
+  font-style: normal;
+}
+.dnum--absorbed {
+  background: linear-gradient(180deg, #c8d4e4 0%, #8fa4bc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-style: normal;
+}

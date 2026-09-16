@@ -1,0 +1,2249 @@
+{
+  "version": 2,
+  "updated": "2026-09-15",
+  "about": "The cast manifest: one entry per thing that has to be drawn, with the identity tags, the states, the framing and the canvas each one needs. It is a work order, not a config file — nothing reads it at runtime. Feed a row to tools/gen/comfy.mjs and judge the batch (docs/ART-PIPELINE.md §5).",
+  "contract": {
+    "note": "Style and quality tags are NOT in this file on purpose. They live in tools/gen/comfy.mjs (STYLE_TAGS, QUALITY_TAGS) and the generator appends them, so a cast row can never drift from the house style. `tags` is identity only; `poseTags` is action only.",
+    "styleTags": "official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed",
+    "qualityTags": "masterpiece, high score, great score, absurdres"
+  },
+  "defaults": {
+    "batch": 3,
+    "steps": 28,
+    "cfg": 6,
+    "sampler": "euler_ancestral",
+    "scheduler": "normal",
+    "refWeight": 0.65,
+    "denoise": 0.55,
+    "characterSize": "832x1216",
+    "bossSize": "1216x832",
+    "backdropSize": "1344x768"
+  },
+  "fields": {
+    "id": "Asset id, lowercase kebab. Becomes the folder under public/art/characters/ (or the filename for backdrops and portraits).",
+    "kind": "party | boss | aeon | dressphere | character | backdrop | portrait",
+    "game": "ffx | ffx-2 | ui",
+    "cmd": "Which comfy.mjs preset to invoke: character, boss or backdrop.",
+    "composition": "Default --composition for this subject (states may override).",
+    "sizeHint": "Default --size. Derived from the sprite cells in research/visual-bible.md §0.4.",
+    "tags": "Identity tags only, Danbooru order: count, character, series, rating, everything else.",
+    "negAdd": "Extra negatives for this subject, appended to BASE_NEGATIVE with --negAdd.",
+    "refState": "Which state is the identity anchor the other states pass to --ref.",
+    "states": "pose -> { poseTags, optional composition, sizeHint, ref, notes }.",
+    "notes": "What to watch for when judging the batch."
+  },
+  "poseTagBans": {
+    "motion lines": "Dropped from every pose in this file. On Animagine XL 4.0 it does not draw speed lines — it sprays a coloured swirl around the figure, rembg keeps the swirl as opaque content, and the cutout comes back as the whole 832x1216 frame with baselineY on a ribbon of paint. SPRITE_NEGATIVE bans the splatter as well; both halves of the fix are needed."
+  },
+  "workflow": [
+    "Generate the refState (usually idle) first, --batch 3, and pick a keeper.",
+    "Generate every other state with --ref <the keeper> so identity and costume carry over.",
+    "Judge on costume first, then extra subjects, then cropped limbs, then the cutout (docs/ART-PIPELINE.md §5).",
+    "Check baselineY against the feet on any pose with something hanging below them."
+  ],
+  "subjects": [
+    {
+      "id": "tidus",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/tidus",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, hood, sleeveless, asymmetrical clothes, black shorts, fingerless gloves, necklace, brotherhood (sword), blue sword, holding sword",
+      "states": {
+        "idle": {
+          "poseTags": "fighting stance, sword resting on shoulder, looking at viewer, confident smile"
+        },
+        "attack": {
+          "poseTags": "attacking, swinging sword, dynamic pose, action pose",
+          "ref": "tidus/idle"
+        },
+        "cast": {
+          "poseTags": "raising hand, arm up, casting spell, magic, glowing magic circle",
+          "ref": "tidus/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "tidus/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "tidus/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "tidus/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose, looking up",
+          "ref": "tidus/idle"
+        }
+      },
+      "notes": "The approved reference for the whole style contract. His idle.json carries a hand-corrected baselineY (1081 vs 1156 auto) because the Brotherhood hangs past his boots — expect the same on any sword-down pose."
+    },
+    {
+      "id": "yuna",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10), final fantasy x, safe, solo, brown hair, short hair, long braid, heterochromia, blue eye, green eye, white kimono top, blue skirt, detached sleeves, purple obi, obi, floral print, holding staff, summoner staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, holding staff with both hands, looking at viewer, serene expression, gentle smile"
+        },
+        "attack": {
+          "poseTags": "attacking, swinging weapon, dynamic pose, action pose",
+          "ref": "yuna/idle"
+        },
+        "cast": {
+          "poseTags": "holding staff up, casting spell, magic, glowing magic circle, eyes closed",
+          "ref": "yuna/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "yuna/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "yuna/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "yuna/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose, looking up",
+          "ref": "yuna/idle"
+        },
+        "summon": {
+          "ref": "yuna/idle",
+          "poseTags": "arms outstretched, staff raised overhead, summoning, glowing magic circle, wind, looking up, hair blowing in wind",
+          "notes": "Summoner-only state; the aeon itself is a separate subject, composited by the engine."
+        }
+      },
+      "notes": "Heterochromia and the staff both land reliably. The skirt renders shorter than canon — judge on that first; \"blue skirt\" plus \"obi\" is the strongest counterweight found so far."
+    },
+    {
+      "id": "auron",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/auron",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, auron (ff10), final fantasy x, safe, solo, male focus, black hair, short hair, sunglasses, round eyewear, scar across eye, facial hair, stubble, mature male, red coat, long coat, one shoulder bare, popped collar, high collar, black gloves, jug, katana, holding sword",
+      "states": {
+        "idle": {
+          "poseTags": "standing, arm in sleeve, katana held low, looking at viewer, stern expression"
+        },
+        "attack": {
+          "poseTags": "attacking, overhead sword swing, dynamic pose, coat flaring",
+          "ref": "auron/idle"
+        },
+        "cast": {
+          "poseTags": "raising hand, arm up, casting spell, magic, glowing magic circle",
+          "ref": "auron/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "auron/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "auron/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "auron/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose, looking up",
+          "ref": "auron/idle"
+        }
+      },
+      "notes": "The coat worn off the left shoulder with the arm inside the sleeve is the silhouette; if both arms are in the sleeves, reject. \"one shoulder bare\" carries it more often than \"off shoulder\"."
+    },
+    {
+      "id": "wakka",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/wakka",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, wakka (ff10), final fantasy x, safe, solo, male focus, orange hair, pompadour, blue headband, blue eyes, dark skin, tan, muscular, open jacket, blue jacket, yellow overalls, suspenders, tribal tattoo, holding ball, blitzball",
+      "states": {
+        "idle": {
+          "poseTags": "standing, relaxed stance, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "throwing ball, arm cocked back, dynamic pose, action pose",
+          "ref": "wakka/idle"
+        },
+        "cast": {
+          "poseTags": "raising hand, arm up, casting spell, magic, glowing magic circle",
+          "ref": "wakka/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "wakka/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "wakka/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "wakka/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, wide grin, ball under arm, looking up",
+          "ref": "wakka/idle"
+        }
+      },
+      "notes": "The pompadour is the tell. Watch for the blitzball vanishing on non-attack poses — repeat \"holding ball\" in --poseTags if it does."
+    },
+    {
+      "id": "lulu",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/lulu",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, lulu (ff10), final fantasy x, safe, solo, black hair, braid, hair ornament, red eyes, lipstick, black dress, belt skirt, corset, fur trim, detached sleeves, large breasts, moogle, holding doll",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, moogle doll at her side, looking at viewer, cool expression"
+        },
+        "attack": {
+          "poseTags": "swinging moogle doll, arm extended, dynamic pose",
+          "ref": "lulu/idle"
+        },
+        "cast": {
+          "poseTags": "arm raised, casting spell, dark magic, glowing magic circle, sparks",
+          "ref": "lulu/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "lulu/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "lulu/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "lulu/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose, looking up",
+          "ref": "lulu/idle"
+        }
+      },
+      "notes": "The belt skirt is a stack of individual leather belts, not a pleated skirt — if it renders as a plain gown, reject. The moogle is a plush she carries, not a floating companion."
+    },
+    {
+      "id": "kimahri",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/kimahri",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1other, kimahri ronso, final fantasy x, safe, solo, furry male, anthro, blue fur, lion, feline, broken horn, single horn, yellow eyes, muscular, tall, armor, pauldrons, loincloth, holding polearm, spear",
+      "states": {
+        "idle": {
+          "poseTags": "standing, spear held upright at his side, looking at viewer, stoic expression"
+        },
+        "attack": {
+          "poseTags": "thrusting spear forward, lunging, dynamic pose",
+          "ref": "kimahri/idle"
+        },
+        "cast": {
+          "poseTags": "raising hand, arm up, casting spell, magic, glowing magic circle",
+          "ref": "kimahri/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "kimahri/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "kimahri/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "kimahri/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose, looking up",
+          "ref": "kimahri/idle"
+        },
+        "jump": {
+          "ref": "kimahri/idle",
+          "poseTags": "jumping, mid-air, spear raised overhead, leaping, from below, dynamic angle, legs tucked",
+          "composition": "full",
+          "notes": "Dragoon-style leap. No ground contact: set baselineY by hand to the intended landing row, or the engine will plant him mid-air at the wrong height."
+        }
+      },
+      "notes": "The broken horn is canon and load-bearing for his silhouette — \"single horn, broken horn\" together, or the model gives him a matched pair. 1other + furry male avoids the \"catgirl\" attractor."
+    },
+    {
+      "id": "rikku",
+      "kind": "party",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10), final fantasy x, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, orange bikini top, cargo shorts, yellow scarf, arm warmers, goggles on head, claw (weapon), thief",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hands on hips, leaning forward, looking at viewer, cheerful grin"
+        },
+        "attack": {
+          "poseTags": "lunging forward, clawed punch, dynamic pose, action pose",
+          "ref": "rikku/idle"
+        },
+        "cast": {
+          "poseTags": "raising hand, arm up, casting spell, magic, glowing magic circle",
+          "ref": "rikku/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, looking down",
+          "ref": "rikku/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, pained expression, off balance",
+          "ref": "rikku/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "notes": "Landscape canvas: a body lying down wastes two thirds of the 2:3 bucket. baselineY is deliberately the whole silhouette here, not the feet.",
+          "ref": "rikku/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose, looking up",
+          "ref": "rikku/idle"
+        },
+        "steal": {
+          "ref": "rikku/idle",
+          "poseTags": "crouching, lunging forward, reaching out, grabbing, mischievous grin, one arm extended",
+          "notes": "Thief-only state."
+        }
+      },
+      "notes": "\"swirl pupils\" is the Al Bhed eye and Animagine knows it — keep it, it is most of what distinguishes her face from generic blonde genki. Rating stays safe; the bikini top is canon outerwear, not swimwear."
+    },
+    {
+      "id": "seymour-flux-body",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/seymour-flux-body",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, seymour guado, final fantasy x, safe, solo, monster boy, pale skin, topless male, bare chest, blue hair, very long hair, long hair, pointed ears, closed eyes, expressionless, emerging from a skeletal frame, bone, ribcage, dark aura, upper body, horror (theme)",
+      "negAdd": "ornate robe, throne, chair, legs, full body",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "seymour-flux-body/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "seymour-flux-body/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "seymour-flux-body/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "seymour-flux-body/idle"
+        }
+      },
+      "notes": "The proof-of-concept could not get Seymour Flux as one image — Animagine knows \"seymour guado\" and nothing about the Flux form, so three variants all came back as robed Seymour with an aura. v2 splits him: this subject is only the pale torso rising out of the bone frame, mortiorchis is the mount, and the engine composites the two. Generate the torso with --ref public/art/characters/seymour-flux/idle.png so the face and hair match the existing approved render."
+    },
+    {
+      "id": "mortiorchis",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/mortiorchis",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "no humans, floating skull, skeletal machine, insect, mandibles, chitin, mechanical, bone, dark metal, glowing eyes, hovering, ominous, monster",
+      "negAdd": "1girl, 1boy, human, face, person, robe",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "mortiorchis/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "mortiorchis/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "mortiorchis/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "mortiorchis/idle"
+        }
+      },
+      "notes": "Seymour Flux's mount, and wider than tall — the bible gives it a 192x160 cell. Bans humans hard: any hint of Seymour here will double up once the torso is composited on top."
+    },
+    {
+      "id": "yunalesca-1",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/yunalesca-1",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yunalesca, final fantasy x, safe, solo, blonde hair, very long hair, pale skin, revealing clothes, white dress, gold trim, gold jewelry, headdress, bare shoulders, serene, closed eyes, elegant, standing",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "yunalesca-1/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "yunalesca-1/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "yunalesca-1/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "yunalesca-1/idle"
+        }
+      },
+      "notes": "Human scale, first form. This is the identity anchor for forms 2 and 3 — generate it first."
+    },
+    {
+      "id": "yunalesca-2",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/yunalesca-2",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "1girl, yunalesca, final fantasy x, safe, solo, monster girl, blonde hair, tentacle hair, medusa, long hair becoming tendrils, pale skin, gold jewelry, revealing clothes, arms spread, menacing, larger",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "yunalesca-2/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "yunalesca-2/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "yunalesca-2/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "yunalesca-2/idle"
+        }
+      },
+      "notes": "Second form: the hair is turning into tendrils but she is still recognisably the woman from form 1. Use --ref on yunalesca-1/idle.png at the default 0.65 so the face survives the transformation tags."
+    },
+    {
+      "id": "yunalesca-3",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/yunalesca-3",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "1girl, yunalesca, final fantasy x, safe, solo, giant monster girl, upper body rising from a mass of tentacles, tentacle hair, skull crown, bone crown, pale skin, huge, looming, gorgon, from below",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "yunalesca-3/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "yunalesca-3/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "yunalesca-3/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "yunalesca-3/idle"
+        }
+      },
+      "notes": "Final form — the bible gives her the largest boss cell in the FFX set (224x192), so the tentacle mass, not the torso, should fill the frame. --ref yunalesca-1 at a lower weight (~0.45): at 0.65 the human silhouette fights the gorgon body."
+    },
+    {
+      "id": "braskas-final-aeon-1",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/braskas-final-aeon-1",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "1boy, monster, giant, grey skin, muscular, huge sword, greatsword, chains, chained, red and black, tattoo, spiky hair, glowing eyes, jecht, aeon, imposing, scars",
+      "negAdd": "human, normal proportions",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "braskas-final-aeon-1/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "braskas-final-aeon-1/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "braskas-final-aeon-1/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "braskas-final-aeon-1/idle"
+        }
+      },
+      "notes": "Jecht inside the aeon: the face has to read as his. --ref public/art/characters/jecht/idle.png at ~0.45 — enough to carry the face, not enough to shrink him back to human."
+    },
+    {
+      "id": "braskas-final-aeon-2",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/braskas-final-aeon-2",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "1boy, monster, giant, grey skin, armored, armor plating, spikes, wing spikes, huge sword, greatsword, chains, red and black, glowing eyes, aeon, second form, imposing",
+      "states": {
+        "idle": {
+          "poseTags": "looming, menacing, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "braskas-final-aeon-2/idle"
+        },
+        "cast": {
+          "poseTags": "summoning energy, glowing magic circle, dark energy swirling",
+          "ref": "braskas-final-aeon-2/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, damaged",
+          "ref": "braskas-final-aeon-2/idle"
+        },
+        "ko": {
+          "poseTags": "collapsing, dissolving into pyreflies, defeated",
+          "ref": "braskas-final-aeon-2/idle"
+        }
+      },
+      "notes": "Second form adds plate and wing-spikes. --ref braskas-final-aeon-1/idle.png at 0.65."
+    },
+    {
+      "id": "yu-pagoda",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/yu-pagoda",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "no humans, stone pillar, pagoda, ornate carving, floating, glowing runes, yevon glyph, guardian statue, tiered, weathered stone",
+      "negAdd": "building, temple exterior, landscape, 1girl, 1boy",
+      "states": {
+        "idle": {
+          "poseTags": "floating upright, glowing faintly"
+        },
+        "attack": {
+          "poseTags": "glowing brightly, energy gathering at the tip, runes lit",
+          "ref": "yu-pagoda/idle"
+        },
+        "ko": {
+          "poseTags": "cracked, crumbling, runes dark, toppling",
+          "ref": "yu-pagoda/idle"
+        }
+      },
+      "notes": "Two of these flank Braska's Final Aeon. Generate one and mirror it in the engine rather than making a left and a right — they are identical in the source. \"pagoda\" alone renders a whole Japanese temple in a landscape; the negAdd is what keeps it a single pillar."
+    },
+    {
+      "id": "yu-yevon",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/yu-yevon",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "no humans, small creature, insect, spider, glowing, translucent, tiny, floating, pale light, yevon glyph, ethereal, parasite",
+      "negAdd": "large, giant, humanoid, 1girl, 1boy",
+      "states": {
+        "idle": {
+          "poseTags": "floating, curled, glowing faintly"
+        },
+        "attack": {
+          "poseTags": "legs spread, lunging, glowing brightly",
+          "ref": "yu-yevon/idle"
+        },
+        "ko": {
+          "poseTags": "dissolving into pyreflies, fading",
+          "ref": "yu-yevon/idle"
+        }
+      },
+      "notes": "Deliberately small and pathetic — the last boss is a bug. The bible floats him (no ground contact), so no blob shadow and baselineY is unused."
+    },
+    {
+      "id": "jecht",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/characters/jecht",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, black hair, short hair, red bandana, headband, chest tattoo, tattoo, open vest, black vest, bare chest, muscular, shorts, stubble, holding sword",
+      "states": {
+        "idle": {
+          "poseTags": "standing, arms crossed, sword on his back, looking at viewer, smirk"
+        },
+        "attack": {
+          "poseTags": "attacking, overhead sword swing, dynamic pose",
+          "ref": "jecht/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, pained expression, off balance",
+          "ref": "jecht/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "jecht/idle"
+        },
+        "victory": {
+          "poseTags": "arms raised, laughing, triumphant pose",
+          "ref": "jecht/idle"
+        }
+      },
+      "notes": "Human Jecht, used in cutscenes and as the face inside Braska's Final Aeon. Generate him before the aeon forms so he can be their --ref. The ko state wants --composition prone."
+    },
+    {
+      "id": "valefor",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/valefor",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "no humans, monster, bird, feathered wings, large wings, blue feathers, long neck, beak, long tail, talons, flying, aeon",
+      "negAdd": "humanoid, 1girl, 1boy",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "valefor/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "valefor/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "Wingspan is wider than the body is tall (bible: 160x128 cell) — landscape, and let the wings touch the edges."
+    },
+    {
+      "id": "ifrit",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/ifrit",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "monster, demon, horns, curved horns, red fur, mane, muscular, claws, fangs, fire, flames, beast, quadruped stance, aeon",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "ifrit/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "ifrit/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "Fire should be rim light on the fur, not a bonfire around him — the cutout keeps every opaque flame."
+    },
+    {
+      "id": "ixion",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/ixion",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "no humans, monster, unicorn, horse, quadruped, long horn, spiral horn, lightning, electricity, purple mane, armor plating, aeon",
+      "negAdd": "rider, 1girl, 1boy, saddle",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "ixion/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "ixion/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "Quadruped: four feet on the same ground line, or baselineY plants him on one hoof."
+    },
+    {
+      "id": "shiva",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/shiva",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, shiva (final fantasy), safe, solo, blue skin, pale blue skin, white hair, long hair, ice, ice crystals, revealing clothes, cold breath, elegant, aeon",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "shiva/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "shiva/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "The one humanoid aeon — she uses the tall bucket. Rating stays safe; keep \"revealing clothes\" mild."
+    },
+    {
+      "id": "bahamut",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/bahamut",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "no humans, dragon, black dragon, huge wings, mechanical wings, horns, spikes, long tail, glowing eyes, armored scales, aeon",
+      "negAdd": "rider, 1girl, 1boy",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "bahamut/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "bahamut/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "The wings are half machine — \"mechanical wings\" is what separates him from a generic black dragon."
+    },
+    {
+      "id": "anima",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/anima",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "no humans, monster, bandaged, bandages, chains, chained, single eye, mask, hanging, mournful, dark, skeletal lower body, tall, narrow, aeon",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "anima/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "anima/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "Tall and narrow (bible: 160x256). The chained lower half hangs below her — hand-correct baselineY or she floats a body-length above the floor."
+    },
+    {
+      "id": "yojimbo",
+      "kind": "aeon",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/yojimbo",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, samurai, solo, male focus, helmet, oni mask, mask, armor, japanese armor, long coat, holding katana, sheathed sword, stoic, aeon",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings folded"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, dynamic pose",
+          "ref": "yojimbo/idle"
+        },
+        "overdrive": {
+          "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
+          "ref": "yojimbo/idle",
+          "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        }
+      },
+      "notes": "Daigoro (the dog) is a separate 24 px sprite in the bible and is deliberately not in this prompt — adding \"dog\" here reliably produces a second subject and trips the multi-subject negatives."
+    },
+    {
+      "id": "yuna-gunner",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna-gunner",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, gunner, dual wielding, holding gun, handgun, pistol, white tank top, pink shorts, detached sleeve, obi, thigh strap, fingerless gloves",
+      "states": {
+        "idle": {
+          "poseTags": "standing, guns lowered at her sides, looking at viewer, confident smirk"
+        },
+        "attack": {
+          "poseTags": "firing guns, both arms extended, dynamic pose, muzzle flash",
+          "ref": "yuna-gunner/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "yuna-gunner/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "yuna-gunner/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "yuna-gunner/idle"
+        }
+      },
+      "notes": "Her default X-2 look and the anchor for every other Yuna dressphere — generate this one first."
+    },
+    {
+      "id": "yuna-white-mage",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna-white-mage",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, white mage, white robe, hooded robe, hood, red trim, long sleeves, holding staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "yuna-white-mage/idle"
+        },
+        "cast": {
+          "poseTags": "holding staff up, casting healing magic, white glow, eyes closed, gentle expression",
+          "ref": "yuna-white-mage/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "yuna-white-mage/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "yuna-white-mage/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "yuna-white-mage/idle"
+        }
+      },
+      "notes": "Classic FF white mage livery — red triangles on white. Watch for the hood eating her face."
+    },
+    {
+      "id": "yuna-black-mage",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna-black-mage",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, black mage, witch hat, black headwear, striped clothes, patchwork dress, blue and black dress, holding staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "yuna-black-mage/idle"
+        },
+        "cast": {
+          "poseTags": "staff raised, casting dark magic, sparks, glowing magic circle, shadowed face under hat brim",
+          "ref": "yuna-black-mage/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "yuna-black-mage/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "yuna-black-mage/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "yuna-black-mage/idle"
+        }
+      },
+      "notes": "X-2's black mage is patchwork and striped, not the plain FF1 robe."
+    },
+    {
+      "id": "yuna-songstress",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna-songstress",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, songstress, idol, holding microphone, pink dress, blue skirt, feather trim, boots, detached sleeves, singing",
+      "states": {
+        "idle": {
+          "poseTags": "standing, microphone held at her side, looking at viewer, smiling"
+        },
+        "attack": {
+          "poseTags": "singing into microphone, arm extended, music notes, dynamic pose",
+          "ref": "yuna-songstress/idle"
+        },
+        "dance": {
+          "poseTags": "dancing, mid-spin, arms out, skirt flaring, music notes, joyful",
+          "ref": "yuna-songstress/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "yuna-songstress/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "yuna-songstress/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "yuna-songstress/idle"
+        }
+      },
+      "notes": "The dressphere Lenne left behind — same outfit as the lenne subject, different face and hair length. Its signature state is \"dance\", not \"cast\"."
+    },
+    {
+      "id": "yuna-dark-knight",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna-dark-knight",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, dark knight, black armor, horned helmet, pauldrons, gauntlets, holding greatsword, dark aura, black and purple",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "yuna-dark-knight/idle"
+        },
+        "cast": {
+          "poseTags": "sword planted in the ground, dark aura rising, head bowed, glowing red runes",
+          "ref": "yuna-dark-knight/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "yuna-dark-knight/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "yuna-dark-knight/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "yuna-dark-knight/idle"
+        }
+      },
+      "notes": "Helmet usually hides the face — keep the heterochromia tags anyway for the unhelmeted variants."
+    },
+    {
+      "id": "yuna-warrior",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/yuna-warrior",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, warrior, armor, shoulder armor, blue armor, headband, holding sword, gauntlets, breastplate",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, overhead sword swing, dynamic pose",
+          "ref": "yuna-warrior/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "yuna-warrior/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "yuna-warrior/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "yuna-warrior/idle"
+        }
+      },
+      "notes": "Light armour over the gunner silhouette; not a full knight."
+    },
+    {
+      "id": "rikku-thief",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-thief",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, thief, orange bikini top, yellow scarf, short shorts, goggles on head, claw (weapon), arm warmers, bare midriff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hands on hips, leaning forward, looking at viewer, cheerful grin"
+        },
+        "attack": {
+          "poseTags": "lunging forward, clawed punch, dynamic pose",
+          "ref": "rikku-thief/idle"
+        },
+        "steal": {
+          "poseTags": "crouching, lunging forward, reaching out, grabbing, mischievous grin",
+          "ref": "rikku-thief/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-thief/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-thief/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-thief/idle"
+        }
+      },
+      "notes": "Her X-2 default and the anchor for the other Rikku dresspheres. Near-identical to her FFX look."
+    },
+    {
+      "id": "rikku-alchemist",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-alchemist",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, alchemist, apron, goggles, holding flask, potion bottles, pouches, brown outfit, gloves",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "throwing a flask, arm cocked back, dynamic pose",
+          "ref": "rikku-alchemist/idle"
+        },
+        "item": {
+          "poseTags": "holding potion, arm extended forward, offering item, mixing, sparkles",
+          "ref": "rikku-alchemist/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-alchemist/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-alchemist/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-alchemist/idle"
+        }
+      },
+      "notes": "Item-focused: its signature state is \"item\", and the engine reuses that frame for Mix."
+    },
+    {
+      "id": "rikku-berserker",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-berserker",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, berserker, fur, fur trim, animal ears (costume), tail, claws, wild, feral, fangs, torn clothes, bare midriff",
+      "states": {
+        "idle": {
+          "poseTags": "crouching low, claws ready, snarling, looking at viewer"
+        },
+        "attack": {
+          "poseTags": "lunging forward, clawing, feral, dynamic pose",
+          "ref": "rikku-berserker/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-berserker/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-berserker/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-berserker/idle"
+        }
+      },
+      "notes": "\"animal ears (costume)\" matters — without \"(costume)\" the model commits to a kemonomimi girl and drops the dressphere read."
+    },
+    {
+      "id": "rikku-black-mage",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-black-mage",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, black mage, witch hat, black headwear, striped clothes, patchwork dress, holding staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "rikku-black-mage/idle"
+        },
+        "cast": {
+          "poseTags": "arm raised, casting spell, magic, glowing magic circle",
+          "ref": "rikku-black-mage/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-black-mage/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-black-mage/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-black-mage/idle"
+        }
+      },
+      "notes": "Same dressphere livery as Yuna's, different body and hair."
+    },
+    {
+      "id": "rikku-white-mage",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-white-mage",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, white mage, white robe, hooded robe, hood, red trim, long sleeves, holding staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "rikku-white-mage/idle"
+        },
+        "cast": {
+          "poseTags": "arm raised, casting spell, magic, glowing magic circle",
+          "ref": "rikku-white-mage/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-white-mage/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-white-mage/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-white-mage/idle"
+        }
+      },
+      "notes": "Same dressphere livery as Yuna's, different body and hair."
+    },
+    {
+      "id": "rikku-gunner",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-gunner",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, gunner, dual wielding, holding gun, handgun, pistol, tank top, shorts, thigh strap",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "firing guns, both arms extended, dynamic pose, muzzle flash",
+          "ref": "rikku-gunner/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-gunner/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-gunner/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-gunner/idle"
+        }
+      },
+      "notes": "Shares the gunner rig with Yuna; keep the swirl pupils or she reads as blonde Yuna."
+    },
+    {
+      "id": "paine-warrior",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/paine-warrior",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, warrior, black leather outfit, bare shoulders, armor, pauldron, holding sword, greatsword, gloves",
+      "states": {
+        "idle": {
+          "poseTags": "standing, sword point-down in front of her, looking at viewer, stern expression"
+        },
+        "attack": {
+          "poseTags": "attacking, overhead sword swing, dynamic pose",
+          "ref": "paine-warrior/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "paine-warrior/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "paine-warrior/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "paine-warrior/idle"
+        }
+      },
+      "notes": "Her default X-2 look and the anchor for the other Paine dresspheres. Sword-down: check baselineY."
+    },
+    {
+      "id": "paine-dark-knight",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/paine-dark-knight",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, dark knight, black armor, horned helmet, pauldrons, holding greatsword, dark aura, black and red",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "paine-dark-knight/idle"
+        },
+        "cast": {
+          "poseTags": "sword planted in the ground, dark aura rising, head bowed, glowing red runes",
+          "ref": "paine-dark-knight/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "paine-dark-knight/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "paine-dark-knight/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "paine-dark-knight/idle"
+        }
+      },
+      "notes": "Suits her palette better than Yuna's — expect a higher keep rate here."
+    },
+    {
+      "id": "paine-samurai",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/paine-samurai",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, samurai, kimono, hakama, red and black, holding katana, sheathed sword, japanese clothes, obi",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on the hilt, iaido stance, looking at viewer, calm"
+        },
+        "attack": {
+          "poseTags": "drawing sword, iaido slash, dynamic pose, sword trail",
+          "ref": "paine-samurai/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "paine-samurai/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "paine-samurai/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "paine-samurai/idle"
+        }
+      },
+      "notes": "The draw-and-slash frame is the one worth batching wide — it is the dressphere's whole identity."
+    },
+    {
+      "id": "paine-gunner",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/paine-gunner",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, gunner, dual wielding, holding gun, handgun, pistol, black outfit, thigh strap",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "firing guns, both arms extended, dynamic pose, muzzle flash",
+          "ref": "paine-gunner/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "paine-gunner/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "paine-gunner/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "paine-gunner/idle"
+        }
+      },
+      "notes": "Third of the gunner set; the three differ only by face and palette."
+    },
+    {
+      "id": "paine-white-mage",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/paine-white-mage",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, white mage, white robe, hooded robe, hood, red trim, long sleeves, holding staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "paine-white-mage/idle"
+        },
+        "cast": {
+          "poseTags": "arm raised, casting spell, magic, glowing magic circle",
+          "ref": "paine-white-mage/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "paine-white-mage/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "paine-white-mage/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "paine-white-mage/idle"
+        }
+      },
+      "notes": "The joke is that she hates it; render her scowling anyway."
+    },
+    {
+      "id": "paine-black-mage",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/paine-black-mage",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, black mage, witch hat, black headwear, striped clothes, patchwork dress, holding staff",
+      "states": {
+        "idle": {
+          "poseTags": "standing, hand on hip, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, dynamic pose, action pose",
+          "ref": "paine-black-mage/idle"
+        },
+        "cast": {
+          "poseTags": "arm raised, casting spell, magic, glowing magic circle",
+          "ref": "paine-black-mage/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "paine-black-mage/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "paine-black-mage/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "paine-black-mage/idle"
+        }
+      },
+      "notes": "Same dressphere livery as Yuna's and Rikku's."
+    },
+    {
+      "id": "ffx2-bahamut",
+      "kind": "aeon",
+      "game": "ffx-2",
+      "cmd": "boss",
+      "outDir": "public/art/characters/ffx2-bahamut",
+      "composition": "boss",
+      "sizeHint": "1024x1024",
+      "refState": "idle",
+      "tags": "no humans, dragon, black dragon, huge wings, red wings, mechanical wings, horns, spikes, long tail, armored scales, glowing violet eyes, glowing purple veins, dark violet aura, purple glow, corrupted, possessed, aeon",
+      "states": {
+        "idle": {
+          "poseTags": "standing, looking at viewer, majestic, wings spread, menacing, violet glow on the scales"
+        },
+        "attack": {
+          "poseTags": "attacking, lunging forward, claws out, jaws open, dynamic pose",
+          "ref": "ffx2-bahamut/idle"
+        },
+        "cast": {
+          "poseTags": "energy gathering, rearing up, head raised, glowing violet light building in the chest, aura, lens flare",
+          "ref": "ffx2-bahamut/idle",
+          "notes": "The Mega Flare countdown frame the engine holds while the 5-to-0 numeral ticks."
+        },
+        "hurt": {
+          "poseTags": "recoiling, head turned away, wings flinching, wounded, cracked scales",
+          "ref": "ffx2-bahamut/idle"
+        },
+        "ko": {
+          "poseTags": "collapsed, head down, wings crumpled on the ground, defeated, violet glow fading, smoke",
+          "ref": "ffx2-bahamut/idle"
+        }
+      },
+      "notes": "Bible 1.17: visually the FFX Bahamut (black dragon, enormous RED wings) with a possession overlay -- 1 px #B048F0 veins over the scales, eyes #C64AF0 instead of gold, a #7A2ED8 rim. The red wings are canon and must survive the violet tint; if the render turns the wings purple too, push \"red wings\" earlier in the tags. No FFX bahamut/idle.png exists yet, so this idle is generated unreferenced; when the FFX one lands, re-ref at 0.45 rather than 0.65 so its palette does not arrive with the face.",
+      "negAdd": "rider, 1girl, 1boy, human, person, saddle"
+    },
+    {
+      "id": "vegnagun-tail",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "boss",
+      "outDir": "public/art/characters/vegnagun-tail",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "no humans, giant machine, mechanical tail, segmented abdomen, insect abdomen, armor plating, green energy conduit, glowing green seam, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
+      "negAdd": "1girl, 1boy, human, animal, snake, creature, small, toy",
+      "states": {
+        "idle": {
+          "poseTags": "coiled, resting on the rock, tip planted into the ground, faint green glow along the conduit"
+        },
+        "attack": {
+          "poseTags": "uncoiling, whipping forward, green energy surging through the segments",
+          "ref": "vegnagun-tail/idle"
+        },
+        "cast": {
+          "poseTags": "tip driven into the terrain, drawing energy upward, green light climbing the segments, glowing runes",
+          "ref": "vegnagun-tail/idle"
+        },
+        "hurt": {
+          "poseTags": "plates buckled, sparks, green light flickering, venting steam",
+          "ref": "vegnagun-tail/idle"
+        },
+        "ko": {
+          "poseTags": "severed, hanging limp, torn cables, smoke, conduit dark",
+          "ref": "vegnagun-tail/idle"
+        }
+      },
+      "notes": "Bible 1.18: plating #4E5A66/#7E8C9A/#B4C0CC with a #8BE8B0 energy conduit running its length; it plants into the terrain to draw Farplane energy during the head fight, which is what the cast state is. Landscape -- it is a horizontal object. Keep it insect, not serpent: a segmented abdomen with hard plate joints, never scales."
+    },
+    {
+      "id": "vegnagun-leg",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "boss",
+      "outDir": "public/art/characters/vegnagun-leg",
+      "composition": "boss",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "no humans, giant machine, colossal insect leg, locust leg, chitinous plating, hard angular joint, brass hydraulic piston, orange joint glow, three floating glass orbs, red orb, yellow orb, green orb, from below, low angle, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
+      "negAdd": "1girl, 1boy, human, full robot, whole robot, small, toy, spider",
+      "states": {
+        "idle": {
+          "poseTags": "planted on the ground, steam venting from the joint, three orbs hovering beside it"
+        },
+        "attack": {
+          "poseTags": "stomping down, foot lifted, debris and dust thrown up",
+          "ref": "vegnagun-leg/idle"
+        },
+        "cast": {
+          "poseTags": "the three orbs blazing, magic light arcing between them and the joint, glowing circle on the ground",
+          "ref": "vegnagun-leg/idle"
+        },
+        "hurt": {
+          "poseTags": "hydraulics ruptured, fluid spraying, plates dented, sparks",
+          "ref": "vegnagun-leg/idle"
+        },
+        "ko": {
+          "poseTags": "buckling, knee folding, cables torn, sparks, collapsing",
+          "ref": "vegnagun-leg/idle"
+        }
+      },
+      "notes": "Bible 1.18: chitinous #3E4A52/#66767E, hydraulics #A9762E, joint glow #C46A2E, flanked by 3 Nodes -- 26 px glass orbs, Red = offensive magic, Yellow = buffs, Green = recovery -- which is what the cast state shows. Only a leg fits the frame (240 px sprite in a 256 cell). \"from below\" is doing the scale work; without it the model renders a complete tidy robot."
+    },
+    {
+      "id": "vegnagun-body",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "boss",
+      "outDir": "public/art/characters/vegnagun-body",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "no humans, giant machine, colossal torso, insect thorax, ribbed chest, organ pipes, pipe organ cannons, row of cannon barrels, grated chest, glowing violet core behind the grating, purple light, two mechanical arms, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
+      "negAdd": "1girl, 1boy, human, face, head, small, toy, spaceship, building, cathedral interior",
+      "states": {
+        "idle": {
+          "poseTags": "dormant, arms lowered, violet core burning steadily behind the grating"
+        },
+        "attack": {
+          "poseTags": "both mechanical arms swinging forward, organ pipes firing, muzzle flash",
+          "ref": "vegnagun-body/idle"
+        },
+        "cast": {
+          "poseTags": "arms raised, violet core blazing, energy arcs crawling over the plating, glowing magic circle",
+          "ref": "vegnagun-body/idle"
+        },
+        "hurt": {
+          "poseTags": "grating torn open, core flaring erratically, plates shed, sparks and smoke",
+          "ref": "vegnagun-body/idle"
+        },
+        "ko": {
+          "poseTags": "core cracked and dimming, arms hanging dead, plates falling away, smoke",
+          "ref": "vegnagun-body/idle"
+        }
+      },
+      "notes": "Bible 1.18 body (core): thorax #3A4450/#5E6E7C, core chamber #B048F0 burning behind a 3 px grating, moth wings #8E96A8 at 35% alpha with a scalloped edge, and TWO arms that cast and regenerate -- the arms are the read that separates the body from the head. The organ-pipe cannon bank is the other: Vegnagun's pilot sits at an organ, and the ranked pipes are the visual pun. No head in frame; ban \"face, head\" or the model grows one on the chest."
+    },
+    {
+      "id": "vegnagun-head",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "boss",
+      "outDir": "public/art/characters/vegnagun-head",
+      "composition": "boss",
+      "sizeHint": "1216x832",
+      "refState": "idle",
+      "tags": "no humans, giant machine, machina skull, horned skull head, mechanical skull, curved horns, huge cannon barrel in the mouth, mouth cannon, glowing muzzle, four small turret pods, frame filling, close, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
+      "negAdd": "1girl, 1boy, human, skeleton, bone, animal skull, small, toy, spaceship, tank",
+      "states": {
+        "idle": {
+          "poseTags": "dormant, jaw closed over the barrel, muzzle dark, eye lenses glowing faintly"
+        },
+        "attack": {
+          "poseTags": "jaw open, cannon firing, muzzle flash, turret pods firing, energy arcs",
+          "ref": "vegnagun-head/idle"
+        },
+        "cast": {
+          "poseTags": "cannon charging, pink and white light building in the barrel, energy drawn along the horns, lens flare",
+          "ref": "vegnagun-head/idle"
+        },
+        "hurt": {
+          "poseTags": "horn snapped, plating blown open, muzzle flickering, sparks and smoke",
+          "ref": "vegnagun-head/idle"
+        },
+        "ko": {
+          "poseTags": "jaw hanging, barrel cracked, lenses dark, smoke pouring out, plates falling away",
+          "ref": "vegnagun-head/idle"
+        }
+      },
+      "notes": "Bible 1.18 head (main cannon): barrel #6E7A88/#AAB6C4, muzzle bloom builds #F49BB8 -> #FFFFFF over the fight timer (that is the cast state), Redoubts as 4 small turret pods #5E6A78. A horned MACHINA skull -- metal, riveted, lensed eyes -- not a bone skull, hence the negatives. The bible wants it frame-filling (288 tall in a 384 cell), so let it bleed off every edge; the usual 16 px crop margin can read as float here."
+    },
+    {
+      "id": "shuyin",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/shuyin",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, shuyin, final fantasy x-2, safe, solo, male focus, blonde hair, spiky hair, messy hair, blue eyes, scowl, glaring, pale skin, sleeveless jacket, green jacket, yellow trim, red and black detached sleeves, elbow gloves, black gloves, blue armlet, black shorts, yellow boots, holding sword, glowing sword, light blue blade, black hilt, translucent, unsent, desaturated, cold colors",
+      "states": {
+        "idle": {
+          "poseTags": "standing, shoulders hunched forward, head slightly lowered, sword held low behind him, glaring at viewer, hostile"
+        },
+        "attack": {
+          "poseTags": "attacking, swinging sword, dynamic pose, action pose",
+          "ref": "shuyin/idle"
+        },
+        "cast": {
+          "poseTags": "arm raised, dark energy gathering, glowing magic circle, shadows",
+          "ref": "shuyin/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, snarling, off balance",
+          "ref": "shuyin/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, dissolving into pyreflies, defeated",
+          "ref": "shuyin/idle"
+        },
+        "victory": {
+          "poseTags": "standing, sword lowered at his side, cold expression, looking down at viewer, still",
+          "ref": "shuyin/idle"
+        },
+        "talk": {
+          "poseTags": "standing, talking, mouth open, one hand raised in a bitter gesture, looking at viewer, anguished",
+          "ref": "shuyin/idle",
+          "notes": "Dialogue-scene body pose for the Farplane confrontation; the portrait carries the face."
+        }
+      },
+      "notes": "Bible 1.19. \"Tidus, but wrong\": same rig, same blond spiky crown, same lean one-sword silhouette, but closed -- shoulders rolled forward, head tipped, blade held low and behind -- and colder and desaturated. Verified costume: jacket YELLOW at the back and pale dark green at the front, blue armlet, red-and-black elbow-length SQUARE sleeves (the one hard silhouette difference from Tidus: blocky stepped forearms), left glove black with a green cuff, right glove plain black, black shorts, yellow boots, sword with a black hilt and a light-blue-to-black blade. Generate with --ref public/art/characters/tidus/idle.png at roughly 0.45: high enough to inherit the face, low enough that the yellow hooded vest does not come with it. If the hood leaks in anyway, drop to 0.35. The PARTY gets no victory pose after this fight (bible 1.19), but Shuyin's own victory frame is still needed for his win condition.",
+      "negAdd": "hood, hooded vest, yellow vest, yellow shirt"
+    },
+    {
+      "id": "lenne",
+      "kind": "character",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/lenne",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, lenne, final fantasy x-2, safe, solo, brown hair, long hair, very long hair, straight hair, brown eyes, purple lipstick, gentle expression, songstress, blue tube top, white ruffles, asymmetrical clothes, black lace skirt, blue belt, black arm ribbons, blue glovelets, dangling earrings, knee-high boots, brown boots, holding microphone, translucent, spirit",
+      "states": {
+        "idle": {
+          "poseTags": "standing, microphone held at her side, looking at viewer, wistful smile"
+        },
+        "sing": {
+          "poseTags": "singing into the microphone, eyes closed, one arm extended outward, head tilted back, music notes, glowing, wind in her hair",
+          "ref": "lenne/idle",
+          "notes": "The bible calls for a 6-frame arms-open singing beat; this is the hold frame for it. Supersedes the old \"cast\" state -- Lenne never casts, she sings."
+        },
+        "cast": {
+          "poseTags": "singing into microphone, arm extended, music notes, glowing, eyes closed",
+          "ref": "lenne/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, hand to chest, sorrowful expression",
+          "ref": "lenne/idle"
+        },
+        "victory": {
+          "poseTags": "arms lowered, bowing, gentle smile, music notes",
+          "ref": "lenne/idle"
+        }
+      },
+      "notes": "Bible 1.20. Verified costume is NOT a pink dress (the old tags had that wrong): a BLUE top with white ruffles that fall from the LEFT side down to the knee -- the asymmetry is the whole silhouette -- a short black lace skirt with a blue belt, knee-high brown boots, black ribbons on the upper arms, blue glovelets on black straps, and long dangling beaded earrings. Brown eyes, violet lipstick. Yuna wears this exact outfit as the Songstress dressphere, so the only thing separating the two at sprite size is Lenne's much longer straight hair. Cutscene-only: no attack, no ko. The engine renders her at 70% opacity with a pyre-pink rim.",
+      "negAdd": "pink dress"
+    },
+    {
+      "id": "dreams-end",
+      "kind": "backdrop",
+      "game": "ffx",
+      "cmd": "backdrop",
+      "outDir": "public/art/backdrops",
+      "composition": "scenery",
+      "sizeHint": "1344x768 -> 2688x1536",
+      "tags": "floating ruins, broken architecture, fragments of a ruined city hanging in the air, dark red sky, black clouds, distant city skyline, debris floating, inside a vast creature, ominous, dim red light, zanarkand",
+      "negAdd": "aircraft, airplane, biplane, spaceship",
+      "states": {
+        "plate": {
+          "poseTags": "",
+          "notes": "Backdrops have one state; the file is <id>.png."
+        }
+      },
+      "notes": "The final arena, inside Sin. Red-black key light from above, silhouetted skyline far back for depth. Bans aircraft for the same reason farplane does: floating fragments plus sky is an aeroplane attractor."
+    },
+    {
+      "id": "bevelle-underground",
+      "kind": "backdrop",
+      "game": "ffx",
+      "cmd": "backdrop",
+      "outDir": "public/art/backdrops",
+      "composition": "scenery",
+      "sizeHint": "1344x768 -> 2688x1536",
+      "tags": "vast machina chamber, giant machinery, industrial cathedral, cables, pipes, catwalks, teal and rust, cold industrial light, underground, deep shadows, scale",
+      "negAdd": "aircraft, sky, sunlight, nature",
+      "states": {
+        "plate": {
+          "poseTags": "",
+          "notes": "Backdrops have one state; the file is <id>.png."
+        }
+      },
+      "notes": "Vegnagun's chamber. Teal fill against rust metal; the depth cue is a foreground catwalk occluder with the machine receding behind it."
+    },
+    {
+      "id": "title",
+      "kind": "backdrop",
+      "game": "ui",
+      "cmd": "backdrop",
+      "outDir": "public/art/backdrops",
+      "composition": "scenery",
+      "sizeHint": "1344x768 -> 2688x1536",
+      "tags": "sea wall at sunset, ocean, waves breaking, orange and violet sky, glowing city on the horizon, distant skyline, calm water, wide shot, warm rim light on the wall, empty",
+      "negAdd": "people, crowd, silhouette of a person, boat",
+      "states": {
+        "plate": {
+          "poseTags": "",
+          "notes": "Backdrops have one state; the file is <id>.png."
+        }
+      },
+      "notes": "Title screen plate — deliberately empty so the logo and menu own the frame. Keep the horizon low; the title card sits in the upper third."
+    },
+    {
+      "id": "chapter-select",
+      "kind": "backdrop",
+      "game": "ui",
+      "cmd": "backdrop",
+      "outDir": "public/art/backdrops",
+      "composition": "scenery",
+      "sizeHint": "1344x768 -> 2688x1536",
+      "tags": "abstract, glowing spheres, floating orbs, pyreflies, drifting lights, dark background, bokeh, ethereal, soft focus, particles, green and white glow",
+      "negAdd": "people, building, landscape, horizon",
+      "states": {
+        "plate": {
+          "poseTags": "",
+          "notes": "Backdrops have one state; the file is <id>.png."
+        }
+      },
+      "notes": "Chapter-select backplate. Non-representational on purpose: chapter cards sit on top of it, so it needs low local contrast and no readable subject."
+    },
+    {
+      "id": "portrait-tidus",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/tidus.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, hood, necklace",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, confident smile",
+          "ref": "tidus/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Approved; regenerate only if the style contract moves."
+    },
+    {
+      "id": "portrait-yuna",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/yuna.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1girl, yuna (ff10), final fantasy x, safe, solo, brown hair, short hair, heterochromia, blue eye, green eye, white kimono top, detached sleeves",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, gentle smile",
+          "ref": "yuna/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Approved; regenerate only if the style contract moves."
+    },
+    {
+      "id": "portrait-auron",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/auron.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, auron (ff10), final fantasy x, safe, solo, male focus, black hair, sunglasses, round eyewear, scar across eye, stubble, mature male, red coat, high collar, popped collar",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, stern expression, three quarter view",
+          "ref": "auron/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-wakka",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/wakka.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, wakka (ff10), final fantasy x, safe, solo, male focus, orange hair, pompadour, blue headband, blue eyes, dark skin, tan, open jacket",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, wide grin",
+          "ref": "wakka/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-lulu",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/lulu.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1girl, lulu (ff10), final fantasy x, safe, solo, black hair, braid, hair ornament, red eyes, lipstick, black dress, fur trim",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, cool expression, half-lidded eyes",
+          "ref": "lulu/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-kimahri",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/kimahri.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1other, kimahri ronso, final fantasy x, safe, solo, furry male, anthro, blue fur, lion, feline, broken horn, single horn, yellow eyes, pauldrons",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, stoic expression",
+          "ref": "kimahri/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-rikku",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/rikku.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1girl, rikku (ff10), final fantasy x, safe, solo, blonde hair, braid, green eyes, swirl pupils, orange bikini top, yellow scarf, goggles on head",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, cheerful grin",
+          "ref": "rikku/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-jecht",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/jecht.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, black hair, red bandana, chest tattoo, open vest, bare chest, stubble",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, smirk",
+          "ref": "jecht/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-seymour",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/seymour.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, seymour guado, final fantasy x, safe, solo, blue hair, long hair, pointed ears, pale skin, guado, ornate robe, high collar",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, calm smile, unsettling",
+          "ref": "seymour/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Robed human Seymour — the version Animagine actually knows. Not the Flux form."
+    },
+    {
+      "id": "portrait-yunalesca",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/yunalesca.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1girl, yunalesca, final fantasy x, safe, solo, blonde hair, very long hair, pale skin, gold jewelry, headdress, bare shoulders",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, serene, faint smile",
+          "ref": "yunalesca/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-shuyin",
+      "kind": "portrait",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/shuyin.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, shuyin, final fantasy x-2, safe, solo, male focus, blonde hair, spiky hair, blue eyes, angry, scowl, black and blue clothes, dark palette",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, glaring, hostile",
+          "ref": "shuyin/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Same --ref trick as the sprite: tidus portrait at ~0.45, dark palette tags on top."
+    },
+    {
+      "id": "portrait-lenne",
+      "kind": "portrait",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/lenne.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1girl, lenne, final fantasy x-2, safe, solo, brown hair, very long hair, songstress, pink dress, feather trim",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, wistful smile",
+          "ref": "lenne/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
+    },
+    {
+      "id": "portrait-bahamut-fayth",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/bahamut-fayth.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, child, male child, final fantasy x, safe, solo, hooded cape, purple hood, glowing eyes, mysterious, ethereal, fayth",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, shadowed face under the hood, knowing smile",
+          "ref": "bahamut-fayth/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "The hooded boy. He is a character portrait, not an aeon — keep him small-featured and young or he reads as a short adult."
+    },
+    {
+      "id": "portrait-valefor",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/valefor.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "no humans, monster, bird, blue feathers, beak, long neck, feathered wings, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "head and shoulders, looking at viewer, majestic",
+          "ref": "valefor/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "portrait-ifrit",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/ifrit.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "monster, demon, curved horns, red fur, mane, fangs, fire, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "head and shoulders, looking at viewer, snarling",
+          "ref": "ifrit/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "portrait-ixion",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/ixion.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "no humans, monster, unicorn, horse, spiral horn, purple mane, lightning, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "head and shoulders, looking at viewer, proud",
+          "ref": "ixion/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "portrait-shiva",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/shiva.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1girl, shiva (final fantasy), safe, solo, blue skin, white hair, long hair, ice crystals, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, cool expression",
+          "ref": "shiva/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "portrait-bahamut",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/bahamut.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "no humans, dragon, black dragon, horns, spikes, glowing eyes, armored scales, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "head and shoulders, looking at viewer, imperious",
+          "ref": "bahamut/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "portrait-anima",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/anima.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "no humans, monster, bandaged, bandages, chains, single eye, mask, mournful, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "head and shoulders, looking at viewer, sorrowful",
+          "ref": "anima/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "portrait-yojimbo",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/yojimbo.png",
+      "composition": "portrait",
+      "sizeHint": "832x1216",
+      "tags": "1boy, samurai, solo, helmet, oni mask, japanese armor, stoic, aeon, final fantasy x",
+      "states": {
+        "portrait": {
+          "poseTags": "looking at viewer, impassive",
+          "ref": "yojimbo/idle",
+          "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
+        }
+      },
+      "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    }
+  ]
+}

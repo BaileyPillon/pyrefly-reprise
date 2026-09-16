@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Chakra+Petch:ital,wght@0,500;0,700;1,700&display=swap">
+  <style>
+    body { margin: 0; background: #0B0A12; }
+    a { color: #E3B94A; } a:hover { color: #F4F1E8; }
+    .frame { position: relative; width: 1440px; height: 810px; overflow: hidden; background: #0B0A12; font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif; color: #F4F1E8; }
+    .serif { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+    .ptile { display: flex; align-items: center; gap: 12px; }
+    .ptile .f { width: 58px; height: 58px; border: 2px solid #0B0A12; background: #0B0A12; overflow: hidden; }
+    .ptile .f img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+    .ptile b { font-size: 15px; font-weight: 700; letter-spacing: 0.22em; color: #0B0A12; }
+  </style>
+</helmet>
+<div class="frame">
+  <img src="bg-gagazet.jpg" alt="" style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; filter: brightness(0.45) saturate(0.8) blur(2px); transform: scale(1.04);">
+  <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11, 10, 18, 0.2) 0%, rgba(11, 10, 18, 0.7) 60%);"></div>
+
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; background: #F4F1E8; clip-path: polygon(46% 0, 100% 0, 100% 100%, 30% 100%);"></div>
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 810px; background: #E3B94A; clip-path: polygon(44.6% 0, 46% 0, 30% 100%, 28.6% 100%);"></div>
+
+  <img src="char-seymour.webp" alt="" style="position: absolute; left: 96px; top: 40px; height: 800px; filter: drop-shadow(0 0 40px rgba(227, 185, 74, 0.35)) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.7));">
+
+  <div style="position: absolute; left: 700px; top: 108px; display: flex; flex-direction: column; gap: 0;">
+    <div style="font-size: 15px; font-weight: 700; letter-spacing: 0.34em; color: #B8862A;">CHAPTER I · MT. GAGAZET — THE PROMINENCE</div>
+    <div class="serif" style="margin-top: 26px; font-size: 176px; font-weight: 700; font-style: italic; line-height: 0.86; color: #0B0A12; letter-spacing: -0.02em;">Seymour</div>
+    <div class="serif" style="font-size: 176px; font-weight: 700; font-style: italic; line-height: 0.86; color: #0B0A12; letter-spacing: -0.02em; margin-left: 140px;">Flux</div>
+    <div style="margin-top: 34px; width: 420px; height: 3px; background: #0B0A12; margin-left: 4px;"></div>
+    <div class="serif" style="margin-top: 16px; font-size: 30px; font-style: italic; color: #0B0A12; margin-left: 6px;">with Mortiorchis — the mount that feeds on its rider</div>
+  </div>
+
+  <div style="position: absolute; left: 0; bottom: 0; width: 1440px; height: 96px; background: #E3B94A; display: flex; align-items: center; justify-content: space-between; padding: 0 52px 0 560px; box-sizing: border-box; clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);">
+    <div style="display: flex; align-items: center; gap: 28px; margin-top: 14px;">
+      <div class="ptile"><div class="f"><img src="portrait-tidus.webp" alt=""></div><b>TIDUS</b></div>
+      <div class="ptile"><div class="f"><img src="portrait-yuna.webp" alt=""></div><b>YUNA</b></div>
+      <div class="ptile"><div class="f" style="display: flex; align-items: center; justify-content: center; color: #F4F1E8; font-weight: 700; font-size: 20px;">A</div><b>AURON</b></div>
+    </div>
+    <div style="margin-top: 14px; font-size: 24px; font-weight: 700; font-style: italic; letter-spacing: 0.24em; color: #0B0A12; white-space: nowrap;">BATTLE START</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,312 @@
+/*
+ * ResultsScreen — "Ink & Gold" (docs/handoff/presentation-ink-and-gold.md,
+ * approved 2026-09-15; mockup docs/screenshots/mockups/A-results.jpg, source
+ * docs/handoff/ink-and-gold/Results.dc.html).
+ *
+ * A paper page with an ink wedge cut diagonally across its right third, the
+ * lead party member standing in the wedge, and the spoils set as a printed
+ * ledger down the left. Authored on the shared 640x360 grid
+ * (`LetterboxStage.ts`), so every literal is its 1440 mockup value / 2.25 and
+ * carries that value in a comment.
+ *
+ * Chapter 4 keeps `--silent` [writing-bible §5.4]: the page stops
+ * celebrating — no gold, no quip, the portrait sunk into the ink.
+ */
+
+.rres {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ig-paper, #f4f1e8);
+}
+
+.rres__stage {
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  color: var(--ig-ink, #0b0a12);
+  -webkit-font-smoothing: antialiased;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.rres--visible .rres__stage {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------- the wedge */
+
+/* Ink block and the gold stripe on its leading edge, both from the mockup's
+   percentage polygons, so they hold at any aspect ratio. */
+.rres__ink {
+  position: absolute;
+  inset: 0;
+  background: var(--ig-ink, #0b0a12);
+  clip-path: polygon(62% 0, 100% 0, 100% 100%, 48% 100%);
+  overflow: hidden;
+}
+/* An ink ramp down the far right, so the gold caption stays legible whatever
+   the portrait is wearing there. Painted after the portrait (::after), inside
+   the wedge's clip. */
+.rres__ink::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 35.56px; /* 80 */
+  background: linear-gradient(
+    270deg,
+    rgba(11, 10, 18, 0.96) 0%,
+    rgba(11, 10, 18, 0.88) 45%,
+    rgba(11, 10, 18, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.rres__stripe {
+  position: absolute;
+  inset: 0;
+  background: var(--ig-accent, #e3b94a);
+  clip-path: polygon(60.6% 0, 62% 0, 48% 100%, 46.6% 100%);
+}
+.rres--silent .rres__stripe {
+  background: #3a3547;
+}
+
+/* The lead member, standing in the wedge (clipped by it, so a square portrait
+   can never spill onto the paper). */
+.rres__hero {
+  position: absolute;
+  left: 364.44px; /* 820 */
+  top: -17.78px; /* -40 */
+  height: 400px; /* 900 */
+  width: auto;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 0;
+  filter: drop-shadow(0 0 17.78px rgba(227, 185, 74, 0.25)); /* 40 */
+}
+.rres--silent .rres__hero {
+  filter: grayscale(0.7) brightness(0.62);
+}
+
+/* Chapter caption, set vertically down the far right edge. */
+.rres__caption {
+  position: absolute;
+  left: 620.44px; /* 1396 */
+  top: 26.67px; /* 60 */
+  font-size: 6.22px; /* 14 */
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  color: var(--ig-accent, #e3b94a);
+  white-space: nowrap;
+  transform: rotate(90deg);
+  transform-origin: left top;
+}
+.rres--silent .rres__caption {
+  color: #6b6478;
+}
+
+/* Everything that `refresh()` rewrites as the counters roll. The wedge, the
+   standing portrait and the caption sit outside it and are written once. */
+.rres__page {
+  position: absolute;
+  inset: 0;
+}
+
+/* --------------------------------------------------------------- the title */
+
+.rres__head {
+  position: absolute;
+  left: 32px; /* 72 */
+  top: 28.44px; /* 64 */
+}
+.rres__chip {
+  display: inline-block;
+  padding: 2.67px 6.22px; /* 6 14 */
+  background: var(--ig-ink, #0b0a12);
+  color: var(--ig-accent, #e3b94a);
+  font-size: 5.78px; /* 13 */
+  font-weight: 700;
+  letter-spacing: 0.34em;
+}
+.rres--silent .rres__chip {
+  color: #b9b2c6;
+}
+.rres__heading {
+  margin-top: 3.56px; /* 8 */
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 88.89px; /* 200 */
+  font-weight: 700;
+  font-style: italic;
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+  color: var(--ig-ink, #0b0a12);
+}
+.rres--silent .rres__heading {
+  font-size: 62.22px; /* 140 — the page says it, it doesn't shout it */
+}
+.rres__rule {
+  margin-top: 6.22px; /* 14 */
+  margin-left: 3.56px; /* 8 */
+  width: 133.33px; /* 300 */
+  height: 2.67px; /* 6 */
+  background: var(--ig-accent, #e3b94a);
+}
+.rres--silent .rres__rule {
+  background: var(--ig-ink, #0b0a12);
+  width: 66.67px; /* 150 */
+}
+
+/* Victory quip [writing-bible §5.4], set as a printed dedication under the
+   rule. Not in the mockup, which had no quip to show. */
+.rres__quip {
+  margin-top: 6.22px; /* 14 */
+  margin-left: 3.56px; /* 8 */
+  max-width: 248.89px; /* 560 — the ledger's column */
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 8px; /* 18 */
+  font-style: italic;
+  line-height: 1.25;
+  color: #5b5566;
+}
+
+/* -------------------------------------------------------------- the ledger */
+
+.rres__ledger {
+  position: absolute;
+  left: 33.78px; /* 76 */
+  top: 146.67px; /* 330 — under the rule and the quip, clear of the party list */
+  width: 248.89px; /* 560 */
+  display: flex;
+  flex-direction: column;
+}
+.rres__line {
+  display: flex;
+  align-items: baseline;
+  gap: 10.67px; /* 24 */
+  padding: 6.22px 0 5.33px; /* 14 0 12 */
+  border-bottom: 0.89px solid var(--ig-ink, #0b0a12); /* 2 */
+}
+.rres__k {
+  width: 66.67px; /* 150 */
+  font-size: 6.22px; /* 14 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--ig-accent-on-paper, #b8862a); /* gold darkened for paper */
+}
+.rres--silent .rres__k {
+  color: #5b5566;
+}
+.rres__v {
+  font-family: var(--font-numbers, 'Rajdhani', sans-serif);
+  font-size: 24px; /* 54 */
+  font-weight: 700;
+  line-height: 1;
+}
+/* The ITEMS row reads as a printed list, not a tally. */
+.rres__v--items {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 13.33px; /* 30 */
+  font-style: italic;
+}
+.rres__d {
+  margin-left: auto;
+  font-size: 6.67px; /* 15 */
+  letter-spacing: 0.1em;
+  color: #5b5566;
+}
+
+/* --------------------------------------------------------------- the party */
+
+.rres__party {
+  position: absolute;
+  left: 33.78px; /* 76 */
+  bottom: 24.89px; /* 56 */
+  width: 248.89px; /* 560 */
+  display: flex;
+  flex-direction: column;
+  gap: 5.33px; /* 12 */
+}
+.rres__member {
+  display: flex;
+  align-items: center;
+  gap: 6.22px; /* 14 */
+}
+.rres__face {
+  position: relative;
+  width: 21.33px; /* 48 */
+  height: 21.33px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ig-ink, #0b0a12);
+  border: 0.89px solid var(--ig-ink, #0b0a12); /* 2 */
+  color: var(--ig-paper, #f4f1e8);
+  font-size: 8.89px; /* 20 */
+  font-weight: 700;
+}
+.rres__face span {
+  position: absolute;
+}
+.rres__face img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 8%;
+  display: block;
+}
+.rres__member-name {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 8.89px; /* 20 */
+  font-weight: 700;
+  font-style: italic;
+}
+.rres__member-ap {
+  margin-left: auto;
+  font-family: var(--font-numbers, 'Rajdhani', sans-serif);
+  font-size: 11.56px; /* 26 */
+  font-weight: 700;
+}
+.rres__member-ap small {
+  margin-left: 2.67px; /* 6 */
+  font-size: 5.78px; /* 13 */
+  letter-spacing: 0.2em;
+  color: var(--ig-accent-on-paper, #b8862a);
+}
+/* A sphere/dress level gained — an ink chip on the member's row. */
+.rres__level-up {
+  margin-left: 4.44px; /* 10 */
+  padding: 1.33px 3.56px; /* 3 8 */
+  background: var(--ig-ink, #0b0a12);
+  color: var(--ig-accent, #e3b94a);
+  font-size: 5.33px; /* 12 */
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+.rres--silent .rres__level-up {
+  color: #b9b2c6;
+}
+.rres--silent .rres__member-ap small {
+  color: #5b5566;
+}
+
+/* -------------------------------------------------------------- the button */
+
+.rres__confirm {
+  position: absolute;
+  right: 26.67px; /* 60 */
+  bottom: 23.11px; /* 52 */
+  padding: 5.33px 9.78px; /* 12 22 */
+  background: var(--ig-paper, #f4f1e8);
+  color: var(--ig-ink, #0b0a12);
+  font-size: 6.22px; /* 14 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  transform: skewX(-12deg);
+}
+.rres__confirm > span {
+  display: inline-block;
+  transform: skewX(12deg);
+}

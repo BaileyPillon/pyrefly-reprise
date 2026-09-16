@@ -1,0 +1,492 @@
+/*
+ * Static FFX battle-HUD mock.
+ *
+ * Everything is authored on the 640 x 360 logical grid from
+ * research/visual-bible.md §3.0, and `HudMock` scales the whole stage with one
+ * transform (letterboxed, `min(w/640, h/360)`), so every rect below is a
+ * verbatim coordinate from §3.1–§3.6. Nothing here is wired to a battle: it
+ * exists so the art direction can be approved with real UI in frame, and so
+ * the agent who builds the live HUD has a pixel target to hit.
+ */
+
+.hudm {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* FFX palette, §3.3 / §3.4 */
+  --ffx-win-top: #1b3a6b;
+  --ffx-win-bottom: #050912;
+  --ffx-border-outer: #dce8f5;
+  --ffx-border-inner: #4e86c8;
+  --ffx-ornament: #9fc4e8;
+  --ffx-text: #edf3fa;
+  --ffx-text-dim: #6c7b90;
+  --ffx-text-soft: #c8d4e4;
+  --ffx-acting: #fff0a8;
+  --ffx-gold: #f2c21e;
+  --ffx-mp: #8fd0f0;
+  --ffx-hp: #f4f1e8;
+  --ffx-hp-crit: #f2d24a;
+  --ffx-enemy: #a83a3a;
+  --ffx-shadow: #08101e;
+}
+
+.hudm[hidden] {
+  display: none !important;
+}
+
+.hudm__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- chrome */
+
+.hudm-win {
+  position: absolute;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--ffx-win-top) 0%, #0c1c39 46%, var(--ffx-win-bottom) 100%);
+  border: 1px solid var(--ffx-border-outer);
+  box-shadow:
+    inset 0 0 0 1px var(--ffx-border-inner),
+    inset 0 1px 0 1px #2e5a9e,
+    0 2px 10px rgba(2, 6, 16, 0.55);
+}
+
+/* the 3x3 corner notches that make an FFX window read as "official" */
+.hudm-win::before,
+.hudm-win::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--ffx-ornament);
+  opacity: 0.85;
+}
+.hudm-win::before {
+  left: 3px;
+  top: 3px;
+}
+.hudm-win::after {
+  right: 3px;
+  bottom: 3px;
+}
+
+/* --------------------------------------------------------- message bar */
+
+.hudm-message {
+  left: 16px;
+  top: 10px;
+  height: 26px;
+  min-width: 132px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  opacity: 0.94;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ffx-text);
+  text-shadow: 1px 1px 0 var(--ffx-shadow);
+}
+.hudm-message b {
+  color: var(--ffx-acting);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------ CTB list */
+
+.hudm-ctb {
+  position: absolute;
+  left: 548px;
+  top: 44px;
+  width: 84px;
+  height: 236px;
+}
+
+.hudm-ctb__row {
+  position: absolute;
+  left: 8px; /* 556 absolute, per §3.2 */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.hudm-ctb__row--enemy {
+  left: 16px; /* 564 absolute: the 8px friend/foe stagger */
+}
+.hudm-ctb__row--current {
+  left: 0; /* 548 absolute */
+}
+
+.hudm-ctb__icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #5a7fa8;
+  background: rgba(16, 24, 40, 0.8);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(2, 6, 16, 0.6);
+}
+.hudm-ctb__mono {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 1px 1px 0 rgba(6, 10, 20, 0.85);
+}
+.hudm-ctb__icon img {
+  position: relative; /* paints over the monogram fallback beneath it */
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 12%;
+  display: block;
+}
+.hudm-ctb__row--enemy .hudm-ctb__icon {
+  border-color: var(--ffx-enemy);
+}
+.hudm-ctb__row--current .hudm-ctb__icon {
+  width: 28px;
+  height: 28px;
+  border-color: var(--ffx-acting);
+  box-shadow:
+    0 0 0 2px rgba(242, 194, 30, 0.5),
+    0 0 8px rgba(242, 194, 30, 0.45);
+  animation: hudm-pulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes hudm-pulse {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(0.82);
+  }
+}
+
+/* enemy letter tag, §3.2 */
+.hudm-ctb__tag {
+  position: absolute;
+  right: 1px;
+  bottom: 0;
+  font-size: 7px;
+  line-height: 8px;
+  font-weight: 700;
+  color: #f4f1e8;
+  text-shadow: 1px 1px 0 #0b0a12;
+}
+
+/* overdrive-ready diamond */
+.hudm-ctb__od {
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  background: var(--ffx-gold);
+  transform: rotate(45deg);
+  box-shadow: 0 0 4px rgba(242, 194, 30, 0.9);
+}
+
+.hudm-ctb__name {
+  font-size: 5.5px;
+  line-height: 7px;
+  letter-spacing: 0.08em;
+  color: var(--ffx-text-soft);
+  text-shadow: 1px 1px 0 #0b0a12;
+  order: -1;
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------- command window */
+
+.hudm-command {
+  left: 16px;
+  top: 214px;
+  width: 164px;
+  height: 132px;
+  opacity: 0.9;
+  padding: 10px 0 0 0;
+}
+
+.hudm-command__row {
+  position: relative;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding-left: 26px;
+  padding-right: 12px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ffx-text);
+  text-shadow: 1px 1px 0 var(--ffx-shadow);
+}
+.hudm-command__row--selected {
+  color: #ffffff;
+}
+.hudm-command__row--selected::before {
+  content: '';
+  position: absolute;
+  inset: 2px 0 2px 10px;
+  background: linear-gradient(90deg, rgba(46, 90, 158, 0.7), rgba(46, 90, 158, 0));
+  border-radius: 2px;
+}
+.hudm-command__row--disabled {
+  color: var(--ffx-text-dim);
+  text-shadow: none;
+}
+.hudm-command__label {
+  position: relative;
+}
+/* Overdrive is available: the row picks up the gauge's gold. */
+.hudm-command__label--ready {
+  color: var(--ffx-acting);
+  text-shadow:
+    1px 1px 0 var(--ffx-shadow),
+    0 0 6px rgba(242, 194, 30, 0.45);
+}
+.hudm-command__mp {
+  position: relative;
+  margin-left: auto;
+  font-family: var(--font-numbers);
+  font-size: 9px;
+  color: var(--ffx-mp);
+}
+
+/* the 13x11 gloved finger cursor, §3.3 */
+.hudm-cursor {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  width: 13px;
+  height: 11px;
+  margin-top: -5.5px;
+  animation: hudm-cursor-bob 0.6s ease-in-out infinite alternate;
+}
+@keyframes hudm-cursor-bob {
+  from {
+    transform: translateX(-1px);
+  }
+  to {
+    transform: translateX(1px);
+  }
+}
+
+/* ----------------------------------------------------- party status window */
+
+.hudm-party {
+  left: 296px;
+  top: 284px;
+  width: 328px;
+  height: 64px;
+  opacity: 0.84;
+}
+
+.hudm-party__row {
+  position: absolute;
+  left: 10px;
+  right: 8px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+.hudm-party__name {
+  width: 62px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ffx-text);
+  text-shadow: 1px 1px 0 var(--ffx-shadow);
+}
+.hudm-party__row--acting .hudm-party__name {
+  color: var(--ffx-acting);
+}
+.hudm-party__tag {
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: #8fa4bc;
+  margin-left: 8px;
+  margin-right: 3px;
+}
+.hudm-party__name + .hudm-party__tag {
+  margin-left: 0;
+}
+.hudm-party__value {
+  font-family: var(--font-numbers);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  color: var(--ffx-hp);
+  text-shadow: 1px 1px 0 var(--ffx-shadow);
+}
+.hudm-party__value--hp {
+  width: 52px;
+  font-size: 12px;
+}
+.hudm-party__value--mp {
+  width: 42px;
+  font-size: 12px;
+  color: var(--ffx-mp);
+}
+.hudm-party__value--crit {
+  color: var(--ffx-hp-crit);
+}
+.hudm-party__value small {
+  font-size: 9px;
+  color: #9fb0c4;
+  margin-left: 1px;
+}
+
+.hudm-party__od {
+  width: 104px;
+  height: 6px;
+  margin-left: auto;
+  background: #2a3246;
+  box-shadow: inset 0 1px 0 #141a28;
+  border-radius: 1px;
+  overflow: hidden;
+  position: relative;
+}
+.hudm-party__od i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  background: linear-gradient(0deg, #f2c21e 0%, #fff0a8 100%);
+  border-right: 1px solid #ffffff;
+}
+.hudm-party__od--full {
+  box-shadow:
+    inset 0 1px 0 #141a28,
+    0 0 5px rgba(242, 194, 30, 0.85);
+  animation: hudm-od-full 0.33s steps(2, end) infinite;
+}
+@keyframes hudm-od-full {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.28);
+  }
+}
+
+/* ------------------------------------------------------- damage numeral */
+
+.hudm-damage {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  background: linear-gradient(180deg, #ffffff 0%, #d8dee8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 1px #141420) drop-shadow(0 1px 0 #141420)
+    drop-shadow(1px 0 0 #141420) drop-shadow(-1px 0 0 #141420)
+    drop-shadow(0 -1px 0 #141420) drop-shadow(0 2px 3px rgba(11, 10, 18, 0.55));
+  transform: translate(-50%, -50%);
+}
+
+/* --------------------------------------------------------------- caption */
+
+.hudm-caption {
+  position: absolute;
+  left: 16px;
+  top: 44px;
+  font-family: var(--font-text);
+  font-size: 7px;
+  line-height: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(198, 216, 242, 0.55);
+  text-shadow: 0 1px 2px rgba(4, 8, 18, 0.9);
+  max-width: 230px;
+}
+.hudm-caption b {
+  color: rgba(159, 240, 210, 0.85);
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------- target reticle */
+/*
+ * §3.5: a four-corner bracket, never a spinning ring. The corners "breathe"
+ * 2 px in and out on a 0.8 s sine; the name plate carries the letter tag that
+ * disambiguates multiples of one enemy.
+ */
+.hudm-reticle {
+  position: absolute;
+  animation: hudm-reticle-breathe 0.8s ease-in-out infinite alternate;
+}
+.hudm-reticle__c {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 0 solid var(--ffx-gold);
+  filter: drop-shadow(0 0 3px rgba(242, 194, 30, 0.55));
+}
+.hudm-reticle__c--tl {
+  left: 0;
+  top: 0;
+  border-left-width: 2px;
+  border-top-width: 2px;
+}
+.hudm-reticle__c--tr {
+  right: 0;
+  top: 0;
+  border-right-width: 2px;
+  border-top-width: 2px;
+}
+.hudm-reticle__c--bl {
+  left: 0;
+  bottom: 0;
+  border-left-width: 2px;
+  border-bottom-width: 2px;
+}
+.hudm-reticle__c--br {
+  right: 0;
+  bottom: 0;
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+}
+@keyframes hudm-reticle-breathe {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.022);
+  }
+}
+
+.hudm-reticle__name {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 5px);
+  white-space: nowrap;
+  padding: 2px 5px 3px;
+  border-radius: 7px;
+  background: rgba(11, 10, 18, 0.7);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--ffx-hp);
+  text-shadow: 1px 1px 0 var(--ffx-shadow);
+}
+.hudm-reticle__name b {
+  color: var(--ffx-gold);
+  font-weight: 700;
+  margin-left: 2px;
+}

@@ -2044,6 +2044,17 @@ export interface BattleResult {
   sphereLevelsGained: Record<CombatantId, number>;
   /** Levels gained this battle, keyed by member id (FFX-2 only). */
   levelsGained?: Record<CombatantId, number>;
+  /**
+   * The formation that follows this one with no menu between, copied from
+   * {@link EnemyGroupDef.nextGroupId} on a victory. Present only when this
+   * battle was a link in a chain (Yunalesca's forms, the Vegnagun chain).
+   *
+   * The engine **never advances groups itself**: it reports this and stops. The
+   * BattleScreen re-inits the engine for the next group with the party's
+   * carried-over state and `BattleSetup.chained = true`, so no results screen
+   * shows between links [docs/CONTRACT-CHANGES.md, orchestrator decision 6].
+   */
+  nextGroupId?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -2146,6 +2157,14 @@ export interface BattleSetup {
   condition?: 'normal' | 'preemptive' | 'ambush' | 'scripted';
   /** Escape and Flee are disabled when false. All five of our encounters ship `false`. */
   canEscape?: boolean;
+  /**
+   * This battle is a link in a chain (`EnemyGroupDef.nextGroupId`), not a fresh
+   * encounter: no results screen shows between links and mid-chain story
+   * scripts may play. The engine never advances groups itself — `victory`
+   * carries `nextGroupId` and the BattleScreen re-inits with the party's
+   * carried-over state [docs/CONTRACT-CHANGES.md, orchestrator decision 6].
+   */
+  chained?: boolean;
 }
 
 /**
@@ -2232,6 +2251,12 @@ export interface FFXMemberBuild {
     unlockedOverdriveIds: AbilityId[];
   };
   sphereGrid: SphereGridState;
+  /**
+   * Statuses carried over from the previous link of a chained encounter.
+   * Omitted for a fresh battle [docs/CONTRACT-CHANGES.md, orchestrator
+   * decision 6].
+   */
+  statuses?: Partial<Record<StatusId, StatusInstance>>;
 }
 
 /** One aeon Yuna owns at this point. */
@@ -2252,6 +2277,8 @@ export interface AeonBuild {
   overdriveIds: AbilityId[];
   /** Battles remaining before a KO'd aeon may be summoned again. 0 = available. */
   reviveCountdown?: number;
+  /** Statuses carried over from the previous link of a chained encounter. */
+  statuses?: Partial<Record<StatusId, StatusInstance>>;
 }
 
 /** The FFX party at a chapter's build point. */
@@ -2292,6 +2319,13 @@ export interface FFX2MemberBuild {
   /** Starting HP/MP. `null` = start at full. */
   hp?: number;
   mp?: number;
+  /**
+   * Statuses she carries in from the previous link of a chained encounter.
+   * Mirrors `FFXMemberBuild.statuses`; `undefined` for a fresh battle.
+   * Gate effects ride along on {@link GarmentGridState.passedGates}, which the
+   * carried `garmentGrid` already holds [ffx2-combat-core §4.1].
+   */
+  statuses?: Partial<Record<StatusId, StatusInstance>>;
 }
 
 /** The FFX-2 party at a chapter's build point. Always exactly three girls. */

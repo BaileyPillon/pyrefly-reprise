@@ -1,0 +1,122 @@
+/**
+ * Recovery items [ffx2-combat-core §5.5 "Recovery", verified: 2 sources].
+ * Sell/Buy prices are gil; `usableInMenu` mirrors the source table's "Menu"
+ * column.
+ */
+
+import type { ItemDef } from '../../../battle/common/types.ts';
+
+export const recoveryItems: ItemDef[] = [
+  {
+    id: 'x2-potion',
+    name: 'Potion',
+    game: 'ffx2',
+    effect: 'x2-item-potion',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 50,
+    description: 'Recovers 200 HP.',
+  },
+  {
+    id: 'x2-hi-potion',
+    name: 'Hi-Potion',
+    game: 'ffx2',
+    effect: 'x2-item-hi-potion',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 500,
+    description: 'Recovers 1000 HP.',
+  },
+  {
+    id: 'x2-x-potion',
+    name: 'X-Potion',
+    game: 'ffx2',
+    effect: 'x2-item-x-potion',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0, // not sold [§5.5]
+    description: 'Recovers up to 9999 HP.',
+  },
+  {
+    id: 'x2-mega-potion',
+    name: 'Mega-Potion',
+    game: 'ffx2',
+    effect: 'x2-item-mega-potion',
+    targeting: 'all-allies',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0,
+    description: 'Restores 2000 HP to the whole party.',
+  },
+  {
+    id: 'x2-ether',
+    name: 'Ether',
+    game: 'ffx2',
+    effect: 'x2-item-ether',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0,
+    description: 'Recovers 100 MP.',
+  },
+  {
+    id: 'x2-turbo-ether',
+    name: 'Turbo Ether',
+    game: 'ffx2',
+    effect: 'x2-item-turbo-ether',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0,
+    description: 'Recovers 500 MP.',
+  },
+  {
+    id: 'x2-elixir',
+    name: 'Elixir',
+    game: 'ffx2',
+    effect: 'x2-item-elixir',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0,
+    description: 'Fully restores HP and MP for one ally.',
+  },
+  {
+    id: 'x2-megalixir',
+    name: 'Megalixir',
+    game: 'ffx2',
+    effect: 'x2-item-megalixir',
+    targeting: 'all-allies',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0,
+    description: 'Fully restores HP and MP for the whole party.',
+  },
+  {
+    id: 'x2-phoenix-down',
+    name: 'Phoenix Down',
+    game: 'ffx2',
+    effect: 'x2-item-phoenix-down',
+    targeting: 'single-ally',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 100,
+    description: 'Revives an ally with 25% max HP.',
+  },
+  {
+    id: 'x2-mega-phoenix',
+    name: 'Mega Phoenix',
+    game: 'ffx2',
+    effect: 'x2-item-mega-phoenix',
+    targeting: 'all-allies',
+    usableInBattle: true,
+    usableInMenu: true,
+    price: 0,
+    description: 'Revives up to two allies with 50% max HP.',
+  },
+];
+
+export default recoveryItems;
