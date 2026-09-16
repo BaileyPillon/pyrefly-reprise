@@ -20,7 +20,7 @@ Each chapter is: party prep (Sphere Grid, equipment, items, Overdrive modes, or 
 
 ## How it was made
 
-I did not write this code by hand. I set the constraints, chose the engine, stack, encounters, and art direction, and then directed roughly a dozen Claude Code agents working in parallel in one repository, each owning one folder. My job was review: every milestone came back to me as a screenshot, and I sent work back until it was right. The sections below explain the three decisions that shaped everything else.
+I set the constraints, chose the engine, stack, encounters, and art direction, and then directed roughly a dozen Claude Code agents working in parallel in one repository, each owning one folder. My job was review: every milestone came back to me as a screenshot, and I sent work back until it was right. The sections below explain the three decisions that shaped everything else.
 
 ### The battle engine
 
