@@ -168,11 +168,31 @@ export function damageSkeleton(power: number, mit: number, buffs: number): numbe
   return idiv(d3 + d4, 8);
 }
 
-/** Which pool an action's amount lands in. */
+/**
+ * Which pool an action's amount lands in.
+ *
+ * `AbilityDef` has no pool field of its own — the data layer says so in the
+ * comment above Ether's record ("no separate 'pool' field, so the pool is noted
+ * via `extra.restoresPool`") — and nothing here read it, so **Ether, Turbo
+ * Ether, Elixir, Megalixir and the MP mixes all restored HP instead of MP**.
+ * That is not a cosmetic drift: it deletes the entire MP economy of a long
+ * fight. `dreams-end` ships 3 Ethers, 2 Turbo Ethers and an Elixir precisely so
+ * Yuna's 320 MP is not a hard cap on a 180,000-HP chapter
+ * [ffx-bfa-yu-yevon §4.4], and `strategy-chapter2.test.ts` already had the
+ * defect written up as a known gap it did not own.
+ *
+ * Restricted to actions that actually restore (`heals`), so a damaging record
+ * that happens to carry the key cannot change pool.
+ */
 export function poolOf(def: AbilityDef): DamagePool {
   if (def.formula === 'lancet') return 'both';
   if (def.formula === 'ctb') return 'ctb';
   if (def.flags.includes('drains-mp')) return 'mp';
+  const restores = def.extra?.['restoresPool'];
+  if (def.flags.includes('heals')) {
+    if (restores === 'mp') return 'mp';
+    if (restores === 'both') return 'both';
+  }
   return 'hp';
 }
 

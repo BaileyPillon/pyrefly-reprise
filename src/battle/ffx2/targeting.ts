@@ -13,7 +13,13 @@ import type {
   Rng,
   Side,
 } from '../common/types.ts';
-import type { AbilityRegistry, DressphereRegistry, Ffx2Unit, GarmentGridDef } from './internal.ts';
+import type {
+  AbilityRegistry,
+  DressphereRegistry,
+  Ffx2Unit,
+  GarmentGridDef,
+  ItemRegistry,
+} from './internal.ts';
 import { adjacentNodes } from './garment-grids.ts';
 
 /** `aeon` never appears in X-2; party and enemy are the only two sides in play. */
@@ -88,12 +94,41 @@ export function resolveTargets(
   }
 }
 
-/** Ids the UI may offer for one ability. */
+/**
+ * Ids the UI may offer for one ability.
+ *
+ * **This is the legal *pool*, not a pick.** `src/ui/ffx2/CommandMenu.ts:238`
+ * and `src/ui/ffx/CommandMenuLogic.ts:153` both read `validTargets` as the
+ * cursor's candidate list — one entry means "auto-target", several mean "let
+ * the player choose" — and `src/battle/ffx/commands.ts` fills it that way
+ * (Cure is offered as all three actives, not as one).
+ *
+ * It used to be computed by running {@link resolveTargets} with a stub RNG,
+ * which is right for `self` / `all-*` but **collapses every `single-*` mode to
+ * a single id**, because that is what `resolveTargets` is for: it *chooses*.
+ * The consequence in play was that a White Mage's Cure, Cura and Life could
+ * only ever be aimed at whichever ally sorted first — she could not heal the
+ * other two at all — and a single-enemy row on a multi-part boss could only
+ * name the first part. Both the UI cursor and every tactic read this list, so
+ * both were blocked. Fixed by returning the pool for the `single-*` modes and
+ * leaving the rest to `resolveTargets` [docs/CONTRACT-CHANGES.md, 2026-09-17 `ffx2-bahamut`].
+ */
 export function validTargetIds(
   units: readonly Ffx2Unit[],
   actor: Ffx2Unit,
   ability: Pick<AbilityDef, 'targeting' | 'flags'>,
 ): CombatantId[] {
+  const allowDead = ability.flags.includes('can-target-dead');
+  switch (ability.targeting) {
+    case 'single-enemy':
+      return opponentsOf(units, actor, allowDead).map((u) => u.id);
+    case 'single-ally':
+      return alliesOf(units, actor, allowDead).map((u) => u.id);
+    case 'single-any':
+      return units.filter((u) => isTargetable(u, allowDead)).map((u) => u.id);
+    default:
+      break;
+  }
   return resolveTargets(units, actor, ability, [], {
     // A deterministic stand-in: `validTargets` must not consume the battle RNG,
     // because the menu is rebuilt every time the player moves the cursor.
@@ -105,10 +140,36 @@ export function validTargetIds(
   } as Rng).map((u) => u.id);
 }
 
+/**
+ * What an ability costs its **user in HP**, in whole HP, for this user, now.
+ *
+ * The Dark Knight's whole design is that her skillset is paid for in HP rather
+ * than MP: Darkness costs **12.5% (1/8) of the user's max HP**, waived while
+ * she has Spellspring [ffx2-vegnagun-shuyin §6.4 `[verified: 2 sources]`;
+ * §7.1 "Its cost is HP, not MP"]. The data layer writes that as
+ * `extra.hpCostPercent` (a *percentage*, so Darkness is `12.5`) plus an
+ * optional `extra.freeUnderSpellspring`; before this existed the field was
+ * written by the data layer and read by nobody, so Darkness was free and the
+ * single strongest ability in the chapter had no downside at all.
+ *
+ * Returns 0 for everything else, so this is inert for the rest of the game.
+ */
+export function hpCostFor(actor: Ffx2Unit, ability: AbilityDef): number {
+  const extra = ability.extra;
+  if (!extra) return 0;
+  const percent = extra['hpCostPercent'];
+  if (typeof percent !== 'number' || percent <= 0) return 0;
+  if (actor.statuses.spellspring && extra['freeUnderSpellspring'] === true) return 0;
+  return Math.max(1, Math.floor((actor.stats.maxHp * percent) / 100));
+}
+
 /** Why a command row is greyed out, or `null` when it is offered. */
 function disabledReason(actor: Ffx2Unit, ability: AbilityDef, mpCost: number): string | null {
   if (actor.statuses.itchy) return 'Itchy — spherechange first';
   if (actor.mp < mpCost && !actor.statuses.spellspring) return 'Not enough MP';
+  // "…fails if the user cannot pay it" — an HP-cost ability is greyed out, not
+  // suicidal, exactly as the MP row above it is. §6.4
+  if (actor.hp <= hpCostFor(actor, ability)) return 'Not enough HP';
   const silenced = Boolean(actor.statuses.silence);
   if (silenced && (ability.category === 'blackmagic' || ability.category === 'whitemagic')) {
     return 'Silenced';
@@ -129,6 +190,10 @@ export interface MenuContext {
   /** Dressphere id occupying each Garment Grid node, `null` for an empty node. */
   gridNodes?: Array<string | null>;
   canEscape: boolean;
+  /** Item table, so the Item submenu can be built. */
+  items?: ItemRegistry;
+  /** Live counts keyed by item id (`setup.ts` `inventoryCounts`). */
+  inventory?: Readonly<Record<string, number>>;
 }
 
 /**
@@ -197,6 +262,42 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
         ...(cursed ? { disabledReason: 'Cursed' } : {}),
         validTargets: [],
         help: step.gates.length > 0 ? `Passes ${step.gates.join(' + ')}` : undefined,
+      });
+    }
+  }
+
+  // --- Item --------------------------------------------------------------
+  //
+  // X-2 has **no Item command inside a Special Dressphere** and none while
+  // Berserk or Itchy; otherwise every girl shares one party inventory
+  // [ffx2-combat-core §3.15, §2.8].
+  //
+  // This submenu did not exist. `execute.ts` has always *resolved* a
+  // `kind: 'item'` command and `Ffx2EngineOptions.items` has always carried the
+  // table, but nothing ever offered a row, so a party's whole inventory — 25
+  // Phoenix Downs, 20 X-Potions and the Light/Lunar Curtains that
+  // `ffx2-vegnagun-shuyin.md` §7.2 opens the Shuyin fight with — was
+  // unreachable in play and `FFX2PartyBuild.inventory` was decorative.
+  if (!berserked && !itchy && ctx.items) {
+    for (const [itemId, count] of Object.entries(ctx.inventory ?? {})) {
+      if (count <= 0) continue;
+      const item = ctx.items.get(itemId);
+      if (!item || !item.usableInBattle) continue;
+      const effect = typeof item.effect === 'string' ? ctx.abilities.get(item.effect) : item.effect;
+      if (!effect) continue;
+      // The **item's** targeting wins over its effect ability's: a Phoenix Down
+      // is `single-ally` even though its effect revives, and `can-target-dead`
+      // rides along from the effect so a KO'd girl stays selectable.
+      const targets = validTargetIds(ctx.units, actor, { targeting: item.targeting, flags: effect.flags });
+      out.push({
+        command: { kind: 'item', id: itemId, targets: [] },
+        label: item.name,
+        category: 'item',
+        mpCost: 0,
+        enabled: targets.length > 0,
+        ...(targets.length > 0 ? {} : { disabledReason: 'No legal target' }),
+        validTargets: targets,
+        ...(item.description !== undefined ? { help: item.description } : {}),
       });
     }
   }

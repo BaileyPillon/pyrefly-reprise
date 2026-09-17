@@ -23,14 +23,12 @@
  * `dreams-end` build's default roster — for anything that just wants "the
  * chain a non-grinding player sees".
  *
- * **Contract gap worth flagging** (see the final report): neither
- * `EnemyDef` nor `EnemyFields` has a place to carry the Yu Pagoda's revive
- * timer (new max HP = 5,000 + excess damage, back after ~63 ticks in the
- * BFA fight / ~72 ticks in the aeon and Yu Yevon fights, §1.4) or Yu
- * Yevon's Curaga counter-eligibility rule (fires at most once per
- * player-side damaging *action*, never on his own Gravija, a Poison tick,
- * or a Yu Pagoda's Power Wave, §3.4.1). Both are documented in comments
- * below for the engine agent since there's no data field to hold them.
+ * **Contract gap, now half closed.** The Yu Pagoda revive timer (§1.4) has
+ * a home: `EnemyDef.reviveRule`, added 2026-09-17 and set on both Pagodas
+ * below. Still undeclared in data is Yu Yevon's Curaga counter-eligibility
+ * rule (fires at most once per player-side damaging *action*, never on his
+ * own Gravija, a Poison tick, or a Yu Pagoda's Power Wave, §3.4.1), which
+ * lives in his AI script instead.
  */
 
 import type { AeonId, BraskasFinalAeonEnemyId } from '../ids.ts';
@@ -106,6 +104,17 @@ function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, contex
     // of staying dead. `overkillThreshold` is set high so a normal hit
     // never reads as an overkill.
     rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] },
+    // §1.4 "Revive rule (critical to implement correctly)" [verified: 2
+    // sources]. A destroyed Pagoda returns with `5,000 + the killing blow's
+    // excess` after **63 ticks** in the BFA fight (its own AGI 40 → base 7 →
+    // rank-3 recovery 21 → 3 × 21) and **72** in the possessed-aeon and Yu
+    // Yevon fights (AGI 30 → base 8 → 24 → 3 × 24). Until this shipped, two
+    // early swings switched the boss's heal / cleanse / Overdrive economy off
+    // for the rest of the battle: measured, both Pagodas were permanently
+    // dead from turn ~21 of a ~190-turn fight, and §1.6's own tuning table
+    // was stuck on its "both down" row (10-20 % gauge a turn) for 89 % of the
+    // encounter instead of its "both alive" row (60 %).
+    reviveRule: { delayTicks: context === 'bfa' ? 63 : 72, baseMaxHp: 5000 },
     abilityIds:
       context === 'bfa'
         ? ['power-wave-bfa', 'yu-pagoda-curse', 'osmose']
@@ -127,7 +136,15 @@ export const braskasFinalAeonGroup: EnemyGroupDef = {
   id: 'braskas-final-aeon',
   game: 'ffx',
   canEscape: false,
-  nextGroupId: 'possessed-aeons', // superseded at runtime by buildPossessedAeonChain's first link — see file header
+  // §2.1 [verified: 2 sources] — the gauntlet runs in aeon-acquisition order,
+  // so the default (five-mandatory-aeon) roster's first link is Valefor.
+  // This used to read `'possessed-aeons'`, which no formation exports:
+  // `BattleScreen`'s chain loop logged "no formation exports that id" and
+  // **stopped the chapter dead after Braska's Final Aeon**, so the possessed
+  // aeons and Yu Yevon were unreachable in play. A caller with a non-default
+  // roster still overrides this by rebuilding the chain with
+  // {@link buildPossessedAeonChain}.
+  nextGroupId: 'possessed-valefor',
   enemies: [
     {
       id: 'braskas-final-aeon',
@@ -336,6 +353,10 @@ function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: strin
     game: 'ffx',
     canEscape: false,
     nextGroupId,
+    // §2.3 [verified: 3 sources] — from the possessed-aeon fights onward the
+    // whole party carries a permanent, non-consumable Auto-Life granted by the
+    // fayth, and the only documented loss is deliberate party-wide Petrify.
+    grantsPermanentAutoLife: true,
     enemies: [
       possessedAeonEnemyDef(aeonId, 0),
       yuPagoda('yu-pagoda-left', 1, 'aeon-or-yu-yevon'),
@@ -392,6 +413,8 @@ export const yuYevonGroup: EnemyGroupDef = {
   id: 'yu-yevon',
   game: 'ffx',
   canEscape: false,
+  grantsPermanentAutoLife: true, // §2.3 [verified: 3 sources] — "cannot lose"
+
   enemies: [
     {
       id: 'yu-yevon',

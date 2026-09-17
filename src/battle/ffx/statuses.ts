@@ -156,6 +156,9 @@ function wipeStatuses(ctx: Ctx, target: FFXCombatant, keep: readonly StatusId[],
   for (const key of Object.keys(target.statuses) as StatusId[]) {
     if (keep.includes(key)) continue;
     delete target.statuses[key];
+    // The two pool flags are a stat change while they are on, so dropping one
+    // has to put the ceiling back — see {@link applyPoolDoubler}.
+    if (key === 'max-hp-x2' || key === 'max-mp-x2') applyPoolDoubler(target, key, false);
     ctx.emit({ type: 'status-remove', targetId: target.id, status: key, reason });
   }
 }
@@ -210,6 +213,7 @@ export function applyStatus(
 
   // Petrification wipes every other status; the stacking buffs survive it.
   if (status === 'petrify') wipeStatuses(ctx, target, ['petrify', ...STACKING_BUFFS, ...MIX_FLAGS], 'overwritten');
+  if (status === 'max-hp-x2' || status === 'max-mp-x2') applyPoolDoubler(target, status, true);
   // Haste halves the target's current counter and Slow doubles it. When the
   // action already used the `ctb` formula the shift has been applied there, so
   // the caller suppresses it rather than paying twice [ffx-combat-core §1.4].
@@ -231,8 +235,41 @@ export function removeStatus(
   // Auto-Regen and other stack-255 statuses are not dispellable.
   if (reason === 'dispelled' && (statusOf(target, status)?.permanent ?? false)) return false;
   delete target.statuses[status];
+  if (status === 'max-hp-x2' || status === 'max-mp-x2') applyPoolDoubler(target, status, false);
   ctx.emit({ type: 'status-remove', targetId: target.id, status, reason });
   return true;
+}
+
+/**
+ * `max-hp-x2` / `max-mp-x2`, the two Mix/tonic flags that are a **pool change**
+ * rather than a damage-chain step [ffx-combat-core §8.2].
+ *
+ * Both were listed in {@link MIX_FLAGS}, both were applied by items the builds
+ * ship — Stamina Tablet, Stamina Tonic, Mana Tablet, Mana Tonic and four Mixes
+ * — and **neither did anything**: nothing in the engine read the status, so the
+ * two Stamina Tablets `ffx-bfa-yu-yevon §4.4` puts in the Dream's End bag were
+ * inert. That is load-bearing for Chapter 3, where Ultimate Jecht Shot lands
+ * for ~3,000 on a Yuna whose maximum is 2,700, so the party's healer cannot
+ * survive it **at full HP** and the fight ends on the first one that is not
+ * answered by a Talk or an aeon.
+ *
+ * The status record is explicit about the shape: *"Doubles the carrier's
+ * effective max HP. **No immediate healing** — existing current HP is
+ * unchanged, only the ceiling rises"* (`data/ffx/statuses/stacks-and-flags.ts`).
+ * So this moves the ceiling and nothing else; on removal the ceiling comes back
+ * down and current HP is clamped under it. The pool caps are §9's.
+ */
+function applyPoolDoubler(target: FFXCombatant, status: 'max-hp-x2' | 'max-mp-x2', on: boolean): void {
+  const hp = status === 'max-hp-x2';
+  const cap = hp ? 99999 : 9999;
+  const stats = target.stats;
+  if (hp) {
+    stats.maxHp = on ? Math.min(cap, stats.maxHp * 2) : Math.max(1, Math.ceil(stats.maxHp / 2));
+    target.hp = Math.min(target.hp, stats.maxHp);
+  } else {
+    stats.maxMp = on ? Math.min(cap, stats.maxMp * 2) : Math.max(0, Math.ceil(stats.maxMp / 2));
+    target.mp = Math.min(target.mp, stats.maxMp);
+  }
 }
 
 /** Remove every status in a list (Esuna, Remedy, Dispel, `removes-statuses`). */

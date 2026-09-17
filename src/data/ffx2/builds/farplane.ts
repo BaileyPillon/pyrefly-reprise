@@ -132,7 +132,12 @@ export const farplaneBuild: FFX2PartyBuild = {
           ap: 0,
         },
       },
-      accessories: ['crystal-bangle', 'black-belt'], // max HP +100%, Str +20 / Def +20
+      // §6.7 "Recommended 'typical' loadout to model: each girl wears **Crystal Bangle + Hyper Wrist**
+      // (attackers)", and §6.3's reference party gives Paine exactly "Hyper Wrist (+30 Str)". Black Belt
+      // (Str +20 / Def +20) was the near miss: Darkness is `piercing-strength`, so its whole damage term
+      // is Strength and the Def half is dead weight against a chain whose moveset is magic-type or
+      // fractional (§1.2). One slot, one citation.
+      accessories: ['crystal-bangle', 'hyper-wrist'], // max HP +100%, Str +30
     },
   ],
   // §6.8 [estimate] — sized to carry all five battles with no menu between.

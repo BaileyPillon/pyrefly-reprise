@@ -44,13 +44,22 @@ export const darkKnightAbilities: AbilityDef[] = [
     recoveryTicks: RT_NORMAL,
     power: 20,
     formula: 'piercing-strength',
-    damageType: 'physical',
+    // **Special** damage, not physical [ffx2-vegnagun-shuyin §6.4: "Special damage to ALL enemies.
+    // Ignores Defense. Long range. Cannot crit."; §7.1: "special damage that ignores Defense"].
+    // `damageType` is the field Protect/Shell (flowchart step 16) and the Bulwarks' retaliation both
+    // read, and §3.3's retaliation table names Darkness explicitly under the third class — "the third
+    // class (NONE, i.e. Darkness/Charon/fixed/fractional player abilities) gets answered with the
+    // single-target buff-strip instead of the AoE". With `'physical'` here the Body/Core fight
+    // answered every Darkness with "Physical attack detected" — 5/16 of max HP to the **whole party**
+    // from **both** Bulwarks — instead of "Hostile activity detected" on the caster alone, which is
+    // roughly ten times the retaliation the encounter is designed around. Keep `'other'`.
+    damageType: 'other',
     element: ['none'],
     targeting: 'all-enemies',
     hits: 1,
     statusEffects: [],
     removesStatuses: [],
-    flags: ['crit-eligible'],
+    flags: [],
     ignoresDefense: true,
     canReflect: false,
     canMiss: true,

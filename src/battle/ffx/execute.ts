@@ -9,7 +9,7 @@
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant, MinigameResult } from '../common/types.ts';
 import { byteRoll } from '../common/rng.ts';
-import { type Ctx, abilityOf, commandAbility, has, isAlive, rankOf, rtOf, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isAlive, rankOf, rtOf, spendItem, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
 import { applyStatus } from './statuses.ts';
@@ -26,6 +26,7 @@ import {
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { consumeBfaTalk } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
+import { revealForSensorAuto } from './sensor.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
 export interface ExecutionResult {
@@ -127,6 +128,13 @@ export function executeCommand(
   command: Command,
   autoResolveMinigames: boolean,
 ): ExecutionResult {
+  // The player backed out of an open overlay and chose something else: the
+  // suspended request is dead, so the *next* time they pick that Overdrive the
+  // overlay opens again rather than being auto-rolled.
+  if (ctx.rt.pendingMinigame?.actorId === actor.id && command.kind !== 'overdrive') {
+    ctx.rt.pendingMinigame = null;
+  }
+
   switch (command.kind) {
     case 'attack':
     case 'ability':
@@ -166,6 +174,14 @@ export function executeCommand(
       if (!outgoing || !incoming) return NOTHING;
       const slotIndex = ctx.state.activeIds.indexOf(outId);
       if (slotIndex < 0) return NOTHING;
+      // The incoming member takes the turn happening right now [§1.7], so one
+      // who cannot take a turn is refused rather than handed an open menu it
+      // can never close. `commands.ts` already disables the row; this is the
+      // engine refusing a command that never should have arrived.
+      if (!canSwitchIn(incoming)) {
+        ctx.emit({ type: 'message', text: `${incoming.name} cannot fight`, kind: 'system' });
+        return { rank: 0, rejected: true, damageDealt: 0 };
+      }
       ctx.state.activeIds[slotIndex] = inId;
       ctx.state.reserveIds = ctx.state.reserveIds.filter((id) => id !== inId).concat(outId);
       incoming.removed = false;
@@ -173,6 +189,10 @@ export function executeCommand(
       outgoing.removed = true;
       rtOf(ctx, inId).ctb = rtOf(ctx, outId).ctb;
       ctx.emit({ type: 'switch', outId, inId });
+      // The bench is where a Sensor is usually parked, so the active three
+      // changing is the moment to re-run the passive reveal
+      // [ffx-combat-core §1.7, §9].
+      revealForSensorAuto(ctx);
       // The incoming member takes the turn happening right now.
       return { rank: 0, handOffTo: inId, damageDealt: 0 };
     }
@@ -219,15 +239,57 @@ export function executeCommand(
     });
     return { rank: 0, rejected: true, damageDealt: 0 };
   }
+  // **Doublecast** [ffx-combat-core §7.4 row 41; ffx-bfa-yu-yevon §4.2
+  // "grant ... Doublecast + Firaga/Thundaga", verified: 2 sources].
+  //
+  // The ability shipped in the data with `extra.castsTwoBlackMagicSpells` and
+  // `formula: 'none'`, `hits: 1`, and **nothing read it** — so every build that
+  // was granted Doublecast (`dreams-end`'s Lulu is one) was offered a menu row
+  // that spent a whole turn resolving a no-damage, no-status ability. The
+  // contract already reserved the hook for it: `AbilityCommand.wrappedId`,
+  // documented in `types.ts` as *"Doublecast / Copycat wrapper: the ability id
+  // this one is repeating"*, had no reader anywhere in the engine.
+  //
+  // This is that reader, and it is deliberately narrow: only an ability whose
+  // own data record sets the flag takes this path, the wrapped spell must be
+  // Black Magic the caster actually knows, **both casts are paid for
+  // separately** (`extra.note` on the record says so in as many words), and the
+  // turn is charged at Doublecast's own rank 3 — which is the whole point of
+  // the ability and the whole of its power. A command that arrives without a
+  // usable `wrappedId` falls back to the strongest spell the caster can afford
+  // twice rather than being refused, because refusing a row the menu offered is
+  // how a headless caller ends up resubmitting it for ever.
+  if (command.kind === 'ability' && def.extra?.['castsTwoBlackMagicSpells'] === true) {
+    return resolveDoublecast(ctx, actor, def, command.wrappedId, command.targets);
+  }
+
   let options: ResolveOptions = {};
 
   if (command.kind === 'overdrive') {
     const kind = def.minigame;
     let extra = command.extra;
     if (kind && !extra) {
-      const interactive = actor.controller === 'player' && !autoResolveMinigames;
+      // A request is only worth making **once**. `docs/CONTRACTS.md` says the
+      // engine emits `minigame-request` and stops, and the UI re-submits the
+      // same command with `extra` attached; it says nothing about what to do
+      // when the same command comes back *bare*, and the old answer was to ask
+      // again — forever. A presenter probe that re-submitted without an outcome
+      // re-picked Spiral Cut 19,916 times and never advanced a tick.
+      //
+      // So a bare re-submit of the command this actor is already suspended on
+      // is read as "nobody is going to play this": the engine rolls the outcome
+      // itself from the seeded RNG, exactly as it does for an AI actor or a
+      // headless run, and resolves the Overdrive. The gauge is spent either
+      // way, which is what stops the loop.
+      const pending = ctx.rt.pendingMinigame;
+      const alreadyAsked =
+        pending !== null &&
+        pending.actorId === actor.id &&
+        pending.kind === kind &&
+        pending.abilityId === def.id;
+      const interactive = actor.controller === 'player' && !autoResolveMinigames && !alreadyAsked;
       if (interactive) {
-        ctx.rt.pendingMinigame = { actorId: actor.id, kind };
+        ctx.rt.pendingMinigame = { actorId: actor.id, kind, abilityId: def.id };
         ctx.emit({ type: 'minigame-request', who: actor.id, kind, params: minigameParams(ctx, def, actor) });
         return { rank: 0, awaitingMinigame: true, damageDealt: 0 };
       }
@@ -251,18 +313,28 @@ export function executeCommand(
   }
 
   if (command.kind === 'item') {
-    const count = ctx.rt.inventory.get(command.id) ?? 0;
-    if (count <= 0) {
+    if (!spendItem(ctx, command.id)) {
       ctx.emit({ type: 'message', text: 'No items left', kind: 'system' });
       return NOTHING;
     }
-    ctx.rt.inventory.set(command.id, count - 1);
     const item = ctx.content.item(command.id);
     if (item) def = { ...def, targeting: item.targeting, name: item.name, category: 'item' };
     if (command.gilSpent !== undefined) {
       options = { ...options, gilSpent: Math.min(command.gilSpent, ctx.rt.gil) };
       ctx.rt.gil = Math.max(0, ctx.rt.gil - (command.gilSpent ?? 0));
     }
+  }
+
+  // A two-actor rig where the stat block and the turn slot belong to different
+  // combatants: `extra.statsFrom` names the actor whose stats the damage chain
+  // reads [ffx-seymour-flux §5.4, §4.4.2 "On attribution"]. Everything else —
+  // the events, the animation, the CTB charge — stays with `actor`, so the only
+  // observable change is the number. Absent on every other ability, and a no-op
+  // when it names the actor already taking the turn.
+  const statsFrom = def.extra?.['statsFrom'];
+  if (typeof statsFrom === 'string' && statsFrom !== actor.id) {
+    const owner = tryActor(ctx, statsFrom);
+    if (owner) options = { ...options, statsUser: owner };
   }
 
   const cost = mpCostFor(actor, def);
@@ -282,6 +354,66 @@ export function executeCommand(
   const damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
   ctx.emit({ type: 'action-end', actorId: actor.id });
   return { rank: rankOf(def), damageDealt, def };
+}
+
+/**
+ * Resolve one Doublecast: the same Black Magic spell, twice, for one turn.
+ *
+ * `wrapped` is the spell the caller chose (`AbilityCommand.wrappedId`). Both
+ * casts pay their own MP, as the ability record's own `extra.note` requires,
+ * and the pair costs a single rank-3 turn.
+ */
+function resolveDoublecast(
+  ctx: Ctx,
+  actor: FFXCombatant,
+  def: AbilityDef,
+  wrapped: string | undefined,
+  targets: readonly CombatantId[],
+): ExecutionResult {
+  let spell = wrapped !== undefined ? abilityOf(ctx, wrapped) : undefined;
+  if (spell && (spell.category !== 'blackmagic' || !actor.learnedAbilityIds.includes(spell.id))) spell = undefined;
+  if (!spell) spell = strongestAffordableBlackMagic(ctx, actor);
+  if (!spell) {
+    ctx.emit({ type: 'message', text: `${actor.name} has no spell to double`, kind: 'system' });
+    return { rank: rankOf(def), damageDealt: 0, def };
+  }
+  const cost = mpCostFor(actor, spell);
+  ctx.emit({
+    type: 'action-start',
+    actorId: actor.id,
+    command: { kind: 'ability', id: def.id, targets: targets.slice(), wrappedId: spell.id },
+    abilityId: spell.id,
+    abilityName: `${def.name}: ${spell.name}`,
+    targets: targets.slice(),
+  });
+  // Two casts, and **they do not have to land on the same target**: FFX's
+  // Doublecast asks for two spells and two targets in turn. One id in
+  // `targets` means both casts go there; two means one each, which is how a
+  // black mage takes both Yu Pagodas off the board in the same turn instead of
+  // killing one and leaving a lone survivor Cursing the party (§1.4).
+  const aims: CombatantId[][] = targets.length >= 2 ? [[targets[0]!], [targets[1]!]] : [targets.slice(), targets.slice()];
+  let dealt = 0;
+  for (const at of aims) {
+    if (cost > 0) {
+      if (actor.mp < cost) break;
+      applyMpDelta(ctx, actor, cost, actor.id);
+    }
+    dealt += resolveAbility(ctx, actor, spell, at);
+  }
+  ctx.emit({ type: 'action-end', actorId: actor.id });
+  return { rank: rankOf(def), damageDealt: dealt, def: spell };
+}
+
+/** The biggest Black Magic spell this caster knows and can pay for twice. */
+function strongestAffordableBlackMagic(ctx: Ctx, actor: FFXCombatant): AbilityDef | undefined {
+  let best: AbilityDef | undefined;
+  for (const id of actor.learnedAbilityIds) {
+    const d = abilityOf(ctx, id);
+    if (!d || d.category !== 'blackmagic' || d.power <= 0) continue;
+    if (mpCostFor(actor, d) * 2 > actor.mp) continue;
+    if (!best || d.power > best.power) best = d;
+  }
+  return best;
 }
 
 /** Charge the actor's counter for an action of `rank`, unless the turn was free. */

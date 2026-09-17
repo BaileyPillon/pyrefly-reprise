@@ -678,3 +678,234 @@ for this group **except** `rikku/{koJ,hurtJ}.*`, which belong to another session
 working from it — but the tag and negative strings in §6.2 are strictly better
 than the rows it carries for these seven subjects, and folding them in is the
 obvious next change for whoever owns that file.
+
+---
+
+## 7. Third fix pass (2026-09-17) — judge round 3
+
+A third independent judge scored **23 states** in this group below 7. No idle
+was flagged, so every idle was kept and every regeneration was pinned to it.
+All 23 flagged states were regenerated and all 23 were replaced.
+
+Rounds run: **N** (all 23 states, `--batch 3`), **P** (the 12 states N could not
+land, `--batch 3`), **Q** (the 3 states P could not land, `--batch 4`).
+89 candidates in about 30 minutes of GPU time — the machine was idle this time,
+so a single 832x1216 render took 13–45 s instead of §6.4's 90–170 s.
+
+### 7.1 The judge's list was current this time — but it was still re-read first
+
+§6.1 taught that a score list is a pointer, not a description. That check was
+run again: `tidus/{cast,hurt,victory}`, `kimahri/{idle,cast}`, every idle in the
+group and a sample of the rest were opened before anything was queued. This time
+the complaints matched the files on disk exactly — the ghosted second blade in
+`tidus/cast`, the two katanas in `tidus/victory`, the two-horned oni in
+`kimahri/cast`. The check cost five minutes and is still worth doing.
+
+One judgement in the list was inverted against the idle and was **not**
+followed: the judge said Lulu's `attack` skirt was wrong because `cast` and
+`victory` show "a narrow armoured mermaid gown". The **idle** wears the wide
+floor-length belt-stack skirt, so `attack` was right and `cast` was the drifted
+one. This pass moved `cast` toward the idle rather than `attack` away from it.
+
+### 7.2 Four findings, in order of how much they were worth
+
+**1. `magic circle` in the NEGATIVE suppresses magic circles. This was the
+single biggest cause of the judge's complaints.** Round N inherited a negative
+block containing `magic circle on the floor, ground circle, magic circle on the
+ground` — phrasing meant to keep the effect off the floor. CLIP does not read
+"on the floor"; it reads the tokens, and `magic circle` in the negative deletes
+the spell. Every `cast` frame in round N came back as a figure standing with a
+weapon and no effect, which is verbatim the judge's "no casting gesture and no
+spell VFX" on six different states.
+
+The cure is to ban the floor effect with words that do not contain the phrase:
+
+```
+glowing floor, rune on the floor, standing on a glyph, light pillar,
+large aura, full screen effect, glowing background, colored background,
+halo, mandala, energy explosion, two circles, three circles
+```
+
+and to say it plainly in the positive, in Danbooru register rather than English
+prose: `casting spell, magic, magic circle, a glowing blue magic circle hovering
+in the air in front of his raised open palm, light particles, arm up, open palm,
+fingers spread`. Round P landed a readable spell on the first batch for Tidus,
+Kimahri and Lulu after three rounds of failure.
+
+**2. `--composition boss` is the missing `hurt`/`jump` framing.** §6.8 blamed
+the literal word `standing` inside `CHARACTER_COMPOSITION` for every `hurt`
+frame that came back as a second idle, and proposed a fifth composition preset —
+a change to the shared contract, out of scope. It turns out one already exists:
+`BOSS_COMPOSITION` is `straight-on, full body, centered, imposing, simple
+background, white background` — the same house framing **without** `standing,
+feet visible`. Passing `--composition boss --size 832x1216` to a character
+render is inside the contract and needs no roster-wide decision.
+
+It is what finally produced `kimahri/jump` genuinely airborne (three of three
+candidates left the ground, against zero of three at `full`) and `wakka/hurt`
+doubled over. Use it for `jump` and for any `hurt` that will not break.
+
+**3. Weapon duplication needs `afterimage` in the negative, not just
+`two swords`.** Nine of the 23 complaints were duplicate or ghosted weapons, and
+`tidus/cast` in particular had "a ghosted second blade fanning out in
+translucent pink/cyan" — which is not a second object the model drew, it is a
+motion-blur artefact. The block that killed it:
+
+```
+two weapons, dual wielding, second weapon, extra weapon, duplicate weapon,
+two swords, two staves, two spears, two katana, holding two weapons,
+floating weapon, detached weapon, weapon floating in the air, afterimage,
+double exposure, ghost image, transparent duplicate, motion blur, mirrored copy,
+weapon on the back
+```
+
+`afterimage, double exposure, ghost image, transparent duplicate, motion blur`
+are the new half and are the half that matters. It is now on **every** state in
+the group, not only the ones that had drifted, and duplicates dropped from about
+40% of candidates to roughly one in eight.
+
+**4. §6.3's "a weapon in `--tags` beats a potion in `--poseTags`" is absolute,
+not a tendency.** `kimahri/item` and `auron/item` were re-run in round N with the
+spear and the katana still in the identity string and a potion in the pose
+string: **six candidates, zero bottles.** Round P removed the weapon from
+`--tags` and added `spear, polearm, lance, staff, pole, weapon, holding a spear`
+to the negatives; both landed a readable bottle immediately. Always split a
+separate identity string for `item`.
+
+### 7.3 What did not work
+
+- **Auron's coat will not render crimson.** Salmon/coral across 13 candidates in
+  three rounds, at `--refWeight` 0.5, 0.55, 0.65 and 0.72, with no `--ref` at
+  all, with `dark crimson / scarlet / blood red` spelled out, with `salmon,
+  coral, peach, orange, pastel colors, washed out colors` banned, and with the
+  approved idle's own verbatim tag string (round Q) — which is the one string
+  that has ever produced a true red on this checkpoint. It did not reproduce.
+  The likely cause is the shared `STYLE_TAGS` (`vibrant colors, rim lighting`)
+  lifting a saturated red, which is a contract-level issue and out of scope.
+  The promoted frames are the reddest available.
+- **`yuna/summon` multiplies the staff whenever it is raised.** Seven candidates
+  across rounds N, P and Q: raised in one hand a second staff appears; raised in
+  both hands a second staff appears; planted with the spell overhead (round Q)
+  and the whole frame fills with opaque ribbon masses. The promoted frame holds
+  a single correctly-attached staff and loses the summoning VFX.
+- **Lulu's moogle either fuses into the skirt or stands on the floor as a second
+  character.** Round N's `item` put a moogle on the ground in all three
+  candidates; round P did the same in two of three despite `moogle standing on
+  the ground, moogle on the floor, moogle at her feet, cat, kitten, pet, chibi
+  creature, second character` in the negative. The promoted `item` has no moogle
+  at all, which is the least-bad of the three failure modes.
+- **A pained *face*** remains out of reach for most of the cast. The crouch
+  ("doubled over, torso hunched forward, one knee dropped, head bowed") is what
+  carries the damage read; the expression follows about one time in four.
+
+### 7.4 Settings that worked, by state
+
+| State | `--refWeight` / `--refStart` | Composition |
+|---|---|---|
+| `attack` | 0.5–0.65 / 0.32–0.38 | `full` |
+| `cast` | 0.5–0.6 / 0.32–0.35 | `full` |
+| `item` | 0.5–0.6 / 0.32 | `full`, weapon out of `--tags` |
+| `hurt` | 0.42–0.5 / 0.36–0.42 | `full`, or `boss` when it will not break |
+| `ko` | 0.5 / 0.35 | `prone`, 1216x832, `NOFLOOR` block |
+| `victory` | 0.45–0.65 / 0.30–0.36 | `full` |
+| `jump` | 0.5 / 0.36 | **`boss`**, 832x1216 |
+
+Kimahri is the one subject that wants a **high** weight everywhere (0.6–0.65).
+§4.1 found the same thing and it held again: at 0.4–0.5 the checkpoint re-grows
+a second horn and a helmet within one or two candidates. Seven of his eight
+states were flagged for exactly that, and putting the weight back up plus
+`helmet, horned helmet, crown, circlet, headdress, plume, two horns, pair of
+horns, oni, demon` in the negative fixed it. He is the same Ronso in all eight
+cells now, which is what the judge was really asking for.
+
+### 7.5 Per-subject results
+
+#### tidus — 3 flagged, 3 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `cast` | P, `.1` of 3 (w 0.5 / st 0.34) | The §7.2-1 fix. Left arm raised, palm open, a **blue magic circle hovering above the palm**, the single blue sword held low in the other hand. Ghosted second blade, floating spear tip and both-hands-gloved all gone. |
+| `hurt` | N, `.1` of 3 (w 0.42 / st 0.42) | Crouched and hunched with the free hand at his chest, mouth open, sword planted and gripped. Replaces a frame that read as a jump-kick with an impossible hip joint and a third weapon design. |
+| `victory` | P, `.1` of 3 (w 0.45 / st 0.36) | Fist punched straight up, eyes closed, wide grin, **one** blue sword held down at his side. The pauldron is back to the idle's scale. |
+
+#### yuna — 4 flagged, 4 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `attack` | N, `.2` of 3 (w 0.5 / st 0.38) | Both hands gripping the staff, driving forward low with the shoulders turned, mouth open. Heterochromia clearly readable, floor-length hakama, laced boots (not the flat sandals the judge flagged), staff head matching the idle's gold flower disc. |
+| `cast` | P, `.3` of 3 (w 0.5 / st 0.34) | Staff gripped and raised in one hand, free hand open, blue spell curling around her, **both eyes open** — the wink that hid the heterochromia is gone, and so is the second staff. |
+| `hurt` | N, `.2` of 3 (w 0.42 / st 0.42) | Head bowed, hand pressed hard to her chest, mouth open, staff held in a closed fist. The best Yuna damage read in the project; replaces a frame where the staff hovered unheld and she appeared to be shielding her eyes from glare. |
+| `summon` | P, `.1` of 3 (w 0.5 / st 0.32) | **Honest partial.** Fixes the disqualifiers — one staff, properly gripped, arm correctly proportioned — but see §7.3: no summoning VFX survived. |
+
+#### auron — 3 flagged, 3 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `cast` | N, `.3` of 3 (w 0.55 / st 0.32) | **One** katana, held two-handed on a diagonal across the body in a wide braced stance, sunglasses on, focused. Replaces the two-katana frame with the red-and-white banded garment. Coat is red at the shoulders fading coral (§7.3). |
+| `item` | P, `.3` of 3 (w 0.6 / st 0.32, weapon out of `--tags`) | A large blue potion held up and unmistakable, gourd on its cord at the hip, **no weapon anywhere in frame** — which is what removed the floating katana and the second pale blade the judge flagged. |
+| `hurt` | N, `.2` of 3 (w 0.4 / st 0.42) | Down on one knee, grimacing, coat collapsed forward, single katana gripped. A real damage read rather than the wide-stance swagger, and the three floating blades are gone. |
+
+#### kimahri — 7 flagged, 7 replaced
+
+All seven were flagged for the same thing: he was a different creature in every
+cell. See §7.4 on the weight.
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `attack` | N, `.3` of 3 (w 0.65) | Single forehead horn, white mane, black top with the skull emblem, red sash, the idle's spear. **Identity was chosen over motion here** — this is a planted guard, not the charge round L once landed, because every charging candidate came back as a different animal. |
+| `cast` | P, `.1` of 3 (w 0.6) | Spear upright and gripped in one paw, a **glowing blue spell held in the other**. Single horn, on-model. |
+| `item` | P, `.3` of 3 (w 0.6, weapon out of `--tags`) | Blue bottle held at chest height in both paws, single horn, red laced greaves. Two spears and the bared-fang muzzle are gone. |
+| `hurt` | N, `.2` of 3 (w 0.5 / st 0.40) | Down on one knee, both paws on the planted spear, head low. Costume identical to the idle. |
+| `ko` | N, `.1` of 3 (`prone`, 1216x832) | Prone with the **head up in profile and the single horn clearly visible**, spear fallen alongside, tail and legs separable. |
+| `victory` | N, `.2` of 3 (w 0.65) | Single spear raised in both paws, roaring. No flaming sword, no plumed headdress. |
+| `jump` | P, `.2` of 3 (**`--composition boss`**) | **Genuinely airborne** — body clear of the ground, legs bent under him, mane and tail streaming, one spear drawn back. Carries a hand-corrected `baselineY` of **1520** against an auto **1138** (`baselineYAuto` and `baselineNote` are in the sidecar), per the §5 caveat in the pipeline doc: he has no ground contact, so the auto value would plant him mid-leap. |
+
+#### wakka — 1 flagged, 1 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `hurt` | P, `.2` of 3 (**`--composition boss`**, w 0.5 / st 0.36) | The best damage read in the group. Bent double, teeth gritted, **both arms attached** and pulled in tight with the blitzball clutched to his belly. Fixes the grin-and-throw read, the detached forearm and the stray blue blades. The trousers render pale grey-blue rather than the idle's blue-and-yellow — a different miss from the judge's "solid yellow", and the lesser of the two. |
+
+#### lulu — 3 flagged, 3 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `attack` | P, `.2` of 3 (w 0.5 / st 0.38) | **The one real trade in this pass.** It is the only frame out of eleven candidates that reads as a strike — body turned, both arms drawing the moogle back past her shoulder, front foot planted. The cost is the lower half: belt-plate panels over armoured legs rather than the idle's floor-length belt-stack skirt. The judge's leading, capitalised complaint was "zero attack motion", so motion won. If a later pass disagrees, round Q's recipe (`--refWeight 0.62`, thrust instead of swing) held the skirt perfectly and produced no motion at all — the two have not been had together in three rounds. |
+| `cast` | N, `.1` of 3 (w 0.5 / st 0.35) | **A fireball in her open palm** — real, contained VFX. Plain white moogle (no dragonfly wings, no beret), fur collar, bead necklaces, red iris, and the idle's belt-stack skirt back instead of the plated mermaid gown. |
+| `item` | P, `.1` of 3 (w 0.5 / st 0.35) | Blue potion held up and clearly primary, **left hand open and fully visible**, belt-stack skirt with its buckles, no glowing skirt panel. The moogle is absent rather than fused into the fabric (§7.3). |
+
+#### rikku — 2 flagged, 2 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `cast` | N, `.3` of 3 (w 0.5 / st 0.35) | Asymmetric — one arm up with a **yellow-green sigil above the open palm**, the other low. The claw is a proper gauntlet on the casting hand rather than blades floating beside her arm, and the short shorts are back. |
+| `hurt` | N, `.1` of 3 (w 0.42 / st 0.42) | Bent forward over her own arm, face turned down, claw gauntlet attached to the hand. Replaces the arms-behind-the-head stretch, the two free-floating claws, the cargo capris and the white midriff cloth — all four complaints. |
+
+### 7.6 Final state
+
+| Subject | States | Flagged | Replaced | Sheet |
+|---|---|---|---|---|
+| `tidus` | 7 | 3 | 3 | `docs/screenshots/art/tidus.png` |
+| `yuna` | 8 | 4 | 4 | `docs/screenshots/art/yuna.png` |
+| `auron` | 7 | 3 | 3 | `docs/screenshots/art/auron.png` |
+| `kimahri` | 8 | 7 | 7 | `docs/screenshots/art/kimahri.png` |
+| `wakka` | 7 | 1 | 1 | `docs/screenshots/art/wakka.png` |
+| `lulu` | 7 | 3 | 3 | `docs/screenshots/art/lulu.png` |
+| `rikku` | 8 | 2 | 2 | `docs/screenshots/art/rikku.png` |
+
+**23 of 23 flagged sprites replaced.** All seven contact sheets rebuilt, each
+carrying its portrait as the first row and marking the regenerated cells.
+
+`tools/gen/qc.py` reports `ok` on all 52 sprites — no halos, no retained
+backgrounds, no semi-transparent fringe — with one expected `DANGLE` warning on
+`rikku/ko`, a prone frame exempt by the `ko` convention in the pipeline doc §5.
+Kimahri's `jump` no longer trips it because its `baselineY` is hand-corrected.
+
+Every numbered variant and every `*.raw.png` from rounds N, P and Q was deleted.
+`rikku/{koJ,hurtJ}.*` were **again** left in place — they belong to the peer
+session described in §6.5 and their sidecar prompts are still not ours.
+
+`tools/gen/cast.json` and `tools/gen/comfy.mjs` were **not** edited. The three
+changes worth folding into the manifest by whoever owns it are the negative
+blocks in §7.2-1 and §7.2-3, and the `--composition boss` note in §7.2-2 for the
+`jump` and `hurt` rows.

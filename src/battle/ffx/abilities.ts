@@ -24,7 +24,7 @@ import type { TimingBonus } from './formulas.ts';
 import { equipmentCrit, hasAuto, weaponElements, weaponStatusStrikes } from './equipment.ts';
 import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, koActor, reviveActor } from './hp.ts';
 import { banishAeon } from './aeons.ts';
-import { applyStatus, bouncesOffReflect, consumeNulCharges, removeStatuses, rollStatus } from './statuses.ts';
+import { applyStatus, bouncesOffReflect, consumeNulCharges, removeStatus, removeStatuses, rollStatus } from './statuses.ts';
 import { applyDelay } from './turnQueue.ts';
 import { isPerHitRandom, redirectTarget, reflectBounceTarget, resolveTargets } from './targeting.ts';
 import {
@@ -36,6 +36,7 @@ import {
   VICTIM_STATUSES,
 } from './overdrive.ts';
 import { runScriptedExtra } from './scripted.ts';
+import { revealTarget, sensorKind } from './sensor.ts';
 
 /** Knobs the caller can override per resolution. */
 export interface ResolveOptions {
@@ -48,6 +49,26 @@ export interface ResolveOptions {
   gilSpent?: number;
   /** Counters cost no turn and never chain further counters. */
   isCounter?: boolean;
+  /**
+   * Compute the **damage chain** with this combatant's stats instead of the
+   * acting one's, while every other part of the action — the events, the
+   * targeting, the Overdrive bookkeeping — stays with the actor whose turn it
+   * is.
+   *
+   * Exists for one documented case: a two-actor rig where one actor owns the
+   * turn slot and the animation and a *different* actor owns the stat block.
+   * `research/ffx-seymour-flux.md` §5.4 settles that ambiguity for Cross Cleave
+   * and Total Annihilation — both are rows in Seymour Flux's own decompiled
+   * action list (`m142`, §3.1/§3.2) and are merely animated on the Mortiorchis,
+   * so they must be computed with **his** Strength 30 / Magic 15 and not the
+   * mount's 40/40. §4.4.2's "On attribution" paragraph states the shipping rule
+   * in as many words: "the Mortiorchis actor owns the turn slot and the
+   * animation; the Seymour actor owns the stats".
+   *
+   * Set from `AbilityDef.extra.statsFrom` in `execute.ts`; unset everywhere
+   * else, so no other encounter changes. See `docs/CONTRACT-CHANGES.md`.
+   */
+  statsUser?: FFXCombatant;
 }
 
 /** MP cost after Magic Booster, One MP Cost and Half MP Cost [ffx-combat-core §9]. */
@@ -163,7 +184,9 @@ export function resolveAbility(
 
       const varianceRoll = damageRng(ctx.rng);
       const input = {
-        user,
+        // The damage chain alone may read another actor's stat block
+        // [ffx-seymour-flux §5.4] — see `ResolveOptions.statsUser`.
+        user: options.statsUser ?? user,
         target,
         def,
         crit,
@@ -235,6 +258,20 @@ export function resolveAbility(
             ...(result.capped ? { capped: true } : {}),
           });
           if (result.amount > 0) {
+            // A physical hit WAKES a sleeper [ffx-combat-core §4.2; the shipped
+            // status record says it in as many words —
+            // `data/ffx/statuses/core.ts` sleep: "Physical damage wakes the
+            // sleeper; magic damage does not", and its `curedBy` lists "any
+            // physical hit"]. This is additive and it closes a soft-lock, not
+            // just a fidelity gap: `state.ts canAct` drops a sleeper out of the
+            // CTB queue entirely, and `ticks.ts onTurnEnd` is the only place
+            // `tickDurationStatuses` runs — so a sleeping actor never reaches a
+            // turn end and its 3-turn Sleep never counts down. Measured in
+            // Chapter 3: one Yu Pagoda Curse put Tidus to sleep on turn 17 of a
+            // 204-turn battle and he never acted again.
+            if (def.damageType === 'physical' && has(target, 'sleep')) {
+              removeStatus(ctx, target, 'sleep', 'expired');
+            }
             totalDealt += result.amount;
             onDamageTaken(ctx, target, result.amount, user.side === 'enemy');
             onDamageDealt(ctx, user, def, result.amount);
@@ -296,6 +333,15 @@ export function resolveAbility(
       runScriptedExtra(ctx, user, def, target, result.amount);
       hitIndex++;
     }
+  }
+
+  // Scan opens the info panel. It is emitted **after** the hits, so the whole
+  // of it is pure information: a reveal rolls nothing and therefore cannot move
+  // the seeded RNG by one draw [ffx-combat-core §9, `sensor.ts`]. The FFX data
+  // marks Scan with the `scan` status, which until now nothing read.
+  const reveals = sensorKind(def);
+  if (reveals) {
+    for (const target of targets) revealTarget(ctx, user.id, target, reveals);
   }
 
   // Self-Destruct removes the user once the hits have landed.

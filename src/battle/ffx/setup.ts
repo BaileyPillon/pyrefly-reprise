@@ -168,6 +168,8 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
       ...(e.poisonTickPercent !== undefined ? { poisonTickPercent: e.poisonTickPercent } : {}),
       ...(e.doomTurns !== undefined ? { doomTurns: e.doomTurns } : {}),
       ...(e.zanmatoLevel !== undefined ? { zanmatoLevel: e.zanmatoLevel } : {}),
+      // A Yu Pagoda "cannot be permanently killed" [ffx-bfa-yu-yevon §1.4].
+      ...(e.reviveRule !== undefined ? { reviveRule: { ...e.reviveRule } } : {}),
     },
   };
   if (form?.hp !== undefined) {
@@ -178,6 +180,41 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
   if (e.scanText !== undefined) c.scanText = e.scanText;
   if (e.misleadingSensor !== undefined) c.misleadingSensor = e.misleadingSensor;
   return c;
+}
+
+/**
+ * A possessed aeon fights with **the player's own aeon's stat block**
+ * [ffx-bfa-yu-yevon §2.2, verified: 2 sources].
+ *
+ * The wiki bestiary literally lists a possessed aeon's HP as "Yuna Valefor HP"
+ * and its Strength / Magic / Defense / Magic Defense / Agility / Accuracy /
+ * Evasion as "Varies"; only Luck is fixed, and it is forced to **1**. So the
+ * gauntlet is self-balancing: a player who fed Yuna's aeons faces hard copies
+ * of them, a player who ignored them faces trivial ones. That is a live copy,
+ * not a table, which is why `data/ffx/enemies/braskas-final-aeon.ts` ships
+ * `stats: { hp: 1, ... }` placeholders with a doc comment saying the engine
+ * must overwrite them here — and until it did, every one of the five possessed
+ * aeons stood up with **1 HP** and died to the first hit, which made five of
+ * the chapter's seven links a walkover.
+ *
+ * Affinities are mirrored too, so "hit its weakness" means something. Luck 1 is
+ * the one deliberate divergence from the player's copy, per the bestiary.
+ *
+ * No-ops for every other enemy in the game: the id has to start with
+ * `possessed-` *and* name an aeon the party actually owns.
+ */
+function mirrorPossessedAeon(c: FFXCombatant, party: FFXPartyBuild): void {
+  if (!c.id.startsWith('possessed-')) return;
+  const aeonId = c.id.slice('possessed-'.length);
+  const build = party.aeons.find((a) => a.id === aeonId);
+  if (!build) return;
+  c.stats = { ...build.stats, luck: 1 };
+  c.hp = build.stats.maxHp;
+  c.mp = build.stats.maxMp;
+  c.alive = c.hp > 0;
+  c.affinities = { ...c.affinities };
+  const form = c.enemy?.forms[0];
+  if (form) form.hp = build.stats.maxHp;
 }
 
 /** Build the state and runtime for one battle. */
@@ -224,6 +261,8 @@ export function buildBattle(
     chained: setup.chained === true,
     overkilled: [],
     canEscape: (setup.canEscape ?? group.canEscape ?? false) === true,
+    sensedIds: new Set(),
+    pendingPartRevivals: [],
   };
 
   const ctx: Ctx = { state, rt, rng, content, emit };
@@ -250,8 +289,18 @@ export function buildBattle(
     rt.aeonRoster.set(build.id, aeon);
   }
 
+  // The fayth's permanent Auto-Life [ffx-bfa-yu-yevon §2.3]. It goes on every
+  // member, active and benched, because a switch mid-chain must not lose it.
+  if (group.grantsPermanentAutoLife === true) {
+    for (const id of [...state.activeIds, ...state.reserveIds]) {
+      const c = state.combatants[id];
+      if (c) c.statuses['auto-life'] = permanentStatus('auto-life');
+    }
+  }
+
   for (const enemy of group.enemies) {
     const c = enemyToCombatant(enemy, false);
+    mirrorPossessedAeon(c, party);
     if (group.aiScriptId && c.enemy) c.enemy.aiScriptId = group.aiScriptId;
     state.combatants[c.id] = c;
     const actorRt = makeActorRuntime(c);

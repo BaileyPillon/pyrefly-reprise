@@ -35,3 +35,6 @@ docs/audio/*.wav
 # local release zips and release build output
 releases/
 dist-release/
+
+# scratch harnesses and probe dumps
+critic/scratch/

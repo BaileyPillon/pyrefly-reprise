@@ -1,0 +1,341 @@
+/**
+ * The SHIPPED `intendedStrategy` against Chapter 3, headlessly, end to end.
+ *
+ * Chapter 3 is not one battle: it is a **seven-link chain** with no menu
+ * between links — Braska's Final Aeon (60,000 then 120,000) → one battle per
+ * aeon Yuna owns → Yu Yevon — and the party's HP, MP, statuses, Overdrive
+ * gauges and item counts carry straight through. A test that only ran the first
+ * formation would prove almost nothing about the chapter, because the last link
+ * is won or lost by what the inventory looks like when it starts. So this file
+ * drives the chain exactly the way `BattleScreen.runEncounter` does: run the
+ * engine to a decision, follow `EnemyGroupDef.nextGroupId`, re-init on the next
+ * formation through `setupForNextLink`, and count links.
+ *
+ * Mirrors `./strategy-chapter2.test.ts`, which is the harness that caught the
+ * equivalent Chapter 2 problem: the e2e suite and `__pyrefly.autoBattle`
+ * both drive the game with `src/engine/BattlePresenterStrategies.ts`, and
+ * nothing asserted that *that* strategy wins. Chapter 3 was losing on turn 128
+ * of link 1 while every engine test stayed green.
+ */
+
+import { describe, expect, it } from 'vitest';
+import type {
+  Command,
+  Decision,
+  EnemyGroupDef,
+  FFXPartyBuild,
+} from '../../src/battle/common/types.ts';
+import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
+import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
+import { dreamsEndBuild } from '../../src/data/ffx/builds/dreams-end.ts';
+import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
+import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
+
+const MAX_DECISIONS = 40_000;
+
+/** The four seeds the coordinating session measures every encounter on. */
+const SEEDS = [1, 7, 42, 20260916];
+
+/**
+ * Braska's Final Aeon → Valefor → Ifrit → Ixion → Shiva → Bahamut → Yu Yevon,
+ * for the `dreams-end` roster (the five mandatory aeons, §4.4).
+ */
+const EXPECTED_LINKS = 7;
+
+function newEngine() {
+  const content = new FFXContentRegistry();
+  content.addAbilities(ALL_ABILITIES);
+  content.addItems(Object.values(ITEMS));
+  return createFFXEngine({ content, autoResolveMinigames: true });
+}
+
+/** Plain Attack on the first valid target — used only when the strategy declines to act. */
+function attack(d: Extract<Decision, { kind: 'player-input' }>): Command {
+  const row =
+    d.commands.find((c) => c.command.kind === 'attack' && c.enabled) ?? d.commands.find((c) => c.enabled);
+  const target = row?.validTargets[0];
+  return (row
+    ? { ...row.command, targets: target ? [target] : [] }
+    : { kind: 'attack', targets: [] }) as Command;
+}
+
+interface Run {
+  outcome: string;
+  /** How many formations were fought. 7 is the whole chapter. */
+  links: number;
+  decisions: number;
+  /** One line per link, so a failure prints *where* and *how* it died. */
+  trail: string[];
+}
+
+/**
+ * Run the whole chain under the shipped strategy.
+ *
+ * `chooseCommand` lets the "wrong tactics stay punished" blocks below wrap the
+ * shipped strategy without duplicating the chain loop.
+ */
+function runChain(
+  seed: number,
+  party: FFXPartyBuild = dreamsEndBuild,
+  chooseCommand?: (d: Extract<Decision, { kind: 'player-input' }>, engine: ReturnType<typeof newEngine>) => Command | null,
+): Run {
+  const engine = newEngine();
+  const first = ENEMY_GROUPS_BY_ID['braskas-final-aeon'];
+  if (!first) throw new Error('braskas-final-aeon group missing from the data layer');
+
+  let group: EnemyGroupDef = first;
+  let setup = {
+    game: 'ffx' as const,
+    party,
+    enemies: group,
+    triggers: [],
+    seed,
+    condition: 'normal' as const,
+    canEscape: false,
+  };
+  engine.init(setup);
+
+  const run: Run = { outcome: 'aborted', links: 0, decisions: 0, trail: [] };
+
+  for (;;) {
+    run.links++;
+    let linkOutcome: string | undefined;
+    for (let i = 0; i < MAX_DECISIONS; i++) {
+      run.decisions++;
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') {
+        linkOutcome = d.result.outcome;
+        break;
+      }
+      if (d.kind !== 'player-input') continue;
+      const override = chooseCommand?.(d, engine) ?? null;
+      engine.submit(override ?? intendedStrategy(d.actorId, d.commands, engine) ?? attack(d));
+    }
+
+    const state = engine.state();
+    const foes = Object.values(state.combatants)
+      .filter((c) => c.side === 'enemy' && !c.flags.isPart)
+      .map((c) => `${c.id} ${c.hp}/${c.stats.maxHp}`)
+      .join(', ');
+    run.trail.push(`link ${run.links} [${group.id}] ${linkOutcome ?? 'stalled'} turn=${state.turn} (${foes})`);
+    run.outcome = linkOutcome ?? 'stalled';
+    if (run.outcome !== 'victory') break;
+
+    const nextId = group.nextGroupId;
+    if (nextId === undefined) break;
+    const next = ENEMY_GROUPS_BY_ID[nextId];
+    if (!next) {
+      run.trail.push(`  !! chapter chains to "${nextId}" but no formation exports that id`);
+      break;
+    }
+    setup = { ...setup, ...setupForNextLink(setup, next, state, seed + run.links) } as typeof setup;
+    group = next;
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+  }
+
+  return run;
+}
+
+/**
+ * The acceptance test for Chapter 3.
+ *
+ * The line, in one paragraph, so a failure here is legible without reading
+ * `src/engine/tactics/braskas-final-aeon.ts`:
+ *
+ * **The bench is the chapter.** §1 `[verified: 2 sources]` says reserve
+ * swapping works normally here and `ffx-combat-core.md` §1.7
+ * `[verified: 2 sources]` says the incoming member takes the turn happening
+ * right now - so a Switch is **free**, and all seven guardians can play. **Lulu
+ * takes the third seat** and is the party's damage: her Firaga is 1,905 against
+ * the boss's Magic Defense and 4,473 against a Mental-Broken one, where Tidus's
+ * sword is 687 and Auron's 1,396, and **Doublecast** (§4.2's recommendation
+ * grants it by name) doubles both. Tidus keeps the seat only while he has
+ * something nobody else can do - Hastega, the Cheer ladder, Slow, a Talk charge
+ * - and Auron lends his own seat back to Tidus for exactly as long as it takes
+ * to Haste her.
+ *
+ * **Both pillars are Slowed and then left standing.** §1.4's guidance is "kill
+ * both or neither" and this line picks **neither**: Slow is one of the only two
+ * statuses a Yu Pagoda is not immune to (§1.4, resist 50), it is permanent, and
+ * it halves Power Wave for the rest of the battle - where killing the pair
+ * costs 10,000-15,000 damage every 63-tick revive cycle, which measured is more
+ * than half of everything the party produces. Nothing is killed, so the
+ * lone-survivor Curse §1.4 warns about never happens.
+ *
+ * **Auron carries the Zombie and the Mental Break.** §1.6
+ * `[verified: 2 sources]`: while the boss is Zombie the next Power Wave deals
+ * **1,500 damage instead of healing**, and Zombiestrike on a weapon re-applies
+ * it - so the pillars spend the battle damaging their own boss. Mental Break
+ * rides with it for the flat x2.35 on every -aga.
+ *
+ * Then: **Hastega up and kept up**; the two **Stamina Tonics**; the **Cheer
+ * ladder exactly once**, because a KO clears the stacks and re-running it after
+ * every revive cost five consecutive turns in a measured losing tail; **an aeon
+ * out when his Overdrive gauge crosses 55**, because §1.6's branch table checks
+ * "an Aeon is on the field" first and spends the whole charge on Jecht Bomber
+ * at the summon instead of an Ultimate Jecht Shot at the party; **Talk as the
+ * backstop**; and **Yu Yevon is never attacked** - the Candle of Life goes in
+ * first for the Doom, the pillars stay suppressed, and nobody swings until his
+ * own Gravija has taken him under 900.
+ *
+ * Measured: **916 wins in 1,000 contiguous seeds (91.6 %)** — 180, 183, 183, 187
+ * and 183 out of 200 on the windows from seeds 1, 201, 401, 601 and 801 — four
+ * canonical seeds 4/4, every win walking all seven links and **every loss on
+ * link 1** - from
+ * the possessed aeons onward the party carries the fayth's permanent Auto-Life
+ * and those fights cannot be lost (§2.3).
+ *
+ * ## What deviates from the research, stated up front
+ *
+ * The round before this one won the chapter by multiplying the party's Strength
+ * by 1.5, which is a x2.6-x2.9 on the damage because the power term is cubic.
+ * **That is reverted in full.** Every offensive stat is §4.1 as published
+ * except **Yuna's Strength 20 -> 28**, which is the number §4.4
+ * `[verified: 2 sources]` publishes for this encounter.
+ *
+ * What remains is two changes that add **no damage at all**, and both are
+ * §4.1's own invitation - it performs exactly one sanity check ("Ultimate Jecht
+ * Shot ... would KO Yuna and Lulu outright") and then says "the preset should
+ * be tuned so the fight is winnable":
+ *
+ *   * the **HP column** scaled so no member is removed outright by the top of
+ *     §1.5's published Ultimate Jecht Shot band (5,040), then clamped to the
+ *     shared stat band `data-ffx-builds.test.ts` holds every chapter to;
+ *   * **Auron's Agility 22 -> 29**, the anomaly inside §4.1's own table, where
+ *     the party's melee anchor has the lowest Agility of all seven.
+ *
+ * Full derivation and the measured win-rate table are in
+ * `src/data/ffx/builds/dreams-end.ts`'s `PRESET_CORRECTION`. **No enemy HP,
+ * stat, ability, counter, AI branch or rotation was changed in the party's
+ * favour anywhere in this chapter** - every enemy-side edit of this round and
+ * the two before it made the encounter harder, and this round also took §4.4's
+ * Stoneproof rule seriously: the build had inherited seven pieces, which made
+ * Jecht Beam's Petrify land zero times in a full chain, and now carries the
+ * "exactly one or two" §4.4 asks for.
+ *
+ * ## Engine and data defects fixed for this chapter
+ *
+ * 2026-09-17 (third pass), written up in `docs/CONTRACT-CHANGES.md`:
+ *
+ *  1. **Doublecast did nothing.** §4.2's recommendation grants it, `dreams-end`
+ *     gives it to Lulu, the ability record carries
+ *     `extra.castsTwoBlackMagicSpells`, `AbilityCommand.wrappedId` was
+ *     documented in the contract as *"Doublecast / Copycat wrapper"* - and
+ *     nothing in the engine read any of it, so the row spent a whole turn on a
+ *     `formula: 'none'` no-op. `execute.ts resolveDoublecast` is the reader.
+ *  2. **Lulu's Overdrive could not be fired at all.** Her build lists the
+ *     generic `'fury'` menu marker, which `execute.ts` refuses outright; the
+ *     tactic now re-shapes it into one of the 19 ids its own `resolvesToOneOf`
+ *     names, the same way it already re-shapes Talk. (Measured, it is still not
+ *     worth a turn here - see the tactic - but it is now a decision rather than
+ *     a dead row.)
+ *
+ * 2026-09-17 (second pass), retained: the Yu Pagodas never revived (§1.4's
+ * `reviveRule`); an FFX chain silently restocked the whole item bag at every
+ * link; `max-hp-x2` was a status with no effect, so the Stamina Tonics were
+ * inert; the tactic cast Armor Break at possessed aeons, which are 255-immune
+ * to all four Breaks (§2.2).
+ *
+ * 2026-09-16 (first pass), retained: the chapter's `nextGroupId` pointed at an
+ * id no formation exports, so the chain stopped dead after link 1; no Yu Pagoda
+ * ever cast Power Wave; Braska's Final Aeon never used a single Overdrive in
+ * either form and Talk was inert; Sleep never counted down; Ether/Turbo
+ * Ether/Elixir restored HP instead of MP; the fayth's permanent Auto-Life was
+ * never applied; and every possessed aeon stood up with 1 HP instead of
+ * mirroring the player's own (§2.2).
+ */
+describe('the shipped intended strategy beats Chapter 3', () => {
+  for (const seed of SEEDS) {
+    it(`wins the whole chain, Braska's Final Aeon through Yu Yevon (seed ${seed})`, () => {
+      const r = runChain(seed);
+      // Printed so a failure shows *where* it lost, not just that it did.
+      console.log(`seed ${seed}:\n  ${r.trail.join('\n  ')}`);
+
+      expect(r.decisions, 'the chain must reach a decision, not spin').toBeLessThan(MAX_DECISIONS);
+      expect(r.outcome).toBe('victory');
+      expect(
+        r.links,
+        'the chapter is a chain: Braska\'s Final Aeon, five possessed aeons, Yu Yevon',
+      ).toBe(EXPECTED_LINKS);
+    });
+  }
+
+  /**
+   * Four seeds prove a line exists; they do not prove it is the line rather
+   * than four lucky rolls. This is the regression net: forty contiguous seeds
+   * of the whole chapter in about a second.
+   *
+   * Measured **36/40** on this window and **916/1,000 (91.6 %)** over the wider
+   * bench. The bar is 31 so ordinary tail variance does not flake it, and so
+   * that a regression toward what this was at the §4.1 preset with no bench, no
+   * Doublecast and no Zombie - **0/40, a guaranteed defeat on link 1** - goes
+   * red immediately.
+   */
+  it('wins the great majority of forty contiguous seeds, chain and all', () => {
+    const results = Array.from({ length: 40 }, (_, i) => runChain(i + 1));
+    const wins = results.filter((r) => r.outcome === 'victory' && r.links === EXPECTED_LINKS).length;
+    const lost = results
+      .map((r, i) => ({ seed: i + 1, r }))
+      .filter((x) => x.r.outcome !== 'victory' || x.r.links !== EXPECTED_LINKS)
+      .map((x) => `${x.seed}: ${x.r.trail.at(-1)}`);
+    console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(' | ') || 'none'}`);
+
+    expect(wins, 'Chapter 3 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(31);
+  });
+});
+
+/**
+ * The wrong tactic must stay punished, independently of whether the intended
+ * line currently wins. `research/ffx-bfa-yu-yevon.md` §3.4.1 is the whole of
+ * the last fight and it is counter-intuitive enough to be worth pinning:
+ *
+ * > Yu Yevon fires **at most one Curaga per player-side action that deals him
+ * > damage**, evaluated after that action has fully resolved.
+ *
+ * With this party's best single action worth about 3,700 and the counter-heal
+ * capped at 9,999, **every swing is a net heal of six thousand**. The wrapper
+ * below plays the obvious game — hit the boss — and the assertion is not merely
+ * that it fails to win but that his HP is *no lower than it started*, which is
+ * the specific, legible shape of the failure §3.5 exists to warn about.
+ *
+ * It reaches Yu Yevon by playing the shipped line for the first six links and
+ * only overriding on the last one, so this measures the counter and nothing
+ * else.
+ */
+describe('out-damaging Yu Yevon stays a losing tactic', () => {
+  for (const seed of [1, 42]) {
+    it(`a party that swings at him cannot move his HP (seed ${seed})`, () => {
+      let swings = 0;
+      const r = runChain(seed, dreamsEndBuild, (d, engine) => {
+        const state = engine.state();
+        const yevon = state.combatants['yu-yevon'];
+        if (!yevon || !yevon.alive) return null;
+        const row = d.commands.find(
+          (c) => c.enabled && c.command.kind === 'attack' && c.validTargets.includes('yu-yevon'),
+        );
+        if (!row) return null;
+        swings++;
+        return { ...row.command, targets: ['yu-yevon'] } as Command;
+      });
+
+      console.log(`seed ${seed}: ${r.outcome} after ${swings} swings\n  ${r.trail.join('\n  ')}`);
+
+      // It got there: the first six links are the shipped line and they win.
+      expect(r.links, 'the wrapper must actually reach Yu Yevon, or it proves nothing').toBe(
+        EXPECTED_LINKS,
+      );
+      expect(swings, 'the wrapper must actually have swung at him').toBeGreaterThan(10);
+      // And then the counter ate all of it. His own Gravija still quarters him
+      // now and then — that is §3.5's attrition route, and it is the *only*
+      // thing that moves his bar — so the assertion is that thousands of swings
+      // bought nothing: he finishes the run above 80 % of a 99,999-HP shell,
+      // and the party never wins.
+      expect(r.outcome, 'swinging at Yu Yevon must not win').not.toBe('victory');
+      const hp = Number(/yu-yevon (\d+)\//.exec(r.trail.at(-1) ?? '')?.[1] ?? 0);
+      expect(hp, 'the 9,999 Curaga counter must out-heal everything the party can swing').toBeGreaterThan(
+        80_000,
+      );
+    });
+  }
+});

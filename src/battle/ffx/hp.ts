@@ -41,6 +41,7 @@ export function applyHpDelta(target: FFXCombatant, amount: number): number {
 /** Apply damage and emit the `damage` event, then resolve any KO it caused. */
 export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info: DamageEventInfo): void {
   const wasAlive = isAlive(target);
+  const hpBefore = target.hp;
   applyHpDelta(target, amount);
 
   const enemyDef = target.enemy;
@@ -68,7 +69,49 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
 
   if (overkill && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
   refreshCriticalStatus(ctx, target);
-  if (target.hp === 0 && wasAlive) koActor(ctx, target, info.sourceId);
+  if (target.hp === 0 && wasAlive) {
+    koActor(ctx, target, info.sourceId);
+    // The killing blow is the only place the *excess* is knowable, so the
+    // revive timer is armed here rather than inside `koActor`.
+    if (amount > 0) schedulePartRevival(ctx, target, Math.max(0, amount - hpBefore));
+  }
+}
+
+/**
+ * Arm a destroyed part's revive timer [ffx-bfa-yu-yevon §1.4].
+ *
+ * `new max HP = baseMaxHp + excess damage from the killing blow`, back after
+ * `delayTicks` on the field-wide CTB clock. The Yu Pagodas are the only users:
+ * they "cannot be permanently killed", and the research calls getting this
+ * right "critical to implement correctly" because it is the difference between
+ * the pillars being a one-time chore and being a repeating decision that the
+ * boss's whole heal / cleanse / Overdrive economy hangs off.
+ */
+export function schedulePartRevival(ctx: Ctx, target: FFXCombatant, excess: number): void {
+  const rule = target.enemy?.reviveRule;
+  if (!rule || isAlive(target)) return;
+  const pending = ctx.rt.pendingPartRevivals;
+  if (pending.some((p) => p.id === target.id)) return;
+  pending.push({
+    id: target.id,
+    atTicks: ctx.state.ticks + rule.delayTicks,
+    maxHp: rule.baseMaxHp + Math.max(0, excess),
+  });
+}
+
+/**
+ * Stand up every part whose {@link schedulePartRevival} timer has run out.
+ *
+ * Called once per turn from the engine's `advance()`, straight after the CTB
+ * clock moves, so a Pagoda re-enters the queue before the next actor is picked.
+ */
+export function resolveDuePartRevivals(ctx: Ctx): void {
+  const pending = ctx.rt.pendingPartRevivals;
+  if (pending.length === 0) return;
+  const due = pending.filter((p) => p.atTicks <= ctx.state.ticks);
+  if (due.length === 0) return;
+  ctx.rt.pendingPartRevivals = pending.filter((p) => p.atTicks > ctx.state.ticks);
+  for (const p of due) restorePart(ctx, p.id, p.maxHp);
 }
 
 /** Restoration that never went through the damage chain (Regen, Auto-Potion, Mortibsorption). */
@@ -124,14 +167,26 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
 
   const autoLife = statusOf(target, 'auto-life');
   if (autoLife && !target.flags.noRevive) {
-    removeStatus(ctx, target, 'auto-life', 'consumed');
+    // A **permanent** Auto-Life is the fayth's, and it is non-consumable:
+    // "from the possessed-aeon fights onward the entire party carries a
+    // permanent, non-consumable Auto-Life granted by the fayth... a KO'd
+    // character immediately revives", and the consequence the same table draws
+    // is that those battles **cannot be lost**
+    // [ffx-bfa-yu-yevon §2.3, verified: 3 sources]. This code already told the
+    // difference apart for the `cause: 'fayth'` message it emits, and then
+    // spent it anyway — so the "unlosable" half of the rule survived exactly
+    // one KO a head. A cast Auto-Life is still consumed, as it should be.
+    const everlasting = autoLife.permanent === true;
+    if (!everlasting) removeStatus(ctx, target, 'auto-life', 'consumed');
     const hp = Math.max(1, idiv(target.stats.maxHp, 4));
     target.hp = hp;
     target.alive = true;
-    ctx.emit({ type: 'revive', targetId: target.id, hp, cause: autoLife.permanent ? 'fayth' : 'auto-life' });
+    ctx.emit({ type: 'revive', targetId: target.id, hp, cause: everlasting ? 'fayth' : 'auto-life' });
     refreshCriticalStatus(ctx, target);
-    // A revived character re-enters with a rank-3 delay, and loses its buffs.
+    // A revived character re-enters with a rank-3 delay, and loses its buffs
+    // (§2.3, "KO revival loses buffs") — but not the fayth's gift.
     clearStatusesOnKo(ctx, target);
+    if (everlasting) target.statuses['auto-life'] = { ...autoLife };
     onRevived(ctx, target.id);
     return;
   }

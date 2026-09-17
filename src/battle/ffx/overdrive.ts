@@ -323,7 +323,20 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
     case 'rikku-mix':
       return { kind, mix: { ingredients: ['', ''], resultAbilityId: null } };
     case 'kimahri-rage':
-      return { kind, rage: { rageId: user.overdrive?.unlockedOverdriveIds[0] ?? def.id } };
+      // The Rage rode in on `OverdriveCommand.id`, exactly like Lulu's Fury
+      // spell above, so `def` is already the record the player chose — a menu
+      // marker can never reach here, `execute.ts` refuses those first.
+      //
+      // Defaulting to `unlockedOverdriveIds[0]` instead **discarded that
+      // choice** and resolved every Ronso Rage as whatever sat first in the
+      // list. For the Gagazet preset that is Jump, so Kimahri's Mighty Guard —
+      // the canonical answer to Total Annihilation, and the reason
+      // `research/ffx-seymour-flux.md` §7.9.2 makes his full gauge a *rule*
+      // rather than an estimate (§6 row 13, §6.1) — was uncastable: the
+      // command named it, the gauge was spent, and Jump came out. Measured on
+      // seed 1 as `action-start{ command.id: 'mighty-guard', abilityId:
+      // 'jump' }`.
+      return { kind, rage: { rageId: def.id } };
     case 'gunner-trigger':
       return { kind, trigger: { hits: ctx.rng.int(4, 16) } };
     case 'yuna-grand-summon':

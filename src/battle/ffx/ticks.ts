@@ -8,7 +8,7 @@
 
 import type { AbilityDef, CombatantId, FFXCombatant, ItemId } from '../common/types.ts';
 import { idiv } from './math.ts';
-import { type Ctx, allCombatants, has, isAlive, livingFriendlies, onField, statusOf, tryActor } from './state.ts';
+import { type Ctx, allCombatants, has, isAlive, livingFriendlies, onField, spendItem, statusOf, tryActor } from './state.ts';
 import { dealDamage, healOutsideChain, koActor } from './hp.ts';
 import { clearUntilNextTurnStatuses, refreshCriticalStatus, removeStatus, tickDurationStatuses } from './statuses.ts';
 import { hasAuto } from './equipment.ts';
@@ -28,6 +28,32 @@ const AUTO_MED_ORDER: ReadonlyArray<readonly [ItemId, string]> = [
   ['antidote', 'poison'],
   ['holy-water', 'zombie'],
   ['remedy', 'any'],
+];
+
+/**
+ * What a Remedy answers — the `'any'` row of {@link AUTO_MED_ORDER}.
+ *
+ * Auto-Med only fires **when the wearer actually has one of these**. Without
+ * this list the `'any'` row matched unconditionally, so an Auto-Med wearer
+ * threw a Remedy away on **every single hit that touched them**, healthy or
+ * not: Auron carries Auto-Med in the Dream's End build and burned the whole
+ * six-Remedy bag inside the first minute of Chapter 3, which mattered from the
+ * moment item counts started carrying between links of the chain (see
+ * `state.ts spendItem`). Petrify is on the list deliberately — Left-Arm Strike
+ * carries `shatter 100`, so a Remedy on the turn the beam lands is the answer
+ * `ffx-bfa-yu-yevon §4.4` names for a character without Stoneproof.
+ */
+const REMEDY_CURES: readonly string[] = [
+  'darkness',
+  'silence',
+  'poison',
+  'zombie',
+  'petrify',
+  'sleep',
+  'confuse',
+  'berserk',
+  'slow',
+  'curse',
 ];
 
 /**
@@ -106,10 +132,7 @@ function firstAvailable(ctx: Ctx, order: readonly ItemId[]): ItemId | undefined 
 }
 
 function consumeItem(ctx: Ctx, id: ItemId): boolean {
-  const count = ctx.rt.inventory.get(id) ?? 0;
-  if (count <= 0) return false;
-  ctx.rt.inventory.set(id, count - 1);
-  return true;
+  return spendItem(ctx, id);
 }
 
 /**
@@ -144,7 +167,8 @@ export function collectReactions(
     // Auto-Med: a curable ailment landed.
     if (isAlive(c) && hasAuto(c, 'auto-med')) {
       for (const [item, status] of AUTO_MED_ORDER) {
-        if (status !== 'any' && !has(c, status as never)) continue;
+        const wanted = status === 'any' ? REMEDY_CURES.some((st) => has(c, st as never)) : has(c, status as never);
+        if (!wanted) continue;
         if ((ctx.rt.inventory.get(item) ?? 0) <= 0) continue;
         if (consumeItem(ctx, item)) {
           out.push({ actorId: c.id, targetId: c.id, abilityId: item, cause: 'auto-med' });

@@ -60,8 +60,15 @@ export interface FFXRuntime {
   elapsedTicks: number;
   /** The enemy that acted most recently, for Seymour's alternation guard. */
   lastEnemyActorId: CombatantId | null;
-  /** A command suspended waiting for a minigame outcome [CONTRACTS.md]. */
-  pendingMinigame: { actorId: CombatantId; kind: MinigameKind } | null;
+  /**
+   * A command suspended waiting for a minigame outcome [CONTRACTS.md].
+   *
+   * `abilityId` is carried so a *bare* re-submit of the very same Overdrive can
+   * be told apart from the player backing out and picking a different one. The
+   * first is "nobody is going to play this overlay" and the engine rolls the
+   * outcome itself; the second is a fresh request.
+   */
+  pendingMinigame: { actorId: CombatantId; kind: MinigameKind; abilityId: AbilityId } | null;
   /** Accumulated presentation time, summed from emitted `wait` events. */
   elapsedMs: number;
   /** Set once `victory` / `defeat` / `escape` has been emitted. */
@@ -82,6 +89,23 @@ export interface FFXRuntime {
   overkilled: CombatantId[];
   /** Whether Escape / Flee are legal at all. */
   canEscape: boolean;
+  /**
+   * Enemies the passive **Sensor** auto-ability has already announced.
+   *
+   * Kept out of {@link BattleState} because an `immune-to-sensor` enemy is
+   * announced without ever becoming `revealed`, so the state flag cannot double
+   * as the "already printed" mark [ffx-combat-core §9, `sensor.ts`].
+   */
+  sensedIds: Set<CombatantId>;
+  /**
+   * Destroyed parts waiting on their {@link EnemyDef.reviveRule} timer.
+   *
+   * `atTicks` is a value of `state.ticks`, the field-wide CTB clock the engine
+   * advances by `normalise()`'s elapsed count every turn — not a turn count,
+   * because a dead Pagoda takes no turns of its own
+   * [ffx-bfa-yu-yevon §1.4].
+   */
+  pendingPartRevivals: Array<{ id: CombatantId; atTicks: number; maxHp: number }>;
 }
 
 /** Everything an engine module needs to do its job. */
@@ -91,6 +115,32 @@ export interface Ctx {
   rng: SeededRng;
   content: FFXContentRegistry;
   emit: (event: EventInput) => void;
+}
+
+/**
+ * Spend one of `id` from the party bag, and **mirror the new count into
+ * `state.flags`** so a chained chapter carries it.
+ *
+ * `app/screens/BattleScreenSetup.ts carryInventory()` reads
+ * `state.flags['inventory:<itemId>']` between links and passes the build's
+ * original count through untouched when that flag is absent. Only the FFX-2
+ * engine ever wrote it; the FFX engine keeps its counts in `rt.inventory`, a
+ * Map, and nothing mirrored them — so **every FFX chain silently restocked the
+ * whole bag at every link**. Measured on Chapter 3, whose seven links share one
+ * inventory: the party spent 25-36 X-Potions out of a build that owns 10, and
+ * the count printed after each link was still the untouched 10. Chapter 5's
+ * FFX-2 chain was never affected.
+ *
+ * Returns false when the bag is empty, so callers keep their existing "No items
+ * left" behaviour.
+ */
+export function spendItem(ctx: Ctx, id: string): boolean {
+  const count = ctx.rt.inventory.get(id) ?? 0;
+  if (count <= 0) return false;
+  const left = count - 1;
+  ctx.rt.inventory.set(id, left);
+  ctx.state.flags[`inventory:${id}`] = left;
+  return true;
 }
 
 /** A fresh, empty {@link ActorRuntime} for a combatant. */
@@ -192,6 +242,26 @@ export function targetable(c: Combatant): boolean {
 /** True when the combatant is alive (not KO'd, not petrified out of the battle). */
 export function isAlive(c: Combatant): boolean {
   return c.alive && !has(c, 'ko') && onField(c);
+}
+
+/**
+ * True when a **benched** member may be swapped onto the field.
+ *
+ * This is deliberately not {@link isAlive}. `isAlive` is the *on-field*
+ * predicate: it requires {@link onField}, and `removed === true` is exactly what
+ * being on the bench means — so gating a Switch row on `isAlive` disables every
+ * switch the game can ever offer, which is what `commands.ts` used to do.
+ *
+ * The reserve rule is §1.7's: "any reserve member may be swapped in at any
+ * point; all seven can therefore participate". The one member who cannot is one
+ * who is unable to take a turn, because the incoming member **takes the turn
+ * that is happening right now** — handing that turn to a KO'd or petrified body
+ * would open a menu for an actor who can never close it. Shattering likewise
+ * "removes one bench slot permanently for that battle"
+ * [ffx-combat-core §1.7].
+ */
+export function canSwitchIn(c: Combatant): boolean {
+  return c.alive && !has(c, 'ko') && !has(c, 'petrify') && !has(c, 'eject');
 }
 
 /** Party side while no aeon is out; the aeon alone while one is. */

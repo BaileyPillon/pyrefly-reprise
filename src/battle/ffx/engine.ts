@@ -35,9 +35,11 @@ import {
 } from './state.ts';
 import { buildBattle } from './setup.ts';
 import { availableCommands } from './commands.ts';
+import { revealForSensorAuto } from './sensor.ts';
 import { chargeForAction, actsAutomatically, berserkCommand, confusedCommand, executeCommand } from './execute.ts';
 import { nextActor, normalise, predictTurnOrder as predictOrder } from './turnQueue.ts';
 import { collectReactions, onTurnEnd, onTurnStart } from './ticks.ts';
+import { resolveDuePartRevivals } from './hp.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { chooseAiCommand } from './ai/index.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
@@ -151,8 +153,20 @@ export class FFXEngine implements FFXBattleEngine {
     const ctx = this.requireCtx();
     if (this.checkEnd()) return;
 
+    // Sensor is passive: it reveals what the party can see. Doing it here
+    // rather than in `buildBattle` is deliberate — `init()` runs before the
+    // first `nextDecision()` clears the buffer, so anything emitted during
+    // setup would reach `state().log` and never reach the presenter
+    // [ffx-combat-core §9].
+    revealForSensorAuto(ctx);
+
     const elapsed = normalise(ctx);
     ctx.state.ticks += elapsed;
+    // A Yu Pagoda that was destroyed comes back on a CTB-tick timer, not a
+    // turn count, because a dead part takes no turns of its own
+    // [ffx-bfa-yu-yevon §1.4]. Resolved here, after the clock moves and before
+    // the next actor is chosen, so the restored part re-enters this very queue.
+    resolveDuePartRevivals(ctx);
     const actor = nextActor(ctx);
     if (!actor) {
       // Nobody can act at all — treat as a loss rather than spinning.

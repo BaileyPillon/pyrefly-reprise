@@ -945,10 +945,20 @@ export interface EnemyFields {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** A part that revives on a CTB-tick timer instead of staying dead. See {@link EnemyDef.reviveRule}. */
+  reviveRule?: PartReviveRule;
   /** FFX-2 only: enemy level, feeding step 1 of the X-2 damage flowchart. Range 1–99. */
   level?: number;
   /** FFX-2 only: ATB ticks the enemy waits after its gauge fills before choosing. 0 = acts immediately. */
   thinkingPeriod?: number;
+}
+
+/** See {@link EnemyDef.reviveRule}. */
+export interface PartReviveRule {
+  /** CTB ticks between the part reaching 0 HP and it standing again. */
+  delayTicks: number;
+  /** The floor its new maximum is built from; the killing blow's excess is added. */
+  baseMaxHp: number;
 }
 
 /** Aeon-only fields, present when `side === 'aeon'`. */
@@ -2401,6 +2411,25 @@ export interface EnemyDef {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /**
+   * A part that **cannot be permanently killed**: it comes back on a timer.
+   *
+   * The Yu Pagodas are the case this exists for
+   * [ffx-bfa-yu-yevon §1.4, "Revive rule (critical to implement correctly)",
+   * verified: 2 sources]: destroyed, they return "after roughly three turns"
+   * with `new max HP = 5,000 + excess damage from the killing blow` (the
+   * wiki's own worked example: start 5,000, take 2,700 then 2,600 → back with
+   * 5,300). The research converts "about three turns" into **CTB ticks**,
+   * because a dead Pagoda takes no turns of its own and the phrase is
+   * otherwise undefined: 63 ticks in the Braska's Final Aeon fight (Pagoda
+   * AGI 40) and 72 in the possessed-aeon and Yu Yevon fights (AGI 30). On
+   * expiry it re-enters the queue like a revived character, at `baseCTB × 3`.
+   *
+   * Without this the pillars are a one-time chore instead of a repeating
+   * decision, and the boss's entire heal / cleanse / Overdrive economy is
+   * switched off for the rest of the battle by two early swings.
+   */
+  reviveRule?: PartReviveRule;
   /** FFX-2 enemy level, 1–99. */
   level?: number;
   /** FFX-2 only: ATB ticks the enemy waits after its gauge fills before choosing. 0 = acts immediately. */
@@ -2435,4 +2464,16 @@ export interface EnemyGroupDef {
    * chain): the formation that follows this one with no menu between.
    */
   nextGroupId?: string;
+  /**
+   * The party fights this formation under a **permanent, non-consumable
+   * Auto-Life granted by the fayth**, so a KO'd member revives immediately and
+   * the battle cannot be lost [ffx-bfa-yu-yevon §2.3, verified: 3 sources].
+   *
+   * True for every possessed-aeon formation and for Yu Yevon. The status is
+   * applied at setup and never removed; `hp.ts` already distinguishes a
+   * permanent Auto-Life from a cast one and reports its revive as
+   * `cause: 'fayth'`. The single documented loss condition — deliberate
+   * party-wide self-petrification — is unaffected, because Petrify is not a KO.
+   */
+  grantsPermanentAutoLife?: boolean;
 }

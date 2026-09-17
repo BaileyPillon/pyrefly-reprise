@@ -78,6 +78,8 @@ export const CORE_ABILITIES: AbilityDef[] = [
     targeting: 'single-enemy',
     // X-2 Curse = "cannot spherechange". It is NOT the FFX Curse. §2.3
     statusEffects: [{ status: 'curse', chance: 254, duration: 0 }],
+    // Not evadable — see the `canMiss` note on `impulse` below. §2.2
+    canMiss: false,
   }),
   def({
     id: 'impulse',
@@ -88,6 +90,23 @@ export const CORE_ABILITIES: AbilityDef[] = [
     formula: 'percent-current',
     damageType: 'magical',
     targeting: 'all-enemies',
+    /**
+     * **Cannot be evaded.** §2.2's action table gives Impulse and Mega Flare
+     * `Targets: All 3` with no accuracy term, and §1.1 is explicit that the
+     * evadable move is the *physical* one: "the sourced description of
+     * Bahamut's physical attack as evadable" is the whole reason his Accuracy
+     * is implemented as 0, and Thief's Evasion 19 is called "the only
+     * dressphere that meaningfully dodges **him**" — singular, the Attack.
+     * `src/data/ffx2/enemies/bahamut-abilities.ts` already carries
+     * `canMiss: false` on all three; this fallback table did not, and the AI
+     * script (`ai/bahamut.ts`) submits the engine-side ids, so the data
+     * record's flag was never the one consulted. Measured on seed 1 before the
+     * fix: `{"type":"miss","targetId":"yuna","sourceId":"bahamut","reason":
+     * "evaded"}` on an Impulse — a free save the real fight does not give.
+     * The guard tests `canMiss !== false`, so the flag must be present and
+     * literally `false` [docs/CONTRACT-CHANGES.md, 2026-09-17 `ffx2-bahamut`].
+     */
+    canMiss: false,
   }),
   def({
     id: 'bahamut-countdown',
@@ -107,5 +126,7 @@ export const CORE_ABILITIES: AbilityDef[] = [
     targeting: 'all-enemies',
     chargeTicks: CHARGE_VALUE_LONG,
     flags: ['always-break-damage-limit'],
+    // Party-wide magic, not evadable — see `impulse` above. §2.2
+    canMiss: false,
   }),
 ];

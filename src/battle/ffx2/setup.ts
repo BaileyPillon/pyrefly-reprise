@@ -25,6 +25,7 @@ import type {
 } from '../common/types.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
+import { withAccessories } from './accessories.ts';
 import { activeGateBonuses, gateStatTotal, withStatBonus } from './garment-grids.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
@@ -55,7 +56,11 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   const grid = grids.get(member.garmentGrid.id);
   // The `P-` equip effect is the `gates: []` bonus and is always on. §4.1
   const equip = grid ? gateStatTotal(activeGateBonuses(grid, [])) : {};
-  const stats: StatBlock = withStatBonus(base, equip);
+  // …then the two accessories, the fourth term this file's own header has
+  // always named and nothing ever computed [accessories.ts, ffx2-combat-core
+  // §5.4]. Without it the researched loadouts are inert and Chapter 5's Tail
+  // kills the White Mage from full on its first Noli Me Tangere.
+  const stats: StatBlock = withAccessories(withStatBonus(base, equip), member.accessories);
 
   return {
     id: member.id,
@@ -168,6 +173,34 @@ function seedOpeningGauges(units: Ffx2Unit[], condition: BattleSetup['condition'
   }
 }
 
+/**
+ * Seed the live item counts.
+ *
+ * `inventory:<itemId>` is the convention `BattleScreenSetup.carryInventory`
+ * already reads back when a chained link hands the party on, and the FFX side
+ * spells it the same way — it just had nothing writing it on the X-2 side,
+ * because the X-2 command menu never offered an item at all. A carried-in count
+ * from the previous link of a chain wins over the build's own.
+ */
+function inventoryFlags(
+  party: FFX2PartyBuild,
+  options: Ffx2EngineOptions,
+): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const entry of party.inventory ?? []) out[`inventory:${entry.itemId}`] = entry.count;
+  for (const entry of options.carriedParty?.inventory ?? []) out[`inventory:${entry.itemId}`] = entry.count;
+  return out;
+}
+
+/** Live item counts, keyed by item id, for the command menu. */
+export function inventoryCounts(state: BattleState): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [key, value] of Object.entries(state.flags)) {
+    if (key.startsWith('inventory:') && typeof value === 'number') out[key.slice('inventory:'.length)] = value;
+  }
+  return out;
+}
+
 export interface BuiltState {
   state: BattleState;
   units: Ffx2Unit[];
@@ -223,6 +256,7 @@ export function buildState(
       ...(setup.chained || options.chained ? { chained: true } : {}),
       ...(setup.enemies.nextGroupId ? { nextGroupId: setup.enemies.nextGroupId } : {}),
       canEscape: setup.canEscape ?? setup.enemies.canEscape ?? false,
+      ...inventoryFlags(party, options),
     },
   };
 

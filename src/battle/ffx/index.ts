@@ -105,6 +105,9 @@ export {
 export { mortibsorption, MORTIORCHIS_MIN_MAX_HP, MORTIORCHIS_DECAY } from './scripted.ts';
 export { validTargets, resolveTargets, redirectTarget, reflectBounceTarget } from './targeting.ts';
 export { availableCommands } from './commands.ts';
+// --- sensor / scan ---------------------------------------------------------
+export { partyHasSensor, revealForSensorAuto, revealTarget, sensorKind, weaknessesOf } from './sensor.ts';
+export type { SensorKind } from './sensor.ts';
 export { payRegen, onTurnStart, onTurnEnd, collectReactions } from './ticks.ts';
 export { evaluateTriggers, collectSignals } from './triggers.ts';
 export type { TriggerSignals } from './triggers.ts';

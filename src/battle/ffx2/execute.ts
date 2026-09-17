@@ -91,8 +91,23 @@ function needsMinigame(env: ExecEnv, actor: Ffx2Unit, ability: AbilityDef, comma
   if (!ability.minigame) return false;
   if (actor.controller !== 'player') return false;
   if (env.options.minigames === false) return false;
-  if (env.getAwaiting()) return false;
-  return !('extra' in command && command.extra);
+  if ('extra' in command && command.extra) return false;
+  // A **bare re-submit of the same action** is the presenter saying nobody is
+  // going to play this overlay, so the engine rolls the outcome itself rather
+  // than asking again — asking again is an unbounded loop, and the FFX engine
+  // was measured re-picking one Overdrive 19,916 times before it was fixed.
+  // Backing out of the overlay and choosing a *different* timed action is not
+  // that, and still opens its own overlay.
+  const awaiting = env.getAwaiting();
+  return !(awaiting !== null && sameAction(awaiting, command));
+}
+
+/** Two commands naming the same action — the re-submit the contract describes. */
+function sameAction(a: Command, b: Command): boolean {
+  if (a.kind !== b.kind) return false;
+  const idA = 'id' in a ? a.id : '';
+  const idB = 'id' in b ? b.id : '';
+  return idA === idB;
 }
 
 /** End the action: spend the gauge, close it out, and run the hooks. */
@@ -170,6 +185,14 @@ export function performCommand(
     return;
   }
   env.setAwaiting(null);
+
+  // Spend the item. One party inventory, decremented on the resolving action
+  // rather than on the pick, so an interrupted charge does not eat the stock.
+  if (command.kind === 'item') {
+    const key = `inventory:${command.id}`;
+    const left = env.state.flags[key];
+    if (typeof left === 'number') env.state.flags[key] = Math.max(0, left - 1);
+  }
 
   if (!alreadyCharged) {
     env.emit({

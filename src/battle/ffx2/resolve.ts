@@ -19,7 +19,7 @@ import { chainMultiplier } from './chain.ts';
 import { computeDamage, critPercent, hitPercent, randomiserRoll } from './formulas.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
 import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
-import { resolveTargets } from './targeting.ts';
+import { hpCostFor, resolveTargets } from './targeting.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
 
 export interface ResolveContext {
@@ -171,6 +171,44 @@ export function resolveAbility(
   const mpCost = user.statuses.spellspring ? 0 : ability.mpCost;
   if (mpCost > 0) user.mp = Math.max(0, user.mp - mpCost);
 
+  // The Dark Knight pays in HP. Darkness is **12.5% of the user's own max HP**
+  // per cast [ffx2-vegnagun-shuyin §6.4 `[verified: 2 sources]`], and that cost
+  // is the ability's entire downside (§7.1). `targeting.ts` greys the row out
+  // when she cannot pay, so the subtraction can never KO her — it is a cost,
+  // not damage: it is not an attack, so it registers no chain and cannot crit.
+  const hpCost = hpCostFor(user, ability);
+  if (hpCost > 0) {
+    user.hp = Math.max(1, user.hp - hpCost);
+    ctx.emit({
+      type: 'damage',
+      targetId: user.id,
+      amount: hpCost,
+      element: 'none',
+      crit: false,
+      hitIndex: 0,
+      hitCount: 1,
+    });
+  }
+
+  // MP restoratives. `extra.restoresMp` is the whole effect of an Ether (100)
+  // or a Turbo Ether (500); `extra.alsoRestoresMp` rides on top of the Elixir
+  // and Megalixir's full HP heal — "up to 9999 HP **and 999 MP**"
+  // [ffx2-combat-core §5.5 items table]. Both fields were written by the data
+  // layer and read by nothing, so every MP restorative in X-2 was inert and the
+  // Chapter 5 bag's six Turbo Ethers could not refill a single spell.
+  const mpGain = ability.extra?.['restoresMp'] ?? ability.extra?.['alsoRestoresMp'];
+  if (typeof mpGain === 'number' && mpGain > 0) {
+    for (const target of pool) {
+      if (!target.alive) continue;
+      const before = target.mp;
+      target.mp = Math.min(target.stats.maxMp, target.mp + mpGain);
+      const gained = target.mp - before;
+      if (gained > 0) {
+        ctx.emit({ type: 'mp-heal', targetId: target.id, sourceId: user.id, amount: gained });
+      }
+    }
+  }
+
   // Scan / Libra / Ma'at's Feather leave here: a reveal is pure information,
   // so it never rolls to hit, never registers a chain, and never touches the
   // seeded RNG. See `sensor.ts` for what counts as one. §3.7
@@ -223,13 +261,31 @@ export function resolveAbility(
         continue;
       }
 
-      const chainCount = registerHit(target, crit);
-      ctx.emit({
-        type: 'chain',
-        targetId: target.id,
-        count: chainCount,
-        multiplier: chainMultiplier(chainCount),
-      });
+      // A **restorative** action is not a hit, and must not touch the chain.
+      //
+      // The Chain is built by landed hits on a target and does three things to
+      // it: raises the damage of the next hit, removes its evasion, and locks
+      // it out of starting an action while the window is open
+      // [ffx2-combat-core §1.7; ffx2-vegnagun-shuyin §1.1 step 13]. Registering
+      // a Cure or a Pray as a "hit" therefore turned the party's own healer
+      // into the boss's best weapon: measured on the Tail, seed 7, Yuna's Pray
+      // opened a 2 s window on all three girls and the Noli Me Tangere 107
+      // ticks later landed at x1.45 for **1,869 / 1,812 / 1,741** against the
+      // sourced band of **1,171-1,323** (§1.2), one-shotting the White Mage;
+      // the same window also froze whoever had just been healed. `heals` is
+      // spelled exactly as `formulas.ts` spells it (`flags 'heals'` or the
+      // `healing` formula), so the two cannot drift apart. Revives already
+      // skipped this block above.
+      const restorative = ability.flags.includes('heals') || ability.formula === 'healing';
+      const chainCount = restorative ? 0 : registerHit(target, crit);
+      if (!restorative) {
+        ctx.emit({
+          type: 'chain',
+          targetId: target.id,
+          count: chainCount,
+          multiplier: chainMultiplier(chainCount),
+        });
+      }
 
       const result = computeDamage({
         user,

@@ -6,6 +6,562 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-17 (third pass) — Chapter 3: Doublecast resolves, and Lulu's Overdrive is reachable
+
+Key `braskas-final-aeon`. One engine change, in one function, reached only by an
+ability whose **own data record** asks for it. No shared type changed: the hook
+it uses, `AbilityCommand.wrappedId`, has been in `src/battle/common/types.ts`
+since the contract was written, documented as *"Doublecast / Copycat wrapper:
+the ability id this one is repeating"*, and had **no reader anywhere in the
+engine**.
+
+**1. `src/battle/ffx/execute.ts` (additive) — Doublecast did nothing.**
+
+`research/ffx-bfa-yu-yevon.md` §4.2's recommendation for this chapter's preset
+grants *"Doublecast + Firaga/Thundaga"* by name `[verified: 2 sources]`, and
+`src/data/ffx/builds/dreams-end.ts` gives Lulu both. The ability record
+(`data/ffx/abilities/special-rikku.ts`) carries
+`extra.castsTwoBlackMagicSpells: true` and a note saying *"the two chosen spells
+own MP costs are paid separately by the engine"* — but `formula: 'none'`,
+`power: 0`. Nothing read the flag, so submitting the row the menu offered
+resolved a no-damage, no-status ability and **spent the turn**.
+
+`executeCommand` now routes any `kind: 'ability'` command whose resolved def
+sets that flag to a new `resolveDoublecast`:
+
+* the wrapped spell is `command.wrappedId`, and it must be **Black Magic the
+  caster has actually learned**; a command that arrives without a usable one
+  falls back to the strongest spell the caster can pay for twice, rather than
+  being refused — refusing a row the menu offered is how a headless caller ends
+  up resubmitting it for ever (cf. decision 9);
+* **both casts pay their own MP**, and the second is skipped if the first
+  emptied the pool;
+* **two targets are honoured**: `targets` of length 1 sends both casts there,
+  length 2 sends one each, which is FFX's own "a spell and a target, twice";
+* the turn is charged at Doublecast's own **rank 3** — that is the ability, and
+  the whole of its power.
+
+Scope: only `doublecast` sets the flag today, and only `dreams-end`'s Lulu is
+granted it. Every other ability, build and chapter is untouched. The change
+makes the *player* stronger, which is the one direction this file usually does
+not go, so to be explicit: it is not a tuning lever, it is an ability the
+research grants and the engine was silently eating.
+
+**2. `src/engine/tactics/braskas-final-aeon.ts` — Lulu's Overdrive was unreachable
+(tactic-side, no engine change).**
+
+`data/ffx/abilities/special-menu-markers.ts` flags this itself, in its own doc
+comment: the generic `'fury'` id is a menu marker and *"it is not what an
+`OverdriveCommand.id` should actually be for Lulu — that must be one of the 19
+tier-specific ids"*, with the gap recorded as unclosed by either the builds
+agent or the UI. `dreams-end` lists `unlockedOverdriveIds: ['fury']`, so the
+only Overdrive row she is ever offered is refused outright by `execute.ts` as a
+marker. The Chapter 3 tactic now reads the row for **availability** and submits
+one of the ids the marker's own `resolvesToOneOf` names, exactly as it already
+does for the Talk trigger command. **The underlying gap is still open for the
+builds/UI owners** — every other chapter that fields Lulu still has a dead
+Overdrive row.
+
+(Measured aside, recorded so nobody re-derives it: firing it is *not* worth a
+turn in this encounter. Every `<spell>-fury` record is `targeting: 'random-enemy'`
+at a fraction of the spell's power — five casts of 583-607, two of which went
+into a Yu Pagoda — against 3,810 for the Doublecast it displaced. The tactic
+therefore leaves the gauge unspent and says why.)
+
+**3. Not an engine change, but it belongs next to them: `dreams-end` now carries
+§4.4's Stoneproof rule.** §4.4 `[verified: 2 sources]` asks for *"exactly one or
+two Stoneproof pieces"* so that *"the Jecht Beam → shatter threat is a real,
+solvable decision rather than a coin flip"*. The build had inherited **seven**
+from `research/ffx-seymour-flux.md` §7.7.2 loadout C, which made Petrify land
+zero times in a full chain and §1.6's "signature lethality" inert; it now carries
+**two**, on Yuna and Lulu. This closes the blocker the previous round's verifier
+raised, by applying the chapter's own research rather than by documenting the
+conflict. The cross-document conflict with §7.7.2 is real and still wants a
+research ruling; this chapter's own `[verified: 2 sources]` section wins for
+this chapter's own build.
+
+## 2026-09-17 (second pass) — Chapter 3: the Yu Pagoda revive rule, FFX chain inventory, `max-hp-x2`
+
+Key `braskas-final-aeon`. Everything here was found by running the chapter
+headlessly through the shipped `intendedStrategy`, end to end across all seven
+links, and by three verifier findings against the first pass of the same day.
+**All four changes make the game harder or stricter, none easier.** Item 2 is
+behaviour **every FFX chain sees**; item 3 is behaviour every FFX chapter sees.
+
+**1. `src/battle/common/types.ts` (additive), `src/battle/ffx/{state,setup,hp,engine}.ts`,
+`src/data/ffx/enemies/braskas-final-aeon.ts` — the Yu Pagodas never revived.**
+
+`ffx-bfa-yu-yevon.md` §1.4 heads the rule "**Revive rule (critical to implement
+correctly)**" [verified: 2 sources]: a destroyed Yu Pagoda returns with
+`new max HP = 5,000 + excess damage from the killing blow` after **63 ticks** in
+the Braska's Final Aeon fight (its own AGI 40 → base 7 → rank-3 recovery 21 →
+3 × 21) and **72** in the possessed-aeon and Yu Yevon fights, then re-enters the
+CTB queue at `baseCTB × 3` like a revived character. Nothing implemented it and
+no data field could carry it, so two swings on turn 20 switched the boss's
+entire heal / cleanse / Overdrive economy off for the remaining 170 turns of the
+fight: measured, both pillars were permanently dead from turn ~21 of a ~190-turn
+battle, Power Wave was cast four or five times in a whole encounter, and §1.6's
+own tuning table sat on its "both Pagodas down" row (10-20 % gauge a turn)
+instead of its "both alive" row (60 %) for 89 % of the fight.
+
+* `EnemyDef` and `EnemyFields` gain one optional field, `reviveRule:
+  { delayTicks, baseMaxHp }` (`PartReviveRule`). Purely additive; every existing
+  enemy omits it and is unaffected.
+* `FFXRuntime` gains `pendingPartRevivals`, a list of `{ id, atTicks, maxHp }`
+  against `state.ticks` — the field-wide CTB clock, not a turn count, because a
+  dead part takes no turns of its own.
+* `hp.ts` gains `schedulePartRevival` (armed from `dealDamage`, which is the only
+  place the killing blow's *excess* is knowable) and `resolveDuePartRevivals`,
+  which `engine.ts advance()` calls once per turn straight after the clock moves
+  and before the next actor is chosen. `restorePart` already existed and had no
+  caller.
+* Both Yu Pagodas now ship `reviveRule`.
+
+This makes Chapter 3 a materially harder and much longer encounter — Power Wave
+now lands 40 to 80 times a fight rather than four or five — and the chapter's
+tactic was rewritten around it. See `docs/handoff/play-braskas-final-aeon.md`.
+
+**2. `src/battle/ffx/{state,execute,ticks}.ts` — an FFX chain silently
+restocked the whole item bag at every link.**
+
+`app/screens/BattleScreenSetup.ts carryInventory()` reads
+`state.flags['inventory:<itemId>']` and returns the build's original count
+untouched when that flag is absent. Only the FFX-2 engine ever wrote it; the FFX
+engine keeps its counts in `rt.inventory`, a `Map`, and nothing mirrored them.
+So every FFX chain refilled the bag between links: measured on Chapter 3, whose
+seven links share one inventory, the party spent **25-36 X-Potions out of a
+build that owns 10**, and the count printed after each link was still 10. A new
+`state.ts spendItem(ctx, id)` is now the single place the FFX engine decrements
+an item, and it mirrors the new count into the flag. `execute.ts` (the Item
+command) and `ticks.ts` (Auto-Potion / Auto-Med / Auto-Phoenix) both go through
+it. **Chapter 5's FFX-2 chain is unaffected** — it already wrote the flag.
+Chapters that are a single battle are unaffected either way.
+
+**3. `src/battle/ffx/statuses.ts` — `max-hp-x2` and `max-mp-x2` were statuses
+with no effect.**
+
+Both are listed in `MIX_FLAGS`, both are applied by shipped items (Stamina
+Tablet, Stamina Tonic, Mana Tablet, Mana Tonic) and by four Mixes, and nothing
+in the engine read either one — so the Stamina Tablets `ffx-bfa-yu-yevon §4.4`
+puts in the Dream's End bag were inert. `applyPoolDoubler` now moves the ceiling
+on apply and puts it back on removal (including the KO path, which `wipeStatuses`
+takes), clamping current HP/MP under the new ceiling and capping at §9's
+99,999 / 9,999. The status record's own wording is honoured exactly: *"No
+immediate healing — existing current HP is unchanged, only the ceiling rises."*
+Any chapter whose build carries one of those items will now see it work.
+
+**4. `src/data/ffx/builds/dreams-end.ts` — two loadout corrections against
+§4.4.**
+
+* The inventory preset in §4.4 reads "**2 Stamina Tonics**"; the build shipped
+  `stamina-tablet`. A Tablet is `single-ally`, a Tonic is `all-allies`, so the
+  shipped pair doubled two HP bars where the research's pair doubles the party's.
+* The three actives' **Strength**, and **Auron's Agility**, are re-derived —
+  this is the round's one deliberate deviation from a published preset and it is
+  documented in full, with its measurement table, in that file's
+  `PRESET_CORRECTION` comment. In short: §4.1 labels its entire stat block
+  `[estimate]` and says the preset "should be tuned so the fight is winnable";
+  with item 1 live, §4.1 as published loses link 1 **200 times out of 200** under
+  every tactical line measured; §4.4 [verified: 2 sources] publishes the
+  encounter's only offensive anchor, "Yuna's Strength at least 28", against
+  §4.1's 20, so that ×1.5 ratio is applied to Tidus (32→48), Yuna (20→30) and
+  Auron (42→50, clamped to the upper band `tests/unit/data-ffx-builds.test.ts`
+  holds every chapter's preset to). Auron's Agility goes **22 → 29**: §4.1 gives
+  the party's entire damage output the *lowest* Agility of all seven characters,
+  which puts a rank-3 Attack at 30 ticks against Tidus's 21. Measured: published
+  preset 0 %, Strength alone 84.5 %, Agility alone 10.5 %, both **96.2 %**
+  (962/1000). No other stat on any character moved and **no enemy number moved
+  at all**.
+
+**5. `src/battle/ffx/ticks.ts` — Auto-Med threw a Remedy away on every hit.**
+
+`AUTO_MED_ORDER`'s last row is `['remedy', 'any']` and the `'any'` sentinel
+matched unconditionally, so an Auto-Med wearer consumed a Remedy after *every
+damaging action that touched them*, healthy or not. Auron carries Auto-Med in
+the Dream's End build and emptied the six-Remedy bag inside the first minute of
+Chapter 3 — which started mattering the moment item counts carried between links
+(item 2). It now fires only when the wearer actually has one of the ailments a
+Remedy cures (`REMEDY_CURES`), Petrify included, which is the answer §4.4 names
+for a character without Stoneproof. Any chapter whose build carries Auto-Med
+will now spend fewer items and cure the same ailments; measured cost to Chapter
+3, 97.0 % → 96.2 %.
+
+Not fixed, deliberately, and carried as a blocker in the round's report:
+`ffx-bfa-yu-yevon §4.4`'s "exactly one or two Stoneproof pieces" against the
+seven the build inherits from `ffx-seymour-flux §7.7.2` loadout C. It is a live
+cross-document conflict, it deletes this chapter's signature Jecht Beam →
+shatter chain (measured: zero Petrify applications in a full chain), and the
+instruction this agent works under forbids deleting an inherited ability.
+Measured cost of applying it anyway: **96.2 % → 85.0 %**.
+
+## 2026-09-17 — Chapter 3: the chain, the Pagodas, the Overdrive gauge, Sleep, MP items, the fayth's Auto-Life
+
+Key `braskas-final-aeon`. Found by running the chapter headlessly through the
+shipped `intendedStrategy`, end to end across all seven links
+(`tests/unit/strategy-braskas-final-aeon.test.ts`). Before this round the
+chapter was a guaranteed defeat on turn 128 of link 1; after it, 1,138 wins in
+1,200 contiguous seeds (94.8%). **One additive type change** (item 6); the rest
+are engine and data. Items 4, 5 and 6 are behaviour **every FFX chapter sees**,
+so Chapters 1 and 2 should re-measure.
+
+**1. `src/data/ffx/enemies/braskas-final-aeon.ts` — the chapter's chain was
+severed after link 1.**
+
+`braskasFinalAeonGroup.nextGroupId` read `'possessed-aeons'`, which no formation
+exports. `BattleScreen.runEncounter` logged `chapter chains to "possessed-aeons"
+but no formation exports that id` and **stopped**, so the possessed-aeon
+gauntlet and Yu Yevon were unreachable in play. It now reads
+`'possessed-valefor'`, the head of the default five-mandatory-aeon chain
+(`ffx-bfa-yu-yevon.md` §2.1, acquisition order). A caller with a different
+roster still overrides it by rebuilding with `buildPossessedAeonChain`.
+`tests/unit/story-triggers.test.ts` carries a `DANGLING_CHAIN_LINKS` workaround
+for exactly this and says to delete the entry when the data is fixed; its walk
+now follows the real link, so the entry is dead weight rather than load-bearing.
+
+**2. `src/battle/ffx/ai/braskas-final-aeon.ts` — no Yu Pagoda in the chapter
+ever cast Power Wave.**
+
+The data names the two rotations by context, `yu-pagoda-bfa` and
+`yu-pagoda-aeon`, because the two Power Wave records differ (§1.4, §2.3). Only
+`yu-pagoda` was registered, so `chooseAiCommand` fell through to its plain-Attack
+fallback: the boss was never healed for 1,500, never cleansed, and never got the
++20% to his Overdrive gauge. Both ids are now registered against the same
+rotation.
+
+**3. `src/battle/ffx/ai/braskas-final-aeon.ts` — Braska's Final Aeon never used
+a single Overdrive, in either form, and the Talk trigger command was inert.**
+
+`setup.ts` builds an `overdrive` block for party members and for aeons and for
+nobody else, so `ai.self.overdrive` on an enemy is `undefined` and the gauge
+check in his own script could never be true. Measured before the fix: 200
+battles, zero Triumphant Grasps, zero Ultimate Jecht Shots, zero Jecht Bombers.
+`execute.ts`'s Talk handler zeroed `boss.overdrive.gauge`, which does not exist,
+so the Trigger Command — the encounter's designed panic button — did nothing at
+all. That is the whole of §1.6 and of §7's checklist item 2.
+
+The gauge now lives on `ctx.state.flags['bfa.gauge']`, the bag this script
+already used for `bfa.talkPending` and which both Pagodas and `consumeBfaTalk`
+can reach. **`bfaGauge` returns the higher of the flag and
+`boss.overdrive?.gauge`**, so a future `setup.ts` that does give enemies a gauge
+takes over without a second change, and `tests/unit/ffx-ai.test.ts`'s fixtures
+keep working unmodified. Rates are §1.6's: +20 flat per Power Wave
+[verified: 2 sources], 0–10 per damaging player **action** against him, and 0–10
+when he acts [estimate]. "Per action" is counted off `hitIndex === 0` in the
+event log — the same counting rule §3.4.1 states for Yu Yevon's counter. The
+gauge carries across the form transition and is not reset (§1.6, §1.7).
+
+The same file now also gates a **possessed aeon's** Overdrive on its own gauge
+(15–30 per Power Wave, 0–10 targeted/acting — §2.3's figures are the only
+quantified enemy-gauge numbers published anywhere). `POSSESSED_AEON_ABILITY_IDS`
+flattens §2.2's "Attack, <special>, <Overdrive>" into one list, so the script
+picked Diamond Dust or Mega Flare as an ordinary 50% roll: a 9,999 party-wide
+Overdrive on the aeon's first real turn. The split is made off the ability's own
+`category === 'overdrive'`, so no data change was needed.
+
+**4. `src/battle/ffx/abilities.ts` — Sleep was permanent, and it was a
+soft-lock, not a fidelity gap.**
+
+`state.ts canAct` drops a sleeper out of the CTB queue entirely, and
+`ticks.ts onTurnEnd` is the only caller of `tickDurationStatuses` — so a sleeping
+actor never reaches a turn end and its 3-turn Sleep never counts down. One Yu
+Pagoda Curse put Tidus to sleep on turn 17 of a 204-turn battle and he never
+acted again. A landed **physical hit now wakes a sleeper**, which is what the
+shipped status record already said it did in as many words
+(`data/ffx/statuses/core.ts` `sleep`: "Physical damage wakes the sleeper; magic
+damage does not", with `curedBy` listing "any physical hit"; `ffx-combat-core.md`
+§4.2). Residual, not fixed here: a sleeper nobody hits and nobody cures is still
+out for good.
+
+**5. `src/battle/ffx/formulas.ts` — `poolOf` now reads `extra.restoresPool`, so
+Ether, Turbo Ether, Elixir, Megalixir and the MP mixes restore MP again.**
+
+`AbilityDef` has no pool field of its own, and the data layer says so above
+Ether's record ("no separate 'pool' field, so the pool is noted via
+`extra.restoresPool`"). Nothing read it, so every MP restorative healed HP
+instead — which deletes the MP economy of any long fight.
+`tests/unit/strategy-chapter2.test.ts` already had this written up as a known
+gap it did not own. Restricted to records carrying the `heals` flag, so a
+damaging record that happens to carry the key cannot change pool.
+
+**6. `src/battle/common/types.ts` (ADDITIVE), `src/battle/ffx/setup.ts`,
+`src/battle/ffx/hp.ts`, `src/data/ffx/enemies/braskas-final-aeon.ts` — the
+fayth's permanent Auto-Life.**
+
+`EnemyGroupDef` gains one optional boolean, `grantsPermanentAutoLife`. §2.3
+[verified: 3 sources]: from the possessed-aeon fights onward the whole party
+carries a permanent, non-consumable Auto-Life granted by the fayth, a KO'd
+member revives immediately, and the consequence the same table draws is that
+**those battles cannot be lost** — the only documented loss being deliberate
+party-wide self-petrification, which is unaffected because Petrify is not a KO.
+Nothing applied it. `setup.ts` now applies it to every member, active and
+benched, when the formation sets the flag; the five possessed-aeon formations
+and `yuYevonGroup` set it.
+
+`hp.ts koActor` also **stopped consuming it**. That function already told a
+permanent Auto-Life apart from a cast one — it emits `cause: 'fayth'` for the
+permanent case — and then removed it anyway, so the unlosable half of the rule
+survived exactly one KO a head. A cast Auto-Life is still consumed. A revived
+member still loses its other buffs, which is §2.3's own "KO revival loses buffs".
+
+**7. `src/battle/ffx/setup.ts` — a possessed aeon now mirrors the player's own
+aeon's stat block.**
+
+§2.2 [verified: 2 sources]: the bestiary lists a possessed aeon's HP as "Yuna
+Valefor HP" and its Strength / Magic / Defense / Magic Defense / Agility /
+Accuracy / Evasion as "Varies"; only Luck is fixed, forced to **1**. It is a
+live copy, not a table, which is why `data/ffx/enemies/braskas-final-aeon.ts`
+ships `stats: { hp: 1, … }` placeholders with a doc comment saying the engine
+must overwrite them at setup. Until it did, all five possessed aeons stood up
+with **1 HP** and died to the first hit, which made five of the chapter's seven
+links a walkover. `mirrorPossessedAeon` is a no-op for every other enemy in the
+game: the id has to start with `possessed-` *and* name an aeon the party owns.
+
+**Order matters here.** Items 3 (the aeon's Overdrive gate), 6 (the fayth's
+Auto-Life) and 7 (the mirror) are one change, not three, and shipping any of
+them alone makes the chapter *less* canon rather than more: the mirror alone
+took the gauntlet from 197/200 to **0/200**, because real aeon stats plus an
+ungated Overdrive plus no Auto-Life is a turn-9 party wipe in a sequence §2.3
+says cannot be lost at all.
+
+## 2026-09-17 — FFX-2 charges Darkness's HP cost, calls `onDamaged`, and gives MP back
+
+Key `ffx2-vegnagun-shuyin`, second round. Three more defects of the same shape
+as the five below: a field the data layer writes and the engine never reads. All
+three are FFX-2-wide behaviour, so **Chapter 4 must re-measure Bahamut against
+them**. None changes a type; all three are additive.
+
+The first two make the game **harder**. Chapter 5's line was winning 92.5% of
+chains while two of the chapter's defining mechanics were switched off; with
+them on, the same line fell to 23/40 and had to be rebuilt.
+
+**1. `src/battle/ffx2/resolve.ts` + `targeting.ts` — an ability's HP cost was
+never charged.**
+
+`AbilityDef.extra.hpCostPercent` is written by exactly one definition in the
+game, `x2-dark-knight-darkness`, which sets `12.5` with a comment citing
+`research/ffx2-vegnagun-shuyin.md` §6.4: "**12.5% (1/8) of user's max HP**"
+`[verified: 2 sources]`. §7.1 names that cost as the ability's entire downside
+("Its cost is HP, not MP"). `resolveAbility` deducted `ability.mpCost` and
+nothing else, and `performCommand` forwarded `ability.extra` only as minigame
+`params`, so the strongest player ability in Chapter 5 — special damage to all
+enemies, ignoring Defense, long range — was free. Measured on Chapter 5's own
+chain the unpaid cost is **65,442–83,430 HP per chain**, over ten full party
+bars.
+
+Now: `targeting.ts` exports `hpCostFor(actor, ability)` (percent of the actor's
+max HP, waived under Spellspring when `extra.freeUnderSpellspring` is set, 0 for
+every other ability in the game) and greys the row out with `'Not enough HP'`
+when she cannot pay, exactly as the MP row above it does — §6.4's "fails if the
+user cannot pay it". `resolveAbility` deducts it beside the MP cost and emits a
+`damage` event on the caster so the HUD shows it. Because the row is disabled
+when `hp <= cost`, the subtraction floors at 1 and can never KO the caster; it
+is a cost, not an attack, so it registers no chain and cannot crit.
+
+**2. `src/battle/ffx2/engine.ts` — `AiScript.onDamaged` was declared and never
+called.**
+
+`internal.ts` has always declared `onDamaged?(ctx, sourceId, amount)` and three
+FFX-2 scripts have always implemented it. Only `onTurnResolved` was ever
+invoked, so all three implementations were dead code and three canon mechanics
+were silently inert:
+
+- **§3.3's Core attack log** — the Core records who hit it and with which
+  mitigation class, and the Bulwarks answer in kind on their next turn. §3.3
+  calls this "**the fight's whole identity**". Censused over 20 Body fights and
+  338 Darkness casts before the fix: **zero** occurrences of "Hostile activity
+  detected", "Physical attack detected" or "Magical attack detected", and the
+  party took literally zero damage across the entire Body fight. After: eight
+  retaliations in a single fight.
+- **§3.2's Node colour machine**, which advances "on (own turn resolves) **OR**
+  (hit by any attack)". Without it the GREEN face — Cura, Regen, Shell and
+  Protect **on the Leg** — came up half as often as it should, and the all-enemy
+  player rows carried no downside at the Leg at all.
+- **§3.4's Odi Et Amo counter**, which fires the game's hardest buff-wipe after
+  a fixed number of hits on the Head.
+
+Wired in `afterAction`, driven off the event drafts the finished action
+produced rather than from inside `resolve.ts`: each enemy that took damage is
+notified **once**, with the action's total, counters included, and the event
+log's ordering is untouched. An HP cost paid by a party caster is excluded — it
+is the caster paying for her own ability, not a hit on her.
+
+**3. `src/battle/ffx2/resolve.ts` — every MP restorative in X-2 was inert.**
+
+`extra.restoresMp` (Ether 100, Turbo Ether 500, the Alchemist's Stash-Ether) and
+`extra.alsoRestoresMp` (Elixir and Megalixir, which `ffx2-combat-core.md` §5.5
+gives as "up to 9999 HP **and 999 MP**") were written by the data layer and read
+by nobody, so the six Turbo Ethers §6.8 stocks for a five-battle chain with no
+menu between links could not refill a single spell. `resolveAbility` now applies
+either field to each living target and emits `mp-heal`. This one favours the
+player; it is a restorative doing what its own description says it does.
+
+## 2026-09-17 — FFX-2 gets an Item command, accessories, and three damage-rule repairs
+
+Key `ffx2-vegnagun-shuyin`. Five defects found by running Chapter 5 — the
+five-battle Vegnagun chain into Shuyin — headlessly through the shipped
+`intendedStrategy` (`tests/unit/strategy-ffx2-vegnagun-shuyin.test.ts`). None
+changes a type. All five are behaviour **every** FFX-2 chapter sees, so Chapter
+4's agent should re-measure Bahamut against them.
+
+**1. `src/battle/ffx2/targeting.ts`, `setup.ts`, `execute.ts`, `engine.ts` — the
+FFX-2 command menu never offered an Item row, so the party's inventory was
+unreachable.**
+
+`execute.ts` has always resolved a `kind: 'item'` command, `Ffx2EngineOptions`
+has always carried an `items` registry, `FFX2PartyBuild.inventory` has always
+been populated, and `BattleScreenSetup.carryInventory` has always read the item
+counts back out of `state.flags['inventory:<itemId>']` when a chained link hands
+the party on. Nothing wrote those flags and nothing built the rows, so the whole
+inventory was decorative: `farplaneBuild` ships 25 Phoenix Downs, 20 X-Potions
+and the Light and Lunar Curtains that `research/ffx2-vegnagun-shuyin.md` §7.2
+opens the Shuyin fight with ("Light Curtain (Protect) on all three + Lunar
+Curtain (Shell) on all three"), and a player could reach none of them.
+
+Additive, and it follows the FFX side's shape (`src/battle/ffx/commands.ts`):
+
+- `buildState` seeds `flags['inventory:<itemId>']` from the build, then from
+  `options.carriedParty.inventory` when a chain hands one in, and exports
+  `inventoryCounts(state)`.
+- `MenuContext` gains optional `items` and `inventory`; `buildCommands` appends
+  one `category: 'item'` row per stocked, `usableInBattle` item, with the
+  **item's** `targeting` (a Phoenix Down is `single-ally`) and the effect
+  ability's `flags` (so `can-target-dead` keeps a KO'd girl selectable). No rows
+  while Berserk or Itchy, per §2.8.
+- `performCommand` decrements the count on the **resolving** action, not on the
+  pick, so an interrupted charge does not eat the stock.
+
+A UI that reads `AvailableCommand.category` will now see `'item'` rows in FFX-2
+where it previously saw none. `src/ui/ffx2/CommandMenu.ts` already groups by
+category, so this is new content in an existing submenu, not a new shape.
+
+**2. `src/battle/ffx2/adapters.ts` — every `percent-total` revive and item heal
+in `src/data/ffx2/**` landed at a sixteenth of its value.**
+
+`types.ts` defines `percent-total` as `targetMaxHP * DmgCon // 16`, and this
+folder's own baseline tables are written in those units (`tail-beam` `power: 5`
+for 5/16, `full-life` `power: 16` for a full revive). Every `percent-total`
+definition in the **data** layer instead writes the plain fraction — Phoenix
+Down `0.25`, Life `0.5`, Full-Life `1.0`, White Wind `0.375`, X-Potion /
+Elixir / Megalixir `1.0`, Machina Maw's Revival `0.5`, and the Core's and the
+Head's own Full-Life and Acta Est Fabula `1.0` — each with a comment saying so
+("revives at 50% max HP [ffx2-combat-core §2.3]"). Fourteen definitions across
+eight files, consistently.
+
+Read literally against the engine's units they were all sixteen times too small:
+a Phoenix Down stood a girl up on **1.6%** of her bar against §2.3's sourced
+"Phoenix Down 25%, Life spell 50%, Full-Life 100%" `[verified: 2 sources]`, an
+X-Potion healed 6.25% instead of the full bar, and the Core revived a 3,000-HP
+Bulwark on 187. Revival simply did not work.
+
+Converted at the one seam between the two conventions —
+`abilityRegistryFrom` — rather than by editing fourteen data definitions or by
+changing a formula the baseline tables depend on. A `power` above 1 is already
+in DmgCon units and passes through untouched, so the normalisation is idempotent
+if the data layer is ever rewritten to the documented shape.
+
+**3. `src/battle/ffx2/resolve.ts` — a heal registered a Chain hit.**
+
+The Chain does three things to a target: raises the damage of the next hit,
+removes its evasion, and locks it out of starting an action while the window is
+open (`ffx2-combat-core.md` §1.7). `resolveAbility` called `registerHit` for
+every ability with a formula, **including restoratives**, which turned the
+party's own healer into the boss's best weapon. Measured on the Tail, seed 7:
+Yuna's Pray opened a 2-second window on all three girls and the Noli Me Tangere
+107 ticks later landed at ×1.45 for **1,869 / 1,812 / 1,741** against §1.2's
+sourced band of **1,171–1,323**, one-shotting the White Mage from full; the same
+window also froze whoever had just been healed. Now an ability that `heals`
+(flag or the `healing` formula, spelled exactly as `formulas.ts` spells it)
+neither registers a chain nor emits a `chain` event. Revives already skipped it.
+
+**4. `src/battle/ffx2/accessories.ts` (new) + `setup.ts` — accessories did
+nothing.**
+
+`setup.ts` has always documented a girl's stat block as
+`level + dressphere + garment grid + accessories` and every build file annotates
+what it equips ("max HP +100%", "Str +30"). Only the first three terms were ever
+computed. The new module is the engine's cited baseline for §5.4's statistic
+accessories, in the same spirit as `dressphere-stats.ts` and the fallback Grids
+in `garment-grids.ts`; a `AccessoryDef` data registry may supersede it later.
+Stats only — Ribbon's immunity and Adamantite's constant Protect/Shell are
+statuses and are not modelled.
+
+Chapter 5's case: §7.2 makes the Tail fight's whole survival condition "keep
+everyone **above 1,323 HP**" (Noli Me Tangere is a flat 1,250 constant of
+`damageType: 'other'`, so nothing mitigates it and §7.2 says outright that "raw
+max HP is the only defence"), and §6.3/§6.7 answer it with a Crystal Bangle on
+all three. With accessories inert a Lv 46 White Mage stood at 1,244 max HP and
+died to the first Noli Me Tangere of the chain, from full, with no play
+available. **Chapter 4's `bevelleBuild` equips six accessories too and will get
+stronger; re-measure Bahamut.**
+
+**5. `src/data/ffx2/abilities/dark-knight.ts` — Darkness was typed
+`physical`.**
+
+`damageType` is the field flowchart step 16 (Protect/Shell) and the Bulwarks'
+retaliation log both read. §6.4 calls Darkness "**Special** damage to ALL
+enemies. Ignores Defense. Long range. Cannot crit", and §3.3's retaliation table
+names it explicitly under the third class: "the third class (NONE, i.e.
+Darkness/Charon/fixed/fractional player abilities) gets answered with the
+single-target buff-strip instead of the AoE". Typed `physical`, every Darkness in
+the Body/Core fight was answered with "Physical attack detected" — 5/16 of max
+HP to the **whole party** from **both** Bulwarks — instead of "Hostile activity
+detected" on the caster alone, roughly ten times the retaliation the encounter is
+built around. Now `damageType: 'other'`, and `crit-eligible` is dropped to match
+§6.4's "Cannot crit". This also stops an enemy Protect halving it, which is
+correct: the Nodes cast Protect on the Leg and the Right Bulwark on the Core.
+
+## 2026-09-17 — FFX-2 `validTargets` is the legal pool, and Bahamut's party-wide magic cannot be evaded
+
+Key `ffx2-bahamut`. Two defects found by running Chapter 4 headlessly through
+the shipped `intendedStrategy` (`tests/unit/strategy-ffx2-bahamut.test.ts`).
+Neither changes a type; both change what the FFX-2 engine *reports* and both are
+behaviour other chapter agents will see, so they are recorded here.
+
+**1. `src/battle/ffx2/targeting.ts` — `validTargetIds` returned one id for every
+`single-*` ability, not the pool.**
+
+`AvailableCommand.validTargets` is the cursor's candidate list — one entry means
+"auto-target", several mean "let the player choose"
+(`src/ui/ffx2/CommandMenu.ts:238`, `src/ui/ffx/CommandMenuLogic.ts:153`), and the
+FFX engine fills it that way (`src/battle/ffx/commands.ts` offers Cure as all
+three actives). The FFX-2 version computed it by running `resolveTargets` with a
+stub RNG. That is right for `self` and the `all-*` modes and **wrong for every
+`single-*` mode**, because `resolveTargets` exists to *choose*: it returned
+`[pool[0]]`.
+
+Measured consequence in Chapter 4: the White Mage's `Cure`, `Cura` and `Life`
+were offered with `validTargets: ['yuna']` only — she could not heal Rikku or
+Paine at all, through the menu or through any tactic, because both read this
+list. On a multi-part boss the same bug pins every single-enemy row to the first
+part.
+
+Now: `single-enemy` returns every targetable opponent, `single-ally` every
+targetable ally, `single-any` everyone targetable; `can-target-dead` still opens
+the dead. Everything else still goes through `resolveTargets` unchanged.
+**Not additive** — rows that used to carry one id now carry up to three. Callers
+that assumed `validTargets[0]` is "the" target still work; callers that used the
+length as a proxy for "is this single-target?" must read `ability.targeting`
+instead.
+
+**2. `src/battle/ffx2/abilities-core.ts` — Bahamut's Curse, Impulse and Mega
+Flare were evadable.**
+
+The engine's guard is `canMiss !== false`, so a flag that is merely absent means
+"can miss". `src/data/ffx2/enemies/bahamut-abilities.ts` carries
+`canMiss: false` on all three, but `src/battle/ffx2/ai/bahamut.ts` submits the
+**engine-side** ids (`bahamut-curse`, `impulse`, `mega-flare`), so the record
+consulted was the fallback table in `abilities-core.ts`, which omitted the flag.
+Measured on seed 1 before the fix:
+`{"type":"miss","targetId":"yuna","sourceId":"bahamut","reason":"evaded"}` on an
+**Impulse** — party-wide fractional magic, dodged.
+
+`research/ffx2-bahamut.md` §2.2 lists Impulse and Mega Flare as hitting "All 3"
+with no accuracy term, and §1.1 is explicit that the evadable move is the
+*physical* one. The three fallback entries now carry `canMiss: false`, matching
+the data record. This made the fight **harder**, not easier.
+
+Bahamut-only ids, so no other encounter's numbers move.
+
 ## 2026-09-17 — `'sensor'` event payload and `Combatant.revealed` (additive)
 
 Key `ffx2-sensor`. Nothing in the project emitted a `'sensor'` `BattleEvent`:
@@ -327,3 +883,74 @@ Three naming decisions worth knowing about, all documented in
     - The single-owner rule from decision 11 still stands — it just points at the
       HUD instead of the presenter. Two systems must never both draw
       `.ig-damage` for the same hit.
+
+13. **`AbilityDef.extra.statsFrom` — a two-actor rig where the turn slot and
+    the stat block belong to different combatants.** (Chapter 1, 2026-09-17.)
+
+    `research/ffx-seymour-flux.md` §5.4 settles an ambiguity the wiki leaves
+    open: Cross Cleave and Total Annihilation appear under *both* enemies'
+    ability lists, but the decompiled `monster_actions.json` puts them on
+    **`m142` (Seymour Flux) only**, and the damage math is decisive — Cross
+    Cleave with Seymour's Strength 30 is 2,275 against a Def-30 character where
+    every guide reports "around 2,000", and with the mount's Strength 40 it is
+    5,294. §4.4.2's "On attribution" paragraph states the shipping rule in as
+    many words: *"the Mortiorchis actor owns the turn slot and the animation;
+    the Seymour actor owns the stats."*
+
+    The engine had no way to express that, so the mount's actions used the
+    mount's stats. Measured: Cross Cleave hit a 2,420-HP Tidus for **5,776** on
+    turn one, which is a party wipe before anybody acts.
+
+    The addition is one optional field and one optional resolve option, and it
+    is inert everywhere it is not set:
+
+    - `AbilityDef.extra.statsFrom: CombatantId` (data). Set on `cross-cleave`
+      and `total-annihilation` in
+      `src/data/ffx/enemies/seymour-flux-abilities.ts`, nowhere else.
+    - `ResolveOptions.statsUser?: FFXCombatant` (`src/battle/ffx/abilities.ts`).
+      Read at exactly one place — the `DamageInput.user` handed to
+      `computeDamage`. **Only the damage chain** sees it. The events, the
+      targeting, the reflect/nul handling, the MP cost, the CTB charge and the
+      Overdrive bookkeeping all stay with the actor whose turn it is, so the
+      mount still owns the animation and the log still reads
+      `actorId: 'mortiorchis'`.
+    - `src/battle/ffx/execute.ts` wires the two together and no-ops when the
+      named actor is the one already acting or is not on the field.
+
+    Other chapters are unaffected: no other `AbilityDef` sets `statsFrom`, and
+    an unset `statsUser` leaves `resolveAbility` byte-identical.
+
+14. **`rollDefaultMinigame` honours the Overdrive the command named.**
+    (Chapter 1, 2026-09-17. `src/battle/ffx/overdrive.ts`.)
+
+    The `kimahri-rage` branch defaulted to `user.overdrive.unlockedOverdriveIds[0]`
+    and **discarded `def.id`** — the record the `OverdriveCommand` actually
+    carried. Every Ronso Rage therefore resolved as whatever sat first in the
+    list, which for the Gagazet preset is Jump. Measured as
+    `action-start{ command.id: 'mighty-guard', abilityId: 'jump' }`: the command
+    named Mighty Guard, the gauge was spent, and Jump came out. That made
+    §6 row 13's answer to Total Annihilation — and §7.9.2's *rule* that Kimahri
+    arrives with a full gauge because he Lancet-learned it off Biran Ronso
+    minutes earlier — uncastable.
+
+    Now `rage.rageId = def.id`, matching the `lulu-fury` branch directly above
+    it ("the spell rode in on `OverdriveCommand.id`"). A menu marker can never
+    reach the branch: `execute.ts` refuses those first. The change affects any
+    caller that names a Rage and previously silently got Jump, which is a fix
+    in every case.
+
+15. **The Chapter 1 AI script targets the field, not `activeIds`.**
+    (`src/battle/ffx/ai/seymour-flux.ts`, 2026-09-17.)
+
+    While an aeon holds the field it is "the *only* present friendly actor —
+    the party is off-stage with frozen counters" (`state.ts friendlies`,
+    ffx-combat-core §6.1), and that is the mechanical basis of
+    ffx-seymour-flux §6 row 15's summon-to-stall. But `targeting.ts` filters an
+    *explicit* target list on `onField` alone, which a frozen party member still
+    satisfies, so a script that hands the engine `state.activeIds` can land
+    Lance of Atrophy or Full-Life on an off-stage member through a summon.
+
+    Seymour's and the mount's target helpers now read `livingFriendlies(ctx)`
+    instead, which is the engine's own answer to the same question. This is a
+    Chapter 1 change only; the general `targeting.ts` behaviour is untouched and
+    is recorded here as a **known sharp edge for other chapters' scripts**.

@@ -143,6 +143,13 @@ export const crossCleave: AbilityDef = {
   removesStatuses: [],
   flags: ['strong-delay', 'crit-eligible'],
   accuracy: 100, // [estimate — matches Seymour's listed Accuracy stat, §1.1]
+  // §5.4 [derived, cross-validated against 3 guides]. The Mortiorchis performs
+  // this, but the row lives in **Seymour's** `m142` action list and is computed
+  // with **his** Strength 30. With the mount's Strength 40 the same swing is
+  // 5,294 against a Def-30 character where every guide reports "around 2,000",
+  // and measured here it was 5,776-5,933 into a 2,420-HP Tidus — a one-shot
+  // party wipe on turn one. See `ResolveOptions.statsUser`.
+  extra: { statsFrom: 'seymour-flux' },
   messageTemplate: '{user} uses Cross Cleave',
 };
 
@@ -172,6 +179,11 @@ export const totalAnnihilation: AbilityDef = {
   // this project's evidence shows always hits (see file header's ACCURACY
   // EDIT note), so the old placeholder byte would never be read anyway.
   canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — see file header.
+  // §5.4 [derived, cross-validated against 3 guides]. Same ownership rule as
+  // Cross Cleave: animated on the Mortiorchis, computed with Seymour's Magic
+  // 15. With the mount's Magic 40 the five hits total 14,760 against an
+  // MDef-20 character where the sourced figure is "about 4K".
+  extra: { statsFrom: 'seymour-flux' },
   messageTemplate: '{user} uses Total Annihilation',
 };
 

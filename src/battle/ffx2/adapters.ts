@@ -43,9 +43,41 @@ function toArray<T>(source: Collection<T>): T[] {
   return Array.isArray(source) ? [...source] : Object.values(source as Record<string, T>);
 }
 
+/**
+ * `percent-total` powers, normalised into the engine's units.
+ *
+ * `types.ts` defines `percent-total` as `targetMaxHP * DmgCon // 16`, and this
+ * folder's own baseline tables are written that way (`tail-beam` `power: 5`
+ * for 5/16, `full-life` `power: 16` for a full revive). **Every**
+ * `percent-total` definition in `src/data/ffx2/**` instead writes the plain
+ * fraction — Phoenix Down `0.25`, Life `0.5`, Full-Life `1.0`, White Wind
+ * `0.375`, X-Potion / Elixir / Megalixir `1.0`, and the same for the bosses'
+ * own Full-Life and Acta Est Fabula — each with a comment saying so
+ * ("revives at 50% max HP [ffx2-combat-core §2.3]").
+ *
+ * Read literally against the engine's units those are all **sixteen times too
+ * small**: a Phoenix Down stood a girl up on 1.6% of her bar instead of
+ * `ffx2-combat-core.md` §2.3's sourced "Phoenix Down **25%**, Life spell
+ * **50%**, Full-Life **100%**" `[verified: 2 sources]`, and an X-Potion healed
+ * 6.25% instead of the full bar (§2.3's item table). The measured consequence
+ * in Chapter 5 was that revival did not work at all: the party could stand
+ * someone up and watch her die to the next hit.
+ *
+ * So the conversion happens here, at the one seam between the two conventions,
+ * rather than by editing fourteen data definitions across eight files or by
+ * changing a formula the baseline tables depend on. A `power` above 1 is
+ * already in DmgCon units and passes through untouched, which is what keeps
+ * this idempotent if the data layer is ever rewritten to the documented shape.
+ */
+function normalisePercentTotal(ability: AbilityDef): AbilityDef {
+  if (ability.formula !== 'percent-total') return ability;
+  if (ability.power > 1 || ability.power <= 0) return ability;
+  return { ...ability, power: ability.power * 16 };
+}
+
 /** Wrap an ability table. Ids the table lacks fall through to the baseline. */
 export function abilityRegistryFrom(source: Collection<AbilityDef>): AbilityRegistry {
-  const byId = new Map(toArray(source).map((a) => [a.id, a]));
+  const byId = new Map(toArray(source).map((a) => [a.id, normalisePercentTotal(a)]));
   return { get: (id) => byId.get(id) };
 }
 

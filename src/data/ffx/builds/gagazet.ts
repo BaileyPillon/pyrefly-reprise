@@ -218,7 +218,19 @@ function auron(): FFXMemberBuild {
       armor: { name: 'Blessed Bracer', slots: 4, autoAbilities: ['hp-10', 'zombie-ward'] },
     },
     overdrive: {
-      gauge: 0, // reserve member — untouched by the approach fights
+      // §7.9.2 [estimate, derived from §7.9.1's extracted formulas]: "Auron |
+      // Stoic | **70%** | Auron eats the hits: ~2.3x his own max HP in absorbed
+      // damage (70 / 30). Highest gauge in the party, which is correct — he is
+      // the one the preset expects to open with Dragon Fang."
+      //
+      // Corrected from 0 on 2026-09-17. The old value came with the note
+      // "reserve member — untouched by the approach fights", which is a
+      // reasonable-sounding inference that §7.9.2 contradicts by name: its
+      // table is per-character and does not distinguish the active three from
+      // the bench, and character gauges **persist between battles** (§7.9.2's
+      // opening note), so a benched Auron carries in whatever he walked out of
+      // the Ronso duel with.
+      gauge: 70,
       mode: 'stoic',
       unlockedModes: ['stoic'],
       unlockedOverdriveIds: ['dragon-fang'],
@@ -255,7 +267,10 @@ function wakka(): FFXMemberBuild {
       weapon: { name: "Wakka's Ball", slots: 1, autoAbilities: [], bonusCrit: BASE_WEAPON_BONUS_CRIT },
       armor: { name: 'Glorious Armguard', slots: 3, autoAbilities: ['hp-10'] },
     },
-    overdrive: { gauge: 0, mode: 'warrior', unlockedModes: ['stoic', 'warrior'], unlockedOverdriveIds: ['element-reels'] },
+    // §7.9.2 [estimate]: "Wakka | Warrior | **30%** | ~3 Attacks; Wakka is the
+    // likeliest bench-warmer on a Ronso-heavy stretch." Corrected from 0 —
+    // see the note on Auron's gauge above.
+    overdrive: { gauge: 30, mode: 'warrior', unlockedModes: ['stoic', 'warrior'], unlockedOverdriveIds: ['element-reels'] },
     sphereGrid: { position: 'wakka-sphere-30', activatedNodeIds: [], sLv: 30, ap: 0, spheres: {} },
   };
 }
@@ -288,7 +303,10 @@ function lulu(): FFXMemberBuild {
       weapon: { name: "Lulu's Moogle", slots: 1, autoAbilities: ['magic-10'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
       armor: { name: 'Glorious Bangle', slots: 3, autoAbilities: ['hp-10', 'magic-def-10'] },
     },
-    overdrive: { gauge: 0, mode: 'stoic', unlockedModes: ['stoic'], unlockedOverdriveIds: ['fury'] },
+    // §7.9.2 [estimate]: "Lulu | Stoic | **45%** | 1.5x her (low) max HP
+    // absorbed — low HP means Stoic fills fast on her." Corrected from 0 — see
+    // the note on Auron's gauge above.
+    overdrive: { gauge: 45, mode: 'stoic', unlockedModes: ['stoic'], unlockedOverdriveIds: ['fury'] },
     sphereGrid: { position: 'lulu-sphere-30', activatedNodeIds: [], sLv: 30, ap: 0, spheres: {} },
   };
 }
@@ -320,7 +338,10 @@ function rikku(): FFXMemberBuild {
       weapon: { name: "Rikku's Claw", slots: 1, autoAbilities: [], bonusCrit: BASE_WEAPON_BONUS_CRIT },
       armor: { name: 'Glorious Targe', slots: 3, autoAbilities: ['hp-10'] },
     },
-    overdrive: { gauge: 0, mode: 'comrade', unlockedModes: ['stoic', 'comrade'], unlockedOverdriveIds: ['mix'] },
+    // §7.9.2 [estimate]: "Rikku | Comrade | **35%** | ~1.75 ally-HP-bars of
+    // party damage watched from the bench." Corrected from 0 — see the note on
+    // Auron's gauge above.
+    overdrive: { gauge: 35, mode: 'comrade', unlockedModes: ['stoic', 'comrade'], unlockedOverdriveIds: ['mix'] },
     // Rikku starts with an S.Lv offset (§7.2 decompiled: +25); folded into the higher starting sLv here.
     sphereGrid: { position: 'rikku-sphere-42', activatedNodeIds: [], sLv: 42, ap: 0, spheres: {} },
   };
@@ -356,6 +377,7 @@ function aeon(
   acc: number,
   abilityIds: string[],
   overdriveIds: string[],
+  overdriveGauge: number,
 ): AeonBuild {
   return {
     id,
@@ -364,7 +386,21 @@ function aeon(
     stats: { hp, mp, str, def, mag, mdef, agi, luck: 5, eva, acc, maxHp: hp, maxMp: mp }, // luck [estimate]
     hp,
     mp,
-    overdriveGauge: 0, // reserve for this chapter — Seymour Banishes a summon after one turn, so the aeon list mostly matters for that beat
+    // §7.9.2, "Aeon gauges — the part §7.9 omitted entirely" [estimate for the
+    // six values; the mechanisms verified: 2 sources]. Corrected from a flat 0
+    // on 2026-09-17. The old value's note — "Seymour Banishes a summon after
+    // one turn, so the aeon list mostly matters for that beat" — is the exact
+    // reading §7.9.2 exists to overturn: because Banish leaves the aeon
+    // **exactly one turn**, a full gauge is the difference between a summon
+    // that Overdrives and a summon that does nothing but stall, and §6 row 15
+    // ("summon every aeon with a full Overdrive gauge") is one of the three
+    // named win conditions. §7.9.2 also fixes the budget the encounter is to
+    // be balanced against — "2 full aeon Overdrives + 1 full character
+    // Overdrive (Kimahri's Mighty Guard) + ~3 more aeon Overdrives reachable
+    // inside the fight" — which a party of five empty aeons cannot produce.
+    // Aeon gauges persist between battles and reset only when that aeon is
+    // defeated (§7.9.2 opening note).
+    overdriveGauge,
     abilityIds: [...abilityIds, 'shield', 'boost'],
     overdriveIds,
   };
@@ -377,11 +413,11 @@ export const gagazetBuild: FFXPartyBuild = {
   reserve: ['auron', 'wakka', 'lulu', 'rikku'],
   // §7.6 [verified: 2 sources] — all five mandatory aeons available; Yojimbo/Anima/Magus Sisters assumed not yet obtained.
   aeons: [
-    aeon('valefor', 'Valefor', 738, 24, 22, 31, 34, 34, 15, 22, 12, ['sonic-wings'], ['energy-ray']),
-    aeon('ifrit', 'Ifrit', 988, 23, 23, 38, 33, 30, 14, 11, 12, ['meteor-strike'], ['hellfire']),
-    aeon('ixion', 'Ixion', 983, 25, 24, 34, 32, 42, 12, 12, 13, ['aerospark'], ['thors-hammer']),
-    aeon('shiva', 'Shiva', 878, 26, 22, 22, 37, 34, 22, 35, 12, ['heavenly-strike'], ['diamond-dust']),
-    aeon('bahamut', 'Bahamut', 1398, 35, 26, 35, 29, 41, 15, 23, 12, ['impulse'], ['mega-flare']),
+    aeon('valefor', 'Valefor', 738, 24, 22, 31, 34, 34, 15, 22, 12, ['sonic-wings'], ['energy-ray'], 100), // §7.9.2 "the oldest aeon, used casually since Besaid... Full by default."
+    aeon('ifrit', 'Ifrit', 988, 23, 23, 38, 33, 30, 14, 11, 12, ['meteor-strike'], ['hellfire'], 75), // §7.9.2 "used regularly on the Gagazet approach"
+    aeon('ixion', 'Ixion', 983, 25, 24, 34, 32, 42, 12, 12, 13, ['aerospark'], ['thors-hammer'], 60), // §7.9.2
+    aeon('shiva', 'Shiva', 878, 26, 22, 22, 37, 34, 22, 35, 12, ['heavenly-strike'], ['diamond-dust'], 50), // §7.9.2
+    aeon('bahamut', 'Bahamut', 1398, 35, 26, 35, 29, 41, 15, 23, 12, ['impulse'], ['mega-flare'], 100), // §7.9.2 "authored as full on purpose" — the only native Break Damage Limit in the chapter
   ],
   // §7.8 [estimate] — typical inventory, includes the two Mega-Potions found on the mountain.
   inventory: [

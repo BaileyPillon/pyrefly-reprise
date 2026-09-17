@@ -7,7 +7,7 @@
  */
 
 import type { AbilityDef, AvailableCommand, FFXCombatant } from '../common/types.ts';
-import { type Ctx, abilityOf, has, isAlive, rankOf, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, has, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
 import { validTargets } from './targeting.ts';
 import { overdriveReady } from './overdrive.ts';
@@ -121,19 +121,28 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
 
   // Switch: the incoming member takes the turn happening right now, so the turn
   // is not consumed by the swap [ffx-combat-core §1.7].
+  //
+  // The row is gated on `canSwitchIn`, **not** `isAlive`. `isAlive` folds in
+  // `onField`, and a benched member is by definition off the field
+  // (`removed === true`), so the old gate disabled every switch row the engine
+  // ever built and four of the seven guardians could never enter a battle.
+  // §1.7's rule is that any reserve member may be swapped in; only one who
+  // cannot take the handed-over turn — KO'd, petrified, ejected — may not.
   if (user.side === 'party') {
     for (const id of ctx.state.reserveIds) {
       const bench = tryActor(ctx, id);
       if (!bench || bench.removed === false || has(bench, 'eject')) continue;
-      rows.push({
+      const row: AvailableCommand = {
         command: { kind: 'switch', targets: [], extra: { outId: user.id, inId: id } },
         label: bench.name,
         category: 'special',
         mpCost: 0,
         rank: 3,
-        enabled: isAlive(bench),
+        enabled: canSwitchIn(bench),
         validTargets: [],
-      });
+      };
+      if (!row.enabled) row.disabledReason = 'Unable to fight';
+      rows.push(row);
     }
   }
 

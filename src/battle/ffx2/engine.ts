@@ -66,7 +66,7 @@ import {
 import { advanceStatuses, canAct, ticksUntilStatusEvent } from './statuses.ts';
 import { applyHpDelta, heal, type ResolveContext } from './resolve.ts';
 import { buildCommands } from './targeting.ts';
-import { buildState } from './setup.ts';
+import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
 import { performCommand, type ExecEnv } from './execute.ts';
@@ -142,6 +142,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
           grid: this.grids.get(actor.dresspheres?.garmentGrid.id ?? ''),
           gridNodes: this.gridNodes[actor.id],
           canEscape: this.battleState.flags['canEscape'] === true,
+          ...(this.options.items ? { items: this.options.items } : {}),
+          inventory: inventoryCounts(this.battleState),
         }),
       };
     }
@@ -344,8 +346,42 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     performCommand(this.env(), unit, command, true);
   }
 
+  /**
+   * Tell every enemy that was hit by this action that it was hit.
+   *
+   * `AiScript.onDamaged` has existed in `internal.ts` since the FFX-2 scripts
+   * were written and **nothing ever called it**, so three canon mechanics were
+   * silently inert: the Core's one-slot attack log, which is the only thing
+   * that makes the Bulwarks retaliate at all and which
+   * [ffx2-vegnagun-shuyin §3.3] calls "the fight's whole identity"; the Nodes'
+   * colour machine, which §3.2 advances on "(own turn resolves) **OR** (hit by
+   * any attack)"; and the Head's hit counter, which fires Odi Et Amo (§3.4).
+   *
+   * Driven off the drafts this action produced rather than from inside
+   * `resolve.ts`, so one action notifies each target once with the true total,
+   * counters included, and the ordering of the event log is untouched.
+   */
+  private notifyDamaged(startedAt: number, actor: Ffx2Unit): void {
+    const produced = this.drafts.slice(startedAt);
+    const totals = new Map<CombatantId, number>();
+    for (const draft of produced) {
+      if (draft.type !== 'damage') continue;
+      const hit = draft as { targetId: CombatantId; amount: number };
+      if (!(hit.amount > 0)) continue;
+      // An HP *cost* is the caster paying for her own ability, not a hit on her.
+      if (hit.targetId === actor.id && actor.side === 'party') continue;
+      totals.set(hit.targetId, (totals.get(hit.targetId) ?? 0) + hit.amount);
+    }
+    for (const [targetId, amount] of totals) {
+      const unit = this.units.find((u) => u.id === targetId);
+      if (!unit || unit.side !== 'enemy') continue;
+      aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(this.aiContext(unit), actor.id, amount);
+    }
+  }
+
   /** Post-action bookkeeping: AI hooks, then story triggers and battle end. */
   private afterAction(actor: Ffx2Unit, startedAt: number): void {
+    this.notifyDamaged(startedAt, actor);
     for (const unit of this.units) {
       if (unit.side !== 'enemy') continue;
       aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(this.aiContext(unit), actor);

@@ -1,0 +1,255 @@
+{
+  "url": "http://localhost:5230/",
+  "mode": "gallery",
+  "gallery": [
+    "D:/Final Fantasy/docs/screenshots/70/40-title.png",
+    "D:/Final Fantasy/docs/screenshots/70/41-chapter-select.png",
+    "D:/Final Fantasy/docs/screenshots/70/42-party-prep.png",
+    "D:/Final Fantasy/docs/screenshots/70/42b-sphere-grid.png",
+    "D:/Final Fantasy/docs/screenshots/70/43-pre-cutscene.png",
+    "D:/Final Fantasy/docs/screenshots/70/44-battle-open.png",
+    "D:/Final Fantasy/docs/screenshots/70/45-battle-skills.png",
+    "D:/Final Fantasy/docs/screenshots/70/48-overdrive.png",
+    "D:/Final Fantasy/docs/screenshots/70/46-attack.png",
+    "D:/Final Fantasy/docs/screenshots/70/47-boss-attack.png",
+    "D:/Final Fantasy/docs/screenshots/70/49-results.png",
+    "D:/Final Fantasy/docs/screenshots/70/50-yunalesca.png",
+    "D:/Final Fantasy/docs/screenshots/70/51-bfa.png",
+    "D:/Final Fantasy/docs/screenshots/70/52-ffx2-bahamut.png",
+    "D:/Final Fantasy/docs/screenshots/70/53-ffx2-vegnagun.png"
+  ],
+  "steps": [
+    {
+      "step": "party-prep",
+      "tabs": [
+        "stats",
+        "sphere-grid",
+        "equipment",
+        "items",
+        "overdrive"
+      ],
+      "tab": "stats"
+    },
+    {
+      "step": "battle-submenu",
+      "opened": true,
+      "category": "White Magic▸×3",
+      "entries": [
+        "Haste8MP",
+        "Hastega30MP",
+        "Slow12MP"
+      ]
+    },
+    {
+      "step": "46-attack.png",
+      "timing": "f6",
+      "seq": 4,
+      "actorId": "tidus",
+      "side": "party",
+      "kind": "ability",
+      "ability": "Hastega"
+    },
+    {
+      "step": "48-overdrive",
+      "seq": 25,
+      "actorId": "kimahri",
+      "side": "party",
+      "kind": "overdrive",
+      "ability": "Mighty Guard"
+    },
+    {
+      "step": "47-boss-attack.png",
+      "timing": "f6",
+      "seq": 45,
+      "actorId": "mortiorchis",
+      "side": "enemy",
+      "kind": "ability",
+      "ability": "Full-Life"
+    },
+    {
+      "step": "46-attack.png",
+      "timing": "f14",
+      "seq": 59,
+      "actorId": "tidus",
+      "side": "party",
+      "kind": "item",
+      "ability": "Holy Water"
+    },
+    {
+      "step": "46-attack.png",
+      "timing": "f26",
+      "seq": 91,
+      "actorId": "yuna",
+      "side": "party",
+      "kind": "summon",
+      "ability": "Summon"
+    },
+    {
+      "step": "47-boss-attack.png",
+      "timing": "f14",
+      "seq": 103,
+      "actorId": "seymour-flux",
+      "side": "enemy",
+      "kind": "ability",
+      "ability": "Banish"
+    },
+    {
+      "step": "47-boss-attack.png",
+      "timing": "f26",
+      "seq": 124,
+      "actorId": "mortiorchis",
+      "side": "enemy",
+      "kind": "ability",
+      "ability": "Full-Life"
+    },
+    {
+      "step": "chapter1:outcome",
+      "outcome": {
+        "chapterId": "seymour-flux",
+        "outcome": "victory",
+        "result": {
+          "outcome": "victory",
+          "turns": 82,
+          "elapsedTicks": 345,
+          "elapsedMs": 0,
+          "ap": 10000,
+          "exp": 0,
+          "gil": 6000,
+          "drops": [
+            {
+              "itemId": "lv-4-key-sphere",
+              "count": 1
+            }
+          ],
+          "overkilled": [],
+          "sphereLevelsGained": {
+            "tidus": 9,
+            "yuna": 8,
+            "kimahri": 12
+          }
+        },
+        "elapsedMs": 202945,
+        "links": 1,
+        "preview": false
+      }
+    },
+    {
+      "step": "50-yunalesca.png",
+      "scene": "zanarkand-dome",
+      "placeholder": false,
+      "preview": false,
+      "actors": 4
+    },
+    {
+      "step": "yunalesca:outcome",
+      "outcome": "timeout"
+    },
+    {
+      "step": "51-bfa.png",
+      "scene": "dreams-end",
+      "placeholder": false,
+      "preview": false,
+      "actors": 6
+    },
+    {
+      "step": "braskas-final-aeon:outcome",
+      "outcome": "timeout"
+    },
+    {
+      "step": "52-ffx2-bahamut.png",
+      "scene": "bevelle-underground",
+      "placeholder": false,
+      "preview": false,
+      "actors": 4
+    },
+    {
+      "step": "ffx2-bahamut:outcome",
+      "outcome": {
+        "chapterId": "ffx2-bahamut",
+        "outcome": "victory",
+        "result": {
+          "outcome": "victory",
+          "turns": 75,
+          "elapsedTicks": 295369,
+          "elapsedMs": 98456,
+          "ap": 15,
+          "exp": 1300,
+          "gil": 1000,
+          "drops": [
+            {
+              "itemId": "gris-gris-bag",
+              "count": 1
+            }
+          ],
+          "overkilled": [],
+          "sphereLevelsGained": {},
+          "levelsGained": {}
+        },
+        "elapsedMs": 88313,
+        "links": 1,
+        "preview": false
+      }
+    },
+    {
+      "step": "53-ffx2-vegnagun.png",
+      "scene": "farplane",
+      "placeholder": false,
+      "preview": false,
+      "actors": 4
+    },
+    {
+      "step": "ffx2-vegnagun-shuyin:outcome",
+      "outcome": "timeout"
+    }
+  ],
+  "cutscenes": [],
+  "errors": [],
+  "notes": [],
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "wiring": {
+    "abilitiesFfx": 343,
+    "itemsFfx": 69,
+    "abilitiesFfx2": 324,
+    "itemsFfx2": 33,
+    "dresspheresFfx2": 14,
+    "garmentGridsFfx2": 43,
+    "ffxSource": "index"
+  },
+  "scenes": [
+    {
+      "key": "demo",
+      "title": "Mt. Gagazet — the Prominence",
+      "placeholder": false
+    },
+    {
+      "key": "gagazet",
+      "title": "Mt. Gagazet — the Prominence",
+      "placeholder": false
+    },
+    {
+      "key": "zanarkand-dome",
+      "title": "Zanarkand Dome — the great hall",
+      "placeholder": false
+    },
+    {
+      "key": "dreams-end",
+      "title": "Dream's End — inside Sin",
+      "placeholder": false
+    },
+    {
+      "key": "bevelle-underground",
+      "title": "Bevelle Underground — Vegnagun's chamber",
+      "placeholder": false
+    },
+    {
+      "key": "farplane",
+      "title": "Heart of the Farplane",
+      "placeholder": false
+    }
+  ],
+  "consoleErrors": [
+    "[results] [cutscene] mid-battle beat \"seymour-half\" ran past its 8000ms budget; cut short and resuming the battle (logged once per beat)",
+    "[chapter:yunalesca] [cutscene] mid-battle beat \"yunalesca-last-quarter\" ran past its 8000ms budget; cut short and resuming the battle (logged once per beat)",
+    "[chapter:ffx2-bahamut] [cutscene] mid-battle beat \"first-mega-flare-countdown\" ran past its 8000ms budget; cut short and resuming the battle (logged once per beat)"
+  ]
+}
