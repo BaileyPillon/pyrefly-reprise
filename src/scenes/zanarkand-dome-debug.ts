@@ -49,14 +49,27 @@ export class ZanarkandDomeSceneScreen extends Screen {
       // the wet floor from the sphere on the left. The scene's light rig is
       // built so that these two colours come straight off it.
       //
-      // The bounce runs strong (0.44) because it is the *only* way the sphere
+      // The bounce runs strong (0.70) because it is the *only* way the sphere
       // reaches these figures: a painted cut-out is unlit by design, so the
       // scene's `fayth-sphere-bounce` PointLight lights the water around their
       // boots and nothing of the actors themselves. Without this the party is
-      // the one thing in the frame the room's light source does not touch.
-      rim: { color: lights.rimColorHex, strength: 0.95, dir: lights.rimDir, width: 3.4 },
-      bounce: { color: lights.bounceColorHex, strength: 0.44 },
-      groundShade: 0.3,
+      // the one thing in the frame the room's light source does not touch — and
+      // it went *up* in the same pass that took every other light in the room
+      // down, because the sphere is the one thing in here that should be getting
+      // stronger.
+      rim: { color: lights.rimColorHex, strength: 1.05, dir: lights.rimDir, width: 3.4 },
+      bounce: { color: lights.bounceColorHex, strength: 0.7 },
+      groundShade: 0.4,
+      // The party stands in the *dark* half of a violet hall with one gold
+      // source behind them. Painted cut-outs come out of the art pipeline lit
+      // for a neutral studio, so at brightness 1 they sit a visible step above
+      // the room and read as stickers pasted on the matte.
+      //
+      // 0.86, not 0.90: fixing the scene's display transform moved the band of
+      // frame that is only painting from 0.168 to 0.349 mean luma — the hall it
+      // was set against no longer exists, and a cut-out that sat a step above a
+      // dim room sits two steps above a correctly exposed one.
+      brightness: 0.86,
       shadow: { radius: 0.8, opacity: 0.6, squash: 0.48 },
       breathe: { amplitude: 0.018, speed: 0.42 },
       sway: { amplitude: 0.01, speed: 0.23 },
@@ -105,8 +118,17 @@ export class ZanarkandDomeSceneScreen extends Screen {
       placeholder: () => paintBossSilhouette({ seed: 31 }),
       placeholderBaseline: 0.985,
       rim: { color: lights.rimColorHex, strength: 0.8, dir: lights.rimDir, width: 4 },
-      bounce: { color: lights.bounceColorHex, strength: 0.3 },
+      bounce: { color: lights.bounceColorHex, strength: 0.34 },
       groundShade: 0.12,
+      // The Seymour Flux stand-in is painted with near-white wing flares, and
+      // they are the one thing in this screen that can out-clip the painted
+      // oculus: at brightness 0.92 in the re-lit hall they were the frame's
+      // second-largest blown region. At 0.82 the aura still reads and the only
+      // eroded-clipped pixels left in the frame are the painted oculus and a
+      // sliver of the sphere's rim — 1160 per megapixel against the painting's
+      // own 494, where the pass this replaces scored 5685 *while sitting a full
+      // stop under the paint*.
+      brightness: 0.82,
       hover: { height: 0.3, bobAmplitude: 0.07, bobSpeed: 0.16 },
       shadow: { radius: 1.35, opacity: 0.45, squash: 0.5 },
       breathe: { amplitude: 0.012, speed: 0.22 },

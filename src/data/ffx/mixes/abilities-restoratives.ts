@@ -18,6 +18,15 @@
  *   `rikku-mix` minigame key).
  * - `flags` always includes `'ignores-armored'` and (except where noted)
  *   `'never-break-damage-limit'` [ffx-combat-core §5.9].
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * the first pass recorded a KNOWN GAP here; it is resolved, not open):
+ * see `mixes/abilities.ts` for the full reasoning. These are all
+ * ally/party-targeting results (heals and revives); the research's one
+ * ally-targeted precedent, Pray (§7.5, "always hits"), is now consistent
+ * with the rest of the data rather than contradicting it. `canMiss: false`
+ * is set explicitly on every record here, citing `ffx-bfa-yu-yevon.md` §1.3
+ * `[estimate]` (analogy by damage-type/category — see `mixes/abilities.ts`).
  */
 
 import type { AbilityDef, StatusId } from '../../../battle/common/types.ts';
@@ -60,6 +69,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'heals', 'never-break-damage-limit'],
@@ -84,6 +94,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [...MIX_CLEANSE_STATUSES],
     flags: ['ignores-armored', 'removes-statuses', 'never-break-damage-limit'],
@@ -108,6 +119,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [...MIX_CLEANSE_STATUSES],
     flags: ['ignores-armored', 'heals', 'removes-statuses', 'never-break-damage-limit'],
@@ -131,6 +143,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'heals', 'misses-if-target-alive', 'can-target-dead', 'never-break-damage-limit'],
@@ -154,6 +167,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'heals', 'can-target-dead', 'never-break-damage-limit'],
@@ -176,6 +190,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'heals', 'never-break-damage-limit'],
@@ -198,6 +213,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'heals', 'never-break-damage-limit'],
@@ -221,6 +237,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [...MIX_CLEANSE_STATUSES],
     flags: ['ignores-armored', 'heals', 'removes-statuses', 'never-break-damage-limit'],
@@ -247,6 +264,7 @@ export const RESTORATIVE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [...MIX_CLEANSE_STATUSES],
     flags: ['ignores-armored', 'heals', 'removes-statuses', 'can-target-dead', 'always-break-damage-limit'],

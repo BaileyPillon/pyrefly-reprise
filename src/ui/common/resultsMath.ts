@@ -3,8 +3,15 @@
  * are unit-testable (`tests/unit/ui-common-results.test.ts`).
  */
 
+import type { BattleResult } from '../../battle/common/types.ts';
+import { apForLevel } from '../../battle/ffx/results.ts';
+import type { Chapter } from '../../data/encounters.ts';
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
-import { ITEMS as FFX2_ITEMS } from '../../data/ffx2/index.ts';
+import {
+  ABILITIES as FFX2_ABILITIES,
+  ITEMS as FFX2_ITEMS,
+  STANDARD_DRESSPHERES,
+} from '../../data/ffx2/index.ts';
 
 /** `mm:ss` clear time, per the results-panel convention in `visual-bible.md` §3.8. */
 export function formatClearTime(ms: number): string {
@@ -82,4 +89,147 @@ export function itemLabel(itemId: string): string {
     .split('-')
     .map((w) => (w.length > 0 ? w.charAt(0).toUpperCase() + w.slice(1) : w))
     .join(' ');
+}
+
+// ---------------------------------------------------------------- clear time
+
+/**
+ * FFX's engine only advances `BattleResult.elapsedMs` inside `wait` effects and
+ * it never emits one, so an FFX clear reports `elapsedMs: 0` and the panel used
+ * to print `RESULTS · 0:00` after a 14 s fight. The wall clock the BattleScreen
+ * measures (`BattleScreenResult.elapsedMs`) is the real number; these constants
+ * only back the last-resort conversion from the tick counter, which both
+ * engines always fill in.
+ *
+ * FFX-2's tick rate is exact (`TICK_RATE_BASE = 3000` ticks per second,
+ * `ffx2-combat-core §1.2`). FFX's CTB tick has no wall-clock definition, so
+ * the rate below is measured: a 21-turn chapter-1 fight played at `fast` ran
+ * 106 ticks in 34.6 s of wall clock (~326 ms/tick), and normal speed is
+ * slower again. It is an **estimate**, used only when no real clock exists.
+ */
+export const FFX_MS_PER_TICK = 400;
+export const FFX2_MS_PER_TICK = 1000 / 3000;
+
+/**
+ * A wall clock under this is not a play session — it is an automated run at
+ * `speed: 'skip'`, where every animation wait collapses to zero and a whole
+ * chapter resolves in a few hundred milliseconds. Reporting `0:00` for it is
+ * true but useless, so the estimate takes over.
+ */
+export const MIN_PLAUSIBLE_WALL_CLOCK_MS = 1000;
+
+/**
+ * How long the encounter took, in milliseconds, preferring real clocks:
+ * the presenter's wall clock, then the engine's own battle clock, then the
+ * tick counter converted at this game's rate.
+ */
+export function clearTimeMs(
+  result: { elapsedMs: number; elapsedTicks: number },
+  wallClockMs?: number,
+  game: 'ffx' | 'ffx2' = 'ffx',
+): number {
+  if (wallClockMs !== undefined && wallClockMs >= MIN_PLAUSIBLE_WALL_CLOCK_MS) {
+    return Math.round(wallClockMs);
+  }
+  if (result.elapsedMs >= MIN_PLAUSIBLE_WALL_CLOCK_MS) return Math.round(result.elapsedMs);
+  const perTick = game === 'ffx2' ? FFX2_MS_PER_TICK : FFX_MS_PER_TICK;
+  return Math.max(0, Math.round((result.elapsedTicks || 0) * perTick));
+}
+
+// -------------------------------------------------------------- member rows
+
+/** One line of the per-member spoils list. */
+export interface ResultsMemberRow {
+  id: string;
+  name: string;
+  /** AP in FFX, EXP in FFX-2 — {@link ResultsMemberRow.awardUnit} says which. */
+  award: number;
+  awardUnit: 'AP' | 'EXP';
+  /** Sphere Levels (FFX) or Levels (FFX-2) gained this battle. */
+  levelDelta: number;
+  levelUnit: 'S.Lv' | 'Lv';
+  /**
+   * The second line: where this member's progression now stands. FFX prints
+   * the Sphere Level and the AP banked toward the next one; FFX-2 prints the
+   * dressphere that earned the AP and the ability it is paying for
+   * [ffx-combat-core §10.1, ffx2-combat-core §3.0].
+   */
+  detail: string;
+}
+
+/** `Cura 60/80 AP`-style progress toward the next unlearned ability. */
+function dressphereDetail(
+  dressphereId: string,
+  learned: readonly string[],
+  bankedAp: number,
+): string {
+  const def = STANDARD_DRESSPHERES[dressphereId as keyof typeof STANDARD_DRESSPHERES];
+  const label = (def?.name ?? itemLabel(dressphereId)).toUpperCase();
+  if (!def) return label;
+  const known = new Set(learned);
+  const next = def.abilities.find((a) => a.apCost > 0 && !known.has(a.abilityId));
+  if (!next) return `${label} · MASTERED`;
+  const name = FFX2_ABILITIES[next.abilityId]?.name ?? itemLabel(next.abilityId);
+  const paid = Math.min(bankedAp, next.apCost);
+  return `${label} · ${name.toUpperCase()} ${formatNumber(paid)}/${formatNumber(next.apCost)} AP`;
+}
+
+/** `S.LV 18 · 12/95 AP` — where the grid stands once this battle's AP is banked. */
+function sphereGridDetail(sLv: number, bankedAp: number, levelsGained: number): string {
+  let rest = bankedAp;
+  for (let i = 0; i < levelsGained; i++) rest -= apForLevel(sLv + i);
+  const now = sLv + levelsGained;
+  return `S.LV ${now} · ${formatNumber(Math.max(0, rest))}/${formatNumber(apForLevel(now))} AP`;
+}
+
+/**
+ * The per-member rows for a finished battle: the three active members in
+ * FFX, all three girls in FFX-2. Pure, so `tests/unit` can assert the
+ * progression arithmetic without a DOM.
+ */
+export function buildMemberRows(
+  chapter: Chapter | undefined,
+  result: BattleResult,
+): ResultsMemberRow[] {
+  const build = chapter?.buildRef;
+  if (!build) return [];
+
+  if (build.game === 'ffx') {
+    return build.activeSlots.map((id) => {
+      const member = build.members.find((m) => m.id === id);
+      const sLv = member?.sphereGrid.sLv ?? 0;
+      const banked = (member?.sphereGrid.ap ?? 0) + result.ap;
+      const levelDelta = result.sphereLevelsGained[id] ?? 0;
+      return {
+        id,
+        name: member?.name ?? id,
+        award: result.ap,
+        awardUnit: 'AP' as const,
+        levelDelta,
+        levelUnit: 'S.Lv' as const,
+        detail: sphereGridDetail(sLv, banked, levelDelta),
+      };
+    });
+  }
+
+  return build.members.map((member) => {
+    const progress = member.abilitiesLearned[member.currentDressphere];
+    const banked = (progress?.ap ?? 0) + result.ap;
+    return {
+      id: member.id,
+      name: member.name,
+      award: result.exp,
+      awardUnit: 'EXP' as const,
+      levelDelta: result.levelsGained?.[member.id] ?? 0,
+      levelUnit: 'Lv' as const,
+      detail: dressphereDetail(member.currentDressphere, progress?.learned ?? [], banked),
+    };
+  });
+}
+
+/** The drops as one printed list: `Elixir, Phoenix Down ×2`. */
+export function dropsLabel(drops: BattleResult['drops']): string {
+  return drops
+    .map((d) => itemLabel(d.itemId) + (d.count > 1 ? ` \u00d7${d.count}` : ''))
+    .join(', ');
 }

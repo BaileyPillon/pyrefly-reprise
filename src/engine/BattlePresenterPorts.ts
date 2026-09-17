@@ -11,6 +11,11 @@
  */
 
 import type {
+  AvailableCommand,
+  BattleEngine,
+  BattleResult,
+  Command,
+  MinigameKind,
   BattleEvent,
   CameraRigId,
   CombatantId,
@@ -105,16 +110,25 @@ export interface MessageBarPort {
 
 /** The cutscene runner (`src/story/runner`), wired in when it lands. */
 export interface CutsceneRunnerPort {
-  play(script: StoryScript, opts?: { midBattle?: boolean }): Promise<void>;
   /**
-   * Resolve dialogue lines without waiting for input.
+   * Play one script. `name` is the trigger name, for the runner's own logging;
+   * `midBattle` says the battle is still on screen underneath it.
+   */
+  play(script: StoryScript, opts?: { midBattle?: boolean; name?: string }): Promise<void>;
+  /**
+   * Advance dialogue lines without waiting for input.
    *
    * A mid-battle beat normally blocks on the player pressing Confirm. Under
    * auto-battle, e2e or the critic there is nobody to press it, and the battle
    * would sit on that line forever — so the presenter switches this on
    * whenever it is driving itself.
+   *
+   * `instant` narrows that further to `'skip'` playback: resolve every line at
+   * once and show nothing, because there is no viewer and a whole chapter has
+   * to fit in an e2e budget. Auto-battle on its own still *plays* the beat —
+   * showing the player nothing was the bug, not the feature.
    */
-  setAutoAdvance?(on: boolean): void;
+  setAutoAdvance?(on: boolean, opts?: { instant?: boolean }): void;
 }
 
 /** The subset of `AudioManager` the presenter uses. */
@@ -141,8 +155,15 @@ export interface BattleStage {
   sideOf(id: CombatantId): 'party' | 'enemy' | 'aeon' | undefined;
   /** Ids currently on the field, party/aeon first. */
   staged(): CombatantId[];
-  /** Screen position of a combatant's head, for cursors and numerals. */
-  project(id: CombatantId): Point2 | null;
+  /**
+   * Screen position of a point on a combatant, in CSS pixels.
+   *
+   * Defaults to the head, which is what target cursors and the old numerals
+   * wanted. Damage numerals ask for `'chest'` so the figure they belong to is
+   * unmistakable — hung off the head they float in the air above everyone
+   * (`docs/screenshots/48-overdrive.png`).
+   */
+  project(id: CombatantId, anchor?: 'head' | 'chest' | 'feet'): Point2 | null;
   /** Swap a combatant's painted art — `form-change`, X-2 spherechange. */
   setArt(id: CombatantId, artId: string): Promise<void>;
   /** Stage a combatant that was not on the field at battle start (a summon). */
@@ -204,3 +225,31 @@ export const ELEMENT_SFX: Readonly<Record<string, string>> = {
   water: 'water',
   holy: 'holy',
 } as const;
+
+// ------------------------------------------------------------ loop types
+
+/** How a battle ended, from the presenter's point of view. */
+export type BattleOutcome =
+  | { kind: 'victory'; result: BattleResult }
+  | { kind: 'defeat'; result: BattleResult }
+  | { kind: 'escape'; result: BattleResult }
+  /** `abort()` was called — the screen is leaving. */
+  | { kind: 'aborted' };
+
+/** What one `play()` call stopped on. */
+export interface PlayResult {
+  /** Set when playback halted on a `minigame-request`. */
+  minigame?: { who: CombatantId; kind: MinigameKind; params: Record<string, unknown> };
+  /** Set when a `victory` / `defeat` event was played. */
+  ended?: 'victory' | 'defeat';
+  result?: BattleResult;
+  /** Events after the stop point, which the engine will re-emit. */
+  dropped: number;
+}
+
+/** Picks a command for a player-controlled actor without a human. */
+export type AutoStrategy = (
+  actorId: CombatantId,
+  commands: AvailableCommand[],
+  engine: BattleEngine,
+) => Command | null;

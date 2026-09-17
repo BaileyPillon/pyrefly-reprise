@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { getChapter } from '../../src/data/encounters.ts';
 import {
   apPerMember,
+  buildMemberRows,
+  clearTimeMs,
+  dropsLabel,
+  FFX_MS_PER_TICK,
   formatClearTime,
   formatNumber,
   isGrimChapter,
@@ -102,5 +107,93 @@ describe('apPerMember', () => {
 
   it('returns an empty record for no members', () => {
     expect(apPerMember(36, [])).toEqual({});
+  });
+});
+
+describe('clearTimeMs', () => {
+  const ffxResult = { elapsedMs: 0, elapsedTicks: 140 };
+
+  it('prefers the presenter wall clock over everything else', () => {
+    expect(clearTimeMs({ elapsedMs: 5_000, elapsedTicks: 9_000 }, 14_200, 'ffx')).toBe(14_200);
+  });
+
+  it('falls back to the engine clock when no wall clock is supplied', () => {
+    expect(clearTimeMs({ elapsedMs: 5_400, elapsedTicks: 9_000 }, undefined, 'ffx2')).toBe(5_400);
+  });
+
+  it('never reports 0:00 for an FFX clear, whose engine leaves elapsedMs at 0', () => {
+    // The defect this screen was rebuilt for: a 14 s fight printed "RESULTS · 0:00".
+    expect(clearTimeMs(ffxResult, 0, 'ffx')).toBe(140 * FFX_MS_PER_TICK);
+    expect(formatClearTime(clearTimeMs(ffxResult, undefined, 'ffx'))).not.toBe('0:00');
+  });
+
+  it('converts FFX-2 ticks at the exact 3000/s rate', () => {
+    expect(clearTimeMs({ elapsedMs: 0, elapsedTicks: 9_000 }, undefined, 'ffx2')).toBe(3_000);
+  });
+
+  it('ignores the sub-second wall clock of a `speed: skip` automated run', () => {
+    // The critic and the gallery collapse every animation wait, so the wall
+    // clock is a few hundred ms and would print "0:00" again.
+    expect(clearTimeMs({ elapsedMs: 0, elapsedTicks: 140 }, 180, 'ffx')).toBe(140 * FFX_MS_PER_TICK);
+  });
+});
+
+describe('buildMemberRows', () => {
+  const base = {
+    outcome: 'victory' as const,
+    turns: 12,
+    elapsedTicks: 0,
+    elapsedMs: 0,
+    exp: 0,
+    gil: 0,
+    drops: [],
+    overkilled: [],
+    sphereLevelsGained: {},
+  };
+
+  it('returns nothing when the chapter is unknown', () => {
+    expect(buildMemberRows(undefined, { ...base, ap: 36 })).toEqual([]);
+  });
+
+  it('lists the three active FFX members and pays each the full AP', () => {
+    const rows = buildMemberRows(getChapter('seymour-flux'), {
+      ...base,
+      ap: 36,
+      sphereLevelsGained: { tidus: 1 },
+    });
+    expect(rows.map((r) => r.id)).toEqual(['tidus', 'yuna', 'kimahri']);
+    expect(rows.every((r) => r.award === 36 && r.awardUnit === 'AP')).toBe(true);
+    expect(rows[0]?.levelDelta).toBe(1);
+    expect(rows[0]?.levelUnit).toBe('S.Lv');
+    expect(rows[0]?.detail).toMatch(/^S\.LV \d+ · [\d,]+\/[\d,]+ AP$/);
+  });
+
+  it('pays FFX-2 in EXP and names the dressphere the AP went to', () => {
+    const rows = buildMemberRows(getChapter('ffx2-vegnagun-shuyin'), {
+      ...base,
+      ap: 180,
+      exp: 1480,
+      levelsGained: { yuna: 1 },
+    });
+    expect(rows).toHaveLength(3);
+    expect(rows[0]?.award).toBe(1480);
+    expect(rows[0]?.awardUnit).toBe('EXP');
+    expect(rows[0]?.levelUnit).toBe('Lv');
+    expect(rows[0]?.detail.startsWith('WHITE MAGE')).toBe(true);
+  });
+});
+
+describe('dropsLabel', () => {
+  it('prints names, with a count only where there is more than one', () => {
+    expect(
+      dropsLabel([
+        { itemId: 'phoenix-down', count: 2 },
+        { itemId: 'elixir', count: 1 },
+      ]),
+    ).toBe('Phoenix Down \u00d72, Elixir');
+  });
+
+  it('is empty for no drops, so the ITEMS row can be dropped entirely', () => {
+    expect(dropsLabel([])).toBe('');
   });
 });

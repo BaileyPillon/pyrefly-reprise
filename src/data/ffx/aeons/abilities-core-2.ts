@@ -18,6 +18,12 @@
  *   limit. Overdrive `targeting` is not restated beyond DmgCon in §6.3, so
  *   `'single-enemy'` is used here and marked `[estimate]`.
  * - `minigame: null` on every entry.
+ *
+ * ACCURACY DECISION (2026-09-16): see `abilities-core.ts` for the full
+ * reasoning and citations (`ffx-bfa-yu-yevon.md` §1.3, lines 101/107/108).
+ * `canMiss: false` is set explicitly on Diamond Dust and Mega Flare (both
+ * `category: 'overdrive'`); Shiva's/Bahamut's Attack and Special above are
+ * untouched and still roll accuracy normally.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -88,6 +94,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'single-enemy', // [estimate] — see abilities-core.ts header.
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -162,6 +169,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['none'],
     targeting: 'single-enemy', // [estimate] — see abilities-core.ts header.
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible', 'always-break-damage-limit'],

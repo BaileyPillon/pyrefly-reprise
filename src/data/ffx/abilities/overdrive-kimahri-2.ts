@@ -16,6 +16,13 @@
  * `damageType: 'other'` on every entry, including Doom and White Wind, per
  * the hard rule that all character Overdrives ignore Protect/Shell/
  * Strength+%/Magic+%/Power Break/Magic Break entirely.
+ *
+ * ACCURACY DECISION (2026-09-16): see `overdrive-kimahri-1.ts` for the full
+ * reasoning — no research file gives any Ronso Rage its own accuracy byte
+ * or a "rolls accuracy" statement, so the general `Other`-damage-type
+ * Overdrive rule applies. `canMiss: false` is set explicitly on all 6
+ * records here, citing `ffx-bfa-yu-yevon.md` §1.3 `[verified: 2 sources]`
+ * for the pattern, `[estimate]` for the extension by formula/rider.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -38,6 +45,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -69,6 +77,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [{ status: 'doom', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: [],
@@ -102,6 +111,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['heals'],
@@ -133,6 +143,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [
       { status: 'poison', chance: 100, duration: 254 },
       { status: 'sleep', chance: 100, duration: 10 },
@@ -172,6 +183,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [
       { status: 'protect', chance: 254, duration: 254 },
       { status: 'shell', chance: 254, duration: 254 },
@@ -208,6 +220,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],

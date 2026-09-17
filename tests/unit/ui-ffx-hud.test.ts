@@ -5,6 +5,13 @@ import { buildTopRows, computeMenuWindow, resolveTargetMode } from '../../src/ui
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import { makeFakeBattleState, makeFakeCommands, makeFakeTurnPreview } from '../../src/ui/ffx/testFixtures.ts';
 
+/** The x/y of the second `translate(...)` in a numeral's transform, in px. */
+function readTranslate(transform: string): [number, number] {
+  const all = [...transform.matchAll(/translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/g)];
+  const last = all[all.length - 1];
+  return last ? [Number(last[1]), Number(last[2])] : [NaN, NaN];
+}
+
 function mountHud(): { hud: FFXBattleHud; root: HTMLElement } {
   const root = document.createElement('div');
   document.body.appendChild(root);
@@ -25,8 +32,47 @@ afterEach(() => {
 describe('buildTopRows', () => {
   it('keeps self-contained command kinds as direct rows and buckets everything else by category', () => {
     const rows = buildTopRows(makeFakeCommands());
-    const shape = rows.map((r) => (r.kind === 'direct' ? r.cmd.command.kind : `group:${r.category}`));
-    expect(shape).toEqual(['attack', 'group:skill', 'group:whitemagic', 'group:blackmagic', 'group:item', 'defend', 'switch']);
+    const shape = rows.map((r) => (r.kind === 'direct' ? r.cmd.command.kind : `group:${r.role ?? r.category}`));
+    expect(shape).toEqual(['attack', 'group:skill', 'group:whitemagic', 'group:blackmagic', 'group:item', 'group:switch']);
+  });
+
+  it('never lists Defend: FFX reaches it as a base action, not as a row in the command window', () => {
+    const rows = buildTopRows(makeFakeCommands());
+    const everyCommand = rows.flatMap((r) => (r.kind === 'direct' ? [r.cmd] : r.items));
+    expect(everyCommand.some((c) => c.command.kind === 'defend')).toBe(false);
+  });
+
+  it('collapses one switch command per benched member into a single Switch group, last in the list', () => {
+    const rows = buildTopRows([
+      ...makeFakeCommands(),
+      { command: { kind: 'switch', targets: [], extra: { outId: 'tidus', inId: 'lulu' } }, label: 'Lulu', category: 'special', mpCost: 0, enabled: true, validTargets: [] },
+    ]);
+    const last = rows[rows.length - 1]!;
+    expect(last.kind).toBe('group');
+    expect(last.kind === 'group' && last.role).toBe('switch');
+    expect(last.kind === 'group' && last.items.length).toBe(2);
+    expect(rows.filter((r) => r.kind === 'group' && r.role === 'switch').length).toBe(1);
+  });
+
+  it('orders the top level the way FFX does, whatever order the engine emitted', () => {
+    const cmd = (kind: string, category: string, label: string): AvailableCommand =>
+      ({ command: { kind, id: label, targets: [] }, label, category, mpCost: 0, enabled: true, validTargets: [] }) as unknown as AvailableCommand;
+    const rows = buildTopRows([
+      cmd('ability', 'item', 'Potion'),
+      cmd('ability', 'summon', 'Valefor'),
+      cmd('ability', 'blackmagic', 'Fire'),
+      cmd('attack', 'attack', 'Attack'),
+      cmd('ability', 'whitemagic', 'Cure'),
+      cmd('ability', 'skill', 'Quick Hit'),
+    ]);
+    expect(rows.map((r) => (r.kind === 'direct' ? r.cmd.label : r.label))).toEqual([
+      'Attack',
+      'Skill',
+      'White Magic',
+      'Black Magic',
+      'Items',
+      'Summon',
+    ]);
   });
 
   it('a disabled group (every item disabled) is reported as not enabled, for menu navigation to skip', () => {
@@ -209,14 +255,65 @@ describe('FFXBattleHud.onEvent', () => {
     expect(border.classList.contains('ffx-screen-border--visible')).toBe(true);
   });
 
-  it('a damage event spawns a floating numeral at the projected position', () => {
+  it('a damage event spawns a floating numeral tracking the struck target', () => {
     const { hud, root } = mountHud();
     cleanup = () => hud.unmount();
-    hud.setProjector(() => ({ x: 111, y: 222 }));
+    const asked: Array<string | undefined> = [];
+    hud.setProjector((_id, anchor) => {
+      asked.push(anchor);
+      return { x: 111, y: 222 };
+    });
     hud.onEvent({ seq: 0, type: 'damage', targetId: 'mortiorchis', amount: 1234, element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
-    const numeral = root.querySelector('.ig-damage__value')!;
+    const numeral = root.querySelector('.ffx-numerals-layer .dnum')!;
     expect(numeral).not.toBeNull();
     expect(numeral.textContent).toBe('1234');
+
+    // The numeral re-projects every frame, and asks for the chest rather than
+    // the head so it reads as belonging to the figure it hit.
+    hud.update(0.016);
+    expect(asked).toContain('chest');
+    const [x, y] = readTranslate((numeral as HTMLElement).style.transform);
+    // Within a jitter/bounce of the projected point, not parked at the origin.
+    expect(Math.abs(x - 111)).toBeLessThan(24);
+    expect(Math.abs(y - 222)).toBeLessThan(24);
+  });
+
+  it('marks a critical hit with its own variant class', () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 10, y: 10 }));
+    hud.onEvent({ seq: 0, type: 'damage', targetId: 'mortiorchis', amount: 4321, element: 'none', crit: true, hitIndex: 0, hitCount: 1 });
+    expect(root.querySelector('.dnum--critical')?.textContent).toBe('4321');
+  });
+
+  it('stacks a multi-hit ladder, one numeral per hit', () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 10, y: 10 }));
+    for (let i = 0; i < 3; i++) {
+      hud.onEvent({ seq: i, type: 'damage', targetId: 'mortiorchis', amount: 100 + i, element: 'none', crit: false, hitIndex: i, hitCount: 3 });
+    }
+    expect(root.querySelectorAll('.dnum')).toHaveLength(3);
+  });
+
+  it('steps two hits on the same target clear of each other instead of printing through', () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 400, y: 300 }));
+    // Two unrelated events landing on one actor in the same beat — a hit and
+    // the MISS that chases it, which used to overlap (47-boss-attack.png).
+    hud.onEvent({ seq: 0, type: 'damage', targetId: 'mortiorchis', amount: 11500, element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
+    hud.onEvent({ seq: 1, type: 'miss', targetId: 'mortiorchis', sourceId: 'tidus', reason: 'evaded' });
+    hud.update(0.016);
+
+    const ys = [...root.querySelectorAll<HTMLElement>('.dnum')].map(
+      (el) => readTranslate(el.style.transform)[1],
+    );
+    expect(ys).toHaveLength(2);
+    expect(ys.every((y) => Number.isFinite(y))).toBe(true);
+    // A whole glyph height apart, and the later one is the higher rung.
+    expect(Math.abs(ys[0]! - ys[1]!)).toBeGreaterThan(14);
+    expect(ys[1]!).toBeLessThan(ys[0]!);
   });
 
   it('an immune-affinity damage event prints IMMUNE instead of a number', () => {
@@ -224,7 +321,15 @@ describe('FFXBattleHud.onEvent', () => {
     cleanup = () => hud.unmount();
     hud.setProjector(() => ({ x: 0, y: 0 }));
     hud.onEvent({ seq: 0, type: 'damage', targetId: 'mortiorchis', amount: 0, element: 'fire', affinity: 'immune', crit: false, hitIndex: 0, hitCount: 1 });
-    expect(root.querySelector('.ffx-numeral-chip--miss')?.textContent).toBe('IMMUNE');
+    expect(root.querySelector('.dnum--immune')?.textContent).toBe('IMMUNE');
+  });
+
+  it('a miss prints MISS', () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 0, y: 0 }));
+    hud.onEvent({ seq: 0, type: 'miss', targetId: 'mortiorchis', sourceId: 'tidus', reason: 'evaded' });
+    expect(root.querySelector('.dnum--miss')?.textContent).toBe('MISS');
   });
 });
 
@@ -253,19 +358,67 @@ describe('FFXBattleHud.chooseCommand', () => {
     expect(commandWin.hidden).toBe(true);
   });
 
-  it('a self-contained command (Defend) resolves immediately with no targets', async () => {
-    const { hud } = mountHud();
+  it('the Switch row opens the reserve list even with one member benched, and resolves that swap', async () => {
+    const { hud, root } = mountHud();
     cleanup = () => hud.unmount();
     hud.setProjector(() => ({ x: 0, y: 0 }));
     hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
 
     const promise = hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
-    // attack -> skill -> whitemagic -> (blackmagic skipped, disabled) -> item -> defend
+    // attack -> skill -> whitemagic -> (blackmagic skipped, disabled) -> items -> switch
     for (let i = 0; i < 4; i++) window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
+    // A one-entry group normally resolves straight away; the reserve list is
+    // the exception, because a swap has to show who is coming in.
+    expect(root.querySelector<HTMLElement>('.ffx-cmd-breadcrumb')?.hidden).toBe(false);
+    expect(root.querySelector('.ffx-cmd__face')).not.toBeNull();
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
     const command = await promise;
-    expect(command).toEqual({ kind: 'defend', targets: [] });
+    expect(command).toMatchObject({ kind: 'switch', targets: [], extra: { outId: 'tidus', inId: 'wakka' } });
+  });
+
+  it('L1 jumps straight to the reserve list from the top level', async () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 0, y: 0 }));
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+
+    const promise = hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyF' }));
+    expect(root.querySelector<HTMLElement>('.ffx-cmd-breadcrumb')?.textContent).toBe('Switch');
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+    const command = await promise;
+    expect(command).toMatchObject({ kind: 'switch' });
+  });
+
+  it('an action-start takes an abandoned menu (and its help line) off screen, and any key brings it back', async () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 0, y: 0 }));
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+
+    const promise = hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+    const stack = root.querySelector<HTMLElement>('.ig-cmd-stack')!;
+    const help = root.querySelector<HTMLElement>('.ffx-cmd-info')!;
+    expect(stack.hidden).toBe(false);
+
+    // A strategy answered for the player: the presenter abandons the HUD's
+    // promise and plays the action anyway.
+    hud.onEvent({ seq: 1, type: 'action-start', actorId: 'seymour-flux', command: { kind: 'attack', targets: ['tidus'] }, targets: ['tidus'] });
+    expect(stack.hidden).toBe(true);
+    expect(help.hidden).toBe(true);
+
+    // Never a dead end: if the decision really was still the player's, the
+    // next keypress restores the menu instead of deadlocking the fight.
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+    expect(stack.hidden).toBe(false);
+
+    (([...root.querySelectorAll('.ig-cmd')].find((r) => r.textContent?.includes('Attack')) as HTMLElement) ?? stack).click();
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+    await promise;
   });
 
   it('clicking a submenu row resolves that ability (mouse path)', async () => {

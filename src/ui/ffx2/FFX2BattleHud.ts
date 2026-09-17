@@ -1,4 +1,14 @@
 import '../inkgold/index.ts';
+// `theme.css` defines every `--x2-*` token on `:root` and, until this line, was
+// imported by `PartyPrep.ts` **and nothing else** — so a battle entered with
+// `skipPrep` (every automated capture, and the chapter flow's own fast path)
+// mounted this HUD with all twelve tokens undefined. `var(--x2-atb-track)` and
+// `linear-gradient(90deg, var(--x2-atb-lo), var(--x2-atb-hi))` then resolved to
+// nothing at all, which is exactly what "the boss HP is an unstyled pink bar"
+// and the chip-less status glyphs were: the *only* thing still painting on the
+// enemy track was the fill's `inset -1px 0 0 #fff` leading edge, a white tick
+// floating on a transparent bar. Load the tokens with the HUD that needs them.
+import './theme.css';
 import './ffx2-hud.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -18,6 +28,9 @@ import type {
 import { openCommandMenu } from './CommandMenu.ts';
 import { mountTriggerHappy } from './TriggerHappy.ts';
 import { mountLadyLuckReels } from './LadyLuckReels.ts';
+import { partyRowHtml } from './PartyRows.ts';
+import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
+import { DamageLayer } from './DamageLayer.ts';
 
 /**
  * The FFX-2 battle HUD.
@@ -25,31 +38,33 @@ import { mountLadyLuckReels } from './LadyLuckReels.ts';
  * Composes the shared Ink & Gold layer (`src/ui/inkgold/`) in its pink
  * `.ig--ffx2` variant, matching `docs/handoff/ink-and-gold/BattleFfx2.dc.html`
  * (the approved round-2 mock, `docs/screenshots/mockups/A-ffx2-battle.jpg`):
- * `.ig-stat-list`/`.ig-stat` for the party (left-anchored, cascading), the
- * dressphere monogram as `.ig-stat__sphere`, `.ig-bosshp` for enemy HP,
- * `.ig-banner` (right-anchored) for the telegraph, `.ig-cmd-stack` (via
- * `CommandMenu.ts`) for commands, `.ig-reticle` for targeting, and
- * `.ig-damage`/`.ig-damage__chain` for the chain pop (the mock's "742" +
- * "CHAIN ×4" pairing, adapted here to headline the chain *count* — this HUD
- * has no damage-numeral pipeline of its own, only the `chain` event).
+ * `.ig-stat-list`/`.ig-stat` for the party, the dressphere monogram as
+ * `.ig-stat__sphere`, `.ig-bosshp` for enemy HP (built out into a real strip by
+ * `BossGauges.ts`), `.ig-banner` (right-anchored) for the telegraph,
+ * `.ig-cmd-stack` (via `CommandMenu.ts`) for commands, `.ig-reticle` for
+ * targeting, and a standalone chip for the mock's "CHAIN ×4" tag.
+ *
+ * Two departures from the mock, both forced by this game's *actual* staging and
+ * both documented in `docs/handoff/polish-ffx2-battle.md`:
+ *
+ * 1. **The party panel is anchored bottom-right, not bottom-left.** The mock
+ *    stands the three girls centre-right and puts their rows in the empty
+ *    bottom-left; our scenes stand them in the FFX arc, lower-left, so the
+ *    mirrored panel landed squarely on top of them. The panel moved rather than
+ *    the formation — `research/visual-bible.md` §4.1's own FFX-2 screen map
+ *    puts party status on the right (`x276 y278`) anyway.
+ * 2. **This HUD draws damage numerals.** Decision 11 in `CONTRACT-CHANGES.md`
+ *    gives the figure to the presenter, but the presenter is only handed a
+ *    `DamageNumbersPort` when `ui/common` has registered a factory or when
+ *    there is no HUD at all, and nothing registers one — so FFX-2 battles drew
+ *    no numbers whatsoever. `DamageLayer.ts` mounts the shared
+ *    `src/ui/common/DamageNumbers.ts` here, exactly as `FFXBattleHud` mounts
+ *    its own. Nothing draws twice: the port stays `null` on this side.
  *
  * `required`-proportional ATB track width (visual-bible §4.3 / CONTRACTS.md)
- * survives the restyle: `.ig-stat__od`'s width is overridden per row, the
- * one thing the shared layer explicitly leaves to the HUD owner.
+ * survives all of it — see `PartyRows.ts`.
  */
 
-/** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
-const TICKS_PER_BAR = 24000;
-/**
- * `visual-bible.md` §4.3: drawn track width is clamped to this range.
- * `BAR_MAX_PX` is `.ig-stat__od`'s own unoverridden width (53.33px, the
- * "slowest/full-runway" reference) so a `required` at or above `TICKS_PER_BAR`
- * renders identically to the shared layer's default; faster characters
- * shrink from there, revealing more of the row's own ink-panel background —
- * still legible as "shorter runway" without overflowing the 200px row.
- */
-const BAR_MIN_PX = 24;
-const BAR_MAX_PX = 53.33;
 const CHAIN_HOLD_MS = 1400;
 const TELEGRAPH_HOLD_MS = 2400;
 
@@ -59,21 +74,6 @@ function isAtbSnapshot(p: TurnPreview[] | AtbSnapshot): p is AtbSnapshot {
 
 function isFfx2(c: AnyCombatant | undefined): c is FFX2Combatant {
   return !!c && 'atb' in c;
-}
-
-function clamp(min: number, max: number, v: number): number {
-  return Math.max(min, Math.min(max, v));
-}
-
-/** §4.9 correction: white >= 33% max, gold-critical < 33%, blood at 0. */
-function hpClass(hp: number, maxHp: number): string {
-  if (hp <= 0) return 'ffx2-hp--ko';
-  return hp / Math.max(1, maxHp) < 0.33 ? 'ffx2-hp--crit' : '';
-}
-
-function barTrackWidth(required: number): number {
-  if (!required) return BAR_MAX_PX;
-  return clamp(BAR_MIN_PX, BAR_MAX_PX, BAR_MAX_PX * (required / TICKS_PER_BAR));
 }
 
 /** The FFX-2 battle HUD: ATB party rows, enemy gauges, command menu, chain/telegraph transients. */
@@ -88,14 +88,27 @@ export class FFX2BattleHud implements HudPort {
   private minigameEl!: HTMLElement;
   private mounted = false;
 
-  private project: (id: CombatantId) => { x: number; y: number } | null = () => null;
+  private project: (
+    id: CombatantId,
+    anchor?: 'head' | 'chest' | 'feet',
+  ) => { x: number; y: number } | null = () => null;
   private lastState: BattleState | null = null;
   private lastSnapshot: AtbSnapshot | null = null;
   /** The actor whose command menu is currently open, if any — drives `.ig-stat--acting`. */
   private actingId: CombatantId | null = null;
-  private readonly chargeStages = new Map<CombatantId, { stage: 1 | 2; name: string }>();
+  private readonly chargeStages = new Map<CombatantId, ChargePip>();
+  /**
+   * Enemies whose HP numerals Sensor/Scan has revealed. FFX-2 keeps an enemy's
+   * HP a secret until it is scanned, so the boss strip prints a `SCAN` hint
+   * until the id lands in here.
+   */
+  private readonly revealed = new Set<CombatantId>();
+  private readonly damage = new DamageLayer();
   private chainHideTimer = 0;
   private telegraphHideTimer = 0;
+  private damageFlashTimer = 0;
+  /** Current `.ffx2hud__stage` letterbox scale, so overlay-space offsets (chain chip) stay proportional at any viewport size. */
+  private stageScale = 1;
   private readonly onResize = (): void => this.layout();
 
   // -------------------------------------------------------------- HudPort
@@ -131,6 +144,12 @@ export class FFX2BattleHud implements HudPort {
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
 
+    // Numerals live on the unscaled overlay, not the 640x360 stage: their
+    // positions come straight from the presenter's projector in real pixels,
+    // with §3.6's grid-quoted glyph sizes multiplied back up by the same
+    // letterbox scale `layout()` applies to the stage.
+    this.damage.mount(this.overlay, { host: this.el, scale: () => this.stageScale });
+
     this.mounted = true;
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
@@ -141,8 +160,15 @@ export class FFX2BattleHud implements HudPort {
     window.removeEventListener('resize', this.onResize);
     window.clearTimeout(this.chainHideTimer);
     window.clearTimeout(this.telegraphHideTimer);
+    window.clearTimeout(this.damageFlashTimer);
+    this.damage.unmount();
     this.el.remove();
     this.mounted = false;
+  }
+
+  /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
+  update(dt: number): void {
+    this.damage.update(dt);
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
@@ -193,6 +219,21 @@ export class FFX2BattleHud implements HudPort {
         return;
       case 'chain':
         return this.showChain(event.targetId, event.count, event.multiplier);
+      case 'damage':
+      case 'heal':
+      case 'miss':
+      case 'mp-damage':
+      case 'mp-heal':
+        // The figure, plus a flash on the target's own row so the hit reads on
+        // the HUD side too. See the class comment on why the numeral is drawn
+        // here rather than by the presenter's (never-supplied) port.
+        this.damage.onEvent(event);
+        this.flashTarget(event.targetId);
+        return;
+      case 'sensor':
+        this.revealed.add(event.targetId);
+        if (this.lastState) this.renderEnemies(this.lastState, this.lastSnapshot ?? { elapsedMs: 0, bars: [] });
+        return;
       case 'charge':
         this.chargeStages.set(event.enemyId, { stage: event.stage, name: event.name });
         if (this.lastState) this.renderEnemies(this.lastState, this.lastSnapshot ?? { elapsedMs: 0, bars: [] });
@@ -216,8 +257,11 @@ export class FFX2BattleHud implements HudPort {
     this.el.hidden = !visible;
   }
 
-  setProjector(project: (id: CombatantId) => { x: number; y: number } | null): void {
+  setProjector(
+    project: (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null,
+  ): void {
     this.project = project;
+    this.damage.setProjector(project);
   }
 
   // ------------------------------------------------------------- rendering
@@ -227,6 +271,10 @@ export class FFX2BattleHud implements HudPort {
     const w = rect.width || window.innerWidth;
     const h = rect.height || window.innerHeight;
     const scale = Math.min(w / 640, h / 360);
+    this.stageScale = scale;
+    // Published to CSS for the few things that live on the *unscaled* overlay
+    // and still have to match the chrome's size (the chain chip).
+    this.el.style.setProperty('--ffx2-scale', scale.toFixed(4));
     const x = (w - 640 * scale) / 2;
     const y = (h - 360 * scale) / 2;
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
@@ -238,57 +286,17 @@ export class FFX2BattleHud implements HudPort {
         const c = state.combatants[id];
         if (!isFfx2(c)) return '';
         const bar = snapshot.bars.find((b) => b.actorId === id) ?? null;
-        return this.partyRowHtml(c, bar, i);
+        return partyRowHtml(c, bar, { actingId: this.actingId, index: i });
       })
       .join('');
     this.partyEl.innerHTML = rows;
   }
 
-  private partyRowHtml(c: FFX2Combatant, bar: AtbSnapshot['bars'][number] | null, index: number): string {
-    const dressphere = c.dresspheres?.current ?? 'gunner';
-    const monogram = dressphere.charAt(0).toUpperCase() || '?';
-    const trackW = barTrackWidth(bar?.required ?? TICKS_PER_BAR);
-    const fillPct = clamp(0, 100, (bar?.fill ?? 0) * 100);
-    const stateClass = bar ? `ffx2atb--${bar.state}` : '';
-    const readyClass = bar?.ready ? 'ffx2atb--ready' : '';
-    const charge =
-      bar?.charge != null
-        ? `<div class="ffx2atb__charge" style="width:${clamp(0, 100, bar.charge * 100)}%"></div>`
-        : '';
-    const acting = c.id === this.actingId ? ' ig-stat--acting' : '';
-    const statuses = Object.keys(c.statuses)
-      .slice(0, 5)
-      .map((s) => `<span class="ffx2-status-chip" title="${s}">${s.slice(0, 2).toUpperCase()}</span>`)
-      .join('');
-    return `<div class="ig-stat${acting}" style="margin-left: calc(var(--ig-stat-step) * ${index})">
-      <div class="ig-stat__sphere">${monogram}</div>
-      <div class="ig-stat__name">${c.name}</div>
-      <div class="ig-stat__value ${hpClass(c.hp, c.stats.maxHp)}">${Math.max(0, c.hp)}<small>/${c.stats.maxHp}</small></div>
-      <div class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${c.stats.maxMp}</small></div>
-      <div class="ig-stat__od ffx2atb__track ${stateClass} ${readyClass}" style="width:${trackW}px">
-        <i class="ffx2atb__fill" style="width:${fillPct}%"></i>
-        ${charge}
-      </div>
-      <div class="ffx2party__status">${statuses}</div>
-    </div>`;
-  }
-
   private renderEnemies(state: BattleState, snapshot: AtbSnapshot): void {
-    const rows = state.enemyIds
-      .map((id, i) => {
-        const c = state.combatants[id];
-        if (!isFfx2(c) || c.removed || c.flags.hidden) return '';
-        const bar = snapshot.bars.find((b) => b.actorId === id) ?? null;
-        const charging = this.chargeStages.get(id);
-        const pip = charging ? `<span class="ffx2enemy__pip ffx2enemy__pip--s${charging.stage}"></span>` : '';
-        const fillPct = clamp(0, 100, (bar?.fill ?? 0) * 100);
-        return `<div class="ig-bosshp" style="top: calc(17.78px + ${i} * 26px)">
-          <div class="ig-bosshp__name">${c.name}</div>
-          <div class="ig-bosshp__track"><div class="ig-bosshp__fill" style="width:${fillPct}%"></div></div>${pip}
-        </div>`;
-      })
-      .join('');
-    this.enemyEl.innerHTML = rows;
+    this.enemyEl.innerHTML = enemyGaugesHtml(state, snapshot, {
+      revealed: this.revealed,
+      charging: this.chargeStages,
+    });
   }
 
   private overlayPoint(targetId: CombatantId, fx: number, fy: number): { x: number; y: number } {
@@ -298,10 +306,22 @@ export class FFX2BattleHud implements HudPort {
     return { x: (rect.width || window.innerWidth) * fx, y: (rect.height || window.innerHeight) * fy };
   }
 
-  /** `.ig-damage`/`.ig-damage__chain`, headlining the chain count (see the class doc comment). */
+  /**
+   * A standalone `CHAIN ×N` chip — still no `.ig-damage` splash, because the
+   * mock's "742" and its `CHAIN ×4` tag are two separate things and only the
+   * tag is the chain's. The numeral itself is now `DamageLayer`'s, spawned from
+   * the `damage` event that precedes this one.
+   *
+   * §4.6 anchors the popup "top-right of the enemy being chained", so the chip
+   * sits up and to the right of the target's projected head point. The offset
+   * scales with the stage so it stays put at any viewport size, and it clears
+   * the numeral's own ladder — which climbs up and to the *right* from the
+   * chest anchor (`damageLadder.computeHitOffset`) — by starting above the head
+   * instead of level with the hits.
+   */
   private showChain(targetId: CombatantId, count: number, multiplier: number): Promise<void> {
     window.clearTimeout(this.chainHideTimer);
-    let el = this.overlay.querySelector('.ig-damage') as HTMLElement | null;
+    let el = this.overlay.querySelector('.ffx2-chain-chip') as HTMLElement | null;
     if (count <= 0) {
       el?.remove();
       return this.hold(400);
@@ -310,20 +330,34 @@ export class FFX2BattleHud implements HudPort {
       el = document.createElement('div');
       this.overlay.appendChild(el);
     }
-    const pos = this.overlayPoint(targetId, 0.4, 0.22);
+    const anchor = this.overlayPoint(targetId, 0.4, 0.22);
+    const pos = { x: anchor.x + 34 * this.stageScale, y: anchor.y - 22 * this.stageScale };
     el.style.left = `${pos.x}px`;
     el.style.top = `${pos.y}px`;
-    el.className = `ig-damage${count >= 20 ? ' ffx2chain--flash' : ''}${count >= 10 ? ' ffx2chain--hot' : count >= 5 ? ' ffx2chain--warm' : ''}`;
-    el.innerHTML = `
-      <svg class="ig-damage__splash" viewBox="0 0 380 190" xmlns="http://www.w3.org/2000/svg"><path d="M18 96 L58 34 L142 54 L206 8 L266 62 L352 42 L326 112 L364 166 L252 146 L182 182 L118 136 L36 158 Z"/></svg>
-      <span class="ig-damage__value ffx2chain__num">${count}</span>
-      <span class="ig-damage__chain">CHAIN &times;${multiplier.toFixed(2)}</span>
-    `;
+    el.className = `ffx2-chain-chip${count >= 20 ? ' ffx2chain--flash' : ''}${count >= 10 ? ' ffx2chain--hot' : count >= 5 ? ' ffx2chain--warm' : ''}`;
+    el.textContent = `CHAIN ×${multiplier.toFixed(2)}`;
     // Restart the pop animation even if the class list did not change.
     void el.offsetWidth;
     el.classList.add('ffx2chain--pop');
     this.chainHideTimer = window.setTimeout(() => el?.remove(), CHAIN_HOLD_MS);
     return this.hold(450);
+  }
+
+  /**
+   * The HUD-side half of a hit, alongside the numeral `DamageLayer` spawns: a
+   * brief flash on the target's own `.ig-stat` row or `.ig-bosshp` block, keyed
+   * off whichever element `renderParty`/`renderEnemies` last drew for that id.
+   * It is what connects a figure floating over the field to the row whose bar
+   * just moved.
+   */
+  private flashTarget(targetId: CombatantId): void {
+    const row = this.partyEl.querySelector<HTMLElement>(`[data-actor-id="${targetId}"]`) ?? this.enemyEl.querySelector<HTMLElement>(`[data-actor-id="${targetId}"]`);
+    if (!row) return;
+    window.clearTimeout(this.damageFlashTimer);
+    row.classList.remove('ffx2-hit-flash');
+    void row.offsetWidth;
+    row.classList.add('ffx2-hit-flash');
+    this.damageFlashTimer = window.setTimeout(() => row.classList.remove('ffx2-hit-flash'), 220);
   }
 
   /** `.ig-banner`, anchored top-right by `.ig--ffx2` for free. */
@@ -332,7 +366,18 @@ export class FFX2BattleHud implements HudPort {
     const enemyName = (this.lastState?.combatants[enemyId] as FFX2Combatant | undefined)?.name ?? enemyId;
     this.telegraphEl.hidden = false;
     this.telegraphEl.className = `ig-banner ffx2hud__telegraph ffx2hud__telegraph--s${stage}`;
-    const chip = turnsLeft > 0 ? `${enemyName} &middot; ${turnsLeft} turn${turnsLeft === 1 ? '' : 's'}` : `${enemyName} &middot; NOW`;
+    // Bahamut's Mega Flare countdown emits the number *as* the state text
+    // (`src/battle/ffx2/ai/bahamut.ts`: "five consecutive actions that do
+    // nothing but display a number"), so the default chip printed
+    // "BAHAMUT · 4 TURNS" next to a banner whose headline was also "4". When
+    // the state text is a bare countdown the chip drops the duplicate and the
+    // numeral carries it alone.
+    const isCountdown = /^\d+$/.test(name.trim());
+    const chip = isCountdown
+      ? enemyName
+      : turnsLeft > 0
+        ? `${enemyName} &middot; ${turnsLeft} turn${turnsLeft === 1 ? '' : 's'}`
+        : `${enemyName} &middot; NOW`;
     this.telegraphEl.innerHTML = `<span class="ig-banner__chip">${chip}</span><span class="ig-banner__name">${name}</span>`;
     this.telegraphHideTimer = window.setTimeout(() => {
       this.telegraphEl.hidden = true;

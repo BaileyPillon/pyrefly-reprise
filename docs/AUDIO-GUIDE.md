@@ -213,10 +213,12 @@ or the note cache and the tests will disagree with themselves.
 
 ## SFX bank
 
-124 cues in eight files under `src/audio/sfx/`, built from the `kit.ts` helpers
+134 cues in nine files under `src/audio/sfx/`, built from the `kit.ts` helpers
 `tone`, `noiseBurst`, `fmTone` and `voiceNote`. `SfxKey` in
 `battle/common/types.ts` is a plain string — **use the keys below verbatim**;
-`playSfx` throws on an unknown key.
+`playSfx` throws on an unknown key, and the compiler cannot catch a bad one.
+`tests/unit/audio-story-cues.test.ts` checks every `sfx()` / `music()` a chapter
+script names; nothing yet checks the `sfxKey` fields on ability data.
 
 ### Which key for which ability family
 
@@ -420,6 +422,27 @@ Playback notes:
 | `debuff-generic` | A generic negative status landing. |
 | `summon-depart` | Aeon departure: the reverse of arrival, rising up and away into the air. |
 | `aeon-overdrive` | Aeon overdrive: a charging roar building into a colossal choir swell. |
+
+#### Story ambiences (`story.ts`)
+
+For `sfx()` steps in chapter scripts: longer (up to ~3.8 s) and softer than combat
+cues, warmed right after the menu cues because a player reaches a chapter's
+opening cutscene before its battle. Sustained voices are built from cheap
+filtered oscillators rather than the `choir` / `pad` instruments, which cost 3-4x
+the heaviest combat cue over a three-second hold.
+
+| key | sound |
+|---|---|
+| `wind-high-altitude` | Thin, cold summit wind: a low bed and a narrow keening whistle, drifting across the stereo field. |
+| `wind-gust` | A single gust that swells in, whistles past left to right, and drops away. |
+| `kimahri-roar` | A Ronso roar of grief rather than threat: a torn, falling cry over breath. Not `boss-roar`. |
+| `fayth-hum` | The fayth humming: a soft wordless chord that blooms and hangs, with a high shimmer. |
+| `dome-echo` | One sound in a vast stone hall, answered by echoes that darken as they fade. |
+| `yu-yevon-chant` | A low, wrong chant: two voices a half-step apart over a sub drone. |
+| `machina-groan` | Old machina under strain: an inharmonic metal groan with creaks. |
+| `farplane-voices` | Many distant voices rising out of the Farplane, each from a different place. |
+| `lenne-song` | A wordless sung phrase on this project's own `LENNE` leitmotif. |
+| `whistle-answer` | A two-finger whistle, then a fainter one answering from far off. |
 
 ### Adding a cue
 

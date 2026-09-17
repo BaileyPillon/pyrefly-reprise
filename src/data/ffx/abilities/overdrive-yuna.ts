@@ -9,6 +9,12 @@
  * This ability deals no damage itself and has no target other than Yuna:
  * it summons her currently-owned aeon with a temporary full Overdrive
  * gauge. `formula: 'none'`, `power: 0`, `hits: 0`, `targeting: 'self'`.
+ *
+ * ACCURACY DECISION (2026-09-16): self-targeted with no damage, so whether
+ * it "rolls accuracy" is moot either way — `canMiss: false` is set
+ * explicitly for consistency with every other character Overdrive
+ * (`research/ffx-bfa-yu-yevon.md` §1.3, `[estimate]`, same as the other
+ * self/no-damage markers in this data set, e.g. the `mix` selector).
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -34,6 +40,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'self',
     hits: 0,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — inert (self-target, no damage); see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],

@@ -1,0 +1,73 @@
+{
+  "url": "http://localhost:5209/",
+  "chapters": {},
+  "complaints": [],
+  "shots": [
+    {
+      "chapter": "seymour-flux",
+      "name": "seymour-half",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-seymour-flux-seymour-half.png"
+    },
+    {
+      "chapter": "seymour-flux",
+      "name": "first-zombie",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-seymour-flux-first-zombie.png"
+    },
+    {
+      "chapter": "yunalesca",
+      "name": "yunalesca-form-2",
+      "status": "no runner",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-yunalesca-yunalesca-form-2.png"
+    },
+    {
+      "chapter": "yunalesca",
+      "name": "yunalesca-first-zombie",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-yunalesca-yunalesca-first-zombie.png"
+    },
+    {
+      "chapter": "yunalesca",
+      "name": "yunalesca-last-quarter",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-yunalesca-yunalesca-last-quarter.png"
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "name": "bfa-talk",
+      "status": "no runner",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-braskas-final-aeon-bfa-talk.png"
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "name": "bfa-sword",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-braskas-final-aeon-bfa-sword.png"
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "name": "valefor-falls",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-braskas-final-aeon-valefor-falls.png"
+    },
+    {
+      "chapter": "ffx2-bahamut",
+      "name": "first-mega-flare-countdown",
+      "status": "box never drew",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-ffx2-bahamut-first-mega-flare-countdown.png"
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "name": "shuyin-taunt",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-ffx2-vegnagun-shuyin-shuyin-taunt.png"
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "name": "cannon-charging",
+      "status": "ok",
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\polish\\story-trigger-ffx2-vegnagun-shuyin-cannon-charging.png"
+    }
+  ]
+}

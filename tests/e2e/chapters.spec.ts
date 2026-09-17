@@ -58,7 +58,7 @@ interface PyreflyApi {
   autoBattle(strategy?: string): boolean;
   setBattleSpeed(speed: 'normal' | 'fast' | 'skip'): boolean;
   waitBattleEnd(): Promise<BattleOutcome | null>;
-  wiring(): Promise<Record<string, boolean>>;
+  wiring(): Promise<Record<string, number | string>>;
   scenes(): Array<{ key: string; placeholder: boolean }>;
 }
 
@@ -66,12 +66,12 @@ interface PyreflyApi {
 type Win = Window & { __pyrefly: PyreflyApi; __pyreflyReady?: boolean };
 
 /** The chapters, and which engine each one needs to be runnable. */
-const CHAPTERS: Array<{ id: ChapterId; engine: 'engineFfx' | 'engineFfx2'; title: string }> = [
-  { id: 'seymour-flux', engine: 'engineFfx', title: 'Seymour Flux' },
-  { id: 'yunalesca', engine: 'engineFfx', title: 'Lady Yunalesca' },
-  { id: 'braskas-final-aeon', engine: 'engineFfx', title: "Braska's Final Aeon" },
-  { id: 'ffx2-bahamut', engine: 'engineFfx2', title: 'Bahamut' },
-  { id: 'ffx2-vegnagun-shuyin', engine: 'engineFfx2', title: 'Vegnagun' },
+const CHAPTERS: Array<{ id: ChapterId; title: string }> = [
+  { id: 'seymour-flux', title: 'Seymour Flux' },
+  { id: 'yunalesca', title: 'Lady Yunalesca' },
+  { id: 'braskas-final-aeon', title: "Braska's Final Aeon" },
+  { id: 'ffx2-bahamut', title: 'Bahamut' },
+  { id: 'ffx2-vegnagun-shuyin', title: 'Vegnagun' },
 ];
 
 async function boot(page: Page): Promise<string[]> {
@@ -199,15 +199,6 @@ test.describe('chapters', () => {
       test.slow();
       const errors = await boot(page);
 
-      const wiring = await page.evaluate(() => (window as Win).__pyrefly.wiring());
-      if (!wiring[chapter.engine]) {
-        test.skip(
-          true,
-          `${chapter.title}: src/battle/${chapter.engine === 'engineFfx' ? 'ffx' : 'ffx2'} has not landed an engine yet`,
-        );
-        return;
-      }
-
       // Bounded: an engine that cannot reach a decision would otherwise hang
       // the whole suite. A timeout is reported as a skip with the reason, not
       // as a silent 90-second stall.
@@ -254,12 +245,6 @@ test.describe('chapters', () => {
   test('a chained encounter fights more than one formation', async ({ page }) => {
     test.slow();
     await boot(page);
-    const wiring = await page.evaluate(() => (window as Win).__pyrefly.wiring());
-    if (!wiring['engineFfx']) {
-      test.skip(true, 'the FFX engine has not landed yet');
-      return;
-    }
-
     // Yunalesca is three forms in one encounter; the screen re-inits the
     // engine per link with the party carried forward and shows no results
     // screen in between (CONTRACT-CHANGES.md decision 6).

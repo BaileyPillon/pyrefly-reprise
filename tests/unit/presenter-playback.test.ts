@@ -147,7 +147,8 @@ describe('BattlePresenter — the playback loop', () => {
     const outcome = await presenter.run(engine);
 
     expect(cutscenes.played).toEqual([script]);
-    // The HUD was hidden for the beat and put back afterwards.
+    // The HUD stays up for the beat — a mid-battle line is spoken over the
+    // fight, not instead of it. See `midbattle-hud.test.ts`.
     expect(hud.visible).toBe(true);
     // Playback resumed: the battle still reached its end.
     expect(outcome.kind).toBe('victory');

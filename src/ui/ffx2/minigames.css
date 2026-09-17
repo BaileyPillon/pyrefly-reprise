@@ -58,24 +58,6 @@
   color: var(--ig-accent);
   font-size: 10px;
 }
-/*
- * `src/ui/ffx/minigames/overdrive-minigames.css` (a sibling agent's file, not
- * ours) declares a bare, unscoped `.ig-minigame { opacity: 0; transform:
- * skewX(...) scale(.97); transition: ...; }` enter-animation for its own
- * Overdrive overlays, revealed by their own `.ffx-mg--open` class. Because
- * that selector isn't scoped to their file's own classes, it also matches —
- * and hides — every FFX-2 minigame here (same shared `.ig-minigame` class).
- * These two-class selectors outrank their one-class selector on specificity,
- * so they win the cascade back without needing to know or depend on their
- * internal class name.
- */
-.ig-minigame.ffx2-trigger,
-.ig-minigame.ffx2-reels {
-  opacity: 1;
-  transform: skewX(var(--ig-skew));
-  transition: none;
-}
-
 .ffx2-reels__warn {
   margin-top: 6px;
   font-family: var(--ig-font-display);

@@ -130,7 +130,9 @@ export function makeFakeCommands(): AvailableCommand[] {
     { command: { kind: 'ability', id: 'firaga', targets: [] }, label: 'Firaga', category: 'blackmagic', mpCost: 30, rank: 5, enabled: false, disabledReason: 'Silenced', validTargets: ['seymour-flux', 'mortiorchis'] },
     { command: { kind: 'item', id: 'potion', targets: [] }, label: 'Potion', category: 'item', mpCost: 0, rank: 4, enabled: true, validTargets: ['tidus', 'yuna', 'auron'] },
     { command: { kind: 'defend', targets: [] }, label: 'Defend', category: 'special', mpCost: 0, enabled: true, validTargets: [] },
-    { command: { kind: 'switch', targets: [], extra: { outId: 'tidus', inId: 'wakka' } }, label: 'Switch', category: 'special', mpCost: 0, enabled: true, validTargets: [] },
+    // The engine labels a switch row with the *benched member's* name (one row
+    // per reserve member); the menu collapses them into one "Switch" group.
+    { command: { kind: 'switch', targets: [], extra: { outId: 'tidus', inId: 'wakka' } }, label: 'Wakka', category: 'special', mpCost: 0, enabled: true, validTargets: [] },
   ];
 }
 

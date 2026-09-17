@@ -15,16 +15,19 @@
 
 import type { Screen } from '../Screen.ts';
 import type { App } from '../App.ts';
-import type { BattleResult } from '../../battle/common/types.ts';
+import type { BattleResult, GameId } from '../../battle/common/types.ts';
 import type { Chapter, ChapterId } from '../../data/encounters.ts';
 import { getChapter } from '../../data/encounters.ts';
 import type { StoryScript } from '../../story/dsl.ts';
 import { audio } from '../../audio/index.ts';
 import { BattleScreen, type BattleScreenResult } from './BattleScreen.ts';
 import { PartyPrepScreen } from './PartyPrepScreen.ts';
+// Type-only: erased at build time, so this adds no runtime edge to the screen.
+import type { ResultsChoice } from './ResultsScreen.ts';
 import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
+import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -44,6 +47,21 @@ export interface ResultsScreenOptions {
   outcome: string;
   /** Chapter 4 suppresses the flourish entirely [writing-bible §5.4]. */
   silent?: boolean;
+  /**
+   * Wall-clock length of the whole encounter, chained links included. The FFX
+   * engine leaves `BattleResult.elapsedMs` at 0 (it only advances inside `wait`
+   * effects, which that engine never emits), so this is the only real clock the
+   * results panel has [ResultsScreen / `clearTimeMs`].
+   */
+  elapsedMs?: number;
+  /**
+   * The chapter's best time as it stood **before** this clear was recorded —
+   * `runChapter` writes the clear before the panel is shown, so the panel can
+   * no longer read the old record itself.
+   */
+  previousBestMs?: number | null;
+  /** Called with the player's pick. Only the defeat panel offers one. */
+  onChoice?: (choice: ResultsChoice) => void;
 }
 
 /** Factories `ui/common` can supply. Any it omits uses the placeholder. */
@@ -92,6 +110,32 @@ export interface RunChapterOptions {
    * debug API's `autoBattle`, an e2e spec, the critic — passes this.
    */
   skipResults?: boolean;
+}
+
+/**
+ * The best-time value a victory should record, or `null` when this run must
+ * never touch the record at all.
+ *
+ * Two independent guards, both required by the `best-time-flow` fix:
+ * - **Never an automated run.** `auto` is set by the debug API's
+ *   `autoBattle`, an e2e spec, or the critic — none of them is a play
+ *   session, however long the run took wall-clock, so it must never
+ *   overwrite (or create) a chapter's best time.
+ * - **Never the raw wall clock.** Even a human-triggered run can carry
+ *   `speed: 'skip'`, where every animation wait collapses to zero and a
+ *   whole chapter resolves in a few milliseconds. `clearTimeMs` is the same
+ *   plausibility-floored conversion the Results panel prints
+ *   (`ui/common/resultsMath.ts`); reusing it here means Chapter Select can
+ *   never show a "best time" the panel itself would never have displayed.
+ */
+export function clearTimeToRecord(
+  result: BattleResult,
+  wallClockMs: number,
+  game: GameId,
+  auto: AutoStrategy | null | undefined,
+): number | null {
+  if (auto) return null;
+  return clearTimeMs(result, wallClockMs, game);
 }
 
 /** Drives the screen sequence. One instance lives on {@link App}. */
@@ -173,16 +217,26 @@ export class GameFlow {
       attempt++;
 
       if (outcome.outcome === 'victory') {
-        if (outcome.result) save.recordClear(id, outcome.elapsedMs, outcome.result.turns);
+        // Read the record before overwriting it, so the panel can tell whether
+        // this run actually beat it.
+        const previousBestMs = save.chapter(id).bestTimeMs;
+        if (outcome.result) {
+          const toRecord = clearTimeToRecord(outcome.result, outcome.elapsedMs, chapter.game, opts.auto);
+          if (toRecord !== null) save.recordClear(id, toRecord, outcome.result.turns);
+        }
         if (!opts.skipCutscenes) await this.playCutscene(chapter, 'post');
-        if (!opts.skipResults) await this.showResults(chapter, outcome);
+        if (!opts.skipResults) await this.showResults(chapter, outcome, previousBestMs);
         this.step = 'idle';
         return outcome;
       }
 
       if (outcome.outcome === 'defeat') {
-        if (!opts.skipResults) await this.showResults(chapter, outcome);
-        if (!opts.skipPrep) continue; // retry from the prep menu
+        // The defeat panel owns the retry decision: `RETRY` re-enters the loop
+        // (through the prep menu when there is one), `CHAPTER SELECT` gives up
+        // and hands the outcome back to the caller. An automated run never
+        // sees the panel (`skipResults`), so it keeps the old behaviour.
+        const choice = opts.skipResults ? 'continue' : await this.showResults(chapter, outcome);
+        if (choice === 'retry' || (choice === 'continue' && !opts.skipPrep)) continue;
       }
 
       this.step = 'idle';
@@ -205,21 +259,32 @@ export class GameFlow {
     await screen.done;
   }
 
-  private async showResults(chapter: Chapter, outcome: BattleScreenResult): Promise<void> {
+  private async showResults(
+    chapter: Chapter,
+    outcome: BattleScreenResult,
+    previousBestMs?: number | null,
+  ): Promise<ResultsChoice> {
     this.step = 'results';
     // Chapter 4's results screen comes up silent: no pose, no fanfare.
     const silent = chapter.music.victory === undefined;
     if (!silent && outcome.outcome === 'victory' && chapter.music.victory) {
       void audio.playMusic(chapter.music.victory, { fade: 0.4 }).catch(() => {});
     }
+    let choice: ResultsChoice = 'continue';
     const opts: ResultsScreenOptions = {
       chapter,
       result: outcome.result,
       outcome: outcome.outcome,
       silent,
+      elapsedMs: outcome.elapsedMs,
+      ...(previousBestMs !== undefined ? { previousBestMs } : {}),
+      onChoice: (picked) => {
+        choice = picked;
+      },
     };
     const screen = factories.results?.(opts) ?? new StubResults(opts);
     await this.app.replace(screen);
     await screen.done;
+    return choice;
   }
 }

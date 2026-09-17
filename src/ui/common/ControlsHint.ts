@@ -9,6 +9,13 @@ export interface ControlHintItem {
   gamepad: string;
   /** Defaults to the keyboard wording. */
   pointer?: string;
+  /**
+   * The `data-action` a click on this entry fires, making the chip a button for
+   * a mouse or touch player — `'confirm'`, `'cancel'`, or a screen's own action
+   * name. The screen must handle it in `input.actions` like the key it names.
+   * Omit for hints with no single target, such as "Left/Right choose".
+   */
+  action?: string;
 }
 
 export interface ControlsHintOptions {
@@ -60,7 +67,8 @@ export class ControlsHint {
     const html = this.items
       .map((item) => {
         const keys = device === 'gamepad' ? item.gamepad : device === 'pointer' ? (item.pointer ?? item.keyboard) : item.keyboard;
-        return `<span class="chint__item"><b>${escapeHtml(keys)}</b> ${escapeHtml(item.label)}</span>`;
+        const click = item.action ? ` data-action="${escapeHtml(item.action)}" role="button" tabindex="0"` : '';
+        return `<span class="chint__item"${click}><b>${escapeHtml(keys)}</b> ${escapeHtml(item.label)}</span>`;
       })
       .join('<span class="chint__sep">&middot;</span>');
     this.el.innerHTML = html;

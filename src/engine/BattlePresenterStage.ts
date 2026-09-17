@@ -167,10 +167,12 @@ export class PaintedStage implements BattleStage {
     return ids.map(([id]) => id);
   }
 
-  project(id: CombatantId): Point2 | null {
+  project(id: CombatantId, anchor: 'head' | 'chest' | 'feet' = 'head'): Point2 | null {
     const staged = this.actors.get(id);
     if (!staged) return null;
-    staged.actor.headPoint(this.scratch);
+    if (anchor === 'chest') staged.actor.centerPoint(this.scratch);
+    else if (anchor === 'feet') this.scratch.copy(staged.actor.position);
+    else staged.actor.headPoint(this.scratch);
     this.scratch.project(this.opts.camera);
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return null;

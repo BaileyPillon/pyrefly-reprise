@@ -17,6 +17,7 @@ import type { AbilityRegistry, Emit, Ffx2Unit } from './internal.ts';
 import { breakChain, cannotEvade, registerHit } from './chain.ts';
 import { chainMultiplier } from './chain.ts';
 import { computeDamage, critPercent, hitPercent, randomiserRoll } from './formulas.ts';
+import { resolveSensor, sensorKind } from './sensor.ts';
 import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
 import { resolveTargets } from './targeting.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
@@ -169,6 +170,15 @@ export function resolveAbility(
 
   const mpCost = user.statuses.spellspring ? 0 : ability.mpCost;
   if (mpCost > 0) user.mp = Math.max(0, user.mp - mpCost);
+
+  // Scan / Libra / Ma'at's Feather leave here: a reveal is pure information,
+  // so it never rolls to hit, never registers a chain, and never touches the
+  // seeded RNG. See `sensor.ts` for what counts as one. §3.7
+  const reveals = sensorKind(ability);
+  if (reveals) {
+    resolveSensor(ctx.emit, user, pool, reveals);
+    return 0;
+  }
 
   // A minigame outcome (Trigger Happy's presses, a reel's hit total) replaces
   // the ability's own hit count. `docs/CONTRACTS.md`, "Minigame protocol".

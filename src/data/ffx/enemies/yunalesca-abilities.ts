@@ -39,6 +39,26 @@
  *     on one CTB turn: her delay is zeroed and every active party member's
  *     delay is incremented by 1 before the cutscene, per §14.13 — that CTB
  *     surgery is an engine concern, documented here for reference.
+ *
+ * **Edit note (2026-09-16, FFX engine agent, at the coordinator's request).**
+ * `canMiss: false` added to every record below that left it unset: `absorb`,
+ * `osmose`, `mind-blast`, `mind-blast-aeon`, `mega-death`, `metamorphosis-1`
+ * and `metamorphosis-2`. Magical and status actions always hit; only physical
+ * Strength attacks roll against the action's own accuracy byte, and Enemy
+ * Accuracy is never read [ffx-combat-core §2.11; ffx-yunalesca §3, §16
+ * "Absorb ... every time, no variance"]. Her two physical attacks
+ * (`dispelling-slap`, `hellbiter`) and the three counters already carried it.
+ * The engine enforces the same rule on its own (an enemy action with no
+ * accuracy byte uses ALWAYS), so this is belt-and-braces documentation, not
+ * the behavioural fix.
+ *
+ * **`mega-death` is deliberately unchanged otherwise.** `ko` *is* Death in
+ * this contract (there is no separate `death` status — docs/CONTRACTS.md,
+ * "Vocabulary notes"), and chance 100 is §5.3's figure. Its Zombie exception
+ * lives in the engine's status roll, where a living Zombie's Death resistance
+ * is raised to 255. The Chapter 2 inversion was three engine bugs, not this
+ * record: a landed `ko` attached a marker without killing, a KO'd Zombie could
+ * never be revived, and the transformation entry actions never fired.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -93,6 +113,7 @@ export const absorb: AbilityDef = {
   statusEffects: [],
   removesStatuses: [],
   flags: ['drains'],
+  canMiss: false,
   extra: { absorbTargetsHighestCurrentHp: true },
   messageTemplate: '{user} uses Absorb on {target}',
 };
@@ -118,6 +139,7 @@ export const osmose: AbilityDef = {
   statusEffects: [],
   removesStatuses: [],
   flags: ['drains-mp', 'ignores-armored'],
+  canMiss: false,
   messageTemplate: '{user} uses Osmose on {target}',
 };
 
@@ -164,6 +186,7 @@ export const mindBlastParty: AbilityDef = {
   statusEffects: [{ status: 'confuse', chance: 50, duration: 254 }],
   removesStatuses: [],
   flags: [],
+  canMiss: false,
   messageTemplate: '{user} uses Mind Blast',
 };
 
@@ -192,6 +215,7 @@ export const mindBlastAeon: AbilityDef = {
   ],
   removesStatuses: [],
   flags: [],
+  canMiss: false,
   messageTemplate: '{user} uses Mind Blast on {target}',
 };
 
@@ -217,6 +241,7 @@ export const megaDeath: AbilityDef = {
   statusEffects: [{ status: 'ko', chance: 100, duration: 0 }], // duration is moot for an instant status; StatusApplication.duration is non-nullable
   removesStatuses: [],
   flags: [],
+  canMiss: false,
   messageTemplate: '{user} uses Mega Death',
 };
 
@@ -311,6 +336,7 @@ export const metamorphosis1: AbilityDef = {
   statusEffects: [],
   removesStatuses: [],
   flags: [],
+  canMiss: false,
   extra: { transformsToForm: 1 },
   messageTemplate: '{user} transforms',
 };
@@ -332,6 +358,7 @@ export const metamorphosis2: AbilityDef = {
   statusEffects: [],
   removesStatuses: [],
   flags: [],
+  canMiss: false,
   extra: { transformsToForm: 2 },
   messageTemplate: '{user} transforms',
 };

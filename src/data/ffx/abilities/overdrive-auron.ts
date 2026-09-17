@@ -16,6 +16,15 @@
  * rider status at all, so it has no immune row and omits those two fields.
  *
  * Crit: same rule as Tidus's Swordplay — every entry carries `crit-eligible`.
+ *
+ * ACCURACY DECISION (2026-09-16, closing the same review `overdrive-tidus.ts`
+ * settled): `research/ffx-bfa-yu-yevon.md` §1.3 (lines 101, 107, 108)
+ * decompiles three enemy Overdrives — `Strength` formula, `Other` damage
+ * type, `category: 'overdrive'` — all flagged "always hits". Dragon Fang/
+ * Shooting Star/Banishing Blade/Tornado share that exact signature
+ * (`formula: 'strength'`, `damageType: 'other'`, `category: 'overdrive'`).
+ * `canMiss: false` is set explicitly on all 4 records below, citing
+ * ffx-bfa-yu-yevon.md §1.3 `[verified: 2 sources]`.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -39,6 +48,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible', 'weak-delay'],
@@ -75,6 +85,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [{ status: 'eject', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -111,6 +122,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [
       { status: 'power-break', chance: 254, duration: 254 },
       { status: 'magic-break', chance: 254, duration: 254 },
@@ -152,6 +164,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 2,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],

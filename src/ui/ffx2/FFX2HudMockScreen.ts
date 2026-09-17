@@ -58,6 +58,11 @@ export class FFX2HudMockScreen extends Screen {
     this.hud = null;
   }
 
+  /** The HUD's damage numerals animate off this tick, exactly as in a real battle. */
+  override update(dt: number): void {
+    this.hud?.update(dt);
+  }
+
   override handleInput(input: InputSnapshot): void {
     if (input.consume('cancel')) void this.app.goto('title');
   }

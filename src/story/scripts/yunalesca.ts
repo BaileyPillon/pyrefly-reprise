@@ -32,6 +32,13 @@
  * Mega Death's telegraph is a battle-side state banner [writing-bible §5.2];
  * its single party callout rides the form III script rather than a second
  * trigger, so the overlay never carries two callouts at once.
+ *
+ * Every trigger here keeps `id === script` and every mid-battle `say` carries
+ * an explicit `auto` — the two invariants `src/story/registry.ts` tests. Both
+ * were broken here: `yunalesca-first-zombie` and `yunalesca-last-quarter`
+ * pointed at scripts registered under a different key, so the presenter logged
+ * `no mid-battle script for trigger` and fought on, and `yunalesca-form-2` sat
+ * on a line waiting for a Confirm until the 30 s budget abandoned the beat.
  */
 
 import type { ChapterScripts } from '../dsl.ts';
@@ -196,39 +203,51 @@ export const yunalescaScripts: ChapterScripts = {
       id: 'yunalesca-first-zombie',
       when: { type: 'status-applied', who: 'tidus', status: 'zombie' },
       once: true,
-      script: 'first-zombie',
+      script: 'yunalesca-first-zombie',
+    },
+    {
+      // Mega Death has already resolved when this plays, so the line has to
+      // read as a eulogy whether or not the party is still standing.
+      id: 'yunalesca-mega-death',
+      when: { type: 'ability-used', who: 'yunalesca', ability: 'mega-death' },
+      once: true,
+      script: 'yunalesca-mega-death',
     },
     {
       id: 'yunalesca-last-quarter',
       when: { type: 'hp-below', who: 'yunalesca', fraction: 0.25 },
       once: true,
-      script: 'last-quarter',
+      script: 'yunalesca-last-quarter',
     },
   ],
   midScripts: {
     'yunalesca-form-2': [
       camera('action', 400),
       fx('form-change', 'yunalesca'),
-      say('yunalesca', 'You are making this longer than it needs to be.'),
+      say('yunalesca', 'You are making this longer than it needs to be.', { auto: 1400 }),
       camera('idle', 400),
     ],
     'yunalesca-form-3': [
       camera('action', 500),
       fx('form-change', 'yunalesca'),
-      say('yunalesca', 'Very well. No more kindness.'),
+      say('yunalesca', 'Very well. No more kindness.', { auto: 1200 }),
       // The single callout paired with the Mega Death telegraph banner.
-      say('auron', 'Stay as you are. Do not let her cure you.'),
+      say('auron', 'Stay as you are. Do not let her cure you.', { auto: 1400 }),
       camera('idle', 500),
     ],
-    'first-zombie': [
-      say('rikku', "Everybody's grey! Is that bad?!"),
-      say('lulu', 'Stay grey. Her kindness kills the living.'),
+    'yunalesca-first-zombie': [
+      say('rikku', "Everybody's grey! Is that bad?!", { auto: 1200 }),
+      say('lulu', 'Stay grey. Her kindness kills the living.', { auto: 1400 }),
     ],
-    'last-quarter': [
+    'yunalesca-mega-death': [
+      say('yunalesca', 'Rest now. All of you.', { auto: 1200 }),
+      say('yunalesca', 'At once.', { auto: 1000 }),
+    ],
+    'yunalesca-last-quarter': [
       camera('action', 600),
-      say('yunalesca', 'A thousand years.'),
+      say('yunalesca', 'A thousand years.', { auto: 1200 }),
       beat(1400),
-      say('yunalesca', 'You are the first to say no.'),
+      say('yunalesca', 'You are the first to say no.', { auto: 1400 }),
       camera('idle', 600),
     ],
   },

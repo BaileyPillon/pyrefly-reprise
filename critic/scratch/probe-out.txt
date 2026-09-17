@@ -1,0 +1,58 @@
+tidus ko-res 50 zombie-res 50 maxHp 3410
+yuna ko-res 50 zombie-res 50 maxHp 2450
+auron ko-res 50 zombie-res 50 maxHp 4400
+MegaDeath kill rate on shipped preset: 286 / 600 = 0.477
+aeon id valefor mp 43 maxMp 43
+[
+ {
+  "t": "damage",
+  "type": "damage",
+  "targetId": "tidus",
+  "amount": 579,
+  "element": "none",
+  "crit": false,
+  "hitIndex": 0,
+  "hitCount": 1,
+  "sourceId": "yunalesca",
+  "affinity": "normal",
+  "seq": 0
+ },
+ {
+  "t": "overdrive-gauge",
+  "type": "overdrive-gauge",
+  "who": "tidus",
+  "from": 35,
+  "to": 40,
+  "cause": "stoic",
+  "seq": 1
+ },
+ {
+  "t": "status-add",
+  "type": "status-add",
+  "targetId": "tidus",
+  "status": "curse",
+  "instance": {
+   "id": "curse",
+   "turnsRemaining": 254,
+   "ticksRemaining": null,
+   "charges": null,
+   "stacks": 0,
+   "permanent": false,
+   "sourceId": "yunalesca",
+   "sourceAbilityId": "mind-blast-aeon"
+  },
+  "seq": 2
+ },
+ {
+  "t": "mp-damage",
+  "type": "mp-damage",
+  "targetId": "tidus",
+  "amount": 170,
+  "sourceId": "yunalesca",
+  "seq": 3
+ }
+]
+aeon curse? false aeon mp now 43
+Hellbiter zombie land rate on shipped preset: 265 / 600 = 0.442
+zombie alive true deathproof alive true plain alive false
+curseproof target cursed anyway? true

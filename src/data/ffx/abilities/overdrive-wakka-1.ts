@@ -21,6 +21,17 @@
  *
  * Crit: "Wakka's Slots... never crit" — nothing in this file carries
  * `crit-eligible`.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * see `overdrive-wakka-2.ts` for the full reasoning and citations): the
+ * resolved shots are `Strength` formula, `Other` damage type, `category:
+ * 'overdrive'` — the exact signature `research/ffx-bfa-yu-yevon.md` §1.3
+ * (lines 101, 107, 108) decompiles as always-hit for three separate enemy
+ * Overdrives. These 4 reel-set commands themselves deal no damage
+ * (`hits: 0`) and have no target to miss against, so `canMiss: false` here
+ * is inert either way; it is set for consistency with the resolved shots in
+ * `overdrive-wakka-2.ts`, citing ffx-bfa-yu-yevon.md §1.3 `[verified: 2
+ * sources]`.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -44,6 +55,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 0,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -80,6 +92,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 0,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -113,6 +126,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 0,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -148,6 +162,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 0,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],

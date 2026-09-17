@@ -107,13 +107,10 @@ test('the ability and item tables are registered with both engines', async ({ pa
     () =>
       (
         window as unknown as {
-          __pyrefly: { wiring(): Promise<Record<string, boolean | number | string>> };
+          __pyrefly: { wiring(): Promise<Record<string, number | string>> };
         }
       ).__pyrefly.wiring(),
   );
-
-  expect(wiring['engineFfx'], 'the FFX engine must be constructible').toBe(true);
-  expect(wiring['engineFfx2'], 'the FFX-2 engine must be constructible').toBe(true);
 
   // Generous floors: the real tables are in the hundreds, so these only ever
   // fire when the wiring is genuinely gone, not when content is still growing.
@@ -124,6 +121,6 @@ test('the ability and item tables are registered with both engines', async ({ pa
   expect(Number(wiring['dresspheresFfx2']), 'FFX-2 dresspheres registered').toBeGreaterThan(5);
   expect(Number(wiring['garmentGridsFfx2']), 'FFX-2 Garment Grids registered').toBeGreaterThan(5);
 
-  // And the mid-battle story runner is reachable, so `script-trigger` beats play.
-  expect(wiring['cutsceneRunner'], 'a mid-battle cutscene runner must be available').toBe(true);
+  // Deliberately no "runner available" flag here: a constant `true` proves
+  // nothing. That cutscenes play is asserted by playing one, in chapters.spec.
 });

@@ -42,8 +42,159 @@
 
 /* ------------------------------------------------------------ enemy strip */
 
-/* Multiple `.ig-bosshp` rows stack via each row's own inline `top` override
-   (set in FFX2BattleHud.ts); this wrapper needs no CSS of its own. */
+/*
+ * The boss strip: one block per top-level enemy, each with its destructible
+ * parts indented underneath (markup in `BossGauges.ts`).
+ *
+ * The shared `.ig-bosshp` is absolutely positioned at the spec's top-left
+ * anchor, which only works for exactly one of them — the previous version
+ * stacked several by writing an inline `top: calc(17.78px + i * 26px)` per row,
+ * a fixed step that could not know a row had grown a part list. The anchor
+ * moves to this wrapper instead and the blocks stack in normal flow.
+ */
+.ffx2hud__enemies {
+  position: absolute;
+  left: 21.33px; /* 48 @1440 — the shared .ig-bosshp anchor, hoisted */
+  top: 17.78px; /* 40 */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+.ffx2hud .ig-bosshp {
+  position: relative;
+  left: auto;
+  top: auto;
+  display: block;
+}
+
+/* The name/bar/numerals line, on an ink slab. The mock hangs the bar straight
+   on the painting, which works over Bevelle's near-black deck and vanishes over
+   the Farplane's pastel sky; --ig-ink-panel is exactly the token tokens.css
+   documents for "chrome laid over painted backgrounds". */
+.ffx2boss__head {
+  display: flex;
+  align-items: center;
+  gap: 6.22px; /* 14 */
+  padding: 2.5px 8px 2.5px 6px;
+  background: var(--ig-ink-panel);
+  border-right: 1.78px solid var(--ig-accent); /* 4 — the .ig--ffx2 accent edge */
+  transform: skewX(var(--ig-skew));
+}
+.ffx2boss__head > * {
+  transform: skewX(var(--ig-skew-inverse));
+}
+.ffx2hud .ig-bosshp__track {
+  width: 150px;
+  height: 4.5px;
+  background: var(--x2-atb-track);
+  box-shadow: inset 0 1px 0 #140a18; /* §4.3's 1px inner top shadow */
+}
+.ffx2hud .ig-bosshp__fill {
+  background: linear-gradient(90deg, var(--x2-atb-lo) 0%, var(--x2-atb-hi) 100%);
+  box-shadow: inset -1px 0 0 #ffffff; /* §4.3's 1px white leading edge */
+  transition: width 220ms ease-out;
+}
+
+/* HP numerals, §4.3's `1240/1980` treatment moved to the enemy row. */
+.ffx2boss__num {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--ig-paper);
+  white-space: nowrap;
+}
+.ffx2boss__num small {
+  font-size: 6px;
+  font-weight: 600;
+  color: #9fb0c4;
+}
+.ffx2boss__num--crit {
+  color: var(--x2-hp-critical);
+}
+/* Shown instead of the numerals until Sensor/Scan reveals the enemy, so the
+   slot reads as withheld information rather than as missing UI. */
+.ffx2boss__hint {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5.5px;
+  letter-spacing: 0.28em;
+  color: rgba(244, 241, 232, 0.4);
+}
+
+/* Charge telegraph pip — amber while charging, blood when imminent (§3.13). */
+.ffx2enemy__pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--x2-slow);
+}
+.ffx2enemy__pip--s2 {
+  background: var(--ig-blood);
+  animation: ffx2-telegraph-flash 0.45s ease-in-out infinite alternate;
+}
+
+/* Parts (Vegnagun's Bulwarks / Redoubts / Nodes): indented under their owner
+   at a narrower track, so "kill the arms before you look it in the face" is
+   readable from the bar layout alone. */
+.ffx2boss__parts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 3px 0 0 16px;
+}
+.ffx2boss__part {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1.5px 6px 1.5px 5px;
+  /* `--ig-ink-chip` (62% ink) is a chip token, meant for a chip sitting on
+     another slab. A part row sits straight on the painting, and over the
+     Farplane's pastel sky a destroyed row at 50% opacity on 62% ink was barely
+     there. Same ink as the owner's slab, one step lighter, so the hierarchy
+     still reads as owner-then-parts. */
+  background: rgba(11, 10, 18, 0.78);
+  border-right: 1.33px solid rgba(247, 182, 217, 0.55); /* 3 */
+  transform: skewX(var(--ig-skew));
+}
+.ffx2boss__part > * {
+  transform: skewX(var(--ig-skew-inverse));
+}
+.ffx2boss__part .ig-bosshp__track {
+  width: 96px;
+  height: 3px;
+}
+.ffx2boss__partname {
+  min-width: 34px;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 6px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.82);
+}
+.ffx2boss__part .ffx2boss__num {
+  font-size: 8px;
+}
+.ffx2boss__part .ffx2boss__num small {
+  font-size: 5px;
+}
+.ffx2boss__down {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5.5px;
+  letter-spacing: 0.24em;
+  color: var(--ig-blood);
+}
+/* Dim the *contents* of a destroyed part, not its slab: at `opacity: 0.5` on
+   the row the ink went with it and the whole strip turned to fog over the
+   Farplane's bright sky. The row still has to hold its place — that is the
+   point of keeping it — so it keeps its background and loses only its text. */
+.ffx2boss__part--down > * {
+  opacity: 0.55;
+}
 
 /* ------------------------------------------------------------ telegraph */
 
@@ -67,18 +218,112 @@
 
 /* ------------------------------------------------------------ party status */
 
+/*
+ * The party panel moves to the **bottom right**.
+ *
+ * The shared layer anchors it bottom-left for FFX-2 (`.ig--ffx2 .ig-stat-list`),
+ * mirroring FFX — which is right for the approved mock, where the three girls
+ * stand centre-right and the bottom-left corner is empty scenery. Our scenes
+ * stand them in the FFX arc, lower-left, so the mirrored panel sat squarely on
+ * top of all three from the waist down (`docs/screenshots/52-ffx2-bahamut.png`,
+ * `53-ffx2-vegnagun.png`). `research/visual-bible.md` §4.1's own FFX-2 screen
+ * map puts party status on the right (`x276 y278 w348 h72`) in any case, so the
+ * panel moves rather than the formation.
+ *
+ * It also shrinks: 170x28 rows instead of 200x27.56, in a column that finishes
+ * ~100px up the 360px grid — clear of the command stack's `bottom: 116.44px`
+ * above it and of the actors' feet to its left.
+ */
+.ffx2hud .ig-stat-list {
+  left: auto;
+  right: 12px;
+  bottom: 10px;
+  align-items: flex-end;
+  gap: 3px;
+  --ig-stat-step: 5px;
+}
+.ffx2hud .ig-stat {
+  width: 170px;
+  height: 28px;
+  gap: 4px;
+  padding-right: 6px;
+  align-items: center;
+}
+.ffx2hud .ig-stat__sphere {
+  width: 17px;
+  height: 17px;
+  margin-left: 4px;
+  font-size: 7.5px;
+}
+/* Two lines: `Name HP MP [chips]` over the full-width ATB track, which is
+   §4.3's verified requirement ("the ATB bar sits under the HP and MP data")
+   and the only way the row's content fits its own box. */
+.ffx2stat__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+}
+.ffx2stat__top {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+}
+.ffx2hud .ig-stat__name {
+  width: auto;
+  flex: none;
+  font-size: 9.5px;
+}
+.ffx2hud .ig-stat__value {
+  font-size: 9px;
+}
+.ffx2hud .ig-stat__value small {
+  font-size: 5px;
+}
+/* `margin-left: auto` is §4.3's "**right-aligned**, so a fast character visibly
+   has a shorter runway": the per-row track width is `required`-proportional
+   (`PartyRows.barTrackWidth`), and a left-aligned set of different widths only
+   reads as ragged. Anchored to the same right edge as the panel itself, the
+   short bar is unmistakably the short one. */
+.ffx2hud .ig-stat__od {
+  margin-left: auto;
+  height: 3.5px;
+  background: var(--x2-atb-track);
+}
+
 .ffx2party__status {
   display: flex;
-  gap: 2px;
-  margin-left: 4px;
+  gap: 1.5px;
+  margin-left: auto;
+  overflow: hidden;
 }
+/* Authored glyphs, not `id.slice(0, 2)` — see `statusChips.ts` for why `CU`
+   was the wrong answer. Sized off §4.3's "10x10 px chips ... on pink chips". */
 .ffx2-status-chip {
-  font-size: 6px;
-  line-height: 10px;
-  padding: 0 2px;
-  background: var(--ig-ink);
-  color: var(--ig-accent);
-  border-radius: 2px;
+  flex: none;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5.5px;
+  letter-spacing: 0.08em;
+  line-height: 9px;
+  padding: 0 2.5px;
+  background: var(--x2-link-idle);
+  color: var(--x2-text-hi);
+  border-radius: 1.5px;
+  white-space: nowrap;
+}
+.ffx2-status-chip--good {
+  background: #2a4e3a;
+  color: #b9f0cf;
+}
+/* Stack level for the Up/Down family, riding the chip as a superscript. */
+.ffx2-status-chip i {
+  font-style: normal;
+  font-size: 4.5px;
+  vertical-align: super;
+  opacity: 0.85;
 }
 
 /* `.ig-stat__od` ships a fixed 53.33px width and a plain accent fill; the HUD
@@ -196,40 +441,129 @@
   pointer-events: none;
 }
 
+/* --------------------------------------------------------- damage numerals */
+
+/*
+ * `research/visual-bible.md` §4.7, "X-2 deltas from FFX": same geometry and
+ * bounce as §3.6 (which is `src/ui/common/DamageNumbers.ts` + `damageLadder.ts`,
+ * shared by both games), but the **fill gradient is `#FFFFFF` to `#F7C8E4`** and
+ * the outline is `#2A0E20`; criticals go `#FFF0A8` to `#F2712E`; healing
+ * `#8BE8B0` to `#3FA870`, unchanged; MISS `#F7C8E4` to `#B0489E`.
+ *
+ * Scoped under `.ffx2hud` so the FFX HUD keeps §3.6's white/steel numerals —
+ * the shared stylesheet stays the FFX-1 default and this is the delta.
+ */
+.ffx2hud .dnum {
+  background: linear-gradient(180deg, #ffffff 0%, #f7c8e4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 1px #2a0e20) drop-shadow(0 1px 0 #2a0e20) drop-shadow(1px 0 0 #2a0e20)
+    drop-shadow(-1px 0 0 #2a0e20) drop-shadow(0 -1px 0 #2a0e20) drop-shadow(0 2px 4px rgba(11, 10, 18, 0.6));
+}
+.ffx2hud .dnum--critical {
+  background: linear-gradient(180deg, #fff0a8 0%, #f2712e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.ffx2hud .dnum--heal {
+  background: linear-gradient(180deg, #8be8b0 0%, #3fa870 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.ffx2hud .dnum--miss,
+.ffx2hud .dnum--absorbed {
+  background: linear-gradient(180deg, #f7c8e4 0%, #b0489e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.ffx2hud .dnum--mp {
+  background: linear-gradient(180deg, #8fd0f0 0%, #3a8fd0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+/* `.dnum--immune` sets a flat -webkit-text-fill-color, so it needs the colour
+   rather than a gradient to change at all. */
+.ffx2hud .dnum--immune {
+  color: #c9a8bd;
+  -webkit-text-fill-color: #c9a8bd;
+}
+
 /* -------------------------------------------------------------- chain pop */
 
-/* `.ig-damage`'s own children (`__splash`, `__value`, `__chain`) already
-   carry the mock's exact styling; these modifiers are the HUD-owned
-   escalation states (visual-bible §4.6) layered on top. */
-.ffx2chain--pop .ffx2chain__num {
+/*
+ * The mock's "CHAIN ×N" tag, on its own: no `.ig-damage` splash, because the
+ * "742" next to it in the mock is the damage figure and that is now
+ * `DamageLayer`'s (see the numerals section above). §4.6 anchors this popup
+ * "top-right of the enemy being chained", which is where `showChain` puts it.
+ *
+ * Sizes read `--ffx2-scale` — the letterbox scale `FFX2BattleHud.layout()`
+ * publishes — because this chip lives on the *unscaled* overlay next to the
+ * numerals, so a bare `11px` would draw at a tenth the size of the chrome it
+ * belongs to.
+ */
+.ffx2-chain-chip {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  padding: calc(3px * var(--ffx2-scale, 1)) calc(8px * var(--ffx2-scale, 1));
+  background: var(--ig-ink);
+  color: var(--ig-accent);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(11px * var(--ffx2-scale, 1));
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.ffx2-chain-chip.ffx2chain--pop {
   animation: ffx2-chain-pop 0.18s ease-out;
 }
 @keyframes ffx2-chain-pop {
   0% {
-    transform: scale(1);
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
   }
   50% {
-    transform: scale(1.15);
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1.25);
   }
   100% {
-    transform: scale(1);
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
   }
 }
-.ffx2chain--warm .ig-damage__splash {
-  filter: drop-shadow(0 0 6px rgba(227, 185, 74, 0.7));
+.ffx2-chain-chip.ffx2chain--warm {
+  box-shadow:
+    0 0 6px 1px rgba(227, 185, 74, 0.7),
+    0 2px 6px rgba(0, 0, 0, 0.5);
 }
-.ffx2chain--hot .ig-damage__splash {
-  fill: #f2712e;
-}
-.ffx2chain--hot .ffx2chain__num {
+.ffx2-chain-chip.ffx2chain--hot {
+  background: #f2712e;
   color: #fff0a8;
 }
-.ffx2chain--flash::after {
+.ffx2-chain-chip.ffx2chain--flash::after {
   content: '';
   position: fixed;
   inset: 0;
   background: var(--ig-accent);
   opacity: 0.15;
+}
+
+/* -------------------------------------------------------------- hit flash */
+
+/* A hit still reads on the HUD side without drawing its number (decision 11
+   leaves the figure to the presenter) — a brief brightness flash on the
+   target's own row, party or enemy. */
+.ffx2-hit-flash {
+  animation: ffx2-hit-flash 0.2s ease-out;
+}
+@keyframes ffx2-hit-flash {
+  0% {
+    filter: brightness(1);
+  }
+  35% {
+    filter: brightness(1.8);
+  }
+  100% {
+    filter: brightness(1);
+  }
 }
 
 /* ----------------------------------------------------------- target reticle */

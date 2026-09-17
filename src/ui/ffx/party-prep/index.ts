@@ -1,44 +1,25 @@
+import './party-prep.css';
 import { registerPrepPanel } from '../../../app/screens/PartyPrepScreen.ts';
-import { mountFFXPartyPrep, type PartyPrepHandle } from './PartyPrep.ts';
-
-export { mountFFXPartyPrep, type PartyPrepHandle };
+import { makeEquipmentPanel, makeItemsPanel, makeOverdrivePanel, makeStatsPanel } from './panels.ts';
+import { makeSphereGridPanel } from './SphereGridPanel.ts';
 
 /**
- * Wires the FFX party-prep UI into `PartyPrepScreen`'s tab shell
- * (`registerPrepPanel`, see that file's header comment). This module's only
- * job is the registration side effect — `main.ts` imports it once for that
- * effect, alongside registering the HUD screenshot demo screen. Everything
- * that isn't shell plumbing lives in `PartyPrep.ts`, which stays a plain,
- * directly-testable `mountFFXPartyPrep(root, build, onDone)` export.
+ * Wires the FFX party-prep UI into `PartyPrepScreen`'s Ink & Gold frame
+ * (`registerPrepPanel`, see that file's header comment) as five composing
+ * panels — Stats, Sphere Grid, Equipment, Items, Overdrive — rather than one
+ * panel that redraws the whole screen: the shell now owns the backdrop,
+ * roster column, tab strip, active-party slots and START BATTLE button
+ * (`src/ui/common/party-prep.css`, `docs/screenshots/
+ * 35-inkgold-party-prep.png`), and keeps every composing panel's own
+ * container alive across tab switches instead of rebuilding whichever tab
+ * was drawn last — the bug the older single-panel design (and this file's
+ * own previous revision) worked around by merging everything into one tab.
  *
- * One registered tab, not five: `PartyPrepScreen` only remounts a tab's panel
- * the *first* time it is opened (see its `mounted` set), so registering
- * Stats/Sphere-Grid/Equipment/Items/Overdrive as five separate panels would
- * show stale content when a player returns to an already-visited tab. A
- * single "Party" panel sidesteps that by owning its own internal tab strip
- * (`DetailPanel`), which re-renders correctly on every switch.
+ * `main.ts` imports this module once for its registration side effect,
+ * alongside the HUD screenshot demo screen.
  */
-let handle: PartyPrepHandle | null = null;
-
-registerPrepPanel({
-  id: 'ffx-party',
-  label: 'Party',
-  game: 'ffx',
-  order: 0,
-  mount(root, ctx) {
-    const build = ctx.chapter.buildRef;
-    if (build.game !== 'ffx') return;
-    handle?.unmount();
-    handle = mountFFXPartyPrep(root, build, () => {
-      // PartyPrepScreen's own Enter-key handling begins the battle; a
-      // synthetic Enter lets the in-panel START BATTLE button reach it
-      // without a bespoke callback wired through the panel shell.
-      window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
-      window.dispatchEvent(new KeyboardEvent('keyup', { code: 'Enter' }));
-    });
-  },
-  unmount() {
-    handle?.unmount();
-    handle = null;
-  },
-});
+registerPrepPanel(makeStatsPanel());
+registerPrepPanel(makeSphereGridPanel());
+registerPrepPanel(makeEquipmentPanel());
+registerPrepPanel(makeItemsPanel());
+registerPrepPanel(makeOverdrivePanel());

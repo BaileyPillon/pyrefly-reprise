@@ -19,6 +19,7 @@ import { yunalescaScripts } from '../../src/story/scripts/yunalesca.ts';
 import { braskasFinalAeonScripts } from '../../src/story/scripts/braskas-final-aeon.ts';
 import { ffx2BahamutScripts } from '../../src/story/scripts/ffx2-bahamut.ts';
 import { ffx2VegnagunShuyinScripts } from '../../src/story/scripts/ffx2-vegnagun-shuyin.ts';
+import { AI_EMITTED_TRIGGERS, type ChapterKey } from '../../src/story/registry.ts';
 
 const CHAPTERS: ReadonlyArray<readonly [string, ChapterScripts]> = [
   ['seymour-flux', seymourFluxScripts],
@@ -65,7 +66,7 @@ function spokenText(script: StoryScript): Array<readonly [string, string]> {
   return out;
 }
 
-describe.each(CHAPTERS)('%s scripts', (_id, chapter) => {
+describe.each(CHAPTERS)('%s scripts', (id, chapter) => {
   it('passes lintScript() on every script it owns', () => {
     for (const [name, script] of allScripts(chapter)) {
       expect(lintScript(flatten(script)), `${name} lint`).toEqual([]);
@@ -104,7 +105,15 @@ describe.each(CHAPTERS)('%s scripts', (_id, chapter) => {
   });
 
   it('wires every trigger to a script and every script to a trigger', () => {
-    const referenced = new Set(chapter.mid.map((t) => t.script));
+    // A mid-battle script is reachable two ways: through a `MidBattleTrigger`,
+    // or by an AI script emitting `script-trigger` with a name of its own and
+    // no trigger at all. `src/story/registry.ts` owns the list of the second
+    // kind, and `story-triggers.test.ts` checks the id/script/budget rules the
+    // presenter actually depends on.
+    const referenced = new Set<string>([
+      ...chapter.mid.map((t) => t.script),
+      ...AI_EMITTED_TRIGGERS[id as ChapterKey],
+    ]);
     const defined = new Set(Object.keys(chapter.midScripts));
     for (const ref of referenced) expect(defined, `trigger -> ${ref}`).toContain(ref);
     for (const key of defined) expect(referenced, `script -> ${key}`).toContain(key);

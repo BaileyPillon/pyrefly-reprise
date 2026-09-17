@@ -18,13 +18,13 @@ import type {
 } from '../common/types.ts';
 import { damageRng, percentRoll } from '../common/rng.ts';
 import { idiv } from './math.ts';
-import { type Ctx, has, hasFlag, isAlive, rtOf, stacks } from './state.ts';
+import { type Ctx, has, hasFlag, isAlive, onField, rtOf, stacks } from './state.ts';
 import { computeDamage, critChance, hitChance, poolOf, resolveElements } from './formulas.ts';
 import type { TimingBonus } from './formulas.ts';
 import { equipmentCrit, hasAuto, weaponElements, weaponStatusStrikes } from './equipment.ts';
-import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, reviveActor } from './hp.ts';
+import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, koActor, reviveActor } from './hp.ts';
 import { banishAeon } from './aeons.ts';
-import { applyStatus, bouncesOffReflect, consumeNulCharges, removeStatuses } from './statuses.ts';
+import { applyStatus, bouncesOffReflect, consumeNulCharges, removeStatuses, rollStatus } from './statuses.ts';
 import { applyDelay } from './turnQueue.ts';
 import { isPerHitRandom, redirectTarget, reflectBounceTarget, resolveTargets } from './targeting.ts';
 import {
@@ -176,7 +176,44 @@ export function resolveAbility(
       };
       const result = def.formula === 'none' ? { amount: 0, affinity: 'normal' as const, capped: false } : computeDamage(input);
 
-      if (pool === 'ctb') {
+      // Revival effects (`heals` + `can-target-dead`: Life, Full-Life, Phoenix
+      // Down, Mega Phoenix) resolve here, never through the HP path below.
+      //
+      // - On a **KO'd** target they revive it. That includes a KO'd Zombie: the
+      //   reversal applies only to a *living* Zombie, and Zombie survives KO,
+      //   so the target comes back still Zombie [ffx-combat-core §4.2,
+      //   ffx-yunalesca §7.1, §15.2 #29]. Refusing to revive a KO'd Zombie —
+      //   what this code used to do — makes every zombified member who dies
+      //   permanently lost, which is exactly how Chapter 2 bled out in Form II.
+      // - On a **living Zombie** they kill it outright ("revival effects
+      //   instantly kill a living Zombie" — the `zombie` status contract).
+      let resolvedAsRevival = false;
+      if (heals && hasFlag(def, 'can-target-dead')) {
+        if (!isAlive(target) && onField(target)) {
+          resolvedAsRevival = true;
+          const restore = Math.abs(result.amount) || idiv(target.stats.maxHp, 2);
+          if (reviveActor(ctx, target, restore, def.id)) {
+            onHealDealt(ctx, user, target, restore);
+          } else {
+            ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
+          }
+        } else if (has(target, 'zombie')) {
+          resolvedAsRevival = true;
+          const lethal = Math.max(target.hp, Math.abs(result.amount));
+          dealDamage(ctx, target, lethal, {
+            sourceId: user.id,
+            element: primaryElement,
+            crit: false,
+            hitIndex,
+            hitCount: totalHits,
+          });
+          totalDealt += lethal;
+        }
+      }
+
+      if (resolvedAsRevival) {
+        // Handled above; skip the ordinary HP application.
+      } else if (pool === 'ctb') {
         // Haste/Slow's own CTB shift is applied by the status path, so the
         // formula result only moves the counter for pure `ctb` actions.
         rtOf(ctx, target.id).ctb = Math.max(0, rtOf(ctx, target.id).ctb + result.amount);
@@ -212,6 +249,20 @@ export function resolveAbility(
 
       // Statuses, then removals, then delay — the decompile's order.
       for (const app of statusApplications(user, def)) {
+        // Death is `ko` in this contract (there is no separate death status),
+        // and landing it must *kill* — HP to 0, a `ko` event, Auto-Life
+        // consulted — not merely attach a marker to a living combatant. The
+        // roll still goes through `rollStatus`, which is where a living
+        // Zombie's Death resistance is raised to 255: that is the whole of
+        // Mega Death's Zombie exception [ffx-yunalesca §5.3, §7.1].
+        if (app.status === 'ko') {
+          if (!isAlive(target)) continue;
+          if (rollStatus(ctx, target, 'ko', app.chance)) {
+            landedAnyStatus = true;
+            koActor(ctx, target, user.id);
+          }
+          continue;
+        }
         if (applyStatus(ctx, user, target, app, def.id, { skipCtbShift: pool === 'ctb' })) {
           landedAnyStatus = true;
           // Eject is not just a marker: it takes the target off the field, and
@@ -233,12 +284,6 @@ export function resolveAbility(
       }
       if (hasFlag(def, 'weak-delay')) applyDelay(ctx, target.id, 'weak');
       if (hasFlag(def, 'strong-delay')) applyDelay(ctx, target.id, 'strong');
-
-      // Revival: `can-target-dead` + `heals` on a KO'd target.
-      if (heals && hasFlag(def, 'can-target-dead') && !isAlive(target) && !has(target, 'zombie')) {
-        const restore = result.amount !== 0 ? Math.abs(result.amount) : idiv(target.stats.maxHp, 2);
-        reviveActor(ctx, target, restore, def.id);
-      }
 
       // Shatter a petrified target.
       if (hasFlag(def, 'shatter') && has(target, 'petrify')) {

@@ -240,10 +240,18 @@ export class FFXEngine implements FFXBattleEngine {
 
     // Enemies this action actually resolved against.
     const damaged = new Set<CombatantId>();
+    // Enemies this action pushed into a new form. The killing blow of a form is
+    // never countered: in the decompile, `onHit` runs the transformation block
+    // *instead of* the counter switch [ffx-yunalesca §2.4, offset 0600]. By the
+    // time counters are collected `advanceForm` has already revived the boss in
+    // its next form, so without this the blow would draw that form's counter.
+    const transformed = new Set<CombatantId>();
     for (const e of actionEvents) {
       if (e.type === 'damage' && e.sourceId === actor.id && e.amount > 0) damaged.add(e.targetId);
       if (e.type === 'mp-damage' && e.sourceId === actor.id) damaged.add(e.targetId);
+      if (e.type === 'form-change') transformed.add(e.enemyId);
     }
+    const counterable = [...damaged].filter((id) => !transformed.has(id));
 
     // The Mortiorchis never dies; it drains Seymour and comes back smaller.
     runMortibsorptionIfDown(ctx);
@@ -252,7 +260,7 @@ export class FFXEngine implements FFXBattleEngine {
     if (command) {
       const def = commandAbility(ctx, command);
       if (def) {
-        for (const counter of collectBossCounters(ctx, actor, def, [...damaged])) {
+        for (const counter of collectBossCounters(ctx, actor, def, counterable)) {
           const counterActor = tryActor(ctx, counter.actorId);
           if (!counterActor || !isAlive(counterActor)) continue;
           this.push({

@@ -43,6 +43,17 @@
  *   as `0` rather than pre-resolved to 3, so the engine's own fallback
  *   logic is exercised.
  * - `minigame: null` on every entry — aeon abilities never open a minigame.
+ *
+ * ACCURACY DECISION (2026-09-16): see `abilities-core.ts` for the full
+ * reasoning and citations (`ffx-bfa-yu-yevon.md` §1.3, lines 101/107/108).
+ * `canMiss: false` is set explicitly on Oblivion (`strength` formula) and
+ * Zanmato (`none` formula, a Death-chance effect) — both `category:
+ * 'overdrive'`, `damageType: 'other'`. Oblivion matches the verified
+ * Strength+Other Overdrive pattern directly; Zanmato's `none` formula is an
+ * extension by analogy on damage-type/category, `[estimate]`. Yojimbo's 4
+ * Attack variants and Anima's Attack/Pain above are untouched and still
+ * roll accuracy normally (Anima's Attack explicitly carries an ACC×1.5
+ * multiplier, which would be meaningless if it always hit).
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -118,6 +129,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['none'],
     targeting: 'single-enemy', // [estimate] — not restated beyond DmgCon in §6.3.
     hits: 16,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible', 'always-break-damage-limit'],
@@ -240,6 +252,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['none'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     // Death is non-status (see file header); no ordinary flags apply to a
     // pure-formula-'none' instant-death effect.
     statusEffects: [],

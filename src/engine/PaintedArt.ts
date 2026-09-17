@@ -6,6 +6,10 @@ import {
   TextureLoader,
   type Texture,
 } from 'three';
+import type { PoseFrame } from './PaintedScale.ts';
+
+export { computePoseScale, contactBandFor } from './PaintedScale.ts';
+export type { PoseFrame, PoseScale, PoseScaleOptions } from './PaintedScale.ts';
 
 /**
  * Loading and bookkeeping for the painted (non-pixel) art pipeline.
@@ -21,12 +25,22 @@ import {
  * the scene hot-swaps the moment the real PNG appears.
  */
 
-/** Sidecar JSON written next to every painted character PNG. */
-export interface PoseMeta {
-  width: number;
-  height: number;
-  /** Y pixel from the top of the PNG where the figure's feet meet the ground. */
-  baselineY: number;
+/**
+ * Sidecar JSON written next to every painted character PNG.
+ *
+ * `scale` and `anchorY` are **optional hand overrides**. Nothing generates
+ * them; they are there so one awkward render can be corrected in a text file
+ * instead of in code. See {@link PoseFrame} for their exact meaning — they are
+ * read by {@link computePoseScale}, which is what sizes the plane.
+ *
+ * ```jsonc
+ * // public/art/characters/tidus/ko.json
+ * { "width": 1216, "height": 823, "baselineY": 813,
+ *   "scale": 0.92,      // this render came out 8% large
+ *   "anchorY": 0.97 }   // ground line at 97% of the image height
+ * ```
+ */
+export interface PoseMeta extends PoseFrame {
   seed?: number;
   prompt?: string;
 }
@@ -103,10 +117,14 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
     if (!res.ok) return null;
     const raw = (await res.json()) as Partial<PoseMeta>;
     if (typeof raw.height !== 'number' || typeof raw.width !== 'number') return null;
+    const positive = (v: unknown): v is number =>
+      typeof v === 'number' && Number.isFinite(v) && v > 0;
     return {
       width: raw.width,
       height: raw.height,
       baselineY: typeof raw.baselineY === 'number' ? raw.baselineY : raw.height,
+      ...(positive(raw.scale) ? { scale: raw.scale } : {}),
+      ...(positive(raw.anchorY) ? { anchorY: raw.anchorY } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
       ...(raw.prompt !== undefined ? { prompt: raw.prompt } : {}),
     };
@@ -158,7 +176,16 @@ export async function loadPainted(
 
     return {
       texture,
-      meta: { width, height, baselineY },
+      // The hand overrides ride along untouched: `anchorY` beats the measured
+      // baseline, and `scale` trims the derived pixel scale, both inside
+      // `computePoseScale`.
+      meta: {
+        width,
+        height,
+        baselineY,
+        ...(meta?.scale !== undefined ? { scale: meta.scale } : {}),
+        ...(meta?.anchorY !== undefined ? { anchorY: meta.anchorY } : {}),
+      },
       placeholder: false,
       url,
     };
@@ -571,7 +598,10 @@ export interface PaintedSubject {
 export interface LoadSubjectOptions {
   /** States to look for. Defaults to {@link CHARACTER_STATES}. */
   states?: readonly string[];
-  /** Leftover-white cleanup, forwarded to {@link loadPainted}. */
+  /**
+   * Leftover-white cleanup, forwarded to {@link loadPainted}. Defaults to
+   * `{ mode: 'auto' }`; pass `{ mode: 'off' }` for hand-cut art.
+   */
   matte?: MatteOptions;
   /** Alpha baseline fitting; `false` trusts the sidecar's `baselineY`. */
   fitBaseline?: false | BaselineFitOptions;
@@ -604,6 +634,17 @@ export async function loadSubject(
   opts: LoadSubjectOptions = {},
 ): Promise<PaintedSubject> {
   const states = opts.states ?? CHARACTER_STATES;
+  // `'auto'` by default — which is what `PaintedActor` has always documented,
+  // but never got, because an unset `matte` skipped the cleanup entirely. It is
+  // the reason a KO render whose white studio background was only half cut
+  // (kimahri/ko.png) drew a hard white rectangle beside the body: `'auto'` only
+  // touches an image whose leftover background is both large and wrapped around
+  // the border, so a properly cut-out PNG still goes through untouched.
+  //
+  // Deliberately *not* defaulted inside `loadPainted`: backdrops load through
+  // it too, and a bright sky is exactly the large, border-hugging near-white
+  // region this would eat.
+  const matte = opts.matte ?? { mode: 'auto' as const };
   const silhouette = opts.silhouette ?? ((): HTMLCanvasElement => softSilhouette(id));
   const baselineOf = (c: HTMLCanvasElement): number => c.height * (opts.silhouetteBaseline ?? 0.965);
 
@@ -614,7 +655,7 @@ export async function loadSubject(
         characterUrl(id, state),
         () => silhouette(id),
         baselineOf,
-        opts.matte,
+        matte,
         opts.fitBaseline,
       ),
     ),

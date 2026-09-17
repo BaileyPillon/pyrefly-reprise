@@ -67,3 +67,53 @@
   color: var(--ig-accent, #e3b94a);
   text-shadow: 0 0.14vw 0.7vw rgba(2, 4, 10, 0.8);
 }
+
+/* ---------------------------------------------------------- mid-battle beat */
+
+/*
+ * A mid-battle story beat is not a cutscene: the fight is still on screen and
+ * the player is still in it. `BattleScreenCutscenes` puts `.battle-midbeat` on
+ * the battle root for the length of one beat, and the only thing that changes
+ * is that the scene behind the line steps back.
+ *
+ * 35% is the dim the bible already uses for a UI laid over a scene that must
+ * stay readable — the FFX-2 Switch roster strip [visual-bible §3.3] and Wantz's
+ * shop over the diorama, "the scene stays visible, dimmed 35%" [§3.14]. The one
+ * place the bible authors the HUD *leaving* is the Overdrive overlay, where the
+ * CTB list, command window and party status all slide off over 0.12 s
+ * [§3.11.0] — a mid-battle line is not that, and used to be treated as if it
+ * were (the HUD was hidden outright, so a beat that overran left ~30 s of empty
+ * screen).
+ *
+ * The HUD roots are `.ffxhud` and `.ffx2hud`; the dialogue box is a sibling of
+ * both, so it reads at full strength over the dimmed chrome.
+ */
+.battle-midbeat .ffxhud,
+.battle-midbeat .ffx2hud {
+  opacity: 0.65;
+  transition: opacity 180ms ease-out; /* the dialogue box's own fade */
+}
+
+/*
+ * Coming out of a beat the dim is simply dropped: the transition above only
+ * applies while `.battle-midbeat` is on, so the HUD returns to full strength on
+ * the frame the fight resumes. Declaring the transition on `.ffxhud` itself
+ * would be this stylesheet reaching into another layer's root element to add
+ * behaviour it never asked for.
+ */
+
+/*
+ * A portrait plate with no portrait in it.
+ *
+ * `portraitImgHtml` removes its `<img>` on a 404 [`ui/common/portrait.ts`], so
+ * a speaker whose painting has not been generated yet (Paine, in the Bahamut
+ * fight) leaves `.dbox__portrait` empty — and the plate is a dark gradient, so
+ * it reads as a grey slab bitten out of the ivory box. `.dbox--no-portrait`
+ * cannot catch this: the speaker *has* a portrait id, the file is just missing.
+ *
+ * Scoped to a mid-battle beat, where the box sits over a live fight and a grey
+ * rectangle is at its most obvious. Delete it when the roster is complete.
+ */
+.battle-midbeat .dbox__portrait:empty {
+  display: none;
+}

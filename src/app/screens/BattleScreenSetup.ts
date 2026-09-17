@@ -22,39 +22,43 @@ import type {
   MidBattleTrigger,
 } from '../../battle/common/types.ts';
 import type { Chapter } from '../../data/encounters.ts';
+import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
+import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
 
-/** Every enemy-group module under `src/data/<game>/enemies/`, lazily. */
-const groupModules = import.meta.glob('../../data/*/enemies/*.ts') as Record<
-  string,
-  () => Promise<Record<string, unknown>>
->;
-
-function isGroup(v: unknown): v is EnemyGroupDef {
-  const o = v as Partial<EnemyGroupDef> | null;
-  return !!o && typeof o.id === 'string' && Array.isArray(o.enemies);
+/**
+ * Find a formation by id. Used to follow a `nextGroupId` from one link of a
+ * chained encounter to the next (Yunalesca's forms, the Vegnagun chain).
+ *
+ * Both data layers publish an id-keyed table now, so this is a lookup rather
+ * than the module-scanning glob it started as.
+ */
+export async function findEnemyGroup(id: string): Promise<EnemyGroupDef | null> {
+  return FFX_GROUPS[id] ?? FFX2_GROUPS[id] ?? null;
 }
 
 /**
- * Find a formation by id across every data module. Used to follow a
- * `nextGroupId` without a central registry existing yet.
+ * How many party spots the FFX-2 scenes publish (`SceneBuild.partySlots`,
+ * sliced to three in `bevelle-underground.ts` / `farplane.ts`).
+ *
+ * **FFX-2 party slot placement lives in two places and this is the seam.**
+ * `src/battle/ffx2/setup.ts` numbers the girls `0, 1, 2` in `members` order and
+ * `PaintedStage.add` looks that number up in the scene's own table — but it
+ * *clamps* (`spots[Math.min(c.slot, spots.length - 1)]`), so a fourth member
+ * would be parked silently on top of the third. Reordering `members` moves the
+ * girls on screen; adding one stacks them. Neither is obvious from either end,
+ * hence the check below.
  */
-export async function findEnemyGroup(id: string): Promise<EnemyGroupDef | null> {
-  for (const load of Object.values(groupModules)) {
-    try {
-      const mod = await load();
-      for (const exported of Object.values(mod)) {
-        if (isGroup(exported) && exported.id === id) return exported;
-      }
-    } catch {
-      /* a half-written data module; skip it */
-    }
-  }
-  return null;
-}
+const FFX2_PARTY_SLOTS = 3;
 
 /** The first setup for a chapter. */
 export function setupForChapter(chapter: Chapter, seed: number): BattleSetup {
   const triggers: MidBattleTrigger[] = chapter.scriptsRef?.mid ?? [];
+  if (chapter.buildRef.game === 'ffx2' && chapter.buildRef.members.length > FFX2_PARTY_SLOTS) {
+    console.warn(
+      `[battle] ${chapter.id}: ${chapter.buildRef.members.length} FFX-2 party members but only ` +
+        `${FFX2_PARTY_SLOTS} scene slots — the extras will be staged on top of the last one.`,
+    );
+  }
   return {
     game: chapter.game,
     party: chapter.buildRef,

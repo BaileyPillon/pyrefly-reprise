@@ -1,0 +1,263 @@
+{
+  "url": "http://localhost:5210/",
+  "mode": "gallery",
+  "gallery": [
+    "D:/Final Fantasy/docs/screenshots/60/40-title.png",
+    "D:/Final Fantasy/docs/screenshots/60/41-chapter-select.png",
+    "D:/Final Fantasy/docs/screenshots/60/42-party-prep.png",
+    "D:/Final Fantasy/docs/screenshots/60/42b-sphere-grid.png",
+    "D:/Final Fantasy/docs/screenshots/60/43-pre-cutscene.png",
+    "D:/Final Fantasy/docs/screenshots/60/44-battle-open.png",
+    "D:/Final Fantasy/docs/screenshots/60/45-battle-skills.png",
+    "D:/Final Fantasy/docs/screenshots/60/46-attack.png",
+    "D:/Final Fantasy/docs/screenshots/60/47-boss-attack.png",
+    "D:/Final Fantasy/docs/screenshots/60/49-results.png",
+    "D:/Final Fantasy/docs/screenshots/60/48-overdrive.png",
+    "D:/Final Fantasy/docs/screenshots/60/50-yunalesca.png",
+    "D:/Final Fantasy/docs/screenshots/60/51-bfa.png",
+    "D:/Final Fantasy/docs/screenshots/60/52-ffx2-bahamut.png",
+    "D:/Final Fantasy/docs/screenshots/60/53-ffx2-vegnagun.png"
+  ],
+  "steps": [
+    {
+      "step": "party-prep",
+      "tabs": [
+        "stats",
+        "sphere-grid",
+        "equipment",
+        "items",
+        "overdrive"
+      ],
+      "tab": "stats"
+    },
+    {
+      "step": "battle-submenu",
+      "opened": true,
+      "category": "White Magic▸×3",
+      "entries": [
+        "Haste8MP",
+        "Hastega30MP",
+        "Slow12MP"
+      ]
+    },
+    {
+      "step": "46-attack.png",
+      "timing": "f6",
+      "seq": 1,
+      "actorId": "tidus",
+      "side": "party",
+      "kind": "attack",
+      "ability": "Attack"
+    },
+    {
+      "step": "46-attack.png",
+      "timing": "f14",
+      "seq": 49,
+      "actorId": "tidus",
+      "side": "party",
+      "kind": "attack",
+      "ability": "Attack"
+    },
+    {
+      "step": "47-boss-attack.png",
+      "timing": "f6",
+      "seq": 83,
+      "actorId": "seymour-flux",
+      "side": "enemy",
+      "kind": "ability",
+      "ability": "Lance of Atrophy"
+    },
+    {
+      "step": "chapter1:outcome",
+      "outcome": null
+    },
+    {
+      "step": "48-overdrive",
+      "pass": "dedicated",
+      "seq": 40,
+      "actorId": "kimahri",
+      "side": "party",
+      "kind": "overdrive",
+      "ability": "Jump"
+    },
+    {
+      "step": "overdrive-pass:outcome",
+      "outcome": {
+        "chapterId": "seymour-flux",
+        "outcome": "defeat",
+        "result": {
+          "outcome": "defeat",
+          "turns": 11,
+          "elapsedTicks": 42,
+          "elapsedMs": 0,
+          "ap": 0,
+          "exp": 0,
+          "gil": 0,
+          "drops": [],
+          "overkilled": [],
+          "sphereLevelsGained": {
+            "tidus": 0,
+            "yuna": 0,
+            "kimahri": 0
+          }
+        },
+        "elapsedMs": 17779,
+        "links": 1,
+        "preview": false
+      }
+    },
+    {
+      "step": "50-yunalesca.png",
+      "scene": "zanarkand-dome",
+      "placeholder": false,
+      "preview": false,
+      "actors": 4
+    },
+    {
+      "step": "yunalesca:outcome",
+      "outcome": "timeout"
+    },
+    {
+      "step": "51-bfa.png",
+      "scene": "dreams-end",
+      "placeholder": false,
+      "preview": false,
+      "actors": 5
+    },
+    {
+      "step": "braskas-final-aeon:outcome",
+      "outcome": {
+        "chapterId": "braskas-final-aeon",
+        "outcome": "defeat",
+        "result": {
+          "outcome": "defeat",
+          "turns": 128,
+          "elapsedTicks": 774,
+          "elapsedMs": 0,
+          "ap": 0,
+          "exp": 0,
+          "gil": 0,
+          "drops": [],
+          "overkilled": [],
+          "sphereLevelsGained": {
+            "tidus": 0,
+            "yuna": 0,
+            "auron": 0
+          }
+        },
+        "elapsedMs": 47394,
+        "links": 1,
+        "preview": false
+      }
+    },
+    {
+      "step": "52-ffx2-bahamut.png",
+      "scene": "bevelle-underground",
+      "placeholder": false,
+      "preview": false,
+      "actors": 4
+    },
+    {
+      "step": "ffx2-bahamut:outcome",
+      "outcome": {
+        "chapterId": "ffx2-bahamut",
+        "outcome": "defeat",
+        "result": {
+          "outcome": "defeat",
+          "turns": 42,
+          "elapsedTicks": 162730,
+          "elapsedMs": 54243,
+          "ap": 0,
+          "exp": 0,
+          "gil": 0,
+          "drops": [],
+          "overkilled": [],
+          "sphereLevelsGained": {},
+          "levelsGained": {}
+        },
+        "elapsedMs": 60026,
+        "links": 1,
+        "preview": false
+      }
+    },
+    {
+      "step": "53-ffx2-vegnagun.png",
+      "scene": "farplane",
+      "placeholder": false,
+      "preview": false,
+      "actors": 4
+    },
+    {
+      "step": "ffx2-vegnagun-shuyin:outcome",
+      "outcome": {
+        "chapterId": "ffx2-vegnagun-shuyin",
+        "outcome": "defeat",
+        "result": {
+          "outcome": "defeat",
+          "turns": 17,
+          "elapsedTicks": 63345,
+          "elapsedMs": 21115,
+          "ap": 0,
+          "exp": 0,
+          "gil": 0,
+          "drops": [],
+          "overkilled": [],
+          "sphereLevelsGained": {},
+          "levelsGained": {}
+        },
+        "elapsedMs": 36845,
+        "links": 1,
+        "preview": false
+      }
+    }
+  ],
+  "cutscenes": [],
+  "errors": [],
+  "notes": [],
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "wiring": {
+    "abilitiesFfx": 343,
+    "itemsFfx": 69,
+    "abilitiesFfx2": 324,
+    "itemsFfx2": 33,
+    "dresspheresFfx2": 14,
+    "garmentGridsFfx2": 43,
+    "ffxSource": "index"
+  },
+  "scenes": [
+    {
+      "key": "demo",
+      "title": "Mt. Gagazet — the Prominence",
+      "placeholder": false
+    },
+    {
+      "key": "gagazet",
+      "title": "Mt. Gagazet — the Prominence",
+      "placeholder": false
+    },
+    {
+      "key": "zanarkand-dome",
+      "title": "Zanarkand Dome — the great hall",
+      "placeholder": false
+    },
+    {
+      "key": "dreams-end",
+      "title": "Dream's End — inside Sin",
+      "placeholder": false
+    },
+    {
+      "key": "bevelle-underground",
+      "title": "Bevelle Underground — Vegnagun's chamber",
+      "placeholder": false
+    },
+    {
+      "key": "farplane",
+      "title": "Heart of the Farplane",
+      "placeholder": false
+    }
+  ],
+  "needsOverdrivePass": true,
+  "consoleErrors": [
+    "[chapter:braskas-final-aeon] [presenter] mid-battle script \"yunalesca-form-2\" did not finish within 30000ms; abandoning the beat and resuming the battle"
+  ]
+}

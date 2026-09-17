@@ -34,6 +34,10 @@
  * Music: the battle slot for this chapter must carry the sorrowful Yuna
  * leitmotif ("Yuna's Ballad" in the original), **not** a boss theme
  * [writing-bible §3 E6]. `boss-ffx2-aeon` is that slot [CONTRACT-CHANGES §8].
+ *
+ * Trigger rules, tested by `src/story/registry.ts`: `id === script` (the engine
+ * emits the **id** and the presenter looks the script up by it), and every
+ * mid-battle `say` carries an `auto` so no beat can sit on a Confirm.
  */
 
 import type { ChapterScripts } from '../dsl.ts';
@@ -143,16 +147,38 @@ export const ffx2BahamutScripts: ChapterScripts = {
       id: 'first-mega-flare-countdown',
       when: { type: 'charge-started', who: 'bahamut' },
       once: true,
-      script: 'mega-flare-countdown',
+      script: 'first-mega-flare-countdown',
+    },
+    {
+      // The loop does not change; the party's reading of it does. Two more
+      // callouts, both about him rather than to him [writing-bible §3 E4-X2].
+      id: 'bahamut-half',
+      when: { type: 'hp-below', who: 'bahamut', fraction: 0.5 },
+      once: true,
+      script: 'bahamut-half',
+    },
+    {
+      id: 'bahamut-low',
+      when: { type: 'hp-below', who: 'bahamut', fraction: 0.2 },
+      once: true,
+      script: 'bahamut-low',
     },
   ],
   midScripts: {
-    'mega-flare-countdown': [
+    'first-mega-flare-countdown': [
       camera('action', 400),
       fx('mega-flare-charge', 'bahamut'),
-      say('paine', "It stopped. That's not mercy."),
-      say('paine', "That's a timer."),
+      say('paine', "It stopped. That's not mercy.", { auto: 1100 }),
+      say('paine', "That's a timer.", { auto: 1100 }),
       camera('idle', 400),
+    ],
+    'bahamut-half': [
+      say('rikku-x2', 'Is it — Yunie, is it slowing down?', { auto: 1200 }),
+      say('paine', "No. It's counting.", { auto: 1100 }),
+    ],
+    'bahamut-low': [
+      say('yuna-x2', "It's almost over.", { auto: 1100 }),
+      say('yuna-x2', 'You can rest. You can rest.', { emotion: 'pained', auto: 1400 }),
     ],
   },
 };

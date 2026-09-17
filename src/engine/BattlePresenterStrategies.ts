@@ -21,6 +21,7 @@ import type {
   StatusId,
 } from '../battle/common/types.ts';
 import type { AutoStrategy } from './BattlePresenter.ts';
+import { tacticFor } from './BattlePresenterTactics.ts';
 
 /** Built-in strategy names. */
 export type StrategyName = 'intended' | 'attack' | 'defend' | 'random';
@@ -74,6 +75,18 @@ function hurtAllies(engine: BattleEngine): AnyCombatant[] {
 export const intendedStrategy: AutoStrategy = (actorId, commands, engine) => {
   const enabled = commands.filter(isEnabled);
   if (!enabled.length) return null;
+
+  // 0. The encounter's own line, when it has one (`BattlePresenterTactics.ts`).
+  //    A tactic that has no opinion this turn means "swing", not "fall back to
+  //    the generic heals" — those generic heals are exactly what an encounter
+  //    tactic exists to override (Potions mid-damage-race, healing a Zombie).
+  const tactic = tacticFor(engine);
+  if (tactic) {
+    const picked = tactic(actorId, commands, engine);
+    if (picked) return picked;
+    return overdriveOrAttack(commands, engine);
+  }
+
   const actor = engine.state().combatants[actorId];
 
   // 1. Someone is down.
@@ -107,17 +120,22 @@ export const intendedStrategy: AutoStrategy = (actorId, commands, engine) => {
     if (heal) return withTarget(heal, hurt.id);
   }
 
-  // 4. A full Overdrive is a resource, not a trophy.
+  // 4–5. Overdrive, then hit something.
+  return overdriveOrAttack(commands, engine);
+};
+
+/** A full Overdrive is a resource, not a trophy; otherwise hit something. */
+function overdriveOrAttack(commands: AvailableCommand[], engine: BattleEngine): Command | null {
+  const enabled = commands.filter(isEnabled);
+  if (!enabled.length) return null;
   const overdrive = enabled.find((c) => c.command.kind === 'overdrive');
   if (overdrive) return withTarget(overdrive, bestEnemyTarget(engine, overdrive));
-
-  // 5. Hit something.
   const attack =
     enabled.find((c) => c.command.kind === 'attack') ??
     enabled.find((c) => c.category === 'skill' || c.category === 'blackmagic') ??
     enabled[0]!;
   return withTarget(attack, bestEnemyTarget(engine, attack));
-};
+}
 
 /**
  * Statuses that stop a character contributing at all, and what lifts them.

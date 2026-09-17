@@ -119,9 +119,24 @@
   border-bottom-width: 0;
   transform: skewX(var(--ig-skew, -12deg));
   cursor: pointer;
+  /*
+   * `#ui` is `pointer-events: none` (the WebGL canvas under it keeps the
+   * cursor when nothing on the overlay wants it) and that inherits all the
+   * way down. `index.html`'s `#ui [data-action]` rule already turns this back
+   * on for every element carrying that attribute, but this shell's own
+   * stylesheet should not depend on a global fallback it does not own to make
+   * its own click targets clickable — so every affordance below restates it
+   * directly, the same way `.ffxprep-sg__canvas` does in the sibling panel
+   * file (`src/ui/ffx/party-prep/party-prep.css`).
+   */
+  pointer-events: auto;
 }
 .prep__member > * {
   transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+/* Mouse-only feedback; the selected row already reads via `--sel`. */
+.prep__member:hover:not(.prep__member--sel) {
+  background: rgba(244, 241, 232, 0.14);
 }
 .prep__member--sel {
   background: var(--ig-paper, #f4f1e8);
@@ -190,6 +205,10 @@
   padding-bottom: 4.44px; /* 10 */
   border-bottom: 1.78px solid transparent; /* 4 */
   cursor: pointer;
+  pointer-events: auto; /* see the comment on .prep__member */
+}
+.prep__tab:hover:not([aria-selected='true']) {
+  color: rgba(244, 241, 232, 0.85);
 }
 .prep__tab[aria-selected='true'] {
   color: var(--ig-paper, #f4f1e8);
@@ -221,6 +240,19 @@
 .prep__sheet-inner--panel {
   display: block;
 }
+/*
+ * Sphere Grid tab only. Every other tab is a short list and lets the slab sit
+ * at its content height under the tab strip; the grid is a map and wants the
+ * whole gap between the tab strip (which ends at ~64px) and the hint line at
+ * 213.33px, so on that one tab the slab starts higher. Scoped with :has() on
+ * the visible panel container, so it follows the tab strip automatically —
+ * `PartyPrepScreen` shows and hides those containers with `hidden` rather
+ * than rebuilding them, and no panel can reach its own slab to toggle a class.
+ */
+.prep__sheet:has(> .prep__sheet-inner > .prep__panel[data-panel='sphere-grid']:not([hidden])) {
+  top: 66px; /* 148.5 */
+}
+
 .prep__stat {
   display: flex;
   align-items: baseline;
@@ -267,6 +299,14 @@
 .prep__hint b {
   color: var(--ig-accent, #e3b94a);
 }
+/* The two hints that name one action are its buttons too, for a mouse player. */
+.prep__hint-act {
+  cursor: pointer;
+  pointer-events: auto; /* see the comment on .prep__member */
+}
+.prep__hint-act:hover {
+  color: var(--ig-paper, #f4f1e8);
+}
 
 /* ------------------------------------------------------------------ start */
 
@@ -285,6 +325,10 @@
   transform: skewX(var(--ig-skew, -12deg));
   box-shadow: 0 4.44px 10.67px rgba(0, 0, 0, 0.5); /* 10 24 */
   cursor: pointer;
+  pointer-events: auto; /* see the comment on .prep__member */
+}
+.prep__start:hover {
+  filter: brightness(1.08);
 }
 .prep__start > span {
   display: inline-flex;

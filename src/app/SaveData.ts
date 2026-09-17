@@ -9,6 +9,22 @@
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
 
+/**
+ * A stored best time under this is not a play session — it is fallout from
+ * the `best-time-flow` defect, where `BattleScreenFlow.runChapter` recorded
+ * the raw wall clock before the Results panel's plausibility floor applied,
+ * so an automated run at `speed: 'skip'` (every animation wait collapses to
+ * zero) could write a sub-second "best time" that Chapter Select then
+ * printed. `ui/common/resultsMath.ts`'s own floor (`MIN_PLAUSIBLE_WALL_CLOCK_MS`,
+ * 1000 ms) is what the fixed code now checks a run against *before* ever
+ * recording it; this constant is deliberately more conservative (5 s, not
+ * 1 s) because it instead has to clean up saves already written by the
+ * broken code, where the corrupt value could be the tick-based estimate
+ * `clearTimeMs` falls back to (still small for a short automated fight)
+ * rather than the raw millisecond count.
+ */
+export const IMPLAUSIBLE_BEST_TIME_MS = 5000;
+
 export interface ChapterRecord {
   /** Chapter id from `data/encounters.ts`. */
   id: string;
@@ -71,6 +87,24 @@ export function defaultSave(): SaveData {
   };
 }
 
+/**
+ * Drop a chapter's stored best time if it is implausibly short
+ * ({@link IMPLAUSIBLE_BEST_TIME_MS}) — leftover fallout from the
+ * `best-time-flow` defect. The clear itself still happened (`cleared` and
+ * `bestTurns` are left alone); only the untrustworthy timing is discarded,
+ * so the next real clear can set a fresh, honest best time.
+ */
+function sanitizeChapters(chapters: Record<string, ChapterRecord>): Record<string, ChapterRecord> {
+  const out: Record<string, ChapterRecord> = {};
+  for (const [id, rec] of Object.entries(chapters)) {
+    out[id] =
+      rec.bestTimeMs !== null && rec.bestTimeMs < IMPLAUSIBLE_BEST_TIME_MS
+        ? { ...rec, bestTimeMs: null }
+        : rec;
+  }
+  return out;
+}
+
 /** Bring an older blob up to {@link SAVE_VERSION}. */
 export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData {
   const base = defaultSave();
@@ -78,7 +112,7 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
     ...base,
     ...raw,
     version: SAVE_VERSION,
-    chapters: { ...base.chapters, ...(raw.chapters ?? {}) },
+    chapters: sanitizeChapters({ ...base.chapters, ...(raw.chapters ?? {}) }),
     settings: { ...base.settings, ...(raw.settings ?? {}) },
     flags: { ...base.flags, ...(raw.flags ?? {}) },
     unlocked: Array.isArray(raw.unlocked) ? [...raw.unlocked] : [],

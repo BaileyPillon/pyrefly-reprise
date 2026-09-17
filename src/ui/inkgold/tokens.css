@@ -14,6 +14,25 @@
  * checked against docs/handoff/presentation-ink-and-gold.md by inspection.
  */
 
+/*
+ * `hidden` means hidden, everywhere this layer is loaded.
+ *
+ * The UA stylesheet's `[hidden] { display: none }` has the same specificity as
+ * any single class, so any component class that sets `display` — `.ig-banner`
+ * and `.ig-cmd-stack` set `display: flex` — wins by source order, and
+ * `element.hidden = true` silently keeps rendering. Every consumer had started
+ * writing its own `.whatever[hidden] { display: none !important }` to
+ * compensate. This is the one rule that makes the attribute trustworthy for all
+ * of them, so a consumer can drop its local copy.
+ *
+ * Deliberately global rather than `.ig [hidden]`: a component is often
+ * appended before its root receives `.ig`, and a hidden element should never
+ * depend on where in the tree it currently sits.
+ */
+[hidden] {
+  display: none !important;
+}
+
 .ig {
   /* Palette — spec "Tokens" table / research/visual-bible.md §0.5. */
   --ig-ink: #0b0a12;

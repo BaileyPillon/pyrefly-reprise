@@ -226,7 +226,8 @@ rejects:
 
 | Export | Meaning |
 | --- | --- |
-| `PaintedArt.load(id, opts?)` / `loadSubject` | Load every state for one character id. `opts`: `states`, `matte`, `fitBaseline`, `silhouette`. |
+| `PaintedArt.load(id, opts?)` / `loadSubject` | Load every state for one character id. `opts`: `states`, `matte` (default `{ mode: 'auto' }`), `fitBaseline`, `silhouette`. |
+| `computePoseScale(pose, opts)` / `contactBandFor(h)` | `src/engine/PaintedScale.ts` — pure pose sizing, no `three`. See below. |
 | `PaintedArt.states` / `CHARACTER_STATES` | `['idle','attack','cast','hurt','ko','victory']` |
 | `characterUrl(id, state)` / `portraitUrl(id)` / `backdropUrl(id)` | Path helpers, base-path aware. |
 | `artUrl(path)` | Any path under `public/`, resolved against Vite's `BASE_URL`. |
@@ -237,6 +238,47 @@ rejects:
 | `fitBaselineFromAlpha(image, w, h, opts?)` | Measure where a figure's feet actually are. |
 | `softSilhouette(id)` | The grey stand-in for a missing subject. |
 | `setPaintedAnisotropy(n)` | Called once by `Renderer`. |
+
+### The sidecar
+
+```jsonc
+{ "width": 1216, "height": 735, "baselineY": 721,   // written by the art tool
+  "scale": 0.92,        // optional, hand-set: trim this pose's pixel scale
+  "anchorY": 0.98 }     // optional, hand-set: the row that sits on the ground
+```
+
+`scale` and `anchorY` are the two **hand overrides**. Nothing generates them;
+they exist so one awkward render can be corrected in a text file instead of in
+code. `anchorY` is in pixels from the top of the PNG, or — for convenience — a
+fraction of the height when it is `<= 1`. Both are read by `computePoseScale`.
+
+### Pose sizing — `computePoseScale`
+
+`src/engine/PaintedScale.ts` is pure (no `three`, no DOM) and unit-tested in
+`tests/unit/engine/painted-scale.test.ts`.
+
+The obvious rule — "every pose is `worldHeight` tall" — breaks the moment a
+pose is not a standing figure. A KO painting is a **landscape** render (~1216
+x 800) of a body lying down; forcing it to 1.75 units *tall* also makes it 2.6
+units *wide*, so a downed character is about twice his standing size, sprawls
+across his neighbours, and shows the PNG's rectangle.
+
+What is actually constant across a subject's poses is the **pixel scale**. So
+it is computed once from the idle pose — `worldHeight / idle.baselineY` world
+units per texel — and every other pose inherits it. A prone pose keeps that
+scale and comes out wide and low, which is what lying down looks like. The
+plane is never rotated: the pose's orientation is painted into the texture.
+
+| Result field | Meaning |
+| --- | --- |
+| `unitsPerPixel` | World units per texel — shared across the subject. |
+| `width`, `height`, `offsetY`, `topY` | Plane size and where its centre goes, so `anchorY` lands on the group origin. |
+| `prone` | Wider than tall (`proneAspect`, default 1.15) — a downed body. |
+| `footprint` | Ground-shadow radius for this pose. |
+| `clamped` | The `maxExtent` / `minExtent` net had to bite; a warning names the pose. |
+
+A pose is sized against itself when there is no reference (a procedural
+placeholder, or a subject with no idle painting), which is the old behaviour.
 
 ### Two things that decide whether a cut-out looks pasted on
 
@@ -276,6 +318,13 @@ units whether the painting is 900 px or 1600 px tall, and the figure's feet sit
 exactly on the group's origin. Canonical heights: party 1.68–1.86, Seymour
 Flux 2.6, an aeon 3–4.
 
+`worldHeight` sizes the **idle** pose; every other pose inherits idle's pixel
+scale (`computePoseScale`, above), so a KO render comes out wide and low rather
+than blown up to a standing figure's height. A prone pose also switches off
+breathe and sway — a body on the ground does not shift its weight — widens the
+contact shadow to the body's footprint, and pulls `headPoint` / `centerPoint`
+down to the top of the actual plane, so damage numerals land over the body.
+
 ### Options
 
 | Option | Meaning |
@@ -292,7 +341,8 @@ Flux 2.6, an aeon 3–4.
 | `hover` | `number` or `{ height, bobAmplitude, bobSpeed }` for something that levitates. The contact shadow stays on the ground and shrinks. |
 | `edgeFade` | Feather the outer band of the plane, 0..0.3, for art whose aura bleeds to the PNG border. |
 | `alphaCut` | Discard threshold. Default 0.02. |
-| `matte` | `{ mode: 'auto' \| 'force' \| 'off' }` white-background cleanup. |
+| `matte` | `{ mode: 'auto' \| 'force' \| 'off' }` white-background cleanup. `'auto'` by default, including through `fromSubject`. |
+| `poseScaling` | `false` to size every pose to `worldHeight` (the old rule), or `{ referencePose, maxExtent, minExtent, proneAspect }`. |
 | `castShadow`, `shadowAlphaTest` | Real shadow from the painted silhouette. |
 | `fitBaseline` | See above. On by default. |
 | `poses`, `initialPose`, `placeholder`, `placeholderBaseline` | The low-level path used by `PaintedActor.create`. |
@@ -314,7 +364,8 @@ Flux 2.6, an aeon 3–4.
 | `moveTo(pos, ms?, easing?)` | Promise; tweens `position`. |
 | `setFacing(1 \| -1)`, `facingDir` | Mirror. |
 | `setBrightness(m)`, `setTint(c)`, `setRimLight(c, s, dir?)`, `setBounceLight(c, s)` | Drive the look from the scene's light rig. |
-| `headPoint(out?)`, `centerPoint(out?)`, `height` | Anchors for VFX and damage numerals. |
+| `headPoint(out?)`, `centerPoint(out?)`, `height` | Anchors for VFX and damage numerals. Both follow the pose: over a prone body they aim at the plane's top, not at where the head used to be. |
+| `isProne`, `poseSize` | Whether the pose on screen is a downed painting, and its `[width, height]` in world units. |
 | `subject` | What `PaintedArt.load` found, or `null`. |
 | `shadow`, `tweens`, `dispose()` | |
 
@@ -332,6 +383,12 @@ differencing gives a band that hugs one side of the outline — this is what
 actually welds a cut-out into a lit scene), a ground bounce, a contact ramp at
 the feet, an alpha-weighted flash, a noise-threshold dissolve with an emissive
 edge, and an optional `edgeFade`.
+
+The contact ramp is sized per plane through the `contactBand` uniform
+(`contactBandFor(planeHeight)`), so the darkening is a fixed *world* distance
+off the ground. Given the standing figure's flat 10%-of-plane band, a short
+landscape KO plane reads as a hard horizontal seam across the whole image
+instead of as contact.
 
 ## `Backdrop`
 

@@ -101,6 +101,10 @@ export {
   ticksUntilStatusEvent,
 } from './statuses.ts';
 
+// --- sensor / scan ---------------------------------------------------------
+export { resolveSensor, revealTarget, sensorKind, weaknessesOf } from './sensor.ts';
+export type { SensorKind } from './sensor.ts';
+
 // --- dresspheres, grids, spherechange --------------------------------------
 export { dressphereStats, hasAnchors, sdspPartStats } from './dressphere-stats.ts';
 export { attackHits, defaultDresspheres, hasAttackCommand, isLongRange } from './dresspheres.ts';

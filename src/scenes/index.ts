@@ -26,8 +26,11 @@ import {
   ZANARKAND_DOME_SLOTS,
 } from './zanarkand-dome.ts';
 import { buildGagazetScene } from './gagazet.ts';
-import { buildBevelleUndergroundScene } from './bevelle-underground.ts';
-import { buildDreamsEndScene } from './dreams-end.ts';
+import {
+  buildBevelleUndergroundScene,
+  BEVELLE_UNDERGROUND_SLOTS,
+} from './bevelle-underground.ts';
+import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
 import { mountScene, type SceneBuild, type SceneFactory } from './types.ts';
 
@@ -139,11 +142,45 @@ SCENES.set('zanarkand-dome', {
   slots: ZANARKAND_DOME_SLOTS,
   placeholder: false,
 });
-SCENES.set('dreams-end', placeholderEntry('dreams-end', "Dream's End — inside Sin"));
-SCENES.set(
-  'bevelle-underground',
-  placeholderEntry('bevelle-underground', 'Bevelle Underground — Limbo'),
-);
+/**
+ * Dream's End is a real location now — `buildDreamsEndScene` in
+ * {@link SCENE_FACTORIES} below — so, exactly as with Bevelle, it must stop
+ * reporting itself as a stand-in to {@link sceneReport}.
+ *
+ * It is written as the placeholder entry with two fields overridden rather than
+ * as a fresh object literal, which is not stylistic: `build` stays the demo
+ * diorama and is **unreachable** (the older "builder brings its own figures"
+ * path, which {@link loadScene} only reaches when `SCENE_FACTORIES` has no
+ * entry), and spreading keeps {@link placeholderEntry} referenced for the
+ * chapters that have not landed yet — `noUnusedLocals` is on, so the last key
+ * to convert would otherwise break this shared file for every other session.
+ * The slots are the scene's own, so anything reading the table directly gets
+ * Dream's End's formation rather than Gagazet's.
+ */
+SCENES.set('dreams-end', {
+  ...placeholderEntry('dreams-end', "Dream's End — inside Sin"),
+  slots: DREAMS_END_SLOTS,
+  placeholder: false,
+});
+/**
+ * Bevelle Underground is a real location now — `buildBevelleUndergroundScene`
+ * in {@link SCENE_FACTORIES} below — so it must stop reporting itself as a
+ * stand-in to {@link sceneReport}, which is what the debug API and the critic
+ * read to decide whether a chapter has been built yet.
+ *
+ * `build` stays pointed at the demo diorama and is **unreachable**: it is the
+ * older "builder brings its own figures" path, and {@link loadScene} only falls
+ * through to this table when `SCENE_FACTORIES` has no entry for the key. The
+ * slots are the scene's own, so anything reading the table directly gets
+ * Bevelle's formation rather than Gagazet's.
+ */
+SCENES.set('bevelle-underground', {
+  key: 'bevelle-underground',
+  title: "Bevelle Underground — Vegnagun's chamber",
+  build: buildDemoScene,
+  slots: BEVELLE_UNDERGROUND_SLOTS,
+  placeholder: false,
+});
 SCENES.set('farplane', {
   key: 'farplane',
   title: 'Heart of the Farplane',

@@ -53,5 +53,11 @@ registerFlowScreens({
       chapterId: opts.chapter.id,
       result: opts.result ?? emptyResult(opts.outcome),
       ...(opts.silent !== undefined ? { silent: opts.silent } : {}),
+      // The wall clock and the pre-clear record: neither can be recovered from
+      // the `BattleResult` alone (FFX leaves `elapsedMs` at 0, and the flow has
+      // already written the new best time by now).
+      ...(opts.elapsedMs !== undefined ? { elapsedMs: opts.elapsedMs } : {}),
+      ...(opts.previousBestMs !== undefined ? { previousBestMs: opts.previousBestMs } : {}),
+      ...(opts.onChoice ? { onChoice: opts.onChoice } : {}),
     }),
 });

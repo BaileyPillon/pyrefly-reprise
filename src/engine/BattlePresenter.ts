@@ -22,76 +22,33 @@
 import type {
   BattleEngine,
   BattleEvent,
-  BattleResult,
   Command,
   CombatantId,
   MinigameKind,
-  MinigameResult,
   AvailableCommand,
   AtbSnapshot,
   FFX2BattleEngine,
   TurnPreview,
 } from '../battle/common/types.ts';
-import type { StoryScript } from '../story/dsl.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
+import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
-import { firstEnabled, outcomeOf, previewOf } from './BattlePresenterUtil.ts';
+import {
+  defaultSleep,
+  firstEnabled,
+  INPUT_STREAK_LIMIT,
+  LIVELOCK_SPINS,
+  askMinigame,
+  notifyHud,
+  outcomeOf,
+  previewOf,
+  runMidBattleScript,
+  SPEED_SCALE,
+  syncHud,
+} from './BattlePresenterUtil.ts';
 
-/** How a battle ended, from the presenter's point of view. */
-export type BattleOutcome =
-  | { kind: 'victory'; result: BattleResult }
-  | { kind: 'defeat'; result: BattleResult }
-  | { kind: 'escape'; result: BattleResult }
-  /** `abort()` was called — the screen is leaving. */
-  | { kind: 'aborted' };
-
-/** What one `play()` call stopped on. */
-export interface PlayResult {
-  /** Set when playback halted on a `minigame-request`. */
-  minigame?: { who: CombatantId; kind: MinigameKind; params: Record<string, unknown> };
-  /** Set when a `victory` / `defeat` event was played. */
-  ended?: 'victory' | 'defeat';
-  result?: BattleResult;
-  /** Events after the stop point, which the engine will re-emit. */
-  dropped: number;
-}
-
-/** Picks a command for a player-controlled actor without a human. */
-export type AutoStrategy = (
-  actorId: CombatantId,
-  commands: AvailableCommand[],
-  engine: BattleEngine,
-) => Command | null;
-
-const SPEED_SCALE: Record<PlaybackSpeed, number> = { normal: 1, fast: 0.32, skip: 0 };
-
-/** How long the presenter will wait on `HudPort.onEvent` before moving on. */
-const HUD_EVENT_BUDGET_MS = 600;
-
-/** How long a mid-battle script may run before the presenter gives up on it. */
-const SCRIPT_BUDGET_MS = 30_000;
-
-/**
- * Decisions in a row with nothing added to the event log before the presenter
- * calls it a livelock.
- *
- * Generous, because a legitimate turn can produce no events (a status tick
- * that changes nothing, an AI passing). A genuinely stuck engine hits this in
- * milliseconds.
- */
-const LIVELOCK_SPINS = 400;
-
-/**
- * `setTimeout` even for zero, because a resolved promise is a **microtask**.
- *
- * A whole battle of `Promise.resolve()` waits never returns to the event loop,
- * so `requestAnimationFrame` never fires and the page freezes solid until the
- * last event — which is exactly what `speed: 'skip'` would otherwise do to the
- * e2e specs and the critic. A macrotask yield keeps the frame loop breathing
- * while still resolving a chapter in a couple of seconds.
- */
-const defaultSleep = (ms: number): Promise<void> =>
-  new Promise((r) => setTimeout(r, Math.max(0, ms)));
+// Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
+export type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 
 export class BattlePresenter {
   private readonly deps: PresenterDeps;
@@ -105,16 +62,12 @@ export class BattlePresenter {
 
   /** Every event played, newest last. The debug API prints this. */
   readonly trace: PlaybackTrace[] = [];
-  /**
-   * Where the loop currently is.
-   *
-   * Every `await` in the playback loop sets this first, so a battle that stops
-   * advancing says *which* await it is parked on instead of looking identical
-   * to a slow one. `__pyrefly.snapshotState()` prints it.
-   */
+  /** The await the loop is parked on, so a stall names itself in `snapshot()`. */
   private phase = 'idle';
   /** The command most recently submitted, so a minigame can re-submit it. */
   private lastCommand: Command | null = null;
+  /** A bare re-submit still suspended: this engine needs a human for minigames. */
+  private minigamesNeedOverlay = false;
   /** Set while a HUD command menu is open, so auto-play can cut in. */
   private pendingMenu: {
     actorId: CombatantId;
@@ -172,7 +125,13 @@ export class BattlePresenter {
    * is driving itself, so tell the cutscene runner to advance on its own.
    */
   private syncAutoAdvance(): void {
-    this.deps.cutscenes?.setAutoAdvance?.(this.auto !== null || this.speed === 'skip');
+    // `'skip'` collapses every wait to zero for e2e and the critic, so a beat
+    // resolves silently there. Auto-battle on its own keeps playing the beat on
+    // its own timer, with the HUD up behind it — an automated capture is still
+    // something a person looks at.
+    this.deps.cutscenes?.setAutoAdvance?.(this.auto !== null || this.speed === 'skip', {
+      instant: this.speed === 'skip',
+    });
   }
 
   /**
@@ -239,50 +198,13 @@ export class BattlePresenter {
   }
 
   /** `HudPort.onEvent` may show a transient, but never blocks playback. */
-  private async notifyHud(event: BattleEvent): Promise<void> {
-    const hud = this.deps.hud;
-    if (!hud) return;
-    try {
-      const p = hud.onEvent(event);
-      if (p && typeof (p as Promise<void>).then === 'function') {
-        await Promise.race([p, this.baseSleep(HUD_EVENT_BUDGET_MS)]);
-      }
-    } catch (err) {
-      console.warn('[presenter] HUD onEvent threw; continuing', err);
-    }
+  private notifyHud(event: BattleEvent): Promise<void> {
+    return notifyHud(this.deps.hud, event, this.baseSleep);
   }
 
   /** Run one mid-battle story script, then resume playback. */
-  private async runScript(name: string): Promise<void> {
-    const script: StoryScript | undefined = this.deps.midScripts?.[name];
-    const runner = this.deps.cutscenes;
-    if (!script || !runner) {
-      // The story agent has not landed this script yet: log and keep fighting.
-      if (!script) console.info(`[presenter] no mid-battle script for trigger "${name}"`);
-      return;
-    }
-    this.deps.hud?.setVisible(false);
-    try {
-      // A script must never be able to wedge a battle. If one does not finish
-      // in time — a dialogue line waiting on input that is never coming, a
-      // port that never resolves — the beat is abandoned and the fight
-      // resumes, loudly.
-      const timedOut = Symbol('cutscene-timeout');
-      const raced = await Promise.race([
-        runner.play(script, { midBattle: true }).then(() => null),
-        this.baseSleep(SCRIPT_BUDGET_MS).then(() => timedOut),
-      ]);
-      if (raced === timedOut) {
-        console.error(
-          `[presenter] mid-battle script "${name}" did not finish within ` +
-            `${SCRIPT_BUDGET_MS}ms; abandoning the beat and resuming the battle`,
-        );
-      }
-    } catch (err) {
-      console.warn(`[presenter] mid-battle script "${name}" failed`, err);
-    } finally {
-      this.deps.hud?.setVisible(true);
-    }
+  private runScript(name: string): Promise<void> {
+    return runMidBattleScript(this.deps, name, this.baseSleep);
   }
 
   // --------------------------------------------------------------- main loop
@@ -294,6 +216,9 @@ export class BattlePresenter {
   async run(engine: BattleEngine): Promise<BattleOutcome> {
     /** Consecutive decisions that left `state().log` exactly as it was. */
     let idleSpins = 0;
+    /** Consecutive player-input decisions with nothing in between. */
+    let inputStreak = 0;
+    let streakActor = '';
     let lastLogLength = engine.state().log.length;
 
     for (;;) {
@@ -323,6 +248,7 @@ export class BattlePresenter {
           return outcomeOf(decision.result);
 
         case 'resolved': {
+          inputStreak = 0;
           const res = await this.play(decision.events);
           this.syncHud(engine);
           if (res.minigame) {
@@ -336,6 +262,7 @@ export class BattlePresenter {
         }
 
         case 'waiting': {
+          inputStreak = 0;
           const events = (engine as FFX2BattleEngine).tick(decision.nextEventMs);
           const res = await this.play(events);
           this.syncHud(engine);
@@ -344,6 +271,17 @@ export class BattlePresenter {
         }
 
         case 'player-input': {
+          inputStreak = decision.actorId === streakActor ? inputStreak + 1 : 1;
+          streakActor = decision.actorId;
+          if (inputStreak > INPUT_STREAK_LIMIT) {
+            console.error(
+              `[presenter] ${decision.actorId} has been offered the turn ` +
+                `${INPUT_STREAK_LIMIT} times in a row without it passing; the last ` +
+                `command (${JSON.stringify(this.lastCommand)}) is not being ` +
+                'resolved by the engine. Abandoning the battle rather than looping.',
+            );
+            return { kind: 'aborted' };
+          }
           this.phase = `command:${decision.actorId}`;
           const command = await this.chooseCommand(engine, decision.actorId, decision.commands);
           if (!command) return { kind: 'aborted' };
@@ -371,16 +309,18 @@ export class BattlePresenter {
       res = await this.resolveMinigame(engine, res.minigame, false);
       this.syncHud(engine);
     }
+    if (res.minigame && this.auto) this.minigamesNeedOverlay = true;
 
     if (res.ended) return outcomeOf(res.result ?? engine.state().result);
     return null;
   }
 
   /**
-   * Open the overlay named by the request, then **re-submit the same command**
-   * with the outcome in `extra`. When there is no HUD (auto-battle, e2e,
-   * tests) the command is re-submitted bare and the engine rolls its own
-   * outcome from the seeded RNG.
+   * Open the overlay named by the request, then re-submit the **same** command
+   * with the outcome in `extra`. With nobody at the controls the command goes
+   * back bare — but note neither engine rolls a default for a bare re-submit
+   * (CONTRACTS.md says they should), which is why automated battles build their
+   * engine with minigames auto-resolved (`BattleScreenWiring.createEngine`).
    */
   private async resolveMinigame(
     engine: BattleEngine,
@@ -389,19 +329,9 @@ export class BattlePresenter {
   ): Promise<PlayResult> {
     const base = this.lastCommand;
     if (!base) return { dropped: 0 };
-
-    let extra: MinigameResult | undefined;
-    if (!engineDefault && this.deps.hud && !this.auto) {
-      try {
-        extra = await this.deps.hud.openMinigame(request.kind, request.params);
-      } catch (err) {
-        console.warn('[presenter] minigame overlay failed; using the engine default', err);
-      }
-    }
-
-    const repeat: Command =
-      extra && base.kind === 'overdrive' ? { ...base, extra } : { ...base };
-    return this.play(engine.submit(repeat));
+    const human = !engineDefault && !this.auto;
+    const extra = human ? await askMinigame(this.deps.hud, request) : undefined;
+    return this.play(engine.submit(extra && base.kind === 'overdrive' ? { ...base, extra } : { ...base }));
   }
 
   /** Ask the HUD (or the auto strategy) for a command. */
@@ -411,10 +341,15 @@ export class BattlePresenter {
     commands: AvailableCommand[],
   ): Promise<Command | null> {
     if (this.auto) {
+      // Taken over mid-fight on an engine built for a human: a timed Overdrive
+      // would suspend forever, so the strategy simply does not see those rows.
+      const offered = this.minigamesNeedOverlay
+        ? commands.filter((c) => !c.opensMinigame && c.command.kind !== 'overdrive')
+        : commands;
       // An automated run must never fall through to the menu: there is nobody
       // to answer it and the battle would hang forever. A strategy that has no
       // opinion gets the first legal row instead.
-      return this.auto(actorId, commands, engine) ?? firstEnabled(commands);
+      return this.auto(actorId, offered, engine) ?? firstEnabled(offered);
     }
     const hud = this.deps.hud;
     if (!hud) return firstEnabled(commands);
@@ -444,13 +379,7 @@ export class BattlePresenter {
 
   /** Re-render the HUD from live engine state. */
   syncHud(engine: BattleEngine): void {
-    const hud = this.deps.hud;
-    if (!hud) return;
-    try {
-      hud.sync(engine.state(), previewOf(engine));
-    } catch (err) {
-      console.warn('[presenter] HUD sync threw', err);
-    }
+    syncHud(this.deps.hud, engine);
   }
 
   /** Everything `window.__pyrefly.snapshotState()` wants from playback. */

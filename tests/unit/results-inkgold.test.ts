@@ -43,11 +43,26 @@ describe('results.css follows the approved mockup', () => {
   });
 
   it('keeps the party list clear of the ledger above it', () => {
-    // ledger top 146.67 + 3 lines (36.44 + 36.44 + 25.77) must end above the
-    // party list, which is bottom-anchored at 24.89 and 74.66 tall.
-    const ledgerBottom = 146.67 + 36.44 + 36.44 + 25.77;
+    // The party list is bottom-anchored at 24.89 and 74.65 tall.
     const partyTop = 360 - 24.89 - (3 * 21.33 + 2 * 5.33);
-    expect(ledgerBottom).toBeLessThan(partyTop);
+    // FFX: ledger top 152 + 3 lines (36.44 + 36.44 + 25.77).
+    expect(152 + 36.44 + 36.44 + 25.77).toBeLessThan(partyTop);
+    // FFX-2 pays EXP *and* per-dressphere AP, so its ledger runs to four rows
+    // and switches to `--compact`: 4 x (3.56 + 17.78 + 3.11 + 0.89).
+    expect(152 + 4 * (3.56 + 17.78 + 3.11 + 0.89)).toBeLessThan(partyTop);
+  });
+
+  it('gives the defeat variant its own sombre palette, with no gold in it', () => {
+    for (const rule of [
+      '.rres--defeat .rres__heading',
+      '.rres--defeat .rres__hero',
+      '.rres--defeat .rres__stripe',
+      '.rres__action--selected',
+    ]) {
+      expect(CSS).toContain(rule);
+    }
+    expect(CSS).not.toMatch(/\.rres--defeat[^}]*#e3b94a/);
+    expect(CSS).not.toMatch(/\.rres--defeat[^}]*--ig-accent/);
   });
 
   it('mutes every accent in the Chapter 4 silent variant', () => {

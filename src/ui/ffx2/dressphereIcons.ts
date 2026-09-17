@@ -41,6 +41,51 @@ export const DRESSPHERE_COLOURS: Record<string, string> = {
 
 const DEFAULT_COLOUR = '#8E6A3E';
 
+/**
+ * Two-letter monogram per dressphere, authored rather than sliced.
+ *
+ * `id.charAt(0)` collides on every pair the roster actually fields: Warrior and
+ * White Mage are both `W` (Yuna and Paine drew the same tile in
+ * `docs/screenshots/52-ffx2-bahamut.png`), Gunner and Gun Mage are both `G`,
+ * Samurai and Songstress both `S`, Thief and Trainer both `T`, Mascot and
+ * Machina Maw both `M`. One letter cannot name sixteen jobs, so the tile takes
+ * two — the same reason `statusChips.ts` stopped slicing status ids.
+ */
+const ABBR: Record<string, string> = {
+  gunner: 'GN',
+  warrior: 'WR',
+  thief: 'TH',
+  'white-mage': 'WM',
+  'black-mage': 'BM',
+  'dark-knight': 'DK',
+  samurai: 'SM',
+  songstress: 'SG',
+  alchemist: 'AL',
+  'gun-mage': 'GM',
+  berserker: 'BS',
+  trainer: 'TR',
+  'lady-luck': 'LL',
+  mascot: 'MA',
+  festivalist: 'FE',
+  psychic: 'PS',
+  'floral-fallal': 'FF',
+  'machina-maw': 'MW',
+  'full-throttle': 'FT',
+};
+
+/**
+ * The monogram for a dressphere tile. Falls back to the first letter of each
+ * hyphenated word, then to the first two letters — which is only reached by a
+ * dressphere this table has not caught up with.
+ */
+export function dressphereAbbr(id: string): string {
+  const known = ABBR[id];
+  if (known) return known;
+  const words = id.split('-').filter(Boolean);
+  if (words.length > 1) return (words[0]!.charAt(0) + words[1]!.charAt(0)).toUpperCase();
+  return (id.slice(0, 2) || '?').toUpperCase();
+}
+
 /** Best-effort display label from a kebab-case dressphere id. */
 export function dressphereLabel(id: string): string {
   return id
@@ -74,7 +119,7 @@ export function dressphereIconHtml(
 ): string {
   const size = opts.size ?? 24;
   const colour = dressphereColour(dressphereId);
-  const initial = dressphereId.charAt(0) || '?';
+  const monogram = dressphereAbbr(dressphereId);
   const ring = opts.ringClass ? ` ${opts.ringClass}` : '';
   // No `data-dressphere` attribute here on purpose: callers (PartyPrep's
   // dressphere list, CommandMenu) put their own `data-*` click hooks on the
@@ -82,7 +127,7 @@ export function dressphereIconHtml(
   // any `[data-dressphere]`/`[data-node]`-style query.
   return `<span class="ffx2-icon${ring}" style="width:${size}px;height:${size}px;--ffx2-job:${colour}"
     title="${dressphereLabel(dressphereId)}">
-    <span class="ffx2-icon__glyph">${initial.toUpperCase()}</span>
+    <span class="ffx2-icon__glyph">${monogram}</span>
   </span>`;
 }
 

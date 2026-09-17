@@ -12,6 +12,15 @@
  * `power` below is the DmgCon column; the flat damage number in each comment
  * is DmgCon's `fixed`-formula readout (`DmgCon * 50` at average variance) or,
  * for Sunburst, the exact `deal-9999` result.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass):
+ * see `mixes/abilities.ts` for the full reasoning and citations
+ * (`ffx-bfa-yu-yevon.md` §1.3, lines 101/107/108). `canMiss: false` is set
+ * explicitly on every record here, citing that source `[estimate]` (analogy
+ * by damage-type/category, not an exact formula match — see the header
+ * note) — Firestorm/Burning Soul/Abaddon Flame's multiple hits are each
+ * unconditional, the same as every other `Other`-damage-type Overdrive
+ * action in this data set.
  */
 
 import type { AbilityDef, StatusApplication } from '../../../battle/common/types.ts';
@@ -34,6 +43,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit', 'crit-eligible'],
@@ -57,6 +67,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'armor-break', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit', 'crit-eligible'],
@@ -79,6 +90,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit', 'crit-eligible'],
@@ -101,6 +113,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit', 'crit-eligible'],
@@ -124,6 +137,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit', 'crit-eligible'],
@@ -153,6 +167,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'poison', chance: 254, duration: 254 },
       ...ALL_FOUR_BREAKS.map((status): StatusApplication => ({ status, chance: 150, duration: 254 })),
@@ -183,6 +198,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 6,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -207,6 +223,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 3,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'poison', chance: 254, duration: 254 },
       ...ALL_FOUR_BREAKS.map((status): StatusApplication => ({ status, chance: 50, duration: 254 })),
@@ -236,6 +253,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 9,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -259,6 +277,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -282,6 +301,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -307,6 +327,7 @@ export const ORDNANCE_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['ignores-armored', 'always-break-damage-limit'],

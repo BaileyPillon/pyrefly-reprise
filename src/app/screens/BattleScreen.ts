@@ -37,7 +37,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter, setupForNextLink } from './BattleScreenSetup.ts';
-import { createEngine, findHud } from './BattleScreenWiring.ts';
+import { createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 
 export interface BattleScreenOptions {
@@ -118,16 +118,16 @@ export class BattleScreen extends Screen {
     // --- engine ------------------------------------------------------------
     this.setup = setupForChapter(chapter, this.opts.seed ?? 1);
     this.group = chapter.enemyGroupRef;
-    this.engine = await createEngine(chapter.game, this.setup);
+    this.engine = await createEngine(chapter.game, this.setup, { automated: this.opts.auto != null });
     this.preview = this.engine === null;
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
 
     // --- HUD + ports -------------------------------------------------------
-    this.hud = await findHud(chapter.game);
+    this.hud = createHud(chapter.game);
     if (this.hud) {
       this.hud.mount(this.root);
-      this.hud.setProjector((id) => this.stage?.project(id) ?? null);
+      this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
     }
 
     // A real HUD sees every event through `onEvent` and draws its own numerals
@@ -231,6 +231,9 @@ export class BattleScreen extends Screen {
   override update(dt: number): void {
     this.scene?.update(dt);
     this.stage?.update(dt);
+    // The HUD ticks on the same clock as the field, so its damage numerals
+    // stop dead with everything else when a capture calls `App.stop()`.
+    this.hud?.update?.(dt);
     this.cutscenes?.update(dt);
   }
 

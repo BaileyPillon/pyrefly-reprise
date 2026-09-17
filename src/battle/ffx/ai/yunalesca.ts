@@ -24,6 +24,8 @@ import { type AiContext, num, registerAiScript, use } from './types.ts';
 const CYCLE = 'priv0004';
 const AEON_CYCLE = 'priv0008';
 const LAST_TARGET = 'priv000C';
+/** Pending transformation: 1 = I->II, 2 = II->III. Set by `advanceForm`. */
+const PENDING = 'priv002C';
 
 /** Random living active party member. */
 function randomLiving(ai: AiContext): string[] {
@@ -161,6 +163,15 @@ export const yunalescaFormThree = (ai: AiContext): Command | null => {
 
 /** Dispatch on the live form index, so one `aiScriptId` covers the whole fight. */
 export const yunalescaAi = (ai: AiContext): Command | null => {
+  // A pending transformation outranks everything, **including the aeon test**:
+  // the first turn after a form change is Metamorphosis plus its entry action,
+  // fired through an aeon if one is out [§1.3 step B, §2.0 precedence 1].
+  const pending = num(ai.memory, PENDING, 0);
+  if (pending !== 0) {
+    const entry = yunalescaEntryAction(ai, pending);
+    if (entry) return entry;
+  }
+
   const form = ai.self.enemy?.formIndex ?? 0;
   if (form === 0) return yunalescaFormOne(ai);
   if (form === 1) return yunalescaFormTwo(ai);
@@ -204,12 +215,28 @@ export function yunalescaCounter(ai: AiContext, attackerId: string, damageType: 
   return use(ai, 'dispelling-slap', [attackerId]);
 }
 
-/** Entry actions fired on the turn a transformation lands [§1.3 step B]. */
+/**
+ * The entry action fired on the turn a transformation lands [§1.3 step B].
+ *
+ * I -> II is Metamorphosis 1 then **Hellbiter** on the whole party; II -> III is
+ * Metamorphosis 2 then **Mega Death**. It is a real scheduled turn (rank 3), it
+ * clears the pending flag, and it does **not** advance `priv0004` — the cycle
+ * counter is 0 going in and 0 coming out, which is what makes Form II's next
+ * turn the guaranteed heal and Form III's next turn step 2 of its ring.
+ */
 export function yunalescaEntryAction(ai: AiContext, newForm: number): Command | null {
+  ai.memory[PENDING] = 0;
   ai.memory[CYCLE] = 0;
   ai.memory[AEON_CYCLE] = 0;
-  if (newForm === 1) return use(ai, 'hellbiter', ai.ctx.state.activeIds.slice());
-  if (newForm === 2) return use(ai, 'mega-death', ai.ctx.state.activeIds.slice());
+  const party = ai.ctx.state.activeIds.slice();
+  if (newForm === 1) {
+    ai.ctx.emit({ type: 'message', text: `${ai.self.name} uses Metamorphosis`, kind: 'ability' });
+    return use(ai, 'hellbiter', party);
+  }
+  if (newForm === 2) {
+    ai.ctx.emit({ type: 'message', text: `${ai.self.name} uses Metamorphosis`, kind: 'ability' });
+    return use(ai, 'mega-death', party);
+  }
   return null;
 }
 

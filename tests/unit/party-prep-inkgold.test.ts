@@ -136,3 +136,44 @@ describe('party-prep.css follows the approved mockup', () => {
     expect(CSS).toContain('border-right-width: calc(2.67px * var(--ig-edge, 0))');
   });
 });
+
+describe('party prep pointer input', () => {
+  /** An input frame with nothing pressed and these `data-action` clicks. */
+  const clicks = (...actions: string[]) =>
+    ({ actions, justPressed: () => false, consume: () => false }) as unknown as Parameters<
+      PartyPrepScreen['handleInput']
+    >[0];
+
+  it('moves the roster cursor when a row is clicked', () => {
+    const { screen, root } = mount(ffx);
+    screen.handleInput(clicks('prep:member-2'));
+    const rows = [...root.querySelectorAll('.prep__member')];
+    expect(rows[2]!.classList.contains('prep__member--sel')).toBe(true);
+  });
+
+  it('begins the battle when START BATTLE is clicked', async () => {
+    const { screen } = mount(ffx);
+    screen.handleInput(clicks('prep:begin'));
+    await expect(screen.done).resolves.toBe(true);
+  });
+
+  it('carries the click target names on the frame itself', () => {
+    const { root } = mount(ffx);
+    expect(root.querySelector('.prep__start')?.getAttribute('data-action')).toBe('prep:begin');
+    expect(root.querySelector('.prep__member')?.getAttribute('data-action')).toBe('prep:member-0');
+  });
+});
+
+describe('party prep hint line', () => {
+  const clicks = (...actions: string[]) =>
+    ({ actions, justPressed: () => false, consume: () => false }) as unknown as Parameters<
+      PartyPrepScreen['handleInput']
+    >[0];
+
+  it('goes back when "ESC BACK" is clicked', async () => {
+    const { screen, root } = mount(ffx);
+    expect(root.querySelector('[data-action="prep:back"]')?.textContent).toContain('BACK');
+    screen.handleInput(clicks('prep:back'));
+    await expect(screen.done).resolves.toBe(false);
+  });
+});

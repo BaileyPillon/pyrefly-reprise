@@ -25,6 +25,20 @@
  * not via the generic status-application pipeline. `duration` has no
  * meaning for an instant KO, so where a duration field would otherwise be
  * required none is emitted (see `extra` above instead).
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * see `blackmagic-elemental.ts` for the full reasoning and the corrected
+ * citations): `research/ffx-yunalesca.md` §7.2 (line 596) — "Physical
+ * accuracy tanks; magic unaffected" — and `research/ffx-bfa-yu-yevon.md`
+ * §1.3 (line 99, Jecht Beam: Magic formula, Magical type, "always hits")
+ * together show Black Magic always hits and never rolls accuracy.
+ * `canMiss: false` is set explicitly on all 7 spells here, citing
+ * ffx-yunalesca.md §7.2 + ffx-bfa-yu-yevon.md §1.3 `[verified: 2 sources]`.
+ * This includes Bio and Death: both are still `formula: 'magic'` actions, so
+ * the same always-hits rule is extended to them by formula family — the
+ * research does not separately re-confirm this for 0-damage status casts,
+ * so that specific extension is `[estimate]`, one notch softer than the
+ * damaging spells' `[verified: 2 sources]`.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -51,6 +65,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [{ status: 'poison', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'], // reflectable: [estimate], see file header
@@ -80,6 +95,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -109,6 +125,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [], // Death is not a StatusApplication here — see file header.
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -139,6 +156,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['drains', 'reflectable', 'crit-eligible'],
@@ -177,6 +195,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['drains-mp', 'reflectable', 'crit-eligible'],
@@ -204,6 +223,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -232,6 +252,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],

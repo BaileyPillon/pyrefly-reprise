@@ -19,6 +19,12 @@
  * is a fixed height: the writing bible caps a line at 2 box-lines of 60
  * characters (dsl.ts MAX_SAY_CHARS), which the 190px slab holds with room.
  *
+ * NARRATION is the one variant that leaves the mockup's rect: Tidus's
+ * retrospective lines are a sentence long, and a sentence bottom-left in a
+ * 900x190 slab reads as a box that failed to fill. The `--narrate` rules at the
+ * foot of this file drop the fixed height, centre the plate in the frame and
+ * let it size to its own text, in the serif italic the spec asks for.
+ *
  * State classes are owned by DialogueBox.ts: --visible, --waiting (advance
  * triangle), --auto, --narrate (no speaker), --no-portrait, --choice.
  */
@@ -44,8 +50,13 @@
   bottom: 4.86vw; /* 70 */
   width: 62.5vw; /* 900 */
   height: 13.19vw; /* 190 */
-  pointer-events: auto;
+  /* Only a box you can see takes clicks: while hidden (opacity 0) it would
+     otherwise swallow clicks meant for whatever sits underneath it. */
+  pointer-events: none;
   cursor: pointer;
+}
+.dbox--visible .dbox__win {
+  pointer-events: auto;
 }
 
 /* The ivory plate and the 8px gold edge standing on its leading side — two
@@ -151,7 +162,9 @@
 .dbox--narrate .dbox__text {
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
   font-style: italic;
-  font-size: max(14px, 1.81vw); /* 26 */
+  font-size: max(16px, 2.15vw); /* 31 */
+  line-height: 1.25;
+  text-align: center;
   color: #2a2533;
 }
 
@@ -236,4 +249,40 @@
 .dbox__choice-row--selected {
   background: var(--ig-accent, #e3b94a);
   border-left-color: var(--ig-ink, #0b0a12);
+}
+
+/* --------------------------------------------------------------- narration */
+
+/*
+ * The narration plate: centred in the frame, as wide as the measure needs and
+ * only as tall as the line inside it. `left`/`right` do the centring rather
+ * than a transform, because the window itself is never transformed (the skew
+ * belongs to the two plates, and a transform here would compose with theirs).
+ * The body goes back into flow, so the slab takes its height from the text.
+ */
+.dbox--narrate .dbox__win {
+  left: 21.5vw;
+  right: 21.5vw;
+  bottom: 8.33vw; /* 120 */
+  width: auto;
+  height: auto;
+}
+/* `relative`, not `static`: the body has to stay a positioned box or the
+   ivory slab (which is absolute, and first in the DOM) paints over the line. */
+.dbox--narrate .dbox__body {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  width: auto;
+  /* Side padding clears the -12deg skew at both ends of the plate. */
+  padding: 2.85vw 5.2vw;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+/* Hung inside the plate's right end instead of at a fixed 936. */
+.dbox--narrate .dbox__advance {
+  left: auto;
+  right: 2.6vw;
+  bottom: 1.04vw; /* 15 */
 }

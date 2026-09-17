@@ -18,6 +18,30 @@
  *   chance against Petrified targets; the `-ra`/`-ga` tiers do not.
  *
  * All rows are `[verified: 2 sources]` per §7.4 unless noted otherwise inline.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * the first pass's `canMiss: true` was an argument from absence and was
+ * wrong; see below): **does Black Magic roll to-hit at all?** §2.11's
+ * ALWAYS branch keys off a per-action `hitFormula` byte in the decompiled
+ * action table, not a short list this project happened to quote — "not on
+ * the list of actions §7 discussed" never showed Black Magic rolls. The
+ * actual decompiled per-action rows settle it directly:
+ * - `research/ffx-yunalesca.md` §7.2 (line 596), on the Dark status:
+ *   **"Physical accuracy tanks; magic unaffected"** — magic does not go
+ *   through the same evadable accuracy pathway Darkness attacks at all.
+ * - `research/ffx-bfa-yu-yevon.md` §1.3 (line 99), **Jecht Beam** — decompiled
+ *   row, `Magic` formula, `Magical` damage type, flags include
+ *   **"always hits"**.
+ * - Contrast the same table's physical rows (lines 98, 104-105:
+ *   Left-Arm Strike / Left-Arm Strike 2 / Blade Blitz — `Strength`,
+ *   `Physical`, "affected by Dark" / an explicit "accuracy 150" byte): those
+ *   roll accuracy normally, which is what makes the magic row's contrasting
+ *   "always hits" flag meaningful rather than incidental.
+ * Conclusion: Black Magic (Magic formula, Magical damage type) always hits
+ * and does not roll accuracy at all. `canMiss: false` is set explicitly
+ * below on every spell, citing ffx-yunalesca.md §7.2 + ffx-bfa-yu-yevon.md
+ * §1.3 `[verified: 2 sources]` — one general status-interaction rule and one
+ * decompiled per-action row independently agree.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -40,6 +64,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible', 'shatter'],
@@ -64,6 +89,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible', 'shatter'],
@@ -89,6 +115,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible', 'shatter'],
@@ -113,6 +140,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible', 'shatter'],
@@ -141,6 +169,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -164,6 +193,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -187,6 +217,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -210,6 +241,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -237,6 +269,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -260,6 +293,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -283,6 +317,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],
@@ -306,6 +341,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['reflectable', 'crit-eligible'],

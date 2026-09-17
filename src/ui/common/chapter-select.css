@@ -63,10 +63,10 @@
 /* The selected chapter: 560x336 slab with a 3px gold border and a soft halo. */
 .cselect__hero {
   position: absolute;
-  left: 28.44px; /* 64 */
+  left: 26.67px; /* 60 */
   top: 57.78px; /* 130 */
-  width: 248.89px; /* 560 */
-  height: 149.33px; /* 336 */
+  width: 257.78px; /* 580 */
+  height: 148.44px; /* 334 */
   background: #15121e;
   border: 1.33px solid var(--ig-accent); /* 3 */
   transform: skewX(-8deg);
@@ -120,8 +120,8 @@
 /* The four unselected chapters, in fixed slots so nothing re-centres. */
 .cselect__card {
   position: absolute;
-  width: 111.11px; /* 250 */
-  height: 66.67px; /* 150 */
+  width: 128px; /* 288 */
+  height: 55.11px; /* 124 */
   background: #15121e;
   border: 0.89px solid rgba(244, 241, 232, 0.35); /* 2 */
   transform: skewX(-8deg);
@@ -185,10 +185,10 @@
 
 .cselect__info {
   position: absolute;
-  left: 28.44px; /* 64 */
-  top: 226.67px; /* 510 */
-  width: 400px; /* 900 */
-  padding: 11.56px 15.11px 12.44px; /* 26 34 28 */
+  left: 26.67px; /* 60 */
+  top: 214.22px; /* 482 */
+  width: 257.78px; /* 580 */
+  padding: 9.78px 13.33px 10.67px; /* 22 30 24 */
   background: var(--ig-paper);
   color: var(--ig-ink);
   transform: skewX(-8deg);
@@ -199,17 +199,20 @@
 }
 .cselect__info-head {
   display: flex;
-  align-items: baseline;
-  gap: 9.78px; /* 22 */
+  align-items: flex-start;
+  gap: 7.11px; /* 16 */
 }
 .cselect__info-title {
+  flex: 1 1 auto;
   font-family: var(--ig-font-serif);
-  font-size: 17.78px; /* 40 */
+  font-size: 13.33px; /* 30 */
   font-weight: 700;
   font-style: italic;
-  line-height: 1;
+  line-height: 1.02;
 }
 .cselect__badge {
+  flex: none;
+  margin-top: 1.33px;
   padding: 1.78px 4.44px; /* 4 10 */
   border: 0.89px solid var(--ig-ink); /* 2 */
   font-family: var(--ig-font-display);
@@ -217,33 +220,139 @@
   font-weight: 700;
   letter-spacing: 0.22em;
 }
-.cselect__info-location {
-  margin-left: auto;
-  font-family: var(--ig-font-display);
-  font-size: 5.33px;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  color: var(--ig-gold-on-paper);
-  white-space: nowrap;
-}
+/* The chapter blurb. Clamped so a long one cannot push the slab down into the
+   controls hint; the hero above it already carries the name. */
 .cselect__info-premise {
   margin-top: 4.44px; /* 10 */
   font-family: var(--ig-font-text);
-  font-size: 8.44px; /* 19 */
+  font-size: 7.11px; /* 16 */
+  line-height: 1.35;
   color: #2a2533;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
 }
-.cselect__info-meta {
-  margin-top: 8px; /* 18 */
+
+/* ----------------------------------------------------------------- dossier */
+
+/*
+ * The right-hand column. The approved board put BOSS / PARTY / BEST in a row
+ * under the ivory slab, which left the frame's right fifth empty; standing
+ * them up as an ink slab beside the cards fills it and gives the party
+ * portraits somewhere to be seen. Same -8deg skew as everything else, accent
+ * on the outer edge (right here, as the ivory slab's gold sits on its left).
+ */
+.cselect__aside {
+  position: absolute;
+  left: 440px; /* 990 */
+  top: 57.78px; /* 130 */
+  width: 174px; /* 391 */
+  height: 241.78px; /* 544 */
+  box-sizing: border-box;
+  /* Ink .84 is the spec's over-art panel, but the backdrop is almost black on
+     this side of the frame, so the slab needs the hairline to be seen at all. */
+  background: linear-gradient(180deg, rgba(17, 15, 27, 0.92) 0%, rgba(11, 10, 18, 0.8) 100%);
+  border: 0.89px solid rgba(244, 241, 232, 0.16); /* 2 */
+  border-right: 1.78px solid var(--ig-accent); /* 4 */
+  transform: skewX(-8deg);
+  box-shadow: 0 7.11px 17.78px rgba(0, 0, 0, 0.5); /* 16 40 */
+}
+.cselect__aside-inner {
+  height: 100%;
+  padding: 11.56px 13.33px; /* 26 30 */
+  box-sizing: border-box;
+  transform: skewX(8deg);
   display: flex;
-  gap: 17.78px; /* 40 */
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cselect__aside-label {
+  font-family: var(--ig-font-display);
+  font-size: 4.89px; /* 11 */
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  color: var(--ig-accent);
+}
+.cselect__aside-place {
+  margin-top: 2.67px; /* 6 */
+  font-family: var(--ig-font-serif);
+  font-size: 12.44px; /* 28 */
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.05;
+  color: var(--ig-paper);
+}
+.cselect__aside-rule {
+  margin-top: 8.89px; /* 20 */
+  height: 0.44px;
+  background: rgba(244, 241, 232, 0.22);
+}
+.cselect__aside-boss {
+  margin-top: 2.67px;
   font-family: var(--ig-font-text);
   font-size: 7.11px; /* 16 */
+  line-height: 1.3;
+  color: rgba(244, 241, 232, 0.9);
 }
-.cselect__info-meta b {
-  font-family: var(--ig-font-display);
+.cselect__aside-best {
+  margin-top: 1.78px;
+  font-family: var(--ig-font-numeral, var(--ig-font-display));
+  font-size: 14.22px; /* 32 */
   font-weight: 700;
-  font-size: 5.78px;
-  letter-spacing: 0.12em;
-  color: var(--ig-gold-on-paper);
-  margin-right: 4.44px; /* 10 */
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--ig-paper);
+}
+.cselect__aside-best--none {
+  font-family: var(--ig-font-display);
+  font-size: 5.78px; /* 13 */
+  letter-spacing: 0.24em;
+  color: rgba(244, 241, 232, 0.45);
+}
+
+/* Three portrait tiles, cropped to a common eye line by portrait.ts. */
+.cselect__party {
+  margin-top: 4.44px; /* 10 */
+  display: flex;
+  gap: 6.22px; /* 14 */
+}
+.cselect__party-tile {
+  width: 41.78px; /* 94 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.67px; /* 6 */
+}
+.cselect__face {
+  position: relative;
+  width: 41.78px;
+  height: 41.78px;
+  overflow: hidden;
+  background: #1a1526;
+  border: 0.89px solid rgba(244, 241, 232, 0.5); /* 2 */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* The initial under the painting, for a portrait that has not been made yet. */
+.cselect__face span {
+  position: absolute;
+  font-family: var(--ig-font-display);
+  font-size: 13.33px;
+  font-weight: 700;
+  color: rgba(244, 241, 232, 0.55);
+}
+.cselect__face img {
+  z-index: 1;
+}
+.cselect__party-name {
+  font-family: var(--ig-font-display);
+  font-size: 4.44px; /* 10 */
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgba(244, 241, 232, 0.8);
+  white-space: nowrap;
 }

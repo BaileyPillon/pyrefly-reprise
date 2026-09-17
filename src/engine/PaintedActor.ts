@@ -23,6 +23,7 @@ import {
   type PaintedTexture,
   type PoseMeta,
 } from './PaintedArt.ts';
+import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName } from './Tween.ts';
@@ -111,6 +112,31 @@ export interface PaintedActorOptions {
   placeholder?: () => HTMLCanvasElement;
   /** Where the feet are in the placeholder canvas, as a fraction of height. */
   placeholderBaseline?: number;
+  /**
+   * How poses are sized against each other.
+   *
+   * By default every pose of a subject shares one **pixels-per-world-unit**,
+   * derived once from the idle painting, so a KO render (a landscape image of a
+   * body lying down) comes out wide and low at the same pixel scale instead of
+   * being stretched to a standing figure's height. See
+   * {@link computePoseScale}.
+   *
+   * `false` restores the old per-pose behaviour (every pose is exactly
+   * `worldHeight` tall) — only correct for art where each pose is cropped to
+   * the same standing figure.
+   */
+  poseScaling?:
+    | false
+    | {
+        /** Which pose sets the pixel scale. Default `'idle'`. */
+        referencePose?: string;
+        /** Longest side allowed, as a multiple of `worldHeight`. Default 2.2. */
+        maxExtent?: number;
+        /** Shortest longest-side allowed, same units. Default 0.35. */
+        minExtent?: number;
+        /** Width/height ratio at which a pose counts as prone. Default 1.15. */
+        proneAspect?: number;
+      };
   /** Poses to load on {@link PaintedActor.create}. */
   poses?: PoseMap;
   initialPose?: string;
@@ -124,7 +150,22 @@ interface PlaneSlot {
   fade: number;
   pose: string;
   meta: PoseMeta;
+  /** What {@link computePoseScale} worked out for this slot's pose. */
+  scale: PoseScale;
 }
+
+/** A pose that has not been sized yet: 1x1, upright, no footprint. */
+const UNSIZED: PoseScale = {
+  unitsPerPixel: 1,
+  width: 1,
+  height: 1,
+  offsetY: 0.5,
+  topY: 1,
+  anchorY: 1,
+  prone: false,
+  footprint: 0,
+  clamped: false,
+};
 
 let sharedNoise: Texture | null = null;
 function noiseTexture(): Texture {
@@ -198,6 +239,17 @@ export class PaintedActor extends Group {
   private readonly hoverBobSpeed: number;
   private readonly shadowBaseRadius: number;
   private readonly shadowBaseOpacity: number;
+  private readonly shadowSquash: number;
+
+  /**
+   * The pose whose pixel scale every other pose inherits — idle, normally.
+   * `null` until a real (non-placeholder) pose set has loaded, which is exactly
+   * when each pose should fall back to sizing itself.
+   */
+  private reference: PoseMeta | null = null;
+  private readonly referencePose: string;
+  private readonly sizeFromReference: boolean;
+  private readonly extents: { maxExtent: number; minExtent: number; proneAspect: number };
 
   private facing: 1 | -1 = 1;
   private _alpha = 1;
@@ -268,6 +320,15 @@ export class PaintedActor extends Group {
     const rim = opts.rim ?? {};
     this.rimDirBase.set(rim.dir?.[0] ?? -1, rim.dir?.[1] ?? 0.32);
 
+    const sizing = opts.poseScaling === false ? {} : (opts.poseScaling ?? {});
+    this.sizeFromReference = opts.poseScaling !== false;
+    this.referencePose = sizing.referencePose ?? 'idle';
+    this.extents = {
+      maxExtent: sizing.maxExtent ?? 2.2,
+      minExtent: sizing.minExtent ?? 0.35,
+      proneAspect: sizing.proneAspect ?? 1.15,
+    };
+
     this.u = {
       brightness: { value: this.baseBrightness },
       tint: { value: new Color(opts.tint ?? 0xffffff) },
@@ -298,10 +359,12 @@ export class PaintedActor extends Group {
       this.shadow = null;
       this.shadowBaseRadius = 0;
       this.shadowBaseOpacity = 0;
+      this.shadowSquash = 0.58;
     } else {
       const so = opts.shadow ?? {};
       this.shadowBaseRadius = so.radius ?? this.worldHeight * 0.36;
       this.shadowBaseOpacity = so.opacity ?? 0.5;
+      this.shadowSquash = so.squash ?? 0.58;
       const mat = new MeshBasicMaterial({
         map: blobTexture(),
         color: so.color ?? 0x050a14,
@@ -313,7 +376,7 @@ export class PaintedActor extends Group {
       this.shadow.rotation.x = -Math.PI / 2;
       this.shadow.position.y = 0.012;
       this.shadow.renderOrder = 4;
-      this.shadow.scale.set(this.shadowBaseRadius, this.shadowBaseRadius * (so.squash ?? 0.58), 1);
+      this.shadow.scale.set(this.shadowBaseRadius, this.shadowBaseRadius * this.shadowSquash, 1);
       this.shadow.name = 'contact-shadow';
       this.add(this.shadow);
     }
@@ -371,6 +434,9 @@ export class PaintedActor extends Group {
         map: { value: null },
         opacity: { value: 0 },
         texel: { value: new Vector2(1 / 1024, 1 / 1024) },
+        // Per-slot, not shared: the contact ramp is a fixed *world* distance,
+        // so its UV height depends on how tall this pose's plane ended up.
+        contactBand: { value: 0.1 },
         ...this.u,
       },
       vertexShader: paintedVertexShader,
@@ -394,7 +460,15 @@ export class PaintedActor extends Group {
       mesh.customDepthMaterial = depth;
       mesh.castShadow = true;
     }
-    return { mesh, material, depth, fade: 0, pose: '', meta: { width: 1, height: 1, baselineY: 1 } };
+    return {
+      mesh,
+      material,
+      depth,
+      fade: 0,
+      pose: '',
+      meta: { width: 1, height: 1, baselineY: 1 },
+      scale: UNSIZED,
+    };
   }
 
   private makePlaceholderPose(url: string): PaintedTexture {
@@ -437,6 +511,8 @@ export class PaintedActor extends Group {
       this.owned.add(next.texture);
       this.poseUrls[n] = poses[n]!;
     });
+    this.pickReference();
+    this.resize();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
@@ -461,6 +537,8 @@ export class PaintedActor extends Group {
       this.poses.set(name, tex);
       this.poseUrls[name] = tex.url;
     }
+    this.pickReference();
+    this.resize();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     if (first) this.setPose(first, { immediate: true, force: true });
   }
@@ -480,6 +558,10 @@ export class PaintedActor extends Group {
     this.poses.set(name, next);
     this.owned.add(next.texture);
     this.poseUrls[name] = target;
+    // The hot-swapped pose may *be* the reference (idle landing at last), in
+    // which case every other plane has to be re-sized against it.
+    this.pickReference();
+    this.resize();
     if (this.pose === name) this.setPose(name, { immediate: true, force: true });
     this.retire(previous);
     return !next.placeholder;
@@ -560,14 +642,68 @@ export class PaintedActor extends Group {
       slot.depth.needsUpdate = true;
     }
 
-    // World scale: the distance from the top of the PNG down to the baseline is
-    // the figure's height, so `worldHeight / baselineY` converts px -> world.
-    const perPx = this.worldHeight / Math.max(1, tex.meta.baselineY);
-    const w = tex.meta.width * perPx;
-    const h = tex.meta.height * perPx;
-    slot.mesh.scale.set(w * this.facing, h, 1);
-    // Feet on the group origin: sink the plane by whatever is below baselineY.
-    slot.mesh.position.y = h / 2 - (tex.meta.height - tex.meta.baselineY) * perPx;
+    // One pixel scale for the whole subject, taken from idle — so a landscape
+    // KO render becomes a wide, low body instead of a standing figure's height
+    // stretched across two and a half world units. A placeholder has no
+    // relationship to the subject's pixel scale, so it sizes itself.
+    const reference = tex.placeholder ? null : this.reference;
+    const scale = computePoseScale(tex.meta, {
+      worldHeight: this.worldHeight,
+      reference,
+      ...this.extents,
+    });
+    slot.scale = scale;
+
+    // The plane itself never rotates — mirroring is a negative scale.x, and the
+    // pose's own orientation is painted into the texture. A prone figure is a
+    // wide plane standing upright, not a tall plane tipped over.
+    slot.mesh.rotation.set(0, 0, 0);
+    slot.mesh.scale.set(scale.width * this.facing, scale.height, 1);
+    slot.mesh.position.y = scale.offsetY;
+    slot.material.uniforms['contactBand']!.value = contactBandFor(scale.height);
+
+    if (scale.clamped) {
+      console.warn(
+        `[painted] pose "${name}" (${tex.meta.width}x${tex.meta.height}) is at a very ` +
+          `different pixel scale from "${this.referencePose}"; clamped to ` +
+          `${scale.width.toFixed(2)}x${scale.height.toFixed(2)} world units. ` +
+          'Add a `scale` override to its sidecar JSON if that is wrong.',
+      );
+    }
+  }
+
+  /**
+   * Pick the pose whose pixel scale the others inherit: the idle painting, or —
+   * when idle is missing — the first real, upright pose there is. Placeholders
+   * never qualify, because a grey silhouette's pixels mean nothing.
+   */
+  private pickReference(): void {
+    if (!this.sizeFromReference) {
+      this.reference = null;
+      return;
+    }
+    const idle = this.poses.get(this.referencePose);
+    if (idle && !idle.placeholder) {
+      this.reference = idle.meta;
+      return;
+    }
+    for (const pose of this.poses.values()) {
+      if (pose.placeholder) continue;
+      if (pose.meta.height >= pose.meta.width) {
+        this.reference = pose.meta;
+        return;
+      }
+    }
+    this.reference = null;
+  }
+
+  /** Re-size both planes — after the reference pose has changed underneath. */
+  private resize(): void {
+    for (const slot of this.slots) {
+      const tex = this.poses.get(slot.pose);
+      if (tex) this.applyPose(this.slots.indexOf(slot), slot.pose, tex);
+    }
+    this.syncOpacity();
   }
 
   private syncOpacity(): void {
@@ -745,16 +881,61 @@ export class PaintedActor extends Group {
 
   /** World-space point at the top of the figure — VFX and damage numbers. */
   headPoint(out = new Vector3()): Vector3 {
-    return out.set(this.position.x, this.position.y + this.worldHeight * 0.92, this.position.z);
+    return out.set(this.position.x, this.position.y + this.aimHeight * 0.92, this.position.z);
   }
 
   /** World-space point at mid-torso. */
   centerPoint(out = new Vector3()): Vector3 {
-    return out.set(this.position.x, this.position.y + this.worldHeight * 0.52, this.position.z);
+    return out.set(this.position.x, this.position.y + this.aimHeight * 0.52, this.position.z);
   }
 
   get height(): number {
     return this.worldHeight;
+  }
+
+  /** True while the pose on screen is a downed (wider-than-tall) painting. */
+  get isProne(): boolean {
+    return this.slots[this.active]!.scale.prone;
+  }
+
+  /** World size of the plane currently showing — `[width, height]`. */
+  get poseSize(): [number, number] {
+    const s = this.slots[this.active]!.scale;
+    return [Math.abs(s.width), s.height];
+  }
+
+  /** 0 while standing, 1 once a prone pose has fully crossfaded in. */
+  private proneWeight(): number {
+    let total = 0;
+    let prone = 0;
+    for (const slot of this.slots) {
+      if (slot.fade <= 0) continue;
+      total += slot.fade;
+      if (slot.scale.prone) prone += slot.fade;
+    }
+    return total > 0 ? prone / total : 0;
+  }
+
+  /** Footprint radius blended across the crossfade, in world units. */
+  private footprintRadius(): number {
+    let total = 0;
+    let sum = 0;
+    for (const slot of this.slots) {
+      if (slot.fade <= 0) continue;
+      total += slot.fade;
+      sum += slot.scale.footprint * slot.fade;
+    }
+    return total > 0 ? sum / total : 0;
+  }
+
+  /**
+   * The height VFX should aim at: the standing height normally, but the top of
+   * the actual plane once the figure is on the ground — a damage number over a
+   * KO'd character belongs just above the body, not where his head used to be.
+   */
+  private get aimHeight(): number {
+    const slot = this.slots[this.active]!;
+    return slot.scale.prone ? Math.max(0.2, slot.scale.topY) : this.worldHeight;
   }
 
   // ------------------------------------------------------------------- update
@@ -764,11 +945,16 @@ export class PaintedActor extends Group {
     this.tweens.update(dt);
     this.clock += dt;
 
+    // --- how much of what is on screen is a downed figure ------------------
+    // Blended across the crossfade, so the standing idle's breathing eases out
+    // as the KO painting eases in rather than stopping dead.
+    const prone = this.proneWeight();
+    const upright = 1 - prone;
+
     // --- stack the motion layers into one transform ------------------------
-    const breathe = this.breatheAmp
-      ? Math.sin(this.clock * this.breatheSpeed * TAU) * 0.5 + 0.5
-      : 0;
-    const breatheScale = 1 + this.breatheAmp * (breathe - 0.5) * 2;
+    const breatheAmp = this.breatheAmp * upright;
+    const breathe = breatheAmp ? Math.sin(this.clock * this.breatheSpeed * TAU) * 0.5 + 0.5 : 0;
+    const breatheScale = 1 + breatheAmp * (breathe - 0.5) * 2;
 
     const squashY = 1 - 0.18 * this.squashAmount;
     const squashX = 1 + 0.14 * this.squashAmount;
@@ -793,15 +979,23 @@ export class PaintedActor extends Group {
     }
 
     this.inner.position.set(ox, oy, 0);
-    this.inner.rotation.z = this.swayAmp
-      ? Math.sin(this.clock * this.swaySpeed * TAU) * this.swayAmp
-      : 0;
+    // Sway is a standing figure's weight shifting; rotating a body that is
+    // already lying down just wobbles the whole painting, and on a wide plane
+    // the corners swing far enough to show the PNG's rectangle.
+    const swayAmp = this.swayAmp * upright;
+    this.inner.rotation.z = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
 
     // --- contact shadow reacts to squash and hop ---------------------------
     if (this.shadow) {
       const lift = Math.min(1, (this.hopHeight + hover) / Math.max(0.001, this.worldHeight * 0.6));
-      const r = this.shadowBaseRadius * (1 + this.squashAmount * 0.3) * (1 - lift * 0.42);
-      this.shadow.scale.set(r, r * 0.58, 1);
+      // Follow the pose's footprint: a body on the ground casts a long, flat
+      // shadow under its whole length, not the standing figure's small disc.
+      const base = Math.max(this.shadowBaseRadius, this.footprintRadius());
+      const r = base * (1 + this.squashAmount * 0.3) * (1 - lift * 0.42);
+      // The wider the footprint, the flatter the blob, so a prone shadow does
+      // not balloon into a circle the size of the body's length.
+      const squash = this.shadowSquash * (this.shadowBaseRadius / Math.max(1e-4, base)) ** 0.5;
+      this.shadow.scale.set(r, r * Math.min(this.shadowSquash, squash), 1);
       this.shadow.position.x = ox * 0.55;
       const sm = this.shadow.material as MeshBasicMaterial;
       sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5);

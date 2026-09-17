@@ -48,6 +48,10 @@ export {
 } from './formulas.ts';
 export type { DamageInput, DamageResult, DamagePool, TimingBonus } from './formulas.ts';
 export type { FuryTier } from './fury.ts';
+export { effectiveStats, effectivePool } from './effectiveStats.ts';
+export type { EffectiveStats, EffectiveStatRow, EffectiveStatKey, StatBonusKind, StatsBearer } from './effectiveStats.ts';
+export { bearerHasAuto, bonusPercentFor } from './equipment.ts';
+export type { BonusFamily, EquipmentBearer } from './equipment.ts';
 export {
   recoveryTicks,
   predictTurnOrder,

@@ -40,6 +40,32 @@
  * but only gives their damage SHAPE, not confirmed exact names or ids in
  * order. They are deliberately SKIPPED here rather than guessed — see the
  * report for this gap.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * the first pass's `canMiss: true`, and its "known gap" on the ally-target
+ * mixes, both reasoned from absence rather than evidence): does a Mix
+ * result roll to-hit? `research/ffx-bfa-yu-yevon.md` §1.3 (lines 101, 107,
+ * 108) decompiles three enemy Overdrives — `Other` damage type, `category:
+ * 'overdrive'` — all flagged "always hits", regardless of their underlying
+ * formula (Strength in all three observed cases; every Mix result is also
+ * `damageType: 'other'`, `category: 'overdrive'`, per §5.9). Extending that
+ * pattern to Mixes' other formulas (`fixed`/`percent-total`/
+ * `percent-current`/`deal-9999`/`none`) is an analogy on the damage-type/
+ * category axis rather than an exact formula match, so it is tagged
+ * `[estimate]` here — one notch softer than the `[verified: 2 sources]` used
+ * for Black Magic and the Strength-formula Overdrives that match the
+ * decompiled rows exactly.
+ *
+ * This also resolves the first pass's "known gap" on the ALLY/PARTY-
+ * targeting results (`abilities-restoratives.ts`, `abilities-wards.ts`,
+ * `abilities-boosts.ts`): the only ally-targeted action the research
+ * explicitly resolves, Pray (§7.5, "always hits"), is now consistent with
+ * every other data point instead of contradicting it — ally-targeted
+ * support and enemy-targeted ordnance both always hit; the earlier
+ * uncertainty was an artefact of reasoning from a short discussed-actions
+ * list, not a real split in the data. `canMiss: false` is set explicitly on
+ * all 43 result abilities plus the `mix` selector, citing
+ * `ffx-bfa-yu-yevon.md` §1.3 `[estimate]` (analogy, per above) throughout.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -69,6 +95,7 @@ export const MIX_SELECTOR_ABILITY: AbilityDef = {
   element: [],
   targeting: 'self',
   hits: 0,
+  canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
   statusEffects: [],
   removesStatuses: [],
   flags: [],

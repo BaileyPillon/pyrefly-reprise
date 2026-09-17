@@ -14,6 +14,13 @@
  * interface, and this mirrors the existing convention in
  * `abilities/whitemagic-protect.ts` (the NulBlaze/NulFrost/NulShock/NulTide
  * spells use the identical `{ chance: 254, duration: 1 }` shape).
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * see `mixes/abilities-restoratives.ts` and `mixes/abilities.ts` for the
+ * full reasoning): these are all ally/party-targeting buffs. `canMiss:
+ * false` is set explicitly on every record here, citing `ffx-bfa-yu-yevon.md`
+ * §1.3 `[estimate]` (analogy by damage-type/category) — the first pass's
+ * KNOWN GAP on this file is resolved, not open; see the sibling files for why.
  */
 
 import type { AbilityDef, StatusApplication } from '../../../battle/common/types.ts';
@@ -41,6 +48,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [...NUL_QUARTET],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -63,6 +71,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [...NUL_QUARTET],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -86,6 +95,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       ...NUL_QUARTET,
       { status: 'cheer', chance: 254, duration: 254, stacks: 5 },
@@ -113,6 +123,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       ...NUL_QUARTET,
       { status: 'cheer', chance: 254, duration: 254, stacks: 5 },
@@ -141,6 +152,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'protect', chance: 254, duration: 254 },
       { status: 'shell', chance: 254, duration: 254 },
@@ -166,6 +178,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'protect', chance: 254, duration: 254 },
       { status: 'shell', chance: 254, duration: 254 },
@@ -193,6 +206,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'protect', chance: 254, duration: 254 },
       { status: 'shell', chance: 254, duration: 254 },
@@ -221,6 +235,7 @@ export const WARD_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'protect', chance: 254, duration: 254 },
       { status: 'shell', chance: 254, duration: 254 },

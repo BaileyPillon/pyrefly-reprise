@@ -10,6 +10,18 @@ export interface HudPort {
   onEvent(event: BattleEvent): Promise<void> | void;
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult>;
   setVisible(visible: boolean): void;
-  /** The presenter supplies projected screen positions for cursors and damage numbers. */
-  setProjector(project: (id: CombatantId) => { x: number; y: number } | null): void;
+  /**
+   * The presenter supplies projected screen positions for cursors and damage
+   * numbers, in CSS pixels. `anchor` picks the point on the figure: the
+   * default `'head'` for cursors, `'chest'` for damage numerals.
+   */
+  setProjector(
+    project: (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null,
+  ): void;
+  /**
+   * Optional per-frame tick from the battle screen, in seconds. A HUD that
+   * animates anything itself (FFX's damage numerals) uses this so its motion
+   * freezes with the rest of the game when the loop is stopped for a capture.
+   */
+  update?(dt: number): void;
 }

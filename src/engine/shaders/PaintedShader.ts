@@ -43,6 +43,11 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float dissolve;
   uniform vec3 dissolveColor;
   uniform float groundShade;
+  // UV height of the contact ramp. Set per plane from the pose's world height
+  // (see contactBandFor) so the darkening is a fixed distance off the ground
+  // instead of a fixed fraction of the image -- a landscape KO plane given the
+  // standing figure's 10% band reads as a hard horizontal seam.
+  uniform float contactBand;
   uniform vec2 texel;
   uniform float alphaCut;
   uniform float edgeFade;
@@ -87,12 +92,12 @@ export const paintedFragmentShader = /* glsl */ `
 
     // --- bounce light from the ground --------------------------------------
     if (bounceStrength > 0.0) {
-      float up = 1.0 - smoothstep(0.0, 0.42, vUv.y);
+      float up = 1.0 - smoothstep(0.0, max(0.08, contactBand * 4.2), vUv.y);
       c += bounceColor * bounceStrength * up * 0.55;
     }
 
     // --- contact darkening at the feet -------------------------------------
-    float contact = mix(1.0 - groundShade, 1.0, smoothstep(0.0, 0.1, vUv.y));
+    float contact = mix(1.0 - groundShade, 1.0, smoothstep(0.0, max(0.01, contactBand), vUv.y));
     c *= contact;
 
     // --- flash --------------------------------------------------------------

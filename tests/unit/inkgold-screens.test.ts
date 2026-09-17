@@ -139,3 +139,22 @@ describe('slabs.css FFX-2 mirroring', () => {
     expect(css).not.toContain('--ig-slab-skew');
   });
 });
+
+// ------------------------------------------------------------ [hidden] rule
+
+describe('tokens.css [hidden]', () => {
+  const css = readCss('tokens.css');
+
+  it('makes the hidden attribute beat any component display, layer-wide', () => {
+    // `.ig-banner` / `.ig-cmd-stack` set display:flex, which ties the UA's
+    // [hidden] rule on specificity and wins on source order. Verified in
+    // Chromium: both compute `none` with this rule and `flex` without hidden.
+    expect(css).toMatch(/^\[hidden\] \{\s*display: none !important;\s*\}/m);
+  });
+
+  it('is global, not scoped under .ig', () => {
+    // Rules only: the comment above the rule names the scoped form it rejects.
+    const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(rules).not.toMatch(/\.ig\s+\[hidden\]/);
+  });
+});

@@ -31,14 +31,22 @@
  *     wipe: `battleStart('blackhole')` [visual-bible §1.18].
  *   - Braska, Auron and Jecht speak from the Farplane during the fights and
  *     Shuyin taunts from the cockpit. Those are **AI-driven no-action flavour
- *     turns** that burn an ATB slot [ffx2-vegnagun-shuyin §2] — they belong in
- *     the enemy ability data, not here, but the lines are the story agent's:
+ *     turns** that burn an ATB slot [ffx2-vegnagun-shuyin §2]. The AI scripts
+ *     emit `script-trigger` with their own names — `farplane-voice`,
+ *     `shuyin-line-1`..`7`, `auron-halfway`, `jecht-no-overtime`,
+ *     `vegnagun-tail-quarter`, `shuyin-taunt`, `shuyin-desperate` — so the
+ *     **lines live in `midScripts` under exactly those names**, with no `mid`
+ *     trigger in between. The register is the story agent's:
  *     **Jecht carries every rule** (Node colours, Bulwark retaliation), Auron
  *     gets structure, Braska gets feelings, and **Yuna never replies**
  *     [writing-bible §3 E7]. Keep them to 12 words and to one-shot pools.
  *   - The Head battle carries a real-time fail timer paired with a visible
  *     cannon charge. It gets exactly one urgency line, not a countdown chorus,
- *     and **no line ever names a duration** — reference the meter only.
+ *     and **no line treats a duration as a UI value** — reference the meter
+ *     only, so nothing has to be rewritten when the engine pins the timer
+ *     [writing-bible §3 E7]. The one number in the chapter, Shuyin's "four
+ *     minutes", is the bible's own `[ORIGINAL]` taunt: he is goading, not
+ *     reading the meter out.
  *   - The party **does not pose on victory** in the Farplane [visual-bible §2.5].
  *   - Shuyin's entrance uses `hp-below` at `fraction: 1` for the same reason
  *     Chapter 3's aeon entrances do: there is no "enters the field" trigger.
@@ -53,6 +61,7 @@ import {
   camera,
   choice,
   fade,
+  flash,
   fx,
   hideActor,
   ifFlag,
@@ -244,12 +253,14 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
       script: 'body-down',
     },
     {
-      // The one urgency beat for the timed fight. The meter is the clock; no
-      // line ever names a duration [writing-bible §3 E7].
+      // The muzzle lights for the first time. The meter is the clock, and the
+      // callouts read the meter rather than a clock [writing-bible §3 E7]. The
+      // 50% checkpoint is Auron's, and it arrives from the AI script instead
+      // (`auron-halfway` in `midScripts`).
       id: 'cannon-charging',
       when: { type: 'charge-started', who: 'vegnagun-head' },
       once: true,
-      script: 'cannon-half',
+      script: 'cannon-charging',
     },
     {
       id: 'head-down',
@@ -278,105 +289,183 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
     },
   ],
   midScripts: {
+    // --- Chain seams. No combat is in flight during these: the link just
+    // ended and the next one has not started. They are the only mid-battle
+    // scripts allowed to run long, and even they stay inside the presenter's
+    // 30 s abandon budget [src/story/registry.ts].
     'tail-down': [
       camera('idle', 700),
-      say('rikku-x2', "And that's a tail."),
-      say('paine', 'One piece. It has a lot of pieces.'),
+      say('rikku-x2', "And that's a tail.", { auto: 1000 }),
+      say('paine', 'One piece. It has a lot of pieces.', { auto: 1100 }),
       // Leblanc's team is already scattered off the leg. Nodes hang far
       // overhead in forced perspective.
       camera('action', 1200),
-      beat(1400),
-      say('paine', 'She never had a chance up here.'),
-      say('rikku-x2', "Guess we're the ones with a leg up!"),
-      say('yuna-x2', 'Save it. All of it. For after.'),
+      beat(1200),
+      say('paine', 'She never had a chance up here.', { auto: 1100 }),
+      say('rikku-x2', "Guess we're the ones with a leg up!", { auto: 1000 }),
+      say('yuna-x2', 'Save it. All of it. For after.', { auto: 1100 }),
       music('boss-vegnagun', 600),
     ],
     'leg-down': [
       camera('idle', 700),
-      say('rikku-x2', 'Did we get it? Tell me we got it.'),
-      say('paine', 'Looks that way.'),
-      say('yuna-x2', 'Then shake a leg.'),
-      beat(1400), // Rikku is delighted. Paine is not.
+      say('rikku-x2', 'Did we get it? Tell me we got it.', { auto: 1000 }),
+      say('paine', 'Looks that way.', { auto: 900 }),
+      say('yuna-x2', 'Then shake a leg.', { auto: 1100 }),
+      beat(1200), // Rikku is delighted. Paine is not.
       // The point of no return. Surface the save warning in the UI here, not
       // in dialogue [writing-bible §3 E7 beat 11].
-      say('paine', "The torso team's pinned. I'm going."),
-      beat(1600), // Paine exits frame. Hold on the empty path.
-      say('ormi', 'Please — the boss is up there —'),
+      say('paine', "The torso team's pinned. I'm going.", { auto: 1100 }),
+      beat(1400), // Paine exits frame. Hold on the empty path.
+      say('ormi', 'Please — the boss is up there —', { auto: 1000 }),
       camera('action', 1400),
-      say('yuna-x2', "...It's so big."),
-      say('rikku-x2', 'Good news: no more climbing.'),
-      say('paine', 'Focus.'),
+      say('yuna-x2', "...It's so big.", { auto: 1100 }),
+      say('rikku-x2', 'Good news: no more climbing.', { auto: 1000 }),
+      say('paine', 'Focus.', { auto: 900 }),
     ],
     'body-down': [
       camera('idle', 800),
-      beat(1600), // Rikku sits down on the plating, entirely spent.
-      say('paine', 'Hn.'),
-      say('yuna-x2', "So where is he? Where's Shuyin?"),
+      beat(1400), // Rikku sits down on the plating, entirely spent.
+      say('paine', 'Hn.', { auto: 900 }),
+      say('yuna-x2', "So where is he? Where's Shuyin?", { auto: 1100 }),
       // The single biggest scale shot in the chapter. Let the head keep
       // arriving after the player thinks it has finished arriving.
-      camera('action', 2400),
+      camera('action', 2000),
       shake(10, 1600),
-      wait(2600),
-      say('shuyin', "Spira is finished. I'm only signing it."),
+      wait(2000),
+      say('shuyin', "Spira is finished. I'm only signing it.", { auto: 1300 }),
       // The jaw splits. The main cannon unveils. Behind them the severed tail
       // plants itself in the terrain — Vegnagun is drinking the Farplane.
       fx('cannon-unveil', 'vegnagun-head'),
       shake(8, 1200),
-      say('paine', "It's charging. That's a charge."),
-      say('yuna-x2', "Then we're faster.", { emotion: 'determined' }),
+      say('paine', "It's charging. That's a charge.", { auto: 1100 }),
+      say('yuna-x2', "Then we're faster.", { emotion: 'determined', auto: 1200 }),
       music('boss-vegnagun', 600),
-    ],
-    'cannon-half': [
-      fx('cannon-charge', 'vegnagun-head'),
-      // Farplane voice, structural: Auron gets the checkpoint callout.
-      say('auron', "Half charged. Whatever you're saving — spend it."),
     ],
     'head-down': [
       camera('idle', 900),
-      say('rikku-x2', "Is it out? Tell me it's out of juice."),
-      say('paine', "Maybe now he'll listen."),
-      say('yuna-x2', 'Then I talk. That was always the plan.'),
+      say('rikku-x2', "Is it out? Tell me it's out of juice.", { auto: 1000 }),
+      say('paine', "Maybe now he'll listen.", { auto: 1000 }),
+      say('yuna-x2', 'Then I talk. That was always the plan.', { auto: 1200 }),
     ],
+    // E5's confrontation. Trimmed against the 30 s budget: Shinra's second
+    // line, Buddy's, Rikku's stammer and Shuyin's split "thousand years" pair
+    // are folded away; the canonical order of what is left is untouched
+    // [writing-bible §3 E5 pre-battle table].
     'shuyin-appears': [
       music(null, 900),
       camera('idle', 900),
-      say('shinra', "Vegnagun's dead. Something's still down there."),
-      say('shinra', 'Something small.'),
-      say('brother', 'YUNA! Come up now! I am ordering it!'),
-      say('buddy', "We're holding position. Take the time you need."),
+      say('shinra', "Vegnagun's dead. Something's still down there.", { auto: 900 }),
+      say('brother', 'YUNA! Come up now! I am ordering it!', { auto: 900 }),
       // Baralai drops to his knees. Something steps out of him and keeps
       // standing. Nooj and Gippal drag him clear, off to frame-left.
-      beat(1800),
-      say('baralai', '...Forgive me. I was not myself.'),
-      say('rikku-x2', 'Okay. Okay okay okay.'),
-      say('rikku-x2', 'That is Tidus. Why is that Tidus.'),
-      say('paine', "It isn't."),
-      say('shuyin', 'Lenne?'),
+      beat(1400),
+      say('baralai', '...Forgive me. I was not myself.', { auto: 900 }),
+      say('rikku-x2', 'That is Tidus. Why is that Tidus.', { auto: 900 }),
+      say('paine', "It isn't.", { auto: 800 }),
+      say('shuyin', 'Lenne?', { auto: 900 }),
       // The Songstress dressphere glows. Yuna's voice comes out doubled.
       fx('songstress-light', 'yuna-x2'),
       say('yuna-x2', "I'm here. I've been here the whole time.", {
         voiceKey: 'yuna-lenne-doubled',
+        auto: 1000,
       }),
       say('yuna-x2', 'I never stopped being grateful.', {
         voiceKey: 'yuna-lenne-doubled',
+        auto: 1000,
       }),
-      beat(1600), // He almost takes a step. Then he looks properly.
-      say('shuyin', 'You wear her face.'),
-      say('shuyin', "You don't get to use her voice."),
-      say('shuyin', 'A thousand years.'),
-      say('shuyin', 'Not one of them ended.'),
-      say('yuna-x2', 'Then let us end this one. Please.'),
-      say('shuyin', "No. I'll end all of it."),
+      beat(1200), // He almost takes a step. Then he looks properly.
+      say('shuyin', "You wear her face. You don't get to use her voice.", { auto: 1000 }),
+      say('shuyin', 'A thousand years. Not one of them ended.', { auto: 1000 }),
+      say('yuna-x2', 'Then let us end this one. Please.', { auto: 1000 }),
+      say('shuyin', "No. I'll end all of it.", { auto: 1000 }),
       music('boss-shuyin', 900),
       camera('action', 700),
     ],
+
+    // --- Live-combat beats. Every one of these interrupts a fight in
+    // progress, so they stay short and never wait on input.
+    'cannon-charging': [
+      fx('cannon-charge', 'vegnagun-head'),
+      say('shinra', "The muzzle's live. That meter is your clock.", { auto: 1200 }),
+      say('paine', 'Then we go faster.', { auto: 1000 }),
+    ],
     'shuyin-half': [
-      say('shuyin', 'Why are you still standing?'),
-      say('shuyin', 'Nobody stands this long.'),
+      say('shuyin', 'Why are you still standing?', { auto: 1100 }),
+      say('shuyin', 'Nobody stands this long.', { auto: 1200 }),
     ],
     'shuyin-low': [
-      say('shuyin', 'I just wanted it to stop hurting.'),
-      say('shuyin', "That's all I ever—"),
+      say('shuyin', 'I just wanted it to stop hurting.', { auto: 1200 }),
+      say('shuyin', "That's all I ever—", { auto: 1100 }),
+    ],
+
+    // --- Farplane voices and Shuyin's cockpit lines.
+    //
+    // These are **not** wired through `mid`: the AI scripts emit
+    // `script-trigger` with these names directly, so they never pass a
+    // `MidBattleTrigger` at all [battle/ffx2/ai/vegnagun.ts,
+    // vegnagun-head.ts, shuyin.ts]. They were the other half of the
+    // presenter's "no mid-battle script for trigger" log. `registry.ts` keeps
+    // the list of emitted names and the test fails if a new one appears
+    // without a script.
+    //
+    // House rules [writing-bible §3 E7 "Farplane voice system"]: 12 words or
+    // fewer, the three voices never address each other, Jecht carries every
+    // rule, Auron carries structure, Braska carries feeling, and Yuna never
+    // answers any of them.
+    'farplane-voice-braska': [
+      say('braska', 'You were always going to be braver than me.', { auto: 1300 }),
+    ],
+    'farplane-voice': [
+      // The Leg's flavour slot fires more than once, so this has to be the
+      // line worth hearing twice: the rule the fight is built on.
+      say('jecht', "Forget the lights up top. The leg's the job.", { auto: 1200 }),
+    ],
+    'vegnagun-tail-quarter': [
+      say('jecht', "That all it's got? Finish the thing.", { auto: 1100 }),
+    ],
+    'auron-halfway': [
+      // The canonical 50% checkpoint. References the meter, never a number.
+      say('auron', "Half charged. Whatever you're saving — spend it.", { auto: 1300 }),
+    ],
+    'jecht-no-overtime': [
+      say('jecht', 'No overtime in this one, kid.', { auto: 1100 }),
+    ],
+    'shuyin-line-1': [
+      say('shuyin', 'Let it fire.', { auto: 900 }),
+      say('shuyin', 'Then nobody has to want anything.', { auto: 1200 }),
+    ],
+    'shuyin-line-2': [
+      say('shuyin', 'A thousand years. You get four minutes.', { auto: 1200 }),
+    ],
+    'shuyin-line-3': [
+      say('shuyin', 'The meter does not care how brave you are.', { auto: 1200 }),
+    ],
+    'shuyin-line-4': [
+      say('shuyin', 'Nobody is coming. Nobody ever came.', { auto: 1200 }),
+    ],
+    'shuyin-line-5': [
+      say('shuyin', 'You could stop. I would let you stop.', { auto: 1200 }),
+    ],
+    'shuyin-line-6': [
+      say('shuyin', 'Almost quiet now. Can you feel it?', { auto: 1200 }),
+    ],
+    // Line seven is the loss state: the cannon fires and Spira ends. Four
+    // lines and a long silence, never a montage [writing-bible §3 E7 defeat].
+    'shuyin-line-7': [
+      shake(12, 900),
+      flash(900, '#ffffff'),
+      say('shuyin', "There. Now it's quiet.", { auto: 1400 }),
+      fade('white', 1200),
+      wait(1600),
+    ],
+    // The E5 interrupt pools. The AI picks high/low by HP and passes the pool
+    // index in the event payload, but the presenter looks scripts up by name
+    // only — one line each until it can vary on the payload.
+    'shuyin-taunt': [
+      say('shuyin', 'You fight like someone who still wants something.', { auto: 1300 }),
+    ],
+    'shuyin-desperate': [
+      say('shuyin', 'Stop singing. Stop singing.', { auto: 1200 }),
     ],
   },
 };

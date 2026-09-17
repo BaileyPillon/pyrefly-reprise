@@ -1,7 +1,9 @@
 import {
   AdditiveBlending,
+  BackSide,
   ClampToEdgeWrapping,
   Color,
+  CylinderGeometry,
   DoubleSide,
   Group,
   Mesh,
@@ -138,14 +140,36 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  *
  * The arc is offset in **both** x and z at every step so no figure stands
  * directly behind another at any rig — a straight line of three cut-outs is the
- * fastest way to make a painted scene look like a sticker sheet — and it sits
- * far enough right of the deck's rim that the command window (bottom left, ~26%
- * of the frame) never buries the front character.
+ * fastest way to make a painted scene look like a sticker sheet.
+ *
+ * **Re-measured for the X-2 party.** The first pass zig-zagged (front at
+ * x -1.5, middle swung out to -2.9, back back in to -1.0), which is the FFX
+ * arc and is wrong for the one camera this scene actually fights at: `action`
+ * swings right, so a slot at x -2.9 projected to **screen x 101 of 1600** —
+ * a figure ~170px wide with her centre 101px from the edge — while the front
+ * slot landed at 317 and the two overlapped at every rig between. Measured at
+ * `idle`/`action`/`party` (`stage.project`, 1600x900), these three read as
+ * three:
+ *
+ * | slot | idle | action | party |
+ * |------|------|--------|-------|
+ * | 0 front-left | 381 | 203 | 406 |
+ * | 1 middle     | 565 | 415 | 643 |
+ * | 2 back-right | 710 | 577 | 822 |
+ *
+ * Separations stay above ~145px against silhouettes ~170px wide at the front
+ * slot and ~125px at the back one, so the three touch at most at the shoulder
+ * — a formation, not a pile. Depth still falls away left-to-right, so the row
+ * reads front to back the way the FFX scenes do.
+ *
+ * Slot order is the party build's `members` order (`src/battle/ffx2/setup.ts`
+ * numbers them 0,1,2 in that order), i.e. Yuna, Rikku, Paine — left to right,
+ * matching `docs/screenshots/mockups/A-ffx2-battle.jpg`.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [-1.5, 0, 1.6], // front
-  [-2.9, 0, 0.35], // middle, further left and back
-  [-1.0, 0, -0.95], // back, stepped in again
+  [-2.05, 0, 1.45], // front-left  (Yuna)
+  [-1.3, 0, 0.1], // middle, stepped right and back (Rikku)
+  [-0.45, 0, -1.35], // back-right, furthest from camera (Paine)
   // reserve — outside every rig's frustum, including `victory`'s left swing
   [-12.0, 0, 2.6],
   [-12.9, 0, 1.0],
@@ -164,6 +188,29 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [5.6, 0, -1.1], // right part
   [1.8, 0, -4.6], // left / back part
 ];
+
+/**
+ * **The torn floor hole** — visual bible §2.4, key set piece 1 and the thing
+ * the bible calls "the signature look": Vegnagun's exit wound, venting cyan
+ * light up out of the pit.
+ *
+ * Two decisions about *where*, and they are the whole difference between a set
+ * piece and a lens flare on the floor:
+ *
+ * 1. **Behind the boss, not under it.** The bible frames Bahamut "over the
+ *    hole", which is right for a modelled dragon lit from below and wrong for a
+ *    painted cut-out, whose lighting is baked and cannot be relit from
+ *    underneath. Put the vent *behind* him instead and the same light does the
+ *    same job by a route that works on a flat plane: it throws a cyan ground
+ *    and a rising shaft **behind** a near-black silhouette, which is what
+ *    actually separates the boss from a dark chamber. He hovers a metre in
+ *    front of its near rim.
+ * 2. **Clear of every enemy slot.** An ellipse rather than a circle, wide in x
+ *    and shallow in z, so it fills the dead middle-right of the frame without
+ *    swallowing the two flanking part-slots — a boss part standing in a hole
+ *    is the sort of thing nobody notices until the fight ships.
+ */
+const HOLE = { x: 3.4, z: -7.2, rx: 3.4, rz: 2.2 } as const;
 
 /** Canonical world heights for the cast that fights here. */
 export const BEVELLE_UNDERGROUND_ACTOR_HEIGHTS = {
@@ -322,9 +369,20 @@ function deckCanvas(size = 512, seed = 41): HTMLCanvasElement {
       }
       ctx.restore();
 
-      // Panel seam.
-      ctx.strokeStyle = 'rgba(8,11,18,0.85)';
-      ctx.lineWidth = 3;
+      /**
+       * Panel seam — half the weight it started at, and two texels instead of
+       * three.
+       *
+       * At 0.85 alpha and three texels this was a near-black line, and a plate
+       * deck's seams run *along* the view axis, so each one projects to a hard
+       * vertical stripe converging on the vanishing point. One of them landing
+       * near the middle of the frame does not read as plating at all; it reads
+       * as a rendering seam splitting the floor in two. Halved, it still tells
+       * the eye where one casting ends and the next begins and no longer draws
+       * a line down the picture.
+       */
+      ctx.strokeStyle = 'rgba(8,11,18,0.42)';
+      ctx.lineWidth = 2;
       ctx.strokeRect(x0 + 1.5, y0 + 1.5, cell - 3, cell - 3);
       ctx.strokeStyle = 'rgba(176,192,214,0.22)';
       ctx.lineWidth = 1;
@@ -362,23 +420,48 @@ function deckCanvas(size = 512, seed = 41): HTMLCanvasElement {
  * frame — comes out semi-transparent over near-black and the whole foreground
  * goes muddy. What a floor actually wants is to be solid from the lens to a
  * little past the fighters and then gone, so this gradient is pushed **toward
- * the camera** (v = 0 is near; see the plane's rotation) and given a wide
- * opaque core. The far edge then lands on the painting's dark gantry wall,
- * which is the one band in the image a dissolve can hide in.
+ * the camera** and given a wide opaque core. The far edge then lands on the
+ * painting's dark gantry wall, which is the one band in the image a dissolve
+ * can hide in.
+ *
+ * **The canvas's y axis is world z, increasing away from the far edge**: the
+ * row at `y / size = (z + 28) / 46`, the same mapping the hole punch at the
+ * bottom of this function is written in and verified against. Canvas *top* is
+ * therefore the far end of the deck, not the near one. Reading it the other way
+ * round is what put the opaque core twelve metres up-chamber, left the plate
+ * about half transparent under the party's own feet, and let the painting's lit
+ * floor band — and the hard vertical wall corner that band ends on — show
+ * through the floor in the lower third of the frame.
  */
 function deckFadeCanvas(size = 512): HTMLCanvasElement {
   const c = makeCanvas(size, size);
   const ctx = c.getContext('2d')!;
   ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, size, size);
-  const g = ctx.createRadialGradient(
-    size * 0.5,
-    size * 0.34,
-    0,
-    size * 0.5,
-    size * 0.34,
-    size * 0.48,
-  );
+  /**
+   * The falloff is an **ellipse centred just behind the party**, not a circle
+   * centred half the chamber away.
+   *
+   * Canvas y is world z through the same mapping the hole punch below uses —
+   * `y / size = (z + 28) / 46` — so a centre at `0.62` is z = +0.5, a metre
+   * behind the front rank. The first pass centred it at `0.34`, which is
+   * z = -12.4: twelve metres *up-chamber*, so the plate was only about half
+   * opaque under the party's own feet and the painting's lit floor band showed
+   * straight through it. That band ends on a painted wall corner, and a wall
+   * corner seen through a floor is a hard vertical line down the lower third of
+   * the frame — the one seam this scene had.
+   *
+   * It is stretched 1.55x in z because the deck has to do two different jobs on
+   * its two axes: reach far enough up-chamber to dissolve into the painted
+   * gantry wall rather than ending in mid-air, and fall off well inside its own
+   * 46-unit width so the plane's left and right edges never reach a frame.
+   */
+  const cy = size * 0.62;
+  const zStretch = 1.55;
+  ctx.save();
+  ctx.translate(size * 0.5, cy);
+  ctx.scale(1, zStretch);
+  const g = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.42);
   for (const [at, a] of [
     [0, 1],
     [0.42, 1],
@@ -391,7 +474,139 @@ function deckFadeCanvas(size = 512): HTMLCanvasElement {
     g.addColorStop(at, `rgb(${v},${v},${v})`);
   }
   ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
+  ctx.fillRect(-size * 0.5, -cy / zStretch, size, size / zStretch);
+  ctx.restore();
+
+  /**
+   * And then punch {@link HOLE} clean out of it.
+   *
+   * The deck plane is 46 x 46 centred at `(0, 0, -5)` and rotated flat, so u is
+   * world x over `[-23, 23]` and v runs **toward** the camera: v = 0 is the near
+   * edge at z = +18. The hole is written in those coordinates rather than as a
+   * second mesh because an alpha cut-out is the only way to get a hole with no
+   * z-fighting rim and no second surface for the specular lobe to catch.
+   *
+   * **Canvas y is not v.** `CanvasTexture` leaves `flipY` on, so v = 0 is the
+   * canvas's *bottom* row and the mapping needs the extra inversion below —
+   * `(HOLE.z + 28) / 46` rather than the `(18 - HOLE.z) / 46` that the world
+   * maths hands you. Getting this wrong does not throw and does not look
+   * broken: it mirrors the cut about z = -5, so the plate opens up five metres
+   * nearer the camera than the rim and the shaft that are supposed to be
+   * standing in it, and the frame quietly shows painted wall through the floor.
+   *
+   * The edge is feathered by about a texel and a half and no more. Torn plate
+   * ends where it ends; a soft vignette around a hole reads as a stain.
+   */
+  const hx = ((HOLE.x + 23) / 46) * size;
+  const hy = ((HOLE.z + 28) / 46) * size;
+  const hrx = (HOLE.rx / 46) * size;
+  const hry = (HOLE.rz / 46) * size;
+  ctx.save();
+  ctx.translate(hx, hy);
+  ctx.scale(hrx, hry);
+  const punch = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+  punch.addColorStop(0, 'rgba(0,0,0,1)');
+  punch.addColorStop(0.9, 'rgba(0,0,0,1)');
+  punch.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = punch;
+  ctx.beginPath();
+  ctx.arc(0, 0, 1, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.globalCompositeOperation = 'source-over';
+  return c;
+}
+
+/**
+ * The bent plate teeth around the torn hole's rim, plus the lit lip.
+ *
+ * Drawn as an **annulus with a jagged inner boundary** — an outer circle and a
+ * torn polygon filled even-odd — so one transparent quad laid over the deck
+ * both dirties the plate around the wound and draws the teeth. Two things make
+ * it read as torn steel rather than as a decal:
+ *
+ * - the teeth **alternate long and short** on top of their jitter. Pure noise
+ *   on a radius gives a scalloped edge, which is what erosion looks like; plate
+ *   torn by something forcing its way through comes away in uneven tongues.
+ * - the inner boundary is stroked **twice**, a tight near-white line inside a
+ *   wide soft cyan one. That is the light coming up the shaft catching the
+ *   upturned lip of every tooth, and it is the single cue that says the hole
+ *   has something bright down it rather than being a dark patch on the floor.
+ */
+function holeRimCanvas(size = 512, seed = 23): HTMLCanvasElement {
+  const c = makeCanvas(size, size);
+  const ctx = c.getContext('2d')!;
+  const rand = rng(seed);
+  const cx = size / 2;
+  const cy = size / 2;
+
+  /**
+   * The teeth are spaced **irregularly in angle**, not just jittered in radius.
+   *
+   * A fixed angular step with a random radius gives every tooth the same width,
+   * and forty of those around an ellipse read unmistakably as a doily — the
+   * eye picks up the period long before it picks up the noise. Letting the step
+   * itself vary between a third and twice its mean is what turns the same
+   * jitter into plate that came away in tongues of different sizes.
+   */
+  const pts: Array<[number, number]> = [];
+  const step = (Math.PI * 2) / 34;
+  for (let a = 0; a < Math.PI * 2; a += step * (0.45 + rand() * 1.5)) {
+    const r = size * (0.29 + rand() * 0.075);
+    pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+  }
+  const tracePolygon = (): void => {
+    ctx.moveTo(pts[0]![0], pts[0]![1]);
+    for (const [x, y] of pts.slice(1)) ctx.lineTo(x, y);
+    ctx.closePath();
+  };
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, size * 0.5, 0, Math.PI * 2);
+  tracePolygon();
+  const g = ctx.createRadialGradient(cx, cy, size * 0.26, cx, cy, size * 0.5);
+  /**
+   * The stain hugs the teeth and is gone within about a tooth's length of them.
+   * Run it further out and, from a low rig where the deck is nearly edge-on, the
+   * ring stops reading as dirt around a hole and starts reading as the *edge of
+   * a raised platform* the boss is standing on — the annulus is wide enough on
+   * screen to be mistaken for a face rather than a mark.
+   */
+  g.addColorStop(0, 'rgba(23,30,44,0.95)');
+  g.addColorStop(0.33, 'rgba(20,27,40,0.55)');
+  g.addColorStop(0.46, 'rgba(18,24,36,0.12)');
+  g.addColorStop(0.58, 'rgba(18,24,36,0)');
+  g.addColorStop(1, 'rgba(18,24,36,0)');
+  ctx.fillStyle = g;
+  ctx.fill('evenodd');
+
+  /**
+   * The lit lip, stroked **segment by segment at varying brightness**.
+   *
+   * One continuous stroke around the torn edge is a neon outline, and a neon
+   * outline is the single thing that would make this read as a UI decal rather
+   * than as steel. Light coming up a shaft catches the teeth that happen to be
+   * bent toward it and misses the ones that are not, so each segment gets its
+   * own weight and roughly one in six gets almost none.
+   */
+  ctx.lineCap = 'round';
+  for (let pass = 0; pass < 2; pass++) {
+    const wide = pass === 0;
+    ctx.lineWidth = size * (wide ? 0.016 : 0.005);
+    for (let i = 0; i < pts.length; i++) {
+      const p0 = pts[i]!;
+      const p1 = pts[(i + 1) % pts.length]!;
+      const lit = Math.max(0, rand() * 1.18 - 0.18);
+      ctx.strokeStyle = wide
+        ? `rgba(94,200,232,${(0.34 * lit).toFixed(3)})`
+        : `rgba(200,242,255,${(0.82 * lit).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.moveTo(p0[0], p0[1]);
+      ctx.lineTo(p1[0], p1[1]);
+      ctx.stroke();
+    }
+  }
   return c;
 }
 
@@ -412,11 +627,26 @@ function deckReflectionCanvas(size = 512): HTMLCanvasElement {
   const ctx = c.getContext('2d')!;
   const rand = rng(77);
 
+  /**
+   * One smear, shaped as a **raised cosine** rather than as a triangle.
+   *
+   * The three-stop gradient this started as (0 -> peak at 0.5 -> 0) is linear
+   * on both sides of its peak, so its slope flips sign in a single texel. On a
+   * deck seen at a grazing angle that midpoint stretches across a third of the
+   * frame and the eye reads the slope change as a **hard vertical line down the
+   * middle of the floor** — the one seam this scene had, and it sat at screen
+   * x 800 of 1600 because the brightest smear is centred on the camera's own
+   * axis. Sampling cos gives a profile whose first derivative is continuous, so
+   * there is no crease anywhere to read.
+   */
   const smear = (u: number, w: number, colour: string, alpha: number): void => {
     const g = ctx.createLinearGradient((u - w) * size, 0, (u + w) * size, 0);
-    g.addColorStop(0, 'rgba(0,0,0,0)');
-    g.addColorStop(0.5, colour.replace('ALPHA', alpha.toFixed(3)));
-    g.addColorStop(1, 'rgba(0,0,0,0)');
+    const STEPS = 16;
+    for (let i = 0; i <= STEPS; i++) {
+      const t = i / STEPS;
+      const shape = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+      g.addColorStop(t, colour.replace('ALPHA', (alpha * shape).toFixed(4)));
+    }
     ctx.fillStyle = g;
     ctx.fillRect((u - w) * size, 0, w * 2 * size, size);
   };
@@ -426,7 +656,19 @@ function deckReflectionCanvas(size = 512): HTMLCanvasElement {
   ctx.globalCompositeOperation = 'lighter';
   smear(0.13, 0.07, rust, 0.6);
   smear(0.26, 0.04, rust, 0.3);
-  smear(0.5, 0.13, teal, 0.5);
+  /**
+   * The cool core is deliberately the *weakest* smear, not the strongest.
+   *
+   * It lies on the camera's own axis, so whatever brightness it is given lands
+   * in the bottom-centre of every rig — the part of the deck nearest the lens,
+   * where the plate is already carrying the phong lobe and the grazing-angle
+   * specular. A first pass ran it at 0.5 and the three effects summed into a
+   * bright wedge across the bottom seventh of the frame that read as a *lit
+   * ramp* leading up to the boss: high-contrast, in focus, and pulling the eye
+   * straight off the characters. Half the alpha, and it goes back to being what
+   * it is, the vault's light lying on wet-looking plate.
+   */
+  smear(0.5, 0.13, teal, 0.26);
   smear(0.74, 0.04, rust, 0.32);
   smear(0.88, 0.07, rust, 0.62);
 
@@ -501,6 +743,194 @@ function beamCanvas(softness = 0.36): HTMLCanvasElement {
   return c;
 }
 
+/**
+ * A **Yevon-glyph stone insert**, the bible's key set piece 3: proof that
+ * Bevelle built its holy city on top of a war machine, laid into the deck
+ * plating as a disc of white stone.
+ *
+ * It is here for a compositional reason as much as a narrative one. From the
+ * `idle` rig the lower right quarter of the frame is bare plate — the party are
+ * left, the boss is centre-right and well back, and nothing at all happens in
+ * between. Two of these, breathing very slowly in the light coming out of the
+ * vent, give that quarter something to be without putting an object in the
+ * fighters' way or a silhouette anywhere near the boss's read.
+ *
+ * Drawn in white on transparent: the material tints it, so the same canvas can
+ * be the cool stone of one insert and the vent-lit one of the other.
+ */
+function yevonGlyphCanvas(size = 512): HTMLCanvasElement {
+  const c = makeCanvas(size, size);
+  const ctx = c.getContext('2d')!;
+  const cx = size / 2;
+  const r = size * 0.44;
+
+  // The stone disc itself: a soft field, so the insert reads as a *material*
+  // set into the plate rather than as a line drawing lying on it.
+  const bed = ctx.createRadialGradient(cx, cx, r * 0.1, cx, cx, r);
+  bed.addColorStop(0, 'rgba(255,255,255,0.62)');
+  bed.addColorStop(0.72, 'rgba(255,255,255,0.46)');
+  bed.addColorStop(0.95, 'rgba(255,255,255,0.14)');
+  bed.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = bed;
+  ctx.beginPath();
+  ctx.arc(cx, cx, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  /**
+   * The engraving is kept **below** the stone it is cut into.
+   *
+   * A first pass drew the lines at 0.85 over a faint bed and the insert came
+   * out as a bright hard-edged ring on a dark deck — which is not a slab of
+   * masonry, it is a summoning circle, and the frame already has a boss to
+   * carry that kind of signal. Strong bed, weak line: the eye reads the disc
+   * first as a lighter *material*, and the glyph only afterwards.
+   */
+  ctx.strokeStyle = 'rgba(255,255,255,0.42)';
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // Two concentric rings.
+  for (const [rr, lw] of [
+    [r * 0.94, size * 0.012],
+    [r * 0.6, size * 0.008],
+  ] as Array<[number, number]>) {
+    ctx.lineWidth = lw;
+    ctx.beginPath();
+    ctx.arc(cx, cx, rr, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Four teardrop lobes on the cardinals — the shape Yevon's seal is built out
+  // of — and a hairline spoke between each pair.
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2;
+    const ox = cx + Math.cos(a) * r * 0.77;
+    const oy = cx + Math.sin(a) * r * 0.77;
+    ctx.lineWidth = size * 0.01;
+    ctx.beginPath();
+    ctx.ellipse(ox, oy, r * 0.17, r * 0.1, a, 0, Math.PI * 2);
+    ctx.stroke();
+
+    const b = a + Math.PI / 4;
+    ctx.lineWidth = size * 0.005;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(b) * r * 0.6, cx + Math.sin(b) * r * 0.6);
+    ctx.lineTo(cx + Math.cos(b) * r * 0.94, cx + Math.sin(b) * r * 0.94);
+    ctx.stroke();
+  }
+
+  // The centre: a diamond inside a small ring.
+  ctx.lineWidth = size * 0.009;
+  ctx.beginPath();
+  ctx.arc(cx, cx, r * 0.26, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+    const px = cx + Math.cos(a) * r * 0.17;
+    const py = cx + Math.sin(a) * r * 0.17;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.stroke();
+  return c;
+}
+
+/**
+ * The skin of a foreground conduit.
+ *
+ * The first pass ran the conduits bare, on a flat Lambert colour, and from the
+ * low `bahamut` rig — where one of them is three metres off the lens and fills
+ * a tenth of the frame — an untextured ten-sided cylinder is not a pipe. It is
+ * a grey rectangle laid over the painting, and because it is *lighter* than the
+ * chamber behind it, it reads as a fog artefact rather than as a near object.
+ *
+ * So the canvas carries the three things that make a close pipe a pipe:
+ *
+ *  - **flutes** — vertical light/dark stripes. The texture wraps around the
+ *    cylinder, so stripes in x become the specular banding that tells the eye
+ *    the surface is round rather than flat;
+ *  - **collars** — a rivetted band every quarter of the tile, which gives the
+ *    silhouette a length and a scale to be read against;
+ *  - **rust weeping down from each collar**, which is the only warm thing on
+ *    the object and ties it to the chamber's lamp banks.
+ *
+ * It is drawn dark on purpose. A foreground bracket belongs *below* the value
+ * of everything it brackets; the rig's rim is what will pick its near edge out.
+ */
+function conduitCanvas(w = 256, h = 512, seed = 77): HTMLCanvasElement {
+  const c = makeCanvas(w, h);
+  const ctx = c.getContext('2d')!;
+  const rand = rng(seed);
+
+  ctx.fillStyle = '#2c3546';
+  ctx.fillRect(0, 0, w, h);
+
+  // Flutes. Sixteen around the pipe, their contrast varied so the banding is
+  // not a perfect comb (a perfect comb aliases into moiré as the camera moves).
+  const flutes = 16;
+  for (let i = 0; i < flutes; i++) {
+    const x = (i / flutes) * w;
+    const fw = w / flutes;
+    const g = ctx.createLinearGradient(x, 0, x + fw, 0);
+    const lift = 0.1 + rand() * 0.14;
+    g.addColorStop(0, 'rgba(6,9,15,0.55)');
+    g.addColorStop(0.45, `rgba(150,168,194,${lift.toFixed(3)})`);
+    g.addColorStop(1, 'rgba(6,9,15,0.5)');
+    ctx.fillStyle = g;
+    ctx.fillRect(x, 0, fw, h);
+  }
+
+  // Collars, with a rivet row on each and a cast shadow under it.
+  const collars = 4;
+  for (let i = 0; i < collars; i++) {
+    const y = ((i + 0.5) / collars) * h;
+    const ch = h * 0.045;
+    ctx.fillStyle = 'rgba(122,140,166,0.34)';
+    ctx.fillRect(0, y - ch * 0.5, w, ch);
+    ctx.fillStyle = 'rgba(4,6,11,0.66)';
+    ctx.fillRect(0, y + ch * 0.5, w, ch * 0.42);
+    ctx.fillStyle = 'rgba(178,196,220,0.2)';
+    ctx.fillRect(0, y - ch * 0.5, w, 2);
+    for (let r = 0; r < 18; r++) {
+      const rx = ((r + 0.5) / 18) * w;
+      ctx.fillStyle = 'rgba(198,214,236,0.4)';
+      ctx.beginPath();
+      ctx.arc(rx, y, 2.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(6,9,15,0.55)';
+      ctx.beginPath();
+      ctx.arc(rx + 0.9, y + 1, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Rust weeping down from the collar.
+    for (let s = 0; s < 9; s++) {
+      const sx = rand() * w;
+      const sl = h * (0.04 + rand() * 0.11);
+      const g = ctx.createLinearGradient(0, y, 0, y + sl);
+      g.addColorStop(0, 'rgba(154,76,32,0.42)');
+      g.addColorStop(1, 'rgba(154,76,32,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(sx, y, 1 + rand() * 3.5, sl);
+    }
+  }
+
+  // Blotchy corrosion, to break the repeat up.
+  for (let i = 0; i < 40; i++) {
+    const x = rand() * w;
+    const y = rand() * h;
+    const r = w * (0.03 + rand() * 0.1);
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, rand() > 0.5 ? 'rgba(8,11,18,0.44)' : 'rgba(120,62,30,0.2)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  return c;
+}
+
 // ---------------------------------------------------------------------------
 // The scene
 // ---------------------------------------------------------------------------
@@ -517,8 +947,14 @@ interface Practical {
   jitter: number;
 }
 
-/** One rotating shaft: the yaw group, its two crossed quads, its rate. */
+/**
+ * One rotating shaft: the yaw group, its two crossed quads, its rate, and the
+ * per-quad grazing-angle weights the update loop recomputes each frame (kept on
+ * the struct so the loop allocates nothing).
+ */
 interface Beam {
+  /** Per-quad "how squarely does this face the lens" weight, 0..1. */
+  facing: number[];
   yaw: Group;
   quads: Mesh[];
   speed: number;
@@ -664,15 +1100,34 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    */
   const deckTex = paintedCanvasTexture(deckCanvas(512, 41));
   deckTex.wrapS = deckTex.wrapT = RepeatWrapping;
-  deckTex.repeat.set(3, 3);
+  /**
+   * 3.25, not 3 — and the quarter matters more than the three.
+   *
+   * The canvas paints a 4x4 grid of castings, so a repeat of `r` puts a panel
+   * seam wherever `u * 4` is a whole number. The plane is symmetric about the
+   * camera's own axis, so `u(x = 0) = r / 2`, and **any whole or half repeat
+   * puts a seam exactly on that axis** — a dark line straight down the middle
+   * of every frame, converging on the vanishing point, which is the one place
+   * on a floor the eye will not accept a line. At 3.25 the axis falls halfway
+   * between two seams and the nearest pair land about 1.8 units out, where
+   * they read as what they are: plating running away from the lens.
+   */
+  deckTex.repeat.set(3.25, 3.25);
   const deckFade = paintedCanvasTexture(deckFadeCanvas(512));
   deckFade.colorSpace = NoColorSpace;
   deckFade.wrapS = deckFade.wrapT = ClampToEdgeWrapping;
   const deckMat = new MeshPhongMaterial({
     map: deckTex,
     color: new Color(normaliseLuma(backdrop.palette.ground, 0.56)).lerp(new Color(0x4e6280), 0.3),
-    specular: new Color(normaliseLuma(backdrop.palette.key, 0.8)).lerp(new Color(0xcfeef8), 0.55),
-    shininess: 26,
+    specular: new Color(normaliseLuma(backdrop.palette.key, 0.62)).lerp(new Color(0xcfeef8), 0.55),
+    /**
+     * Low, and on purpose. A tight lobe on a plane this large puts its whole
+     * highlight in the few metres of deck directly under the lens, because that
+     * is where the reflection vector lines up; widening the lobe spreads the
+     * same energy back down the chamber, which is what "subtle reflections"
+     * actually looks like on plate.
+     */
+    shininess: 14,
     bumpMap: deckTex,
     bumpScale: 0.3,
     alphaMap: deckFade,
@@ -700,7 +1155,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
   const reflectMat = new MeshBasicMaterial({
     map: reflectTex,
     transparent: true,
-    opacity: 0.78,
+    opacity: 0.6,
     depthWrite: false,
     blending: AdditiveBlending,
     fog: false,
@@ -784,7 +1239,17 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * an inner group, so yawing the outer one sweeps a cone instead of spinning a
    * plank.
    */
-  const beamTex = paintedCanvasTexture(beamCanvas(0.36));
+  /**
+   * The point the grazing-angle fade is solved against. Every rig in this
+   * scene sits within a couple of units of the reference camera and none of
+   * them pans, so the idle position is close enough for a weighting term and
+   * costs nothing to keep — a scene cannot see the live camera through
+   * {@link SceneBuild.update}, which takes only `dt`.
+   */
+  const BEAM_VIEW_POINT = new Vector3(cameraRef[0], cameraRef[1], cameraRef[2]);
+  const beamNormal = new Vector3();
+  const beamToCam = new Vector3();
+  const beamTex = paintedCanvasTexture(beamCanvas(0.42));
   const beams: Beam[] = [];
   const beamGeoCache: PlaneGeometry[] = [];
   const beamMats: MeshBasicMaterial[] = [];
@@ -798,7 +1263,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * the idle frame**, and it dies before it reaches the deck.
    */
   for (const [x, z, w, h, top, tilt, colour, speed, opacity] of [
-    [-5.4, -9.5, 5.2, 13, 8.6, 0.14, 0x8fdcf0, 0.075, 0.42],
+    [-6.7, -10.4, 5.2, 13, 8.6, 0.14, 0x8fdcf0, 0.075, 0.32],
     [6.6, -13.0, 6.0, 14, 9.4, -0.18, 0x9fe4f2, -0.055, 0.36],
     [1.2, -18.0, 4.6, 12, 9.0, 0.09, 0xffb070, 0.11, 0.3],
   ] as Array<
@@ -834,7 +1299,214 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       quads.push(quad);
     }
     group.add(yaw);
-    beams.push({ yaw, quads, speed, phase: beams.length * 2.1, opacity });
+    beams.push({ yaw, quads, speed, phase: beams.length * 2.1, opacity, facing: quads.map(() => 1) });
+  }
+
+  // ------------------------------------------------------ the torn floor hole
+  /**
+   * Four pieces, in the order the eye reads them.
+   *
+   * The deck's alpha already has the hole cut out of it (see
+   * {@link deckFadeCanvas}), so what shows through the gap is the flat
+   * near-black `background` — a pit with nothing in it. These four put the
+   * light back:
+   *
+   * 1. **The vent** — a cyan disc lying in the gap, the light itself.
+   * 2. **The rim** — bent plate teeth with a lit lip, laid over the deck.
+   * 3. **The shaft** — the same crossed-quad trick the ceiling beams use, but
+   *    inverted, so the bright end is at the floor and it dies out overhead.
+   * 4. **A real point light** just above the gap, which is what actually puts a
+   *    cyan gradient on the deck plate and up the near conduit, and is why the
+   *    hole lights the room instead of merely being bright.
+   */
+  /**
+   * **The pit itself**, and the reason it has to exist.
+   *
+   * Cutting the deck's alpha does not make a hole, it makes a *window* — and
+   * what is behind the deck is the matte painting, forty-five units back and
+   * two storeys up. The first pass of this read exactly like that: a cyan pool
+   * with a piece of lit gantry wall lying inside it, seen through the floor.
+   *
+   * So the gap gets an inside: an open-ended cylinder, `BackSide` so the camera
+   * sees its far wall, scaled to the same ellipse and hung deep enough that no
+   * rig can look past its bottom. It is unlit `MeshBasicMaterial` on purpose —
+   * the shaft wall is the one surface in the scene that should stay flatly,
+   * unreadably black, because that is what makes the light climbing out of it
+   * look like it is coming from somewhere much further down.
+   *
+   * Its `renderOrder` is the load-bearing detail. The deck is `depthWrite:
+   * false` (it is a transparent plane), so anything drawn *after* it ignores it
+   * and paints straight over the plate. The pit is therefore drawn **before**
+   * the deck, at -58, and the deck then blends over it — solid where the plate
+   * is solid, absent where the alpha is cut.
+   */
+  const holePitGeo = new CylinderGeometry(1, 0.86, 11, 40, 1, true);
+  const holePitMat = new MeshBasicMaterial({ color: 0x0a1220, side: BackSide, fog: false });
+  const holePit = new Mesh(holePitGeo, holePitMat);
+  holePit.scale.set(HOLE.rx, 1, HOLE.rz);
+  holePit.position.set(HOLE.x, -5.5, HOLE.z);
+  holePit.renderOrder = -58;
+  holePit.name = 'hole-pit';
+  group.add(holePit);
+
+  const holeGlowTex = paintedCanvasTexture(
+    radialCanvas(256, [
+      [0, 1],
+      [0.28, 0.9],
+      [0.58, 0.5],
+      [0.84, 0.13],
+      [1, 0],
+    ]),
+  );
+  const holeVentMat = new MeshBasicMaterial({
+    map: holeGlowTex,
+    color: 0x9eeaff,
+    transparent: true,
+    opacity: 0.8,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    fog: false,
+  });
+  /**
+   * The vent sits **inside** the mouth, not across it. A glow disc flush with
+   * the deck fills the aperture edge to edge and the hole goes back to being a
+   * bright decal on a floor; dropped a metre down the shaft it is occluded by
+   * the near lip at every rig, which is what makes the light read as coming
+   * from below rather than lying on top.
+   */
+  const holeVent = new Mesh(new PlaneGeometry(HOLE.rx * 1.9, HOLE.rz * 1.9), holeVentMat);
+  holeVent.rotation.x = -Math.PI / 2;
+  /**
+   * A metre down was a third of a metre too far. At -1.05 the near lip hid the
+   * disc from every rig at once and the set piece came out as a flat dark
+   * ellipse with a wire outline round it — the hole read as a *shape cut in the
+   * floor*, not as a hole with light in it. At -0.72 the far half of the disc
+   * clears the lip from a standing rig while the near half stays occluded,
+   * which is the asymmetry that makes an aperture look deep.
+   */
+  holeVent.position.set(HOLE.x, -0.72, HOLE.z);
+  /**
+   * Drawn **before** the deck, for the same reason the pit is: the deck writes
+   * no depth, so a glow with a later `renderOrder` ignores the plate entirely
+   * and lands on the floor as a lit puddle hanging a couple of metres in front
+   * of the hole it is supposed to be inside. At -55 the plate blends over it,
+   * and the only part that reaches the frame is the part framed by the cut.
+   */
+  holeVent.renderOrder = -55;
+  holeVent.name = 'hole-vent';
+  group.add(holeVent);
+
+  /**
+   * The rim quad is sized from the canvas, not by eye: the torn boundary is
+   * drawn at a mean radius of 0.328 of the canvas — 0.655 of its half-width — so
+   * a quad `2 * rx / 0.63` wide lands those teeth exactly on the alpha cut in
+   * the deck below. Get this wrong in either direction and the hole either
+   * wears a ring of plate floating inside it or shows a bare alpha edge.
+   */
+  const holeRimTex = paintedCanvasTexture(holeRimCanvas(512, 23));
+  holeRimTex.wrapS = holeRimTex.wrapT = ClampToEdgeWrapping;
+  const holeRimMat = new MeshBasicMaterial({
+    map: holeRimTex,
+    transparent: true,
+    depthWrite: false,
+    opacity: 0.95,
+    fog: false,
+  });
+  const holeRim = new Mesh(
+    new PlaneGeometry((HOLE.rx * 2) / 0.655, (HOLE.rz * 2) / 0.655),
+    holeRimMat,
+  );
+  holeRim.rotation.x = -Math.PI / 2;
+  holeRim.position.set(HOLE.x, 0.022, HOLE.z);
+  holeRim.renderOrder = -47;
+  holeRim.name = 'hole-rim';
+  group.add(holeRim);
+
+  /**
+   * The shaft. `beamTex` runs bright-to-dim down its own v, so the quads are
+   * mirrored in y (`scale.y = -1`, safe here because the material is
+   * `DoubleSide`) to stand it on its head: brightest where it leaves the floor,
+   * gone before the vault. It does not rotate — the ceiling beams sweep because
+   * something up there is turning, and a hole in the floor is not.
+   */
+  const holeShaftMats: MeshBasicMaterial[] = [];
+  const holeShaftGeo = new PlaneGeometry(HOLE.rx * 1.6, 12);
+  for (let i = 0; i < 2; i++) {
+    const mat = new MeshBasicMaterial({
+      map: beamTex,
+      color: 0x8fe6fa,
+      transparent: true,
+      opacity: 0.3,
+      depthWrite: false,
+      blending: AdditiveBlending,
+      side: DoubleSide,
+      fog: false,
+    });
+    holeShaftMats.push(mat);
+    const quad = new Mesh(holeShaftGeo, mat);
+    quad.scale.y = -1;
+    quad.position.set(HOLE.x, 6.0, HOLE.z);
+    quad.rotation.y = i * Math.PI * 0.5;
+    quad.renderOrder = -19;
+    quad.name = 'hole-shaft';
+    group.add(quad);
+  }
+
+  const holeLight = new PointLight(0x6ed2ee, low ? 5.0 : 6.2, 26, 2);
+  holeLight.position.set(HOLE.x, 0.85, HOLE.z);
+  holeLight.name = 'hole-uplight';
+  group.add(holeLight);
+
+  // ------------------------------------------------------ Yevon stone inserts
+  /**
+   * Two glyph inserts laid into the plate, one either side of the fight.
+   *
+   * Both are normal-blended rather than additive: an additive glyph on a dark
+   * deck is a *neon sign*, and these are meant to be pale stone catching the
+   * room's light. The right-hand one is larger, closer to the lens and tinted
+   * toward the vent's cyan because it lies in the vent's throw; the left-hand
+   * one is smaller, further back and warmer, because the lamp bank is what
+   * reaches it.
+   */
+  const glyphTex = paintedCanvasTexture(yevonGlyphCanvas(512));
+  glyphTex.wrapS = glyphTex.wrapT = ClampToEdgeWrapping;
+  const glyphs: Array<{ mesh: Mesh; base: number; rate: number; phase: number }> = [];
+  /**
+   * Both placements are solved against the `idle` rig rather than eyeballed —
+   * the first pass put them at x ±6 and both came out bisected by a frame edge,
+   * which is the one place a circle must not land. Projected through `idle`
+   * (pos [0,3,9.6], fov 32, 16:9) the near insert centres at about 70% of the
+   * frame's width and 80% of its height — the empty plate between the party and
+   * the pit — and the far one at about 13% / 58%, in the dark back-left corner
+   * the lamp bank half reaches. Both sit a comfortable margin inside the edges
+   * at every other rig too, `bahamut`'s low swing included.
+   */
+  for (const [x, z, r, colour, base, rate] of [
+    [2.2, 0.2, 1.5, 0xa8d6e8, 0.16, 0.19],
+    [-6.0, -6.85, 1.7, 0xc2a888, 0.13, 0.13],
+  ] as Array<[number, number, number, number, number, number]>) {
+    const mesh = new Mesh(
+      new PlaneGeometry(r * 2, r * 2),
+      new MeshBasicMaterial({
+        map: glyphTex,
+        color: colour,
+        transparent: true,
+        opacity: base,
+        depthWrite: false,
+        fog: false,
+      }),
+    );
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.set(x, 0.024, z);
+    /**
+     * After the deck (-50) and the reflection sheet (-49) so the plate does not
+     * paint over it, but before the hole rim (-47), which must stay the
+     * brightest thing lying on the floor.
+     */
+    mesh.renderOrder = -48;
+    mesh.name = 'yevon-insert';
+    group.add(mesh);
+    glyphs.push({ mesh, base, rate, phase: glyphs.length * 2.3 });
   }
 
   // --------------------------------------------------- machinery at depth
@@ -998,7 +1670,31 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
   });
   steam.position.set(-5.6, 1.5, -1.0);
 
-  const particles = [dustFar, dustMid, dustNear, sparksLeft, sparksRight, steam];
+  /**
+   * **Dust in the up-shaft** (visual bible §2.4). The bible asks for sixty
+   * motes and sixty is what it gets — this is the one field in the scene that
+   * must not be a haze, because its job is to make the column of light
+   * *visible* as a column. Sparse, fast and rising hard, so each mote traces the
+   * shaft rather than filling it, and cold, because it is lit by the vent and
+   * nothing else.
+   */
+  const holeDust = new ParticleField({
+    count: Math.round(60 * k),
+    bounds: { x: HOLE.rx, y: 4.6, z: HOLE.rz },
+    colors: [0xc8f2ff, 0x5ec8e8, 0xdff4ff],
+    size: 7,
+    sizeJitter: 0.7,
+    drift: [0.02, 0.86, 0],
+    wobble: [0.28, 0.1, 0.22],
+    wobbleSpeed: 0.55,
+    twinkle: 0.7,
+    opacity: 0.5,
+    additive: true,
+    hardness: 0.4,
+  });
+  holeDust.position.set(HOLE.x, 2.6, HOLE.z);
+
+  const particles = [dustFar, dustMid, dustNear, sparksLeft, sparksRight, steam, holeDust];
   for (const p of particles) group.add(p);
 
   // ---------------------------------------------------- conduits and plating
@@ -1013,9 +1709,23 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * band defocuses them, which is exactly what a foreground element should do.
    */
   const props: Mesh[] = [];
-  const steel = new Color(normaliseLuma(backdrop.palette.ground, 0.34))
-    .lerp(new Color(0x2c3a4e), 0.45)
+  /**
+   * Darker than the first pass by a third.
+   *
+   * A foreground bracket is read as a *silhouette*, and the value it needs is
+   * whatever keeps it under the chamber it brackets. At 0.34 luma these sat
+   * above the painting's own mid-tones from the low `bahamut` rig and came
+   * forward as pale slabs; at 0.21, with the flute texture doing the shaping
+   * and the lamp strip picking out the near edge, they go back where a
+   * foreground object belongs.
+   */
+  const steel = new Color(normaliseLuma(backdrop.palette.ground, 0.21))
+    .lerp(new Color(0x232f41), 0.5)
     .getHex();
+  const conduitTex = paintedCanvasTexture(conduitCanvas(256, 512, 77));
+  conduitTex.wrapS = conduitTex.wrapT = RepeatWrapping;
+  /** Four collar bands per pipe, which puts one roughly every 4.5 units. */
+  conduitTex.repeat.set(1, 3);
   /**
    * Where they stand is arithmetic, not taste. A conduit three units in front
    * of the lens has to be 1.6 units off the axis to graze the frame edge, which
@@ -1025,14 +1735,76 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * pass had them at ±9 and three units ahead of the camera, where they were
    * simply outside the frustum and drew nothing at all.
    */
+  const conduitLampMats: MeshBasicMaterial[] = [];
+  /**
+   * Seventeen and eighteen units, not eleven and twelve.
+   *
+   * At the shorter heights the `intro` rig — which sits at y 5.5 and sees more
+   * of the room than any other — cleared the tops of both, and a capped
+   * cylinder ending in mid-air three storeys up is not a conduit running to the
+   * vault, it is a post. Both are now tall enough to leave the top of the frame
+   * at every rig, and both lose their cap, because the cap is only ever seen
+   * when the pipe is failing to run anywhere.
+   */
   for (const [x, z, r, h] of [
-    [-7.9, -5.0, 0.58, 11],
-    [8.5, -6.2, 0.62, 12],
+    [-7.9, -5.0, 0.58, 17],
+    [8.9, -6.8, 0.6, 18],
   ] as Array<[number, number, number, number]>) {
-    const conduit = makePillar({ height: h, radius: r, taper: 0.94, sides: 10, color: steel });
+    const conduit = makePillar({
+      height: h,
+      radius: r,
+      taper: 0.94,
+      /** Sixteen, to match the flute count the texture paints. */
+      sides: 16,
+      color: steel,
+      texture: conduitTex,
+      cap: false,
+    });
     conduit.position.set(x, 0, z);
     group.add(conduit);
     props.push(conduit);
+
+    /**
+     * A strip of rust lamps clamped to the pipe, facing the camera.
+     *
+     * This is the half of the job the texture cannot do. A Lambert cylinder
+     * three metres off the lens is lit by a key twenty metres away, so its near
+     * face has almost no gradient to separate it from the chamber; an additive
+     * strip of warm bulbs *on* that face gives the silhouette an edge to be
+     * read against and, not incidentally, puts the painting's own lamp colour
+     * in the corner of the frame where there is otherwise nothing.
+     */
+    for (let i = 0; i < 3; i++) {
+      const lamp = new Mesh(
+        /**
+         * The quad is twice the pipe's radius, but `glowTex` is a radial
+         * falloff, so the *bulb* the eye sees is a fraction of that and the
+         * rest is halo. Sized to the bulb instead, the lamp came out at ten
+         * pixels from the `intro` rig — a dot, which is not a light.
+         */
+        new PlaneGeometry(r * 2.1, r * 2.1),
+        new MeshBasicMaterial({
+          map: glowTex,
+          color: 0xffa252,
+          transparent: true,
+          opacity: 0.5,
+          depthWrite: false,
+          blending: AdditiveBlending,
+          fog: false,
+        }),
+      );
+      conduitLampMats.push(lamp.material as MeshBasicMaterial);
+      /**
+       * Hung at fixed *world* heights rather than as a fraction of the pipe:
+       * the frame is what these have to land in, and the frame is 1–7 units off
+       * the deck at every battle rig no matter how far the pipe runs past it.
+       */
+      lamp.position.set(x + (x < 0 ? r * 0.82 : -r * 0.82), 1.9 + i * 2.2, z + r * 0.55);
+      lamp.renderOrder = 4;
+      lamp.name = 'conduit-lamp';
+      group.add(lamp);
+      props.push(lamp);
+    }
   }
 
   /**
@@ -1054,9 +1826,20 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * take the deck's own bounce; the boss pool is the bible's **possession
    * violet**, which is also the only violet anywhere in the frame.
    */
+  /**
+   * The party pools are **offset half a metre behind the slot**, and dimmer
+   * than they were.
+   *
+   * Centred and bright, an additive pool does the opposite of its job: it adds
+   * light to the exact patch of deck the figure's own contact shadow is trying
+   * to darken, the two cancel, and three characters who each have a shadow
+   * nonetheless appear to hover a hand's width off the plate. Pushed back, the
+   * pool lights the deck *around and behind* the feet while the shadow keeps
+   * the deck *under* them — which is the contrast that plants a cut-out.
+   */
   const pools: Mesh[] = PARTY_SLOTS.slice(0, 3).map((s) => {
-    const pool = makeLightPool({ color: backdrop.palette.bounce, radius: 1.55, opacity: 0.3 });
-    pool.position.set(s[0]!, 0.02, s[2]!);
+    const pool = makeLightPool({ color: backdrop.palette.bounce, radius: 1.5, opacity: 0.17 });
+    pool.position.set(s[0]!, 0.02, s[2]! - 0.55);
     return pool;
   });
   const bossPool = makeLightPool({ color: 0xb048f0, radius: 2.3, opacity: 0.24 });
@@ -1137,12 +1920,62 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
         (p.bulb.material as MeshBasicMaterial).opacity = 0.62 + (v / p.base) * 0.28;
       }
 
-      // Shafts: a slow yaw, plus a breath on the brightness so the sweep is not
-      // a mechanism running at a constant rate.
+      /**
+       * Shafts: a slow yaw, a breath on the brightness so the sweep is not a
+       * mechanism running at a constant rate, and — the part that matters —
+       * a **grazing-angle fade** on each of the two crossed quads.
+       *
+       * A quad turning edge-on does not disappear; it compresses. Its 36%
+       * horizontal feather, five world units wide when the quad faces the
+       * lens, squeezes into a fraction of a pixel at ten degrees of incidence,
+       * and the soft-edged shaft becomes a hard-edged bright plank standing in
+       * the room. Weighting each quad by how squarely it faces the camera
+       * retires it before it gets there.
+       *
+       * The two weights are then renormalised to the pair's old constant sum,
+       * so the near-face-on quad simply carries the light its partner gave up
+       * and the shaft's brightness does not pulse once per half-turn — which
+       * is the whole reason the quads are crossed in the first place.
+       */
       for (const b of beams) {
         b.yaw.rotation.y += b.speed * dt;
         const breath = 0.8 + 0.2 * Math.sin(clock * 0.23 + b.phase);
-        for (const q of b.quads) (q.material as MeshBasicMaterial).opacity = b.opacity * breath;
+        let sum = 0;
+        for (let i = 0; i < b.quads.length; i++) {
+          const q = b.quads[i]!;
+          q.getWorldDirection(beamNormal);
+          q.getWorldPosition(beamToCam);
+          beamToCam.subVectors(BEAM_VIEW_POINT, beamToCam).normalize();
+          const face = Math.abs(beamNormal.dot(beamToCam));
+          // smoothstep(0.08, 0.5), floored so a shaft never blinks out.
+          const t = Math.min(1, Math.max(0, (face - 0.08) / 0.42));
+          b.facing[i] = 0.18 + 0.82 * t * t * (3 - 2 * t);
+          sum += b.facing[i]!;
+        }
+        const norm = sum > 1e-4 ? b.quads.length / sum : 1;
+        for (let i = 0; i < b.quads.length; i++) {
+          (b.quads[i]!.material as MeshBasicMaterial).opacity =
+            b.opacity * breath * b.facing[i]! * norm;
+        }
+      }
+
+      /**
+       * The conduit lamps share the *room's* flicker rather than owning one:
+       * they are driven off the first practical's current output, so when the
+       * bad lamp behind the party dips, the bulbs on the pipe in the corner of
+       * the frame dip with it and the chamber reads as one failing circuit.
+       */
+      const circuit = practicals[0] ? practicals[0].light.intensity / practicals[0].base : 1;
+      for (const m of conduitLampMats) m.opacity = 0.34 + 0.24 * circuit;
+
+      /**
+       * The inserts breathe with the vent rather than on a rate of their own:
+       * stone does not pulse, but the light falling on it does, and tying them
+       * to the same clock is what says which source is lighting them.
+       */
+      for (const g of glyphs) {
+        (g.mesh.material as MeshBasicMaterial).opacity =
+          g.base * (0.82 + 0.18 * Math.sin(clock * g.rate + g.phase));
       }
 
       // Distant machinery, breathing out of phase with itself.
@@ -1154,13 +1987,29 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       // The reflected light crawls along the plate as the shafts turn, and the
       // boss pool breathes so the bloom always has something living in it.
       reflectTex.offset.y = Math.sin(clock * 0.05) * 0.015;
-      reflectMat.opacity = 0.72 + Math.sin(clock * 0.31) * 0.08;
+      reflectMat.opacity = 0.55 + Math.sin(clock * 0.31) * 0.07;
+
+      /**
+       * The vent breathes, on two rates that do not divide into each other, and
+       * the point light breathes **with** it. Letting the glow quad pulse while
+       * the real light held steady was the first version, and it looked exactly
+       * like what it was: a sprite fading on top of a lit floor.
+       */
+      const vent = 0.82 + 0.18 * Math.sin(clock * 0.37) + 0.06 * Math.sin(clock * 1.13);
+      holeVentMat.opacity = 0.86 * vent;
+      holeLight.intensity = (low ? 5.0 : 6.2) * (0.86 + 0.14 * vent);
+      for (const m of holeShaftMats) m.opacity = 0.34 * vent;
       (bossPool.material as { opacity: number }).opacity = 0.2 + Math.sin(clock * 0.85) * 0.06;
     },
     dispose(): void {
       watcher?.stop();
       for (const p of particles) p.dispose();
-      for (const m of [...pools, ...props, deck, reflections]) {
+      holeLight.dispose();
+      for (const m of holeShaftMats) m.dispose();
+      holeShaftGeo.dispose();
+      holeGlowTex.dispose();
+      holeRimTex.dispose();
+      for (const m of [...pools, ...props, deck, reflections, holeVent, holeRim, holePit]) {
         m.geometry.dispose();
         (m.material as Material).dispose();
       }
@@ -1172,9 +2021,15 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       for (const m of beamMats) m.dispose();
       for (const g of beamGeoCache) g.dispose();
       for (const g of machineGlows) (g.mesh.material as Material).dispose();
+      for (const g of glyphs) {
+        g.mesh.geometry.dispose();
+        (g.mesh.material as Material).dispose();
+      }
+      glyphTex.dispose();
       for (const g of glowGeoCache) g.dispose();
       deckTex.dispose();
       deckFade.dispose();
+      conduitTex.dispose();
       reflectTex.dispose();
       beamTex.dispose();
       glowTex.dispose();

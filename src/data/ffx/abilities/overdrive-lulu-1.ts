@@ -21,6 +21,27 @@
  *   bonus entirely.
  * - `canReflect: false` — Fury bypasses Shell/Reflect like every character
  *   Overdrive; `damageType: 'other'` already covers Shell.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * the first pass's `canMiss: true` reasoned from "Fury isn't on the short
+ * list of actions §7 discussed," which is an argument from absence, not
+ * evidence): **does each Fury cast roll to-hit?** Two decompiled sources
+ * converge on "no": `research/ffx-yunalesca.md` §7.2 (line 596) — "Physical
+ * accuracy tanks; magic unaffected" — and `research/ffx-bfa-yu-yevon.md`
+ * §1.3 (lines 99, 101, 107, 108) — Jecht Beam (Magic formula) plus three
+ * Strength-formula, `Other`-damage-type Overdrives (Jecht Bomber, Ultimate
+ * Jecht Shot, Jecht Bomber 2) are ALL flagged "always hits", contrasted with
+ * that table's plain physical attacks (lines 98, 104-105), which roll
+ * accuracy and are "affected by Dark" / carry an explicit accuracy byte.
+ * Fury is doubly covered by that pattern: it is both a Magic-formula cast
+ * (matching Jecht Beam) AND a character Overdrive with `damageType: 'other'`
+ * (matching the three Jecht Overdrives). Conclusion: Fury casts always hit
+ * and never roll accuracy — consistent with `research/ffx-combat-core.md`
+ * §5.7's "not blocked by Silence, bypasses Reflect and Shell" framing, which
+ * already describes Fury as sitting outside the normal resolution chain.
+ * `canMiss: false` is set explicitly on all 19 records (this file and
+ * `overdrive-lulu-2.ts`), citing ffx-yunalesca.md §7.2 + ffx-bfa-yu-yevon.md
+ * §1.3 `[verified: 2 sources]`.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -40,6 +61,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -65,6 +87,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -90,6 +113,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -115,6 +139,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -140,6 +165,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -165,6 +191,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -190,6 +217,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -215,6 +243,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -240,6 +269,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -265,6 +295,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],

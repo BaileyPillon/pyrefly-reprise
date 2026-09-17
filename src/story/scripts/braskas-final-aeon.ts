@@ -8,8 +8,8 @@
  * This chapter is one continuous run of battles with no menu between, so the
  * chapter breaks down like this:
  *   - `pre`        Jecht waiting inside Sin (E3 pre-battle).
- *   - `midScripts` everything **inside** the chain: the sword, the inert third
- *     Talk, **Jecht's death scene** (fired on his KO — it is mid-chain, not a
+ *   - `midScripts` everything **inside** the chain: the sword, the answered-with-
+ *     silence Talk, **Jecht's death scene** (fired on his KO — it is mid-chain, not a
  *     post-battle scene), the chant, one entrance and one farewell per
  *     possessed aeon, and Yu Yevon's arrival.
  *   - `post`       the ending only: the chanting stops, Auron is sent, Tidus
@@ -29,9 +29,18 @@
  * Mechanics hooks:
  *   - The in-battle **Talk** trigger: two charges, the effect lands on BFA's
  *     next turn which he then loses, and it is offered a useless third time
- *     [visual-bible §3.12.2]. The third, inert Talk is characterisation — it
- *     gets a line ("...") and nothing else. It is wired as its own ability id
- *     (`talk-inert`) because no trigger condition can count uses.
+ *     [visual-bible §3.12.2]. The beat is characterisation — Tidus calls out,
+ *     Jecht answers with a line that is only ("..."). No trigger condition can
+ *     count uses, so it fires on the **first** Talk and `once: true` retires
+ *     it; the ability id is `'talk'`, the only id the menu marker publishes
+ *     [`data/ffx/abilities/special-menu-markers.ts`]. **Known engine gap:** a
+ *     `TriggerCommand` emits `action-start` with no `abilityId`
+ *     [`battle/ffx/execute.ts` `case 'trigger'`], and `collectSignals` only
+ *     records an ability use when `abilityId` is set, so this beat cannot fire
+ *     until that emit carries `abilityId: 'talk'`. Neither file is ours.
+ *   - Combatant ids in the gauntlet are `possessed-valefor` … `possessed-bahamut`,
+ *     not the bare aeon names — the formations are built by
+ *     `buildPossessedAeonChain` [`data/ffx/enemies/braskas-final-aeon.ts`].
  *   - `form-change` when he draws the sword out of his own chest.
  *   - One `ko` beat per possessed aeon, and one entrance beat each. The
  *     entrances use `hp-below` at `fraction: 1` because the trigger vocabulary
@@ -39,6 +48,11 @@
  *     after that combatant is in play. Same convention in Chapter 5.
  *   - Only the five mandatory aeons are wired [ffx/ids.ts `MANDATORY_AEON_IDS`].
  *     A trigger for an aeon Yuna never obtained simply never fires.
+ *   - Every trigger keeps `id === script`, because the engine emits
+ *     `script-trigger` with the **id** and the presenter looks the script up by
+ *     that name; and every mid-battle `say` carries an `auto`, because a beat
+ *     that waits on a Confirm burns the presenter's 30 s budget and is then
+ *     abandoned mid-scene. `src/story/registry.ts` tests both.
  */
 
 import type { ChapterScripts } from '../dsl.ts';
@@ -159,10 +173,10 @@ export const braskasFinalAeonScripts: ChapterScripts = {
   mid: [
     {
       // The useless third Talk. Characterisation, not a mechanic.
-      id: 'bfa-talk-inert',
-      when: { type: 'ability-used', who: 'tidus', ability: 'talk-inert' },
+      id: 'bfa-talk',
+      when: { type: 'ability-used', who: 'tidus', ability: 'talk' },
       once: true,
-      script: 'bfa-talk-inert',
+      script: 'bfa-talk',
     },
     {
       // He pulls the sword out of his own chest. Form indices are 0-based.
@@ -182,18 +196,18 @@ export const braskasFinalAeonScripts: ChapterScripts = {
       id: 'jecht-falls',
       when: { type: 'ko', who: 'braskas-final-aeon' },
       once: true,
-      script: 'jecht-farewell',
+      script: 'jecht-falls',
     },
-    { id: 'valefor-enters', when: { type: 'hp-below', who: 'valefor', fraction: 1 }, once: true, script: 'aeon-valefor' },
-    { id: 'valefor-falls', when: { type: 'ko', who: 'valefor' }, once: true, script: 'aeon-valefor-falls' },
-    { id: 'ifrit-enters', when: { type: 'hp-below', who: 'ifrit', fraction: 1 }, once: true, script: 'aeon-ifrit' },
-    { id: 'ifrit-falls', when: { type: 'ko', who: 'ifrit' }, once: true, script: 'aeon-ifrit-falls' },
-    { id: 'ixion-enters', when: { type: 'hp-below', who: 'ixion', fraction: 1 }, once: true, script: 'aeon-ixion' },
-    { id: 'ixion-falls', when: { type: 'ko', who: 'ixion' }, once: true, script: 'aeon-ixion-falls' },
-    { id: 'shiva-enters', when: { type: 'hp-below', who: 'shiva', fraction: 1 }, once: true, script: 'aeon-shiva' },
-    { id: 'shiva-falls', when: { type: 'ko', who: 'shiva' }, once: true, script: 'aeon-shiva-falls' },
-    { id: 'bahamut-enters', when: { type: 'hp-below', who: 'bahamut', fraction: 1 }, once: true, script: 'aeon-bahamut' },
-    { id: 'bahamut-falls', when: { type: 'ko', who: 'bahamut' }, once: true, script: 'aeon-bahamut-falls' },
+    { id: 'valefor-enters', when: { type: 'hp-below', who: 'possessed-valefor', fraction: 1 }, once: true, script: 'valefor-enters' },
+    { id: 'valefor-falls', when: { type: 'ko', who: 'possessed-valefor' }, once: true, script: 'valefor-falls' },
+    { id: 'ifrit-enters', when: { type: 'hp-below', who: 'possessed-ifrit', fraction: 1 }, once: true, script: 'ifrit-enters' },
+    { id: 'ifrit-falls', when: { type: 'ko', who: 'possessed-ifrit' }, once: true, script: 'ifrit-falls' },
+    { id: 'ixion-enters', when: { type: 'hp-below', who: 'possessed-ixion', fraction: 1 }, once: true, script: 'ixion-enters' },
+    { id: 'ixion-falls', when: { type: 'ko', who: 'possessed-ixion' }, once: true, script: 'ixion-falls' },
+    { id: 'shiva-enters', when: { type: 'hp-below', who: 'possessed-shiva', fraction: 1 }, once: true, script: 'shiva-enters' },
+    { id: 'shiva-falls', when: { type: 'ko', who: 'possessed-shiva' }, once: true, script: 'shiva-falls' },
+    { id: 'bahamut-enters', when: { type: 'hp-below', who: 'possessed-bahamut', fraction: 1 }, once: true, script: 'bahamut-enters' },
+    { id: 'bahamut-falls', when: { type: 'ko', who: 'possessed-bahamut' }, once: true, script: 'bahamut-falls' },
     {
       id: 'yu-yevon-arrives',
       when: { type: 'hp-below', who: 'yu-yevon', fraction: 1 },
@@ -202,132 +216,132 @@ export const braskasFinalAeonScripts: ChapterScripts = {
     },
   ],
   midScripts: {
-    'bfa-talk-inert': [
-      say('tidus', 'Hey! You still in there?'),
+    'bfa-talk': [
+      say('tidus', 'Hey! You still in there?', { auto: 1000 }),
       beat(1600),
-      say('jecht', '...'),
+      say('jecht', '...', { auto: 1000 }),
     ],
     'bfa-sword': [
       camera('action', 400),
       fx('bfa-draws-sword', 'braskas-final-aeon'),
       shake(10, 700),
-      say('jecht', "Ha! Now we're playin'."),
-      say('auron', 'Spread out. One swing takes us all.'),
+      say('jecht', "Ha! Now we're playin'.", { auto: 1000 }),
+      say('auron', 'Spread out. One swing takes us all.', { auto: 1200 }),
       camera('idle', 400),
     ],
     'bfa-low': [
-      say('jecht', 'Good. Good.'),
-      say('jecht', "Don't you dare slow down now."),
+      say('jecht', 'Good. Good.', { auto: 1000 }),
+      say('jecht', "Don't you dare slow down now.", { auto: 1200 }),
     ],
 
     // --- The scene the whole chapter is for [writing-bible §3 E3 post] ----
     // Understate at the top, one unguarded line, cut within two.
-    'jecht-farewell': [
+    //
+    // A **chain seam**: the fight is over, the next link has not started, and
+    // this is what the chapter was built to reach. It is still a mid-battle
+    // script, so it runs against the presenter's 30 s abandon budget — which
+    // the first draft of this scene overshot by half a minute, so the last
+    // third of Jecht's goodbye was silently dropped every time. Trimmed to the
+    // lines that carry it, with `auto` on each so nothing waits on a Confirm.
+    'jecht-falls': [
       music(null, 900),
       camera('idle', 900),
       fx('aeon-breaks-apart', 'braskas-final-aeon'),
       hideActor('braskas-final-aeon', 900),
       // A man again, briefly, and smaller than Tidus remembers.
       showActor('jecht', { ms: 1100, facing: -1 }),
-      say('jecht', 'Not bad.'),
-      beat(1300),
-      say('jecht', 'Not bad at all.'),
-      say('tidus', "Don't. Don't do the thing where you—"),
-      say('jecht', "The thing where I what? Say somethin' nice?"),
-      say('jecht', 'You turned out fine, kid.'),
-      say('jecht', "I had nothin' to do with it."),
-      say('jecht', "That's the good part."),
-      say('auron', "Jecht. It's finished."),
-      say('jecht', 'Yeah.'),
-      beat(1300),
-      say('jecht', 'You were always such a stiff.'),
-      beat(1600), // Auron almost smiles. He does not answer.
-      say('jecht', "Tell Braska I did somethin' right eventually."),
-      say('yuna', "I'll tell him myself. I promise."),
-      say('jecht', '...Right.'),
-      beat(1400),
-      say('jecht', "C'mere, crybaby."),
+      say('jecht', 'Not bad.', { auto: 900 }),
+      beat(1200),
+      say('jecht', 'You turned out fine, kid.', { auto: 1000 }),
+      say('jecht', "I had nothin' to do with it.", { auto: 1000 }),
+      say('jecht', "That's the good part.", { auto: 1000 }),
+      say('auron', "Jecht. It's finished.", { auto: 900 }),
+      say('jecht', 'You were always such a stiff.', { auto: 1000 }),
+      say('jecht', "Tell Braska I did somethin' right eventually.", { auto: 1100 }),
+      say('yuna', "I'll tell him myself. I promise.", { auto: 1000 }),
+      say('jecht', "C'mere, crybaby.", { auto: 1000 }),
       // The embrace holds for exactly one beat. Then pyreflies. Cut.
       setPose('tidus', 'ready'),
-      wait(1400),
+      wait(1200),
       fx('pyreflies-rising', 'jecht'),
       hideActor('jecht', 700),
-      say('tidus', '...Yeah. Bye, Dad.'),
-      say('auron', "Move. It isn't over."),
+      say('tidus', '...Yeah. Bye, Dad.', { auto: 1200 }),
+      say('auron', "Move. It isn't over.", { auto: 900 }),
     ],
 
     // --- The gauntlet. A funeral with a health bar. -----------------------
-    'aeon-valefor': [
+    // The second chain seam: the chant starts, and the gauntlet is explained
+    // once and never again. Same budget rule as `jecht-falls`.
+    'valefor-enters': [
       music(null, 800),
       sfx('yu-yevon-chant'), // Someone praying, too fast, forever.
       camera('idle', 900),
-      wait(1600),
-      say('rikku', 'What is that noise? Make it stop—'),
-      say('auron', 'That is Yu Yevon.'),
-      say('auron', 'It has been saying that for a thousand years.'),
-      say('tidus', 'Saying what?'),
-      say('auron', 'Nothing.'),
-      say('auron', 'It stopped meaning anything a long time ago.'),
-      beat(1600), // It enters Valefor. The aeon's eyes go wrong.
-      say('yuna', '...Oh.', { emotion: 'pained' }),
-      say('lulu', "Yuna. You don't have to be the one who—"),
-      say('yuna', 'Yes. I do.'),
-      beat(1400),
-      say('yuna', 'They came when I called.'),
-      say('yuna', "I'll be here when they go."),
+      wait(1400),
+      say('rikku', 'What is that noise? Make it stop—', { auto: 1100 }),
+      say('auron', 'That is Yu Yevon.', { auto: 900 }),
+      say('tidus', 'Saying what?', { auto: 900 }),
+      say('auron', 'Nothing.', { auto: 900 }),
+      say('auron', 'It stopped meaning anything a long time ago.', { auto: 1200 }),
+      beat(1400), // It enters Valefor. The aeon's eyes go wrong.
+      say('yuna', '...Oh.', { emotion: 'pained', auto: 1200 }),
+      say('lulu', "Yuna. You don't have to be the one who—", { auto: 1000 }),
+      say('yuna', 'Yes. I do.', { auto: 1100 }),
+      beat(1200),
+      say('yuna', 'They came when I called.', { auto: 1000 }),
+      say('yuna', "I'll be here when they go.", { auto: 1200 }),
       // Wakka starts the prayer gesture, stops halfway, lets his hands fall.
       setPose('wakka', 'pray'),
       wait(1200),
       setPose('wakka', 'idle'),
-      say('yuna', 'Valefor. You always came first.'),
+      say('yuna', 'Valefor. You always came first.', { auto: 1300 }),
       music('boss-yu-yevon', 1200),
     ],
-    'aeon-valefor-falls': [
-      say('yuna', "Rest now. You've carried enough."),
+    'valefor-falls': [
+      say('yuna', "Rest now. You've carried enough.", { auto: 1400 }),
       beat(1400),
     ],
-    'aeon-ifrit': [
-      say('yuna', 'Ifrit.'),
-      say('yuna', 'I know. I called you anyway.'),
+    'ifrit-enters': [
+      say('yuna', 'Ifrit.', { auto: 1000 }),
+      say('yuna', 'I know. I called you anyway.', { auto: 1400 }),
     ],
-    'aeon-ifrit-falls': [
+    'ifrit-falls': [
       beat(1400),
-      say('auron', "Don't look away. She isn't."),
+      say('auron', "Don't look away. She isn't.", { auto: 1200 }),
     ],
-    'aeon-ixion': [
-      say('yuna', 'Ixion. I never once had to ask twice.'),
+    'ixion-enters': [
+      say('yuna', 'Ixion. I never once had to ask twice.', { auto: 1400 }),
     ],
-    'aeon-ixion-falls': [
-      say('yuna', 'Thank you.'),
+    'ixion-falls': [
+      say('yuna', 'Thank you.', { auto: 1200 }),
       beat(1600),
     ],
-    'aeon-shiva': [
-      say('yuna', 'Shiva. You always came quietly.'),
+    'shiva-enters': [
+      say('yuna', 'Shiva. You always came quietly.', { auto: 1400 }),
       beat(1300),
     ],
-    'aeon-shiva-falls': [
+    'shiva-falls': [
       // Kimahri salutes, Ronso style, and says nothing.
       setPose('kimahri', 'ready'),
       wait(1600),
       setPose('kimahri', 'idle'),
     ],
-    'aeon-bahamut': [
-      say('yuna', 'Bahamut.'),
+    'bahamut-enters': [
+      say('yuna', 'Bahamut.', { auto: 1000 }),
       beat(1400),
-      say('yuna', 'Tell the boy I said thank you.'),
+      say('yuna', 'Tell the boy I said thank you.', { auto: 1400 }),
     ],
-    'aeon-bahamut-falls': [
+    'bahamut-falls': [
       camera('idle', 700),
-      say('tidus', 'Yuna. Look at me.'),
-      say('tidus', 'Just for a second, look at me.'),
+      say('tidus', 'Yuna. Look at me.', { auto: 1100 }),
+      say('tidus', 'Just for a second, look at me.', { auto: 1300 }),
       beat(2000), // She doesn't.
     ],
     'yu-yevon-arrives': [
       camera('action', 800),
       fx('yu-yevon-reveal', 'yu-yevon'),
-      say('tidus', "That's it? That's what ate the world?"),
-      say('auron', 'Something small can eat anything.'),
-      say('auron', 'Give it a thousand years.'),
+      say('tidus', "That's it? That's what ate the world?", { auto: 1100 }),
+      say('auron', 'Something small can eat anything.', { auto: 1000 }),
+      say('auron', 'Give it a thousand years.', { auto: 1200 }),
       camera('idle', 600),
     ],
   },

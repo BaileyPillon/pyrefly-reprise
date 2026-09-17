@@ -1,263 +1,418 @@
 /*
- * Pre-battle "Party & Sphere Grid" screen [research/visual-bible.md §5.4].
- * Same 640x360 authoring grid and letterbox stage as the battle HUD, reusing
- * `.ffxhud-win` chrome from ffx-hud.css (imported by PartyPrep.ts) so the
- * windows read as the same game.
+ * FFX party-prep panel bodies — Stats / Sphere Grid / Equipment / Items /
+ * Overdrive. These compose into `PartyPrepScreen`'s Ink & Gold frame
+ * (`src/ui/common/party-prep.css`, `.prep__sheet-inner--panel`): the
+ * backdrop, roster column, tabs, active-party slots and START BATTLE button
+ * are the shell's, not redrawn here. Every rule below is scoped under a
+ * `.ffxprep-*` class of this file's own, reading the shared layer only
+ * through `var(--ig-*)` — no bare `.ig-*` selector [CONTRACT-CHANGES
+ * decision 10]. The sheet is already ivory with ink text (`.prep__sheet`),
+ * so these rules mostly just pick type and the gold-on-paper accent.
  */
 
-.ffxprep {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  font-family: var(--font-text);
-}
-.ffxprep__stage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 640px;
-  height: 360px;
-  transform-origin: 0 0;
-}
-
-.ffxprep-roster {
-  left: 12px;
-  top: 12px;
-  width: 152px;
-  height: 248px;
-  overflow-y: auto;
-  padding: 4px;
-}
-.ffxprep-roster__row {
-  position: relative;
-  height: 34px;
-  margin-bottom: 2px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 6px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.ffxprep-roster__row--selected {
-  background: rgba(46, 90, 158, 0.55);
-  box-shadow: inset 0 0 0 1px var(--ffx-border-inner);
-}
-.ffxprep-roster__row--active {
-  border-left: 3px solid var(--ffx-od-fill-lo);
-  padding-left: 3px;
-}
-.ffxprep-roster__portrait {
-  position: relative;
-  width: 28px;
-  height: 28px;
-  flex: none;
-  overflow: hidden;
-  border: 1px solid #5a7fa8;
-}
-.ffxprep-roster__info {
-  flex: 1;
-  min-width: 0;
-}
-.ffxprep-roster__name {
-  font-size: 10px;
-  color: var(--ffx-text);
-}
-.ffxprep-roster__slv {
-  font-size: 8px;
-  color: #c8d4e4;
-}
-.ffxprep-roster__bar {
-  width: 60px;
-  height: 4px;
-  background: var(--ffx-od-track);
-  margin-top: 2px;
-}
-.ffxprep-roster__bar i {
-  display: block;
-  height: 100%;
-  background: var(--ffx-hp);
-}
-.ffxprep-roster__bar--od i {
-  background: linear-gradient(90deg, var(--ffx-od-fill-lo), var(--ffx-od-fill-hi));
-}
-
-.ffxprep-detail {
-  left: 176px;
-  top: 12px;
-  width: 452px;
-  height: 248px;
-  padding: 6px 12px;
-  overflow: hidden;
-}
-.ffxprep-tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-.ffxprep-tab {
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  padding: 4px 10px;
-  color: var(--ffx-text-dim);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-}
-.ffxprep-tab--active {
-  color: var(--ffx-text-hi);
-  border-bottom-color: var(--ffx-od-fill-lo);
-}
-.ffxprep-detail__body {
-  height: 200px;
-  overflow-y: auto;
-}
+/* ------------------------------------------------------------------ Stats */
 
 .ffxprep-stats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 21.33px; /* matches .prep__sheet-inner's own column gap */
 }
-.ffxprep-stat-row {
+.ffxprep-stat {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 16px;
-  font-size: 9px;
-  color: var(--ffx-text);
-}
-.ffxprep-stat-row__label {
-  width: 90px;
-  color: #8fa4bc;
-}
-.ffxprep-stat-row__bar {
-  flex: 1;
-  height: 4px;
-  background: var(--ffx-od-track);
-}
-.ffxprep-stat-row__bar i {
-  display: block;
-  height: 100%;
-  background: var(--ffx-mp);
-}
-.ffxprep-stat-row__value {
-  width: 30px;
-  text-align: right;
-  font-family: var(--font-numbers);
-}
-
-.ffxprep-chips {
-  display: flex;
-  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 4px;
-  margin: 4px 0 10px;
+  padding: 2.67px 0 2.22px;
+  border-bottom: 0.89px solid var(--ig-ink);
 }
-.ffxprep-chip {
-  font-size: 8px;
-  padding: 2px 6px;
-  border-radius: 8px;
-  border: 1px solid var(--ffx-border-inner);
-  color: #c8d4e4;
+.ffxprep-stat:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+.ffxprep-stat__k {
+  font-size: 5.78px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+/* Value cluster: optional "before equipment" figure, the value itself, and
+   the auto-ability chip. Baseline-aligned so the big numeral still sets the
+   row's baseline against the label on the left. */
+.ffxprep-stat__vs {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 0;
+}
+.ffxprep-stat__v {
+  font-family: var(--ig-font-numeral);
+  font-size: 13.33px;
+  font-weight: 700;
+  line-height: 1;
+}
+/* The pre-equipment pool (HP/MP only), quiet and small, with the arrow that
+   makes "2200 -> 2420" read as one raised number rather than two stats. */
+.ffxprep-stat__base {
+  font-family: var(--ig-font-numeral);
+  font-size: 7.11px;
+  line-height: 1;
+  opacity: 0.55;
+}
+.ffxprep-stat__base::after {
+  content: '\2192';
+  margin-left: 2px;
+}
+/* The +N% chip. Gold on paper like the label, so it reads as annotation on
+   the stat rather than as part of the numeral. */
+.ffxprep-stat__bonus {
+  font-family: var(--ig-font-text);
+  font-size: 5.33px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.ffxprep-stats__note {
+  margin-top: 3px;
+  font-family: var(--ig-font-text);
+  font-size: 6px;
+  font-style: italic;
+  line-height: 1.3;
+  opacity: 0.65;
 }
 
-.ffxprep-list-row {
+/* ------------------------------------------------------------ Sphere Grid */
+
+/*
+ * The Sphere Grid tab is the one panel that wants the whole slab: a header
+ * strip, a full-bleed canvas, the sphere pouch + legend, and a caption line.
+ * Everything outside the <canvas> is ink on the sheet's ivory
+ * (`--ig-ink` / `--ig-accent-on-paper`), never `--ig-paper`, which on ivory
+ * is the near-invisible caption in docs/screenshots/42b-sphere-grid.png.
+ * Values are authored on the 640x360 grid like the rest of the screen.
+ */
+
+.ffxprep-sg {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+  height: 124px;
+  color: var(--ig-ink);
+}
+
+/* ---- header: who, S.Lv, the AP bar, and the view controls */
+
+.ffxprep-sg__head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 20px;
-  font-size: 10px;
-  color: var(--ffx-text);
-  cursor: pointer;
-  padding: 0 4px;
+  gap: 5px;
+  height: 11px;
+  flex: none;
 }
-.ffxprep-list-row--selected {
-  background: rgba(46, 90, 158, 0.5);
-  border-radius: 3px;
+.ffxprep-sg__who {
+  font-family: var(--ig-font-serif);
+  font-size: 11px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  white-space: nowrap;
 }
-.ffxprep-list-row__qty {
-  margin-left: auto;
-  font-family: var(--font-numbers);
-  color: #c8d4e4;
+.ffxprep-sg__slv {
+  font-size: 5.2px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  white-space: nowrap;
 }
-.ffxprep-mode-desc {
-  margin-top: 8px;
+.ffxprep-sg__slv b {
+  font-family: var(--ig-font-numeral);
   font-size: 9px;
-  color: #c8d4e4;
-  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--ig-ink);
+}
+.ffxprep-sg__ap {
+  position: relative;
+  width: 54px;
+  height: 2.2px;
+  background: rgba(11, 10, 18, 0.16);
+  overflow: hidden;
+}
+.ffxprep-sg__ap-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.ffxprep-sg__ap-n {
+  font-family: var(--ig-font-numeral);
+  font-size: 5.2px;
+  font-weight: 700;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+.ffxprep-sg__spacer {
+  flex: 1 1 auto;
+}
+/*
+ * `#ui` is `pointer-events: none` (the whole overlay layer is, so the WebGL
+ * canvas under it keeps the cursor), and that inherits all the way down. The
+ * Sphere Grid is the one panel that is genuinely a mouse surface — wheel
+ * zoom, drag pan, click a node — so it turns pointer events back on for its
+ * own canvas and its own view controls, and for nothing else. Without this
+ * every pointer event over the tab lands on `#game > canvas` instead, which
+ * is why the first polish pass could not hover, drag or zoom at all.
+ */
+.ffxprep-sg__btn,
+.ffxprep-sg__canvas,
+.ffxprep-sg__canvas canvas {
+  pointer-events: auto;
 }
 
-.ffxprep-grid {
-  left: 176px;
-  top: 12px;
-  width: 452px;
-  height: 248px;
-  padding: 0;
-  overflow: hidden;
+.ffxprep-sg__btn {
+  font-family: var(--ig-font-display);
+  font-size: 4.8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  padding: 2.4px 4px;
+  min-width: 10px;
+  color: var(--ig-ink);
+  background: transparent;
+  border: 0.89px solid rgba(11, 10, 18, 0.45);
+  border-radius: 0;
+  cursor: pointer;
+}
+.ffxprep-sg__btn:hover {
+  background: rgba(11, 10, 18, 0.08);
+}
+.ffxprep-sg__walk--on {
+  background: var(--ig-accent, #e3b94a);
+  border-color: var(--ig-accent, #e3b94a);
+}
+
+/* ---- the canvas fills whatever is left of the slab, at device resolution */
+
+.ffxprep-sg__slot {
+  flex: 1 1 auto;
+  min-height: 0;
   position: relative;
 }
-.ffxprep-grid canvas {
+.ffxprep-sg__canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #08101e;
+}
+.ffxprep-sg__canvas canvas {
   display: block;
   width: 100%;
   height: 100%;
   cursor: grab;
+  outline: none;
 }
-.ffxprep-grid__header {
-  position: absolute;
-  right: 10px;
-  top: 6px;
-  font-size: 12px;
-  color: var(--ffx-text-hi);
-  pointer-events: none;
+.ffxprep-sg__canvas canvas:focus-visible {
+  outline: 0.89px solid var(--ig-accent, #e3b94a);
+  outline-offset: -0.89px;
 }
 
-.ffxprep-active {
-  left: 12px;
-  top: 270px;
-  width: 616px;
-  height: 78px;
+/*
+ * ---- caption over sphere pouch, two rows, clipped to the slab.
+ *
+ * They shared one row in the first polish pass and the slab is only 334
+ * authoring px wide, so the nine pouch chips left the caption about half a
+ * line: "Agility +2 - permanent +2 AGI  Move onto the nod..." Two short rows
+ * cost the canvas 8px of height and give the sentence the whole width.
+ */
+
+.ffxprep-sg__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5px;
+  height: 18px;
+  flex: none;
+  overflow: hidden;
+}
+.ffxprep-sg__pouch {
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  gap: 10px;
+  gap: 3px;
+  white-space: nowrap;
+  flex: none;
+  height: 7.5px;
+  margin-left: auto;
 }
-.ffxprep-active__slot {
-  flex: 1;
-  height: 62px;
-  border: 1px dashed #4e5a70;
-  border-radius: 3px;
-  display: flex;
+.ffxprep-sg__sphere {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 8px;
-  cursor: pointer;
-}
-.ffxprep-active__slot--filled {
-  border-style: solid;
-  border-color: var(--ffx-border-inner);
-}
-.ffxprep-active__name {
-  font-size: 10px;
-  color: var(--ffx-text);
-}
-.ffxprep-active__hpmp {
-  font-size: 8px;
-  color: #8fa4bc;
-}
-.ffxprep-start {
-  position: absolute;
-  left: 520px;
-  top: 318px;
-  width: 104px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
+  gap: 1.4px;
+  font-family: var(--ig-font-display);
+  font-size: 4.2px;
+  font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--ffx-text-hi);
+  line-height: 1;
+}
+.ffxprep-sg__sphere i {
+  width: 3.6px;
+  height: 3.6px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.6px rgba(11, 10, 18, 0.35);
+}
+.ffxprep-sg__sphere b {
+  font-family: var(--ig-font-numeral);
+  font-size: 5.6px;
+  margin-left: 0.5px;
+}
+.ffxprep-sg__sphere--out {
+  opacity: 0.32;
+}
+.ffxprep-sg__sphere--wanted {
+  box-shadow: 0 1.4px 0 var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+
+/* ---- caption: the node's effect, its cost, and what Enter will do */
+
+.ffxprep-sg__caption {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--ig-font-text);
+  font-size: 5.6px;
+  line-height: 10px;
+  height: 10px;
+  color: var(--ig-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ffxprep-sg__caption b {
+  font-weight: 700;
+}
+.ffxprep-sg__cost {
+  font-family: var(--ig-font-display);
+  font-size: 4.8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  margin-left: 4px;
+}
+.ffxprep-sg__act {
+  font-family: var(--ig-font-display);
+  font-size: 4.8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+/* -------------------------------------------------------------- Equipment */
+
+.ffxprep-gear {
+  margin-bottom: 8px;
+}
+.ffxprep-gear__name {
+  font-family: var(--ig-font-serif);
+  font-size: 10px;
+  font-style: italic;
+}
+.ffxprep-gear__name b {
+  font-family: var(--ig-font-display);
+  font-style: normal;
+  font-size: 6px;
+  letter-spacing: 0.2em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  margin-right: 6px;
+}
+.ffxprep-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.ffxprep-chip {
+  font-family: var(--ig-font-display);
+  font-size: 6.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 0.89px solid var(--ig-ink);
+  opacity: 0.85;
+}
+.ffxprep-chip--empty {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+/* ------------------------------------------------------------------ Items */
+
+.ffxprep-items {
+  max-height: 88px;
+  overflow-y: auto;
+}
+.ffxprep-item-row {
+  display: flex;
+  align-items: center;
+  height: 14px;
+  font-family: var(--ig-font-display);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-bottom: 0.89px solid rgba(11, 10, 18, 0.12);
+}
+.ffxprep-item-row__qty {
+  margin-left: auto;
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.ffxprep-empty {
+  font-family: var(--ig-font-text);
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+/* -------------------------------------------------------------- Overdrive */
+
+.ffxprep-od-name {
+  font-family: var(--ig-font-serif);
+  font-size: 13px;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.ffxprep-od-name b {
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  font-weight: 700;
+}
+.ffxprep-mode-list {
+  max-height: 64px;
+  overflow-y: auto;
+}
+.ffxprep-mode-row {
+  display: flex;
+  align-items: center;
+  height: 15px;
+  padding: 0 4px;
+  font-family: var(--ig-font-display);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   cursor: pointer;
 }
-.ffxprep-start[disabled] {
-  color: var(--ffx-text-dim);
-  cursor: not-allowed;
-  opacity: 0.6;
+.ffxprep-mode-row--selected {
+  background: var(--ig-accent);
+  color: var(--ig-ink);
+  border-radius: 2px;
+}
+.ffxprep-mode-row__tag {
+  margin-left: auto;
+  font-size: 6px;
+  letter-spacing: 0.1em;
+}
+.ffxprep-mode-blurb {
+  margin-top: 6px;
+  font-family: var(--ig-font-text);
+  font-size: 8px;
+  font-style: italic;
+  opacity: 0.75;
 }

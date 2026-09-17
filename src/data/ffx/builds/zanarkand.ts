@@ -7,7 +7,22 @@
  * first playthrough reaches this fight at roughly that many battles).
  * Equipment is loadout **B** from `research/ffx-seymour-flux.md` §7.7.2,
  * which is defined as a diff against the Gagazet loadout — see
- * `./gagazet.ts` for the base. All numbers are `[estimate]` in the
+ * `./gagazet.ts` for the base — with **one armour slot per
+ * member re-assigned to §10.10 of `research/ffx-yunalesca.md`**, "Ward / Proof
+ * loadout (the intended preparation)": **Confuse Ward** for everyone before
+ * Form III. Wakka, Rikku and Kimahri had an empty slot, so for them it is
+ * purely additive; Tidus, Yuna and Lulu had exactly one slot filled by loadout
+ * B, and Auron two, so there the Death/Stone Ward loadout B chose is what gives
+ * way — §10.10 asks for Death protection only for "one designated survivor,
+ * *if not using Zombie*", and this is the Zombie party, whose Death resistance
+ * already blocks Mega Death (§7.1). Everything carried in from Mt. Gagazet (`hp-10`,
+ * `magic-def-10`, `magic-def-5`, `zombie-ward`) is retained, so ability
+ * permanence (§7.7.1, "they can never be removed") holds: only the slots that
+ * were *empty* on arrival at Zanarkand differ. Confuse Ward is the decisive
+ * one — §7.2's Ward arithmetic makes it a **total** block of Mind Blast's
+ * Confuse, `(50 - 50) > rng` never being true — and the full diff, with the
+ * measurements behind it, is in `critic/scratch/zanarkand-build-diff.md`.
+ * All numbers are `[estimate]` in the
  * research's own sense (an authored story-progress snapshot); components
  * (ability grid locations, equipment abilities, catalyst costs) are
  * `[verified]`/`[decompiled]`.
@@ -37,8 +52,8 @@ function tidus(): FFXMemberBuild {
     learnedAbilityIds: ['cheer', 'provoke', 'haste', 'hastega', 'slow', 'delay-attack', 'delay-buster', 'flee', 'talk'],
     equipment: {
       weapon: { name: 'Baroque Sword', slots: 3, autoAbilities: ['strength-10'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: the 3rd slot fills with Death Ward.
-      armor: { name: 'Glorious Shield', slots: 3, autoAbilities: ['hp-10', 'zombie-ward', 'death-ward'] },
+      // §10.10 [ffx-yunalesca.md:729-737] fills the one free slot: Confuse Ward.
+      armor: { name: 'Glorious Shield', slots: 3, autoAbilities: ['hp-10', 'zombie-ward', 'confuse-ward'] },
     },
     overdrive: { gauge: 35, mode: 'stoic', unlockedModes: ['stoic', 'warrior'], unlockedOverdriveIds: ['spiral-cut', 'slice-and-dice'] },
     sphereGrid: { position: 'tidus-sphere-46', activatedNodeIds: [], sLv: 46, ap: 0, spheres: {} },
@@ -76,8 +91,9 @@ function yuna(): FFXMemberBuild {
     ],
     equipment: {
       weapon: { name: "Yuna's Staff", slots: 1, autoAbilities: [], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: the 4th slot fills with Death Ward.
-      armor: { name: 'Blessed Ring', slots: 4, autoAbilities: ['magic-def-10', 'magic-def-5', 'zombie-ward', 'death-ward'] },
+      // §10.10 fills the one free slot: Confuse Ward (the "Everyone" row beats
+      // the caster's Silence Ward when only one slot is free).
+      armor: { name: 'Blessed Ring', slots: 4, autoAbilities: ['magic-def-10', 'magic-def-5', 'zombie-ward', 'confuse-ward'] },
     },
     overdrive: { gauge: 45, mode: 'healer', unlockedModes: ['stoic', 'healer'], unlockedOverdriveIds: ['grand-summon'] },
     sphereGrid: { position: 'yuna-sphere-44', activatedNodeIds: [], sLv: 44, ap: 0, spheres: {} },
@@ -96,8 +112,8 @@ function auron(): FFXMemberBuild {
     learnedAbilityIds: ['power-break', 'armor-break', 'magic-break', 'mental-break', 'threaten', 'guard', 'sentinel'],
     equipment: {
       weapon: { name: "Auron's Katana", slots: 1, autoAbilities: ['piercing'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: 3rd slot -> Death Ward, 4th -> Stone Ward.
-      armor: { name: 'Blessed Bracer', slots: 4, autoAbilities: ['hp-10', 'zombie-ward', 'death-ward', 'stone-ward'] },
+      // §10.10: the 4th slot carries Confuse Ward; Death Ward is kept.
+      armor: { name: 'Blessed Bracer', slots: 4, autoAbilities: ['hp-10', 'zombie-ward', 'death-ward', 'confuse-ward'] },
     },
     overdrive: { gauge: 55, mode: 'warrior', unlockedModes: ['stoic', 'warrior'], unlockedOverdriveIds: ['dragon-fang', 'shooting-star'] },
     sphereGrid: { position: 'auron-sphere-48', activatedNodeIds: [], sLv: 48, ap: 0, spheres: {} },
@@ -116,8 +132,8 @@ function wakka(): FFXMemberBuild {
     learnedAbilityIds: ['dark-attack', 'silence-attack', 'sleep-attack', 'dark-buster', 'silence-buster', 'sleep-buster', 'aim'],
     equipment: {
       weapon: { name: "Wakka's Ball", slots: 1, autoAbilities: [], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: 2nd slot -> Death Ward, 3rd left empty.
-      armor: { name: 'Glorious Armguard', slots: 3, autoAbilities: ['hp-10', 'death-ward'] },
+      // §10.10: the empty 3rd slot takes Confuse Ward.
+      armor: { name: 'Glorious Armguard', slots: 3, autoAbilities: ['hp-10', 'death-ward', 'confuse-ward'] },
     },
     overdrive: { gauge: 30, mode: 'victor', unlockedModes: ['stoic', 'warrior', 'victor'], unlockedOverdriveIds: ['element-reels'] },
     sphereGrid: { position: 'wakka-sphere-44', activatedNodeIds: [], sLv: 44, ap: 0, spheres: {} },
@@ -137,8 +153,8 @@ function lulu(): FFXMemberBuild {
     learnedAbilityIds: ['fire', 'fira', 'firaga', 'blizzard', 'blizzara', 'thunder', 'thundara', 'water', 'watera', 'bio', 'focus', 'scan'],
     equipment: {
       weapon: { name: "Lulu's Moogle", slots: 1, autoAbilities: ['magic-10'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: 3rd slot -> Death Ward.
-      armor: { name: 'Glorious Bangle', slots: 3, autoAbilities: ['hp-10', 'magic-def-10', 'death-ward'] },
+      // §10.10 fills the one free slot: Confuse Ward.
+      armor: { name: 'Glorious Bangle', slots: 3, autoAbilities: ['hp-10', 'magic-def-10', 'confuse-ward'] },
     },
     overdrive: { gauge: 40, mode: 'stoic', unlockedModes: ['stoic'], unlockedOverdriveIds: ['fury'] },
     sphereGrid: { position: 'lulu-sphere-44', activatedNodeIds: [], sLv: 44, ap: 0, spheres: {} },
@@ -157,8 +173,8 @@ function rikku(): FFXMemberBuild {
     learnedAbilityIds: ['steal', 'use', 'mix', 'luck', 'flee', 'nab-gil'],
     equipment: {
       weapon: { name: "Rikku's Claw", slots: 1, autoAbilities: [], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: 2nd slot -> Death Ward, 3rd left empty.
-      armor: { name: 'Glorious Targe', slots: 3, autoAbilities: ['hp-10', 'death-ward'] },
+      // §10.10: the empty 3rd slot takes Confuse Ward.
+      armor: { name: 'Glorious Targe', slots: 3, autoAbilities: ['hp-10', 'death-ward', 'confuse-ward'] },
     },
     overdrive: { gauge: 25, mode: 'stoic', unlockedModes: ['stoic', 'comrade'], unlockedOverdriveIds: ['mix'] },
     sphereGrid: { position: 'rikku-sphere-42', activatedNodeIds: [], sLv: 42, ap: 0, spheres: {} },
@@ -177,8 +193,8 @@ function kimahri(): FFXMemberBuild {
     learnedAbilityIds: ['lancet', 'scan', 'jump', 'mighty-guard', 'white-wind'],
     equipment: {
       weapon: { name: "Kimahri's Spear", slots: 2, autoAbilities: ['piercing', 'sensor'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
-      // §7.7.2 loadout B: 2nd slot -> Death Ward, 3rd left empty.
-      armor: { name: 'Glorious Armlet', slots: 3, autoAbilities: ['hp-10', 'death-ward'] },
+      // §10.10: the empty 3rd slot takes Confuse Ward.
+      armor: { name: 'Glorious Armlet', slots: 3, autoAbilities: ['hp-10', 'death-ward', 'confuse-ward'] },
     },
     overdrive: { gauge: 35, mode: 'stoic', unlockedModes: ['stoic'], unlockedOverdriveIds: ['jump', 'mighty-guard', 'white-wind'] },
     sphereGrid: { position: 'kimahri-sphere-42', activatedNodeIds: [], sLv: 42, ap: 0, spheres: {} },

@@ -597,6 +597,13 @@ export interface Combatant {
   scanText?: string;
   /** Set when the sensor text is in-world advice that the fight does not honour (Yunalesca's Holy "weakness"). QA must not "fix" it. */
   misleadingSensor?: boolean;
+  /**
+   * True once Sensor / Scan has revealed this combatant **for the rest of the
+   * battle**. The FFX-2 boss strip prints a `SCAN` hint instead of HP numerals
+   * until this flips, so the engine sets it alongside the `'sensor'` event and
+   * never clears it — reveal survives KO, form changes and a chained link.
+   */
+  revealed?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -1813,13 +1820,33 @@ export type BattleEvent =
       cause?: string;
     })
   | (BattleEventBase & { type: 'message'; text: string; kind: MessageKind })
-  /** Sensor / Scan revealed an enemy. The HUD opens the info panel. */
+  /**
+   * Sensor / Scan revealed an enemy. The HUD opens the info panel.
+   *
+   * The numeric payload is a **snapshot at reveal time** — it exists so the
+   * panel can print numerals from the event alone, without reaching into
+   * `state()`. Live values keep coming from `state().combatants[targetId]`,
+   * which stays readable because the reveal also sets
+   * {@link Combatant.revealed}. Every payload field is optional: an enemy the
+   * fight keeps secret (`immune-to-sensor`, or `flags.hideHpBar`) is still
+   * announced, just with no numbers — X-2's own "- - -" row.
+   */
   | (BattleEventBase & {
       type: 'sensor';
       targetId: CombatantId;
       /** True for the fuller Scan panel, false for the one-line Sensor bar. */
       full: boolean;
       text: string;
+      /** Current HP at reveal time. Omitted when the numerals stay secret. */
+      hp?: number;
+      /** Max HP at reveal time. Omitted when the numerals stay secret. */
+      maxHp?: number;
+      /** Current MP at reveal time. Omitted when the numerals stay secret. */
+      mp?: number;
+      /** Max MP at reveal time. Omitted when the numerals stay secret. */
+      maxMp?: number;
+      /** Elements the target takes extra damage from. Empty array = none, absent = not read. */
+      weaknesses?: ElementId[];
     })
   | (BattleEventBase & { type: 'summon'; aeonId: string; combatantId: CombatantId; ownerId: CombatantId })
   | (BattleEventBase & {

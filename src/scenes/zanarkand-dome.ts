@@ -101,11 +101,11 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   // party-side rigs swing the view axis left, so they are the two that cost the
   // painting plane the most margin; walking them 1.15 units back toward the
   // hall's axis hands some of that margin back.
-  party: { position: [0.6, 2.15, 8.1], lookAt: [-0.3, 1.5, 0.7], fov: 32, sway: 0.7 },
+  party: { position: [0.6, 2.15, 8.1], lookAt: [-0.05, 1.5, 0.7], fov: 32, sway: 0.7 },
   enemy: { position: [0.7, 2.25, 7.6], lookAt: [1.9, 1.95, -2.0], fov: 32, sway: 0.7 },
   /** The Yunalesca angle: low on the floor, tilted up at the dais. */
   yunalesca: { position: [0.7, 1.0, 6.2], lookAt: [2.05, 1.2, -2.4], fov: 30, sway: 0.5 },
-  victory: { position: [0.65, 2.1, 8.3], lookAt: [-0.25, 1.55, 0.9], fov: 32, sway: 1.2 },
+  victory: { position: [0.65, 2.1, 8.3], lookAt: [0.0, 1.55, 0.9], fov: 32, sway: 1.2 },
 };
 
 /**
@@ -118,22 +118,32 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * the actors are handed a gold bounce and a cold violet rim.
  *
  * **In front of the sphere, not on it.** The painted sphere's disc — measured
- * off `public/art/backdrops/zanarkand-dome.png` — runs u 0.09..0.38 and
- * v 0.62..0.90 of the image, which at the `idle` rig projects to the frame's
- * bottom-left corner: screen x 0..0.31, y 0.72..1.0. The arc used to sit far
+ * off `public/art/backdrops/zanarkand-dome.png`, whose gold pixels bound to
+ * u 0.10..0.36, v 0.635..0.86 — projects at the `idle` rig to the frame's
+ * bottom-left corner: screen x 0.00..0.32, y 0.72..1.0. The arc used to sit far
  * enough left that the middle slot's boots landed inside that disc, and the one
  * bright thing in the lower half of the painting was cut in half by a pair of
- * feet. Every slot here is shifted right until the *widest* figure's silhouette
- * clears x 0.31 with room to spare — the middle slot, the leftmost of the
- * three, now stands at screen x ≈ 0.35. The arc keeps its shape and stays
- * inside the command window's quarter of the frame. The `party` and `victory`
- * rigs moved with it (see {@link RIGS}); nothing else in the scene is keyed to
- * these positions.
+ * feet.
+ *
+ * The whole arc is shifted **+0.28 in x** from the version that was solved
+ * against the grey stand-in painting. On that matte the disc did not exist, so
+ * a leftmost figure whose silhouette ran from screen x 0.308 to 0.394 cost
+ * nothing; against the restored painting its left shoulder overlapped the
+ * disc's right edge (0.323) by a hair, and — worse — sat inside
+ * {@link sphereHalo}, which is the additive quad that puts the sphere's own
+ * emission back on the paint. A figure standing in the halo picks up a warm
+ * fringe the cut-out shader never asked for. At the numbers below the leftmost
+ * silhouette starts at screen x ≈ 0.35 and the halo dies by 0.34, so nothing in
+ * the party touches the sphere or its glow.
+ *
+ * The arc keeps its shape and stays inside the command window's quarter of the
+ * frame. The `party` and `victory` rigs moved with it (see {@link RIGS});
+ * nothing else in the scene is keyed to these positions.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [-0.15, 0, 1.8],
-  [-1.1, 0, 0.75],
-  [0.2, 0, -0.75],
+  [0.13, 0, 1.8],
+  [-0.82, 0, 0.75],
+  [0.48, 0, -0.75],
   // reserve
   [-11.6, 0, 2.8],
   [-12.5, 0, 1.2],
@@ -256,7 +266,7 @@ function wetFloorCanvas(gold: string, violet: string, deep: string): HTMLCanvasE
 
   /**
    * Reflected light, smeared along +z (v in texture space). The gold is kept to
-   * the left **third** and the violet is given the rest.
+   * the left **two fifths** and the violet is given the rest.
    *
    * It used to run gold most of the way across, on the theory that the sphere is
    * the only warm source so the water owes it a reflection everywhere. Against
@@ -270,21 +280,30 @@ function wetFloorCanvas(gold: string, violet: string, deep: string): HTMLCanvasE
    */
   const smear = ctx.createLinearGradient(0, 0, size, 0);
   smear.addColorStop(0, gold);
-  smear.addColorStop(0.26, gold);
-  smear.addColorStop(0.58, violet);
+  // The gold runs to 0.42, not 0.26. The texture's u axis is world x across the
+  // whole plane, so a stop at 0.26 put the warm half of the water out at
+  // x < -7 — left of everything the camera actually frames, and the party stood
+  // on the cold half with the room's only warm source directly beside them.
+  smear.addColorStop(0.42, gold);
+  smear.addColorStop(0.68, violet);
   smear.addColorStop(1, violet);
-  ctx.globalAlpha = 0.7;
+  ctx.globalAlpha = 0.6;
   ctx.fillStyle = smear;
   ctx.fillRect(0, 0, size, size);
   ctx.globalAlpha = 1;
 
-  // Vertical smears: the actual "reflection" cue.
+  // Vertical smears: the actual "reflection" cue, and there are 220 of them.
+  // The base colour above went *down* for the restored painting and this went
+  // *up*, which is the whole idea — a smooth wash is not water, it is haze lying
+  // on the floor. A mirror is *structure*: with the base dark and the bands
+  // bright the plane carries the painting's own contrast range instead of
+  // averaging to a lavender sheet across the bottom of the frame.
   ctx.globalCompositeOperation = 'lighter';
-  for (let i = 0; i < 110; i++) {
+  for (let i = 0; i < 220; i++) {
     const x = Math.random() * size;
     const w = 2 + Math.random() * 18;
-    const warm = x < size * 0.34;
-    const a = (warm ? 0.09 : 0.045) + Math.random() * 0.12;
+    const warm = x < size * 0.46;
+    const a = (warm ? 0.26 : 0.12) + Math.random() * 0.26;
     const g = ctx.createLinearGradient(0, 0, 0, size);
     g.addColorStop(0, 'rgba(0,0,0,0)');
     g.addColorStop(0.5, warm ? `rgba(255,214,150,${a})` : `rgba(196,186,255,${a})`);
@@ -294,10 +313,10 @@ function wetFloorCanvas(gold: string, violet: string, deep: string): HTMLCanvasE
   }
 
   // Ripple lines across the smears — this is what stops it reading as a blur.
-  for (let i = 0; i < 70; i++) {
+  for (let i = 0; i < 170; i++) {
     const y = Math.random() * size;
     const h = 1 + Math.random() * 2.5;
-    ctx.fillStyle = `rgba(214,204,255,${0.03 + Math.random() * 0.07})`;
+    ctx.fillStyle = `rgba(214,204,255,${0.06 + Math.random() * 0.17})`;
     ctx.fillRect(0, y, size, h);
   }
   ctx.globalCompositeOperation = 'source-over';
@@ -454,14 +473,16 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     // The scene owns its floor; see the class doc above.
     ground: false as const,
     fog: { near: 16, far: 62, colorMix: 0.3 },
-    // Thin sheets, and thinner than they were. Mist is the scene's cheapest way
-    // to gain depth and its cheapest way to lose a painting: three sheets at the
-    // old values put roughly a quarter of a stop of haze over the *whole* lower
-    // half, and the lower half is where the sphere is.
+    // Thin sheets, and a third of what they were. Mist is the scene's cheapest
+    // way to gain depth and its cheapest way to lose a painting, and a sheet's
+    // cost scales with the display transform laid on top of it: at a correct
+    // ~2.2 encode these three were putting a quarter of a stop of haze over the
+    // *whole* lower half, which is where the sphere is. Composited over paint
+    // that already contains its own atmosphere, almost nothing is enough.
     fogPlanes: [
-      { z: -30, y: 4.4, width: 66, height: 20, opacity: 0.1, speed: 0.006 },
-      { z: -17, y: 2.4, width: 44, height: 11, opacity: 0.06, speed: 0.013 },
-      { z: -7.0, y: 1.3, width: 30, height: 6, opacity: 0.035, speed: 0.026, additive: true },
+      { z: -30, y: 4.4, width: 66, height: 20, opacity: 0.028, speed: 0.006 },
+      { z: -17, y: 2.4, width: 44, height: 11, opacity: 0.011, speed: 0.013 },
+      { z: -7.0, y: 1.3, width: 30, height: 6, opacity: 0.004, speed: 0.026, additive: true },
     ],
     // Deliberately *not* the fog colour, and deliberately not black either.
     // Any sliver a rig swings past the painting's edge should read as the far
@@ -488,25 +509,35 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     palette: litPalette(backdrop.palette),
     // The sphere: low, far left, slightly into the hall.
     keyFrom: [-9.5, 3.4, -7.5],
-    // The key is the *sphere*, and it is a gold key in a violet room — it has to
-    // be readable as a direction without becoming the room's exposure. Cut back
-    // from 1.85, which on the restored painting drove the 3D floor a full stop
-    // warmer than the water behind it.
-    keyIntensity: 1.5,
+    // The key is the *sphere*, and it is a gold key in a violet room. Every
+    // intensity in this rig is a little over half what it was, and the reason is
+    // the grade, not taste: this rig was tuned against a frame that was being
+    // written to the canvas *linearly* (see the palette's note 1), so it had to
+    // burn light to be seen at all. With the display transform put right, the
+    // same values composited a stop and a half over the painting — the frame
+    // measured 0.475 mean luma against the paint's 0.337, with 55k clipped
+    // pixels per megapixel. 1.12 puts the lit floor and the pillar brackets back
+    // onto the paint they stand in front of, and keeps the direction: warm from
+    // frame-left, and nothing else in the room warm at all.
+    keyIntensity: 1.12,
     // The oculus and the twilight between the right-hand pillars.
     rimFrom: [7.4, 6.2, 3.0],
     rimColor: 0xc7c4ff,
-    rimIntensity: 1.25,
-    // …and the violet comes up to meet it, so the balance between the sphere's
-    // gold and the dome's twilight is the painting's balance and not a warm wash.
-    fillIntensity: 0.84,
-    ambientIntensity: 0.46,
+    rimIntensity: 0.72,
+    // …and the violet is held in proportion to it, so the balance between the
+    // sphere's gold and the dome's twilight stays the painting's balance and
+    // does not become a warm wash. These move *with* the key, never on their
+    // own: a gold key raised by itself is how two earlier passes turned a violet
+    // hall amber.
+    fillIntensity: 0.54,
+    ambientIntensity: 0.3,
     // The fill and ambient are the *painting's* violet twilight, and this matte
-    // is a bright one — a hall lit to roughly 40% luma with a pink-violet sky
-    // behind every colonnade. Lit at the values a near-black hall wanted, the
-    // 3D floor and pillars sat a full stop under the painting behind them and
-    // the seam showed. These are set to the painting's own mid-tones.
-    luma: { key: 0.86, fill: 0.56, rim: 0.9, ambient: 0.42 },
+    // is a bright one: rgb 90/81/125 at 0.337 luma, its colonnades at 0.273 and
+    // the twilight between them at 0.394. These lumas are set to those mid-tones
+    // so the 3D floor and the pillar brackets sit on the paint behind them
+    // rather than a stop under it, and the intensities above decide how much of
+    // that hue actually lands.
+    luma: { key: 0.9, fill: 0.62, rim: 0.92, ambient: 0.5 },
     shadows: low ? false : { mapSize: 1024, area: 12, radius: 3.8, bias: -0.0014 },
   });
   group.add(lights.group);
@@ -516,7 +547,7 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    * (spells and impacts flicker it), so the room's standing warm source is a
    * second light the scene owns and breathes itself.
    */
-  const spherePractical = new PointLight(0xffb867, 1.9, 19, 1.8);
+  const spherePractical = new PointLight(0xffb867, 1.4, 21, 1.8);
   spherePractical.position.set(-8.0, 1.7, -9.0);
   spherePractical.name = 'fayth-sphere';
   group.add(spherePractical);
@@ -536,7 +567,7 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    * above forces to gold for exactly the same reason; a `PointLight` cannot
    * touch them, because painted cut-outs are unlit by design.
    */
-  const sphereBounce = new PointLight(0xffc178, 0.98, 8.0, 2.0);
+  const sphereBounce = new PointLight(0xffc178, 0.6, 8.4, 2.0);
   sphereBounce.position.set(-3.6, 0.6, 0.9);
   sphereBounce.name = 'fayth-sphere-bounce';
   group.add(sphereBounce);
@@ -546,7 +577,7 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     wetFloorCanvas(
       '#a8763c',
       `#${new Color(normaliseLuma(backdrop.palette.horizon, 0.42)).getHexString()}`,
-      `#${new Color(normaliseLuma(backdrop.palette.ground, 0.16)).getHexString()}`,
+      `#${new Color(normaliseLuma(backdrop.palette.ground, 0.12)).getHexString()}`,
     ),
   );
   floorTex.wrapS = floorTex.wrapT = ClampToEdgeWrapping;
@@ -557,25 +588,36 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    * from the horizon down, and the painting's lower third is where the sphere
    * is — the one bright thing in the shot.
    *
-   * And it has to fall off **faster than it used to**, because "the horizon
-   * down" is not a figure of speech here. The painted sphere sits at screen
-   * y 0.72..0.95, which is well below the 3D horizon line (y ≈ 0.40 at `idle`),
-   * so every pixel of the painted sphere has this plane in front of it. At the
-   * old falloff the plane still carried 20–50% alpha out there and the sphere
-   * was being *veiled* — warm-milky when the floor was tinted bright, dull grey
-   * once it was tinted dark. Dying by 0.4 of the radius instead of 0.76 keeps
-   * the pool under the fighters, where it is doing work, and hands the sphere's
-   * quarter of the frame back to the painting.
+   * The falloff is a compromise between two real failures, and the shape below
+   * is where it settles.
+   *
+   * *Too far* and the painted sphere is veiled: it sits at screen y 0.72..1.0,
+   * well below the 3D horizon (y ≈ 0.40 at `idle`), and the floor point that
+   * projects onto the disc's centre is only (-2.9, 0, 1.1) — squarely inside
+   * the pool. A plane still carrying 40% alpha out there turns a cracked gold
+   * dome into a flat terracotta hemisphere.
+   *
+   * *Too near* — which is what the previous pass cut it to, dying by 0.4 of the
+   * radius — and there is no wet floor left to catch the sphere's reflection at
+   * all. The bottom of the frame measured 0.244 luma against the painting's own
+   * waterline at 0.383: a full stop of black where the matte has moving water.
+   *
+   * So it keeps a bright core out to 0.22 (under the fighters, where the plane
+   * is doing its actual job of catching shadows and pools), then falls hard
+   * through 0.5 and trails a thin 6% out to two thirds. That thin tail is what
+   * the sphere's reflection needs to look like it is lying *on* something, and
+   * at 6% it lifts the painted disc by under three values.
    */
   const floorAlpha = paintedCanvasTexture(
     radialCanvas(
       512,
       [
         [0, 1],
-        [0.1, 0.9],
-        [0.24, 0.5],
-        [0.4, 0.17],
-        [0.6, 0.03],
+        [0.12, 0.92],
+        [0.22, 0.66],
+        [0.34, 0.3],
+        [0.48, 0.12],
+        [0.68, 0.03],
         [1, 0],
       ],
       true,
@@ -586,14 +628,28 @@ export const buildZanarkandDomeScene: SceneFactory = async (
   floorAlpha.wrapS = floorAlpha.wrapT = ClampToEdgeWrapping;
 
   const floor = new Mesh(
-    new PlaneGeometry(32, 27, 1, 1),
+    // 26 x 23, not 32 x 27. The radial alpha is in *texture* space, so the
+    // plane's size is what sets the pool's radius in world units: at 32 the
+    // 12% tail was still lying over the middle of the painted water, and the
+    // frame's near-centre band measured 0.249 luma against the painting's 0.384
+    // — a dim plane spread over bright paint. Shrunk, the pool still reaches a
+    // unit past the widest party slot, which is all it is for.
+    new PlaneGeometry(26, 23, 1, 1),
     new MeshLambertMaterial({
       map: floorTex,
       alphaMap: floorAlpha,
       // The painting's water is a *dark* mirror carrying bright reflections, not
-      // a pale floor: at 0.64 this plane was brighter than the water it stands
-      // in for and the join showed as a milky step.
-      color: new Color(normaliseLuma(backdrop.palette.ground, 0.5)),
+      // a pale floor, and this number is the line between the two. Too high and
+      // the plane veils the painted sphere it lies in front of: at 0.72 the
+      // disc's darkest pixel went from 0.08 luma to 0.33, which is a cracked
+      // gold dome with its cracks filled in. Too low and the near half of the
+      // frame goes dead against a painting whose own waterline runs at 0.416.
+      // 0.44 is a base the lit rig multiplies up to about the paint, with the
+      // *reflections* — the smears below and the texture's own bands — carrying
+      // the brightness instead of the base colour. The frame's near-water band
+      // measures 0.334 against the painting's 0.416, which is the gap the two
+      // near-black pillar brackets and the vignette account for.
+      color: new Color(normaliseLuma(backdrop.palette.ground, 0.44)),
       transparent: true,
       depthWrite: false,
     }),
@@ -601,7 +657,7 @@ export const buildZanarkandDomeScene: SceneFactory = async (
   floor.rotation.x = -Math.PI / 2;
   // Nudged right and toward the camera with the pool: the fighters are the only
   // reason this plane exists, and everything left of x ≈ -6 is the sphere's.
-  floor.position.set(-0.5, 0, 2.6);
+  floor.position.set(0.1, 0, 2.6);
   floor.receiveShadow = true;
   floor.renderOrder = -40;
   floor.name = 'wet-floor';
@@ -671,19 +727,44 @@ export const buildZanarkandDomeScene: SceneFactory = async (
   /**
    * The halo: gold, **tight**, and quiet.
    *
-   * A soft blob wider than the disc it sits on is not a halo, it is a veil: the
-   * previous 1.24 / 0.4 version spread a low-alpha wash across the whole
-   * lower-left quadrant and lifted the painted sphere's *shadows* as much as its
+   * A soft blob wider than the disc it sits on is not a halo, it is a veil: a
+   * 1.24-scale version spread a low-alpha wash across the whole lower-left
+   * quadrant and lifted the painted sphere's *shadows* as much as its
    * highlights, which is exactly how a cracked gold dome turns into a flat
-   * terracotta hemisphere. Pulled inside the disc's own footprint and taken down
-   * to a fifth, it now adds value where the paint is already bright and leaves
-   * the cracks their contrast.
+   * terracotta hemisphere. Held inside the disc's own footprint, it adds value
+   * where the paint is already bright and leaves the cracks their contrast.
+   *
+   * The number here is the peak of the breath driven in `update`, not a second
+   * opinion about it — see the note there. It is small because an additive quad
+   * over paint that is already the brightest thing in the frame is the fastest
+   * way in this scene to turn a light source into a white hole: at 0.28 the
+   * sphere's quadrant composited at 0.852 mean luma against the painting's
+   * 0.387, i.e. blown flat.
    */
-  const sphereHalo = sphereGlow(0xffb95c, 0.34, 1.12, BACKDROP.distance + 1.0, -13);
+  const sphereHalo = sphereGlow(0xffb95c, 0.062, 1.02, BACKDROP.distance + 1.0, -13);
+  // Biased **down** the disc. The painting's dome is brightest across its lower
+  // belly (its own brightest pixel is at v 0.83) and carries a hard painted rim
+  // along its top edge at v ≈ 0.66; a halo centred on the disc's geometric
+  // middle put its own peak on that rim and clipped a 1300-px hole there, which
+  // is the painted silhouette of the sphere being erased by the sphere's glow.
+  // Biased down, and with the pair now running at about half the alpha the
+  // grey-matte pass used, that hole measures 26 px at `idle` — the painting
+  // itself clips 34 px on the same rim at this resolution, so the added glow now
+  // does less damage to the paint than the paint does to itself.
+  sphereHalo.position.y -= SPHERE_ON_PAINTING.h * 0.09;
   sphereHalo.name = 'sphere-halo';
   group.add(sphereHalo);
-  /** The core: small, near-white, and the only thing here meant to bloom. */
-  const sphereCore = sphereGlow(0xfff0d0, 0.44, 0.52, BACKDROP.distance + 1.2, -12);
+  /**
+   * The core: small, near-white, and the brightest thing the scene lays on the
+   * paint. It stays *inside* the painted dome's bright belly, and it is kept
+   * quiet enough that it lifts the paint toward the bloom threshold rather than
+   * straight through it — an additive quad that crosses the threshold on top of
+   * paint already sitting at 0.95 does not make the sphere glow, it punches a
+   * white hole where the sphere was. With the grade's highlight rolloff (see
+   * `palette` note 3) the disc still runs from 0.11 luma in its cracks to 0.97
+   * at its belly, which is the contrast range the paint was made in.
+   */
+  const sphereCore = sphereGlow(0xfff0d0, 0.085, 0.34, BACKDROP.distance + 1.2, -12);
   sphereCore.position.y += SPHERE_ON_PAINTING.h * 0.08;
   sphereCore.name = 'sphere-core';
   group.add(sphereCore);
@@ -694,25 +775,33 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    * stretched additive blob laid on the water buys ninety percent of the read
    * for one quad, and it is the single element that makes the floor look wet.
    *
-   * It is aimed, not placed: it runs along +z out of the painted disc's own
-   * screen column (x ≈ 0.15 at `idle`) and past the party's feet, so the gold on
-   * the water is plainly the sphere's and not an unexplained warm patch.
+   * It is aimed, not placed: it runs out of the painted disc toward the camera
+   * and past the party's feet, so the gold on the water is plainly the sphere's
+   * and not an unexplained warm patch.
    *
-   * **Narrow is the whole point.** At 8.8 units wide and 0.68 opacity this quad
-   * was seen almost edge-on, which spread it into a horizontal band across the
-   * bottom of the frame rather than a streak running away from the camera — a
-   * reflection you can only read as a reflection if it is longer than it is
-   * wide. Halved in width, moved back under the disc, and taken down about a
-   * third in value: still the second-brightest thing in the lower half of the
-   * frame, but now shaped like a smear on wet stone.
+   * **Beside the disc, not across it.** This is the one thing the framing forces
+   * and it is easy to get backwards. The painting's sphere occupies screen
+   * y 0.72..1.0 at `idle` — the painted water *underneath* it is cropped off the
+   * bottom of the frame — so a smear laid in the disc's own screen column has
+   * nothing to lie on but the disc, and every version that did it turned the
+   * lower left milky: the whole quadrant measured no pixel darker than 0.37 luma
+   * against the painting's 0.12. Moved one column to the right, it runs on the
+   * water *between* the sphere and the party, which is the only water in frame
+   * the sphere can plausibly be reflected in, and the disc keeps its own blacks.
+   *
+   * **Narrow is the other half.** Wide and bright, this quad is seen almost
+   * edge-on and spreads into a horizontal band across the bottom of the frame
+   * rather than a streak running away from the camera. 3.2 units across 25 long
+   * is roughly eight to one, and a reflection only reads as a reflection if it
+   * is much longer than it is wide.
    */
   const sphereReflection = new Mesh(
     new PlaneGeometry(1, 1),
     new MeshBasicMaterial({
       map: blobTex,
-      color: 0xffdca8,
+      color: 0xffca80,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.34,
       depthWrite: false,
       blending: AdditiveBlending,
       fog: false,
@@ -722,21 +811,23 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    * **Yawed, not axis-aligned.** A streak laid straight down +z holds one world
    * x while the frame's own left edge walks outward with distance, so on screen
    * it slides off the side of the picture before it has run half its length —
-   * which is why the last version of this quad was invisible at the `idle` rig
-   * even at full brightness. Solved on the screen instead: the sphere's column
-   * is screen x ≈ 0.13, and the floor points that project there are
-   * (-3.3, 0, 1) near the camera and (-7.9, 0, -13) back at the colonnade. The
-   * quad is laid along that line — 18° off the hall's axis — so the reflection
-   * stays under the painted disc for its whole run and reads as one smear of
-   * gold receding on wet stone.
+   * which is why an earlier version of this quad was invisible at the `idle` rig
+   * even at full brightness. Solved on the screen instead. The target column is
+   * the strip immediately right of the painted disc (screen x ≈ 0.30..0.40), and
+   * the floor points that project there are about (-2.0, 0, 2) near the camera
+   * and (-5.4, 0, -13) back at the colonnade — the frame's edge walks outward
+   * with distance, so holding a screen column means drifting 3.4 units left over
+   * that run. The quad is laid along exactly that line, 13° off the hall's axis,
+   * so the gold stays in one column of the picture for its whole length and
+   * reads as a single smear receding on wet stone.
    *
    * `rotation.z` on a plane already tipped flat by `rotation.x = -π/2` is a yaw
    * about world Y (three.js composes Euler 'XYZ' as `RX·RY·RZ`, so the Z spin
    * happens in the plane's own surface first).
    */
-  sphereReflection.rotation.set(-Math.PI / 2, 0, 0.315);
-  sphereReflection.scale.set(5.6, 24, 1);
-  sphereReflection.position.set(-5.5, 0.012, -5.6);
+  sphereReflection.rotation.set(-Math.PI / 2, 0, 0.223);
+  sphereReflection.scale.set(3.2, 25, 1);
+  sphereReflection.position.set(-3.6, 0.012, -5.0);
   sphereReflection.renderOrder = -30;
   sphereReflection.name = 'sphere-reflection';
   group.add(sphereReflection);
@@ -751,17 +842,17 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     new PlaneGeometry(1, 1),
     new MeshBasicMaterial({
       map: blobTex,
-      color: 0xffd7a6,
+      color: 0xffc98a,
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.1,
       depthWrite: false,
       blending: AdditiveBlending,
       fog: false,
     }),
   );
   nearWet.rotation.x = -Math.PI / 2;
-  nearWet.scale.set(8.0, 8.0, 1);
-  nearWet.position.set(-2.9, 0.01, 1.4);
+  nearWet.scale.set(5.6, 7.4, 1);
+  nearWet.position.set(-2.6, 0.01, 1.4);
   nearWet.renderOrder = -31;
   nearWet.name = 'sphere-reflection-near';
   group.add(nearWet);
@@ -773,7 +864,7 @@ export const buildZanarkandDomeScene: SceneFactory = async (
       map: clampTexture(paintedCanvasTexture(ringCanvas())),
       color: 0xffd48a,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.145,
       depthWrite: false,
       blending: AdditiveBlending,
       fog: false,
@@ -787,7 +878,21 @@ export const buildZanarkandDomeScene: SceneFactory = async (
   group.add(daisRing);
 
   // ------------------------------------------------------------- light shafts
-  const beamTex = clampTexture(paintedCanvasTexture(beamCanvas()));
+  // A harder horizontal feather than the default. At 0.34 the three quads
+  // overlapped into one broad pale cone that filled the middle of the frame and
+  // read as haze; the painting's own light is a *shaft*, with an edge.
+  const beamTex = clampTexture(paintedCanvasTexture(beamCanvas(0.17)));
+  /**
+   * **A shaft has an edge; haze does not.** These are additive quads over paint
+   * that already contains its own light, so the painting is the exposure
+   * reference and not the quad — the band the main shaft crosses composites at
+   * 0.313 mean luma against the painting's own 0.273 for the same band, which is
+   * about as far over as a light the painting does not contain is allowed to go.
+   * What buys the read at that budget is the *feather*, not the alpha: at the
+   * stock 0.34 horizontal softness the three quads dissolve into one broad pale
+   * cone standing in the middle of the hall, and at 0.17 the same energy has
+   * sides and lands as light falling through a hole in a roof.
+   */
   const shaftSpecs: Array<{
     w: number;
     h: number;
@@ -798,23 +903,43 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     speed: number;
   }> = [
     // The main shaft off the oculus, landing left of the dais. At `idle` it
-    // falls down screen x ≈ 0.36 — directly below the painted oculus, which
-    // sits at x ≈ 0.33 — so the 3D shaft reads as the continuation of the
-    // painted one rather than as a second, unexplained light.
-    // Lifted and lengthened so that the part of it crossing the *painted*
-    // oculus is its faint upper tail, not the bright head six percent down the
-    // beam texture. A godray drawn additively over the light source it comes out
-    // of is the fastest way to blow a highlight in this scene: at y 8.2 / h 22
-    // this shaft was laying ~0.29 of extra additive value straight onto paint
-    // that is already at 0.95, and the oculus went from a sun to a white hole.
-    { w: 5.6, h: 30, pos: [-2.6, 11.0, -14.0], tilt: 0.17, yaw: 0.1, opacity: 0.6, speed: 0.31 },
+    // falls down screen x ≈ 0.36, and the painted oculus sits at screen
+    // x 0.345..0.418 — so the 3D shaft reads as the continuation of the painted
+    // one rather than as a second, unexplained light.
+    //
+    // **Its top edge is solved so the quad stops exactly where the painted
+    // oculus stops.** A godray drawn additively over the light source it comes
+    // out of is the fastest way to blow a highlight in this scene, and this one
+    // kept doing it: the painting's oculus is rgb 242/205/253 — luma 0.847 with
+    // its blue channel already two values off the top — and a shaft crossing it
+    // at 60% of the beam texture's alpha was laying ~0.30 of extra additive
+    // value onto paint that has nowhere to go. Measured: 26% of the oculus crop
+    // clipped, against 0.01% in the painting itself. Lifting and lengthening the
+    // quad did not fix it, because a longer quad only moves *which* part of the
+    // gradient crosses the paint.
+    //
+    // So it is aimed instead. The painted oculus's lower edge is screen y 0.10,
+    // which is world y 13.8 on the backdrop plane at z = -56; the ray through it
+    // passes y ≈ 6.6 at this shaft's own depth of z = -14. Top edge at 6.6
+    // (centre -1.4, height 16) puts the beam texture's bright head just *below*
+    // the painted sun, where the dome interior is dark violet — which is both
+    // the safe place for it and the correct one: a shaft is visible where it
+    // leaves the aperture, not on top of it.
+    //
+    // The **bottom** edge is solved too, which is why the quad is 16 long rather
+    // than 20. At 20 its dead-soft foot reached y = -13 and crossed the water in
+    // front of the party, where an almost-invisible beam is indistinguishable
+    // from fog lying on the floor — the frame's lower left held no pixel darker
+    // than 0.37 luma with it there. Stopping it at y = -9.4 leaves the shaft in
+    // the air, which is the only place a shaft exists.
+    { w: 4.4, h: 16, pos: [-2.6, -1.4, -14.0], tilt: 0.17, yaw: 0.1, opacity: 0.24, speed: 0.31 },
     // A narrower one further back and to the right, through a crack.
-    { w: 3.4, h: 20, pos: [4.2, 8.0, -19.0], tilt: -0.12, yaw: -0.14, opacity: 0.5, speed: 0.23 },
+    { w: 3.4, h: 20, pos: [4.2, 8.0, -19.0], tilt: -0.12, yaw: -0.14, opacity: 0.19, speed: 0.23 },
     // A broad, faint wash close to the camera, so the near air is not empty.
     // Lifted and shortened as well as dimmed: at y 6.8 / h 17 its dead soft foot
     // landed on the painted sphere, and a godray is the one thing in this scene
     // allowed to cross a colonnade but never a light source.
-    { w: 9.5, h: 14, pos: [1.2, 7.8, -8.0], tilt: 0.24, yaw: 0.04, opacity: 0.15, speed: 0.17 },
+    { w: 9.5, h: 14, pos: [1.2, 7.8, -8.0], tilt: 0.24, yaw: 0.04, opacity: 0.03, speed: 0.17 },
   ];
   const shafts = (low ? shaftSpecs.slice(0, 2) : shaftSpecs).map((s, i) => {
     const mesh = new Mesh(
@@ -847,16 +972,16 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    * nothing — §2.2 of the bible is explicit that there is **no wind** in here.
    */
   const dust = new ParticleField({
-    count: Math.round(440 * k),
+    count: Math.round(780 * k),
     bounds: { x: 5.6, y: 7.2, z: 5.5 },
-    colors: [0xeef2ff, 0xd6cffa, 0xfff2d8],
-    size: 3.8,
+    colors: [0xe6ecff, 0xd0c8f6, 0xffeccb],
+    size: 4.4,
     sizeJitter: 0.7,
-    drift: [0.012, -0.035, 0.004],
+    drift: [0.01, -0.03, 0.004],
     wobble: [0.4, 0.22, 0.32],
     wobbleSpeed: 0.26,
     twinkle: 0.6,
-    opacity: 0.6,
+    opacity: 0.5,
     additive: true,
     hardness: 0.3,
   });
@@ -869,22 +994,38 @@ export const buildZanarkandDomeScene: SceneFactory = async (
    *
    * **Many and slow** is the whole brief for these. FFX's Zanarkand dome is
    * thick with them, and they are the one element that sells the room as the
-   * place a thousand summoners died in — so the counts are high, the drift is
-   * barely a crawl (0.12 u/s up against the preset's 0.42) and the twinkle is
-   * the only fast thing about them. They are golden-*white*: a pure gold mote
-   * disappears against the painted sphere, and a pure white one reads as snow.
+   * place a thousand summoners died in — so the counts are high (620 / 760 /
+   * 1000 across the three bands, halved by `quality: 'low'`), the drift is
+   * barely a crawl (0.07 u/s against the preset's 0.42) and the twinkle is the
+   * only fast thing about them.
+   *
+   * The **opacities** are about half what they were, for the same reason every
+   * additive element in this scene came down: they were set against a frame that
+   * was reaching the canvas linearly, and at a correct display transform an
+   * 0.84-alpha mote is a hard white dot. Count carries the room; alpha only
+   * decides whether they are pyreflies or snow.
+   *
+   * They are golden-*white*, and the gold has to be in the **source** colour: a
+   * pure white mote reads as snow, and so does a pale gold one, because an
+   * additive sprite under a bloom pass climbs toward white on its own. The
+   * palette below starts one step warmer than the mote should look and the
+   * compositing does the rest.
    */
   const pyrefliesNear = new ParticleField(
     ParticlePresets.pyreflies({
-      count: Math.round(320 * k),
+      count: Math.round(620 * k),
       bounds: { x: 9.5, y: 3.4, z: 5.5 },
-      colors: [0xffeec4, 0xfff6e4, 0xffe9bc, 0xffd89a, 0xffe2b8],
-      size: 9.2,
-      drift: [0.014, 0.12, 0.008],
+      // Golden-white, and the gold is the *base*: at 0xfff2d4 the near band
+      // photographed as white specks — an additive mote under a bloom pass
+      // climbs toward white on its own, so a palette that starts near white
+      // finishes there and the hall looks like it is snowing indoors.
+      colors: [0xffd58a, 0xffe7b4, 0xffcb79, 0xffc067, 0xffdc9c],
+      size: 8.6,
+      drift: [0.01, 0.07, 0.005],
       wobble: [0.5, 0.2, 0.36],
-      wobbleSpeed: 0.38,
+      wobbleSpeed: 0.3,
       twinkle: 0.7,
-      opacity: 0.86,
+      opacity: 0.52,
     }),
   );
   pyrefliesNear.position.set(-0.8, 1.9, -0.5);
@@ -892,15 +1033,15 @@ export const buildZanarkandDomeScene: SceneFactory = async (
   /** Mid band: between the party and the dais, so the hall's air has depth. */
   const pyrefliesMid = new ParticleField(
     ParticlePresets.pyreflies({
-      count: Math.round(370 * k),
+      count: Math.round(760 * k),
       bounds: { x: 11, y: 4.2, z: 6.5 },
-      colors: [0xffe9b8, 0xfff3dc, 0xffd894, 0xffeecb],
-      size: 7.2,
-      drift: [0.012, 0.13, 0.004],
+      colors: [0xffd695, 0xffe4b0, 0xffc776, 0xffdba0],
+      size: 7.0,
+      drift: [0.008, 0.075, 0.003],
       wobble: [0.52, 0.2, 0.38],
-      wobbleSpeed: 0.32,
+      wobbleSpeed: 0.26,
       twinkle: 0.78,
-      opacity: 0.85,
+      opacity: 0.48,
     }),
   );
   pyrefliesMid.position.set(-1.2, 2.8, -6.2);
@@ -908,15 +1049,15 @@ export const buildZanarkandDomeScene: SceneFactory = async (
   /** Far band: smaller and denser, drifting up between the pillars. */
   const pyrefliesFar = new ParticleField(
     ParticlePresets.pyreflies({
-      count: Math.round(480 * k),
+      count: Math.round(1000 * k),
       bounds: { x: 14, y: 5.6, z: 9 },
-      colors: [0xffe8b4, 0xfff0cc, 0xffdc9c, 0xffc978],
-      size: 5.6,
-      drift: [0.01, 0.1, 0.0],
+      colors: [0xffd695, 0xffe2ad, 0xffca7e, 0xffb95c],
+      size: 5.4,
+      drift: [0.006, 0.06, 0.0],
       wobble: [0.55, 0.22, 0.4],
-      wobbleSpeed: 0.3,
+      wobbleSpeed: 0.24,
       twinkle: 0.82,
-      opacity: 0.8,
+      opacity: 0.44,
     }),
   );
   pyrefliesFar.position.set(-1.6, 3.6, -12.0);
@@ -942,7 +1083,14 @@ export const buildZanarkandDomeScene: SceneFactory = async (
       // [x, z, height, radius, colour, cap]
       // The bracket: tall enough that no top edge ever enters the frame.
       [-4.15, 2.6, 24, 0.72, pillarDark, false],
-      [6.5, -2.0, 24, 1.15, pillarDark, false],
+      // Thinner and pushed a unit further out than it was. A bracket is a *band*
+      // at the edge of the frame; at radius 1.15 and x 6.5 this one projected as
+      // a near-black slab over the last seventh of the picture, and the seventh
+      // it covered is where the restored painting keeps its brightest twilight
+      // (that band measures 0.438 luma in the paint and read 0.288 composited,
+      // almost all of the loss being this column). At 0.86 / 7.35 it still seals
+      // the frame edge for every rig and gives the pink sky back.
+      [8.1, -2.0, 24, 0.78, pillarDark, false],
       // …and nothing else. Two rounds of mid-ground ruins were tried here and
       // both were cut: a *tall* broken column out at the frame's sides projects
       // as a vertical black bar that halves the picture, and a *low* one inside
@@ -969,12 +1117,12 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     // under the boss: the light in this room comes from frame-left, so a pool
     // centred exactly under a figure reads as a lamp the figure is carrying.
     ...PARTY_SLOTS.slice(0, 3).map((s) => {
-      const pool = makeLightPool({ color: 0xffc178, radius: 1.6, opacity: 0.2 });
+      const pool = makeLightPool({ color: 0xffc178, radius: 1.6, opacity: 0.085 });
       pool.position.set(s[0] - 0.34, 0.02, s[2] + 0.12);
       return pool;
     }),
     (() => {
-      const pool = makeLightPool({ color: 0xf2d24a, radius: 2.4, opacity: 0.22 });
+      const pool = makeLightPool({ color: 0xf2d24a, radius: 2.4, opacity: 0.115 });
       const s = ENEMY_SLOTS[0]!;
       pool.position.set(s[0], 0.018, s[2]);
       pool.name = 'boss-pool';
@@ -1025,65 +1173,113 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     /**
-     * The engine's Zanarkand grade, re-solved for the painting that is actually
-     * on disk.
+     * The Zanarkand grade, solved against the painting that is on disk.
      *
-     * Three changes, each one a measurement off
-     * `public/art/backdrops/zanarkand-dome.png`:
+     * The reference is `public/art/backdrops/zanarkand-dome.png` itself: mean
+     * rgb 90/81/125 at **0.337 luma**, sd 0.220, HSV saturation 0.446, its
+     * colonnades at 0.273, the twilight on the right at 0.394, the water at its
+     * foot at 0.416, the sphere's quadrant at 0.387, and 494 eroded-clipped
+     * pixels per megapixel — all of that its own oculus core. Those six numbers
+     * are what this grade is scored against.
      *
-     * 1. **The vignette is opened up.** `ScenePalettes.zanarkandDome` was
-     *    authored for a frame whose subject sits in the middle; this
-     *    composition puts the party in the lower **left** with the glowing
-     *    sphere beside them, and the stock 0.58 vignette at radius 0.54 costs
-     *    that corner 45% of its value — the sphere, which is the reason the
-     *    scene is lit the way it is, goes out. At 0.44/0.72 the corner loses
-     *    about a fifth, which still shapes the frame.
-     * 2. **The midtone lift is put back in balance.** `gamma` here is an
-     *    exponent of `1/γ`, so anything over 1 is a *lift* — and the lift this
-     *    scene was carrying, `[1.18, 1.24, 1.04]`, lifted red and green by two
-     *    to three times as much as blue. On a grey stand-in painting that reads
-     *    as warmth. On the painting that is actually on disk it is a bleach: it
-     *    pulls a violet hall toward khaki, takes most of the blue out of the
-     *    twilight, and flattens the gold sphere by raising its shadows as hard
-     *    as its highlights. `[1.09, 1.06, 1.12]` is the same amount of lift with
-     *    the *blue* fractionally ahead, which is what a twilight matte wants —
-     *    and because a `1/γ` curve pins 1.0 to 1.0, all of that brightness is
-     *    bought without pushing a single highlight into clipping. `saturation`
-     *    goes up to 1.14 to match: the grade is no longer doing the job of
-     *    holding the gold apart from the violet, so the saturation has to.
-     * 3. **Exposure and bloom flatter the painting again.** Tone mapping here is
-     *    `NoToneMapping` — exposure is a linear multiply with a hard clip — so
-     *    the headroom is spent carefully: 1.07 is as far as the oculus will go
-     *    before it stops being a glow and becomes a white hole. Threshold stays
-     *    at 0.90 (only ~1.4% of the painting sits above it: the oculus and the
-     *    sphere's core) and strength comes *down* from 0.5 to 0.36 with a wider
-     *    radius, which spreads the oculus's bloom instead of stacking it — the
-     *    previous pass's one genuinely blown highlight (measured: 19% of the
-     *    oculus crop clipped, against 0.1% anywhere in the painting). The sphere
-     *    still blooms, because {@link sphereCore} is an additive emitter sitting
-     *    on the disc, not paint hoping to cross a line.
-     * 4. **The vignette opens a little further.** 0.29 at radius 0.82: the
-     *    sphere is in the bottom-left corner and it is the reason the room is
-     *    lit, so the corner it lives in cannot be the darkest part of the frame.
+     * 1. **`gamma` here is the display transform, not a taste control.** This is
+     *    the one thing about grading this engine that has to be understood
+     *    before any number below makes sense, because every pass that has got it
+     *    wrong has got it wrong the same way.
      *
-     * The numbers are checked against the painting, not against taste: over the
-     * band of the matte the idle rig actually sees (v 0..0.85) the paint means
-     * r 88 / g 81 / b 128 at 0.34 luma, and the graded frame is solved to land
-     * near that. The green lift runs a hair ahead of the other two because a
-     * violet room with a violet 3D fill in it drifts magenta otherwise.
+     *    `EffectComposer`'s render targets carry `NoColorSpace`, so the whole
+     *    post chain runs on **linear** values, and `GradeShader` — a raw
+     *    `ShaderMaterial` with no `<colorspace_fragment>` include — is the last
+     *    pass and writes straight to the canvas. Nothing in the chain applies
+     *    the sRGB encode. `GradeShader`'s own `pow(c, 1/gamma)` is therefore the
+     *    display transform for this scene, and the neutral value for it is not
+     *    1.0 but **≈2.2**.
+     *
+     *    That is measurable rather than theoretical. The painting's 0.337 mean
+     *    is an sRGB number; decoded it is 0.093 linear, and an unlit plane hands
+     *    the compositor exactly that. `0.093 ^ (1/2.2) = 0.340` — the painting
+     *    reproduced to within a value. At `gamma 1.0` the same plane composites
+     *    at 0.093, which is the dim hall every pass before this one has been
+     *    fighting with lights.
+     *
+     *    So gamma is pinned at the transform and the *look* is cut with `gain`,
+     *    `lift` and `saturation`, which is where a look belongs.
+     * 2. **Nothing is bought with exposure.** `Renderer` runs `NoToneMapping`,
+     *    and three.js only applies `toneMappingExposure` inside a tone-mapping
+     *    function — with none compiled in, the uniform does nothing at all. It
+     *    stays at 1.0 so the next pass does not spend a day on a dead control.
+     * 3. **The look is in `gain` and `lift`.** `gain` carries the stock palette's
+     *    violet split — red and blue over one, green under — so the hall keeps
+     *    the painting's magenta-violet instead of drifting to grey-blue, and the
+     *    gold from the sphere keeps its bite. `lift` is barely negative: under a
+     *    2.2 gamma a negative lift bites very hard in the darks, and a few
+     *    thousandths is all it takes to hold the pillar brackets and the deep
+     *    hall black. `saturation` comes down to 0.98 because a linear-composited
+     *    frame is *already* over-saturated by the encode — the pass this
+     *    replaces measured HSV 0.67 against the painting's 0.446 — and because
+     *    `shadowTintAmount` is putting violet into the shadows underneath it.
+     * 4. **Bloom's threshold is a linear number, which is why 0.98 was off.**
+     *    `UnrealBloomPass` runs before the grade, so it thresholds the *linear*
+     *    frame. The painting's brightest paint — the oculus, the sphere's core —
+     *    is sRGB 0.95, i.e. **0.89 linear**, and the frame's mean is 0.093: a
+     *    0.98 threshold sat above everything in the picture and the scene's own
+     *    light source did not glow. 0.62 catches the oculus, the sphere's belly,
+     *    the pyreflies and the VFX and nothing else, and the strength is kept
+     *    moderate with a wide radius so the bloom spreads instead of stacking
+     *    into a white hole.
+     * 5. **Scored on blown highlights, not eyeballed.** The metric is clipped
+     *    pixels surviving a 5x5 erosion, normalised per megapixel so the shot's
+     *    resolution does not flatter it. The painting scores 494/Mpx. The frame
+     *    that came before this pass scored **5685/Mpx while sitting a full stop
+     *    under the paint** — crushed and blown at once, which is what a wrong
+     *    display transform does. This grade lands the composite inside the
+     *    painting's own numbers; see the capture notes in the scene's handoff.
      */
     palette: {
       ...ScenePalettes.zanarkandDome,
-      vignette: 0.29,
-      vignetteRadius: 0.82,
+      // The painting carries its own falloff into the corners, and this
+      // composition puts its one warm source in the bottom-left corner. A
+      // stock 0.58/0.54 vignette takes 45% of the sphere's value away.
+      vignette: 0.2,
+      vignetteRadius: 0.86,
+      // Dead control under NoToneMapping; see note 2.
       exposure: 1.0,
-      lift: [0.002, 0.002, 0.01],
-      gamma: [1.3, 1.38, 1.22],
-      gain: [1.0, 1.0, 1.0],
+      lift: [-0.006, -0.008, -0.004],
+      // The display transform (note 1), with a half-step of extra red so the
+      // gold reads warm and a half-step off green so the violet stays violet.
+      gamma: [2.34, 2.26, 2.3],
+      gain: [0.88, 0.845, 0.915],
       saturation: 1.12,
-      bloomThreshold: 0.95,
-      bloomStrength: 0.18,
-      bloomRadius: 0.55,
+      shadowTintAmount: 0.12,
+      bloomThreshold: 0.86,
+      bloomStrength: 0.13,
+      bloomRadius: 0.76,
+      /**
+       * **The tilt-shift band is moved down onto the subject.**
+       *
+       * `ScenePalettes.zanarkandDome` focuses at screen y 0.38 with a 0.14 band
+       * and 5 px of blur, which is the right band for a scene whose subject is
+       * on the horizon. This composition's two subjects are the **party** (feet
+       * at screen y ≈ 0.90) and the **painted sphere** (y 0.72..1.0), and both
+       * of them sat four band-widths outside the focus, under the full 5 px.
+       *
+       * That is the single largest reason the restored painting stopped reading
+       * down there: measured over the sphere's disc the frame kept the paint's
+       * mean but lost its *floor* — no pixel darker than 0.375 luma survived,
+       * against 0.131 in the painting itself. A 5 px blur laid over a cracked
+       * gold dome does not dim it, it fills its cracks with its own highlights,
+       * and a lens blur is the one effect a grade cannot take back out.
+       *
+       * Focus at 0.58 with a 0.30 band keeps everything from the colonnade's
+       * feet to the bottom of the frame sharp, and 2.4 px is enough to throw
+       * the dome's ironwork soft — which is all the band was ever for. The
+       * blur came down again when the grade was fixed: a lens blur costs more
+       * the brighter the frame it is laid over, and a 3.2 px band that was
+       * invisible on a dim hall is a smear on a correctly exposed one.
+       */
+      tiltFocus: 0.58,
+      tiltBandWidth: 0.3,
+      tiltMaxBlur: 2.4,
     } satisfies ScenePalette,
     update(dt: number): void {
       clock += dt;
@@ -1094,17 +1290,31 @@ export const buildZanarkandDomeScene: SceneFactory = async (
       // The sphere breathes; everything warm in the room breathes with it, so
       // the bloom always has something living in it.
       const pulse = 0.82 + Math.sin(clock * 0.53) * 0.18;
-      spherePractical.intensity = 1.95 * pulse;
-      sphereBounce.intensity = 1.05 * pulse;
-      (sphereReflection.material as MeshBasicMaterial).opacity = 0.38 + pulse * 0.18;
-      (nearWet.material as MeshBasicMaterial).opacity = 0.2 + pulse * 0.1;
-      // The painted sphere breathes with its own light. The halo swings wider
-      // than the core: a core that pumped this hard would pop in and out of the
-      // bloom threshold and strobe.
-      (sphereHalo.material as MeshBasicMaterial).opacity = 0.24 + pulse * 0.14;
-      (sphereCore.material as MeshBasicMaterial).opacity = 0.34 + pulse * 0.12;
-      (bossPool.material as MeshBasicMaterial).opacity = 0.17 + Math.sin(clock * 0.81) * 0.05;
-      (daisRing.material as MeshBasicMaterial).opacity = 0.23 + Math.sin(clock * 0.62) * 0.06;
+      spherePractical.intensity = 1.45 * pulse;
+      sphereBounce.intensity = 0.62 * pulse;
+      (sphereReflection.material as MeshBasicMaterial).opacity = 0.22 + pulse * 0.18;
+      (nearWet.material as MeshBasicMaterial).opacity = 0.055 + pulse * 0.045;
+      /**
+       * The painted sphere breathes with its own light.
+       *
+       * **These four lines are the sphere, not the constructor's.** `update` runs
+       * on the first frame, so whatever the materials were built with is dead
+       * the moment the scene starts — the pass this replaces left the halo built
+       * at 0.30 and driven here at 0.055..0.090, and the 0.30 in the constructor
+       * was read by two later passes as the value that was shipping. It was not:
+       * the room's only light source was compositing at a fifteenth of the alpha
+       * its own comment claimed, which is most of why the restored painting's
+       * gold dome photographed as a dead terracotta lump.
+       *
+       * The halo swings wider than the core, because a core that pumped this
+       * hard would cross the bloom threshold and back on every breath and
+       * strobe. Both are additive over paint that is already bright, so they are
+       * scored on the clipped-pixel count, not on how gold they look paused.
+       */
+      (sphereHalo.material as MeshBasicMaterial).opacity = 0.033 + pulse * 0.029;
+      (sphereCore.material as MeshBasicMaterial).opacity = 0.045 + pulse * 0.04;
+      (bossPool.material as MeshBasicMaterial).opacity = 0.09 + Math.sin(clock * 0.81) * 0.026;
+      (daisRing.material as MeshBasicMaterial).opacity = 0.115 + Math.sin(clock * 0.62) * 0.03;
 
       // Shafts drift in and out as the dust in them thickens.
       for (const s of shafts) {

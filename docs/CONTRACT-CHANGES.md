@@ -6,6 +6,96 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-17 — `'sensor'` event payload and `Combatant.revealed` (additive)
+
+Key `ffx2-sensor`. Nothing in the project emitted a `'sensor'` `BattleEvent`:
+`grep -rn "type: 'sensor'" src/` matched only the union member's own
+declaration. Both HUDs already consumed it, so `src/ui/ffx2/BossGauges.ts`
+printed its `SCAN` hint instead of enemy HP for an entire battle and
+`src/ui/ffx/SensorPanel.ts` never opened. The FFX-2 engine now emits it; see
+`docs/handoff/fix-ffx2-sensor.md`, including the read-only finding that **FFX
+is still broken the same way** (its Scan sets an inert `scan` status, and the
+`sensor` auto-ability on Kimahri's Spear has no reader at all).
+
+Two additive, optional changes to `src/battle/common/types.ts`; nothing
+existing changes shape and `npx tsc --noEmit` is clean.
+
+- **`BattleEvent` `'sensor'` gains `hp?`, `maxHp?`, `mp?`, `maxMp?` and
+  `weaknesses?: ElementId[]`.** A snapshot at reveal time, so a panel can print
+  numerals from the event alone rather than reaching into `state()`. The fields
+  being **absent** is meaningful: it is how the engine expresses X-2's `- - -`
+  row for a target whose numbers stay secret (`immune-to-sensor`, or
+  `flags.hideHpBar`). `immune-to-scan` still fails a full Scan outright, as a
+  `'miss'` with `reason: 'immune'`.
+- **`Combatant.revealed?: boolean`.** Latched when Sensor/Scan reveals a
+  combatant and **never cleared**, so the reveal survives KO, form changes and
+  a chained link. `state().combatants[id]` is the same object the engine
+  mutates, so `state()` exposes it immediately.
+
+For ability authors: mark a reveal in data with `extra: { reveals: 'scan' }`
+(or `{ scan: true }` / `{ sensor: true }`). The FFX-2 engine checks that marker
+first and only then falls back to matching `scan` / `libra` / `ma'at's feather`
+in the ability's name or id — `src/battle/ffx2/**` cannot import
+`src/data/ffx2/**`, so it has to recognise the action from the `AbilityDef`
+shape. Support upgrades (`targeting: 'self'`, or carrying `extra.passive`) are
+never treated as reveals, which is what keeps Scan Lv. 2 / Lv. 3
+[ffx2-combat-core §3.7] out of it when they are transcribed.
+
+## 2026-09-17 — OPEN ITEM: possessed-aeon accuracy bytes (no contract change)
+
+Recorded here because it is a behaviour of the shared
+`src/battle/common/types.ts` `AbilityDef` contract that data cannot express
+today, not because any contract shape changed. Nothing is additive or
+breaking; this entry exists so the gap is tracked somewhere other than a
+file header.
+
+**What.** The ten possessed-aeon Attack/Special records in
+`src/data/ffx/enemies/braskas-final-aeon-abilities.ts` (`category: 'aeon'`:
+`possessed-valefor-sonic-wings`, `possessed-ifrit-meteor-strike`,
+`possessed-ixion-aerospark`, `possessed-shiva-heavenly-strike`,
+`possessed-bahamut-impulse`, `possessed-anima-pain`,
+`possessed-yojimbo-daigoro`, `possessed-cindy-camisade`,
+`possessed-sandy-razzia`, `possessed-mindy-passado`) are typed
+`damageType: 'physical'` (or `'magical'`, for Pain) but carry **no**
+`accuracy` byte. `src/battle/ffx/accuracy.ts` tests `user.side === 'enemy'`
+*before* the damage-type branch, so an enemy-side action with no byte takes
+the ALWAYS-hit path: **all ten always hit**, and Darkness, Aim/Reflex stacks,
+Evasion and the Luck differential never apply to them.
+
+**Why it is still open.** No research source publishes an accuracy byte for
+these rows, and none was invented:
+
+- `research/ffx-bfa-yu-yevon.md` publishes exactly one accuracy byte in the
+  whole chapter — Blade Blitz's 150, §1.3 line 105 — and none for §2.2's
+  possessed-aeon movesets.
+- `research/ffx-combat-core.md` §6.3's aeon table has no accuracy column.
+  §2.11 line 476 says enemy ability rows carry their own byte
+  `[verified: 2 sources]`, while §2.11 line 478 says aeon **Attack** variants
+  use the `Accuracy x2.5` / `x1.5` hit formulas `[single source]`. A possessed
+  aeon is an enemy made of an aeon, so the two rules point opposite ways.
+- `research/ffx-bfa-yu-yevon.md` §2.2 line 350 lists a possessed aeon's own
+  **Accuracy** stat as "Varies" (mirrored live off the player's aeon,
+  `[verified: 2 sources]`) — which only means something if something reads it,
+  and today nothing does. `possessedAeonEnemyDef` in
+  `src/data/ffx/enemies/braskas-final-aeon.ts` ships `acc: 0` as an explicit
+  placeholder for the live mirror.
+
+**Shipped behaviour:** unchanged — always-hit, documented in that file's
+header and asserted by `tests/unit/chapters/possessed-aeons.test.ts` so the
+gap stays visible instead of looking intentional.
+
+**To close it**, one of:
+1. a decompiled per-row accuracy byte for ids 203–233, which the data agent
+   then transcribes with a citation; or
+2. an engine-side rule (owner: the engine agent) letting a possessed aeon's
+   mirrored Accuracy stat feed the hit-chance table — e.g. honouring
+   `extra.mirrorsCasterStats` before the `user.side === 'enemy'` shortcut, so
+   §6.3's `x2.5` / `x1.5` Attack multipliers become meaningful.
+
+Adding `accuracy: 100` by analogy with `left-arm-strike` is **not** a close:
+that byte is itself an `[estimate]`, and copying an estimate across ten rows
+would launder a guess into ten apparent data points.
+
 ## 2026-09-15 — `BattleResult.nextGroupId` and `FFX2MemberBuild.statuses` (additive)
 
 Orchestrator decision 6 says "`victory` carries `nextGroupId`", but
@@ -196,3 +286,44 @@ Three naming decisions worth knowing about, all documented in
     The same reasoning is why the layer is frozen-additive. A renamed or
     retuned token reaches three folders at once, so it goes through the
     coordinator.
+
+11. **The presenter draws damage numerals, for both games. HUDs never
+    headline a damage figure.**
+    `docs/ARCHITECTURE.md` already files damage numbers under `ui/common/` — a
+    shared, presenter-driven component — not under either HUD. That assignment
+    stands and is now explicit, because the FFX-2 HUD's chain pop had grown a
+    large `.ig-damage` numeral of its own. With the presenter also drawing
+    damage, two systems would render `.ig-damage` into one document: the same
+    shape as the `.ig-minigame` collision behind decision 10.
+
+    - The presenter owns every per-hit figure: damage, healing (negative
+      `amount`), MISS / IMMUNE / ABSORBED, and the multi-hit ladder driven by
+      `hitIndex` / `hitCount`.
+    - An FFX-2 **chain** is not a damage figure. The HUD shows it as a
+      separate, smaller `CHAIN ×N` chip that never renders a number in
+      numeral-size type.
+    - A HUD may still *react* to a damage event (a status bar flash, a portrait
+      shake) through `HudPort.onEvent`; it just must not draw the number.
+
+12. **SUPERSEDES DECISION 11. Each game's HUD owns its damage numerals.**
+    Decision 11 ruled that the presenter draws damage numerals for both games
+    and told the FFX-2 HUD to stop drawing them. That did not match the code:
+    the BattleScreen **hides the presenter's numerals whenever a HUD is
+    mounted**, and the FFX HUD has always drawn its own. So applying decision 11
+    left **FFX-2 battles drawing no damage numbers at all** — a regression the
+    ruling itself caused. `tools/orphans.mjs` confirms it: the shared
+    `src/ui/common/DamageNumbers.ts` and `damageLadder.ts` have no importers.
+
+    Lesson recorded: a ruling about who renders what must be checked against
+    what the screen actually mounts, not against the architecture diagram.
+
+    - The HUD mounted for a battle draws every per-hit figure: damage, healing
+      (negative `amount`), MISS / IMMUNE / ABSORBED, and the multi-hit ladder
+      from `hitIndex` / `hitCount`. FFX already does; FFX-2 must.
+    - FFX-2 should **reuse** `src/ui/common/DamageNumbers.ts` and
+      `damageLadder.ts` rather than write a third implementation.
+    - An FFX-2 **chain** is still not a damage figure, but it now rides on the
+      numeral it belongs to, as a `CHAIN ×N` chip attached to that hit.
+    - The single-owner rule from decision 11 still stands — it just points at the
+      HUD instead of the presenter. Two systems must never both draw
+      `.ig-damage` for the same hit.

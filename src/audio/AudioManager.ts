@@ -16,7 +16,7 @@
 
 import { MusicLoader } from './MusicLoader.ts';
 import { TRACK_BLURBS, hasTrack, trackNames } from './tracks/index.ts';
-import { SFX, SFX_GROUPS, hasSfx, renderSfx, sfxNames } from './sfx/index.ts';
+import { SFX, SFX_GROUPS, renderSfx, resolveSfx, sfxNames } from './sfx/index.ts';
 import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 
 export interface AudioManagerOptions {
@@ -284,10 +284,13 @@ export class AudioManager {
   }
 
   playSfx(name: string, options: PlaySfxOptions = {}): void {
-    if (!hasSfx(name)) throw new Error(`Unknown sfx "${name}"`);
+    // Aliases (an ability's authored `sfxKey`) resolve to the real cue, so the
+    // buffer cache is keyed once per sound, not once per name for it.
+    const cue = resolveSfx(name);
+    if (cue === undefined) throw new Error(`Unknown sfx "${name}"`);
     const ctx = this.ctx;
     if (!ctx || !this.sfxBus) return;
-    const buffer = this.getSfxBuffer(name);
+    const buffer = this.getSfxBuffer(cue);
     if (!buffer) return;
     const source = ctx.createBufferSource();
     source.buffer = buffer;

@@ -45,3 +45,15 @@
   transform: skewX(8deg);
   color: rgba(244, 241, 232, 0.35);
 }
+
+/* A hint that names a single action is also the button for it, so a mouse or
+   touch player can do what the keyboard player is told to press. The strip
+   stays click-through everywhere else. */
+.chint__item[data-action] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.chint__item[data-action]:hover b {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

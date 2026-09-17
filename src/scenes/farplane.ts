@@ -83,13 +83,23 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   reveal: { position: [-1.2, 2.2, 13.6], lookAt: [0.2, 2.9, -5.5], fov: 34, sway: 1.5 },
 };
 
-/** Three active slots in the FFX arc, then four reserve slots off frame-left. */
+/**
+ * Three active slots in the FFX arc, then four reserve slots off frame-left.
+ *
+ * **Re-measured for the X-2 party**, the same way and for the same reason as
+ * `bevelle-underground.ts` (see the long note on `PARTY_SLOTS` there): the old
+ * zig-zag swung the middle slot out to x -2.95, which this scene's `action` rig
+ * projects almost off the left edge, and the three girls collapsed into one
+ * pile (`docs/screenshots/53-ffx2-vegnagun.png`). Measured at `idle`/`action`
+ * with `stage.project` at 1600x900, these land at 295/498/648 and 194/408/562 —
+ * staggered front to back, none closer than ~150px to her neighbour.
+ *
+ * Slot order is the build's `members` order: Yuna, Rikku, Paine, left to right.
+ */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  // Front to back, staggered, and pushed right of the arc's natural centre so
-  // the command window (bottom-left, 26% of the frame) never buries a figure.
-  [-1.55, 0, 1.55],
-  [-2.95, 0, 0.3],
-  [-1.1, 0, -1.05],
+  [-2.3, 0, 1.45], // front-left  (Yuna)
+  [-1.45, 0, 0.1], // middle, stepped right and back (Rikku)
+  [-0.55, 0, -1.3], // back-right, furthest from camera (Paine)
   // Reserve — parked well outside every rig's frustum, frame-left.
   [-11.5, 0, 2.6],
   [-12.4, 0, 1.0],

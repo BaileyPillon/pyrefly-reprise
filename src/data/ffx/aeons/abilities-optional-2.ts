@@ -18,6 +18,14 @@
  * - **Dismiss**'s raw rank byte is `0`; stored as `0` here rather than
  *   pre-resolved to 3, per `AbilityDef.rank`'s documented fallback.
  * - `minigame: null` on every entry.
+ *
+ * ACCURACY DECISION (2026-09-16): see `abilities-core.ts` for the full
+ * reasoning and citations (`ffx-bfa-yu-yevon.md` §1.3, lines 101/107/108).
+ * `canMiss: false` is set explicitly on Delta Attack (`category:
+ * 'overdrive'`, `damageType: 'other'`, `strength` formula — the same
+ * Strength+Other Overdrive signature as Auron's Bushido and Oblivion).
+ * Cindy/Sandy/Mindy's Attack and Special above, and Shield/Boost/Dismiss
+ * (`category: 'aeon'`, self-targeted), are untouched.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -213,6 +221,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['none'],
     targeting: 'single-enemy', // [estimate] — not restated beyond DmgCon in §6.3.
     hits: 6,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],

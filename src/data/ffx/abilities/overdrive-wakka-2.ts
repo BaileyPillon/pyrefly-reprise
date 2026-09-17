@@ -14,6 +14,28 @@
  * All 10 use `formula: 'strength'`, `damageType: 'other'`, no
  * `crit-eligible` flag (Slots never crits), and `targeting: 'random-enemy'`
  * unless noted (Aurochs Shot hits all enemies).
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * the first pass's `canMiss: true` argued from the absence of Slots on a
+ * short discussed-actions list, which doesn't show Slots rolls): does a
+ * resolved shot roll to-hit against its target? §5.6's "the player can
+ * control the outcome completely" is about which symbols the reels stop on
+ * (a purely mechanical, player-driven step), not about whether the
+ * resulting attack can be evaded — the "Miss" reel symbol is a separate,
+ * deterministic minigame outcome already folded into `attack-reels-hit`'s
+ * hit-count formula (Miss contributes 0 to the sum), not a to-hit roll.
+ * `research/ffx-bfa-yu-yevon.md` §1.3 (lines 101, 107, 108) decompiles three
+ * enemy Overdrives sharing this exact signature — `Strength` formula,
+ * `Other` damage type, `category: 'overdrive'` — and all three are flagged
+ * "always hits", contrasted with that table's plain physical attacks
+ * (lines 98, 104-105), which roll accuracy normally. All 10 shots here match
+ * the always-hit signature (`formula: 'strength'`, `damageType: 'other'`,
+ * `category: 'overdrive'`). Conclusion: resolved shots always hit.
+ * `canMiss: false` is set explicitly on all 10 records, citing
+ * ffx-bfa-yu-yevon.md §1.3 `[verified: 2 sources]`. This means only ONE
+ * layer of randomness/skill applies, not two: the reel result decides how
+ * many attempts and against how many targets, and every attempt connects
+ * unconditionally.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -32,6 +54,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -56,6 +79,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['ice'],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -80,6 +104,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -104,6 +129,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -132,6 +158,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [
       { status: 'poison', chance: 254, duration: 254 },
       { status: 'sleep', chance: 100, duration: 3 },
@@ -164,6 +191,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [
       { status: 'power-break', chance: 100, duration: 254 },
       { status: 'magic-break', chance: 100, duration: 254 },
@@ -201,6 +229,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [{ status: 'petrify', chance: 100, duration: 254 }],
     removesStatuses: [],
     flags: [],
@@ -232,6 +261,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -260,6 +290,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -289,6 +320,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 12,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits, independent of reel result; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],

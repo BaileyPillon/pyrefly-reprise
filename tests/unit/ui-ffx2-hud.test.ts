@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
+import { BAR_MAX_PX, BAR_MIN_PX } from '../../src/ui/ffx2/PartyRows.ts';
 import type { AtbSnapshot, BattleState, FFX2Combatant } from '../../src/battle/common/types.ts';
 
 function girl(id: string, name: string, hp: number, maxHp: number): FFX2Combatant {
@@ -85,10 +86,11 @@ describe('FFX2BattleHud', () => {
     const fastWidth = parseFloat(tracks[0]!.style.width);
     const slowWidth = parseFloat(tracks[1]!.style.width);
     expect(fastWidth).toBeLessThan(slowWidth);
-    // Clamped to `.ig-stat__od`'s own [24, 53.33] range (53.33 = the shared
-    // layer's unoverridden width, so a slow-enough bar matches it exactly).
-    expect(fastWidth).toBeGreaterThanOrEqual(24);
-    expect(slowWidth).toBeLessThanOrEqual(53.34);
+    // Clamped to `PartyRows`' own [BAR_MIN_PX, BAR_MAX_PX] range. The track is
+    // a full-width second line under the HP/MP data now (§4.3's verified
+    // layout), not the stub that borrowed `.ig-stat__od`'s [24, 53.33].
+    expect(fastWidth).toBeGreaterThanOrEqual(BAR_MIN_PX);
+    expect(slowWidth).toBeLessThanOrEqual(BAR_MAX_PX);
   });
 
   it('marks a below-33%-max HP value as critical, per the §4.9 threshold correction', () => {
@@ -102,15 +104,50 @@ describe('FFX2BattleHud', () => {
     expect(() => hud.sync(baseState(), [])).not.toThrow();
   });
 
-  it('pops a chain counter and clears it on a count of 0', async () => {
+  it('pops a standalone CHAIN chip (no damage-numeral element) and clears it on a count of 0', async () => {
     hud.sync(baseState(), snapshotFor(16000, 16000));
     await hud.onEvent({ seq: 1, type: 'chain', targetId: 'rikku', count: 3, multiplier: 1.55 });
-    const popup = root.querySelector('.ig-damage');
-    expect(popup?.textContent).toContain('3');
-    expect(popup?.textContent).toContain('CHAIN');
+    const chip = root.querySelector('.ffx2-chain-chip');
+    expect(chip?.textContent).toContain('CHAIN');
+    expect(chip?.textContent).toContain('1.55');
 
     await hud.onEvent({ seq: 2, type: 'chain', targetId: 'rikku', count: 0, multiplier: 1.4 });
+    expect(root.querySelector('.ffx2-chain-chip')).toBeNull();
+  });
+
+  it('never draws `.ig-damage` — decision 11 leaves every damage figure to the presenter', async () => {
+    hud.sync(baseState(), snapshotFor(16000, 16000));
+    await hud.onEvent({ seq: 1, type: 'chain', targetId: 'rikku', count: 12, multiplier: 2.0 });
+    await hud.onEvent({
+      seq: 2,
+      type: 'damage',
+      targetId: 'rikku',
+      sourceId: 'bahamut',
+      amount: 742,
+      element: 'none',
+      crit: false,
+      hitIndex: 0,
+      hitCount: 1,
+    });
     expect(root.querySelector('.ig-damage')).toBeNull();
+  });
+
+  it('flashes the hit row on a damage event without drawing its number', async () => {
+    hud.sync(baseState(), snapshotFor(16000, 16000));
+    await hud.onEvent({
+      seq: 1,
+      type: 'damage',
+      targetId: 'rikku',
+      sourceId: 'bahamut',
+      amount: 742,
+      element: 'none',
+      crit: false,
+      hitIndex: 0,
+      hitCount: 1,
+    });
+    const row = root.querySelector('[data-actor-id="rikku"]');
+    expect(row?.className).toContain('ffx2-hit-flash');
+    expect(row?.textContent).not.toContain('742');
   });
 
   it('shows a two-stage telegraph banner for a boss charge', async () => {

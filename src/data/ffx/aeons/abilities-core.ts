@@ -49,6 +49,23 @@
  *   given); every Attack below ships `rank: 1` `[estimate: standard FFX
  *   base-Attack CTB rank]`, matching the real game's cheapest command.
  * - `minigame: null` on every entry — aeon abilities never open a minigame.
+ *
+ * ACCURACY DECISION (2026-09-16, closing the review that already settled
+ * `overdrive-tidus.ts` / `overdrive-auron.ts` / `overdrive-kimahri-*.ts`):
+ * `research/ffx-bfa-yu-yevon.md` §1.3 (lines 101, 107, 108) decompiles three
+ * enemy Overdrives — `Other` damage type, `category: 'overdrive'` — all
+ * flagged "always hits", regardless of their underlying formula. Every
+ * Overdrive here (Energy Ray, Energy Blast, Hellfire, Thor's Hammer) is
+ * `formula: 'special-magic'`, `damageType: 'other'`, `category:
+ * 'overdrive'`, matching that signature on the damage-type/category axis.
+ * `canMiss: false` is set explicitly on all 4, citing ffx-bfa-yu-yevon.md
+ * §1.3 `[verified: 2 sources]` for the pattern, `[estimate]` for extending
+ * it from Strength-formula rows to `special-magic`. This does NOT extend to
+ * Attack or Special (`category: 'aeon'`) above — those roll accuracy
+ * normally via their ACC×2.5/1.5 multiplier (why the multiplier exists at
+ * all), including Ifrit's Meteor Strike, which is `damageType: 'other'` but
+ * `category: 'aeon'`, not `'overdrive'` — outside the evidence this
+ * decision covers.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -120,6 +137,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['none'],
     targeting: 'single-enemy', // [estimate] — see file header.
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -143,6 +161,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['none'],
     targeting: 'single-enemy', // [estimate] — see file header.
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -218,6 +237,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'single-enemy', // [estimate] — see file header.
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -297,6 +317,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'single-enemy', // [estimate] — see file header.
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],

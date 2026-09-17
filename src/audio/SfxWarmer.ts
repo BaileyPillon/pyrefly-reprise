@@ -33,7 +33,9 @@ export const SFX_WARMUP_CHUNK_SIZE = 6;
 /** SFX groups (see `SFX_GROUPS`), most-likely-to-be-heard-soon first. A group
  *  not listed here (e.g. a new sfx file) is warmed after these, in whatever
  *  order Object.keys gives it. */
-const GROUP_PRIORITY = ['ui', 'flow', 'weapons', 'battle', 'enemy', 'magic', 'spells', 'support'];
+// `story` follows `flow` because that is the order a player meets them: the
+// menus, then the chapter's opening cutscene, and only then the battle.
+const GROUP_PRIORITY = ['ui', 'flow', 'story', 'weapons', 'battle', 'enemy', 'magic', 'spells', 'support'];
 
 /** Cues measured at 100ms+ to render (see the module doc above) — warmed last
  *  no matter which group they belong to. */

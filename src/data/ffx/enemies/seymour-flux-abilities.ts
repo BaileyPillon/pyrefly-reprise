@@ -35,6 +35,34 @@
  *     the caster's own Reflect status (not the engine's normal reflect-back-
  *     at-attacker rule) decides whether it lands on Seymour or bounces onto
  *     a random party member. See `research/ffx-seymour-flux.md` §3.3.
+ *
+ * ACCURACY EDIT (2026-09-16, by the FFX player-data agent, authorised by the
+ * coordinator for this one fix — this file's normal owner, the enemy-data
+ * agent, has been idle): none of this file's records set `canMiss`, so every
+ * one of them rolled to hit via `src/battle/ffx/accuracy.ts`'s standard
+ * formula, including magical/status actions that the decompile actually
+ * flags as unconditional. Per `research/ffx-yunalesca.md` §7.2 (line 596,
+ * "Physical accuracy tanks; magic unaffected") and `research/
+ * ffx-bfa-yu-yevon.md` §1.3 (lines 101, 107, 108: three `Other`-damage-type
+ * enemy Overdrives, Strength formula, all flagged "always hits", contrasted
+ * with that table's plain physical attacks at lines 98/104-105 which roll
+ * and are "affected by Dark" / carry an explicit accuracy byte) — the same
+ * evidence this data agent already applied to the player-side catalog:
+ *   - `canMiss: false` added to `total-annihilation` (Magic formula,
+ *     Magical damage), `flare-self` (Magic formula, Magical damage,
+ *     category `blackmagic`), `banish`/`slowga-counter`/`full-life`
+ *     (status/CTB/percent-total actions, `damageType: 'other'`, no rider on
+ *     the ALWAYS-hit exclusion list) — citing `ffx-yunalesca.md` §7.2 +
+ *     `ffx-bfa-yu-yevon.md` §1.3, `[verified: 2 sources]` for the magic
+ *     rows, `[estimate]` for extending the pattern to the non-damage status
+ *     actions by damage-type/category analogy, same calibration used
+ *     throughout `src/data/ffx/mixes/**`.
+ *   - `cross-cleave` (Strength formula, Physical damage, `accuracy: 100`
+ *     `[estimate]`) is left untouched — physical attacks roll, per the
+ *     contrast rows above.
+ *   - `lance-of-atrophy` and `mortibsorption` already carried `canMiss:
+ *     false` before this edit (decompiled `accuracy: 255` bytes) and were
+ *     not touched.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -93,6 +121,7 @@ export const fullLife: AbilityDef = {
   removesStatuses: ['poison', 'darkness', 'silence', 'sleep', 'confuse', 'berserk', 'slow', 'doom'],
   flags: ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses', 'reflectable'],
   canReflect: true,
+  canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [estimate] — see file header's ACCURACY EDIT note.
   messageTemplate: '{user} uses Full-Life on {target}',
 };
 
@@ -138,7 +167,11 @@ export const totalAnnihilation: AbilityDef = {
   statusEffects: [],
   removesStatuses: [],
   flags: [],
-  accuracy: 100, // [estimate]
+  // accuracy: 100 [estimate] removed 2026-09-16 — superseded by canMiss:
+  // false below; Total Annihilation is Magic formula/Magical damage, which
+  // this project's evidence shows always hits (see file header's ACCURACY
+  // EDIT note), so the old placeholder byte would never be read anyway.
+  canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — see file header.
   messageTemplate: '{user} uses Total Annihilation',
 };
 
@@ -170,6 +203,7 @@ export const flareSelf: AbilityDef = {
   removesStatuses: [],
   flags: ['ignores-armored', 'reflectable'],
   canReflect: true,
+  canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — see file header.
   extra: {
     selfTargetBounce: true,
     note: "Always resolves at Self; Seymour's own Reflect status decides the real target.",
@@ -199,6 +233,7 @@ export const banish: AbilityDef = {
   statusEffects: [{ status: 'eject', chance: 255, duration: 0 }], // duration is moot; eject is permanent-for-battle by rule, not by ticking down
   removesStatuses: [],
   flags: ['always-break-damage-limit'], // [decompiled] cosmetic — no damage is dealt
+  canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [estimate] — see file header's ACCURACY EDIT note.
   extra: { bypassesAeonRibbon: true },
   messageTemplate: '{user} banishes {target}',
 };
@@ -260,6 +295,7 @@ export const slowgaCounter: AbilityDef = {
   removesStatuses: [],
   flags: ['reflectable', 'is-counter'],
   canReflect: true,
+  canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [estimate] — see file header's ACCURACY EDIT note.
   extra: { counterTrigger: 'player-delay-attempt' },
   messageTemplate: '{user} counters with Slowga',
 };

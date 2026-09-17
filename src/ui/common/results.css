@@ -144,16 +144,39 @@
 .rres--silent .rres__heading {
   font-size: 62.22px; /* 140 — the page says it, it doesn't shout it */
 }
+/* The rule and the state tags share one baseline, so OVERKILL / NEW BEST cost
+   the page no vertical room at all. */
+.rres__rule-row {
+  display: flex;
+  align-items: center;
+  gap: 4.44px; /* 10 */
+}
 .rres__rule {
   margin-top: 6.22px; /* 14 */
   margin-left: 3.56px; /* 8 */
   width: 133.33px; /* 300 */
   height: 2.67px; /* 6 */
   background: var(--ig-accent, #e3b94a);
+  flex: none;
 }
 .rres--silent .rres__rule {
   background: var(--ig-ink, #0b0a12);
   width: 66.67px; /* 150 */
+}
+
+/* Overkill / New Best, set as ink chips hung off the end of the rule. */
+.rres__tag {
+  margin-top: 6.22px; /* 14 — matches the rule, so they share a centre line */
+  padding: 1.33px 3.56px; /* 3 8 */
+  background: var(--ig-ink, #0b0a12);
+  color: var(--ig-accent, #e3b94a);
+  font-size: 5.33px; /* 12 */
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+}
+.rres--silent .rres__tag {
+  color: #b9b2c6;
 }
 
 /* Victory quip [writing-bible §5.4], set as a printed dedication under the
@@ -174,7 +197,7 @@
 .rres__ledger {
   position: absolute;
   left: 33.78px; /* 76 */
-  top: 146.67px; /* 330 — under the rule and the quip, clear of the party list */
+  top: 152px; /* 342 — clears the head stack (chip + heading + rule/tags + quip) */
   width: 248.89px; /* 560 */
   display: flex;
   flex-direction: column;
@@ -213,6 +236,17 @@
   font-size: 6.67px; /* 15 */
   letter-spacing: 0.1em;
   color: #5b5566;
+}
+
+/* Four rows instead of three (FFX-2 pays EXP *and* per-dressphere AP). The
+   ledger tightens in place rather than climbing into the quip above it or
+   growing down into the party list below: 4 x 25.34 = 101.4 from top 152 ends
+   at 253.4, clear of the party list's 260.46 top. */
+.rres__ledger--compact .rres__line {
+  padding: 3.56px 0 3.11px; /* 8 0 7 */
+}
+.rres__ledger--compact .rres__v {
+  font-size: 17.78px; /* 40 */
 }
 
 /* --------------------------------------------------------------- the party */
@@ -257,11 +291,33 @@
   object-position: 50% 8%;
   display: block;
 }
+/* Name + the progression line under it. Grows so the award still sits hard
+   against the ledger's right edge. */
+.rres__member-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.rres__member-line {
+  display: flex;
+  align-items: center;
+}
 .rres__member-name {
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
   font-size: 8.89px; /* 20 */
   font-weight: 700;
   font-style: italic;
+}
+/* `S.LV 18 · 12/95 AP` (FFX) or `WHITE MAGE · CURA 60/80 AP` (FFX-2): where
+   this member's progression stands now that the battle's award is banked. */
+.rres__member-detail {
+  margin-top: 0.44px; /* 1 */
+  font-size: 4.89px; /* 11 */
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #7b7486;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .rres__member-ap {
   margin-left: auto;
@@ -309,4 +365,145 @@
 .rres__confirm > span {
   display: inline-block;
   transform: skewX(12deg);
+}
+
+/* ------------------------------------------------------------- the actions */
+
+/* The defeat panel's two slabs, in place of `CONFIRM ▸`. Same skew and
+   position as the confirm slab so the page's silhouette does not move. */
+.rres__actions {
+  position: absolute;
+  right: 26.67px; /* 60 */
+  bottom: 23.11px; /* 52 */
+  display: flex;
+  gap: 4.44px; /* 10 */
+}
+.rres__action {
+  padding: 5.33px 9.78px; /* 12 22 */
+  background: transparent;
+  border: 0.89px solid #6c6579; /* 2 */
+  color: #cfc8bb;
+  font-size: 6.22px; /* 14 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  transform: skewX(-12deg);
+  cursor: pointer;
+}
+.rres__action > span {
+  display: inline-block;
+  transform: skewX(12deg);
+}
+.rres__action--selected {
+  background: #e8e3d8;
+  border-color: #e8e3d8;
+  color: #14121b;
+}
+
+/* -------------------------------------------------------------- the defeat */
+
+/*
+ * A loss is not a muted win. The page itself turns over: paper goes to a cold
+ * slate, the one accent leaves entirely (ash, never gold — "one accent per
+ * context" also means *no* accent when nothing is being celebrated), the
+ * heading stops shouting, and the wedge holds the leader's fallen pose sunk
+ * under an ink veil instead of a portrait smiling at the player.
+ */
+.rres--defeat {
+  background: #14121b;
+}
+.rres--defeat .rres__stage {
+  color: #d8d3c8;
+}
+.rres--defeat .rres__ink {
+  background: #08070d;
+}
+/* The veil: the figure reads as a shape in the dark, not a hero shot. Sits
+   above the <img> (auto z-index) and below the right-edge ramp. */
+.rres--defeat .rres__ink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 7, 13, 0.94) 0%,
+    rgba(8, 7, 13, 0.45) 46%,
+    rgba(8, 7, 13, 0.88) 100%
+  );
+  pointer-events: none;
+}
+.rres--defeat .rres__ink::after {
+  z-index: 3;
+}
+.rres--defeat .rres__stripe {
+  background: #443e51;
+}
+.rres--defeat .rres__caption {
+  color: #7c7589;
+}
+.rres--defeat .rres__chip {
+  background: transparent;
+  border: 0.89px solid #6c6579; /* 2 */
+  color: #cfc8bb;
+  padding: 1.78px 5.33px; /* 4 12 */
+}
+.rres--defeat .rres__heading {
+  color: #e8e3d8;
+  font-size: 71.11px; /* 160 — the page says it, it doesn't celebrate it */
+}
+.rres--defeat .rres__rule {
+  background: #6c6579;
+  width: 66.67px; /* 150 */
+  /* Hung a little lower than the victory rule, so the italic descender of
+     "Defeat" does not land on it. */
+  margin-top: 11.56px; /* 26 */
+}
+/* No quip on a defeat, so the record starts higher and the last rule keeps
+   clear air above the party list. */
+.rres--defeat .rres__ledger {
+  top: 140.44px; /* 316 */
+}
+.rres--defeat .rres__tag {
+  background: transparent;
+  border: 0.89px solid #4f4860; /* 2 */
+  color: #8a8398;
+  padding: 0.89px 3.11px; /* 2 7 */
+}
+.rres--defeat .rres__k {
+  color: #8a8398;
+}
+.rres--defeat .rres__line {
+  border-bottom-color: rgba(216, 211, 200, 0.2);
+}
+.rres--defeat .rres__v {
+  color: #cfc8bb;
+}
+.rres--defeat .rres__d {
+  color: #6f687d;
+}
+.rres--defeat .rres__face {
+  background: #221e2c;
+  border-color: #443e51;
+  color: #8a8398;
+}
+.rres--defeat .rres__face img {
+  filter: grayscale(0.9) brightness(0.66);
+}
+.rres--defeat .rres__member-name {
+  color: #cfc8bb;
+}
+.rres--defeat .rres__member-detail {
+  color: #645d72;
+}
+
+/* The fallen leader: laid low in the wedge rather than standing full height,
+   and drained of colour. `hurt.png` is a tall figure and `ko.png` a prone one,
+   so both are anchored to the foot of the frame and clipped by the wedge. */
+.rres--defeat .rres__hero {
+  left: 337.78px; /* 760 */
+  top: auto;
+  bottom: -8.89px; /* -20 */
+  height: 302.22px; /* 680 */
+  filter: grayscale(0.92) brightness(0.42) contrast(1.04);
+  object-position: 50% 100%;
 }

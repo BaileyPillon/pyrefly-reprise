@@ -19,6 +19,8 @@ import { ZanarkandDomeSceneScreen } from '../scenes/zanarkand-dome-debug.ts';
 import { BevelleUndergroundSceneScreen } from '../scenes/bevelle-underground-debug.ts';
 // Scene agent (Dream's End): temporary screen for `goto('scene-dreams-end')`.
 import { DreamsEndSceneScreen } from '../scenes/dreams-end-debug.ts';
+// Results agent: fixture-driven results panels, `goto('results-victory')` etc.
+import { registerResultsDemoScreens } from './resultsDemo.ts';
 
 export const VERSION = '0.1.0';
 
@@ -179,6 +181,10 @@ export function installDebugApi(app: App): PyreflyDebugApi {
   // `goto('scene-bevelle-underground')` and
   // `tools/screenshot.mjs --screen=scene-bevelle-underground --rig=<name>`.
   app.register('scene-bevelle-underground', () => new BevelleUndergroundSceneScreen());
+  // Results agent: `results-victory` / `results-defeat` / `results-ffx2`, so
+  // both variants can be captured without having to win (or lose) a chapter
+  // first. Registered additively — `main.ts` keeps `results` / `results-silent`.
+  registerResultsDemoScreens(app);
 
   /** The battle screen, if one is on top of the stack. */
   const battleScreen = (): BattleScreen | null => {

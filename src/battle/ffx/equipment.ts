@@ -10,9 +10,22 @@ import type {
   AutoAbilityId,
   DamageType,
   ElementId,
+  EquipmentDef,
   FFXCombatant,
   StatusId,
 } from '../common/types.ts';
+
+/**
+ * The structural slice of "someone wearing FFX gear".
+ *
+ * An `FFXCombatant` satisfies it, and so does an `FFXMemberBuild` — which is
+ * the point: the prep menus reason about a build long before an engine has
+ * turned it into a combatant, and §9's numbers are the same either way.
+ * Purely additive; every existing export here still takes `FFXCombatant`.
+ */
+export interface EquipmentBearer {
+  equipment?: { weapon: EquipmentDef; armor: EquipmentDef } | undefined;
+}
 
 /** Every auto-ability the combatant has, weapon first then armour. */
 export function autoAbilitiesOf(c: FFXCombatant): AutoAbilityId[] {
@@ -23,7 +36,12 @@ export function autoAbilitiesOf(c: FFXCombatant): AutoAbilityId[] {
 
 /** Does the combatant carry this auto-ability? */
 export function hasAuto(c: FFXCombatant, id: AutoAbilityId): boolean {
-  const eq = c.equipment;
+  return bearerHasAuto(c, id);
+}
+
+/** {@link hasAuto} for anything wearing gear, combatant or build. */
+export function bearerHasAuto(b: EquipmentBearer, id: AutoAbilityId): boolean {
+  const eq = b.equipment;
   if (!eq) return false;
   return eq.weapon.autoAbilities.includes(id) || eq.armor.autoAbilities.includes(id);
 }
@@ -60,10 +78,55 @@ const DEFENSE_MAGICAL: ReadonlyArray<readonly [AutoAbilityId, number]> = [
   ['magic-def-20', 20],
 ];
 
-function bestPercent(c: FFXCombatant, table: ReadonlyArray<readonly [AutoAbilityId, number]>): number {
+/**
+ * Pools are the one place where an auto-ability really does change a
+ * `StatBlock` field: `maxHP = baseHP * (100+N) // 100`, `maxMP` likewise
+ * [ffx-combat-core §9].
+ */
+const POOL_HP: ReadonlyArray<readonly [AutoAbilityId, number]> = [
+  ['hp-5', 5],
+  ['hp-10', 10],
+  ['hp-20', 20],
+  ['hp-30', 30],
+];
+const POOL_MP: ReadonlyArray<readonly [AutoAbilityId, number]> = [
+  ['mp-5', 5],
+  ['mp-10', 10],
+  ['mp-20', 20],
+  ['mp-30', 30],
+];
+
+/**
+ * The six `+N%` auto-ability families of §9, named the way a menu names them
+ * rather than the way the damage chain consumes them.
+ */
+export type BonusFamily = 'strength' | 'magic' | 'defense' | 'magic-def' | 'hp' | 'mp';
+
+const BONUS_TABLES: Readonly<Record<BonusFamily, ReadonlyArray<readonly [AutoAbilityId, number]>>> = {
+  strength: OFFENSE_PHYSICAL,
+  magic: OFFENSE_MAGICAL,
+  defense: DEFENSE_PHYSICAL,
+  'magic-def': DEFENSE_MAGICAL,
+  hp: POOL_HP,
+  mp: POOL_MP,
+};
+
+function bestPercent(c: EquipmentBearer, table: ReadonlyArray<readonly [AutoAbilityId, number]>): number {
   let best = 0;
-  for (const [id, pct] of table) if (hasAuto(c, id) && pct > best) best = pct;
+  for (const [id, pct] of table) if (bearerHasAuto(c, id) && pct > best) best = pct;
   return best;
+}
+
+/**
+ * Best `+N%` this bearer carries from one family, in percentage points, or 0.
+ *
+ * "Best", not "sum": the tiers of one family never stack, so Yuna's Blessed
+ * Ring carrying both `magic-def-10` and `magic-def-5` is worth 10, not 15
+ * [ffx-combat-core §9; the same `bestPercent` steps 8/9 of the damage chain
+ * already use].
+ */
+export function bonusPercentFor(b: EquipmentBearer, family: BonusFamily): number {
+  return bestPercent(b, BONUS_TABLES[family]);
 }
 
 /**

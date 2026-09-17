@@ -9,6 +9,13 @@
  * `power: 0`, `flags: ['ignores-armored', 'never-break-damage-limit']`,
  * `canReflect: false`, `minigame: null`. Every status below is
  * `{ chance: 254, duration: 254 }` — battle-long, no expiry short of KO.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * see `mixes/abilities-restoratives.ts` and `mixes/abilities.ts` for the
+ * full reasoning): these are all ally/party-targeting buffs. `canMiss:
+ * false` is set explicitly on every record here, citing `ffx-bfa-yu-yevon.md`
+ * §1.3 `[estimate]` (analogy by damage-type/category) — the first pass's
+ * KNOWN GAP on this file is resolved, not open; see the sibling files for why.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -28,6 +35,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'max-hp-x2', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -50,6 +58,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'max-hp-x2', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -72,6 +81,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'max-hp-x2', chance: 254, duration: 254 },
       { status: 'cheer', chance: 254, duration: 254, stacks: 5 },
@@ -97,6 +107,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'max-mp-x2', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -119,6 +130,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'max-mp-x2', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -141,6 +153,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [
       { status: 'max-mp-x2', chance: 254, duration: 254 },
       { status: 'focus', chance: 254, duration: 254, stacks: 5 },
@@ -166,6 +179,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'mp-cost-zero', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -188,6 +202,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'mp-cost-zero', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -211,6 +226,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'damage-9999', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -233,6 +249,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'damage-9999', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -255,6 +272,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-ally',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'guaranteed-critical', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -277,6 +295,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'guaranteed-critical', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -299,6 +318,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'overdrive-x1_5', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],
@@ -322,6 +342,7 @@ export const BOOST_MIX_ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-allies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [estimate] — always hits; see file header.
     statusEffects: [{ status: 'overdrive-x2', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: ['ignores-armored', 'never-break-damage-limit'],

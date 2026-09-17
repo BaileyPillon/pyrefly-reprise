@@ -16,15 +16,14 @@
  * Overdrives, and any encounter whose script depends on a real rotation —
  * Yunalesca's above all — could never reach a decision.
  *
- * `src/data/ffx/index.ts` is being written as this lands, so the FFX side reads
- * whatever is on disk: the index when it exists, otherwise every module under
- * `src/data/ffx/**`, harvesting anything shaped like an `AbilityDef` or an
- * `ItemDef`. Both paths go through the same harvester, so the eventual index
- * needs no special case here.
+ * Both data layers publish a finished index (`src/data/ffx/index.ts`,
+ * `src/data/ffx2/index.ts`), so this is plain imports. It started as a module
+ * harvester written while the FFX index did not exist yet.
  */
 
-import type { AbilityDef, ItemDef } from '../../battle/common/types.ts';
 import { registerFFXAbilities, registerFFXItems } from '../../battle/ffx/index.ts';
+import { ALL_ABILITIES, ITEMS } from '../../data/ffx/index.ts';
+import * as data from '../../data/ffx2/index.ts';
 import {
   abilityRegistryFrom,
   dressphereRegistryFrom,
@@ -32,75 +31,6 @@ import {
   itemRegistryFrom,
   type Ffx2EngineOptions,
 } from '../../battle/ffx2/index.ts';
-
-type Loader = () => Promise<Record<string, unknown>>;
-
-/** The FFX index, once the data agent lands it. Empty until then. */
-const ffxIndexModule = import.meta.glob('../../data/ffx/index.ts') as Record<string, Loader>;
-/** Every FFX data module, as the fallback source. */
-const ffxDataModules = import.meta.glob('../../data/ffx/**/*.ts') as Record<string, Loader>;
-
-// ---------------------------------------------------------------- duck types
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null;
-}
-
-/** An `AbilityDef` is recognisable by its required discriminating fields. */
-function isAbilityDef(v: unknown): v is AbilityDef {
-  if (!isRecord(v)) return false;
-  return (
-    typeof v['id'] === 'string' &&
-    typeof v['name'] === 'string' &&
-    (v['game'] === 'ffx' || v['game'] === 'ffx2') &&
-    typeof v['category'] === 'string' &&
-    typeof v['formula'] === 'string' &&
-    typeof v['damageType'] === 'string' &&
-    Array.isArray(v['flags'])
-  );
-}
-
-/** An `ItemDef` carries an `effect` and the menu flags; it has no formula. */
-function isItemDef(v: unknown): v is ItemDef {
-  if (!isRecord(v)) return false;
-  return (
-    typeof v['id'] === 'string' &&
-    typeof v['name'] === 'string' &&
-    (v['game'] === 'ffx' || v['game'] === 'ffx2') &&
-    v['effect'] !== undefined &&
-    typeof v['usableInBattle'] === 'boolean'
-  );
-}
-
-interface Harvest {
-  abilities: Map<string, AbilityDef>;
-  items: Map<string, ItemDef>;
-}
-
-/**
- * Pull every ability and item out of an arbitrary module shape.
- *
- * Data files ship all of them: a bare `export const cure: AbilityDef`, an
- * `ABILITIES: Record<id, AbilityDef>`, an `ALL_ABILITIES: AbilityDef[]`, and a
- * `default` object whose values are any of those. Recursing a few levels with
- * a seen-set covers the lot without caring which shape a given file chose.
- */
-function harvest(value: unknown, out: Harvest, seen: Set<object>, depth = 0): void {
-  if (depth > 3 || !isRecord(value) || seen.has(value)) return;
-  seen.add(value);
-
-  if (isAbilityDef(value)) {
-    out.abilities.set(value.id, value);
-    return;
-  }
-  if (isItemDef(value)) {
-    out.items.set(value.id, value);
-    return;
-  }
-  for (const child of Array.isArray(value) ? value : Object.values(value)) {
-    harvest(child, out, seen, depth + 1);
-  }
-}
 
 // -------------------------------------------------------------------- report
 
@@ -113,7 +43,7 @@ export interface ContentReport {
   dresspheresFfx2: number;
   garmentGridsFfx2: number;
   /** Where the FFX records came from. */
-  ffxSource: 'index' | 'modules' | 'none';
+  ffxSource: 'index' | 'none';
 }
 
 let report: ContentReport = {
@@ -132,46 +62,16 @@ let ffx2Options: Ffx2EngineOptions = {};
 // ------------------------------------------------------------------ FFX side
 
 async function loadFfxContent(): Promise<void> {
-  const out: Harvest = { abilities: new Map(), items: new Map() };
-  const seen = new Set<object>();
-  let source: ContentReport['ffxSource'] = 'none';
-
-  const indexLoader = Object.values(ffxIndexModule)[0];
-  if (indexLoader) {
-    try {
-      harvest(await indexLoader(), out, seen);
-      if (out.abilities.size) source = 'index';
-    } catch (err) {
-      console.warn('[content] src/data/ffx/index.ts failed to load; falling back', err);
-    }
-  }
-
-  // No index yet, or it yielded nothing: read the tree directly.
-  if (!out.abilities.size) {
-    seen.clear();
-    for (const [path, load] of Object.entries(ffxDataModules)) {
-      try {
-        harvest(await load(), out, seen);
-      } catch (err) {
-        console.warn(`[content] ${path} failed to load; skipping`, err);
-      }
-    }
-    if (out.abilities.size) source = 'modules';
-  }
-
-  const abilities = [...out.abilities.values()].filter((a) => a.game === 'ffx');
-  const items = [...out.items.values()].filter((i) => i.game === 'ffx');
+  const abilities = ALL_ABILITIES.filter((a) => a.game === 'ffx');
+  const items = Object.values(ITEMS).filter((i) => i.game === 'ffx');
   registerFFXAbilities(abilities);
   registerFFXItems(items);
-
-  report = { ...report, abilitiesFfx: abilities.length, itemsFfx: items.length, ffxSource: source };
+  report = { ...report, abilitiesFfx: abilities.length, itemsFfx: items.length, ffxSource: 'index' };
 }
 
 // ---------------------------------------------------------------- FFX-2 side
 
 async function loadFfx2Content(): Promise<void> {
-  // FFX-2's index is a finished contract, so this side is a plain import.
-  const data = await import('../../data/ffx2/index.ts');
   const abilities = Object.values(data.ABILITIES);
   const items = Object.values(data.ITEMS);
   // Standard spheres only, as `adapters.ts` documents. A special dressphere is

@@ -24,8 +24,19 @@ export function hitChance(user: FFXCombatant, target: FFXCombatant, def: Ability
 
   let base: number;
   if (def.accuracy !== undefined) {
-    // USE_ACTION_ACCURACY: every enemy action takes this branch.
+    // USE_ACTION_ACCURACY: the action carries its own accuracy byte.
     base = def.accuracy - target.stats.eva;
+  } else if (user.side === 'enemy') {
+    // Enemy Accuracy is **never** read [§2.11]. An enemy action with no
+    // accuracy byte uses the ALWAYS hit formula. Rolling the table here would
+    // run Yunalesca (ACC 0) at base 25 and make Absorb, Mind Blast and Mega
+    // Death land about one time in four.
+    return null;
+  } else if (def.damageType !== 'physical') {
+    // The table is only for `uses_hit_chance_table` actions — physical weapon
+    // attacks. Magic, items, healing, revival and Overdrives use ALWAYS; a
+    // Cure or a Phoenix Down never whiffs [§2.11].
+    return null;
   } else {
     const raw = ifloor(user.stats.acc * 0.4);
     const idx = Math.max(0, Math.min(8, raw - target.stats.eva + 10));

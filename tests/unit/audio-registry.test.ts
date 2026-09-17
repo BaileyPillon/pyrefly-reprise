@@ -26,6 +26,9 @@ const SFX_CATALOG = [
   'cure-2', 'cure-3', 'regen', 'life', 'full-life', 'esuna', 'dispel', 'protect', 'shell', 'reflect', 'reflect-bounce', 'haste',
   'slow', 'stop', 'sleep', 'silence', 'blind', 'poison', 'berserk', 'confuse', 'curse', 'scan', 'steal-success', 'steal-fail',
   'item-use', 'phoenix-down', 'elixir', 'mp-restore', 'buff-generic', 'debuff-generic', 'summon-depart', 'aeon-overdrive',
+  // story (named by src/story/scripts; see tests/unit/audio-story-cues.test.ts)
+  'wind-high-altitude', 'wind-gust', 'kimahri-roar', 'fayth-hum', 'dome-echo', 'yu-yevon-chant', 'machina-groan',
+  'farplane-voices', 'lenne-song', 'whistle-answer',
 ];
 
 describe('music registry', () => {

@@ -14,7 +14,10 @@ const CATEGORY_LABEL: Partial<Record<AbilityCategory, string>> = {
 };
 
 /** Command kinds that resolve on their own — never a list of abilities to pick from. */
-const DIRECT_KINDS = new Set<Command['kind']>(['attack', 'defend', 'switch', 'escape', 'trigger', 'dismiss']);
+const DIRECT_KINDS = new Set<Command['kind']>(['attack', 'escape', 'trigger', 'dismiss']);
+
+/** Label of the synthetic group that holds every `switch` command. */
+export const SWITCH_LABEL = 'Switch';
 
 export interface TopDirectRow {
   kind: 'direct';
@@ -25,21 +28,82 @@ export interface TopGroupRow {
   category: AbilityCategory;
   label: string;
   items: AvailableCommand[];
+  /**
+   * `'switch'` marks the synthetic reserve-list group. It is not an ability
+   * category, and unlike a real one-entry group it always opens its list (a
+   * party swap must show *who* is coming in, even with one member benched).
+   */
+  role?: 'switch';
 }
 export type TopRow = TopDirectRow | TopGroupRow;
 
 /**
+ * Canonical FFX top-level order [visual-bible §3.3, "Default command set"]:
+ * Attack, the character command (Skill / Special), White Magic, Black Magic,
+ * Item, Overdrive when the gauge is full, Summon for Yuna. Anything the
+ * engine emits that isn't in the table keeps its engine order in the middle
+ * of the list; Switch is always last because it is an affordance on the party
+ * rather than an action on the field.
+ */
+const TOP_ORDER: Record<string, number> = {
+  'kind:trigger': 0,
+  'kind:attack': 1,
+  skill: 2,
+  special: 2,
+  whitemagic: 3,
+  blackmagic: 4,
+  item: 5,
+  overdrive: 6,
+  summon: 7,
+  aeon: 8,
+  'kind:escape': 9,
+  'kind:dismiss': 9,
+  'role:switch': 10,
+};
+const ORDER_FALLBACK = 8.5;
+
+function orderKey(row: TopRow): number {
+  if (row.kind === 'direct') return TOP_ORDER[`kind:${row.cmd.command.kind}`] ?? ORDER_FALLBACK;
+  if (row.role === 'switch') return TOP_ORDER['role:switch']!;
+  return TOP_ORDER[row.category] ?? ORDER_FALLBACK;
+}
+
+/**
  * Groups the engine's flat `AvailableCommand[]` into the command window's
  * top-level rows [visual-bible §3.3]: a command whose `Command.kind` is
- * self-contained (Attack, Defend, Switch, Escape, Talk, Dismiss) is its own
- * row; everything else (abilities, items, Overdrives, Summon) is bucketed by
- * `category` into a submenu, in first-seen order, so the engine's own
- * ordering drives the menu layout with no UI-side re-derivation.
+ * self-contained (Attack, Escape, Trigger, Dismiss) is its own row;
+ * everything else (abilities, items, Overdrives, Summon) is bucketed by
+ * `category` into a submenu. Two deliberate departures from a plain pass over
+ * the engine's list:
+ *
+ * * **No Defend row.** FFX's command window is Attack / the character command
+ *   / White Magic / Black Magic / Item / Overdrive / Summon — Defend is a
+ *   base *action* (`ffx-combat-core` §1.3 ranks it 2, §4.2 defines its
+ *   status) reached by an affordance, not a row in the list, and it never
+ *   appears among the character skill lists of §7. The engine keeps emitting
+ *   it (the `'defend'` auto-battle strategy in `BattlePresenterStrategies`
+ *   picks it straight off `AvailableCommand[]`); the menu simply doesn't
+ *   list it.
+ * * **One Switch row.** The engine emits one `switch` command *per benched
+ *   member*, which surfaced as bare name rows ("Auron") sitting among the
+ *   verbs. They collapse into a single `Switch` group whose submenu is the
+ *   reserve list, matching §3.3's "roster strip ... all seven characters
+ *   appear as portraits" swap flow.
  */
 export function buildTopRows(commands: AvailableCommand[]): TopRow[] {
   const rows: TopRow[] = [];
   const groups = new Map<string, TopGroupRow>();
+  let switchGroup: TopGroupRow | null = null;
   for (const cmd of commands) {
+    if (cmd.command.kind === 'defend') continue;
+    if (cmd.command.kind === 'switch') {
+      if (!switchGroup) {
+        switchGroup = { kind: 'group', category: cmd.category, label: SWITCH_LABEL, items: [], role: 'switch' };
+        rows.push(switchGroup);
+      }
+      switchGroup.items.push(cmd);
+      continue;
+    }
     if (DIRECT_KINDS.has(cmd.command.kind)) {
       rows.push({ kind: 'direct', cmd });
       continue;
@@ -52,7 +116,22 @@ export function buildTopRows(commands: AvailableCommand[]): TopRow[] {
     }
     group.items.push(cmd);
   }
-  return rows;
+  // Stable by construction: `Array.prototype.sort` is specified stable, so
+  // rows sharing an order key (Skill/Special, or anything unlisted) keep the
+  // engine's own ordering.
+  return rows.sort((a, b) => orderKey(a) - orderKey(b));
+}
+
+/** The benched member a `switch` command would bring in, for its portrait. */
+export function switchTargetId(cmd: AvailableCommand): CombatantId | null {
+  const extra = (cmd.command as { extra?: Record<string, unknown> }).extra;
+  const inId = extra?.['inId'];
+  return typeof inId === 'string' ? inId : null;
+}
+
+/** Index of the synthetic Switch group, or -1 — the L1/triangle affordance's jump target. */
+export function switchRowIndex(rows: TopRow[]): number {
+  return rows.findIndex((r) => r.kind === 'group' && r.role === 'switch');
 }
 
 export type TargetResolution =

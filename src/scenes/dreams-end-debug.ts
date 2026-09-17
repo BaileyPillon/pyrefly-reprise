@@ -19,6 +19,7 @@ import {
   DREAMS_END_ACTOR_HEIGHTS,
   DREAMS_END_ENEMY_ACTOR_DEFAULTS,
 } from './dreams-end.ts';
+import { isPlaceholderScene } from './index.ts';
 import { mountScene, type SceneBuild } from './types.ts';
 
 export class DreamsEndSceneScreen extends Screen {
@@ -187,11 +188,24 @@ export class DreamsEndSceneScreen extends Screen {
     this.camera = null;
   }
 
+  /**
+   * Both placeholder flags are published, because they mean different things
+   * and the critic reads them for different reasons.
+   *
+   * `backdropPlaceholder` is about the **art**: true means
+   * `public/art/backdrops/dreams-end.png` did not load and the painting on
+   * screen is `Backdrop`'s procedural stand-in. `scenePlaceholder` is about the
+   * **registry** — `isPlaceholderScene` is the same value `__pyrefly.scenes()`
+   * reports, i.e. whether this chapter is still drawing the Gagazet diorama
+   * instead of its own module. Dream's End should answer false to both; a run
+   * where they disagree says which of the two regressed.
+   */
   override snapshot(): Record<string, unknown> {
     return {
       scene: 'dreams-end',
       boss: this.bossId,
       backdropPlaceholder: this.build?.backdrop.placeholder ?? null,
+      scenePlaceholder: isPlaceholderScene('dreams-end'),
       rigs: this.build ? Object.keys(this.build.rigs) : [],
     };
   }

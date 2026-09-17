@@ -3,6 +3,7 @@ import {
   bouncePosition,
   classifyDamageEvent,
   computeHitOffset,
+  deflectFromRects,
   fontSizeFor,
   jitterX,
   lifetimeMsFor,
@@ -136,5 +137,66 @@ describe('opacityAt / scaleAt', () => {
 
   it('pops a critical hit larger than a normal one at spawn', () => {
     expect(scaleAt(0, 'critical')).toBeGreaterThan(scaleAt(0, 'damage'));
+  });
+});
+
+describe('deflectFromRects — keeping numerals off the HUD slabs', () => {
+  const half = { w: 30, h: 12 };
+  const menu = { left: 80, top: 320, right: 440, bottom: 830 };
+
+  it('leaves a numeral alone when it clears every panel', () => {
+    expect(deflectFromRects({ x: 900, y: 400 }, half, [menu])).toEqual({ x: 900, y: 400 });
+  });
+
+  it('slides a numeral that lands inside the command menu out to the nearer edge', () => {
+    // Projected onto the ATTACK row, as a hit on a party member standing
+    // behind the command stack does (docs/screenshots/46-attack.png).
+    const out = deflectFromRects({ x: 400, y: 445 }, half, [menu], {
+      left: 0,
+      top: 0,
+      right: 1600,
+      bottom: 900,
+    });
+    expect(out.x - half.w).toBeGreaterThanOrEqual(menu.right);
+    expect(out.y).toBe(445);
+  });
+
+  it('pushes up rather than down when both verticals are equally far', () => {
+    const band = { left: 0, top: 380, right: 1600, bottom: 480 };
+    const out = deflectFromRects({ x: 800, y: 430 }, half, [band], {
+      left: 0,
+      top: 0,
+      right: 1600,
+      bottom: 900,
+    });
+    expect(out.y + half.h).toBeLessThanOrEqual(band.top);
+  });
+
+  it('clears both panels when the first push lands inside the second', () => {
+    const a = { left: 80, top: 320, right: 440, bottom: 830 };
+    const b = { left: 450, top: 320, right: 700, bottom: 830 };
+    const out = deflectFromRects({ x: 430, y: 500 }, half, [a, b], {
+      left: 0,
+      top: 0,
+      right: 1600,
+      bottom: 900,
+    });
+    const box = { left: out.x - half.w, right: out.x + half.w, top: out.y - half.h, bottom: out.y + half.h };
+    for (const r of [a, b]) {
+      const hits = box.right > r.left && box.left < r.right && box.bottom > r.top && box.top < r.bottom;
+      expect(hits).toBe(false);
+    }
+  });
+
+  it('keeps the numeral inside the layer bounds', () => {
+    const edge = { left: 1400, top: 0, right: 1600, bottom: 900 };
+    const out = deflectFromRects({ x: 1560, y: 400 }, half, [edge], {
+      left: 0,
+      top: 0,
+      right: 1600,
+      bottom: 900,
+    });
+    expect(out.x + half.w).toBeLessThanOrEqual(1600);
+    expect(out.x - half.w).toBeGreaterThanOrEqual(0);
   });
 });

@@ -30,8 +30,18 @@
  *     `TriggerCommand`, fired from the battle screen, not a story step.
  *   - Mortiorchis's two-stage telegraph is a battle event, not a script — but
  *     pair each state line with **one** party callout [writing-bible §5.2].
- *     `mortiorchis-charge` below is that one callout; the banner is the data
- *     agent's `Mortiorchis enters Auto-Attack Mode`.
+ *     `mortiorchis-first-charge` below is that one callout; the banner is the
+ *     data agent's `Mortiorchis enters Auto-Attack Mode`.
+ *
+ * **Two rules every `mid` entry in this project obeys** — see
+ * `src/story/registry.ts`, which tests both:
+ *   1. `id === script`. The engine emits `script-trigger` with the trigger's
+ *      **id** (`battle/ffx/triggers.ts`), and the presenter looks the script up
+ *      by that name, so a trigger whose `script` differs from its `id` is a
+ *      beat that can never play.
+ *   2. Every `say` carries an explicit `auto`. A mid-battle script runs inside
+ *      a live fight on a 30 s presenter budget; a line that waits on a Confirm
+ *      that never comes wedges the beat until it is abandoned.
  */
 
 import type { ChapterScripts } from '../dsl.ts';
@@ -234,7 +244,7 @@ export const seymourFluxScripts: ChapterScripts = {
       id: 'mortiorchis-first-charge',
       when: { type: 'charge-started', who: 'mortiorchis' },
       once: true,
-      script: 'mortiorchis-charge',
+      script: 'mortiorchis-first-charge',
     },
     {
       // Lance of Atrophy lands. The lesson is one line, not a tutorial.
@@ -243,23 +253,35 @@ export const seymourFluxScripts: ChapterScripts = {
       once: true,
       script: 'first-zombie',
     },
+    {
+      // He casts it as a kindness, which is the whole character
+      // [writing-bible §3 E1 callouts].
+      id: 'seymour-lance',
+      when: { type: 'ability-used', who: 'seymour-flux', ability: 'lance-of-atrophy' },
+      once: true,
+      script: 'seymour-lance',
+    },
   ],
   midScripts: {
     'seymour-half': [
       camera('action', 400),
-      say('seymour', 'Good. Struggle.'),
-      say('seymour', 'It makes the rest feel earned.'),
+      say('seymour', 'Good. Struggle.', { auto: 1000 }),
+      say('seymour', 'It makes the rest feel earned.', { auto: 1300 }),
       camera('idle', 400),
     ],
-    'mortiorchis-charge': [
+    'mortiorchis-first-charge': [
       camera('action', 300),
       fx('mortiorchis-charge', 'mortiorchis'),
-      say('auron', "It's charging. End this."),
+      say('auron', "It's charging. End this.", { auto: 1100 }),
       camera('idle', 300),
     ],
     'first-zombie': [
-      say('rikku', "Eeew! Yunie, don't heal him!"),
-      say('lulu', "He's turned. Cures will kill him now."),
+      say('rikku', "Eeew! Yunie, don't heal him!", { auto: 1200 }),
+      say('lulu', "He's turned. Cures will kill him now.", { auto: 1400 }),
+    ],
+    'seymour-lance': [
+      say('seymour', 'Let it in.', { auto: 1000 }),
+      say('seymour', "It's quieter on the other side.", { auto: 1300 }),
     ],
   },
 };

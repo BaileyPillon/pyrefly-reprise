@@ -3,8 +3,7 @@ import { Screen } from '../../app/Screen.ts';
 import type { InputSnapshot } from '../../app/Input.ts';
 import type { MinigameKind } from '../../battle/common/types.ts';
 import { FFXBattleHud } from './FFXBattleHud.ts';
-import { mountFFXPartyPrep, type PartyPrepHandle } from './party-prep/PartyPrep.ts';
-import { makeFakeBattleState, makeFakeCommands, makeFakePartyBuild, makeFakeTurnPreview } from './testFixtures.ts';
+import { makeFakeBattleState, makeFakeCommands, makeFakeTurnPreview } from './testFixtures.ts';
 
 const STYLE_ID = 'ffx-hud-demo-style';
 const CSS = `
@@ -17,9 +16,14 @@ const CSS = `
 
 /**
  * A live, data-bound stand-in for a battle screen: mounts the real
- * `FFXBattleHud` (or the party-prep menus) against the fake fixtures in
- * `testFixtures.ts`, so the HUD can be screenshotted and iterated on before
- * any battle engine or 3D scene exists. Registered as `'ffx-hud-demo'`.
+ * `FFXBattleHud` against the fake fixtures in `testFixtures.ts`, so the HUD
+ * can be screenshotted and iterated on before any battle engine or 3D scene
+ * exists. Registered as `'ffx-hud-demo'`.
+ *
+ * Party-prep no longer has a demo mode here: it composes into
+ * `PartyPrepScreen`'s own Ink & Gold frame now (`src/ui/ffx/party-prep/
+ * index.ts`), so the real `'party-prep'` screen (registered in `main.ts`) is
+ * the thing to screenshot for it, not a synthetic stand-in.
  *
  * Beats (`window.__pyrefly.trigger(name)`):
  * | Name | Effect |
@@ -27,14 +31,11 @@ const CSS = `
  * | `command:open` | opens the command menu (default on enter) |
  * | `telegraph` | fires a stage-2 charge telegraph banner |
  * | `minigame:<kind>` | opens that Overdrive minigame overlay |
- * | `party-prep` | swaps to the party-prep screen |
- * | `battle` | swaps back to the battle HUD |
  */
 export class FFXHudDemoScreen extends Screen {
   readonly name = 'ffx-hud-demo';
 
   private hud: FFXBattleHud | null = null;
-  private prep: PartyPrepHandle | null = null;
   private label: HTMLElement | null = null;
 
   override enter(): void {
@@ -53,18 +54,11 @@ export class FFXHudDemoScreen extends Screen {
   }
 
   override exit(): void {
-    this.teardown();
-  }
-
-  private teardown(): void {
     this.hud?.unmount();
     this.hud = null;
-    this.prep?.unmount();
-    this.prep = null;
   }
 
   private showBattle(): void {
-    this.teardown();
     const hud = new FFXBattleHud();
     this.hud = hud;
     hud.mount(this.root);
@@ -72,16 +66,16 @@ export class FFXHudDemoScreen extends Screen {
     hud.setProjector((id) => FAKE_POSITIONS[id] ?? { x: 800, y: 450 });
     const state = makeFakeBattleState();
     hud.sync(state, makeFakeTurnPreview());
+    // Populates the .ig-banner (name tracked from turn-start, "ATTACK" left
+    // in the chip once the tracked name is trimmed off the message text) so
+    // the demo shows the banner as designed instead of an empty slab.
+    hud.onEvent({ seq: 0, type: 'turn-start', actorId: 'tidus', turn: 1, elapsedTicks: 0 });
+    hud.onEvent({ seq: 1, type: 'message', text: 'Tidus ATTACK', kind: 'ability' });
     void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
   }
 
-  private showPartyPrep(): void {
-    this.teardown();
-    this.prep = mountFFXPartyPrep(this.root, makeFakePartyBuild(), () => {});
-  }
-
   override handleInput(input: InputSnapshot): void {
-    if (input.justPressed('cancel') && !this.prep) void this.app.goto('title');
+    if (input.justPressed('cancel')) void this.app.goto('title');
   }
 
   override trigger(name: string): boolean {
@@ -98,14 +92,6 @@ export class FFXHudDemoScreen extends Screen {
       void this.hud?.openMinigame(kind as MinigameKind, MINIGAME_DEMO_PARAMS[kind] ?? {});
       return true;
     }
-    if (name === 'party-prep') {
-      this.showPartyPrep();
-      return true;
-    }
-    if (name === 'battle') {
-      this.showBattle();
-      return true;
-    }
     return false;
   }
 
@@ -114,7 +100,7 @@ export class FFXHudDemoScreen extends Screen {
   }
 
   override snapshot(): Record<string, unknown> {
-    return { mode: this.prep ? 'party-prep' : 'battle' };
+    return { mode: 'battle' };
   }
 }
 

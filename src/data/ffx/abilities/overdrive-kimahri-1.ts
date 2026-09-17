@@ -17,6 +17,27 @@
  * `damageType: 'other'` on every entry per the hard rule that all character
  * Overdrives ignore Protect/Shell/Strength+%/Magic+%/Power Break/Magic
  * Break entirely.
+ *
+ * ACCURACY DECISION (2026-09-16, closing the same review `overdrive-tidus.ts`
+ * / `overdrive-auron.ts` settled): Jump, Seed Cannon and Thrust Kick use
+ * `formula: 'strength'` and could look like they should roll accuracy the
+ * way a physical Attack does. Checked specifically for a research row that
+ * says otherwise — `research/ffx-combat-core.md` §5.8's full 12-row Ronso
+ * Rage table carries no accuracy or hit-chance annotation for any Rage, and
+ * no other research file (`ffx-bfa-yu-yevon.md`, which is where Kimahri's
+ * Ronso Rage usage is discussed at line 544, `ffx-yunalesca.md`) gives any
+ * of these a specific accuracy byte or a contradicting "rolls accuracy"
+ * statement either. Absent that, the rule this project already established
+ * for `Other`-damage-type Overdrives applies: `research/ffx-bfa-yu-yevon.md`
+ * §1.3 (lines 101, 107, 108) decompiles three Strength-formula, `Other`
+ * damage-type enemy Overdrives as all "always hits", and every Rage here is
+ * `category: 'overdrive'`, `damageType: 'other'` — these ARE Overdrives
+ * first, whatever their formula. `canMiss: false` is set explicitly on all
+ * 6 records in this file, citing ffx-bfa-yu-yevon.md §1.3 `[verified: 2
+ * sources]` for the pattern, `[estimate]` for the extension to a formula
+ * (`strength`, `special-magic`, `user-max-hp`) or rider (Petrify on Stone
+ * Breath, instant Eject on Self-Destruct) the three confirmed rows don't
+ * exactly replicate.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -36,6 +57,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -64,6 +86,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['fire'],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -89,6 +112,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -119,6 +143,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['destroys-user'],
@@ -149,6 +174,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -178,6 +204,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [{ status: 'petrify', chance: 254, duration: 254 }],
     removesStatuses: [],
     flags: [],

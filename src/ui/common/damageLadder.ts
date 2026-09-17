@@ -18,6 +18,8 @@ export interface DamageEventInput {
   /** True when this numeral is against an MP pool rather than HP. */
   isMp?: boolean;
   critical?: boolean;
+  /** `BattleEvent`'s own spelling of `critical`. Either one promotes the numeral. */
+  crit?: boolean;
   /** Whether the hit connected at all; false renders MISS regardless of `amount`. */
   hit?: boolean;
 }
@@ -30,7 +32,7 @@ export function classifyDamageEvent(input: DamageEventInput): DamageKind {
   if (input.amount === undefined) return 'miss';
   if (input.isMp) return 'mp';
   if (input.amount < 0) return 'heal';
-  return input.critical ? 'critical' : 'damage';
+  return input.critical || input.crit ? 'critical' : 'damage';
 }
 
 export interface HitOffset {
@@ -51,6 +53,24 @@ export function computeHitOffset(hitIndex: number): HitOffset {
   const i = Math.max(0, Math.floor(hitIndex));
   // `0 - 3*i` rather than `-3*i` so hit 0 reports +0, not -0.
   return { dx: 4 * i, dy: 0 - 3 * i, delayMs: 80 * i };
+}
+
+/**
+ * Vertical pitch, in logical px, between two numerals stacked on the *same*
+ * target — one glyph height plus a little air.
+ *
+ * §3.6's `(+4, -3) * i` diagonal alone is a sub-glyph step: two figures that
+ * land together print through each other (`docs/screenshots/polish/47-boss-attack.png`
+ * shows a MISS struck across an `11500` on Yuna, and `48-overdrive.png` two
+ * figures sharing Tidus). The ladder therefore steps by this pitch vertically
+ * and keeps §3.6's diagonal as the horizontal drift, which is also what the
+ * game's own multi-hit ladders read like.
+ */
+export function ladderPitch(kind: DamageKind): number {
+  // Just under a glyph height: with `computeHitOffset`'s own `-3` per rung this
+  // comes to a hair over one line, which separates the figures without walking
+  // a five-hit ladder off the top of the screen above a tall enemy.
+  return fontSizeFor(kind) * 0.85;
 }
 
 /** `+/-6px` random x jitter so simultaneous hits on different targets don't overlap [§3.6]. */
@@ -184,4 +204,127 @@ export function scaleAt(tMs: number, kind: DamageKind): number {
   if (tMs >= durationMs) return 1;
   const p = Math.max(0, tMs) / durationMs;
   return pop + (1 - pop) * easeOutCubic(p);
+}
+
+// ---------------------------------------------------------------- HUD dodging
+
+/** A screen-space box, in the same pixel space as the numeral layer. */
+export interface NumeralRect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+interface Push {
+  dx: number;
+  dy: number;
+  cost: number;
+}
+
+function overlaps(
+  cx: number,
+  cy: number,
+  half: { w: number; h: number },
+  r: NumeralRect,
+  margin: number,
+): boolean {
+  return !(
+    cx + half.w <= r.left - margin ||
+    cx - half.w >= r.right + margin ||
+    cy + half.h <= r.top - margin ||
+    cy - half.h >= r.bottom + margin
+  );
+}
+
+function fits(cx: number, cy: number, half: { w: number; h: number }, b: NumeralRect | null): boolean {
+  if (!b) return true;
+  return cx - half.w >= b.left && cx + half.w <= b.right && cy - half.h >= b.top && cy + half.h <= b.bottom;
+}
+
+/**
+ * Slide a numeral out of any opaque HUD panel it would otherwise be swallowed
+ * by — the FFX command menu, the CTB column, the party-status list.
+ *
+ * The projected chest point of a party member standing behind the command
+ * stack lands *inside* that stack, which is what made a hit on Yuna print
+ * "789" across the ATTACK row (`docs/screenshots/46-attack.png`). Rather than
+ * clamping to an arbitrary corner, this picks the cheapest single-axis push
+ * that clears the panel and still fits in `bounds`, so the numeral stays as
+ * close to its target as it can while remaining readable.
+ *
+ * Costs are weighted, not raw distances: up is slightly preferred (numerals
+ * rise anyway) and down is heavily penalised (down is where the party-status
+ * slabs live). `margin` keeps a little air between the glyph and the panel
+ * edge. Runs a few passes so a push out of one panel that lands in another
+ * resolves; if nothing fits the bounds, the cheapest push wins anyway and the
+ * result is clamped.
+ */
+export function deflectFromRects(
+  point: { x: number; y: number },
+  half: { w: number; h: number },
+  rects: readonly NumeralRect[],
+  bounds: NumeralRect | null = null,
+  margin = 6,
+): { x: number; y: number } {
+  let x = point.x;
+  let y = point.y;
+  if (rects.length === 0) return clampToBounds(x, y, half, bounds);
+
+  for (let pass = 0; pass < 3; pass++) {
+    let moved = false;
+    for (const r of rects) {
+      if (!overlaps(x, y, half, r, margin)) continue;
+      const candidates: Push[] = [
+        { dx: r.left - margin - (x + half.w), dy: 0, cost: 0 },
+        { dx: r.right + margin - (x - half.w), dy: 0, cost: 0 },
+        { dx: 0, dy: r.top - margin - (y + half.h), cost: 0 },
+        { dx: 0, dy: r.bottom + margin - (y - half.h), cost: 0 },
+      ];
+      candidates[0]!.cost = Math.abs(candidates[0]!.dx);
+      candidates[1]!.cost = Math.abs(candidates[1]!.dx);
+      candidates[2]!.cost = Math.abs(candidates[2]!.dy) * 0.9;
+      candidates[3]!.cost = Math.abs(candidates[3]!.dy) * 2.2;
+
+      const inside = candidates.filter((c) => fits(x + c.dx, y + c.dy, half, bounds));
+      const pool = inside.length > 0 ? inside : candidates;
+      const best = pool.reduce((a, b) => (b.cost < a.cost ? b : a));
+      x += best.dx;
+      y += best.dy;
+      moved = true;
+    }
+    if (!moved) break;
+  }
+
+  // Panels packed closer together than the numeral is wide have no gap to sit
+  // in, so the per-rect pushes above can shuttle it from one into the next.
+  // When that happens, clear the whole cluster at once: above it by
+  // preference, below it otherwise.
+  const stuck = rects.filter((r) => overlaps(x, y, half, r, margin));
+  if (stuck.length > 0) {
+    const top = Math.min(...stuck.map((r) => r.top));
+    const bottom = Math.max(...stuck.map((r) => r.bottom));
+    const above = top - margin - half.h;
+    const below = bottom + margin + half.h;
+    y = fits(x, above, half, bounds) || !fits(x, below, half, bounds) ? above : below;
+  }
+
+  return clampToBounds(x, y, half, bounds);
+}
+
+function clampToBounds(
+  x: number,
+  y: number,
+  half: { w: number; h: number },
+  b: NumeralRect | null,
+): { x: number; y: number } {
+  if (!b) return { x, y };
+  const minX = b.left + half.w;
+  const maxX = b.right - half.w;
+  const minY = b.top + half.h;
+  const maxY = b.bottom - half.h;
+  return {
+    x: maxX >= minX ? Math.min(maxX, Math.max(minX, x)) : (b.left + b.right) / 2,
+    y: maxY >= minY ? Math.min(maxY, Math.max(minY, y)) : (b.top + b.bottom) / 2,
+  };
 }

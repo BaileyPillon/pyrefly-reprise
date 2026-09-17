@@ -14,9 +14,12 @@ import { enemySfx } from './enemy.ts';
 import { flowSfx } from './flow.ts';
 import { spellSfx } from './spells.ts';
 import { supportSfx } from './support.ts';
+import { storySfx } from './story.ts';
 import type { SfxDef } from './kit.ts';
+import { SFX_ALIASES } from './aliases.ts';
 
 export type { SfxDef };
+export { SFX_ALIASES };
 
 /** Every file's cues, in registration order. A name must appear in exactly one file. */
 export const SFX_GROUPS: Record<string, Record<string, SfxDef>> = {
@@ -28,6 +31,7 @@ export const SFX_GROUPS: Record<string, Record<string, SfxDef>> = {
   flow: flowSfx,
   spells: spellSfx,
   support: supportSfx,
+  story: storySfx,
 };
 
 export const SFX: Record<string, SfxDef> = Object.assign({}, ...Object.values(SFX_GROUPS));
@@ -38,6 +42,17 @@ export function sfxNames(): string[] {
 
 export function hasSfx(name: string): boolean {
   return Object.prototype.hasOwnProperty.call(SFX, name);
+}
+
+/**
+ * The real cue a key plays: the key itself when it is a cue, otherwise its
+ * entry in {@link SFX_ALIASES} (the per-ability `sfxKey` names the battle data
+ * was authored with). `undefined` when neither resolves.
+ */
+export function resolveSfx(name: string): string | undefined {
+  if (hasSfx(name)) return name;
+  const target = Object.prototype.hasOwnProperty.call(SFX_ALIASES, name) ? SFX_ALIASES[name] : undefined;
+  return target !== undefined && hasSfx(target) ? target : undefined;
 }
 
 export function getSfx(name: string): SfxDef {

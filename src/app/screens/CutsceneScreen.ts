@@ -18,8 +18,8 @@ import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 
 const HINTS = [
-  { keyboard: 'Enter', gamepad: 'Cross', label: 'advance' },
-  { keyboard: 'Esc', gamepad: 'Circle', label: 'skip' },
+  { keyboard: 'Enter', gamepad: 'Cross', label: 'advance', action: 'confirm' },
+  { keyboard: 'Esc', gamepad: 'Circle', label: 'skip', action: 'cancel' },
 ];
 
 /**
@@ -166,7 +166,7 @@ export class CutsceneScreen extends Screen {
     this.hint?.handleInput(input);
     this.dialogueBox?.handleInput(input);
     const skippable = this.opts.skippable ?? true;
-    if (skippable && input.consume('cancel')) this.runner?.skip();
+    if (skippable && (input.consume('cancel') || input.actions.includes('cancel'))) this.runner?.skip();
   }
 
   override update(dt: number): void {
@@ -218,7 +218,18 @@ export class CutsceneScreen extends Screen {
       },
       wait: (ms) => new Promise((resolve) => window.setTimeout(resolve, ms)),
       moveActor: () => {},
-      sfx: (key) => audio.playSfx(key),
+      // A missing cue must cost a sound, never the scene. `playSfx` throws on
+      // an unknown name, and the runner calls this synchronously mid-script:
+      // unguarded, one bad key stopped every chapter's opening cutscene before
+      // its first line. Same policy as the battle presenter's `cue()`.
+      sfx: (key) => {
+        try {
+          audio.playSfx(key);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.warn(`[cutscene] sfx "${key}" skipped:`, err instanceof Error ? err.message.split('.')[0] : err);
+        }
+      },
       flash: (color, ms) => this.flash(color, ms),
       shake: (px, ms) => this.shake(px, ms),
       fadeScreen: (to, ms) => this.app.fade(to === 'clear' ? 'clear' : 'opaque', ms),

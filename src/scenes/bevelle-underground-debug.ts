@@ -96,8 +96,16 @@ export class BevelleUndergroundSceneScreen extends Screen {
       states: ['idle'],
       placeholder: () => paintBossSilhouette({ seed: 57 }),
       placeholderBaseline: 0.985,
-      rim: { color: 0xb048f0, strength: 0.75, dir: [1, 0.3] as [number, number], width: 4 },
-      bounce: { color: 0x6ed2ee, strength: 0.24 },
+      /**
+       * Lit from **below and behind**, by the torn floor hole the scene vents
+       * cyan light out of. That is the bible's money shot 2 — "up-light turning
+       * the underside of the wings cyan and the topside near-black" — and on a
+       * painted cut-out it is the only part of that description a rim band can
+       * actually deliver: a negative y in `dir` puts the band along the
+       * underside of every silhouette edge instead of along the top.
+       */
+      rim: { color: 0x9ae8fb, strength: 0.85, dir: [0.25, -0.9] as [number, number], width: 4 },
+      bounce: { color: 0x6ed2ee, strength: 0.44 },
       groundShade: 0.1,
       hover: { height: 0.5, bobAmplitude: 0.09, bobSpeed: 0.16 },
       shadow: { radius: 1.6, opacity: 0.5, squash: 0.5 },
@@ -112,8 +120,8 @@ export class BevelleUndergroundSceneScreen extends Screen {
         states: ['idle'],
         placeholder: () => paintBossSilhouette({ seed: 57 }),
         placeholderBaseline: 0.985,
-        rim: { color: 0xb048f0, strength: 0.75, dir: [1, 0.3] as [number, number], width: 4 },
-        bounce: { color: 0x6ed2ee, strength: 0.24 },
+        rim: { color: 0x9ae8fb, strength: 0.85, dir: [0.25, -0.9] as [number, number], width: 4 },
+        bounce: { color: 0x6ed2ee, strength: 0.44 },
         groundShade: 0.1,
         hover: { height: 0.36, bobAmplitude: 0.075, bobSpeed: 0.17 },
         shadow: { radius: 1.3, opacity: 0.55, squash: 0.5 },

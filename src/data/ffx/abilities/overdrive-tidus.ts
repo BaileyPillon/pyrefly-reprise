@@ -19,6 +19,26 @@
  *
  * Crit: "Tidus's Overdrives can land critical hits... unlike Wakka's Slots,
  * which never crit" — every entry below carries the `crit-eligible` flag.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
+ * the first pass wrongly reasoned that `formula: 'strength'` implies "rolls
+ * accuracy like a normal Attack"; the decompiled Overdrive rows below show
+ * that is exactly backwards for this damage-type family): does Slice &
+ * Dice's 6 hits, or Energy Rain's all-enemies hit, roll to-hit per target?
+ * `research/ffx-bfa-yu-yevon.md` §1.3 (lines 101, 107, 108) decompiles three
+ * enemy Overdrives — Jecht Bomber, Ultimate Jecht Shot, Jecht Bomber 2 — that
+ * are `Strength` formula, `Other` damage type, and all flagged "always
+ * hits", CONTRASTED against that same table's plain physical attacks (lines
+ * 98, 104-105: Strength, `Physical` type, "affected by Dark" / an explicit
+ * accuracy byte, which do roll). The formula is not what decides it; the
+ * `Other` damage type — i.e. "this is a character Overdrive" — is. Spiral
+ * Cut/Slice & Dice/Energy Rain/Blitz Ace are all `formula: 'strength'`,
+ * `damageType: 'other'`, `category: 'overdrive'`, matching the Jecht
+ * Overdrives' exact signature. Conclusion: Swordplay always hits and never
+ * rolls accuracy. `canMiss: false` is set explicitly on all 4 records below,
+ * citing ffx-bfa-yu-yevon.md §1.3 `[verified: 2 sources]` (three independent
+ * decompiled rows agree). Each of Slice & Dice's 6 hits and each enemy
+ * Energy Rain reaches is unconditional, not an independent roll.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -41,6 +61,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -74,6 +95,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 6,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -107,6 +129,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 1,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
@@ -144,6 +167,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'single-enemy',
     hits: 8,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],

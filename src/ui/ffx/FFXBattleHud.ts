@@ -96,6 +96,15 @@ export class FFXBattleHud implements HudPort {
     );
     this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el);
 
+    // A CTB tile doubles as a click target while aiming: routes through the
+    // same confirm path as the reticle and Enter, and is a no-op — returns
+    // `false`, nothing happens — outside targeting or for a non-candidate id.
+    this.ctbList.el.addEventListener('click', (e) => {
+      const row = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-actor]');
+      const id = row?.dataset['actor'];
+      if (id) this.commandMenu.tryConfirmTargetById(id);
+    });
+
     const surface = document.createElement('div');
     surface.className = 'ig-surface';
     surface.innerHTML = '<div class="ig-surface__grain"></div><div class="ig-surface__vignette"></div>';
@@ -116,6 +125,7 @@ export class FFXBattleHud implements HudPort {
   unmount(): void {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
+    this.damageNumbers.clear();
     this.telegraph.dispose();
     this.el.remove();
     this.mounted = false;
@@ -148,8 +158,15 @@ export class FFXBattleHud implements HudPort {
 
   onEvent(event: BattleEvent): void {
     switch (event.type) {
-      case 'turn-start':
       case 'action-start':
+        this.currentActorId = event.actorId;
+        // An action resolving means the decision has been made — by the
+        // player, or by a strategy that raced the menu's promise and won
+        // (`BattlePresenter.chooseCommand`). Either way the command stack and
+        // its help line must not sit over the action.
+        this.commandMenu.suspend();
+        return;
+      case 'turn-start':
         this.currentActorId = event.actorId;
         return;
       case 'message':
@@ -191,7 +208,12 @@ export class FFXBattleHud implements HudPort {
     if (visible) this.layout();
   }
 
-  setProjector(project: (id: CombatantId) => { x: number; y: number } | null): void {
+  /** Frame tick from `BattleScreen`, forwarded to the only thing here that animates itself. */
+  update(dt: number): void {
+    this.damageNumbers.update(dt);
+  }
+
+  setProjector(project: Projector): void {
     const p: Projector = project;
     this.commandMenu.setProjector(p);
     this.damageNumbers.setProjector(p);

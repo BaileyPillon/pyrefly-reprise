@@ -20,6 +20,14 @@
  * `statusEffects: []` and the raw chance byte lives at `extra.deathChance:
  * 80`; the engine rolls that on its own Death-specific path and applies
  * `'ko'` directly on success, not via the generic status pipeline.
+ *
+ * ACCURACY DECISION (2026-09-16, corrected in a second integration pass):
+ * see `overdrive-lulu-1.ts` for the full reasoning and citations
+ * (`ffx-yunalesca.md` §7.2 line 596 + `ffx-bfa-yu-yevon.md` §1.3 lines 99,
+ * 101, 107, 108). `canMiss: false` is set explicitly on all 10 records in
+ * this file too, citing the same two sources `[verified: 2 sources]` — Fury
+ * is both a Magic-formula cast and an `Other`-damage-type Overdrive, and the
+ * decompiled rows show both families always hit.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -39,6 +47,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['lightning'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -64,6 +73,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: ['water'],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -92,6 +102,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [{ status: 'poison', chance: 80, duration: 254 }],
     removesStatuses: [],
     flags: [],
@@ -122,6 +133,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -152,6 +164,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [], // Death is not a StatusApplication here — see file header.
     removesStatuses: [],
     flags: [],
@@ -183,6 +196,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['drains'],
@@ -212,6 +226,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: ['drains-mp'],
@@ -237,6 +252,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'random-enemy',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -265,6 +281,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     element: [],
     targeting: 'all-enemies',
     hits: 16,
+    canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — always hits; see file header.
     statusEffects: [],
     removesStatuses: [],
     flags: [],
