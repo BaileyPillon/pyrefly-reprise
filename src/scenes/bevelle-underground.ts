@@ -169,7 +169,13 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 const PARTY_SLOTS: Array<[number, number, number]> = [
   [-2.05, 0, 1.45], // front-left  (Yuna)
   [-1.3, 0, 0.1], // middle, stepped right and back (Rikku)
-  [-0.45, 0, -1.35], // back-right, furthest from camera (Paine)
+  // Back-right (Paine). 0.45 further left than the table above records: the
+  // boss had to come in off the HUD rail (see {@link ENEMY_SLOTS}) and at his
+  // new x his left wingtip reached 0.430 of the canvas, which is where this
+  // slot's shoulder was. The nudge re-opens the gutter — Paine now reads
+  // 0.372..0.444 against a wing that starts at 0.430 — and costs the formation
+  // nothing: separation from slot 1 stays above 130px at `idle` and `action`.
+  [-0.9, 0, -1.5],
   // reserve — outside every rig's frustum, including `victory`'s left swing
   [-12.0, 0, 2.6],
   [-12.9, 0, 1.0],
@@ -183,10 +189,30 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * the parts a multi-part boss puts on the field (Bahamut's wings, Vegnagun's
  * leg and tail).
  */
+/**
+ * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`).
+ * The FFX-2 HUD is mirrored from FFX's, so the rail is different and *tighter*:
+ * the command stack's left edge is at 0.745 of the canvas and the party column
+ * under it at 0.725, which makes 0.72 the last column an enemy may use.
+ *
+ * At `[3.3, 0, -2.6]` Bahamut measured **0.575..0.930** — his whole right wing
+ * was behind the command stack and his wingtip was off the screen, in a fight
+ * whose money shot is "wings spread wide enough to exceed the frame"
+ * (see the `bahamut` rig). Exceeding the frame is the intent; exceeding it
+ * *into the menu* is not.
+ *
+ * 2.1 units left and 2.8 back put him at 0.430..0.713: still 0.28 of the frame
+ * wide and 0.47 tall, still the largest thing in the shot, with both wings
+ * whole and a clear gutter before the stack. The depth also lifts his feet to
+ * 0.61, well above the party column's 0.722 top edge.
+ *
+ * Nothing in this chapter uses slots 1 and 2 — Bahamut has no parts — but they
+ * move with him so a future formation cannot inherit the old collision.
+ */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [3.3, 0, -2.6], // boss
-  [5.6, 0, -1.1], // right part
-  [1.8, 0, -4.6], // left / back part
+  [1.2, 0, -5.4], // boss -> x 0.430..0.713, y 0.138..0.610 at `idle`
+  [2.9, 0, -8.4], // right part
+  [0.2, 0, -7.0], // left / back part
 ];
 
 /**

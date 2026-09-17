@@ -171,28 +171,52 @@ function runChain(
  *
  * Then: **Hastega up and kept up**; the two **Stamina Tonics**; the **Cheer
  * ladder exactly once**, because a KO clears the stacks and re-running it after
- * every revive cost five consecutive turns in a measured losing tail; **an aeon
- * out when his Overdrive gauge crosses 55**, because §1.6's branch table checks
- * "an Aeon is on the field" first and spends the whole charge on Jecht Bomber
- * at the summon instead of an Ultimate Jecht Shot at the party; **Talk as the
- * backstop**; and **Yu Yevon is never attacked** - the Candle of Life goes in
- * first for the Doom, the pillars stay suppressed, and nobody swings until his
- * own Gravija has taken him under 900.
+ * every revive cost five consecutive turns in a measured losing tail; and
+ * **Yu Yevon is never attacked** - the Candle of Life goes in first for the
+ * Doom, the pillars stay suppressed, and nobody swings until his own Gravija
+ * has taken him under 900.
  *
- * Measured: **916 wins in 1,000 contiguous seeds (91.6 %)** — 180, 183, 183, 187
- * and 183 out of 200 on the windows from seeds 1, 201, 401, 601 and 801 — four
- * canonical seeds 4/4, every win walking all seven links and **every loss on
- * link 1** - from
- * the possessed aeons onward the party carries the fayth's permanent Auto-Life
- * and those fights cannot be lost (§2.3).
+ * **And the five aeons and the two Talk charges are all held for the Ultimate
+ * Jecht Shot phase** (round 4). §1.6's branch table is checked in order and
+ * only its *third* row can wipe a party: an aeon on the field turns the charge
+ * into a single-target Jecht Bomber, form 1 spends it on Triumphant Grasp and
+ * form 2 above half on Triumphant Grasp 2 - all single-target, all answered by
+ * one Curaga - and only **form 2 at or below half** spends it on Ultimate Jecht
+ * Shot, ~4,700 on all three at once. §1.6 says the Talk charges *"**must** be
+ * saved for the Ultimate Jecht Shot phase"* and an aeon cancels the same charge
+ * for free, so the roster is saved for it too. Measured, spending them on
+ * whatever gauge filled first left the party eating **ten** Ultimate Jecht
+ * Shots for 137,905 damage on one of the seeds it then lost.
+ *
+ * **Tidus buys the MP to finish the Slow ladder** (round 4). Slow is
+ * `chance 100` against a Pagoda's `resistance 50`, which `statuses.ts` resolves
+ * as `100 - 50 > rng(0..100)` - a shade under half. A pair costs four casts on
+ * average and can cost nine; at 12 MP each against his 140 (30 of which is
+ * Hastega) he runs dry, and a dry Tidus stops being asked for the seat at all,
+ * so the pillar he failed to Slow Power Waves at full rate for the rest of the
+ * battle. He drinks an Ether instead, and while that debt is open nobody else
+ * touches them.
+ *
+ * Measured: **4/4 on the canonical seeds**, **8/8 on the eight seeds the
+ * round-3 verifier picked** (previously 5/8, all three losses on link 1 against
+ * the 120,000-HP second form) and **38/40 on seeds 1-40**. Every win walks all
+ * seven links and **every loss is link 1** - from the possessed aeons onward
+ * the party carries the fayth's permanent Auto-Life and those fights cannot be
+ * lost (§2.3).
  *
  * ## What deviates from the research, stated up front
  *
- * The round before this one won the chapter by multiplying the party's Strength
- * by 1.5, which is a x2.6-x2.9 on the damage because the power term is cubic.
- * **That is reverted in full.** Every offensive stat is §4.1 as published
- * except **Yuna's Strength 20 -> 28**, which is the number §4.4
- * `[verified: 2 sources]` publishes for this encounter.
+ * An earlier round won the chapter by multiplying the party's Strength by 1.5,
+ * which is a x2.6-x2.9 on the damage because the power term is cubic. **That is
+ * reverted in full**, and so is the one exception the round after it kept:
+ * **Yuna's Strength is §4.1's published 20**, not §4.4's 28. §4.4's sentence is
+ * a *threshold* quoted as a recommendation ("the wiki singles out 'Yuna's
+ * Strength at least 28' as the threshold for Bahamut's Mega Flare plus a couple
+ * of attacks to finish the job"), not a statement about the typical build -
+ * §4.1 is the section that answers that question and it says 20. It bought
+ * nothing anyway: this build's aeons carry their own stat block, so nothing in
+ * the engine scales an aeon off Yuna. **Every offensive stat is now §4.1
+ * exactly as published.**
  *
  * What remains is two changes that add **no damage at all**, and both are
  * §4.1's own invitation - it performs exactly one sanity check ("Ultimate Jecht
@@ -266,11 +290,11 @@ describe('the shipped intended strategy beats Chapter 3', () => {
    * than four lucky rolls. This is the regression net: forty contiguous seeds
    * of the whole chapter in about a second.
    *
-   * Measured **36/40** on this window and **916/1,000 (91.6 %)** over the wider
-   * bench. The bar is 31 so ordinary tail variance does not flake it, and so
-   * that a regression toward what this was at the §4.1 preset with no bench, no
-   * Doublecast and no Zombie - **0/40, a guaranteed defeat on link 1** - goes
-   * red immediately.
+   * Measured **38/40** on this window (36/40 before round 4's aeon reserve and
+   * Slow-MP rules). The bar is 34 so ordinary tail variance does not flake it,
+   * and so that a regression toward what this was at the §4.1 preset with no
+   * bench, no Doublecast and no Zombie - **0/40, a guaranteed defeat on link 1**
+   * - goes red immediately.
    */
   it('wins the great majority of forty contiguous seeds, chain and all', () => {
     const results = Array.from({ length: 40 }, (_, i) => runChain(i + 1));
@@ -281,8 +305,38 @@ describe('the shipped intended strategy beats Chapter 3', () => {
       .map((x) => `${x.seed}: ${x.r.trail.at(-1)}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(' | ') || 'none'}`);
 
-    expect(wins, 'Chapter 3 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(31);
-  });
+    expect(wins, 'Chapter 3 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(34);
+    // Forty seven-link chains are about a second on an idle machine; the budget
+    // is for a loaded one, where a dozen other vitest runs are competing.
+  }, 180_000);
+
+  /**
+   * **The eight seeds the round-3 verifier picked**, none of which the four
+   * canonical seeds or the 1-40 net contains.
+   *
+   * They are here because they are what failed: the round-3 line won 5 of
+   * these 8, and all three losses were link 1 against the 120,000-HP second
+   * form, which is the one place in the chapter a party can actually lose. The
+   * two rules that closed them - the aeon/Talk reserve for the Ultimate Jecht
+   * Shot phase and Tidus's Ether for the Slow ladder - are both in
+   * `src/engine/tactics/braskas-final-aeon.ts`, and this block is what stops
+   * either of them being quietly undone. Measured **8/8**; the bar is 7 so one
+   * seed of headroom exists for an unrelated tuning change.
+   */
+  it('wins the eight seeds the verifier picked, chain and all', () => {
+    const seeds = [2, 3, 5, 11, 13, 99, 1234, 7777];
+    const results = seeds.map((seed) => ({ seed, r: runChain(seed) }));
+    const won = results.filter((x) => x.r.outcome === 'victory' && x.r.links === EXPECTED_LINKS);
+    const lost = results
+      .filter((x) => x.r.outcome !== 'victory' || x.r.links !== EXPECTED_LINKS)
+      .map((x) => `${x.seed}: ${x.r.trail.at(-1)}`);
+    console.log(`verifier seeds: ${won.length}/${seeds.length} wins; losses: ${lost.join(' | ') || 'none'}`);
+
+    expect(
+      won.length,
+      'the seeds the previous round lost are the regression this block exists for',
+    ).toBeGreaterThanOrEqual(7);
+  }, 180_000);
 });
 
 /**
@@ -336,6 +390,8 @@ describe('out-damaging Yu Yevon stays a losing tactic', () => {
       expect(hp, 'the 9,999 Curaga counter must out-heal everything the party can swing').toBeGreaterThan(
         80_000,
       );
-    });
+      // This one deliberately runs the last link to its decision ceiling, so it
+      // is the slowest block in the file; the budget is for a loaded machine.
+    }, 180_000);
   }
 });

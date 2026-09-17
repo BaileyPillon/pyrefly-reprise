@@ -107,11 +107,33 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
   [-14.2, 0, -2.2],
 ];
 
-/** Boss centre-right, then two flanking slots for the parts of a big machine. */
+/**
+ * Boss centre-right, then flanking slots for the parts of a big machine.
+ *
+ * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`).
+ * The FFX-2 rail is 0.72 of the canvas — the command stack's left edge is
+ * 0.745, the party column's is 0.725 — and the Vegnagun tail is the widest
+ * figure in the game: 0.49 of the frame across. At `[2.75, 0, -2.3]` it
+ * measured **0.436..0.926**, so the last quarter of the tail, the part with the
+ * tip on it, was drawn under the menu or past the right edge
+ * (`docs/handoff/playability-round-1.md` §4 issue 3).
+ *
+ * 1.95 units left and 2.7 back bring it to 0.313..0.710. The blade is still
+ * 0.40 of the frame wide and 0.48 tall and still sweeps corner to corner, which
+ * is the shot; what changed is that it now *ends* inside the frame, so the tail
+ * reads as a tail rather than as a wall.
+ *
+ * **There are four slots, not three.** `vegnagun-leg` fields three Nodes on
+ * slots 1-3 (`src/data/ffx2/enemies/vegnagun-leg.ts`), and
+ * `BattlePresenterStage.add` clamps a slot index to the last published slot —
+ * so with three slots Node C was parked exactly on top of Node B, two
+ * separately targetable parts sharing one silhouette.
+ */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [2.75, 0, -2.3],
-  [5.3, 0, -0.8],
-  [0.5, 0, -4.2],
+  [0.8, 0, -5.0], // boss -> x 0.313..0.710, y 0.143..0.626 at `idle`
+  [2.3, 0, -8.0],
+  [-0.5, 0, -6.6],
+  [1.0, 0, -9.4],
 ];
 
 /** Canonical world heights for the figures the preview stages. */

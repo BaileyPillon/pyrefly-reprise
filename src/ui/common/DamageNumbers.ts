@@ -1,18 +1,23 @@
 import './damage-numbers.css';
 import {
   bouncePosition,
+  burstSlot,
   classifyDamageEvent,
-  computeHitOffset,
   deflectFromRects,
   fontSizeFor,
   jitterX,
-  ladderPitch,
   lifetimeMsFor,
+  nextBurstSlot,
   opacityAt,
+  placeInSafeArea,
+  resolveLanes,
+  safeAreaFrom,
   scaleAt,
   textFor,
+  type BurstState,
   type DamageEventInput,
   type DamageKind,
+  type LaneInput,
   type NumeralRect,
 } from './damageLadder.ts';
 
@@ -22,7 +27,7 @@ import {
  * **This is the one implementation** (`docs/CONTRACT-CHANGES.md` decision 12:
  * the HUD mounted for a battle owns its numerals, and FFX-2 reuses this rather
  * than writing a third copy). `src/ui/ffx/DamageNumbers.ts` is a thin FFX
- * adapter over it; an FFX-2 HUD mounts it the same way:
+ * adapter over it; `src/ui/ffx2/DamageLayer.ts` is the FFX-2 one:
  *
  * ```ts
  * const numbers = new DamageNumbers({
@@ -36,7 +41,7 @@ import {
  * numbers.update(dt);
  * // per battle event:
  * const el = numbers.spawnEvent(event);
- * if (el) el.appendChild(chainChip);          // FFX-2's CHAIN xN rides the hit
+ * numbers.attachChip(event.targetId, chainChip);  // FFX-2's CHAIN xN rides the hit
  * ```
  *
  * Positions come from the injected `project(targetId, anchor)` callback rather
@@ -46,10 +51,23 @@ import {
  * re-projects its target *every frame*, so a numeral stays pinned to the
  * actor that was struck even while the battle camera is moving.
  *
- * Numerals stack per *target*, not per action: whatever lands on one actor in
- * the same beat climbs the ladder a rung at a time (see {@link spawn}), so an
- * FFX-2 chain does not need to track its own hit counter to stay legible — it
- * can spawn each link with `hitIndex` 0 and still get a ladder.
+ * ## Round 2: why one action no longer prints one blob
+ *
+ * `docs/handoff/playability-round-1.md` issue 2 caught a multi-hit piling
+ * roughly eight figures on one screen point (`53-ffx2-vegnagun.png`) and an
+ * AoE burying `2200` under `1850` (`50-yunalesca.png`). Four things now keep
+ * them apart, and all four are pure math in `damageLadder.ts`:
+ *
+ * | Problem | Mechanism |
+ * |---|---|
+ * | hits resolved in one engine tick all appeared at once | per-target **queue**: each release is held to at least 80ms after the previous one on that target (`nextBurstSlot`) |
+ * | the ladder wrapped after 5 rungs onto figures still on screen | the ladder climbs 4 rungs, then **fans** into a new column beside it (`burstSlot`) |
+ * | two actors standing close projected to nearly the same x | per-target **lanes**, swept apart once per frame and re-centred (`resolveLanes`) |
+ * | figures clamped to a HUD edge landed on the same coordinate | a **safe rect** (bounds minus the edge-anchored HUD bands) that a numeral is *mirrored* into before it is clamped (`safeAreaFrom` / `placeInSafeArea`) |
+ *
+ * Only a numeral whose target is itself buried under the chrome gets
+ * `.dnum--over-hud`, which lifts it over its neighbours and adds a scrim so it
+ * reads against HUD ink.
  */
 
 /** Which point on the struck actor a numeral hangs off. Numerals want the chest. */
@@ -73,8 +91,10 @@ export interface DamageNumbersOptions {
   scale?: () => number;
   /**
    * Opaque HUD panels a numeral must not end up inside, in viewport pixels,
-   * read every frame. A numeral that projects into one slides out to the
-   * nearest free edge (see {@link deflectFromRects}).
+   * read every frame. The ones anchored to a screen edge (the FFX CTB column,
+   * the party-status windows, the FFX-2 boss strip) define the HUD-free safe
+   * rect numerals live in; anything floating in the middle of the field is
+   * dodged the old way (see {@link deflectFromRects}).
    */
   avoid?: () => readonly NumeralRect[];
   /** Extra class names for the layer element, e.g. the FFX HUD's own hook. */
@@ -105,12 +125,13 @@ export interface NumeralEventLike {
 }
 
 /**
- * How many rungs the ladder climbs before it wraps back to the target's chest.
- * Five rungs is about 170px at 1600x900 — a Wakka reel or a long chain would
- * otherwise walk numerals off the top of the screen (and then pile up against
- * the clamp). By the time rung 5 spawns, rung 0 is well into its fade.
+ * How far outside the safe rect (in *logical* px, scaled at use) a target may
+ * stand before its numerals stop being pulled back inside and are drawn over
+ * the HUD instead. Four ladder rungs: a party member whose chest sits a little
+ * below the status windows still reads with the figure just above them; an
+ * enemy wholly behind the CTB column does not.
  */
-const LADDER_RUNGS = 5;
+const SAFE_SLACK = 64;
 
 interface ActiveNumber {
   el: HTMLElement;
@@ -125,12 +146,18 @@ interface ActiveNumber {
   halfW: number;
   /** `halfW` measured once the glyph had real layout (fonts, font-size applied). */
   measured: boolean;
+  /** Last value written to `.dnum--over-hud`, so the class is only touched on a change. */
+  overHud: boolean;
 }
 
 export class DamageNumbers {
   readonly el: HTMLElement;
   private active: ActiveNumber[] = [];
   private mounted = false;
+  /** Per-target queue state: which slot is next and when it may be released. */
+  private readonly bursts = new Map<string, BurstState>();
+  /** Layer clock, advanced by {@link update}; the queue is paced against it. */
+  private nowMs = 0;
 
   constructor(private readonly opts: DamageNumbersOptions) {
     this.el = document.createElement('div');
@@ -156,6 +183,7 @@ export class DamageNumbers {
   clear(): void {
     for (const n of this.active) n.el.remove();
     this.active = [];
+    this.bursts.clear();
   }
 
   get count(): number {
@@ -200,24 +228,30 @@ export class DamageNumbers {
    * Spawn one numeral. For a multi-hit action, call once per hit with the same
    * `target` and an incrementing `hitIndex`.
    *
-   * Numerals stack per target: the rung a numeral takes is the deeper of its
-   * own `hitIndex` and the number of numerals already riding that target, so a
-   * multi-hit action ladders by its hit list while unrelated events that land
-   * on one actor in the same beat (a MISS chasing a hit, an AoE plus a counter)
-   * still step clear of each other instead of printing through.
+   * The slot a numeral takes is the deeper of its own `hitIndex` and the
+   * target's running queue position, so a chain that spawns every link with
+   * `hitIndex` 0 still ladders, and unrelated events landing on one actor in
+   * the same beat (a MISS chasing a hit, an AoE plus a counter) still step
+   * clear of each other. The queue also decides *when* the numeral appears:
+   * hits that resolved in one engine tick are released 80ms apart, which is
+   * the quick succession FFX shows a multi-hit in, while a presenter that
+   * already paces its hits gets no extra delay at all.
    */
   spawn(input: DamageSpawnInput): HTMLElement | null {
     const kind = classifyDamageEvent(input);
-    const hitIndex = Math.max(0, Math.floor(input.hitIndex ?? 0));
-    const rung = Math.max(hitIndex, this.liveOn(input.target)) % LADDER_RUNGS;
-    const ladder = computeHitOffset(rung);
-    // Delay is the hit's own place in its action's list — an event that simply
-    // arrived later is already late and must not be held back again.
-    const delayMs = computeHitOffset(hitIndex).delayMs;
+    const slot = nextBurstSlot(this.bursts.get(input.target), this.nowMs, input.hitIndex ?? 0);
+    this.bursts.set(input.target, slot.state);
+    const place = burstSlot(slot.index, kind);
     const scale = this.scale();
 
     const el = document.createElement('div');
     el.className = `dnum dnum--${kind}`;
+    // Who this figure belongs to and which slot of that target's burst it took.
+    // Two numerals that look like they are printing through each other are
+    // almost always either one target's queue restarting or two targets sharing
+    // a lane, and these two attributes say which without a debugger.
+    el.dataset['target'] = input.target;
+    el.dataset['slot'] = String(slot.index);
     el.style.fontSize = `${(fontSizeFor(kind) * scale).toFixed(1)}px`;
     el.style.opacity = '0';
     el.textContent = textFor(kind, input.amount);
@@ -232,19 +266,55 @@ export class DamageNumbers {
       kind,
       ageMs: 0,
       lifetimeMs: lifetimeMsFor(kind),
-      delayMs,
-      offsetX: ladder.dx + jitterX(),
-      offsetY: ladder.dy - ladderPitch(kind) * rung,
+      delayMs: slot.delayMs,
+      // The fan and the lanes own horizontal separation now, so the old
+      // +/-6px jitter is gone from the offset — it only survives as the
+      // ballistic drift, where it reads as life rather than as noise.
+      offsetX: place.dx,
+      offsetY: place.dy,
       vx: jitterX() * 3,
       halfW: Math.max(8, el.offsetWidth / 2),
       measured: el.offsetWidth > 0,
+      overHud: false,
     });
     return el;
+  }
+
+  /**
+   * Hang an extra element off the newest live numeral for `target`, so it
+   * rides that figure for the rest of its flight.
+   *
+   * This is how FFX-2's `CHAIN xN` tag stops being a separate popup parked at
+   * a fixed offset from the enemy while the damage figure it belongs to floats
+   * away from it. The chip becomes a child of the numeral, pinned to its
+   * top-right corner, and inherits its motion, its pop and its fade.
+   *
+   * Returns `false` (and leaves the element exactly where it was) when the
+   * target has no live numeral — a chain tick that arrives without a hit, or
+   * after the figure has already faded, still shows as a free-floating chip.
+   */
+  attachChip(target: string, chip: HTMLElement): boolean {
+    for (let i = this.active.length - 1; i >= 0; i--) {
+      const n = this.active[i]!;
+      if (n.target !== target) continue;
+      chip.classList.add('dnum__chip');
+      // Cleared every call, not just on the first: the FFX-2 HUD re-positions
+      // the same chip element on every chain tick, and a stale `left`/`top`
+      // would drag it back out of the numeral's corner.
+      chip.style.left = '';
+      chip.style.top = '';
+      // Re-appending a node restarts its CSS animation, so only move it if it
+      // is not already riding this numeral.
+      if (chip.parentElement !== n.el) n.el.appendChild(chip);
+      return true;
+    }
+    return false;
   }
 
   /** Advance every numeral's motion/fade and drop the ones whose lifetime has ended. */
   update(dt: number): void {
     const dtMs = dt * 1000;
+    this.nowMs += dtMs;
     const survivors: ActiveNumber[] = [];
     // One layout read per frame, shared by every numeral: the layer's own box
     // turns the projector's viewport pixels into layer-local ones (they are
@@ -260,7 +330,55 @@ export class DamageNumbers {
         : null;
     const panels = this.panels(layer);
     const scale = this.scale();
-    const anchor = this.opts.anchor ?? 'chest';
+    const anchorPoint = this.opts.anchor ?? 'chest';
+
+    // The HUD-free rectangle, and whatever panels float *inside* it (the
+    // command stack over the field, a sensor card) which still need dodging.
+    const safe = bounds ? safeAreaFrom(bounds, panels) : null;
+    const floating = safe ? panels.filter((p) => overlapsRect(p, safe)) : panels;
+
+    // Project each distinct target once, then hand the anchors to the lane
+    // solver so two actors who project to nearly the same x get their own
+    // column of figures instead of interleaving.
+    const points = new Map<string, { x: number; y: number } | null>();
+    const laneInputs = new Map<string, LaneInput>();
+    // How much room each target's whole burst needs around its anchor. The
+    // placement below pulls the anchor in by this rather than clamping each
+    // figure, which is what keeps a fan a fan when its actor stands under the
+    // chrome.
+    const groups = new Map<string, { w: number; h: number }>();
+    for (const n of this.active) {
+      // Width is re-read here and nowhere else: this pass writes no styles, so
+      // the layout flushed by the `getBoundingClientRect` above still holds and
+      // every read is free. (Measuring inside the placement loop below, which
+      // writes a transform per numeral, would invalidate layout on every
+      // iteration and thrash.) Re-reading every frame rather than once also
+      // catches the numeral font finishing its load after the glyph spawned,
+      // which used to leave a wide figure with a stale half-width overhanging
+      // the edge it was clamped to.
+      if (n.el.offsetWidth > 0) {
+        n.halfW = Math.max(8, n.el.offsetWidth / 2);
+        n.measured = true;
+      }
+      if (!points.has(n.target)) {
+        const p = this.opts.project(n.target, anchorPoint);
+        points.set(n.target, p ? { x: p.x - layer.left, y: p.y - layer.top } : null);
+      }
+      const p = points.get(n.target);
+      if (!p || n.ageMs < n.delayMs) continue;
+      const want = n.halfW + Math.abs(n.offsetX) * scale;
+      const seen = laneInputs.get(n.target);
+      if (!seen) laneInputs.set(n.target, { id: n.target, x: p.x, halfWidth: want });
+      else seen.halfWidth = Math.max(seen.halfWidth, want);
+      const tall = (fontSizeFor(n.kind) * scale) / 2 + Math.abs(n.offsetY) * scale;
+      const box = groups.get(n.target);
+      if (!box) groups.set(n.target, { w: want, h: tall });
+      else {
+        box.w = Math.max(box.w, want);
+        box.h = Math.max(box.h, tall);
+      }
+    }
+    const lanes = resolveLanes([...laneInputs.values()], 10 * scale);
 
     for (const n of this.active) {
       n.ageMs += dtMs;
@@ -276,45 +394,66 @@ export class DamageNumbers {
         continue;
       }
 
-      const base = this.opts.project(n.target, anchor);
+      const base = points.get(n.target) ?? null;
       if (!base) {
         n.el.style.opacity = '0';
         survivors.push(n);
         continue;
       }
 
-      if (!n.measured && n.el.offsetWidth > 0) {
-        // Width at spawn can read 0 (the layer is not laid out yet, or the
-        // numeral font has not loaded), which would let a wide figure hang off
-        // the edge of the layer. Re-measure once, on the first frame it draws.
-        n.halfW = Math.max(8, n.el.offsetWidth / 2);
-        n.measured = true;
-      }
-
       const bounce = bouncePosition(tMs, n.kind, n.vx);
-      const raw = {
-        x: base.x - layer.left + (n.offsetX + bounce.x) * scale,
-        y: base.y - layer.top + (n.offsetY + bounce.y) * scale,
-      };
       // The spawn pop is a transform about the glyph's own centre, so the
       // dodging/clamping has to use the popped extent or a numeral that lands
       // near an edge or a panel overhangs it for the first 0.12s.
       const pop = scaleAt(tMs, n.kind);
       const half = { w: n.halfW * pop, h: (fontSizeFor(n.kind) * scale * pop) / 2 };
-      const at = deflectFromRects(raw, half, panels, bounds, 6 * scale);
+      const anchor = { x: base.x + (lanes.get(n.target) ?? 0), y: base.y };
+      const offset = { x: (n.offsetX + bounce.x) * scale, y: (n.offsetY + bounce.y) * scale };
+
+      const placed = placeInSafeArea(
+        anchor,
+        offset,
+        half,
+        safe,
+        SAFE_SLACK * scale,
+        groups.get(n.target),
+      );
+      let at = { x: placed.x, y: placed.y };
+      if (placed.overHud) {
+        // The target is under the chrome: keep the figure on its actor and on
+        // screen, and let the class below lift it clear of the HUD instead.
+        at = deflectFromRects(at, half, [], bounds, 0);
+      } else if (floating.length > 0) {
+        at = deflectFromRects(at, half, floating, safe ?? bounds, 6 * scale);
+      }
+
+      if (placed.overHud !== n.overHud) {
+        n.el.classList.toggle('dnum--over-hud', placed.overHud);
+        n.overHud = placed.overHud;
+      }
       n.el.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${pop.toFixed(3)})`;
       n.el.style.opacity = opacityAt(tMs, n.kind).toFixed(3);
       survivors.push(n);
     }
 
     this.active = survivors;
+    this.pruneBursts();
   }
 
-  /** How many numerals are already riding `target` — the rung a new one starts from. */
+  /** How many numerals are already riding `target`. */
   private liveOn(target: string): number {
     let n = 0;
     for (const a of this.active) if (a.target === target) n++;
     return n;
+  }
+
+  /** Forget queue state for targets that have been quiet and have nothing on screen. */
+  private pruneBursts(): void {
+    for (const [target, state] of this.bursts) {
+      if (this.nowMs - state.lastSpawnMs > 2000 && this.liveOn(target) === 0) {
+        this.bursts.delete(target);
+      }
+    }
   }
 
   private scale(): number {
@@ -337,4 +476,9 @@ export class DamageNumbers {
     }
     return out;
   }
+}
+
+/** True when two rects share any area at all. */
+function overlapsRect(a: NumeralRect, b: NumeralRect): boolean {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }

@@ -15,17 +15,35 @@
  *
  * So this file holds the three rules that replace them: the HUD is never
  * hidden for a beat, the line is really shown and really ends on its own, and
- * the beat is cut short — once, loudly — if it runs past its budget.
+ * the beat is cut short — once, and on the right clock — if it runs past its
+ * budget.
  *
  * Budget numbers come from `src/story/registry.ts`; the timing of a line comes
  * from `research/writing-bible.md` §2.1 ("Allocate real time (1.2–2.0s)") and
  * §3 E6, which caps a mid-battle callout at ten words.
+ *
+ * ## Which clock the budget is on
+ *
+ * A third defect met the first two on the five-chapter sweep
+ * (`docs/handoff/playability-round-1.md` §4.1): the budget was wall clock while
+ * everything it was budgeting — camera tweens, the typewriter — is advanced a
+ * frame at a time from `update(dt)`, with `dt` clamped at 1/20 s. Under
+ * SwiftShader an authored 400 ms camera move costs seconds of real time, so
+ * three of the five chapters cut a beat short and logged it on **every**
+ * automated run. And `'skip'` did not help: `setAutoAdvance(on, {instant})`
+ * swapped the dialogue port only, and its one-shot `skip()` was cleared by the
+ * `reset()` at the top of the next beat.
+ *
+ * So: the budget is spent in scene time, wall clock only ends a beat whose
+ * frame loop has *stopped* ({@link FRAME_STALL_MS}), and `'skip'` has no budget
+ * at all because there is nothing left to outrun.
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   createMidBattleCutscenes,
+  FRAME_STALL_MS,
   LINE_GRACE_MS,
   MIDBEAT_CLASS,
   resetMidBattleOverrunLog,
@@ -74,17 +92,30 @@ function virtualClock() {
   };
 }
 
+/** What the beat asked the camera for, so `'skip'` can be shown to snap. */
+interface CameraCalls {
+  moved: Array<{ rig: string; ms: number | undefined }>;
+  snapped: string[];
+}
+
 /**
  * A stage whose camera move never resolves — the shape of every real overrun
- * (a port that goes away mid-beat), without needing a real one.
+ * (a port that goes away mid-beat), without needing a real one. It is also the
+ * shape of the *slow* case this file cares about most: a tween that needs
+ * rendered frames the renderer is not delivering.
  */
-function stubStage(opts: { cameraResolves: boolean }): BattleStage {
+function stubStage(opts: { cameraResolves: boolean; calls: CameraCalls }): BattleStage {
   const never = (): Promise<void> => new Promise<void>(() => {});
   const done = (): Promise<void> => Promise.resolve();
   return {
     camera: {
-      moveTo: opts.cameraResolves ? done : never,
-      snapTo: () => {},
+      moveTo: (rig: string, ms?: number): Promise<void> => {
+        opts.calls.moved.push({ rig, ms });
+        return opts.cameraResolves ? done() : never();
+      },
+      snapTo: (rig: string): void => {
+        opts.calls.snapped.push(rig);
+      },
       shake: () => {},
       punch: done,
       rigNames: ['idle', 'action'],
@@ -103,14 +134,28 @@ function stubStage(opts: { cameraResolves: boolean }): BattleStage {
 
 function mountRunner(over: { cameraResolves?: boolean } = {}) {
   const clock = virtualClock();
+  const calls: CameraCalls = { moved: [], snapped: [] };
   const root = document.createElement('div');
   document.body.appendChild(root);
   const cutscenes = createMidBattleCutscenes({
     root,
-    stage: stubStage({ cameraResolves: over.cameraResolves ?? true }),
+    stage: stubStage({ cameraResolves: over.cameraResolves ?? true, calls }),
     sleep: clock.sleep,
   });
-  return { clock, root, cutscenes, box: () => root.querySelector('.dbox') as HTMLElement };
+  /**
+   * Render `frames` frames of `dtSec` each, draining microtasks between them.
+   *
+   * This is the clock the beat's budget is really on, and the reason these
+   * tests can distinguish "the beat used its eight seconds" from "the renderer
+   * took eight seconds to draw half of it".
+   */
+  const pump = async (frames: number, dtSec = 1 / 20): Promise<void> => {
+    for (let i = 0; i < frames; i++) {
+      cutscenes.update(dtSec);
+      for (let k = 0; k < 8; k++) await Promise.resolve();
+    }
+  };
+  return { clock, root, cutscenes, calls, pump, box: () => root.querySelector('.dbox') as HTMLElement };
 }
 
 afterEach(() => {
@@ -259,7 +304,12 @@ describe('an automated run still sees the line', () => {
 
 describe('a beat that overruns is ended, and logged once', () => {
   it('cuts the script short at its budget and resumes the battle', async () => {
+    // No `pump()` anywhere in this test: the frame loop has stopped, so after
+    // `FRAME_STALL_MS` of real silence the wall clock is allowed to end the
+    // beat. That is the stall guard, and it is the only path on which wall
+    // clock still decides anything.
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
     const { clock, root, cutscenes } = mountRunner({ cameraResolves: false });
     cutscenes.setAutoAdvance(true);
 
@@ -279,13 +329,31 @@ describe('a beat that overruns is ended, and logged once', () => {
 
     expect(settled).toBe(true);
     expect(root.classList.contains(MIDBEAT_CLASS), 'the dim is dropped').toBe(false);
-    expect(error).toHaveBeenCalledTimes(1);
-    expect(String(error.mock.calls[0]?.[0])).toContain('first-mega-flare-countdown');
-    expect(String(error.mock.calls[0]?.[0])).toContain(String(MID_SCRIPT_BUDGET_MS));
+    // Not `console.error`: the fight carried on, and every automated gate we
+    // have fails a run that logs one. An automated run says it quietly.
+    expect(error, 'an overrun is not an error').not.toHaveBeenCalled();
+    expect(info).toHaveBeenCalledTimes(1);
+    expect(String(info.mock.calls[0]?.[0])).toContain('first-mega-flare-countdown');
+    expect(String(info.mock.calls[0]?.[0])).toContain(String(MID_SCRIPT_BUDGET_MS));
+  });
+
+  it('warns instead, when it is a human whose beat got cut off', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const { clock, cutscenes } = mountRunner({ cameraResolves: false });
+    // No `setAutoAdvance`: someone is holding the controller.
+
+    const beat = cutscenes.play([camera('action', 400)], { midBattle: true, name: 'seymour-half' });
+    await clock.advance(MID_SCRIPT_BUDGET_MS);
+    await beat;
+
+    expect(error).not.toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(String(warn.mock.calls[0]?.[0])).toContain('seymour-half');
   });
 
   it('logs once, however often the trigger fires', async () => {
-    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
     const { clock, cutscenes } = mountRunner({ cameraResolves: false });
     cutscenes.setAutoAdvance(true);
 
@@ -295,11 +363,12 @@ describe('a beat that overruns is ended, and logged once', () => {
       await beat;
     }
 
-    expect(error).toHaveBeenCalledTimes(1);
+    expect(info).toHaveBeenCalledTimes(1);
   });
 
   it("a finished beat's budget timer cannot cut the next one short", async () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
     const { clock, cutscenes } = mountRunner();
     cutscenes.setAutoAdvance(true, { instant: true });
 
@@ -313,5 +382,110 @@ describe('a beat that overruns is ended, and logged once', () => {
     await second;
 
     expect(error, 'the stale timer belonged to a beat that had already ended').not.toHaveBeenCalled();
+    expect(info, 'and it is not reported as an overrun either').not.toHaveBeenCalled();
+  });
+});
+
+// ------------------------------------------------------- the budget's clock
+
+describe('the budget is spent in scene time, not wall clock', () => {
+  it('does not cut a beat short because the renderer is slow', async () => {
+    // The measured defect: under SwiftShader a `camera('action', 400)` needs
+    // its eight-plus rendered frames whatever the clock says, and wall clock
+    // ran out first on Chapters 1, 3 and 4 of every sweep.
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+    const { clock, cutscenes, pump } = mountRunner({ cameraResolves: false });
+    cutscenes.setAutoAdvance(true);
+
+    const beat = cutscenes.play([camera('action', 400), say('paine', 'That is a timer.', { auto: 1100 })], {
+      midBattle: true,
+      name: 'first-mega-flare-countdown',
+    });
+    let settled = false;
+    void beat.then(() => (settled = true));
+
+    // Frames are arriving, but slowly: 100 of them is 5 s of scene time and
+    // any amount of wall clock at all.
+    await pump(100);
+    await clock.advance(MID_SCRIPT_BUDGET_MS * 10);
+    await pump(1);
+    expect(settled, 'five seconds of scene time is inside an eight second budget').toBe(false);
+    expect(info).not.toHaveBeenCalled();
+
+    // Past eight seconds of *scene* time it is a real overrun, and ends.
+    await pump(80);
+    await beat;
+    expect(settled).toBe(true);
+    expect(info).toHaveBeenCalledTimes(1);
+  });
+
+  it('still ends a beat whose frame loop has stopped', async () => {
+    // The stall guard. Scene time cannot advance if nothing is rendering, so
+    // the wall clock has to be allowed to end the beat — a beat must never be
+    // able to wedge a battle, however the frames went away.
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+    const { clock, cutscenes, pump } = mountRunner({ cameraResolves: false });
+    cutscenes.setAutoAdvance(true);
+
+    const beat = cutscenes.play([camera('action', 400)], { midBattle: true, name: 'yu-yevon-arrives' });
+    await pump(4); // a few frames, then the loop dies
+    // Real time, not the virtual clock, is what the stall guard reads.
+    await new Promise((r) => setTimeout(r, FRAME_STALL_MS + 50));
+    await clock.advance(MID_SCRIPT_BUDGET_MS);
+    await beat;
+
+    expect(info).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ------------------------------------------------------------ 'skip' is free
+
+describe("'skip' playback costs a beat nothing, every time", () => {
+  it('resolves every beat with no clock and no frames at all', async () => {
+    // The regression: `setAutoAdvance(true, {instant:true})` skipped the runner
+    // once, and `play()`'s own `reset()` cleared the latch — so beat two
+    // onwards paid full price, and a five-chapter sweep ran at ~1.5 s a turn.
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+    const { clock, cutscenes, calls } = mountRunner({ cameraResolves: false });
+    cutscenes.setAutoAdvance(true, { instant: true });
+
+    for (const name of ['seymour-half', 'yu-yevon-arrives', 'first-mega-flare-countdown']) {
+      // A camera move that never resolves plus three seconds of authored
+      // silence: the two things that used to cost the budget its whole 8 s.
+      await cutscenes.play([camera('action', 400), waitStep(3_000), say('paine', 'That is a timer.')], {
+        midBattle: true,
+        name,
+      });
+    }
+
+    // Nothing was ever handed to the clock, so none of it can have been waited on.
+    expect(clock.waiting, 'no timer was left running either').toBe(0);
+    expect(error).not.toHaveBeenCalled();
+    expect(info, 'nothing overran, because nothing was raced').not.toHaveBeenCalled();
+    // The rig still lands — snapped, not tweened over frames nobody renders.
+    expect(calls.snapped).toEqual(['action', 'action', 'action']);
+    expect(calls.moved, 'a tween would have needed eight rendered frames').toEqual([]);
+  });
+
+  it('goes back to playing beats properly when the speed comes off', async () => {
+    // Beat "b" is left to hit its budget at the end, on the stall path (no
+    // frames): that is the point — it is racing again.
+    vi.spyOn(console, 'info').mockImplementation(() => {});
+    const { clock, cutscenes, calls, box } = mountRunner();
+    cutscenes.setAutoAdvance(true, { instant: true });
+    await cutscenes.play([camera('action', 400)], { midBattle: true, name: 'a' });
+
+    cutscenes.setAutoAdvance(true);
+    const beat = cutscenes.play([camera('action', 400), say('paine', 'That is a timer.', { auto: 1100 })], {
+      midBattle: true,
+      name: 'b',
+    });
+    await Promise.resolve();
+    expect(box().hidden, 'the box is back on screen').toBe(false);
+    expect(calls.moved.map((m) => m.rig), 'and the camera tweens again').toEqual(['action']);
+
+    await clock.advance(MID_SCRIPT_BUDGET_MS);
+    await beat;
   });
 });

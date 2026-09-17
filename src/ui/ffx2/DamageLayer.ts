@@ -58,14 +58,31 @@ export interface DamageLayerOptions {
 }
 
 /** Mounts the shared numerals into the HUD's unscaled overlay. */
+/**
+ * The HUD's own `CHAIN xN` tag. `FFX2BattleHud.showChain` builds it as a
+ * sibling of this layer inside `.ffx2hud__overlay`; {@link DamageLayer.update}
+ * adopts it so it rides the figure instead of sitting at a fixed offset from
+ * the enemy while that figure floats away.
+ */
+const CHAIN_CHIP_SELECTOR = '.ffx2-chain-chip';
+
 export class DamageLayer {
   private numbers: DamageNumbers | null = null;
   private project: Projector = () => null;
   private host: HTMLElement | null = null;
+  private root: HTMLElement | null = null;
+  /**
+   * Target of the most recent damage-ish event. A `chain` event always follows
+   * the hit that extended the chain, on the same target, so this is who the
+   * chip belongs to — and the HUD hands the chain event to itself rather than
+   * to this layer, so there is nothing else to key off.
+   */
+  private lastTarget: CombatantId | null = null;
 
   mount(root: HTMLElement, opts: DamageLayerOptions): void {
     if (this.numbers) return;
     this.host = opts.host;
+    this.root = root;
     this.numbers = new DamageNumbers({
       root,
       className: 'ffx2-numerals-layer',
@@ -84,10 +101,13 @@ export class DamageLayer {
     this.numbers?.unmount();
     this.numbers = null;
     this.host = null;
+    this.root = null;
+    this.lastTarget = null;
   }
 
   clear(): void {
     this.numbers?.clear();
+    this.lastTarget = null;
   }
 
   setProjector(project: Projector): void {
@@ -106,12 +126,46 @@ export class DamageLayer {
    * draws nothing.
    */
   onEvent(event: BattleEvent): HTMLElement | null {
-    return this.numbers?.spawnEvent(event as Parameters<DamageNumbers['spawnEvent']>[0]) ?? null;
+    const el = this.numbers?.spawnEvent(event as Parameters<DamageNumbers['spawnEvent']>[0]) ?? null;
+    if (el && 'targetId' in event) this.lastTarget = event.targetId as CombatantId;
+    return el;
+  }
+
+  /**
+   * Explicitly hand the chain chip to the numeral it belongs to.
+   *
+   * `FFX2BattleHud` routes `chain` events to its own `showChain`, so today
+   * {@link update} finds the chip instead; this is the direct route for any
+   * host that would rather say which target the chip is for. Returns false
+   * when that target has no numeral in flight, in which case the chip stays
+   * exactly where its owner put it.
+   */
+  attachChain(targetId: CombatantId, chip: HTMLElement): boolean {
+    return this.numbers?.attachChip(targetId, chip) ?? false;
   }
 
   /** @param dt seconds, from `HudPort.update`. */
   update(dt: number): void {
+    this.adoptChainChip();
     this.numbers?.update(dt);
+  }
+
+  /**
+   * Glue the HUD's `CHAIN xN` chip onto the figure for the hit that produced
+   * it, every frame it exists.
+   *
+   * Re-checked per frame rather than once, because `showChain` reuses the one
+   * chip element and re-writes its `left`/`top` on each chain tick — left
+   * alone it would snap back to the enemy's shoulder while the numeral it
+   * belongs to has already risen away. When there is no live numeral on the
+   * chained target (a chain tick with no damage, e.g. the HUD mock's `C` key)
+   * nothing is touched and the chip floats where the HUD put it.
+   */
+  private adoptChainChip(): void {
+    if (!this.root || !this.numbers || !this.lastTarget) return;
+    const chip = this.root.querySelector<HTMLElement>(CHAIN_CHIP_SELECTOR);
+    if (!chip) return;
+    this.numbers.attachChip(this.lastTarget, chip);
   }
 
   /** In-flight numerals, for tests and the debug API. */

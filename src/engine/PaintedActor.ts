@@ -26,7 +26,7 @@ import {
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
-import { TweenGroup, type EasingFn, type EasingName } from './Tween.ts';
+import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -190,6 +190,8 @@ function blobTexture(): Texture {
 
 const TAU = Math.PI * 2;
 
+const clamp01 = (v: number): number => (v < 0 ? 0 : v > 1 ? 1 : v);
+
 /**
  * A painted character in the 2.5D scene.
  *
@@ -293,6 +295,8 @@ export class PaintedActor extends Group {
   private shakeTotalMs = 1;
   private shakePhase = 0;
   private rimDirBase = new Vector2(-1, 0.32);
+  /** The one live flash decay, so a second flash cannot fight the first. */
+  private flashTween: Tween | null = null;
 
   constructor(opts: PaintedActorOptions = {}) {
     super();
@@ -718,14 +722,34 @@ export class PaintedActor extends Group {
 
   // ------------------------------------------------------------------ effects
 
-  /** Additive flash toward `colour`, decaying over `ms`. */
+  /**
+   * Additive flash toward `colour`, decaying to nothing over `ms`.
+   *
+   * The shader adds this on top of the painting (alpha- and
+   * reflectance-weighted, clamped to white), so even `peak` 1 brightens the
+   * figure rather than replacing it with a flat colour-shaped hole.
+   *
+   * Only one flash runs at a time. Two overlapping ones used to drive the same
+   * uniform from two live tweens, and whichever happened to be later in the
+   * group won the frame -- so a heal landing during a cast could *raise* the
+   * amount back up and hold the figure lit. The in-flight tween is killed, and
+   * the new one starts from whichever of the two is brighter so a weak flash
+   * never cuts a strong one short.
+   */
   flash(colour: number | string = 0xffffff, ms = 180, peak = 1): void {
+    this.flashTween?.kill();
     this.u.flashColor.value.set(colour as never);
-    this.tweens.to(peak, 0, {
-      durationMs: ms,
+    const from = Math.max(clamp01(peak), this.u.flashAmount.value);
+    this.u.flashAmount.value = from;
+    this.flashTween = this.tweens.to(from, 0, {
+      durationMs: Math.max(1, ms),
       easing: 'quadOut',
       onUpdate: (v) => {
         this.u.flashAmount.value = v;
+      },
+      onComplete: () => {
+        this.flashTween = null;
+        this.u.flashAmount.value = 0;
       },
     });
   }

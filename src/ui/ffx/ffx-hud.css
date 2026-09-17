@@ -74,7 +74,18 @@
 /* Name plates were 4.89px = 12 device px at 1600x900 (docs/screenshots/44).
    5.6px = 14. Tracking comes down a notch so the longest name on screen
    ("Seymour Flux") still fits beside its tile. */
-.ffxhud .ig-ctb__name { font-size: 5.6px; letter-spacing: 0.13em; padding: 1.6px 3.8px; }
+/* `max-width` is what makes the HUD safe area a **constant**
+   (docs/ENGINE-API.md#hud-safe-area). Without it the CTB column's left edge is
+   whatever the longest combatant name happens to be, so the rail a scene has to
+   clear moves per encounter: measured at 0.866 of the canvas for "Yunalesca"
+   and 0.816 for "Braska's Final Aeon". 48px is the widest plate the current
+   cast produces (that same "Braska's Final Aeon" row), so nothing visibly
+   ellipsises today — it pins the rail at 0.815 for any name a later encounter
+   brings, which is what `SAFE_RIGHT = 0.79` is measured against. */
+.ffxhud .ig-ctb__name {
+  font-size: 5.6px; letter-spacing: 0.13em; padding: 1.6px 3.8px;
+  max-width: 48px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 /* Not part of Ink & Gold's component set (no accent may compete with gold) -
    small functional dots so Overdrive-ready and a charging boss stay legible. */
@@ -258,13 +269,21 @@
 .ffx-sensor__bar { width: 100%; height: 4px; background: #2a3246; margin-bottom: 4px; }
 .ffx-sensor__bar i { display: block; height: 100%; background: var(--ig-blood); }
 .ffx-sensor__chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+/* Colour for a non-neutral chip (weak/resist/null/absorb) is set inline per
+ * chip from `AFFINITY_COLOR`/`AFFINITY_BG` (SensorPanel.ts) — four data
+ * values, not four fixed lookalike-y states worth a CSS modifier each. The
+ * `--weak`/`--res`/`--null`/`--abs` classes stay on the element as a stable
+ * query hook (screenshots, tests) even though this file no longer styles
+ * off them itself. */
 .ffx-sensor__chip {
-  height: 13px; display: flex; align-items: center; justify-content: center;
+  height: 13px; display: flex; align-items: center; justify-content: center; gap: 2px;
   font-family: var(--ig-font-display); font-size: 6px; letter-spacing: 0.04em;
   color: rgba(244, 241, 232, 0.4); background: rgba(11, 10, 18, 0.4);
 }
-.ffx-sensor__chip--weak { color: var(--ig-accent); }
-.ffx-sensor__chip--res, .ffx-sensor__chip--null, .ffx-sensor__chip--abs { color: rgba(244, 241, 232, 0.7); }
+/* The element glyph: a small solid diamond in that element's own colour
+ * (`ELEMENT_COLOR`, visual-bible.md §3.3's magic-list chip hexes), matching
+ * `.ffx-ctb-charge`'s diamond treatment elsewhere in this file. */
+.ffx-sensor__chip-icon { width: 5px; height: 5px; flex: none; transform: rotate(45deg); }
 .ffx-sensor__failed { font-size: 8px; color: rgba(244, 241, 232, 0.5); margin-top: 6px; }
 
 /* ----------------------------------------------------- telegraph banner */

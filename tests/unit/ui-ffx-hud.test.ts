@@ -304,7 +304,10 @@ describe('FFXBattleHud.onEvent', () => {
     // the MISS that chases it, which used to overlap (47-boss-attack.png).
     hud.onEvent({ seq: 0, type: 'damage', targetId: 'mortiorchis', amount: 11500, element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
     hud.onEvent({ seq: 1, type: 'miss', targetId: 'mortiorchis', sourceId: 'tidus', reason: 'evaded' });
-    hud.update(0.016);
+    // Round 2: the second event on a target is held back by one stagger
+    // (`damageLadder.nextBurstSlot`), so it has not been placed yet on the
+    // frame after it arrives. Run far enough in for both to be drawing.
+    for (let i = 0; i < 6; i++) hud.update(0.016);
 
     const ys = [...root.querySelectorAll<HTMLElement>('.dnum')].map(
       (el) => readTranslate(el.style.transform)[1],

@@ -230,7 +230,13 @@ export class PaintedStage implements BattleStage {
       const staged = this.actors.get(at);
       if (!staged) return;
       const point = staged.actor.centerPoint(this.scratch.clone());
-      this.hits.flash.play(point, crit ? 320 : 260, crit ? 1.4 : 1.0);
+      // The bloom is sized to the figure it lands on. `HitEffects` is
+      // configured once, for a boss; played unscaled on a 1.8-unit party
+      // member the same quad is wider than she is tall, and with depth
+      // testing off it paints straight over her (this is what turned Rikku
+      // into a white blob in docs/screenshots/70/52-ffx2-bahamut.png).
+      const bloom = bloomScale(staged.actor.height) * (crit ? 1.3 : 1);
+      this.hits.flash.play(point, crit ? 320 : 260, bloom);
       this.hits.sparks.emit(point, crit ? 1.35 : 1);
       if (key === 'slash' || key === 'impact') {
         await this.hits.slash.play(point, 300, -0.62);
@@ -299,6 +305,23 @@ export class PaintedStage implements BattleStage {
 
 function rank(side: Side): number {
   return side === 'party' ? 0 : side === 'aeon' ? 1 : 2;
+}
+
+/** The enemy-slot height `HitEffects`' bloom size was chosen against. */
+const BOSS_HEIGHT = 4.1;
+
+/**
+ * Impact-bloom scale for a figure of `worldHeight` units.
+ *
+ * `HitEffects` is built with `size: 3.0`, which is tuned for the 4.1-unit boss
+ * slot; a party member is 1.82. The ratio is softened (square root) rather than
+ * taken straight, so a small figure still gets a bloom that reads, and it is
+ * bounded at both ends so neither a destructible part nor Vegnagun produces an
+ * absurd one.
+ */
+function bloomScale(worldHeight: number): number {
+  const ratio = Math.max(0.1, worldHeight) / BOSS_HEIGHT;
+  return Math.min(1.15, Math.max(0.34, Math.sqrt(ratio)));
 }
 
 /** Stable per-id seed so a placeholder figure looks the same every boot. */

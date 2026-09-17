@@ -236,14 +236,20 @@
  */
 .ffx2hud .ig-stat-list {
   left: auto;
-  right: 12px;
+  right: 10px;
   bottom: 10px;
   align-items: flex-end;
   gap: 3px;
-  --ig-stat-step: 5px;
+  --ig-stat-step: 4px;
 }
+/* 158, not 170, and the cascade steps 4 rather than 5: together they pull the
+   panel's left edge from 0.700 of the canvas to 0.725, which is what sets the
+   FFX-2 HUD safe area (docs/ENGINE-API.md#hud-safe-area). This column, not the
+   command stack, was the binding rail — the stack's own left edge is 0.745 —
+   and every unit it gives back is a unit of Vegnagun that stops being drawn
+   under a party row. */
 .ffx2hud .ig-stat {
-  width: 170px;
+  width: 158px;
   height: 28px;
   gap: 4px;
   padding-right: 6px;
@@ -369,7 +375,12 @@
 
 .ffx2hud__command {
   position: absolute;
-  right: 17.78px;
+  /* 12, not the mock's 17.78: the stack is right-anchored, so trimming the
+     margin moves its *left* edge outboard too, and that edge is a wall the
+     scene has to stand its boss clear of. At 12 it lands at 0.745 of the
+     canvas, behind the party column's 0.725, so the safe area is set by one
+     rail instead of two (docs/ENGINE-API.md#hud-safe-area). */
+  right: 12px;
   bottom: 116.44px; /* BattleFfx2.dc.html: right 40, bottom 262 @1440 */
   max-height: 220px;
   overflow-y: auto;

@@ -17,6 +17,8 @@
  *   makes every later timed step resolve immediately too, while still
  *   forwarding instantaneous steps (`music`, `sfx`, `setFlag`, `setPose`) so
  *   scene state ends up correct after a skip.
+ * - `setInstant(true)` is the **mid-battle `'skip'` mode**: the same
+ *   fast-forward, but sticky across `reset()`. See {@link CutsceneRunner.setInstant}.
  * - `jump` is guarded at 1000 total jumps per `run()`, per the DSL's own
  *   "the runner aborts after 1 000 jumps" contract note.
  */
@@ -118,6 +120,7 @@ const MAX_JUMPS = 1000;
 export class CutsceneRunner {
   private readonly flags = new Map<string, string | number | boolean>();
   private skippedFlag = false;
+  private instantFlag = false;
   private skipWaiters: Array<() => void> = [];
   private jumpCount = 0;
 
@@ -127,15 +130,46 @@ export class CutsceneRunner {
     return this.skippedFlag;
   }
 
+  /** True while this runner is in the sticky fast-forward of {@link setInstant}. */
+  get instant(): boolean {
+    return this.instantFlag;
+  }
+
+  /**
+   * Mid-battle `'skip'` mode: a {@link skip} that **survives {@link reset}**.
+   *
+   * `skip()` on its own is a one-shot latch on the script in flight, and every
+   * mid-battle beat begins with a `reset()` — so a caller that skipped once
+   * (`speed: 'skip'` reaching `setAutoAdvance(on, {instant})`) got exactly one
+   * cheap beat and then paid full price for every beat after it. That is the
+   * whole of why an e2e chapter run at `'skip'` still spent up to eight seconds
+   * on each of Seymour's, Yu Yevon's and Bahamut's callouts.
+   *
+   * Under it every *timed* step still resolves at once while `music`, `sfx`,
+   * flags and poses still fire, so the scene state a later beat reads is the
+   * state it would have had if the beat had played.
+   */
+  setInstant(on: boolean): void {
+    this.instantFlag = on;
+    if (on) this.skip();
+  }
+
   /** Chapter-flag read-back, for `MidBattleTrigger` scripts and tests. */
   getFlag(key: string): string | number | boolean | undefined {
     return this.flags.get(key);
   }
 
-  /** Clears flags, the skip latch and the jump counter. Call between scripts if reusing one runner. */
+  /**
+   * Clears flags, the skip latch and the jump counter. Call between scripts if
+   * reusing one runner.
+   *
+   * {@link setInstant} is deliberately **not** cleared: it is a property of the
+   * playback speed, not of the script, so the next script starts already
+   * fast-forwarded.
+   */
   reset(): void {
     this.flags.clear();
-    this.skippedFlag = false;
+    this.skippedFlag = this.instantFlag;
     this.skipWaiters = [];
     this.jumpCount = 0;
   }

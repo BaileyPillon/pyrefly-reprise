@@ -328,3 +328,399 @@ function clampToBounds(
     y: maxY >= minY ? Math.min(maxY, Math.max(minY, y)) : (b.top + b.bottom) / 2,
   };
 }
+
+// ------------------------------------------------- per-target burst layout
+//
+// Round 2, issue 2 of `docs/handoff/playability-round-1.md`: a multi-hit
+// action piled ~8 numerals on one screen point (`53-ffx2-vegnagun.png`) and
+// Yunalesca's AoE buried `2200` under `1850` (`50-yunalesca.png`). Three
+// separate mechanisms fix that, and all three live here as pure math:
+//
+//   1. a **queue with a short stagger** per target, so hits that resolve in
+//      one engine tick still appear in quick succession the way FFX shows a
+//      multi-hit ({@link nextBurstSlot});
+//   2. a **rising ladder that fans horizontally** once it has climbed its few
+//      rungs, so hit 5 sits beside hit 1 rather than on top of it
+//      ({@link burstSlot});
+//   3. **per-target lanes**, so two actors whose chests project to nearly the
+//      same x do not interleave their columns ({@link resolveLanes}).
+
+/**
+ * Rungs the ladder climbs on one target before the next hit starts a new fan
+ * column. Three rungs is ~83 logical px of rise above the chest — as far up as
+ * a numeral can go and still read as belonging to the actor under it.
+ */
+export const LADDER_RUNGS = 3;
+
+/**
+ * Horizontal step, in logical px, between two fan columns on the same target.
+ * A 5-figure numeral at the 16px base size is ~44px wide, so 46 guarantees two
+ * neighbouring columns cannot print through each other.
+ */
+export const FAN_STEP = 46;
+
+/** Fan columns before the layout wraps back onto column 0 (20 numerals/target). */
+export const FAN_COLUMNS = 5;
+
+/** Minimum gap, in ms, between two numerals released on the same target. */
+export const HIT_STAGGER_MS = 80;
+
+/**
+ * Extra rung pitch, in logical px, that pays for the stagger.
+ *
+ * A numeral released {@link HIT_STAGGER_MS} later is that much earlier in its
+ * own ballistic arc, and §3.6's arc rises about 10px in 80ms — so without this
+ * the rung a hit climbs is very nearly cancelled out by the rise its
+ * predecessor has already made, and two consecutive hits sit within a few
+ * pixels of each other for the first third of a second. Which is the pile-up.
+ */
+const STAGGER_RISE = 11;
+
+/**
+ * A fan column's horizontal offset in logical px: column 0 sits on the target,
+ * then the columns alternate right/left so the group stays centred on the
+ * actor instead of marching off in one direction.
+ */
+export function fanOffset(column: number): number {
+  const c = Math.max(0, Math.floor(column)) % FAN_COLUMNS;
+  if (c === 0) return 0;
+  const step = Math.ceil(c / 2);
+  return (c % 2 === 1 ? 1 : -1) * step * FAN_STEP;
+}
+
+/** Where numeral `index` of a target's current burst sits, and how late it is released. */
+export interface BurstSlot {
+  /** Horizontal offset from the target's anchor, logical px. */
+  dx: number;
+  /** Vertical offset from the target's anchor, logical px (negative = up). */
+  dy: number;
+  /** Rung on the ladder, 0..{@link LADDER_RUNGS}-1. */
+  rung: number;
+  /** Fan column, 0..{@link FAN_COLUMNS}-1. */
+  column: number;
+}
+
+/**
+ * Ladder-plus-fan position for the `index`-th numeral riding one target.
+ *
+ * Hits climb the ladder first (`rung = index % LADDER_RUNGS`), which is the
+ * FFX read — a multi-hit is a column of figures rising off the target. Once
+ * the ladder is full the next hit opens a **new column** beside it rather than
+ * wrapping onto a rung that is still on screen, which is precisely the failure
+ * in `53-ffx2-vegnagun.png`.
+ *
+ * §3.6's `(+4, -3) * i` diagonal survives as the intra-column drift.
+ */
+export function burstSlot(index: number, kind: DamageKind = 'damage'): BurstSlot {
+  const i = Math.max(0, Math.floor(index));
+  const rung = i % LADDER_RUNGS;
+  const column = Math.floor(i / LADDER_RUNGS) % FAN_COLUMNS;
+  return {
+    dx: fanOffset(column) + 4 * rung,
+    // `0 - x` rather than `-x` so rung 0 reports +0, not -0.
+    dy: 0 - (ladderPitch(kind) + 3 + STAGGER_RISE) * rung,
+    rung,
+    column,
+  };
+}
+
+/** Per-target queue state carried between {@link nextBurstSlot} calls. */
+export interface BurstState {
+  /** Slot index the next numeral on this target takes. */
+  next: number;
+  /** Clock time, in ms, of the most recent spawn on this target. */
+  lastSpawnMs: number;
+  /** Earliest clock time, in ms, at which the next numeral may become visible. */
+  nextFreeAt: number;
+}
+
+export interface BurstOptions {
+  /** Minimum spacing between two releases on one target. Default {@link HIT_STAGGER_MS}. */
+  staggerMs?: number;
+  /** Cap on how long one numeral may be held back, so a 16-hit reel still ends. Default 720. */
+  maxDelayMs?: number;
+  /** Quiet time after which the target's burst is considered over and the ladder restarts. Default 800. */
+  gapMs?: number;
+}
+
+/**
+ * Take the next slot in a target's queue.
+ *
+ * The delay is *relative to the previous release on that target*, not to the
+ * first hit of the action: a presenter that already paces its hits gets no
+ * extra delay at all, while eight hits resolved in a single engine tick go out
+ * 80ms apart. That is what "quick succession" means in FFX — the numerals
+ * arrive one after another, each rising and fading on its own clock.
+ *
+ * `hitIndex` (the engine's own 0-based index within a multi-hit action) wins
+ * when it is ahead of the running counter, so a caller that knows its hit
+ * number keeps its ladder even if some of its numerals never spawned.
+ */
+export function nextBurstSlot(
+  prev: BurstState | undefined,
+  nowMs: number,
+  hitIndex = 0,
+  opts: BurstOptions = {},
+): { index: number; delayMs: number; state: BurstState } {
+  const staggerMs = opts.staggerMs ?? HIT_STAGGER_MS;
+  const maxDelayMs = opts.maxDelayMs ?? 720;
+  const gapMs = opts.gapMs ?? 800;
+  const hit = Math.max(0, Math.floor(hitIndex));
+  const fresh = !prev || nowMs - prev.lastSpawnMs > gapMs;
+  const index = fresh ? hit : Math.max(prev.next, hit);
+  const delayMs = fresh ? 0 : Math.min(maxDelayMs, Math.max(0, prev.nextFreeAt - nowMs));
+  return {
+    index,
+    delayMs,
+    state: { next: index + 1, lastSpawnMs: nowMs, nextFreeAt: nowMs + delayMs + staggerMs },
+  };
+}
+
+// ------------------------------------------------------------ target lanes
+
+/** One target competing for horizontal room, in layer pixels. */
+export interface LaneInput {
+  id: string;
+  /** Projected anchor x. */
+  x: number;
+  /** Half-width of everything this target wants to draw around `x`. */
+  halfWidth: number;
+}
+
+/**
+ * Give every target its own horizontal lane.
+ *
+ * An AoE that lands on three party members standing shoulder to shoulder
+ * projects three anchors a few pixels apart, and their ladders interleave —
+ * `50-yunalesca.png`'s `2200` under `1850`. This sweeps the anchors left to
+ * right, pushes any that overlap far enough apart to clear, then re-centres
+ * the whole group on its original centroid so the fan stays visually attached
+ * to the formation rather than drifting to one side.
+ *
+ * Returns an x *offset* per id (0 when the target needed no push). Ties on x
+ * break by id, so the result is stable frame to frame.
+ */
+export function resolveLanes(targets: readonly LaneInput[], gap = 10): Map<string, number> {
+  const out = new Map<string, number>();
+  if (targets.length === 0) return out;
+  if (targets.length === 1) {
+    out.set(targets[0]!.id, 0);
+    return out;
+  }
+
+  const sorted = [...targets].sort((a, b) => (a.x === b.x ? (a.id < b.id ? -1 : 1) : a.x - b.x));
+  const placed: { id: string; x: number; shift: number }[] = [];
+  let cursor = Number.NEGATIVE_INFINITY;
+  for (const t of sorted) {
+    const half = Math.max(0, t.halfWidth);
+    const wanted = t.x - half;
+    const x = wanted < cursor + gap ? cursor + gap + half : t.x;
+    cursor = x + half;
+    placed.push({ id: t.id, x: t.x, shift: x - t.x });
+  }
+
+  // Everything above only ever pushes right, which walks a crowded formation
+  // toward the HUD. Re-centre by the mean push so the spread is symmetric.
+  const mean = placed.reduce((sum, p) => sum + p.shift, 0) / placed.length;
+  for (const p of placed) out.set(p.id, p.shift - mean);
+  return out;
+}
+
+// -------------------------------------------------------------- safe area
+
+export interface SafeAreaOptions {
+  /** How close to an edge (as a fraction of the bounds) a panel must sit to count as hugging it. Default 0.08. */
+  edgeTolerance?: number;
+  /** How much of that edge the panel must span before the whole edge is inset. Default 0.22. */
+  minCoverage?: number;
+  /**
+   * Widest band the left or right edge may give up, as a fraction of the
+   * bounds. Default 0.22 — enough for the FFX CTB column (~13% of a 16:9
+   * frame) and deliberately *not* enough for the command stack (~23%), which
+   * is only up while the menu is open and is better dodged than designed
+   * around. A panel whose band would exceed this is left to
+   * {@link deflectFromRects}.
+   */
+  maxInsetX?: number;
+  /** Same, for the top and bottom edges. Default 0.34 — the party-status windows are ~32% of the height. */
+  maxInsetY?: number;
+  /** Extra air, in px, between the safe rect and the panel. Default 6. */
+  margin?: number;
+}
+
+/**
+ * The HUD-free rectangle numerals should live in.
+ *
+ * Issue 3 of `docs/handoff/playability-round-1.md`: `604`, `571` and `578`
+ * printed across the right-hand CTB column in `47-boss-attack.png`. Dodging a
+ * panel only once a numeral already overlaps it is too late — by then several
+ * numerals have been shoved to the same free edge and pile up again. Instead
+ * the layer works out, once per frame, the band each edge-anchored HUD slab
+ * eats (the FFX CTB column on the right, the party-status windows along the
+ * bottom, the FFX-2 boss strip along the top) and spawns inside what is left.
+ *
+ * A slab that hugs two edges — the bottom-right party window is both — is
+ * charged to the **cheaper** edge only, so a corner panel costs a 290px bottom
+ * band rather than swallowing the right half of the screen.
+ */
+export function safeAreaFrom(
+  bounds: NumeralRect,
+  panels: readonly NumeralRect[],
+  opts: SafeAreaOptions = {},
+): NumeralRect {
+  const w = bounds.right - bounds.left;
+  const h = bounds.bottom - bounds.top;
+  if (!(w > 0 && h > 0)) return bounds;
+
+  const tol = opts.edgeTolerance ?? 0.08;
+  const minCoverage = opts.minCoverage ?? 0.22;
+  const capX = w * (opts.maxInsetX ?? 0.22);
+  const capY = h * (opts.maxInsetY ?? 0.34);
+  const margin = opts.margin ?? 6;
+  const tolX = w * tol;
+  const tolY = h * tol;
+
+  const inset = { left: 0, top: 0, right: 0, bottom: 0 };
+
+  for (const raw of panels) {
+    const left = Math.max(raw.left, bounds.left);
+    const top = Math.max(raw.top, bounds.top);
+    const right = Math.min(raw.right, bounds.right);
+    const bottom = Math.min(raw.bottom, bounds.bottom);
+    if (right <= left || bottom <= top) continue;
+
+    const spanX = (right - left) / w;
+    const spanY = (bottom - top) / h;
+    const candidates: { edge: 'left' | 'top' | 'right' | 'bottom'; amount: number }[] = [];
+    if (left <= bounds.left + tolX && spanY >= minCoverage) {
+      candidates.push({ edge: 'left', amount: right - bounds.left + margin });
+    }
+    if (right >= bounds.right - tolX && spanY >= minCoverage) {
+      candidates.push({ edge: 'right', amount: bounds.right - left + margin });
+    }
+    if (top <= bounds.top + tolY && spanX >= minCoverage) {
+      candidates.push({ edge: 'top', amount: bottom - bounds.top + margin });
+    }
+    if (bottom >= bounds.bottom - tolY && spanX >= minCoverage) {
+      candidates.push({ edge: 'bottom', amount: bounds.bottom - top + margin });
+    }
+    // A band wider than its cap is not worth designing around — it would cost
+    // more field than the panel occupies. Drop it and let the deflector deal.
+    const affordable = candidates.filter((c) =>
+      c.edge === 'left' || c.edge === 'right' ? c.amount <= capX : c.amount <= capY,
+    );
+    if (affordable.length === 0) continue;
+
+    // Cheapest edge only: a corner slab is a band along its short side.
+    const best = affordable.reduce((a, b) => (b.amount < a.amount ? b : a));
+    inset[best.edge] = Math.max(inset[best.edge], best.amount);
+  }
+
+  const rect: NumeralRect = {
+    left: bounds.left + inset.left,
+    top: bounds.top + inset.top,
+    right: bounds.right - inset.right,
+    bottom: bounds.bottom - inset.bottom,
+  };
+  if (rect.right <= rect.left || rect.bottom <= rect.top) return bounds;
+  return rect;
+}
+
+/** Where a numeral ended up, and whether it had to be drawn over the HUD to get there. */
+export interface SafePlacement {
+  x: number;
+  y: number;
+  /** True when the target sits so deep under the HUD that no in-safe-area placement still reads as its own. */
+  overHud: boolean;
+}
+
+/**
+ * Put `anchor + offset` inside `safe`, preferring a mirror to a clamp.
+ *
+ * Clamping is what makes numerals pile up: every figure that overshoots an
+ * edge lands on the *same* clamped coordinate. So an offset that would leave
+ * the safe rect is first **reflected** — the fan flips to the other side of
+ * its target, which preserves the spacing the fan was there to provide — and
+ * only clamped if the mirror does not fit either.
+ *
+ * `slack` is how far outside the safe rect a target may stand and still have
+ * its numerals pulled back inside: a party member whose chest is a little
+ * below the status windows reads fine with the figure just above them, but an
+ * enemy wholly behind the CTB column does not, and that is the one case where
+ * `overHud` comes back true and the caller lifts the glyph over the chrome.
+ */
+export function placeInSafeArea(
+  anchor: { x: number; y: number },
+  offset: { x: number; y: number },
+  half: { w: number; h: number },
+  safe: NumeralRect | null,
+  slack = 0,
+  group?: { w: number; h: number },
+): SafePlacement {
+  const ideal = { x: anchor.x + offset.x, y: anchor.y + offset.y };
+  if (!safe) return { x: ideal.x, y: ideal.y, overHud: false };
+
+  const roomX = safe.right - safe.left;
+  const roomY = safe.bottom - safe.top;
+  if (roomX < half.w * 2 || roomY < half.h * 2) {
+    return { x: ideal.x, y: ideal.y, overHud: true };
+  }
+
+  const outside =
+    Math.max(safe.left - anchor.x, anchor.x - safe.right, 0) > slack ||
+    Math.max(safe.top - anchor.y, anchor.y - safe.bottom, 0) > slack;
+  if (outside) return { x: ideal.x, y: ideal.y, overHud: true };
+
+  // Move the *anchor* first, by up to one `slack`, so the whole fan has room
+  // rather than each figure being clamped on its own. Clamping figure by figure
+  // is what turned Mortiorchis's fan back into a stack: every column of a
+  // target parked against the CTB column landed on the same
+  // `safe.right - halfWidth`, which is precisely the pile issue 2 is about.
+  //
+  // Only on the axis where the anchor has actually left the rect, though: a
+  // target standing in open field keeps the exact x its lane gave it, so the
+  // nudge cannot undo `resolveLanes` by pulling two neighbouring actors back
+  // onto the same column.
+  const g = group ?? half;
+  const ax =
+    anchor.x < safe.left || anchor.x > safe.right
+      ? nudgeInto(anchor.x, safe.left + g.w, safe.right - g.w, slack)
+      : anchor.x;
+  const ay =
+    anchor.y < safe.top || anchor.y > safe.bottom
+      ? nudgeInto(anchor.y, safe.top + g.h, safe.bottom - g.h, slack)
+      : anchor.y;
+
+  // Reflect what still overshoots back off the boundary rather than clamping
+  // it flat against it. Reflection is one-to-one, so two fan columns that both
+  // overshoot stay two positions; a clamp maps every overshoot onto the *same*
+  // coordinate, which is the pile-up this whole module exists to stop. It also
+  // beats mirroring about the target: the fan is symmetric, so column 3
+  // mirrored lands exactly on column 4.
+  return {
+    x: reflectAxis(ax + offset.x, safe.left + half.w, safe.right - half.w),
+    y: reflectAxis(ay + offset.y, safe.top + half.h, safe.bottom - half.h),
+    overHud: false,
+  };
+}
+
+/** Fold `v` back into `[lo, hi]` off whichever bound it crossed; clamps if it folds past the other. */
+function reflectAxis(v: number, lo: number, hi: number): number {
+  if (hi < lo) return (lo + hi) / 2;
+  if (v < lo) return Math.min(hi, 2 * lo - v);
+  if (v > hi) return Math.max(lo, 2 * hi - v);
+  return v;
+}
+
+/**
+ * Pull `v` toward `[lo, hi]`, but never further than `maxMove` — so a group
+ * whose actor stands under the chrome drifts toward open space without
+ * detaching from the actor it belongs to. An inverted range (a group wider
+ * than the safe rect) aims at its middle.
+ */
+function nudgeInto(v: number, lo: number, hi: number, maxMove: number): number {
+  const target = hi >= lo ? Math.min(hi, Math.max(lo, v)) : (lo + hi) / 2;
+  const delta = target - v;
+  if (Math.abs(delta) <= maxMove) return target;
+  return v + Math.sign(delta) * maxMove;
+}

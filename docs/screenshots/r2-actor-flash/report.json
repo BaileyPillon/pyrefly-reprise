@@ -1,0 +1,31 @@
+{
+  "frames": [
+    {
+      "name": "04-rikku-cast.png",
+      "bytes": 2573512
+    },
+    {
+      "name": "04-rikku-cast-before.png",
+      "bytes": 2570346
+    },
+    {
+      "name": "05-rikku-crit.png",
+      "bytes": 2548946
+    },
+    {
+      "name": "05-rikku-crit-before.png",
+      "bytes": 2507860
+    }
+  ],
+  "notes": [
+    {
+      "chapter": "ffx2-bahamut",
+      "scene": null,
+      "actors": []
+    },
+    {
+      "rikkuActorId": "rikku"
+    }
+  ],
+  "errors": []
+}

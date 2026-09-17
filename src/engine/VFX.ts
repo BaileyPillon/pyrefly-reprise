@@ -369,12 +369,25 @@ export class SparkBurst extends Points {
 export interface ImpactFlashOptions {
   color?: number | string;
   size?: number;
+  /**
+   * Brightest the additive bloom is allowed to get, 0..1.
+   *
+   * It matters because this quad has `depthTest: false` and a `renderOrder`
+   * above the figures: whatever it covers, it covers completely. At the old
+   * hard-coded 0.95 a bloom sized for a four-metre boss and played unchanged
+   * on a 1.8-metre party member erased her torso -- Rikku came out as a white
+   * blob with only her hair and shoes surviving. Call sites also scale the
+   * quad to the target (see `PaintedStage`), and between the two the bloom
+   * reads as light *around* the hit instead of a hole punched through it.
+   */
+  peakOpacity?: number;
 }
 
 /** A soft additive bloom at the point of impact. Cheap, and it sells the hit. */
 export class ImpactFlash extends Mesh {
   private readonly tweens = new TweenGroup();
   private readonly baseSize: number;
+  private readonly peakOpacity: number;
 
   constructor(opts: ImpactFlashOptions = {}) {
     const mat = new MeshBasicMaterial({
@@ -396,12 +409,18 @@ export class ImpactFlash extends Mesh {
     });
     super(new PlaneGeometry(1, 1), mat);
     this.baseSize = opts.size ?? 2.6;
+    this.peakOpacity = Math.max(0, Math.min(1, opts.peakOpacity ?? 0.7));
     this.frustumCulled = false;
     this.renderOrder = 41;
     this.visible = false;
     this.name = 'impact-flash';
   }
 
+  /**
+   * @param scale multiplies the configured `size`. Scale it to the target --
+   *   a boss and a party member are metres apart in height and the same bloom
+   *   on both swallows the smaller one whole.
+   */
   play(at: Vector3 | { x: number; y: number; z: number }, ms = 260, scale = 1): void {
     this.position.set(at.x, at.y, at.z);
     this.visible = true;
@@ -413,7 +432,9 @@ export class ImpactFlash extends Mesh {
       onUpdate: (t) => {
         const s = this.baseSize * scale * (0.35 + t * 1.15);
         this.scale.set(s, s, 1);
-        mat.opacity = (1 - t) * 0.95;
+        // Falls off faster than linear: the bloom is a pop, and the long dim
+        // tail is what used to sit on a figure for a quarter of a second.
+        mat.opacity = Math.pow(1 - t, 1.6) * this.peakOpacity;
       },
       onComplete: () => {
         this.visible = false;

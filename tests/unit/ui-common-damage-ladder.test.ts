@@ -1,15 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import {
   bouncePosition,
+  burstSlot,
   classifyDamageEvent,
   computeHitOffset,
   deflectFromRects,
+  fanOffset,
   fontSizeFor,
   jitterX,
   lifetimeMsFor,
+  nextBurstSlot,
   opacityAt,
+  placeInSafeArea,
+  resolveLanes,
+  safeAreaFrom,
   scaleAt,
   textFor,
+  FAN_COLUMNS,
+  FAN_STEP,
+  HIT_STAGGER_MS,
+  LADDER_RUNGS,
+  type BurstState,
 } from '../../src/ui/common/damageLadder.ts';
 
 describe('classifyDamageEvent', () => {
@@ -198,5 +209,328 @@ describe('deflectFromRects — keeping numerals off the HUD slabs', () => {
     });
     expect(out.x + half.w).toBeLessThanOrEqual(1600);
     expect(out.x - half.w).toBeGreaterThanOrEqual(0);
+  });
+});
+
+// ---------------------------------------------------------------- round 2
+//
+// Issue 2 of `docs/handoff/playability-round-1.md`: multi-hit and multi-target
+// numerals piled on one point. These cover the three mechanisms that replaced
+// the single wrapping ladder.
+
+describe('fanOffset — columns beside the ladder', () => {
+  it('leaves the first column on the target, with no negative zero', () => {
+    expect(fanOffset(0)).toBe(0);
+    expect(Object.is(fanOffset(0), -0)).toBe(false);
+  });
+
+  it('alternates right then left so the group stays centred on the actor', () => {
+    expect(fanOffset(1)).toBe(FAN_STEP);
+    expect(fanOffset(2)).toBe(-FAN_STEP);
+    expect(fanOffset(3)).toBe(2 * FAN_STEP);
+    expect(fanOffset(4)).toBe(-2 * FAN_STEP);
+  });
+
+  it('wraps back to the middle after FAN_COLUMNS', () => {
+    expect(fanOffset(FAN_COLUMNS)).toBe(fanOffset(0));
+    expect(fanOffset(FAN_COLUMNS + 1)).toBe(fanOffset(1));
+  });
+});
+
+describe('burstSlot — the ladder that fans instead of wrapping', () => {
+  it('climbs the ladder within one column first', () => {
+    for (let i = 0; i < LADDER_RUNGS; i++) {
+      expect(burstSlot(i).column).toBe(0);
+      expect(burstSlot(i).rung).toBe(i);
+    }
+  });
+
+  it('opens a new column rather than printing over a rung still on screen', () => {
+    const first = burstSlot(0);
+    const wrapped = burstSlot(LADDER_RUNGS);
+    expect(wrapped.rung).toBe(first.rung);
+    expect(wrapped.column).toBe(1);
+    // This is the `53-ffx2-vegnagun.png` failure: hit 5 used to land on hit 0.
+    expect(Math.abs(wrapped.dx - first.dx)).toBeGreaterThanOrEqual(FAN_STEP);
+  });
+
+  it('gives every slot in a full fan its own cell', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < LADDER_RUNGS * FAN_COLUMNS; i++) {
+      const s = burstSlot(i);
+      seen.add(`${s.rung}:${s.column}`);
+    }
+    expect(seen.size).toBe(LADDER_RUNGS * FAN_COLUMNS);
+  });
+
+  it('rises per rung by more than the arc climbs during one stagger, plus a glyph', () => {
+    // The regression this constant exists for: a hit released 80ms later is
+    // that much lower on its own arc, which used to cancel out its rung.
+    const risePerStagger = Math.abs(bouncePosition(HIT_STAGGER_MS, 'damage', 0).y);
+    const pitch = Math.abs(burstSlot(1).dy - burstSlot(0).dy);
+    expect(pitch).toBeGreaterThan(risePerStagger + fontSizeFor('damage'));
+  });
+
+  it('never reports a negative zero for the first slot', () => {
+    expect(Object.is(burstSlot(0).dy, -0)).toBe(false);
+    expect(burstSlot(-4).rung).toBe(0);
+  });
+});
+
+describe('nextBurstSlot — the per-target queue', () => {
+  it('releases the first hit on a target immediately', () => {
+    const first = nextBurstSlot(undefined, 1000);
+    expect(first.index).toBe(0);
+    expect(first.delayMs).toBe(0);
+  });
+
+  it('spaces eight hits resolved in one engine tick 80ms apart', () => {
+    const delays: number[] = [];
+    let state: BurstState | undefined;
+    for (let i = 0; i < 8; i++) {
+      const slot = nextBurstSlot(state, 0, i);
+      delays.push(slot.delayMs);
+      state = slot.state;
+    }
+    expect(delays).toEqual([0, 80, 160, 240, 320, 400, 480, 560]);
+  });
+
+  it('adds no delay at all when the presenter already paces its hits', () => {
+    let state: BurstState | undefined;
+    let now = 0;
+    for (let i = 0; i < 5; i++) {
+      const slot = nextBurstSlot(state, now, i);
+      expect(slot.delayMs).toBe(0);
+      state = slot.state;
+      now += 150; // wider than HIT_STAGGER_MS, narrower than the burst gap
+    }
+    expect(state?.next).toBe(5);
+  });
+
+  it('caps how long one numeral may be held back', () => {
+    let state: BurstState | undefined;
+    let last = 0;
+    for (let i = 0; i < 40; i++) {
+      const slot = nextBurstSlot(state, 0, i, { maxDelayMs: 300 });
+      last = slot.delayMs;
+      state = slot.state;
+    }
+    expect(last).toBe(300);
+  });
+
+  it('restarts the ladder once the target has been quiet', () => {
+    const first = nextBurstSlot(undefined, 0);
+    const during = nextBurstSlot(first.state, 100);
+    expect(during.index).toBe(1);
+    const after = nextBurstSlot(during.state, 100 + 801);
+    expect(after.index).toBe(0);
+    expect(after.delayMs).toBe(0);
+  });
+
+  it("honours the engine's own hit index when it is ahead of the counter", () => {
+    const first = nextBurstSlot(undefined, 0, 0);
+    const jumped = nextBurstSlot(first.state, 0, 6);
+    expect(jumped.index).toBe(6);
+    expect(nextBurstSlot(jumped.state, 0, 0).index).toBe(7);
+  });
+});
+
+describe('resolveLanes — one lane per target', () => {
+  it('leaves a lone target where it is', () => {
+    expect(resolveLanes([{ id: 'a', x: 500, halfWidth: 40 }]).get('a')).toBe(0);
+  });
+
+  it('separates two actors who project to the same point', () => {
+    const lanes = resolveLanes(
+      [
+        { id: 'yuna', x: 600, halfWidth: 40 },
+        { id: 'tidus', x: 600, halfWidth: 40 },
+      ],
+      10,
+    );
+    const a = 600 + lanes.get('yuna')!;
+    const b = 600 + lanes.get('tidus')!;
+    expect(Math.abs(a - b)).toBeGreaterThanOrEqual(90);
+  });
+
+  it('keeps the spread centred on the formation rather than pushing it one way', () => {
+    const xs = [600, 606, 612];
+    const lanes = resolveLanes(
+      xs.map((x, i) => ({ id: `t${i}`, x, halfWidth: 30 })),
+      10,
+    );
+    const moved = xs.map((x, i) => x + lanes.get(`t${i}`)!);
+    const before = xs.reduce((s, x) => s + x, 0) / xs.length;
+    const after = moved.reduce((s, x) => s + x, 0) / moved.length;
+    expect(after).toBeCloseTo(before, 6);
+    // and every pair now clears
+    for (let i = 1; i < moved.length; i++) {
+      expect(moved[i]! - moved[i - 1]!).toBeGreaterThanOrEqual(70);
+    }
+  });
+
+  it('leaves targets that already clear each other untouched', () => {
+    const lanes = resolveLanes(
+      [
+        { id: 'a', x: 200, halfWidth: 30 },
+        { id: 'b', x: 900, halfWidth: 30 },
+      ],
+      10,
+    );
+    expect(lanes.get('a')).toBe(0);
+    expect(lanes.get('b')).toBe(0);
+  });
+
+  it('is stable when two targets share an x', () => {
+    const input = [
+      { id: 'b', x: 400, halfWidth: 20 },
+      { id: 'a', x: 400, halfWidth: 20 },
+    ];
+    const once = resolveLanes(input, 8);
+    const again = resolveLanes([...input].reverse(), 8);
+    expect(once.get('a')).toBe(again.get('a'));
+    expect(once.get('b')).toBe(again.get('b'));
+  });
+});
+
+describe('safeAreaFrom — the HUD-free rectangle', () => {
+  // A 1600x900 frame with the FFX chrome measured off `50-yunalesca.png`.
+  const bounds = { left: 0, top: 0, right: 1600, bottom: 900 };
+  const ctbColumn = { left: 1390, top: 130, right: 1560, bottom: 500 };
+  const partyWindows = { left: 1000, top: 610, right: 1560, bottom: 830 };
+
+  it('insets the right edge for the CTB column', () => {
+    const safe = safeAreaFrom(bounds, [ctbColumn]);
+    expect(safe.right).toBeLessThanOrEqual(ctbColumn.left);
+    expect(safe.left).toBe(0);
+    expect(safe.bottom).toBe(900);
+  });
+
+  it('charges a corner slab to its cheaper edge instead of eating half the frame', () => {
+    const safe = safeAreaFrom(bounds, [partyWindows]);
+    expect(safe.bottom).toBeLessThanOrEqual(partyWindows.top);
+    // Not the right edge: that would have cost 600px of field for a 290px panel.
+    expect(safe.right).toBe(1600);
+  });
+
+  it('keeps numerals out of both bands at once', () => {
+    const safe = safeAreaFrom(bounds, [ctbColumn, partyWindows]);
+    expect(safe.right).toBeLessThanOrEqual(ctbColumn.left);
+    expect(safe.bottom).toBeLessThanOrEqual(partyWindows.top);
+  });
+
+  it('ignores a panel floating in the middle of the field', () => {
+    expect(safeAreaFrom(bounds, [{ left: 600, top: 300, right: 800, bottom: 500 }])).toEqual(bounds);
+  });
+
+  it('refuses a band wider than it is worth — the open command stack', () => {
+    // ~23% of the width: dodging it costs less field than designing around it.
+    const commandStack = { left: 60, top: 480, right: 360, bottom: 830 };
+    expect(safeAreaFrom(bounds, [commandStack]).left).toBe(0);
+  });
+
+  it('ignores a panel that barely touches the edge it hugs', () => {
+    const sliver = { left: 1500, top: 430, right: 1600, bottom: 470 };
+    expect(safeAreaFrom(bounds, [sliver]).right).toBe(1600);
+  });
+
+  it('never returns a degenerate rectangle', () => {
+    const everything = { left: 0, top: 0, right: 1600, bottom: 900 };
+    const safe = safeAreaFrom(bounds, [everything]);
+    expect(safe.right).toBeGreaterThan(safe.left);
+    expect(safe.bottom).toBeGreaterThan(safe.top);
+  });
+
+  it('passes an unlaid-out bounds straight through', () => {
+    const empty = { left: 0, top: 0, right: 0, bottom: 0 };
+    expect(safeAreaFrom(empty, [ctbColumn])).toEqual(empty);
+  });
+});
+
+describe('placeInSafeArea — mirror before clamping', () => {
+  const safe = { left: 0, top: 0, right: 1000, bottom: 600 };
+  const half = { w: 30, h: 12 };
+
+  it('leaves a numeral that already fits exactly where it asked to be', () => {
+    const at = placeInSafeArea({ x: 400, y: 300 }, { x: 46, y: -28 }, half, safe);
+    expect(at).toEqual({ x: 446, y: 272, overHud: false });
+  });
+
+  it('reflects a fan column that would leave the safe rect instead of clamping it', () => {
+    const anchor = { x: 960, y: 300 };
+    const at = placeInSafeArea(anchor, { x: 46, y: 0 }, half, safe);
+    // 1006 overshoots the 970 limit by 36 and folds back to 934.
+    expect(at.x).toBe(934);
+    expect(at.overHud).toBe(false);
+  });
+
+  it('keeps two reflected columns apart rather than collapsing them onto one edge', () => {
+    const anchor = { x: 960, y: 300 };
+    const right = placeInSafeArea(anchor, { x: 46, y: 0 }, half, safe);
+    const further = placeInSafeArea(anchor, { x: 92, y: 0 }, half, safe);
+    expect(Math.abs(right.x - further.x)).toBeGreaterThanOrEqual(46);
+  });
+
+  it('does not fold a column onto the mirror image of another column', () => {
+    // The fan is symmetric, so mirroring about the target mapped column 3
+    // exactly onto column 4 and printed 602 through 1400 on Seymour.
+    const anchor = { x: 900, y: 300 };
+    const plus = placeInSafeArea(anchor, { x: 92, y: 0 }, half, safe);
+    const minus = placeInSafeArea(anchor, { x: -92, y: 0 }, half, safe);
+    expect(plus.x).not.toBe(minus.x);
+    expect(Math.abs(plus.x - minus.x)).toBeGreaterThanOrEqual(36);
+  });
+
+  it('clamps when the fold overshoots the far side too', () => {
+    const tight = { left: 0, top: 0, right: 80, bottom: 600 };
+    const at = placeInSafeArea({ x: 70, y: 300 }, { x: 46, y: 0 }, half, tight);
+    expect(at.x).toBe(30);
+    expect(at.overHud).toBe(false);
+  });
+
+  it('pulls a target standing just outside the rect back in without going over the HUD', () => {
+    const at = placeInSafeArea({ x: 400, y: 640 }, { x: 0, y: 0 }, half, safe, 64);
+    expect(at.overHud).toBe(false);
+    expect(at.y).toBeLessThanOrEqual(safe.bottom - half.h);
+  });
+
+  it('gives up and goes over the HUD for a target buried under it', () => {
+    const at = placeInSafeArea({ x: 1500, y: 300 }, { x: 0, y: 0 }, half, safe, 64);
+    expect(at.overHud).toBe(true);
+    expect(at.x).toBe(1500); // still on its actor, not dragged to an edge
+  });
+
+  it('moves a whole fan in rather than clamping each column onto one edge', () => {
+    // Mortiorchis parked against the CTB column: every column of the fan used
+    // to land on `safe.right - halfWidth`, which is the pile-up all over again.
+    const anchor = { x: 1080, y: 300 };
+    const group = { w: 160, h: 60 };
+    const near = placeInSafeArea(anchor, { x: 10, y: 0 }, half, safe, 400, group);
+    const far = placeInSafeArea(anchor, { x: 125, y: 0 }, half, safe, 400, group);
+    expect(near.overHud).toBe(false);
+    expect(far.overHud).toBe(false);
+    expect(Math.abs(near.x - far.x)).toBeGreaterThanOrEqual(110);
+    expect(near.x + half.w).toBeLessThanOrEqual(safe.right);
+    expect(far.x + half.w).toBeLessThanOrEqual(safe.right);
+  });
+
+  it('leaves an in-field anchor exactly where its lane put it', () => {
+    // The nudge above must not undo `resolveLanes` by pulling two neighbouring
+    // actors back onto the same column.
+    const group = { w: 300, h: 200 };
+    const a = placeInSafeArea({ x: 400, y: 300 }, { x: 0, y: 0 }, half, safe, 200, group);
+    const b = placeInSafeArea({ x: 520, y: 300 }, { x: 0, y: 0 }, half, safe, 200, group);
+    expect(a.x).toBe(400);
+    expect(b.x).toBe(520);
+  });
+
+  it('does nothing at all without a safe rect', () => {
+    const at = placeInSafeArea({ x: 10, y: 10 }, { x: 5, y: -5 }, half, null);
+    expect(at).toEqual({ x: 15, y: 5, overHud: false });
+  });
+
+  it('goes over the HUD when the safe rect is too small for the glyph', () => {
+    const slot = { left: 0, top: 0, right: 20, bottom: 600 };
+    expect(placeInSafeArea({ x: 10, y: 10 }, { x: 0, y: 0 }, half, slot).overHud).toBe(true);
   });
 });

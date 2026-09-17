@@ -156,10 +156,28 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * the parts a multi-part boss puts on the field (Yunalesca's serpent coils, a
  * Mortiorchis-style mount, Dark Bahamut's wings).
  */
+/**
+ * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`):
+ * the FFX HUD's CTB queue owns everything right of 0.815 of the canvas, so an
+ * enemy has to finish by 0.79, and the party-status panel's top edge at 0.684
+ * is what a figure's feet may not sink far past.
+ *
+ * At `[2.95, 0, -2.9]` Yunalesca measured 0.581..0.803 x, 0.194..0.746 y — over
+ * the queue's rail on one side and into the status panel on the other. The
+ * 1.1 units of extra depth do both jobs at once: further away is further *left*
+ * of the queue and further *up* the frame, so she lands at 0.541..0.746 and
+ * 0.199..0.718 with no change to the rig. It costs 7% of her on-screen height,
+ * which is the cheapest of the three ways out of the collision (the other two
+ * are yawing the camera, which this scene's flat painting cannot afford — see
+ * {@link RIGS} — and narrowing the queue, which would ellipsise names).
+ *
+ * Slots 1 and 2 hold nothing in this chapter; they move with the boss so a
+ * future part cannot land where Mortiorchis used to (`gagazet.ts`).
+ */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [2.95, 0, -2.9],
-  [5.1, 0, -1.8],
-  [1.0, 0, -4.4],
+  [2.5, 0, -4.0], // boss -> x 0.541..0.746, y 0.199..0.718 at `idle`
+  [3.9, 0, -7.4],
+  [0.9, 0, -6.2],
 ];
 
 /**

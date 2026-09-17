@@ -30,6 +30,7 @@ import {
   uiPortsRegistered,
 } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
+import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { loadScene, type LoadedScene } from '../../scenes/index.ts';
@@ -140,6 +141,14 @@ export class BattleScreen extends Screen {
       stage: this.stage,
       audio,
       textSpeed: this.app.save.settings.textSpeed,
+      // A `'skip'` run is e2e or the critic: no viewer, and a whole chapter to
+      // finish inside a budget. Give the runner a clock that collapses instead
+      // of the bare `setTimeout` it defaulted to, so a beat's waits cost a
+      // macrotask yield (which keeps the frame loop breathing —
+      // `BattlePresenterUtil.defaultSleep`) and nothing more. A speed *change*
+      // mid-fight goes through `setAutoAdvance`, which collapses the same waits
+      // from inside the runner; this covers the run that starts at `'skip'`.
+      sleep: (ms) => defaultSleep(this.opts.speed === 'skip' ? 0 : ms),
     });
 
     const registered = uiPortsRegistered();

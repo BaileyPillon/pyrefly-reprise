@@ -110,6 +110,23 @@ const TARGET_IPD = 0.3;
 const TARGET_EYE_Y = 0.42;
 
 /**
+ * The inline `style` for a crop, shared by {@link faceImgHtml} (a measured
+ * `CROPS` row) and {@link bodyHeadCropStyle} (the generic full-body-painting
+ * estimate below) — both place a source image inside a square frame from the
+ * same four numbers, they just get those numbers from different places.
+ */
+function cropStyle(crop: PortraitCrop, opts: FaceOptions): string {
+  const w = ((opts.ipd ?? TARGET_IPD) / crop.ipd) * 100;
+  const h = w / crop.aspect;
+  const left = 50 - crop.fx * w;
+  const top = (opts.eyeY ?? TARGET_EYE_Y) * 100 - crop.fy * h;
+  return (
+    `position:absolute;left:${left.toFixed(2)}%;top:${top.toFixed(2)}%;` +
+    `width:${w.toFixed(2)}%;height:auto;max-width:none;object-fit:fill`
+  );
+}
+
+/**
  * A portrait cropped to the head, for a **square** frame with `overflow:
  * hidden` and `position: relative` (`.prep__face`, the chapter-select party
  * tiles). Every face comes back at the same head scale with its eyes on the
@@ -123,15 +140,32 @@ const TARGET_EYE_Y = 0.42;
  */
 export function faceImgHtml(id: string | undefined, alt = '', opts: FaceOptions = {}): string {
   if (!id) return '';
-  const crop = portraitCrop(id);
-  const w = ((opts.ipd ?? TARGET_IPD) / crop.ipd) * 100;
-  const h = w / crop.aspect;
-  const left = 50 - crop.fx * w;
-  const top = (opts.eyeY ?? TARGET_EYE_Y) * 100 - crop.fy * h;
-  const style =
-    `position:absolute;left:${left.toFixed(2)}%;top:${top.toFixed(2)}%;` +
-    `width:${w.toFixed(2)}%;height:auto;max-width:none;object-fit:fill`;
+  const style = cropStyle(portraitCrop(id), opts);
   const cls = opts.className ? ` class="${opts.className}"` : '';
   const src = artUrl(`art/portraits/${id}.png`);
   return `<img${cls} src="${src}" alt="${alt}" draggable="false" style="${style}" onerror="this.remove()" />`;
+}
+
+/**
+ * Generic head-region crop for a **full-body** character painting
+ * (`characters/<id>/idle.png`) — the fallback for an enemy with no
+ * dedicated `portraits/<id>.png` and no measured {@link CROPS} row (every
+ * boss but Seymour, Yunalesca and Jecht, per `research/visual-bible.md`
+ * §3.2/§4.11's "small square portraits" spec).
+ *
+ * These renders are generated "full body ... centered, straight-on"
+ * (`characters/<id>/idle.json`'s own `prompt` field), so the head sits in a
+ * narrow top-center band whatever the creature — `[estimate]`, tuned by eye
+ * against `mortiorchis`, `seymour-flux` and `vegnagun-body`. `aspect`
+ * defaults to the pipeline's common 1216x832 canvas; the caller (the async
+ * side of `ui/ffx/portraits.ts`, which owns the DOM wiring) narrows it to
+ * the file's own `idle.json` dimensions once that sidecar loads, the same
+ * "correct in place, never broken" pattern {@link faceImgHtml} uses for a
+ * missing `CROPS` row.
+ */
+const GENERIC_BODY_HEAD_CROP: Omit<PortraitCrop, 'aspect'> = { fx: 0.5, fy: 0.15, ipd: 0.16 };
+const GENERIC_BODY_ASPECT = 1216 / 832;
+
+export function bodyHeadCropStyle(aspect: number = GENERIC_BODY_ASPECT, opts: FaceOptions = {}): string {
+  return cropStyle({ ...GENERIC_BODY_HEAD_CROP, aspect }, opts);
 }

@@ -113,7 +113,6 @@ import {
   activeParty,
   aim,
   has,
-  hasAeonLeft,
   hpFraction,
   revive,
   row,
@@ -382,6 +381,37 @@ function bossGauge(engine: BattleEngine, boss: AnyCombatant): number {
   const flag = typeof v === 'number' ? v : 0;
   const own = 'overdrive' in boss ? (boss.overdrive?.gauge ?? 0) : 0;
   return Math.max(flag, own);
+}
+
+/**
+ * **True when the charge he is building right now would come out as Ultimate
+ * Jecht Shot** — §1.6's branch table, read from the party's side.
+ *
+ * The branch table is checked in order and only its *third* row is the one that
+ * can wipe the party:
+ *
+ * | Condition, in order | Overdrive |
+ * |---|---|
+ * | an Aeon is on the field | Jecht Bomber / Jecht Bomber 2, single target |
+ * | form 2 **and** HP <= 50 % | **Ultimate Jecht Shot**, whole party |
+ * | form 2, HP > 50 % | Triumphant Grasp 2, one target |
+ * | form 1 | Triumphant Grasp, one target |
+ *
+ * Everything above the Ultimate Jecht Shot row is a **single-target** hit that
+ * Yuna out-heals; Ultimate Jecht Shot is ~4,700 on **all three at once**
+ * (§1.5's band vs Defense 20-30) and it is the only thing in the chapter that
+ * kills a full party between her turns. §1.6 says so in as many words: the two
+ * Talk charges *"**must** be saved for the Ultimate Jecht Shot phase — exactly
+ * the guidance every guide gives"*, and an aeon cancels exactly the same charge
+ * for free (its row is checked first).
+ *
+ * The predicate is `belowHalf` as the AI itself computes it
+ * (`ai/braskas-final-aeon.ts`: `form === 1 && hp * 2 <= maxHp`), so the tactic
+ * and the boss agree on the phase to the tick.
+ */
+function ultimateJechtShotPhase(boss: AnyCombatant): boolean {
+  const form = boss.enemy?.formIndex ?? 0;
+  return form === 1 && boss.hp * 2 <= boss.stats.maxHp;
 }
 
 /** Every Yu Pagoda still standing. */
@@ -854,6 +884,26 @@ function tidusExclusive(
   if (unslowed) {
     const r = row(commands, ['Slow'], unslowed.id);
     if (r) return aim(r, unslowed.id);
+    // **And if he cannot pay for it, he buys the MP.** This is the single
+    // cheapest 100 MP in the chapter and the autopsy of the three losing seeds
+    // is what found it. Slow is `chance 100` against a Pagoda's `resistance 50`
+    // and `statuses.ts applyStatus` resolves that as `100 - 50 > rng(0..100)`,
+    // i.e. it lands slightly **under half the time** — so a pair costs four
+    // casts on average and can easily cost nine. Tidus has 140 MP, Hastega is
+    // 30 of it and Slow is 12, so he runs dry after about eight attempts; and
+    // once he is dry, `row(['Slow'])` is disabled, {@link tidusExclusive}
+    // returns `null`, he gives the seat away and {@link tidusNeeded} never asks
+    // for him again. The pillar he failed to Slow then Power Waves at full rate
+    // **for the rest of the battle**.
+    //
+    // Measured on seed 13, which is exactly that state: one Pagoda Slowed in
+    // nine casts, 108 Power Waves against a winning seed's 40 — 162,000 of
+    // healing into the boss instead of 60,000, and a gauge fed +20 a wave
+    // (§1.6's one verified gauge number) that overdrove 24 times instead of 9.
+    // One Ether is 100 MP, which is eight more attempts; §1.4's halving lasts
+    // the whole battle because `restorePart` does not clear statuses.
+    const refill = row(commands, ['Ether', 'Turbo Ether'], PILLARS);
+    if (refill) return aim(refill, PILLARS);
   }
 
   // **Cheer to five.** +1 Strength a stack on the way out and physical damage
@@ -880,6 +930,7 @@ function tidusExclusive(
   // of those against two of these (see {@link SUMMON_GAUGE}), so it only fires
   // with no aeon on the field.
   if (
+    ultimateJechtShotPhase(boss) &&
     bossGauge(engine, boss) >= TALK_GAUGE &&
     engine.state().aeonId === null &&
     talksLeft(engine) > 0
@@ -899,6 +950,7 @@ function tidusExclusive(
  * a seat Auron does not get back.
  */
 function tidusNeeded(
+  commands: AvailableCommand[],
   engine: BattleEngine,
   living: AnyCombatant[],
   standing: AnyCombatant[],
@@ -908,10 +960,15 @@ function tidusNeeded(
   const tidus = engine.state().combatants[PILLARS];
   if (!tidus) return false;
   const mp = tidus.mp;
+  // An Ether he could drink counts as MP he has — see the Slow branch of
+  // {@link tidusExclusive}. Without this the seat is never handed back to a
+  // Tidus who has run dry mid-ladder, and the un-Slowed pillar is permanent.
+  const canRefill = row(commands, ['Ether', 'Turbo Ether'], PILLARS) !== undefined;
   if (mp >= 8 && living.some((c) => c.id !== ignoreId && c.alive && !has(c, 'haste'))) return true;
-  if (mp >= 12 && standing.some((c) => !has(c, 'slow'))) return true;
+  if ((mp >= 12 || canRefill) && standing.some((c) => !has(c, 'slow'))) return true;
   if (living.every((c) => !c.alive || stacksOf(c, 'cheer') < 5)) return true;
   if (
+    ultimateJechtShotPhase(boss) &&
     bossGauge(engine, boss) >= TALK_GAUGE &&
     engine.state().aeonId === null &&
     talksLeft(engine) > 0
@@ -955,7 +1012,7 @@ function rotation(
   const mageUseful = mage !== undefined && mage.alive && !has(mage, 'ko') && mage.mp > 0;
 
   if (actorId === BREAKER) {
-    if (tidusNeeded(engine, living, standing, boss, BREAKER) && benched(engine, PILLARS)) {
+    if (tidusNeeded(commands, engine, living, standing, boss, BREAKER) && benched(engine, PILLARS)) {
       return handOver(engine, commands, PILLARS);
     }
     return null;
@@ -970,7 +1027,7 @@ function rotation(
     // 30 ticks instead of 15 and holding Mental Break for 16 % of the fight.
     // Lulu yielding instead leaves Auron standing there to be Hasted, and costs
     // one -aga.
-    if (tidusNeeded(engine, living, standing, boss, BLACK_MAGE) && benched(engine, PILLARS)) {
+    if (tidusNeeded(commands, engine, living, standing, boss, BLACK_MAGE) && benched(engine, PILLARS)) {
       return handOver(engine, commands, PILLARS);
     }
     if (!mageUseful && benched(engine, BREAKER)) return handOver(engine, commands, BREAKER);
@@ -1056,8 +1113,24 @@ function braskasLine(
   // 4. **Keep the casters solvent.** An Ether is 100 MP back and §4.4 ships
   //    three of them, plus two Turbo Ethers and an Elixir. Haste uptime is the
   //    fight, the Breaks cost MP, and so does every -aga the black mage throws.
+  //
+  //    **But the first Ether belongs to the Slow.** The bag holds three Ethers
+  //    and two Turbo Ethers for a seven-link chain, and the breaker empties it
+  //    fast: measured on seed 13 Auron drank all three before form 2, which is
+  //    why Tidus had nothing left to finish the pillar ladder with. A Mental
+  //    Break is worth about 1,500 damage and is stripped by the next Power
+  //    Wave; a Slow that lands halves Power Wave **for the rest of the
+  //    battle**. So while a pillar is still un-Slowed and Tidus cannot pay for
+  //    the cast, nobody else touches the Ethers.
   const self = engine.state().combatants[actorId];
-  if (self && self.mp < MP_FLOOR && row(commands, ['Haste', 'Hastega']) === undefined) {
+  const tidusMp = engine.state().combatants[PILLARS]?.mp ?? 0;
+  const slowDebt = standing.some((c) => !has(c, 'slow')) && tidusMp < 12;
+  if (
+    self &&
+    self.mp < MP_FLOOR &&
+    (actorId === PILLARS || !slowDebt) &&
+    row(commands, ['Haste', 'Hastega']) === undefined
+  ) {
     const refill = row(commands, ['Ether', 'Turbo Ether'], actorId);
     if (refill) return aim(refill, actorId);
   }
@@ -1215,7 +1288,41 @@ function supportTurn(
   // revive rule implemented they are standing for most of the battle, so that
   // gate meant the roster was never spent and the party ate every Overdrive
   // raw. The gauge is the gate.
-  if (state.aeonId === null && bossGauge(engine, boss) >= SUMMON_GAUGE && hasAeonLeft(commands)) {
+  //
+  // **And spent on the phase, not on the first gauge that fills.** This is the
+  // change that turned the losing seeds around and it is §1.6's own branch
+  // table read from the party's side ({@link ultimateJechtShotPhase}): a charge
+  // that fills in form 1, or in form 2 above half, comes out as a *Triumphant
+  // Grasp* — one target, two hits, ~2,000 or ~3,200 apiece, which Yuna answers
+  // with one Curaga. Only below half does it come out as **Ultimate Jecht
+  // Shot**, ~4,700 on all three at once, and that is the only thing in the
+  // chapter that takes a healthy party apart between her turns.
+  //
+  // Measured on the three seeds the previous round lost (5, 13, 99): spending
+  // the roster on whatever filled first left the party arriving at the Ultimate
+  // Jecht Shot phase with an empty bench and eating **ten** of them for 137,905
+  // damage on seed 13 alone, against 29,634 on a seed that won. §1.6 says the
+  // same thing about the Talk charges in as many words — they *"**must** be
+  // saved for the Ultimate Jecht Shot phase"* — and an aeon cancels the very
+  // same charge for free, so the roster is saved for it too.
+  //
+  // **The whole roster waits, and a partial reserve is worse than either.** The
+  // sweep, on the four canonical seeds plus the eight the verifier picked:
+  //
+  // | Rule | gate + 8 unseen | seeds 1-40 |
+  // |---|---:|---:|
+  // | spend on whatever charge fills (the previous round) | 9/12 | 37/40 |
+  // | hold three of five for the Ultimate Jecht Shot phase | 10/12 | — |
+  // | **hold all five** | **12/12** | **37/40** |
+  //
+  // A partial reserve loses both ways: it is still spending aeons on Triumphant
+  // Grasps, and it arrives at the phase that matters with two left instead of
+  // five.
+  if (
+    state.aeonId === null &&
+    bossGauge(engine, boss) >= SUMMON_GAUGE &&
+    ultimateJechtShotPhase(boss)
+  ) {
     const summon = nextAeon(commands);
     if (summon) return summon;
   }

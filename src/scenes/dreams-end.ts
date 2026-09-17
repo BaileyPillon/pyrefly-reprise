@@ -172,10 +172,29 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * slots for the parts of a multi-part boss — Braska's Final Aeon's Yu Pagodas
  * stand on these two.
  */
+/**
+ * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`).
+ * The FFX HUD's CTB queue starts at 0.815 of the canvas, so nothing on the
+ * field may pass 0.79, and the old numbers broke that on both enemies at once:
+ * Braska's Final Aeon ran to 0.878 and **`yu-pagoda-left` sat at 0.887..1.009**
+ * — a whole destructible part drawn behind the queue and off the right edge of
+ * the screen, in a fight whose entire tactic is "take the pillars"
+ * (`docs/handoff/playability-round-1.md` §4 issue 3).
+ *
+ * This is the widest boss in the FFX half (0.31 of the frame), so pulling him
+ * inside the rail takes both levers: 0.7 units left and 1.5 back. The depth is
+ * what pays for most of it — it narrows him to 0.28 *and* lifts his feet from
+ * 0.754 to 0.712, clear of the party-status panel's 0.684 top edge — and he
+ * still opens the fight 0.28 wide by 0.53 tall, centred at 0.65.
+ *
+ * The two pagodas then read as what they are: a matched pair flanking him at
+ * 0.483..0.566 and 0.675..0.750, both whole, instead of one visible pillar and
+ * one rumour behind the HUD.
+ */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [2.9, 0, -2.5], // boss
-  [5.2, 0, -1.1], // right part
-  [1.4, 0, -4.6], // left / back part
+  [2.2, 0, -4.0], // boss       -> x 0.506..0.787, y 0.185..0.712 at `idle`
+  [4.0, 0, -7.4], // right part -> x 0.675..0.750
+  [0.6, 0, -6.0], // left/back  -> x 0.483..0.566
 ];
 
 /** The slot table `src/scenes/index.ts` can hand to a battle. */

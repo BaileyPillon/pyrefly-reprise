@@ -43,19 +43,38 @@ const BASE_WEAPON_BONUS_CRIT = 3;
  * (`battle/ffx/formulas.ts`), a x1.5 on the stat is a **x2.6 to x2.9 on the
  * damage** - arithmetically the same lever as halving the boss's HP pool, and
  * applied to the player's side of the equation. **That is reverted in full.**
- * Every offensive stat below is §4.1 exactly as published, with one exception
- * that has its own published number:
+ * Every offensive stat below is now §4.1 exactly as published, with **no**
+ * exception:
  *
  * | Stat | §4.1 | Shipped | Why |
  * |---|---:|---:|---|
  * | Tidus STR | 32 | **32** | reverted |
  * | Auron STR | 42 | **42** | reverted |
  * | Lulu MAG | 42 | **42** | untouched |
- * | Yuna STR | 20 | **28** | §4.4 `[verified: 2 sources]` publishes exactly this number |
+ * | Yuna STR | 20 | **20** | reverted 2026-09-17 - see below |
  *
- * §4.4: *"Aeon stats scale off **Yuna's** Strength/Magic, which is why the wiki
- * singles out **'Yuna's Strength at least 28'** as the threshold..."* - 28, not
- * 30, and not a multiplier.
+ * **Yuna's Strength 28 is withdrawn (2026-09-17, round 4).** The previous round
+ * kept one raised offensive stat and defended it as "§4.4 publishes exactly
+ * this number". Re-read against §4.1, that defence does not hold, and a
+ * verifier's canon check was right to fail it:
+ *
+ *   * §4.1 is the section that answers *"what does a typical party have here?"*
+ *     and its own table says **Yuna STR 20**.
+ *   * §4.4's sentence is a different question and says so: *"Aeon stats scale
+ *     off **Yuna's** Strength/Magic, **which is why the wiki singles out
+ *     'Yuna's Strength at least 28' as the threshold** for Bahamut's Mega Flare
+ *     plus a couple of attacks to finish the job."* That is a **threshold for a
+ *     particular finish** - what a player needs if they intend to end the fight
+ *     with an aeon - quoted as a recommendation. It is not a statement about
+ *     the typical build, and reading a recommended floor as a published typical
+ *     is how a preset drifts upward one citation at a time.
+ *   * It would not even buy what it was cited for: this build's aeons carry
+ *     their **own** stat block ({@link dreamsEndAeons}), so nothing in the
+ *     engine scales an aeon off Yuna at all. The stat's only effect here is on
+ *     the ~490 of damage her idle swing does against a 180,000-HP chapter.
+ *
+ * Measured across the four canonical seeds and the eight the verifier picked,
+ * the revert costs nothing: 12/12 either way.
  *
  * ---
  *
@@ -105,9 +124,9 @@ const BASE_WEAPON_BONUS_CRIT = 3;
  * | Build | Win rate |
  * |---|---:|
  * | §4.1 as published | **0 %** |
- * | + Yuna STR 28, HP column tuned, Auron AGI 22 | 75.0 % |
+ * | + HP column tuned, Auron AGI 22 (and the withdrawn Yuna STR 28) | 75.0 % |
  * | + Auron AGI 26 | 82.5 % |
- * | **+ Auron AGI 29 (shipped)** | **92.5 %** (1,000 seeds: 91.6 %) |
+ * | **+ Auron AGI 29 (shipped)** | **92.5 %** |
  *
  * ---
  *
@@ -139,7 +158,7 @@ const BASE_WEAPON_BONUS_CRIT = 3;
  * four Softs, six Remedies, Esuna and Auron's Auto-Med.
  */
 const PRESET_CORRECTION =
-  "§4.1 HP column tuned to its own Ultimate Jecht Shot sanity check (band-clamped) + Auron Agility 22 -> 29; Yuna Strength 20 -> 28 per §4.4";
+  '§4.1 HP column tuned to its own Ultimate Jecht Shot sanity check (band-clamped) + Auron Agility 22 -> 29. Every offensive stat is §4.1 as published.';
 void PRESET_CORRECTION;
 
 
@@ -179,8 +198,10 @@ function yuna(): FFXMemberBuild {
     spriteKey: 'yuna',
     portraitKey: 'yuna',
     // §4.1 [estimate]; only HP moved — see PRESET_CORRECTION above.
-    // Strength 28 is §4.4's own published threshold [verified: 2 sources].
-    stats: { hp: 5130, mp: 320, str: 28, def: 20, mag: 36, mdef: 32, agi: 26, luck: 18, eva: 20, acc: 24, maxHp: 5130, maxMp: 320 },
+    // **Strength is §4.1's published 20.** It was 28 for one round, cited to
+    // §4.4; that citation is a threshold recommendation for an aeon finish, not
+    // a typical-build number, and it is withdrawn — see the header.
+    stats: { hp: 5130, mp: 320, str: 20, def: 20, mag: 36, mdef: 32, agi: 26, luck: 18, eva: 20, acc: 24, maxHp: 5130, maxMp: 320 },
     hp: 5130,
     mp: 320,
     // §4.2 [estimate] — Auto-Life deliberately withheld (the preset's own

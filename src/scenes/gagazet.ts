@@ -137,13 +137,36 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 
 /**
  * Enemy formation: the boss centre-right and further back, with two flanking
- * slots a multi-part boss parks its parts on (Mortiorchis' arms, a summon's
+ * slots a multi-part boss parks its parts on (Mortiorchis, a summon's
  * outriders).
+ *
+ * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`),
+ * which for the FFX HUD ends at 0.79 of the canvas width — the CTB queue's
+ * column owns everything right of 0.815. The previous numbers predate that
+ * measurement and both figures were partly behind it: Seymour reached 0.862 at
+ * `idle`, and slot 1 put **Mortiorchis at 0.815..1.128**, i.e. ~70% of the
+ * second enemy was under the queue or past the right edge of the screen
+ * (`docs/handoff/playability-round-1.md` §4 issue 3).
+ *
+ * The boss only needed the 0.9 units of x that brings him to 0.783; he keeps
+ * his depth, so he is the same size on screen as before (0.23 of the frame
+ * wide, 0.59 tall) and still sits centre-right.
+ *
+ * Slot 1 is the interesting one. There is no room left of the queue for a
+ * second 0.2-wide figure *beside* a 0.23-wide boss, so the slot stops being a
+ * flank and becomes a **high back-left float**: 4.6 units behind the boss and
+ * 1.85 up, which lands it at 0.496..0.695 across his shoulder rather than off
+ * the edge of the screen. That is also the right reading for this encounter —
+ * Mortiorchis is the thing Seymour is riding, not a second soldier stood next
+ * to him — and the lift is what keeps the two silhouettes from merging.
+ *
+ * Slot 2 stays a ground slot, moved back with the rest of the formation so a
+ * part parked on it (nothing in this chapter uses it) is inside the rail too.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [3.1, 0, -2.4], // boss
-  [5.3, 0, -1.0], // right part
-  [1.6, 0, -4.4], // left / back part
+  [2.2, 0, -2.45], // boss           -> x 0.551..0.783, y 0.075..0.664 at `idle`
+  [1.8, 1.85, -7.0], // high float    -> x 0.496..0.695, y 0.112..0.353
+  [3.35, 0, -6.6], // ground, back-right
 ];
 
 /**
