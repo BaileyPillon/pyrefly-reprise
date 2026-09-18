@@ -30,3 +30,17 @@ Hard caps (apply before weighting):
 4. Review 12+ screenshots per chapter (pre-scene, command menu open, an Overdrive, a boss attack, a form change, post-scene, results).
 5. Read the story scripts against `research/writing-bible.md` beat sheets.
 6. Produce `critic/rounds/round-NN.md`: category scores with evidence, weighted total, caps applied, and a **ranked issue list** (severity, category, exact repro, file/line, suggested fix).
+
+## The loop (owner's rule, restated 2026-09-18)
+
+- The gate is a weighted total of **9.6**. Below it, the critic returns a **detailed ranked issue list** (severity, category, exact repro, file/line, suggested fix) and the build is revised and refined against that list, then the critic runs again. The loop repeats until the gate is met.
+- The critic never fixes anything itself and never softens a score because a fix is planned.
+- Every round is written to `critic/rounds/round-NN.md` (+ `.json`) and the top of the list is reported to the owner with the score.
+
+## New ideas (need the owner's approval first)
+
+The critic may also propose **new ideas for addictive gameplay elements** (progression hooks, challenge modes, rankings, unlocks, quality-of-life that makes another run tempting). These go in a separate **Proposals** section of the round report, each with the player benefit, the cost, and the risk to fidelity. **Nothing from that section is built until Bailey approves it**; proposals never count for or against the score.
+
+## Audio
+
+No agent can hear. The critic checks audio only technically (files present and playing, loudness, no errors); whether the music and effects are beautiful is judged by the owner from the audition files.
