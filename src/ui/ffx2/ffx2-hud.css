@@ -60,6 +60,29 @@
   flex-direction: column;
   gap: 4px;
   align-items: flex-start;
+  /* Clearance below the last gauge, not a gap between gauges: the strategy
+     rail is anchored under this strip and `StrategyGuide.layout` parks its
+     `G HIDE GUIDE` chip 11px *above* the rail's own top, which put the chip
+     back inside the bottom gauge. Padding is what the anchor measures
+     (`offsetHeight`), so this is the one place the clearance can live without
+     moving a gauge or reaching into the shared component. */
+  padding-bottom: 12px;
+}
+
+/* Invisible 1px layout markers `FFX2BattleHud.layoutFences` parks on the party
+   formation each frame, so the guide rail and the advisor card can be anchored
+   to the girls the same way they are anchored to HUD panels. They are in the
+   stage so their `offsetTop`/`offsetLeft` are in the same 640x360 grid as the
+   chrome; `1px` rather than `0` because both components gate on a laid-out
+   anchor having a non-zero size. */
+.ffx2hud__fence {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 .ffx2hud .ig-bosshp {
   position: relative;

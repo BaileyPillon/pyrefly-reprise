@@ -35,6 +35,7 @@ import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
+import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
 
 /**
  * The FFX-2 battle HUD.
@@ -71,6 +72,33 @@ import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 
 const CHAIN_HOLD_MS = 1400;
 const TELEGRAPH_HOLD_MS = 2400;
+
+/** One rectangle the intent slab must not cover. */
+type IntentAvoidRect = SlabRect;
+
+/**
+ * A fighter's body half-width as a fraction of its projected height. See
+ * `fighterBoxes` for why this is a ratio and not a measurement.
+ */
+const BODY_HALF_WIDTH = 0.28;
+
+/**
+ * `EnemyIntent.ts`'s own placement constants, mirrored so the slab's natural
+ * position can be reproduced here before it is solved for. They are grid px and
+ * scale with the letterbox, exactly as they do there.
+ */
+const INTENT_HEAD_GAP = 10;
+const INTENT_EDGE_MARGIN = 4;
+const INTENT_FALLBACK_W = 150;
+const INTENT_FALLBACK_H = 40;
+
+/** The guide rail's own column in stage px (`strategy-guide.css`: left 21.33, width 132). */
+const GUIDE_RAIL_LEFT = 21.33;
+const GUIDE_RAIL_RIGHT = GUIDE_RAIL_LEFT + 132;
+/** Mirrors the `anchors` below, so the fences fall back to exactly what the anchors would have done. */
+const GUIDE_FALLBACK_BOTTOM = 104;
+const ADVISOR_FALLBACK_LEFT = 160;
+const ADVISOR_BOTTOM = 26;
 
 function isAtbSnapshot(p: TurnPreview[] | AtbSnapshot): p is AtbSnapshot {
   return !Array.isArray(p);
@@ -124,7 +152,13 @@ export class FFX2BattleHud implements HudPort {
     game: 'ffx2',
     anchors: {
       below: () => this.enemyEl ?? null,
-      above: () => this.partyEl ?? null,
+      // The girls, not the party column: the rail runs down the left edge and
+      // the column is bottom-*right*, so the thing actually under the rail is
+      // Yuna. `fenceTopEl` is a 1px marker this HUD parks on the topmost party
+      // fighter's head every frame (see `layoutFences`), so the rail stops
+      // above her instead of being drawn across her face. It falls back to the
+      // fixed `bottom` whenever nothing is projected yet.
+      above: () => this.fenceTopEl ?? null,
       top: 44,
       bottom: 104,
     },
@@ -162,7 +196,17 @@ export class FFX2BattleHud implements HudPort {
   private readonly advisor = new MoveAdvisor({
     game: 'ffx2',
     anchors: {
-      before: () => this.partyEl ?? null,
+      // `fenceColumnEl`, not `partyEl`: the rows cascade *out* of their own
+      // container (`PartyRows` steps each one left with a `margin-right`, which
+      // is outside the border box), so the third row's left edge sits a few px
+      // left of `.ffx2hud__party`'s — and that sliver is what the card's right
+      // edge was landing on. The fence tracks the leftmost row instead.
+      before: () => this.fenceColumnEl ?? this.partyEl ?? null,
+      // `fenceRightEl` is parked just past the rightmost girl standing in the
+      // card's own band every frame (`layoutFences`), so the card starts clear
+      // of the formation rather than on top of Yuna and Rikku. `left` is the
+      // fallback for a frame with nothing projected yet.
+      after: () => this.fenceRightEl ?? null,
       left: 160,
       right: 458,
       bottom: 26,
@@ -182,6 +226,13 @@ export class FFX2BattleHud implements HudPort {
   private damageFlashTimer = 0;
   /** Current `.ffx2hud__stage` letterbox scale, so overlay-space offsets (chain chip) stay proportional at any viewport size. */
   private stageScale = 1;
+  /** Letterbox offset of the stage inside the HUD, in viewport px (`layout`). */
+  private stageX = 0;
+  private stageY = 0;
+  /** 1px layout markers the guide rail and advisor card are anchored to; see `layoutFences`. */
+  private fenceTopEl: HTMLElement | null = null;
+  private fenceRightEl: HTMLElement | null = null;
+  private fenceColumnEl: HTMLElement | null = null;
   private readonly onResize = (): void => this.layout();
 
   // -------------------------------------------------------------- HudPort
@@ -202,6 +253,9 @@ export class FFX2BattleHud implements HudPort {
       <div class="ig-stat-list ffx2hud__party"></div>
       <div class="ffx2hud__command" hidden></div>
       <div class="ffx2hud__minigame"></div>
+      <i class="ffx2hud__fence" data-fence="party-top"></i>
+      <i class="ffx2hud__fence" data-fence="party-right"></i>
+      <i class="ffx2hud__fence" data-fence="party-column"></i>
     `;
 
     this.overlay = document.createElement('div');
@@ -216,6 +270,9 @@ export class FFX2BattleHud implements HudPort {
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
+    this.fenceTopEl = this.stage.querySelector('[data-fence="party-top"]');
+    this.fenceRightEl = this.stage.querySelector('[data-fence="party-right"]');
+    this.fenceColumnEl = this.stage.querySelector('[data-fence="party-column"]');
 
     // Numerals live on the unscaled overlay, not the 640x360 stage: their
     // positions come straight from the presenter's projector in real pixels,
@@ -254,6 +311,7 @@ export class FFX2BattleHud implements HudPort {
 
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
   update(dt: number): void {
+    this.layoutFences();
     this.damage.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
@@ -280,10 +338,51 @@ export class FFX2BattleHud implements HudPort {
     return this.intent;
   }
 
-  /** The HUD panels the intent slab may not cover, in viewport pixels. */
-  private intentAvoidRects(): Array<{ left: number; top: number; right: number; bottom: number }> {
-    const out: Array<{ left: number; top: number; right: number; bottom: number }> = [];
-    for (const selector of ['.ffx2hud__enemies', '.ffx2hud__party', '.ffx2hud__command', '.mad__card'] as const) {
+  /**
+   * What the intent slab may not cover, in viewport pixels: the HUD's own
+   * panels, and the fighters themselves.
+   *
+   * The fighters are here because the slab hangs `HEAD_GAP` above the acting
+   * enemy's head and is then *clamped into the layer* — and Bahamut's head is
+   * near the top of the frame, so the clamp pushed a 150x98 slab straight down
+   * onto his wings. It is his own painting the slab is talking about; sitting
+   * on it is exactly the complaint the FFX side logged about its chip.
+   *
+   * What goes out, though, is **not** this list. `EnemyIntentPanel.layout`
+   * dodges each rectangle it is given in turn and never re-checks, which on a
+   * board with nine obstacles ping-pongs the slab between the boss and the
+   * gauge strip and finally drops it on the move advisor. So the list is solved
+   * here instead — {@link placeSlab} finds the free spot nearest where the slab
+   * wants to be — and {@link steerRects} hands back the one or two rectangles
+   * whose single greedy pass lands on that spot. `intentPlacement.ts` has the
+   * full account, including why merging the obstacles does not work.
+   *
+   * Anything this cannot reproduce — no projection for the acting enemy yet, no
+   * laid-out overlay, no view — falls back to handing over the raw obstacles,
+   * i.e. exactly the behaviour before any of this.
+   */
+  private intentAvoidRects(): IntentAvoidRect[] {
+    const obstacles = this.intentObstacles();
+    const solved = this.solveIntentPlacement(obstacles);
+    return solved ?? obstacles;
+  }
+
+  /** Every box on the board the slab would rather not cover, in viewport px. */
+  private intentObstacles(): IntentAvoidRect[] {
+    const out: IntentAvoidRect[] = [];
+    const selectors = [
+      '.ffx2hud__enemies',
+      '.ffx2hud__party',
+      '.ffx2hud__command',
+      '.ffx2hud__telegraph',
+      '.mad__card',
+      '.mad__toggle',
+      '.sgd__panel',
+      '.sgd__toggle',
+      '.ffx2sc',
+      '.ffx2-chain-chip',
+    ] as const;
+    for (const selector of selectors) {
       for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
         // Size alone: a zero-size box already means "not laid out", and it
         // covers `[hidden]` (forced to `display: none` by `tokens.css`) and a
@@ -293,7 +392,185 @@ export class FFX2BattleHud implements HudPort {
         out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
       }
     }
+    for (const box of this.fighterBoxes()) out.push(box);
     return out;
+  }
+
+  /**
+   * Reproduce the slab's natural position, solve for a free one, and express
+   * the answer as avoid rectangles. `null` means "cannot reproduce it".
+   *
+   * The first two steps of `EnemyIntent.layout` are copied exactly — project
+   * the acting enemy's head, hang the box `HEAD_GAP` above it, clamp into the
+   * overlay — so the natural position computed here is the one that pass is
+   * about to compute for itself. Only the third step, the dodge, is replaced.
+   */
+  private solveIntentPlacement(obstacles: IntentAvoidRect[]): IntentAvoidRect[] | null {
+    const view = this.intent.view();
+    if (!view) return null;
+    const layer = this.overlay.getBoundingClientRect();
+    if (layer.width <= 0 || layer.height <= 0) return null;
+    const head = this.project(view.enemyId, 'head');
+    if (!head) return null;
+
+    const scale = this.stageScale || 1;
+    const box = (this.intent.isVisible ? this.el.querySelector('.eint__panel') : this.el.querySelector('.eint__toggle')) as
+      | HTMLElement
+      | null;
+    const rect = box?.getBoundingClientRect();
+    const w = rect?.width || INTENT_FALLBACK_W * scale;
+    const h = rect?.height || INTENT_FALLBACK_H * scale;
+
+    const edge = INTENT_EDGE_MARGIN * scale;
+    const cx = head.x - layer.left;
+    const cy = head.y - layer.top;
+    const natural = { left: cx - w / 2, top: cy - INTENT_HEAD_GAP * scale - h };
+
+    const local = obstacles.map((o) => ({
+      left: o.left - layer.left,
+      top: o.top - layer.top,
+      right: o.right - layer.left,
+      bottom: o.bottom - layer.top,
+    }));
+    const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge);
+    const clampedNatural = {
+      left: Math.max(edge, Math.min(Math.max(edge, layer.width - w - edge), natural.left)),
+      top: Math.max(edge, Math.min(Math.max(edge, layer.height - h - edge), natural.top)),
+    };
+    return steerRects(clampedNatural, target, { w, h }, { width: layer.width, height: layer.height }).map((r) => ({
+      left: r.left + layer.left,
+      top: r.top + layer.top,
+      right: r.right + layer.left,
+      bottom: r.bottom + layer.top,
+    }));
+  }
+
+  /**
+   * Every living fighter's body box, in viewport pixels.
+   *
+   * There are no sprite bounds to ask for — `PaintedStage.snapshot()` reports
+   * poses, not extents — so a box is the projected head-to-feet span with a
+   * half-width of {@link BODY_HALF_WIDTH} of that height. That is about right
+   * for the girls and deliberately narrow for a spread dragon: a box that
+   * claimed Bahamut's whole wingspan would leave the slab nowhere to stand.
+   */
+  private fighterBoxes(): IntentAvoidRect[] {
+    const state = this.lastState;
+    if (!state) return [];
+    const out: IntentAvoidRect[] = [];
+    for (const id of Object.keys(state.combatants)) {
+      const c = state.combatants[id];
+      if (!c || c.hp <= 0) continue;
+      const head = this.project(id, 'head');
+      const feet = this.project(id, 'feet');
+      if (!head || !feet) continue;
+      const height = Math.abs(feet.y - head.y);
+      if (height <= 0) continue;
+      const half = height * BODY_HALF_WIDTH;
+      out.push({
+        left: head.x - half,
+        right: head.x + half,
+        top: Math.min(head.y, feet.y),
+        bottom: Math.max(head.y, feet.y),
+      });
+    }
+    return out;
+  }
+
+  /**
+   * Park the three layout fences, in stage coordinates.
+   *
+   * The girls are drawn by the 3D stage, not the HUD, so nothing in the DOM
+   * says where they are — and where they are *moves with the viewport's
+   * aspect*: the scene renders to the whole window while this chrome is
+   * letterboxed into 640x360, so at 2000x1000 the formation sits further out
+   * in stage space than it does at 1280x720. A fixed anchor number is right at
+   * one aspect and wrong at the next, which is why these are measured every
+   * frame and handed to the guide rail and the advisor card as ordinary
+   * anchors (`StrategyGuideAnchors.above`, `MoveAdvisorAnchors.after`).
+   *
+   * Each fence only moves for a fighter that is actually in that panel's way:
+   * the rail's fence tracks the girls standing in the rail's own column, the
+   * card's fence the girls standing in the card's own band. With nobody in the
+   * way both fall back to where they were before any of this, so a formation
+   * that leaves the chrome alone gets the full-length rail and the full-width
+   * card.
+   *
+   * The third fence is not about the girls at all: it marks the **leftmost
+   * edge of the party column**, which is not `.ffx2hud__party`'s own left edge
+   * because `PartyRows` cascades the rows out of their container with a
+   * `margin-right` step. The card's right wall is that fence, so the card stops
+   * before Paine's row rather than before the container her row pokes out of.
+   */
+  private layoutFences(): void {
+    const top = this.fenceTopEl;
+    const right = this.fenceRightEl;
+    if (!top || !right) return;
+    this.layoutColumnFence();
+    const rect = this.el.getBoundingClientRect();
+    const scale = this.stageScale || 1;
+    const toStage = (p: { x: number; y: number }): { x: number; y: number } => ({
+      x: (p.x - rect.left - this.stageX) / scale,
+      y: (p.y - rect.top - this.stageY) / scale,
+    });
+
+    const card = this.stage.querySelector<HTMLElement>('.mad__card');
+    const cardTop = card && card.offsetHeight > 0 ? 360 - ADVISOR_BOTTOM - card.offsetHeight : 360 - ADVISOR_BOTTOM - 58;
+
+    let fenceTop = 360 - GUIDE_FALLBACK_BOTTOM;
+    let fenceRight = ADVISOR_FALLBACK_LEFT;
+    const state = this.lastState;
+    for (const id of state?.activeIds ?? []) {
+      const c = state?.combatants[id];
+      if (!c || c.hp <= 0) continue;
+      const headPt = this.project(id, 'head');
+      const feetPt = this.project(id, 'feet');
+      if (!headPt || !feetPt) continue;
+      const head = toStage(headPt);
+      const feet = toStage(feetPt);
+      const half = Math.abs(feet.y - head.y) * BODY_HALF_WIDTH;
+      // In the rail's column: cut the rail off above her head.
+      if (head.x + half > GUIDE_RAIL_LEFT && head.x - half < GUIDE_RAIL_RIGHT) {
+        fenceTop = Math.min(fenceTop, head.y);
+      }
+      // Standing in the card's band: start the card past her shoulder.
+      if (Math.max(head.y, feet.y) > cardTop) {
+        fenceRight = Math.max(fenceRight, head.x + half);
+      }
+    }
+    top.style.top = `${Math.max(0, fenceTop).toFixed(2)}px`;
+    // `MoveAdvisor.layout` reads `offsetLeft + offsetWidth`, so the fence's own
+    // 1px is part of the clearance it hands back.
+    right.style.left = `${Math.max(0, Math.min(639, fenceRight)).toFixed(2)}px`;
+  }
+
+  /**
+   * Park the column fence on the leftmost party row's left edge.
+   *
+   * Measured off the rows' painted boxes rather than their `offsetLeft`,
+   * because `.ig-stat` carries the house `skewX`: the lean moves the row's
+   * bottom-left corner out past its layout box, and the lean is exactly what
+   * the card's right edge was catching. `getBoundingClientRect` sees the
+   * transform, `offsetLeft` does not.
+   *
+   * With no rows laid out yet the fence is left where it was, and the anchor
+   * falls back to the container — which is what it used to be.
+   */
+  private layoutColumnFence(): void {
+    const fence = this.fenceColumnEl;
+    const party = this.partyEl;
+    if (!fence || !party) return;
+    const host = this.el.getBoundingClientRect();
+    const scale = this.stageScale || 1;
+    let left: number | null = null;
+    for (const row of party.querySelectorAll<HTMLElement>('.ig-stat')) {
+      const r = row.getBoundingClientRect();
+      if (r.width <= 0) continue;
+      const stageLeft = (r.left - host.left - this.stageX) / scale;
+      left = left === null ? stageLeft : Math.min(left, stageLeft);
+    }
+    if (left === null) return;
+    fence.style.left = `${Math.max(0, Math.min(639, left)).toFixed(2)}px`;
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
@@ -415,7 +692,10 @@ export class FFX2BattleHud implements HudPort {
     this.el.style.setProperty('--ffx2-scale', scale.toFixed(4));
     const x = (w - 640 * scale) / 2;
     const y = (h - 360 * scale) / 2;
+    this.stageX = x;
+    this.stageY = y;
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+    this.layoutFences();
   }
 
   private renderParty(state: BattleState, snapshot: AtbSnapshot): void {
