@@ -1,295 +1,318 @@
 /**
- * "The Weight of a Thousand Years" — Shuyin boss theme.
+ * "The Weight of a Thousand Years" — Shuyin.
  *
- * ORIGINAL COMPOSITION. C# minor, 154 bpm, electronic-rock: a fast piano
- * 16th-note riff is the spine, under supersaw chords, double-tracked
- * guitar-dist and a string bed, driven by a full electronic-rock kit. The
- * hook is `LENNE` (the score's love-and-loss cell, from `motifs.ts`) carried
- * by pwm-lead high and accented — his grief for Lenne, sharpened into fury.
- * The B section drops to half-time and hands `augment(LENNE, 2)` to epiano
- * and strings in dorian: the memory underneath the rage, tender before the
- * riff comes back harder.
+ * ORIGINAL COMPOSITION. Piano and strings over restrained percussion, C# minor,
+ * 154 bpm, with the B section written out at half speed (77) so the memory
+ * underneath the grief moves at half the tempo of the grief itself.
  *
- * Form (154 bpm, 4/4, 272 beats = 106.0 s):
- *   intro   beats   0- 16   piano riff alone, kick building in            (4 bars)
- *   A1      beats  16- 80   full band, LENNE hook enters in pwm-lead      <- loop start
- *   B       beats  80-144   half-time, epiano + strings carry augment(LENNE,2), dorian
- *   A2      beats 144-208   riff returns harder, hook restated insistently
- *   climax  beats 208-240   fortissimo, hook shouted twice, everything in
- *   turn    beats 240-272   drums fall to a snare roll over a dominant chord
- * Loop 16 -> 272.
+ * THEMES (docs/audio/THEMES.md §5, cue map row 19). This is the Songstress's
+ * hook in the PARALLEL minor — the tonic does not move. `minorise()` maps the
+ * three pitch classes that change (F->E, Bb->A, C->B) across
+ * `SONGSTRESS_LEAD`, so every note Shuyin sings is provably her line, one
+ * accidental darker. Two consequences the cue is built on:
+ *
+ *   - The identity leap, bar 3, is now E - A - G#: b3 up to b6, home to the 5,
+ *     which is `SONGSTRESS_DARK` exactly. The pop hook's fingerprint and the
+ *     tragedy's are the same interval.
+ *   - Bar 7 was the brightest bar in the score: one borrowed bVII major
+ *     dropped into a major key. In the minor it is just the mode doing its
+ *     job. `SHUYIN_CHORDS` keeps the same B major there and it costs nothing
+ *     now. The joy did not go dark; it went ordinary, which is worse.
+ *
+ * Rubato is written into the note values (`agogic`), because the renderer has
+ * one tempo per track: a breath of 8% at each phrase end, and 18% of
+ * ritardando across the last two notes of the coda.
+ *
+ * Form (4/4, 154 bpm, 64 bars, 100 s):
+ *   bars  1- 8  intro  beats   0- 32  solo piano, the first four bars, alone
+ *   bars  9-24  A      beats  32- 96  the theme twice, strings from bar 13  <- loop
+ *   bars 25-40  B      beats  96-160  half-time: strings and harp, no kit
+ *   bars 41-56  A'     beats 160-224  strings take the tune, piano answers
+ *   bars 57-64  coda   beats 224-256  back to one piano, and a held sixth
+ * Loop 32 -> 256.
  */
 
 import {
-  arpLine,
-  chordLine,
   chordRoots,
   concatNotes,
-  drumLine,
+  tracker,
   type Note,
-  type Pitch,
   type Track,
 } from '../score.ts';
-import { augment, cell, LENNE } from './motifs.ts';
+import { agogic, lean, shapeByBar, SHUYIN_CHORDS, SONGSTRESS_LEAD } from './themes.ts';
+import {
+  arpStackLine,
+  atVolume,
+  doubled,
+  groove,
+  humanise,
+  legato,
+  minorise,
+  nudge,
+  padLine,
+  ramp,
+} from './ffx2-common.ts';
 
-const BPM = 154;
+const BAR = 4;
 const INTRO = 0;
-const A1 = 16;
-const B = 80;
-const A2 = 144;
-const CLIMAX = 208;
-const TURN = 240;
-const LENGTH = 272;
+const A = 32;
+const B = 96;
+const A2 = 160;
+const CODA = 224;
+const LENGTH = 256;
 
-const INTRO_CHORDS = ['C#m', 'C#m', 'A', 'B'];
-const A1_CHORDS = [
-  'C#m', 'A', 'E', 'B', 'C#m', 'A', 'E', 'B',
-  'C#m', 'A', 'F#m', 'B', 'C#m', 'A', 'E', 'B',
-];
-const B_CHORDS = [
-  'C#m', 'F#', 'E', 'B', 'C#m', 'F#', 'E', 'B',
-  'C#m', 'F#', 'G#m', 'B', 'C#m', 'F#', 'E', 'B',
-];
-const A2_CHORDS = [
-  'C#m', 'A', 'E', 'B', 'C#m', 'A', 'E', 'B',
-  // bar 10 (index 10) is 'F#' not 'F#m': the hook's raised-6th accent (A#) lands
-  // there, and A# is a semitone clash against F#m's own third (A) — F# major
-  // makes A# the chord's own third instead, and it's dorian's IV anyway.
-  'C#m', 'A', 'F#', 'G#7', 'C#m', 'A', 'B', 'G#7',
-];
-const CLIMAX_CHORDS = ['C#m', 'E', 'A', 'B', 'C#m', 'A', 'B', 'G#7'];
-const TURN_CHORDS = ['C#m', 'C#m', 'F#m', 'F#m', 'G#', 'G#', 'G#7', 'G#7'];
+/**
+ * `SHUYIN_CHORDS` with one substitution: bar 4's plain B becomes `B7sus4`.
+ * The theme holds an E through that bar — a 4-3 suspension that resolves down
+ * to D# on the last half beat — and sounding the chord's own D# underneath it
+ * turns a suspension into a semitone cluster. The Songstress's own bar 4 is an
+ * `Ab7sus4`, so this is the hook's own harmony, not a new idea.
+ */
+const CHORDS = SHUYIN_CHORDS.map((c, i) => (i === 3 ? 'B7sus4' : c));
 
-// ---- the LENNE hook and its call/answer split ------------------------------
+/** One bar per entry; the eight chords cover a section in two passes. */
+const A_CHORDS = [...CHORDS, ...CHORDS];
+const INTRO_CHORDS = CHORDS.slice(0, 4).concat(CHORDS.slice(0, 4));
+/** The half-time B: the same eight chords, each held two bars. */
+const B_CHORDS = CHORDS;
+const CODA_CHORDS = ['C#m', 'A', 'F#m', 'B7sus4', 'C#m', 'A', 'B7sus4', 'C#m'];
 
-function stampCell(pattern: Note[], beats: number[], tonic: Pitch, vel: number): Note[] {
-  return concatNotes(...beats.map((b) => cell(pattern, b, tonic, vel)));
+/**
+ * Per-bar dynamics for the theme. Bar 7 — the bar that used to be joy — is the
+ * loudest, and bar 8 falls further than it started: the phrase gives up.
+ */
+const THEME_DYNAMICS = [0.52, 0.56, 0.64, 0.58, 0.54, 0.62, 0.72, 0.48];
+
+/**
+ * One statement of Shuyin's theme: her line, minorised, breathing at the
+ * phrase ends, with both appoggiaturas leaning louder than the notes they
+ * fall to (bar 4's E over B, bar 8's D# over C#).
+ */
+function theme(start: number, scale: number, level: number): Note[] {
+  // No `gate` here: the written note ends have to stay exact so `agogic` can
+  // find the phrase endings. `legato` puts the overlap back afterwards.
+  const raw = tracker(SONGSTRESS_LEAD, { start, checkBars: BAR * scale, scale });
+  const dark = minorise(raw);
+  const shaped = shapeByBar(
+    dark.map((n) => [n[0] - start, n[1], n[2], n[3]] as Note),
+    THEME_DYNAMICS,
+    BAR * scale,
+  ).map((n) => [n[0] + start, n[1], n[2], n[3]] as Note);
+  const leaned = lean(shaped, [
+    [start + 12 * scale, start + 13.5 * scale],
+    [start + 28 * scale, start + 29 * scale],
+  ]);
+  // The phrase ends: bar 2's last note stops at 7.5, bar 4's at 16, bar 8's at
+  // 32. Each is lengthened 8% and the time stolen from the attack that follows.
+  const breathed = agogic(leaned, [start + 7.5 * scale, start + 16 * scale, start + 32 * scale], 0.08);
+  return humanise(atVolume(legato(breathed, 0.07 * scale), level), 0.03, 6);
 }
 
-const LENNE_LONG = augment(LENNE, 2);
-/** First half of the cell (the "call"; beats 0-4) and the second half re-based to 0 (the "answer"). */
-const LENNE_CALL: Note[] = LENNE.filter((n) => n[0] < 4);
-const LENNE_ANSWER: Note[] = LENNE.filter((n) => n[0] >= 4).map((n): Note => [n[0] - 4, n[1], n[2], n[3]]);
+// --- piano -----------------------------------------------------------------
 
-// ---- piano: the fast 16th-note riff ----------------------------------------
-
-const RIFF_PATTERN = [0, 1, 2, 1, 3, 2, 1, 0, 0, 1, 2, 3, 2, 1, 0, 1];
-
-function riff(chords: string[], start: number, velocity: number, accent: number, center: number): Note[] {
-  return arpLine(chords, { start, pattern: RIFF_PATTERN, step: 0.25, dur: 0.2, octave: 4, center, velocity, accent });
+/**
+ * Left hand: rolling broken chords, pedalled (long gate, a reverb send held
+ * through the bar), never a repeated-note ostinato. It stays above C2 except
+ * where the octave doubles a downbeat.
+ */
+function leftHand(chords: string[], start: number, barBeats: number, velocity: number): Note[] {
+  // Centre 48 and a pattern that never reaches past the stack's own octave:
+  // the left hand stays below whoever has the tune, which is what stops the
+  // accompaniment sounding a semitone under the melody's suspensions.
+  const rolled = arpStackLine(chords, {
+    start,
+    barBeats,
+    pattern: [0, 1, 2, 3, 2, 1],
+    step: barBeats / 8,
+    dur: barBeats / 6,
+    center: 52,
+    keepRoot: true,
+    maxTones: 3,
+    velocity,
+    accent: 1.14,
+    seed: Math.round(start),
+  });
+  const roots = chordRoots(chords, 2).map(
+    (midi, bar): Note => [start + bar * barBeats, barBeats * 0.9, midi, velocity * 1.05],
+  );
+  return humanise(concatNotes(rolled, roots), 0.035, 12);
 }
 
 const pianoNotes = concatNotes(
-  arpLine(INTRO_CHORDS, { start: INTRO, pattern: [0, 2, 1, 2], step: 0.5, dur: 0.4, octave: 4, center: 64, velocity: 0.5 }),
-  riff(A1_CHORDS, A1, 0.72, 1.16, 66),
-  chordLine(B_CHORDS, { start: B, octave: 4, center: 66, velocity: 0.28, dur: 0.4, roll: 0.02 }),
-  riff(A2_CHORDS, A2, 0.82, 1.2, 68),
-  // Call-and-response with the pwm hook's statements 5-6: piano answers in the gap.
-  stampCell(LENNE_ANSWER, [180, 188], 'C#5', 0.7),
-  riff(CLIMAX_CHORDS, CLIMAX, 0.9, 1.22, 70),
-  riff(TURN_CHORDS, TURN, 0.84, 1.18, 68),
+  // Intro: the first four bars of the theme, alone, twice — the second time
+  // with the left hand under it.
+  theme(INTRO, 1, 0.9).filter((n) => n[0] < INTRO + 16),
+  theme(INTRO + 16, 1, 0.94).filter((n) => n[0] < INTRO + 32),
+  leftHand(INTRO_CHORDS.slice(4), INTRO + 16, BAR, 0.34),
+  // A: the piano owns the tune.
+  theme(A, 1, 1),
+  theme(A + 32, 1, 1.04),
+  leftHand(A_CHORDS, A, BAR, 0.4),
+  // B: the piano drops to accompaniment under the strings.
+  leftHand(B_CHORDS, B, BAR * 2, 0.34),
+  // A': the strings have the tune; the piano answers in the gaps, high.
+  humanise(
+    legato(
+      tracker(
+        `
+          -:2 G#5:1 E5:1        | -:2 C#5:2           |
+          -:4                   | -:2 F#5:1 D#5:1     |
+          -:2 G#5:1 A5:1        | -:2 B4:2            |
+          -:4                   | -:1 D#5:1 C#5:2     |
+        `,
+        { start: A2, checkBars: BAR, velocity: 0.5 },
+      ),
+      0.06,
+    ),
+    0.03,
+    15,
+  ),
+  leftHand(A_CHORDS, A2, BAR, 0.42),
+  // Coda: one piano again, the theme's last two bars, slowing.
+  humanise(
+    legato(
+      agogic(
+        lean(
+          tracker(
+            `
+              G#4:1 A4:1 G#4:2  | E4:2 C#4:2          |
+              D#4:1 C#4:3       | -:4                 |
+              G#3:1 C#4:1 E4:2  | D#4:2 C#4:2         |
+              D#4:2 C#4:2       | C#4:4               |
+            `,
+            { start: CODA, checkBars: BAR, velocity: 0.44 },
+          ),
+          [
+            [CODA + 8, CODA + 9],
+            [CODA + 20, CODA + 22],
+            [CODA + 24, CODA + 26],
+          ],
+        ),
+        [CODA + 12, CODA + 24, CODA + 32],
+        0.18,
+      ),
+      0.08,
+    ),
+    0.03,
+    16,
+  ),
+  leftHand(CODA_CHORDS, CODA, BAR, 0.3),
 );
 
-// ---- sub bass: a floor under the riff, never fighting it -------------------
+// --- strings ---------------------------------------------------------------
 
-function subLine(chords: string[], start: number, vel: number): Note[] {
-  return chordRoots(chords, 1).map((midi, bar): Note => [start + bar * 4, 3.6, midi, vel]);
-}
-
-function subPulse(chords: string[], start: number, vel: number): Note[] {
-  const notes: Note[] = [];
-  chordRoots(chords, 1).forEach((midi, bar) => {
-    const at = start + bar * 4;
-    notes.push([at, 1.8, midi, vel], [at + 2, 1.8, midi, vel * 0.8]);
-  });
-  return notes;
-}
-
-const subNotes = concatNotes(
-  subLine(INTRO_CHORDS, INTRO, 0.35),
-  subLine(A1_CHORDS, A1, 0.55),
-  subPulse(B_CHORDS, B, 0.42),
-  subLine(A2_CHORDS, A2, 0.62),
-  subLine(CLIMAX_CHORDS, CLIMAX, 0.7),
-  subLine(TURN_CHORDS, TURN, 0.6),
+/** The half-time statement: the theme at half speed, and the cue's centre. */
+const stringsLead = concatNotes(
+  theme(B, 2, 0.86),
+  // A': the section takes the tune back at speed, doubled an octave below by
+  // the violas only from the climb onward — the sound widens at the climax.
+  theme(A2, 1, 0.92),
+  doubled(theme(A2, 1, 0.92).filter((n) => n[0] >= A2 + 16), -12, 0.7),
+  theme(A2 + 32, 1, 0.96),
+  doubled(theme(A2 + 32, 1, 0.96).filter((n) => n[0] >= A2 + 48), -12, 0.72),
 );
 
-// ---- drums: full electronic-rock kit, half-time in B -----------------------
+/** A held bed: thirds and fifths, entering half way through A and never busy. */
+const stringsBed = humanise(
+  concatNotes(
+    padLine(A_CHORDS.slice(8), { start: A + 32, center: 57, velocity: 0.34, dur: 3.9, seed: 40 }),
+    padLine(B_CHORDS, { start: B, barBeats: 8, center: 57, velocity: 0.4, dur: 7.6, seed: 41 }),
+    padLine(A_CHORDS, { start: A2, center: 57, velocity: 0.42, dur: 3.9, seed: 42 }),
+    padLine(CODA_CHORDS, { start: CODA, center: 55, velocity: 0.3, dur: 3.9, seed: 43 }),
+  ),
+  0.03,
+  18,
+);
 
-const KICK = 'X.x.X...x.X.X...';
-const SNARE = '....X.g.....X..g';
-const HAT = 'x.x.x.x.X.x.x.x.';
-const KICK_HALF = 'x.......x.......';
-const SNARE_HALF = '........X.......';
-const HAT_HALF = 'x...x...x...x...';
+/** Cellos and basses: roots and the occasional step, bowed long. */
+const lowStrings = humanise(
+  concatNotes(
+    chordRoots(A_CHORDS.slice(8), 2).map((m, i): Note => [A + 32 + i * BAR, 3.8, m, 0.42]),
+    chordRoots(B_CHORDS, 2).map((m, i): Note => [B + i * BAR * 2, 7.6, m, 0.46]),
+    chordRoots(A_CHORDS, 2).map((m, i): Note => [A2 + i * BAR, 3.8, m, 0.5]),
+    chordRoots(CODA_CHORDS, 2).map((m, i): Note => [CODA + i * BAR, 3.8, m, 0.36]),
+  ),
+  0.03,
+  20,
+);
 
-function buildRoll(start: number, dur: number, v0 = 0.32, v1 = 0.98): Note[] {
-  const step = 0.25;
-  const steps = Math.round(dur / step);
-  const notes: Note[] = [];
-  for (let s = 0; s < steps; s++) {
-    const t = steps > 1 ? s / (steps - 1) : 1;
-    notes.push([start + s * step, step * 0.9, 'D2', v0 + (v1 - v0) * t]);
-  }
-  return notes;
-}
+// --- colour ----------------------------------------------------------------
 
-const introKick: Note[] = [
-  [8, 0.4, 'C2', 0.5],
-  [12, 0.4, 'C2', 0.58],
-  [13, 0.3, 'C2', 0.5],
-  [14, 0.4, 'C2', 0.68],
-  [15, 0.3, 'C2', 0.6],
+/** Harp: broken chords under the half-time B, and nothing anywhere else. */
+const harpNotes = humanise(
+  arpStackLine(B_CHORDS, {
+    start: B,
+    barBeats: 8,
+    pattern: [0, 1, 2, 3, 4, 3, 2, 1],
+    step: 0.5,
+    dur: 1.2,
+    center: 68,
+    maxTones: 3,
+    velocity: 0.34,
+    accent: 1.2,
+    seed: 44,
+  }),
+  0.04,
+  22,
+);
+
+/** One bell, at the coda, and one at the loop's turn. */
+const bellNotes: Note[] = [
+  [B, 6, 'C#5', 0.4],
+  [CODA, 6, 'C#4', 0.36],
 ];
 
+// --- restrained percussion -------------------------------------------------
+
 const kickNotes = concatNotes(
-  introKick,
-  drumLine(KICK, { start: A1, pitch: 'C2', velocity: 0.9, times: 16 }),
-  drumLine(KICK_HALF, { start: B, pitch: 'C2', velocity: 0.7, times: 16 }),
-  drumLine(KICK, { start: A2, pitch: 'C2', velocity: 0.95, times: 16 }),
-  drumLine(KICK, { start: CLIMAX, pitch: 'C2', velocity: 1, times: 8 }),
-  drumLine(KICK, { start: TURN, pitch: 'C2', velocity: 0.95, times: 7 }),
+  groove('X.......x.......', { start: A + 32, bars: 8, pitch: 'C2', velocity: 0.42, seed: 61 }),
+  groove('X.......x...x...', { start: A2, bars: 16, pitch: 'C2', velocity: 0.5, seed: 62 }),
 );
 
 const snareNotes = concatNotes(
-  drumLine(SNARE, { start: A1, pitch: 'D2', velocity: 0.82, times: 16 }),
-  drumLine(SNARE_HALF, { start: B, pitch: 'D2', velocity: 0.75, times: 16 }),
-  drumLine(SNARE, { start: A2, pitch: 'D2', velocity: 0.88, times: 16 }),
-  drumLine(SNARE, { start: CLIMAX, pitch: 'D2', velocity: 0.95, times: 8 }),
-  drumLine(SNARE, { start: TURN, pitch: 'D2', velocity: 0.9, times: 7 }),
-  buildRoll(TURN + 28, 4),
+  groove('....g.......g..g', { start: A + 32, bars: 8, pitch: 'D2', velocity: 0.3, ghost: 0.18, seed: 63 }),
+  groove('....X..g....X..g', { start: A2, bars: 15, pitch: 'D2', velocity: 0.44, ghost: 0.2, seed: 64 }),
+  // A roll into A', the one moment the kit is heard as an event.
+  Array.from({ length: 8 }, (_, i): Note => [A2 - 2 + i * 0.25, 0.22, 'D2', 0.26 + i * 0.05]),
 );
 
-const hatNotes = concatNotes(
-  drumLine(HAT, { start: A1, pitch: 'F#3', velocity: 0.45, times: 16 }),
-  drumLine(HAT_HALF, { start: B, pitch: 'F#3', velocity: 0.32, times: 16 }),
-  drumLine(HAT, { start: A2, pitch: 'F#3', velocity: 0.5, times: 16 }),
-  drumLine(HAT, { start: CLIMAX, pitch: 'F#3', velocity: 0.56, times: 8 }),
-  drumLine(HAT, { start: TURN, pitch: 'F#3', velocity: 0.5, times: 7 }),
+const shakerNotes = concatNotes(
+  groove('x.g.x.g.x.g.x.g.', { start: A2, bars: 16, pitch: 'F#2', velocity: 0.22, ghost: 0.12, seed: 65 }),
 );
 
-const crashNotes: Note[] = [
-  [A1, 1.4, 'C5', 0.62],
-  [B, 1.4, 'C5', 0.5],
-  [A2, 1.4, 'C5', 0.68],
-  [CLIMAX, 1.4, 'C5', 0.78],
-  [CLIMAX + 16, 1.4, 'C5', 0.74],
-  [TURN, 1.4, 'C5', 0.6],
-];
-
-const clapNotes: Note[] = [16, 48, 80, 112, 144, 176, 208, 240].map((b): Note => [b, 0.3, 'C3', 0.7]);
-
-// ---- guitar-dist: double-tracked rock chug ---------------------------------
-
-const GUITAR_PATTERN = 'X.x.x.x.X.x.x.x.';
-
-/**
- * `side` makes the double-track real: R lags ~4.6 ms, sits a hair quieter,
- * drops every other ghost chug for air, and rings the 5th under the downbeat
- * where L plays a single root.
- */
-function guitarChug(chords: string[], start: number, vel: number, side: 'L' | 'R' = 'L'): Note[] {
-  const notes: Note[] = [];
-  const delay = side === 'R' ? 0.012 : 0;
-  const trim = side === 'R' ? 0.93 : 1;
-  let ghost = 0;
-  chords.forEach((chord, bar) => {
-    const root = chordRoots([chord], 2)[0]!;
-    const at = start + bar * 4;
-    for (let s = 0; s < GUITAR_PATTERN.length; s++) {
-      const ch = GUITAR_PATTERN[s];
-      if (ch === '.') continue;
-      const accent = ch === 'X';
-      if (!accent) {
-        ghost++;
-        if (side === 'R' && ghost % 2 === 0) continue;
-      }
-      const t = at + s * 0.25 + delay;
-      const v = Math.min(1, (accent ? vel * 1.12 : vel * 0.82) * trim);
-      notes.push([t, accent ? 0.4 : 0.2, root, v]);
-      if (accent && side === 'R') notes.push([t, 0.4, root + 7, Math.min(1, vel * 0.92 * trim)]);
-    }
-  });
-  return notes;
-}
-
-const guitarL = concatNotes(
-  guitarChug(A1_CHORDS, A1, 0.62, 'L'),
-  guitarChug(A2_CHORDS, A2, 0.68, 'L'),
-  guitarChug(CLIMAX_CHORDS, CLIMAX, 0.86, 'L'),
-  guitarChug(TURN_CHORDS, TURN, 0.78, 'L'),
-);
-const guitarR = concatNotes(
-  guitarChug(A1_CHORDS, A1, 0.62, 'R'),
-  guitarChug(A2_CHORDS, A2, 0.68, 'R'),
-  guitarChug(CLIMAX_CHORDS, CLIMAX, 0.86, 'R'),
-  guitarChug(TURN_CHORDS, TURN, 0.78, 'R'),
-);
-
-// ---- supersaw: the pop-electronic chord wall -------------------------------
-
-const supersawNotes = concatNotes(
-  chordLine(A1_CHORDS, { start: A1, octave: 4, center: 64, velocity: 0.52, dur: 3.7, roll: 0.02 }),
-  chordLine(A2_CHORDS, { start: A2, octave: 4, center: 64, velocity: 0.52, dur: 3.7, roll: 0.02 }),
-  // A2 statements 3-4: the hook handed down to supersaw, an octave lower.
-  stampCell(LENNE, [160, 168], 'C#4', 0.72),
-  chordLine(CLIMAX_CHORDS, { start: CLIMAX, octave: 4, center: 66, velocity: 0.8, dur: 3.7, roll: 0.02 }),
-  chordLine(TURN_CHORDS, { start: TURN, octave: 4, center: 64, velocity: 0.58, dur: 3.7 }),
-);
-
-// ---- strings: an orchestral undertone, and B's tender duet -----------------
-
-const stringsNotes = concatNotes(
-  chordLine(A1_CHORDS, { start: A1, octave: 3, center: 58, velocity: 0.38, dur: 3.7 }),
-  stampCell(LENNE_LONG, [B, B + 16, B + 32, B + 48], 'C#4', 0.55),
-  chordLine(A2_CHORDS, { start: A2, octave: 3, center: 58, velocity: 0.38, dur: 3.7 }),
-  chordLine(CLIMAX_CHORDS, { start: CLIMAX, octave: 3, center: 60, velocity: 0.62, dur: 3.7 }),
-  chordLine(TURN_CHORDS, { start: TURN, octave: 3, center: 58, velocity: 0.42, dur: 3.7 }),
-);
-
-// ---- epiano: carries the memory of Lenne in B ------------------------------
-
-const epianoNotes = stampCell(LENNE_LONG, [B, B + 16, B + 32, B + 48], 'C#5', 0.68);
-
-// ---- pwm-lead: LENNE, sharpened into an anguished hook ---------------------
-
-const pwmNotes = concatNotes(
-  stampCell(LENNE, [16, 32, 48, 64], 'C#5', 0.88),
-  // A2's hook, varied instead of hammering the same 8-beat cell 8 times running:
-  stampCell(LENNE, [144, 152], 'C#5', 0.95), // 1-2: hook as before
-  // 3-4 (160, 168) move to supersaw, an octave down — see supersawNotes
-  stampCell(LENNE_CALL, [176, 184], 'C#5', 0.92), // 5-6: call only, piano answers the gap
-  concatNotes(stampCell(LENNE, [192], 'C#5', 1), stampCell(LENNE, [192], 'C#6', 0.85)), // 7: back up, octave doubled
-  concatNotes(stampCell(LENNE, [200], 'C#5', 1), stampCell(LENNE, [200], 'C#6', 0.85)), // 8: back up, octave doubled
-  // Climax: the hook shouted twice, doubled in octaves so it tops A2.
-  concatNotes(stampCell(LENNE, [208, 224], 'C#5', 1), stampCell(LENNE, [208, 224], 'C#6', 0.92)),
+const timpaniNotes = humanise(
+  [
+    [A - 1, 1, 'C#2', 0.4],
+    [B - 1, 1, 'G#1', 0.44],
+    [A2 - 4, 4, 'C#2', 0.5],
+    [CODA - 1, 1, 'C#2', 0.36],
+  ] as Note[],
+  0.04,
+  66,
 );
 
 export const shuyinTrack: Track = {
   name: 'boss-shuyin',
-  bpm: BPM,
+  bpm: 154,
   timeSig: [4, 4],
-  loop: { start: A1, end: LENGTH },
+  loop: { start: A, end: LENGTH },
   length: LENGTH,
-  tailSec: 3,
+  tailSec: 4,
   fx: {
-    reverb: { room: 0.55, damp: 0.38, width: 0.9, preDelay: 0.015 },
-    delay: { timeBeats: 0.5, feedback: 0.28, damp: 3200 },
+    reverb: { room: 0.74, damp: 0.3, width: 0.94, preDelay: 0.024 },
+    delay: { timeBeats: 0.75, feedback: 0.18, damp: 2400 },
   },
   channels: [
-    { name: 'piano riff', instrument: 'piano', volume: 0.85, pan: -0.05, notes: pianoNotes, fx: { reverb: 0.15 } },
-    { name: 'sub bass', instrument: 'bass-sub', volume: 0.55, pan: 0, notes: subNotes },
-    { name: 'kick', instrument: 'kick', volume: 0.92, pan: 0, notes: kickNotes },
-    { name: 'snare-909', instrument: 'snare-909', volume: 0.8, pan: -0.05, notes: snareNotes, fx: { reverb: 0.14 } },
-    { name: 'hat', instrument: 'hat', volume: 0.42, pan: 0.2, notes: hatNotes },
-    { name: 'crash', instrument: 'crash', volume: 0.42, pan: 0.1, notes: crashNotes, fx: { reverb: 0.28 } },
-    { name: 'clap', instrument: 'clap', volume: 0.55, pan: -0.1, notes: clapNotes, fx: { reverb: 0.15 } },
-    { name: 'guitar L', instrument: 'guitar-dist', volume: 0.55, pan: -0.35, notes: guitarL, fx: { reverb: 0.1 } },
-    { name: 'guitar R', instrument: 'guitar-dist', volume: 0.52, pan: 0.35, notes: guitarR, fx: { reverb: 0.11 } },
-    { name: 'supersaw', instrument: 'supersaw', volume: 0.6, pan: 0.05, notes: supersawNotes, fx: { reverb: 0.2 } },
-    { name: 'strings', instrument: 'strings', volume: 0.55, pan: 0.15, notes: stringsNotes, fx: { reverb: 0.3 } },
-    { name: 'epiano', instrument: 'epiano', volume: 0.72, pan: -0.18, notes: epianoNotes, fx: { reverb: 0.28, delay: 0.14 } },
-    { name: 'pwm hook', instrument: 'pwm-lead', volume: 0.68, pan: 0.08, notes: pwmNotes, fx: { reverb: 0.24, delay: 0.18 } },
+    { name: 'piano', instrument: 'piano', volume: 0.92, pan: -0.04, notes: pianoNotes, fx: { reverb: 0.3 } },
+    { name: 'strings', instrument: 'strings', volume: 0.72, pan: -0.12, notes: ramp(stringsLead, 0.96, 1.04, B, LENGTH - B), fx: { reverb: 0.36 } },
+    { name: 'string bed', instrument: 'pad', volume: 0.5, pan: 0.1, notes: stringsBed, fx: { reverb: 0.44 } },
+    { name: 'low strings', instrument: 'strings-low', volume: 0.6, pan: 0.16, notes: lowStrings, fx: { reverb: 0.34 } },
+    { name: 'harp', instrument: 'harp', volume: 0.5, pan: -0.26, notes: harpNotes, fx: { reverb: 0.4 } },
+    { name: 'bell', instrument: 'bell', volume: 0.3, pan: 0.24, notes: bellNotes, fx: { reverb: 0.5 } },
+    { name: 'kick', instrument: 'kick', volume: 0.48, pan: 0, notes: kickNotes, fx: { reverb: 0.12 } },
+    { name: 'snare', instrument: 'snare', volume: 0.42, pan: -0.08, notes: nudge(snareNotes, 0.006), fx: { reverb: 0.18 } },
+    { name: 'shaker', instrument: 'shaker', volume: 0.26, pan: 0.26, notes: shakerNotes, fx: { reverb: 0.12 } },
+    { name: 'timpani', instrument: 'timpani', volume: 0.54, pan: 0.06, notes: timpaniNotes, fx: { reverb: 0.36 } },
   ],
 };
 

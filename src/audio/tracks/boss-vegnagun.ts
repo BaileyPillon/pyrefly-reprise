@@ -1,397 +1,280 @@
 /**
- * "Iron Verdict" — Vegnagun boss theme.
+ * "Iron Verdict" — Vegnagun, the machine nobody is driving.
  *
- * ORIGINAL COMPOSITION. F minor, 168 bpm, industrial machine-rock: a
- * synth-bass 16th ostinato that never stops, metal-hit clangs woven into the
- * groove as tuned percussion, layered kick + kick-808 hits, guitar-dist
- * chugs, a pwm-lead "alarm" siren, and a giant drawbar organ drone standing
- * in for the machine's own pipe organ. Every 4-bar phrase in the groove
- * sections, bar 3 shortens to 7/8 (3.5 beats) and bar 4 stretches to 4.5, so
- * the loop lurches like something enormous missing a step; `timeSig` stays
- * [4,4] and every phrase still totals 16 beats, so loop points land on
- * multiples of 4.
+ * ORIGINAL COMPOSITION. Electronic-orchestral menace in F minor at 168 bpm:
+ * a machine pulse that never varies, low brass in bare octaves, choir slabs,
+ * and an orchestra that keeps trying to make music out of it.
  *
- * Form (168 bpm, 4/4, 288 beats = 102.9 s):
- *   intro    beats   0- 16   organ swells in, bass pulse -> ostinato, teaser clangs
- *   A        beats  16- 80   full groove + lurch, alarm siren enters          <- loop start
- *   B        beats  80-112   regular bars, guitar chugs harder, snare rolls into A2
- *   A2       beats 112-176   groove + lurch returns, alarm doubles an octave up
- *   break    beats 176-208   system overload: drums & bass cut, organ + metal + rising siren
- *   assault  beats 208-272   full lurch groove at fortissimo, siren in unison octaves
- *   turn     beats 272-288   snare roll over a dominant chord, back into the loop
- * Loop 16 -> 288.
+ * THEMES (docs/audio/THEMES.md §5, cue map row 18). Everything here is
+ * `SONGSTRESS_DARK` — b3 up to b6, home to the 5, which in F minor is
+ * Ab - Db - C. Three things mechanise it:
+ *
+ *   1. CONSTANT NOTE LENGTHS AND CONSTANT VELOCITY on every machine layer.
+ *      THEMES.md names this cue as one of exactly two places in the score
+ *      where an unhumanised part is the point. The orchestral layers on top
+ *      still breathe, and that contrast is the reading: the machine is exact,
+ *      the people around it are not.
+ *   2. BARE OCTAVES. The cell in the low brass has no third and no harmony
+ *      under it — an interval, not a chord.
+ *   3. NO MODULATION. The Songstress's bridge is functional ii-V motion; here
+ *      it is stripped to one pedal F that never moves for ninety seconds. The
+ *      ostinato's four pitches are the cell's own, cycling forever.
+ *
+ * The LURCH is the only thing that ever goes wrong: the ostinato's cycle is
+ * written a sixteenth short, so it walks out of phase with the bar and then
+ * slams back onto the downbeat. Nobody is driving.
+ *
+ * Form (4/4, 168 bpm, 64 bars, 91 s):
+ *   bars  1- 8  ostinato  beats   0- 32  the pulse alone, spinning up
+ *   bars  9-24  A         beats  32- 96  the cell in bare octaves      <- loop start
+ *   bars 25-32  lurch     beats  96-128  the cycle slips a sixteenth
+ *   bars 33-48  A'        beats 128-192  the cell doubled, choir over it
+ *   bars 49-56  apex      beats 192-224  everything, still not moving
+ *   bars 57-64  collapse  beats 224-256  layers drop out, the pulse remains
+ * Loop 32 -> 256.
  */
 
-import {
-  chordMidis,
-  chordRoots,
-  concatNotes,
-  drumLine,
-  motif,
-  scaleVelocity,
-  type Note,
-  type Track,
-} from '../score.ts';
+import { chordLine, concatNotes, type Note, type Track } from '../score.ts';
+import { cell } from './motifs.ts';
+import { augment, SONGSTRESS_DARK } from './themes.ts';
+import { doubled, groove, humanise, phrase, ramp } from './ffx2-common.ts';
 
-const BPM = 168;
-const LURCH = [4, 4, 3.5, 4.5];
+const OSTINATO = 0;
+const A = 32;
+const LURCH = 96;
+const A2 = 128;
+const APEX = 192;
+const COLLAPSE = 224;
+const LENGTH = 256;
 
-const INTRO = 0;
-const A = 16;
-const B = 80;
-const A2 = 112;
-const BREAK = 176;
-const ASSAULT = 208;
-const TURN = 272;
-const LENGTH = 288;
+/** The cell's own pitches, in the order the machine cycles them. */
+const CYCLE = ['F2', 'Ab2', 'Db3', 'C3'];
 
-interface Bar {
-  start: number;
-  dur: number;
-  chord: string;
-}
-
-function regularBars(start: number, chords: string[]): Bar[] {
-  return chords.map((chord, i) => ({ start: start + i * 4, dur: 4, chord }));
-}
-
-function lurchPhrase(start: number, chords: string[]): Bar[] {
-  const bars: Bar[] = [];
-  let t = start;
-  for (let i = 0; i < 4; i++) {
-    bars.push({ start: t, dur: LURCH[i]!, chord: chords[i]! });
-    t += LURCH[i]!;
-  }
-  return bars;
-}
-
-function lurchSection(start: number, phrases: string[][]): Bar[] {
-  const bars: Bar[] = [];
-  let t = start;
-  for (const chords of phrases) {
-    bars.push(...lurchPhrase(t, chords));
-    t += 16;
-  }
-  return bars;
-}
-
-const rootOf = (chord: string, octave: number): number => chordRoots([chord], octave)[0]!;
-
-const INTRO_CHORDS = ['Fm', 'Fm', 'Fm', 'Fm'];
-const A_PHRASES = [['Fm', 'Fm', 'Db', 'Cm'], ['Fm', 'Fm', 'Db', 'Cm'], ['Fm', 'Ab', 'Db', 'Cm'], ['Fm', 'Ab', 'Db', 'Cm']];
-const B_CHORDS = ['Bbm', 'Ab', 'Db', 'Cm', 'Bbm', 'Ab', 'Eb', 'Cm'];
-const A2_PHRASES = [['Fm', 'Fm', 'Db', 'Cm'], ['Fm', 'Fm', 'Db', 'Cm'], ['Fm', 'Ab', 'Eb', 'Cm'], ['Fm', 'Ab', 'Eb', 'Cm']];
-const BREAK_CHORDS = ['Fm', 'Fm', 'Fm', 'Fm', 'Fm', 'Fm', 'Db', 'Cm'];
-const ASSAULT_PHRASES = [['Fm', 'Fm', 'Db', 'Cm'], ['Fm', 'Ab', 'Bbm', 'Cm'], ['Fm', 'Fm', 'Db', 'Cm'], ['Fm', 'Ab', 'Db', 'Cm']];
-const TURN_CHORDS = ['Cm', 'Cm', 'C', 'C7'];
-
-const introBars = regularBars(INTRO, INTRO_CHORDS);
-const aBars = lurchSection(A, A_PHRASES);
-const bBars = regularBars(B, B_CHORDS);
-const a2Bars = lurchSection(A2, A2_PHRASES);
-const breakBars = regularBars(BREAK, BREAK_CHORDS);
-const assaultBars = lurchSection(ASSAULT, ASSAULT_PHRASES);
-const turnBars = regularBars(TURN, TURN_CHORDS);
-
-/** Truncate a step-pattern to fit a short bar, or wrap back to its own start to fill a long one. */
-function patternFor(base: string, steps: number): string {
-  if (steps <= base.length) return base.slice(0, steps);
-  return base + base.slice(0, steps - base.length);
-}
-
-// ---- synth-bass: the ostinato that never stops -----------------------------
-
-const BASS_CELL = [0, 0, 12, 0, 0, 7, 12, 0, 0, 0, 12, 7, 0, 0, 12, 7];
-
-function bassOstinato(bars: Bar[], velScale = 1): Note[] {
+/**
+ * The pulse: sixteenths, one velocity, one length, forever. `step` is normally
+ * 0.25; the lurch runs it at 0.2344 (a sixteenth short per cycle) so the
+ * pattern walks out of phase with the bar instead of stumbling in a way a
+ * drummer would.
+ */
+function pulse(start: number, beats: number, step: number, velocity: number, octave = 0): Note[] {
   const notes: Note[] = [];
-  for (const bar of bars) {
-    const root = rootOf(bar.chord, 1);
-    const steps = Math.round(bar.dur / 0.25);
-    for (let s = 0; s < steps; s++) {
-      const idx = s % BASS_CELL.length;
-      const vel = (idx % 4 === 0 ? 0.92 : 0.66) * velScale;
-      notes.push([bar.start + s * 0.25, 0.2, root + BASS_CELL[idx]!, Math.min(1, vel)]);
-    }
+  const count = Math.floor(beats / step);
+  for (let i = 0; i < count; i++) {
+    const pitch = CYCLE[i % CYCLE.length]!;
+    notes.push([start + i * step, step * 0.85, pitch, velocity]);
   }
-  return notes;
+  return octave === 0 ? notes : doubled(notes, octave, 1);
 }
 
-function bassPulse(bars: Bar[]): Note[] {
-  const notes: Note[] = [];
-  for (const bar of bars) {
-    const root = rootOf(bar.chord, 1);
-    for (let b = 0; b < Math.round(bar.dur); b++) notes.push([bar.start + b, 0.6, root, 0.55]);
-  }
-  return notes;
-}
+const ostinatoNotes = concatNotes(
+  pulse(OSTINATO, 32, 0.25, 0.5),
+  pulse(A, 64, 0.25, 0.62),
+  pulse(LURCH, 32, 0.234375, 0.66),
+  pulse(A2, 64, 0.25, 0.66),
+  pulse(APEX, 32, 0.25, 0.72),
+  pulse(COLLAPSE, 24, 0.25, 0.6),
+  pulse(COLLAPSE + 24, 8, 0.25, 0.5),
+);
 
-// ---- kick, kick-808, hat, snare-909 ----------------------------------------
-
-const KICK16 = 'X...X..x..X.x...';
-const HAT16 = 'x.x.x.x.X.x.x.x.';
-
-function snareRoll(start: number, dur: number): Note[] {
-  const step = 0.25;
-  const steps = Math.max(1, Math.round(dur / step));
-  const notes: Note[] = [];
-  for (let s = 0; s < steps; s++) {
-    const t = steps > 1 ? s / (steps - 1) : 1;
-    notes.push([start + s * step, step * 0.9, 'D2', 0.32 + t * 0.63]);
-  }
-  return notes;
-}
-
-// `noKick`/`noSnare` drop those drums entirely — used for B's hushed opening bars.
-interface GrooveOptions {
-  roll?: boolean;
-  kickVel?: number;
-  hatVel?: number;
-  snareVel?: number;
-  noKick?: boolean;
-  noSnare?: boolean;
-}
-
-function groovePercussion(bars: Bar[], opts: GrooveOptions = {}): { kick: Note[]; hat: Note[]; snare: Note[] } {
-  const kick: Note[] = [];
-  const hat: Note[] = [];
-  const snare: Note[] = [];
-  const last = bars.length - 1;
-  bars.forEach((bar, i) => {
-    const steps = Math.round(bar.dur / 0.25);
-    if (!opts.noKick) kick.push(...drumLine(patternFor(KICK16, steps), { start: bar.start, pitch: 'C2', velocity: opts.kickVel ?? 0.9 }));
-    hat.push(...drumLine(patternFor(HAT16, steps), { start: bar.start, pitch: 'F#3', velocity: opts.hatVel ?? 0.42 }));
-    if (opts.noSnare) return;
-    if (opts.roll && i === last) {
-      snare.push(...snareRoll(bar.start, bar.dur));
-    } else {
-      const sv = opts.snareVel ?? 0.75;
-      for (const off of [1, 3]) if (off < bar.dur) snare.push([bar.start + off, 0.22, 'D2', sv]);
-      if (bar.dur > 4) snare.push([bar.start + 4.1, 0.2, 'D2', sv * 0.7]);
-    }
-  });
-  return { kick, hat, snare };
-}
-
-function kick808PerBar(bars: Bar[], dur: number, vel: number): Note[] {
-  return bars.map((bar): Note => [bar.start, dur, 'F1', vel]);
-}
-
-// ---- metal-hit: pitched clangs as part of the groove -----------------------
-
-function metalHits(bars: Bar[], vel = 0.75): Note[] {
-  const notes: Note[] = [];
-  for (const bar of bars) {
-    const root = rootOf(bar.chord, 3);
-    for (const off of [0.5, 2.5]) if (off < bar.dur) notes.push([bar.start + off, 0.3, root, vel]);
-    if (bar.dur > 4) notes.push([bar.start + 4.0, 0.3, root, vel * 0.85]);
-  }
-  return notes;
-}
-
-function breakdownMetal(bars: Bar[]): Note[] {
-  const notes: Note[] = [];
-  const half = Math.ceil(bars.length / 2);
-  bars.forEach((bar, i) => {
-    const root = rootOf(bar.chord, 3);
-    if (i < half) {
-      // System overload, phase 1: distant, sparse clangs — every other bar only.
-      if (i % 2 === 1) {
-        const t = i / Math.max(1, half - 1);
-        notes.push([bar.start, 0.5, root, 0.28 + t * 0.14]);
-      }
-      return;
-    }
-    const t = (i - half) / Math.max(1, bars.length - half - 1);
-    const vel = Math.min(1, 0.5 + t * 0.5);
-    notes.push([bar.start, 0.6, root, vel]);
-    notes.push([bar.start + 2, 0.4, root + 7, vel * 0.8]);
-  });
-  return notes;
-}
-
-// ---- guitar-dist: palm-muted gallop, downbeats ring open -------------------
-
-const GUITAR16 = 'X.xxx.xxx.xxx.xx';
-
-// `side` makes the double-track real: R lags ~4.6ms, sits quieter, drops every
-// other ghost chug for air, and rings the 5th under the downbeat where L is single-note.
-function guitarChug(bars: Bar[], vel = 0.75, side: 'L' | 'R' = 'L'): Note[] {
-  const notes: Note[] = [];
-  const delay = side === 'R' ? 0.012 : 0;
-  const trim = side === 'R' ? 0.93 : 1;
-  let ghost = 0;
-  for (const bar of bars) {
-    const root = rootOf(bar.chord, 2);
-    const steps = Math.round(bar.dur / 0.25);
-    const pattern = patternFor(GUITAR16, steps);
-    for (let s = 0; s < steps; s++) {
-      const ch = pattern[s];
-      if (ch === '.') continue;
-      const open = s === 0;
-      if (!open) {
-        ghost++;
-        if (side === 'R' && ghost % 2 === 0) continue;
-      }
-      const v = Math.min(1, (open ? vel * 1.15 : vel * (ch === 'X' ? 1 : 0.82)) * trim);
-      const t = bar.start + s * 0.25 + delay;
-      notes.push([t, open ? 0.5 : 0.2, root, v]);
-      if (open && side === 'R') notes.push([t, 0.5, root + 7, Math.min(1, v * 0.85)]);
-    }
-  }
-  return notes;
-}
-
-// ---- pwm-lead: the alarm siren ---------------------------------------------
-
-/** Relative to the bar's root; a leaping two-beat siren blip, dominant 7th flavoured. */
-const ALARM_CELL: Note[] = [
-  [0, 0.5, 7, 0.9],
-  [0.5, 0.5, 10, 0.85],
-  [1, 0.25, 12, 0.95],
-  [1.25, 0.25, 10, 0.8],
-  [1.5, 0.5, 7, 0.85],
+/** The pedal. One note. It is under everything in the cue and it never moves. */
+const pedalNotes: Note[] = [
+  [OSTINATO, 32, 'F1', 0.5],
+  [A, 32, 'F1', 0.62],
+  [A + 32, 32, 'F1', 0.62],
+  [LURCH, 32, 'F1', 0.66],
+  [A2, 32, 'F1', 0.66],
+  [A2 + 32, 32, 'F1', 0.68],
+  [APEX, 32, 'F1', 0.74],
+  [COLLAPSE, 32, 'F1', 0.6],
 ];
 
-function alarmMotif(bars: Bar[], octaveShift = 0, velScale = 1): Note[] {
-  const starts = bars.map((b) => b.start);
-  const roots = bars.map((b) => rootOf(b.chord, 3) + octaveShift);
-  return scaleVelocity(motif(ALARM_CELL, starts, roots), velScale);
+/**
+ * The cell in bare octaves, augmented so one statement fills two bars. No
+ * third is ever sounded under it: this is an interval, not a progression.
+ */
+function octaveCell(start: number, root: string, velocity: number): Note[] {
+  const line = cell(augment(SONGSTRESS_DARK, 2), start, root, velocity);
+  return concatNotes(line, doubled(line, -12, 0.85));
 }
 
-function risingAlarm(bars: Bar[]): Note[] {
-  return bars.map((bar, i): Note => {
-    const root = rootOf(bar.chord, 4) + 12 * Math.floor(i / 4) + 2 * Math.floor(i / 2);
-    return [bar.start, bar.dur * 0.85, root, Math.min(1, 0.25 + i * 0.1)];
-  });
+/**
+ * A fifth above the cell — the upper octave only. Doubling the lower octave a
+ * fifth up would put a G right under the choir's Ab, and the whole point of
+ * these bare octaves is that nothing sits a semitone from anything.
+ */
+function fifthAbove(start: number, root: string, velocity: number): Note[] {
+  return doubled(cell(augment(SONGSTRESS_DARK, 2), start, root, velocity), 7, 0.72);
 }
 
-// ---- organ: the machine's own pipe organ -----------------------------------
+/** The retrograde — the machine running the same four notes backwards. */
+const DARK_BACK: Note[] = [
+  [0, 2, 7],
+  [2, 4, 8],
+  [6, 2, 3],
+];
 
-function organBed(bars: Bar[], velocity: number, octave: number, center: number): Note[] {
-  const notes: Note[] = [];
-  for (const bar of bars) {
-    for (const m of chordMidis(bar.chord, { octave, center })) notes.push([bar.start, Math.max(0.1, bar.dur - 0.08), m, velocity]);
-  }
-  return notes;
-}
-
-/** The breakdown's organ: a hollow root+fifth pedal for the first half, full chords building into the second. */
-function organBreak(bars: Bar[]): Note[] {
-  const notes: Note[] = [];
-  const half = Math.ceil(bars.length / 2);
-  bars.forEach((bar, i) => {
-    const dur = Math.max(0.1, bar.dur - 0.08);
-    if (i < half) {
-      const root = rootOf(bar.chord, 2);
-      notes.push([bar.start, dur, root, 0.4]);
-      notes.push([bar.start, dur, root + 7, 0.34]);
-      return;
-    }
-    const t = (i - half) / Math.max(1, bars.length - half - 1);
-    const vel = 0.5 + t * 0.22;
-    for (const m of chordMidis(bar.chord, { octave: 2, center: 48 })) notes.push([bar.start, dur, m, vel]);
-  });
-  return notes;
-}
-
-// ---- assembly ---------------------------------------------------------------
-
-// B splits: first 4 bars hush to bass+metal+hats only, back 4 bring the rest in with the roll.
-const bBarsQuiet = bBars.slice(0, 4);
-const bBarsBack = bBars.slice(4);
-
-const bassSections: [Bar[], number][] = [[aBars, 1], [bBars, 1.05], [a2Bars, 1.1], [assaultBars, 1.22], [turnBars, 1.15]];
-const bassNotes = concatNotes(
-  bassPulse(introBars.slice(0, 2)),
-  bassOstinato(introBars.slice(2), 0.78),
-  ...bassSections.map(([bars, vel]) => bassOstinato(bars, vel)),
+const brassNotes = concatNotes(
+  octaveCell(A, 'F3', 0.72),
+  humanise(concatNotes(cell(DARK_BACK, A + 8, 'F3', 0.68), doubled(cell(DARK_BACK, A + 8, 'F3', 0.68), -12, 0.85)), 0.02, 3),
+  octaveCell(A + 16, 'F3', 0.76),
+  humanise(concatNotes(cell(DARK_BACK, A + 24, 'F3', 0.7), doubled(cell(DARK_BACK, A + 24, 'F3', 0.7), -12, 0.85)), 0.02, 4),
+  octaveCell(A + 32, 'F3', 0.78),
+  octaveCell(A + 48, 'F3', 0.8),
+  // A': the same statements with a third voice a fifth up — still no third.
+  octaveCell(A2, 'F3', 0.82),
+  fifthAbove(A2, 'F3', 0.82),
+  octaveCell(A2 + 16, 'F3', 0.84),
+  octaveCell(A2 + 32, 'F3', 0.86),
+  fifthAbove(A2 + 32, 'F3', 0.86),
+  octaveCell(A2 + 48, 'F3', 0.88),
+  octaveCell(APEX, 'F3', 0.92),
+  fifthAbove(APEX, 'F3', 0.92),
+  octaveCell(APEX + 16, 'F3', 0.94),
+  octaveCell(COLLAPSE, 'F3', 0.66),
 );
 
-const introDrums = { kick: [[8, 0.5, 'C2', 0.5], [12, 0.5, 'C2', 0.6], [14, 0.3, 'C2', 0.7]] as Note[] };
-const aG = groovePercussion(aBars, { roll: true, kickVel: 0.9, snareVel: 0.76 });
-const bQuietG = groovePercussion(bBarsQuiet, { noKick: true, noSnare: true, hatVel: 0.28 });
-const bBackG = groovePercussion(bBarsBack, { roll: true, kickVel: 0.92, hatVel: 0.48, snareVel: 0.8 });
-const a2G = groovePercussion(a2Bars, { roll: true, kickVel: 0.94, hatVel: 0.5, snareVel: 0.84 });
-const assaultG = groovePercussion(assaultBars, { roll: true, kickVel: 1, hatVel: 0.55, snareVel: 0.92 });
-const turnG = groovePercussion(turnBars, { roll: true, kickVel: 0.95, hatVel: 0.5, snareVel: 0.86 });
+/**
+ * Choir: slabs, not singing. They arrive on the phrase heads, hold four bars
+ * and stop — and because the choir preset carries real section jitter, they
+ * are the one layer in the cue that is audibly not a machine.
+ *
+ * The voicing is root, b3 and the octave, with NO FIFTH. The cell's b6 (Db)
+ * is sounding above them for four beats at a time, and a held C right under it
+ * would turn the theme's ache into a semitone cluster. Leaving the fifth out
+ * costs nothing: the organ and the pedal have it covered.
+ */
+function slab(at: number, dur: number, velocity: number): Note[] {
+  return [
+    [at, dur, 'F3', velocity],
+    [at + 0.05, dur - 0.05, 'Ab3', velocity * 0.94],
+    [at + 0.1, dur - 0.1, 'F4', velocity * 0.88],
+  ];
+}
 
-const kickNotes = concatNotes(introDrums.kick, aG.kick, bBackG.kick, a2G.kick, assaultG.kick, turnG.kick);
-const hatNotes = concatNotes(aG.hat, bQuietG.hat, bBackG.hat, a2G.hat, assaultG.hat, turnG.hat);
-const snareNotes = concatNotes(
-  aG.snare,
-  bBackG.snare,
-  a2G.snare,
-  snareRoll(breakBars[breakBars.length - 1]!.start, breakBars[breakBars.length - 1]!.dur),
-  assaultG.snare,
-  turnG.snare,
+const choirNotes = humanise(
+  phrase(
+    concatNotes(
+      ...[
+        { at: A + 32, vel: 0.5, dur: 14 },
+        { at: A2, vel: 0.56, dur: 14 },
+        { at: A2 + 32, vel: 0.6, dur: 14 },
+        { at: APEX, vel: 0.68, dur: 14 },
+        { at: APEX + 16, vel: 0.64, dur: 12 },
+        { at: COLLAPSE, vel: 0.44, dur: 12 },
+      ].map(({ at, vel, dur }) => slab(at, dur, vel)),
+    ),
+    A,
+    LENGTH - A,
+    0.1,
+  ),
+  0.03,
+  19,
 );
 
-const kick808Notes = concatNotes(
-  kick808PerBar(aBars, 1.2, 0.85),
-  kick808PerBar(bBarsBack, 1.2, 0.88),
-  kick808PerBar(a2Bars, 1.3, 0.9),
-  kick808PerBar(assaultBars, 1.6, 1),
-  kick808PerBar(turnBars, 0.9, 0.92),
+/**
+ * Strings: short, stabbed, on the off beats the machine leaves empty. They are
+ * the only part of the cue with a human accent pattern, and they lose.
+ */
+const stringsNotes = humanise(
+  concatNotes(
+    ...[A2, A2 + 16, A2 + 32, A2 + 48, APEX, APEX + 8, APEX + 16, APEX + 24].map((at) =>
+      concatNotes(
+        chordLine(['Fm'], { start: at + 1.5, octave: 4, center: 72, velocity: 0.62, dur: 0.4 }),
+        chordLine(['Fm'], { start: at + 3.5, octave: 4, center: 72, velocity: 0.7, dur: 0.4 }),
+        chordLine(['Db'], { start: at + 6.5, octave: 4, center: 72, velocity: 0.66, dur: 0.4 }),
+      ),
+    ),
+  ),
+  0.04,
+  23,
 );
 
+/** Organ: the floor. Sixteen feet of it, never articulated, only swelling. */
+const organNotes: Note[] = [
+  [OSTINATO, 32, 'F2', 0.4],
+  [A, 64, 'F2', 0.46],
+  [LURCH, 32, 'F2', 0.5],
+  [A2, 64, 'F2', 0.5],
+  [APEX, 32, 'F2', 0.56],
+  [COLLAPSE, 32, 'F2', 0.42],
+];
+
+/** Industrial percussion: a hammer mill, tuned to the pedal. */
 const metalNotes = concatNotes(
-  [[12, 0.4, rootOf('Fm', 3), 0.5], [14, 0.4, rootOf('Fm', 3) + 7, 0.6]] as Note[],
-  metalHits(aBars, 0.72),
-  metalHits(bBars, 0.78),
-  metalHits(a2Bars, 0.82),
-  breakdownMetal(breakBars),
-  metalHits(assaultBars, 0.95),
-  metalHits(turnBars, 0.85),
+  groove('X.......x.......', { start: OSTINATO + 16, bars: 4, pitch: 'F3', velocity: 0.5, seed: 41, drift: 0 }),
+  groove('X.......x...x...', { start: A, bars: 16, pitch: 'F3', velocity: 0.56, seed: 42, drift: 0 }),
+  groove('X...x...X...x.x.', { start: LURCH, bars: 8, pitch: 'F3', velocity: 0.62, seed: 43, drift: 0 }),
+  groove('X.......x...x...', { start: A2, bars: 16, pitch: 'F3', velocity: 0.6, seed: 44, drift: 0 }),
+  groove('X...x...X...x...', { start: APEX, bars: 8, pitch: 'F3', velocity: 0.68, seed: 45, drift: 0 }),
+  groove('X...............', { start: COLLAPSE, bars: 8, pitch: 'F3', velocity: 0.5, seed: 46, drift: 0 }),
 );
 
-const guitarSections: [Bar[], number][] = [[aBars, 0.7], [bBarsBack, 0.8], [a2Bars, 0.85], [assaultBars, 1]];
-const guitarL = concatNotes(...guitarSections.map(([bars, vel]) => guitarChug(bars, vel, 'L')));
-const guitarR = concatNotes(...guitarSections.map(([bars, vel]) => guitarChug(bars, vel, 'R')));
+const kickNotes = concatNotes(
+  groove('X.......X.......', { start: OSTINATO + 8, bars: 6, pitch: 'C2', velocity: 0.62, seed: 47, drift: 0 }),
+  groove('X...x...X...x...', { start: A, bars: 16, pitch: 'C2', velocity: 0.74, seed: 48, drift: 0 }),
+  groove('X...x...X..x.x..', { start: LURCH, bars: 8, pitch: 'C2', velocity: 0.78, seed: 49, drift: 0 }),
+  groove('X...x...X...x...', { start: A2, bars: 16, pitch: 'C2', velocity: 0.8, seed: 50, drift: 0 }),
+  groove('X...x...X...x.x.', { start: APEX, bars: 8, pitch: 'C2', velocity: 0.86, seed: 51, drift: 0 }),
+  groove('X.......X.......', { start: COLLAPSE, bars: 6, pitch: 'C2', velocity: 0.6, seed: 52, drift: 0 }),
+);
 
+/**
+ * Timpani: the orchestra's answer to the machine, on the tonic and the fifth.
+ * Tuned, struck by a player, and audibly not on the grid.
+ */
+const timpaniNotes = humanise(
+  [
+    [A + 30, 2, 'F2', 0.6],
+    [A + 62, 2, 'C2', 0.66],
+    [LURCH + 30, 2, 'F2', 0.72],
+    [A2 + 62, 2, 'F2', 0.76],
+    [APEX - 2, 1, 'C2', 0.7],
+    [APEX - 1, 1, 'F2', 0.8],
+    [APEX + 30, 2, 'F2', 0.84],
+    [COLLAPSE + 30, 2, 'F2', 0.5],
+  ] as Note[],
+  0.04,
+  29,
+);
+
+const crashNotes: Note[] = [
+  [A, 1.5, 'C4', 0.5],
+  [LURCH, 1.5, 'C4', 0.56],
+  [A2, 1.5, 'C4', 0.58],
+  [APEX, 1.5, 'C4', 0.66],
+  [COLLAPSE, 1.5, 'C4', 0.44],
+];
+
+/** A high alarm, doubling the cell two octaves up at the apex only. */
 const alarmNotes = concatNotes(
-  alarmMotif(aBars, 0, 0.85),
-  alarmMotif(a2Bars, 12, 0.95),
-  risingAlarm(breakBars),
-  concatNotes(alarmMotif(assaultBars, 0, 1), alarmMotif(assaultBars, 12, 0.9)),
-  alarmMotif(turnBars, 0, 0.88),
+  cell(augment(SONGSTRESS_DARK, 2), APEX, 'F5', 0.42),
+  cell(augment(SONGSTRESS_DARK, 2), APEX + 16, 'F5', 0.44),
 );
-
-const organNotes = concatNotes(
-  organBed(introBars, 0.4, 2, 55),
-  organBed(aBars, 0.5, 3, 64),
-  organBed(bBarsBack, 0.55, 3, 64),
-  organBed(a2Bars, 0.58, 3, 64),
-  organBreak(breakBars),
-  organBed(assaultBars, 0.73, 3, 66),
-  organBed(turnBars, 0.6, 2, 50),
-);
-
-const crashHits: Note[] = [[A, 1.5, 'C5', 0.6], [B, 1.5, 'C5', 0.58], [A2, 1.5, 'C5', 0.64], [BREAK, 1.5, 'C5', 0.5], [ASSAULT, 1.5, 'C5', 0.8]];
 
 export const vegnagunTrack: Track = {
   name: 'boss-vegnagun',
-  bpm: BPM,
+  bpm: 168,
   timeSig: [4, 4],
   loop: { start: A, end: LENGTH },
   length: LENGTH,
   tailSec: 3.5,
   fx: {
-    reverb: { room: 0.5, damp: 0.42, width: 0.9, preDelay: 0.012 },
-    delay: { timeBeats: 0.375, feedback: 0.24, damp: 3000 },
+    reverb: { room: 0.72, damp: 0.34, width: 0.92, preDelay: 0.022 },
+    delay: { timeBeats: 0.5, feedback: 0.22, damp: 2600 },
   },
   channels: [
-    { name: 'synth-bass ostinato', instrument: 'synth-bass', volume: 0.95, pan: 0, notes: bassNotes, fx: { reverb: 0.05 } },
-    { name: 'kick', instrument: 'kick', volume: 0.95, pan: 0, notes: kickNotes },
-    { name: 'kick-808', instrument: 'kick-808', volume: 0.85, pan: 0, notes: kick808Notes },
-    { name: 'hat', instrument: 'hat', volume: 0.4, pan: 0.22, notes: hatNotes },
-    { name: 'snare-909', instrument: 'snare-909', volume: 0.8, pan: -0.05, notes: snareNotes, fx: { reverb: 0.14 } },
-    { name: 'crash', instrument: 'crash', volume: 0.42, pan: 0.1, notes: crashHits, fx: { reverb: 0.28 } },
-    { name: 'metal-hit', instrument: 'metal-hit', volume: 0.7, pan: -0.15, notes: metalNotes, fx: { reverb: 0.18, delay: 0.1 } },
-    { name: 'guitar L', instrument: 'guitar-dist', volume: 0.55, pan: -0.35, notes: guitarL, fx: { reverb: 0.1 } },
-    { name: 'guitar R', instrument: 'guitar-dist', volume: 0.52, pan: 0.35, notes: guitarR, fx: { reverb: 0.11 } },
-    { name: 'alarm siren', instrument: 'pwm-lead', volume: 0.62, pan: 0.08, notes: alarmNotes, fx: { reverb: 0.22, delay: 0.16 } },
-    { name: 'organ', instrument: 'organ', volume: 0.8, pan: 0, notes: organNotes, fx: { reverb: 0.3 } },
+    { name: 'pulse', instrument: 'arp-pluck', volume: 0.42, pan: 0.22, notes: ostinatoNotes, fx: { reverb: 0.12, delay: 0.1 } },
+    { name: 'pedal', instrument: 'synth-bass', volume: 0.78, pan: 0, notes: pedalNotes, fx: { reverb: 0.06 } },
+    { name: 'sub', instrument: 'bass-sub', volume: 0.5, pan: 0, notes: pedalNotes.map((n) => [n[0], n[1], 'F1', (n[3] ?? 0.6) * 0.7] as Note), fx: { reverb: 0.05 } },
+    { name: 'low brass', instrument: 'brass', volume: 0.74, pan: -0.1, notes: ramp(brassNotes, 0.94, 1.06, A, LENGTH - A), fx: { reverb: 0.3 } },
+    { name: 'choir', instrument: 'choir', volume: 0.6, pan: 0, notes: choirNotes, fx: { reverb: 0.5 } },
+    { name: 'strings', instrument: 'strings-short', volume: 0.46, pan: -0.24, notes: stringsNotes, fx: { reverb: 0.26 } },
+    { name: 'organ', instrument: 'organ', volume: 0.42, pan: 0, notes: organNotes, fx: { reverb: 0.4 } },
+    { name: 'hammer', instrument: 'metal-hit', volume: 0.46, pan: 0.3, notes: metalNotes, fx: { reverb: 0.26 } },
+    { name: 'kick', instrument: 'kick-808', volume: 0.7, pan: 0, notes: kickNotes, fx: { reverb: 0.08 } },
+    { name: 'timpani', instrument: 'timpani', volume: 0.6, pan: 0.08, notes: timpaniNotes, fx: { reverb: 0.34 } },
+    { name: 'crash', instrument: 'crash', volume: 0.34, pan: 0.12, notes: crashNotes, fx: { reverb: 0.34 } },
+    { name: 'alarm', instrument: 'pwm-lead', volume: 0.34, pan: -0.3, notes: alarmNotes, fx: { reverb: 0.3, delay: 0.24 } },
   ],
 };
 

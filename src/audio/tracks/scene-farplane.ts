@@ -1,161 +1,304 @@
 /**
  * "Where the Pyreflies Rest" — the Farplane.
  *
- * ORIGINAL COMPOSITION. The afterlife: an endless field of flowers and
- * drifting lights where the dead can be glimpsed. E major, 92 bpm, ethereal
- * and bittersweet — the place where the two games meet. FFX's own rising
- * question (now resolved into major, at peace) is answered by the first half
- * of FFX-2's love-and-loss line, held a fourth apart in F# dorian so every
- * pitch still belongs to the home key.
+ * ORIGINAL COMPOSITION. E, 92 bpm, and deliberately modeless: the whole cue is
+ * built on stacked fourths, which have no third in them, so it is never quite
+ * major and never quite minor. Ethereal strings, a harp that never hurries and
+ * a wordless voice a long way off. The one emotion is rest without forgetting.
  *
- * Form (4/4, 38 bars, 99 s):
- *   bars  1- 4  intro   beats   0- 16   pad fades in, harp begins
- *   bars  5-14  A       beats  16- 56   flute states the rising question    <- loop start
- *   bars 15-24  B       beats  56- 96   epiano answers with Lenne's ache; soft pulse enters
- *   bars 25-34  A2      beats  96-136   both themes interweave, celesta motes
- *   bars 35-38  outro   beats 136-152   pulse recedes, turnaround into the loop
- * The loop runs 16 -> 152.
+ * THEMES (docs/audio/THEMES.md, cue map row 14).
+ *
+ *   - HYMN, harmonised in QUARTAL STACKS and distant. `HYMN_SOPRANO`'s first
+ *     eight bars are sung by the choir over voicings of fourths — which is
+ *     also what lets the prayer's Aeolian G natural sit inside an E-major
+ *     scene without either of them being wrong.
+ *   - `FAREWELL_RISE` ANSWERED BY `SONGSTRESS_RISE`. The two games open on the
+ *     same four scale degrees, one with a minor third and one with a major
+ *     one. Here they are put side by side, the flute asking and the voices
+ *     answering, and then in the fourth section they are played together. The
+ *     cue says nothing about it and neither should anyone else.
+ *
+ * Form (4/4, 92 bpm, 40 bars, 104 s):
+ *   bars  1- 8  bed       beats   0- 32  fourths, harp, nothing happening
+ *   bars  9-16  call      beats  32- 64  FAREWELL_RISE, flute, alone   <- loop
+ *   bars 17-24  answer    beats  64- 96  SONGSTRESS_RISE, voices
+ *   bars 25-32  together  beats  96-128  the hymn, harmonised in fourths
+ *   bars 33-40  bed       beats 128-160  back to the fourths, and rest
+ * Loop 32 -> 160.
  */
 
-import { arpLine, chordLine, concatNotes, drumLine, tracker, type Note, type Track } from '../score.ts';
-import { LENNE, PYREFLY_RISE_MAJOR, cell } from './motifs.ts';
+import { concatNotes, toMidi, tracker, type Note, type Track } from '../score.ts';
+import { cell } from './motifs.ts';
+import { FAREWELL_RISE, HYMN_SOPRANO, SONGSTRESS_RISE } from './themes.ts';
+import { doubled, humanise, legato, phrase } from './ffx2-common.ts';
 
-const BAR = 4;
+const BED_A = 0;
+const CALL = 32;
+const ANSWER = 64;
+const TOGETHER = 96;
+const BED_B = 128;
+const LENGTH = 160;
 
-const INTRO_CHORDS = ['E', 'C#m', 'A', 'B'];
-const A_CHORDS = ['E', 'B', 'C#m', 'A', 'E', 'B', 'F#m', 'A', 'B', 'E'];
-const B_CHORDS = ['C#m', 'A', 'F#m', 'B', 'E', 'C#m', 'A', 'B', 'E', 'B'];
-const A2_CHORDS = ['E', 'C#m', 'A', 'B', 'F#m', 'A', 'E', 'B', 'C#m', 'E'];
-const OUTRO_CHORDS = ['A', 'F#m', 'B', 'B'];
-
-const INTRO = 0;
-const A = 16;
-const B = 56;
-const A2 = 96;
-const OUTRO = 136;
-const LENGTH = 152;
-
-/** The first half of Lenne, stamped a fourth below the melody's E on F# — its own dorian degree. */
-const LENNE_FIRST_HALF = LENNE.filter((n) => n[0] < 4);
-
-function harpArpeggio(): Note[] {
-  return concatNotes(
-    arpLine(INTRO_CHORDS, { start: INTRO, pattern: [0, 2, 3, 4, 3, 2], step: 0.5, dur: 0.9, octave: 3, center: 64, velocity: 0.3, accent: 1.1 }),
-    arpLine(A_CHORDS, { start: A, pattern: [0, 2, 3, 4, 3, 2], step: 0.5, dur: 0.9, octave: 3, center: 64, velocity: 0.4, accent: 1.15 }),
-    arpLine(B_CHORDS, { start: B, pattern: [0, 1, 2, 3, 2, 1], step: 0.5, dur: 0.9, octave: 3, center: 64, velocity: 0.56, accent: 1.1 }),
-    arpLine(A2_CHORDS, { start: A2, pattern: [0, 2, 3, 4, 3, 2], step: 0.5, dur: 0.9, octave: 3, center: 66, velocity: 0.42, accent: 1.15 }),
-    // Outro bars 1-2 recede; bars 3-4 swell back up into the loop with a denser flourish.
-    arpLine(OUTRO_CHORDS.slice(0, 2), { start: OUTRO, pattern: [0, 2, 3, 2], step: 0.5, dur: 1.4, octave: 3, center: 64, velocity: 0.28, accent: 1.05 }),
-    arpLine(OUTRO_CHORDS.slice(2), { start: OUTRO + 2 * BAR, pattern: [0, 1, 2, 3, 4, 3, 2, 1], step: 0.25, dur: 0.5, octave: 3, center: 66, velocity: 0.44, accent: 1.2 }),
-  );
+/**
+ * A stack of fourths on a root. Three or four of them is the whole harmonic
+ * vocabulary of this cue: no thirds, so no mode, so nothing to resolve.
+ */
+function quartal(root: string, voices = 3): number[] {
+  const base = toMidi(root);
+  return Array.from({ length: voices }, (_, i) => base + i * 5);
 }
 
-function softPad(): Note[] {
-  return concatNotes(
-    chordLine(INTRO_CHORDS, { start: INTRO, octave: 3, center: 64, velocity: 0.12, dur: 3.9, roll: 0.2 }),
-    chordLine(A_CHORDS, { start: A, octave: 3, center: 64, velocity: 0.2, dur: 3.95 }),
-    chordLine(B_CHORDS, { start: B, octave: 3, center: 64, velocity: 0.4, dur: 3.95 }),
-    chordLine(A2_CHORDS, { start: A2, octave: 3, center: 64, velocity: 0.26, dur: 3.95 }),
-    chordLine(OUTRO_CHORDS.slice(0, 2), { start: OUTRO, octave: 3, center: 64, velocity: 0.16, dur: 3.9 }),
-    chordLine(OUTRO_CHORDS.slice(2), { start: OUTRO + 2 * BAR, octave: 3, center: 64, velocity: 0.34, dur: 3.95, roll: 0.1 }),
-  );
+/** Planing: the same shape moved bodily by step, with no functional logic. */
+interface Slab {
+  at: number;
+  dur: number;
+  root: string;
+  vel: number;
+  voices?: number;
+}
+
+function slabs(list: Slab[], seed: number, octave = 0): Note[] {
+  const notes: Note[] = [];
+  for (const s of list) {
+    quartal(s.root, s.voices ?? 3).forEach((midi, v) => {
+      // Entries are staggered a little: a section does not arrive together.
+      notes.push([s.at + v * 0.05, s.dur - v * 0.05, midi + octave, s.vel * (1 - v * 0.06)]);
+    });
+  }
+  return humanise(notes, 0.03, seed);
 }
 
 /**
- * One long-held low pedal per section (not restruck every bar) — a floor that stays put
- * regardless of the harp's history-dependent ring-out or which chord happens to fall where,
- * so the quietest bars in a section are never far below its loudest.
+ * Which roots a section may stack fourths on, and why the list is short.
+ *
+ * A stack of fourths is only modeless if every note in it belongs to the mode.
+ * In E Aeolian — the prayer's mode, and the mode of FFX's minor-third
+ * farewell — the usable roots are E (E-A-D), A (A-D-G), D (D-G-C), B (B-E-A)
+ * and F# (F#-B-E). In E major — where FFX-2's rise puts a G# — only B and F#
+ * survive. So the ANSWER section stands on B and F# and nothing else, and the
+ * G natural and the G# never sound at the same time anywhere in the cue. They
+ * take turns, and neither is ever wrong.
  */
-function pedalFloor(): Note[] {
-  return [
-    [B, B_CHORDS.length * BAR - 0.2, 'E3', 0.3],
-    [A2, A2_CHORDS.length * BAR - 0.2, 'E3', 0.22],
-  ];
+const BED_SLABS: Slab[] = [
+  { at: 0, dur: 7.6, root: 'E3', vel: 0.4 },
+  { at: 8, dur: 7.6, root: 'A3', vel: 0.36 },
+  { at: 16, dur: 7.6, root: 'E3', vel: 0.38 },
+  { at: 24, dur: 7.6, root: 'B2', vel: 0.34, voices: 4 },
+];
+
+const CALL_SLABS: Slab[] = [
+  { at: 0, dur: 7.6, root: 'E3', vel: 0.36 },
+  { at: 8, dur: 7.6, root: 'A3', vel: 0.34 },
+  // Three voices only: a fourth stack on D reaches F natural on its fourth
+  // voice, and this cue's mode has an F#.
+  { at: 16, dur: 7.6, root: 'D3', vel: 0.36 },
+  { at: 24, dur: 7.6, root: 'E3', vel: 0.34 },
+];
+
+/** B and F# only: the two stacks E minor and E major agree on. */
+const ANSWER_SLABS: Slab[] = [
+  { at: 0, dur: 7.6, root: 'B2', vel: 0.36, voices: 4 },
+  { at: 8, dur: 7.6, root: 'F#3', vel: 0.34 },
+  { at: 16, dur: 7.6, root: 'B2', vel: 0.36 },
+  { at: 24, dur: 7.6, root: 'F#3', vel: 0.32 },
+];
+
+/** Under the hymn: E, A, D, E — the prayer's own Em, G, Am, Em, in fourths. */
+const HYMN_SLABS: Slab[] = [
+  { at: 0, dur: 7.6, root: 'E3', vel: 0.36 },
+  { at: 8, dur: 7.6, root: 'D3', vel: 0.34 },
+  { at: 16, dur: 7.6, root: 'A3', vel: 0.36 },
+  { at: 24, dur: 7.6, root: 'E3', vel: 0.34, voices: 4 },
+];
+
+function shift(list: Slab[], by: number): Slab[] {
+  return list.map((s) => ({ ...s, at: s.at + by }));
 }
 
-function epianoChords(): Note[] {
-  return concatNotes(
-    chordLine(A_CHORDS, { start: A, octave: 4, center: 68, velocity: 0.34, dur: 3.5 }),
-    chordLine(B_CHORDS, { start: B, octave: 4, center: 68, velocity: 0.5, dur: 3.5 }),
-    chordLine(A2_CHORDS, { start: A2, octave: 4, center: 68, velocity: 0.42, dur: 3.5 }),
-    chordLine(OUTRO_CHORDS.slice(0, 2), { start: OUTRO, octave: 4, center: 68, velocity: 0.3, dur: 3.5 }),
-    chordLine(OUTRO_CHORDS.slice(2), { start: OUTRO + 2 * BAR, octave: 4, center: 68, velocity: 0.44, dur: 3.9 }),
+const stringsNotes = concatNotes(
+  slabs(BED_SLABS, 161),
+  slabs(shift(CALL_SLABS, CALL), 162),
+  slabs(shift(ANSWER_SLABS, ANSWER), 163),
+  slabs(shift(HYMN_SLABS, TOGETHER), 164),
+  slabs(shift(BED_SLABS, BED_B), 165),
+);
+
+/** The same stacks an octave down, bowed long — the floor of the hall. */
+const lowStrings = concatNotes(
+  slabs(
+    [
+      { at: 0, dur: 15.6, root: 'E2', vel: 0.34, voices: 2 },
+      { at: 16, dur: 15.6, root: 'A2', vel: 0.32, voices: 2 },
+    ],
+    166,
+  ),
+  slabs(shift([{ at: 0, dur: 31.6, root: 'E2', vel: 0.3, voices: 2 }], CALL), 167),
+  slabs(shift([{ at: 0, dur: 31.6, root: 'B1', vel: 0.32, voices: 2 }], ANSWER), 168),
+  slabs(
+    shift(
+      [
+        { at: 0, dur: 15.6, root: 'E2', vel: 0.34, voices: 2 },
+        { at: 16, dur: 15.6, root: 'A2', vel: 0.32, voices: 2 },
+      ],
+      TOGETHER,
+    ),
+    169,
+  ),
+  slabs(shift([{ at: 0, dur: 31.6, root: 'E2', vel: 0.28, voices: 2 }], BED_B), 170),
+);
+
+// --- the call and the answer ----------------------------------------------
+
+/**
+ * Four notes, and the fourth is the one that means something: both rises end
+ * on their third — minor for FFX, major for FFX-2 — and that note is held and
+ * arrived at, so it is the LOUDEST of the four. A four-note cell rendered at
+ * one velocity is a sampler playing four notes; this is somebody asking a
+ * question.
+ */
+const RISE_SHAPE = [0.84, 0.92, 0.98, 1.08];
+
+function rise(pattern: Note[], at: number, tonic: string, velocity: number, seed: number): Note[] {
+  const shaped = cell(pattern, at, tonic, velocity).map(
+    (n, i) => [n[0], n[1], n[2], velocity * (RISE_SHAPE[i] ?? 1)] as Note,
+  );
+  return humanise(legato(shaped, 0.1), 0.02, seed);
+}
+
+/**
+ * The flute asks with FFX's four notes — B, E, F#, and the MINOR third, G.
+ * Over stacked fourths there is no major third anywhere to contradict it.
+ */
+const fluteNotes = concatNotes(
+  rise(FAREWELL_RISE, CALL + 4, 'E5', 0.5, 171),
+  rise(FAREWELL_RISE, CALL + 20, 'E5', 0.46, 172),
+  // One exchange inside the answer section: the question, then the voices.
+  rise(FAREWELL_RISE, ANSWER + 12, 'E5', 0.44, 173),
+);
+
+/**
+ * The voices answer with FFX-2's — the same four degrees, and the third is
+ * major. The two versions never sound together; they take turns, and the cue
+ * says nothing about it.
+ */
+const choirNotes = concatNotes(
+  rise(SONGSTRESS_RISE, ANSWER + 4, 'E5', 0.42, 175),
+  rise(SONGSTRESS_RISE, ANSWER + 18, 'E5', 0.4, 176),
+  rise(SONGSTRESS_RISE, ANSWER + 26, 'E4', 0.38, 177),
+  // The prayer itself, bars 1-4, sung a long way off over the fourths.
+  humanise(
+    phrase(
+      legato(
+        tracker(HYMN_SOPRANO, { start: TOGETHER, checkBars: 4, velocity: 0.34, scale: 2 }).filter(
+          (n) => n[0] < TOGETHER + 32,
+        ),
+        0.12,
+      ),
+      TOGETHER,
+      32,
+      0.12,
+    ),
+    0.03,
+    180,
+  ),
+);
+
+/** And the hymn's next four bars, in the last section, an octave down. */
+const choirLow = humanise(
+  phrase(
+    legato(
+      doubled(
+        tracker(HYMN_SOPRANO, { start: BED_B - 32, checkBars: 4, velocity: 0.3, scale: 2 }).filter(
+          (n) => n[0] >= BED_B && n[0] < BED_B + 32,
+        ),
+        -12,
+        1,
+      ),
+      0.12,
+    ),
+    BED_B,
+    32,
+    0.1,
+  ),
+  0.03,
+  181,
+);
+
+// --- light -----------------------------------------------------------------
+
+/**
+ * Harp: fourths, arpeggiated, never faster than a heartbeat. Stacks, not
+ * triads — a harp playing E major triads would put a G# into a section built
+ * to have no third at all.
+ */
+function quartalArp(start: number, root: string, step: number, velocity: number, span = 4): Note[] {
+  // Three voices, never four: the fourth voice of a stack on D is an F
+  // natural, and this cue's mode has an F#.
+  const stack = quartal(root, 3);
+  const shape = [0, 1, 2, 1, 2, 1];
+  return shape.slice(0, span).map(
+    (index, i): Note => [start + i * step, step * 2.6, stack[index]!, velocity * (i === 0 ? 1.14 : 1)],
   );
 }
 
-/** Epiano's top line: FFX-2's ache answering the flute, always on F# (its diatonic dorian home). */
-function epianoLenneAnswer(): Note[] {
-  return concatNotes(
-    cell(LENNE_FIRST_HALF, B + 4, 'F#4', 0.52),
-    // Re-timed from beat 20 (a 'C#m' bar, where the cell's A held a semitone above the chord's G#)
-    // to beat 24 ('A'), where every note of the cell lands on or below a chord tone.
-    cell(LENNE_FIRST_HALF, B + 24, 'F#4', 0.56),
-    cell(LENNE_FIRST_HALF, A2 + 8, 'F#4', 0.58),
-    // Two quiet chord-tone pings between the Lenne statements — B_CHORDS[3]/[7] are both 'B',
-    // and these bars otherwise carry no melodic motion at all, reading much thinner than their neighbours.
-    tracker('F#4:2 D#4:2', { start: B + 12, velocity: 0.4 }),
-    tracker('F#4:2 D#4:2', { start: B + 28, velocity: 0.4 }),
-  );
-}
+const harpNotes = humanise(
+  concatNotes(
+    ...[
+      { start: BED_A, list: BED_SLABS },
+      { start: CALL, list: CALL_SLABS },
+      { start: ANSWER, list: ANSWER_SLABS },
+      { start: TOGETHER, list: HYMN_SLABS },
+      { start: BED_B, list: BED_SLABS },
+    ].flatMap(({ start, list }, i) =>
+      list.map((slab, bar) =>
+        // The harp takes the section's own stack an octave up, so it can never
+        // put a note a semitone from the bed holding underneath it.
+        quartalArp(start + bar * 8 + (bar % 2 === 0 ? 0 : 2), slab.root.replace(/\d/, (d) => String(Number(d) + 1)), 1, 0.28 + i * 0.01),
+      ),
+    ),
+  ),
+  0.04,
+  182,
+);
 
-/** Flute's lead: FFX's rising question, now resolved into major, at peace. */
-function fluteLead(): Note[] {
-  return concatNotes(
-    // Started right on the A downbeat instead of beat +4, so the held E4 lands on 'E' (its own
-    // root) rather than the following 'B' bar, where it sat a semitone above the chord's D#.
-    cell(PYREFLY_RISE_MAJOR, A, 'E4', 0.55),
-    tracker('G#4:1 F#4:1 E4:2 | D#4:3 -:1', { start: A + 12, velocity: 0.48, checkBars: BAR }),
-    cell(PYREFLY_RISE_MAJOR, A + 24, 'E4', 0.6),
-    tracker('B4:2 A4:2 | G#4:3 E4:1', { start: A + 32, velocity: 0.28, checkBars: BAR }),
-    tracker('E5:2 D#5:1 C#5:1 | B4:3 -:1', { start: A2 + 0, velocity: 0.44, checkBars: BAR }),
-    cell(PYREFLY_RISE_MAJOR, A2 + 16, 'E4', 0.38),
-    tracker('F#4:2 G#4:2 | A4:3 -:1', { start: A2 + 24, velocity: 0.3, checkBars: BAR }),
-    cell(PYREFLY_RISE_MAJOR, OUTRO, 'E4', 0.35),
-    // A last soft rising lift, timed to land right as the loop restarts.
-    tracker('B4:1 C#5:1 D#5:1 E5:1', { start: OUTRO + 12, velocity: 0.5 }),
-  );
-}
+/** Celesta: motes of light. Seven of them in a hundred seconds. */
+const celestaNotes: Note[] = [
+  [CALL + 2, 3, 'B5', 0.34],
+  [CALL + 18, 3, 'E6', 0.3],
+  [ANSWER + 2, 3, 'F#6', 0.32],
+  [ANSWER + 22, 3, 'B5', 0.28],
+  [TOGETHER, 4, 'E6', 0.34],
+  [TOGETHER + 16, 4, 'A5', 0.3],
+  [BED_B + 24, 6, 'E6', 0.26],
+];
 
-/** Celesta motes: small falling glints, sparse. */
-function celestaMotes(): Note[] {
-  return concatNotes(
-    tracker('B5:0.5 G#5:0.5 E5:0.5 B4:0.5', { start: A2 + 4, velocity: 0.32 }),
-    tracker('C#6:0.5 A5:0.5 E5:0.5 C#5:0.5', { start: A2 + 20, velocity: 0.22 }),
-    tracker('E6:0.5 B5:0.5 G#5:1', { start: A2 + 36, velocity: 0.3 }),
-    tracker('A5:0.5 F#5:0.5 D#5:1', { start: OUTRO + 8, velocity: 0.26 }),
-  );
-}
-
-/** A very soft heartbeat pulse — kick-808 given a short decay, for the middle section only. */
-function softPulse(): Note[] {
-  return drumLine('x...x...x...x...', { start: B, pitch: 'C2', velocity: 0.32, times: B_CHORDS.length });
-}
-
-function shakerPulse(): Note[] {
-  return drumLine('x.x.x.x.x.x.x.x.', { start: B, pitch: 'C3', velocity: 0.22, times: B_CHORDS.length });
-}
+/** One bell, at the top of the loop. */
+const bellNotes: Note[] = [
+  [CALL, 8, 'E4', 0.3],
+  [TOGETHER, 8, 'E3', 0.28],
+];
 
 export const sceneFarplaneTrack: Track = {
   name: 'scene-farplane',
   bpm: 92,
   timeSig: [4, 4],
-  loop: { start: A, end: LENGTH },
+  loop: { start: CALL, end: LENGTH },
   length: LENGTH,
-  tailSec: 4,
+  tailSec: 6,
   fx: {
-    reverb: { room: 0.9, damp: 0.24, width: 1, preDelay: 0.04 },
-    delay: { timeBeats: 1, feedback: 0.3, damp: 2200 },
+    reverb: { room: 0.9, damp: 0.2, width: 0.96, preDelay: 0.035 },
+    delay: { timeBeats: 1.5, feedback: 0.24, damp: 2000 },
   },
   channels: [
-    { name: 'soft pad', instrument: 'supersaw', volume: 0.72, pan: 0, notes: softPad(), fx: { reverb: 0.55 } },
-    { name: 'harp', instrument: 'harp', volume: 0.32, pan: -0.15, notes: harpArpeggio(), fx: { reverb: 0.4, delay: 0.15 } },
-    { name: 'flute lead', instrument: 'flute', volume: 0.5, pan: 0.08, notes: fluteLead(), fx: { reverb: 0.35, delay: 0.12 } },
-    { name: 'epiano chords', instrument: 'epiano', volume: 0.78, pan: 0.2, notes: epianoChords(), fx: { reverb: 0.4 } },
-    { name: 'pedal floor', instrument: 'strings-low', volume: 0.5, pan: 0, notes: pedalFloor(), fx: { reverb: 0.4 } },
-    { name: 'epiano answer', instrument: 'epiano', volume: 0.6, pan: -0.22, notes: epianoLenneAnswer(), fx: { reverb: 0.45, delay: 0.18 } },
-    { name: 'celesta', instrument: 'celesta', volume: 0.38, pan: 0.3, notes: celestaMotes(), fx: { reverb: 0.55, delay: 0.3 } },
-    { name: 'pulse', instrument: 'kick-808', volume: 0.35, pan: 0, notes: softPulse() },
-    { name: 'shaker', instrument: 'shaker', volume: 0.3, pan: -0.1, notes: shakerPulse() },
+    { name: 'strings', instrument: 'strings', volume: 0.6, pan: -0.1, notes: stringsNotes, fx: { reverb: 0.48 } },
+    { name: 'low strings', instrument: 'strings-low', volume: 0.5, pan: 0.16, notes: lowStrings, fx: { reverb: 0.46 } },
+    { name: 'pad', instrument: 'pad', volume: 0.4, pan: 0.05, notes: slabs(shift(ANSWER_SLABS, ANSWER), 183, -12), fx: { reverb: 0.55 } },
+    { name: 'voices', instrument: 'choir', volume: 0.54, pan: -0.06, notes: choirNotes, fx: { reverb: 0.6, delay: 0.16 } },
+    { name: 'voices low', instrument: 'choir', volume: 0.4, pan: 0.1, notes: choirLow, fx: { reverb: 0.6 } },
+    { name: 'flute', instrument: 'flute', volume: 0.56, pan: 0.14, notes: fluteNotes, fx: { reverb: 0.5, delay: 0.2 } },
+    { name: 'harp', instrument: 'harp', volume: 0.5, pan: -0.3, notes: harpNotes, fx: { reverb: 0.5, delay: 0.14 } },
+    { name: 'celesta', instrument: 'celesta', volume: 0.38, pan: 0.3, notes: celestaNotes, fx: { reverb: 0.55, delay: 0.22 } },
+    { name: 'bell', instrument: 'bell', volume: 0.26, pan: -0.2, notes: bellNotes, fx: { reverb: 0.6 } },
   ],
 };
 

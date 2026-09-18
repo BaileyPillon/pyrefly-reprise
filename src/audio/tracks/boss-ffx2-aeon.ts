@@ -1,352 +1,380 @@
 /**
- * "Static Coronation" — the corrupted dragon-king aeon battle.
+ * "Static Coronation" — the corrupted aeon in the Bevelle Underground.
  *
- * ORIGINAL COMPOSITION. Pop-rock-electronic, brighter production than an FFX
- * boss but with real menace: Bb minor, 160 bpm. Supersaw stabs carry a riff
- * recast from FFX-2's bright hook (its 3rd and 6th lowered into minor), a
- * synth-bass pumps octaves under it, drums alternate four-on-the-floor with a
- * breakbeat, guitar-dist chugs, and a lifted chorus turns the same hook
- * hopeful in the relative major. The riff is chord-aware — over the V (F) it
- * outlines F-A-C instead of the tonic hook, so nothing sits a minor 2nd above
- * the chord underneath.
+ * ORIGINAL COMPOSITION. Pop-jazz fusion, Bb minor, 160 bpm: electric piano
+ * comping, fingered electric bass, a tight kit, brass punches, and — because
+ * the girls are fighting something that used to be a friend — a string line
+ * that refuses to join in.
  *
- * Form (4/4, 68 bars, 102 s):
- *   bars  1- 4  intro    beats   0- 16   count-in kick + bass groove alone
- *   bars  5-16  A        beats  16- 64   riff, four-on-the-floor           <- loop start
- *   bars 17-28  B        beats  64-112   breakbeat, riff call/response
- *   bars 29-40  chorus   beats 112-160   relative major (Db), hook turns hopeful
- *   bars 41-52  bridge   beats 160-208   breakbeat, riff sequences up and builds
- *   bars 53-64  A2       beats 208-256   riff reprise, octave-doubled, hardest hit
- *   bars 65-68  turn     beats 256-272   turnaround into the loop
- * The loop runs 16 -> 272. Dynamic peaks: A2 and the chorus.
+ * THEMES (docs/audio/THEMES.md §5, cue map row 17). The A theme is built on
+ * `SONGSTRESS_DARK`, the Songstress hook's identity leap with both ends
+ * flattened: b3 up to b6, home to the 5 — Db - Gb - F in Bb minor. It is
+ * stamped literally at bar 3 of the theme and again as the supersaw stab that
+ * answers every phrase. The CHORUS is `SONGSTRESS_LEAD` bars 1-4 at written
+ * pitch (Db major, the relative major — the pop star enjoying herself) with an
+ * original four-bar answer that pulls the key back down into Bb minor. The
+ * BRIDGE is `SONGSTRESS_BRIDGE` over `SONGSTRESS_BRIDGE_CHORDS`: FFX-2 keeps
+ * its ii-V motion even when it is fighting a god.
+ *
+ * The complete hook, with its bridge and its one bar of borrowed joy, is
+ * rationed to `ending-ffx2`. This cue only ever gets its first four bars.
+ *
+ * Form (4/4, 160 bpm, 76 bars, 114 s):
+ *   bars  1- 8  intro    beats   0- 32  epiano and hats, bass from bar 5
+ *   bars  9-24  A        beats  32- 96  the theme, twice                <- loop start
+ *   bars 25-40  chorus   beats  96-160  the hook in Db, brass doubling
+ *   bars 41-56  bridge   beats 160-224  ii-V, strings carry the regret
+ *   bars 57-72  A2       beats 224-288  the theme in octaves, hardest
+ *   bars 73-76  turn     beats 288-304  back round
+ * Loop 32 -> 304.
  */
 
 import {
-  arpLine,
-  barStarts,
   chordLine,
-  chordRoots,
   concatNotes,
-  drumLine,
-  motif,
-  transposeNotes,
+  tracker,
   type Note,
-  type Pitch,
   type Track,
 } from '../score.ts';
-import { SPHERE_HOOK, withVelocity } from './motifs.ts';
+import { cell } from './motifs.ts';
+import {
+  lean,
+  SONGSTRESS_BRIDGE,
+  SONGSTRESS_BRIDGE_CHORDS,
+  SONGSTRESS_DARK,
+  SONGSTRESS_LEAD,
+} from './themes.ts';
+import {
+  atVolume,
+  bassLine,
+  compLine,
+  doubled,
+  gated,
+  groove,
+  humanise,
+  legato,
+  nudge,
+  padLine,
+  phrase,
+  ramp,
+  tomFill,
+} from './ffx2-common.ts';
 
 const BAR = 4;
-
-/** Linear ramp across `steps` values from `from` to `to` (inclusive) — the bridge's smooth build. */
-function ramp(steps: number, from: number, to: number): number[] {
-  if (steps <= 1) return [to];
-  return Array.from({ length: steps }, (_, i) => from + (to - from) * (i / (steps - 1)));
-}
-
-const INTRO_CHORDS = ['Bbm', 'Bbm', 'Gb', 'F'];
-const A_CHORDS = ['Bbm', 'Gb', 'F', 'Ebm', 'Bbm', 'Gb', 'Db', 'F', 'Bbm', 'Gb', 'F', 'F'];
-const B_CHORDS = ['Bbm', 'Ab', 'Gb', 'F', 'Ebm', 'Db', 'Gb', 'F', 'Bbm', 'Ab', 'Gb', 'F'];
-const CHORUS_CHORDS = ['Db', 'Ab', 'Bbm', 'Gb', 'Db', 'Ab', 'Ebm', 'Ab', 'Db', 'Gb', 'Ab', 'Db'];
-const BRIDGE_CHORDS = ['Ebm', 'Db', 'Ab', 'F', 'Ebm', 'Db', 'Ab', 'F', 'Ebm', 'Db', 'F', 'F'];
-const A2_CHORDS = A_CHORDS;
-const TURN_CHORDS = ['Db', 'Ab', 'F', 'F'];
-
 const INTRO = 0;
-const A = 16;
-const B = 64;
-const CHORUS = 112;
+const A = 32;
+const CHORUS = 96;
 const BRIDGE = 160;
-const A2 = 208;
-const TURN = 256;
-const LENGTH = 272;
+const A2 = 224;
+const TURN = 288;
+const LENGTH = 304;
 
-/** Recast SPHERE_HOOK in minor: lower the 3rd (offset 4) and 6th (offset 9) a semitone. */
-function toMinor(pattern: Note[]): Note[] {
-  return pattern.map((n) => [n[0], n[1], n[2] === 4 ? 3 : n[2] === 9 ? 8 : n[2], n[3]] as Note);
-}
-
-const HOOK_MINOR = toMinor(SPHERE_HOOK);
+// --- harmony ---------------------------------------------------------------
 
 /**
- * Over the V (F major), the tonic hook's Bb/Db/Gb each sit a semitone above
- * F's A/C/F. Swap in a shape that outlines F-A-C on the hook's own rhythm,
- * with the chromatic colour kept only as a sub-0.25-beat passing tone.
+ * Root motion by step and third, m7 and maj7 colours throughout: the FFX-2
+ * language. The one dominant is the hanging `F7sus4` at the end of each
+ * phrase — a 7sus4 rather than a plain V7, so the leading tone is withheld
+ * and the phrase turns over instead of slamming shut.
  */
-const F_VARIANT: Note[] = [
-  [0, 0.75, 0],
-  [0.75, 0.75, 4],
-  [1.5, 0.25, 1],
-  [1.75, 0.25, 7],
-  [2, 1, 4],
-  [3, 1, 7],
-];
+const A_PHRASE = ['Bbm7', 'Ab', 'Gbmaj7', 'Dbmaj7', 'Bbm7', 'Gbmaj7', 'Ebm7', 'F7sus4'];
+const A_CHORDS = [...A_PHRASE, ...A_PHRASE];
+const INTRO_CHORDS = ['Bbm7', 'Bbm7', 'Gbmaj7', 'Ab', 'Bbm7', 'Bbm7', 'Ebm7', 'F7sus4'];
+/** Four bars of the hook's own harmony, then four that walk it home to the minor. */
+const CHORUS_PHRASE = ['Dbmaj7', 'Bbm7', 'Gbmaj7', 'Ab7sus4', 'Bbm7', 'Gbmaj7', 'Ebm7', 'F7sus4'];
+const CHORUS_CHORDS = [...CHORUS_PHRASE, ...CHORUS_PHRASE];
+const BRIDGE_CHORDS = [...SONGSTRESS_BRIDGE_CHORDS, ...SONGSTRESS_BRIDGE_CHORDS];
+const TURN_CHORDS = ['Gbmaj7', 'Ab', 'Bbm7', 'F7sus4'];
 
-/** Over Ab, only the hook's Db (offset 3) sits a semitone above Ab's C — shift it up to D. */
-const AB_VARIANT: Note[] = HOOK_MINOR.map((n) => (n[2] === 3 ? ([n[0], n[1], 4, n[3]] as Note) : n));
-
-function riffPatternFor(chordSymbol: string): { pattern: Note[]; root: Pitch } {
-  if (chordSymbol === 'F') return { pattern: F_VARIANT, root: 'F3' };
-  if (chordSymbol === 'Ab') return { pattern: AB_VARIANT, root: 'Bb3' };
-  return { pattern: HOOK_MINOR, root: 'Bb3' };
-}
-
-/** A: the chord-aware hook, once a bar, answered an octave up every 4th bar. */
-function riffA(chords: string[], start: number, velocity: number): Note[] {
-  const notes: Note[] = [];
-  const starts = barStarts(start, chords.length, BAR);
-  chords.forEach((chord, i) => {
-    const { pattern, root } = riffPatternFor(chord);
-    const base = i % 4 === 3 ? transposeNotes(pattern, 12) : pattern;
-    notes.push(...withVelocity(motif(base, [starts[i]!], [root]), velocity));
-  });
-  return notes;
-}
-
-/** B: call and response — the hook calls on even bars, a chord-tone counter-line answers the odd ones. */
-function riffCallResponse(chords: string[], start: number): Note[] {
-  const notes: Note[] = [];
-  const starts = barStarts(start, chords.length, BAR);
-  chords.forEach((chord, i) => {
-    if (i % 2 !== 0) return;
-    const { pattern, root } = riffPatternFor(chord);
-    notes.push(...withVelocity(motif(pattern, [starts[i]!], [root]), 0.88));
-  });
-  const responseChords = chords.map((c, i) => (i % 2 === 1 ? c : ''));
-  notes.push(
-    ...arpLine(responseChords, { start, pattern: [2, 1, 0], step: 0.75, dur: 0.65, octave: 3, center: 63, velocity: 0.66, accent: 1.1 }),
-  );
-  return notes;
-}
-
-/** Bridge: the same chord-aware hook, ramping smoothly bar by bar and octave-doubling in the back half, building into A2. */
-function riffBridge(chords: string[], start: number): Note[] {
-  const notes: Note[] = [];
-  const starts = barStarts(start, chords.length, BAR);
-  const velocities = ramp(chords.length, 0.82, 1);
-  chords.forEach((chord, i) => {
-    const { pattern, root } = riffPatternFor(chord);
-    const velocity = velocities[i]!;
-    notes.push(...withVelocity(motif(pattern, [starts[i]!], [root]), velocity));
-    if (i >= chords.length / 2) {
-      notes.push(...withVelocity(motif(transposeNotes(pattern, 12), [starts[i]!], [root]), Math.max(0, velocity - 0.12)));
-    }
-  });
-  return notes;
-}
-
-/** A2: the hook hits harder — octave-doubled every bar, the loudest statement of the riff (trimmed a notch so it doesn't swallow the rest of the loop). */
-function riffA2(chords: string[], start: number): Note[] {
-  const notes: Note[] = [];
-  const starts = barStarts(start, chords.length, BAR);
-  chords.forEach((chord, i) => {
-    const { pattern, root } = riffPatternFor(chord);
-    const base = i % 4 === 3 ? transposeNotes(pattern, 12) : pattern;
-    notes.push(...withVelocity(motif(base, [starts[i]!], [root]), 0.92));
-    notes.push(...withVelocity(motif(transposeNotes(base, 12), [starts[i]!], [root]), 0.72));
-  });
-  return notes;
-}
-
-/** The chorus: the hook unaltered (still bright and major) every other bar over Db — a co-peak with A2. */
-function chorusHookLine(): Note[] {
-  const notes: Note[] = [];
-  const starts = barStarts(CHORUS, CHORUS_CHORDS.length, BAR);
-  for (let i = 0; i < CHORUS_CHORDS.length; i += 2) {
-    notes.push(...motif(SPHERE_HOOK, [starts[i]!], ['Db4']).map((n) => [n[0], n[1], n[2], 0.9] as Note));
-  }
-  return notes;
-}
-
-const OCTAVE_PUMP: Note[] = [
-  [0, 0.4, 0, 0.85],
-  [0.5, 0.4, 12, 0.68],
-  [1, 0.4, 0, 0.82],
-  [1.5, 0.4, 12, 0.66],
-  [2, 0.4, 0, 0.85],
-  [2.5, 0.4, 12, 0.68],
-  [3, 0.4, 0, 0.82],
-  [3.5, 0.4, 12, 0.66],
-];
-
-/** Octave-pumping bass, scaled per section (and ramped bar-by-bar through the bridge) so A2 pumps the hardest. */
-function bassLine(): Note[] {
-  const notes: Note[] = [];
-  for (const { chords, start, scale } of [
-    { chords: INTRO_CHORDS, start: INTRO, scale: 0.82 },
-    { chords: A_CHORDS, start: A, scale: 1 },
-    { chords: B_CHORDS, start: B, scale: 1.2 },
-    { chords: CHORUS_CHORDS, start: CHORUS, scale: 1 },
-    { chords: A2_CHORDS, start: A2, scale: 1.18 },
-    { chords: TURN_CHORDS, start: TURN, scale: 1 },
-  ]) {
-    const pumped = motif(OCTAVE_PUMP, barStarts(start, chords.length, BAR), chordRoots(chords, 1));
-    notes.push(...pumped.map((n) => [n[0], n[1], n[2], Math.min(1, (n[3] ?? 0.8) * scale)] as Note));
-  }
-  // Bridge: the bass ramps smoothly bar by bar right alongside the riff, kit and guitars.
-  const bridgeScales = ramp(BRIDGE_CHORDS.length, 1.05, 1.35);
-  const bridgeRoots = chordRoots(BRIDGE_CHORDS, 1);
-  BRIDGE_CHORDS.forEach((_, bar) => {
-    const pumped = motif(OCTAVE_PUMP, [BRIDGE + bar * BAR], [bridgeRoots[bar]!]);
-    const scale = bridgeScales[bar]!;
-    notes.push(...pumped.map((n) => [n[0], n[1], n[2], Math.min(1, (n[3] ?? 0.8) * scale)] as Note));
-  });
-  return notes;
-}
-
-const FLOOR_KICK = 'X...X...X...X...';
-const FLOOR_CLAP = '....X.......X...';
-const BREAK_KICK_MED = 'X...X...X.x.X...';
-const BREAK_KICK_BUSY = 'X...X...X.x.X.x.';
-const BREAK_SNARE_MED = '....X..gX.X.....';
-const BREAK_SNARE_BUSY = '....X..gX.X.X.g.';
-const HAT_16 = 'x.x.x.x.x.x.x.x.';
-const HAT_MED = 'x.xxx.x.x.xxx.x.';
-const HAT_BUSY = 'xxxxxxxxxxxxxxxx';
-const B_CLAP_ACCENT = '........g.......';
+// --- the A theme -----------------------------------------------------------
 
 /**
- * One bar per entry of `velocities`, each at its own start beat, with the pattern itself
- * stepping through three density tiers (sparse -> medium -> busy) across the section — the
- * bridge's build is more than louder, it is literally busier bar by bar, which reads clearly
- * in RMS where a velocity bump alone gets compressed away by both the instrument's own
- * velocity curve and the master normaliser.
+ * Eight bars, range F4-Gb5, and the shape a listener should be able to hum:
+ * a rising cell (F - Bb - Db) answered by a fall, then the identity leap up to
+ * the b6 at bar 3, restated a step higher at bar 6, and the 2-1 sigh at bar 8.
+ * Bar 3 is left empty here and filled by `SONGSTRESS_DARK` itself.
  */
-function rampedDrumBars(patterns: [string, string, string], start: number, velocities: number[], pitch = 'C1'): Note[] {
-  const notes: Note[] = [];
-  const n = velocities.length;
-  velocities.forEach((velocity, bar) => {
-    const tier = Math.min(2, Math.floor((bar / n) * 3));
-    notes.push(...drumLine(patterns[tier]!, { start: start + bar * BAR, pitch, velocity, times: 1 }));
+const THEME_LINE = `
+  F4:0.5 Bb4:0.5 Db5:1 -:0.5 C5:1 -:0.5 |
+  C5:0.75 Bb4:0.25 Ab4:1 F4:2           |
+  -:4                                   |
+  F5:1.5 Eb5:0.5 Db5:2                  |
+  F4:0.5 Bb4:0.5 Db5:1 -:0.5 Eb5:1 -:0.5 |
+  Gb5:0.75 F5:0.25 Eb5:1 Db5:2          |
+  Eb5:1 Db5:1 Bb4:2                     |
+  C5:2 Bb4:2                            |
+`;
+
+/** One statement of the theme, with the leap stamped in and the sighs leaning. */
+function theme(start: number, velocity: number): Note[] {
+  const sung = tracker(THEME_LINE, { start, checkBars: BAR, velocity, gate: 1.02 });
+  const leap = cell(SONGSTRESS_DARK, start + 8, 'Bb4', velocity + 0.06);
+  // bar 4's F5 leans on the Eb5 under it; bar 8's C5 is the 2 falling to the 1.
+  const leaned = lean(concatNotes(sung, leap), [
+    [start + 12, start + 13.5],
+    [start + 28, start + 30],
+  ]);
+  return humanise(phrase(legato(leaned, 0.05), start, 32, 0.16), 0.03, 4);
+}
+
+/** The chorus: four bars of the hook itself, then four that walk it home. */
+const CHORUS_ANSWER = `
+  F4:1 Db5:1 C5:2      |
+  Bb4:1.5 Ab4:0.5 Gb4:2 |
+  Gb4:1 Bb4:1 Ab4:2    |
+  C5:2 Bb4:2           |
+`;
+
+function chorusMelody(start: number, velocity: number): Note[] {
+  const hook = tracker(SONGSTRESS_LEAD, { start, checkBars: BAR, velocity, gate: 1.0 }).filter(
+    (n) => n[0] < start + 16,
+  );
+  const answer = tracker(CHORUS_ANSWER, {
+    start: start + 16,
+    checkBars: BAR,
+    velocity: velocity - 0.04,
+    gate: 1.02,
   });
-  return notes;
+  const leaned = lean(concatNotes(hook, answer), [[start + 28, start + 30]]);
+  return humanise(phrase(legato(leaned, 0.05), start, 32, 0.14), 0.03, 9);
 }
 
-function kickLine(): Note[] {
-  return concatNotes(
-    drumLine(FLOOR_KICK, { start: INTRO, pitch: 'C1', velocity: 0.7, times: 4 }),
-    drumLine(FLOOR_KICK, { start: A, pitch: 'C1', velocity: 0.92, times: A_CHORDS.length }),
-    // B: the busier breakbeat variant (more hits, not just louder ones) — real drum weight.
-    drumLine(BREAK_KICK_BUSY, { start: B, pitch: 'C1', velocity: 0.95, times: B_CHORDS.length }),
-    drumLine(FLOOR_KICK, { start: CHORUS, pitch: 'C1', velocity: 0.9, times: CHORUS_CHORDS.length }),
-    rampedDrumBars([BREAK_KICK_MED, BREAK_KICK_BUSY, BREAK_KICK_BUSY], BRIDGE, ramp(BRIDGE_CHORDS.length, 0.92, 1)),
-    drumLine(FLOOR_KICK, { start: A2, pitch: 'C1', velocity: 0.92, times: A2_CHORDS.length }),
-    drumLine(FLOOR_KICK, { start: TURN, pitch: 'C1', velocity: 0.9, times: TURN_CHORDS.length }),
-    // A2 only: an extra long-decay boom under the downbeat — trimmed a notch so it no longer
-    // dominates the master normaliser and crushes every other section's level.
-    drumLine('o.......', { start: A2, step: 0.5, pitch: 'C1', velocity: 0.78, times: A2_CHORDS.length }),
-  );
-}
+// --- parts -----------------------------------------------------------------
 
-function clapLine(): Note[] {
-  return concatNotes(
-    drumLine(FLOOR_CLAP, { start: A, pitch: 'C3', velocity: 0.78, times: A_CHORDS.length }),
-    // B: a soft ghost accent alongside the snare — a little more weight without losing the breakbeat feel.
-    drumLine(B_CLAP_ACCENT, { start: B, pitch: 'C3', velocity: 0.55, times: B_CHORDS.length }),
-    drumLine(FLOOR_CLAP, { start: CHORUS, pitch: 'C3', velocity: 0.84, times: CHORUS_CHORDS.length }),
-    drumLine(FLOOR_CLAP, { start: A2, pitch: 'C3', velocity: 0.86, times: A2_CHORDS.length }),
-    drumLine(FLOOR_CLAP, { start: TURN, pitch: 'C3', velocity: 0.8, times: TURN_CHORDS.length }),
-  );
-}
+/** Electric piano: colour tones only — the bass owns the roots. */
+const epianoNotes = humanise(
+  concatNotes(
+    compLine(INTRO_CHORDS, [{ at: 0, dur: 1.7, vel: 0.5, roll: 0.02 }, { at: 2.5, dur: 1.2, vel: 0.42 }], {
+      start: INTRO,
+      center: 60,
+      perBar: (bar) => 0.82 + bar * 0.03,
+    }),
+    compLine(
+      A_CHORDS,
+      [
+        { at: 0.5, dur: 0.45, vel: 0.6, roll: 0.015 },
+        { at: 1.5, dur: 0.9, vel: 0.66 },
+        { at: 2.75, dur: 0.3, vel: 0.5 },
+        { at: 3.5, dur: 0.45, vel: 0.62 },
+      ],
+      { start: A, center: 60, perBar: (bar) => (bar % 8 === 7 ? 0.86 : bar % 4 === 0 ? 1.04 : 0.96) },
+    ),
+    compLine(
+      CHORUS_CHORDS,
+      [
+        { at: 0, dur: 0.6, vel: 0.62, roll: 0.012 },
+        { at: 1.75, dur: 0.5, vel: 0.56 },
+        { at: 2.5, dur: 1.2, vel: 0.6 },
+      ],
+      { start: CHORUS, center: 60, perBar: (bar) => (bar >= 8 ? 1.06 : 0.98) },
+    ),
+    // The bridge is the electric piano's own eight bars: it comps looser and
+    // higher while the strings take the tune.
+    compLine(
+      BRIDGE_CHORDS,
+      [
+        { at: 0.5, dur: 0.6, vel: 0.54, roll: 0.02 },
+        { at: 2, dur: 0.9, vel: 0.6 },
+        { at: 3.25, dur: 0.5, vel: 0.48 },
+      ],
+      { start: BRIDGE, center: 60, perBar: (bar) => 0.8 + bar * 0.02 },
+    ),
+    compLine(
+      A_CHORDS,
+      [
+        { at: 0.5, dur: 0.45, vel: 0.64, roll: 0.015 },
+        { at: 1.5, dur: 0.9, vel: 0.7 },
+        { at: 2.75, dur: 0.3, vel: 0.54 },
+        { at: 3.5, dur: 0.45, vel: 0.66 },
+      ],
+      { start: A2, center: 60, perBar: (bar) => (bar % 4 === 0 ? 1.06 : 1) },
+    ),
+    compLine(TURN_CHORDS, [{ at: 0, dur: 1.8, vel: 0.6, roll: 0.02 }, { at: 2.5, dur: 1.2, vel: 0.52 }], {
+      start: TURN,
+      center: 60,
+    }),
+  ),
+  0.03,
+  21,
+);
 
-function snareLine(): Note[] {
-  return concatNotes(
-    drumLine(BREAK_SNARE_BUSY, { start: B, pitch: 'D3', velocity: 0.94, times: B_CHORDS.length }),
-    rampedDrumBars([BREAK_SNARE_MED, BREAK_SNARE_BUSY, BREAK_SNARE_BUSY], BRIDGE, ramp(BRIDGE_CHORDS.length, 0.88, 1), 'D3'),
-  );
-}
+/** The tune, over three sections. */
+const leadNotes = concatNotes(theme(A, 0.8), theme(A + 32, 0.84), theme(A2, 0.88), theme(A2 + 32, 0.9));
 
-function hatLine(): Note[] {
-  return concatNotes(
-    drumLine(HAT_16, { start: A, pitch: 'F#3', velocity: 0.4, times: A_CHORDS.length }),
-    drumLine(HAT_BUSY, { start: B, pitch: 'F#3', velocity: 0.5, times: B_CHORDS.length }),
-    drumLine(HAT_16, { start: CHORUS, pitch: 'F#3', velocity: 0.56, times: CHORUS_CHORDS.length }),
-    rampedDrumBars([HAT_MED, HAT_BUSY, HAT_BUSY], BRIDGE, ramp(BRIDGE_CHORDS.length, 0.44, 0.64), 'F#3'),
-    drumLine(HAT_16, { start: A2, pitch: 'F#3', velocity: 0.52, times: A2_CHORDS.length }),
-    drumLine(HAT_16, { start: TURN, pitch: 'F#3', velocity: 0.42, times: TURN_CHORDS.length }),
-  );
-}
+/** The flute joins only for the second chorus, an octave up: the lift you hear. */
+const fluteNotes = atVolume(doubled(chorusMelody(CHORUS + 32, 0.8), 12, 0.92), 1);
 
-/** Palm-muted eighth chugs following the chord roots — notes shorter than 0.12s mute themselves. */
-function guitarChugs(chords: string[], start: number, velocity: number | number[] = 0.72): Note[] {
-  const notes: Note[] = [];
-  const roots = chordRoots(chords, 2);
-  chords.forEach((_, bar) => {
-    const root = roots[bar]!;
-    const v = Array.isArray(velocity) ? velocity[bar]! : velocity;
-    notes.push(...drumLine('x.x.x.x.x.x.x.x.', { start: start + bar * BAR, step: 0.25, pitch: root, velocity: v }));
-  });
-  return notes;
-}
+/**
+ * Horns sing the chorus — Ab3-Bb4 is the middle of their range, which is why
+ * the hook was written there — and answer the theme's phrase ends elsewhere.
+ */
+const brassNotes = concatNotes(
+  chorusMelody(CHORUS, 0.78),
+  chorusMelody(CHORUS + 32, 0.84),
+  // Two-note answers in the gaps at the end of each A phrase.
+  humanise(
+    [
+      [A + 30, 0.5, 'F4', 0.78],
+      [A + 31, 0.75, 'Db4', 0.72],
+      [A + 62, 0.5, 'F4', 0.8],
+      [A + 63, 0.75, 'Bb3', 0.74],
+      [A2 + 30, 0.5, 'F4', 0.84],
+      [A2 + 31, 0.75, 'Db4', 0.78],
+      [A2 + 62, 0.5, 'Ab4', 0.86],
+      [A2 + 63, 0.75, 'F4', 0.8],
+    ] as Note[],
+    0.02,
+    5,
+  ),
+);
 
-function guitarLine(): Note[] {
-  return concatNotes(
-    guitarChugs(A_CHORDS, A, 0.72),
-    guitarChugs(B_CHORDS, B, 0.9),
-    // Chorus: long sustained power chords instead of chugs — brighter, still edged, a co-peak with A2.
-    chordLine(CHORUS_CHORDS, { start: CHORUS, octave: 3, center: 60, velocity: 0.8, dur: 3.6 }),
-    guitarChugs(BRIDGE_CHORDS, BRIDGE, ramp(BRIDGE_CHORDS.length, 0.74, 1)),
-    // A2: a wall of sustained power chords instead of muted chugs — trimmed a notch from the first pass.
-    chordLine(A2_CHORDS, { start: A2, octave: 2, center: 55, velocity: 0.72, dur: 3.85 }),
-  );
-}
+/** Brass stabs: the punctuation, always on an off beat, never on the downbeat. */
+const brassStabNotes = humanise(
+  gated(
+    concatNotes(
+      chordLine(['F7sus4'], { start: INTRO + 30, octave: 3, center: 62, velocity: 0.72, dur: 1 }),
+      chordLine([A_CHORDS[0]!], { start: A + 3.5, octave: 3, center: 62, velocity: 0.7, dur: 0.6 }),
+      chordLine([A_CHORDS[4]!], { start: A + 19.5, octave: 3, center: 62, velocity: 0.72, dur: 0.6 }),
+      chordLine([A_CHORDS[8]!], { start: A + 35.5, octave: 3, center: 62, velocity: 0.74, dur: 0.6 }),
+      chordLine([CHORUS_CHORDS[0]!], { start: CHORUS - 0.5, octave: 3, center: 64, velocity: 0.8, dur: 0.8 }),
+      chordLine([CHORUS_CHORDS[8]!], { start: CHORUS + 31.5, octave: 3, center: 64, velocity: 0.82, dur: 0.8 }),
+      chordLine([A_CHORDS[0]!], { start: A2 - 0.5, octave: 3, center: 62, velocity: 0.86, dur: 0.8 }),
+      chordLine([A_CHORDS[0]!], { start: A2 + 3.5, octave: 3, center: 62, velocity: 0.78, dur: 0.6 }),
+      chordLine([A_CHORDS[8]!], { start: A2 + 35.5, octave: 3, center: 62, velocity: 0.8, dur: 0.6 }),
+      chordLine([TURN_CHORDS[3]!], { start: TURN + 11, octave: 3, center: 62, velocity: 0.78, dur: 1 }),
+    ),
+    0.9,
+  ),
+  0.03,
+  13,
+);
 
-/** Second guitar: delayed ~0.012 beat, a sparser root+5th pattern instead of an identical double. `scale` boosts (or trims) both. */
-function guitarChugs2(chords: string[], start: number, scale: number | number[] = 1): Note[] {
-  const notes: Note[] = [];
-  const roots = chordRoots(chords, 2);
-  const pattern = 'x.x...x.x.x...x.'.split('');
-  chords.forEach((_, bar) => {
-    const root = roots[bar]!;
-    const fifth = root + 7;
-    const s = Array.isArray(scale) ? scale[bar]! : scale;
-    pattern.forEach((ch, i) => {
-      if (ch !== 'x') return;
-      const at = start + bar * BAR + i * 0.25 + 0.012;
-      const strong = i === 0 || i === 8;
-      notes.push([at, 0.25, root, Math.min(1, (strong ? 0.78 : 0.58) * s)]);
-      if (strong) notes.push([at, 0.25, fifth, Math.min(1, 0.55 * s)]);
-    });
-  });
-  return notes;
-}
+/**
+ * Supersaw: the dark cell as a stab, doubling the theme's own leap at bars 3
+ * and 6 — and nothing else. THEMES.md gives this cue "SONGSTRESS_DARK as
+ * supersaw stabs", and a supersaw pad held through the chorus would put a
+ * synth chord in the same octave as the horns singing the hook.
+ */
+const supersawNotes = concatNotes(
+  ...[A + 8, A + 20, A + 40, A + 52, A2 + 8, A2 + 20, A2 + 40, A2 + 52].map((beat, i) =>
+    gated(
+      humanise(cell(SONGSTRESS_DARK, beat, i >= 4 ? 'Bb5' : 'Bb4', i >= 4 ? 0.66 : 0.56), 0.03, 17),
+      0.72,
+    ),
+  ),
+);
 
-function guitarLine2(): Note[] {
-  return concatNotes(
-    guitarChugs2(A_CHORDS, A),
-    guitarChugs2(B_CHORDS, B, 1.3),
-    chordLine(CHORUS_CHORDS, { start: CHORUS + 0.012, octave: 2, center: 55, velocity: 0.66, dur: 3.5, roll: 0.06 }),
-    guitarChugs2(BRIDGE_CHORDS, BRIDGE, ramp(BRIDGE_CHORDS.length, 1, 1.35)),
-    // A2 was a hard "fuller" boost (1.12x + a 0.7 fifth) — trimmed a notch so it no longer dominates.
-    guitarChugs2(A2_CHORDS, A2, 1.02),
-  );
-}
+/** Fingered bass: a real line with ghosts and air, not an octave pump. */
+const BASS_A = [
+  { at: 0, dur: 0.85, step: 0, vel: 0.88 },
+  { at: 1.5, dur: 0.3, step: 0, vel: 0.44 },
+  { at: 2, dur: 0.55, step: 7, vel: 0.74 },
+  { at: 2.75, dur: 0.25, step: 12, vel: 0.5 },
+  { at: 3.25, dur: 0.6, step: 7, vel: 0.68 },
+];
+const BASS_CHORUS = [
+  { at: 0, dur: 0.9, step: 0, vel: 0.9 },
+  { at: 1, dur: 0.4, step: 0, vel: 0.5 },
+  { at: 2, dur: 0.9, step: 12, vel: 0.72 },
+  { at: 3.5, dur: 0.4, step: 7, vel: 0.66 },
+];
+const BASS_BRIDGE = [
+  { at: 0, dur: 1.4, step: 0, vel: 0.76 },
+  { at: 2, dur: 0.8, step: 7, vel: 0.62 },
+  { at: 3.5, dur: 0.4, step: 12, vel: 0.56 },
+];
 
-/** Choir hits marking the big structural downbeats — aeon grandeur, not a continuous bed. */
-function choirHits(): Note[] {
-  return concatNotes(
-    chordLine([B_CHORDS[0]!], { start: B, octave: 4, center: 67, velocity: 0.75, dur: 2 }),
-    chordLine([CHORUS_CHORDS[0]!], { start: CHORUS, octave: 4, center: 67, velocity: 0.95, dur: 3.5 }),
-    chordLine([CHORUS_CHORDS[4]!], { start: CHORUS + 16, octave: 4, center: 67, velocity: 0.88, dur: 3.5 }),
-    chordLine([CHORUS_CHORDS[8]!], { start: CHORUS + 32, octave: 4, center: 67, velocity: 0.9, dur: 3.5 }),
-    chordLine([BRIDGE_CHORDS[8]!], { start: BRIDGE + 32, octave: 4, center: 67, velocity: 0.85, dur: 2 }),
-    chordLine([A2_CHORDS[0]!], { start: A2, octave: 4, center: 67, velocity: 0.95, dur: 3.8 }),
-    chordLine([A2_CHORDS[4]!], { start: A2 + 16, octave: 4, center: 67, velocity: 0.85, dur: 3.8 }),
-    chordLine([A2_CHORDS[8]!], { start: A2 + 32, octave: 4, center: 67, velocity: 0.9, dur: 3.8 }),
-  );
-}
+const bassNotes = concatNotes(
+  bassLine(INTRO_CHORDS.slice(4), BASS_A, { start: INTRO + 16, octave: 1, velocity: 0.78 }),
+  bassLine(A_CHORDS, BASS_A, { start: A, octave: 1 }),
+  bassLine(CHORUS_CHORDS, BASS_CHORUS, { start: CHORUS, octave: 1, velocity: 1.02 }),
+  bassLine(BRIDGE_CHORDS, BASS_BRIDGE, { start: BRIDGE, octave: 1, velocity: 0.88 }),
+  bassLine(A_CHORDS, BASS_A, { start: A2, octave: 1, velocity: 1.04 }),
+  bassLine(TURN_CHORDS, BASS_A, { start: TURN, octave: 1, velocity: 0.94 }),
+);
 
-function bellAccents(): Note[] {
-  return [
-    [A, 3, 'Bb4', 0.6],
-    [CHORUS, 4, 'Db5', 0.65],
-    [CHORUS + 32, 4, 'F5', 0.6],
-    [BRIDGE + 40, 2, 'Ab4', 0.6],
-    [A2, 3, 'Bb4', 0.72],
-    [A2 + 32, 3, 'Bb5', 0.65],
-    [TURN, 2, 'F5', 0.6],
-  ];
-}
+/** Strings: the friend the party is fighting. They arrive late and leave early. */
+const stringsNotes = concatNotes(
+  // The bridge line: the jazz bridge played straight, legato, as a lament.
+  humanise(
+    legato(
+      tracker(SONGSTRESS_BRIDGE, { start: BRIDGE, checkBars: BAR, velocity: 0.6, gate: 1.02 }),
+      0.09,
+    ),
+    0.03,
+    31,
+  ),
+  humanise(
+    legato(
+      tracker(SONGSTRESS_BRIDGE, { start: BRIDGE + 32, checkBars: BAR, velocity: 0.66, gate: 1.02, transpose: -12 }),
+      0.09,
+    ),
+    0.03,
+    32,
+  ),
+  // A held bed under the second chorus, entering only at the lift.
+  padLine(CHORUS_CHORDS.slice(8), { start: CHORUS + 32, center: 55, velocity: 0.42, dur: 3.9, seed: 19 }),
+);
+
+// --- kit -------------------------------------------------------------------
+
+const KICK_A = 'X..x..x...x.x...';
+const KICK_CHORUS = 'X..x..x.X...x.x.';
+const KICK_BRIDGE = 'x.......x.......';
+const SNARE_A = '....X..g....X.gg';
+const SNARE_BRIDGE = '....g.......X...';
+const HAT_A = 'X.x.x.x.X.x.x.x.';
+const HAT_BUSY = 'X.xgx.xgX.xgx.xg';
+const HAT_BRIDGE = 'x...g...x...g...';
+
+const kickNotes = concatNotes(
+  groove(KICK_A, { start: INTRO + 16, bars: 4, pitch: 'C2', velocity: 0.6, seed: 2 }),
+  groove(KICK_A, { start: A, bars: 16, pitch: 'C2', velocity: 0.78, seed: 3, perBar: (b) => (b % 8 === 0 ? 1.08 : 1) }),
+  groove(KICK_CHORUS, { start: CHORUS, bars: 16, pitch: 'C2', velocity: 0.82, seed: 4 }),
+  groove(KICK_BRIDGE, { start: BRIDGE, bars: 16, pitch: 'C2', velocity: 0.6, seed: 5, perBar: (b) => 0.9 + b * 0.02 }),
+  groove(KICK_A, { start: A2, bars: 16, pitch: 'C2', velocity: 0.88, seed: 6, perBar: (b) => (b % 8 === 0 ? 1.06 : 1) }),
+  groove(KICK_CHORUS, { start: TURN, bars: 4, pitch: 'C2', velocity: 0.84, seed: 7 }),
+);
+
+const snareNotes = concatNotes(
+  groove(SNARE_A, { start: A, bars: 15, pitch: 'D2', velocity: 0.72, ghost: 0.26, seed: 8 }),
+  tomFill(A + 62, ['D2', 'D2', 'A2', 'A2', 'F2', 'F2', 'D2', 'D2'], 0.25, 0.66),
+  groove(SNARE_A, { start: CHORUS, bars: 16, pitch: 'D2', velocity: 0.76, ghost: 0.28, seed: 9 }),
+  groove(SNARE_BRIDGE, { start: BRIDGE, bars: 16, pitch: 'D2', velocity: 0.52, ghost: 0.2, seed: 10 }),
+  groove(SNARE_A, { start: A2, bars: 15, pitch: 'D2', velocity: 0.8, ghost: 0.3, seed: 11 }),
+  tomFill(A2 + 62, ['D2', 'A2', 'F2', 'D2', 'A2', 'F2', 'D2', 'D2'], 0.25, 0.78),
+  groove(SNARE_A, { start: TURN, bars: 4, pitch: 'D2', velocity: 0.78, ghost: 0.3, seed: 12 }),
+);
+
+const hatNotes = concatNotes(
+  groove(HAT_A, { start: INTRO, bars: 8, pitch: 'F#2', velocity: 0.3, seed: 13, perBar: (b) => 0.7 + b * 0.05 }),
+  groove(HAT_A, { start: A, bars: 16, pitch: 'F#2', velocity: 0.4, seed: 14 }),
+  groove(HAT_BUSY, { start: CHORUS, bars: 16, pitch: 'F#2', velocity: 0.42, seed: 15 }),
+  groove(HAT_BRIDGE, { start: BRIDGE, bars: 16, pitch: 'F#2', velocity: 0.3, seed: 16 }),
+  groove(HAT_BUSY, { start: A2, bars: 16, pitch: 'F#2', velocity: 0.44, seed: 17 }),
+  groove(HAT_A, { start: TURN, bars: 4, pitch: 'F#2', velocity: 0.42, seed: 18 }),
+);
+
+const tomNotes = concatNotes(
+  tomFill(A + 30, ['A2', 'F2', 'D2', 'D2'], 0.25, 0.6),
+  tomFill(CHORUS - 1, ['A2', 'F2', 'D2', 'C2'], 0.25, 0.7),
+  tomFill(A2 - 1, ['A2', 'A2', 'F2', 'D2'], 0.25, 0.76),
+);
+
+const crashNotes: Note[] = [
+  [A, 1.6, 'C4', 0.52],
+  [CHORUS, 1.8, 'C4', 0.62],
+  [CHORUS + 32, 1.8, 'C4', 0.58],
+  [A2, 1.8, 'C4', 0.66],
+  [TURN, 1.6, 'C4', 0.5],
+];
+
+/** Celesta: three notes, at the three section heads. Nothing else. */
+const celestaNotes: Note[] = [
+  [CHORUS, 2, 'Db6', 0.5],
+  [CHORUS + 32, 2, 'F6', 0.46],
+  [A2, 2, 'Bb5', 0.5],
+];
 
 export const bossFfx2AeonTrack: Track = {
   name: 'boss-ffx2-aeon',
@@ -354,42 +382,33 @@ export const bossFfx2AeonTrack: Track = {
   timeSig: [4, 4],
   loop: { start: A, end: LENGTH },
   length: LENGTH,
-  tailSec: 2.5,
+  tailSec: 3,
   fx: {
-    reverb: { room: 0.55, damp: 0.42, width: 0.9, preDelay: 0.01 },
-    delay: { timeBeats: 0.375, feedback: 0.24, damp: 3200 },
+    reverb: { room: 0.52, damp: 0.42, width: 0.9, preDelay: 0.012 },
+    delay: { timeBeats: 0.375, feedback: 0.2, damp: 3400 },
   },
   channels: [
+    { name: 'epiano', instrument: 'epiano', volume: 0.7, pan: -0.14, notes: epianoNotes, fx: { reverb: 0.16 } },
     {
-      name: 'riff stabs',
-      instrument: 'supersaw',
-      volume: 0.75,
-      pan: -0.1,
-      notes: concatNotes(
-        riffA(A_CHORDS, A, 0.85),
-        riffCallResponse(B_CHORDS, B),
-        riffBridge(BRIDGE_CHORDS, BRIDGE),
-        riffA2(A2_CHORDS, A2),
-      ),
-      fx: { reverb: 0.15, delay: 0.12 },
+      name: 'trumpets',
+      instrument: 'brass-stab',
+      volume: 0.64,
+      pan: 0.1,
+      notes: ramp(leadNotes, 1, 1.06, A, LENGTH - A),
+      fx: { reverb: 0.22, delay: 0.14 },
     },
-    {
-      name: 'chorus hook',
-      instrument: 'supersaw',
-      volume: 0.58,
-      pan: 0.15,
-      notes: chorusHookLine(),
-      fx: { reverb: 0.25, delay: 0.15 },
-    },
-    { name: 'synth-bass', instrument: 'synth-bass', volume: 0.9, pan: 0, notes: bassLine(), fx: { reverb: 0.04 } },
-    { name: 'kick', instrument: 'kick-808', volume: 0.9, pan: 0, notes: kickLine() },
-    { name: 'clap', instrument: 'clap', volume: 0.72, pan: 0.05, notes: clapLine(), fx: { reverb: 0.1 } },
-    { name: 'snare', instrument: 'snare-909', volume: 0.72, pan: -0.05, notes: snareLine(), fx: { reverb: 0.12 } },
-    { name: 'hats', instrument: 'hat', volume: 0.42, pan: 0.22, notes: hatLine() },
-    { name: 'guitar', instrument: 'guitar-dist', volume: 0.7, pan: 0.28, notes: guitarLine(), fx: { reverb: 0.15 } },
-    { name: 'guitar-2', instrument: 'guitar-dist', volume: 0.62, pan: -0.32, notes: guitarLine2(), fx: { reverb: 0.15 } },
-    { name: 'choir hits', instrument: 'choir', volume: 0.6, pan: 0, notes: choirHits(), fx: { reverb: 0.45 } },
-    { name: 'bell', instrument: 'bell', volume: 0.45, pan: 0.3, notes: bellAccents(), fx: { reverb: 0.4, delay: 0.2 } },
+    { name: 'horns', instrument: 'brass', volume: 0.66, pan: -0.08, notes: brassNotes, fx: { reverb: 0.28 } },
+    { name: 'flute', instrument: 'flute', volume: 0.5, pan: 0.12, notes: fluteNotes, fx: { reverb: 0.32 } },
+    { name: 'brass punches', instrument: 'brass-stab', volume: 0.56, pan: 0.18, notes: brassStabNotes, fx: { reverb: 0.2 } },
+    { name: 'supersaw', instrument: 'supersaw', volume: 0.44, pan: 0.2, notes: supersawNotes, fx: { reverb: 0.22, delay: 0.16 } },
+    { name: 'strings', instrument: 'strings', volume: 0.6, pan: -0.2, notes: stringsNotes, fx: { reverb: 0.34 } },
+    { name: 'bass', instrument: 'bass', volume: 0.85, pan: 0, notes: nudge(bassNotes, 0.004), fx: { reverb: 0.05 } },
+    { name: 'kick', instrument: 'kick', volume: 0.72, pan: 0, notes: kickNotes, fx: { reverb: 0.08 } },
+    { name: 'snare', instrument: 'snare', volume: 0.6, pan: -0.06, notes: snareNotes, fx: { reverb: 0.14 } },
+    { name: 'hats', instrument: 'hat', volume: 0.34, pan: 0.24, notes: hatNotes, fx: { reverb: 0.08 } },
+    { name: 'toms', instrument: 'tom', volume: 0.52, pan: 0.12, notes: tomNotes, fx: { reverb: 0.14 } },
+    { name: 'crash', instrument: 'crash', volume: 0.38, pan: 0.1, notes: crashNotes, fx: { reverb: 0.3 } },
+    { name: 'celesta', instrument: 'celesta', volume: 0.4, pan: -0.3, notes: celestaNotes, fx: { reverb: 0.4, delay: 0.2 } },
   ],
 };
 
