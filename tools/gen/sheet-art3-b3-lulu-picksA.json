@@ -1,0 +1,27 @@
+{
+  "rows": [
+    {
+      "kind": "character",
+      "cellHeight": 1000,
+      "cellWidth": 640,
+      "label": "finalists",
+      "items": [
+        {
+          "path": "public/art/characters/lulu/f3attack.3.png",
+          "caption": "attack f3attack.3"
+        },
+        {
+          "path": "public/art/characters/lulu/f3cast.4.png",
+          "caption": "cast f3cast.4"
+        },
+        {
+          "path": "public/art/characters/lulu/f4hurt.2.png",
+          "caption": "hurt f4hurt.2"
+        }
+      ]
+    }
+  ],
+  "subtitle": "zoom check: anatomy, doll count, belt skirt, cutout",
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-picksA.png",
+  "title": "LULU picks A - attack / cast / hurt"
+}

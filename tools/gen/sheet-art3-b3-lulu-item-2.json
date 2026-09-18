@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "cellHeight": 660,
+      "label": "promoted idle (reference)",
+      "kind": "character",
+      "items": [
+        {
+          "path": "public/art/characters/lulu/idle.png",
+          "caption": "IDLE"
+        }
+      ],
+      "cellWidth": 440
+    },
+    {
+      "cellHeight": 660,
+      "label": "item reshoot",
+      "kind": "character",
+      "items": [
+        {
+          "path": "public/art/characters/lulu/f4item.1.png",
+          "caption": "f4item.1"
+        },
+        {
+          "path": "public/art/characters/lulu/f4item.2.png",
+          "caption": "f4item.2"
+        },
+        {
+          "path": "public/art/characters/lulu/f4item.3.png",
+          "caption": "f4item.3"
+        },
+        {
+          "path": "public/art/characters/lulu/f4item.4.png",
+          "caption": "f4item.4"
+        },
+        {
+          "path": "public/art/characters/lulu/f4item.5.png",
+          "caption": "f4item.5"
+        }
+      ],
+      "cellWidth": 440
+    }
+  ],
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-item-2.png",
+  "subtitle": "facing first, then belt skirt / doll count / anatomy",
+  "title": "LULU ITEM - reshoot vs new idle"
+}

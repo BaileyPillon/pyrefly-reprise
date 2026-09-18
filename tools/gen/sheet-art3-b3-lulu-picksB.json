@@ -1,0 +1,27 @@
+{
+  "rows": [
+    {
+      "kind": "character",
+      "cellHeight": 1000,
+      "cellWidth": 640,
+      "label": "finalists",
+      "items": [
+        {
+          "path": "public/art/characters/lulu/f4item.2.png",
+          "caption": "item f4item.2"
+        },
+        {
+          "path": "public/art/characters/lulu/f3victory.4.png",
+          "caption": "victory f3victory.4"
+        },
+        {
+          "path": "public/art/characters/lulu/f3ko.2.png",
+          "caption": "ko f3ko.2"
+        }
+      ]
+    }
+  ],
+  "subtitle": "zoom check: anatomy, doll count, belt skirt, cutout",
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-picksB.png",
+  "title": "LULU picks B - item / victory / ko"
+}

@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "cellHeight": 660,
+      "label": "promoted idle (reference)",
+      "kind": "character",
+      "items": [
+        {
+          "path": "public/art/characters/lulu/idle.png",
+          "caption": "IDLE"
+        }
+      ],
+      "cellWidth": 440
+    },
+    {
+      "cellHeight": 660,
+      "label": "hurt reshoot",
+      "kind": "character",
+      "items": [
+        {
+          "path": "public/art/characters/lulu/f4hurt.1.png",
+          "caption": "f4hurt.1"
+        },
+        {
+          "path": "public/art/characters/lulu/f4hurt.2.png",
+          "caption": "f4hurt.2"
+        },
+        {
+          "path": "public/art/characters/lulu/f4hurt.3.png",
+          "caption": "f4hurt.3"
+        },
+        {
+          "path": "public/art/characters/lulu/f4hurt.4.png",
+          "caption": "f4hurt.4"
+        },
+        {
+          "path": "public/art/characters/lulu/f4hurt.5.png",
+          "caption": "f4hurt.5"
+        }
+      ],
+      "cellWidth": 440
+    }
+  ],
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-hurt-2.png",
+  "subtitle": "facing first, then belt skirt / doll count / anatomy",
+  "title": "LULU HURT - reshoot vs new idle"
+}
