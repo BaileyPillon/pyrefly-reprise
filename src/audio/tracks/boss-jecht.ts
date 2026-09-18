@@ -1,27 +1,63 @@
 /**
- * "Blitz for Two" — Jecht (Braska's Final Aeon) boss theme.
+ * "Blitz for Two" — Jecht, Braska's Final Aeon.
  *
- * ORIGINAL COMPOSITION. A son finally squaring up to his father: hard rock
- * first, orchestra second. D minor, drop-D-flavoured power chords, 144 bpm.
- * Double-tracked distorted guitar — two channels panned +-0.35, genuinely
- * different content (R drops the off-grid ghost chugs, swaps every root+5th
- * ring for root+octave and back, and sits ~5ms behind L), not just a
- * velocity trick. A real single-line solo (D aeolian/pentatonic, developed
- * across its 8 bars) throws in the occasional grace-note bend. The bridge
- * drops to half-time and lets the brass sing `PYREFLY_RISE_MAJOR` — the old
- * man's pride showing through the fury — before the riff crashes back in.
+ * ORIGINAL COMPOSITION. D minor, 144 bpm. A son squaring up to his father,
+ * and the cue's whole design is that neither of them stops talking.
  *
- * Form (4/4, 64 bars, 106.7 s):
- *   bars  1- 4  intro    beats   0- 16  kit + bass alone, guitar teases the riff
- *   bars  5-12  A        beats  16- 48  riff in full, brass-stab accents      <- loop start
- *   bars 13-20  A2       beats  48- 80  riff variation, grows over A, tom fill
- *   bars 21-28  solo     beats  80-112  guitar-lead solo; rhythm guitars thin to quiet chugs
- *   bars 29-36  bridge   beats 112-144  half-time; brass sings the motif over its own chords
- *   bars 37-44  climax   beats 144-176  the riff crashes back, hardest hit of the piece
- *   bars 45-52  solo 2   beats 176-208  solo reprise, busier, one bend climax, then builds
- *   bars 53-60  final    beats 208-240  riff reprise, full band
- *   bars 61-64  turn     beats 240-256  four-bar turnaround back into the loop
- * Loop runs 16 -> 256; the turnaround's dominant chord resolves into the D minor riff.
+ * Per `docs/audio/THEMES.md`, this cue carries two themes at once:
+ *
+ *   **FATHER** — the riff. Four bars, register D2-D3, entirely off the beat,
+ *   and its bar-1 pitch skeleton is `1 - b7 - 1 - b3`, which is `HYMN_HEAD`
+ *   with every note shoved sideways. Straighten it and the swagger turns back
+ *   into the prayer; `scene-gagazet` does exactly that on one horn and says
+ *   nothing about it. Bars 1 and 3 share an identical rhythm at different
+ *   pitches — that repetition is what makes a swagger a hook rather than a
+ *   noodle, so it is not varied. Bar 2 has air in it. Bar 4 is the only bar
+ *   with no rest and lands the octave late, on its own downbeat.
+ *
+ *   **FAREWELL** — bars 9-12 only, transposed +3 into D minor: the climb, the
+ *   octave it cannot hold, and the b6 sounded over the tonic while
+ *   `bVI - bVII - i` closes underneath. It arrives at half-time in the bridge,
+ *   and in the climax the two themes are superimposed *literally*, FATHER
+ *   entering **two beats late** so its syncopations land against the lament's
+ *   downbeats instead of with them. That collision needs no fudging: FATHER's
+ *   bars 3-4 are `Bb5 - C5 - D5`, which is FAREWELL's own bars 10-11 in the
+ *   same metric position. The two themes were built on one frame.
+ *   Do not smooth it out. It is supposed to sound like an argument.
+ *
+ * THE ONE RENDERER CONSTRAINT, VERBATIM: the and-of-beat is LOUDER than the
+ * downbeat — 0.95 against 0.80, via `offbeat()` below. Syncopation quieter
+ * than the beat it displaces is not syncopation, it is a mistake, and no
+ * humaniser, compressor or normaliser may level it out.
+ *
+ * Resemblance guard, re-read, and it cost a rewrite. Three features identify
+ * the source cue, and none of them are its pitches:
+ *   - **no repeated-note chug.** The riff never restrikes the same pitch on
+ *     consecutive subdivisions. An earlier draft of this cue was built on
+ *     palm-muted sixteenths hammering one note — exactly the banned figure —
+ *     and the rhythm guitars now play FATHER itself instead.
+ *   - **no shouted or chanted male vocal.** The only voices here are a
+ *     wordless choir, and only in the climax, and only on the lament.
+ *   - **no descending chromatic tag** closing a phrase. The turnaround is
+ *     `bVI - bVII`, the score's own fingerprint, not a chromatic walk-down.
+ * The blue b5 stays rationed to exactly two grace notes per statement, one
+ * climbing and one falling: a riff that plays its blue note constantly has no
+ * blue note.
+ *
+ * Form (4/4, 64 bars, 256 beats, 106.7 s):
+ *   beats   0- 16  intro    kit and bass; the guitar teases bar 1 and stops
+ *   beats  16- 48  A        FATHER twice, in full                     <- loop start
+ *   beats  48- 80  A2       the same riff, louder, brass on the off-beats
+ *   beats  80-112  solo     single-line lead; the rhythm guitars thin out
+ *   beats 112-144  bridge   HALF-TIME. FAREWELL bars 9-12, strings and brass
+ *                           in unison with a clean guitar an octave below,
+ *                           over Bb5 - C5 - D5 as a rock riff
+ *   beats 144-176  climax   BOTH AT ONCE. Lament above in strings and choir at
+ *                           half-time; FATHER below at full speed, 2 beats late
+ *   beats 176-208  solo 2   the lead returns busier, one bend at the top
+ *   beats 208-240  final    the riff, whole band
+ *   beats 240-256  turn     bVI - bVII, and back into the riff
+ * Loop 16 -> 256.
  */
 
 import {
@@ -34,39 +70,22 @@ import {
   motif,
   scaleVelocity,
   shiftNotes,
+  toMidi,
   tracker,
+  transposeNotes,
   type Note,
   type Track,
 } from '../score.ts';
-import { augment, cell, PYREFLY_RISE_MAJOR } from './motifs.ts';
+import {
+  FAREWELL_DYNAMICS,
+  FAREWELL_RH,
+  FATHER,
+  FATHER_CHORDS,
+  lean,
+  shapeByBar,
+} from './themes.ts';
 
 const BAR = 4;
-
-const INTRO_CHORDS = ['Dm', 'Dm', 'Dm', 'Dm'];
-const A_CHORDS = ['Dm', 'Dm', 'Bb', 'C', 'Dm', 'Dm', 'Bb', 'C'];
-const A2_CHORDS = ['Dm', 'C', 'Bb', 'C', 'Dm', 'Dm', 'Bb', 'A'];
-const SOLO_CHORDS = ['Dm', 'Bb', 'C', 'Dm', 'Gm', 'Dm', 'Bb', 'C'];
-// Reharmonised under the bridge motif: D-Em-Bm-G-A-Bm-G-A keeps every held brass
-// pitch a chord tone or a smooth 6th/9th/7th color, and ends on A (V) so the
-// C# leading tone pulls straight into the Dm crash at the climax.
-const BRIDGE_CHORDS = ['D', 'Em', 'Bm', 'G', 'A', 'Bm', 'G', 'A'];
-const CLIMAX_CHORDS = ['Dm', 'Dm', 'Bb', 'C', 'Dm', 'Bb', 'C', 'Dm'];
-const SOLO2_CHORDS = ['Dm', 'Bb', 'C', 'Dm', 'Gm', 'A', 'Bb', 'C'];
-const FINAL_CHORDS = ['Dm', 'Dm', 'Bb', 'C', 'Dm', 'Dm', 'Bb', 'C'];
-const TURN_CHORDS = ['Bb', 'C', 'Bb', 'A'];
-const ALL_CHORDS = [
-  ...INTRO_CHORDS,
-  ...A_CHORDS,
-  ...A2_CHORDS,
-  ...SOLO_CHORDS,
-  ...BRIDGE_CHORDS,
-  ...CLIMAX_CHORDS,
-  ...SOLO2_CHORDS,
-  ...FINAL_CHORDS,
-  ...TURN_CHORDS,
-];
-const BARS = ALL_CHORDS.length; // 64
-const LENGTH = BARS * BAR; // 256 beats = 106.7s @144bpm
 
 const INTRO = 0;
 const A = 16;
@@ -77,118 +96,205 @@ const CLIMAX = 144;
 const SOLO2 = 176;
 const FINAL = 208;
 const TURN = 240;
+const LENGTH = 256;
 
-/** Riff cell, semitone offsets from the bar's root: chugs (<0.12s = palm mute at 144bpm)
- * punctuated by ringing root+5th and root+octave power chords. */
-const RIFF_A: Note[] = [
-  [0, 0.2, 0, 0.9], [0.25, 0.2, 0, 0.82], [0.5, 0.2, 0, 0.9],
-  [1, 0.9, 0, 0.95], [1, 0.9, 7, 0.95],
-  [2, 0.2, 0, 0.88], [2.25, 0.2, 0, 0.8], [2.5, 0.2, 0, 0.88], [2.75, 0.2, 0, 0.82],
-  [3, 0.9, 0, 0.95], [3, 0.9, 12, 0.9],
-];
+/** FATHER is sixteen beats; a section holds two statements. */
+const RIFF_BEATS = 16;
 
-/** A2 variation: an extra chug and an earlier, shorter chord for syncopation. */
-const RIFF_A2: Note[] = [
-  [0, 0.2, 0, 0.9], [0.25, 0.2, 0, 0.82], [0.5, 0.2, 0, 0.9], [0.75, 0.2, 0, 0.84],
-  [1, 0.7, 0, 0.95], [1, 0.7, 7, 0.95], [1.75, 0.2, 0, 0.85],
-  [2, 0.2, 0, 0.88], [2.25, 0.2, 0, 0.8], [2.5, 0.2, 0, 0.88],
-  [3, 0.5, 0, 0.95], [3, 0.5, 7, 0.95], [3.5, 0.5, 0, 0.98], [3.5, 0.5, 12, 0.95],
-];
+// --------------------------------------------------------------- the riff
 
-/** Climax variation: mostly ringing chords, the hardest hit of the piece. */
-const RIFF_CLIMAX: Note[] = [
-  [0, 0.9, 0, 1], [0, 0.9, 7, 1],
-  [1, 0.2, 0, 0.85], [1.25, 0.2, 0, 0.8],
-  [1.5, 0.9, 0, 1], [1.5, 0.9, 7, 1],
-  [2.5, 0.2, 0, 0.85], [2.75, 0.2, 0, 0.8],
-  [3, 0.9, 0, 1], [3, 0.9, 12, 0.95],
-];
-
-/** Sparse muted chugs for the intro tease — no chords yet. */
-const RIFF_INTRO: Note[] = [
-  [0, 0.2, 0, 0.7], [0.5, 0.2, 0, 0.65], [1, 0.2, 0, 0.7],
-  [2, 0.2, 0, 0.7], [2.5, 0.2, 0, 0.65], [3, 0.2, 0, 0.7], [3.5, 0.2, 0, 0.75],
-];
-
-/** Turnaround riff: chugs building into a chord that rings into the loop point. */
-const RIFF_TURN: Note[] = [
-  [0, 0.2, 0, 0.85], [0.5, 0.2, 0, 0.8], [1, 0.2, 0, 0.85],
-  [1.5, 0.9, 0, 0.9], [1.5, 0.9, 7, 0.9],
-  [2.5, 0.2, 0, 0.85], [3, 0.9, 0, 0.95], [3, 0.9, 7, 0.95],
-];
-
-/** A long, quiet root+5th swell held under the bridge — "the fury" simmering under the pride. */
-const RIFF_SWELL: Note[] = [[0, 7.8, 0, 0.4], [0, 7.8, 7, 0.35]];
-
-/** Quiet palm-muted quarter chugs so the lead sits on top during the first solo. */
-const RIFF_CHUG_QUIET: Note[] = [[0, 0.18, 0, 0.42], [1, 0.18, 0, 0.38], [2, 0.18, 0, 0.42], [3, 0.18, 0, 0.38]];
-
-/** Busier muted chugs for the second solo — still well under the lead, but building. */
-const RIFF_CHUG_BUILD: Note[] = [
-  [0, 0.18, 0, 0.55], [0.5, 0.18, 0, 0.45], [1, 0.18, 0, 0.55],
-  [2, 0.18, 0, 0.55], [2.5, 0.18, 0, 0.45], [3, 0.18, 0, 0.55],
-];
-
-/** R's variant of a rhythm pattern: drop the off-grid 16th "ghost" chugs (the ones sitting
- * on a quarter-beat, not the beat or half-beat), and swap every root+5th/root+octave ring
- * for its opposite, so the double-track differs in substance, not just level. */
-function rPattern(pattern: Note[]): Note[] {
-  return pattern
-    .filter((n) => {
-      const frac = n[0] - Math.floor(n[0]);
-      const isGhostChug = n[1] < 0.3 && (Math.abs(frac - 0.25) < 1e-6 || Math.abs(frac - 0.75) < 1e-6);
-      return !isGhostChug;
-    })
-    .map((n): Note => {
-      if (n[2] === 7) return [n[0], n[1], 12, n[3]];
-      if (n[2] === 12) return [n[0], n[1], 7, n[3]];
-      return n;
-    });
+/**
+ * The and-of-beat is LOUDER than the downbeat. This is the single most
+ * important number in the cue and the loudest tell of a machine when it is
+ * inverted, so it is applied last and nothing after it touches velocity.
+ */
+function offbeat(notes: Note[], scale = 1): Note[] {
+  return notes.map((n): Note => {
+    const onBeat = Math.abs(n[0] - Math.round(n[0])) < 1e-6;
+    const base = onBeat ? 0.8 : 0.95;
+    // Grace notes (the rationed blue b5) sit under the note they lean into.
+    const grace = n[1] <= 0.26 ? 0.82 : 1;
+    return [n[0], n[1], n[2], Math.min(1, base * grace * scale)];
+  });
 }
 
-const RIFF_A_R = rPattern(RIFF_A);
-const RIFF_A2_R = rPattern(RIFF_A2);
-const RIFF_CLIMAX_R = rPattern(RIFF_CLIMAX);
-const RIFF_TURN_R = rPattern(RIFF_TURN);
-const RIFF_SWELL_R = rPattern(RIFF_SWELL);
 
-function riffNotes(pattern: Note[], chords: string[], start: number): Note[] {
-  return motif(pattern, barStarts(start, chords.length, BAR), chordRoots(chords, 3));
+/**
+ * A phrase that swells and falls, plus the deterministic +-0.04 velocity
+ * jitter THEMES.md asks for. A line rendered at one velocity is the single
+ * most machine-like thing a mock-up can do, and a sixteenth-note ostinato at
+ * one velocity is the "wall of constant-velocity sixteenths" the brief bans
+ * outright. The arch is the bible's default: 0.62 -> 0.78 -> 0.58 over a
+ * phrase, written here as a sine so it applies to any line.
+ *
+ * NOT applied to anything carrying a written accent — the boss off-beat
+ * rule, the motif's thrown-away snap, the locked canon — because levelling
+ * those out is exactly what this rule exists to prevent.
+ */
+function breathe(notes: Note[], phraseBeats: number, depth = 0.1): Note[] {
+  return notes.map((n, i): Note => {
+    const phase = ((n[0] % phraseBeats) + phraseBeats) % phraseBeats / phraseBeats;
+    const arch = Math.sin(phase * Math.PI) * depth - depth * 0.3;
+    const jitter = ((((i * 2654435761) >>> 0) % 2000) / 2000 - 0.5) * 0.08;
+    const v = (n[3] ?? 0.8) + arch + jitter;
+    return [n[0], n[1], n[2], Math.max(0.05, Math.min(1, v))];
+  });
 }
 
-function guitarCoreL(): Note[] {
+/** Two statements of FATHER from `start`, at `root`. */
+function riff(start: number, root: string, scale = 1, statements = 2): Note[] {
+  return offbeat(motif(FATHER, barStarts(start, statements, RIFF_BEATS), [root]), scale);
+}
+
+/** The harmony the riff carries with it: D5 | D5 | Bb5 C5 | D5, half-bar grain. */
+function riffChords(statements = 2): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < statements; i++) out.push(...FATHER_CHORDS);
+  return out;
+}
+
+function powerChords(start: number, statements: number, velocity: number, octave = 2): Note[] {
+  const chords = riffChords(statements);
+  const notes: Note[] = [];
+  chords.forEach((symbol, i) => {
+    const at = start + i * 2;
+    for (const midi of chordMidis(symbol, { octave })) {
+      // Ring on the half-bar, and let the riff carry the movement.
+      notes.push([at, 1.7, midi, velocity * 0.85]);
+    }
+  });
+  return notes;
+}
+
+/** L plays the riff; R plays it an octave up, a hair late and a hair softer.
+ *  Two takes of one part, which is what double-tracking actually is. */
+function guitarL(): Note[] {
   return concatNotes(
-    riffNotes(RIFF_INTRO, INTRO_CHORDS, INTRO),
-    riffNotes(RIFF_A, A_CHORDS, A),
-    scaleVelocity(riffNotes(RIFF_A2, A2_CHORDS, A2), 1.05),
-    riffNotes(RIFF_CHUG_QUIET, SOLO_CHORDS, SOLO),
-    motif(RIFF_SWELL, [BRIDGE], [chordRoots(BRIDGE_CHORDS, 3)[0]!]),
-    motif(RIFF_SWELL, [BRIDGE + 16], [chordRoots(BRIDGE_CHORDS, 3)[4]!]),
-    riffNotes(RIFF_CLIMAX, CLIMAX_CHORDS, CLIMAX),
-    riffNotes(RIFF_CHUG_BUILD, SOLO2_CHORDS, SOLO2),
-    riffNotes(RIFF_A, FINAL_CHORDS, FINAL),
-    riffNotes(RIFF_TURN, TURN_CHORDS, TURN),
+    // the tease: bar 1 only, then silence
+    offbeat(motif(FATHER.slice(0, 4), [INTRO + 12], ['D2']), 0.8),
+    riff(A, 'D2', 0.9),
+    riff(A2, 'D2', 1.0),
+    // under the solo the rhythm guitar holds the frame instead of the riff
+    powerChords(SOLO, 2, 0.38),
+    riff(CLIMAX + 2, 'D2', 1.08),
+    powerChords(SOLO2, 2, 0.5),
+    riff(FINAL, 'D2', 1.02),
   );
 }
 
-function guitarCoreR(): Note[] {
+function guitarR(): Note[] {
   const core = concatNotes(
-    riffNotes(RIFF_INTRO, INTRO_CHORDS, INTRO),
-    riffNotes(RIFF_A_R, A_CHORDS, A),
-    scaleVelocity(riffNotes(RIFF_A2_R, A2_CHORDS, A2), 1.05),
-    riffNotes(RIFF_CHUG_QUIET, SOLO_CHORDS, SOLO),
-    motif(RIFF_SWELL_R, [BRIDGE], [chordRoots(BRIDGE_CHORDS, 3)[0]!]),
-    motif(RIFF_SWELL_R, [BRIDGE + 16], [chordRoots(BRIDGE_CHORDS, 3)[4]!]),
-    riffNotes(RIFF_CLIMAX_R, CLIMAX_CHORDS, CLIMAX),
-    riffNotes(RIFF_CHUG_BUILD, SOLO2_CHORDS, SOLO2),
-    riffNotes(RIFF_A_R, FINAL_CHORDS, FINAL),
-    riffNotes(RIFF_TURN_R, TURN_CHORDS, TURN),
+    transposeNotes(riff(A, 'D2', 0.9), 12),
+    transposeNotes(riff(A2, 'D2', 1.0), 12),
+    powerChords(SOLO, 2, 0.34, 3),
+    transposeNotes(riff(CLIMAX + 2, 'D2', 1.08), 12),
+    powerChords(SOLO2, 2, 0.44, 3),
+    transposeNotes(riff(FINAL, 'D2', 1.02), 12),
   );
-  return shiftNotes(scaleVelocity(core, 0.93), 0.012);
+  return shiftNotes(scaleVelocity(core, 0.9), 0.014);
 }
 
-/** The solo proper: a 2-bar idea in D aeolian/minor pentatonic (D F G A Bb C), sequenced up,
- * extended with a wider reach, and answered, with two grace-note bends as seasoning. */
+/**
+ * The bridge's power chords: FAREWELL's own bars 10-11 played as a rock riff.
+ * Bar 8 is `A5` and not `A` — a power chord has no third, so the pull into the
+ * climax's D minor happens without a leading tone ever asserting itself, which
+ * is FAREWELL's own rule about withholding it at the moment of maximum pull.
+ */
+const BRIDGE_CHORDS = ['F5', 'F5', 'Bb5', 'C5', 'D5', 'D5', 'Bb5', 'A5'];
+/** The same eight bars as triads, for the string bed under the lament. */
+const BRIDGE_TRIADS = ['F', 'F', 'Bb', 'C', 'Dm', 'Dm', 'Bb', 'A5'];
+
+/**
+ * The bridge's guitars do almost nothing: one ring a bar, quiet, so the room
+ * empties out under the lament. The fury is still in the chair — it is just
+ * not talking. A bridge that is as loud as the riff around it is not a bridge,
+ * and the first draft of this cue made exactly that mistake: the half-time
+ * section measured one decibel below the full band, which is a wall of sound
+ * with a tune on top rather than a change of scene.
+ */
+function bridgeGuitar(): Note[] {
+  const notes: Note[] = [];
+  BRIDGE_CHORDS.forEach((symbol, bar) => {
+    const at = BRIDGE + bar * BAR;
+    // Nothing at all for four bars. The guitars come back with the arrival,
+    // and lean in again for the last two so the climax has a run-up.
+    if (bar < 4) return;
+    const velocity = bar >= 6 ? 0.44 : 0.32;
+    for (const midi of chordMidis(symbol, { octave: 2 })) {
+      notes.push([at, 3.8, midi, velocity]);
+    }
+  });
+  return notes;
+}
+
+/** The turn: bVI - bVII, the score's fingerprint, and never a chromatic tag. */
+const TURN_CHORDS = ['Bb5', 'Bb5', 'C5', 'C5'];
+
+function turnGuitar(): Note[] {
+  const notes: Note[] = [];
+  TURN_CHORDS.forEach((symbol, bar) => {
+    const at = TURN + bar * BAR;
+    for (const midi of chordMidis(symbol, { octave: 2 })) {
+      notes.push([at, 1.8, midi, 0.9]);
+      notes.push([at + 2.5, 1.4, midi, 0.95]);
+    }
+  });
+  return notes;
+}
+
+// ------------------------------------------------------------- the lament
+
+/**
+ * FAREWELL bars 9-12, +3 into D minor, every value doubled so it plays at
+ * half-time against the riff. `FAREWELL_DYNAMICS` is applied before the
+ * augmentation, because half of this theme lives in that table: bar 9 steps
+ * back to 0.66 so bar 11 has somewhere to come from, and bar 11's downbeat at
+ * 0.94 is the loudest note in the score outside a boss fight — which this is.
+ *
+ * Bar 10 is `FAREWELL_FALL`: hold three beats, step down one. It is an
+ * appoggiatura, so the HELD note is LOUDER than the note it falls to.
+ */
+function lament(start: number, velocityScale = 1): Note[] {
+  const whole = tracker(FAREWELL_RH, { checkBars: 4, gate: 1.0 });
+  const shaped = shapeByBar(whole, FAREWELL_DYNAMICS, 4);
+  const window = shaped
+    .filter((n) => n[0] >= 32 && n[0] < 48)
+    .map((n): Note => [(n[0] - 32) * 2, n[1] * 2, toMidi(n[2]) + 3, (n[3] ?? 0.7) * velocityScale]);
+  // Bar 10 at half-time: the held Bb4 starts at beat 8 and falls to A4 at 14.
+  const leaned = lean(window, [[8, 14]]);
+  return shiftNotes(leaned, start);
+}
+
+/**
+ * The half-time bridge maps FAREWELL's bars 9-12 onto eight bars of this cue:
+ * bars 1-2 are the theme's bar 9, bars 3-4 its bar 10, bars 5-6 its bar 11 —
+ * the arrival — and bars 7-8 its bar 12. So the orchestra is rationed to that
+ * map. Strings enter alone on the climb; brass and the clean guitar an octave
+ * below join only at `BRIDGE_WIDEN`, which is the theme's own climax, and the
+ * sound physically opens exactly where the tune peaks. That is the bible's
+ * rule for the whole score, and it is also why the bridge can be quiet: it
+ * does not need to arrive loud, it needs somewhere to go.
+ */
+const BRIDGE_WIDEN = BRIDGE + 16;
+
+function bridgeLament(): Note[] {
+  return lament(BRIDGE, 0.9);
+}
+
+/** The part of the bridge's lament that the tutti is allowed to double. */
+function bridgeLamentWide(): Note[] {
+  return bridgeLament().filter((n) => n[0] >= BRIDGE_WIDEN);
+}
+
+function climaxLament(): Note[] {
+  return lament(CLIMAX, 1);
+}
+
+// ---------------------------------------------------------------- the solos
+
+/** A two-bar idea in D aeolian / minor pentatonic, sequenced, extended and
+ *  answered, with two grace-note bends as seasoning and nothing chromatic at
+ *  the phrase ends. */
 const SOLO_LEAD = `
   D4:0.75 F4:0.75 G4:0.5 A4:1 G4:0.5 F4:0.5 | A4:1 C5:1 Bb4:0.75 A4:0.25 G4:0.25 F4:0.25 G4:0.25 A4:0.25 |
   F4:0.75 G4:0.75 A4:0.5 C5:1 Bb4:0.5 A4:0.5 | Db4:0.25@0.7 D4:0.75 F4:1 G4:0.5 F4:0.25 D4:0.25 C4:0.25 D4:0.75 |
@@ -196,157 +302,212 @@ const SOLO_LEAD = `
   A4:0.75 Bb4:0.75 C5:0.5 D5:1 C5:0.5 Bb4:0.5 | B4:0.25@0.7 C5:0.75 A4:1 G4:0.5 F4:1.5 |
 `;
 
-/** Solo 2: the idea returns busier (continuous 8ths, a couple of 16th runs into the downbeat),
- * climbs toward one held bend-grace note on the highest pitch of the whole solo, then settles
- * a full octave down to hand off cleanly into the final riff. */
+/** Busier, climbing to one held bend on the solo's highest pitch, then settling
+ *  an octave down to hand cleanly into the final riff. */
 const SOLO2_LEAD = `
   D4:0.5 F4:0.5 A4:0.5 D5:0.5 C5:0.5 A4:0.5 F4:0.5 G4:0.5 | A4:0.5 Bb4:0.5 D5:0.5 F5:0.25 D5:0.25 C5:0.5 Bb4:0.5 A4:0.5 G4:0.5 |
   G4:0.5 A4:0.5 C5:0.5 E5:0.5 D5:0.5 C5:0.5 A4:0.5 G4:0.5 | F4:0.25 G4:0.25 A4:0.25 C5:0.25 D5:1 C5:0.5 A4:0.5 F4:1 |
-  G4:0.5 Bb4:0.5 D5:0.5 F5:0.25 D5:0.25 C5:0.5 Bb4:0.5 G4:1 | A4:0.5 C#5:0.5 E5:0.5 D5:0.5 C#5:0.5 A4:0.5 E4:0.5 A4:0.5 |
+  G4:0.5 Bb4:0.5 D5:0.5 F5:0.25 D5:0.25 C5:0.5 Bb4:0.5 G4:1 | A4:0.5 C5:0.5 E5:0.5 D5:0.5 C5:0.5 A4:0.5 E4:0.5 A4:0.5 |
   Bb4:0.25 C5:0.25 D5:0.25 F5:0.25 Gb5:0.25@0.75 G5:1.75 E5:0.5 D5:0.25 C5:0.25 | C5:0.75 A4:0.75 F4:1 D4:1.5 |
 `;
 
+/**
+ * A player's right hand is not a volume slider. The two solos are written at
+ * one base velocity and then breathed across their two-bar ideas, so each
+ * phrase rises into its answer and falls out of it — without that, 114 notes
+ * of lead guitar arrive at exactly one dynamic and the whole solo reads as a
+ * sequencer.
+ */
 function guitarLead(): Note[] {
   return concatNotes(
-    tracker(SOLO_LEAD, { start: SOLO, velocity: 0.85, checkBars: BAR }),
-    tracker(SOLO2_LEAD, { start: SOLO2, velocity: 0.92, checkBars: BAR }),
+    breathe(tracker(SOLO_LEAD, { start: SOLO, velocity: 0.85, checkBars: BAR, gate: 0.98 }), 8, 0.14),
+    breathe(tracker(SOLO2_LEAD, { start: SOLO2, velocity: 0.92, checkBars: BAR, gate: 0.98 }), 8, 0.14),
   );
 }
 
-const BASS_MOTIF: Note[] = [
-  [0, 0.4, 0, 0.95], [1, 0.9, 0, 0.9], [2, 0.4, 0, 0.92], [2.5, 0.4, 0, 0.85], [3, 0.9, 0, 0.95],
-];
+const SOLO_CHORDS = ['Dm', 'Bb', 'C', 'Dm', 'Gm', 'Dm', 'Bb', 'C'];
+const SOLO2_CHORDS = ['Dm', 'Bb', 'C', 'Dm', 'Gm', 'Bb', 'Bb', 'C'];
 
-function bassRiff(chords: string[], start: number): Note[] {
-  return motif(BASS_MOTIF, barStarts(start, chords.length, BAR), chordRoots(chords, 1));
+// ----------------------------------------------------------------- the bass
+
+/**
+ * The bass plays FATHER too — the skeleton of it, with the grace notes left
+ * to the guitars so the bottom stays legible. Same accent rule.
+ */
+const FATHER_SKELETON: Note[] = FATHER.filter((n) => n[1] > 0.26);
+
+function bassRiff(start: number, statements = 2, scale = 1): Note[] {
+  return offbeat(motif(FATHER_SKELETON, barStarts(start, statements, RIFF_BEATS), ['D1']), scale);
 }
 
 function bassPulse(chords: string[], start: number, velocity: number): Note[] {
-  return chordRoots(chords, 1).map((midi, bar): Note => [start + bar * BAR, 3.6, midi, velocity]);
+  return chordRoots(chords, 1).map((midi, bar): Note => [start + bar * BAR, 3.5, midi, velocity]);
 }
 
 function bassLine(): Note[] {
   return concatNotes(
-    bassRiff(INTRO_CHORDS, INTRO),
-    bassRiff(A_CHORDS, A),
-    scaleVelocity(bassRiff(A2_CHORDS, A2), 1.05),
-    bassPulse(SOLO_CHORDS, SOLO, 0.6),
-    bassPulse(BRIDGE_CHORDS, BRIDGE, 0.48),
-    bassRiff(CLIMAX_CHORDS, CLIMAX),
-    bassPulse(SOLO2_CHORDS, SOLO2, 0.66),
-    bassRiff(FINAL_CHORDS, FINAL),
-    bassRiff(TURN_CHORDS, TURN),
+    bassRiff(INTRO, 1, 0.72),
+    bassRiff(A, 2, 0.9),
+    bassRiff(A2, 2, 1.0),
+    bassPulse(SOLO_CHORDS, SOLO, 0.58),
+    bassPulse(BRIDGE_CHORDS.slice(4), BRIDGE_WIDEN, 0.32),
+    bassRiff(CLIMAX + 2, 2, 1.08),
+    bassPulse(SOLO2_CHORDS, SOLO2, 0.64),
+    bassRiff(FINAL, 2, 1.02),
+    bassPulse(['Bb', 'Bb', 'C', 'C'], TURN, 0.85),
   );
 }
 
-const KICK = 'X.x.X.x.X...X.x.';
-const SNARE = '....X.......X...';
+// ------------------------------------------------------------------ the kit
+
+const KICK = 'X..x..X...X.X..x';
+const SNARE = '....X..g....X...';
 const SNARE_FILL = '....X..g..X.XXXX';
 const HAT = 'x.X.x.X.x.X.x.X.';
 
-function kit(): Note[] {
+/**
+ * How hard the band is playing, by section. This table is the cue's shape, and
+ * it is the difference between eight sections and one long section: the riff
+ * grows A -> A2 -> climax -> final, the solos sit back, and the bridge is a
+ * different room. Nothing downstream may flatten it.
+ */
+function drive(beat: number): number {
+  if (beat >= BRIDGE && beat < CLIMAX) return 0.32;
+  if (beat >= SOLO && beat < BRIDGE) return 0.62;
+  if (beat >= SOLO2 && beat < FINAL) return 0.68;
+  if (beat < A) return 0.6;
+  if (beat < A2) return 0.82;
+  if (beat < SOLO) return 0.92;
+  if (beat >= CLIMAX && beat < SOLO2) return 1;
+  return 0.96;
+}
+
+function kickLine(): Note[] {
   const notes: Note[] = [];
-  for (let bar = 0; bar < BARS; bar++) {
+  for (let bar = 0; bar < LENGTH / BAR; bar++) {
     const at = bar * BAR;
+    const level = drive(at);
     if (at >= BRIDGE && at < CLIMAX) {
-      notes.push(...drumLine('X.......x.......', { start: at, pitch: 'C1', velocity: 0.7 }));
+      // Nothing for four bars, then two soft strokes a bar. The silence is the
+      // point: the one place in the cue where the clock stops.
+      if (at < BRIDGE_WIDEN) continue;
+      notes.push(...drumLine('X.......x.......', { start: at, pitch: 'C1', velocity: 0.42 }));
       continue;
     }
-    if (at >= SOLO && at < BRIDGE) {
-      notes.push(...drumLine(KICK, { start: at, pitch: 'C1', velocity: 0.78 }));
-      continue;
-    }
-    const grow = at >= A2 && at < SOLO ? 0.05 : 0;
-    notes.push(...drumLine(KICK, { start: at, pitch: 'C1', velocity: Math.min(1, 0.92 + grow) }));
+    notes.push(...drumLine(KICK, { start: at, pitch: 'C1', velocity: level }));
   }
   return notes;
 }
 
 function snareLine(): Note[] {
   const notes: Note[] = [];
-  for (let bar = 0; bar < BARS; bar++) {
+  for (let bar = 0; bar < LENGTH / BAR; bar++) {
     const at = bar * BAR;
-    if (at >= BRIDGE && at < CLIMAX) continue;
-    if (at >= CLIMAX - BAR && at < CLIMAX) {
-      for (let s = 0; s < 8; s++) notes.push([at + s * 0.5, 0.5, 'D2', 0.4 + (s / 8) * 0.55]);
+    if (at >= BRIDGE && at < CLIMAX - BAR) continue;
+    if (at === CLIMAX - BAR) {
+      for (let s = 0; s < 8; s++) notes.push([at + s * 0.5, 0.5, 'D2', 0.42 + (s / 8) * 0.55]);
       continue;
     }
-    if (at >= SOLO && at < BRIDGE) {
-      notes.push(...drumLine(SNARE, { start: at, pitch: 'D2', velocity: 0.68 }));
-      continue;
-    }
-    const grow = at >= A2 && at < SOLO ? 0.04 : 0;
     const fill = bar % 8 === 7;
-    notes.push(...drumLine(fill ? SNARE_FILL : SNARE, { start: at, pitch: 'D2', velocity: Math.min(1, 0.85 + grow) }));
+    notes.push(
+      ...drumLine(fill ? SNARE_FILL : SNARE, { start: at, pitch: 'D2', velocity: drive(at) * 0.92 }),
+    );
   }
   return notes;
 }
 
-function hats(): Note[] {
+function hatLine(): Note[] {
   const notes: Note[] = [];
-  for (let bar = 0; bar < BARS; bar++) {
+  for (let bar = 0; bar < LENGTH / BAR; bar++) {
     const at = bar * BAR;
-    const bridgeQuiet = at >= BRIDGE && at < CLIMAX;
-    const soloQuiet = at >= SOLO && at < BRIDGE;
-    const grow = at >= A2 && at < SOLO ? 0.03 : 0;
-    const velocity = bridgeQuiet ? 0.28 : soloQuiet ? 0.36 : Math.min(1, 0.48 + grow);
-    notes.push(...drumLine(HAT, { start: at, pitch: 'F#3', velocity }));
+    // No hats at all in the bridge: it is the one place the clock stops.
+    if (at >= BRIDGE && at < CLIMAX) continue;
+    notes.push(...drumLine(HAT, { start: at, pitch: 'F#3', velocity: drive(at) * 0.5 }));
   }
   return notes;
 }
 
-function crashes(): Note[] {
-  return [A, A2, CLIMAX, SOLO2, FINAL, TURN].map((beat): Note => [beat, 1.5, 'C5', 0.68]);
-}
-
-function toms(): Note[] {
-  const fill = 'A3:0.25 A3:0.25 F3:0.25 F3:0.25 D3:0.25 D3:0.25 C3:0.5';
-  return concatNotes(
-    tracker(fill, { start: A2 + 30, velocity: 0.8 }),
-    tracker(fill, { start: CLIMAX + 30, velocity: 0.85 }),
-    tracker(fill, { start: FINAL + 30, velocity: 0.8 }),
+function crashLine(): Note[] {
+  return [A, A2, SOLO, BRIDGE, CLIMAX, SOLO2, FINAL, TURN].map(
+    (beat): Note => [beat, 1.5, 'C5', beat === CLIMAX ? 0.75 : 0.66],
   );
 }
 
-/** Off-beat brass punctuation — the classic battle-brass accent, kept high (~B4 centre)
- * so it clears the guitar's D3-D4 register. A2's last bar tapers to one soft stab so the
- * section breathes into the solo instead of cutting off flat. */
-function stabs(chords: string[], start: number, offsets: number[], velocity: number): Note[] {
-  const notes: Note[] = [];
-  chords.forEach((symbol, bar) => {
-    const tones = chordMidis(symbol, { octave: 4, center: 71 });
-    for (const offset of offsets) {
-      for (const midi of tones) notes.push([start + bar * BAR + offset, 0.25, midi, velocity]);
-    }
-  });
-  return notes;
+function tomLine(): Note[] {
+  const pitches = ['A3', 'A3', 'F3', 'F3', 'D3', 'C3'];
+  return concatNotes(
+    ...[A2, CLIMAX, FINAL].map((landOn) =>
+      pitches.map((pitch, i): Note => [landOn - 1.5 + i * 0.25, 0.24, pitch, 0.8 - i * 0.01]),
+    ),
+  );
 }
+
+// --------------------------------------------------------- brass and strings
 
 function brassStabs(): Note[] {
+  const notes: Note[] = [];
+  const runs: Array<[number, number, number[], number]> = [
+    [A, 2, [1.5, 2.5], 0.66],
+    [A2, 2, [0, 1.5, 2.5, 3.5], 0.82],
+    [FINAL, 2, [0, 1.5, 2.5, 3.5], 0.88],
+  ];
+  for (const [start, statements, offsets, velocity] of runs) {
+    riffChords(statements).forEach((symbol, i) => {
+      const at = start + i * 2;
+      for (const offset of offsets) {
+        const beat = at + offset;
+        if (beat >= start + statements * RIFF_BEATS) continue;
+        for (const midi of chordMidis(symbol, { octave: 4, center: 71 })) {
+          notes.push([beat, 0.25, midi, velocity * (Math.abs(beat - Math.round(beat)) < 1e-6 ? 0.85 : 1)]);
+        }
+      }
+    });
+  }
+  // Breathed across the riff's own four bars. The off-beat accent is written
+  // into `velocity` above and survives, because the arch is far smaller than
+  // the 0.15 gap between the downbeat and the "and".
+  return breathe(notes, RIFF_BEATS, 0.07);
+}
+
+/** The bridge: the lament in unison on brass, and nothing else from them —
+ *  and not until the theme's own climax. */
+function brassLine(): Note[] {
   return concatNotes(
-    stabs(A_CHORDS, A, [1.5, 2.5], 0.78),
-    stabs(A2_CHORDS.slice(0, 7), A2, [0, 1.5, 2.5, 3.5], 0.86),
-    stabs(A2_CHORDS.slice(7), A2 + 7 * BAR, [1.5], 0.55),
-    stabs(CLIMAX_CHORDS, CLIMAX, [0, 1, 2, 3], 0.92),
-    stabs(FINAL_CHORDS, FINAL, [0, 1.5, 2.5, 3.5], 0.86),
+    scaleVelocity(bridgeLamentWide(), 0.85),
+    scaleVelocity(climaxLament(), 0.95),
   );
 }
 
-/** `PYREFLY_RISE_MAJOR` sung twice, augmented for the half-time feel, checked against
- * BRIDGE_CHORDS: statement 1's A3-D4-E4-F#4 lands on D-root, D-root, Em-root, Em/Bm 5th;
- * statement 2's A3-D4-E4-F#4 is a G 9th, G 5th, A 5th, A's smooth 13th into Bm's 5th. The
- * tail spells the G bar as a Gmaj9 upper structure (5-7-9), then the A bar as A major itself
- * so the held C# walks straight into the D minor crash. */
-function bridgeBrass(): Note[] {
+/** Strings take the lament as written, and widen at the climax by doubling an
+ *  octave below from bar 11 onward — the sound physically opens where the tune
+ *  peaks, which is the bible's rule for the whole score. */
+function stringsLine(): Note[] {
+  const climax = climaxLament();
+  const fromBar11 = climax.filter((n) => n[0] >= CLIMAX + 16);
   return concatNotes(
-    cell(augment(PYREFLY_RISE_MAJOR, 2), BRIDGE, 'D4', 0.7),
-    cell(augment(PYREFLY_RISE_MAJOR, 2), BRIDGE + 12, 'D4', 0.82),
-    tracker('D4+F#4+A4:4 E4+A4+C#5:4', { start: BRIDGE + 24, velocity: 0.78 }),
+    bridgeLament(),
+    chordLine(BRIDGE_TRIADS, {
+      start: BRIDGE,
+      octave: 3,
+      center: 64,
+      velocity: 0.22,
+      dur: 3.8,
+      roll: 0.05,
+    }),
+    climax,
+    transposeNotes(scaleVelocity(fromBar11, 0.8), -12),
   );
 }
 
-function bridgeStrings(): Note[] {
-  return chordLine(BRIDGE_CHORDS, { start: BRIDGE, octave: 3, center: 64, velocity: 0.5, dur: 3.85, roll: 0.05 });
+/** Wordless, and only here: the choir doubles the lament in the climax. */
+function choirLine(): Note[] {
+  return scaleVelocity(climaxLament(), 0.75);
+}
+
+/** A clean guitar an octave below the bridge's melody, as the bible asks —
+ *  from the arrival onward, so it is part of the widening and not of the entry. */
+function cleanGuitar(): Note[] {
+  return transposeNotes(scaleVelocity(bridgeLamentWide(), 0.8), -12);
 }
 
 export const jechtTrack: Track = {
@@ -357,41 +518,41 @@ export const jechtTrack: Track = {
   length: LENGTH,
   tailSec: 2.5,
   fx: {
-    reverb: { room: 0.55, damp: 0.48, width: 0.85, preDelay: 0.008 },
+    reverb: { room: 0.56, damp: 0.46, width: 0.86, preDelay: 0.008 },
     delay: { timeBeats: 0.5, feedback: 0.22, damp: 2800 },
   },
   channels: [
-    { name: 'guitar L', instrument: 'guitar-dist', volume: 0.72, pan: -0.35, notes: guitarCoreL(), fx: { reverb: 0.08 } },
-    { name: 'guitar R', instrument: 'guitar-dist', volume: 0.68, pan: 0.35, notes: guitarCoreR(), fx: { reverb: 0.08 } },
-    {
-      name: 'guitar lead',
-      instrument: 'guitar-dist',
-      volume: 0.8,
-      pan: -0.08,
-      notes: guitarLead(),
-      fx: { reverb: 0.16, delay: 0.14 },
-    },
+    { name: 'guitar L', instrument: 'guitar-dist', volume: 0.72, pan: -0.35, notes: concatNotes(guitarL(), bridgeGuitar(), turnGuitar()), fx: { reverb: 0.08 } },
+    { name: 'guitar R', instrument: 'guitar-dist', volume: 0.64, pan: 0.35, notes: guitarR(), fx: { reverb: 0.08 } },
+    { name: 'guitar lead', instrument: 'guitar-dist', volume: 0.8, pan: -0.08, notes: guitarLead(), fx: { reverb: 0.16, delay: 0.14 } },
+        // `guitar-lead` and `guitar-clean` have sampled presets but no synthesised
+    // voices, so both parts play through `guitar-dist`: the lead is the same
+    // amp pushed by velocity, and the "clean-ish" octave doubling is the same
+    // amp rolled back. See docs/audio/requests-ffx-bosses.md.
+    { name: 'guitar clean', instrument: 'guitar-dist', volume: 0.42, pan: 0.24, notes: cleanGuitar(), fx: { reverb: 0.18 } },
     { name: 'bass', instrument: 'bass', volume: 0.9, pan: 0, notes: bassLine(), fx: { reverb: 0.05 } },
-    // 'sub' now sounds only under the bridge and climax — elsewhere it just doubled the bass
-    // riff an octave down and muddied the mix.
     {
       name: 'sub',
       instrument: 'bass-sub',
-      volume: 0.42,
+      volume: 0.4,
       pan: 0,
-      notes: concatNotes(
-        chordRoots(BRIDGE_CHORDS, 1).map((midi, bar): Note => [BRIDGE + bar * BAR, 3.7, midi, 0.46]),
-        chordRoots(CLIMAX_CHORDS, 1).map((midi, bar): Note => [CLIMAX + bar * BAR, 3.7, midi, 0.5]),
+      // Only under the climax. In the bridge it just refills the room the
+      // arrangement is trying to empty.
+      // A swell across the climax rather than a flat floor under it: the
+      // argument gets heavier as it goes on.
+      notes: chordRoots(riffChords(2), 1).map(
+        (midi, i): Note => [CLIMAX + i * 2, 1.8, midi, 0.4 + (i / 15) * 0.22],
       ),
     },
-    { name: 'kick', instrument: 'kick', volume: 0.95, pan: 0, notes: kit() },
+    { name: 'kick', instrument: 'kick', volume: 0.95, pan: 0, notes: kickLine() },
     { name: 'snare', instrument: 'snare', volume: 0.82, pan: -0.05, notes: snareLine(), fx: { reverb: 0.14 } },
-    { name: 'hats', instrument: 'hat', volume: 0.38, pan: 0.2, notes: hats() },
-    { name: 'crash', instrument: 'crash', volume: 0.46, pan: 0.1, notes: crashes(), fx: { reverb: 0.28 } },
-    { name: 'toms', instrument: 'tom', volume: 0.6, pan: -0.15, notes: toms(), fx: { reverb: 0.18 } },
-    { name: 'brass stabs', instrument: 'brass-stab', volume: 0.55, pan: -0.28, notes: brassStabs(), fx: { reverb: 0.16 } },
-    { name: 'brass', instrument: 'brass', volume: 0.78, pan: -0.15, notes: bridgeBrass(), fx: { reverb: 0.32, delay: 0.1 } },
-    { name: 'strings', instrument: 'strings', volume: 0.55, pan: 0.2, notes: bridgeStrings(), fx: { reverb: 0.4 } },
+    { name: 'hats', instrument: 'hat', volume: 0.36, pan: 0.2, notes: hatLine() },
+    { name: 'toms', instrument: 'tom', volume: 0.58, pan: -0.15, notes: tomLine(), fx: { reverb: 0.18 } },
+    { name: 'crash', instrument: 'crash', volume: 0.46, pan: 0.1, notes: crashLine(), fx: { reverb: 0.28 } },
+    { name: 'brass stabs', instrument: 'brass-stab', volume: 0.54, pan: -0.28, notes: brassStabs(), fx: { reverb: 0.16 } },
+    { name: 'brass', instrument: 'brass', volume: 0.76, pan: -0.16, notes: brassLine(), fx: { reverb: 0.32, delay: 0.1 } },
+    { name: 'strings', instrument: 'strings', volume: 0.6, pan: 0.2, notes: stringsLine(), fx: { reverb: 0.4 } },
+    { name: 'choir', instrument: 'choir', volume: 0.5, pan: 0.1, notes: choirLine(), fx: { reverb: 0.5 } },
   ],
 };
 

@@ -1,368 +1,262 @@
 /**
- * "What the Tide Keeps" — Yu Yevon, the true final battle.
+ * "No End" — Yu Yevon, the true final battle.
  *
- * ORIGINAL COMPOSITION. An ancient parasitic god behind every aeon the party
- * has ever summoned — enormous and ceremonial, then triumphant. B minor
- * lifting to its relative D major for the climax, 96 bpm with a double-time
- * drive (8th-note taiko, then 16ths in taiko and strings-short) so the piece
- * feels vast and urgent at once. Organ, choir, full strings, brass, timpani,
- * taiko and bell — the widest dynamic range and fullest orchestration in the
- * score. The whole score's themes return: choir states `SENDING` in dread
- * (A), brass and strings answer with `PYREFLY_SIGH` (B), and the climax lifts
- * to D major with `augment(PYREFLY_RISE_MAJOR, 2)` in brass and choir over
- * everything. A timpani-and-organ transition bar brings the climax back down
- * to the dread without a lurch before the loop turns over.
+ * ORIGINAL COMPOSITION. Every other boss in this game is a person who wants
+ * something. This one is a rite that has outlived everybody who believed in
+ * it, so the cue is not a fight at all: it is HYMN — "Still Water" — sung once,
+ * at half speed, and then refused a cadence.
  *
- * Form (4/4, 52 bars, 130 s):
- *   bars  1- 4  intro     beats   0- 16  drone, organ enters, first toll
- *   bars  5-16  A dread   beats  16- 64  choir sings SENDING, low pedal     <- loop start
- *   bars 17-28  B answer  beats  64-112  brass+strings answer with the sigh,
- *                                        taiko/strings-short ostinati enter
- *   bars 29-36  C build   beats 112-144  choir and brass alternate, driving
- *                                        toward the modulation
- *   bars 37-48  D climax  beats 144-192  D major, the rise augmented, tutti
- *   bars 49-52  transition beats 192-208  timpani + organ ease back to dread
- * Loop runs 16 -> 208; the transition's Bm chord lands exactly where A began.
+ * Per `docs/audio/THEMES.md` §HYMN, transformation *boss-yu-yevon*:
+ *   - the full sixteen bars at `augment(…, 2)` — 32 bars at 40 bpm, one
+ *     statement of roughly three minutes;
+ *   - choir only, over a SINGLE low drone that never changes chord. The
+ *     harmony of this cue is the four voices and nothing else;
+ *   - bars 12-16 are stripped of their harmony: from the climax on, the drone
+ *     stops and the voices sing unaccompanied;
+ *   - the closing `Am | Em` amen is replaced by an `Am` held and never
+ *     resolved — the soprano's F#4 leans on the iv and is never allowed to
+ *     fall to the tonic;
+ *   - a second choir enters a fifth above, eight beats late, for the last
+ *     statement, and the hymn ends as bare organum on an open fifth.
+ * No drums, no timpani, no cymbals, no brass, no attack anywhere.
+ *
+ * The organum voice is transposed DIATONICALLY up a fifth inside E Aeolian,
+ * not chromatically: a chromatic fifth would put a C#5 against the final
+ * chord's C natural, and E Aeolian's own fifth above the 2 is a diminished
+ * one. Taking the diatonic fifth keeps the score's rule that no leading tone
+ * and no borrowed tone ever enters this theme, and lands the last note on C5 —
+ * which the held Am6 underneath already contains.
+ *
+ * Two craft notes, because they are most of what stops this reading as a
+ * sampler:
+ *   - At 40 bpm and double augmentation, a single hymn note lasts up to nine
+ *     seconds. A choir sample held that long is dead. `swell()` splits every
+ *     long note into two or three tied attacks that grow into each other
+ *     (THEMES.md §Dynamics sanctions this for strings and choir only), so a
+ *     held note breathes instead of sitting still.
+ *   - HYMN bar 4's beat-4 rest is written in all four voices, and at this
+ *     augmentation it is three full seconds of silence with the drone alone.
+ *     That is the cue. Do not fill it.
+ *
+ * Form (4/4, 40 bpm, 140 beats, 210 s):
+ *   beats   0-  4  drone alone, one low E                        <- loop start at 4
+ *   beats   4- 36  HYMN bars 1-4    A         the head, and the breath
+ *   beats  36- 68  HYMN bars 5-8    A'        the amen, first time
+ *   beats  68- 92  HYMN bars 9-11   B         the climb; bar 11 is the climax
+ *   beats  92-124  HYMN bars 12-15            UNACCOMPANIED from here
+ *   beats 108-140  organum: soprano a diatonic fifth up, 8 beats late
+ *   beats 124-132  HYMN bar 16                Am held; no amen, no resolution
+ *   beats 132-140  the organum alone          bare, and it ends on the fifth
+ * Loop 4 -> 140: the unresolved Am decays into the drone it started from, so
+ * the prayer begins again without ever having finished. He has no end.
  */
 
 import {
-  arpLine,
-  chordLine,
-  chordMidis,
-  chordRoots,
   concatNotes,
-  drumLine,
+  shiftNotes,
   tracker,
   type Note,
   type Track,
 } from '../score.ts';
-import { augment, cell, PYREFLY_SIGH, PYREFLY_RISE_MAJOR, SENDING } from './motifs.ts';
+import {
+  augment,
+  HYMN_ALTO,
+  HYMN_BASS,
+  HYMN_HEAD,
+  HYMN_SOPRANO,
+  HYMN_TENOR,
+  lean,
+  shapeByBar,
+} from './themes.ts';
+import { cell } from './motifs.ts';
 
-const BAR = 4;
+/** HYMN is written in 4/4; doubling every value makes one hymn bar eight beats. */
+const HYMN_BAR = 4;
+const SLOW = 2;
+const BAR = HYMN_BAR * SLOW; // 8 beats per sung bar
 
-const INTRO_CHORDS = ['Bm', 'Bm', 'Bm', 'Bm'];
-// Bar 9 is 'A' (not 'G'): SENDING's 3rd statement holds a C#5 there, and that note is
-// A's own 3rd rather than a half-step clash against a G chord's D.
-const A_CHORDS = ['Bm', 'Bm', 'G', 'G', 'Bm', 'Bm', 'Em', 'F#', 'Bm', 'A', 'Em', 'F#'];
-const B_CHORDS = ['G', 'D', 'Bm', 'F#', 'G', 'D', 'Em', 'F#', 'G', 'A', 'Bm', 'F#'];
-const C_CHORDS = ['Em', 'F#', 'G', 'A', 'Bm', 'C#m', 'D', 'A'];
-// Bars 5 and 10 are the tonic-over-dominant-bass 'D/A' (a cadential 6-4) rather than plain
-// 'A': the climax's held D holds land on the chord instead of clashing with A's own C#.
-const D_CHORDS = ['D', 'A', 'Bm', 'G', 'D', 'D/A', 'G', 'D', 'Bm', 'G', 'D/A', 'D'];
-const TRANS_CHORDS = ['G', 'Em', 'F#', 'Bm'];
-const ALL_CHORDS = [...INTRO_CHORDS, ...A_CHORDS, ...B_CHORDS, ...C_CHORDS, ...D_CHORDS, ...TRANS_CHORDS];
-const BARS = ALL_CHORDS.length; // 52
-const LENGTH = BARS * BAR; // 208 beats = 130s @96bpm
+/** Beat the hymn's first bar lands on. Before it, the drone is alone. */
+const HYMN_AT = 4;
 
-const INTRO = 0;
-const A = 16;
-const B = 64;
-const C = 112;
-const D = 144;
-const TRANS = 192;
+/** Absolute beat of hymn bar `n` (1-indexed, as the bible numbers them). */
+const bar = (n: number): number => HYMN_AT + (n - 1) * BAR;
 
-/** A: the dread. SENDING stated three times, each answered by a held drone breath
- * so the section feels vast rather than merely slow. Statement 1's breath sits under
- * G-G, where B is the 3rd — fine held straight through. Statements 2 and 3 sit under
- * Em-F#, so the breath moves from B3 (Em's 5th) to A#3 (F#'s own 3rd) instead of
- * holding B3 into F# and clashing a half-step against its A#. */
-function choirDread(): Note[] {
-  const notes: Note[] = [];
-  for (let i = 0; i < 3; i++) {
-    notes.push(...cell(SENDING, A + i * 16, 'B4', 0.5 + i * 0.09));
-    const breath = i === 0 ? 'B3:8' : 'B3:4 A#3:4';
-    notes.push(...tracker(breath, { start: A + i * 16 + 8, velocity: 0.3 + i * 0.05 }));
+/** Bar 11 is the climax; bar 12 is where the floor goes, and never comes back. */
+const STRIP = bar(12); // 92
+const LAST = bar(13); // 100 — the A" return, the hymn's last statement
+const ORGANUM_AT = LAST + 8; // 108 — "a fifth above, eight beats late"
+const LENGTH = 140; // 210 s at 40 bpm
+
+/**
+ * The dynamic arch, per hymn bar. HYMN takes no rubato — a congregation does
+ * not rubato — so every drop of expression in this cue has to come from here.
+ * Bar 9 steps back before the climb, bar 11 is the peak and is still only 0.78
+ * because nothing in this cue is ever loud, and the A" return walks away.
+ */
+const HYMN_DYNAMICS = [
+  0.42, 0.48, 0.52, 0.46,
+  0.50, 0.56, 0.60, 0.52,
+  0.54, 0.64, 0.78, 0.62,
+  0.50, 0.46, 0.42, 0.38,
+];
+
+/**
+ * A held note a sampler cannot swell, faked as two or three tied attacks that
+ * grow into each other — THEMES.md §Dynamics, strings and choir only, never
+ * piano. Without this every long note in the cue is a flat block of sample.
+ */
+function swell(notes: Note[], maxBeats = 4, overlap = 0.3): Note[] {
+  const out: Note[] = [];
+  for (const n of notes) {
+    const base = n[3] ?? 0.8;
+    if (n[1] <= maxBeats) {
+      out.push(n);
+      continue;
+    }
+    const parts = Math.min(3, Math.ceil(n[1] / maxBeats));
+    const seg = n[1] / parts;
+    for (let i = 0; i < parts; i++) {
+      const grow = parts > 1 ? (0.24 * i) / (parts - 1) : 0.24;
+      out.push([
+        n[0] + i * seg,
+        seg + (i < parts - 1 ? overlap : 0),
+        n[2],
+        Math.min(1, base * (0.76 + grow)),
+      ]);
+    }
   }
-  return notes;
+  return out;
 }
 
-/** B: a sustained choir pad under the brass/strings answer, pulled back so the climax
- * has somewhere to grow to. */
-function choirAnswer(): Note[] {
-  return chordLine(B_CHORDS, { start: B, octave: 4, center: 69, velocity: 0.32, dur: 3.8, roll: 0.06 });
+/** One SATB voice: parsed, stretched to half speed, shaped by the arch, placed. */
+function voice(src: string, velocityScale = 1): Note[] {
+  const straight = tracker(src, { checkBars: HYMN_BAR, gate: 1.0 });
+  const shaped = shapeByBar(straight, HYMN_DYNAMICS, HYMN_BAR);
+  const scaled = velocityScale === 1
+    ? shaped
+    : shaped.map((n): Note => [n[0], n[1], n[2], Math.min(1, (n[3] ?? 0.8) * velocityScale)]);
+  return shiftNotes(augment(scaled, SLOW), HYMN_AT);
 }
 
-/** C: choir and brass alternate bar by bar, both climbing in velocity toward D. */
-function choirBuild(): Note[] {
+// ------------------------------------------------------------------ soprano
+
+/**
+ * The tune. Two changes to the written hymn, both required by the bible:
+ * the sigh at bar 8 leans (the F# is LOUDER than the E it falls to — the
+ * appoggiatura rule), and bar 16's sigh never happens at all.
+ */
+function sopranoLine(): Note[] {
+  const sung = voice(HYMN_SOPRANO);
+  // Bar 8's amen: F#4 at beat bar(8), resolving to E4 four beats later.
+  const leaned = lean(sung, [[bar(8), bar(8) + 4]]);
+  // Bar 16 is rewritten below, so drop whatever the written hymn had there.
+  const upToBar15 = leaned.filter((n) => n[0] < bar(16));
+  // THE REFUSAL: the 2 held over the iv for the whole bar, and no tonic after
+  // it. The written amen would have fallen F#4 -> E4 here; it does not.
+  const held: Note[] = [[bar(16), 8, 'F#4', 0.46]];
+  return concatNotes(swell(upToBar15), swell(held, 4, 0.3));
+}
+
+function altoLine(): Note[] {
+  const sung = voice(HYMN_ALTO, 0.86).filter((n) => n[0] < bar(16));
+  // Am, not Am -> Em: the third of the unresolved chord, held.
+  return concatNotes(swell(sung), swell([[bar(16), 8, 'C4', 0.4]], 4, 0.3));
+}
+
+function tenorLine(): Note[] {
+  const sung = voice(HYMN_TENOR, 0.84).filter((n) => n[0] < bar(16));
+  return concatNotes(swell(sung), swell([[bar(16), 8, 'A3', 0.4]], 4, 0.3));
+}
+
+function bassLine(): Note[] {
+  const sung = voice(HYMN_BASS, 0.88).filter((n) => n[0] < bar(16));
+  // The bass stays on A2 as well: the chord is iv, and it stays iv.
+  return concatNotes(swell(sung), swell([[bar(16), 8, 'A2', 0.44]], 4, 0.3));
+}
+
+// ------------------------------------------------------------------ organum
+
+/**
+ * HYMN's soprano, bars 13-16, a DIATONIC fifth up inside E Aeolian:
+ *   E4 D4 E4 G4 | A4 G4 | B4 G4 | F#4 E4
+ *   B4 A4 B4 D5 | E5 D5 | F#5 D5 | C5  B4
+ * The last two notes matter. C5 is the diatonic fifth above the soprano's F#4
+ * and is already a tone of the Am6 the choir is holding, so the two voices end
+ * consonant; and the line closes on B — the FIFTH of the key, never the tonic.
+ * An open fifth, no third, no cadence, one voice left singing.
+ */
+const ORGANUM = `
+  B4:1 A4:1 B4:1 D5:1 | E5:2 D5:2 |
+  F#5:2 D5:2          | C5:2 B4:2 |
+`;
+
+function organumLine(): Note[] {
+  const line = tracker(ORGANUM, { checkBars: HYMN_BAR, gate: 1.0 });
+  const shaped = shapeByBar(line, [0.34, 0.38, 0.36, 0.3], HYMN_BAR);
+  return swell(shiftNotes(augment(shaped, SLOW), ORGANUM_AT));
+}
+
+// -------------------------------------------------------------------- drone
+
+/**
+ * "A single low drone." One pitch, E, for eleven bars, and then it is gone.
+ * It does not follow the harmony because there is no harmony to follow: the
+ * voices are the harmony, and this is the floor they stand on.
+ */
+function droneLine(octaveNote: string, velocity: number): Note[] {
   const notes: Note[] = [];
-  C_CHORDS.forEach((symbol, bar) => {
-    if (bar % 2 !== 0) return;
-    const at = C + bar * BAR;
-    const tones = chordMidis(symbol, { octave: 4, center: 71 });
-    tones.forEach((m) => notes.push([at, 3.6, m, 0.52 + bar * 0.03]));
-  });
-  return notes;
-}
-
-function brassBuild(): Note[] {
-  const notes: Note[] = [];
-  C_CHORDS.forEach((symbol, bar) => {
-    if (bar % 2 === 0) return;
-    const at = C + bar * BAR;
-    const tones = chordMidis(symbol, { octave: 4, center: 65 });
-    for (const midi of tones) {
-      notes.push([at, 0.35, midi, 0.68 + bar * 0.03]);
-      notes.push([at + 2, 0.35, midi, 0.72 + bar * 0.03]);
-    }
-  });
-  return notes;
-}
-
-/** D: choir and brass together sing the rise, augmented for ceremony, twice, then
- * hold the D major chord through the rest of the climax — pushed louder than B's
- * answer so the biggest section of the score is unmistakably the loudest. */
-function choirClimax(): Note[] {
-  return concatNotes(
-    cell(augment(PYREFLY_RISE_MAJOR, 2), D, 'D5', 0.88),
-    cell(augment(PYREFLY_RISE_MAJOR, 2), D + 20, 'D5', 1),
-    tracker('D5+F#5+A5:9 F#5+A5+D6:9', { start: D + 30, velocity: 0.92 }),
-  );
-}
-
-function brassClimax(): Note[] {
-  return concatNotes(
-    cell(augment(PYREFLY_RISE_MAJOR, 2), D, 'D4', 0.85),
-    cell(augment(PYREFLY_RISE_MAJOR, 2), D + 20, 'D4', 0.98),
-    tracker('D4+F#4+A4:9 F#4+A4+D5:9', { start: D + 30, velocity: 0.9 }),
-  );
-}
-
-/** Off-beat brass punctuation reinforcing the double-time drive in C and D. */
-function stabs(chords: string[], start: number, offsets: number[], velocity: number): Note[] {
-  const notes: Note[] = [];
-  chords.forEach((symbol, bar) => {
-    const tones = chordMidis(symbol, { octave: 4, center: 76 });
-    for (const offset of offsets) {
-      for (const midi of tones) notes.push([start + bar * BAR + offset, 0.22, midi, velocity]);
-    }
-  });
-  return notes;
-}
-
-/** Sustained cathedral wash. Loud in the intro and the transition, a quiet floor elsewhere. */
-function organLine(): Note[] {
-  return concatNotes(
-    chordLine(INTRO_CHORDS, { start: INTRO, octave: 2, center: 48, velocity: 0.68, dur: 3.9 }),
-    chordLine(A_CHORDS, { start: A, octave: 2, center: 48, velocity: 0.32, dur: 3.9 }),
-    chordLine(B_CHORDS, { start: B, octave: 2, center: 48, velocity: 0.26, dur: 3.9 }),
-    chordLine(C_CHORDS, { start: C, octave: 2, center: 48, velocity: 0.42, dur: 3.9 }),
-    chordLine(D_CHORDS, { start: D, octave: 2, center: 50, velocity: 0.6, dur: 3.9 }),
-    chordLine(TRANS_CHORDS, { start: TRANS, octave: 2, center: 48, velocity: 0.62, dur: 3.9 }),
-  );
-}
-
-/** Low string heartbeat: sparse in the dread, doubling under the answer, full in the climax. */
-function stringsLowPedal(): Note[] {
-  const roots = chordRoots(ALL_CHORDS, 2);
-  const notes: Note[] = [];
-  for (let bar = 0; bar < BARS; bar++) {
-    const at = bar * BAR;
-    const root = roots[bar]!;
-    if (at < A) continue;
-    if (at >= D) {
-      for (let s = 0; s < 8; s++) notes.push([at + s * 0.5, 0.48, root, Math.min(1, 0.68 + (s % 2) * 0.2)]);
-      continue;
-    }
-    if (at >= B) {
-      for (let s = 0; s < 4; s++) notes.push([at + s, 0.9, root, 0.32 + (s === 0 ? 0.08 : 0)]);
-      continue;
-    }
-    notes.push([at, 0.9, root, 0.5]);
-    notes.push([at + 2, 0.9, root, 0.34]);
+  for (let at = 0; at < STRIP; at += BAR) {
+    notes.push([at, Math.min(BAR, STRIP - at) + 0.4, octaveNote, velocity]);
   }
-  return notes;
+  // The last statement of the drone fades rather than stopping dead, so the
+  // voices are left alone by subtraction and not by an edit.
+  const out = swell(notes, 4, 0.5);
+  const lastTwo = out.slice(-2);
+  for (const n of lastTwo) n[3] = (n[3] ?? 0.4) * 0.6;
+  return out;
 }
 
-/** Brass and strings answer together with PYREFLY_SIGH, three times through B, rising. */
-function answerLine(tonic: string): Note[] {
+// ------------------------------------------------------------------- celesta
+
+/**
+ * A music box running down. It states HYMN_HEAD three times, three octaves
+ * above the choir, each one quieter and each one further apart, and then it
+ * stops before the climax and never comes back. Nothing else in the cue has an
+ * attack; this is the only thing a listener can hear being struck.
+ */
+function celestaLine(): Note[] {
   return concatNotes(
-    cell(PYREFLY_SIGH, B, tonic, 0.55),
-    cell(PYREFLY_SIGH, B + 16, tonic, 0.66),
-    cell(PYREFLY_SIGH, B + 32, tonic, 0.76),
+    cell(augment(HYMN_HEAD, SLOW), bar(1), 'E6', 0.34),
+    cell(augment(HYMN_HEAD, SLOW), bar(5), 'E6', 0.24),
+    cell(augment(HYMN_HEAD, SLOW), bar(9), 'E6', 0.15),
   );
-}
-
-/** Full string swell: enters quiet with the answer, widens through the build, crests loudest
- * in the climax so the biggest section of the score reads as clearly the loudest. */
-function stringsSwell(): Note[] {
-  return concatNotes(
-    chordLine(B_CHORDS, { start: B, octave: 3, center: 64, velocity: 0.3, dur: 3.85, roll: 0.06 }),
-    chordLine(C_CHORDS, { start: C, octave: 3, center: 64, velocity: 0.55, dur: 3.85, roll: 0.05 }),
-    chordLine(D_CHORDS, { start: D, octave: 4, center: 71, velocity: 0.85, dur: 3.85, roll: 0.04 }),
-    chordLine(TRANS_CHORDS, { start: TRANS, octave: 3, center: 62, velocity: 0.3, dur: 3.85 }),
-  );
-}
-
-/** Double-time drive: silent in the dread, 8ths under the answer, 16ths building and driving. */
-function stringsShortOstinato(): Note[] {
-  return concatNotes(
-    arpLine(B_CHORDS, { start: B, pattern: [0, 1, 2, 1], step: 0.5, dur: 0.42, octave: 4, center: 74, velocity: 0.32 }),
-    arpLine(C_CHORDS, { start: C, pattern: [0, 2, 1, 2, 0, 1, 2, 1], step: 0.25, dur: 0.22, octave: 4, center: 74, velocity: 0.48 }),
-    arpLine(D_CHORDS, { start: D, pattern: [0, 1, 2, 3, 2, 1, 2, 3], step: 0.25, dur: 0.22, octave: 4, center: 76, velocity: 0.62 }),
-  );
-}
-
-/** Timpani: distant tolls, a heartbeat under the dread, rolling into the build, hits through the
- * climax, and the soft solo hit that anchors the transition bar back to the top of the loop. */
-function timpaniLine(): Note[] {
-  const roots = chordRoots(ALL_CHORDS, 2);
-  const notes: Note[] = [];
-  for (let bar = 0; bar < BARS; bar++) {
-    const at = bar * BAR;
-    const root = roots[bar]!;
-    if (at < A) {
-      notes.push([at, 3, root, bar === 0 ? 0.65 : 0.4]);
-      continue;
-    }
-    if (at >= TRANS) {
-      notes.push([at, 2.5, root, 0.5]);
-      if (at === TRANS + BAR * 2) notes.push([at + 3, 1, root, 0.42]);
-      continue;
-    }
-    if (at >= D) {
-      notes.push([at, 1, root, 0.85]);
-      notes.push([at + 1.5, 0.5, root, 0.6]);
-      notes.push([at + 2, 1, root, 0.78]);
-      notes.push([at + 3.5, 0.5, root, 0.65]);
-      continue;
-    }
-    if (at >= C) {
-      for (let s = 0; s < 4; s++) notes.push([at + s, 0.9, root, 0.55 + s * 0.06]);
-      continue;
-    }
-    if (at >= B) {
-      for (let s = 0; s < 8; s++) notes.push([at + s * 0.5, 0.5, root, 0.3 + (s / 8) * 0.35]);
-      continue;
-    }
-    notes.push([at, 1.5, root, 0.6]);
-    notes.push([at + 2.5, 1, root, 0.4]);
-  }
-  return notes;
-}
-
-/** Taiko: absent in the dread, an 8th-note pulse under the answer, 16ths from the build onward. */
-function taikoLine(): Note[] {
-  const notes: Note[] = [];
-  for (let bar = 0; bar < B_CHORDS.length; bar++) {
-    notes.push(...drumLine('XxxxXxxx', { start: B + bar * BAR, step: 0.5, pitch: 'D2', velocity: 0.26 }));
-  }
-  for (let bar = 0; bar < C_CHORDS.length; bar++) {
-    notes.push(...drumLine('XxxxxxxxXxxxxxxx', { start: C + bar * BAR, pitch: 'D2', velocity: 0.5 }));
-  }
-  for (let bar = 0; bar < D_CHORDS.length; bar++) {
-    notes.push(...drumLine('XxxXxxxxXxxXxxxx', { start: D + bar * BAR, pitch: 'D2', velocity: 0.72 }));
-  }
-  return notes;
-}
-
-/** Two cymbal hits mark the climax's two rise statements — nothing else in the piece gets one,
- * so they land as the loudest single accents in the score. */
-function crashes(): Note[] {
-  return [
-    [D, 1.8, 'C5', 0.75],
-    [D + 20, 1.8, 'C5', 0.82],
-  ];
-}
-
-/** One toll per section, the way the boss-dread bell does — never more insistent than that. */
-function tolls(): Note[] {
-  return [
-    [0, 5, 'B2', 0.62],
-    [A, 5, 'B2', 0.55],
-    [B, 5, 'F#2', 0.58],
-    [C, 4, 'A2', 0.6],
-    [D, 6, 'D3', 0.75],
-    [TRANS, 5, 'F#2', 0.5],
-  ];
 }
 
 export const yuYevonTrack: Track = {
   name: 'boss-yu-yevon',
-  bpm: 96,
+  bpm: 40,
   timeSig: [4, 4],
-  loop: { start: A, end: LENGTH },
+  loop: { start: HYMN_AT, end: LENGTH },
   length: LENGTH,
-  tailSec: 5,
+  tailSec: 9,
   fx: {
     reverb: { room: 0.94, damp: 0.2, width: 1, preDelay: 0.05 },
-    delay: { timeBeats: 1.5, feedback: 0.3, damp: 2200 },
+    delay: { timeBeats: 2, feedback: 0.22, damp: 2000 },
   },
   channels: [
-    {
-      name: 'choir',
-      instrument: 'choir',
-      volume: 0.85,
-      pan: -0.06,
-      notes: concatNotes(choirDread(), choirAnswer(), choirBuild(), choirClimax()),
-      fx: { reverb: 0.55 },
-    },
-    {
-      name: 'organ',
-      instrument: 'organ',
-      volume: 0.7,
-      pan: 0.08,
-      notes: organLine(),
-      fx: { reverb: 0.4 },
-    },
-    {
-      name: 'strings-low',
-      instrument: 'strings-low',
-      volume: 0.7,
-      pan: -0.15,
-      notes: stringsLowPedal(),
-      fx: { reverb: 0.32 },
-    },
-    {
-      name: 'strings answer',
-      instrument: 'strings',
-      volume: 0.68,
-      pan: 0.1,
-      notes: answerLine('B4'),
-      fx: { reverb: 0.4, delay: 0.1 },
-    },
-    {
-      name: 'strings swell',
-      instrument: 'strings',
-      volume: 0.6,
-      pan: 0.22,
-      notes: stringsSwell(),
-      fx: { reverb: 0.45 },
-    },
-    {
-      name: 'strings-short',
-      instrument: 'strings-short',
-      volume: 0.5,
-      pan: 0.3,
-      notes: stringsShortOstinato(),
-      fx: { reverb: 0.2 },
-    },
-    {
-      name: 'brass answer',
-      instrument: 'brass',
-      volume: 0.72,
-      pan: -0.22,
-      notes: concatNotes(answerLine('B3'), brassBuild(), brassClimax()),
-      fx: { reverb: 0.35, delay: 0.08 },
-    },
-    {
-      name: 'brass stabs',
-      instrument: 'brass-stab',
-      volume: 0.5,
-      pan: -0.35,
-      notes: concatNotes(stabs(C_CHORDS, C, [0, 2], 0.7), stabs(D_CHORDS, D, [0, 1, 2, 3], 0.85)),
-      fx: { reverb: 0.2 },
-    },
-    { name: 'timpani', instrument: 'timpani', volume: 0.8, pan: 0.12, notes: timpaniLine(), fx: { reverb: 0.32 } },
-    { name: 'taiko', instrument: 'taiko', volume: 0.62, pan: -0.1, notes: taikoLine(), fx: { reverb: 0.22 } },
-    { name: 'bell', instrument: 'bell', volume: 0.5, pan: 0.35, notes: tolls(), fx: { reverb: 0.6, delay: 0.3 } },
-    { name: 'crash', instrument: 'crash', volume: 0.5, pan: 0.15, notes: crashes(), fx: { reverb: 0.3 } },
-    {
-      name: 'sub',
-      instrument: 'bass-sub',
-      volume: 0.58,
-      pan: 0,
-      notes: chordRoots(ALL_CHORDS, 1).map((midi, bar): Note => [bar * BAR, 3.9, midi, bar * BAR >= D ? 0.7 : 0.5]),
-    },
+    { name: 'choir soprano', instrument: 'choir', volume: 0.82, pan: -0.18, notes: sopranoLine(), fx: { reverb: 0.55 } },
+    { name: 'choir alto', instrument: 'choir', volume: 0.6, pan: 0.08, notes: altoLine(), fx: { reverb: 0.55 } },
+    // Tenor and bass were written for `choir-ooh`, the darker closed-vowel
+    // choir. It has a sampled preset but no synthesised voice, and naming it
+    // would throw on the runtime's fallback path — the path that exists so the
+    // game never goes silent. They sit on `choir`, panned wide and pulled back,
+    // and the SATB separation comes from register and seating instead.
+    { name: 'choir tenor', instrument: 'choir', volume: 0.58, pan: -0.3, notes: tenorLine(), fx: { reverb: 0.58 } },
+    { name: 'choir bass', instrument: 'choir', volume: 0.6, pan: 0.3, notes: bassLine(), fx: { reverb: 0.58 } },
+    { name: 'choir organum', instrument: 'choir', volume: 0.5, pan: 0.42, notes: organumLine(), fx: { reverb: 0.68, delay: 0.18 } },
+    { name: 'drone strings', instrument: 'strings-low', volume: 0.5, pan: -0.05, notes: droneLine('E1', 0.4), fx: { reverb: 0.42 } },
+    { name: 'drone organ', instrument: 'organ', volume: 0.3, pan: 0.05, notes: droneLine('E2', 0.34), fx: { reverb: 0.5 } },
+    { name: 'music box', instrument: 'celesta', volume: 0.36, pan: -0.38, notes: celestaLine(), fx: { reverb: 0.6, delay: 0.2 } },
   ],
 };
 

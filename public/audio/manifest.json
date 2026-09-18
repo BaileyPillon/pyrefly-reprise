@@ -23,11 +23,11 @@
     "boss-seymour": {
       "file": "music/boss-seymour.mp3",
       "loopStart": 7.2727,
-      "loopEnd": 109.0909,
-      "duration": 112.0909,
-      "bytes": 1642774,
-      "lufs": -15.98,
-      "truePeakDb": -1.4
+      "loopEnd": 98.1818,
+      "duration": 101.1818,
+      "bytes": 1592960,
+      "lufs": -15.99,
+      "truePeakDb": -1.49
     },
     "title": {
       "file": "music/title.mp3",
@@ -76,12 +76,12 @@
     },
     "boss-yunalesca": {
       "file": "music/boss-yunalesca.mp3",
-      "loopStart": 8.1818,
+      "loopStart": 10.9091,
       "loopEnd": 100.9091,
       "duration": 103.9091,
-      "bytes": 1533677,
-      "lufs": -16,
-      "truePeakDb": -2.41
+      "bytes": 1510224,
+      "lufs": -15.97,
+      "truePeakDb": -1.8
     },
     "scene-dreams-end": {
       "file": "music/scene-dreams-end.mp3",
@@ -97,17 +97,17 @@
       "loopStart": 6.6667,
       "loopEnd": 106.6667,
       "duration": 109.6667,
-      "bytes": 1754536,
-      "lufs": -15.99,
-      "truePeakDb": -3.28
+      "bytes": 1758394,
+      "lufs": -16.01,
+      "truePeakDb": -3.03
     },
     "boss-yu-yevon": {
       "file": "music/boss-yu-yevon.mp3",
-      "loopStart": 10,
-      "loopEnd": 130,
-      "duration": 133,
-      "bytes": 1959486,
-      "lufs": -16.02,
+      "loopStart": 6,
+      "loopEnd": 210,
+      "duration": 213,
+      "bytes": 3151611,
+      "lufs": -16.03,
       "truePeakDb": -1.39
     },
     "victory-ffx": {
