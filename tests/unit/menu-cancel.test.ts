@@ -32,6 +32,22 @@ function key(code: string): void {
   window.dispatchEvent(new KeyboardEvent('keydown', { code, bubbles: true }));
 }
 
+/**
+ * Wait out the frame an Esc press lives in.
+ *
+ * The FFX menu hands the claim back one animation frame after the press that
+ * caused it, not synchronously — `src/ui/ffx/cancelClaim.ts` has the full
+ * account. The short version: `BattleScreen` polls `justPressed('cancel')` on
+ * the next frame, so a claim dropped inside the `keydown` handler left that
+ * poll seeing a free Esc and one tap both backed out of the submenu and opened
+ * the pause menu.
+ */
+const afterFrame = (): Promise<void> =>
+  new Promise((resolve) => {
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => resolve());
+    else setTimeout(() => resolve(), 0);
+  });
+
 beforeEach(() => {
   setMenuOwnsCancel(false);
   document.body.innerHTML = '';
@@ -69,7 +85,7 @@ describe('FFX command menu', () => {
     expect(menuOwnsCancel()).toBe(false);
   });
 
-  it('takes Esc in a submenu and gives it back on the way out', () => {
+  it('takes Esc in a submenu and gives it back on the way out', async () => {
     open();
     // Down to a category row with more than one entry ("Skill"), then in.
     key('ArrowDown');
@@ -77,10 +93,14 @@ describe('FFX command menu', () => {
     expect(menuOwnsCancel()).toBe(true);
 
     key('Escape'); // back to the top row
+    // Still claimed for the rest of this frame — the press that backed out is
+    // the same press `BattleScreen` is about to poll, and it must not pause.
+    expect(menuOwnsCancel()).toBe(true);
+    await afterFrame();
     expect(menuOwnsCancel()).toBe(false);
   });
 
-  it('takes Esc while targeting, even though targeting never re-renders the stack', () => {
+  it('takes Esc while targeting, even though targeting never re-renders the stack', async () => {
     open();
     // "Attack" is the top row and has two valid targets, so confirming it goes
     // straight to the reticle — the path that sets `state` without touching
@@ -89,6 +109,8 @@ describe('FFX command menu', () => {
     expect(menuOwnsCancel()).toBe(true);
 
     key('Escape'); // out of targeting, back to the top
+    expect(menuOwnsCancel()).toBe(true);
+    await afterFrame();
     expect(menuOwnsCancel()).toBe(false);
   });
 

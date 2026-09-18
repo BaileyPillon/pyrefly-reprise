@@ -1,6 +1,6 @@
 import type { ItemId, MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
-import { setMenuOwnsCancel } from '../../common/menuCancel.ts';
+import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../cancelClaim.ts';
 import { arr, escapeHtml, MinigameCancelled } from './params.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 
@@ -80,7 +80,7 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
       if (settled) return;
       settled = true;
       watcher.detach();
-      setMenuOwnsCancel(false);
+      releaseCancel();
       await overlay.flashSuccess();
       await overlay.close();
       resolve({
@@ -94,7 +94,7 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
       if (settled) return;
       settled = true;
       watcher.detach();
-      setMenuOwnsCancel(false);
+      releaseCancelAfterPress();
       await overlay.close();
       reject(new MinigameCancelled('rikku-mix'));
     };
@@ -137,7 +137,7 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
     renderSlots();
     watcher.attach();
     // Esc is this overlay's back button now, so the pause menu must not also
-    // answer the same press (`src/ui/common/menuCancel.ts`).
-    setMenuOwnsCancel(true);
+    // answer the same press (`src/ui/ffx/cancelClaim.ts`).
+    claimCancel();
   });
 }

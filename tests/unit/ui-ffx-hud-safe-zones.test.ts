@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleState } from '../../src/battle/common/types.ts';
+import { menuOwnsCancel } from '../../src/ui/common/menuCancel.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import {
   advisorZone,
@@ -284,5 +285,82 @@ describe('an Overdrive picker with nothing to pick', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
     await expect(pending).resolves.toMatchObject({ kind: 'kimahri-rage', rage: { rageId: 'jump' } });
     expect(root.querySelectorAll('.ig-minigame').length).toBe(0);
+  });
+});
+
+// ------------------------------------------------- one press, one meaning
+
+/**
+ * `src/ui/ffx/cancelClaim.ts` has the full account. In short: the menus answer
+ * `keydown` the instant it arrives, `BattleScreen` polls the same press as an
+ * edge on the next frame, and a claim dropped synchronously left that poll
+ * looking at a free Esc — so one tap backed out of a submenu *and* opened the
+ * pause menu. Every job of the live HUD matrix died on it.
+ */
+const afterFrame = (): Promise<void> =>
+  new Promise((resolve) => {
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => resolve());
+    else setTimeout(() => resolve(), 0);
+  });
+
+const key = (code: string): void => {
+  window.dispatchEvent(new KeyboardEvent('keydown', { code }));
+};
+
+/** Walk the stack down to the first row that opens a submenu. */
+function stepToGroupRow(hud: FFXBattleHud): void {
+  for (let i = 0; i < 8; i++) {
+    if (hud.el.querySelector('.ig-cmd--selected .ffx-cmd__chev')) return;
+    key('ArrowDown');
+  }
+  throw new Error('no group row in the fixture command list');
+}
+
+describe('Esc in a menu does not also open the pause', () => {
+  it('keeps the claim through the frame that carries the press, then drops it', async () => {
+    const hud = mountHud();
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    const pending = hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+    expect(menuOwnsCancel()).toBe(false); // top row: Esc belongs to the pause
+
+    stepToGroupRow(hud);
+    key('Enter');
+    expect(menuOwnsCancel()).toBe(true); // in a submenu: Esc is the back button
+
+    key('Escape');
+    // The step back has already happened...
+    expect(hud.el.querySelector('.ig-cmd--selected .ffx-cmd__chev')).not.toBeNull();
+    // ...but the claim is still up, which is what `BattleScreen` polls next.
+    expect(menuOwnsCancel()).toBe(true);
+
+    await afterFrame();
+    expect(menuOwnsCancel()).toBe(false); // a *second* tap pauses, as it should
+
+    void pending;
+  });
+
+  it('drops the claim at once when the decision was made with confirm', async () => {
+    const hud = mountHud();
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    const pending = hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+    key('Enter'); // Attack, straight to targeting
+    expect(menuOwnsCancel()).toBe(true);
+    key('Enter'); // confirm the target — the command is submitted
+    expect(menuOwnsCancel()).toBe(false);
+    await expect(pending).resolves.toMatchObject({ kind: 'attack' });
+  });
+
+  it('holds it for an Overdrive picker backed out of with Esc', async () => {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const pending = openKimahriRage(root, { rages: [{ id: 'jump', name: 'Jump' }] });
+    expect(menuOwnsCancel()).toBe(true);
+
+    key('Escape');
+    expect(menuOwnsCancel()).toBe(true);
+    await expect(pending).rejects.toThrow(/backed out/);
+
+    await afterFrame();
+    expect(menuOwnsCancel()).toBe(false);
   });
 });

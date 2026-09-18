@@ -14,7 +14,7 @@ import {
 } from './CommandMenuLogic.ts';
 import type { Projector } from './DamageNumbers.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
-import { setMenuOwnsCancel } from '../common/menuCancel.ts';
+import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { TargetCursor, type TargetEntry } from './TargetCursor.ts';
 
@@ -163,6 +163,11 @@ export class CommandMenu {
    * sets `'target'` and goes straight to the reticle without touching
    * `renderStack()`, so publishing from the renderer would have left Esc
    * looking free while the player was mid-targeting.
+   *
+   * Which *kind* of release this is matters — see `cancelClaim.ts`. A step back
+   * to the top row that the player asked for with Esc has to keep the claim up
+   * for the frame that press is still an edge in, or `BattleScreen` polls it a
+   * moment later, finds Esc free, and opens the pause on the same tap.
    */
   private get state(): 'top' | 'sub' | 'target' {
     return this.stateValue;
@@ -170,8 +175,13 @@ export class CommandMenu {
 
   private set state(value: 'top' | 'sub' | 'target') {
     this.stateValue = value;
-    setMenuOwnsCancel(value !== 'top');
+    if (value !== 'top') claimCancel();
+    else if (this.handlingCancel) releaseCancelAfterPress();
+    else releaseCancel();
   }
+
+  /** True only inside the cancel branch of a button handler; see `state`. */
+  private handlingCancel = false;
 
   private suspended = false;
   private rows: TopRow[] = [];
@@ -231,7 +241,7 @@ export class CommandMenu {
     // No menu is open any more, so Esc is nobody's back button until the next
     // one opens. Without this a decision taken from a submenu would leave the
     // flag true and Esc dead for the rest of the battle.
-    setMenuOwnsCancel(false);
+    releaseCancel();
     this.watcher.detach();
     this.unwireClicks?.();
     this.targetCursor.hide();
@@ -287,9 +297,17 @@ export class CommandMenu {
 
   private onButton(b: UiButton): void {
     if (this.resume()) return;
-    if (this.state === 'target') return this.onTargetButton(b);
-    if (this.state === 'sub') return this.onSubButton(b);
-    return this.onTopButton(b);
+    // The flag is read by the `state` setter, which any of the three handlers
+    // may trip. Set here rather than in each cancel branch so a branch added
+    // later cannot forget it.
+    this.handlingCancel = b === 'cancel';
+    try {
+      if (this.state === 'target') return this.onTargetButton(b);
+      if (this.state === 'sub') return this.onSubButton(b);
+      return this.onTopButton(b);
+    } finally {
+      this.handlingCancel = false;
+    }
   }
 
   private onTopButton(b: UiButton): void {
