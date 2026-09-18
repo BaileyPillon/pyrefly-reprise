@@ -95,11 +95,41 @@ export class DreamsEndSceneScreen extends Screen {
       placeholder: () => paintBossSilhouette({ seed: 47 }),
       placeholderBaseline: 0.985,
       ...DREAMS_END_ENEMY_ACTOR_DEFAULTS,
-      rim: { color: 0xffb070, strength: 0.8, dir: [1, 0.3] as [number, number], width: 4.2 },
-      bounce: { color: 0xff8a46, strength: 0.24 },
-      groundShade: 0.12,
-      hover: { height: 0.12, bobAmplitude: 0.05, bobSpeed: 0.16 },
-      shadow: { radius: 1.45, opacity: 0.5, squash: 0.5 },
+      /**
+       * The rim carries this boss, and it has to, because the brightness cap
+       * below deliberately refuses to.
+       *
+       * Braska's Final Aeon is painted in browns and near-black and he stands
+       * against a near-black red sky — almost no value separation of his own.
+       * The tempting fix is overall gain, and that is exactly what clipped his
+       * steel greatsword flat. So he is separated at the **edge** instead:
+       * a stronger hot rim off the same right-hand key draws his whole
+       * silhouette against the sky, and a warmer bounce lifts the undersides
+       * of the legs and the great claw out of the floor, without touching a
+       * single highlight that bloom could catch.
+       *
+       * This is the general move for a dark creature on a dark plate: raise the
+       * rim, not the exposure.
+       */
+      rim: { color: 0xffb070, strength: 1.05, dir: [1, 0.3] as [number, number], width: 4.2 },
+      bounce: { color: 0xff8a46, strength: 0.3 },
+      groundShade: 0.26,
+      /**
+       * **Not hovering.** Braska's Final Aeon is a four-tonne thing that stands
+       * on the arena floor; the generic boss staging lifted him 0.12 off it and
+       * bobbed him, and at this rig that reads as a cut-out pasted over the
+       * painting rather than as a body in the room. He keeps a slow vertical
+       * breath (`breathe`, below) and nothing else.
+       *
+       * The contact shadow does the rest of the work. At opacity 0.5 under a
+       * silhouette this wide there was nothing on the floor to anchor him to —
+       * the eye had no point where the creature met the ground, which is the
+       * single fastest way to lose the scale the `worldHeight` is buying. A
+       * wider, darker, flatter pool reads as weight, and `groundShade` doubled
+       * is what keeps his own feet from staying brighter than the floor they
+       * are standing on.
+       */
+      shadow: { radius: 1.95, opacity: 0.72, squash: 0.42 },
       breathe: { amplitude: 0.012, speed: 0.22 },
       sway: { amplitude: 0.006, speed: 0.15 },
     };
@@ -136,7 +166,11 @@ export class DreamsEndSceneScreen extends Screen {
     for (const a of this.actors) a.update(dt);
     this.camera?.update(dt);
     const boss = this.actors[this.actors.length - 1];
-    boss?.setBrightness(0.85 + (0.82 + Math.sin(this.clock * 0.85) * 0.18) * 0.25);
+    // Kept strictly under 1: `setBrightness` is a straight multiplier on the
+    // sampled texel, and this boss carries a near-white steel greatsword. Any
+    // multiplier above 1 clips that blade flat and it reads as a glowing white
+    // blob instead of as metal. Breathe him 0.86..0.96 instead.
+    boss?.setBrightness(0.91 + Math.sin(this.clock * 0.85) * 0.05);
   }
 
   override render(): { scene: Scene; camera: Camera } | null {

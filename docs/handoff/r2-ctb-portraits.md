@@ -194,3 +194,31 @@ blank text on a flat dark background.
   string builders with no DOM assertions anywhere in `tests/unit/`.
 * Manual: chapter 1 (`seymour-flux`) battle-open, dev server, screenshots
   above.
+
+### 4.1 Final re-check (this pass)
+
+Re-ran the whole verification cold, since this round's work had been
+committed (`aaf8362`, "round 2 partial ... before deploy") with three of the
+five owned files still uncommitted in the tree:
+
+* `npx tsc --noEmit` — clean.
+* `npx vitest run` — **2,714 passed, 1 failed, 80 files.** The one failure is
+  `tests/unit/strategy-ffx2-vegnagun-shuyin.test.ts` > "wins the great
+  majority of forty contiguous chains", which **times out at 15 s** rather
+  than asserting wrong — reproduces in isolation too. That file is
+  `src/battle/ffx2` strategy-simulation territory (Chapter 5's Darkness/HP-cost
+  chain math), not one of this round's five owned files, and nothing here
+  touches `battle/`, `data/ffx2/**` or the RNG/seed path it depends on. Flagged
+  for whoever owns that suite; not fixed here.
+* Manual: re-drove the live dev server on port 5244 with
+  `window.__pyrefly.gotoChapter('seymour-flux', { skipCutscenes: true, auto:
+  'off' })` and confirmed the CTB list still shows painted portraits for
+  Tidus/Yuna/Kimahri, the `PORTRAIT_ALIAS` resolve for Seymour Flux, and the
+  idle-painting crop fallback for Mortiorchis (still tagged `B`/`A` in the
+  corner); the Sensor panel still shows all six coloured element diamonds.
+  Tried a second chapter (`ffx2-vegnagun-shuyin`) to see a non-neutral
+  affinity chip (`gravity: 'immune'` on Bahamut/Shuyin/Vegnagun) render as
+  `NULL`, but FFX-2 battles use `FFX2BattleHud`, not this round's
+  `CtbList`/`SensorPanel` — confirmed by code shape only
+  (`AFFINITY_COLOR.immune` / `'NULL'` label in `SensorPanel.ts`), not by a
+  live capture.

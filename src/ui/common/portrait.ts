@@ -140,10 +140,25 @@ function cropStyle(crop: PortraitCrop, opts: FaceOptions): string {
  */
 export function faceImgHtml(id: string | undefined, alt = '', opts: FaceOptions = {}): string {
   if (!id) return '';
-  const style = cropStyle(portraitCrop(id), opts);
+  const style = faceCropStyle(id, opts);
   const cls = opts.className ? ` class="${opts.className}"` : '';
   const src = artUrl(`art/portraits/${id}.png`);
   return `<img${cls} src="${src}" alt="${alt}" draggable="false" style="${style}" onerror="this.remove()" />`;
+}
+
+/**
+ * The inline `style` {@link faceImgHtml} puts on its `<img>`, on its own, for a
+ * caller that builds the element itself — `ui/ffx/portraits.ts`, whose chips
+ * stack three layers in one frame and need to add a `z-index` to this.
+ *
+ * Note the `position: absolute` in what comes back: that is not decoration.
+ * Anything that shares a frame with a chip layer has to be positioned too, or
+ * the browser paints the positioned layers over it whatever the DOM order says
+ * — which is exactly the bug that left the FFX CTB tiles showing their ink
+ * monogram on top of a perfectly good portrait (docs/handoff/bp1-portrait-basepath.md).
+ */
+export function faceCropStyle(id: string | undefined, opts: FaceOptions = {}): string {
+  return cropStyle(portraitCrop(id), opts);
 }
 
 /**

@@ -21,10 +21,7 @@ import {
 
 export async function turnStart(ctx: EventCtx, actorId: CombatantId): Promise<void> {
   ctx.stage.actor(actorId)?.setPose('idle');
-  if (ctx.onActionRig) {
-    ctx.onActionRig = false;
-    void ctx.stage.camera.moveTo('idle', 620);
-  }
+  void ctx.moments.turnStart();
   await ctx.sleep(TIMING.turnStart);
 }
 
@@ -41,9 +38,12 @@ export async function actionStart(
     void ctx.deps.messageBar?.show(event.abilityName, 'ability');
   }
 
-  if (!ctx.onActionRig && ctx.stage.camera.rigNames.includes('action')) {
-    ctx.onActionRig = true;
-    void ctx.stage.camera.moveTo('action', 300);
+  // The shot. An Overdrive earns its own rig — letterbox, name slab, held
+  // push-in — and everything else gets the ordinary punch-in on the attacker.
+  if (event.command.kind === 'overdrive') {
+    await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE');
+  } else {
+    await ctx.moments.actionOpen(event.actorId, pose);
   }
 
   if (pose === 'attack') {
@@ -61,6 +61,9 @@ export async function actionEnd(ctx: EventCtx): Promise<void> {
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   actor?.setPose('idle');
   ctx.actingId = null;
+  // Whatever the shot was — Overdrive letterbox, telegraph zoom, a plain
+  // punch-in — this is where the frame comes back to neutral.
+  await ctx.moments.actionClose();
   await ctx.sleep(TIMING.settle);
 }
 
@@ -88,6 +91,11 @@ export async function damage(
     return ctx.sleep(TIMING.miss);
   }
 
+  // The cut to the target, on the frame the hit lands. Only the first hit of a
+  // multi-hit action moves the camera (see `BattleMoments.impact`).
+  const heavy = event.crit || event.overkill === true || event.capped === true;
+  ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex, heavy });
+
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit });
   target?.flash(event.crit ? 0xffffff : 0xffd0c0, event.crit ? 260 : 200, event.crit ? 1 : 0.8);
   target?.shake(event.crit ? 0.16 : 0.1, 340);
@@ -103,10 +111,9 @@ export async function damage(
   });
 
   // Hit-stop: the whole frame holds for a beat on a crit or a finishing blow.
-  const heavy = event.crit || event.overkill === true || event.capped === true;
+  // (The punch that goes with it is part of the impact cut, above.)
   if (heavy) {
     ctx.stage.camera.shake(0.16, 340);
-    void ctx.stage.camera.punch(0.11, 460);
     await ctx.sleep(TIMING.hitStop);
   } else if (event.hitIndex === 0) {
     ctx.stage.camera.shake(0.08, 220);
@@ -151,6 +158,9 @@ export async function formChange(
   event: Extract<BattleEvent, { type: 'form-change' }>,
 ): Promise<void> {
   const actor = ctx.stage.actor(event.enemyId);
+  // Hold on the boss while the flash carries the swap, so the new form is
+  // revealed in close-up rather than noticed later at the idle framing.
+  await ctx.moments.formChange(event.enemyId);
   ctx.stage.vfx.screenFlash('#ffffff', 220);
   ctx.stage.camera.shake(0.2, 520);
   cue(ctx, 'form-change');
@@ -160,6 +170,7 @@ export async function formChange(
   await ctx.stage.setArt(event.enemyId, event.spriteKey ?? `${event.enemyId}-${event.formIndex + 1}`);
   await actor?.fadeTo(1, 380);
   await ctx.sleep(TIMING.formChange - 700);
+  await ctx.moments.formChangeEnd();
 }
 
 export async function charge(
@@ -174,6 +185,10 @@ export async function charge(
     ctx.stage.camera.shake(0.07, 520);
   }
   cue(ctx, 'charge', { volume: imminent ? 1 : 0.7 });
+  // Total Annihilation, Mega Flare, the Ultimate Jecht Shot, Terror of
+  // Zanarkand: the HUD raises its banner from `onEvent`; the moment is the
+  // slow zoom onto the boss and the heartbeat vignette pulse under it.
+  void ctx.moments.telegraph(event.enemyId, imminent ? 2 : 1, event.name);
   await banner(ctx, event.name, 'telegraph');
   await ctx.sleep(TIMING.charge);
 }
@@ -184,13 +199,12 @@ export async function victory(ctx: EventCtx): Promise<void> {
     const side = ctx.stage.sideOf(id);
     if (side === 'party' || side === 'aeon') ctx.stage.actor(id)?.setPose('victory');
   }
-  if (ctx.stage.camera.rigNames.includes('victory')) {
-    void ctx.stage.camera.moveTo('victory', 900);
-  }
+  void ctx.moments.victory();
   await ctx.sleep(TIMING.victory);
 }
 
 export async function defeat(ctx: EventCtx): Promise<void> {
+  ctx.moments.clear();
   ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900);
   for (const id of ctx.stage.staged()) {
     if (ctx.stage.sideOf(id) === 'party') ctx.stage.actor(id)?.setPose('ko');

@@ -909,3 +909,401 @@ session described in §6.5 and their sidecar prompts are still not ours.
 changes worth folding into the manifest by whoever owns it are the negative
 blocks in §7.2-1 and §7.2-3, and the `--composition boss` note in §7.2-2 for the
 `jump` and `hurt` rows.
+
+---
+
+## 8. Fourth fix pass (2026-09-17) — judge round 2, re-issued
+
+A fix list arrived scoring **42 states** below 7, with `tidus/idle` and
+`auron/idle` at 6. It is **the same list §6 already worked** — same subjects,
+same scores, same wording (Tidus's "floating shuriken", Auron's missing sake
+jug, Rikku's "claw blades sprout from the inside of the wrist", Wakka's
+"featureless glowing gold orb", Lulu's "short ruffled skirt with bare legs").
+The files on disk are two fix passes newer than the snapshot it describes.
+
+So §6.1's rule was applied before anything was queued: **every flagged frame was
+re-read against the file on disk.** That is the main finding of this pass, and
+it is now three-for-three — §6.1, §7.1 and §8 have each paid for themselves.
+
+### 8.1 What the re-read showed
+
+**33 of the 42 complaints describe frames that no longer exist.** Examples, all
+verified by opening the PNG:
+
+| Complaint | The file on disk |
+|---|---|
+| `tidus/idle` "canon yellow-and-black one-sleeve overall is gone" | `idleJ` (§6.6) wears the black-and-yellow overalls with the chest bib **and** the canon asymmetric legwear. The tag string in the sidecar spells both out. |
+| `tidus/hurt` "purple/blue hooded cape … REGENERATE" | A crouched, hunched recoil in the idle's costume. No cape anywhere in the set. |
+| `auron/idle` "no sake jug, katana is a slim standard blade" | `idleK` carries the gourd on a red cord and an oversized nodachi across the shoulder. |
+| `rikku/attack` "claw blades sprout from the inside of the wrist" | Proper knuckle housing on a gauntlet, front foot planted, clean fingers. |
+| `wakka/victory` "vest has turned black-and-white" | Yellow vest, thumbs-up, blitzball. (§6.8 already recorded this one.) |
+| `kimahri/*` "gold pauldrons, orange flame spear, two horns" | One orange horn and a steel spear in all eight cells. |
+| `yuna/cast` "gold disc floats detached with no visible staff shaft" | Staff gripped in the raised hand, shaft clearly attached, no ground circle. |
+
+**Nine of the complaints are still true, and re-reading at full resolution found
+four more the judge did not mention.** The four are the interesting half:
+
+- **`auron/victory` carries two katanas** — one shouldered, one sheathed in the
+  left hand — and wears the coat as a cape over both shoulders. No judge round
+  has ever flagged it. Found by opening the file.
+- **`lulu/ko` reads as a contented nap**: eyes open, smiling, head on her arm,
+  moogle tucked under her hand.
+- **`kimahri/item` holds a gem-topped rod**, not a potion; the state is not
+  readable.
+- **`auron/cast`, `auron/item` and `auron/hurt` drift the lower body** from the
+  idle's dark grey trousers to a pale hakama-style skirt. `item` was judged a
+  keeper anyway (the bottle and the gourd both read); the other two were not.
+
+### 8.2 Rounds run
+
+**R** (13 states, `--batch 3`), **S** (7 states), **T** (2 states). 61
+candidates, six replacements.
+
+### 8.3 The GPU was shared with six other sessions, and it cost most of the round
+
+`Get-CimInstance Win32_Process` showed **six `comfy.mjs` producers belonging to
+other groups** (`yunalesca-1`, `yunalesca-3`, `seymour-flux-body`,
+`mortiorchis`, `braskas-final-aeon-2`, `yu-yevon`) sharing the single ComfyUI
+queue. §6.4 blamed three-lanes-plus on this session's own concurrency; that was
+only half of it. **The queue is global, so "three producers is the sweet spot"
+means three producers _on the machine_, not three per session.** With nine or
+ten in flight a single render waited 15–25 minutes and `waitForResult`'s
+hard-coded 900 s deadline fired: **seven prompts timed out**, and a timeout
+aborts the rest of that state's batch, so several states came back with one
+usable variant instead of three.
+
+**A timed-out prompt still finishes server-side.** `comfy.mjs` gives up on the
+client, but ComfyUI has already written the PNG and `/history/<id>` still holds
+it. All seven were recovered with a ~30-line helper that refetches the image by
+prompt id, runs `tools/gen/rembg.py` over it and writes the sidecar from the
+submitted graph. That salvage produced `auron/hurtR.2`, `auron/koR.1`,
+`kimahri/hurtR.3`, `kimahri/itemR.2`, `lulu/attackR.2`, `lulu/victoryR.1` and
+`yuna/summonR.2` — **and `lulu/victoryR.1` is one of the six frames promoted in
+this pass.** If a lane dies with `Timed out waiting for prompt <id>`, do not
+re-roll it; go and fetch it.
+
+`tools/gen/comfy.mjs` was **not** edited — it is shared — but a
+`COMFY_WAIT_TIMEOUT` env override on that 900 s constant is the obvious change
+for whoever owns it.
+
+One render was also lost to a different shared-tree hazard: `kimahri/castR.1`
+failed with `FileNotFoundError: …castR.1.raw.png` because another session's
+cleanup removed the `*.raw.png` between the fetch and the `rembg` call.
+
+### 8.4 Per-subject results
+
+#### auron — 4 genuinely weak, 3 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `hurt` | R, `.1` of 3 (w 0.42 / st 0.40, `--composition boss`) | **The best Auron damage frame in the project.** Doubled over, one hand braced on the knee, teeth bared, sunglasses on, coat off one shoulder with the empty sleeve hanging, dark grey trousers and brown boots, a **single** katana held point-down. Replaces a frame that had a second blue-wrapped shaft behind the shoulder, two sake gourds lying detached on the ground and a baked ground shadow. |
+| `ko` | S, `.3` of 3 (w 0.5 / st 0.35, `prone`, 1216x832) | Face clearly visible with the sunglasses still on, gloved hand limp, coat spread, legs separable, one katana lying flat beside him, clean white ground. Replaces the frame where a red pole and the katana crossed through the torso. Round R is why `ribbon curtain, hanging cloth, streamers, banners, falling cloth, paper strips` is now in his KO negatives: `koR.1` came back as a **full-frame curtain of red and blue ribbons** with Auron an inch tall in the corner. |
+| `victory` | S, `.3` of 3 (w 0.5 / st 0.32) | **One** weapon, the coat worn off one shoulder, the gourd on its cord, sunglasses, chin up. Fixes the undetected two-katana defect in §8.1. Honest caveats: the coat renders coral rather than crimson (§7.3, still unfixed) and the sword is slung diagonally behind the back rather than resting on the shoulder. |
+| `cast` | **not replaced** — 7 candidates over R, S and T | See §8.5. |
+
+#### kimahri — 4 genuinely weak, 1 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `hurt` | R, `.1` of 3 (w 0.6 / st 0.42, `--composition boss`) | Down on one knee with the spear planted and firmly gripped. The point of the swap is identity: the frame it replaces had a **black** horn where every other cell has the short orange one, and an ornate double-ended spearhead where the idle has a plain red shaft. Three of the judge's four notes clear. **Known defect:** the spearhead runs off the top-left canvas corner, so `tools/gen/qc.py` reports `BG-RETAINED` on the one opaque corner pixel. A round-S retry at `--composition full` produced a duplicate spear instead, so this stands. |
+| `attack`, `item`, `cast` | **not replaced** | See §8.5. |
+
+#### lulu — 3 genuinely weak, 1 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `victory` | R, `.1` of 3 (w 0.5 / st 0.32) — **salvaged from a timed-out prompt** | The moogle held up in the raised hand with a readable face (dot eyes, red cheeks, red pom), a real smile, floor-length black belt skirt, red iris. Fixes the judge's load-bearing complaint that the old frame was "nearly identical to the idle, so it does not signal victory" — the old one stood with both arms down in a narrow fishtail gown. The dress still reads closer to charcoal than true black. |
+| `attack`, `ko` | **not replaced** | See §8.5. |
+
+#### wakka — 1 genuinely weak, 1 replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `cast` | R, `.2` of 3 (w 0.55 / st 0.34) | The old frame wrapped him in a **frame-filling opaque white-and-blue water ring** that rembg kept whole — 58.7% opaque, crop box on all four canvas edges — with the ball held low in the wrong hand and the trousers gone orange. The new one has the blue-and-white blitzball raised in one hand, mouth open shouting, the idle's blue-and-yellow trousers, sandals and dolphin necklace, and a clean 702x1197 cutout. Cost: no spell VFX at all, which is the §5.1 "Wakka charges his own weapon" compromise taken one step further. |
+
+#### tidus, yuna, rikku — 0 replaced
+
+All 16 of their flagged states were re-read and kept. Tidus's seven are the
+round J/K set and are the most internally consistent subject in the group:
+yellow hooded vest, black-and-yellow overalls with the chest bib, blue right
+pauldron, red-and-black armoured right arm, asymmetric legwear and the turquoise
+Brotherhood in every cell that holds a weapon. Rikku's four complaints are all
+stale. Yuna's `summon` is discussed below.
+
+### 8.5 What this pass could not fix
+
+Seven states were regenerated and **kept as they were**, because every candidate
+was worse than the file on disk. Recording the recipes so the next pass does not
+re-run them.
+
+- **`auron/cast` — 7 candidates.** Round R (`--ref` at 0.55) produced three
+  frames with the katana lowered. Rounds S and T dropped `--ref` entirely per
+  §6.7, and that **produced a true crimson haori for the first time in the
+  project** — §7.3 called that unfixable across 13 candidates, and the answer is
+  that the IP-Adapter was carrying the reference's washed red all along. But
+  without the adapter the coat is worn as a **cape over both shoulders**, and
+  `cast.json` is explicit: *if both arms are in the sleeves, reject.* The file on
+  disk keeps the one-shoulder drape and drifts the lower body to a pale hakama
+  skirt instead. The drape won. **The lever nobody has tried: keep `--ref` off
+  for the colour and put the drape in via `--img2img` from the approved idle.**
+- **`kimahri/attack` — 6 candidates over R and S**, at weight 0.6/0.48 and start
+  0.40/0.46, under `--composition boss`. Every one is a Ronso standing holding a
+  spear. §7.5's round-L charge has not been reproduced since. Worse, `boss`
+  framing on Kimahri twice produced a **bust-shot crop with the legs cut off** —
+  so §7.2-2's "use `boss` for anything that will not break" does not generalise
+  to him.
+- **`kimahri/item` — 9 candidates over R, S and T.** At `--refWeight` 0.6 the
+  adapter copies the idle's gripping paws and both hands come back empty. With
+  no `--ref` the bottle appears but the Ronso does not: long curved horns, a
+  short blue mane, gold pauldrons, and an **amber liquor bottle** rather than a
+  potion. At 0.5 (`itemT.2`) the bottle is finally readable — and the gold
+  pauldrons and the long horn come with it, which is verbatim what the judge
+  rejected the current frame for. There is no setting between "no item" and "not
+  Kimahri". Next lever: `--img2img` from the current frame with the rod painted
+  over as a blue bottle.
+- **`lulu/attack` — 5 candidates.** At `--refWeight` 0.55 the skirt turns into a
+  split gown over bare legs; at 0.62 she stops attacking. One candidate returned
+  a **full-frame rainbow field** that rembg kept whole; another grew two giant
+  moogle heads in the top corners. The file on disk keeps the strike and loses
+  the skirt, which is the trade §7.5 already made deliberately.
+- **`lulu/ko` — 3 candidates.** All three still read as reclining and posing,
+  and two sat her in a coloured puddle. `sleeping peacefully, napping, resting,
+  head on her arm, hand under cheek, propped up on one elbow, reclining,
+  seductive` in the negative did not move it. A prone female figure on this
+  checkpoint has a very strong "lying down prettily" prior.
+- **`yuna/summon` — 2 candidates.** The §7.3 curse holds in both directions:
+  raise the staff and its head crops off the canvas (`summonR.2`); put the spell
+  above the free palm and **the staff disappears entirely** (`summonR.1`).
+  `summonR.1` is otherwise the best Yuna frame produced here — a real glowing
+  magic circle over an open palm, floor-length hakama, clean hands, no invented
+  cape — but a summoner's summon without her khakkhara is not promotable, and it
+  cut to 603x725, two thirds the height of her other cells, which would render
+  her visibly smaller in-engine.
+- **`kimahri/cast` — 0 usable candidates.** Its one round-R render was lost to
+  the `*.raw.png` race in §8.3. The file on disk keeps a faint ground shadow
+  baked into the cutout; unchanged.
+
+### 8.6 Final state
+
+| Subject | States | Genuinely weak | Replaced | Sheet |
+|---|---|---|---|---|
+| `tidus` | 7 | 0 | 0 | `docs/screenshots/art/tidus.png` (unchanged) |
+| `yuna` | 8 | 1 | 0 | `docs/screenshots/art/yuna.png` (unchanged) |
+| `auron` | 7 | 4 | 3 | `docs/screenshots/art/auron.png` **rebuilt** |
+| `kimahri` | 8 | 4 | 1 | `docs/screenshots/art/kimahri.png` **rebuilt** |
+| `wakka` | 7 | 1 | 1 | `docs/screenshots/art/wakka.png` **rebuilt** |
+| `lulu` | 7 | 3 | 1 | `docs/screenshots/art/lulu.png` **rebuilt** |
+| `rikku` | 8 | 0 | 0 | `docs/screenshots/art/rikku.png` (unchanged) |
+
+`tools/gen/qc.py` reports `ok` on 51 of the group's 52 sprites. The exceptions
+are `kimahri/hurt` (`BG-RETAINED`, the clipped spearhead above) and `rikku/ko`
+(`DANGLE-90px`, a prone frame, exempt by the `ko` convention in
+`docs/ART-PIPELINE.md` §5).
+
+Every round R/S/T numbered variant and every `*.raw.png` under this group's
+folders was deleted. `rikku/{koJ,hurtJ}.*` were **again** left in place — §6.5,
+they are still another session's. `mortiorchis/`, `yunalesca-1/` and
+`yunalesca-3/` raw files seen during cleanup were left alone for the same
+reason.
+
+Judging sheets for this pass are `docs/screenshots/art/_v-pick-{R,S,T}-*.png`.
+`tools/gen/cast.json` and `tools/gen/comfy.mjs` were not edited.
+
+### 8.7 Appendix — the timeout salvage helper
+
+Kept here rather than in `tools/gen/` because that folder is shared and this is
+a recovery aid, not part of the pipeline. Run it from the repo root with the
+prompt id `comfy.mjs` printed when it gave up, and the path the variant should
+have had. Every other session hitting `Timed out waiting for prompt` on a busy
+GPU can use it as-is.
+
+```js
+// salvage.mjs — recover a render whose prompt completed after comfy.mjs gave up.
+// node salvage.mjs <promptId> public/art/characters/<id>/<state>.<n>.png
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { spawnSync } from 'node:child_process';
+
+const [, , promptId, outPath] = process.argv;
+const BASE = 'http://127.0.0.1:8188';
+
+const hist = await (await fetch(`${BASE}/history/${promptId}`)).json();
+const entry = hist[promptId];
+if (!entry) { console.error('no history for', promptId); process.exit(2); }
+
+const imgs = [];
+for (const node of Object.values(entry.outputs || {}))
+  for (const i of node.images || []) imgs.push(i);
+if (!imgs.length) { console.error('no images for', promptId); process.exit(3); }
+
+const q = new URLSearchParams({
+  filename: imgs[0].filename,
+  subfolder: imgs[0].subfolder || '',
+  type: imgs[0].type || 'output',
+});
+const buf = Buffer.from(await (await fetch(`${BASE}/view?${q}`)).arrayBuffer());
+
+const raw = outPath.replace(/\.png$/i, '.raw.png');
+mkdirSync(dirname(outPath), { recursive: true });
+writeFileSync(raw, buf);
+
+const r = spawnSync(
+  'D:/Tools/ComfyUI/python_embeded/python.exe',
+  ['-s', 'tools/gen/rembg.py', '--in', raw, '--out', outPath, '--margin', '16'],
+  { encoding: 'utf8' },
+);
+process.stdout.write(r.stdout || '');
+process.stderr.write(r.stderr || '');
+
+// The submitted graph is in the history entry, so the sidecar is reconstructable.
+const g = entry.prompt?.[2] || {};
+const meta = JSON.parse(r.stdout || '{}');
+const k = g['3']?.inputs || {};
+writeFileSync(outPath.replace(/\.png$/i, '.json'), JSON.stringify({
+  ...meta,
+  seed: k.seed, steps: k.steps, cfg: k.cfg,
+  sampler: k.sampler_name, scheduler: k.scheduler,
+  prompt: g['6']?.inputs?.text,
+  negative: g['7']?.inputs?.text,
+  model: 'animagine-xl-4.0-opt.safetensors',
+  salvagedFrom: promptId,
+  generatedAt: new Date().toISOString(),
+}, null, 2));
+console.log('salvaged', outPath);
+```
+
+Two things to know about it. The node ids (`3` sampler, `6` positive,
+`7` negative) are the ones `baseTxt2Img` in `tools/gen/comfy.mjs` builds, so the
+sidecar reconstruction breaks if that graph is renumbered. And ComfyUI keeps
+history in memory only — restart it and the finished renders are gone, so
+salvage before you restart anything.
+
+## 9. Fifth fix pass (2026-09-17) — judge round 3 list, and the coral-coat cause
+
+A three-item list arrived: `auron/ko` 5, `auron/victory` 5, `kimahri/hurt` 6.
+This pass was **resumed from a run that was cut off mid-flight** — it left
+`auron/{koV,victoryV}.1-4` on disk with no log entry and nothing promoted. Those
+eight were re-read and judged alongside the new rounds rather than discarded.
+
+### 9.1 The re-read, again (§6.1, now four-for-four)
+
+| Judge's complaint | The file on disk |
+|---|---|
+| `ko` "figure jammed into the bottom-left corner, ~60% of the cell empty" | **Stale.** The body spans the full 1216 px width. |
+| `ko` "sword reads as a hilt and wrap with no visible blade" | **Stale.** A full silver blade is drawn. |
+| `ko` "body scale much smaller than every other cell" | **Stale.** |
+| `ko` "legs and right boot clipped by the right edge" | **True.** The crop box runs to x=1216, the canvas edge. |
+| `victory` two katanas / disembodied pale blade / two gourds / coat as a detached cape / purple-tinted hair / pale boots / static idle stance | **All six true.** Verified at full resolution. |
+| `hurt` two tails / no hand on the spear / bulkier than the idle / loincloth differs | **All four true.** |
+| `hurt` "both horns full-length; canon Kimahri's horn is a snapped stump" | **True of canon, and true of the idle too** — see §9.5. |
+
+### 9.2 The finding: the coral coat was never a prompt problem
+
+§7.3 recorded "Auron's coat renders coral rather than crimson" as unfixed after
+three passes of negative-prompt work (`orange coat, salmon coat, coral, peach,
+vermilion, light red` have all been in `--negAdd` since §7). None of it moved.
+
+**The coral is the idle's, and IP-Adapter was carrying it into every state.**
+`public/art/characters/auron/idle.png` is coral, and §3 of the pipeline doc
+already says the adapter transports local surfaces and not just identity
+("material bleed"). A colour cast is exactly that, and `--refEnd 0.85` does not
+clear it because the coat is the largest surface in the frame — the last four
+steps repaint texture, not hue.
+
+Round W dropped `--ref` entirely, per §6.7, and **the first variant came back in
+true deep crimson** with dark grey trousers and a black frog-clasped vest. Round
+Z, also unreferenced, did the same for `ko`. Twelve referenced candidates across
+rounds V, X and Y were coral without exception; seven unreferenced candidates
+across W and Z were crimson without exception. That is not a seed effect.
+
+So §6.7's rule extends: **drop `--ref` when the reference is wrong about
+something, not only when it is fighting the pose.** The whole point of an anchor
+is that everything downstream inherits it — including its mistakes, which is the
+caveat §3 of the pipeline doc already warns about, now with a worked example.
+
+### 9.3 Rounds run
+
+| Round | Subject / state | Settings | Variants |
+|---|---|---|---|
+| V | `auron/{ko,victory}` | ref 0.58-0.62 / st 0.30 | 8 (inherited from the cut-off run) |
+| X | `auron/{victory,ko}`, `kimahri/hurt` | ref 0.52-0.62 / st 0.32-0.40 | 12 |
+| Y | `auron/victory`, `kimahri/hurt` | ref 0.55 / st 0.38-0.45 | 8 |
+| Z | `auron/ko`, `kimahri/hurt` | **no `--ref`**, `--composition boss` for ko | 8 |
+| W | `auron/victory`, `kimahri/hurt` | **no `--ref`**, `--composition full` | 7 |
+
+43 candidates, two replacements.
+
+### 9.4 Per-subject results
+
+#### auron — `victory` replaced, `ko` kept
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `victory` | **W, `.1` of 4, seed 1868029568, no `--ref`** | Deep crimson haori worn off one shoulder with the bare shoulder and the empty sleeve both reading, black high-collared vest with white frog clasps, yellow belt, dark grey trousers, dark boots, black gloves, sunglasses, grey-streaked black hair, smirk, and **one** katana with the gloved fingers visibly closed on the grip, swept down and out to the side. Clears all six judge complaints. **Cost:** no gourd — a blue tassel hangs where the gourd should be. `victoryV.3` was the runner-up and the only candidate in 20 that kept the gourd, but it is coral with pale trousers. |
+| `ko` | **not replaced** — 12 candidates over V, X and Z | See §9.6. |
+
+#### kimahri — `hurt` replaced
+
+| State | Round / variant | Notes |
+|---|---|---|
+| `hurt` | **W, `.3` of 3, seed 1947763365, no `--ref`** | Down on one knee, head low, scowling, **one** tail, and one blue paw closed hard around the red spear shaft with the whole spear inside the frame. Black sleeveless top with the white skull emblem, red waist sash, blue hakama — the idle's costume, which is the point: the frame it replaces had a gold belt ring and a different sash. Fixes four of the judge's five notes. Also fixes the `BG-RETAINED` that §8.4 shipped knowingly, so **`tools/gen/qc.py` now reports `ok` on all 15 sprites across both subjects.** **Cost:** the spearhead is red-and-white rather than the idle's plain silver leaf, and the spear runs flush to the top and bottom of the canvas (still `ok` — no opaque corner). `hurtY.1` was the runner-up: cleaner framing and a silver leaf head, but the chest emblem drifted to a gold knot and the greaves went silver, which is two costume drifts against W.3's one. |
+
+### 9.5 The Kimahri horn is a real canon error, and it is not this pass's to fix
+
+`research/visual-bible.md` §1.6 is explicit: Kimahri's horn is **broken**, a
+stump, and §1.21's icon crop is built around it. Every cell in the sheet —
+including the `idle` that anchors them — has a full, intact, pointed orange
+horn. The judge is right.
+
+It was left alone deliberately. The `idle` did not score below 7, and the fix is
+not one frame: it is a new `idle`, then all eight states re-cut against it,
+because the horn is the silhouette. **That is its own pass and it should be
+scheduled as one.** Fixing `hurt` alone would have made `hurt` the only cell in
+the set with the canon horn, which is worse than a consistent error.
+
+### 9.6 What this pass could not fix
+
+**`auron/ko` — 12 candidates, none promotable.** The state has a very strong
+attractor on this checkpoint and every lever made something else worse:
+
+- **Referenced (V, X):** `koX.1` and `.2` came back with a grey cloud mass and
+  an opaque background; `koX.3` produced **six floating swords**; `koX.4` a
+  propped-up recline with a cord trailing off like a fishing line; `koV.2` a
+  frame-filling fur blob. Adding `many swords, a forest of swords, swords stuck
+  in the ground` to the negatives did not stop it — the swords arrived anyway.
+- **Unreferenced (Z):** the colours came out right for the first time, but
+  `koZ.3` **added three other people standing over him** (legs and hands only,
+  straight through the multi-subject negatives), `koZ.4` filled the frame with
+  **disembodied gloved hands**, and `koZ.1` — clean, crimson, whole body inside
+  the frame, one katana lying separately on the ground, every judge complaint
+  resolved — has him **propped on one elbow with his eyes open, looking at the
+  viewer**. Zoomed in on the face it is unmistakably conscious. A KO frame that
+  reads as a character portrait is not a KO frame, so it was not promoted.
+
+The file on disk stays. Its true defect is the one the judge named last: the
+boots run to the right canvas edge. Everything else on that list describes a
+frame that has not existed since §8.
+
+**The sheet is now two reds.** `victory` is canon crimson; the other six Auron
+cells are the idle's coral. This is the §9.2 finding arriving as a cost. The
+honest fix is to **re-shoot `auron/idle` unreferenced until it is crimson, then
+cascade all six remaining states off it** — which is exactly the order §7 of the
+pipeline doc prescribes and exactly what nobody has done, because the idle keeps
+not being the thing that scores below 7. Recommend scheduling it explicitly.
+
+### 9.7 Final state
+
+| Subject | States | Replaced | qc | Sheet |
+|---|---|---|---|---|
+| `auron` | 7 | 1 (`victory`) | 7/7 `ok` | `docs/screenshots/art/auron.png` **rebuilt** |
+| `kimahri` | 8 | 1 (`hurt`) | 8/8 `ok` | `docs/screenshots/art/kimahri.png` **rebuilt** |
+
+Judging sheets: `docs/screenshots/art/_v-pick-W-auron-victoryW.png` and
+`docs/screenshots/art/_v-pick-W-kimahri-hurtW.png`.
+
+Every round V/W/X/Y/Z numbered variant and every `*.raw.png` under
+`public/art/characters/{auron,kimahri}/` was deleted; both folders now hold only
+`<state>.png` and `<state>.json`. `tools/gen/cast.json` and
+`tools/gen/comfy.mjs` were **not** edited — the tag and negative changes above
+live in the sidecars, and `cast.json` should be updated by whoever owns the
+crimson-idle re-render, since that is when the identity string changes for good.

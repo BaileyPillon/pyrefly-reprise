@@ -98,8 +98,14 @@ live in exactly one place — the exported constants at the top of
 ```js
 export const STYLE_TAGS   = 'official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed';
 export const QUALITY_TAGS = 'masterpiece, high score, great score, absurdres';
-export const CHARACTER_COMPOSITION = 'straight-on, full body, standing, feet visible, simple background, white background';
+export const CHARACTER_COMPOSITION = 'full body, standing, feet visible, simple background, white background';
+export const FACING_PHRASES = { right: '(from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2)', /* ... */ };
 ```
+
+**The composition block lost its camera phrase in v3** (2026-09-17): the leading
+`straight-on` moved into `FACING_PHRASES`, and `compositionFor()` puts a facing
+phrase back on the front of whichever framing block you asked for. §2a is the
+whole story. The framing blocks are otherwise unchanged.
 
 **The composition block moved in v2** (2026-09-15). The proof-of-concept round
 closed with the observation that about one variant in three was framed usably
@@ -171,6 +177,111 @@ Recommended sampler settings come from the same card and are the CLI defaults:
 
 ---
 
+## 2a. Facing contract (v3)
+
+**Every sprite that stands on a battlefield faces its enemy.** v2 rendered the
+whole roster `straight-on`, which looked fine on a contact sheet and wrong the
+moment two of them were put in a scene: the party and the boss face each other
+across the field, and both of them were staring down the camera instead.
+
+The party stands on the **left** and fights rightward; enemies stand on the
+**right** and fight leftward. So:
+
+| Subject | `--facing` | What the art shows |
+| --- | --- | --- |
+| Party, dresspheres, allies | `right` | body angled ~45° toward the RIGHT edge |
+| Bosses, enemies, aeons | `left` | body angled ~45° toward the LEFT edge |
+| Portraits | `none` | v2 `straight-on`; a HUD head-shot meets the player's eye |
+
+A frontal face turned toward the viewer is wanted — the head has to stay
+readable, because the blind judge has to name the character unaided. A flat 90°
+profile is a **reject**, not a near-miss: it loses the face, and a flat cutout
+in profile reads as cardboard on the battlefield.
+
+`--facing` is a preset default (`character` → right, `boss` → left,
+`--composition portrait` → none), so a cast row that says nothing still gets the
+right one. `tools/gen/cast.json` states it explicitly on all 70 battlefield
+subjects anyway.
+
+```bash
+node tools/gen/comfy.mjs character --name tidus --facing right ...
+node tools/gen/comfy.mjs boss      --name yunalesca-1 --facing left ...
+```
+
+### The phrasing, and why each piece is in it
+
+```js
+FACING_PHRASES.right = '(from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2)';
+FACING_NEGATIVE      = 'facing viewer, front view, straight-on, symmetrical, from behind, facing away';
+```
+
+- `(from side:1.3)` — the only token that actually turns the body. **The
+  emphasis weight is the whole trick.** Twenty-one unweighted renders across
+  seven phrasings came back frontal, because a named character's prior *is*
+  their straight-on official art and a bare camera tag does not outvote it.
+- `three-quarter view` — does nothing alone, but stops the weighted `from side`
+  flattening into a profile.
+- `(looking at viewer:1.2)` — not optional. Without it the body keeps rotating
+  past profile into a back view.
+- `body facing right` / `left` — **decorative, and not to be trusted.** Two runs
+  differing in that one word produced the same images pair by pair. SDXL's text
+  encoder has no reliable left/right grounding.
+- The negatives are half the recipe; the generator appends them automatically
+  whenever `--facing` is not `none`. They are deliberately **not** applied to
+  `--composition prone` — banning `facing viewer` on a figure already drawn
+  `from side, eyes closed` rolls it face-down into the floor.
+
+The full A/B table — fourteen phrasings, three fixed seeds, plus the boss mirror
+check on Yunalesca — is `docs/handoff/art3-contract.md`.
+
+### Direction is fixed in post, not in the prompt
+
+The checkpoint has a bias and the bias is **frame-left**. That is already what
+enemies want, so `--facing left` mostly lands first time; `--facing right` mostly
+does not, and is mirrored afterwards:
+
+```bash
+D:\Tools\ComfyUI\python_embeded\python.exe -s tools/gen/flip.py \
+    public/art/characters/tidus/idle.png --set-facing right
+```
+
+`flip.py` mirrors the PNG and fixes the sidecar: `cropBox` is mirrored inside the
+source canvas, `flipped: true` records that the seed no longer reproduces the
+file, and `width`/`height`/`baselineY` are untouched — a horizontal mirror moves
+no row, and `baselineY` is a row. **Pass `--set-facing`**: the `facing` the
+generator writes is what was *requested*, and this script exists precisely
+because the render often ignores the request.
+
+**Do not mirror a chiral subject — reroll instead.** Auron's coat is off his
+**left** shoulder with that sleeve hanging empty; Kimahri's broken horn is one
+specific horn; legible text and asymmetric insignia become nonsense mirrored.
+
+### `--ref` does not carry facing
+
+`--ref` buys identity, not direction. Six referenced `tidus attack` renders
+against a facing-**right** idle, at `--refStart` 0.0 / 0.25 / 0.35, all came back
+facing frame-left. Facing is decided in the first steps of the denoise, which is
+exactly the window `--refStart 0.25` keeps the adapter out of — and moving the
+adapter into that window buys a duplicated sword, not a direction. Keep the
+defaults (`0.65 / 0.25 / 0.85`), and judge and mirror a referenced state exactly
+as you would an idle. Mirror an idle *before* referencing it, so the reference,
+the sidecar and the intent all agree.
+
+### KO poses keep their orientation
+
+A downed figure lies with its head toward the enemy it lost to — head-right for
+the party, head-left for enemies — so the body reads as having fallen *into* the
+fight. `--composition prone` swaps in a different phrase table for that
+(`head to the right, feet to the left`), because `body facing right` on a lying
+figure summons someone flat on their back and `looking at viewer` fights the
+`eyes closed` already in the prone block.
+
+### Judging order changed
+
+**Facing is judged first, before costume.** A good render pointing the wrong way
+is one `flip.py` from being right; no other defect in §6 is.
+
+
 ## 3. Generating
 
 ### Characters
@@ -200,15 +311,17 @@ the rest. **Judge on costume accuracy first** — the model knows the characters
 but it drifts on outfit details more than on faces.
 
 Flags: `--seed`, `--steps`, `--cfg`, `--batch`, `--margin`, `--width`,
-`--height`, `--size`, `--sampler`, `--scheduler`, `--composition`, `--negAdd`,
-`--ref`, `--refWeight`, `--refStart`, `--refEnd`, `--refWeightType`,
-`--refScaling`, `--img2img`, `--denoise`.
+`--height`, `--size`, `--sampler`, `--scheduler`, `--composition`, `--facing`,
+`--facingPhrase`, `--negAdd`, `--ref`, `--refWeight`, `--refStart`, `--refEnd`,
+`--refWeightType`, `--refScaling`, `--img2img`, `--denoise`.
 
 `--size WxH` is shorthand for `--width`/`--height`, and rejects anything that
 is not a multiple of 8 — SDXL's VAE strides by 8, and other values round
 silently and shift the framing.
 
-`--composition` now takes `full | portrait | prone | boss`.
+`--composition` now takes `full | portrait | prone | boss`, and `--facing` takes
+`right | left | none` (§2a). `--facingPhrase "..."` overrides the phrase table
+for an A/B on a fixed seed; nothing in the cast manifest uses it.
 
 ### Reference consistency — `--ref`
 
@@ -488,6 +601,11 @@ public/art/
 
 The failure modes worth rejecting on, in order:
 
+0. **Wrong facing.** Judged first since v3, and judged in two parts: is the body
+   turned at all (a frontal render is a reject), and is it turned the right way.
+   A good render pointing the wrong way is not a reject — mirror it with
+   `flip.py` (§2a), unless the subject is chiral. An overshoot into a flat
+   profile or a back view *is* a reject: the blind judge has to see the face.
 1. **Wrong costume.** The most common drift. Tidus loses the asymmetric black
    pattern on the yellow vest, or gains a symmetric pair of shorts legs.
 2. **Extra subjects.** Two characters, or a mirrored "multiple views" sheet,

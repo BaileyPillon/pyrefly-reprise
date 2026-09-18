@@ -245,3 +245,186 @@ Added:
   (`--only=bfa|rikku` captures one chapter per process; a fresh page per
   chapter is far more reliable than walking the flow between them)
 * `docs/screenshots/r2-actor-flash/` — 10 frames + `report.json`
+
+---
+
+## 6. Re-verification, 2026-09-17 ~12:20 (second pass over the same fix)
+
+This round's `actor-flash` slot was re-run against the tree as it stands now,
+after the art fleet and the other round-2 owners had moved underneath it. **No
+code was changed in this pass** — all four edits in §5 are present and
+unmodified in `aaf8362`. What follows is fresh evidence that they still hold.
+
+Fresh A/B captures, same harness, same port (**5245**), into
+`docs/screenshots/r2-actor-flash-recheck/`. The earlier frames in
+`docs/screenshots/r2-actor-flash/` are left in place as the original record.
+
+| Frame | Verdict on the current tree |
+|---|---|
+| `01-bfa-open.png` | **Chapter 3 opens on the real Braska's Final Aeon painting** — black plate armour, tan musculature, the red diamond row down the near arm, white hair, the greatsword behind the shoulder. Nothing flat, nothing green. |
+| `02-bfa-heal-flash.png` / `-before` | `-before` still reproduces `70/51-bfa.png`'s flat mint silhouette exactly; the shipped shader keeps every one of those surfaces under the green lift. |
+| `03-bfa-crit-flash.png` | `flash(0xffffff, 260, 1)` plus a crit bloom — **the hardest flash in the game** — and the armour, spikes, claws, diamonds and face all still read. |
+| `04-rikku-cast.png` / `-before` | The cast frame. `-before` is Rikku rendered as a uniform mint wash, skin and outfit alike. After: her skin tone, blue bandana, orange hair, yellow top and green scarf are all intact, and the cast light is a glow **at her hand** rather than over her. |
+| `05-rikku-crit.png` / `-before` | `-before` is issue 7 in its worst form: a white blob that also swallows Paine. After: Rikku is lit but legible and **Paine is untouched** — that second blob was the unscaled bloom, and `bloomScale` is what removed it. |
+
+`report.json` in that directory again records
+`{ id: 'braskas-final-aeon', art: 'braskas-final-aeon-1', pose: 'idle',
+placeholder: false }`, and the run logged **no console errors**, which re-settles
+the "placeholder path wrongly taken" hypothesis on the current art.
+
+Type-check: `npx tsc --noEmit` **clean**.
+
+### 6.1 Capture conditions worth knowing (they cost most of this pass)
+
+Neither is a defect in this work, but both will bite the next agent on this
+machine:
+
+* **Another owner's file was mid-edit for ~40 minutes.** `src/scenes/
+  bevelle-underground.ts` (Chapter 4's scene, not this slot's file) sat with an
+  unterminated doc comment, so `vite:oxc` returned **500 for the whole module
+  graph** and the app would not boot at all — the Rikku captures could not run
+  until it parsed again. Not touched; waited it out. Any agent that sees
+  "`__pyreflyReady` never becomes true" should read the dev-server log before
+  suspecting its own code.
+* **The dev server wedges, it does not crash.** Twice the port stayed
+  `LISTENING` while every request hung, both times because Vite was clearing
+  its cache and re-optimizing deps after another agent wrote a file (once a new
+  `critic/scratch/**/tsconfig.json`). `curl` returns `000` rather than a
+  refusal. It recovers on its own in a few minutes; killing and restarting Vite
+  only pays the optimize cost again.
+
+### 6.2 Tests on the re-verification pass
+
+| | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| `tests/unit/engine/`, `presenter-events`, `presenter-playback` | **44 passed**, 0 failed |
+| `npx vitest run` (full) | **2,549 passed**, **2 failed** (74 files) |
+
+**Neither failure belongs to this slot, and neither can:** the four files this
+slot owns are byte-identical to `aaf8362` (`git status` reports them
+unmodified), while both failing tests exercise files that *are* dirty in the
+working tree under other owners' in-flight edits.
+
+| Failing test | Why it is not this slot's |
+|---|---|
+| `tests/unit/ui-damage-numbers-layout.test.ts` — *"lifts a numeral over the HUD only when its target is buried under it"*, `expected 46 to be less than 40` | Imports `src/ui/common/DamageNumbers.ts` and `src/ui/common/damageLadder.ts` and nothing else from `src/`. Both are modified in the working tree — this is the `damage-numbers-fan` slot mid-edit. |
+| `tests/unit/strategy-braskas-final-aeon.test.ts` — *"wins the whole chain… (seed 20260916)"*, `expected 'defeat' to be 'victory'` | Runs the headless battle engine through `intendedStrategy`, i.e. `src/engine/tactics/braskas-final-aeon.ts`, which is likewise modified in the working tree by another owner. It touches no renderer code at all — this slot's files are not loaded by that test. |
+
+An earlier full run in this pass reported 9 failures across 6 files; all of the
+extra ones were `[vitest-pool]: Failed to start forks worker` / *"Timeout
+waiting for worker to respond"* — worker start-up starving on a machine running
+several agents at once, not assertions. They did not recur on the clean re-run.
+
+---
+
+## 7. Close-out, 2026-09-17 ~14:35
+
+The slot was interrupted by a usage limit after §6 and resumed here. **No code
+was changed in this pass either** — the four owned files are still unmodified
+against `aaf8362`, re-confirmed by `git status` and by reading the fixes back
+out of the tree:
+
+| File | Fix confirmed present |
+|---|---|
+| `src/engine/shaders/PaintedShader.ts:136-143` | `FLASH_FLOOR`/`FLASH_GAIN`/`FLASH_CEIL`, reflectance-weighted additive lift, `min(c + lift, max(c, FLASH_CEIL))` |
+| `src/engine/shaders/PaintedShader.ts:87-88` | `TINT_FLOOR` 0.18 guard on the multiply tint |
+| `src/engine/PaintedActor.ts:299,740-751` | `flashTween` killed before re-arming; `onComplete` pins the uniform to 0 |
+| `src/engine/VFX.ts:383,412,437` | `peakOpacity` (default 0.7), `pow(1 - t, 1.6)` falloff |
+| `src/engine/BattlePresenterStage.ts:238-239,322-324` | `bloomScale` = `sqrt(h / 4.1)` clamped `[0.34, 1.15]`, applied to the impact bloom |
+
+### 7.1 The two frames, read directly
+
+Re-read from `docs/screenshots/r2-actor-flash-recheck/` rather than trusted
+from the earlier write-up:
+
+* **`01-bfa-open.png` — Chapter 3 battle open.** Braska's Final Aeon is the
+  real painting and nothing about it is flat or green: black plate armour over
+  tan musculature, the horned skull-mask, white hair, the row of red diamonds
+  down the limbs, individually readable claws and spikes, and the bright chest
+  sigil. Yuna, Tidus and Auron read cleanly in the same frame. **Issue 8 is
+  closed.**
+* **`04-rikku-cast.png` — Rikku mid-cast, Chapter 4.** Rikku is lit, not blown
+  out: orange hair, blue bandana, yellow top, green scarf, skin tone and orange
+  shoes are all still distinguishable, and the glow is a compact bloom **at her
+  hand** where the cast is, not a disc over her torso. Paine beside her is
+  untouched — that second blob in the original report was the unscaled bloom,
+  and `bloomScale` removed it. **Issue 7 is closed.**
+
+### 7.2 Final gate
+
+| | Result |
+|---|---|
+| `npx tsc --noEmit` | **clean** (exit 0) |
+| `npx vitest run` (full) | **2,553 passed, 0 failed**, 74 files, 26.2s |
+
+The two failures §6.2 recorded — `ui-damage-numbers-layout` and
+`strategy-braskas-final-aeon` — are **both green now**. They were the
+`damage-numbers-fan` and tactics owners' working trees mid-edit, exactly as
+diagnosed there; no action was needed from this slot and none was taken. The
+suite is fully green with this slot's fixes in place.
+
+**Status: done.** Nothing in this slot is outstanding. The §4 out-of-scope
+observations (the near-camera Yu Pagoda in Dreams' End, the Vegnagun art
+question, the `seymour-flux-body/ko.png` white-background warning) remain for
+the art and scene owners.
+
+---
+
+## 8. Third pass, 2026-09-18 ~00:30 — re-verified after the actor rewrite
+
+The slot was re-run once more, this time against a tree that has moved a long
+way underneath it: `src/engine/PaintedActor.ts` is **+571 lines** over
+`aaf8362` and `src/engine/BattlePresenterStage.ts` **+34**, both under the
+*actor-life* owner (per-pose `facing`/`mirrored`, `lifeState`, `turnRing`,
+`side` replacing `facing` in `PaintedActor.create`, a richer `snapshot()`), and
+the art fleet has repainted Braska's Final Aeon and the Chapter 4 cast since
+the last captures.
+
+**No code was changed in this pass.** The question worth asking was whether a
+rewrite that large had quietly dropped any of the four fixes, so each was read
+back out of the working tree rather than trusted:
+
+| Fix | Where it lives now | State |
+|---|---|---|
+| Additive, reflectance-weighted, clamped flash | `src/engine/shaders/PaintedShader.ts:136-144` | present; file is **unmodified** against `aaf8362` |
+| `TINT_FLOOR` 0.18 guard on the multiply tint | `src/engine/shaders/PaintedShader.ts:87-88` | present, same file |
+| One live flash tween, peak `max(peak, current)`, `onComplete` pins to 0 | `src/engine/PaintedActor.ts:393-394, 923-938` | **survived the rewrite intact**, including the shared `this.u` uniform block (`:459-467`) that every crossfade slot points at, so a flash still drives one value across both planes |
+| `peakOpacity` 0.7 + `pow(1-t, 1.6)` falloff; `bloomScale` = `sqrt(h/4.1)` clamped `[0.34, 1.15]` | `src/engine/VFX.ts:383, 412, 437`; `src/engine/BattlePresenterStage.ts:252-253, 350-353` | present; `VFX.ts` unmodified, and the `bloomScale` call site is untouched by the actor-life diff |
+
+### 8.1 Fresh A/B captures
+
+Same harness (`critic/scratch/r2-flash-shots.mjs`), same port **5245**, new
+directory `docs/screenshots/r2-actor-flash-r3/` — 10 frames + `report.json`,
+**zero console errors** on both runs. Every frame is still a matched pair: the
+same live battle and the same held flash, captured once shipped and once with
+the pre-fix `mix` hot-swapped back onto the same materials.
+
+| Frame | Read directly |
+|---|---|
+| `01-bfa-open.png` | Chapter 3 opens on the **real, fully detailed painting**: tan musculature, black plate on the far arm, the red diamond rows, the horned skull-mask and white hair, individually readable claws and toes, and the greatsword standing behind the shoulder. The bright wedge at his chest is the **sword blade in the PNG itself** (confirmed by reading `public/art/characters/braskas-final-aeon-1/idle.png`), not a render artefact. |
+| `02-bfa-heal-flash.png` / `-before` | `flash(0x9dffc4, 320, 0.6)`, the literal heal call. **`-before` reproduces `70/51-bfa.png` exactly** — a flat mint silhouette with every surface gone. Shipped: the whole figure survives under a green lift. |
+| `03-bfa-crit-flash.png` | `flash(0xffffff, 260, 1)` plus a crit bloom, held on an interval — the hardest flash in the game, pinned at its peak indefinitely — and armour, spikes, claws, diamonds, face and the red chest markings all still read. |
+| `04-rikku-cast.png` / `-before` | `-before` is Rikku as a **uniform mint-green figure**, skin and outfit alike. Shipped: blue bandana, orange hair, yellow top, skin tone and orange shoes are all distinguishable and the cast light is a compact glow **at her hand**. |
+| `05-rikku-crit.png` / `-before` | `-before` is **issue 7 in its original form** — a white silhouette, and the unscaled bloom reaching over to swallow Paine as well. Shipped: Rikku is lit but legible, the bloom is a small disc that does not cover her head or legs, and **Paine is untouched**. |
+
+`report.json` records the live stage snapshot for the Chapter 3 field, now with
+the actor-life fields:
+`{ id: 'braskas-final-aeon', art: 'braskas-final-aeon-1', pose: 'idle',
+placeholder: false, facing: -1, mirrored: false, life: 'idle' }` — so the
+"placeholder path wrongly taken" hypothesis stays ruled out on the current art,
+and the new mirroring machinery is not flipping the boss.
+
+**Both issues remain closed.** Worth stating once, because the held captures
+overstate it: in `04`/`05` Rikku's torso is the brightest part of her, and it
+should be — those frames re-fire the flash and the bloom every 120 ms to pin
+the effect at its true peak. In play a crit flash is a single 260 ms decay.
+
+### 8.2 Gate
+
+| | Result |
+|---|---|
+| `npx tsc --noEmit` | **clean** (exit 0) |
+| `tests/unit/engine/**`, `presenter-events`, `presenter-playback` | **92 passed**, 0 failed (5 files) |
+| `npx vitest run` (full) | see below |
+

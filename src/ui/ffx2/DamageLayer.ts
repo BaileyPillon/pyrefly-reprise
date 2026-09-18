@@ -40,7 +40,15 @@ export type Projector = (
 /**
  * Opaque FFX-2 HUD slabs a numeral has to dodge. Queried live rather than
  * cached: the command stack grows a level at a time, the boss strip grows a
- * row when a part appears, and the telegraph banner comes and goes.
+ * row when a part appears, the telegraph banner comes and goes, and the
+ * strategy guide's rail is toggled with `G`.
+ *
+ * The guide is listed by its solid children only — `.sgd` itself is `inset: 0`
+ * `pointer-events: none` across the whole stage, and listing that would tell
+ * the layer the entire field is chrome. The rail is on the left in both games
+ * — `.sgd--ffx2` only flips which edge takes the accent border, not the side —
+ * so this is the same slab in the same place as in FFX. See the note in
+ * `src/ui/ffx/DamageNumbers.ts`.
  */
 const PANEL_SELECTORS = [
   '.ig-stat-list',
@@ -48,6 +56,8 @@ const PANEL_SELECTORS = [
   '.ig-cmd-stack',
   '.ffx2hud__enemies',
   '.ffx2hud__telegraph',
+  '.sgd__panel',
+  '.sgd__toggle',
 ] as const;
 
 export interface DamageLayerOptions {

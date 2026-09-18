@@ -30,6 +30,7 @@ import type {
   FFX2BattleEngine,
   TurnPreview,
 } from '../battle/common/types.ts';
+import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
@@ -80,7 +81,16 @@ export class BattlePresenter {
     this.deps = deps;
     this.baseSleep = deps.sleep ?? defaultSleep;
     this.timeScale = deps.timeScale ?? 1;
-    this.ctx = createEventCtx(deps, (ms) => this.sleep(ms));
+    this.ctx = createEventCtx(
+      deps,
+      (ms) => this.sleep(ms),
+      () => this.speed,
+    );
+  }
+
+  /** The shot picker, so the screen can tear its overlays down on exit. */
+  get moments(): BattleMoments {
+    return this.ctx.moments;
   }
 
   // ------------------------------------------------------------------ control
@@ -214,6 +224,12 @@ export class BattlePresenter {
    * screen owns what happens next (chain, results, retry).
    */
   async run(engine: BattleEngine): Promise<BattleOutcome> {
+    // The opening shot, once per encounter: the party slides in, then the
+    // headline enemy gets its slow push and name plate. A chained formation
+    // (Yunalesca's forms, the Vegnagun chain) re-enters `run` on the same
+    // presenter and gets the reveal for its *new* boss only.
+    await this.openOn(engine);
+
     /** Consecutive decisions that left `state().log` exactly as it was. */
     let idleSpins = 0;
     /** Consecutive player-input decisions with nothing in between. */
@@ -295,6 +311,28 @@ export class BattlePresenter {
       idleSpins = logLength === lastLogLength ? idleSpins + 1 : 0;
       lastLogLength = logLength;
     }
+  }
+
+  /**
+   * Play the opening moment for whatever is on the field right now.
+   *
+   * The "boss" is the first enemy that is not a destructible part — that is
+   * Yunalesca rather than a coil, Braska's Final Aeon rather than the Yu
+   * Pagodas — and an encounter with no enemies at all (the demo reel) simply
+   * gets the party slide.
+   */
+  private async openOn(engine: BattleEngine): Promise<void> {
+    if (this.aborted) return;
+    const state = engine.state();
+    const boss = state.enemyIds
+      .map((id) => state.combatants[id])
+      .find((c) => c && !c.removed && !c.flags.hidden && !c.flags.isPart);
+    this.phase = 'moment:battle-start';
+    await this.ctx.moments.battleStart({
+      partyIds: state.activeIds,
+      bossId: boss?.id ?? null,
+      bossName: boss?.name ?? null,
+    });
   }
 
   /** Submit one command and play everything it produced, minigames included. */

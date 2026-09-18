@@ -20,10 +20,8 @@
  * 1.5, which - because `power(STR) = STR^3 / 32 + 30` - is a x2.6 to x2.9 on
  * the damage, and which no published number supports. This round takes all of
  * that back: **every offensive stat in the build is §4.1 as published**, with
- * the single exception of Yuna's Strength, which moves 20 -> 28 because §4.4
- * `[verified: 2 sources]` publishes exactly that number as this encounter's
- * threshold. The fight is won instead by three things the chapter had never
- * used, all of them in the research:
+ * **no exception**. The fight is won instead by three things the chapter had
+ * never used, all of them in the research:
  *
  *  1. **The bench.** §1 `[verified: 2 sources]`: *"reserve swapping works
  *     normally"*; ffx-combat-core §1.7 `[verified: 2 sources]`: the incoming
@@ -41,6 +39,29 @@
  *     a weapon re-applies it repeatedly."* Auron's free weapon slot carries the
  *     Zombiestrike §1.6 names, and the pillars now damage their own boss
  *     roughly 17,500 a battle instead of only healing it.
+ *
+ * ## What changed on 2026-09-17 (round 5), for the verifiers
+ *
+ * Two verifier objections, answered.
+ *
+ * **1. Yuna's Strength is §4.1's published 20, and the "28" is withdrawn.** The
+ * third pass kept exactly one raised offensive stat and defended it as "§4.4
+ * publishes this number". Re-read, that does not hold: §4.1 is the section that
+ * answers *"what does a typical party have here?"* and its table says **20**;
+ * §4.4's sentence answers a different question and says so - *"Aeon stats scale
+ * off Yuna's Strength/Magic, **which is why the wiki singles out** 'Yuna's
+ * Strength at least 28' **as the threshold** for Bahamut's Mega Flare plus a
+ * couple of attacks to finish the job"*. That is a recommended floor for a
+ * particular *finish*, not a statement about the typical build, and reading one
+ * as the other is how a preset drifts upward one citation at a time. It would
+ * not even buy what it was cited for - `dreams-end`'s aeons carry their own
+ * published stat block, so nothing in this engine scales an aeon off Yuna. The
+ * revert lives in `data/ffx/builds/dreams-end.ts` and costs nothing measured.
+ *
+ * **2. The robustness, from 5/8 to 8/8 on the verifier's seeds, by one change
+ * to how the aeon roster is spent** - {@link summonNow}, and its ordering
+ * inside {@link supportTurn}. Nothing else moved; no enemy number, and no
+ * player number.
  *
  * ## The line, link 1
  *
@@ -412,6 +433,56 @@ function bossGauge(engine: BattleEngine, boss: AnyCombatant): number {
 function ultimateJechtShotPhase(boss: AnyCombatant): boolean {
   const form = boss.enemy?.formIndex ?? 0;
   return form === 1 && boss.hp * 2 <= boss.stats.maxHp;
+}
+
+/**
+ * **Is this the turn to put an aeon out?** - §1.6's branch table, read as a
+ * resource-spending rule. One question, and it is not the one the previous
+ * round asked.
+ *
+ * **Is the charge imminent?** {@link SUMMON_GAUGE}. The summon has to be
+ * *standing* when the gauge fills, not cast after it, because §1.6's table is
+ * checked in order and its *first* row is "an Aeon is on the field": whatever
+ * the charge would have been, it comes out as a single-target Jecht Bomber at
+ * the summon instead, and while the summon stands **no party member is
+ * targetable at all**.
+ *
+ * That is the whole rule as of round 5. Two conditions that used to sit beside
+ * it are gone, and both removals are measured over seeds 1-400 of the
+ * thousand-seed window rather than argued:
+ *
+ * | Rule | seeds 1-400 |
+ * |---|---:|
+ * | round 4: hold the roster for the Ultimate Jecht Shot phase, summon *after* the routine heal | 374/400 |
+ * | summon before the routine heal, still holding for the phase | 380/400 |
+ * | **summon before the routine heal, on the gauge alone (shipped)** | **387/400** |
+ * | summon before the routine heal, on distress, ignoring the gauge | 374/400 |
+ *
+ * **1. The Ultimate Jecht Shot phase gate is withdrawn.** Round 4 measured it
+ * on twelve seeds and it won there, 12/12 against 9/12 for spending the roster
+ * on whatever charge filled first - but that comparison was made while the
+ * summon sat *below* `repair` in {@link supportTurn}, where in a chaotic link
+ * it was barely reachable at all, so what it was really comparing was two
+ * flavours of "almost never summon". With the ordering fixed the gate reverses:
+ * it costs seven wins in four hundred. The reason is that the phase gate is a
+ * gate on **the boss's** HP, and a party that is losing never gets him there.
+ * Measured across ten losing seeds of the thousand-seed window, three summoned
+ * **zero** aeons in battles of 900 to 1,300 ticks, and seed 20 died after 996
+ * ticks and sixteen KOs with the boss still at 85,667 of 120,000, five aeons
+ * unspent and both Talk charges unspent with them. It held its whole answer in
+ * reserve for a phase it was never going to reach.
+ *
+ * **2. But the gauge gate stays.** Summoning on distress at any gauge - on the
+ * reasoning that a stretch of the boss's turns spent on a summon is worth
+ * having whether or not a charge is imminent - is worth thirteen fewer wins
+ * (374/400). An aeon that arrives early is an aeon that is already dead when
+ * the charge lands, and the party's CTB is frozen for the whole time it stands
+ * (`rt.frozenPartyCtb`), so an early summon is also a stretch of turns the
+ * party does not get.
+ */
+function summonNow(engine: BattleEngine, boss: AnyCombatant): boolean {
+  if (engine.state().aeonId !== null) return false;
+  return bossGauge(engine, boss) >= SUMMON_GAUGE;
 }
 
 /** Every Yu Pagoda still standing. */
@@ -1163,6 +1234,21 @@ function braskasLine(
       const r = row(commands, ['Mental Break'], boss.id);
       if (r) return aim(r, boss.id);
     }
+    // **Power Break under distress was tried here and measured worse**, and
+    // the negative result is worth keeping because it is counter-intuitive.
+    // `formulas.ts` step 8 halves every physical hit the boss lands while it
+    // holds, and the loss census says physical hits are what kills the party
+    // (44 Blade Blitzes on seed 34) — so "when the party is losing turns to
+    // KOs, buy fewer KOs" reads like the obvious answer. It is not: over seeds
+    // 1-400 it cost **five wins** (381/400 against 386/400) and it lost two of
+    // the four gate seeds outright (13 and 20260916). The reason is the same
+    // one that makes Armor Break unaffordable here — a Power Wave strips it
+    // every ~20 ticks against Auron's ~12-tick cadence, so it is a turn bought
+    // back at roughly half price, and the turn it displaces is the **Zombie
+    // swing**, which deals his damage *and* flips a pillar's next Power Wave
+    // from +1,500 to -1,500. Against a boss the party is already out-damaging,
+    // a 3,000-point swing beats a half-uptime halving.
+    //
     // **Then the Zombie, because it turns the pillars around.**
     //
     // §1.6 [verified: 2 sources]: *"BFA resists Zombie at 50 but is not
@@ -1260,6 +1346,24 @@ function supportTurn(
     if (refill) return aim(refill, actorId);
   }
 
+  // **The summon outranks the Protect and the routine top-up**, and that
+  // ordering is the second half of the round-5 change ({@link summonNow}).
+  // Anything that is about to die has already been answered - `braskasLine`
+  // runs `repair(EMERGENCY)` before this function is ever called - so what the
+  // summon preempts here is a Protect and a heal of a member above
+  // {@link EMERGENCY}. Both are worth nothing for the stretch an aeon holds the
+  // field, because **no party member is targetable at all while it stands**;
+  // and the turn Yuna spends getting one out is the turn that decides whether
+  // the charge lands on the summon or on the party. Measured before this
+  // ordering: in a chaotic link somebody is always under
+  // {@link HEAL_FLOOR}, so `repair` answered every one of her turns and the
+  // summon branch below was simply never reached - seed 111 reached the
+  // Ultimate Jecht Shot phase, ate three of them and summoned nothing.
+  if (summonNow(engine, boss)) {
+    const urgent = nextAeon(commands);
+    if (urgent) return urgent;
+  }
+
   const unprotected = living.find((c) => !has(c, 'protect'));
   if (unprotected) {
     const r = row(commands, ['Protect'], unprotected.id);
@@ -1269,60 +1373,22 @@ function supportTurn(
   const fix = repair(commands, living, HEAL_FLOOR);
   if (fix) return fix;
 
-  // Aeons, held for form 2 (§1.6 — explicitly legal here, and the boss carries
-  // a dedicated anti-aeon Overdrive *because* they were expected). While an
-  // aeon stands no party member can be targeted at all, so each one is a
-  // stretch of turns in which the party takes zero damage, and Grand Summon
-  // hands it a full gauge so it Overdrives on arrival instead of on its third
-  // turn. Form 2 rather than form 1 because that is where the damage pool is
-  // twice as large and where the Overdrives that would otherwise kill Yuna
-  // land on the aeon instead.
+  // **The second summon site, and the one that fires in a winning run** - the
+  // rule itself is {@link summonNow}, which is also read one branch above this
+  // one, ahead of the Protect and the routine top-up.
   //
-  // **Spent on the gauge, not on the form.** Summoning them as soon as form 2
-  // opens burns all five before the boss drops under half, which is exactly the
-  // phase they exist to answer: measured, the party arrived at the first
-  // Ultimate Jecht Shot with an empty roster on most seeds.
+  // §1.6 makes aeons explicitly legal here and the boss carries a dedicated
+  // anti-aeon Overdrive *because* they were expected. While an aeon stands no
+  // party member can be targeted at all, so each one is a stretch of turns in
+  // which the party takes zero damage, and Grand Summon hands it a full gauge
+  // so it Overdrives on arrival instead of on its third turn.
   //
-  // **No longer gated on the pillars being down.** It used to be, from a round
-  // in which two early swings killed the Yu Pagodas for good; with §1.4's
-  // revive rule implemented they are standing for most of the battle, so that
-  // gate meant the roster was never spent and the party ate every Overdrive
-  // raw. The gauge is the gate.
-  //
-  // **And spent on the phase, not on the first gauge that fills.** This is the
-  // change that turned the losing seeds around and it is §1.6's own branch
-  // table read from the party's side ({@link ultimateJechtShotPhase}): a charge
-  // that fills in form 1, or in form 2 above half, comes out as a *Triumphant
-  // Grasp* — one target, two hits, ~2,000 or ~3,200 apiece, which Yuna answers
-  // with one Curaga. Only below half does it come out as **Ultimate Jecht
-  // Shot**, ~4,700 on all three at once, and that is the only thing in the
-  // chapter that takes a healthy party apart between her turns.
-  //
-  // Measured on the three seeds the previous round lost (5, 13, 99): spending
-  // the roster on whatever filled first left the party arriving at the Ultimate
-  // Jecht Shot phase with an empty bench and eating **ten** of them for 137,905
-  // damage on seed 13 alone, against 29,634 on a seed that won. §1.6 says the
-  // same thing about the Talk charges in as many words — they *"**must** be
-  // saved for the Ultimate Jecht Shot phase"* — and an aeon cancels the very
-  // same charge for free, so the roster is saved for it too.
-  //
-  // **The whole roster waits, and a partial reserve is worse than either.** The
-  // sweep, on the four canonical seeds plus the eight the verifier picked:
-  //
-  // | Rule | gate + 8 unseen | seeds 1-40 |
-  // |---|---:|---:|
-  // | spend on whatever charge fills (the previous round) | 9/12 | 37/40 |
-  // | hold three of five for the Ultimate Jecht Shot phase | 10/12 | — |
-  // | **hold all five** | **12/12** | **37/40** |
-  //
-  // A partial reserve loses both ways: it is still spending aeons on Triumphant
-  // Grasps, and it arrives at the phase that matters with two left instead of
-  // five.
-  if (
-    state.aeonId === null &&
-    bossGauge(engine, boss) >= SUMMON_GAUGE &&
-    ultimateJechtShotPhase(boss)
-  ) {
+  // **Spent on the gauge, and on nothing else.** Two gates that used to sit
+  // here are gone and both removals are measured in {@link summonNow}: the
+  // pillars-down gate (which meant the roster was never spent at all) and
+  // round 4's "hold the whole roster for the Ultimate Jecht Shot phase" (which
+  // is a gate on the *boss's* HP, and a losing party never gets him there).
+  if (summonNow(engine, boss)) {
     const summon = nextAeon(commands);
     if (summon) return summon;
   }

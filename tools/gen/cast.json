@@ -1,11 +1,12 @@
 {
-  "version": 2,
-  "updated": "2026-09-15",
+  "version": 3,
+  "updated": "2026-09-17",
   "about": "The cast manifest: one entry per thing that has to be drawn, with the identity tags, the states, the framing and the canvas each one needs. It is a work order, not a config file — nothing reads it at runtime. Feed a row to tools/gen/comfy.mjs and judge the batch (docs/ART-PIPELINE.md §5).",
   "contract": {
     "note": "Style and quality tags are NOT in this file on purpose. They live in tools/gen/comfy.mjs (STYLE_TAGS, QUALITY_TAGS) and the generator appends them, so a cast row can never drift from the house style. `tags` is identity only; `poseTags` is action only.",
     "styleTags": "official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed",
-    "qualityTags": "masterpiece, high score, great score, absurdres"
+    "qualityTags": "masterpiece, high score, great score, absurdres",
+    "facing": "v3 (2026-09-17). Every subject that appears on a battlefield carries a `facing`. Party, dressphere and ally subjects are \"right\" (they stand on the left of the field and fight rightward); every boss, enemy and aeon is \"left\". Portraits are \"none\" — a HUD head-shot is not on the battlefield and should meet the player's eye. The generator turns this into the camera phrase (FACING_PHRASES in comfy.mjs); pass it as --facing. Direction is the one part of the prompt the checkpoint gets wrong often, so judge every batch for it and mirror a good-but-backwards variant rather than rerolling: docs/handoff/art3-contract.md."
   },
   "defaults": {
     "batch": 3,
@@ -30,7 +31,8 @@
     "negAdd": "Extra negatives for this subject, appended to BASE_NEGATIVE with --negAdd.",
     "refState": "Which state is the identity anchor the other states pass to --ref.",
     "states": "pose -> { poseTags, optional composition, sizeHint, ref, notes }.",
-    "notes": "What to watch for when judging the batch."
+    "notes": "What to watch for when judging the batch.",
+    "facing": "right | left | none. Which way the body is angled, --facing. right = party (stands left, fights right), left = enemy/boss/aeon, none = straight-on (portraits). Defaults if omitted: right for the character preset, left for the boss preset, none for --composition portrait."
   },
   "poseTagBans": {
     "motion lines": "Dropped from every pose in this file. On Animagine XL 4.0 it does not draw speed lines — it sprays a coloured swirl around the figure, rembg keeps the swirl as opaque content, and the cutout comes back as the whole 832x1216 frame with baselineY on a ribbon of paint. SPRITE_NEGATIVE bans the splatter as well; both halves of the fix are needed."
@@ -38,6 +40,7 @@
   "workflow": [
     "Generate the refState (usually idle) first, --batch 3, and pick a keeper.",
     "Generate every other state with --ref <the keeper> so identity and costume carry over.",
+    "Judge facing before anything else on a v3 render: a figure facing the wrong way is unusable no matter how good the costume is, but it is fixable by mirroring, so keep it and flip it.",
     "Judge on costume first, then extra subjects, then cropped limbs, then the cutout (docs/ART-PIPELINE.md §5).",
     "Check baselineY against the feet on any pose with something hanging below them."
   ],
@@ -49,6 +52,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/tidus",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, hood, sleeveless, asymmetrical clothes, black shorts, fingerless gloves, necklace, brotherhood (sword), blue sword, holding sword",
@@ -93,6 +97,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10), final fantasy x, safe, solo, brown hair, short hair, long braid, heterochromia, blue eye, green eye, white kimono top, blue skirt, detached sleeves, purple obi, obi, floral print, holding staff, summoner staff",
@@ -142,6 +147,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/auron",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, auron (ff10), final fantasy x, safe, solo, male focus, black hair, short hair, sunglasses, round eyewear, scar across eye, facial hair, stubble, mature male, red coat, long coat, one shoulder bare, popped collar, high collar, black gloves, jug, katana, holding sword",
@@ -177,7 +183,7 @@
           "ref": "auron/idle"
         }
       },
-      "notes": "The coat worn off the left shoulder with the arm inside the sleeve is the silhouette; if both arms are in the sleeves, reject. \"one shoulder bare\" carries it more often than \"off shoulder\"."
+      "notes": "The coat worn off the left shoulder with the arm inside the sleeve is the silhouette; if both arms are in the sleeves, reject. \"one shoulder bare\" carries it more often than \"off shoulder\". His LEFT arm stays inside the coat, so the left sleeve hangs EMPTY and swings loose; only the right arm is out. A render with two arms out of the sleeves is wrong however good the coat is."
     },
     {
       "id": "wakka",
@@ -186,6 +192,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/wakka",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, wakka (ff10), final fantasy x, safe, solo, male focus, orange hair, pompadour, blue headband, blue eyes, dark skin, tan, muscular, open jacket, blue jacket, yellow overalls, suspenders, tribal tattoo, holding ball, blitzball",
@@ -230,6 +237,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/lulu",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, lulu (ff10), final fantasy x, safe, solo, black hair, braid, hair ornament, red eyes, lipstick, black dress, belt skirt, corset, fur trim, detached sleeves, large breasts, moogle, holding doll",
@@ -274,6 +282,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/kimahri",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1other, kimahri ronso, final fantasy x, safe, solo, furry male, anthro, blue fur, lion, feline, broken horn, single horn, yellow eyes, muscular, tall, armor, pauldrons, loincloth, holding polearm, spear",
@@ -315,7 +324,7 @@
           "notes": "Dragoon-style leap. No ground contact: set baselineY by hand to the intended landing row, or the engine will plant him mid-air at the wrong height."
         }
       },
-      "notes": "The broken horn is canon and load-bearing for his silhouette — \"single horn, broken horn\" together, or the model gives him a matched pair. 1other + furry male avoids the \"catgirl\" attractor."
+      "notes": "The broken horn is canon and load-bearing for his silhouette — \"single horn, broken horn\" together, or the model gives him a matched pair. 1other + furry male avoids the \"catgirl\" attractor. The broken horn is a SHORT STUB, a few inches of horn snapped off at the base — not a long horn with a chip in it, and not a whole horn. If the single horn is long, reject: the stub is the silhouette."
     },
     {
       "id": "rikku",
@@ -324,6 +333,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/rikku",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10), final fantasy x, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, orange bikini top, cargo shorts, yellow scarf, arm warmers, goggles on head, claw (weapon), thief",
@@ -373,6 +383,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/seymour-flux-body",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, seymour guado, final fantasy x, safe, solo, monster boy, pale skin, topless male, bare chest, blue hair, very long hair, long hair, pointed ears, closed eyes, expressionless, emerging from a skeletal frame, bone, ribcage, dark aura, upper body, horror (theme)",
@@ -398,7 +409,7 @@
           "ref": "seymour-flux-body/idle"
         }
       },
-      "notes": "The proof-of-concept could not get Seymour Flux as one image — Animagine knows \"seymour guado\" and nothing about the Flux form, so three variants all came back as robed Seymour with an aura. v2 splits him: this subject is only the pale torso rising out of the bone frame, mortiorchis is the mount, and the engine composites the two. Generate the torso with --ref public/art/characters/seymour-flux/idle.png so the face and hair match the existing approved render."
+      "notes": "The proof-of-concept could not get Seymour Flux as one image — Animagine knows \"seymour guado\" and nothing about the Flux form, so three variants all came back as robed Seymour with an aura. v2 splits him: this subject is only the pale torso rising out of the bone frame, mortiorchis is the mount, and the engine composites the two. Generate the torso with --ref public/art/characters/seymour-flux/idle.png so the face and hair match the existing approved render. CANON, and the thing every variant gets wrong: the two long pale shapes rising behind his head are HAIR — two horn-like LOCKS of blue hair swept up and falling down his back — not bone horns, not antlers, not a helmet. Write them as hair every time and put \"horns, antlers, helmet\" in --negAdd. He is SEATED on Mortiorchis, fused into the bone frame at the waist, never standing and never with legs. His face and bare chest carry pronounced dark VEINS under the skin, which is most of what makes the form read as Flux rather than as robed Seymour."
     },
     {
       "id": "mortiorchis",
@@ -407,6 +418,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/mortiorchis",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "no humans, floating skull, skeletal machine, insect, mandibles, chitin, mechanical, bone, dark metal, glowing eyes, hovering, ominous, monster",
@@ -441,6 +453,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/yunalesca-1",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yunalesca, final fantasy x, safe, solo, blonde hair, very long hair, pale skin, revealing clothes, white dress, gold trim, gold jewelry, headdress, bare shoulders, serene, closed eyes, elegant, standing",
@@ -474,6 +487,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/yunalesca-2",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "1girl, yunalesca, final fantasy x, safe, solo, monster girl, blonde hair, tentacle hair, medusa, long hair becoming tendrils, pale skin, gold jewelry, revealing clothes, arms spread, menacing, larger",
@@ -507,6 +521,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/yunalesca-3",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "1girl, yunalesca, final fantasy x, safe, solo, giant monster girl, upper body rising from a mass of tentacles, tentacle hair, skull crown, bone crown, pale skin, huge, looming, gorgon, from below",
@@ -540,6 +555,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/braskas-final-aeon-1",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "1boy, monster, giant, grey skin, muscular, huge sword, greatsword, chains, chained, red and black, tattoo, spiky hair, glowing eyes, jecht, aeon, imposing, scars",
@@ -574,6 +590,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/braskas-final-aeon-2",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "1boy, monster, giant, grey skin, armored, armor plating, spikes, wing spikes, huge sword, greatsword, chains, red and black, glowing eyes, aeon, second form, imposing",
@@ -607,6 +624,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/yu-pagoda",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "no humans, stone pillar, pagoda, ornate carving, floating, glowing runes, yevon glyph, guardian statue, tiered, weathered stone",
@@ -633,6 +651,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/yu-yevon",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "no humans, small creature, insect, spider, glowing, translucent, tiny, floating, pale light, yevon glyph, ethereal, parasite",
@@ -659,6 +678,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/jecht",
       "composition": "full",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, black hair, short hair, red bandana, headband, chest tattoo, tattoo, open vest, black vest, bare chest, muscular, shorts, stubble, holding sword",
@@ -692,6 +712,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/valefor",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "no humans, monster, bird, feathered wings, large wings, blue feathers, long neck, beak, long tail, talons, flying, aeon",
@@ -719,6 +740,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/ifrit",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "monster, demon, horns, curved horns, red fur, mane, muscular, claws, fangs, fire, flames, beast, quadruped stance, aeon",
@@ -745,6 +767,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/ixion",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "no humans, monster, unicorn, horse, quadruped, long horn, spiral horn, lightning, electricity, purple mane, armor plating, aeon",
@@ -772,6 +795,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/shiva",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, shiva (final fantasy), safe, solo, blue skin, pale blue skin, white hair, long hair, ice, ice crystals, revealing clothes, cold breath, elegant, aeon",
@@ -798,6 +822,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/bahamut",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "no humans, dragon, black dragon, huge wings, mechanical wings, horns, spikes, long tail, glowing eyes, armored scales, aeon",
@@ -825,6 +850,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/anima",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "no humans, monster, bandaged, bandages, chains, chained, single eye, mask, hanging, mournful, dark, skeletal lower body, tall, narrow, aeon",
@@ -851,6 +877,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/yojimbo",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, samurai, solo, male focus, helmet, oni mask, mask, armor, japanese armor, long coat, holding katana, sheathed sword, stoic, aeon",
@@ -877,6 +904,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna-gunner",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, gunner, dual wielding, holding gun, handgun, pistol, white tank top, pink shorts, detached sleeve, obi, thigh strap, fingerless gloves",
@@ -912,6 +940,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna-white-mage",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, white mage, white robe, hooded robe, hood, red trim, long sleeves, holding staff",
@@ -951,6 +980,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna-black-mage",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, black mage, witch hat, black headwear, striped clothes, patchwork dress, blue and black dress, holding staff",
@@ -990,6 +1020,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna-songstress",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, songstress, idol, holding microphone, pink dress, blue skirt, feather trim, boots, detached sleeves, singing",
@@ -1029,6 +1060,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna-dark-knight",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, dark knight, black armor, horned helmet, pauldrons, gauntlets, holding greatsword, dark aura, black and purple",
@@ -1068,6 +1100,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/yuna-warrior",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, yuna (ff10-2), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, warrior, armor, shoulder armor, blue armor, headband, holding sword, gauntlets, breastplate",
@@ -1103,6 +1136,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/rikku-thief",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, thief, orange bikini top, yellow scarf, short shorts, goggles on head, claw (weapon), arm warmers, bare midriff",
@@ -1142,6 +1176,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/rikku-alchemist",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, alchemist, apron, goggles, holding flask, potion bottles, pouches, brown outfit, gloves",
@@ -1181,6 +1216,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/rikku-berserker",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, berserker, fur, fur trim, animal ears (costume), tail, claws, wild, feral, fangs, torn clothes, bare midriff",
@@ -1210,12 +1246,54 @@
       "notes": "\"animal ears (costume)\" matters — without \"(costume)\" the model commits to a kemonomimi girl and drops the dressphere read."
     },
     {
+      "id": "rikku-dark-knight",
+      "kind": "dressphere",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/rikku-dark-knight",
+      "composition": "full",
+      "facing": "right",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, dark knight, black armor, heavy armor, horned helmet, pauldrons, gauntlets, armored boots, holding greatsword, dark aura, black and gold",
+      "states": {
+        "idle": {
+          "poseTags": "standing, greatsword held point-down, looking at viewer, confident"
+        },
+        "attack": {
+          "poseTags": "attacking, overhead greatsword swing, dynamic pose",
+          "ref": "rikku-dark-knight/idle"
+        },
+        "cast": {
+          "poseTags": "sword planted in the ground, dark aura rising, head bowed, glowing red runes",
+          "ref": "rikku-dark-knight/idle"
+        },
+        "hurt": {
+          "poseTags": "flinching, recoiling, staggering backwards, off balance",
+          "ref": "rikku-dark-knight/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated",
+          "ref": "rikku-dark-knight/idle",
+          "composition": "prone",
+          "sizeHint": "1216x832"
+        },
+        "victory": {
+          "poseTags": "arms raised, cheering, smiling, triumphant pose",
+          "ref": "rikku-dark-knight/idle"
+        }
+      },
+      "notes": "BLACK ARMOUR, not her default outfit. The failure mode here is the model keeping Rikku's Thief look — orange bikini top, yellow scarf, bare midriff — and adding a sword to it; that is a reject. The Dark Knight dressphere is full heavy plate: horned helm, pauldrons, gauntlets, armoured boots, a greatsword taller than she is, and almost no skin showing. Ban the default in --negAdd (\"bikini, midriff, scarf, goggles, bare shoulders, revealing clothes\"). Keep the green swirl-pupil eyes for the unhelmeted variants. Because so much of the reference is armour, --ref her thief idle at about 0.45 or the adapter drags the orange back in.",
+      "negAdd": "bikini, midriff, scarf, goggles, bare shoulders, revealing clothes"
+    },
+    {
       "id": "rikku-black-mage",
       "kind": "dressphere",
       "game": "ffx-2",
       "cmd": "character",
       "outDir": "public/art/characters/rikku-black-mage",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, black mage, witch hat, black headwear, striped clothes, patchwork dress, holding staff",
@@ -1255,6 +1333,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/rikku-white-mage",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, white mage, white robe, hooded robe, hood, red trim, long sleeves, holding staff",
@@ -1294,6 +1373,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/rikku-gunner",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, rikku (ff10-2), final fantasy x-2, safe, solo, blonde hair, long hair, braid, green eyes, swirl pupils, al bhed, gunner, dual wielding, holding gun, handgun, pistol, tank top, shorts, thigh strap",
@@ -1329,6 +1409,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/paine-warrior",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, warrior, black leather outfit, bare shoulders, armor, pauldron, holding sword, greatsword, gloves",
@@ -1364,6 +1445,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/paine-dark-knight",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, dark knight, black armor, horned helmet, pauldrons, holding greatsword, dark aura, black and red",
@@ -1403,6 +1485,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/paine-samurai",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, samurai, kimono, hakama, red and black, holding katana, sheathed sword, japanese clothes, obi",
@@ -1438,6 +1521,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/paine-gunner",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, gunner, dual wielding, holding gun, handgun, pistol, black outfit, thigh strap",
@@ -1473,6 +1557,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/paine-white-mage",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, white mage, white robe, hooded robe, hood, red trim, long sleeves, holding staff",
@@ -1512,6 +1597,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/paine-black-mage",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, paine (ff10-2), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, black mage, witch hat, black headwear, striped clothes, patchwork dress, holding staff",
@@ -1551,6 +1637,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/ffx2-bahamut",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1024x1024",
       "refState": "idle",
       "tags": "no humans, dragon, black dragon, huge wings, red wings, mechanical wings, horns, spikes, long tail, armored scales, glowing violet eyes, glowing purple veins, dark violet aura, purple glow, corrupted, possessed, aeon",
@@ -1586,6 +1673,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/vegnagun-tail",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "no humans, giant machine, mechanical tail, segmented abdomen, insect abdomen, armor plating, green energy conduit, glowing green seam, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
@@ -1620,6 +1708,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/vegnagun-leg",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "no humans, giant machine, colossal insect leg, locust leg, chitinous plating, hard angular joint, brass hydraulic piston, orange joint glow, three floating glass orbs, red orb, yellow orb, green orb, from below, low angle, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
@@ -1654,6 +1743,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/vegnagun-body",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "no humans, giant machine, colossal torso, insect thorax, ribbed chest, organ pipes, pipe organ cannons, row of cannon barrels, grated chest, glowing violet core behind the grating, purple light, two mechanical arms, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
@@ -1688,6 +1778,7 @@
       "cmd": "boss",
       "outDir": "public/art/characters/vegnagun-head",
       "composition": "boss",
+      "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle",
       "tags": "no humans, giant machine, machina skull, horned skull head, mechanical skull, curved horns, huge cannon barrel in the mouth, mouth cannon, glowing muzzle, four small turret pods, frame filling, close, moth-like wings on a locust body, scalloped translucent moth wings, segmented plating, brass hydraulics, rivets, rust, cables, violet glow through grates, machina, colossal, ominous",
@@ -1722,6 +1813,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/shuyin",
       "composition": "full",
+      "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1boy, shuyin, final fantasy x-2, safe, solo, male focus, blonde hair, spiky hair, messy hair, blue eyes, scowl, glaring, pale skin, sleeveless jacket, green jacket, yellow trim, red and black detached sleeves, elbow gloves, black gloves, blue armlet, black shorts, yellow boots, holding sword, glowing sword, light blue blade, black hilt, translucent, unsent, desaturated, cold colors",
@@ -1765,6 +1857,7 @@
       "cmd": "character",
       "outDir": "public/art/characters/lenne",
       "composition": "full",
+      "facing": "right",
       "sizeHint": "832x1216",
       "refState": "idle",
       "tags": "1girl, lenne, final fantasy x-2, safe, solo, brown hair, long hair, very long hair, straight hair, brown eyes, purple lipstick, gentle expression, songstress, blue tube top, white ruffles, asymmetrical clothes, black lace skirt, blue belt, black arm ribbons, blue glovelets, dangling earrings, knee-high boots, brown boots, holding microphone, translucent, spirit",
@@ -1873,6 +1966,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/tidus.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, hood, necklace",
       "states": {
@@ -1892,6 +1986,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/yuna.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1girl, yuna (ff10), final fantasy x, safe, solo, brown hair, short hair, heterochromia, blue eye, green eye, white kimono top, detached sleeves",
       "states": {
@@ -1911,6 +2006,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/auron.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, auron (ff10), final fantasy x, safe, solo, male focus, black hair, sunglasses, round eyewear, scar across eye, stubble, mature male, red coat, high collar, popped collar",
       "states": {
@@ -1930,6 +2026,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/wakka.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, wakka (ff10), final fantasy x, safe, solo, male focus, orange hair, pompadour, blue headband, blue eyes, dark skin, tan, open jacket",
       "states": {
@@ -1949,6 +2046,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/lulu.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1girl, lulu (ff10), final fantasy x, safe, solo, black hair, braid, hair ornament, red eyes, lipstick, black dress, fur trim",
       "states": {
@@ -1968,6 +2066,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/kimahri.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1other, kimahri ronso, final fantasy x, safe, solo, furry male, anthro, blue fur, lion, feline, broken horn, single horn, yellow eyes, pauldrons",
       "states": {
@@ -1987,6 +2086,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/rikku.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1girl, rikku (ff10), final fantasy x, safe, solo, blonde hair, braid, green eyes, swirl pupils, orange bikini top, yellow scarf, goggles on head",
       "states": {
@@ -2006,6 +2106,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/jecht.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, black hair, red bandana, chest tattoo, open vest, bare chest, stubble",
       "states": {
@@ -2025,6 +2126,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/seymour.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, seymour guado, final fantasy x, safe, solo, blue hair, long hair, pointed ears, pale skin, guado, ornate robe, high collar",
       "states": {
@@ -2044,6 +2146,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/yunalesca.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1girl, yunalesca, final fantasy x, safe, solo, blonde hair, very long hair, pale skin, gold jewelry, headdress, bare shoulders",
       "states": {
@@ -2063,6 +2166,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/shuyin.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, shuyin, final fantasy x-2, safe, solo, male focus, blonde hair, spiky hair, blue eyes, angry, scowl, black and blue clothes, dark palette",
       "states": {
@@ -2082,6 +2186,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/lenne.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1girl, lenne, final fantasy x-2, safe, solo, brown hair, very long hair, songstress, pink dress, feather trim",
       "states": {
@@ -2101,6 +2206,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/bahamut-fayth.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, child, male child, final fantasy x, safe, solo, hooded cape, purple hood, glowing eyes, mysterious, ethereal, fayth",
       "states": {
@@ -2120,6 +2226,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/valefor.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "no humans, monster, bird, blue feathers, beak, long neck, feathered wings, aeon, final fantasy x",
       "states": {
@@ -2139,6 +2246,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/ifrit.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "monster, demon, curved horns, red fur, mane, fangs, fire, aeon, final fantasy x",
       "states": {
@@ -2158,6 +2266,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/ixion.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "no humans, monster, unicorn, horse, spiral horn, purple mane, lightning, aeon, final fantasy x",
       "states": {
@@ -2177,6 +2286,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/shiva.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1girl, shiva (final fantasy), safe, solo, blue skin, white hair, long hair, ice crystals, aeon, final fantasy x",
       "states": {
@@ -2196,6 +2306,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/bahamut.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "no humans, dragon, black dragon, horns, spikes, glowing eyes, armored scales, aeon, final fantasy x",
       "states": {
@@ -2215,6 +2326,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/anima.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "no humans, monster, bandaged, bandages, chains, single eye, mask, mournful, aeon, final fantasy x",
       "states": {
@@ -2234,6 +2346,7 @@
       "outDir": "public/art/portraits",
       "out": "public/art/portraits/yojimbo.png",
       "composition": "portrait",
+      "facing": "none",
       "sizeHint": "832x1216",
       "tags": "1boy, samurai, solo, helmet, oni mask, japanese armor, stoic, aeon, final fantasy x",
       "states": {

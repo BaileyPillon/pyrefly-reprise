@@ -1,0 +1,452 @@
+[
+  {
+    "label": "staged",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "facing-idle",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "ready",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "ready",
+        "life": "ready",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "attack-strike",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "attack",
+        "life": "act",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "guard",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "defend",
+        "life": "guard",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "hurt",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "hurt",
+        "life": "hurt",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "ko",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "ko",
+        "life": "down",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "revive",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "enemy-dissolving",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "idle",
+        "life": "idle",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "ko",
+        "life": "down",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "idle",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  },
+  {
+    "label": "victory",
+    "actors": [
+      {
+        "name": "tidus",
+        "pose": "victory",
+        "life": "victory",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "yuna",
+        "pose": "victory",
+        "life": "victory",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "kimahri",
+        "pose": "victory",
+        "life": "victory",
+        "facing": 1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "seymour-flux",
+        "pose": "idle",
+        "life": "victory",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      },
+      {
+        "name": "mortiorchis",
+        "pose": "idle",
+        "life": "victory",
+        "facing": -1,
+        "mirrored": false,
+        "placeholder": false
+      }
+    ]
+  }
+]

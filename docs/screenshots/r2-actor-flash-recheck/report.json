@@ -1,0 +1,60 @@
+{
+  "frames": [
+    {
+      "name": "04-rikku-cast.png",
+      "bytes": 2537320
+    },
+    {
+      "name": "04-rikku-cast-before.png",
+      "bytes": 2539392
+    },
+    {
+      "name": "05-rikku-crit.png",
+      "bytes": 2509120
+    },
+    {
+      "name": "05-rikku-crit-before.png",
+      "bytes": 2480981
+    }
+  ],
+  "notes": [
+    {
+      "chapter": "ffx2-bahamut",
+      "scene": "bevelle-underground",
+      "actors": [
+        {
+          "id": "bahamut",
+          "side": "enemy",
+          "art": "ffx2-bahamut",
+          "pose": "idle",
+          "placeholder": false
+        },
+        {
+          "id": "paine",
+          "side": "party",
+          "art": "paine-warrior",
+          "pose": "idle",
+          "placeholder": false
+        },
+        {
+          "id": "yuna",
+          "side": "party",
+          "art": "yuna-white-mage",
+          "pose": "ready",
+          "placeholder": false
+        },
+        {
+          "id": "rikku",
+          "side": "party",
+          "art": "rikku",
+          "pose": "idle",
+          "placeholder": false
+        }
+      ]
+    },
+    {
+      "rikkuActorId": "rikku"
+    }
+  ],
+  "errors": []
+}

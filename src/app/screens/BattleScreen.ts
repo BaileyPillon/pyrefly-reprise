@@ -40,6 +40,7 @@ import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter, setupForNextLink } from './BattleScreenSetup.ts';
 import { createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
+import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
 
 export interface BattleScreenOptions {
   chapter: Chapter;
@@ -74,6 +75,8 @@ export class BattleScreen extends Screen {
   private engine: BattleEngine | null = null;
   private hud: HudPort | null = null;
   private cutscenes: MidBattleCutscenes | null = null;
+  /** Letterbox bars, name slab and heartbeat vignette (`BattleMoments`). */
+  private momentOverlay: MomentOverlay | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
 
@@ -151,6 +154,8 @@ export class BattleScreen extends Screen {
       sleep: (ms) => defaultSleep(this.opts.speed === 'skip' ? 0 : ms),
     });
 
+    this.momentOverlay = createMomentOverlay(this.root);
+
     const registered = uiPortsRegistered();
     const ownsOverlays = registered.damageNumbers || this.hud === null;
     const ownsBanner = registered.messageBar || this.hud === null;
@@ -162,6 +167,9 @@ export class BattleScreen extends Screen {
       messageBar: ownsBanner ? createMessageBar(this.root) : null,
       cutscenes: this.cutscenes,
       audio,
+      // Letterbox / name slab / heartbeat vignette. `BattleMoments` raises
+      // these; see `src/ui/common/transitions/`.
+      moments: this.momentOverlay,
       midScripts: chapter.scriptsRef?.midScripts ?? {},
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
@@ -345,6 +353,8 @@ export class BattleScreen extends Screen {
     this.hud = null;
     this.cutscenes?.dispose();
     this.cutscenes = null;
+    this.momentOverlay?.dispose();
+    this.momentOverlay = null;
     this.stage?.dispose();
     this.stage = null;
     this.scene?.dispose();

@@ -28,6 +28,7 @@ import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
+import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -212,7 +213,19 @@ export class GameFlow {
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
       });
-      await this.app.replace(battle);
+      // FFX spins into a battle rather than cutting. The swirl holds the frame
+      // covered while `replace` loads the diorama and stages the art, so the
+      // unwind always reveals a finished first frame
+      // (`src/ui/common/transitions/swirl.ts`).
+      let swapped: Promise<void> = Promise.resolve();
+      await playBattleSwirl(this.app.uiRoot, {
+        instant: opts.speed === 'skip',
+        onCover: () => {
+          swapped = this.app.replace(battle);
+          return swapped;
+        },
+      });
+      await swapped;
       const outcome = await battle.finished;
       attempt++;
 
@@ -283,7 +296,13 @@ export class GameFlow {
       },
     };
     const screen = factories.results?.(opts) ?? new StubResults(opts);
-    await this.app.replace(screen);
+    // Spec "Motion & camera": battle -> results is the diagonal ivory wipe,
+    // mirrored for FFX-2 chapters. The swap happens under the cover half.
+    let swapped: Promise<void> = Promise.resolve();
+    await playResultsWipe(this.app.uiRoot, chapter.game, () => {
+      swapped = this.app.replace(screen);
+    });
+    await swapped;
     await screen.done;
     return choice;
   }

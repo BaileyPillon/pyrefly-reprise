@@ -68,6 +68,16 @@
 .ffxhud .ig-ctb__tile .ffx-portrait-fallback { font-size: 8px; }
 .ffxhud .ig-stat__face .ffx-portrait-fallback { font-size: 12px; }
 .ffx-trigger__face .ffx-portrait-fallback { font-size: 10px; }
+/* The trigger prompt's portrait frame had a fallback font size but no box of
+   its own: an empty inline-block collapses to 0x0, so its chip layers (all
+   percentage-sized against the frame) collapsed with it and the speaker's face
+   never appeared. Square, sized and clipped, like the other four chip frames
+   (`.ig-ctb__tile`, `.ig-stat__face`, `.ig-prep__face`, `.ffx-cmd__face`);
+   17.3px matches `.ffx-cmd__face`, the other chip that sits on an `.ig-cmd` row. */
+.ffx-trigger__face {
+  position: relative; flex: none; width: 17.3px; height: 17.3px;
+  overflow: hidden; background: #1a1526;
+}
 
 /* ------------------------------------------------------------ CTB extras */
 
@@ -78,10 +88,20 @@
    (docs/ENGINE-API.md#hud-safe-area). Without it the CTB column's left edge is
    whatever the longest combatant name happens to be, so the rail a scene has to
    clear moves per encounter: measured at 0.866 of the canvas for "Yunalesca"
-   and 0.816 for "Braska's Final Aeon". 48px is the widest plate the current
-   cast produces (that same "Braska's Final Aeon" row), so nothing visibly
-   ellipsises today — it pins the rail at 0.815 for any name a later encounter
-   brings, which is what `SAFE_RIGHT = 0.79` is measured against. */
+   and 0.816 for "Braska's Final Aeon". 48px pins it at 0.815 for any name a
+   later encounter brings, which is what `SAFE_RIGHT = 0.79` is measured
+   against.
+
+   48px is a *cap*, not a fit: the cast's longest name does ellipsise, and is
+   meant to. "Braska's Final Aeon" renders as "Braska's F…" in the queue
+   (docs/screenshots/r2/framing-braskas-final-aeon.png) — every other name in
+   the five chapters, "Yunalesca" and "Seymour Flux" included, fits whole. That
+   is the trade this rule makes: one boss's queue plate is abbreviated so the
+   rail every scene solves against is a constant instead of a function of the
+   encounter's longest name. The full name is never only in the plate — it is on
+   the target cursor and in the Sensor panel — so nothing is lost but length.
+   Raising the cap to fit it would push the rail to 0.866 and cost every FFX
+   scene ~5% of its usable width; that is the wrong side of the trade. */
 .ffxhud .ig-ctb__name {
   font-size: 5.6px; letter-spacing: 0.13em; padding: 1.6px 3.8px;
   max-width: 48px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -110,6 +130,30 @@
 .ffx-ctb-statuses i { width: 4px; height: 4px; display: block; }
 
 /* --------------------------------------------------------- party extras */
+
+/* 12, not the shared layer's 24 (`.ig-stat-list`, the spec's "bottom 54 @1440").
+   This is a margin change only — no row shrinks, no type gets smaller — and it
+   is the whole of the FFX HUD safe area's **bottom** rail
+   (docs/ENGINE-API.md#hud-safe-area).
+
+   The column is three 27.56px rows with two 3.56px gaps, so its top edge is
+   `360 - bottom - 89.8`. At 24 that is 0.684 of the canvas and the two tallest
+   FFX bosses stand through it: Braska's Final Aeon's quad reaches 0.715 at
+   `idle` and Yunalesca's 0.725, both inside the band's x span (0.629..0.964),
+   which is the "renders under the bottom windows" half of
+   docs/handoff/playability-round-1.md §4 issue 3. Neither can be answered by
+   moving the boss: he is standing on the ground, and lifting his feet 3% of the
+   frame means pushing him far enough back to stop being the largest thing in
+   the shot.
+
+   12 drops the rail to 0.717 instead, which clears Braska's Final Aeon outright
+   and leaves Yunalesca 0.008 of quad — less than the transparent margin under
+   her painted feet — in the band. 12 is not a number picked to fit, either: the
+   FFX-2 HUD's own party column already ships at `bottom: 10px` for the same
+   reason (`src/ui/ffx2/ffx2-hud.css`), so this brings the two halves of the
+   game onto one rail rather than inventing a third. The bottom edge lands at
+   0.967, still inside the frame and still above the letterbox. */
+.ffxhud .ig-stat-list { bottom: 12px; }
 
 .ffxhud .ig-stat { position: relative; transition: opacity 0.2s ease; }
 .ffxhud .ig-stat__value { transition: color 0.2s ease; }

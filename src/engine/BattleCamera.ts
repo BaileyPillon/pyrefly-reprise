@@ -42,6 +42,16 @@ const toVec = (v: [number, number, number] | Vector3): Vector3 =>
 export class BattleCamera {
   readonly camera: PerspectiveCamera;
   readonly tweens = new TweenGroup();
+  /**
+   * Punch / push / roll live in their own group.
+   *
+   * `moveTo` and `snapTo` both `killAll()` {@link tweens} so a rig change
+   * cancels the rig change it interrupts — but a *moment* is built out of a
+   * rig change **and** a dolly push at the same time (`BattleMoments`: the
+   * Overdrive rig pushes in while it cuts, the telegraph zoom rides through a
+   * banner). Sharing one group meant the rig move silently ate the push.
+   */
+  private readonly fx = new TweenGroup();
 
   private readonly rigs = new Map<string, ResolvedRig>();
   private readonly swayAmplitude: number;
@@ -59,6 +69,16 @@ export class BattleCamera {
   private tweening = false;
 
   private currentRig = '';
+  /**
+   * Resolver for the `moveTo` currently in flight.
+   *
+   * `TweenGroup.killAll` kills a tween without firing its `onComplete`, so the
+   * promise `moveTo` handed out would never settle once a second move (or a
+   * `snapTo`) superseded it — and a caller that `await`ed the first one would
+   * wait forever. A superseded move resolves here instead: the camera did stop
+   * doing what it was asked, which is all the caller was waiting to know.
+   */
+  private moveResolve: (() => void) | null = null;
   private swayClock = Math.random() * 100;
   private swayScale = 1;
   private readonly scratch = new Vector3();
@@ -74,6 +94,12 @@ export class BattleCamera {
    * texel ratio has to stay put (visual-bible §6.3).
    */
   private punchAmount = 0;
+  /**
+   * Dutch roll in radians, applied after `lookAt`. The presentation spec asks
+   * for "-4deg roll on every attack" (`presentation-ink-and-gold.md`, "Motion &
+   * camera"); {@link roll} tweens there and back, {@link setRoll} holds it.
+   */
+  private rollRad = 0;
 
   constructor(camera: PerspectiveCamera, opts: BattleCameraOptions = {}) {
     this.camera = camera;
@@ -113,11 +139,24 @@ export class BattleCamera {
     };
   }
 
+  /**
+   * Settle the promise handed out by a `moveTo` that has just been superseded
+   * by another rig change. See {@link moveResolve}: `TweenGroup.killAll` kills
+   * a tween without firing its `onComplete`, so without this the first move's
+   * promise would never settle and a caller awaiting it would wait forever.
+   */
+  private settleMove(): void {
+    const resolve = this.moveResolve;
+    this.moveResolve = null;
+    resolve?.();
+  }
+
   /** Jump straight to a rig with no interpolation. */
   snapTo(name: string): void {
     const rig = this.rigs.get(name);
     if (!rig) return;
     this.currentRig = name;
+    this.settleMove();
     this.tweens.killAll();
     this.tweening = false;
     this.targetPos.copy(rig.position);
@@ -132,7 +171,11 @@ export class BattleCamera {
     this.apply(0);
   }
 
-  /** Smoothly move to a named rig. Resolves when the tween completes. */
+  /**
+   * Smoothly move to a named rig. Resolves when the tween completes — or as
+   * soon as a later `moveTo`/`snapTo` supersedes it, because the camera did
+   * stop doing what this caller asked, which is all it was waiting to know.
+   */
   moveTo(
     name: string,
     ms = 900,
@@ -141,6 +184,7 @@ export class BattleCamera {
     const rig = this.rigs.get(name);
     if (!rig) return Promise.resolve();
     this.currentRig = name;
+    this.settleMove();
     this.tweens.killAll();
     this.tweenFromPos.copy(this.curPos);
     this.tweenFromLook.copy(this.curLook);
@@ -152,7 +196,7 @@ export class BattleCamera {
     const toFov = rig.fov ?? fromFov;
     const fromSway = this.swayScale;
 
-    return this.tweens.toAsync(0, 1, {
+    const ran = this.tweens.toAsync(0, 1, {
       durationMs: ms,
       easing,
       onUpdate: (t) => {
@@ -166,7 +210,13 @@ export class BattleCamera {
       },
       onComplete: () => {
         this.tweening = false;
+        this.moveResolve = null;
       },
+    });
+
+    return new Promise<void>((resolve) => {
+      this.moveResolve = resolve;
+      void ran.then(resolve);
     });
   }
 
@@ -194,14 +244,14 @@ export class BattleCamera {
    */
   punch(fraction = 0.12, ms = 420): Promise<void> {
     const inMs = Math.max(1, ms * 0.28);
-    this.tweens.to(this.punchAmount, fraction, {
+    this.fx.to(this.punchAmount, fraction, {
       durationMs: inMs,
       easing: 'cubicOut',
       onUpdate: (v) => {
         this.punchAmount = v;
       },
     });
-    return this.tweens.toAsync(fraction, 0, {
+    return this.fx.toAsync(fraction, 0, {
       durationMs: ms - inMs,
       delayMs: inMs,
       easing: 'quadInOut',
@@ -211,9 +261,87 @@ export class BattleCamera {
     });
   }
 
+  /**
+   * Push in by `fraction` of the camera-to-subject distance and **hold** there
+   * until {@link release}. This is the slow zoom a boss telegraph and an
+   * Overdrive ride on, where `punch` — which eases straight back out — would
+   * bounce the frame in the middle of the wind-up.
+   */
+  push(fraction = 0.1, ms = 900): Promise<void> {
+    return this.fx.toAsync(this.punchAmount, fraction, {
+      durationMs: Math.max(1, ms),
+      easing: 'quadInOut',
+      onUpdate: (v) => {
+        this.punchAmount = v;
+      },
+    });
+  }
+
+  /** Ease a held {@link push} (and any roll) back to neutral. */
+  release(ms = 420): Promise<void> {
+    if (this.rollRad !== 0) void this.rollTo(0, ms);
+    if (this.punchAmount === 0) return Promise.resolve();
+    return this.fx.toAsync(this.punchAmount, 0, {
+      durationMs: Math.max(1, ms),
+      easing: 'quadInOut',
+      onUpdate: (v) => {
+        this.punchAmount = v;
+      },
+    });
+  }
+
+  /** How far in the held dolly currently is, as a fraction. Read by tests. */
+  get pushAmount(): number {
+    return this.punchAmount;
+  }
+
+  /** Current dutch roll, in degrees. */
+  get rollDeg(): number {
+    return (this.rollRad * 180) / Math.PI;
+  }
+
+  /** Snap the dutch roll with no tween. */
+  setRoll(deg: number): void {
+    this.rollRad = (deg * Math.PI) / 180;
+  }
+
+  /** Tween the dutch roll to `deg` and hold it there. */
+  rollTo(deg: number, ms = 240): Promise<void> {
+    return this.fx.toAsync(this.rollDeg, deg, {
+      durationMs: Math.max(1, ms),
+      easing: 'quadOut',
+      onUpdate: (v) => this.setRoll(v),
+    });
+  }
+
+  /**
+   * Kick the frame over to `deg` and let it fall back to level — the attack
+   * roll. Resolves when it is level again.
+   *
+   * Both halves are scheduled up front (the fall-back rides a `delayMs`, the
+   * way {@link punch} does) rather than chained on an `await`. Chaining them
+   * would leave the frame tilted for a whole extra tick between the two, and
+   * would strand the camera mid-tilt if the caller stopped pumping frames.
+   */
+  roll(deg = -4, ms = 420): Promise<void> {
+    const inMs = Math.max(1, ms * 0.3);
+    this.fx.to(this.rollDeg, deg, {
+      durationMs: inMs,
+      easing: 'quadOut',
+      onUpdate: (v) => this.setRoll(v),
+    });
+    return this.fx.toAsync(deg, 0, {
+      durationMs: Math.max(1, ms - inMs),
+      delayMs: inMs,
+      easing: 'quadInOut',
+      onUpdate: (v) => this.setRoll(v),
+    });
+  }
+
   /** @param dt seconds */
   update(dt: number): void {
     this.tweens.update(dt);
+    this.fx.update(dt);
     if (this.shakeLeftMs > 0) this.shakeLeftMs -= dt * 1000;
     if (!this.tweening) {
       // Ease toward the rig target; lets offsetTarget() settle naturally.
@@ -263,5 +391,8 @@ export class BattleCamera {
       this.curLook.y + oy * 0.18,
       this.curLook.z,
     );
+    // Roll last: `lookAt` rebuilds the whole orientation from the up vector, so
+    // anything applied before it is thrown away.
+    if (this.rollRad !== 0) this.camera.rotateZ(this.rollRad);
   }
 }

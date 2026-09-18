@@ -47,6 +47,16 @@ export interface Settings {
   /** Reduce bloom/particles for weaker machines. */
   lowEffects: boolean;
   reduceMotion: boolean;
+  /**
+   * Show the in-battle strategy guide (`src/ui/common/StrategyGuide.ts`).
+   *
+   * **Defaults to `true`**, so the panel is up the first time a chapter is
+   * played and the player is told what the encounter was designed around
+   * before they have to guess. It is a preference, not progress: once they
+   * press G (or the panel's own chip) the answer is remembered here for every
+   * later battle, including the ones they have not reached yet.
+   */
+  guideVisible: boolean;
 }
 
 export interface SaveData {
@@ -69,6 +79,7 @@ export function defaultSettings(): Settings {
     textSpeed: 1,
     skipSeenCutscenes: false,
     lowEffects: false,
+    guideVisible: true,
     reduceMotion:
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -147,6 +158,7 @@ export class SaveStore {
     this.key = key;
     this.storage = storage;
     this.data = this.load();
+    activeStore = this;
   }
 
   /** Current in-memory save. Mutate through the helpers, not directly. */
@@ -253,4 +265,45 @@ export class SaveStore {
   snapshot(): SaveData {
     return JSON.parse(JSON.stringify(this.data)) as SaveData;
   }
+}
+
+// ---------------------------------------------------------------------------
+// The running app's store, for UI that is built outside the screen tree
+// ---------------------------------------------------------------------------
+
+/**
+ * The most recently constructed {@link SaveStore}.
+ *
+ * `App` builds exactly one and hands it down to its screens, which is how
+ * everything that lives in the screen tree reaches settings. The battle HUDs do
+ * not: `BattleScreenWiring.createHud(game)` takes no arguments, and the HUD is
+ * handed to the presenter as a bare `HudPort`. The strategy guide inside that
+ * HUD still has a preference to remember, and it must remember it in **the same
+ * blob the app writes** — a second `SaveStore` would hold a stale copy of every
+ * other field and clobber it on the next `recordClear`.
+ *
+ * Registration happens in the constructor rather than from `App`, so the
+ * dependency runs one way (`ui` reads `app/SaveData`, and `App` needs no line
+ * about a HUD it does not own). A test that builds its own store simply becomes
+ * the active one for that test file, which is what a test wants anyway.
+ */
+let activeStore: SaveStore | null = null;
+
+/** The running app's save, when there is one. */
+export function activeSave(): SaveStore | null {
+  return activeStore;
+}
+
+/**
+ * Read one boolean setting through {@link activeSave}, falling back to the
+ * shipped default when no store exists yet (a HUD mounted in a unit test, a
+ * mock screen, a browser with storage blocked).
+ */
+export function readSetting<K extends keyof Settings>(key: K): Settings[K] {
+  return activeStore?.settings[key] ?? defaultSettings()[key];
+}
+
+/** Write one setting through {@link activeSave}. A no-op with no store. */
+export function writeSetting<K extends keyof Settings>(key: K, value: Settings[K]): void {
+  activeStore?.setSettings({ [key]: value } as Partial<Settings>);
 }

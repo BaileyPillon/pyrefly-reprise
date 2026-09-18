@@ -1,0 +1,32 @@
+{
+  "width": 707,
+  "height": 1050,
+  "baselineY": 1034,
+  "seed": 424242,
+  "prompt": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, hood, sleeveless, asymmetrical clothes, black shorts, fingerless gloves, necklace, brotherhood \\(sword\\), blue sword, holding sword, fighting stance, sword resting on shoulder, confident smile, (from side:1.4), (profile:1.1), three-quarter view, body facing right, head turned toward viewer, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical",
+  "cropBox": [
+    62,
+    131,
+    769,
+    1181
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "right",
+  "facingPhrase": "(from side:1.4), (profile:1.1), three-quarter view, body facing right, head turned toward viewer",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-17T19:13:52.667Z"
+}

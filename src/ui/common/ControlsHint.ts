@@ -74,3 +74,25 @@ export class ControlsHint {
     this.el.innerHTML = html;
   }
 }
+
+/**
+ * The in-battle strategy guide's toggle, worded per device.
+ *
+ * Exported from here rather than written inline in
+ * `src/ui/common/StrategyGuide.ts` so the panel's own chip and any screen that
+ * prints a controls strip say the same thing. The gamepad wording names the
+ * face button `src/app/Input.ts` leaves unmapped (standard-gamepad index 2,
+ * Square on a DualShock / X on an Xbox pad), which is why the guide can claim
+ * it without colliding with confirm, cancel or triangle.
+ *
+ * `action` makes the chip clickable for a mouse or touch player; a screen that
+ * includes this item must handle `'guide:toggle'` in `input.actions`. The guide
+ * panel's own chip listens for its own clicks directly and does not need it.
+ */
+export const GUIDE_HINT_ITEM: ControlHintItem = {
+  label: 'guide',
+  keyboard: 'G',
+  gamepad: 'Square',
+  pointer: 'Guide',
+  action: 'guide:toggle',
+};

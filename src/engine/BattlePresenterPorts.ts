@@ -63,14 +63,55 @@ export interface ActorHandle {
   headPoint(): Point3;
 }
 
-/** Camera rigs plus the two impact moves. */
+/**
+ * Camera rigs plus the impact moves and the held moves a *moment* is built
+ * from (`BattleMoments.ts`).
+ *
+ * `punch` bounces straight back out; `push` holds until `release`, which is
+ * what a telegraph's slow zoom and an Overdrive's push-in need. `roll` is the
+ * spec's "-4deg roll on every attack" (`presentation-ink-and-gold.md`).
+ */
 export interface CameraPort {
   moveTo(rig: CameraRigId, ms?: number): Promise<void>;
   snapTo(rig: CameraRigId): void;
   shake(amplitude?: number, ms?: number): void;
   punch(fraction?: number, ms?: number): Promise<void>;
+  /** Dolly in by `fraction` of the subject distance and hold there. */
+  push?(fraction?: number, ms?: number): Promise<void>;
+  /** Ease a held `push` (and any roll) back to neutral. */
+  release?(ms?: number): Promise<void>;
+  /** Kick the horizon over by `deg` and let it fall back level. */
+  roll?(deg?: number, ms?: number): Promise<void>;
   readonly rigNames: string[];
   readonly rigName: string;
+}
+
+/**
+ * The full-screen chrome a *moment* puts over the field: the letterbox bars,
+ * the Ink & Gold name slab (boss reveal, Overdrive) and the heartbeat vignette
+ * a boss charge pulses.
+ *
+ * DOM-only, so it is a port like every other: the implementation lives in
+ * `src/ui/common/transitions/`, and the headless presenter tests pass a fake
+ * (or nothing at all — every call site treats it as optional).
+ */
+export interface MomentsPort {
+  /** Slide the cinematic bars in or out. Resolves when they have settled. */
+  letterbox(on: boolean, ms?: number): Promise<void>;
+  /**
+   * Show a skewed name slab and resolve once it has been dismissed.
+   * `kind` picks the accent: a boss reveal, an Overdrive, a charge telegraph.
+   */
+  nameSlab(opts: {
+    title: string;
+    subtitle?: string;
+    kind: 'reveal' | 'overdrive' | 'telegraph';
+    holdMs?: number;
+  }): Promise<void>;
+  /** Start (or stop) the heartbeat vignette pulse. `bpm` sets the throb rate. */
+  vignette(on: boolean, opts?: { bpm?: number; colour?: string }): void;
+  /** Tear every layer down. */
+  clear(): void;
 }
 
 /** One-shot effects, keyed by `VfxKey` from the event stream. */
@@ -183,6 +224,8 @@ export interface PresenterDeps {
   messageBar?: MessageBarPort | null;
   cutscenes?: CutsceneRunnerPort | null;
   audio?: AudioPort | null;
+  /** Letterbox / name slab / vignette. Omitted in tests and headless runs. */
+  moments?: MomentsPort | null;
   /** Mid-battle scripts by `MidBattleTrigger.script`, from `ChapterScripts`. */
   midScripts?: Record<string, StoryScript>;
   /** Sleep hook. Tests pass a no-op so the loop runs instantly. */

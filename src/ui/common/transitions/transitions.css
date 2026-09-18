@@ -1,0 +1,264 @@
+/**
+ * Battle *moments*, the DOM half.
+ *
+ * Three things live here, all of them full-screen chrome the battle raises and
+ * drops again:
+ *
+ * - `.pf-swirl`  — the battle-start swirl (`swirl.ts`).
+ * - `.pf-mom`    — the letterbox bars, name slab and heartbeat vignette a
+ *                  moment puts over the field (`MomentOverlay.ts`).
+ *
+ * Ink & Gold throughout: ink/paper/gold and the -12deg slab skew are read from
+ * `src/ui/inkgold/tokens.css` when the host root carries `.ig` (the battle
+ * screen does), with the spec's literal values as fallbacks so a bare mount —
+ * the screenshot harness, a scene debug screen — still looks right.
+ *
+ * Nothing here is authored on the 640x360 logical grid: these are viewport
+ * effects that have to cover whatever the window actually is, so they are sized
+ * in vh/vw/vmax and use `clamp()` for type rather than the grid's px-per-2.25
+ * conversion.
+ */
+
+/* ---------------------------------------------------------------- swirl ---
+   FFX drops into a battle through a spinning wipe, not a cut. Two counter-
+   rotating conic layers, each covering two opposite quadrants, expand from the
+   centre: when both reach full scale the frame is covered (that is the instant
+   the screen swaps), and the same motion continued unwinds them again. */
+
+.pf-swirl {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.pf-swirl__blade {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 200vmax;
+  height: 200vmax;
+  margin: -100vmax 0 0 -100vmax;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation-duration: var(--pf-swirl-ms, 620ms);
+  animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+  animation-fill-mode: both;
+  animation-name: pf-swirl-a;
+}
+
+/* Quadrants 0-90 and 180-270 ... */
+.pf-swirl__blade--a {
+  background: conic-gradient(
+    from 0deg,
+    var(--pf-swirl-ink, #0b0a12) 0deg 90deg,
+    transparent 90deg 180deg,
+    var(--pf-swirl-ink, #0b0a12) 180deg 270deg,
+    transparent 270deg 360deg
+  );
+}
+
+/* ... and the two the first one leaves open, counter-rotating. */
+.pf-swirl__blade--b {
+  animation-name: pf-swirl-b;
+  background: conic-gradient(
+    from 90deg,
+    var(--pf-swirl-ink, #0b0a12) 0deg 90deg,
+    transparent 90deg 180deg,
+    var(--pf-swirl-ink, #0b0a12) 180deg 270deg,
+    transparent 270deg 360deg
+  );
+}
+
+/* The gold seam that rides the leading edge of the swirl. */
+.pf-swirl__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30vmax;
+  height: 30vmax;
+  margin: -15vmax 0 0 -15vmax;
+  border-radius: 50%;
+  border: 2px solid var(--pf-swirl-gold, #e3b94a);
+  box-shadow: 0 0 40px rgba(227, 185, 74, 0.55);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: pf-swirl-ring var(--pf-swirl-ms, 620ms) cubic-bezier(0.4, 0, 0.3, 1) both;
+}
+
+@keyframes pf-swirl-a {
+  0% { transform: rotate(-150deg) scale(0); }
+  50% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(150deg) scale(0); }
+}
+
+@keyframes pf-swirl-b {
+  0% { transform: rotate(150deg) scale(0); }
+  50% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(-150deg) scale(0); }
+}
+
+@keyframes pf-swirl-ring {
+  0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+  35% { opacity: 0.9; }
+  50% { transform: scale(7) rotate(140deg); opacity: 0.55; }
+  100% { transform: scale(14) rotate(280deg); opacity: 0; }
+}
+
+/* ------------------------------------------------------------- moments --- */
+
+.pf-mom {
+  position: absolute;
+  inset: 0;
+  z-index: 36;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Letterbox. Bars sit outside the frame and slide in; height is a share of the
+   viewport so the same moment reads at any aspect ratio. */
+.pf-mom__bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 11vh;
+  background: #05040a;
+  transform: translateY(0);
+  transition: transform var(--pf-bar-ms, 260ms) cubic-bezier(0.3, 0, 0.2, 1);
+  will-change: transform;
+}
+.pf-mom__bar--top { top: 0; transform: translateY(-100%); }
+.pf-mom__bar--bottom { bottom: 0; transform: translateY(100%); }
+.pf-mom[data-letterbox='1'] .pf-mom__bar--top,
+.pf-mom[data-letterbox='1'] .pf-mom__bar--bottom { transform: translateY(0); }
+
+/* A hairline of the accent along the inner edge, so the bars read as chrome
+   rather than as the window having been cropped. */
+.pf-mom__bar--top { border-bottom: 1px solid var(--ig-accent, #e3b94a); }
+.pf-mom__bar--bottom { border-top: 1px solid var(--ig-accent, #e3b94a); }
+
+/* Name slab — boss reveal, Overdrive, charge telegraph. Ink & Gold's unit of
+   chrome: skew the box, counter-skew the content (inkgold/slabs.css). */
+.pf-mom__slab {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  min-width: 46%;
+  max-width: 82%;
+  padding: 1.6vh 4.4vw 1.6vh 3.4vw;
+  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+  border-left: 4px solid var(--ig-accent, #e3b94a);
+  box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.55);
+  transform: translate(-108%, -50%) skewX(var(--ig-skew, -12deg));
+  opacity: 0;
+  transition:
+    transform var(--pf-slab-ms, 260ms) cubic-bezier(0.16, 1, 0.3, 1),
+    opacity var(--pf-slab-ms, 260ms) ease;
+  will-change: transform, opacity;
+}
+.pf-mom__slab[data-on='1'] {
+  transform: translate(-3%, -50%) skewX(var(--ig-skew, -12deg));
+  opacity: 1;
+}
+.pf-mom__slab-content {
+  display: block;
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.pf-mom__slab-sub {
+  display: block;
+  font-family: var(--ig-font-display, 'Chakra Petch', 'Bahnschrift', sans-serif);
+  font-weight: 700;
+  font-size: clamp(9px, 1.35vh, 15px);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ig-accent, #e3b94a);
+  margin-bottom: 0.4vh;
+}
+.pf-mom__slab-title {
+  display: block;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(22px, 5.4vh, 64px);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  color: var(--ig-paper, #f4f1e8);
+  white-space: nowrap;
+}
+/* The one place this system keeps a warning colour instead of the accent:
+   reusing "ready" gold for "the boss is about to wipe the party" would
+   contradict the accent's meaning everywhere else (TelegraphBanner.ts). */
+.pf-mom__slab--telegraph {
+  border-left-color: #e8412e;
+  background: rgba(30, 6, 4, 0.86);
+}
+.pf-mom__slab--telegraph .pf-mom__slab-sub { color: #e8412e; }
+/* A reveal hangs the enemy's name off the right edge instead, mirroring the
+   side of the frame the enemy block stands on. */
+.pf-mom__slab--reveal {
+  left: auto;
+  right: 0;
+  border-left: none;
+  border-right: 4px solid var(--ig-accent, #e3b94a);
+  padding: 1.6vh 3.4vw 1.6vh 4.4vw;
+  text-align: right;
+  transform: translate(108%, -50%) skewX(var(--ig-skew, -12deg));
+}
+.pf-mom__slab--reveal[data-on='1'] {
+  transform: translate(3%, -50%) skewX(var(--ig-skew, -12deg));
+}
+
+/* Heartbeat vignette — the charge telegraph's countdown. One radial mask that
+   throbs; `--pf-vig-ms` is the beat period the overlay computes from bpm. */
+.pf-mom__vig {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 50%,
+    rgba(0, 0, 0, 0) 38%,
+    var(--pf-vig-colour, rgba(150, 20, 12, 0.5)) 100%
+  );
+  transition: opacity 240ms ease;
+  will-change: opacity;
+}
+.pf-mom__vig[data-on='1'] {
+  opacity: 1;
+  animation: pf-vig-beat var(--pf-vig-ms, 714ms) ease-in-out infinite;
+}
+@keyframes pf-vig-beat {
+  0% { opacity: 0.42; transform: scale(1.02); }
+  14% { opacity: 1; transform: scale(1); }
+  34% { opacity: 0.58; transform: scale(1.015); }
+  48% { opacity: 0.86; transform: scale(1.004); }
+  100% { opacity: 0.42; transform: scale(1.02); }
+}
+
+/* The shared heartbeat. `.pf-mom__vig` runs its own keyframes (it scales as
+   well as fades); anything else that must throb *in time with it* — the FFX
+   HUD's stage-2 screen border — takes this one instead, reading the same
+   `--pf-beat-ms` period. `src/ui/ffx/TelegraphBanner.ts` sets that property
+   from the same bpm figure `BattleMoments` hands the vignette. */
+.pf-beat {
+  animation: pf-beat var(--pf-beat-ms, 455ms) ease-in-out infinite;
+}
+@keyframes pf-beat {
+  0% { opacity: 0.55; }
+  14% { opacity: 1; }
+  34% { opacity: 0.7; }
+  48% { opacity: 0.92; }
+  100% { opacity: 0.55; }
+}
+
+/* Reduced motion: every moment still *happens* (the player must not lose the
+   information a slab or a letterbox carries), it simply does not travel. */
+@media (prefers-reduced-motion: reduce) {
+  .pf-swirl__blade,
+  .pf-swirl__ring { animation-duration: 1ms; }
+  .pf-mom__bar { transition-duration: 1ms; }
+  .pf-mom__slab { transition-duration: 1ms; }
+  .pf-mom__vig[data-on='1'] { animation: none; opacity: 0.8; }
+  .pf-beat { animation: none; opacity: 1; }
+}

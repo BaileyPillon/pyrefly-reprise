@@ -143,7 +143,15 @@
 }
 .ig-stat > * { transform: skewX(var(--ig-skew-inverse)); }
 .ig-stat--acting { border-left-color: var(--ig-accent); border-right-color: var(--ig-accent); background: var(--ig-ink-acting); }
-.ig-stat__face { width: 27.56px; height: 27.56px; overflow: hidden; background: #1a1526; flex: none; margin-left: 2.67px; } /* 62 6 */
+/* `position: relative` is load-bearing, not tidiness: this frame holds a
+   portrait chip (`ui/ffx/portraits.ts`), whose layers are absolutely
+   positioned percentages of the frame. It happened to work already because
+   `.ig-stat > *` above skews every child and a transform makes an element a
+   containing block — an accident one un-skewed variant would break, dropping
+   the party's faces to whatever ancestor is positioned instead. Its three
+   sibling chip frames (`.ig-ctb__tile`, `.ffx-cmd__face`, `.ffx-trigger__face`)
+   all say it outright; so does this one now. */
+.ig-stat__face { position: relative; width: 27.56px; height: 27.56px; overflow: hidden; background: #1a1526; flex: none; margin-left: 2.67px; } /* 62 6 */
 .ig-stat__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
 /* ig-stat__sphere: BattleFfx2.dc.html's dressphere monogram tile — the FFX-2
    swap for .ig-stat__face's portrait <img> (a plain glyph instead of a

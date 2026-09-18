@@ -330,7 +330,11 @@ down to the top of the actual plane, so damage numerals land over the body.
 | Option | Meaning |
 | --- | --- |
 | `worldHeight` | Feet-to-top height in world units. Default 1.8. |
-| `facing` | `1` faces +x, `-1` mirrors the plane (a negative scale, not a UV flip). |
+| `side` | `'party'` \| `'enemy'` \| `'aeon'`. The one you want: it sets `facing` from the team. |
+| `facing` | Which way the **body** is turned: `1` toward +x, `-1` toward -x. Not a mirror instruction — see [Facing](#facing-two-numbers-not-one). |
+| `artFacing` | Which way this subject's *paintings* face when their sidecars do not say. Default `'auto'` = "already correct for its side", never mirrored. |
+| `turnRing` | `true`, or `{ color, radius, opacity }`, for the soft ground ring under whoever is acting. **Off by default**; the battle stage opts in. |
+| `life` | `false` to make `setPose` a plain texture swap — hand-animated scene demos want this. |
 | `crossfadeMs` | Pose crossfade. Default 120. |
 | `tint`, `brightness` | Multiply colour and exposure trim. |
 | `rim` | `{ color, strength, dir, width }` — a rim band derived from the alpha silhouette. |
@@ -352,7 +356,8 @@ down to the top of the actual plane, so damage numerals land over the body.
 | Member | Meaning |
 | --- | --- |
 | `update(dt)` | **Every frame**, seconds. Drives tweens and every motion layer. |
-| `setPose(name, { immediate?, force? })`, `pose`, `poseNames` | Crossfade between poses. |
+| `setPose(name, { immediate?, force? })`, `pose`, `poseNames` | Crossfade between poses — **and enter the matching life state**. See [Life](#life-the-pose-name-is-also-a-state). |
+| `lifeState` | What the body is doing: `idle \| ready \| act \| guard \| hurt \| down \| victory`. |
 | `adoptPoses(map, initial?)` | Take already-loaded textures (a stand-in borrowing another actor's painting). Borrowed textures are never disposed by this actor. |
 | `reloadPose(name, url?)` | Re-read one pose from disk; used by the dev hot-swap. |
 | `flash(colour?, ms?, peak?)` | Additive hit flash, weighted by alpha. |
@@ -362,7 +367,9 @@ down to the top of the actual plane, so damage numerals land over the body.
 | `dissolveTo(v, ms?, colour?)` / `setDissolve(v)` | Pyrefly dissolve; 0 solid, 1 gone. KO and sending. |
 | `fadeTo(a, ms?, easing?)` / `setAlpha(a)` / `alpha` | Opacity, shadow included. |
 | `moveTo(pos, ms?, easing?)` | Promise; tweens `position`. |
-| `setFacing(1 \| -1)`, `facingDir` | Mirror. |
+| `setFacing(1 \| -1)`, `setSide(side)`, `facingDir` | Turn the body. |
+| `setArtFacing(a)`, `artFacingDir`, `mirrored` | Declare which way the art faces, and read back whether the plane is actually being drawn flipped. |
+| `setTurnRing(on)` / `clearTurnRing()` | Take the ring off the life layer and drive it by hand, and give it back. |
 | `setBrightness(m)`, `setTint(c)`, `setRimLight(c, s, dir?)`, `setBounceLight(c, s)` | Drive the look from the scene's light rig. |
 | `headPoint(out?)`, `centerPoint(out?)`, `height` | Anchors for VFX and damage numerals. Both follow the pose: over a prone body they aim at the plane's top, not at where the head used to be. |
 | `isProne`, `poseSize` | Whether the pose on screen is a downed painting, and its `[width, height]` in world units. |
@@ -372,6 +379,117 @@ down to the top of the actual plane, so damage numerals land over the body.
 **The motion layers stack.** Breathe, sway, lunge, recoil, squash, hop, shake
 and hover all contribute to one transform per frame, so an actor can be
 mid-lunge, mid-hop and shaking at once without any of them fighting.
+
+## `BattlePresenterActors` — **stable**, facing and life
+
+`src/engine/BattlePresenterActors.ts`. The two rule sets `PaintedActor` reads
+every frame, as plain functions and one small class.
+
+**This module imports nothing** — no `three`, no DOM, same rule as
+`BattlePresenterPorts.ts` — so the whole state machine runs in Node and is
+tested directly in `tests/unit/engine/actor-life.test.ts`. The actor is a thin
+renderer of what these functions decide. Anything you want to assert about how
+a fighter carries itself belongs here, not in a screenshot.
+
+### Facing: two numbers, not one
+
+Two different questions used to share one `facing: 1 | -1`, which is why an
+enemy's painting was mirrored whether or not it needed to be.
+
+| | What it is | Who owns it |
+| --- | --- | --- |
+| **World facing** | Which way along ±x this fighter is turned. Aims the lunge, the lean and the posture tilt; never touches the texture. | The **side**: party and aeons `+1`, enemies `-1` (`facingForSide`). |
+| **Art facing** | Which way the painting was painted. | The **PNG**, through its sidecar's `"facing"` field. |
+
+The plane is mirrored only when the two disagree — `mirrorFor(art, want)`:
+
+```ts
+mirrorFor('right',  1) === 1    // party art on the party's side: as painted
+mirrorFor('left',  -1) === 1    // enemy art on the enemy's side: as painted
+mirrorFor('right', -1) === -1   // wrong way round for this side: flip it
+mirrorFor('front',  ±1) === 1   // a figure facing camera has no wrong side
+mirrorFor(undefined, ±1) === 1  // undeclared: assumed correct for its side
+```
+
+Under the v3 art contract (`docs/handoff/art3-contract.md`: party art faces
+**right**, enemy and aeon art faces **left**) the two never disagree, so
+**nothing is mirrored** and no painting is handed to the player back-to-front.
+That is the point of the change: the engine's job is to stop flipping correct
+art, not to guess.
+
+`parseArtFacing` reads the sidecar field and accepts the pipeline's own
+spellings — `none`, `straight-on` and friends all mean `'front'`. Anything it
+does not recognise reads as absent, which falls through to `'auto'`.
+
+Facing is **per pose**, not per subject: one leftover frontal `cast.png` in an
+otherwise right-facing set declares `"facing": "front"` in its own sidecar and
+is left alone while its neighbours are not. `PaintedArt.loadSubject` also
+surfaces the subject-level default it found as `subject.facing`, which is what
+`PaintedActor.fromSubject` hands to `setArtFacing`.
+
+### Life: the pose name is also a state
+
+`setPose` is not a texture swap. The pose name maps to a **life state**
+(`lifeStateForPose`), the state carries a resting **posture**, and the
+transition between two states fires one-shot **cues**. The presenter did not
+have to learn any of this — it still just names poses.
+
+| Pose(s) | State | Posture | Cues on entry |
+| --- | --- | --- | --- |
+| `idle`, anything unknown | `idle` | square, normal breathing, ring out | — |
+| `ready` | `ready` | half-step forward, weight up, quicker breath, **ring lit** | `step` (a small hop onto the front foot) |
+| `attack`, `cast`, `item`, `pray` | `act` | slight lean, breath held, ring lit | — |
+| `defend`, `guard`, `sentinel` | `guard` | braced *back*, low, very still | — |
+| `hurt` | `hurt` | rocked back, quick shallow breath | `flinch` (tint + knock-back) |
+| `ko`, `dead` | `down` | tilted over, all but no breath, ring out | `fall` |
+| `victory` | `victory` | up on the toes | `hop`, staggered per fighter |
+| *(any → leaving `down`)* | | | `rise` + a soft glow |
+
+Every distance in `POSTURES` is a **fraction of the figure's world height**, so
+the same numbers read the same on a 1.8-unit summoner and a 4.1-unit boss.
+Postures are eased into with `approach` (exponential, framerate-independent),
+never snapped — except by `set(state, { immediate: true })`, which is what
+staging a party member who was *already* KO'd uses so nobody watches a corpse
+topple over on frame one.
+
+**One rule overrides the pose name** (`nextLifeState`): a fighter who is already
+`down` does not enter `hurt`. Damage still lands on a KO'd party member and the
+presenter still names `hurt` for it; without the rule the body would sit up to
+wince, and `cuesFor` would read that as *leaving* `down` and play the revive
+rise, glow and all, on a character who is still dead. `PaintedActor.setPose`
+drops the painting too, so the body keeps its `ko` pose.
+
+### The attack step
+
+`attackOffset(t)` is the shape of the lunge — and it is deliberately not one
+ease out and back. That is a *drift*, and it reads as the figure sliding into
+the enemy and sliding home. What reads as an attack is punctuation, in four
+beats (`ATTACK_BEATS`, fractions of the move):
+
+```
+step 0.26   quick step in, cubic-out, to 86% of the distance
+hold 0.20   a beat of stillness — the wind-up, and where the eye catches up
+strike 0.12 the push through the top of it, peaking at 1.0 (ATTACK_IMPACT)
+settle 0.42 smoothstep back home
+```
+
+The peak is still the `distance` passed to `lunge()` and the whole move still
+takes `ms`, so every existing call site keeps its staging.
+
+### The turn ring
+
+A soft additive annulus on the ground, brightest just inside its rim, scaled
+0.46 in z so it reads as a ring lying on the floor rather than a disc facing the
+camera. It comes up fast (τ 0.09 s) and leaves slowly (τ 0.2 s), so a highlight
+never flickers between two events of the same turn, and it is left *alone* by
+the `guard` and `hurt` postures (`ring: null`) so being hit mid-turn does not
+put it out.
+
+It is **off unless the actor asks for it**. `BattlePresenterStage` opts in —
+gold under the party, a colder violet under the fiends — because "whose decision
+is this?" is a question only a battle has. A scene demo drives the same poses
+for staging reasons, and a highlight under a character who is not taking a turn
+is a lie in every screenshot it lands in.
 
 ## `PaintedShader`
 
@@ -602,6 +720,118 @@ have. `unmountScene` undoes it without disposing.
 `src/scenes/demo.ts` is the reference implementation: `buildGagazetScene` is the
 `SceneFactory`, and `buildDemoScene(camera)` is the demo screen's layer on top
 of it (actors, VFX, beats, a `BattleCamera`).
+
+---
+
+## HUD safe area
+
+**The rule: an enemy standing on `enemySlots[n]` must be fully inside the safe
+area at the `idle` rig, and its head, torso and every targetable part must stay
+inside it at `action` too.** A scene that ignores this draws its boss behind the
+CTB queue, and the fight's second enemy stops existing — which is exactly what
+`docs/handoff/playability-round-1.md` §4 issue 3 reported.
+
+Both HUDs are a **640x360 authoring stage** scaled by `min(w/640, h/360)` and
+pinned to the top-left of the canvas (`.ffxhud__stage`, `.ffx2hud__stage`), so
+at any 16:9 canvas every panel lands on the same *fraction* of the frame. Every
+number below is a fraction of the canvas, measured live at **1600x900 and
+1920x1080** (they agree to ±0.001), and it is a fraction, not a pixel count,
+that a scene solves against.
+
+### The rails
+
+| HUD | Panel | Rect (x0..x1, y0..y1) |
+|---|---|---|
+| FFX | CTB queue `.ig-ctb` | **0.843**..0.970, 0.138..0.557 |
+| FFX | party status `.ig-stat-list` | 0.629..0.964, **0.717**..0.967 |
+| FFX | command stack `.ig-cmd-stack` | 0.047..0.329, 0.568..0.928 |
+| FFX | Sensor panel `.ffx-sensor` | 0.300..0.482, 0.067..0.283 |
+| FFX-2 | party status `.ig-stat-list` | **0.725**..0.984, **0.722**..0.972 |
+| FFX-2 | command window `.ffx2hud__command` | 0.745..0.981, 0.390..0.677 |
+| FFX-2 | boss strip `.ffx2hud__enemies` | 0.033..0.407, 0.049..0.102 |
+| both | strategy guide `.sgd__panel` | 0.033..0.240, 0.108..0.700 (soft) |
+
+The CTB column's left edge is the one rail that is **not** a constant of the
+stylesheet on its own: its rows are right-anchored and each carries a name
+plate, so without a cap the rail moves with whatever the longest combatant name
+in the encounter happens to be. `.ffxhud .ig-ctb__name { max-width: 48px }` is
+what bounds it. Measured three ways in the live Chapter 2 queue, identical at
+1600x900 and 1920x1080:
+
+| CTB `.ig-ctb` left edge | value |
+|---|---|
+| as it ships, current cast | 0.866 ("Yunalesca"), 0.856 ("Braska's F…") |
+| **worst case under the cap**, any name | **0.843** |
+| with the cap removed, one long name | 0.629 |
+
+**0.843 is the number a scene solves against** — the leftmost the column can
+travel for any name a later encounter brings, not the 0.856/0.866 today's cast
+happens to produce. Removing the cap would hand a third of the frame to one
+name plate.
+
+The cap is deliberately *shorter* than the longest name in the cast, so that
+name is abbreviated in the queue: "Braska's Final Aeon" reads "Braska's F…"
+(`docs/screenshots/r2/framing-braskas-final-aeon.png`). Everything else in the
+five chapters fits whole. The queue plate is not the only place the name
+appears — the target reticle and the Sensor panel both render it in full,
+untruncated — so the abbreviation costs nothing the player needs.
+
+### The safe area
+
+```
+FFX     x <= 0.79   y <= 0.717      (right rail 0.843 - 0.053 of sway/quad margin)
+FFX-2   x <= 0.72   y <= 0.722      (right rail 0.745 - 0.025)
+```
+
+The top is free on both, and so is the left **for enemies** — but the left is
+not empty. Three panels live there, and the distinction that matters is which
+side of the field they cover:
+
+- the FFX command stack (0.047..0.329, y from 0.568) and the FFX-2 command
+  window sit over the party's lower third, which is FFX's own arrangement: the
+  party stands behind the command window and always has;
+- the Sensor panel is transient;
+- the **strategy guide** (`src/ui/common/strategy-guide.css`, `left: 21.33px;
+  width: 132px` on the 640-wide stage = 0.033..0.240) is new, taller than
+  either, and reaches up to y 0.108 — over the party's *heads*, not their
+  boots. It is dismissible with `G`, so it is a soft rail, but a party slot
+  left of 0.240 is behind it for as long as it is up. See the overlap column in
+  `docs/handoff/r2-framing-safe-area.md`; the guide's geometry is not this
+  note's to change.
+
+Two things about the numbers:
+
+- **The right rail is hard.** The CTB column and the FFX-2 command window are
+  tall, opaque and always up. `sway` on a rig moves the frame a little every
+  frame, and a painted actor's quad is wider than the figure on it — the aura
+  runs to the plane's edge — so the safe area sits well inside the panel it is
+  protecting, and a slot solved to the panel rather than to the rail will cross
+  it on some sway phase. Chapter 1's boss did exactly that: solved from his
+  nominal width to 0.783, measured at 0.793.
+- **The bottom rail is soft, and only for feet.** A ground-planted boss's *quad*
+  may descend a little past it, because the quad has transparent margin under
+  the painted feet and because the party column is bottom-anchored under the
+  right half of the frame. What may not cross it is the figure's readable mass:
+  no enemy's centroid, and no targetable part's centroid, may fall below it.
+  Lifting a boss's feet 3% of the frame means pushing him far enough back to
+  stop being the largest thing in the shot, which is a worse bug than the one it
+  fixes.
+
+### Checking a scene against it
+
+The rails are measured, not asserted, so re-measure after any change to a slot,
+a rig, or a HUD column's width or margin:
+
+```js
+// in a battle, with the HUD up
+const { scene, camera } = window.__pyrefly.app.lastRendered;
+// project the 8 corners of each enemy actor's mesh bounds through
+// camera.matrixWorldInverse then camera.projectionMatrix, and compare against
+// getBoundingClientRect() on '.ig-ctb', '.ig-stat-list', '.ffx2hud__command'.
+```
+
+`docs/handoff/r2-framing-safe-area.md` has the per-chapter table this produced,
+and each scene's `ENEMY_SLOTS` block carries the numbers its own boss measured.
 
 ---
 

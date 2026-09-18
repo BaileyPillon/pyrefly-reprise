@@ -290,11 +290,18 @@ describe('the shipped intended strategy beats Chapter 3', () => {
    * than four lucky rolls. This is the regression net: forty contiguous seeds
    * of the whole chapter in about a second.
    *
-   * Measured **38/40** on this window (36/40 before round 4's aeon reserve and
-   * Slow-MP rules). The bar is 34 so ordinary tail variance does not flake it,
+   * Measured **39/40** on this window as of round 5 (38/40 before it, 36/40
+   * before round 4). The bar is 36 so ordinary tail variance does not flake it,
    * and so that a regression toward what this was at the §4.1 preset with no
    * bench, no Doublecast and no Zombie - **0/40, a guaranteed defeat on link 1**
    * - goes red immediately.
+   *
+   * The wider picture behind this window, measured over the **thousand**
+   * contiguous seeds 1-1000 under the shipped line: **972 wins, 97.2 %**
+   * (193, 194, 191, 199 and 195 out of 200 on the five windows), against
+   * 930/1000 = 93.0 % before round 5's {@link summonNow} change. All 28 losses
+   * are link 1 - from the possessed aeons onward the party carries the fayth's
+   * permanent Auto-Life and those fights cannot be lost (§2.3).
    */
   it('wins the great majority of forty contiguous seeds, chain and all', () => {
     const results = Array.from({ length: 40 }, (_, i) => runChain(i + 1));
@@ -305,7 +312,7 @@ describe('the shipped intended strategy beats Chapter 3', () => {
       .map((x) => `${x.seed}: ${x.r.trail.at(-1)}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(' | ') || 'none'}`);
 
-    expect(wins, 'Chapter 3 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(34);
+    expect(wins, 'Chapter 3 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(36);
     // Forty seven-link chains are about a second on an idle machine; the budget
     // is for a loaded one, where a dozen other vitest runs are competing.
   }, 180_000);
@@ -317,11 +324,13 @@ describe('the shipped intended strategy beats Chapter 3', () => {
    * They are here because they are what failed: the round-3 line won 5 of
    * these 8, and all three losses were link 1 against the 120,000-HP second
    * form, which is the one place in the chapter a party can actually lose. The
-   * two rules that closed them - the aeon/Talk reserve for the Ultimate Jecht
-   * Shot phase and Tidus's Ether for the Slow ladder - are both in
-   * `src/engine/tactics/braskas-final-aeon.ts`, and this block is what stops
-   * either of them being quietly undone. Measured **8/8**; the bar is 7 so one
-   * seed of headroom exists for an unrelated tuning change.
+   * rules that closed them are all in `src/engine/tactics/braskas-final-aeon.ts`
+   * - Tidus's Ether for the Slow ladder (round 4), and round 5's
+   * `summonNow`, which spends the aeon roster on the boss's Overdrive gauge
+   * and puts that decision *ahead* of the routine Protect and top-up in
+   * `supportTurn`. This block is what stops any of them being quietly undone.
+   * Measured **8/8**; the bar is 7 so one seed of headroom exists for an
+   * unrelated tuning change.
    */
   it('wins the eight seeds the verifier picked, chain and all', () => {
     const seeds = [2, 3, 5, 11, 13, 99, 1234, 7777];

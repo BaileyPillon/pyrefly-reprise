@@ -366,6 +366,14 @@ export const FAN_COLUMNS = 5;
 export const HIT_STAGGER_MS = 80;
 
 /**
+ * Quiet time on a target, in ms, after which its burst is over: the ladder
+ * restarts at the chest and the fan is re-shaped for wherever the actor now
+ * stands. Long enough to cover a slow multi-hit's own gaps, short enough that
+ * the next action does not start three rungs up in dead air.
+ */
+export const BURST_GAP_MS = 800;
+
+/**
  * Extra rung pitch, in logical px, that pays for the stagger.
  *
  * A numeral released {@link HIT_STAGGER_MS} later is that much earlier in its
@@ -388,6 +396,82 @@ export function fanOffset(column: number): number {
   return (c % 2 === 1 ? 1 : -1) * step * FAN_STEP;
 }
 
+/** Room a target's fan has on each side of its anchor, in logical px. */
+export interface FanRoom {
+  left: number;
+  right: number;
+}
+
+/** The symmetric fan, used whenever the room either side is not known or is ample. */
+const FAN_SYMMETRIC: readonly number[] = Array.from({ length: FAN_COLUMNS }, (_, c) => fanOffset(c));
+
+/**
+ * The fan columns a target may actually open, ordered, given the room it has.
+ *
+ * {@link fanOffset} opens symmetrically and lets `placeInSafeArea` reflect
+ * whatever leaves the rect. That is right for a target in open field and wrong
+ * for one near a margin: reflection is one-to-one, but it folds column +2 back
+ * to within a few px of column -1, so an actor 200px from the left edge ends up
+ * with its outer columns bunched instead of fanned (the stress frame in
+ * `r2-53-ffx2-chain-chip.png`). §5 of `docs/handoff/r2-damage-numbers-fan.md`.
+ *
+ * So the fan is made **asymmetric** before the fact: it opens only into the
+ * room that exists, still alternating while both sides have room so the group
+ * stays centred on the actor, and marching into the open side once the near
+ * one is full. The result is always a set of distinct offsets `FAN_STEP` apart
+ * that all fit — which is what the reflection could not promise.
+ *
+ * A target with room for nothing but column 0 gets `[0]`; its ladder then
+ * separates its numerals vertically and its stagger separates them in time,
+ * which is the honest degradation and not a pile-up.
+ */
+export function fanSequence(room?: FanRoom | null): readonly number[] {
+  if (!room) return FAN_SYMMETRIC;
+  const slotsRight = Math.max(0, Math.floor(room.right / FAN_STEP));
+  const slotsLeft = Math.max(0, Math.floor(room.left / FAN_STEP));
+  if (slotsRight >= FAN_COLUMNS && slotsLeft >= FAN_COLUMNS) return FAN_SYMMETRIC;
+  const out: number[] = [0];
+  let right = 0;
+  let left = 0;
+  // Start right, matching `fanOffset`, so an unconstrained fan is unchanged.
+  let preferRight = true;
+  while (out.length < FAN_COLUMNS) {
+    const canRight = right < slotsRight;
+    const canLeft = left < slotsLeft;
+    if (!canRight && !canLeft) break;
+    if (canRight && (preferRight || !canLeft)) out.push(++right * FAN_STEP);
+    else out.push(0 - ++left * FAN_STEP);
+    preferRight = !preferRight;
+  }
+  return out;
+}
+
+/**
+ * Which of a target's two fan tracks a numeral rides.
+ *
+ * A burst is normally one family of numeral and uses `'main'` alone. When a
+ * *second* family lands on the same target inside one burst — a heal on an
+ * actor who is being hit — it takes `'alt'`, which reads the same fan from the
+ * far end, so the two families occupy disjoint columns. See {@link burstSlot}.
+ */
+export type BurstTrack = 'main' | 'alt';
+
+/** The two numeral families that must not share a fan column. See {@link BurstTrack}. */
+export type NumeralFamily = 'damage' | 'heal';
+
+/**
+ * Which family a numeral kind belongs to.
+ *
+ * Only healing is split out, and for a concrete reason: every other kind flies
+ * the *same* ballistic arc, so the ladder alone keeps them apart, while a heal
+ * floats straight up. Two different motions through one column cross — over
+ * ~600ms a damage figure two rungs up meets a heal figure one rung up, which is
+ * the last overlap left in §5 of `docs/handoff/r2-damage-numbers-fan.md`.
+ */
+export function familyFor(kind: DamageKind): NumeralFamily {
+  return kind === 'heal' ? 'heal' : 'damage';
+}
+
 /** Where numeral `index` of a target's current burst sits, and how late it is released. */
 export interface BurstSlot {
   /** Horizontal offset from the target's anchor, logical px. */
@@ -398,6 +482,17 @@ export interface BurstSlot {
   rung: number;
   /** Fan column, 0..{@link FAN_COLUMNS}-1. */
   column: number;
+}
+
+/** How a target's fan is shaped for {@link burstSlot}. */
+export interface BurstSlotOptions {
+  /**
+   * The columns this target may open, from {@link fanSequence}. Defaults to the
+   * symmetric five, which is what a target in open field gets.
+   */
+  fan?: readonly number[];
+  /** Which fan track this numeral rides. Default `'main'`. See {@link BurstTrack}. */
+  track?: BurstTrack;
 }
 
 /**
@@ -411,23 +506,60 @@ export interface BurstSlot {
  *
  * §3.6's `(+4, -3) * i` diagonal survives as the intra-column drift.
  */
-export function burstSlot(index: number, kind: DamageKind = 'damage'): BurstSlot {
+export function burstSlot(index: number, kind: DamageKind = 'damage', opts: BurstSlotOptions = {}): BurstSlot {
+  // `kind` no longer changes the geometry — see the `dy` comment below — but it
+  // stays in the signature on purpose. Callers pass the numeral's kind, and the
+  // guarantee they are relying on is precisely that it makes no difference:
+  // every rung of a target's ladder is at one height, so a MISS and a crit that
+  // the queue gave different slots cannot land on each other.
+  void kind;
   const i = Math.max(0, Math.floor(index));
+  const fan = opts.fan && opts.fan.length > 0 ? opts.fan : FAN_SYMMETRIC;
   const rung = i % LADDER_RUNGS;
-  const column = Math.floor(i / LADDER_RUNGS) % FAN_COLUMNS;
+  const step = Math.floor(i / LADDER_RUNGS) % fan.length;
+  // The alt track reads the same fan from the far end, so the family that
+  // arrived second on this target cannot land in a column the first is using
+  // until the first has opened every column there is room for.
+  const column = opts.track === 'alt' ? fan.length - 1 - step : step;
   return {
-    dx: fanOffset(column) + 4 * rung,
+    dx: (fan[column] ?? 0) + 4 * rung,
     // `0 - x` rather than `-x` so rung 0 reports +0, not -0.
-    dy: 0 - (ladderPitch(kind) + 3 + STAGGER_RISE) * rung,
+    //
+    // The pitch is deliberately **not** `ladderPitch(kind)`. A ladder is a
+    // property of the *target*, not of the numeral climbing it: when the pitch
+    // came from each numeral's own kind, rung 2 of a MISS sat 17px below rung 2
+    // of a crit, so two numerals that the queue had given different slots on
+    // one actor could still land on each other. Every rung is now at the same
+    // height whatever kind takes it, and the height is the one the common case
+    // already used, so nothing about a plain multi-hit moves.
+    dy: 0 - (LADDER_PITCH + 3 + STAGGER_RISE) * rung,
     rung,
     column,
   };
 }
 
+/**
+ * The one rung height, in logical px, shared by every kind of numeral — see
+ * {@link burstSlot}. A crit's larger glyph still clears it (24px tall against a
+ * 27.6px step), and a `kind` that needed a taller rung would be better served
+ * by a fan column than by breaking the ladder for everything else.
+ */
+const LADDER_PITCH = ladderPitch('damage');
+
 /** Per-target queue state carried between {@link nextBurstSlot} calls. */
 export interface BurstState {
-  /** Slot index the next numeral on this target takes. */
+  /** Slot index the next numeral on this target's `'main'` track takes. */
   next: number;
+  /**
+   * Slot index the next `'alt'`-track numeral takes — its own ladder, because
+   * the two tracks are two columns. Absent until a second family arrives.
+   */
+  nextAlt?: number;
+  /**
+   * The family that opened this burst, and therefore owns the `'main'` track.
+   * Anything else landing on this target before the burst ends takes `'alt'`.
+   */
+  family?: NumeralFamily;
   /** Clock time, in ms, of the most recent spawn on this target. */
   lastSpawnMs: number;
   /** Earliest clock time, in ms, at which the next numeral may become visible. */
@@ -439,8 +571,15 @@ export interface BurstOptions {
   staggerMs?: number;
   /** Cap on how long one numeral may be held back, so a 16-hit reel still ends. Default 720. */
   maxDelayMs?: number;
-  /** Quiet time after which the target's burst is considered over and the ladder restarts. Default 800. */
+  /** Quiet time after which the target's burst is over and the ladder restarts. Default {@link BURST_GAP_MS}. */
   gapMs?: number;
+  /**
+   * The numeral's family, from {@link familyFor}. The first family to spawn in
+   * a burst keeps the `'main'` track; a different one arriving before the burst
+   * ends is put on `'alt'`, with its own ladder index, so the two never share a
+   * fan column. Default `'damage'`.
+   */
+  family?: NumeralFamily;
 }
 
 /**
@@ -455,25 +594,41 @@ export interface BurstOptions {
  * `hitIndex` (the engine's own 0-based index within a multi-hit action) wins
  * when it is ahead of the running counter, so a caller that knows its hit
  * number keeps its ladder even if some of its numerals never spawned.
+ *
+ * The returned `track` says which fan column family this numeral belongs in —
+ * see {@link BurstOptions.family} — and is passed straight to
+ * {@link burstSlot}.
  */
 export function nextBurstSlot(
   prev: BurstState | undefined,
   nowMs: number,
   hitIndex = 0,
   opts: BurstOptions = {},
-): { index: number; delayMs: number; state: BurstState } {
+): { index: number; delayMs: number; track: BurstTrack; state: BurstState } {
   const staggerMs = opts.staggerMs ?? HIT_STAGGER_MS;
   const maxDelayMs = opts.maxDelayMs ?? 720;
-  const gapMs = opts.gapMs ?? 800;
+  const gapMs = opts.gapMs ?? BURST_GAP_MS;
+  const family = opts.family ?? 'damage';
   const hit = Math.max(0, Math.floor(hitIndex));
   const fresh = !prev || nowMs - prev.lastSpawnMs > gapMs;
-  const index = fresh ? hit : Math.max(prev.next, hit);
-  const delayMs = fresh ? 0 : Math.min(maxDelayMs, Math.max(0, prev.nextFreeAt - nowMs));
-  return {
-    index,
-    delayMs,
-    state: { next: index + 1, lastSpawnMs: nowMs, nextFreeAt: nowMs + delayMs + staggerMs },
+  // The *stagger* is shared by both tracks — two families landing on one actor
+  // in one tick should still arrive one after the other — but the ladder index
+  // is per track, so a heal joining a multi-hit starts at that column's foot
+  // rather than three rungs up in dead air.
+  const owner = fresh ? family : (prev?.family ?? family);
+  const track: BurstTrack = owner === family ? 'main' : 'alt';
+  const prevIndex = fresh ? 0 : track === 'alt' ? (prev?.nextAlt ?? 0) : (prev?.next ?? 0);
+  const index = fresh ? hit : Math.max(prevIndex, hit);
+  const delayMs = fresh ? 0 : Math.min(maxDelayMs, Math.max(0, prev!.nextFreeAt - nowMs));
+  const state: BurstState = {
+    next: track === 'main' ? index + 1 : fresh ? 0 : (prev?.next ?? 0),
+    lastSpawnMs: nowMs,
+    nextFreeAt: nowMs + delayMs + staggerMs,
+    family: owner,
   };
+  const alt = track === 'alt' ? index + 1 : fresh ? 0 : (prev?.nextAlt ?? 0);
+  if (alt > 0) state.nextAlt = alt;
+  return { index, delayMs, track, state };
 }
 
 // ------------------------------------------------------------ target lanes
@@ -485,6 +640,32 @@ export interface LaneInput {
   x: number;
   /** Half-width of everything this target wants to draw around `x`. */
   halfWidth: number;
+}
+
+export interface LaneOptions {
+  /**
+   * The horizontal room the lanes actually have, in layer px — normally the
+   * safe rect. Without it the sweep below is unbounded: seven targets each
+   * asking for 540px of exclusive room in a 1600px frame got shifts of
+   * -1204 and +971, which put two of them a thousand pixels off the edge of
+   * the screen. With it, the demand is squeezed to fit before the sweep runs.
+   */
+  bounds?: { left: number; right: number };
+  /**
+   * Furthest a lane may sit from the anchor it belongs to, in layer px.
+   *
+   * This is the rule that outranks separation: a numeral 300px from the actor
+   * it belongs to has stopped being that actor's numeral, and two figures that
+   * slightly overlap on the right character read better than two clean figures
+   * floating in dead air. When the cap binds, targets may still overlap — the
+   * per-target stagger and ladder are what keep them legible then.
+   *
+   * Keep it below `SAFE_SLACK` (the distance outside the safe rect at which
+   * `placeInSafeArea` gives up and draws over the HUD), so a lane push can
+   * never on its own make a numeral think its target is buried under the
+   * chrome. `FAN_STEP` < `SAFE_SLACK`, which is why it is the default.
+   */
+  maxShift?: number;
 }
 
 /**
@@ -499,8 +680,20 @@ export interface LaneInput {
  *
  * Returns an x *offset* per id (0 when the target needed no push). Ties on x
  * break by id, so the result is stable frame to frame.
+ *
+ * The sweep is greedy and only ever pushes right, so on its own it is
+ * unbounded — it will happily ask for more width than the screen has and post
+ * anchors off both edges, where every one of them is clamped flat against the
+ * frame and piles up again. Two bounds keep it honest, and both are in
+ * {@link LaneOptions}: the demand is **squeezed** to the room available before
+ * the sweep, and each resulting shift is **capped** so a numeral never leaves
+ * the actor it belongs to.
  */
-export function resolveLanes(targets: readonly LaneInput[], gap = 10): Map<string, number> {
+export function resolveLanes(
+  targets: readonly LaneInput[],
+  gap = 10,
+  opts: LaneOptions = {},
+): Map<string, number> {
   const out = new Map<string, number>();
   if (targets.length === 0) return out;
   if (targets.length === 1) {
@@ -509,12 +702,25 @@ export function resolveLanes(targets: readonly LaneInput[], gap = 10): Map<strin
   }
 
   const sorted = [...targets].sort((a, b) => (a.x === b.x ? (a.id < b.id ? -1 : 1) : a.x - b.x));
+
+  // Squeeze the demand into the room there is. Every target asking for its
+  // full exclusive width is only satisfiable when the widths happen to fit;
+  // when they do not, shrinking them all by the same factor keeps the
+  // *ordering* and the relative spacing the sweep is for, and gives up only
+  // the absolute gaps — which the vertical ladder and the stagger already
+  // cover. Scaling here rather than after the sweep matters: the sweep is what
+  // amplifies an over-demand into a thousand-pixel shift.
+  const avail = opts.bounds ? opts.bounds.right - opts.bounds.left : Number.POSITIVE_INFINITY;
+  const demand = sorted.reduce((s, t) => s + 2 * Math.max(0, t.halfWidth), 0) + gap * (sorted.length - 1);
+  const squeeze = demand > avail && demand > 0 ? avail / demand : 1;
+  const laneGap = gap * squeeze;
+
   const placed: { id: string; x: number; shift: number }[] = [];
   let cursor = Number.NEGATIVE_INFINITY;
   for (const t of sorted) {
-    const half = Math.max(0, t.halfWidth);
+    const half = Math.max(0, t.halfWidth) * squeeze;
     const wanted = t.x - half;
-    const x = wanted < cursor + gap ? cursor + gap + half : t.x;
+    const x = wanted < cursor + laneGap ? cursor + laneGap + half : t.x;
     cursor = x + half;
     placed.push({ id: t.id, x: t.x, shift: x - t.x });
   }
@@ -522,7 +728,26 @@ export function resolveLanes(targets: readonly LaneInput[], gap = 10): Map<strin
   // Everything above only ever pushes right, which walks a crowded formation
   // toward the HUD. Re-centre by the mean push so the spread is symmetric.
   const mean = placed.reduce((sum, p) => sum + p.shift, 0) / placed.length;
-  for (const p of placed) out.set(p.id, p.shift - mean);
+  const maxShift = Math.max(0, opts.maxShift ?? Number.POSITIVE_INFINITY);
+  for (const p of placed) {
+    let shift = p.shift - mean;
+    // Never post a lane outside the room — outside it the numeral is clamped
+    // flat against the frame, which is the pile-up this module exists to stop.
+    //
+    // Only for a target that *started* inside, though. This clamp is here to
+    // stop the sweep from carrying an anchor out of the room; a target that was
+    // already outside it (an enemy standing behind the CTB column) is not the
+    // sweep's doing, and dragging it to the edge would both detach its numerals
+    // from it and hide the fact that it is buried — which is the one case
+    // `placeInSafeArea` is allowed to draw over the HUD for.
+    if (opts.bounds && p.x >= opts.bounds.left && p.x <= opts.bounds.right) {
+      if (p.x + shift < opts.bounds.left) shift = opts.bounds.left - p.x;
+      else if (p.x + shift > opts.bounds.right) shift = opts.bounds.right - p.x;
+    }
+    if (shift > maxShift) shift = maxShift;
+    else if (shift < -maxShift) shift = -maxShift;
+    out.set(p.id, shift);
+  }
   return out;
 }
 

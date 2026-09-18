@@ -1,4 +1,5 @@
 import {
+  AdditiveBlending,
   CircleGeometry,
   Color,
   DoubleSide,
@@ -13,6 +14,18 @@ import {
   Vector3,
   type Texture,
 } from 'three';
+import {
+  ActorLife,
+  attackOffset,
+  facingForSide,
+  lifeStateForPose,
+  mirrorFor,
+  nextLifeState,
+  resolvePoseName,
+  type ActorSide,
+  type ArtFacing,
+  type LifeCue,
+} from './BattlePresenterActors.ts';
 import {
   loadPainted,
   paintedCanvasTexture,
@@ -56,8 +69,44 @@ export interface PaintedActorOptions {
    * (`meta.baselineY`) to the top of the PNG's content. A human is 1.8.
    */
   worldHeight?: number;
-  /** 1 faces +x, -1 mirrors the plane. */
+  /**
+   * Which way this fighter is turned: 1 = toward +x, -1 = toward -x.
+   *
+   * This is the *world* facing — it aims the lunge, the recoil and the lean.
+   * It no longer mirrors the plane on its own; that is decided against
+   * {@link PaintedActorOptions.artFacing} and the pose's own sidecar, so art
+   * that already faces the right way is never flipped. Prefer
+   * {@link PaintedActorOptions.side}, which sets it from the team.
+   */
   facing?: 1 | -1;
+  /** Party and aeons face +x, enemies face -x. Sets `facing` when given. */
+  side?: ActorSide;
+  /**
+   * Which way this subject's paintings face, when their sidecars do not say.
+   *
+   * Default `'auto'`: assume the art obeys the contract for its side (party
+   * right, enemies left) and never mirror it. `'front'` is the old
+   * facing-camera art, which is also never mirrored. A pose whose sidecar
+   * declares its own `facing` overrides this for that pose only.
+   */
+  artFacing?: ArtFacing;
+  /**
+   * The soft ground ring that marks whose turn it is.
+   *
+   * **Off unless you ask for it.** The ring answers a question only a battle
+   * has — *whose decision is this?* — so it is the battle stage that opts in
+   * (`BattlePresenterStage`), with a gold ring under the party and a colder one
+   * under the fiends. A cutscene or a scene demo drives the same poses for
+   * staging reasons, and a highlight under a character who is not taking a turn
+   * is a lie in every screenshot it lands in.
+   */
+  turnRing?: false | true | { color?: number | string; radius?: number; opacity?: number };
+  /**
+   * The life layer: breathing weight, the ready step, the guard brace, the KO
+   * fall, the victory hop. `false` leaves `setPose` a plain texture swap, which
+   * is what hand-animated scene demos want.
+   */
+  life?: false;
   /** Crossfade duration between poses. */
   crossfadeMs?: number;
   /** Multiply tint. Used to mark stand-in party members. */
@@ -188,7 +237,38 @@ function blobTexture(): Texture {
   return sharedBlob;
 }
 
+let sharedRing: Texture | null = null;
+/** The turn highlight: a soft annulus, brightest just inside its rim. */
+function ringTexture(): Texture {
+  if (!sharedRing) {
+    sharedRing = paintedCanvasTexture(
+      radialCanvas(256, [
+        [0, 0],
+        [0.52, 0.04],
+        [0.74, 0.34],
+        [0.87, 0.95],
+        [0.95, 0.3],
+        [1, 0],
+      ]),
+    );
+  }
+  return sharedRing;
+}
+
 const TAU = Math.PI * 2;
+
+/** Where a hit tints the painting for a moment — a warm, bruised red. */
+const HURT_TINT = 0xff9f8e;
+
+/** How long the KO takes to tip over and hit the ground. */
+const FALL_MS = 300;
+
+/** Stable per-name jitter so a party does not breathe, or cheer, in lockstep. */
+function beatOffsetFor(name: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < name.length; i++) h = Math.imul(h ^ name.charCodeAt(i), 16777619);
+  return ((h >>> 8) % 1000) / 1000;
+}
 
 const clamp01 = (v: number): number => (v < 0 ? 0 : v > 1 ? 1 : v);
 
@@ -205,6 +285,18 @@ const clamp01 = (v: number): number => (v < 0 ? 0 : v > 1 ? 1 : v);
  * **stack**: breathing, sway, lunge, recoil, squash, hop and shake all
  * contribute to one transform each frame, so an actor can be mid-lunge, mid-hop
  * and shaking without any of them fighting.
+ *
+ * Over those sits the **life layer** (`BattlePresenterActors.ts`): the pose name
+ * is also a *state*, so `setPose('ready')` leans the fighter forward and lights
+ * the turn ring under their feet, `setPose('defend')` braces them, `setPose`
+ * ('ko') drops the body, a revive brings it back up with a glow, and `recoil`
+ * flinches through the `hurt` painting with a warm tint. The presenter did not
+ * have to learn any of it: it still just names poses.
+ *
+ * **Facing is two numbers, not one.** The body's facing (party +x, enemies -x)
+ * aims the lunge and the lean; whether the *plane* is mirrored depends on which
+ * way the painting was painted (`artFacing`, or the pose sidecar's `facing`).
+ * Art that already faces the right way for its side is never flipped.
  *
  * The API is deliberately parallel to {@link SpriteActor}: `update(dt)`,
  * `flash`, `shake`, `fadeTo`, `setAlpha`, `moveTo`, `setFacing`,
@@ -253,7 +345,10 @@ export class PaintedActor extends Group {
   private readonly sizeFromReference: boolean;
   private readonly extents: { maxExtent: number; minExtent: number; proneAspect: number };
 
+  /** World facing: which way this fighter is turned. Never mirrors on its own. */
   private facing: 1 | -1 = 1;
+  /** What this subject's paintings face when a sidecar does not say. */
+  private artFacing: ArtFacing;
   private _alpha = 1;
   private baseBrightness: number;
   private readonly castsShadow: boolean;
@@ -298,6 +393,33 @@ export class PaintedActor extends Group {
   /** The one live flash decay, so a second flash cannot fight the first. */
   private flashTween: Tween | null = null;
 
+  // --- life ----------------------------------------------------------------
+  /** Posture + state machine. Null when `life: false`. */
+  private readonly life: ActorLife | null;
+  /** The pose name that was *asked* for, before any fallback. */
+  private requested = '';
+  /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
+  private fallTilt = 0;
+  private fallDrop = 0;
+  /** 0..1 damage tint, lerped from `baseTint` toward {@link HURT_TINT}. */
+  private hurtTint = 0;
+  private readonly baseTint: Color;
+  private readonly hurtTintColour = new Color(HURT_TINT);
+  private readonly tintScratch = new Color();
+  /** Set while {@link flinch} owns the pose, so it never fights a real change. */
+  private flinchToken = 0;
+  /** Suppresses the `hurt` life state re-entering its own flinch. */
+  private flinching = false;
+  private readonly turnRing: Mesh | null;
+  private readonly ringBaseRadius: number;
+  private readonly ringBaseOpacity: number;
+  /** Hand control of the ring, or null to leave it to the life layer. */
+  private ringOverride: number | null = null;
+  /** Breathing phase in cycles, so a tempo change never snaps the chest. */
+  private breathPhase = Math.random();
+  /** A stable per-name offset, so a party does not breathe (or cheer) in step. */
+  private readonly beatOffset: number;
+
   constructor(opts: PaintedActorOptions = {}) {
     super();
     this.name = opts.name ?? 'painted-actor';
@@ -333,9 +455,14 @@ export class PaintedActor extends Group {
       proneAspect: sizing.proneAspect ?? 1.15,
     };
 
+    this.baseTint = new Color(opts.tint ?? 0xffffff);
+    this.beatOffset = beatOffsetFor(this.name);
+    this.life = opts.life === false ? null : new ActorLife();
+    this.artFacing = opts.artFacing ?? 'auto';
+
     this.u = {
       brightness: { value: this.baseBrightness },
-      tint: { value: new Color(opts.tint ?? 0xffffff) },
+      tint: { value: this.baseTint.clone() },
       flashColor: { value: new Color(0xffffff) },
       flashAmount: { value: 0 },
       rimColor: { value: new Color(rim.color ?? 0xbfe0ff) },
@@ -385,7 +512,35 @@ export class PaintedActor extends Group {
       this.add(this.shadow);
     }
 
-    this.setFacing(opts.facing ?? 1);
+    if (!opts.turnRing) {
+      this.turnRing = null;
+      this.ringBaseRadius = 0;
+      this.ringBaseOpacity = 0;
+    } else {
+      const ro = opts.turnRing === true ? {} : opts.turnRing;
+      this.ringBaseRadius = ro.radius ?? Math.max(0.5, this.worldHeight * 0.42);
+      this.ringBaseOpacity = ro.opacity ?? 0.85;
+      const mat = new MeshBasicMaterial({
+        map: ringTexture(),
+        color: ro.color ?? 0xf0cf92,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        blending: AdditiveBlending,
+      });
+      const ring = new Mesh(new CircleGeometry(1, 48), mat);
+      ring.rotation.x = -Math.PI / 2;
+      // Above the contact shadow, below the figure.
+      ring.position.y = 0.02;
+      ring.renderOrder = 5;
+      ring.scale.set(this.ringBaseRadius, this.ringBaseRadius * 0.46, 1);
+      ring.visible = false;
+      ring.name = 'turn-ring';
+      this.turnRing = ring;
+      this.add(ring);
+    }
+
+    this.setFacing(opts.side ? facingForSide(opts.side) : (opts.facing ?? 1));
 
     // Show something immediately, before any PNG has loaded.
     const boot = this.makePlaceholderPose('placeholder');
@@ -427,6 +582,9 @@ export class PaintedActor extends Group {
       ...(actorOpts.fitBaseline !== undefined ? { fitBaseline: actorOpts.fitBaseline } : {}),
     });
     const actor = new PaintedActor({ name: id, ...actorOpts });
+    // The sidecars are the art's own word on which way it faces; an explicit
+    // option still wins, because a caller who says so has looked at the PNG.
+    if (subject.facing && actorOpts.artFacing === undefined) actor.setArtFacing(subject.facing);
     actor.adoptPoses(subject.poses, actorOpts.initialPose);
     actor.subject = subject;
     return actor;
@@ -586,15 +744,40 @@ export class PaintedActor extends Group {
     return [...this.poses.values()].every((p) => p.placeholder);
   }
 
-  /** Crossfade to a pose. Unknown poses are ignored. */
+  /**
+   * Crossfade to a pose, and live it.
+   *
+   * The name is both a painting and a *state*: `setPose('ready')` leans the
+   * fighter forward and lights the turn ring, `setPose('ko')` drops the body,
+   * `setPose('victory')` swaps the pose on a small hop. See
+   * {@link import('./BattlePresenterActors.ts').lifeStateForPose}. A pose with
+   * no painting of its own still changes the state — it falls back to the
+   * nearest one there is, which is how a subject loaded with `states: ['idle']`
+   * can still be asked to celebrate.
+   */
   setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
-    const next = this.poses.get(name);
+    // A body on the ground is allowed to ignore the pose it was handed. The
+    // one case is a hit landing on someone who is already KO'd: the presenter
+    // still names `hurt` for it, and wincing (never mind the sit-up the rise
+    // cue would put under it) is not what a corpse does. Staging (`immediate`)
+    // is exempt — that is the caller declaring the state, not the fight.
+    const life = this.life;
+    if (life && !opts?.immediate) {
+      const want = lifeStateForPose(name);
+      if (nextLifeState(life.state, want) !== want) return;
+    }
+    const resolved = resolvePoseName(name, (p) => this.poses.has(p));
+    this.enterLife(name, opts?.immediate === true);
+    if (!resolved) return;
+    const next = this.poses.get(resolved);
     if (!next) return;
-    if (this.pose === name && !opts?.force) return;
+    const already = this.requested === name && this.pose === resolved;
+    this.requested = name;
+    if (already && !opts?.force) return;
 
     const from = this.active;
     const to = from === 0 ? 1 : 0;
-    this.applyPose(to, name, next);
+    this.applyPose(to, resolved, next);
 
     if (opts?.immediate || this.crossfadeMs <= 0) {
       this.slots[to]!.fade = 1;
@@ -660,9 +843,10 @@ export class PaintedActor extends Group {
 
     // The plane itself never rotates — mirroring is a negative scale.x, and the
     // pose's own orientation is painted into the texture. A prone figure is a
-    // wide plane standing upright, not a tall plane tipped over.
+    // wide plane standing upright, not a tall plane tipped over. (The KO fall
+    // tilts the *inner group*, which carries both planes together.)
     slot.mesh.rotation.set(0, 0, 0);
-    slot.mesh.scale.set(scale.width * this.facing, scale.height, 1);
+    slot.mesh.scale.set(scale.width * this.mirrorOf(tex.meta), scale.height, 1);
     slot.mesh.position.y = scale.offsetY;
     slot.material.uniforms['contactBand']!.value = contactBandFor(scale.height);
 
@@ -754,34 +938,246 @@ export class PaintedActor extends Group {
     });
   }
 
-  /** Step forward along `facing` and settle back. */
+  /**
+   * Step in, strike, come home — the attack move, along the *body's* facing.
+   *
+   * Not one ease out and back: that is a drift, and it reads as the figure
+   * sliding into the enemy. The shape is punctuated — quick step, a beat of
+   * stillness, the strike pushing through the top of it, then the walk back —
+   * which is what makes a still painting read as hitting something. The timing
+   * lives in {@link import('./BattlePresenterActors.ts').ATTACK_BEATS}; the
+   * peak is still `distance` and the whole move still takes `ms`, so every
+   * existing call site keeps its staging.
+   */
   lunge(distance = 0.9, ms = 320): Promise<void> {
-    const outMs = ms * 0.34;
-    this.tweens.to(this.lungeOffset, distance, {
-      durationMs: outMs,
-      easing: 'cubicOut',
-      onUpdate: (v) => {
-        this.lungeOffset = v;
+    const from = this.lungeOffset;
+    return this.tweens.toAsync(0, 1, {
+      durationMs: Math.max(1, ms),
+      easing: 'linear',
+      onUpdate: (t) => {
+        // Anything already in flight is folded out over the first beat, so a
+        // second lunge on top of a first does not snap back to zero.
+        const carry = from * Math.max(0, 1 - t / 0.26);
+        this.lungeOffset = distance * attackOffset(t) + carry;
       },
-    });
-    return this.tweens.toAsync(distance, 0, {
-      durationMs: ms - outMs,
-      delayMs: outMs,
-      easing: 'quadInOut',
-      onUpdate: (v) => {
-        this.lungeOffset = v;
+      onComplete: () => {
+        this.lungeOffset = 0;
       },
     });
   }
 
-  /** Knocked back and springing home. */
+  /**
+   * Knocked back and springing home — and, when there is a `hurt` painting,
+   * wearing it for the length of the flinch.
+   *
+   * The presenter calls this on every hit, so this is where "recoil on hit with
+   * a brief tint" lives: one call from `BattlePresenterBeats.damage` gives the
+   * knock-back, the pose and the bruise.
+   */
   recoil(ms = 340, distance = 0.28): Promise<void> {
+    this.flinch(ms);
+    return this.knockBack(ms, distance);
+  }
+
+  private knockBack(ms: number, distance: number): Promise<void> {
     return this.tweens.toAsync(1, 0, {
-      durationMs: ms,
+      durationMs: Math.max(1, ms),
       easing: 'elasticOut',
       onUpdate: (v) => {
         this.recoilOffset = -v * distance;
       },
+    });
+  }
+
+  /**
+   * The hit reaction on its own: the `hurt` pose for a moment, a warm tint over
+   * the painting, then back to whatever the fighter was doing.
+   *
+   * No-op on a downed fighter — a body on the ground does not flinch — and on
+   * an actor whose life layer is off.
+   */
+  flinch(ms = 340): void {
+    const life = this.life;
+    if (!life || life.state === 'down' || this.flinching) return;
+    const back = this.requested || 'idle';
+    const token = ++this.flinchToken;
+    this.flinching = true;
+    try {
+      this.setPose('hurt');
+    } finally {
+      this.flinching = false;
+    }
+    this.tintHurt(Math.max(160, ms * 0.7));
+    // A plain timer: hold the flinch, then hand the pose back — unless someone
+    // (a KO, the next action) has taken it in the meantime.
+    this.tweens.to(0, 1, {
+      durationMs: Math.max(1, ms),
+      easing: 'linear',
+      onUpdate: () => {},
+      onComplete: () => {
+        if (this.flinchToken !== token) return;
+        if (this.life?.state !== 'hurt') return;
+        this.setPose(back === 'hurt' ? 'idle' : back);
+      },
+    });
+  }
+
+  /** Warm damage tint over the painting, decaying to the base tint. */
+  private tintHurt(ms = 240): void {
+    this.tweens.to(1, 0, {
+      durationMs: Math.max(1, ms),
+      easing: 'quadOut',
+      onUpdate: (v) => {
+        this.hurtTint = v;
+        this.syncTint();
+      },
+      onComplete: () => {
+        this.hurtTint = 0;
+        this.syncTint();
+      },
+    });
+  }
+
+  private syncTint(): void {
+    this.u.tint.value.copy(
+      this.tintScratch.copy(this.baseTint).lerp(this.hurtTintColour, clamp01(this.hurtTint)),
+    );
+  }
+
+  // --------------------------------------------------------------------- life
+
+  /** The life state this fighter is in. `'idle'` when the layer is off. */
+  get lifeState(): string {
+    return this.life?.state ?? 'idle';
+  }
+
+  /**
+   * Turn the acting-character ring on or off by hand.
+   *
+   * Normally the life layer does this: the ring comes up when a fighter is
+   * `ready` or acting and fades when the turn passes. This is for screens that
+   * drive the field themselves.
+   */
+  setTurnRing(on: boolean): void {
+    if (!this.turnRing) return;
+    this.ringOverride = on ? 1 : 0;
+  }
+
+  /** Give the ring back to the life layer after {@link setTurnRing}. */
+  clearTurnRing(): void {
+    this.ringOverride = null;
+  }
+
+  /**
+   * Move the life state on, from a pose name, and fire whatever one-shots the
+   * transition asks for. Called by every {@link setPose}.
+   */
+  private enterLife(pose: string, immediate: boolean): void {
+    const life = this.life;
+    if (!life) return;
+    const change = life.set(lifeStateForPose(pose), { immediate });
+    if (!change) return;
+    // Any real state change cancels a flinch that has not handed the pose back
+    // yet, so a KO landing mid-flinch is not undone 200 ms later.
+    if (change.to !== 'hurt') this.flinchToken++;
+    if (immediate) {
+      // Staging someone who is already down: no fall, no cheering, no glow.
+      if (change.to === 'down') {
+        this.fallTilt = 1;
+        this.fallDrop = 1;
+      } else if (change.from === 'down') {
+        this.fallTilt = 0;
+        this.fallDrop = 0;
+      }
+      return;
+    }
+    for (const cue of change.cues) this.playCue(cue);
+  }
+
+  private playCue(cue: LifeCue): void {
+    switch (cue) {
+      case 'step':
+        // Their turn: the lean is posture, this is the weight coming up on to
+        // the front foot.
+        void this.hop(this.worldHeight * 0.035, 300);
+        return;
+      case 'flinch':
+        // Reached only when something set the `hurt` pose directly; `recoil`
+        // brings its own knock-back.
+        if (this.flinching) return;
+        this.tintHurt(260);
+        void this.knockBack(300, this.worldHeight * 0.1);
+        return;
+      case 'fall':
+        this.fall();
+        return;
+      case 'rise':
+        this.rise();
+        return;
+      case 'hop':
+        // Victory, staggered a little per fighter so a party does not cheer on
+        // one frame like a chorus line.
+        this.after(this.beatOffset * 240, () => {
+          void this.hop(this.worldHeight * 0.13, 460);
+        });
+        return;
+    }
+  }
+
+  /** Tip over and hit the ground: the KO. */
+  private fall(): void {
+    this.tweens.to(0, 1, {
+      durationMs: FALL_MS,
+      easing: 'quadIn',
+      onUpdate: (v) => {
+        this.fallTilt = v;
+        this.fallDrop = v;
+      },
+      onComplete: () => {
+        // Landing: a short slap of squash and a small ground shake, then the
+        // extra tilt relaxes into the `down` posture.
+        void this.squash(280, 0.5);
+        this.shake(this.worldHeight * 0.018, 200);
+        this.tweens.to(1, 0, {
+          durationMs: 420,
+          easing: 'quadOut',
+          onUpdate: (v) => {
+            this.fallTilt = v;
+            this.fallDrop = v;
+          },
+        });
+      },
+    });
+  }
+
+  /** Back on their feet, with the Phoenix Down's glow still on them. */
+  private rise(): void {
+    const from = this.fallTilt;
+    const drop = this.fallDrop;
+    this.tweens.to(1, 0, {
+      durationMs: 320,
+      easing: 'quadOut',
+      onUpdate: (v) => {
+        this.fallTilt = from * v;
+        this.fallDrop = drop * v;
+      },
+    });
+    this.flash(0xcfe9ff, 640, 0.55);
+    void this.hop(this.worldHeight * 0.07, 520);
+  }
+
+  /** A plain delay on the actor's own tween group, so `dispose` kills it. */
+  private after(ms: number, fn: () => void): void {
+    if (ms <= 0) {
+      fn();
+      return;
+    }
+    this.tweens.to(0, 1, {
+      durationMs: 1,
+      delayMs: ms,
+      easing: 'linear',
+      onUpdate: () => {},
+      onComplete: fn,
     });
   }
 
@@ -815,11 +1211,30 @@ export class PaintedActor extends Group {
     this.shakePhase = Math.random() * TAU;
   }
 
-  /** Pyrefly dissolve: 0 = solid, 1 = gone. */
+  /**
+   * Pyrefly dissolve: 0 = solid, 1 = gone.
+   *
+   * Dissolving all the way *is* a death, so the body goes down with it: the
+   * fiend collapses and comes apart at the same time, instead of standing to
+   * attention while it evaporates. (This is the enemy half of the KO — a party
+   * member gets the fall from `setPose('ko')` and stays on the field.)
+   */
   dissolveTo(value: number, ms = 900, colour?: number | string): Promise<void> {
     if (colour !== undefined) this.u.dissolveColor.value.set(colour as never);
+    // Fall *then* come apart. The KO drop takes ~300 ms, so holding the
+    // dissolve off for a beat lets the eye see the fiend go down before the
+    // pyreflies take it; starting both on the same frame reads as a figure
+    // evaporating on its feet, and the fall is lost inside the fade. The delay
+    // is taken out of the move, not added to it, so every caller's timing
+    // (`TIMING.ko`) is unchanged.
+    let delayMs = 0;
+    if (value >= 0.999 && this.life && this.life.state !== 'down') {
+      this.setPose('ko');
+      delayMs = Math.min(FALL_MS * 0.6, ms * 0.25);
+    }
     return this.tweens.toAsync(this.u.dissolve.value, value, {
-      durationMs: ms,
+      durationMs: Math.max(1, ms - delayMs),
+      delayMs,
       easing: 'quadInOut',
       onUpdate: (v) => {
         this.u.dissolve.value = v;
@@ -866,17 +1281,56 @@ export class PaintedActor extends Group {
     });
   }
 
-  /** Mirror the figure. Implemented as a negative plane scale.x. */
+  /**
+   * Turn the fighter: 1 = toward +x, -1 = toward -x.
+   *
+   * This is the direction the *body* faces, not a mirror instruction. Whether
+   * the plane ends up flipped depends on which way the painting itself faces
+   * ({@link setArtFacing} and each pose's sidecar), so art that is already
+   * correct for its side is drawn exactly as painted.
+   */
   setFacing(dir: 1 | -1): void {
     this.facing = dir;
-    for (const slot of this.slots) {
-      slot.mesh.scale.x = Math.abs(slot.mesh.scale.x) * dir;
-    }
-    this.u.rimDir.value.set(this.rimDirBase.x * dir, this.rimDirBase.y);
+    this.applyMirror();
+  }
+
+  /** {@link setFacing} from the team: party and aeons +x, enemies -x. */
+  setSide(side: ActorSide): void {
+    this.setFacing(facingForSide(side));
+  }
+
+  /** Declare which way this subject's paintings face. See {@link ArtFacing}. */
+  setArtFacing(art: ArtFacing): void {
+    this.artFacing = art;
+    this.applyMirror();
   }
 
   get facingDir(): 1 | -1 {
     return this.facing;
+  }
+
+  get artFacingDir(): ArtFacing {
+    return this.artFacing;
+  }
+
+  /** -1 when this pose has to be flipped to face the way the body is turned. */
+  private mirrorOf(meta: PoseMeta): 1 | -1 {
+    return mirrorFor(meta.facing ?? this.artFacing, this.facing);
+  }
+
+  /** True when the plane on screen is drawn mirrored. Debug + tests. */
+  get mirrored(): boolean {
+    return this.mirrorOf(this.slots[this.active]!.meta) === -1;
+  }
+
+  private applyMirror(): void {
+    for (const slot of this.slots) {
+      slot.mesh.scale.x = Math.abs(slot.mesh.scale.x) * this.mirrorOf(slot.meta);
+    }
+    // The rim direction is in the painting's own space, so it follows the
+    // mirror, not the body: flipping the plane flips where its light comes from.
+    const m = this.mirrorOf(this.slots[this.active]!.meta);
+    this.u.rimDir.value.set(this.rimDirBase.x * m, this.rimDirBase.y);
   }
 
   setBrightness(mult: number): void {
@@ -884,7 +1338,8 @@ export class PaintedActor extends Group {
   }
 
   setTint(colour: number | string): void {
-    this.u.tint.value.set(colour as never);
+    this.baseTint.set(colour as never);
+    this.syncTint();
   }
 
   /** Drive the rim light from the scene's light rig. */
@@ -893,7 +1348,7 @@ export class PaintedActor extends Group {
     this.u.rimStrength.value = strength;
     if (dir) {
       this.rimDirBase.set(dir[0], dir[1]);
-      this.u.rimDir.value.set(dir[0] * this.facing, dir[1]);
+      this.applyMirror();
     }
   }
 
@@ -975,9 +1430,20 @@ export class PaintedActor extends Group {
     const prone = this.proneWeight();
     const upright = 1 - prone;
 
+    // --- life: posture eases toward whatever state we are in ---------------
+    this.life?.update(dt);
+    const p = this.life?.posture;
+    const lean = p ? p.lean * this.worldHeight : 0;
+    const crouch = p ? p.crouch * this.worldHeight : 0;
+    const tilt = p ? p.tilt : 0;
+
     // --- stack the motion layers into one transform ------------------------
-    const breatheAmp = this.breatheAmp * upright;
-    const breathe = breatheAmp ? Math.sin(this.clock * this.breatheSpeed * TAU) * 0.5 + 0.5 : 0;
+    // Breathing runs on its own phase accumulator rather than off the clock, so
+    // a fighter holding their breath to guard — and letting it go again — eases
+    // between tempos instead of jumping a quarter-cycle.
+    this.breathPhase += dt * this.breatheSpeed * (p ? p.tempo : 1);
+    const breatheAmp = this.breatheAmp * upright * (p ? p.breathe : 1);
+    const breathe = breatheAmp ? Math.sin(this.breathPhase * TAU) * 0.5 + 0.5 : 0;
     const breatheScale = 1 + breatheAmp * (breathe - 0.5) * 2;
 
     const squashY = 1 - 0.18 * this.squashAmount;
@@ -991,8 +1457,11 @@ export class PaintedActor extends Group {
         ? Math.sin(this.clock * this.hoverBobSpeed * TAU) * this.hoverBobAmp
         : 0);
 
-    let ox = (this.lungeOffset + this.recoilOffset) * this.facing;
-    let oy = this.hopHeight + hover;
+    // The lean rides with the lunge: both are "forward" for this fighter, and
+    // forward is the body's facing, never the mirror.
+    let ox = (this.lungeOffset + this.recoilOffset + lean * upright) * this.facing;
+    let oy =
+      this.hopHeight + hover - (crouch + this.fallDrop * this.worldHeight * 0.05) * upright;
 
     if (this.shakeLeftMs > 0) {
       this.shakeLeftMs -= dt * 1000;
@@ -1007,7 +1476,27 @@ export class PaintedActor extends Group {
     // already lying down just wobbles the whole painting, and on a wide plane
     // the corners swing far enough to show the PNG's rectangle.
     const swayAmp = this.swayAmp * upright;
-    this.inner.rotation.z = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
+    const sway = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
+    // Posture tilt is a *body* rotation: tipping "forward" is toward the way
+    // the fighter is turned, which is why it carries the facing and the sway
+    // does not. Kept small, and faded out with the pose, because a wide plane
+    // rotated far enough shows the corners of its own PNG.
+    const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
+    this.inner.rotation.z = sway + bodyTilt;
+
+    // --- turn highlight ----------------------------------------------------
+    if (this.turnRing) {
+      const k = clamp01(this.ringOverride ?? (p ? p.ring : 0));
+      const visible = k > 0.01 && this._alpha > 0.02;
+      this.turnRing.visible = visible;
+      if (visible) {
+        const pulse = 0.82 + Math.sin(this.clock * 1.7) * 0.18;
+        const r = this.ringBaseRadius * (0.93 + 0.07 * k) * (1 + 0.025 * pulse);
+        this.turnRing.scale.set(r, r * 0.46, 1);
+        const rm = this.turnRing.material as MeshBasicMaterial;
+        rm.opacity = this.ringBaseOpacity * k * pulse * this._alpha;
+      }
+    }
 
     // --- contact shadow reacts to squash and hop ---------------------------
     if (this.shadow) {
@@ -1044,6 +1533,10 @@ export class PaintedActor extends Group {
     if (this.shadow) {
       this.shadow.geometry.dispose();
       (this.shadow.material as MeshBasicMaterial).dispose();
+    }
+    if (this.turnRing) {
+      this.turnRing.geometry.dispose();
+      (this.turnRing.material as MeshBasicMaterial).dispose();
     }
     this.removeFromParent();
   }

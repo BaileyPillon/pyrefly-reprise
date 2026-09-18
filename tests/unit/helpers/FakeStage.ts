@@ -110,20 +110,33 @@ export class FakeStage implements BattleStage {
     }
 
     const calls = this.calls;
+    // `rigName` tracks the last rig asked for, because `BattleMoments.impact`
+    // only cuts when the target's rig is not the one already on screen.
     this.camera = {
-      rigNames: ['idle', 'action', 'victory', 'enemy', 'party'],
+      rigNames: ['intro', 'idle', 'action', 'victory', 'enemy', 'party'],
       rigName: 'idle',
       async moveTo(rig: string): Promise<void> {
         calls.push(`camera:${rig}`);
+        (this as { rigName: string }).rigName = rig;
       },
       snapTo(rig: string): void {
         calls.push(`camera!:${rig}`);
+        (this as { rigName: string }).rigName = rig;
       },
       shake(): void {
         calls.push('camera:shake');
       },
       async punch(): Promise<void> {
         calls.push('camera:punch');
+      },
+      async push(fraction?: number): Promise<void> {
+        calls.push(`camera:push${fraction === undefined ? '' : `=${fraction.toFixed(2)}`}`);
+      },
+      async release(): Promise<void> {
+        calls.push('camera:release');
+      },
+      async roll(deg?: number): Promise<void> {
+        calls.push(`camera:roll=${deg ?? 0}`);
       },
     };
 

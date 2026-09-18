@@ -1,0 +1,322 @@
+/**
+ * The optional in-battle strategy guide (`src/ui/common/StrategyGuide.ts`).
+ *
+ * Authored on the same 640x360 logical grid as the two battle HUDs, because it
+ * mounts inside their letterbox-scaled stage and has to scale with the rest of
+ * the chrome (`src/ui/inkgold/tokens.css`, AUTHORING CONVENTION). Every length
+ * here is grid px; spec numbers are quoted as `/* NN @1440 *\/` where the value
+ * is a conversion of one.
+ *
+ * ## Why this slab is not skewed
+ *
+ * Every other Ink & Gold slab is `transform: skewX(var(--ig-skew))` with its
+ * contents counter-skewed. Those are *short*: `.ig-cmd` is 23px tall, the
+ * banner 20, `.ffx-sensor` 78 — at 12deg a 78px box leans about 8px, which
+ * reads as a deliberate angle. This rail is a variable 56-200px tall, and at
+ * 200px the same skew leans 21px: its top and bottom edges would sit in
+ * different columns, it would overhang the party rows beneath it in FFX-2, and
+ * the counter-skew on multi-line paragraphs makes running text visibly
+ * lozenge-shaped. So the accent moves instead of the box: the rail is a plain
+ * ink panel with the accent on its start edge (the same `--ig-edge` trick
+ * `.ig-stat` uses to border left in FFX and right in FFX-2), and the *short*
+ * elements — the toggle chip and each section head's rule — carry the house
+ * skew. Direction A's "one accent per context" is unchanged; only the geometry
+ * that does not survive being made tall is dropped.
+ *
+ * ## Which edge
+ *
+ * Left, in both games, and vertically between two anchors the owner names
+ * (`StrategyGuideAnchors`) rather than at a fixed height. FFX puts its command
+ * stack bottom-left and its CTB queue top-right; FFX-2 mirrors — command
+ * bottom-right, telegraph top-right — and stands its party column bottom-left.
+ * A left rail that is measured to stop above whatever is beneath it is the one
+ * position that clears the command menu and the CTB list in both.
+ */
+
+.sgd {
+  /* Stage-space origin, so the inline `top` values `layout()` computes from
+     the anchors' `offsetTop` mean the same thing here as they do on the HUD's
+     own chrome. The rail itself catches no clicks; the two children that
+     should take one turn it back on. */
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ------------------------------------------------------------------ panel */
+
+.sgd__panel {
+  position: absolute;
+  left: 21.33px; /* 48 @1440 — the banner's own left rail in FFX */
+  width: 132px;
+  /* `top` and `max-height` are set per frame by StrategyGuide.layout(). */
+  padding: 5px 7px 6px;
+  background: var(--ig-ink-panel);
+  color: var(--ig-paper);
+  font-family: var(--ig-font-text);
+  font-size: 5.3px;
+  line-height: 1.5;
+  box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45); /* 8 20 */
+  /* Accent on the start edge: left in FFX (--ig-edge 0), right in FFX-2
+     (--ig-edge 1), with no `.ig--ffx2` override rule — see tokens.css. */
+  border-left: calc((1 - var(--ig-edge)) * 1.78px) solid var(--ig-accent);
+  border-right: calc(var(--ig-edge) * 1.78px) solid var(--ig-accent);
+  pointer-events: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* A native scrollbar inside a stage scaled by ~2.5 is a fat grey bar across
+     the art. The rail fades its last few px instead, which says "there is more"
+     without drawing chrome the mock never had. */
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 7px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 7px), transparent 100%);
+}
+.sgd__panel::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.sgd__title {
+  margin: 0 0 4px;
+  font-family: var(--ig-font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 8px;
+  line-height: 1.1;
+  color: var(--ig-paper);
+}
+
+.sgd__sec {
+  margin-top: 5px;
+}
+.sgd__sec:first-of-type {
+  margin-top: 0;
+}
+
+/* The one place the house skew survives: a head is a single short line. */
+.sgd__head {
+  margin: 0 0 2.5px;
+  padding: 1px 4px 1.2px;
+  display: inline-block;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 4.6px; /* 10 @1440, the CTB name's register */
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ig-ink);
+  background: var(--ig-accent);
+  transform: skewX(var(--ig-skew));
+}
+
+/* --------------------------------------------------------------- NEXT/WATCH */
+
+.sgd__actor {
+  margin: 0;
+  font-family: var(--ig-font-display);
+  font-size: 4.6px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b9c6d6;
+}
+
+/* The command line: the thing the player is being told to press, in the
+   numeral face so it reads at a glance from across the room. */
+.sgd__cmd {
+  margin: 0.5px 0 1.5px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-family: var(--ig-font-numeral);
+  font-size: 9px;
+  line-height: 1.15;
+}
+.sgd__label {
+  color: var(--ig-accent);
+  font-weight: 700;
+}
+.sgd__arrow {
+  color: #8d99a8;
+  font-size: 6px;
+}
+.sgd__target {
+  color: var(--ig-paper);
+  font-weight: 600;
+}
+.sgd__timing {
+  font-family: var(--ig-font-display);
+  font-size: 4.8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e9d7a6;
+}
+
+.sgd__why {
+  margin: 0;
+  color: #dcd8cc;
+}
+.sgd__idle {
+  margin: 0;
+  color: #8d99a8;
+  font-style: italic;
+}
+
+/* Every claim the panel makes to the player names the research section it came
+   from (src/data/guides/types.ts). Quiet, but never absent. */
+.sgd__cite {
+  margin: 0.5px 0 0;
+  font-family: var(--ig-font-display);
+  font-size: 4px;
+  letter-spacing: 0.08em;
+  color: #7f8a99;
+}
+
+.sgd__charge {
+  margin-bottom: 3px;
+  padding-left: 4px;
+  border-left: 1.2px solid #8d99a8;
+}
+/* Stage 1 amber / stage 2 blood, the same two-stage reading the telegraph
+   banner and the CTB charge pip already use [visual-bible §3.13]. */
+.sgd__charge--s1 {
+  border-left-color: var(--ig-gold);
+}
+.sgd__charge--s2 {
+  border-left-color: var(--ig-blood);
+  animation: sgd-imminent 0.6s ease-in-out infinite alternate;
+}
+@keyframes sgd-imminent {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.45);
+  }
+}
+.sgd__charge--s2 .sgd__label {
+  color: #f2a0a0;
+}
+
+.sgd__phase-label {
+  margin: 0 0 0.5px;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 4.6px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ig-accent);
+}
+
+/* ------------------------------------------------------------------ RULES */
+
+.sgd__rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sgd__rules li {
+  position: relative;
+  margin-bottom: 3px;
+  padding-left: 6px;
+  color: #dcd8cc;
+}
+.sgd__rules li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2.6px;
+  width: 2.6px;
+  height: 2.6px;
+  background: var(--ig-accent);
+  transform: rotate(45deg);
+}
+.sgd__rules .sgd__cite {
+  display: block;
+}
+
+/* Roomy rail: the paragraph, with its citation. */
+.sgd__rule-short {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- compact */
+
+/* A rail shorter than COMPACT_HEIGHT (StrategyGuide.ts) — which is every rail
+   with an FFX command menu open — swaps each rule's paragraph for its one-line
+   headline and drops the rules' citations. NEXT and WATCH are untouched: they
+   are what the player is reading at a decision, and they fit. The rule's
+   research section is still one `G`, one closed menu away. */
+.sgd--compact .sgd__rule-full,
+.sgd--compact .sgd__rules .sgd__cite {
+  display: none;
+}
+.sgd--compact .sgd__rule-short {
+  display: inline;
+}
+.sgd--compact .sgd__rules li {
+  margin-bottom: 1.6px;
+}
+
+/* ----------------------------------------------------------------- toggle */
+
+/* Stays on screen when the panel is hidden — "fully hidden when off (only the
+   tiny toggle remains)". Two words wide, sitting just above the rail's top
+   edge, so turning the guide off gives the frame back and still says how to
+   get it. */
+.sgd__toggle {
+  position: absolute;
+  left: 21.33px;
+  /* Overwritten per frame by layout() (11px above the panel's measured top)
+     while the guide is up. `applyVisible` clears the inline value when the
+     guide is switched off, so the chip falls back to this anchor instead of
+     freezing wherever the panel happened to end. */
+  top: 44px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  padding: 1px 5px 1.5px;
+  border: 0;
+  background: var(--ig-ink-chip);
+  color: #cfd6de;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 4.4px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: skewX(var(--ig-skew));
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.sgd__toggle > * {
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse));
+}
+.sgd__toggle b {
+  color: var(--ig-accent);
+  font-weight: 700;
+}
+.sgd__toggle:hover,
+.sgd__toggle:focus-visible {
+  background: var(--ig-ink-acting);
+  color: var(--ig-paper);
+  outline: none;
+}
+
+/* Off: the chip alone, dimmer than when the guide is up — it is an offer, not
+   a readout. */
+.sgd--off .sgd__toggle {
+  opacity: 0.72;
+}
+.sgd--off .sgd__toggle:hover,
+.sgd--off .sgd__toggle:focus-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sgd__charge--s2 {
+    animation: none;
+  }
+}

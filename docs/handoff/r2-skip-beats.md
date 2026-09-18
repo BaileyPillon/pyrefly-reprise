@@ -99,29 +99,164 @@ window.__pyrefly.gotoChapter(id, {
 })
 ```
 
-**Both halves were run on port 5241 against an isolated copy of the tree**
-(`scratchpad/app`, source snapshot + junctions to `node_modules` and
-`public/art`), so a concurrent agent's half-saved file could not decide the
-result — the first attempt on the live tree was killed by exactly that, twice.
-The "before" build is this same tree with the four behavioural changes reverted
-in place, so the two runs differ only in those.
+**Both halves were run against isolated copies of the tree** — the "after" build
+on **port 5241** (`scratchpad/app`) and the "before" build on 5341
+(`scratchpad/app-before`; 5242 turned out to be squatted by another agent's
+server) — each a source snapshot with junctions to `node_modules`, `public/art`
+and `public/fonts`, so a concurrent agent's half-saved file could not decide the
+result. The first attempt on the live tree was killed by exactly that, twice.
+The "before" build is the current tree with these three files reverted to
+`8b6f5a4` (`git diff 8b6f5a4 aaf8362` touches nothing else in them), so the two
+runs differ **only** in this fix and not in the other round-2 work that landed
+alongside it.
 
-<!-- RESULTS -->
+### 2.1 What a beat costs — the measurement that means something
+
+Chapter wall clock on this box is dominated by rendering, not by beats, and the
+box has a dozen agents on it; the same chapter measured twice an hour apart
+varies by 2×. So the number to read is the **per-beat** one. The presenter
+already times every event it plays (`BattlePresenter.trace`, `{seq, type, ms}`)
+and a beat is exactly one `script-trigger` event, so `critic/scratch/beats.mjs`
+reads them straight out of the trace. Seed 1, `auto: 'intended'`,
+`speed: 'skip'`, one fresh page load per chapter.
+
+| chapter | beats | before: total / worst | after: total / worst | `console.error` before → after |
+|---|---|---|---|---|
+| `seymour-flux` | 4 | **16,043 ms** / 8,032 ms | **0 ms** / 0 ms | 2 → **0** |
+| `braskas-final-aeon` | 10 | **43,148 ms** / 10,961 ms | **6 ms** / 3 ms | 3 → **0** |
+| `ffx2-bahamut` | 3 | **8,320 ms** / 8,171 ms | **1 ms** / 1 ms | 1 → **0** |
+
+Three things to notice.
+
+* **The beat count is identical on both sides** — 4, 10, 3. The beats are not
+  being skipped over; every trigger still fires, still runs its script, still
+  lands its poses, flags, music and camera rig. It just costs nothing.
+* **The worst beat before was 10,961 ms** — *past* the 8,000 ms budget it was
+  supposedly capped at, because the cap itself was a wall-clock timer racing a
+  frame-driven animation and the losing beat still had to unwind.
+* **Six `console.error`s across three chapters became zero.** That is the gate
+  the round-1 report was failing.
+
+### 2.2 The whole-chapter sweep
+
+`critic/scratch/sweep.mjs`, seed 1, Chromium on SwiftShader, fresh page load per
+chapter, the "after" build on port 5241:
+
+| chapter | outcome | turns | links | `elapsedMs` | console errors |
+|---|---|---|---|---|---|
+| `seymour-flux` | victory | 82 | 1 | 312,653 | **0** |
+| `yunalesca` | victory | 237 | 1 | 364,756 | **0** |
+| `braskas-final-aeon` | victory | 105 | 7 | 360,971 | **0** |
+| `ffx2-bahamut` | victory | 75 | 1 | 104,223 | **0** |
+| `ffx2-vegnagun-shuyin` | victory | 58 | 5 | 635,644 | **0** |
+
+**Five victories, zero console errors, zero page errors.** That is the gate.
+
+The `elapsedMs` column is *not* a fair before/after comparison and this report
+will not pretend otherwise. Round 1's pre-fix sweep
+(`critic/scratch/sweep-report.json`) recorded 122,267 / 214,767 / 224,358 /
+64,444 / 449,058 ms — **smaller** numbers than the fixed build above, because it
+ran on a quieter machine. Where the two sides *were* measured in the same window
+(`beats.mjs` logs `elapsedMs` too):
+
+| chapter | before `elapsedMs` | after `elapsedMs` | beat share of "before" |
+|---|---|---|---|
+| `seymour-flux` | 367,953 | 312,653 | 4.4% |
+| `braskas-final-aeon` | 695,371 | 441,338 | 6.2% |
+| `ffx2-bahamut` | 186,383 | 104,223 | 4.5% |
+
+So the honest claim is narrower than round 1's: **beats were 4–6% of a
+chapter's wall clock, not the bulk of it.** Round 1 read "~1.5 s per turn" as
+beat cost; most of it is the software renderer. What this fix removes is that
+4–6%, the truncated beats, and — the part that actually mattered — every
+`console.error`.
+
+### 2.3 `'normal'` / `'fast'` still play the beat
+
+`speed: 'fast'`, `auto: 'intended'`, seed 1, captured mid-line
+(`critic/scratch/beat-shots.mjs`, kept in the scratchpad):
+
+![Seymour's beat at 'fast' speed](../screenshots/critic/skip-beats/seymour-flux-fast-beat-01.png)
+
+![Yuna's beat at 'fast' speed](../screenshots/critic/skip-beats/ffx2-bahamut-fast-beat-01.png)
+
+Chapter 1 above, Chapter 4 below. In both, the HUD is still up — CTB portraits,
+the party rows, the sensor panel, the boss gauge — the field behind the line is
+dimmed rather than hidden, and the typewriter is caught part-way through
+("It's quieter o…", "It's almost ov…"). Nothing about the human path was
+collapsed along with `'skip'`.
+
+### 2.4 One residual, measured: the stall guard versus a slow capture
+
+`FRAME_STALL_MS` is 500 ms, and on a loaded box that is **shorter than a
+frame**. Instrumenting `requestAnimationFrame` during the Chapter 4 capture
+above: at 1600×900, **131 frames for the whole chapter, 95 of them more than
+500 ms after the last, worst gap 8,336 ms**; at 1024×576, 558 frames, 211 gaps
+over 500 ms, worst 11,138 ms. At those cadences a beat in `auto` mode looks
+"stalled" to the guard the moment it starts, so it is ended early and logs its
+pacing note — the first 1600×900 attempt captured **no** dialogue at all because
+the beat was cut before its first line typed. The Chapter 1 capture, where the
+renderer kept up (47 frames, worst gap 1,817 ms), played its beats through and
+logged nothing.
+
+This is not the round-1 defect and it is not a `console.error` — `'skip'`, the
+mode every gate runs in, has no budget at all and logs nothing, which §2.1 and
+§2.2 measure. But it is the reason a gallery capture at `'normal'`/`'fast'` can
+still miss a beat, and it is **deliberately not fixed here**: making the guard
+adaptive (say, `max(500 ms, 3 × the slowest frame seen)`) would let a beat
+spend its whole 8,000 ms of scene time at ~1.25 fps, which is ~2 minutes of
+wall clock *per beat* for the gallery. That is a trade the capture owner should
+make, not this task.
+
+### 2.5 Type-check and tests
+
+| | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| `npx vitest run tests/unit/midbattle-hud.test.ts` | 17 passed |
+| `npx vitest run` (whole tree) | 2,478 passed, 8 failed, 70 files |
+
+None of the eight are in this fix's files, and seven are not real failures.
+`battle-screen-flow-clear-time` and `inkgold-screens` failed on *vitest worker
+start* and pass in isolation; `strategy-chapter2`, `strategy-ffx2-bahamut`,
+`strategy-ffx2-vegnagun-shuyin` and both `audio` files failed on
+`Test timed out in 15000ms` — 40-seed balance sweeps and full track renders on a
+box with a dozen agents on it. `strategy-chapter2` passes in isolation; the
+other two still time out, on the timeout rather than on a win-rate assertion.
+The one genuine assertion failure is
+`ui-damage-numbers-layout.test.ts > lifts a numeral over the HUD only when its
+target is buried under it` (`expected 46 to be less than 40`), which belongs to
+the concurrent damage-numbers work, not to this one.
 
 ---
 
 ## 3. Files
 
-<!-- FILES -->
+| File | Change |
+|---|---|
+| `src/story/runner/CutsceneRunner.ts` | `setInstant(on)` — a `skip()` latch that survives `reset()`; `reset()` restores the latch to the instant flag rather than to `false`; `instant` getter. |
+| `src/app/screens/BattleScreenCutscenes.ts` | The `instant` mode: `wait`/`animMs`/`settle` collapse, `camera` snaps instead of tweening, `showActor`/`hideActor` set alpha outright, no budget raced at all. The scene-time `budget()` with its `FRAME_STALL_MS` guard, ticked from `update(dt)`. `raceLine` on the same clock. The overrun log as `console.info` (strategy) / `console.warn` (human), never `console.error`. |
+| `src/app/screens/BattleScreen.ts` | Injects `sleep: (ms) => defaultSleep(this.opts.speed === 'skip' ? 0 : ms)` into `createMidBattleCutscenes` — the run that *starts* at `'skip'`. |
+| `tests/unit/midbattle-hud.test.ts` | 17 tests. The four that are this fix: a beat is not cut short by a slow renderer; a beat whose frame loop stopped still ends; `'skip'` resolves every beat with no clock and no frames, snapping the rig; the speed coming off puts the beat back on its timer. |
+| `docs/screenshots/critic/skip-beats/*.png` | Two `'fast'`-speed beats, Chapters 1 and 4, for §2.3. |
+
+`src/engine/BattleCamera.ts` was **not** touched: it already exposes `snapTo`,
+which is the whole of what the collapsed camera path needs.
+
+Probes, kept in the scratchpad rather than the repo:
+`critic/scratch/beats.mjs` (per-beat cost out of `BattlePresenter.trace`) and
+`beat-shots.mjs` (beat screenshots plus rAF cadence).
 
 ---
 
 ## 4. Notes for whoever picks this up next
 
-* `FRAME_STALL_MS` is the only wall-clock number left in the beat path. If a
-  capture ever legitimately renders slower than one frame per 500 ms, it will
-  start ending beats early again — raise it there rather than going back to a
-  wall-clock budget.
+* `FRAME_STALL_MS` is the only wall-clock number left in the beat path, and on
+  a loaded box a capture **does** legitimately render slower than one frame per
+  500 ms — measured in §2.4. In `'skip'` that costs nothing (no budget is
+  raced), but in `auto` it ends a beat early. Raise it there, or make it
+  adaptive, rather than going back to a wall-clock budget; read §2.4 for what
+  that buys and what it costs the gallery first.
 * `DialogueBox`'s own `auto` hold still reads `performance.now()`
   (`src/ui/common/DialogueBox.ts`), so a line's *hold* is wall clock while its
   *typing* is frame-driven. It is bounded by the scene-time line deadline now,

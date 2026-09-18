@@ -122,7 +122,11 @@ export class PaintedStage implements BattleStage {
 
     const actor = await PaintedActor.create({
       name: c.id,
-      facing: kind === 'party' ? 1 : -1,
+      // The *body's* facing, from the side — party and aeons turn toward +x,
+      // enemies toward -x. Whether the painting is mirrored is a separate
+      // question, answered by each pose's sidecar; art painted to the contract
+      // (party faces right, enemies face left) is drawn exactly as painted.
+      side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
       worldHeight: worldHeightFor(c, heights),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
@@ -139,12 +143,22 @@ export class PaintedStage implements BattleStage {
       shadow: { radius: kind === 'party' ? 0.62 : 1.5, opacity: 0.48 },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
+      // The turn highlight: gold under a party member, a cooler ring under a
+      // fiend, so whose turn it is reads even in a screenshot.
+      turnRing: {
+        color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
+        radius: kind === 'party' ? 0.78 : 1.7,
+        opacity: kind === 'party' ? 0.85 : 0.7,
+      },
     });
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
     const spot = spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
-    if (!c.alive && c.side === 'party') actor.setPose('ko');
+    // Already down when the field is staged: snap to it. `immediate` is what
+    // stops a party member who was KO'd before the battle opened from toppling
+    // over on frame one.
+    if (!c.alive && c.side === 'party') actor.setPose('ko', { immediate: true });
 
     this.opts.scene.add(actor);
     this.actors.set(c.id, { actor, side: c.side, slot: c.slot, artId, kind });
@@ -284,13 +298,27 @@ export class PaintedStage implements BattleStage {
   }
 
   /** Everything the debug snapshot wants about the field. */
-  snapshot(): Array<{ id: string; side: Side; art: string; pose: string; placeholder: boolean }> {
+  snapshot(): Array<{
+    id: string;
+    side: Side;
+    art: string;
+    pose: string;
+    placeholder: boolean;
+    /** Body facing: 1 = turned toward +x, -1 = toward -x. */
+    facing: 1 | -1;
+    /** True when this pose's plane is being drawn flipped. */
+    mirrored: boolean;
+    life: string;
+  }> {
     return [...this.actors.entries()].map(([id, s]) => ({
       id,
       side: s.side,
       art: s.artId,
       pose: s.actor.pose,
       placeholder: s.actor.isPlaceholder,
+      facing: s.actor.facingDir,
+      mirrored: s.actor.mirrored,
+      life: s.actor.lifeState,
     }));
   }
 

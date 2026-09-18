@@ -163,6 +163,29 @@ export class BevelleUndergroundSceneScreen extends Screen {
   }
 
   override trigger(name: string): boolean {
+    /**
+     * `hide:<substring>` — drop every object in the scene whose `name` contains
+     * the substring, and `show:` to put them back.
+     *
+     * This exists because the only way to find out which of a dozen stacked
+     * transparent planes is drawing a given artefact is to take the same shot
+     * with each of them switched off, and on a software renderer a shot costs
+     * five minutes. One `--trigger=hide:a,hide:b` run bisects what an afternoon
+     * of reading `renderOrder` values will not.
+     */
+    if (name.startsWith('hide:') || name.startsWith('show:')) {
+      const want = name.startsWith('hide:');
+      const needle = name.slice(5);
+      if (!needle || !this.build) return false;
+      let hit = 0;
+      this.build.group.traverse((o) => {
+        if (o.name.includes(needle)) {
+          o.visible = !want;
+          hit++;
+        }
+      });
+      return hit > 0;
+    }
     if (name.startsWith('rig:')) {
       const rig = name.slice(4);
       if (!this.build || !(rig in this.build.rigs)) return false;

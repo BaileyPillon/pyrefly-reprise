@@ -18,6 +18,7 @@ import { DamageNumbers, type Projector } from './DamageNumbers.ts';
 import { openMinigame as dispatchMinigame } from './minigames/index.ts';
 import { PartyStatusWindow } from './PartyStatusWindow.ts';
 import { SensorPanel } from './SensorPanel.ts';
+import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 
@@ -44,6 +45,26 @@ export class FFXBattleHud implements HudPort {
   private readonly sensorPanel = new SensorPanel();
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
+  /**
+   * The optional strategy guide (`src/ui/common/StrategyGuide.ts`), a left rail
+   * measured to sit between the action banner and the command stack.
+   *
+   * Both anchors are resolved lazily, per frame, rather than captured once:
+   * `.ffx-cmd-area` is `column-reverse` and bottom-anchored, so its *top* edge
+   * — the edge the rail has to clear — moves every time a submenu opens or
+   * closes. `top`/`bottom` are the fallbacks used before the HUD has been laid
+   * out, or if either anchor is ever removed.
+   */
+  private readonly guide = new StrategyGuide({
+    game: 'ffx',
+    anchors: {
+      below: () => this.bannerEl,
+      above: () => this.cmdAreaEl,
+      top: 44,
+      bottom: 34,
+    },
+  });
+  private readonly cmdAreaEl: HTMLElement;
 
   private lastState: BattleState | null = null;
   /** Whoever's `turn-start`/`action-start` fired most recently, for the message banner's name slab. `message` events carry no actor of their own. */
@@ -77,6 +98,7 @@ export class FFXBattleHud implements HudPort {
     // many rows it currently holds (`column-reverse`: the first DOM child —
     // the stack — sits at the anchored bottom edge).
     const cmdArea = document.createElement('div');
+    this.cmdAreaEl = cmdArea;
     cmdArea.className = 'ffx-cmd-area';
     this.infoEl = document.createElement('div');
     this.infoEl.className = 'ig-cutin__info ffx-cmd-info';
@@ -118,6 +140,12 @@ export class FFXBattleHud implements HudPort {
     if (this.mounted) return;
     root.appendChild(this.el);
     this.mounted = true;
+    // Into the scaled stage, not `this.el`: the rail is authored on the same
+    // 640x360 grid as the rest of the chrome and measures its anchors in that
+    // grid's own pixels (`StrategyGuide.layout`). Mounted here rather than in
+    // the constructor so its window-level key listener has the same lifetime as
+    // the HUD that owns it.
+    this.guide.mount(this.stage);
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
   }
@@ -125,6 +153,7 @@ export class FFXBattleHud implements HudPort {
   unmount(): void {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
+    this.guide.unmount();
     this.damageNumbers.clear();
     this.telegraph.dispose();
     this.el.remove();
@@ -136,6 +165,7 @@ export class FFXBattleHud implements HudPort {
     if (Array.isArray(preview)) this.ctbList.render(preview, state.combatants);
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
+    this.guide.sync(state);
   }
 
   async chooseCommand(
@@ -153,7 +183,21 @@ export class FFXBattleHud implements HudPort {
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);
 
-    return this.commandMenu.open({ actorId, commands, previewRank: wrapped, combatants, setHelp: (t) => this.setHelp(t) });
+    // The guide's NEXT line explains *this* decision, so it opens and closes
+    // with the menu — including when the menu loses to a strategy that raced
+    // its promise, which is why the clear sits in a `finally`.
+    if (this.lastState) this.guide.showDecision(actorId, commands, this.lastState);
+    try {
+      return await this.commandMenu.open({
+        actorId,
+        commands,
+        previewRank: wrapped,
+        combatants,
+        setHelp: (t) => this.setHelp(t),
+      });
+    } finally {
+      this.guide.clearDecision();
+    }
   }
 
   onEvent(event: BattleEvent): void {
@@ -208,9 +252,15 @@ export class FFXBattleHud implements HudPort {
     if (visible) this.layout();
   }
 
-  /** Frame tick from `BattleScreen`, forwarded to the only thing here that animates itself. */
+  /** Frame tick from `BattleScreen`, forwarded to the only things here that animate themselves. */
   update(dt: number): void {
     this.damageNumbers.update(dt);
+    this.guide.update(dt);
+  }
+
+  /** The guide rail, for tests and the debug snapshot. */
+  get strategyGuide(): StrategyGuide {
+    return this.guide;
   }
 
   setProjector(project: Projector): void {

@@ -148,9 +148,18 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * second enemy was under the queue or past the right edge of the screen
  * (`docs/handoff/playability-round-1.md` §4 issue 3).
  *
- * The boss only needed the 0.9 units of x that brings him to 0.783; he keeps
- * his depth, so he is the same size on screen as before (0.23 of the frame
- * wide, 0.59 tall) and still sits centre-right.
+ * The boss keeps his depth, so he is the same size on screen as he ever was
+ * (0.245 of the frame wide, 0.60 tall) and still sits centre-right; only his x
+ * moves.
+ *
+ * **1.95, not the 2.2 this was first solved to.** 2.2 was computed from the
+ * actor's nominal width and came out at 0.783 — inside the rail on paper. The
+ * measured quad is wider than the figure (the aura runs to the plane's edge,
+ * and `sway` spends a little more), and at 1600x900 and 1920x1080 the real
+ * right edge was **0.793**: over the 0.79 rail, at both resolutions, at every
+ * sway phase sampled. 0.25 further left buys 0.021 of frame and lands it at
+ * 0.772, which holds the rail with the margin the rail is supposed to have.
+ * Nothing else moves: he is the same size, the same height and the same depth.
  *
  * Slot 1 is the interesting one. There is no room left of the queue for a
  * second 0.2-wide figure *beside* a 0.23-wide boss, so the slot stops being a
@@ -164,7 +173,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * part parked on it (nothing in this chapter uses it) is inside the rail too.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [2.2, 0, -2.45], // boss           -> x 0.551..0.783, y 0.075..0.664 at `idle`
+  [1.95, 0, -2.45], // boss          -> x 0.527..0.772, y 0.065..0.669 at `idle`
   [1.8, 1.85, -7.0], // high float    -> x 0.496..0.695, y 0.112..0.353
   [3.35, 0, -6.6], // ground, back-right
 ];

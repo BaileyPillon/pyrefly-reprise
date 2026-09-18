@@ -6,10 +6,12 @@ import {
   TextureLoader,
   type Texture,
 } from 'three';
+import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import type { PoseFrame } from './PaintedScale.ts';
 
 export { computePoseScale, contactBandFor } from './PaintedScale.ts';
 export type { PoseFrame, PoseScale, PoseScaleOptions } from './PaintedScale.ts';
+export type { ArtFacing } from './BattlePresenterActors.ts';
 
 /**
  * Loading and bookkeeping for the painted (non-pixel) art pipeline.
@@ -43,6 +45,19 @@ export type { PoseFrame, PoseScale, PoseScaleOptions } from './PaintedScale.ts';
 export interface PoseMeta extends PoseFrame {
   seed?: number;
   prompt?: string;
+  /**
+   * Which way this painting faces — `'right'`, `'left'` or `'front'`.
+   *
+   * The art contract is that party art faces **right** and enemy art faces
+   * **left**, so an undeclared painting is assumed to already be correct for
+   * the side it is staged on and is never mirrored. This field is how art that
+   * does *not* obey the contract says so: `"front"` for the older
+   * facing-camera renders (never flipped, because a frontal figure has no
+   * wrong side), or the direction it really faces, which is what lets
+   * {@link import('./BattlePresenterActors.ts').mirrorFor} flip it exactly when
+   * it disagrees with the side it is fighting on.
+   */
+  facing?: ArtFacing;
 }
 
 export interface PaintedTexture {
@@ -125,6 +140,7 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
       baselineY: typeof raw.baselineY === 'number' ? raw.baselineY : raw.height,
       ...(positive(raw.scale) ? { scale: raw.scale } : {}),
       ...(positive(raw.anchorY) ? { anchorY: raw.anchorY } : {}),
+      ...(parseArtFacing(raw.facing) ? { facing: parseArtFacing(raw.facing)! } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
       ...(raw.prompt !== undefined ? { prompt: raw.prompt } : {}),
     };
@@ -185,6 +201,10 @@ export async function loadPainted(
         baselineY,
         ...(meta?.scale !== undefined ? { scale: meta.scale } : {}),
         ...(meta?.anchorY !== undefined ? { anchorY: meta.anchorY } : {}),
+        // Which way the painting faces rides along too: it decides whether the
+        // plane is mirrored, and that is a per-*pose* question (one old frontal
+        // `cast.png` can sit in an otherwise right-facing set).
+        ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),
       },
       placeholder: false,
       url,
@@ -591,6 +611,13 @@ export interface PaintedSubject {
   real: string[];
   /** States that resolved to `idle` because their own PNG is missing. */
   fellBack: string[];
+  /**
+   * The subject's declared art facing — `idle`'s sidecar, or the first state
+   * that declares one. Undefined means "obeys the contract for its side", which
+   * is the default and is never mirrored. Individual poses may still override
+   * it through their own sidecar.
+   */
+  facing?: ArtFacing;
   /** True when even `idle` was absent and everything is a grey silhouette. */
   placeholder: boolean;
 }
@@ -694,7 +721,20 @@ export async function loadSubject(
     urls[state] = characterUrl(id, state);
   }
 
-  return { id, poses, urls, real, fellBack, placeholder: subjectMissing };
+  // `idle` is the subject's word on which way it was painted; any other state
+  // that declares one will do when idle is silent.
+  const declared =
+    idle.meta.facing ?? [...byState.values()].find((p) => p.meta.facing !== undefined)?.meta.facing;
+
+  return {
+    id,
+    poses,
+    urls,
+    real,
+    fellBack,
+    placeholder: subjectMissing,
+    ...(declared ? { facing: declared } : {}),
+  };
 }
 
 /**

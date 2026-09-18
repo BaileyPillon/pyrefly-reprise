@@ -1,0 +1,32 @@
+{
+  "width": 798,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 515153,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, blonde hair, very long hair, pale skin, revealing clothes, white dress, gold trim, gold jewelry, headdress, bare shoulders, serene, closed eyes, elegant, standing, looming, menacing, (from side:1.4), (profile:1.1), three-quarter view, body facing left, head turned toward viewer, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical",
+  "cropBox": [
+    34,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.4), (profile:1.1), three-quarter view, body facing left, head turned toward viewer",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-17T19:14:46.607Z"
+}

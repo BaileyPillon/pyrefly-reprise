@@ -1,0 +1,54 @@
+{
+  "out": "docs/screenshots/concept/pause-heroes.png",
+  "title": "Pause-screen hero art — cinematic close-ups",
+  "subtitle": "1344x768 painted plates, no cutout. Chapter heroes (the emotional beat of each fight), then the Party / Character Info row. comfy.mjs `hero` preset, --ref at 0.5 against each subject's approved idle.",
+  "rows": [
+    {
+      "label": "Chapter heroes — pause screen backplate, one per encounter",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/pause/ch1-seymour-flux.png", "caption": "Ch.1 — Seymour Flux", "note": "Tidus: anguished anger, wet eyes" },
+        { "path": "public/art/pause/ch2-yunalesca.png", "caption": "Ch.2 — Yunalesca", "note": "Yuna: tears held back, chin up" },
+        { "path": "public/art/pause/ch3-braskas-final-aeon.png", "caption": "Ch.3 — Braska's Final Aeon", "note": "Tidus: crying and smiling at once" }
+      ]
+    },
+    {
+      "label": "Chapter heroes (cont.)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/pause/ch4-bahamut.png", "caption": "Ch.4 — Bahamut", "note": "Yuna X-2: sorrow and guilt" },
+        { "path": "public/art/pause/ch5-shuyin.png", "caption": "Ch.5 — Shuyin", "note": "Yuna Songstress: serene grief" }
+      ]
+    },
+    {
+      "label": "Party / Character Info — FFX cast",
+      "cellHeight": 230,
+      "items": [
+        { "path": "public/art/pause/tidus.png", "caption": "Tidus", "note": "cocky grin" },
+        { "path": "public/art/pause/yuna.png", "caption": "Yuna", "note": "gentle smile, sad eyes" },
+        { "path": "public/art/pause/auron.png", "caption": "Auron", "note": "stern, slight smirk" },
+        { "path": "public/art/pause/wakka.png", "caption": "Wakka", "note": "big laugh" }
+      ]
+    },
+    {
+      "label": "Party / Character Info — FFX cast (cont.)",
+      "cellHeight": 230,
+      "items": [
+        { "path": "public/art/pause/lulu.png", "caption": "Lulu", "note": "cool sidelong glance" },
+        { "path": "public/art/pause/kimahri.png", "caption": "Kimahri", "note": "fierce roar, broken horn" },
+        { "path": "public/art/pause/rikku.png", "caption": "Rikku", "note": "wink, tongue out" },
+        { "path": "public/art/pause/jecht.png", "caption": "Jecht", "note": "rough laugh" }
+      ]
+    },
+    {
+      "label": "Party / Character Info — X-2 cast and antagonist",
+      "cellHeight": 230,
+      "items": [
+        { "path": "public/art/pause/yuna-ffx2.png", "caption": "Yuna (Gunner)", "note": "playful" },
+        { "path": "public/art/pause/rikku-ffx2.png", "caption": "Rikku (Thief)", "note": "peace sign, wink" },
+        { "path": "public/art/pause/paine.png", "caption": "Paine", "note": "deadpan stare" },
+        { "path": "public/art/pause/seymour.png", "caption": "Seymour", "note": "serene menace, veins" }
+      ]
+    }
+  ]
+}

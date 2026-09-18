@@ -11,9 +11,21 @@ export type SideResolver = (id: CombatantId) => 'party' | 'enemy' | 'aeon' | nul
 /**
  * HUD panels a numeral must never disappear behind: the command stack (which
  * the trigger prompt also draws itself as) and its description card, the CTB
- * column, the party-status list, the sensor read-out. Queried live rather than
- * cached because the stack grows and shrinks a level at a time, and skipped
- * while hidden (`[hidden]` collapses them, so `offsetParent` reads null).
+ * column, the party-status list, the sensor read-out, and the strategy guide's
+ * left rail. Queried live rather than cached because the stack grows and
+ * shrinks a level at a time, and skipped while hidden (`[hidden]` collapses
+ * them, so `offsetParent` reads null).
+ *
+ * The guide is listed by its two solid children, `.sgd__panel` and
+ * `.sgd__toggle`, and **not** by `.sgd`: that wrapper is `inset: 0`
+ * `pointer-events: none` over the whole stage, so listing it would tell the
+ * layer the entire field is chrome. The panel is ~24% of the grid's width,
+ * which is over `safeAreaFrom`'s 22% edge cap, so it is dodged as a floating
+ * slab rather than carved out of the safe rect — the right treatment for a
+ * panel the player toggles off with `G`, and the same one the command stack
+ * gets. Without it a party member standing on the left prints straight across
+ * the guide's text: `docs/screenshots/r2/r2-overdrive-multihit.png` as first
+ * recaptured, where Yuna's `761` landed on the RULES row.
  *
  * The telegraph banner is deliberately absent: it is a transient band across
  * the middle of the field, and dodging it would shove every numeral on screen
@@ -26,6 +38,8 @@ const PANEL_SELECTORS = [
   '.ig-ctb',
   '.ig-stat-list',
   '.ffx-sensor',
+  '.sgd__panel',
+  '.sgd__toggle',
 ] as const;
 
 /**

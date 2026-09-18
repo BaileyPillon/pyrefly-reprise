@@ -5,7 +5,9 @@ import {
   classifyDamageEvent,
   computeHitOffset,
   deflectFromRects,
+  familyFor,
   fanOffset,
+  fanSequence,
   fontSizeFor,
   jitterX,
   lifetimeMsFor,
@@ -237,6 +239,79 @@ describe('fanOffset — columns beside the ladder', () => {
   });
 });
 
+describe('fanSequence — a fan opens only into the room that exists', () => {
+  const ample = { left: 10 * FAN_STEP, right: 10 * FAN_STEP };
+
+  it('is the plain symmetric fan when the actor stands in open field', () => {
+    expect([...fanSequence(ample)]).toEqual([0, 1, 2, 3, 4].map(fanOffset));
+    expect([...fanSequence(null)]).toEqual([0, 1, 2, 3, 4].map(fanOffset));
+  });
+
+  it('opens only rightward for an actor against the left margin', () => {
+    // §5 of `docs/handoff/r2-damage-numbers-fan.md`: this used to open
+    // symmetrically and have the left columns reflected back off the margin,
+    // which folds column -2 to within a few px of column +1 — the bunching
+    // around Yuna in the stress frame of `r2-53-ffx2-chain-chip.png`.
+    const seq = fanSequence({ left: 0, right: 10 * FAN_STEP });
+    expect([...seq]).toEqual([0, FAN_STEP, 2 * FAN_STEP, 3 * FAN_STEP, 4 * FAN_STEP]);
+  });
+
+  it('opens only leftward for an actor against the right margin', () => {
+    const seq = fanSequence({ left: 10 * FAN_STEP, right: 0 });
+    expect([...seq]).toEqual([0, -FAN_STEP, -2 * FAN_STEP, -3 * FAN_STEP, -4 * FAN_STEP]);
+  });
+
+  it('uses the near side first, then keeps marching into the open one', () => {
+    // One step of room on the left: it is used, and the rest go right, rather
+    // than the fan alternating into a margin that cannot hold them.
+    const seq = fanSequence({ left: FAN_STEP, right: 10 * FAN_STEP });
+    expect([...seq]).toEqual([0, FAN_STEP, -FAN_STEP, 2 * FAN_STEP, 3 * FAN_STEP]);
+  });
+
+  it('never posts a column the target has no room for', () => {
+    for (const room of [
+      { left: 0, right: 0 },
+      { left: FAN_STEP * 1.5, right: FAN_STEP * 0.5 },
+      { left: -200, right: FAN_STEP * 2.2 },
+    ]) {
+      for (const dx of fanSequence(room)) {
+        expect(dx).toBeLessThanOrEqual(Math.max(0, room.right));
+        expect(dx).toBeGreaterThanOrEqual(0 - Math.max(0, room.left));
+      }
+    }
+  });
+
+  it('degrades to the single centre column rather than to a pile', () => {
+    // No room either side is the honest floor: one column, and the ladder and
+    // the stagger carry the separation from there.
+    expect([...fanSequence({ left: 4, right: 4 })]).toEqual([0]);
+    expect([...fanSequence({ left: -500, right: -500 })]).toEqual([0]);
+  });
+
+  it('keeps every column it does post distinct and a full step apart', () => {
+    for (const room of [
+      { left: 0, right: 3 * FAN_STEP },
+      { left: 2 * FAN_STEP, right: FAN_STEP },
+      { left: 6 * FAN_STEP, right: 0 },
+    ]) {
+      const seq = [...fanSequence(room)].sort((a, b) => a - b);
+      expect(new Set(seq).size).toBe(seq.length);
+      for (let i = 1; i < seq.length; i++) {
+        expect(seq[i]! - seq[i - 1]!).toBeGreaterThanOrEqual(FAN_STEP);
+      }
+    }
+  });
+});
+
+describe('familyFor — which numerals must not share a column', () => {
+  it('splits out healing alone, because only healing flies a different path', () => {
+    expect(familyFor('heal')).toBe('heal');
+    for (const k of ['damage', 'critical', 'mp', 'miss', 'immune', 'absorbed'] as const) {
+      expect(familyFor(k)).toBe('damage');
+    }
+  });
+});
+
 describe('burstSlot — the ladder that fans instead of wrapping', () => {
   it('climbs the ladder within one column first', () => {
     for (let i = 0; i < LADDER_RUNGS; i++) {
@@ -271,9 +346,62 @@ describe('burstSlot — the ladder that fans instead of wrapping', () => {
     expect(pitch).toBeGreaterThan(risePerStagger + fontSizeFor('damage'));
   });
 
+  it('puts rung N at the same height whatever kind climbs it', () => {
+    // A ladder belongs to the target, not to the numeral on it. While the pitch
+    // came from each numeral's own kind, rung 2 of a MISS sat well below rung 2
+    // of a crit, so two numerals the queue had deliberately given *different*
+    // slots on one actor could still print through each other — the `MISS`
+    // struck across an `11500` on Yuna in `47-boss-attack.png`.
+    const kinds = ['damage', 'critical', 'heal', 'mp', 'miss', 'immune', 'absorbed'] as const;
+    for (let rung = 0; rung < LADDER_RUNGS; rung++) {
+      const heights = new Set(kinds.map((k) => burstSlot(rung, k).dy));
+      expect(heights.size).toBe(1);
+    }
+  });
+
   it('never reports a negative zero for the first slot', () => {
     expect(Object.is(burstSlot(0).dy, -0)).toBe(false);
     expect(burstSlot(-4).rung).toBe(0);
+  });
+
+  it('takes its columns from a shaped fan when it is given one', () => {
+    const fan = fanSequence({ left: 0, right: 10 * FAN_STEP });
+    const wrapped = burstSlot(LADDER_RUNGS, 'damage', { fan });
+    // The whole burst stays on the side the actor has room on.
+    expect(wrapped.dx).toBeGreaterThan(burstSlot(0, 'damage', { fan }).dx);
+    for (let i = 0; i < LADDER_RUNGS * fan.length; i++) {
+      expect(burstSlot(i, 'damage', { fan }).dx).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('wraps within the columns a shaped fan actually has', () => {
+    const fan = fanSequence({ left: 4, right: 4 });
+    expect(fan.length).toBe(1);
+    // One column left: every hit is on the ladder, and nothing indexes past it.
+    for (let i = 0; i < 9; i++) {
+      expect(burstSlot(i, 'damage', { fan }).column).toBe(0);
+      expect(burstSlot(i, 'damage', { fan }).rung).toBe(i % LADDER_RUNGS);
+    }
+  });
+
+  it('puts the alt track in a column the main track will not reach', () => {
+    // A heal landing on an actor who is being hit. They share a ladder height,
+    // so if they shared a column too they would cross: damage is ballistic and
+    // falls back through its rung, a heal floats straight up.
+    const main = new Set<number>();
+    for (let i = 0; i < LADDER_RUNGS * 2; i++) main.add(burstSlot(i).dx);
+    for (let i = 0; i < LADDER_RUNGS; i++) {
+      expect(main.has(burstSlot(i, 'heal', { track: 'alt' }).dx)).toBe(false);
+    }
+  });
+
+  it('reads the alt track off the far end of whatever fan there is', () => {
+    // Default fan: the far end is the outermost symmetric column.
+    expect(burstSlot(0, 'heal', { track: 'alt' }).dx).toBe(fanOffset(FAN_COLUMNS - 1));
+    // Shaped fan: the far end is whatever room the actor actually had.
+    const fan = fanSequence({ left: 0, right: 2.5 * FAN_STEP });
+    expect(fan.length).toBe(3);
+    expect(burstSlot(0, 'heal', { fan, track: 'alt' }).dx).toBe(fan[fan.length - 1]);
   });
 });
 
@@ -333,6 +461,55 @@ describe('nextBurstSlot — the per-target queue', () => {
     expect(jumped.index).toBe(6);
     expect(nextBurstSlot(jumped.state, 0, 0).index).toBe(7);
   });
+
+  it('keeps a lone heal dead centre on its actor', () => {
+    // The whole point of the alt track is a *second* family. A heal that is the
+    // only thing happening to an actor must still float straight up the middle,
+    // not 92px off to one side.
+    const only = nextBurstSlot(undefined, 0, 0, { family: 'heal' });
+    expect(only.track).toBe('main');
+    expect(burstSlot(only.index, 'heal').dx).toBe(0);
+  });
+
+  it('moves the family that arrives second onto its own track', () => {
+    const hit = nextBurstSlot(undefined, 0, 0, { family: 'damage' });
+    const heal = nextBurstSlot(hit.state, 40, 0, { family: 'heal' });
+    expect(heal.track).toBe('alt');
+    // Its own ladder: the heal starts at that column's foot rather than three
+    // rungs up in dead air because the damage got there first.
+    expect(heal.index).toBe(0);
+    expect(burstSlot(heal.index, 'heal', { track: heal.track }).dx).not.toBe(
+      burstSlot(hit.index, 'damage').dx,
+    );
+  });
+
+  it('still staggers across the two tracks', () => {
+    // Separate ladders, one release clock: a heal and a hit resolved in the
+    // same engine tick should arrive one after the other, as they would in FFX.
+    const hit = nextBurstSlot(undefined, 0, 0, { family: 'damage' });
+    const heal = nextBurstSlot(hit.state, 0, 0, { family: 'heal' });
+    expect(heal.delayMs).toBe(HIT_STAGGER_MS);
+  });
+
+  it('climbs each track independently', () => {
+    let state = nextBurstSlot(undefined, 0, 0, { family: 'damage' }).state;
+    const healA = nextBurstSlot(state, 10, 0, { family: 'heal' });
+    state = healA.state;
+    const hitB = nextBurstSlot(state, 20, 0, { family: 'damage' });
+    state = hitB.state;
+    const healB = nextBurstSlot(state, 30, 0, { family: 'heal' });
+    expect(hitB.index).toBe(1);
+    expect(healB.index).toBe(1);
+    expect(healB.track).toBe('alt');
+  });
+
+  it('hands the main track back to whichever family opens the next burst', () => {
+    const hit = nextBurstSlot(undefined, 0, 0, { family: 'damage' });
+    const heal = nextBurstSlot(hit.state, 40, 0, { family: 'heal' });
+    const later = nextBurstSlot(heal.state, 40 + 801, 0, { family: 'heal' });
+    expect(later.track).toBe('main');
+    expect(later.index).toBe(0);
+  });
 });
 
 describe('resolveLanes — one lane per target', () => {
@@ -390,6 +567,106 @@ describe('resolveLanes — one lane per target', () => {
     const again = resolveLanes([...input].reverse(), 8);
     expect(once.get('a')).toBe(again.get('a'));
     expect(once.get('b')).toBe(again.get('b'));
+  });
+});
+
+describe('resolveLanes — the sweep is bounded', () => {
+  // The Chapter-5 stress frame in `docs/screenshots/r2/r2-53-ffx2-vegnagun-multihit.png`:
+  // three party members, three nodes and Vegnagun all carrying live numerals at
+  // once, each with a fan open, in a 1600x900 frame. The greedy sweep answers
+  // that impossible demand by posting anchors off both edges of the screen,
+  // where every one of them is clamped flat against the frame — the pile-up
+  // this module exists to stop, reintroduced by the fix for it.
+  const CROWD = [
+    { id: 'yuna', x: 205, halfWidth: 270 },
+    { id: 'rikku', x: 400, halfWidth: 270 },
+    { id: 'paine', x: 570, halfWidth: 270 },
+    { id: 'node-a', x: 700, halfWidth: 270 },
+    { id: 'node-b', x: 760, halfWidth: 270 },
+    { id: 'node-c', x: 820, halfWidth: 270 },
+    { id: 'vegnagun', x: 1420, halfWidth: 270 },
+  ];
+  const FRAME = { left: 0, right: 1600 };
+
+  it('posts anchors a thousand pixels off screen without bounds (the regression)', () => {
+    const lanes = resolveLanes(CROWD, 25);
+    const xs = CROWD.map((t) => t.x + lanes.get(t.id)!);
+    // Documented, not desired: this is what the unbounded sweep does, and it is
+    // why `DamageNumbers.update` never calls it without `bounds`.
+    expect(Math.min(...xs)).toBeLessThan(-500);
+    expect(Math.max(...xs)).toBeGreaterThan(2000);
+  });
+
+  it('keeps every anchor inside the room it was given', () => {
+    const lanes = resolveLanes(CROWD, 25, { bounds: FRAME, maxShift: FAN_STEP * 2.5 });
+    for (const t of CROWD) {
+      const x = t.x + lanes.get(t.id)!;
+      expect(x).toBeGreaterThanOrEqual(FRAME.left);
+      expect(x).toBeLessThanOrEqual(FRAME.right);
+    }
+  });
+
+  it('never drags a numeral more than maxShift off the actor it belongs to', () => {
+    const lanes = resolveLanes(CROWD, 25, { bounds: FRAME, maxShift: FAN_STEP * 2.5 });
+    for (const t of CROWD) {
+      expect(Math.abs(lanes.get(t.id)!)).toBeLessThanOrEqual(FAN_STEP * 2.5 + 1e-9);
+    }
+  });
+
+  it('still separates a three-target AoE that does fit', () => {
+    // Yunalesca's AoE on three party members standing shoulder to shoulder —
+    // `50-yunalesca.png`'s `2200` under `1850`. One hit each, so column 0 and a
+    // glyph-sized demand: there is room, and the squeeze must not engage.
+    const aoe = [
+      { id: 'tidus', x: 300, halfWidth: 45 },
+      { id: 'yuna', x: 318, halfWidth: 45 },
+      { id: 'kimahri', x: 336, halfWidth: 45 },
+    ];
+    const lanes = resolveLanes(aoe, 25, { bounds: FRAME, maxShift: FAN_STEP * 2.5 });
+    const xs = aoe.map((t) => t.x + lanes.get(t.id)!).sort((a, b) => a - b);
+    expect(xs[1]! - xs[0]!).toBeGreaterThanOrEqual(45 + 45 + 25 - 1e-9);
+    expect(xs[2]! - xs[1]!).toBeGreaterThanOrEqual(45 + 45 + 25 - 1e-9);
+  });
+
+  it('leaves a target that genuinely stands outside the room where it is', () => {
+    // An enemy behind the CTB column: pulling its numerals to the safe-rect
+    // edge would detach them from it *and* hide the fact that it is buried,
+    // which is the one case `placeInSafeArea` is allowed to draw over the HUD.
+    const lanes = resolveLanes(
+      [
+        { id: 'buried', x: 1540, halfWidth: 40 },
+        { id: 'clear', x: 600, halfWidth: 40 },
+      ],
+      10,
+      { bounds: { left: 0, right: 1380 }, maxShift: FAN_STEP },
+    );
+    expect(1540 + lanes.get('buried')!).toBeGreaterThan(1380);
+  });
+
+  it('caps a lane push below the slack at which a numeral is called buried', () => {
+    // `DamageNumbers.update` passes `maxShift: FAN_STEP * scale` and
+    // `SAFE_SLACK * scale` as the slack. If the cap ever grew past the slack, a
+    // crowded formation could push a perfectly visible actor's anchor far
+    // enough out of the safe rect to be drawn over the HUD — numerals in the
+    // chrome, caused by the code that exists to keep them out of it.
+    expect(FAN_STEP).toBeLessThan(64);
+  });
+
+  it('degrades to overlap rather than to dead air when nothing can fit', () => {
+    // Ten targets in a 400px strip. Something has to give; what gives is the
+    // gap between figures, never the figure's attachment to its actor.
+    const many = Array.from({ length: 10 }, (_, i) => ({
+      id: `t${i}`,
+      x: 40 + i * 35,
+      halfWidth: 120,
+    }));
+    const lanes = resolveLanes(many, 20, { bounds: { left: 0, right: 400 }, maxShift: FAN_STEP });
+    for (const t of many) {
+      const x = t.x + lanes.get(t.id)!;
+      expect(Math.abs(x - t.x)).toBeLessThanOrEqual(FAN_STEP + 1e-9);
+      expect(x).toBeGreaterThanOrEqual(0);
+      expect(x).toBeLessThanOrEqual(400);
+    }
   });
 });
 

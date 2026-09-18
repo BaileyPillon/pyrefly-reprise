@@ -129,20 +129,136 @@ export const STYLE_TAGS =
 export const QUALITY_TAGS = 'masterpiece, high score, great score, absurdres';
 
 /**
+ * THE FACING CONTRACT (v3, 2026-09-17).
+ *
+ * v2 rendered everybody `straight-on`, and it showed the moment the art went
+ * into a battle scene: the party and the boss face each other across the
+ * field, and both of them were staring down the camera instead. v3 splits the
+ * camera phrase out of the composition blocks into this table.
+ *
+ * The party stands on the LEFT of the battlefield and fights to the RIGHT, so
+ * party art is `facing: right`. Enemies, bosses and aeons stand on the right
+ * and fight leftward, so they are `facing: left`. `none` keeps the v2
+ * straight-on framing and is the default for portraits, which are HUD
+ * head-shots and should meet the player's eye.
+ *
+ * What the phrasing has to buy, in order:
+ *   1. a body angled ~45 degrees, not a 90 degree profile (a profile loses the
+ *      face, and a flat cutout in profile reads as cardboard);
+ *   2. a readable face, which is why `looking at viewer` stays in, weighted;
+ *   3. the correct direction — which, see below, the prompt cannot deliver.
+ *
+ * Fourteen phrasings were A/B'd on Tidus over three fixed seeds
+ * (docs/handoff/art3-contract.md has the table). The findings:
+ *
+ * - **Unweighted phrasings do nothing.** `three-quarter view, body facing
+ *   right, looking to the side`, `facing right, from side, three-quarter
+ *   view`, `turned to the right, dynamic angle` and `from side, looking at
+ *   viewer, three-quarter` all came back frontal, 12 renders out of 12. A
+ *   named character's prior *is* their straight-on official art, and a bare
+ *   camera tag does not outvote it.
+ * - **`(from side:1.3)` does.** The same phrase with an emphasis weight turns
+ *   the body every time. `from side` is the load-bearing token — it is the
+ *   Danbooru tag the checkpoint actually knows — and the weight is what lets
+ *   it beat the character prior. `three-quarter view` contributes nothing on
+ *   its own but stops the weighted `from side` from overshooting into a flat
+ *   90 degree profile.
+ * - **`(looking at viewer:1.2)` is not optional.** Without it the weighted
+ *   `from side` keeps turning past profile into a back view, and a sprite
+ *   whose face you cannot see fails the blind-judge test outright.
+ * - **The direction word is inert.** Two runs identical but for `body facing
+ *   right` vs `body facing left`, same three seeds, produced the same image
+ *   pair by pair, both facing the LEFT of the frame. SDXL's text encoder has
+ *   no reliable left/right grounding; this is a known limit, not a phrasing
+ *   that can be tuned. The words are kept below because they cost nothing and
+ *   occasionally break a tie.
+ *
+ * So the checkpoint has a bias, and the bias is frame-LEFT. That is already
+ * what enemies want. Party art (`right`) mostly has to be mirrored after the
+ * fact with `tools/gen/flip.py` — cheap and exact, with the chirality caveat
+ * in that file's header (Auron's coat is off his LEFT shoulder, Kimahri's
+ * broken horn is one specific horn; reroll those instead of mirroring).
+ *
+ * Judge facing first, before costume: a good render pointing the wrong way is
+ * one command from being right, and no other defect is.
+ */
+export const FACING_PHRASES = {
+  right: '(from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2)',
+  left: '(from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2)',
+  none: 'straight-on',
+};
+
+/**
+ * Negatives that come with a facing.
+ *
+ * The positive phrase turns the body and these stop it turning back, or too
+ * far: `facing viewer / front view / straight-on / symmetrical` are the frontal
+ * attractor, `from behind / facing away` are the overshoot. Appended
+ * automatically whenever `--facing` is not `none`, ahead of any `--negAdd`.
+ *
+ * Deliberately NOT applied to `--composition prone`: a downed figure is drawn
+ * `from side, eyes closed` already, and banning `facing viewer` on top of that
+ * rolls the body face-down into the floor.
+ */
+export const FACING_NEGATIVE =
+  'facing viewer, front view, straight-on, symmetrical, from behind, facing away';
+
+/**
+ * Facing for a prone (KO) figure.
+ *
+ * A downed party member should still be lying with their head toward the enemy
+ * they just lost to — head-right for the party, head-left for an enemy — so
+ * the body reads as having fallen *into* the fight, not away from it. The
+ * standing phrase is wrong here twice over: `body facing right` on a lying
+ * figure summons a person lying on their back, and `looking at viewer` fights
+ * the `eyes closed` in the prone block.
+ */
+export const PRONE_FACING_PHRASES = {
+  right: 'head to the right, feet to the left',
+  left: 'head to the left, feet to the right',
+  none: '',
+};
+
+/**
+ * Facing for a pause-screen hero close-up.
+ *
+ * `none` is EMPTY here, not `straight-on`. The v2/v3 `straight-on` exists to
+ * stop a battlefield sprite drifting off-axis; on a cinematic close-up it is
+ * an active liability, because half these shots want a three-quarter face and
+ * `straight-on` argues with the `three-quarter view` in their pose tags — and
+ * on this checkpoint `straight-on` wins that argument, which flattens the whole
+ * row into passport photos. The camera angle for a hero plate is stated per
+ * shot in `--poseTags` ("three-quarter view", "looking down", "eyes closed"),
+ * because there it is direction rather than contract.
+ */
+export const HERO_FACING_PHRASES = {
+  right: FACING_PHRASES.right,
+  left: FACING_PHRASES.left,
+  none: '',
+};
+
+/** Which way a subject faces. `none` is the v2 straight-on behaviour. */
+export const FACINGS = ['right', 'left', 'none'];
+
+/**
  * Composition block that makes a full-body sprite cut out cleanly.
  *
- * v2 (2026-09-15): `straight-on` and `feet visible` were added after the
- * proof-of-concept round found that ~2 in 3 rejected variants were rejected
- * for *camera*, not costume — bird's-eye and dutch-tilt framings that no
- * amount of pose tagging cured. `standing on ground` became plain `standing`
- * because "ground" kept summoning a textured floor plane into what is
- * supposed to be a flat white cyclorama.
+ * v2 (2026-09-15): `feet visible` was added after the proof-of-concept round
+ * found that ~2 in 3 rejected variants were rejected for *camera*, not
+ * costume — bird's-eye and dutch-tilt framings that no amount of pose tagging
+ * cured. `standing on ground` became plain `standing` because "ground" kept
+ * summoning a textured floor plane into what is supposed to be a flat white
+ * cyclorama.
+ *
+ * v3 (2026-09-17): the leading `straight-on` moved out into FACING_PHRASES.
+ * The blocks below are the framing *minus* the camera angle; `compositionFor`
+ * puts the facing phrase back on the front.
  *
  * This is part of the shared contract: changing it means re-rendering the
  * roster, not one character.
  */
 export const CHARACTER_COMPOSITION =
-  'straight-on, full body, standing, feet visible, simple background, white background';
+  'full body, standing, feet visible, simple background, white background';
 
 /**
  * Framing for bosses. They are rarely bipeds standing politely on a floor —
@@ -151,12 +267,15 @@ export const CHARACTER_COMPOSITION =
  * `--composition boss` (the `boss` preset does it for you).
  */
 export const BOSS_COMPOSITION =
-  'straight-on, full body, centered, imposing, simple background, white background';
+  'full body, centered, imposing, simple background, white background';
 
 /**
  * Framing for dialogue/menu portraits. Same style and quality blocks as the
  * sprites — only the framing changes, so a portrait still looks like it came
  * out of the same art department. Select it with `--composition portrait`.
+ *
+ * Defaults to `--facing none`: a HUD portrait is not on the battlefield, it is
+ * the character looking at the player.
  */
 export const PORTRAIT_COMPOSITION =
   'portrait, close-up, upper body, looking at viewer, simple background, white background';
@@ -165,16 +284,96 @@ export const PORTRAIT_COMPOSITION =
  * Framing for downed/KO poses. `full` says "standing on ground", which
  * actively fights a lying-down pose — the sampler splits the difference and
  * gives you a crouch. Select with `--composition prone`.
+ *
+ * `from side` already lives here, so the prone facing phrase only has to say
+ * which end of the body is which.
  */
 export const PRONE_COMPOSITION =
   'lying on ground, on side, eyes closed, full body, from side, simple background, white background';
+
+/**
+ * Framing for pause-screen hero art (v4, 2026-09-18).
+ *
+ * The "Until Dawn" pause screen wants a cinematic close-up of a face, held
+ * in a landscape frame with the scene still behind it. Three things separate
+ * it from `portrait`:
+ *
+ * 1. **It keeps its background.** `portrait` says `simple background, white
+ *    background` because a HUD head-shot gets cut out. These do not go through
+ *    rembg at all — the painted backdrop *is* half the shot, and the pause
+ *    overlay composites the whole landscape frame. So the framing block asks
+ *    for depth of field and bokeh instead of a cyclorama.
+ * 2. **It is landscape.** 1344x768, the same bucket as a backdrop, because the
+ *    pause panel is a wide plate with the face off to one side.
+ * 3. **Expression is the subject.** `detailed eyes` and `expressive` are in the
+ *    block itself rather than left to `--poseTags`, because on this checkpoint
+ *    a close-up with no emotional tag reliably renders a neutral idol face.
+ *
+ * `looking at viewer` is deliberately NOT here — half these shots look away
+ * (Yuna's eyes downcast, eyes closed mid-song). Say which in `--poseTags`.
+ */
+export const HERO_COMPOSITION =
+  'close-up, face focus, portrait, upper body, expressive, detailed eyes, ' +
+  'cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic';
 
 const COMPOSITIONS = {
   full: CHARACTER_COMPOSITION,
   portrait: PORTRAIT_COMPOSITION,
   prone: PRONE_COMPOSITION,
   boss: BOSS_COMPOSITION,
+  hero: HERO_COMPOSITION,
 };
+
+/** Compositions that ignore `--facing` unless it is given explicitly. */
+const COMPOSITION_DEFAULT_FACING = {
+  full: null, // inherit the preset default (right for character, left for boss)
+  boss: null,
+  prone: null,
+  portrait: 'none',
+  // A pause-screen close-up is not on the battlefield; the camera is the one
+  // thing in the room with the character. Direction comes from --poseTags.
+  hero: 'none',
+};
+
+/**
+ * Put a composition block together: facing phrase first, framing after.
+ *
+ * `override` is the A/B escape hatch (`--facingPhrase "..."`). It replaces the
+ * table lookup so a phrasing can be tried on a fixed seed without editing this
+ * file; nothing in the cast manifest uses it.
+ */
+export function compositionFor(composition = 'full', facing = 'none', override = null) {
+  const framing = COMPOSITIONS[composition];
+  if (!framing) {
+    throw new Error(
+      `Unknown --composition "${composition}" (expected: ${Object.keys(COMPOSITIONS).join(', ')})`,
+    );
+  }
+  if (!FACINGS.includes(facing)) {
+    throw new Error(`Unknown --facing "${facing}" (expected: ${FACINGS.join(', ')})`);
+  }
+  const table =
+    composition === 'prone'
+      ? PRONE_FACING_PHRASES
+      : composition === 'hero'
+        ? HERO_FACING_PHRASES
+        : FACING_PHRASES;
+  const phrase = override === null ? table[facing] : override;
+  return joinTags(phrase, framing);
+}
+
+/**
+ * The default facing for a preset + composition pair.
+ *
+ * Party members are drawn standing on the left of the field, so `character`
+ * faces right; bosses and aeons stand on the right, so `boss` faces left.
+ * Portraits opt out. An explicit `--facing` always wins.
+ */
+export function defaultFacingFor(preset, composition) {
+  const byComposition = COMPOSITION_DEFAULT_FACING[composition];
+  if (byComposition) return byComposition;
+  return preset === 'boss' ? 'left' : 'right';
+}
 
 export const BASE_NEGATIVE = [
   'lowres',
@@ -222,6 +421,19 @@ export const SPRITE_NEGATIVE = `${BASE_NEGATIVE}, paint splatter, ink splash, co
 export const BACKDROP_NEGATIVE = `${BASE_NEGATIVE}, 1girl, 1boy, character, people, person, human`;
 
 /**
+ * Hero (pause-screen) negatives.
+ *
+ * Note what is NOT banned: backgrounds. `SPRITE_NEGATIVE` bans
+ * `colorful background` because rembg would keep it; a hero plate is never cut
+ * out, so the painted backdrop stays and the bans are about *framing* instead.
+ * `full body`, `wide shot` and `from afar` are the attractor that pulls a
+ * close-up back out to a standing figure — the checkpoint's prior for a named
+ * character is their full-length official art, and a bare `close-up` loses that
+ * argument about one time in three without these.
+ */
+export const HERO_NEGATIVE = `${BASE_NEGATIVE}, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome`;
+
+/**
  * Per-shot negative additions, appended to the shared negative with `--negAdd`.
  *
  * Needed because some scene names collide with real English once CLIP
@@ -267,13 +479,14 @@ export function seedFromName(name) {
   return h.readUInt32BE(0) % 2147483647;
 }
 
-export function buildCharacterPrompt({ tags, poseTags, composition = 'full' }) {
-  const framing = COMPOSITIONS[composition];
-  if (!framing) {
-    throw new Error(
-      `Unknown --composition "${composition}" (expected: ${Object.keys(COMPOSITIONS).join(', ')})`,
-    );
-  }
+export function buildCharacterPrompt({
+  tags,
+  poseTags,
+  composition = 'full',
+  facing = 'none',
+  facingPhrase = null,
+}) {
+  const framing = compositionFor(composition, facing, facingPhrase);
   return joinTags(escapeTags(tags), escapeTags(poseTags), framing, STYLE_TAGS, QUALITY_TAGS);
 }
 
@@ -707,7 +920,7 @@ function outFor(outPath, index, batch) {
  * only in default framing and default canvas — same style contract, same
  * cutout, same sidecar, so they stay one code path on purpose.
  */
-async function runSprite(args, { defaultComposition, defaultWidth, defaultHeight, label }) {
+async function runSprite(args, { preset, defaultComposition, defaultWidth, defaultHeight, label }) {
   const name = required(args, 'name');
   const tags = required(args, 'tags');
   const pose = args.pose === true ? 'idle' : args.pose || 'idle';
@@ -722,9 +935,23 @@ async function runSprite(args, { defaultComposition, defaultWidth, defaultHeight
   const composition =
     args.composition === true ? defaultComposition : args.composition || defaultComposition;
   const baseSeed = num(args, 'seed', seedFromName(`${name}:${pose}`));
+  // v3 facing contract: party art faces right, enemy art faces left, and the
+  // sprite's own preset decides that unless the caller says otherwise.
+  const facing =
+    args.facing === true || args.facing === undefined
+      ? defaultFacingFor(preset, composition)
+      : String(args.facing);
+  const facingPhrase =
+    args.facingPhrase === undefined || args.facingPhrase === true
+      ? null
+      : String(args.facingPhrase);
 
-  const positive = buildCharacterPrompt({ tags, poseTags, composition });
-  const negative = withNegAdd(SPRITE_NEGATIVE, args.negAdd);
+  const positive = buildCharacterPrompt({ tags, poseTags, composition, facing, facingPhrase });
+  // The facing negatives are half of the facing recipe, so they ride along with
+  // --facing rather than waiting for every caller to remember them.
+  const facingNegative =
+    facing === 'none' || composition === 'prone' ? '' : FACING_NEGATIVE;
+  const negative = withNegAdd(SPRITE_NEGATIVE, joinTags(facingNegative, args.negAdd === true ? '' : args.negAdd));
   const ref = referenceOptions(args, { defaultWidth, defaultHeight });
   const results = [];
 
@@ -752,7 +979,7 @@ async function runSprite(args, { defaultComposition, defaultWidth, defaultHeight
       prefix: `pyrefly/${name}_${pose}`,
     });
     process.stderr.write(
-      `[gen] ${label} ${name}/${pose} variant ${i + 1}/${batch} seed=${seed}` +
+      `[gen] ${label} ${name}/${pose} variant ${i + 1}/${batch} seed=${seed} facing=${facing}` +
         `${ref.refImage ? ` ref@${ref.refWeight}` : ''}` +
         `${ref.initImage ? ` img2img@${ref.denoise}` : ''}\n`,
     );
@@ -773,6 +1000,8 @@ async function runSprite(args, { defaultComposition, defaultWidth, defaultHeight
       scheduler,
       pose,
       composition,
+      facing,
+      ...(facingPhrase ? { facingPhrase } : {}),
       canvas: { width: ref.width, height: ref.height },
       ...ref.provenance,
       generatedAt: new Date().toISOString(),
@@ -788,6 +1017,7 @@ async function runSprite(args, { defaultComposition, defaultWidth, defaultHeight
 
 async function runCharacter(args) {
   return runSprite(args, {
+    preset: 'character',
     defaultComposition: 'full',
     defaultWidth: 832,
     defaultHeight: 1216,
@@ -805,11 +1035,107 @@ async function runCharacter(args) {
  */
 async function runBoss(args) {
   return runSprite(args, {
+    preset: 'boss',
     defaultComposition: 'boss',
     defaultWidth: 1216,
     defaultHeight: 832,
     label: 'boss',
   });
+}
+
+/**
+ * Hero preset — pause-screen cinematic close-ups.
+ *
+ * Deliberately NOT `runSprite` with a different composition, for one reason
+ * that changes the whole code path: **no rembg**. These are full painted
+ * plates, not cutouts, so there is no alpha crop, no `cropBox` and no
+ * `baselineY` — the three things every sidecar field in `runSprite` exists to
+ * carry. The pause overlay draws the landscape frame whole.
+ *
+ * `--ref` is expected rather than optional here: the face has to be the same
+ * person the player just had in their party, and a close-up gives the
+ * checkpoint far more room to drift than a 60 px-tall battlefield sprite does.
+ * Moderate weight — the default 0.65 carries the idle's *lighting* into a shot
+ * whose whole point is new lighting, so these run nearer 0.5.
+ *
+ * `--mood` is recorded in the sidecar and is not prompted from; the emotion
+ * belongs in `--poseTags` where the encoder can see it. The field is there so
+ * the pause screen (and the next person picking variants) knows what the shot
+ * was *for*.
+ */
+async function runHero(args) {
+  const name = required(args, 'name');
+  const tags = required(args, 'tags');
+  const poseTags = args.poseTags === true ? '' : args.poseTags || '';
+  const outPath = resolve(process.cwd(), required(args, 'out'));
+  const batch = Math.max(1, num(args, 'batch', 1));
+  const steps = num(args, 'steps', 30);
+  const cfg = num(args, 'cfg', 6);
+  const sampler = args.sampler === true ? 'euler_ancestral' : args.sampler || 'euler_ancestral';
+  const scheduler = args.scheduler === true ? 'normal' : args.scheduler || 'normal';
+  const composition = args.composition === true ? 'hero' : args.composition || 'hero';
+  const subject = args.subject === true || !args.subject ? name : String(args.subject);
+  const mood = args.mood === true || !args.mood ? '' : String(args.mood);
+  const baseSeed = num(args, 'seed', seedFromName(`hero:${name}`));
+  const facing =
+    args.facing === true || args.facing === undefined ? 'none' : String(args.facing);
+
+  const positive = buildCharacterPrompt({ tags, poseTags, composition, facing });
+  const negative = withNegAdd(HERO_NEGATIVE, args.negAdd === true ? '' : args.negAdd);
+  const ref = referenceOptions(args, { defaultWidth: 1344, defaultHeight: 768 });
+  const results = [];
+
+  for (let i = 0; i < batch; i++) {
+    const seed = (baseSeed + i) % 2147483647;
+    const target = outFor(outPath, i, batch);
+    const workflow = characterWorkflow({
+      positive,
+      negative,
+      width: ref.width,
+      height: ref.height,
+      seed,
+      steps,
+      cfg,
+      sampler,
+      scheduler,
+      refImage: ref.refImage,
+      refWeight: ref.refWeight,
+      refWeightType: ref.refWeightType,
+      refScaling: ref.refScaling,
+      refStart: ref.refStart,
+      refEnd: ref.refEnd,
+      initImage: ref.initImage,
+      denoise: ref.denoise,
+      prefix: `pyrefly/hero_${name}`,
+    });
+    process.stderr.write(
+      `[gen] hero ${name} variant ${i + 1}/${batch} seed=${seed}` +
+        `${ref.refImage ? ` ref@${ref.refWeight}` : ''}\n`,
+    );
+    // postProcess:false — the painted background is the point. See HERO_NEGATIVE.
+    const r = await generateOne({ workflow, outPath: target, postProcess: false });
+    const sidecar = {
+      subject,
+      mood,
+      seed,
+      prompt: positive,
+      negative,
+      model: CHECKPOINT,
+      steps,
+      cfg,
+      sampler,
+      scheduler,
+      composition,
+      facing,
+      canvas: { width: ref.width, height: ref.height },
+      ...ref.provenance,
+      generatedAt: new Date().toISOString(),
+    };
+    writeFileSync(target.replace(/\.png$/i, '.json'), `${JSON.stringify(sidecar, null, 2)}\n`);
+    results.push({ ...r, seed });
+    process.stderr.write(`[gen]   -> ${target} (${r.seconds.toFixed(1)}s)\n`);
+  }
+  return results;
 }
 
 async function runBackdrop(args) {
@@ -930,7 +1256,8 @@ pyrefly art generator (ComfyUI ${BASE})
   node tools/gen/comfy.mjs character --name <id> --tags "<danbooru tags>" \\
       [--pose <pose>] [--poseTags "<tags>"] --out <path.png>
       [--batch N] [--seed N] [--steps 28] [--cfg 6] [--margin 16]
-      [--composition full|portrait|prone|boss] [--negAdd "<extra negatives>"]
+      [--composition full|portrait|prone|boss] [--facing right|left|none]
+      [--negAdd "<extra negatives>"]
       [--ref <png>] [--refWeight ${REF_WEIGHT_DEFAULT}] [--refStart ${REF_START_DEFAULT}] [--refEnd ${REF_END_DEFAULT}]
       [--refWeightType linear] [--refScaling K+V]
       [--img2img <png>] [--denoise ${IMG2IMG_DENOISE_DEFAULT}]
@@ -940,9 +1267,28 @@ pyrefly art generator (ComfyUI ${BASE})
       same flags; defaults to 1216x832 landscape and --composition boss
       (use --size 1024x1024 for floaters, --size 832x1216 for tall forms)
 
+  node tools/gen/comfy.mjs hero --name <id> --tags "<danbooru tags>" \\
+      --poseTags "<expression + scene>" --out public/art/pause/<id>.png
+      [--subject "<who>"] [--mood "<one line>"] [--batch N] [--seed N]
+      1344x768 landscape, --composition hero, NO rembg (the painted
+      background is kept). Point --ref at the character's approved idle at
+      ~0.5 so the face matches the cast without importing its lighting.
+
   node tools/gen/comfy.mjs backdrop --name <id> --tags "<scene tags>" --out <path.png>
       [--batch N] [--seed N] [--steps 30] [--cfg 6] [--negAdd "<extra negatives>"]
       [--size WxH] [--ref <png>] [--img2img <png>] [--denoise ${IMG2IMG_DENOISE_DEFAULT}]
+
+Facing contract (v3):
+  --facing right    Party art: body angled toward the RIGHT of the frame, so
+                    the party (who stand on the left) face the enemy. Default
+                    for the "character" preset.
+  --facing left     Enemy/boss/aeon art, angled the other way. Default for the
+                    "boss" preset.
+  --facing none     v2 behaviour, plain "straight-on". Default for
+                    --composition portrait (a HUD head-shot meets the player's
+                    eye and is not on the battlefield).
+  --facingPhrase    A/B escape hatch: use this literal phrase instead of the
+                    one in FACING_PHRASES. For testing, not for the cast.
 
 Reference consistency:
   --ref <png>       IP-Adapter identity anchor. Point it at an approved idle
@@ -974,6 +1320,7 @@ async function main() {
   let results;
   if (cmd === 'character') results = await runCharacter(args);
   else if (cmd === 'boss') results = await runBoss(args);
+  else if (cmd === 'hero') results = await runHero(args);
   else if (cmd === 'backdrop') results = await runBackdrop(args);
   else {
     console.error(`Unknown command "${cmd}"\n\n${USAGE}`);

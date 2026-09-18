@@ -12,10 +12,12 @@
  */
 
 import type { BattleEvent, CombatantId, ElementId, MessageKind } from '../battle/common/types.ts';
+import { BattleMoments } from './BattleMoments.ts';
 import {
   ELEMENT_SFX,
   SFX_FALLBACKS,
   type DamageNumbersPort,
+  type PlaybackSpeed,
   type PresenterDeps,
   type BattleStage,
 } from './BattlePresenterPorts.ts';
@@ -66,12 +68,29 @@ export interface EventCtx {
   sleep(ms: number): Promise<void>;
   /** Whoever is mid-action, so `action-end` can put them back to idle. */
   actingId: CombatantId | null;
-  /** Set while the camera is parked on the action rig. */
-  onActionRig: boolean;
+  /**
+   * Which shot the battle is on. Every `camera.moveTo` the beats used to make
+   * by hand now goes through here — see `BattleMoments.ts` for why.
+   */
+  readonly moments: BattleMoments;
 }
 
-export function createEventCtx(deps: PresenterDeps, sleep: (ms: number) => Promise<void>): EventCtx {
-  return { stage: deps.stage, deps, sleep, actingId: null, onActionRig: false };
+export function createEventCtx(
+  deps: PresenterDeps,
+  sleep: (ms: number) => Promise<void>,
+  speed: () => PlaybackSpeed,
+): EventCtx {
+  const moments = new BattleMoments({
+    stage: deps.stage,
+    moments: deps.moments ?? null,
+    audio: deps.audio ?? null,
+    // Only the opening moment uses this, and only to keep the HUD down until
+    // the boss reveal has finished — see `BattleMoments.battleStart`.
+    hud: deps.hud ?? null,
+    sleep,
+    speed,
+  });
+  return { stage: deps.stage, deps, sleep, actingId: null, moments };
 }
 
 // --------------------------------------------------------------------- audio
@@ -264,9 +283,12 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return ctx.sleep(TIMING.status);
     }
 
+    // An explicit `camera` event from a boss's data file overrides the moment
+    // the beats would have picked (CONTRACTS.md playback rule 4), so it goes
+    // straight to the port — but it still has to obey the playback speed, or a
+    // `'skip'` run sits on a 700 ms tween per event.
     case 'camera':
-      ctx.onActionRig = event.rig !== 'idle';
-      await ctx.stage.camera.moveTo(event.rig, event.ms ?? 700);
+      await ctx.moments.moveToRig(event.rig, event.ms ?? 700);
       return;
 
     case 'vfx':

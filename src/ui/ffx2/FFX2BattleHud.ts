@@ -31,6 +31,7 @@ import { mountLadyLuckReels } from './LadyLuckReels.ts';
 import { partyRowHtml } from './PartyRows.ts';
 import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
 import { DamageLayer } from './DamageLayer.ts';
+import { StrategyGuide } from '../common/StrategyGuide.ts';
 
 /**
  * The FFX-2 battle HUD.
@@ -104,6 +105,27 @@ export class FFX2BattleHud implements HudPort {
    */
   private readonly revealed = new Set<CombatantId>();
   private readonly damage = new DamageLayer();
+  /**
+   * The optional strategy guide (`src/ui/common/StrategyGuide.ts`).
+   *
+   * Left rail here too, not a mirror of FFX's. FFX-2 anchors its command stack
+   * bottom-**right** and its telegraph banner top-right, so the right edge is
+   * the one edge the panel may not take; the left holds the boss gauge strip at
+   * the top and the party column at the bottom, with the whole middle free.
+   * Both anchors resolve per frame because the gauge strip grows a block per
+   * living enemy (`BossGauges.ts`) and the party column re-renders every ATB
+   * tick. The accent still flips to pyre pink — `game: 'ffx2'` puts `.sgd--ffx2`
+   * on the rail and it inherits `--ig-accent` from the `.ig--ffx2` root.
+   */
+  private readonly guide = new StrategyGuide({
+    game: 'ffx2',
+    anchors: {
+      below: () => this.enemyEl ?? null,
+      above: () => this.partyEl ?? null,
+      top: 44,
+      bottom: 104,
+    },
+  });
   private chainHideTimer = 0;
   private telegraphHideTimer = 0;
   private damageFlashTimer = 0;
@@ -149,6 +171,9 @@ export class FFX2BattleHud implements HudPort {
     // with §3.6's grid-quoted glyph sizes multiplied back up by the same
     // letterbox scale `layout()` applies to the stage.
     this.damage.mount(this.overlay, { host: this.el, scale: () => this.stageScale });
+    // Into the scaled stage, so the rail letterboxes with the rest of the
+    // chrome and its anchors' `offsetTop` are in the same 640x360 grid.
+    this.guide.mount(this.stage);
 
     this.mounted = true;
     this.layout();
@@ -162,6 +187,7 @@ export class FFX2BattleHud implements HudPort {
     window.clearTimeout(this.telegraphHideTimer);
     window.clearTimeout(this.damageFlashTimer);
     this.damage.unmount();
+    this.guide.unmount();
     this.el.remove();
     this.mounted = false;
   }
@@ -169,10 +195,17 @@ export class FFX2BattleHud implements HudPort {
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
   update(dt: number): void {
     this.damage.update(dt);
+    this.guide.update(dt);
+  }
+
+  /** The guide rail, for tests and the debug snapshot. */
+  get strategyGuide(): StrategyGuide {
+    return this.guide;
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
     this.lastState = state;
+    this.guide.sync(state);
     if (!isAtbSnapshot(preview)) return; // FFX-2 always passes an AtbSnapshot; ignore a stray CTB list.
     this.lastSnapshot = preview;
     this.renderParty(state, preview);
@@ -188,6 +221,9 @@ export class FFX2BattleHud implements HudPort {
     this.actingId = actorId;
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     this.commandEl.hidden = false;
+    // NEXT explains the decision that is open right now; cleared below, after
+    // the menu resolves.
+    if (this.lastState) this.guide.showDecision(actorId, commands, this.lastState);
     const command = await openCommandMenu({
       container: this.commandEl,
       targetLayer: this.overlay,
@@ -204,6 +240,7 @@ export class FFX2BattleHud implements HudPort {
     });
     this.commandEl.hidden = true;
     this.actingId = null;
+    this.guide.clearDecision();
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     return command;
   }

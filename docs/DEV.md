@@ -44,6 +44,29 @@ node tools/screenshot.mjs [--out=PATH] [--screen=NAME] [--frames=N]
 ```
 With no `--url` it starts its own `vite preview`, so run `npm run build` first.
 
+### Deploy
+
+```
+npm run deploy -- [--skip-tests] [--allow-dirty] [--message="text"]
+```
+
+`tools/deploy-pages.mjs` does the whole release in one command: type-check +
+unit tests, `vite build --outDir dist-release`, re-init `dist-release` as a
+throwaway single-commit `gh-pages` git repo and force-push it, kick a Pages
+build and poll it to completion, then verify the live site serves the same
+bundle and that art assets resolve. It appends one line per run to
+`docs/deploys.log` and exits non-zero on any failure.
+
+- `--skip-tests` skips the `tsc`/`vitest` preflight.
+- `--allow-dirty` deploys even with uncommitted changes in the main repo
+  (the dirty files are still printed); without it, a dirty tree aborts.
+- `--message="text"` appends free text to the gh-pages commit message.
+
+Safe to run repeatedly — `dist-release/.git` is deleted and recreated every
+run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
+CLI (hardcoded at `D:/Tools/GitHubCLI/gh.exe`) authenticated against
+`BaileyPillon/pyrefly-reprise`.
+
 ### Sprite tool (retired)
 
 `tools/render-sprite.mjs` drove the original pixel-art pipeline. The game is
