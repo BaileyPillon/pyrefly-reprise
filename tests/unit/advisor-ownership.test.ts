@@ -44,6 +44,7 @@ import { recommendedCommand } from '../../src/engine/tactics/guide.ts';
 import {
   type AdvisorIntent,
   type AdvisorOptions,
+  abilityOwner,
   buildAdvisorView,
   ownedRow,
 } from '../../src/engine/tactics/advisor.ts';
@@ -376,5 +377,24 @@ describe('ownedRow', () => {
     // Nor a disabled one.
     const off: AvailableCommand[] = decision.commands.map((c) => ({ ...c, enabled: false }));
     expect(ownedRow(off, { ...fang.command, targets: ['seymour-flux'] } as Command)).toBeNull();
+  });
+});
+
+describe('abilityOwner — who to hand the turn to', () => {
+  // `handOff` is defensive: no shipped tactic can return a row it was not
+  // handed, so the path is unreachable through `buildAdvisorView` today. Its
+  // one piece of judgement — *who* actually owns the move — is testable, and is
+  // what would be wrong first if a future tactic ever went off-menu.
+  it('finds the living member who knows the move, and nobody for a shared one', () => {
+    const { state } = baileysBoard();
+    const mightyGuard = { kind: 'overdrive', id: 'mighty-guard', targets: [] } as unknown as Command;
+    expect(abilityOwner(state, mightyGuard, 'tidus')?.id).toBe('kimahri');
+
+    // Yuna is on the floor on this board, so her Curaga has no living owner.
+    const curaga = { kind: 'ability', id: 'curaga', targets: [] } as unknown as Command;
+    expect(abilityOwner(state, curaga, 'tidus')).toBeNull();
+
+    // And an idless row (Attack, Defend, a switch) never names an owner.
+    expect(abilityOwner(state, { kind: 'attack', targets: [] } as unknown as Command, 'tidus')).toBeNull();
   });
 });
