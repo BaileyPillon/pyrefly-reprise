@@ -1,0 +1,113 @@
+{
+  "frames": [
+    {
+      "name": "01-bfa-open.png",
+      "bytes": 2510239
+    },
+    {
+      "name": "01-bfa-open-before.png",
+      "bytes": 2505500
+    },
+    {
+      "name": "02-bfa-heal-flash.png",
+      "bytes": 2513035
+    },
+    {
+      "name": "02-bfa-heal-flash-before.png",
+      "bytes": 2512994
+    },
+    {
+      "name": "03-bfa-crit-flash.png",
+      "bytes": 2441404
+    },
+    {
+      "name": "03-bfa-crit-flash-before.png",
+      "bytes": 2025703
+    }
+  ],
+  "notes": [
+    {
+      "chapter": "braskas-final-aeon",
+      "scene": "dreams-end",
+      "actors": [
+        {
+          "id": "tidus",
+          "side": "party",
+          "art": "tidus",
+          "pose": "idle",
+          "placeholder": false,
+          "facing": 1,
+          "mirrored": false,
+          "life": "idle"
+        },
+        {
+          "id": "yuna",
+          "side": "party",
+          "art": "yuna",
+          "pose": "idle",
+          "placeholder": false,
+          "facing": 1,
+          "mirrored": false,
+          "life": "idle"
+        },
+        {
+          "id": "auron",
+          "side": "party",
+          "art": "auron",
+          "pose": "idle",
+          "placeholder": false,
+          "facing": 1,
+          "mirrored": false,
+          "life": "idle"
+        },
+        {
+          "id": "braskas-final-aeon",
+          "side": "enemy",
+          "art": "braskas-final-aeon-1",
+          "pose": "idle",
+          "placeholder": false,
+          "facing": -1,
+          "mirrored": false,
+          "life": "idle"
+        },
+        {
+          "id": "yu-pagoda-left",
+          "side": "enemy",
+          "art": "yu-pagoda",
+          "pose": "idle",
+          "placeholder": false,
+          "facing": -1,
+          "mirrored": false,
+          "life": "idle"
+        },
+        {
+          "id": "yu-pagoda-right",
+          "side": "enemy",
+          "art": "yu-pagoda",
+          "pose": "idle",
+          "placeholder": false,
+          "facing": -1,
+          "mirrored": false,
+          "life": "idle"
+        }
+      ]
+    },
+    {
+      "bfaActorId": "braskas-final-aeon"
+    },
+    {
+      "rigs": [
+        "intro",
+        "idle",
+        "action",
+        "party",
+        "enemy",
+        "victory"
+      ]
+    },
+    {
+      "rig": "idle"
+    }
+  ],
+  "errors": []
+}

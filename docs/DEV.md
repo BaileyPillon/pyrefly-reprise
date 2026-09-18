@@ -21,6 +21,7 @@ npx playwright install chromium   # once, for e2e + screenshots
 | End-to-end | `npm run test:e2e` (alias for `playwright test`) |
 | Screenshot | `npm run screenshot -- --screen=demo --out=docs/screenshots/01-foundation.png` |
 | Painted-art generation | see [ART-PIPELINE.md](ART-PIPELINE.md) — ComfyUI + `tools/gen/comfy.mjs` |
+| Watch new renders land | `node tools/art-watch.mjs [--port=8890]` → http://127.0.0.1:8890/ |
 | Music/SFX preview | `node tools/render-track.mjs all --out=docs/audio` |
 
 ### Ports and base path
@@ -43,6 +44,28 @@ node tools/screenshot.mjs [--out=PATH] [--screen=NAME] [--frames=N]
                           [--url=http://localhost:5173/] [--timeout=30000] [--headed]
 ```
 With no `--url` it starts its own `vite preview`, so run `npm run build` first.
+
+### Art-watch gallery
+
+```
+node tools/art-watch.mjs [--port=8890]
+```
+
+Dependency-free (Node built-ins only) auto-refreshing gallery at
+`http://127.0.0.1:8890/` for watching AI renders land in real time. On every
+request it rescans `D:/Tools/ComfyUI/output/pyrefly`, `public/art/pause`,
+`public/art/characters/*/` (one level deep, skipping `*.raw.png`),
+`public/art/portraits`, `docs/screenshots/concept` and
+`docs/screenshots/pause`, and shows the newest 80 `*.png` files by mtime.
+The page meta-refreshes every 20s; thumbnails are served through `/img?p=`,
+which only serves files that resolve inside one of those folders.
+
+Registered as the **PyreflyArtWatch** scheduled task (`schtasks`, `ONLOGON`)
+so it comes back after every reboot — no need to start it by hand. Re-create
+it with:
+```
+schtasks /Create /SC ONLOGON /TN PyreflyArtWatch /TR "node \"D:\Final Fantasy\tools\art-watch.mjs\"" /F
+```
 
 ### Deploy
 

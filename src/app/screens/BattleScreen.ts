@@ -41,6 +41,7 @@ import { findEnemyGroup, setupForChapter, setupForNextLink } from './BattleScree
 import { createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { PauseScreen } from './PauseScreen.ts';
 
 export interface BattleScreenOptions {
   chapter: Chapter;
@@ -84,6 +85,21 @@ export class BattleScreen extends Screen {
   private links = 0;
   private preview = false;
   private finishedResolve: ((r: BattleScreenResult) => void) | null = null;
+
+  // --------------------------------------------------------------- pausing
+
+  /** The pause overlay while it is up. See {@link openPause}. */
+  private pauseScreen: PauseScreen | null = null;
+  /** True while the presenter's clock is held. */
+  private presenterPaused = false;
+  /** Sleeps parked on the pause gate, released when it opens. */
+  private pauseWaiters: Array<() => void> = [];
+  /** How many formations this chapter chains through. Measured in `enter`. */
+  private chainLength = 1;
+  /** Where the player asked to go from the pause menu. See {@link requestExit}. */
+  private exitIntent: 'restart' | 'chapter-select' | 'title' | null = null;
+  /** Set by the raw `P` listener; consumed by the next `handleInput`. */
+  private pauseKeyPressed = false;
 
   /** Resolves when the encounter ends (victory, defeat, escape or exit). */
   readonly finished: Promise<BattleScreenResult>;
@@ -163,6 +179,12 @@ export class BattleScreen extends Screen {
     this.presenter = new BattlePresenter({
       stage: this.stage,
       hud: this.hud,
+      // The one clock `App` cannot freeze for the pause overlay. Everything
+      // else in a battle is ticked from `update()`, which the loop stops
+      // calling the moment another screen is on top; the presenter instead
+      // paces itself with its own awaits, so it is frozen here, at the single
+      // choke point every one of those awaits goes through. See `pauseGate`.
+      sleep: this.pauseGate,
       damageNumbers: ownsOverlays ? createDamageNumbers(this.root) : null,
       messageBar: ownsBanner ? createMessageBar(this.root) : null,
       cutscenes: this.cutscenes,
@@ -178,8 +200,34 @@ export class BattleScreen extends Screen {
     void audio.playMusic(chapter.music.battle, { fade: 1.2 });
     void this.app.fade('clear', 600);
 
+    // `P` is not in `app/Input.ts`'s key map and this screen does not own that
+    // file, so the third way into the pause menu is a listener of its own.
+    // It only ever sets a flag: the decision — and the "not while a command
+    // menu owns the keyboard" rule — stays in `handleInput` with the other two.
+    window.addEventListener('keydown', this.onPauseKey);
+
+    // How many formations this chapter chains through, for the pause screen's
+    // ENCOUNTER PROGRESS row ("LINK 2 OF 4"). Async because resolving a
+    // `nextGroupId` is, and not worth blocking the first frame for.
+    void this.measureChain();
+
     // Run the encounter without blocking `enter()`, so the first frame draws.
     void this.runEncounter();
+  }
+
+  /** Walk `nextGroupId` to the end of the chain, counting formations. */
+  private async measureChain(): Promise<void> {
+    let group = this.group;
+    let count = 1;
+    const seen = new Set<string>();
+    while (group?.nextGroupId && !seen.has(group.nextGroupId)) {
+      seen.add(group.nextGroupId);
+      const next = await findEnemyGroup(group.nextGroupId);
+      if (!next) break;
+      group = next;
+      count++;
+    }
+    this.chainLength = count;
   }
 
   // ------------------------------------------------------------------- loop
@@ -229,6 +277,129 @@ export class BattleScreen extends Screen {
     this.finish(outcome);
   }
 
+  // ------------------------------------------------------------- the pause
+
+  /**
+   * The presenter's clock, with a gate on the end of it.
+   *
+   * Every wait the presenter takes — between damage numerals, on a camera
+   * move, holding a banner — goes through `BattlePresenter`'s own `sleep`,
+   * which is this function scaled by the playback speed. So parking here after
+   * the real delay has elapsed stops battle playback dead at the next await
+   * point and lets it carry on from exactly there, with no lost or doubled
+   * frames, and without `BattlePresenter` needing to know that pausing exists.
+   *
+   * Written as a field rather than a method because it is handed to the
+   * presenter as a bare function at construction time.
+   */
+  private readonly pauseGate = async (ms: number): Promise<void> => {
+    await defaultSleep(ms);
+    while (this.presenterPaused) {
+      await new Promise<void>((resolve) => this.pauseWaiters.push(resolve));
+    }
+  };
+
+  private setPresenterPaused(paused: boolean): void {
+    this.presenterPaused = paused;
+    if (paused) return;
+    const waiters = this.pauseWaiters;
+    this.pauseWaiters = [];
+    for (const resolve of waiters) resolve();
+  }
+
+  private readonly onPauseKey = (e: KeyboardEvent): void => {
+    if (e.code === 'KeyP' && !e.repeat) this.pauseKeyPressed = true;
+  };
+
+  /**
+   * Whether the pause menu may open right now.
+   *
+   * It may not while the HUD is waiting for a command. Both command menus
+   * (`ui/ffx/CommandMenu.ts`, `ui/ffx2/CommandMenu.ts`) take the keyboard
+   * directly off `window` for as long as they are open, so a pause menu
+   * stacked on top of one would have two screens reading the same arrow keys
+   * and Esc would mean "back out of targeting" and "close the pause" at the
+   * same time. That is the rule behind the brief's "Esc when no submenu is
+   * open", and it applies to `P` and the pad's Start button too — the conflict
+   * is about who owns the keys, not about which key opened the menu.
+   *
+   * The debug beat `pause:open` deliberately ignores this: a capture tool has
+   * no keyboard to lose and wants the menu on a predictable frame.
+   */
+  private get canPause(): boolean {
+    if (this.pauseScreen || this.app.overlayActive) return false;
+    if (!this.presenter || this.presenter.isAborted) return false;
+    const snap = this.presenter.snapshot();
+    if (snap['awaitingMenu'] === true) return false;
+    // A minigame overlay owns the keyboard for the same reason a command menu
+    // does (`ui/ffx/minigames/**` each attach a `RawInputWatcher`).
+    return !String(snap['phase'] ?? '').includes('minigame');
+  }
+
+  /** Put the pause menu up over the frozen battle. */
+  private async openPause(): Promise<void> {
+    if (this.pauseScreen || this.app.overlayActive) return;
+    const chapter = this.opts.chapter;
+    const screen = new PauseScreen({
+      chapter,
+      state: () => this.engine?.state() ?? null,
+      links: () => Math.max(1, this.links),
+      chainLength: this.chainLength,
+      onPause: (paused) => this.setPresenterPaused(paused),
+      onResume: () => void this.closePause(),
+      onRestart: () => this.requestExit('restart'),
+      onChapterSelect: () => this.requestExit('chapter-select'),
+      onQuitToTitle: () => this.requestExit('title'),
+    });
+    this.pauseScreen = screen;
+    // Write the running total out before the menu reads it, so PLAY TIME is
+    // the number on disk and not one flush behind.
+    this.app.save.flushPlayTime();
+    await this.app.pushOverlay(screen);
+  }
+
+  private async closePause(): Promise<void> {
+    if (!this.pauseScreen) return;
+    this.pauseScreen = null;
+    await this.app.popOverlay();
+  }
+
+  /**
+   * Leave the encounter for somewhere else.
+   *
+   * The flow in `BattleScreenFlow.runChapter` is parked on `battle.finished`,
+   * and whoever called it navigates *after* it resolves — `main.ts` sends an
+   * ended chapter back to chapter select. So this screen cannot simply call
+   * `goto()`: its own navigation would land first and be overwritten a tick
+   * later by the flow's.
+   *
+   * Instead it aborts, which is what makes the flow unwind, and then waits for
+   * the unwind to actually finish (this screen off the stack, the flow idle)
+   * before taking over. CHAPTER SELECT needs nothing at all afterwards — the
+   * flow's own follow-up is already exactly that — which is why it is the one
+   * intent with no branch below.
+   */
+  private requestExit(intent: 'restart' | 'chapter-select' | 'title'): void {
+    if (this.exitIntent) return;
+    this.exitIntent = intent;
+    const app = this.app;
+    const chapterId = this.opts.chapter.id;
+
+    void (async () => {
+      await this.closePause();
+      this.presenter?.abort();
+      this.setPresenterPaused(false);
+      this.finish({ kind: 'aborted' });
+
+      // Let the flow finish unwinding. Bounded, so a flow that never settles
+      // costs one dropped menu action rather than a screen that never returns.
+      for (let i = 0; i < 240 && app.current === this; i++) await app.nextFrame();
+
+      if (intent === 'restart') void app.runChapter(chapterId, { skipPrep: true, skipCutscenes: true });
+      else if (intent === 'title') void app.goto('title');
+    })();
+  }
+
   private finish(outcome: BattleOutcome): void {
     const resolve = this.finishedResolve;
     if (!resolve) return;
@@ -246,6 +417,12 @@ export class BattleScreen extends Screen {
   // ------------------------------------------------------------------ frame
 
   override update(dt: number): void {
+    // Play time, for the pause screen's PLAY TIME row. `update` is only called
+    // while this screen is on top, so the clock stops of its own accord the
+    // moment the pause overlay goes up — time spent reading the menu is not
+    // time spent playing. `SaveStore.addPlayTime` buffers the writes.
+    if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
+
     this.scene?.update(dt);
     this.stage?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
@@ -257,6 +434,21 @@ export class BattleScreen extends Screen {
   override handleInput(input: InputSnapshot): void {
     // A mid-battle beat owns the input while it is on screen.
     this.cutscenes?.handleInput(input);
+
+    // The three ways into the pause menu: Esc/Circle, P, and the pad's
+    // Start/Options button (`start`, which `app/Input.ts` also maps to E and
+    // C). `consume` takes the edge so nothing below sees the same press —
+    // Esc in particular is a back button in several places at once.
+    const wantsPause = this.pauseKeyPressed || input.justPressed('start') || input.justPressed('cancel');
+    this.pauseKeyPressed = false;
+    if (wantsPause && this.canPause) {
+      input.consume('start');
+      input.consume('cancel');
+      audio.playSfx('menu-open');
+      void this.openPause();
+      return;
+    }
+
     // Fast-forward is held, not toggled: the FFX convention.
     if (input.justPressed('r1')) this.presenter?.fastForward();
     if (input.justReleased('r1')) this.presenter?.setSpeed('normal');
@@ -270,6 +462,18 @@ export class BattleScreen extends Screen {
   // ---------------------------------------------------------------- triggers
 
   override trigger(name: string): boolean {
+    // Debug beats for the capture tool and e2e. `pause:open` skips `canPause`
+    // on purpose — see that getter — so a screenshot lands on a known frame.
+    if (name === 'pause:open') {
+      if (this.pauseScreen) return true;
+      void this.openPause();
+      return true;
+    }
+    if (name === 'pause:close') {
+      if (!this.pauseScreen) return false;
+      void this.closePause();
+      return true;
+    }
     if (name === 'battle:fast') {
       this.presenter?.setSpeed('fast');
       return true;
@@ -313,6 +517,11 @@ export class BattleScreen extends Screen {
       scenePlaceholder: this.scene?.placeholder ?? null,
       preview: this.preview,
       links: this.links,
+      chainLength: this.chainLength,
+      paused: this.pauseScreen !== null,
+      canPause: this.canPause,
+      exitIntent: this.exitIntent,
+      playTimeMs: this.app.save.playTime(this.opts.chapter.id),
       hud: this.hud !== null,
       rig: this.scene?.battleCamera.rigName ?? null,
       actors: this.stage?.snapshot() ?? [],
@@ -347,6 +556,11 @@ export class BattleScreen extends Screen {
   // -------------------------------------------------------------------- exit
 
   override exit(): void {
+    window.removeEventListener('keydown', this.onPauseKey);
+    // Release anything parked on the pause gate before aborting, so a torn-down
+    // presenter cannot leave a `sleep` awaited forever.
+    this.setPresenterPaused(false);
+    this.app.save.flushPlayTime();
     this.presenter?.abort();
     this.finish({ kind: 'aborted' });
     this.hud?.unmount();

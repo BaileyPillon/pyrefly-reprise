@@ -1,0 +1,55 @@
+{
+  "out": "docs/screenshots/art/auron.png",
+  "title": "Pyrefly Reprise - AURON (art round 3, facing contract v3)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - party faces frame-right",
+  "rows": [
+    {
+      "label": "AURON - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 250,
+      "items": [
+        {
+          "path": "public/art/characters/auron/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/auron/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/auron/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/auron/item.png",
+          "caption": "item"
+        },
+        {
+          "path": "public/art/characters/auron/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/auron/victory.png",
+          "caption": "victory"
+        },
+        {
+          "path": "public/art/characters/auron/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "AURON - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/auron.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

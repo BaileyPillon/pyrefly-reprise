@@ -174,7 +174,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  */
 /**
  * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`).
- * The FFX HUD's CTB queue starts at 0.815 of the canvas, so nothing on the
+ * The FFX HUD's CTB queue starts at 0.843 of the canvas, so nothing on the
  * field may pass 0.79, and the old numbers broke that on both enemies at once:
  * Braska's Final Aeon ran to 0.878 and **`yu-pagoda-left` sat at 0.887..1.009**
  * — a whole destructible part drawn behind the queue and off the right edge of
@@ -182,19 +182,28 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * (`docs/handoff/playability-round-1.md` §4 issue 3).
  *
  * This is the widest boss in the FFX half (0.31 of the frame), so pulling him
- * inside the rail takes both levers: 0.7 units left and 1.5 back. The depth is
- * what pays for most of it — it narrows him to 0.28 *and* lifts his feet from
- * 0.754 to 0.712, clear of the party-status panel's 0.684 top edge — and he
- * still opens the fight 0.28 wide by 0.53 tall, centred at 0.65.
+ * inside the rail takes both levers: 0.85 units left and 1.5 back. The depth is
+ * what pays for most of it — it narrows him to 0.29 *and* lifts his feet from
+ * 0.754 to 0.717, clear of the party-status panel's 0.684 top edge — and he
+ * still opens the fight 0.29 wide by 0.52 tall, centred at 0.64.
+ *
+ * **2.05, not the 2.2 this was first solved to.** At 2.2 he measured 0.785 at
+ * 1600x900 and 0.789 at 1920x1080 — inside the 0.79 rail, but by 0.001, which
+ * is not a margin. He is the widest boss in the FFX half and the rail exists to
+ * absorb exactly the sway-and-quad spread that 0.004 gap is a sample of, so he
+ * takes the same 0.15-unit answer Chapter 1's boss and Chapter 4's did. It buys
+ * 0.010 of frame — measured 0.779 at both 1600x900 and 1920x1080, against
+ * 0.785/0.789 before — costs nothing in size or depth (still 0.288 wide), and
+ * leaves the gutter to party slot 2 (which ends at 0.443) untouched.
  *
  * The two pagodas then read as what they are: a matched pair flanking him at
- * 0.483..0.566 and 0.675..0.750, both whole, instead of one visible pillar and
+ * 0.482..0.567 and 0.674..0.755, both whole, instead of one visible pillar and
  * one rumour behind the HUD.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [2.2, 0, -4.0], // boss       -> x 0.506..0.787, y 0.185..0.712 at `idle`
-  [4.0, 0, -7.4], // right part -> x 0.675..0.750
-  [0.6, 0, -6.0], // left/back  -> x 0.483..0.566
+  [2.05, 0, -4.0], // boss      -> x 0.491..0.779, y 0.190..0.716 at `idle`
+  [4.0, 0, -7.4], // right part -> x 0.674..0.755
+  [0.6, 0, -6.0], // left/back  -> x 0.482..0.567
 ];
 
 /** The slot table `src/scenes/index.ts` can hand to a battle. */

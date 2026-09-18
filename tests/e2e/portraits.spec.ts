@@ -32,6 +32,7 @@ interface PyreflyApi {
   screen(): string;
   goto(name: string): Promise<boolean>;
   frames(n: number): Promise<void>;
+  trigger(name: string): boolean;
 }
 
 type Win = Window & { __pyrefly: PyreflyApi; __pyreflyReady?: boolean };
@@ -108,6 +109,38 @@ async function show(page: Page, screen: string): Promise<void> {
 }
 
 /**
+ * Raise the FFX battle HUD and wait for it to have real geometry.
+ *
+ * `goto('battle')` stages the encounter but leaves the HUD down: FFX's own
+ * opening (`engine/BattleMoments.ts` `battleStart`) keeps the CTB list and
+ * command window off-screen for the party slide and boss reveal, and only
+ * raises them on the way out — and a `goto()` straight to the screen never
+ * runs that opening, so `FFXBattleHud.el.hidden` stays `true` indefinitely.
+ * A hidden ancestor gives every tile a 0x0 box, which is indistinguishable
+ * from a portrait that failed to paint if you only read `getBoundingClientRect`.
+ *
+ * `trigger('hud:on')` is `BattleScreen`'s own debug hook for exactly this
+ * (`BattleScreen.trigger`), so this stays a test of the portrait chips rather
+ * than of the opening cinematic — which is `bp1-moments`' territory and, under
+ * SwiftShader, minutes of animation before a single tile is legible.
+ */
+async function raiseHud(page: Page): Promise<void> {
+  const ok = await page.evaluate(() => (window as Win).__pyrefly.trigger('hud:on'));
+  expect(ok, 'the battle screen must accept the "hud:on" debug trigger').toBe(true);
+  await page.evaluate(() => (window as Win).__pyrefly.frames(4));
+  await page.waitForFunction(
+    () => {
+      const hud = document.querySelector<HTMLElement>('.ffxhud');
+      if (!hud || hud.hidden) return false;
+      const rows = [...hud.querySelectorAll('.ig-ctb__row')];
+      return rows.length > 1 && rows.every((r) => r.getBoundingClientRect().width > 0);
+    },
+    null,
+    { timeout: 15_000 },
+  );
+}
+
+/**
  * Read every `<img>` in the document (or under `selector`) with its loaded
  * size, so a test can say "these all resolved" without caring which screen
  * put them there.
@@ -144,6 +177,7 @@ test.describe('art URLs respect the production base', () => {
 
     await boot(page);
     await show(page, 'battle');
+    await raiseHud(page);
 
     const rows: Row[] = await page.evaluate(() => {
       const list = document.querySelector('[data-role="ctb-list"]');
@@ -176,13 +210,26 @@ test.describe('art URLs respect the production base', () => {
     expect(rows.some((r) => !['tidus', 'yuna', 'kimahri', 'wakka', 'lulu', 'auron', 'rikku'].includes(r.actor))).toBe(true);
 
     for (const row of rows) {
-      const loaded = row.layers.filter((l) => l.natural > 0 && l.width > 0 && l.height > 0);
-      expect(loaded.length, `${row.actor}: the tile must show painted art, not the "${row.fallbackText}" monogram`).toBeGreaterThan(0);
+      // Three failures that look identical in a screenshot, told apart here:
+      // no layer was ever emitted (the renderer never resolved an id), a layer
+      // was emitted and 404'd (a base-path mistake), or it loaded and is not
+      // being painted (the stacking bug, or a collapsed ancestor).
+      expect(
+        row.layers.length,
+        `${row.actor}: the tile has no painted layer at all, only the "${row.fallbackText}" monogram`,
+      ).toBeGreaterThan(0);
 
       for (const layer of row.layers) {
         expect(layer.src ?? '', `${row.actor}: every art URL is built under the deployed base`).toContain(`${base}art/`);
         expect(layer.natural, `${row.actor}: ${layer.src} did not load`).toBeGreaterThan(0);
+        expect(
+          Math.min(layer.width, layer.height),
+          `${row.actor}: ${layer.src} loaded but occupies a 0x0 box — a hidden or collapsed ancestor, not a bad URL`,
+        ).toBeGreaterThan(0);
       }
+
+      const loaded = row.layers.filter((l) => l.natural > 0 && l.width > 0 && l.height > 0);
+      expect(loaded.length, `${row.actor}: the tile must show painted art, not the "${row.fallbackText}" monogram`).toBeGreaterThan(0);
 
       // The stacking half: the monogram is the floor of the chip, so every
       // painted layer above it has to out-rank it. This is what regressed.
@@ -210,6 +257,11 @@ test.describe('art URLs respect the production base', () => {
     // backdrop URLs of their own (`ui/common/portrait.ts`, `PaintedArt.ts`).
     for (const screen of ['battle', 'chapter-select', 'party-prep', 'results', 'cutscene']) {
       await show(page, screen);
+      // The FFX HUD starts down (see `raiseHud`), and a hidden subtree's
+      // computed `background-image` is still readable — but its `<img>` chips
+      // only get a box once it is up, so raise it here too and check the same
+      // screen the player sees.
+      if (screen === 'battle') await raiseHud(page);
 
       const imgs = await imagesUnder(page, '');
       const art = imgs.filter((i) => /\/art\//.test(i.src));

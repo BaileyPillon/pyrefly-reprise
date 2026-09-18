@@ -142,7 +142,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  *
  * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`),
  * which for the FFX HUD ends at 0.79 of the canvas width — the CTB queue's
- * column owns everything right of 0.815. The previous numbers predate that
+ * column can travel as far left as 0.843. The previous numbers predate that
  * measurement and both figures were partly behind it: Seymour reached 0.862 at
  * `idle`, and slot 1 put **Mortiorchis at 0.815..1.128**, i.e. ~70% of the
  * second enemy was under the queue or past the right edge of the screen
@@ -158,13 +158,13 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * and `sway` spends a little more), and at 1600x900 and 1920x1080 the real
  * right edge was **0.793**: over the 0.79 rail, at both resolutions, at every
  * sway phase sampled. 0.25 further left buys 0.021 of frame and lands it at
- * 0.772, which holds the rail with the margin the rail is supposed to have.
+ * 0.763, which holds the rail with the margin the rail is supposed to have.
  * Nothing else moves: he is the same size, the same height and the same depth.
  *
  * Slot 1 is the interesting one. There is no room left of the queue for a
  * second 0.2-wide figure *beside* a 0.23-wide boss, so the slot stops being a
  * flank and becomes a **high back-left float**: 4.6 units behind the boss and
- * 1.85 up, which lands it at 0.496..0.695 across his shoulder rather than off
+ * 1.85 up, which lands it at 0.487..0.700 across his shoulder rather than off
  * the edge of the screen. That is also the right reading for this encounter —
  * Mortiorchis is the thing Seymour is riding, not a second soldier stood next
  * to him — and the lift is what keeps the two silhouettes from merging.
@@ -173,8 +173,8 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * part parked on it (nothing in this chapter uses it) is inside the rail too.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [1.95, 0, -2.45], // boss          -> x 0.527..0.772, y 0.065..0.669 at `idle`
-  [1.8, 1.85, -7.0], // high float    -> x 0.496..0.695, y 0.112..0.353
+  [1.95, 0, -2.45], // boss          -> x 0.531..0.763, y 0.060..0.673 at `idle`
+  [1.8, 1.85, -7.0], // high float    -> x 0.487..0.700, y 0.108..0.358
   [3.35, 0, -6.6], // ground, back-right
 ];
 

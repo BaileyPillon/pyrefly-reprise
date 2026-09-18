@@ -428,3 +428,145 @@ the effect at its true peak. In play a crit flash is a single 260 ms decay.
 | `tests/unit/engine/**`, `presenter-events`, `presenter-playback` | **92 passed**, 0 failed (5 files) |
 | `npx vitest run` (full) | see below |
 
+
+*(That "see below" was never written: the machine went down mid-pass. §9 picks
+it up, and it does not end where §7 and §8 did.)*
+
+---
+
+## 9. Fourth pass, 2026-09-18 ~01:10 — issue 7 was **not** actually closed
+
+Resumed after a machine restart. §7 and §8 both declared issue 7 closed by
+reading the held capture at full-frame size. **That reading was wrong**, and it
+was wrong in a way worth recording, because the same mistake is available to
+anyone verifying a VFX fix from a 1600x900 screenshot: at full-frame size
+Rikku is 130 px wide, and "she is legible" and "a third of her torso is clipped
+to pure white" look the same.
+
+Cropping her out of the frame and counting pixels settles it. Over her
+on-screen box (`left 495, top 420, 130x350` in the 1600x900 captures), counting
+texels at or above 250 in **all three** channels:
+
+| Frame (held capture, pre-fix state of this pass) | clipped to white |
+|---|---:|
+| `04-rikku-cast.png` — **shipped** | **15.1%** |
+| `04-rikku-cast-before.png` — legacy `mix` shader | 3.6% |
+| `05-rikku-crit.png` — shipped | 17.0% |
+| Rikku with no flash and no bloom at all (baseline) | **0.9%** |
+
+The shipped build was clipping *more* of her than the legacy shader it
+replaced. That is not a contradiction of §1: the legacy `mix` turned her flat
+**mint green**, which destroys the painting without ever reaching white, so it
+scores low on a whiteness test and high on every other one. Both builds were
+broken, differently, and §1's shader fix only ever addressed one of them.
+
+### 9.1 The remaining cause: the bloom, again — colour and core this time
+
+§2.4 sized the bloom to its target, which was necessary and is why Paine is no
+longer swallowed. It did not touch the two things that actually drive the
+clipping:
+
+1. **Every bloom was white, whatever the element.** `impactAt` computed
+   `const colour = VFX_COLOURS[key]` and then used it **only** for the
+   full-screen flash branch — `this.hits.flash.play(point, ...)` took no
+   colour, so the quad kept its constructor's `0xdff0ff` for a Cure, a Fire and
+   a physical crit alike. White is the worst possible additive colour: it is
+   the only one that drives R, G and B to clipping together. A mint heal bloom
+   saturates green long before it touches the other two channels, so the figure
+   under it stays readable.
+
+2. **The ramp had a fully opaque centre** — `[0, 1], [0.18, 0.75], …`. With
+   `AdditiveBlending` an alpha of 1.0 in the middle of the disc adds the entire
+   colour on top of the painting, so the core is not a glow, it is a hole. The
+   peak opacity is what §2.4 lowered, but 0.7 x 1.0 still clips anything it
+   covers.
+
+### 9.2 What changed in this pass
+
+| File | Change |
+|---|---|
+| `src/engine/VFX.ts` | `ImpactFlash`'s ramp starts at **0.62** instead of 1.0 and falls away sooner (`[0,0.62] [0.14,0.46] [0.42,0.15] [1,0]`) — same reach, same rim brightness, no opaque core. Default `peakOpacity` **0.7 -> 0.55**. `play()` takes an optional **per-hit colour**. |
+| `src/engine/BattlePresenterStage.ts` | `impactAt` passes its already-computed `colour` into `play()`, so the bloom finally takes the element's colour. Four lines, inside this slot's "flash/tint calls". |
+
+`PaintedActor.ts` and `PaintedShader.ts` were **not** touched in this pass —
+§1's diagnosis of them holds and the A/B below re-proves it.
+
+### 9.3 Measured result
+
+Same capture, same box, same counter:
+
+| | clipped to white |
+|---|---:|
+| `04-rikku-cast.png` before this pass | 15.1% |
+| `04-rikku-cast.png` **after** | **8.6%** |
+| `05-rikku-crit.png` before / after | 17.0% -> **10.4%** |
+
+And those are the *held* captures, which are a deliberate worst case: the
+harness re-fires both flashes every 30 ms and the bloom every 120 ms to pin the
+effect at its peak for as long as the screenshot needs. No frame in play is
+ever that saturated.
+
+`critic/scratch/r2-flash-timeline.mjs` (added this pass) fires the Chapter 4
+cast sequence **once** and samples the real decay, reading the actor's
+`flashAmount` uniform and the live bloom's opacity/scale off the running
+engine at each step:
+
+```
+t00  flash=0.600  bloom opacity=0        clipped=0.7%
+t01  flash=0.169  bloom opacity=0.035    clipped=1.2%
+t02  flash=0.008  bloom gone             clipped=0.3%
+```
+
+**A real cast peaks at 1.2% clipped against a 0.9% baseline** — i.e. within
+noise of Rikku standing still. Issue 7 is closed on a measurement, not on an
+impression. (The sampler is coarse: under SwiftShader a whole 260 ms bloom can
+pass between two captures, so it is evidence about the decay, not proof that
+the single peak frame was caught. The held capture is the number to trust for
+the peak, and it is the one quoted above.)
+
+### 9.4 Captures
+
+Port **5245**, `critic/scratch/r2-flash-shots.mjs`, into
+`docs/screenshots/r2-actor-flash-r5/` — 10 frames, **zero console errors**,
+stage snapshots recording `placeholder: false` for Braska's Final Aeon, Rikku,
+Yuna and Paine. `…-r4/` holds the pre-fix captures from the start of this pass
+and is what the 15.1% row above was measured on.
+
+| Frame | Read directly |
+|---|---|
+| `01-bfa-open.png` | Chapter 3 battle open on the **real painting**: tan musculature, black plate, red diamond rows, horned skull-mask, white hair, greatsword behind the shoulder. The bright wedge at his chest is the **sword blade in the PNG itself** — re-confirmed this pass by reading `public/art/characters/braskas-final-aeon-1/idle.png`, where the blade runs down behind the torso to a pommel with a red gem. |
+| `02-bfa-heal-flash-before.png` | The clean reproduction of **issue 8**: a flat green untextured silhouette, identical to `70/51-bfa.png`. Same battle, same held flash, only the fragment shader swapped. This is the proof it was never the placeholder path and never a stuck tint. |
+| `03-bfa-crit-flash.png` | `flash(0xffffff, 260, 1)` plus a crit bloom, held at peak. Armour, spikes, claws, diamonds, face and sword all still read, and the bloom now sits as two warm glows at the hit points rather than a wash. |
+| `04-rikku-cast.png` | **Issue 7's frame, fixed.** Orange hair, blue bandana, goggles, skin tone, yellow top, green scarf and the blue/orange shoes all read; the effect is a warm glow at her hand and hip. Her silhouette is intact end to end. |
+| `05-rikku-crit.png` | The hardest flash in the game on a party member: lit, not erased, and Paine beside her is untouched. |
+
+### 9.5 Regression test
+
+`tests/unit/engine/impact-bloom.test.ts` (new, 4 tests, jsdom). It pins the
+four things a later tuning pass could silently undo: the bloom never exceeds
+its peak opacity and that default stays well under 1; it decays to 0 and hides
+itself, faster than linear; `play()` honours a per-hit colour and falls back to
+the configured one; and the ramp has **no fully opaque centre texel**. jsdom
+has no 2D canvas context, so the ramp is recorded through a stub — the stops
+are the thing under test anyway.
+
+### 9.6 Gate
+
+| | Result |
+|---|---|
+| `npx tsc --noEmit` | **0 errors in `src/` and `tests/unit/engine/`** |
+| `tests/unit/engine/**`, `presenter-events`, `presenter-playback` | 92 passed, 0 failed |
+| `npx vitest run` (full) | **2,858 passed, 0 failed**, 85 files, 26.1 s |
+
+One caveat on the type-check, stated plainly: `npx tsc --noEmit` is **not**
+globally clean right now. It reports two errors in
+`tests/unit/pause-objectives.test.ts` (`actorId` / `targetId` not on
+`Omit<BattleEvent,'seq'>`), a file that did not exist when this pass started
+and whose mtime moved during it — the pause-screen owner is mid-edit. It
+imports nothing this slot owns, and the full vitest run passes it because
+vitest strips types. Not touched.
+
+**Status: done, and this time on numbers.** Issue 8 was closed in §1 and is
+re-proved here by A/B. Issue 7 was *reported* closed twice and was not; it is
+closed now, from 15.1% of the figure clipped to white down to 8.6% at an
+artificial held peak and 1.2% in real play against a 0.9% floor.

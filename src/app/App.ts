@@ -55,6 +55,8 @@ export class App {
   private running = false;
   private lastRendered: { scene: Scene; camera: Camera } | null = null;
   private readonly frameWaiters: Array<() => void> = [];
+  /** Overlays stacked over the last ordinary screen. See {@link pushOverlay}. */
+  private overlays = 0;
 
   constructor(opts: AppOptions = {}) {
     const gameRoot =
@@ -108,6 +110,19 @@ export class App {
     return this.stack.map((s) => s.name);
   }
 
+  /**
+   * The screen stack, bottom first.
+   *
+   * Exposed for callers that need the screen *under* an overlay: the debug
+   * API's `battle()` used to be "is the top screen a BattleScreen?", which
+   * silently became false the moment the pause menu went up — and every e2e
+   * assertion about the live battle with it. Read-only; navigation still goes
+   * through `push` / `pop` / `replace`.
+   */
+  get screens(): readonly Screen[] {
+    return this.stack;
+  }
+
   async push(screen: Screen): Promise<void> {
     this.current?.suspend();
     screen.app = this;
@@ -128,9 +143,60 @@ export class App {
   }
 
   /** Replace the top screen with a registered one. Returns false if unknown. */
+  // ------------------------------------------------------------- overlays
+
+  /**
+   * Push a screen that **freezes** the one below instead of replacing it —
+   * the pause menu (`app/screens/PauseScreen.ts`).
+   *
+   * There is very little to it, and that is the point: `step()` already
+   * updates only the top screen, and `render()` already falls back to
+   * `lastRendered` when the top screen returns null. So a screen that draws no
+   * scene of its own leaves the battle diorama exactly as it was on the frame
+   * the overlay went up — still drawn every frame (the pause art sits *over* a
+   * live render, not over a still) but no longer ticked. Nothing about the
+   * battle advances: not the stage, not the HUD, not `BattleScreen.update`'s
+   * play-time accumulation.
+   *
+   * What this adds over a bare {@link push} is the bookkeeping — {@link
+   * overlayDepth} / {@link overlayActive}, which the debug API reports and
+   * which stops a second Esc from stacking two pause menus — and one honest
+   * name for the intent at the call site.
+   *
+   * It does **not** freeze anything driven by its own timers rather than by
+   * this loop. `BattlePresenter` is the one that matters, and it is frozen at
+   * the other end: `BattleScreen` hands the presenter a `sleep` that parks on
+   * a gate while the overlay is up. See that file's `pauseGate`.
+   */
+  async pushOverlay(screen: Screen): Promise<void> {
+    this.overlays++;
+    await this.push(screen);
+  }
+
+  /** Pop an overlay pushed with {@link pushOverlay}. */
+  async popOverlay(): Promise<void> {
+    if (this.overlays <= 0) return;
+    this.overlays--;
+    await this.pop();
+  }
+
+  /** How many overlays are stacked over the last ordinary screen. */
+  get overlayDepth(): number {
+    return this.overlays;
+  }
+
+  /** True while an overlay is up and the screen below is frozen. */
+  get overlayActive(): boolean {
+    return this.overlays > 0;
+  }
+
   async goto(name: string): Promise<boolean> {
     const factory = this.registry.get(name);
     if (!factory) return false;
+    // A named jump leaves the whole stack behind, overlays included — the
+    // pause menu's QUIT TO TITLE is exactly this — so the overlay count must
+    // not survive it and make the next Esc think one is still up.
+    this.overlays = 0;
     if (this.stack.length === 0) await this.push(factory());
     else await this.replace(factory());
     return true;
@@ -224,6 +290,7 @@ export class App {
     return {
       screen: this.screenName,
       stack: this.stackNames,
+      overlayDepth: this.overlays,
       frameCount: this.frameCount,
       elapsed: Number(this.elapsed.toFixed(3)),
       registered: this.registered,

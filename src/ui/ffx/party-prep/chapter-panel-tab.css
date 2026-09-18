@@ -1,0 +1,182 @@
+/*
+ * The prep menu's CHAPTER tab (`ChapterPanel.ts`).
+ *
+ * The dossier's own type and rules come from `src/ui/common/chapter-panel.css`
+ * via `.cpanel cpanel--paper`; everything here is the tab's frame — the hero
+ * painting used as a background slab behind the ivory sheet's own ground, and
+ * the two-column split that keeps the copy off the art.
+ *
+ * Authored on the shared 640x360 grid (`LetterboxStage.ts`): every literal is
+ * its 1440 mockup value / 2.25 and carries that value in a comment.
+ *
+ * Scoping (docs/CONTRACT-CHANGES.md decision 10): consumer stylesheet, no bare
+ * `.ig-*` rules — only `.prepchap*` and the one `.prep__sheet` rule below,
+ * reading the shared layer's custom properties.
+ */
+
+/*
+ * Raise the sheet for this tab, exactly as `party-prep.css` already does for
+ * the Sphere Grid.
+ *
+ * Every other tab is a short list and lets the slab sit at its content height
+ * under the tab strip. This one is a full-height briefing, so it wants the
+ * whole gap between the tab strip and the shell's hint line at 213.33 — and
+ * without this it would grow *downwards* past that hint and print the copy
+ * through it.
+ *
+ * The selector is the sibling of the one in `party-prep.css` and follows the
+ * tab strip automatically: `PartyPrepScreen` shows and hides panel containers
+ * with `hidden` rather than rebuilding them, and no panel can reach its own
+ * slab to toggle a class. It lives here rather than in the shell's stylesheet
+ * because it is this tab's requirement, and the shell does not own it.
+ */
+.prep__sheet:has(> .prep__sheet-inner > .prep__panel[data-panel='chapter']:not([hidden])) {
+  top: 66px; /* 148.5 */
+}
+
+.prepchap {
+  position: relative;
+  /* The band between the raised sheet top and the shell's hint line, less the
+     sheet's own padding. Fixed rather than min/max so the slab cannot grow
+     into the hint no matter how long a chapter's copy runs; `overflow: hidden`
+     is the backstop, and the columns below are sized to fit inside it. */
+  height: 120px; /* 270 */
+  /* Bleed to the sheet's padding edge so the painting reads as the tab's
+     ground rather than as an inset picture. Matches `.prep__sheet`'s own
+     24/34/22 padding on the 1440 grid. */
+  margin: -10.67px -15.11px -9.78px;
+  padding: 8.89px 15.11px 8.89px; /* 20 34 20 */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/*
+ * The hero painting, laid in behind the copy.
+ *
+ * Multiple `background-image` layers, best first — see `heroBackground()` in
+ * `ChapterPanel.ts` for why that is the whole fallback mechanism. Anchored
+ * right because the copy runs down the left: the subject's face lands in the
+ * empty half rather than under the blurb.
+ */
+.prepchap__hero {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: 70% 32%;
+  background-repeat: no-repeat;
+}
+
+/*
+ * An ivory ramp from the left, so the sheet's own paper ground carries the
+ * type and the painting fades in on the right — the mirror of the pause
+ * screen's ink ramp, in the other colour.
+ *
+ * It stays **fully opaque past the last column of copy** rather than fading
+ * through it. The five hero paintings are not tonally alike: Chapter 1's is a
+ * dark blue night and Chapter 4's is a pale blonde close-up, and a ramp tuned
+ * to look good over the first one left the second one's objectives sitting on
+ * near-white paint, unreadable. Legibility cannot be a per-chapter accident,
+ * so the copy owns the left 80% outright and the art gets the rest.
+ */
+.prepchap__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    96deg,
+    rgba(244, 241, 232, 0.99) 0%,
+    rgba(244, 241, 232, 0.99) 62%,
+    rgba(244, 241, 232, 0.94) 78%,
+    rgba(244, 241, 232, 0.3) 91%,
+    rgba(244, 241, 232, 0.06) 100%
+  );
+}
+
+.prepchap__cols {
+  position: relative;
+  height: 100%;
+  /* Stops where the wash above stops being opaque; the band to the right of
+     this is the painting's. */
+  width: 80%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  gap: 0 11.56px; /* 0 26 */
+  align-content: start;
+}
+.prepchap__col {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* The objectives column is a briefing, and sits a touch lower than the title
+   column so the two do not read as one wrapped block. */
+.prepchap__col--brief {
+  padding-top: 3.56px; /* 8 */
+}
+.prepchap__col--brief .cpanel__head {
+  margin-top: 0;
+}
+
+/*
+ * Tighter than the pause screen's copy, because this band is half as tall.
+ *
+ * The location line goes entirely: the shell already prints
+ * `I - SEYMOUR FLUX - MT. GAGAZET - THE PROMINENCE` across the top right of
+ * this very screen, and saying it twice costs a line the snapshots need.
+ */
+.prepchap__cols .cpanel__title {
+  font-size: 16.89px; /* 38 */
+}
+.prepchap__cols .cpanel__where {
+  display: none;
+}
+.prepchap__cols .cpanel__blurb {
+  margin-top: 4px; /* 9 */
+  font-size: 5.11px; /* 11.5 */
+  line-height: 1.45;
+}
+.prepchap__cols .cpanel__snaps {
+  margin-top: 4.44px; /* 10 */
+  gap: 4.44px; /* 10 */
+}
+.prepchap__cols .cpanel__snap-img {
+  height: 14.22px; /* 32 */
+}
+/*
+ * One line, hard.
+ *
+ * The shared rule clamps to two lines with `-webkit-line-clamp`, which is the
+ * right call where there is room for two. There is not here, and a clamp that
+ * disagrees with its container's height clips the second line halfway through
+ * the letters instead of ending the caption cleanly. A plain nowrap ellipsis
+ * has no such failure mode.
+ */
+.prepchap__cols .cpanel__snap-cap {
+  font-size: 4.44px; /* 10 */
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 1.78px; /* 4 */
+}
+/* The tile is a photograph pinned to a page that is already paper, so it
+   needs an edge the pause screen's ink ground gave it for free. */
+.prepchap__cols .cpanel__snap {
+  box-shadow: 0 1.33px 3.56px rgba(11, 10, 18, 0.28);
+  outline: 0.44px solid rgba(11, 10, 18, 0.12);
+}
+
+.prepchap__fallback h2 {
+  margin: 0;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 17.78px; /* 40 */
+  font-style: italic;
+  font-weight: 700;
+  color: var(--ig-ink, #0b0a12);
+}
+.prepchap__fallback p {
+  margin: 4.44px 0 0; /* 10 */
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: 5.78px; /* 13 */
+  line-height: 1.6;
+  color: rgba(11, 10, 18, 0.7);
+}

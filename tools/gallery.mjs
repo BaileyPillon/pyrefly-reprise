@@ -87,6 +87,65 @@ async function settle(page, frames = 30, ms = 350) {
   await page.evaluate(() => window.__pyrefly.frames(6));
 }
 
+/**
+ * Wait for the battle HUD to be on screen, frame-driven.
+ *
+ * A chapter no longer opens on its battle HUD: `BattleMoments.battleStart`
+ * hides it (`HudPort.setVisible(false)`), slides the party in, pushes on the
+ * boss for the reveal plate, and only hands the HUD back in its `finally`.
+ * Under SwiftShader that opening outlasts a plain `settle()`, so a capture
+ * taken straight after `waitForScreen('battle')` lands *inside the opening* —
+ * on the intro camera rig, with no CTB list, no party window and no numerals.
+ * That is what `docs/screenshots/80/50..53` were on the first pass.
+ *
+ * Polled on rendered frames rather than wall clock, for the same reason
+ * `docs/handoff/r2-skip-beats.md` gives: the opening is advanced by `update(dt)`
+ * and a software renderer's frames are slow, so a timer races the animation.
+ */
+async function waitForHud(page, frames = 900) {
+  return page.evaluate(async (budget) => {
+    const up = () => {
+      const el = document.querySelector('.ffxhud, .ffx2hud');
+      if (!el || el.hidden) return false;
+      return el.getBoundingClientRect().height > 0;
+    };
+    for (let i = 0; i < budget; i++) {
+      if (up()) return { ok: true, frames: i };
+      await window.__pyrefly.frame();
+    }
+    return { ok: false, frames: budget };
+  }, frames);
+}
+
+/** Is the battle HUD on screen right now? */
+function hudUp(page) {
+  return page.evaluate(() => {
+    const el = document.querySelector('.ffxhud, .ffx2hud');
+    return !!el && !el.hidden && el.getBoundingClientRect().height > 0;
+  });
+}
+
+/**
+ * Wait for the HUD *and* still have it when the settle is done.
+ *
+ * A chained encounter replays the opening for **every link** — Chapter 3 is 7
+ * links and Chapter 5 is 5 — so `waitForHud` on its own only proves the HUD was
+ * up at that instant. Measured with `critic/scratch/zz-r2-ch5probe.tmp.mjs`:
+ * over 960 frames of `ffx2-vegnagun-shuyin` the HUD went down twice, both times
+ * on a link change, which is what put `docs/screenshots/80/51` and `53` on an
+ * intro rig with no HUD. So: wait, settle, and if the settle crossed a link
+ * boundary, wait again.
+ */
+async function settleOnHud(page, attempts = 6) {
+  for (let i = 0; i < attempts; i++) {
+    const hud = await waitForHud(page);
+    if (!hud.ok) return { ok: false, attempt: i, reason: 'hud never came up' };
+    await settle(page, 20, 300);
+    if (await hudUp(page)) return { ok: true, attempt: i };
+  }
+  return { ok: false, attempts, reason: 'hud kept going down (link changes)' };
+}
+
 /** Screenshot to docs/screenshots/<name>. */
 async function shot(page, name) {
   const out = join(OUT_DIR, name);
@@ -683,7 +742,10 @@ async function captureOtherChapters(page) {
         note(`${id}: battle screen never opened`);
         continue;
       }
-      await settle(page, 60, 600);
+      // The opening moment owns the camera and keeps the HUD down; wait it out
+      // or the frame is the intro rig rather than the fight.
+      const hud = await settleOnHud(page);
+      if (!hud.ok) note(`${id}: ${hud.reason} — ${file} is an opening frame, not the fight`);
       await freezeShot(page, file);
       const snap = await page.evaluate(() => window.__pyrefly.snapshotState().screenState ?? {});
       report.steps.push({

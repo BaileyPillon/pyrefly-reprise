@@ -169,12 +169,18 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 const PARTY_SLOTS: Array<[number, number, number]> = [
   [-2.05, 0, 1.45], // front-left  (Yuna)
   [-1.3, 0, 0.1], // middle, stepped right and back (Rikku)
-  // Back-right (Paine). 0.45 further left than the table above records: the
-  // boss had to come in off the HUD rail (see {@link ENEMY_SLOTS}) and at his
-  // new x his left wingtip reached 0.430 of the canvas, which is where this
-  // slot's shoulder was. The nudge re-opens the gutter — Paine now reads
-  // 0.372..0.444 against a wing that starts at 0.430 — and costs the formation
-  // nothing: separation from slot 1 stays above 130px at `idle` and `action`.
+  // Back-right (Paine). 0.45 further left than this slot used to sit, and the
+  // only party slot the HUD safe-area pass moved: pulling the boss off the
+  // FFX-2 rail (see {@link ENEMY_SLOTS}) brought his left wing across this
+  // slot's column, and at the old x the figure and the wing were converging on
+  // the same patch of frame rather than reading as foreground and background.
+  //
+  // Measured at `idle`, 1600x900: Paine 0.361..0.444 x, 0.443..0.743 y; the
+  // wing edge above her reaches 0.410 x but only 0.120..0.350 y. So the two do
+  // share a column — they are meant to, the boss is behind her — and the
+  // separation that keeps her readable is **vertical**: her head tops out
+  // 0.09 of frame below the wing's lower edge. That margin is what the nudge
+  // bought, and it survives the `action` rig's push-in.
   [-0.9, 0, -1.5],
   // reserve — outside every rig's frustum, including `victory`'s left swing
   [-12.0, 0, 2.6],
@@ -201,10 +207,20 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * (see the `bahamut` rig). Exceeding the frame is the intent; exceeding it
  * *into the menu* is not.
  *
- * 2.1 units left and 2.8 back put him at 0.430..0.713: still 0.28 of the frame
- * wide and 0.47 tall, still the largest thing in the shot, with both wings
+ * 2.25 units left and 3.2 back put him at 0.408..0.706: still 0.30 of the frame
+ * wide and 0.50 tall, still the largest thing in the shot, with both wings
  * whole and a clear gutter before the stack. The depth also lifts his feet to
  * 0.61, well above the party column's 0.722 top edge.
+ *
+ * **-5.8, not the -5.4 this was first solved to.** At -5.4 he measured
+ * 0.415..0.722 on one pass and 0.421..0.714 on another: a 0.008 swing, because
+ * the wings beat and the rig sways, and the higher of the two is over the rail.
+ * That is the same failure mode Chapter 1's boss had — a slot solved to one
+ * projection rather than to the rail plus its margin — so it takes the same
+ * answer. 0.4 more depth and 0.15 more left buy 0.014 of headroom, which is
+ * wider than the swing, and cost under 3% of his on-screen height. He does not
+ * fall into the pit doing it: `((1.05 - 2.4)/2.5)^2 + ((-5.8 + 7.8)/1.6)^2` is
+ * 1.85, comfortably outside {@link HOLE}'s ellipse.
  *
  * Nothing in this chapter uses slots 1 and 2 — Bahamut has no parts — but they
  * move with him so a future formation cannot inherit the old collision.
@@ -219,7 +235,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * HUD rail's 0.72 column.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [1.2, 0, -5.4], // boss -> x 0.430..0.713, y 0.138..0.610 at `idle`
+  [1.05, 0, -5.8], // boss -> x 0.408..0.706, y 0.115..0.615 at `idle`
   [3.5, 0, -5.4], // right part
   [-1.1, 0, -6.6], // left / back part
 ];

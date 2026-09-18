@@ -333,6 +333,7 @@ down to the top of the actual plane, so damage numerals land over the body.
 | `side` | `'party'` \| `'enemy'` \| `'aeon'`. The one you want: it sets `facing` from the team. |
 | `facing` | Which way the **body** is turned: `1` toward +x, `-1` toward -x. Not a mirror instruction — see [Facing](#facing-two-numbers-not-one). |
 | `artFacing` | Which way this subject's *paintings* face when their sidecars do not say. Default `'auto'` = "already correct for its side", never mirrored. |
+| `interimYaw` | Degrees of [interim turn](#the-interim-turn) for art that is still straight-on. Default 26; `false` or `0` keeps the plane flat to camera. |
 | `turnRing` | `true`, or `{ color, radius, opacity }`, for the soft ground ring under whoever is acting. **Off by default**; the battle stage opts in. |
 | `life` | `false` to make `setPose` a plain texture swap — hand-animated scene demos want this. |
 | `crossfadeMs` | Pose crossfade. Default 120. |
@@ -369,6 +370,7 @@ down to the top of the actual plane, so damage numerals land over the body.
 | `moveTo(pos, ms?, easing?)` | Promise; tweens `position`. |
 | `setFacing(1 \| -1)`, `setSide(side)`, `facingDir` | Turn the body. |
 | `setArtFacing(a)`, `artFacingDir`, `mirrored` | Declare which way the art faces, and read back whether the plane is actually being drawn flipped. |
+| `setInterimYaw(deg)`, `interimYawDeg`, `yawDeg` | The [interim turn](#the-interim-turn): how far a still-frontal painting's plane is yawed toward the enemy, and the eased value on the planes right now. |
 | `setTurnRing(on)` / `clearTurnRing()` | Take the ring off the life layer and drive it by hand, and give it back. |
 | `setBrightness(m)`, `setTint(c)`, `setRimLight(c, s, dir?)`, `setBounceLight(c, s)` | Drive the look from the scene's light rig. |
 | `headPoint(out?)`, `centerPoint(out?)`, `height` | Anchors for VFX and damage numerals. Both follow the pose: over a prone body they aim at the plane's top, not at where the head used to be. |
@@ -426,6 +428,67 @@ otherwise right-facing set declares `"facing": "front"` in its own sidecar and
 is left alone while its neighbours are not. `PaintedArt.loadSubject` also
 surfaces the subject-level default it found as `subject.facing`, which is what
 `PaintedActor.fromSubject` hands to `setArtFacing`.
+
+### The interim turn
+
+**Interim, and it deletes itself.** The v3 contract has every battlefield
+subject *painted* at ~45° toward the other team, and the roster is being
+re-rendered to it one subject at a time. Until a given painting lands, the
+figure meets the camera's eye while supposedly fighting someone stood beside
+it. So the engine yaws the **plane** toward the enemy instead: party and aeons
+toward +x, fiends toward -x, `INTERIM_YAW_DEG` (26) either way.
+
+```ts
+interimYawFor('front', 1)      // +26  — v2 straight-on, turn it
+interimYawFor(undefined, -1)   // -26  — nothing declared, assume v2
+interimYawFor('right', 1)      //   0  — painted turned already; leave it
+interimYawFor('left', -1)      //   0
+```
+
+The `undefined` row is a **deliberate divergence from `mirrorFor`**, which
+reads the same silence as "already correct for its side, do not flip". For the
+mirror that is the safe assumption; here the safe one is the opposite, because
+everything in `public/art/characters/` that has not been re-rendered is
+straight-on and says nothing about it. An explicit `right` / `left` is the only
+thing that opts a pose out — which is exactly what `flip.py` and the generator
+write the moment a repaint lands, so this layer switches itself off subject by
+subject as the art fleet ships. It is **per pose**, like the mirror: a v3 `idle`
+sits flat while the same subject's un-rendered `cast` is still turned by the
+engine.
+
+Turning a plane is not painting a figure turned — the far shoulder does not
+come forward — but a foreshortened plane with a near edge and a far edge reads
+as a body angled into the fight. 26° is where that stops being invisible and
+has not yet become a squeeze: at 18° it is indistinguishable from flat, and by
+42° a frontal figure just looks compressed (`docs/screenshots/bp1/yaw-sweep-*`).
+
+`clampYawToCamera(yaw, camAzimuth, maxOff)` is the guard on the other side. A
+yawed plane is still a plane, and turned square to the view it flattens to a
+line, so the turn is given back as the camera swings round the side —
+**always somewhere between 0 and the full yaw**, never reversed, because a
+fiend turning away from the party to keep its plane toward the lens is a worse
+lie than a flat cut-out. `camAzimuth` is `atan2(dx, dz)` from the figure to the
+camera, in degrees: the same frame as the yaw, so a plane yawed to exactly
+`camAzimuth` faces the camera square on. `PaintedActor` harvests it in
+`onBeforeRender` — the main pass only, since the shadow pass goes through
+`onBeforeShadow` — so no caller has to hand an actor a camera. At every chapter-1
+rig the turn lands 5–23° off the view axis and nothing is clamped
+(`MAX_YAW_OFF_CAMERA_DEG` is 34).
+
+The yaw rides on the actor's inner group, which carries both planes and nothing
+else, so:
+
+- the plane's bottom edge stays in the ground plane (a rotation about Y moves no
+  y), and the contact shadow and turn ring are siblings that stay lying flat;
+- `lunge` and `recoil` are `inner.position`, applied *after* the rotation, so
+  forward is still world ±x however far the body is turned;
+- it is faded out with the same `upright` weight as the sway and the posture
+  tilt, so a prone KO painting — a *wide* plane, whose corners swing furthest —
+  lies flat.
+
+`window.__pyrefly.interimYaw(on?)` turns it off and on for every actor on the
+field, for an A/B against the same staged frame:
+`docs/screenshots/bp1/yaw-before.png`, `yaw-after.png`, `yaw-action.png`.
 
 ### Life: the pose name is also a state
 
@@ -807,7 +870,10 @@ Two things about the numbers:
   runs to the plane's edge — so the safe area sits well inside the panel it is
   protecting, and a slot solved to the panel rather than to the rail will cross
   it on some sway phase. Chapter 1's boss did exactly that: solved from his
-  nominal width to 0.783, measured at 0.793.
+  nominal width to 0.783, measured at 0.793. **Measure more than once**, too —
+  Chapter 4's Bahamut measured 0.714 on one pass and 0.722 on the next, because
+  his wings beat; a slot is only inside the rail if its *widest* sampled phase
+  is. Leave at least 0.01 of headroom and re-measure.
 - **The bottom rail is soft, and only for feet.** A ground-planted boss's *quad*
   may descend a little past it, because the quad has transparent margin under
   the painted feet and because the party column is bottom-anchored under the

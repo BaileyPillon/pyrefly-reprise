@@ -12,12 +12,17 @@ import {
   ShaderMaterial,
   Vector2,
   Vector3,
+  type Camera,
   type Texture,
 } from 'three';
 import {
   ActorLife,
+  approach,
   attackOffset,
+  clampYawToCamera,
   facingForSide,
+  INTERIM_YAW_DEG,
+  interimYawFor,
   lifeStateForPose,
   mirrorFor,
   nextLifeState,
@@ -90,6 +95,17 @@ export interface PaintedActorOptions {
    * declares its own `facing` overrides this for that pose only.
    */
   artFacing?: ArtFacing;
+  /**
+   * The interim turn, in degrees: how far a still-frontal painting's plane is
+   * yawed toward the enemy so it is not meeting the camera's eye mid-fight.
+   *
+   * Defaults to
+   * {@link import('./BattlePresenterActors.ts').INTERIM_YAW_DEG}. `false` or
+   * `0` opts this actor out — art painted to the v3 contract opts *itself* out
+   * through its sidecar, so this is for a screen that wants a flat billboard
+   * on purpose (a menu portrait, a diorama shot straight down the axis).
+   */
+  interimYaw?: number | false;
   /**
    * The soft ground ring that marks whose turn it is.
    *
@@ -256,6 +272,36 @@ function ringTexture(): Texture {
 }
 
 const TAU = Math.PI * 2;
+const DEG2RAD = Math.PI / 180;
+const RAD2DEG = 180 / Math.PI;
+
+/** How long the interim turn takes to settle, seconds. */
+const YAW_TAU = 0.18;
+
+/**
+ * The global A/B switch behind `window.__pyrefly.interimYaw(on)`.
+ *
+ * Module-level rather than per-actor on purpose: the toggle exists to compare
+ * two captures of the *same staged field*, and every actor has to answer to it
+ * on the same frame. Each actor keeps its own angle
+ * ({@link PaintedActor.setInterimYaw}); this only says whether the angle is
+ * being applied at all.
+ */
+let interimYawOn = true;
+
+/** Turn the interim yaw on or off for every painted actor on the field. */
+export function setInterimYawEnabled(on: boolean): void {
+  interimYawOn = on;
+}
+
+/** Whether the interim yaw is currently being applied. */
+export function isInterimYawEnabled(): boolean {
+  return interimYawOn;
+}
+
+/** Scratch for the per-frame camera azimuth. Read and dropped inside one call. */
+const yawScratchA = new Vector3();
+const yawScratchB = new Vector3();
 
 /** Where a hit tints the painting for a moment — a warm, bruised red. */
 const HURT_TINT = 0xff9f8e;
@@ -297,6 +343,12 @@ const clamp01 = (v: number): number => (v < 0 ? 0 : v > 1 ? 1 : v);
  * aims the lunge and the lean; whether the *plane* is mirrored depends on which
  * way the painting was painted (`artFacing`, or the pose sidecar's `facing`).
  * Art that already faces the right way for its side is never flipped.
+ *
+ * On top of that sits the **interim turn**: until a subject is re-rendered to
+ * the v3 contract (painted at ~45° toward the enemy), its straight-on plane is
+ * *yawed* toward the other team so it is not addressing the camera mid-fight.
+ * A pose whose sidecar already declares `right` or `left` is left flat.
+ * `window.__pyrefly.interimYaw(false)` turns the whole thing off for an A/B.
  *
  * The API is deliberately parallel to {@link SpriteActor}: `update(dt)`,
  * `flash`, `shake`, `fadeTo`, `setAlpha`, `moveTo`, `setFacing`,
@@ -349,6 +401,18 @@ export class PaintedActor extends Group {
   private facing: 1 | -1 = 1;
   /** What this subject's paintings face when a sidecar does not say. */
   private artFacing: ArtFacing;
+  /** This actor's interim turn, in degrees. 0 = flat to camera. */
+  private interimYaw: number;
+  /** The eased, applied yaw in degrees — what is on `inner.rotation.y`. */
+  private appliedYaw = 0;
+  /**
+   * Which way the camera lies from this figure, as a yaw in degrees
+   * (`atan2(dx, dz)`), harvested in `onBeforeRender` so the actor never has to
+   * be handed a camera. Null until the first frame has rendered.
+   */
+  private viewAzimuth: number | null = null;
+  /** False until the first `update`, which lands the yaw rather than easing it. */
+  private yawPrimed = false;
   private _alpha = 1;
   private baseBrightness: number;
   private readonly castsShadow: boolean;
@@ -459,6 +523,8 @@ export class PaintedActor extends Group {
     this.beatOffset = beatOffsetFor(this.name);
     this.life = opts.life === false ? null : new ActorLife();
     this.artFacing = opts.artFacing ?? 'auto';
+    this.interimYaw = 0;
+    if (opts.interimYaw !== false) this.setInterimYaw(opts.interimYaw ?? INTERIM_YAW_DEG);
 
     this.u = {
       brightness: { value: this.baseBrightness },
@@ -612,6 +678,14 @@ export class PaintedActor extends Group {
     mesh.frustumCulled = false;
     mesh.renderOrder = renderOrder;
     mesh.visible = false;
+    // The camera comes to *us*. `onBeforeRender` fires on the main pass only
+    // (the shadow pass goes through `onBeforeShadow`, which `Object3D` no-ops),
+    // so the interim yaw can answer to a rig that has swung round the side
+    // without `PaintedStage` having to hand every actor a camera, and without
+    // this class growing a reference to one it would then have to keep current.
+    mesh.onBeforeRender = (_renderer, scene, camera): void => {
+      if (scene) this.noteViewCamera(camera);
+    };
 
     let depth: MeshDepthMaterial | null = null;
     if (this.castsShadow) {
@@ -1313,6 +1387,51 @@ export class PaintedActor extends Group {
     return this.artFacing;
   }
 
+  // ------------------------------------------------------------ interim turn
+
+  /**
+   * Set this actor's interim turn, in degrees — how far a still-frontal
+   * painting's plane is yawed toward the enemy. 0 leaves it flat to camera.
+   *
+   * The *sign* is not this: which way the plane turns comes from the body's
+   * facing (party +x, enemies -x), and a pose whose sidecar already says
+   * `right` or `left` is left flat however large this is, because it was
+   * painted turned and turning it again makes a profile. See
+   * {@link import('./BattlePresenterActors.ts').interimYawFor}.
+   */
+  setInterimYaw(deg: number): void {
+    this.interimYaw = Number.isFinite(deg) ? Math.abs(deg) : 0;
+  }
+
+  /** This actor's interim turn, in degrees. */
+  get interimYawDeg(): number {
+    return this.interimYaw;
+  }
+
+  /** The yaw actually on the planes right now, in degrees. Debug + tests. */
+  get yawDeg(): number {
+    return this.appliedYaw;
+  }
+
+  /** Where the yaw is easing to, in degrees: the rule, clamped to the camera. */
+  private yawTarget(): number {
+    if (!interimYawOn || this.interimYaw === 0) return 0;
+    const art = this.slots[this.active]!.meta.facing ?? this.artFacing;
+    const want = interimYawFor(art, this.facing, this.interimYaw);
+    if (want === 0) return 0;
+    return this.viewAzimuth === null ? want : clampYawToCamera(want, this.viewAzimuth);
+  }
+
+  /** Where the camera lies from here, as a yaw in degrees. From the renderer. */
+  private noteViewCamera(camera: Camera): void {
+    const here = this.getWorldPosition(yawScratchA);
+    const eye = camera.getWorldPosition(yawScratchB);
+    const dx = eye.x - here.x;
+    const dz = eye.z - here.z;
+    if (dx === 0 && dz === 0) return;
+    this.viewAzimuth = Math.atan2(dx, dz) * RAD2DEG;
+  }
+
   /** -1 when this pose has to be flipped to face the way the body is turned. */
   private mirrorOf(meta: PoseMeta): 1 | -1 {
     return mirrorFor(meta.facing ?? this.artFacing, this.facing);
@@ -1483,6 +1602,27 @@ export class PaintedActor extends Group {
     // rotated far enough shows the corners of its own PNG.
     const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
     this.inner.rotation.z = sway + bodyTilt;
+
+    // --- the interim turn --------------------------------------------------
+    // The plane yawed toward the enemy, for art that has not been repainted
+    // turned yet. It rides on `inner`, which carries both planes and nothing
+    // else: the contact shadow and the turn ring are siblings and stay lying
+    // flat on the ground, and the lunge (`inner.position`) is applied after the
+    // rotation, so "forward" is still world ±x however far the body is turned.
+    // Faded out with `upright` for the same reason the sway and the posture
+    // tilt are — a prone painting is a *wide* plane, and swinging one in depth
+    // shows the corners of its own PNG.
+    const yawWanted = this.yawTarget() * upright;
+    if (this.yawPrimed) {
+      this.appliedYaw = approach(this.appliedYaw, yawWanted, YAW_TAU, dt);
+    } else {
+      // The field opens already turned. Nobody swings into their stance on the
+      // first half-second of a battle, and a capture taken at frame 2 would
+      // otherwise catch every fighter mid-swing.
+      this.yawPrimed = true;
+      this.appliedYaw = yawWanted;
+    }
+    this.inner.rotation.y = this.appliedYaw * DEG2RAD;
 
     // --- turn highlight ----------------------------------------------------
     if (this.turnRing) {

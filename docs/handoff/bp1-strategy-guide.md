@@ -184,13 +184,16 @@ helpers fall back to the shipped default and the write is a no-op.
 ## 6. Verification
 
 ```
-npx tsc --noEmit          # clean for these files
-npx vitest run            # 80 files, 2715 tests, all green
+npx tsc --noEmit          # clean, whole tree
+npx vitest run            # 85 files, 2858 tests, all green
 ```
 
-The only `tsc` output in the tree is three pre-existing errors in
-`src/ui/common/DamageNumbers.ts`, which the numerals agent owns and was
-mid-edit on. Nothing in this change touches it.
+Re-run after the restart, against a tree several other agents had moved on in
+the meantime (the file count is up from 82 and the test count from 2783 purely
+from their work). `tsc` is now clean across the whole tree: the three errors in
+`src/ui/common/DamageNumbers.ts` noted in an earlier draft of this document were
+the numerals agent's mid-edit state and they have since finished. Nothing here
+touches that file.
 
 New tests, 52 in total:
 
@@ -221,6 +224,57 @@ On port 5304, driving the real game through `window.__pyrefly`:
 | `docs/screenshots/bp1/guide-ffx-watch.png` | FFX with a live telegraph in WATCH |
 | `docs/screenshots/bp1/guide-ffx2-on.png` | FFX-2, Chapter 4, guide up |
 | `docs/screenshots/bp1/guide-ffx2-off.png` | same board, guide off |
+
+Reproduced with `critic/scratch/bp1-guide-shot2.mjs`:
+
+```
+node critic/scratch/bp1-guide-shot2.mjs --chapter=seymour-flux  --frames=150 --out=...guide-ffx-on.png
+node critic/scratch/bp1-guide-shot2.mjs --chapter=seymour-flux  --frames=150 --keys=g --out=...guide-ffx-off.png
+node critic/scratch/bp1-guide-shot2.mjs --chapter=ffx2-bahamut  --frames=150 --out=...guide-ffx2-on.png
+node critic/scratch/bp1-guide-shot2.mjs --chapter=ffx2-bahamut  --frames=150 --keys=g --out=...guide-ffx2-off.png
+node critic/scratch/bp1-guide-shot2.mjs --dev --url=http://127.0.0.1:5304/ \
+     --chapter=seymour-flux --frames=150 --watch --out=...guide-ffx-watch.png
+```
+
+Four of the five run against `npx vite preview --outDir critic/scratch/prod-strategy-guide
+--port 5304` (so `/pyrefly-reprise/`). Three things about this are worth writing
+down, because the obvious script does not work:
+
+* **`frames()` must be pumped, and in chunks.** The battle only advances while
+  the pump is driven, so parking on a bare `page.waitForFunction` deadlocks —
+  nothing moves and the condition never arrives. Chunking also matters on a box
+  running several agents at once: under swiftshader a single `frames(150)` can
+  outlive any sane timeout with nothing to show for it, and each of the failed
+  first attempts died exactly there.
+* **A strategy that returns `null` does not hand the turn back.**
+  `BattlePresenter.ts:390` is `this.auto(...) ?? firstEnabled(offered)`, so
+  returning `null` silently plays a fallback command and the fight runs to the
+  results screen. The only way to give a fight back to the player mid-battle is
+  `battle().battlePresenter.setAutoPlay(null)` — and the decision that clears it
+  still has to be answered.
+* **The WATCH shot needs the real strategy.** Total Annihilation only exists in
+  phase 2, which is ~35,000 damage in; a stand-in that picks the first command
+  wipes long beforehand. `--watch` therefore runs on the **dev** server so it can
+  `import('/src/engine/BattlePresenterStrategies.ts')` and drive with the shipped
+  `intendedStrategy`, then clears autoplay the moment `.sgd__charge` renders.
+  Testing for the word "WATCH" is useless here — that heading is always present,
+  since it also carries the phase note.
+
+`--dev` blocks every WebSocket. Other agents are editing this tree continuously
+and vite's full-reloads were destroying the page mid-capture; the stub in the
+older `bp1-guide-shot.mjs` only catches the `'vite-hmr'` subprotocol and does not
+hold under Vite 8.
+
+### 6.2 Two cosmetic notes, neither owned here
+
+* In `guide-ffx2-on.png` the RULES list is cut off mid-rule with the fade, because
+  Bahamut's board leaves the rail less height than that chapter's five rules want.
+  That is the measured rail behaving as designed (§3) rather than overhanging the
+  party rows, but Chapter 4 is the one board where the guide cannot show all of
+  its own RULES at once.
+* In `guide-ffx-watch.png` the toggle chip sits under the telegraph banner while
+  that banner is up. The banner is transient and the chip stays legible, and the
+  banner belongs to the framing agent, so nothing was changed for it.
 
 ## 7. Adding a chapter, or a sentence
 

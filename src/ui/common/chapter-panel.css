@@ -1,0 +1,287 @@
+/*
+ * The chapter dossier — "Ink & Gold" (docs/handoff/presentation-ink-and-gold.md).
+ * Markup from `src/ui/common/chapterPanel.ts`; seen twice, on two different
+ * grounds: over ink on the pause screen, and on the prep menu's ivory sheet.
+ *
+ * Rather than two stylesheets, `.cpanel` declares four colour roles as custom
+ * properties and every rule below reads them. `.cpanel--paper` is the one
+ * override that repoints all four for an ivory ground — including the accent,
+ * which has to darken from `--ig-gold` to `--ig-gold-on-paper` to stay legible
+ * on paper (spec "Tokens": "gold on ivory #B8862A"). Nothing else changes.
+ *
+ * Authored on the shared 640x360 grid (`LetterboxStage.ts`): every literal is
+ * its 1440 mockup value / 2.25 and carries that value in a comment.
+ *
+ * Scoping (docs/CONTRACT-CHANGES.md decision 10): consumer stylesheet, so no
+ * bare `.ig-*` rules — only `.cpanel*`, reading the shared layer through its
+ * custom properties.
+ */
+
+.cpanel {
+  --cp-fg: var(--ig-paper, #f4f1e8);
+  --cp-dim: rgba(244, 241, 232, 0.62);
+  --cp-faint: rgba(244, 241, 232, 0.38);
+  --cp-accent: var(--ig-accent, #e3b94a);
+  --cp-rule: rgba(244, 241, 232, 0.16);
+
+  color: var(--cp-fg);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+}
+
+/* The prep menu's ivory sheet. */
+.cpanel--paper {
+  --cp-fg: var(--ig-ink, #0b0a12);
+  --cp-dim: rgba(11, 10, 18, 0.68);
+  --cp-faint: rgba(11, 10, 18, 0.42);
+  --cp-accent: var(--ig-accent-on-paper, #b8862a);
+  --cp-rule: rgba(11, 10, 18, 0.2);
+}
+
+/* --------------------------------------------------------------- masthead */
+
+.cpanel__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 3.56px; /* 8 */
+  font-size: 5.33px; /* 12 */
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  color: var(--cp-accent);
+}
+.cpanel__dot {
+  opacity: 0.6;
+  letter-spacing: 0;
+}
+
+.cpanel__title {
+  margin: 1.78px 0 0; /* 4 */
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 18.67px; /* 42 */
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+.cpanel__subtitle {
+  margin-top: 1.33px; /* 3 */
+  font-size: 6.22px; /* 14 */
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: var(--cp-fg);
+  opacity: 0.85;
+}
+
+.cpanel__where {
+  margin-top: 2.22px; /* 5 */
+  font-size: 4.89px; /* 11 */
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--cp-faint);
+}
+
+/* The arena still: the chapter's own backdrop, cropped to a letterbox strip. */
+.cpanel__arena {
+  margin-top: 5.33px; /* 12 */
+  height: 26.67px; /* 60 */
+  background-size: cover;
+  background-position: center 40%;
+  /* A hairline in the accent rather than a border box — the still is a
+     photograph pinned to the page, not a framed window. */
+  border-bottom: 1.33px solid var(--cp-accent); /* 3 */
+  filter: saturate(0.9) brightness(0.92);
+}
+
+.cpanel__blurb {
+  margin: 5.33px 0 0; /* 12 */
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: 5.33px; /* 12 */
+  line-height: 1.55;
+  color: var(--cp-dim);
+}
+
+/* ----------------------------------------------------------------- ledger */
+
+.cpanel__ledger {
+  display: flex;
+  gap: 12.44px; /* 28 */
+  margin-top: 5.78px; /* 13 */
+  padding-top: 4.44px; /* 10 */
+  border-top: 0.89px solid var(--cp-rule); /* 2 */
+}
+.cpanel__ledger-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.33px; /* 3 */
+  min-width: 0;
+}
+.cpanel__ledger-k {
+  font-size: 4.44px; /* 10 */
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: var(--cp-accent);
+  white-space: nowrap;
+}
+.cpanel__ledger-v {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 10.67px; /* 24 */
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+/* A value that is a word, not a number. */
+.cpanel__ledger-v--word {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 9.33px; /* 21 */
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------- objectives */
+
+.cpanel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 5.78px; /* 13 */
+  padding-bottom: 2.67px; /* 6 */
+  border-bottom: 0.89px solid var(--cp-rule);
+}
+.cpanel__head-label {
+  font-size: 4.89px; /* 11 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--cp-accent);
+}
+.cpanel__count {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 6.22px; /* 14 */
+  font-weight: 700;
+  color: var(--cp-dim);
+}
+
+.cpanel__objectives {
+  margin: 4.44px 0 0; /* 10 */
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3.11px; /* 7 */
+}
+.cpanel__objective {
+  display: flex;
+  align-items: flex-start;
+  gap: 4.44px; /* 10 */
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: 5.33px; /* 12 */
+  line-height: 1.35;
+  color: var(--cp-dim);
+}
+.cpanel__check {
+  flex: none;
+  width: 6.22px; /* 14 */
+  height: 6.22px;
+  margin-top: 0.44px;
+  box-sizing: border-box;
+  border: 0.89px solid var(--cp-faint); /* 2 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5.33px;
+  line-height: 1;
+  color: var(--ig-ink, #0b0a12);
+}
+/* An inert marker for the prep tab, which has no battle to tick against: a
+   dash, not an empty check box, so three unstarted objectives do not read as
+   three failed ones. */
+.cpanel__bullet {
+  flex: none;
+  width: 6.22px;
+  height: 6.22px;
+  margin-top: 0.44px;
+  position: relative;
+}
+.cpanel__bullet::after {
+  content: '';
+  position: absolute;
+  left: 0.89px;
+  top: 2.67px;
+  width: 4.44px; /* 10 */
+  height: 0.89px; /* 2 */
+  background: var(--cp-accent);
+  opacity: 0.8;
+}
+.cpanel__objective--done {
+  color: var(--cp-fg);
+}
+.cpanel__objective--done .cpanel__check {
+  background: var(--cp-accent);
+  border-color: var(--cp-accent);
+}
+
+/* ------------------------------------------------------------------- tip */
+
+.cpanel__tip {
+  display: flex;
+  gap: 4.44px; /* 10 */
+  margin-top: 5.33px; /* 12 */
+  padding: 4px 4.89px; /* 9 11 */
+  background: rgba(227, 185, 74, 0.1);
+  border-left: 1.33px solid var(--cp-accent); /* 3 */
+}
+.cpanel__tip-label {
+  flex: none;
+  font-size: 4.44px; /* 10 */
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--cp-accent);
+  padding-top: 0.89px;
+}
+.cpanel__tip-text {
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: 5.11px; /* 11.5 */
+  line-height: 1.45;
+  color: var(--cp-dim);
+}
+
+/* ------------------------------------------------------------- snapshots */
+
+/*
+ * Three stills tucked into the page at slight angles, each with a handwritten
+ * caption — the reference layout's photographs. The tilt is per-tile and set
+ * inline (`--snap-tilt`) so the three never line up into a strip.
+ */
+.cpanel__snaps {
+  display: flex;
+  gap: 7.11px; /* 16 */
+  margin-top: 8px; /* 18 */
+}
+.cpanel__snap {
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 1.78px 1.78px 0; /* 4 */
+  background: var(--ig-paper, #f4f1e8);
+  box-shadow: 0 2.67px 8px rgba(0, 0, 0, 0.55); /* 6 18 */
+  transform: rotate(var(--snap-tilt, 0deg));
+}
+.cpanel__snap-img {
+  display: block;
+  height: 24.89px; /* 56 */
+  background-size: cover;
+  background-position: center 35%;
+}
+.cpanel__snap-cap {
+  /* Handwriting: the serif in italic is the closest face in the bank, set
+     small and loose so it reads as an aside rather than as body copy. */
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 5.33px; /* 12 */
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--ig-ink, #0b0a12);
+  padding: 1.78px 1.33px 2.22px; /* 4 3 5 */
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}

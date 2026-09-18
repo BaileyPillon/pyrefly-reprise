@@ -165,7 +165,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  */
 /**
  * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`):
- * the FFX HUD's CTB queue owns everything right of 0.815 of the canvas, so an
+ * the FFX HUD's CTB queue owns everything right of 0.843 of the canvas, so an
  * enemy has to finish by 0.79, and the party-status panel's top edge — 0.717
  * once `.ffxhud .ig-stat-list` came down to `bottom: 12px`, 0.684 before it —
  * is what a figure's feet may not sink far past.
@@ -173,8 +173,8 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * At `[2.95, 0, -2.9]` Yunalesca measured 0.581..0.803 x, 0.194..0.746 y — over
  * the queue's rail on one side and into the status panel on the other. The
  * 1.1 units of extra depth do both jobs at once: further away is further *left*
- * of the queue and further *up* the frame, so she lands at 0.541..0.746 and
- * 0.199..0.718 with no change to the rig. It costs 7% of her on-screen height,
+ * of the queue and further *up* the frame, so she lands at 0.550..0.744 and
+ * 0.192..0.721 with no change to the rig. It costs 7% of her on-screen height,
  * which is the cheapest of the three ways out of the collision (the other two
  * are yawing the camera, which this scene's flat painting cannot afford — see
  * {@link RIGS} — and narrowing the queue, which would ellipsise names).
@@ -183,7 +183,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * future part cannot land where Mortiorchis used to (`gagazet.ts`).
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [2.5, 0, -4.0], // boss -> x 0.541..0.746, y 0.199..0.718 at `idle`
+  [2.5, 0, -4.0], // boss -> x 0.550..0.744, y 0.192..0.721 at `idle`
   [3.9, 0, -7.4],
   [0.9, 0, -6.2],
 ];

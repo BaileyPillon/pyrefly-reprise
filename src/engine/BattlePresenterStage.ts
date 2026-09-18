@@ -250,7 +250,11 @@ export class PaintedStage implements BattleStage {
       // testing off it paints straight over her (this is what turned Rikku
       // into a white blob in docs/screenshots/70/52-ffx2-bahamut.png).
       const bloom = bloomScale(staged.actor.height) * (crit ? 1.3 : 1);
-      this.hits.flash.play(point, crit ? 320 : 260, bloom);
+      // `colour` used to be computed here and then thrown away for everything
+      // except the screen flash, so every bloom was the constructor's icy
+      // white regardless of element. Passing it through is what makes a heal
+      // read as a green glow rather than as a white hole in the figure.
+      this.hits.flash.play(point, crit ? 320 : 260, bloom, colour);
       this.hits.sparks.emit(point, crit ? 1.35 : 1);
       if (key === 'slash' || key === 'impact') {
         await this.hits.slash.play(point, 300, -0.62);

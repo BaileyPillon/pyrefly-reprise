@@ -41,7 +41,7 @@ plain functions. **It imports nothing** — no `three`, no DOM, the same rule
 is unit-tested directly instead of being inspected in screenshots. `PaintedActor`
 became a thin renderer of what those functions decide.
 
-That split is the reason this round has 41 tests and not three. The interesting
+That split is the reason this round has 38 tests and not three. The interesting
 behaviour — what a `ready` fighter's posture is, which one-shots a transition
 fires, whether a corpse is allowed to flinch — is now assertable without a
 canvas.

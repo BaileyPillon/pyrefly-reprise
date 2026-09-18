@@ -34,6 +34,18 @@ export interface ChapterRecord {
   /** Fewest turns taken on a clear, or null. */
   bestTurns: number | null;
   attempts: number;
+  /**
+   * Total real time spent **playing** this chapter, in milliseconds, across
+   * every attempt — the pause screen's PLAY TIME row.
+   *
+   * Deliberately not `bestTimeMs`, which is one clear's stopwatch and resets
+   * to the best of them. This only ever grows, and it counts *played* time:
+   * {@link SaveStore.addPlayTime} is fed from `BattleScreen.update`, which the
+   * App loop stops calling the moment another screen (the pause overlay) is on
+   * top. Time spent staring at the pause menu is therefore not play time,
+   * which is the whole point of showing the number there.
+   */
+  playTimeMs: number;
 }
 
 export interface Settings {
@@ -57,6 +69,16 @@ export interface Settings {
    * later battle, including the ones they have not reached yet.
    */
   guideVisible: boolean;
+  /**
+   * FFX-2's ATB mode, the Active/Wait toggle from the original config menu —
+   * `'active'` lets the gauges keep filling while a command menu is open,
+   * `'wait'` freezes them until the command is chosen.
+   *
+   * Stored here (rather than per-chapter) because it is a preference, like
+   * {@link Settings.guideVisible}: the player sets it once and every FFX-2
+   * chapter honours it. The pause screen's OPTIONS row is what writes it.
+   */
+  ffx2Atb: 'active' | 'wait';
 }
 
 export interface SaveData {
@@ -80,6 +102,7 @@ export function defaultSettings(): Settings {
     skipSeenCutscenes: false,
     lowEffects: false,
     guideVisible: true,
+    ffx2Atb: 'active',
     reduceMotion:
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -108,10 +131,13 @@ export function defaultSave(): SaveData {
 function sanitizeChapters(chapters: Record<string, ChapterRecord>): Record<string, ChapterRecord> {
   const out: Record<string, ChapterRecord> = {};
   for (const [id, rec] of Object.entries(chapters)) {
-    out[id] =
-      rec.bestTimeMs !== null && rec.bestTimeMs < IMPLAUSIBLE_BEST_TIME_MS
-        ? { ...rec, bestTimeMs: null }
-        : rec;
+    // `playTimeMs` is younger than the oldest saves in the wild and there is
+    // no honest way to reconstruct it, so a record without one starts at zero
+    // rather than borrowing `bestTimeMs` (one clear is not a play history).
+    const playTimeMs = Number.isFinite(rec.playTimeMs) && rec.playTimeMs > 0 ? rec.playTimeMs : 0;
+    const bestTimeMs =
+      rec.bestTimeMs !== null && rec.bestTimeMs < IMPLAUSIBLE_BEST_TIME_MS ? null : rec.bestTimeMs;
+    out[id] = { ...rec, bestTimeMs, playTimeMs };
   }
   return out;
 }
@@ -149,10 +175,22 @@ function safeStorage(): StorageLike | null {
  * The save file. One instance lives on {@link App}; screens read and write
  * through it and call {@link save} when something meaningful changes.
  */
+/**
+ * Play time piles up in memory and is written out once this much of it is
+ * unsaved. 5 s is short enough that a browser crash loses a trivial amount and
+ * long enough that a 60 fps battle writes twelve times a minute, not 3 600.
+ */
+export const PLAY_TIME_FLUSH_MS = 5000;
+
+/** Largest single {@link SaveStore.addPlayTime} delta that is believed. */
+export const MAX_PLAY_TIME_STEP_MS = 1000;
+
 export class SaveStore {
   private data: SaveData;
   private readonly storage: StorageLike | null;
   private readonly key: string;
+  /** Play time added since the last write. See {@link SaveStore.addPlayTime}. */
+  private unflushedPlayTimeMs = 0;
 
   constructor(key = SAVE_KEY, storage: StorageLike | null = safeStorage()) {
     this.key = key;
@@ -196,6 +234,7 @@ export class SaveStore {
 
   reset(): void {
     this.data = defaultSave();
+    this.unflushedPlayTimeMs = 0;
     try {
       this.storage?.removeItem(this.key);
     } catch {
@@ -214,9 +253,55 @@ export class SaveStore {
       bestTimeMs: null,
       bestTurns: null,
       attempts: 0,
+      playTimeMs: 0,
     };
     this.data.chapters[id] = fresh;
     return fresh;
+  }
+
+  // --------------------------------------------------------- play time
+
+  /**
+   * Add played milliseconds to a chapter's running total.
+   *
+   * Called once per frame from `BattleScreen.update`, so it must not hit
+   * `localStorage` once per frame: the total is accumulated in memory and
+   * only written out once {@link PLAY_TIME_FLUSH_MS} of unsaved time has
+   * piled up (or when {@link flushPlayTime} is called — the pause screen and
+   * `BattleScreen.exit` both do, so the number the player is shown is the
+   * number on disk).
+   *
+   * Non-finite and negative deltas are dropped rather than trusted: `dt`
+   * comes from the frame clock, and a tab that was backgrounded for a minute
+   * would otherwise book a minute of "play".  A single delta is also clamped
+   * to {@link MAX_PLAY_TIME_STEP_MS}, which is well above `App`'s own
+   * `maxDeltaSec` clamp and exists only so a caller that hands over a whole
+   * elapsed span cannot inflate the total in one call.
+   */
+  addPlayTime(id: string, ms: number): void {
+    if (!Number.isFinite(ms) || ms <= 0) return;
+    const delta = Math.min(ms, MAX_PLAY_TIME_STEP_MS);
+    const rec = this.chapter(id);
+    rec.playTimeMs += delta;
+    this.unflushedPlayTimeMs += delta;
+    if (this.unflushedPlayTimeMs >= PLAY_TIME_FLUSH_MS) this.flushPlayTime();
+  }
+
+  /** Write accumulated play time out now. No-op when nothing is pending. */
+  flushPlayTime(): void {
+    if (this.unflushedPlayTimeMs <= 0) return;
+    this.unflushedPlayTimeMs = 0;
+    this.save();
+  }
+
+  /** Total played milliseconds for one chapter. */
+  playTime(id: string): number {
+    return this.data.chapters[id]?.playTimeMs ?? 0;
+  }
+
+  /** Played milliseconds across every chapter. */
+  totalPlayTime(): number {
+    return Object.values(this.data.chapters).reduce((sum, rec) => sum + (rec.playTimeMs ?? 0), 0);
   }
 
   recordAttempt(id: string): void {

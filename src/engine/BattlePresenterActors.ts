@@ -94,6 +94,115 @@ export function mirrorFor(art: ArtFacing | undefined, want: 1 | -1): 1 | -1 {
 }
 
 // ---------------------------------------------------------------------------
+// The interim turn
+// ---------------------------------------------------------------------------
+
+/**
+ * How far a still-frontal painting is yawed toward its enemy, in degrees.
+ *
+ * **Interim.** The art contract (`docs/handoff/art3-contract.md`) says a
+ * battlefield subject is *painted* at about 45 degrees toward the other team,
+ * and the roster is being re-rendered to it one subject at a time. Until a
+ * given painting lands, the figure meets the camera's eye while supposedly
+ * fighting someone standing beside it, and the whole field reads as a row of
+ * cut-outs addressing the player.
+ *
+ * Turning the billboard's *plane* is not the same thing as painting the figure
+ * turned — the far shoulder does not come forward, the face does not swing —
+ * but a foreshortened plane with a near edge and a far edge reads as a body
+ * angled into the fight, and it costs nothing when the repaint ships. 26° is
+ * the compromise: it takes ~10% off the width, which is enough to see and not
+ * enough to look like a poster swung on a hinge.
+ */
+export const INTERIM_YAW_DEG = 26;
+
+/**
+ * How far off camera-facing a billboard may ever end up, in degrees.
+ *
+ * A yawed plane is still a plane: turn it until its normal is square to the
+ * view and it flattens to a line. The battle rigs all sit near the field's
+ * centre line, so in practice a 26° turn lands 8–23° off the view axis and
+ * this never binds — it is the guard for a rig that swings round the side
+ * (`enemy`, `yunalesca`, a scene demo's orbit), where the turn has to give way
+ * rather than edge the figure out of existence. cos(34°) keeps at least 83% of
+ * the painting's width on screen.
+ */
+export const MAX_YAW_OFF_CAMERA_DEG = 34;
+
+/**
+ * The interim yaw for one painting, in degrees. Positive turns toward +x.
+ *
+ * Driven by the **sidecar**, and deliberately not by the same reading of it
+ * that {@link mirrorFor} uses:
+ *
+ * | `facing` | Yaw | Why |
+ * | --- | --- | --- |
+ * | `'right'` / `'left'` | **0** | v3 art: the figure is already painted turned, and turning the plane as well doubles the angle into a profile. |
+ * | `'front'` | the interim yaw | v2 straight-on, and it says so. |
+ * | `'auto'` / absent | the interim yaw | Nothing declared. |
+ *
+ * That last row is the divergence, and it is the one that matters today: the
+ * mirror treats an undeclared painting as "already correct for its side" and
+ * leaves it alone, which is safe, because mirroring art that did not need it is
+ * the worse failure. Here the safe assumption is the other one — everything in
+ * `public/art/characters/` that has not been re-rendered is straight-on and
+ * says nothing about it, so "nothing declared" has to mean "not turned yet" or
+ * the interim does nothing at all on the roster it exists for. An explicit
+ * `right` / `left` is the only thing that opts a pose out, which is exactly
+ * what the art fleet writes the moment a repaint lands.
+ */
+export function interimYawFor(
+  art: ArtFacing | undefined,
+  want: 1 | -1,
+  deg: number = INTERIM_YAW_DEG,
+): number {
+  if (art === 'right' || art === 'left') return 0;
+  if (!Number.isFinite(deg)) return 0;
+  return deg * want;
+}
+
+/**
+ * Give the turn back to the camera when the camera has swung round the side.
+ *
+ * `camAzimuth` is the direction from the figure to the camera, as a yaw in the
+ * same frame as the returned value — `atan2(dx, dz)` in degrees — so a plane
+ * yawed to exactly `camAzimuth` faces the camera square on.
+ *
+ * The result is always **somewhere between 0 and `yaw`**: the turn is given up
+ * gradually and never reversed. Clamping into the `±maxOff` band around the
+ * camera without that bound would happily hand an enemy a *positive* yaw once
+ * the camera got round far enough — a fiend turning away from the party to
+ * keep its plane toward the lens, which is a worse lie than a flat cut-out.
+ */
+export function clampYawToCamera(
+  yaw: number,
+  camAzimuth: number,
+  maxOff: number = MAX_YAW_OFF_CAMERA_DEG,
+): number {
+  if (!Number.isFinite(yaw) || yaw === 0) return 0;
+  if (!Number.isFinite(camAzimuth)) return yaw;
+  // Wrapped, so a camera that has swung behind the figure (azimuth near ±180)
+  // is measured the short way round rather than as a 200-degree deviation.
+  const cam = wrapDegrees(camAzimuth);
+  if (Math.abs(yaw - cam) <= maxOff) return yaw;
+  // The deviation |t*yaw - cam| is convex in t, so the best turn left on the
+  // segment [0, yaw] is whichever end of the allowed band it reaches last.
+  const lo = (cam - maxOff) / yaw;
+  const hi = (cam + maxOff) / yaw;
+  const t = Math.min(1, Math.max(0, Math.max(lo, hi)));
+  // `0`, not `-0`: a flat plane is a flat plane, and the sign of zero leaking
+  // out of here would show up in a snapshot diff as a turn that is not there.
+  return t === 0 ? 0 : yaw * t;
+}
+
+/** Wrap an angle in degrees into (-180, 180]. */
+export function wrapDegrees(deg: number): number {
+  if (!Number.isFinite(deg)) return 0;
+  const d = ((deg + 180) % 360 + 360) % 360 - 180;
+  return d === -180 ? 180 : d;
+}
+
+// ---------------------------------------------------------------------------
 // Life states
 // ---------------------------------------------------------------------------
 

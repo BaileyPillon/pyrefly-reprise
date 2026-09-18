@@ -87,10 +87,13 @@
 /* `max-width` is what makes the HUD safe area a **constant**
    (docs/ENGINE-API.md#hud-safe-area). Without it the CTB column's left edge is
    whatever the longest combatant name happens to be, so the rail a scene has to
-   clear moves per encounter: measured at 0.866 of the canvas for "Yunalesca"
-   and 0.816 for "Braska's Final Aeon". 48px pins it at 0.815 for any name a
-   later encounter brings, which is what `SAFE_RIGHT = 0.79` is measured
-   against.
+   clear moves per encounter. Measured live in the Chapter 2 queue, the same at
+   1600x900 and 1920x1080: the column's left edge sits at 0.866 of the canvas
+   for "Yunalesca" and 0.856 for the truncated "Braska's F…", it bottoms out at
+   **0.843** for the widest plate this cap can produce, and with the cap removed
+   one long name drags it to **0.629** — a third of the frame. 0.843 is
+   therefore the rail every FFX scene solves against, and `SAFE_RIGHT = 0.79` is
+   measured against that.
 
    48px is a *cap*, not a fit: the cast's longest name does ellipsise, and is
    meant to. "Braska's Final Aeon" renders as "Braska's F…" in the queue

@@ -304,3 +304,96 @@ Unchanged from the previous round, none of them this task's files:
   (*"exactly one or two"*) and `research/ffx-seymour-flux.md` §7.7.2 loadout C
   (seven) is real and still wants a research ruling. This chapter's own
   `[verified: 2 sources]` section won for this chapter's build.
+
+---
+
+## 6. Re-verified from a clean boot, 2026-09-18
+
+The machine restarted mid-round, in the middle of the screenshot pass. Nothing
+in §1–§5 was re-derived from notes: **every number below was re-measured from
+scratch on the committed tree** (`38b0723`, working tree clean), and all of them
+reproduce exactly.
+
+| Check | Re-run result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| `verify-bfa-wrong-lines.test.ts` + `verify-bfa-ablations.test.ts` + `braskas-final-aeon-extra-seeds.test.ts` | **19 tests, all green** |
+| The verifier's eight seeds `2, 3, 5, 11, 13, 99, 1234, 7777` | **8/8**, seven links each |
+| The four gate seeds `1, 7, 42, 20260916` | **4/4**, seven links each |
+| Seed windows 1 / 201 / 401 / 601 / 801 | 193, 194, 191, 199, 195 |
+| **Seeds 1–1000** | **972/1000 = 97.2 %** |
+| `tests/unit/strategy-braskas-final-aeon.test.ts` | 8/8 |
+| **`npx vitest run` (whole repo)** | **84 files, 2,854 tests, 0 failures** |
+
+The three seeds the robustness objection named — **5, 13 and 99** — each win the
+full seven-link chain (turns 472, 534 and 417).
+
+### 6.1 The canon ruling, re-read independently
+
+§4.1 and §4.4 were re-read from `research/ffx-bfa-yu-yevon.md` rather than from
+the previous section's summary of them, and the ruling stands:
+
+* §4.1 is the section that answers *"what does a typical party have at Dream's
+  End?"*; its table says **Yuna STR 20**, and the section header labels the
+  whole block **"explicitly an authored estimate"**.
+* §4.4's sentence is about a different thing and says so inside itself: *"Aeon
+  stats scale off **Yuna's** Strength/Magic, **which is why the wiki singles
+  out** 'Yuna's Strength at least 28' **as the threshold** for Bahamut's Mega
+  Flare plus a couple of attacks to finish the job."* That is a **threshold for
+  one particular finish**, not the typical build.
+
+Confirmed at source this session: nothing in the engine derives an aeon's
+Strength or Magic from Yuna's — `dreamsEndBuild.aeons` carries its own published
+stat block — so the 28 would not have bought even the thing it was cited for.
+`src/data/ffx/builds/dreams-end.ts:204` reads `str: 20`. **Every offensive stat
+in the build is §4.1 as published.**
+
+### 6.2 The screenshot pass, and why it kept failing
+
+This is the part the restart interrupted, and it needed two fixes that are
+worth writing down for the next owner who screenshots a battle.
+
+1. **HMR reloads the page out from under a long capture.** `bfa-r7-shots.mjs`
+   died with *"Execution context was destroyed, most likely because of a
+   navigation"* — an art-fleet save elsewhere in the tree reloading the dev
+   server's page. Run the server with
+   `npx vite --config critic/scratch/vite.nohmr-5246.config.ts` (`hmr: false`,
+   `watch.ignored: ['**/*']`). `tools/screenshot.mjs` already blocks HMR by
+   default for exactly this reason; the scratch capture scripts did not.
+2. **Do not advance a battle on the wall clock.** `bfa-r7-shots.mjs` used
+   `page.waitForTimeout` between shots, but while the page is blocked inside a
+   90-second `page.screenshot` under SwiftShader the battle loop does not run
+   either — so every frame that landed was `turn: 0`, including the ones that
+   looked fine. Advance with `window.__pyrefly.frames(n)` in small chunks and
+   poll `battleState().turn`, the way `tools/gallery.mjs` does.
+   Poll tolerantly: `battleState()` is briefly null when the screen flips and
+   between links, which is not a reason to stop capturing.
+
+Two things stayed flaky even then and are worth knowing: the renderer crashes
+outright (`Target crashed`) at 1280x720 — 960x540 with `--disable-dev-shm-usage`
+survives — and it tends to crash *after* the first successful capture, so
+**one shot per browser launch** is the reliable shape. Reaching a late turn
+(~150) by pumping frames never landed inside a useful budget.
+
+The working script is `critic/scratch/bfa-r8-shots.mjs`:
+
+```sh
+npx vite --config critic/scratch/vite.nohmr-5246.config.ts --port 5246 --strictPort &
+node critic/scratch/bfa-r8-shots.mjs --seed=13 --stops=10 --width=960 --height=540 \
+  --out-dir=docs/screenshots/r2-bfa-verifiers
+```
+
+**Captured** (`docs/screenshots/r2-bfa-verifiers/`):
+
+* `02-seed13.png` — the form-1 reveal: Jecht as Braska's Final Aeon, the
+  greatsword, the Dream's End sky.
+* `01-seed13-turn12.png` — **the line actually running**, and the one frame that
+  is evidence rather than art. Turn 12 of seed 13: **Bahamut standing**
+  (`aeon: "bahamut"`), the boss at **58,889/60,000**, and **both Yu Pagodas
+  alive at 5,000/5,000** — which is the "slow both, kill neither" decision of
+  §1.4 visible on screen. The Ink & Gold guide panel, the CTB rail with
+  portraits and the three-member party HUD all render correctly.
+
+`01-link1-form1.png` (6 KB) and `01-seed13.png` are earlier, pre-fix captures
+kept only so the failure modes above are reproducible; the first is a blank
+frame and the second is a `turn: 0` frame mislabelled by the wall-clock bug.

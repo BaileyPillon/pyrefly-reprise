@@ -1,0 +1,55 @@
+{
+  "out": "docs/screenshots/art/wakka.png",
+  "title": "Pyrefly Reprise - WAKKA (art round 3, facing contract v3)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - party faces frame-right",
+  "rows": [
+    {
+      "label": "WAKKA - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 250,
+      "items": [
+        {
+          "path": "public/art/characters/wakka/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/wakka/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/wakka/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/wakka/item.png",
+          "caption": "item"
+        },
+        {
+          "path": "public/art/characters/wakka/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/wakka/victory.png",
+          "caption": "victory"
+        },
+        {
+          "path": "public/art/characters/wakka/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "WAKKA - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/wakka.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

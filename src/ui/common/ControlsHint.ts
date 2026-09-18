@@ -89,6 +89,36 @@ export class ControlsHint {
  * includes this item must handle `'guide:toggle'` in `input.actions`. The guide
  * panel's own chip listens for its own clicks directly and does not need it.
  */
+/**
+ * The pause menu's footer strip, at its top level.
+ *
+ * `F` and `Esc` are the two that name a single action, so they are also their
+ * own buttons for a mouse player (`action`). The gamepad column names the
+ * buttons `src/app/Input.ts` actually maps: `l1` is F on a keyboard and the
+ * left shoulder on a pad, and `cancel` is Circle/B.
+ */
+export const PAUSE_HINTS: ControlHintItem[] = [
+  { keyboard: '▲ ▼', gamepad: 'D-pad', label: 'navigate' },
+  { keyboard: 'Enter', gamepad: 'Cross', label: 'select', action: 'confirm' },
+  { keyboard: 'F', gamepad: 'L1', label: 'photo mode', action: 'pause:photo' },
+  { keyboard: 'Esc', gamepad: 'Circle', label: 'back', action: 'cancel' },
+];
+
+/**
+ * The same strip once the cursor is inside a panel (OPTIONS, PARTY, MUSIC).
+ *
+ * Differs from {@link PAUSE_HINTS} in the two places the controls genuinely
+ * differ — Left/Right now adjust a setting, and Esc now means "back to the
+ * menu" rather than "close the pause" — and is otherwise identical, so the
+ * strip does not appear to reshuffle when focus moves.
+ */
+export const PAUSE_PANEL_HINTS: ControlHintItem[] = [
+  { keyboard: '▲ ▼', gamepad: 'D-pad', label: 'navigate' },
+  { keyboard: '◀ ▶', gamepad: 'D-pad', label: 'adjust' },
+  { keyboard: 'Enter', gamepad: 'Cross', label: 'select', action: 'confirm' },
+  { keyboard: 'Esc', gamepad: 'Circle', label: 'menu', action: 'cancel' },
+];
+
 export const GUIDE_HINT_ITEM: ControlHintItem = {
   label: 'guide',
   keyboard: 'G',

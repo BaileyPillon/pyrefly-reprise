@@ -5,14 +5,19 @@ import {
   ATTACK_BEATS,
   ATTACK_IMPACT,
   attackOffset,
+  clampYawToCamera,
   cuesFor,
   facingForSide,
+  INTERIM_YAW_DEG,
+  interimYawFor,
   lifeStateForPose,
+  MAX_YAW_OFF_CAMERA_DEG,
   mirrorFor,
   nextLifeState,
   parseArtFacing,
   POSTURES,
   resolvePoseName,
+  wrapDegrees,
   type ArtFacing,
   type LifeState,
 } from '../../../src/engine/BattlePresenterActors.ts';
@@ -74,6 +79,164 @@ describe('facing', () => {
     for (const art of ['right', 'left'] as ArtFacing[]) {
       expect(mirrorFor(art, 1) * mirrorFor(art, -1)).toBe(-1);
     }
+  });
+});
+
+/**
+ * The interim turn: until the roster is re-rendered three-quarter, the plane
+ * itself is yawed toward the enemy so a straight-on painting is not meeting the
+ * player's eye in the middle of a fight.
+ */
+describe('interimYawFor', () => {
+  it('turns the party toward +x and the fiends toward -x', () => {
+    expect(interimYawFor('front', 1)).toBeCloseTo(INTERIM_YAW_DEG, 6);
+    expect(interimYawFor('front', -1)).toBeCloseTo(-INTERIM_YAW_DEG, 6);
+  });
+
+  /**
+   * The rule that stops the interim fighting the fix. v3 art is *painted* at
+   * ~45 degrees; yawing the plane on top of that carries it round into the flat
+   * profile `art3-contract.md` §1 rejects, and loses the face with it.
+   */
+  it('leaves art that was painted turned exactly where it is', () => {
+    for (const want of [1, -1] as const) {
+      expect(interimYawFor('right', want)).toBe(0);
+      expect(interimYawFor('left', want)).toBe(0);
+    }
+  });
+
+  /**
+   * The divergence from {@link mirrorFor}, and the reason the round has any
+   * effect at all: everything in `public/art/characters/` that has not been
+   * re-rendered is straight-on and says nothing about it, so an undeclared
+   * painting has to be treated as "not turned yet" here, even though the mirror
+   * treats the same silence as "already correct, do not flip".
+   */
+  it('turns frontal art and art that declares nothing', () => {
+    for (const art of ['front', 'auto', undefined] as (ArtFacing | undefined)[]) {
+      expect(interimYawFor(art, 1)).toBeCloseTo(INTERIM_YAW_DEG, 6);
+      expect(interimYawFor(art, -1)).toBeCloseTo(-INTERIM_YAW_DEG, 6);
+    }
+    expect(interimYawFor(parseArtFacing('none'), 1)).toBeCloseTo(INTERIM_YAW_DEG, 6);
+    expect(interimYawFor(parseArtFacing('right'), 1)).toBe(0);
+  });
+
+  it('takes whatever angle it is handed, and 0 turns it off', () => {
+    expect(interimYawFor('front', 1, 30)).toBeCloseTo(30, 6);
+    expect(interimYawFor('front', -1, 30)).toBeCloseTo(-30, 6);
+    expect(interimYawFor('front', 1, 0)).toBe(0);
+    expect(interimYawFor('front', 1, Number.NaN)).toBe(0);
+  });
+
+  it('is symmetric: the two sides turn the same amount, opposite ways', () => {
+    expect(interimYawFor('front', 1) + interimYawFor('front', -1)).toBeCloseTo(0, 6);
+  });
+});
+
+describe('clampYawToCamera', () => {
+  /** Camera azimuth from a figure, in the same frame as a yaw: `atan2(dx, dz)`. */
+  const azimuth = (figure: [number, number], camera: [number, number]): number =>
+    (Math.atan2(camera[0] - figure[0], camera[1] - figure[1]) * 180) / Math.PI;
+
+  /**
+   * The numbers this has to survive: Mt. Gagazet (chapter 1), from
+   * `src/scenes/gagazet.ts`. Every battle rig sits near the field's centre
+   * line, so a 26-degree turn lands well inside the band and **nothing is
+   * clamped** — which is the point. If this test starts failing, a rig has
+   * swung far enough round the side that the interim turn is being given up,
+   * and the capture will show it.
+   */
+  const GAGAZET = {
+    rigs: {
+      idle: [0, 9.5],
+      action: [0.25, 8.85],
+      party: [-1.6, 6.5],
+      enemy: [1.5, 5.9],
+      victory: [-1.9, 6.9],
+    } as Record<string, [number, number]>,
+    party: [
+      [-1.55, 1.55],
+      [-2.95, 0.25],
+      [-1.05, -1.05],
+    ] as [number, number][],
+    boss: [1.95, -2.45] as [number, number],
+  };
+
+  it('leaves the turn alone at every chapter-1 rig', () => {
+    for (const [name, cam] of Object.entries(GAGAZET.rigs)) {
+      for (const slot of GAGAZET.party) {
+        const yaw = interimYawFor('front', 1);
+        expect(clampYawToCamera(yaw, azimuth(slot, cam)), `party at ${name}`).toBeCloseTo(yaw, 6);
+      }
+      const enemyYaw = interimYawFor('front', -1);
+      expect(clampYawToCamera(enemyYaw, azimuth(GAGAZET.boss, cam)), `boss at ${name}`).toBeCloseTo(
+        enemyYaw,
+        6,
+      );
+    }
+  });
+
+  it('keeps the plane within the allowed band when it can', () => {
+    for (let cam = -180; cam <= 180; cam += 3) {
+      for (const yaw of [26, -26, 40, -40]) {
+        const out = clampYawToCamera(yaw, cam);
+        const reachable = Math.abs(wrapDegrees(cam)) <= Math.abs(yaw) + MAX_YAW_OFF_CAMERA_DEG;
+        if (reachable && Math.sign(wrapDegrees(cam)) === Math.sign(yaw)) {
+          expect(Math.abs(out - wrapDegrees(cam))).toBeLessThanOrEqual(MAX_YAW_OFF_CAMERA_DEG + 1e-9);
+        }
+      }
+    }
+  });
+
+  /**
+   * Both halves of the bound. A fiend that turned *toward* +x to keep its plane
+   * square to a camera that had swung round behind the party would be facing
+   * away from the people hitting it: a worse lie than a flat cut-out. And a
+   * camera swinging the other way must not turn a 26-degree interim into a
+   * 60-degree one — that is the profile the art contract rejects.
+   */
+  it('never turns the figure the wrong way, or further than it was asked to', () => {
+    for (let cam = -180; cam <= 180; cam += 1) {
+      for (const yaw of [26, -26]) {
+        const out = clampYawToCamera(yaw, cam);
+        expect(Math.abs(out)).toBeLessThanOrEqual(Math.abs(yaw) + 1e-9);
+        expect(out * yaw).toBeGreaterThanOrEqual(-1e-9);
+      }
+    }
+  });
+
+  it('gives the turn up entirely when the camera is round the far side', () => {
+    // Camera 80 degrees off to the figure's left, party member turning right:
+    // any turn at all takes the plane further toward edge-on.
+    expect(clampYawToCamera(26, -80)).toBe(0);
+    expect(clampYawToCamera(-26, 80)).toBe(0);
+  });
+
+  it('keeps as much of the turn as the camera allows', () => {
+    // Band is [-15, +5]; the largest turn of a -26 yaw that stays inside it.
+    expect(clampYawToCamera(-26, -5, 10)).toBeCloseTo(-15, 6);
+    expect(clampYawToCamera(26, 5, 10)).toBeCloseTo(15, 6);
+  });
+
+  it('holds the full turn when the camera is already past it', () => {
+    expect(clampYawToCamera(26, 90)).toBeCloseTo(26, 6);
+    expect(clampYawToCamera(-26, -90)).toBeCloseTo(-26, 6);
+  });
+
+  it('passes a flat plane and a broken azimuth through unchanged', () => {
+    expect(clampYawToCamera(0, 40)).toBe(0);
+    expect(clampYawToCamera(26, Number.NaN)).toBe(26);
+    expect(clampYawToCamera(Number.NaN, 0)).toBe(0);
+  });
+});
+
+describe('wrapDegrees', () => {
+  it('measures a camera behind the figure the short way round', () => {
+    expect(wrapDegrees(190)).toBeCloseTo(-170, 6);
+    expect(wrapDegrees(-190)).toBeCloseTo(170, 6);
+    expect(wrapDegrees(540)).toBeCloseTo(180, 6);
+    expect(wrapDegrees(26)).toBeCloseTo(26, 6);
+    expect(wrapDegrees(0)).toBe(0);
   });
 });
 

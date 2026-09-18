@@ -16,10 +16,12 @@ import { ControlsHint } from '../../ui/common/ControlsHint.ts';
 import { romanNumeral } from '../../ui/common/roman.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
+import { PauseScreen } from './PauseScreen.ts';
 
 const HINTS = [
   { keyboard: 'Enter', gamepad: 'Cross', label: 'advance', action: 'confirm' },
-  { keyboard: 'Esc', gamepad: 'Circle', label: 'skip', action: 'cancel' },
+  // Esc opens the pause menu, which is where SKIP SCENE now lives.
+  { keyboard: 'Esc', gamepad: 'Circle', label: 'menu', action: 'cancel' },
 ];
 
 /**
@@ -101,6 +103,11 @@ export class CutsceneScreen extends Screen {
   private shakeEl: HTMLElement | null = null;
   private finished = false;
   private lastResult: CutsceneRunResult | null = null;
+  /** The pause overlay while it is up. */
+  private pauseScreen: PauseScreen | null = null;
+  /** True while the script's own waits are held on the pause gate. */
+  private scriptPaused = false;
+  private pauseWaiters: Array<() => void> = [];
 
   constructor(private readonly opts: CutsceneScreenOptions = {}) {
     super();
@@ -154,6 +161,10 @@ export class CutsceneScreen extends Screen {
   }
 
   override exit(): void {
+    // Anything parked on the gate must be released, or a script that was
+    // paused when the screen went away would never finish its `run()`.
+    this.setScriptPaused(false);
+    this.pauseScreen = null;
     this.hint?.unmount();
     this.dialogueBox?.unmount();
     this.shakeEl?.remove();
@@ -165,8 +176,88 @@ export class CutsceneScreen extends Screen {
   override handleInput(input: InputSnapshot): void {
     this.hint?.handleInput(input);
     this.dialogueBox?.handleInput(input);
+
     const skippable = this.opts.skippable ?? true;
-    if (skippable && (input.consume('cancel') || input.actions.includes('cancel'))) this.runner?.skip();
+    const backedOut = input.consume('cancel') || input.actions.includes('cancel');
+    if (!backedOut && !input.justPressed('start')) return;
+
+    // Esc used to skip the scene outright. It now opens the same pause menu
+    // the battle uses, with SKIP SCENE as one entry on it — so the key that
+    // throws away a cutscene is a menu choice rather than a reflex, and the
+    // options, the music player and the chapter dossier are reachable from a
+    // cutscene too. A screen with no chapter behind it (the demo script, a
+    // bare `goto('cutscene')`) has no dossier to show and keeps the old
+    // straight-to-skip behaviour.
+    const chapter = this.opts.chapterId ? getChapter(this.opts.chapterId) : undefined;
+    if (!chapter) {
+      if (skippable && backedOut) this.runner?.skip();
+      return;
+    }
+    if (this.pauseScreen) return;
+    void this.openPause(chapter, skippable);
+  }
+
+  // ------------------------------------------------------------- the pause
+
+  private async openPause(chapter: NonNullable<ReturnType<typeof getChapter>>, skippable: boolean): Promise<void> {
+    if (this.pauseScreen || this.app.overlayActive) return;
+    const screen = new PauseScreen({
+      chapter,
+      // A cutscene has no battle behind it, so the dossier's objectives all
+      // read as untouched and ENCOUNTER PROGRESS has nothing to report —
+      // which is the honest picture before the fight starts.
+      onPause: (paused) => this.setScriptPaused(paused),
+      onResume: () => void this.closePause(),
+      onChapterSelect: () => void this.app.goto('chapter-select'),
+      onQuitToTitle: () => void this.app.goto('title'),
+      ...(skippable
+        ? {
+            extraRows: [
+              {
+                id: 'skip-scene',
+                label: 'Skip Scene',
+                run: () => {
+                  void this.closePause().then(() => this.runner?.skip());
+                },
+              },
+            ],
+          }
+        : {}),
+    });
+    this.pauseScreen = screen;
+    await this.app.pushOverlay(screen);
+  }
+
+  private async closePause(): Promise<void> {
+    if (!this.pauseScreen) return;
+    this.pauseScreen = null;
+    await this.app.popOverlay();
+  }
+
+  /**
+   * Hold the script's own timed waits.
+   *
+   * The dialogue typewriter already stops with the App loop (it ticks from
+   * `update`, which an overlay suspends), but `CutsceneRunner`'s `wait` port
+   * is a bare `setTimeout` and would keep counting behind the menu — so a
+   * player who paused mid-beat would come back to a line that had already
+   * advanced. Same gate shape as `BattleScreen.pauseGate`.
+   */
+  private setScriptPaused(paused: boolean): void {
+    this.scriptPaused = paused;
+    if (paused) return;
+    const waiters = this.pauseWaiters;
+    this.pauseWaiters = [];
+    for (const resolve of waiters) resolve();
+  }
+
+  private waitGate(ms: number): Promise<void> {
+    return new Promise<void>((resolve) => {
+      window.setTimeout(() => {
+        if (!this.scriptPaused) return resolve();
+        this.pauseWaiters.push(resolve);
+      }, ms);
+    });
   }
 
   override update(dt: number): void {
@@ -186,7 +277,7 @@ export class CutsceneScreen extends Screen {
   }
 
   override snapshot(): Record<string, unknown> {
-    return { finished: this.finished, result: this.lastResult };
+    return { finished: this.finished, result: this.lastResult, paused: this.pauseScreen !== null };
   }
 
   // ------------------------------------------------------------------ run
@@ -216,7 +307,7 @@ export class CutsceneScreen extends Screen {
       music: (track, fade) => {
         if (track) void audio.playMusic(track, fade !== undefined ? { fade } : {});
       },
-      wait: (ms) => new Promise((resolve) => window.setTimeout(resolve, ms)),
+      wait: (ms) => this.waitGate(ms),
       moveActor: () => {},
       // A missing cue must cost a sound, never the scene. `playSfx` throws on
       // an unknown name, and the runner calls this synchronously mid-script:

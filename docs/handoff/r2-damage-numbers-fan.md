@@ -300,6 +300,36 @@ the same fan from the far end and therefore occupies disjoint columns. A heal on
 an actor nothing else is touching still floats straight up the middle of them:
 the alt track only exists when there is a first family to avoid.
 
+### 2.10 The strategy guide's rail is chrome too
+
+Found by the recapture of §3's Overdrive shot, not by a test: the guide rail the
+player toggles with `G` is open by default, and a party member standing on the
+left of the field printed its numeral **straight across the guide's RULES row**
+(Yuna's `761` in `r2-overdrive-multihit.png` as first recaptured). The panel
+list each adapter reports simply did not mention it, so to the layer that
+quarter of the screen was open field.
+
+Both adapters now list it, and **by its two solid children** —
+`.sgd__panel` and `.sgd__toggle` — rather than by `.sgd`. That wrapper is
+`inset: 0` `pointer-events: none` across the whole stage; listing it would tell
+the layer that the entire field is chrome and there is nowhere left to put a
+numeral at all.
+
+It is dodged as a **floating slab** (§2.5's `deflectFromRects`) rather than
+carved out of the safe rect, and that falls out of §2.5's own cap rather than
+being a judgement call: the panel is ~24% of the grid's width, over the 22%
+edge cap, so `safeAreaFrom` refuses the band and leaves it to the deflector.
+That is also the right treatment on the merits — a panel the player can toggle
+off should not permanently shrink the field the numerals live in, which is
+exactly the argument §2.5 makes for the command stack.
+
+The rail is on the left in both games (`.sgd--ffx2` only flips which edge takes
+the accent border), so this is the same slab in the same place for FFX and
+FFX-2, and both adapters got the same two selectors. Three jsdom tests pin it:
+"is dodged by an FFX numeral landing on a party member standing under it", "is
+dodged by an FFX-2 numeral too", and — the one guarding the `.sgd` trap above —
+"does not let the rail wrapper blank the whole field".
+
 ---
 
 ## 3. Verification
@@ -310,7 +340,7 @@ the alt track only exists when there is a first family to avoid.
 |---|---|
 | `npx tsc --noEmit` | clean, whole repo |
 | `tests/unit/ui-common-damage-ladder.test.ts` | 92 passed (63 new; the file had 29 before this round) |
-| `tests/unit/ui-damage-numbers-layout.test.ts` | 19 passed (new file) |
+| `tests/unit/ui-damage-numbers-layout.test.ts` | 22 passed (new file) |
 | `tests/unit/ui-ffx-hud.test.ts` | 35 passed |
 | `npx vitest run` | see §5 |
 
@@ -362,8 +392,8 @@ whole-party AoE land on a known frame instead of being waited for.
 
 | Shot | What it shows |
 |---|---|
-| `docs/screenshots/r2/r2-overdrive-multihit.png` | **the multi-hit Overdrive.** 12 hits on Seymour Flux in one engine tick; 10 figures in flight at once, fanned into three columns climbing off him, the last hit's crit `1007` in gold. Measured on that frame: **0 overlapping pairs, 0 clipped, 0 pinned to an edge, 0 over-HUD.** Clear of the open command stack on the left and the CTB column on the right |
-| `docs/screenshots/r2/r2-boss-aoe.png` | **the boss AoE.** Yunalesca's whole-party hit: `2331 / 2290 / 1944` side by side, each over its own party member, 0 overlapping pairs. This is `50-yunalesca.png`'s `2200` buried under `1850`, directly |
+| `docs/screenshots/r2/r2-overdrive-multihit.png` | **the multi-hit Overdrive.** 12 hits on Mortiorchis in one engine tick; 10 figures in flight at once, fanned into three columns climbing off it, the last hit's crit `1007` in gold. Measured on that frame: **0 overlapping pairs, 0 clipped, 0 pinned to an edge, 0 over-HUD.** Clear of the open command stack and the guide rail on the left and the CTB column on the right |
+| `docs/screenshots/r2/r2-boss-aoe.png` | **the boss AoE.** Yunalesca's whole-party hit: `1588 / 2020 / 1808` side by side, each over its own party member, **0 overlapping pairs, 0 clipped, 0 pinned, 0 over-HUD**. This is `50-yunalesca.png`'s `2200` buried under `1850`, directly |
 | `docs/screenshots/r2/r2-47-boss-attack.png` | Chapter 1 played through: across 649 sampled frames, **0 numerals clipped, 0 pinned flat against an edge, 0 over-HUD**, 12 overlapping pairs (worst: two consecutive rungs of one target's own ladder grazing) |
 | `docs/screenshots/r2/r2-52-ffx2-bahamut.png` | Chapter 4 played through: 16 figures live at the peak, same three zeros |
 | `docs/screenshots/r2/r2-ffx2-chain-chip.png` | **the `CHAIN x1.30` chip riding its numeral**, beside a 6-hit burst on Bahamut fanned into two columns (`674 / 637 / 600` climbing, `711` in the second column). The chip is legible, clear of all four rungs and clear of the chrome. Harness line for the frame: `chip "CHAIN ×1.30" at [723,404,247,83] riding numeral "711" with 4 numerals live`, with the chip confirmed still in the DOM *after* the shot. See §3.1 and §2.7a — it took five captures |
@@ -372,6 +402,15 @@ The first two captures are the ones to look at; the last two are the regression
 check on the §2.4a fix, and both were recaptured for it. Compare
 `r2-47-boss-attack.png` against `docs/screenshots/47-boss-attack.png`, where
 `604 / 571 / 578` printed across the CTB column.
+
+**Both of the first two were recaptured again after §2.10**, on the settled tree
+at the close of the round, and both measure four zeros — `clipped 0, flush 0,
+overlapping pairs 0, overHud 0`. The Overdrive frame is the one that found the
+guide-rail bug in the first place, so it is also the frame that shows it gone:
+the numeral that used to print on the `RULES` row is not there in the current
+PNG. The whole-party AoE is the stronger evidence for §2.10 in principle — its
+three figures land on a party that stands directly beside the rail — and they
+come out at x `559 / 728 / 853`, all clear of the panel's right edge (~383).
 
 ### 3.1 The chain chip took three attempts, and the first two lied
 
@@ -432,10 +471,10 @@ zeros across everything it saw.
 | `src/ui/common/damageLadder.ts` | +`LADDER_RUNGS`, `FAN_STEP`, `FAN_COLUMNS`, `HIT_STAGGER_MS`, `fanOffset`, `burstSlot`, `nextBurstSlot`, `resolveLanes`, `safeAreaFrom`, `placeInSafeArea`. Then §2.4a: `resolveLanes` takes a `LaneOptions` third argument (`bounds`, `maxShift`) and squeezes an over-demand before the sweep instead of amplifying it. And §2.4b: `burstSlot` steps by one `LADDER_PITCH` for every kind. Then §2.8/§2.9: `FanRoom`, `fanSequence`, `NumeralFamily`, `familyFor`, `BurstTrack` and a `BurstSlotOptions` third argument to `burstSlot` (`fan`, `track`). Nothing existing was removed — `computeHitOffset`, `ladderPitch` and `deflectFromRects` all still work and are still used/tested. |
 | `src/ui/common/DamageNumbers.ts` | spawn takes a queue slot instead of a wrapping rung; `update` does one projection pass (lanes + width re-measure, no layout thrash) then one placement pass through the safe rect; `attachChip`; `clear()` forgets queues; the ±6px x-jitter is gone from the offset (the fan and the lanes own horizontal separation now) and survives only as the ballistic drift. §2.4a: a target now asks the lane solver for its glyph plus at most one `FAN_STEP` rather than its fan's whole reach, and the solver is handed the safe rect's width and a `FAN_STEP * scale` cap. §2.7a: `placeChip` takes its x from the ridden figure and its y from the bottom of the whole burst, then deflects the chip off the floating HUD panels inside §2.5's safe rect, using a placement context (`chipArea`) cached by that frame's `update` so no layout is re-read. §2.8/§2.9: each target's room either side is measured against the safe rect at projection time and handed to `fanSequence`, and a numeral remembers its `track` so re-placement on later frames reproduces the same column. |
 | `src/ui/common/damage-numbers.css` | `.dnum--over-hud` (lift + heavier scrim); `.dnum__chip` is now just the marker on a followed element, and the note at the top of the file records why `.dnum` stays a single element and why nothing may be parented into it. |
-| `src/ui/ffx2/DamageLayer.ts` | remembers the last damage target; adopts and re-pins `.ffx2-chain-chip` each frame; `attachChain()`. |
-| `src/ui/ffx/DamageNumbers.ts` | **unchanged** — it already reported the panel rects the safe area needs. |
+| `src/ui/ffx2/DamageLayer.ts` | remembers the last damage target; adopts and re-pins `.ffx2-chain-chip` each frame; `attachChain()`. §2.10: the same `.sgd__panel` / `.sgd__toggle` selectors as the FFX adapter. |
+| `src/ui/ffx/DamageNumbers.ts` | it already reported the panel rects the safe area needs; §2.10 added `.sgd__panel` and `.sgd__toggle` to `PANEL_SELECTORS`, with the note on why not `.sgd`. |
 | `tests/unit/ui-common-damage-ladder.test.ts` | +63 cases (29 -> 92). |
-| `tests/unit/ui-damage-numbers-layout.test.ts` | new, 19 cases, jsdom. |
+| `tests/unit/ui-damage-numbers-layout.test.ts` | new, 22 cases, jsdom (the last 3 are §2.10's). |
 | `tests/unit/ui-ffx-hud.test.ts` | one test ticks six frames instead of one (see above). |
 
 Capture harnesses (in `build/r2-capture/`, gitignored, not shipped):
@@ -466,8 +505,8 @@ audio and balance owners landed their own fixes. Recorded here because the
 mid-round number appeared in an earlier revision of this section and someone
 comparing the two should know which is the live one: **the clean run is.**
 
-Targeted re-run of the three numeral files on the same tree: 146 passed
-(92 + 19 + 35), 0 failed. `npx tsc --noEmit` clean across the repo.
+Targeted re-run of the three numeral files on the same tree: 149 passed
+(92 + 22 + 35), 0 failed. `npx tsc --noEmit` clean across the repo.
 
 ## 5. Not done / for whoever picks this up
 

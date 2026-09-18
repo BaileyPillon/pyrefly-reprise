@@ -2,6 +2,12 @@ import './party-prep.css';
 import { registerPrepPanel } from '../../../app/screens/PartyPrepScreen.ts';
 import { makeEquipmentPanel, makeItemsPanel, makeOverdrivePanel, makeStatsPanel } from './panels.ts';
 import { makeSphereGridPanel } from './SphereGridPanel.ts';
+import { makeChapterPanel } from './ChapterPanel.ts';
+// Side-effect only: registers the FFX-2 CHAPTER tab. Imported from here
+// because `main.ts` imports exactly one prep-registration module and this is
+// it; the FFX-2 side is kept in its own file so the X-2 UI agent has a place
+// to add real dressphere/Garment Grid tabs without touching this one.
+import '../../ffx2/party-prep/index.ts';
 
 /**
  * Wires the FFX party-prep UI into `PartyPrepScreen`'s Ink & Gold frame
@@ -18,6 +24,9 @@ import { makeSphereGridPanel } from './SphereGridPanel.ts';
  * `main.ts` imports this module once for its registration side effect,
  * alongside the HUD screenshot demo screen.
  */
+// First tab: the chapter briefing (`order: -10`), so a player reads what they
+// are walking into before they tune anything.
+registerPrepPanel(makeChapterPanel('ffx'));
 registerPrepPanel(makeStatsPanel());
 registerPrepPanel(makeSphereGridPanel());
 registerPrepPanel(makeEquipmentPanel());

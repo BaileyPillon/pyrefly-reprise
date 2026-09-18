@@ -118,8 +118,8 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * tip on it, was drawn under the menu or past the right edge
  * (`docs/handoff/playability-round-1.md` §4 issue 3).
  *
- * 1.95 units left and 2.7 back bring it to 0.313..0.710. The blade is still
- * 0.40 of the frame wide and 0.48 tall and still sweeps corner to corner, which
+ * 1.95 units left and 2.7 back bring it to 0.303..0.713. The blade is still
+ * 0.41 of the frame wide and 0.50 tall and still sweeps corner to corner, which
  * is the shot; what changed is that it now *ends* inside the frame, so the tail
  * reads as a tail rather than as a wall.
  *
@@ -130,7 +130,7 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * separately targetable parts sharing one silhouette.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [0.8, 0, -5.0], // boss -> x 0.313..0.710, y 0.143..0.626 at `idle`
+  [0.8, 0, -5.0], // boss -> x 0.303..0.713, y 0.135..0.633 at `idle`
   [2.3, 0, -8.0],
   [-0.5, 0, -6.6],
   [1.0, 0, -9.4],

@@ -479,15 +479,40 @@ export function seedFromName(name) {
   return h.readUInt32BE(0) % 2147483647;
 }
 
+/**
+ * `--emphasis` — the one prompt channel that is NOT escaped.
+ *
+ * `escapeTags` backslash-escapes every paren in `--tags` and `--poseTags`,
+ * which is right for literal Danbooru tags (`yuna (ff10)`) and fatal for
+ * emphasis syntax. A `(scar across eye:1.3)` written into `--poseTags` reaches
+ * CLIP as the *literal characters* `\(scar across eye:1.3\)` and carries no
+ * weight at all — the 2026-09-18 hero round believed it was weighting canon
+ * tokens and was in fact only adding punctuation. (The facing phrases work
+ * because `compositionFor` injects them past `escapeTags`; nothing a caller
+ * types has ever had that route.)
+ *
+ * So: identity goes in `--tags`, action goes in `--poseTags`, and the two or
+ * three tokens that have to out-shout the character prior go in `--emphasis`,
+ * verbatim. Keep it short. It is placed after the pose tags and before the
+ * framing block, so it reads as part of the subject description.
+ */
 export function buildCharacterPrompt({
   tags,
   poseTags,
   composition = 'full',
   facing = 'none',
   facingPhrase = null,
+  emphasis = null,
 }) {
   const framing = compositionFor(composition, facing, facingPhrase);
-  return joinTags(escapeTags(tags), escapeTags(poseTags), framing, STYLE_TAGS, QUALITY_TAGS);
+  return joinTags(
+    escapeTags(tags),
+    escapeTags(poseTags),
+    emphasis || '',
+    framing,
+    STYLE_TAGS,
+    QUALITY_TAGS,
+  );
 }
 
 export function buildBackdropPrompt({ tags }) {
@@ -946,7 +971,17 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
       ? null
       : String(args.facingPhrase);
 
-  const positive = buildCharacterPrompt({ tags, poseTags, composition, facing, facingPhrase });
+  const emphasis =
+    args.emphasis === undefined || args.emphasis === true ? null : String(args.emphasis);
+
+  const positive = buildCharacterPrompt({
+    tags,
+    poseTags,
+    composition,
+    facing,
+    facingPhrase,
+    emphasis,
+  });
   // The facing negatives are half of the facing recipe, so they ride along with
   // --facing rather than waiting for every caller to remember them.
   const facingNegative =
@@ -1080,7 +1115,21 @@ async function runHero(args) {
   const facing =
     args.facing === true || args.facing === undefined ? 'none' : String(args.facing);
 
-  const positive = buildCharacterPrompt({ tags, poseTags, composition, facing });
+  const facingPhrase =
+    args.facingPhrase === undefined || args.facingPhrase === true
+      ? null
+      : String(args.facingPhrase);
+  const emphasis =
+    args.emphasis === undefined || args.emphasis === true ? null : String(args.emphasis);
+
+  const positive = buildCharacterPrompt({
+    tags,
+    poseTags,
+    composition,
+    facing,
+    facingPhrase,
+    emphasis,
+  });
   const negative = withNegAdd(HERO_NEGATIVE, args.negAdd === true ? '' : args.negAdd);
   const ref = referenceOptions(args, { defaultWidth: 1344, defaultHeight: 768 });
   const results = [];
@@ -1127,6 +1176,7 @@ async function runHero(args) {
       scheduler,
       composition,
       facing,
+      ...(emphasis ? { emphasis } : {}),
       canvas: { width: ref.width, height: ref.height },
       ...ref.provenance,
       generatedAt: new Date().toISOString(),
@@ -1289,6 +1339,14 @@ Facing contract (v3):
                     eye and is not on the battlefield).
   --facingPhrase    A/B escape hatch: use this literal phrase instead of the
                     one in FACING_PHRASES. For testing, not for the cast.
+
+Emphasis:
+  --emphasis "..."  The ONLY prompt channel that is not paren-escaped, so it is
+                    the only place CLIP emphasis syntax actually works:
+                      --emphasis "(scar over his right eye:1.4), (black hair:1.2)"
+                    The same text in --tags or --poseTags is escaped to literal
+                    characters and weighs nothing. Two or three tokens, no more —
+                    it is for out-shouting a character prior, not for prompting.
 
 Reference consistency:
   --ref <png>       IP-Adapter identity anchor. Point it at an approved idle

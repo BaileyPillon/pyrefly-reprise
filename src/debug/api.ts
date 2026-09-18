@@ -7,6 +7,7 @@ import { wiringReport } from '../app/screens/BattleScreenWiring.ts';
 import { getStrategy, strategyNames, type StrategyName } from '../engine/BattlePresenterStrategies.ts';
 import type { AutoStrategy } from '../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../engine/BattlePresenterPorts.ts';
+import { isInterimYawEnabled, setInterimYawEnabled } from '../engine/PaintedActor.ts';
 import { sceneReport } from '../scenes/index.ts';
 // Scene agent (Mt. Gagazet): temporary screen for `goto('scene-gagazet')`.
 import { GagazetSceneScreen } from '../scenes/gagazet-debug.ts';
@@ -66,7 +67,15 @@ export interface PyreflyDebugApi {
    * Fire a named beat on the active screen: `'attack'`, `'cast'`, `'hurt'`,
    * `'ko'`, `'hud:on'` / `'hud:off'` / `'hud:toggle'`, `'rig:<name>'`,
    * `'battle:fast'` / `'battle:skip'` / `'battle:normal'`, `'prep:begin'`,
-   * `'cutscene:skip'`, `'results:continue'`, `'select:<chapterId>'`.
+   * `'cutscene:skip'`, `'results:continue'`, `'select:<chapterId>'`,
+   * `'pause:open'` / `'pause:close'` / `'pause:panel:<details|options|party|music>'`
+   * / `'pause:photo'` / `'pause:photo-off'`.
+   *
+   * `pause:open` goes to the battle or cutscene screen and ignores the "not
+   * while a command menu is open" rule the keyboard paths honour, so a capture
+   * lands on a predictable frame; the rest go to the pause screen once it is
+   * up, since `trigger` always addresses the top of the stack.
+   *
    * Returns false when the screen does not know the name.
    */
   trigger(name: string): boolean;
@@ -137,6 +146,18 @@ export interface PyreflyDebugApi {
   /** Which scene keys are real and which are still placeholders. */
   scenes(): ReturnType<typeof sceneReport>;
   /**
+   * A/B the **interim turn**: the yaw that angles a still-frontal painting's
+   * plane toward the enemy until the three-quarter repaints land
+   * (`docs/handoff/art3-contract.md`). Applies to every actor on the field on
+   * the next frame; call with no argument to read the current state.
+   *
+   * ```js
+   * __pyrefly.interimYaw(false);   // flat billboards, the old look
+   * await __pyrefly.frames(20);    // let the turn ease out before capturing
+   * ```
+   */
+  interimYaw(on?: boolean): boolean;
+  /**
    * What is wired up right now: engines, HUDs, the cutscene runner, and the
    * **number of ability and item records registered per game**. A zero count
    * means the data tables never reached the engine, which looks identical to a
@@ -186,10 +207,23 @@ export function installDebugApi(app: App): PyreflyDebugApi {
   // first. Registered additively — `main.ts` keeps `results` / `results-silent`.
   registerResultsDemoScreens(app);
 
-  /** The battle screen, if one is on top of the stack. */
+  /**
+   * The live battle screen.
+   *
+   * Searches the stack from the top rather than only testing `app.current`,
+   * because the pause menu is an *overlay*: it sits on top of a battle that is
+   * still very much running (frozen, but with its engine, its log and its
+   * state intact). Testing only the top screen would make `battleState()` and
+   * `battleLog()` go null the instant the player — or a capture script —
+   * opened the pause, which is exactly when a test wants to read them.
+   */
   const battleScreen = (): BattleScreen | null => {
-    const screen = app.current;
-    return screen instanceof BattleScreen ? screen : null;
+    const stack = app.screens;
+    for (let i = stack.length - 1; i >= 0; i--) {
+      const screen = stack[i];
+      if (screen instanceof BattleScreen) return screen;
+    }
+    return null;
   };
 
   const api: PyreflyDebugApi = {
@@ -274,6 +308,10 @@ export function installDebugApi(app: App): PyreflyDebugApi {
       return app.screenName === name;
     },
     scenes: () => sceneReport(),
+    interimYaw: (on?: boolean) => {
+      if (on !== undefined) setInterimYawEnabled(on);
+      return isInterimYawEnabled();
+    },
     wiring: () => wiringReport(),
   };
 

@@ -1,0 +1,59 @@
+{
+  "out": "docs/screenshots/art/yuna.png",
+  "title": "Pyrefly Reprise - YUNA (art round 3, facing contract v3)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - party faces frame-right",
+  "rows": [
+    {
+      "label": "YUNA - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 250,
+      "items": [
+        {
+          "path": "public/art/characters/yuna/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yuna/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yuna/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/yuna/item.png",
+          "caption": "item"
+        },
+        {
+          "path": "public/art/characters/yuna/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/yuna/victory.png",
+          "caption": "victory"
+        },
+        {
+          "path": "public/art/characters/yuna/summon.png",
+          "caption": "summon"
+        },
+        {
+          "path": "public/art/characters/yuna/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "YUNA - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/yuna.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

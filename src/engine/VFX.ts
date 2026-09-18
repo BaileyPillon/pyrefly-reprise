@@ -388,14 +388,24 @@ export class ImpactFlash extends Mesh {
   private readonly tweens = new TweenGroup();
   private readonly baseSize: number;
   private readonly peakOpacity: number;
+  private readonly baseColor: number | string;
 
   constructor(opts: ImpactFlashOptions = {}) {
     const mat = new MeshBasicMaterial({
+      // The ramp has no fully opaque centre, and that is the point.
+      //
+      // Additive blending adds `colour * alpha * opacity` to whatever is
+      // already in the buffer, so an alpha of 1.0 in the middle of the disc
+      // put a near-white core straight on top of the figure and clipped it --
+      // measured at 15% of Rikku's on-screen box driven to pure white during
+      // a cast, which is issue 7 of playability-round-1. Starting at 0.62 and
+      // falling away sooner keeps the same reach and the same brightness at
+      // the rim while leaving the paint underneath legible through the middle.
       map: paintedCanvasTexture(
         radialCanvas(256, [
-          [0, 1],
-          [0.18, 0.75],
-          [0.5, 0.18],
+          [0, 0.62],
+          [0.14, 0.46],
+          [0.42, 0.15],
           [1, 0],
         ]),
       ),
@@ -409,7 +419,8 @@ export class ImpactFlash extends Mesh {
     });
     super(new PlaneGeometry(1, 1), mat);
     this.baseSize = opts.size ?? 2.6;
-    this.peakOpacity = Math.max(0, Math.min(1, opts.peakOpacity ?? 0.7));
+    this.peakOpacity = Math.max(0, Math.min(1, opts.peakOpacity ?? 0.55));
+    this.baseColor = opts.color ?? 0xfff0c8;
     this.frustumCulled = false;
     this.renderOrder = 41;
     this.visible = false;
@@ -420,11 +431,22 @@ export class ImpactFlash extends Mesh {
    * @param scale multiplies the configured `size`. Scale it to the target --
    *   a boss and a party member are metres apart in height and the same bloom
    *   on both swallows the smaller one whole.
+   * @param colour the element's colour for this one hit, falling back to the
+   *   configured one. Without it every element bloomed the same icy white, so
+   *   a Cure on a party member lit her up exactly like a physical crit --
+   *   white is also the worst possible additive colour, because it is the only
+   *   one that drives all three channels to clipping at once.
    */
-  play(at: Vector3 | { x: number; y: number; z: number }, ms = 260, scale = 1): void {
+  play(
+    at: Vector3 | { x: number; y: number; z: number },
+    ms = 260,
+    scale = 1,
+    colour?: number | string,
+  ): void {
     this.position.set(at.x, at.y, at.z);
     this.visible = true;
     const mat = this.material as MeshBasicMaterial;
+    mat.color.set(colour ?? this.baseColor);
     this.tweens.killAll();
     this.tweens.to(0, 1, {
       durationMs: ms,

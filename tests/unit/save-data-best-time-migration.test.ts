@@ -22,6 +22,7 @@ function makeChapterRecord(overrides: Partial<ChapterRecord> = {}): ChapterRecor
     bestTimeMs: null,
     bestTurns: null,
     attempts: 1,
+    playTimeMs: 0,
     ...overrides,
   };
 }

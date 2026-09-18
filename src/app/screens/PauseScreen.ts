@@ -1,0 +1,718 @@
+/**
+ * The pause menu.
+ *
+ * A full-bleed painted close-up of whoever this chapter is about, a column of
+ * commands down the left, and the chapter's dossier down the right — the
+ * "Until Dawn / Memories Eternal" layout translated into Ink & Gold
+ * (`docs/handoff/presentation-ink-and-gold.md`; approved chrome in
+ * `docs/screenshots/mockups/A-*.jpg`). The art is the screen; the chrome sits
+ * on it in ink and paper slabs and never boxes it in.
+ *
+ * ## What it is, structurally
+ *
+ * An **overlay**, pushed with {@link App.pushOverlay}. The battle underneath
+ * keeps being drawn every frame and stops being ticked — see that method for
+ * why that falls out of the existing loop rather than needing a freeze flag.
+ * The one thing the loop cannot freeze is `BattlePresenter`, which runs on its
+ * own awaits; `BattleScreen` freezes that by gating the `sleep` it hands the
+ * presenter, and hands this screen the gate's open/close through
+ * {@link PauseScreenOptions.onPause}.
+ *
+ * ## Focus
+ *
+ * Two levels, and Esc means "up one":
+ *
+ * - `menu` — the left column has the cursor. Moving it *previews* the right
+ *   panel (landing on MUSIC PLAYER shows the jukebox) without committing, the
+ *   way the reference screen does. Esc closes the pause.
+ * - `panel` — Confirm on a row that owns a panel moves the cursor into it, so
+ *   Up/Down scroll the track list or the options rows. Esc goes back to `menu`.
+ *
+ * That is the whole reason `BattleScreen` only opens this on Esc "when no
+ * submenu is open": Esc is a back button at three different depths here and in
+ * the battle HUD, and exactly one of them can own it at a time.
+ */
+
+import type { BattleEvent, BattleState } from '../../battle/common/types.ts';
+import type { Chapter } from '../../data/encounters.ts';
+import { getChapterMeta, type ChapterMeta } from '../../data/chapter-meta.ts';
+import { audio } from '../../audio/index.ts';
+import { Screen } from '../Screen.ts';
+import type { InputSnapshot } from '../Input.ts';
+import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
+import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
+import { escapeHtml } from '../../ui/common/html.ts';
+import { ControlsHint, PAUSE_HINTS, PAUSE_PANEL_HINTS } from '../../ui/common/ControlsHint.ts';
+import { MusicPlayer } from '../../ui/common/MusicPlayer.ts';
+import { PhotoMode } from '../../ui/common/PhotoMode.ts';
+import {
+  dossierHtml,
+  mountHeroArt,
+  snapshotsHtml,
+  wireImageFallbacks,
+} from '../../ui/common/chapterPanel.ts';
+import {
+  encounterProgress,
+  evaluateObjectives,
+  type ObjectiveContext,
+} from '../../ui/common/chapterObjectives.ts';
+import {
+  TEXT_SPEEDS,
+  VOLUME_STEP,
+  optionRows,
+  optionsTabHtml,
+  partyCardsHtml,
+  partyTabHtml,
+} from './PauseScreenPanels.ts';
+import '../../ui/common/pause-screen.css';
+
+/** Which panel the right-hand column is showing. */
+export type PausePanel = 'details' | 'options' | 'party' | 'music';
+
+/** One row of the left command column. */
+interface MenuRow {
+  id: string;
+  label: string;
+  /** Moving onto this row previews this panel. */
+  panel: PausePanel;
+  /** Confirm enters the panel instead of firing an action. */
+  entersPanel?: boolean;
+  /** A row whose value is shown on the right of the label (STRATEGY GUIDE). */
+  value?: () => string;
+}
+
+export interface PauseScreenOptions {
+  chapter: Chapter;
+  /** Live battle state, or null when the pause is opened over a cutscene. */
+  state?: () => Readonly<BattleState> | null;
+  /** The ordered event log. Defaults to `state().log`. */
+  log?: () => readonly BattleEvent[];
+  /** Which link of a chained chapter is live, 1-based. Defaults to 1. */
+  links?: () => number;
+  /** How many formations the chapter chains through, for ENCOUNTER PROGRESS. */
+  chainLength?: number;
+  /**
+   * Freeze / thaw whatever the App loop cannot. `BattleScreen` passes its
+   * presenter gate; `CutsceneScreen` passes nothing and relies on the loop.
+   */
+  onPause?: (paused: boolean) => void;
+  /** Extra rows to splice in above CHAPTER SELECT — the cutscene's "Skip scene". */
+  extraRows?: Array<{ id: string; label: string; run: () => void }>;
+  /** RESTART ENCOUNTER. Omitted (and the row hidden) when there is nothing to restart. */
+  onRestart?: () => void;
+  onChapterSelect?: () => void;
+  onQuitToTitle?: () => void;
+  /** Called when the player closes the menu. The owner pops the overlay. */
+  onResume: () => void;
+}
+
+/** How far the pause menu ducks the music under itself. */
+const PAUSE_DUCK = 0.35;
+
+export class PauseScreen extends Screen {
+  readonly name = 'pause';
+
+  private readonly opts: PauseScreenOptions;
+  private readonly meta: ChapterMeta | undefined;
+  private stage: Stage | null = null;
+  /** Themed wrapper for the chrome that lives outside the letterboxed stage. */
+  private chrome: HTMLElement | null = null;
+  private hint: ControlsHint | null = null;
+  private music: MusicPlayer | null = null;
+  private photo: PhotoMode | null = null;
+  /** Screen roots hidden for the duration of photo mode. See {@link enterPhotoMode}. */
+  private hiddenUnder: HTMLElement[] = [];
+
+  private rows: MenuRow[] = [];
+  private index = 0;
+  private focus: 'menu' | 'panel' = 'menu';
+  private panel: PausePanel = 'details';
+  private optionIndex = 0;
+  /** Set once, so a double Esc cannot resume twice. */
+  private closing = false;
+
+  constructor(opts: PauseScreenOptions) {
+    super();
+    this.opts = opts;
+    this.meta = getChapterMeta(opts.chapter.id);
+  }
+
+  // ------------------------------------------------------------------ enter
+
+  override enter(): void {
+    installInkGoldStyles();
+    this.opts.onPause?.(true);
+    // The pause music sits *under* the menu rather than replacing it: the
+    // fight's theme keeps playing, quietly, which is what makes the menu feel
+    // like a held breath instead of a different screen.
+    audio.duck(PAUSE_DUCK, 0.2);
+    audio.playSfx('menu-page');
+
+    this.rows = this.buildRows();
+    this.root.className = 'screen';
+    this.stage = createStage(this.root, 'pause');
+    this.stage.el.classList.add('ig');
+    if (this.opts.chapter.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
+
+    this.stage.stage.innerHTML = this.frameHtml();
+
+    const heroImg = this.stage.stage.querySelector<HTMLImageElement>('[data-role="hero"]');
+    if (heroImg && this.meta) mountHeroArt(heroImg, this.meta);
+
+    // The hint strips mount on the **screen root**, not inside the stage.
+    // `controls-hint.css` is authored in device pixels precisely because it
+    // normally sits outside a 640x360 stage; putting it inside one would scale
+    // it by the letterbox factor on top of its own sizes and print a footer
+    // two and a half times too big.
+    //
+    // They still need the Ink & Gold tokens, and those are declared on `.ig` —
+    // which is on the stage they are deliberately *not* inside. So they get
+    // their own themed wrapper, or an FFX-2 chapter would print a gold footer
+    // under a pink screen.
+    this.chrome = document.createElement('div');
+    this.chrome.className = 'pause__chrome ig';
+    if (this.opts.chapter.game === 'ffx2') this.chrome.classList.add('ig--ffx2');
+    this.root.appendChild(this.chrome);
+
+    this.hint = new ControlsHint({ root: this.chrome, items: PAUSE_HINTS });
+    this.hint.mount();
+    this.hint.el.classList.add('pause__hint');
+
+    this.renderMenu();
+    this.renderPanel();
+    this.renderParty();
+  }
+
+  /**
+   * The command column.
+   *
+   * RESTART ENCOUNTER is omitted rather than greyed out when the owner gave no
+   * `onRestart` (the cutscene pause has no encounter to restart): a menu row
+   * that can never do anything is worse than one that is not there.
+   */
+  private buildRows(): MenuRow[] {
+    const rows: MenuRow[] = [{ id: 'resume', label: 'Resume', panel: 'details' }];
+    if (this.opts.onRestart) rows.push({ id: 'restart', label: 'Restart Encounter', panel: 'details' });
+    rows.push({
+      id: 'guide',
+      label: 'Strategy Guide',
+      panel: 'details',
+      value: () => (this.app.save.settings.guideVisible ? 'ON' : 'OFF'),
+    });
+    rows.push({ id: 'options', label: 'Options', panel: 'options', entersPanel: true });
+    rows.push({ id: 'details', label: 'Encounter Details', panel: 'details' });
+    rows.push({ id: 'party', label: 'Party', panel: 'party', entersPanel: true });
+    rows.push({ id: 'music', label: 'Music Player', panel: 'music', entersPanel: true });
+    for (const extra of this.opts.extraRows ?? []) {
+      rows.push({ id: extra.id, label: extra.label, panel: 'details' });
+    }
+    if (this.opts.onChapterSelect) rows.push({ id: 'chapter-select', label: 'Chapter Select', panel: 'details' });
+    if (this.opts.onQuitToTitle) rows.push({ id: 'quit', label: 'Quit to Title', panel: 'details' });
+    return rows;
+  }
+
+  /** The static frame: art, wordmark, the two columns, the bottom strip. */
+  private frameHtml(): string {
+    const meta = this.meta;
+    const chapter = this.opts.chapter;
+    const gameLine = chapter.game === 'ffx2' ? 'FINAL FANTASY X-2' : 'FINAL FANTASY X';
+    const quote = meta
+      ? `<blockquote class="pause__quote">
+           <span class="pause__quote-text">&ldquo;${escapeHtml(meta.quote.text)}&rdquo;</span>
+           <cite class="pause__quote-who">${escapeHtml(meta.quote.speaker)}</cite>
+           <span class="pause__hand">${escapeHtml(meta.handwritten)}</span>
+         </blockquote>`
+      : '';
+
+    return `
+      <div class="pause__art"><img class="pause__art-img" data-role="hero" alt=""></div>
+      <div class="pause__scrim"></div>
+      <div class="pause__vignette"></div>
+
+      <div class="pause__brand">
+        <div class="pause__wordmark">PYREFLY REPRISE</div>
+        <div class="pause__game">${gameLine}</div>
+      </div>
+
+      <nav class="pause__menu" data-role="menu" aria-label="Paused"></nav>
+      ${quote}
+
+      <section class="pause__panel cpanel" data-role="panel"></section>
+
+      <div class="pause__party" data-role="party"></div>
+      <div class="pause__snaps cpanel">${meta ? snapshotsHtml(meta) : ''}</div>
+    `;
+  }
+
+  // --------------------------------------------------------------- rendering
+
+  private renderMenu(): void {
+    const el = this.stage?.stage.querySelector('[data-role="menu"]');
+    if (!el) return;
+    el.innerHTML = this.rows
+      .map((row, i) => {
+        const sel = i === this.index;
+        const value = row.value?.();
+        return `<div class="pause__row${sel ? ' pause__row--sel' : ''}${
+          this.focus === 'panel' && sel ? ' pause__row--dim' : ''
+        }" data-action="pause:row:${escapeHtml(row.id)}" role="button" tabindex="0" aria-current="${sel}">
+          <span class="pause__row-label">${escapeHtml(row.label.toUpperCase())}</span>
+          ${value ? `<span class="pause__row-value">${escapeHtml(value)}</span>` : ''}
+        </div>`;
+      })
+      .join('');
+  }
+
+  /** The live context every objective and the progress row is evaluated against. */
+  private context(): ObjectiveContext {
+    const state = this.opts.state?.() ?? null;
+    return {
+      state,
+      log: this.opts.log?.() ?? state?.log ?? [],
+      links: this.opts.links?.() ?? 1,
+    };
+  }
+
+  private renderPanel(): void {
+    const el = this.stage?.stage.querySelector<HTMLElement>('[data-role="panel"]');
+    if (!el) return;
+
+    // The jukebox owns a real element with its own cursor, so it is mounted
+    // once and hidden rather than re-rendered into a string like the others.
+    if (this.panel !== 'music') {
+      this.music?.dispose();
+      this.music = null;
+    }
+
+    el.dataset['panel'] = this.panel;
+
+    if (this.panel === 'options') {
+      el.innerHTML = optionsTabHtml(this.app.save.settings, this.optionIndex);
+      return;
+    }
+    if (this.panel === 'party') {
+      el.innerHTML = partyTabHtml(this.opts.state?.() ?? null);
+      wireImageFallbacks(el);
+      return;
+    }
+    if (this.panel === 'music') {
+      if (!this.music) {
+        el.innerHTML = '';
+        this.music = new MusicPlayer({ root: el, chapterKeys: this.chapterMusicKeys() });
+      }
+      return;
+    }
+
+    const meta = this.meta;
+    if (!meta) {
+      el.innerHTML = `<div class="pause__empty">${escapeHtml(this.opts.chapter.title)}</div>`;
+      return;
+    }
+    const ctx = this.context();
+    el.innerHTML = dossierHtml(meta, {
+      sceneKey: this.opts.chapter.sceneKey,
+      statuses: evaluateObjectives(meta.objectives, ctx),
+      playTimeMs: this.app.save.playTime(this.opts.chapter.id),
+      progress: encounterProgress(
+        ctx,
+        this.opts.chainLength !== undefined ? { chainLength: this.opts.chainLength } : {},
+      ),
+      // The three polaroids live along the bottom of this screen, not in the
+      // column — see `DossierOptions.snapshots`.
+      snapshots: false,
+    });
+  }
+
+  /** Cue names this chapter uses, for the jukebox's "this fight" group. */
+  private chapterMusicKeys(): string[] {
+    const music = this.opts.chapter.music;
+    const fromChapter = [music.scene, music.battle, music.phase2, music.victory, music.post];
+    return [...new Set([...(this.meta?.musicKeys ?? []), ...fromChapter])].filter(
+      (k): k is string => typeof k === 'string' && k.length > 0,
+    );
+  }
+
+  private renderParty(): void {
+    const el = this.stage?.stage.querySelector('[data-role="party"]');
+    if (!el) return;
+    el.innerHTML = partyCardsHtml(this.opts.state?.() ?? null);
+  }
+
+  // ------------------------------------------------------------------- input
+
+  override handleInput(input: InputSnapshot): void {
+    this.hint?.handleInput(input);
+
+    if (this.photo) {
+      this.handlePhotoInput(input);
+      return;
+    }
+
+    for (const action of input.actions) this.handleAction(action);
+
+    // F (mapped to `l1`) drops every piece of chrome and hands the camera over.
+    if (input.justPressed('l1')) {
+      this.enterPhotoMode();
+      return;
+    }
+
+    if (this.focus === 'panel') {
+      this.handlePanelInput(input);
+      return;
+    }
+
+    if (input.justPressed('down')) this.moveMenu(1);
+    if (input.justPressed('up')) this.moveMenu(-1);
+    if (input.justPressed('confirm')) this.activate(this.rows[this.index]);
+    // Esc / Circle and Start both close from the top level: Start is what
+    // opened it, and a menu that a button opens should close on the same
+    // button. `Escape` is also the battle HUD's back button, which is why
+    // `BattleScreen` will not open this while a command menu owns it.
+    if (input.justPressed('cancel') || input.justPressed('start')) this.close();
+  }
+
+  private handlePanelInput(input: InputSnapshot): void {
+    if (input.justPressed('cancel') || input.justPressed('start')) {
+      this.focus = 'menu';
+      this.hint?.setItems(PAUSE_HINTS);
+      audio.playSfx('cancel');
+      this.renderMenu();
+      this.renderPanel();
+      return;
+    }
+
+    if (this.panel === 'music' && this.music) {
+      if (input.justPressed('down')) {
+        this.music.move(1);
+        audio.playSfx('cursor-move');
+      }
+      if (input.justPressed('up')) {
+        this.music.move(-1);
+        audio.playSfx('cursor-move');
+      }
+      if (input.justPressed('confirm')) this.music.confirm();
+      return;
+    }
+
+    if (this.panel === 'options') {
+      const rows = optionRows(this.app.save.settings);
+      if (input.justPressed('down')) {
+        this.optionIndex = (this.optionIndex + 1) % rows.length;
+        audio.playSfx('cursor-move');
+        this.renderPanel();
+      }
+      if (input.justPressed('up')) {
+        this.optionIndex = (this.optionIndex - 1 + rows.length) % rows.length;
+        audio.playSfx('cursor-move');
+        this.renderPanel();
+      }
+      if (input.justPressed('right')) this.adjustOption(1);
+      if (input.justPressed('left')) this.adjustOption(-1);
+      if (input.justPressed('confirm')) this.adjustOption(1);
+    }
+  }
+
+  private handlePhotoInput(input: InputSnapshot): void {
+    if (input.justPressed('cancel') || input.justPressed('l1') || input.actions.includes('photo:exit')) {
+      this.exitPhotoMode();
+    }
+  }
+
+  private handleAction(action: string): void {
+    if (action === 'photo:exit') return; // handled in photo mode
+    if (this.music?.handleAction(action)) return;
+    if (action.startsWith('pause:row:')) {
+      const id = action.slice('pause:row:'.length);
+      const i = this.rows.findIndex((r) => r.id === id);
+      if (i < 0) return;
+      this.index = i;
+      this.panel = this.rows[i]!.panel;
+      audio.playSfx('cursor-move');
+      this.renderMenu();
+      this.renderPanel();
+      this.activate(this.rows[i]);
+      return;
+    }
+    if (action.startsWith('pause:opt:')) {
+      const id = action.slice('pause:opt:'.length);
+      const i = optionRows(this.app.save.settings).findIndex((r) => r.id === id);
+      if (i < 0) return;
+      this.optionIndex = i;
+      this.focus = 'panel';
+      this.panel = 'options';
+      this.adjustOption(1);
+    }
+  }
+
+  private moveMenu(dir: 1 | -1): void {
+    const n = this.rows.length;
+    if (n === 0) return;
+    this.index = (this.index + dir + n) % n;
+    const next = this.rows[this.index]!.panel;
+    audio.playSfx('cursor-move');
+    if (next !== this.panel) {
+      this.panel = next;
+      this.renderPanel();
+    }
+    this.renderMenu();
+  }
+
+  /**
+   * Fire the selected row.
+   *
+   * A row that owns a panel moves focus into it instead of doing anything —
+   * the panel is already on screen from the cursor preview, so Confirm's job
+   * is only to say "and now Up/Down belong to that".
+   */
+  private activate(row: MenuRow | undefined): void {
+    if (!row) return;
+    audio.playSfx('confirm');
+
+    if (row.entersPanel) {
+      this.focus = 'panel';
+      this.hint?.setItems(PAUSE_PANEL_HINTS);
+      this.renderMenu();
+      return;
+    }
+
+    switch (row.id) {
+      case 'resume':
+        this.close();
+        return;
+      case 'details':
+        this.panel = 'details';
+        this.renderPanel();
+        return;
+      case 'guide': {
+        const next = !this.app.save.settings.guideVisible;
+        this.app.save.setSettings({ guideVisible: next });
+        this.renderMenu();
+        return;
+      }
+      case 'restart':
+        this.opts.onRestart?.();
+        return;
+      case 'chapter-select':
+        this.opts.onChapterSelect?.();
+        return;
+      case 'quit':
+        this.opts.onQuitToTitle?.();
+        return;
+      default: {
+        const extra = this.opts.extraRows?.find((e) => e.id === row.id);
+        extra?.run();
+      }
+    }
+  }
+
+  /**
+   * Nudge one option.
+   *
+   * Volumes and text speed step; the two toggles flip regardless of direction,
+   * which is what makes Confirm work on them as well as Left/Right. Every
+   * write goes through `SaveStore.setSettings` (so it persists) *and* through
+   * `AudioManager` where the mixer needs telling — a volume the player can see
+   * but not hear would be a worse bug than no options menu at all.
+   */
+  private adjustOption(dir: 1 | -1): void {
+    const rows = optionRows(this.app.save.settings);
+    const row = rows[this.optionIndex];
+    if (!row) return;
+    const save = this.app.save;
+    const settings = save.settings;
+    const clamp01 = (v: number): number => Math.round(Math.min(1, Math.max(0, v)) * 100) / 100;
+
+    switch (row.id) {
+      case 'masterVolume': {
+        const value = clamp01(settings.masterVolume + dir * VOLUME_STEP);
+        save.setSettings({ masterVolume: value });
+        audio.setMasterVolume(value);
+        break;
+      }
+      case 'musicVolume': {
+        const value = clamp01(settings.musicVolume + dir * VOLUME_STEP);
+        save.setSettings({ musicVolume: value });
+        audio.setMusicVolume(value);
+        break;
+      }
+      case 'sfxVolume': {
+        const value = clamp01(settings.sfxVolume + dir * VOLUME_STEP);
+        save.setSettings({ sfxVolume: value });
+        audio.setSfxVolume(value);
+        break;
+      }
+      case 'textSpeed': {
+        const i = TEXT_SPEEDS.indexOf(settings.textSpeed as (typeof TEXT_SPEEDS)[number]);
+        const next = TEXT_SPEEDS[Math.min(TEXT_SPEEDS.length - 1, Math.max(0, (i < 0 ? 2 : i) + dir))];
+        save.setSettings({ textSpeed: next ?? 1 });
+        break;
+      }
+      case 'ffx2Atb':
+        save.setSettings({ ffx2Atb: settings.ffx2Atb === 'active' ? 'wait' : 'active' });
+        break;
+      case 'guideVisible':
+        save.setSettings({ guideVisible: !settings.guideVisible });
+        break;
+      default:
+        return;
+    }
+    audio.playSfx('cursor-move');
+    this.renderPanel();
+    this.renderMenu();
+  }
+
+  // -------------------------------------------------------------- photo mode
+
+  private enterPhotoMode(): void {
+    if (this.photo || !this.stage) return;
+    this.photo = new PhotoMode({
+      camera: this.app.renderer.camera,
+      // The chrome to hide is everything inside the stage; the one hint photo
+      // mode keeps goes on the screen root beside it, both so it survives that
+      // hiding rule and so it is sized in device pixels like the strip it
+      // replaces (see the `ControlsHint` mount above).
+      chrome: this.stage.stage,
+      root: this.chrome ?? this.root,
+      onExit: () => this.exitPhotoMode(),
+    });
+    this.hideScreensBelow();
+    this.hint?.unmount();
+    audio.playSfx('menu-page');
+  }
+
+  private exitPhotoMode(): void {
+    if (!this.photo) return;
+    this.photo.dispose();
+    this.photo = null;
+    this.restoreScreensBelow();
+    this.hint?.mount();
+    audio.playSfx('cancel');
+  }
+
+  /**
+   * Hide the frozen screen's own DOM for the duration of photo mode.
+   *
+   * `PhotoMode` only hides the chrome it is handed — this screen's stage. The
+   * battle HUD is not in it: `BattleScreen` mounts the HUD, the damage
+   * numerals, the message bar and the strategy guide into *its* screen root
+   * (`app/screens/BattleScreen.ts`), a sibling `div` under `App.uiRoot`, and
+   * the pause root only covers it because it sits at a higher `z-index`. Take
+   * the pause chrome away and the frozen HUD reappears on top of the
+   * turntable — a mid-swing damage numeral and a guide panel in every photo.
+   *
+   * Hiding the screen roots underneath costs nothing visually: the diorama is
+   * drawn by the renderer's own canvas, which is not inside any of them.
+   */
+  private hideScreensBelow(): void {
+    for (const screen of this.app.screens) {
+      if (screen === this) continue;
+      const el = screen.root;
+      if (!el || el.style.visibility === 'hidden') continue;
+      el.style.visibility = 'hidden';
+      this.hiddenUnder.push(el);
+    }
+  }
+
+  private restoreScreensBelow(): void {
+    for (const el of this.hiddenUnder) el.style.visibility = '';
+    this.hiddenUnder = [];
+  }
+
+  // ------------------------------------------------------------------- frame
+
+  override update(dt: number): void {
+    // Photo mode is the only thing on this screen that animates; everything
+    // else is static until the player presses something.
+    const input = this.app.input;
+    this.photo?.update(dt, {
+      left: input.pressed('left'),
+      right: input.pressed('right'),
+      up: input.pressed('up'),
+      down: input.pressed('down'),
+      // Z is `confirm` in `app/Input.ts` (alongside Enter and Space), and photo
+      // mode has nothing to confirm — so in here that whole button is the zoom,
+      // which is what makes the brief's "Z zoom" true without remapping
+      // anything. R1 doubles it for a pad.
+      zoom: input.pressed('confirm') || input.pressed('r1'),
+    });
+  }
+
+  /**
+   * Draw nothing of our own, so `App` keeps re-drawing the frozen battle
+   * underneath. See {@link App.pushOverlay}.
+   */
+  override render(): null {
+    return null;
+  }
+
+  private close(): void {
+    if (this.closing) return;
+    this.closing = true;
+    audio.playSfx('cancel');
+    this.opts.onResume();
+  }
+
+  // ---------------------------------------------------------------- triggers
+
+  override trigger(name: string): boolean {
+    if (name === 'pause:close') {
+      this.close();
+      return true;
+    }
+    if (name === 'pause:photo') {
+      this.enterPhotoMode();
+      return true;
+    }
+    if (name === 'pause:photo-off') {
+      this.exitPhotoMode();
+      return true;
+    }
+    if (name.startsWith('pause:panel:')) {
+      const panel = name.slice('pause:panel:'.length) as PausePanel;
+      const i = this.rows.findIndex((r) => r.panel === panel && r.entersPanel !== undefined);
+      this.panel = panel;
+      if (i >= 0) this.index = i;
+      this.renderMenu();
+      this.renderPanel();
+      return true;
+    }
+    return false;
+  }
+
+  override snapshot(): Record<string, unknown> {
+    const ctx = this.context();
+    return {
+      chapter: this.opts.chapter.id,
+      rows: this.rows.map((r) => r.id),
+      row: this.rows[this.index]?.id ?? null,
+      focus: this.focus,
+      panel: this.panel,
+      photo: this.photo?.snapshot() ?? null,
+      music: this.music?.nowPlaying ?? null,
+      playTimeMs: this.app.save.playTime(this.opts.chapter.id),
+      objectives: this.meta ? evaluateObjectives(this.meta.objectives, ctx) : [],
+      progress: encounterProgress(
+        ctx,
+        this.opts.chainLength !== undefined ? { chainLength: this.opts.chainLength } : {},
+      ),
+    };
+  }
+
+  override exit(): void {
+    this.photo?.dispose();
+    this.photo = null;
+    // Closing the menu straight out of photo mode must not leave the battle
+    // HUD invisible behind it.
+    this.restoreScreensBelow();
+    this.music?.dispose();
+    this.music = null;
+    this.hint?.unmount();
+    this.hint = null;
+    this.chrome?.remove();
+    this.chrome = null;
+    this.stage?.destroy();
+    this.stage = null;
+    audio.unduck(0.35);
+    this.opts.onPause?.(false);
+  }
+}
