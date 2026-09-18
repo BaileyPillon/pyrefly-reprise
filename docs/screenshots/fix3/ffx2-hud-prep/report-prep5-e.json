@@ -1,0 +1,388 @@
+[
+  {
+    "label": "prep-ch5",
+    "w": 1280,
+    "h": 720,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-1280x720-e.png",
+    "rects": [
+      {
+        "sel": ".prep__eyebrow",
+        "left": 56.9,
+        "top": 39.1,
+        "right": 265.8,
+        "bottom": 57.1
+      },
+      {
+        "sel": ".prep__where",
+        "left": 646.8,
+        "top": 40.9,
+        "right": 1223.1,
+        "bottom": 56.9
+      },
+      {
+        "sel": ".prep__roster",
+        "left": 64,
+        "top": 97.8,
+        "right": 348.4,
+        "bottom": 277.2
+      },
+      {
+        "sel": ".prep__tabs",
+        "left": 462.2,
+        "top": 99.5,
+        "right": 951.8,
+        "bottom": 128.4
+      },
+      {
+        "sel": ".prep__sheet",
+        "left": 445.4,
+        "top": 132,
+        "right": 1208,
+        "bottom": 372
+      },
+      {
+        "sel": ".prep__hint",
+        "left": 462.2,
+        "top": 426.7,
+        "right": 896.3,
+        "bottom": 440.7
+      },
+      {
+        "sel": ".prep__start",
+        "left": 986,
+        "top": 513.3,
+        "right": 1231.8,
+        "bottom": 561.8
+      },
+      {
+        "sel": ".prep__slots",
+        "left": 64,
+        "top": 584.9,
+        "right": 1169.7,
+        "bottom": 666.7
+      }
+    ],
+    "overlaps": [],
+    "clipped": [],
+    "overflow": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch5",
+    "w": 1600,
+    "h": 900,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-1600x900-e.png",
+    "rects": [
+      {
+        "sel": ".prep__eyebrow",
+        "left": 71.1,
+        "top": 48.9,
+        "right": 332.2,
+        "bottom": 71.4
+      },
+      {
+        "sel": ".prep__where",
+        "left": 808.5,
+        "top": 51.1,
+        "right": 1528.9,
+        "bottom": 71.1
+      },
+      {
+        "sel": ".prep__roster",
+        "left": 80,
+        "top": 122.2,
+        "right": 435.5,
+        "bottom": 346.5
+      },
+      {
+        "sel": ".prep__tabs",
+        "left": 577.8,
+        "top": 124.4,
+        "right": 1189.8,
+        "bottom": 160.5
+      },
+      {
+        "sel": ".prep__sheet",
+        "left": 556.7,
+        "top": 165,
+        "right": 1509.9,
+        "bottom": 465
+      },
+      {
+        "sel": ".prep__hint",
+        "left": 577.8,
+        "top": 533.3,
+        "right": 1120.4,
+        "bottom": 550.8
+      },
+      {
+        "sel": ".prep__start",
+        "left": 1232.5,
+        "top": 641.7,
+        "right": 1539.8,
+        "bottom": 702.2
+      },
+      {
+        "sel": ".prep__slots",
+        "left": 80,
+        "top": 731.2,
+        "right": 1462.1,
+        "bottom": 833.4
+      }
+    ],
+    "overlaps": [],
+    "clipped": [],
+    "overflow": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch5-tab-chapter",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-chapter-1600-e.png",
+    "overlaps": [],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5-tab-dresspheres",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-dresspheres-1600-e.png",
+    "overlaps": [
+      {
+        "a": ".prep__sheet",
+        "b": ".prep__hint",
+        "w": 542.6,
+        "h": 17.5
+      }
+    ],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5-tab-accessories",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-accessories-1600-e.png",
+    "overlaps": [],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5-tab-items",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-items-1600-e.png",
+    "overlaps": [],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5",
+    "w": 2000,
+    "h": 1000,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-2000x1000-e.png",
+    "rects": [
+      {
+        "sel": ".prep__eyebrow",
+        "left": 190.1,
+        "top": 54.3,
+        "right": 480.3,
+        "bottom": 79.3
+      },
+      {
+        "sel": ".prep__where",
+        "left": 1009.5,
+        "top": 56.8,
+        "right": 1809.9,
+        "bottom": 79
+      },
+      {
+        "sel": ".prep__roster",
+        "left": 200,
+        "top": 135.8,
+        "right": 595,
+        "bottom": 385
+      },
+      {
+        "sel": ".prep__tabs",
+        "left": 753.1,
+        "top": 138.2,
+        "right": 1433.1,
+        "bottom": 178.3
+      },
+      {
+        "sel": ".prep__sheet",
+        "left": 729.7,
+        "top": 183.3,
+        "right": 1788.8,
+        "bottom": 516.7
+      },
+      {
+        "sel": ".prep__hint",
+        "left": 753.1,
+        "top": 592.6,
+        "right": 1356,
+        "bottom": 612
+      },
+      {
+        "sel": ".prep__start",
+        "left": 1480.6,
+        "top": 713,
+        "right": 1822,
+        "bottom": 780.3
+      },
+      {
+        "sel": ".prep__slots",
+        "left": 200,
+        "top": 812.4,
+        "right": 1735.6,
+        "bottom": 926
+      }
+    ],
+    "overlaps": [],
+    "clipped": [],
+    "overflow": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch5",
+    "w": 2560,
+    "h": 1440,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-2560x1440-e.png",
+    "rects": [
+      {
+        "sel": ".prep__eyebrow",
+        "left": 113.8,
+        "top": 78.2,
+        "right": 531.6,
+        "bottom": 114.2
+      },
+      {
+        "sel": ".prep__where",
+        "left": 1293.6,
+        "top": 81.8,
+        "right": 2446.3,
+        "bottom": 113.8
+      },
+      {
+        "sel": ".prep__roster",
+        "left": 128,
+        "top": 195.5,
+        "right": 696.8,
+        "bottom": 554.4
+      },
+      {
+        "sel": ".prep__tabs",
+        "left": 924.4,
+        "top": 199.1,
+        "right": 1903.6,
+        "bottom": 256.8
+      },
+      {
+        "sel": ".prep__sheet",
+        "left": 890.7,
+        "top": 264,
+        "right": 2415.9,
+        "bottom": 744
+      },
+      {
+        "sel": ".prep__hint",
+        "left": 924.4,
+        "top": 853.3,
+        "right": 1792.6,
+        "bottom": 881.3
+      },
+      {
+        "sel": ".prep__start",
+        "left": 1972.1,
+        "top": 1026.7,
+        "right": 2463.7,
+        "bottom": 1123.6
+      },
+      {
+        "sel": ".prep__slots",
+        "left": 128,
+        "top": 1169.9,
+        "right": 2339.3,
+        "bottom": 1333.4
+      }
+    ],
+    "overlaps": [],
+    "clipped": [],
+    "overflow": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch5-tab-chapter",
+    "w": 2560,
+    "h": 1440,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-chapter-2560-e.png",
+    "overlaps": [],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5-tab-dresspheres",
+    "w": 2560,
+    "h": 1440,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-dresspheres-2560-e.png",
+    "overlaps": [
+      {
+        "a": ".prep__sheet",
+        "b": ".prep__hint",
+        "w": 868.2,
+        "h": 28
+      }
+    ],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5-tab-accessories",
+    "w": 2560,
+    "h": 1440,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-accessories-2560-e.png",
+    "overlaps": [],
+    "clipped": [],
+    "overflow": []
+  },
+  {
+    "label": "prep-ch5-tab-items",
+    "w": 2560,
+    "h": 1440,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch5-tab-items-2560-e.png",
+    "overlaps": [],
+    "clipped": [],
+    "overflow": []
+  }
+]

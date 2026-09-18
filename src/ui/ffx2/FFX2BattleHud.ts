@@ -100,6 +100,15 @@ const GUIDE_FALLBACK_BOTTOM = 104;
 const ADVISOR_FALLBACK_LEFT = 160;
 const ADVISOR_BOTTOM = 26;
 
+/**
+ * `tan(12deg)` — the house slab skew (`--ig-skew`, flipped to +12deg for
+ * FFX-2). A skewed box paints `height / 2 * this` further out than its layout
+ * box on each side, and every anchor in `MoveAdvisor` / `StrategyGuide` is a
+ * *layout* offset, so anything that has to clear a painted edge has to add it
+ * back by hand.
+ */
+const SKEW_TANGENT = Math.tan((12 * Math.PI) / 180);
+
 function isAtbSnapshot(p: TurnPreview[] | AtbSnapshot): p is AtbSnapshot {
   return !Array.isArray(p);
 }
@@ -379,8 +388,11 @@ export class FFX2BattleHud implements HudPort {
       '.mad__toggle',
       '.sgd__panel',
       '.sgd__toggle',
-      '.ffx2sc',
       '.ffx2-chain-chip',
+      // Not `.ffx2sc`: the spherechange wheel is a modal sized to the whole
+      // overlay, so listing it would make every placement "covered" and send
+      // the solver hunting for a spot that does not exist. It is *meant* to be
+      // over the slab, and it takes input while it is up.
     ] as const;
     for (const selector of selectors) {
       for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
@@ -573,7 +585,14 @@ export class FFX2BattleHud implements HudPort {
       left = left === null ? stageLeft : Math.min(left, stageLeft);
     }
     if (left === null) return;
-    fence.style.left = `${Math.max(0, Math.min(639, left)).toFixed(2)}px`;
+    // And back off by the *card's* own lean, for the same reason: `MoveAdvisor`
+    // positions its layout box, the house `skewX` paints the box's corner
+    // further out than that, and `CLEARANCE_GAP` alone is 0.2 grid px short of
+    // a full-height card's lean — which at 2560x1440 is the sliver of Paine's
+    // row the card was still touching.
+    const card = this.stage.querySelector<HTMLElement>('.mad__card');
+    const lean = ((card?.offsetHeight ?? 0) / 2) * SKEW_TANGENT;
+    fence.style.left = `${Math.max(0, Math.min(639, left - lean)).toFixed(2)}px`;
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {

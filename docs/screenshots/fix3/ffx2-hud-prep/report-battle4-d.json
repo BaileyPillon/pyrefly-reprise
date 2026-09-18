@@ -1,0 +1,446 @@
+[
+  {
+    "label": "battle-ch4",
+    "w": 1280,
+    "h": 720,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch4-1280x720-d.png",
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 42.7,
+        "top": 35.5,
+        "right": 516.6,
+        "bottom": 97.5
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 928,
+        "top": 520,
+        "right": 1260,
+        "bottom": 700
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 953.8,
+        "top": 281,
+        "right": 1256,
+        "bottom": 487.1
+      },
+      {
+        "sel": ".mad__card",
+        "left": 505.6,
+        "top": 551.6,
+        "right": 922.4,
+        "bottom": 668
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 516.4,
+        "top": 533,
+        "right": 621.3,
+        "bottom": 548
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 42.7,
+        "top": 130,
+        "right": 306.7,
+        "bottom": 382
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 41.1,
+        "top": 108,
+        "right": 141.9,
+        "bottom": 123
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 804.6,
+        "top": 8,
+        "right": 1104.6,
+        "bottom": 203.9
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1043.8,
+        "top": 8,
+        "right": 1104.6,
+        "bottom": 23
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 938,
+        "top": 520,
+        "right": 1266,
+        "bottom": 576
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 930,
+        "top": 582,
+        "right": 1258,
+        "bottom": 638
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 922,
+        "top": 644,
+        "right": 1250,
+        "bottom": 700
+      }
+    ],
+    "overlaps": [
+      {
+        "a": ".eint__panel",
+        "b": ".eint__toggle",
+        "w": 60.8,
+        "h": 15
+      }
+    ],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 216.77509420326604,
+        "right": 361.3282460994433,
+        "top": 391.4575733766401,
+        "bottom": 649.5882017626708
+      },
+      {
+        "id": "rikku",
+        "left": 379.5052093424021,
+        "right": 503.7515945821211,
+        "top": 361.8374096652151,
+        "bottom": 583.7059547361417
+      },
+      {
+        "id": "paine",
+        "left": 462.66924487712,
+        "right": 569.2202829145705,
+        "top": 336.3823942823181,
+        "bottom": 526.6521050634797
+      },
+      {
+        "id": "bahamut",
+        "left": 623.8039954133804,
+        "right": 800.6095909456686,
+        "top": 116.3983444538265,
+        "bottom": 432.1226221900554
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "battle-ch4",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch4-1600x900-d.png",
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 53.3,
+        "top": 44.4,
+        "right": 645.8,
+        "bottom": 121.9
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 1160,
+        "top": 650,
+        "right": 1575,
+        "bottom": 875
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 1192.3,
+        "top": 351.2,
+        "right": 1570,
+        "bottom": 608.9
+      },
+      {
+        "sel": ".mad__card",
+        "left": 634.5,
+        "top": 689.5,
+        "right": 1153,
+        "bottom": 835
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 648,
+        "top": 666.3,
+        "right": 779.1,
+        "bottom": 685
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 53.3,
+        "top": 162.5,
+        "right": 383.3,
+        "bottom": 480
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 51.3,
+        "top": 135,
+        "right": 177.4,
+        "bottom": 153.8
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 1003.3,
+        "top": 10,
+        "right": 1378.3,
+        "bottom": 254.8
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1302.2,
+        "top": 10,
+        "right": 1378.2,
+        "bottom": 28.8
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 1172.6,
+        "top": 650,
+        "right": 1582.4,
+        "bottom": 720
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 1162.6,
+        "top": 727.5,
+        "right": 1572.4,
+        "bottom": 797.5
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 1152.6,
+        "top": 805,
+        "right": 1562.4,
+        "bottom": 875
+      }
+    ],
+    "overlaps": [
+      {
+        "a": ".eint__panel",
+        "b": ".eint__toggle",
+        "w": 76,
+        "h": 18.8
+      }
+    ],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 275.87262435667463,
+        "right": 457.0237568468688,
+        "top": 492.12431333320677,
+        "bottom": 815.6084784942677
+      },
+      {
+        "id": "rikku",
+        "left": 477.7991219636724,
+        "right": 633.3835653134902,
+        "top": 453.9156268199854,
+        "bottom": 731.74498994466
+      },
+      {
+        "id": "paine",
+        "left": 579.9573556566268,
+        "right": 713.332560433782,
+        "top": 421.19874894377114,
+        "bottom": 659.3687574744054
+      },
+      {
+        "id": "bahamut",
+        "left": 778.2067130985931,
+        "right": 999.3748827783916,
+        "top": 144.5552609774768,
+        "bottom": 539.4984211199738
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "battle-ch4",
+    "w": 2000,
+    "h": 1000,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch4-2000x1000-d.png",
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 170.4,
+        "top": 49.3,
+        "right": 828.7,
+        "bottom": 135.5
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 1400,
+        "top": 722.2,
+        "right": 1861.1,
+        "bottom": 972.2
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 1435.9,
+        "top": 390.2,
+        "right": 1855.6,
+        "bottom": 676.6
+      },
+      {
+        "sel": ".mad__card",
+        "left": 810.6,
+        "top": 766.1,
+        "right": 1392.2,
+        "bottom": 927.8
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 825.6,
+        "top": 740.3,
+        "right": 971.2,
+        "bottom": 761.1
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 170.4,
+        "top": 180.6,
+        "right": 537,
+        "bottom": 536.1
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 168.1,
+        "top": 150,
+        "right": 308.2,
+        "bottom": 170.8
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 1229,
+        "top": 11.1,
+        "right": 1645.7,
+        "bottom": 283.1
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1561.2,
+        "top": 11.1,
+        "right": 1645.7,
+        "bottom": 31.9
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 1414,
+        "top": 722.2,
+        "right": 1869.4,
+        "bottom": 800
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 1402.9,
+        "top": 808.3,
+        "right": 1858.3,
+        "bottom": 886.1
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 1391.7,
+        "top": 894.5,
+        "right": 1847.2,
+        "bottom": 972.2
+      }
+    ],
+    "overlaps": [
+      {
+        "a": ".eint__panel",
+        "b": ".eint__toggle",
+        "w": 84.5,
+        "h": 20.8
+      }
+    ],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 403.37578259739746,
+        "right": 606.3957477709799,
+        "top": 549.0011463820703,
+        "bottom": 911.5367984777531
+      },
+      {
+        "id": "rikku",
+        "left": 633.4608876961759,
+        "right": 807.7313365337504,
+        "top": 505.48678241203106,
+        "bottom": 816.6840124791286
+      },
+      {
+        "id": "paine",
+        "left": 751.0084731221996,
+        "right": 900.2813807120574,
+        "top": 468.2106103510563,
+        "bottom": 734.7693739043739
+      },
+      {
+        "id": "bahamut",
+        "left": 977.6589504217861,
+        "right": 1225.0626848272625,
+        "top": 157.79012983921203,
+        "bottom": 599.582512706134
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "battle-ch4",
+    "w": 2560,
+    "h": 1440,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch4-2560x1440-d.png",
+    "screen": "battle",
+    "rects": [],
+    "overlaps": [],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": -540.3460281707685,
+        "right": -135.16781126169758,
+        "top": 1071.7892739971046,
+        "bottom": 1795.321804191874
+      },
+      {
+        "id": "rikku",
+        "left": 45.48324751540869,
+        "right": 371.69694392916983,
+        "top": 938.842312283272,
+        "bottom": 1521.3667701649883
+      },
+      {
+        "id": "paine",
+        "left": 341.461835423042,
+        "right": 608.1232953227404,
+        "top": 840.9433364219075,
+        "bottom": 1317.1245148142261
+      },
+      {
+        "id": "bahamut",
+        "left": 820.386147607297,
+        "right": 1227.9360215171728,
+        "top": 287.176886841348,
+        "bottom": 1014.944518823269
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  }
+]

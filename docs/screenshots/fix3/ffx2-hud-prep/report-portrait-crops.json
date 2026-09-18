@@ -1,0 +1,389 @@
+{
+  "tiles": [
+    {
+      "id": "tidus",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -8.2,
+        "top": -42.1,
+        "right": -57.3,
+        "bottom": -136.6
+      },
+      "scale": 1.36
+    },
+    {
+      "id": "yuna",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -35.8,
+        "right": -42.2,
+        "bottom": -109
+      },
+      "scale": 1.23
+    },
+    {
+      "id": "auron",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -65.4,
+        "right": -23.8,
+        "bottom": -52.4
+      },
+      "scale": 1.13
+    },
+    {
+      "id": "wakka",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -22.6,
+        "right": -44.1,
+        "bottom": -124.8
+      },
+      "scale": 1.24
+    },
+    {
+      "id": "lulu",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -75.9,
+        "top": -62.8,
+        "right": 0,
+        "bottom": -131.2
+      },
+      "scale": 1.42
+    },
+    {
+      "id": "kimahri",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -80.5,
+        "top": -63.5,
+        "right": -23.7,
+        "bottom": -171.8
+      },
+      "scale": 1.58
+    },
+    {
+      "id": "rikku",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -21.2,
+        "top": -83.4,
+        "right": -1,
+        "bottom": -32.1
+      },
+      "scale": 1.12
+    },
+    {
+      "id": "seymour",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -119.1,
+        "top": -88.6,
+        "right": -13,
+        "bottom": -187.5
+      },
+      "scale": 1.73
+    },
+    {
+      "id": "yunalesca",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -40.4,
+        "top": -39.7,
+        "right": 0,
+        "bottom": -102.4
+      },
+      "scale": 1.22
+    },
+    {
+      "id": "jecht",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": -104.2,
+        "top": -18.9,
+        "right": 0,
+        "bottom": -216.5
+      },
+      "scale": 1.58
+    },
+    {
+      "id": "anima",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -2,
+        "right": 0,
+        "bottom": -81
+      },
+      "scale": 1
+    },
+    {
+      "id": "bahamut",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -2,
+        "right": 0,
+        "bottom": -81
+      },
+      "scale": 1
+    },
+    {
+      "id": "ifrit",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -2,
+        "right": 0,
+        "bottom": -81
+      },
+      "scale": 1
+    },
+    {
+      "id": "ixion",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -2,
+        "right": 0,
+        "bottom": -81
+      },
+      "scale": 1
+    },
+    {
+      "id": "shiva",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -2,
+        "right": 0,
+        "bottom": -81
+      },
+      "scale": 1
+    },
+    {
+      "id": "valefor",
+      "body": false,
+      "natural": "824x1202",
+      "bare": {
+        "left": 0,
+        "top": -1.8,
+        "right": 0,
+        "bottom": -80.7
+      },
+      "scale": 1
+    },
+    {
+      "id": "yojimbo",
+      "body": false,
+      "natural": "832x1216",
+      "bare": {
+        "left": 0,
+        "top": -2,
+        "right": 0,
+        "bottom": -81
+      },
+      "scale": 1
+    },
+    {
+      "id": "yuna-gunner",
+      "body": true,
+      "natural": "460x1194",
+      "bare": {
+        "left": -78.8,
+        "top": -55.8,
+        "right": -78.8,
+        "bottom": -640.2
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "yuna-white-mage",
+      "body": true,
+      "natural": "758x1172",
+      "bare": {
+        "left": -78.8,
+        "top": -2.7,
+        "right": -78.8,
+        "bottom": -339.2
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "yuna-dark-knight",
+      "body": true,
+      "natural": "549x1195",
+      "bare": {
+        "left": -78.8,
+        "top": -34.6,
+        "right": -78.8,
+        "bottom": -520
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "rikku-thief",
+      "body": true,
+      "natural": "558x1212",
+      "bare": {
+        "left": -78.8,
+        "top": -34.4,
+        "right": -78.8,
+        "bottom": -518.7
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "rikku-alchemist",
+      "body": true,
+      "natural": "541x1194",
+      "bare": {
+        "left": -78.8,
+        "top": -36.1,
+        "right": -78.8,
+        "bottom": -528.7
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "rikku-berserker",
+      "body": true,
+      "natural": "555x1215",
+      "bare": {
+        "left": -78.8,
+        "top": -35.2,
+        "right": -78.8,
+        "bottom": -523.6
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "paine-warrior",
+      "body": true,
+      "natural": "408x1180",
+      "bare": {
+        "left": -78.8,
+        "top": -70.8,
+        "right": -78.8,
+        "bottom": -725.3
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "paine-dark-knight",
+      "body": true,
+      "natural": "609x1208",
+      "bare": {
+        "left": -78.8,
+        "top": -24.8,
+        "right": -78.8,
+        "bottom": -464.6
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "paine-samurai",
+      "body": true,
+      "natural": "640x1129",
+      "bare": {
+        "left": -78.8,
+        "top": -13.7,
+        "right": -78.8,
+        "bottom": -401.7
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "ffx2-bahamut",
+      "body": true,
+      "natural": "1024x1024",
+      "bare": {
+        "left": -78.8,
+        "top": 0,
+        "right": -78.8,
+        "bottom": -157.5
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "vegnagun-head",
+      "body": true,
+      "natural": "1126x809",
+      "bare": {
+        "left": -78.8,
+        "top": 0,
+        "right": -78.8,
+        "bottom": -62.5
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "shuyin",
+      "body": true,
+      "natural": "694x1136",
+      "bare": {
+        "left": -78.8,
+        "top": -7.3,
+        "right": -78.8,
+        "bottom": -365.2
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "lenne",
+      "body": true,
+      "natural": "724x1170",
+      "bare": {
+        "left": -78.8,
+        "top": -6.2,
+        "right": -78.8,
+        "bottom": -359.2
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "mortiorchis",
+      "body": true,
+      "natural": "1201x829",
+      "bare": {
+        "left": -78.8,
+        "top": 0,
+        "right": -78.8,
+        "bottom": -53
+      },
+      "scale": 1.88
+    },
+    {
+      "id": "seymour-flux",
+      "body": true,
+      "natural": "832x1214",
+      "bare": {
+        "left": -78.8,
+        "top": 0,
+        "right": -78.8,
+        "bottom": -312.5
+      },
+      "scale": 1.88
+    }
+  ],
+  "missing": []
+}

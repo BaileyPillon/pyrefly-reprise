@@ -1,0 +1,82 @@
+[
+  {
+    "label": "prep-ch4",
+    "w": 1280,
+    "h": 720,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-1280x720-b.png",
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch4",
+    "w": 1600,
+    "h": 900,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-1600x900-b.png",
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch4-tab-chapter",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-tab-chapter-b.png"
+  },
+  {
+    "label": "prep-ch4-tab-dresspheres",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-tab-dresspheres-b.png"
+  },
+  {
+    "label": "prep-ch4-tab-accessories",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-tab-accessories-b.png"
+  },
+  {
+    "label": "prep-ch4-tab-items",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-tab-items-b.png"
+  },
+  {
+    "label": "prep-ch4",
+    "w": 2000,
+    "h": 1000,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-2000x1000-b.png",
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "prep-ch4",
+    "w": 2560,
+    "h": 1440,
+    "tabs": [
+      "CHAPTER",
+      "DRESSPHERES",
+      "ACCESSORIES",
+      "ITEMS"
+    ],
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\prep-ch4-2560x1440-b.png",
+    "errors": [],
+    "art404": []
+  }
+]
