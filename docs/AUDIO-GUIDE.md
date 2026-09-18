@@ -1,8 +1,19 @@
 # Audio Guide — music and SFX
 
-Everything you hear in Pyrefly Reprise is **generated code**. There are no audio
-files in the repo (the WAVs in `docs/audio/` are rendered previews, not runtime
-assets), and every note is an original composition.
+Every note in Pyrefly Reprise is an **original composition**, written as code in
+`src/audio/tracks/`. This guide covers writing that music.
+
+**What plays those notes has changed** — read
+[`audio/PIPELINE.md`](audio/PIPELINE.md) before you touch instruments or
+timbre. In short: the cues are now rendered offline with recorded orchestral
+samples and shipped as MP3s under `public/audio/`, because the runtime
+oscillator mix was, in Bailey's words, "too arcade-y". The synthesised voices
+described below are still here and still run — they are the fallback whenever a
+cue has not been pre-rendered — but they are no longer what a player hears.
+
+Everything about the *scores* in this guide is unchanged, and the scores
+themselves did not change when the pipeline landed. That is the point: the notes
+were never the problem.
 
 > **Rule, no exceptions:** never transcribe a Square Enix melody. Match *mood,
 > tempo, instrumentation and harmonic language* — minor keys with a major lift,
@@ -21,9 +32,16 @@ instruments.ts ── voices/    one note  → Float32 stereo buffer
         ▼
 render.ts   renderTrack(track, sampleRate) → { left, right, loopStartSample, loopEndSample }
         │
-        ├── Node:    tools/render-track.mjs → docs/audio/*.wav
-        └── Browser: worker.ts → MusicLoader → AudioBuffer → AudioManager
+        ├── Node:    tools/render-track.mjs → docs/audio/*.wav        (synth preview)
+        ├── Node:    tools/audio/render.mjs → public/audio/*.mp3      (SAMPLED — what ships)
+        └── Browser: worker.ts → MusicLoader → AudioBuffer → AudioManager  (fallback)
 ```
+
+`renderTrack` is one sequencer with four optional hooks — `voiceFor`,
+`spatialise`, `reverbRender`, `master` — all defaulting to the behaviour
+described here. The offline renderer passes sampled voices, orchestral seating
+and a concert hall through them; the browser passes nothing and gets exactly
+what it always got. See [`audio/PIPELINE.md`](audio/PIPELINE.md).
 
 `dsp/`, `voices/`, `instruments.ts`, `score.ts`, `harmony.ts`, `render.ts`,
 `tracks/` and `sfx/` are **platform-free**: no DOM, no Web Audio, no Node APIs.
