@@ -95,7 +95,8 @@ export interface SlabPlacement {
  *
  * `top` never goes **above** the natural position: the natural top is already
  * the highest the slab wants to be (it is the enemy's head minus the gap minus
- * the slab), so anything higher is further from the boss for no reason.
+ * the slab), so anything higher is further from the boss for no reason. Nor
+ * above `edge + headroom`, which is the band the slab's own chip needs.
  *
  * With nothing free — a small frame with a big board — the candidate that
  * covers the least is returned with `free: false`, which is still strictly less
@@ -107,18 +108,28 @@ export function placeSlab(
   obstacles: readonly SlabRect[],
   layer: { width: number; height: number },
   edge: number,
+  /**
+   * Clearance to keep above the slab for its own `E HIDE` chip, which
+   * `EnemyIntent.layout` parks on the slab's top-right corner and then clamps
+   * into the frame — so a slab flush with the top edge has the chip clamped
+   * down on top of its own first line. Reserving the chip's height is the only
+   * way to keep the two apart from out here.
+   */
+  headroom = 0,
 ): SlabPlacement {
   const { w, h } = size;
   const maxLeft = layer.width - w - edge;
+  const floor = edge + headroom;
   const maxTop = layer.height - h - edge;
+  const wanted = Math.max(natural.top, floor);
 
   const lefts = new Set<number>([clamp(edge, maxLeft, natural.left)]);
-  const tops = new Set<number>([clamp(edge, maxTop, natural.top)]);
+  const tops = new Set<number>([clamp(floor, maxTop, wanted)]);
   for (const o of obstacles) {
     lefts.add(clamp(edge, maxLeft, o.right + DODGE_GAP));
     lefts.add(clamp(edge, maxLeft, o.left - w - DODGE_GAP));
     // Downward only; see the doc comment.
-    tops.add(clamp(edge, maxTop, Math.max(natural.top, o.bottom + DODGE_GAP)));
+    tops.add(clamp(floor, maxTop, Math.max(wanted, o.bottom + DODGE_GAP)));
   }
 
   let best: SlabPlacement | null = null;
@@ -126,7 +137,7 @@ export function placeSlab(
   let bestCover = Infinity;
   for (const left of lefts) {
     for (const top of tops) {
-      if (top < natural.top - 0.5) continue;
+      if (top < wanted - 0.5) continue;
       const box = { left, top, right: left + w, bottom: top + h };
       let cover = 0;
       for (const o of obstacles) cover += overlapArea(box, o);
@@ -141,7 +152,7 @@ export function placeSlab(
       bestCover = cover;
     }
   }
-  return best ?? { left: clamp(edge, maxLeft, natural.left), top: clamp(edge, maxTop, natural.top), free: false };
+  return best ?? { left: clamp(edge, maxLeft, natural.left), top: clamp(floor, maxTop, wanted), free: false };
 }
 
 /**

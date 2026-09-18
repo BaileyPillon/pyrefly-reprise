@@ -104,6 +104,22 @@ describe('placeSlab', () => {
     expect(out.top + SIZE.h).toBeLessThanOrEqual(LAYER.height - EDGE + 0.001);
   });
 
+  it('keeps headroom for the slab’s own chip', () => {
+    // Nothing in the way, but the natural spot is flush with the top edge —
+    // which is where `EnemyIntent.layout` clamps the `E HIDE` chip down onto
+    // the panel's first line.
+    const out = placeSlab({ left: 400, top: -200 }, SIZE, [], LAYER, EDGE, 31);
+    expect(out.top).toBeGreaterThanOrEqual(EDGE + 31 - 0.5);
+  });
+
+  it('still steers to a clear placement on the real board with headroom', () => {
+    const out = placeSlab(NATURAL, SIZE, BOARD, LAYER, EDGE, 31);
+    expect(out.free).toBe(true);
+    expect(out.top).toBeGreaterThanOrEqual(EDGE + 31 - 0.5);
+    const box = { left: out.left, top: out.top, right: out.left + SIZE.w, bottom: out.top + SIZE.h };
+    for (const o of BOARD) expect([o, hits(box, o)]).toEqual([o, false]);
+  });
+
   it('reports the least-covering spot when nothing is free', () => {
     const wall: SlabRect[] = [{ left: -10, top: -10, right: 1290, bottom: 730 }];
     const out = placeSlab(NATURAL, SIZE, wall, LAYER, EDGE);
@@ -173,8 +189,10 @@ describe('steerRects', () => {
         left: Math.max(edge, Math.min(layer.width - size.w - edge, natural.left)),
         top: Math.max(edge, Math.min(layer.height - size.h - edge, natural.top)),
       };
-      const target = placeSlab(natural, size, board, layer, edge);
+      const headroom = 8 * scale + scale;
+      const target = placeSlab(natural, size, board, layer, edge, headroom);
       expect([scale, target.free]).toEqual([scale, true]);
+      expect(target.top).toBeGreaterThanOrEqual(edge + headroom - 0.5);
       const landed = greedy(start, size, steerRects(start, target, size, layer), layer, edge);
       const box = { left: landed.left, top: landed.top, right: landed.left + size.w, bottom: landed.top + size.h };
       for (const o of board) expect([scale, o, hits(box, o)]).toEqual([scale, o, false]);

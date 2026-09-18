@@ -414,12 +414,15 @@ export class FFX2BattleHud implements HudPort {
     if (!head) return null;
 
     const scale = this.stageScale || 1;
-    const box = (this.intent.isVisible ? this.el.querySelector('.eint__panel') : this.el.querySelector('.eint__toggle')) as
-      | HTMLElement
-      | null;
+    const chip = this.el.querySelector<HTMLElement>('.eint__toggle');
+    const box = this.intent.isVisible ? this.el.querySelector<HTMLElement>('.eint__panel') : chip;
     const rect = box?.getBoundingClientRect();
     const w = rect?.width || INTENT_FALLBACK_W * scale;
     const h = rect?.height || INTENT_FALLBACK_H * scale;
+    // The chip rides the panel's top-right corner and is clamped into the
+    // frame, so a slab flush with the top edge wears its own `E HIDE` across
+    // its first line. Reserve the chip's band while the panel is up.
+    const headroom = this.intent.isVisible ? (chip?.getBoundingClientRect().height ?? 8 * scale) + scale : 0;
 
     const edge = INTENT_EDGE_MARGIN * scale;
     const cx = head.x - layer.left;
@@ -432,7 +435,7 @@ export class FFX2BattleHud implements HudPort {
       right: o.right - layer.left,
       bottom: o.bottom - layer.top,
     }));
-    const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge);
+    const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge, headroom);
     const clampedNatural = {
       left: Math.max(edge, Math.min(Math.max(edge, layer.width - w - edge), natural.left)),
       top: Math.max(edge, Math.min(Math.max(edge, layer.height - h - edge), natural.top)),
