@@ -1,0 +1,47 @@
+{
+  "out": "docs/screenshots/art/seymour-flux-body.png",
+  "title": "SEYMOUR FLUX (rider) \u2014 art round 3, facing contract v3",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - enemies face frame-left",
+  "rows": [
+    {
+      "label": "SEYMOUR-FLUX-BODY - battle states",
+      "kind": "character",
+      "cellHeight": 470,
+      "cellWidth": 290,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "SEYMOUR - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/seymour.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

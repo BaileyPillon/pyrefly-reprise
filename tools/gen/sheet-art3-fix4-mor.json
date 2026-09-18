@@ -1,0 +1,59 @@
+{
+  "out": "docs/screenshots/art/_ba4-mor.png",
+  "title": "mortiorchis idle round 3 (no ref, halo pushed)",
+  "subtitle": "fix pass, contract v3",
+  "rows": [
+    {
+      "label": "idleH",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/mortiorchis/idleH.1.png",
+          "caption": "idleH.1"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleH.2.png",
+          "caption": "idleH.2"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleH.3.png",
+          "caption": "idleH.3"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleH.4.png",
+          "caption": "idleH.4"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleH.5.png",
+          "caption": "idleH.5"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleH.6.png",
+          "caption": "idleH.6"
+        }
+      ]
+    },
+    {
+      "label": "round1 idleF + current",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/mortiorchis/idleF.1.png",
+          "caption": "idleF.1"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleF.3.png",
+          "caption": "idleF.3"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idle.png",
+          "caption": "idle"
+        }
+      ]
+    }
+  ]
+}

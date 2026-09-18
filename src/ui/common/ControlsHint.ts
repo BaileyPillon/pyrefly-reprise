@@ -126,3 +126,59 @@ export const GUIDE_HINT_ITEM: ControlHintItem = {
   pointer: 'Guide',
   action: 'guide:toggle',
 };
+
+/**
+ * The in-battle move advisor's toggle, worded per device.
+ *
+ * Here beside {@link GUIDE_HINT_ITEM} and for the same reason: the card's own
+ * chip and any controls strip that lists it must say the same thing. `N` is the
+ * one letter no existing binding claims, and the gamepad column names standard
+ * button 7 — the right trigger, which `src/app/Input.ts`'s `PAD_MAP` leaves
+ * free and which the guide's button 2 does not collide with.
+ *
+ * `action` makes the chip clickable for a mouse or touch player; a screen that
+ * includes this item must handle `'advisor:toggle'` in `input.actions`. The
+ * card's own chip listens for its own clicks and does not need it.
+ */
+export const ADVISOR_HINT_ITEM: ControlHintItem = {
+  label: 'best move',
+  keyboard: 'N',
+  gamepad: 'R2',
+  pointer: 'Best move',
+  action: 'advisor:toggle',
+};
+
+/**
+ * The enemy-intent slab's toggle, worded per device.
+ *
+ * `E` is the key — the letter of the word a player will guess — and it is the
+ * one binding in this file that is **not** free. `src/app/Input.ts` maps `E`
+ * (with `C` and the pad's Start) to the abstract `start` button, and
+ * `BattleScreen.handleInput` opens the pause menu on `start`.
+ *
+ * That collision is resolved where it belongs, at the battle screen: the slab's
+ * own `keydown` listener records the press and `EnemyIntent.consumeIntentKeyPress`
+ * lets `BattleScreen` take the `start` edge for it, so one tap of `E` hides the
+ * slab and does not also open the pause. `P`, `C`, `Esc`, the pad's Start button
+ * and the PAUSE chip all still open it. The panel listens for the raw `keydown`
+ * itself, exactly as the strategy guide listens for `G`, rather than adding a
+ * battle-only special case to a contract file thirty agents import.
+ *
+ * The gamepad column names standard-gamepad button **3** (Triangle on a
+ * DualShock, Y on an Xbox pad). `PAD_MAP` binds it to the abstract `triangle`,
+ * which no battle screen reads — the demo scene is its only consumer — and
+ * button 2 is already the strategy guide's, so the two optional panels sit on
+ * the two face buttons a fight leaves idle and neither collides with confirm
+ * or cancel.
+ *
+ * `action` makes the chip clickable for a mouse or touch player; a screen that
+ * prints this item must handle `'intent:toggle'`. The slab's own chip listens
+ * for its own clicks and does not need it.
+ */
+export const INTENT_HINT_ITEM: ControlHintItem = {
+  label: 'enemy move',
+  keyboard: 'E',
+  gamepad: 'Triangle',
+  pointer: 'Enemy',
+  action: 'intent:toggle',
+};

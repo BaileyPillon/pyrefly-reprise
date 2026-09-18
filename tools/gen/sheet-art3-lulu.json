@@ -1,0 +1,55 @@
+{
+  "out": "docs/screenshots/art/lulu.png",
+  "title": "Pyrefly Reprise - LULU (art round 3, facing contract v3, fix pass)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - party faces frame-right",
+  "rows": [
+    {
+      "label": "LULU - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 250,
+      "items": [
+        {
+          "path": "public/art/characters/lulu/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/lulu/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/lulu/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/lulu/item.png",
+          "caption": "item"
+        },
+        {
+          "path": "public/art/characters/lulu/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/lulu/victory.png",
+          "caption": "victory"
+        },
+        {
+          "path": "public/art/characters/lulu/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "LULU - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/lulu.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

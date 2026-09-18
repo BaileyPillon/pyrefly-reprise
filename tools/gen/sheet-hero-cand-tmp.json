@@ -1,0 +1,51 @@
+{
+  "out": "docs/screenshots/art/_f4-ch4.png",
+  "title": "fix4 — ch4 Bahamut",
+  "subtitle": "hero fix-pass candidates — check pupils and hands first, then canon detail, then lighting identity",
+  "rows": [
+    {
+      "label": "candidates",
+      "cellHeight": 430,
+      "items": [
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.1.png",
+          "caption": "ch4-bahamut.1"
+        },
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.2.png",
+          "caption": "ch4-bahamut.2"
+        },
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.3.png",
+          "caption": "ch4-bahamut.3"
+        },
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.4.png",
+          "caption": "ch4-bahamut.4"
+        }
+      ]
+    },
+    {
+      "label": "candidates (cont.)",
+      "cellHeight": 430,
+      "items": [
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.5.png",
+          "caption": "ch4-bahamut.5"
+        },
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.6.png",
+          "caption": "ch4-bahamut.6"
+        },
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.7.png",
+          "caption": "ch4-bahamut.7"
+        },
+        {
+          "path": "public/art/pause/_fix4/ch4-bahamut.8.png",
+          "caption": "ch4-bahamut.8"
+        }
+      ]
+    }
+  ]
+}

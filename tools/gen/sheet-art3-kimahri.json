@@ -1,0 +1,59 @@
+{
+  "out": "docs/screenshots/art/kimahri.png",
+  "title": "Pyrefly Reprise - KIMAHRI (art round 3, facing contract v3, fix pass)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - party faces frame-right",
+  "rows": [
+    {
+      "label": "KIMAHRI - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 250,
+      "items": [
+        {
+          "path": "public/art/characters/kimahri/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/kimahri/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/kimahri/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/kimahri/item.png",
+          "caption": "item"
+        },
+        {
+          "path": "public/art/characters/kimahri/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/kimahri/victory.png",
+          "caption": "victory"
+        },
+        {
+          "path": "public/art/characters/kimahri/jump.png",
+          "caption": "jump"
+        },
+        {
+          "path": "public/art/characters/kimahri/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "KIMAHRI - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/kimahri.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

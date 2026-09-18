@@ -9,7 +9,10 @@
     "node": ">=20.19"
   },
   "scripts": {
+    "predev": "node tools/gen/manifest.mjs --quiet",
     "dev": "vite",
+    "art:manifest": "node tools/gen/manifest.mjs",
+    "prebuild": "node tools/gen/manifest.mjs --quiet",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",

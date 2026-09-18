@@ -41,6 +41,9 @@ import { findEnemyGroup, setupForChapter, setupForNextLink } from './BattleScree
 import { createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
+import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
+import { attachEnemyIntent, consumeIntentKeyPress } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
 
 export interface BattleScreenOptions {
@@ -100,6 +103,8 @@ export class BattleScreen extends Screen {
   private exitIntent: 'restart' | 'chapter-select' | 'title' | null = null;
   /** Set by the raw `P` listener; consumed by the next `handleInput`. */
   private pauseKeyPressed = false;
+  /** The small PAUSE chip in the HUD corner — the mouse's way in. */
+  private pauseChip: HTMLElement | null = null;
 
   /** Resolves when the encounter ends (victory, defeat, escape or exit). */
   readonly finished: Promise<BattleScreenResult>;
@@ -148,6 +153,12 @@ export class BattleScreen extends Screen {
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
+      // The enemy-intent slab needs the live engine, not just the state the HUD
+      // is synced with: predicting a rotation means dry-running its AI script,
+      // and the script's memory (Yunalesca's `priv0004`, the BFA log cursor)
+      // lives in engine runtime that `BattleState` does not carry. Both sides
+      // are probed rather than typed — see `attachEnemyIntent`.
+      attachEnemyIntent(this.hud, this.engine);
     }
 
     // A real HUD sees every event through `onEvent` and draws its own numerals
@@ -200,11 +211,31 @@ export class BattleScreen extends Screen {
     void audio.playMusic(chapter.music.battle, { fade: 1.2 });
     void this.app.fade('clear', 600);
 
-    // `P` is not in `app/Input.ts`'s key map and this screen does not own that
-    // file, so the third way into the pause menu is a listener of its own.
-    // It only ever sets a flag: the decision — and the "not while a command
-    // menu owns the keyboard" rule — stays in `handleInput` with the other two.
+    // `P` has no abstract button in `app/Input.ts` — adding one would put a
+    // global binding in a contract file for a single screen — so it gets a
+    // listener of its own. It only ever sets a flag; every decision about
+    // *whether* the menu may open stays in `handleInput` with the other ways in.
+    //
+    // Note this is a bubble-phase listener, so it stops firing the moment the
+    // pause screen claims the keyboard (`Input.claimKeyboard`, capture phase).
+    // That is the behaviour we want: P re-opening a menu that is already up
+    // would be a no-op at best.
     window.addEventListener('keydown', this.onPauseKey);
+
+    // ...and the fourth, for a mouse: a chip in the top-left corner of the
+    // frame. `Input.onClick` turns any `[data-action]` under `#ui` into an
+    // entry in `input.actions`, so this needs no listener of its own.
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    // `.ig` so the chip can read `--ig-accent` (it sits on the battle screen's
+    // root, outside the HUD's own themed stage); `.ig--ffx2` so an X-2 chapter
+    // gets pyre pink rather than the FFX gold fallback.
+    chip.className = chapter.game === 'ffx2' ? 'battle-pause-chip ig ig--ffx2' : 'battle-pause-chip ig';
+    chip.dataset['action'] = 'pause:open';
+    chip.textContent = 'PAUSE';
+    chip.setAttribute('aria-label', 'Pause');
+    this.root.appendChild(chip);
+    this.pauseChip = chip;
 
     // How many formations this chapter chains through, for the pause screen's
     // ENCOUNTER PROGRESS row ("LINK 2 OF 4"). Async because resolving a
@@ -314,26 +345,56 @@ export class BattleScreen extends Screen {
   /**
    * Whether the pause menu may open right now.
    *
-   * It may not while the HUD is waiting for a command. Both command menus
-   * (`ui/ffx/CommandMenu.ts`, `ui/ffx2/CommandMenu.ts`) take the keyboard
-   * directly off `window` for as long as they are open, so a pause menu
-   * stacked on top of one would have two screens reading the same arrow keys
-   * and Esc would mean "back out of targeting" and "close the pause" at the
-   * same time. That is the rule behind the brief's "Esc when no submenu is
-   * open", and it applies to `P` and the pad's Start button too — the conflict
-   * is about who owns the keys, not about which key opened the menu.
+   * It used to answer `false` for the whole time the HUD was waiting for a
+   * command — which is, for a human, nearly all of a battle. That is the bug
+   * the player reported on the live site as "Esc and P do nothing": they were
+   * pressing them at the command menu, the only place a battle ever waits for
+   * them. **A command menu no longer blocks the pause.**
    *
-   * The debug beat `pause:open` deliberately ignores this: a capture tool has
-   * no keyboard to lose and wants the menu on a predictable frame.
+   * What made it a genuine conflict is now handled at the source. Both command
+   * menus take the keyboard straight off `window` (`ui/ffx/rawInput.ts`,
+   * `ui/ffx2/CommandMenu.ts`), so a pause stacked on one had two screens on the
+   * same arrow keys and a Confirm that would resolve a real command from behind
+   * the menu. {@link openPause} now claims the keyboard exclusively
+   * (`Input.claimKeyboard`, capture phase) and mutes the pad watchers
+   * (`setRawInputSuspended`) for as long as the overlay is up, so exactly one
+   * screen reads the player at a time.
+   *
+   * A minigame still blocks it: those are timed inputs, and freezing one
+   * mid-swing is a fairness question rather than an input-ownership one.
+   *
+   * The debug beat `pause:open` ignores even that: a capture tool has no
+   * keyboard to lose and wants the menu on a predictable frame.
    */
   private get canPause(): boolean {
     if (this.pauseScreen || this.app.overlayActive) return false;
     if (!this.presenter || this.presenter.isAborted) return false;
     const snap = this.presenter.snapshot();
-    if (snap['awaitingMenu'] === true) return false;
     // A minigame overlay owns the keyboard for the same reason a command menu
     // does (`ui/ffx/minigames/**` each attach a `RawInputWatcher`).
     return !String(snap['phase'] ?? '').includes('minigame');
+  }
+
+  /**
+   * Whether **Esc** in particular may open the pause.
+   *
+   * Esc is the command menu's own back button — out of targeting, out of a
+   * submenu, back to the top row — and that is the FFX behaviour the brief
+   * asks to keep. A key cannot mean "out of targeting" and "open the pause" on
+   * the same press.
+   *
+   * But it is only the back button when there is something to go back to.
+   * Neither menu binds Esc at its **top row** (`ui/common/menuCancel.ts` has
+   * the two call sites), and the top row is exactly where a player sits when
+   * they decide to pause — which is why the original report said Esc did
+   * nothing. So Esc opens the pause everywhere except in a submenu or while
+   * targeting, where it still backs out and `P` / Start / the PAUSE chip are
+   * the way in.
+   */
+  private get canPauseOnCancel(): boolean {
+    if (!this.canPause) return false;
+    if (this.presenter?.snapshot()['awaitingMenu'] !== true) return true;
+    return !menuOwnsCancel();
   }
 
   /** Put the pause menu up over the frozen battle. */
@@ -345,7 +406,12 @@ export class BattleScreen extends Screen {
       state: () => this.engine?.state() ?? null,
       links: () => Math.max(1, this.links),
       chainLength: this.chainLength,
-      onPause: (paused) => this.setPresenterPaused(paused),
+      onPause: (paused) => {
+        this.setPresenterPaused(paused);
+        // The other half of "exactly one screen reads the player": the HUD's
+        // own pad watchers. The keyboard half is the claim taken below.
+        setRawInputSuspended(paused);
+      },
       onResume: () => void this.closePause(),
       onRestart: () => this.requestExit('restart'),
       onChapterSelect: () => this.requestExit('chapter-select'),
@@ -435,14 +501,32 @@ export class BattleScreen extends Screen {
     // A mid-battle beat owns the input while it is on screen.
     this.cutscenes?.handleInput(input);
 
-    // The three ways into the pause menu: Esc/Circle, P, and the pad's
-    // Start/Options button (`start`, which `app/Input.ts` also maps to E and
-    // C). `consume` takes the edge so nothing below sees the same press —
-    // Esc in particular is a back button in several places at once.
-    const wantsPause = this.pauseKeyPressed || input.justPressed('start') || input.justPressed('cancel');
+    // The four ways into the pause menu: `P`, the pad's Start/Options button
+    // (`start`, which `app/Input.ts` also maps to E and C), a click on the
+    // PAUSE chip, and Esc/Circle.
+    //
+    // The first three work at any point in a battle, the command menu included
+    // — that is the reported bug's fix. Esc is the one that has to wait: it is
+    // also the command menu's back button, and a key cannot mean "out of
+    // targeting" and "open the pause" on the same press. See `canPauseOnCancel`.
+    //
+    // `consume` takes the edge so nothing below sees the same press.
+    // `E` is one of the three keys `Input.ts` maps to `start`, and it is also
+    // the enemy-intent slab's hide/show key. The slab's own `keydown` listener
+    // records the press; taking the `start` edge for it here is what stops one
+    // tap of E both hiding the slab and opening the pause. `P`, `C`, Esc, the
+    // pad's Start button and the PAUSE chip are all untouched.
+    if (consumeIntentKeyPress()) input.consume('start');
+    const chipClicked = input.actions.includes('pause:open');
+    const wantsPause = this.pauseKeyPressed || chipClicked || input.justPressed('start');
     this.pauseKeyPressed = false;
     if (wantsPause && this.canPause) {
       input.consume('start');
+      audio.playSfx('menu-open');
+      void this.openPause();
+      return;
+    }
+    if (input.justPressed('cancel') && this.canPauseOnCancel) {
       input.consume('cancel');
       audio.playSfx('menu-open');
       void this.openPause();
@@ -520,6 +604,7 @@ export class BattleScreen extends Screen {
       chainLength: this.chainLength,
       paused: this.pauseScreen !== null,
       canPause: this.canPause,
+      canPauseOnCancel: this.canPauseOnCancel,
       exitIntent: this.exitIntent,
       playTimeMs: this.app.save.playTime(this.opts.chapter.id),
       hud: this.hud !== null,
@@ -557,6 +642,15 @@ export class BattleScreen extends Screen {
 
   override exit(): void {
     window.removeEventListener('keydown', this.onPauseKey);
+    this.pauseChip?.remove();
+    this.pauseChip = null;
+    // A screen torn down with the pause still up must not leave the HUD's own
+    // watchers muted for the next battle.
+    setRawInputSuspended(false);
+    // Same reason: a screen torn down mid-submenu would otherwise leave Esc
+    // looking like the command menu's back button in the next battle, and the
+    // pause would refuse it for good.
+    setMenuOwnsCancel(false);
     // Release anything parked on the pause gate before aborting, so a torn-down
     // presenter cannot leave a `sleep` awaited forever.
     this.setPresenterPaused(false);

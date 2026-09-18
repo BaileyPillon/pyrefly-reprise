@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/_ba-yunalesca-2-picks.png",
+  "title": "YUNALESCA-2 promoted states",
+  "subtitle": "facing check",
+  "rows": [
+    {
+      "label": "idle / attack / cast / hurt / ko",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 420,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-2/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

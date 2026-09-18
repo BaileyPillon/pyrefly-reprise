@@ -1,0 +1,969 @@
+{
+ "art": [
+  {
+   "url": "art/backdrops/title.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/dreams-end.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/gagazet.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/farplane.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/tidus.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/yuna.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/auron.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/rikku.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/pause/ch4-ffx2-bahamut.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/rikku/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/gagazet.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/tidus.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/dreams-end.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/farplane.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/auron.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/rikku.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/wakka.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/lulu.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/pause/ch1-seymour-flux.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/portraits/seymour.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/gagazet.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/backdrops/gagazet.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/tidus/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/yuna/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/kimahri/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  },
+  {
+   "url": "art/characters/bahamut/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "method": "GET"
+  }
+ ],
+ "console": [
+  "[warning] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead.",
+  "[warning] [painted] /pyrefly-reprise/art/characters/tidus/ko.png still had an opaque white studio background; cleaned it at load time. Regenerate the PNG with a proper alpha matte.",
+  "[warning] [painted] /pyrefly-reprise/art/characters/seymour-flux-body/cast.png still had an opaque white studio background; cleaned it at load time. Regenerate the PNG with a proper alpha matte."
+ ]
+}

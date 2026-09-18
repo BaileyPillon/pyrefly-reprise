@@ -1,0 +1,87 @@
+{
+  "out": "docs/screenshots/art/_ba4-cand2.png",
+  "title": "fix pass round 2 candidates",
+  "subtitle": "fix pass, contract v3",
+  "rows": [
+    {
+      "label": "mortiorchis idleG (ref at approved idle)",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/mortiorchis/idleG.1.png",
+          "caption": "idleG.1"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleG.2.png",
+          "caption": "idleG.2"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleG.3.png",
+          "caption": "idleG.3"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleG.4.png",
+          "caption": "idleG.4"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleG.5.png",
+          "caption": "idleG.5"
+        }
+      ]
+    },
+    {
+      "label": "yunalesca-1 idleG",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-1/idleG.1.png",
+          "caption": "idleG.1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleG.2.png",
+          "caption": "idleG.2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleG.3.png",
+          "caption": "idleG.3"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleG.4.png",
+          "caption": "idleG.4"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleG.5.png",
+          "caption": "idleG.5"
+        }
+      ]
+    },
+    {
+      "label": "portrait seymour",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/portraits/seymourF.1.png",
+          "caption": "seymourF.1"
+        },
+        {
+          "path": "public/art/portraits/seymourF.2.png",
+          "caption": "seymourF.2"
+        },
+        {
+          "path": "public/art/portraits/seymourF.3.png",
+          "caption": "seymourF.3"
+        },
+        {
+          "path": "public/art/portraits/seymourF.4.png",
+          "caption": "seymourF.4"
+        }
+      ]
+    }
+  ]
+}

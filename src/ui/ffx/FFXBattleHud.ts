@@ -18,7 +18,9 @@ import { DamageNumbers, type Projector } from './DamageNumbers.ts';
 import { openMinigame as dispatchMinigame } from './minigames/index.ts';
 import { PartyStatusWindow } from './PartyStatusWindow.ts';
 import { SensorPanel } from './SensorPanel.ts';
+import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
+import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 
@@ -64,7 +66,38 @@ export class FFXBattleHud implements HudPort {
       bottom: 34,
     },
   });
+  /**
+   * The optional move advisor (`src/ui/common/MoveAdvisor.ts`), a card in the
+   * bottom-centre band between the command stack and the party status column.
+   *
+   * Both anchors are resolved per frame for the same reason the guide's are:
+   * `.ffx-cmd-area` is `column-reverse` and bottom-anchored, so its *right*
+   * edge moves with the widest row a submenu currently holds, and the card has
+   * to give way rather than be drawn over. The party list is the wall on the
+   * other side; the fallbacks are those two anchors' authored edges.
+   */
+  private readonly advisor = new MoveAdvisor({
+    game: 'ffx',
+    anchors: {
+      after: () => this.cmdAreaEl,
+      before: () => this.partyStatus.el,
+      left: 196,
+      right: 414,
+      bottom: 26,
+    },
+  });
   private readonly cmdAreaEl: HTMLElement;
+  /**
+   * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
+   *
+   * Mounted on the **overlay**, not the scaled stage, because it is pinned to a
+   * projected actor position and the projector answers in viewport pixels — the
+   * same reason the damage numerals live there. `avoid` names the CTB list and
+   * the command stack: those are the two panels a slab hanging over a boss can
+   * genuinely land on, and the queue is the one the player is reading the
+   * prediction *against*.
+   */
+  private readonly intent = new EnemyIntentPanel({ game: 'ffx' });
 
   private lastState: BattleState | null = null;
   /** Whoever's `turn-start`/`action-start` fired most recently, for the message banner's name slab. `message` events carry no actor of their own. */
@@ -146,6 +179,13 @@ export class FFXBattleHud implements HudPort {
     // the constructor so its window-level key listener has the same lifetime as
     // the HUD that owns it.
     this.guide.mount(this.stage);
+    this.advisor.mount(this.stage);
+    this.intent.mount(this.overlay, {
+      host: this.el,
+      scale: () => this.hudScale(),
+      project: (id, anchor) => this.project(id, anchor),
+      avoid: () => this.intentAvoidRects(),
+    });
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
   }
@@ -154,6 +194,8 @@ export class FFXBattleHud implements HudPort {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.guide.unmount();
+    this.advisor.unmount();
+    this.intent.unmount();
     this.damageNumbers.clear();
     this.telegraph.dispose();
     this.el.remove();
@@ -166,6 +208,21 @@ export class FFXBattleHud implements HudPort {
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
     this.guide.sync(state);
+    this.advisor.sync(state);
+    // The prediction deep-clones the board two dozen times, so it is refreshed
+    // when the engine state actually moved — once per playback step — and never
+    // from `update(dt)`, which only re-projects the slab that is already drawn.
+    this.intent.refresh();
+  }
+
+  /** Hand the panel its engine. See `EnemyIntent.attachEnemyIntent`. */
+  setIntentSource(source: IntentSource | null): void {
+    this.intent.setSource(source);
+  }
+
+  /** The intent slab, for tests and the debug snapshot. */
+  get enemyIntent(): EnemyIntentPanel {
+    return this.intent;
   }
 
   async chooseCommand(
@@ -186,7 +243,12 @@ export class FFXBattleHud implements HudPort {
     // The guide's NEXT line explains *this* decision, so it opens and closes
     // with the menu — including when the menu loses to a strategy that raced
     // its promise, which is why the clear sits in a `finally`.
-    if (this.lastState) this.guide.showDecision(actorId, commands, this.lastState);
+    // The advisor's card explains the same decision and follows the same
+    // lifetime, so it opens and closes with the guide's NEXT line.
+    if (this.lastState) {
+      this.guide.showDecision(actorId, commands, this.lastState);
+      this.advisor.showDecision(actorId, commands, this.lastState);
+    }
     try {
       return await this.commandMenu.open({
         actorId,
@@ -197,6 +259,7 @@ export class FFXBattleHud implements HudPort {
       });
     } finally {
       this.guide.clearDecision();
+      this.advisor.clearDecision();
     }
   }
 
@@ -256,6 +319,8 @@ export class FFXBattleHud implements HudPort {
   update(dt: number): void {
     this.damageNumbers.update(dt);
     this.guide.update(dt);
+    this.advisor.update(dt);
+    this.intent.update(dt);
   }
 
   /** The guide rail, for tests and the debug snapshot. */
@@ -263,8 +328,14 @@ export class FFXBattleHud implements HudPort {
     return this.guide;
   }
 
+  /** The move-advisor card, for tests and the debug snapshot. */
+  get moveAdvisor(): MoveAdvisor {
+    return this.advisor;
+  }
+
   setProjector(project: Projector): void {
     const p: Projector = project;
+    this.project = p;
     this.commandMenu.setProjector(p);
     this.damageNumbers.setProjector(p);
     this.damageNumbers.setSideResolver((id) => {
@@ -306,6 +377,49 @@ export class FFXBattleHud implements HudPort {
 
   private nameOf(id: CombatantId): string {
     return this.lastState?.combatants[id]?.name ?? id;
+  }
+
+  /** The presenter's projector, installed by `setProjector`. */
+  private project: Projector = () => null;
+
+  /**
+   * The HUD panels the intent slab may not cover, in viewport pixels.
+   *
+   * The CTB list first and above all — the slab's whole claim is "this is what
+   * the actor at the top of that queue is about to do", and covering the queue
+   * with the answer is self-defeating. The command stack and its help card are
+   * here for the same reason the numerals dodge them, and `.ffx-sensor` joined
+   * them after a Chapter 1 capture caught the slab printed across the
+   * Mortiorchis's own scan card.
+   *
+   * `.ig-banner` is deliberately absent, for the reason `ffx/DamageNumbers.ts`
+   * gives about the telegraph: it is a transient band across the top of the
+   * field, and dodging it would move the slab at exactly the moment the boss is
+   * winding up and the player is reading it.
+   */
+  private intentAvoidRects(): Array<{ left: number; top: number; right: number; bottom: number }> {
+    const out: Array<{ left: number; top: number; right: number; bottom: number }> = [];
+    for (const selector of ['.ig-ctb', '.ig-cmd-stack', '.ffx-cmd-info', '.ig-stat-list', '.ffx-sensor', '.mad__card'] as const) {
+      for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
+        // Size alone. `ffx/DamageNumbers.ts` gates on `el.hidden ||
+        // el.offsetParent === null` as well, which is redundant here: a zero-size
+        // box already means "not laid out", and it covers `[hidden]` (which
+        // `tokens.css` forces to `display: none`) and a hidden *ancestor* too.
+        const r = el.getBoundingClientRect();
+        if (r.width <= 0 || r.height <= 0) continue;
+        out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
+      }
+    }
+    return out;
+  }
+
+  /** The letterbox scale `layout()` applies to the 640x360 grid. */
+  private hudScale(): number {
+    const rect = this.el.getBoundingClientRect();
+    const w = rect.width || window.innerWidth;
+    const h = rect.height || window.innerHeight;
+    if (!w || !h) return 1;
+    return Math.min(w / 640, h / 360);
   }
 
   /** Letterbox the 640x360 grid into whatever the viewport is, exactly as `HudMock`. */

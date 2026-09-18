@@ -1,0 +1,17 @@
+{
+  "out": "docs/screenshots/art/_ba4-zoom2.png",
+  "title": "mortiorchis idle finalists",
+  "subtitle": "cage skull + green ocelli + gold sunburst + scythe arms + censer",
+  "rows": [
+    {"label": "idleH finalists", "kind": "character", "cellHeight": 560, "cellWidth": 780,
+     "items": [
+       {"path": "public/art/characters/mortiorchis/idleH.5.png", "caption": "H.5"},
+       {"path": "public/art/characters/mortiorchis/idleH.3.png", "caption": "H.3"}
+     ]},
+    {"label": "idleH finalists 2", "kind": "character", "cellHeight": 560, "cellWidth": 780,
+     "items": [
+       {"path": "public/art/characters/mortiorchis/idleH.6.png", "caption": "H.6"},
+       {"path": "public/art/characters/mortiorchis/idleH.4.png", "caption": "H.4"}
+     ]}
+  ]
+}

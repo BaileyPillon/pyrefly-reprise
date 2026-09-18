@@ -1,0 +1,19 @@
+{
+  "out": "docs/screenshots/art/_ba4-zoom1.png",
+  "title": "fix pass — close look",
+  "subtitle": "yunalesca-1 idleG finalists / seymour portrait finalists",
+  "rows": [
+    {"label": "yunalesca-1 idleG", "kind": "character", "cellHeight": 640, "cellWidth": 500,
+     "items": [
+       {"path": "public/art/characters/yunalesca-1/idleG.1.png", "caption": "G.1"},
+       {"path": "public/art/characters/yunalesca-1/idleG.4.png", "caption": "G.4"},
+       {"path": "public/art/characters/yunalesca-1/idleF.3.png", "caption": "F.3"}
+     ]},
+    {"label": "portrait seymour", "kind": "character", "cellHeight": 640, "cellWidth": 500,
+     "items": [
+       {"path": "public/art/portraits/seymourF.1.png", "caption": "F.1"},
+       {"path": "public/art/portraits/seymourF.4.png", "caption": "F.4"},
+       {"path": "public/art/portraits/seymourF.3.png", "caption": "F.3"}
+     ]}
+  ]
+}

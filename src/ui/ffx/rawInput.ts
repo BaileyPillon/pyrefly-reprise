@@ -53,6 +53,29 @@ const REPEAT_DELAY_MS = 320;
 const REPEAT_INTERVAL_MS = 120;
 const DIRECTIONS = new Set<UiButton>(['up', 'down', 'left', 'right']);
 
+/**
+ * Global mute for every watcher, set while the pause overlay is up.
+ *
+ * `app/Input.claimKeyboard()` already cuts the **keyboard** off in the capture
+ * phase, but the gamepad is polled here from our own `requestAnimationFrame`
+ * and nothing upstream can intercept that. Without this, a d-pad press behind
+ * the pause menu moved a hidden command cursor and Cross resolved a command —
+ * taking a real turn while the game was supposed to be frozen.
+ *
+ * Set by `app/screens/BattleScreen.ts`'s pause, alongside the presenter gate.
+ */
+let suspended = false;
+
+/** Stop / resume every `RawInputWatcher` in the page. */
+export function setRawInputSuspended(value: boolean): void {
+  suspended = value;
+}
+
+/** Whether raw HUD input is currently muted. */
+export function rawInputSuspended(): boolean {
+  return suspended;
+}
+
 export class RawInputWatcher {
   private attached = false;
   private rafId = 0;
@@ -78,6 +101,7 @@ export class RawInputWatcher {
   }
 
   private readonly onKeyDown = (e: KeyboardEvent): void => {
+    if (suspended) return;
     const button = KEY_MAP[e.code];
     if (!button) return;
     if (e.repeat && !DIRECTIONS.has(button)) return;
@@ -88,6 +112,10 @@ export class RawInputWatcher {
   private readonly pollGamepad = (now: number): void => {
     if (!this.attached) return;
     this.rafId = requestAnimationFrame(this.pollGamepad);
+    // Keep polling (so the loop is still alive on resume) but report nothing.
+    // `padHeld` is deliberately left as it was: a button held across the pause
+    // must not fire a fresh edge the moment the menu closes.
+    if (suspended) return;
     const pads = navigator.getGamepads?.() ?? [];
     const next = new Set<UiButton>();
     for (const pad of pads) {

@@ -1,0 +1,95 @@
+{
+  "out": "docs/screenshots/art/_ba4-sey2.png",
+  "title": "seymour states round 2 (ref 0.6 / start 0.3)",
+  "subtitle": "fix pass, contract v3",
+  "rows": [
+    {
+      "label": "attackG",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/attackG.1.png",
+          "caption": "attackG.1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackG.2.png",
+          "caption": "attackG.2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackG.3.png",
+          "caption": "attackG.3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackG.4.png",
+          "caption": "attackG.4"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackG.5.png",
+          "caption": "attackG.5"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackG.6.png",
+          "caption": "attackG.6"
+        }
+      ]
+    },
+    {
+      "label": "hurtG",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtG.1.png",
+          "caption": "hurtG.1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtG.2.png",
+          "caption": "hurtG.2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtG.3.png",
+          "caption": "hurtG.3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtG.4.png",
+          "caption": "hurtG.4"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtG.5.png",
+          "caption": "hurtG.5"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtG.6.png",
+          "caption": "hurtG.6"
+        }
+      ]
+    },
+    {
+      "label": "koG",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/koG.1.png",
+          "caption": "koG.1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koG.2.png",
+          "caption": "koG.2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koG.3.png",
+          "caption": "koG.3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koG.4.png",
+          "caption": "koG.4"
+        }
+      ]
+    }
+  ]
+}

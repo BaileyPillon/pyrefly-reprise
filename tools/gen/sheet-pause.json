@@ -1,53 +1,121 @@
 {
   "out": "docs/screenshots/concept/pause-heroes.png",
-  "title": "Pause-screen hero art — cinematic close-ups (round 2)",
-  "subtitle": "1344x768 painted plates, no cutout. comfy.mjs `hero` preset, --ref at 0.5 against each subject's approved idle. NOTE ON THE CHAPTER ROW: a chapter plate is the PARTY MEMBER whose face carries that fight's emotional beat, framed in that fight's location — it is not a boss portrait. The boss is named because it names the chapter; where the antagonist is legible in the plate the caption says so.",
+  "title": "Pause-screen hero art — cinematic close-ups (round 3, fix pass)",
+  "subtitle": "1344x768 painted plates, no cutout, `hero` preset at --ref 0.5. A chapter plate is the PARTY MEMBER carrying that fight's beat in that fight's location, not a boss portrait — each caption says who is in the plate. All 17 files are distinct.",
   "rows": [
     {
-      "label": "Chapter heroes — pause backplate. Caption reads: chapter / boss the chapter is named for / whose face is in the plate.",
+      "label": "Chapter heroes — pause backplate. Caption: chapter / who is in the plate / is the antagonist visible.",
       "cellHeight": 300,
       "items": [
-        { "path": "public/art/pause/ch1-seymour-flux.png", "caption": "Ch.1 Seymour Flux — TIDUS", "note": "anguished anger, wet eyes · Gagazet blizzard" },
-        { "path": "public/art/pause/ch2-yunalesca.png", "caption": "Ch.2 Yunalesca — YUNA", "note": "tears held back, chin up · Zanarkand Dome violet" },
-        { "path": "public/art/pause/ch3-braskas-final-aeon.png", "caption": "Ch.3 Braska's Final Aeon — TIDUS", "note": "crying and smiling at once · Dream's End red-black" }
+        {
+          "path": "public/art/pause/ch1-seymour-flux.png",
+          "caption": "Ch.1 Seymour Flux — TIDUS, no boss in plate",
+          "note": "anguished anger · Gagazet blizzard"
+        },
+        {
+          "path": "public/art/pause/ch2-yunalesca.png",
+          "caption": "Ch.2 Yunalesca — YUNA, no boss in plate",
+          "note": "tears held back, chin up · Dome violet"
+        },
+        {
+          "path": "public/art/pause/ch3-braskas-final-aeon.png",
+          "caption": "Ch.3 Braska's Final Aeon — TIDUS, no boss in plate",
+          "note": "crying and smiling · Dream's End red"
+        }
       ]
     },
     {
-      "label": "Chapter heroes (cont.)",
+      "label": "Chapter heroes (cont.) — both regenerated in the fix pass",
       "cellHeight": 300,
       "items": [
-        { "path": "public/art/pause/ch4-ffx2-bahamut.png", "caption": "Ch.4 Bahamut — YUNA (GUNNER), aeon in plate", "note": "sorrow and guilt · Bevelle Underground cyan" },
-        { "path": "public/art/pause/ch5-ffx2-vegnagun-shuyin.png", "caption": "Ch.5 Vegnagun / Shuyin — YUNA (SONGSTRESS), Vegnagun in plate", "note": "serene grief mid-song · Farplane chamber" }
+        {
+          "path": "public/art/pause/ch4-ffx2-bahamut.png",
+          "caption": "Ch.4 Bahamut — YUNA (GUNNER), AEON IN PLATE",
+          "note": "REDONE · sorrow and guilt · teal Bevelle"
+        },
+        {
+          "path": "public/art/pause/ch5-ffx2-vegnagun-shuyin.png",
+          "caption": "Ch.5 Vegnagun / Shuyin — YUNA (SONGSTRESS), VEGNAGUN IN PLATE",
+          "note": "REDONE · serene grief · Farplane machina"
+        }
       ]
     },
     {
-      "label": "Party / Character Info — FFX cast",
+      "label": "Party / Character Info — FFX cast (Yuna, Auron, Wakka regenerated)",
       "cellHeight": 230,
       "items": [
-        { "path": "public/art/pause/tidus.png", "caption": "Tidus", "note": "cocky grin · Besaid sea" },
-        { "path": "public/art/pause/yuna.png", "caption": "Yuna", "note": "gentle smile, sad eyes · Besaid, late afternoon" },
-        { "path": "public/art/pause/auron.png", "caption": "Auron", "note": "stern, weary smirk · Gagazet dusk" },
-        { "path": "public/art/pause/wakka.png", "caption": "Wakka", "note": "warm laugh · Besaid beach, midday" }
+        {
+          "path": "public/art/pause/tidus.png",
+          "caption": "Tidus",
+          "note": "cocky grin · Besaid sea"
+        },
+        {
+          "path": "public/art/pause/yuna.png",
+          "caption": "Yuna — REDONE",
+          "note": "braid + obi back, eyes uncrossed"
+        },
+        {
+          "path": "public/art/pause/auron.png",
+          "caption": "Auron — REDONE",
+          "note": "ponytail, scar over left eye"
+        },
+        {
+          "path": "public/art/pause/wakka.png",
+          "caption": "Wakka — REDONE",
+          "note": "face anatomy rebuilt · Besaid beach"
+        }
       ]
     },
     {
-      "label": "Party / Character Info — FFX cast (cont.)",
+      "label": "Party / Character Info — FFX cast (cont.) (Lulu, Kimahri, Jecht regenerated)",
       "cellHeight": 230,
       "items": [
-        { "path": "public/art/pause/lulu.png", "caption": "Lulu", "note": "cool sidelong appraisal · Macalania crystal light" },
-        { "path": "public/art/pause/kimahri.png", "caption": "Kimahri", "note": "silent stoic resolve, broken horn · Gagazet snow" },
-        { "path": "public/art/pause/rikku.png", "caption": "Rikku", "note": "wink, tongue out · Bikanel sand" },
-        { "path": "public/art/pause/jecht.png", "caption": "Jecht", "note": "rough laugh · Dream Zanarkand night" }
+        {
+          "path": "public/art/pause/lulu.png",
+          "caption": "Lulu — REDONE",
+          "note": "all-black beaded braids, red eyes"
+        },
+        {
+          "path": "public/art/pause/kimahri.png",
+          "caption": "Kimahri — REDONE",
+          "note": "humanoid Ronso, broken horn stub"
+        },
+        {
+          "path": "public/art/pause/rikku.png",
+          "caption": "Rikku",
+          "note": "wink, tongue out · Bikanel sand"
+        },
+        {
+          "path": "public/art/pause/jecht.png",
+          "caption": "Jecht — REDONE",
+          "note": "black hair, red chest tattoo, no hands"
+        }
       ]
     },
     {
-      "label": "Party / Character Info — X-2 cast and antagonist",
+      "label": "Party / Character Info — X-2 cast and antagonist (Rikku, Paine regenerated)",
       "cellHeight": 230,
       "items": [
-        { "path": "public/art/pause/yuna-ffx2.png", "caption": "Yuna (Gunner)", "note": "playful · Celsius deck, daylight" },
-        { "path": "public/art/pause/rikku-ffx2.png", "caption": "Rikku (Thief)", "note": "wink, bright grin · Bikanel dusk" },
-        { "path": "public/art/pause/paine.png", "caption": "Paine", "note": "deadpan, guarded · Bevelle steel grey" },
-        { "path": "public/art/pause/seymour.png", "caption": "Seymour", "note": "serene menace, veins · sickly dark" }
+        {
+          "path": "public/art/pause/yuna-ffx2.png",
+          "caption": "Yuna (Gunner)",
+          "note": "playful · Celsius deck"
+        },
+        {
+          "path": "public/art/pause/rikku-ffx2.png",
+          "caption": "Rikku (Thief) — REDONE",
+          "note": "hands out of frame, head in frame"
+        },
+        {
+          "path": "public/art/pause/paine.png",
+          "caption": "Paine — REDONE",
+          "note": "angular older face, greatsword"
+        },
+        {
+          "path": "public/art/pause/seymour.png",
+          "caption": "Seymour",
+          "note": "serene menace · sickly dark"
+        }
       ]
     }
   ]

@@ -1,5 +1,16 @@
 import { bodyHeadCropStyle, faceCropStyle } from '../common/portrait.ts';
+import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+
+/**
+ * Art the build-time manifest positively denies — skip the layer rather than
+ * request it. `null` (no manifest yet, or a path it does not index) is *not*
+ * absent, so nothing here can hide art that is really there.
+ * See `docs/handoff/adv-art-manifest.md`.
+ */
+function knownAbsent(path: string): boolean {
+  return manifestKnowsAssetNow(artUrl(path)) === false;
+}
 
 /**
  * Portrait chip helper shared by the CTB list, party status window, trigger
@@ -82,10 +93,11 @@ export function portraitChipHtml(
 ): string {
   const letter = initialFor(name);
   const fallback = `<span class="ffx-portrait-fallback" style="background:${bg};z-index:0">${letter}</span>`;
-  const body = bodyId
-    ? `<img src="${artUrl(`art/characters/${bodyId}/idle.png`)}" alt="" data-role="portrait-img" data-body-id="${bodyId}" style="${bodyHeadCropStyle()};z-index:1" />`
-    : '';
-  if (!portraitKey) return `${fallback}${body}`;
+  const body =
+    bodyId && !knownAbsent(`art/characters/${bodyId}/idle.png`)
+      ? `<img src="${artUrl(`art/characters/${bodyId}/idle.png`)}" alt="" data-role="portrait-img" data-body-id="${bodyId}" style="${bodyHeadCropStyle()};z-index:1" />`
+      : '';
+  if (!portraitKey || knownAbsent(`art/portraits/${portraitKey}.png`)) return `${fallback}${body}`;
   // The measured head crop (`common/portrait.ts`'s `CROPS`), not the frame
   // CSS's `object-fit: cover`: at a 46px tile a cover crop of a full-length
   // 832x1216 painting is mostly hair and sky, and the crop table is there so
@@ -102,6 +114,11 @@ const bodyAspectCache = new Map<string, number | null>();
 function loadBodyAspect(id: string): Promise<number | null> {
   const cached = bodyAspectCache.get(id);
   if (cached !== undefined) return Promise.resolve(cached);
+  // No painting, no sidecar — the manifest already knows, so don't ask.
+  if (knownAbsent(`art/characters/${id}/idle.png`)) {
+    bodyAspectCache.set(id, null);
+    return Promise.resolve(null);
+  }
   return fetch(artUrl(`art/characters/${id}/idle.json`))
     .then((res) => (res.ok ? (res.json() as Promise<{ width?: number; height?: number }>) : null))
     .then((meta) => (meta?.width && meta?.height ? meta.width / meta.height : null))

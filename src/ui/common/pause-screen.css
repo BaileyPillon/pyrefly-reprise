@@ -698,6 +698,25 @@
   align-items: flex-end;
 }
 
+/* ---------------------------------------------------------- panels hidden */
+
+/*
+ * HIDE PANELS (`H`, Triangle, or the menu row).
+ *
+ * The player asked for this so they could look at the painting, so "hidden"
+ * means the scrim and the vignette go too — those exist only to give the
+ * chrome something to sit on, and left behind they would be a dark ramp across
+ * a picture with nothing on it. `.pause__art` stays, and it is the one child
+ * that is still full bleed, so the frame is the painting and nothing else.
+ *
+ * Photo mode's rule (`[data-photo='on']`) is the same idea one level further —
+ * it hides the art as well and hands the camera the diorama. The two never
+ * overlap: entering photo mode takes this screen's input.
+ */
+.pause--bare > *:not(.pause__art) {
+  display: none;
+}
+
 /* ------------------------------------------------------------------ hint */
 
 /*
@@ -710,6 +729,78 @@
   right: auto;
   top: auto;
   transform: skewX(-8deg);
+}
+
+/*
+ * The one line left when the panels are down. Bottom-left, faint, and in
+ * device pixels like the strip it replaces (it mounts on `.pause__chrome`).
+ *
+ * It sits where the hint strip was rather than centred, because the thing it
+ * must not do is land on the subject's face — the whole point of the mode.
+ */
+.pause__bare-hint {
+  position: absolute;
+  left: 64px;
+  bottom: 22px;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(244, 241, 232, 0.42);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  transform: skewX(-8deg);
+}
+.pause__bare-hint b {
+  color: var(--ig-accent, #e3b94a);
+  opacity: 0.85;
+}
+.pause__bare-hint b[data-action] {
+  cursor: pointer;
+  pointer-events: auto; /* see the comment on .pause__row */
+}
+.pause__bare-hint span {
+  opacity: 0.4;
+}
+
+/* ------------------------------------------------------- the battle chip */
+
+/*
+ * The mouse's way into the pause menu, in the top-left corner of the battle
+ * frame.
+ *
+ * It is mounted by `BattleScreen` into *its* screen root — outside the HUD's
+ * letterboxed stage, so it is authored in device pixels — and it lives in this
+ * stylesheet because this is the file that already comes along with
+ * `PauseScreen`, which `BattleScreen` imports. z-index clears the HUD's own
+ * layers (up to 40) and stays well under the pause overlay's 60, so the menu
+ * it opens covers it.
+ */
+.battle-pause-chip {
+  position: absolute;
+  left: 22px;
+  top: 18px;
+  z-index: 45;
+  margin: 0;
+  padding: 5px 12px;
+  border: 0;
+  border-left: 3px solid var(--ig-accent, #e3b94a);
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  color: rgba(244, 241, 232, 0.72);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto; /* see the comment on .pause__row */
+  transform: skewX(-12deg);
+  opacity: 0.55;
+  transition: opacity 140ms ease, color 140ms ease;
+}
+.battle-pause-chip:hover,
+.battle-pause-chip:focus-visible {
+  opacity: 1;
+  color: var(--ig-paper, #f4f1e8);
 }
 
 /* Photo mode's one surviving line, centred at the foot of the frame. */

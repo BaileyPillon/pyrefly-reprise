@@ -70,6 +70,39 @@ export interface Settings {
    */
   guideVisible: boolean;
   /**
+   * Show the in-battle move advisor (`src/ui/common/MoveAdvisor.ts`).
+   *
+   * Its own preference, beside {@link Settings.guideVisible} and
+   * {@link Settings.intentVisible}, because the three panels answer different
+   * questions and a player may well want one without the others: the guide is
+   * the encounter's designed line with its research citation, the advisor is
+   * this turn's numbers for the character who is deciding. Also **defaults to
+   * `true`** — the numbers are the point — and is remembered the first time the
+   * player presses `N`.
+   */
+  advisorVisible: boolean;
+  /**
+   * Show the enemy-intent slab over the boss's head
+   * (`src/ui/common/EnemyIntent.ts`).
+   *
+   * A second, independent preference rather than a mode of
+   * {@link Settings.guideVisible}, because the two panels answer different
+   * questions and a player wants different amounts of each. The strategy guide
+   * is a *coach* — it says what the encounter was designed to be beaten with,
+   * which a returning player has already learned and turns off. The intent slab
+   * is an *instrument*: it reads out the move that is actually coming and what
+   * it will do, and it stays useful on a tenth run, when the coaching does not.
+   * Folding them into one switch would make a player who wants the numbers
+   * accept the advice as well.
+   *
+   * **Defaults to `true`.** Total Annihilation's five hits and Mega Death are
+   * both survivable and both unannounced; being told once, before it lands, is
+   * the difference between a wipe that teaches and a wipe that reads as unfair.
+   * The answer is remembered for every later battle — `E`, the pad, or the
+   * panel's own chip.
+   */
+  intentVisible: boolean;
+  /**
    * FFX-2's ATB mode, the Active/Wait toggle from the original config menu —
    * `'active'` lets the gauges keep filling while a command menu is open,
    * `'wait'` freezes them until the command is chosen.
@@ -79,6 +112,17 @@ export interface Settings {
    * chapter honours it. The pause screen's OPTIONS row is what writes it.
    */
   ffx2Atb: 'active' | 'wait';
+  /**
+   * Hide the pause menu's panels, leaving the hero painting unobstructed
+   * (`src/app/screens/PauseScreen.ts`, the `H` key / HIDE PANELS row).
+   *
+   * **Defaults to `false`** — a pause menu that opens with no menu on it would
+   * be indistinguishable from a broken screen the first time. Once the player
+   * hides the chrome the answer sticks, the same way {@link Settings.guideVisible}
+   * does, because someone who paused to look at the art will want to do it
+   * again and not re-press `H` on every chapter.
+   */
+  pausePanelsHidden: boolean;
 }
 
 export interface SaveData {
@@ -102,7 +146,10 @@ export function defaultSettings(): Settings {
     skipSeenCutscenes: false,
     lowEffects: false,
     guideVisible: true,
+    advisorVisible: true,
+    intentVisible: true,
     ffx2Atb: 'active',
+    pausePanelsHidden: false,
     reduceMotion:
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&

@@ -1,0 +1,59 @@
+{
+  "out": "docs/screenshots/art/jecht.png",
+  "title": "Pyrefly Reprise - JECHT (art round 3, facing contract v3)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - Jecht faces frame-RIGHT (he speaks with Tidus); chiral, never mirrored",
+  "rows": [
+    {
+      "label": "JECHT - states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 250,
+      "items": [
+        {
+          "path": "public/art/characters/jecht/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/jecht/talk.png",
+          "caption": "talk"
+        },
+        {
+          "path": "public/art/characters/jecht/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/jecht/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/jecht/victory.png",
+          "caption": "victory"
+        }
+      ]
+    },
+    {
+      "label": "JECHT - ko (prone, head toward the enemy)",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 430,
+      "items": [
+        {
+          "path": "public/art/characters/jecht/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "JECHT - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/jecht.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "out": "docs/screenshots/art/_fix3-cand.png",
+  "title": "YOJIMBO overdrive C + attack finalists",
+  "rows": [
+    {
+      "label": "YOJIMBO overdrive C + attack finalists",
+      "kind": "character",
+      "cellHeight": 660,
+      "cellWidth": 440,
+      "items": [
+        {
+          "path": "public/art/characters/yojimbo/attackB.3.png",
+          "caption": "A3"
+        },
+        {
+          "path": "public/art/characters/yojimbo/attackB.4.png",
+          "caption": "A4"
+        },
+        {
+          "path": "public/art/characters/yojimbo/overdriveC.1.png",
+          "caption": "C1"
+        },
+        {
+          "path": "public/art/characters/yojimbo/overdriveC.2.png",
+          "caption": "C2"
+        },
+        {
+          "path": "public/art/characters/yojimbo/overdriveC.3.png",
+          "caption": "C3"
+        },
+        {
+          "path": "public/art/characters/yojimbo/overdriveC.4.png",
+          "caption": "C4"
+        }
+      ]
+    }
+  ]
+}

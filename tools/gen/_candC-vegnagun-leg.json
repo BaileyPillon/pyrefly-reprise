@@ -1,0 +1,31 @@
+{
+  "out": "docs/screenshots/art/_candC-vegnagun-leg-idle.png",
+  "title": "vegnagun-leg — idle reroll C",
+  "subtitle": "no low-angle tags / arms + organ pipes emphasised",
+  "rows": [
+    {
+      "label": "VEGNAGUN-LEG",
+      "kind": "character",
+      "cellHeight": 520,
+      "cellWidth": 420,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-leg/idleC.1.png",
+          "caption": "idleC.1"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idleC.2.png",
+          "caption": "idleC.2"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idleC.3.png",
+          "caption": "idleC.3"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idleC.4.png",
+          "caption": "idleC.4"
+        }
+      ]
+    }
+  ]
+}

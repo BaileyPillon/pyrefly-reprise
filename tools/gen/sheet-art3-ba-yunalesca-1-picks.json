@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/_ba-yunalesca-1-picks.png",
+  "title": "YUNALESCA-1 promoted",
+  "subtitle": "facing check",
+  "rows": [
+    {
+      "label": "idle / attack / cast / hurt / ko",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-1/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

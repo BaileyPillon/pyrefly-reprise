@@ -1,0 +1,296 @@
+/**
+ * The in-battle move advisor (`src/ui/common/MoveAdvisor.ts`).
+ *
+ * Authored on the same 640x360 logical grid as the two battle HUDs and the
+ * strategy guide, because it mounts inside their letterbox-scaled stage
+ * (`src/ui/inkgold/tokens.css`, AUTHORING CONVENTION). Every length here is
+ * grid px.
+ *
+ * ## Where it sits, and what it is not allowed to touch
+ *
+ * A **bottom-centre card**, between the command stack and the party status
+ * column, with `MoveAdvisor.layout()` measuring both of those every frame and
+ * squeezing the card between them. That band is the one piece of the HUD that
+ * is empty in *both* games and in every submenu state:
+ *
+ * | | FFX | FFX-2 |
+ * |---|---|---|
+ * | bottom-left | command stack (grows up) | party column |
+ * | bottom-right | party status | command stack (grows up) |
+ * | top-right | CTB queue | telegraph banner |
+ * | left rail, mid | strategy guide | strategy guide |
+ * | **bottom centre** | **free** | **free** |
+ *
+ * So the card is mirrored by measurement rather than by a `.mad--ffx2` rule
+ * that moves it: `layout()` is handed "the element on my left" and "the element
+ * on my right" by whichever HUD owns it, and in FFX-2 those are simply the
+ * other way round. The guide's rail is never one of them — it is a left rail
+ * and this is a centre card, and they do not share a column at any height.
+ *
+ * ## Why the card is skewed and the rail was not
+ *
+ * `strategy-guide.css` drops the house `skewX(var(--ig-skew))` because that
+ * rail is a variable 56-200px tall and a 12deg lean puts its top and bottom
+ * edges in different columns. This card is capped at 104px
+ * and is usually nearer 60, which leans about 6-9px — the same register as
+ * `.ffx-sensor` (78px), which is skewed. So the card keeps the house geometry
+ * and counter-skews its contents, and the two optional panels read as the same
+ * family without either of them being deformed.
+ */
+
+.mad {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4; /* above the guide rail's 3; they never overlap, but a stacking
+                 order that depends on DOM order is a trap for the next agent */
+}
+
+/* -------------------------------------------------------------------- card */
+
+.mad__card {
+  position: absolute;
+  /* `left`, `width` and `bottom` are set per frame by MoveAdvisor.layout(). */
+  bottom: 26px;
+  left: 196px;
+  width: 210px;
+  /* Two suggestions (a party switch plus its runner-up) is the tallest the
+     card gets, and at 94px the second row's last line fell under the fade.
+     104 clears it and still leaves the sensor panel's band (top 24-114) free. */
+  max-height: 104px;
+  padding: 4px 7px 5px;
+  background: var(--ig-ink-panel);
+  color: var(--ig-paper);
+  font-family: var(--ig-font-text);
+  font-size: 5.3px;
+  line-height: 1.45;
+  box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45);
+  transform: skewX(var(--ig-skew));
+  border-bottom: 1.78px solid var(--ig-accent);
+  pointer-events: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent 100%);
+}
+.mad__card::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+/* Counter-skew, exactly as `.ffx-sensor > *` and `.ig-cmd > *` do. */
+.mad__card > * {
+  transform: skewX(var(--ig-skew-inverse));
+}
+
+/* ------------------------------------------------------------------- head */
+
+.mad__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 2.5px;
+}
+.mad__title {
+  padding: 1px 4px 1.2px;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 4.6px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ig-ink);
+  background: var(--ig-accent);
+}
+.mad__actor {
+  font-family: var(--ig-font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 7px;
+  color: var(--ig-paper);
+}
+
+/* ------------------------------------------------------------------ a move */
+
+.mad__move + .mad__move {
+  margin-top: 3px;
+  padding-top: 3px;
+  border-top: 0.4px solid rgba(244, 241, 232, 0.18);
+}
+
+.mad__line {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-family: var(--ig-font-numeral);
+  font-size: 8.4px;
+  line-height: 1.15;
+}
+/* The runner-up is quieter than the pick, so the card still has one answer. */
+.mad__move--alt .mad__line {
+  font-size: 7px;
+}
+.mad__move--alt .mad__label {
+  color: #e9d7a6;
+}
+
+.mad__rank {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ig-font-display);
+  font-size: 4.4px;
+  font-weight: 700;
+  color: var(--ig-ink);
+  background: var(--ig-accent);
+  transform: rotate(45deg);
+}
+.mad__rank b {
+  display: block;
+  transform: rotate(-45deg);
+}
+.mad__move--alt .mad__rank {
+  background: #8d99a8;
+}
+
+.mad__label {
+  color: var(--ig-accent);
+  font-weight: 700;
+}
+.mad__arrow {
+  color: #8d99a8;
+  font-size: 5.6px;
+}
+.mad__target {
+  color: var(--ig-paper);
+  font-weight: 600;
+}
+/* "CHAPTER LINE" — this row is the tactic the encounter was designed around,
+   not merely the best-scoring simulation. */
+.mad__badge {
+  padding: 0.6px 3px 0.8px;
+  font-family: var(--ig-font-display);
+  font-size: 3.9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ig-ink);
+  background: #e9d7a6;
+}
+
+/* --------------------------------------------------------------- the chips */
+
+.mad__stats {
+  margin: 1.2px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4px;
+}
+.mad__stat {
+  padding: 0.5px 3px 0.8px;
+  background: var(--ig-ink-chip);
+  font-family: var(--ig-font-display);
+  font-size: 4.2px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #cfd6de;
+  white-space: nowrap;
+}
+/* The number the player came for, in the numeral face at chip size. */
+.mad__stat--dmg {
+  font-family: var(--ig-font-numeral);
+  font-size: 5.2px;
+  letter-spacing: 0.04em;
+  color: #f2d24a;
+}
+.mad__stat--heal {
+  font-family: var(--ig-font-numeral);
+  font-size: 5.2px;
+  letter-spacing: 0.04em;
+  color: #9fe0a8;
+}
+.mad__stat--kill {
+  color: var(--ig-ink);
+  background: var(--ig-blood);
+}
+.mad__stat--status {
+  color: #e9d7a6;
+}
+
+.mad__effect {
+  margin: 1.4px 0 0;
+  color: #b9c6d6;
+}
+.mad__why {
+  margin: 0.6px 0 0;
+  color: #dcd8cc;
+}
+.mad__cite {
+  margin: 0.4px 0 0;
+  font-family: var(--ig-font-display);
+  font-size: 4px;
+  letter-spacing: 0.08em;
+  color: #7f8a99;
+}
+.mad__warn {
+  margin: 0.6px 0 0;
+  padding-left: 4px;
+  border-left: 1.2px solid var(--ig-blood);
+  color: #f2a0a0;
+}
+.mad__idle {
+  margin: 0;
+  color: #8d99a8;
+  font-style: italic;
+}
+
+/* ----------------------------------------------------------------- toggle */
+
+/* Stays on screen when the card is hidden, so a player who turned it off can
+   find it again without the pause menu. Sits just above the card's measured
+   top edge; `applyVisible` clears the inline value when the card goes away, so
+   the chip falls back to this anchor instead of freezing mid-screen. */
+.mad__toggle {
+  position: absolute;
+  left: 196px;
+  bottom: 122px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  padding: 1px 5px 1.5px;
+  border: 0;
+  background: var(--ig-ink-chip);
+  color: #cfd6de;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 4.4px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: skewX(var(--ig-skew));
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.mad__toggle > * {
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse));
+}
+.mad__toggle b {
+  color: var(--ig-accent);
+  font-weight: 700;
+}
+.mad__toggle:hover,
+.mad__toggle:focus-visible {
+  background: var(--ig-accent);
+  color: var(--ig-ink);
+}
+.mad__toggle:hover b,
+.mad__toggle:focus-visible b {
+  color: var(--ig-ink);
+}

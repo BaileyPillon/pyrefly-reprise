@@ -317,7 +317,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
     'A thousand-year gun the size of a cathedral, and a boy inside it who has been grieving for just ' +
     'as long. Tail, leg, body, head — and then, finally, the boy holding the trigger.',
   heroArt: 'pause/ch5-ffx2-vegnagun-shuyin',
-  heroArtFallback: 'portraits/shuyin.png',
+  heroArtFallback: 'characters/shuyin/idle.png',
   quote: {
     text: 'A thousand years of silence, and Spira never once stopped to listen.',
     speaker: 'Shuyin',
@@ -343,8 +343,8 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   tip: 'Two Dark Knights spamming Darkness ignore every part’s Defense, hit every target at once, and cost HP a Mega-Potion undoes.',
   snapshots: [
     { image: 'backdrops/farplane.png', caption: "Vegnagun's chamber" },
-    { image: 'characters/vegnagun-head/idle.1.png', caption: 'kill the arms first' },
-    { image: 'portraits/lenne.png', caption: 'the note he circles' },
+    { image: 'characters/vegnagun-head/idle.png', caption: 'kill the arms first' },
+    { image: 'characters/lenne/idle.png', caption: 'the note he circles' },
   ],
   focalCharacterId: 'shuyin',
   musicKeys: ['boss-dread', 'battle-ffx'],

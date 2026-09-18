@@ -1,0 +1,17 @@
+{
+  "out": "docs/screenshots/art/_ba5-portraits.png",
+  "title": "bosses-a portraits \u2014 fix pass 5",
+  "subtitle": "--composition portrait with the F1.5 softened facing phrase at (from side:1.25); canon Guado hair crest and canon beaded headdress",
+  "rows": [
+    {
+      "label": "PORTRAITS",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 300,
+      "items": [
+        {"path": "public/art/portraits/seymour.png", "caption": "seymour"},
+        {"path": "public/art/portraits/yunalesca.png", "caption": "yunalesca"}
+      ]
+    }
+  ]
+}

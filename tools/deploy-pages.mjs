@@ -167,6 +167,13 @@ async function main() {
   log(`main repo at ${mainSha}`);
 
   // ---- 2. Build -----------------------------------------------------------
+  // The art index has to be regenerated from whatever the fleet finished since
+  // the last release, *before* vite copies public/ — otherwise the shipped
+  // manifest is stale and the site hides art that is sitting right there.
+  log('building: node tools/gen/manifest.mjs');
+  if (run(process.execPath, [join(ROOT, 'tools', 'gen', 'manifest.mjs')]).status !== 0) {
+    fail('art manifest generation failed — see output above');
+  }
   log('building: npx vite build --outDir dist-release --emptyOutDir');
   if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir']).status !== 0) {
     fail('vite build failed — see output above');

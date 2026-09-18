@@ -1,0 +1,12 @@
+{
+  "out": "docs/screenshots/art/_ba4-zoom3.png",
+  "title": "yunalesca-3 idle finalists",
+  "subtitle": "medusa framing: snake-lock sunburst + small woman at the crown",
+  "rows": [
+    {"label": "G.1 vs G.2", "kind": "character", "cellHeight": 620, "cellWidth": 860,
+     "items": [
+       {"path": "public/art/characters/yunalesca-3/idleG.1.png", "caption": "G.1"},
+       {"path": "public/art/characters/yunalesca-3/idleG.2.png", "caption": "G.2"}
+     ]}
+  ]
+}

@@ -31,6 +31,23 @@
  * That is the whole reason `BattleScreen` only opens this on Esc "when no
  * submenu is open": Esc is a back button at three different depths here and in
  * the battle HUD, and exactly one of them can own it at a time.
+ *
+ * ## The keyboard, while this is up
+ *
+ * This screen can now open over a live command menu, and that menu is still
+ * listening on `window` underneath it. So `enter()` takes an exclusive claim
+ * (`Input.claimKeyboard`) for as long as the overlay lives: every keydown stops
+ * in `app/Input.ts`'s capture-phase listener and the menu below never sees it.
+ * The claim's callback is also how `H` — a key with no abstract button — reaches
+ * this screen at all.
+ *
+ * ## Panels hidden
+ *
+ * `H` (or Triangle, or the HIDE PANELS row) drops every slab and leaves the
+ * painting, with one faint line bottom-left. The player asked for it to look at
+ * the art, so "hidden" really does mean the scrim and the vignette too; the only
+ * thing left over the painting is the line that says how to get back. Remembered
+ * in `Settings.pausePanelsHidden`.
  */
 
 import type { BattleEvent, BattleState } from '../../battle/common/types.ts';
@@ -42,7 +59,12 @@ import type { InputSnapshot } from '../Input.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
-import { ControlsHint, PAUSE_HINTS, PAUSE_PANEL_HINTS } from '../../ui/common/ControlsHint.ts';
+import {
+  ControlsHint,
+  PAUSE_HINTS,
+  PAUSE_PANEL_HINTS,
+  type ControlHintItem,
+} from '../../ui/common/ControlsHint.ts';
 import { MusicPlayer } from '../../ui/common/MusicPlayer.ts';
 import { PhotoMode } from '../../ui/common/PhotoMode.ts';
 import {
@@ -109,6 +131,21 @@ export interface PauseScreenOptions {
 /** How far the pause menu ducks the music under itself. */
 const PAUSE_DUCK = 0.35;
 
+/**
+ * The hint strip's extra entry for the panel toggle.
+ *
+ * Declared here rather than in `ControlsHint.ts` (another agent's file) and
+ * spliced onto the shared sets locally — the same trick `GUIDE_HINT_ITEM` uses
+ * from the other direction.
+ */
+const HIDE_HINT_ITEM: ControlHintItem = {
+  label: 'hide panels',
+  keyboard: 'H',
+  gamepad: 'Triangle',
+  pointer: 'Hide',
+  action: 'pause:panels',
+};
+
 export class PauseScreen extends Screen {
   readonly name = 'pause';
 
@@ -130,6 +167,12 @@ export class PauseScreen extends Screen {
   private optionIndex = 0;
   /** Set once, so a double Esc cannot resume twice. */
   private closing = false;
+  /** Every slab is hidden and the painting is the whole screen. */
+  private panelsHidden = false;
+  /** The one line left over the art while {@link panelsHidden}. */
+  private bareHint: HTMLElement | null = null;
+  /** Releases the exclusive keyboard claim taken in {@link enter}. */
+  private releaseKeyboard: (() => void) | null = null;
 
   constructor(opts: PauseScreenOptions) {
     super();
@@ -148,6 +191,12 @@ export class PauseScreen extends Screen {
     audio.duck(PAUSE_DUCK, 0.2);
     audio.playSfx('menu-page');
 
+    // Take the keyboard away from anything below — see the class doc. The
+    // callback is this screen's only route to keys that have no abstract
+    // button, which today is `H`.
+    this.releaseKeyboard = this.app.input.claimKeyboard(this.onClaimedKey);
+
+    this.panelsHidden = this.app.save.settings.pausePanelsHidden;
     this.rows = this.buildRows();
     this.root.className = 'screen';
     this.stage = createStage(this.root, 'pause');
@@ -174,13 +223,24 @@ export class PauseScreen extends Screen {
     if (this.opts.chapter.game === 'ffx2') this.chrome.classList.add('ig--ffx2');
     this.root.appendChild(this.chrome);
 
-    this.hint = new ControlsHint({ root: this.chrome, items: PAUSE_HINTS });
+    this.hint = new ControlsHint({ root: this.chrome, items: [...PAUSE_HINTS, HIDE_HINT_ITEM] });
     this.hint.mount();
     this.hint.el.classList.add('pause__hint');
+
+    // The line that survives HIDE PANELS. Built once and shown/hidden rather
+    // than created on demand, so the toggle costs no layout. It lives on the
+    // same device-pixel chrome wrapper as the hint strip, for the same reason.
+    this.bareHint = document.createElement('div');
+    this.bareHint.className = 'pause__bare-hint';
+    this.bareHint.innerHTML =
+      '<b data-action="pause:panels" role="button" tabindex="0">H</b> show panels' +
+      ' <span>&middot;</span> <b data-action="cancel" role="button" tabindex="0">Esc</b> resume';
+    this.chrome.appendChild(this.bareHint);
 
     this.renderMenu();
     this.renderPanel();
     this.renderParty();
+    this.applyPanelsHidden();
   }
 
   /**
@@ -198,6 +258,15 @@ export class PauseScreen extends Screen {
       label: 'Strategy Guide',
       panel: 'details',
       value: () => (this.app.save.settings.guideVisible ? 'ON' : 'OFF'),
+    });
+    rows.push({
+      id: 'panels',
+      // The label is the *action*, not the state — "HIDE PANELS" while they are
+      // up, "SHOW PANELS" once they are not (which is only ever read from the
+      // bottom-left line, since the row itself is hidden along with everything
+      // else; it still flips so a pad player tabbing back sees the truth).
+      label: this.panelsHidden ? 'Show Panels' : 'Hide Panels',
+      panel: 'details',
     });
     rows.push({ id: 'options', label: 'Options', panel: 'options', entersPanel: true });
     rows.push({ id: 'details', label: 'Encounter Details', panel: 'details' });
@@ -350,6 +419,22 @@ export class PauseScreen extends Screen {
 
     for (const action of input.actions) this.handleAction(action);
 
+    // Triangle (pad Y, or Shift/Tab/Q) is the pad's HIDE PANELS. `H` comes in
+    // through the keyboard claim instead — it has no abstract button, and
+    // adding one to `app/Input.ts` for a single screen's toggle would put a
+    // global binding in a file thirty agents import.
+    if (input.justPressed('triangle')) {
+      this.togglePanels();
+      return;
+    }
+
+    // With the panels down the only things that answer are the toggle and the
+    // two ways out; arrows and Confirm would be moving a cursor nobody can see.
+    if (this.panelsHidden) {
+      if (input.justPressed('cancel') || input.justPressed('start')) this.close();
+      return;
+    }
+
     // F (mapped to `l1`) drops every piece of chrome and hands the camera over.
     if (input.justPressed('l1')) {
       this.enterPhotoMode();
@@ -418,8 +503,58 @@ export class PauseScreen extends Screen {
     }
   }
 
+  /**
+   * `H`, straight off the keyboard claim.
+   *
+   * Edge-only and chord-guarded for the same reason the strategy guide's `G`
+   * is: a held key or a Ctrl+H must not flip the chrome. The claim already
+   * filters chords out, but this handler is the one that would have to change
+   * if that ever stopped being true.
+   */
+  private readonly onClaimedKey = (e: KeyboardEvent): void => {
+    if (e.code !== 'KeyH' || e.repeat) return;
+    if (this.photo || this.closing) return;
+    this.togglePanels();
+  };
+
+  /** Flip HIDE / SHOW PANELS and remember the answer. */
+  private togglePanels(): void {
+    if (this.photo) return;
+    this.panelsHidden = !this.panelsHidden;
+    this.app.save.setSettings({ pausePanelsHidden: this.panelsHidden });
+    audio.playSfx('menu-page');
+    // The row's label is its action, so it has to be rebuilt, not re-rendered.
+    this.rows = this.buildRows();
+    if (this.index >= this.rows.length) this.index = 0;
+    this.renderMenu();
+    this.applyPanelsHidden();
+  }
+
+  /**
+   * Put the chrome up or take it away.
+   *
+   * One class on the stage does the work; the CSS owns which children go. The
+   * hint strip and the bottom-left line swap over here rather than in CSS
+   * because the strip mounts on the screen root, outside the stage — see the
+   * `ControlsHint` mount in {@link enter}.
+   */
+  private applyPanelsHidden(): void {
+    // On the inner 640x360 element, which is what the slabs are children of.
+    this.stage?.stage.classList.toggle('pause--bare', this.panelsHidden);
+    if (this.hint) this.hint.el.style.display = this.panelsHidden ? 'none' : '';
+    if (this.bareHint) this.bareHint.style.display = this.panelsHidden ? '' : 'none';
+  }
+
   private handleAction(action: string): void {
     if (action === 'photo:exit') return; // handled in photo mode
+    if (action === 'pause:panels') {
+      this.togglePanels();
+      return;
+    }
+    if (action === 'cancel' && this.panelsHidden) {
+      this.close();
+      return;
+    }
     if (this.music?.handleAction(action)) return;
     if (action.startsWith('pause:row:')) {
       const id = action.slice('pause:row:'.length);
@@ -482,6 +617,9 @@ export class PauseScreen extends Screen {
       case 'details':
         this.panel = 'details';
         this.renderPanel();
+        return;
+      case 'panels':
+        this.togglePanels();
         return;
       case 'guide': {
         const next = !this.app.save.settings.guideVisible;
@@ -577,6 +715,9 @@ export class PauseScreen extends Screen {
     });
     this.hideScreensBelow();
     this.hint?.unmount();
+    // Photo mode has its own one-line hint; two of them stacked would be a
+    // mess, and this one names keys photo mode does not answer.
+    if (this.bareHint) this.bareHint.style.display = 'none';
     audio.playSfx('menu-page');
   }
 
@@ -586,6 +727,7 @@ export class PauseScreen extends Screen {
     this.photo = null;
     this.restoreScreensBelow();
     this.hint?.mount();
+    this.applyPanelsHidden();
     audio.playSfx('cancel');
   }
 
@@ -667,6 +809,11 @@ export class PauseScreen extends Screen {
       this.exitPhotoMode();
       return true;
     }
+    if (name === 'pause:panels' || name === 'pause:panels:hide' || name === 'pause:panels:show') {
+      const want = name === 'pause:panels' ? !this.panelsHidden : name === 'pause:panels:hide';
+      if (want !== this.panelsHidden) this.togglePanels();
+      return true;
+    }
     if (name.startsWith('pause:panel:')) {
       const panel = name.slice('pause:panel:'.length) as PausePanel;
       const i = this.rows.findIndex((r) => r.panel === panel && r.entersPanel !== undefined);
@@ -687,6 +834,7 @@ export class PauseScreen extends Screen {
       row: this.rows[this.index]?.id ?? null,
       focus: this.focus,
       panel: this.panel,
+      panelsHidden: this.panelsHidden,
       photo: this.photo?.snapshot() ?? null,
       music: this.music?.nowPlaying ?? null,
       playTimeMs: this.app.save.playTime(this.opts.chapter.id),
@@ -699,6 +847,12 @@ export class PauseScreen extends Screen {
   }
 
   override exit(): void {
+    // Give the keyboard back before anything else: a command menu underneath
+    // is still open and is about to be the player's again.
+    this.releaseKeyboard?.();
+    this.releaseKeyboard = null;
+    this.bareHint?.remove();
+    this.bareHint = null;
     this.photo?.dispose();
     this.photo = null;
     // Closing the menu straight out of photo mode must not leave the battle

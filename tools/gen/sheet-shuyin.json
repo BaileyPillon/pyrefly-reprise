@@ -1,0 +1,55 @@
+{
+  "out": "docs/screenshots/art/shuyin.png",
+  "title": "shuyin — art contract v3",
+  "subtitle": "Animagine XL 4.0 Opt · shared style block · rembg isnet-anime · idle picked first, every other state --ref idle",
+  "rows": [
+    {
+      "label": "SHUYIN — facing left",
+      "kind": "character",
+      "cellHeight": 470,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/shuyin/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/shuyin/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/shuyin/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/shuyin/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/shuyin/ko.png",
+          "caption": "ko"
+        },
+        {
+          "path": "public/art/characters/shuyin/victory.png",
+          "caption": "victory"
+        },
+        {
+          "path": "public/art/characters/shuyin/talk.png",
+          "caption": "talk"
+        }
+      ]
+    },
+    {
+      "label": "PORTRAIT",
+      "kind": "character",
+      "cellHeight": 320,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/shuyin.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

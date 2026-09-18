@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/_ba-seymour-flux-body-picks.png",
+  "title": "SEYMOUR-FLUX-BODY promoted",
+  "subtitle": "facing check",
+  "rows": [
+    {
+      "label": "idle / attack / cast / hurt / ko",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "out": "docs/screenshots/art/_ba4-port.png",
+  "title": "portrait finalists — which way does the head point?",
+  "subtitle": "enemy portraits should present a three-quarter head, eyes on the player",
+  "rows": [
+    {"label": "portraits", "kind": "character", "cellHeight": 620, "cellWidth": 460,
+     "items": [
+       {"path": "public/art/portraits/seymour.png", "caption": "seymour (G.1)"},
+       {"path": "public/art/portraits/yunalescaF.4.png", "caption": "yunalesca F.4"},
+       {"path": "public/art/portraits/yunalescaF.2.png", "caption": "yunalesca F.2"}
+     ]}
+  ]
+}

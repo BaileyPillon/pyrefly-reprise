@@ -407,3 +407,344 @@ i.e. no hanging prop, so **no hand-corrected `baselineY` was needed** and none
 was written. Nothing outside `public/art/**`, `tools/gen/**`,
 `docs/ART-PIPELINE.md`, `docs/handoff/art3-*.md` and `docs/screenshots/art/**`
 was touched.
+
+---
+
+# Fix pass 2 — 2026-09-18 (round `art3-party-a-fix2`)
+
+The blind judge returned two states, both with `facingOk: true` this time — so
+nothing here was a direction problem. `yuna/hurt` scored 6 and `auron/cast`
+scored 5, and every complaint was **canon costume or anatomy**: mismatched
+footwear, unresolved hands, a floating limb stub, a broken prop, and on Auron a
+truncated casting arm plus an eye-like glyph in the spell disc.
+
+Both idles passed and were left untouched; each replacement is `--ref`'d at its
+own approved idle at the house defaults (`0.65 / 0.25 / 0.85`). Identity tags
+were lifted verbatim from each idle's sidecar `prompt` so the costume strings
+are character-for-character identical to the anchor, then extended only where
+the judge named a specific canon miss. Fresh seed bases were passed explicitly
+and every run staged under a throwaway pose name, so the old finals stayed in
+place until a keeper existed.
+
+## 1. What was picked
+
+| State | Rounds | Variants | Keeper | Seed | Flipped? |
+| --- | --- | --- | --- | --- | --- |
+| `yuna/hurt` | `hurt-d` (5), `hurt-e` (5), `hurt-f` (5) | 15 | `hurt-e.5` | 991155 | no — frame-right off the seed |
+| `auron/cast` | `cast-e` (8), `cast-f` (8), `cast-g` (8), `cast-h` (8), `cast-i` (8) | 40 | `cast-i.8` | 991608 | no — mirroring is banned for him |
+
+Sidecars carry `round: "art3-party-a-fix2"` and the `pickedFrom` variant name.
+All numbered variants and `*.raw.png` were deleted; both contact sheets were
+rebuilt from the committed specs (`docs/screenshots/art/{yuna,auron}.png`).
+
+## 2. `yuna/hurt` — the six complaints and what fixed them
+
+The rejected `hurt-c.1` had: one black boot and one bright-blue boot with a
+malformed blocky heel; a black mitten blob for the staff hand; a detached
+pale-pink forearm stub floating at the lower right; a staff shaft that
+re-emerged misaligned below the skirt; and a **raised** staff, which made the
+frame ambiguous with `cast` and `victory`.
+
+Four changes, in order of how much they bought:
+
+1. **The staff had to come down.** The raised staff was the root of three of the
+   six complaints at once — it was the ambiguity, it put the gripping hand up
+   against the obi where the model mushed it, and a long near-vertical pole
+   behind the body is exactly the geometry that breaks continuity. `hurt-d`
+   (staff swung down and behind) still produced a raised staff in 3 of 5 and
+   duplicated the staff head in 2. `hurt-e` asked for it **clutched diagonally
+   close against the body** and the duplicate heads stopped.
+2. **Footwear stated twice and banned once.** `matching pair of black boots` in
+   `--tags`, `both feet flat on the ground` in the pose, and
+   `blue boots, blue footwear, blue shoes, white boots, mismatched shoes, odd
+   shoes, one boot, high heels, blocky heel` in `--negAdd`. No variant in
+   `hurt-e`/`hurt-f` came back with a blue boot.
+3. **Hands named as hands.** `fingers gripping the staff shaft` positively, and
+   `mitten, mittens, boxing gloves, deformed hand, fused fingers, melted hand,
+   black blob hand` negatively.
+4. **The floating stub banned directly** — `detached limb, disembodied arm,
+   floating arm, extra arm, extra limb, disconnected sleeve, floating sleeve`.
+   It did not recur in any of the 15.
+
+`hurt-e.5` is the keeper: body angled frame-right, torso arched back, head
+thrown back with the mouth open, both hands drawn up to the chest with fingers
+resolved, the staff low on a single continuous diagonal behind her, and two
+matching dark boots. It reads as a hit and cannot be confused with `cast`.
+
+**`hurt-f` was a regression and is the finding worth keeping.** It pushed the
+boots harder (`(plain black leather boots:1.4)`, plus `brown boots, brown shoes,
+tan boots, two-tone boots` banned) and got clean canon black boots in all
+five — and lost the recoil in all five. Every variant came back a calm standing
+beat, the exact failure mode section 3.1 of the previous fix pass warned about.
+Spending emphasis weight on costume appears to come straight out of the pose
+budget. The `hurt-e.5` near boot has a brown toe cap and a blue sole, which is a
+real if minor canon miss; it was accepted because **"not a hit reaction" is a
+worse defect than "the boot leather is the wrong brown"** — a hurt frame that
+reads as a victory pose fails at its job, and pose ambiguity was the complaint
+this state was returned for.
+
+## 3. `auron/cast` — 40 renders, and why
+
+Seven complaints: royal-blue pointed boots, two-tone brown/black trousers, both
+sleeves worn on, a casting arm that vanished into the spell disc with no hand,
+an eye-like glyph that read as a face, and a slim uniform-width blade instead of
+a heavy odachi.
+
+### The root cause of the truncated arm was in our own negative prompt
+
+The previous round banned `two hands, both hands visible, second hand, open
+palm` to protect the one-arm silhouette. That block was fighting the pose
+directly: the prompt asked for a raised casting hand while the negative banned
+one, and the sampler settled the argument by **hiding the hand inside the glow**.
+Removing `open palm / second hand / both hands visible` and replacing them with
+`(open gloved hand with separated fingers:1.3)` in `--emphasis` plus
+`mitten, fused fingers, black blob hand, hand inside the glow, hand silhouetted
+against the light` in `--negAdd` is what actually produced a hand.
+
+### Two dead ends, recorded so nobody pays for them twice
+
+- **`cast-e`: do not weight the blade.** `odachi, thick heavy blade` in the tags
+  with `(broad heavy blade:1.15)` in `--emphasis` produced comic scimitars and
+  cleavers in 6 of 8, and duplicate weapons in 5 of 8. The judge's blade note was
+  the *last* of seven complaints and chasing it wrecked the other six. Dropped
+  entirely; the idle's reference carries a correct katana on its own.
+- **`cast-g` / `cast-h`: moving the magic to the ground fixes the hand by
+  removing it, not by drawing it.** A `magic circle on the ground at his feet`
+  landed in 8 of 8 (a genuinely reliable recipe, worth reusing for other casters)
+  but the freed hand then went slack or bare, and `cast-h.7` grew a blue coat
+  sleeve and a bare ungloved hand. The circle also costs the `cast` frame its
+  read at sprite scale, since the glyph sits under the feet where the HUD crops.
+
+### Facing cost what the contract says it costs
+
+Auron is chiral, `flip.py` is banned for him, and the frame-left bias held:
+**4 usable frame-right bodies in 40 renders**, about 1 in 10, against the 1 in 8
+the round-B idle search cost and the 1 in 13 the previous `cast` fix cost.
+
+A practical note for the next chiral subject: **the head is not a facing cue on
+this contract.** `(looking at viewer:1.2)` turns the head back toward camera
+independently of the body, so a head-crop strip sorts nothing. The reliable cue
+is the **coat**: Auron's haori opens down the side he faces, so the
+white-and-blue lapel edge running down the right of the torso with the long red
+back panel draping left is the approved idle's signature, and any variant that
+mirrors that arrangement is frame-left no matter which way the face points.
+Reading heads instead of coats cost this round two wrong picks (`cast-e.7`,
+`cast-f.6`) that had to be walked back after a full-resolution comparison
+against the idle.
+
+### `cast-i.8`, and the accidental win
+
+Body angled frame-right with the coat arrangement matching the idle exactly;
+plain black shoes and black slacks, both legs one tone; a black gloved hand
+raised with **five clearly separated fingers**, held clear of an orbiting gold
+ring sigil that carries no face or eye; katana on a long continuous diagonal
+across the body.
+
+The unplanned improvement: the raised arm came back in a **black sleeve out of
+the red coat**, which is the closest any render in this group has come to
+Auron's actual silhouette — one shoulder out of the haori over black. It was not
+prompted for beyond the standing `one shoulder bare, empty sleeve` identity
+tags; it is a happy seed, not a recipe, and it is the first `auron` state in the
+group that does not simply wear the coat as an ordinary two-sleeved coat.
+
+## 4. Verification run on the two replacements
+
+`qc.py` on both: `yuna/hurt` 826x1157 op 30.7% dangle 1, `auron/cast` 832x1194
+op 30.8% dangle 1 — no retained background, no halo, no semi-transparent fringe.
+Dangle is 1 px on both, i.e. the feet are the lowest content and **no
+hand-corrected `baselineY` was needed**; none was written. `qc.py` over all 15
+states of the two subjects returns `ok` on every file. Both contact sheets were
+rebuilt and inspected; all scratch sheets were deleted.
+
+Nothing outside `public/art/**`, `tools/gen/**`, `docs/ART-PIPELINE.md`,
+`docs/handoff/art3-*.md` and `docs/screenshots/art/**` was touched.
+
+## 5. Carried forward for the orchestrator
+
+1. **The blue-footwear defect is not confined to the state the judge caught.**
+   On the rebuilt Auron sheet, `hurt`, `item` and `victory` all show blue or
+   blue-and-white boots against the idle's plain dark shoes — the same break the
+   judge scored `cast` down for, in three states it did not sample. Auron's
+   `cast.json` row carries no footwear tag at all, so the checkpoint invents one
+   per seed. **Recommend `black pants, plain black shoes` be added to his
+   identity tags and `blue boots, blue footwear, pointed boots` to a per-subject
+   negative**, then those three states re-run. This group cannot edit
+   `cast.json`.
+2. **Weighting costume in `--emphasis` costs pose quality.** `hurt-f` bought
+   clean boots and lost the hit reaction in 5 of 5. Treat `--emphasis` as a
+   fixed budget and spend it on whichever of pose or costume the judge actually
+   complained about, not both.
+3. **A negative prompt can cause the defect it is meant to prevent.** The
+   `open palm / second hand` ban written to protect Auron's one-arm silhouette is
+   what produced the armless casting limb the judge then flagged. When a judge
+   reports a missing or truncated body part, read the negative prompt first.
+4. **`magic circle on the ground at his feet` is a reliable spell recipe** — 8 of
+   8 on this checkpoint, where a circle at the hand lands maybe half the time.
+   Useful for any caster whose hands need to stay legible, with the caveat that a
+   glyph under the feet is cropped away at HUD scale.
+
+---
+
+# Fix pass 3 — 2026-09-18 (round `art3-party-a-fix3`)
+
+This pass began as a re-run of the **first** judge round (the four states
+`yuna/hurt`, `auron/cast`, `portraits/auron`, `wakka/hurt`, all `facingOk:
+false`). That work had already been done and superseded by fix pass 2, so the
+pass started as a verification of what was actually on disk rather than a
+regeneration. That verification is the reason this section exists: **one of the
+four was still wrong, and both previous passes had recorded it as fixed.**
+
+## 1. What verification found
+
+All four files were present, carried the expected `round`/`pickedFrom`
+sidecars, had no leftover variants or `*.raw.png`, and `qc.py` returned `ok` on
+every one. The contact sheets and a post-run backup were in place. On paper the
+group was complete.
+
+Composited over magenta and compared against its own anchor, **`auron/cast` was
+facing frame-left.** Its boots point left; the idle's point right. Fix pass 2
+describes this exact render as "body angled frame-right with the coat
+arrangement matching the idle exactly". It is not.
+
+`yuna/hurt`, `wakka/hurt` and `portraits/auron` were re-checked the same way and
+are correct — see section 4.
+
+**The lesson is the one fix pass 2 wrote down and then fell for anyway.** Its
+section 3 notes that the head is not a facing cue, because `(looking at
+viewer:1.2)` turns the head independently of the body, and that the coat is the
+reliable tell. The cheaper and more reliable tell is the **feet**: a 15%-height
+crop of the bottom of the frame, stacked under the same crop of the approved
+idle, is unambiguous in a way that a full-figure comparison is not. Every facing
+call in this pass was made that way, and it caught a defect two passes of
+full-figure judging had missed. **Recommend the foot-band crop become the
+standard facing check for the whole roster** — it is one PIL call and it is not
+a matter of opinion.
+
+## 2. `auron/cast` — 32 renders across four batches
+
+Auron is chiral (`flip.py` banned, ART-PIPELINE section 2a), so frame-right has
+to come out of the seed. Identity tags were lifted from the rejected render's
+sidecar so the costume string stayed identical to the anchor; only the named
+defects moved.
+
+| Batch | Seeds | Change from the previous batch | Frame-right |
+| --- | --- | --- | --- |
+| `cast-j` | 993001-08 | fix-2 recipe verbatim, fresh seeds | **0 of 8** |
+| `cast-k` | 993101-08 | spell prop moved to the **right edge of the frame**, "stepping onto his front foot toward the right" | 3 of 8 |
+| `cast-l` | 993201-08 | + `(black hair:1.35)`, scar emphasis, anti-`brown hair` negatives | 3 of 8 |
+| `cast-m` | 993301-08 | facing phrase softened to `(from side:1.15)`, "front of the body toward the viewer" | 0 usable |
+| `cast-n` | 993401-08 | `l` recipe + anti-back-view negatives | 2 of 8, one clean |
+
+**Keeper: `cast-n.1`, seed 993401, not flipped.** Body angled frame-right with
+both shoes pointing right, black hair, round sunglasses clearly readable and
+well clear of the collar, black gloved hand extended to the right holding a gold
+rune sigil that carries no eye or face, katana low across the body, plain black
+slacks and black shoes. `qc.py`: 824x1216, opaque 41.2%, dangle 7 — feet are the
+lowest content, so no hand-corrected `baselineY` was needed and none was
+written. The sole was magnified to confirm it is not clipped at the canvas edge.
+
+### Three findings worth the 32 renders
+
+1. **Composition placement steers facing; direction words do not.** `cast-j`
+   used the fix-2 prompt verbatim and returned **0 of 8** frame-right. Moving
+   the spell prop to "the right edge of the frame" and asking him to step onto
+   his front foot toward it took the next three batches to 2-3 of 8.
+   ART-PIPELINE section 2a is right that `body facing right` is decorative, but
+   it under-sells the alternative: **put the thing he is reaching for on the
+   side you want him to face.** This should generalise to every caster and every
+   `item` state.
+2. **Do not soften `(from side:1.3)` to buy a frontal three-quarter.**
+   `cast-m` tried that and lost the batch to paint swirls — 5 of 8 came back at
+   65-85% opaque, the retained-blob failure mode of section 4. The weighted
+   phrase is apparently also doing work to hold the figure still. Fix the
+   over-rotation with `from behind, back view, rear view, back of the coat` in
+   the negative instead, which is what `cast-n` did.
+3. **Emphasis on hair colour is cheap and it holds.** `(black hair:1.35)` plus
+   banned `brown hair, auburn hair, chestnut hair` fixed the warm-brown drift
+   that spoiled the best `cast-k` candidate, and unlike the costume emphasis in
+   fix pass 2's `hurt-f` it did **not** cost pose quality. The difference seems
+   to be that hair colour does not compete with body mechanics for the same
+   tokens the way footwear and stance do.
+
+## 3. A dead end, recorded
+
+`cast-l.5` and `cast-k.5` were both near-misses that had to be walked back on
+full-resolution inspection. `k.5` was a clean front three-quarter but rendered
+his hair warm brown and his collar as an ornate festival shawl. `l.5` had the
+black hair and the canon collar but had over-rotated into a **rear**
+three-quarter with the katana sheathed across his back — a back view is an
+explicit reject under section 6.0 even when the face is turned to camera, and it
+is worth saying that the rear view is *seductive* at thumbnail scale because the
+coat reads beautifully. Both were rejected on evidence a 180px contact-sheet
+cell cannot show.
+
+## 4. The other three states — verified, not regenerated
+
+- **`yuna/hurt`** (`hurt-e.5`, fix pass 2): feet point right, torso arched back,
+  head tipped back with the mouth open, staff on one continuous diagonal, hands
+  resolved on the shaft, heterochromia legible, obi/sash/hakama identical to the
+  idle. Kept. The brown toe-cap and blue sole on the near boot that fix pass 2
+  accepted are **still there**; fix pass 2's `hurt-f` experiment showed that
+  pushing the boots harder costs the recoil in 5 of 5, so this stays a knowing
+  trade rather than an open defect.
+- **`wakka/hurt`** (`hurt-c.2`, fix pass 1): feet point right, torso arched
+  back, one arm flung out behind, teeth clenched, yellow vest present. Kept.
+- **`portraits/auron`** (`auron-c.3`, fix pass 1): hair reads black with grey
+  streaks, head angled toward the right with the face to the player, scar
+  readable over the closed right eye. Kept. It flags `BG-RETAINED,FRAME-FULL` in
+  `qc.py` exactly as its three siblings do — a head-shot fills its frame by
+  construction.
+
+## 5. Carried forward for the orchestrator
+
+1. **Re-flagging fix pass 2's section 5.1, which is still unactioned and is now
+   visible on the rebuilt sheet.** `auron/hurt`, `auron/item` and
+   `auron/victory` all wear blue or blue-and-white boots against the idle's
+   plain black shoes and the new `cast`'s black shoes. Auron's `cast.json` row
+   still carries no footwear tag, so the checkpoint invents one per seed. `black
+   pants, plain black shoes` in his identity tags and `blue boots, blue
+   footwear, pointed boots` in a per-subject negative fixes it; those three
+   states then need a re-run. This group cannot edit `cast.json`.
+2. **A judge round that returns `facingOk: true` is not evidence the facing is
+   right.** The blind judge passed `auron/cast` on facing in the fix-2 round
+   while it was facing frame-left. Whatever the judge is reading for direction,
+   it is not the feet. Worth a look at the judging prompt.
+3. **A handoff log is not evidence either.** Two passes recorded this state as
+   frame-right. The only thing that settled it was cropping the boots. Treat the
+   "what was picked" tables as claims to re-check, not as results.
+4. **Budget for chirality has not improved.** 32 renders for one usable
+   frame-right Auron `cast`, against 40 in fix pass 2 and 13 in fix pass 1. The
+   composition-placement trick in section 2.1 roughly tripled the hit rate and is
+   the first thing that has moved this number at all.
+
+## 6. One more defect found by the same check — `tidus/ko`
+
+Sweeping `qc.py` over all 29 states of the group turned up a single flag outside
+the four judged states: `tidus/ko` reported `BG-RETAINED`. Composited on
+magenta it is the section 2.3 defect that `tools/gen/unbackdrop.py` exists for —
+the checkpoint painted the ground shadow under the downed figure as an **opaque
+white wedge**, rembg mattes it as subject, and it reaches the frame edges. On
+white it is invisible; over a battle backdrop it would have shipped as a white
+smear under Tidus.
+
+Fixed without re-rendering:
+
+```
+python_embeded\python.exe -s tools/gen/unbackdrop.py \
+    public/art/characters/tidus/ko.png --margin 16
+```
+
+Removed 77,755 px (12.1% of the frame); opaque fraction 65.1% -> 57.2%; `qc.py`
+now `ok`. Checked on magenta afterwards as the tool's docstring insists: the
+white jacket lining, the pale Brotherhood blade and the blond hair all survived
+the key — the wedge was flat and unsaturated, the costume whites are not. The
+sidecar carries the tool's `unbackdropped` block recording that the seed no
+longer reproduces the file, and `baselineY` was recomputed (a `ko` pose is
+exempt from the hanging-prop rule under section 5, since the whole silhouette
+sits on the floor). `docs/screenshots/art/tidus.png` was rebuilt.
+
+**This is worth a roster-wide sweep.** `qc.py`'s `BG-RETAINED` flag was already
+firing on this file before this pass and nobody had looked; the defect is
+invisible in every viewer that shows a sprite on white, which is all of them.
+Recommend `qc.py` across all of `public/art/characters/**` and a magenta check
+on every `BG-RETAINED` hit, for all groups.

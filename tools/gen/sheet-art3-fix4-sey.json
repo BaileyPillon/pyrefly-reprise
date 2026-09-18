@@ -1,0 +1,83 @@
+{
+  "out": "docs/screenshots/art/_ba4-sey.png",
+  "title": "seymour-flux-body fix candidates",
+  "subtitle": "fix pass, contract v3",
+  "rows": [
+    {
+      "label": "attackF",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/attackF.1.png",
+          "caption": "attackF.1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackF.2.png",
+          "caption": "attackF.2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackF.3.png",
+          "caption": "attackF.3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackF.4.png",
+          "caption": "attackF.4"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/idle.png",
+          "caption": "idle"
+        }
+      ]
+    },
+    {
+      "label": "hurtF",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtF.1.png",
+          "caption": "hurtF.1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtF.2.png",
+          "caption": "hurtF.2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtF.3.png",
+          "caption": "hurtF.3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtF.4.png",
+          "caption": "hurtF.4"
+        }
+      ]
+    },
+    {
+      "label": "koF",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/koF.1.png",
+          "caption": "koF.1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koF.2.png",
+          "caption": "koF.2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koF.3.png",
+          "caption": "koF.3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koF.4.png",
+          "caption": "koF.4"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "out": "docs/screenshots/art/_cand-ffx2-bahamut-idle.png",
+  "title": "ffx2-bahamut — idle candidates (v3 facing)",
+  "subtitle": "judge: facing first, then costume, then cutout",
+  "rows": [
+    {
+      "label": "FFX2-BAHAMUT",
+      "kind": "character",
+      "cellHeight": 520,
+      "cellWidth": 420,
+      "items": [
+        {
+          "path": "public/art/characters/ffx2-bahamut/idle.1.png",
+          "caption": "idle.1"
+        },
+        {
+          "path": "public/art/characters/ffx2-bahamut/idle.2.png",
+          "caption": "idle.2"
+        },
+        {
+          "path": "public/art/characters/ffx2-bahamut/idle.3.png",
+          "caption": "idle.3"
+        },
+        {
+          "path": "public/art/characters/ffx2-bahamut/idle.4.png",
+          "caption": "idle.4"
+        }
+      ]
+    }
+  ]
+}

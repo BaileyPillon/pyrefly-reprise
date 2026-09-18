@@ -148,6 +148,8 @@ export class Input implements InputSnapshot {
   private padDown = new Set<Button>();
   private attached = false;
   private now = 0;
+  /** The current exclusive keyboard claimant. See {@link claimKeyboard}. */
+  private keyboardClaim: ((e: KeyboardEvent) => void) | null = null;
 
   constructor(opts: InputOptions = {}) {
     this.pointerRoot =
@@ -170,8 +172,14 @@ export class Input implements InputSnapshot {
   attach(): void {
     if (this.attached) return;
     this.attached = true;
-    this.keyboardTarget.addEventListener('keydown', this.onKeyDown as EventListener);
-    this.keyboardTarget.addEventListener('keyup', this.onKeyUp as EventListener);
+    // **Capture phase, deliberately.** Several HUD widgets listen for keys
+    // straight off `window` themselves (`ui/ffx/rawInput.ts`'s
+    // `RawInputWatcher`, `ui/ffx2/CommandMenu.ts`, the strategy guide's `G`)
+    // because the presenter calls them outside the screen-input cycle. Listening
+    // first is what lets {@link claimKeyboard} cut every one of them off while an
+    // overlay owns the keyboard — see that method.
+    this.keyboardTarget.addEventListener('keydown', this.onKeyDown as EventListener, true);
+    this.keyboardTarget.addEventListener('keyup', this.onKeyUp as EventListener, true);
     window.addEventListener('blur', this.onBlur);
     this.pointerRoot.addEventListener('click', this.onClick as EventListener);
     window.addEventListener('gamepadconnected', this.onGamepadChange);
@@ -181,8 +189,8 @@ export class Input implements InputSnapshot {
   detach(): void {
     if (!this.attached) return;
     this.attached = false;
-    this.keyboardTarget.removeEventListener('keydown', this.onKeyDown as EventListener);
-    this.keyboardTarget.removeEventListener('keyup', this.onKeyUp as EventListener);
+    this.keyboardTarget.removeEventListener('keydown', this.onKeyDown as EventListener, true);
+    this.keyboardTarget.removeEventListener('keyup', this.onKeyUp as EventListener, true);
     window.removeEventListener('blur', this.onBlur);
     this.pointerRoot.removeEventListener('click', this.onClick as EventListener);
     window.removeEventListener('gamepadconnected', this.onGamepadChange);
@@ -190,6 +198,16 @@ export class Input implements InputSnapshot {
   }
 
   private readonly onKeyDown = (e: KeyboardEvent): void => {
+    // An exclusive claim stops the event dead here, in the capture phase, so no
+    // other `window` listener in the tree sees it — see {@link claimKeyboard}.
+    // Chords are left alone so browser shortcuts (Ctrl+R, Cmd+Shift+I) still
+    // work while a menu is up.
+    const claim = this.keyboardClaim;
+    if (claim && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.stopImmediatePropagation();
+      claim(e);
+    }
+
     const button = KEY_MAP[e.code];
     if (!button) return;
     // Tab and the arrows would otherwise scroll or move focus out of the game.
@@ -201,6 +219,7 @@ export class Input implements InputSnapshot {
   };
 
   private readonly onKeyUp = (e: KeyboardEvent): void => {
+    if (this.keyboardClaim && !e.ctrlKey && !e.metaKey && !e.altKey) e.stopImmediatePropagation();
     const button = KEY_MAP[e.code];
     if (!button) return;
     this.heldKeys.delete(e.code);
@@ -366,6 +385,46 @@ export class Input implements InputSnapshot {
 
   get lastDevice(): 'keyboard' | 'gamepad' | 'pointer' {
     return this._lastDevice;
+  }
+
+  // ------------------------------------------------------- exclusive claims
+
+  /**
+   * Take the keyboard away from every other `window` listener until the
+   * returned function is called.
+   *
+   * The battle HUDs do not route input through this class: the presenter calls
+   * `HudPort.chooseCommand()` and awaits a promise, outside App's per-frame
+   * screen-input cycle, so the FFX command menu (`ui/ffx/rawInput.ts`) and the
+   * FFX-2 one (`ui/ffx2/CommandMenu.ts`) each listen on `window` for as long as
+   * they are open. That used to make a pause menu over a live command menu
+   * impossible: both would read the same arrow keys, and Enter would resolve a
+   * command — taking a real turn — from behind the pause screen.
+   *
+   * A claim closes that. `Input`'s own listener runs in the **capture** phase,
+   * so it is first; while claimed it calls `stopImmediatePropagation()` and the
+   * event never reaches the menu at all. `Input` itself still records the press
+   * (we are inside its handler), so the claimant keeps playing normally, and
+   * `onKey` hands it the raw event for keys that are not in the abstract map —
+   * the pause screen's `H`, for one.
+   *
+   * Claims nest: releasing restores whatever claim was in force before, and
+   * releasing twice is a no-op.
+   */
+  claimKeyboard(onKey: (e: KeyboardEvent) => void = () => {}): () => void {
+    const previous = this.keyboardClaim;
+    this.keyboardClaim = onKey;
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      if (this.keyboardClaim === onKey) this.keyboardClaim = previous;
+    };
+  }
+
+  /** True while some overlay owns the keyboard exclusively. */
+  get keyboardClaimed(): boolean {
+    return this.keyboardClaim !== null;
   }
 
   /** Testing / debug hook: synthesise a button press for one frame. */

@@ -6,9 +6,14 @@ import {
   TextureLoader,
   type Texture,
 } from 'three';
+import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import type { PoseFrame } from './PaintedScale.ts';
 
+// "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
+// there. It is deliberately not re-exported here: this file is already well
+// over the 400-line house limit, and the manifest is a separate concern that
+// the UI layer uses without ever touching a texture.
 export { computePoseScale, contactBandFor } from './PaintedScale.ts';
 export type { PoseFrame, PoseScale, PoseScaleOptions } from './PaintedScale.ts';
 export type { ArtFacing } from './BattlePresenterActors.ts';
@@ -159,7 +164,16 @@ export async function loadPainted(
   fallbackBaseline?: (c: HTMLCanvasElement) => number,
   matte?: MatteOptions,
   fit?: false | BaselineFitOptions,
+  opts: LoadPaintedOptions = {},
 ): Promise<PaintedTexture> {
+  // The manifest's flat refusal: this file is not in the build, so asking for
+  // it can only produce a 404 and a warning. Straight to the stand-in, in
+  // silence. `null` (no manifest, or an un-indexed URL) means "go and look",
+  // which is what every caller did before the manifest existed.
+  if (!opts.ignoreManifest && (await manifestKnowsAsset(url)) === false) {
+    return placeholderPainted(url, fallback, fallbackBaseline);
+  }
+
   const [tex, meta] = await Promise.all([tryLoadTexture(url), tryLoadMeta(url)]);
   if (tex) {
     const img = tex.image as { width?: number; height?: number } | undefined;
@@ -210,6 +224,27 @@ export async function loadPainted(
       url,
     };
   }
+  return placeholderPainted(url, fallback, fallbackBaseline);
+}
+
+/** Options for {@link loadPainted}. */
+export interface LoadPaintedOptions {
+  /**
+   * Load even when `public/art/manifest.json` has never heard of this file.
+   *
+   * The dev hot-swap watcher needs it: the manifest is generated at build time,
+   * so a PNG the art fleet dropped in five seconds ago is by definition not in
+   * it, and gating that reload would make new art invisible until a rebuild.
+   */
+  ignoreManifest?: boolean;
+}
+
+/** The procedural stand-in, packaged as a {@link PaintedTexture}. */
+function placeholderPainted(
+  url: string,
+  fallback: () => HTMLCanvasElement,
+  fallbackBaseline?: (c: HTMLCanvasElement) => number,
+): PaintedTexture {
   const canvas = fallback();
   return {
     texture: paintedCanvasTexture(canvas),
@@ -676,8 +711,19 @@ export async function loadSubject(
   const baselineOf = (c: HTMLCanvasElement): number => c.height * (opts.silhouetteBaseline ?? 0.965);
 
   const wanted = [...new Set(['idle', ...states])];
+
+  // The manifest is the difference between "look and see" and "already know".
+  // With one, a pose nobody has painted is never requested — no 404 in the
+  // network panel, no `[painted] missing painting` in the console, and the
+  // state falls back to `idle` exactly as it always did. Without one (an old
+  // deploy, a bare static server, a unit test) `known` is null and every state
+  // is fetched, which is the original behaviour.
+  const manifest = await loadArtManifest();
+  const known = manifest ? (manifest.subjects[id]?.states ?? []) : null;
+  const fetchable = known ? wanted.filter((state) => known.includes(state)) : wanted;
+
   const loaded = await Promise.all(
-    wanted.map((state) =>
+    fetchable.map((state) =>
       loadPainted(
         characterUrl(id, state),
         () => silhouette(id),
@@ -689,9 +735,21 @@ export async function loadSubject(
   );
 
   const byState = new Map<string, PaintedTexture>();
-  wanted.forEach((state, i) => byState.set(state, loaded[i]!));
+  fetchable.forEach((state, i) => byState.set(state, loaded[i]!));
 
-  const idle = byState.get('idle')!;
+  // When the manifest says the subject has nothing, no request went out at all
+  // and there is no texture to stand in for `idle` — make the silhouette here.
+  const idle =
+    byState.get('idle') ??
+    (((): PaintedTexture => {
+      const canvas = silhouette(id);
+      return {
+        texture: paintedCanvasTexture(canvas),
+        meta: { width: canvas.width, height: canvas.height, baselineY: baselineOf(canvas) },
+        placeholder: true,
+        url: characterUrl(id, 'idle'),
+      };
+    })());
   const subjectMissing = idle.placeholder;
   if (subjectMissing && !warned.has(`subject:${id}`)) {
     warned.add(`subject:${id}`);
@@ -707,14 +765,14 @@ export async function loadSubject(
   const fellBack: string[] = [];
 
   for (const state of states) {
-    const own = byState.get(state)!;
-    if (!own.placeholder) {
+    const own = byState.get(state);
+    if (own && !own.placeholder) {
       poses[state] = own;
       real.push(state);
     } else {
       // A state without its own painting borrows idle's. When idle is missing
       // too, that *is* the silhouette, which is the third rule.
-      if (state !== 'idle') own.texture.dispose();
+      if (own && state !== 'idle') own.texture.dispose();
       poses[state] = idle;
       if (!subjectMissing) fellBack.push(state);
     }
@@ -722,9 +780,12 @@ export async function loadSubject(
   }
 
   // `idle` is the subject's word on which way it was painted; any other state
-  // that declares one will do when idle is silent.
+  // that declares one will do when idle is silent, and the manifest carries the
+  // same answer for a subject whose sidecars were never fetched.
   const declared =
-    idle.meta.facing ?? [...byState.values()].find((p) => p.meta.facing !== undefined)?.meta.facing;
+    idle.meta.facing ??
+    [...byState.values()].find((p) => p.meta.facing !== undefined)?.meta.facing ??
+    (manifest ? manifest.subjects[id]?.facing : undefined);
 
   return {
     id,

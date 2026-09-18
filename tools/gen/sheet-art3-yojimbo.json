@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/yojimbo.png",
+  "title": "Pyrefly Reprise - YOJIMBO (art round 3, fix pass, facing contract v3, aeons)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - aeons face frame-LEFT per contract v3",
+  "rows": [
+    {
+      "label": "YOJIMBO - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 380,
+      "items": [
+        {
+          "path": "public/art/characters/yojimbo/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yojimbo/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yojimbo/overdrive.png",
+          "caption": "overdrive"
+        }
+      ]
+    },
+    {
+      "label": "YOJIMBO - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/yojimbo.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

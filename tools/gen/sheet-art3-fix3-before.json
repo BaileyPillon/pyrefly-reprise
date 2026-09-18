@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/_v-b-fix3-flagged.png",
+  "title": "party-b fix pass 3 - the 13 flagged states, with each idle as the reference",
+  "subtitle": "judge round 3 feedback - facing first, then costume continuity with the idle, then anatomy/cutout",
+  "rows": [
+    { "label": "LULU - idle (FLAGGED) + flagged states", "kind": "character", "cellHeight": 400, "cellWidth": 240,
+      "items": [
+        {"path": "public/art/characters/lulu/idle.png", "caption": "idle FLAG"},
+        {"path": "public/art/characters/lulu/item.png", "caption": "item FLAG"},
+        {"path": "public/art/characters/lulu/hurt.png", "caption": "hurt FLAG"},
+        {"path": "public/art/portraits/lulu.png", "caption": "portrait FLAG"},
+        {"path": "public/art/characters/lulu/attack.png", "caption": "attack ok"},
+        {"path": "public/art/characters/lulu/cast.png", "caption": "cast ok"},
+        {"path": "public/art/characters/lulu/victory.png", "caption": "victory ok"},
+        {"path": "public/art/characters/lulu/ko.png", "caption": "ko ok"}
+      ] },
+    { "label": "KIMAHRI - idle (ref) + flagged states", "kind": "character", "cellHeight": 400, "cellWidth": 240,
+      "items": [
+        {"path": "public/art/characters/kimahri/idle.png", "caption": "idle ok"},
+        {"path": "public/art/characters/kimahri/attack.png", "caption": "attack FLAG"},
+        {"path": "public/art/characters/kimahri/item.png", "caption": "item FLAG"},
+        {"path": "public/art/characters/kimahri/victory.png", "caption": "victory FLAG"},
+        {"path": "public/art/characters/kimahri/jump.png", "caption": "jump FLAG"}
+      ] },
+    { "label": "RIKKU - idle (ref) + flagged states", "kind": "character", "cellHeight": 400, "cellWidth": 240,
+      "items": [
+        {"path": "public/art/characters/rikku/idle.png", "caption": "idle ok"},
+        {"path": "public/art/characters/rikku/attack.png", "caption": "attack FLAG"},
+        {"path": "public/art/characters/rikku/cast.png", "caption": "cast FLAG"},
+        {"path": "public/art/characters/rikku/hurt.png", "caption": "hurt FLAG"},
+        {"path": "public/art/characters/rikku/steal.png", "caption": "steal FLAG"},
+        {"path": "public/art/characters/rikku/ko.png", "caption": "ko FLAG"}
+      ] }
+  ]
+}

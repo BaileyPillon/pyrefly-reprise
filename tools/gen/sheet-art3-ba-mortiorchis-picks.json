@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/_ba-mortiorchis-picks.png",
+  "title": "MORTIORCHIS promoted",
+  "subtitle": "facing check",
+  "rows": [
+    {
+      "label": "idle / attack / cast / hurt / ko",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 440,
+      "items": [
+        {
+          "path": "public/art/characters/mortiorchis/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

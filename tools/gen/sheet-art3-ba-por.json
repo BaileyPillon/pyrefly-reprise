@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/_ba-por.png",
+  "title": "PORTRAITS",
+  "subtitle": "judging",
+  "rows": [
+    {
+      "label": "PORTRAITS",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 330,
+      "items": [
+        {
+          "path": "public/art/portraits/yunalescaV3.1.png",
+          "caption": "yunalesca 1"
+        },
+        {
+          "path": "public/art/portraits/yunalescaV3.2.png",
+          "caption": "yunalesca 2"
+        },
+        {
+          "path": "public/art/portraits/yunalescaV3.3.png",
+          "caption": "yunalesca 3"
+        },
+        {
+          "path": "public/art/portraits/seymourV3.1.png",
+          "caption": "seymour 1"
+        },
+        {
+          "path": "public/art/portraits/seymourV3.2.png",
+          "caption": "seymour 2"
+        },
+        {
+          "path": "public/art/portraits/seymourV3.3.png",
+          "caption": "seymour 3"
+        }
+      ]
+    }
+  ]
+}

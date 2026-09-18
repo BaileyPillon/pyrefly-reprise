@@ -1,0 +1,47 @@
+{
+  "out": "docs/screenshots/art/_ba-yunalesca-2-states.png",
+  "title": "YUNALESCA-2 states",
+  "subtitle": "ref'd at the promoted idle",
+  "rows": [
+    {
+      "label": "attack / cast / hurt / ko",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-2/attackV3.1.png",
+          "caption": "attack 1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/attackV3.2.png",
+          "caption": "attack 2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/castV3.1.png",
+          "caption": "cast 1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/castV3.2.png",
+          "caption": "cast 2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/hurtV3.1.png",
+          "caption": "hurt 1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/hurtV3.2.png",
+          "caption": "hurt 2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/koV3.1.png",
+          "caption": "ko 1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/koV3.2.png",
+          "caption": "ko 2"
+        }
+      ]
+    }
+  ]
+}

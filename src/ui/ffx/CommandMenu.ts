@@ -14,6 +14,7 @@ import {
 } from './CommandMenuLogic.ts';
 import type { Projector } from './DamageNumbers.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
+import { setMenuOwnsCancel } from '../common/menuCancel.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { TargetCursor, type TargetEntry } from './TargetCursor.ts';
 
@@ -151,7 +152,27 @@ export class CommandMenu {
   readonly breadcrumbEl: HTMLElement;
   readonly targetCursor = new TargetCursor();
 
-  private state: 'top' | 'sub' | 'target' = 'top';
+  private stateValue: 'top' | 'sub' | 'target' = 'top';
+
+  /**
+   * Accessor rather than a plain field so that **every** transition publishes
+   * whether Esc currently belongs to this menu — `setMenuOwnsCancel`, which
+   * `BattleScreen.canPauseOnCancel` reads to decide if Esc may open the pause.
+   *
+   * A field plus a call at each assignment would have missed one: `openTarget`
+   * sets `'target'` and goes straight to the reticle without touching
+   * `renderStack()`, so publishing from the renderer would have left Esc
+   * looking free while the player was mid-targeting.
+   */
+  private get state(): 'top' | 'sub' | 'target' {
+    return this.stateValue;
+  }
+
+  private set state(value: 'top' | 'sub' | 'target') {
+    this.stateValue = value;
+    setMenuOwnsCancel(value !== 'top');
+  }
+
   private suspended = false;
   private rows: TopRow[] = [];
   private topIndex = 0;
@@ -207,6 +228,10 @@ export class CommandMenu {
 
   private finish(command: Command): void {
     this.suspended = false;
+    // No menu is open any more, so Esc is nobody's back button until the next
+    // one opens. Without this a decision taken from a submenu would leave the
+    // flag true and Esc dead for the rest of the battle.
+    setMenuOwnsCancel(false);
     this.watcher.detach();
     this.unwireClicks?.();
     this.targetCursor.hide();

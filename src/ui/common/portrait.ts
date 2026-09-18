@@ -13,18 +13,33 @@
  * square frame comes out at the same head scale with its eyes on one line.
  */
 
+import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+
+/**
+ * Skip an `<img>` for art the build-time manifest says is not there.
+ *
+ * `onerror="this.remove()"` already made a miss *invisible*; it did not make it
+ * *free*, and every one of those misses is a 404 in the live site's network
+ * panel (`docs/handoff/adv-art-manifest.md`). Asking `public/art/manifest.json`
+ * first turns "remove it after it fails" into "never ask". Returns false —
+ * i.e. emit the `<img>` and let `onerror` handle it — whenever the manifest has
+ * not loaded or has no opinion, so nothing here can hide art on a race.
+ */
+function knownAbsent(path: string): boolean {
+  return manifestKnowsAssetNow(artUrl(path)) === false;
+}
 
 /** `<img>` markup for a portrait, or `''` when `id` is falsy. Removes itself on a 404. */
 export function portraitImgHtml(id: string | undefined, alt = ''): string {
-  if (!id) return '';
+  if (!id || knownAbsent(`art/portraits/${id}.png`)) return '';
   const src = artUrl(`art/portraits/${id}.png`);
   return `<img src="${src}" alt="${alt}" draggable="false" onerror="this.remove()" />`;
 }
 
 /** `<img>` markup for a chapter-select/results backdrop thumbnail. Same miss behaviour. */
 export function backdropImgHtml(sceneKey: string | undefined, alt = ''): string {
-  if (!sceneKey) return '';
+  if (!sceneKey || knownAbsent(`art/backdrops/${sceneKey}.png`)) return '';
   const src = artUrl(`art/backdrops/${sceneKey}.png`);
   return `<img src="${src}" alt="${alt}" draggable="false" onerror="this.remove()" />`;
 }
@@ -139,7 +154,7 @@ function cropStyle(crop: PortraitCrop, opts: FaceOptions): string {
  * its width, and the two are assumed equal.
  */
 export function faceImgHtml(id: string | undefined, alt = '', opts: FaceOptions = {}): string {
-  if (!id) return '';
+  if (!id || knownAbsent(`art/portraits/${id}.png`)) return '';
   const style = faceCropStyle(id, opts);
   const cls = opts.className ? ` class="${opts.className}"` : '';
   const src = artUrl(`art/portraits/${id}.png`);

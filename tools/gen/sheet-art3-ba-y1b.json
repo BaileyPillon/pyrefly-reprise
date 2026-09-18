@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/_ba-y1b.png",
+  "title": "YUNALESCA-1 attack/ko reroll",
+  "subtitle": "judging",
+  "rows": [
+    {
+      "label": "YUNALESCA-1 attack/ko reroll",
+      "kind": "character",
+      "cellHeight": 520,
+      "cellWidth": 380,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-1/attackV3b.1.png",
+          "caption": "attack 1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/attackV3b.2.png",
+          "caption": "attack 2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/attackV3b.3.png",
+          "caption": "attack 3"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/koV3b.1.png",
+          "caption": "ko 1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/koV3b.2.png",
+          "caption": "ko 2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/koV3b.3.png",
+          "caption": "ko 3"
+        }
+      ]
+    }
+  ]
+}

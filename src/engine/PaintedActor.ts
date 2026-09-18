@@ -789,6 +789,9 @@ export class PaintedActor extends Group {
       (c) => c.height * this.placeholderBaseline,
       this.matte,
       this.fitBaseline,
+      // The hot-swap watcher only ever calls this for a file it has just seen
+      // appear, which is by definition newer than the build-time art manifest.
+      { ignoreManifest: true },
     );
     const previous = this.poses.get(name);
     this.poses.set(name, next);

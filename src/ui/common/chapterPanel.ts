@@ -19,6 +19,7 @@
 
 import './chapter-panel.css';
 import type { ChapterMeta } from '../../data/chapter-meta.ts';
+import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from './html.ts';
 import { formatPlayTime, type EncounterProgress, type ObjectiveStatus } from './chapterObjectives.ts';
@@ -38,11 +39,22 @@ import { formatPlayTime, type EncounterProgress, type ObjectiveStatus } from './
  * having to mount anything or fake an image load.
  */
 export function heroArtCandidates(meta: ChapterMeta): string[] {
-  return [
+  const all = [
     artUrl(`art/${meta.heroArt}.png`),
     artUrl(`art/${meta.heroArt}.webp`),
     artUrl(`art/${meta.heroArtFallback}`),
   ];
+  // Drop candidates the build-time art manifest positively denies, before
+  // anything asks the browser for them. The `.webp` arm is the one this
+  // always removes: it exists only because the format was once undecided, and
+  // nothing in `public/art/**` has ever shipped as one, so it was a guaranteed
+  // 404 on every chapter panel — and the party-prep panel stacks all three as
+  // CSS `background-image` layers, which fetches every one of them rather than
+  // stopping at the first that works. `null` (no manifest yet, or a path it
+  // does not index) is not "absent", so the error-driven chain below stays the
+  // fallback rather than becoming a dependency.
+  const filtered = all.filter((url) => manifestKnowsAssetNow(url) !== false);
+  return filtered.length ? filtered : all;
 }
 
 /**

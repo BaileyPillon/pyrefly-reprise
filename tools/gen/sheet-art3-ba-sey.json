@@ -1,0 +1,47 @@
+{
+  "out": "docs/screenshots/art/_ba-sey.png",
+  "title": "SEYMOUR-FLUX-BODY states",
+  "subtitle": "judging",
+  "rows": [
+    {
+      "label": "SEYMOUR-FLUX-BODY states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/attackV3.1.png",
+          "caption": "attack 1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/attackV3.2.png",
+          "caption": "attack 2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/castV3.1.png",
+          "caption": "cast 1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/castV3.2.png",
+          "caption": "cast 2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtV3.1.png",
+          "caption": "hurt 1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/hurtV3.2.png",
+          "caption": "hurt 2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koV3.1.png",
+          "caption": "ko 1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/koV3.2.png",
+          "caption": "ko 2"
+        }
+      ]
+    }
+  ]
+}

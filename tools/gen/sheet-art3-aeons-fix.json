@@ -1,0 +1,175 @@
+{
+  "out": "docs/screenshots/art/aeons-fix.png",
+  "title": "Pyrefly Reprise - AEONS (art round 3 FIX PASS, contract v3, facing LEFT)",
+  "subtitle": "valefor / ifrit / ixion / shiva / bahamut / anima / yojimbo - idle, attack, overdrive, HUD portrait",
+  "rows": [
+    {
+      "label": "VALEFOR - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/valefor/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/valefor/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/valefor/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/valefor.png",
+          "caption": "portrait"
+        }
+      ]
+    },
+    {
+      "label": "IFRIT - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/ifrit/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/ifrit/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/ifrit/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/ifrit.png",
+          "caption": "portrait"
+        }
+      ]
+    },
+    {
+      "label": "IXION - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/ixion/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/ixion/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/ixion/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/ixion.png",
+          "caption": "portrait"
+        }
+      ]
+    },
+    {
+      "label": "SHIVA - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/shiva/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/shiva/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/shiva/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/shiva.png",
+          "caption": "portrait"
+        }
+      ]
+    },
+    {
+      "label": "BAHAMUT - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/bahamut/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/bahamut/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/bahamut/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/bahamut.png",
+          "caption": "portrait"
+        }
+      ]
+    },
+    {
+      "label": "ANIMA - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/anima/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/anima/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/anima/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/anima.png",
+          "caption": "portrait"
+        }
+      ]
+    },
+    {
+      "label": "YOJIMBO - idle / attack / overdrive / portrait",
+      "kind": "character",
+      "cellHeight": 300,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yojimbo/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yojimbo/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yojimbo/overdrive.png",
+          "caption": "overdrive"
+        },
+        {
+          "path": "public/art/portraits/yojimbo.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

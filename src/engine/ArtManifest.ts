@@ -1,0 +1,265 @@
+/**
+ * The build-time index of painted art, loaded once at runtime.
+ *
+ * `tools/gen/manifest.mjs` walks `public/art/` and writes
+ * `public/art/manifest.json`; every build regenerates it (`npm run
+ * art:manifest`, wired as `prebuild` and called by `tools/deploy-pages.mjs`).
+ *
+ * The point is to stop the game **asking the server what exists**. Before this,
+ * opening a battle fired a HEAD probe per pose per figure and a GET per state
+ * inside `PaintedArt.loadSubject`; every pose the art fleet has not painted yet
+ * — `ready` and `defend` on all six party members, `cast` on every aeon — came
+ * back 404, so the live site's network panel was dozens of red lines deep and
+ * the console filled with `[painted] missing painting`. One 6 KB JSON answers
+ * all of it, and a pose the manifest does not list is simply never requested.
+ *
+ * Nothing here throws and nothing here is required: when `manifest.json` is
+ * absent (an old deploy, a hand-made static server, a unit test) every query
+ * answers `null`, which means *"I don't know — go and probe like before"*. The
+ * probing path in `BattlePresenterArt` and the load-everything path in
+ * `PaintedArt` are both still there, and both still work.
+ */
+
+import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
+
+/** One subject's entry: what `public/art/characters/<id>/` actually holds. */
+export interface ArtManifestSubject {
+  /** Chosen poses on disk, sorted. Numbered candidates are not listed. */
+  readonly states: readonly string[];
+  /** True when `public/art/portraits/<id>.png` exists. */
+  readonly portrait: boolean;
+  /** Declared facing, from `idle.json` or the first state that declares one. */
+  readonly facing?: ArtFacing;
+}
+
+/** The whole of `public/art/manifest.json`. */
+export interface ArtManifest {
+  readonly version: number;
+  readonly generatedAt: string;
+  readonly subjects: Readonly<Record<string, ArtManifestSubject>>;
+  readonly portraits: readonly string[];
+  readonly backdrops: readonly string[];
+  readonly pause: readonly string[];
+}
+
+/** Public path of the manifest, resolved against the Vite base path. */
+export function artManifestPath(): string {
+  const base =
+    (typeof import.meta.env !== 'undefined' && import.meta.env.BASE_URL) || '/';
+  return `${base.replace(/\/+$/, '')}/art/manifest.json`;
+}
+
+let inFlight: Promise<ArtManifest | null> | null = null;
+let current: ArtManifest | null = null;
+
+/**
+ * Coerce a parsed JSON blob into an {@link ArtManifest}, or `null`.
+ *
+ * Deliberately strict about the *shape* and forgiving about the contents: a
+ * manifest from an older generator that is missing `pause` is still usable for
+ * the subjects it does list, and a garbage file is treated exactly like a
+ * missing one (fall back to probing) rather than breaking a battle.
+ */
+export function parseArtManifest(raw: unknown): ArtManifest | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const obj = raw as Record<string, unknown>;
+  if (!obj.subjects || typeof obj.subjects !== 'object') return null;
+
+  const subjects: Record<string, ArtManifestSubject> = {};
+  for (const [id, value] of Object.entries(obj.subjects as Record<string, unknown>)) {
+    if (!value || typeof value !== 'object') continue;
+    const entry = value as Record<string, unknown>;
+    const states = Array.isArray(entry.states)
+      ? entry.states.filter((s): s is string => typeof s === 'string')
+      : [];
+    // `parseArtFacing` owns the vocabulary (and its aliases); the generator
+    // only copies the sidecar's string through.
+    const facing = parseArtFacing(entry.facing);
+    subjects[id] = {
+      states,
+      portrait: entry.portrait === true,
+      ...(facing ? { facing } : {}),
+    };
+  }
+
+  const strings = (v: unknown): string[] =>
+    Array.isArray(v) ? v.filter((s): s is string => typeof s === 'string') : [];
+
+  return {
+    version: typeof obj.version === 'number' ? obj.version : 0,
+    generatedAt: typeof obj.generatedAt === 'string' ? obj.generatedAt : '',
+    subjects,
+    portraits: strings(obj.portraits),
+    backdrops: strings(obj.backdrops),
+    pause: strings(obj.pause),
+  };
+}
+
+/**
+ * Fetch and cache the manifest. Resolves to `null` when there isn't one.
+ *
+ * Single-flight: forty figures staging at once share one request. The `null`
+ * result is cached too — a site deployed without a manifest asks for it once
+ * per session and then never again.
+ */
+export function loadArtManifest(): Promise<ArtManifest | null> {
+  if (inFlight) return inFlight;
+  inFlight = (async (): Promise<ArtManifest | null> => {
+    try {
+      const res = await fetch(artManifestPath(), { cache: 'force-cache' });
+      // A dev server answers a missing file with `index.html` and a 200, so the
+      // status alone is not the signal — the same trap `BattlePresenterArt`
+      // documents for pose probes. Parsing is the honest check here: HTML is
+      // not JSON, `json()` rejects, and we fall through to probing.
+      if (!res.ok) return null;
+      return parseArtManifest(await res.json());
+    } catch {
+      return null;
+    }
+  })().then((m) => {
+    current = m;
+    return m;
+  });
+  return inFlight;
+}
+
+/** The manifest if it has already loaded, else `null`. Never fetches. */
+export function artManifest(): ArtManifest | null {
+  return current;
+}
+
+/**
+ * Poses that exist for `id`, or `null` for *"no manifest — probe instead"*.
+ *
+ * An **empty array** is a real answer: the manifest loaded and this subject has
+ * no art, so nothing should be requested for it at all.
+ */
+export async function artStatesFor(id: string): Promise<readonly string[] | null> {
+  const manifest = await loadArtManifest();
+  if (!manifest) return null;
+  return manifest.subjects[id]?.states ?? [];
+}
+
+/** Facing declared for `id`, or undefined (no manifest, or none declared). */
+export async function artFacingFor(id: string): Promise<ArtFacing | undefined> {
+  const manifest = await loadArtManifest();
+  return manifest?.subjects[id]?.facing;
+}
+
+/** Is `public/art/portraits/<id>.png` there? `null` when there is no manifest. */
+export function hasPortraitArt(id: string): boolean | null {
+  if (!current) return null;
+  const subject = current.subjects[id];
+  if (subject) return subject.portrait;
+  return current.portraits.includes(id);
+}
+
+/** Is `public/art/backdrops/<key>.png` there? `null` when there is no manifest. */
+export function hasBackdropArt(key: string): boolean | null {
+  return current ? current.backdrops.includes(key) : null;
+}
+
+/** Is `public/art/pause/<key>.png` there? `null` when there is no manifest. */
+export function hasPauseArt(key: string): boolean | null {
+  return current ? current.pause.includes(key) : null;
+}
+
+/**
+ * Any `public/art/**.png` URL the manifest has an opinion about.
+ *
+ * `true` it exists, `false` it does not (so **do not request it**), `null` we
+ * cannot say — no manifest loaded, or a URL outside the four indexed folders
+ * (a `.raw` intermediate, a numbered candidate, anything hand-built).
+ *
+ * This is the one gate that covers every loader path at once, including the
+ * one `resolvePoseMap` cannot help with: a figure with no art at all still
+ * gets a full pose map so `PaintedActor` has names to hang its stand-ins on,
+ * and without this every one of those names would be a 404.
+ */
+const ART_ASSET =
+  /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#]+)|(portraits|backdrops|pause)\/([^/?#]+))\.([a-z0-9]+)(?:$|[?#])/i;
+
+function judge(manifest: ArtManifest, url: string): boolean | null {
+  const m = ART_ASSET.exec(url);
+  if (!m) return null;
+
+  const [, subjectId, state, folder, key, ext] = m;
+  // The fleet ships PNG. A `.webp`/`.jpg` under an indexed folder is therefore
+  // an *alternative encoding nobody produced* — a real `false`, which is what
+  // lets a candidate chain skip it instead of learning the hard way. A `.json`
+  // sidecar is not indexed and is judged by its PNG, so it stays `null`.
+  if ((ext ?? '').toLowerCase() === 'json') return null;
+  const isPng = (ext ?? '').toLowerCase() === 'png';
+
+  if (subjectId !== undefined && state !== undefined) {
+    // A dotted stem is a candidate or a `.raw` intermediate: not indexed, and
+    // not ours to judge.
+    if (state.includes('.')) return null;
+    return isPng && (manifest.subjects[subjectId]?.states ?? []).includes(state);
+  }
+  if (folder === undefined || key === undefined || key.includes('.')) return null;
+  const list =
+    folder === 'portraits'
+      ? manifest.portraits
+      : folder === 'backdrops'
+        ? manifest.backdrops
+        : manifest.pause;
+  return isPng && list.includes(key);
+}
+
+export async function manifestKnowsAsset(url: string): Promise<boolean | null> {
+  const manifest = await loadArtManifest();
+  return manifest ? judge(manifest, url) : null;
+}
+
+/**
+ * Sync twin of {@link manifestKnowsAsset}, for the UI's `innerHTML` builders.
+ *
+ * Answers `null` until the manifest has actually loaded, which is deliberate:
+ * a caller that runs before the first fetch resolves behaves exactly as it did
+ * before this existed, rather than hiding art on a race.
+ */
+export function manifestKnowsAssetNow(url: string): boolean | null {
+  return current ? judge(current, url) : null;
+}
+
+/**
+ * Install a manifest directly and skip the fetch — for tests, and for any
+ * caller that already has the object.
+ *
+ * `setArtManifest(null)` pins the *no manifest* answer without a request;
+ * {@link resetArtManifest} puts the module back to its cold state so the next
+ * query fetches again.
+ */
+export function setArtManifest(manifest: ArtManifest | null): void {
+  current = manifest;
+  inFlight = Promise.resolve(manifest);
+}
+
+/** Forget everything, including the in-flight request. Tests only. */
+export function resetArtManifest(): void {
+  current = null;
+  inFlight = null;
+}
+
+/**
+ * Start the fetch now, in the background, and never wait for it.
+ *
+ * The async queries below can await the request; the **sync** ones
+ * ({@link manifestKnowsAssetNow} and the `hasXArt` helpers) cannot, and they
+ * are what the UI's `innerHTML` builders use. Those answer `null` — "no
+ * opinion, emit the `<img>` and let `onerror` clean up" — until the manifest
+ * has actually landed, so without a head start the first screens still fire the
+ * misses this whole thing exists to prevent. One 6 KB request at bundle init
+ * is what closes that window.
+ */
+export function prefetchArtManifest(): void {
+  void loadArtManifest();
+}
+
+// Kicked off at module init rather than from `main.ts`, because *every* module
+// that touches painted art imports this one (directly or through
+// `PaintedArt.ts`), so this is the earliest point that is guaranteed to run —
+// earlier than any screen can render. Guarded on `document` so a Node unit test
+// never fires a request it would only have to ignore.
+if (typeof document !== 'undefined' && typeof fetch === 'function') prefetchArtManifest();

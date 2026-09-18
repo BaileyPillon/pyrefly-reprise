@@ -1,0 +1,31 @@
+{
+  "out": "docs/screenshots/art/_ae6-before.png",
+  "title": "aeons fix pass 6 — flagged states (before)",
+  "subtitle": "idles as anchors on row 1",
+  "rows": [
+    { "label": "anchors", "kind": "character", "cellHeight": 340, "cellWidth": 340,
+      "items": [
+        {"path": "public/art/characters/valefor/idle.png", "caption": "valefor idle OK"},
+        {"path": "public/art/characters/ifrit/idle.png", "caption": "ifrit idle OK"},
+        {"path": "public/art/characters/bahamut/idle.png", "caption": "bahamut idle OK"},
+        {"path": "public/art/characters/yojimbo/idle.png", "caption": "yojimbo idle OK"},
+        {"path": "public/art/characters/anima/idle.png", "caption": "anima idle 6 FAIL"}
+      ]},
+    { "label": "flagged A", "kind": "character", "cellHeight": 340, "cellWidth": 340,
+      "items": [
+        {"path": "public/art/characters/valefor/overdrive.png", "caption": "valefor od 6.5"},
+        {"path": "public/art/characters/ifrit/attack.png", "caption": "ifrit atk 6.5"},
+        {"path": "public/art/characters/ifrit/overdrive.png", "caption": "ifrit od 6"},
+        {"path": "public/art/portraits/ifrit.png", "caption": "ifrit portrait 6.5"},
+        {"path": "public/art/portraits/shiva.png", "caption": "shiva portrait 8"}
+      ]},
+    { "label": "flagged B", "kind": "character", "cellHeight": 340, "cellWidth": 340,
+      "items": [
+        {"path": "public/art/characters/bahamut/overdrive.png", "caption": "bahamut od 6.5"},
+        {"path": "public/art/characters/anima/attack.png", "caption": "anima atk 6.5"},
+        {"path": "public/art/characters/anima/overdrive.png", "caption": "anima od 3.5"},
+        {"path": "public/art/portraits/anima.png", "caption": "anima portrait 6.5"},
+        {"path": "public/art/characters/yojimbo/overdrive.png", "caption": "yojimbo od 7.5"}
+      ]}
+  ]
+}

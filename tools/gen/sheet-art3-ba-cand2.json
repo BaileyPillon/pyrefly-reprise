@@ -1,0 +1,55 @@
+{
+  "out": "docs/screenshots/art/_ba-cand2.png",
+  "title": "bosses-a idle reroll",
+  "subtitle": "round 2 judging",
+  "rows": [
+    {
+      "label": "SEYMOUR-FLUX-BODY idleV3b 1-4",
+      "kind": "character",
+      "cellHeight": 520,
+      "cellWidth": 380,
+      "items": [
+        {
+          "path": "public/art/characters/seymour-flux-body/idleV3b.1.png",
+          "caption": "1"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/idleV3b.2.png",
+          "caption": "2"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/idleV3b.3.png",
+          "caption": "3"
+        },
+        {
+          "path": "public/art/characters/seymour-flux-body/idleV3b.4.png",
+          "caption": "4"
+        }
+      ]
+    },
+    {
+      "label": "YUNALESCA-3 idleV3b 1-4",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 560,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-3/idleV3b.1.png",
+          "caption": "1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-3/idleV3b.2.png",
+          "caption": "2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-3/idleV3b.3.png",
+          "caption": "3"
+        },
+        {
+          "path": "public/art/characters/yunalesca-3/idleV3b.4.png",
+          "caption": "4"
+        }
+      ]
+    }
+  ]
+}

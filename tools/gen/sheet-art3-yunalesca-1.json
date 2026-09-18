@@ -1,0 +1,47 @@
+{
+  "out": "docs/screenshots/art/yunalesca-1.png",
+  "title": "YUNALESCA form 1 \u2014 art round 3, facing contract v3",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - enemies face frame-left",
+  "rows": [
+    {
+      "label": "YUNALESCA-1 - battle states",
+      "kind": "character",
+      "cellHeight": 470,
+      "cellWidth": 280,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-1/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/ko.png",
+          "caption": "ko"
+        }
+      ]
+    },
+    {
+      "label": "YUNALESCA - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/yunalesca.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

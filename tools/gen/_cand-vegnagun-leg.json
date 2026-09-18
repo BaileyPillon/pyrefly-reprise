@@ -1,0 +1,31 @@
+{
+  "out": "docs/screenshots/art/_cand-vegnagun-leg-idle.png",
+  "title": "vegnagun-leg — idle candidates (v3 facing)",
+  "subtitle": "judge: facing first, then costume, then cutout",
+  "rows": [
+    {
+      "label": "VEGNAGUN-LEG",
+      "kind": "character",
+      "cellHeight": 520,
+      "cellWidth": 420,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-leg/idle.1.png",
+          "caption": "idle.1"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idle.2.png",
+          "caption": "idle.2"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idle.3.png",
+          "caption": "idle.3"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idle.4.png",
+          "caption": "idle.4"
+        }
+      ]
+    }
+  ]
+}

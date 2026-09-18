@@ -68,6 +68,7 @@ import { applyHpDelta, heal, type ResolveContext } from './resolve.ts';
 import { buildCommands } from './targeting.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
 import { performCommand, type ExecEnv } from './execute.ts';
 import { actorOrder, battleOutcome, buildResult, emptyState } from './results.ts';
@@ -122,6 +123,27 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   gaugeSnapshot(): AtbSnapshot {
     return buildSnapshot(actorOrder(this.units), this.elapsedMs);
+  }
+
+  /**
+   * What the next enemy to act is about to do — for the HUD's intent slab.
+   *
+   * Read-only: `intent.ts` dry-runs the AI script on a **cloned** board, so a
+   * rotation's step counter, the Mega Flare countdown and the Vegnagun head's
+   * fail clock are not advanced by being asked about. The ability registry is
+   * not in the state, so it is handed over here along with the gauge snapshot,
+   * which is what keeps this panel and the ATB bars naming the same next actor.
+   *
+   * Deliberately not on the `FFX2BattleEngine` interface — see the FFX twin.
+   */
+  intent(): EnemyIntent | null {
+    return predictNextFFX2EnemyIntent({
+      state: this.battleState,
+      rng: this.rng,
+      abilities: this.abilities,
+      ...(this.options.items ? { items: this.options.items } : {}),
+      snapshot: this.gaugeSnapshot(),
+    });
   }
 
   nextDecision(): Decision {

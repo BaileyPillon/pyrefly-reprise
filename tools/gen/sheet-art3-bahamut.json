@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/bahamut.png",
+  "title": "Pyrefly Reprise - BAHAMUT (art round 3, fix pass, facing contract v3, aeons)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - aeons face frame-LEFT per contract v3",
+  "rows": [
+    {
+      "label": "BAHAMUT - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 380,
+      "items": [
+        {
+          "path": "public/art/characters/bahamut/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/bahamut/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/bahamut/overdrive.png",
+          "caption": "overdrive"
+        }
+      ]
+    },
+    {
+      "label": "BAHAMUT - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/bahamut.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

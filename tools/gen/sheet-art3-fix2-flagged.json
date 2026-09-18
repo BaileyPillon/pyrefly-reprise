@@ -1,0 +1,43 @@
+{
+  "out": "docs/screenshots/art/_v-b-fix2-flagged.png",
+  "title": "party-b fix pass 2 - the nine states the judge flagged, each beside its approved idle",
+  "subtitle": "Left cell of each row is the idle the state is --ref'd at; the rest are the flagged files as shipped",
+  "rows": [
+    {
+      "label": "LULU - idle (approved) + flagged attack / hurt / ko / portrait",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 250,
+      "items": [
+        { "path": "public/art/characters/lulu/idle.png", "caption": "idle (ref)" },
+        { "path": "public/art/characters/lulu/attack.png", "caption": "attack 5" },
+        { "path": "public/art/characters/lulu/hurt.png", "caption": "hurt 5" },
+        { "path": "public/art/characters/lulu/ko.png", "caption": "ko 4" },
+        { "path": "public/art/portraits/lulu.png", "caption": "portrait 7" }
+      ]
+    },
+    {
+      "label": "KIMAHRI - idle (approved) + flagged hurt / victory / portrait",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 250,
+      "items": [
+        { "path": "public/art/characters/kimahri/idle.png", "caption": "idle (ref)" },
+        { "path": "public/art/characters/kimahri/hurt.png", "caption": "hurt 5" },
+        { "path": "public/art/characters/kimahri/victory.png", "caption": "victory 5" },
+        { "path": "public/art/portraits/kimahri.png", "caption": "portrait 7" }
+      ]
+    },
+    {
+      "label": "RIKKU - idle (approved) + flagged attack / cast",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 250,
+      "items": [
+        { "path": "public/art/characters/rikku/idle.png", "caption": "idle (ref)" },
+        { "path": "public/art/characters/rikku/attack.png", "caption": "attack 6" },
+        { "path": "public/art/characters/rikku/cast.png", "caption": "cast 5" }
+      ]
+    }
+  ]
+}

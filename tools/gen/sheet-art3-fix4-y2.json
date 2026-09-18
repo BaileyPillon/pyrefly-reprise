@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/_ba4-y2.png",
+  "title": "yunalesca-2 idle round 2 (tendril lower body)",
+  "subtitle": "fix pass, contract v3",
+  "rows": [
+    {
+      "label": "idleF",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-2/idleF.1.png",
+          "caption": "idleF.1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/idleF.2.png",
+          "caption": "idleF.2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/idleF.3.png",
+          "caption": "idleF.3"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/idleF.4.png",
+          "caption": "idleF.4"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/idleF.5.png",
+          "caption": "idleF.5"
+        },
+        {
+          "path": "public/art/characters/yunalesca-2/idleF.6.png",
+          "caption": "idleF.6"
+        }
+      ]
+    }
+  ]
+}

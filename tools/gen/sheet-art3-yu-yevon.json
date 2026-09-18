@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/yu-yevon.png",
+  "title": "Pyrefly Reprise - YU YEVON (art round 3, facing contract v3)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - enemies face frame-LEFT",
+  "rows": [
+    {
+      "label": "YU YEVON - battle states",
+      "kind": "character",
+      "cellHeight": 400,
+      "cellWidth": 330,
+      "items": [
+        {
+          "path": "public/art/characters/yu-yevon/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/yu-yevon/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/yu-yevon/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/yu-yevon/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/yu-yevon/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

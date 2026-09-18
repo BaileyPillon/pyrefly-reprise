@@ -1,0 +1,28 @@
+{
+  "out": "docs/screenshots/art/_ba4-before.png",
+  "title": "bosses-a fix pass — current state of the flagged files",
+  "subtitle": "refs on top row; flagged states below",
+  "rows": [
+    { "label": "anchors (passed)", "kind": "character", "cellHeight": 360, "cellWidth": 360,
+      "items": [
+        {"path": "public/art/characters/seymour-flux-body/idle.png", "caption": "sey idle OK"},
+        {"path": "public/art/characters/seymour-flux-body/cast.png", "caption": "sey cast OK"},
+        {"path": "public/art/characters/mortiorchis/idle.png", "caption": "mor idle (frontal)"},
+        {"path": "public/art/characters/yunalesca-1/idle.png", "caption": "y1 idle (frontal)"}
+      ]},
+    { "label": "seymour flagged", "kind": "character", "cellHeight": 360, "cellWidth": 360,
+      "items": [
+        {"path": "public/art/characters/seymour-flux-body/attack.png", "caption": "attack 6"},
+        {"path": "public/art/characters/seymour-flux-body/hurt.png", "caption": "hurt 6"},
+        {"path": "public/art/characters/seymour-flux-body/ko.png", "caption": "ko 5"},
+        {"path": "public/art/portraits/seymour.png", "caption": "portrait 7"}
+      ]},
+    { "label": "yunalesca 2 / 3", "kind": "character", "cellHeight": 360, "cellWidth": 360,
+      "items": [
+        {"path": "public/art/characters/yunalesca-2/idle.png", "caption": "y2 idle 6"},
+        {"path": "public/art/characters/yunalesca-3/idle.png", "caption": "y3 idle 5"},
+        {"path": "public/art/characters/yunalesca-3/attack.png", "caption": "y3 attack 6"},
+        {"path": "public/art/portraits/yunalesca.png", "caption": "portrait 8"}
+      ]}
+  ]
+}

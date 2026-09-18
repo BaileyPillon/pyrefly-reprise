@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/ifrit.png",
+  "title": "Pyrefly Reprise - IFRIT (art round 3, fix pass, facing contract v3, aeons)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - aeons face frame-LEFT per contract v3",
+  "rows": [
+    {
+      "label": "IFRIT - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 380,
+      "items": [
+        {
+          "path": "public/art/characters/ifrit/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/ifrit/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/ifrit/overdrive.png",
+          "caption": "overdrive"
+        }
+      ]
+    },
+    {
+      "label": "IFRIT - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/ifrit.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

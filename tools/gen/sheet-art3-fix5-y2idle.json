@@ -1,0 +1,20 @@
+{
+  "out": "docs/screenshots/art/_ba5-y2idle.png",
+  "title": "fix5 — yunalesca-2 idle candidates (after unbackdrop)",
+  "subtitle": "contract v3, ref yunalesca-1/idle @0.5/0.3, seeds 770001-770005",
+  "rows": [
+    {
+      "label": "idleF5",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 300,
+      "items": [
+        {"path": "public/art/characters/yunalesca-2/idleF5.1.png", "caption": "1 (770001)"},
+        {"path": "public/art/characters/yunalesca-2/idleF5.2.png", "caption": "2 (770002)"},
+        {"path": "public/art/characters/yunalesca-2/idleF5.3.png", "caption": "3 (770003)"},
+        {"path": "public/art/characters/yunalesca-2/idleF5.4.png", "caption": "4 (770004)"},
+        {"path": "public/art/characters/yunalesca-2/idleF5.5.png", "caption": "5 (770005)"}
+      ]
+    }
+  ]
+}

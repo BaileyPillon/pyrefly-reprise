@@ -1,0 +1,59 @@
+{
+  "out": "docs/screenshots/art/_x2-bosses-idles.png",
+  "title": "x2-bosses — the seven approved idles (contract v3)",
+  "subtitle": "every other state is --ref pinned to these · enemies angled frame-left, Lenne frame-right · no sprite mirrored",
+  "rows": [
+    {
+      "label": "CHARACTERS",
+      "kind": "character",
+      "cellHeight": 460,
+      "cellWidth": 320,
+      "items": [
+        {
+          "path": "public/art/characters/shuyin/idle.png",
+          "caption": "shuyin (facing left)"
+        },
+        {
+          "path": "public/art/characters/lenne/idle.png",
+          "caption": "lenne (facing right)"
+        }
+      ]
+    },
+    {
+      "label": "BOSSES / AEON",
+      "kind": "character",
+      "cellHeight": 400,
+      "cellWidth": 400,
+      "items": [
+        {
+          "path": "public/art/characters/ffx2-bahamut/idle.png",
+          "caption": "ffx2-bahamut"
+        },
+        {
+          "path": "public/art/characters/vegnagun-head/idle.png",
+          "caption": "vegnagun-head"
+        },
+        {
+          "path": "public/art/characters/vegnagun-body/idle.png",
+          "caption": "vegnagun-body"
+        }
+      ]
+    },
+    {
+      "label": "VEGNAGUN cont.",
+      "kind": "character",
+      "cellHeight": 400,
+      "cellWidth": 400,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-tail/idle.png",
+          "caption": "vegnagun-tail"
+        },
+        {
+          "path": "public/art/characters/vegnagun-leg/idle.png",
+          "caption": "vegnagun-leg"
+        }
+      ]
+    }
+  ]
+}

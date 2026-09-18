@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/ixion.png",
+  "title": "Pyrefly Reprise - IXION (art round 3, fix pass, facing contract v3, aeons)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - aeons face frame-LEFT per contract v3",
+  "rows": [
+    {
+      "label": "IXION - battle states",
+      "kind": "character",
+      "cellHeight": 430,
+      "cellWidth": 380,
+      "items": [
+        {
+          "path": "public/art/characters/ixion/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/ixion/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/ixion/overdrive.png",
+          "caption": "overdrive"
+        }
+      ]
+    },
+    {
+      "label": "IXION - HUD portrait",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/portraits/ixion.png",
+          "caption": "portrait"
+        }
+      ]
+    }
+  ]
+}

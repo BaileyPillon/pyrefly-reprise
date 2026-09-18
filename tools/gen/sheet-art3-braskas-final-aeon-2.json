@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/braskas-final-aeon-2.png",
+  "title": "Pyrefly Reprise - BRASKA'S FINAL AEON - FORM 2 (art round 3, facing contract v3)",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - enemies face frame-LEFT",
+  "rows": [
+    {
+      "label": "BRASKA'S FINAL AEON - FORM 2 - battle states",
+      "kind": "character",
+      "cellHeight": 400,
+      "cellWidth": 330,
+      "items": [
+        {
+          "path": "public/art/characters/braskas-final-aeon-2/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/braskas-final-aeon-2/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/braskas-final-aeon-2/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/braskas-final-aeon-2/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/braskas-final-aeon-2/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

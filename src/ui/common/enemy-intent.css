@@ -1,0 +1,400 @@
+/**
+ * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
+ *
+ * ## Why this one is authored in real pixels and scaled, not on the grid
+ *
+ * Every other piece of chrome lives inside the HUD's 640x360 stage, which one
+ * `translate(...) scale(...)` letterboxes onto the viewport, so those files are
+ * written in grid px. This slab cannot: it is pinned to a *projected* actor
+ * position, and the projector answers in viewport pixels
+ * (`HudPort.setProjector`). Mounting it in the scaled stage would mean undoing
+ * the stage transform on every frame's coordinate — the same reason
+ * `DamageLayer.ts` puts the FFX-2 numerals on the unscaled overlay.
+ *
+ * So the geometry below is quoted on the 640x360 grid anyway, for one reason:
+ * the type has to land in the same size register as the CTB list and the
+ * command stack, or the panel reads as a different game's UI. `--eint-scale` is
+ * the letterbox factor, set per frame by `layout()`, and a
+ * `transform: scale()` off the top-left corner multiplies the whole box by it.
+ *
+ * `transform` rather than `zoom`, which was the first thing tried and is wrong
+ * here: `zoom` scales the *used values* of `left` and `top` as well, so a panel
+ * told to sit at x=400 on a 2.5x stage lands at x=1000, and the dodge
+ * arithmetic in `layout()` — which works in real viewport pixels, because that
+ * is what the projector answers in — has no way to express where it wants the
+ * box. A transform leaves the offsets alone and still reports the scaled size
+ * through `getBoundingClientRect`, which is exactly the pair the layout needs.
+ *
+ * ## Not skewed
+ *
+ * Same reason `strategy-guide.css` gives: this is a tall multi-line reading
+ * panel, and at 12deg a 150px-tall box leans 32px, putting its top and bottom
+ * edges in different columns and lozenging every paragraph. The accent moves
+ * instead — a bar on the top edge, plus the house skew on the short elements
+ * (the chip, the section heads), which is where it still reads as an angle.
+ */
+
+.eint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Above the numerals' layer is wrong (a numeral has to be readable), below
+     the HUD stage is wrong (the slab has to be readable). This sits between
+     them: over the field art, under a numeral that lands on it. */
+  z-index: 2;
+}
+
+/* ------------------------------------------------------------------ panel */
+
+.eint__panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: scale(var(--eint-scale, 1));
+  transform-origin: top left;
+  width: 150px;
+  padding: 5px 7px 5px;
+  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+  color: var(--ig-paper, #f4f1e8);
+  font-family: var(--ig-font-text, 'Exo 2', 'Segoe UI', sans-serif);
+  font-size: 5.3px;
+  line-height: 1.45;
+  /* Enemies are blood in this house, not gold: the slab is the *threat*, and
+     Direction A reserves --ig-blood for the enemy side. The accent bar sits on
+     the top edge rather than the start edge because this box is anchored by its
+     bottom, over a head — the eye arrives at the top. */
+  border-top: 1.78px solid var(--ig-blood, #b02a2a);
+  box-shadow: 0 3.56px 10px rgba(0, 0, 0, 0.55);
+  pointer-events: auto;
+}
+
+/* The tail: a small notch under the panel pointing at the head it belongs to,
+   so a slab that had to dodge sideways still reads as *that* enemy's. Its x is
+   set per frame by `layout()` (`--eint-tail`, in this box's own unscaled px),
+   and `--detached` drops it whenever the panel had to be clamped away from the
+   head — a notch on the wrong edge claims a relationship that is not there. */
+.eint__panel::after {
+  content: '';
+  position: absolute;
+  left: var(--eint-tail, 50%);
+  bottom: -4px;
+  width: 8px;
+  height: 4px;
+  margin-left: -4px;
+  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.eint__panel--detached::after {
+  display: none;
+}
+
+.eint__enemy {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px;
+  margin: 0 0 1px;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 4.6px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #d8b6b6;
+}
+.eint__enemy i {
+  font-style: normal;
+  color: var(--ig-blood, #b02a2a);
+  filter: brightness(1.7);
+  letter-spacing: 0.16em;
+}
+
+/* The move: the one line a player reads at a glance from across the room, in
+   the numeral face for exactly that reason. */
+.eint__move {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 1.5px;
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 10px;
+  line-height: 1.1;
+}
+.eint__label {
+  color: var(--ig-paper, #f4f1e8);
+  font-weight: 700;
+}
+
+.eint__conf {
+  padding: 0.6px 3px 0.9px;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 3.9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transform: skewX(var(--ig-skew, -12deg));
+}
+/* A deterministic rotation and a weighted branch are different claims, and the
+   panel must never let them look alike — see `intent.ts` on why the confidence
+   is sampled rather than declared. */
+.eint__conf--scripted {
+  background: var(--ig-gold, #e3b94a);
+  color: var(--ig-ink, #0b0a12);
+}
+.eint__conf--likely {
+  background: transparent;
+  border: 0.6px solid #8d99a8;
+  color: #cfd6de;
+}
+
+.eint__desc {
+  margin: 0 0 2px;
+  color: #dcd8cc;
+}
+
+.eint__els {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5px;
+  margin: 0 0 2px;
+}
+.eint__els span {
+  padding: 0.4px 2.5px 0.7px;
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  border: 0.5px solid #4c5563;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 3.9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b9c6d6;
+}
+
+.eint__head {
+  margin: 3px 0 1.5px;
+  padding: 0.8px 4px 1px;
+  display: inline-block;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: 4.2px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ig-ink, #0b0a12);
+  background: var(--ig-blood, #b02a2a);
+  filter: brightness(1.3);
+  transform: skewX(var(--ig-skew, -12deg));
+}
+
+/* ----------------------------------------------------------------- charge */
+
+.eint__charge {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 0 0 2px;
+  padding: 1px 0 1px 4px;
+  border-left: 1.2px solid var(--ig-gold, #e3b94a);
+}
+.eint__charge--s2 {
+  border-left-color: var(--ig-blood, #b02a2a);
+  animation: eint-imminent 0.6s ease-in-out infinite alternate;
+}
+@keyframes eint-imminent {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.5);
+  }
+}
+.eint__charge-name {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 7px;
+  font-weight: 700;
+  color: #f2d79a;
+}
+.eint__charge--s2 .eint__charge-name {
+  color: #f2a0a0;
+}
+.eint__charge-when {
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 4.4px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e9d7a6;
+}
+
+/* ----------------------------------------------------------------- damage */
+
+.eint__dmgs,
+.eint__lines,
+.eint__odds {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eint__dmg {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1.35;
+}
+.eint__who {
+  flex: 1 1 auto;
+  color: #b9c6d6;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 4.4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.eint__amt {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: 7.5px;
+  font-weight: 700;
+  color: var(--ig-paper, #f4f1e8);
+}
+.eint__pct {
+  min-width: 26px;
+  text-align: right;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8d99a8;
+}
+.eint__dmg i {
+  font-style: normal;
+  font-size: 3.9px;
+  color: #7f8a99;
+}
+/* Lethal is the one thing on this panel that must be unmissable. */
+.eint__dmg--lethal .eint__amt,
+.eint__dmg--lethal .eint__pct {
+  color: #f2a0a0;
+}
+.eint__dmg--lethal .eint__pct {
+  font-weight: 700;
+}
+.eint__dmg--heal .eint__amt {
+  color: #9fd8a0;
+}
+
+.eint__lines li,
+.eint__odds li {
+  position: relative;
+  margin-bottom: 1.5px;
+  padding-left: 5px;
+  color: #dcd8cc;
+}
+.eint__lines li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2.2px;
+  width: 2.2px;
+  height: 2.2px;
+  background: var(--ig-blood, #b02a2a);
+  filter: brightness(1.5);
+  transform: rotate(45deg);
+}
+.eint__odds li {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding-left: 0;
+}
+.eint__odds b {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  color: var(--ig-paper, #f4f1e8);
+}
+
+.eint__form {
+  margin: 2px 0 0;
+  padding: 1px 0 1px 4px;
+  border-left: 1.2px solid var(--ig-gold, #e3b94a);
+  color: #e9d7a6;
+}
+
+.eint__note {
+  margin: 0.5px 0 0;
+  color: #8d99a8;
+}
+
+/* Every claim this panel makes to the player names the research section it
+   came from, exactly as the strategy guide does. */
+.eint__cite {
+  display: block;
+  margin: 1.5px 0 0;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 3.7px;
+  letter-spacing: 0.08em;
+  color: #7f8a99;
+}
+
+/* ----------------------------------------------------------------- toggle */
+
+/* Stays over the boss when the panel is hidden, so turning the read-out off
+   gives the art back and still says how to get it. */
+.eint__toggle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: scale(var(--eint-scale, 1)) skewX(var(--ig-skew, -12deg));
+  transform-origin: top left;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  padding: 1px 5px 1.5px;
+  border: 0;
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  color: #cfd6de;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: 4.2px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.eint__toggle > * {
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.eint__toggle b {
+  color: var(--ig-blood, #b02a2a);
+  filter: brightness(1.7);
+  font-weight: 700;
+}
+.eint__toggle:hover,
+.eint__toggle:focus-visible {
+  background: var(--ig-ink-acting, rgba(11, 10, 18, 0.94));
+  color: var(--ig-paper, #f4f1e8);
+  outline: none;
+}
+
+/* While the panel is up the chip rides the panel's top-right corner; while it
+   is off the chip is the whole thing. `layout()` places it either way — a
+   float would not work, because the chip is the panel's sibling, not its
+   child (it has to outlive `.eint__panel[hidden]`). */
+.eint:not(.eint--off) .eint__toggle {
+  opacity: 0.8;
+}
+.eint--off .eint__toggle {
+  opacity: 0.78;
+}
+.eint--off .eint__toggle:hover,
+.eint--off .eint__toggle:focus-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eint__charge--s2 {
+    animation: none;
+  }
+}

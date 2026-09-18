@@ -31,7 +31,10 @@ import { mountLadyLuckReels } from './LadyLuckReels.ts';
 import { partyRowHtml } from './PartyRows.ts';
 import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
 import { DamageLayer } from './DamageLayer.ts';
+import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
+import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
+import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 
 /**
  * The FFX-2 battle HUD.
@@ -126,6 +129,54 @@ export class FFX2BattleHud implements HudPort {
       bottom: 104,
     },
   });
+  /**
+   * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
+   *
+   * On the overlay, like the numerals, because it is pinned to a projected
+   * actor position. `avoid` names the boss-gauge strip and the party column —
+   * FFX-2's equivalents of the FFX queue: the strip is what the slab's "acts
+   * next" claim is read against, and the party rows are where the damage
+   * figures land.
+   */
+  private readonly intent = new EnemyIntentPanel({ game: 'ffx2' });
+  /**
+   * The optional move advisor (`src/ui/common/MoveAdvisor.ts`).
+   *
+   * The same bottom band as FFX's, but this HUD is **not** the mirror the
+   * shared `.ig--ffx2 .ig-stat-list` rule would suggest: measured live, its
+   * party column sits at left 464 and its command stack at 477 — *both* on the
+   * right, with the boss gauge strip top-left and the guide rail running down
+   * the left to y 255. So the free band here is the bottom-left/centre, and the
+   * card has one wall rather than two: it starts clear of the guide rail (which
+   * ends at x 153) and stops before the party column.
+   *
+   * The wall is resolved per frame all the same, because the column re-renders
+   * every ATB tick, and `MoveAdvisor.layout` gates it on `offsetWidth > 0` so a
+   * not-yet-laid-out element is treated as no edge at all.
+   *
+   * The simulator is handed the registries the live engine was built with
+   * (`ffx2EngineOptions()`), because X-2 takes its ability and item tables by
+   * injection — with the engine's baseline fallback alone the card would price
+   * every dressphere skill as "unknown".
+   */
+  private readonly advisor = new MoveAdvisor({
+    game: 'ffx2',
+    anchors: {
+      before: () => this.partyEl ?? null,
+      left: 160,
+      right: 458,
+      bottom: 26,
+    },
+    advisor: () => {
+      const options = ffx2EngineOptions();
+      return {
+        ffx2: {
+          ...(options.abilities ? { abilities: options.abilities } : {}),
+          ...(options.items ? { items: options.items } : {}),
+        },
+      };
+    },
+  });
   private chainHideTimer = 0;
   private telegraphHideTimer = 0;
   private damageFlashTimer = 0;
@@ -174,6 +225,13 @@ export class FFX2BattleHud implements HudPort {
     // Into the scaled stage, so the rail letterboxes with the rest of the
     // chrome and its anchors' `offsetTop` are in the same 640x360 grid.
     this.guide.mount(this.stage);
+    this.advisor.mount(this.stage);
+    this.intent.mount(this.overlay, {
+      host: this.el,
+      scale: () => this.stageScale,
+      project: (id, anchor) => this.project(id, anchor),
+      avoid: () => this.intentAvoidRects(),
+    });
 
     this.mounted = true;
     this.layout();
@@ -188,6 +246,8 @@ export class FFX2BattleHud implements HudPort {
     window.clearTimeout(this.damageFlashTimer);
     this.damage.unmount();
     this.guide.unmount();
+    this.advisor.unmount();
+    this.intent.unmount();
     this.el.remove();
     this.mounted = false;
   }
@@ -196,6 +256,8 @@ export class FFX2BattleHud implements HudPort {
   update(dt: number): void {
     this.damage.update(dt);
     this.guide.update(dt);
+    this.advisor.update(dt);
+    this.intent.update(dt);
   }
 
   /** The guide rail, for tests and the debug snapshot. */
@@ -203,9 +265,44 @@ export class FFX2BattleHud implements HudPort {
     return this.guide;
   }
 
+  /** The move-advisor card, for tests and the debug snapshot. */
+  get moveAdvisor(): MoveAdvisor {
+    return this.advisor;
+  }
+
+  /** Hand the panel its engine. See `EnemyIntent.attachEnemyIntent`. */
+  setIntentSource(source: IntentSource | null): void {
+    this.intent.setSource(source);
+  }
+
+  /** The intent slab, for tests and the debug snapshot. */
+  get enemyIntent(): EnemyIntentPanel {
+    return this.intent;
+  }
+
+  /** The HUD panels the intent slab may not cover, in viewport pixels. */
+  private intentAvoidRects(): Array<{ left: number; top: number; right: number; bottom: number }> {
+    const out: Array<{ left: number; top: number; right: number; bottom: number }> = [];
+    for (const selector of ['.ffx2hud__enemies', '.ffx2hud__party', '.ffx2hud__command', '.mad__card'] as const) {
+      for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
+        // Size alone: a zero-size box already means "not laid out", and it
+        // covers `[hidden]` (forced to `display: none` by `tokens.css`) and a
+        // hidden ancestor too. See the FFX twin.
+        const r = el.getBoundingClientRect();
+        if (r.width <= 0 || r.height <= 0) continue;
+        out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
+      }
+    }
+    return out;
+  }
+
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
     this.lastState = state;
     this.guide.sync(state);
+    this.advisor.sync(state);
+    // Once per playback step, never per frame: a prediction deep-clones the
+    // board two dozen times. `update(dt)` only re-projects what is drawn.
+    this.intent.refresh();
     if (!isAtbSnapshot(preview)) return; // FFX-2 always passes an AtbSnapshot; ignore a stray CTB list.
     this.lastSnapshot = preview;
     this.renderParty(state, preview);
@@ -223,7 +320,10 @@ export class FFX2BattleHud implements HudPort {
     this.commandEl.hidden = false;
     // NEXT explains the decision that is open right now; cleared below, after
     // the menu resolves.
-    if (this.lastState) this.guide.showDecision(actorId, commands, this.lastState);
+    if (this.lastState) {
+      this.guide.showDecision(actorId, commands, this.lastState);
+      this.advisor.showDecision(actorId, commands, this.lastState);
+    }
     const command = await openCommandMenu({
       container: this.commandEl,
       targetLayer: this.overlay,
@@ -241,6 +341,7 @@ export class FFX2BattleHud implements HudPort {
     this.commandEl.hidden = true;
     this.actingId = null;
     this.guide.clearDecision();
+    this.advisor.clearDecision();
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     return command;
   }

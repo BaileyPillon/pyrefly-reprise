@@ -28,6 +28,7 @@
  * `ffx2-hud.css` — rather than clipping silently.
  */
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
+import { setMenuOwnsCancel } from '../common/menuCancel.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
   attack: 'Attack',
@@ -145,6 +146,8 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     let targetIdx = 0;
 
     const cleanup = (): void => {
+      // The menu is gone; Esc belongs to nobody until the next one opens.
+      setMenuOwnsCancel(false);
       window.removeEventListener('keydown', onKey);
       deps.container.removeEventListener('click', onClick);
       deps.targetLayer.removeEventListener('click', onTargetClick);
@@ -190,6 +193,9 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderTop(): void {
       view = 'top';
+      // At the top row the `KEY_CANCEL` branch below has nowhere to step back
+      // to, so Esc is free for the pause. See `ui/common/menuCancel.ts`.
+      setMenuOwnsCancel(false);
       const rows = topRows
         .map((row, i) => {
           const selected = i === topIdx;
@@ -206,6 +212,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderSub(title: string): void {
       view = 'sub';
+      setMenuOwnsCancel(true);
       subCategory = title;
       const rows = subItems.map((c, i) => leafRowHtml(c, i, i === subIdx)).join('');
       deps.container.innerHTML = `<div class="ffx2cmd__title">${title}</div><div class="ig-cmd-stack">${rows}</div>`;
@@ -214,6 +221,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderTargets(): void {
       view = 'target';
+      setMenuOwnsCancel(true);
       deps.targetLayer.innerHTML = targetIds
         .map((id, i) => {
           const pos = deps.project(id);

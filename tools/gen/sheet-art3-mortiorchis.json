@@ -1,0 +1,35 @@
+{
+  "out": "docs/screenshots/art/mortiorchis.png",
+  "title": "MORTIORCHIS (the mount) \u2014 art round 3, facing contract v3",
+  "subtitle": "Animagine XL 4.0 Opt - shared style block - IP-Adapter --ref at the approved idle - rembg isnet-anime cutouts - enemies face frame-left",
+  "rows": [
+    {
+      "label": "MORTIORCHIS - battle states",
+      "kind": "character",
+      "cellHeight": 330,
+      "cellWidth": 470,
+      "items": [
+        {
+          "path": "public/art/characters/mortiorchis/idle.png",
+          "caption": "idle"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/attack.png",
+          "caption": "attack"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/cast.png",
+          "caption": "cast"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/hurt.png",
+          "caption": "hurt"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/ko.png",
+          "caption": "ko"
+        }
+      ]
+    }
+  ]
+}

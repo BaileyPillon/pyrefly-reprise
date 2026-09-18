@@ -42,6 +42,7 @@ import { collectReactions, onTurnEnd, onTurnStart } from './ticks.ts';
 import { resolveDuePartRevivals } from './hp.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { chooseAiCommand } from './ai/index.ts';
+import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { dismissAeon } from './aeons.ts';
 import { buildBattleResult } from './results.ts';
@@ -97,6 +98,20 @@ export class FFXEngine implements FFXBattleEngine {
 
   predictTurnOrder(n: number, previewCommand?: Command): TurnPreview[] {
     return predictOrder(this.requireCtx(), n, previewCommand);
+  }
+
+  /**
+   * What the next enemy to act is about to do — for the HUD's intent slab.
+   *
+   * Read-only, like {@link predictTurnOrder} beside it: `intent.ts` dry-runs the
+   * AI script on a **cloned** context, so counters, cycle steps and the charge
+   * ladder are not advanced by being asked about. Deliberately not on the
+   * `FFXBattleEngine` interface — that is one of the five contract files in
+   * `docs/CONTRACTS.md` and one optional panel does not earn a shape change
+   * there, so `src/ui/common/EnemyIntent.ts` probes for this method instead.
+   */
+  intent(): EnemyIntent | null {
+    return this.ctx ? predictNextEnemyIntent(this.ctx) : null;
   }
 
   nextDecision(): Decision {

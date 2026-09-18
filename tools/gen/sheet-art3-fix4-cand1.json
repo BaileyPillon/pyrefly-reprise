@@ -1,0 +1,55 @@
+{
+  "out": "docs/screenshots/art/_ba4-cand1.png",
+  "title": "fix pass round 1 candidates",
+  "subtitle": "fix pass, contract v3",
+  "rows": [
+    {
+      "label": "mortiorchis idleF",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/mortiorchis/idleF.1.png",
+          "caption": "idleF.1"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleF.2.png",
+          "caption": "idleF.2"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleF.3.png",
+          "caption": "idleF.3"
+        },
+        {
+          "path": "public/art/characters/mortiorchis/idleF.4.png",
+          "caption": "idleF.4"
+        }
+      ]
+    },
+    {
+      "label": "yunalesca-1 idleF",
+      "kind": "character",
+      "cellHeight": 360,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-1/idleF.1.png",
+          "caption": "idleF.1"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleF.2.png",
+          "caption": "idleF.2"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleF.3.png",
+          "caption": "idleF.3"
+        },
+        {
+          "path": "public/art/characters/yunalesca-1/idleF.4.png",
+          "caption": "idleF.4"
+        }
+      ]
+    }
+  ]
+}
