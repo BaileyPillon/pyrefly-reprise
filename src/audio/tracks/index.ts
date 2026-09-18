@@ -5,6 +5,7 @@ import { titleTrack } from './title.ts';
 import { battleTrack } from './battle-ffx.ts';
 import { bossTrack } from './boss-dread.ts';
 import { chapterSelectTrack } from './chapter-select.ts';
+import { pauseTrack } from './pause.ts';
 import { gagazetTrack } from './scene-gagazet.ts';
 import { seymourTrack } from './boss-seymour.ts';
 import { zanarkandDomeTrack } from './scene-zanarkand-dome.ts';
@@ -52,6 +53,7 @@ const COMPOSED: Record<string, Track> = {
   'battle-ffx': battleTrack,
   'boss-dread': bossTrack,
   'chapter-select': chapterSelectTrack,
+  pause: pauseTrack,
   'scene-gagazet': gagazetTrack,
   'boss-seymour': seymourTrack,
   'scene-zanarkand-dome': zanarkandDomeTrack,
@@ -84,10 +86,14 @@ for (const [key, target] of Object.entries(STAND_INS)) {
 }
 
 export const TRACK_BLURBS: Record<string, string> = {
-  title: 'Gentle solo piano ballad, strings entering — "memory of a lost city". A minor, 64 bpm.',
+  title:
+    '"Tide, Remembered" — the farewell theme, bars 1-8 only, a tone below its own key and never finishing: solo piano, then strings and a distant voice. A minor, 58 bpm.',
   'battle-ffx': 'Driving rock-orchestral battle theme. E minor, 150 bpm.',
   'boss-dread': 'Slow choir/timpani dread for Seymour and Yunalesca. D minor, 90 bpm.',
-  'chapter-select': '"Threshold, Unhurried" — harp and celesta menu waltz, the title\'s rising cell at rest. F lydian, 84 bpm, 3/4.',
+  'chapter-select':
+    '"Threshold, Unhurried" — the farewell theme as a waltz: four passes of one eight-bar phrase, piano to quartet to an inverted texture and back. B minor, 84 bpm, 3/4.',
+  pause:
+    '"Still Water" — the prayer\'s first eight bars, one voice over a tenor drone, mostly air. E Aeolian, 46 bpm.',
   'scene-gagazet':
     '"Where the Horns Fell Silent" — flute over an open-fifth choir, a clan horn call and distant taiko thunder. B minor with a dorian G#, 72 bpm.',
   'boss-seymour':

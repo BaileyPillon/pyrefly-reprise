@@ -16,6 +16,7 @@ import { sustainedPresets } from './sustained.ts';
 import { percussionPresets } from './percussion.ts';
 import { bandPresets } from './band.ts';
 import { electronicPresets } from './electronic.ts';
+import { menusClairObscurPresets } from './menus-clair-obscur.ts';
 
 export type { VoicePreset, PresetGroup };
 export * from './types.ts';
@@ -29,6 +30,7 @@ export const PRESET_GROUPS: Record<string, PresetGroup> = {
   percussion: percussionPresets,
   band: bandPresets,
   electronic: electronicPresets,
+  'menus-clair-obscur': menusClairObscurPresets,
 };
 
 /** Flattened registry: instrument name -> preset. */

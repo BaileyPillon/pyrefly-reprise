@@ -64,10 +64,17 @@ describe('sampled instrument presets', () => {
   });
 
   it('states a caveat for each instrument that is an approximation', () => {
-    // These three are stand-ins, and saying so in the data is what stops the
-    // docs quietly claiming a spiccato section we do not have.
+    // These are stand-ins, and saying so in the data is what stops the docs
+    // quietly claiming a spiccato section, a solo soprano or a solo viola we
+    // do not have. Add to this list only with the preset's own `caveat` set.
     const named = presetCaveats().map((c) => c.name).sort();
-    expect(named).toEqual(['soprano', 'strings-short', 'taiko']);
+    expect(named).toEqual([
+      'soprano',
+      'soprano-distant',
+      'string-quartet',
+      'strings-short',
+      'taiko',
+    ]);
   });
 
   it('throws a useful error for an unknown preset', () => {
