@@ -272,13 +272,20 @@ helper updated for the new `.pause__frame` wrapper. `npx tsc --noEmit` clean.
 
 ## What is left
 
-- **The 2x masters do not exist yet** (18 of 19 plates). Nothing 404s and
-  nothing regresses — the manifest simply lists none of them and every plate
-  ships its 1x PNG — but the "high resolution" half of Bailey's report is only
-  *proven*, not *delivered*, until the art track renders them. See §2.
-- **`focal` is in no shipped sidecar.** Every plate is on the 0.5/0.35 default
-  today. It is worth a pass over the five chapter plates: Chapter 1's subject
-  sits left of centre and reads better at roughly `x 0.42, y 0.28`.
+- ~~**The 2x masters do not exist yet.**~~ **Delivered.** The art track landed
+  all **19** during this round: every `public/art/pause/<stem>.png` now has a
+  `<stem>.2x.webp` beside it, and all nineteen measure exactly 2688x1536 (PIL,
+  checked file by file). `npm run art:manifest` reports "19 pause paintings (19
+  with a 2x master)", so `pause2x` lists every stem and no plate is left on the
+  1x file at a large viewport. The throwaway `ch1-seymour-flux.2x.webp` this
+  track generated to prove the path was overwritten by the real one; there is
+  nothing of it left to delete.
+- ~~**`focal` is in no shipped sidecar.**~~ **Delivered**, and by exactly the
+  no-code-change route §3 describes — all 19 sidecars carry one now, and they
+  are real per-plate framings rather than the default repeated (`lulu` at
+  `x 0.20`, `yuna-ffx2` at `x 0.84`, `auron` at `x 0.70`). Chapter 1 reads
+  `{ x: 0.37, y: 0.47 }`, which supersedes the `0.42 / 0.28` this track wrote
+  by hand for its first run.
 - **`.battle-pause-chip` is still 12px device type.** It belongs to
   `BattleScreen`, not to this screen, and it is no longer visible with the pause
   up now that the painting covers the window — but it is the same "tiny chrome"
