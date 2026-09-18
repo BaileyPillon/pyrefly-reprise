@@ -70,7 +70,7 @@ schtasks /Create /SC ONLOGON /TN PyreflyArtWatch /TR "node \"D:\Final Fantasy\to
 ### Deploy
 
 ```
-npm run deploy -- [--skip-tests] [--allow-dirty] [--message="text"]
+npm run deploy -- [--skip-tests] [--allow-dirty] [--dry-run] [--message="text"]
 ```
 
 `tools/deploy-pages.mjs` does the whole release in one command: type-check +
@@ -80,9 +80,20 @@ build and poll it to completion, then verify the live site serves the same
 bundle and that art assets resolve. It appends one line per run to
 `docs/deploys.log` and exits non-zero on any failure.
 
+The dirty-tree check only refuses on **build-relevant** paths — `src/`,
+`tests/`, `tools/`, `public/` outside `public/art/`, `index.html`,
+`package*.json`, `vite.config.*`, `tsconfig*.json`, and anything else it does
+not recognise — so a release is no longer lost when the art fleet drops a file
+into `docs/**`, `critic/scratch/**`, `public/art/**`, `tools/gen/sheet-*.json`
+or `tools/zz-*.tmp.*` during the preflight. Those fleet paths are printed as a
+warning and the deploy continues; the rules live in `tools/deploy-classify.mjs`
+and are pinned by `tests/unit/deploy-dirty-classify.test.ts`.
+
 - `--skip-tests` skips the `tsc`/`vitest` preflight.
-- `--allow-dirty` deploys even with uncommitted changes in the main repo
-  (the dirty files are still printed); without it, a dirty tree aborts.
+- `--allow-dirty` deploys even when a build-relevant path is dirty
+  (the dirty files are still printed); without it, such a tree aborts.
+- `--dry-run` stops right after the dirty-tree check and prints how each dirty
+  path was classified — useful for confirming the tree is only fleet noise.
 - `--message="text"` appends free text to the gh-pages commit message.
 
 Safe to run repeatedly — `dist-release/.git` is deleted and recreated every

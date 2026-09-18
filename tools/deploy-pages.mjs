@@ -2,12 +2,15 @@
 /**
  * Build and deploy Pyrefly Reprise to GitHub Pages, in one command.
  *
- *   node tools/deploy-pages.mjs [--skip-tests] [--allow-dirty] [--message="text"]
+ *   node tools/deploy-pages.mjs [--skip-tests] [--allow-dirty] [--dry-run]
+ *                              [--message="text"]
  *
  * Flags:
  *   --skip-tests   skip `npx tsc --noEmit` and `npx vitest run`
- *   --allow-dirty  allow deploying with uncommitted changes in the main repo
+ *   --allow-dirty  allow deploying even when a build-relevant path is dirty
  *                  (the dirty files are still printed as a warning)
+ *   --dry-run      stop right after the dirty-tree check, printing how every
+ *                  dirty path was classified — nothing is built or pushed
  *   --message=     extra free-text appended to the gh-pages commit message
  *
  * Pipeline: preflight -> `vite build` into dist-release/ -> re-init
@@ -33,6 +36,8 @@ import {
 import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+
+import { classifyPorcelain } from './deploy-classify.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist-release');
@@ -67,6 +72,7 @@ function parseArgs(argv) {
 const args = parseArgs(process.argv.slice(2));
 const SKIP_TESTS = Boolean(args['skip-tests']);
 const ALLOW_DIRTY = Boolean(args['allow-dirty']);
+const DRY_RUN = Boolean(args['dry-run']);
 const EXTRA_MESSAGE = typeof args.message === 'string' ? args.message : '';
 
 function log(msg) {
@@ -153,18 +159,40 @@ async function main() {
     log('preflight: skipping tsc/vitest (--skip-tests)');
   }
 
+  // Only paths that can change what `vite build` emits stop the release. The
+  // art fleet writes docs/screenshots, docs/handoff and tools/gen/sheet-*.json
+  // while this script runs, and a blanket dirty check turned every one of
+  // those into a lost release — see tools/deploy-classify.mjs.
   const porcelain = capture('git', ['status', '--porcelain'], { cwd: ROOT });
-  if (porcelain) {
-    log('main repo has uncommitted changes:');
-    for (const line of porcelain.split('\n')) log(`  ${line}`);
+  const dirty = classifyPorcelain(porcelain);
+  if (dirty.fleetNoise.length) {
+    log(`ignoring ${dirty.fleetNoise.length} dirty fleet path(s) — these cannot change the build:`);
+    for (const entry of dirty.fleetNoise) log(`  ${entry.raw}  [${entry.rule}]`);
+  }
+  if (dirty.buildRelevant.length) {
+    log(`${dirty.buildRelevant.length} build-relevant path(s) are dirty:`);
+    for (const entry of dirty.buildRelevant) log(`  ${entry.raw}  [${entry.rule}]`);
     if (!ALLOW_DIRTY) {
-      fail('refusing to deploy a dirty tree (pass --allow-dirty to override)');
+      fail(
+        'refusing to deploy: the paths above feed the build, so the bundle would not match HEAD (pass --allow-dirty to override)',
+      );
     }
     log('--allow-dirty set: continuing despite the above');
+  } else if (dirty.entries.length) {
+    log('no build-relevant path is dirty — continuing');
+  } else {
+    log('working tree clean');
   }
 
   const mainSha = capture('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT });
   log(`main repo at ${mainSha}`);
+
+  if (DRY_RUN) {
+    log(
+      `--dry-run: stopping after the dirty-tree check (${dirty.buildRelevant.length} build-relevant, ${dirty.fleetNoise.length} fleet-noise). Nothing was built, pushed or deployed.`,
+    );
+    return;
+  }
 
   // ---- 2. Build -----------------------------------------------------------
   // The art index has to be regenerated from whatever the fleet finished since
