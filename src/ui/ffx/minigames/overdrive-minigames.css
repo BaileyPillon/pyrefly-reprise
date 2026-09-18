@@ -89,6 +89,15 @@
 }
 .ffx-mg-list__gauge { width: 56px; height: 5px; background: rgba(11, 10, 18, 0.2); margin-left: auto; }
 .ffx-mg-list__gauge i { display: block; height: 100%; background: var(--ig-gold-on-paper); }
+/* An untimed picker with nothing to pick — Kimahri with no Rage Lancet-ed yet,
+   Yuna with no aeon, Rikku with an empty pouch. It used to render as a blank
+   slab with no exit (`params.ts`, `MinigameCancelled`); now it says why it is
+   empty, and the head's instruction line says how to leave. */
+.ffx-mg-list__empty {
+  padding: 10px 6px 12px;
+  font-family: var(--ig-font-text); font-style: italic; font-size: 11px;
+  color: rgba(11, 10, 18, 0.6);
+}
 
 .ffx-mg-slots { display: flex; justify-content: center; gap: 10px; margin-top: 8px; }
 .ffx-mg-slot {

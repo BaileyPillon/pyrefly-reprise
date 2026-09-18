@@ -23,6 +23,10 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
+import { advisorZone, SPRITE_HALF_WIDTH_RATIO, STAGE, type Rect } from './hudSafeZones.ts';
+
+/** Grid px between the parked `E ENEMY MOVE` chip and the CTB queue's top edge. */
+const CHIP_DOCK_GAP = 11;
 
 /**
  * The real FFX battle HUD: CTB queue, command stack, party status, telegraph
@@ -185,6 +189,7 @@ export class FFXBattleHud implements HudPort {
       scale: () => this.hudScale(),
       project: (id, anchor) => this.project(id, anchor),
       avoid: () => this.intentAvoidRects(),
+      chipDock: () => this.intentChipDock(),
     });
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
@@ -198,11 +203,17 @@ export class FFXBattleHud implements HudPort {
     this.intent.unmount();
     this.damageNumbers.clear();
     this.telegraph.dispose();
+    this.clearTransientOverlays();
     this.el.remove();
     this.mounted = false;
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
+    // A decided battle keeps nothing transient on the field: the results
+    // screen fades up over this frame and anything still drawn is drawn over
+    // it. `result` going non-null is the one state change that means "the
+    // fight is over", and it is idempotent, so re-syncing is harmless.
+    if (state.result) this.clearTransientOverlays();
     this.lastState = state;
     if (Array.isArray(preview)) this.ctbList.render(preview, state.combatants);
     const actingId = state.log.length ? findLastActorId(state.log) : null;
@@ -236,6 +247,12 @@ export class FFXBattleHud implements HudPort {
       if (Array.isArray(result) && this.lastState) this.ctbList.render(result, this.lastState.combatants);
       return result;
     };
+
+    // A new decision is open, so nothing from the previous one may still be on
+    // the field — see `clearTransientOverlays`. This is the "on submit" and
+    // "on actor change" hook both at once: the presenter only asks for the next
+    // command after the previous one has been submitted and played out.
+    this.clearTransientOverlays();
 
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);
@@ -274,6 +291,10 @@ export class FFXBattleHud implements HudPort {
         this.commandMenu.suspend();
         return;
       case 'turn-start':
+        // The turn passing is the actor change: whatever the last actor left
+        // on the field — a message banner, an Overdrive picker whose promise
+        // was abandoned — is stale from this event on.
+        if (this.currentActorId !== event.actorId) this.clearTransientOverlays();
         this.currentActorId = event.actorId;
         return;
       case 'message':
@@ -307,7 +328,15 @@ export class FFXBattleHud implements HudPort {
     // viewport-sized root) so `.ig-minigame`'s spec pixel geometry lands at
     // the same scale as the rest of the HUD instead of rendering pinned to
     // the real top-left corner.
-    return dispatchMinigame(this.stage, kind, params);
+    //
+    // Bracketed by `removeMinigameOverlays` on both sides. Each overlay is
+    // expected to take itself off the field (every `finish`/`cancel` awaits
+    // `overlay.close()` *before* it settles the promise, so this sweep has
+    // nothing to do on the happy path); the sweep is what makes "no title slab
+    // outlives its decision" true even for an overlay that threw, or that was
+    // abandoned by a strategy racing the menu.
+    this.removeMinigameOverlays();
+    return dispatchMinigame(this.stage, kind, params).finally(() => this.removeMinigameOverlays());
   }
 
   setVisible(visible: boolean): void {
@@ -320,6 +349,14 @@ export class FFXBattleHud implements HudPort {
     this.damageNumbers.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
+    // After the advisor's own `layout()`, never before: `MoveAdvisor` measures
+    // itself into the band between two HUD panels and knows nothing about the
+    // party standing in that band, which is how the card ended up printed
+    // across Tidus and Kimahri. `placeAdvisor` is FFX overruling that with the
+    // measured zone in `hudSafeZones.ts`. See the handoff — the right end state
+    // is the advisor taking a zone from its owner instead of being moved after
+    // the fact, and that is a change to a file this track does not own.
+    this.placeAdvisor();
     this.intent.update(dt);
   }
 
@@ -379,6 +416,119 @@ export class FFXBattleHud implements HudPort {
     return this.lastState?.combatants[id]?.name ?? id;
   }
 
+  /**
+   * Take every one-decision-long piece of chrome off the field.
+   *
+   * Two things live exactly as long as one decision and had no owner making
+   * sure of it:
+   *
+   * - an **Overdrive overlay** (`minigames/OverdriveOverlay.ts`), which is only
+   *   removed by its own `close()`. A picker whose promise never settled — the
+   *   empty-list case `minigames/params.ts` documents — left its ivory title
+   *   slab on the stage for the rest of the fight, printed over the `G GUIDE`
+   *   chip and the Sensor card. That is Bailey's "stale Ronso Rage banner".
+   * - the **message banner** (`.ig-banner`), which {@link setMessage} shows and
+   *   nothing ever hid again, so the last line of the previous actor's turn sat
+   *   over the next actor's.
+   *
+   * Called at the three moments a decision can end — a new `chooseCommand`
+   * (submit, and the actor changing with it), a `turn-start` for a different
+   * actor, and the battle state carrying a `result` — plus `unmount`. It is
+   * idempotent and touches nothing the player is currently reading: a live
+   * picker is always inside the `await` these callers sit on the other side of.
+   */
+  private clearTransientOverlays(): void {
+    this.removeMinigameOverlays();
+    this.bannerEl.hidden = true;
+  }
+
+  /** The sweep half of {@link clearTransientOverlays}; see `openMinigame`. */
+  private removeMinigameOverlays(): void {
+    for (const el of this.stage.querySelectorAll<HTMLElement>('.ig-minigame')) el.remove();
+  }
+
+  // ------------------------------------------------------------- safe zones
+
+  /**
+   * Move the advisor card (and its chip) into the zone `hudSafeZones.ts` picks.
+   *
+   * Runs after `MoveAdvisor.update`, so the inline `left`/`width`/`bottom` it
+   * writes are the ones that stand. Everything is read and written in the
+   * stage's own grid px: the card is a child of the scaled stage, so
+   * `offsetLeft`/`offsetWidth` are already grid units, while the projector
+   * answers in viewport px and has to be divided back through the letterbox.
+   *
+   * A no-op when the card is not up, and a no-op when no zone fits — the card
+   * then keeps the advisor's own placement, because a visible overlap is easier
+   * to see and report than a card parked off the grid.
+   */
+  private placeAdvisor(): void {
+    const card = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-card"]');
+    const chip = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]');
+    if (!card || card.hidden || card.offsetWidth <= 0) return;
+
+    const zone = advisorZone({
+      cmdArea: this.gridRect(this.cmdAreaEl) ?? { left: 30, top: 205, right: 211, bottom: 334 },
+      partyStatus: this.gridRect(this.partyStatus.el) ?? { left: 403, top: 258, right: 617, bottom: 348 },
+      guide: this.gridRect(this.el.querySelector<HTMLElement>('.sgd__panel')),
+      sensor: this.gridRect(this.sensorPanel.el),
+      sprites: this.partySpriteRects(),
+    });
+    if (!zone) return;
+
+    card.style.left = `${zone.left.toFixed(2)}px`;
+    card.style.width = `${zone.width.toFixed(2)}px`;
+    card.style.bottom = `${zone.bottom.toFixed(2)}px`;
+    card.style.maxHeight = `${zone.maxHeight.toFixed(2)}px`;
+    card.dataset['zone'] = zone.kind;
+    if (chip) {
+      chip.style.left = `${zone.left.toFixed(2)}px`;
+      chip.style.bottom = `${(zone.bottom + card.offsetHeight + 2).toFixed(2)}px`;
+    }
+  }
+
+  /**
+   * Every **active** party member's sprite, as a grid-space rect.
+   *
+   * Reconstructed from the projector's head and feet points — see
+   * `SPRITE_HALF_WIDTH_RATIO` for why the width is an estimate and why the
+   * estimate is deliberately generous. A member the projector cannot answer for
+   * (off stage for a frame while the stage re-stages it) is simply skipped;
+   * the zone is recomputed next frame.
+   */
+  private partySpriteRects(): Rect[] {
+    const state = this.lastState;
+    if (!state) return [];
+    const scale = this.hudScale();
+    if (!scale) return [];
+    const host = this.el.getBoundingClientRect();
+    const ox = host.left + (host.width - STAGE.width * scale) / 2;
+    const oy = host.top + (host.height - STAGE.height * scale) / 2;
+    const out: Rect[] = [];
+    for (const id of state.activeIds) {
+      const head = this.project(id, 'head');
+      const feet = this.project(id, 'feet');
+      if (!head || !feet) continue;
+      const top = (head.y - oy) / scale;
+      const bottom = (feet.y - oy) / scale;
+      const cx = (head.x - ox) / scale;
+      const half = Math.abs(bottom - top) * SPRITE_HALF_WIDTH_RATIO;
+      out.push({ left: cx - half, right: cx + half, top: Math.min(top, bottom), bottom: Math.max(top, bottom) });
+    }
+    return out;
+  }
+
+  /** An element's box in the stage's 640x360 grid px, or `null` if it is not laid out. */
+  private gridRect(el: HTMLElement | null): Rect | null {
+    if (!el || el.hidden || el.offsetWidth <= 0 || el.offsetHeight <= 0) return null;
+    return {
+      left: el.offsetLeft,
+      top: el.offsetTop,
+      right: el.offsetLeft + el.offsetWidth,
+      bottom: el.offsetTop + el.offsetHeight,
+    };
+  }
+
   /** The presenter's projector, installed by `setProjector`. */
   private project: Projector = () => null;
 
@@ -399,7 +549,22 @@ export class FFXBattleHud implements HudPort {
    */
   private intentAvoidRects(): Array<{ left: number; top: number; right: number; bottom: number }> {
     const out: Array<{ left: number; top: number; right: number; bottom: number }> = [];
-    for (const selector of ['.ig-ctb', '.ig-cmd-stack', '.ffx-cmd-info', '.ig-stat-list', '.ffx-sensor', '.mad__card'] as const) {
+    // The guide's rail and the advisor's chip joined the list with the fix-3
+    // round: both are opaque, both ship **on**, and at 1280x720 the slab is
+    // wide enough to reach the guide's column. Named by their solid children
+    // for the reason `ffx/DamageNumbers.ts` gives — `.sgd` and `.mad` are
+    // `inset: 0` wrappers, and listing those would fence off the whole field.
+    for (const selector of [
+      '.ig-ctb',
+      '.ig-cmd-stack',
+      '.ffx-cmd-info',
+      '.ig-stat-list',
+      '.ffx-sensor',
+      '.mad__card',
+      '.mad__toggle',
+      '.sgd__panel',
+      '.sgd__toggle',
+    ] as const) {
       for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
         // Size alone. `ffx/DamageNumbers.ts` gates on `el.hidden ||
         // el.offsetParent === null` as well, which is redundant here: a zero-size
@@ -411,6 +576,22 @@ export class FFXBattleHud implements HudPort {
       }
     }
     return out;
+  }
+
+  /**
+   * Where `E ENEMY MOVE` parks when the intent panel is off — see
+   * `EnemyIntentMountOptions.chipDock`.
+   *
+   * The CTB queue's own top-right corner, so the chip reads as a label on the
+   * queue it annotates instead of as graffiti on the boss. The queue's top edge
+   * is grid y 49.8 and the band above it holds nothing but the telegraph
+   * banner, which is centred on the stage and 150 grid px away.
+   */
+  private intentChipDock(): { x: number; y: number } | null {
+    const ctb = this.ctbList.el.getBoundingClientRect();
+    if (ctb.width <= 0 || ctb.height <= 0) return null;
+    const scale = this.hudScale();
+    return { x: ctb.right, y: ctb.top - CHIP_DOCK_GAP * scale };
   }
 
   /** The letterbox scale `layout()` applies to the 640x360 grid. */

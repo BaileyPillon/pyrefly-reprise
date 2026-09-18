@@ -153,6 +153,18 @@ export interface EnemyIntentMountOptions {
   project: (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null;
   /** Rectangles the slab must not cover — the CTB list above all. */
   avoid: () => IntentRect[];
+  /**
+   * Where the **chip** parks while the panel is off, in viewport px: the point
+   * its top-right corner is pinned to.
+   *
+   * With the panel up, the slab hangs over the boss's head because that is the
+   * relationship it is claiming. With the panel off there is no slab and the
+   * chip inherited the same anchor, which put `E ENEMY MOVE` in the middle of
+   * the boss's painting — the complaint in `docs/handoff/fix3-ffx-hud.md`. A
+   * HUD that has a rail to park it on says so here; omitting it (FFX-2, and
+   * every test) keeps the old head-anchored behaviour.
+   */
+  chipDock?: () => { x: number; y: number } | null;
 }
 
 /** Standard-gamepad button 3 (Triangle / Y); see `INTENT_HINT_ITEM`. */
@@ -163,6 +175,9 @@ const HEAD_GAP = 10;
 
 /** Panel width in grid px, at the same register as the guide rail's 132. */
 const PANEL_WIDTH = 150;
+
+/** Clearance the slab and the chip keep from the frame's edges, in grid px. */
+const EDGE_MARGIN = 4;
 
 // ---------------------------------------------------------------------------
 // The E key, and the pause it collides with
@@ -404,6 +419,26 @@ export class EnemyIntentPanel {
     const scale = opts.scale() || 1;
     this.panelEl.style.setProperty('--eint-scale', scale.toFixed(4));
     this.toggleEl.style.setProperty('--eint-scale', scale.toFixed(4));
+
+    // Panel off, and the owner named a rail to park the chip on: nothing here
+    // is anchored to the boss any more, so the projection and the dodge below
+    // have nothing to do. See `chipDock`.
+    if (!this.visible) {
+      const dock = opts.chipDock?.() ?? null;
+      if (dock) {
+        const chip = this.toggleEl.getBoundingClientRect();
+        const chipW = chip.width || 40 * scale;
+        const chipH = chip.height || 8 * scale;
+        const edge = EDGE_MARGIN * scale;
+        const x = Math.max(edge, Math.min(layer.width - chipW - edge, dock.x - layer.left - chipW));
+        const y = Math.max(edge, Math.min(layer.height - chipH - edge, dock.y - layer.top));
+        this.panelEl.classList.add('eint__panel--detached');
+        this.toggleEl.style.left = `${x.toFixed(1)}px`;
+        this.toggleEl.style.top = `${y.toFixed(1)}px`;
+        return;
+      }
+    }
+
     const box = this.visible ? this.panelEl : this.toggleEl;
 
     // A projection can come back `null` for a frame — the stage re-stages an
@@ -427,10 +462,15 @@ export class EnemyIntentPanel {
     let left = cx - w / 2;
     let top = cy - HEAD_GAP * scale - h;
 
+    // `EDGE_MARGIN` is grid px and so has to be scaled: the flat 4 viewport px
+    // this used to clamp to is 1.6 grid px at 1600x900 and 1.1 at 2560x1440, so
+    // a slab pushed against the top of the frame sat flush on the edge and read
+    // as clipped (`docs/handoff/fix3-ffx-hud.md`, the 1280x720 Chapter 2 shot).
+    const edge = EDGE_MARGIN * scale;
     const clampX = (v: number, width = w): number =>
-      Math.max(4, Math.min(Math.max(4, layer.width - width - 4), v));
+      Math.max(edge, Math.min(Math.max(edge, layer.width - width - edge), v));
     const clampY = (v: number, height = h): number =>
-      Math.max(4, Math.min(Math.max(4, layer.height - height - 4), v));
+      Math.max(edge, Math.min(Math.max(edge, layer.height - height - edge), v));
     left = clampX(left);
     top = clampY(top);
 

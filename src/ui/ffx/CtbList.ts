@@ -4,6 +4,28 @@ import { portraitChipHtml, resolvePortraitKey, tintFor, wirePortraitFallbacks } 
 /** Ink & Gold spec: "CTB queue ... Six rows visible" (presentation-ink-and-gold.md "Components"). */
 const VISIBLE_ROWS = 6;
 
+/**
+ * Font sizes `fitNames` may give a queue name plate, largest first, in the
+ * 640x360 grid's own px.
+ *
+ * 5.6 is the legibility floor `ffx-hud.css` sets for a HUD label (14 device px
+ * at 1600x900) and is what every name in the five chapters actually renders at
+ * — the ladder exists for a name a later encounter brings that is one
+ * unbreakable word wider than the 48px cap. 4.9 is 12 device px, below the
+ * floor but still a readable plate, and a long name at 12px beats the same name
+ * ellipsised to "Seymour F…".
+ */
+const NAME_SIZES = [5.6, 5.2, 4.9] as const;
+
+/** Most lines a name plate may wrap to before `fitNames` steps the size down. */
+const NAME_MAX_LINES = 3;
+
+/** Vertical padding on `.ig-ctb__name`, both edges together (`ffx-hud.css`). */
+const NAME_PAD_Y = 3.2;
+
+/** `line-height` on `.ig-ctb__name` (`ffx-hud.css`). */
+const NAME_LINE_HEIGHT = 1.16;
+
 /** Not part of the Ink & Gold component set (no accent may compete with gold);
  * kept as small functional state dots so Overdrive-ready and a boss's charge
  * stage stay legible, using the same amber/red pair the FFX visual-bible used. */
@@ -39,6 +61,19 @@ const STATUS_DOT_COLOR: Partial<Record<StatusId, string>> = {
 export class CtbList {
   readonly el: HTMLElement;
 
+  /**
+   * The size {@link fitNames} settled on for a given name, so the measuring
+   * only happens once per name instead of on every render.
+   *
+   * The queue re-renders on every `sync` *and* on every `previewRank` while the
+   * player moves the cursor, which is several times a second; measuring
+   * `scrollHeight` forces a layout each time. The cast of a battle is a handful
+   * of names and a name's fit depends on nothing but the name, so one
+   * measurement each is all that is ever needed. The map is per-list, so a new
+   * battle (a new `CtbList`) measures afresh.
+   */
+  private readonly fittedSizes = new Map<string, number>();
+
   constructor() {
     this.el = document.createElement('div');
     this.el.className = 'ig-ctb';
@@ -49,6 +84,42 @@ export class CtbList {
     const rows = preview.slice(0, VISIBLE_ROWS).map((row, i) => this.rowHtml(row, i, combatants));
     this.el.innerHTML = rows.join('');
     wirePortraitFallbacks(this.el);
+    this.fitNames();
+  }
+
+  /**
+   * Fit every name plate inside the 48px cap without ellipsis.
+   *
+   * The plate wraps (`ffx-hud.css` sets `white-space: normal`), so the only
+   * thing that can still overflow is a name whose *longest single word* is
+   * wider than the cap, or one that needs more than {@link NAME_MAX_LINES}.
+   * Both are answered by stepping the font down {@link NAME_SIZES} until the
+   * measured `scrollHeight`/`scrollWidth` fit, and the smallest rung is used if
+   * none do — a slightly small plate still reads, a clipped one does not.
+   *
+   * jsdom reports 0 for every box, so the loop takes the first rung there and
+   * the plate renders at full size, which is what the unit tests assert.
+   */
+  private fitNames(): void {
+    for (const el of this.el.querySelectorAll<HTMLElement>('.ig-ctb__name')) {
+      const name = el.textContent ?? '';
+      const cached = this.fittedSizes.get(name);
+      if (cached !== undefined) {
+        el.style.setProperty('--ffx-ctb-name-size', `${cached}px`);
+        continue;
+      }
+      let chosen = NAME_SIZES[NAME_SIZES.length - 1]!;
+      for (const size of NAME_SIZES) {
+        el.style.setProperty('--ffx-ctb-name-size', `${size}px`);
+        const maxHeight = NAME_PAD_Y + size * NAME_LINE_HEIGHT * NAME_MAX_LINES + 0.5;
+        if (el.scrollHeight <= maxHeight && el.scrollWidth <= el.clientWidth + 0.5) {
+          chosen = size;
+          break;
+        }
+      }
+      el.style.setProperty('--ffx-ctb-name-size', `${chosen}px`);
+      this.fittedSizes.set(name, chosen);
+    }
   }
 
   private rowHtml(row: TurnPreview, i: number, combatants: Record<CombatantId, AnyCombatant>): string {

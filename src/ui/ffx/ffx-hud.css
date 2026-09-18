@@ -95,19 +95,35 @@
    therefore the rail every FFX scene solves against, and `SAFE_RIGHT = 0.79` is
    measured against that.
 
-   48px is a *cap*, not a fit: the cast's longest name does ellipsise, and is
-   meant to. "Braska's Final Aeon" renders as "Braska's F…" in the queue
-   (docs/screenshots/r2/framing-braskas-final-aeon.png) — every other name in
-   the five chapters, "Yunalesca" and "Seymour Flux" included, fits whole. That
-   is the trade this rule makes: one boss's queue plate is abbreviated so the
-   rail every scene solves against is a constant instead of a function of the
-   encounter's longest name. The full name is never only in the plate — it is on
-   the target cursor and in the Sensor panel — so nothing is lost but length.
-   Raising the cap to fit it would push the rail to 0.866 and cost every FFX
-   scene ~5% of its usable width; that is the wrong side of the trade. */
+   48px is a *cap*, not a fit. What the cap used to do about a name too long for
+   it was ellipsise — "Braska's Final Aeon" read "Braska's F…", and at this font
+   size so did "Seymour F…", which is the truncation Bailey reported
+   (docs/handoff/fix3-ffx-hud.md defect 3). Raising the cap is not the answer:
+   it would drag the rail from 0.843 to 0.866 and cost every FFX scene ~5% of
+   its usable width.
+
+   So the plate **wraps and shrinks to fit inside the same 48px** instead. It is
+   a normal-wrapping box up to three lines tall, and `CtbList.fitNames()`
+   measures each plate once per name and steps the font down the ladder in
+   `NAME_SIZES` only if three lines at full size still overflow. Every name in
+   the five chapters fits at the full 5.6px: "Seymour Flux" and "Yunalesca" on
+   one or two lines, "Braska's Final Aeon" on three. The rail is unchanged, so
+   `SAFE_RIGHT = 0.79` and every scene's measured slots still hold.
+
+   `--ffx-ctb-name-size` is the per-plate result, set inline by `fitNames()`;
+   the fallback here is what an unmeasured plate (jsdom, first paint) renders
+   at. `align-items: center` on `.ig-ctb__row` keeps a two- or three-line plate
+   centred against its tile, and a three-line plate is 22px against the 20.44px
+   tile, so the column grows about 2px in the worst case and nothing below it
+   moves. */
 .ffxhud .ig-ctb__name {
-  font-size: 5.6px; letter-spacing: 0.13em; padding: 1.6px 3.8px;
-  max-width: 48px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: var(--ffx-ctb-name-size, 5.6px);
+  letter-spacing: 0.13em; padding: 1.6px 3.8px;
+  max-width: 48px;
+  white-space: normal; line-height: 1.16; text-align: right;
+  /* Never ellipsise: `fitNames()` guarantees the fit, and an `overflow: hidden`
+     here would hide the evidence when it ever fails to. */
+  overflow: visible;
 }
 
 /* Not part of Ink & Gold's component set (no accent may compete with gold) -

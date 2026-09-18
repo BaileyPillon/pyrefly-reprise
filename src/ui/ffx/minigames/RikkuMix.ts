@@ -1,6 +1,6 @@
 import type { ItemId, MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
-import { arr, escapeHtml } from './params.ts';
+import { arr, escapeHtml, MinigameCancelled } from './params.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 
 interface Ingredient {
@@ -37,7 +37,7 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
   const slotBEl = overlay.bodyEl.querySelector<HTMLElement>('[data-role="slot-b"]')!;
   const previewEl = overlay.bodyEl.querySelector<HTMLElement>('[data-role="preview"]')!;
 
-  return new Promise<MinigameResult>((resolve) => {
+  return new Promise<MinigameResult>((resolve, reject) => {
     let cursor = 0;
     let slotA: string | null = null;
     let slotB: string | null = null;
@@ -87,8 +87,27 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
       });
     };
 
+    /** Back out with both slots empty. See `MinigameCancelled` in `params.ts`. */
+    const cancel = async (): Promise<void> => {
+      if (settled) return;
+      settled = true;
+      watcher.detach();
+      await overlay.close();
+      reject(new MinigameCancelled('rikku-mix'));
+    };
+
     const watcher = new RawInputWatcher((b) => {
-      if (settled || !ingredients.length) return;
+      if (settled) return;
+      // Nothing held and nothing to hold: cancel is the way out rather than a
+      // no-op, so an empty pouch cannot strand the overlay on the field.
+      if (b === 'cancel' && slotA === null && slotB === null) {
+        void cancel();
+        return;
+      }
+      if (!ingredients.length) {
+        if (b === 'confirm') void cancel();
+        return;
+      }
       if (b === 'up') cursor = (cursor - 1 + ingredients.length) % ingredients.length;
       else if (b === 'down') cursor = (cursor + 1) % ingredients.length;
       else if (b === 'confirm') {

@@ -40,6 +40,19 @@ const PANEL_SELECTORS = [
   '.ffx-sensor',
   '.sgd__panel',
   '.sgd__toggle',
+  // The move advisor and the enemy-intent slab, added for the same reason the
+  // guide is here: both are opaque ink panels a player can have up while a
+  // numeral lands, and both ship **on** by default. The advisor's card sits in
+  // the bottom band a party member's numerals rise through, and the intent slab
+  // hangs directly over the boss, which is where an enemy's numerals spawn —
+  // between them they were the last two panels a numeral could vanish into.
+  // Listed by their solid children, never by `.mad` / `.eint`, which are
+  // `inset: 0` wrappers: listing those would tell the layer the whole field is
+  // chrome (the note above `.sgd` explains what that costs).
+  '.mad__card',
+  '.mad__toggle',
+  '.eint__panel',
+  '.eint__toggle',
 ] as const;
 
 /**
