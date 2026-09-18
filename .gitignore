@@ -31,6 +31,9 @@ public/art/
 # previews only and regenerate with `node tools/render-track.mjs all`.
 # (Four early previews were committed before this rule and remain tracked.)
 docs/audio/*.wav
+# Audition copies from `npm run audio:render -- --audition`: byte-identical to
+# what already ships in public/audio/, kept only for listening locally.
+docs/audio/audition/
 
 # local release zips and release build output
 releases/
