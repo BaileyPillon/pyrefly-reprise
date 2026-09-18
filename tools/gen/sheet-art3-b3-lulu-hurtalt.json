@@ -1,0 +1,27 @@
+{
+  "subtitle": "facing, face readable, doll held not floating, belt skirt",
+  "title": "LULU hurt alternates",
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-hurtalt.png",
+  "rows": [
+    {
+      "items": [
+        {
+          "caption": "f4hurt.1",
+          "path": "public/art/characters/lulu/f4hurt.1.png"
+        },
+        {
+          "caption": "f4hurt.4",
+          "path": "public/art/characters/lulu/f4hurt.4.png"
+        },
+        {
+          "caption": "f3hurt.2",
+          "path": "public/art/characters/lulu/f3hurt.2.png"
+        }
+      ],
+      "kind": "character",
+      "cellWidth": 640,
+      "cellHeight": 1000,
+      "label": "alternates"
+    }
+  ]
+}

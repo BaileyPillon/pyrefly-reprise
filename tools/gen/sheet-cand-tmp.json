@@ -1,6 +1,6 @@
 {
-  "out": "docs/screenshots/art/_f4-auron-castc.png",
-  "title": "AURON cast - fix4 batch c (crimson, nodachi, jug)",
+  "out": "docs/screenshots/art/_f4-auron-castd.png",
+  "title": "AURON cast - fix4 batch d (ref 0.5, dark red)",
   "subtitle": "fix pass candidates - judge facing first, then canon, then cutout",
   "rows": [
     {
@@ -10,28 +10,28 @@
       "cellWidth": 260,
       "items": [
         {
-          "path": "public/art/characters/auron/f4castc.1.png",
-          "caption": "f4castc.1"
+          "path": "public/art/characters/auron/f4castd.1.png",
+          "caption": "f4castd.1"
         },
         {
-          "path": "public/art/characters/auron/f4castc.2.png",
-          "caption": "f4castc.2"
+          "path": "public/art/characters/auron/f4castd.2.png",
+          "caption": "f4castd.2"
         },
         {
-          "path": "public/art/characters/auron/f4castc.3.png",
-          "caption": "f4castc.3"
+          "path": "public/art/characters/auron/f4castd.3.png",
+          "caption": "f4castd.3"
         },
         {
-          "path": "public/art/characters/auron/f4castc.4.png",
-          "caption": "f4castc.4"
+          "path": "public/art/characters/auron/f4castd.4.png",
+          "caption": "f4castd.4"
         },
         {
-          "path": "public/art/characters/auron/f4castc.5.png",
-          "caption": "f4castc.5"
+          "path": "public/art/characters/auron/f4castd.5.png",
+          "caption": "f4castd.5"
         },
         {
-          "path": "public/art/characters/auron/f4castc.6.png",
-          "caption": "f4castc.6"
+          "path": "public/art/characters/auron/f4castd.6.png",
+          "caption": "f4castd.6"
         }
       ]
     }

@@ -1,0 +1,27 @@
+{
+  "subtitle": "facing, face readable, doll held not floating, belt skirt",
+  "title": "LULU cast alternates",
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-castalt.png",
+  "rows": [
+    {
+      "items": [
+        {
+          "caption": "f3cast.1",
+          "path": "public/art/characters/lulu/f3cast.1.png"
+        },
+        {
+          "caption": "f3cast.2",
+          "path": "public/art/characters/lulu/f3cast.2.png"
+        },
+        {
+          "caption": "f3cast.3",
+          "path": "public/art/characters/lulu/f3cast.3.png"
+        }
+      ],
+      "kind": "character",
+      "cellWidth": 640,
+      "cellHeight": 1000,
+      "label": "alternates"
+    }
+  ]
+}
