@@ -40,6 +40,18 @@ export interface ArtManifest {
   readonly portraits: readonly string[];
   readonly backdrops: readonly string[];
   readonly pause: readonly string[];
+  /**
+   * Pause plates that also ship `public/art/pause/<id>.2x.webp`, the
+   * 2688x1536 master of the 1344x768 PNG.
+   *
+   * The pause screen is full-bleed at window size, so past roughly 1400 CSS px
+   * the 1x plate is being upscaled and reads as a low-resolution image. It
+   * offers both files through `srcset` and lets the browser choose — but only
+   * for the plates named here, because an `srcset` candidate for a file the
+   * art fleet has not produced yet is a 404 on the one image the screen is.
+   * Always a subset of {@link ArtManifest.pause}; empty on an older manifest.
+   */
+  readonly pause2x: readonly string[];
 }
 
 /** Public path of the manifest, resolved against the Vite base path. */
@@ -92,6 +104,10 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     portraits: strings(obj.portraits),
     backdrops: strings(obj.backdrops),
     pause: strings(obj.pause),
+    // A manifest written before the 2x contract existed simply has no opinion,
+    // and an empty list is the safe one: the screen ships the 1x plate alone,
+    // exactly as it did before.
+    pause2x: strings(obj.pause2x),
   };
 }
 
@@ -162,6 +178,41 @@ export function hasBackdropArt(key: string): boolean | null {
 /** Is `public/art/pause/<key>.png` there? `null` when there is no manifest. */
 export function hasPauseArt(key: string): boolean | null {
   return current ? current.pause.includes(key) : null;
+}
+
+/**
+ * Is `public/art/pause/<key>.2x.webp` there? `null` when there is no manifest.
+ *
+ * Only ever `true` for a file the build-time scan actually saw, which is what
+ * lets the pause screen put it in an `srcset` without risking a 404 on its
+ * hero painting. `null` and `false` both mean "ship the 1x plate alone".
+ */
+export function hasPause2xArt(key: string): boolean | null {
+  return current ? current.pause2x.includes(key) : null;
+}
+
+/**
+ * The `pause/<key>` stem a `public/art/pause/...` URL names, or `null`.
+ *
+ * The pause plates are reached two different ways — `ChapterMeta.heroArt` is
+ * already `pause/ch1-seymour-flux`, while the PARTY tab builds
+ * `art/pause/<combatant-id>.png` — so the one thing every caller has in common
+ * is the URL. Parsing it here keeps the `.2x` naming rule in this module with
+ * the manifest that indexes it.
+ */
+export function pauseStemOf(url: string): string | null {
+  const m = /(?:^|\/)art\/pause\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(url);
+  return m?.[1] ?? null;
+}
+
+/**
+ * The `2x.webp` master's URL for a pause plate URL, when the manifest says one
+ * exists. `null` otherwise — including before the manifest has loaded.
+ */
+export function pause2xUrlFor(url: string): string | null {
+  const stem = pauseStemOf(url);
+  if (stem === null || hasPause2xArt(stem) !== true) return null;
+  return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
 }
 
 /**

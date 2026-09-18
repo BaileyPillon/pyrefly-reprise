@@ -56,7 +56,7 @@ import { getChapterMeta, type ChapterMeta } from '../../data/chapter-meta.ts';
 import { audio } from '../../audio/index.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
-import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
+import { createFullBleedStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import {
@@ -199,7 +199,14 @@ export class PauseScreen extends Screen {
     this.panelsHidden = this.app.save.settings.pausePanelsHidden;
     this.rows = this.buildRows();
     this.root.className = 'screen';
-    this.stage = createStage(this.root, 'pause');
+    // Not a letterboxed stage. The painting has to be the whole window at any
+    // aspect, and a 640x360 stage can only ever be 16:9 — which is what put
+    // ink bars down both sides of Bailey's 2000x1012 screenshot. The stage's
+    // `scale()` was the other half of the same defect: it rasterised every
+    // glyph at 640x360 and resampled it up, so the chrome read as a
+    // low-resolution image however large its font sizes were. See
+    // `createFullBleedStage` and the header of `pause-screen.css`.
+    this.stage = createFullBleedStage(this.root, 'pause');
     this.stage.el.classList.add('ig');
     if (this.opts.chapter.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
 
@@ -293,23 +300,30 @@ export class PauseScreen extends Screen {
          </blockquote>`
       : '';
 
+    // Three layers of painting, then one grid of chrome. The chrome is wrapped
+    // because the grid needs a single element to be — and because
+    // `.pause--bare` hides the painting's siblings by direct-child rule, so
+    // "every slab at once" has to be one child.
     return `
       <div class="pause__art"><img class="pause__art-img" data-role="hero" alt=""></div>
       <div class="pause__scrim"></div>
+      <div class="pause__grain" aria-hidden="true"></div>
       <div class="pause__vignette"></div>
 
-      <div class="pause__brand">
-        <div class="pause__wordmark">PYREFLY REPRISE</div>
-        <div class="pause__game">${gameLine}</div>
+      <div class="pause__frame">
+        <div class="pause__brand">
+          <div class="pause__wordmark">PYREFLY REPRISE</div>
+          <div class="pause__game">${gameLine}</div>
+        </div>
+
+        <nav class="pause__menu" data-role="menu" aria-label="Paused"></nav>
+        ${quote}
+
+        <section class="pause__panel cpanel cpanel--fluid" data-role="panel"></section>
+
+        <div class="pause__party" data-role="party"></div>
+        <div class="pause__snaps cpanel cpanel--fluid">${meta ? snapshotsHtml(meta) : ''}</div>
       </div>
-
-      <nav class="pause__menu" data-role="menu" aria-label="Paused"></nav>
-      ${quote}
-
-      <section class="pause__panel cpanel" data-role="panel"></section>
-
-      <div class="pause__party" data-role="party"></div>
-      <div class="pause__snaps cpanel">${meta ? snapshotsHtml(meta) : ''}</div>
     `;
   }
 

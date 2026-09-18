@@ -9,8 +9,21 @@
  * which has to darken from `--ig-gold` to `--ig-gold-on-paper` to stay legible
  * on paper (spec "Tokens": "gold on ivory #B8862A"). Nothing else changes.
  *
- * Authored on the shared 640x360 grid (`LetterboxStage.ts`): every literal is
- * its 1440 mockup value / 2.25 and carries that value in a comment.
+ * ## Two grounds, and now two *scales*
+ *
+ * The prep menu's CHAPTER tab lives inside a letterboxed 640x360 stage, so
+ * over there a literal `px` here is a grid px that the stage's own transform
+ * multiplies up. The pause screen no longer has a stage: it is full-bleed at
+ * window size and authored in viewport units, because a scaled layer is
+ * rasterised once and resampled and that is what made Bailey's 2000x1012
+ * screenshot read as a low-resolution image.
+ *
+ * So no rule below carries a bare length any more. Every size is
+ * `calc(<grid value> * var(--cp-u))` or one of the `--cp-fs-*` type tokens,
+ * and the defaults on `.cpanel` reproduce the old 640x360 numbers **exactly**
+ * (`--cp-u: 1px`, every token its old literal) — the prep tab is unchanged to
+ * the pixel. `.cpanel--fluid`, which only the pause screen sets, repoints them
+ * at `clamp()`ed viewport units with a 14px floor on anything a player reads.
  *
  * Scoping (docs/CONTRACT-CHANGES.md decision 10): consumer stylesheet, so no
  * bare `.ig-*` rules — only `.cpanel*`, reading the shared layer through its
@@ -23,6 +36,31 @@
   --cp-faint: rgba(244, 241, 232, 0.38);
   --cp-accent: var(--ig-accent, #e3b94a);
   --cp-rule: rgba(244, 241, 232, 0.16);
+
+  /*
+   * The authoring unit. `1px` *is* the 640x360 grid: every literal in this
+   * file was its 1440-mockup value / 2.25, and multiplying by 1px gives it
+   * back. Override this and the whole block rescales as one.
+   */
+  --cp-u: 1px;
+
+  /* Type, named by role. Each default is the grid value it replaced. */
+  --cp-fs-eyebrow: calc(5.33 * var(--cp-u)); /* 12 */
+  --cp-fs-title: calc(18.67 * var(--cp-u)); /* 42 */
+  --cp-fs-subtitle: calc(6.22 * var(--cp-u)); /* 14 */
+  --cp-fs-where: calc(4.89 * var(--cp-u)); /* 11 */
+  --cp-fs-body: calc(5.33 * var(--cp-u)); /* 12 */
+  --cp-fs-label: calc(4.44 * var(--cp-u)); /* 10 */
+  --cp-fs-head: calc(4.89 * var(--cp-u)); /* 11 */
+  --cp-fs-numeral: calc(10.67 * var(--cp-u)); /* 24 */
+  --cp-fs-numeral-word: calc(9.33 * var(--cp-u)); /* 21 */
+  --cp-fs-count: calc(6.22 * var(--cp-u)); /* 14 */
+  --cp-fs-tip: calc(5.11 * var(--cp-u)); /* 11.5 */
+  --cp-fs-caption: calc(5.33 * var(--cp-u)); /* 12 */
+
+  /* The two picture blocks, which are proportions rather than type. */
+  --cp-arena-h: calc(26.67 * var(--cp-u)); /* 60 */
+  --cp-snap-h: calc(24.89 * var(--cp-u)); /* 56 */
 
   color: var(--cp-fg);
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
@@ -37,13 +75,47 @@
   --cp-rule: rgba(11, 10, 18, 0.2);
 }
 
+/*
+ * Viewport-relative type, for a caller that is not inside a letterboxed stage.
+ *
+ * The floors are the contract: **nothing a player reads is under 14 CSS px**,
+ * at any window size this game can be opened at, which is what Bailey's
+ * "the chrome is tiny" was about. The ceilings stop a 4K window printing a
+ * dossier in poster type. Spacing (`--cp-u`) is deliberately *less* generous
+ * than the old grid scale — the copy got bigger, so the gaps between it get
+ * smaller, or the panel would not hold the same block.
+ *
+ * Each clamp mixes `vw` and `vh` so the block grows on a bigger screen without
+ * exploding on an ultrawide, where `vw` alone is a lie about how much room
+ * there is.
+ */
+.cpanel--fluid {
+  --cp-u: clamp(1.7px, 0.07vw + 0.11vh, 3.4px);
+
+  --cp-fs-eyebrow: clamp(14px, 0.3vw + 0.36vh, 19px);
+  --cp-fs-title: clamp(28px, 0.95vw + 1.15vh, 58px);
+  --cp-fs-subtitle: clamp(14px, 0.34vw + 0.4vh, 21px);
+  --cp-fs-where: clamp(14px, 0.3vw + 0.36vh, 19px);
+  --cp-fs-body: clamp(14px, 0.42vw + 0.52vh, 22px);
+  --cp-fs-label: clamp(14px, 0.28vw + 0.34vh, 18px);
+  --cp-fs-head: clamp(14px, 0.3vw + 0.36vh, 19px);
+  --cp-fs-numeral: clamp(19px, 0.62vw + 0.75vh, 38px);
+  --cp-fs-numeral-word: clamp(17px, 0.56vw + 0.68vh, 34px);
+  --cp-fs-count: clamp(14px, 0.4vw + 0.48vh, 22px);
+  --cp-fs-tip: clamp(14px, 0.4vw + 0.49vh, 21px);
+  --cp-fs-caption: clamp(14px, 0.38vw + 0.46vh, 21px);
+
+  --cp-arena-h: clamp(48px, 4vw + 4.8vh, 150px);
+  --cp-snap-h: clamp(44px, 3.6vw + 4.3vh, 136px);
+}
+
 /* --------------------------------------------------------------- masthead */
 
 .cpanel__eyebrow {
   display: flex;
   align-items: center;
-  gap: 3.56px; /* 8 */
-  font-size: 5.33px; /* 12 */
+  gap: calc(3.56 * var(--cp-u)); /* 8 */
+  font-size: var(--cp-fs-eyebrow);
   font-weight: 700;
   letter-spacing: 0.34em;
   color: var(--cp-accent);
@@ -54,9 +126,9 @@
 }
 
 .cpanel__title {
-  margin: 1.78px 0 0; /* 4 */
+  margin: calc(1.78 * var(--cp-u)) 0 0; /* 4 */
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 18.67px; /* 42 */
+  font-size: var(--cp-fs-title);
   font-weight: 700;
   font-style: italic;
   line-height: 1.02;
@@ -64,8 +136,8 @@
 }
 
 .cpanel__subtitle {
-  margin-top: 1.33px; /* 3 */
-  font-size: 6.22px; /* 14 */
+  margin-top: calc(1.33 * var(--cp-u)); /* 3 */
+  font-size: var(--cp-fs-subtitle);
   font-weight: 700;
   letter-spacing: 0.26em;
   color: var(--cp-fg);
@@ -73,8 +145,8 @@
 }
 
 .cpanel__where {
-  margin-top: 2.22px; /* 5 */
-  font-size: 4.89px; /* 11 */
+  margin-top: calc(2.22 * var(--cp-u)); /* 5 */
+  font-size: var(--cp-fs-where);
   font-weight: 700;
   letter-spacing: 0.22em;
   color: var(--cp-faint);
@@ -82,20 +154,20 @@
 
 /* The arena still: the chapter's own backdrop, cropped to a letterbox strip. */
 .cpanel__arena {
-  margin-top: 5.33px; /* 12 */
-  height: 26.67px; /* 60 */
+  margin-top: calc(5.33 * var(--cp-u)); /* 12 */
+  height: var(--cp-arena-h);
   background-size: cover;
   background-position: center 40%;
   /* A hairline in the accent rather than a border box — the still is a
      photograph pinned to the page, not a framed window. */
-  border-bottom: 1.33px solid var(--cp-accent); /* 3 */
+  border-bottom: calc(1.33 * var(--cp-u)) solid var(--cp-accent); /* 3 */
   filter: saturate(0.9) brightness(0.92);
 }
 
 .cpanel__blurb {
-  margin: 5.33px 0 0; /* 12 */
+  margin: calc(5.33 * var(--cp-u)) 0 0; /* 12 */
   font-family: var(--ig-font-text, 'Exo 2', sans-serif);
-  font-size: 5.33px; /* 12 */
+  font-size: var(--cp-fs-body);
   line-height: 1.55;
   color: var(--cp-dim);
 }
@@ -104,19 +176,20 @@
 
 .cpanel__ledger {
   display: flex;
-  gap: 12.44px; /* 28 */
-  margin-top: 5.78px; /* 13 */
-  padding-top: 4.44px; /* 10 */
-  border-top: 0.89px solid var(--cp-rule); /* 2 */
+  flex-wrap: wrap;
+  gap: calc(4.44 * var(--cp-u)) calc(12.44 * var(--cp-u)); /* 10 / 28 */
+  margin-top: calc(5.78 * var(--cp-u)); /* 13 */
+  padding-top: calc(4.44 * var(--cp-u)); /* 10 */
+  border-top: calc(0.89 * var(--cp-u)) solid var(--cp-rule); /* 2 */
 }
 .cpanel__ledger-cell {
   display: flex;
   flex-direction: column;
-  gap: 1.33px; /* 3 */
+  gap: calc(1.33 * var(--cp-u)); /* 3 */
   min-width: 0;
 }
 .cpanel__ledger-k {
-  font-size: 4.44px; /* 10 */
+  font-size: var(--cp-fs-label);
   font-weight: 700;
   letter-spacing: 0.26em;
   color: var(--cp-accent);
@@ -124,7 +197,7 @@
 }
 .cpanel__ledger-v {
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 10.67px; /* 24 */
+  font-size: var(--cp-fs-numeral);
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
@@ -132,7 +205,7 @@
 /* A value that is a word, not a number. */
 .cpanel__ledger-v--word {
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 9.33px; /* 21 */
+  font-size: var(--cp-fs-numeral-word);
   font-style: italic;
 }
 
@@ -142,51 +215,53 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: 5.78px; /* 13 */
-  padding-bottom: 2.67px; /* 6 */
-  border-bottom: 0.89px solid var(--cp-rule);
+  margin-top: calc(5.78 * var(--cp-u)); /* 13 */
+  padding-bottom: calc(2.67 * var(--cp-u)); /* 6 */
+  border-bottom: calc(0.89 * var(--cp-u)) solid var(--cp-rule);
 }
 .cpanel__head-label {
-  font-size: 4.89px; /* 11 */
+  font-size: var(--cp-fs-head);
   font-weight: 700;
   letter-spacing: 0.3em;
   color: var(--cp-accent);
 }
 .cpanel__count {
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 6.22px; /* 14 */
+  font-size: var(--cp-fs-count);
   font-weight: 700;
   color: var(--cp-dim);
 }
 
 .cpanel__objectives {
-  margin: 4.44px 0 0; /* 10 */
+  margin: calc(4.44 * var(--cp-u)) 0 0; /* 10 */
   padding: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 3.11px; /* 7 */
+  gap: calc(3.11 * var(--cp-u)); /* 7 */
 }
 .cpanel__objective {
   display: flex;
   align-items: flex-start;
-  gap: 4.44px; /* 10 */
+  gap: calc(4.44 * var(--cp-u)); /* 10 */
   font-family: var(--ig-font-text, 'Exo 2', sans-serif);
-  font-size: 5.33px; /* 12 */
+  font-size: var(--cp-fs-body);
   line-height: 1.35;
   color: var(--cp-dim);
 }
+/* The tick box is sized off the line it sits on, so it keeps its proportion
+   whichever scale the block is at. */
 .cpanel__check {
   flex: none;
-  width: 6.22px; /* 14 */
-  height: 6.22px;
-  margin-top: 0.44px;
+  width: 1.15em;
+  height: 1.15em;
+  margin-top: 0.08em;
   box-sizing: border-box;
-  border: 0.89px solid var(--cp-faint); /* 2 */
+  border: max(1px, calc(0.89 * var(--cp-u))) solid var(--cp-faint); /* 2 */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 5.33px;
+  font-size: inherit;
   line-height: 1;
   color: var(--ig-ink, #0b0a12);
 }
@@ -195,18 +270,18 @@
    three failed ones. */
 .cpanel__bullet {
   flex: none;
-  width: 6.22px;
-  height: 6.22px;
-  margin-top: 0.44px;
+  width: 1.15em;
+  height: 1.15em;
+  margin-top: 0.08em;
   position: relative;
 }
 .cpanel__bullet::after {
   content: '';
   position: absolute;
-  left: 0.89px;
-  top: 2.67px;
-  width: 4.44px; /* 10 */
-  height: 0.89px; /* 2 */
+  left: 0.08em;
+  top: 0.5em;
+  width: 0.82em;
+  height: max(1px, calc(0.89 * var(--cp-u))); /* 2 */
   background: var(--cp-accent);
   opacity: 0.8;
 }
@@ -222,23 +297,23 @@
 
 .cpanel__tip {
   display: flex;
-  gap: 4.44px; /* 10 */
-  margin-top: 5.33px; /* 12 */
-  padding: 4px 4.89px; /* 9 11 */
+  gap: calc(4.44 * var(--cp-u)); /* 10 */
+  margin-top: calc(5.33 * var(--cp-u)); /* 12 */
+  padding: calc(4 * var(--cp-u)) calc(4.89 * var(--cp-u)); /* 9 11 */
   background: rgba(227, 185, 74, 0.1);
-  border-left: 1.33px solid var(--cp-accent); /* 3 */
+  border-left: calc(1.33 * var(--cp-u)) solid var(--cp-accent); /* 3 */
 }
 .cpanel__tip-label {
   flex: none;
-  font-size: 4.44px; /* 10 */
+  font-size: var(--cp-fs-label);
   font-weight: 700;
   letter-spacing: 0.3em;
   color: var(--cp-accent);
-  padding-top: 0.89px;
+  padding-top: 0.2em;
 }
 .cpanel__tip-text {
   font-family: var(--ig-font-text, 'Exo 2', sans-serif);
-  font-size: 5.11px; /* 11.5 */
+  font-size: var(--cp-fs-tip);
   line-height: 1.45;
   color: var(--cp-dim);
 }
@@ -252,36 +327,43 @@
  */
 .cpanel__snaps {
   display: flex;
-  gap: 7.11px; /* 16 */
-  margin-top: 8px; /* 18 */
+  gap: calc(7.11 * var(--cp-u)); /* 16 */
+  margin-top: calc(8 * var(--cp-u)); /* 18 */
 }
 .cpanel__snap {
   margin: 0;
   flex: 1 1 0;
   min-width: 0;
-  padding: 1.78px 1.78px 0; /* 4 */
+  padding: calc(1.78 * var(--cp-u)) calc(1.78 * var(--cp-u)) 0; /* 4 */
   background: var(--ig-paper, #f4f1e8);
-  box-shadow: 0 2.67px 8px rgba(0, 0, 0, 0.55); /* 6 18 */
+  box-shadow: 0 calc(2.67 * var(--cp-u)) calc(8 * var(--cp-u)) rgba(0, 0, 0, 0.55); /* 6 18 */
   transform: rotate(var(--snap-tilt, 0deg));
 }
 .cpanel__snap-img {
   display: block;
-  height: 24.89px; /* 56 */
+  height: var(--cp-snap-h);
   background-size: cover;
   background-position: center 35%;
 }
+/*
+ * The handwritten caption.
+ *
+ * It used to be `-webkit-line-clamp: 2` with `overflow: hidden`, which printed
+ * "Limbo, a thousand years…" on a tile wide enough to hold the words — the
+ * ellipsis defect Bailey flagged. A caption is three to five words of the
+ * author's voice; truncating one is worse than any amount of wrapping, so the
+ * box now grows to whatever it holds and the type is allowed to break. The
+ * tiles are flex siblings on a common baseline, so a caption that runs to
+ * three lines lifts its own picture rather than clipping its own words.
+ */
 .cpanel__snap-cap {
-  /* Handwriting: the serif in italic is the closest face in the bank, set
-     small and loose so it reads as an aside rather than as body copy. */
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 5.33px; /* 12 */
+  font-size: var(--cp-fs-caption);
   font-style: italic;
   line-height: 1.25;
   color: var(--ig-ink, #0b0a12);
-  padding: 1.78px 1.33px 2.22px; /* 4 3 5 */
+  padding: calc(1.78 * var(--cp-u)) calc(1.33 * var(--cp-u)) calc(2.22 * var(--cp-u)); /* 4 3 5 */
   text-align: center;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }

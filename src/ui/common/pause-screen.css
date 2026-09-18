@@ -8,18 +8,38 @@
  * the command column has something to sit on, and every piece of chrome is an
  * ink or paper slab laid over paint — never a window that boxes it in.
  *
- * Authored on the shared 640x360 grid (`LetterboxStage.ts`): every literal is
- * its 1440 mockup value / 2.25 and carries that value in a comment.
+ * ## Not on the 640x360 grid any more (fix round 3)
+ *
+ * Every other screen in this game is authored on the shared grid and scaled by
+ * `LetterboxStage`. This one was too, and it was wrong twice over — both
+ * halves of what Bailey reported from a 2000x1012 window:
+ *
+ * 1. **Bars.** A 640x360 stage is 16:9 and the window is not, so the hero
+ *    painting — which is `inset: 0` *of the stage* — stopped 100px short of
+ *    each edge and printed ink down both sides of a full-bleed painting.
+ * 2. **A low-resolution image.** The stage's `scale(2.81)` meant every glyph
+ *    was rasterised at 640x360 and resampled up. Chromium composites a scaled
+ *    layer from one rasterisation; no amount of font-size fixes that, and the
+ *    "PAUSE" wordmark and the hint line at the foot of the frame were the
+ *    visible cost.
+ *
+ * So this screen mounts through `createFullBleedStage`: `position: fixed`,
+ * no grid, no transform, and **every length below is viewport-relative**. The
+ * fluid tokens are declared once on `.pause` and everything reads them, with
+ * `clamp()` floors that hold the brief's "body text never below 14 CSS px" at
+ * any window size and ceilings that stop a 4K screen printing a poster.
+ *
+ * The dossier column's own classes (`.cpanel*`) live in `chapter-panel.css`,
+ * which is shared with the prep menu's CHAPTER tab; it is tokenised the same
+ * way and this file hands it `.cpanel--fluid`.
  *
  * Scoping (docs/CONTRACT-CHANGES.md decision 10): consumer stylesheet, so no
  * bare `.ig-*` rules — only `.pause*`, reading the shared layer through its
- * custom properties. The dossier column's own classes (`.cpanel*`) live in
- * `chapter-panel.css`, because the prep menu's CHAPTER tab shows the same
- * block on an ivory ground.
+ * custom properties.
  */
 
 /*
- * Deliberately **transparent**.
+ * Deliberately **transparent**, and deliberately `fixed`.
  *
  * The frozen battle is still being drawn on the WebGL canvas underneath this
  * overlay every frame, and photo mode's whole job is to reveal it by hiding
@@ -31,9 +51,14 @@
  * The screen is never see-through in normal use: `.pause__art` is a full-bleed
  * child with its own opaque ground, so it covers the canvas whether or not the
  * hero painting itself loads.
+ *
+ * `fixed` rather than `absolute` because this layer has to be the *window*,
+ * not the screen root it happens to be appended to. Nothing above it in the
+ * tree sets a transform or a filter, so `fixed` really does resolve against
+ * the viewport here.
  */
 .pause {
-  position: absolute;
+  position: fixed;
   inset: 0;
   overflow: hidden;
   background: transparent;
@@ -51,6 +76,38 @@
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
   color: var(--ig-paper, #f4f1e8);
   -webkit-font-smoothing: antialiased;
+
+  /*
+   * ------------------------------------------------------------- the scale
+   *
+   * `--pu` is what one old grid pixel is worth now, and its clamp tracks the
+   * letterbox factor it replaced almost exactly on a 16:9 window (2.0 at
+   * 1280x720, 2.81 at 2000x1012) — so spacing and rules keep the proportions
+   * the mockup was approved at, while the *type* below is free to be bigger
+   * than a 1/2.25 reduction of a 1440 comp ever was.
+   *
+   * Mixing `vw` and `vh` in every clamp is the whole trick for "any aspect":
+   * `vw` alone doubles the chrome on a 21:9 window that has no more height
+   * than a 16:9 one, and `vh` alone shrinks it to nothing on a phone.
+   */
+  --pu: clamp(2px, 0.08vw + 0.12vh, 4.2px);
+
+  /* Safe margins. The frame never puts type closer than this to an edge. */
+  --pause-pad-x: clamp(18px, 3.4vw, 96px);
+  --pause-pad-y: clamp(16px, 3.2vh, 72px);
+  /* Room at the foot of the frame for the hint strip that lives outside it. */
+  --pause-hint-band: clamp(30px, 1.2vw + 2.6vh, 76px);
+
+  /* Type, by role. Every floor is >= 14px: that is the readability contract. */
+  --pause-fs-micro: clamp(14px, 0.28vw + 0.34vh, 19px);
+  --pause-fs-small: clamp(14px, 0.32vw + 0.39vh, 21px);
+  --pause-fs-body: clamp(14px, 0.4vw + 0.48vh, 22px);
+  --pause-fs-row: clamp(15px, 0.44vw + 0.53vh, 27px);
+  --pause-fs-num: clamp(15px, 0.46vw + 0.56vh, 28px);
+  --pause-fs-name: clamp(17px, 0.58vw + 0.7vh, 35px);
+  --pause-fs-quote: clamp(18px, 0.64vw + 0.78vh, 40px);
+  --pause-fs-wordmark: clamp(14px, 0.3vw + 0.36vh, 20px);
+  --pause-fs-game: clamp(20px, 0.76vw + 0.92vh, 46px);
 }
 
 /* Photo mode takes every piece of chrome away and leaves the diorama. */
@@ -63,11 +120,14 @@
 /* ------------------------------------------------------------------- art */
 
 /*
- * The hero painting, full bleed.
+ * The hero painting, genuinely full bleed.
  *
- * `object-position` is pushed right of centre because the art is a close-up
- * of one face and the left third of the frame is spoken for by the command
- * column: centring it would put the subject's nose behind "RESTART ENCOUNTER".
+ * `object-position` is written **inline** by `mountHeroArt`, from the plate's
+ * `focal` sidecar (default 50% / 35%), because which part of a 1.75:1 painting
+ * survives depends on the window: a 21:9 screen crops the top and bottom, a
+ * phone held upright crops most of the width, and the one thing that must
+ * never be cropped is the face. The value below is only the floor under a
+ * plate whose sidecar has not answered yet.
  *
  * `data-art` is set by `mountHeroArt` in `chapterPanel.ts` as it walks the
  * candidate list: `hero` for the painted close-up, `fallback` once it has had
@@ -80,22 +140,47 @@
   position: absolute;
   inset: 0;
   background: #120f1c;
+  overflow: hidden;
 }
 .pause__art-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 68% 22%;
+  object-position: 50% 35%;
   display: block;
-  /* The shipped fallbacks are head-and-shoulders portraits painted for a
-     small CTB tile; blown up to a full frame they want a touch of softening
-     and a pushed-back exposure so the chrome stays the sharpest thing. */
+  /*
+   * A pushed-back exposure so the chrome stays the sharpest thing — and
+   * pointedly **no blur**. Past a certain window size a 1344x768 plate is
+   * being magnified whatever we do; the answer to that is the 2x master in
+   * `srcset` and the grain and vignette below, which make residual softness
+   * read as a painted surface. Blurring it on purpose would only ever make it
+   * a blurrier photograph of a painting.
+   */
   filter: saturate(0.94) contrast(1.02);
+  /*
+   * The slow drift. 3 percent of overscan, forty-six seconds end to end, so a
+   * player who pauses to look at the art gets a picture that breathes rather
+   * than a freeze-frame. The scale is constant and the translate stays inside
+   * the overscan it buys, so no edge of the frame is ever uncovered.
+   */
+  transform: scale(1.03);
+  animation: pause-art-drift 46s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes pause-art-drift {
+  from {
+    transform: scale(1.03) translate(-0.7%, -0.45%);
+  }
+  to {
+    transform: scale(1.03) translate(0.7%, 0.45%);
+  }
 }
 .pause__art-img[data-art='fallback'] {
+  /* A CTB portrait painted for a 40px tile, standing in for a hero plate. */
   object-position: 62% 18%;
   filter: saturate(0.9) contrast(1.02) brightness(0.92);
   transform: scale(1.18);
+  animation: none;
 }
 .pause__art-img[data-art='missing'] {
   visibility: hidden;
@@ -109,9 +194,9 @@
     linear-gradient(
       100deg,
       rgba(11, 10, 18, 0.97) 0%,
-      rgba(11, 10, 18, 0.9) 22%,
-      rgba(11, 10, 18, 0.45) 42%,
-      rgba(11, 10, 18, 0.08) 58%
+      rgba(11, 10, 18, 0.9) 20%,
+      rgba(11, 10, 18, 0.45) 40%,
+      rgba(11, 10, 18, 0.08) 56%
     ),
     linear-gradient(180deg, rgba(11, 10, 18, 0.72) 0%, rgba(11, 10, 18, 0) 22%),
     linear-gradient(0deg, rgba(11, 10, 18, 0.95) 0%, rgba(11, 10, 18, 0.55) 18%, rgba(11, 10, 18, 0) 38%);
@@ -119,41 +204,102 @@
 .pause__vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(120% 90% at 55% 40%, transparent 45%, rgba(11, 10, 18, 0.55));
+  background: radial-gradient(118% 88% at 52% 40%, transparent 42%, rgba(11, 10, 18, 0.62));
+}
+
+/*
+ * Paper grain.
+ *
+ * An SVG `feTurbulence` tile, laid over the painting at 7% in `overlay`. It is
+ * the difference between "a low-resolution photo" and "paint on a surface":
+ * the eye reads the noise as tooth and stops reading the softness as a lack of
+ * pixels. Inline as a data URI so it costs no request and cannot 404.
+ */
+.pause__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  background-repeat: repeat;
+}
+
+/* ----------------------------------------------------------------- frame */
+
+/*
+ * The chrome, as a grid rather than as six absolutely-positioned slabs.
+ *
+ * Absolute coordinates were only ever honest inside a fixed 640x360 canvas.
+ * With the layer at window size and the type on `clamp()`, a grid is what
+ * keeps the safe margins safe and lets the whole thing fold to one column on a
+ * phone without a second layout being written.
+ */
+.pause__frame {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  /*
+   * The bottom padding reserves a band for the hint strip, which is not in
+   * this grid at all — it mounts on `.pause__chrome`, outside the painting,
+   * because `controls-hint.css` is another agent's file and is authored
+   * against the screen root. Without the reservation the strip prints
+   * straight through the party cards, which is exactly what it did at 720p.
+   */
+  padding: var(--pause-pad-y) var(--pause-pad-x) calc(var(--pause-pad-y) + var(--pause-hint-band));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'brand panel'
+    'menu  panel'
+    'quote panel'
+    'party snaps';
+  column-gap: clamp(16px, 2.6vw, 64px);
+  row-gap: clamp(8px, 1.4vh, 26px);
+  align-items: start;
+  /* `#ui` is click-through; the rows and rails opt themselves back in. */
+  pointer-events: none;
 }
 
 /* -------------------------------------------------------------- wordmark */
 
 .pause__brand {
-  position: absolute;
-  left: 28.44px; /* 64 */
-  top: 16.89px; /* 38 */
+  grid-area: brand;
 }
 .pause__wordmark {
-  font-size: 5.33px; /* 12 */
+  font-size: var(--pause-fs-wordmark);
   font-weight: 700;
   letter-spacing: 0.44em;
   color: rgba(244, 241, 232, 0.72);
 }
 .pause__game {
-  margin-top: 2.67px; /* 6 */
+  margin-top: calc(2.67 * var(--pu)); /* 6 */
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 9.78px; /* 22 */
+  font-size: var(--pause-fs-game);
   font-weight: 700;
   letter-spacing: 0.2em;
+  line-height: 1.1;
   color: var(--ig-accent, #e3b94a);
 }
 
 /* ------------------------------------------------------------------ menu */
 
 .pause__menu {
-  position: absolute;
-  left: 28.44px; /* 64 */
-  top: 48.89px; /* 110 */
-  width: 116.44px; /* 262 */
+  grid-area: menu;
+  align-self: start;
+  margin-top: clamp(8px, 2vh, 40px);
+  /*
+   * As wide as its widest row and no wider. The selected row draws the only
+   * ink in the column, and at `width: 100%` that slab ran two hundred pixels
+   * past the end of "RESUME" and read as a stray bar across the painting.
+   */
+  width: fit-content;
+  max-width: min(100%, clamp(240px, 27vw, 540px));
   display: flex;
   flex-direction: column;
-  gap: 0.89px; /* 2 */
+  gap: calc(0.89 * var(--pu)); /* 2 */
 }
 
 /*
@@ -165,10 +311,10 @@
 .pause__row {
   display: flex;
   align-items: center;
-  gap: 4.44px; /* 10 */
-  height: 13.78px; /* 31 */
-  padding: 0 5.33px 0 5.33px; /* 12 */
+  gap: calc(4.44 * var(--pu)); /* 10 */
+  padding: 0.34em 0.7em;
   box-sizing: border-box;
+  font-size: var(--pause-fs-row);
   transform: skewX(var(--ig-skew, -12deg));
   cursor: pointer;
   /*
@@ -184,7 +330,7 @@
   transform: skewX(var(--ig-skew-inverse, 12deg));
 }
 .pause__row-label {
-  font-size: 7.11px; /* 16 */
+  font-size: 1em;
   font-weight: 700;
   letter-spacing: 0.2em;
   color: rgba(244, 241, 232, 0.62);
@@ -194,7 +340,8 @@
 .pause__row-value {
   margin-left: auto;
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 5.78px; /* 13 */
+  /* Still on the 14px floor, even as a fraction of the row it sits in. */
+  font-size: max(14px, 0.82em);
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--ig-accent, #e3b94a);
@@ -210,8 +357,8 @@
      (see the comment on --ig-edge in src/ui/inkgold/tokens.css). */
   border-style: solid;
   border-color: var(--ig-accent, #e3b94a);
-  border-left-width: calc(1.78px * (1 - var(--ig-edge, 0))); /* 4 */
-  border-right-width: calc(1.78px * var(--ig-edge, 0));
+  border-left-width: calc(max(2px, 1.78 * var(--pu)) * (1 - var(--ig-edge, 0))); /* 4 */
+  border-right-width: calc(max(2px, 1.78 * var(--pu)) * var(--ig-edge, 0));
   border-top-width: 0;
   border-bottom-width: 0;
 }
@@ -227,27 +374,27 @@
 /* ----------------------------------------------------------------- quote */
 
 .pause__quote {
-  position: absolute;
-  left: 28.44px; /* 64 */
-  top: 200px; /* 450 */
-  width: 128px; /* 288 */
+  grid-area: quote;
+  align-self: end;
   margin: 0;
-  border-left: 0.89px solid rgba(227, 185, 74, 0.5); /* 2 */
-  padding-left: 6.22px; /* 14 */
+  width: 100%;
+  max-width: clamp(260px, 30vw, 620px);
+  border-left: max(1px, calc(0.89 * var(--pu))) solid rgba(227, 185, 74, 0.5); /* 2 */
+  padding-left: calc(6.22 * var(--pu)); /* 14 */
 }
 .pause__quote-text {
   display: block;
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 8.44px; /* 19 */
+  font-size: var(--pause-fs-quote);
   font-style: italic;
   line-height: 1.32;
   color: rgba(244, 241, 232, 0.9);
 }
 .pause__quote-who {
   display: block;
-  margin-top: 2.67px; /* 6 */
+  margin-top: calc(2.67 * var(--pu)); /* 6 */
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 4.44px; /* 10 */
+  font-size: var(--pause-fs-micro);
   font-style: normal;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -256,9 +403,9 @@
 /* The margin note: smaller, tilted, deliberately not aligned to anything. */
 .pause__hand {
   display: block;
-  margin-top: 4.44px; /* 10 */
+  margin-top: calc(4.44 * var(--pu)); /* 10 */
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 6.22px; /* 14 */
+  font-size: var(--pause-fs-body);
   font-style: italic;
   color: rgba(244, 241, 232, 0.5);
   transform: rotate(-1.6deg);
@@ -272,32 +419,37 @@
  * leans, but this one holds four paragraphs and a checklist, and skewing a
  * block of body copy costs more legibility than it buys consistency. It keeps
  * the system's voice through its accent edge instead.
+ *
+ * It spans the three upper rows and scrolls rather than clipping: the copy is
+ * now set at a real reading size, and a 720p window is genuinely short of room
+ * for a dossier at that size. A scrollbar is an honest answer; `overflow:
+ * hidden` on a panel whose last line is the strategy tip is not.
  */
 .pause__panel {
-  position: absolute;
-  right: 25.78px; /* 58 */
-  top: 20.44px; /* 46 */
-  width: 226.67px; /* 510 */
-  /* Stops short of the polaroid row along the foot of the frame; the dossier
-     below is sized so its content lands inside this, and `overflow: hidden`
-     is the backstop rather than the plan. */
-  max-height: 262.22px; /* 590 */
+  grid-area: panel;
+  /* Hug the dossier rather than stretching an empty ink slab under it, but
+     never grow past the area — at that point the copy scrolls. */
+  align-self: start;
+  justify-self: end;
+  max-height: 100%;
+  width: 100%;
+  max-width: clamp(340px, 40vw, 780px);
+  min-height: 0;
   box-sizing: border-box;
-  padding: 9.78px 11.56px 10.67px; /* 22 26 24 */
+  padding: calc(9.78 * var(--pu)) calc(11.56 * var(--pu)) calc(10.67 * var(--pu)); /* 22 26 24 */
   background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
-  border-top: 1.78px solid var(--ig-accent, #e3b94a); /* 4 */
-  box-shadow: 0 7.11px 17.78px rgba(0, 0, 0, 0.5); /* 16 40 */
-  backdrop-filter: blur(2.67px);
-  overflow: hidden;
-}
-.pause__panel[data-panel='music'],
-.pause__panel[data-panel='party'] {
+  border-top: max(2px, calc(1.78 * var(--pu))) solid var(--ig-accent, #e3b94a); /* 4 */
+  box-shadow: 0 calc(7.11 * var(--pu)) calc(17.78 * var(--pu)) rgba(0, 0, 0, 0.5); /* 16 40 */
+  backdrop-filter: blur(calc(2.67 * var(--pu)));
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(227, 185, 74, 0.5) transparent;
   pointer-events: auto;
 }
 
 .pause__empty {
-  font-size: 5.78px;
+  font-size: var(--pause-fs-body);
   letter-spacing: 0.2em;
   color: rgba(244, 241, 232, 0.5);
 }
@@ -306,11 +458,11 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-bottom: 3.56px; /* 8 */
-  border-bottom: 0.89px solid rgba(244, 241, 232, 0.16);
+  padding-bottom: calc(3.56 * var(--pu)); /* 8 */
+  border-bottom: max(1px, calc(0.89 * var(--pu))) solid rgba(244, 241, 232, 0.16);
 }
 .pause__head-label {
-  font-size: 5.33px; /* 12 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
   letter-spacing: 0.34em;
   color: var(--ig-accent, #e3b94a);
@@ -319,25 +471,25 @@
 /* --------------------------------------------------------------- options */
 
 .pause__opts {
-  margin-top: 5.33px; /* 12 */
+  margin-top: calc(5.33 * var(--pu)); /* 12 */
   display: flex;
   flex-direction: column;
-  gap: 1.33px; /* 3 */
+  gap: calc(1.33 * var(--pu)); /* 3 */
 }
 .pause__opt {
   display: flex;
   align-items: center;
-  gap: 5.33px; /* 12 */
-  padding: 3.56px 4.44px; /* 8 10 */
+  gap: calc(5.33 * var(--pu)); /* 12 */
+  padding: calc(3.56 * var(--pu)) calc(4.44 * var(--pu)); /* 8 10 */
   cursor: pointer;
   pointer-events: auto; /* see the comment on .pause__row */
 }
 .pause__opt--sel {
   background: rgba(244, 241, 232, 0.1);
-  box-shadow: inset 1.78px 0 0 var(--ig-accent, #e3b94a); /* 4 */
+  box-shadow: inset max(2px, calc(1.78 * var(--pu))) 0 0 var(--ig-accent, #e3b94a); /* 4 */
 }
 .pause__opt-k {
-  font-size: 5.33px; /* 12 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
   letter-spacing: 0.2em;
   color: rgba(244, 241, 232, 0.72);
@@ -348,8 +500,8 @@
 }
 .pause__opt-meter {
   margin-left: auto;
-  width: 53.33px; /* 120 */
-  height: 3.56px; /* 8 */
+  width: clamp(72px, 9vw, 190px); /* 120 on the old grid */
+  height: calc(3.56 * var(--pu)); /* 8 */
   background: #2a3246;
   flex: none;
 }
@@ -360,21 +512,21 @@
 }
 .pause__opt-v {
   margin-left: auto;
-  min-width: 26.67px; /* 60 */
+  min-width: 3.4em;
   text-align: right;
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 7.11px; /* 16 */
+  font-size: var(--pause-fs-small);
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--ig-accent, #e3b94a);
 }
 /* A row with a meter has already spent its auto margin on the meter. */
 .pause__opt-meter + .pause__opt-v {
-  margin-left: 5.33px; /* 12 */
+  margin-left: calc(5.33 * var(--pu)); /* 12 */
 }
 .pause__opt-hint {
-  margin-top: 7.11px; /* 16 */
-  font-size: 4.44px; /* 10 */
+  margin-top: calc(7.11 * var(--pu)); /* 16 */
+  font-size: var(--pause-fs-micro);
   letter-spacing: 0.22em;
   color: rgba(244, 241, 232, 0.45);
 }
@@ -387,13 +539,13 @@
 .pause__members {
   display: flex;
   flex-direction: column;
-  gap: 5.33px; /* 12 */
+  gap: calc(5.33 * var(--pu)); /* 12 */
 }
 .pause__member {
   display: flex;
-  gap: 6.22px; /* 14 */
-  padding-bottom: 5.33px; /* 12 */
-  border-bottom: 0.89px solid rgba(244, 241, 232, 0.14);
+  gap: calc(6.22 * var(--pu)); /* 14 */
+  padding-bottom: calc(5.33 * var(--pu)); /* 12 */
+  border-bottom: max(1px, calc(0.89 * var(--pu))) solid rgba(244, 241, 232, 0.14);
 }
 .pause__member:last-child {
   border-bottom: 0;
@@ -403,12 +555,12 @@
    portrait if it does not (`wireImageFallbacks`). */
 .pause__member-art {
   flex: none;
-  width: 48.89px; /* 110 */
-  height: 62.22px; /* 140 */
+  width: clamp(64px, 7vw, 150px); /* 110 on the old grid */
+  height: clamp(82px, 8.9vw, 190px); /* 140 */
   object-fit: cover;
   object-position: 50% 12%;
   background: #1a1526;
-  border-bottom: 1.33px solid var(--ig-accent, #e3b94a); /* 3 */
+  border-bottom: max(1px, calc(1.33 * var(--pu))) solid var(--ig-accent, #e3b94a); /* 3 */
 }
 .pause__member-info {
   min-width: 0;
@@ -416,35 +568,35 @@
 }
 .pause__member-name {
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 12.44px; /* 28 */
+  font-size: var(--pause-fs-name);
   font-weight: 700;
   font-style: italic;
   line-height: 1.05;
 }
 .pause__member-rows {
-  margin-top: 3.56px; /* 8 */
+  margin-top: calc(3.56 * var(--pu)); /* 8 */
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 7.11px; /* 0 16 */
+  gap: 0 calc(7.11 * var(--pu)); /* 0 16 */
 }
 .pause__member-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 3.56px;
-  padding: 1.33px 0; /* 3 */
-  border-bottom: 0.44px solid rgba(244, 241, 232, 0.12);
+  gap: calc(3.56 * var(--pu));
+  padding: calc(1.33 * var(--pu)) 0; /* 3 */
+  border-bottom: 1px solid rgba(244, 241, 232, 0.12);
 }
 .pause__member-k {
-  font-size: 4.44px; /* 10 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   color: var(--ig-accent, #e3b94a);
   white-space: nowrap;
 }
 .pause__member-v {
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 6.22px; /* 14 */
+  font-size: var(--pause-fs-small);
   font-weight: 700;
   color: rgba(244, 241, 232, 0.9);
   white-space: nowrap;
@@ -452,18 +604,18 @@
   text-overflow: ellipsis;
 }
 .pause__member-statuses {
-  margin-top: 3.11px; /* 7 */
+  margin-top: calc(3.11 * var(--pu)); /* 7 */
   display: flex;
   flex-wrap: wrap;
-  gap: 2.22px; /* 5 */
+  gap: calc(2.22 * var(--pu)); /* 5 */
 }
 .pause__status {
-  font-size: 4px; /* 9 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
   letter-spacing: 0.16em;
-  padding: 0.89px 2.67px; /* 2 6 */
+  padding: 0.1em 0.45em;
   background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
-  border: 0.44px solid rgba(244, 241, 232, 0.3);
+  border: 1px solid rgba(244, 241, 232, 0.3);
   color: rgba(244, 241, 232, 0.8);
 }
 
@@ -473,17 +625,17 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-bottom: 3.56px;
-  border-bottom: 0.89px solid rgba(244, 241, 232, 0.16);
+  padding-bottom: calc(3.56 * var(--pu));
+  border-bottom: max(1px, calc(0.89 * var(--pu))) solid rgba(244, 241, 232, 0.16);
 }
 .pause__music-head-label {
-  font-size: 5.33px;
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
   letter-spacing: 0.34em;
   color: var(--ig-accent, #e3b94a);
 }
 .pause__music-head-act {
-  font-size: 4.89px; /* 11 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
   letter-spacing: 0.26em;
   color: rgba(244, 241, 232, 0.6);
@@ -494,30 +646,30 @@
   color: var(--ig-paper, #f4f1e8);
 }
 .pause__music-list {
-  margin-top: 4.44px; /* 10 */
-  max-height: 177.78px; /* 400 */
+  margin-top: calc(4.44 * var(--pu)); /* 10 */
+  max-height: clamp(180px, 46vh, 780px);
   overflow-y: auto;
   /* The list is longer than the panel and the cut lands mid-row. Fading the
      last few pixels turns a clipped track title into a legible "there is more
      below" instead of a rendering mistake. */
-  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 7.11px), transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 1.4em), transparent 100%);
 }
 .pause__music-row {
   display: flex;
   align-items: center;
-  gap: 4.44px; /* 10 */
-  padding: 2.67px 3.56px; /* 6 8 */
+  gap: calc(4.44 * var(--pu)); /* 10 */
+  padding: calc(2.67 * var(--pu)) calc(3.56 * var(--pu)); /* 6 8 */
   cursor: pointer;
   pointer-events: auto; /* see the comment on .pause__row */
 }
 .pause__music-row--sel {
   background: rgba(244, 241, 232, 0.1);
-  box-shadow: inset 1.78px 0 0 var(--ig-accent, #e3b94a);
+  box-shadow: inset max(2px, calc(1.78 * var(--pu))) 0 0 var(--ig-accent, #e3b94a);
 }
 .pause__music-dot {
   flex: none;
-  width: 2.67px; /* 6 */
-  height: 2.67px;
+  width: calc(2.67 * var(--pu)); /* 6 */
+  height: calc(2.67 * var(--pu));
   border-radius: 50%;
   background: var(--ig-accent, #e3b94a);
 }
@@ -526,7 +678,7 @@
 }
 .pause__music-title {
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 7.56px; /* 17 */
+  font-size: var(--pause-fs-body);
   font-style: italic;
   font-weight: 700;
   color: rgba(244, 241, 232, 0.8);
@@ -539,7 +691,7 @@
 }
 .pause__music-state {
   margin-left: auto;
-  font-size: 4px; /* 9 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
   letter-spacing: 0.24em;
   color: var(--ig-accent, #e3b94a);
@@ -553,27 +705,31 @@
 
 /* The three who are standing on the field, with their live numbers. */
 .pause__party {
-  position: absolute;
-  left: 28.44px; /* 64 */
-  bottom: 22.22px; /* 50 */
+  grid-area: party;
+  align-self: end;
   display: flex;
-  gap: 4.44px; /* 10 */
+  flex-wrap: wrap;
+  gap: calc(4.44 * var(--pu)); /* 10 */
+  width: 100%;
 }
 .pause__card {
   display: flex;
   align-items: center;
-  gap: 4.44px; /* 10 */
-  /* Wide enough for `2420/2420` and `115/115` side by side without the MP
-     value running under the Overdrive gauge — the three cards plus their gaps
-     still stop well clear of the dossier column's left edge. */
-  width: 102.22px; /* 230 */
+  gap: calc(4.44 * var(--pu)); /* 10 */
+  /*
+   * Three across the left rail at any window, and the numerals inside them
+   * wrap rather than shrink — 14px is the floor for `2420/2420` too.
+   */
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: clamp(150px, 16vw, 340px);
   box-sizing: border-box;
-  padding: 3.56px 4.44px; /* 8 10 */
+  padding: calc(3.56 * var(--pu)) calc(4.44 * var(--pu)); /* 8 10 */
   background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
   border-style: solid;
   border-color: var(--ig-paper, #f4f1e8);
-  border-left-width: calc(1.78px * (1 - var(--ig-edge, 0))); /* 4 */
-  border-right-width: calc(1.78px * var(--ig-edge, 0));
+  border-left-width: calc(max(2px, 1.78 * var(--pu)) * (1 - var(--ig-edge, 0))); /* 4 */
+  border-right-width: calc(max(2px, 1.78 * var(--pu)) * var(--ig-edge, 0));
   border-top-width: 0;
   border-bottom-width: 0;
 }
@@ -593,14 +749,14 @@
 .pause__card-face {
   flex: none;
   position: relative;
-  width: 17.78px; /* 40 */
-  height: 17.78px;
+  width: clamp(34px, 3.4vw, 76px); /* 40 on the old grid */
+  height: clamp(34px, 3.4vw, 76px);
   overflow: hidden;
   background: #1a1526;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8px; /* 18 */
+  font-size: var(--pause-fs-body);
   font-weight: 700;
   color: rgba(244, 241, 232, 0.55);
 }
@@ -614,7 +770,7 @@
 }
 .pause__card-name {
   font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: 8.44px; /* 19 */
+  font-size: var(--pause-fs-name);
   font-weight: 700;
   font-style: italic;
   line-height: 1.05;
@@ -624,17 +780,20 @@
 }
 .pause__card-nums {
   display: flex;
-  gap: 4.44px; /* 10 */
-  margin-top: 0.89px;
-  white-space: nowrap;
+  flex-wrap: wrap;
+  column-gap: calc(4.44 * var(--pu)); /* 10 */
+  margin-top: calc(0.89 * var(--pu));
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 6.22px; /* 14 */
+  font-size: var(--pause-fs-num);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.15;
+}
+.pause__card-nums > span {
+  white-space: nowrap;
 }
 .pause__card-nums i {
   font-style: normal;
-  font-size: 4.44px; /* 10 */
+  font-size: max(14px, 0.78em);
   color: #9fb0c4;
 }
 .pause__card-hp {
@@ -645,8 +804,8 @@
 }
 .pause__card-bar {
   display: block;
-  height: 1.33px; /* 3 */
-  margin-top: 1.33px;
+  height: max(2px, calc(1.33 * var(--pu))); /* 3 */
+  margin-top: calc(1.33 * var(--pu));
   background: #2a3246;
 }
 .pause__card-bar-fill {
@@ -661,18 +820,18 @@
   flex: none;
   display: flex;
   flex-direction: column;
-  gap: 0.89px;
-  width: 15.56px; /* 35 */
+  gap: calc(0.89 * var(--pu));
+  width: clamp(28px, 2.6vw, 60px); /* 35 on the old grid */
 }
 .pause__card-od-label {
-  font-size: 3.56px; /* 8 */
+  font-size: var(--pause-fs-micro);
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   color: var(--ig-accent, #e3b94a);
 }
 .pause__card-odbar {
   display: block;
-  height: 3.56px; /* 8 */
+  height: max(4px, calc(3.56 * var(--pu))); /* 8 */
   background: #2a3246;
 }
 .pause__card-odbar-fill {
@@ -689,12 +848,13 @@
  * takes the tiles out of the dossier column and hangs them in the frame.
  */
 .pause__snaps {
-  position: absolute;
-  right: 25.78px; /* 58 */
-  bottom: 21.33px; /* 48 */
-  width: 226.67px; /* 510 */
+  grid-area: snaps;
+  align-self: end;
+  justify-self: end;
+  width: 100%;
+  max-width: clamp(340px, 40vw, 780px);
   display: flex;
-  gap: 6.22px; /* 14 */
+  gap: calc(6.22 * var(--pu)); /* 14 */
   align-items: flex-end;
 }
 
@@ -708,51 +868,59 @@
  * chrome something to sit on, and left behind they would be a dark ramp across
  * a picture with nothing on it. `.pause__art` stays, and it is the one child
  * that is still full bleed, so the frame is the painting and nothing else.
+ * The grain is the one exception: it is part of the painting's surface, not
+ * chrome, and taking it away would make the plate look *more* like a photo of
+ * a painting at exactly the moment the player is looking hardest.
  *
  * Photo mode's rule (`[data-photo='on']`) is the same idea one level further —
  * it hides the art as well and hands the camera the diorama. The two never
  * overlap: entering photo mode takes this screen's input.
  */
-.pause--bare > *:not(.pause__art) {
+.pause--bare > *:not(.pause__art):not(.pause__grain) {
   display: none;
 }
 
 /* ------------------------------------------------------------------ hint */
 
 /*
- * Device pixels, not stage pixels: both hint lines mount on the screen root
- * beside the letterboxed stage, so they share `controls-hint.css`'s scale.
+ * Both hint lines mount on `.pause__chrome`, a sibling layer outside the
+ * painting, and both are now on the same `clamp()` scale as everything else:
+ * `controls-hint.css`'s 12px was authored for a 1600x900 window and was the
+ * single most illegible thing on Bailey's 2000x1012 screenshot.
  */
 .pause__hint.chint {
-  left: 64px;
-  bottom: 22px;
+  left: var(--pause-pad-x);
+  bottom: var(--pause-pad-y);
   right: auto;
   top: auto;
   transform: skewX(-8deg);
+  font-size: var(--pause-fs-micro);
+  gap: clamp(10px, 1vw, 24px);
+  padding: 0.6em 1.2em;
+  border-left-width: max(3px, calc(1.33 * var(--pu)));
 }
 
 /*
- * The one line left when the panels are down. Bottom-left, faint, and in
- * device pixels like the strip it replaces (it mounts on `.pause__chrome`).
+ * The one line left when the panels are down.
  *
  * It sits where the hint strip was rather than centred, because the thing it
  * must not do is land on the subject's face — the whole point of the mode.
  */
 .pause__bare-hint {
   position: absolute;
-  left: 64px;
-  bottom: 22px;
+  left: var(--pause-pad-x);
+  bottom: var(--pause-pad-y);
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 11px;
+  font-size: var(--pause-fs-small);
   font-weight: 600;
   letter-spacing: 0.22em;
-  color: rgba(244, 241, 232, 0.42);
+  color: rgba(244, 241, 232, 0.62);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
   transform: skewX(-8deg);
 }
 .pause__bare-hint b {
   color: var(--ig-accent, #e3b94a);
-  opacity: 0.85;
+  opacity: 0.95;
 }
 .pause__bare-hint b[data-action] {
   cursor: pointer;
@@ -769,7 +937,7 @@
  * frame.
  *
  * It is mounted by `BattleScreen` into *its* screen root — outside the HUD's
- * letterboxed stage, so it is authored in device pixels — and it lives in this
+ * letterboxed stage, so it is authored in device px — and it lives in this
  * stylesheet because this is the file that already comes along with
  * `PauseScreen`, which `BattleScreen` imports. z-index clears the HUD's own
  * layers (up to 40) and stays well under the pause overlay's 60, so the menu
@@ -787,7 +955,7 @@
   background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
   color: rgba(244, 241, 232, 0.72);
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.28em;
   line-height: 1;
@@ -808,12 +976,12 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 26px;
+  bottom: var(--pause-pad-y, 26px);
   text-align: center;
-  font-size: 12px;
+  font-size: clamp(14px, 0.32vw + 0.39vh, 21px);
   font-weight: 700;
   letter-spacing: 0.24em;
-  color: rgba(244, 241, 232, 0.6);
+  color: rgba(244, 241, 232, 0.72);
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
   z-index: 9;
 }
@@ -828,23 +996,81 @@
   opacity: 0.45;
 }
 
-/* Reduced motion: the only transition here is the chrome fade. */
+/*
+ * Themed wrapper for the two hint strips, which mount on the screen root
+ * rather than inside the painting layer (see the `ControlsHint` mount in
+ * `PauseScreen.enter`). It carries `.ig` — and `.ig--ffx2` on an X-2 chapter —
+ * so those strips can read `--ig-accent`, and it re-declares the fluid tokens
+ * because it is *not* inside `.pause` and cannot inherit them. It draws
+ * nothing itself and stays click-through except where a hint names an action.
+ */
+.pause__chrome {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 61; /* just above `.pause`, for the same reason */
+  --pu: clamp(2px, 0.08vw + 0.12vh, 4.2px);
+  --pause-pad-x: clamp(18px, 3.4vw, 96px);
+  --pause-pad-y: clamp(16px, 3.2vh, 72px);
+  --pause-hint-band: clamp(30px, 1.2vw + 2.6vh, 76px);
+  --pause-fs-micro: clamp(14px, 0.28vw + 0.34vh, 19px);
+  --pause-fs-small: clamp(14px, 0.32vw + 0.39vh, 21px);
+}
+
+/* -------------------------------------------------------------- narrow */
+
+/*
+ * A phone held upright, or any window too narrow to carry two columns.
+ *
+ * The painting is still the whole screen — that is the one thing that must be
+ * true at every aspect — and the chrome folds to a single column over it. The
+ * dossier keeps its place in the stack and scrolls; the polaroids go, because
+ * three tilted tiles across 358 usable pixels are three smudges.
+ */
+@media (max-width: 720px), (max-aspect-ratio: 3 / 4) {
+  .pause__frame {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-areas:
+      'brand'
+      'menu'
+      'party'
+      'panel';
+  }
+  .pause__menu,
+  .pause__panel,
+  .pause__snaps {
+    max-width: none;
+    justify-self: stretch;
+  }
+  .pause__quote,
+  .pause__snaps {
+    display: none;
+  }
+  .pause__party {
+    align-self: start;
+  }
+  .pause__card {
+    max-width: none;
+  }
+  /* The ramp is a left-to-right wipe, which means nothing in one column. */
+  .pause__scrim {
+    background: linear-gradient(180deg, rgba(11, 10, 18, 0.9) 0%, rgba(11, 10, 18, 0.72) 55%, rgba(11, 10, 18, 0.9) 100%);
+  }
+}
+
+/* -------------------------------------------------------- reduced motion */
+
+/*
+ * Reduced motion: the chrome fade and — the one that matters — the drift.
+ * A player who has asked the system for less movement has asked for a still
+ * painting, not a slower one.
+ */
 @media (prefers-reduced-motion: reduce) {
   .lb-stage[data-photo='on'] > *:not(.pause__photo-hint) {
     transition: none;
   }
-}
-
-/*
- * Themed wrapper for the two hint strips, which mount on the screen root
- * rather than inside the letterboxed stage (see the `ControlsHint` mount in
- * `PauseScreen.enter`). It carries `.ig` — and `.ig--ffx2` on an X-2 chapter —
- * only so those strips can read `--ig-accent`; it draws nothing itself and
- * stays click-through except where a hint names an action.
- */
-.pause__chrome {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 61; /* just above `.pause`, for the same reason */
+  .pause__art-img {
+    animation: none;
+  }
 }

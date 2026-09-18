@@ -65,3 +65,45 @@ export function createStage(root: HTMLElement, className: string): Stage {
     destroy: () => window.removeEventListener('resize', onResize),
   };
 }
+
+/**
+ * The same two-element shape as {@link createStage}, with **no** 640x360 grid
+ * and **no** scale transform: the inner element simply fills its parent.
+ *
+ * The pause overlay needs this. Its hero painting is meant to be the whole
+ * window, and inside a letterboxed stage it could only ever be 16:9 — on
+ * Bailey's 2000x1012 window that printed ink bars down both sides of the
+ * painting (`docs/handoff/fix3-pause.md`). The transform was the second half
+ * of the same defect: every glyph on the screen was rasterised at 640x360 and
+ * then blown up by `scale(2.81)`, which is why the chrome read as a
+ * low-resolution image rather than as type. Chromium rasterises a scaled layer
+ * once at its own resolution and resamples it; the only cure is not to scale
+ * the layer.
+ *
+ * Consumers of this one author in **viewport-relative units** (`clamp()` on
+ * `vw`/`vh`), not in grid px — there is no grid to be relative to. `layout()`
+ * is a no-op and nothing listens for resize, because CSS is doing the work.
+ *
+ * Everything else is deliberately identical, including the `lb-stage` class on
+ * the inner element, so rules that key off it (photo mode's
+ * `[data-photo='on']`) and tests that query `.<name>__stage` keep working.
+ */
+export function createFullBleedStage(root: HTMLElement, className: string): Stage {
+  const el = document.createElement('div');
+  el.className = className;
+
+  const stage = document.createElement('div');
+  stage.className = `${className}__stage lb-stage`;
+  stage.style.position = 'absolute';
+  stage.style.inset = '0';
+
+  el.appendChild(stage);
+  root.appendChild(el);
+
+  return {
+    el,
+    stage,
+    layout: () => {},
+    destroy: () => {},
+  };
+}

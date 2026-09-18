@@ -19,7 +19,12 @@
 
 import './chapter-panel.css';
 import type { ChapterMeta } from '../../data/chapter-meta.ts';
-import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import {
+  loadArtManifest,
+  manifestKnowsAssetNow,
+  pause2xUrlFor,
+  pauseStemOf,
+} from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from './html.ts';
 import { formatPlayTime, type EncounterProgress, type ObjectiveStatus } from './chapterObjectives.ts';
@@ -57,6 +62,75 @@ export function heroArtCandidates(meta: ChapterMeta): string[] {
   return filtered.length ? filtered : all;
 }
 
+/** Where the subject's face sits in a plate, 0..1 from the top-left corner. */
+export interface ArtFocal {
+  x: number;
+  y: number;
+}
+
+/**
+ * Where to hold a pause plate when the frame crops it, absent a sidecar.
+ *
+ * The plates are 1344x768 (1.75:1) and the pause screen is now the whole
+ * window, so *something* is always cropped: a 16:9 window eats the sides, a
+ * 21:9 one eats the top and bottom, a phone held upright eats most of the
+ * width. Centre horizontally, and a little above centre vertically, because
+ * every one of these paintings is a head-and-shoulders close-up — the face is
+ * in the upper third, and `50% 50%` is what pushes a chin off the bottom of an
+ * ultrawide.
+ */
+export const DEFAULT_PAUSE_FOCAL: Readonly<ArtFocal> = { x: 0.5, y: 0.35 };
+
+/** The 1x plates the art fleet ships, and the width their 2x masters are. */
+const PLATE_1X_WIDTH = 1344;
+const PLATE_2X_WIDTH = 2688;
+
+/** Sidecars already fetched, by PNG url. `null` = fetched, nothing usable. */
+const focalCache = new Map<string, ArtFocal | null>();
+
+/**
+ * Read a `focal` out of a parsed sidecar, or `null`.
+ *
+ * Forgiving on purpose: the sidecars are generator metadata the art fleet
+ * writes (prompt, seed, canvas...), `focal` is an optional addition to them,
+ * and a plate whose sidecar is malformed must fall back to the default rather
+ * than break the one image the screen is. Out-of-range numbers are clamped
+ * rather than rejected — `1.2` means "the right-hand edge", not "give up".
+ */
+export function parseArtFocal(raw: unknown): ArtFocal | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const focal = (raw as { focal?: unknown }).focal;
+  if (!focal || typeof focal !== 'object') return null;
+  const { x, y } = focal as { x?: unknown; y?: unknown };
+  if (typeof x !== 'number' || typeof y !== 'number') return null;
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  return { x: Math.min(1, Math.max(0, x)), y: Math.min(1, Math.max(0, y)) };
+}
+
+/**
+ * The focal point for a `public/art/pause/<id>.png`, from its sidecar.
+ *
+ * One `fetch` per plate per session, cached including the misses, so reopening
+ * the pause menu costs nothing. Anything that goes wrong — no sidecar, HTML
+ * from a dev server's catch-all, no `focal` key — resolves to
+ * {@link DEFAULT_PAUSE_FOCAL}.
+ */
+export async function pauseFocal(pngUrl: string): Promise<Readonly<ArtFocal>> {
+  const cached = focalCache.get(pngUrl);
+  if (cached !== undefined) return cached ?? DEFAULT_PAUSE_FOCAL;
+  let focal: ArtFocal | null = null;
+  if (pauseStemOf(pngUrl) !== null && typeof fetch === 'function') {
+    try {
+      const res = await fetch(pngUrl.replace(/\.png(?=$|[?#])/i, '.json'), { cache: 'force-cache' });
+      if (res.ok) focal = parseArtFocal(await res.json());
+    } catch {
+      focal = null;
+    }
+  }
+  focalCache.set(pngUrl, focal);
+  return focal ?? DEFAULT_PAUSE_FOCAL;
+}
+
 /**
  * Point an `<img>` at a chapter's hero art, walking {@link heroArtCandidates}
  * on every load failure until one sticks.
@@ -66,6 +140,17 @@ export function heroArtCandidates(meta: ChapterMeta): string[] {
  * and paints as soon as it decodes. When every candidate fails the element is
  * left with the last `src` and marked `data-art="missing"`, which the
  * stylesheet turns into a flat ink panel rather than a broken-image glyph.
+ *
+ * Two things happen on top of that, both only for a real pause plate (never
+ * for the shipped CTB portrait the chain ends on, which was painted for a
+ * 40px tile and has its own framing rule in the stylesheet):
+ *
+ * - **`srcset`.** When the manifest says `<id>.2x.webp` exists, the element
+ *   offers `1344w` and `2688w` at `sizes="100vw"` and the browser picks. That
+ *   is the whole high-resolution fix: a 2000px-wide window asks for more than
+ *   1344 CSS px of image and now gets a file that has it.
+ * - **`object-position`.** Set from the plate's `focal`, so a frame that has
+ *   to crop crops away from the face.
  */
 export function mountHeroArt(img: HTMLImageElement, meta: ChapterMeta): void {
   const candidates = heroArtCandidates(meta);
@@ -73,16 +158,51 @@ export function mountHeroArt(img: HTMLImageElement, meta: ChapterMeta): void {
   const tryNext = (): void => {
     if (index >= candidates.length) {
       img.dataset['art'] = 'missing';
+      img.removeAttribute('srcset');
       return;
     }
-    img.dataset['art'] = index === 0 ? 'hero' : index === candidates.length - 1 ? 'fallback' : 'hero';
-    img.src = candidates[index++]!;
+    const url = candidates[index++]!;
+    img.dataset['art'] = index === 1 ? 'hero' : index === candidates.length ? 'fallback' : 'hero';
+    mountPlate(img, url);
   };
   img.addEventListener('error', tryNext);
   img.addEventListener('load', () => {
     img.dataset['loaded'] = 'true';
   });
   tryNext();
+}
+
+/**
+ * Put one candidate on the element: `src` now, and the 2x candidate and the
+ * focal point as soon as the manifest and the sidecar can say.
+ *
+ * `src` is assigned first and unconditionally, so the painting starts decoding
+ * on the same tick the menu opens rather than waiting on a manifest that is
+ * usually already in hand. The upgrade re-checks that the element is still on
+ * this candidate before it touches anything — the error chain may have moved
+ * on while the sidecar was in flight.
+ */
+function mountPlate(img: HTMLImageElement, url: string): void {
+  img.removeAttribute('srcset');
+  img.removeAttribute('sizes');
+  img.style.removeProperty('object-position');
+  img.src = url;
+
+  if (pauseStemOf(url) === null) return;
+
+  const stillHere = (): boolean => img.getAttribute('src') === url;
+
+  void loadArtManifest().then(() => {
+    const retina = pause2xUrlFor(url);
+    if (!retina || !stillHere()) return;
+    img.sizes = '100vw';
+    img.srcset = `${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`;
+  });
+
+  void pauseFocal(url).then((focal) => {
+    if (!stillHere()) return;
+    img.style.objectPosition = `${(focal.x * 100).toFixed(1)}% ${(focal.y * 100).toFixed(1)}%`;
+  });
 }
 
 /**

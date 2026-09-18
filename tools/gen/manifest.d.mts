@@ -26,6 +26,11 @@ export interface ArtManifestFile {
   portraits: string[];
   backdrops: string[];
   pause: string[];
+  /**
+   * Pause plates that also ship a `<id>.2x.webp` master (2688x1536). Always a
+   * subset of `pause` — see `retinaStems` in `manifest.mjs`.
+   */
+  pause2x: string[];
 }
 
 export interface BuildManifestOptions {

@@ -123,10 +123,22 @@ function isBare(root: HTMLElement): boolean {
   return root.querySelector('.pause__stage')?.classList.contains('pause--bare') ?? false;
 }
 
-/** The stage children the bare rule is written against. */
+/**
+ * The slabs the bare rule takes away, and the painting it leaves.
+ *
+ * The bare rule is written against the stage's **direct** children, and since
+ * the screen went full-bleed (fix round 3) every piece of chrome is one child:
+ * `.pause__frame`, the grid the six slabs live in. So this looks one level
+ * further down, which is where the menu, the dossier and the party strip are
+ * now — the rule still hides all of them at once, by hiding their parent.
+ */
 function slabs(root: HTMLElement): string[] {
   const stage = root.querySelector('.pause__stage');
-  return stage ? [...stage.children].map((el) => el.className.split(' ')[0]!) : [];
+  if (!stage) return [];
+  const frame = stage.querySelector('.pause__frame');
+  return [...stage.children, ...(frame ? [...frame.children] : [])].map(
+    (el) => el.className.split(' ')[0]!,
+  );
 }
 
 // ------------------------------------------------------------- the claim

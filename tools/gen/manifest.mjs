@@ -23,6 +23,13 @@
  *   is listed as a state (the painting is real) but reported as a warning.
  * - `portraits/<id>.png`, `backdrops/<id>.png`, `pause/<id>.png` are flat
  *   lists under the same bare-name rule.
+ * - `pause/<id>.2x.webp` is the **high-resolution master** of a pause plate
+ *   (2688x1536 against the 1344x768 PNG). It is listed separately, in
+ *   `pause2x`, because the pause screen is full-bleed on a desktop window and
+ *   the 1x plate visibly softens past about 1400 CSS px — so the screen offers
+ *   both through `srcset` and lets the browser pick. It is *only* ever listed
+ *   when the file is really there: an `srcset` entry for a plate the fleet has
+ *   not re-rendered would be a 404 on the one image the whole screen is.
  * - A subject's `facing` comes from `idle.json`, or from the first state that
  *   declares one, and is the value `PaintedArt` would otherwise have had to
  *   fetch every sidecar to learn.
@@ -75,6 +82,9 @@ function listDir(dir) {
   }
 }
 
+/** `<stem>.2x.webp` — the high-resolution master beside a flat plate. */
+const RETINA = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.2x\.webp$/;
+
 /** Bare-named PNG stems directly inside `dir`, sorted. */
 function chosenStems(dir) {
   const out = [];
@@ -82,6 +92,25 @@ function chosenStems(dir) {
     if (!entry.isFile()) continue;
     const m = CHOSEN.exec(entry.name);
     if (m) out.push(m[1]);
+  }
+  return out.sort();
+}
+
+/**
+ * Stems in `dir` that have a `<stem>.2x.webp` master **and** the 1x PNG the
+ * screen falls back to, sorted.
+ *
+ * Both halves matter: a `2x.webp` with no PNG beside it is a half-landed
+ * render, and offering it alone would leave a browser that cannot decode WebP
+ * — or one whose viewport picks the small candidate — with nothing at all.
+ */
+function retinaStems(dir, oneX) {
+  const have = new Set(oneX);
+  const out = [];
+  for (const entry of listDir(dir)) {
+    if (!entry.isFile()) continue;
+    const m = RETINA.exec(entry.name);
+    if (m && have.has(m[1])) out.push(m[1]);
   }
   return out.sort();
 }
@@ -162,13 +191,15 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     subjects[id] = { states, portrait, ...(facing ? { facing } : {}) };
   }
 
+  const pause = chosenStems(join(artRoot, 'pause'));
   const manifest = {
     version: 1,
     generatedAt: now,
     subjects,
     portraits: chosenStems(join(artRoot, 'portraits')),
     backdrops: chosenStems(join(artRoot, 'backdrops')),
-    pause: chosenStems(join(artRoot, 'pause')),
+    pause,
+    pause2x: retinaStems(join(artRoot, 'pause'), pause),
   };
 
   return { manifest, warnings, variantsOnly };
@@ -230,7 +261,8 @@ function main(argv) {
     console.log(
       `[art:manifest] ${subjectCount} subjects, ${stateCount} poses, ` +
         `${manifest.portraits.length} portraits, ${manifest.backdrops.length} backdrops, ` +
-        `${manifest.pause.length} pause paintings -> ${path}${changed ? '' : ' (unchanged)'}`,
+        `${manifest.pause.length} pause paintings (${manifest.pause2x.length} with a 2x master) ` +
+        `-> ${path}${changed ? '' : ' (unchanged)'}`,
     );
     for (const w of warnings) console.warn(`[art:manifest] warn: ${w}`);
     if (variantsOnly.length) {
