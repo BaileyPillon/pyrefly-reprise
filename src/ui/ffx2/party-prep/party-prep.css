@@ -27,6 +27,24 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px 16px;
   align-content: start;
+  /*
+   * The hard stop, so no chapter's loadout can ever push the ivory down over
+   * the hint line again. 213.33 (the hint) - 75.56 (the sheet's top) - 4 of
+   * air - 20.45 of the sheet's own padding. `panels.ts` caps the chip list so
+   * this should never actually clip; it is here because a *data* change must
+   * not be able to break the frame, and Chapter 5's mastered White Mage is
+   * exactly how it broke the first time.
+   */
+  max-height: 113.3px;
+  overflow: hidden;
+}
+/*
+ * The tail of a long learned list, counted rather than named. Quieter than a
+ * real ability chip — it is a number about the list, not a member of it.
+ */
+.x2prep-chip--more {
+  opacity: 0.62;
+  font-variant-numeric: tabular-nums;
 }
 .x2prep-worn {
   grid-column: 1 / -1;

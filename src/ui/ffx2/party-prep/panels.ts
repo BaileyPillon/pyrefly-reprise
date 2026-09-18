@@ -76,6 +76,29 @@ function apText(ap: number, next: { abilityId: string; apCost: number } | undefi
   return parts.length ? ` &middot; ${parts.join(' &middot; ')}` : '';
 }
 
+/**
+ * How many learned-ability chips the Dresspheres tab lists before it stops
+ * naming them and counts the rest.
+ *
+ * The ivory sheet is a fixed band — it starts at 75.56 and the hint line is at
+ * 213.33 (`src/ui/common/party-prep.css`) — and a Chapter 5 girl has mastered
+ * her dressphere, so White Mage's full 16 chips wrapped to five rows and the
+ * sheet grew down over `▲▼ PARTY ◄► TABS ENTER BEGINS THE BATTLE ESC BACK`.
+ * Ten is what the left column holds in three rows at the widest chip the table
+ * has ("White Magic Lv. 3"), and the header already carries the true total.
+ */
+const MAX_LEARNED_CHIPS = 10;
+
+/** The learned list as chips, with the tail counted rather than named. */
+function learnedChipsHtml(learned: readonly string[]): string {
+  if (!learned.length) return '<span class="ffxprep-chip ffxprep-chip--empty">&mdash;</span>';
+  const shown = learned.slice(0, MAX_LEARNED_CHIPS);
+  const rest = learned.length - shown.length;
+  const chips = shown.map((a) => `<span class="ffxprep-chip">${escapeHtml(abilityName(a))}</span>`);
+  if (rest > 0) chips.push(`<span class="ffxprep-chip x2prep-chip--more">+${rest}</span>`);
+  return chips.join('');
+}
+
 // ------------------------------------------------------------- Dresspheres
 
 /**
@@ -152,11 +175,7 @@ export function makeDresspherePanel(): PrepPanel {
       </div>
       <div class="x2prep__col">
         <div class="x2prep-line"><b>LEARNED</b> ${learned.length}/${total}${apText(progress?.ap ?? 0, next)}</div>
-        <div class="ffxprep-chips">${
-          learned.length
-            ? learned.map((a) => `<span class="ffxprep-chip">${escapeHtml(abilityName(a))}</span>`).join('')
-            : '<span class="ffxprep-chip ffxprep-chip--empty">—</span>'
-        }</div>
+        <div class="ffxprep-chips">${learnedChipsHtml(learned)}</div>
       </div>
       <div class="x2prep__col">
         ${gridHtml(member)}
