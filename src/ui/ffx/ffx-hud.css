@@ -174,7 +174,21 @@
    0.967, still inside the frame and still above the letterbox. */
 .ffxhud .ig-stat-list { bottom: 12px; }
 
-.ffxhud .ig-stat { position: relative; transition: opacity 0.2s ease; }
+/* Ink & Gold's `--ig-ink-panel` is `rgba(11, 10, 18, 0.84)`, and 16% is enough
+   for a boss standing behind the column to glow through his own HP readout —
+   Yunalesca's white dress through the Tidus row in
+   `docs/screenshots/fix3/ffx-hud/before-1280x720-yunalesca-all-open.png`, which
+   is the "fighters drawn over the party status window" line in Bailey's list.
+   The four FFX bosses' quads all stop within 2 grid px of this column's top
+   rail (`docs/ENGINE-API.md#hud-safe-area`), so "move the boss" is not on the
+   table and the panel has to hold its own ground instead.
+
+   0.96 rather than 1: the column is still a slab over a painting and a flat
+   black rectangle reads as a hole punched in the frame. Scoped to the FFX
+   battle HUD's rows only — the shared token, the FFX-2 column and every other
+   `.ig-stat` in the game are untouched. */
+.ffxhud .ig-stat { position: relative; transition: opacity 0.2s ease; background: rgba(11, 10, 18, 0.96); }
+.ffxhud .ig-stat--acting { background: rgba(20, 18, 32, 0.97); }
 .ffxhud .ig-stat__value { transition: color 0.2s ease; }
 /* HP/MP denominators were 5.78px = 14 device px at 1600x900, in a grey that
    dropped them out of the row entirely; 6.6px = 16.5. The gauge keeps its

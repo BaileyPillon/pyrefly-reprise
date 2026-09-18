@@ -322,10 +322,15 @@ describe('the rail is measured, never fixed', () => {
     guide.update(0.016);
 
     const panel = panelOf(stage);
-    // 20 + 24 + the 5px clearance gap.
-    expect(Number.parseFloat(panel.style.top)).toBeCloseTo(49, 1);
-    // 240 - 5 - 49.
-    expect(Number.parseFloat(panel.style.maxHeight)).toBeCloseTo(186, 1);
+    // 20 + 24 + the 5px clearance gap + the 11px the `G GUIDE` chip rides above
+    // the rail's own top edge. The chip is what has to clear the anchor, not the
+    // panel: without the reserve the rail cleared FFX's action banner and the
+    // chip landed on it (docs/handoff/fix3-ffx-hud.md, defect 4).
+    expect(Number.parseFloat(panel.style.top)).toBeCloseTo(60, 1);
+    // 240 - 5 - 60.
+    expect(Number.parseFloat(panel.style.maxHeight)).toBeCloseTo(175, 1);
+    // ...and the chip now sits *below* the anchor's bottom edge, not on it.
+    expect(Number.parseFloat(toggleOf(stage).style.top)).toBeGreaterThanOrEqual(20 + 24);
   });
 
   it('gives the rail back as the command stack shrinks', () => {

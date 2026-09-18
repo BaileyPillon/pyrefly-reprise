@@ -81,6 +81,17 @@ const MIN_PANEL_HEIGHT = 56;
 const CLEARANCE_GAP = 5;
 
 /**
+ * How far above the rail's own top edge the `G GUIDE` chip sits, in grid px.
+ *
+ * It is a constant rather than a measurement because `layout()` runs before the
+ * chip's first paint on the opening frame, and a zero height there would drop
+ * the chip onto the banner for exactly the frame a screenshot is most likely to
+ * catch. 11 is the gap the authored `top: 44` / chip `top: 44 - 11` pair in
+ * `strategy-guide.css` already encodes.
+ */
+const CHIP_RISE = 11;
+
+/**
  * Rails shorter than this render RULES as one-liners (`.sgd--compact`).
  *
  * Measured, not guessed: with an FFX command menu open the rail is 156 grid px
@@ -289,8 +300,17 @@ export class StrategyGuide {
   private layout(): void {
     const { anchors } = this.opts;
     const below = anchors.below?.() ?? null;
+    // The chip rides `CHIP_RISE` **above** the rail's top edge, so the rail has
+    // to leave room for it under whatever it is clearing — otherwise the chip
+    // itself lands on that anchor. In FFX the anchor is the action banner
+    // (`.ig-banner`, grid y 17.8..48) and the chip is 7.5px tall, which is
+    // exactly how `G GUIDE` ended up printed across the banner in Bailey's
+    // Chapter 1 capture. The fallback `anchors.top` already has the rise
+    // counted in (44, with the chip at 33), so only the measured branch adds it.
     const top =
-      below && below.offsetHeight > 0 ? below.offsetTop + below.offsetHeight + CLEARANCE_GAP : anchors.top;
+      below && below.offsetHeight > 0
+        ? below.offsetTop + below.offsetHeight + CLEARANCE_GAP + CHIP_RISE
+        : anchors.top;
 
     // `offsetTop` is already stage-space: every anchor and the panel share the
     // HUD stage as their offset parent.
@@ -308,7 +328,7 @@ export class StrategyGuide {
     const available = Math.max(MIN_PANEL_HEIGHT, floor - top);
     this.panelEl.style.top = `${top.toFixed(2)}px`;
     this.panelEl.style.maxHeight = `${available.toFixed(2)}px`;
-    this.toggleEl.style.top = `${Math.max(0, top - 11).toFixed(2)}px`;
+    this.toggleEl.style.top = `${Math.max(0, top - CHIP_RISE).toFixed(2)}px`;
     // Short rules while the menu is eating the rail; the paragraphs come back
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);

@@ -1,5 +1,6 @@
 import type { MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
+import { setMenuOwnsCancel } from '../../common/menuCancel.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 import { arr, escapeHtml, MinigameCancelled } from './params.ts';
 
@@ -49,6 +50,7 @@ export function openYunaGrandSummon(root: HTMLElement, params: Record<string, un
       if (settled) return;
       settled = true;
       watcher.detach();
+      setMenuOwnsCancel(false);
       await overlay.flashSuccess();
       await overlay.close();
       resolve({ kind: 'yuna-grand-summon', grandSummon: { aeonId } });
@@ -59,6 +61,7 @@ export function openYunaGrandSummon(root: HTMLElement, params: Record<string, un
       if (settled) return;
       settled = true;
       watcher.detach();
+      setMenuOwnsCancel(false);
       await overlay.close();
       reject(new MinigameCancelled('yuna-grand-summon'));
     };
@@ -85,5 +88,8 @@ export function openYunaGrandSummon(root: HTMLElement, params: Record<string, un
 
     render();
     watcher.attach();
+    // Esc is this overlay's back button now, so the pause menu must not also
+    // answer the same press (`src/ui/common/menuCancel.ts`).
+    setMenuOwnsCancel(true);
   });
 }
