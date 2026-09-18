@@ -1,0 +1,43 @@
+{
+  "subtitle": "facing right first, then belt skirt / hem colour / doll size / anatomy",
+  "rows": [
+    {
+      "cellHeight": 660,
+      "items": [
+        {
+          "caption": "IDLE",
+          "path": "public/art/characters/lulu/idle.png"
+        }
+      ],
+      "kind": "character",
+      "label": "promoted idle (reference)",
+      "cellWidth": 440
+    },
+    {
+      "cellHeight": 660,
+      "items": [
+        {
+          "caption": "f3item.1",
+          "path": "public/art/characters/lulu/f3item.1.png"
+        },
+        {
+          "caption": "f3item.2",
+          "path": "public/art/characters/lulu/f3item.2.png"
+        },
+        {
+          "caption": "f3item.3",
+          "path": "public/art/characters/lulu/f3item.3.png"
+        },
+        {
+          "caption": "f3item.4",
+          "path": "public/art/characters/lulu/f3item.4.png"
+        }
+      ],
+      "kind": "character",
+      "label": "item candidates",
+      "cellWidth": 440
+    }
+  ],
+  "out": "docs/screenshots/art/_v-b-fix3b-lulu-item.png",
+  "title": "LULU ITEM - fix3 candidates vs new idle"
+}

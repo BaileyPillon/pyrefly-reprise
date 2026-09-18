@@ -1,0 +1,39 @@
+{
+  "out": "docs/screenshots/art/_f4-auron-castc.png",
+  "title": "AURON cast - fix4 batch c (crimson, nodachi, jug)",
+  "subtitle": "fix pass candidates - judge facing first, then canon, then cutout",
+  "rows": [
+    {
+      "label": "candidates",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/auron/f4castc.1.png",
+          "caption": "f4castc.1"
+        },
+        {
+          "path": "public/art/characters/auron/f4castc.2.png",
+          "caption": "f4castc.2"
+        },
+        {
+          "path": "public/art/characters/auron/f4castc.3.png",
+          "caption": "f4castc.3"
+        },
+        {
+          "path": "public/art/characters/auron/f4castc.4.png",
+          "caption": "f4castc.4"
+        },
+        {
+          "path": "public/art/characters/auron/f4castc.5.png",
+          "caption": "f4castc.5"
+        },
+        {
+          "path": "public/art/characters/auron/f4castc.6.png",
+          "caption": "f4castc.6"
+        }
+      ]
+    }
+  ]
+}
