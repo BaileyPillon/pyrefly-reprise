@@ -6,15 +6,23 @@
  * writes it to a WAV. Nothing here touches Web Audio or the DOM.
  */
 
-import { foldTail, makeStereo, mixStereoInto, normalizeStereo, peakOfStereo } from './dsp/buffer.ts';
+import {
+  crossfadeLoopSeam,
+  foldTail,
+  makeStereo,
+  mixStereoInto,
+  normalizeStereo,
+  peakOfStereo,
+} from './dsp/buffer.ts';
 import type { Stereo } from './dsp/buffer.ts';
 import { hashSeed } from './dsp/oscillators.ts';
 import { Reverb } from './dsp/reverb.ts';
 import { applyDelayStereo } from './dsp/delay.ts';
 import { applySoftClip, panGains } from './dsp/shaper.ts';
 import { getInstrument } from './instruments.ts';
+import type { Voice } from './instruments.ts';
 import { midiToFreq, toMidi } from './score.ts';
-import type { Track } from './score.ts';
+import type { Channel, Track } from './score.ts';
 
 export interface RenderedTrack {
   name: string;
@@ -32,6 +40,16 @@ export interface RenderedTrack {
   renderMs: number;
 }
 
+/** What the offline renderer may override for one channel (see `spatialise`). */
+export interface ChannelPlacement {
+  /** Replaces the channel's own pan. */
+  pan?: number;
+  /** Replaces the channel's reverb send. */
+  reverb?: number;
+  /** Multiplies the channel's volume. */
+  volumeScale?: number;
+}
+
 export interface RenderOptions {
   /** Peak the master is normalised to. Keep below 0.95. */
   targetPeak?: number;
@@ -39,6 +57,28 @@ export interface RenderOptions {
   saturate?: boolean;
   /** Reuse identical note renders. Default true; turn off to measure cost. */
   cache?: boolean;
+  /**
+   * Resolve an instrument name to a voice. Defaults to the synthesised
+   * registry in `instruments.ts`; the offline renderer passes sampled voices
+   * here instead, which is the whole of how a cue becomes orchestral without
+   * a single note of the score changing.
+   */
+  voiceFor?: (instrument: string) => Voice;
+  /**
+   * Override a channel's pan, reverb send and level — used offline to seat the
+   * players on a platform instead of wherever the composer happened to pan them.
+   */
+  spatialise?: (channel: Channel, index: number) => ChannelPlacement | undefined;
+  /**
+   * Render the reverb send bus. Defaults to the built-in Freeverb; the offline
+   * renderer passes a convolution hall.
+   */
+  reverbRender?: (bus: Stereo, sampleRate: number) => Stereo;
+  /**
+   * Final master stage, replacing the built-in saturate-and-normalise. Runs
+   * after the loop tail is folded, so a limiter here sees the real programme.
+   */
+  master?: (mix: Stereo, sampleRate: number) => void;
 }
 
 const DEFAULT_TARGET_PEAK = 0.89;
@@ -60,7 +100,9 @@ export function renderTrack(track: Track, sampleRate = 44100, options: RenderOpt
   const totalSamples = Math.ceil((track.length * secondsPerBeat + tailSec) * sampleRate);
 
   const dry = makeStereo(totalSamples);
-  const hasReverb = track.channels.some((c) => (c.fx?.reverb ?? 0) > 0);
+  // `spatialise` can add a send to a channel the composer left dry, so when the
+  // offline renderer is seating the players we always allocate the bus.
+  const hasReverb = !!options.spatialise || track.channels.some((c) => (c.fx?.reverb ?? 0) > 0);
   const hasDelay = track.channels.some((c) => (c.fx?.delay ?? 0) > 0) && !!track.fx?.delay;
   const reverbBus = hasReverb ? makeStereo(totalSamples) : null;
   const delayBus = hasDelay ? makeStereo(totalSamples) : null;
@@ -68,13 +110,16 @@ export function renderTrack(track: Track, sampleRate = 44100, options: RenderOpt
   const cache = new Map<string, Stereo>();
   let noteCount = 0;
 
+  const resolveVoice = options.voiceFor ?? getInstrument;
+
   for (let ci = 0; ci < track.channels.length; ci++) {
     const channel = track.channels[ci]!;
-    const voice = getInstrument(channel.instrument);
-    const volume = channel.volume ?? 1;
-    const pan = panGains(channel.pan ?? 0);
+    const voice = resolveVoice(channel.instrument);
+    const placement = options.spatialise?.(channel, ci);
+    const volume = (channel.volume ?? 1) * (placement?.volumeScale ?? 1);
+    const pan = panGains(placement?.pan ?? channel.pan ?? 0);
     const transpose = channel.transpose ?? 0;
-    const reverbSend = channel.fx?.reverb ?? 0;
+    const reverbSend = placement?.reverb ?? channel.fx?.reverb ?? 0;
     const delaySend = channel.fx?.delay ?? 0;
     for (const note of channel.notes) {
       const startBeat = note[0];
@@ -119,9 +164,11 @@ export function renderTrack(track: Track, sampleRate = 44100, options: RenderOpt
   }
 
   if (reverbBus) {
-    const wet = new Reverb(sampleRate, track.fx?.reverb ?? { room: 0.78, damp: 0.35, width: 0.9 }).render(
-      reverbBus,
-    );
+    const wet = options.reverbRender
+      ? options.reverbRender(reverbBus, sampleRate)
+      : new Reverb(sampleRate, track.fx?.reverb ?? { room: 0.78, damp: 0.35, width: 0.9 }).render(
+          reverbBus,
+        );
     mixStereoInto(dry, wet, 0, 1, 1);
   }
 
@@ -139,11 +186,24 @@ export function renderTrack(track: Track, sampleRate = 44100, options: RenderOpt
     }
   }
 
-  if (options.saturate ?? true) {
-    normalizeStereo(dry, 0.6);
-    applySoftClip(dry, 1);
+  if (options.master) {
+    // The offline path masters with a real bus compressor and limiter, and
+    // normalises to a loudness target rather than to a peak.
+    options.master(dry, sampleRate);
+  } else {
+    if (options.saturate ?? true) {
+      normalizeStereo(dry, 0.6);
+      applySoftClip(dry, 1);
+    }
+    normalizeStereo(dry, targetPeak);
   }
-  normalizeStereo(dry, targetPeak);
+
+  // Last, deliberately. The seam has to be joined on the samples that actually
+  // ship: a compressor or limiter ahead of it applies a different gain either
+  // side of the wrap and would re-open the step this closes. ~18 ms is long
+  // enough to bridge it and short enough that the duplicated run-up reads as a
+  // transition rather than as repeated music.
+  crossfadeLoopSeam(dry, loopStartSample, loopEndSample, Math.round(0.018 * sampleRate));
 
   return {
     name: track.name,

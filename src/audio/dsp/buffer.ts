@@ -97,6 +97,43 @@ export function foldTail(buf: Stereo, loopStart: number, loopEnd: number): void 
   }
 }
 
+/**
+ * Make the loop wrap continuous.
+ *
+ * `foldTail` above makes the loop's ENERGY continuous — nothing that was
+ * ringing at `loopEnd` goes missing. It does not make the WAVEFORM continuous:
+ * the last sample of the loop and the first are two unrelated moments of
+ * music, and the step between them is a broadband click on every wrap. On a
+ * dense cue that step can be twice the local RMS, which is loud.
+ *
+ * The fix is the standard one. `buf[loopStart - 1] -> buf[loopStart]` is
+ * already continuous, because that is contiguous audio. So we crossfade the
+ * last few milliseconds before `loopEnd` into the few milliseconds before
+ * `loopStart`: by the time the player reaches `loopEnd` it is hearing the
+ * material that leads into `loopStart`, and the wrap flows. Equal-power, so
+ * the level does not dip through the fade.
+ *
+ * Needs `fadeSamples` of run-up before `loopStart` to fade into; a track that
+ * loops from the very first sample is left alone.
+ */
+export function crossfadeLoopSeam(buf: Stereo, loopStart: number, loopEnd: number, fadeSamples: number): boolean {
+  const loopLength = loopEnd - loopStart;
+  const fade = Math.min(fadeSamples, loopStart, Math.floor(loopLength / 4));
+  if (fade < 8 || loopEnd > buf.left.length) return false;
+  for (let i = 0; i < fade; i++) {
+    const x = (i + 1) / fade;
+    // cos/sin keeps power constant across the blend, where a linear fade
+    // would leave a shallow dip in the middle.
+    const outGain = Math.cos((x * Math.PI) / 2);
+    const inGain = Math.sin((x * Math.PI) / 2);
+    const at = loopEnd - fade + i;
+    const from = loopStart - fade + i;
+    buf.left[at] = buf.left[at]! * outGain + buf.left[from]! * inGain;
+    buf.right[at] = buf.right[at]! * outGain + buf.right[from]! * inGain;
+  }
+  return true;
+}
+
 export function fadeIn(buf: Float32Array, samples: number): void {
   const n = Math.min(samples, buf.length);
   for (let i = 0; i < n; i++) buf[i]! *= i / n;
