@@ -37,9 +37,9 @@ Hard caps (apply before weighting):
 - The critic never fixes anything itself and never softens a score because a fix is planned.
 - Every round is written to `critic/rounds/round-NN.md` (+ `.json`) and the top of the list is reported to the owner with the score.
 
-## New ideas (need the owner's approval first)
+## Expansions and novel ideas (need the owner's approval first)
 
-The critic may also propose **new ideas for addictive gameplay elements** (progression hooks, challenge modes, rankings, unlocks, quality-of-life that makes another run tempting). These go in a separate **Proposals** section of the round report, each with the player benefit, the cost, and the risk to fidelity. **Nothing from that section is built until Bailey approves it**; proposals never count for or against the score.
+Beyond the ranked issue list, the critic may **suggest and recommend expansions or novel ideas that would improve the game from any aspect of game design**: gameplay systems and addictive loops (progression, challenge modes, rankings, unlocks, replay hooks), new encounters or chapters, characters, aeons and dresspheres, difficulty and accessibility, onboarding and tutorials, narrative and presentation, art direction, animation and VFX, UI and UX, audio direction, controls, performance, social and sharing features, and anything else a good designer would raise. These go in a separate **Proposals** section of the round report, each with a short pitch, the player benefit, the rough cost, and the risk to fidelity, ranked by value for cost. **Nothing from that section is built until Bailey approves it**, and proposals never count for or against the score.
 
 ## Audio
 
