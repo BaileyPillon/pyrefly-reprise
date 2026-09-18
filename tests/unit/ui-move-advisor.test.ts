@@ -21,7 +21,23 @@
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { SaveStore, defaultSettings } from '../../src/app/SaveData.ts';
-import { MoveAdvisor } from '../../src/ui/common/MoveAdvisor.ts';
+import {
+  MAX_DENSITY,
+  MoveAdvisor,
+  cardHtml,
+  type Density,
+} from '../../src/ui/common/MoveAdvisor.ts';
+import type { AdvisorView, MoveSuggestion } from '../../src/engine/tactics/advisor.ts';
+import type { AvailableCommand, BattleState, Command } from '../../src/battle/common/types.ts';
+import {
+  createFFXEngine,
+  registerFFXAbilities,
+  registerFFXItems,
+  resetFFXRegistry,
+} from '../../src/battle/ffx/index.ts';
+import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
+import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
+import { seymourFluxGroup } from '../../src/data/ffx/enemies/seymour-flux.ts';
 import { ADVISOR_HINT_ITEM } from '../../src/ui/common/ControlsHint.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
@@ -350,4 +366,244 @@ describe('both HUDs mount it', () => {
     expect(card!.closest('.ffx2hud__stage')).not.toBeNull();
     expect(hud.moveAdvisor.isVisible).toBe(true);
   });
+});
+
+// ------------------------------------------------------------- fitting in
+
+/**
+ * The card fits the room it is given, by printing less.
+ *
+ * This is the regression the critic reproduced on the built preview: with a
+ * second suggestion the card wanted 162px, `move-advisor.css` gives it 104, and
+ * what fell off the bottom — behind a mask fade, with no scrollbar and no key
+ * bound to scroll it — was the line that answered the report ("stand Yuna up")
+ * [fix-3 round 1, F1]. Neither the stylesheet nor the FFX HUD's safe zone
+ * belongs to this track, so the card does the fitting itself.
+ *
+ * jsdom performs no layout, so the two numbers the fit is measured from are
+ * supplied: `clientHeight` is the cap, and `scrollHeight` is made to depend on
+ * what was actually rendered, so the loop being tested is the real one.
+ */
+function measured(card: HTMLElement, cap: number, perLine = 14): void {
+  Object.defineProperty(card, 'clientHeight', {
+    configurable: true,
+    get: () => Math.min(cap, card.querySelectorAll('p, article').length * perLine),
+  });
+  Object.defineProperty(card, 'scrollHeight', {
+    configurable: true,
+    get: () => card.querySelectorAll('p, article').length * perLine,
+  });
+}
+
+/** A two-suggestion view with a revive underneath, the shape that overflowed. */
+function crowdedView(): AdvisorView {
+  const base = {
+    command: { kind: 'attack', targets: ['seymour-flux'] } as unknown as MoveSuggestion['command'],
+    targetId: 'seymour-flux',
+    targetName: 'Seymour Flux',
+    estimate: { kind: 'damage' as const, min: 900, mid: 1_100, max: 1_300, hits: 1, killsTarget: false },
+    mpCost: 0,
+    hitChance: 96,
+    critChance: 12,
+    statuses: [],
+    cures: [],
+    warning: '',
+    isSwitch: false,
+    cite: '',
+    score: 1,
+    source: 'simulated' as const,
+  };
+  return {
+    actorId: 'tidus',
+    actorName: 'Tidus',
+    suggestions: [
+      {
+        ...base,
+        label: 'Hastega',
+        menu: 'White Magic',
+        effect: 'Puts Haste on the whole party for several turns',
+        reason: 'Haste on the party is the chapter’s opener',
+        source: 'tactic',
+      },
+      {
+        ...base,
+        label: 'Mega Phoenix',
+        menu: 'Items',
+        targetName: 'the party',
+        effect: 'Revives all fallen allies at full HP',
+        reason: 'Only Yuna can call an aeon, revive or heal — stand Yuna up',
+        warning: 'Seymour Flux uses Lance of Atrophy before Yuna can act',
+      },
+    ],
+    note: 'Cross Cleave hits the whole party next — take it first, then raise Yuna',
+    considered: 12,
+  };
+}
+
+describe('the card prints less rather than hiding the bottom of itself', () => {
+  it('drops decoration, in order, and never the answer', () => {
+    const view = crowdedView();
+    const text = (d: Density): string => {
+      const el = document.createElement('div');
+      el.innerHTML = cardHtml(view, d);
+      return el.textContent ?? '';
+    };
+    // Every step is shorter than the one before it.
+    for (let d = 1 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
+      expect(text(d).length, `density ${d}`).toBeLessThan(text((d - 1) as Density).length);
+    }
+    // The effect lines are the first thing to go, runner-up first.
+    expect(text(0)).toContain('Revives all fallen allies');
+    expect(text(1)).not.toContain('Revives all fallen allies');
+    expect(text(1)).toContain('Puts Haste on the whole party');
+    expect(text(2)).not.toContain('Puts Haste on the whole party');
+
+    // And at *every* density the card still answers the question: both moves,
+    // where they live, why the revive is being offered, and both warnings.
+    for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
+      const t = text(d);
+      expect(t, `density ${d}`).toContain('Mega Phoenix');
+      expect(t, `density ${d}`).toContain('Hastega');
+      expect(t, `density ${d}`).toContain('in Items');
+      expect(t, `density ${d}`).toContain('stand Yuna up');
+      expect(t, `density ${d}`).toContain('Lance of Atrophy');
+      expect(t, `density ${d}`).toContain('Cross Cleave hits the whole party');
+    }
+  });
+
+  it('compacts until it fits the cap it was given, on a real update tick', () => {
+    const { advisor, stage } = mountAdvisor();
+    const card = cardOf(stage);
+    // 104 is `move-advisor.css`'s real cap; ten units a line is what makes the
+    // full card overflow it here by about the ratio it overflowed by on the
+    // preview (162 wanted against 104 given).
+    measured(card, 104, 10);
+    advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
+    (advisor as unknown as { cached: AdvisorView | null }).cached = crowdedView();
+    (advisor as unknown as { lastSignature: string }).lastSignature = '';
+    advisor.update(16);
+
+    expect(card.scrollHeight).toBeLessThanOrEqual(card.clientHeight + 1);
+    expect(advisor.printedDensity).toBeGreaterThan(0);
+    expect(card.textContent).toContain('stand Yuna up');
+    expect(card.textContent).toContain('Cross Cleave hits the whole party');
+  });
+
+  it('relaxes again when the room comes back', () => {
+    const { advisor, stage } = mountAdvisor();
+    const card = cardOf(stage);
+    let cap = 60;
+    Object.defineProperty(card, 'clientHeight', {
+      configurable: true,
+      get: () => Math.min(cap, card.querySelectorAll('p, article').length * 14),
+    });
+    Object.defineProperty(card, 'scrollHeight', {
+      configurable: true,
+      get: () => card.querySelectorAll('p, article').length * 14,
+    });
+    advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
+    (advisor as unknown as { cached: AdvisorView | null }).cached = crowdedView();
+    (advisor as unknown as { lastSignature: string }).lastSignature = '';
+    advisor.update(16);
+    const tight = advisor.printedDensity;
+    expect(tight).toBeGreaterThan(0);
+
+    cap = 400;
+    advisor.update(16);
+    expect(advisor.printedDensity).toBeLessThan(tight);
+    expect(card.textContent).toContain('Revives all fallen allies');
+  });
+
+  it('leaves the card alone where there is no layout to measure', () => {
+    // A card that has not been laid out reports zero for both, and zero means
+    // "no reading" rather than "no room".
+    const { advisor, stage } = mountAdvisor();
+    open(advisor);
+    advisor.update(16);
+    expect(advisor.printedDensity).toBe(0);
+    expect(cardOf(stage).textContent).not.toBe('');
+  });
+});
+
+// ------------------------------------------ the FFX HUD, exactly as it ships
+
+/**
+ * `FFXBattleHud` builds its card with `new MoveAdvisor({ game, anchors })` —
+ * no `advisor` option, no registries, no forecast. That is the configuration
+ * every FFX chapter runs in, and until this test nothing exercised it: the
+ * advisor's safety rules were all proved through `buildAdvisorView` with
+ * options a HUD never passes [critic, fix-3 round 1, F3].
+ *
+ * So this drives the real Chapter 1 engine, hands the board to the HUD's own
+ * card, and reads the answer off the DOM the player would be looking at.
+ */
+describe('the FFX HUD’s own card, on a real Chapter 1 board', () => {
+  function chapterOneBoard(p1Step: number): {
+    state: BattleState;
+    actorId: string;
+    commands: AvailableCommand[];
+  } {
+    const engine = createFFXEngine({ autoResolveMinigames: true });
+    engine.init({
+      game: 'ffx',
+      party: gagazetBuild,
+      enemies: seymourFluxGroup,
+      triggers: [],
+      seed: 1,
+      condition: 'normal',
+      canEscape: false,
+    });
+    for (let i = 0; i < 80; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      if (d.actorId === 'tidus') {
+        const state = structuredClone(engine.state()) as BattleState;
+        state.combatants['yuna']!.hp = 0;
+        state.combatants['yuna']!.alive = false;
+        state.flags['seymour.p1Step'] = p1Step;
+        state.flags['seymour.lastEnemyActor'] = 'nobody';
+        return { state, actorId: d.actorId, commands: d.commands };
+      }
+      const row = d.commands.find((c) => c.enabled)!;
+      engine.submit({ ...row.command, targets: row.validTargets[0] ? [row.validTargets[0]] : [] } as Command);
+    }
+    throw new Error('Chapter 1 gave no Tidus decision inside 80 steps');
+  }
+
+  it('reads the boss’s next move with nothing wired to it', () => {
+    // The process-wide registry is what `BattleScreenContent` fills at boot and
+    // what the advisor falls back to when a HUD passes no content — so filling
+    // it here is the shipped arrangement, not a convenience.
+    registerFFXAbilities(ALL_ABILITIES);
+    registerFFXItems(Object.values(ITEMS));
+    try {
+      const { hud, root } = mountHud(new FFXBattleHud());
+      const advisor = hud.moveAdvisor;
+      expect((advisor as unknown as { opts: { advisor?: unknown } }).opts.advisor).toBeUndefined();
+
+      // Seymour's cycle at the mount's Cross Cleave step: a party-wide hit that
+      // kills both living members, so raising Yuna into it is a wasted turn.
+      const sweep = chapterOneBoard(5);
+      advisor.showDecision(sweep.actorId, sweep.commands, sweep.state);
+      const sweptText = cardOf(root).textContent ?? '';
+      expect(sweptText).toContain('Cross Cleave');
+      expect(sweptText).toContain('Yuna');
+      expect(sweptText).not.toMatch(/§|ffx-seymour/);
+      expect(advisor.view()!.note).toMatch(/Cross Cleave/);
+
+      // And on a Lance of Atrophy step the raise is still offered, with the
+      // telegraph printed beside it rather than instead of it.
+      const lance = chapterOneBoard(0);
+      advisor.showDecision(lance.actorId, lance.commands, lance.state);
+      const view = advisor.view()!;
+      expect(view.note).toBe('');
+      const revive = view.suggestions.find((s) => /phoenix|life/i.test(s.label));
+      expect(revive, view.suggestions.map((s) => s.label).join(', ')).toBeDefined();
+      expect(revive!.warning).toMatch(/Lance of Atrophy/);
+      expect(cardOf(root).textContent).toContain('Lance of Atrophy');
+    } finally {
+      resetFFXRegistry();
+    }
+  }, 60_000);
 });
