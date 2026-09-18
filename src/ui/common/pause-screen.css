@@ -90,24 +90,24 @@
    * `vw` alone doubles the chrome on a 21:9 window that has no more height
    * than a 16:9 one, and `vh` alone shrinks it to nothing on a phone.
    */
-  --pu: clamp(2px, 0.08vw + 0.12vh, 4.2px);
+  --pu: clamp(2px, 0.08vw + 0.12vh, 5px);
 
   /* Safe margins. The frame never puts type closer than this to an edge. */
   --pause-pad-x: clamp(18px, 3.4vw, 96px);
   --pause-pad-y: clamp(16px, 3.2vh, 72px);
   /* Room at the foot of the frame for the hint strip that lives outside it. */
-  --pause-hint-band: clamp(30px, 1.2vw + 2.6vh, 76px);
+  --pause-hint-band: clamp(44px, 1.2vw + 2.6vh, 76px);
 
   /* Type, by role. Every floor is >= 14px: that is the readability contract. */
   --pause-fs-micro: clamp(14px, 0.28vw + 0.34vh, 19px);
   --pause-fs-small: clamp(14px, 0.32vw + 0.39vh, 21px);
-  --pause-fs-body: clamp(14px, 0.4vw + 0.48vh, 22px);
-  --pause-fs-row: clamp(15px, 0.44vw + 0.53vh, 27px);
+  --pause-fs-body: clamp(14px, 0.4vw + 0.48vh, 26px);
+  --pause-fs-row: clamp(15px, 0.44vw + 0.53vh, 29px);
   --pause-fs-num: clamp(15px, 0.46vw + 0.56vh, 28px);
-  --pause-fs-name: clamp(17px, 0.58vw + 0.7vh, 35px);
-  --pause-fs-quote: clamp(18px, 0.64vw + 0.78vh, 40px);
+  --pause-fs-name: clamp(17px, 0.58vw + 0.7vh, 38px);
+  --pause-fs-quote: clamp(18px, 0.64vw + 0.78vh, 43px);
   --pause-fs-wordmark: clamp(14px, 0.3vw + 0.36vh, 20px);
-  --pause-fs-game: clamp(20px, 0.76vw + 0.92vh, 46px);
+  --pause-fs-game: clamp(20px, 0.76vw + 0.92vh, 50px);
 }
 
 /* Photo mode takes every piece of chrome away and leaves the diorama. */
@@ -722,7 +722,7 @@
    */
   flex: 1 1 0;
   min-width: 0;
-  max-width: clamp(150px, 16vw, 340px);
+  max-width: clamp(150px, 16vw, 400px);
   box-sizing: border-box;
   padding: calc(3.56 * var(--pu)) calc(4.44 * var(--pu)); /* 8 10 */
   background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
@@ -898,6 +898,18 @@
   gap: clamp(10px, 1vw, 24px);
   padding: 0.6em 1.2em;
   border-left-width: max(3px, calc(1.33 * var(--pu)));
+  /*
+   * `right: auto` unbounds the strip, and on a 390px phone the line ran off
+   * the screen — the last hint read `F PHO`. It is anchored left because a
+   * skewed strip has to start somewhere fixed, so the bound goes on the width
+   * instead, and the row wraps rather than being cut. `--pause-hint-band`
+   * reserves two lines' worth at that width, so a wrapped strip still never
+   * lands on the dossier.
+   */
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--pause-pad-x) * 2);
+  flex-wrap: wrap;
+  row-gap: 0.35em;
 }
 
 /*
@@ -1009,10 +1021,10 @@
   inset: 0;
   pointer-events: none;
   z-index: 61; /* just above `.pause`, for the same reason */
-  --pu: clamp(2px, 0.08vw + 0.12vh, 4.2px);
+  --pu: clamp(2px, 0.08vw + 0.12vh, 5px);
   --pause-pad-x: clamp(18px, 3.4vw, 96px);
   --pause-pad-y: clamp(16px, 3.2vh, 72px);
-  --pause-hint-band: clamp(30px, 1.2vw + 2.6vh, 76px);
+  --pause-hint-band: clamp(44px, 1.2vw + 2.6vh, 76px);
   --pause-fs-micro: clamp(14px, 0.28vw + 0.34vh, 19px);
   --pause-fs-small: clamp(14px, 0.32vw + 0.39vh, 21px);
 }
@@ -1049,9 +1061,36 @@
   }
   .pause__party {
     align-self: start;
+    /*
+     * A grid rather than a shrinking flex row. `flex: 1 1 0` let the three
+     * cards share whatever was there, and on a 390px phone that was ~123px
+     * each: the OD gauge ended up drawn straight over `2420/2420`. The
+     * numerals cannot give — 14px is the floor for a full HP pair too, and
+     * they are `nowrap` so a number never breaks across lines — so the column
+     * count has to. `auto-fit` drops to two, then one, exactly when a card can
+     * no longer hold its own contents, and `min(100%, …)` keeps the track from
+     * being wider than the frame on the narrowest screen.
+     */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
   }
   .pause__card {
     max-width: none;
+  }
+  /*
+   * The hint strip wraps here, and on a 390px phone the full control line is
+   * three rows of chips — a chip cannot be broken, so no amount of tightening
+   * gets it to one. The band reserves the whole strip rather than a guess at
+   * it: at 64px the dossier was still being drawn 17px underneath it (measured
+   * in the browser, not assumed). The chips also give back their generous
+   * desktop padding, which buys back most of a row.
+   */
+  .pause__hint.chint {
+    gap: 8px;
+    padding: 0.45em 0.8em;
+  }
+  .pause__frame {
+    --pause-hint-band: clamp(92px, 1.2vw + 8vh, 124px);
   }
   /* The ramp is a left-to-right wipe, which means nothing in one column. */
   .pause__scrim {

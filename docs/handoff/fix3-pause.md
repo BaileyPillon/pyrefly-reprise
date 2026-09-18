@@ -134,6 +134,39 @@ the words. The box now grows to what it holds and the type wraps
 (`overflow-wrap: break-word; hyphens: auto`). Measured in the browser at all six
 sizes: `scrollHeight <= clientHeight` on all three tiles, every time.
 
+### 7. Second pass — what the re-verification screenshots caught
+
+The first pass measured six viewports and every number came back inside the
+contract, but the numbers were not the whole story: reading the 390x844
+screenshot rather than its measurements showed three things a
+`fullbleed && !under14 && !hscroll` assertion cannot see.
+
+- **The hint strip ran off the screen.** `.pause__hint.chint` is anchored
+  `left: var(--pause-pad-x); right: auto` — it has to start somewhere fixed
+  because it is skewed — and nothing bounded its width, so on a phone the last
+  hint read `F PHO`. It now carries `max-width: calc(100vw - 2 * pad-x)` and
+  `flex-wrap: wrap`. No horizontal page scroll appeared before this fix either,
+  because the strip was *clipped*, not scrolled, which is why the measurement
+  passed.
+- **The party cards drew the OD gauge over the HP numerals.** `flex: 1 1 0`
+  with `min-width: 0` let three cards share 354px — ~123px each, of which the
+  body got ~29 — and `2420/2420` is `nowrap` by contract (14px is the floor for
+  a full HP pair too), so it simply overprinted the gauge. `.pause__party` is a
+  `repeat(auto-fit, minmax(min(100%, 210px), 1fr))` grid in the narrow query
+  now: three tracks become two, then one, at exactly the width where a card
+  can no longer hold its own contents.
+- **The dossier's fade ran under the hint strip.** `--pause-hint-band` floored
+  at 30px, and a single-line strip at its own floor is ~34px tall before its
+  offset. Floor raised to 44px, and to 64px inside the narrow query where the
+  strip may now wrap to a second line.
+
+The same pass raised the **clamp ceilings**, which were shaving 10-15% off a
+4K screen: `--pause-fs-body` 22 -> 26, `row` 27 -> 29, `num` 28 -> 30, `name`
+35 -> 38, `quote` 40 -> 43, `game` 46 -> 50, `--pu` 4.2 -> 5. Nothing below
+about 2800 CSS px reaches any of these — at 2560x1080 every token is still on
+its formula, and at 2000x1012 most are still on their floor — so this is a 4K
+change only, and no floor moved.
+
 ---
 
 ## How it was verified
