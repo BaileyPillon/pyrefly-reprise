@@ -73,28 +73,70 @@ export const GAP = 6;
  * it). So a sprite's horizontal extent is reconstructed from its height, which
  * the head and feet points do give exactly.
  *
- * Measured across the nine party sprites of chapters 1-3, width/height runs
- * 0.65 (Tidus, Chapter 2) to 0.82 (Yuna, Chapter 1). 0.45 is a deliberate
- * **over**-estimate of the half — it claims 0.90 of the height as width — so
- * the reconstructed rect always contains the real one and the "no panel on a
- * fighter" assertion can never pass by luck. The price is that the advisor is
- * placed a few px further from the party than it strictly needs to be.
+ * Measured live through the debug API across the nine party sprites of
+ * chapters 1-3 (the run is in `docs/handoff/fix3-ffx-hud.md`), as a fraction of
+ * the head-to-feet span:
+ *
+ * | | Tidus | Yuna | third |
+ * |---|---|---|---|
+ * | 1 Seymour Flux | 0.386 | **0.453** | 0.371 (Kimahri) |
+ * | 2 Yunalesca | 0.362 | 0.421 | 0.370 (Auron) |
+ * | 3 Braska's Final Aeon | 0.371 | 0.433 | 0.375 (Auron) |
+ *
+ * 0.45 shipped first and was **under** the worst case: Yuna's quad in Chapter 1
+ * reached 2.35 grid px past the rect claimed for her, which is a fighter the
+ * "no panel on a fighter" assertion could not see. 0.50 clears the measured
+ * maximum by 10%. The price is that the advisor is placed a few px further from
+ * the party than it strictly needs to be, which is the right way to be wrong.
+ *
+ * The head anchor's x sits within 0.017 of the span of the quad's own centre in
+ * all nine cases, so centring the reconstruction on it is sound.
  */
-export const SPRITE_HALF_WIDTH_RATIO = 0.45;
+export const SPRITE_HALF_WIDTH_RATIO = 0.5;
+
+/**
+ * How far above the projector's `head` point the painted quad actually reaches,
+ * as a fraction of the head-to-feet span.
+ *
+ * The head anchor is on the figure's *head*; the quad carries transparent
+ * margin above it for hair, a weapon over the shoulder and the aura. Measured
+ * across the same nine sprites the ratio is a remarkably flat 0.1023..0.1063,
+ * so 0.14 clears the worst case by a third.
+ *
+ * Without it the shelf cleared the wrong line: the card's bottom edge sat
+ * `GAP` above the head *point* and therefore ~4 grid px **inside** the top of
+ * the painting. That is the `SPRITE advisor x sprite:auron` row the live matrix
+ * reported in 35 of its states.
+ */
+export const SPRITE_TOP_MARGIN_RATIO = 0.14;
+
+/**
+ * The same margin under the `feet` point, as a fraction of the span.
+ *
+ * Tiny — measured 0.0015..0.0020 across the nine sprites, because the quad is
+ * built to stand *on* its feet — but not zero, and a rect that stops half a
+ * pixel above the bottom of the painting is not a rect that covers it. 0.01
+ * clears the worst case five times over and costs nothing: no panel is ever
+ * placed below the party.
+ */
+export const SPRITE_FOOT_MARGIN_RATIO = 0.01;
 
 /**
  * Narrowest the advisor card may be squeezed in FFX.
  *
- * `MoveAdvisor.MIN_CARD_WIDTH` is 132 — the width its chips stop wrapping to
- * one word a line at — but FFX's pocket measures 99..101 in chapters 1 and 3,
- * so holding out for 132 would send every chapter to the shelf and put the card
- * over the boss instead of over the party. 96 is the narrowest that still fits
- * "1,875–2,117" and "always hits" on one line each at the card's chip size; the
- * card scrolls (`move-advisor.css`, `overflow-y: auto`) for anything longer.
- * `docs/handoff/fix3-ffx-hud.md` asks the advisor track to take this as a per
- * game floor so the override can go away.
+ * This was 96 for one round, against `MoveAdvisor.MIN_CARD_WIDTH`'s 132, to
+ * keep the card in the bottom pocket in chapters 1 and 3 where the pocket
+ * measured 99..101. That measurement was made with the sprite rect 0.05 of a
+ * span too narrow on each side (see {@link SPRITE_HALF_WIDTH_RATIO}); against
+ * the party's real width the pocket is 93.5 and 94.2, so it does not fit a card
+ * at **any** width worth reading, and all three chapters take the shelf — which
+ * is 180 grid px wide with the guide up and 303 without it.
+ *
+ * So the floor goes back to the advisor's own 132 and the two components stop
+ * disagreeing. The pocket arithmetic stays: it is the better placement when an
+ * encounter's party leaves room for it, and a later one may.
  */
-export const MIN_ADVISOR_WIDTH = 96;
+export const MIN_ADVISOR_WIDTH = 132;
 
 /**
  * Rightmost the shelf may reach.
@@ -193,9 +235,14 @@ export function advisorZone(input: AdvisorZoneInput): AdvisorZone | null {
   const shelfWidth = shelfRight - shelfLeft;
   if (shelfWidth < MIN_ADVISOR_WIDTH) return null;
 
-  // The card's bottom edge clears the highest head; its top edge then has to
-  // clear the Sensor card, which lives in this same band while it is up.
-  const cardBottomY = headsTop - GAP;
+  // The card's bottom edge clears the highest head — and the command stack,
+  // whose top edge is not a constant: opening a submenu grows the stack upward
+  // (measured 204.5 at the top row, 177.8 with a Skill list open) until it
+  // reaches the shelf's own band. Chapter 2's card met it there in every
+  // `submenu` state the live matrix captured.
+  let floorY = headsTop;
+  if (overlapsX(input.cmdArea, shelfLeft, shelfRight)) floorY = Math.min(floorY, input.cmdArea.top);
+  const cardBottomY = floorY - GAP;
   const ceilingY = input.sensor && overlapsX(input.sensor, shelfLeft, shelfRight) ? input.sensor.bottom + GAP : GAP;
   const room = cardBottomY - ceilingY;
   if (room < MIN_ADVISOR_HEIGHT) return null;

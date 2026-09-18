@@ -23,7 +23,17 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
-import { advisorZone, SPRITE_HALF_WIDTH_RATIO, STAGE, type Rect } from './hudSafeZones.ts';
+import {
+  advisorZone,
+  SPRITE_FOOT_MARGIN_RATIO,
+  SPRITE_HALF_WIDTH_RATIO,
+  SPRITE_TOP_MARGIN_RATIO,
+  STAGE,
+  type Rect,
+} from './hudSafeZones.ts';
+
+/** Clearance between the advisor card's top edge and its chip, in grid px. */
+const ADVISOR_CHIP_GAP = 2;
 
 /** Grid px between the parked `E ENEMY MOVE` chip and the CTB queue's top edge. */
 const CHIP_DOCK_GAP = 11;
@@ -458,14 +468,23 @@ export class FFXBattleHud implements HudPort {
    * `offsetLeft`/`offsetWidth` are already grid units, while the projector
    * answers in viewport px and has to be divided back through the letterbox.
    *
-   * A no-op when the card is not up, and a no-op when no zone fits — the card
-   * then keeps the advisor's own placement, because a visible overlap is easier
-   * to see and report than a card parked off the grid.
+   * A no-op when no zone fits — the card then keeps the advisor's own
+   * placement, because a visible overlap is easier to see and report than a
+   * card parked off the grid.
+   *
+   * The **chip is placed whether the card is up or not**. `MoveAdvisor`
+   * deliberately clears the chip's inline `left` when the card goes away so it
+   * cannot freeze at a stale card's edge, and the stylesheet anchor it falls
+   * back to (`move-advisor.css`, `left: 196px`) is in the middle of the party:
+   * in chapters 1 and 3 the `N BEST MOVE` chip landed on Tidus and on the
+   * command stack the moment the player pressed `N`. That is the second half of
+   * Bailey's "the card and its chip sit on top of the party sprites".
    */
   private placeAdvisor(): void {
     const card = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-card"]');
     const chip = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]');
-    if (!card || card.hidden || card.offsetWidth <= 0) return;
+    if (!card) return;
+    const cardUp = !card.hidden && card.offsetWidth > 0;
 
     const zone = advisorZone({
       cmdArea: this.gridRect(this.cmdAreaEl) ?? { left: 30, top: 205, right: 211, bottom: 334 },
@@ -476,14 +495,19 @@ export class FFXBattleHud implements HudPort {
     });
     if (!zone) return;
 
-    card.style.left = `${zone.left.toFixed(2)}px`;
-    card.style.width = `${zone.width.toFixed(2)}px`;
-    card.style.bottom = `${zone.bottom.toFixed(2)}px`;
-    card.style.maxHeight = `${zone.maxHeight.toFixed(2)}px`;
-    card.dataset['zone'] = zone.kind;
+    if (cardUp) {
+      card.style.left = `${zone.left.toFixed(2)}px`;
+      card.style.width = `${zone.width.toFixed(2)}px`;
+      card.style.bottom = `${zone.bottom.toFixed(2)}px`;
+      card.style.maxHeight = `${zone.maxHeight.toFixed(2)}px`;
+      card.dataset['zone'] = zone.kind;
+    }
     if (chip) {
+      // With the card up the chip rides just above it; with the card away it
+      // takes the card's own anchor, which is the one place in the zone that is
+      // known to be clear of both the party and the chrome.
       chip.style.left = `${zone.left.toFixed(2)}px`;
-      chip.style.bottom = `${(zone.bottom + card.offsetHeight + 2).toFixed(2)}px`;
+      chip.style.bottom = `${(cardUp ? zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP : zone.bottom).toFixed(2)}px`;
     }
   }
 
@@ -509,11 +533,17 @@ export class FFXBattleHud implements HudPort {
       const head = this.project(id, 'head');
       const feet = this.project(id, 'feet');
       if (!head || !feet) continue;
-      const top = (head.y - oy) / scale;
-      const bottom = (feet.y - oy) / scale;
+      const headY = (head.y - oy) / scale;
+      const feetY = (feet.y - oy) / scale;
       const cx = (head.x - ox) / scale;
-      const half = Math.abs(bottom - top) * SPRITE_HALF_WIDTH_RATIO;
-      out.push({ left: cx - half, right: cx + half, top: Math.min(top, bottom), bottom: Math.max(top, bottom) });
+      const span = Math.abs(feetY - headY);
+      const half = span * SPRITE_HALF_WIDTH_RATIO;
+      // The head anchor is on the figure's head, not on the top of the painted
+      // quad — there is hair, a weapon and an aura above it. `top` is lifted by
+      // the measured margin so the rect covers what the player actually sees.
+      const top = Math.min(headY, feetY) - span * SPRITE_TOP_MARGIN_RATIO;
+      const bottom = Math.max(headY, feetY) + span * SPRITE_FOOT_MARGIN_RATIO;
+      out.push({ left: cx - half, right: cx + half, top, bottom });
     }
     return out;
   }
