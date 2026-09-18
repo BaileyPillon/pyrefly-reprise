@@ -1,0 +1,130 @@
+[
+  {
+    "label": "battle-ch4",
+    "w": 1280,
+    "h": 720,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch4-1280x720-g.png",
+    "wheel": null,
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 42.7,
+        "top": 35.5,
+        "right": 516.6,
+        "bottom": 97.5
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 928,
+        "top": 520,
+        "right": 1260,
+        "bottom": 700
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 953.8,
+        "top": 281,
+        "right": 1256,
+        "bottom": 487.1
+      },
+      {
+        "sel": ".mad__card",
+        "left": 515.6,
+        "top": 551.6,
+        "right": 910.4,
+        "bottom": 668
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 526.4,
+        "top": 533,
+        "right": 631.3,
+        "bottom": 548
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 42.7,
+        "top": 130,
+        "right": 306.7,
+        "bottom": 382
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 41.1,
+        "top": 108,
+        "right": 141.9,
+        "bottom": 123
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 798.9,
+        "top": 25,
+        "right": 1098.9,
+        "bottom": 220.9
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1038.1,
+        "top": 8,
+        "right": 1098.9,
+        "bottom": 23
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 938,
+        "top": 520,
+        "right": 1266,
+        "bottom": 576
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 930,
+        "top": 582,
+        "right": 1258,
+        "bottom": 638
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 922,
+        "top": 644,
+        "right": 1250,
+        "bottom": 700
+      }
+    ],
+    "overlaps": [],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 243.09253155736934,
+        "right": 380.8529985585755,
+        "top": 391.8058433425965,
+        "bottom": 637.8066772733217
+      },
+      {
+        "id": "rikku",
+        "left": 394.20329804766436,
+        "right": 513.3384233838881,
+        "top": 362.87385366130815,
+        "bottom": 575.6151489045649
+      },
+      {
+        "id": "paine",
+        "left": 470.9258814251861,
+        "right": 573.6775105516517,
+        "top": 337.76241741307746,
+        "bottom": 521.2474694246232
+      },
+      {
+        "id": "bahamut",
+        "left": 622.8058414300623,
+        "right": 794.8349996703568,
+        "top": 122.48696623493481,
+        "bottom": 429.6818916640322
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  }
+]

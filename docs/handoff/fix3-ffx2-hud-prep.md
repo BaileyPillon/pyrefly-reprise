@@ -212,7 +212,27 @@ Screenshots and the machine-readable reports are in
 | `-before` | the live build's behaviour |
 | `-c` | after the fences, before the placement solver — the merge experiment |
 | `-d` | after the placement solver |
-| `-e` | final: both prep screens, both battles, all four viewports |
+| `-e` | Chapter 4 battle at 2560, both prep screens, the portrait sheet |
+| `-f` | Chapter 5 prep, after the mastered-dressphere fix |
+| `-g` / `-h` | Chapter 5 battle, after the skew fix |
+
+### The numbers
+
+Panel-on-panel overlaps, and panel-on-fighter overlaps, in viewport px:
+
+| state | before | after |
+|-------|--------|-------|
+| Ch.4 battle 1280x720 | rail x Yuna 64x119, card x Yuna 73x85, card x Rikku 119x24, intent x Bahamut 172x81, gauges x guide chip 99x12 | none |
+| Ch.4 battle 1600x900 | same shape | none |
+| Ch.4 battle 2000x1000 | same shape | none |
+| Ch.4 battle 2560x1440 | HUD never measured (see residue) | none |
+| Ch.5 battle 1280 / 1600 / 2000 / 2560 | — | none |
+| Ch.4 prep, 4 viewports x 4 tabs | — | none |
+| Ch.5 prep, 4 viewports x 4 tabs | sheet x hint line 543x18 (1600), 868x28 (2560) | none |
+
+The intermediate `-c` run is worth keeping: it is the merge experiment, and it
+shows the exact failure the solver replaced — `.mad__card` x `.eint__panel` at
+300x116, 375x146 and 417x162.
 
 `report-*.json` carries every rect, every pairwise overlap, every fighter-vs-panel
 hit, plus page errors and any `/art/` 404. `report-portrait-crops.json` carries
@@ -269,7 +289,34 @@ cutting a face again, and would let `CROPS` be deleted.
   throws rather than measuring an empty screen. This is a harness property, not
   a game defect: the HUD mounts correctly there, it is just slow under software
   GL.
+- **The spherechange wheel was not measured live.** By construction it is a
+  modal — `SpherechangeDeps.root` is "sized to the viewport (the overlay covers
+  the whole battle screen)" — so it is *meant* to cover the chrome, and it is
+  excluded from the intent slab's obstacle list for that reason. The probe
+  tried to open it with real keyboard input from the command stack and the ATB
+  moved the turn on first; `battle-ch5-1280x720-wheel-h.png` is where it got
+  to. Worth one pass by whoever next drives an X-2 fight by hand.
+- **The chain chip was not measured live either.** It is in the obstacle list
+  and in the probe's selector list, but forcing a chain in a scripted run needs
+  a specific board state. Same note.
 - **Paine's prep tile** — see the request above.
 - **The `CROPS` table still exists** and still goes stale on a re-roll. The
   clamp means stale now costs a mis-centred head rather than a cut one, but the
   real fix is the sidecar.
+- **Two runs were lost to another track's working tree, not to anything here.**
+  The audio track briefly had `ReferenceError: pizz is not defined` at module
+  scope in `src/audio/sfx/spells.ts`, which throws during boot, so
+  `__pyreflyReady` never went true and the Chapter 5 probe timed out at
+  1280x720. It was re-run after they fixed it (`-h`). `npx tsc --noEmit`
+  likewise reports only `src/audio/**` and `src/engine/tactics/advisor-revive.ts`
+  while they are mid-edit; nothing under `src/ui/` or in this track's tests.
+
+## Verification harness
+
+The probes live in this session's scratchpad rather than the repo, since they
+drive a dev server on a random port and are not something the suite should own:
+`drive.mjs` → `drive3.mjs` (battle and prep rects, fighter projection, overlap
+pairs, clipping, text overflow, the spherechange attempt) and
+`portrait-sheet.mjs` (the contact sheet). `drive3` flushes its report after
+every viewport, because a boot timeout at the last one used to throw away the
+three that had passed.

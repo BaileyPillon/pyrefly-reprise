@@ -1,0 +1,136 @@
+[
+  {
+    "label": "battle-ch5",
+    "w": 1280,
+    "h": 720,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch5-1280x720-h.png",
+    "wheel": {
+      "opened": false,
+      "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch5-1280x720-wheel-h.png",
+      "rect": null,
+      "coversViewport": false,
+      "overlaps": []
+    },
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 42.7,
+        "top": 35.5,
+        "right": 520.6,
+        "bottom": 97.5
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 928,
+        "top": 520,
+        "right": 1260,
+        "bottom": 700
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 953.8,
+        "top": 281,
+        "right": 1256,
+        "bottom": 487.1
+      },
+      {
+        "sel": ".mad__card",
+        "left": 455.6,
+        "top": 551.6,
+        "right": 910.4,
+        "bottom": 668
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 466.4,
+        "top": 533,
+        "right": 571.3,
+        "bottom": 548
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 42.7,
+        "top": 130,
+        "right": 306.7,
+        "bottom": 366
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 41.1,
+        "top": 108,
+        "right": 141.9,
+        "bottom": 123
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 745.8,
+        "top": 25,
+        "right": 1045.8,
+        "bottom": 221.3
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 985,
+        "top": 8,
+        "right": 1045.8,
+        "bottom": 23
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 938,
+        "top": 520,
+        "right": 1266,
+        "bottom": 576
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 930,
+        "top": 582,
+        "right": 1258,
+        "bottom": 638
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 922,
+        "top": 644,
+        "right": 1250,
+        "bottom": 700
+      }
+    ],
+    "overlaps": [],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 165.59257240426302,
+        "right": 302.91317901463873,
+        "top": 375.2678957426434,
+        "bottom": 620.4832646897429
+      },
+      {
+        "id": "rikku",
+        "left": 335.3426853484812,
+        "right": 453.7866228697373,
+        "top": 353.4023045738846,
+        "bottom": 564.9093358618418
+      },
+      {
+        "id": "paine",
+        "left": 469.2241230825475,
+        "right": 572.8817333926252,
+        "top": 336.4281171446515,
+        "bottom": 521.5309926983615
+      },
+      {
+        "id": "vegnagun-tail",
+        "left": 562.9096707694002,
+        "right": 741.750376104781,
+        "top": 127.66486538599081,
+        "bottom": 447.02326777059915
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  }
+]

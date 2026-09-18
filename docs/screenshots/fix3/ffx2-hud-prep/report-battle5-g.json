@@ -1,0 +1,392 @@
+[
+  {
+    "label": "battle-ch5",
+    "w": 1280,
+    "h": 720,
+    "error": "page.waitForFunction: Timeout 240000ms exceeded."
+  },
+  {
+    "label": "battle-ch5",
+    "w": 1600,
+    "h": 900,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch5-1600x900-g.png",
+    "wheel": null,
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 53.3,
+        "top": 44.4,
+        "right": 650.7,
+        "bottom": 121.9
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 1160,
+        "top": 650,
+        "right": 1575,
+        "bottom": 875
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 1192.3,
+        "top": 351.2,
+        "right": 1570,
+        "bottom": 608.9
+      },
+      {
+        "sel": ".mad__card",
+        "left": 572,
+        "top": 689.5,
+        "right": 1138,
+        "bottom": 835
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 585.5,
+        "top": 666.3,
+        "right": 716.6,
+        "bottom": 685
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 53.3,
+        "top": 162.5,
+        "right": 383.3,
+        "bottom": 457.5
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 51.3,
+        "top": 135,
+        "right": 177.4,
+        "bottom": 153.8
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 930.7,
+        "top": 31.3,
+        "right": 1305.7,
+        "bottom": 276.6
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1229.7,
+        "top": 10,
+        "right": 1305.7,
+        "bottom": 28.8
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 1172.6,
+        "top": 650,
+        "right": 1582.4,
+        "bottom": 720
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 1162.6,
+        "top": 727.5,
+        "right": 1572.4,
+        "bottom": 797.5
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 1152.6,
+        "top": 805,
+        "right": 1562.4,
+        "bottom": 875
+      }
+    ],
+    "overlaps": [],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 210.61207858428924,
+        "right": 383.0014968876771,
+        "top": 470.74096655580246,
+        "bottom": 778.5792135261379
+      },
+      {
+        "id": "rikku",
+        "left": 421.92714623597806,
+        "right": 570.4631762080248,
+        "top": 442.679815568314,
+        "bottom": 707.9227262326833
+      },
+      {
+        "id": "paine",
+        "left": 588.2654554495219,
+        "right": 718.1503568222203,
+        "top": 420.940808296457,
+        "bottom": 652.8781321762755
+      },
+      {
+        "id": "vegnagun-tail",
+        "left": 702.6684337326745,
+        "right": 926.5787883134575,
+        "top": 158.8399994330626,
+        "bottom": 558.6799183273179
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "battle-ch5",
+    "w": 2000,
+    "h": 1000,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch5-2000x1000-g.png",
+    "wheel": null,
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 170.4,
+        "top": 49.3,
+        "right": 834.2,
+        "bottom": 135.5
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 1400,
+        "top": 722.2,
+        "right": 1861.1,
+        "bottom": 972.2
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 1435.9,
+        "top": 390.2,
+        "right": 1855.6,
+        "bottom": 676.6
+      },
+      {
+        "sel": ".mad__card",
+        "left": 743.9,
+        "top": 766.1,
+        "right": 1375.5,
+        "bottom": 927.8
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 758.9,
+        "top": 740.3,
+        "right": 904.5,
+        "bottom": 761.1
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 170.4,
+        "top": 180.6,
+        "right": 537,
+        "bottom": 508.3
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 168.1,
+        "top": 150,
+        "right": 308.2,
+        "bottom": 170.8
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 1145,
+        "top": 34.7,
+        "right": 1561.7,
+        "bottom": 307.3
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1477.1,
+        "top": 11.1,
+        "right": 1561.6,
+        "bottom": 31.9
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 1414,
+        "top": 722.2,
+        "right": 1869.4,
+        "bottom": 800
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 1402.9,
+        "top": 808.3,
+        "right": 1858.3,
+        "bottom": 886.1
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 1391.7,
+        "top": 894.5,
+        "right": 1847.2,
+        "bottom": 972.2
+      }
+    ],
+    "overlaps": [],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 343.08997044811093,
+        "right": 533.691142282697,
+        "top": 523.5986597348849,
+        "bottom": 863.9578951537885
+      },
+      {
+        "id": "rikku",
+        "left": 578.197703278337,
+        "right": 742.6003296535259,
+        "top": 492.36445466786427,
+        "bottom": 785.9405731949871
+      },
+      {
+        "id": "paine",
+        "left": 763.5940345832372,
+        "right": 907.4739554356721,
+        "top": 468.1227837602603,
+        "bottom": 725.051213853894
+      },
+      {
+        "id": "vegnagun-tail",
+        "left": 892.7149702042085,
+        "right": 1141.0529931869685,
+        "top": 177.06066330981318,
+        "bottom": 620.5214186361704
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  },
+  {
+    "label": "battle-ch5",
+    "w": 2560,
+    "h": 1440,
+    "file": "D:\\Final Fantasy\\docs\\screenshots\\fix3\\ffx2-hud-prep\\battle-ch5-2560x1440-g.png",
+    "wheel": null,
+    "screen": "battle",
+    "rects": [
+      {
+        "sel": ".ffx2hud__enemies",
+        "left": 85.3,
+        "top": 71.1,
+        "right": 1041.2,
+        "bottom": 195.1
+      },
+      {
+        "sel": ".ffx2hud__party",
+        "left": 1856,
+        "top": 1040,
+        "right": 2520,
+        "bottom": 1400
+      },
+      {
+        "sel": ".ffx2hud__command",
+        "left": 1907.6,
+        "top": 561.9,
+        "right": 2512,
+        "bottom": 974.3
+      },
+      {
+        "sel": ".mad__card",
+        "left": 915.3,
+        "top": 1103.2,
+        "right": 1820.7,
+        "bottom": 1336
+      },
+      {
+        "sel": ".mad__toggle",
+        "left": 936.8,
+        "top": 1066,
+        "right": 1146.5,
+        "bottom": 1096
+      },
+      {
+        "sel": ".sgd__panel",
+        "left": 85.3,
+        "top": 260,
+        "right": 613.3,
+        "bottom": 732
+      },
+      {
+        "sel": ".sgd__toggle",
+        "left": 82.1,
+        "top": 216,
+        "right": 283.9,
+        "bottom": 246
+      },
+      {
+        "sel": ".eint__panel",
+        "left": 1486.4,
+        "top": 50,
+        "right": 2086.4,
+        "bottom": 442.5
+      },
+      {
+        "sel": ".eint__toggle",
+        "left": 1964.7,
+        "top": 16,
+        "right": 2086.4,
+        "bottom": 46
+      },
+      {
+        "sel": ".ig-stat[0]",
+        "left": 1876.1,
+        "top": 1040,
+        "right": 2531.9,
+        "bottom": 1152
+      },
+      {
+        "sel": ".ig-stat[1]",
+        "left": 1860.1,
+        "top": 1164,
+        "right": 2515.9,
+        "bottom": 1276
+      },
+      {
+        "sel": ".ig-stat[2]",
+        "left": 1844.1,
+        "top": 1288,
+        "right": 2499.9,
+        "bottom": 1400
+      }
+    ],
+    "overlaps": [],
+    "fighters": [
+      {
+        "id": "yuna",
+        "left": 336.31821380782196,
+        "right": 612.0860261914742,
+        "top": 751.2343352164862,
+        "bottom": 1243.6768573301508
+      },
+      {
+        "id": "rikku",
+        "left": 674.5796377746785,
+        "right": 912.2013044845887,
+        "top": 707.0700902291424,
+        "bottom": 1131.3944950682676
+      },
+      {
+        "id": "paine",
+        "left": 940.9027107149785,
+        "right": 1148.695416437044,
+        "top": 672.8478551510009,
+        "bottom": 1043.906258226118
+      },
+      {
+        "id": "vegnagun-tail",
+        "left": 1124.4656494186142,
+        "right": 1482.6290726553107,
+        "top": 254.5539338254983,
+        "bottom": 894.1314753195992
+      }
+    ],
+    "fighterHits": [],
+    "errors": [],
+    "art404": []
+  }
+]
