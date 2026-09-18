@@ -44,12 +44,14 @@ const FFMPEG =
 
 const { renderTrack } = await import('../../src/audio/render.ts');
 const { getTrack, trackNames } = await import('../../src/audio/tracks/index.ts');
-const { renderSfx, sfxNames } = await import('../../src/audio/sfx/index.ts');
+const { renderSfxWith, sfxNames, getSfxDesign } = await import('../../src/audio/sfx/index.ts');
+const { CATEGORY_RULES } = await import('../../src/audio/sfx/design.ts');
+const { pitchToFreq } = await import('../../src/audio/score.ts');
 const { Hall } = await import('../../src/audio/dsp/hall.ts');
 const presets = await import('../../src/audio/voices/presets/index.ts');
 const { voiceForPreset, availableLibs, missingLibs, LIBRARIES, libPath } = await import('./libs.mjs');
-const { masterToTarget } = await import('./master.mjs');
-const { measureAll } = await import('./measure.mjs');
+const { masterToTarget, limit } = await import('./master.mjs');
+const { measureAll, measureMomentaryLufs, measureTruePeak, findCueBounds } = await import('./measure.mjs');
 
 // ------------------------------------------------------------------- flags
 
@@ -287,6 +289,114 @@ async function writeCue(cue) {
 // ---------------------------------------------------------------- sfx sprite
 
 /**
+ * The sampled note renderer for sound design.
+ *
+ * A design's `note` layers name instruments — celesta, tam-tam, choir-ooh,
+ * cello-solo — and this is where they become recordings instead of
+ * oscillators. It is the same resolution the music uses, so a sword hit and
+ * the strings behind it come off the same platform.
+ */
+function buildSfxNoteRenderer() {
+  const cache = new Map();
+  return (rate, instrument, pitch, dur, velocity, seed) => {
+    let voice = cache.get(instrument);
+    if (!voice) {
+      if (!presets.hasPreset(instrument)) {
+        throw new Error(
+          `An SFX design names instrument "${instrument}", which has no sampled preset. ` +
+            'Add one to src/audio/voices/presets/ (see docs/audio/PIPELINE.md).',
+        );
+      }
+      voice = voiceForPreset(presets.getPreset(instrument));
+      cache.set(instrument, voice);
+    }
+    return voice({ sampleRate: rate, freq: pitchToFreq(pitch), dur, velocity, seed });
+  };
+}
+
+/** Scale a buffer in place. */
+function scale(buf, gain) {
+  for (let i = 0; i < buf.left.length; i++) {
+    buf.left[i] *= gain;
+    buf.right[i] *= gain;
+  }
+}
+
+/**
+ * Trim, level and peak-guard one effect.
+ *
+ * Levelling is per *category*, not per cue: a cursor tick belongs 8 dB under a
+ * sword and 10 under a summon, and the categories in `src/audio/sfx/design.ts`
+ * are where that judgement lives. Levelling each cue to one number instead
+ * would flatten the whole bank into a wall, which is the loudest possible way
+ * to sound cheap.
+ */
+function finishSfxCue(name, buf) {
+  const design = getSfxDesign(name);
+  const rule = CATEGORY_RULES[design.category];
+
+  const bounds = findCueBounds(buf.left, buf.right);
+  const trimmed = {
+    left: buf.left.subarray(bounds.start, bounds.end),
+    right: buf.right.subarray(bounds.start, bounds.end),
+  };
+
+  const measured = measureMomentaryLufs(trimmed.left, trimmed.right, sampleRate);
+  if (Number.isFinite(measured)) {
+    // Clamped: a design that needs more than 12 dB of correction is a design
+    // problem, and silently fixing it here would hide it.
+    const db = Math.max(-12, Math.min(12, rule.lufs - measured));
+    scale(trimmed, Math.pow(10, db / 20));
+  }
+
+  // Effects sit under the music: -1 dBTP is the codec ceiling, and the sprite
+  // as a whole is quieter than that anyway.
+  const peakDb = measureTruePeak(trimmed.left, trimmed.right);
+  if (peakDb > -1) scale(trimmed, Math.pow(10, (-1 - peakDb) / 20));
+
+  return {
+    buf: trimmed,
+    category: design.category,
+    lufs: Number(measureMomentaryLufs(trimmed.left, trimmed.right, sampleRate).toFixed(2)),
+    truePeakDb: Number(measureTruePeak(trimmed.left, trimmed.right).toFixed(2)),
+  };
+}
+
+/**
+ * The audition order: the twenty-five cues worth listening to first, grouped
+ * the way a listener meets them — the interface, then a fight, then magic,
+ * then the big moments, then the places.
+ */
+const SFX_TOUR = [
+  'cursor-move', 'confirm', 'cancel', 'error', 'menu-open',
+  'turn-ready', 'battle-start', 'slash-light', 'slash-heavy', 'hit-1',
+  'guard', 'critical', 'ko-fall', 'ball-hit', 'gunshot',
+  'cure', 'fire-3', 'ice-3', 'thunder', 'holy-2',
+  'summon', 'overdrive-full', 'victory-fanfare', 'dissolve-pyreflies', 'fayth-hum',
+];
+
+/** One file with the tour in it, 0.7 s of hall between cues. */
+async function writeTour(parts, audDir) {
+  const byName = new Map(parts.map((p) => [p.name, p]));
+  const gap = Math.round(0.7 * sampleRate);
+  const chosen = SFX_TOUR.map((name) => byName.get(name)).filter(Boolean);
+  const total = chosen.reduce((a, p) => a + p.buf.left.length + gap, gap);
+  const left = new Float32Array(total);
+  const right = new Float32Array(total);
+  let at = gap;
+  for (const part of chosen) {
+    left.set(part.buf.left, at);
+    right.set(part.buf.right, at);
+    at += part.buf.left.length + gap;
+  }
+  const wav = join(audDir, '_tour.wav');
+  await writeFile(wav, encodeWavF32(left, right, sampleRate));
+  await toMp3(wav, join(audDir, '_tour.mp3'), '4');
+  await rm(wav, { force: true });
+  log(`      audition tour: ${chosen.length} cues, ${fmtSec(total / sampleRate)}`);
+}
+
+/**
  * One sprite instead of ~150 tiny files: a hundred and fifty HTTP requests is
  * worse than one 2 MB download, and LAME's gapless header means a cue's
  * offset into the decoded buffer is accurate enough to play with
@@ -294,30 +404,36 @@ async function writeCue(cue) {
  */
 async function renderSfxSprite() {
   const names = sfxNames();
+  const note = buildSfxNoteRenderer();
   const gap = Math.round(0.05 * sampleRate);
   const parts = [];
   let total = Math.round(0.05 * sampleRate);
   for (const name of names) {
-    const buf = renderSfx(name, sampleRate);
-    parts.push({ name, buf });
-    total += buf.left.length + gap;
+    const rendered = finishSfxCue(name, renderSfxWith(name, sampleRate, note));
+    parts.push({ name, ...rendered });
+    total += rendered.buf.left.length + gap;
   }
   const left = new Float32Array(total);
   const right = new Float32Array(total);
   const entries = {};
   let at = Math.round(0.05 * sampleRate);
-  for (const { name, buf } of parts) {
-    left.set(buf.left, at);
-    right.set(buf.right, at);
-    entries[name] = {
+  for (const part of parts) {
+    left.set(part.buf.left, at);
+    right.set(part.buf.right, at);
+    entries[part.name] = {
       offset: Number((at / sampleRate).toFixed(4)),
-      duration: Number((buf.left.length / sampleRate).toFixed(4)),
+      duration: Number((part.buf.left.length / sampleRate).toFixed(4)),
+      category: part.category,
+      lufs: part.lufs,
+      truePeakDb: part.truePeakDb,
     };
-    at += buf.left.length + gap;
+    at += part.buf.left.length + gap;
   }
 
-  // Level the sprite as one programme so SFX sit consistently under the music.
-  masterToTarget({ left, right }, sampleRate, { targetLufs: -18, ceilingDbtp: -1 });
+  // No bus compression and no second normalisation: the cues are already
+  // levelled against each other by category, and squeezing the sprite as one
+  // programme would undo exactly that. All the master does is hold the ceiling.
+  limit({ left, right }, sampleRate, Math.pow(10, -1 / 20));
 
   const sfxDir = join(outRoot, 'sfx');
   await mkdir(sfxDir, { recursive: true });
@@ -330,7 +446,23 @@ async function renderSfxSprite() {
     bytes = (await readFile(mp3Path)).length;
     if (!keepWav) await rm(wavPath, { force: true });
   }
-  return { entries, bytes, count: names.length, seconds: total / sampleRate };
+
+  // Auditions: individual files, because nobody can judge a menu tick by
+  // scrubbing to 41.7 s in a four-minute sprite — plus one guided tour, in the
+  // order someone would actually want to hear the bank.
+  if (audition && encode) {
+    const audDir = resolve(ROOT, 'docs/audio/audition/sfx');
+    await mkdir(audDir, { recursive: true });
+    for (const part of parts) {
+      const oneWav = join(audDir, `${part.name}.wav`);
+      await writeFile(oneWav, encodeWavF32(part.buf.left, part.buf.right, sampleRate));
+      await toMp3(oneWav, join(audDir, `${part.name}.mp3`), '4');
+      await rm(oneWav, { force: true });
+    }
+    await writeTour(parts, audDir);
+  }
+
+  return { entries, bytes, count: names.length, seconds: total / sampleRate, parts };
 }
 
 // ------------------------------------------------------------------- manifest
@@ -378,8 +510,16 @@ async function main() {
   }
 
   const only = flags.get('only');
-  const wantMusic = only ? only.split(',').map((s) => s.trim()).filter(Boolean) : trackNames();
   const wantSfx = flags.has('sfx') || (flags.has('all') && !flags.has('music-only'));
+  // `--sfx` on its own means the effects and nothing else: re-rendering twenty
+  // minutes of music to change a menu tick is how another agent's half-written
+  // cue ends up in public/audio.
+  const sfxOnly = flags.has('sfx') && !flags.has('all') && !only;
+  const wantMusic = only
+    ? only.split(',').map((s) => s.trim()).filter(Boolean)
+    : sfxOnly
+      ? []
+      : trackNames();
 
   for (const name of wantMusic) {
     if (!trackNames().includes(name)) {
@@ -445,6 +585,40 @@ async function main() {
       cues: sprite.entries,
     };
     log(`${sprite.count} cues, ${fmtSec(sprite.seconds)}, ${(sprite.bytes / 1e6).toFixed(2)} MB`);
+
+    // Per-category levels: the one number that says whether the bank is
+    // balanced, and the one a listener notices when it is not.
+    const byCategory = new Map();
+    for (const part of sprite.parts) {
+      if (!byCategory.has(part.category)) byCategory.set(part.category, []);
+      byCategory.get(part.category).push(part);
+    }
+    for (const [category, cues] of [...byCategory].sort()) {
+      const target = CATEGORY_RULES[category].lufs;
+      const levels = cues.map((c) => c.lufs).filter(Number.isFinite);
+      const mean = levels.reduce((a, b) => a + b, 0) / Math.max(1, levels.length);
+      const worst = cues.reduce((a, b) => (Math.abs(b.lufs - target) > Math.abs(a.lufs - target) ? b : a));
+      log(
+        `      ${category.padEnd(9)} ${String(cues.length).padStart(3)} cues  ` +
+          `mean ${mean.toFixed(1)} LUFS (target ${target})  worst ${worst.name} ${worst.lufs.toFixed(1)}`,
+      );
+      if (Math.abs(worst.lufs - target) > 3) {
+        console.error(
+          `SFX "${worst.name}" measures ${worst.lufs.toFixed(1)} LUFS against a ${target} target ` +
+            'for its category — the design needs more or less in it, not a gain change.',
+        );
+        failures++;
+      }
+    }
+    const hotPeak = sprite.parts.filter((p) => p.truePeakDb > -1);
+    if (hotPeak.length > 0) {
+      console.error(`SFX over -1 dBTP: ${hotPeak.map((p) => p.name).join(', ')}`);
+      failures++;
+    }
+    if (sprite.bytes > 3.5e6) {
+      console.error(`SFX sprite is ${(sprite.bytes / 1e6).toFixed(2)} MB, over the 3.5 MB budget.`);
+      failures++;
+    }
   }
 
   await saveManifest(manifest);

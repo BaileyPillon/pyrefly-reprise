@@ -1,6 +1,22 @@
 /**
- * The SFX bank: every cue is synthesised from the DSP kit at startup, so the
- * game ships no audio files and nothing here can be mistaken for retail audio.
+ * The SFX bank.
+ *
+ * Every cue is a **design** — a list of layered materials in B minor (see
+ * `./design.ts` and `./materials.ts`) — and a design renders two ways:
+ *
+ *   - offline, with the sampled instruments, into `public/audio/sfx/sprite.mp3`,
+ *     which is what a player actually hears;
+ *   - in the browser, with the synthesised voices, as the safety net for the
+ *     moment before the sprite has decoded and for any browser that will not
+ *     decode it.
+ *
+ * Both paths run the same arrangement through the same rules, so a cue cannot
+ * drift between them: what changes is the timbre of each layer, which is the
+ * one thing the pre-render exists to improve.
+ *
+ * The game still ships no third-party audio. The sprite is rendered from this
+ * source with free-licensed sample libraries that never leave the build
+ * machine — see `docs/audio/CREDITS.md`.
  */
 
 import { makeStereo, type Stereo } from '../dsp/buffer.ts';
@@ -15,14 +31,17 @@ import { flowSfx } from './flow.ts';
 import { spellSfx } from './spells.ts';
 import { supportSfx } from './support.ts';
 import { storySfx } from './story.ts';
+import { renderDesign, synthNoteRenderer, type NoteRenderer, type SfxDesign } from './design.ts';
 import type { SfxDef } from './kit.ts';
 import { SFX_ALIASES } from './aliases.ts';
 
 export type { SfxDef };
+export type { SfxDesign, NoteRenderer };
 export { SFX_ALIASES };
+export { renderDesign, synthNoteRenderer };
 
-/** Every file's cues, in registration order. A name must appear in exactly one file. */
-export const SFX_GROUPS: Record<string, Record<string, SfxDef>> = {
+/** Every file's designs, in registration order. A name must appear in exactly one file. */
+export const SFX_DESIGN_GROUPS: Record<string, Record<string, SfxDesign>> = {
   ui: uiSfx,
   battle: battleSfx,
   magic: magicSfx,
@@ -33,6 +52,30 @@ export const SFX_GROUPS: Record<string, Record<string, SfxDef>> = {
   support: supportSfx,
   story: storySfx,
 };
+
+/** Flattened design registry — what `tools/audio/render.mjs` walks. */
+export const SFX_DESIGNS: Record<string, SfxDesign> = Object.assign(
+  {},
+  ...Object.values(SFX_DESIGN_GROUPS),
+);
+
+function defOf(design: SfxDesign): SfxDef {
+  return {
+    about: design.about,
+    render: (sampleRate: number) => renderDesign(design, sampleRate),
+  };
+}
+
+function groupDefs(designs: Record<string, SfxDesign>): Record<string, SfxDef> {
+  const out: Record<string, SfxDef> = {};
+  for (const [name, design] of Object.entries(designs)) out[name] = defOf(design);
+  return out;
+}
+
+/** The same groups as playable cues, for the debug list and the runtime bank. */
+export const SFX_GROUPS: Record<string, Record<string, SfxDef>> = Object.fromEntries(
+  Object.entries(SFX_DESIGN_GROUPS).map(([group, designs]) => [group, groupDefs(designs)]),
+);
 
 export const SFX: Record<string, SfxDef> = Object.assign({}, ...Object.values(SFX_GROUPS));
 
@@ -61,8 +104,22 @@ export function getSfx(name: string): SfxDef {
   return def;
 }
 
+export function getSfxDesign(name: string): SfxDesign {
+  const design = SFX_DESIGNS[name];
+  if (!design) throw new Error(`Unknown sfx design "${name}". Known: ${sfxNames().join(', ')}`);
+  return design;
+}
+
 export function renderSfx(name: string, sampleRate: number): Stereo {
   return getSfx(name).render(sampleRate);
+}
+
+/**
+ * Render a cue with a specific note renderer — how `tools/audio/render.mjs`
+ * plays a design on recorded instruments instead of synthesised ones.
+ */
+export function renderSfxWith(name: string, sampleRate: number, note: NoteRenderer): Stereo {
+  return renderDesign(getSfxDesign(name), sampleRate, note);
 }
 
 export function renderSfxBank(sampleRate: number): Record<string, Stereo> {

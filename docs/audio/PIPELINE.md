@@ -218,17 +218,28 @@ time round".
 
 ## Sound effects
 
-All ~134 cues render into one sprite, `public/audio/sfx/sprite.mp3`, with the
+All 134 cues render into one sprite, `public/audio/sfx/sprite.mp3`, with the
 manifest storing each cue's offset and duration. One request beats a hundred
 and thirty-four, and LAME's gapless header makes the offsets land accurately
 after `decodeAudioData`.
 
-The effects are still synthesised — they are sound *design*, not performances,
-and the DSP kit in `src/audio/sfx/` is the right tool for them. What changed is
-where they sit: the runtime puts a send from the SFX bus into a `ConvolverNode`
-loaded with the impulse response of **the same hall the music was mixed in**
-(`src/audio/dsp/hall.ts`, rendered on the fly — no download). A sword hit and
-the strings behind it now decay into one room instead of sounding pasted on.
+**The effects are sampled too.** An effect is a layered design in B minor (see
+[`SOUND-DESIGN.md`](SOUND-DESIGN.md)), and its `note` layers — glass, bells,
+harp, choir, tam-tam, timpani, a solo cello — resolve to the same recorded
+instruments the music uses when the sprite is rendered, and to the synthesised
+voices when the browser has to cover for it. Only air, sub weight and metallic
+ring are synthesised, and they sit under recorded material rather than being
+the sound itself.
+
+Render them on their own with `npm run audio:render -- --sfx`, which touches no
+music file. Each cue is trimmed, levelled to its category's target (measured as
+the loudest 400 ms, K-weighted) and held under -1 dBTP; the tool fails if a cue
+is more than 3 LU off its category or the sprite goes over 3.5 MB.
+
+The runtime also puts a send from the SFX bus into a `ConvolverNode` loaded
+with the impulse response of **the same hall the music was mixed in**
+(`src/audio/dsp/hall.ts`, rendered on the fly — no download), so a sword hit and
+the strings behind it decay into one room instead of sounding pasted on.
 
 A cue fired before the sprite has decoded uses its synthesised version rather
 than waiting. A menu tick 200 ms late is worse than a slightly different one on
@@ -247,6 +258,8 @@ time.
 | `tools/audio/measure.mjs` | BS.1770 loudness, true peak, spectrum, seam. |
 | `tools/audio/render.mjs` | The CLI. |
 | `src/audio/voices/presets/` | **The instrument data. Start here.** |
+| `src/audio/sfx/design.ts` | The sound-design vocabulary and the rules it enforces. |
+| `src/audio/sfx/materials.ts` | The palette: glass, bells, harp, choir, cloth, sub, steel. |
 | `src/audio/dsp/hall.ts` | The concert hall — a 16-line Jot FDN, shared by the offline mix and the runtime SFX reverb. |
 | `src/audio/manifest.ts` | Manifest parsing, loop maths, eviction. Platform-free and unit-tested. |
 | `src/audio/MusicLoader.ts` | Picks the route: pre-rendered, or synthesised. |

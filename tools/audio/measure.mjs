@@ -375,6 +375,65 @@ export function measureSeam(left, right, loopStartSample, loopEndSample) {
   };
 }
 
+/**
+ * Loudest 400 ms of a cue, K-weighted — the number to level sound effects by.
+ *
+ * `measureLufs` is the right measure for a piece of music and the wrong one for
+ * a menu tick: BS.1770 integration needs a 400 ms block and gates quiet ones
+ * out, so a 140 ms cue measures -Infinity and a two-second cue with one event
+ * in it measures whatever the silence says. Matching effects by their loudest
+ * moment is what makes a cursor tick and a summon sit sensibly against each
+ * other, and it is what "-24 LUFS short-term" in the brief means.
+ *
+ * A cue shorter than the window is measured whole, so the number stays
+ * comparable rather than falling off a cliff at 400 ms.
+ */
+export function measureMomentaryLufs(left, right, sampleRate, windowSec = 0.4) {
+  const kl = kWeight(left, sampleRate);
+  const kr = kWeight(right, sampleRate);
+  const n = Math.min(kl.length, kr.length);
+  if (n === 0) return -Infinity;
+  const window = Math.min(n, Math.round(windowSec * sampleRate));
+  const step = Math.max(1, Math.round(window / 8));
+  const loudnessOf = (p) => -0.691 + 10 * Math.log10(Math.max(1e-30, p));
+
+  let best = -Infinity;
+  for (let start = 0; start + window <= n; start += step) {
+    let sl = 0;
+    let sr = 0;
+    for (let i = start; i < start + window; i++) {
+      sl += kl[i] * kl[i];
+      sr += kr[i] * kr[i];
+    }
+    const loudness = loudnessOf(sl / window + sr / window);
+    if (loudness > best) best = loudness;
+  }
+  return best;
+}
+
+/**
+ * Where a cue actually begins and ends, in samples.
+ *
+ * Designs are written on a grid with room at both ends; shipping that room
+ * costs sprite bytes and delays every trigger. The threshold is relative to the
+ * cue's own peak so a quiet ambience is not trimmed into its own body.
+ */
+export function findCueBounds(left, right, thresholdDb = -60) {
+  const n = Math.min(left.length, right.length);
+  let peak = 0;
+  for (let i = 0; i < n; i++) {
+    const v = Math.max(Math.abs(left[i]), Math.abs(right[i]));
+    if (v > peak) peak = v;
+  }
+  if (peak === 0) return { start: 0, end: n };
+  const floor = peak * Math.pow(10, thresholdDb / 20);
+  let start = 0;
+  while (start < n && Math.max(Math.abs(left[start]), Math.abs(right[start])) < floor) start++;
+  let end = n;
+  while (end > start && Math.max(Math.abs(left[end - 1]), Math.abs(right[end - 1])) < floor) end--;
+  return { start, end };
+}
+
 /** Everything at once, for the render report. */
 export function measureAll(left, right, sampleRate, loopStartSample, loopEndSample) {
   const spectrum = measureSpectrum(left, right, sampleRate);

@@ -1,118 +1,265 @@
-/** Weapon and physical-contact SFX: cuts, pierces, blunt blows, guns, whiffs. */
+/**
+ * Per-character weapons.
+ *
+ * Each one is the same three-part gesture — movement, contact, ring — tuned to
+ * the character: Tidus is quick and bright, Auron is slow and low, Wakka is
+ * leather and air with no metal in it at all, Rikku is three small events where
+ * everyone else has one.
+ */
 
-import { makeNoise } from '../dsp/oscillators.ts';
-import { addAt, blank, fmTone, noiseBurst, tone, trim } from './kit.ts';
-import type { SfxDef } from './kit.ts';
+import {
+  bodyHit,
+  breath,
+  cloth,
+  glassHigh,
+  MAGIC,
+  pizz,
+  scatter,
+  steelRing,
+  SUB,
+  subImpact,
+  UI,
+  whoosh,
+} from './materials.ts';
+import type { SfxDesign } from './design.ts';
 
-export const weaponSfx: Record<string, SfxDef> = {
+export const weaponSfx: Record<string, SfxDesign> = {
   'slash-light': {
-    about: 'Quick single-hand sword swing, bright and fast (Tidus).',
-    render: (sr) => {
-      const out = blank(sr, 0.22);
-      addAt(out, noiseBurst(sr, { dur: 0.13, freq: 1800, freqTo: 8200, q: 2.1, gain: 0.5, attack: 0.008, curve: 3.5 }), 0, sr, 0.9, -0.25);
-      addAt(out, fmTone(sr, { freq: 2600, ratio: 2.4, index: 1.2, indexTo: 0.15, dur: 0.08, gain: 0.18, curve: 6 }), 0.05, sr, 0.5, 0.2);
-      return trim(out, 0.68);
-    },
+    about: 'Tidus: a quick single-handed cut — light cloth, fast air, a bright edge on the 5.',
+    category: 'weapon',
+    length: 0.62,
+    layers: [
+      cloth({ at: 0, dur: 0.06, gain: 0.16 }),
+      whoosh({ at: 0.03, dur: 0.15, from: 1100, to: 3800, pan: -0.5, panTo: 0.4, gain: 0.32 }),
+      steelRing({ at: 0.1, freq: 1480, dur: 0.36, gain: 0.24, pan: 0.2 }),
+      glassHigh(UI.move, { at: 0.1, dur: 0.05, vel: 0.3, gain: 0.14, pan: 0.2 }),
+    ],
   },
+
   'slash-heavy': {
-    about: 'Weighty two-handed cleave with a low body and a metal edge (Auron, Paine greatsword).',
-    render: (sr) => {
-      const out = blank(sr, 0.42);
-      addAt(out, noiseBurst(sr, { dur: 0.28, freq: 550, freqTo: 3400, q: 1.3, gain: 0.55, attack: 0.03, curve: 2, drive: 0.5 }), 0, sr, 0.95, 0.3);
-      addAt(out, tone(sr, { freq: 140, toFreq: 70, glide: 0.6, dur: 0.22, wave: 'sine', gain: 0.4, curve: 3 }), 0.06, sr, 0.6);
-      addAt(out, fmTone(sr, { freq: 1600, ratio: 3.1, index: 1.6, indexTo: 0.2, dur: 0.18, gain: 0.2, curve: 4.5 }), 0.16, sr, 0.55, -0.2);
-      return trim(out, 0.85);
-    },
+    about: "Auron's katana: a slow heavy cleave, a low body, and steel that keeps ringing after it lands.",
+    category: 'weapon',
+    length: 1.1,
+    layers: [
+      cloth({ at: 0, dur: 0.14, gain: 0.26 }),
+      whoosh({ at: 0.05, dur: 0.28, from: 380, to: 1700, pan: 0.5, panTo: -0.4, gain: 0.42 }),
+      bodyHit({ at: 0.24, vel: 0.85, gain: 0.5 }),
+      subImpact({ at: 0.24, freq: SUB.move, dur: 0.5, gain: 0.45 }),
+      steelRing({ at: 0.245, freq: 988, dur: 0.75, gain: 0.3, pan: -0.15 }),
+    ],
   },
+
   pierce: {
-    about: 'Spear thrust: a narrow whoosh with a sharp tip impact (Kimahri).',
-    render: (sr) => {
-      const out = blank(sr, 0.26);
-      addAt(out, noiseBurst(sr, { dur: 0.14, freq: 2600, freqTo: 5200, q: 3, gain: 0.4, attack: 0.01, curve: 4, highpass: 800 }), 0, sr, 0.85);
-      addAt(out, tone(sr, { freq: 900, toFreq: 200, glide: 0.5, dur: 0.09, wave: 'sine', gain: 0.5, curve: 5 }), 0.13, sr, 0.85);
-      addAt(out, noiseBurst(sr, { dur: 0.07, freq: 3200, freqTo: 1400, q: 1.2, gain: 0.35, attack: 0.002, curve: 6, seed: 4021 }), 0.13, sr, 0.7);
-      return trim(out, 0.82);
-    },
+    about: "Kimahri's spear: a narrow whoosh that stays in one place, then a hard tip and a thin ring.",
+    category: 'weapon',
+    length: 0.8,
+    layers: [
+      cloth({ at: 0, dur: 0.07, gain: 0.14 }),
+      {
+        kind: 'air',
+        at: 0.03,
+        dur: 0.16,
+        freq: 1600,
+        freqTo: 3200,
+        q: 3.2,
+        attack: 0.02,
+        curve: 3,
+        gain: 0.26,
+        pan: -0.1,
+      },
+      bodyHit({ at: 0.16, pitch: 'D2', vel: 0.7, gain: 0.4, speed: 1.2 }),
+      subImpact({ at: 0.16, freq: SUB.home, dur: 0.24, gain: 0.34 }),
+      steelRing({ at: 0.162, freq: 2349, dur: 0.4, gain: 0.18, pan: 0.15 }),
+    ],
   },
+
   'ball-hit': {
-    about: 'Rubbery blitzball thwack with a trailing whoosh (Wakka).',
-    render: (sr) => {
-      const out = blank(sr, 0.36);
-      addAt(out, noiseBurst(sr, { dur: 0.16, freq: 1100, freqTo: 6200, q: 1.8, gain: 0.4, attack: 0.01, curve: 3 }), 0, sr, 0.75, -0.2);
-      addAt(out, tone(sr, { freq: 210, toFreq: 90, glide: 0.4, dur: 0.14, wave: 'tri', gain: 0.55, curve: 3.5, drive: 1.4 }), 0.07, sr, 0.9);
-      addAt(out, tone(sr, { freq: 620, toFreq: 340, glide: 0.5, dur: 0.1, wave: 'sine', gain: 0.25, curve: 5 }), 0.08, sr, 0.5);
-      return trim(out, 0.85);
-    },
+    about: "Wakka's blitzball: leather and air, a rubbery thump with no metal anywhere in it.",
+    category: 'weapon',
+    length: 0.8,
+    layers: [
+      cloth({ at: 0, dur: 0.08, gain: 0.18 }),
+      whoosh({ at: 0.02, dur: 0.2, from: 500, to: 1500, pan: -0.45, panTo: 0.45, gain: 0.3 }),
+      bodyHit({ at: 0.18, pitch: 'F#2', vel: 0.7, gain: 0.45, speed: 1.05 }),
+      subImpact({ at: 0.18, freq: 95, dur: 0.3, gain: 0.34, curve: 4 }),
+      {
+        kind: 'tone',
+        at: 0.182,
+        dur: 0.18,
+        freq: 260,
+        toFreq: 170,
+        wave: 'tri',
+        attack: 0.004,
+        curve: 5,
+        gain: 0.16,
+        lowpass: 2200,
+      },
+    ],
   },
+
   claw: {
-    about: 'Three rapid claw scratches (Rikku).',
-    render: (sr) => {
-      const out = blank(sr, 0.34);
-      const rand = makeNoise(9001);
-      for (let i = 0; i < 3; i++) {
-        addAt(out, noiseBurst(sr, { dur: 0.09, freq: 2400 + i * 500, freqTo: 6800 + i * 400, q: 2.6, gain: 0.4, attack: 0.004, curve: 4.5, seed: 700 + i }), i * 0.08, sr, 0.85, rand() * 0.5);
-      }
-      return trim(out, 0.75);
-    },
+    about: "Rikku's claw: three quick scratches across the field, each smaller than the last.",
+    category: 'weapon',
+    length: 0.7,
+    layers: [
+      ...[0, 0.08, 0.16].map((at, i) => ({
+        kind: 'air' as const,
+        at,
+        dur: 0.1,
+        freq: 2200 + i * 500,
+        freqTo: 900,
+        q: 2.4,
+        attack: 0.006,
+        curve: 5,
+        gain: 0.26 - i * 0.05,
+        pan: -0.35 + i * 0.35,
+        highpass: 700,
+        seed: 300 + i,
+      })),
+      steelRing({ at: 0.17, freq: 1976, dur: 0.3, gain: 0.14, pan: 0.3 }),
+      subImpact({ at: 0.16, freq: 110, dur: 0.16, gain: 0.18, curve: 5 }),
+    ],
   },
+
   'dagger-flurry': {
-    about: 'Rapid double/triple dagger cut (Rikku, X-2).',
-    render: (sr) => {
-      const out = blank(sr, 0.3);
-      addAt(out, noiseBurst(sr, { dur: 0.1, freq: 2000, freqTo: 7800, q: 2.2, gain: 0.42, attack: 0.006, curve: 4 }), 0, sr, 0.85, -0.3);
-      addAt(out, noiseBurst(sr, { dur: 0.1, freq: 2200, freqTo: 8200, q: 2.2, gain: 0.42, attack: 0.006, curve: 4, seed: 5151 }), 0.07, sr, 0.9, 0.3);
-      addAt(out, noiseBurst(sr, { dur: 0.09, freq: 2400, freqTo: 7400, q: 2.4, gain: 0.35, attack: 0.005, curve: 4.5, seed: 8282 }), 0.14, sr, 0.75, -0.1);
-      return trim(out, 0.76);
-    },
+    about: 'A flurry of small blades: four bright cuts in 300 ms, panned apart, one ring to close it.',
+    category: 'weapon',
+    length: 0.9,
+    layers: [
+      ...[0, 0.075, 0.15, 0.225].map((at, i) => ({
+        kind: 'air' as const,
+        at,
+        dur: 0.09,
+        freq: 1800 + i * 420,
+        freqTo: 3600,
+        q: 2.2,
+        attack: 0.005,
+        curve: 5,
+        gain: 0.22,
+        pan: i % 2 === 0 ? -0.4 : 0.4,
+        highpass: 600,
+        seed: 88 + i,
+      })),
+      ...[0, 0.075, 0.15, 0.225].map((at, i) => glassHigh(i % 2 === 0 ? UI.move : UI.tense, {
+        at: at + 0.012,
+        dur: 0.04,
+        vel: 0.3,
+        gain: 0.12,
+        pan: i % 2 === 0 ? -0.3 : 0.3,
+      })),
+      steelRing({ at: 0.24, freq: 1568, dur: 0.45, gain: 0.2 }),
+    ],
   },
+
   gunshot: {
-    about: 'Single pistol shot: a sharp crack and a low thump, kept short (Yuna).',
-    render: (sr) => {
-      const out = blank(sr, 0.2);
-      addAt(out, noiseBurst(sr, { dur: 0.05, freq: 2600, freqTo: 900, q: 0.7, gain: 0.9, attack: 0.0005, curve: 7 }), 0, sr, 1);
-      addAt(out, tone(sr, { freq: 150, toFreq: 55, glide: 0.5, dur: 0.09, wave: 'sine', gain: 0.5, curve: 5, drive: 1.8 }), 0, sr, 0.85);
-      addAt(out, noiseBurst(sr, { dur: 0.1, freq: 5200, freqTo: 1800, q: 0.6, gain: 0.25, attack: 0.001, curve: 6, seed: 6060, highpass: 2000 }), 0, sr, 0.6);
-      return trim(out, 0.88);
-    },
+    about: "Yuna's pistol: a short dry crack with a low thump under it, gone in a quarter second.",
+    category: 'weapon',
+    length: 0.75,
+    top: 11_000,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 0.055,
+        freq: 2600,
+        freqTo: 700,
+        q: 0.8,
+        attack: 0.0012,
+        curve: 9,
+        gain: 0.5,
+        seed: 2020,
+      },
+      bodyHit({ at: 0.002, pitch: 'B1', vel: 0.7, gain: 0.4, speed: 1.4 }),
+      subImpact({ at: 0.002, freq: 84, dur: 0.22, gain: 0.34, curve: 5 }),
+      {
+        kind: 'air',
+        at: 0.05,
+        dur: 0.4,
+        freq: 900,
+        freqTo: 300,
+        q: 0.6,
+        attack: 0.02,
+        curve: 2.4,
+        gain: 0.1,
+        pan: 0.2,
+      },
+    ],
   },
+
   'gun-burst': {
-    about: 'Five-round pistol burst (Yuna).',
-    render: (sr) => {
-      const out = blank(sr, 0.58);
-      const rand = makeNoise(7171);
-      for (let i = 0; i < 5; i++) {
-        const at = i * 0.09 + Math.abs(rand()) * 0.01;
-        addAt(out, noiseBurst(sr, { dur: 0.045, freq: 2500 + rand() * 400, freqTo: 900, q: 0.7, gain: 0.85, attack: 0.0005, curve: 7, seed: 900 + i }), at, sr, 0.9, rand() * 0.15);
-        addAt(out, tone(sr, { freq: 145, toFreq: 55, glide: 0.5, dur: 0.07, wave: 'sine', gain: 0.4, curve: 5 }), at, sr, 0.75);
-      }
-      return trim(out, 0.88);
-    },
+    about: 'Five rounds: the same crack five times, each a shade quieter, the room answering after.',
+    category: 'weapon',
+    length: 1.3,
+    top: 11_000,
+    layers: [
+      ...[0, 0.1, 0.2, 0.3, 0.4].flatMap((at, i) => [
+        {
+          kind: 'air' as const,
+          at,
+          dur: 0.05,
+          freq: 2600,
+          freqTo: 700,
+          q: 0.8,
+          attack: 0.0012,
+          curve: 9,
+          gain: 0.4 - i * 0.03,
+          pan: (i % 2 === 0 ? -1 : 1) * 0.18,
+          seed: 2020 + i,
+        },
+        bodyHit({ at: at + 0.002, pitch: 'B1', vel: 0.6, gain: 0.3, speed: 1.4 }),
+      ]),
+      subImpact({ at: 0.002, freq: 84, dur: 0.5, gain: 0.3, curve: 3 }),
+      {
+        kind: 'air',
+        at: 0.45,
+        dur: 0.6,
+        freq: 800,
+        freqTo: 260,
+        q: 0.6,
+        attack: 0.03,
+        curve: 2.2,
+        gain: 0.1,
+        pan: 0.25,
+      },
+    ],
   },
+
   whiff: {
-    about: 'A swing that misses: air only, no impact.',
-    render: (sr) => {
-      const out = blank(sr, 0.26);
-      addAt(out, noiseBurst(sr, { dur: 0.22, freq: 1200, freqTo: 3400, q: 1.4, gain: 0.35, attack: 0.02, curve: 2.6 }), 0, sr, 0.8, -0.15);
-      return trim(out, 0.5);
-    },
+    about: 'A swing that hits nothing: cloth and air, and then the discomfort of no impact at all.',
+    category: 'weapon',
+    length: 0.6,
+    layers: [
+      cloth({ at: 0, dur: 0.09, gain: 0.2 }),
+      whoosh({ at: 0.03, dur: 0.26, from: 700, to: 2400, pan: -0.5, panTo: 0.5, gain: 0.34 }),
+      breath({ at: 0.2, dur: 0.25, gain: 0.05 }),
+    ],
   },
+
   guard: {
-    about: 'Metal block: a bright clank with a short ring.',
-    render: (sr) => {
-      const out = blank(sr, 0.4);
-      addAt(out, fmTone(sr, { freq: 1800, ratio: 1.8, index: 4, indexTo: 0.3, dur: 0.32, gain: 0.35, curve: 3 }), 0, sr, 0.85);
-      addAt(out, noiseBurst(sr, { dur: 0.06, freq: 3600, freqTo: 1600, q: 1.2, gain: 0.4, attack: 0.001, curve: 6, seed: 3033 }), 0, sr, 0.75);
-      return trim(out, 0.72);
-    },
+    about: 'A block: steel meeting steel, bright and short, with the shield ringing on after.',
+    category: 'impact',
+    length: 0.9,
+    layers: [
+      cloth({ at: 0, dur: 0.05, gain: 0.12 }),
+      bodyHit({ at: 0.03, pitch: 'D2', vel: 0.6, gain: 0.34, speed: 1.3 }),
+      steelRing({ at: 0.03, freq: 1568, dur: 0.7, index: 2, gain: 0.34, pan: 0.15 }),
+      glassHigh(UI.tense, { at: 0.032, dur: 0.1, vel: 0.4, gain: 0.2, pan: -0.2 }),
+      subImpact({ at: 0.03, freq: 92, dur: 0.24, gain: 0.26, curve: 5 }),
+    ],
   },
+
   counter: {
-    about: 'Parry tick immediately followed by a counter-hit.',
-    render: (sr) => {
-      const out = blank(sr, 0.5);
-      addAt(out, fmTone(sr, { freq: 2000, ratio: 1.7, index: 3, indexTo: 0.2, dur: 0.1, gain: 0.35, curve: 5 }), 0, sr, 0.8);
-      addAt(out, tone(sr, { freq: 210, toFreq: 68, glide: 0.5, dur: 0.2, wave: 'sine', gain: 0.65, curve: 4, drive: 2 }), 0.09, sr, 0.9);
-      addAt(out, noiseBurst(sr, { dur: 0.12, freq: 1700, freqTo: 500, q: 0.7, gain: 0.4, curve: 5, seed: 5252 }), 0.09, sr, 0.8);
-      return trim(out, 0.85);
-    },
+    about: 'A parry and the answer: a pizzicato tick, then a blade already on its way back.',
+    category: 'weapon',
+    length: 1,
+    layers: [
+      pizz(MAGIC.move, { at: 0, vel: 0.7, gain: 0.4, pan: -0.25 }),
+      steelRing({ at: 0.01, freq: 1976, dur: 0.3, gain: 0.2, pan: -0.2 }),
+      cloth({ at: 0.14, dur: 0.06, gain: 0.16 }),
+      whoosh({ at: 0.17, dur: 0.16, from: 1000, to: 3200, pan: 0.4, panTo: -0.35, gain: 0.3 }),
+      bodyHit({ at: 0.3, vel: 0.75, gain: 0.44 }),
+      subImpact({ at: 0.3, freq: SUB.home, dur: 0.34, gain: 0.4 }),
+      ...scatter(3, { at: 0.3, span: 0.06, freq: 3000, dur: 0.03, gain: 0.07, seed: 61 }),
+    ],
   },
 };

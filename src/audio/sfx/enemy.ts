@@ -1,136 +1,345 @@
-/** Enemy and boss SFX: breath, lasers, explosions, dissolves, phase shifts. */
+/**
+ * What the other side does: breath weapons, machina, the moment a boss changes
+ * shape, and the small sad sound of an enemy dissolving into light.
+ *
+ * The boss material is the one place the score's dread register is allowed into
+ * the effects — low strings on the b6, a tam-tam opening, the floor moving —
+ * because those cues fire while that music is already playing and they have to
+ * belong to it.
+ */
 
-import { makeNoise } from '../dsp/oscillators.ts';
-import { addAt, blank, fmTone, noiseBurst, tone, trim, voiceNote } from './kit.ts';
-import type { SfxDef } from './kit.ts';
+import {
+  bell,
+  bodyHit,
+  breath,
+  choirBloom,
+  cymbalSwell,
+  drone,
+  glassHigh,
+  LOW,
+  lowStrings,
+  MAGIC,
+  scatter,
+  subImpact,
+  SUB,
+  suction,
+  tamTam,
+  timpani,
+  toll,
+  UI,
+} from './materials.ts';
+import type { SfxDesign } from './design.ts';
 
-export const enemySfx: Record<string, SfxDef> = {
+export const enemySfx: Record<string, SfxDesign> = {
   'breath-attack': {
-    about: 'Roaring elemental breath blast (Braska\'s Final Aeon, dark Bahamut).',
-    render: (sr) => {
-      const out = blank(sr, 1.3);
-      addAt(out, noiseBurst(sr, { dur: 1.1, freq: 500, freqTo: 3000, q: 0.9, gain: 0.55, attack: 0.05, curve: 1.6, drive: 0.5 }), 0, sr, 0.95);
-      addAt(out, fmTone(sr, { freq: 95, toFreq: 130, ratio: 1.8, index: 3.5, indexTo: 1, dur: 1.0, gain: 0.35, curve: 1.8, crunchAmount: 0.4, attack: 0.06 }), 0.02, sr, 0.75, -0.15);
-      addAt(out, tone(sr, { freq: 60, dur: 0.9, wave: 'sine', gain: 0.4, curve: 2 }), 0.02, sr, 0.6);
-      return trim(out, 0.9);
-    },
+    about: 'An elemental breath: a long roar of air over low choir, with the room shaking under it.',
+    category: 'spell',
+    length: 2.4,
+    top: 9000,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 1.5,
+        freq: 260,
+        freqTo: 1400,
+        q: 0.45,
+        attack: 0.08,
+        curve: 1.6,
+        hold: 0.2,
+        gain: 0.45,
+      },
+      choirBloom(['B1', 'D2', 'F#2'], { at: 0, dur: 1.4, vel: 0.65, gain: 0.34, voice: 'choir', attack: 0.06 }),
+      subImpact({ at: 0, freq: SUB.deep, dur: 1.4, gain: 0.5, curve: 1.5 }),
+      ...scatter(12, { at: 0.1, span: 1.1, freq: 1800, freqSpread: 1, dur: 0.05, gain: 0.08, seed: 3131 }),
+      tamTam({ at: 0.8, dur: 1.4, vel: 0.6, gain: 0.22, speed: 0.85 }),
+    ],
   },
+
   'laser-charge': {
-    about: 'Rising laser charge-up whine, about a second (Vegnagun).',
-    render: (sr) => {
-      const out = blank(sr, 1.0);
-      addAt(out, tone(sr, { freq: 300, toFreq: 2600, glide: 1.4, dur: 0.9, wave: 'saw', cutoff: 900, cutoffTo: 6000, resonance: 3, gain: 0.32, curve: 0.8, attack: 0.05 }), 0, sr, 0.85);
-      addAt(out, noiseBurst(sr, { dur: 0.85, freq: 2000, freqTo: 8000, q: 2, gain: 0.16, attack: 0.3, curve: 1.4 }), 0.05, sr, 0.6);
-      return trim(out, 0.75);
-    },
+    about: 'Vegnagun taking aim: a hollow tone climbing a minor third while air is pulled toward it.',
+    category: 'spell',
+    length: 1.6,
+    layers: [
+      {
+        kind: 'tone',
+        at: 0,
+        dur: 1.2,
+        freq: 247,
+        toFreq: 587,
+        wave: 'tri',
+        attack: 0.15,
+        curve: 1.1,
+        gain: 0.26,
+        lowpass: 3600,
+      },
+      suction({ at: 0.1, dur: 1, low: 500, high: 4000, gain: 0.2 }),
+      drone(['B1', 'C#2'], { at: 0, dur: 1.2, vel: 0.5, gain: 0.24, voice: 'pwm-lead' }),
+      glassHigh(UI.ache, { at: 1.05, dur: 0.08, vel: 0.4, gain: 0.2, pan: 0.2 }),
+    ],
   },
+
   'laser-fire': {
-    about: 'Sustained laser beam discharge (Vegnagun).',
-    render: (sr) => {
-      const out = blank(sr, 0.75);
-      addAt(out, fmTone(sr, { freq: 2200, ratio: 2.3, index: 5, indexTo: 2, dur: 0.6, gain: 0.4, curve: 1.4, crunchAmount: 0.3 }), 0, sr, 0.9);
-      addAt(out, noiseBurst(sr, { dur: 0.6, freq: 5000, freqTo: 8000, q: 1.6, gain: 0.2, attack: 0.005, curve: 1.8 }), 0, sr, 0.7);
-      addAt(out, tone(sr, { freq: 1800, dur: 0.55, wave: 'square', gain: 0.15, curve: 1.6 }), 0.01, sr, 0.5, 0.2);
-      return trim(out, 0.88);
-    },
+    about: 'The beam: a held column of filtered air with a hard front edge and a hollow core.',
+    category: 'spell',
+    length: 1.8,
+    top: 10_000,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 0.08,
+        freq: 3600,
+        freqTo: 1200,
+        q: 0.7,
+        attack: 0.001,
+        curve: 8,
+        gain: 0.5,
+        seed: 606,
+      },
+      {
+        kind: 'air',
+        at: 0.02,
+        dur: 1.2,
+        freq: 1400,
+        q: 1.4,
+        attack: 0.02,
+        curve: 1.2,
+        hold: 0.55,
+        gain: 0.3,
+      },
+      {
+        kind: 'tone',
+        at: 0.02,
+        dur: 1.1,
+        freq: 587,
+        toFreq: 493,
+        wave: 'tri',
+        attack: 0.01,
+        curve: 1.3,
+        hold: 0.5,
+        gain: 0.2,
+        lowpass: 4200,
+      },
+      subImpact({ at: 0.01, freq: SUB.move, dur: 1.1, gain: 0.4, curve: 1.4 }),
+    ],
   },
+
   explosion: {
-    about: 'Big explosion: crack, boom and settling debris.',
-    render: (sr) => {
-      const out = blank(sr, 1.4);
-      addAt(out, noiseBurst(sr, { dur: 0.5, freq: 900, freqTo: 150, q: 0.5, gain: 0.7, attack: 0.001, curve: 2.2, drive: 0.6 }), 0, sr, 1);
-      addAt(out, tone(sr, { freq: 90, toFreq: 32, glide: 0.6, dur: 0.8, wave: 'sine', gain: 0.6, curve: 1.8, drive: 2 }), 0, sr, 0.95);
-      addAt(out, noiseBurst(sr, { dur: 0.9, freq: 400, freqTo: 100, q: 0.5, gain: 0.35, attack: 0.05, curve: 1.6, seed: 4141 }), 0.08, sr, 0.75);
-      return trim(out, 0.92);
-    },
+    about: 'A real explosion: the crack, the weight, and debris still settling a second later.',
+    category: 'impact',
+    length: 2.4,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 0.12,
+        freq: 2600,
+        freqTo: 500,
+        q: 0.45,
+        attack: 0.001,
+        curve: 7,
+        gain: 0.5,
+        seed: 4242,
+      },
+      bodyHit({ at: 0, pitch: 'B1', vel: 0.95, gain: 0.6, speed: 0.85 }),
+      subImpact({ at: 0, freq: SUB.deep, dur: 1.1, gain: 0.6, curve: 2.2 }),
+      {
+        kind: 'air',
+        at: 0.04,
+        dur: 1.3,
+        freq: 420,
+        freqTo: 110,
+        q: 0.4,
+        attack: 0.02,
+        curve: 2,
+        gain: 0.3,
+        seed: 99,
+      },
+      ...scatter(14, { at: 0.35, span: 1.2, freq: 1600, freqSpread: 1, dur: 0.04, gain: 0.07, seed: 515 }),
+      tamTam({ at: 0.02, dur: 1.6, vel: 0.7, gain: 0.24 }),
+    ],
   },
+
   quake: {
-    about: 'Long low rumble with falling debris (Yu Yevon, Gagazet tremor).',
-    render: (sr) => {
-      const out = blank(sr, 2.0);
-      addAt(out, tone(sr, { freq: 45, toFreq: 32, glide: 1, dur: 1.7, wave: 'sine', gain: 0.55, curve: 1.2, drive: 1.6 }), 0, sr, 0.95);
-      addAt(out, noiseBurst(sr, { dur: 1.8, freq: 120, freqTo: 260, q: 0.6, gain: 0.4, attack: 0.2, curve: 1.2, drive: 0.4 }), 0, sr, 0.85);
-      const rand = makeNoise(2718);
-      for (let i = 0; i < 8; i++) {
-        const at = 0.3 + Math.abs(rand()) * 1.5;
-        addAt(out, noiseBurst(sr, { dur: 0.05, freq: 1400 + rand() * 900, q: 2, gain: 0.2, curve: 6, seed: 1000 + i }), at, sr, 0.55, rand());
-      }
-      return trim(out, 0.88);
-    },
+    about: 'The ground fails: a long low rumble with the timpani rolling and rock falling through it.',
+    category: 'impact',
+    length: 3.2,
+    top: 8000,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 2.6,
+        freq: 150,
+        freqTo: 70,
+        q: 0.5,
+        attack: 0.25,
+        curve: 1.3,
+        gain: 0.38,
+        seed: 808,
+      },
+      subImpact({ at: 0, freq: SUB.deep, dur: 2.4, gain: 0.55, curve: 1.2 }),
+      timpani('B1', { at: 0.1, dur: 1.6, vel: 0.7, gain: 0.3 }),
+      timpani('D2', { at: 0.9, dur: 1.4, vel: 0.6, gain: 0.24, pan: -0.15 }),
+      ...scatter(10, { at: 0.5, span: 1.8, freq: 900, freqSpread: 1.1, dur: 0.06, gain: 0.08, seed: 1717 }),
+      lowStrings(['B1', 'C#2'], { at: 0.2, dur: 1.8, vel: 0.5, gain: 0.24, tremolo: true }),
+    ],
   },
+
   whip: {
-    about: 'Tentacle whip lash with a sharp crack (Seymour\'s aeons).',
-    render: (sr) => {
-      const out = blank(sr, 0.4);
-      addAt(out, noiseBurst(sr, { dur: 0.22, freq: 700, freqTo: 5200, q: 1.4, gain: 0.5, attack: 0.03, curve: 2, seed: 2525 }), 0, sr, 0.9, -0.2);
-      addAt(out, noiseBurst(sr, { dur: 0.05, freq: 4200, freqTo: 1200, q: 0.6, gain: 0.5, attack: 0.0006, curve: 7, seed: 6363 }), 0.2, sr, 0.85);
-      return trim(out, 0.83);
-    },
+    about: 'A tentacle lash: air narrowing to a point, a crack, and wet weight behind it.',
+    category: 'weapon',
+    length: 0.9,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 0.2,
+        freq: 600,
+        freqTo: 3400,
+        q: 1.8,
+        attack: 0.03,
+        curve: 3,
+        gain: 0.34,
+        pan: -0.4,
+        panTo: 0.4,
+      },
+      {
+        kind: 'air',
+        at: 0.19,
+        dur: 0.05,
+        freq: 3000,
+        freqTo: 1000,
+        q: 0.9,
+        attack: 0.001,
+        curve: 8,
+        gain: 0.42,
+        pan: 0.35,
+        seed: 313,
+      },
+      bodyHit({ at: 0.2, pitch: 'D2', vel: 0.7, gain: 0.36, speed: 1.1 }),
+      subImpact({ at: 0.2, freq: 88, dur: 0.3, gain: 0.3, curve: 4 }),
+    ],
   },
+
   'dissolve-pyreflies': {
-    about: 'An FFX enemy dies and dissolves into drifting light motes: soft, beautiful, a little sad.',
-    render: (sr) => {
-      const out = blank(sr, 2.2);
-      addAt(out, noiseBurst(sr, { dur: 0.4, freq: 1200, freqTo: 200, q: 0.6, gain: 0.25, attack: 0.02, curve: 3 }), 0, sr, 0.6);
-      const motes = ['A6', 'E6', 'C6', 'G5', 'E5'];
-      const rand = makeNoise(3535);
-      motes.forEach((pitch, i) => {
-        addAt(out, voiceNote(sr, 'sfx-shimmer', pitch, 0.7, 0.3 + i * 0.03), 0.15 + i * 0.22, sr, 0.42, rand() * 0.7);
-      });
-      addAt(out, voiceNote(sr, 'choir', 'C4', 1.6, 0.35), 0.2, sr, 0.3, -0.1);
-      addAt(out, noiseBurst(sr, { dur: 1.6, freq: 6000, freqTo: 9500, q: 1.2, gain: 0.09, attack: 0.6, curve: 1.8 }), 0.3, sr, 0.55);
-      return trim(out, 0.55);
-    },
+    about: 'An enemy comes apart into light: the body lets go, and what is left rises and is beautiful.',
+    category: 'ambience',
+    length: 3,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 0.5,
+        freq: 700,
+        freqTo: 2000,
+        q: 0.8,
+        attack: 0.05,
+        curve: 2,
+        gain: 0.16,
+      },
+      choirBloom([MAGIC.tense, MAGIC.home], { at: 0.1, dur: 1.4, vel: 0.45, gain: 0.28, attack: 0.2 }),
+      ...[MAGIC.move, UI.home, UI.neutral, UI.move, UI.high, MAGIC.high].map((pitch, i) => glassHigh(pitch, {
+        at: 0.25 + i * 0.22,
+        dur: 0.14,
+        vel: 0.4 - i * 0.03,
+        gain: 0.3 - i * 0.025,
+        pan: i % 2 === 0 ? -0.35 : 0.36,
+      })),
+      breath({ at: 0.2, dur: 1.8, gain: 0.06 }),
+      bell(UI.home, { at: 1.1, dur: 1, vel: 0.3, gain: 0.16, pan: 0.15 }),
+    ],
   },
+
   'machina-destroy': {
-    about: 'Machina destroyed: sparking mechanical explosion (Vegnagun wreckage).',
-    render: (sr) => {
-      const out = blank(sr, 1.2);
-      addAt(out, noiseBurst(sr, { dur: 0.35, freq: 700, freqTo: 120, q: 0.5, gain: 0.6, attack: 0.001, curve: 2.4, drive: 0.5 }), 0, sr, 0.95);
-      addAt(out, tone(sr, { freq: 320, toFreq: 40, glide: 0.6, dur: 0.5, wave: 'square', gain: 0.35, curve: 2, drive: 2.5 }), 0, sr, 0.8);
-      const rand = makeNoise(9898);
-      for (let i = 0; i < 7; i++) {
-        const at = 0.05 + Math.abs(rand()) * 0.8;
-        addAt(out, noiseBurst(sr, { dur: 0.03, freq: 4000 + Math.abs(rand()) * 4000, q: 3, gain: 0.28, curve: 8, seed: 1300 + i }), at, sr, 0.7, rand());
-      }
-      return trim(out, 0.88);
-    },
+    about: 'Machina killed: metal tears, sparks scatter, and the drone it was running on dies away.',
+    category: 'impact',
+    length: 2.4,
+    layers: [
+      {
+        kind: 'air',
+        at: 0,
+        dur: 0.1,
+        freq: 2200,
+        freqTo: 600,
+        q: 0.5,
+        attack: 0.001,
+        curve: 7,
+        gain: 0.45,
+        seed: 2468,
+      },
+      bodyHit({ at: 0, pitch: 'B1', vel: 0.85, gain: 0.5, speed: 0.9 }),
+      subImpact({ at: 0, freq: SUB.deep * 1.2, dur: 0.9, gain: 0.5, curve: 2.4 }),
+      { kind: 'ring', at: 0.02, freq: 620, ratio: 3.73, index: 2.2, indexTo: 0.1, dur: 0.9, curve: 3, gain: 0.22, pan: -0.2 },
+      ...scatter(16, { at: 0.12, span: 1.3, freq: 2800, freqSpread: 1, dur: 0.03, gain: 0.07, seed: 1234 }),
+      drone(['B1', 'C#2'], { at: 0.05, dur: 1.2, vel: 0.5, gain: 0.2, voice: 'pwm-lead' }),
+      cymbalSwell({ at: 0.05, dur: 1.2, vel: 0.5, gain: 0.16 }),
+    ],
   },
+
   'boss-phase-shift': {
-    about: 'Boss changes form: an ominous low swell into an impact (Seymour, Yunalesca).',
-    render: (sr) => {
-      const out = blank(sr, 1.7);
-      addAt(out, tone(sr, { freq: 45, toFreq: 70, glide: 1.2, dur: 1.1, wave: 'sine', gain: 0.4, curve: 0.9, attack: 0.3, drive: 1.4 }), 0, sr, 0.85);
-      addAt(out, noiseBurst(sr, { dur: 1.0, freq: 200, freqTo: 900, q: 1.3, gain: 0.25, attack: 0.4, curve: 1.4 }), 0, sr, 0.7, -0.15);
-      addAt(out, tone(sr, { freq: 120, toFreq: 38, glide: 0.5, dur: 0.4, wave: 'sine', gain: 0.75, curve: 2.6, drive: 2 }), 1.05, sr, 1);
-      addAt(out, voiceNote(sr, 'brass-stab', 'D3', 0.5, 0.9), 1.05, sr, 0.5);
-      return trim(out, 0.9);
-    },
+    about: 'A boss becomes something else: strings rise on the b6, the tam-tam opens, and it lands.',
+    category: 'flourish',
+    length: 3.4,
+    layers: [
+      lowStrings([LOW.tense, 'B2'], { at: 0, dur: 1.6, vel: 0.6, gain: 0.34, tremolo: true }),
+      choirBloom(['G2', 'B2'], { at: 0.2, dur: 1.5, vel: 0.5, gain: 0.26, voice: 'choir', attack: 0.3 }),
+      cymbalSwell({ at: 0.4, dur: 1.5, vel: 0.6, gain: 0.2 }),
+      suction({ at: 0.6, dur: 1.2, low: 400, high: 3000, gain: 0.16 }),
+      subImpact({ at: 1.8, freq: SUB.deep, dur: 1.1, gain: 0.6, curve: 2 }),
+      timpani('B1', { at: 1.8, dur: 0.9, vel: 0.9, gain: 0.4 }),
+      tamTam({ at: 1.8, dur: 1.5, vel: 0.8, gain: 0.3 }),
+      toll(LOW.home, { at: 1.82, dur: 1.4, vel: 0.6, gain: 0.3 }),
+    ],
   },
+
   'boss-overdrive-warning': {
-    about: 'Tense charging build before a boss ultimate, about two seconds.',
-    render: (sr) => {
-      const out = blank(sr, 2.0);
-      addAt(out, tone(sr, { freq: 220, toFreq: 880, glide: 2, dur: 1.8, wave: 'saw', cutoff: 500, cutoffTo: 4200, resonance: 2.2, gain: 0.28, curve: 0.7, attack: 0.1 }), 0, sr, 0.85);
-      const rand = makeNoise(4747);
-      for (let i = 0; i < 10; i++) {
-        addAt(out, tone(sr, { freq: 900 + i * 40, dur: 0.05, wave: 'square', gain: 0.14 + i * 0.01, curve: 6 }), i * 0.17, sr, 0.5 + i * 0.03, rand() * 0.3);
-      }
-      addAt(out, noiseBurst(sr, { dur: 1.7, freq: 300, freqTo: 3000, q: 1, gain: 0.2, attack: 0.5, curve: 1.2 }), 0.1, sr, 0.7);
-      return trim(out, 0.85);
-    },
+    about: 'Something terrible is being charged: a tremolo climb under an accelerating bell, no resolution.',
+    category: 'spell',
+    length: 2.6,
+    layers: [
+      lowStrings(['B1', 'C#2'], { at: 0, dur: 2, vel: 0.55, gain: 0.3, tremolo: true }),
+      ...[0, 0.5, 0.9, 1.2, 1.44, 1.62, 1.75, 1.85].map((at, i) => bell(i % 2 === 0 ? MAGIC.ache : MAGIC.tense, {
+        at,
+        dur: 0.3,
+        vel: 0.4 + i * 0.045,
+        gain: 0.26 + i * 0.02,
+        pan: i % 2 === 0 ? -0.2 : 0.22,
+      })),
+      suction({ at: 0.9, dur: 1.1, low: 500, high: 3600, gain: 0.18 }),
+      subImpact({ at: 1.9, freq: SUB.home, dur: 0.6, gain: 0.34, curve: 2.4 }),
+    ],
   },
+
   'petrify-shatter': {
-    about: 'Stone crackle building into a shatter.',
-    render: (sr) => {
-      const out = blank(sr, 0.9);
-      const rand = makeNoise(1919);
-      for (let i = 0; i < 6; i++) {
-        addAt(out, noiseBurst(sr, { dur: 0.05, freq: 2000 + i * 300, q: 3, gain: 0.25, curve: 6, seed: 1500 + i }), i * 0.06, sr, 0.5, rand() * 0.5);
-      }
-      addAt(out, noiseBurst(sr, { dur: 0.3, freq: 3500, freqTo: 1200, q: 0.8, gain: 0.55, attack: 0.001, curve: 5, seed: 2626 }), 0.4, sr, 0.9);
-      addAt(out, fmTone(sr, { freq: 2600, ratio: 2.9, index: 3, indexTo: 0.2, dur: 0.35, gain: 0.3, curve: 4 }), 0.4, sr, 0.6);
-      return trim(out, 0.85);
-    },
+    about: 'Stone closing over, then breaking: a granular crackle that tightens, and glass giving way.',
+    category: 'impact',
+    length: 2,
+    layers: [
+      ...scatter(18, { at: 0, span: 0.85, freq: 1400, freqSpread: 0.9, dur: 0.035, gain: 0.09, seed: 7373 }),
+      drone(['B2', 'C#3'], { at: 0, dur: 0.9, vel: 0.45, gain: 0.2 }),
+      {
+        kind: 'air',
+        at: 0.9,
+        dur: 0.12,
+        freq: 3200,
+        freqTo: 1200,
+        q: 0.6,
+        attack: 0.001,
+        curve: 7,
+        gain: 0.4,
+        seed: 919,
+      },
+      ...[UI.tense, UI.move, MAGIC.high, UI.neutral].map((pitch, i) => glassHigh(pitch, {
+        at: 0.9 + i * 0.03,
+        dur: 0.1,
+        vel: 0.5,
+        gain: 0.26,
+        pan: i % 2 === 0 ? -0.35 : 0.35,
+      })),
+      subImpact({ at: 0.9, freq: SUB.home, dur: 0.5, gain: 0.4, curve: 3 }),
+      ...scatter(10, { at: 1, span: 0.6, freq: 2600, freqSpread: 1, dur: 0.03, gain: 0.06, seed: 606 }),
+    ],
   },
 };
