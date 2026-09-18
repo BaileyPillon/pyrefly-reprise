@@ -2,7 +2,13 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleState } from '../../src/battle/common/types.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
-import { advisorZone, GAP, MIN_ADVISOR_WIDTH, type Rect } from '../../src/ui/ffx/hudSafeZones.ts';
+import {
+  advisorZone,
+  GAP,
+  MAX_ADVISOR_HEIGHT,
+  MIN_ADVISOR_WIDTH,
+  type Rect,
+} from '../../src/ui/ffx/hudSafeZones.ts';
 import { makeFakeBattleState, makeFakeCommands, makeFakeTurnPreview } from '../../src/ui/ffx/testFixtures.ts';
 import { openKimahriRage } from '../../src/ui/ffx/minigames/index.ts';
 
@@ -129,6 +135,43 @@ describe('advisorZone', () => {
     const spritesRight = Math.max(...PARTY['seymour-flux']!.map((r) => r.right));
     expect(zone.left).toBeGreaterThanOrEqual(spritesRight + GAP - 0.001);
     expect(zone.left + zone.width).toBeLessThanOrEqual(CHROME.partyStatus.left - GAP + 0.001);
+  });
+
+  it('never offers more height than the card was designed at', () => {
+    // The pocket's ceiling in chapters 1 and 3 is the stage's own top, so the
+    // raw room is ~220px — three times the card. Without the clamp the card
+    // grows to fill it and the NEXT BEST MOVE slab becomes a column.
+    for (const sprites of Object.values(PARTY)) {
+      expect(advisorZone({ ...CHROME, sprites })!.maxHeight).toBeLessThanOrEqual(MAX_ADVISOR_HEIGHT);
+    }
+  });
+
+  it('still hands back the smaller room when the zone is the tighter of the two', () => {
+    // Chapter 2's shelf is bounded above by the Sensor card and below by the
+    // party's heads; that is less than MAX_ADVISOR_HEIGHT and must survive.
+    const zone = advisorZone({ ...CHROME, sprites: PARTY['yunalesca']! })!;
+    const headsTop = Math.min(...PARTY['yunalesca']!.map((r) => r.top));
+    expect(zone.maxHeight).toBe(headsTop - GAP - (CHROME.sensor.bottom + GAP));
+    expect(zone.maxHeight).toBeLessThan(MAX_ADVISOR_HEIGHT);
+  });
+
+  it('refuses a pocket too short to hold the card rather than squeezing one in', () => {
+    // A party that stands clear of the pocket's x span but whose sprites hang
+    // down to the stage floor leaves a wide pocket with no vertical room.
+    const floorHugger: Rect[] = [{ left: 100, top: 20, right: 250, bottom: 356 }];
+    const zone = advisorZone({
+      ...CHROME,
+      sensor: { left: 250, top: 24, right: 396, bottom: 330 },
+      sprites: floorHugger,
+    });
+    expect(zone?.kind).not.toBe('pocket');
+  });
+
+  it('lifts the pocket clear of the Sensor card when the two share a column', () => {
+    const low: Rect = { left: 256, top: 24, right: 396, bottom: 180 };
+    const withSensor = advisorZone({ ...CHROME, sensor: low, sprites: PARTY['seymour-flux']! })!;
+    expect(withSensor.kind).toBe('pocket');
+    expect(cardRect(withSensor, withSensor.maxHeight).top).toBeGreaterThanOrEqual(low.bottom);
   });
 });
 

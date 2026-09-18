@@ -110,6 +110,18 @@ export const SHELF_RIGHT = 340;
 /** Distance from the stage's bottom edge the pocket's card sits at. */
 export const POCKET_BOTTOM = 26;
 
+/**
+ * Tallest the card may grow, in grid px — `move-advisor.css`'s own
+ * `max-height`, repeated here because a zone's `maxHeight` overrides it and a
+ * zone with 226px of room would otherwise let the card grow past the size it
+ * was designed at. A zone offering *less* than this still wins: that is the
+ * whole point of measuring it.
+ */
+export const MAX_ADVISOR_HEIGHT = 104;
+
+/** A zone shorter than this is not a zone — the card's head alone is ~14px. */
+export const MIN_ADVISOR_HEIGHT = 28;
+
 export interface AdvisorZoneInput {
   /** The command stack and its help card, as one box. */
   cmdArea: Rect;
@@ -149,20 +161,28 @@ export function advisorZone(input: AdvisorZoneInput): AdvisorZone | null {
   const pocketLeft = Math.max(input.cmdArea.right, spritesRight) + GAP;
   const pocketWidth = railRight - pocketLeft;
   if (Number.isFinite(pocketLeft) && pocketWidth >= MIN_ADVISOR_WIDTH) {
-    // The pocket's ceiling is whatever sprite hangs over it — the card may grow
-    // up to that and no further. A party that ends above the card's own band
-    // imposes no ceiling at all, hence the stage-height default.
-    const ceiling = input.sprites
-      .filter((r) => r.right > pocketLeft)
-      .reduce((m, r) => Math.max(m, r.bottom), 0);
-    const cardTopLimit = ceiling > 0 ? ceiling + GAP : 0;
-    return {
-      left: pocketLeft,
-      width: pocketWidth,
-      bottom: POCKET_BOTTOM,
-      maxHeight: Math.max(28, STAGE.height - POCKET_BOTTOM - cardTopLimit),
-      kind: 'pocket',
-    };
+    // How far up the card may grow: past the Sensor card, which is the one
+    // other panel whose column reaches down into the pocket's, and past any
+    // sprite that still shares the pocket's x span — which cannot happen while
+    // `pocketLeft` is derived from `spritesRight`, but is cheap to keep honest
+    // if a later caller hands in a narrower left edge.
+    let ceilingY = GAP;
+    if (input.sensor && overlapsX(input.sensor, pocketLeft, railRight)) {
+      ceilingY = Math.max(ceilingY, input.sensor.bottom + GAP);
+    }
+    for (const r of input.sprites) {
+      if (overlapsX(r, pocketLeft, railRight)) ceilingY = Math.max(ceilingY, r.bottom + GAP);
+    }
+    const room = STAGE.height - POCKET_BOTTOM - ceilingY;
+    if (room >= MIN_ADVISOR_HEIGHT) {
+      return {
+        left: pocketLeft,
+        width: pocketWidth,
+        bottom: POCKET_BOTTOM,
+        maxHeight: Math.min(room, MAX_ADVISOR_HEIGHT),
+        kind: 'pocket',
+      };
+    }
   }
 
   // ---- 2. the shelf: above the party's heads, right of the guide's rail.
@@ -178,12 +198,12 @@ export function advisorZone(input: AdvisorZoneInput): AdvisorZone | null {
   const cardBottomY = headsTop - GAP;
   const ceilingY = input.sensor && overlapsX(input.sensor, shelfLeft, shelfRight) ? input.sensor.bottom + GAP : GAP;
   const room = cardBottomY - ceilingY;
-  if (room < 28) return null;
+  if (room < MIN_ADVISOR_HEIGHT) return null;
   return {
     left: shelfLeft,
     width: shelfWidth,
     bottom: STAGE.height - cardBottomY,
-    maxHeight: room,
+    maxHeight: Math.min(room, MAX_ADVISOR_HEIGHT),
     kind: 'shelf',
   };
 }
