@@ -209,6 +209,45 @@ Screenshots: `docs/screenshots/fix3/pause/`.
   and OPTIONS panels, and the prep menu's CHAPTER tab (the other consumer of
   `chapter-panel.css`).
 
+### The second pass's run
+
+A fresh vite dev server on **port 5723**, same throwaway HMR-off config, and a
+**fresh browser context per viewport** — the first pass resized one page
+through all six sizes, which had two costs. A screenshot of a 2000px+ viewport
+started hanging once several resizes had each reallocated a SwiftShader
+framebuffer, and one `Escape` landed while the battle's opening beat still
+owned the keyboard, so the pause never opened and every later measurement in
+that run read `null` against a screen that was not up. A fresh page per size
+also makes the `srcset` check honest: a browser upgrades a picked candidate and
+never downgrades it, so measuring small viewports after large ones in one page
+proves nothing about the small ones.
+
+Three assertions were added for the things the first pass's numbers were blind
+to — the hint strip's right edge against the viewport (it was *clipped*, not
+scrolled, so `documentElement.scrollWidth` was right to pass), the intersection
+of each party card's numerals with its OD gauge, and the dossier's bottom
+against the top of the hint strip.
+
+| | 390x844 | 1280x720 | 2000x1012 | 3840x2160 |
+|---|---|---|---|---|
+| painting rect == viewport | yes | yes | yes | yes |
+| `currentSrc` | `.png` | `.png` | `.2x.webp` | `.2x.webp` |
+| smallest font / under 14px | 14 / 0 of 68 | 14 / 0 of 74 | 14 / 0 of 74 | 18 / 0 of 74 |
+| hint strip inside the window | yes | yes | yes | yes |
+| numerals over the OD gauge | none | none | none | none |
+| polaroid captions clipped | none | none | none | none |
+| blur on the art | none | none | none | none |
+
+The key contract was re-run on its own against the current tree, because
+another track landed a change to how the FFX menus claim `cancel` while this
+was in flight: `P` opens over a live command menu, `H` hides the panels
+(`panelsHidden: true`, `.pause--bare` on the stage, menu not rendered,
+surviving line at 14px, painting still exactly the viewport), `H` again brings
+them back, `ArrowDown` moves the cursor `RESUME -> RESTART ENCOUNTER`, the
+MUSIC panel still lists its 10 rows, `Escape` resumes (`battle > pause` ->
+`battle`), `F` enters photo mode and `Escape` leaves it. No page errors, no
+console errors.
+
 Unit tests: `tests/unit/pause-fullbleed.test.ts` (18, new) — the manifest's
 `pause2x` rules against a fixture tree, `parseArtManifest`, `pauseStemOf` /
 `pause2xUrlFor`, `parseArtFocal`, and the stylesheet contracts (layer is
@@ -254,3 +293,23 @@ helper updated for the new `.pause__frame` wrapper. `npx tsc --noEmit` clean.
 - **The PARTY tab's third card** used to clip once buffs added a status row;
   the panel now scrolls (`overflow-y: auto`), which closes it, but the cards
   have not been re-designed for the larger type.
+- **The phone dossier is a sliver.** With the menu's ten rows, the three party
+  cards each on their own row and a three-line hint strip, a 390x844 screen has
+  about 130px left for the dossier. It scrolls, and nothing is clipped or
+  overlapped any more, but a phone layout that gave the dossier a tab of its own
+  rather than a slot in the stack would be the real answer. Nobody has asked for
+  one — Bailey plays at 2000x1012 — so this is noted, not done.
+- **Chapter 1's pause plate is a painting of Tidus**, while the dossier beside
+  it is Seymour Flux. It may well be deliberate (the plates are hero-side
+  portraits, and the quote under it is Seymour's), but it reads as a mismatch on
+  a full-bleed screen where the painting is now the whole window rather than a
+  panel. Art track's call: `public/art/pause/ch1-seymour-flux.png`.
+- **Esc-opens-the-pause was not re-proven on the second pass.** `Escape`
+  *resuming* is proven, and `P` opening over a live command menu is proven, but
+  the run that would have shown `Escape` opening it from the command menu's top
+  row could not boot the app: `src/audio/**` was mid-edit by another track and
+  throwing at import (`pizz is not defined`), with `tsc` showing 15 errors in
+  files this track does not own. The first pass proved it, and the `cancel`
+  claim has since moved (`src/ui/ffx/cancelClaim.ts`, another track's commit
+  "FFX HUD: one tap of Esc means one thing"), so it is worth one more run once
+  the tree boots. Nothing in this track's files bears on it.
