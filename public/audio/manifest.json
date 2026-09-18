@@ -4,12 +4,21 @@
   "music": {
     "chapter-select": {
       "file": "music/chapter-select.mp3",
-      "loopStart": 8.5714,
-      "loopEnd": 77.1429,
-      "duration": 80.1429,
-      "bytes": 1173527,
-      "lufs": -16.12,
-      "truePeakDb": -1.8
+      "loopStart": 4.2857,
+      "loopEnd": 72.8571,
+      "duration": 75.8571,
+      "bytes": 1003243,
+      "lufs": -16.09,
+      "truePeakDb": -1.37
+    },
+    "pause": {
+      "file": "music/pause.mp3",
+      "loopStart": 5.2174,
+      "loopEnd": 46.9565,
+      "duration": 49.9565,
+      "bytes": 735574,
+      "lufs": -16,
+      "truePeakDb": -1.39
     },
     "boss-seymour": {
       "file": "music/boss-seymour.mp3",
@@ -22,12 +31,12 @@
     },
     "title": {
       "file": "music/title.mp3",
-      "loopStart": 15,
-      "loopEnd": 105,
-      "duration": 108,
-      "bytes": 1453722,
-      "lufs": -16.08,
-      "truePeakDb": -1.38
+      "loopStart": 8.2759,
+      "loopEnd": 91.0345,
+      "duration": 94.0345,
+      "bytes": 1199811,
+      "lufs": -16.14,
+      "truePeakDb": -1.37
     },
     "battle-ffx": {
       "file": "music/battle-ffx.mp3",
