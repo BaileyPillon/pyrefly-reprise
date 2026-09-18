@@ -16,11 +16,16 @@
  *
  * ## How a suggestion is chosen
  *
- * 1. **The chapter's own line wins when it is legal.** `recommendedCommand`
- *    runs the shipped `intendedStrategy` read-only through `guide.ts`'s
- *    `stateOnlyEngine`, so the advisor's top row and the auto-battler can never
- *    disagree about *what* to do. The advisor's job on that row is to say what
- *    it will cost and what it will do, which the tactic does not.
+ * 1. **The chapter's own line wins when this actor can press it.**
+ *    `recommendedCommand` runs the shipped `intendedStrategy` read-only through
+ *    `guide.ts`'s `stateOnlyEngine`, so the advisor's top row and the
+ *    auto-battler can never disagree about *what* to do. The advisor's job on
+ *    that row is to say what it will cost and what it will do, which the tactic
+ *    does not. "Can press it" is {@link ownedRow} and it is not a formality —
+ *    the card's actor name, its rows and the menu in front of the player have
+ *    to agree, so a line naming a move this character does not own is either
+ *    turned into the switch that hands the turn to whoever does ({@link
+ *    handOff}) or dropped for the simulated ranking.
  * 2. **Otherwise every legal row is simulated and scored.** Each candidate is
  *    resolved on a throwaway copy of the battle by `src/battle/<game>/simulate.ts` —
  *    the engine's real damage chain — and {@link scoreOutcome} turns the result
@@ -33,6 +38,11 @@
  *    itself chose it or when the bench is *clearly* better off in. Whenever it
  *    does reach the top, the best non-switch is shown beneath it, because
  *    "switch" alone is not an answer to "what do I press".
+ * 4. **An ally on the floor always gets an answer.** When somebody is down and
+ *    the top row is not the revive, the revive is the runner-up — or, when
+ *    raising them now only feeds the boss a second kill, the card says so in
+ *    one sentence (`AdvisorView.note`) instead of staying quiet. What a revive
+ *    is worth is read off the board rather than fixed: see `./advisor-revive.ts`.
  *
  * ## The canon-aware penalties
  *
@@ -79,7 +89,17 @@ import {
   previewCritChance as previewCritChanceFfx2,
   previewHitChance as previewHitChanceFfx2,
 } from '../../battle/ffx2/simulate.ts';
-import { buildGuideView, recommendedCommand, rowFor, type GuideDecision } from './guide.ts';
+import { buildGuideView, recommendedCommand, type GuideDecision } from './guide.ts';
+import {
+  type AdvisorIntent,
+  downedActives,
+  reviveReason,
+  reviveRisk,
+  reviveValue,
+  waitSentence,
+} from './advisor-revive.ts';
+
+export type { AdvisorIntent } from './advisor-revive.ts';
 
 // ------------------------------------------------------------------ the view
 
@@ -118,7 +138,24 @@ export interface MoveSuggestion {
   cures: string[];
   /** One line on why this is the pick. */
   reason: string;
-  /** Research citation, when the chapter's written guide has one for this row. */
+  /**
+   * The submenu the player presses to reach this row — "Items", "White Magic".
+   *
+   * The card prints it beside the label, and it is not decoration: Chapter 1's
+   * Poison Fang is a *thrown item* every member carries, and named on its own
+   * it reads as somebody else's ability. Bailey's report on the live build was
+   * exactly that — "I'm controlling Tidus but the advisor is telling me to use
+   * Poison Fang?" — for a row that was in Tidus's own Items list all along.
+   */
+  menu: string;
+  /**
+   * Research citation for the chapter's own line, when there is one.
+   *
+   * Kept on the data for the debug snapshot and **not printed on the card**:
+   * "ffx-seymour-flux §6 rows 5-6" is a note to the people building the game,
+   * not to the person holding the controller. The citations stay in the
+   * strategy guide panel, which is where a player goes to ask *why*.
+   */
   cite: string;
   /** A named warning when the move was penalised for being wasteful here. */
   warning: string;
@@ -132,8 +169,19 @@ export interface MoveSuggestion {
 export interface AdvisorView {
   actorId: CombatantId;
   actorName: string;
-  /** One suggestion, or two when the top one is a party switch. */
+  /**
+   * One suggestion, or two — the runner-up when the top row is a party switch,
+   * and the revive when an ally is down and the top row is not one.
+   */
   suggestions: MoveSuggestion[];
+  /**
+   * One plain sentence the card prints under the moves, or `''`.
+   *
+   * Currently only ever the "do not raise them into that" line: when an ally is
+   * down and the board would kill them again the moment they stand up, the card
+   * says *when* to spend the Phoenix Down instead of silently ranking it last.
+   */
+  note: string;
   /** How many legal rows were actually simulated, for the debug snapshot. */
   considered: number;
 }
@@ -143,6 +191,16 @@ export interface AdvisorOptions {
   ffx2?: { abilities?: AbilityRegistry; items?: ItemRegistry };
   /** FFX ability/item records. Defaults to the process-wide registry. */
   ffxContent?: FFXContentRegistry;
+  /**
+   * The enemy-intent forecast, when the HUD has one.
+   *
+   * Optional and duck-typed for the same reason `attachEnemyIntent` is: the
+   * prediction needs the live engine context and the advisor only ever holds a
+   * `BattleState`. With it the advisor can tell a revive that survives from one
+   * that walks into a telegraphed Lance of Atrophy; without it, it falls back
+   * to what the state alone says (charges, Zombie) and never guesses.
+   */
+  intent?: () => AdvisorIntent | null;
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -163,8 +221,6 @@ export const SWITCH_PENALTY = 12_000;
 /** Score for killing an ordinary enemy; a boss is worth {@link BOSS_KILL_VALUE}. */
 const KILL_VALUE = 2_000;
 const BOSS_KILL_VALUE = 20_000;
-/** Standing an ally back up. */
-const REVIVE_VALUE = 3_000;
 /** Healing that takes an ally out of the band where the next hit kills them. */
 const PREVENTS_KO_VALUE = 2_500;
 /** HP fraction under which an ally counts as one hit from dead. */
@@ -206,6 +262,92 @@ const FRIENDLY_FIRE_WEIGHT = 4;
 const MAX_SIMULATIONS = 60;
 
 const YUNALESCA_ID = 'yunalesca';
+
+/** The submenu a row lives in, in the words printed on the command stack. */
+const MENU_WORDS: Partial<Record<string, string>> = {
+  attack: 'Attack',
+  skill: 'Special',
+  special: 'Special',
+  blackmagic: 'Black Magic',
+  whitemagic: 'White Magic',
+  summon: 'Summon',
+  overdrive: 'Overdrive',
+  aeon: 'Aeon',
+  item: 'Items',
+  dressphere: 'Dressphere',
+};
+
+// --------------------------------------------------------------- ownership
+
+/**
+ * The row **this actor** is actually offered for `command`, or `null`.
+ *
+ * The card's one unbreakable promise is that everything on it is something the
+ * player can press *right now, on the menu in front of them*. `guide.ts`'s
+ * `rowFor` is deliberately looser — it matches kind and id so the panel can
+ * print a label for a command whose row has since been greyed out — and that
+ * looseness is not safe for a card that says "press this". So this is the
+ * stricter gate and every suggestion goes through it:
+ *
+ *  * the row exists in **this** decision's command list and is `enabled`;
+ *  * the ability / item id matches exactly, so a Ronso Rage named like an item
+ *    can never stand in for the item;
+ *  * a switch matches on the incoming member, which is what distinguishes one
+ *    switch row from another (they share `kind` and carry no id);
+ *  * every aimed target is in that row's own `validTargets`, so a command
+ *    aimed at somebody this row cannot reach is refused rather than printed.
+ */
+export function ownedRow(
+  commands: readonly AvailableCommand[],
+  command: Command,
+): AvailableCommand | null {
+  const id = 'id' in command ? String((command as { id?: unknown }).id) : '';
+  const inId = (command as { extra?: { inId?: CombatantId } }).extra?.inId;
+  for (const row of commands) {
+    if (!row.enabled) continue;
+    if (row.command.kind !== command.kind) continue;
+    const rowId = 'id' in row.command ? String((row.command as { id?: unknown }).id) : '';
+    if (rowId !== id) continue;
+    if (command.kind === 'switch') {
+      const rowIn = (row.command as { extra?: { inId?: CombatantId } }).extra?.inId;
+      if (inId !== undefined && rowIn !== undefined && inId !== rowIn) continue;
+    }
+    const targets = command.targets as readonly CombatantId[];
+    if (targets.length > 0 && !targets.every((t) => row.validTargets.includes(t))) continue;
+    return row;
+  }
+  return null;
+}
+
+/**
+ * The living party member who knows `command`'s ability, when the acting one
+ * does not — the "that is somebody else's move" case.
+ *
+ * Reads the members' own learned and Overdrive lists rather than a table, so a
+ * build change cannot leave a stale answer behind. Returns `null` for anything
+ * without an id (Attack, Defend, a switch) and for FFX-2, which carries its
+ * command sets on dresspheres instead.
+ */
+export function abilityOwner(
+  state: Readonly<BattleState>,
+  command: Command,
+  exclude: CombatantId,
+): AnyCombatant | null {
+  const id = 'id' in command ? String((command as { id?: unknown }).id) : '';
+  if (!id) return null;
+  for (const memberId of [...state.activeIds, ...state.reserveIds]) {
+    if (memberId === exclude) continue;
+    const c = state.combatants[memberId];
+    if (!c || !c.alive) continue;
+    const known = [
+      ...((c as { learnedAbilityIds?: readonly string[] }).learnedAbilityIds ?? []),
+      ...((c as { overdrive?: { unlockedOverdriveIds?: readonly string[] } }).overdrive
+        ?.unlockedOverdriveIds ?? []),
+    ].map(String);
+    if (known.includes(id)) return c;
+  }
+  return null;
+}
 
 // ------------------------------------------------------------------- reading
 
@@ -393,7 +535,7 @@ function aimCandidates(
 export function scoreOutcome(
   state: Readonly<BattleState>,
   outcome: SimOutcome,
-  ctx: { command: Command; def: AbilityDef | null },
+  ctx: { command: Command; def: AbilityDef | null; intent?: AdvisorIntent | null },
 ): { score: number; warning: string } {
   const boss = primaryBoss(state);
   let score = 0;
@@ -421,7 +563,13 @@ export function scoreOutcome(
     if (!c || isEnemy(c) || delta >= 0) continue;
     if (c.alive && hpFraction(c) < CRITICAL_HP) score += PREVENTS_KO_VALUE;
   }
-  score += outcome.revives.length * REVIVE_VALUE;
+  // Not a flat number: what a revive is worth is who is on the floor, how far
+  // the party has already collapsed and whether they survive standing up. See
+  // `./advisor-revive.ts`.
+  for (const id of outcome.revives) {
+    score += reviveValue(state, id, ctx.intent ?? null);
+  }
+  const risk = outcome.revives[0] ? reviveRisk(state, outcome.revives[0], ctx.intent ?? null) : null;
 
   for (const change of outcome.statusChanges) {
     const target = state.combatants[change.targetId];
@@ -457,6 +605,9 @@ export function scoreOutcome(
 
   score -= outcome.mpSpent * MP_WEIGHT;
   if (outcome.rejected) score -= 1_000_000;
+  // The re-kill warning outranks anything above it: a revive into a telegraphed
+  // Lance of Atrophy is the most expensive mistake on the board.
+  if (risk) warning = risk.sentence;
   return { score, warning };
 }
 
@@ -504,7 +655,9 @@ function reasonFor(
   if (s.command.kind === 'dismiss') return 'Puts the party back on the field';
   if (s.command.kind === 'defend') return 'Nothing better is offered — brace for the hit';
   if (outcome.kills.some((id) => isEnemy(state.combatants[id]))) return `Finishes ${name}`;
-  if (outcome.revives.length > 0) return `Stands ${state.combatants[outcome.revives[0]!]?.name ?? 'them'} back up`;
+  // Not "stands them back up" — the player can see that. What they cannot see
+  // is what the party has been doing without since that member went down.
+  if (outcome.revives.length > 0) return reviveReason(state, outcome.revives[0]!);
   const cured = outcome.statusChanges.find((c) => !c.applied && !isEnemy(state.combatants[c.targetId]));
   if (cured) {
     return `Clears ${statusLabel(cured.status)} from ${state.combatants[cured.targetId]?.name ?? 'them'}`;
@@ -559,6 +712,7 @@ function candidateFor(
   row: AvailableCommand,
   targetId: CombatantId | null,
   sim: Sim,
+  intent: AdvisorIntent | null,
   withRange = false,
 ): Candidate | null {
   const command = { ...row.command, targets: targetId ? [targetId] : [] } as Command;
@@ -619,10 +773,11 @@ function candidateFor(
       : previewCritChance(state, actorId, targetId, def)
     : 0;
 
-  const scored = scoreOutcome(state, mid, { command, def });
+  const scored = scoreOutcome(state, mid, { command, def, intent });
   const base: Omit<MoveSuggestion, 'reason' | 'cite' | 'score' | 'source'> = {
     command,
     label: row.label,
+    menu: MENU_WORDS[row.category] ?? '',
     targetId,
     targetName: scoped ?? target?.name ?? null,
     effect: describeAbility(def, row, command),
@@ -660,6 +815,7 @@ function switchCandidate(
   const base: Omit<MoveSuggestion, 'reason' | 'cite' | 'score' | 'source'> = {
     command,
     label: row.label,
+    menu: 'Switch',
     targetId: incoming?.id ?? null,
     // No target name: FFX labels a Switch row with the incoming member's own
     // name, so printing the target too reads "Auron -> Auron".
@@ -703,10 +859,17 @@ export function buildAdvisorView(
   const actor = state.combatants[decision.actorId];
   if (!actor) return null;
   const sim = simulatorFor(state, options);
+  let intent: AdvisorIntent | null = null;
+  try {
+    intent = options.intent?.() ?? null;
+  } catch {
+    // A forecast is never worth a card. The advisor reads the board instead.
+    intent = null;
+  }
 
   const candidates: Candidate[] = [];
   let simulations = 0;
-  for (const row of decision.commands) {
+  for (const row of orderedRows(state, decision.commands, options)) {
     if (!row.enabled) continue;
     if (row.command.kind === 'escape') continue;
     if (row.command.kind === 'switch') {
@@ -717,32 +880,93 @@ export function buildAdvisorView(
     for (const targetId of aimCandidates(state, row, def)) {
       if (simulations >= MAX_SIMULATIONS) break;
       simulations += 1;
-      const candidate = candidateFor(state, decision.actorId, row, targetId, sim);
+      const candidate = candidateFor(state, decision.actorId, row, targetId, sim, intent);
       if (candidate) candidates.push(candidate);
     }
   }
 
   candidates.sort((a, b) => b.suggestion.score - a.suggestion.score);
 
-  // The chapter's own line, when it is legal right now, is the top row.
-  const tactic = tacticSuggestion(state, decision, candidates, sim);
-  const ranked = tactic ? [tactic, ...candidates.filter((c) => !sameCommand(c.suggestion.command, tactic.suggestion.command))] : candidates;
-  if (ranked.length === 0) return null;
+  // The chapter's own line, when this actor can actually press it, is the top
+  // row. `tacticSuggestion` returns `null` rather than a row from somebody
+  // else's menu, and the ranking below stands in for it when it does.
+  const tactic = tacticSuggestion(state, decision, candidates, sim, intent);
+  const ranked = tactic
+    ? [tactic, ...candidates.filter((c) => !sameCommand(c.suggestion.command, tactic.suggestion.command))]
+    : candidates;
 
-  const shown: Candidate[] = [ranked[0]!];
+  // **The hard gate.** Nothing reaches the card that this actor cannot press on
+  // the menu currently in front of them — not a stale candidate, not a tactic's
+  // re-aim, not a row that was greyed out between the simulation and here.
+  const legal = ranked.filter((c) => ownedRow(decision.commands, c.suggestion.command) !== null);
+  if (legal.length === 0) return null;
+
+  const shown: Candidate[] = [legal[0]!];
+  let note = '';
   if (shown[0]!.suggestion.isSwitch) {
     // "Switch" is not an answer to "what do I press" — show the best move too.
-    const alternative = ranked.find((c) => !c.suggestion.isSwitch);
+    const alternative = legal.find((c) => !c.suggestion.isSwitch);
     if (alternative) shown.push(alternative);
+  } else if (!isRevive(shown[0]!)) {
+    // An ally on the floor is the question the player is actually asking, and
+    // the card used to answer it by saying nothing. Either the revive is shown
+    // as the runner-up, or — when raising them now just feeds the boss another
+    // kill — the card says in one sentence when to spend the turn instead.
+    const down = downedActives(state)[0];
+    const raise = legal.find(isRevive);
+    if (raise) {
+      const risk = reviveRisk(state, raise.outcome?.revives[0] ?? raise.suggestion.targetId ?? '', intent);
+      if (risk) note = waitSentence(risk);
+      else shown.push(raise);
+    } else if (down) {
+      const risk = reviveRisk(state, down.id, intent);
+      if (risk) note = waitSentence(risk);
+    }
   }
-  const suggestions = shown.map((c) => withRange(state, decision.actorId, c, sim));
+  const suggestions = shown.map((c) => withRange(state, decision.actorId, c, sim, intent));
 
   return {
     actorId: decision.actorId,
     actorName: actor.name,
     suggestions,
+    note,
     considered: candidates.length,
   };
+}
+
+/** True when this candidate's simulation stands somebody back up. */
+function isRevive(c: Candidate): boolean {
+  return (c.outcome?.revives.length ?? 0) > 0;
+}
+
+/**
+ * The decision's rows, with the revives brought to the front while an ally is
+ * down.
+ *
+ * {@link MAX_SIMULATIONS} caps a wide menu at sixty previews, and Chapter 1
+ * offers Tidus forty-two rows — so on a deep item list the Phoenix Down can sit
+ * past the cap and never be priced at all, which is a silent way of making the
+ * revive lose. Ordering is not scoring: every row still competes on its own
+ * simulated number, this only decides which ones get simulated first.
+ */
+function orderedRows(
+  state: Readonly<BattleState>,
+  commands: AvailableCommand[],
+  options: AdvisorOptions,
+): AvailableCommand[] {
+  const down = downedActives(state);
+  if (down.length === 0) return commands;
+  const ids = new Set(down.map((c) => c.id));
+  const first: AvailableCommand[] = [];
+  const rest: AvailableCommand[] = [];
+  for (const row of commands) {
+    const def = defFor(state, row.command, options);
+    const raises =
+      def?.flags.includes('misses-if-target-alive') === true &&
+      row.validTargets.some((id) => ids.has(id));
+    (raises ? first : rest).push(row);
+  }
+  return [...first, ...rest];
 }
 
 /**
@@ -756,9 +980,10 @@ function withRange(
   actorId: CombatantId,
   candidate: Candidate,
   sim: Sim,
+  intent: AdvisorIntent | null,
 ): MoveSuggestion {
   if (!candidate.origin) return candidate.suggestion;
-  const full = candidateFor(state, actorId, candidate.origin.row, candidate.origin.targetId, sim, true);
+  const full = candidateFor(state, actorId, candidate.origin.row, candidate.origin.targetId, sim, intent, true);
   if (!full?.suggestion.estimate) return candidate.suggestion;
   return {
     ...candidate.suggestion,
@@ -793,6 +1018,48 @@ function sameCommand(a: Command, b: Command): boolean {
 }
 
 /**
+ * The tactic named a move this actor does not have. Offer the switch, or decline.
+ *
+ * There is exactly one honest answer to "the chapter's line wants Mighty Guard
+ * and you are Tidus": *put Kimahri in*. FFX makes that nearly free — the
+ * incoming member takes the turn that is happening right now [ffx-combat-core
+ * §1.7] — so when the bench row is on this menu and the board is one where the
+ * swap is worth the turn ({@link switchValue} against {@link SWITCH_PENALTY},
+ * the same bar every other switch is held to), that is the card's answer.
+ *
+ * Otherwise it returns `null` and `buildAdvisorView` falls back to the
+ * simulated ranking for the character actually standing there. What it never
+ * does is print the other character's move, which is the defect this whole
+ * path exists to close.
+ */
+function handOff(
+  state: Readonly<BattleState>,
+  decision: GuideDecision,
+  command: Command,
+): Candidate | null {
+  const owner = abilityOwner(state, command, decision.actorId);
+  if (!owner) return null;
+  const row = decision.commands.find(
+    (c) =>
+      c.enabled &&
+      c.command.kind === 'switch' &&
+      (c.command as { extra?: { inId?: CombatantId } }).extra?.inId === owner.id,
+  );
+  if (!row) return null;
+  const candidate = switchCandidate(state, row, null);
+  if (switchValue(state, candidate.suggestion.command) < SWITCH_PENALTY) return null;
+  const label = 'id' in command ? String((command as { id?: unknown }).id).replace(/-/g, ' ') : 'that move';
+  return {
+    ...candidate,
+    suggestion: {
+      ...candidate.suggestion,
+      reason: `${owner.name} is the one who can use ${label}, and stepping in costs no time`,
+      source: 'tactic',
+    },
+  };
+}
+
+/**
  * The shipped tactic's choice, dressed as a suggestion.
  *
  * Runs the same `intendedStrategy` the auto-battler and the strategy guide run,
@@ -807,6 +1074,7 @@ function tacticSuggestion(
   decision: GuideDecision,
   candidates: Candidate[],
   sim: Sim,
+  intent: AdvisorIntent | null,
 ): Candidate | null {
   let command: Command | null = null;
   try {
@@ -815,18 +1083,24 @@ function tacticSuggestion(
     return null;
   }
   if (!command) return null;
-  const row = rowFor(decision.commands, command);
-  if (row && !row.enabled) return null;
+
+  // **Ownership, before anything else.** A tactic chooses among the rows it was
+  // handed, so in a healthy build this always resolves — but "the card's actor,
+  // its commands and the menu the player is looking at always agree" is the
+  // promise the card lives or dies on, and it is cheap to make it structural
+  // instead of trusting every present and future tactic to keep it.
+  const row = ownedRow(decision.commands, command);
+  if (!row) return handOff(state, decision, command);
 
   // `SwitchCommand.targets` is typed as the empty tuple, so the aimed id is
   // read through the shared shape rather than off the narrowed union.
   const aimedId = (command.targets as readonly CombatantId[])[0] ?? null;
   let candidate = candidates.find((c) => sameCommand(c.suggestion.command, command!)) ?? null;
-  if (!candidate && row) {
+  if (!candidate) {
     candidate =
       command.kind === 'switch'
         ? switchCandidate(state, row, aimedId)
-        : candidateFor(state, decision.actorId, row, aimedId, sim);
+        : candidateFor(state, decision.actorId, row, aimedId, sim, intent);
   }
   if (!candidate) return null;
 

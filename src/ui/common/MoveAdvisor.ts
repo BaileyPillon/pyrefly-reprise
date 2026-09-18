@@ -319,8 +319,9 @@ function signatureOf(view: AdvisorView): string {
   return [
     view.actorId,
     ...view.suggestions.map((s) =>
-      [s.label, s.targetId ?? '', s.estimate?.min ?? '', s.estimate?.max ?? '', s.reason, s.warning].join('|'),
+      [s.label, s.menu, s.targetId ?? '', s.estimate?.min ?? '', s.estimate?.max ?? '', s.reason, s.warning].join('|'),
     ),
+    view.note,
   ].join('||');
 }
 
@@ -329,8 +330,8 @@ function num(n: number): string {
   return Math.round(n).toLocaleString('en-US');
 }
 
-function statsHtml(s: MoveSuggestion): string {
-  const chips: string[] = [];
+function statsHtml(s: MoveSuggestion, lead = ''): string {
+  const chips: string[] = lead ? [lead] : [];
   const e = s.estimate;
   if (e && e.kind !== 'none') {
     const cls = e.kind === 'heal' ? 'mad__stat--heal' : 'mad__stat--dmg';
@@ -356,20 +357,38 @@ function statsHtml(s: MoveSuggestion): string {
   return `<p class="mad__stats">${chips.join('')}</p>`;
 }
 
+/**
+ * One suggestion.
+ *
+ * Two things the card used to print are deliberately gone, both on Bailey's
+ * report of the live build:
+ *
+ *  * **"chapter line"** is developer vocabulary. The player has never been told
+ *    what a chapter line is; what they want to know is whose advice this is, so
+ *    the badge says **Guide's pick** and means the same thing.
+ *  * **The research citation** ("ffx-seymour-flux §6 rows 5-6") is gone too.
+ *    It is a note to the people building the game. The citations are still
+ *    shown — in the strategy guide panel, which is the place a player opens to
+ *    ask *why* rather than *what do I press*.
+ *
+ * And one thing is new: the **submenu** the row lives in. "Poison Fang" alone
+ * reads as somebody else's ability; "Poison Fang · Items" is a set of
+ * directions to the row, on the menu the player is already looking at.
+ */
 function moveHtml(s: MoveSuggestion, rank: number, total: number): string {
   const target = s.targetName
     ? `<span class="mad__arrow">→</span><span class="mad__target">${escapeHtml(s.targetName)}</span>`
     : '';
   const rankChip = total > 1 ? `<span class="mad__rank"><b>${rank}</b></span>` : '';
-  const badge = s.source === 'tactic' ? '<span class="mad__badge">chapter line</span>' : '';
+  const badge = s.source === 'tactic' ? '<span class="mad__badge">Guide’s pick</span>' : '';
+  const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
   return [
     `<article class="mad__move${rank > 1 ? ' mad__move--alt' : ''}">`,
     `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${badge}</p>`,
-    statsHtml(s),
+    statsHtml(s, menu),
     s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
     s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
     s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
-    s.cite ? `<p class="mad__cite">${escapeHtml(s.cite)}</p>` : '',
     '</article>',
   ].join('');
 }
@@ -384,5 +403,9 @@ function cardHtml(view: AdvisorView): string {
     `<span class="mad__actor">${escapeHtml(view.actorName)}</span>`,
     '</div>',
     moves || '<p class="mad__idle">Nothing legal to suggest.</p>',
+    // The "wait for it" line, when an ally is down and raising them now would
+    // only feed the boss a second kill. It is advice about a move the card is
+    // *not* recommending, so it sits under the moves rather than inside one.
+    view.note ? `<p class="mad__warn">${escapeHtml(view.note)}.</p>` : '',
   ].join('');
 }
