@@ -38,6 +38,8 @@ import {
   existsSync,
   copyFileSync,
   readFileSync,
+  renameSync,
+  unlinkSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve, join, basename, extname } from 'node:path';
@@ -45,14 +47,24 @@ import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 import {
   BLACK_RESTART_MIN_INTERVAL_MS,
+  fileStamp,
   isBlackFrame,
+  maxRgbOfPng,
   parseRestartSentinel,
+  quarantineTargetFor,
+  resolveMaxRgb,
   shouldRestartAfterBlack,
 } from './black-frame.mjs';
 
 // Re-exported so the guard's decisions have one import path for callers and
 // tests, even though the policy itself lives in the pure module.
-export { isBlackFrame, parseRestartSentinel, shouldRestartAfterBlack };
+export {
+  isBlackFrame,
+  parseRestartSentinel,
+  quarantineTargetFor,
+  resolveMaxRgb,
+  shouldRestartAfterBlack,
+};
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -71,6 +83,25 @@ const EMBEDDED_PYTHON = join(COMFY_ROOT, 'python_embeded', 'python.exe');
 const COMFY_LOG_DIR = process.env.COMFY_LOG_DIR || 'D:/Tools/comfy-logs';
 const BLACK_FRAME_LOG = join(COMFY_LOG_DIR, 'black-frames.log');
 const BLACK_RESTART_SENTINEL = join(COMFY_LOG_DIR, 'last-black-restart.txt');
+
+/**
+ * Where rejected black renders are moved to, out of ComfyUI's output tree.
+ *
+ * Quarantine, never delete: the 2026-09-18 files are what the guard's two
+ * decoders were cross-checked against, and a black PNG is evidence about the
+ * GPU. Same folder the hand sweep used (see docs/handoff/art-ops.md).
+ */
+const BLACK_QUARANTINE_DIR = join(COMFY_LOG_DIR, 'black-quarantine');
+
+/**
+ * ComfyUI's own `output/` folder — where `SaveImage` has already written the
+ * PNG by the time this client is allowed to look at it.
+ *
+ * Note it is *not* under `ComfyUI/` the way `input/` is; this portable bundle
+ * keeps output at the top level, which is also what `tools/art-watch.mjs`
+ * scans.
+ */
+const COMFY_OUTPUT_DIR = process.env.COMFY_OUTPUT || join(COMFY_ROOT, 'output');
 
 /** The scheduled task that brings ComfyUI back up (see docs/handoff/art-ops.md). */
 const COMFY_TASK_NAME = process.env.COMFY_TASK || 'PyreflyComfyUI';
@@ -851,13 +882,13 @@ function maxRgbOfPngFile(pngPath) {
 }
 
 /**
- * Run the check on bytes that are still in memory.
+ * Ask the embedded python about bytes that are still in memory.
  *
  * The render is decoded from a scratch copy in the OS temp folder, never from
  * `--out` or a candidate slot: the whole point is that a black frame never
  * lands anywhere the fleet or the gallery will pick it up.
  */
-function maxRgbOfBuffer(buf) {
+function maxRgbViaPython(buf) {
   let dir;
   try {
     dir = mkdtempSync(join(tmpdir(), 'pyrefly-guard-'));
@@ -881,23 +912,137 @@ function maxRgbOfBuffer(buf) {
   }
 }
 
+/** Said at most once per run; per render they would bury everything else. */
+let warnedFallbackDecoder = false;
+let warnedUnverified = false;
+
+/**
+ * The largest RGB sample in a finished render, by whichever decoder can answer.
+ *
+ * PIL first, the pure-JS decoder second. The second one matters: a wrong
+ * `COMFY_ROOT` or a moved `python_embeded/` used to silently turn the guard OFF
+ * and let the pipeline write whatever the GPU produced. `maxRgbOfPng` agreed
+ * with PIL on all 29 real PNGs it was cross-checked against, so it is a real
+ * answer, not a placeholder.
+ *
+ * `null` still means unverified-not-black — the guard fails open, see
+ * `isBlackFrame` — but an unverified render now says so on stderr instead of
+ * passing silently.
+ */
+function maxRgbOfBuffer(buf) {
+  const { maxRgb, source } = resolveMaxRgb(maxRgbViaPython(buf), () => maxRgbOfPng(buf));
+
+  if (source === 'fallback' && !warnedFallbackDecoder) {
+    warnedFallbackDecoder = true;
+    process.stderr.write(
+      `[gen] NOTE: the embedded python could not run the black-frame check, so the\n` +
+        `[gen]   built-in PNG decoder in black-frame.mjs is doing it instead. Renders are\n` +
+        `[gen]   still guarded. Check COMFY_ROOT (${COMFY_ROOT}) if this is unexpected.\n`,
+    );
+  }
+
+  if (source === 'none') {
+    // Per render, because "which one was it" is the first thing an operator
+    // asks — an unverifiable PNG (16-bit, interlaced) is a per-file property.
+    process.stderr.write(
+      '[gen] WARNING: UNVERIFIED RENDER — neither decoder could read these bytes, so the\n' +
+        '[gen]   black-frame guard did not vet this image. It is NOT being treated as black.\n',
+    );
+    if (!warnedUnverified) {
+      warnedUnverified = true;
+      process.stderr.write(
+        `\n[gen] ================= BLACK-FRAME GUARD IS NOT VETTING THIS RUN =================\n` +
+          `[gen]   Both checkers failed: the embedded python at\n` +
+          `[gen]   ${EMBEDDED_PYTHON}\n` +
+          `[gen]   and the built-in decoder in tools/gen/black-frame.mjs.\n` +
+          `[gen]   Renders are being written UNVERIFIED — eyeball them, and see\n` +
+          `[gen]   docs/handoff/art-ops.md before trusting this batch.\n` +
+          `[gen] =============================================================================\n\n`,
+      );
+    }
+  }
+
+  return maxRgb;
+}
+
 /** The SaveImage prefix, which is what names the file in ComfyUI's output. */
 function prefixOf(workflow) {
   return workflow?.['9']?.inputs?.filename_prefix || '(unknown)';
 }
 
-function recordBlackFrame({ promptId, prefix, maxRgb }) {
-  const stamp = new Date().toISOString();
+/**
+ * Get ComfyUI's own copy of a black render out of its output tree.
+ *
+ * This client never writes a black frame into the repo, but `SaveImage` wrote
+ * one into `output/pyrefly/` before the bytes ever reached here — the first
+ * folder the art-watch gallery scans, and the folder people grab "the latest
+ * render" from by hand. A rejected frame left sitting there gets promoted
+ * anyway, which is most of how 2026-09-18 happened.
+ *
+ * Moved, not deleted: it is evidence about the GPU. Node's `fs` does the move
+ * (nothing shells out to `Remove-Item` under ComfyUI's tree), `rename` first
+ * with copy+unlink for the cross-volume case, and a file that is already gone
+ * is a non-event.
+ *
+ * @returns {string|null} absolute destination, or null if nothing was moved
+ */
+function quarantineServerCopy(image, when) {
+  let target;
+  try {
+    target = quarantineTargetFor(image, {
+      outputDir: COMFY_OUTPUT_DIR,
+      quarantineDir: BLACK_QUARANTINE_DIR,
+      stamp: fileStamp(when),
+    });
+  } catch {
+    return null;
+  }
+  if (!target) return null;
+
+  try {
+    if (!existsSync(target.from)) return null;
+    mkdirSync(BLACK_QUARANTINE_DIR, { recursive: true });
+    try {
+      renameSync(target.from, target.to);
+    } catch (err) {
+      // EXDEV: comfy-logs and the ComfyUI bundle are both on D: today, but the
+      // output folder is relocatable and a rename across volumes fails outright.
+      if (err.code !== 'EXDEV' && err.code !== 'EPERM') throw err;
+      copyFileSync(target.from, target.to);
+      unlinkSync(target.from);
+    }
+    return resolve(target.to);
+  } catch (err) {
+    if (err.code === 'ENOENT') return null; // vanished under us: fine
+    process.stderr.write(
+      `[gen] WARNING: could not quarantine ${target.from}: ${err.message}\n` +
+        `[gen]   Move it out of ${COMFY_OUTPUT_DIR} by hand — it is a black frame.\n`,
+    );
+    return null;
+  }
+}
+
+function recordBlackFrame({ promptId, prefix, maxRgb, image }) {
+  const when = new Date();
+  const stamp = when.toISOString();
+  const quarantined = quarantineServerCopy(image, when);
   try {
     mkdirSync(COMFY_LOG_DIR, { recursive: true });
-    appendFileSync(BLACK_FRAME_LOG, `${stamp} prompt=${promptId} prefix=${prefix} maxRgb=${maxRgb}\n`);
+    appendFileSync(
+      BLACK_FRAME_LOG,
+      `${stamp} prompt=${promptId} prefix=${prefix} maxRgb=${maxRgb} ` +
+        `quarantined=${quarantined || '(no server-side copy found)'}\n`,
+    );
   } catch (err) {
     process.stderr.write(`[gen] could not append to ${BLACK_FRAME_LOG}: ${err.message}\n`);
   }
   process.stderr.write(
     `\n[gen] BLACK FRAME (NaN state): ${prefix} (prompt ${promptId}) came back with every RGB\n` +
       `[gen]   sample at 0. The GPU is producing NaNs; ComfyUI does not report this as an error.\n` +
-      `[gen]   Nothing was written to disk. Logged to ${BLACK_FRAME_LOG}\n\n`,
+      `[gen]   Nothing was written to the repo. Logged to ${BLACK_FRAME_LOG}\n` +
+      (quarantined
+        ? `[gen]   ComfyUI's own copy moved to ${quarantined}\n\n`
+        : `[gen]   No server-side copy was found under ${COMFY_OUTPUT_DIR} to quarantine.\n\n`),
   );
 }
 
@@ -983,7 +1128,7 @@ const GPU_ATTENTION = [
  */
 async function recoverFromBlackFrame(workflow, shot) {
   const prefix = prefixOf(workflow);
-  recordBlackFrame({ promptId: shot.promptId, prefix, maxRgb: shot.maxRgb });
+  recordBlackFrame({ promptId: shot.promptId, prefix, maxRgb: shot.maxRgb, image: shot.image });
 
   if (blackRecoveryUsed) {
     throw new Error(
@@ -1006,7 +1151,7 @@ async function recoverFromBlackFrame(workflow, shot) {
 
   const retry = await renderOnce(workflow);
   if (isBlackFrame(retry.maxRgb)) {
-    recordBlackFrame({ promptId: retry.promptId, prefix, maxRgb: retry.maxRgb });
+    recordBlackFrame({ promptId: retry.promptId, prefix, maxRgb: retry.maxRgb, image: retry.image });
     throw new Error(
       `BLACK FRAME (NaN state) on ${prefix} again after restarting ComfyUI — a process restart did not clear it.\n${GPU_ATTENTION}`,
     );
@@ -1179,7 +1324,9 @@ async function renderOnce(workflow) {
   if (!images.length) throw new Error(`No images came back for prompt ${promptId}`);
   const buf = await fetchImage(images[0]);
   const maxRgb = maxRgbOfBuffer(buf);
-  return { buf, promptId, maxRgb, seconds: (Date.now() - started) / 1000 };
+  // `image` is kept so a rejected render's server-side copy can be found and
+  // quarantined — SaveImage has already written it under ComfyUI's output dir.
+  return { buf, promptId, image: images[0], maxRgb, seconds: (Date.now() - started) / 1000 };
 }
 
 async function generateOne({ workflow, outPath, postProcess, margin }) {
@@ -1630,15 +1777,20 @@ Reference consistency:
                     silhouette; use when --ref is not enough (odd forms).
 
 Black frames:
-  Every finished render is decoded before it is written anywhere. A render whose
-  every RGB sample is 0 — the signature of a NaN'd GPU, which ComfyUI does not
-  report as an error — is never written to --out or a candidate slot. It is
+  Every finished render is decoded before it is written anywhere — by ComfyUI's
+  embedded python, or, if that is unavailable, by the built-in decoder in
+  black-frame.mjs. A render whose every RGB sample is 0 — the signature of a
+  NaN'd GPU, which ComfyUI does not report as an error — is never written to
+  --out or a candidate slot, and ComfyUI's own copy of it is moved out of
+  ${COMFY_OUTPUT_DIR} into
+  ${BLACK_QUARANTINE_DIR}. It is
   logged to ${BLACK_FRAME_LOG}, ComfyUI is restarted (at most once
   per 10 minutes, sentinel ${BLACK_RESTART_SENTINEL}) and the
   same prompt is resubmitted once. Black again -> exit 1, GPU needs attention.
-  See docs/handoff/art-ops.md.
+  If neither decoder can read the bytes the render is written UNVERIFIED and
+  says so loudly on stderr. See docs/handoff/art-ops.md.
 
-Env: COMFY_HOST, COMFY_PORT, COMFY_ROOT, COMFY_INPUT, COMFY_CKPT,
+Env: COMFY_HOST, COMFY_PORT, COMFY_ROOT, COMFY_INPUT, COMFY_OUTPUT, COMFY_CKPT,
      COMFY_UPSCALER, COMFY_IPADAPTER, COMFY_CLIPVISION, COMFY_LOG_DIR,
      COMFY_TASK
 `.trim();

@@ -5,7 +5,9 @@
  * On 2026-09-18 the GPU spent six minutes emitting 832x1216 rectangles of pure
  * zero while ComfyUI reported every one of them as a success. Thirteen were
  * rendered and two reached the repo. The guard's job is to make that
- * unshippable; these tests pin down the two decisions it gets to make.
+ * unshippable; these tests pin down every decision it gets to make: is this
+ * frame black, which decoder's answer counts, may ComfyUI be restarted, and
+ * where the rejected file goes.
  *
  * What is actually at stake in each direction:
  *
@@ -23,13 +25,17 @@
  * quietly switch the gallery's badge off.
  */
 
+import path from 'node:path';
 import { deflateSync } from 'node:zlib';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   BLACK_RESTART_MIN_INTERVAL_MS,
+  fileStamp,
   isBlackFrame,
   maxRgbOfPng,
   parseRestartSentinel,
+  quarantineTargetFor,
+  resolveMaxRgb,
   shouldRestartAfterBlack,
 } from '../../tools/gen/black-frame.mjs';
 
@@ -217,6 +223,121 @@ describe('maxRgbOfPng', () => {
     expect(maxRgbOfPng(null)).toBeNull();
     // Truncated mid-chunk: a half-written file the watcher caught in flight.
     expect(maxRgbOfPng(makePng(8, 6, 2, [0, 0, 0]).subarray(0, 20))).toBeNull();
+  });
+});
+
+describe('resolveMaxRgb', () => {
+  it('uses the embedded python when it answers, and does not decode twice', () => {
+    const fallback = vi.fn(() => 42);
+    expect(resolveMaxRgb(0, fallback)).toEqual({ maxRgb: 0, source: 'python' });
+    expect(resolveMaxRgb(200, fallback)).toEqual({ maxRgb: 200, source: 'python' });
+    // The authority answered; running the JS decoder as well would be pure cost
+    // on every single render.
+    expect(fallback).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the built-in decoder when there is no embedded python', () => {
+    // `maxRgbOfPngFile` returns null when `COMFY_ROOT/python_embeded/python.exe`
+    // is missing — a wrong COMFY_ROOT, a moved bundle. That used to switch the
+    // guard off silently and let a NaN'd GPU write straight to public/art.
+    const black = makePng(8, 6, 2, [0, 0, 0]);
+    expect(resolveMaxRgb(null, () => maxRgbOfPng(black))).toEqual({
+      maxRgb: 0,
+      source: 'fallback',
+    });
+    expect(isBlackFrame(resolveMaxRgb(null, () => maxRgbOfPng(black)).maxRgb)).toBe(true);
+
+    const painting = makePng(8, 6, 2, [3, 2, 4]);
+    expect(resolveMaxRgb(null, () => maxRgbOfPng(painting))).toEqual({
+      maxRgb: 4,
+      source: 'fallback',
+    });
+  });
+
+  it('treats a non-numeric python answer as no answer', () => {
+    expect(resolveMaxRgb(undefined, () => 7)).toEqual({ maxRgb: 7, source: 'fallback' });
+    expect(resolveMaxRgb(Number.NaN, () => 7)).toEqual({ maxRgb: 7, source: 'fallback' });
+  });
+
+  it('reports "none" — unverified, and NOT black — when neither can read it', () => {
+    const verdict = resolveMaxRgb(null, () => maxRgbOfPng(Buffer.from('not a png')));
+    expect(verdict).toEqual({ maxRgb: null, source: 'none' });
+    // The point of the whole fail-open design: an unreadable render must not be
+    // rejected as black. The caller's job is to say it is unverified.
+    expect(isBlackFrame(verdict.maxRgb)).toBe(false);
+  });
+
+  it('accepts a plain value as well as a thunk', () => {
+    expect(resolveMaxRgb(null, 9)).toEqual({ maxRgb: 9, source: 'fallback' });
+    expect(resolveMaxRgb(null, null)).toEqual({ maxRgb: null, source: 'none' });
+  });
+});
+
+describe('quarantineTargetFor', () => {
+  const outputDir = 'D:/Tools/ComfyUI/output';
+  const quarantineDir = 'D:/Tools/comfy-logs/black-quarantine';
+  const opts = { outputDir, quarantineDir, stamp: '20260918T133501Z' };
+
+  /** Compare against a path built the same way the platform builds them. */
+  const p = (...parts: string[]) => path.normalize(path.join(...parts));
+
+  it('finds the copy SaveImage already wrote, under the output dir', () => {
+    // This is the gap the guard had: the repo stays clean, but ComfyUI's own
+    // PNG is sitting in the first folder art-watch scans.
+    expect(
+      quarantineTargetFor({ filename: 'hero_ch1_00013_.png', subfolder: 'pyrefly', type: 'output' }, opts),
+    ).toEqual({
+      from: p(outputDir, 'pyrefly', 'hero_ch1_00013_.png'),
+      to: p(quarantineDir, '20260918T133501Z__pyrefly__hero_ch1_00013_.png'),
+    });
+  });
+
+  it('flattens the subfolder into the name so one folder holds everything', () => {
+    const target = quarantineTargetFor(
+      { filename: 'x_00001_.png', subfolder: 'pyrefly/ch2' },
+      opts,
+    );
+    expect(path.basename(target?.to ?? '')).toBe('20260918T133501Z__pyrefly__ch2__x_00001_.png');
+  });
+
+  it('handles a flat output image and a missing stamp', () => {
+    expect(quarantineTargetFor({ filename: 'x_00001_.png' }, { outputDir, quarantineDir })).toEqual({
+      from: p(outputDir, 'x_00001_.png'),
+      to: p(quarantineDir, 'x_00001_.png'),
+    });
+  });
+
+  it('refuses to move anything it cannot place inside the output dir', () => {
+    // It decides what gets renamed on disk, so it does not take ComfyUI's
+    // strings on trust.
+    expect(quarantineTargetFor({ filename: 'x.png', subfolder: '../../..' }, opts)).toBeNull();
+    expect(quarantineTargetFor({ filename: '../x.png' }, opts)).toBeNull();
+    expect(quarantineTargetFor({ filename: 'sub/x.png' }, opts)).toBeNull();
+    expect(quarantineTargetFor({ filename: 'x.png', subfolder: 'C:/Windows' }, opts)).toBeNull();
+  });
+
+  it('does nothing for an image that is not in the output tree at all', () => {
+    expect(quarantineTargetFor({ filename: 'x.png', type: 'temp' }, opts)).toBeNull();
+    expect(quarantineTargetFor({ filename: 'x.png', type: 'input' }, opts)).toBeNull();
+  });
+
+  it('does nothing without a usable history entry', () => {
+    expect(quarantineTargetFor(null, opts)).toBeNull();
+    expect(quarantineTargetFor({}, opts)).toBeNull();
+    expect(quarantineTargetFor({ filename: '   ' }, opts)).toBeNull();
+    expect(quarantineTargetFor({ filename: '..' }, opts)).toBeNull();
+  });
+});
+
+describe('fileStamp', () => {
+  it('is a filename, so no colons', () => {
+    expect(fileStamp(new Date('2026-09-18T13:35:01.123Z'))).toBe('20260918T133501Z');
+    expect(fileStamp('2026-09-18T13:35:01.000Z')).toBe('20260918T133501Z');
+    expect(fileStamp(new Date('2026-09-18T13:35:01.123Z'))).not.toMatch(/[:*?"<>|]/);
+  });
+
+  it('does not throw on a bad date', () => {
+    expect(typeof fileStamp('nonsense')).toBe('string');
   });
 });
 

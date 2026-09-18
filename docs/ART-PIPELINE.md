@@ -645,8 +645,24 @@ render before it writes it anywhere:
   ignored, so an opaque cutout over dead RGB still trips it.
 - A black frame is **never written** — not to `--out`, not to the `.raw.png`,
   not to a candidate slot — and is appended to
-  `D:\Tools\comfy-logs\black-frames.log` with the timestamp, prompt id and
-  SaveImage prefix.
+  `D:\Tools\comfy-logs\black-frames.log` with the timestamp, prompt id,
+  SaveImage prefix and where the file went.
+- **ComfyUI's own copy is moved out of the way.** `SaveImage` writes the PNG
+  into `D:\Tools\ComfyUI\output\pyrefly\` before this client ever sees the
+  bytes, and that is the first folder `art-watch` scans and the folder people
+  grab "the latest render" from, so a rejected frame left sitting there gets
+  promoted anyway. It is moved (Node `fs`, rename with a copy+unlink fallback
+  across volumes) to `D:\Tools\comfy-logs\black-quarantine\` as
+  `<stamp>__<subfolder>__<filename>.png`. Quarantined, never deleted — a black
+  PNG is evidence about the GPU, and these files are what the two decoders were
+  cross-checked against.
+- **The check has a fallback, so a bad path cannot switch it off.** The embedded
+  python is the authority; when it is missing (wrong `COMFY_ROOT`, moved
+  bundle), the pure-JS decoder in `black-frame.mjs` answers instead and the run
+  says so once. Only when *both* fail is a render written unverified, and then
+  stderr carries a per-render `UNVERIFIED RENDER` line plus a loud once-per-run
+  banner. Unverified still means *not black* — the guard fails open on its own
+  bugs rather than stopping the fleet — but it is no longer silent.
 - The pipeline then **restarts ComfyUI once** (stop the `main.py` python,
   `schtasks /Run /TN PyreflyComfyUI`, wait for `/system_stats`) and resubmits
   the same prompt one time. Restarts are throttled to one per 10 minutes via
@@ -662,7 +678,13 @@ tested in `tests/unit/art-black-frame.test.ts`.
 `tools/art-watch.mjs` flags the same thing in the gallery — a red border and a
 `BLACK` badge on any tile whose image is all-zero, plus a count in the header —
 so a black frame that lands from some other path (a hand-run workflow in the web
-UI) is still obvious. The gallery uses the small pure-JS PNG decoder in
+UI) is still obvious. It checks **every** tile on the page (80), not a slice of
+them: a cold load costs ~0.2s of decode (1.9s on the first read after a reboot,
+when the files come off disk too) and every load after that is ~0.15s. A tile
+the decoder could not read (16-bit, interlaced, caught mid-write) or did not get
+to wears a muted dashed border and a `?` or `…` badge, because the page is only
+useful if **no badge means "decoded, has colour"** rather than "nobody looked".
+The gallery uses the small pure-JS PNG decoder in
 `black-frame.mjs` rather than shelling out to python, because it re-scans every
 20 seconds; `comfy.mjs` uses PIL + numpy in the embedded python, because it is
 the actual gate and a battle-tested decoder is worth the 1.2s. Both feed the

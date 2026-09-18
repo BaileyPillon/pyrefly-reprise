@@ -83,9 +83,21 @@ and `tools/art-watch.mjs`. Full description in `docs/ART-PIPELINE.md` §6
    single point where the PNG comes back from `/view`: is the maximum RGB sample
    zero? If yes, the file is not written to `--out`, to a `.raw.png`, or to a
    candidate slot, and rembg never sees it.
-2. **It is logged.** One line per black frame in
-   `D:\Tools\comfy-logs\black-frames.log`: timestamp, prompt id, SaveImage
-   prefix, `maxRgb`. If this file starts growing, the GPU is degrading.
+   ComfyUI's embedded python does the decoding; if it is not there (wrong
+   `COMFY_ROOT`, moved bundle) the built-in decoder in `black-frame.mjs` does it
+   instead, so a misconfigured path no longer switches the guard off silently.
+   If *neither* can read the bytes, the render is written but stderr says
+   `UNVERIFIED RENDER` and prints a banner — eyeball that batch.
+2. **It is logged, and ComfyUI's own copy is quarantined.** One line per black
+   frame in `D:\Tools\comfy-logs\black-frames.log`: timestamp, prompt id,
+   SaveImage prefix, `maxRgb`, and the absolute path the file was moved to.
+   `SaveImage` has already written the PNG into
+   `D:\Tools\ComfyUI\output\pyrefly\` by the time this client can look at it —
+   the first folder art-watch scans and the one people pull "the latest render"
+   out of by hand — so it is moved to
+   `D:\Tools\comfy-logs\black-quarantine\` as
+   `<stamp>__<subfolder>__<filename>.png`. Moved, never deleted: it is evidence
+   about the GPU. If this log starts growing, the GPU is degrading.
 3. **ComfyUI is restarted once,** the same way the agents did it by hand (stop
    the `main.py` python, `schtasks /Run /TN PyreflyComfyUI`, poll
    `/system_stats` for up to 3 minutes), and the same prompt is resubmitted
@@ -101,7 +113,11 @@ and `tools/art-watch.mjs`. Full description in `docs/ART-PIPELINE.md` §6
    expensive outcome.
 6. **The gallery flags them.** `art-watch` puts a red border and a `BLACK` badge
    on any all-zero tile and a count in the header, so a black frame arriving
-   from a hand-run workflow in the ComfyUI web UI is still caught.
+   from a hand-run workflow in the ComfyUI web UI is still caught. It now checks
+   every tile on the page rather than the first 24, and a tile it could not
+   decode or did not reach gets a muted dashed border and a `?` / `…` badge.
+   **A tile with no badge means "decoded, has colour", and nothing else** — if
+   you see grey badges, those images are unvetted, not fine.
 
 The threshold is `max == 0` and must stay that way. `public/art/backdrops` has
 legitimately near-black night scenes in it; a mean or percentile threshold would

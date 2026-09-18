@@ -17,6 +17,10 @@
  * 2026-09-18 NaN-GPU failure, which produces a thumbnail that is honestly hard
  * to tell from a dark painting at 180px. See docs/handoff/art-ops.md.
  *
+ * A tile with no badge means "decoded, has colour", and only that. A tile the
+ * decoder could not read, or did not get to this scan, wears a muted grey
+ * badge instead — the whole page is useless if "not checked" looks like "fine".
+ *
  * Folders scanned (see ROOTS below):
  *   - D:/Tools/ComfyUI/output/pyrefly        (raw renders, flat)
  *   - public/art/pause                        (pause heroes, flat)
@@ -138,7 +142,7 @@ function scanAll() {
 // --------------------------------------------------------------- black frames
 
 /**
- * `path|mtimeMs|size` -> true (all-zero), false (has colour), null (unreadable).
+ * `path|mtimeMs|size` -> 'black' | 'ok'.
  *
  * Keyed on mtime and size as well as path so an overwritten file is re-checked
  * and a promoted candidate does not inherit a stale verdict. A render is
@@ -152,49 +156,85 @@ const BLACK_CACHE_MAX = 4000;
 /**
  * New files decoded per request.
  *
- * The page refreshes every 20s and in steady state one or two renders have
- * landed, so this budget is never reached in normal use. It exists for the
- * first load after a long batch: 80 cold 2MB PNGs would be a few seconds of
- * inflate, and a gallery that hangs is a gallery nobody leaves open. Anything
- * over budget stays unknown (no badge) and gets picked up next refresh.
+ * This covers a whole page, deliberately. It used to be 24 against 80 cards,
+ * which meant the first load after a batch left 56 tiles with no badge — and a
+ * tile with no badge looks exactly like a tile that was checked and cleared.
+ * The guard's whole value is that a black frame cannot hide among the good
+ * ones, so "not checked yet" must never render as "fine".
+ *
+ * The cost is bounded and measured. Decoding all 80 is ~0.16s of CPU, because
+ * `maxRgbOfPng` bails at the first 255 sample and a healthy painting hits one
+ * within a scanline or two; the worst case is the very first load after a
+ * reboot, which also reads 80 files off a cold disk and took 1.9s. Every load
+ * after that is ~0.15s, because steady state is one or two new files per 20s
+ * refresh and everything else is a cache hit.
+ *
+ * If the page ever does outgrow the budget, the tiles it did not reach now say
+ * so instead of quietly looking clean.
  */
-const BLACK_CHECKS_PER_SCAN = 24;
+const BLACK_CHECKS_PER_SCAN = MAX_CARDS;
 
 /** Don't try to decode something absurd; the renders are ~2MB. */
 const BLACK_MAX_BYTES = 64 * 1024 * 1024;
 
+/**
+ * File keys already reported as undecodable, so the log says it once per file
+ * rather than once per 20s refresh forever.
+ */
+const loggedUnverifiable = new Set();
+
+/**
+ * One tile's verdict.
+ *
+ *   'black'        every RGB sample is 0 — the NaN-GPU failure
+ *   'ok'           decoded, has colour
+ *   'unverifiable' decoded and could not be read: 16-bit or interlaced (out of
+ *                  the decoder's scope), or caught mid-write
+ *   'unchecked'    not looked at this scan (over budget)
+ */
 function checkBlack(filePath, mtimeMs, size, budget) {
   const key = `${filePath}|${mtimeMs}|${size}`;
-  if (blackCache.has(key)) return blackCache.get(key);
-  if (budget.left <= 0) return null;
+  const cached = blackCache.get(key);
+  if (cached !== undefined) return cached;
+  if (budget.left <= 0) return 'unchecked';
   budget.left--;
 
-  let verdict = null;
+  let verdict = 'unverifiable';
   if (size > 0 && size <= BLACK_MAX_BYTES) {
     try {
-      verdict = isBlackFrame(maxRgbOfPng(fs.readFileSync(filePath)));
+      const maxRgb = maxRgbOfPng(fs.readFileSync(filePath));
+      if (maxRgb !== null) verdict = isBlackFrame(maxRgb) ? 'black' : 'ok';
     } catch {
-      verdict = null; // mid-write, locked, gone — ask again next refresh
+      verdict = 'unverifiable'; // mid-write, locked, gone — ask again next refresh
     }
   }
 
-  // Only remember a definite answer. `null` means "could not read it yet",
-  // which is usually a half-written file that will be fine in 20 seconds.
-  if (verdict !== null) {
-    if (blackCache.size >= BLACK_CACHE_MAX) {
-      const oldest = blackCache.keys().next().value;
-      if (oldest !== undefined) blackCache.delete(oldest);
+  if (verdict === 'unverifiable') {
+    // Not cached: the common cause is a half-written file that will decode
+    // fine in 20 seconds. A genuinely out-of-scope PNG just gets re-read each
+    // scan, which is cheap and rare — but it is now *visible*, which is the
+    // point. Before, an undecodable render was indistinguishable from a clean
+    // one.
+    if (!loggedUnverifiable.has(key)) {
+      loggedUnverifiable.add(key);
+      console.warn(`[art-watch] cannot decode (16-bit? interlaced? mid-write?): ${filePath}`);
     }
-    blackCache.set(key, verdict);
+    return verdict;
   }
+
+  if (blackCache.size >= BLACK_CACHE_MAX) {
+    const oldest = blackCache.keys().next().value;
+    if (oldest !== undefined) blackCache.delete(oldest);
+  }
+  blackCache.set(key, verdict);
   return verdict;
 }
 
-/** Annotate the scanned items with `black: true | false | null`. */
+/** Annotate the scanned items with `check: 'black'|'ok'|'unverifiable'|'unchecked'`. */
 function markBlackFrames(items) {
   const budget = { left: BLACK_CHECKS_PER_SCAN };
   for (const item of items) {
-    item.black = checkBlack(item.path, item.mtimeMs, item.size, budget);
+    item.check = checkBlack(item.path, item.mtimeMs, item.size, budget);
   }
   return items;
 }
@@ -237,16 +277,43 @@ function timeAgo(mtimeMs) {
   return days === 1 ? '1 day ago' : `${days} days ago`;
 }
 
+/**
+ * Badge and card modifier per verdict.
+ *
+ * Only `'ok'` is allowed to render as a bare tile. That is the contract this
+ * page is for: **no badge means "decoded, has colour"** — never "we didn't
+ * look". Anything short of a verdict wears a muted grey badge instead.
+ */
+const CHECK_STYLES = {
+  black: {
+    cls: ' is-black',
+    badge: 'BLACK',
+    title: 'Every RGB sample is 0 — NaN-state render, not a dark painting',
+  },
+  unverifiable: {
+    cls: ' is-unknown',
+    badge: '?',
+    title: 'Could not be decoded (16-bit, interlaced, or still being written) — NOT verified',
+  },
+  unchecked: {
+    cls: ' is-unknown',
+    badge: '…',
+    title: 'Not checked yet — over this scan’s decode budget; next refresh will get it',
+  },
+  ok: { cls: '', badge: '', title: '' },
+};
+
 function renderPage(items) {
   const now = new Date();
   const cards = items
     .map((item) => {
       const filename = path.basename(item.path);
       const imgUrl = `/img?p=${encodeURIComponent(item.path)}`;
-      const badge = item.black
-        ? '<div class="badge" title="Every RGB sample is 0 — NaN-state render, not a dark painting">BLACK</div>'
+      const style = CHECK_STYLES[item.check] || CHECK_STYLES.unchecked;
+      const badge = style.badge
+        ? `<div class="badge badge-${item.check}" title="${escapeHtml(style.title)}">${escapeHtml(style.badge)}</div>`
         : '';
-      return `      <a class="card${item.black ? ' is-black' : ''}" href="${imgUrl}" target="_blank" rel="noopener">
+      return `      <a class="card${style.cls}" href="${imgUrl}" target="_blank" rel="noopener">
         <div class="thumb"><img src="${imgUrl}" loading="lazy" alt="${escapeHtml(filename)}">${badge}</div>
         <div class="meta">
           <div class="filename" title="${escapeHtml(filename)}">${escapeHtml(filename)}</div>
@@ -257,7 +324,8 @@ function renderPage(items) {
     })
     .join('\n');
 
-  const blackCount = items.filter((i) => i.black).length;
+  const blackCount = items.filter((i) => i.check === 'black').length;
+  const unknownCount = items.filter((i) => i.check !== 'black' && i.check !== 'ok').length;
 
   return `<!doctype html>
 <html lang="en">
@@ -324,6 +392,12 @@ function renderPage(items) {
   .card.is-black { border-color: #d0342c; background: #1c1214; }
   .card.is-black:hover { border-color: #ff5b4f; }
   .card.is-black .filename { color: #ff8b80; }
+  /* Not a verdict: nothing is wrong with it, nothing has vouched for it either.
+     Muted rather than alarming, but never indistinguishable from a clean tile. */
+  .card.is-unknown { border-style: dashed; border-color: #3a3f4c; background: #11131a; }
+  .card.is-unknown:hover { border-color: #6b7280; }
+  .card.is-unknown .thumb img { opacity: 0.72; }
+  .card.is-unknown .filename { color: #a7adba; }
   .thumb {
     position: relative;
     aspect-ratio: 1 / 1;
@@ -344,7 +418,15 @@ function renderPage(items) {
     font-weight: 700;
     letter-spacing: 0.08em;
   }
+  .badge-unverifiable,
+  .badge-unchecked {
+    background: #2b3038;
+    color: #c2c8d4;
+    border: 1px solid #454c59;
+    font-weight: 600;
+  }
   .stats .black { color: #ff5b4f; font-weight: 700; }
+  .stats .unknown { color: #a7adba; }
   .thumb img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
   .meta { padding: 0.5rem 0.65rem 0.7rem; }
   .filename {
@@ -366,6 +448,7 @@ function renderPage(items) {
   <div class="stats">
     <span><strong id="count">${items.length}</strong> image${items.length === 1 ? '' : 's'}</span>
     ${blackCount ? `<span class="black">${blackCount} BLACK</span>` : ''}
+    ${unknownCount ? `<span class="unknown" title="Decoded no verdict: 16-bit/interlaced, mid-write, or over this scan's budget">${unknownCount} unchecked</span>` : ''}
     <span>refreshes every 20s &middot; <span id="clock">${now.toLocaleTimeString()}</span></span>
   </div>
 </header>

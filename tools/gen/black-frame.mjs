@@ -12,13 +12,14 @@
  * the pipeline makes under that failure (reject? restart? fail?) are unit
  * testable without a GPU, a ComfyUI, or a clock.
  *
- * Node built-ins only (`zlib`), same rule as the rest of `tools/`.
+ * Node built-ins only (`zlib`, `path`), same rule as the rest of `tools/`.
  *
  * Two callers, deliberately different ways of getting `maxRgb`:
  *
  *   - `tools/gen/comfy.mjs` shells out to ComfyUI's embedded python and asks
  *     PIL + numpy, because it is guarding the art pipeline itself and a
- *     battle-tested decoder is worth 1.2s per render.
+ *     battle-tested decoder is worth 1.2s per render. When that is not
+ *     available it falls back to `maxRgbOfPng` below via `resolveMaxRgb`.
  *   - `tools/art-watch.mjs` uses `maxRgbOfPng` below, because it is an
  *     always-on web page that would otherwise spawn python on every 20s
  *     refresh.
@@ -27,6 +28,7 @@
  */
 
 import { inflateSync } from 'node:zlib';
+import { isAbsolute, join, normalize, resolve, sep } from 'node:path';
 
 /**
  * How long a black-frame ComfyUI restart is allowed to suppress the next one.
@@ -107,6 +109,112 @@ export function shouldRestartAfterBlack(
   const age = nowMs - lastRestartMs;
   if (age < 0) return false;
   return age >= minIntervalMs;
+}
+
+/**
+ * Pick which decoder's answer the guard acts on.
+ *
+ * `comfy.mjs` prefers ComfyUI's embedded python (PIL + numpy), but that path is
+ * only there when `COMFY_ROOT` points at a real bundle. Before this existed, a
+ * wrong `COMFY_ROOT` or a moved `python_embeded/` turned the guard off entirely
+ * and the pipeline went back to writing whatever came off the GPU — the exact
+ * state that shipped two black frames on 2026-09-18. So python missing is a
+ * *fallback*, not a surrender: `maxRgbOfPng` below agreed with PIL on 29 of 29
+ * real renders, and a second opinion beats no opinion.
+ *
+ * The fallback is passed as a thunk so the cheap-but-not-free pure-JS inflate
+ * only runs when it is actually needed.
+ *
+ * `source`:
+ *   - `'python'`   — the authority answered; `maxRgb` is its number.
+ *   - `'fallback'` — python could not, the built-in decoder could.
+ *   - `'none'`     — neither could. `maxRgb` is null, which `isBlackFrame`
+ *                    treats as *not* black: the render is unverified, and the
+ *                    caller is expected to say so out loud.
+ *
+ * @param {number|null|undefined} pythonMax
+ * @param {(() => number|null|undefined)|number|null|undefined} fallback
+ * @returns {{maxRgb: number|null, source: 'python'|'fallback'|'none'}}
+ */
+export function resolveMaxRgb(pythonMax, fallback) {
+  if (typeof pythonMax === 'number' && Number.isFinite(pythonMax)) {
+    return { maxRgb: pythonMax, source: 'python' };
+  }
+  const second = typeof fallback === 'function' ? fallback() : fallback;
+  if (typeof second === 'number' && Number.isFinite(second)) {
+    return { maxRgb: second, source: 'fallback' };
+  }
+  return { maxRgb: null, source: 'none' };
+}
+
+/**
+ * Where a black render's *server-side* copy lives, and where to move it.
+ *
+ * `comfy.mjs` never writes a black frame into the repo — but by the time it can
+ * look at the bytes, ComfyUI's own `SaveImage` has already written the PNG into
+ * `D:/Tools/ComfyUI/output/pyrefly/`, which is the first folder the art-watch
+ * gallery scans and the folder an operator pulls "the latest render" out of by
+ * hand. Leaving it there is how a rejected frame gets promoted anyway.
+ *
+ * Pure so the destination naming is pinned by a test rather than by a live
+ * ComfyUI. Returns `null` — do nothing — rather than guessing, when:
+ *
+ *   - there is no usable `filename`;
+ *   - `type` is present and is not `output` (a `temp`/`input` image does not
+ *     live under the output dir at all);
+ *   - the `filename`/`subfolder` would resolve outside `outputDir`. ComfyUI
+ *     generates these names itself, but this function decides what gets moved
+ *     on disk and it is not going to take `../../` on trust.
+ *
+ * The destination flattens the subfolder into the name (`pyrefly/x_00001_.png`
+ * -> `<stamp>__pyrefly__x_00001_.png`) so one flat quarantine folder holds
+ * everything without collisions, matching what the 2026-09-18 sweep did by hand.
+ *
+ * @param {{filename?: string, subfolder?: string, type?: string}|null|undefined} image
+ *        a `/history` output entry
+ * @param {{outputDir: string, quarantineDir: string, stamp?: string}} opts
+ * @returns {{from: string, to: string}|null}
+ */
+export function quarantineTargetFor(image, { outputDir, quarantineDir, stamp = '' } = {}) {
+  if (!image || typeof image !== 'object') return null;
+  if (!outputDir || !quarantineDir) return null;
+
+  const filename = typeof image.filename === 'string' ? image.filename.trim() : '';
+  if (!filename || filename === '.' || filename === '..') return null;
+  if (/[\\/]/.test(filename)) return null;
+  if (typeof image.type === 'string' && image.type && image.type !== 'output') return null;
+
+  const subfolder = typeof image.subfolder === 'string' ? image.subfolder.trim() : '';
+  const parts = subfolder.split(/[\\/]+/).filter((p) => p && p !== '.');
+  if (parts.some((p) => p === '..')) return null;
+  if (parts.some((p) => isAbsolute(p) || /^[A-Za-z]:/.test(p))) return null;
+
+  const from = normalize(join(outputDir, ...parts, filename));
+  // Belt and braces: after normalize, the result must still be inside outputDir.
+  const rootKey = resolve(outputDir).toLowerCase();
+  const fromKey = resolve(from).toLowerCase();
+  if (fromKey !== rootKey && !fromKey.startsWith(rootKey.endsWith(sep) ? rootKey : rootKey + sep)) {
+    return null;
+  }
+
+  const flat = [...parts, filename].join('__');
+  const to = normalize(join(quarantineDir, stamp ? `${stamp}__${flat}` : flat));
+  return { from, to };
+}
+
+/**
+ * `2026-09-18T13:35:01.123Z` -> `20260918T133501Z`, for quarantine filenames.
+ *
+ * Colons are illegal in Windows filenames and the milliseconds add nothing an
+ * operator scanning the folder wants to read.
+ *
+ * @param {Date|number|string} when
+ * @returns {string}
+ */
+export function fileStamp(when = Date.now()) {
+  const d = when instanceof Date ? when : new Date(when);
+  const iso = Number.isNaN(d.getTime()) ? new Date(0).toISOString() : d.toISOString();
+  return iso.replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z');
 }
 
 // --------------------------------------------------------------------------
