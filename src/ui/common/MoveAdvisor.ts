@@ -45,6 +45,24 @@ import { escapeHtml } from './html.ts';
  * screenshot that was taken. Both are gated on `offsetWidth > 0`, because
  * `.ffx2hud__command` is `hidden` whenever no menu is open and a hidden element
  * reports an offset of zero — the bug `StrategyGuide.layout` documents.
+ *
+ * ## It fits in the band it is given
+ *
+ * The card's height is not the card's to choose. `move-advisor.css` caps it at
+ * 104px and `ffx/hudSafeZones.ts` hands the FFX HUD a `maxHeight` for whichever
+ * pocket or shelf it found — both other tracks' files — and the card scrolls,
+ * with no scrollbar and a mask fade, so anything past the cap is simply *gone*
+ * for a player holding a controller.
+ *
+ * That is how the answer to the report went missing: with a second suggestion
+ * and a reason the card wanted 162px and had 104, so the revive's "stand Yuna
+ * up" line faded out below the frame [critic, fix-3 round 1, F1]. So the card
+ * now measures itself against the room it was given and **prints less** until
+ * it fits ({@link fitCard}), instead of printing the same thing and hiding the
+ * bottom of it. What it gives up, in order, is decoration: the one-line effect
+ * descriptions, then the runner-up's numbers. What it never gives up is a
+ * move's name, where that move lives on the menu, the *reason* the revive is
+ * being offered, and any warning — those are the card.
  */
 
 /** Stage-relative geometry, in the 640x360 authoring grid's own pixels. */
@@ -103,6 +121,10 @@ export class MoveAdvisor {
   private cached: AdvisorView | null = null;
   /** Signature of the last render, so a per-frame tick does not rewrite the DOM. */
   private lastSignature = '';
+  /** How much of each suggestion the last render printed. See {@link fitCard}. */
+  private density: Density = 0;
+  /** `signature@height` the current density was measured for. */
+  private fittedFor = '';
 
   constructor(opts: MoveAdvisorOptions) {
     this.opts = opts;
@@ -196,7 +218,13 @@ export class MoveAdvisor {
   /** Per-frame tick from the HUD: polls the pad and keeps the card in its band. */
   update(_dt: number): void {
     this.pollPad();
-    if (this.visible) this.layout();
+    if (!this.visible) return;
+    this.layout();
+    // After `layout`, and every frame: the FFX HUD re-writes the card's
+    // `max-height` from its safe zone *after* this tick (`placeAdvisor`), and
+    // the band narrows and widens as submenus open, so the room the card has is
+    // a moving number. `fitCard` returns immediately unless it changed.
+    this.fitCard();
   }
 
   private pollPad(): void {
@@ -270,9 +298,52 @@ export class MoveAdvisor {
     const signature = signatureOf(this.cached);
     if (signature !== this.lastSignature) {
       this.lastSignature = signature;
-      this.cardEl.innerHTML = cardHtml(this.cached);
+      this.density = 0;
+      this.fittedFor = '';
+      this.cardEl.innerHTML = cardHtml(this.cached, 0);
     }
     this.layout();
+    this.fitCard();
+  }
+
+  /**
+   * Print less until the card fits the room it was given.
+   *
+   * Measured, not guessed: `scrollHeight` is what the content wants and
+   * `clientHeight` is what the box allows, and they differ only while the cap
+   * (`max-height`, from the stylesheet or from the FFX HUD's zone) is biting.
+   * Each step of {@link cardHtml}'s density drops one layer of decoration and
+   * the card is measured again, so the same ladder works at any viewport, at
+   * any submenu depth, and under whatever cap either HUD hands over next.
+   *
+   * Re-fitted when the advice changes or when the room does — the key carries
+   * both. A layout the browser has not performed yet (jsdom, a hidden card, the
+   * frame before mount) measures zero, and zero means "no reading", not "no
+   * room": the card is left exactly as it is.
+   */
+  private fitCard(): void {
+    if (!this.cached || !this.visible || this.cardEl.hidden) return;
+    const room = this.cardEl.clientHeight;
+    if (room <= 0) return;
+    const key = `${this.lastSignature}@${Math.round(room)}`;
+    if (key === this.fittedFor) return;
+
+    // From the top every time: the room can grow as well as shrink (a submenu
+    // closes, the zone moves from the shelf to the pocket), and a card that
+    // only ever got terser would stay terse for the rest of the battle.
+    let density: Density = 0;
+    this.cardEl.innerHTML = cardHtml(this.cached, density);
+    while (density < MAX_DENSITY && this.cardEl.scrollHeight > this.cardEl.clientHeight + 1) {
+      density = (density + 1) as Density;
+      this.cardEl.innerHTML = cardHtml(this.cached, density);
+    }
+    this.density = density;
+    this.fittedFor = `${this.lastSignature}@${Math.round(this.cardEl.clientHeight)}`;
+  }
+
+  /** How much the card is currently printing, for tests and the debug snapshot. */
+  get printedDensity(): number {
+    return this.density;
   }
 
   /**
@@ -330,7 +401,26 @@ function num(n: number): string {
   return Math.round(n).toLocaleString('en-US');
 }
 
-function statsHtml(s: MoveSuggestion, lead = ''): string {
+/**
+ * How much of each suggestion the card prints.
+ *
+ * Ordered by what a player can most afford to lose, cheapest first. The four
+ * things that are never dropped at any density are the move's name, the submenu
+ * it lives in, the reason under a *runner-up* (which is where the revive lives,
+ * and "why" is the whole of Bailey's second question), and any warning.
+ *
+ * | density | what goes |
+ * |---|---|
+ * | 0 | nothing — the full card |
+ * | 1 | the runner-up's effect line |
+ * | 2 | + the lead's effect line, and the runner-up's secondary chips |
+ * | 3 | + the runner-up's numbers, down to the submenu chip |
+ * | 4 | + the lead's reason and its secondary chips |
+ */
+export type Density = 0 | 1 | 2 | 3 | 4;
+export const MAX_DENSITY: Density = 4;
+
+function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
   const chips: string[] = lead ? [lead] : [];
   const e = s.estimate;
   if (e && e.kind !== 'none') {
@@ -340,14 +430,21 @@ function statsHtml(s: MoveSuggestion, lead = ''): string {
     if (e.hits > 1) chips.push(`<span class="mad__stat">${e.hits} hits</span>`);
     if (e.killsTarget) chips.push('<span class="mad__stat mad__stat--kill">kills</span>');
   }
-  chips.push(`<span class="mad__stat">${s.mpCost > 0 ? `${s.mpCost} MP` : 'no MP'}</span>`);
-  chips.push(
-    `<span class="mad__stat">${s.hitChance === null ? 'always hits' : `${s.hitChance}% to hit`}</span>`,
-  );
-  // Crit is deliberately outside the range — see `simulate.ts`'s roll policy.
-  if (s.critChance > 0) chips.push(`<span class="mad__stat">${s.critChance}% crit</span>`);
-  const applied = [...new Set(s.statuses)];
-  const cured = [...new Set(s.cures)];
+  if (!trim) {
+    chips.push(`<span class="mad__stat">${s.mpCost > 0 ? `${s.mpCost} MP` : 'no MP'}</span>`);
+    chips.push(
+      `<span class="mad__stat">${s.hitChance === null ? 'always hits' : `${s.hitChance}% to hit`}</span>`,
+    );
+    // Crit is deliberately outside the range — see `simulate.ts`'s roll policy.
+    if (s.critChance > 0) chips.push(`<span class="mad__stat">${s.critChance}% crit</span>`);
+  } else if (s.mpCost > 0) {
+    // The one number a trimmed row keeps: a move the player cannot pay for is
+    // not advice, and "no MP" is the only chip that says nothing when it is
+    // missing.
+    chips.push(`<span class="mad__stat">${s.mpCost} MP</span>`);
+  }
+  const applied = trim ? [] : [...new Set(s.statuses)];
+  const cured = trim ? [] : [...new Set(s.cures)];
   if (applied.length > 0) {
     chips.push(`<span class="mad__stat mad__stat--status">+ ${escapeHtml(applied.join(', '))}</span>`);
   }
@@ -375,27 +472,34 @@ function statsHtml(s: MoveSuggestion, lead = ''): string {
  * reads as somebody else's ability; "Poison Fang · Items" is a set of
  * directions to the row, on the menu the player is already looking at.
  */
-function moveHtml(s: MoveSuggestion, rank: number, total: number): string {
+function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Density = 0): string {
+  const alt = rank > 1;
   const target = s.targetName
     ? `<span class="mad__arrow">→</span><span class="mad__target">${escapeHtml(s.targetName)}</span>`
     : '';
   const rankChip = total > 1 ? `<span class="mad__rank"><b>${rank}</b></span>` : '';
   const badge = s.source === 'tactic' ? '<span class="mad__badge">Guide’s pick</span>' : '';
   const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
+  // See {@link Density}. A runner-up loses its decoration before the lead does,
+  // and the lead's reason is the last thing to go.
+  const showEffect = alt ? density < 1 : density < 2;
+  const trimStats = alt ? density >= 2 : density >= 4;
+  const barStats = alt && density >= 3;
+  const showReason = alt || density < 4;
   return [
-    `<article class="mad__move${rank > 1 ? ' mad__move--alt' : ''}">`,
+    `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
     `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${badge}</p>`,
-    statsHtml(s, menu),
-    s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
-    s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
+    barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
+    showEffect && s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
+    showReason && s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
     s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
     '</article>',
   ].join('');
 }
 
-function cardHtml(view: AdvisorView): string {
+export function cardHtml(view: AdvisorView, density: Density = 0): string {
   const moves = view.suggestions
-    .map((s, i) => moveHtml(s, i + 1, view.suggestions.length))
+    .map((s, i) => moveHtml(s, i + 1, view.suggestions.length, density))
     .join('');
   return [
     '<div class="mad__head">',

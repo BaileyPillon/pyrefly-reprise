@@ -93,11 +93,13 @@ import { buildGuideView, recommendedCommand, type GuideDecision } from './guide.
 import {
   type AdvisorIntent,
   downedActives,
+  reviveCaution,
   reviveReason,
   reviveRisk,
   reviveValue,
   waitSentence,
 } from './advisor-revive.ts';
+import { forecastFromState } from './advisor-forecast.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
 
@@ -192,13 +194,14 @@ export interface AdvisorOptions {
   /** FFX ability/item records. Defaults to the process-wide registry. */
   ffxContent?: FFXContentRegistry;
   /**
-   * The enemy-intent forecast, when the HUD has one.
+   * A **better** enemy-intent forecast than the one the advisor can derive.
    *
-   * Optional and duck-typed for the same reason `attachEnemyIntent` is: the
-   * prediction needs the live engine context and the advisor only ever holds a
-   * `BattleState`. With it the advisor can tell a revive that survives from one
-   * that walks into a telegraphed Lance of Atrophy; without it, it falls back
-   * to what the state alone says (charges, Zombie) and never guesses.
+   * The advisor no longer depends on this. When an ally is down it builds its
+   * own forecast from the board (`./advisor-forecast.ts`), because neither HUD
+   * ever passed one and a safety rule that only runs in unit tests is not a
+   * safety rule [critic, fix-3 round 1, F2]. A HUD that *does* pass its live
+   * source still wins: that one reads the engine's real CTB counters and AI
+   * memory, which a state-only rebuild cannot.
    */
   intent?: () => AdvisorIntent | null;
 }
@@ -566,10 +569,16 @@ export function scoreOutcome(
   // Not a flat number: what a revive is worth is who is on the floor, how far
   // the party has already collapsed and whether they survive standing up. See
   // `./advisor-revive.ts`.
+  // `hpDelta` is positive for damage, so the HP a raise gives back is the
+  // negative one — measured rather than assumed, which is what tells a Phoenix
+  // Down's sliver apart from a Mega Phoenix's full bar when the question is
+  // whether the next hit puts them straight back down.
   for (const id of outcome.revives) {
-    score += reviveValue(state, id, ctx.intent ?? null);
+    score += reviveValue(state, id, ctx.intent ?? null, restoredHp(outcome, id));
   }
-  const risk = outcome.revives[0] ? reviveRisk(state, outcome.revives[0], ctx.intent ?? null) : null;
+  const raised = outcome.revives[0];
+  const risk = raised ? reviveRisk(state, raised, ctx.intent ?? null, restoredHp(outcome, raised)) : null;
+  const caution = raised && !risk ? reviveCaution(state, raised, ctx.intent ?? null, restoredHp(outcome, raised)) : '';
 
   for (const change of outcome.statusChanges) {
     const target = state.combatants[change.targetId];
@@ -606,9 +615,18 @@ export function scoreOutcome(
   score -= outcome.mpSpent * MP_WEIGHT;
   if (outcome.rejected) score -= 1_000_000;
   // The re-kill warning outranks anything above it: a revive into a telegraphed
-  // Lance of Atrophy is the most expensive mistake on the board.
+  // Lance of Atrophy is the most expensive mistake on the board. A caution is
+  // the softer half of the same reading — the raise is still the pick, and the
+  // player is told what is coming for them.
   if (risk) warning = risk.sentence;
+  else if (caution) warning = caution;
   return { score, warning };
+}
+
+/** HP a previewed action stood `id` back up with. See {@link scoreOutcome}. */
+function restoredHp(outcome: SimOutcome, id: CombatantId): number {
+  const delta = outcome.hpDelta[id] ?? 0;
+  return delta < 0 ? -delta : 0;
 }
 
 /**
@@ -859,12 +877,17 @@ export function buildAdvisorView(
   const actor = state.combatants[decision.actorId];
   if (!actor) return null;
   const sim = simulatorFor(state, options);
+  // The forecast is only ever read by the revive rules, and a prediction is a
+  // dozen board clones — so it is asked for exactly when somebody is on the
+  // floor and the question "does this raise survive" can actually come up.
   let intent: AdvisorIntent | null = null;
-  try {
-    intent = options.intent?.() ?? null;
-  } catch {
-    // A forecast is never worth a card. The advisor reads the board instead.
-    intent = null;
+  if (downedActives(state).length > 0) {
+    try {
+      intent = options.intent?.() ?? forecastFromState(state, options);
+    } catch {
+      // A forecast is never worth a card. The advisor reads the board instead.
+      intent = null;
+    }
   }
 
   const candidates: Candidate[] = [];
@@ -915,7 +938,9 @@ export function buildAdvisorView(
     const down = downedActives(state)[0];
     const raise = legal.find(isRevive);
     if (raise) {
-      const risk = reviveRisk(state, raise.outcome?.revives[0] ?? raise.suggestion.targetId ?? '', intent);
+      const raisedId = raise.outcome?.revives[0] ?? raise.suggestion.targetId ?? '';
+      const back = raise.outcome ? restoredHp(raise.outcome, raisedId) : undefined;
+      const risk = reviveRisk(state, raisedId, intent, back);
       if (risk) note = waitSentence(risk);
       else shown.push(raise);
     } else if (down) {
