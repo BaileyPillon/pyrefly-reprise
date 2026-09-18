@@ -268,7 +268,7 @@ const FFX2_BAHAMUT_META: ChapterMeta = {
     'Two years on, the aeon Yuna once called by name is standing in the dark with nobody home behind ' +
     'its eyes. She tries to talk it down anyway, because that is what she knows how to do.',
   heroArt: 'pause/ch4-ffx2-bahamut',
-  heroArtFallback: 'portraits/yuna-ffx2.1.raw.png',
+  heroArtFallback: 'portraits/yuna.png',
   quote: {
     text: "Bahamut, it's me. Please — you have to hear me, just this once.",
     speaker: 'Yuna',
@@ -295,7 +295,7 @@ const FFX2_BAHAMUT_META: ChapterMeta = {
   snapshots: [
     { image: 'backdrops/bevelle-underground.png', caption: 'Limbo, a thousand years dark' },
     { image: 'characters/ffx2-bahamut/idle.png', caption: 'nobody is home' },
-    { image: 'portraits/paine.1.raw.png', caption: "you don't get another option" },
+    { image: 'characters/paine-warrior/idle.png', caption: "you don't get another option" },
   ],
   focalCharacterId: 'yuna-ffx2',
   musicKeys: ['boss-dread', 'battle-ffx'],
