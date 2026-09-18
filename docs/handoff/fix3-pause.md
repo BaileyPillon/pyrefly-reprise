@@ -201,13 +201,25 @@ menu not rendered, the surviving line at 14px, painting still exactly the
 viewport) and `H` again brings them back, `ArrowDown` still moves the cursor,
 `F` enters photo mode and `Escape` leaves it. No page errors, no console errors.
 
-Screenshots: `docs/screenshots/fix3/pause/`.
+Screenshots: `docs/screenshots/fix3/pause/`. Three generations, oldest first,
+because the interesting thing about this screen is what each pass caught.
 
-- `390x844-phone.png`, `1280x720.png`, `1600x900.png`, `2000x1012.png`,
-  `2560x1080.png`, `3840x2160.png` — the first pass, before the hint-band fix.
-- `v2-*.png` — after it: the same sizes plus `panels-hidden`, the PARTY, MUSIC
-  and OPTIONS panels, and the prep menu's CHAPTER tab (the other consumer of
-  `chapter-panel.css`).
+- `390x844-phone.png` … `3840x2160.png` — the first pass, before the
+  hint-band fix.
+- `v2-*.png` — after it: the same six sizes plus `panels-hidden`, the PARTY,
+  MUSIC and OPTIONS panels, and the prep menu's CHAPTER tab (the other
+  consumer of `chapter-panel.css`).
+- `v5-*.png` — the second pass's measured run, with `2000x1012` and
+  `panels-hidden` as the two worth putting in front of Bailey.
+- `v6-*.png` — the final state: the phone after the party-grid and hint-band
+  fixes, and the two large sizes re-measured against the art track's **real**
+  2688x1536 masters rather than the one file this track generated to prove the
+  path.
+
+(The `v3-*` and `v4-*` runs are not in the repo. `v3` was the run whose
+`Escape` was refused, so every shot in it is of the battle screen with no pause
+up; `v4` was superseded by `v5` at every size it covered, and six 4K PNGs is
+30MB of nothing new.)
 
 ### The second pass's run
 
@@ -238,6 +250,26 @@ against the top of the hint strip.
 | polaroid captions clipped | none | none | none | none |
 | blur on the art | none | none | none | none |
 
+A third run then re-measured the two sizes those fixes touched, plus 21:9,
+against the art track's real masters:
+
+| | 390x844 | 2560x1080 | 3840x2160 |
+|---|---|---|---|
+| painting rect == viewport | yes | yes | yes |
+| `currentSrc` | `.png` | `.2x.webp` | `.2x.webp` |
+| smallest font / under 14px | 14 / 0 of 68 | 14 / 0 of 74 | 18 / 0 of 74 |
+| hint strip inside the window | yes | yes | yes |
+| numerals over the OD gauge | none | none | none |
+| numerals clipped in the card | none | none | **none** (was all three) |
+| dossier bottom to hint top | **+9px** (was -17) | +256px | +997px |
+| page or console errors | none | none | none |
+
+The two bolded cells are the second pass's fixes landing: the phone's dossier
+no longer runs underneath the hint strip, and the 4K card no longer clips
+`2420/2420` — that one was caused by this pass's own ceiling bump and is why
+the numeral ceiling went back to 28 while the card's width cap took the
+headroom instead.
+
 The key contract was re-run on its own against the current tree, because
 another track landed a change to how the FFX menus claim `cancel` while this
 was in flight: `P` opens over a live command menu, `H` hides the panels
@@ -254,7 +286,15 @@ Unit tests: `tests/unit/pause-fullbleed.test.ts` (18, new) — the manifest's
 `fixed`, no font literal under 14px, every `--pause-fs-*` and `--cp-fs-*` clamp
 floors at 14px, no blur on the art, drift off for reduced motion, no
 `-webkit-line-clamp`). `tests/unit/pause-panels.test.ts` had its `slabs()`
-helper updated for the new `.pause__frame` wrapper. `npx tsc --noEmit` clean.
+helper updated for the new `.pause__frame` wrapper.
+
+`npx tsc --noEmit` reports nothing in any file this track owns. The whole
+vitest suite was run once at the end: **3254 passed, 6 failed, all six in
+`tests/unit/audio*.test.ts`** — the audio track was mid-edit in the same
+working tree and was, for a stretch of this round, throwing at import
+(`pizz is not defined`) and failing `tsc` in 15 of its own files. That is
+noise from a neighbour, not a regression here; every pause and chapter-panel
+test passes.
 
 ## Files
 
