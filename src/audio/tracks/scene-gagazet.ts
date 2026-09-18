@@ -1,210 +1,209 @@
 /**
- * "Where the Horns Fell Silent" — Mt. Gagazet scene theme.
+ * "Where the Horns Fell Silent" — Mt. Gagazet.
  *
- * ORIGINAL COMPOSITION. 72 bpm, B minor (aeolian) coloured by a raised 6th
- * (G#) borrowed from B dorian — the "IV major" (E) chord that carries it is
- * the one splash of warmth in an otherwise cold, open-fifth harmony. Flute
- * breathes the lead over a choir drone built from bare fifths (no third —
- * the mountain doesn't resolve, it just endures); a clan horn call in open
- * 4ths/5ths answers the flute's phrases; taiko rumbles like distant thunder
- * in the peaks; shaker hisses like blown snow.
+ * ORIGINAL COMPOSITION. B Aeolian, 4/4, 72 bpm. Wind, one horn, a low choir
+ * of open fifths with no third in it anywhere, and thirty seconds in which
+ * nothing happens on purpose.
  *
- * Form (4/4, 28 bars, ~93.3 s):
- *   bars  1- 4  intro    beats   0- 16   wind alone: shaker, a held low
- *                                        strings-low hum, one soft taiko hit
- *   bars  5-12  climb    beats  16- 48   flute enters in 2-bar phrases,      <- loop start
- *                                        answered by the horn call in the
- *                                        2 bars between each phrase
- *   bars 13-20  peak     beats  48- 80   everything present at once: flute
- *                                        soars, horn punctuates, taiko
- *                                        cracks, the flute recalls
- *                                        PYREFLY_RISE once as a hushed memory
- *   bars 21-28  thinning beats  80-112   flute fragments and falls silent,
- *                                        horn echoes once more, drone and
- *                                        wind fade back toward the climb
- * The loop runs 16 -> 112: the intro plays once, then climb/peak/thinning
- * cycle, ending on the tonic bass just as the climb's own opening bar does.
+ * THEMES (docs/audio/THEMES.md cue map, row 10)
+ *   FATHER_STRAIGHTENED — which IS HYMN_HEAD — on one unaccompanied horn, at
+ *   the very top, four notes and then nothing. The father's riff is the
+ *   prayer with every note shoved off the beat; push them back and it turns
+ *   into the prayer again. The cue does exactly that and says nothing about
+ *   it.
+ *   FAREWELL_RISE on the cellos, once, alone, and then THIRTY SECONDS OF ONE
+ *   DRONE before anything else is allowed to happen. Silence is the
+ *   instrument here; the arrangement's job is to stay out of its way.
+ *
+ * THE ONE EMOTION: the mountain does not care.
+ *
+ * Harmonic note: this cue used to borrow a raised 6th for warmth. It does not
+ * any more — the raised 6th is reserved for the FFX-2 material (THEMES.md
+ * §Harmonic language), and Spira is Aeolian. The warmth here comes from bVI
+ * and bVII, and from nothing else.
+ *
+ * Form (31 bars, 124 beats, 103.3 s):
+ *   bar   1     horn     beats   0-  4  four notes, alone
+ *   bar   2     silence  beats   4-  8  nothing at all
+ *   bar   3     cello    beats   8- 12  FAREWELL_RISE, alone
+ *   bars  4-12  drone    beats  12- 48  one pitch, thirty seconds, wind over it
+ *   bars 13-20  A        beats  48- 80  low choir in fifths, horn calls    <- loop start
+ *   bars 21-28  B        beats  80-112  the horn answered at the fifth; thunder
+ *   bars 29-31  outro    beats 112-124  back to the drone and the wind
  */
 
 import {
-  arpLine,
   chordLine,
   chordRoots,
   concatNotes,
   drumLine,
+  motif,
   tracker,
   type Note,
   type Track,
 } from '../score.ts';
-import { cell, PYREFLY_RISE } from './motifs.ts';
+import { FAREWELL_RISE, FATHER_STRAIGHTENED } from './themes.ts';
 
 const BAR = 4;
+const DRONE = 12;
+const A = 48;
+const B = 80;
+const OUTRO = 112;
+const LENGTH = 124;
 
-const INTRO_CHORDS = ['Bm', 'Bm', 'G', 'A'];
-const A_CHORDS = ['Bm', 'A', 'D', 'E', 'Bm', 'G', 'F#m', 'E'];
-const B_CHORDS = ['D', 'A', 'E', 'Bm', 'G', 'D', 'E', 'Bm'];
-const A2_CHORDS = ['Bm', 'A', 'Bm', 'E', 'Bm', 'A', 'Bm', 'Bm'];
+const A_CHORDS = ['Bm', 'Bm', 'G', 'A', 'Bm', 'D', 'Em', 'A'];
+const B_CHORDS = ['G', 'A', 'Bm', 'D', 'G', 'A', 'Em', 'Bm'];
+const OUTRO_CHORDS = ['Em', 'Bm', 'Bm'];
 
-const A_START = 16;
-const B_START = 48;
-const A2_START = 80;
-const LENGTH = 112;
 
-/** Root + fifth only — "B" -> "B5", used for the choir's open-fifth drone. */
-function fifths(chords: string[]): string[] {
-  return chords.map((c) => `${c.match(/^[A-Ga-g][#b]*/)![0]}5`);
-}
-
-// ---------------------------------------------------------------- flute lead
-
-/** Climb, phrase 1 (bars 5-6, Bm/A) — the flute's first question. */
-const FLUTE_A1 = '-:1 F#4:1 B4:1 D5:1 | E5:2 D5:1 C#5:1';
-/** Climb, phrase 2 (bars 9-10, Bm/G) — answered, it asks again, lower. */
-const FLUTE_A2 = 'D5:2 B4:1 A4:1 | G4:1 B4:1 D5:2';
-
-/** Peak, opening rise (bars 13-14, D/A) — the climb's payoff. */
-const FLUTE_B1 = 'A4:1 D5:1 F#5:1 A5:1 | B5:2 A5:1 F#5:1';
-/** After the PYREFLY_RISE quote settles, one beat of hush before bar 17. */
-const FLUTE_B_FILL = '-:1 D5:1 B4:1';
-/** Peak, bars 17-20 (G/D/E/Bm) — the highest point of the piece, then landing. */
-const FLUTE_B2 = 'G5:1 B5:1 D6:2 | A5:1.5 F#5:0.5 D5:2 | G#5:1 F#5:1 E5:2 | B4:2 D5:2';
-
-/** Thinning, bars 21-24 — fragments, the raised 6th glinting once more. */
-const FLUTE_THIN1 = 'F#4:2 -:1 B4:1 | -:2 D5:2 | B4:3 -:1 | -:1 G#4:1 F#4:2';
-/** Thinning, bars 27-28 — a last breath on the tonic, held into the loop. */
-const FLUTE_THIN2 = 'F#4:4 | B4:4';
-
-function fluteLine(): Note[] {
-  return concatNotes(
-    // The climb's flute stays hushed (0.46–0.48) so the peak's 0.72–0.74 is a real arrival.
-    tracker(FLUTE_A1, { start: A_START, velocity: 0.48, checkBars: BAR }),
-    tracker(FLUTE_A2, { start: 32, velocity: 0.46, checkBars: BAR }),
-    tracker(FLUTE_B1, { start: B_START, velocity: 0.74, checkBars: BAR }),
-    cell(PYREFLY_RISE, B_START + 8, 'B4', 0.62),
-    tracker(FLUTE_B_FILL, { start: B_START + 13, velocity: 0.5 }),
-    tracker(FLUTE_B2, { start: B_START + 16, velocity: 0.72, checkBars: BAR }),
-    tracker(FLUTE_THIN1, { start: A2_START, velocity: 0.5, checkBars: BAR }),
-    tracker(FLUTE_THIN2, { start: A2_START + 24, velocity: 0.32, checkBars: BAR }),
-  );
-}
-
-// -------------------------------------------------------------- clan horn call
-
-/** Answers flute phrase 1: open 5th+octave on D, then open 4th+5th on E. */
-const HORN_1 = 'D4:1 A4:1 D5:2 | E4:1 A4:1 B4:2';
-/** Answers flute phrase 2: open 5th+octave on F#m, wide open 5ths on E. */
-const HORN_2 = 'F#4:1 C#5:1 F#5:2 | B3:1 E4:1 B4:2';
-/** Announces the peak, under the flute's opening rise: D then A, both open 5ths. */
-const HORN_PEAK = 'D4:1.5 A4:0.5 D5:2 | A3:1.5 E4:0.5 A4:2';
-/** A second punctuation as the flute reaches its highest phrase. */
-const HORN_MID = 'G4:1 D5:1 G5:2';
-/** The horn's own peak, answering the flute's landing. */
-const HORN_FINISH = 'E4:1.5 B4:0.5 E5:2 | B3:2 F#4:2';
-/** One last distant echo as everything thins out. */
-const HORN_ECHO = 'F#4:2 B4:2';
-
-function hornCall(): Note[] {
-  return concatNotes(
-    tracker(HORN_1, { start: 24, velocity: 0.5, checkBars: BAR }),
-    tracker(HORN_2, { start: 40, velocity: 0.55, checkBars: BAR }),
-    tracker(HORN_PEAK, { start: B_START, velocity: 0.68, checkBars: BAR }),
-    tracker(HORN_MID, { start: B_START + 16, velocity: 0.6 }),
-    tracker(HORN_FINISH, { start: B_START + 24, velocity: 0.72, checkBars: BAR }),
-    tracker(HORN_ECHO, { start: A2_START, velocity: 0.28 }),
-  );
-}
-
-// ------------------------------------------------------------------ choir bed
-
-function choirDrone(): Note[] {
-  return concatNotes(
-    chordLine(fifths(INTRO_CHORDS), { start: 0, octave: 3, center: 59, velocity: 0.24, dur: 3.8, roll: 0.18 }),
-    chordLine(fifths(A_CHORDS), { start: A_START, octave: 3, center: 59, velocity: 0.34, dur: 3.85, roll: 0.1 }),
-    chordLine(fifths(B_CHORDS), { start: B_START, octave: 3, center: 62, velocity: 0.58, dur: 3.85, roll: 0.08 }),
-    chordLine(fifths(A2_CHORDS), { start: A2_START, octave: 3, center: 59, velocity: 0.3, dur: 3.85, roll: 0.18 }),
-  );
-}
-
-// ------------------------------------------------------------------- harp bed
-
-function harpBed(): Note[] {
-  return concatNotes(
-    arpLine(INTRO_CHORDS, { start: 0, pattern: [0, 2, 1, 2], step: 1, dur: 0.9, octave: 4, center: 74, velocity: 0.2 }),
-    arpLine(A_CHORDS, {
-      start: A_START,
-      pattern: [0, 1, 2, 3, 2, 1],
-      step: 0.5,
-      dur: 0.55,
-      octave: 4,
-      center: 76,
-      velocity: 0.3,
-    }),
-    arpLine(B_CHORDS, {
-      start: B_START,
-      pattern: [0, 1, 2, 3, 4, 3, 2, 1],
-      step: 0.5,
-      dur: 0.42,
-      octave: 4,
-      center: 78,
-      velocity: 0.4,
-    }),
-    arpLine(A2_CHORDS, { start: A2_START, pattern: [0, 2, 1], step: 1, dur: 0.85, octave: 4, center: 74, velocity: 0.22 }),
-  );
-}
-
-// -------------------------------------------------------------- strings-low
-
-/** Sustained roots; linearly fades between two velocities across a chord list. */
-function fadeRoots(chords: string[], start: number, velFrom: number, velTo: number, dur = 3.85): Note[] {
-  const roots = chordRoots(chords, 2);
-  return roots.map((midi, bar): Note => {
-    const t = chords.length > 1 ? bar / (chords.length - 1) : 0;
-    return [start + bar * BAR, dur, midi, velFrom + (velTo - velFrom) * t];
+/**
+ * Nothing in this score holds one velocity for thirty seconds. A drone, a
+ * shaker or a held pad written at a fixed level is the most machine-like
+ * thing a mock-up can do, and it is also the easiest thing to fix: a slow
+ * sine and a deterministic per-note wobble, both small enough that nobody
+ * hears the device and everybody hears that the sound is alive.
+ */
+function breathe(notes: Note[], periodBeats: number, depth: number, wobble = 0): Note[] {
+  return notes.map((n, i): Note => {
+    const swell = 1 + depth * Math.sin((2 * Math.PI * n[0]) / periodBeats);
+    const jitter = wobble === 0 ? 1 : 1 + wobble * Math.sin(i * 2.399963);
+    return [n[0], n[1], n[2], Math.max(0.02, Math.min(1, (n[3] ?? 0.8) * swell * jitter))];
   });
 }
 
-function stringsLow(): Note[] {
+/** Root and fifth only. The mountain does not resolve; it endures. */
+function fifths(chords: string[]): string[] {
+  return chords.map((c) => `${/^[A-Ga-g][#b]*/.exec(c)![0]}5`);
+}
+
+// ---------------------------------------------------------------------------
+// Four notes, then nothing
+// ---------------------------------------------------------------------------
+
+/**
+ * The riff, straightened, on one horn. Velocities fall across the four notes
+ * — a player running out of breath on a cold mountain, not a sampler firing
+ * four identical triggers.
+ */
+function hornHead(): Note[] {
+  const levels = [0.54, 0.46, 0.5, 0.58];
   return concatNotes(
-    [[0, 15.5, 'B2', 0.2] as Note],
-    fadeRoots(A_CHORDS, A_START, 0.36, 0.42),
-    fadeRoots(B_CHORDS, B_START, 0.48, 0.58),
-    fadeRoots(A2_CHORDS, A2_START, 0.34, 0.18),
+    motif(FATHER_STRAIGHTENED, [0], ['B3']).map((n, i): Note => [n[0], n[1] * 1.4, n[2], levels[i]!]),
+    // and once more at the top of B, an octave down, so the loop remembers it
+    motif(FATHER_STRAIGHTENED, [B], ['B2']).map((n, i): Note => [n[0], n[1] * 1.6, n[2], levels[i]! - 0.08]),
   );
 }
 
-// -------------------------------------------------------- taiko: distant thunder
+/** FAREWELL's first four degrees, on the cellos, once. The only melody in the cue. */
+function celloRise(): Note[] {
+  const levels = [0.4, 0.46, 0.5, 0.44];
+  return motif(FAREWELL_RISE, [8], ['B2']).map((n, i): Note => [n[0], n[1] * 1.5, n[2], levels[i]!]);
+}
 
-function thunderRoll(chords: string[], hitBars: number[], start: number, vel: number, big: boolean): Note[] {
+// ---------------------------------------------------------------------------
+// The drone — thirty seconds of one pitch
+// ---------------------------------------------------------------------------
+
+function droneLine(): Note[] {
+  return concatNotes(
+    // Two overlapping bows so the drone breathes without ever restriking.
+    [[DRONE, 20, 'B1', 0.3] as Note],
+    [[DRONE + 18, 18, 'B1', 0.26] as Note],
+    [[DRONE + 8, 28, 'B2', 0.22] as Note],
+    chordRoots([...A_CHORDS, ...B_CHORDS], 1).map((midi, bar): Note => {
+      const at = A + bar * BAR;
+      return [at, 3.85, midi, at < B ? 0.3 : 0.38];
+    }),
+    chordRoots(OUTRO_CHORDS, 1).map((midi, bar): Note => [OUTRO + bar * BAR, 3.85, midi, 0.26]),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// The mountain
+// ---------------------------------------------------------------------------
+
+/** A low choir on open fifths. No third is sung anywhere in this cue. */
+function choirFifths(): Note[] {
+  return concatNotes(
+    chordLine(fifths(A_CHORDS), { start: A, octave: 2, center: 50, velocity: 0.3, dur: 3.85, roll: 0.14 }),
+    chordLine(fifths(B_CHORDS), { start: B, octave: 2, center: 52, velocity: 0.44, dur: 3.85, roll: 0.1 }),
+    chordLine(fifths(OUTRO_CHORDS), { start: OUTRO, octave: 2, center: 50, velocity: 0.24, dur: 3.85, roll: 0.18 }),
+    // one thin upper line, entering only for the second half
+    chordLine(fifths(B_CHORDS.slice(4)), { start: B + 16, octave: 3, center: 62, velocity: 0.28, dur: 3.8, roll: 0.2 }),
+  );
+}
+
+/** Horn calls in bare fourths and fifths, two bars apart, never hurried. */
+const CALL_1 = 'B3:1.5 F#4:0.5 B4:2 | -:4';
+const CALL_2 = 'A3:1.5 E4:0.5 A4:2  | -:4';
+const CALL_3 = 'D4:1.5 A4:0.5 D5:2  | -:2 G4:2';
+const CALL_4 = 'E4:1.5 B4:0.5 E5:2  | B3:2 F#4:2';
+const CALL_ECHO = 'F#4:2 B4:2';
+
+function hornCalls(): Note[] {
+  return concatNotes(
+    tracker(CALL_1, { start: A + 8, velocity: 0.44, gate: 0.98, checkBars: BAR }),
+    tracker(CALL_2, { start: A + 24, velocity: 0.4, gate: 0.98, checkBars: BAR }),
+    tracker(CALL_3, { start: B + 8, velocity: 0.56, gate: 0.98, checkBars: BAR }),
+    tracker(CALL_4, { start: B + 24, velocity: 0.62, gate: 0.98, checkBars: BAR }),
+    tracker(CALL_ECHO, { start: OUTRO, velocity: 0.26, gate: 0.98 }),
+  );
+}
+
+/** Distant thunder in the peaks: a roll, its echo, and a fifth above it when it is close. */
+function thunder(chords: string[], bars: number[], start: number, level: number, big: boolean): Note[] {
   const roots = chordRoots(chords, 1);
   const notes: Note[] = [];
-  for (const idx of hitBars) {
-    const at = start + idx * BAR;
-    const root = roots[idx]!;
-    notes.push([at, 1.6, root, vel]);
-    notes.push([at + 1.5, 0.9, root, vel * 0.55]);
-    if (big) notes.push([at + 2.5, 0.9, root + 7, vel * 0.62]);
+  for (const bar of bars) {
+    const at = start + bar * BAR;
+    const root = roots[bar]!;
+    notes.push([at, 1.7, root, level]);
+    notes.push([at + 1.6, 0.9, root, level * 0.5]);
+    if (big) notes.push([at + 2.6, 0.9, root + 7, level * 0.6]);
   }
   return notes;
 }
 
-function taikoThunder(): Note[] {
+function taikoLine(): Note[] {
   return concatNotes(
-    [[0, 1.5, 'B1', 0.3] as Note, [8, 1.2, 'G1', 0.24] as Note],
-    // The climb keeps its thunder distant (two soft rolls) so the peak's full storm lands.
-    thunderRoll(A_CHORDS, [0, 4], A_START, 0.26, false),
-    thunderRoll(B_CHORDS, [0, 1, 2, 3, 4, 5, 6, 7], B_START, 0.62, true),
-    thunderRoll(A2_CHORDS, [0, 4], A2_START, 0.22, false),
+    [[DRONE + 12, 1.6, 'B1', 0.2] as Note],
+    thunder(A_CHORDS, [0, 4], A, 0.24, false),
+    thunder(B_CHORDS, [0, 2, 4, 5, 6], B, 0.5, true),
+    thunder(OUTRO_CHORDS, [0], OUTRO, 0.2, false),
   );
 }
 
-// -------------------------------------------------------------- shaker: wind
-
-function shakerWind(): Note[] {
+/** Wind. It is the one thing that never stops, and it never gets loud either. */
+function wind(): Note[] {
   return concatNotes(
-    drumLine('x...x...x...x...', { start: 0, pitch: 'C3', velocity: 0.14, times: 4 }),
-    drumLine('x.x.x.x.x.x.x.x.', { start: A_START, pitch: 'C3', velocity: 0.2, times: 8 }),
-    drumLine('xxx.xxx.xxx.xxx.', { start: B_START, pitch: 'C3', velocity: 0.28, times: 8 }),
-    drumLine('x...x...x...x...', { start: A2_START, pitch: 'C3', velocity: 0.16, times: 8 }),
+    drumLine('x...............', { start: 0, pitch: 'C3', velocity: 0.1, times: 3 }),
+    drumLine('x.......x.......', { start: DRONE, pitch: 'C3', velocity: 0.12, times: 9 }),
+    drumLine('x...x...x...x...', { start: A, pitch: 'C3', velocity: 0.17, times: 8 }),
+    drumLine('x.x.x.x.x.x.x.x.', { start: B, pitch: 'C3', velocity: 0.24, times: 8 }),
+    drumLine('x...x...x...x...', { start: OUTRO, pitch: 'C3', velocity: 0.14, times: 3 }),
+  );
+}
+
+/** Two harp gestures in the whole cue. Both are the same four notes of the rise. */
+function harpLine(): Note[] {
+  return concatNotes(
+    motif(FAREWELL_RISE, [B + 4], ['B4']).map((n): Note => [n[0], n[1] * 2, n[2], 0.26]),
+    motif(FAREWELL_RISE, [OUTRO + 4], ['B3']).map((n): Note => [n[0], n[1] * 2, n[2], 0.18]),
+  );
+}
+
+function bellLine(): Note[] {
+  return [
+    [DRONE, 5, 'B2', 0.34],
+    [B, 5, 'F#3', 0.32],
+  ];
+}
+
+function lowStrings(): Note[] {
+  return concatNotes(
+    chordLine(A_CHORDS, { start: A, octave: 2, center: 47, velocity: 0.28, dur: 3.85 }),
+    chordLine(B_CHORDS, { start: B, octave: 2, center: 49, velocity: 0.42, dur: 3.85 }),
+    chordLine(OUTRO_CHORDS, { start: OUTRO, octave: 2, center: 47, velocity: 0.22, dur: 3.85 }),
   );
 }
 
@@ -212,21 +211,23 @@ export const gagazetTrack: Track = {
   name: 'scene-gagazet',
   bpm: 72,
   timeSig: [4, 4],
-  loop: { start: A_START, end: LENGTH },
+  loop: { start: A, end: LENGTH },
   length: LENGTH,
-  tailSec: 4,
+  tailSec: 6,
   fx: {
-    reverb: { room: 0.88, damp: 0.32, width: 0.98, preDelay: 0.035 },
-    delay: { timeBeats: 1, feedback: 0.28, damp: 2400 },
+    reverb: { room: 0.9, damp: 0.3, width: 1, preDelay: 0.04 },
+    delay: { timeBeats: 1, feedback: 0.3, damp: 2400 },
   },
   channels: [
-    { name: 'flute lead', instrument: 'flute', volume: 0.9, pan: -0.05, notes: fluteLine(), fx: { reverb: 0.35, delay: 0.15 } },
-    { name: 'horn call', instrument: 'brass', volume: 0.7, pan: -0.18, notes: hornCall(), fx: { reverb: 0.32, delay: 0.1 } },
-    { name: 'choir drone', instrument: 'choir', volume: 0.62, pan: 0.1, notes: choirDrone(), fx: { reverb: 0.55 } },
-    { name: 'harp', instrument: 'harp', volume: 0.4, pan: -0.28, notes: harpBed(), fx: { reverb: 0.3, delay: 0.22 } },
-    { name: 'strings-low', instrument: 'strings-low', volume: 0.55, pan: 0, notes: stringsLow(), fx: { reverb: 0.32 } },
-    { name: 'taiko thunder', instrument: 'taiko', volume: 0.62, pan: 0.15, notes: taikoThunder(), fx: { reverb: 0.35 } },
-    { name: 'shaker wind', instrument: 'shaker', volume: 0.3, pan: 0.32, notes: shakerWind(), fx: { reverb: 0.18 } },
+    { name: 'horn', instrument: 'brass', volume: 0.62, pan: -0.2, notes: concatNotes(hornHead(), hornCalls()), fx: { reverb: 0.4, delay: 0.16 } },
+    { name: 'cello rise', instrument: 'strings-low', volume: 0.7, pan: 0.1, notes: celloRise(), fx: { reverb: 0.38 } },
+    { name: 'drone', instrument: 'strings-low', volume: 0.66, pan: 0, notes: breathe(droneLine(), 26, 0.14), fx: { reverb: 0.34 } },
+    { name: 'low strings', instrument: 'strings-low', volume: 0.5, pan: -0.12, notes: breathe(lowStrings(), 24, 0.14), fx: { reverb: 0.34 } },
+    { name: 'choir', instrument: 'choir', volume: 0.66, pan: 0.12, notes: breathe(choirFifths(), 32, 0.16), fx: { reverb: 0.6 } },
+    { name: 'harp', instrument: 'harp', volume: 0.42, pan: -0.3, notes: harpLine(), fx: { reverb: 0.4, delay: 0.24 } },
+    { name: 'taiko', instrument: 'taiko', volume: 0.6, pan: 0.16, notes: taikoLine(), fx: { reverb: 0.36 } },
+    { name: 'bell', instrument: 'bell', volume: 0.36, pan: 0.32, notes: bellLine(), fx: { reverb: 0.6, delay: 0.3 } },
+    { name: 'wind', instrument: 'shaker', volume: 0.3, pan: 0.3, notes: breathe(wind(), 21, 0.3, 0.16), fx: { reverb: 0.2 } },
   ],
 };
 

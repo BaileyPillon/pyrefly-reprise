@@ -43,36 +43,36 @@
       "loopStart": 6.4,
       "loopEnd": 76.8,
       "duration": 79.8,
-      "bytes": 1283690,
-      "lufs": -16,
-      "truePeakDb": -1.97
+      "bytes": 1285643,
+      "lufs": -16.01,
+      "truePeakDb": -1.55
     },
     "boss-dread": {
       "file": "music/boss-dread.mp3",
       "loopStart": 10.6667,
       "loopEnd": 85.3333,
       "duration": 88.3333,
-      "bytes": 1310109,
+      "bytes": 1282223,
       "lufs": -16.02,
-      "truePeakDb": -1.42
+      "truePeakDb": -1.47
     },
     "scene-gagazet": {
       "file": "music/scene-gagazet.mp3",
-      "loopStart": 13.3333,
-      "loopEnd": 93.3333,
-      "duration": 96.3333,
-      "bytes": 1429242,
-      "lufs": -16.11,
-      "truePeakDb": -1.4
+      "loopStart": 40,
+      "loopEnd": 103.3333,
+      "duration": 106.3333,
+      "bytes": 1436068,
+      "lufs": -16.15,
+      "truePeakDb": -1.38
     },
     "scene-zanarkand-dome": {
       "file": "music/scene-zanarkand-dome.mp3",
-      "loopStart": 16.5517,
-      "loopEnd": 99.3103,
-      "duration": 102.3103,
-      "bytes": 1278879,
-      "lufs": -16.12,
-      "truePeakDb": -1.4
+      "loopStart": 10,
+      "loopEnd": 130,
+      "duration": 133,
+      "bytes": 1771096,
+      "lufs": -16.1,
+      "truePeakDb": -1.39
     },
     "boss-yunalesca": {
       "file": "music/boss-yunalesca.mp3",
@@ -88,9 +88,9 @@
       "loopStart": 12.6316,
       "loopEnd": 101.0526,
       "duration": 104.0526,
-      "bytes": 1674963,
-      "lufs": -16.05,
-      "truePeakDb": -1.37
+      "bytes": 1517895,
+      "lufs": -16.1,
+      "truePeakDb": -1.38
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
@@ -112,21 +112,21 @@
     },
     "victory-ffx": {
       "file": "music/victory-ffx.mp3",
-      "loopStart": 6,
-      "loopEnd": 70,
-      "duration": 73,
-      "bytes": 1131747,
-      "lufs": -16.34,
-      "truePeakDb": -1.35
+      "loopStart": 8,
+      "loopEnd": 72,
+      "duration": 75,
+      "bytes": 1099390,
+      "lufs": -16.09,
+      "truePeakDb": -1.37
     },
     "ending-ffx": {
       "file": "music/ending-ffx.mp3",
-      "loopStart": 29.0909,
-      "loopEnd": 160,
-      "duration": 163,
-      "bytes": 2025678,
+      "loopStart": 33.1034,
+      "loopEnd": 115.8621,
+      "duration": 118.8621,
+      "bytes": 1693720,
       "lufs": -16.01,
-      "truePeakDb": -1.39
+      "truePeakDb": -1.4
     },
     "scene-bevelle-underground": {
       "file": "music/scene-bevelle-underground.mp3",

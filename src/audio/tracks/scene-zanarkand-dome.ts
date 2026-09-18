@@ -1,191 +1,266 @@
 /**
- * "Where the Tide Stopped" — Zanarkand Dome scene theme.
+ * "Where the Tide Stopped" — the ruined dome at dusk.
  *
- * ORIGINAL COMPOSITION. The pilgrimage's end: a ruined dome at dusk, pyreflies
- * drifting through empty arches. E minor, 58 bpm, built mostly from space and
- * silence. The piano states its material in wide dyads and octaves rather
- * than flowing arpeggios — deliberately unlike the title theme's A minor
- * arpeggio ballad — under a slow pad, a distant bell and celesta pyrefly
- * flickers, with low strings entering only once the dome has sat in silence
- * a while.
+ * ORIGINAL COMPOSITION. B Aeolian, 4/4, 48 bpm. A nocturne: solo piano with
+ * the melody an octave up over rolling broken chords, a harmonised hymn in
+ * the middle of it, and a wordless voice alone at the climb.
  *
- * Built around PYREFLY_SIGH, restated as a fixed melodic anchor (always the
- * same pitches) over harmony that keeps moving underneath it — a memory that
- * doesn't change even as the ground beneath it does. PYREFLY_RISE is stated
- * once, opening the B section full of hope, and is never answered by the
- * sigh that would resolve it: the question is left standing in the air.
+ * THEMES (docs/audio/THEMES.md §1, §2 and the cue map, row 11)
+ *   FAREWELL as a nocturne — melody transposed +12, left hand in broken
+ *   chords that roll rather than repeat (the resemblance guard forbids a
+ *   repeated-note ostinato here, because that texture belongs to somebody
+ *   else's famous piece). Bars 1-8, then the hymn, then bars 9-12 with the
+ *   voice alone and THE PIANO ENTIRELY SILENT under her, then bars 13-16.
+ *   HYMN bars 1-8, harmonised in strings, in E Aeolian — the subdominant of
+ *   this cue's key, so the prayer arrives a fifth below the nocturne without
+ *   a modulation. This is the ONLY time in the whole score the hymn is warm.
+ *   Celesta doubles bar 11's peak an octave up and is allowed to ring.
  *
- * Form (4/4, 24 bars, 99.3 s):
- *   bars  1-4    intro   beats  0- 16   solo piano dyads, one bell toll
- *   bars  5-12   A       beats 16- 48   PYREFLY_SIGH anchor, pad enters   <- loop start
- *   bars 13-20   B       beats 48- 80   celesta flickers, strings-low enters,
- *                                       PYREFLY_RISE stated, left unresolved
- *   bars 21-24   A'      beats 80- 96   recap thins out, settles toward Em
- * Loop 16 -> 96; the closing B-minor dyad leans back into A's opening Em.
+ * THE ONE EMOTION: warmth remembered, which is worse than cold.
+ *
+ * Performance rules applied: the piano is pedalled (gate 0.98 plus a reverb
+ * send held through the bar) and the left hand clears on the bar line; the
+ * appoggiaturas lean; the rests written into bars 4, 8 and 13 are left empty;
+ * the left hand thickens from triplets to sixteenths at the repeat so the
+ * texture moves without the dynamics having to.
+ *
+ * Tempo note: the bible gives the nocturne 48 bpm and the hymn 56. A track
+ * has one tempo, the cue map says 48, and the hymn is the guest here, so 48
+ * it is — see docs/audio/requests-ffx-general.md, request 2 (tempo map).
+ *
+ * Form (26 bars, 104 beats, 130 s):
+ *   bars  1- 2  intro    beats   0-  8  piano alone, two bare fifths
+ *   bars  3-10  nocturne beats   8- 40  FAREWELL bars 1-8, melody +12   <- loop start
+ *   bars 11-18  hymn     beats  40- 72  HYMN bars 1-8, strings, warm
+ *   bars 19-22  climb    beats  72- 88  FAREWELL bars 9-12, voice alone, no piano
+ *   bars 23-26  close    beats  88-104  FAREWELL bars 13-16, piano and strings
  */
 
-import { chordLine, chordRoots, concatNotes, tracker, transposeNotes, type Note, type Track } from '../score.ts';
-import { cell, PYREFLY_RISE, PYREFLY_SIGH } from './motifs.ts';
+import {
+  arpLine,
+  chordLine,
+  chordRoots,
+  concatNotes,
+  tracker,
+  type Note,
+  type Track,
+} from '../score.ts';
+import {
+  FAREWELL_CHORDS,
+  FAREWELL_DYNAMICS,
+  FAREWELL_RH,
+  HYMN_ALTO,
+  HYMN_BASS,
+  HYMN_CHORDS,
+  HYMN_SOPRANO,
+  HYMN_TENOR,
+  agogic,
+  lean,
+  shapeByBar,
+} from './themes.ts';
 
 const BAR = 4;
-const INTRO_CHORDS = ['Em', 'Em', 'C', 'Bm'];
-const A_CHORDS = ['Em', 'C', 'G', 'Bm', 'Am', 'Em', 'C', 'Bm'];
-/** B opens on Am, not C: the rising cell's B3/E4/F#4/G4 are all chord tones or colours of Am9(13). */
-const B_CHORDS = ['Am', 'G', 'D', 'Bm', 'Am', 'C', 'G', 'Bm'];
-const A2_CHORDS = ['Em', 'Am', 'C', 'Bm'];
-const ALL_CHORDS = [...INTRO_CHORDS, ...A_CHORDS, ...B_CHORDS, ...A2_CHORDS];
-const BARS = ALL_CHORDS.length; // 24
-const LENGTH = BARS * BAR; // 96 beats = 99.3 s at 58 bpm
+const NOCTURNE = 8;
+const HYMN = 40;
+const CLIMB = 72;
+const CLOSE = 88;
+const LENGTH = 104;
 
-const A = 16;
-const B = 48;
-const A2 = 80;
+/** The nocturne is quiet everywhere: the whole cue sits under the theme's own table. */
+const HUSH = 0.72;
 
-/** Solo piano, intro: two bars of drift, a held dyad, and quiet. Nothing resolves yet. */
-const INTRO_PIANO = `
-  -:2 E3+E4:2         | -:1 G3+B3:2 -:1     |
-  -:2 C4+E4:2         | -:1 B3+D4:2 -:1     |
-`;
-
-/** The wide, thin dyads that answer/breathe between PYREFLY_SIGH statements. */
-function breath(startBeat: number, notesStr: string, velocity: number): Note[] {
-  return tracker(`${notesStr}:4`, { start: startBeat, velocity, checkBars: BAR });
+function farewell(start: number, fromBar: number, toBar: number, trim: number, up = 12): Note[] {
+  const from = (fromBar - 1) * BAR;
+  const to = toBar * BAR;
+  const shaped = shapeByBar(
+    tracker(FAREWELL_RH, { gate: 1, transpose: up, checkBars: BAR }),
+    FAREWELL_DYNAMICS.map((v) => Math.min(1, v * trim)),
+    BAR,
+  );
+  const leaned = lean(shaped, [[4, 7], [20, 23], [36, 39], [52, 55], [60, 62]]);
+  const breathed = agogic(leaned, [15, 31, 48, 64], 0.08);
+  return breathed
+    .filter((n) => n[0] >= from - 1e-6 && n[0] < to - 1e-6)
+    .map((n): Note => [n[0] - from + start, n[1] * 0.98, n[2], n[3]]);
 }
 
-function pianoLine(): Note[] {
+// ---------------------------------------------------------------------------
+// Piano
+// ---------------------------------------------------------------------------
+
+/** Two bare fifths and a lot of room. Nothing has happened yet. */
+const INTRO_PIANO = `
+  -:1 B2+F#3:3 | -:1 E3+B3:2 -:1 |
+`;
+
+/**
+ * The left hand rolls: root, fifth, octave, tenth and back. The last note of
+ * each bar is cut to four tenths of its step, which is how a pedal clears on
+ * a bar line when the renderer has no pedal events (request 4).
+ */
+function leftHand(start: number, chords: string[], step: number, velocity: number): Note[] {
+  const notes = arpLine(chords, {
+    start, barBeats: BAR, pattern: [0, 2, 3, 4, 5, 4, 3, 2], step, dur: step * 0.95,
+    octave: 2, center: 50, velocity, accent: 1.1,
+  });
+  return notes.map((n): Note => {
+    const inBar = (n[0] - start) % BAR;
+    return inBar > BAR - step - 1e-6 ? [n[0], step * 0.4, n[2], (n[3] ?? velocity) * 0.75] : n;
+  });
+}
+
+function pianoMelody(): Note[] {
   return concatNotes(
-    tracker(INTRO_PIANO, { start: 0, velocity: 0.42, checkBars: BAR }),
-    // A — the sigh returns every other bar, doubled in octaves for weight.
-    cell(PYREFLY_SIGH, A, 'E4', 0.54),
-    transposeNotes(cell(PYREFLY_SIGH, A, 'E4', 0.34), -12),
-    breath(A + 4, 'E3+C4', 0.38),
-    cell(PYREFLY_SIGH, A + 8, 'E4', 0.68),
-    breath(A + 12, 'B3+F#4', 0.4),
-    cell(PYREFLY_SIGH, A + 16, 'E4', 0.72),
-    transposeNotes(cell(PYREFLY_SIGH, A + 16, 'E4', 0.4), 12),
-    breath(A + 20, 'E3+B3', 0.4),
-    cell(PYREFLY_SIGH, A + 24, 'E4', 0.72),
-    tracker('B3+F#4:3 -:1', { start: A + 28, velocity: 0.44, checkBars: BAR }),
-    // B — the rise opens the section and is left hanging; the piano recedes for the
-    // celesta and strings. Two faint echoes, then silence for the rest of the section.
-    cell(PYREFLY_RISE, B, 'E4', 0.62),
-    tracker('B3+F#4:4', { start: B + 12, velocity: 0.34 }),
-    tracker('G3+D4:4', { start: B + 24, velocity: 0.28 }),
-    // A' — the sigh comes back once more, quieter, then the dyads thin to almost nothing.
-    cell(PYREFLY_SIGH, A2, 'E4', 0.38),
-    tracker('A3+E4:4', { start: A2 + 4, velocity: 0.24 }),
-    transposeNotes(cell(PYREFLY_SIGH, A2 + 8, 'E4', 0.3), -12),
-    tracker('B3+F#4:3 -:1', { start: A2 + 12, velocity: 0.22, checkBars: BAR }),
+    tracker(INTRO_PIANO, { start: 0, velocity: 0.34, gate: 0.98, checkBars: BAR }),
+    farewell(NOCTURNE, 1, 8, HUSH),
+    // The climb belongs to the voice. The piano does not play under her at all.
+    farewell(CLOSE, 13, 16, HUSH - 0.06),
   );
 }
 
-/** Three distant tolls — never more than one per section, always fading before it can insist. */
-function bellLine(): Note[] {
+function pianoLeft(): Note[] {
+  return concatNotes(
+    leftHand(NOCTURNE, FAREWELL_CHORDS.slice(0, 4), 0.3333, 0.3),
+    leftHand(NOCTURNE + 16, FAREWELL_CHORDS.slice(4, 8), 0.25, 0.32),
+    leftHand(CLOSE, FAREWELL_CHORDS.slice(12, 16), 0.3333, 0.26),
+  );
+}
+
+function pianoBass(): Note[] {
+  return concatNotes(
+    chordRoots(FAREWELL_CHORDS.slice(0, 8), 1).map((midi, bar): Note => [
+      NOCTURNE + bar * BAR, 3.6, midi, bar % 2 === 0 ? 0.3 : 0.24,
+    ]),
+    chordRoots(FAREWELL_CHORDS.slice(12, 16), 1).map((midi, bar): Note => [
+      CLOSE + bar * BAR, 3.6, midi, 0.22,
+    ]),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// The hymn, harmonised — the one time it is ever warm
+// ---------------------------------------------------------------------------
+
+function hymnVoice(src: string, arch: number[]): Note[] {
+  return tracker(src, { gate: 0.99, checkBars: BAR })
+    .filter((n) => n[0] < 8 * BAR - 1e-6)
+    .map((n): Note => {
+      const bar = Math.floor(n[0] / BAR);
+      return [n[0] + HYMN, n[1], n[2], arch[Math.min(bar, arch.length - 1)]!];
+    });
+}
+
+const HYMN_ARCH = [0.4, 0.46, 0.5, 0.42, 0.44, 0.5, 0.54, 0.42];
+
+function stringsUpper(): Note[] {
+  return concatNotes(
+    hymnVoice(HYMN_SOPRANO, HYMN_ARCH),
+    hymnVoice(HYMN_ALTO, HYMN_ARCH.map((v) => v - 0.06)),
+    // and the last four bars of the nocturne, under the piano
+    farewell(CLOSE, 13, 16, HUSH - 0.2, 0).map((n): Note => [n[0], n[1], n[2], n[3]]),
+  );
+}
+
+function stringsLower(): Note[] {
+  return concatNotes(
+    hymnVoice(HYMN_TENOR, HYMN_ARCH.map((v) => v - 0.08)),
+    hymnVoice(HYMN_BASS, HYMN_ARCH.map((v) => v - 0.04)),
+    chordRoots(FAREWELL_CHORDS.slice(12, 16), 2).map((midi, bar): Note => [
+      CLOSE + bar * BAR, 3.8, midi, 0.3,
+    ]),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// The voice, alone
+// ---------------------------------------------------------------------------
+
+/**
+ * FAREWELL bars 9-12, wordless, with nothing underneath but a held low string
+ * and the pad. She never gets the head — the resemblance guard reserves that
+ * — and she stops when the climb does.
+ */
+function voiceLine(): Note[] {
+  return farewell(CLIMB, 9, 12, 0.78).map((n): Note => [n[0], n[1], n[2], n[3]]);
+}
+
+/**
+ * The celesta doubles the peak of bar 11 — the B the melody touches twice and
+ * cannot hold — an octave above it, and is left to ring for eight beats. It
+ * plays four notes in the whole cue.
+ */
+function celestaLine(): Note[] {
   return [
-    [0, 4, 'E3', 0.5],
-    [8, 4, 'B2', 0.4],
-    [B, 4.5, 'B2', 0.42],
-    [A2, 4.5, 'E3', 0.44],
+    [HYMN + 20, 6, 'E6', 0.2],
+    [CLIMB + 8, 8, 'B6', 0.34],
+    [CLIMB + 9, 7, 'F#6', 0.24],
+    [CLOSE + 12, 6, 'B5', 0.2],
   ];
 }
 
-/** The pad is the one thing that never drops out inside the loop — soft entrance, a swell
- * through B, then it recedes to leave the dome quiet again for the loop to turn over. */
+/** One rolled chord a bar through the climb: the harp is here for light, not notes. */
+function harpLine(): Note[] {
+  return concatNotes(
+    chordLine(FAREWELL_CHORDS.slice(8, 12), {
+      start: CLIMB, octave: 4, center: 74, velocity: 0.3, dur: 3.7, roll: 0.1,
+    }),
+    chordLine(HYMN_CHORDS.slice(5, 7), {
+      start: HYMN + 20, octave: 4, center: 74, velocity: 0.24, dur: 3.7, roll: 0.14,
+    }),
+  );
+}
+
 function padLine(): Note[] {
   return concatNotes(
-    chordLine(A_CHORDS, { start: A, octave: 3, center: 64, velocity: 0.13, dur: 3.85, roll: 0.06 }),
-    chordLine(B_CHORDS, { start: B, octave: 3, center: 64, velocity: 0.58, dur: 3.85, roll: 0.06 }),
-    chordLine(A2_CHORDS, { start: A2, octave: 3, center: 64, velocity: 0.11, dur: 3.85, roll: 0.06 }),
+    chordLine(FAREWELL_CHORDS.slice(0, 8), { start: NOCTURNE, octave: 3, center: 62, velocity: 0.12, dur: 3.85, roll: 0.06 }),
+    chordLine(HYMN_CHORDS.slice(0, 8), { start: HYMN, octave: 3, center: 62, velocity: 0.16, dur: 3.85, roll: 0.06 }),
+    chordLine(FAREWELL_CHORDS.slice(8, 16), { start: CLIMB, octave: 3, center: 62, velocity: 0.22, dur: 3.85, roll: 0.06 }),
   );
 }
 
-/** Pyreflies: short, irregular flickers, never on a tidy grid. Mostly in B, a couple left
- * over into A' as the light dies down. */
-function celestaLine(): Note[] {
-  const flick = (startBeat: number, notesStr: string, velocity: number): Note[] =>
-    tracker(notesStr, { start: startBeat, velocity });
+/** Low strings hold under the voice — the only thing she has to stand on. */
+function lowHold(): Note[] {
   return concatNotes(
-    flick(B + 1.5, 'B5:0.4 G5:0.4 E5:0.6', 0.4),
-    flick(B + 6, 'E5:0.4 A5:0.3 D6:0.5', 0.44),
-    flick(B + 10.5, 'F#5:0.3 B5:0.4', 0.36),
-    flick(B + 15, 'G5:0.5 D5:0.4 B4:0.6', 0.42),
-    flick(B + 19.5, 'A5:0.3 E5:0.5', 0.34),
-    flick(B + 24.5, 'B5:0.4 F#5:0.4 D5:0.6', 0.38),
-    flick(B + 29, 'F#5:0.3 D6:0.4', 0.3),
-    flick(A2 + 2.5, 'E5:0.4 B4:0.6', 0.26),
-    flick(A2 + 9, 'F#5:0.4 D5:0.6', 0.2),
+    chordRoots(FAREWELL_CHORDS.slice(8, 12), 2).map((midi, bar): Note => [
+      CLIMB + bar * BAR, 3.8, midi, 0.3 + bar * 0.04,
+    ]),
+    chordRoots(HYMN_CHORDS.slice(0, 8), 2).map((midi, bar): Note => [
+      HYMN + bar * BAR, 3.8, midi, 0.26,
+    ]),
   );
 }
 
-/** Low strings enter only in B — a swell that builds weight under the celesta, then eases
- * back down through A' so the loop seam returns to something close to the hush it began in. */
-function lowStrings(): Note[] {
-  const chords = [...B_CHORDS, ...A2_CHORDS];
-  const roots = chordRoots(chords, 2);
-  const notes: Note[] = [];
-  roots.forEach((midi, i) => {
-    const beat = B + i * BAR;
-    const inB = i < B_CHORDS.length;
-    const velocity = inB
-      ? 0.26 + (i / B_CHORDS.length) * 0.4
-      : 0.24 - ((i - B_CHORDS.length) / A2_CHORDS.length) * 0.16;
-    notes.push([beat, 3.75, midi, velocity]);
-  });
-  return notes;
+function bellLine(): Note[] {
+  return [
+    [0, 5, 'B2', 0.42],
+    [HYMN, 5, 'E3', 0.36],
+    [CLOSE, 5.5, 'B2', 0.34],
+  ];
 }
 
 export const zanarkandDomeTrack: Track = {
   name: 'scene-zanarkand-dome',
-  bpm: 58,
+  bpm: 48,
   timeSig: [4, 4],
-  loop: { start: A, end: LENGTH },
+  loop: { start: NOCTURNE, end: LENGTH },
   length: LENGTH,
-  tailSec: 5,
+  tailSec: 7,
   fx: {
-    reverb: { room: 0.92, damp: 0.24, width: 1, preDelay: 0.05 },
-    delay: { timeBeats: 1.5, feedback: 0.26, damp: 2200 },
+    reverb: { room: 0.93, damp: 0.22, width: 1, preDelay: 0.05 },
+    delay: { timeBeats: 1.5, feedback: 0.24, damp: 2200 },
   },
   channels: [
-    {
-      name: 'piano',
-      instrument: 'piano',
-      volume: 0.95,
-      pan: -0.05,
-      notes: pianoLine(),
-      fx: { reverb: 0.4 },
-    },
-    {
-      name: 'pad',
-      instrument: 'pad',
-      volume: 0.55,
-      pan: 0.05,
-      notes: padLine(),
-      fx: { reverb: 0.5 },
-    },
-    {
-      name: 'bell',
-      instrument: 'bell',
-      volume: 0.4,
-      pan: 0.3,
-      notes: bellLine(),
-      fx: { reverb: 0.65, delay: 0.35 },
-    },
-    {
-      name: 'celesta',
-      instrument: 'celesta',
-      volume: 0.4,
-      pan: 0.22,
-      notes: celestaLine(),
-      fx: { reverb: 0.55, delay: 0.3 },
-    },
-    {
-      name: 'strings-low',
-      instrument: 'strings-low',
-      volume: 0.6,
-      pan: -0.15,
-      notes: lowStrings(),
-      fx: { reverb: 0.4 },
-    },
+    { name: 'piano', instrument: 'piano', volume: 1.28, pan: -0.04, notes: pianoMelody(), fx: { reverb: 0.3 } },
+    { name: 'piano left hand', instrument: 'piano', volume: 0.74, pan: 0.12, notes: pianoLeft(), fx: { reverb: 0.3 } },
+    { name: 'piano bass', instrument: 'piano', volume: 0.6, pan: 0, notes: pianoBass(), fx: { reverb: 0.24 } },
+    { name: 'strings upper', instrument: 'strings', volume: 0.6, pan: 0.1, notes: stringsUpper(), fx: { reverb: 0.45 } },
+    { name: 'strings lower', instrument: 'strings-low', volume: 0.52, pan: -0.14, notes: stringsLower(), fx: { reverb: 0.4 } },
+    { name: 'voice', instrument: 'choir', volume: 0.66, pan: 0.06, notes: voiceLine(), fx: { reverb: 0.65, delay: 0.18 } },
+    { name: 'low hold', instrument: 'strings-low', volume: 0.44, pan: 0.18, notes: lowHold(), fx: { reverb: 0.4 } },
+    { name: 'celesta', instrument: 'celesta', volume: 0.44, pan: 0.24, notes: celestaLine(), fx: { reverb: 0.55, delay: 0.3 } },
+    { name: 'harp', instrument: 'harp', volume: 0.46, pan: -0.3, notes: harpLine(), fx: { reverb: 0.45, delay: 0.25 } },
+    { name: 'pad', instrument: 'pad', volume: 0.42, pan: 0.04, notes: padLine(), fx: { reverb: 0.5 } },
+    { name: 'bell', instrument: 'bell', volume: 0.38, pan: 0.32, notes: bellLine(), fx: { reverb: 0.65, delay: 0.35 } },
   ],
 };
 

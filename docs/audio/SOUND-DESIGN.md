@@ -177,6 +177,22 @@ weapon     14 cues  mean -18.0 LUFS (target -18)
 
 ---
 
+## One open question for the mix
+
+The files follow the brief's level targets, and the loudest spells reach the
+-1 dBTP codec ceiling. Rule 8 of the sound-effect rules asks for effects to
+peak **6 dB below the music's ceiling**, and that is not a property of the file
+— it is a property of the bus. Right now `AudioManager` defaults to
+`sfxVolume: 0.9` against `musicVolume: 0.7`, so a Firaga arrives about 2.5 dB
+*over* the music's own peaks.
+
+That may well be right: effects are short and have to cut through an orchestra.
+But if Bailey says the effects are too loud against the score, the fix is one
+number on the SFX bus, not a re-render of the bank — the cues are already
+balanced against each other, and changing them would throw that away.
+
+---
+
 ## Honest caveats
 
 - **No recorded foley.** The brief allowed CC0 foley packs (Kenney,
