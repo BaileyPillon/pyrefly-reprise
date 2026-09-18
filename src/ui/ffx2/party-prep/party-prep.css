@@ -1,0 +1,203 @@
+/*
+ * FFX-2 party-prep panel bodies — Dresspheres / Accessories / Items.
+ *
+ * These compose into `PartyPrepScreen`'s Ink & Gold frame the same way the FFX
+ * panels do (`src/ui/ffx/party-prep/party-prep.css`), so they reuse that
+ * file's generic pieces — `.ffxprep-chip`, `.ffxprep-chips`, `.ffxprep-gear`,
+ * `.ffxprep-items`, `.ffxprep-item-row`, `.ffxprep-empty` — and only add what
+ * is X-2's own: the worn-dressphere header, the Garment Grid strip and the
+ * gate pips. Everything is scoped under an `.x2prep-*` class of this file's
+ * own and reads the shared layer through `var(--ig-*)` only [CONTRACT-CHANGES
+ * decision 10]. The sheet is already ivory with ink text (`.prep__sheet`).
+ *
+ * `--ffx2-job` is the dressphere's colour from `dressphereIcons.ts`, set
+ * inline per element; on the ivory sheet it is used as an edge and a tile
+ * wash rather than as text, which at 6-8px would not hold contrast.
+ */
+
+/*
+ * Two columns under a full-width header, because the sheet is wide and short:
+ * it starts at 75.56 and the hint line is at 213.33 (`src/ui/common/
+ * party-prep.css`), so a panel has ~118 units of height to live in and 334 of
+ * width. Stacked, the dressphere tab ran past the bottom of the ivory and
+ * under the START BATTLE button.
+ */
+.x2prep {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 16px;
+  align-content: start;
+}
+.x2prep-worn {
+  grid-column: 1 / -1;
+}
+.x2prep__col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------- worn dressphere */
+
+.x2prep-worn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 4px;
+  border-bottom: 0.89px solid var(--ig-ink);
+}
+.x2prep-worn__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  font-family: var(--ig-font-display);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #12101c;
+  background: var(--ffx2-job, var(--ig-accent));
+  border-radius: 2px;
+}
+.x2prep-worn__name {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-size: 13px;
+}
+/* The dressphere's command set, on the header line rather than a line of its
+   own — it is a caption, not a section. */
+.x2prep-worn__cmds {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.x2prep-worn__lv {
+  margin-left: auto;
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: 9px;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+
+/* ------------------------------------------------------------- label lines */
+
+.x2prep-line {
+  font-family: var(--ig-font-text);
+  font-size: 9px;
+}
+.x2prep-line b {
+  font-family: var(--ig-font-display);
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  margin-right: 6px;
+}
+.x2prep-note {
+  font-family: var(--ig-font-text);
+  font-size: 8px;
+  opacity: 0.6;
+}
+/* A footnote under a two-column body belongs to both columns. */
+.x2prep-foot {
+  grid-column: 1 / -1;
+}
+/* The rest of the wardrobe, as job monograms rather than names: nine or ten
+   dresspheres as word chips wrapped to three rows and pushed the panel off the
+   sheet, and the two-letter tile is the same vocabulary the HUD rows and the
+   Spherechange wheel already use (`dressphereIcons.dressphereAbbr`). The name
+   is on the tile's `title`. */
+.x2prep-owned {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.x2prep-owned__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  font-family: var(--ig-font-display);
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #12101c;
+  background: var(--ffx2-job, var(--ig-accent));
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+/* ------------------------------------------------------------ garment grid */
+
+.x2prep-grid {
+  padding: 0 0 4px;
+  border-bottom: 0.89px solid rgba(11, 10, 18, 0.12);
+}
+.x2prep-grid__name {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-size: 10px;
+}
+.x2prep-grid__name b {
+  font-family: var(--ig-font-display);
+  font-style: normal;
+  font-size: 6px;
+  letter-spacing: 0.2em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  margin-right: 6px;
+}
+.x2prep-grid__strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 3px;
+}
+/* One pip per node the Grid has; the filled one is where she is standing
+   (`GarmentGridState.nodePosition`). The nodes themselves are empty slots the
+   player fills at runtime, so there is nothing to name inside them. */
+.x2prep-node {
+  width: 7px;
+  height: 7px;
+  border: 0.89px solid var(--ig-ink);
+  border-radius: 50%;
+  opacity: 0.45;
+}
+.x2prep-node--here {
+  opacity: 1;
+  background: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+  border-color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.x2prep-grid__gates {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 8px;
+}
+.x2prep-gate {
+  width: 6px;
+  height: 6px;
+  transform: rotate(45deg);
+  border: 0.89px solid var(--ig-ink);
+  opacity: 0.55;
+}
+.x2prep-gate--passed {
+  opacity: 1;
+  box-shadow: 0 0 0 0.89px var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.x2prep-gate--red {
+  background: #c93a42;
+}
+.x2prep-gate--green {
+  background: #75913a;
+}
+.x2prep-gate--blue {
+  background: #3a78be;
+}
+.x2prep-gate--yellow {
+  background: #e3b94a;
+}

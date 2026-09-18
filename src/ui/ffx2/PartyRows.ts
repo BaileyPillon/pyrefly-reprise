@@ -14,8 +14,9 @@
  */
 
 import type { AtbSnapshot, CombatantId, FFX2Combatant } from '../../battle/common/types.ts';
-import { dressphereAbbr, dressphereLabel } from './dressphereIcons.ts';
+import { dressphereAbbr, dressphereColour, dressphereLabel } from './dressphereIcons.ts';
 import { statusChipsFor, statusChipsHtml } from './statusChips.ts';
+import { bodyFaceImgHtml, faceImgHtmlFrom } from '../common/portrait.ts';
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
 export const TICKS_PER_BAR = 24000;
@@ -71,6 +72,47 @@ export interface PartyRowOptions {
  * has to come off that same edge or the cascade would walk the rows out of the
  * frame instead of into it.
  */
+/**
+ * The girl's face for a row, as a stack of layers in one square tile.
+ *
+ * Painted portraits, not the bare job monogram the rows shipped with: the
+ * monogram alone is the one thing the FFX side never does (`ui/ffx/
+ * portraits.ts` stacks the same three layers), and a row of `WM` / `DK` / `WR`
+ * tiles next to three painted girls is what the report called out.
+ *
+ * The layers are stacked rather than chosen because the manifest may not have
+ * landed yet on the first frame, and because the art for a girl in a given
+ * dressphere arrives in three different shapes:
+ *
+ * - **z2** `portraits/<girl>-<dressphere>.png`, then `portraits/<girl>-x2.png`,
+ *   then `portraits/<girl>.png` — the dedicated head-and-shoulders painting.
+ *   Only Yuna's and Rikku's plain FFX portraits exist today; the X-2 ones are
+ *   still numbered candidates (`portraits/yuna-ffx2-a.*`), so the specific ids
+ *   cost nothing now and start working the moment the fleet picks one.
+ * - **z1** the head band of `characters/<girl>-<dressphere>/idle.png`, the
+ *   full-body painting the stage is already drawing (so it is in cache). This
+ *   is what gives **Paine** a painted face at all — she has no portrait file —
+ *   and it is per dressphere, which is the "per current dressphere" the report
+ *   asks for.
+ * - **z0** the two-letter job monogram, unchanged, as the floor.
+ *
+ * Each `<img>` removes itself on a miss, so whichever layer is real wins and
+ * nothing ever shows a broken image.
+ */
+function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string): string {
+  const art = `${c.id}-${dressphere}`;
+  const portrait = faceImgHtmlFrom([art, `${c.id}-x2`, c.id], c.name, {
+    className: 'ffx2stat__face-img',
+    z: 2,
+  });
+  const body = bodyFaceImgHtml(art, c.name, { className: 'ffx2stat__face-img', z: 1 });
+  return `<div class="ffx2stat__face" title="${dressphereLabel(dressphere)}" style="--ffx2-job:${dressphereColour(dressphere)}">
+      <span class="ffx2stat__mono">${monogram}</span>
+      ${body}${portrait}
+      <i class="ffx2stat__job">${monogram}</i>
+    </div>`;
+}
+
 export function partyRowHtml(
   c: FFX2Combatant,
   bar: AtbSnapshot['bars'][number] | null,
@@ -91,7 +133,7 @@ export function partyRowHtml(
   const acting = c.id === opts.actingId ? ' ig-stat--acting' : '';
   const statuses = statusChipsHtml(statusChipsFor(c.statuses));
   return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})">
-    <div class="ig-stat__sphere" title="${dressphereLabel(dressphere)}">${monogram}</div>
+    ${faceStackHtml(c, dressphere, monogram)}
     <div class="ffx2stat__body">
       <div class="ffx2stat__top">
         <div class="ig-stat__name">${c.name}</div>

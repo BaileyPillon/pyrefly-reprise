@@ -261,6 +261,71 @@
   margin-left: 4px;
   font-size: 7.5px;
 }
+/* The girl's painted face, in place of the bare job monogram the rows shipped
+   with (`PartyRows.faceStackHtml` for what stacks inside it).
+
+   A square frame with `overflow: hidden` and `position: relative` is the
+   contract `ui/common/portrait.ts` places its crops into — its geometry is
+   percentages of *this* box, and it assumes the box is square. Everything in
+   here is positioned, because a positioned sibling otherwise wins on paint
+   order whatever the DOM says (docs/handoff/bp1-portrait-basepath.md).
+
+   20px, not the sphere tile's 17: a face needs the pixels, and the row gives
+   them up from the monogram tile's own 4px left margin plus the 4px flex gap,
+   so the two-line body to its right keeps the width it already had. */
+.ffx2stat__face {
+  position: relative;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-left: 2px;
+  overflow: hidden;
+  background: #1a1526;
+  border: 0.75px solid color-mix(in srgb, var(--ffx2-job, var(--ig-accent)) 70%, transparent);
+  border-radius: 1.5px;
+}
+.ig-stat--acting .ffx2stat__face {
+  border-color: var(--ig-accent);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--ig-accent) 55%, transparent);
+}
+.ffx2stat__face-img {
+  /* The rest — position, left/top/width — is the measured crop, inline. */
+  display: block;
+  image-rendering: auto;
+}
+/* Floor of the stack: the two-letter job monogram, seen only while (or if) no
+   painting loads. */
+.ffx2stat__mono {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 7.5px;
+  letter-spacing: 0.04em;
+  color: var(--ffx2-job, var(--ig-accent));
+}
+/* Over the face, bottom-left: the dressphere, which the monogram tile used to
+   carry on its own. Same 5.5px the status chips use (§4.3's "10x10 px chips"),
+   so the row still says *which* dressphere at a glance. */
+.ffx2stat__job {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+  padding: 0 1.5px;
+  font-family: var(--ig-font-display);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 5.5px;
+  line-height: 8px;
+  color: #12101c;
+  background: var(--ffx2-job, var(--ig-accent));
+  border-radius: 0 1.5px 0 0;
+}
 /* Two lines: `Name HP MP [chips]` over the full-width ATB track, which is
    §4.3's verified requirement ("the ATB bar sits under the HP and MP data")
    and the only way the row's content fits its own box. */
