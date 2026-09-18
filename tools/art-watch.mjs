@@ -4,14 +4,18 @@
  *
  *   node tools/art-watch.mjs [--port=8890]
  *
- * Node built-ins only (http, fs, path) — no dependencies, so it can be left
- * running as a detached background process or a logon scheduled task without
- * needing `npm install` first.
+ * Node built-ins only (http, fs, path, zlib) — no dependencies, so it can be
+ * left running as a detached background process or a logon scheduled task
+ * without needing `npm install` first.
  *
  * On every request to `/` it rescans a fixed set of folders for `*.png`,
  * sorts everything by mtime descending, and renders the newest 80 as a dark
  * "Ink & Gold" themed card grid. Each thumbnail is served through `/img?p=`,
  * which only serves files that resolve inside one of the allowed folders.
+ *
+ * Tiles are flagged BLACK when every RGB sample in the file is zero — the
+ * 2026-09-18 NaN-GPU failure, which produces a thumbnail that is honestly hard
+ * to tell from a dark painting at 180px. See docs/handoff/art-ops.md.
  *
  * Folders scanned (see ROOTS below):
  *   - D:/Tools/ComfyUI/output/pyrefly        (raw renders, flat)
@@ -26,6 +30,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { isBlackFrame, maxRgbOfPng } from './gen/black-frame.mjs';
 
 // --------------------------------------------------------------- args
 
@@ -118,11 +123,80 @@ function scanAll() {
       } catch {
         continue;
       }
-      items.push({ path: filePath, label: root.label, mtimeMs: stat.mtimeMs });
+      items.push({
+        path: filePath,
+        label: root.label,
+        mtimeMs: stat.mtimeMs,
+        size: stat.size,
+      });
     }
   }
   items.sort((a, b) => b.mtimeMs - a.mtimeMs);
   return items.slice(0, MAX_CARDS);
+}
+
+// --------------------------------------------------------------- black frames
+
+/**
+ * `path|mtimeMs|size` -> true (all-zero), false (has colour), null (unreadable).
+ *
+ * Keyed on mtime and size as well as path so an overwritten file is re-checked
+ * and a promoted candidate does not inherit a stale verdict. A render is
+ * immutable once written, so a hit here is always correct.
+ */
+const blackCache = new Map();
+
+/** Cache ceiling. 80 cards a page, so this is many hours of renders. */
+const BLACK_CACHE_MAX = 4000;
+
+/**
+ * New files decoded per request.
+ *
+ * The page refreshes every 20s and in steady state one or two renders have
+ * landed, so this budget is never reached in normal use. It exists for the
+ * first load after a long batch: 80 cold 2MB PNGs would be a few seconds of
+ * inflate, and a gallery that hangs is a gallery nobody leaves open. Anything
+ * over budget stays unknown (no badge) and gets picked up next refresh.
+ */
+const BLACK_CHECKS_PER_SCAN = 24;
+
+/** Don't try to decode something absurd; the renders are ~2MB. */
+const BLACK_MAX_BYTES = 64 * 1024 * 1024;
+
+function checkBlack(filePath, mtimeMs, size, budget) {
+  const key = `${filePath}|${mtimeMs}|${size}`;
+  if (blackCache.has(key)) return blackCache.get(key);
+  if (budget.left <= 0) return null;
+  budget.left--;
+
+  let verdict = null;
+  if (size > 0 && size <= BLACK_MAX_BYTES) {
+    try {
+      verdict = isBlackFrame(maxRgbOfPng(fs.readFileSync(filePath)));
+    } catch {
+      verdict = null; // mid-write, locked, gone — ask again next refresh
+    }
+  }
+
+  // Only remember a definite answer. `null` means "could not read it yet",
+  // which is usually a half-written file that will be fine in 20 seconds.
+  if (verdict !== null) {
+    if (blackCache.size >= BLACK_CACHE_MAX) {
+      const oldest = blackCache.keys().next().value;
+      if (oldest !== undefined) blackCache.delete(oldest);
+    }
+    blackCache.set(key, verdict);
+  }
+  return verdict;
+}
+
+/** Annotate the scanned items with `black: true | false | null`. */
+function markBlackFrames(items) {
+  const budget = { left: BLACK_CHECKS_PER_SCAN };
+  for (const item of items) {
+    item.black = checkBlack(item.path, item.mtimeMs, item.size, budget);
+  }
+  return items;
 }
 
 /** True only for a path that resolves inside one of the allowed ROOTS and is a real *.png file. */
@@ -169,8 +243,11 @@ function renderPage(items) {
     .map((item) => {
       const filename = path.basename(item.path);
       const imgUrl = `/img?p=${encodeURIComponent(item.path)}`;
-      return `      <a class="card" href="${imgUrl}" target="_blank" rel="noopener">
-        <div class="thumb"><img src="${imgUrl}" loading="lazy" alt="${escapeHtml(filename)}"></div>
+      const badge = item.black
+        ? '<div class="badge" title="Every RGB sample is 0 — NaN-state render, not a dark painting">BLACK</div>'
+        : '';
+      return `      <a class="card${item.black ? ' is-black' : ''}" href="${imgUrl}" target="_blank" rel="noopener">
+        <div class="thumb"><img src="${imgUrl}" loading="lazy" alt="${escapeHtml(filename)}">${badge}</div>
         <div class="meta">
           <div class="filename" title="${escapeHtml(filename)}">${escapeHtml(filename)}</div>
           <div class="folder">${escapeHtml(item.label)}</div>
@@ -179,6 +256,8 @@ function renderPage(items) {
       </a>`;
     })
     .join('\n');
+
+  const blackCount = items.filter((i) => i.black).length;
 
   return `<!doctype html>
 <html lang="en">
@@ -241,13 +320,31 @@ function renderPage(items) {
     transition: border-color 0.15s ease, transform 0.15s ease;
   }
   .card:hover { border-color: #c9a227; transform: translateY(-2px); }
+  /* A NaN-state render is a plausible-looking dark thumbnail; say so loudly. */
+  .card.is-black { border-color: #d0342c; background: #1c1214; }
+  .card.is-black:hover { border-color: #ff5b4f; }
+  .card.is-black .filename { color: #ff8b80; }
   .thumb {
+    position: relative;
     aspect-ratio: 1 / 1;
     background: #0a0b0f repeating-conic-gradient(#12141a 0% 25%, #0a0b0f 0% 50%) 50% / 16px 16px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  .badge {
+    position: absolute;
+    top: 0.4rem;
+    left: 0.4rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    background: #d0342c;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .stats .black { color: #ff5b4f; font-weight: 700; }
   .thumb img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
   .meta { padding: 0.5rem 0.65rem 0.7rem; }
   .filename {
@@ -268,6 +365,7 @@ function renderPage(items) {
   <h1>Pyrefly Reprise &middot; latest renders</h1>
   <div class="stats">
     <span><strong id="count">${items.length}</strong> image${items.length === 1 ? '' : 's'}</span>
+    ${blackCount ? `<span class="black">${blackCount} BLACK</span>` : ''}
     <span>refreshes every 20s &middot; <span id="clock">${now.toLocaleTimeString()}</span></span>
   </div>
 </header>
@@ -325,7 +423,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (url.pathname === '/' || url.pathname === '/index.html') {
-    const items = scanAll();
+    const items = markBlackFrames(scanAll());
     const html = renderPage(items);
     res.writeHead(200, {
       'Content-Type': 'text/html; charset=utf-8',

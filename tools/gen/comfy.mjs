@@ -29,10 +29,30 @@
 
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, existsSync, copyFileSync, readFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  appendFileSync,
+  writeFileSync,
+  existsSync,
+  copyFileSync,
+  readFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, resolve, join, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
+import {
+  BLACK_RESTART_MIN_INTERVAL_MS,
+  isBlackFrame,
+  parseRestartSentinel,
+  shouldRestartAfterBlack,
+} from './black-frame.mjs';
+
+// Re-exported so the guard's decisions have one import path for callers and
+// tests, even though the policy itself lives in the pure module.
+export { isBlackFrame, parseRestartSentinel, shouldRestartAfterBlack };
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -46,6 +66,14 @@ const BASE = `http://${HOST}:${PORT}`;
 
 const COMFY_ROOT = process.env.COMFY_ROOT || 'D:/Tools/ComfyUI';
 const EMBEDDED_PYTHON = join(COMFY_ROOT, 'python_embeded', 'python.exe');
+
+/** Where the black-frame guard keeps its log and its restart sentinel. */
+const COMFY_LOG_DIR = process.env.COMFY_LOG_DIR || 'D:/Tools/comfy-logs';
+const BLACK_FRAME_LOG = join(COMFY_LOG_DIR, 'black-frames.log');
+const BLACK_RESTART_SENTINEL = join(COMFY_LOG_DIR, 'last-black-restart.txt');
+
+/** The scheduled task that brings ComfyUI back up (see docs/handoff/art-ops.md). */
+const COMFY_TASK_NAME = process.env.COMFY_TASK || 'PyreflyComfyUI';
 
 const CHECKPOINT = process.env.COMFY_CKPT || 'animagine-xl-4.0-opt.safetensors';
 const UPSCALE_MODEL = process.env.COMFY_UPSCALER || 'RealESRGAN_x4plus.pth';
@@ -764,6 +792,230 @@ async function fetchImage({ filename, subfolder, type }) {
 }
 
 // --------------------------------------------------------------------------
+// Black-frame guard
+// --------------------------------------------------------------------------
+//
+// 2026-09-18, 13:35: the GPU went into a NaN state mid-session and stayed
+// there for six minutes. ComfyUI never errored — the sampler ran, SaveImage
+// wrote PNGs, /history reported success — and every pixel of every render was
+// zero. `nodes.py:1699: RuntimeWarning: invalid value encountered in cast` in
+// the ComfyUI console is the only signal, and nothing was watching it. Thirteen
+// black renders later, two of them had been copied into public/art.
+//
+// So: no finished render reaches disk without being looked at. The check is
+// deliberately the narrowest one that cannot reject a real painting — see
+// `isBlackFrame` in black-frame.mjs for why it is "max sample is 0" and not a
+// mean threshold. Full incident writeup in docs/handoff/art-ops.md.
+
+/**
+ * Ask PIL + numpy for the largest RGB sample in a PNG.
+ *
+ * Node has no PNG decoder, and this is the gate on the whole art pipeline, so
+ * it shells out to the decoder that is already installed and already trusted
+ * by every other step here (`rembg.py`, `qc.py`, `stageImage`) rather than to
+ * anything hand-rolled. `tools/gen/black-frame.mjs` has a pure-JS decoder for
+ * the gallery, which cannot afford to spawn python on a timer; this one is the
+ * authority.
+ *
+ * Returns `null` when it cannot tell — missing python, unreadable file — and
+ * the guard then lets the render through. A checker that fails closed would
+ * stop the art fleet over its own bugs.
+ */
+function maxRgbOfPngFile(pngPath) {
+  if (!existsSync(EMBEDDED_PYTHON)) {
+    process.stderr.write(
+      `[gen] WARNING: no embedded python at ${EMBEDDED_PYTHON} — black-frame guard is OFF\n`,
+    );
+    return null;
+  }
+  const py = [
+    'import sys',
+    'import numpy as np',
+    'from PIL import Image',
+    'a = np.asarray(Image.open(sys.argv[1]).convert("RGB"))',
+    'print(int(a.max()) if a.size else 0)',
+  ].join('\n');
+  const res = spawnSync(EMBEDDED_PYTHON, ['-s', '-c', py, pngPath], {
+    encoding: 'utf8',
+    maxBuffer: 8 * 1024 * 1024,
+  });
+  if (res.status !== 0) {
+    process.stderr.write(
+      `[gen] WARNING: black-frame check could not read the render: ${res.stderr || res.stdout}\n`,
+    );
+    return null;
+  }
+  const line = (res.stdout || '').trim().split(/\r?\n/).pop();
+  const n = Number(line);
+  return Number.isFinite(n) ? n : null;
+}
+
+/**
+ * Run the check on bytes that are still in memory.
+ *
+ * The render is decoded from a scratch copy in the OS temp folder, never from
+ * `--out` or a candidate slot: the whole point is that a black frame never
+ * lands anywhere the fleet or the gallery will pick it up.
+ */
+function maxRgbOfBuffer(buf) {
+  let dir;
+  try {
+    dir = mkdtempSync(join(tmpdir(), 'pyrefly-guard-'));
+  } catch (err) {
+    process.stderr.write(`[gen] WARNING: black-frame check has no temp dir: ${err.message}\n`);
+    return null;
+  }
+  const scratch = join(dir, 'frame.png');
+  try {
+    writeFileSync(scratch, buf);
+    return maxRgbOfPngFile(scratch);
+  } catch (err) {
+    process.stderr.write(`[gen] WARNING: black-frame check failed: ${err.message}\n`);
+    return null;
+  } finally {
+    try {
+      rmSync(dir, { recursive: true, force: true });
+    } catch {
+      /* a leftover temp file is not worth failing a render over */
+    }
+  }
+}
+
+/** The SaveImage prefix, which is what names the file in ComfyUI's output. */
+function prefixOf(workflow) {
+  return workflow?.['9']?.inputs?.filename_prefix || '(unknown)';
+}
+
+function recordBlackFrame({ promptId, prefix, maxRgb }) {
+  const stamp = new Date().toISOString();
+  try {
+    mkdirSync(COMFY_LOG_DIR, { recursive: true });
+    appendFileSync(BLACK_FRAME_LOG, `${stamp} prompt=${promptId} prefix=${prefix} maxRgb=${maxRgb}\n`);
+  } catch (err) {
+    process.stderr.write(`[gen] could not append to ${BLACK_FRAME_LOG}: ${err.message}\n`);
+  }
+  process.stderr.write(
+    `\n[gen] BLACK FRAME (NaN state): ${prefix} (prompt ${promptId}) came back with every RGB\n` +
+      `[gen]   sample at 0. The GPU is producing NaNs; ComfyUI does not report this as an error.\n` +
+      `[gen]   Nothing was written to disk. Logged to ${BLACK_FRAME_LOG}\n\n`,
+  );
+}
+
+function readRestartSentinel() {
+  try {
+    return parseRestartSentinel(readFileSync(BLACK_RESTART_SENTINEL, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function writeRestartSentinel(nowMs) {
+  try {
+    mkdirSync(COMFY_LOG_DIR, { recursive: true });
+    writeFileSync(BLACK_RESTART_SENTINEL, `${Math.floor(nowMs / 1000)}\n`);
+  } catch (err) {
+    // Not fatal, but say so loudly: without the sentinel the throttle is off
+    // and a NaN'd GPU could get restarted once per render.
+    process.stderr.write(
+      `[gen] WARNING: could not write ${BLACK_RESTART_SENTINEL}: ${err.message}\n`,
+    );
+  }
+}
+
+/**
+ * Stop ComfyUI and let the scheduled task start it again.
+ *
+ * Killing by command line rather than by name because the machine runs other
+ * pythons; the filter is the same one in docs/ART-PIPELINE.md §1. Deliberately
+ * no `-Filter` clause, so the command carries no double quotes and survives
+ * Windows argv quoting intact.
+ */
+async function restartComfy() {
+  process.stderr.write('[gen] black-frame recovery: restarting ComfyUI...\n');
+  const stop = spawnSync(
+    'powershell.exe',
+    [
+      '-NoProfile',
+      '-NonInteractive',
+      '-Command',
+      "Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'python.exe' -and " +
+        "$_.CommandLine -like '*ComfyUI\\main.py*' } | " +
+        'ForEach-Object { Stop-Process -Id $_.ProcessId -Force }',
+    ],
+    { encoding: 'utf8' },
+  );
+  if (stop.status !== 0) {
+    process.stderr.write(`[gen]   stop step said: ${stop.stderr || stop.stdout}\n`);
+  }
+  // The process has to actually exit before the task will bind :8188 again.
+  await new Promise((r) => setTimeout(r, 3000));
+
+  const run = spawnSync('schtasks', ['/Run', '/TN', COMFY_TASK_NAME], { encoding: 'utf8' });
+  if (run.status !== 0) {
+    throw new Error(
+      `Could not restart ComfyUI: schtasks /Run /TN ${COMFY_TASK_NAME} failed (${run.status})\n` +
+        `${run.stderr || run.stdout}`,
+    );
+  }
+  await waitForServer(180_000);
+  process.stderr.write('[gen]   ComfyUI is answering again.\n');
+}
+
+/**
+ * One recovery attempt per process, ever.
+ *
+ * A batch that goes black twice is not a blip. Restarting again would just keep
+ * a broken GPU quietly producing nothing while the operator watches a progress
+ * log, which is exactly how 13 black renders got made.
+ */
+let blackRecoveryUsed = false;
+
+const GPU_ATTENTION = [
+  'The GPU needs attention before any more art is rendered:',
+  '  - check the NVIDIA driver events (event 153 preceded the 2026-09-18 incident)',
+  '  - watch the ComfyUI console for "invalid value encountered in cast"',
+  '  - docs/handoff/art-ops.md has the full incident and the recovery steps',
+].join('\n');
+
+/**
+ * Handle a render that came back all-zero: log it, restart ComfyUI once, and
+ * resubmit the same prompt exactly once. Throws if it is black again.
+ */
+async function recoverFromBlackFrame(workflow, shot) {
+  const prefix = prefixOf(workflow);
+  recordBlackFrame({ promptId: shot.promptId, prefix, maxRgb: shot.maxRgb });
+
+  if (blackRecoveryUsed) {
+    throw new Error(
+      `BLACK FRAME (NaN state) again on ${prefix}, and this run has already restarted ComfyUI once.\n${GPU_ATTENTION}`,
+    );
+  }
+  blackRecoveryUsed = true;
+
+  const now = Date.now();
+  const last = readRestartSentinel();
+  if (!shouldRestartAfterBlack(now, last, BLACK_RESTART_MIN_INTERVAL_MS)) {
+    const mins = Math.max(0, Math.round((now - last) / 60000));
+    throw new Error(
+      `BLACK FRAME (NaN state) on ${prefix}. ComfyUI was already restarted for this ${mins} min ` +
+        `ago (< ${BLACK_RESTART_MIN_INTERVAL_MS / 60000} min), so it was NOT restarted again.\n${GPU_ATTENTION}`,
+    );
+  }
+  writeRestartSentinel(now);
+  await restartComfy();
+
+  const retry = await renderOnce(workflow);
+  if (isBlackFrame(retry.maxRgb)) {
+    recordBlackFrame({ promptId: retry.promptId, prefix, maxRgb: retry.maxRgb });
+    throw new Error(
+      `BLACK FRAME (NaN state) on ${prefix} again after restarting ComfyUI — a process restart did not clear it.\n${GPU_ATTENTION}`,
+    );
+  }
+  process.stderr.write('[gen]   recovered: the resubmitted render is not black.\n');
+  return { ...retry, seconds: shot.seconds + retry.seconds };
+}
+
+// --------------------------------------------------------------------------
 // rembg post-processing (runs in ComfyUI's embedded python)
 // --------------------------------------------------------------------------
 
@@ -912,14 +1164,31 @@ function referenceOptions(args, { defaultWidth, defaultHeight }) {
 // Presets
 // --------------------------------------------------------------------------
 
-async function generateOne({ workflow, outPath, postProcess, margin }) {
+/**
+ * Queue one prompt and pull its PNG back into memory, checked.
+ *
+ * This is the single place a finished render exists as bytes, so this is where
+ * the black-frame guard runs — before `--out`, before the `.raw.png`, before
+ * rembg, before anything downstream can pick the file up.
+ */
+async function renderOnce(workflow) {
   const started = Date.now();
   const promptId = await queuePrompt(workflow);
   const entry = await waitForResult(promptId);
   const images = imagesFrom(entry);
   if (!images.length) throw new Error(`No images came back for prompt ${promptId}`);
   const buf = await fetchImage(images[0]);
-  const elapsed = (Date.now() - started) / 1000;
+  const maxRgb = maxRgbOfBuffer(buf);
+  return { buf, promptId, maxRgb, seconds: (Date.now() - started) / 1000 };
+}
+
+async function generateOne({ workflow, outPath, postProcess, margin }) {
+  let shot = await renderOnce(workflow);
+  if (isBlackFrame(shot.maxRgb)) {
+    shot = await recoverFromBlackFrame(workflow, shot);
+  }
+  const buf = shot.buf;
+  const elapsed = shot.seconds;
 
   mkdirSync(dirname(outPath), { recursive: true });
 
@@ -1360,8 +1629,18 @@ Reference consistency:
                     redraw them at --denoise (default ${IMG2IMG_DENOISE_DEFAULT}). Keeps the
                     silhouette; use when --ref is not enough (odd forms).
 
+Black frames:
+  Every finished render is decoded before it is written anywhere. A render whose
+  every RGB sample is 0 — the signature of a NaN'd GPU, which ComfyUI does not
+  report as an error — is never written to --out or a candidate slot. It is
+  logged to ${BLACK_FRAME_LOG}, ComfyUI is restarted (at most once
+  per 10 minutes, sentinel ${BLACK_RESTART_SENTINEL}) and the
+  same prompt is resubmitted once. Black again -> exit 1, GPU needs attention.
+  See docs/handoff/art-ops.md.
+
 Env: COMFY_HOST, COMFY_PORT, COMFY_ROOT, COMFY_INPUT, COMFY_CKPT,
-     COMFY_UPSCALER, COMFY_IPADAPTER, COMFY_CLIPVISION
+     COMFY_UPSCALER, COMFY_IPADAPTER, COMFY_CLIPVISION, COMFY_LOG_DIR,
+     COMFY_TASK
 `.trim();
 
 async function main() {

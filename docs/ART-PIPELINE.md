@@ -619,6 +619,59 @@ The failure modes worth rejecting on, in order:
 5. **Flat backdrop.** No depth cue, no light direction. Add an explicit light
    source and a foreground occluder to the scene tags.
 
+### Black frames
+
+There is a sixth failure mode that is not a judgement call, because it is not
+the model's fault: **the GPU drops into a NaN state and every render comes back
+as pure zero**. ComfyUI does not treat this as an error — the sampler runs,
+`/history` says success, `SaveImage` writes a normal-looking PNG — so the only
+signal is one line in the ComfyUI console:
+
+```
+nodes.py:1699: RuntimeWarning: invalid value encountered in cast
+```
+
+That is a NaN float tensor being cast to uint8, which gives 0 everywhere. At a
+180px thumbnail a black frame is genuinely hard to tell from a dark painting,
+which is how two of them reached `public/art/` on 2026-09-18.
+
+**You no longer have to catch these by eye.** `comfy.mjs` decodes every finished
+render before it writes it anywhere:
+
+- The check is **maximum RGB sample == 0**, and nothing looser. It is not a mean
+  or a percentile, deliberately: `backdrops/` holds legitimately near-black
+  night scenes, and any threshold that rejects "dark" would throw those away. A
+  real painting always has one non-zero sample; a NaN cast never does. Alpha is
+  ignored, so an opaque cutout over dead RGB still trips it.
+- A black frame is **never written** — not to `--out`, not to the `.raw.png`,
+  not to a candidate slot — and is appended to
+  `D:\Tools\comfy-logs\black-frames.log` with the timestamp, prompt id and
+  SaveImage prefix.
+- The pipeline then **restarts ComfyUI once** (stop the `main.py` python,
+  `schtasks /Run /TN PyreflyComfyUI`, wait for `/system_stats`) and resubmits
+  the same prompt one time. Restarts are throttled to one per 10 minutes via
+  `D:\Tools\comfy-logs\last-black-restart.txt`, because ComfyUI is shared with
+  the rest of the art fleet.
+- If it comes back black again, or the throttle blocks the restart, the run
+  **exits non-zero** and tells the operator the GPU needs attention. It does not
+  loop: a GPU that NaNs twice is hardware, not a blip.
+
+The decisions are pure functions in `tools/gen/black-frame.mjs` and are unit
+tested in `tests/unit/art-black-frame.test.ts`.
+
+`tools/art-watch.mjs` flags the same thing in the gallery — a red border and a
+`BLACK` badge on any tile whose image is all-zero, plus a count in the header —
+so a black frame that lands from some other path (a hand-run workflow in the web
+UI) is still obvious. The gallery uses the small pure-JS PNG decoder in
+`black-frame.mjs` rather than shelling out to python, because it re-scans every
+20 seconds; `comfy.mjs` uses PIL + numpy in the embedded python, because it is
+the actual gate and a battle-tested decoder is worth the 1.2s. Both feed the
+same `isBlackFrame`, and they were cross-checked against the 15 quarantined
+black renders and the healthy roster before shipping.
+
+Operational history, including what the driver was doing at the time, is in
+`docs/handoff/art-ops.md`.
+
 ---
 
 ## 7. What's in the repo now

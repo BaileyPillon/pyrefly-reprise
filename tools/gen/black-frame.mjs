@@ -1,0 +1,263 @@
+/**
+ * Black-frame detection — the pure half.
+ *
+ * On 2026-09-18 at 13:35 the GPU dropped into a NaN state mid-session: the
+ * sampler kept running, ComfyUI's SaveImage kept writing PNGs, and every one of
+ * them was 832x1216 pixels of zero. `nodes.py:1699: RuntimeWarning: invalid
+ * value encountered in cast` is the tell — casting a NaN float tensor to uint8
+ * gives 0 everywhere. Two of those files reached `public/art/` before a human
+ * looked at a thumbnail. See `docs/handoff/art-ops.md`.
+ *
+ * Everything in this file is a pure function of its arguments, so the decisions
+ * the pipeline makes under that failure (reject? restart? fail?) are unit
+ * testable without a GPU, a ComfyUI, or a clock.
+ *
+ * Node built-ins only (`zlib`), same rule as the rest of `tools/`.
+ *
+ * Two callers, deliberately different ways of getting `maxRgb`:
+ *
+ *   - `tools/gen/comfy.mjs` shells out to ComfyUI's embedded python and asks
+ *     PIL + numpy, because it is guarding the art pipeline itself and a
+ *     battle-tested decoder is worth 1.2s per render.
+ *   - `tools/art-watch.mjs` uses `maxRgbOfPng` below, because it is an
+ *     always-on web page that would otherwise spawn python on every 20s
+ *     refresh.
+ *
+ * Both funnel into the same `isBlackFrame`, which is the actual policy.
+ */
+
+import { inflateSync } from 'node:zlib';
+
+/**
+ * How long a black-frame ComfyUI restart is allowed to suppress the next one.
+ *
+ * A NaN'd GPU usually comes back from a process restart; a GPU that NaNs again
+ * ten minutes later is a hardware/driver problem and restarting in a loop just
+ * hides it from the operator while burning the art fleet's afternoon.
+ */
+export const BLACK_RESTART_MIN_INTERVAL_MS = 10 * 60 * 1000;
+
+/**
+ * Is this render the NaN failure?
+ *
+ * **Exactly zero, not "dark".** `public/art/backdrops/` is full of legitimately
+ * near-black paintings — Zanarkand at night, the inside of Sin — and a mean or
+ * percentile threshold would throw those away. A painting always has at least
+ * one non-zero sample somewhere; a NaN cast never does. So the test is the
+ * strongest one that cannot produce a false positive: the maximum RGB sample
+ * over the whole image is 0.
+ *
+ * `null` (the decoder could not read the file, python is missing, the format is
+ * exotic) is deliberately NOT black. The guard fails open: an unreadable render
+ * is a separate problem and rejecting it here would stop the fleet dead.
+ *
+ * @param {number|null|undefined} maxRgb largest R, G or B sample in the image
+ * @returns {boolean}
+ */
+export function isBlackFrame(maxRgb) {
+  return typeof maxRgb === 'number' && Number.isFinite(maxRgb) && maxRgb === 0;
+}
+
+/**
+ * Read the restart sentinel's contents into an epoch in milliseconds.
+ *
+ * The file `D:/Tools/comfy-logs/last-black-restart.txt` holds epoch *seconds*
+ * (one line, so an operator can read it with `type`), but this accepts
+ * milliseconds too: anything past 1e11 is too far in the future to be seconds
+ * and is obviously a JS `Date.now()` someone wrote by hand.
+ *
+ * Junk, an empty file and a missing file all mean the same thing — no restart
+ * on record — and that is `null`, which `shouldRestartAfterBlack` treats as
+ * permission to restart. Erring toward restarting is right: the alternative is
+ * refusing to recover because a text file got corrupted.
+ *
+ * @param {string|null|undefined} text
+ * @returns {number|null} epoch ms, or null when there is no usable stamp
+ */
+export function parseRestartSentinel(text) {
+  if (typeof text !== 'string') return null;
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+  const n = Number(trimmed.split(/\s+/)[0]);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return n < 1e11 ? Math.round(n * 1000) : Math.round(n);
+}
+
+/**
+ * May the pipeline restart ComfyUI right now?
+ *
+ * ComfyUI is shared — other art agents have work queued on it — so a restart is
+ * a rude thing to do and this is the throttle that keeps it rare.
+ *
+ * A stamp in the future means the clock moved (or another agent's machine wrote
+ * it); refuse rather than restart, because the alternative is a restart loop
+ * that never ages out.
+ *
+ * @param {number} nowMs
+ * @param {number|null|undefined} lastRestartMs from `parseRestartSentinel`
+ * @param {number} [minIntervalMs]
+ * @returns {boolean}
+ */
+export function shouldRestartAfterBlack(
+  nowMs,
+  lastRestartMs,
+  minIntervalMs = BLACK_RESTART_MIN_INTERVAL_MS,
+) {
+  if (typeof lastRestartMs !== 'number' || !Number.isFinite(lastRestartMs)) return true;
+  const age = nowMs - lastRestartMs;
+  if (age < 0) return false;
+  return age >= minIntervalMs;
+}
+
+// --------------------------------------------------------------------------
+// A PNG decoder, for the gallery only
+// --------------------------------------------------------------------------
+
+function paeth(a, b, c) {
+  const p = a + b - c;
+  const pa = Math.abs(p - a);
+  const pb = Math.abs(p - b);
+  const pc = Math.abs(p - c);
+  if (pa <= pb && pa <= pc) return a;
+  return pb <= pc ? b : c;
+}
+
+/** Undo one scanline's filter in place. Returns false for an unknown filter. */
+function unfilterRow(filterType, cur, prev, bpp) {
+  const n = cur.length;
+  switch (filterType) {
+    case 0:
+      return true;
+    case 1:
+      for (let i = bpp; i < n; i++) cur[i] = (cur[i] + cur[i - bpp]) & 0xff;
+      return true;
+    case 2:
+      for (let i = 0; i < n; i++) cur[i] = (cur[i] + prev[i]) & 0xff;
+      return true;
+    case 3:
+      for (let i = 0; i < n; i++) {
+        const left = i >= bpp ? cur[i - bpp] : 0;
+        cur[i] = (cur[i] + ((left + prev[i]) >> 1)) & 0xff;
+      }
+      return true;
+    case 4:
+      for (let i = 0; i < n; i++) {
+        const left = i >= bpp ? cur[i - bpp] : 0;
+        const upLeft = i >= bpp ? prev[i - bpp] : 0;
+        cur[i] = (cur[i] + paeth(left, prev[i], upLeft)) & 0xff;
+      }
+      return true;
+    default:
+      return false;
+  }
+}
+
+/** Bytes per pixel-ish stride unit, per PNG colour type, at bit depth 8. */
+const CHANNELS_BY_COLOR_TYPE = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 };
+
+/**
+ * Largest R, G or B sample in an 8-bit PNG, or `null` if it cannot be read.
+ *
+ * Alpha is skipped on purpose. A rembg cutout is mostly transparent and its
+ * alpha channel says nothing about whether the *painting* came back black.
+ *
+ * Scope is deliberately narrow: 8-bit, non-interlaced, which is every PNG this
+ * pipeline produces (ComfyUI's SaveImage, and `tools/gen/png.mjs`). Anything
+ * else returns `null` — unknown, not black — rather than guessing.
+ *
+ * Bails out the moment it sees a 255, which is the common case for a healthy
+ * render and makes the gallery's scan of a fresh painting a partial inflate
+ * plus a few hundred bytes of scanning.
+ *
+ * @param {Buffer|Uint8Array} buf raw PNG bytes
+ * @returns {number|null}
+ */
+export function maxRgbOfPng(buf) {
+  const png = Buffer.isBuffer(buf) ? buf : buf ? Buffer.from(buf) : null;
+  if (!png || png.length < 8) return null;
+  if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) return null;
+
+  let ihdr = null;
+  let palette = null;
+  const idat = [];
+  let off = 8;
+  while (off + 8 <= png.length) {
+    const len = png.readUInt32BE(off);
+    if (off + 12 + len > png.length) return null;
+    const type = png.toString('latin1', off + 4, off + 8);
+    const body = png.subarray(off + 8, off + 8 + len);
+    if (type === 'IHDR') {
+      if (len < 13) return null;
+      ihdr = {
+        width: body.readUInt32BE(0),
+        height: body.readUInt32BE(4),
+        depth: body[8],
+        color: body[9],
+        compression: body[10],
+        filter: body[11],
+        interlace: body[12],
+      };
+    } else if (type === 'PLTE') palette = Buffer.from(body);
+    else if (type === 'IDAT') idat.push(Buffer.from(body));
+    else if (type === 'IEND') break;
+    off += 12 + len;
+  }
+
+  if (!ihdr || !idat.length) return null;
+  if (ihdr.depth !== 8 || ihdr.interlace !== 0 || ihdr.compression !== 0 || ihdr.filter !== 0) {
+    return null;
+  }
+  if (!ihdr.width || !ihdr.height) return null;
+  const channels = CHANNELS_BY_COLOR_TYPE[ihdr.color];
+  if (!channels) return null;
+  if (ihdr.color === 3 && (!palette || palette.length < 3)) return null;
+
+  let raw;
+  try {
+    raw = inflateSync(Buffer.concat(idat));
+  } catch {
+    return null;
+  }
+
+  const stride = channels * ihdr.width;
+  if (raw.length < (stride + 1) * ihdr.height) return null;
+
+  const cur = Buffer.alloc(stride);
+  const prev = Buffer.alloc(stride);
+  let max = 0;
+  let p = 0;
+  for (let y = 0; y < ihdr.height; y++) {
+    const filterType = raw[p++];
+    raw.copy(cur, 0, p, p + stride);
+    p += stride;
+    if (!unfilterRow(filterType, cur, prev, channels)) return null;
+
+    if (ihdr.color === 3) {
+      for (let i = 0; i < stride; i++) {
+        const base = cur[i] * 3;
+        if (base + 2 < palette.length) {
+          if (palette[base] > max) max = palette[base];
+          if (palette[base + 1] > max) max = palette[base + 1];
+          if (palette[base + 2] > max) max = palette[base + 2];
+        }
+      }
+    } else if (ihdr.color === 6) {
+      for (let i = 0; i < stride; i++) {
+        if (i % 4 === 3) continue; // alpha
+        if (cur[i] > max) max = cur[i];
+      }
+    } else if (ihdr.color === 4) {
+      for (let i = 0; i < stride; i += 2) {
+        if (cur[i] > max) max = cur[i];
+      }
+    } else {
+      for (let i = 0; i < stride; i++) {
+        if (cur[i] > max) max = cur[i];
+      }
+    }
+
+    if (max === 255) return 255;
+    cur.copy(prev);
+  }
+  return max;
+}
