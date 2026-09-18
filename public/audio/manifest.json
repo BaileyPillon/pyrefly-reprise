@@ -1,0 +1,729 @@
+{
+  "version": 1,
+  "sampleRate": 44100,
+  "music": {
+    "chapter-select": {
+      "file": "music/chapter-select.mp3",
+      "loopStart": 8.5714,
+      "loopEnd": 77.1429,
+      "duration": 80.1429,
+      "bytes": 1173527,
+      "lufs": -16.12,
+      "truePeakDb": -1.8
+    },
+    "boss-seymour": {
+      "file": "music/boss-seymour.mp3",
+      "loopStart": 7.2727,
+      "loopEnd": 109.0909,
+      "duration": 112.0909,
+      "bytes": 1642774,
+      "lufs": -15.98,
+      "truePeakDb": -1.4
+    },
+    "title": {
+      "file": "music/title.mp3",
+      "loopStart": 15,
+      "loopEnd": 105,
+      "duration": 108,
+      "bytes": 1453722,
+      "lufs": -16.08,
+      "truePeakDb": -1.38
+    },
+    "battle-ffx": {
+      "file": "music/battle-ffx.mp3",
+      "loopStart": 6.4,
+      "loopEnd": 76.8,
+      "duration": 79.8,
+      "bytes": 1283690,
+      "lufs": -16,
+      "truePeakDb": -1.97
+    },
+    "boss-dread": {
+      "file": "music/boss-dread.mp3",
+      "loopStart": 10.6667,
+      "loopEnd": 85.3333,
+      "duration": 88.3333,
+      "bytes": 1310109,
+      "lufs": -16.02,
+      "truePeakDb": -1.42
+    },
+    "scene-gagazet": {
+      "file": "music/scene-gagazet.mp3",
+      "loopStart": 13.3333,
+      "loopEnd": 93.3333,
+      "duration": 96.3333,
+      "bytes": 1429242,
+      "lufs": -16.11,
+      "truePeakDb": -1.4
+    },
+    "scene-zanarkand-dome": {
+      "file": "music/scene-zanarkand-dome.mp3",
+      "loopStart": 16.5517,
+      "loopEnd": 99.3103,
+      "duration": 102.3103,
+      "bytes": 1278879,
+      "lufs": -16.12,
+      "truePeakDb": -1.4
+    },
+    "boss-yunalesca": {
+      "file": "music/boss-yunalesca.mp3",
+      "loopStart": 8.1818,
+      "loopEnd": 100.9091,
+      "duration": 103.9091,
+      "bytes": 1533677,
+      "lufs": -16,
+      "truePeakDb": -2.41
+    },
+    "scene-dreams-end": {
+      "file": "music/scene-dreams-end.mp3",
+      "loopStart": 12.6316,
+      "loopEnd": 101.0526,
+      "duration": 104.0526,
+      "bytes": 1674963,
+      "lufs": -16.05,
+      "truePeakDb": -1.37
+    },
+    "boss-jecht": {
+      "file": "music/boss-jecht.mp3",
+      "loopStart": 6.6667,
+      "loopEnd": 106.6667,
+      "duration": 109.6667,
+      "bytes": 1754536,
+      "lufs": -15.99,
+      "truePeakDb": -3.28
+    },
+    "boss-yu-yevon": {
+      "file": "music/boss-yu-yevon.mp3",
+      "loopStart": 10,
+      "loopEnd": 130,
+      "duration": 133,
+      "bytes": 1959486,
+      "lufs": -16.02,
+      "truePeakDb": -1.39
+    },
+    "victory-ffx": {
+      "file": "music/victory-ffx.mp3",
+      "loopStart": 6,
+      "loopEnd": 70,
+      "duration": 73,
+      "bytes": 1131747,
+      "lufs": -16.34,
+      "truePeakDb": -1.35
+    },
+    "ending-ffx": {
+      "file": "music/ending-ffx.mp3",
+      "loopStart": 29.0909,
+      "loopEnd": 160,
+      "duration": 163,
+      "bytes": 2025678,
+      "lufs": -16.01,
+      "truePeakDb": -1.39
+    },
+    "scene-bevelle-underground": {
+      "file": "music/scene-bevelle-underground.mp3",
+      "loopStart": 9.6,
+      "loopEnd": 96,
+      "duration": 99,
+      "bytes": 1494031,
+      "lufs": -17.01,
+      "truePeakDb": -1.37
+    },
+    "scene-farplane": {
+      "file": "music/scene-farplane.mp3",
+      "loopStart": 10.4348,
+      "loopEnd": 99.1304,
+      "duration": 102.1304,
+      "bytes": 1615299,
+      "lufs": -15.94,
+      "truePeakDb": -1.4
+    },
+    "boss-vegnagun": {
+      "file": "music/boss-vegnagun.mp3",
+      "loopStart": 5.7143,
+      "loopEnd": 102.8571,
+      "duration": 105.8571,
+      "bytes": 1718494,
+      "lufs": -15.99,
+      "truePeakDb": -1.34
+    },
+    "boss-shuyin": {
+      "file": "music/boss-shuyin.mp3",
+      "loopStart": 6.2338,
+      "loopEnd": 105.974,
+      "duration": 108.974,
+      "bytes": 1709927,
+      "lufs": -15.98,
+      "truePeakDb": -1.93
+    },
+    "victory-ffx2": {
+      "file": "music/victory-ffx2.mp3",
+      "loopStart": 5.625,
+      "loopEnd": 50.625,
+      "duration": 53.625,
+      "bytes": 856761,
+      "lufs": -16.28,
+      "truePeakDb": -1.38
+    },
+    "boss-ffx2-aeon": {
+      "file": "music/boss-ffx2-aeon.mp3",
+      "loopStart": 6,
+      "loopEnd": 102,
+      "duration": 105,
+      "bytes": 1614465,
+      "lufs": -16.03,
+      "truePeakDb": -2.11
+    },
+    "ending-ffx2": {
+      "file": "music/ending-ffx2.mp3",
+      "loopStart": 11.4286,
+      "loopEnd": 171.4286,
+      "duration": 174.4286,
+      "bytes": 2118576,
+      "lufs": -16.17,
+      "truePeakDb": -1.33
+    }
+  },
+  "sfx": {
+    "file": "sfx/sprite.mp3",
+    "bytes": 1769811,
+    "duration": 152.3203,
+    "cues": {
+      "cursor-move": {
+        "offset": 0.05,
+        "duration": 0.045
+      },
+      "confirm": {
+        "offset": 0.145,
+        "duration": 0.22
+      },
+      "cancel": {
+        "offset": 0.415,
+        "duration": 0.22
+      },
+      "error": {
+        "offset": 0.685,
+        "duration": 0.3
+      },
+      "menu-open": {
+        "offset": 1.035,
+        "duration": 0.3
+      },
+      "menu-close": {
+        "offset": 1.385,
+        "duration": 0.3
+      },
+      "coin-tick": {
+        "offset": 1.735,
+        "duration": 0.12
+      },
+      "status-applied": {
+        "offset": 1.905,
+        "duration": 0.5
+      },
+      "overdrive-full": {
+        "offset": 2.455,
+        "duration": 1.3
+      },
+      "sword-slash-1": {
+        "offset": 3.805,
+        "duration": 0.3
+      },
+      "sword-slash-2": {
+        "offset": 4.155,
+        "duration": 0.34
+      },
+      "hit-1": {
+        "offset": 4.545,
+        "duration": 0.4
+      },
+      "hit-2": {
+        "offset": 4.995,
+        "duration": 0.32
+      },
+      "critical": {
+        "offset": 5.365,
+        "duration": 0.9
+      },
+      "ko-fall": {
+        "offset": 6.315,
+        "duration": 1.1
+      },
+      "footstep": {
+        "offset": 7.4651,
+        "duration": 0.18
+      },
+      "victory-fanfare": {
+        "offset": 7.6951,
+        "duration": 2.6
+      },
+      "boss-roar": {
+        "offset": 10.3451,
+        "duration": 1.8
+      },
+      "machina-whir": {
+        "offset": 12.1951,
+        "duration": 1.6
+      },
+      "magic-charge": {
+        "offset": 13.8451,
+        "duration": 1.1
+      },
+      "fire": {
+        "offset": 14.9951,
+        "duration": 1.1
+      },
+      "ice": {
+        "offset": 16.1451,
+        "duration": 1.2
+      },
+      "thunder": {
+        "offset": 17.3951,
+        "duration": 1.6
+      },
+      "water": {
+        "offset": 19.0451,
+        "duration": 1.3
+      },
+      "holy": {
+        "offset": 20.3951,
+        "duration": 2.4
+      },
+      "cure": {
+        "offset": 22.8451,
+        "duration": 1.6
+      },
+      "summon": {
+        "offset": 24.4951,
+        "duration": 3.2
+      },
+      "pyrefly": {
+        "offset": 27.7451,
+        "duration": 1.8
+      },
+      "slash-light": {
+        "offset": 29.5951,
+        "duration": 0.22
+      },
+      "slash-heavy": {
+        "offset": 29.8651,
+        "duration": 0.42
+      },
+      "pierce": {
+        "offset": 30.3351,
+        "duration": 0.26
+      },
+      "ball-hit": {
+        "offset": 30.6451,
+        "duration": 0.36
+      },
+      "claw": {
+        "offset": 31.0551,
+        "duration": 0.34
+      },
+      "dagger-flurry": {
+        "offset": 31.4451,
+        "duration": 0.3
+      },
+      "gunshot": {
+        "offset": 31.7951,
+        "duration": 0.2
+      },
+      "gun-burst": {
+        "offset": 32.0451,
+        "duration": 0.58
+      },
+      "whiff": {
+        "offset": 32.6751,
+        "duration": 0.26
+      },
+      "guard": {
+        "offset": 32.9851,
+        "duration": 0.4
+      },
+      "counter": {
+        "offset": 33.4351,
+        "duration": 0.5
+      },
+      "breath-attack": {
+        "offset": 33.9851,
+        "duration": 1.3
+      },
+      "laser-charge": {
+        "offset": 35.3351,
+        "duration": 1
+      },
+      "laser-fire": {
+        "offset": 36.3851,
+        "duration": 0.75
+      },
+      "explosion": {
+        "offset": 37.1851,
+        "duration": 1.4
+      },
+      "quake": {
+        "offset": 38.6351,
+        "duration": 2
+      },
+      "whip": {
+        "offset": 40.6851,
+        "duration": 0.4
+      },
+      "dissolve-pyreflies": {
+        "offset": 41.1351,
+        "duration": 2.2
+      },
+      "machina-destroy": {
+        "offset": 43.3851,
+        "duration": 1.2
+      },
+      "boss-phase-shift": {
+        "offset": 44.6351,
+        "duration": 1.7
+      },
+      "boss-overdrive-warning": {
+        "offset": 46.3851,
+        "duration": 2
+      },
+      "petrify-shatter": {
+        "offset": 48.4351,
+        "duration": 0.9
+      },
+      "ctb-tick": {
+        "offset": 49.3851,
+        "duration": 0.035
+      },
+      "ctb-shift": {
+        "offset": 49.4702,
+        "duration": 0.22
+      },
+      "turn-ready": {
+        "offset": 49.7402,
+        "duration": 0.6
+      },
+      "menu-page": {
+        "offset": 50.3902,
+        "duration": 0.08
+      },
+      "battle-start": {
+        "offset": 50.5202,
+        "duration": 1.05
+      },
+      "escape": {
+        "offset": 51.6202,
+        "duration": 0.35
+      },
+      "od-cursor-tick": {
+        "offset": 52.0202,
+        "duration": 0.03
+      },
+      "od-timer-tick": {
+        "offset": 52.1002,
+        "duration": 0.05
+      },
+      "od-hit-zone": {
+        "offset": 52.2002,
+        "duration": 0.24
+      },
+      "od-miss": {
+        "offset": 52.4902,
+        "duration": 0.16
+      },
+      "od-input": {
+        "offset": 52.7002,
+        "duration": 0.06
+      },
+      "od-sequence-complete": {
+        "offset": 52.8102,
+        "duration": 0.55
+      },
+      "od-reel-spin": {
+        "offset": 53.4102,
+        "duration": 0.3
+      },
+      "od-reel-stop": {
+        "offset": 53.7602,
+        "duration": 0.24
+      },
+      "od-fury-rotation": {
+        "offset": 54.0502,
+        "duration": 0.05
+      },
+      "od-mix-select": {
+        "offset": 54.1502,
+        "duration": 0.18
+      },
+      "od-success": {
+        "offset": 54.3802,
+        "duration": 0.5
+      },
+      "od-fail": {
+        "offset": 54.9302,
+        "duration": 0.3
+      },
+      "chain-hit": {
+        "offset": 55.2802,
+        "duration": 0.2
+      },
+      "chain-break": {
+        "offset": 55.5302,
+        "duration": 0.2
+      },
+      "spherechange": {
+        "offset": 55.7802,
+        "duration": 1.25
+      },
+      "garment-grid-gate": {
+        "offset": 57.0802,
+        "duration": 0.5
+      },
+      "fire-2": {
+        "offset": 57.6302,
+        "duration": 1.5
+      },
+      "fire-3": {
+        "offset": 59.1802,
+        "duration": 2.4
+      },
+      "ice-2": {
+        "offset": 61.6302,
+        "duration": 1.5
+      },
+      "ice-3": {
+        "offset": 63.1802,
+        "duration": 2.4
+      },
+      "lightning": {
+        "offset": 65.6302,
+        "duration": 1.3
+      },
+      "lightning-2": {
+        "offset": 66.9802,
+        "duration": 1.5
+      },
+      "lightning-3": {
+        "offset": 68.5302,
+        "duration": 2.5
+      },
+      "water-2": {
+        "offset": 71.0802,
+        "duration": 1.5
+      },
+      "water-3": {
+        "offset": 72.6302,
+        "duration": 2.4
+      },
+      "holy-2": {
+        "offset": 75.0802,
+        "duration": 3
+      },
+      "gravity": {
+        "offset": 78.1302,
+        "duration": 1.2
+      },
+      "gravity-2": {
+        "offset": 79.3802,
+        "duration": 1.7
+      },
+      "flare": {
+        "offset": 81.1302,
+        "duration": 1.8
+      },
+      "ultima": {
+        "offset": 82.9802,
+        "duration": 3.5
+      },
+      "bio": {
+        "offset": 86.5302,
+        "duration": 1.3
+      },
+      "death": {
+        "offset": 87.8802,
+        "duration": 1.8
+      },
+      "doom-tick": {
+        "offset": 89.7302,
+        "duration": 0.34
+      },
+      "drain": {
+        "offset": 90.1202,
+        "duration": 1.1
+      },
+      "osmose": {
+        "offset": 91.2702,
+        "duration": 1
+      },
+      "meteor": {
+        "offset": 92.3202,
+        "duration": 2.6
+      },
+      "cure-2": {
+        "offset": 94.9702,
+        "duration": 1.5
+      },
+      "cure-3": {
+        "offset": 96.5202,
+        "duration": 1.9
+      },
+      "regen": {
+        "offset": 98.4702,
+        "duration": 0.6
+      },
+      "life": {
+        "offset": 99.1202,
+        "duration": 1.6
+      },
+      "full-life": {
+        "offset": 100.7702,
+        "duration": 2
+      },
+      "esuna": {
+        "offset": 102.8202,
+        "duration": 0.55
+      },
+      "dispel": {
+        "offset": 103.4202,
+        "duration": 0.4
+      },
+      "protect": {
+        "offset": 103.8702,
+        "duration": 0.7
+      },
+      "shell": {
+        "offset": 104.6202,
+        "duration": 0.7
+      },
+      "reflect": {
+        "offset": 105.3702,
+        "duration": 0.6
+      },
+      "reflect-bounce": {
+        "offset": 106.0202,
+        "duration": 0.5
+      },
+      "haste": {
+        "offset": 106.5702,
+        "duration": 0.55
+      },
+      "slow": {
+        "offset": 107.1703,
+        "duration": 0.7
+      },
+      "stop": {
+        "offset": 107.9203,
+        "duration": 0.9
+      },
+      "sleep": {
+        "offset": 108.8703,
+        "duration": 0.9
+      },
+      "silence": {
+        "offset": 109.8203,
+        "duration": 0.4
+      },
+      "blind": {
+        "offset": 110.2703,
+        "duration": 0.5
+      },
+      "poison": {
+        "offset": 110.8203,
+        "duration": 0.55
+      },
+      "berserk": {
+        "offset": 111.4203,
+        "duration": 0.6
+      },
+      "confuse": {
+        "offset": 112.0703,
+        "duration": 0.65
+      },
+      "curse": {
+        "offset": 112.7703,
+        "duration": 0.5
+      },
+      "scan": {
+        "offset": 113.3203,
+        "duration": 0.6
+      },
+      "steal-success": {
+        "offset": 113.9703,
+        "duration": 0.4
+      },
+      "steal-fail": {
+        "offset": 114.4203,
+        "duration": 0.35
+      },
+      "item-use": {
+        "offset": 114.8203,
+        "duration": 0.35
+      },
+      "phoenix-down": {
+        "offset": 115.2203,
+        "duration": 1
+      },
+      "elixir": {
+        "offset": 116.2703,
+        "duration": 1.3
+      },
+      "mp-restore": {
+        "offset": 117.6203,
+        "duration": 0.6
+      },
+      "buff-generic": {
+        "offset": 118.2703,
+        "duration": 0.4
+      },
+      "debuff-generic": {
+        "offset": 118.7203,
+        "duration": 0.4
+      },
+      "summon-depart": {
+        "offset": 119.1703,
+        "duration": 2
+      },
+      "aeon-overdrive": {
+        "offset": 121.2203,
+        "duration": 3
+      },
+      "wind-high-altitude": {
+        "offset": 124.2703,
+        "duration": 3.2
+      },
+      "wind-gust": {
+        "offset": 127.5203,
+        "duration": 1.7
+      },
+      "kimahri-roar": {
+        "offset": 129.2703,
+        "duration": 1.6
+      },
+      "fayth-hum": {
+        "offset": 130.9203,
+        "duration": 3.1
+      },
+      "dome-echo": {
+        "offset": 134.0703,
+        "duration": 2.5
+      },
+      "yu-yevon-chant": {
+        "offset": 136.6203,
+        "duration": 3.2
+      },
+      "machina-groan": {
+        "offset": 139.8703,
+        "duration": 2.3
+      },
+      "farplane-voices": {
+        "offset": 142.2203,
+        "duration": 3.5
+      },
+      "lenne-song": {
+        "offset": 145.7703,
+        "duration": 3.75
+      },
+      "whistle-answer": {
+        "offset": 149.5703,
+        "duration": 2.7
+      }
+    }
+  }
+}

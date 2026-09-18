@@ -261,11 +261,23 @@ export function measureSpectrum(left, right, sampleRate, fftSize = 4096) {
 /**
  * How much of an orchestra's shape the spectrum has.
  *
- * Two rules, both aimed at the "arcade-y" complaint:
- *   - air (8-16 kHz) must sit well below the midrange. A real hall recording
- *     rolls off up there; a raw saw or square does not.
- *   - the 1-4 kHz region must not be the loudest band in the file. That band
- *     is where buzz lives, and where the ear is most sensitive to it.
+ * The tempting rule — "1-4 kHz must not be the loudest band" — is wrong, and
+ * it fails good music. A cue led by a solo flute genuinely peaks there: the
+ * instrument's own fundamentals run up to 2 kHz and its second harmonic sits
+ * on top of them. Rejecting that would be rejecting the orchestration.
+ *
+ * What actually distinguishes an orchestra in a hall from a stack of
+ * oscillators is the TILT. Above the low mids a recorded ensemble slopes
+ * steadily down — instrument bodies radiate less up there, air absorbs it,
+ * and the hall soaks up what is left. A saw or square wave has harmonics at
+ * 1/n forever and comes out nearly flat, which is exactly what "buzzy" and
+ * "arcade-y" describe. So the checks are:
+ *
+ *   - air (8-16 kHz) well below the loudest band — the roll-off has to exist;
+ *   - presence (4-8 kHz) below it too, by less;
+ *   - and the run low-mid -> mid -> high-mid -> presence -> air must slope
+ *     downwards overall, with room for one band to buck it (a piccolo, a
+ *     glockenspiel, a cymbal) without failing the cue.
  */
 export function checkSpectralBalance(spectrum) {
   if (!spectrum) return { ok: false, problems: ['no spectrum (file too short)'] };
@@ -276,14 +288,31 @@ export function checkSpectralBalance(spectrum) {
         'an orchestral recording rolls off past 8k (want <= -12 dB)',
     );
   }
-  const midPeak = Math.max(spectrum.mid, spectrum['high-mid']);
-  if (midPeak >= -0.01) {
+  if (spectrum.presence > -5) {
     problems.push(
-      '1-4 kHz is the loudest band in the file — that is where buzzy oscillator ' +
-        'harmonics pile up; an orchestral balance peaks lower',
+      `presence (4-8k) is only ${spectrum.presence.toFixed(1)} dB below the loudest band ` +
+        '(want <= -5 dB)',
     );
   }
-  return { ok: problems.length === 0, problems };
+
+  // Overall tilt across the upper five bands, in dB per band.
+  const run = ['low-mid', 'mid', 'high-mid', 'presence', 'air'].map((b) => spectrum[b]);
+  const tilt = (run[run.length - 1] - run[0]) / (run.length - 1);
+  if (tilt > -2) {
+    problems.push(
+      `spectrum is nearly flat above 250 Hz (${tilt.toFixed(1)} dB per band); a recorded ` +
+        'ensemble slopes down, an oscillator stack does not',
+    );
+  }
+  // Allow exactly one band to rise against the trend.
+  let rises = 0;
+  for (let i = 1; i < run.length; i++) {
+    if (run[i] > run[i - 1] + 0.5) rises++;
+  }
+  if (rises > 1) {
+    problems.push(`${rises} bands rise against the roll-off; expected at most one`);
+  }
+  return { ok: problems.length === 0, problems, tilt };
 }
 
 /**
