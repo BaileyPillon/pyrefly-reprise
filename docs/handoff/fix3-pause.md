@@ -352,18 +352,41 @@ cards genuinely need about 490.
 `currentSrc` crosses to the 2x master between 1280 and 1600 CSS px, which is
 the contract. The 4K run is the only one where any type is off its floor.
 
-Keys, at 2000x1012, all real presses: the **first** `Escape` out of a fresh
-battle is eaten by the FFX command menu (`src/ui/ffx/cancelClaim.ts`, another
-track — Esc is that menu's back button and "one tap of Esc means one thing"),
-and the **second** opens the pause; at four of the eight sizes above the run's
-opening `Escape` landed after the menu had already given the claim up and
-opened it first time. `H` hides the panels (`panelsHidden: true`, `.pause--bare`
-on the stage, the menu not rendered, the surviving line at 14px, the painting
-still exactly the viewport) and `H` again brings them back; `ArrowDown` moves
-the cursor `RESUME -> RESTART ENCOUNTER`; the PARTY, MUSIC and OPTIONS panels
-all render without scrolling; `F` enters photo mode and `Escape` leaves it;
-`Escape` resumes and `P` opens over a live command menu. No page errors, no
-console errors.
+Keys, at 2000x1012, all real presses:
+
+| Press | Result |
+|---|---|
+| `Escape` (first, fresh battle) | `battle` — refused, see below |
+| `Escape` (second) | `battle > pause` |
+| `H` | `panelsHidden: true`, `.pause--bare` on the stage, menu not rendered, surviving line at 14px, painting still exactly the viewport |
+| `H` again | `panelsHidden: false` |
+| `ArrowDown` | `RESUME` -> `RESTART ENCOUNTER` |
+| PARTY / MUSIC / OPTIONS | all three render inside the panel, none scrolls |
+| `F` | photo mode, `{ yaw: 0, pitch: 0, zoom: 1 }` |
+| `Escape` | leaves photo mode (`photo: null`), pause still up |
+| `Escape` | resumes -> `battle` |
+| `P` | `battle > pause` |
+| `Escape` | resumes -> `battle` |
+
+**The first pause key out of a fresh battle is refused, and it is not this
+screen's doing.** It reproduces for `Escape` *and* for `P`, so it is not just
+the FFX command menu's cancel claim (`src/ui/ffx/cancelClaim.ts` — Esc is that
+menu's back button and "one tap of Esc means one thing"); `BattleScreen` also
+gates on its own `canPause` while the opening beat is running. Both files
+belong to other tracks. The second press always lands, and at four of the eight
+sizes above the run's opening `Escape` landed first time because the beat had
+already finished. Every open/resume cycle after the first is reliable.
+
+The prep menu's CHAPTER tab, the other consumer of `chapter-panel.css`, was
+measured on the same run: all three polaroid captions read in full
+("the Prominence, at last", "unhurried, always unhurried", "the machine beneath
+him"), `white-space` is `normal`, `text-overflow` is not `ellipsis`, and
+`scrollHeight <= clientHeight` on every tile. The caption's computed size is
+5.33 — *grid* px, inside a stage at `--lb-scale: 2.81`, so 15.0 CSS px
+rendered, which is why the `14px / --lb-scale` floor does not bind at this
+window. See `v8-prep-chapter-tab.png`.
+
+No page errors and no console errors in any run.
 
 ### The second pass's run
 
@@ -445,16 +468,28 @@ test passes.
 | File | Change |
 |---|---|
 | `src/app/screens/PauseScreen.ts` | full-bleed stage, `.pause__frame` wrapper, grain layer, `.cpanel--fluid` |
-| `src/ui/common/pause-screen.css` | rewritten on fluid tokens; grid layout; drift, grain, vignette |
-| `src/ui/common/chapter-panel.css` | tokenised (`--cp-u`, `--cp-fs-*`), `.cpanel--fluid`, caption fix |
+| `src/ui/common/pause-screen.css` | rewritten on fluid tokens; grid layout; drift, grain, vignette; the `rail`, the short-window query and the party card's own minimum size |
+| `src/ui/common/chapter-panel.css` | tokenised (`--cp-u`, `--cp-fs-*`), `.cpanel--fluid`, caption fix, and the caption guard that outranks the prep tab's override |
 | `src/ui/common/chapterPanel.ts` | `srcset`/`sizes` for the 2x master, `focal` sidecar, `parseArtFocal` |
-| `src/ui/common/LetterboxStage.ts` | `createFullBleedStage` (additive; `createStage` untouched) |
+| `src/ui/common/LetterboxStage.ts` | `createFullBleedStage` (additive; `createStage` untouched) plus `--lb-scale`, the letterbox factor published to CSS |
 | `src/engine/ArtManifest.ts` | `pause2x`, `hasPause2xArt`, `pauseStemOf`, `pause2xUrlFor` |
 | `tools/gen/manifest.mjs`, `tools/gen/manifest.d.mts` | scan and type `pause2x` |
-| `tests/unit/pause-fullbleed.test.ts` | new |
-| `tests/unit/pause-panels.test.ts` | `slabs()` follows the frame wrapper |
+| `tests/unit/pause-fullbleed.test.ts` | new; 28 now — the rail, the short-window fold, the scrolling menu, the card's minimum size and width cap, and the caption guard's reach |
+| `tests/unit/pause-panels.test.ts` | `slabs()` follows the frame wrapper, and now the rail inside it |
 
 ## What is left
+
+- **The prep tab's caption override.** `.prepchap__cols .cpanel__snap-cap` in
+  `src/ui/ffx/party-prep/chapter-panel-tab.css` still declares `white-space:
+  nowrap` and `text-overflow: ellipsis`; the guard in `chapter-panel.css` beats
+  it, but it is a beaten rule rather than a deleted one, and the two sizing
+  rules under the guard exist only to pay for the second line it costs.
+  **`ffx2-hud-prep`: delete that pair and this whole block can go.**
+- **The first pause key out of a fresh battle is refused.** Reproduced for both
+  `Escape` and `P` (see the key table above), so it is `BattleScreen.canPause`
+  and/or `src/ui/ffx/cancelClaim.ts`, both other tracks' files. Harmless in
+  practice — a player presses it again — but it is a real "I pressed it and
+  nothing happened", and it belongs to whoever owns those two.
 
 - ~~**The 2x masters do not exist yet.**~~ **Delivered.** The art track landed
   all **19** during this round: every `public/art/pause/<stem>.png` now has a
@@ -495,12 +530,8 @@ test passes.
   portraits, and the quote under it is Seymour's), but it reads as a mismatch on
   a full-bleed screen where the painting is now the whole window rather than a
   panel. Art track's call: `public/art/pause/ch1-seymour-flux.png`.
-- **Esc-opens-the-pause was not re-proven on the second pass.** `Escape`
-  *resuming* is proven, and `P` opening over a live command menu is proven, but
-  the run that would have shown `Escape` opening it from the command menu's top
-  row could not boot the app: `src/audio/**` was mid-edit by another track and
-  throwing at import (`pizz is not defined`), with `tsc` showing 15 errors in
-  files this track does not own. The first pass proved it, and the `cancel`
-  claim has since moved (`src/ui/ffx/cancelClaim.ts`, another track's commit
-  "FFX HUD: one tap of Esc means one thing"), so it is worth one more run once
-  the tree boots. Nothing in this track's files bears on it.
+- ~~**Esc-opens-the-pause was not re-proven on the second pass.**~~ **Proven**,
+  against the current tree and after `cancelClaim.ts` landed: `Escape` opens the
+  pause at every one of the eight sizes in the table above — first press at four
+  of them, second press at the other four. What is left of it is the
+  first-press-refused note above, which is another track's.
