@@ -1,0 +1,523 @@
+{
+ "runs": [
+  {
+   "chapter": "ch4",
+   "vp": "1280x720",
+   "s12": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--pop",
+    "flash": false,
+    "afterContent": "none",
+    "afterPosition": "static",
+    "afterInset": "auto auto auto auto",
+    "afterOpacity": "1",
+    "afterAnimation": "none",
+    "afterDuration": "0s",
+    "afterBg": "rgba(0, 0, 0, 0)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "s22": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--flash ffx2chain--pop",
+    "flash": true,
+    "afterContent": "\"\"",
+    "afterPosition": "fixed",
+    "afterInset": "0px 0px 0px 0px",
+    "afterOpacity": "0.15",
+    "afterAnimation": "ffx2-chain-veil",
+    "afterDuration": "0.08s",
+    "afterBg": "rgb(255, 217, 236)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "d12": {
+    "tl": [
+     0,
+     -1,
+     -1
+    ],
+    "tr": [
+     0,
+     0,
+     0
+    ],
+    "bl": [
+     0,
+     1,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     0,
+     0,
+     0
+    ],
+    "midR": [
+     0,
+     0,
+     0
+    ]
+   },
+   "d22": {
+    "tl": [
+     -1,
+     -2,
+     -3
+    ],
+    "tr": [
+     0,
+     0,
+     0
+    ],
+    "bl": [
+     0,
+     0,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     1,
+     0,
+     0
+    ],
+    "midR": [
+     0,
+     0,
+     0
+    ]
+   },
+   "d22l": {
+    "tl": [
+     0,
+     -2,
+     -3
+    ],
+    "tr": [
+     0,
+     0,
+     0
+    ],
+    "bl": [
+     0,
+     1,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     3,
+     -1,
+     -1
+    ],
+    "midR": [
+     1,
+     1,
+     1
+    ]
+   },
+   "veil12": 1,
+   "veil22": 3,
+   "veilLate": 3
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2560x1440",
+   "s12": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--pop",
+    "flash": false,
+    "afterContent": "none",
+    "afterPosition": "static",
+    "afterInset": "auto auto auto auto",
+    "afterOpacity": "1",
+    "afterAnimation": "none",
+    "afterDuration": "0s",
+    "afterBg": "rgba(0, 0, 0, 0)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "s22": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--flash ffx2chain--pop",
+    "flash": true,
+    "afterContent": "\"\"",
+    "afterPosition": "fixed",
+    "afterInset": "0px 0px 0px 0px",
+    "afterOpacity": "0.15",
+    "afterAnimation": "ffx2-chain-veil",
+    "afterDuration": "0.08s",
+    "afterBg": "rgb(255, 217, 236)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "d12": {
+    "tl": [
+     -2,
+     -3,
+     -6
+    ],
+    "tr": [
+     0,
+     0,
+     0
+    ],
+    "bl": [
+     0,
+     -1,
+     -1
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     -56,
+     -30,
+     1
+    ],
+    "midR": [
+     0,
+     0,
+     1
+    ]
+   },
+   "d22": {
+    "tl": [
+     -2,
+     -5,
+     -8
+    ],
+    "tr": [
+     1,
+     1,
+     0
+    ],
+    "bl": [
+     0,
+     -1,
+     -1
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     -59,
+     -31,
+     1
+    ],
+    "midR": [
+     0,
+     0,
+     1
+    ]
+   },
+   "d22l": {
+    "tl": [
+     -3,
+     -6,
+     -11
+    ],
+    "tr": [
+     1,
+     1,
+     0
+    ],
+    "bl": [
+     0,
+     -1,
+     -1
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     -63,
+     -34,
+     0
+    ],
+    "midR": [
+     0,
+     0,
+     1
+    ]
+   },
+   "veil12": 56,
+   "veil22": 59,
+   "veilLate": 63
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1280x720",
+   "s12": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--pop",
+    "flash": false,
+    "afterContent": "none",
+    "afterPosition": "static",
+    "afterInset": "auto auto auto auto",
+    "afterOpacity": "1",
+    "afterAnimation": "none",
+    "afterDuration": "0s",
+    "afterBg": "rgba(0, 0, 0, 0)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "s22": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--flash ffx2chain--pop",
+    "flash": true,
+    "afterContent": "\"\"",
+    "afterPosition": "fixed",
+    "afterInset": "0px 0px 0px 0px",
+    "afterOpacity": "0.15",
+    "afterAnimation": "ffx2-chain-veil",
+    "afterDuration": "0.08s",
+    "afterBg": "rgb(255, 217, 236)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "d12": {
+    "tl": [
+     0,
+     0,
+     0
+    ],
+    "tr": [
+     0,
+     0,
+     -1
+    ],
+    "bl": [
+     -1,
+     -1,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     -1,
+     0,
+     0
+    ],
+    "midR": [
+     -1,
+     -3,
+     -4
+    ]
+   },
+   "d22": {
+    "tl": [
+     1,
+     1,
+     0
+    ],
+    "tr": [
+     0,
+     0,
+     -1
+    ],
+    "bl": [
+     0,
+     -1,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     -1
+    ],
+    "midL": [
+     -3,
+     -3,
+     -3
+    ],
+    "midR": [
+     -1,
+     -3,
+     -4
+    ]
+   },
+   "d22l": {
+    "tl": [
+     0,
+     0,
+     0
+    ],
+    "tr": [
+     0,
+     0,
+     -1
+    ],
+    "bl": [
+     -1,
+     -1,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     -2,
+     -3,
+     -3
+    ],
+    "midR": [
+     -1,
+     -2,
+     -4
+    ]
+   },
+   "veil12": 4,
+   "veil22": 4,
+   "veilLate": 4
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2560x1440",
+   "s12": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--pop",
+    "flash": false,
+    "afterContent": "none",
+    "afterPosition": "static",
+    "afterInset": "auto auto auto auto",
+    "afterOpacity": "1",
+    "afterAnimation": "none",
+    "afterDuration": "0s",
+    "afterBg": "rgba(0, 0, 0, 0)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "s22": {
+    "classes": "ffx2-chain-chip ffx2chain--hot ffx2chain--flash ffx2chain--pop",
+    "flash": true,
+    "afterContent": "\"\"",
+    "afterPosition": "fixed",
+    "afterInset": "0px 0px 0px 0px",
+    "afterOpacity": "0.15",
+    "afterAnimation": "ffx2-chain-veil",
+    "afterDuration": "0.08s",
+    "afterBg": "rgb(255, 217, 236)",
+    "chipTransform": "none",
+    "bodyAnim": "ffx2-chain-pop"
+   },
+   "d12": {
+    "tl": [
+     1,
+     1,
+     0
+    ],
+    "tr": [
+     1,
+     1,
+     0
+    ],
+    "bl": [
+     0,
+     0,
+     0
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     0,
+     -5,
+     -4
+    ],
+    "midR": [
+     0,
+     0,
+     -1
+    ]
+   },
+   "d22": {
+    "tl": [
+     0,
+     0,
+     -1
+    ],
+    "tr": [
+     0,
+     0,
+     -1
+    ],
+    "bl": [
+     0,
+     0,
+     -1
+    ],
+    "br": [
+     0,
+     0,
+     0
+    ],
+    "midL": [
+     1,
+     -2,
+     -1
+    ],
+    "midR": [
+     1,
+     1,
+     0
+    ]
+   },
+   "d22l": {
+    "tl": [
+     0,
+     0,
+     -1
+    ],
+    "tr": [
+     0,
+     1,
+     0
+    ],
+    "bl": [
+     1,
+     1,
+     0
+    ],
+    "br": [
+     1,
+     1,
+     1
+    ],
+    "midL": [
+     2,
+     2,
+     2
+    ],
+    "midR": [
+     1,
+     1,
+     0
+    ]
+   },
+   "veil12": 5,
+   "veil22": 2,
+   "veilLate": 2
+  }
+ ],
+ "failures": [
+  "ch4 2560x1440: the wash is still on 1200 ms after the increment (maxAbs 63/255)"
+ ]
+}
