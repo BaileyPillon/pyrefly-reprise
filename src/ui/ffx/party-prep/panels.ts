@@ -2,6 +2,7 @@ import type { FFXMemberBuild, FFXPartyBuild, OverdriveModeId } from '../../../ba
 import type { EffectiveStatRow } from '../../../battle/ffx/effectiveStats.ts';
 import { effectiveStats } from '../../../battle/ffx/effectiveStats.ts';
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
+import { itemLabel } from '../../common/resultsMath.ts';
 
 /**
  * The Party / Equipment / Items / Overdrive-modes tabs: four small composing
@@ -153,7 +154,21 @@ export function makeEquipmentPanel(): PrepPanel {
 
 // ------------------------------------------------------------------- Items
 
-/** The Items tab: party-wide inventory counts — not per-member, so it ignores `selectMember`. */
+/**
+ * The Items tab: party-wide inventory counts — not per-member, so it ignores
+ * `selectMember`.
+ *
+ * **Two columns, because that is FFX's own item menu.** FFX-2's bag is a
+ * single column and `ui/ffx2/party-prep/panels.ts` keeps it that way; this is
+ * one of the places the two games genuinely differ and the difference is kept.
+ * It is also what makes the list readable: 28 kinds at one column and a 14 px
+ * row showed six of them inside the sheet's 88 px well (critic round 02,
+ * ranked issue 40) and nothing said there were twenty-two more.
+ *
+ * Names come from `itemLabel()`, the same registry lookup the results ledger
+ * uses. The tab used to print `entry.itemId` — `hi-potion`, `mega-phoenix` —
+ * straight onto a player-facing surface.
+ */
 export function makeItemsPanel(): PrepPanel {
   return {
     id: 'items',
@@ -167,9 +182,22 @@ export function makeItemsPanel(): PrepPanel {
         root.innerHTML = '<div class="ffxprep-empty">No items.</div>';
         return;
       }
-      root.innerHTML = `<div class="ffxprep-items">${build.inventory
-        .map((entry) => `<div class="ffxprep-item-row"><span>${escapeHtml(entry.itemId)}</span><span class="ffxprep-item-row__qty">×${entry.count}</span></div>`)
-        .join('')}</div>`;
+      const kinds = build.inventory.length;
+      const total = build.inventory.reduce((n, e) => n + e.count, 0);
+      const rows = build.inventory
+        .map(
+          (entry) =>
+            `<div class="ffxprep-item-row"><span class="ffxprep-item-row__name">${escapeHtml(
+              itemLabel(entry.itemId),
+            )}</span><span class="ffxprep-item-row__qty">&times;${entry.count}</span></div>`,
+        )
+        .join('');
+      // The count is the affordance: a scrollable well with no edge to it does
+      // not tell you it is scrollable, and "28 KINDS" against six visible rows
+      // does.
+      root.innerHTML = `
+        <div class="ffxprep-items__head">${kinds} kind${kinds === 1 ? '' : 's'} <span>${total} in the bag</span></div>
+        <div class="ffxprep-items ffxprep-items--two-col">${rows}</div>`;
     },
   };
 }
@@ -193,6 +221,17 @@ const OVERDRIVE_NAME: Record<string, string> = {
   kimahri: 'Ronso Rage',
   rikku: 'Mix',
 };
+
+/**
+ * FFX names its Overdrive modes Stoic, Warrior, Comrade, Healer… — proper
+ * nouns, as the menu prints them. `OverdriveModeId` is the lower-case id, and
+ * the row was printing it raw (`stoic`, `daredevil`); the `text-transform:
+ * uppercase` in the CSS hid it at a glance and not in the DOM. Every id in the
+ * union is a single word, so title case *is* the name.
+ */
+function modeLabel(mode: OverdriveModeId): string {
+  return mode.charAt(0).toUpperCase() + mode.slice(1);
+}
 
 const MODE_BLURB: Partial<Record<OverdriveModeId, string>> = {
   stoic: 'Charges from damage taken.',
@@ -229,7 +268,7 @@ export function makeOverdrivePanel(): PrepPanel {
       .map((mode) => {
         const selected = mode === member.overdrive.mode;
         return `<div class="ffxprep-mode-row${selected ? ' ffxprep-mode-row--selected' : ''}" data-mode="${mode}">
-          <span class="ffxprep-mode-row__name">${escapeHtml(mode)}</span>
+          <span class="ffxprep-mode-row__name">${escapeHtml(modeLabel(mode))}</span>
           ${selected ? '<span class="ffxprep-mode-row__tag">EQUIPPED</span>' : ''}
         </div>`;
       })

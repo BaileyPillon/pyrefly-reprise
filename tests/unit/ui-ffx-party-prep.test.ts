@@ -181,9 +181,28 @@ describe('Items panel', () => {
     const build = makeFakePartyBuild();
     const panel = makeItemsPanel();
     const root = mountPanel(panel, build, 'tidus');
-    expect(root.textContent).toContain('potion');
+    // Real names, from the item registry — the tab used to print the raw
+    // `hi-potion` / `mega-phoenix` ids (critic round 02, ranked issue 40).
+    const names = [...root.querySelectorAll('.ffxprep-item-row__name')].map((e) => e.textContent);
+    expect(names).toContain('Potion');
+    expect(names).toContain('Hi-Potion');
+    expect(names.some((n) => /-/.test(n ?? '') && n !== 'Hi-Potion')).toBe(false);
     expect(root.textContent).toContain(`×${build.inventory.find((i) => i.itemId === 'potion')!.count}`);
+    // FFX's item menu is two columns; FFX-2's bag is one.
+    expect(root.querySelector('.ffxprep-items--two-col')).not.toBeNull();
+    // The well scrolls, and now says how much is below the fold.
+    expect(root.querySelector('.ffxprep-items__head')?.textContent).toContain(`${build.inventory.length} kind`);
     expect(panel.selectMember).toBeUndefined();
+  });
+
+  it('names Overdrive modes as FFX does, not as ids', () => {
+    const build = makeFakePartyBuild();
+    const root = mountPanel(makeOverdrivePanel(), build, 'tidus');
+    const names = [...root.querySelectorAll('.ffxprep-mode-row__name')].map((e) => e.textContent);
+    expect(names.length).toBeGreaterThan(0);
+    // "Stoic", not "stoic" — the CSS uppercased it on screen, but the DOM (and
+    // CHK-007's copy grep) still read the id.
+    for (const n of names) expect(n).toMatch(/^[A-Z]/);
   });
 
   it('shows a placeholder when the inventory is empty', () => {
