@@ -99,7 +99,7 @@ export function makeStatsPanel(): PrepPanel {
       <div class="x2prep-line"><b>${escapeHtml(member.name)}</b> Lv ${member.level} &middot; wearing ${escapeHtml(dressphereLabel(worn))}</div>
       <div class="x2prep-stats">${rows}</div>
       ${others.length ? `<div class="x2prep-cmp"><div class="x2prep-cmp__row x2prep-cmp__row--head"><span class="x2prep-cmp__name"></span>${head}</div>${compare}</div>` : ''}
-      <div class="x2prep-note x2prep-foot">Stats come from the dressphere and the level, not from the girl &mdash; all three are identical in the same sphere at the same level.</div>`;
+      <div class="x2prep-note x2prep-foot">The dressphere and the level are the stats &mdash; all three girls are identical in the same sphere.</div>`;
   };
 
   return {
@@ -111,7 +111,8 @@ export function makeStatsPanel(): PrepPanel {
     fullScreen: false,
     mount(root, ctx: PrepPanelContext) {
       build = ffx2Build(ctx);
-      root.innerHTML = '<div class="x2prep"></div>';
+      // `--stack`: full-width rows, not `.x2prep`'s two columns — see the CSS.
+      root.innerHTML = '<div class="x2prep x2prep--stack"></div>';
       bodyEl = root.querySelector('.x2prep');
       render(ctx.memberId);
     },

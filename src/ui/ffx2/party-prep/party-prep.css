@@ -49,6 +49,17 @@
 .x2prep-worn {
   grid-column: 1 / -1;
 }
+/*
+ * One column instead of two, for a tab whose content is full-width rows rather
+ * than a pair of stacks (the Stats tab). Without it `.x2prep`'s two columns
+ * split the tab's four blocks across them and the comparison table was dealt
+ * half the width and clipped — measured at 1600x900 in
+ * `docs/screenshots/fix3/ffx2-hud-prep/prep5-1600x900-e-tab2.png` before this.
+ */
+.x2prep--stack {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
 .x2prep__col {
   display: flex;
   flex-direction: column;
@@ -229,16 +240,21 @@
  * visible instead of merely true.
  */
 
+/* Ten stats in two rows of five. The panel has 334 units of width and 113.3 of
+   height to live in (see `.x2prep`), and the comparison table below needs most
+   of the height, so this block is deliberately tight. */
 .x2prep-stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 2px 8px;
-  margin: 4px 0 6px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px 8px;
+  margin: 3px 0 4px;
 }
 .x2prep-stat {
   display: flex;
   align-items: baseline;
   gap: 4px;
+  height: 12px;
+  min-width: 0;
   border-bottom: 0.89px solid rgba(11, 10, 18, 0.12);
 }
 .x2prep-stat__k {
@@ -251,19 +267,21 @@
 .x2prep-stat__v {
   margin-left: auto;
   font-family: var(--ig-font-numeral);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
 }
 
+/* Four rows and the header inside the panel's 113.3-unit budget. The rest
+   scroll; the masked bottom edge is what says so. */
 .x2prep-cmp {
-  max-height: 72px;
+  max-height: 44px;
   overflow-y: auto;
   mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 8px), transparent 100%);
   -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 8px), transparent 100%);
 }
 .x2prep-cmp__row {
   display: grid;
-  grid-template-columns: 72px repeat(10, 1fr);
+  grid-template-columns: 64px repeat(10, minmax(0, 1fr));
   align-items: center;
   gap: 2px;
   height: 14px;
