@@ -16,11 +16,11 @@
  *
  * | chapter | party sprites, union |
  * |---|---|
- * | 1 Seymour Flux | x 65..285, y 153..314 |
- * | 2 Yunalesca | x 205..373, y 185..340 |
- * | 3 Braska's Final Aeon | x 68..284, y 185..339 |
+ * | 1 Seymour Flux | x 65..286, y 152..314 |
+ * | 2 Yunalesca | x 207..374, y 185..341 |
+ * | 3 Braska's Final Aeon | x 68..285, y 185..339 |
  *
- * Their union is x 65..373, y 153..340 — and the band between the command
+ * Their union is x 65..374, y 152..341 — and the band between the command
  * stack and the party-status column, which is where the advisor card shipped,
  * is x 211..403. There is no fixed sub-rectangle of that band outside the
  * union, which is exactly why Bailey's Chapter 1 capture has the NEXT BEST MOVE
@@ -32,14 +32,15 @@
  * {@link advisorZone} tries them in order and takes the first that fits:
  *
  * 1. **The pocket** — bottom-anchored, between the rightmost party sprite and
- *    the party-status column. It exists in chapters 1 and 3 (~100px wide once
- *    the sprite estimate's margin is paid) and is the placement nearest to
- *    where the card already was, so the card stays where a player who has
- *    played chapter 1 expects it.
+ *    the party-status column. It is the placement nearest to where the card
+ *    shipped, and **no chapter in the game currently leaves one**: measured
+ *    against the party's real width it is 93.5 grid px in Chapter 1, none at
+ *    all in Chapter 2 and 94.2 in Chapter 3, against a card that needs 132.
+ *    The arithmetic stays for an encounter that does leave room.
  * 2. **The shelf** — above the party's heads, between the strategy guide's rail
- *    and the boss column, dropped below the Sensor card if that is up. This is
- *    what chapter 2 gets, where the party stands far enough right that the
- *    pocket collapses to ~11px.
+ *    and the boss column, dropped below the Sensor card when that is up and
+ *    below the command stack's top edge when a submenu has raised it into the
+ *    same band. This is what all three chapters take today.
  *
  * If neither fits the caller is handed `null` and leaves the card where the
  * advisor's own layout put it — a visible overlap is a better failure than a
@@ -161,8 +162,30 @@ export const POCKET_BOTTOM = 26;
  */
 export const MAX_ADVISOR_HEIGHT = 104;
 
-/** A zone shorter than this is not a zone — the card's head alone is ~14px. */
-export const MIN_ADVISOR_HEIGHT = 28;
+/**
+ * A zone shorter than this is not a zone.
+ *
+ * The card's head line is ~14px and `move-advisor.css` scrolls the body, so a
+ * short card is a usable card — it is the head plus a row, and the player can
+ * still read the move's name. 22 rather than 28 because of one measured case:
+ * **Chapter 1 with the Sensor card up** is the tightest band in the game. The
+ * party stands high there (Kimahri's quad reaches y 152) and a scan result
+ * occupies y 24..102, which leaves 24.1 grid px between them once both gaps and
+ * the chip's reserve are paid. A floor of 28 would hand back `null` for those
+ * few seconds and drop the card back onto the advisor's own placement, which is
+ * on Tidus — trading a short card for a wrong one.
+ */
+export const MIN_ADVISOR_HEIGHT = 22;
+
+/**
+ * Room kept above the card for its own `N HIDE MOVES` chip, in grid px.
+ *
+ * The chip is 8 grid px tall and rides `ADVISOR_CHIP_GAP` above the card's top
+ * edge, so a zone that measures its ceiling against the *card* hands back a
+ * card whose chip is already past it. At 1280x720 the shelf's chip poked 34
+ * grid px² into the Sensor card, in every state the Sensor was up.
+ */
+export const ADVISOR_CHIP_RESERVE = 11;
 
 export interface AdvisorZoneInput {
   /** The command stack and its help card, as one box. */
@@ -215,7 +238,9 @@ export function advisorZone(input: AdvisorZoneInput): AdvisorZone | null {
     for (const r of input.sprites) {
       if (overlapsX(r, pocketLeft, railRight)) ceilingY = Math.max(ceilingY, r.bottom + GAP);
     }
-    const room = STAGE.height - POCKET_BOTTOM - ceilingY;
+    // The chip sits above the card, so it is the chip that has to clear the
+    // ceiling, not the card's own top edge.
+    const room = STAGE.height - POCKET_BOTTOM - ceilingY - ADVISOR_CHIP_RESERVE;
     if (room >= MIN_ADVISOR_HEIGHT) {
       return {
         left: pocketLeft,
@@ -244,7 +269,7 @@ export function advisorZone(input: AdvisorZoneInput): AdvisorZone | null {
   if (overlapsX(input.cmdArea, shelfLeft, shelfRight)) floorY = Math.min(floorY, input.cmdArea.top);
   const cardBottomY = floorY - GAP;
   const ceilingY = input.sensor && overlapsX(input.sensor, shelfLeft, shelfRight) ? input.sensor.bottom + GAP : GAP;
-  const room = cardBottomY - ceilingY;
+  const room = cardBottomY - ceilingY - ADVISOR_CHIP_RESERVE;
   if (room < MIN_ADVISOR_HEIGHT) return null;
   return {
     left: shelfLeft,

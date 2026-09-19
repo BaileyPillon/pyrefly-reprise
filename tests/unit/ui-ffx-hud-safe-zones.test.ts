@@ -4,6 +4,7 @@ import type { BattleState } from '../../src/battle/common/types.ts';
 import { menuOwnsCancel } from '../../src/ui/common/menuCancel.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import {
+  ADVISOR_CHIP_RESERVE,
   advisorZone,
   GAP,
   MAX_ADVISOR_HEIGHT,
@@ -195,6 +196,16 @@ describe('advisorZone', () => {
     expect(zone.left).toBeGreaterThanOrEqual(250 + GAP);
   });
 
+  it('keeps room above the card for its own chip', () => {
+    // The chip rides above the card, so it is the chip that has to clear
+    // whatever bounds the zone from above. The live matrix caught it poking
+    // into the Sensor card in every state the Sensor was up.
+    const sprites = rectsFor('braskas-final-aeon');
+    const zone = advisorZone({ ...CHROME, sprites })!;
+    const chipTop = 360 - zone.bottom - zone.maxHeight - ADVISOR_CHIP_RESERVE;
+    expect(chipTop).toBeGreaterThanOrEqual(CHROME.sensor.bottom);
+  });
+
   it('drops the shelf below the Sensor card rather than under it', () => {
     const sprites = rectsFor('yunalesca');
     const withSensor = advisorZone({ ...CHROME, sprites })!;
@@ -250,7 +261,7 @@ describe('advisorZone', () => {
     // party's heads; that is less than MAX_ADVISOR_HEIGHT and must survive.
     const zone = advisorZone({ ...CHROME, sprites: rectsFor('yunalesca') })!;
     const headsTop = Math.min(...rectsFor('yunalesca').map((r) => r.top));
-    expect(zone.maxHeight).toBe(headsTop - GAP - (CHROME.sensor.bottom + GAP));
+    expect(zone.maxHeight).toBe(headsTop - GAP - (CHROME.sensor.bottom + GAP) - ADVISOR_CHIP_RESERVE);
     expect(zone.maxHeight).toBeLessThan(MAX_ADVISOR_HEIGHT);
   });
 
