@@ -18,9 +18,30 @@
  * it — the appoggiatura rule.
  */
 
-import type { Note } from '../score.ts';
+import type { Note, TempoMark } from '../score.ts';
 import { toMidi } from '../score.ts';
-import { agogic, lean, shapeByBar } from './themes.ts';
+import { agogic, lean } from './themes.ts';
+
+/**
+ * One marked leaning note and the note it falls to, in beats of the built
+ * track.
+ *
+ * Each of the three cues exports its own table of these as `APPOGGIATURAS`, so
+ * the claim "every appoggiatura in this cue leans" is checkable against the
+ * notes the renderer will actually play rather than against a comment. THEMES.md
+ * calls the inverted version "the single loudest tell of a synthetic
+ * performance", and a rule nobody can check is a rule that drifts.
+ */
+export interface Appoggiatura {
+  /** `Channel.name` the pair lives on. */
+  channel: string;
+  /** Beat of the leaning note — the one that must be LOUDER. */
+  lean: number;
+  /** Beat of its resolution — lower, and a step or third below in pitch. */
+  resolve: number;
+  /** Where in the music this is, for the audit's output. */
+  where: string;
+}
 
 /** Deterministic pseudo-noise in -1..1 from a note's own beat and pitch. */
 function wobble(beat: number, midi: number, salt: number): number {
@@ -70,11 +91,40 @@ function clampVelocity(v: number): number {
   return Math.max(0.05, Math.min(1, v));
 }
 
+/**
+ * Apply a per-bar velocity table to a phrase that does not start at beat 0.
+ *
+ * `shapeByBar` in `themes.ts` indexes the table by `floor(beat / barBeats)` —
+ * the *absolute* beat, which is right for a theme sitting at the top of a
+ * track and silently wrong for a phrase placed anywhere else. Every statement
+ * in these three cues is placed: `title`'s reprise starts at beat 56 and
+ * `chapter-select`'s fourth pass at beat 78, so the whole eight-bar arch was
+ * reading off the end of an eight-entry table and clamping to its last value.
+ * The written crescendo was being thrown away and the phrase came out level.
+ *
+ * Same semantics as `shapeByBar` otherwise — it *sets* the velocity, because a
+ * melody's dynamic is the table and nothing else. (`swell` below multiplies
+ * instead, which is what an accompaniment with its own accents wants.)
+ */
+export function shapeBars(notes: Note[], table: number[], barBeats: number, at = 0): Note[] {
+  return notes.map((n) => {
+    const bar = Math.floor((n[0] - at) / barBeats + 1e-6);
+    const target = table[Math.max(0, Math.min(bar, table.length - 1))];
+    return [n[0], n[1], n[2], target ?? n[3]] as Note;
+  });
+}
+
 export interface PerformOptions {
   /** Per-bar velocity table, applied first — the written arch. */
   table?: number[];
   /** Beats per bar for the table. 4 for the 4/4 cues, 3 for the waltz. */
   barBeats?: number;
+  /**
+   * Beat the phrase starts on, so `table` is indexed from its own bar 1.
+   * Required whenever a table is given for a phrase that is not at beat 0;
+   * `perform` throws rather than quietly flattening the arch.
+   */
+  at?: number;
   /** `[leaningBeat, resolvingBeat]` pairs — the appoggiatura rule. */
   leans?: Array<[number, number]>;
   /** How much louder the leaning note is. THEMES.md says 0.08 and means it. */
@@ -103,7 +153,20 @@ export interface PerformOptions {
  */
 export function perform(notes: Note[], options: PerformOptions = {}): Note[] {
   let out = notes;
-  if (options.table) out = shapeByBar(out, options.table, options.barBeats ?? 4);
+  if (options.table) {
+    const barBeats = options.barBeats ?? 4;
+    const at = options.at ?? 0;
+    if (options.at === undefined && out.length > 0) {
+      const first = Math.min(...out.map((n) => n[0]));
+      if (first >= barBeats) {
+        throw new Error(
+          `perform(): a table was given for a phrase starting at beat ${first} with no "at" — ` +
+            'the arch would be read off the wrong end of the table and the phrase would come out level',
+        );
+      }
+    }
+    out = shapeBars(out, options.table, barBeats, at);
+  }
   if (options.slope !== 0) out = contour(out, options.slope ?? 0.03);
   if (options.jitter !== 0) out = micro(out, options.jitter ?? 0.025, options.salt ?? 1);
   if (options.breaths?.length) out = agogic(out, options.breaths, options.pull ?? 0.08);
@@ -113,9 +176,68 @@ export function perform(notes: Note[], options: PerformOptions = {}): Note[] {
 }
 
 /**
+ * A stepwise descent, played as one decrescendo.
+ *
+ * `lean()` takes *pairs*, and a pair is all it can take: its two sets are
+ * "louder" and "quieter", so a note that is the resolution of one fall and the
+ * leaning note of the next lands in both, and whichever set is tested first
+ * wins. Three of the lines in these cues are not a pair — they are a chain. The
+ * hymn's A′ walks `A4 - G4 - F#4` across the bar 6/7 line; the title reprise's
+ * distant voice walks `C5 - B4 - A4 - G4 - E4` through four of them. Declaring
+ * the pairs one at a time left the middle notes arbitrary, and
+ * `tools/audio/themes-audit.mjs` — which looks for the *shape* the bible
+ * describes rather than for what an arranger remembered to declare — caught one
+ * of them coming out backwards.
+ *
+ * So a chain is written as a chain. The velocities are laid on a straight line
+ * falling by `step` per note, centred on the mean of what the phrase already
+ * had, so every consecutive pair leans by exactly `step` and **the level the
+ * per-bar table gave the phrase is unchanged** — this shapes a descent, it does
+ * not turn one down.
+ *
+ * Runs after `perform()`, deliberately: nothing downstream may invert it.
+ */
+export function descent(notes: Note[], beats: number[], step = 0.05): Note[] {
+  if (beats.length < 2) throw new Error('descent(): a chain needs at least two notes');
+  if (!(step > 0)) throw new Error(`descent(): step must be > 0 (got ${step})`);
+  const chain: Note[] = [];
+  for (const beat of beats) {
+    let best: Note | undefined;
+    let bestGap = Infinity;
+    for (const n of notes) {
+      const gap = Math.abs(n[0] - beat);
+      if (gap < bestGap && gap < 0.26) {
+        best = n;
+        bestGap = gap;
+      }
+    }
+    if (!best) throw new Error(`descent(): no note near beat ${beat} — the chain does not exist`);
+    chain.push(best);
+  }
+  const mean = chain.reduce((a, n) => a + (n[3] ?? 0.8), 0) / chain.length;
+  const middle = (chain.length - 1) / 2;
+  const target = new Map<Note, number>();
+  chain.forEach((n, i) => target.set(n, clampVelocity(mean + (middle - i) * step)));
+  for (let i = 1; i < chain.length; i++) {
+    const above = target.get(chain[i - 1]!)!;
+    const below = target.get(chain[i]!)!;
+    if (!(above > below)) {
+      throw new Error(
+        `descent(): the chain at beat ${chain[i]![0]} does not fall (${above} then ${below}) — ` +
+          'the velocities clamped into each other, so lower the step or the phrase',
+      );
+    }
+  }
+  return notes.map((n) => {
+    const v = target.get(n);
+    return v === undefined ? n : ([n[0], n[1], n[2], v] as Note);
+  });
+}
+
+/**
  * Shape an accompaniment by the bar without flattening what is inside it.
  *
- * `shapeByBar` (and `perform`'s `table`) *sets* every note in a bar to one
+ * `shapeBars` (and `perform`'s `table`) *sets* every note in a bar to one
  * velocity, which is right for a melody and wrong for a broken-chord figure
  * that has its own downbeat accent. This multiplies by the bar's level
  * instead, so the arch happens over the bar and the figure keeps its shape.
@@ -193,6 +315,89 @@ export function bars(notes: Note[], fromBeat: number, toBeat: number, at: number
  * top of bar 1 still ringing, which is the difference between a pedalled piano
  * and a smeared one.
  */
+export interface LiltOptions {
+  /** Downbeat of the first bar the lilt covers. */
+  from: number;
+  /** Beat it stops on. A mark is written here handing the pulse back. */
+  to: number;
+  /** Beats in a bar — 3 for the waltz. */
+  barBeats: number;
+  /** The tempo the bar as a whole keeps, whatever happens inside it. */
+  bpm: number;
+  /** Fraction beat 1 hurries by, so beat 2 arrives early. 0.09 is a real lilt. */
+  lift?: number;
+  /** Fraction beat 2 relaxes by, so beat 3 is given its time back. */
+  settle?: number;
+  /** `[beat, bpm]` — phrase ends that take a breath at that slower pulse. */
+  breaths?: Array<[beat: number, bpm: number]>;
+  /** Printed in the render report against the block's first mark. */
+  label?: string;
+}
+
+/**
+ * The waltz lilt, as a tempo map.
+ *
+ * A waltz is not three equal beats. The second beat is *anticipated* — the
+ * players lean forward into it — and the third is let go, and the bar still
+ * ends when the bar was always going to end. THEMES.md describes exactly this
+ * and then says: *"Written as velocity because the renderer has one tempo."*
+ * The renderer no longer has one tempo, so it is written as tempo, which is
+ * what it always was: the accompaniment bends with the tune instead of the
+ * tune drifting away from a grid.
+ *
+ * Beat 1 runs at `bpm * (1 + lift)` and beat 2 at `bpm * (1 - settle)`; the
+ * tempo for the rest of the bar is **derived** so that the bar lasts exactly
+ * `barBeats * 60 / bpm` seconds. That is the property that makes this safe to
+ * repeat thirty-two times under a loop: every downbeat still lands where the
+ * written grid says, so nothing accumulates and the loop body is the length
+ * the cue map says it is.
+ *
+ * `breaths` replaces the tempo of the mark on a given beat — used on the beat
+ * a phrase rests, where slowing the pulse widens the silence rather than
+ * stretching a note. The block closes with a mark at `to` carrying the
+ * downbeat tempo back, so a loop whose start is also a downbeat wraps onto the
+ * same pulse it left and does not lurch.
+ */
+export function waltzLilt(options: LiltOptions): TempoMark[] {
+  const { from, to, barBeats, bpm } = options;
+  const lift = options.lift ?? 0.09;
+  const settle = options.settle ?? 0.07;
+  if (barBeats < 3) throw new Error('waltzLilt(): a lilt needs at least three beats in the bar');
+  if ((to - from) % barBeats !== 0) {
+    throw new Error(`waltzLilt(): ${from}..${to} is not a whole number of ${barBeats}-beat bars`);
+  }
+  const barSec = (barBeats * 60) / bpm;
+  const firstSec = 60 / (bpm * (1 + lift));
+  const secondSec = 60 / (bpm * (1 - settle));
+  const restSec = barSec - firstSec - secondSec;
+  if (restSec <= 0) {
+    throw new Error(`waltzLilt(): lift ${lift} and settle ${settle} use up the whole bar`);
+  }
+  const downbeatBpm = bpm * (1 + lift);
+  const restBpm = ((barBeats - 2) * 60) / restSec;
+
+  const breaths = new Map(options.breaths ?? []);
+  const marks: TempoMark[] = [];
+  const push = (beat: number, fallback: number, label?: string): void => {
+    const breath = breaths.get(beat);
+    const bpmHere = breath ?? fallback;
+    const tag = breath !== undefined ? 'breath' : label;
+    marks.push({ beat, bpm: bpmHere, ...(tag === undefined ? {} : { label: tag }) });
+  };
+
+  let first = true;
+  for (let bar = from; bar < to; bar += barBeats) {
+    push(bar, downbeatBpm, first ? (options.label ?? 'lilt') : undefined);
+    push(bar + 1, bpm * (1 - settle));
+    // One mark covers every remaining beat of the bar: the segment it opens
+    // runs to the next downbeat, which for 3/4 is exactly beat three.
+    push(bar + 2, restBpm);
+    first = false;
+  }
+  marks.push({ beat: to, bpm: downbeatBpm, label: 'a tempo' });
+  return marks;
+}
+
 export function clearPedal(notes: Note[], barBeats: number, step: number, at = 0): Note[] {
   return notes.map((n) => {
     const offset = (n[0] - at + step) % barBeats;

@@ -32,7 +32,7 @@
 
 import { concatNotes, midiFromName, tracker, type Note, type Track } from '../score.ts';
 import { HYMN_SOPRANO, HYMN_TENOR } from './themes.ts';
-import { bars, micro, perform, swell } from './menus-perform.ts';
+import { bars, descent, micro, perform, swell, type Appoggiatura } from './menus-perform.ts';
 
 /**
  * Which sampled voice each part names. Both exist in the synthesised registry
@@ -58,17 +58,44 @@ const LENGTH = 36;
  */
 const DYN = [0.5, 0.56, 0.58, 0.5, 0.52, 0.58, 0.6, 0.52];
 
+/**
+ * The one stepwise descent in the phrase: bar 6's `4 b3` walking on across the
+ * barline into bar 7's `2` — `A4 - G4 - F#4`, over `Am | C` then `D`.
+ *
+ * It is a chain, not a pair, and that is why it was wrong. The G4 is the
+ * resolution of the fall inside bar 6 *and* the leaning note of the fall into
+ * bar 7, and `lean()` can only put a note in one of those two roles. Declared
+ * as a pair, the G4 came out at 0.50 against an F#4 at 0.59 — backwards, which
+ * `tools/audio/themes-audit.mjs` reports as *"the single loudest tell of a
+ * synthetic performance"*, and rightly: this is the bible's own shape, a note
+ * held two beats giving way to a shorter one a step below.
+ *
+ * `descent()` lays all three on one falling line and keeps their mean, so the
+ * arch the table wrote is untouched and bar 7 now *starts* from under the note
+ * before it — which is also what its written climb `2 b3 4` wants, since it has
+ * to rise from somewhere to reach the 4.
+ */
+const DESCENT = [START + 20, START + 22, START + 24];
+
 /** Soprano: HYMN bars 1-8, one voice, wordless, no rubato. */
 function soprano(): Note[] {
   const whole = tracker(HYMN_SOPRANO, { checkBars: BAR, velocity: 0.55 });
-  return perform(bars(whole, 0, 32, START), {
+  const played = perform(bars(whole, 0, 32, START), {
     table: DYN,
     barBeats: BAR,
+    // The phrase starts at beat 4, so the table has to be indexed from there.
+    // Without this the eight-bar arch was read off bar 1 of an eight-entry
+    // table and the last bar clamped — the hymn's own small swell, thrown
+    // away, in the cue the bible says is mostly air and therefore has the
+    // least else in it to carry the line.
+    at: START,
     // Bar 8 is THE SIGH — the 2 over the iv6 falling to the tonic, the score's
     // one shared cadence. The leaning F#4 is louder than the E4 it falls to.
     leans: [[START + 28, START + 30]],
-    // Bar 3's rising fourth is answered an octave and a fifth up at the hymn's
-    // climax, which this cue never reaches; the answer is the arrival it gets.
+    // Bar 3's fall — the 4 over the iv giving way to the b3, the same step the
+    // sigh is — at the smaller weight reserved for a phrase's inner sighs. Its
+    // resolution is a THREE-beat note, so it is a pair and not a chain: nothing
+    // leans on from it, and `lean()` is the right tool.
     softLeans: [[START + 10, START + 12]],
     // No breaths: the rests are written into the hymn and agogic timing is
     // explicitly forbidden here.
@@ -76,6 +103,8 @@ function soprano(): Note[] {
     jitter: 0.02,
     salt: 71,
   });
+  // Last, so that nothing above can invert it.
+  return descent(played, DESCENT, 0.05);
 }
 
 /**
@@ -107,6 +136,33 @@ function harp(): Note[] {
   return concatNotes(fifth(START, 0.24), fifth(START + 16, 0.2));
 }
 
+/**
+ * NO TEMPO MAP, AND THAT IS THE DECISION.
+ *
+ * `title` and `chapter-select` both gained one in this pass, and the obvious
+ * thing to do was to give all three cues the same treatment. THEMES.md forbids
+ * it, twice, in the two places that govern this cue:
+ *
+ *   > 4/4, `checkBars: 4`, **52 bpm**. Broad and congregational — this is sung
+ *   > by a crowd, not a soloist, so *no rubato* (it is the only lyrical theme
+ *   > with none).
+ *
+ *   > | HYMN, and the Yunalesca canon | **zero.** A congregation does not
+ *   > rubato, and the rite does not breathe |
+ *
+ * A tempo map is rubato with the pulse included, so it is more of the thing
+ * the bible says this theme gets none of, not less. It is also the wrong
+ * *idea*: what makes eight bars of a hymn loop under a menu without wearing
+ * out is that it does not want anything, and a pulse that leans and recovers
+ * is a pulse that wants something. The breath in this cue is bar 4 beat 4,
+ * where all the parts rest at once, and it is written as a rest because that
+ * is how the bible says to write a breath.
+ *
+ * So the rubato work for this cue went into the two things it *is* allowed:
+ * the written arch, which was being thrown away (see `at` in `soprano()`), and
+ * the appoggiatura at bar 8. If a future pass wants the pause screen to bend,
+ * that is a change to THEMES.md first and to this file second.
+ */
 export const pauseTrack: Track = {
   name: 'pause',
   bpm: 46,
@@ -122,20 +178,45 @@ export const pauseTrack: Track = {
   },
   channels: [
     {
+      // ONE voice, at the far end of the biggest room in the game — not a
+      // choir standing in front of it. Three things decide that and only two
+      // of them reach the shipped MP3.
+      //
+      // Her timing is the first and it is the one that was actually wrong.
+      // The `choir` preset is a section on risers: it scatters entries by
+      // 34 ms, because twenty singers are never together, and a 34 ms scatter
+      // is precisely what makes a voice read as a *block* laid over a cue
+      // rather than as a person standing somewhere. THEMES.md's solo band is
+      // 8-12 and `soprano-distant` asks for 10. There is nothing else in this
+      // cue to hide behind, so it is audible here before anywhere else.
+      //
+      // Her level is the second: 0.5 against a drone at 0.25 and a harp at
+      // 0.3 keeps her the tune without putting her in front of the room.
+      //
+      // The reverb send is the third, and in the sampled render the *seat*
+      // wins it — `choir` sits at depth 0.88 and sends 0.65 whatever this
+      // channel says. So 0.8 is for the synthesised fallback, which is the
+      // only path that reads a channel send, and which has to sound like the
+      // same cue.
       name: 'soprano',
       instrument: VOICE.soprano,
-      volume: 0.62,
+      volume: 0.5,
       pan: -0.06,
+      perform: { timingJitterMs: 10 },
       notes: soprano(),
-      fx: { reverb: 0.62 },
+      fx: { reverb: 0.8 },
     },
     {
+      // The hymn's own tenor part, sung. 30 ms is the `pad` preset's section
+      // spread; one voice under one voice wants the same 14 the bible gives a
+      // choir, and no more.
       name: 'tenor drone',
       instrument: VOICE.drone,
       volume: 0.25,
       pan: 0.08,
+      perform: { timingJitterMs: 14 },
       notes: drone(),
-      fx: { reverb: 0.55 },
+      fx: { reverb: 0.6 },
     },
     {
       name: 'harp',
@@ -147,5 +228,29 @@ export const pauseTrack: Track = {
     },
   ],
 };
+
+/**
+ * Every appoggiatura in this cue, as data — and in a cue with one melodic
+ * line and forty seconds of air, all three of them are in it.
+ *
+ * Bar 8 is THE SIGH: scale degree 2 held over the `iv6` and falling to the
+ * tonic, the plagal amen that closes the hymn twice and the whole score's
+ * punctuation. If any one leaning note in this game has to be louder than what
+ * it falls to, it is this F#4. The others are the same falling step — the 4
+ * over the iv giving way to the b3 — inside bars 3-4, and then the two links of
+ * the `A4 - G4 - F#4` chain that walks bar 6 into bar 7 (see `DESCENT`). The
+ * second of those is the pair the shape audit failed on before this pass.
+ */
+export const APPOGGIATURAS: Appoggiatura[] = [
+  { channel: 'soprano', lean: START + 28, resolve: START + 30, where: 'bar 8 — THE SIGH (the amen)' },
+  { channel: 'soprano', lean: START + 10, resolve: START + 12, where: 'bars 3-4 — the 4 onto the b3' },
+  { channel: 'soprano', lean: START + 20, resolve: START + 22, where: 'bar 6 — the 4 onto the b3' },
+  {
+    channel: 'soprano',
+    lean: START + 22,
+    resolve: START + 24,
+    where: 'bars 6-7 — the b3 across the barline onto the 2',
+  },
+];
 
 export default pauseTrack;

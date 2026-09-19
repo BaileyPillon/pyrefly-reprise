@@ -35,9 +35,10 @@ import {
   type Note,
   type Track,
 } from '../score.ts';
+import { tempoMap } from '../tempo.ts';
 import { FAREWELL_CHORDS, FAREWELL_DYNAMICS, FAREWELL_RISE, FAREWELL_WALTZ, HYMN_HEAD } from './themes.ts';
 import { cell } from './motifs.ts';
-import { bars, clip, micro, perform, swell } from './menus-perform.ts';
+import { bars, clip, micro, perform, swell, waltzLilt, type Appoggiatura } from './menus-perform.ts';
 
 /**
  * Which sampled voice each part names. Every one exists in the synthesised
@@ -100,6 +101,7 @@ function melody(at: number, table: number[], octaves: number, salt: number): Not
   return perform(bars(whole, 0, PASS, at), {
     table,
     barBeats: BAR,
+    at,
     // Bars 2 and 6, the signature rhythm at two of its four heights: hold, step
     // down. The held note is the appoggiatura and it is the louder of the pair.
     leans: [
@@ -135,7 +137,10 @@ interface WaltzOptions {
  *
  * The one detail that stops this being a metronome is that beat 2 is a shade
  * stronger than beat 3 — a waltz leans forward into its second beat and lets
- * the third one go. Written as velocity because the renderer has one tempo.
+ * the third one go. That used to be written here as velocity alone, because
+ * the renderer had one tempo; it now happens in the pulse as well (see the
+ * tempo map below), and the velocity stays because a lean is both — the beat
+ * arrives early *and* it is played harder.
  */
 function waltz(at: number, options: WaltzOptions): Note[] {
   const chords = options.chords ?? CHORDS;
@@ -198,14 +203,16 @@ function harpWaltz(at: number, chords: string[], velocity: number, salt: number)
   );
 }
 
-/** The prayer's head, four notes on one flute, then two beats of nothing. */
+/**
+ * The prayer's head, four notes on one flute, then two beats of nothing.
+ *
+ * No agogic pull and no tempo mark under it: THEMES.md gives HYMN **zero**
+ * rubato in every cue it appears in — *"a congregation does not rubato"* — and
+ * that applies to four notes of it as much as to sixteen bars. The space after
+ * the fourth note is written as a rest, which is where it belongs.
+ */
 function fluteCameo(): Note[] {
-  return perform(cell(HYMN_HEAD, 0, 'B4', 0.5), {
-    breaths: [4],
-    pull: 0.12,
-    jitter: 0.02,
-    salt: 3,
-  });
+  return perform(cell(HYMN_HEAD, 0, 'B4', 0.5), { jitter: 0.02, salt: 3 });
 }
 
 /**
@@ -224,8 +231,15 @@ function distantVoice(): Note[] {
     slope: 0.02,
     jitter: 0.02,
     salt: 23,
+    // C#5 -> B4 across the barline: the 3rd of A leaning onto the 3rd of
+    // Gmaj7. It is the only falling step in the line, so it is the only place
+    // the appoggiatura rule has anything to say — and it says the C#5 is the
+    // louder of the two.
+    softLeans: [[P3 + 6, P3 + 9]],
+    // Half what it was: the pulse takes this breath now, in every part at
+    // once, instead of one line stretching away from a grid.
     breaths: [P3 + 11],
-    pull: 0.1,
+    pull: 0.05,
   });
 }
 
@@ -239,7 +253,9 @@ function celestaTag(): Note[] {
     jitter: 0.02,
     salt: 43,
     breaths: [LENGTH - 1],
-    pull: 0.1,
+    // The linger on this beat is in the tempo map now, and it is much bigger
+    // than an agogic pull could be: 58 bpm against the 91.6 of a downbeat.
+    pull: 0.05,
   });
 }
 
@@ -253,9 +269,47 @@ function pedal(): Note[] {
   ];
 }
 
+/**
+ * The pulse, pass by pass.
+ *
+ * Until tempo maps existed the bible's own note on this cue had to end
+ * *"Written as velocity because the renderer has one tempo."* It does not any
+ * more, so the waltz is a waltz: beat two is **anticipated** — the players
+ * lean forward into it — and beat three is let go, and the bar still lasts the
+ * 2.143 s that 84 bpm says it lasts, so nothing drifts under thirty-two bars
+ * of loop. `waltzLilt` derives that third tempo rather than being told it,
+ * which is what makes the bar exact instead of nearly exact.
+ *
+ * Three things ride on top of the lilt:
+ *
+ * - **Breaths between the phrases.** Bars 4 and 8 of every pass rest on their
+ *   third beat. Slowing the pulse across that beat widens a *silence* instead
+ *   of stretching a note, which is the one kind of rubato nobody can hear as a
+ *   wobble — they hear the players take a breath.
+ * - **P3 broadens.** The pass where the tune drops to the cellos and the
+ *   chords are voiced above it is written at 81 rather than 84: a 3.6% step,
+ *   taken at a phrase boundary, so the inversion sounds like a decision.
+ * - **The cadence lingers.** The last beat of the loop goes down to 58, half
+ *   as fast again as the beat before it — and then the mark at `LENGTH` hands
+ *   the pulse straight back to the tempo beat 6 starts at, so the wrap is the
+ *   same pulse the listener left and does not lurch.
+ *
+ * Beats 0-6 carry no mark at all. That is `HYMN_HEAD` on the flute, and the
+ * bible gives the hymn **zero** rubato in every cue it appears in.
+ */
+const BREATH = 70;
+const LINGER = 58;
+
 export const chapterSelectTrack: Track = {
   name: 'chapter-select',
   bpm: 84,
+  tempo: tempoMap(
+    waltzLilt({ from: P1, to: P2, barBeats: BAR, bpm: 84, breaths: [[P1 + 11, BREATH], [P1 + 23, BREATH]], label: 'P1 waltz' }),
+    waltzLilt({ from: P2, to: P3, barBeats: BAR, bpm: 84, breaths: [[P2 + 11, BREATH], [P2 + 23, BREATH]], label: 'P2' }),
+    // The inversion: a shade broader, and leaning a shade further into beat two.
+    waltzLilt({ from: P3, to: P4, barBeats: BAR, bpm: 81, lift: 0.1, settle: 0.08, breaths: [[P3 + 11, 68], [P3 + 23, 68]], label: 'P3 poco largamente' }),
+    waltzLilt({ from: P4, to: LENGTH, barBeats: BAR, bpm: 84, breaths: [[P4 + 11, BREATH], [P4 + 23, LINGER]], label: 'P4 a tempo' }),
+  ),
   timeSig: [3, 4],
   loop: { start: P1, end: LENGTH },
   length: LENGTH,
@@ -278,6 +332,11 @@ export const chapterSelectTrack: Track = {
       instrument: VOICE.piano,
       volume: 0.92,
       pan: -0.05,
+      // The shared `piano` preset is a concert grand at 3 ms — tighter than
+      // any hand. THEMES.md puts solo piano at 6-9, and so does `piano-felt`
+      // next door in voices/presets/menus-clair-obscur.ts, which is the voice
+      // this line actually wants. One desk, not every cue that names a piano.
+      perform: { timingJitterMs: 7 },
       notes: concatNotes(
         melody(P1, scale(DYN, 0.86), 1, 2),
         melody(P2, scale(DYN, 0.8), 1, 4),
@@ -290,6 +349,7 @@ export const chapterSelectTrack: Track = {
       instrument: VOICE.piano,
       volume: 0.52,
       pan: 0.12,
+      perform: { timingJitterMs: 7 },
       notes: concatNotes(
         waltz(P1, { octave: 3, center: 59, bassOctave: 2, salt: 41 }),
         // P3 inverts the texture: no bass at all, and the chord voiced ABOVE
@@ -324,6 +384,10 @@ export const chapterSelectTrack: Track = {
       instrument: VOICE.quartet,
       volume: 0.54,
       pan: 0.04,
+      // Four players listening to each other, not a section: 22 ms is how far
+      // apart twenty desks are, and it is the wrong sound for a menu. 12 is
+      // the figure `string-quartet` carries for exactly this reason.
+      perform: { timingJitterMs: 12 },
       // P2 doubles the tune an octave below the piano — two players agreeing,
       // which is what makes the second pass feel like more without being louder.
       notes: melody(P2, scale(DYN, 0.62), 0, 8),
@@ -334,6 +398,9 @@ export const chapterSelectTrack: Track = {
       instrument: VOICE.cello,
       volume: 0.6,
       pan: 0.2,
+      // One cello carrying the tune through P3 — THEMES.md's solo-strings
+      // band is 8-12, against the section preset's 24.
+      perform: { timingJitterMs: 9 },
       // P3: the melody itself, at written pitch, under everything else.
       notes: concatNotes(melody(P3, scale(DYN, 0.66), 0, 10), pedal()),
       fx: { reverb: 0.4 },
@@ -341,10 +408,21 @@ export const chapterSelectTrack: Track = {
     {
       name: 'distant voice',
       instrument: VOICE.voice,
-      volume: 0.22,
+      // ONE voice at the back of the hall, not a choir on top of the waltz.
+      // Three things put her there and only the first two reach the shipped
+      // MP3: her level, and her timing. The `choir` preset is a section on
+      // risers and scatters its entries by 34 ms, which is precisely what
+      // makes a stack of voices read as a *block* sitting over the texture;
+      // 10 ms is one singer (THEMES.md's solo band is 8-12, and it is what
+      // `soprano-distant` asks for). The reverb send is the third, and in the
+      // sampled render the seat wins it — `choir` sits at depth 0.88 and
+      // sends 0.65 whatever this says — so 0.78 here is for the synthesised
+      // fallback, which is the only path that reads it.
+      volume: 0.18,
       pan: 0.16,
+      perform: { timingJitterMs: 10 },
       notes: distantVoice(),
-      fx: { reverb: 0.6 },
+      fx: { reverb: 0.78, delay: 0.14 },
     },
     {
       name: 'celesta',
@@ -356,5 +434,52 @@ export const chapterSelectTrack: Track = {
     },
   ],
 };
+
+/**
+ * Every appoggiatura in this cue, as data.
+ *
+ * THEMES.md: *"the leaning note is LOUDER than its resolution … This is the
+ * single most important number in this file."* `perform()` runs `lean()` last
+ * so nothing downstream can invert it, but "the code is careful" is not
+ * evidence — so the pairs are exported and an audit reads the built track and
+ * checks each one against the velocities the renderer will actually play.
+ *
+ * The named falls are the theme's signature rhythm at two of its four heights
+ * (bars 2 and 6 of every pass: hold three, step down one); the inner sighs are
+ * bars 3 and 7. `melody()` is the same function for all four passes, so what
+ * holds for one holds for each — which is exactly the sort of claim that is
+ * worth having a machine confirm rather than assuming.
+ */
+const MELODY_PAIRS: Array<[offset: number, to: number, where: string]> = [
+  [3, 5, 'bar 2 — the signature fall'],
+  [15, 17, 'bar 6 — the same fall, a tone up'],
+  [7, 8, 'bar 3 — the inner sigh'],
+  [19, 20, 'bar 7 — the inner sigh'],
+];
+
+export const APPOGGIATURAS: Appoggiatura[] = [
+  ...(
+    [
+      ['piano melody', P1, 'P1'],
+      ['piano melody', P2, 'P2'],
+      ['quartet', P2, 'P2 quartet'],
+      ['cellos', P3, 'P3 cellos'],
+      ['piano melody', P4, 'P4'],
+    ] as Array<[string, number, string]>
+  ).flatMap(([channel, at, pass]) =>
+    MELODY_PAIRS.map(([from, to, where]) => ({
+      channel,
+      lean: at + from,
+      resolve: at + to,
+      where: `${pass} ${where}`,
+    })),
+  ),
+  {
+    channel: 'distant voice',
+    lean: P3 + 6,
+    resolve: P3 + 9,
+    where: 'P3 soprano — C#5 over A onto the 3rd of Gmaj7',
+  },
+];
 
 export default chapterSelectTrack;
