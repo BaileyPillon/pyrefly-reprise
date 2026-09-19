@@ -216,6 +216,67 @@ describe('each boss fight is scored with its own cue — critic round 02 #02', (
   });
 });
 
+describe('a stage animation that never settles cannot strand a chapter — #01', () => {
+  /**
+   * The measured live failure, reproduced.
+   *
+   * At `speed: 'skip'` on the dev server: Bahamut 0/8400, the engine's own
+   * `result` already `victory`, turn 75 — and `snapshotState().screenState
+   * .playback.phase` reading `"play:ko"`. The presenter was inside
+   * `await actor.dissolveTo(...)` for the killing blow. `TweenGroup.toAsync`
+   * resolves from `Tween.onComplete`, and `Tween.kill()` — which
+   * `PaintedActor.dispose()` calls through `tweens.killAll()` — sets `_killed`
+   * without firing it, so that await never returned, the `victory` event queued
+   * behind it never played, and the screen sat on `'battle'` for as long as
+   * anyone was willing to watch.
+   *
+   * This fakes exactly that: a stage whose KO dissolve returns a promise that
+   * is never settled.
+   */
+  function neverSettlingKoStage(party: string[], enemies: string[]): FakeStage {
+    const stage = new FakeStage(party, enemies);
+    for (const id of enemies) {
+      const actor = stage.actors.get(id);
+      if (actor) {
+        actor.dissolveTo = () =>
+          new Promise<void>(() => {
+            /* killed, never resolved */
+          });
+      }
+    }
+    return stage;
+  }
+
+  it('reaches victory even when the killing blow’s dissolve never resolves', async () => {
+    const chapter = CHAPTERS[3]!; // Chapter 4, the one the critic measured
+    const setup = setupForChapter(chapter, 1);
+    const engine = await engineFor(chapter, setup);
+    const { sleep } = countingSleep();
+    const stage = neverSettlingKoStage(
+      setup.party.members.map((m) => m.id),
+      chapter.enemyGroupRef.enemies.map((e) => e.id),
+    );
+    const presenter = new BattlePresenter({ stage, audio: new FakeAudio(), sleep });
+    presenter.setSpeed('skip');
+    presenter.setAutoPlay(intendedStrategy);
+
+    const { outcome } = await withDeadline(
+      'chapter 4 with a dead KO animation',
+      runEncounterChain({
+        chapter,
+        presenter,
+        engine,
+        stage: recordingStage(),
+        group: chapter.enemyGroupRef,
+        setup,
+        seed: 1,
+        findGroup: findEnemyGroup,
+      }),
+    );
+    expect(['victory', 'defeat', 'escape']).toContain(outcome.kind);
+  });
+});
+
 describe('cueForGroup', () => {
   const chapter = CHAPTERS[0]!;
 

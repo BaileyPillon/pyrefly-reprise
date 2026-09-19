@@ -37,6 +37,56 @@ import {
 /** One numeral, minus the screen position the stage supplies. */
 type Numeral = Omit<Parameters<DamageNumbersPort['show']>[0], 'x' | 'y'>;
 
+/**
+ * How long past its own stated length an actor animation may run before
+ * playback stops waiting for it.
+ *
+ * **This is the fix for "Chapter 4 is won and then never ends"** (critic round
+ * 02 #01). Measured live at `speed: 'skip'`: Bahamut at 0/8400, the engine's
+ * own `result` already `victory`, turn 75, and the presenter parked at
+ * `phase: "play:ko"` — inside `await actor.dissolveTo(...)` for the killing
+ * blow, which never resolved, so the `victory` event after it never played and
+ * the screen never finished.
+ *
+ * The root cause is one line below this layer: `TweenGroup.toAsync` resolves
+ * from `Tween.onComplete`, and `Tween.kill()` (which `PaintedActor.dispose` ->
+ * `tweens.killAll()` calls) sets `_killed` **without firing it**. Any actor
+ * animation the presenter is awaiting when that actor's tweens are killed is
+ * abandoned mid-await, forever. Fixing `Tween.kill()` to settle belongs to
+ * whoever owns `src/engine/Tween.ts`; it is written up in
+ * `docs/handoff/builda-flow.md`.
+ *
+ * What belongs *here* is that playback must drain whatever the stage does. A
+ * beat that overruns costs a dropped animation; a beat that never returns costs
+ * the chapter.
+ */
+export const ACTOR_ANIM_GRACE_MS = 2_000;
+
+/**
+ * Await an actor animation, but never forever.
+ *
+ * Resolves when the animation does, or `ms + ACTOR_ANIM_GRACE_MS` after it was
+ * started, whichever comes first. The timer is the *presenter's* clock
+ * (`ctx.sleep`), so it scales with the playback speed exactly as the animation
+ * it is guarding is meant to.
+ */
+export async function settled(ctx: EventCtx, p: void | Promise<void>, ms: number): Promise<void> {
+  if (!p || typeof (p as Promise<void>).then !== 'function') return;
+  const overran = Symbol('overran');
+  const startedAt = Date.now();
+  const raced = await Promise.race([
+    (p as Promise<void>).then(() => null),
+    ctx.sleep(ms + ACTOR_ANIM_GRACE_MS).then(() => overran),
+  ]);
+  // At `speed: 'skip'` every wait collapses to zero, so the guard wins every
+  // race by design and there is nothing to report — that run asked for no
+  // animation at all. Only a guard that genuinely waited and still had to give
+  // up is worth a line in the console.
+  if (raced === overran && Date.now() - startedAt >= 50) {
+    console.warn(`[presenter] an actor animation did not finish within ${ms + ACTOR_ANIM_GRACE_MS}ms; carrying on`);
+  }
+}
+
 /** Every duration the presenter uses, in milliseconds at `timeScale` 1. */
 export const TIMING = {
   turnStart: 90,
@@ -213,18 +263,18 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
 
     case 'dismiss': {
       const a = ctx.stage.actor(event.combatantId);
-      await a?.fadeTo(0, TIMING.dismiss);
+      await settled(ctx, a?.fadeTo(0, TIMING.dismiss), TIMING.dismiss);
       ctx.stage.removeCombatant(event.combatantId);
       return;
     }
 
     case 'switch': {
       const out = ctx.stage.actor(event.outId);
-      await out?.fadeTo(0, TIMING.switchOut);
+      await settled(ctx, out?.fadeTo(0, TIMING.switchOut), TIMING.switchOut);
       ctx.stage.removeCombatant(event.outId);
       const to = ctx.stage.actor(event.inId);
       to?.setAlpha(0);
-      await to?.fadeTo(1, TIMING.switchOut);
+      await settled(ctx, to?.fadeTo(1, TIMING.switchOut), TIMING.switchOut);
       return;
     }
 
@@ -234,7 +284,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
     case 'counter': {
       const a = ctx.stage.actor(event.actorId);
       a?.setPose('attack');
-      await a?.lunge(0.6, 280);
+      await settled(ctx, a?.lunge(0.6, 280), 280);
       a?.setPose('idle');
       return;
     }
@@ -244,7 +294,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
 
     case 'part-destroyed': {
       const a = ctx.stage.actor(event.partId);
-      await a?.dissolveTo(1, TIMING.ko, 0x9dffc4);
+      await settled(ctx, a?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
       ctx.stage.removeCombatant(event.partId);
       ctx.stage.camera.shake(0.12, 320);
       return;
@@ -254,7 +304,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       const a = ctx.stage.actor(event.partId);
       a?.setDissolve(0);
       a?.setAlpha(0);
-      await a?.fadeTo(1, TIMING.revive);
+      await settled(ctx, a?.fadeTo(1, TIMING.revive), TIMING.revive);
       return;
     }
 

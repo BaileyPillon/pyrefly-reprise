@@ -12,6 +12,7 @@ import {
   cue,
   elementCue,
   numeral,
+  settled,
   TIMING,
   poseForCommand,
   type EventCtx,
@@ -129,7 +130,12 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   cue(ctx, 'ko');
   if (side === 'enemy') {
     // A fiend is sent: it comes apart into pyreflies and leaves the field.
-    await actor?.dissolveTo(1, TIMING.ko, 0x9dffc4);
+    //
+    // `settled`, not a bare await: this is the exact line the whole of critic
+    // round 02 #01 came down to. The last enemy's dissolve never resolved, so
+    // the `victory` event queued behind it never played and the chapter never
+    // ended. See `ACTOR_ANIM_GRACE_MS`.
+    await settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
     ctx.stage.removeCombatant(id);
     return;
   }
@@ -148,7 +154,7 @@ export async function summon(ctx: EventCtx, combatantId: CombatantId, aeonId: st
     slot: 1,
   });
   actor?.setAlpha(0);
-  await actor?.fadeTo(1, 620);
+  await settled(ctx, actor?.fadeTo(1, 620), 620);
   void actor?.hop(0.5, 520);
   await ctx.sleep(TIMING.summon - 620);
 }
@@ -164,11 +170,11 @@ export async function formChange(
   ctx.stage.vfx.screenFlash('#ffffff', 220);
   ctx.stage.camera.shake(0.2, 520);
   cue(ctx, 'form-change');
-  await actor?.fadeTo(0.15, 320);
+  await settled(ctx, actor?.fadeTo(0.15, 320), 320);
   // The art session ships boss forms as `<id>-<n>` (yunalesca-1/2/3), so an
   // event that omits `spriteKey` still resolves to the right painting.
   await ctx.stage.setArt(event.enemyId, event.spriteKey ?? `${event.enemyId}-${event.formIndex + 1}`);
-  await actor?.fadeTo(1, 380);
+  await settled(ctx, actor?.fadeTo(1, 380), 380);
   await ctx.sleep(TIMING.formChange - 700);
   await ctx.moments.formChangeEnd();
 }
