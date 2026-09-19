@@ -24,7 +24,6 @@ import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import {
-  advisorChipDock,
   advisorZone,
   SPRITE_FOOT_MARGIN_RATIO,
   SPRITE_HALF_WIDTH_RATIO,
@@ -41,8 +40,15 @@ const ADVISOR_CHIP_GAP = 2;
 interface HeldAdvisorPlacement {
   key: string;
   zone: AdvisorZone | null;
-  chip: { left: number; bottom: number } | null;
 }
+
+/**
+ * `appliedAdvisorBox`'s value while the card is on its own placement.
+ *
+ * Any string no `${kind}@...` box key can collide with; it is only ever
+ * compared, never parsed.
+ */
+const FREE_PLACEMENT = 'free';
 
 /** A snapped rect's identity, for the placement key. */
 function rectKey(r: Rect | null): string {
@@ -148,6 +154,12 @@ export class FFXBattleHud implements HudPort {
    * `solveAdvisorPlacement` for why that matters.
    */
   private advisorDecisionSeq = 0;
+  /**
+   * The decision that gave up on a measured zone, if any. See
+   * `solveAdvisorPlacement`: the zone/free choice is held for a whole decision,
+   * not merely the zone's box.
+   */
+  private advisorFreeSeq = -1;
   private heldAdvisor: HeldAdvisorPlacement | null = null;
   /** The box last written to the card, so a new one can be fitted on arrival. */
   private appliedAdvisorBox = '';
@@ -503,7 +515,7 @@ export class FFXBattleHud implements HudPort {
 
   /**
    * Move the advisor card (and its chip) into the zone `hudSafeZones.ts` picks,
-   * or take the card down when there is no zone it fits in.
+   * or — when no zone fits — hand the card back to its own placement, whole.
    *
    * Runs after `MoveAdvisor.update`, so the inline `left`/`width`/`bottom` it
    * writes are the ones that stand. Everything is read and written in the
@@ -511,46 +523,68 @@ export class FFXBattleHud implements HudPort {
    * `offsetLeft`/`offsetWidth` are already grid units, while the projector
    * answers in viewport px and has to be divided back through the letterbox.
    *
-   * **A declined zone takes the card down.** It used to be a no-op, which left
-   * the card at the advisor's own anchor — in the middle of the party — and
-   * that is only half of what went wrong: a zone that *was* returned could be
-   * 24 grid px tall against a card that needs 31, and the card is written to
-   * scroll with no scrollbar and a mask fade, so the player got a headline and
-   * the top half of one line of glyphs [Bailey, pre-deploy gate 2026-09-18].
-   * `hudSafeZones.MIN_ADVISOR_HEIGHT` is what makes the first case impossible;
-   * this is what makes the second honest. The chip alone is a complete state —
-   * it says what key brings the card back — and a sliced card is not.
+   * **No zone means this method gets out of the way — it never takes the card
+   * down.** For one build it did, together with a chip that said the screen was
+   * full, and the pre-deploy gate found the cost: Chapter 1 keeps the Sensor card up for the
+   * whole fight (`SensorPanel.hide()` has no caller), so no box tall enough for
+   * the card existed on five of its seven decisions and the player got a
+   * two-word chip floating over the strategy guide instead of any advice. A card
+   * in an imperfect place answers the question; a card that is not there does
+   * not, and the live build has never withheld it [lead, 2026-09-18]. So the
+   * fallback is exactly what the live build draws: every inline value this
+   * method wrote is cleared, `MoveAdvisor.layout` measures the band between the
+   * command stack and the party column as it always has, and the stylesheet's
+   * own 104px cap comes back with the cleared `max-height` — which is the cap
+   * `MoveAdvisor.fitCard` then fits the text to, so a fallback card is never
+   * sliced either.
    *
-   * The **chip is placed whether the card is up or not**. `MoveAdvisor`
-   * deliberately clears the chip's inline `left` when the card goes away so it
-   * cannot freeze at a stale card's edge, and the stylesheet anchor it falls
-   * back to (`move-advisor.css`, `left: 196px`) is in the middle of the party:
-   * in chapters 1 and 3 the `N BEST MOVE` chip landed on Tidus and on the
-   * command stack the moment the player pressed `N`. That is the second half of
-   * Bailey's "the card and its chip sit on top of the party sprites".
+   * A sliced card was the other half of the report and it is still impossible:
+   * `hudSafeZones.MIN_ADVISOR_HEIGHT` is why a *zone* is never 24px tall, and
+   * the 104px cap plus the density ladder is why the free placement fits too.
+   *
+   * The **chip is placed whether the card is up or not**, but only while there
+   * is a zone: `MoveAdvisor` deliberately clears the chip's inline `left` when
+   * the player hides the card, and the stylesheet anchor it falls back to
+   * (`move-advisor.css`, `left: 196px`) is in the middle of the party — in
+   * chapters 1 and 3 the `N BEST MOVE` chip landed on Tidus the moment the
+   * player pressed `N`. With no zone there is no measured band to dock it in
+   * and the chip rides with the card, which is where `MoveAdvisor.layout` puts
+   * it and where the live build has it.
    */
   private placeAdvisor(): void {
     const card = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-card"]');
     const chip = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]');
     if (!card) return;
 
-    const held = this.solveAdvisorPlacement();
-    const zone = held.zone;
-    const cardUp = this.advisor.isVisible && zone !== null;
-
-    // **Tell the card it was declined**, rather than leaving its chip to
-    // advertise a card that is not on screen. `setDeclined` is a no-op on every
-    // frame the answer has not changed, and it is the only thing that writes
-    // the chip's declined label — see `MoveAdvisor.setDeclined` for why that
-    // word is in the element and not in a stylesheet's `content`.
-    this.advisor.setDeclined(zone === null);
-    // `MoveAdvisor.applyVisible` is the only other writer of this flag and it
-    // only runs on a toggle or a decline, so owning it per frame here is safe:
-    // the card comes back the moment a zone does.
+    const zone = this.solveAdvisorPlacement().zone;
+    // **One input, and it is the player's.** `MoveAdvisor.applyVisible` is the
+    // only other writer of this flag and it writes the same answer; nothing
+    // measured on this screen may take the card down.
+    const cardUp = this.advisor.isVisible;
     card.hidden = !cardUp;
-    this.advisor.el.dataset['zone'] = zone ? zone.kind : 'none';
+    this.advisor.el.dataset['zone'] = zone ? zone.kind : 'free';
 
-    if (zone && cardUp) {
+    if (!zone) {
+      // Done once, on the frame the card comes off a zone, rather than every
+      // frame: `MoveAdvisor.update` has already written this frame's box from
+      // its own anchors and re-clearing it per frame would throw that
+      // measurement away and park the card on the stylesheet's pre-layout
+      // `left: 196px`, which sits on the command stack.
+      if (this.appliedAdvisorBox !== FREE_PLACEMENT) {
+        this.appliedAdvisorBox = FREE_PLACEMENT;
+        this.clearAdvisorBox(card, chip);
+        // `update` ends in the advisor's own `layout()`, so the card and chip
+        // leave this frame on the measured band instead of the bare stylesheet
+        // anchor, and `fitCard` re-walks its ladder against the 104px cap the
+        // cleared `max-height` just restored. Same trick as the box-change path
+        // below, for the same reason: no frame is painted at the density some
+        // other box earned.
+        this.advisor.update(0);
+      }
+      return;
+    }
+
+    if (cardUp) {
       const applied = `${zone.kind}@${zone.left}@${zone.width}@${zone.bottom}@${zone.maxHeight}`;
       this.writeAdvisorBox(card, zone);
       if (applied !== this.appliedAdvisorBox) {
@@ -579,16 +613,12 @@ export class FFXBattleHud implements HudPort {
       this.appliedAdvisorBox = '';
     }
     if (chip) {
-      // With the card up the chip rides just above it; with the card away it
-      // takes the card's own anchor, or — when the card was declined outright —
-      // whatever band `advisorChipDock` found, which needs far less room.
-      const dock = zone
-        ? { left: zone.left, bottom: cardUp ? zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP : zone.bottom }
-        : held.chip;
-      if (dock) {
-        chip.style.left = `${dock.left.toFixed(2)}px`;
-        chip.style.bottom = `${dock.bottom.toFixed(2)}px`;
-      }
+      // With the card up the chip rides just above it; with the player's `N`
+      // holding the card down it takes the zone's own bottom edge, rather than
+      // the stylesheet anchor in the middle of the party.
+      chip.style.left = `${zone.left.toFixed(2)}px`;
+      const bottom = cardUp ? zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP : zone.bottom;
+      chip.style.bottom = `${bottom.toFixed(2)}px`;
     }
   }
 
@@ -599,6 +629,29 @@ export class FFXBattleHud implements HudPort {
     card.style.bottom = `${zone.bottom.toFixed(2)}px`;
     card.style.maxHeight = `${zone.maxHeight.toFixed(2)}px`;
     card.dataset['zone'] = zone.kind;
+  }
+
+  /**
+   * Every inline value and data attribute {@link writeAdvisorBox} wrote, undone.
+   *
+   * `top` is in here although nothing writes it, because the contract this
+   * clears to is "the card carries no geometry the HUD measured" and the next
+   * agent to add a `top` should not have to remember two lists. What the card
+   * carries after this is whatever `MoveAdvisor.layout` measures for itself on
+   * the very next tick — the live build's placement — and, for `max-height`,
+   * `move-advisor.css`'s 104px.
+   */
+  private clearAdvisorBox(card: HTMLElement, chip: HTMLElement | null): void {
+    card.style.left = '';
+    card.style.top = '';
+    card.style.width = '';
+    card.style.bottom = '';
+    card.style.maxHeight = '';
+    delete card.dataset['zone'];
+    if (chip) {
+      chip.style.left = '';
+      chip.style.bottom = '';
+    }
   }
 
   /**
@@ -673,8 +726,17 @@ export class FFXBattleHud implements HudPort {
     const held = this.heldAdvisor;
     if (held && held.key === key) return held;
 
-    const solved: HeldAdvisorPlacement = { key, zone: advisorZone(input), chip: null };
-    if (!solved.zone) solved.chip = advisorChipDock(input);
+    // **Free placement is chosen once per decision, never per frame.** The key
+    // above already holds one *zone* still for a decision, but a submenu opening
+    // or the Sensor card arriving legitimately changes it, and without this the
+    // card could cross between a measured zone and its own placement — two
+    // different widths and two different lefts — while the player was reading
+    // it. Once a decision has failed to find a zone it stays on the free
+    // placement until the next decision opens, which is where room that has
+    // genuinely come back is picked up.
+    const zone = this.advisorFreeSeq === this.advisorDecisionSeq ? null : advisorZone(input);
+    if (!zone) this.advisorFreeSeq = this.advisorDecisionSeq;
+    const solved: HeldAdvisorPlacement = { key, zone };
     this.heldAdvisor = solved;
     return solved;
   }

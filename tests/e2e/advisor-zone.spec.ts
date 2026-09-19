@@ -83,8 +83,14 @@ interface Probe {
   present: boolean;
   /** The advisor has no advice at all, so its whole root is hidden. */
   silent: boolean;
-  /** Card hidden because the HUD declined the zone; the chip is then the panel. */
-  declined: boolean;
+  /** The player put the card away with `N`; the chip is then the panel. */
+  off: boolean;
+  /**
+   * `free`: no measured zone fit, so the card is on its own placement — the
+   * live build's, which is the band between the command stack and the party
+   * column and may well have a party sprite standing in it.
+   */
+  free: boolean;
   zone: string | null;
   /** Card and every descendant, in the card's own pixels. */
   overflow: Array<{ tag: string; scrollH: number; clientH: number; scrollW: number; clientW: number }>;
@@ -184,7 +190,8 @@ async function probe(page: Page): Promise<Probe> {
       return {
         present: false,
         silent: true,
-        declined: false,
+        off: false,
+        free: false,
         zone: null,
         overflow: [],
         card: null,
@@ -242,16 +249,21 @@ async function probe(page: Page): Promise<Probe> {
     const visible = (el: HTMLElement | null): boolean =>
       el !== null && !el.hidden && el.offsetWidth > 0 && el.offsetHeight > 0;
 
-    // Three different states, and conflating the last two cost this spec a run:
+    // Three different states, and conflating them cost this spec a run:
     //  - `silent`: the advisor has nothing to say, so `MoveAdvisor.render` hides
     //    its whole root. Chapter 1's third decision is an Overdrive prompt.
-    //  - `declined`: the HUD found no box the card fits in and took the card
-    //    down on purpose. The chip is then the panel, and must still be placed.
-    //  - neither: the card is up and everything below applies.
+    //  - `off`: the player pressed `N`. Nothing this spec drives does, and the
+    //    HUD may no longer hide the card on its own, so it should never be seen
+    //    here; the chip is then the panel, and must still be placed.
+    //  - `free`: no measured zone fit and the card is on its own placement.
+    //    Everything below still applies except the party-sprite clearance,
+    //    which is exactly what a measured zone buys and the free placement
+    //    (the live build's) does not.
     const silent = root.hidden || root.offsetWidth <= 0;
-    const declined = !silent && (root.dataset['zone'] === 'none' || card.hidden);
+    const off = !silent && card.hidden;
+    const free = !silent && root.dataset['zone'] === 'free';
     const overflow: Array<{ tag: string; scrollH: number; clientH: number; scrollW: number; clientW: number }> = [];
-    if (!declined) {
+    if (!off) {
       for (const el of [card, ...Array.from(card.querySelectorAll<HTMLElement>('*'))]) {
         overflow.push({
           tag: `${el.tagName.toLowerCase()}.${el.className || '-'}`,
@@ -282,12 +294,13 @@ async function probe(page: Page): Promise<Probe> {
     return {
       present: true,
       silent,
-      declined,
+      off,
+      free,
       zone: root.dataset['zone'] ?? null,
       overflow,
-      card: declined ? null : quadOf(card),
+      card: off ? null : quadOf(card),
       panels,
-      clip: declined ? null : { left: b.left, top: b.top, right: b.right, bottom: b.bottom },
+      clip: off ? null : { left: b.left, top: b.top, right: b.right, bottom: b.bottom },
       sprites,
       text: card.innerText.replace(/\s+/g, ' ').trim(),
       chip: visible(chip) ? quadOf(chip!) : null,
@@ -437,7 +450,13 @@ for (const vp of VIEWPORTS) {
             continue;
           }
 
-          if (!p.declined) {
+          // The HUD may not take the card down; only `N` may, and this spec
+          // never presses it. This is the regression the gate found on
+          // 2026-09-18 — five of Chapter 1's seven decisions with no card —
+          // and it is a failure however good the chip looks.
+          expect(p.off, `${chapter} turn ${turn}: the card was withheld`).toBe(false);
+
+          if (!p.off) {
             // 1. Nothing clipped, measured in the card's own pixels.
             for (const el of p.overflow) {
               expect(
@@ -458,21 +477,25 @@ for (const vp of VIEWPORTS) {
                 `the card must not touch ${sel}`,
               ).toMatchObject({ hit: false });
             }
-            for (const [i, s] of p.sprites.entries()) {
-              expect(
-                { chapter, turn, sprite: i, hit: overlapsQuad(p.card!, s) },
-                'the card must not touch a party sprite',
-              ).toMatchObject({ hit: false });
+            // Clearing the party is what a *measured* zone is for. On the free
+            // placement the card is where the live build draws it — the band
+            // between the command stack and the party column — and a sprite
+            // standing in that band is the known cost of showing the card
+            // rather than withholding it. Chapter 1 is where that bites, and
+            // the reason it bites (`SensorPanel.hide()` has no caller, so the
+            // Sensor card never leaves) belongs to the sensor track.
+            if (!p.free) {
+              for (const [i, s] of p.sprites.entries()) {
+                expect(
+                  { chapter, turn, sprite: i, hit: overlapsQuad(p.card!, s) },
+                  'the card must not touch a party sprite',
+                ).toMatchObject({ hit: false });
+              }
             }
           } else {
-            // A declined card still leaves a chip, and the chip is placed.
-            expect(p.chip, `${chapter} turn ${turn}: the chip survives a declined zone`).not.toBeNull();
-            for (const [i, s] of p.sprites.entries()) {
-              expect(
-                { chapter, turn, sprite: i, hit: overlapsQuad(p.chip!, s) },
-                'the chip must not sit on a party sprite',
-              ).toMatchObject({ hit: false });
-            }
+            // The card is away only because the player asked; the chip is then
+            // the whole panel and still has to be on screen.
+            expect(p.chip, `${chapter} turn ${turn}: the chip survives the card`).not.toBeNull();
           }
 
           // 2. The placement is held for the decision: 60 frames, one box.
@@ -484,7 +507,7 @@ for (const vp of VIEWPORTS) {
           // the content fits, which takes a frame or two at the top of a
           // decision and is monotone, so it converges and then stops. Measuring
           // from frame zero would count that convergence as the card moving.
-          if (!p.declined) {
+          if (!p.off) {
             await page.evaluate(async () => {
               const api = (window as unknown as { __pyrefly: { frame(): Promise<void> } }).__pyrefly;
               for (let i = 0; i < 20; i++) await api.frame();
@@ -499,9 +522,9 @@ for (const vp of VIEWPORTS) {
 
           await capture(
             page,
-            `${chapter}-${vp.width}x${vp.height}-t${turn}${p.declined ? '-declined' : ''}`,
+            `${chapter}-${vp.width}x${vp.height}-t${turn}${p.free ? '-free' : ''}`,
             p.clip,
-            turn === 0 || p.declined,
+            turn === 0 || p.free,
           );
 
           if (turn < 3 && !(await nextDecision(page))) break;

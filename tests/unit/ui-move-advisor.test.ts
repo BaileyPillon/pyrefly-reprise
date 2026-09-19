@@ -245,6 +245,49 @@ describe('turning it off', () => {
   });
 });
 
+/**
+ * The chip says one of two things, and the player chose which.
+ *
+ * It briefly said a third: for one build the FFX HUD could *decline* the card
+ * when `hudSafeZones.ts` found no box it fits in, and the chip then reported the
+ * HUD's decision rather than the player's. On Chapter 1 that was five of seven
+ * decisions with no card at all. The fallback is the live build's placement now
+ * (`FFXBattleHud.placeAdvisor`), the card is only ever away because `N` put it
+ * away, and there is no third label — see `ui-ffx-hud-safe-zones.test.ts` for
+ * the HUD half.
+ */
+describe('the chip', () => {
+  it('reads hide moves with the card up and best move with it away', () => {
+    const { stage } = mountAdvisor();
+    const chip = toggleOf(stage);
+    expect(chip.textContent?.toLowerCase()).toContain('hide moves');
+    pressN();
+    expect(chip.textContent?.toLowerCase()).toContain('best move');
+    pressN();
+    expect(chip.textContent?.toLowerCase()).toContain('hide moves');
+  });
+
+  it('has no vocabulary for a card the HUD withheld', async () => {
+    // Belt and braces for a label that was, in an earlier round, a stylesheet
+    // `content:` string no `textContent` could see: the advisor's own two files
+    // are read off disk and must not contain the words anywhere — not in the
+    // element, not in the CSS, not in a comment that a later agent copies.
+    const { readFile } = await import('node:fs/promises');
+    const { resolve } = await import('node:path');
+    // `process.cwd()` rather than `import.meta.url`: under the jsdom
+    // environment the module URL is resolved against the fake document, not the
+    // file on disk, and lands two directories above the repo.
+    for (const rel of ['MoveAdvisor.ts', 'move-advisor.css']) {
+      const path = resolve(process.cwd(), 'src/ui/common', rel);
+      const src = await readFile(path, 'utf8');
+      expect(src.toLowerCase(), `${rel} offers the player no room`).not.toMatch(/no[-\s]?room/);
+      // Declared or called, not merely named: the header keeps the account of
+      // why `setDeclined` was removed, and the next agent should read it.
+      expect(src, `${rel} still has a declined state`).not.toMatch(/(setDeclined|isDeclined)\s*[(:]/);
+    }
+  });
+});
+
 // -------------------------------------------------------------- the content
 
 describe('what the card says', () => {

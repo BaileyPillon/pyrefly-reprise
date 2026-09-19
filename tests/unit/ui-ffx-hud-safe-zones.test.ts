@@ -703,99 +703,116 @@ describe('the FFX HUD applying the advisor zone', () => {
     expect(hud.advisorPlacement).toMatchObject({ kind: first!.kind, maxHeight: first!.maxHeight });
   });
 
-  it('takes the card down rather than slice it when nothing fits', () => {
-    const hud = mountHud();
-    hud.setProjector(wallProjector() as never);
-    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
-    hud.update(16);
-    const { card, root, chip } = advisorEls(hud);
-    expect(hud.advisorPlacement).toBeNull();
-    expect(card.hidden).toBe(true);
-    expect(root.dataset['zone']).toBe('none');
-    // The chip is the whole panel in this state, so it stays on the field.
-    expect(chip.hidden).toBe(false);
-  });
-
-  it('brings the card back the moment a box exists again', () => {
-    // A decline is a statement about this frame's screen, not a latch: the
-    // Sensor card comes down, a member is KO'd out of the band, the player
-    // switches the guide off, and the card is owed its box again.
-    const hud = mountHud();
-    hud.setProjector(wallProjector() as never);
-    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
-    hud.update(16);
-    const { card, root } = advisorEls(hud);
-    expect(card.hidden).toBe(true);
-
-    hud.setProjector((() => null) as never);
-    void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
-    hud.update(16);
-    expect(hud.advisorPlacement).not.toBeNull();
-    expect(card.hidden).toBe(false);
-    expect(root.dataset['zone']).not.toBe('none');
-  });
-
   /**
-   * The chip is the entire panel while a zone is declined, so it has to be a
-   * complete and truthful state on its own — and it was neither. The gate found
-   * it still reading `N HIDE MOVES` over empty ground, `N` turning that into
-   * `N BEST MOVE`, and a second press bringing nothing back; the word "no room"
-   * existed only as a stylesheet `content:` string, which no test, no screen
-   * reader and no `textContent` could see [critic, pre-deploy gate 2026-09-18].
+   * The gate's finding, and the rule that came out of it.
+   *
+   * For one build a zone that could not be solved took the card off the screen
+   * and captioned the chip with an apology. Chapter 1 keeps the Sensor card up
+   * for the whole fight, so that was five of its seven decisions with no advice
+   * at all — a chip floating over the strategy guide where the card used to be.
+   * The live build has never withheld the card, and it is what the card falls
+   * back to now [lead, pre-deploy gate 2026-09-18].
    */
-  describe('the chip while the zone is declined', () => {
-    it('says there is no room, instead of offering to hide a card that is not there', () => {
+  describe('with no zone the card fits in', () => {
+    it('hands the card back to its own placement instead of taking it down', () => {
       const hud = mountHud();
       hud.setProjector(wallProjector() as never);
       hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
       hud.update(16);
-      const { chip } = advisorEls(hud);
+      const { card, root, chip } = advisorEls(hud);
       expect(hud.advisorPlacement).toBeNull();
-      expect(hud.moveAdvisor.isDeclined).toBe(true);
-      // The label is in the element, readable by anything that asks the button
-      // what it says.
-      expect(chip.textContent?.toLowerCase()).toContain('no room');
-      expect(chip.textContent?.toLowerCase()).not.toContain('hide moves');
-      expect(chip.textContent?.toLowerCase()).not.toContain('best move');
-      // Nothing is pressed while the card is not on screen, whatever the stored
-      // preference says.
-      expect(chip.getAttribute('aria-pressed')).toBe('false');
+      expect(card.hidden).toBe(false);
+      expect(root.dataset['zone']).toBe('free');
+      expect(card.dataset['zone']).toBeUndefined();
+      // Nothing measured is left on the card: no inline cap, so
+      // `move-advisor.css`'s own 104px is what `fitCard` prints against, and no
+      // inline `top`, which the zone path does not write but which this clears
+      // anyway so "no HUD geometry" is one rule rather than a list.
+      expect(card.style.maxHeight).toBe('');
+      expect(card.style.top).toBe('');
+      // What *is* on the card is `MoveAdvisor.layout`'s own band, measured from
+      // its anchors — 196 and 414 here, because jsdom lays nothing out and both
+      // anchors report a zero width, which is the fallback pair the FFX HUD
+      // hands it. That is the live build's placement exactly.
+      expect(parseFloat(card.style.left)).toBeCloseTo(196, 1);
+      expect(parseFloat(card.style.width)).toBeCloseTo(218, 1);
+      expect(chip.hidden).toBe(false);
     });
 
-    it('does not change its story when N is pressed', () => {
+    it('keeps one placement for the whole decision rather than crossing back', () => {
+      // The card must not change width and left in the middle of a sentence the
+      // player is reading. A zone's box is already held; this is the *choice*
+      // between a zone and the free placement being held too.
       const hud = mountHud();
       hud.setProjector(wallProjector() as never);
       hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
       hud.update(16);
-      const { card, chip } = advisorEls(hud);
+      const { card, root } = advisorEls(hud);
+      const geometry = [card.style.left, card.style.width, card.style.bottom, card.style.maxHeight].join();
 
-      for (let press = 0; press < 2; press += 1) {
-        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyN' }));
-        hud.update(16);
-        expect(chip.textContent?.toLowerCase(), `after press ${press + 1}`).toContain('no room');
-        expect(card.hidden, `after press ${press + 1}`).toBe(true);
-      }
-      // `N` is still the answer to "show me the card when there is room": the
-      // preference was stored both times, which is what the card obeys the
-      // moment a zone comes back.
-      expect(hud.moveAdvisor.isVisible).toBe(true);
+      // The screen empties out mid-decision — every panel gone, every sprite
+      // away — which would solve to a zone if the choice were re-taken.
+      hud.setProjector((() => null) as never);
+      for (let i = 0; i < 60; i++) hud.update(16);
+      expect(hud.advisorPlacement).toBeNull();
+      expect(root.dataset['zone']).toBe('free');
+      expect([card.style.left, card.style.width, card.style.bottom, card.style.maxHeight].join()).toBe(geometry);
     });
 
-    it('goes back to the ordinary label the moment a box exists again', () => {
+    it('takes a measured zone again at the next decision', () => {
       const hud = mountHud();
       hud.setProjector(wallProjector() as never);
       hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
       hud.update(16);
-      const { card, chip } = advisorEls(hud);
-      expect(chip.textContent?.toLowerCase()).toContain('no room');
+      const { card, root } = advisorEls(hud);
+      expect(root.dataset['zone']).toBe('free');
 
       hud.setProjector((() => null) as never);
       void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
       hud.update(16);
-      expect(hud.moveAdvisor.isDeclined).toBe(false);
+      expect(hud.advisorPlacement).not.toBeNull();
       expect(card.hidden).toBe(false);
-      expect(chip.textContent?.toLowerCase()).toContain('hide moves');
-      expect(chip.textContent?.toLowerCase()).not.toContain('no room');
+      expect(root.dataset['zone']).not.toBe('free');
+      expect(parseFloat(card.style.maxHeight)).toBeCloseTo(hud.advisorPlacement!.maxHeight, 1);
+    });
+
+    /**
+     * The chip is not a second state machine. It was, briefly: it reported the
+     * HUD's decline rather than the player's preference, so `N` could not put
+     * the card back and the chip said a third thing no other screen says.
+     */
+    describe('its chip', () => {
+      it('offers to hide the card, because the card is there to hide', () => {
+        const hud = mountHud();
+        hud.setProjector(wallProjector() as never);
+        hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+        hud.update(16);
+        const { chip } = advisorEls(hud);
+        expect(hud.advisorPlacement).toBeNull();
+        expect(chip.textContent?.toLowerCase()).toContain('hide moves');
+        expect(chip.textContent?.toLowerCase()).not.toContain('room');
+        expect(chip.getAttribute('aria-pressed')).toBe('true');
+      });
+
+      it('answers N, both ways, with nothing else in between', () => {
+        const hud = mountHud();
+        hud.setProjector(wallProjector() as never);
+        hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+        hud.update(16);
+        const { card, chip } = advisorEls(hud);
+
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyN' }));
+        hud.update(16);
+        expect(card.hidden).toBe(true);
+        expect(chip.textContent?.toLowerCase()).toContain('best move');
+        expect(chip.getAttribute('aria-pressed')).toBe('false');
+
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyN' }));
+        hud.update(16);
+        expect(card.hidden).toBe(false);
+        expect(chip.textContent?.toLowerCase()).toContain('hide moves');
+        expect(hud.moveAdvisor.isVisible).toBe(true);
+      });
     });
   });
 });

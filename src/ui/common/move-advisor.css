@@ -295,26 +295,17 @@
   color: var(--ig-ink);
 }
 
-/* ------------------------------------------------------- the declined state */
+/* ---------------------------------------------------------- with no zone */
 
-/* `FFXBattleHud.placeAdvisor` writes `data-zone` on the root every frame:
-   which of `hudSafeZones.ts`'s placements the card won, or `none` when the
-   screen was too full to hold a box the whole card fits in and the card was
-   taken down rather than sliced. In that state the chip is the entire panel, so
-   it must not offer to *hide* something that is not on screen.
+/* `FFXBattleHud.placeAdvisor` writes `data-zone` on the root every frame: which
+   of `hudSafeZones.ts`'s placements the card won, or `free` when the screen was
+   too full to hold a box the whole card fits in.
 
-   **The word itself is not here.** A round of this fix wrote it as
-   `content: 'no room'` on a `[data-zone='none'] .mad__toggle::after`, which
-   reads correctly on a screenshot and is invisible to everything else — the
-   gate's grep for the string found nothing in `src/`, `textContent` returned
-   the old label, and a screen reader read the old label too. The chip's label
-   is written by `MoveAdvisor.setDeclined`, which `placeAdvisor` calls with the
-   same answer that sets `data-zone`; FFX-2 has no zones, is never declined, and
-   keeps the plain toggle. All that is left here is how the declined chip
-   *looks*. */
-.mad--no-room .mad__toggle {
-  opacity: 0.85;
-}
-.mad--no-room .mad__toggle b {
-  color: var(--ig-paper, #f4f1e8);
-}
+   **`free` is not a state the player can see**, and that is the whole of the
+   rule. A round of this fix took the card down when no zone fit and captioned
+   the chip with an apology — as `content:` here, then as text in the element —
+   and on Chapter 1 that meant no advice on five of seven decisions. There is
+   nothing to style: with no zone the card keeps the `left`/`width`/`bottom` its own
+   `MoveAdvisor.layout` measures and the 104px cap above, which is what the live
+   build has always drawn, and the chip reads `hide moves` like any other
+   frame. */
