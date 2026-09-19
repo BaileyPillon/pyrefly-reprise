@@ -110,6 +110,33 @@ function growToGrid(r: Rect | null, q: number): Rect | null {
 const CHIP_DOCK_GAP = 11;
 
 /**
+ * The CTB queue's authored rail on the grid, for the frames it is not up.
+ *
+ * `docs/ENGINE-API.md#hud-safe-area` gives it as 0.843..0.970 x 0.138..0.557 of
+ * the frame — the *worst case under the name-plate cap*, not where today's cast
+ * happens to put it — which on the 640x360 stage is x 539.5..620.8,
+ * y 49.7..200.5. Only the top-right corner is used; see {@link intentChipDock}.
+ */
+const CTB_RAIL = { left: 539.5, top: 49.7, right: 620.8, bottom: 200.5 } as const;
+
+/**
+ * The arithmetic behind `FFXBattleHud.intentChipDock`, on its own so a test can
+ * reach it without a laid-out browser. See that method for why the fallback
+ * exists; `tests/unit/ui-ffx-hud.test.ts` pins the state that needed it.
+ */
+export function intentChipDockAt(
+  ctb: { right: number; top: number; width: number; height: number },
+  host: { left: number; top: number; width: number; height: number },
+  scale: number,
+): { x: number; y: number } | null {
+  if (!scale) return null;
+  if (ctb.width > 0 && ctb.height > 0) return { x: ctb.right, y: ctb.top - CHIP_DOCK_GAP * scale };
+  const ox = host.left + (host.width - STAGE.width * scale) / 2;
+  const oy = host.top + (host.height - STAGE.height * scale) / 2;
+  return { x: ox + CTB_RAIL.right * scale, y: oy + (CTB_RAIL.top - CHIP_DOCK_GAP) * scale };
+}
+
+/**
  * The real FFX battle HUD: CTB queue, command stack, party status, telegraph
  * banner, sensor panel and damage numerals, composed from the shared Ink &
  * Gold presentation layer (`src/ui/inkgold/`, Direction A approved
@@ -1141,12 +1168,23 @@ export class FFXBattleHud implements HudPort {
    * queue it annotates instead of as graffiti on the boss. The queue's top edge
    * is grid y 49.8 and the band above it holds nothing but the telegraph
    * banner, which is centred on the stage and 150 grid px away.
+   *
+   * **The queue is not always laid out, and that is when the chip used to land
+   * on the boss.** Between one decision and the next — while an action plays
+   * out — the command stack, the guide rail, the advisor card *and* the CTB
+   * list are all down; the chip is the only thing left on the field, and with
+   * nothing to measure this returned `null` and `EnemyIntent.layout` fell back
+   * to the head anchor. The round-03 browser matrix caught it in exactly one
+   * state of thirteen, in chapters 2 and 3, at 2 442 grid px² of Yunalesca and
+   * of Braska's Final Aeon — which is Bailey's own report that "the E ENEMY
+   * MOVE chip floats over the boss art", surviving in the one state nobody
+   * screenshots. So the fallback is the queue's **authored** rail rather than
+   * no answer: `docs/ENGINE-API.md#hud-safe-area` fixes its right edge at
+   * 0.970 of the frame and its top at 0.138, which is where the queue will be
+   * when it comes back anyway.
    */
   private intentChipDock(): { x: number; y: number } | null {
-    const ctb = this.ctbList.el.getBoundingClientRect();
-    if (ctb.width <= 0 || ctb.height <= 0) return null;
-    const scale = this.hudScale();
-    return { x: ctb.right, y: ctb.top - CHIP_DOCK_GAP * scale };
+    return intentChipDockAt(this.ctbList.el.getBoundingClientRect(), this.el.getBoundingClientRect(), this.hudScale());
   }
 
   /** The letterbox scale `layout()` applies to the 640x360 grid. */

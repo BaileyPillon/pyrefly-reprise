@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import type { AvailableCommand } from '../../src/battle/common/types.ts';
 import { buildTopRows, computeMenuWindow, resolveTargetMode } from '../../src/ui/ffx/CommandMenu.ts';
-import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
+import { FFXBattleHud, intentChipDockAt } from '../../src/ui/ffx/FFXBattleHud.ts';
 import { makeFakeBattleState, makeFakeCommands, makeFakeTurnPreview } from '../../src/ui/ffx/testFixtures.ts';
 
 /** The x/y of the second `translate(...)` in a numeral's transform, in px. */
@@ -543,5 +543,41 @@ describe('FFXBattleHud.chooseCommand', () => {
     lastRow.click();
     const command = await promise;
     expect(command).toMatchObject({ id: 'spell-19', targets: ['seymour-flux'] });
+  });
+});
+
+// ------------------------------------------------- the parked E ENEMY MOVE chip
+
+describe('where the E ENEMY MOVE chip parks while the read-out is folded', () => {
+  const host = { left: 0, top: 0, width: 1600, height: 900 };
+  const scale = 900 / 360; // 2.5, the letterbox at 1600x900
+
+  it('rides the CTB queue’s top-right corner while the queue is up', () => {
+    const dock = intentChipDockAt({ right: 1551, top: 124, width: 165, height: 377 }, host, scale)!;
+    expect(dock.x).toBe(1551);
+    expect(dock.y).toBeLessThan(124);
+  });
+
+  it('falls back to the queue’s authored rail rather than to the boss’s head', () => {
+    // **The one state in thirteen that Bailey's report survived in.** Between
+    // one decision and the next the command stack, the guide, the advisor card
+    // *and* the CTB queue are all down, so this used to answer `null` and
+    // `EnemyIntent.layout` anchored the chip to the enemy's head instead: the
+    // round-03 browser matrix measured it at 2 442 grid px² of Yunalesca and
+    // the same of Braska's Final Aeon, in state `13-plate-toggle2` only.
+    const dock = intentChipDockAt({ right: 0, top: 0, width: 0, height: 0 }, host, scale)!;
+    expect(dock).not.toBeNull();
+    // Grid x 620.8, y 49.7 - 11, through the letterbox: the top-right corner of
+    // the rail `docs/ENGINE-API.md#hud-safe-area` reserves for the queue.
+    const ox = (1600 - 640 * scale) / 2;
+    expect((dock.x - ox) / scale).toBeCloseTo(620.8, 1);
+    expect(dock.y / scale).toBeCloseTo(38.7, 1);
+    // And it is nowhere near the band the bosses stand in (x 317..514 in
+    // Chapter 1, 329..499 in Chapter 2, 295..495 in Chapter 3).
+    expect((dock.x - ox) / scale).toBeGreaterThan(514);
+  });
+
+  it('declines only when there is no letterbox to solve against', () => {
+    expect(intentChipDockAt({ right: 0, top: 0, width: 0, height: 0 }, host, 0)).toBeNull();
   });
 });
