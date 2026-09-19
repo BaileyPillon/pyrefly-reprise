@@ -128,17 +128,19 @@ function isBare(root: HTMLElement): boolean {
  *
  * The bare rule is written against the stage's **direct** children, and since
  * the screen went full-bleed (fix round 3) every piece of chrome is one child:
- * `.pause__frame`, the grid the six slabs live in. So this looks one level
- * further down, which is where the menu, the dossier and the party strip are
- * now — the rule still hides all of them at once, by hiding their parent.
+ * `.pause__frame`, the grid the slabs live in. So this looks below it — two
+ * levels now, because the wordmark, the menu and the quote were wrapped again
+ * in `.pause__rail` when the quote turned out to be able to lay itself out over
+ * the menu as a separate grid area. The rule still hides all of them at once,
+ * by hiding the one ancestor they share.
  */
 function slabs(root: HTMLElement): string[] {
   const stage = root.querySelector('.pause__stage');
   if (!stage) return [];
   const frame = stage.querySelector('.pause__frame');
-  return [...stage.children, ...(frame ? [...frame.children] : [])].map(
-    (el) => el.className.split(' ')[0]!,
-  );
+  const inFrame = frame ? [...frame.children] : [];
+  const deeper = inFrame.flatMap((el) => [...el.children]);
+  return [...stage.children, ...inFrame, ...deeper].map((el) => el.className.split(' ')[0]!);
 }
 
 // ------------------------------------------------------------- the claim

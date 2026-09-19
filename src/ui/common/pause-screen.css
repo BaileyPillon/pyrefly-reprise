@@ -235,6 +235,21 @@
  * With the layer at window size and the type on `clamp()`, a grid is what
  * keeps the safe margins safe and lets the whole thing fold to one column on a
  * phone without a second layout being written.
+ *
+ * ## Two areas, not six (fix round 3, second pass)
+ *
+ * The left-hand column used to be three grid rows — `brand`, `menu`, `quote` —
+ * with the quote in a `minmax(0, 1fr)` row and `align-self: end`, so it would
+ * hang at the bottom of whatever space was left over. On an 800x600 window
+ * there was no space left over: the row collapsed to zero height, and an item
+ * that is `end`-aligned in a zero-height row is laid out *upwards* out of it.
+ * The Seymour quote was printed straight across MUSIC PLAYER, CHAPTER SELECT
+ * and QUIT TO TITLE — three rows the cursor could still land on and activate.
+ *
+ * Grid areas are allowed to overlap; flex items are not. So the whole left
+ * column is one area now (`rail`) holding one flex column, and the "hang the
+ * quote at the bottom" trick is `margin-top: auto`, which yields when the space
+ * runs out instead of reversing. It cannot print over the menu at any size.
  */
 .pause__frame {
   position: absolute;
@@ -250,11 +265,9 @@
   padding: var(--pause-pad-y) var(--pause-pad-x) calc(var(--pause-pad-y) + var(--pause-hint-band));
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   grid-template-areas:
-    'brand panel'
-    'menu  panel'
-    'quote panel'
+    'rail  panel'
     'party snaps';
   column-gap: clamp(16px, 2.6vw, 64px);
   row-gap: clamp(8px, 1.4vh, 26px);
@@ -263,10 +276,24 @@
   pointer-events: none;
 }
 
+/*
+ * The left column: wordmark, menu, quote, top to bottom, never on top of one
+ * another. `min-height: 0` is what lets the menu inside it scroll rather than
+ * push the quote through the foot of the window on a short screen.
+ */
+.pause__rail {
+  grid-area: rail;
+  align-self: stretch;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 /* -------------------------------------------------------------- wordmark */
 
 .pause__brand {
-  grid-area: brand;
+  flex: none;
 }
 .pause__wordmark {
   font-size: var(--pause-fs-wordmark);
@@ -287,8 +314,27 @@
 /* ------------------------------------------------------------------ menu */
 
 .pause__menu {
-  grid-area: menu;
-  align-self: start;
+  /*
+   * `0 1 auto`: the menu is the one thing in the rail allowed to run out of
+   * room, and when it does it scrolls inside its own box instead of pushing the
+   * quote (or itself) off the bottom of the window. `PauseScreen.renderMenu`
+   * keeps the selected row in view, so a pad player never loses the cursor.
+   */
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(227, 185, 74, 0.5) transparent;
+  /*
+   * A scroll container on one axis is a scroll container on both, and every row
+   * in here is skewed — its corners stick out past the box by about a tenth of
+   * its own height. Without this gutter that overhang is horizontal overflow,
+   * which Chromium answers with a scrollbar *inside the menu*. The gutter is
+   * given back as a negative margin, so the rows sit exactly where they did.
+   */
+  padding-inline: calc(2.4 * var(--pu));
+  margin-inline: calc(-2.4 * var(--pu));
   margin-top: clamp(8px, 2vh, 40px);
   /*
    * As wide as its widest row and no wider. The selected row draws the only
@@ -373,10 +419,19 @@
 
 /* ----------------------------------------------------------------- quote */
 
+/*
+ * Hung at the foot of the rail by `margin-top: auto` rather than by
+ * `align-self: end` in a flexible grid row — see the note on `.pause__frame`.
+ * An auto margin gives its space back when there is none to give; an
+ * end-aligned grid item in a collapsed row lays itself out backwards over the
+ * menu, which is what printed the quote across three live rows at 800x600.
+ */
 .pause__quote {
-  grid-area: quote;
-  align-self: end;
-  margin: 0;
+  flex: none;
+  margin-top: auto;
+  margin-bottom: 0;
+  margin-inline: 0;
+  padding-top: clamp(8px, 1.4vh, 26px);
   width: 100%;
   max-width: clamp(260px, 30vw, 620px);
   border-left: max(1px, calc(0.89 * var(--pu))) solid rgba(227, 185, 74, 0.5); /* 2 */
@@ -717,12 +772,51 @@
   align-items: center;
   gap: calc(4.44 * var(--pu)); /* 10 */
   /*
-   * Three across the left rail at any window, and the numerals inside them
-   * wrap rather than shrink — 14px is the floor for `2420/2420` too.
+   * Three across the left rail when they fit, and **a new row when they do
+   * not** — never three squeezed ones.
+   *
+   * This was `flex: 1 1 0; min-width: 0`, which says "share whatever is there,
+   * however little that is". On a 1024x768 window the left rail is 464px, each
+   * card got ~149 of it, the body got ~50 — and `2420/2420` is `nowrap` by
+   * contract, because 14px is the floor for a full HP pair too. So the numerals
+   * simply printed through the gold OD gauge beside them, and `Kimahri` came
+   * out as `Kima…`. The first pass moved the fix into a `max-width: 720px`
+   * query and left the 721–1100px band still doing it; a 4:3 window is exactly
+   * that band, and 4:3 is one of the aspects the brief names.
+   *
+   * `min-width: auto` (i.e. **not** overriding it) is the cure, and it is the
+   * one the flexbox spec is for: a flex item's automatic minimum size is its
+   * content's, so a card refuses to shrink past what its own numerals need and
+   * `flex-wrap` above sends the third one to a second row instead. Nothing
+   * measures a number or guesses a breakpoint — the contents state their width
+   * and the layout believes them.
+   *
+   * The basis stays at **0**, and that is not the half of the old declaration
+   * that was wrong. Flex lines are collected on each item's *hypothetical* main
+   * size — the basis clamped by min and max — so with the automatic minimum
+   * back in force a basis of 0 still reports "I need 157px", which is what makes
+   * the line break honest. `flex: 1 1 auto` (this pass's first attempt) reports
+   * the card's full content width instead, and at Bailey's own 2000x1012 that
+   * is ~300px a card: three of them plus their gaps overran the 900px rail by a
+   * hair and the strip came apart into two rows, on a window with room for
+   * three. Basis 0 lays all three out and lets them grow into the rail.
    */
   flex: 1 1 0;
-  min-width: 0;
-  max-width: clamp(150px, 16vw, 400px);
+  /*
+   * The cap has to clear the floor, not sit under it.
+   *
+   * A flex item's automatic minimum size is itself clamped by `max-width`, so a
+   * cap smaller than what the card holds does not make the card wrap — it makes
+   * the card overflow. At 800x600 the cap's old floor was 150px and a card with
+   * `2420/2420` and the OD gauge beside it needs about 157, so all three cards
+   * painted their gauge 2–7px past their own right border. (Measured: 800x600
+   * had `scrollWidth 154, 150, 149` against `clientWidth 147`; 1024x768, where
+   * `16vw` is 164, had none.) The floor is 168 now, which is the widest a card
+   * asks for at the 14px type floor plus a little, and it only ever binds below
+   * ~1050px of window, where three cards and their gaps take 516 of the 736px
+   * the party strip has. Above that `16vw` is doing the work as before.
+   */
+  max-width: clamp(168px, 16vw, 400px);
   box-sizing: border-box;
   padding: calc(3.56 * var(--pu)) calc(4.44 * var(--pu)); /* 8 10 */
   background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
@@ -764,8 +858,13 @@
 .pause__card-face > span {
   position: absolute;
 }
+/*
+ * No `min-width: 0` here either, and for the same reason: this is the box whose
+ * content — a name and a full `2420/2420` pair — decides how narrow the card is
+ * allowed to get. Zero it and the card above happily shrinks to nothing and
+ * lets the numerals spill over the OD gauge.
+ */
 .pause__card-body {
-  min-width: 0;
   flex: 1 1 auto;
 }
 .pause__card-name {
@@ -1042,12 +1141,16 @@
 @media (max-width: 720px), (max-aspect-ratio: 3 / 4) {
   .pause__frame {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
     grid-template-areas:
-      'brand'
-      'menu'
+      'rail'
       'party'
       'panel';
+  }
+  /* The rail is only the wordmark and the menu here; it takes the height it
+     needs and the dossier gets the rest. */
+  .pause__rail {
+    align-self: start;
   }
   .pause__menu,
   .pause__panel,
@@ -1061,18 +1164,6 @@
   }
   .pause__party {
     align-self: start;
-    /*
-     * A grid rather than a shrinking flex row. `flex: 1 1 0` let the three
-     * cards share whatever was there, and on a 390px phone that was ~123px
-     * each: the OD gauge ended up drawn straight over `2420/2420`. The
-     * numerals cannot give — 14px is the floor for a full HP pair too, and
-     * they are `nowrap` so a number never breaks across lines — so the column
-     * count has to. `auto-fit` drops to two, then one, exactly when a card can
-     * no longer hold its own contents, and `min(100%, …)` keeps the track from
-     * being wider than the frame on the narrowest screen.
-     */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
   }
   .pause__card {
     max-width: none;
@@ -1095,6 +1186,48 @@
   /* The ramp is a left-to-right wipe, which means nothing in one column. */
   .pause__scrim {
     background: linear-gradient(180deg, rgba(11, 10, 18, 0.9) 0%, rgba(11, 10, 18, 0.72) 55%, rgba(11, 10, 18, 0.9) 100%);
+  }
+}
+
+/* --------------------------------------------------------------- short */
+
+/*
+ * A window with more width than height to spare: 800x600 and 1024x768 (4:3,
+ * which the brief names), a laptop with a browser's chrome eating the bottom
+ * third, a phone on its side.
+ *
+ * The rail's contents are a fixed cost — the wordmark, and ten menu rows that
+ * are all real commands — so what gives is the decoration. The quote and the
+ * polaroids go, and the party strip takes the whole width back, which is the
+ * difference between three cards in a row and three cards stacked in three.
+ *
+ * This is a *height* query on purpose. The first pass folded the layout on
+ * width alone (`max-width: 720px`), which is why an 800x600 window — not narrow
+ * by that test, and not close to enough room by any other — was handed the full
+ * desktop layout and printed the quote over MUSIC PLAYER, CHAPTER SELECT and
+ * QUIT TO TITLE.
+ */
+@media (max-height: 700px) and (min-width: 721px) {
+  .pause__frame {
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'rail  panel'
+      'party party';
+  }
+  .pause__quote,
+  .pause__snaps {
+    display: none;
+  }
+  /* Ten rows of the same type, in less height: the type holds its floor and
+     the padding around it gives way. */
+  .pause__row {
+    padding: 0.2em 0.6em;
+  }
+  .pause__menu {
+    margin-top: clamp(4px, 1vh, 12px);
+  }
+  .pause__party {
+    align-self: end;
   }
 }
 

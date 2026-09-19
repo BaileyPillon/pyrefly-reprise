@@ -304,6 +304,12 @@ export class PauseScreen extends Screen {
     // because the grid needs a single element to be — and because
     // `.pause--bare` hides the painting's siblings by direct-child rule, so
     // "every slab at once" has to be one child.
+    //
+    // The wordmark, the menu and the quote are wrapped again, in `.pause__rail`:
+    // they are one column, and as three separate grid areas the quote could be
+    // (and on an 800x600 window was) laid out backwards over the menu when the
+    // window ran out of height. Flex items cannot overlap. See the note on
+    // `.pause__frame` in `pause-screen.css`.
     return `
       <div class="pause__art"><img class="pause__art-img" data-role="hero" alt=""></div>
       <div class="pause__scrim"></div>
@@ -311,13 +317,15 @@ export class PauseScreen extends Screen {
       <div class="pause__vignette"></div>
 
       <div class="pause__frame">
-        <div class="pause__brand">
-          <div class="pause__wordmark">PYREFLY REPRISE</div>
-          <div class="pause__game">${gameLine}</div>
-        </div>
+        <div class="pause__rail">
+          <div class="pause__brand">
+            <div class="pause__wordmark">PYREFLY REPRISE</div>
+            <div class="pause__game">${gameLine}</div>
+          </div>
 
-        <nav class="pause__menu" data-role="menu" aria-label="Paused"></nav>
-        ${quote}
+          <nav class="pause__menu" data-role="menu" aria-label="Paused"></nav>
+          ${quote}
+        </div>
 
         <section class="pause__panel cpanel cpanel--fluid" data-role="panel"></section>
 
@@ -344,6 +352,21 @@ export class PauseScreen extends Screen {
         </div>`;
       })
       .join('');
+
+    /*
+     * Keep the cursor in view.
+     *
+     * On a short window (`@media (max-height: 700px)`) the menu is a scroll
+     * container: ten real commands do not fit in 600px of screen alongside a
+     * wordmark and the party strip, and scrolling them is the one answer that
+     * neither shrinks the type below its floor nor hides a row the player can
+     * still activate. `block: 'nearest'` scrolls only when the row is actually
+     * out of view, so nothing moves on a window with room.
+     */
+    const sel = el.querySelector('.pause__row--sel');
+    if (sel && typeof sel.scrollIntoView === 'function') {
+      sel.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
   }
 
   /** The live context every objective and the progress row is evaluated against. */

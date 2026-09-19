@@ -167,6 +167,100 @@ about 2800 CSS px reaches any of these — at 2560x1080 every token is still on
 its formula, and at 2000x1012 most are still on their floor — so this is a 4K
 change only, and no floor moved.
 
+### 8. Third pass — the aspects the six sizes did not cover
+
+The brief names 4:3, and the second pass's six viewports had none: `390x844`,
+then a jump to `1280x720` and up. Every size it measured was 16:9 or wider. A
+window with width to spare and no height turned out to be a different screen,
+and it was broken in a way no measurement so far had been pointed at.
+
+- **The quote printed over three live menu rows.** The left column was three
+  grid rows — `brand`, `menu`, `quote` — and the quote sat in a
+  `minmax(0, 1fr)` row with `align-self: end`, so it hung at the bottom of
+  whatever was left over. At 800x600 there was nothing left over: the row
+  collapsed to zero height, and a grid item aligned to the `end` of a
+  zero-height row is laid out **upwards out of it**. The Seymour quote was
+  drawn straight across MUSIC PLAYER, CHAPTER SELECT and QUIT TO TITLE — rows
+  the cursor could still land on and activate.
+
+  Grid areas may overlap; flex items may not. So the whole left column is one
+  grid area (`rail`) holding one flex column, and "hang the quote at the
+  bottom" is `margin-top: auto` — a margin that gives its space back when
+  there is none, instead of reversing. Pinned by
+  `tests/unit/pause-fullbleed.test.ts`.
+
+- **The layout folded on width alone.** `@media (max-width: 720px)` is why an
+  800x600 window — not narrow by that test, and nowhere near enough room by any
+  other — was handed the full desktop layout in the first place. There is a
+  height query beside it now, `(max-height: 700px) and (min-width: 721px)`: the
+  rail's contents are a fixed cost (a wordmark and ten real commands), so the
+  decoration gives way. The quote and the polaroids go, and the party strip
+  takes the full width back.
+
+- **The menu scrolls rather than pushing a row off the window.** `flex: 0 1
+  auto; overflow-y: auto` on `.pause__menu`, and `renderMenu` calls
+  `scrollIntoView({ block: 'nearest' })` on the selected row so a pad player
+  never loses the cursor. `nearest` means nothing moves on a window with room.
+  The menu also carries a `padding-inline` gutter given straight back as a
+  negative margin: every row is skewed and its corners stick out past the box,
+  which a scroll container would otherwise answer with a second scrollbar.
+
+- **A party card was still allowed to shrink past its own numerals**, in the
+  721–1100px band the first pass's `max-width: 720px` query did not reach —
+  and 4:3 is exactly that band. `flex: 1 1 0; min-width: 0` says "share
+  whatever is there, however little"; at 1024x768 the left rail is 464px, each
+  card got ~149 and the OD gauge printed through `2420/2420`. **Leaving
+  `min-width` alone** is the fix: a flex item's automatic minimum size is its
+  content's, so flex lines are collected honestly and the third card takes a
+  new row. Nothing measures a number or guesses a breakpoint.
+
+- **The polaroid caption fix stopped at the prep tab's doorstep.** §6 fixed
+  `.cpanel__snap-cap` in the shared stylesheet, but the prep menu's CHAPTER tab
+  adds `src/ui/ffx/party-prep/chapter-panel-tab.css` — another track's file —
+  with `.prepchap__cols .cpanel__snap-cap { white-space: nowrap; text-overflow:
+  ellipsis }`, which outranks a bare class. So the CHAPTER tab, the *default*
+  tab on the path into every chapter, still printed Bailey's exact reported
+  string one screen over. The reset is restated at three classes
+  (`.cpanel .cpanel__snap .cpanel__snap-cap`) so it wins from whichever sheet
+  lands last, and `.cpanel__snap` is the middle term because the pause screen
+  lifts the bare `<figure>`s out of the dossier and has no `.cpanel__snaps`
+  wrapper at all. The floor is converted into the caller's units with
+  `calc(14px / var(--lb-scale, 1))` — `LetterboxStage.createStage` now publishes
+  its scale factor as `--lb-scale`, because CSS has no unit that survives a
+  transform and no way to ask what one is. The full-bleed layer publishes `1`,
+  so the same expression is plain px there.
+
+  **Ask for the prep tab's owner (`ffx2-hud-prep`):** delete the `nowrap` /
+  `text-overflow: ellipsis` pair from `.prepchap__cols .cpanel__snap-cap` in
+  `src/ui/ffx/party-prep/chapter-panel-tab.css`, and the guard here (with the
+  two sizing rules under it) can go. A caption is three to five words in the
+  author's voice; truncating one is worse than any amount of wrapping.
+
+### 9. Fourth pass — two defects the third pass's own fixes introduced
+
+Both were found by re-measuring rather than by reading the diff, and both are
+the same shape: a declaration that was right about one window and wrong about
+another.
+
+- **`max-width` clamps the automatic minimum size too.** So a cap *below* what
+  the card holds does not make the card wrap — it makes the card overflow. At
+  800x600 the cap's floor was `150px` and a card with `2420/2420` and the OD
+  gauge beside it needs about 157: all three cards reported `scrollWidth`
+  154 / 150 / 149 against `clientWidth` 147 and painted their gauge past their
+  own right border. (1024x768, where `16vw` is 164, had none — which is why the
+  third pass's run passed.) The floor is `168px` now.
+
+- **`flex: 1 1 auto` cost Bailey's own window its party strip.** Flex lines are
+  collected on each item's *hypothetical* main size — the basis clamped by min
+  and max — so with the automatic minimum back in force a basis of **0** still
+  reports "I need 157px", which is all the honest wrapping needed. A basis of
+  `auto` reports the card's full content width instead, ~300px at 2000x1012:
+  three of them plus their gaps overran the 900px rail by a hair and the strip
+  came apart into two rows on a window with room for three. Back to
+  `flex: 1 1 0`, with `min-width` still left alone — and now 800x600 lays three
+  cards at 165px each with nothing clipped, 1024x768 wraps to 2+1 because it
+  genuinely cannot hold three, and 2000x1012 is three across again.
+
 ---
 
 ## How it was verified
@@ -216,10 +310,60 @@ because the interesting thing about this screen is what each pass caught.
   2688x1536 masters rather than the one file this track generated to prove the
   path.
 
-(The `v3-*` and `v4-*` runs are not in the repo. `v3` was the run whose
+- `v8-*.png` — the third and fourth passes' run, and the one to look at: it is
+  the only generation taken against the current tree, and the only one that
+  covers a 4:3 window.
+
+(The `v3-*`, `v4-*` and `v7-*` runs are not in the repo. `v3` was the run whose
 `Escape` was refused, so every shot in it is of the battle screen with no pause
 up; `v4` was superseded by `v5` at every size it covered, and six 4K PNGs is
-30MB of nothing new.)
+30MB of nothing new; `v7` was the third pass's run, superseded at every size by
+`v8` once the fourth pass's two fixes landed.)
+
+### The third and fourth passes' run
+
+A vite dev server on **port 5627**, the same throwaway HMR-off config, a fresh
+browser context per viewport, and **eight** sizes rather than six — 800x600 and
+1024x768 were added because the brief names 4:3 and every size measured up to
+that point had been 16:9 or wider. That is the whole reason §8 exists.
+
+| | 390x844 | 800x600 | 1024x768 | 1280x720 | 1600x900 | 2000x1012 | 2560x1080 | 3840x2160 |
+|---|---|---|---|---|---|---|---|---|
+| painting rect == viewport | yes | yes | yes | yes | yes | yes | yes | yes |
+| `currentSrc` | png | png | png | png | **2x** | **2x** | **2x** | **2x** |
+| smallest font | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 18 |
+| text under 14px | 0/54 | 0/54 | 0/60 | 0/60 | 0/60 | 0/60 | 0/60 | 0/60 |
+| quote over the menu | no | no | no | no | no | no | no | no |
+| party rows / card width | 2 / 170 | **1 / 165** | 2 / 165 | 1 / 184 | 1 / 231 | **1 / 289** | 1 / 372 | 1 / 392 |
+| card clipped, numerals over the gauge | none | none | none | none | none | none | none | none |
+| caption clipped or ellipsised | none | none | none | none | none | none | none | none |
+| hint strip inside the window | yes | yes | yes | yes | yes | yes | yes | yes |
+| dossier bottom to hint top | +9px | +74 | +187 | +121 | +240 | +284 | +256 | +997 |
+| transforms on the art's chain | drift only | drift only | drift only | drift only | drift only | drift only | drift only | drift only |
+| blur on the art / h-scroll / errors | none | none | none | none | none | none | none | none |
+
+The two bolded cells are §9's fixes landing: 800x600 lays three cards in one
+row at 165px each with nothing clipped (the third pass had three cards
+overflowing their own border there), and 2000x1012 — Bailey's window — is three
+across again at 289px (the third pass had split it into two rows). 1024x768's
+two rows are correct and not a regression: the left rail is 464px and three
+cards genuinely need about 490.
+
+`currentSrc` crosses to the 2x master between 1280 and 1600 CSS px, which is
+the contract. The 4K run is the only one where any type is off its floor.
+
+Keys, at 2000x1012, all real presses: the **first** `Escape` out of a fresh
+battle is eaten by the FFX command menu (`src/ui/ffx/cancelClaim.ts`, another
+track — Esc is that menu's back button and "one tap of Esc means one thing"),
+and the **second** opens the pause; at four of the eight sizes above the run's
+opening `Escape` landed after the menu had already given the claim up and
+opened it first time. `H` hides the panels (`panelsHidden: true`, `.pause--bare`
+on the stage, the menu not rendered, the surviving line at 14px, the painting
+still exactly the viewport) and `H` again brings them back; `ArrowDown` moves
+the cursor `RESUME -> RESTART ENCOUNTER`; the PARTY, MUSIC and OPTIONS panels
+all render without scrolling; `F` enters photo mode and `Escape` leaves it;
+`Escape` resumes and `P` opens over a live command menu. No page errors, no
+console errors.
 
 ### The second pass's run
 

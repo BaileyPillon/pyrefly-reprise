@@ -52,6 +52,20 @@ export function createStage(root: HTMLElement, className: string): Stage {
     const x = (w - STAGE_W * scale) / 2;
     const y = (h - STAGE_H * scale) / 2;
     stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+    /*
+     * The same number, published to CSS.
+     *
+     * Inside a scaled stage a grid pixel is worth `scale` CSS pixels, so a
+     * stylesheet that wants a *rendered* size — "this caption is never smaller
+     * than 14 CSS px on screen", the readability floor from fix round 3 — has
+     * to divide by the factor the transform is about to multiply by. CSS has no
+     * way to ask, and no unit that survives a transform, so the layout that
+     * computes the factor hands it over: `calc(14px / var(--lb-scale, 1))`.
+     *
+     * The fallback of `1` is deliberate: a consumer outside any stage (the
+     * full-bleed pause layer) reads the same expression and gets plain CSS px.
+     */
+    stage.style.setProperty('--lb-scale', scale.toFixed(4));
   };
 
   const onResize = (): void => layout();
@@ -96,6 +110,9 @@ export function createFullBleedStage(root: HTMLElement, className: string): Stag
   stage.className = `${className}__stage lb-stage`;
   stage.style.position = 'absolute';
   stage.style.inset = '0';
+  // Nothing scales here, so one grid pixel is one CSS pixel. Shared rules that
+  // divide a floor by this (see `createStage`) then come out in plain px.
+  stage.style.setProperty('--lb-scale', '1');
 
   el.appendChild(stage);
   root.appendChild(el);
