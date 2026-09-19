@@ -19,9 +19,25 @@
  *     job. `SHUYIN_CHORDS` keeps the same B major there and it costs nothing
  *     now. The joy did not go dark; it went ordinary, which is worse.
  *
- * Rubato is written into the note values (`agogic`), because the renderer has
- * one tempo per track: a breath of 8% at each phrase end, and 18% of
- * ritardando across the last two notes of the coda.
+ * RUBATO, NOW IN THE PULSE. `agogic()` still writes the small things into the
+ * note values — a breath of 8% at each phrase end, which is an agogic accent
+ * and belongs to the player's hand. But the renderer has a tempo map now, and
+ * the things that are properly the *pulse* have moved into it, because a
+ * lengthened note under an accompaniment that did not lengthen is not rubato,
+ * it is a piano that is late:
+ *
+ *   beats  88- 96  rit. 154 -> 140, the band pulling up into the half-time B
+ *   beats 116-124  accel. to 150 — the memory quickens; nobody is in control
+ *   beats 148-156  rit. to 138, and it lets go
+ *   beats 156-160  accel. back to 154 under the snare roll into A'
+ *   beat  252      fermata, 1.1 s on the last held sixth, then the loop turns
+ *
+ * The coda's written ritardando came down from 18% to a breath of 8% when the
+ * rit. and the fermata took over; doing both would have been 30% and read as
+ * a glitch. The map is back at the written 154 by `loop.end`, which is what
+ * stops the wrap lurching — the waveform is continuous, and now the pulse is
+ * too. The fermata sits inside the loop on purpose: the grief stops for a
+ * second, every time round, and then starts again. That is the cue.
  *
  * Form (4/4, 154 bpm, 64 bars, 100 s):
  *   bars  1- 8  intro  beats   0- 32  solo piano, the first four bars, alone
@@ -33,8 +49,13 @@
  */
 
 import {
+  accel,
+  aTempo,
   chordRoots,
   concatNotes,
+  fermata,
+  rit,
+  tempoMap,
   tracker,
   type Note,
   type Track,
@@ -188,8 +209,11 @@ const pianoNotes = concatNotes(
             [CODA + 24, CODA + 26],
           ],
         ),
+        // A breath, not a ritardando: the coda's rit. is in the tempo map
+        // now, and 18% here on top of it would total 30% and read as a
+        // glitch. THEMES.md's ceiling is 25% and its breath is 8%.
         [CODA + 12, CODA + 24, CODA + 32],
-        0.18,
+        0.08,
       ),
       0.08,
     ),
@@ -294,6 +318,23 @@ const timpaniNotes = humanise(
 export const shuyinTrack: Track = {
   name: 'boss-shuyin',
   bpm: 154,
+  tempo: tempoMap(
+    // The intro is one piano, alone, and it is not a metronome.
+    rit(INTRO + 24, A, 146, 'intro, letting go'),
+    aTempo(A, 'base', 'a tempo'),
+    // Into the half-time B: the band pulls up rather than cutting.
+    rit(B - 8, B, 140, 'into the memory'),
+    accel(B + 20, B + 28, 150, 'the memory quickens'),
+    rit(B + 52, B + 60, 138, 'and lets go'),
+    // ...and the snare roll drives it back onto the written tempo for A'.
+    accel(B + 60, A2, 154, 'a tempo, on the roll'),
+    // The coda slows for real, and the last held sixth is a fermata. Both
+    // sit inside the loop; the map is back at 154 by loop.end so the wrap
+    // does not lurch.
+    rit(CODA + 16, CODA + 28, 142, 'the coda lets go'),
+    fermata(CODA + 28, 1.1, 'the last sixth, held'),
+    aTempo(CODA + 28, 'base', 'a tempo'),
+  ),
   timeSig: [4, 4],
   loop: { start: A, end: LENGTH },
   length: LENGTH,

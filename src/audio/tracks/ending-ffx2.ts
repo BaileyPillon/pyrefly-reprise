@@ -30,8 +30,13 @@
  */
 
 import {
+  accel,
+  aTempo,
   chordRoots,
   concatNotes,
+  fermata,
+  rit,
+  tempoMap,
   tracker,
   type Note,
   type Track,
@@ -99,10 +104,37 @@ function hook(start: number, transpose: number, level: number, seed: number): No
   return humanise(legato(leaned, 0.06), 0.03, seed);
 }
 
+/**
+ * Per-bar dynamics for the bridge. It was written at one velocity for all
+ * eight bars, which THEMES.md bans outright ("never render a phrase at
+ * constant velocity") and which cost the cue its best moment: the bridge
+ * exists to climb a sixth above the hook's ceiling, and a climb that does not
+ * get louder is not a climb. Bar 7 — the Gb5, the highest note in the cue —
+ * is the peak; bar 8 settles back under the last chorus.
+ */
+const BRIDGE_DYNAMICS = [0.6, 0.64, 0.62, 0.68, 0.66, 0.72, 0.8, 0.62];
+
 /** The jazz bridge, which climbs a sixth above anything the hook could reach. */
 function bridgeTune(start: number, transpose: number, level: number, seed: number): Note[] {
-  const raw = tracker(SONGSTRESS_BRIDGE, { start, checkBars: BAR, transpose, velocity: 0.68 * level });
-  return humanise(legato(lean(raw, [[start + 24, start + 27]]), 0.06), 0.03, seed);
+  const raw = tracker(SONGSTRESS_BRIDGE, { start, checkBars: BAR, transpose });
+  const shaped = shapeByBar(
+    raw.map((n) => [n[0] - start, n[1], n[2], n[3]] as Note),
+    BRIDGE_DYNAMICS.map((v) => v * level),
+    BAR,
+  ).map((n) => [n[0] + start, n[1], n[2], n[3]] as Note);
+  // Two appoggiaturas, and the second is the one that matters: the peak, Gb5
+  // held three beats, leaning down onto the F under it. `lean` goes LAST, after
+  // every shape and arch, because THEMES.md says no humaniser may level it —
+  // and an arch applied afterwards is a humaniser. The first pair (bar 4's Bb
+  // onto the Ab that opens bar 5) was unmarked and came out 0.03 INVERTED.
+  return humanise(
+    lean(legato(shaped, 0.06), [
+      [start + 14, start + 16],
+      [start + 24, start + 27],
+    ]),
+    0.03,
+    seed,
+  );
 }
 
 // --- piano -----------------------------------------------------------------
@@ -303,6 +335,36 @@ const bellNotes: Note[] = [
 export const endingFfx2Track: Track = {
   name: 'ending-ffx2',
   bpm: 84,
+  /**
+   * The pulse, bent. A ballad played to a grid is a ballad typed in, and this
+   * is the cue that says goodbye — "more gently, because it can".
+   *
+   * Every bend sits where the kit is not: the drums play the two choruses
+   * only (beats 48-80 and 112-144), and those two sections run at their
+   * written tempo from end to end. The intro, the bridge and the coda are
+   * piano, harp and strings alone, and that is where the rubato lives.
+   *
+   * The map returns to the written 84 by `loop.end`, so the wrap does not
+   * lurch, and both fermatas are inside the loop where they will be heard.
+   */
+  tempo: tempoMap(
+    // Solo piano, under tempo, finding it.
+    [INTRO, 78],
+    accel(INTRO + 8, VERSE, 84, 'into the verse'),
+    rit(CHORUS - 4, CHORUS, 80, 'a breath before the chorus'),
+    aTempo(CHORUS, 'base', 'a tempo'),
+    // The bridge's peak — the highest note in the cue — is leaned on and held.
+    rit(BRIDGE + 20, BRIDGE + 24, 78, 'leaning on the peak'),
+    fermata(BRIDGE + 24, 0.6, 'the peak, held'),
+    aTempo(BRIDGE + 27, 'base', 'a tempo'),
+    accel(BRIDGE + 28, CHORUS2, 88, 'lifting a step'),
+    rit(CHORUS2 + 28, CODA, 84, 'settling home'),
+    // FFX's four-note goodbye visits at CODA + 8, and the whole cue slows to
+    // let it. Then the pivot chord is held, and the verse comes round again.
+    rit(CODA + 4, CODA + 12, 76, 'the farewell visits'),
+    fermata(CODA + 12, 1.2, 'the pivot, held'),
+    aTempo(CODA + 12, 'base', 'a tempo'),
+  ),
   timeSig: [4, 4],
   loop: { start: VERSE, end: LENGTH },
   length: LENGTH,

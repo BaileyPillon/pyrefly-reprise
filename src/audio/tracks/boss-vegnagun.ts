@@ -9,11 +9,19 @@
  * `SONGSTRESS_DARK` — b3 up to b6, home to the 5, which in F minor is
  * Ab - Db - C. Three things mechanise it:
  *
- *   1. CONSTANT NOTE LENGTHS AND CONSTANT VELOCITY on every machine layer.
- *      THEMES.md names this cue as one of exactly two places in the score
- *      where an unhumanised part is the point. The orchestral layers on top
- *      still breathe, and that contrast is the reading: the machine is exact,
- *      the people around it are not.
+ *   1. CONSTANT NOTE LENGTHS AND CONSTANT VELOCITY on every machine layer,
+ *      and — since the renderer grew per-channel performance overrides —
+ *      TIMING TO MATCH. THEMES.md's humanisation table gives this cue and the
+ *      Yunalesca canon a ceiling of `<= 3 ms`, and the cue map row says it
+ *      again. It is a ceiling for the cue, not for the machine layers only:
+ *      an earlier draft left the brass at 16 ms, the choir at 34 and the
+ *      strings at 14 on the argument that the orchestra on top should still
+ *      breathe, which is a nice idea and not what the bible says. It is also
+ *      the wrong reading. The lurch is the only thing in this cue allowed to
+ *      be out of time; if the choir is loose as well, the lurch stops being
+ *      an event. So every channel is pulled onto the grid with `perform`,
+ *      the choir last and only to the ceiling itself — the players have been
+ *      dragged onto the machine's clock, which is the thing to be afraid of.
  *   2. BARE OCTAVES. The cell in the low brass has no third and no harmony
  *      under it — an interval, not a chord.
  *   3. NO MODULATION. The Songstress's bridge is functional ii-V motion; here
@@ -23,6 +31,26 @@
  * The LURCH is the only thing that ever goes wrong: the ostinato's cycle is
  * written a sixteenth short, so it walks out of phase with the bar and then
  * slams back onto the downbeat. Nobody is driving.
+ *
+ * NO LEAN, AND NO TEMPO MAP, ON PURPOSE. `SONGSTRESS_DARK`'s b6 falling to
+ * the 5 is an appoggiatura everywhere else it appears, and THEMES.md's rule
+ * is that the leaning note is the louder one. Here it is deliberately flat:
+ * the bible's own exemption is "the two places this document names (the
+ * Yunalesca canon at 0.62, Vegnagun's machine)", and a machine that leans on
+ * a dissonance is a machine that has an opinion about it. Same for the pulse:
+ * the cue has no `tempo` map because the one thing this music must never do
+ * is bend. Every other cue in this group got one.
+ *
+ * FLAT MEANS FLAT, THOUGH. "Deliberately flat" was the intention and not what
+ * the score said: the cue-long crescendo on the brass was a smooth `ramp`
+ * evaluated per note, so the 5 — struck four beats after the b6 it resolves —
+ * came out very slightly the LOUDER of the two. Eleven statements, every one
+ * of them a hair backwards, which is the one direction the bible calls "the
+ * single loudest tell of a synthetic performance". The crescendo now steps
+ * per statement (see `stepRamp`), so within a statement the machine is at one
+ * level, exactly as the bible's "constant velocity" exemption describes, and
+ * every marked pair measures a delta of exactly 0.000. A machine that steps
+ * is also more of a machine than one that glides.
  *
  * Form (4/4, 168 bpm, 64 bars, 91 s):
  *   bars  1- 8  ostinato  beats   0- 32  the pulse alone, spinning up
@@ -37,7 +65,7 @@
 import { chordLine, concatNotes, type Note, type Track } from '../score.ts';
 import { cell } from './motifs.ts';
 import { augment, SONGSTRESS_DARK } from './themes.ts';
-import { doubled, groove, humanise, phrase, ramp } from './ffx2-common.ts';
+import { doubled, groove, humanise, phrase } from './ffx2-common.ts';
 
 const OSTINATO = 0;
 const A = 32;
@@ -106,6 +134,39 @@ function fifthAbove(start: number, root: string, velocity: number): Note[] {
   return doubled(cell(augment(SONGSTRESS_DARK, 2), start, root, velocity), 7, 0.72);
 }
 
+/**
+ * A crescendo that steps rather than glides.
+ *
+ * `ramp()` interpolates per note, which is right for players and wrong for
+ * this desk: one statement of the augmented cell lasts eight beats, so its
+ * three notes each land on a different point of the curve and the last one —
+ * the 5, resolving down a semitone out of the held b6 — ends up fractionally
+ * louder than the note leaning on it. It measured -0.0015 across eleven
+ * statements: inaudible, and backwards, and there is no reason to ship a
+ * machine that is backwards.
+ *
+ * So the factor is taken from the START of the statement a note belongs to.
+ * The level changes between statements and never inside one.
+ */
+function stepRamp(
+  notes: Note[],
+  from: number,
+  to: number,
+  start: number,
+  beats: number,
+  stepBeats: number,
+): Note[] {
+  return notes.map((n) => {
+    const block = Math.floor((n[0] - start) / stepBeats) * stepBeats;
+    const t = Math.max(0, Math.min(1, block / beats));
+    const v = (n[3] ?? 0.8) * (from + (to - from) * t);
+    return [n[0], n[1], n[2], Math.max(0.05, Math.min(1, v))] as Note;
+  });
+}
+
+/** One statement of the augmented cell, and of its retrograde, is eight beats. */
+const STATEMENT = 8;
+
 /** The retrograde — the machine running the same four notes backwards. */
 const DARK_BACK: Note[] = [
   [0, 2, 7],
@@ -135,8 +196,10 @@ const brassNotes = concatNotes(
 
 /**
  * Choir: slabs, not singing. They arrive on the phrase heads, hold four bars
- * and stop — and because the choir preset carries real section jitter, they
- * are the one layer in the cue that is audibly not a machine.
+ * and stop. The `choir` preset asks for 34 ms of section jitter, which is
+ * right for a choir and wrong for this cue; the channel overrides it to the
+ * bible's ceiling of 3 ms — the loosest thing in the cue, and still tighter
+ * than any human section has ever been.
  *
  * The voicing is root, b3 and the octave, with NO FIFTH. The cell's b6 (Db)
  * is sounding above them for four beats at a time, and a held C right under it
@@ -220,7 +283,9 @@ const kickNotes = concatNotes(
 
 /**
  * Timpani: the orchestra's answer to the machine, on the tonic and the fifth.
- * Tuned, struck by a player, and audibly not on the grid.
+ * Tuned, struck by a player — and on the grid with everything else, because
+ * the ceiling in THEMES.md is the cue's, not the ostinato's. The written
+ * velocity shape is where the player is still audible.
  */
 const timpaniNotes = humanise(
   [
@@ -266,14 +331,19 @@ export const vegnagunTrack: Track = {
     { name: 'pulse', instrument: 'arp-pluck', volume: 0.42, pan: 0.22, notes: ostinatoNotes, fx: { reverb: 0.12, delay: 0.1 } },
     { name: 'pedal', instrument: 'synth-bass', volume: 0.78, pan: 0, notes: pedalNotes, fx: { reverb: 0.06 } },
     { name: 'sub', instrument: 'bass-sub', volume: 0.5, pan: 0, notes: pedalNotes.map((n) => [n[0], n[1], 'F1', (n[3] ?? 0.6) * 0.7] as Note), fx: { reverb: 0.05 } },
-    { name: 'low brass', instrument: 'brass', volume: 0.74, pan: -0.1, notes: ramp(brassNotes, 0.94, 1.06, A, LENGTH - A), fx: { reverb: 0.3 } },
-    { name: 'choir', instrument: 'choir', volume: 0.6, pan: 0, notes: choirNotes, fx: { reverb: 0.5 } },
-    { name: 'strings', instrument: 'strings-short', volume: 0.46, pan: -0.24, notes: stringsNotes, fx: { reverb: 0.26 } },
+    // THEMES.md, Humanisation: "Vegnagun, the Yunalesca canon — <= 3 ms".
+    // Every voice in this cue is held under that ceiling by hand, because the
+    // presets are written for the orchestra these players used to be.
+    // The crescendo steps per statement, so no note inside one is louder than
+    // the note it resolves out of. See `stepRamp`.
+    { name: 'low brass', instrument: 'brass', volume: 0.74, pan: -0.1, perform: { timingJitterMs: 2 }, notes: stepRamp(brassNotes, 0.94, 1.06, A, LENGTH - A, STATEMENT), fx: { reverb: 0.3 } },
+    { name: 'choir', instrument: 'choir', volume: 0.6, pan: 0, perform: { timingJitterMs: 3 }, notes: choirNotes, fx: { reverb: 0.5 } },
+    { name: 'strings', instrument: 'strings-short', volume: 0.46, pan: -0.24, perform: { timingJitterMs: 1 }, notes: stringsNotes, fx: { reverb: 0.26 } },
     { name: 'organ', instrument: 'organ', volume: 0.42, pan: 0, notes: organNotes, fx: { reverb: 0.4 } },
     { name: 'hammer', instrument: 'metal-hit', volume: 0.46, pan: 0.3, notes: metalNotes, fx: { reverb: 0.26 } },
     { name: 'kick', instrument: 'kick-808', volume: 0.7, pan: 0, notes: kickNotes, fx: { reverb: 0.08 } },
-    { name: 'timpani', instrument: 'timpani', volume: 0.6, pan: 0.08, notes: timpaniNotes, fx: { reverb: 0.34 } },
-    { name: 'crash', instrument: 'crash', volume: 0.34, pan: 0.12, notes: crashNotes, fx: { reverb: 0.34 } },
+    { name: 'timpani', instrument: 'timpani', volume: 0.6, pan: 0.08, perform: { timingJitterMs: 3 }, notes: timpaniNotes, fx: { reverb: 0.34 } },
+    { name: 'crash', instrument: 'crash', volume: 0.34, pan: 0.12, perform: { timingJitterMs: 3 }, notes: crashNotes, fx: { reverb: 0.34 } },
     { name: 'alarm', instrument: 'pwm-lead', volume: 0.34, pan: -0.3, notes: alarmNotes, fx: { reverb: 0.3, delay: 0.24 } },
   ],
 };

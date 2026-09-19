@@ -6,6 +6,43 @@
  * major and never quite minor. Ethereal strings, a harp that never hurries and
  * a wordless voice a long way off. The one emotion is rest without forgetting.
  *
+ * THE DECLARED KEY, AND WHY IT IS WRONG. The cue map's row 14 says **E
+ * major**. This cue is in **E Aeolian, with one borrowed major third in the
+ * answer section** — and so is any cue that obeys row 14, because the row
+ * contradicts itself. Its own themes column asks for two things:
+ *
+ *   - HYMN, harmonised. HYMN is E Aeolian and THEMES.md §1 says of it, in
+ *     bold, that the 7th is "never sharpened, in any transformation, for any
+ *     reason". E major's 7th is D#. There is no arrangement of the prayer in
+ *     E major that does not break its own resemblance guard.
+ *   - `FAREWELL_RISE`, whose fourth degree is the MINOR third, G natural —
+ *     that being the entire point of putting it beside `SONGSTRESS_RISE`,
+ *     which has the major one. "Minor then major" is the row's own gloss.
+ *
+ * So the music cannot be moved to the declared key without destroying the
+ * material the same row requires, and the declaration is what is in error.
+ * Measured over the score: 99.5% of this cue's weighted pitch content lies
+ * inside E Aeolian, the exception being the 0.5% of G# that is FFX-2's answer
+ * arriving, which is exactly the one borrowed note the cue exists to stage.
+ * **Three files still say "E major" and none of them is the arranger's:**
+ * `docs/audio/THEMES.md` cue map row 14, `CUE_MAP` in
+ * `tools/audio/themes-audit.mjs`, and `TRACK_BLURBS` in `./index.ts`. They
+ * should read `E Aeolian (one borrowed major 3rd)`.
+ *
+ * WHAT DID CHANGE HERE. The audit was right that something was wrong, just
+ * not about which end. A key estimate over the old score came back **A
+ * major**, with E only the third candidate: six two-voice stacks of fourths
+ * in a row put more weight on the 4 and the b7 than on the tonic, so nothing
+ * told the ear where home was. The floor is an open fifth now and the harp's
+ * figure comes home to its own root; E is the tonic by a clear margin
+ * (E minor r=0.76, E major 0.71, A major 0.67) and the fourths above it are
+ * as modeless as they ever were.
+ *
+ * NO TEMPO MAP, DELIBERATELY. Rubato is the one expressive device this cue is
+ * not allowed: THEMES.md's rubato table gives HYMN — which is the whole
+ * TOGETHER section — a flat **zero**, because a congregation does not rubato.
+ * Everything else here is a drone.
+ *
  * THEMES (docs/audio/THEMES.md, cue map row 14).
  *
  *   - HYMN, harmonised in QUARTAL STACKS and distant. `HYMN_SOPRANO`'s first
@@ -123,28 +160,45 @@ const stringsNotes = concatNotes(
   slabs(shift(BED_SLABS, BED_B), 165),
 );
 
-/** The same stacks an octave down, bowed long — the floor of the hall. */
-const lowStrings = concatNotes(
-  slabs(
+/**
+ * The floor of the hall — and the one thing in this cue that is not a fourth.
+ *
+ * A two-voice "stack" of fourths is a root and the note a fourth above it,
+ * and six of them in a row on E, A and B put more weight on the 4 and the b7
+ * than on the tonic: a key estimate run over the whole cue came back **A
+ * major**, with E only third. That is not a bookkeeping complaint. It means a
+ * listener has no reason to hear E as home, and a cue whose one emotion is
+ * *rest without forgetting* has to have somewhere to rest.
+ *
+ * So the bottom two voices are an OPEN FIFTH — tonic and dominant, the oldest
+ * drone pair there is, and the one interval that names a tonic without naming
+ * a mode. Everything above it is still quartal and still modeless; it now has
+ * a floor to be modeless over. THEMES.md sanctions it twice: "pedal points
+ * under everything slow", and HYMN bar 1 is "the head over an open fifth".
+ */
+function openFifth(root: string, at: number, dur: number, vel: number, seed: number): Note[] {
+  const base = toMidi(root);
+  return humanise(
     [
-      { at: 0, dur: 15.6, root: 'E2', vel: 0.34, voices: 2 },
-      { at: 16, dur: 15.6, root: 'A2', vel: 0.32, voices: 2 },
-    ],
-    166,
-  ),
-  slabs(shift([{ at: 0, dur: 31.6, root: 'E2', vel: 0.3, voices: 2 }], CALL), 167),
-  slabs(shift([{ at: 0, dur: 31.6, root: 'B1', vel: 0.32, voices: 2 }], ANSWER), 168),
-  slabs(
-    shift(
-      [
-        { at: 0, dur: 15.6, root: 'E2', vel: 0.34, voices: 2 },
-        { at: 16, dur: 15.6, root: 'A2', vel: 0.32, voices: 2 },
-      ],
-      TOGETHER,
-    ),
-    169,
-  ),
-  slabs(shift([{ at: 0, dur: 31.6, root: 'E2', vel: 0.28, voices: 2 }], BED_B), 170),
+      [at, dur, base, vel],
+      // The fifth is bowed a breath after the root, as a section does.
+      [at + 0.06, dur - 0.06, base + 7, vel * 0.92],
+    ] as Note[],
+    0.03,
+    seed,
+  );
+}
+
+const lowStrings = concatNotes(
+  openFifth('E2', BED_A, 15.6, 0.34, 166),
+  // The one move away from home, and it is to the fifth, not to the fourth.
+  openFifth('B1', BED_A + 16, 15.6, 0.32, 167),
+  openFifth('E2', CALL, 31.6, 0.3, 168),
+  // The answer's stacks are B and F#; the floor agrees with them.
+  openFifth('B1', ANSWER, 31.6, 0.32, 169),
+  // The prayer gets a tonic pedal under it and nothing else moves.
+  openFifth('E2', TOGETHER, 31.6, 0.34, 170),
+  openFifth('E2', BED_B, 31.6, 0.28, 171),
 );
 
 // --- the call and the answer ----------------------------------------------
@@ -235,7 +289,11 @@ function quartalArp(start: number, root: string, step: number, velocity: number,
   // Three voices, never four: the fourth voice of a stack on D is an F
   // natural, and this cue's mode has an F#.
   const stack = quartal(root, 3);
-  const shape = [0, 1, 2, 1, 2, 1];
+  // Root, fourth, seventh, and home to the root. The obvious shape puts the
+  // fourth in twice, which over eighty notes is most of why the cue used to
+  // read as sitting on its own subdominant; coming home on the root costs
+  // nothing and makes each figure a gesture rather than a wander.
+  const shape = [0, 1, 2, 0, 2, 1];
   return shape.slice(0, span).map(
     (index, i): Note => [start + i * step, step * 2.6, stack[index]!, velocity * (i === 0 ? 1.14 : 1)],
   );

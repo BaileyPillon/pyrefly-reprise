@@ -29,7 +29,7 @@
 
 import { concatNotes, toMidi, type Note, type Track } from '../score.ts';
 import { cell } from './motifs.ts';
-import { HYMN_POISONED, SONGSTRESS_DARK, augment } from './themes.ts';
+import { HYMN_POISONED, SONGSTRESS_DARK, augment, lean } from './themes.ts';
 import { arpStackLine, groove, humanise, legato, ramp } from './ffx2-common.ts';
 
 const PULSE = 0;
@@ -79,17 +79,49 @@ function figure(start: number, bars: number, velocity: number): Note[] {
   return out;
 }
 
-const bassNotes = concatNotes(
-  // The pedal itself: one note, under everything, for a hundred seconds.
-  [
-    [PULSE, 32, 'G1', 0.44],
-    [FIGURE, 32, 'G1', 0.5],
-    [MACHINE, 32, 'G1', 0.5],
-    [FIGURE2, 32, 'G1', 0.54],
-    [OUT, 16, 'G1', 0.42],
-  ] as Note[],
-  figure(FIGURE, 8, 0.66),
-  figure(FIGURE2, 8, 0.78),
+/**
+ * Where each statement leans, and where it resolves.
+ *
+ * Augmented, the dark cell is b3 for two beats, then the **b6 held four
+ * beats**, then the 5 — Eb2 falling a semitone onto D2. That is an
+ * appoggiatura by every definition in THEMES.md, and this cue is not one of
+ * the two the bible exempts (those are the Yunalesca canon and Vegnagun, and
+ * they are exempt because they are machines with no opinion about the
+ * dissonance; this one is the machine under a cathedral, and it is the
+ * cathedral's ache that makes it frightening).
+ */
+function figureLeans(start: number, bars: number): Array<[number, number]> {
+  const pairs: Array<[number, number]> = [];
+  for (let bar = 0; bar < bars; bar += 2) pairs.push([start + bar * 4 + 2, start + bar * 4 + 6]);
+  return pairs;
+}
+
+const bassNotes = lean(
+  // The crescendo goes on FIRST and the lean LAST. `ramp` multiplies across a
+  // span and `lean` adds at two points, so a ramp laid over a lean re-levels
+  // it — and with nothing marked at all, all eight statements came out
+  // *inverted*, the b6 one or two thousandths quieter than the 5 it falls to.
+  // Small numbers, but it is the one tell THEMES.md calls "the single loudest
+  // tell of a synthetic performance", eight times in a hundred seconds.
+  ramp(
+    concatNotes(
+      // The pedal itself: one note, under everything, for a hundred seconds.
+      [
+        [PULSE, 32, 'G1', 0.44],
+        [FIGURE, 32, 'G1', 0.5],
+        [MACHINE, 32, 'G1', 0.5],
+        [FIGURE2, 32, 'G1', 0.54],
+        [OUT, 16, 'G1', 0.42],
+      ] as Note[],
+      figure(FIGURE, 8, 0.66),
+      figure(FIGURE2, 8, 0.78),
+    ),
+    0.96,
+    1.06,
+    FIGURE,
+    LENGTH - FIGURE,
+  ),
+  [...figureLeans(FIGURE, 8), ...figureLeans(FIGURE2, 8)],
 );
 
 const metalNotes = concatNotes(
@@ -210,7 +242,9 @@ export const sceneBevelleUndergroundTrack: Track = {
   },
   channels: [
     { name: 'ticks', instrument: 'arp-pluck', volume: 0.32, pan: 0.28, notes: tickNotes, fx: { reverb: 0.2, delay: 0.22 } },
-    { name: 'synth bass', instrument: 'synth-bass', volume: 0.74, pan: 0, notes: ramp(bassNotes, 0.96, 1.06, FIGURE, LENGTH - FIGURE), fx: { reverb: 0.08 } },
+    // `bassNotes` already carries the crescendo; the lean is applied over the
+    // top of it and must not be re-levelled here.
+    { name: 'synth bass', instrument: 'synth-bass', volume: 0.74, pan: 0, notes: bassNotes, fx: { reverb: 0.08 } },
     { name: 'organ', instrument: 'organ', volume: 0.6, pan: -0.06, notes: organNotes, fx: { reverb: 0.55 } },
     { name: 'pad', instrument: 'pad', volume: 0.46, pan: 0.08, notes: padNotes, fx: { reverb: 0.5 } },
     { name: 'low strings', instrument: 'strings-low', volume: 0.44, pan: 0.18, notes: lowStrings, fx: { reverb: 0.4 } },

@@ -110,11 +110,14 @@ function theme(start: number, velocity: number): Note[] {
   const sung = tracker(THEME_LINE, { start, checkBars: BAR, velocity, gate: 1.02 });
   const leap = cell(SONGSTRESS_DARK, start + 8, 'Bb4', velocity + 0.06);
   // bar 4's F5 leans on the Eb5 under it; bar 8's C5 is the 2 falling to the 1.
-  const leaned = lean(concatNotes(sung, leap), [
+  // The arch first, the lean last: `phrase` multiplies and `lean` adds, so an
+  // arch laid over a lean re-levels every pair it straddles.
+  const arched = phrase(legato(concatNotes(sung, leap), 0.05), start, 32, 0.16);
+  const leaned = lean(arched, [
     [start + 12, start + 13.5],
     [start + 28, start + 30],
   ]);
-  return humanise(phrase(legato(leaned, 0.05), start, 32, 0.16), 0.03, 4);
+  return humanise(leaned, 0.03, 4);
 }
 
 /** The chorus: four bars of the hook itself, then four that walk it home. */
@@ -135,8 +138,17 @@ function chorusMelody(start: number, velocity: number): Note[] {
     velocity: velocity - 0.04,
     gate: 1.02,
   });
-  const leaned = lean(concatNotes(hook, answer), [[start + 28, start + 30]]);
-  return humanise(phrase(legato(leaned, 0.05), start, 32, 0.14), 0.03, 9);
+  const arched = phrase(legato(concatNotes(hook, answer), 0.05), start, 32, 0.14);
+  // Three sighs, not one. The hook's bar 4 (F onto Eb) and the answer's bar 2
+  // (Bb onto Ab) were unmarked, and the arch left both of them INVERTED — the
+  // horns and the flute doubling them were measured 0.01-0.02 the wrong way
+  // round in both choruses. `lean` runs last so nothing can level it again.
+  const leaned = lean(arched, [
+    [start + 12, start + 13.5],
+    [start + 20, start + 21.5],
+    [start + 28, start + 30],
+  ]);
+  return humanise(leaned, 0.03, 9);
 }
 
 // --- parts -----------------------------------------------------------------
@@ -293,25 +305,42 @@ const bassNotes = concatNotes(
   bassLine(TURN_CHORDS, BASS_A, { start: TURN, octave: 1, velocity: 0.94 }),
 );
 
+/**
+ * Per-bar dynamics for the bridge lament. Both statements were going out at
+ * one velocity for eight bars, which is the thing THEMES.md bans outright —
+ * and it cost the section its shape, because the bridge's whole reason to
+ * exist is that it climbs a sixth above anything the hook can reach. Bar 7,
+ * the Gb5, is the top of the cue; bar 8 gives it back.
+ */
+const BRIDGE_DYNAMICS = [0.88, 0.94, 0.9, 1, 0.96, 1.06, 1.18, 0.9];
+
+/**
+ * One statement of the bridge as a lament: shaped by bar, legato, and with
+ * both of its appoggiaturas leaning louder than what they fall to — bar 4's
+ * Bb onto the Ab that opens bar 5, and the peak, Gb5 held three beats, onto
+ * the F under it. Measured before this they were +0.004 and +0.005, which is
+ * humaniser noise standing in for a performance.
+ */
+function bridgeLament(start: number, velocity: number, transpose: number, seed: number): Note[] {
+  const raw = tracker(SONGSTRESS_BRIDGE, { start, checkBars: BAR, velocity, gate: 1.02, transpose });
+  const shaped = raw.map(
+    (n) => [n[0], n[1], n[2], velocity * (BRIDGE_DYNAMICS[Math.floor((n[0] - start) / BAR)] ?? 1)] as Note,
+  );
+  return humanise(
+    lean(legato(shaped, 0.09), [
+      [start + 14, start + 16],
+      [start + 24, start + 27],
+    ]),
+    0.03,
+    seed,
+  );
+}
+
 /** Strings: the friend the party is fighting. They arrive late and leave early. */
 const stringsNotes = concatNotes(
   // The bridge line: the jazz bridge played straight, legato, as a lament.
-  humanise(
-    legato(
-      tracker(SONGSTRESS_BRIDGE, { start: BRIDGE, checkBars: BAR, velocity: 0.6, gate: 1.02 }),
-      0.09,
-    ),
-    0.03,
-    31,
-  ),
-  humanise(
-    legato(
-      tracker(SONGSTRESS_BRIDGE, { start: BRIDGE + 32, checkBars: BAR, velocity: 0.66, gate: 1.02, transpose: -12 }),
-      0.09,
-    ),
-    0.03,
-    32,
-  ),
+  bridgeLament(BRIDGE, 0.6, 0, 31),
+  bridgeLament(BRIDGE + 32, 0.66, -12, 32),
   // A held bed under the second chorus, entering only at the lift.
   padLine(CHORUS_CHORDS.slice(8), { start: CHORUS + 32, center: 55, velocity: 0.42, dur: 3.9, seed: 19 }),
 );

@@ -58,10 +58,31 @@ const FANFARE_ANSWER = `
   C5:1 Bb4:1 Ab4:2 |
 `;
 
+/**
+ * The identity leap, performed rather than triggered.
+ *
+ * `SONGSTRESS_HOOK` is three notes — the 3 up to the 6, a perfect fourth,
+ * then home to the 5 — and this cue is the one place in the game where it is
+ * stated major and intact. It was going out at ONE velocity for all three,
+ * which loses two things at once. The 6 is the arrival, so it should be the
+ * loudest; and it is a two-beat note falling a whole tone onto a one-beat
+ * note, which makes it an appoggiatura, and THEMES.md calls the rule that
+ * the leaning note is the louder one "the single most important number in
+ * this file". Measured before this: 0.648 leaning onto 0.648. Exactly flat,
+ * on the fanfare's own fingerprint.
+ */
+function identityLeap(start: number, tonic: string, velocity: number): Note[] {
+  const shaped = cell(SONGSTRESS_HOOK, start, tonic, velocity).map(
+    // The 3 is the run-up, not the event.
+    (n, i) => [n[0], n[1], n[2], velocity * (i === 0 ? 0.94 : 1)] as Note,
+  );
+  return lean(shaped, [[start + 1, start + 3]]);
+}
+
 const fanfareMelody = concatNotes(
-  cell(SONGSTRESS_HOOK, FANFARE, 'Eb4', 0.82),
+  identityLeap(FANFARE, 'Eb4', 0.82),
   tracker(FANFARE_ANSWER, { start: FANFARE + 4, checkBars: BAR, velocity: 0.76 }),
-  cell(SONGSTRESS_HOOK, FANFARE + 8, 'Eb4', 0.9),
+  identityLeap(FANFARE + 8, 'Eb4', 0.9),
   // AMEN in the major: the 2 (F) held over the IV and falling to the tonic,
   // leaning louder than the note it resolves to. The same two notes close the
   // hymn, the farewell and the FFX victory fanfare.
@@ -115,11 +136,17 @@ function tune(start: number, velocity: number): Note[] {
     cell(SONGSTRESS_RISE, start + 16, 'Eb4', velocity),
   );
   const rest = tracker(GROOVE_TUNE, { start, checkBars: BAR, velocity });
-  const leaned = lean(concatNotes(rise, rest), [
+  const arched = phrase(legato(concatNotes(rise, rest), 0.05), start, 32, 0.14);
+  // `lean` goes LAST, after the arch. The arch multiplies and the lean adds,
+  // so an arch applied over the top of a lean quietly re-levels every pair it
+  // straddles — which is what had happened to bar 4's F falling onto its Eb:
+  // unmarked, and 0.034 the wrong way round in all three passes.
+  const leaned = lean(arched, [
+    [start + 12, start + 13.5],
     [start + 24, start + 26],
     [start + 28, start + 30],
   ]);
-  return humanise(phrase(legato(leaned, 0.05), start, 32, 0.14), 0.03, 73);
+  return humanise(leaned, 0.03, 73);
 }
 
 const malletNotes = concatNotes(tune(PASSES[0]!, 0.6), tune(PASSES[2]!, 0.56));
