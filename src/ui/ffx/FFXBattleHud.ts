@@ -21,6 +21,8 @@ import { SensorPanel } from './SensorPanel.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
+import { solidPanelRects } from '../common/panel-rects.ts';
+import { sensorSteerDx } from './sensorSteer.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import type { CursorSelection } from './TargetCursor.ts';
@@ -38,6 +40,9 @@ import {
 } from './hudSafeZones.ts';
 
 /** Clearance between the advisor card's top edge and its chip, in grid px. */
+/** How often the HUD re-measures its own panels for the field, in ms. */
+const PANEL_PUBLISH_MS = 250;
+
 const ADVISOR_CHIP_GAP = 2;
 
 /**
@@ -628,6 +633,27 @@ export class FFXBattleHud implements HudPort {
     // the fact, and that is a change to a file this track does not own.
     this.placeAdvisor();
     this.intent.update(dt);
+    this.republishPanels(dt);
+  }
+
+  /**
+   * Keep the field's idea of where the chrome is from going stale.
+   *
+   * Panels used to be published only on an engine sync and when a cursor
+   * opened, and between those two the number lied: measured live with the
+   * command list open and nothing aimed at yet, Tidus was 56% behind the list
+   * while `visibleInFrame` still said 1.000. The advisor card and the Sensor
+   * shelf move on their own clock — `placeAdvisor` above has just moved one of
+   * them — so the rectangles are re-read on a slow timer of their own, four
+   * times a second, which is cheap and never stale by more than a frame or two
+   * of animation.
+   */
+  private republishPanels(dt: number): void {
+    if (!this.targeting) return;
+    this.panelPublishMs -= dt * 1000;
+    if (this.panelPublishMs > 0) return;
+    this.panelPublishMs = PANEL_PUBLISH_MS;
+    this.targeting.setPanels(this.panelRects());
   }
 
   /** The guide rail, for tests and the debug snapshot. */
@@ -788,6 +814,74 @@ export class FFXBattleHud implements HudPort {
 
     // The status panel's yield.
     this.el.classList.toggle('ffxhud--targeting-enemy', !!sel && kind === 'enemy');
+
+    this.steerSensor(sel);
+  }
+
+  /**
+   * Move the Sensor card off the fiend it is describing.
+   *
+   * `.ffx-sensor` is pinned at grid 436,166 — squarely in the lane the enemies
+   * stand in. Aim at a Yu Pagoda and the read-out opens across its base, over
+   * the gold bracket and over the "Yu Pagoda C" plate, which is what the
+   * adversarial capture caught: the card that answers *"what am I looking
+   * at?"* printed on top of the thing being looked at. No formation can avoid
+   * it — the card is transient and follows whatever the player aims at — so it
+   * is steered instead of the field being restaged.
+   *
+   * Deliberately small: one horizontal offset, in grid px, published as a
+   * custom property the stylesheet adds to its own `left`. The card slides to
+   * whichever side of the target has more room inside the stage and never
+   * crosses into the turn list's column; if neither side fits, it stays put
+   * and the x-ray fallback still reads. Cleared the instant the cursor closes,
+   * so nothing about the card's resting place changes for a player who never
+   * opens a target cursor.
+   *
+   * GAME-AWARE (AGENTS.md rule 14): **FFX only.** `SensorPanel` is FFX's own
+   * Sensor read-out — the ability, the plate and its `I` fold key are all
+   * FFX's [research/visual-bible.md §3.5]. FFX-2's equivalent is the boss
+   * gauge strip, which stands clear of the lane already and has no card to
+   * move. Asserted in tests/unit/ui-sensor-steer.test.ts.
+   */
+  private steerSensor(sel: CursorSelection | null): void {
+    const el = this.sensorPanel.el;
+    if (!sel || sel.kind !== 'enemy' || el.hidden) {
+      el.style.removeProperty('--ffx-sensor-dx');
+      return;
+    }
+    const id = sel.activeId ?? sel.ids[0];
+    const target = id ? this.targeting?.rect(id) : null;
+    const card = this.stageRect(el);
+    if (!target || !card) {
+      el.style.removeProperty('--ffx-sensor-dx');
+      return;
+    }
+    // Both in grid space, so the answer is resolution-independent.
+    const scale = this.hudScale();
+    if (!scale) return;
+    const host = this.el.getBoundingClientRect();
+    const ox = host.left + (host.width - STAGE.width * scale) / 2;
+    const oy = host.top + (host.height - STAGE.height * scale) / 2;
+    const figure = {
+      left: (target.x - ox) / scale,
+      right: (target.x + target.w - ox) / scale,
+      top: (target.y - oy) / scale,
+      bottom: (target.y + target.h - oy) / scale,
+    };
+    // Measured with whatever steer is already on it taken back off, so the
+    // answer is against the card's resting place and cannot drift a step at a
+    // time across the field.
+    const dx0 = parseFloat(el.style.getPropertyValue('--ffx-sensor-dx')) || 0;
+    const home = {
+      left: card.left - dx0,
+      right: card.right - dx0,
+      top: card.top,
+      bottom: card.bottom,
+    };
+
+    const dx = sensorSteerDx(home, figure, STAGE.width);
+    if (dx === null) el.style.removeProperty('--ffx-sensor-dx');
+    else el.style.setProperty('--ffx-sensor-dx', `${Math.round(dx * 10) / 10}px`);
   }
 
   /**
@@ -811,19 +905,22 @@ export class FFXBattleHud implements HudPort {
     // it in only reports the fiend the player is looking at as invisible.
     // That collision is real and is reported in docs/handoff/fix3-targeting.md
     // rather than papered over here.
-    const els = [
-      this.commandMenu.stackEl,
-      this.ctbList.el,
-      this.partyStatus.el,
-      this.advisor.el,
-      this.guide.el,
-    ];
-    for (const el of els) {
-      if (!el || el.hidden) continue;
-      const r = el.getBoundingClientRect();
-      if (r.width < 2 || r.height < 2) continue;
-      out.push({ x: r.left, y: r.top, w: r.width, h: r.height });
-    }
+    //
+    // Resolved through `solidPanelRects`, which descends a wrapper that paints
+    // nothing and takes its painted card instead. Handing over the roots
+    // directly was a live lie: `.mad` and `.sgd` are `inset: 0` transparent
+    // wrappers, they measured 0,0,1600,900, and every combatant on the field
+    // therefore reported `visibleInFrame` 0.000 — including allies standing in
+    // the open — which also stopped the formation's panel clause ever running.
+    out.push(
+      ...solidPanelRects([
+        this.commandMenu.stackEl,
+        this.ctbList.el,
+        this.partyStatus.el,
+        this.advisor.el,
+        this.guide.el,
+      ]),
+    );
     return out;
   }
 
@@ -1299,6 +1396,8 @@ export class FFXBattleHud implements HudPort {
   private targeting: TargetingPort | null = null;
   /** The turn preview last rendered, for the letter tags. */
   private lastPreviewRows: TurnPreview[] = [];
+  /** Countdown to the next panel re-measure. See `republishPanels`. */
+  private panelPublishMs = 0;
 
   /**
    * The HUD panels the intent slab may not cover, in viewport pixels.

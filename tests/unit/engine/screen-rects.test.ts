@@ -4,6 +4,7 @@ import {
   occludersOf,
   visibilityOf,
   visibleFraction,
+  worstPanelFor,
   type DepthRect,
 } from '../../../src/engine/ScreenRects.ts';
 
@@ -112,5 +113,43 @@ describe('occludersOf', () => {
     // `grazing` overlaps far-small by 2px of 100 = 2% of its area, under the
     // 4% floor: a wingtip clipping a bracket must not fade a whole fiend out.
     expect(occludersOf('far-small', rects)).not.toContain('grazing');
+  });
+});
+
+/**
+ * The rectangle the formation's panel clause walks away from.
+ *
+ * Requirement B(1) caps a targetable enemy's HUD coverage at 25%. Measured
+ * live before the clause ran, `yu-pagoda-right` sat 36% under the turn list at
+ * 1280x720 and 40% at 2000x1000, with the gold bracket, the hand cursor and
+ * the "Yu Pagoda C" plate all drawn beneath the queue's tiles.
+ *
+ * GAME-AWARE (AGENTS.md rule 14): **both games** — shared measurement plumbing
+ * behind a defect (critic CHK-020).
+ */
+describe('worstPanelFor', () => {
+  const turnList = R(1300, 40, 280, 520);
+  const commandStack = R(40, 560, 420, 280);
+
+  it('is null when no panel touches the figure', () => {
+    expect(worstPanelFor(R(600, 300, 200, 400), [turnList, commandStack])).toBeNull();
+  });
+
+  it('picks the panel covering the most of it, not the first that touches', () => {
+    // Clipped by the turn list's bottom-left corner, buried under the stack.
+    const fiend = R(300, 500, 1100, 200);
+    expect(worstPanelFor(fiend, [turnList, commandStack])).toBe(commandStack);
+    expect(worstPanelFor(fiend, [commandStack, turnList])).toBe(commandStack);
+  });
+
+  it('answers for a fiend standing under the turn list', () => {
+    const pagoda = R(1240, 300, 200, 420);
+    expect(worstPanelFor(pagoda, [turnList, commandStack])).toBe(turnList);
+    // ...and the coverage it has to walk off is the number B(1) caps.
+    expect(1 - visibleFraction(pagoda, [turnList])).toBeGreaterThan(0.25);
+  });
+
+  it('ignores panels regardless of depth — a HUD covers everything', () => {
+    expect(worstPanelFor(R(1350, 100, 100, 100), [turnList])).toBe(turnList);
   });
 });

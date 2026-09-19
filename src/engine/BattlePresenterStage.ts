@@ -18,7 +18,14 @@ import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts'
 import { HitEffects } from './VFX.ts';
 import type { SceneSlots } from '../scenes/index.ts';
 import { solveFormation, type FormationMember } from './Formation.ts';
-import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './ScreenRects.ts';
+import {
+  occludersOf,
+  visibleFraction,
+  visibilityOf,
+  worstPanelFor,
+  type DepthRect,
+  type ScreenRect,
+} from './ScreenRects.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 
 export interface PaintedStageOptions {
@@ -55,6 +62,17 @@ interface StagedActor {
  * eased a few pixels further in.
  */
 const CLEAR_ENOUGH = 0.8;
+
+/**
+ * How much of a **targetable enemy** has to be clear of the HUD's own panels.
+ *
+ * The task's requirement B(1) caps panel coverage at 25%; this is 22%, so the
+ * lane settles with a little margin rather than exactly on the line. Measured
+ * live before this clause existed, `yu-pagoda-right` sat 36% under the turn
+ * list at 1280x720 and 40% at 2000x1000 — the gold bracket, the hand and the
+ * name plate all drawn beneath the queue's tiles.
+ */
+const PANEL_CLEAR = 0.78;
 
 /** How far a destructible part may stray from its machine, in world units. */
 const PART_LEASH = 3.2;
@@ -464,6 +482,38 @@ export class PaintedStage implements BattleStage {
           if (this.nudgeIn(otherId, (-dir * step) / 2, lanes, rect.width)) moved = true;
         }
       }
+
+      // Second clause: the HUD's own panels.
+      //
+      // This is the half that was written down and never ran. `occludersOf`
+      // above only knows about combatants, so a fiend standing squarely under
+      // the turn list matched `fraction < CLEAR_ENOUGH`, found no combatant to
+      // move away from, and stayed exactly where it was. (And until
+      // `solidPanelRects` landed the panel rectangles were two full-viewport
+      // transparent wrappers, so *every* fiend was below the threshold and
+      // none of it meant anything.)
+      //
+      // Enemies only, deliberately. The approved frame
+      // `docs/concepts/targeting/b-ring-and-dim/s1.png` draws the command list
+      // across the party's legs on purpose — measured off the mockup itself,
+      // Yuna is ~48% behind it there — so the party arc is the picked look and
+      // is not restaged here. Requirement B(1)'s 25% cap is about targetable
+      // enemies, and that is what this enforces.
+      if (this.panels.length) {
+        for (const [id, mine] of rects) {
+          if (this.actors.get(id)?.kind !== 'enemy') continue;
+          if (visibleFraction(mine, this.panels) >= PANEL_CLEAR) continue;
+          const worst = worstPanelFor(mine, this.panels);
+          if (!worst) continue;
+          const overlap =
+            Math.min(mine.x + mine.w, worst.x + worst.w) - Math.max(mine.x, worst.x);
+          if (overlap <= 0) continue;
+          // Away from the panel, along the axis the lane actually allows.
+          const dir = mine.x + mine.w / 2 <= worst.x + worst.w / 2 ? -1 : 1;
+          if (this.nudgeIn(id, dir * (overlap * 0.4 + 3), lanes, rect.width)) moved = true;
+        }
+      }
+
       if (!moved) return true;
     }
     // Ran out of passes with figures still moving: not settled yet.

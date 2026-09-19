@@ -430,8 +430,11 @@
    three — which is the price, knowingly paid: a 100x78 panel over a boss's
    feet for seven seconds is a much smaller thing than a slab printed over
    another panel's text. */
+/* `--ffx-sensor-dx` is the steer `FFXBattleHud.steerSensor` writes while an
+   enemy target cursor is live, so the read-out stops opening across the very
+   fiend it describes. Zero — the resting place — whenever no cursor is up. */
 .ffx-sensor {
-  position: absolute; left: 436px; top: 166px; width: 100px;
+  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px)); top: 166px; width: 100px;
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -579,6 +582,12 @@
   position: absolute;
   --ffx-corner: 24px;
   --ffx-mark: var(--ig-gold, #f2c21e);
+  /* The stroke weight travels as a CUSTOM PROPERTY, never as a `border-width`
+     shorthand. A modifier that wanted a thinner stroke used to write
+     `border-width: 2px`, and a shorthand sets all four sides — which turned
+     the four L-shaped corners into four closed squares. See the guard
+     below and tests/unit/ui-target-css.test.ts. */
+  --ffx-bw: 3px;
 }
 .ffx-target--ally { --ffx-mark: #7ee8b0; }
 .ffx-target--enemy { --ffx-mark: #f2c21e; }
@@ -610,15 +619,22 @@
   border-color: rgba(11, 10, 18, 0.9);
   pointer-events: none;
 }
-.ffx-target__c--tl { left: 0; top: 0; border-left-width: 3px; border-top-width: 3px; }
-.ffx-target__c--tr { right: 0; top: 0; border-right-width: 3px; border-top-width: 3px; }
-.ffx-target__c--bl { left: 0; bottom: 0; border-left-width: 3px; border-bottom-width: 3px; }
-.ffx-target__c--br { right: 0; bottom: 0; border-right-width: 3px; border-bottom-width: 3px; }
+.ffx-target__c--tl { left: 0; top: 0; border-left-width: var(--ffx-bw); border-top-width: var(--ffx-bw); }
+.ffx-target__c--tr { right: 0; top: 0; border-right-width: var(--ffx-bw); border-top-width: var(--ffx-bw); }
+.ffx-target__c--bl { left: 0; bottom: 0; border-left-width: var(--ffx-bw); border-bottom-width: var(--ffx-bw); }
+.ffx-target__c--br { right: 0; bottom: 0; border-right-width: var(--ffx-bw); border-bottom-width: var(--ffx-bw); }
 
 /* A candidate that is not the one being aimed at: still drawn (a mouse player
-   clicks it directly) but clearly subordinate. */
-.ffx-target--dim .ffx-target__c { opacity: 0.4; border-width: 2px; }
-.ffx-target--dim.ffx-target__c { opacity: 0.4; }
+   clicks it directly) but clearly subordinate.
+
+   It changes `--ffx-bw`, NOT `border-width`. The previous rule here was
+   `opacity: 0.4; border-width: 2px`, and because a multi-target cast also
+   marked every target as a candidate, Bailey's own Hastega frame drew eight
+   closed grey squares instead of three green brackets. Two things were wrong
+   and both are fixed: the shorthand (here) and the dim flag itself
+   (TargetCursor.reposition). */
+.ffx-target--dim { --ffx-bw: 2px; }
+.ffx-target--dim .ffx-target__c { opacity: 0.4; }
 
 /* Multi-target: every target flashes together, which is FFX's own rule.
 

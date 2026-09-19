@@ -140,6 +140,28 @@ describe('a multi-target command rings every target', () => {
     expect(c.selection).toMatchObject({ mode: 'all' });
     expect(c.selection!.ids.sort()).toEqual(['auron', 'tidus', 'yuna']);
   });
+
+  /**
+   * The live defect in Bailey's own frame. `.ffx-target--dim` was put on every
+   * target of a party-wide cast, and the CSS rule behind that class carried a
+   * `border-width` SHORTHAND — so the three green L-shaped brackets came out as
+   * eight closed grey squares and nothing said who Hastega was for. Two
+   * guards, because it took both mistakes to produce it.
+   */
+  it('dims nobody — in a group cast every figure IS a target', () => {
+    const c = makeCursor();
+    c.showGroup(PARTY);
+    expect(c.el.querySelectorAll('.ffx-target--dim')).toHaveLength(0);
+    c.showGroup(ENEMIES);
+    expect(c.el.querySelectorAll('.ffx-target--dim')).toHaveLength(0);
+  });
+
+  it('still dims the candidates a single-target cursor is not aimed at', () => {
+    const c = makeCursor();
+    c.showSingle(ENEMIES);
+    // Three candidates, one aimed at: the other two stay subordinate.
+    expect(c.el.querySelectorAll('.ffx-target--dim')).toHaveLength(2);
+  });
 });
 
 describe('the cursor chrome is game-specific (AGENTS.md rule 14)', () => {

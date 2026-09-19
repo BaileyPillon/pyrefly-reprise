@@ -1,0 +1,2477 @@
+[
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "menu": true
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ffx-sensor",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.542,
+          "apiVisible": 1,
+          "apiInFrame": 0.679,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 0.917,
+          "apiVisible": 1,
+          "apiInFrame": 0.284,
+          "dim": 0,
+          "ringed": false
+        },
+        "kimahri": {
+          "coveredByHud": 0,
+          "apiVisible": 0.742,
+          "apiInFrame": 0.742,
+          "dim": 0,
+          "ringed": false
+        },
+        "seymour-flux": {
+          "coveredByHud": 0.104,
+          "apiVisible": 0.836,
+          "apiInFrame": 0.836,
+          "dim": 0,
+          "ringed": false
+        },
+        "mortiorchis": {
+          "coveredByHud": 0.042,
+          "apiVisible": 0.999,
+          "apiInFrame": 0.953,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 189,
+        "h": 274,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 193,
+        "h": 231,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 135,
+        "h": 203,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ffx-sensor",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.134,
+          "apiVisible": 1,
+          "apiInFrame": 0.92,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.191,
+          "apiVisible": 1,
+          "apiInFrame": 0.818,
+          "dim": 0,
+          "ringed": true
+        },
+        "kimahri": {
+          "coveredByHud": 0,
+          "apiVisible": 0.71,
+          "apiInFrame": 0.71,
+          "dim": 0,
+          "ringed": true
+        },
+        "seymour-flux": {
+          "coveredByHud": 0.097,
+          "apiVisible": 0.837,
+          "apiInFrame": 0.837,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "mortiorchis": {
+          "coveredByHud": 0.042,
+          "apiVisible": 0.998,
+          "apiInFrame": 0.951,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "id": "mortiorchis",
+    "cov": {
+      "coveredByHud": 0.042,
+      "apiVisible": 1,
+      "apiInFrame": 0.953,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "mortiorchis",
+        "w": 241,
+        "h": 163,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "id": "seymour-flux",
+    "cov": {
+      "coveredByHud": 0.007,
+      "apiVisible": 0.834,
+      "apiInFrame": 0.834,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "seymour-flux",
+        "w": 191,
+        "h": 295,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "walked": [
+      "mortiorchis",
+      "seymour-flux"
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "menu": true
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ffx-sensor",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.5,
+          "apiVisible": 1,
+          "apiInFrame": 0.701,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 0.917,
+          "apiVisible": 1,
+          "apiInFrame": 0.297,
+          "dim": 0,
+          "ringed": false
+        },
+        "kimahri": {
+          "coveredByHud": 0,
+          "apiVisible": 0.71,
+          "apiInFrame": 0.71,
+          "dim": 0,
+          "ringed": false
+        },
+        "seymour-flux": {
+          "coveredByHud": 0,
+          "apiVisible": 0.997,
+          "apiInFrame": 0.997,
+          "dim": 0,
+          "ringed": false
+        },
+        "mortiorchis": {
+          "coveredByHud": 0,
+          "apiVisible": 0.849,
+          "apiInFrame": 0.849,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 238,
+        "h": 334,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 238,
+        "h": 297,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 168,
+        "h": 260,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ffx-sensor",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.122,
+          "apiVisible": 1,
+          "apiInFrame": 0.914,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.191,
+          "apiVisible": 1,
+          "apiInFrame": 0.809,
+          "dim": 0,
+          "ringed": true
+        },
+        "kimahri": {
+          "coveredByHud": 0,
+          "apiVisible": 0.803,
+          "apiInFrame": 0.803,
+          "dim": 0,
+          "ringed": true
+        },
+        "seymour-flux": {
+          "coveredByHud": 0,
+          "apiVisible": 0.981,
+          "apiInFrame": 0.981,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "mortiorchis": {
+          "coveredByHud": 0,
+          "apiVisible": 0.833,
+          "apiInFrame": 0.833,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "id": "seymour-flux",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.982,
+      "apiInFrame": 0.982,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "seymour-flux",
+        "w": 232,
+        "h": 373,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "id": "mortiorchis",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.831,
+      "apiInFrame": 0.831,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "mortiorchis",
+        "w": 304,
+        "h": 204,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "walked": [
+      "seymour-flux",
+      "mortiorchis"
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "menu": true
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ffx-sensor",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.5,
+          "apiVisible": 1,
+          "apiInFrame": 0.703,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 0.917,
+          "apiVisible": 1,
+          "apiInFrame": 0.3,
+          "dim": 0,
+          "ringed": false
+        },
+        "kimahri": {
+          "coveredByHud": 0,
+          "apiVisible": 0.718,
+          "apiInFrame": 0.718,
+          "dim": 0,
+          "ringed": false
+        },
+        "seymour-flux": {
+          "coveredByHud": 0.097,
+          "apiVisible": 0.834,
+          "apiInFrame": 0.834,
+          "dim": 0,
+          "ringed": false
+        },
+        "mortiorchis": {
+          "coveredByHud": 0.042,
+          "apiVisible": 0.999,
+          "apiInFrame": 0.953,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 264,
+        "h": 373,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 269,
+        "h": 321,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 190,
+        "h": 284,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ffx-sensor",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.104,
+          "apiVisible": 1,
+          "apiInFrame": 0.928,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.191,
+          "apiVisible": 1,
+          "apiInFrame": 0.815,
+          "dim": 0,
+          "ringed": true
+        },
+        "kimahri": {
+          "coveredByHud": 0,
+          "apiVisible": 0.672,
+          "apiInFrame": 0.672,
+          "dim": 0,
+          "ringed": true
+        },
+        "seymour-flux": {
+          "coveredByHud": 0.097,
+          "apiVisible": 0.83,
+          "apiInFrame": 0.83,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "mortiorchis": {
+          "coveredByHud": 0.042,
+          "apiVisible": 0.999,
+          "apiInFrame": 0.952,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "id": "mortiorchis",
+    "cov": {
+      "coveredByHud": 0.042,
+      "apiVisible": 1,
+      "apiInFrame": 0.951,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "mortiorchis",
+        "w": 335,
+        "h": 227,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "id": "seymour-flux",
+    "cov": {
+      "coveredByHud": 0.007,
+      "apiVisible": 0.832,
+      "apiInFrame": 0.832,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "seymour-flux",
+        "w": 264,
+        "h": 418,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "seymour-flux",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "walked": [
+      "mortiorchis",
+      "seymour-flux"
+    ]
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "menu": true
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 0.458,
+          "apiVisible": 1,
+          "apiInFrame": 0.714,
+          "dim": 0,
+          "ringed": false
+        },
+        "auron": {
+          "coveredByHud": 0.069,
+          "apiVisible": 0.76,
+          "apiInFrame": 0.746,
+          "dim": 0,
+          "ringed": false
+        },
+        "yunalesca": {
+          "coveredByHud": 0,
+          "apiVisible": 0.801,
+          "apiInFrame": 0.801,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "auron"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 184,
+        "h": 275,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 189,
+        "h": 253,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 140,
+        "h": 211,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.125,
+          "apiVisible": 1,
+          "apiInFrame": 0.927,
+          "dim": 0,
+          "ringed": true
+        },
+        "auron": {
+          "coveredByHud": 0.056,
+          "apiVisible": 0.737,
+          "apiInFrame": 0.732,
+          "dim": 0,
+          "ringed": true
+        },
+        "yunalesca": {
+          "coveredByHud": 0,
+          "apiVisible": 0.811,
+          "apiInFrame": 0.811,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "walked": []
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "menu": true
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 0.458,
+          "apiVisible": 1,
+          "apiInFrame": 0.714,
+          "dim": 0,
+          "ringed": false
+        },
+        "auron": {
+          "coveredByHud": 0.056,
+          "apiVisible": 0.748,
+          "apiInFrame": 0.745,
+          "dim": 0,
+          "ringed": false
+        },
+        "yunalesca": {
+          "coveredByHud": 0,
+          "apiVisible": 0.809,
+          "apiInFrame": 0.809,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "auron"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 234,
+        "h": 356,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 235,
+        "h": 308,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 174,
+        "h": 265,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.125,
+          "apiVisible": 0.994,
+          "apiInFrame": 0.916,
+          "dim": 0,
+          "ringed": true
+        },
+        "auron": {
+          "coveredByHud": 0.056,
+          "apiVisible": 0.832,
+          "apiInFrame": 0.829,
+          "dim": 0,
+          "ringed": true
+        },
+        "yunalesca": {
+          "coveredByHud": 0,
+          "apiVisible": 0.84,
+          "apiInFrame": 0.84,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "walked": []
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "menu": true
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 0.417,
+          "apiVisible": 0.985,
+          "apiInFrame": 0.711,
+          "dim": 0,
+          "ringed": false
+        },
+        "auron": {
+          "coveredByHud": 0.014,
+          "apiVisible": 0.683,
+          "apiInFrame": 0.683,
+          "dim": 0,
+          "ringed": false
+        },
+        "yunalesca": {
+          "coveredByHud": 0,
+          "apiVisible": 0.857,
+          "apiInFrame": 0.857,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "auron"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 254,
+        "h": 381,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 259,
+        "h": 345,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 194,
+        "h": 289,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.104,
+          "apiVisible": 1,
+          "apiInFrame": 0.946,
+          "dim": 0,
+          "ringed": true
+        },
+        "auron": {
+          "coveredByHud": 0.028,
+          "apiVisible": 0.691,
+          "apiInFrame": 0.69,
+          "dim": 0,
+          "ringed": true
+        },
+        "yunalesca": {
+          "coveredByHud": 0,
+          "apiVisible": 0.86,
+          "apiInFrame": 0.86,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "yunalesca",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "walked": []
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "menu": true
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.479,
+          "apiVisible": 1,
+          "apiInFrame": 0.692,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 1,
+          "apiVisible": 1,
+          "apiInFrame": 0.307,
+          "dim": 0,
+          "ringed": false
+        },
+        "auron": {
+          "coveredByHud": 0,
+          "apiVisible": 0.699,
+          "apiInFrame": 0.699,
+          "dim": 0,
+          "ringed": false
+        },
+        "braskas-final-aeon": {
+          "coveredByHud": 0,
+          "apiVisible": 0.898,
+          "apiInFrame": 0.898,
+          "dim": 0,
+          "ringed": false
+        },
+        "yu-pagoda-left": {
+          "coveredByHud": 0,
+          "apiVisible": 0.89,
+          "apiInFrame": 0.89,
+          "dim": 0,
+          "ringed": false
+        },
+        "yu-pagoda-right": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "auron"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 183,
+        "h": 271,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 184,
+        "h": 236,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 136,
+        "h": 205,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.181,
+          "apiVisible": 1,
+          "apiInFrame": 0.848,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.439,
+          "apiVisible": 1,
+          "apiInFrame": 0.612,
+          "dim": 0,
+          "ringed": true
+        },
+        "auron": {
+          "coveredByHud": 0,
+          "apiVisible": 0.816,
+          "apiInFrame": 0.816,
+          "dim": 0,
+          "ringed": true
+        },
+        "braskas-final-aeon": {
+          "coveredByHud": 0,
+          "apiVisible": 0.898,
+          "apiInFrame": 0.898,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "yu-pagoda-left": {
+          "coveredByHud": 0,
+          "apiVisible": 0.887,
+          "apiInFrame": 0.887,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "yu-pagoda-right": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "id": "yu-pagoda-left",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.881,
+      "apiInFrame": 0.881,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "yu-pagoda-left",
+        "w": 121,
+        "h": 189,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "id": "braskas-final-aeon",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.9,
+      "apiInFrame": 0.898,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "braskas-final-aeon",
+        "w": 303,
+        "h": 287,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "id": "yu-pagoda-right",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 1,
+      "apiInFrame": 1,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "yu-pagoda-right",
+        "w": 113,
+        "h": 173,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1280,
+    "H": 720,
+    "frame": "attack",
+    "walked": [
+      "yu-pagoda-left",
+      "braskas-final-aeon",
+      "yu-pagoda-right"
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "menu": true
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.519,
+          "apiVisible": 1,
+          "apiInFrame": 0.673,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 1,
+          "apiVisible": 1,
+          "apiInFrame": 0.26,
+          "dim": 0,
+          "ringed": false
+        },
+        "auron": {
+          "coveredByHud": 0,
+          "apiVisible": 0.699,
+          "apiInFrame": 0.699,
+          "dim": 0,
+          "ringed": false
+        },
+        "braskas-final-aeon": {
+          "coveredByHud": 0,
+          "apiVisible": 0.915,
+          "apiInFrame": 0.914,
+          "dim": 0,
+          "ringed": false
+        },
+        "yu-pagoda-left": {
+          "coveredByHud": 0,
+          "apiVisible": 0.899,
+          "apiInFrame": 0.899,
+          "dim": 0,
+          "ringed": false
+        },
+        "yu-pagoda-right": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "auron"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 232,
+        "h": 337,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 228,
+        "h": 296,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 173,
+        "h": 256,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.17,
+          "apiVisible": 1,
+          "apiInFrame": 0.874,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.458,
+          "apiVisible": 1,
+          "apiInFrame": 0.596,
+          "dim": 0,
+          "ringed": true
+        },
+        "auron": {
+          "coveredByHud": 0,
+          "apiVisible": 0.681,
+          "apiInFrame": 0.681,
+          "dim": 0,
+          "ringed": true
+        },
+        "braskas-final-aeon": {
+          "coveredByHud": 0,
+          "apiVisible": 0.914,
+          "apiInFrame": 0.914,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "yu-pagoda-left": {
+          "coveredByHud": 0,
+          "apiVisible": 0.905,
+          "apiInFrame": 0.905,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "yu-pagoda-right": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "id": "yu-pagoda-left",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.897,
+      "apiInFrame": 0.897,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "yu-pagoda-left",
+        "w": 152,
+        "h": 238,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "id": "braskas-final-aeon",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.914,
+      "apiInFrame": 0.914,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "braskas-final-aeon",
+        "w": 382,
+        "h": 355,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "id": "yu-pagoda-right",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 1,
+      "apiInFrame": 1,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "yu-pagoda-right",
+        "w": 141,
+        "h": 216,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 1600,
+    "H": 900,
+    "frame": "attack",
+    "walked": [
+      "yu-pagoda-left",
+      "braskas-final-aeon",
+      "yu-pagoda-right"
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "menu": true
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "stage": "idle",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.519,
+          "apiVisible": 1,
+          "apiInFrame": 0.659,
+          "dim": 0,
+          "ringed": false
+        },
+        "yuna": {
+          "coveredByHud": 1,
+          "apiVisible": 1,
+          "apiInFrame": 0.298,
+          "dim": 0,
+          "ringed": false
+        },
+        "auron": {
+          "coveredByHud": 0,
+          "apiVisible": 0.755,
+          "apiInFrame": 0.755,
+          "dim": 0,
+          "ringed": false
+        },
+        "braskas-final-aeon": {
+          "coveredByHud": 0,
+          "apiVisible": 0.895,
+          "apiInFrame": 0.894,
+          "dim": 0,
+          "ringed": false
+        },
+        "yu-pagoda-left": {
+          "coveredByHud": 0,
+          "apiVisible": 0.899,
+          "apiInFrame": 0.899,
+          "dim": 0,
+          "ringed": false
+        },
+        "yu-pagoda-right": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "sel": {
+      "ids": [
+        "tidus",
+        "yuna",
+        "auron"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 258,
+        "h": 385,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 255,
+        "h": 321,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      },
+      {
+        "cls": "ffx-target ffx-target--ally ffx-target--group",
+        "id": null,
+        "w": 190,
+        "h": 289,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(126, 232, 176)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "hastega",
+    "coverage": {
+      "panels": [
+        ".ig-cmd-stack",
+        ".ig-ctb",
+        ".mad__card",
+        ".sgd__panel",
+        ".sgd__toggle",
+        ".ig-stat-list"
+      ],
+      "out": {
+        "tidus": {
+          "coveredByHud": 0.17,
+          "apiVisible": 1,
+          "apiInFrame": 0.876,
+          "dim": 0,
+          "ringed": true
+        },
+        "yuna": {
+          "coveredByHud": 0.458,
+          "apiVisible": 1,
+          "apiInFrame": 0.617,
+          "dim": 0,
+          "ringed": true
+        },
+        "auron": {
+          "coveredByHud": 0,
+          "apiVisible": 0.753,
+          "apiInFrame": 0.753,
+          "dim": 0,
+          "ringed": true
+        },
+        "braskas-final-aeon": {
+          "coveredByHud": 0,
+          "apiVisible": 0.893,
+          "apiInFrame": 0.892,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "yu-pagoda-left": {
+          "coveredByHud": 0,
+          "apiVisible": 0.901,
+          "apiInFrame": 0.901,
+          "dim": 0.26,
+          "ringed": false
+        },
+        "yu-pagoda-right": {
+          "coveredByHud": 0,
+          "apiVisible": 1,
+          "apiInFrame": 1,
+          "dim": 0.26,
+          "ringed": false
+        }
+      }
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "afterCancel": {
+      "brackets": 0,
+      "stillDim": []
+    }
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "id": "yu-pagoda-left",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.887,
+      "apiInFrame": 0.887,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "yu-pagoda-left",
+        "w": 167,
+        "h": 260,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "id": "braskas-final-aeon",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.896,
+      "apiInFrame": 0.895,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "braskas-final-aeon",
+        "w": 423,
+        "h": 399,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "id": "yu-pagoda-right",
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 1,
+      "apiInFrame": 1,
+      "dim": 0,
+      "ringed": true
+    },
+    "brackets": [
+      {
+        "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+        "id": "yu-pagoda-right",
+        "w": 161,
+        "h": 242,
+        "border": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "underlay": [
+          "3px",
+          "0px",
+          "0px",
+          "3px"
+        ],
+        "colour": "rgb(242, 194, 30)",
+        "opacity": 1
+      }
+    ]
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "W": 2000,
+    "H": 1000,
+    "frame": "attack",
+    "walked": [
+      "yu-pagoda-left",
+      "braskas-final-aeon",
+      "yu-pagoda-right"
+    ]
+  }
+]

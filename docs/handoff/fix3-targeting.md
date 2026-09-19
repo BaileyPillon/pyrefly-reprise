@@ -146,16 +146,178 @@ Two visibility numbers are reported, and the split is deliberate:
   equivalent command, and emits no `switch` event. Regression test in
   `tests/unit/presenter-events.test.ts`.
 
+## Fix pass (2026-09-19) — what the adversarial verifier refuted, and the answers
+
+An adversarial pass drove the real game (its own vite server, GPU mode, real
+key presses) and refuted the first attempt on four counts. All four are
+answered, each pinned by a test, and re-verified with fresh captures in
+`docs/screenshots/fix3/targeting/` (`report-fix.json`, `report-ffx2.json`).
+
+### 1. The bracket collapsed to four closed squares on every multi-target cast
+
+**Bailey's own frame, still broken.** Two mistakes, and it took both:
+
+- `TargetCursor.reposition` set `dim = group ? this.entries.length > 1 : …`,
+  so **every** target of a party-wide cast wore `.ffx-target--dim` — the
+  subordinate treatment, on the three figures the spell was actually for;
+- the rule behind that class was
+  `.ffx-target--dim .ffx-target__c { opacity: .4; border-width: 2px }`, and
+  `border-width` is a **shorthand**: it sets all four sides, closing each
+  L-shaped corner into a small square. The file's own comment claimed this
+  defect had been fixed in 8653b63; what was fixed there was the *underlay*
+  (a `box-shadow`, which follows the whole border box). The shorthand was a
+  second, separate instance of the same mistake in the same subtree.
+
+Now a group cast dims nobody, and the stroke weight travels as `--ffx-bw`, a
+custom property. No rule under `.ffx-target` may write `border-width` again —
+`tests/unit/ui-target-css.test.ts` reads the stylesheet and fails if one does,
+because jsdom does not cascade the shorthand and every DOM test passed while a
+real browser drew squares.
+
+Measured after, at 1280x720 / 1600x900 / 2000x1000 in all three FFX chapters:
+`border = ['3px','0px','0px','3px']`, the underlay identical, colour
+`rgb(126,232,176)` (ally green), opacity 1, and zero `.ffx-target--dim`
+elements on the cast.
+
+### 2. `visibleInFrame` was 0 for every combatant in every FFX battle
+
+The debug surface required by task item C — and the number the formation is
+relaxed against — was dead. Both HUDs handed `setPanels` the **roots** of their
+panels, and two of those roots, the advisor's `.mad` and the guide's `.sgd`
+(each `position:absolute; inset:0`), are full-viewport **transparent
+wrappers**. Measured live they reported 0,0,1600,900, so allies standing in
+the open came back 100% covered and `relaxFormation` could tell no fiend from
+another.
+
+`src/ui/common/panel-rects.ts` applies the rule a player's eye uses: **a
+wrapper that paints nothing hides nothing.** It walks each root and takes the
+first descendant that actually paints (a background colour with real alpha, a
+background image, a backdrop filter, a visible border). Both HUDs go through
+it.
+
+A second half: panels were published only on an engine sync, so between two
+syncs the answer went stale — measured with the command list open and nothing
+aimed at yet, Tidus was 56% behind the list while `visibleInFrame` still said
+1.000. Both HUDs re-measure on a 250 ms timer now (`republishPanels`).
+
+**GAME-AWARE: both games** — shared measurement plumbing behind a defect
+(critic CHK-020). FFX-2 was the mirror image of the same bug: `visibleInFrame`
+came back *identical* to `visible` in Chapters 4 and 5, i.e. the FFX-2 field
+was never measured against its HUD at all, and the advisor card and guide rail
+were missing from its panel list entirely. Both added.
+
+### 3. A selected enemy was 36–40% under the turn list
+
+Requirement B(1) caps HUD coverage of a targetable enemy at 25%.
+`relaxFormation`'s panel clause was written down and never ran: the loop found
+a fiend below its threshold and then asked `occludersOf`, which only knows
+about **combatants** — so a fiend standing squarely under the turn list found
+nothing to move away from and stayed there. A second clause now nudges an
+enemy out from under whichever panel covers most of it (`worstPanelFor` in
+`ScreenRects.ts`, `PANEL_CLEAR = 0.78`, enemies only — see 4).
+
+HUD coverage of the **selected** enemy after, recomputed in-page from the real
+visible panels by a 24×24 sample grid over the figure's rectangle:
+
+| | 1280x720 | 1600x900 | 2000x1000 |
+|---|---|---|---|
+| `yu-pagoda-right` (was 0.359 / — / 0.399) | **0.000** | **0.000** | **0.000** |
+| `yu-pagoda-left` | 0.000 | 0.000 | 0.000 |
+| `braskas-final-aeon` (was 0.210) | **0.000** | **0.000** | **0.000** |
+| `seymour-flux` | 0.007 | 0.000 | 0.007 |
+| `mortiorchis` | 0.042 | 0.000 | 0.042 |
+| `bahamut` (Ch 4) | 0.083 | — | 0.094 |
+| `vegnagun-tail` (Ch 5) | 0.000 | — | 0.000 |
+
+The **Sensor card** was the other half of that same capture: it opened
+squarely across the pagoda it was describing, over the bracket and over the
+name plate. It is pinned at grid 436,166 — in the lane the fiends stand in —
+and it follows whatever the player aims at, so no formation can avoid it.
+`steerSensor` slides it to whichever side of the target has room
+(`src/ui/ffx/sensorSteer.ts`, pure grid geometry,
+`tests/unit/ui-sensor-steer.test.ts`) and clears the steer the instant the
+cursor closes, so a player who never opens a target cursor sees the card
+exactly where it has always been. **GAME-AWARE: FFX only** — the Sensor plate,
+the ability and its `I` fold key are FFX's [visual-bible §3.5]; FFX-2 reads an
+enemy out on the boss gauge strip along the top, which never enters the lane
+and has nothing to move. The test asserts the FFX-2 HUD neither imports the
+steer nor uses its property.
+
+### 4. The targeted ally is ~45% behind the command list
+
+**Not changed, because the approved end state draws it that way** — and that
+is the honest answer rather than a dodge. Measured off the approved frame
+itself, `docs/concepts/targeting/b-ring-and-dim/s1.png`, the command list runs
+across the party's legs and Yuna's own rectangle is **~48%** behind it there.
+Our build measures 0.458 at 1280x720 and 0.458 at 2000x1000 on the same cast:
+the picked look, to within a couple of points. Requirement B(1)'s 25% cap is
+written about *targetable enemies*, and that is what clause 3 enforces.
+
+What makes the ally unmistakable is what the mockup uses, and all of it is now
+live: the bracket (fixed above, and drawn **over** the list), the green party
+row, the lit turn-list tile and the "ALL ALLIES" label. Measured on the
+Hastega cast in Chapters 1 and 3, every target reports `ringed: true, dim: 0`
+and every non-target `dim: 0.26`, on both sides of the field.
+
+**Open for Bailey:** open the party arc further than the mockups draw it, or
+leave it as drawn? Unchanged from the first pass.
+
+### 5. Three of five chapters had never been driven by anyone
+
+Driven now, with real key presses, and captured:
+
+- **Ch 1 Seymour Flux** — the enemy cursor walks `mortiorchis` →
+  `seymour-flux`.
+- **Ch 2 Yunalesca** — **there is no enemy cursor to drive, and that is FFX.**
+  She is the only enemy, and `resolveTargetMode` returns `auto` for a single
+  legal target, so Attack confirms without a cursor. The ally cursor and the
+  party-wide cast are captured instead; her own visibility is 0.82–0.86 with
+  0.000 HUD coverage. Nothing about targeting legality was touched to get
+  this answer.
+- **Ch 3** — walks `yu-pagoda-left` → `braskas-final-aeon` →
+  `yu-pagoda-right`, all three at 0.000 HUD coverage.
+- **Ch 4 Bahamut** and **Ch 5 Vegnagun** — the ATB's first actor is a White
+  Mage with no Attack row, so the walk plays a real turn (Cure on an ally) and
+  takes the next actor's menu. Captured with the **flower** reticle present
+  (1) and the **hand** absent (0), the Active/Wait chip reading "ACTIVE — ATB
+  RUNNING", a gold L-shaped bracket and the ink plate: rule 14 verified on
+  screen, not only in a unit test.
+
+One craft defect fell out of finally looking at Chapter 5. The flower ring was
+sized at 1.24× the target's longest side, and Vegnagun's tail projects as a
+wide sprawling rectangle, so the ring came out about 800 px across with its
+six petals sitting on Rikku's and Paine's faces on the far side of the field.
+The approved frame `s3.png` draws the ring at about 1.1× the part it marks, so
+the ring follows the figure up to a cap of a third of the shorter screen edge
+and no further. **FFX-2 only** — FFX docks the hand instead.
+
+### How this pass was verified
+
+Its own vite dev server on port 5612 (started and stopped here), Playwright
+headless in **GPU mode** (`PYREFLY_BROWSER=gpu`) for every run — no black or
+blank canvas, no fallback to SwiftShader needed. Real key presses throughout
+(ArrowUp/ArrowDown/Enter/Escape); no command was ever issued through the debug
+API. The probes are throwaway, under `critic/scratch/`
+(`fix-targeting-p2.mjs`, `fix-ffx2-targeting.mjs`), and no product code lives
+in them.
+
+One trap worth recording for whoever drives this next: **Escape at the root
+command list opens the pause screen**, and every later ArrowDown then walks
+the pause menu instead of the command list. That is exactly how the first run
+of this probe convinced itself Chapter 3 had no Attack row.
+
+`npx tsc --noEmit` clean; `npm test` 140 files / 4045 tests green;
+`node tools/orphans.mjs` lists neither new module.
+
 ## Known remaining, and the open questions
 
-1. **The Sensor card opens on top of the enemy it describes.** Aim at a fiend
-   and `SensorPanel` opens over it; measured, that takes the target's
-   `visibleInFrame` to 0 while `visible` stays near 1. The card is transient and
-   follows the target, so no formation can avoid it — it needs to be placed
-   clear of the aimed-at enemy. `SensorPanel.ts` belongs to the **ffx-hud**
-   track, so it is reported rather than moved, and the card is deliberately
-   excluded from the panel set the formation settles against (including it only
-   reports the fiend the player is looking at as invisible).
+1. **The Sensor card opening on top of the enemy it describes — FIXED** in the
+   fix pass; see section 3 above. It is steered clear of the aimed-at figure by
+   `FFXBattleHud.steerSensor` + `src/ui/ffx/sensorSteer.ts`, rather than by
+   moving `SensorPanel.ts`, which belongs to the **ffx-hud** track and is
+   untouched. The card still stays out of the panel set the formation settles
+   against: it opens *because* the player aimed, so feeding it in would only
+   report the fiend they are looking at as invisible.
 2. **The party arc still overlaps.** Auron and Kimahri sit at 0.67–0.74 behind
    Tidus after the relaxation has done what the party lane allows. The approved
    frames draw the party close and overlapping, so this is the picked look
@@ -168,8 +330,12 @@ Two visibility numbers are reported, and the split is deliberate:
    **is still unanswered**. This track kept the house staging, as option B does.
    Bailey owes that yes/no.
 4. **Vegnagun's parts.** Chapter 5 stages one part per formation link in the
-   build as it stands, so the "four parts at once, each separately selectable"
-   case could not be exercised live. The layout rule for it is written and unit
+   build as it stands — the fix pass drove Chapter 5 with real key presses at
+   two resolutions and the field holds `vegnagun-tail` alone at battle start —
+   so the "four parts at once, each separately selectable" case *still* could
+   not be exercised live. Reaching the multi-part phase means playing the tail
+   down, which no automated walk here does. It is the one requirement in task
+   item B(1) with no live measurement behind it. The layout rule for it is written and unit
    tested (`tests/unit/engine/formation.test.ts`), and parts are leashed to
    their machine, but it wants a live check once the multi-part formation is
    reachable.

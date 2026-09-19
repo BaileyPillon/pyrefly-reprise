@@ -299,7 +299,14 @@ export class TargetCursor {
       const rect = this.rectFor(entry.id, i);
       if (!rect) return;
       const active = group || i === this.activeIndex;
-      const dim = group ? this.entries.length > 1 : i !== this.activeIndex;
+      // In GROUP mode every listed figure **is** a target: not one of them is
+      // subordinate, so not one of them is dimmed. The old rule here read
+      // `group ? this.entries.length > 1 : …`, which put `--dim` on every
+      // target of a party-wide cast — so in Bailey's own Hastega frame all
+      // three allies wore the subordinate treatment and nothing said which
+      // figures the spell was actually for. Pinned by
+      // tests/unit/ui-target-cursor.test.ts ("a group cast dims nobody").
+      const dim = !group && i !== this.activeIndex;
       const cls = [
         'ffx-target',
         `ffx-target--${groupKind ?? entry.kind}`,
@@ -337,7 +344,19 @@ export class TargetCursor {
         // FFX-2's field reticle: a rotating six-petal flower wrapping the
         // target, and the sparkle that marks the menu lives in the command
         // list, not out here.
-        const r = Math.max(rect.w, rect.h) * 0.62;
+        // The ring hugs the silhouette, and is **capped**.
+        //
+        // Measured live in Chapter 5: Vegnagun's tail projects as a wide,
+        // sprawling rectangle, and a ring at 1.24x its longest side came out
+        // 800 px across with its six petals sitting on Rikku's and Paine's
+        // faces on the far side of the field. The approved frame
+        // (`b-ring-and-dim/s3.png`) draws the ring at about 1.1x the part it
+        // marks, wholly inside the frame and touching nothing else, so the
+        // ring follows the figure up to a third of the shorter screen edge and
+        // no further. FFX-2 only — FFX docks the hand instead.
+        const viewMin =
+          typeof window === 'undefined' ? 1080 : Math.min(window.innerWidth, window.innerHeight);
+        const r = Math.min(Math.max(rect.w, rect.h) * 0.56, viewMin * 0.34);
         parts.push(
           `<div class="ffx-target__flower" style="left:${px(rect.x + rect.w / 2)};top:${px(rect.y + rect.h / 2)};width:${px(r * 2)};height:${px(r * 2)}">${FLOWER_SVG}</div>`,
         );

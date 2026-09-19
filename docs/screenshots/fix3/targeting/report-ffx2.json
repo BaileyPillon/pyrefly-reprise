@@ -1,0 +1,442 @@
+[
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 1280,
+    "H": 720,
+    "firstMenu": [
+      "White Magic◂",
+      "Change◂",
+      "Item◂"
+    ]
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 1280,
+    "H": 720,
+    "frame": "ffx2-ally",
+    "sel": {
+      "ids": [
+        "yuna",
+        "rikku",
+        "paine"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    },
+    "chrome": {
+      "hand": 0,
+      "flower": 0,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--group",
+          "id": null,
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--group",
+          "id": null,
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--group",
+          "id": null,
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        }
+      ],
+      "plate": null,
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 1280,
+    "H": 720,
+    "frame": "ffx2-enemy",
+    "id": "vegnagun-tail",
+    "chrome": {
+      "hand": 0,
+      "flower": 1,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+          "id": "vegnagun-tail",
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(242, 194, 30)"
+        }
+      ],
+      "plate": "Vegnagun",
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    },
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.882,
+      "apiInFrame": 0.882,
+      "dim": 0,
+      "ringed": true
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 1280,
+    "H": 720,
+    "frame": "ffx2-enemy",
+    "walked": [
+      "vegnagun-tail"
+    ]
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 2000,
+    "H": 1000,
+    "firstMenu": [
+      "White Magic◂",
+      "Change◂",
+      "Item◂"
+    ]
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 2000,
+    "H": 1000,
+    "frame": "ffx2-ally",
+    "sel": {
+      "ids": [
+        "yuna",
+        "rikku",
+        "paine"
+      ],
+      "mode": "all",
+      "side": null,
+      "accent": "self"
+    },
+    "chrome": {
+      "hand": 0,
+      "flower": 0,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--group",
+          "id": null,
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--group",
+          "id": null,
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--group",
+          "id": null,
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        }
+      ],
+      "plate": null,
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 2000,
+    "H": 1000,
+    "frame": "ffx2-enemy",
+    "id": "vegnagun-tail",
+    "chrome": {
+      "hand": 0,
+      "flower": 1,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+          "id": "vegnagun-tail",
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(242, 194, 30)"
+        }
+      ],
+      "plate": "Vegnagun",
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    },
+    "cov": {
+      "coveredByHud": 0,
+      "apiVisible": 0.879,
+      "apiInFrame": 0.879,
+      "dim": 0,
+      "ringed": true
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "W": 2000,
+    "H": 1000,
+    "frame": "ffx2-enemy",
+    "walked": [
+      "vegnagun-tail"
+    ]
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 1280,
+    "H": 720,
+    "firstMenu": [
+      "White Magic◂",
+      "Change◂",
+      "Item◂"
+    ]
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 1280,
+    "H": 720,
+    "frame": "ffx2-ally",
+    "sel": {
+      "ids": [
+        "yuna"
+      ],
+      "mode": "single",
+      "side": null,
+      "accent": "self"
+    },
+    "chrome": {
+      "hand": 0,
+      "flower": 1,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--self ffx-target--clickable",
+          "id": "yuna",
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(143, 208, 240)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--dim ffx-target--clickable",
+          "id": "rikku",
+          "border": [
+            "2px",
+            "0px",
+            "0px",
+            "2px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--dim ffx-target--clickable",
+          "id": "paine",
+          "border": [
+            "2px",
+            "0px",
+            "0px",
+            "2px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        }
+      ],
+      "plate": "Yuna",
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 1280,
+    "H": 720,
+    "frame": "ffx2-enemy",
+    "id": "bahamut",
+    "chrome": {
+      "hand": 0,
+      "flower": 1,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+          "id": "bahamut",
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(242, 194, 30)"
+        }
+      ],
+      "plate": "Bahamut",
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    },
+    "cov": {
+      "coveredByHud": 0.083,
+      "apiVisible": 0.966,
+      "apiInFrame": 0.888,
+      "dim": 0,
+      "ringed": true
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 1280,
+    "H": 720,
+    "frame": "ffx2-enemy",
+    "walked": [
+      "bahamut"
+    ]
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 2000,
+    "H": 1000,
+    "firstMenu": [
+      "White Magic◂",
+      "Change◂",
+      "Item◂"
+    ]
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 2000,
+    "H": 1000,
+    "frame": "ffx2-ally",
+    "sel": {
+      "ids": [
+        "yuna"
+      ],
+      "mode": "single",
+      "side": null,
+      "accent": "self"
+    },
+    "chrome": {
+      "hand": 0,
+      "flower": 1,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--self ffx-target--clickable",
+          "id": "yuna",
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(143, 208, 240)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--dim ffx-target--clickable",
+          "id": "rikku",
+          "border": [
+            "2px",
+            "0px",
+            "0px",
+            "2px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        },
+        {
+          "cls": "ffx-target ffx-target--ally ffx-target--dim ffx-target--clickable",
+          "id": "paine",
+          "border": [
+            "2px",
+            "0px",
+            "0px",
+            "2px"
+          ],
+          "colour": "rgb(126, 232, 176)"
+        }
+      ],
+      "plate": "Yuna",
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 2000,
+    "H": 1000,
+    "frame": "ffx2-enemy",
+    "id": "bahamut",
+    "chrome": {
+      "hand": 0,
+      "flower": 1,
+      "brackets": [
+        {
+          "cls": "ffx-target ffx-target--enemy ffx-target--clickable",
+          "id": "bahamut",
+          "border": [
+            "3px",
+            "0px",
+            "0px",
+            "3px"
+          ],
+          "colour": "rgb(242, 194, 30)"
+        }
+      ],
+      "plate": "Bahamut",
+      "tag": null,
+      "activeWait": "ACTIVE — ATB RUNNING"
+    },
+    "cov": {
+      "coveredByHud": 0.094,
+      "apiVisible": 0.972,
+      "apiInFrame": 0.885,
+      "dim": 0,
+      "ringed": true
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "W": 2000,
+    "H": 1000,
+    "frame": "ffx2-enemy",
+    "walked": [
+      "bahamut"
+    ]
+  }
+]

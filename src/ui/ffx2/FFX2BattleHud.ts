@@ -40,6 +40,7 @@ import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
+import { solidPanelRects } from '../common/panel-rects.ts';
 import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
 
 /**
@@ -76,6 +77,9 @@ import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
  */
 
 const TELEGRAPH_HOLD_MS = 2400;
+
+/** How often the HUD re-measures its own panels for the field, in ms. */
+const PANEL_PUBLISH_MS = 250;
 
 /** One rectangle the intent slab must not cover. */
 type IntentAvoidRect = SlabRect;
@@ -140,6 +144,8 @@ export class FFX2BattleHud implements HudPort {
   private atbMode: 'active' | 'wait' = 'active';
   /** The painted field's targeting surface, when there is a field. */
   private targeting: TargetingPort | null = null;
+  /** Countdown to the next panel re-measure, so `visibleInFrame` never goes stale. */
+  private panelPublishMs = 0;
   private mounted = false;
 
   private project: (
@@ -353,6 +359,14 @@ export class FFX2BattleHud implements HudPort {
     this.guide.update(dt);
     this.advisor.update(dt);
     this.intent.update(dt);
+    // GAME-AWARE (rule 14): the same shared plumbing FFX got. Panels were
+    // published only on an engine sync, so between two syncs the field's idea
+    // of where the chrome sits went stale and `visibleInFrame` lied.
+    this.panelPublishMs -= dt * 1000;
+    if (this.targeting && this.panelPublishMs <= 0) {
+      this.panelPublishMs = PANEL_PUBLISH_MS;
+      this.targeting.setPanels(this.panelRects());
+    }
   }
 
   /** The guide rail, for tests and the debug snapshot. */
@@ -851,14 +865,20 @@ export class FFX2BattleHud implements HudPort {
 
   /** HUD panels that genuinely cover the field, in viewport pixels. */
   private panelRects(): Array<{ x: number; y: number; w: number; h: number }> {
-    const out: Array<{ x: number; y: number; w: number; h: number }> = [];
-    for (const el of [this.commandEl, this.partyEl, this.enemyEl]) {
-      if (!el || el.hidden) continue;
-      const r = el.getBoundingClientRect();
-      if (r.width < 2 || r.height < 2) continue;
-      out.push({ x: r.left, y: r.top, w: r.width, h: r.height });
-    }
-    return out;
+    // GAME-AWARE (rule 14): the measurement is shared plumbing behind a
+    // defect, so FFX-2 gets exactly the work FFX got. Two halves were missing
+    // here: the advisor card and the guide rail were never declared at all —
+    // so in Chapters 4 and 5 `visibleInFrame` came back *identical* to
+    // `visible`, i.e. the FFX-2 field was never measured against its HUD — and
+    // the roots now go through `solidPanelRects`, which resolves a transparent
+    // `inset: 0` wrapper to the card that actually paints.
+    return solidPanelRects([
+      this.commandEl,
+      this.partyEl,
+      this.enemyEl,
+      this.advisor.el,
+      this.guide.el,
+    ]);
   }
 
   // ------------------------------------------------------------- rendering

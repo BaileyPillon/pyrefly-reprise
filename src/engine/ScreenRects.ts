@@ -135,6 +135,33 @@ export function visibilityOf(
 }
 
 /**
+ * The panel that covers most of `target`, or `null` when none of them touch
+ * it.
+ *
+ * The formation needs one rectangle to move *away from*, and "most of it" is
+ * the honest choice: a fiend clipped by the turn list's corner and buried
+ * under the command stack should walk out from under the stack. Panels cover
+ * regardless of depth, so no depth test here.
+ */
+export function worstPanelFor(
+  target: ScreenRect,
+  panels: readonly ScreenRect[],
+): ScreenRect | null {
+  let best: ScreenRect | null = null;
+  let bestArea = 0;
+  for (const p of panels) {
+    const hit = intersect(target, p);
+    if (!hit) continue;
+    const area = rectArea(hit);
+    if (area > bestArea) {
+      bestArea = area;
+      best = p;
+    }
+  }
+  return best;
+}
+
+/**
  * Which combatants are covering `id` — what the x-ray fade needs to know.
  *
  * Only figures genuinely in front and genuinely overlapping (more than
