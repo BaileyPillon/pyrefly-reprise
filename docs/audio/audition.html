@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pyrefly Reprise — audition</title>
+<style>
+  :root {
+    --ink: #17140f; --paper: #f6f1e6; --gold: #8a6a2f; --rule: #d8cdb6;
+    --muted: #6b6055; --panel: #fffdf8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #ece4d6; --paper: #14120f; --gold: #d2ac5e; --rule: #3a342a;
+      --muted: #9b9184; --panel: #1c1916;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #ece4d6; --paper: #14120f; --gold: #d2ac5e; --rule: #3a342a;
+    --muted: #9b9184; --panel: #1c1916;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 16px/1.6 "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 16px 96px; }
+  h1 { font-size: 2rem; margin: 0 0 4px; letter-spacing: 0.01em; }
+  .sub { color: var(--muted); margin: 0 0 40px; font-style: italic; }
+  h2 {
+    font-size: 1.25rem; margin: 56px 0 8px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--gold);
+  }
+  h3 { font-size: 1.05rem; margin: 32px 0 4px; color: var(--gold); }
+  h4 { font-size: 1rem; margin: 0 0 2px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .group-note { color: var(--muted); margin: 0 0 20px; font-size: 0.92rem; }
+  .cue {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 16px 18px; margin: 0 0 14px;
+  }
+  .emotion { margin: 0 0 6px; font-style: italic; color: var(--gold); }
+  .blurb { margin: 0 0 10px; font-size: 0.92rem; color: var(--muted); }
+  audio { width: 100%; height: 36px; }
+  .stats { margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 4px 14px;
+           font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; color: var(--muted); }
+  .guide { background: var(--panel); border-left: 3px solid var(--gold);
+           padding: 20px 22px; border-radius: 0 8px 8px 0; }
+  .guide ol { padding-left: 20px; }
+  .guide li { margin-bottom: 14px; }
+  .guide strong { color: var(--gold); }
+  .check { border: 1px dashed var(--rule); border-radius: 8px; padding: 16px 20px; margin-top: 24px; }
+  .first .cue { border-color: var(--gold); }
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule);
+           color: var(--muted); font-size: 0.85rem; }
+  @media (max-width: 480px) { .wrap { padding: 28px 16px 64px; } h1 { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Pyrefly Reprise — the score</h1>
+<p class="sub">Twenty-one cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+
+<div class="guide">
+  <h2 style="margin-top:0">What to listen for</h2>
+  <p>There are six tunes in the whole game, and they are all related.</p>
+  <ol>
+    <li><strong>The prayer.</strong> A crowd singing with no instruments. Sixteen slow bars, and it never uses the chord that would make it sound like a <em>song</em> — so it sounds like something people have done for a thousand years instead. You hear it in the pause screen (just one voice and a drone), in the Zanarkand dome (warm, with strings, the only time it is ever kind), and in the Yu Yevon fight, where it is stretched to three minutes and the last chord never arrives.</li>
+    <li><strong>The goodbye.</strong> This is the one. Solo piano, sixteen bars. It starts already falling, climbs once with everything it has, reaches a note it cannot hold, and comes home a step slower. If you only love one piece of music in this game, it should be this one — and if you don’t, tell us, because everything else is arranged around it. You have already heard four notes of it: it is the title theme, finished at last. It turns into a <strong>waltz</strong> in the menus, a <strong>nocturne</strong> in the dome, a <strong>lament over heavy guitars</strong> in the fight against the father, and at the very end the full orchestra plays it with three chords changed — nothing else — and it stops being sad.</li>
+    <li><strong>Seymour.</strong> Six notes on a church organ, low and quiet. A polite little bow upward and then a slither downward. He never gets loud; the band around him does. In his last form the tune walks off the edge of its own scale.</li>
+    <li><strong>The father.</strong> A rock riff, entirely off the beat, proud of itself. Its secret is that it is the prayer with every note shoved sideways — and in the mountain scene a single horn plays it <em>straight</em>, and it turns back into the prayer. In the Final Aeon fight the riff and the goodbye play <strong>at the same time</strong>, on purpose, over each other. It is supposed to sound like an argument.</li>
+    <li><strong>The pop hook.</strong> FFX-2. Bright, jazzy, and its whole identity is one jump upward. Flatten the two notes of that jump and you get Shuyin’s tragedy; mechanise it and you get Vegnagun. Same jump, three worlds. There is one bar in the middle of the happy version that is pure joy — a chord that doesn’t belong, dropped in and taken straight back out. In Shuyin’s version that bar is just… ordinary. That’s the whole story of the character in one bar.</li>
+    <li><strong>The battle music and the victory fanfare.</strong> Both original. The fanfare deliberately does the opposite of the famous one: it starts on a <em>long</em> note instead of three short ones, it falls instead of rising, and it ends on a gentle “amen” chord rather than a triumphant one — so winning feels like relief rather than a trophy.</li>
+  </ol>
+  <div class="check">
+    <p style="margin-top:0"><strong>Three things to check if something feels wrong</strong></p>
+    <p><strong>Does it breathe?</strong> There should be rests you notice — a beat where everything stops. If a cue never stops, it will feel like a synthesiser.</p>
+    <p><strong>Are the sad notes loud?</strong> In this music the note that <em>aches</em> is meant to be louder than the note it falls to. If the aching note is the quiet one, we got it backwards and it will sound mechanical.</p>
+    <p style="margin-bottom:0"><strong>Does it sound like one room?</strong> Sword hits, menu clicks and the orchestra all go through the same concert hall. If an effect sounds pasted on top, that is a bug, not a taste question.</p>
+  </div>
+</div>
+
+<h2>Start here — eight files</h2>
+<p class="group-note">If there is only time for eight, these eight say what changed.</p>
+<div class="first">
+        <article class="cue">
+          <h4>title</h4>
+          <p class="emotion">The goodbye, unfinished — solo piano, a tone below its own key.</p>
+          <audio controls preload="none" src="../../public/audio/music/title.mp3"></audio>
+          <p class="stats"><span>1:34</span><span>1.20 MB</span><span>-16.14 LUFS</span><span>-1.37 dBTP</span><span>loop 8.28s → 91.03s</span><span>tilt -10.2 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>chapter-select</h4>
+          <p class="emotion">The same tune as a waltz. This is the Clair Obscur register.</p>
+          <audio controls preload="none" src="../../public/audio/music/chapter-select.mp3"></audio>
+          <p class="stats"><span>1:16</span><span>1.00 MB</span><span>-16.09 LUFS</span><span>-1.37 dBTP</span><span>loop 4.29s → 72.86s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>battle-ffx</h4>
+          <p class="emotion">The ordinary fight. Everything else is measured against this.</p>
+          <audio controls preload="none" src="../../public/audio/music/battle-ffx.mp3"></audio>
+          <p class="stats"><span>1:20</span><span>1.28 MB</span><span>-16.01 LUFS</span><span>-1.55 dBTP</span><span>loop 6.40s → 76.80s</span><span>tilt -7.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>boss-seymour</h4>
+          <p class="emotion">Organ and band. He never gets loud; the band does.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-seymour.mp3"></audio>
+          <p class="stats"><span>1:41</span><span>1.59 MB</span><span>-15.99 LUFS</span><span>-1.49 dBTP</span><span>loop 7.27s → 98.18s</span><span>tilt -9.1 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>boss-yunalesca</h4>
+          <p class="emotion">The prayer turned Phrygian and made into a machine.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-yunalesca.mp3"></audio>
+          <p class="stats"><span>1:44</span><span>1.51 MB</span><span>-15.97 LUFS</span><span>-1.8 dBTP</span><span>loop 10.91s → 100.91s</span><span>tilt -11.1 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>boss-jecht</h4>
+          <p class="emotion">The riff and the goodbye, at the same time, arguing.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-jecht.mp3"></audio>
+          <p class="stats"><span>1:50</span><span>1.76 MB</span><span>-16.01 LUFS</span><span>-3.03 dBTP</span><span>loop 6.67s → 106.67s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>boss-ffx2-aeon</h4>
+          <p class="emotion">The other game entirely — and the same four opening degrees.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-ffx2-aeon.mp3"></audio>
+          <p class="stats"><span>1:57</span><span>1.82 MB</span><span>-16 LUFS</span><span>-1.38 dBTP</span><span>loop 12.00s → 114.00s</span><span>tilt -8.0 dB/band</span><span>all gates pass</span></p>
+        </article>
+        <article class="cue">
+          <h4>sound effects — montage</h4>
+          <p class="emotion">Twelve effects in twenty-five seconds: glass, steel, choir, sub.</p>
+          <audio controls preload="none" src="sfx-montage.mp3"></audio>
+          <p class="stats"><span>0:25</span><span>12 effects</span><span>cursor · confirm · menu · slash ×2 · guard · critical · cure · thunder · overdrive · summon · fayth</span></p>
+        </article>
+</div>
+
+<h2>Everything, in play order</h2>
+
+<h3>The frame</h3>
+<p class="group-note">Everything outside a fight. These are the two cues a player hears most, which is why neither is allowed the goodbye’s heart.</p>
+
+        <article class="cue">
+          <h4>title</h4>
+          <p class="emotion">A story that is already over, being told anyway</p>
+          <p class="blurb">&quot;Tide, Remembered&quot; — the farewell theme, bars 1-8 only, a tone below its own key and never finishing: solo piano, then strings and a distant voice. A minor, 58 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/title.mp3"></audio>
+          <p class="stats"><span>1:34</span><span>1.20 MB</span><span>-16.14 LUFS</span><span>-1.37 dBTP</span><span>loop 8.28s → 91.03s</span><span>tilt -10.2 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>chapter-select</h4>
+          <p class="emotion">Unhurried choosing; nothing here can hurt you yet</p>
+          <p class="blurb">&quot;Threshold, Unhurried&quot; — the farewell theme as a waltz: four passes of one eight-bar phrase, piano to quartet to an inverted texture and back. B minor, 84 bpm, 3/4.</p>
+          <audio controls preload="none" src="../../public/audio/music/chapter-select.mp3"></audio>
+          <p class="stats"><span>1:16</span><span>1.00 MB</span><span>-16.09 LUFS</span><span>-1.37 dBTP</span><span>loop 4.29s → 72.86s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>pause</h4>
+          <p class="emotion">The game holding its breath</p>
+          <p class="blurb">&quot;Still Water&quot; — the prayer's first eight bars, one voice over a tenor drone, mostly air. E Aeolian, 46 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/pause.mp3"></audio>
+          <p class="stats"><span>0:50</span><span>0.74 MB</span><span>-16 LUFS</span><span>-1.39 dBTP</span><span>loop 5.22s → 46.96s</span><span>tilt -9.6 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+<h3>Chapter I — Seymour Flux, Mt. Gagazet</h3>
+<p class="group-note">The mountain, the demonic mass, and the ordinary fight music the rest of the game is measured against.</p>
+
+        <article class="cue">
+          <h4>scene-gagazet</h4>
+          <p class="emotion">The mountain does not care</p>
+          <p class="blurb">&quot;Where the Horns Fell Silent&quot; — flute over an open-fifth choir, a clan horn call and distant taiko thunder. B minor with a dorian G#, 72 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/scene-gagazet.mp3"></audio>
+          <p class="stats"><span>1:46</span><span>1.44 MB</span><span>-16.15 LUFS</span><span>-1.38 dBTP</span><span>loop 40.00s → 103.33s</span><span>tilt -11.3 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>battle-ffx</h4>
+          <p class="emotion">We can win this</p>
+          <p class="blurb">Driving rock-orchestral battle theme. E minor, 150 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/battle-ffx.mp3"></audio>
+          <p class="stats"><span>1:20</span><span>1.28 MB</span><span>-16.01 LUFS</span><span>-1.55 dBTP</span><span>loop 6.40s → 76.80s</span><span>tilt -7.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-dread</h4>
+          <p class="emotion">Something is watching, and it is patient</p>
+          <p class="blurb">Slow choir/timpani dread for Seymour and Yunalesca. D minor, 90 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-dread.mp3"></audio>
+          <p class="stats"><span>1:28</span><span>1.31 MB</span><span>-16.02 LUFS</span><span>-1.47 dBTP</span><span>loop 10.67s → 85.33s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-seymour</h4>
+          <p class="emotion">Contempt that has convinced itself it is mercy</p>
+          <p class="blurb">&quot;Ascension of the Unmaker&quot; — a demonic mass at battle tempo: choir over an organ lament bass, spiccato strings, taiko and a Sending counter-line. C# minor, 132 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-seymour.mp3"></audio>
+          <p class="stats"><span>1:41</span><span>1.59 MB</span><span>-15.99 LUFS</span><span>-1.49 dBTP</span><span>loop 7.27s → 98.18s</span><span>tilt -9.1 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>victory-ffx</h4>
+          <p class="emotion">Relief, not triumph</p>
+          <p class="blurb">&quot;Bright After the Storm&quot; — a one-shot rising brass fanfare, then a pluck-and-piano results loop that grows and recedes. C major, 120 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/victory-ffx.mp3"></audio>
+          <p class="stats"><span>1:15</span><span>1.10 MB</span><span>-16.09 LUFS</span><span>-1.37 dBTP</span><span>loop 8.00s → 72.00s</span><span>tilt -9.6 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+<h3>Chapter II — Yunalesca, the Zanarkand dome</h3>
+<p class="group-note">The only time the prayer is ever warm, and the only time it is ever cold.</p>
+
+        <article class="cue">
+          <h4>scene-zanarkand-dome</h4>
+          <p class="emotion">Warmth remembered, which is worse than cold</p>
+          <p class="blurb">&quot;Where the Tide Stopped&quot; — sparse piano dyads, pad and bell in the ruined dome; the sigh returns, the question stays open. E minor, 58 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/scene-zanarkand-dome.mp3"></audio>
+          <p class="stats"><span>2:13</span><span>1.77 MB</span><span>-16.1 LUFS</span><span>-1.39 dBTP</span><span>loop 10.00s → 130.00s</span><span>tilt -11.7 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-yunalesca</h4>
+          <p class="emotion">A rite that will finish with or without you</p>
+          <p class="blurb">&quot;Rite Without End&quot; — a fixed-pitch choir chant over a relentless harp and spiccato ostinato; the rite never changes its note. F harmonic minor, 6/8, 132 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-yunalesca.mp3"></audio>
+          <p class="stats"><span>1:44</span><span>1.51 MB</span><span>-15.97 LUFS</span><span>-1.8 dBTP</span><span>loop 10.91s → 100.91s</span><span>tilt -11.1 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+<h3>Chapter III — Braska’s Final Aeon, and Yu Yevon</h3>
+<p class="group-note">The father’s riff and the goodbye, played over each other on purpose; then the prayer stretched until its last chord never arrives.</p>
+
+        <article class="cue">
+          <h4>scene-dreams-end</h4>
+          <p class="emotion">Unmoored</p>
+          <p class="blurb">&quot;A City That Never Was&quot; — celesta music box over whole-tone drift inside Sin; the title's rise, bent wrong. No tonic, 76 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/scene-dreams-end.mp3"></audio>
+          <p class="stats"><span>1:44</span><span>1.52 MB</span><span>-16.1 LUFS</span><span>-1.38 dBTP</span><span>loop 12.63s → 101.05s</span><span>tilt -10.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-jecht</h4>
+          <p class="emotion">Two people talking over each other, and both of them are right</p>
+          <p class="blurb">&quot;Blitz for Two&quot; — double-tracked drop-D guitar riffs and a real solo; the bridge turns to D major for the father's pride. D minor, 144 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-jecht.mp3"></audio>
+          <p class="stats"><span>1:50</span><span>1.76 MB</span><span>-16.01 LUFS</span><span>-3.03 dBTP</span><span>loop 6.67s → 106.67s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-yu-yevon</h4>
+          <p class="emotion">No end</p>
+          <p class="blurb">&quot;What the Tide Keeps&quot; — organ, choir and full orchestra; Sending in dread, the sigh in answer, the rising cell triumphant in D major. B minor, 96 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-yu-yevon.mp3"></audio>
+          <p class="stats"><span>3:33</span><span>3.15 MB</span><span>-16.03 LUFS</span><span>-1.39 dBTP</span><span>loop 6.00s → 210.00s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>ending-ffx</h4>
+          <p class="emotion">Permission to stop</p>
+          <p class="blurb">&quot;Tide, Answered&quot; — the title's A-minor question answered in D major: solo piano, strings, then choir with the rising cell augmented. 66 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/ending-ffx.mp3"></audio>
+          <p class="stats"><span>1:59</span><span>1.69 MB</span><span>-16.01 LUFS</span><span>-1.4 dBTP</span><span>loop 33.10s → 115.86s</span><span>tilt -10.9 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+<h3>Chapter IV — FFX-2, Bahamut</h3>
+<p class="group-note">The second game’s register: pop-jazz piano, brass, kit — and the pop hook recast in minor.</p>
+
+        <article class="cue">
+          <h4>scene-farplane</h4>
+          <p class="emotion">Rest without forgetting</p>
+          <p class="blurb">&quot;Where the Pyreflies Rest&quot; — flute, harp and a soft supersaw pad; FFX's rising cell at peace, answered by Lenne's line. E major, 92 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/scene-farplane.mp3"></audio>
+          <p class="stats"><span>1:47</span><span>1.61 MB</span><span>-16 LUFS</span><span>-2.35 dBTP</span><span>loop 20.87s → 104.35s</span><span>tilt -12.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-ffx2-aeon</h4>
+          <p class="emotion">A pop star fighting a god, and enjoying it</p>
+          <p class="blurb">&quot;Static Coronation&quot; — supersaw stabs on the Sphere hook recast in minor, octave-pumping synth-bass, breakbeats; the chorus turns the hook hopeful in Db. Bb minor, 160 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-ffx2-aeon.mp3"></audio>
+          <p class="stats"><span>1:57</span><span>1.82 MB</span><span>-16 LUFS</span><span>-1.38 dBTP</span><span>loop 12.00s → 114.00s</span><span>tilt -8.0 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>victory-ffx2</h4>
+          <p class="emotion">That was fun</p>
+          <p class="blurb">&quot;Sphere Shine&quot; — a synth-brass fanfare on the Sphere hook and an Eb9 hit, then an 808 results groove riffing on the hook. Eb major, 128 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/victory-ffx2.mp3"></audio>
+          <p class="stats"><span>1:11</span><span>1.08 MB</span><span>-16.05 LUFS</span><span>-1.39 dBTP</span><span>loop 7.50s → 67.50s</span><span>tilt -6.3 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+<h3>Chapter V — Vegnagun and Shuyin</h3>
+<p class="group-note">The same jump, mechanised and then grieved over.</p>
+
+        <article class="cue">
+          <h4>scene-bevelle-underground</h4>
+          <p class="emotion">The machine under the cathedral</p>
+          <p class="blurb">&quot;Iron Undertow&quot; — arp-pluck sixteenths, half-time 808 and distant metal clangs beneath Bevelle; the Sphere hook in minor, fragment first. G minor, 100 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/scene-bevelle-underground.mp3"></audio>
+          <p class="stats"><span>1:49</span><span>1.50 MB</span><span>-16.2 LUFS</span><span>-1.38 dBTP</span><span>loop 19.20s → 105.60s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-vegnagun</h4>
+          <p class="emotion">Something enormous, and nobody is driving</p>
+          <p class="blurb">&quot;Iron Verdict&quot; — a never-ending synth-bass ostinato, metal-hit clangs and an alarm siren; bars lurch 3½ and 4½ beats like a machine missing a step. F minor, 168 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-vegnagun.mp3"></audio>
+          <p class="stats"><span>1:34</span><span>1.82 MB</span><span>-15.99 LUFS</span><span>-1.39 dBTP</span><span>loop 11.43s → 91.43s</span><span>tilt -9.0 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>boss-shuyin</h4>
+          <p class="emotion">Grief that has curdled</p>
+          <p class="blurb">&quot;The Weight of a Thousand Years&quot; — a 16th-note piano riff under electronic rock; Lenne's theme as an anguished hook, tender in the half-time B. C# minor, 154 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/boss-shuyin.mp3"></audio>
+          <p class="stats"><span>1:43</span><span>1.43 MB</span><span>-16.08 LUFS</span><span>-1.36 dBTP</span><span>loop 12.47s → 99.74s</span><span>tilt -11.5 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+        <article class="cue">
+          <h4>ending-ffx2</h4>
+          <p class="emotion">The second game says goodbye more gently, because it can</p>
+          <p class="blurb">&quot;Wherever the Tide Takes Me&quot; — a pop ballad: epiano verses on the slowed Sphere hook, Lenne's line in major for the chorus, drums only in the last third, a final chorus up a step where FFX's rising cell visits. Bb major → C, 84 bpm.</p>
+          <audio controls preload="none" src="../../public/audio/music/ending-ffx2.mp3"></audio>
+          <p class="stats"><span>1:57</span><span>1.66 MB</span><span>-16.07 LUFS</span><span>-1.4 dBTP</span><span>loop 11.43s → 114.29s</span><span>tilt -8.9 dB/band</span><span>all gates pass</span></p>
+        </article>
+
+<footer>
+  <p>Every cue is rendered offline from the score data with sampled instruments (Salamander Grand Piano, CC-BY 3.0; Sonatina Symphonic Orchestra, CC Sampling Plus 1.0; FluidR3 GM, MIT) and mixed through one concert hall. The game fetches these files and falls back to runtime synthesis only if one is missing.</p>
+  <p><strong>Measurements.</strong> LUFS is programme loudness — every cue is within a decibel of −16, so nothing jumps when the music changes. dBTP is the loudest instantaneous peak, held under −1 so no decoder clips it. “tilt” is how fast the spectrum rolls off above 250 Hz: a recorded ensemble slopes down, an oscillator stack does not, and every cue here slopes. “loop” is where the music wraps, stored to the sample so the join is silent.</p>
+  <p>Generated by <code>tools/audio/audition.mjs</code>. Nothing in this score quotes any existing work.</p>
+</footer>
+
+</div>
+</body>
+</html>

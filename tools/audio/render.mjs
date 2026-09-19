@@ -433,7 +433,12 @@ async function renderSfxSprite() {
   // No bus compression and no second normalisation: the cues are already
   // levelled against each other by category, and squeezing the sprite as one
   // programme would undo exactly that. All the master does is hold the ceiling.
-  limit({ left, right }, sampleRate, Math.pow(10, -1 / 20));
+  //
+  // Held 0.4 dB under it, for the same reason `masterToTarget` does on the
+  // music path: the ceiling has to survive the encoder, not the WAV. Limiting
+  // to exactly -1 dB shipped a sprite that decoded at -0.80 dBTP, because MDCT
+  // quantisation overshoots whatever it is handed.
+  limit({ left, right }, sampleRate, Math.pow(10, -1.4 / 20));
 
   const sfxDir = join(outRoot, 'sfx');
   await mkdir(sfxDir, { recursive: true });
@@ -548,8 +553,14 @@ async function main() {
     const m = cue.measured;
     manifest.music[name] = {
       file: `music/${name}.mp3`,
-      loopStart: Number((cue.loopStart / sampleRate).toFixed(4)),
-      loopEnd: Number((cue.loopEnd / sampleRate).toFixed(4)),
+      // Six decimals, not four. Four decimal places of a second is 4.4 samples
+      // at 44.1 kHz, so a rounded loop point lands beside the sample the
+      // crossfade matched and the wrap steps by whatever the waveform was
+      // doing in between — a tick, every time the loop comes round, on cues
+      // that are otherwise seamless. Six decimals resolves to a twentieth of a
+      // sample and costs two bytes.
+      loopStart: Number((cue.loopStart / sampleRate).toFixed(6)),
+      loopEnd: Number((cue.loopEnd / sampleRate).toFixed(6)),
       duration: Number((cue.total / sampleRate).toFixed(4)),
       bytes,
       lufs: Number(m.lufs.toFixed(2)),

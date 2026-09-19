@@ -178,6 +178,37 @@ down with a tilt of only -3.72 — very nearly flat to 16 kHz, which is precisel
 the fizz "arcade-y" describes. The sampled render puts air 33 dB down. All three
 cues also gained substantial low-mid weight: the orchestra has a body now.
 
+### Checking it again, after the encoder
+
+The renderer measures what it is about to hand to ffmpeg. That is the wrong
+side of the encode for three of the gates, so there is a second pass that
+decodes the shipped MP3s the way a browser will and measures those instead.
+
+```
+node tools/audio/qa.mjs [--json=PATH] [--only=cue,cue] [--strict]
+node tools/audio/seam-probe.mjs [cue ...] [--fix]
+node tools/audio/themes-audit.mjs [cue ...] [--verbose]
+node tools/audio/integration.mjs            # the game, in a real browser
+```
+
+It is worth running because the two passes have disagreed, every time for a
+reason worth knowing:
+
+- **True peak moves.** The music path limits to 0.4 dB under the ceiling
+  because MDCT quantisation overshoots whatever it is given; the sprite path
+  limited to exactly −1 dB and shipped at **−0.80 dBTP**. Same bug, one file,
+  one line.
+- **The manifest can disagree with the file.** Several agents render into one
+  `manifest.json` with read-modify-write, so a slow render can save an entry
+  another agent has already replaced. That shipped a `title` entry whose
+  `loopEnd` was 11 s past the end of the file it named. Only a check that
+  opens the file can see it.
+- **`themes-audit.mjs` reads the score, not the audio**, and asks the question
+  no measurement can: is the theme `THEMES.md` promises actually in this cue?
+  It searches for each cell as an *interval* sequence, because every legal
+  transformation in the bible — transposition, augmentation, re-barring into
+  3/4 — keeps the intervals and moves only the pitches.
+
 ---
 
 ## Loops
@@ -207,6 +238,20 @@ bug this pipeline found:
    limiter ahead of it applies a different gain either side of the wrap and
    re-opens the step it just closed. That cost an hour; please leave it where
    it is.
+
+3. **The manifest has to say where the seam is to the sample.** Both of the
+   above make the waveform continuous at one exact sample, and the first
+   version of the manifest then rounded the loop points to four decimal places
+   — which at 44.1 kHz is 4.4 samples. The wrap therefore landed one or two
+   samples beside the sample that had been crossfaded, and stepped by whatever
+   the waveform happened to be doing in between: up to 0.13 (−17 dBFS) on
+   `ending-ffx`, nearly five times the largest step anywhere else in that cue.
+   A single-sample impulse, once per loop, on the quietest music in the game.
+
+   Loop points are written with six decimals now, which resolves to a
+   twentieth of a sample. `tests/unit/audio-shipped-files.test.ts` fails if any
+   entry drifts back off a sample boundary, and `tools/audio/seam-probe.mjs
+   --fix` re-derives the right values from the audio without re-rendering it.
 
 Hence the seam test compares the wrap against **the entry into the loop**
 rather than against zero. A cue whose loop opens on a downbeat has a real

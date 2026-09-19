@@ -4,8 +4,8 @@
   "music": {
     "chapter-select": {
       "file": "music/chapter-select.mp3",
-      "loopStart": 4.2857,
-      "loopEnd": 72.8571,
+      "loopStart": 4.285692,
+      "loopEnd": 72.85712,
       "duration": 75.8571,
       "bytes": 1003243,
       "lufs": -16.09,
@@ -13,8 +13,8 @@
     },
     "pause": {
       "file": "music/pause.mp3",
-      "loopStart": 5.2174,
-      "loopEnd": 46.9565,
+      "loopStart": 5.217392,
+      "loopEnd": 46.956531,
       "duration": 49.9565,
       "bytes": 735574,
       "lufs": -16,
@@ -22,8 +22,8 @@
     },
     "boss-seymour": {
       "file": "music/boss-seymour.mp3",
-      "loopStart": 7.2727,
-      "loopEnd": 98.1818,
+      "loopStart": 7.272698,
+      "loopEnd": 98.181791,
       "duration": 101.1818,
       "bytes": 1592960,
       "lufs": -15.99,
@@ -31,8 +31,8 @@
     },
     "title": {
       "file": "music/title.mp3",
-      "loopStart": 8.2759,
-      "loopEnd": 91.0345,
+      "loopStart": 8.275896,
+      "loopEnd": 91.034512,
       "duration": 94.0345,
       "bytes": 1199811,
       "lufs": -16.14,
@@ -43,23 +43,23 @@
       "loopStart": 6.4,
       "loopEnd": 76.8,
       "duration": 79.8,
-      "bytes": 1285643,
+      "bytes": 1283690,
       "lufs": -16.01,
       "truePeakDb": -1.55
     },
     "boss-dread": {
       "file": "music/boss-dread.mp3",
-      "loopStart": 10.6667,
-      "loopEnd": 85.3333,
+      "loopStart": 10.666689,
+      "loopEnd": 85.333356,
       "duration": 88.3333,
-      "bytes": 1282223,
+      "bytes": 1310109,
       "lufs": -16.02,
       "truePeakDb": -1.47
     },
     "scene-gagazet": {
       "file": "music/scene-gagazet.mp3",
       "loopStart": 40,
-      "loopEnd": 103.3333,
+      "loopEnd": 103.333333,
       "duration": 106.3333,
       "bytes": 1436068,
       "lufs": -16.15,
@@ -76,8 +76,8 @@
     },
     "boss-yunalesca": {
       "file": "music/boss-yunalesca.mp3",
-      "loopStart": 10.9091,
-      "loopEnd": 100.9091,
+      "loopStart": 10.909093,
+      "loopEnd": 100.909093,
       "duration": 103.9091,
       "bytes": 1510224,
       "lufs": -15.97,
@@ -85,8 +85,8 @@
     },
     "scene-dreams-end": {
       "file": "music/scene-dreams-end.mp3",
-      "loopStart": 12.6316,
-      "loopEnd": 101.0526,
+      "loopStart": 12.63161,
+      "loopEnd": 101.052653,
       "duration": 104.0526,
       "bytes": 1517895,
       "lufs": -16.1,
@@ -94,8 +94,8 @@
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
-      "loopStart": 6.6667,
-      "loopEnd": 106.6667,
+      "loopStart": 6.666689,
+      "loopEnd": 106.666689,
       "duration": 109.6667,
       "bytes": 1758394,
       "lufs": -16.01,
@@ -121,8 +121,8 @@
     },
     "ending-ffx": {
       "file": "music/ending-ffx.mp3",
-      "loopStart": 33.1034,
-      "loopEnd": 115.8621,
+      "loopStart": 33.103401,
+      "loopEnd": 115.862018,
       "duration": 118.8621,
       "bytes": 1693720,
       "lufs": -16.01,
@@ -139,8 +139,8 @@
     },
     "scene-farplane": {
       "file": "music/scene-farplane.mp3",
-      "loopStart": 20.8696,
-      "loopEnd": 104.3478,
+      "loopStart": 20.869592,
+      "loopEnd": 104.347846,
       "duration": 107.3478,
       "bytes": 1606046,
       "lufs": -16,
@@ -148,8 +148,8 @@
     },
     "boss-vegnagun": {
       "file": "music/boss-vegnagun.mp3",
-      "loopStart": 11.4286,
-      "loopEnd": 91.4286,
+      "loopStart": 11.428594,
+      "loopEnd": 91.428594,
       "duration": 94.4286,
       "bytes": 1815674,
       "lufs": -15.99,
@@ -157,8 +157,8 @@
     },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",
-      "loopStart": 12.4675,
-      "loopEnd": 99.7402,
+      "loopStart": 12.467506,
+      "loopEnd": 99.740227,
       "duration": 102.7402,
       "bytes": 1427416,
       "lufs": -16.08,
@@ -184,8 +184,8 @@
     },
     "ending-ffx2": {
       "file": "music/ending-ffx2.mp3",
-      "loopStart": 11.4286,
-      "loopEnd": 114.2857,
+      "loopStart": 11.428594,
+      "loopEnd": 114.285737,
       "duration": 117.2857,
       "bytes": 1660506,
       "lufs": -16.07,
@@ -194,7 +194,7 @@
   },
   "sfx": {
     "file": "sfx/sprite.mp3",
-    "bytes": 2709677,
+    "bytes": 2709777,
     "duration": 244.0362,
     "cues": {
       "cursor-move": {
