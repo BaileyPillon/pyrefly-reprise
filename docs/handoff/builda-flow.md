@@ -236,6 +236,13 @@ in scope and needs your approval** (AGENTS.md hard rule 10).
   `package.json`, so `vite` could not start at all. I added a three-line
   `package.json` there. It is local and gitignored. A proper `npm i` would be
   better; it needs Bailey's yes (hard rule 11).
+- **`tests/unit/audio-cue-reachability.test.ts` is still untracked** — the audio
+  track wrote it and has not committed it. I edited it in place, as its own
+  comment invited ("when they do, this test fails and the line below gets
+  deleted"): `pause` came off `KNOWN_UNWIRED`, `battle-ffx` and `boss-dread`
+  went on with the reasoning above, and its literal scan now also walks
+  `src/ui/common` (a shared helper called from two screens is still the game
+  asking for a cue). **I did not commit it** — it is theirs to land.
 - **`ENEMY_GROUPS_BY_ID` hands every battle the same enemy record objects and the
   FFX engine writes through them.** The Mortiorchis's `stats.maxHp` comes out of
   one run at 4 000, 3 000 or 1 000 depending on what ran before it in the same
