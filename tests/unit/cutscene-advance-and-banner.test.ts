@@ -13,6 +13,9 @@
  * - **#10** the approved battle-start boss card was never built.
  */
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -223,6 +226,103 @@ describe('the battle-start boss card — #10', () => {
     expect(card!.querySelectorAll('.bstart__member')).toHaveLength(3);
     expect(card!.textContent).toContain('Tidus');
     await shown;
+  });
+
+  /**
+   * The refutation of the first pass at #10: the card was right and its foot
+   * strip was not. `portrait.ts` adopts **any** `art/portraits/` `<img>` in the
+   * document and writes `position:absolute` plus a several-hundred-percent
+   * width inline; the tile had no `position`, so three full-size paintings
+   * escaped its `overflow:hidden`, resolved against `.bstart` and covered the
+   * words BATTLE START. Measured live: tile 40x40, img 2322x3394 at x=-149.
+   *
+   * Two halves, so neither can regress alone: the markup must ask for a
+   * managed head crop, and the frame must be a containing block for it.
+   * (Shared plumbing, so it is a "both games" fix — CHECKS.md CHK-020. The
+   * card's only game-specific part is the accent token, untouched here.)
+   */
+  it('gives each party portrait a managed head crop inside a positioned frame', () => {
+    const el = root();
+    const banner = new BattleStartBanner({
+      root: el,
+      bossName: 'Seymour Flux',
+      party: [
+        { id: 'tidus', name: 'Tidus' },
+        { id: 'yuna', name: 'Yuna' },
+        { id: 'kimahri', name: 'Kimahri' },
+      ],
+      holdMs: 60_000,
+    });
+    const tiles = [...banner.el.querySelectorAll('.bstart__tile')];
+    expect(tiles).toHaveLength(3);
+    for (const tile of tiles) {
+      // The initial is a floor of its own, not the tile's text, so the
+      // painting has something to cover rather than something to fight.
+      expect(tile.querySelector('.bstart__initial')).not.toBeNull();
+      const img = tile.querySelector('img');
+      expect(img).not.toBeNull();
+      // `faceImgHtml`'s signature: the sweep will correct this element in
+      // place rather than adopt it and guess.
+      expect(img!.getAttribute('data-face-crop')).toBeTruthy();
+      // …and it is already placed as a crop on the first paint.
+      expect(img!.getAttribute('style') ?? '').toContain('position:absolute');
+    }
+    banner.dismiss();
+  });
+
+  /**
+   * FFX-2 only, and for an FFX-2 reason: a Gullwing's sprite key is her
+   * dressphere, which the fleet paints as a full body and not as a portrait,
+   * so the card asked for `portraits/yuna-gunner.png`, missed, and drew a Y.
+   * An FFX guardian's sprite key is her id, so her path must not change.
+   */
+  it('falls from a dressphere key back to the character portrait — FFX-2 only', () => {
+    const ffx2 = new BattleStartBanner({
+      root: root(),
+      bossName: 'Bahamut',
+      game: 'ffx2',
+      party: [
+        { id: 'yuna', artId: 'yuna-gunner', name: 'Yuna' },
+        { id: 'paine', artId: 'paine-warrior', name: 'Paine' },
+      ],
+      holdMs: 60_000,
+    });
+    const srcs = [...ffx2.el.querySelectorAll('.bstart__tile img')].map(
+      (i) => i.getAttribute('src') ?? '',
+    );
+    // Yuna: the dressphere portrait first, then her own; Paine has no portrait
+    // file at all, so the head of her dressphere painting is the floor.
+    expect(srcs.some((s) => s.includes('portraits/yuna'))).toBe(true);
+    expect(srcs.some((s) => s.includes('characters/paine-warrior/idle.png'))).toBe(true);
+    ffx2.dismiss();
+
+    // FFX: sprite key === id, so one image and nothing new asked for.
+    const ffx = new BattleStartBanner({
+      root: root(),
+      bossName: 'Seymour Flux',
+      game: 'ffx',
+      party: [{ id: 'auron', artId: 'auron', name: 'Auron' }],
+      holdMs: 60_000,
+    });
+    const ffxSrcs = [...ffx.el.querySelectorAll('.bstart__tile img')].map(
+      (i) => i.getAttribute('src') ?? '',
+    );
+    expect(ffxSrcs).toHaveLength(1);
+    expect(ffxSrcs[0]).toContain('portraits/auron.png');
+    ffx.dismiss();
+  });
+
+  it('frames those crops in a positioned, clipping tile', () => {
+    // `import.meta.url` is an http URL under jsdom, so this resolves from the
+    // runner's root instead (vitest runs from the repo root).
+    const css = readFileSync(join(process.cwd(), 'src/ui/common/battle-start-banner.css'), 'utf8');
+    const block = /\.bstart__tile\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+    expect(block).not.toBe('');
+    // Without this the absolutely-positioned crop resolves against `.bstart`.
+    expect(block).toMatch(/position:\s*relative/);
+    expect(block).toMatch(/overflow:\s*hidden/);
+    const initial = /\.bstart__initial\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+    expect(initial).toMatch(/position:\s*absolute/);
   });
 
   it('takes itself down on its own, and only once', async () => {

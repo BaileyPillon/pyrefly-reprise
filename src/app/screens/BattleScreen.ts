@@ -285,7 +285,10 @@ export class BattleScreen extends Screen {
     const party = state.activeIds
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => Boolean(c))
-      .map((c) => ({ id: c.spriteKey || c.id, name: c.name }));
+      // Both keys, not one. The card wants the character's own id to find her
+      // portrait and the sprite key to find the painting the field is staging
+      // — which in FFX-2 is her dressphere, and in FFX is the same string.
+      .map((c) => ({ id: c.id, artId: c.spriteKey || c.id, name: c.name }));
 
     const banner = new BattleStartBanner({
       root: this.root,

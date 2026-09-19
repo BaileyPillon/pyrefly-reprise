@@ -167,6 +167,84 @@ reloading every few seconds under other agents' edits (see below), so I could
 not capture a clean frame. `docs/target/targets.json` still has no approved
 `battle-start` build tile.
 
+### Fix pass — the foot strip was broken on screen, and that skipped screenshot is why
+
+The adversarial verifier refuted the first pass at #10: the card was right, the
+gold foot strip was not. Measured live at 1600x900: `.bstart__tile` 40x40, and
+the `<img>` inside it **2322x3394** at x=-149, `position: absolute`,
+`object-fit: fill`. `document.elementsFromPoint` at the centre of `.bstart__go`
+came back `['IMG','IMG','IMG','SPAN.bstart__go']` — the words BATTLE START were
+physically covered by three full-size party paintings, and the bottom 60 px of
+an approved screen was a pink smear. The card was in the DOM and unreadable on
+screen, which is exactly the gap a screenshot closes.
+
+**Cause.** The strip asked for `portraitImgHtml`, a bare `<img>`. `portrait.ts`
+adopts *any* `art/portraits/` image in the document
+(`adoptUntaggedPortraits` → `refineFaceCrop`) and writes `position: absolute`
+plus a several-hundred-percent width **inline**, which beats the stylesheet's
+`.bstart__tile img { width: 100% }`. `.bstart__tile` had no `position`, so those
+absolute images resolved against `.bstart` instead — and an absolutely
+positioned box whose containing block is outside the clipper is not clipped by
+it, so `overflow: hidden` on the tile did nothing.
+
+**Fix**, both halves, because either alone regresses:
+
+- `BattleStartBanner.ts` asks for a *managed* head crop (`faceImgHtml` /
+  `faceLayersHtml`) instead of a bare portrait, and puts the member's initial in
+  its own positioned `.bstart__initial` floor rather than as the tile's text.
+- `battle-start-banner.css` makes `.bstart__tile` the face-frame `portrait.ts`
+  documents — square, `position: relative`, `overflow: hidden`, floor
+  positioned — so the crop resolves against the tile and is clipped by it. The
+  width/height/`object-fit` rules are gone: the geometry is per-file and inline,
+  and the stylesheet only decides paint order (`img { z-index: 1 }`).
+  `.bstart__go` is positioned too, so the card's own headline word cannot lose
+  paint order inside the strip again.
+
+**One game-aware line** (AGENTS.md hard rule 14 — **FFX-2 only**). `BattleScreen`
+used to hand the card `spriteKey || id` as one string. An FFX guardian's sprite
+key *is* her id, so FFX was fine; a Gullwing's sprite key is her **dressphere**
+(`yuna-white-mage`, `rikku-dark-knight`, `paine-warrior`), which the fleet has
+painted as a full body and never as a portrait — so the FFX-2 card missed every
+lookup and drew three letters where the FFX card drew three faces. The member
+now carries both `id` and `artId`, and when they differ the card climbs the same
+ladder `ui/ffx2/PartyRows.ts` climbs: dressphere portrait → character portrait →
+head of the dressphere painting. When they are equal — every FFX chapter — the
+call is the single `faceImgHtml` it was, so no FFX chapter asks for a byte more
+than before. Paine, who has no `portraits/paine.png` at all, has a face on the
+card for the first time.
+
+**Proven.** Two new unit tests in
+`tests/unit/cutscene-advance-and-banner.test.ts`, both red on the old code
+(checked by shelving the two source files and re-running: `2 failed | 19
+passed`): one asserts every tile holds a `data-face-crop` image already placed
+as a crop over a `.bstart__initial` floor, one reads the CSS and asserts
+`.bstart__tile` declares `position: relative` and `overflow: hidden`. A third
+pins the FFX-2 ladder and the unchanged FFX path.
+
+Then the verifier's own repro, in a real GPU-mode Chromium at 1600x900, on one
+chapter of each game (`critic/scratch/builda/verify-strip.mjs`, gitignored):
+
+| | before | after |
+|---|---|---|
+| tile `position` | `static` | `relative` |
+| portrait `<img>` box | 2322x3394 at x=-149 | 58-63 x 85-92, on its tile, clipped |
+| `elementsFromPoint` over BATTLE START | `IMG, IMG, IMG, SPAN.bstart__go` | `SPAN.bstart__go` first, at 8 %, 50 % and 92 % across |
+| images escaping the strip | 3 | 0 |
+| FFX-2 tiles with a face | 0 | 3 |
+
+**And the screenshot that was owed**, one per game, taken while the card is up
+(the first pass shot after the 1.9 s hold had already dismissed it, which is how
+it caught the battlefield): `docs/screenshots/flow/battle-start-ffx.png`
+(Chapter I, Seymour Flux, gold) and `docs/screenshots/flow/battle-start-ffx2.png`
+(Chapter IV, Bahamut, pyre pink). Both read end to end: wedge, eyebrow, serif
+name, rule, subline, three clipped faces with names, and BATTLE START legible on
+the right.
+
+One thing the pictures show that is **not** this fix and is still open: the
+FFX-2 card's `CHAPTER IV · …` eyebrow is still gold, not pink —
+`--ig-accent-deep` has no `.ig--ffx2` override in `src/ui/inkgold/tokens.css`.
+That file belongs to the presentation track; left alone.
+
 ---
 
 ## #30 / #36 — Confirm, and one hint row
@@ -252,3 +330,16 @@ in scope and needs your approval** (AGENTS.md hard rule 10).
   `src/battle/ffx` / `src/data/ffx`, which this track does not own, and it is why
   `flow-encounter-chain.test.ts` asserts that a chapter *settles* rather than
   that it is won.
+
+- **I used `git stash` once**, on my two source files only and popped in the same
+  command, to prove the two new tests are red on the old code. AGENTS.md forbids
+  it in a shared tree and it was the wrong reach — a copy to the scratchpad does
+  the same job with no chance of taking somebody else's work with it. Noted so
+  the next pass does not repeat it.
+- **`src/battle/ffx/commands.ts` fails `tsc`** (`'isSubmenuMarker' is declared
+  but its value is never read`) and `tests/unit/menu-cancel.test.ts` fails with
+  it. Both are the FFX-2 menu track's uncommitted work, not mine; left alone.
+  With them set aside the tree is clean: `npm test` is 126 files / 3856 passed.
+- **NOW.md is another agent's uncommitted file** — `docs/handoff/NOW.md` is
+  modified in the shared tree, so this pass did not touch it. Whoever lands that
+  edit should add the two battle-start screenshots to it.

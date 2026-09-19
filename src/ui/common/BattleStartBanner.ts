@@ -27,12 +27,21 @@
 
 import './battle-start-banner.css';
 import { escapeHtml } from './html.ts';
-import { portraitImgHtml } from './portrait.ts';
+import { faceImgHtml, faceLayersHtml } from './portrait.ts';
 import { romanNumeral } from './roman.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 
 export interface BattleStartBannerMember {
+  /** The character's own id — `tidus`, `yuna`, `paine`. */
   id: string;
+  /**
+   * The painted key the field is staging them under, when it differs from
+   * `id`. **FFX-2 only in practice:** a Gullwing's sprite key carries her
+   * current dressphere (`yuna-gunner`, `paine-warrior`), and FFX has no such
+   * thing — a guardian's sprite key *is* her id. See the party markup below
+   * for what the difference buys.
+   */
+  artId?: string;
   name: string;
 }
 
@@ -78,6 +87,15 @@ export function splitBossName(name: string): string[] {
   return [trimmed.slice(0, cut), trimmed.slice(cut + 1)];
 }
 
+/**
+ * The painted head for one party tile, or `''` when the fleet has nothing —
+ * in which case the tile's initial is what shows.
+ */
+function memberFaceHtml(m: BattleStartBannerMember): string {
+  if (!m.artId || m.artId === m.id) return faceImgHtml(m.id, m.name);
+  return faceLayersHtml([m.artId, m.id], m.artId, m.name);
+}
+
 export class BattleStartBanner {
   readonly el: HTMLElement;
   private readonly holdMs: number;
@@ -104,12 +122,39 @@ export class BattleStartBanner {
       .map((line) => `<span>${escapeHtml(line)}</span>`)
       .join('');
     const subline = opts.subline ? `<p class="bstart__subline">${escapeHtml(opts.subline)}</p>` : '';
+    // The tile is a **face frame**, not an image box: square, `position:
+    // relative`, `overflow: hidden`, with the initial as a positioned floor
+    // underneath whatever painting loads over it — the same contract
+    // `.cselect__face` and `.pause__card-face` keep.
+    //
+    // It has to be `faceImgHtml`, not the plain `portraitImgHtml`. A portrait
+    // `<img>` anywhere in the document is adopted by `portrait.ts`'s crop sweep
+    // (`adoptUntaggedPortraits`), which writes `position:absolute` and a
+    // several-hundred-percent width **inline**, beating any stylesheet rule the
+    // tile sets. Against an unpositioned tile that image resolves against the
+    // card instead, escapes the tile's clip entirely, and paints the party's
+    // paintings at full size across the foot strip and over the words BATTLE
+    // START — which is exactly what shipped (round 02 #10, refuted first pass).
+    // Asking for the measured head crop instead means the geometry the sweep
+    // writes is the geometry this frame was designed for.
+    //
+    // Which art it asks for is the one game-aware line on the card, and it is
+    // FFX-2 only (AGENTS.md hard rule 14). A guardian's sprite key is her id,
+    // so FFX resolves `portraits/<id>.png` on the first candidate exactly as
+    // before. A Gullwing's sprite key is her **dressphere**
+    // (`yuna-gunner`), which the fleet has painted as a full body and not as a
+    // portrait — so FFX-2 falls `yuna-gunner` → `yuna` → the head of
+    // `characters/yuna-gunner/idle.png`, the same ladder the FFX-2 party rows
+    // climb (`ui/ffx2/PartyRows.ts`). Without it the FFX-2 card showed three
+    // letters where the FFX card showed three faces.
     const party = (opts.party ?? [])
       .map(
         (m) =>
-          `<span class="bstart__member"><span class="bstart__tile">${
-            portraitImgHtml(m.id, m.name) || escapeHtml(m.name.charAt(0).toUpperCase())
-          }</span><span class="bstart__who">${escapeHtml(m.name)}</span></span>`,
+          `<span class="bstart__member"><span class="bstart__tile"><span class="bstart__initial">${escapeHtml(
+            m.name.charAt(0).toUpperCase(),
+          )}</span>${memberFaceHtml(m)}</span><span class="bstart__who">${escapeHtml(
+            m.name,
+          )}</span></span>`,
       )
       .join('');
 
