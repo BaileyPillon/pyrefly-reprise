@@ -1,0 +1,90 @@
+{
+  "$comment": [
+    "Where every painted face is, measured off the painting itself.",
+    "",
+    "fx / fy  the midpoint between the eyes, as a fraction of the FILE's width and height.",
+    "ipd      the eye-to-eye distance as a fraction of the FILE's width; the scale handle.",
+    "         For a head rolled out of the vertical (Tidus, Wakka, Yuna, Rikku, Lulu) it is the",
+    "         true separation, the diagonal, not its horizontal projection. For a near-profile",
+    "         with one eye on camera (Auron, Kimahri, Bahamut, Ixion, Valefor) it is the",
+    "         human-equivalent value that lands the head at the roster's scale, and fy comes",
+    "         from that one eye.",
+    "px       the file's real pixel size when it was measured. A re-roll that changes the",
+    "         canvas invalidates the row, and tests/unit/ui-portrait-face-crop.test.ts fails",
+    "         the build when the file on disk stops matching -- which is exactly how Auron",
+    "         shipped cropped through the chin last round and nothing noticed.",
+    "",
+    "Measured 2026-09-18 with tools/portraits/measure-face-crops.mjs: each eye read off a",
+    "window of the painting under a grid labelled in FILE PIXELS, so the number under the",
+    "crosshair is the number the row wants. Regenerate the probes after any art re-roll:",
+    "  node tools/portraits/measure-face-crops.mjs probe <id>",
+    "and re-render the acceptance sheet before believing a row."
+  ],
+  "targets": { "eyeY": 0.42, "ipd": 0.3 },
+  "portraits": {
+    "tidus": { "fx": 0.4087, "fy": 0.3548, "ipd": 0.2067, "px": [832, 1216], "note": "head rolled; his left eye sits 63 px below his right" },
+    "yuna": { "fx": 0.3726, "fy": 0.3478, "ipd": 0.2015, "px": [832, 1216], "note": "three-quarter, head tilted" },
+    "auron": {
+      "fx": 0.42,
+      "fy": 0.379,
+      "ipd": 0.24,
+      "px": [832, 1216],
+      "note": "near profile behind opaque lenses; fy is the one open amber eye at (381, 461), fx and ipd frame the face rather than the lens spacing. The row this replaces claimed fy 0.4735, which is his mouth."
+    },
+    "kimahri": { "fx": 0.58, "fy": 0.343, "ipd": 0.19, "px": [832, 1216], "note": "anthro muzzle in near profile; one eye, at (470, 417)" },
+    "wakka": { "fx": 0.3335, "fy": 0.3277, "ipd": 0.2011, "px": [832, 1216], "note": "head rolled hard; eyes at (355, 367) and (200, 430)" },
+    "lulu": { "fx": 0.6887, "fy": 0.3824, "ipd": 0.2089, "px": [832, 1216], "note": "face behind the near half of her hair" },
+    "rikku": { "fx": 0.5403, "fy": 0.5374, "ipd": 0.2644, "px": [832, 1216], "note": "lowest face in the roster; the painting is a close-up" },
+    "seymour": {
+      "fx": 0.345,
+      "fy": 0.347,
+      "ipd": 0.174,
+      "px": [832, 1216],
+      "note": "three-quarter facing left; eyes at (221, 392) and (353, 452). The row this replaces put fx at 0.67, which framed his ear and clipped both eyes off the left edge."
+    },
+    "yunalesca": {
+      "fx": 0.3834,
+      "fy": 0.3643,
+      "ipd": 0.2257,
+      "px": [832, 1216],
+      "note": "eyes at (230, 473) and (408, 413). The row this replaces put fx at 0.621 and was clamped against the right edge."
+    },
+    "jecht": { "fx": 0.7428, "fy": 0.2673, "ipd": 0.1466, "px": [832, 1216], "note": "eyes at (557, 327) and (679, 323), under the headband" },
+    "bahamut": { "fx": 0.346, "fy": 0.407, "ipd": 0.155, "px": [832, 1216], "note": "dragon in profile; the one lit eye is at (288, 495)" },
+    "anima": { "fx": 0.333, "fy": 0.37, "ipd": 0.1875, "px": [832, 1216], "note": "a single eye at (277, 450); ipd frames the wrapped head" },
+    "ifrit": { "fx": 0.3937, "fy": 0.4466, "ipd": 0.1406, "px": [832, 1216], "note": "eyes at (269, 540) and (386, 546), between the horns" },
+    "ixion": { "fx": 0.345, "fy": 0.424, "ipd": 0.173, "px": [832, 1216], "note": "horse head in profile; the one eye is at (287, 516), and the gold in his mane reads as an eye until you put a ruler on it" },
+    "shiva": { "fx": 0.348, "fy": 0.4276, "ipd": 0.2007, "px": [832, 1216], "note": "frontal; eyes at (206, 520) and (373, 520)" },
+    "valefor": { "fx": 0.563, "fy": 0.416, "ipd": 0.157, "px": [824, 1202], "note": "bird head in profile; the one eye is at (464, 500). The only portrait that is not 832x1216." },
+    "yojimbo": { "fx": 0.446, "fy": 0.192, "ipd": 0.155, "px": [832, 1216], "note": "masked face in shadow under a straw hat; the one lit eye is at (371, 234)" }
+  },
+  "bodies": {
+    "paine-warrior": { "fx": 0.4887, "fy": 0.1292, "ipd": 0.0985, "px": [408, 1180] },
+    "paine-dark-knight": {
+      "fx": 0.6255,
+      "fy": 0.2076,
+      "ipd": 0.0534,
+      "px": [609, 1208],
+      "note": "Chapter 5's Paine. The greatsword's pommel is the topmost thing in the file and her head stands well right of centre, so the generic fx 0.5 / fy 0.15 estimate framed the blade."
+    },
+    "paine-gunner": { "fx": 0.543, "fy": 0.1331, "ipd": 0.0779, "px": [493, 1136] },
+    "paine-black-mage": { "fx": 0.4841, "fy": 0.1815, "ipd": 0.0603, "px": [567, 1151], "note": "the hat pushes her face down the canvas" },
+    "paine-white-mage": { "fx": 0.5266, "fy": 0.1501, "ipd": 0.0417, "px": [820, 1140] },
+    "paine-samurai": { "fx": 0.5695, "fy": 0.1687, "ipd": 0.0781, "px": [640, 1129] },
+    "rikku-dark-knight": { "fx": 0.3997, "fy": 0.1514, "ipd": 0.0452, "px": [787, 1205], "note": "Chapter 4 and 5's Rikku; the machina arm fills the right half of the canvas" },
+    "rikku-alchemist": { "fx": 0.4957, "fy": 0.1631, "ipd": 0.0808, "px": [541, 1194] },
+    "rikku-berserker": { "fx": 0.5083, "fy": 0.1602, "ipd": 0.0966, "px": [555, 1215] },
+    "rikku-black-mage": { "fx": 0.4007, "fy": 0.199, "ipd": 0.0616, "px": [683, 1190], "note": "the hat brim reaches further left than she does" },
+    "rikku-gunner": { "fx": 0.4772, "fy": 0.1472, "ipd": 0.0868, "px": [364, 1062] },
+    "rikku-thief": { "fx": 0.5324, "fy": 0.251, "ipd": 0.1197, "px": [558, 1212], "note": "the tallest hair in the game; her eyes are a quarter of the way down the file" },
+    "rikku-white-mage": { "fx": 0.3355, "fy": 0.1714, "ipd": 0.069, "px": [626, 1213], "note": "she stands well left of centre" },
+    "rikku": { "fx": 0.449, "fy": 0.1804, "ipd": 0.065, "px": [648, 1120] },
+    "yuna-white-mage": { "fx": 0.475, "fy": 0.1074, "ipd": 0.0456, "px": [758, 1172], "note": "Chapter 4 and 5's Yuna" },
+    "yuna-black-mage": { "fx": 0.4412, "fy": 0.1777, "ipd": 0.0706, "px": [782, 1149] },
+    "yuna-dark-knight": { "fx": 0.4851, "fy": 0.218, "ipd": 0.0787, "px": [549, 1195], "note": "the horned helm puts her eyes lowest of Yuna's set" },
+    "yuna-gunner": { "fx": 0.52, "fy": 0.1124, "ipd": 0.1109, "px": [460, 1194] },
+    "yuna-songstress": { "fx": 0.3713, "fy": 0.1061, "ipd": 0.0771, "px": [655, 1116] },
+    "yuna-warrior": { "fx": 0.4942, "fy": 0.1005, "ipd": 0.0773, "px": [728, 1183] },
+    "yuna": { "fx": 0.4975, "fy": 0.0989, "ipd": 0.0472, "px": [803, 1075] }
+  }
+}

@@ -15,6 +15,7 @@
 
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+import faceCropData from './face-crops.json';
 
 /**
  * Skip an `<img>` for art the build-time manifest says is not there.
@@ -60,27 +61,38 @@ export function backdropImgHtml(sceneKey: string | undefined, alt = ''): string 
  * - `ipd` — the eye-to-eye distance as a fraction of the file's **width**.
  *   It is the scale handle: a painting with a small `ipd` is a wide shot and
  *   has to be blown up further to match the rest of the roster.
- * - `aspect` — `width / height` of the file. It is only the *starting guess*
- *   now: {@link refineFaceCrop} replaces it with the loaded image's true
- *   `naturalWidth / naturalHeight` as soon as the bytes land (see below).
+ * - `aspect` — `width / height` of the file. The rows carry the size the file
+ *   was measured at, so the first paint is already right;
+ *   {@link refineFaceCrop} then replaces it with the loaded image's true
+ *   `naturalWidth / naturalHeight`, which is what keeps a re-rolled painting
+ *   from being placed against a canvas that no longer exists.
  *
- * Re-measured 2026-09-18 against the current files, off a calibration rig:
- * each portrait rendered through the geometry below into a 320 px reference
- * tile with the target eye line and eye-to-eye ticks drawn on top, so a row is
- * right when the pupils sit on the crosshairs rather than when it looks about
- * right. For a rolled head (Wakka, Rikku, Yunalesca) the scale handle is the
- * true eye-to-eye distance, the diagonal, not its horizontal projection; for a
- * near-profile (Kimahri, Seymour) only one eye is on camera and the pair are
- * the human-equivalent values that land the head at the roster's scale.
+ * **The rows live in `face-crops.json`, not here**, because they are measured
+ * data about files the art fleet re-rolls rather than code — and because the
+ * measuring rig (`tools/portraits/measure-face-crops.mjs`) reads the same file,
+ * so the acceptance sheet and the shipped geometry cannot drift apart. Every
+ * row was read off a window of its own painting under a grid labelled in file
+ * pixels, so the number under the crosshair is the number in the row; `note`
+ * records where the eyes actually are. For a head rolled out of the vertical
+ * the scale handle is the true eye separation, the diagonal, not its horizontal
+ * projection; for a near-profile with one eye on camera (Auron, Kimahri,
+ * Bahamut, Ixion, Valefor) `fx` and `ipd` are the human-equivalent values that
+ * land the head at the roster's scale and `fy` comes from that one eye.
  *
- * **These rows go stale the moment the art fleet re-rolls a painting**, which
- * is exactly how Auron ended up cropped through the chin: his row was measured
- * on 2026-09-16 against a 671x1216 file and every portrait in the game was
- * regenerated on 2026-09-18. Two things now keep a stale row from cutting a
- * face rather than merely mis-centring it:
+ * **These rows go stale the moment the art fleet re-rolls a painting.** That is
+ * how Auron shipped cropped through the chin: his row was measured against a
+ * 671x1216 file, every portrait was regenerated at 832x1216, and nothing in the
+ * build noticed. Four things now stand between a stale row and a cut face:
  *
- * 1. the aspect is taken from the file, never from the row ({@link refineFaceCrop});
- * 2. {@link cropStyle} clamps the placement so the painting always covers the
+ * 1. each row records the file's pixel size, and
+ *    `tests/unit/ui-portrait-face-crop.test.ts` reads the real paintings off
+ *    disk and fails when one has moved;
+ * 2. the same test asserts each row's own measured eye line lands on
+ *    {@link TARGET_EYE_Y} and its eye separation at {@link TARGET_IPD} once
+ *    placed, so a row that cannot be honoured fails rather than shipping;
+ * 3. the aspect is taken from the file at runtime, never only from the row
+ *    ({@link refineFaceCrop});
+ * 4. {@link cropStyle} clamps the placement so the painting always covers the
  *    frame, and {@link DEFAULT_CROP} — what an unknown id gets — is a plain
  *    top-biased crop rather than a guess at somebody's eye line.
  *
@@ -92,6 +104,15 @@ export interface PortraitCrop {
   fy: number;
   ipd: number;
   aspect: number;
+}
+
+/** A row as `face-crops.json` stores it: the focal numbers plus the file they were measured on. */
+interface MeasuredRow {
+  fx: number;
+  fy: number;
+  ipd: number;
+  px: number[];
+  note?: string;
 }
 
 /** The pipeline's usual portrait canvas, and the starting guess for any row. */
@@ -109,32 +130,37 @@ const CANVAS_ASPECT = 832 / 1216;
  */
 const DEFAULT_CROP: PortraitCrop = { fx: 0.5, fy: 0.295, ipd: 0.3, aspect: CANVAS_ASPECT };
 
-const CROPS: Readonly<Record<string, PortraitCrop>> = {
-  tidus: { fx: 0.4, fy: 0.328, ipd: 0.22, aspect: CANVAS_ASPECT },
-  yuna: { fx: 0.379, fy: 0.343, ipd: 0.243, aspect: CANVAS_ASPECT },
-  auron: { fx: 0.31, fy: 0.4735, ipd: 0.265, aspect: CANVAS_ASPECT },
-  // Anthro muzzle in near profile: one eye visible, so `fx`/`ipd` are the
-  // human-equivalent values that land his head at the roster's scale, and the
-  // eye line is set from that one eye.
-  kimahri: { fx: 0.6, fy: 0.335, ipd: 0.19, aspect: CANVAS_ASPECT },
-  wakka: { fx: 0.325, fy: 0.3, ipd: 0.241, aspect: CANVAS_ASPECT },
-  lulu: { fx: 0.681, fy: 0.37, ipd: 0.211, aspect: CANVAS_ASPECT },
-  rikku: { fx: 0.55, fy: 0.538, ipd: 0.267, aspect: CANVAS_ASPECT },
-  // Seymour is near-profile like Kimahri; the rest are three-quarter views with
-  // both eyes on camera.
-  seymour: { fx: 0.67, fy: 0.36, ipd: 0.173, aspect: CANVAS_ASPECT },
-  yunalesca: { fx: 0.621, fy: 0.358, ipd: 0.245, aspect: CANVAS_ASPECT },
-  jecht: { fx: 0.695, fy: 0.2275, ipd: 0.19, aspect: CANVAS_ASPECT },
-};
+const PORTRAIT_ROWS = faceCropData.portraits as Readonly<Record<string, MeasuredRow>>;
+const BODY_ROWS = faceCropData.bodies as Readonly<Record<string, MeasuredRow>>;
+
+function toCrop(row: MeasuredRow | undefined, fallback: PortraitCrop): PortraitCrop {
+  if (!row) return fallback;
+  const w = row.px[0];
+  const h = row.px[1];
+  return { fx: row.fx, fy: row.fy, ipd: row.ipd, aspect: w && h ? w / h : fallback.aspect };
+}
 
 /** The measured crop for `id`, or the top-biased fallback when it has no row. */
 export function portraitCrop(id: string | undefined): PortraitCrop {
-  return (id && CROPS[id]) || DEFAULT_CROP;
+  return toCrop(id ? PORTRAIT_ROWS[id] : undefined, DEFAULT_CROP);
 }
 
 /** Ids with a measured row, for the guard test. */
 export function measuredPortraitIds(): string[] {
-  return Object.keys(CROPS);
+  return Object.keys(PORTRAIT_ROWS);
+}
+
+/** Full-body ids with a measured head row, for the guard test. */
+export function measuredBodyIds(): string[] {
+  return Object.keys(BODY_ROWS);
+}
+
+/**
+ * The pixel size a row was measured against, so the guard test can compare it
+ * with the file actually on disk. `undefined` for an unmeasured id.
+ */
+export function measuredFilePx(id: string, kind: 'portrait' | 'body' = 'portrait'): number[] | undefined {
+  return (kind === 'body' ? BODY_ROWS : PORTRAIT_ROWS)[id]?.px;
 }
 
 export interface FaceOptions {
@@ -272,6 +298,10 @@ function faceOptAttrs(opts: FaceOptions): string {
  * monogram on top of a perfectly good portrait (docs/handoff/bp1-portrait-basepath.md).
  */
 export function faceCropStyle(id: string | undefined, opts: FaceOptions = {}): string {
+  // Asking for the style means an `<img>` is about to exist, and the one caller
+  // that does this builds the element itself without a `data-face-crop`. Arming
+  // the sweep here is what lets the correction pass find it anyway.
+  scheduleFaceCropSweep();
   return cropStyle(portraitCrop(id), opts);
 }
 
@@ -294,9 +324,39 @@ export function faceCropStyle(id: string | undefined, opts: FaceOptions = {}): s
  */
 const GENERIC_BODY_HEAD_CROP: Omit<PortraitCrop, 'aspect'> = { fx: 0.5, fy: 0.15, ipd: 0.16 };
 const GENERIC_BODY_ASPECT = 1216 / 832;
+const GENERIC_BODY_CROP: PortraitCrop = { ...GENERIC_BODY_HEAD_CROP, aspect: GENERIC_BODY_ASPECT };
 
-export function bodyHeadCropStyle(aspect: number = GENERIC_BODY_ASPECT, opts: FaceOptions = {}): string {
-  return cropStyle({ ...GENERIC_BODY_HEAD_CROP, aspect }, opts);
+/**
+ * The measured head of one full-body painting, or the generic estimate.
+ *
+ * **The estimate is wrong more often than it is right, and this is why the
+ * table exists.** `fx 0.5` assumes the figure is centred on the canvas; the
+ * dressphere paintings are not. Paine's Dark Knight stands right of centre with
+ * a greatsword filling the left of the frame, so centring on 0.5 put the blade
+ * in the party row where her face should be — the FFX-2 party rows drew a sword
+ * for the whole of Chapter 5. Rikku's Dark Knight hides behind a machina arm,
+ * Rikku's Thief has hair tall enough to push her eyes a quarter of the way down
+ * the file, and Yuna's Dark Knight wears a horned helm. Every one of those is a
+ * different `fx`/`fy`, and no single estimate covers them.
+ *
+ * The estimate is kept for an unmeasured id (a boss's idle painting, a
+ * dressphere nobody has measured yet) because a roughly-top-centre crop of a
+ * "full body, centered, straight-on" render is still better than a cover crop.
+ */
+export function bodyCrop(id: string | undefined): PortraitCrop {
+  return toCrop(id ? BODY_ROWS[id] : undefined, GENERIC_BODY_CROP);
+}
+
+/**
+ * The inline style for a full-body head crop.
+ *
+ * `id` is optional so that `ui/ffx/portraits.ts`, which asks for the generic
+ * estimate and then tightens the aspect itself once its image loads, keeps its
+ * exact current behaviour; passing an id opts into the measured table.
+ */
+export function bodyHeadCropStyle(aspect: number = GENERIC_BODY_ASPECT, opts: FaceOptions = {}, id?: string): string {
+  const row = id ? BODY_ROWS[id] : undefined;
+  return cropStyle(row ? toCrop(row, GENERIC_BODY_CROP) : { ...GENERIC_BODY_HEAD_CROP, aspect }, opts);
 }
 
 /**
@@ -309,7 +369,8 @@ export function bodyFaceImgHtml(subjectId: string | undefined, alt = '', opts: F
   const src = artUrl(`art/characters/${subjectId}/idle.png`);
   scheduleFaceCropSweep();
   return (
-    `<img${cls} src="${src}" alt="${alt}" draggable="false" style="${bodyHeadCropStyle(undefined, opts)}${zDecl(opts)}"` +
+    `<img${cls} src="${src}" alt="${alt}" draggable="false"` +
+    ` style="${cropStyle(bodyCrop(subjectId), opts)}${zDecl(opts)}"` +
     ` data-face-crop="${subjectId}" data-face-body="1"${faceOptAttrs(opts)} onerror="this.remove()" />`
   );
 }
@@ -383,13 +444,49 @@ export function refineFaceCrop(img: HTMLImageElement): void {
   if (Number.isFinite(eyeY) && eyeY > 0) opts.eyeY = eyeY;
 
   if (img.hasAttribute('data-face-body')) {
-    applyCrop(img, { ...GENERIC_BODY_HEAD_CROP, aspect }, opts);
+    applyCrop(img, { ...bodyCrop(id), aspect }, opts);
     return;
   }
   applyCrop(img, { ...portraitCrop(id), aspect }, opts);
   void portraitFocal(id).then((focal) => {
     if (focal && img.isConnected) applyCrop(img, { ...focal, aspect }, opts);
   });
+}
+
+/**
+ * The portrait id a `<img>` is showing, from its `src`, for an element that
+ * nobody tagged.
+ *
+ * `ui/ffx/portraits.ts` builds the FFX HUD's own portrait layer by hand — it
+ * asks for {@link faceCropStyle} and writes its own `<img>` with a `z-index` —
+ * so that element never carried `data-face-crop` and the correction pass below
+ * has never touched the CTB tiles or the party window. That was invisible only
+ * because every portrait on disk happens to match the canvas its row was
+ * measured on; the moment one does not, the HUD is the screen that shows it.
+ * The file is its own identity, so read the id back off the URL rather than
+ * reaching into another track's markup.
+ */
+function portraitIdFromSrc(src: string): string | null {
+  const m = /\/art\/portraits\/([^/?#]+)\.png(?:[?#]|$)/.exec(src);
+  return m?.[1] ?? null;
+}
+
+/**
+ * Tag and correct portrait `<img>`s that were built outside this module.
+ *
+ * Deliberately narrow: only an element that is already showing a
+ * `art/portraits/<id>.png`, is not a body crop (`ui/ffx/portraits.ts` tightens
+ * those itself from `idle.json` and must keep owning them), and has no
+ * `data-face-crop` of its own. Anything adopted is tagged, so it costs one pass.
+ */
+function adoptUntaggedPortraits(root: ParentNode): void {
+  for (const img of root.querySelectorAll<HTMLImageElement>('img[src*="/art/portraits/"]:not([data-face-crop])')) {
+    if (img.hasAttribute('data-body-id') || img.hasAttribute('data-face-body')) continue;
+    const id = portraitIdFromSrc(img.getAttribute('src') ?? '');
+    if (!id) continue;
+    img.setAttribute('data-face-crop', id);
+    if (img.complete) refineFaceCrop(img);
+  }
 }
 
 let sweepPending = false;
@@ -408,10 +505,23 @@ function scheduleFaceCropSweep(): void {
   sweepPending = true;
   requestAnimationFrame(() => {
     sweepPending = false;
+    adoptUntaggedPortraits(document);
     for (const img of document.querySelectorAll<HTMLImageElement>('img[data-face-crop]')) {
       if (img.complete) refineFaceCrop(img);
     }
   });
+}
+
+/**
+ * Run the correction pass over `root` now, for a caller that has just written
+ * markup and cannot wait a frame — and for the unit tests, which have no
+ * `requestAnimationFrame`.
+ */
+export function refineFaceCropsIn(root: ParentNode): void {
+  adoptUntaggedPortraits(root);
+  for (const img of root.querySelectorAll<HTMLImageElement>('img[data-face-crop]')) {
+    if (img.complete) refineFaceCrop(img);
+  }
 }
 
 if (typeof document !== 'undefined') {
@@ -422,7 +532,15 @@ if (typeof document !== 'undefined') {
     'load',
     (event) => {
       const target = event.target;
-      if (target instanceof HTMLImageElement && target.hasAttribute('data-face-crop')) refineFaceCrop(target);
+      if (!(target instanceof HTMLImageElement)) return;
+      if (!target.hasAttribute('data-face-crop')) {
+        // A portrait somebody else's module built; adopt it before correcting.
+        if (target.hasAttribute('data-body-id')) return;
+        const id = portraitIdFromSrc(target.getAttribute('src') ?? '');
+        if (!id) return;
+        target.setAttribute('data-face-crop', id);
+      }
+      refineFaceCrop(target);
     },
     true,
   );
