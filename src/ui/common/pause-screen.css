@@ -1135,22 +1135,133 @@
  *
  * The painting is still the whole screen — that is the one thing that must be
  * true at every aspect — and the chrome folds to a single column over it. The
- * dossier keeps its place in the stack and scrolls; the polaroids go, because
- * three tilted tiles across 358 usable pixels are three smudges.
+ * polaroids go, because three tilted tiles across 358 usable pixels are three
+ * smudges.
+ *
+ * ## The frame is the scroll box here (fix 3, pass 2)
+ *
+ * The first pass laid this out as `auto auto minmax(0, 1fr)` and let the two
+ * `auto` rows take their content height. On a tall phone that is fine: there
+ * is room. On a window that is narrow **and** short — 640x480, 700x500,
+ * 720x400, and every other 4:3 or squat window under the 721px width bound —
+ * there is not, and `auto` tracks do not shrink. The rail overflowed its own
+ * track, the `1fr` dossier track collapsed to nothing, and the stack printed
+ * the party cards and the dossier straight over live menu rows: at 640x480,
+ * seven painted text-on-text intersections and a QUIT TO TITLE row whose
+ * centre hit-tested as the dossier. A row the cursor is *on* that the player
+ * cannot see is the worst thing this screen can do.
+ *
+ * The cure is not another breakpoint — it is to stop pretending the content
+ * fits. The frame becomes a **column of flex items** that scrolls.
+ *
+ * Flex and not grid, and that distinction is the whole fix. A grid `auto`
+ * track is not "as tall as its item": it is sized by the track algorithm, and
+ * when the container's height is definite and there is not enough of it, the
+ * algorithm sizes each track down towards its item's *min-content* height —
+ * which for this rail is nearly nothing, because the rail sets `min-height: 0`
+ * so the menu inside it can be its own scroll box on a desktop window. The
+ * first attempt at this fix did exactly that, and made things worse: at
+ * 640x480 the three tracks came out 121 / 79 / 165 px for a rail whose content
+ * is 373 px tall, so the rail overflowed its own track by 250 px and printed
+ * over both of the others. A column flex item at `flex: none` has no such
+ * escape hatch — it is its content's height, it cannot be shrunk, and two of
+ * them cannot occupy the same strip of the screen.
+ *
+ * So: a window with room looks exactly as it did (`scrollHeight ===
+ * clientHeight`, no scrollbar), and a window without room hands the player the
+ * rest with the same Down arrow they were already pressing — `renderMenu`'s
+ * `scrollIntoView({ block: 'nearest' })` walks every scrolling ancestor, so the
+ * cursor stays on screen for free.
+ *
+ * `overflow-x: clip` rather than `auto`: the rows are skewed and their corners
+ * overhang their box by about a tenth of their height, and a *horizontal*
+ * scrollbar across the foot of a painting is not a thing anyone asked for.
  */
 @media (max-width: 720px), (max-aspect-ratio: 3 / 4) {
   .pause__frame {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
-    grid-template-areas:
-      'rail'
-      'party'
-      'panel';
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /*
+     * The hint band stops being *padding* and becomes the frame's bottom edge.
+     *
+     * Reserving it as padding is right for a layout that does not scroll: the
+     * content is laid out above the strip and stays there. It is wrong for one
+     * that does, twice over. Chromium leaves a scroll container's end padding
+     * out of its scrollable overflow, so the reservation vanished the moment
+     * the frame started scrolling (the dossier ran 57px under the strip at
+     * 640x480). And even with the padding honoured, only the *end* of the
+     * scroll is protected — scrolled anywhere else, the party cards and the
+     * menu simply travel underneath a strip that is `position: fixed` and
+     * always on top, which is what the measurements showed.
+     *
+     * Ending the scroll viewport at the band fixes both: there is no pixel of
+     * this frame, at any scroll offset, that is behind the hint strip.
+     */
+    bottom: calc(var(--pause-pad-y) + var(--pause-hint-band));
+    padding-bottom: 0;
+    overflow-x: clip;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(227, 185, 74, 0.5) transparent;
+    /* The frame is a scroll box now, so it has to be able to take a wheel or a
+       drag. It draws nothing and handles no clicks, so catching them here
+       costs the painting underneath nothing — and photo mode still takes the
+       whole layer away by direct-child rule. */
+    pointer-events: auto;
   }
-  /* The rail is only the wordmark and the menu here; it takes the height it
-     needs and the dossier gets the rest. */
+  /* Air under the last slab when the player has scrolled to the end, since the
+     container's own end padding would be dropped (see above). */
+  .pause__frame::after {
+    content: '';
+    display: block;
+    flex: none;
+    order: 9;
+    height: var(--pause-pad-y);
+  }
+  /*
+   * Source order is rail, panel, party, snaps; reading order here is rail,
+   * party, panel — the dossier is the long thing and it goes last.
+   *
+   * `flex: none` on every one of them, and `align-self: stretch` because in a
+   * column flex container `align-self` is the *horizontal* axis, where the
+   * base rules' `start` / `end` would pin a full-width slab to one side.
+   */
+  .pause__rail,
+  .pause__party,
+  .pause__panel {
+    flex: none;
+    align-self: stretch;
+    min-height: auto;
+  }
   .pause__rail {
-    align-self: start;
+    order: 1;
+  }
+  .pause__party {
+    order: 2;
+  }
+  .pause__panel {
+    order: 3;
+  }
+  /*
+   * The menu stops being its own scroll box. Two nested scrollers on one axis
+   * means the player can scroll the menu to its end and find the frame has not
+   * moved — and `block: 'nearest'` is satisfied by the inner one, so the frame
+   * never scrolls the selected row back into the window at all. One scroller.
+   */
+  .pause__menu {
+    overflow: visible;
+    max-height: none;
+  }
+  /*
+   * Same reasoning for the dossier: `max-height: 100%` was 100% of a grid area
+   * that does not exist here, and a second scroller at worst. It prints in
+   * full and the frame carries it.
+   */
+  .pause__panel {
+    max-height: none;
+    overflow: visible;
   }
   .pause__menu,
   .pause__panel,
@@ -1162,19 +1273,19 @@
   .pause__snaps {
     display: none;
   }
-  .pause__party {
-    align-self: start;
-  }
   .pause__card {
     max-width: none;
   }
   /*
    * The hint strip wraps here, and on a 390px phone the full control line is
    * three rows of chips — a chip cannot be broken, so no amount of tightening
-   * gets it to one. The band reserves the whole strip rather than a guess at
-   * it: at 64px the dossier was still being drawn 17px underneath it (measured
-   * in the browser, not assumed). The chips also give back their generous
-   * desktop padding, which buys back most of a row.
+   * gets it to one. The chips give back their generous desktop padding, which
+   * buys back most of a row.
+   *
+   * The *band* the strip needs is no longer guessed at in this file at all:
+   * `PauseScreen.measureHintBand` writes the measured height onto the frame.
+   * The clamp below is only the floor a browser sees before the first
+   * measurement lands (and if `ResizeObserver` is missing entirely).
    */
   .pause__hint.chint {
     gap: 8px;

@@ -132,6 +132,37 @@ export interface PauseScreenOptions {
 const PAUSE_DUCK = 0.35;
 
 /**
+ * Clear air between the foot of the frame's content and the top of the hint
+ * strip, in CSS px. See {@link PauseScreen.measureHintBand}.
+ *
+ * Not a `clamp()`: it is the gap between two slabs, not a piece of type, and
+ * it reads the same at 640x480 as it does at 4K.
+ */
+const HINT_BAND_GAP = 10;
+
+/**
+ * How much room the frame must reserve at its foot for the hint strip, given
+ * where the strip actually landed.
+ *
+ * Split out of {@link PauseScreen.measureHintBand} so the arithmetic — which
+ * is the whole of two of Bailey's defects — can be pinned without a browser.
+ *
+ * The frame is `inset: 0`, so its bottom edge is the viewport's; its
+ * `padding-top` is `--pause-pad-y` by construction and its `padding-bottom` is
+ * `calc(--pause-pad-y + --pause-hint-band)`. The content therefore ends at
+ * `viewportHeight - padTop - band`, and for that to clear the strip by
+ * {@link HINT_BAND_GAP} the band has to be at least
+ * `viewportHeight - hintTop - padTop + gap`.
+ *
+ * In the compact layout the same number is the frame's `bottom` offset rather
+ * than its padding, which is the same reservation measured from the same edge.
+ */
+export function hintBandPx(viewportHeight: number, hintTop: number, padTop: number, gap = HINT_BAND_GAP): number {
+  if (!Number.isFinite(viewportHeight) || !Number.isFinite(hintTop) || !Number.isFinite(padTop)) return 0;
+  return Math.max(0, Math.ceil(viewportHeight - hintTop - padTop + gap));
+}
+
+/**
  * The hint strip's extra entry for the panel toggle.
  *
  * Declared here rather than in `ControlsHint.ts` (another agent's file) and
@@ -173,6 +204,10 @@ export class PauseScreen extends Screen {
   private bareHint: HTMLElement | null = null;
   /** Releases the exclusive keyboard claim taken in {@link enter}. */
   private releaseKeyboard: (() => void) | null = null;
+  /** Watches the hint strip so the frame reserves its *measured* height. */
+  private hintWatch: ResizeObserver | null = null;
+  /** Torn down with the screen; see {@link watchHintBand}. */
+  private onViewportResize: (() => void) | null = null;
 
   constructor(opts: PauseScreenOptions) {
     super();
@@ -248,6 +283,60 @@ export class PauseScreen extends Screen {
     this.renderPanel();
     this.renderParty();
     this.applyPanelsHidden();
+    this.watchHintBand();
+  }
+
+  // ------------------------------------------------------------- hint band
+
+  /**
+   * Reserve exactly as much room at the foot of the frame as the hint strip
+   * actually takes — measured, not guessed.
+   *
+   * The strip is not in the frame's grid. It mounts on `.pause__chrome`, a
+   * sibling layer, because `controls-hint.css` belongs to another track and is
+   * authored against the screen root (see the `ControlsHint` mount in
+   * {@link enter}). So the frame has to *reserve* a band for it, and the first
+   * pass reserved a `clamp()` guess at one.
+   *
+   * A guess is wrong at some size, and it was wrong at several: 13.7px of the
+   * strip's ink was printed over the foot of all three party cards at 800x600,
+   * and the dossier ran 8.5px under it at 640x480 and 720x540 — reduced, in the
+   * 640x480 case, to a 43.9px sliver reading `FFX · I` before it was cut. The
+   * strip's height is not a function of the viewport the way a clamp assumes:
+   * it is a wrapping flex row of chips whose count changes with the panel
+   * (`setItems`), so the same window can want one band or three.
+   *
+   * There is no loop to worry about: the band only changes the frame's bottom
+   * padding, and the strip is `position: fixed` outside the frame, so nothing
+   * the band does can change what was measured.
+   */
+  private measureHintBand(): void {
+    const frame = this.stage?.stage.querySelector<HTMLElement>('.pause__frame');
+    const hint = this.hint?.el;
+    if (!frame || !hint) return;
+    const rect = hint.getBoundingClientRect();
+    // Panels are hidden: the strip is `display: none` and so is the frame.
+    // Keep the last good band rather than collapsing the reservation to zero
+    // and reflowing the whole stack for a layer nobody can see.
+    if (rect.height < 1) return;
+    // `padding-top` is `--pause-pad-y` by construction, and the frame is
+    // `inset: 0`, so its bottom edge is the viewport's. Written this way
+    // rather than as `rect.height + gap` so it stays correct even if the
+    // strip's own anchoring changes in the file that owns it.
+    const padTop = Number.parseFloat(getComputedStyle(frame).paddingTop) || 0;
+    frame.style.setProperty('--pause-hint-band', `${hintBandPx(window.innerHeight, rect.top, padTop)}px`);
+  }
+
+  /** Measure now, and again whenever the strip rewraps or the window moves. */
+  private watchHintBand(): void {
+    this.measureHintBand();
+    const hint = this.hint?.el;
+    if (hint && typeof ResizeObserver === 'function') {
+      this.hintWatch = new ResizeObserver(() => this.measureHintBand());
+      this.hintWatch.observe(hint);
+    }
+    this.onViewportResize = (): void => this.measureHintBand();
+    window.addEventListener('resize', this.onViewportResize);
   }
 
   /**
@@ -580,6 +669,10 @@ export class PauseScreen extends Screen {
     this.stage?.stage.classList.toggle('pause--bare', this.panelsHidden);
     if (this.hint) this.hint.el.style.display = this.panelsHidden ? 'none' : '';
     if (this.bareHint) this.bareHint.style.display = this.panelsHidden ? '' : 'none';
+    // Coming back from HIDE PANELS the strip is laid out again, possibly
+    // wrapped differently from when it went away (the panel may have changed
+    // underneath, and with it the chip count). Re-reserve from the new one.
+    if (!this.panelsHidden) this.measureHintBand();
   }
 
   private handleAction(action: string): void {
@@ -888,6 +981,10 @@ export class PauseScreen extends Screen {
     // is still open and is about to be the player's again.
     this.releaseKeyboard?.();
     this.releaseKeyboard = null;
+    this.hintWatch?.disconnect();
+    this.hintWatch = null;
+    if (this.onViewportResize) window.removeEventListener('resize', this.onViewportResize);
+    this.onViewportResize = null;
     this.bareHint?.remove();
     this.bareHint = null;
     this.photo?.dispose();

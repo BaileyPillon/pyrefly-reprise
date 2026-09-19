@@ -83,7 +83,67 @@ export const DEFAULT_PAUSE_FOCAL: Readonly<ArtFocal> = { x: 0.5, y: 0.35 };
 
 /** The 1x plates the art fleet ships, and the width their 2x masters are. */
 const PLATE_1X_WIDTH = 1344;
+const PLATE_1X_HEIGHT = 768;
 const PLATE_2X_WIDTH = 2688;
+/** 1.75 — the shape every pause plate is painted at. */
+const PLATE_ASPECT = PLATE_1X_WIDTH / PLATE_1X_HEIGHT;
+
+/**
+ * How many CSS pixels of image a box `w x h` needs when the plate is drawn
+ * with `object-fit: cover`.
+ *
+ * This is the whole of the `sizes` fix, and the reason a `sizes="100vw"` was
+ * wrong: `sizes` is a *width* hint, and `cover` is driven by whichever axis is
+ * the more demanding. On a 390x844 phone at DPR 3 the width hint asked for
+ * 390 x 3 = 1170 physical pixels, the 1344-wide PNG satisfied that, and the
+ * browser never fetched the master — but cover has to fill 1170x2532, so a
+ * 768px-tall source was magnified 3.30x and the screen was exactly the
+ * "low-resolution image blown up" Bailey reported, on the one class of screen
+ * where it is most obvious. The 2688x1536 master would have been 1.65x.
+ *
+ * Covering a box `w x h` with a source of aspect `a` scales the source by
+ * `max(w / srcW, h / srcH)`, so the width of source actually consumed is
+ * `max(w, h * a)`. Feed the browser that and it picks correctly at every
+ * aspect and every DPR, because it multiplies the hint by the DPR itself.
+ *
+ * Exported for the test that pins the phone case.
+ */
+export function coverSourceWidth(w: number, h: number, aspect: number = PLATE_ASPECT): number {
+  if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return 0;
+  return Math.ceil(Math.max(w, h * aspect));
+}
+
+/**
+ * Keep one element's `sizes` truthful, now and whenever its box changes.
+ *
+ * One observer per element, kept on the element itself so it lives and dies
+ * with it (a `ResizeObserver` holds its targets weakly, so nothing here keeps
+ * a detached `<img>` alive). Re-entered safely: `mountPlate` runs again on
+ * every load failure as the candidate chain walks.
+ */
+const sizedImages = new WeakMap<HTMLImageElement, ResizeObserver>();
+
+function applyCoverSizes(img: HTMLImageElement): void {
+  const rect = img.getBoundingClientRect();
+  let px = coverSourceWidth(rect.width, rect.height);
+  if (px <= 0) {
+    // Not laid out yet, or in a hidden tab. The pause plate is the window, so
+    // the window is the right guess until the observer says otherwise.
+    if (typeof window === 'undefined') return;
+    px = coverSourceWidth(window.innerWidth, window.innerHeight);
+  }
+  if (px > 0) img.sizes = `${px}px`;
+}
+
+function watchCoverSizes(img: HTMLImageElement): void {
+  applyCoverSizes(img);
+  if (sizedImages.has(img) || typeof ResizeObserver !== 'function') return;
+  const ro = new ResizeObserver(() => {
+    if (img.srcset) applyCoverSizes(img);
+  });
+  ro.observe(img);
+  sizedImages.set(img, ro);
+}
 
 /** Sidecars already fetched, by PNG url. `null` = fetched, nothing usable. */
 const focalCache = new Map<string, ArtFocal | null>();
@@ -146,9 +206,11 @@ export async function pauseFocal(pngUrl: string): Promise<Readonly<ArtFocal>> {
  * 40px tile and has its own framing rule in the stylesheet):
  *
  * - **`srcset`.** When the manifest says `<id>.2x.webp` exists, the element
- *   offers `1344w` and `2688w` at `sizes="100vw"` and the browser picks. That
- *   is the whole high-resolution fix: a 2000px-wide window asks for more than
- *   1344 CSS px of image and now gets a file that has it.
+ *   offers `1344w` and `2688w` and the browser picks. That is the whole
+ *   high-resolution fix: a 2000px-wide window asks for more than 1344 CSS px
+ *   of image and now gets a file that has it. The `sizes` hint it picks
+ *   against is {@link coverSourceWidth} of the element's own box, not `100vw`
+ *   — see that function for why a width-only hint under-fetched on a phone.
  * - **`object-position`.** Set from the plate's `focal`, so a frame that has
  *   to crop crops away from the face.
  */
@@ -195,8 +257,12 @@ function mountPlate(img: HTMLImageElement, url: string): void {
   void loadArtManifest().then(() => {
     const retina = pause2xUrlFor(url);
     if (!retina || !stillHere()) return;
-    img.sizes = '100vw';
+    // `sizes` before `srcset`: the selection runs off whatever `sizes` says at
+    // the moment the candidate list arrives, and a `100vw` that was only ever
+    // going to be replaced would have already fetched the wrong file.
+    applyCoverSizes(img);
     img.srcset = `${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`;
+    watchCoverSizes(img);
   });
 
   void pauseFocal(url).then((focal) => {
