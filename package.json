@@ -19,6 +19,7 @@
     "test:e2e": "playwright test",
     "screenshot": "node tools/screenshot.mjs",
     "deploy": "node tools/deploy-pages.mjs",
+    "critic:status": "node tools/critic-status.mjs",
     "audio:render": "node --max-old-space-size=6144 tools/audio/render.mjs",
     "audio:instruments": "node tools/audio/render.mjs --list"
   },

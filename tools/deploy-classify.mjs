@@ -34,6 +34,11 @@ const DECODER = new TextDecoder();
 const NOISE_RULES = [
   { rule: 'docs/**', test: (p) => underDir(p, 'docs') },
   { rule: 'critic/scratch/**', test: (p) => underDir(p, 'critic/scratch') },
+  // The critic-pending markers `tools/deploy-pages.mjs` writes after every
+  // live deploy (and their `.gitkeep`) never change what `vite build` emits,
+  // so a marker sitting uncommitted from the previous release must never
+  // block the next one — see `tools/critic-pending.mjs`.
+  { rule: 'critic/pending/**', test: (p) => underDir(p, 'critic/pending') },
   {
     rule: 'tools/gen/sheet-*.json',
     test: (p) => dirOf(p) === 'tools/gen' && /^sheet-.*\.json$/.test(baseOf(p)),

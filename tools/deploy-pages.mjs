@@ -17,7 +17,13 @@
  * dist-release as a throwaway single-commit `gh-pages` git repo and force-push
  * it -> kick a Pages build and poll it to completion -> verify the live site
  * serves the same bundle and that art assets resolve -> append a line to
- * docs/deploys.log.
+ * docs/deploys.log -> leave a `critic/pending/<mainShortSha>.json` marker.
+ *
+ * Owner's rule (critic/RUBRIC.md, "The loop"): every build pushed live gets a
+ * full critic round, no exceptions. Every run (--dry-run included) starts by
+ * printing any markers already sitting in critic/pending/ as a warning, and a
+ * verified deploy ends by writing its own marker and a loud final banner —
+ * see tools/critic-pending.mjs and tools/critic-status.mjs.
  *
  * Safe to run repeatedly: dist-release's .git is deleted and recreated every
  * run, so gh-pages always ends up with exactly one commit.
@@ -38,6 +44,12 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { classifyPorcelain } from './deploy-classify.mjs';
+import {
+  buildPendingMarker,
+  formatPendingWarningBlock,
+  readPendingMarkers,
+  writePendingMarker,
+} from './critic-pending.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist-release');
@@ -46,6 +58,7 @@ const REPO = 'BaileyPillon/pyrefly-reprise';
 const REPO_URL = `https://github.com/${REPO}.git`;
 const LIVE_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
 const LOG_PATH = join(ROOT, 'docs', 'deploys.log');
+const PENDING_DIR = join(ROOT, 'critic', 'pending');
 
 function parseArgs(argv) {
   const out = {};
@@ -144,6 +157,14 @@ function countFiles(dir) {
 
 async function main() {
   if (!existsSync(GH_EXE)) fail(`gh CLI not found at ${GH_EXE}`);
+
+  // ---- 0. Warn about live builds still waiting on a critic round ---------
+  // Printed at the start of every run, --dry-run included: hotfixes must
+  // still ship even with the critic behind on rounds, so this never refuses
+  // the deploy — it just makes the debt impossible to miss. The owner's rule
+  // (critic/RUBRIC.md, "The loop"): every build pushed live gets a full
+  // critic round before the release counts as finished.
+  for (const line of formatPendingWarningBlock(readPendingMarkers(PENDING_DIR))) log(line);
 
   // ---- 1. Preflight -----------------------------------------------------
   if (!SKIP_TESTS) {
@@ -329,6 +350,27 @@ async function main() {
   const summary = `Deployed main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) to ${LIVE_URL} at ${isoNow}`;
   log(summary);
   console.log(summary);
+
+  // ---- 7. Leave a critic-pending marker -------------------------------
+  // Only a full critic round against this exact live build clears this file
+  // (critic/RUBRIC.md, "The loop") — see tools/critic-pending.mjs and
+  // tools/critic-status.mjs.
+  const marker = buildPendingMarker({
+    mainSha,
+    bundle: bundleHash,
+    deployedAt: isoNow,
+    liveUrl: LIVE_URL,
+    artFiles: artFileCount,
+  });
+  const markerPath = writePendingMarker(PENDING_DIR, marker);
+  log(`critic-pending marker written: ${markerPath}`);
+
+  const banner = `CRITIC ROUND REQUIRED for main ${mainSha} bundle ${bundleHash}: a release is not finished until the critic has evaluated this live build (critic/RUBRIC.md)`;
+  const rule = '='.repeat(banner.length);
+  console.log('');
+  console.log(rule);
+  console.log(banner);
+  console.log(rule);
 }
 
 main().catch((err) => {

@@ -101,6 +101,13 @@ run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
 CLI (hardcoded at `D:/Tools/GitHubCLI/gh.exe`) authenticated against
 `BaileyPillon/pyrefly-reprise`.
 
+**Every live build must be evaluated by the critic — no exceptions.** The
+mandatory sequence is green tree -> push main -> deploy -> announce -> a full
+critic round on the live URL, and only the chief critic's report for that
+exact build clears the `critic/pending/<sha>.json` marker the deploy just
+left behind (see `critic/RUBRIC.md`, "The loop"). Run `npm run critic:status`
+at any time to see which live builds are still waiting on a round.
+
 ### Sprite tool (retired)
 
 `tools/render-sprite.mjs` drove the original pixel-art pipeline. The game is

@@ -213,6 +213,8 @@ describe('deploy dirty-tree classifier', () => {
       ['tools/zz-a.tmp.json', '??'],
       ['public/art/characters/tidus/idle.png', ' M'],
       ['public/art/portraits/lulu.png', '??'],
+      ['critic/pending/a1b2c3d.json', '??'],
+      ['critic/pending/.gitkeep', '??'],
     ];
     for (const [p, code] of noisePaths) {
       it(`continues past ${code}${p}`, () => {
@@ -224,11 +226,20 @@ describe('deploy dirty-tree classifier', () => {
       expect(classifyPath('critic/pass-7-notes.md', '??').category).toBe('noise');
     });
 
+    it('treats a critic-pending marker as noise once tracked, not just untracked', () => {
+      // Markers are meant to be committed by whoever commits next (see
+      // tools/critic-pending.mjs), so a modified/staged marker must stay
+      // noise too, not only a brand-new untracked one.
+      expect(classifyPath('critic/pending/a1b2c3d.json', ' M').category).toBe('noise');
+      expect(classifyPath('critic/pending/a1b2c3d.json', 'A ').category).toBe('noise');
+    });
+
     it('names the rule that decided each verdict', () => {
       expect(classifyPath('docs/screenshots/x.png', '??').rule).toBe('docs/**');
       expect(classifyPath('tools/gen/sheet-x.json', ' M').rule).toBe('tools/gen/sheet-*.json');
       expect(classifyPath('public/art/x.png', ' M').rule).toBe('public/art/**');
       expect(classifyPath('tools/zz-x.tmp.mjs', ' M').rule).toBe('tools/zz-*.tmp.*');
+      expect(classifyPath('critic/pending/a1b2c3d.json', ' M').rule).toBe('critic/pending/**');
     });
 
     it('prefers the noise rules over the blanket tools/ and public/ rules', () => {
