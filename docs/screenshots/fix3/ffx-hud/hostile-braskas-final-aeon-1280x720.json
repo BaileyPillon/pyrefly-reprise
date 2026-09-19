@@ -1,0 +1,2283 @@
+{
+  "chapter": "braskas-final-aeon",
+  "viewport": "1280x720",
+  "gpu": true,
+  "states": {
+    "01-menu": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 50760",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 53769",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7998",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "A one-off action this encounter offers",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          251,
+          393,
+          500,
+          679
+        ],
+        [
+          "yuna",
+          118,
+          376,
+          334,
+          625
+        ],
+        [
+          "auron",
+          399,
+          363,
+          590,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          841,
+          293,
+          991,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          590,
+          296,
+          753,
+          483
+        ]
+      ]
+    },
+    "02-row0": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 50664",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 53815",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7949",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          252,
+          393,
+          501,
+          679
+        ],
+        [
+          "yuna",
+          118,
+          376,
+          334,
+          624
+        ],
+        [
+          "auron",
+          399,
+          362,
+          590,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          841,
+          294,
+          990,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          590,
+          296,
+          753,
+          483
+        ]
+      ]
+    },
+    "02-row1": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 50558",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 53851",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7907",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the Special menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          252,
+          393,
+          502,
+          679
+        ],
+        [
+          "yuna",
+          118,
+          376,
+          335,
+          624
+        ],
+        [
+          "auron",
+          399,
+          362,
+          590,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          840,
+          294,
+          990,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          590,
+          296,
+          753,
+          483
+        ]
+      ]
+    },
+    "02-row2": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 50419",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 53891",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7856",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          253,
+          392,
+          502,
+          679
+        ],
+        [
+          "yuna",
+          118,
+          375,
+          335,
+          624
+        ],
+        [
+          "auron",
+          400,
+          362,
+          590,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          840,
+          294,
+          990,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          590,
+          296,
+          753,
+          483
+        ]
+      ]
+    },
+    "02-row3": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 50255",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 53934",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7800",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the Items menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          254,
+          392,
+          503,
+          679
+        ],
+        [
+          "yuna",
+          119,
+          375,
+          335,
+          624
+        ],
+        [
+          "auron",
+          400,
+          362,
+          591,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          840,
+          294,
+          989,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          590,
+          296,
+          753,
+          484
+        ]
+      ]
+    },
+    "02-row4": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 50076",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 53977",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7742",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Swap in a reserve member (L1 / Q). The member coming in takes this turn.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          54,
+          249,
+          387,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          254,
+          392,
+          504,
+          679
+        ],
+        [
+          "yuna",
+          119,
+          375,
+          336,
+          625
+        ],
+        [
+          "auron",
+          400,
+          362,
+          591,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          840,
+          294,
+          989,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          590,
+          296,
+          752,
+          484
+        ]
+      ]
+    },
+    "03-top": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 49888",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 54020",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 7683",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "A one-off action this encounter offers",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          320,
+          61,
+          620,
+          230
+        ],
+        "advisorChip": [
+          336,
+          41,
+          441,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          255,
+          392,
+          504,
+          679
+        ],
+        [
+          "yuna",
+          119,
+          375,
+          336,
+          625
+        ],
+        [
+          "auron",
+          401,
+          362,
+          591,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          839,
+          294,
+          989,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          484
+        ]
+      ]
+    },
+    "04-targeting": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 31177",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35260",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 740",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          256,
+          392,
+          505,
+          679
+        ],
+        [
+          "yuna",
+          120,
+          376,
+          337,
+          625
+        ],
+        [
+          "auron",
+          401,
+          362,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          516
+        ],
+        [
+          "yu-pagoda-left",
+          839,
+          294,
+          988,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          484
+        ]
+      ]
+    },
+    "05-target-2": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 31019",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35331",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 704",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          257,
+          393,
+          506,
+          680
+        ],
+        [
+          "yuna",
+          120,
+          376,
+          337,
+          625
+        ],
+        [
+          "auron",
+          401,
+          362,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          839,
+          294,
+          988,
+          466
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          484
+        ]
+      ]
+    },
+    "06-cancel": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 30972",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35357",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 694",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "pause",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          257,
+          393,
+          507,
+          680
+        ],
+        [
+          "yuna",
+          120,
+          376,
+          337,
+          625
+        ],
+        [
+          "auron",
+          401,
+          362,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          839,
+          294,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "07-submenu": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 30909",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35403",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 680",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          257,
+          393,
+          507,
+          680
+        ],
+        [
+          "yuna",
+          120,
+          376,
+          337,
+          625
+        ],
+        [
+          "auron",
+          401,
+          362,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          838,
+          294,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "08-esc-once": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 30862",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35471",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 670",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          257,
+          393,
+          507,
+          680
+        ],
+        [
+          "yuna",
+          120,
+          376,
+          338,
+          626
+        ],
+        [
+          "auron",
+          402,
+          363,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          838,
+          293,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "09-panels-off": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 30867",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35513",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 673",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Braska's Final Aeon2nd in queueBraska's Final Aeon hesitatesScriptedSpends the turn and does nothing.",
+      "guideMore": true,
+      "guideClipped": false,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intent": [
+          661,
+          50,
+          961,
+          151
+        ],
+        "intentChip": [
+          896,
+          33,
+          957,
+          48
+        ],
+        "guideChip": [
+          41,
+          88,
+          112,
+          103
+        ],
+        "advisorChip": [
+          31,
+          215,
+          131,
+          230
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          257,
+          393,
+          507,
+          681
+        ],
+        [
+          "yuna",
+          120,
+          376,
+          338,
+          626
+        ],
+        [
+          "auron",
+          401,
+          363,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          838,
+          293,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "10-panels-on": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 30926",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35568",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 688",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Braska's Final Aeon2nd in queueBraska's Final Aeon hesitatesScriptedSpends the turn and does nothing.",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          257,
+          394,
+          507,
+          681
+        ],
+        [
+          "yuna",
+          120,
+          377,
+          337,
+          626
+        ],
+        [
+          "auron",
+          401,
+          363,
+          592,
+          582
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          838,
+          293,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "11-rapid": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 31047",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35615",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 718",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Braska's Final Aeon2nd in queueBraska's Final Aeon hesitatesScriptedSpends the turn and does nothing.",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          256,
+          394,
+          506,
+          682
+        ],
+        [
+          "yuna",
+          120,
+          377,
+          337,
+          626
+        ],
+        [
+          "auron",
+          401,
+          363,
+          592,
+          583
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          839,
+          293,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "12-plate-toggle": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 31146",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 35640",
+        "DECLARED PANELxFIGHTER cmdStack x auron(party) = 743",
+        "CITATION in guide: §1.6"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Braska's Final Aeon2nd in queueBraska's Final Aeon hesitatesScriptedSpends the turn and does nothing.",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          323,
+          61,
+          625,
+          230
+        ],
+        "advisorChip": [
+          339,
+          41,
+          444,
+          56
+        ],
+        "ctb": [
+          1095,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          462,
+          407,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          256,
+          395,
+          506,
+          682
+        ],
+        [
+          "yuna",
+          120,
+          377,
+          337,
+          627
+        ],
+        [
+          "auron",
+          401,
+          363,
+          592,
+          583
+        ],
+        [
+          "braskas-final-aeon",
+          640,
+          123,
+          981,
+          515
+        ],
+        [
+          "yu-pagoda-left",
+          839,
+          293,
+          988,
+          465
+        ],
+        [
+          "yu-pagoda-right",
+          589,
+          296,
+          752,
+          483
+        ]
+      ]
+    },
+    "13-plate-toggle2": {
+      "issues": [],
+      "sensorFolded": null,
+      "sensorHidden": null,
+      "sensorText": "",
+      "cmdInfoText": "",
+      "intentText": "",
+      "guideMore": false,
+      "guideClipped": null,
+      "odRows": [],
+      "screenName": "battle",
+      "rects": {},
+      "fighters": []
+    }
+  },
+  "findings": [],
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}
