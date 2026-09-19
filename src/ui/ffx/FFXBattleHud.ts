@@ -246,6 +246,11 @@ export class FFXBattleHud implements HudPort {
     // the HUD that owns it.
     this.guide.mount(this.stage);
     this.advisor.mount(this.stage);
+    // `reset`, not merely `mount`: what Sensor revealed belongs to one battle,
+    // and a HUD instance that is mounted a second time is a second battle. (It
+    // also keeps this round's own rule — a method with no caller is how the
+    // plate got into trouble in the first place.)
+    this.sensorPanel.reset();
     this.sensorPanel.mount();
     this.intent.mount(this.overlay, {
       host: this.el,
