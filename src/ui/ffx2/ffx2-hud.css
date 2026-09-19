@@ -21,6 +21,29 @@
   inset: 0;
   pointer-events: none;
   overflow: hidden;
+
+  /* ---------------------------------------------------- the top-left stack
+     The approved frame `docs/concepts/targeting/b-ring-and-dim/s3.png` draws
+     the top-left corner as two rows that never touch: the Active/Wait chip on
+     its own row, the boss HP bar on its own row below it. Measured off that
+     frame at 1920 and divided back into this 640x360 grid, the chip sits at
+     top ~18.7 and the bar at top ~47.
+
+     Both rows are absolutely positioned against the stage and BOTH TOPS ARE
+     FIXED, including while the chip is hidden. That is deliberate: the chip is
+     only up while a target cursor is live, so laying the rows out in flow
+     would drop the whole boss strip 22px every time a command menu closed.
+
+     The chip's row starts below the PAUSE chip, which `BattleScreen` mounts
+     into the *screen root* in device px (`.battle-pause-chip`, left 22 / top
+     18) rather than into this scaled stage. At 1280x720 the stage scale is
+     exactly 2, so that chip covers grid y 9..20 — which is why the chip's row
+     starts at 22 and not at the frame's 18.7. `tests/unit/ui-ffx2-atbmode.test.ts`
+     asserts the two rows cannot overlap. */
+  --x2-atbmode-top: 22px;
+  /* Padding (4+5) + the 7px display line, rounded up for the descender. */
+  --x2-atbmode-height: 17px;
+  --x2-enemies-top: 41px;
 }
 .ffx2hud[hidden] {
   display: none !important;
@@ -55,7 +78,10 @@
 .ffx2hud__enemies {
   position: absolute;
   left: 21.33px; /* 48 @1440 — the shared .ig-bosshp anchor, hoisted */
-  top: 17.78px; /* 40 */
+  /* Its own row, below the Active/Wait chip's — see `.ffx2hud`'s tokens. The
+     spec's own anchor was 17.78 (40 @1440); the chip was drawn straight over
+     it, clipping "Vegnagun" to "egnagun" and cutting the B off "Bahamut". */
+  top: var(--x2-enemies-top, 41px);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1005,9 +1031,13 @@
    needs to know the ATB is still counting. FFX's CTB has no such setting and
    this chip has no FFX counterpart. */
 .ffx2-atbmode {
-  position: absolute; left: 12px; top: 10px;
+  /* Its own top row, aligned with the boss strip's left edge and clear of both
+     the PAUSE chip above it and the HP bar below it (see `.ffx2hud`). It used
+     to sit at 12,10 — on top of both. */
+  position: absolute; left: 21.33px; top: var(--x2-atbmode-top, 22px);
+  height: var(--x2-atbmode-height, 17px); box-sizing: border-box;
   display: flex; align-items: center; gap: 6px;
-  padding: 4px 10px 5px;
+  padding: 0 10px;
   background: var(--ig-ink, #0b0a12);
   border-left: 2px solid var(--ig-pyre-pink, #f49ac8);
   font-family: var(--ig-font-display); font-weight: 700; font-size: 7px;
