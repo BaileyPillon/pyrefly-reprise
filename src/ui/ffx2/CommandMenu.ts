@@ -52,6 +52,32 @@ const CATEGORY_LABELS: Record<string, string> = {
 type Row = { leaf: AvailableCommand } | { group: string; items: AvailableCommand[] };
 
 /**
+ * Whether there is a row above or below the fold of a scrolled command window.
+ *
+ * `.ffx2hud__command` is `max-height: 220px; overflow-y: auto`, so a long
+ * submenu scrolls — but nothing on screen said so. Measured by the pass-2
+ * critic at both 1280x720 and 2560x1440, in both chapters: `Item` is 227 px
+ * against a 220 px box, so "Light Curtain" sits below the fold; chapter 5's
+ * `Skill` is 360 px and its `White Magic` 440 px, sixteen rows with more than
+ * half of them off-screen including Full-Cure and the Lv. 2 / Lv. 3 rows. A
+ * player has no way to know they exist.
+ *
+ * Pure so the thresholds can be asserted without a layout engine: jsdom reports
+ * every scroll metric as 0, and `0 > 0 + 1` would be a test of nothing. The
+ * 1 px slack absorbs sub-pixel rounding on fractional device pixel ratios,
+ * where `scrollHeight` and `clientHeight` differ by a fraction on a box that
+ * does not actually scroll.
+ */
+export function scrollAffordance(m: { scrollTop: number; scrollHeight: number; clientHeight: number }): {
+  above: boolean;
+  below: boolean;
+} {
+  const overflowing = m.scrollHeight > m.clientHeight + 1;
+  if (!overflowing) return { above: false, below: false };
+  return { above: m.scrollTop > 1, below: m.scrollTop + m.clientHeight < m.scrollHeight - 1 };
+}
+
+/**
  * Spherechange always costs the whole turn (§4.5), so — per the approved
  * mock — it gets its own top-level row with the special ink/accent-border
  * treatment (`.ig-cmd--overdrive`) no matter what `category` the engine
@@ -229,6 +255,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       window.removeEventListener('keydown', onKey);
       deps.container.removeEventListener('click', onClick);
       deps.targetLayer.removeEventListener('click', onTargetClick);
+      deps.container.classList.remove('ffx2cmd--more-above', 'ffx2cmd--more-below');
       deps.container.innerHTML = '';
       deps.targetLayer.innerHTML = '';
     };
@@ -311,6 +338,42 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
      * bug was still live on this side. It is the same module, not a copy —
      * one implementation, no drift.
      */
+    /**
+     * Keep the selection on screen and say so when the list runs past the box.
+     *
+     * Two halves of the same defect: the window scrolls, but the cursor was
+     * never scrolled with it (arrow down past the 7th Item row and the cursor
+     * left the frame), and nothing marked the fold. `--more-below` /
+     * `--more-above` drive the Ink & Gold fade and chevron in `ffx2-hud.css`.
+     *
+     * `scrollIntoView` is absent in jsdom, hence the guard; the classes are
+     * still correct there because {@link scrollAffordance} is measured, not
+     * assumed.
+     */
+    function markFold(): void {
+      const box = deps.container;
+      const cursor = box.querySelector<HTMLElement>('.ig-cmd--selected');
+      if (cursor && typeof cursor.scrollIntoView === 'function') cursor.scrollIntoView({ block: 'nearest' });
+      const { above, below } = scrollAffordance(box);
+      box.classList.toggle('ffx2cmd--more-above', above);
+      box.classList.toggle('ffx2cmd--more-below', below);
+      for (const old of box.querySelectorAll('.ffx2cmd__fold')) old.remove();
+      // Sticky, so each mark rides the edge of the box rather than the end of
+      // the list: a `::before`/`::after` on the scroller scrolls with content.
+      for (const [on, where, glyph] of [
+        [above, 'up', '▴'],
+        [below, 'down', '▾'],
+      ] as Array<[boolean, string, string]>) {
+        if (!on) continue;
+        const mark = document.createElement('div');
+        mark.className = `ffx2cmd__fold ffx2cmd__fold--${where}`;
+        mark.setAttribute('aria-hidden', 'true');
+        mark.textContent = glyph;
+        if (where === 'up') box.prepend(mark);
+        else box.append(mark);
+      }
+    }
+
     function renderTop(fromCancel = false): void {
       view = 'top';
       if (fromCancel) releaseCancelAfterPress();
@@ -323,6 +386,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         })
         .join('');
       deps.container.innerHTML = `<div class="ig-cmd-stack">${rows}</div>`;
+      markFold();
       emitPreview();
     }
 
@@ -332,6 +396,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       subCategory = title;
       const rows = subItems.map((c, i) => leafRowHtml(c, i, i === subIdx)).join('');
       deps.container.innerHTML = `<div class="ffx2cmd__title">${title}</div><div class="ig-cmd-stack">${rows}</div>`;
+      markFold();
       emitPreview();
     }
 

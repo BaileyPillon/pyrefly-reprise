@@ -489,6 +489,43 @@
 .ffx2hud__command[hidden] {
   display: none;
 }
+/*
+ * The fold marks. The window above scrolls, and until this nothing on screen
+ * said so: measured by the pass-2 critic at 1280x720 and 2560x1440 in both
+ * chapters, `Item` runs 227 px into a 220 px box (Light Curtain below the
+ * fold), chapter 5's `Skill` 360 px and its `White Magic` 440 px — sixteen
+ * rows with Full-Cure and the Lv. 2 / Lv. 3 rows off-screen. Windows' overlay
+ * scrollbars fade out, so the box looked like the whole list.
+ *
+ * `position: sticky` and not a pseudo-element: `.ffx2hud__command` is the
+ * scroller, so a `::after` on it would scroll away with the last row. Ink pill,
+ * paper glyph, right-aligned under the cascade — the same ink/paper pair the
+ * rows use, so it reads as part of the stack and not as a control.
+ * `CommandMenu.markFold()` adds each mark only when there is really something
+ * past that edge, and scrolls the cursor into view so the selection can never
+ * be one of the rows it is warning about.
+ */
+.ffx2cmd__fold {
+  position: sticky;
+  z-index: 2;
+  width: fit-content;
+  margin-left: auto;
+  padding: 0 4px;
+  background: var(--ig-ink);
+  color: var(--ig-paper);
+  font-size: 7px;
+  line-height: 1.1;
+  text-align: right;
+  pointer-events: none;
+}
+.ffx2cmd__fold--up {
+  top: 0;
+  margin-bottom: -8px;
+}
+.ffx2cmd__fold--down {
+  bottom: 0;
+  margin-top: -8px;
+}
 .ffx2cmd__title {
   margin-bottom: 4px;
   padding: 2px 8px;

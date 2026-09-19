@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { openCommandMenu } from '../../src/ui/ffx2/CommandMenu.ts';
+import { openCommandMenu, scrollAffordance } from '../../src/ui/ffx2/CommandMenu.ts';
 import type { AtbSnapshot, AvailableCommand } from '../../src/battle/common/types.ts';
 
 /**
@@ -314,6 +314,40 @@ describe('FFX-2 command menu', () => {
     // for the same one.
     expect(css).toMatch(/\.ffx2hud \.ig-cmd\.ffx2cmd--gate \.ffx2cmd__grants \{[^}]*flex: 1 0 100%/);
     expect(css).toMatch(/\.ffx2hud \.ig-cmd\.ffx2cmd--gate \{[^}]*flex-wrap: wrap/);
+  });
+
+  /**
+   * Critic pass 2, secondary finding: the command window scrolls
+   * (`.ffx2hud__command { max-height: 220px; overflow-y: auto }`) but nothing
+   * on screen said so. Measured live at 1280x720 and 2560x1440 in both
+   * chapters: `Item` 227 px against a 220 px box, chapter 5's `Skill` 360 px
+   * and its `White Magic` 440 px — sixteen rows with Full-Cure and the Lv. 2 /
+   * Lv. 3 rows below the fold and no way to know they exist.
+   *
+   * The thresholds are the part worth pinning: jsdom lays nothing out and
+   * reports every scroll metric as 0, so a DOM-only test would assert that a
+   * box which does not scroll shows no mark — which was already true.
+   */
+  it('marks the fold only when the list really runs past the box', () => {
+    // Fits: 220 of 220, and the 1 px slack for a fractional device ratio.
+    expect(scrollAffordance({ scrollTop: 0, scrollHeight: 220, clientHeight: 220 })).toEqual({ above: false, below: false });
+    expect(scrollAffordance({ scrollTop: 0, scrollHeight: 220.6, clientHeight: 220 })).toEqual({ above: false, below: false });
+    // The measured `Item` list: 227 into 220, at the top.
+    expect(scrollAffordance({ scrollTop: 0, scrollHeight: 227, clientHeight: 220 })).toEqual({ above: false, below: true });
+    // Chapter 5's White Magic, scrolled to the middle and then to the end.
+    expect(scrollAffordance({ scrollTop: 110, scrollHeight: 440, clientHeight: 220 })).toEqual({ above: true, below: true });
+    expect(scrollAffordance({ scrollTop: 220, scrollHeight: 440, clientHeight: 220 })).toEqual({ above: true, below: false });
+  });
+
+  it('draws the fold marks as sticky ink pills, so they ride the box and not the list', () => {
+    const css = readFileSync(HUD_CSS, 'utf8');
+    const rule = /\.ffx2cmd__fold \{([\s\S]*?)\n\}/.exec(css);
+    expect(rule, '.ffx2cmd__fold not found').not.toBeNull();
+    // Sticky is the whole point: `.ffx2hud__command` is the scroller, so
+    // anything absolutely positioned inside it scrolls away with the last row.
+    expect(rule![1]!).toMatch(/position:\s*sticky/);
+    expect(css).toMatch(/\.ffx2cmd__fold--up \{[^}]*top:\s*0/);
+    expect(css).toMatch(/\.ffx2cmd__fold--down \{[^}]*bottom:\s*0/);
   });
 
   it('calls previewRank with the highlighted command on every render', () => {
