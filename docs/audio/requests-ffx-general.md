@@ -46,7 +46,7 @@ score-wide, not ours.
 
 ---
 
-## 2. Tempo map (the bible's own request 1)
+## 2. Tempo map (the bible's own request 1) — DELIVERED
 
 `scene-zanarkand-dome` has to hold two tempi that the bible gives different
 numbers: the nocturne at 48 bpm and the hymn inside it at 56. A track has one
@@ -62,6 +62,44 @@ can.
 
 `Track.tempo?: Array<[beat, bpm]>` with linear interpolation, exactly as
 THEMES.md §Renderer requests describes it.
+
+**It landed, and this group has spent it.** `src/audio/tempo.ts` gives steps,
+ramps (rit./accel.) and fermatas, and both renders honour it. What the two
+cues above do with it now:
+
+- `scene-zanarkand-dome` plays the hymn at **56**, the tempo the bible wrote
+  it at, and the nocturne around it at 48 — the compromise described above is
+  gone. Breaths at bars 4 and 8, an accelerando into the climb, a broadening
+  onto bar 11 and a ritardando on the last ache.
+- `ending-ffx` has the map the bible asked for, and is the cue that shows what
+  it is worth: four written breaths, `accel.` into the climb, 58 → 54 on the
+  arrival, a **1.5 s fermata** before the prayer answers, and the 18%
+  ritardando THEMES.md names onto the last cadence in the game. 115.9 s
+  written, 122.7 s played: nearly seven seconds of the cue is bent or held
+  time that a fixed grid could not have produced.
+- `victory-ffx` broadens 13% onto its plagal amen and hands the results loop
+  over in tempo, so the fanfare relaxes rather than stopping.
+- `boss-dread` has **no map, deliberately**: "HYMN, and the Yunalesca canon —
+  zero. A congregation does not rubato."
+
+In all four, `loop.start` and `loop.end` sound the same tempo, so no wrap
+lurches; `tempoWarnings()` is clean for each.
+
+### Related, and still open: the humanisation table is a preset-level problem
+
+THEMES.md §Humanisation asks for 14-18 ms on section strings and choir and
+6-9 on a solo piano. The presets are `choir` 34, `strings` 22, `strings-low`
+24, `pad` 30 and `piano` **3** — every one outside the band, and the piano is
+outside it downwards, which is the direction that reads as "typed".
+
+The four cues re-rendered in this pass say so per channel (`perform:
+{ humanise }`, and `timingJitterMs: 7` for the piano), which is what the
+feature is for. But `battle-ffx`, `scene-gagazet` and `scene-dreams-end` still
+play the presets as written — eight channels between them, listed by the
+group's score audit — and the fix belongs in
+`src/audio/voices/presets/` rather than in another twenty `perform` blocks
+scattered across twenty-one cues. Whoever owns the presets should move them;
+the arrangers should then drop the overrides.
 
 ---
 
