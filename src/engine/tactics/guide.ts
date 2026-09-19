@@ -49,6 +49,7 @@ import type {
 import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from '../../data/guides/types.ts';
 import { GUIDES } from '../../data/guides/index.ts';
 import { intendedStrategy } from '../BattlePresenterStrategies.ts';
+import { targetLabel } from './targetLabel.ts';
 
 /** Thrown when a tactic asks the guide's read-only engine view to do something. */
 export class GuideEngineMisuseError extends Error {
@@ -367,7 +368,13 @@ function nextFor(
   const targetId = command.targets[0] ?? null;
   const target = targetId ? state.combatants[targetId] : undefined;
   const actorName = state.combatants[decision.actorId]?.name ?? decision.actorId;
-  const targetName = target?.name ?? null;
+  // A party-wide or all-enemy command is aimed at one id so the engine can
+  // resolve it; naming that id here read as "Hastega -> Tidus" for a move
+  // that hits the whole party, while the advisor's card correctly said "the
+  // party" for the same command on the same frame [pre-deploy critic gate
+  // 2026-09-18]. `targetLabel` is the single place both panels get this
+  // word from now, so they cannot disagree again.
+  const targetName = targetLabel(state.game, command, target?.name ?? null);
 
   const hit = guide.hints.find((h) =>
     hintMatches(h, { label, command, actorId: decision.actorId, target, state, guide }),

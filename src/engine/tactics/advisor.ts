@@ -100,6 +100,7 @@ import {
   waitSentence,
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
+import { scopeWord } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
 
@@ -747,15 +748,10 @@ function candidateFor(
   const target = targetId ? state.combatants[targetId] : undefined;
   // A party-wide spell is aimed at one id so the engine can resolve it, but
   // naming that id on the card reads as "Hastega on Tidus" for a move that
-  // hits all three. The scope word is what the player sees.
-  const scoped =
-    def?.targeting === 'all-allies'
-      ? 'the party'
-      : def?.targeting === 'all-enemies'
-        ? 'all enemies'
-        : def?.targeting === 'all'
-          ? 'everyone'
-          : null;
+  // hits all three. The scope word is what the player sees — shared with
+  // `guide.ts` through `scopeWord` so the two panels can never disagree
+  // about it (`./targetLabel.ts`).
+  const scoped = scopeWord(def?.targeting);
   const toEnemies = [mid.damageToEnemies, min.damageToEnemies, max.damageToEnemies];
   const toAllies = [mid.healingToAllies, min.healingToAllies, max.healingToAllies];
   let estimate: AdvisorEstimate | null = null;
