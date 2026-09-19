@@ -1,0 +1,247 @@
+/*
+ * The spherechange transformation — `research/visual-bible.md` §4.5.4's
+ * "Commit VFX", drawn on the HUD's unscaled overlay in viewport pixels.
+ * See `SpherechangeFlourish.ts` for the spec quote and why every size is
+ * multiplied by `--sf-scale`, the letterbox scale.
+ *
+ * `--sf-x` / `--sf-head` / `--sf-feet` are the girl's projected position, so
+ * the whole effect is anchored to *her*, not to a corner of the screen.
+ */
+
+.ffx2sf {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Above the numerals and the chain counter: it is the frame's subject for
+     0.8 s, and §3 says the change "halts time". */
+  z-index: 8;
+}
+
+/* ------------------------------------------------- the white light column */
+
+/*
+ * §4.5.4: "a vertical #FFFFFF light column over the girl for 12 frames ... the
+ * new outfit resolving on frame 9". Twelve frames at 60 Hz is 200 ms, but §3
+ * budgets ~0.8 s for the whole transformation, so the column's own beats are
+ * spread across that budget: it opens, whites her out at the middle (where the
+ * outfit resolves underneath it), and falls away.
+ */
+.ffx2sf__column {
+  position: absolute;
+  left: var(--sf-x);
+  top: calc(var(--sf-head) - var(--sf-body) * 0.28);
+  width: calc(34px * var(--sf-scale));
+  height: calc(var(--sf-body) * 1.32);
+  margin-left: calc(-17px * var(--sf-scale));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.95) 22%,
+    #fff 50%,
+    rgba(255, 255, 255, 0.95) 78%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: blur(calc(1.5px * var(--sf-scale)));
+  transform-origin: 50% 100%;
+  animation: ffx2sf-column var(--sf-ms) cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes ffx2sf-column {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.05) scaleX(0.4);
+  }
+  22% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+  }
+  /* Frame 9 of 12 — the outfit resolves under the white. */
+  55% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(1.04) scaleX(0.2);
+  }
+}
+
+/* ------------------------------------------------------- 8 petal-motes */
+
+/*
+ * §4.5.4: "8 #F7B6D9 petal-motes orbit outward". Each mote is parked at the
+ * girl's chest and thrown out along its own angle (`--sf-a`), with a small
+ * stagger (`--sf-d`) so the ring does not read as one rigid wheel.
+ */
+.ffx2sf__motes {
+  position: absolute;
+  left: var(--sf-x);
+  top: calc(var(--sf-head) + var(--sf-body) * 0.42);
+}
+
+.ffx2sf__mote {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(5px * var(--sf-scale));
+  height: calc(7px * var(--sf-scale));
+  margin: calc(-3.5px * var(--sf-scale)) 0 0 calc(-2.5px * var(--sf-scale));
+  background: #f7b6d9;
+  /* A petal, not a dot. */
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 0 calc(4px * var(--sf-scale)) rgba(247, 182, 217, 0.9);
+  animation: ffx2sf-mote var(--sf-ms) ease-out var(--sf-d, 0ms) forwards;
+}
+
+@keyframes ffx2sf-mote {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--sf-a)) translateY(0) rotate(calc(-1 * var(--sf-a)));
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(calc(var(--sf-a) + 140deg)) translateY(calc(-1 * var(--sf-ring) * 0.62))
+      rotate(calc(-1 * var(--sf-a) - 140deg));
+  }
+}
+
+/* --------------------------------------------------------- the ground ring */
+
+/* §4.5.4: "a #FFD9EC ring expanding from her feet to radius 90 px and fading".
+   Flattened to 0.36 of its height so it reads as a ring lying on the floor of
+   the arena rather than a circle painted on the camera. */
+.ffx2sf__ring {
+  position: absolute;
+  left: var(--sf-x);
+  top: var(--sf-feet);
+  width: calc(var(--sf-ring) * 2);
+  height: calc(var(--sf-ring) * 2 * 0.36);
+  margin: calc(-1 * var(--sf-ring) * 0.36) 0 0 calc(-1 * var(--sf-ring));
+  border: calc(2px * var(--sf-scale)) solid #ffd9ec;
+  border-radius: 50%;
+  box-shadow: 0 0 calc(10px * var(--sf-scale)) rgba(255, 217, 236, 0.55);
+  animation: ffx2sf-ring var(--sf-ms) cubic-bezier(0.1, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes ffx2sf-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0.05);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* ----------------------------------------------------------- the name plate */
+
+/*
+ * §4.5.4's gate-arrival line rises "14 px above her". The plate carries the
+ * girl, what she became, and — when a gate was crossed — the effect that now
+ * lasts the rest of the battle, because that is the line §4.5.4 calls the most
+ * valuable on the screen.
+ */
+.ffx2sf__plate {
+  position: absolute;
+  left: var(--sf-x);
+  top: calc(var(--sf-head) - 14px * var(--sf-scale));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(1px * var(--sf-scale));
+  transform: translate(-50%, -100%);
+  text-align: center;
+  white-space: nowrap;
+  text-shadow:
+    0 0 calc(3px * var(--sf-scale)) rgba(11, 10, 18, 0.95),
+    0 calc(1px * var(--sf-scale)) 0 rgba(11, 10, 18, 0.9);
+  animation: ffx2sf-plate calc(var(--sf-ms) + 1150ms) ease-out forwards;
+}
+
+.ffx2sf__who {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(7px * var(--sf-scale));
+  letter-spacing: 0.18em;
+  color: #ffd9ec;
+}
+
+.ffx2sf__name {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(14px * var(--sf-scale));
+  line-height: 1.1;
+  color: var(--sf-job);
+}
+
+.ffx2sf__gate {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(8px * var(--sf-scale));
+  letter-spacing: 0.12em;
+  color: var(--sf-gate);
+}
+
+.ffx2sf__special {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(7px * var(--sf-scale));
+  letter-spacing: 0.2em;
+  color: #fff0a8;
+}
+
+@keyframes ffx2sf-plate {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -80%);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+  72% {
+    opacity: 1;
+    transform: translate(-50%, -110%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -125%);
+  }
+}
+
+/* Playback has been handed back; only the plate is still finishing. */
+.ffx2sf--settled .ffx2sf__column,
+.ffx2sf--settled .ffx2sf__motes,
+.ffx2sf--settled .ffx2sf__ring {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx2sf__column,
+  .ffx2sf__mote,
+  .ffx2sf__ring {
+    animation-duration: 1ms;
+  }
+  .ffx2sf__plate {
+    animation: ffx2sf-plate-still calc(var(--sf-ms) + 1150ms) linear forwards;
+  }
+  @keyframes ffx2sf-plate-still {
+    0%,
+    88% {
+      opacity: 1;
+      transform: translate(-50%, -100%);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -100%);
+    }
+  }
+}

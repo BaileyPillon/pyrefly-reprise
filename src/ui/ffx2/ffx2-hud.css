@@ -519,6 +519,25 @@
   font-size: 9px;
   color: var(--ig-spira-sky);
 }
+/*
+ * §4.5.4's gate-preview line — "the single most valuable line on the screen"
+ * — carried on the Change submenu's rows: `GRANTS: Red + Green`. The gate
+ * effect lasts the rest of the battle, so the player has to see it before
+ * spending a whole turn on the link that crosses it.
+ */
+.ffx2cmd__grants {
+  flex: none;
+  margin-left: 8px;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: var(--ig-gold-on-paper);
+}
+.ffx2hud .ig-cmd--overdrive .ffx2cmd__grants,
+.ffx2hud .ig-cmd--selected .ffx2cmd__grants {
+  color: var(--ig-accent);
+}
 .ffx2cmd__reason {
   flex: none;
   font-size: 8px;
@@ -590,59 +609,192 @@
 /* -------------------------------------------------------------- chain pop */
 
 /*
- * The mock's "CHAIN ×N" tag, on its own: no `.ig-damage` splash, because the
- * "742" next to it in the mock is the damage figure and that is now
- * `DamageLayer`'s (see the numerals section above). §4.6 anchors this popup
- * "top-right of the enemy being chained", which is where `showChain` puts it.
+ * The chain counter, to `research/visual-bible.md` §4.6: **a big numeral with
+ * the word CHAIN beneath it**, anchored "top-right of the enemy being chained".
+ *
+ * It used to be one rotated line reading `CHAIN ×2.00` — the multiplier, with
+ * no numeral and no label — so the mechanic X-2's damage output is built on had
+ * no readout of its own length. The slab chrome is kept (it is the approved
+ * `BattleFfx2` mock's "CHAIN ×4" tag, and the rest of this HUD is that mock);
+ * what changed is what is inside it. The multiplier rides along on the label,
+ * because §4.6 draws the count big but the multiplier is what the count buys.
  *
  * Sizes read `--ffx2-scale` — the letterbox scale `FFX2BattleHud.layout()`
- * publishes — because this chip lives on the *unscaled* overlay next to the
- * numerals, so a bare `11px` would draw at a tenth the size of the chrome it
- * belongs to.
+ * publishes and `ChainCounter` re-publishes on the chip itself — because this
+ * lives on the *unscaled* overlay next to the numerals, so a bare `11px` would
+ * draw at a tenth the size of the chrome it belongs to.
  */
-.ffx2-chain-chip {
+/* The decaying afterimage (`.ffx2chain-broke`) deliberately drops the
+   `.ffx2-chain-chip` class: once the chain has broken there is no chain
+   counter any more, and anything asking the DOM "is a chain showing?" — a
+   test, the critic's overlap probe — should get "no" on the same frame the
+   engine says so, not 0.4 s later. It keeps the look by sharing the rules. */
+.ffx2-chain-chip,
+.ffx2chain-broke {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(1px * var(--ffx2-scale, 1));
   transform: translate(-50%, -50%) rotate(-8deg);
-  padding: calc(3px * var(--ffx2-scale, 1)) calc(8px * var(--ffx2-scale, 1));
+  padding: calc(3px * var(--ffx2-scale, 1)) calc(9px * var(--ffx2-scale, 1)) calc(4px * var(--ffx2-scale, 1));
   background: var(--ig-ink);
   color: var(--ig-accent);
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(11px * var(--ffx2-scale, 1));
-  letter-spacing: 0.16em;
   white-space: nowrap;
   pointer-events: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
+
+/* §4.6: 28 px, fill gradient #FFD9EC to #B0489E, 2 px #2A0E20 outline. The
+   gradient is a clipped background because a text fill cannot be a gradient
+   any other way; the outline is a shadow ring, since `-webkit-text-stroke`
+   would eat into the glyph rather than sit outside it. */
+.ffx2chain__n {
+  font-family: var(--ig-font-numeral);
+  font-size: calc(28px * var(--ffx2-scale, 1));
+  line-height: 0.92;
+  background: linear-gradient(180deg, #ffd9ec 0%, #b0489e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 calc(2px * var(--ffx2-scale, 1)) #2a0e20);
+}
+
+/* §4.6: 10 px, #F7B6D9, letter-spaced +1 px. */
+.ffx2chain__label {
+  font-size: calc(10px * var(--ffx2-scale, 1));
+  letter-spacing: 0.12em;
+  color: #f7b6d9;
+}
+.ffx2chain__label b {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  color: var(--ig-paper);
+}
+
+/* §4.6: "a ring of 6 petal-motes bursts outward" on each increment. They are
+   laid over the chip's centre and thrown out along their own angles. */
+.ffx2chain__motes {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+.ffx2chain__motes i {
+  position: absolute;
+  width: calc(3px * var(--ffx2-scale, 1));
+  height: calc(4px * var(--ffx2-scale, 1));
+  margin: calc(-2px * var(--ffx2-scale, 1)) 0 0 calc(-1.5px * var(--ffx2-scale, 1));
+  background: #f7b6d9;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  opacity: 0;
+}
+.ffx2-chain-chip.ffx2chain--pop .ffx2chain__motes i {
+  animation: ffx2-chain-mote 0.42s ease-out forwards;
+}
+@keyframes ffx2-chain-mote {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--ffx2-a)) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--ffx2-a)) translateY(calc(-26px * var(--ffx2-scale, 1)));
+  }
+}
+
+/* §4.6: numeral scale-pops 1.0 -> 1.45 -> 1.0 over 0.18 s and the colour
+   flashes #FFFFFF for two frames. The pop is on the whole chip so the label
+   travels with the numeral; the white flash is the numeral's alone. */
 .ffx2-chain-chip.ffx2chain--pop {
   animation: ffx2-chain-pop 0.18s ease-out;
+}
+.ffx2-chain-chip.ffx2chain--pop .ffx2chain__n {
+  animation: ffx2-chain-white 0.18s steps(1, end);
 }
 @keyframes ffx2-chain-pop {
   0% {
     transform: translate(-50%, -50%) rotate(-8deg) scale(1);
   }
   50% {
-    transform: translate(-50%, -50%) rotate(-8deg) scale(1.25);
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1.45);
   }
   100% {
     transform: translate(-50%, -50%) rotate(-8deg) scale(1);
   }
 }
+@keyframes ffx2-chain-white {
+  0%,
+  18% {
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+  }
+  19%,
+  100% {
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+/* §4.6 decay: "shrinks to 0.6x and fades over 0.4 s" when the chain breaks.
+   The break is information — the multiplier the player was building is gone —
+   so it is shown, not silently removed. */
+.ffx2chain-broke {
+  animation: ffx2-chain-broke 0.4s ease-in forwards;
+}
+@keyframes ffx2-chain-broke {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-8deg) scale(0.6);
+  }
+}
+
+/* §4.6 escalation: 5 gains a #F2C21E outer glow. */
 .ffx2-chain-chip.ffx2chain--warm {
   box-shadow:
-    0 0 6px 1px rgba(227, 185, 74, 0.7),
+    0 0 6px 1px rgba(242, 194, 30, 0.7),
     0 2px 6px rgba(0, 0, 0, 0.5);
 }
+/* 10 turns the numeral's fill to #FFF0A8 -> #F2712E. */
 .ffx2-chain-chip.ffx2chain--hot {
   background: #f2712e;
+}
+.ffx2-chain-chip.ffx2chain--hot .ffx2chain__n {
+  background: linear-gradient(180deg, #fff0a8 0%, #f2712e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 calc(2px * var(--ffx2-scale, 1)) #2a0e20)
+    drop-shadow(0 0 calc(3px * var(--ffx2-scale, 1)) rgba(255, 240, 168, 0.8));
+}
+.ffx2-chain-chip.ffx2chain--hot .ffx2chain__label {
   color: #fff0a8;
 }
+/* 20 adds a one-frame full-screen #FFD9EC flash at 15% on each increment. */
 .ffx2-chain-chip.ffx2chain--flash::after {
   content: '';
   position: fixed;
   inset: 0;
-  background: var(--ig-accent);
+  background: #ffd9ec;
   opacity: 0.15;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx2-chain-chip.ffx2chain--pop,
+  .ffx2-chain-chip.ffx2chain--pop .ffx2chain__n,
+  .ffx2-chain-chip.ffx2chain--pop .ffx2chain__motes i {
+    animation-duration: 1ms;
+  }
+  .ffx2-chain-chip.ffx2chain--flash::after {
+    display: none;
+  }
 }
 
 /* -------------------------------------------------------------- hit flash */

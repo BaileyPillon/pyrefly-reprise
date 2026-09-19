@@ -19,6 +19,7 @@ import type {
   BattleState,
   Command,
   CombatantId,
+  GateColour,
   AnyCombatant,
   FFX2Combatant,
   MinigameKind,
@@ -31,6 +32,8 @@ import { mountLadyLuckReels } from './LadyLuckReels.ts';
 import { partyRowHtml } from './PartyRows.ts';
 import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
 import { DamageLayer } from './DamageLayer.ts';
+import { playSpherechangeFlourish } from './SpherechangeFlourish.ts';
+import { ChainCounter } from './ChainCounter.ts';
 import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
@@ -70,7 +73,6 @@ import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
  * survives all of it — see `PartyRows.ts`.
  */
 
-const CHAIN_HOLD_MS = 1400;
 const TELEGRAPH_HOLD_MS = 2400;
 
 /** One rectangle the intent slab must not cover. */
@@ -230,7 +232,12 @@ export class FFX2BattleHud implements HudPort {
       };
     },
   });
-  private chainHideTimer = 0;
+  /** §4.6's chain counter, drawn on the overlay (`ChainCounter.ts`). */
+  private readonly chain = new ChainCounter({
+    overlay: () => this.overlay,
+    scale: () => this.stageScale,
+    point: (id) => this.overlayPoint(id, 0.4, 0.22),
+  });
   private telegraphHideTimer = 0;
   private damageFlashTimer = 0;
   /** Current `.ffx2hud__stage` letterbox scale, so overlay-space offsets (chain chip) stay proportional at any viewport size. */
@@ -307,7 +314,7 @@ export class FFX2BattleHud implements HudPort {
   unmount(): void {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
-    window.clearTimeout(this.chainHideTimer);
+    this.chain.dispose();
     window.clearTimeout(this.telegraphHideTimer);
     window.clearTimeout(this.damageFlashTimer);
     this.damage.unmount();
@@ -656,6 +663,8 @@ export class FFX2BattleHud implements HudPort {
         return;
       case 'chain':
         return this.showChain(event.targetId, event.count, event.multiplier);
+      case 'spherechange':
+        return this.showSpherechange(event.who, event.to, event.gatesCrossed, event.special);
       case 'damage':
       case 'heal':
       case 'miss':
@@ -760,27 +769,47 @@ export class FFX2BattleHud implements HudPort {
    * instead of level with the hits.
    */
   private showChain(targetId: CombatantId, count: number, multiplier: number): Promise<void> {
-    window.clearTimeout(this.chainHideTimer);
-    let el = this.overlay.querySelector('.ffx2-chain-chip') as HTMLElement | null;
-    if (count <= 0) {
-      el?.remove();
-      return this.hold(400);
-    }
-    if (!el) {
-      el = document.createElement('div');
-      this.overlay.appendChild(el);
-    }
-    const anchor = this.overlayPoint(targetId, 0.4, 0.22);
-    const pos = { x: anchor.x + 34 * this.stageScale, y: anchor.y - 22 * this.stageScale };
-    el.style.left = `${pos.x}px`;
-    el.style.top = `${pos.y}px`;
-    el.className = `ffx2-chain-chip${count >= 20 ? ' ffx2chain--flash' : ''}${count >= 10 ? ' ffx2chain--hot' : count >= 5 ? ' ffx2chain--warm' : ''}`;
-    el.textContent = `CHAIN ×${multiplier.toFixed(2)}`;
-    // Restart the pop animation even if the class list did not change.
-    void el.offsetWidth;
-    el.classList.add('ffx2chain--pop');
-    this.chainHideTimer = window.setTimeout(() => el?.remove(), CHAIN_HOLD_MS);
-    return this.hold(450);
+    this.chain.show(targetId, count, multiplier);
+    return this.hold(count <= 0 ? 400 : 450);
+  }
+
+  /**
+   * The spherechange transformation — §4.5.4's commit VFX, played on the field
+   * over the girl who just spent her whole turn on it.
+   *
+   * The event was previously falling through `onEvent`'s `default:` and drawing
+   * nothing at all, so X-2's signature action read as a monogram changing
+   * letters in a 40 px row. Awaited, because §3's mechanic "halts time" — and
+   * because the rows redraw on the next `atb` event, so the light has to be on
+   * screen before the row admits she changed.
+   *
+   * FFX has no spherechange; `FFXBattleHud` is a different component and gets
+   * nothing from this.
+   */
+  private async showSpherechange(
+    who: CombatantId,
+    to: string,
+    gatesCrossed: GateColour[],
+    special: string | undefined,
+  ): Promise<void> {
+    const name = (this.lastState?.combatants[who] as FFX2Combatant | undefined)?.name ?? who;
+    await playSpherechangeFlourish(
+      {
+        overlay: this.overlay,
+        scale: () => this.stageScale,
+        anchor: (id) => {
+          const head = this.project(id, 'head');
+          const feet = this.project(id, 'feet');
+          return head && feet ? { head, feet } : null;
+        },
+      },
+      { who, name, to, gatesCrossed, special },
+    );
+    // Her ATB bar is empty and begins refilling — §4.5.4's "Cost, made visible:
+    // do not skip this frame; it is the price". The engine has already zeroed
+    // it; this redraw is what puts the empty bar on screen while the light is
+    // still fading, instead of a frame later.
+    if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
   }
 
   /**

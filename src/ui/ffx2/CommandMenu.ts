@@ -19,16 +19,21 @@
  *
  * Grouping rule (there is no explicit "open a submenu" flag on
  * `AvailableCommand`, only `category`): a category with exactly one command in
- * it renders as a single top-level row (this is how Trigger Happy and
- * Spherechange show up directly, per `visual-bible.md` §4.7's
+ * it renders as a single top-level row (this is how Trigger Happy and Gunplay
+ * show up directly, per `visual-bible.md` §4.7's
  * "Attack · Trigger Happy · Gunplay · Item" example); a category with more
  * than one command renders as one row that opens a submenu listing them. A
  * submenu can now be long (once the dressphere ability tables are wired up),
  * so the stack itself scrolls — see `.ffx2hud__command`'s `max-height` in
  * `ffx2-hud.css` — rather than clipping silently.
+ *
+ * The one exception is **Change**, which is always a submenu even at one
+ * destination, because the game's command is "Change" and the outfit is
+ * chosen inside it — see {@link CHANGE_LABEL}.
  */
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { setMenuOwnsCancel } from '../common/menuCancel.ts';
+import { dressphereLabel } from './dressphereIcons.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
   attack: 'Attack',
@@ -59,6 +64,53 @@ type Row = { leaf: AvailableCommand } | { group: string; items: AvailableCommand
  */
 function isSpherechange(c: AvailableCommand): boolean {
   return c.command.kind === 'spherechange';
+}
+
+/**
+ * The synthetic category every spherechange row is filed under. `AbilityCategory`
+ * is a closed union of bare words (`'attack'`, `'blackmagic'`, `'dressphere'`…),
+ * so a double-underscore key cannot collide with a category coming off a real
+ * ability.
+ */
+const CHANGE_GROUP = '__change';
+
+/**
+ * **FFX-2's command is "Change", and it is one row, not one row per outfit.**
+ *
+ * `battle/ffx2/targeting.ts` emits one `AvailableCommand` per *reachable* node
+ * and labels each with the raw dressphere id it leads to, so before this the
+ * FFX-2 command window read `Attack / Skill / gunner / black-mage / Item` —
+ * two internal ids on a player-facing surface (critic round 02, ranked issue
+ * 26; the live rows are in `docs/screenshots/fix3/critic-ffx2-hud-prep/
+ * report-f.json`). It was also wrong about the game: in X-2 you press L1,
+ * the Garment Grid opens, and you pick a destination *inside it*
+ * (`research/visual-bible.md` §4.5.2) — the outfits are never top-level rows.
+ *
+ * So every spherechange collapses into one **Change** row that opens a
+ * submenu of the reachable dresspheres by name, each carrying the
+ * `GRANTS:` gate line §4.5.4 calls "the single most valuable line on the
+ * screen". The full node graph in `SpherechangeWheel.ts` is what this row
+ * *should* open; it cannot yet, because the grid's node contents live in
+ * `Ffx2Engine.gridNodes` (private, and another track's file) and nothing
+ * hands them to a HUD. See `docs/handoff/fix3-ffx2-hud-prep.md`.
+ *
+ * **FFX has no equivalent and gets none of this** — `ui/ffx/CommandMenu.ts`
+ * is a separate component and is untouched.
+ */
+const CHANGE_LABEL = 'Change';
+
+/** The destination outfit's real name: the command's own `extra`, never the engine's raw-id `label`. */
+function spherechangeLabel(c: AvailableCommand): string {
+  const cmd = c.command;
+  if (cmd.kind !== 'spherechange') return c.label;
+  return cmd.extra.specialDressUp ? `${dressphereLabel(cmd.extra.toDressphere)} (Special)` : dressphereLabel(cmd.extra.toDressphere);
+}
+
+/** `GRANTS: …` for a link that crosses a gate — §4.5.4's gate-preview line, carried by `targeting.ts` as `help`. */
+function spherechangeHelp(c: AvailableCommand): string {
+  const cmd = c.command;
+  if (cmd.kind !== 'spherechange' || cmd.extra.gatesCrossed.length === 0) return '';
+  return `GRANTS: ${cmd.extra.gatesCrossed.map((g) => g.charAt(0).toUpperCase() + g.slice(1)).join(' + ')}`;
 }
 
 export interface CommandMenuDeps {
@@ -93,25 +145,35 @@ function withTargets(command: Command, targets: CombatantId[]): Command {
   }
 }
 
-/** Groups by category (in first-seen order), except Spherechange rows, which are always their own row at their own position (see {@link isSpherechange}). A category that only ever gets one item collapses to a plain leaf row. */
+/**
+ * Groups by category (in first-seen order). A category that only ever gets one
+ * item collapses to a plain leaf row — **except** the synthetic Change group,
+ * which stays a submenu even with a single destination, because "Change" and
+ * "Change into Thief" are different promises and only the first one is the
+ * game's (see {@link CHANGE_LABEL}).
+ */
 function groupRows(commands: AvailableCommand[]): Row[] {
   const rows: Row[] = [];
   const groupIndex = new Map<string, number>();
   for (const c of commands) {
-    if (isSpherechange(c)) {
-      rows.push({ leaf: c });
-      continue;
-    }
-    const idx = groupIndex.get(c.category);
+    const key = isSpherechange(c) ? CHANGE_GROUP : c.category;
+    const idx = groupIndex.get(key);
     if (idx === undefined) {
-      groupIndex.set(c.category, rows.length);
-      rows.push({ group: c.category, items: [c] });
+      groupIndex.set(key, rows.length);
+      rows.push({ group: key, items: [c] });
     } else {
       const row = rows[idx];
       if (row && 'group' in row) row.items.push(c);
     }
   }
-  return rows.map((row) => ('group' in row && row.items.length === 1 ? { leaf: row.items[0]! } : row));
+  return rows.map((row) =>
+    'group' in row && row.items.length === 1 && row.group !== CHANGE_GROUP ? { leaf: row.items[0]! } : row,
+  );
+}
+
+/** A group row's player-facing title. */
+function groupLabel(group: string): string {
+  return group === CHANGE_GROUP ? CHANGE_LABEL : (CATEGORY_LABELS[group] ?? group);
 }
 
 const KEY_CONFIRM = new Set(['Enter', 'Space', 'NumpadEnter', 'KeyZ']);
@@ -188,7 +250,26 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       const cursor = selected ? CURSOR_SVG : '';
       const mp = c.mpCost > 0 ? `<span class="ffx2cmd__mp">${c.mpCost}</span>` : '';
       const reason = !c.enabled && c.disabledReason ? `<span class="ffx2cmd__reason">${c.disabledReason}</span>` : '';
-      return `<div class="${rowClasses(selected, c)}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${c.label}</span>${reason}${mp}${cursor}</div>`;
+      const change = isSpherechange(c);
+      const label = change ? spherechangeLabel(c) : c.label;
+      const grants = change ? spherechangeHelp(c) : '';
+      const gate = grants ? `<span class="ffx2cmd__grants">${grants}</span>` : '';
+      return `<div class="${rowClasses(selected, c)}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${label}</span>${gate}${reason}${mp}${cursor}</div>`;
+    }
+
+    /** A category row. `.ig-cmd--overdrive` for Change, because §4.5 costs the whole turn. */
+    function groupRowHtml(group: string, items: AvailableCommand[], i: number, selected: boolean): string {
+      const cursor = selected ? CURSOR_SVG : '';
+      const isChange = group === CHANGE_GROUP;
+      // Cursed seals the Garment Grid entirely (`ffx2-combat-core.md` §Curse):
+      // every destination comes back disabled, so the row says so once rather
+      // than opening a submenu of dead ends.
+      const enabled = items.some((c) => c.enabled);
+      const reason = !enabled && items[0]?.disabledReason ? `<span class="ffx2cmd__reason">${items[0].disabledReason}</span>` : '';
+      const cls = ['ig-cmd', selected ? 'ig-cmd--selected' : '', enabled ? '' : 'ig-cmd--disabled', isChange ? 'ig-cmd--overdrive' : '']
+        .filter(Boolean)
+        .join(' ');
+      return `<div class="${cls}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${groupLabel(group)}</span>${reason}<span class="ffx2cmd__arrow">&#9666;</span>${cursor}</div>`;
     }
 
     function renderTop(): void {
@@ -200,10 +281,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         .map((row, i) => {
           const selected = i === topIdx;
           if ('leaf' in row) return leafRowHtml(row.leaf, i, selected);
-          const cursor = selected ? CURSOR_SVG : '';
-          const label = CATEGORY_LABELS[row.group] ?? row.group;
-          const cls = ['ig-cmd', selected ? 'ig-cmd--selected' : ''].filter(Boolean).join(' ');
-          return `<div class="${cls}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${label}</span><span class="ffx2cmd__arrow">&#9666;</span>${cursor}</div>`;
+          return groupRowHtml(row.group, row.items, i, selected);
         })
         .join('');
       deps.container.innerHTML = `<div class="ig-cmd-stack">${rows}</div>`;
@@ -235,9 +313,12 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         .join('');
     }
 
+    /** Opens a category. A group with nothing enabled in it (a Cursed Change) never opens. */
     function openGroup(items: AvailableCommand[], label: string): void {
+      if (!items.some((c) => c.enabled)) return;
       subItems = items;
-      subIdx = 0;
+      subIdx = items.findIndex((c) => c.enabled);
+      if (subIdx < 0) subIdx = 0;
       renderSub(label);
     }
 
@@ -271,7 +352,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         const row = topRows[idx];
         if (!row) return;
         if ('leaf' in row) chooseLeaf(row.leaf);
-        else openGroup(row.items, CATEGORY_LABELS[row.group] ?? row.group);
+        else openGroup(row.items, groupLabel(row.group));
       } else if (view === 'sub') {
         subIdx = idx;
         const c = subItems[idx];
@@ -286,7 +367,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
           const row = topRows[topIdx];
           if (!row) return;
           if ('leaf' in row) chooseLeaf(row.leaf);
-          else openGroup(row.items, CATEGORY_LABELS[row.group] ?? row.group);
+          else openGroup(row.items, groupLabel(row.group));
         } else if (view === 'sub') {
           const c = subItems[subIdx];
           if (c) chooseLeaf(c);
