@@ -287,3 +287,78 @@ describe('hiding clears the field', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 });
+
+/**
+ * The name plate is docked clear of the HUD's own lists.
+ *
+ * The pre-release verifier's Chapter 1 capture: Phoenix Down aimed at a downed
+ * Yuna printed her plate squarely across the MEGA PHOENIX row — the surface
+ * that answers "who am I reviving?" laid over the choice being made. The
+ * cursor now takes the HUD's painted panels (`setPanels`) and hangs the plate
+ * off whichever side of the figure is clear.
+ *
+ * GAME-AWARE (AGENTS.md rule 14): the plate and its docking are BOTH games —
+ * one `TargetCursor` serves FFX's hand chrome and FFX-2's flower chrome, and
+ * `visual-bible.md` §3.5 gives the plate to both. Only the *wiring* is FFX's
+ * today, because only the FFX HUD declares its panels to the cursor.
+ */
+describe('the name plate dodges the HUD panels', () => {
+  const FIGURE = { x: 60, y: 400, w: 200, h: 220 };
+
+  function plateWithPanels(panels: Array<{ x: number; y: number; w: number; h: number }>): HTMLElement {
+    const c = new TargetCursor();
+    c.setProjector(() => FIGURE);
+    c.setPanels(panels);
+    document.body.append(c.el);
+    c.showSingle([{ id: 'yuna', name: 'Yuna', kind: 'ally' }]);
+    return c.el.querySelector<HTMLElement>('.ffx-target__plate')!;
+  }
+
+  it('keeps the approved placement — under the figure — when nothing is in the way', () => {
+    const plate = plateWithPanels([]);
+    expect(plate.className).toContain('ffx-target__plate--below');
+  });
+
+  it('moves off a command list that covers the space under the figure', () => {
+    // Chapter 1's real geometry: the item list runs down the left of the frame
+    // and the downed ally lies inside it.
+    const plate = plateWithPanels([{ x: 56, y: 560, w: 380, h: 300 }]);
+    expect(plate.className).not.toContain('ffx-target__plate--below');
+    expect(plate.className).toMatch(/--(above|right|left)/);
+  });
+
+  it('takes the side with room rather than the first side it tries', () => {
+    // Everything but the right of the figure is panel.
+    const plate = plateWithPanels([
+      { x: 0, y: 0, w: 260, h: 1000 },
+      { x: 0, y: 620, w: 1000, h: 300 },
+      { x: 0, y: 0, w: 1000, h: 400 },
+    ]);
+    expect(plate.className).toContain('ffx-target__plate--right');
+  });
+
+  it('never leaves the plate hanging off the frame instead', () => {
+    // A figure at the left edge: "left" would put the plate outside the
+    // viewport, which is no more readable than under a panel.
+    const c = new TargetCursor();
+    c.setProjector(() => ({ x: 2, y: 400, w: 180, h: 200 }));
+    c.setPanels([{ x: 0, y: 560, w: 440, h: 300 }]);
+    document.body.append(c.el);
+    c.showSingle([{ id: 'yuna', name: 'Yuna', kind: 'ally' }]);
+    const plate = c.el.querySelector<HTMLElement>('.ffx-target__plate')!;
+    expect(plate.className).not.toContain('ffx-target__plate--left');
+  });
+
+  it('is still one element inside the one targeting layer', () => {
+    const c = new TargetCursor();
+    c.setProjector(() => FIGURE);
+    document.body.append(c.el);
+    c.showSingle([{ id: 'yuna', name: 'Yuna', kind: 'ally' }]);
+    const plate = c.el.querySelector('.ffx-target__plate')!;
+    const box = c.el.querySelector('.ffx-target')!;
+    expect(plate.parentElement).toBe(c.el);
+    expect(box.parentElement).toBe(c.el);
+    expect((plate as HTMLElement).style.zIndex).toBe('');
+    expect((box as HTMLElement).style.zIndex).toBe('');
+  });
+});

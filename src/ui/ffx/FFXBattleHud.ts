@@ -789,13 +789,25 @@ export class FFXBattleHud implements HudPort {
     const ids = new Set(sel?.ids ?? []);
     const kind = sel?.kind ?? 'enemy';
 
+    // The same panel set the field measures against also decides which side of
+    // the figure the name plate hangs off, so the plate can never be printed
+    // across the command list's own rows (`TargetCursor.dockFor`).
+    const panels = this.panelRects();
+    this.commandMenu.setPanels(panels);
+    // The cursor drew itself before this call (the selection is published from
+    // `TargetCursor.publish`, downstream of `reposition`), so the first frame
+    // of a new aim would otherwise dock its plate against the *previous*
+    // decision's panels. One re-layout per change of selection, never per
+    // frame.
+    if (sel) this.commandMenu.targetCursor.reposition();
+
     // The field.
     if (this.targeting) {
       // Tell the field where the HUD's own panels are before asking it how
       // much of the target is visible — a fiend behind the command stack is
       // just as hidden as one behind the aeon, and it is the other half of
       // "they are not clearly visible".
-      this.targeting.setPanels(this.panelRects());
+      this.targeting.setPanels(panels);
       if (!sel) {
         this.targeting.select(null);
         this.targeting.xray(null);

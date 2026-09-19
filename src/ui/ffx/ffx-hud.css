@@ -574,7 +574,16 @@
    This layer lives in `.ffxhud__overlay`, the unscaled sibling of the 640x360
    stage, because `PaintedStage.projectRect` reports real viewport pixels. */
 
-.ffx-targeting { position: absolute; inset: 0; pointer-events: none; z-index: 32; }
+/* ONE layer for the whole cursor: every bracket, every plate, the hand, the
+   flower and the ALL label are children of this element, so they are stacked
+   together and they sit above the command stack and every other HUD panel
+   consistently. The pre-release verifier read Chapter 1's KO'd-ally frame as
+   "the bracket is under the item rows while the plate is over them", which two
+   separate layers would genuinely produce; they are one, and
+   `tests/unit/ui-target-css.test.ts` fails if a rule inside `.ffx-targeting`
+   ever gives a child its own z-index and splits them again. 36 clears the
+   damage numerals at 30 as well as the scaled stage. */
+.ffx-targeting { position: absolute; inset: 0; pointer-events: none; z-index: 36; }
 
 /* Per-target bracket, scaled to the figure's own bounds. The three accents are
    visual-bible 3.5's: ally green, enemy gold, self blue. */
@@ -693,6 +702,20 @@
   white-space: nowrap;
   box-shadow: 0 3px 10px rgba(11, 10, 18, 0.6);
 }
+
+/* The plate is docked to whichever side of the figure is clear of the command
+   list (`TargetCursor.dockFor`). The four transforms below are the CSS half of
+   `plateBox`'s four boxes and must keep matching it, or the cursor will pick a
+   side by measuring a rectangle the browser then draws somewhere else.
+
+   Why it exists: aiming Phoenix Down at a downed Yuna in Chapter 1 opened her
+   plate squarely across the MEGA PHOENIX row, so the surface that answers "who
+   am I reviving?" was printed over the choice being made. Reproduced at
+   1280x720 by the pre-release verifier. */
+.ffx-target__plate--below { transform: translate(-50%, 6px) skewX(var(--ig-skew, -12deg)); }
+.ffx-target__plate--above { transform: translate(-50%, calc(-100% - 6px)) skewX(var(--ig-skew, -12deg)); }
+.ffx-target__plate--right { transform: translate(6px, -50%) skewX(var(--ig-skew, -12deg)); }
+.ffx-target__plate--left { transform: translate(calc(-100% - 6px), -50%) skewX(var(--ig-skew, -12deg)); }
 .ffx-target__plate--ally { --ffx-plate-mark: #7ee8b0; }
 .ffx-target__plate--enemy { --ffx-plate-mark: #f2c21e; }
 .ffx-target__plate--self { --ffx-plate-mark: #8fd0f0; }
@@ -744,6 +767,25 @@
    own elements, and must not restyle another consumer's. */
 .ffxhud .ig-stat.ig-party-row--targeted {
   box-shadow: inset 0 0 0 2px #7ee8b0, 0 0 12px rgba(126, 232, 176, 0.35);
+}
+
+/* A DOWNED ally's row still has to read as selected.
+
+   `.ffx-stat--ko` wears `opacity: .5; filter: grayscale(1)`, and a filter
+   applies to the whole element including its box-shadow — so the green ring
+   this rule draws came out pale white on exactly the row a player most needs
+   to identify: the one they are aiming a Phoenix Down at. Measured live in
+   Chapter 1 (`filter: grayscale(1)` on `.ig-stat.ffx-stat--ko.ig-party-row
+   --targeted`). Selection wins over the KO treatment; the row keeps its
+   struck-through name, so nothing about "this ally is down" is lost.
+
+   GAME-AWARE (AGENTS.md rule 14): FFX only. `.ffx-stat--ko` is the FFX party
+   status window's own row; FFX-2's rows are `.ffx2-party__row` in
+   `ffx2-hud.css` and are not greyscaled. */
+.ffxhud .ig-stat.ffx-stat--ko.ig-party-row--targeted {
+  opacity: 1;
+  filter: none;
+  box-shadow: inset 0 0 0 2px #7ee8b0, 0 0 16px rgba(126, 232, 176, 0.55);
 }
 .ffxhud .ig-ctb__tile--targeted {
   box-shadow: 0 0 0 2px var(--ffx-tile-mark, #f2c21e), 0 0 10px rgba(242, 194, 30, 0.4);

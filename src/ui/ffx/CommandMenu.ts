@@ -13,7 +13,7 @@ import {
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { commandHelpText } from './commandHelp.ts';
-import type { CursorChrome, CursorSelection, RectProjector } from './TargetCursor.ts';
+import type { CursorChrome, CursorSelection, RectProjector, TargetRect } from './TargetCursor.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
@@ -271,6 +271,11 @@ export class CommandMenu {
   /** FFX's hand, or FFX-2's flower. See {@link CursorChrome}. */
   setChrome(chrome: CursorChrome): void {
     this.targetCursor.setChrome(chrome);
+  }
+
+  /** The HUD's painted panels, so the name plate docks clear of the lists. */
+  setPanels(panels: readonly TargetRect[]): void {
+    this.targetCursor.setPanels(panels);
   }
 
   open(opts: CommandMenuOpenOptions): Promise<Command> {

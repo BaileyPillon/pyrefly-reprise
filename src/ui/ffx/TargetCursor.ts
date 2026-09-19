@@ -114,6 +114,8 @@ export class TargetCursor {
   private readonly onClick: (e: MouseEvent) => void;
   private clickHandler: ((id: CombatantId) => void) | null = null;
   private selectionHandler: ((sel: CursorSelection | null) => void) | null = null;
+  /** The HUD panels the plate has to stay off. See {@link setPanels}. */
+  private panels: TargetRect[] = [];
 
   constructor() {
     this.el = document.createElement('div');
@@ -155,6 +157,25 @@ export class TargetCursor {
   setProjector(project: RectProjector): void {
     this.projector = project;
     this.reposition();
+  }
+
+  /**
+   * Where the HUD's own painted panels are, so the name plate can be docked to
+   * a side of the figure that is **clear of the command list**.
+   *
+   * The adversarial verifier's Chapter 1 capture: Phoenix Down aimed at a
+   * downed Yuna opened her plate squarely on the MEGA PHOENIX row, so the one
+   * surface that answers *"who am I reviving?"* was printed across the choice
+   * the player was making. The plate is not moved for its own sake — it is
+   * moved off the rows, and only when a side with room exists; when the figure
+   * is boxed in on all four sides it takes the side that loses least, which is
+   * still better than always taking the same one.
+   *
+   * Optional: without it (the HUD mocks, the unit fixtures) the plate keeps
+   * its default place under the figure and nothing changes.
+   */
+  setPanels(panels: readonly TargetRect[]): void {
+    this.panels = panels.map((p) => ({ x: p.x, y: p.y, w: p.w, h: p.h }));
   }
 
   /**
@@ -369,7 +390,7 @@ export class TargetCursor {
     this.el.innerHTML = parts.join('');
   }
 
-  /** The ink name plate under the target: name, letter tag, optional note. */
+  /** The ink name plate: name, letter tag, optional note, docked clear of the HUD. */
   private plateHtml(entry: TargetEntry, rect: TargetRect): string {
     const tag = entry.tag
       ? `<span class="ffx-target__tag">${escapeHtml(entry.tag)}</span>`
@@ -377,11 +398,52 @@ export class TargetCursor {
     const note = entry.note
       ? `<span class="ffx-target__note">${escapeHtml(entry.note)}</span>`
       : '';
+    const dock = this.dockFor(entry, rect);
     return (
-      `<div class="ffx-target__plate ffx-target__plate--${entry.kind}" style="left:${px(rect.x + rect.w / 2)};top:${px(rect.y + rect.h)}">` +
+      `<div class="ffx-target__plate ffx-target__plate--${entry.kind} ffx-target__plate--${dock.side}" ` +
+      `style="left:${px(dock.x)};top:${px(dock.y)}">` +
       `<span class="ffx-target__name">${escapeHtml(entry.name)}</span>${tag}${note}` +
       '</div>'
     );
+  }
+
+  /**
+   * Which side of the figure the plate hangs off, and its anchor point.
+   *
+   * Four candidates in order of preference — under the figure (the approved
+   * frames' own placement), above it, then right, then left — scored by how
+   * much of the plate would land on a HUD panel. The first that lands clear
+   * wins; if none does, the least-covered one does. The anchor is a point and
+   * the CSS does the rest (`.ffx-target__plate--*` in ffx-hud.css), so the
+   * estimate here only has to be close enough to choose between sides.
+   */
+  private dockFor(entry: TargetEntry, rect: TargetRect): { side: PlateDock; x: number; y: number } {
+    const cx = rect.x + rect.w / 2;
+    const cy = rect.y + rect.h / 2;
+    const candidates: Array<{ side: PlateDock; x: number; y: number }> = [
+      { side: 'below', x: cx, y: rect.y + rect.h },
+      { side: 'above', x: cx, y: rect.y },
+      { side: 'right', x: rect.x + rect.w, y: cy },
+      { side: 'left', x: rect.x, y: cy },
+    ];
+    if (!this.panels.length) return candidates[0]!;
+    // A rough plate box: the name is the widest part, at ~10px per glyph plus
+    // the tag chip and the padding. Only the *comparison* between sides has to
+    // be right, and a box a few pixels out cannot change which side is clear.
+    const w = Math.max(64, entry.name.length * 10 + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
+    const h = 34;
+    let best = candidates[0]!;
+    let bestCover = Infinity;
+    for (const c of candidates) {
+      const box = plateBox(c.side, c.x, c.y, w, h);
+      const covered = this.panels.reduce((sum, p) => sum + overlapArea(box, p), 0) + offFrameArea(box);
+      if (covered <= 1) return c;
+      if (covered < bestCover) {
+        bestCover = covered;
+        best = c;
+      }
+    }
+    return best;
   }
 
   /**
@@ -443,6 +505,31 @@ export class TargetCursor {
     }
     return { x: 16, y: 16 + index * (FALLBACK_SIZE + 8), w: FALLBACK_SIZE, h: FALLBACK_SIZE };
   }
+}
+
+/** Which side of the figure the name plate hangs off. */
+export type PlateDock = 'below' | 'above' | 'right' | 'left';
+
+/** The plate's box for a dock side, matching the CSS transform for that side. */
+function plateBox(side: PlateDock, x: number, y: number, w: number, h: number): TargetRect {
+  const gap = 6;
+  if (side === 'below') return { x: x - w / 2, y: y + gap, w, h };
+  if (side === 'above') return { x: x - w / 2, y: y - h - gap, w, h };
+  if (side === 'right') return { x: x + gap, y: y - h / 2, w, h };
+  return { x: x - w - gap, y: y - h / 2, w, h };
+}
+
+function overlapArea(a: TargetRect, b: TargetRect): number {
+  const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+  const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+  return w > 0 && h > 0 ? w * h : 0;
+}
+
+/** A plate half off the frame is no more readable than one under a panel. */
+function offFrameArea(box: TargetRect): number {
+  if (typeof window === 'undefined') return 0;
+  const inside = overlapArea(box, { x: 0, y: 0, w: window.innerWidth, h: window.innerHeight });
+  return box.w * box.h - inside;
 }
 
 function px(v: number): string {

@@ -90,3 +90,42 @@ describe('the target bracket stays four L-shaped corners', () => {
     expect(dim![1]).toContain('--ffx-bw');
   });
 });
+
+/**
+ * The bracket and the plate are ONE layer.
+ *
+ * The pre-release verifier read Chapter 1's KO'd-ally frame as "her bracket is
+ * drawn underneath the item rows while her name plate is drawn on top of
+ * them". Both are children of `.ffx-targeting`, so that can only become true
+ * if a rule gives one of them a z-index of its own and splits the stack. This
+ * guard is what stops that happening later.
+ */
+describe('the whole cursor stacks as one layer, above the command lists', () => {
+  it('only the layer root carries a z-index', () => {
+    const offenders: string[] = [];
+    for (const [sel, body] of bracketRules()) {
+      if (/(^|\s|,)\.ffx-targeting\s*$/.test(sel)) continue;
+      if (/z-index\s*:/.test(body)) offenders.push(sel);
+    }
+    expect(offenders).toEqual([]);
+    const root = /\.ffx-targeting\s*\{([^{}]*)\}/.exec(CODE)?.[1] ?? '';
+    expect(root).toMatch(/z-index:\s*(3[2-9]|[4-9]\d)/);
+  });
+
+  it('the plate has a rule for each dock side TargetCursor can choose', () => {
+    for (const side of ['below', 'above', 'right', 'left']) {
+      expect(CODE, side).toContain(`.ffx-target__plate--${side}`);
+    }
+  });
+
+  it("a selected KO'd ally's row is not greyed out of its own accent", () => {
+    // `.ffx-stat--ko` wears `filter: grayscale(1)`, which greys the green
+    // selection ring with everything else. Selection wins on the one row the
+    // player is aiming at. FFX only (rule 14): `.ffx-stat--ko` is FFX's row.
+    const rule = /\.ffxhud\s+\.ig-stat\.ffx-stat--ko\.ig-party-row--targeted\s*\{([^{}]*)\}/.exec(CODE)?.[1];
+    expect(rule, 'no KO+targeted rule in ffx-hud.css').toBeDefined();
+    expect(rule).toMatch(/filter:\s*none/);
+    expect(rule).toMatch(/opacity:\s*1/);
+    expect(rule).toContain('#7ee8b0');
+  });
+});
