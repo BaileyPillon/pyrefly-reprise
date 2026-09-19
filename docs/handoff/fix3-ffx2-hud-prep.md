@@ -1,419 +1,239 @@
-# fix3 — ffx2-hud-prep (round 3)
+# fix3 — ffx2-hud-prep
 
-Track owner: `src/ui/ffx2/**`, `src/ui/ffx/party-prep/**`,
-`src/ui/common/party-prep.css`, `src/ui/common/portrait.ts`, plus the new
-`src/ui/ffx2/ChainCounter.ts`, `src/ui/ffx2/SpherechangeFlourish.ts`,
-`src/ui/ffx2/spherechange-flourish.css` and
-`tests/unit/ui-ffx2-chain-flourish.test.ts`.
+Track: FFX-2 HUD and prep screens, plus the shared portrait crop logic.
+Owns `src/ui/ffx2/**`, `src/ui/ffx/party-prep/**`, `src/ui/common/party-prep.css`,
+`src/ui/common/portrait.ts`.
 
-The previous two passes of this track closed the four carried-over defects and
-survived an adversarial verifier; that work is at `bf0e017` and its record is
-in this file's git history. **This round is a different brief.** Bailey played
-the live build, the chief critic ran round 02 on it (`critic/rounds/round-02.json`,
-headline 3.5), and Bailey asked for a named list of presentation work — with
-the standing rule that **a change true to one game is not applied to the
-other**.
-
-So this pass does three things:
-
-1. the round-02 ranked issues that land in this track's files;
-2. the items on Bailey's list that land in this track's files;
-3. a re-verification of the four carried-over defects, live, rather than a
-   re-do.
-
-Every change below is labelled with which game it is true to.
+This round is the **fix pass** on the critic's pass 1 (`fba91ae`), which drove
+the previous round live and refuted four things its own DOM matrix could not
+see. Three of the four carried-over defects from the original brief were
+confirmed closed by that critic pass and are not re-litigated here.
 
 ---
 
-## 1 — "Change" is one command, and it is FFX-2's (rank 26, FFX-2 only)
+## What changed
 
-**What was live.** The FFX-2 command window read
+### 1. The chain counter's pop is inside the placement solver now
 
-```
-Attack   Skill ◂   gunner   black-mage   Item ◂
-```
+`ChainCounter.show()` measured `el.offsetWidth/offsetHeight` — the **layout**
+box — handed that to `placeSlab`, and *then* added `.ffx2chain--pop`, whose
+keyframe scales the painted chip to 1.45 about its centre on every increment.
+The solver had therefore never seen the box the player sees.
 
-Two internal ids, on the most player-facing surface in the game. Measured, not
-inferred: `docs/screenshots/fix3/critic-ffx2-hud-prep/report-f.json` has the
-row text off the live DOM at three viewports.
+Measured by the critic at the 50% keyframe, 1280x720, chapter 4:
 
-**Why it happened.** `battle/ffx2/targeting.ts:258` emits one `AvailableCommand`
-per *reachable node* and sets `label: to` — the raw dressphere id — and
-`CommandMenu.ts` gave each spherechange its own top-level row.
+| | layout box | painted box |
+|---|---|---|
+| size | 167x95 | 242.4x137 |
+| position | (665.9, 12) | (628.3, **-9.3**) |
 
-**Why it was also wrong about the game.** X-2 has no per-outfit command. You
-press L1, the Garment Grid opens, and the destination is chosen *inside it*
-(`research/visual-bible.md` §4.5.2). One row, one grid.
+9.3 px above the overlay, clipped away by `.ffx2hud`'s `overflow: hidden`;
+166.8x5.2 onto Bahamut; 33.8x102.8 onto the enemy-intent slab — *larger* than
+the 99x81 the previous handoff recorded as the **pre**-fix state. It reproduced
+at counts 3/7/12/22, at all four viewports, in both FFX-2 chapters.
 
-**What it is now.** Every spherechange collapses into one **Change** row with
-the `.ig-cmd--overdrive` treatment (§4.5: it costs the whole turn), opening a
-submenu that names each reachable dressphere and carries §4.5.4's gate-preview
-line — `GRANTS: Red + Green` — which that section calls "the single most
-valuable line on the screen". Curse seals the row outright
-(`ffx2-combat-core.md` §Curse: the L1 menu is disabled) instead of opening a
-submenu of dead ends.
+The fix is structural, not a fudge factor. `.ffx2-chain-chip` is now an **empty
+reservation box** sized by `show()` to the pop's peak (`CHAIN_POP_SCALE`, 1.45),
+and the ink slab is an inner `.ffx2chain__body` centred in it. The body is what
+scales. So the box `placeSlab` places, the box
+`FFX2BattleHud.intentObstacles()` measures as `.ffx2-chain-chip`, and the box
+the player sees are the same rectangle at every point in the animation.
 
-Live after: rows read `["Attack","Skill◂","Change◂","Item◂"]`, submenu reads
-`["Gunner GRANTS: Red","Black Mage GRANTS: Yellow"]`.
+A second bug fell out with it: a transform makes an element the containing
+block for `position: fixed` descendants, so while the pop was running
+`.ffx2chain--flash::after`'s **full-screen** §4.6 flash had been collapsing to
+the chip's own bounds and snapping back 0.18 s later. The chip is never
+transformed now, so the flash is viewport-fixed throughout.
 
-**FFX gets none of this.** `src/ui/ffx/CommandMenu.ts` is a different component
-in a different track and was not touched. FFX has no Garment Grid.
+### 2. Cancelling out of target selection no longer commits the wrong command
 
-## 2 — The spherechange gets its moment (Bailey's list, FFX-2 only)
+`CommandMenu.ts` sent *every* cancel in the `target` view to
+`renderSub(subCategory)`, whether or not the pending command had been reached
+through a submenu. From a top-level leaf, `subItems`/`subCategory` still held
+whatever submenu was opened last. The line predates this work, but the previous
+round is what made the stale submenu able to be **Change** — the one submenu
+whose rows cost the entire turn.
 
-`BattleEvent` has carried a `spherechange` variant all along.
-`FFX2BattleHud.onEvent` fell through to `default:` and drew **nothing**. So the
-most expensive action in X-2 — it costs her whole turn — read as a two-letter
-monogram quietly changing in a 40 px party row, with no pause and no
-acknowledgement. The price was paid and nothing happened.
+Driven live in chapter 4: open Change, Esc, arrow to Attack, Enter (reticle on
+Bahamut), Esc — the window redrew the **Change** submenu *with the reticle
+still up*, and the next Enter logged
+`{"type":"spherechange","who":"paine","from":"warrior","to":"gunner"}`. The
+player pressed Attack and spent Paine's whole turn on a spherechange. With no
+submenu ever opened it was quieter and just as broken: an empty command window
+that swallowed ArrowDown/ArrowUp/Enter until a second Esc.
 
-`SpherechangeFlourish.ts` plays `research/visual-bible.md` §4.5.4's **Commit
-VFX**, to the approved spec rather than invented:
+The menu now records `pendingFrom` — the view the row was picked in — and goes
+back *there*, clearing `targetLayer` and the pending command on the way. The
+reticle-plus-menu state is gone because clearing the reticles was half the fix.
 
-> the transformation plays on the field — a vertical `#FFFFFF` light column
-> over the girl for 12 frames while 8 `#F7B6D9` petal-motes orbit outward, the
-> new outfit resolving on frame 9, and a `#FFD9EC` ring expanding from her feet
-> to radius 90 px and fading
+### 3. The Change submenu shows the outfit names it exists to show
 
-plus §4.5.4's gate-arrival line ("the earned effect's name rises 14 px above
-her in the gate colour") and §3's budget ("Budget ~0.8 s"). It is **awaited**,
-because §3's mechanic "halts time"; the party rows are redrawn as it settles so
-§4.5.4's "Cost, made visible — her ATB bar is empty and begins refilling" lands
-on screen while the light is still fading.
+`.ffx2cmd__grants` was `flex: none` inside `.ig-cmd`'s fixed 129.78x23.11 box,
+so the **label** was the flex item that shrank: "Black Mage" got 27 of the 72 px
+it needs and rendered "BL…", "Gunner" rendered "GUN…". `textContent` is
+untouched by a CSS ellipsis, which is exactly why the previous round's evidence
+(`["Gunner GRANTS: Red", "Black Mage GRANTS: Yellow"]`) said the names were
+fine.
 
-With no projected anchor it draws nothing and resolves at once: a spherechange
-must never be able to wedge the battle loop on a missing projector.
+Rows that carry a gate line now get `.ffx2cmd--gate`, which wraps the row and
+drops `GRANTS:` onto its own line beneath the name, right-aligned under the
+right-anchored stack. **The row is deliberately not widened**: the command
+window's left edge is the wall the scene has to stand its boss clear of
+(`.ffx2hud__command`'s `right: 12px` note, `docs/ENGINE-API.md#hud-safe-area`),
+and moving it outboard costs the stage more than the gate line is worth.
 
-**FFX gets none of this.** There is no spherechange in FFX and `FFXBattleHud`
-never sees the event. Yuna's summons have their own approved moment and it is
-not this one.
+### 4. The FFX Equipment tab names its auto-abilities
 
-## 3 — The chain counter gets its numeral (Bailey's list, FFX-2 only)
+It printed `def.autoAbilities` raw — `strength-10`, `hp-10`, `zombie-ward` —
+three lines from the Items tab the same round had routed through `itemLabel()`.
+New `src/ui/ffx/party-prep/autoAbilityLabels.ts` transcribes FFX's own names for
+the whole `AutoAbilityId` union.
 
-What shipped was one rotated tag reading `CHAIN ×2.00`: the *multiplier*, on
-one line, with no numeral and no `CHAIN` label — so the mechanic X-2's whole
-damage output is built on had no readout of its own length.
+Transcribed, not derived, and the module comment says why: a `kebab -> Title
+Case` helper gets a handful right and the rest wrong. FFX writes the percentage
+families as `Strength +10%`, the counter as `Evade & Counter`, the auto-status
+family hyphenated (`Auto-Haste`) but the SOS family not (`SOS Haste`), the
+elemental nulls in medial caps (`SOS NulBlaze`), strike/touch/proof as one
+closed word (`Zombiestrike`, `Stoneproof`) but wards as two (`Zombie Ward`).
+The map is typed `Record<AutoAbilityId, string>`, so a new id in the union fails
+`tsc` rather than leaking onto the screen.
 
-`ChainCounter.ts` is §4.6: **the count big, `CHAIN` beneath it**, a scale-pop
-and a burst of six petal-motes per increment, the three escalation tiers
-(5 → gold glow, 10 → `#FFF0A8`→`#F2712E` fill, 20 → the full-screen flash) and
-§4.6's decay when the chain breaks, which the old chip did not have at all —
-it just vanished. The multiplier rides along on the label, because §4.6 draws
-the count big but the multiplier is what the count buys.
+### Also: `yuna-white-mage`'s face-crop row was stale
 
-It also pulls ~40 lines back out of the 830-line `FFX2BattleHud`.
+Not one of the four, and not caused by this track: the art fleet re-rolled and
+**horizontally mirrored** `public/art/characters/yuna-white-mage/idle.png` at
+14:41 today (758x1172 -> 581x1183; `idle.json` carries `flipped: true` and a
+`flipNote`). The measured row in `face-crops.json` still described the old
+painting, so her eye line landed at 0.766 against the house 0.42 — on her
+collarbone — and `ui-portrait-face-crop.test.ts` was red before this round
+touched anything.
 
-**FFX gets none of this.** FFX has no chain mechanic and emits no `chain`
-event.
-
-### 3a — and it is *placed*, not just pinned
-
-This is the defect the new spec created, found live and fixed in the same
-round. §4.6's anchor ("top-right of the enemy being chained") was written for
-an 11 px tag. At §4.6's real size — a 28 px numeral over a 10 px label, about
-100 px tall at a 1280x720 letterbox — the same anchor put the counter across
-Bahamut's body (112x14) and across the enemy-intent slab (99x81).
-
-The chip now goes through `placeSlab` from `intentPlacement.ts`, the solver the
-intent slab already steers with: it keeps its §4.6 spot when that spot is free
-and steps aside when it is not. Its obstacle list is the slab's list **plus the
-slab itself** (that list exists to place the slab, so it necessarily leaves it
-out) and **minus the chip** (it must not dodge its own last rectangle). The
-chip is a 1.4 s transient and the slab is standing furniture, so the chip is
-what moves.
-
-The old chip's `-8deg` tilt went with the change: a 50-grid-px block on a slant
-is harder to read, §4.6 does not ask for one, and a rotated box is not where
-its layout rect says it is, which is what a placement solver needs.
-
-## 4 — The FFX ITEMS tab reads as items (rank 40, FFX only)
-
-`src/ui/ffx/party-prep/panels.ts:171` printed `entry.itemId` — `hi-potion`,
-`mega-phoenix` — straight onto the screen, and its 88 px well showed six of 28
-kinds with nothing saying there were twenty-two more. Names now come from
-`itemLabel()`, the registry lookup the results ledger already used.
-
-**Two columns, because FFX's own item menu is two columns** — and that turns
-six visible rows into twelve. **FFX-2's bag stays one column**: `ui/ffx2/
-party-prep/panels.ts` already used real item names and X-2's item list is a
-single column. This is one of the places the games genuinely differ and the
-difference is kept.
-
-The Overdrive tab was the same class of leak: the mode rows printed the
-`OverdriveModeId` (`stoic`, `daredevil`) with a CSS `text-transform` hiding it
-on screen but not in the DOM, so CHK-007's copy grep would have caught it.
-FFX names its modes Stoic, Warrior, Comrade — proper nouns — and now so does
-the row. **FFX-2 has no Overdrive modes and no such tab.**
-
-## 4a — One Esc, one meaning (found live; **not** caused by this round, FFX-2 only)
-
-Driving the new Change submenu with real keys turned up something worse than
-what I was looking for: **one tap of Esc in an FFX-2 submenu stepped back to
-the top row *and* opened the pause screen.** The probe
-(`critic/scratch/fix3-ffx2/esc-probe.mjs`) reproduces it on the *ability*
-submenu too, so it is not the Change row's doing — it has been in every FFX-2
-fight since the pause screen landed, and Bailey would have hit it the first
-time he pressed Esc in a Skill list.
-
-It is the exact race `src/ui/ffx/cancelClaim.ts` was written for during the FFX
-track's fix-3 round. The menu is a DOM `keydown` listener firing *between*
-frames; `BattleScreen.handleInput` polls `justPressed('cancel')` once *per*
-frame. Releasing the Esc claim the instant the menu steps back lets the screen
-find that same press still fresh as an edge a frame later and take it as its
-own. FFX-2's menu simply never adopted that module.
-
-It does now — the same module, not a copy. Before: both submenus ended on
-`screen() === 'pause'`. After: both end on `'battle'`.
-
-## 5 — A STATS tab for FFX-2 prep (rank 40's parity half, FFX-2 only)
-
-Of FFX's two extra tabs, one has a real X-2 counterpart and one does not.
-
-- **STATS does.** Added.
-- **EQUIPMENT and OVERDRIVE do not, and stay absent on purpose.** X-2 has no
-  weapons and no armour — the dressphere *is* the equipment and accessories are
-  the only slots, which the Accessories tab already covers — and it has no
-  Overdrive modes at all. This is rank 40's "written exception list".
-
-The tab earns more than parity. [ffx2-combat-core §5.1]: **a girl's stats are a
-function of (dressphere × level) only.** Yuna, Rikku and Paine are identical in
-the same sphere at the same level, which is why `FFX2MemberBuild` carries no
-stat block and the engine derives one. A player arriving from FFX will assume
-the exact opposite — that the character has the stats and the outfit is
-cosmetic — and nothing in the game has ever told them otherwise. So the tab
-prints her worn block and then every sphere she owns as a *delta* against it,
-the same comparison §4.5.4 puts on the Garment Grid, and the rule becomes
-self-evident rather than merely true.
-
-Read-only like every tab here; every figure comes from the engine's own
-`dressphereStats()`.
-
-## 6 — The four carried-over defects, re-verified
-
-Not re-done — re-measured live on this build, because §1–§3 touch the same
-surfaces.
-
-| defect | state |
-|---|---|
-| FFX-2 party rows show no painted portraits | closed at `7cb8417`/`bf0e017`; live rows carry `art/characters/<girl>-<dressphere>/idle.png` under `art/portraits/<girl>.png`, per the current dressphere, with the monogram as the floor. Re-measured this round. |
-| FFX-2 prep has only the Chapter tab | closed; **five** tabs as of this round (CHAPTER / DRESSPHERES / STATS / ACCESSORIES / ITEMS), all reading the real build — see §5. |
-| Auron's HUD portrait is badly cropped | closed at `bf0e017`; every row in `src/ui/common/face-crops.json` is measured off the painting and pinned by `tests/unit/ui-portrait-face-crop.test.ts` (84 cases, including the file-size check that broke Auron in the first place). |
-| FFX-2 HUD overlap at four viewports | re-measured; §3a is the one new overlap this round introduced and closed. |
-
-`faceLayersHtml` was also exported from `ui/common/portrait.ts` and adopted by
-`PartyRows`, so the prep screen's roster can take it in one line — see the
-request below.
+Re-measured off the pixels with the project's own rig
+(`tools/portraits/measure-face-crops.mjs sheet yuna-white-mage`), not from
+memory: `fx 0.6333, fy 0.1079, ipd 0.0861, px [581, 1183]`. Note the rig's
+`detectHead` reports `headCentreX` 0.702 for this file — that is the raised
+**hood**, not her face, which is why the row is measured by hand off the
+contact sheet.
 
 ---
 
-## Answers to two critic findings this track deliberately did **not** act on
+## FFX vs FFX-2
 
-**Rank 28 — "Chapter 4 shows an unnumbered pink bar" for enemy HP.** This is
-correct FFX-2 and should stay. X-2 keeps an enemy's HP secret until it is
-scanned; `FFX2BattleHud.revealed` already gates the numerals on a `sensor`
-event and the strip prints a `SCAN` hint until then. Making the boss's HP
-always numeric would be truer to the rubric's clarity criterion and **false to
-the game**, which is the trade Bailey's standing rule resolves in the game's
-favour. If clarity is judged to win here, it is a design decision, not a bug
-fix, and it needs Bailey — the FFX half of that finding is a different track's
-anyway.
+Bailey's standing rule for this round: a change true to one game does not get
+applied to the other. This track kept them apart by construction.
 
-**Rank 41 — "Party prep ships an extra CHAPTER tab as the default".** Left
-alone, and flagged as a question rather than a fix: the approved mockup's first
-tab is STATS, but Bailey's own list for this round asks to "show me the room
-before you ask me to fight in it", which is an argument *for* leading with the
-chapter briefing. Changing the default tab is a change to an approved mockup
-and the house rule is a mockup before integrating a screen. **Question for
-Bailey below.**
-
----
-
-## Requests to other tracks
-
-**To the FFX-2 battle track (`src/battle/ffx2/**`) — expose the Garment Grid.**
-The **Change** row should open the real node graph in
-`src/ui/ffx2/SpherechangeWheel.ts` (§4.5.2: the ring of nodes, the gate orbs,
-the travelled links in blue, the `R1 SPECIAL DRESS UP` pill). That component is
-built, tested and today **only reachable from the HUD mock screen** — no real
-fight has ever shown it. It cannot be wired from this side because its input is
-the grid's *node contents*, which live in `Ffx2Engine.gridNodes` (private) and
-are never handed to a HUD. What is needed is either that map on the snapshot,
-or the whole `GarmentGridDef` for the acting girl on `AvailableCommand`. Until
-then the Change submenu is the honest degradation: it names every destination
-the engine offers and the gate each one crosses, but it cannot draw the route.
-
-**To the FFX-2 battle track — label spherechange rows.**
-`battle/ffx2/targeting.ts:258` sets `label: to` (a raw id). The UI works around
-it via `command.extra.toDressphere`, which is authoritative anyway, but the
-`label` field is still wrong for any other consumer.
-
-**To the shell track (`src/app/screens/PartyPrepContent.ts`) — one line.**
-Its roster and slot cards call `faceImgHtml(id)` alone, so **Paine** — who has
-no `portraits/paine.png` — gets her name initial on the prep screen where the
-battle gives her a painted face. `faceLayersHtml` is now exported for exactly
-this:
-
-```ts
-faceLayersHtml([`${id}-${dressphere}`, `${id}-x2`, id], `${id}-${dressphere}`, name)
-```
-
-Not done here because the call site is the shell's, and changing
-`faceImgHtml`'s own semantics would silently push body crops into the pause
-screen and chapter select mid-round.
-
-**To the FFX HUD track — check `ui/ffx/CommandMenu.ts` for the Esc race.**
-FFX-2's menu had it and FFX's `cancelClaim.ts` is the cure, so the FFX menu is
-presumably already using it — but it was not verified from this side, and §4a
-shows how easy it is for one menu to be left behind. One run of
-`critic/scratch/fix3-ffx2/esc-probe.mjs` pointed at a Chapter 1–3 fight settles
-it.
-
-**To the move-advisor track (`src/ui/common/MoveAdvisor.ts`) — the card
-overruns its band.** This is the one overlap left in the FFX-2 battle matrix
-and it is not the fence's. Measured on the `menu` state at 2000x1000:
-`advisor-card X fighter:paine 82.4x13.5` and `advisor-chip X fighter:paine
-61.5x20.9`. The fence this HUD publishes is right — it is parked past Paine's
-shoulder, it now includes the toggle chip's band above the card and the card's
-own skew lean, and every other state in the same run measures zero. What
-happens is that `layout()` is handed a band narrower than the card's minimum
-width (the girls on one side, the party column on the other) and resolves it by
-spilling *left*, back over the girl the fence was protecting. It needs to
-shrink, wrap or move up instead, and only that file can decide which. It is
-intermittent because it depends on where the formation is standing on the frame
-the card lays out: clean at 1280x720 and 1600x900 in the same run.
-
-**To `src/ui/common/EnemyIntent.ts`'s track — a real placement pass.**
-`intentPlacement.ts` exists only because `layout()` dodges obstacles in one
-greedy pass. Two components now steer through that module from the outside
-(the slab and, as of this round, the chain counter). A real candidate search
-inside `layout()` would let the whole module be deleted.
-
-**To the art fleet.** `portrait.portraitFocal` reads
-`public/art/portraits/<id>.json` for a `focal: { fx, fy, ipd }` block and it
-wins over the measured table. The pipeline already writes that sidecar with
-`width`/`height`; adding the three focal numbers at render time is what would
-let `face-crops.json` be deleted and stop a re-roll ever needing a human.
-
----
-
-## Questions for Bailey
-
-1. **Prep's first tab.** The critic wants STATS (the approved mockup's first
-   tab); your own list wants the room shown before the fight, which is what the
-   CHAPTER tab does. Keep CHAPTER as the default, move it to the end, or get a
-   new mockup approved?
-2. **FFX-2 boss HP.** X-2 hides enemy HP until Scan, and the game currently
-   does. The critic reads that as a clarity blocker. Stay true to X-2 (hint
-   until scanned) or always show the boss's bar with numbers?
-3. **Chain counter size.** §4.6's numeral is 28 px in the 640x360 grid — big
-   enough that it has to be steered around the boss rather than sitting beside
-   him. Is that the spectacle you want, or should it be smaller and always in
-   its §4.6 spot?
+- 1, 2 and 3 are `src/ui/ffx2/` only. FFX has no chain mechanic and emits no
+  `chain` event; it has no spherechange; and it has its own
+  `src/ui/ffx/CommandMenu.ts`, which is untouched.
+- 4 is `src/ui/ffx/` only. FFX-2 has **no auto-abilities** — its equivalent is
+  the accessory table plus dressphere skillsets, which
+  `src/ui/ffx2/party-prep/panels.ts` already names through `abilityName()` and
+  `accessoryEffect()`. Giving X-2 an auto-ability list would be inventing a
+  mechanic it does not have.
 
 ---
 
 ## How it was verified
 
-Real Chromium (Playwright, the repo's SwiftShader flags) on a `vite` dev server
-on port **5748**, driven through `window.__pyrefly` into the actual Chapter 4
-and Chapter 5 fights and both prep screens with real `page.keyboard` input —
-including walking to the **Change** row by its text and opening it with Enter —
-then reading `getBoundingClientRect` for every panel and the painted stage's own
-`project(id, 'head'|'feet')` for every living fighter. The chain counter was
-driven at every escalation tier (3 / 7 / 12 / 22) and the spherechange
-transformation on a real girl at her real projected position, both through the
-HUD's own event port exactly as the engine drives it. Server stopped at the end.
+`npx tsc --noEmit` clean. Targeted vitest 145/145 green across
+`ui-ffx2-chain-flourish`, `ui-ffx2-command-menu`, `ui-ffx-party-prep`,
+`ui-ffx2-prep-stats`, `ui-portrait-face-crop`.
 
-The rig is `critic/scratch/fix3-ffx2/drive3.mjs`. Vite's HMR socket is stubbed
-(`ctx.routeWebSocket`) because other tracks are editing this working tree and a
-save of theirs mid-run reloads the page and throws the measurement away.
+Live on a vite dev server (port 5732) with real `page.keyboard` presses,
+chapters 4 and 5, at 1280x720 / 1600x900 / 2000x1000 / 2560x1440. Rig:
+`critic/scratch/fix3-ffx2-hud-prep-fix/verify.mjs`; output
+`docs/screenshots/fix3/ffx2-hud-prep/verify.json`.
 
-The measurement also greps every player-facing label element for anything still
-shaped like an internal kebab id, so the rank-26 class of defect fails the run
-rather than needing to be noticed.
+The rig deliberately measures what the critic measured, not what the fix makes
+easy. In particular it freezes **`.ffx2chain__body`** at the 50% keyframe and
+measures the body — freezing `.ffx2-chain-chip` the way the critic's
+`pop-overflow.mjs` did would now freeze nothing and report "inside" trivially.
 
-### Two holes in the rig, found and closed
+Representative numbers, chapter 4 at 1280x720, all four tiers:
 
-Worth recording, because the previous round's screenshots have the first one
-too and nobody noticed.
+```
+count  3: reserved 243x138@(376.5,101.5)  painted 242.4x137@(376.8,102)  inside
+count  7: reserved 243x138@(376.5,101.5)  painted 242.4x137@(376.8,102)  inside
+count 12: reserved 243x138@(376.5,101.5)  painted 242.4x137@(376.8,102)  inside
+count 22: reserved 243x138@(376.5,101.5)  painted 242.4x137@(376.8,102)  inside
+```
 
-1. **A transient outlived by its own screenshot.** The chain counter lives
-   1.4 s and the spherechange light 0.8 s; a `page.screenshot` of a SwiftShader
-   frame takes longer than either. So the rig measured the chip in the DOM,
-   wrote "19 boxes, 0 overlaps" — and photographed a frame it had already
-   expired out of. The first version of this round's evidence showed an empty
-   patch of sky where the counter had been, and the report said it was there.
-   The rig now re-fires the event through the HUD's own port on an interval
-   until the shutter closes, and freezes the flourish's animations 420 ms in so
-   the captured frame is the same beat every time instead of whatever was
-   caught.
-2. **A skewed box is not an overflowing one.** The rig flags `.prep__sheet` as
-   overflowing horizontally (`scrollWidth` 373 vs `clientWidth` 364) on every
-   tab of both games. That 9 units is the `skewX` the sheet is drawn with
-   painting past its layout box; `overflow` is `visible` and nothing is
-   clipped. It is a false positive, not a defect — noted so the next reader
-   does not chase it.
+The painted size is byte-identical to the critic's 242.4x137 — the same box,
+now placed instead of clipped, with zero fighter and zero panel overlaps.
 
-### What the matrix said
+Submenu labels, measured as `scrollWidth`/`clientWidth` (what `textContent`
+could not see):
 
-Chapters 4 and 5, 1280x720 / 1600x900 / 2000x1000 / 2560x1440, across the
-command menu, the Change submenu, the chain counter at every escalation tier
-(3 / 7 / 12 / 22) and the spherechange transformation:
+```
+"Gunner"     gate=true  label 96/96  not clipped  grants "GRANTS: Red"    107/107 not clipped
+"Black Mage" gate=true  label 107/107 not clipped grants "GRANTS: Yellow" 107/107 not clipped
+"White Mage" gate=false label 71/71  not clipped   (no gate crossed -> no marker, no second line)
+```
 
-- **zero panel-on-panel and panel-on-fighter overlaps**, including the two this
-  round introduced and then closed (§3a) — before the fix the counter wore
-  Bahamut (112x14) and the intent slab (99x81) at 1280x720;
-- **zero raw ids** on any player-facing label, in either game;
-- the command rows read `Attack / Skill / Change / Item`, and the Change
-  submenu `Gunner — GRANTS: Red` / `Black Mage — GRANTS: Yellow`;
-- the counter reads its count, its label and its multiplier, with six motes and
-  the right tier at each threshold;
-- the flourish names the outfit, prints the gate and draws its eight motes.
+Cancel path, real key presses. Both branches of `pendingFrom` are driven,
+one per chapter, because **`Attack` is a top-level leaf in chapter 4 but a
+group row in chapter 5** (its category carries two commands there, so
+`groupRows` opens a submenu). Chapter 4 therefore exercises
+target -> top and chapter 5 exercises target -> the submenu it came from:
 
-Prep, both games, same four viewports, every tab and every member: **zero
-overlaps**; FFX-2 now reports five tabs
-(`CHAPTER / DRESSPHERES / STATS / ACCESSORIES / ITEMS`) against FFX's six.
+```
+ch4  cancel (picked from a top-level leaf): reticles 1 -> 0; title ""; rows ["Attack","Skill","Change","Item"]
+     committed after cancel: ["turn-start","action-start","chain","damage","action-end",...]
+```
 
-**The exact number.** The final matrix is eight battle contexts — Chapters 4
-and 5 at all four viewports — of nine measured states each. **One** of the
-seventy-two carries an overlap: Chapter 4 at 2000x1000, on the `menu` state
-only, `advisor-card X fighter:paine 82.4x13.5` and `advisor-chip X
-fighter:paine 61.5x20.9`. Every other state of every other context is zero,
-including all four chain tiers, the transformation, and 2560x1440 where the
-counter is at its largest.
+An attack, and no `spherechange` anywhere in the log.
 
-That one is the move-advisor card overrunning the band this HUD gives it, not
-the band being wrong — the request, with the numbers, is in the handoff section
-above. It is intermittent because it depends on where the formation is standing
-on the frame the card lays out; an earlier run showed the same class at
-1280x720 (16x31 on Rikku) and the runs either side of it measured zero at that
-viewport. It is written down rather than rounded away.
+The first version of this rig reported chapter 5 as a failure at every
+viewport. It was the rig, not the build: it assumed `Attack` was a leaf, so
+its Enter opened the Attack submenu, no reticle appeared and it concluded the
+cancel path was broken. The diagnostic that settled it is
+`critic/scratch/fix3-ffx2-hud-prep-fix/ch5diag.mjs`:
+
+```
+2 after Enter  {"screen":"battle","title":"Attack","rows":[{"t":"Attack"},{"t":"Attack"}],"reticles":0}
+3 after Esc    {"screen":"battle","title":"","rows":["Attack","Skill","Change","Item"],"reticles":0}
+```
+
+Worth recording for whoever owns FFX-2 targeting: that submenu has **two rows
+both reading "Attack"**. The HUD groups by `category` and labels each row with
+the command's own `label`, so two `attack`-category commands with the same
+label render as two identical rows. Whether chapter 5 should be offering two
+attack commands at all is an engine/data question, not a HUD one —
+`window.__pyrefly` exposes no accessor for the raw `AvailableCommand[]`, so
+this is reported from the DOM rather than guessed at.
 
 ---
 
-## Left / known residue
+## What is left
 
-- **The Garment Grid wheel is still unreachable in a real fight.** See the
-  request above. This is the biggest thing left in this track.
-- **Yuna's and Rikku's face tiles are the same painting in every dressphere.**
-  Only the monogram and its colour change, because no `<girl>-<dressphere>`
-  portrait exists. The lookup is in place; this is a request to the art fleet.
-- **`yojimbo`'s crop is measured off one lit eye** under a hat brim — the least
-  confident row in `face-crops.json`.
-- **Boss idle paintings still use the generic body estimate.** Only the FFX-2
-  dresspheres are measured.
-- **The spherechange flourish is not in the obstacle list.** It is a
-  transformation playing *on* the girl, deliberately over her, for 0.8 s — the
-  same reason `.ffx2sc` is excluded. If it should dodge the chrome, say so.
-- **§4.5.4's gate-arrival "orb flies from the link to the girl"** is not drawn:
-  there is no link on screen to fly from until the wheel is wired. The gate is
-  named on the plate instead.
-- **The Stats tab shows two of twelve spheres at a time.** The panel gets
-  334x113.3 units and the comparison table gets what is left after the worn
-  block and the rule; the rest scroll behind a masked edge. A girl with
-  thirteen dresspheres wants a wider sheet or a second page, and both are the
-  shell's call.
-- **The chain counter is the loudest thing in the frame at 2560x1440.** §4.6's
-  28 px numeral scales with the letterbox, so at 4x it is a 112 px figure. It
-  is placed clear of everything, but whether that is the spectacle Bailey wants
-  is question 3 below, not something to decide from here.
+**For the art track.** `public/art` is gitignored, so a re-roll silently
+invalidates a `face-crops.json` row and the guard test is the only thing that
+notices. When a character's `idle.png` or portrait is re-rolled, please
+re-measure that row in the same change:
+
+```
+node tools/portraits/measure-face-crops.mjs sheet <id> out.png   # read the eye line off the grid
+node tools/portraits/measure-face-crops.mjs detect               # head-top / head-centre cross-check
+```
+
+`yuna-white-mage` is current as of 2026-09-19 14:41. If the sweep that produced
+`idle-c.*` picks a different candidate, the row needs re-measuring again — the
+guard test will say so.
+
+**Standing request, unchanged from the previous round.** `EnemyIntent.layout`
+(another track's file) still resolves its obstacle list in a single greedy pass,
+which is why `src/ui/ffx2/intentPlacement.ts` exists to steer it from the
+outside. A real placement pass in `layout()` would make that whole module
+unnecessary.
+
+**Standing request, new.** `Ffx2Engine.gridNodes` is private, so the Change
+submenu can only list *reachable* destinations, not open the full Garment Grid
+the way `SpherechangeWheel.ts` is built to. If that data is ever handed to a
+HUD, the Change row should open the grid proper (§4.5.2).
+
+**Not done, and out of this track's lane.** The `.ig-cmd` row box
+(129.78x23.11, `src/ui/inkgold/slabs.css`) is tight enough that any row wanting
+a label plus a trailing chip has this same collision waiting. Fixed here only
+for gate rows, from `ffx2-hud.css`. If the Ink & Gold track ever revisits that
+slab, a variant with room for a secondary line would let `.ffx2cmd--gate` go
+away.
