@@ -163,15 +163,33 @@ are the **gate's own**, unchanged:
 | help slab under the intent slab | 748-11 830 grid px² | **0** |
 | panel-on-panel, any pair | present | **0** |
 
+Twelve hostile runs — 3 chapters x 1280x720, 1600x900, 2000x1000, 2560x1440,
+13 states each, 156 states. The complete list of non-`DECLARED`,
+non-`CITATION` findings across all 156:
+
+```
+braskas-final-aeon  x4 viewports   clean
+seymour-flux        x4 viewports   sensor x seymour-flux  (§4, engine/art)
+yunalesca           x4 viewports   party  x yunalesca     (§4, scene)
+```
+
 Raw output: `docs/screenshots/fix3/ffx-hud/hostile-*.json` and
 `docs/screenshots/fix3/critic-ffx-hud/advisor-zone-live.json` (the gate's file,
 rewritten by its own script on this build).
 
-Screenshots, 13 states x 3 chapters x 4 viewports, in
-`docs/screenshots/fix3/ffx-hud/<chapter>-<viewport>-<state>.png`. The three
-worth opening are `yunalesca-1280x720-01-menu.png` (the shape of refutation 1,
-now clear), `seymour-flux-1280x720-01-menu.png` and
+Screenshots: four states per chapter at 1280x720, committed as
+`docs/screenshots/fix3/ffx-hud/<chapter>-1280x720-<state>.png` (the full
+13x3x4 set is 585 MB and stays out of the repo; re-make any of it with the
+command in §3). The three worth opening are `yunalesca-1280x720-01-menu.png`
+(the shape of refutation 1, now clear), `seymour-flux-1280x720-01-menu.png` and
 `braskas-final-aeon-1280x720-07-submenu.png`.
+
+```
+npx vite build --outDir <scratch>/dist-hud
+npx vite preview --outDir <scratch>/dist-hud --port 5741 --strictPort
+node critic/scratch/ffx-hud-hostile.mjs 5741 <out> <chapter> <w>x<h> --gpu --shots
+node critic/scratch/advisor-zone-live.mjs 5741
+```
 
 ### Tests
 
