@@ -32,6 +32,7 @@ import {
   SPRITE_TOP_MARGIN_RATIO,
   STAGE,
   type AdvisorZone,
+  type AdvisorZoneInput,
   type Rect,
 } from './hudSafeZones.ts';
 
@@ -93,6 +94,32 @@ const FREE_PLACEMENT = 'free';
 /** A snapped rect's identity, for the placement key. */
 function rectKey(r: Rect | null): string {
   return r ? `${r.left},${r.top},${r.right},${r.bottom}` : '-';
+}
+
+/**
+ * *Which* panels and fighters are on the screen, ignoring where they are.
+ *
+ * The shape of the frame rather than its measurements: a panel opening or
+ * folding, a party member going down, a boss leaving the field. Used by
+ * {@link FFXBattleHud.solveAdvisorPlacement} to decide when a declined solve is
+ * worth asking again — measurements move every frame and are never a reason on
+ * their own, presence moves only when something really happened.
+ *
+ * The two always-on panels (`cmdArea`, `partyStatus`) and the help slab's
+ * reserved slot are deliberately absent: they are never `null`, so they could
+ * not distinguish anything.
+ */
+function panelPresence(input: AdvisorZoneInput): string {
+  const on = (r: Rect | null | undefined): string => (r ? '1' : '0');
+  return [
+    on(input.guide),
+    on(input.sensor),
+    on(input.intent),
+    on(input.intentChip),
+    on(input.ctb),
+    input.sprites.length,
+    input.enemies?.length ?? 0,
+  ].join(':');
 }
 
 /** A rect snapped **outwards** to a multiple of `q`, so it never shrinks. */
@@ -254,11 +281,18 @@ export class FFXBattleHud implements HudPort {
    */
   private advisorDecisionSeq = 0;
   /**
-   * The decision that gave up on a measured zone, if any. See
-   * `solveAdvisorPlacement`: the zone/free choice is held for a whole decision,
-   * not merely the zone's box.
+   * The decision that gave up on a measured zone, and **the set of panels that
+   * were on the screen when it did**. See `solveAdvisorPlacement`.
+   *
+   * It was the decision alone for one build, and that cost the player the
+   * advice: one press of `E` opened the enemy-move read-out over the only band
+   * the card fits in, the solve declined, and the decline was then pinned for
+   * the rest of the turn — so the second `E`, which folds the read-out and
+   * hands the band straight back, changed nothing. 53 measured states of one
+   * Chapter 1 decision with no card on any of them
+   * (`docs/handoff/fix3-verify2-findings.json`, `ffx-hud` failure 1).
    */
-  private advisorFreeSeq = -1;
+  private advisorFree: { seq: number; panels: string } | null = null;
   private heldAdvisor: HeldAdvisorPlacement | null = null;
   /** The box last written to the card, so a new one can be fitted on arrival. */
   private appliedAdvisorBox = '';
@@ -687,24 +721,35 @@ export class FFXBattleHud implements HudPort {
    * `offsetLeft`/`offsetWidth` are already grid units, while the projector
    * answers in viewport px and has to be divided back through the letterbox.
    *
-   * **No zone means this method gets out of the way — it never takes the card
-   * down.** For one build it did, together with a chip that said the screen was
-   * full, and the pre-deploy gate found the cost: Chapter 1 keeps the Sensor card up for the
-   * whole fight (`SensorPanel.hide()` has no caller), so no box tall enough for
-   * the card existed on five of its seven decisions and the player got a
-   * two-word chip floating over the strategy guide instead of any advice. A card
-   * in an imperfect place answers the question; a card that is not there does
-   * not, and the live build has never withheld it [lead, 2026-09-18]. So the
-   * fallback is exactly what the live build draws: every inline value this
-   * method wrote is cleared, `MoveAdvisor.layout` measures the band between the
-   * command stack and the party column as it always has, and the stylesheet's
-   * own 104px cap comes back with the cleared `max-height` — which is the cap
-   * `MoveAdvisor.fitCard` then fits the text to, so a fallback card is never
-   * sliced either.
+   * **No zone takes the card down and docks the chip — and the card comes back
+   * on the first frame the room does.** Both halves of that sentence are the
+   * contract, and for one build only the first half was true.
    *
-   * A sliced card was the other half of the report and it is still impossible:
-   * `hudSafeZones.MIN_ADVISOR_HEIGHT` is why a *zone* is never 24px tall, and
-   * the 104px cap plus the density ladder is why the free placement fits too.
+   * The first half is the round-02 gate's finding. The branch used to clear the
+   * inline box and hand the card back to `MoveAdvisor`'s own unguarded anchor,
+   * on the reasoning that "a card in an imperfect place answers the question; a
+   * card that is not there does not" — and in Chapter 2, at all four viewports,
+   * "imperfect" came to 7 465 grid px² of card on Tidus, 4 125 on Yuna and
+   * 1 781 on Auron. That is not an imperfect place, it is the fight with a slab
+   * over it. `advisorZone` declines only when **no** rectangle on the frame
+   * holds even an 80px card clear of every panel and every fighter, so a
+   * decline means the screen is genuinely full, and what the player keeps is a
+   * real `N BEST MOVE` chip on measured clear ground rather than two words on
+   * Tidus.
+   *
+   * The second half is the pre-release verifier's, and it is the half this
+   * docblock used to deny outright (it read "this method gets out of the way —
+   * it never takes the card down" above a branch that took it down). A decline
+   * is about *this frame's* screen and nothing more: see
+   * {@link solveAdvisorPlacement} for the latch that holds one against the set
+   * of panels that caused it, so that folding the enemy-move read-out, the
+   * Sensor card timing out or the guide being switched off all hand the card
+   * straight back inside the same decision.
+   *
+   * A sliced card was the other half of the round-02 report and it is still
+   * impossible: `hudSafeZones.MIN_ADVISOR_HEIGHT` is why a *zone* is never 24px
+   * tall, and the 104px cap plus the density ladder is why the card fits the
+   * box it is given.
    *
    * The **chip is placed whether the card is up or not**, but only while there
    * is a zone: `MoveAdvisor` deliberately clears the chip's inline `left` when
@@ -927,16 +972,32 @@ export class FFXBattleHud implements HudPort {
     const held = this.heldAdvisor;
     if (held && held.key === key) return held;
 
-    // **Free placement is chosen once per decision, never per frame.** The key
-    // above already holds one *zone* still for a decision, but a submenu opening
-    // or the Sensor card arriving legitimately changes it, and without this the
-    // card could cross between a measured zone and its own placement — two
-    // different widths and two different lefts — while the player was reading
-    // it. Once a decision has failed to find a zone it stays on the free
-    // placement until the next decision opens, which is where room that has
-    // genuinely come back is picked up.
-    const zone = this.advisorFreeSeq === this.advisorDecisionSeq ? null : advisorZone(input);
-    if (!zone) this.advisorFreeSeq = this.advisorDecisionSeq;
+    // **A decline is held until the screen genuinely changes shape — and no
+    // longer.**
+    //
+    // The key above already holds one *zone* still for a decision, but it is
+    // built from measured boxes, and a panel settling or a boss breathing moves
+    // one by a quantum. Without a second guard the card could cross between a
+    // measured zone and nothing at all — the decline takes the card *down* —
+    // while the player was reading it, several times a second.
+    //
+    // The guard used to be the decision: once a solve declined, the free
+    // placement was pinned until the next actor was asked for a command. That
+    // is what made `E` a one-way door. Opening the enemy-move read-out puts a
+    // 150 x 168 slab in the band, the solve honestly declines, and folding it
+    // one second later hands the band back — but nothing ever asked again, so
+    // the card stayed gone for every later state of that decision.
+    //
+    // So the decline is held against **which panels are up**, not against the
+    // decision. Frame noise never adds or removes a panel; the player pressing
+    // `E`, the Sensor card folding on its clock, the guide being switched off
+    // and a KO all do, and every one of them is a real reason to ask again. The
+    // decision seq stays in the latch so a new decision always starts fresh.
+    const panels = panelPresence(input);
+    const stale = this.advisorFree;
+    const holdFree = stale !== null && stale.seq === this.advisorDecisionSeq && stale.panels === panels;
+    const zone = holdFree ? null : advisorZone(input);
+    this.advisorFree = zone ? null : { seq: this.advisorDecisionSeq, panels };
     const solved: HeldAdvisorPlacement = {
       key,
       zone,
