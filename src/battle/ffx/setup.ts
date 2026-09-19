@@ -263,6 +263,7 @@ export function buildBattle(
     canEscape: (setup.canEscape ?? group.canEscape ?? false) === true,
     sensedIds: new Set(),
     pendingPartRevivals: [],
+    progress: { bestEnemyHp: Number.POSITIVE_INFINITY, atTurn: 0 },
   };
 
   const ctx: Ctx = { state, rt, rng, content, emit };

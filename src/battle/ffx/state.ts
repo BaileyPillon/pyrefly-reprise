@@ -106,6 +106,23 @@ export interface FFXRuntime {
    * [ffx-bfa-yu-yevon §1.4].
    */
   pendingPartRevivals: Array<{ id: CombatantId; atTicks: number; maxHp: number }>;
+  /**
+   * Stalemate watch: the lowest total enemy HP this battle has ever reached,
+   * and the turn it was reached on.
+   *
+   * Yu Yevon is why. He counters every damaging player action with a 9,999
+   * Curaga, the two Yu Pagodas put another ~4,500 back between his turns, and
+   * the party carries a permanent fayth Auto-Life that makes losing impossible
+   * — so a party that runs out of the one Candle of Life is in a battle with
+   * **no exit in either direction**. Measured on the shipped board with Defend
+   * on every decision: 40,000 steps, 25,364 turns, no `battle-over`, the boss
+   * parked at an equilibrium of 6,001 of 99,999 [ffx-bfa-yu-yevon §3.4, §3.5].
+   *
+   * "Progress" is deliberately a **new minimum**, not "any HP moved": Gravija
+   * takes 75% of everybody's current HP every cycle, so HP is moving
+   * constantly in exactly the fight that is stuck.
+   */
+  progress: { bestEnemyHp: number; atTurn: number };
 }
 
 /** Everything an engine module needs to do its job. */

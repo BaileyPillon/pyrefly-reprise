@@ -208,6 +208,20 @@ export function applyStatus(
   }
 
   const instance = makeInstance(app, source?.id, abilityId);
+  // **Doom runs on the victim's own clock** [ffx-bfa-yu-yevon §3.1, §3.5].
+  //
+  // Yu Yevon declares `doomTurns: 3`, and the research it is cited to is
+  // explicit about what that number is: *"Doom counter kills Yu Yevon in
+  // exactly 3 turns (e.g., Candle of Life)"* `[verified: 2 sources]`. The field
+  // had no reader anywhere, and the Candle of Life's own record carries a
+  // `duration: 254` its comment calls a **placeholder** ("the actual Doom
+  // countdown is per-target; see EnemyFields.doomTurns"), so the one item the
+  // chapter ships for the Doom route set a 254-turn timer and killed nobody:
+  // measured on the shipped board, the Candle landed and the battle ran out to
+  // the stalemate guard with him on 6,001.
+  if (status === 'doom' && target.enemy?.doomTurns !== undefined) {
+    instance.turnsRemaining = target.enemy.doomTurns;
+  }
   target.statuses[status] = instance;
   ctx.emit({ type: 'status-add', targetId: target.id, status, instance: { ...instance } });
 

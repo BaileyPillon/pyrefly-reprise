@@ -6,6 +6,36 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-19 — critic round 02, combat track: two readers for fields that had none
+
+Key `builda-combat`. No shape changed; two doc comments in
+`src/battle/common/types.ts` were corrected to describe a reading the data
+already relied on, and `src/battle/ffx/state.ts`'s `FFXRuntime` gained one
+private field. Additive.
+
+**1. `EnemyDef.doomTurns` / `EnemyFields.doomTurns` (doc only).** The comment
+said "when this enemy **inflicts** it". `src/data/ffx/enemies/braskas-final-aeon.ts`
+sets `doomTurns: 3` on Yu Yevon for the opposite reading and says so inline —
+`research/ffx-bfa-yu-yevon.md` §3.1: *"Doom counter kills Yu Yevon in exactly 3
+turns (e.g., Candle of Life)"* `[verified: 2 sources]`. The field had **no
+reader at all**, and the Candle of Life's own `duration: 254` is a placeholder
+its record calls one, so the Doom route set a 254-turn timer and killed nobody.
+`statuses.ts applyStatus` now lets a target's own `doomTurns` win over the
+ability's duration, and the comments describe both directions.
+
+**2. `AbilityDef.targeting` on `reflect` — `single-ally` -> `single-any`.** Data,
+not a type: the old value was tagged `[estimate]`, and §3.5 names casting
+Reflect **on Yu Yevon** as one of the five documented ways the fight ends. It
+could not be aimed at an enemy at all. Protect and Shell are untouched.
+
+**3. `FFXRuntime.progress` (additive, engine-private).** `{ bestEnemyHp,
+atTurn }`, feeding a stalemate guard in `engine.ts`: 400 turns with no new low
+on the enemy side's total HP ends the battle as `'escape'`. `FFXRuntime` is not
+a published contract shape — it never reaches `state()` — but it is listed here
+because the guard changes when a battle can end. Every canonical route out of
+Yu Yevon reaches a new minimum inside a handful of turns; the longest intended
+line in the project wins in ~195.
+
 ## 2026-09-17 (third pass) — Chapter 3: Doublecast resolves, and Lulu's Overdrive is reachable
 
 Key `braskas-final-aeon`. One engine change, in one function, reached only by an

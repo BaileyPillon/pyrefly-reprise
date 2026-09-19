@@ -351,6 +351,42 @@ export function resolveAbility(
     }
   }
 
+  // **`destroys-user`** [ffx2-combat-core §2.3, §3.12 row "Charon"].
+  //
+  // "Charon (Dark Knight): `user max HP * 2`; **the user is removed from the
+  // battle**." The flag had exactly one reader in the project — `abilities.ts`
+  // in the *FFX* engine, for Kimahri's Self-Destruct — and none at all under
+  // `src/battle/ffx2`, so X-2's only self-sacrifice ability had no cost.
+  //
+  // What that did to Chapter 4: `x2-dark-knight-charon` is `formula:
+  // 'user-max-hp'` and `ignoresDefense`, so it is a free, repeatable,
+  // defence-ignoring nuke. Measured, taking it whenever it was offered and
+  // otherwise attacking: **15 wins in 15 seeds, 13.2 turns against the intended
+  // line's 77**, with Rikku's HP unchanged after every cast
+  // (1739 -> 1739 -> 1739) and `alive: true`. A blind sweep of all 28 rows the
+  // chapter offers found it the only winner.
+  //
+  // The user is **KO'd**, not ejected: X-2 has no eject, a KO'd girl is still
+  // on the party and still revivable, and that is what "removed from the
+  // battle" means here. The removal runs through `applyHpDelta`, so Auto-Life,
+  // the chain break and the `ko` event all behave exactly as they do for any
+  // other death — the cost is a real death, with the real ways out of it.
+  if (ability.flags.includes('destroys-user') && user.alive) {
+    const cost = user.hp;
+    if (cost > 0) {
+      ctx.emit({
+        type: 'damage',
+        targetId: user.id,
+        amount: cost,
+        element: 'none',
+        crit: false,
+        hitIndex: 0,
+        hitCount: 1,
+      });
+      applyHpDelta(ctx, user, cost, user.id);
+    }
+  }
+
   if (options.isCounter) {
     const first = pool[0];
     if (first) {

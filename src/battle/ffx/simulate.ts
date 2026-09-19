@@ -312,6 +312,9 @@ function runtimeFor(state: BattleState, command: Command): FFXRuntime {
     canEscape: false,
     sensedIds: new Set(),
     pendingPartRevivals: [],
+    // A preview never reaches the stalemate check; the field exists so the
+    // runtime literal matches `FFXRuntime`.
+    progress: { bestEnemyHp: Number.POSITIVE_INFINITY, atTurn: 0 },
   };
   for (const [id, raw] of Object.entries(state.combatants)) {
     const c = raw as FFXCombatant;

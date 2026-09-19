@@ -941,7 +941,15 @@ export interface EnemyFields {
   threatenChance?: number;
   /** Poison tick as a percentage of the enemy's max HP, 0–100. Party members always use 25. */
   poisonTickPercent?: number;
-  /** Doom countdown in the victim's own turns when this enemy inflicts it. Party default is 5. */
+  /**
+   * Doom countdown, in the victim's own turns. Party default is 5.
+   *
+   * Read in **both** directions: the countdown this enemy's Doom puts on a
+   * party member, and — when Doom is inflicted *on* this enemy — the countdown
+   * it runs on, which overrides the ability's own `duration`. Yu Yevon's `3` is
+   * the second reading: "a Candle of Life kills him in exactly 3 turns"
+   * [ffx-bfa-yu-yevon §3.1, verified: 2 sources].
+   */
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
@@ -2407,7 +2415,10 @@ export interface EnemyDef {
   threatenChance?: number;
   /** Poison tick as a percentage of max HP, 0–100. */
   poisonTickPercent?: number;
-  /** Doom countdown in the victim's turns when this enemy inflicts it. */
+  /**
+   * Doom countdown, in the victim's turns; see {@link EnemyDef.doomTurns}.
+   * Also the countdown Doom runs on when it is inflicted **on** this enemy.
+   */
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;

@@ -46,6 +46,19 @@ import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { dismissAeon } from './aeons.ts';
 import { buildBattleResult } from './results.ts';
+
+/**
+ * Turns without a new low on the enemy side's total HP before the battle is
+ * called a stalemate and ended.
+ *
+ * Deliberately far beyond any real fight: the longest intended line in the
+ * project wins Chapter 3's first link in ~195 turns, and every canonical route
+ * out of Yu Yevon reaches a new minimum inside a handful of his own turns. It
+ * exists for the case the research itself describes as unlosable
+ * [ffx-bfa-yu-yevon §2.3 "Cannot lose"], where without it the only way out is
+ * the pause menu.
+ */
+const STALEMATE_TURNS = 400;
 export { apForLevel } from './results.ts';
 
 /** Construction-time knobs. */
@@ -356,6 +369,34 @@ export class FFXEngine implements FFXBattleEngine {
     const relevant = primary.length > 0 ? primary : bosses;
     if (relevant.every((c) => !isAlive(c))) {
       this.finish('victory');
+      return true;
+    }
+
+    // **Stalemate.** A battle that can be neither won nor lost has to end, or
+    // the only way out is the pause menu [critic round 02 #17].
+    //
+    // Progress is a **new minimum** on the enemy side's total HP. Yu Yevon
+    // answers every damaging action with a 9,999 Curaga, the two Pagodas add
+    // ~4,500 between his turns, and the party's permanent fayth Auto-Life
+    // makes defeat impossible, so a party out of Candles sits there for ever —
+    // measured at 25,364 turns with the boss parked on 6,001 of 99,999. His own
+    // Gravija meanwhile takes 75% of everybody's current HP every cycle, which
+    // is why "some HP moved" is not the test: HP moves constantly in precisely
+    // the fight that is stuck.
+    //
+    // This takes nothing away from him. Every canonical route out — Doom, the
+    // Zombie inversion, Reflect on him, Poison at 10% of 99,999, and the
+    // Gravija attrition that ends at 1 HP — reaches a new minimum long inside
+    // the window [ffx-bfa-yu-yevon §3.5]. The longest intended line in the
+    // project, Chapter 3's first link, wins in ~195 turns.
+    const enemyHp = relevant.reduce((sum, c) => sum + Math.max(0, c.hp), 0);
+    if (enemyHp < ctx.rt.progress.bestEnemyHp) {
+      ctx.rt.progress = { bestEnemyHp: enemyHp, atTurn: ctx.state.turn };
+    } else if (ctx.state.turn - ctx.rt.progress.atTurn >= STALEMATE_TURNS) {
+      ctx.emit({ type: 'message', text: 'The battle cannot be won from here.', kind: 'system' });
+      // `'escape'`, because the party withdraws: `BattleResult['outcome']` has
+      // three members and this is the one that means "over, not beaten".
+      this.finish('escape');
       return true;
     }
 

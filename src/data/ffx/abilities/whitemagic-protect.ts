@@ -102,8 +102,22 @@ export const reflect: AbilityDef = {
   power: 0,
   formula: 'none',
   damageType: 'other',
-  // targeting: single-ally [estimate] — see Protect.
-  targeting: 'single-ally',
+  /**
+   * **`single-any`**, not `single-ally`, and this one is sourced rather than
+   * an `[estimate]` like its two neighbours.
+   *
+   * `research/ffx-bfa-yu-yevon.md` §3.5 lists it as one of the five documented
+   * ways to end the Yu Yevon fight, in as many words: *"**Reflect** — Cast
+   * Reflect on him; his Curaga bounces onto the party instead. Note the
+   * Pagodas' Power Wave #210 strips Reflect"* `[verified: 2 sources]`. A
+   * `single-ally` Reflect cannot be aimed at an enemy at all, so that route did
+   * not exist: measured on the shipped board, the row came back
+   * `validTargets` without `yu-yevon` on every one of Yuna's turns.
+   *
+   * Protect and Shell keep `single-ally`; nothing in the research asks for them
+   * on an enemy, and this is the one row a sourced strategy turns on.
+   */
+  targeting: 'single-any',
   element: [],
   hits: 1,
   statusEffects: [{ status: 'reflect', chance: 254, duration: 254 }],
