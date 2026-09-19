@@ -35,9 +35,16 @@ docs/audio/*.wav
 # what already ships in public/audio/, kept only for listening locally.
 docs/audio/audition/
 
+# End-state board from `node tools/end-state-board.mjs`: ~2 MB of inlined
+# pictures, regenerated from docs/target/targets.json (which IS tracked).
+docs/target/board.html
+
 # local release zips and release build output
 releases/
 dist-release/
 
 # scratch harnesses and probe dumps
 critic/scratch/
+
+# critic round evidence (screenshots, harnesses): reports are tracked, evidence folders are not
+critic/rounds/*/
