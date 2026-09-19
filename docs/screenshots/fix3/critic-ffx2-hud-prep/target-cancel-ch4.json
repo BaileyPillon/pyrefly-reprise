@@ -1,0 +1,79 @@
+{
+ "scenario1": {
+  "afterEsc": {
+   "screen": "battle",
+   "rows": [],
+   "stack": 0,
+   "title": "",
+   "reticles": 1
+  },
+  "tries": [
+   {
+    "k": "ArrowDown",
+    "stack": 0,
+    "screen": "battle"
+   },
+   {
+    "k": "ArrowUp",
+    "stack": 0,
+    "screen": "battle"
+   },
+   {
+    "k": "Enter",
+    "stack": 0,
+    "screen": "battle"
+   }
+  ],
+  "esc2": {
+   "screen": "battle",
+   "rows": [
+    "Attack",
+    "Skill◂",
+    "Change◂",
+    "Item◂"
+   ],
+   "stack": 4,
+   "title": null,
+   "reticles": 1
+  }
+ },
+ "scenario2": {
+  "afterEsc": {
+   "screen": "battle",
+   "rows": [
+    "GunnerGRANTS: Red",
+    "Black MageGRANTS: Yellow"
+   ],
+   "stack": 2,
+   "title": "Change",
+   "reticles": 1
+  },
+  "committed": {
+   "newEvents": [
+    "turn-start",
+    "spherechange",
+    "action-end",
+    "atb",
+    "atb",
+    "turn-start",
+    "action-start",
+    "chain",
+    "damage",
+    "action-end",
+    "atb",
+    "atb"
+   ],
+   "sc": [
+    {
+     "who": "paine",
+     "from": "warrior",
+     "to": "gunner"
+    }
+   ]
+  },
+  "before": {
+   "dress": "white-mage",
+   "n": 8
+  }
+ }
+}

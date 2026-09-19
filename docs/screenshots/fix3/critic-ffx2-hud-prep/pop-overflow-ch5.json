@@ -1,0 +1,346 @@
+[
+ {
+  "vp": "1280x720",
+  "count": 3,
+  "layout": {
+   "w": 167,
+   "h": 95,
+   "l": 576.303,
+   "t": 15.7992
+  },
+  "painted": {
+   "l": 538.7,
+   "t": -5.5,
+   "r": 781.1,
+   "b": 131.6,
+   "w": 242.4,
+   "h": 137
+  },
+  "outside": {
+   "top": 5.5,
+   "left": -538.7,
+   "right": -498.9,
+   "bottom": -588.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 179.2,
+    "h": 4.8
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 35.1,
+    "h": 106.6
+   }
+  ]
+ },
+ {
+  "vp": "1280x720",
+  "count": 7,
+  "layout": {
+   "w": 167,
+   "h": 95,
+   "l": 576.303,
+   "t": 15.7992
+  },
+  "painted": {
+   "l": 538.7,
+   "t": -5.5,
+   "r": 781.1,
+   "b": 131.6,
+   "w": 242.4,
+   "h": 137
+  },
+  "outside": {
+   "top": 5.5,
+   "left": -538.7,
+   "right": -498.9,
+   "bottom": -588.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 179.2,
+    "h": 4.8
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 35.1,
+    "h": 106.6
+   }
+  ]
+ },
+ {
+  "vp": "1280x720",
+  "count": 12,
+  "layout": {
+   "w": 167,
+   "h": 95,
+   "l": 576.303,
+   "t": 15.7992
+  },
+  "painted": {
+   "l": 538.7,
+   "t": -5.5,
+   "r": 781.1,
+   "b": 131.6,
+   "w": 242.4,
+   "h": 137
+  },
+  "outside": {
+   "top": 5.5,
+   "left": -538.7,
+   "right": -498.9,
+   "bottom": -588.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 179.2,
+    "h": 4.8
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 35.1,
+    "h": 106.6
+   }
+  ]
+ },
+ {
+  "vp": "1280x720",
+  "count": 22,
+  "layout": {
+   "w": 167,
+   "h": 95,
+   "l": 576.303,
+   "t": 15.7992
+  },
+  "painted": {
+   "l": 538.7,
+   "t": -5.5,
+   "r": 781.1,
+   "b": 131.6,
+   "w": 242.4,
+   "h": 137
+  },
+  "outside": {
+   "top": 5.5,
+   "left": -538.7,
+   "right": -498.9,
+   "bottom": -588.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 179.2,
+    "h": 4.8
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 35.1,
+    "h": 106.6
+   }
+  ]
+ },
+ {
+  "vp": "2560x1440",
+  "count": 3,
+  "layout": {
+   "w": 334,
+   "h": 189,
+   "l": 1148,
+   "t": 34.0296
+  },
+  "painted": {
+   "l": 1072.8,
+   "t": -8.5,
+   "r": 1557.6,
+   "b": 265.6,
+   "w": 484.9,
+   "h": 274.1
+  },
+  "outside": {
+   "top": 8.5,
+   "left": -1072.8,
+   "right": -1002.4,
+   "bottom": -1174.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 358,
+    "h": 10.5
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 71.6,
+    "h": 215.6
+   }
+  ]
+ },
+ {
+  "vp": "2560x1440",
+  "count": 7,
+  "layout": {
+   "w": 334,
+   "h": 189,
+   "l": 1148,
+   "t": 34.0296
+  },
+  "painted": {
+   "l": 1072.8,
+   "t": -8.5,
+   "r": 1557.6,
+   "b": 265.6,
+   "w": 484.9,
+   "h": 274.1
+  },
+  "outside": {
+   "top": 8.5,
+   "left": -1072.8,
+   "right": -1002.4,
+   "bottom": -1174.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 358,
+    "h": 10.5
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 71.6,
+    "h": 215.6
+   }
+  ]
+ },
+ {
+  "vp": "2560x1440",
+  "count": 12,
+  "layout": {
+   "w": 334,
+   "h": 189,
+   "l": 1148,
+   "t": 34.0296
+  },
+  "painted": {
+   "l": 1072.8,
+   "t": -8.5,
+   "r": 1557.6,
+   "b": 265.6,
+   "w": 484.9,
+   "h": 274.1
+  },
+  "outside": {
+   "top": 8.5,
+   "left": -1072.8,
+   "right": -1002.4,
+   "bottom": -1174.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 358,
+    "h": 10.5
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 71.6,
+    "h": 215.6
+   }
+  ]
+ },
+ {
+  "vp": "2560x1440",
+  "count": 22,
+  "layout": {
+   "w": 334,
+   "h": 189,
+   "l": 1148,
+   "t": 34.0296
+  },
+  "painted": {
+   "l": 1072.8,
+   "t": -8.5,
+   "r": 1557.6,
+   "b": 265.6,
+   "w": 484.9,
+   "h": 274.1
+  },
+  "outside": {
+   "top": 8.5,
+   "left": -1072.8,
+   "right": -1002.4,
+   "bottom": -1174.4
+  },
+  "clipped": {
+   "cls": "ig ig--ffx2 ffx2hud",
+   "overflow": "hidden",
+   "top": 0
+  },
+  "hits": [
+   {
+    "id": "vegnagun-tail",
+    "w": 358,
+    "h": 10.5
+   }
+  ],
+  "panelHits": [
+   {
+    "n": "intent",
+    "w": 71.6,
+    "h": 215.6
+   }
+  ]
+ }
+]

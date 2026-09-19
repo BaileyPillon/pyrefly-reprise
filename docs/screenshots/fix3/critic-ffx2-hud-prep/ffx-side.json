@@ -1,0 +1,77 @@
+[
+ {
+  "name": "ffx1",
+  "chapter": "seymour-flux",
+  "error": "TimeoutError: page.waitForFunction: Timeout 600000ms exceeded."
+ },
+ {
+  "name": "ffx3",
+  "chapter": "braskas-final-aeon",
+  "error": "TimeoutError: page.waitForFunction: Timeout 600000ms exceeded."
+ },
+ {
+  "name": "x2ch4",
+  "chapter": "ffx2-bahamut",
+  "rows": [
+   "Attack",
+   "Skill◂",
+   "Change◂",
+   "Item◂"
+  ],
+  "leak": {
+   "changeRow": [],
+   "chainChip": false,
+   "flourish": false,
+   "x2Hud": true,
+   "ffxHud": false
+  },
+  "crops": [
+   {
+    "text": "WM\n     ",
+    "src": "/art/portraits/yuna.png",
+    "tile": {
+     "w": 40,
+     "h": 40
+    },
+    "over": {
+     "l": 0,
+     "t": 10.1,
+     "r": 13.6,
+     "b": 28.2
+    }
+   },
+   {
+    "text": "DK\n     ",
+    "src": "/art/portraits/rikku.png",
+    "tile": {
+     "w": 40,
+     "h": 40
+    },
+    "over": {
+     "l": 2.1,
+     "t": 14.9,
+     "r": -1.2,
+     "b": 4.8
+    }
+   },
+   {
+    "text": "WR\n     ",
+    "src": "/art/characters/paine-warrior/idle.png",
+    "tile": {
+     "w": 40,
+     "h": 40
+    },
+    "over": {
+     "l": 33.6,
+     "t": 23.8,
+     "r": 36.1,
+     "b": 253.2
+    }
+   }
+  ],
+  "findings": [
+   "HUD face tile \"DK\n     \" (/art/portraits/rikku.png) shows bare frame on r"
+  ],
+  "errors": []
+ }
+]

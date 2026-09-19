@@ -1,0 +1,43 @@
+{
+ "seen": {
+  "sf": [],
+  "chain": [
+   {
+    "t": 22862,
+    "n": "1"
+   },
+   {
+    "t": 54409,
+    "n": "1"
+   },
+   {
+    "t": 74471,
+    "n": "1"
+   },
+   {
+    "t": 123489,
+    "n": "1"
+   },
+   {
+    "t": 186386,
+    "n": "1"
+   }
+  ],
+  "maxChain": 1
+ },
+ "outcome": null,
+ "events": {
+  "atb": 167,
+  "turn-start": 55,
+  "action-start": 46,
+  "status-add": 19,
+  "action-end": 53,
+  "chain": 46,
+  "damage": 58,
+  "status-tick": 987,
+  "charge": 10,
+  "script-trigger": 2
+ },
+ "spherechanges": [],
+ "chainPeak": 1
+}

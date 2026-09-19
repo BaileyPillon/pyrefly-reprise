@@ -1,0 +1,4668 @@
+[
+ {
+  "tag": "prep4-1280x720",
+  "ok": true,
+  "tabs": [
+   "CHAPTER",
+   "DRESSPHERES",
+   "STATS",
+   "ACCESSORIES",
+   "ITEMS"
+  ],
+  "states": [
+   {
+    "tab": "CHAPTER",
+    "i": 0,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 67.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 76.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 85.3,
+       "t": 224.8,
+       "w": 49.7,
+       "h": 49.8
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7.2,
+         "t": 30.2,
+         "rr": 1.4,
+         "b": 11.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-1280x720-tab0.png"
+   },
+   {
+    "tab": "DRESSPHERES",
+    "i": 1,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 67.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 76.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 85.3,
+       "t": 224.8,
+       "w": 49.7,
+       "h": 49.8
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7.2,
+         "t": 30.2,
+         "rr": 1.4,
+         "b": 11.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-1280x720-tab1.png"
+   },
+   {
+    "tab": "STATS",
+    "i": 2,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [
+     {
+      "cls": "x2prep-cmp",
+      "sh": 140,
+      "ch": 44,
+      "sw": 334,
+      "cw": 334,
+      "overflow": "auto"
+     }
+    ],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 67.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 76.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 85.3,
+       "t": 224.8,
+       "w": 49.7,
+       "h": 49.8
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7.2,
+         "t": 30.2,
+         "rr": 1.4,
+         "b": 11.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-1280x720-tab2.png"
+   },
+   {
+    "tab": "ACCESSORIES",
+    "i": 3,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 67.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 76.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 85.3,
+       "t": 224.8,
+       "w": 49.7,
+       "h": 49.8
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7.2,
+         "t": 30.2,
+         "rr": 1.4,
+         "b": 11.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-1280x720-tab3.png"
+   },
+   {
+    "tab": "ITEMS",
+    "i": 4,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 67.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 76.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 85.3,
+       "t": 224.8,
+       "w": 49.7,
+       "h": 49.8
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7.2,
+         "t": 30.2,
+         "rr": 1.4,
+         "b": 11.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-1280x720-tab4.png"
+   }
+  ],
+  "bareFaces": [
+   {
+    "cls": "prep__face",
+    "text": "P",
+    "imgs": []
+   },
+   {
+    "cls": "prep__face",
+    "text": "P",
+    "imgs": []
+   }
+  ],
+  "errors": [],
+  "missingArt": []
+ },
+ {
+  "tag": "prep4-2560x1440",
+  "ok": true,
+  "tabs": [
+   "CHAPTER",
+   "DRESSPHERES",
+   "STATS",
+   "ACCESSORIES",
+   "ITEMS"
+  ],
+  "states": [
+   {
+    "tab": "CHAPTER",
+    "i": 0,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 135.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 152.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 170.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 14.4,
+         "t": 60.3,
+         "rr": 2.8,
+         "b": 23.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-2560x1440-tab0.png"
+   },
+   {
+    "tab": "DRESSPHERES",
+    "i": 1,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 135.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 152.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 170.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 14.4,
+         "t": 60.3,
+         "rr": 2.8,
+         "b": 23.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-2560x1440-tab1.png"
+   },
+   {
+    "tab": "STATS",
+    "i": 2,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [
+     {
+      "cls": "x2prep-cmp",
+      "sh": 140,
+      "ch": 44,
+      "sw": 334,
+      "cw": 334,
+      "overflow": "auto"
+     }
+    ],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 135.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 152.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 170.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 14.4,
+         "t": 60.3,
+         "rr": 2.8,
+         "b": 23.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-2560x1440-tab2.png"
+   },
+   {
+    "tab": "ACCESSORIES",
+    "i": 3,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 135.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 152.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 170.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 14.4,
+         "t": 60.3,
+         "rr": 2.8,
+         "b": 23.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-2560x1440-tab3.png"
+   },
+   {
+    "tab": "ITEMS",
+    "i": 4,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 135.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 152.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 170.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": []
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 14.4,
+         "t": 60.3,
+         "rr": 2.8,
+         "b": 23.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "P",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": []
+     }
+    ],
+    "shot": "prepv-prep4-2560x1440-tab4.png"
+   }
+  ],
+  "bareFaces": [
+   {
+    "cls": "prep__face",
+    "text": "P",
+    "imgs": []
+   },
+   {
+    "cls": "prep__face",
+    "text": "P",
+    "imgs": []
+   }
+  ],
+  "errors": [],
+  "missingArt": []
+ },
+ {
+  "tag": "prep1-1280x720",
+  "ok": true,
+  "tabs": [
+   "CHAPTER",
+   "STATS",
+   "SPHERE GRID",
+   "EQUIPMENT",
+   "ITEMS",
+   "OVERDRIVE"
+  ],
+  "states": [
+   {
+    "tab": "CHAPTER",
+    "i": 0,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 71.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 4.6,
+         "t": 16.5,
+         "rr": 17.8,
+         "b": 39.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 80.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 89.3,
+       "t": 224.8,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 20.7,
+         "t": 18.5,
+         "rr": 8.1,
+         "b": 46.5
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 98.2,
+       "t": 287,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 1.2,
+         "t": 13.5,
+         "rr": 11.2,
+         "b": 27.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 107.1,
+       "t": 349.2,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 14.6,
+         "rr": 24.4,
+         "b": 44
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 116,
+       "t": 411.3,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 21.7,
+         "t": 19,
+         "rr": 0,
+         "b": 35.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 124.8,
+       "t": 473.5,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.9,
+         "t": 21.3,
+         "rr": 22.9,
+         "b": 50.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 26.6,
+         "t": 23.8,
+         "rr": 10.4,
+         "b": 59.9
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-1280x720-tab0.png"
+   },
+   {
+    "tab": "STATS",
+    "i": 1,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 71.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 4.6,
+         "t": 16.5,
+         "rr": 17.8,
+         "b": 39.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 80.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 89.3,
+       "t": 224.8,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 20.7,
+         "t": 18.5,
+         "rr": 8.1,
+         "b": 46.5
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 98.2,
+       "t": 287,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 1.2,
+         "t": 13.5,
+         "rr": 11.2,
+         "b": 27.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 107.1,
+       "t": 349.2,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 14.6,
+         "rr": 24.4,
+         "b": 44
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 116,
+       "t": 411.3,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 21.7,
+         "t": 19,
+         "rr": 0,
+         "b": 35.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 124.8,
+       "t": 473.5,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.9,
+         "t": 21.3,
+         "rr": 22.9,
+         "b": 50.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 26.6,
+         "t": 23.8,
+         "rr": 10.4,
+         "b": 59.9
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-1280x720-tab1.png"
+   },
+   {
+    "tab": "SPHERE GRID",
+    "i": 2,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 71.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 4.6,
+         "t": 16.5,
+         "rr": 17.8,
+         "b": 39.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 80.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 89.3,
+       "t": 224.8,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 20.7,
+         "t": 18.5,
+         "rr": 8.1,
+         "b": 46.5
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 98.2,
+       "t": 287,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 1.2,
+         "t": 13.5,
+         "rr": 11.2,
+         "b": 27.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 107.1,
+       "t": 349.2,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 14.6,
+         "rr": 24.4,
+         "b": 44
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 116,
+       "t": 411.3,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 21.7,
+         "t": 19,
+         "rr": 0,
+         "b": 35.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 124.8,
+       "t": 473.5,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.9,
+         "t": 21.3,
+         "rr": 22.9,
+         "b": 50.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 26.6,
+         "t": 23.8,
+         "rr": 10.4,
+         "b": 59.9
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-1280x720-tab2.png"
+   },
+   {
+    "tab": "EQUIPMENT",
+    "i": 3,
+    "overlaps": [],
+    "raw": [
+     {
+      "cls": "ffxprep-chip",
+      "t": "strength-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "hp-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "zombie-ward"
+     }
+    ],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 71.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 4.6,
+         "t": 16.5,
+         "rr": 17.8,
+         "b": 39.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 80.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 89.3,
+       "t": 224.8,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 20.7,
+         "t": 18.5,
+         "rr": 8.1,
+         "b": 46.5
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 98.2,
+       "t": 287,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 1.2,
+         "t": 13.5,
+         "rr": 11.2,
+         "b": 27.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 107.1,
+       "t": 349.2,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 14.6,
+         "rr": 24.4,
+         "b": 44
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 116,
+       "t": 411.3,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 21.7,
+         "t": 19,
+         "rr": 0,
+         "b": 35.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 124.8,
+       "t": 473.5,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.9,
+         "t": 21.3,
+         "rr": 22.9,
+         "b": 50.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 26.6,
+         "t": 23.8,
+         "rr": 10.4,
+         "b": 59.9
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-1280x720-tab3.png"
+   },
+   {
+    "tab": "ITEMS",
+    "i": 4,
+    "overlaps": [],
+    "raw": [
+     {
+      "cls": "ffxprep-chip",
+      "t": "strength-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "hp-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "zombie-ward"
+     }
+    ],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 71.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 4.6,
+         "t": 16.5,
+         "rr": 17.8,
+         "b": 39.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 80.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 89.3,
+       "t": 224.8,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 20.7,
+         "t": 18.5,
+         "rr": 8.1,
+         "b": 46.5
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 98.2,
+       "t": 287,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 1.2,
+         "t": 13.5,
+         "rr": 11.2,
+         "b": 27.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 107.1,
+       "t": 349.2,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 14.6,
+         "rr": 24.4,
+         "b": 44
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 116,
+       "t": 411.3,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 21.7,
+         "t": 19,
+         "rr": 0,
+         "b": 35.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 124.8,
+       "t": 473.5,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.9,
+         "t": 21.3,
+         "rr": 22.9,
+         "b": 50.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 26.6,
+         "t": 23.8,
+         "rr": 10.4,
+         "b": 59.9
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-1280x720-tab4.png"
+   },
+   {
+    "tab": "OVERDRIVE",
+    "i": 5,
+    "overlaps": [],
+    "raw": [
+     {
+      "cls": "ffxprep-chip",
+      "t": "strength-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "hp-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "zombie-ward"
+     }
+    ],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 71.5,
+       "t": 100.4,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 4.6,
+         "t": 16.5,
+         "rr": 17.8,
+         "b": 39.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 80.4,
+       "t": 162.6,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.7,
+         "t": 16.8,
+         "rr": 21.6,
+         "b": 41.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 89.3,
+       "t": 224.8,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 20.7,
+         "t": 18.5,
+         "rr": 8.1,
+         "b": 46.5
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 98.2,
+       "t": 287,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 1.2,
+         "t": 13.5,
+         "rr": 11.2,
+         "b": 27.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 107.1,
+       "t": 349.2,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 14.6,
+         "rr": 24.4,
+         "b": 44
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 116,
+       "t": 411.3,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 21.7,
+         "t": 19,
+         "rr": 0,
+         "b": 35.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 124.8,
+       "t": 473.5,
+       "w": 49.8,
+       "h": 49.8
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.6,
+         "t": 23.4,
+         "rr": 1.1,
+         "b": 9.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 74.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.9,
+         "t": 21.3,
+         "rr": 22.9,
+         "b": 50.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 449.7,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 3.5,
+         "t": 21.5,
+         "rr": 27.8,
+         "b": 53.7
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 824.8,
+       "t": 593.8,
+       "w": 64,
+       "h": 64
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 26.6,
+         "t": 23.8,
+         "rr": 10.4,
+         "b": 59.9
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-1280x720-tab5.png"
+   }
+  ],
+  "bareFaces": [],
+  "errors": [],
+  "missingArt": []
+ },
+ {
+  "tag": "prep1-2560x1440",
+  "ok": true,
+  "tabs": [
+   "CHAPTER",
+   "STATS",
+   "SPHERE GRID",
+   "EQUIPMENT",
+   "ITEMS",
+   "OVERDRIVE"
+  ],
+  "states": [
+   {
+    "tab": "CHAPTER",
+    "i": 0,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 143.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 9.3,
+         "t": 33.1,
+         "rr": 35.6,
+         "b": 78.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 160.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 178.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 41.3,
+         "t": 36.9,
+         "rr": 16.3,
+         "b": 93.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 196.4,
+       "t": 573.9,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.4,
+         "t": 27.1,
+         "rr": 22.4,
+         "b": 55.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 214.1,
+       "t": 698.3,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 29.3,
+         "rr": 48.9,
+         "b": 88.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 231.9,
+       "t": 822.7,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 43.4,
+         "t": 38.1,
+         "rr": 0,
+         "b": 71.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 249.7,
+       "t": 947.1,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.9,
+         "t": 42.6,
+         "rr": 45.9,
+         "b": 100.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 53.2,
+         "t": 47.5,
+         "rr": 20.9,
+         "b": 119.8
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-2560x1440-tab0.png"
+   },
+   {
+    "tab": "STATS",
+    "i": 1,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 143.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 9.3,
+         "t": 33.1,
+         "rr": 35.6,
+         "b": 78.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 160.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 178.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 41.3,
+         "t": 36.9,
+         "rr": 16.3,
+         "b": 93.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 196.4,
+       "t": 573.9,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.4,
+         "t": 27.1,
+         "rr": 22.4,
+         "b": 55.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 214.1,
+       "t": 698.3,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 29.3,
+         "rr": 48.9,
+         "b": 88.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 231.9,
+       "t": 822.7,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 43.4,
+         "t": 38.1,
+         "rr": 0,
+         "b": 71.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 249.7,
+       "t": 947.1,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.9,
+         "t": 42.6,
+         "rr": 45.9,
+         "b": 100.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 53.2,
+         "t": 47.5,
+         "rr": 20.9,
+         "b": 119.8
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-2560x1440-tab1.png"
+   },
+   {
+    "tab": "SPHERE GRID",
+    "i": 2,
+    "overlaps": [],
+    "raw": [],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 143.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 9.3,
+         "t": 33.1,
+         "rr": 35.6,
+         "b": 78.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 160.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 178.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 41.3,
+         "t": 36.9,
+         "rr": 16.3,
+         "b": 93.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 196.4,
+       "t": 573.9,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.4,
+         "t": 27.1,
+         "rr": 22.4,
+         "b": 55.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 214.1,
+       "t": 698.3,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 29.3,
+         "rr": 48.9,
+         "b": 88.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 231.9,
+       "t": 822.7,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 43.4,
+         "t": 38.1,
+         "rr": 0,
+         "b": 71.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 249.7,
+       "t": 947.1,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.9,
+         "t": 42.6,
+         "rr": 45.9,
+         "b": 100.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 53.2,
+         "t": 47.5,
+         "rr": 20.9,
+         "b": 119.8
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-2560x1440-tab2.png"
+   },
+   {
+    "tab": "EQUIPMENT",
+    "i": 3,
+    "overlaps": [],
+    "raw": [
+     {
+      "cls": "ffxprep-chip",
+      "t": "strength-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "hp-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "zombie-ward"
+     }
+    ],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 143.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 9.3,
+         "t": 33.1,
+         "rr": 35.6,
+         "b": 78.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 160.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 178.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 41.3,
+         "t": 36.9,
+         "rr": 16.3,
+         "b": 93.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 196.4,
+       "t": 573.9,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.4,
+         "t": 27.1,
+         "rr": 22.4,
+         "b": 55.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 214.1,
+       "t": 698.3,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 29.3,
+         "rr": 48.9,
+         "b": 88.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 231.9,
+       "t": 822.7,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 43.4,
+         "t": 38.1,
+         "rr": 0,
+         "b": 71.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 249.7,
+       "t": 947.1,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.9,
+         "t": 42.6,
+         "rr": 45.9,
+         "b": 100.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 53.2,
+         "t": 47.5,
+         "rr": 20.9,
+         "b": 119.8
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-2560x1440-tab3.png"
+   },
+   {
+    "tab": "ITEMS",
+    "i": 4,
+    "overlaps": [],
+    "raw": [
+     {
+      "cls": "ffxprep-chip",
+      "t": "strength-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "hp-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "zombie-ward"
+     }
+    ],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 143.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 9.3,
+         "t": 33.1,
+         "rr": 35.6,
+         "b": 78.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 160.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 178.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 41.3,
+         "t": 36.9,
+         "rr": 16.3,
+         "b": 93.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 196.4,
+       "t": 573.9,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.4,
+         "t": 27.1,
+         "rr": 22.4,
+         "b": 55.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 214.1,
+       "t": 698.3,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 29.3,
+         "rr": 48.9,
+         "b": 88.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 231.9,
+       "t": 822.7,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 43.4,
+         "t": 38.1,
+         "rr": 0,
+         "b": 71.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 249.7,
+       "t": 947.1,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.9,
+         "t": 42.6,
+         "rr": 45.9,
+         "b": 100.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 53.2,
+         "t": 47.5,
+         "rr": 20.9,
+         "b": 119.8
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-2560x1440-tab4.png"
+   },
+   {
+    "tab": "OVERDRIVE",
+    "i": 5,
+    "overlaps": [],
+    "raw": [
+     {
+      "cls": "ffxprep-chip",
+      "t": "strength-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "hp-10"
+     },
+     {
+      "cls": "ffxprep-chip",
+      "t": "zombie-ward"
+     }
+    ],
+    "clipped": [],
+    "overflow": [],
+    "faces": [
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 143.1,
+       "t": 200.8,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 9.3,
+         "t": 33.1,
+         "rr": 35.6,
+         "b": 78.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 160.8,
+       "t": 325.2,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 5.4,
+         "t": 33.5,
+         "rr": 43.2,
+         "b": 83.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 178.6,
+       "t": 449.6,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 41.3,
+         "t": 36.9,
+         "rr": 16.3,
+         "b": 93.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "A",
+      "tile": {
+       "l": 196.4,
+       "t": 573.9,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/auron.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 2.4,
+         "t": 27.1,
+         "rr": 22.4,
+         "b": 55.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "W",
+      "tile": {
+       "l": 214.1,
+       "t": 698.3,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/wakka.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 0,
+         "t": 29.3,
+         "rr": 48.9,
+         "b": 88.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "L",
+      "tile": {
+       "l": 231.9,
+       "t": 822.7,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/lulu.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 43.4,
+         "t": 38.1,
+         "rr": 0,
+         "b": 71.3
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "R",
+      "tile": {
+       "l": 249.7,
+       "t": 947.1,
+       "w": 99.5,
+       "h": 99.5
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.2,
+         "t": 46.9,
+         "rr": 2.2,
+         "b": 18.6
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "T",
+      "tile": {
+       "l": 149.3,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/tidus.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 11.9,
+         "t": 42.6,
+         "rr": 45.9,
+         "b": 100.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "Y",
+      "tile": {
+       "l": 899.4,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 7,
+         "t": 43.1,
+         "rr": 55.6,
+         "b": 107.4
+        }
+       }
+      ]
+     },
+     {
+      "cls": "prep__face",
+      "title": null,
+      "text": "K",
+      "tile": {
+       "l": 1649.6,
+       "t": 1187.6,
+       "w": 128,
+       "h": 128
+      },
+      "imgs": [
+       {
+        "src": "/art/portraits/kimahri.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "over": {
+         "l": 53.2,
+         "t": 47.5,
+         "rr": 20.9,
+         "b": 119.8
+        }
+       }
+      ]
+     }
+    ],
+    "shot": "prepv-prep1-2560x1440-tab5.png"
+   }
+  ],
+  "bareFaces": [],
+  "errors": [],
+  "missingArt": []
+ }
+]

@@ -1,0 +1,34 @@
+{
+ "before": {
+  "girl": "yuna",
+  "dress": "white-mage",
+  "n": 8
+ },
+ "after": {
+  "sf": [
+   {
+    "t": 12959,
+    "who": "paine",
+    "to": "gunner",
+    "name": "Gunner",
+    "gate": "GATE · Red",
+    "motes": 8
+   }
+  ],
+  "sc": [
+   {
+    "who": "paine",
+    "from": "warrior",
+    "to": "gunner",
+    "gates": [
+     "red"
+    ]
+   }
+  ],
+  "dress": {
+   "yuna": "white-mage",
+   "rikku": "dark-knight",
+   "paine": "gunner"
+  }
+ }
+}

@@ -1,0 +1,206 @@
+[
+ {
+  "vp": "1280x720",
+  "sub": [
+   {
+    "row": "GunnerGRANTS: Red",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Gunner",
+      "sw": 47,
+      "cw": 31,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Red",
+      "sw": 51,
+      "cw": 51,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   },
+   {
+    "row": "Black MageGRANTS: Yellow",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Black Mage",
+      "sw": 72,
+      "cw": 27,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Yellow",
+      "sw": 66,
+      "cw": 66,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "vp": "1600x900",
+  "sub": [
+   {
+    "row": "GunnerGRANTS: Red",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Gunner",
+      "sw": 47,
+      "cw": 31,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Red",
+      "sw": 51,
+      "cw": 51,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   },
+   {
+    "row": "Black MageGRANTS: Yellow",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Black Mage",
+      "sw": 72,
+      "cw": 27,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Yellow",
+      "sw": 66,
+      "cw": 66,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "vp": "2000x1000",
+  "sub": [
+   {
+    "row": "GunnerGRANTS: Red",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Gunner",
+      "sw": 47,
+      "cw": 31,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Red",
+      "sw": 51,
+      "cw": 51,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   },
+   {
+    "row": "Black MageGRANTS: Yellow",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Black Mage",
+      "sw": 72,
+      "cw": 27,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Yellow",
+      "sw": 66,
+      "cw": 66,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "vp": "2560x1440",
+  "sub": [
+   {
+    "row": "GunnerGRANTS: Red",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Gunner",
+      "sw": 47,
+      "cw": 31,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Red",
+      "sw": 51,
+      "cw": 51,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   },
+   {
+    "row": "Black MageGRANTS: Yellow",
+    "parts": [
+     {
+      "cls": "ffx2cmd__label",
+      "text": "Black Mage",
+      "sw": 72,
+      "cw": 27,
+      "clipped": true,
+      "overflow": "hidden",
+      "textOverflow": "ellipsis"
+     },
+     {
+      "cls": "ffx2cmd__grants",
+      "text": "GRANTS: Yellow",
+      "sw": 66,
+      "cw": 66,
+      "clipped": false,
+      "overflow": "visible",
+      "textOverflow": "clip"
+     }
+    ]
+   }
+  ]
+ }
+]

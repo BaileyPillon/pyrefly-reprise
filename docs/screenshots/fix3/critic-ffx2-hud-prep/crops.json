@@ -1,0 +1,57 @@
+[
+ {
+  "name": "ffx1",
+  "chapter": "seymour-flux",
+  "crops": [
+   {
+    "label": "T",
+    "src": "/art/portraits/tidus.png",
+    "nat": "832x1216",
+    "tile": {
+     "w": 55.1,
+     "h": 55.1
+    },
+    "over": {
+     "l": 5.1,
+     "t": 18.3,
+     "r": 19.7,
+     "b": 43.4
+    },
+    "imgH": 116.8
+   },
+   {
+    "label": "Y",
+    "src": "/art/portraits/yuna.png",
+    "nat": "832x1216",
+    "tile": {
+     "w": 55.1,
+     "h": 55.1
+    },
+    "over": {
+     "l": 3,
+     "t": 18.5,
+     "r": 23.9,
+     "b": 46.2
+    },
+    "imgH": 119.8
+   },
+   {
+    "label": "K",
+    "src": "/art/portraits/kimahri.png",
+    "nat": "832x1216",
+    "tile": {
+     "w": 55.1,
+     "h": 55.1
+    },
+    "over": {
+     "l": 22.9,
+     "t": 20.4,
+     "r": 9,
+     "b": 51.6
+    },
+    "imgH": 127.1
+   }
+  ],
+  "shot": "crops-ffx1.png"
+ }
+]

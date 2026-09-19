@@ -1,0 +1,469 @@
+[
+ {
+  "tag": "battle4-1280x720-v1",
+  "ok": true,
+  "states": [
+   {
+    "label": "menu",
+    "overlaps": [],
+    "cmdWindowOverlaps": [],
+    "boxCount": 18,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": null,
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-menu.png"
+   },
+   {
+    "label": "change-submenu",
+    "overlaps": [],
+    "cmdWindowOverlaps": [],
+    "boxCount": 18,
+    "screen": "battle",
+    "cmdRows": [
+     "GunnerGRANTS: Red",
+     "Black MageGRANTS: Yellow"
+    ],
+    "cmdTitle": "Change",
+    "rawIds": [],
+    "chain": null,
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-change-submenu.png"
+   },
+   {
+    "label": "esc-change",
+    "before": "battle",
+    "after": {
+     "screen": "battle",
+     "rows": [
+      "Attack",
+      "Skill◂",
+      "Change◂",
+      "Item◂"
+     ]
+    }
+   },
+   {
+    "label": "esc-submenu",
+    "inSub": {
+     "title": "Item",
+     "rows": 8
+    },
+    "after": {
+     "screen": "battle",
+     "rows": [
+      "Attack",
+      "Skill◂",
+      "Change◂",
+      "Item◂"
+     ]
+    }
+   },
+   {
+    "label": "target",
+    "overlaps": [],
+    "cmdWindowOverlaps": [],
+    "boxCount": 18,
+    "screen": "battle",
+    "cmdRows": [
+     "Potion",
+     "Hi-Potion",
+     "Phoenix Down",
+     "Ether",
+     "Remedy",
+     "Holy Water",
+     "Lunar Curtain",
+     "Light Curtain"
+    ],
+    "cmdTitle": "Item",
+    "rawIds": [],
+    "chain": null,
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-target.png"
+   },
+   {
+    "label": "esc-from-target",
+    "tgt": {
+     "reticles": 0,
+     "rows": 8
+    },
+    "back": {
+     "screen": "battle",
+     "rows": [
+      "Attack",
+      "Skill◂",
+      "Change◂",
+      "Item◂"
+     ],
+     "title": null,
+     "reticles": 0,
+     "stackChildren": 4
+    }
+   },
+   {
+    "label": "chain-1",
+    "overlaps": [
+     {
+      "a": "chain-chip",
+      "b": "fighter:bahamut",
+      "w": 171.8,
+      "h": 4.6
+     }
+    ],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": {
+     "n": "1",
+     "label": "CHAIN ×1.00",
+     "motes": 6,
+     "cls": "ffx2-chain-chip ffx2chain--pop"
+    },
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-1.png"
+   },
+   {
+    "label": "chain-3",
+    "overlaps": [],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": {
+     "n": "3",
+     "label": "CHAIN ×1.55",
+     "motes": 6,
+     "cls": "ffx2-chain-chip ffx2chain--pop"
+    },
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-3.png"
+   },
+   {
+    "label": "chain-7",
+    "overlaps": [
+     {
+      "a": "chain-chip",
+      "b": "fighter:bahamut",
+      "w": 139.1,
+      "h": 2.7
+     }
+    ],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": {
+     "n": "7",
+     "label": "CHAIN ×1.75",
+     "motes": 6,
+     "cls": "ffx2-chain-chip ffx2chain--warm ffx2chain--pop"
+    },
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-7.png"
+   },
+   {
+    "label": "chain-12",
+    "overlaps": [],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": {
+     "n": "12",
+     "label": "CHAIN ×2.00",
+     "motes": 6,
+     "cls": "ffx2-chain-chip ffx2chain--hot ffx2chain--pop"
+    },
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-12.png"
+   },
+   {
+    "label": "chain-22",
+    "overlaps": [
+     {
+      "a": "chain-chip",
+      "b": "fighter:bahamut",
+      "w": 100.3,
+      "h": 4.9
+     }
+    ],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": {
+     "n": "22",
+     "label": "CHAIN ×2.50",
+     "motes": 6,
+     "cls": "ffx2-chain-chip ffx2chain--hot ffx2chain--flash ffx2chain--pop"
+    },
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-22.png"
+   },
+   {
+    "label": "chain-199",
+    "overlaps": [
+     {
+      "a": "chain-chip",
+      "b": "fighter:bahamut",
+      "w": 96.9,
+      "h": 3.1
+     }
+    ],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": {
+     "n": "199",
+     "label": "CHAIN ×9.99",
+     "motes": 6,
+     "cls": "ffx2-chain-chip ffx2chain--hot ffx2chain--flash ffx2chain--pop"
+    },
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-199.png"
+   },
+   {
+    "label": "chain-break",
+    "overlaps": [
+     {
+      "a": "intent-panel",
+      "b": "chain-broke",
+      "w": 103.1,
+      "h": 79.2
+     }
+    ],
+    "cmdWindowOverlaps": [],
+    "boxCount": 19,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": null,
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-chain-break.png"
+   },
+   {
+    "label": "chain-unknown-target",
+    "deadProbe": {
+     "threw": null,
+     "chip": true
+    }
+   },
+   {
+    "label": "spherechange",
+    "overlaps": [
+     {
+      "a": "gauges",
+      "b": "flourish",
+      "w": 473.9,
+      "h": 62
+     },
+     {
+      "a": "party",
+      "b": "flourish",
+      "w": 332,
+      "h": 180
+     },
+     {
+      "a": "cmd-stack",
+      "b": "flourish",
+      "w": 302.2,
+      "h": 206.1
+     },
+     {
+      "a": "advisor-card",
+      "b": "flourish",
+      "w": 323.6,
+      "h": 138.8
+     },
+     {
+      "a": "advisor-chip",
+      "b": "flourish",
+      "w": 104.9,
+      "h": 15
+     },
+     {
+      "a": "guide-rail",
+      "b": "flourish",
+      "w": 264,
+      "h": 254
+     },
+     {
+      "a": "guide-rail",
+      "b": "flourish-plate",
+      "w": 97.7,
+      "h": 87.8
+     },
+     {
+      "a": "guide-chip",
+      "b": "flourish",
+      "w": 100.8,
+      "h": 15
+     },
+     {
+      "a": "intent-panel",
+      "b": "flourish",
+      "w": 300,
+      "h": 185.2
+     },
+     {
+      "a": "intent-chip",
+      "b": "flourish",
+      "w": 60.8,
+      "h": 15
+     },
+     {
+      "a": "flourish",
+      "b": "row:yuna",
+      "w": 328,
+      "h": 56
+     },
+     {
+      "a": "flourish",
+      "b": "row:rikku",
+      "w": 328,
+      "h": 56
+     },
+     {
+      "a": "flourish",
+      "b": "row:paine",
+      "w": 328,
+      "h": 56
+     },
+     {
+      "a": "flourish",
+      "b": "gauge:bahamut",
+      "w": 473.9,
+      "h": 38
+     }
+    ],
+    "cmdWindowOverlaps": [
+     {
+      "a": "command",
+      "b": "flourish",
+      "w": 302.2,
+      "h": 206.1
+     }
+    ],
+    "boxCount": 20,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": null,
+    "flourish": {
+     "who": "yuna",
+     "to": "black-mage",
+     "name": "Black Mage",
+     "gate": "GATE · Red + Green",
+     "motes": 8
+    },
+    "shot": "battle4-1280x720-v1-spherechange.png"
+   },
+   {
+    "label": "spherechange-unprojected",
+    "wedge": {
+     "resolved": true,
+     "ms": 0,
+     "drawn": false
+    }
+   },
+   {
+    "label": "spherechange-nogate",
+    "nogate": {
+     "gate": null,
+     "special": "SPECIAL DRESS UP",
+     "name": "Warrior"
+    }
+   },
+   {
+    "label": "rapid",
+    "after": {
+     "screen": "battle",
+     "rows": 4
+    }
+   },
+   {
+    "label": "rapid",
+    "overlaps": [],
+    "cmdWindowOverlaps": [],
+    "boxCount": 18,
+    "screen": "battle",
+    "cmdRows": [
+     "Attack",
+     "Skill◂",
+     "Change◂",
+     "Item◂"
+    ],
+    "cmdTitle": "",
+    "rawIds": [],
+    "chain": null,
+    "flourish": null,
+    "shot": "battle4-1280x720-v1-rapid.png"
+   }
+  ],
+  "findings": [],
+  "errors": []
+ }
+]
