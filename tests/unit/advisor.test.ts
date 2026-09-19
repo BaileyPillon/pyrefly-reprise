@@ -129,7 +129,13 @@ function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
       if (top.isSwitch) out.switches += 1;
       if (view.suggestions.length > 1) out.pairs += 1;
       if (top.estimate) out.withNumbers += 1;
-      else out.bare.push(top.label);
+      // A switch never carries a damage or healing figure — it hands the turn
+      // to somebody else and the *runner-up* is the row that acts, which is
+      // why the assertion three lines down insists a switch always has one.
+      // `bare` is about rows that act, so switches are counted in `switches`
+      // and left out of it [2026-09-19, when Chapter 1's line started reaching
+      // its Kimahri -> Auron hand-off often enough to top the card with it].
+      else if (!top.isSwitch) out.bare.push(top.label);
       expect(view.actorId).toBe(decision.actorId);
       // A switch at the top must always carry a runner-up.
       if (top.isSwitch) expect(view.suggestions.length).toBe(2);
@@ -215,6 +221,13 @@ describe('buildAdvisorView — agreement with the shipped tactic', () => {
     'Shell',
     'Talk',
     'Defend',
+    // Added 2026-09-19 with Chapter 1's phase-2 Dispel rung (§6 row 8): Dispel
+    // takes a status off and deals nothing, so a figure on it would be
+    // invented. What it is *worth* — a ~2,000 party-wide Flare bounce that
+    // does not happen, and ~1,734 of his own HP when the next one lands on him
+    // instead — is a forecast, which is the open card-design question this
+    // list's note already raises.
+    'Dispel',
     'Bahamut',
     'Valefor',
     'Ifrit',

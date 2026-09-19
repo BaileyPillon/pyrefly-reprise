@@ -212,6 +212,39 @@ describe('tokens.css', () => {
     expect(ffx2Block).toContain('--ig-pyre-pink');
   });
 
+  /**
+   * Every accent role .ig defines must be repointed by .ig--ffx2, or an FFX-2
+   * screen shows gold [AGENTS.md hard rule 14 — FFX-2 only, FFX unchanged].
+   *
+   * `--ig-accent-deep` is the one that was missed: the battle-start card's
+   * `CHAPTER IV · …` eyebrow reads it (src/ui/common/battle-start-banner.css)
+   * and tokens.css declared it nowhere at all, so the eyebrow fell back to the
+   * stylesheet's own hard-coded gold on both games — visible in
+   * docs/screenshots/flow/battle-start-ffx2.png and reported at the bottom of
+   * docs/handoff/builda-flow.md.
+   */
+  it('repoints every accent role under .ig--ffx2, --ig-accent-deep included', () => {
+    // The *rule*, not the first mention: `.ig--ffx2` is named in two comments
+    // inside the base block before the selector itself appears.
+    const ffx2At = css.search(/^\.ig--ffx2\s*\{/m);
+    expect(ffx2At, 'tokens.css must still carry an .ig--ffx2 rule').toBeGreaterThan(0);
+    const base = css.slice(0, ffx2At);
+    const ffx2Block = css.slice(ffx2At);
+    const roles = [...base.matchAll(/--ig-accent[\w-]*/g)].map((m) => m[0]);
+
+    expect(roles, 'the base block must still define the accent roles').toContain('--ig-accent-deep');
+    for (const role of new Set(roles)) {
+      expect(ffx2Block, `${role} has no .ig--ffx2 override, so FFX-2 shows gold`).toContain(`${role}:`);
+    }
+  });
+
+  it('leaves the FFX value of --ig-accent-deep exactly where the banner had it', () => {
+    // The banner shipped `var(--ig-accent-deep, #a67c16)`; declaring the token
+    // at that same value is what makes this an FFX-2-only change.
+    const base = css.slice(0, css.search(/^\.ig--ffx2\s*\{/m));
+    expect(base).toMatch(/--ig-accent-deep:\s*#a67c16;/i);
+  });
+
   it('falls back to the shared --font-serif rather than declaring its own @font-face', () => {
     expect(css).toContain('var(--font-serif');
     expect(css).not.toContain('@font-face');

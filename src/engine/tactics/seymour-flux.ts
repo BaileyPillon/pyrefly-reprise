@@ -136,6 +136,15 @@ const PARTY_HOLE = 1_500;
 /** Below this fraction a member is topped up once the emergencies are over. */
 const TOPPED_UP = 0.85;
 
+/**
+ * Aeons kept off the field until he crosses 50% [§6 row 15, §4.4.2].
+ *
+ * Measured over four forty-seed windows (1, 41, 101, 1001): 0 held = 91 wins
+ * of 160, 1 = 96, **2 = 100**, 3 = 56. See the summon rule for why the curve
+ * has a peak rather than a slope.
+ */
+const AEONS_HELD_FOR_PHASE_2 = 2;
+
 export const seymourFlux: Tactic = (actorId, commands, engine) => {
   const state = engine.state();
   const boss = state.combatants[SEYMOUR_FLUX_ID] as FFXCombatant | undefined;
@@ -161,6 +170,18 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
   // and skips the generic revive/heal ladder outright, which is exactly what
   // that fixture is asserting. So the guard plays those generic rules itself.
   if (!state.combatants[MOUNT_ID]) return generic(commands, party, boss.id);
+
+  // **An aeon on the field plays none of the party's rules.** §4.5 gives it
+  // exactly one turn before Banish and §6 row 15 says what that turn is for, so
+  // every ladder below — the Zombie cure, the wards, the Cheer, the repairs —
+  // is a turn it does not have. It is also the only *present* friendly actor
+  // while the party is off-stage with frozen counters (`aeons.ts freezeParty`),
+  // so reading `living` at all would have it answering a board it is not
+  // standing on: measured before this branch, the summons spent their single
+  // turn on a thrown Fire Gem every time (see `strike`).
+  if (actor.side === 'aeon') {
+    return strike(commands, actor, boss.id) ?? strike(commands, actor, MOUNT_ID);
+  }
 
   const living = party.filter((c) => c.alive);
   const phase2 = boss.hp * 2 < boss.stats.maxHp;
@@ -286,7 +307,23 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
   // Limit, Mega Flare is the largest single damage event the preset can produce
   // (§5.7), and §7.9.2 starts him at a full gauge "on purpose" for that reason.
   // Valefor is the other full one and follows him.
-  if (state.aeonId === null) {
+  //
+  // **Two are held back for phase 2**, and that is the one thing about this
+  // rule that changed. §6 row 15 is written about phase 2 by name — "Summon
+  // every aeon with a full Overdrive gauge **in phase 2**" — and §4.4.2 says
+  // why: a summon is the only thing in the party's hands that *postpones*
+  // Total Annihilation, and Total Annihilation does not exist until he crosses
+  // 50%. Spending all five in phase 1 left the charge ladder unanswerable.
+  //
+  // The size of the reserve is measured, not chosen. Holding **none** (the
+  // previous rule) wins 91 of 160 seeds, one 96, **two 100**, three 56 — the
+  // curve turns over sharply, because phase 1 needs the stall too and a party
+  // that banks its shield dies before it can spend it. Two is the reserve that
+  // pays for both halves of the fight, and it is what makes the phase-2 burst
+  // above land at the moment the research says a player spends it.
+  const held = boss.hp * 2 < boss.stats.maxHp ? 0 : AEONS_HELD_FOR_PHASE_2;
+  const summonable = commands.filter((c) => c.enabled && c.command.kind === 'summon').length;
+  if (state.aeonId === null && summonable > held) {
     const summon = nextAeon(commands);
     if (summon) return summon;
   }
@@ -408,6 +445,28 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
   if (worst) {
     const heal = row(commands, ['Curaga', 'X-Potion', 'Cura', 'Hi-Potion', 'Cure'], worst.id);
     if (heal) return aim(heal, worst.id);
+  }
+
+  // ------------------------------------- 5a. take his Reflect off, in phase 2
+  //
+  // §6 row 8 and §5.3, and this is the "new home above step 6" step 7's comment
+  // has promised since the phase-2 loop was fixed and never actually had — the
+  // only Dispel rung in the file sat *below* the Cheer ladder, which in a fight
+  // that re-runs its repairs every cycle is most of the way to never.
+  //
+  // It is worth a turn only once §4.4.1's loop is running, which is exactly
+  // what phase 2 is. Flare is always cast at Self and his Reflect is the only
+  // thing deciding who eats it (§3.3), so one Dispel buys three things at once:
+  // the ~2,000 party-wide bounce does not happen, the next Flare resolves on
+  // him for ~1,734 (§5.3), and he spends a further turn recasting Reflect.
+  // Measured, moving it here is worth 4 wins in 160 seeds.
+  //
+  // Phase 1 is untouched: his Protect (§6 row 9) is still left alone, for the
+  // reason step 7 gives — this party's damage is mostly `damageType: 'other'`
+  // and his Protect never touches it.
+  if (phase2 && has(boss, 'reflect')) {
+    const strip = row(commands, ['Dispel'], boss.id);
+    if (strip) return aim(strip, boss.id);
   }
 
   // ------------------------------------------- 5b. shut phase 2 off: Silence
@@ -602,6 +661,50 @@ function swapIn(commands: AvailableCommand[], name: string): Command | null {
  * nothing.
  */
 function strike(commands: AvailableCommand[], actor: AnyCombatant, targetId: CombatantId): Command | null {
+  // **An aeon's one turn is its Overdrive.** §4.5: "the aeon gets exactly one
+  // turn to act before it is banished", and §5.7 prices that turn — Energy
+  // Blast 13,485, Mega Flare 12,946, Thor's Hammer and Diamond Dust 10,788,
+  // Hellfire 10,429, Energy Ray 9,889, all on the Special Magic formula that
+  // "ignores Magic Defense entirely", capped at 9,999 for every aeon but
+  // Bahamut. §5.7's closing line calls a full sweep of them "the shape of the
+  // intended 'phase 2 burst' win".
+  //
+  // It was not happening. This ladder knew three Overdrive labels and all three
+  // were the *party's* (Dragon Fang, Spiral Cut, Jump), so every summon fell
+  // through to the thrown-item rung and spent its single turn on a **Fire
+  // Gem**. Measured over forty seeds before this branch: 35 Bahamut summons, 35
+  // Fire Gems thrown by Bahamut, **zero Mega Flares** — the largest single
+  // damage event the preset owns, cast never.
+  //
+  // Below the Overdrive the order is measured rather than assumed. §7.9.2 sends
+  // only Valefor and Bahamut in with a full gauge; Ifrit, Ixion and Shiva
+  // arrive at 75 / 60 / 50 and have no Overdrive row to take. For them a
+  // thrown Gem — `fixed` formula, `ignores-armored`, paying full face value
+  // against Defense 40 (§7.8, §5.6) — beats their Special, because Meteor
+  // Strike, Aerospark and Heavenly Strike are Strength-formula power 16-17 and
+  // compute to a few hundred against that Defense. Putting the Specials ahead
+  // of the Gems cost 6 wins in 160 seeds when it was measured.
+  if (actor.side === 'aeon') {
+    const burst = row(
+      commands,
+      ['Energy Blast', 'Mega Flare', "Thor's Hammer", 'Diamond Dust', 'Hellfire', 'Energy Ray'],
+      targetId,
+    );
+    if (burst) return aim(burst, targetId);
+    const thrown = row(
+      commands,
+      ['Fire Gem', 'Ice Gem', 'Lightning Gem', 'Water Gem', 'Frag Grenade', 'Grenade'],
+      targetId,
+    );
+    if (thrown) return aim(thrown, targetId);
+    const special = row(commands, ['Impulse', 'Meteor Strike', 'Aerospark', 'Heavenly Strike'], targetId);
+    if (special) return aim(special, targetId);
+    const swing = commands.find(
+      (c) => c.enabled && c.command.kind === 'attack' && c.validTargets.includes(targetId),
+    );
+    return swing ? aim(swing, targetId) : null;
+  }
+
   // Overdrives first, strongest available. Auron's Dragon Fang is the largest
   // the actives carry and he is Stoic, so the hits he survives keep paying for
   // it (§7.9.1's `damageReceived x 30 / maxHP`); §7.9.2 starts him at 70% "he

@@ -98,6 +98,19 @@ export interface TweenOptions {
   delayMs?: number;
   onUpdate?: (value: number, progress: number) => void;
   onComplete?: () => void;
+  /**
+   * Fired by {@link Tween.kill} instead of `onComplete`, exactly once, and
+   * never after the tween has already completed.
+   *
+   * This exists because a killed tween used to settle **nothing**: a caller
+   * awaiting {@link TweenGroup.toAsync} was abandoned mid-await, for ever.
+   * That is the root cause `docs/handoff/builda-flow.md` traced Chapter 4's
+   * "won and then never ends" to — `PaintedActor.dispose()` calls
+   * `tweens.killAll()`, `PaintedStage.removeCombatant` disposes actors, and the
+   * presenter was parked in `await actor.dissolveTo(...)` for the killing blow,
+   * so the `victory` event queued behind it never played.
+   */
+  onKilled?: () => void;
 }
 
 /** A single scalar 0..1 tween, ticked by a {@link TweenGroup}. */
@@ -110,6 +123,7 @@ export class Tween {
   private elapsed = 0;
   private readonly onUpdate: ((value: number, progress: number) => void) | undefined;
   private readonly onComplete: (() => void) | undefined;
+  private readonly onKilled: (() => void) | undefined;
   private _done = false;
   private _killed = false;
 
@@ -121,10 +135,16 @@ export class Tween {
     this.delaySec = Math.max(0, opts.delayMs ?? 0) / 1000;
     this.onUpdate = opts.onUpdate;
     this.onComplete = opts.onComplete;
+    this.onKilled = opts.onKilled;
   }
 
   get done(): boolean {
     return this._done || this._killed;
+  }
+
+  /** True when this tween was stopped by {@link kill} rather than finishing. */
+  get killed(): boolean {
+    return this._killed;
   }
 
   /** Current eased value without advancing time. */
@@ -137,9 +157,18 @@ export class Tween {
     return clamp01(this.elapsed / this.durationSec);
   }
 
-  /** Stop without firing onComplete. */
+  /**
+   * Stop without firing `onComplete` — but **always settle**.
+   *
+   * `onKilled` fires here, once, and only for a tween that had not already
+   * finished, so a `toAsync` caller is resolved rather than left awaiting a
+   * promise nothing will ever settle. Killing a tween twice, or killing one
+   * that has already completed, is a no-op.
+   */
   kill(): void {
+    if (this._done || this._killed) return;
     this._killed = true;
+    this.onKilled?.();
   }
 
   /** Jump to the end, firing onUpdate + onComplete once. */
@@ -190,15 +219,45 @@ export class TweenGroup {
     return this.add(new Tween(from, to, opts));
   }
 
-  /** Returns a promise that settles when the tween completes or is killed. */
+  /**
+   * Returns a promise that settles when the tween completes **or is killed**.
+   *
+   * It resolves on both paths and never rejects: a dropped animation is not an
+   * error, and a rejection here would surface as an unhandled rejection inside
+   * whichever `dispose()` happened to kill the tween, far from any `catch`.
+   *
+   * Until `Tween.kill()` learned to settle, the killed branch did not exist —
+   * `killAll()` emptied the array and every awaiting caller was abandoned
+   * mid-await, for ever. That is the defect `docs/handoff/builda-flow.md` #01
+   * traced Chapter 4's "won and then never ends" to.
+   *
+   * **Which of the two happened is reported through `opts.onKilled`, not
+   * through the resolved value**, and that is deliberate: every animation in
+   * `ActorHandle` / `CameraHandle` (`src/engine/BattlePresenterPorts.ts`) is
+   * typed `Promise<void>`, and widening the promise here would have rewritten
+   * sixteen signatures across four files plus both ports and their fakes to
+   * carry a value the presenter does not read. A caller that needs to know —
+   * a beat that must not play its follow-through on an actor that has left the
+   * stage — passes `onKilled` and is told.
+   *
+   * `BattlePresenterEvents.settled()` races these promises against a deadline
+   * and that guard stays: it covers an animation that *overruns*, which is a
+   * different failure from one that is killed. It simply no longer has to be
+   * the only thing standing between a disposed actor and a frozen chapter.
+   */
   toAsync(from: number, to: number, opts: TweenOptions): Promise<void> {
     return new Promise<void>((resolve) => {
       const done = opts.onComplete;
+      const killed = opts.onKilled;
       this.add(
         new Tween(from, to, {
           ...opts,
           onComplete: () => {
             done?.();
+            resolve();
+          },
+          onKilled: () => {
+            killed?.();
             resolve();
           },
         }),
@@ -218,8 +277,17 @@ export class TweenGroup {
     this.tweens.length = write;
   }
 
+  /**
+   * Kill every tween this group owns, settling each one's `toAsync` promise.
+   *
+   * The array is emptied **first**, so a caller whose `onKilled` reaches back
+   * into the group — starting a replacement tween from a dissolve's
+   * continuation, say — is not iterating a list that is being truncated
+   * underneath it, and its new tween survives the call.
+   */
   killAll(): void {
-    for (const t of this.tweens) t.kill();
-    this.tweens.length = 0;
+    const killing = this.tweens;
+    this.tweens = [];
+    for (const t of killing) t.kill();
   }
 }

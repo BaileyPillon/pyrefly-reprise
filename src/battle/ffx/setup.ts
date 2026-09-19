@@ -21,6 +21,7 @@ import type {
   StatusInstance,
 } from '../common/types.ts';
 import type { SeededRng } from '../common/rng.ts';
+import { cloneData } from '../common/clone.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { applyEquipmentToCombatant, AUTO_STATUS_ABILITIES, hasAuto } from './equipment.ts';
@@ -224,8 +225,16 @@ export function buildBattle(
   content: FFXContentRegistry,
   emit: Ctx['emit'],
 ): Ctx {
-  const party = setup.party as FFXPartyBuild;
-  const group = setup.enemies;
+  // **The battle owns its records.** `setup.party` and `setup.enemies` are the
+  // module singletons `src/data/ffx/**` exports — the *same* `EnemyGroupDef`
+  // and `FFXPartyBuild` objects every run of this chapter is handed. The
+  // field-by-field copies below are thorough one level down and share
+  // everything under it (`equipment.*.autoAbilities`, `rewards.steal`,
+  // `forms[n].statOverrides`), so the one deep copy here is what actually
+  // makes a battle independent of whatever ran before it in the same process.
+  // See `src/battle/common/clone.ts` for the audit that found the leaks.
+  const party = cloneData(setup.party) as FFXPartyBuild;
+  const group = cloneData(setup.enemies);
 
   const state: BattleState = {
     game: 'ffx',
@@ -238,7 +247,7 @@ export function buildBattle(
     ticks: 0,
     log: [],
     nextSeq: 0,
-    triggers: setup.triggers.map((t) => ({ ...t })),
+    triggers: cloneData(setup.triggers),
     firedTriggerIds: [],
     result: null,
     seed: setup.seed,

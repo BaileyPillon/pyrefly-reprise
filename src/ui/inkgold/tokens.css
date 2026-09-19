@@ -54,6 +54,13 @@
   /* The same accent role on an ivory/paper ground, where the bright accent
      has too little contrast to set type in (results ledger, info slabs). */
   --ig-accent-on-paper: var(--ig-gold-on-paper);
+  /* One step deeper again, for small heavily-tracked type on ivory — the
+     battle-start card's `CHAPTER I · …` eyebrow is the only consumer today
+     (src/ui/common/battle-start-banner.css). It had no declaration at all and
+     was living on that file's hard-coded `var(--ig-accent-deep, #a67c16)`
+     fallback, which is why the FFX-2 card's eyebrow came out gold. This value
+     IS that fallback, so no FFX screen changes by a pixel. */
+  --ig-accent-deep: #a67c16;
 
   /* Type stacks — spec "Type" table. Cormorant Garamond's face declaration
      lives in src/ui/common/fonts.css (--font-serif there) — already loaded
@@ -91,6 +98,13 @@
 .ig--ffx2 {
   --ig-accent: var(--ig-pyre-pink);
   --ig-accent-on-paper: #b8437e; /* pyre pink darkened for paper, as #b8862a is for gold */
+  /* FFX-2 only [AGENTS.md hard rule 14]: "one accent per context, never two",
+     and the battle-start eyebrow was the one place still reading gold on an
+     FFX-2 screen. Deliberately the deep pink this block already ships rather
+     than a new shade — #b8437e is the approved FFX-2 accent-on-paper and the
+     eyebrow is accent-on-paper type; inventing a darker pink would put a
+     colour on an approved screen that Bailey has not seen (hard rule 9). */
+  --ig-accent-deep: var(--ig-accent-on-paper);
   --ig-skew: 12deg;
   --ig-skew-inverse: -12deg;
   --ig-edge: 1;

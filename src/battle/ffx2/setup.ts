@@ -23,6 +23,7 @@ import type {
   FFX2PartyBuild,
   StatBlock,
 } from '../common/types.ts';
+import { cloneData } from '../common/clone.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
@@ -148,7 +149,10 @@ function applyCarriedState(unit: Ffx2Unit, carried: CarriedPartyState): void {
   unit.mp = Math.max(0, Math.min(unit.stats.maxMp, row.mp));
   unit.alive = unit.hp > 0;
   unit.statuses = { ...row.statuses };
-  if (row.dresspheres) unit.dresspheres = row.dresspheres;
+  // Cloned, not adopted: the carried row outlives this link of the chain and
+  // `BattleScreenSetup.carryPartyForward` hands the same object to the next
+  // one, so a shared `dresspheres` would let link 3 rewrite link 2's grid.
+  if (row.dresspheres) unit.dresspheres = cloneData(row.dresspheres);
   if (row.accessories) unit.accessories = [...row.accessories];
   // Gate effects are lost at the end of a battle, but a chained link is the
   // *same* battle in every way that matters, so `passedGates` rides along.
@@ -215,7 +219,13 @@ export function buildState(
   rng: { int(a: number, b: number): number },
 ): BuiltState {
   if (setup.party.game !== 'ffx2') throw new Error('FFX2Engine: setup.party must be an FFX2PartyBuild');
-  const party = setup.party as FFX2PartyBuild;
+  // **The battle owns its records**, for the same reason the FFX side does and
+  // with two leaks of its own: `buildEnemy` handed the live unit the shipped
+  // `enemy.forms` array and the shipped `enemy.rewards` object by reference,
+  // and `buildMember` handed it `member.abilitiesLearned`. See
+  // `src/battle/common/clone.ts`.
+  const party = cloneData(setup.party) as FFX2PartyBuild;
+  const enemies = cloneData(setup.enemies);
 
   const grids = options.garmentGrids ?? defaultGarmentGrids;
   const units: Ffx2Unit[] = [];
@@ -229,8 +239,8 @@ export function buildState(
     units.push(unit);
   });
 
-  for (const enemy of setup.enemies.enemies) units.push(buildEnemy(enemy, false));
-  for (const part of setup.enemies.parts ?? []) units.push(buildEnemy(part, true));
+  for (const enemy of enemies.enemies) units.push(buildEnemy(enemy, false));
+  for (const part of enemies.parts ?? []) units.push(buildEnemy(part, true));
 
   seedOpeningGauges(units, setup.condition, rng);
 
@@ -248,14 +258,14 @@ export function buildState(
     ticks: options.carriedParty?.elapsedTicks ?? 0,
     log: [],
     nextSeq: 0,
-    triggers: [...setup.triggers],
+    triggers: cloneData(setup.triggers),
     firedTriggerIds: [],
     result: null,
     seed: setup.seed,
     flags: {
       ...(setup.chained || options.chained ? { chained: true } : {}),
-      ...(setup.enemies.nextGroupId ? { nextGroupId: setup.enemies.nextGroupId } : {}),
-      canEscape: setup.canEscape ?? setup.enemies.canEscape ?? false,
+      ...(enemies.nextGroupId ? { nextGroupId: enemies.nextGroupId } : {}),
+      canEscape: setup.canEscape ?? enemies.canEscape ?? false,
       ...inventoryFlags(party, options),
     },
   };
