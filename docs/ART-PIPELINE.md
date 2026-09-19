@@ -763,3 +763,31 @@ in `public/art/` is a model weight; the repo holds generated images only.
 This project is an unofficial fan tribute. Final Fantasy characters and settings
 are property of Square Enix; generated likenesses inherit that and are not
 cleared for commercial use.
+
+## 9. Model checksums
+
+Two of the weight files below were found corrupt on disk on 2026-09-18 —
+`animagine-xl-4.0-opt.safetensors` and `ip-adapter-plus_sdxl_vit-h.safetensors`
+no longer matched their publisher hashes, most likely since their original
+unverified downloads on 2026-09-15 on a machine with known-unstable RAM. Both
+were re-downloaded, hash-verified twice, and swapped in at 21:34–21:43 that
+day; the corrupt originals are kept (never deleted) at
+`D:\Tools\model-downloads\*.CORRUPT-*.safetensors` as evidence. **Rule going
+forward: verify every model download against the publisher hash before its
+first use**, not after something looks wrong — a corrupt SDXL weight does not
+reliably announce itself as a crash or a black frame; it can just as easily
+render normally while quietly drawing on damaged tensors.
+
+| File | Bytes | Publisher hash | Source | Verified | Status |
+| --- | --- | --- | --- | --- | --- |
+| `checkpoints/animagine-xl-4.0-opt.safetensors` | 6,938,350,040 | sha256 `6327eca98bfb6538dd7a4edce22484a1bbc57a8cff6b11d075d40da1afb847ac` | Animagine XL 4.0 Opt publisher release | 2026-09-18 | OK — re-verified after the 21:34 swap |
+| `ipadapter/ip-adapter-plus_sdxl_vit-h.safetensors` | 847,517,512 | sha256 `3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581` | `huggingface.co/h94/IP-Adapter`, `sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors` | 2026-09-18 | OK — re-verified after the 21:34 swap |
+| `clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors` | 2,528,373,448 | sha256 `6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030` | `huggingface.co/h94/IP-Adapter`, `models/image_encoder/model.safetensors` (renamed on disk, see §1) | 2026-09-18 | OK |
+| `upscale_models/RealESRGAN_x4plus.pth` | 67,040,989 | sha256 `4fa0d38905f75ac06eb49a7951b426670021be3018265fd191d2125df9d682f1` | `github.com/xinntao/Real-ESRGAN` v0.1.0 release asset | 2026-09-18 | OK — size and hash both confirmed against the v0.1.0 release |
+| `rembg-models/models/isnet-anime/isnet-anime.onnx` | 176,069,933 | md5 `6f184e756bb3bd901c8849220a83e38e` | `danielgatis/rembg` v0.0.0 release; hash pinned in `rembg/sessions/dis_anime.py` | 2026-09-18 | OK |
+| `models/vae/*`, `models/loras/*`, `models/controlnet/*` | — | — | — | 2026-09-18 | Not part of this pipeline. `loras/` and `controlnet/` hold only ComfyUI's placeholder files; `vae/` holds weights (`ae.safetensors`, `flux2-vae.safetensors`, `qwen_image_vae.safetensors`) for other workflows sharing this ComfyUI instance — `comfy.mjs` never loads an external VAE, it uses the checkpoint's own. Not verified here; verify against their own publisher before anything in this repo depends on them. |
+
+Re-verification after the swap, plus a same-day A/B against an old render made
+under the corrupt weights, is in `docs/handoff/` — see the health-check renders
+at `docs/screenshots/art/_modelcheck/` (`after-tidus.png`, `after-tidus-ref.png`,
+`ab.png`).
