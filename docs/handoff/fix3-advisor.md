@@ -1,192 +1,200 @@
 # fix3 — advisor track
 
 Owner files: `src/engine/tactics/advisor.ts`, `src/ui/common/MoveAdvisor.ts`
-(text and logic only), `tests/unit/advisor*`. New this round:
-`src/engine/tactics/advisor-revive.ts`, `tests/unit/advisor-ownership.test.ts`.
+(text and logic only), `tests/unit/advisor*`, `tests/unit/ui-move-advisor.ts`.
+New across the two passes: `src/engine/tactics/advisor-revive.ts`,
+`src/engine/tactics/advisor-forecast.ts`, `tests/unit/advisor-ownership.test.ts`,
+`tests/unit/advisor-forecast.test.ts`. `guide.ts` was never touched: the citation
+plumbing did not need it — the card simply stops printing what it already had.
 
-Commit: `bab0b29` — *Advisor: own the move, price the revive, drop the research voice*.
-`src/engine/tactics/guide.ts` was **not** touched; the citation plumbing did not
-need it (the card simply stops printing what it was already carrying).
+Commits, pass 1: `bab0b29`. Pass 2 (this document): `a6e344a`, `703b422`,
+`01d4f6c`, `3aa5440`.
 
 ---
 
 ## The report
 
-Bailey, on the live build (`88e5b64`), Chapter 1, Tidus acting, Yuna KO at
-0/1500, Kimahri on the field. The NEXT BEST MOVE card said:
-
-> **Tidus** — Poison Fang → Seymour Flux · `CHAPTER LINE` · *ffx-seymour-flux §6 rows 5-6*
+Bailey, on the live build, Chapter 1, Tidus acting, Yuna KO at 0/1500, Kimahri
+on the field:
 
 > "im controlling tidus but the advisor is telling me to use poison fang? how
 > does that make sense? and what about reviving yuna?"
 
-## What was actually happening
+Pass 1 answered the ownership half (Poison Fang turned out to be a thrown item
+on Tidus's own Items list; the card never said *where* a row lived, so a legal
+suggestion was indistinguishable from an illegal one) and priced the revive off
+the board instead of at a flat 3,000. The adversarial verifier then refuted it
+on three counts, all of them about **advice the player never actually got**.
+This pass is those three.
 
-Reproduced against the real Chapter 1 engine (Tidus's own decision, Yuna forced
-to 0 HP). **Poison Fang is not Kimahri's Ronso Rage in this game — it is a
-thrown item**, `poison-fang` in `src/data/ffx/items/offensive-1a.ts`, and
-`gagazetBuild.inventory` stocks five of them. It was row 33 of 42 on Tidus's own
-menu, inside Items. `seymour-flux.ts` step 2 picks it up with
-`row(commands, ['Poison Fang'], boss.id)` — always from the acting character's
-own rows — so the suggestion was legal the whole time.
+---
 
-The defect was therefore **not** that the card named somebody else's move. It
-was that the card gave the player no way to tell:
+## F1 — the answer was on the card and off the screen
 
-* it printed a bare label with no hint of which submenu the row lived in, so a
-  thrown item read exactly like another character's ability;
-* nothing in the code actually *enforced* the promise, so "the card only ever
-  names rows this actor can press" was a convention, not a guarantee;
-* and it said nothing at all about the summoner lying on the floor, which is
-  the part of the report that was a real ranking bug.
+`move-advisor.css` caps the card at 104px, `ffx/hudSafeZones.ts` hands the FFX
+HUD its own `maxHeight`, and the card scrolls with no scrollbar and a mask fade.
+With a second suggestion it wanted 162px, so "stand Yuna up" faded out below the
+frame. Neither file is this track's, so the card does the fitting itself.
 
-## (a) Ownership — closed
+**What it does now.** `MoveAdvisor.fitCard` measures the content against the cap
+— read off the *computed* `max-height`, which is where both owners' values land
+— and walks a seven-rung density ladder, printing less until it fits. The order
+is decoration first: the one-line effect descriptions, then the runner-up's
+numbers, then the lead's, then the lead's reason, and at the last rung two named
+moves and the board's note. A move's name, the submenu it lives in, the
+runner-up's *reason* and any warning survive every rung but the last.
 
-New `ownedRow(commands, command)` in `advisor.ts` is the hard gate. A row counts
-as this actor's only when it is in **this** decision's list, is `enabled`,
-matches on ability/item id (and, for a switch, on the incoming member), and can
-reach every target the command aims at. `guide.ts`'s `rowFor` is deliberately
-looser — it matches kind+id so the *panel* can label a greyed-out row — and that
-looseness is no longer used by the card.
+Three things about that fit were wrong on the first attempt at it, and each was
+found by measuring the built preview rather than by reasoning:
 
-* `tacticSuggestion()` validates the chapter line through `ownedRow` before it
-  does anything else.
-* When the line names a move this actor does not own, `handOff()` looks for the
-  living member who knows it (from their own `learnedAbilityIds` /
-  `unlockedOverdriveIds`) and offers **the switch to that character** — but only
-  when a switch row is enabled and `switchValue()` clears `SWITCH_PENALTY`, the
-  same bar every other switch is held to. Otherwise it returns `null` and the
-  card falls back to the simulated ranking for whoever is actually standing
-  there.
-* `buildAdvisorView` filters the final list through `ownedRow` as well, so a
-  stale candidate or a re-aimed tactic cannot slip past.
-* Every suggestion now carries `menu` (the submenu, from the row's own
-  `category`) and the card prints it: **"Poison Fang · in Items"**.
-
-## (b) Revive value — now read off the board
-
-`REVIVE_VALUE`'s flat `3_000` is gone. `src/engine/tactics/advisor-revive.ts`
-prices a revive from four readings:
-
-| reading | how |
+| what | why it was wrong |
 |---|---|
-| what the party loses while they are down | `capabilityLoss()` — the fallen member's own `learnedAbilityIds` against every living member's, over five families (revival, healing, cleansing, warding, hasting). Deliberately *learned* abilities only: Kimahri's White Wind and Mighty Guard are Ronso Rages off a one-shot gauge, not something he can press on the turn the healer goes down. |
-| their role | `PARTY_ROLES` (`src/ui/common/party-roles.ts`, read-only). Summoner is worth the most — the summon rows are gated on Yuna's id inside `battle/ffx/commands.ts`, so no ability list can see it. |
-| how far the party has collapsed | per additional downed active, plus a bonus when only one is still standing. |
-| whether the raise survives | `reviveRisk()` — see below. |
+| keyed off `clientHeight` | that is the *content's* height whenever the cap is not biting, so the key changed every time the fit did |
+| ran after `layout()` | `layout()` writes one width and the HUD's `placeAdvisor` overwrites it a moment later; the card was fitted 180px wide and painted 112px wide |
+| re-fitted per frame, both directions | the safe zone is solvable on some frames and not on others, so the card is painted at ~200px, ~180px and ~112px several times a second, and the fit dropped and restored a whole sentence while the player read it |
 
-Chapter 1 with Yuna down: 2,500 base + four lost families (4,800) + Summoner
-(2,500) = **9,800**, against ~2,600 for the best thing Tidus can throw and
-20,000 for finishing the boss. So a revive outranks every plain attack and never
-out-argues a kill. `reviveValue()` is pure and unit-tested at both ends.
+So the fit now runs **before** `layout()` (measuring the box that was actually on
+screen), keys off `(advice, cap, width)`, and is **monotone within a decision** —
+it gives things up and never takes them back until the next decision opens.
 
-**Whether *this* actor can revive** needs no extra code: the advisor only ever
-prices rows the acting character was offered, so a Phoenix Down with none in
-stock, or a Life she has not learned or cannot pay for, never reaches the
-scorer. What *was* needed is `orderedRows()` — `MAX_SIMULATIONS` caps a menu at
-sixty previews and Tidus is offered forty-two rows, so the revive is now
-simulated first while anyone is down rather than risking the cap.
+The note — the "raise her after it lands" sentence — also **moved above the
+moves**. Whatever cuts this card cuts its bottom, and that sentence is the whole
+answer to "what about reviving Yuna?".
 
-**Safety.** `reviveRisk()` refuses to recommend a raise into a guaranteed
-re-kill, from three signals, none of which needs the live engine:
+## F2 / F3 — the forecast the game never had
 
-1. the body is still a **Zombie** (Zombie survives KO here on purpose), so
-   raising it hands the Mortiorchis's Full-Life its guaranteed kill —
-   `seymour-flux.ts` step 4 leaves that body down for the same reason;
-2. a **charge counter at 0 or 1** in the log — the Total Annihilation case;
-3. the **enemy-intent forecast**, when the HUD supplies one, says the next
-   action is aimed lethally at the revive target or is a named re-kill move
-   (Lance of Atrophy, Full-Life, Total Annihilation, Death).
+`AdvisorOptions.intent` existed and nothing passed it. `FFXBattleHud` builds its
+card with `new MoveAdvisor({ game, anchors })` and no options at all;
+`FFX2BattleHud` passes registries and no `intent`. So the telegraphed-re-kill
+rule was green in unit tests that injected a forecast by hand and **dead in the
+game** — the intent slab announced "Lance of Atrophy · Zombie 50%" over
+Seymour's head while the card underneath offered a Mega Phoenix and said nothing.
 
-When it fires, the revive's value is cut to 15% and the card prints **one plain
-sentence** in `AdvisorView.note` saying when to spend the turn instead —
-e.g. *"Seymour Flux uses Lance of Atrophy next and Yuna would go straight back
-down — raise Yuna once it has landed."* The revive is not offered on that board.
+Wiring it is one line in each HUD and both are other tracks' files this round —
+but the advisor does not need the HUD. `src/engine/tactics/advisor-forecast.ts`
+derives the forecast from the `BattleState` the advisor already holds:
 
-**Where the revive shows up.** The chapter's own line still tops the card
-(rule 1 of the module header: the advisor and the auto-battler must never teach
-different fights). When an ally is down and the top row is not the revive, the
-revive is the **runner-up** with a plain reason. "Suggest switching rarely" and
-"top two when the best is a switch" are unchanged.
+* **FFX** rebuilds a `Ctx` the way `simulate.ts` does and runs the engine's own
+  `predictEnemyIntent` against it. Every input the AI scripts read is in the
+  public state — Seymour's whole six-step cycle is `state.flags['seymour.p1Step']`.
+* **FFX-2** needs no rebuild: `Ffx2IntentEnv` is a state, an RNG and the two
+  registries `FFX2BattleHud` already passes.
+* CTB counters are not in `BattleState`, and for this question they do not have
+  to be: a revived character re-enters at **three times their base counter**
+  (`turnQueue.ts:156`), so every living enemy acts before they do and what
+  decides whether the raise survives is the *worst* of them. That is what the
+  module returns.
+* It runs only when somebody is actually on the floor, at 3 samples an enemy.
+* `AdvisorOptions.intent` still wins when a HUD passes one — that source reads
+  the live CTB counters and AI memory, which a state-only rebuild cannot.
 
-## (c) Plain words — done
+**And the rule had to be tightened to survive contact with the real script.**
+Two of Seymour's three phase-1 turns are Lance of Atrophy and it picks **one
+random living target**; the old rule refused a revive whenever the forecast
+*named* a re-kill move, which would have left the summoner on the floor two
+turns out of three. A refusal now needs a guaranteed re-kill — something aimed
+at the body on the floor and lethal there, or a sweep reaching two or more
+living allies for at least what the raise gives back (measured from the
+simulation's own `hpDelta`, so a Phoenix Down's sliver and a Mega Phoenix's full
+bar are told apart). A `'likely'` branch never refuses. Anything short of that
+is a **caution** printed beside the revive — the revive is still recommended,
+and the card says what is coming:
 
-* `chapter line` → **`Guide's pick`**.
-* The research citation (`ffx-seymour-flux §6 rows 5-6`) is **no longer printed
-  on the card**. `MoveSuggestion.cite` is still populated for the debug
-  snapshot; the citations are still shown in the strategy guide panel, which is
-  the place a player opens to ask *why*.
-* `move-advisor.css` was **not** edited (not this track's file). The new chips
-  reuse `.mad__stat`, and the wait sentence reuses `.mad__warn`.
+> Mega Phoenix → the party · in Items
+> *Only Yuna can call an aeon, revive or heal — stand Yuna up.*
+> **Seymour Flux uses Lance of Atrophy before Yuna can act.**
 
-## (d) Tests
+## (c) Plain words — unchanged from pass 1
 
-`tests/unit/advisor-ownership.test.ts`, 13 tests:
+`chapter line` → **Guide's pick**; no `§`/`ffx-` citation on the card (they stay
+in the strategy guide panel, which is where a player goes to ask *why*); every
+row carries the submenu it lives in.
 
-* **Property test, one per chapter.** Replays all five chapters with the shipped
-  tactics *and* with seeded random legal play, both FFX and FFX-2 engines,
-  ≥300 decisions per chapter (seeds are added until the budget is met), and
-  asserts that every suggestion on every card passes `ownedRow` against that
-  decision's own command list — and that the card's actor id and name match the
-  decision's. **Zero illegal suggestions.**
-* **Bailey's exact board** (Chapter 1, Tidus acting, Yuna forced to 0/1500,
-  Phoenix Downs in stock): a revive is first or second, its reason names Yuna
-  and contains no `§`/`ffx-` citation, its `menu` is `Items`, and `note` is
-  empty.
-* **The same board with Lance of Atrophy telegraphed on Yuna**: the card
-  explains the wait, the revive is not offered, and `reviveValue` drops below a
-  third.
-* Plus the Zombie-body wait, the capability-loss reading (four families lost for
-  Yuna, none for Wakka), and `ownedRow`'s four refusals.
+---
 
 ## How it was verified
 
 * `npx tsc --noEmit` — clean.
-* `npx vitest run tests/unit/advisor.test.ts tests/unit/advisor-simulate.test.ts
-  tests/unit/ui-move-advisor.test.ts tests/unit/strategy-guide.test.ts` — 67
-  passed. The pre-existing "tops the card with the chapter line" guarantees
-  still hold.
-* `npx vitest run tests/unit/advisor-ownership.test.ts` — 13 passed.
-* **Real input, real browser.** `vite build` snapshot served by `vite preview`
-  on port 5612 (the dev server was unusable: other agents are editing this tree
-  and HMR kept reloading the page mid-run). Playwright drove Chapter 1 through
-  the debug API with Yuna held at 0/1500, to a Tidus turn with the command menu
-  open — the board on Bailey's screenshot, down to `ITEMS x27`. Both servers
-  stopped afterwards.
+* `npx vitest run tests/unit/advisor-forecast.test.ts advisor-ownership.test.ts
+  advisor.test.ts advisor-simulate.test.ts ui-move-advisor.test.ts
+  strategy-guide.test.ts` — **97 passed**, including the property test that
+  replays all five chapters under the shipped tactics and seeded random legal
+  play (300+ decisions each, both engines) with zero illegal suggestions.
+* New tests that pin this round's three failures:
+  * `advisor-forecast.test.ts` builds its advisor the way the HUDs build theirs
+    — `{ ffxContent }` or `{ ffx2: { abilities, items } }`, **never** an
+    `intent` option — and drives Seymour's real cycle: the mount's Cross Cleave
+    step holds the revive back and says when, a Lance of Atrophy step still
+    offers it with the telegraph beside it, a Dispel step says nothing.
+  * `ui-move-advisor.test.ts` adds the density ladder (shorter at every rung,
+    and at no rung missing a move's name, its submenu, the revive's reason or
+    the note), the fit loop against a cap, the monotone-within-a-decision rule,
+    and **the FFX HUD's own card** — `new MoveAdvisor({ game, anchors })`, no
+    options — answering on a real Chapter 1 board.
+* **Real input, real browser.** `npx vite build` into a scratch dir, `vite
+  preview` on port 5716, Playwright chromium with `tools/screenshot.mjs`'s
+  `CHROMIUM_ARGS`, real `Enter` presses to walk turns until the open menu is
+  Tidus's, with Yuna held at 0/1500 and `seymour.p1Step` pinned so the forecast
+  under test is a named step of the real script. Both servers stopped
+  afterwards; nothing on :8188 or :8890 was touched.
 
 | shot | what it shows |
 |---|---|
-| `docs/screenshots/fix3/advisor/01-tidus-turn-yuna-down-full.png` | Bailey's board reproduced: Tidus acting, Yuna 0/1500, Kimahri up. Card: **Hastega → the party · `GUIDE'S PICK` · in White Magic**, and **2 · Mega Phoenix → the party · in Items** — *"Yuna is the only one left who can call an aeon, revive or heal — stand Yuna up."* No citation anywhere on the card. |
-| `.../02-card-closeup.png` | the same card, close up. |
-| `.../03-holy-water-board-full.png`, `.../04-holy-water-board-card.png` | a second Tidus turn, Zombie on him: **Holy Water → Tidus · `GUIDE'S PICK` · in Items**, with **2 · Phoenix Down → Yuna · in Items** underneath. The chapter's cure still leads; the revive is no longer invisible. |
+| `docs/screenshots/fix3/advisor/05-baileys-board-fixed.png` | Bailey's board, the whole card on screen: **Hastega → the party · GUIDE'S PICK · in White Magic**, then **2 · Mega Phoenix → the party · in Items · +1,500 · cures KO**, *"Only Yuna can call an aeon, revive or heal — stand Yuna up"*, and in red *"Seymour Flux uses Lance of Atrophy before Yuna can act"* — while the intent slab above says Lance of Atrophy. No citation, no "chapter line". |
+| `06-wait-note-full.png`, `07-wait-note-card.png` | the mount's Cross Cleave step: no revive offered, and the card leads with *"Cross Cleave hits the whole party next — take it first, then raise Yuna."* |
+| `08-hud-shelf-24px.png` | the open defect below: the same card in the HUD's 24px shelf. |
+| `09-960x540.png` | the small viewport. |
 
-## What is left / requests for other tracks
+Measured on the preview at 1280x720, Bailey's board, over 60 frames: content 67px
+against a 104px cap, **0 frames overflowing** (round 1 measured 162 against 103,
+every frame).
 
-1. **Wire the intent forecast into the advisor.** `AdvisorOptions.intent` is a
-   new optional `() => AdvisorIntent | null`, a *structural subset* of
-   `ui/common/EnemyIntent.ts`'s `IntentView`, so the HUD owners can pass their
-   existing source with no adapter:
+One disclosure about `05-baileys-board-fixed.png`: the HUD's per-frame tick was
+silenced in the page for the length of the capture (`hud.update = () => {}`),
+because of the open defect below — the card is re-placed several times a second
+and a screenshot of a WebGL page never lands where the probe looked. Nothing
+about the card's own content or fit was touched, and the measurements above are
+from the un-frozen page.
+
+---
+
+## What is left — for other tracks
+
+1. **`ffx/hudSafeZones.ts` + `FFXBattleHud.placeAdvisor`: the shelf is a box
+   nothing fits in, and the card teleports.** Owner: the FFX HUD track. Measured
+   on the built preview, Chapter 1, Tidus acting, at 1280x720 and 1600x900:
+   * `advisorZone` returns `kind: 'shelf'` on many turns (the pocket does not fit
+     and the Sensor card's bottom edge becomes the shelf's ceiling), with
+     `maxHeight` between **24px and 45px**. The advisor's tersest possible card —
+     head, actor, two named moves — is **47px**. `MIN_ADVISOR_HEIGHT` is 28;
+     it wants to be about 72, with the shelf declining rather than returning a
+     box that small.
+   * On the same board `placeAdvisor` alternates between finding a zone and
+     finding none **several times a second**, so the card jumps between the
+     shelf and its own bottom-right placement, changing size as it goes. Worth
+     a hysteresis or a held zone.
+   * With a cap of 104 (the pocket, and the stylesheet's own value) everything
+     fits and the answer is on screen; this is only about the shelf.
+2. **`move-advisor.css`** (presentation track), optional now rather than
+   blocking: `.mad__warn--lead` is a new hook for the note that sits under the
+   head, and the `in <submenu>` chip could carry a quieter weight than the
+   damage chips.
+3. **Wiring `AdvisorOptions.intent`** is no longer needed for correctness, but a
+   HUD that passes its live source still gives the advisor a better forecast
+   (real CTB counters and AI memory):
    ```ts
-   // FFXBattleHud / FFX2BattleHud, where `advisor:` options are built
-   advisor: () => ({ ...registries, intent: () => this.enemyIntent.current() }),
+   advisor: () => ({ ...registries, intent: () => this.enemyIntent.view() }),
    ```
-   Without it the advisor still refuses a revive into a Zombie body or a charge
-   landing this turn (both read from `BattleState`), but it cannot see a
-   telegraphed Lance of Atrophy. **Owner: the HUD / enemy-intent track.**
-2. **`move-advisor.css` — the card is taller now and it shows.** On
-   `01-tidus-turn-yuna-down-full.png` the second suggestion's last line
-   ("stand Yuna up.") is clipped at the bottom of the stage: two suggestions no
-   longer fit in the band `MoveAdvisor.layout` puts the card in. The card
-   scrolls, so nothing is lost, but the runner-up should not need scrolling to
-   be read. Three options, all in the stylesheet: a tighter `.mad__move--alt`
-   (smaller type, less padding), a `max-height` with the anchor moved up, or
-   `flex-direction: column-reverse` so the card grows upward from
-   `anchors.bottom`. The same file could give the new "in Items" chip a quieter
-   weight than the damage chips and the card-level `.mad__warn` note a little
-   top margin. Not this track's file. **Owner: the presentation track.**
-3. **A judgement call worth Bailey's eye.** The chapter's own line still sits at
-   #1 and the revive at #2, because `seymour-flux.ts` puts the turn-one openers
-   *above* the revive on purpose and with measurements behind it (its step 2 vs
-   step 4 comments). If Bailey wants the revive to lead on that board, that is a
-   change to the tactic's ordering, not to the advisor — and the advisor will
-   follow it automatically. **Owner: the Chapter 1 tactic.**
+4. **A judgement call for Bailey.** The chapter's own line still tops the card,
+   so on turn one the revive is the runner-up rather than the pick. That is
+   `seymour-flux.ts`'s ordering, not the advisor's, and the advisor follows it
+   automatically if it changes.
+
+## One housekeeping note
+
+`node_modules/jsdom/lib/generated/idl/CSSNestedDeclarations.js` was found
+**corrupted with binary garbage** mid-session (every jsdom test in the repo
+failed to start with `SyntaxError: Invalid or unexpected token`). Repaired with
+`rm -rf node_modules/jsdom && npm install --no-save --ignore-scripts
+jsdom@29.1.1`; `package.json` and the lockfile are untouched. Worth knowing
+given this machine's week — see the crash-diagnosis notes.
