@@ -283,17 +283,30 @@
   left: 21.33px;
   width: 132px;
   /* `top` is written per frame by layout(), at the panel's bottom edge. */
-  height: 8px;
+  height: 11px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0.5px;
   border: 0;
-  background: linear-gradient(to top, var(--ig-ink-panel), rgba(11, 10, 18, 0));
+  /* Opaque under the word, fading only across its top third. The first version
+     was a full-height fade and the browser pass caught the consequence: at a
+     rail that is genuinely overflowing, "MORE" was printed over the middle of
+     the last sentence it was announcing. The glyphs sit on the panel's own
+     bottom edge, under the `mask-image` fade the panel already draws, so the
+     two read as one affordance. */
+  background: linear-gradient(
+    to top,
+    var(--ig-ink-panel) 0%,
+    var(--ig-ink-panel) 64%,
+    rgba(11, 10, 18, 0) 100%
+  );
   color: var(--ig-accent);
   font-family: var(--ig-font-display);
   font-size: 5px;
-  line-height: 8px;
+  line-height: 1;
   letter-spacing: 0.2em;
-  text-align: center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   cursor: pointer;
   pointer-events: auto;
 }

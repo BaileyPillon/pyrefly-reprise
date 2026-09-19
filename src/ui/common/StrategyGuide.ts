@@ -142,6 +142,9 @@ const COMPACT_HEIGHT = 200;
  */
 const FIT_RUNGS = 4;
 
+/** Height of the MORE affordance, in grid px. Mirrors `.sgd__more`'s own. */
+const MORE_HEIGHT = 11;
+
 export class StrategyGuide {
   readonly el: HTMLElement;
   private readonly panelEl: HTMLElement;
@@ -393,7 +396,11 @@ export class StrategyGuide {
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);
     this.fit(available);
-    this.moreEl.style.top = `${(top + available - 8).toFixed(2)}px`;
+    // Flush with the panel's own bottom edge, whichever of the two heights is
+    // smaller: `available` is a cap, and a rail whose content stops short of it
+    // would otherwise get a chip floating in mid-panel.
+    const panelHeight = Math.min(available, this.panelEl.offsetHeight || available);
+    this.moreEl.style.top = `${(top + panelHeight - MORE_HEIGHT).toFixed(2)}px`;
   }
 
   /**

@@ -469,10 +469,19 @@ Two notes on the method, because both cost time:
   what a human gets. The same clamp is why the plate's seven-second auto-fold
   takes ~45 s of wall clock in this harness and ~7 s in a 60 fps game.
 
-The harness is `tools/zz-hud-check.tmp.mjs` (a recognised fleet path — see
-`docs/DEV.md`'s deploy dirty-tree rules), its output is
-`docs/screenshots/fix3/ffx-hud/after-report.json`, and the shots are
-`after-<viewport>-0N-*.png`.
+**The result, after four passes.** Of the 14 measured states, **12 are
+completely clean** and the other two carry a 12 and a 6 square-pixel corner
+between the intent slab and the raised command-info card — the dodge's own 4 px
+gap, lost to rounding. Zero slab-on-fighter and zero slab-on-reticle overlaps at
+either viewport, which is issue #14 answered; and zero slab-on-panel overlaps
+otherwise. The first three passes are what found the four errors the previous
+two commits fix, each of which was reasoning that the screen disagreed with.
+
+The harness is `tools/hud-safe-area-check.mjs` and it is worth keeping: it is
+the only thing in the repo that measures a HUD panel against a *fighter*. Its
+output is `docs/screenshots/fix3/ffx-hud/after-report.json` and the shots are
+`after-<viewport>-0N-*.png`, plus `after-1600x900-08-guide-more.png` for the
+guide's affordance.
 
 ---
 

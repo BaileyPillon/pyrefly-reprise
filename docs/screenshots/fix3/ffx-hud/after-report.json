@@ -1,0 +1,1531 @@
+{
+  "viewports": [
+    {
+      "viewport": "1600x900",
+      "states": {
+        "01-menu": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1067,
+              415,
+              1363,
+              633
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              315
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              295,
+              383,
+              315
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              270,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "02-targeting": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Seymour Flux HP 70000 / 70000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1067,
+              415,
+              1363,
+              633
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              315
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              295,
+              383,
+              315
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              270,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "03-target-second": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1067,
+              415,
+              1363,
+              633
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              315
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              295,
+              383,
+              315
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              270,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "04-plate-folded": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1067,
+              415,
+              1363,
+              633
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              315
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              295,
+              383,
+              315
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              270,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "05-plate-reopened": {
+          "issues": [],
+          "sensorFolded": true,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV IMortiorchis",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1088,
+              415,
+              1224,
+              436
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              315
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              295,
+              383,
+              315
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              270,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "06-submenu": {
+          "issues": [
+            "intent x cmdInfo = 12px2"
+          ],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Restores a small amount of HP to one ally.",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1067,
+              415,
+              1363,
+              633
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              275
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              255,
+              383,
+              275
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              485,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "07-back": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Open the Items menu.",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 298,
+          "rects": {
+            "intent": [
+              413,
+              31,
+              788,
+              329
+            ],
+            "intentChip": [
+              708,
+              10,
+              784,
+              29
+            ],
+            "sensor": [
+              1067,
+              415,
+              1363,
+              633
+            ],
+            "guide": [
+              53,
+              110,
+              383,
+              315
+            ],
+            "guideChip": [
+              51,
+              83,
+              177,
+              101
+            ],
+            "guideMore": [
+              53,
+              295,
+              383,
+              315
+            ],
+            "advisor": [
+              737,
+              576,
+              1000,
+              835
+            ],
+            "advisorChip": [
+              763,
+              551,
+              894,
+              570
+            ],
+            "ctb": [
+              1369,
+              124,
+              1551,
+              501
+            ],
+            "cmdStack": [
+              76,
+              416,
+              544,
+              836
+            ],
+            "cmdInfo": [
+              68,
+              329,
+              320,
+              401
+            ],
+            "party": [
+              1007,
+              646,
+              1542,
+              870
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "states": {
+        "01-menu": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              854,
+              332,
+              1090,
+              506
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              252
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              236,
+              307,
+              252
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              216,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "02-targeting": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Seymour Flux HP 70000 / 70000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              854,
+              332,
+              1090,
+              506
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              252
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              236,
+              307,
+              252
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              216,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "03-target-second": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              854,
+              332,
+              1090,
+              506
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              252
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              236,
+              307,
+              252
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              216,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "04-plate-folded": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              854,
+              332,
+              1090,
+              506
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              252
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              236,
+              307,
+              252
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              216,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "05-plate-reopened": {
+          "issues": [],
+          "sensorFolded": true,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV IMortiorchis",
+          "cmdInfoText": "Physical damage",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              870,
+              332,
+              980,
+              349
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              252
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              236,
+              307,
+              252
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              216,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "06-submenu": {
+          "issues": [
+            "intent x cmdInfo = 6px2"
+          ],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Restores a small amount of HP to one ally.",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              854,
+              332,
+              1090,
+              506
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              220
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              204,
+              307,
+              220
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              388,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        },
+        "07-back": {
+          "issues": [],
+          "sensorFolded": false,
+          "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+          "cmdInfoText": "Open the Items menu.",
+          "intentText": "Seymour Flux2nd in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punished with party-wide S",
+          "intentHeight": 238,
+          "rects": {
+            "intent": [
+              328,
+              25,
+              628,
+              263
+            ],
+            "intentChip": [
+              564,
+              8,
+              625,
+              23
+            ],
+            "sensor": [
+              854,
+              332,
+              1090,
+              506
+            ],
+            "guide": [
+              43,
+              88,
+              307,
+              252
+            ],
+            "guideChip": [
+              41,
+              66,
+              142,
+              81
+            ],
+            "guideMore": [
+              43,
+              236,
+              307,
+              252
+            ],
+            "advisor": [
+              590,
+              461,
+              800,
+              668
+            ],
+            "advisorChip": [
+              610,
+              441,
+              715,
+              456
+            ],
+            "ctb": [
+              1095,
+              100,
+              1241,
+              401
+            ],
+            "cmdStack": [
+              60,
+              333,
+              436,
+              668
+            ],
+            "cmdInfo": [
+              54,
+              263,
+              256,
+              321
+            ],
+            "party": [
+              805,
+              517,
+              1234,
+              696
+            ]
+          },
+          "guideRungs": [
+            "sgd--compact",
+            "sgd--fit1",
+            "sgd--fit2",
+            "sgd--fit3",
+            "sgd--fit4"
+          ],
+          "guideClipped": true,
+          "guideMoreShown": true,
+          "odLabels": [
+            {
+              "who": "tidus",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "yuna",
+              "label": "OD",
+              "ready": false
+            },
+            {
+              "who": "kimahri",
+              "label": "Overdrive",
+              "ready": true
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "findings": []
+}
