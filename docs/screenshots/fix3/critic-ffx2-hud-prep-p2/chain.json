@@ -1,0 +1,2406 @@
+{
+ "rows": [
+  {
+   "chapter": "ch4",
+   "vp": "1280x720",
+   "count": 3,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 708.8,
+    "y": 122.6
+   },
+   "feetY": 429.7,
+   "reserved": {
+    "l": 375.8,
+    "t": 101.5,
+    "rt": 618.8,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 376.1,
+    "t": 102,
+    "rt": 618.5,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 497.3,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -333,
+    "dy": 117
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -376.1,
+    "right": -661.5,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 798.8,
+     "t": 25,
+     "w": 300,
+     "h": 185.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 185.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1280x720",
+   "count": 7,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 708.7,
+    "y": 122.6
+   },
+   "feetY": 429.6,
+   "reserved": {
+    "l": 375.7,
+    "t": 101.5,
+    "rt": 618.7,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 376,
+    "t": 102,
+    "rt": 618.4,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 497.2,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -333,
+    "dy": 117
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -376,
+    "right": -661.6,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 798.7,
+     "t": 25,
+     "w": 300,
+     "h": 185.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 185.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1280x720",
+   "count": 12,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 708.7,
+    "y": 122.6
+   },
+   "feetY": 429.6,
+   "reserved": {
+    "l": 375.7,
+    "t": 101.5,
+    "rt": 618.7,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 376,
+    "t": 102,
+    "rt": 618.4,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 497.2,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -333,
+    "dy": 117
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -376,
+    "right": -661.6,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 798.7,
+     "t": 25,
+     "w": 300,
+     "h": 185.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 185.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1280x720",
+   "count": 22,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 708.7,
+    "y": 122.6
+   },
+   "feetY": 429.6,
+   "reserved": {
+    "l": 375.7,
+    "t": 101.5,
+    "rt": 618.7,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 376,
+    "t": 102,
+    "rt": 618.4,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 497.2,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -333,
+    "dy": 117
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -376,
+    "right": -661.6,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 798.7,
+     "t": 25,
+     "w": 300,
+     "h": 185.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 185.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1600x900",
+   "count": 3,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 887.3,
+    "y": 153.2
+   },
+   "feetY": 537.5,
+   "reserved": {
+    "l": 474.8,
+    "t": 125.9,
+    "rt": 778.8,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 475.2,
+    "t": 126.1,
+    "rt": 778.3,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 626.8,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -412.5,
+    "dy": 144.7
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -475.2,
+    "right": -821.7,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 998.9,
+     "t": 31.3,
+     "w": 375,
+     "h": 231.4
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 231.4
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1600x900",
+   "count": 7,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 887.4,
+    "y": 153.2
+   },
+   "feetY": 537.5,
+   "reserved": {
+    "l": 474.5,
+    "t": 125.9,
+    "rt": 778.5,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 474.9,
+    "t": 126.1,
+    "rt": 778,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 626.5,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -412.9,
+    "dy": 144.7
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -474.9,
+    "right": -822,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 999,
+     "t": 31.3,
+     "w": 375,
+     "h": 231.4
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 231.4
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1600x900",
+   "count": 12,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 887.4,
+    "y": 153.2
+   },
+   "feetY": 537.5,
+   "reserved": {
+    "l": 474.5,
+    "t": 125.9,
+    "rt": 778.5,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 474.9,
+    "t": 126.1,
+    "rt": 778,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 626.5,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -412.9,
+    "dy": 144.7
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -474.9,
+    "right": -822,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 999,
+     "t": 31.3,
+     "w": 375,
+     "h": 231.4
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 231.4
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "1600x900",
+   "count": 22,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 887.4,
+    "y": 153.2
+   },
+   "feetY": 537.5,
+   "reserved": {
+    "l": 474.5,
+    "t": 125.9,
+    "rt": 778.5,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 474.9,
+    "t": 126.1,
+    "rt": 778,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 626.5,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -412.9,
+    "dy": 144.7
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -474.9,
+    "right": -822,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 999,
+     "t": 31.3,
+     "w": 375,
+     "h": 231.4
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 231.4
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2000x1000",
+   "count": 3,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1095.9,
+    "y": 170.4
+   },
+   "feetY": 596.4,
+   "reserved": {
+    "l": 1639.8,
+    "t": 16.7,
+    "rt": 1976.8,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1640,
+    "t": 17.1,
+    "rt": 1976.7,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1808.3,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 544,
+    "dy": 38.2
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1640,
+    "right": -23.3,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1219.2,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 257.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 257.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2000x1000",
+   "count": 7,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1095.6,
+    "y": 170.3
+   },
+   "feetY": 596.3,
+   "reserved": {
+    "l": 1639.5,
+    "t": 16.7,
+    "rt": 1976.5,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1639.7,
+    "t": 17.1,
+    "rt": 1976.4,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1808,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 543.9,
+    "dy": 38.3
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1639.7,
+    "right": -23.6,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1218.9,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 257.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 257.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2000x1000",
+   "count": 12,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1095.6,
+    "y": 170.3
+   },
+   "feetY": 596.3,
+   "reserved": {
+    "l": 1639.5,
+    "t": 16.7,
+    "rt": 1976.5,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1639.7,
+    "t": 17.1,
+    "rt": 1976.4,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1808,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 543.9,
+    "dy": 38.3
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1639.7,
+    "right": -23.6,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1218.9,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 257.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 257.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2000x1000",
+   "count": 22,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1095.6,
+    "y": 170.3
+   },
+   "feetY": 596.3,
+   "reserved": {
+    "l": 1639.5,
+    "t": 16.7,
+    "rt": 1976.5,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1639.7,
+    "t": 17.1,
+    "rt": 1976.4,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1808,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 543.9,
+    "dy": 38.3
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1639.7,
+    "right": -23.6,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1218.9,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 257.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 257.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2560x1440",
+   "count": 3,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1419.7,
+    "y": 244.7
+   },
+   "feetY": 859.3,
+   "reserved": {
+    "l": 758.6,
+    "t": 199.1,
+    "rt": 1243.6,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 758.6,
+    "t": 199.5,
+    "rt": 1243.5,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 1001.1,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -661.1,
+    "dy": 229.4
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -758.6,
+    "right": -1316.5,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1595.7,
+     "t": 50,
+     "w": 600,
+     "h": 370.3
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 370.3
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2560x1440",
+   "count": 7,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1420.3,
+    "y": 244.4
+   },
+   "feetY": 859.1,
+   "reserved": {
+    "l": 759.1,
+    "t": 199.1,
+    "rt": 1244.1,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 759.2,
+    "t": 199.5,
+    "rt": 1244.1,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 1001.6,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -661.1,
+    "dy": 229.7
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -759.2,
+    "right": -1315.9,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1596.3,
+     "t": 50,
+     "w": 600,
+     "h": 370.3
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 370.3
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2560x1440",
+   "count": 12,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1420.3,
+    "y": 244.4
+   },
+   "feetY": 859.1,
+   "reserved": {
+    "l": 759.1,
+    "t": 199.1,
+    "rt": 1244.1,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 759.2,
+    "t": 199.5,
+    "rt": 1244.1,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 1001.6,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -661.1,
+    "dy": 229.7
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -759.2,
+    "right": -1315.9,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1596.3,
+     "t": 50,
+     "w": 600,
+     "h": 370.3
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 370.3
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch4",
+   "vp": "2560x1440",
+   "count": 22,
+   "enemy": "bahamut",
+   "anchor": {
+    "x": 1420.3,
+    "y": 244.4
+   },
+   "feetY": 859.1,
+   "reserved": {
+    "l": 759.1,
+    "t": 199.1,
+    "rt": 1244.1,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 759.2,
+    "t": 199.5,
+    "rt": 1244.1,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 1001.6,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -661.1,
+    "dy": 229.7
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -759.2,
+    "right": -1315.9,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1596.3,
+     "t": 50,
+     "w": 600,
+     "h": 370.3
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 370.3
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1280x720",
+   "count": 3,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 652.2,
+    "y": 127.2
+   },
+   "feetY": 447.2,
+   "reserved": {
+    "l": 315.5,
+    "t": 101.5,
+    "rt": 558.5,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 315.8,
+    "t": 102,
+    "rt": 558.3,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 437,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -336.6,
+    "dy": 112.3
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -315.8,
+    "right": -721.7,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 745.8,
+     "t": 25,
+     "w": 300,
+     "h": 182.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 182.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1280x720",
+   "count": 7,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 652.1,
+    "y": 127.2
+   },
+   "feetY": 447.2,
+   "reserved": {
+    "l": 315.5,
+    "t": 101.5,
+    "rt": 558.5,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 315.8,
+    "t": 102,
+    "rt": 558.2,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 437,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -336.6,
+    "dy": 112.3
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -315.8,
+    "right": -721.8,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 745.8,
+     "t": 25,
+     "w": 300,
+     "h": 182.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 182.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1280x720",
+   "count": 12,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 652.1,
+    "y": 127.2
+   },
+   "feetY": 447.2,
+   "reserved": {
+    "l": 315.5,
+    "t": 101.5,
+    "rt": 558.5,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 315.8,
+    "t": 102,
+    "rt": 558.2,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 437,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -336.6,
+    "dy": 112.3
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -315.8,
+    "right": -721.8,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 745.8,
+     "t": 25,
+     "w": 300,
+     "h": 182.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 182.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1280x720",
+   "count": 22,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 652.1,
+    "y": 127.2
+   },
+   "feetY": 447.2,
+   "reserved": {
+    "l": 315.5,
+    "t": 101.5,
+    "rt": 558.5,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "painted": {
+    "l": 315.8,
+    "t": 102,
+    "rt": 558.2,
+    "bt": 239,
+    "w": 242.4,
+    "h": 137
+   },
+   "anchorCheck": {
+    "chipCentreX": 437,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -336.6,
+    "dy": 112.3
+   },
+   "outsideOverlay": {
+    "top": -102,
+    "left": -315.8,
+    "right": -721.8,
+    "bottom": -481
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 12.2,
+    "left": 0,
+    "right": 0,
+    "bottom": 12.2
+   },
+   "intent": {
+    "box": {
+     "l": 745.8,
+     "t": 25,
+     "w": 300,
+     "h": 182.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 300,
+        "h": 182.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1600x900",
+   "count": 3,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 814.8,
+    "y": 158.9
+   },
+   "feetY": 558.6,
+   "reserved": {
+    "l": 394.9,
+    "t": 125.9,
+    "rt": 698.9,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 395.4,
+    "t": 126.1,
+    "rt": 698.5,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 546.9,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -419.9,
+    "dy": 139
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -395.4,
+    "right": -901.5,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 930.7,
+     "t": 31.3,
+     "w": 375,
+     "h": 228.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 228.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1600x900",
+   "count": 7,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 814.9,
+    "y": 158.9
+   },
+   "feetY": 558.6,
+   "reserved": {
+    "l": 395,
+    "t": 125.9,
+    "rt": 699,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 395.4,
+    "t": 126.1,
+    "rt": 698.5,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 547,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -419.9,
+    "dy": 139
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -395.4,
+    "right": -901.5,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 930.8,
+     "t": 31.3,
+     "w": 375,
+     "h": 228.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 228.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1600x900",
+   "count": 12,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 814.9,
+    "y": 158.9
+   },
+   "feetY": 558.6,
+   "reserved": {
+    "l": 395,
+    "t": 125.9,
+    "rt": 699,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 395.4,
+    "t": 126.1,
+    "rt": 698.5,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 547,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -419.9,
+    "dy": 139
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -395.4,
+    "right": -901.5,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 930.8,
+     "t": 31.3,
+     "w": 375,
+     "h": 228.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 228.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "1600x900",
+   "count": 22,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 814.9,
+    "y": 158.9
+   },
+   "feetY": 558.6,
+   "reserved": {
+    "l": 395,
+    "t": 125.9,
+    "rt": 699,
+    "bt": 297.9,
+    "w": 304,
+    "h": 172
+   },
+   "painted": {
+    "l": 395.4,
+    "t": 126.1,
+    "rt": 698.5,
+    "bt": 297.7,
+    "w": 303.1,
+    "h": 171.7
+   },
+   "anchorCheck": {
+    "chipCentreX": 547,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -419.9,
+    "dy": 139
+   },
+   "outsideOverlay": {
+    "top": -126.1,
+    "left": -395.4,
+    "right": -901.5,
+    "bottom": -602.3
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 15.5,
+    "left": 0,
+    "right": 0,
+    "bottom": 15.5
+   },
+   "intent": {
+    "box": {
+     "l": 930.8,
+     "t": 31.3,
+     "w": 375,
+     "h": 228.2
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 375,
+        "h": 228.2
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2000x1000",
+   "count": 3,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1016.7,
+    "y": 176.7
+   },
+   "feetY": 621.1,
+   "reserved": {
+    "l": 1565.8,
+    "t": 16.7,
+    "rt": 1902.8,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1565.9,
+    "t": 17.1,
+    "rt": 1902.6,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1734.3,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 549.1,
+    "dy": 32
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1565.9,
+    "right": -97.4,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1145.2,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 253.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 253.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2000x1000",
+   "count": 7,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1016.5,
+    "y": 176.7
+   },
+   "feetY": 621,
+   "reserved": {
+    "l": 1565.7,
+    "t": 16.7,
+    "rt": 1902.7,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1565.8,
+    "t": 17.1,
+    "rt": 1902.5,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1734.2,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 549.1,
+    "dy": 32
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1565.8,
+    "right": -97.5,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1145,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 253.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 253.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2000x1000",
+   "count": 12,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1016.5,
+    "y": 176.7
+   },
+   "feetY": 621,
+   "reserved": {
+    "l": 1565.7,
+    "t": 16.7,
+    "rt": 1902.7,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1565.8,
+    "t": 17.1,
+    "rt": 1902.5,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1734.2,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 549.1,
+    "dy": 32
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1565.8,
+    "right": -97.5,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1145,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 253.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 253.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2000x1000",
+   "count": 22,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1016.5,
+    "y": 176.7
+   },
+   "feetY": 621,
+   "reserved": {
+    "l": 1565.7,
+    "t": 16.7,
+    "rt": 1902.7,
+    "bt": 208.7,
+    "w": 337,
+    "h": 192
+   },
+   "painted": {
+    "l": 1565.8,
+    "t": 17.1,
+    "rt": 1902.5,
+    "bt": 208.2,
+    "w": 336.7,
+    "h": 191
+   },
+   "anchorCheck": {
+    "chipCentreX": 1734.2,
+    "rightOfEnemy": true,
+    "aboveEnemy": false,
+    "dx": 549.1,
+    "dy": 32
+   },
+   "outsideOverlay": {
+    "top": -17.1,
+    "left": -1565.8,
+    "right": -97.5,
+    "bottom": -791.8
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 16.8,
+    "left": 0,
+    "right": 0,
+    "bottom": 16.7
+   },
+   "intent": {
+    "box": {
+     "l": 1145,
+     "t": 34.7,
+     "w": 416.7,
+     "h": 253.5
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 416.7,
+        "h": 253.5
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2560x1440",
+   "count": 3,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1302.8,
+    "y": 254.9
+   },
+   "feetY": 894.3,
+   "reserved": {
+    "l": 634.8,
+    "t": 199.1,
+    "rt": 1119.8,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 634.8,
+    "t": 199.5,
+    "rt": 1119.7,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 877.3,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -668,
+    "dy": 219.2
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -634.8,
+    "right": -1440.3,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1485.9,
+     "t": 50,
+     "w": 600,
+     "h": 365.1
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 365.1
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2560x1440",
+   "count": 7,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1302.9,
+    "y": 255
+   },
+   "feetY": 894.3,
+   "reserved": {
+    "l": 634.9,
+    "t": 199.1,
+    "rt": 1119.9,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 634.9,
+    "t": 199.5,
+    "rt": 1119.8,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 877.4,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -668,
+    "dy": 219
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -634.9,
+    "right": -1440.2,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1485.8,
+     "t": 50,
+     "w": 600,
+     "h": 365.1
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 365.1
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2560x1440",
+   "count": 12,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1302.9,
+    "y": 255
+   },
+   "feetY": 894.3,
+   "reserved": {
+    "l": 634.9,
+    "t": 199.1,
+    "rt": 1119.9,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 634.9,
+    "t": 199.5,
+    "rt": 1119.8,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 877.4,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -668,
+    "dy": 219
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -634.9,
+    "right": -1440.2,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1485.8,
+     "t": 50,
+     "w": 600,
+     "h": 365.1
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 365.1
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "chapter": "ch5",
+   "vp": "2560x1440",
+   "count": 22,
+   "enemy": "vegnagun-tail",
+   "anchor": {
+    "x": 1302.9,
+    "y": 255
+   },
+   "feetY": 894.3,
+   "reserved": {
+    "l": 634.9,
+    "t": 199.1,
+    "rt": 1119.9,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "painted": {
+    "l": 634.9,
+    "t": 199.5,
+    "rt": 1119.8,
+    "bt": 473.6,
+    "w": 484.9,
+    "h": 274.1
+   },
+   "anchorCheck": {
+    "chipCentreX": 877.4,
+    "rightOfEnemy": false,
+    "aboveEnemy": false,
+    "dx": -668,
+    "dy": 219
+   },
+   "outsideOverlay": {
+    "top": -199.5,
+    "left": -634.9,
+    "right": -1440.2,
+    "bottom": -966.4
+   },
+   "paintedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "reservedHits": {
+    "fighters": [],
+    "panels": []
+   },
+   "moteOut": {
+    "top": 24.9,
+    "left": 0,
+    "right": 0,
+    "bottom": 24.9
+   },
+   "intent": {
+    "box": {
+     "l": 1485.8,
+     "t": 50,
+     "w": 600,
+     "h": 365.1
+    },
+    "hits": {
+     "fighters": [],
+     "panels": [
+      {
+       "n": "intent",
+       "o": {
+        "w": 600,
+        "h": 365.1
+       }
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "failures": [
+  "ch4 1280x720 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 375.8 vs enemy head x 708.8 (dx -333), box bottom 239.5 vs head y 122.6 (dy 117)",
+  "ch4 1280x720 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 375.7 vs enemy head x 708.7 (dx -333), box bottom 239.5 vs head y 122.6 (dy 117)",
+  "ch4 1280x720 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 375.7 vs enemy head x 708.7 (dx -333), box bottom 239.5 vs head y 122.6 (dy 117)",
+  "ch4 1280x720 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 375.7 vs enemy head x 708.7 (dx -333), box bottom 239.5 vs head y 122.6 (dy 117)",
+  "ch4 1600x900 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 474.8 vs enemy head x 887.3 (dx -412.5), box bottom 297.9 vs head y 153.2 (dy 144.7)",
+  "ch4 1600x900 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 474.5 vs enemy head x 887.4 (dx -412.9), box bottom 297.9 vs head y 153.2 (dy 144.7)",
+  "ch4 1600x900 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 474.5 vs enemy head x 887.4 (dx -412.9), box bottom 297.9 vs head y 153.2 (dy 144.7)",
+  "ch4 1600x900 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 474.5 vs enemy head x 887.4 (dx -412.9), box bottom 297.9 vs head y 153.2 (dy 144.7)",
+  "ch4 2000x1000 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 1639.8 vs enemy head x 1095.9 (dx 544), box bottom 208.7 vs head y 170.4 (dy 38.2)",
+  "ch4 2000x1000 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 1639.5 vs enemy head x 1095.6 (dx 543.9), box bottom 208.7 vs head y 170.3 (dy 38.3)",
+  "ch4 2000x1000 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 1639.5 vs enemy head x 1095.6 (dx 543.9), box bottom 208.7 vs head y 170.3 (dy 38.3)",
+  "ch4 2000x1000 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 1639.5 vs enemy head x 1095.6 (dx 543.9), box bottom 208.7 vs head y 170.3 (dy 38.3)",
+  "ch4 2560x1440 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 758.6 vs enemy head x 1419.7 (dx -661.1), box bottom 474.1 vs head y 244.7 (dy 229.4)",
+  "ch4 2560x1440 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 759.1 vs enemy head x 1420.3 (dx -661.1), box bottom 474.1 vs head y 244.4 (dy 229.7)",
+  "ch4 2560x1440 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 759.1 vs enemy head x 1420.3 (dx -661.1), box bottom 474.1 vs head y 244.4 (dy 229.7)",
+  "ch4 2560x1440 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 759.1 vs enemy head x 1420.3 (dx -661.1), box bottom 474.1 vs head y 244.4 (dy 229.7)",
+  "ch5 1280x720 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 315.5 vs enemy head x 652.2 (dx -336.6), box bottom 239.5 vs head y 127.2 (dy 112.3)",
+  "ch5 1280x720 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 315.5 vs enemy head x 652.1 (dx -336.6), box bottom 239.5 vs head y 127.2 (dy 112.3)",
+  "ch5 1280x720 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 315.5 vs enemy head x 652.1 (dx -336.6), box bottom 239.5 vs head y 127.2 (dy 112.3)",
+  "ch5 1280x720 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 315.5 vs enemy head x 652.1 (dx -336.6), box bottom 239.5 vs head y 127.2 (dy 112.3)",
+  "ch5 1600x900 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 394.9 vs enemy head x 814.8 (dx -419.9), box bottom 297.9 vs head y 158.9 (dy 139)",
+  "ch5 1600x900 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 395 vs enemy head x 814.9 (dx -419.9), box bottom 297.9 vs head y 158.9 (dy 139)",
+  "ch5 1600x900 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 395 vs enemy head x 814.9 (dx -419.9), box bottom 297.9 vs head y 158.9 (dy 139)",
+  "ch5 1600x900 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 395 vs enemy head x 814.9 (dx -419.9), box bottom 297.9 vs head y 158.9 (dy 139)",
+  "ch5 2000x1000 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 1565.8 vs enemy head x 1016.7 (dx 549.1), box bottom 208.7 vs head y 176.7 (dy 32)",
+  "ch5 2000x1000 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 1565.7 vs enemy head x 1016.5 (dx 549.1), box bottom 208.7 vs head y 176.7 (dy 32)",
+  "ch5 2000x1000 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 1565.7 vs enemy head x 1016.5 (dx 549.1), box bottom 208.7 vs head y 176.7 (dy 32)",
+  "ch5 2000x1000 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 1565.7 vs enemy head x 1016.5 (dx 549.1), box bottom 208.7 vs head y 176.7 (dy 32)",
+  "ch5 2560x1440 count 3: chip is NOT top-right of the chained enemy (§4.6) — box left 634.8 vs enemy head x 1302.8 (dx -668), box bottom 474.1 vs head y 254.9 (dy 219.2)",
+  "ch5 2560x1440 count 7: chip is NOT top-right of the chained enemy (§4.6) — box left 634.9 vs enemy head x 1302.9 (dx -668), box bottom 474.1 vs head y 255 (dy 219)",
+  "ch5 2560x1440 count 12: chip is NOT top-right of the chained enemy (§4.6) — box left 634.9 vs enemy head x 1302.9 (dx -668), box bottom 474.1 vs head y 255 (dy 219)",
+  "ch5 2560x1440 count 22: chip is NOT top-right of the chained enemy (§4.6) — box left 634.9 vs enemy head x 1302.9 (dx -668), box bottom 474.1 vs head y 255 (dy 219)"
+ ]
+}

@@ -1,0 +1,821 @@
+{
+ "prep": [
+  {
+   "chapter": "ch1-ffx",
+   "vp": "1280x720",
+   "tabs": [
+    "CHAPTER",
+    "STATS",
+    "SPHERE GRID",
+    "EQUIPMENT",
+    "ITEMS",
+    "OVERDRIVE"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "SPHERE GRID",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "EQUIPMENT",
+     "chips": [
+      "Strength +10%",
+      "HP +10%",
+      "Zombie Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Strength +10%",
+      "HP +10%",
+      "Zombie Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "OVERDRIVE",
+     "chips": [
+      "Strength +10%",
+      "HP +10%",
+      "Zombie Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch1-ffx",
+   "vp": "2560x1440",
+   "tabs": [
+    "CHAPTER",
+    "STATS",
+    "SPHERE GRID",
+    "EQUIPMENT",
+    "ITEMS",
+    "OVERDRIVE"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "SPHERE GRID",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "EQUIPMENT",
+     "chips": [
+      "Strength +10%",
+      "HP +10%",
+      "Zombie Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Strength +10%",
+      "HP +10%",
+      "Zombie Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "OVERDRIVE",
+     "chips": [
+      "Strength +10%",
+      "HP +10%",
+      "Zombie Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch3-ffx",
+   "vp": "1280x720",
+   "tabs": [
+    "CHAPTER",
+    "STATS",
+    "SPHERE GRID",
+    "EQUIPMENT",
+    "ITEMS",
+    "OVERDRIVE"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "SPHERE GRID",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "EQUIPMENT",
+     "chips": [
+      "Strength +10%",
+      "Strength +5%",
+      "Piercing",
+      "HP +20%",
+      "Death Ward",
+      "Confuse Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Strength +10%",
+      "Strength +5%",
+      "Piercing",
+      "HP +20%",
+      "Death Ward",
+      "Confuse Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "OVERDRIVE",
+     "chips": [
+      "Strength +10%",
+      "Strength +5%",
+      "Piercing",
+      "HP +20%",
+      "Death Ward",
+      "Confuse Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch3-ffx",
+   "vp": "2560x1440",
+   "tabs": [
+    "CHAPTER",
+    "STATS",
+    "SPHERE GRID",
+    "EQUIPMENT",
+    "ITEMS",
+    "OVERDRIVE"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "SPHERE GRID",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "EQUIPMENT",
+     "chips": [
+      "Strength +10%",
+      "Strength +5%",
+      "Piercing",
+      "HP +20%",
+      "Death Ward",
+      "Confuse Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Strength +10%",
+      "Strength +5%",
+      "Piercing",
+      "HP +20%",
+      "Death Ward",
+      "Confuse Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "OVERDRIVE",
+     "chips": [
+      "Strength +10%",
+      "Strength +5%",
+      "Piercing",
+      "HP +20%",
+      "Death Ward",
+      "Confuse Ward"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch4-ffx2",
+   "vp": "1280x720",
+   "tabs": [
+    "CHAPTER",
+    "DRESSPHERES",
+    "STATS",
+    "ACCESSORIES",
+    "ITEMS"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "DRESSPHERES",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ACCESSORIES",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel",
+      "MAG +10, MDEF +10",
+      "DEF +20"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel",
+      "MAG +10, MDEF +10",
+      "DEF +20"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch4-ffx2",
+   "vp": "2560x1440",
+   "tabs": [
+    "CHAPTER",
+    "DRESSPHERES",
+    "STATS",
+    "ACCESSORIES",
+    "ITEMS"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "DRESSPHERES",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ACCESSORIES",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel",
+      "MAG +10, MDEF +10",
+      "DEF +20"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel",
+      "MAG +10, MDEF +10",
+      "DEF +20"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch5-ffx2",
+   "vp": "1280x720",
+   "tabs": [
+    "CHAPTER",
+    "DRESSPHERES",
+    "STATS",
+    "ACCESSORIES",
+    "ITEMS"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "DRESSPHERES",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ACCESSORIES",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6",
+      "max HP +100%",
+      "MDEF +40"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6",
+      "max HP +100%",
+      "MDEF +40"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  },
+  {
+   "chapter": "ch5-ffx2",
+   "vp": "2560x1440",
+   "tabs": [
+    "CHAPTER",
+    "DRESSPHERES",
+    "STATS",
+    "ACCESSORIES",
+    "ITEMS"
+   ],
+   "perTab": [
+    {
+     "tab": "CHAPTER",
+     "chips": [],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "DRESSPHERES",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "STATS",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ACCESSORIES",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6",
+      "max HP +100%",
+      "MDEF +40"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    },
+    {
+     "tab": "ITEMS",
+     "chips": [
+      "Pray",
+      "Vigor",
+      "Shell",
+      "Protect",
+      "Cure",
+      "Cura",
+      "Curaga",
+      "Esuna",
+      "Dispel",
+      "Life",
+      "+6",
+      "max HP +100%",
+      "MDEF +40"
+     ],
+     "rawChips": [],
+     "rawWords": []
+    }
+   ]
+  }
+ ],
+ "hud": [
+  {
+   "chapter": "ch1-ffx",
+   "faces": [
+    {
+     "name": "Tidus",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/portraits/tidus.png",
+     "complete": true,
+     "natural": [
+      832,
+      1216
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Yuna",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/portraits/yuna.png",
+     "complete": true,
+     "natural": [
+      832,
+      1216
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Kimahri",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/portraits/kimahri.png",
+     "complete": true,
+     "natural": [
+      832,
+      1216
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    }
+   ]
+  },
+  {
+   "chapter": "ch3-ffx",
+   "faces": [
+    {
+     "name": "Tidus",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/portraits/tidus.png",
+     "complete": true,
+     "natural": [
+      832,
+      1216
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Yuna",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/portraits/yuna.png",
+     "complete": true,
+     "natural": [
+      832,
+      1216
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Auron",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/portraits/auron.png",
+     "complete": true,
+     "natural": [
+      832,
+      1216
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    }
+   ]
+  },
+  {
+   "chapter": "ch4-ffx2",
+   "faces": [
+    {
+     "name": "Yuna",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/characters/yuna-white-mage/idle.png",
+     "complete": true,
+     "natural": [
+      581,
+      1183
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Rikku",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/characters/rikku-dark-knight/idle.png",
+     "complete": true,
+     "natural": [
+      787,
+      1205
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Paine",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/characters/paine-warrior/idle.png",
+     "complete": true,
+     "natural": [
+      408,
+      1180
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    }
+   ]
+  },
+  {
+   "chapter": "ch5-ffx2",
+   "faces": [
+    {
+     "name": "Yuna",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/characters/yuna-white-mage/idle.png",
+     "complete": true,
+     "natural": [
+      581,
+      1183
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Rikku",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/characters/rikku-dark-knight/idle.png",
+     "complete": true,
+     "natural": [
+      787,
+      1205
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    },
+    {
+     "name": "Paine",
+     "hasImg": true,
+     "src": "http://127.0.0.1:5541/art/characters/paine-dark-knight/idle.png",
+     "complete": true,
+     "natural": [
+      609,
+      1208
+     ],
+     "painted": {
+      "w": 0,
+      "h": 0
+     },
+     "fallbackVisible": false
+    }
+   ]
+  }
+ ],
+ "failures": []
+}

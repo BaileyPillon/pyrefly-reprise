@@ -1,0 +1,178 @@
+[
+ {
+  "chapter": "ch4",
+  "vp": "1280x720",
+  "pre": {
+   "enemy": "bahamut",
+   "head": {
+    "x": 708.8,
+    "y": 123.2
+   },
+   "chip": {
+    "l": 627.7,
+    "t": 12.2,
+    "rt": 794.9,
+    "bt": 106.7,
+    "w": 167.2,
+    "h": 94.5
+   },
+   "split": false,
+   "rightOfHead": false,
+   "aboveHead": true,
+   "dxLeftMinusHead": -81.1,
+   "dyBottomMinusHead": -16.5
+  },
+  "post": {
+   "enemy": "bahamut",
+   "head": {
+    "x": 709.6,
+    "y": 122.7
+   },
+   "chip": {
+    "l": 376.7,
+    "t": 101.5,
+    "rt": 619.7,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "split": true,
+   "rightOfHead": false,
+   "aboveHead": false,
+   "dxLeftMinusHead": -332.9,
+   "dyBottomMinusHead": 116.8
+  }
+ },
+ {
+  "chapter": "ch4",
+  "vp": "2560x1440",
+  "pre": {
+   "enemy": "bahamut",
+   "head": {
+    "x": 1417.7,
+    "y": 246.5
+   },
+   "chip": {
+    "l": 1255.6,
+    "t": 25.5,
+    "rt": 1590,
+    "bt": 214.5,
+    "w": 334.4,
+    "h": 189
+   },
+   "split": false,
+   "rightOfHead": false,
+   "aboveHead": true,
+   "dxLeftMinusHead": -162.1,
+   "dyBottomMinusHead": -32
+  },
+  "post": {
+   "enemy": "bahamut",
+   "head": {
+    "x": 1417.8,
+    "y": 245.1
+   },
+   "chip": {
+    "l": 757,
+    "t": 199.1,
+    "rt": 1242,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "split": true,
+   "rightOfHead": false,
+   "aboveHead": false,
+   "dxLeftMinusHead": -660.8,
+   "dyBottomMinusHead": 229
+  }
+ },
+ {
+  "chapter": "ch5",
+  "vp": "1280x720",
+  "pre": {
+   "enemy": "vegnagun-tail",
+   "head": {
+    "x": 651.6,
+    "y": 127.5
+   },
+   "chip": {
+    "l": 574.1,
+    "t": 16.5,
+    "rt": 741.3,
+    "bt": 111,
+    "w": 167.2,
+    "h": 94.5
+   },
+   "split": false,
+   "rightOfHead": false,
+   "aboveHead": true,
+   "dxLeftMinusHead": -77.5,
+   "dyBottomMinusHead": -16.5
+  },
+  "post": {
+   "enemy": "vegnagun-tail",
+   "head": {
+    "x": 651.8,
+    "y": 127.4
+   },
+   "chip": {
+    "l": 315.3,
+    "t": 101.5,
+    "rt": 558.3,
+    "bt": 239.5,
+    "w": 243,
+    "h": 138
+   },
+   "split": true,
+   "rightOfHead": false,
+   "aboveHead": false,
+   "dxLeftMinusHead": -336.4,
+   "dyBottomMinusHead": 112.1
+  }
+ },
+ {
+  "chapter": "ch5",
+  "vp": "2560x1440",
+  "pre": {
+   "enemy": "vegnagun-tail",
+   "head": {
+    "x": 1304.3,
+    "y": 255.5
+   },
+   "chip": {
+    "l": 1150.7,
+    "t": 34.5,
+    "rt": 1485.1,
+    "bt": 223.6,
+    "w": 334.4,
+    "h": 189
+   },
+   "split": false,
+   "rightOfHead": false,
+   "aboveHead": true,
+   "dxLeftMinusHead": -153.6,
+   "dyBottomMinusHead": -32
+  },
+  "post": {
+   "enemy": "vegnagun-tail",
+   "head": {
+    "x": 1304.5,
+    "y": 253.6
+   },
+   "chip": {
+    "l": 636.3,
+    "t": 199.1,
+    "rt": 1121.3,
+    "bt": 474.1,
+    "w": 485,
+    "h": 275
+   },
+   "split": true,
+   "rightOfHead": false,
+   "aboveHead": false,
+   "dxLeftMinusHead": -668.2,
+   "dyBottomMinusHead": 220.4
+  }
+ }
+]
