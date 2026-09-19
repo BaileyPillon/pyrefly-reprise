@@ -218,6 +218,7 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
       mpCost: 0,
       enabled: true,
       validTargets: validTargetIds(ctx.units, actor, attack),
+      targeting: attack.targeting,
     });
   }
 
@@ -237,6 +238,9 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
         enabled: reason === null,
         ...(reason ? { disabledReason: reason } : {}),
         validTargets: validTargetIds(ctx.units, actor, ability),
+        // Who it hits, so the menu rings a party-wide cure on all three rather
+        // than asking which one. See `AvailableCommand.targeting`.
+        targeting: ability.targeting,
         ...(ability.minigame ? { opensMinigame: ability.minigame } : {}),
       });
     }
@@ -297,6 +301,7 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
         enabled: targets.length > 0,
         ...(targets.length > 0 ? {} : { disabledReason: 'No legal target' }),
         validTargets: targets,
+        targeting: item.targeting,
         ...(item.description !== undefined ? { help: item.description } : {}),
       });
     }

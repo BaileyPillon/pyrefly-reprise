@@ -553,3 +553,166 @@
   letter-spacing: 0.16em; text-transform: uppercase;
   color: rgba(244, 241, 232, 0.5);
 }
+
+/* ======================================================== target selection */
+
+/* Bailey's Chapter 3 criticism: "it's not clear which ally is being selected
+   for buffs and not clear which enemy is being selected for attacking."
+   The approved answer is option B, "hand, ring and a quiet dim"
+   (docs/concepts/targeting/b-ring-and-dim/, picked 2026-09-19). The accent
+   pool under the figure and the quiet dim on everyone else are in the 3D
+   scene (src/engine/TargetHighlight.ts); everything here is the HUD half.
+
+   GAME-AWARE (AGENTS.md rule 14): the bracket, the name plate with its letter
+   tag and the ALL-target label are BOTH games. The hand is FFX only and the
+   flower is FFX-2 only — the two chromes must never be mixed
+   [research/visual-bible.md 4.2 / 4.7, ffx-vs-ffx2-presentation.md 9 row 2].
+
+   This layer lives in `.ffxhud__overlay`, the unscaled sibling of the 640x360
+   stage, because `PaintedStage.projectRect` reports real viewport pixels. */
+
+.ffx-targeting { position: absolute; inset: 0; pointer-events: none; z-index: 32; }
+
+/* Per-target bracket, scaled to the figure's own bounds. The three accents are
+   visual-bible 3.5's: ally green, enemy gold, self blue. */
+.ffx-target {
+  position: absolute;
+  --ffx-corner: 24px;
+  --ffx-mark: var(--ig-gold, #f2c21e);
+}
+.ffx-target--ally { --ffx-mark: #7ee8b0; }
+.ffx-target--enemy { --ffx-mark: #f2c21e; }
+.ffx-target--self { --ffx-mark: #8fd0f0; }
+.ffx-target--clickable { pointer-events: auto; cursor: pointer; }
+
+/* Every stroke on a 1px ink underlay (the outer box-shadow), so the bracket
+   survives Dream's End's red sky and the lava below it. */
+.ffx-target__c {
+  position: absolute;
+  width: var(--ffx-corner); height: var(--ffx-corner);
+  border: 0 solid var(--ffx-mark);
+  box-shadow: 0 0 0 1px rgba(11, 10, 18, 0.85);
+  filter: drop-shadow(0 0 3px rgba(11, 10, 18, 0.9));
+}
+.ffx-target__c--tl { left: 0; top: 0; border-left-width: 3px; border-top-width: 3px; }
+.ffx-target__c--tr { right: 0; top: 0; border-right-width: 3px; border-top-width: 3px; }
+.ffx-target__c--bl { left: 0; bottom: 0; border-left-width: 3px; border-bottom-width: 3px; }
+.ffx-target__c--br { right: 0; bottom: 0; border-right-width: 3px; border-bottom-width: 3px; }
+
+/* A candidate that is not the one being aimed at: still drawn (a mouse player
+   clicks it directly) but clearly subordinate. */
+.ffx-target--dim .ffx-target__c { opacity: 0.4; border-width: 2px; }
+.ffx-target--dim.ffx-target__c { opacity: 0.4; }
+
+/* Multi-target: every target flashes together, which is FFX's own rule. */
+.ffx-target--group .ffx-target__c {
+  opacity: 0.72;
+  animation: ffx-target-flash 0.9s ease-in-out infinite;
+}
+@keyframes ffx-target-flash {
+  0%, 100% { opacity: 0.42; }
+  50% { opacity: 1; }
+}
+
+/* The hand, docked hard against the silhouette. FFX ONLY. */
+.ffx-target__hand {
+  position: absolute; width: 44px; height: 30px;
+  transform: translate(-100%, -50%);
+  animation: ffx-hand-bob 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(11, 10, 18, 0.8));
+}
+.ffx-target__hand svg { width: 100%; height: 100%; display: block; }
+.ffx-hand__palm { fill: var(--ig-paper, #f4f1e8); stroke: var(--ig-ink, #0b0a12); stroke-width: 1.6; stroke-linejoin: round; }
+.ffx-hand__cuff { fill: var(--ig-gold, #f2c21e); stroke: var(--ig-ink, #0b0a12); stroke-width: 1.6; }
+@keyframes ffx-hand-bob {
+  0%, 100% { transform: translate(-100%, -50%); }
+  50% { transform: translate(calc(-100% + 6px), -50%); }
+}
+
+/* FFX-2's field reticle: a rotating six-petal flower. FFX-2 ONLY, and never
+   drawn together with the hand above. */
+.ffx-target__flower {
+  position: absolute; transform: translate(-50%, -50%);
+  animation: ffx-flower-turn 6s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(244, 154, 200, 0.55));
+}
+.ffx-target__flower svg { width: 100%; height: 100%; display: block; }
+.ffx-flower__ring { fill: none; stroke: rgba(244, 241, 232, 0.55); stroke-width: 1.4; }
+.ffx-flower__petal { fill: rgba(244, 154, 200, 0.85); stroke: var(--ig-paper, #f4f1e8); stroke-width: 1.2; }
+@keyframes ffx-flower-turn {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* The ink name plate under the target. The letter tag is the only mark that
+   tells Yu Pagoda B from Yu Pagoda C, so it is a chip, not a suffix. */
+.ffx-target__plate {
+  position: absolute;
+  transform: translate(-50%, 6px) skewX(var(--ig-skew, -12deg));
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 14px 6px;
+  background: var(--ig-ink, #0b0a12);
+  border-bottom: 2px solid var(--ffx-plate-mark, #f2c21e);
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(11, 10, 18, 0.6);
+}
+.ffx-target__plate--ally { --ffx-plate-mark: #7ee8b0; }
+.ffx-target__plate--enemy { --ffx-plate-mark: #f2c21e; }
+.ffx-target__plate--self { --ffx-plate-mark: #8fd0f0; }
+.ffx-target__plate > * { display: inline-block; transform: skewX(var(--ig-skew-inverse, 12deg)); }
+.ffx-target__name {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+  font-size: 19px; letter-spacing: 0.02em; color: var(--ig-paper, #f4f1e8);
+}
+.ffx-target__tag {
+  min-width: 20px; padding: 1px 6px; text-align: center;
+  background: var(--ffx-plate-mark, #f2c21e); color: var(--ig-ink, #0b0a12);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.06em;
+}
+.ffx-target__note {
+  font-family: var(--ig-font-text); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(244, 241, 232, 0.66);
+}
+
+/* One centred label for a multi-target cast, in place of a field cursor. */
+.ffx-target__all {
+  position: absolute; transform: translate(-50%, -140%) skewX(var(--ig-skew, -12deg));
+  padding: 5px 16px 6px;
+  background: var(--ig-ink, #0b0a12);
+  border-bottom: 2px solid var(--ffx-all-mark, #f2c21e);
+}
+.ffx-target__all--ally { --ffx-all-mark: #7ee8b0; }
+.ffx-target__all--enemy { --ffx-all-mark: #f2c21e; }
+.ffx-target__all span {
+  display: inline-block; transform: skewX(var(--ig-skew-inverse, 12deg));
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.22em; color: var(--ffx-all-mark, #f2c21e);
+}
+
+/* While a target cursor is live the party-status panel yields: it drops to
+   about a third and pulls in, so the spread enemy formation fits a 16:9 frame.
+   The approved frames state this trade-off rather than hiding it. On an ALLY
+   cast the panel does NOT dim — the targeted rows light green instead, which
+   is the same rule read the other way. */
+.ffxhud--targeting-enemy .ig-stat-list {
+  opacity: 0.34;
+  transform: translateX(6%);
+}
+.ffxhud .ig-stat-list { transition: opacity 0.16s ease, transform 0.16s ease; }
+
+/* The row and the turn-list tile of whatever is being aimed at, lit in sync
+   with the field — so the four surfaces can never disagree. Scoped under
+   `.ffxhud` per decision 10: these are marks this HUD puts on Ink & Gold's
+   own elements, and must not restyle another consumer's. */
+.ffxhud .ig-stat.ig-party-row--targeted {
+  box-shadow: inset 0 0 0 2px #7ee8b0, 0 0 12px rgba(126, 232, 176, 0.35);
+}
+.ffxhud .ig-ctb__tile--targeted {
+  box-shadow: 0 0 0 2px var(--ffx-tile-mark, #f2c21e), 0 0 10px rgba(242, 194, 30, 0.4);
+}
+.ffxhud .ig-ctb__tile--targeted-ally { --ffx-tile-mark: #7ee8b0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx-target__hand, .ffx-target__flower, .ffx-target--group .ffx-target__c { animation: none; }
+}

@@ -11,7 +11,7 @@ import '../inkgold/index.ts';
 import './theme.css';
 import './ffx2-hud.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
-import type { HudPort } from '../../engine/HudPort.ts';
+import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import type {
   AtbSnapshot,
   AvailableCommand,
@@ -27,6 +27,8 @@ import type {
   TurnPreview,
 } from '../../battle/common/types.ts';
 import { openCommandMenu } from './CommandMenu.ts';
+import type { CursorSelection } from '../ffx/TargetCursor.ts';
+import { accentFor } from '../../engine/TargetHighlight.ts';
 import { mountTriggerHappy } from './TriggerHappy.ts';
 import { mountLadyLuckReels } from './LadyLuckReels.ts';
 import { partyRowHtml } from './PartyRows.ts';
@@ -129,6 +131,15 @@ export class FFX2BattleHud implements HudPort {
   private telegraphEl!: HTMLElement;
   private commandEl!: HTMLElement;
   private minigameEl!: HTMLElement;
+  /** FFX-2's Active/Wait chip, shown while a target cursor is live. */
+  private activeWaitEl: HTMLElement | null = null;
+  /**
+   * Which ATB mode the fight is in. FFX-2's Config offers both; the engine
+   * runs Active, and the indicator reports what is true rather than guessing.
+   */
+  private atbMode: 'active' | 'wait' = 'active';
+  /** The painted field's targeting surface, when there is a field. */
+  private targeting: TargetingPort | null = null;
   private mounted = false;
 
   private project: (
@@ -276,6 +287,7 @@ export class FFX2BattleHud implements HudPort {
       <div class="ig-stat-list ffx2hud__party"></div>
       <div class="ffx2hud__command" hidden></div>
       <div class="ffx2hud__minigame"></div>
+      <div class="ffx2-atbmode" hidden></div>
       <i class="ffx2hud__fence" data-fence="party-top"></i>
       <i class="ffx2hud__fence" data-fence="party-right"></i>
       <i class="ffx2hud__fence" data-fence="party-column"></i>
@@ -293,6 +305,8 @@ export class FFX2BattleHud implements HudPort {
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
+    // FFX-2 ONLY: the Active/Wait chip. FFX's CTB has no such Config entry.
+    this.activeWaitEl = this.stage.querySelector('.ffx2-atbmode');
     this.fenceTopEl = this.stage.querySelector('[data-fence="party-top"]');
     this.fenceRightEl = this.stage.querySelector('[data-fence="party-right"]');
     this.fenceColumnEl = this.stage.querySelector('[data-fence="party-column"]');
@@ -669,6 +683,17 @@ export class FFX2BattleHud implements HudPort {
       commands,
       previewRank,
       project: this.project,
+      // The silhouette the bracket is scaled to, and the display name and
+      // letter tag the plate prints — the plate used to print the raw
+      // combatant id.
+      projectRect: (id) => this.targeting?.rect(id) ?? null,
+      nameOf: (id) => this.lastState?.combatants[id]?.name ?? id,
+      letterTagOf: (id) => this.letterTagOf(id),
+      kindOf: (id) => {
+        if (id === actorId) return 'self';
+        return this.lastState?.combatants[id]?.side === 'enemy' ? 'enemy' : 'ally';
+      },
+      onSelection: (sel) => this.applySelection(sel),
       actorName: actor?.name ?? actorId,
       onPreview: (preview) => {
         if (!isAtbSnapshot(preview) || !this.lastState) return;
@@ -741,6 +766,99 @@ export class FFX2BattleHud implements HudPort {
   ): void {
     this.project = project;
     this.damage.setProjector(project);
+  }
+
+  /** The painted field's targeting surface. See {@link TargetingPort}. */
+  setTargetingPort(port: TargetingPort): void {
+    this.targeting = port;
+  }
+
+  /**
+   * The letter that tells one of Vegnagun's parts, or one of two identical
+   * fiends, from the next — read off the gauge snapshot the HUD last
+   * rendered, so the field plate and the boss gauge agree.
+   */
+  private letterTagOf(id: CombatantId): string | undefined {
+    const enemies = (this.lastState?.enemyIds ?? []).filter(
+      (e) => this.lastState?.combatants[e] && !this.lastState.combatants[e]!.removed,
+    );
+    if (enemies.length < 2) return undefined;
+    const i = enemies.indexOf(id);
+    return i >= 0 ? String.fromCharCode(65 + i) : undefined;
+  }
+
+  /**
+   * One selection, painted on every surface — the same contract the FFX HUD
+   * keeps, and for the same reason: Bailey could not read an answer to *"which
+   * enemy is being selected"* off any of them.
+   *
+   * GAME-AWARE (AGENTS.md rule 14): the accent pool, the quiet dim, the lit
+   * rows and the x-ray fallback are **both games**; what is FFX-2's alone is
+   * the chrome the cursor wears (the flower, handled in `CommandMenu`) and the
+   * Active/Wait indicator below, which is a real FFX-2 Config entry and has no
+   * FFX equivalent — FFX's CTB simply waits.
+   */
+  private applySelection(sel: CursorSelection | null): void {
+    const ids = new Set(sel?.ids ?? []);
+    const kind = sel?.kind ?? 'enemy';
+
+    if (this.targeting) {
+      this.targeting.setPanels(this.panelRects());
+      if (!sel) {
+        this.targeting.select(null);
+        this.targeting.xray(null);
+      } else {
+        // FFX-2's own accent is pink, and a floating part (Vegnagun's head)
+        // takes a halo behind it rather than a pool on a floor it never
+        // touches — `accentFor` decides, from the game flag, never memory.
+        const accent = accentFor(kind, 'ffx2', true);
+        this.targeting.select({ ids: [...ids], mode: sel.mode, accent });
+        const active = sel.activeId;
+        const covered = active !== null && this.targeting.visibility(active) < 0.75;
+        this.targeting.xray(covered ? active : null);
+      }
+    }
+
+    for (const el of this.el.querySelectorAll<HTMLElement>('[data-actor-id]')) {
+      const on = ids.has(el.dataset['actorId'] ?? '');
+      el.classList.toggle('ffx2--targeted', on);
+      el.classList.toggle('ffx2--targeted-ally', on && kind !== 'enemy');
+    }
+
+    // The ATB keeps running while the player aims — that is the whole point of
+    // showing the indicator — so the panel yields but never freezes.
+    this.el.classList.toggle('ffx2hud--targeting-enemy', !!sel && kind === 'enemy');
+    this.setActiveWaitVisible(!!sel);
+  }
+
+  /**
+   * FFX-2's **Active / Wait** indicator, shown while a target cursor is live.
+   *
+   * FFX-2 ONLY. It is a real FFX-2 Config entry — the ATB either keeps
+   * counting while a menu is open (Active) or holds (Wait) — and it is in the
+   * approved frame for exactly that reason: an FFX-2 player aiming at
+   * Vegnagun needs to know whether the clock is still running. FFX's CTB has
+   * no such setting and gets no such indicator
+   * [research/ffx-vs-ffx2-presentation.md, the ATB/CTB rows].
+   */
+  private setActiveWaitVisible(on: boolean): void {
+    if (!this.activeWaitEl) return;
+    this.activeWaitEl.hidden = !on;
+    const active = this.atbMode === 'active';
+    this.activeWaitEl.classList.toggle('ffx2-atbmode--wait', !active);
+    this.activeWaitEl.textContent = active ? 'ACTIVE — ATB RUNNING' : 'WAIT — ATB HELD';
+  }
+
+  /** HUD panels that genuinely cover the field, in viewport pixels. */
+  private panelRects(): Array<{ x: number; y: number; w: number; h: number }> {
+    const out: Array<{ x: number; y: number; w: number; h: number }> = [];
+    for (const el of [this.commandEl, this.partyEl, this.enemyEl]) {
+      if (!el || el.hidden) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) continue;
+      out.push({ x: r.left, y: r.top, w: r.width, h: r.height });
+    }
+    return out;
   }
 
   // ------------------------------------------------------------- rendering

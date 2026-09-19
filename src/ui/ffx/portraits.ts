@@ -1,4 +1,9 @@
-import { bodyHeadCropStyle, faceCropStyle } from '../common/portrait.ts';
+import {
+  bodyHeadCropStyle,
+  faceCropStyle,
+  refineBodyCropFromAlpha,
+  refineBodyCropsIn,
+} from '../common/portrait.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 
@@ -161,8 +166,17 @@ export function wirePortraitFallbacks(root: ParentNode): void {
       // be re-stated or the corrected body crop would jump back in front of the
       // dedicated portrait that is meant to cover it.
       if (aspect && img.isConnected) img.style.cssText = `${bodyHeadCropStyle(aspect)};z-index:1`;
+      // ...and then frame it on the painting's real silhouette. The aspect
+      // correction above still assumes a humanoid head near the top of the
+      // canvas; a Yu Pagoda sits small in the middle of a padded square, so
+      // that crop framed sky and the ink monogram showed straight through it.
+      // That is Bailey's "Yu Pagoda's turn-list portrait is a letter tile".
+      if (img.isConnected) refineBodyCropFromAlpha(img);
     });
   });
+  // Paintings already in the browser cache fire no `load` event after this
+  // runs, so measure the complete ones now rather than waiting for one.
+  refineBodyCropsIn(root);
 }
 
 /**

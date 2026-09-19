@@ -1,4 +1,4 @@
-import type { AbilityCategory, AnyCombatant, AvailableCommand, Command, CombatantId } from '../../battle/common/types.ts';
+import type { AbilityCategory, AnyCombatant, AvailableCommand, Command, CombatantId, Targeting } from '../../battle/common/types.ts';
 import type { ReticleKind } from './TargetCursor.ts';
 
 const CATEGORY_LABEL: Partial<Record<AbilityCategory, string>> = {
@@ -137,20 +137,42 @@ export function switchRowIndex(rows: TopRow[]): number {
 export type TargetResolution =
   | { mode: 'none'; targets: CombatantId[] }
   | { mode: 'auto'; targets: CombatantId[] }
-  | { mode: 'choose'; candidates: CombatantId[] };
+  | { mode: 'choose'; candidates: CombatantId[] }
+  /** The command hits every one of these; the player confirms rather than picks. */
+  | { mode: 'all'; targets: CombatantId[] };
+
+/** Targeting values that hit everything they are legal against. */
+const HITS_EVERYTHING = new Set<Targeting>(['all-enemies', 'all-allies', 'all']);
 
 /**
- * Whether a chosen row still needs the player to pick a target.
+ * Whether a chosen row still needs the player to pick a target — and, when it
+ * does not, whether it lands on one target or on all of them.
  *
  * Assumption (undocumented by the engine contract, called out in
  * `docs/CONTRACT-CHANGES.md`): `AvailableCommand.command.targets` arrives
  * already resolved (non-empty) for anything the player does not choose —
- * self, all-enemies, all-allies, random-* — and empty when the player must
- * pick one of `validTargets`.
+ * self, random-* — and empty when the player must pick one of `validTargets`.
+ *
+ * The `'all'` case is new, and it is the defect in Bailey's Chapter 3 frame.
+ * A party-wide cast (Hastega, a Mega-Potion, an all-enemy Overdrive) arrives
+ * with an empty `command.targets` and three `validTargets`, which is exactly
+ * what "pick one of these three" looks like — so the menu asked Tidus which
+ * ally to Hastega, put a hairline bracket over one of them, and the engine
+ * then (correctly) buffed all three. `AvailableCommand.targeting` is what
+ * tells the two apart; when it is absent the old behaviour stands.
+ *
+ * GAME-AWARE (AGENTS.md rule 14): **both games.** Party-wide and all-enemy
+ * commands exist in FFX (Hastega, Holy Water, an aeon's Overdrive) and in
+ * FFX-2 (Cura on the party, Trigger Happy's spread), the menu logic is shared,
+ * and this is a display bug in shared plumbing (critic CHK-020). Both engines
+ * now publish `targeting`.
  */
 export function resolveTargetMode(cmd: AvailableCommand): TargetResolution {
   if (cmd.command.targets.length > 0) return { mode: 'none', targets: cmd.command.targets };
   if (cmd.validTargets.length === 0) return { mode: 'none', targets: [] };
+  if (cmd.targeting && HITS_EVERYTHING.has(cmd.targeting)) {
+    return { mode: 'all', targets: cmd.validTargets };
+  }
   if (cmd.validTargets.length === 1) return { mode: 'auto', targets: cmd.validTargets };
   return { mode: 'choose', candidates: cmd.validTargets };
 }

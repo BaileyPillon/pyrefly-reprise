@@ -158,12 +158,124 @@ export interface PyreflyDebugApi {
    */
   interimYaw(on?: boolean): boolean;
   /**
+   * The live **targeting** state, so a test can assert what Bailey could not
+   * read off the screen: which combatant is being aimed at, which ones are
+   * ringed, who is dimmed, and — the measurement his complaint turns on — how
+   * much of each fighter is actually visible.
+   *
+   * ```js
+   * const t = __pyrefly.targeting();
+   * t.selectedIds;                       // ['yu-pagoda-left']
+   * t.rects['yu-pagoda-left'].visible;   // 0.93
+   * t.rects['braskas-final-aeon'].dim;   // 0.26
+   * ```
+   *
+   * `null` for `selection` means nothing is being chosen right now; `rects` is
+   * still populated, because "is this fiend visible at all?" is a question
+   * worth asking on any frame.
+   */
+  targeting(): TargetingSnapshot | null;
+  /**
    * What is wired up right now: engines, HUDs, the cutscene runner, and the
    * **number of ability and item records registered per game**. A zero count
    * means the data tables never reached the engine, which looks identical to a
    * working battle until a boss tries to cast something.
    */
   wiring(): Promise<Record<string, boolean | number | string>>;
+}
+
+/** One combatant, as the targeting snapshot reports it. */
+export interface TargetingRect {
+  /** The painted silhouette's screen rectangle, CSS pixels. */
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  /** Distance from the camera. Smaller draws in front. */
+  depth: number;
+  /**
+   * How much of this figure is not covered by anything nearer or by a HUD
+   * panel, 0..1. The number Bailey's "hidden behind bigger enemies" complaint
+   * is measured against.
+   */
+  visible: number;
+  /** How far toward grey the quiet dim has pushed it, 0..1. */
+  dim: number;
+  /** True while a selection accent (pool or halo) is lit under it. */
+  ringed: boolean;
+  /** Which staged combatants are drawn over it. */
+  occludedBy: string[];
+}
+
+/** What {@link PyreflyDebugApi.targeting} answers. */
+export interface TargetingSnapshot {
+  /**
+   * The live selection, or null when the player is not choosing a target.
+   * `mode` is `'single'` while one target is being cycled and `'all'` for a
+   * command that hits every id (Hastega, an all-enemy Overdrive).
+   */
+  selection: { ids: string[]; mode: 'single' | 'all'; side: string | null; accent: string } | null;
+  /** Shorthand for `selection?.ids ?? []`. */
+  selectedIds: string[];
+  /** Every staged combatant, keyed by id. */
+  rects: Record<string, TargetingRect>;
+}
+
+/**
+ * Read the targeting state off whatever battle is on screen.
+ *
+ * Probed rather than typed: the debug API must not force `App` to know about
+ * `PaintedStage`, and a screen that is not a battle (the title, the results)
+ * simply answers nothing.
+ */
+function readTargeting(app: App): TargetingSnapshot | null {
+  const screen = (app as unknown as { current?: { stage?: unknown } }).current;
+  const stage = screen?.stage as
+    | {
+        highlight?: {
+          selection: { ids: readonly string[]; mode: 'single' | 'all'; side: unknown; accent: string } | null;
+          isSelected(id: string): boolean;
+          dimOf(id: string): number;
+        };
+        staged(): string[];
+        projectRect(id: string): { x: number; y: number; w: number; h: number; depth: number } | null;
+        visibility(): Map<string, number>;
+        occluders(id: string): string[];
+      }
+    | undefined;
+  if (!stage || typeof stage.projectRect !== 'function') return null;
+
+  const visibility = stage.visibility();
+  const rects: Record<string, TargetingRect> = {};
+  for (const id of stage.staged()) {
+    const r = stage.projectRect(id);
+    if (!r) continue;
+    rects[id] = {
+      x: r.x,
+      y: r.y,
+      w: r.w,
+      h: r.h,
+      depth: r.depth,
+      visible: visibility.get(id) ?? 1,
+      dim: stage.highlight?.dimOf(id) ?? 0,
+      ringed: stage.highlight?.isSelected(id) ?? false,
+      occludedBy: stage.occluders(id),
+    };
+  }
+
+  const sel = stage.highlight?.selection ?? null;
+  return {
+    selection: sel
+      ? {
+          ids: [...sel.ids],
+          mode: sel.mode,
+          side: typeof sel.side === 'string' ? sel.side : null,
+          accent: sel.accent,
+        }
+      : null,
+    selectedIds: sel ? [...sel.ids] : [],
+    rects,
+  };
 }
 
 declare global {
@@ -312,6 +424,7 @@ export function installDebugApi(app: App): PyreflyDebugApi {
       if (on !== undefined) setInterimYawEnabled(on);
       return isInterimYawEnabled();
     },
+    targeting: () => readTargeting(app),
     wiring: () => wiringReport(),
   };
 

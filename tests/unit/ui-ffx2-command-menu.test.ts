@@ -108,8 +108,12 @@ describe('FFX-2 command menu', () => {
     expect(subLabels).toEqual(['Firaga', 'Blizzaga']);
 
     click(container.querySelector('[data-idx="0"]')); // Firaga leaf -> opens targeting
-    const reticle = targetLayer.querySelector('[data-idx="0"]');
-    expect(reticle?.textContent).toContain('bahamut');
+    // The shared cursor draws one bracket per candidate, keyed by id. The
+    // name plate prints the DISPLAY name now — this menu used to print the raw
+    // combatant id on a player-facing surface.
+    const reticle = targetLayer.querySelector('[data-target-id="bahamut"]');
+    expect(reticle).not.toBeNull();
+    expect(targetLayer.querySelector('.ffx-target__name')?.textContent).toBe('bahamut');
     click(reticle);
 
     const command = await promise;
@@ -224,18 +228,20 @@ describe('FFX-2 command menu', () => {
 
       // Attack is a top-level leaf: cancelling its targeting belongs at the top.
       click(container.querySelector('[data-idx="0"]'));
-      expect(targetLayer.querySelector('[data-idx="0"]')).not.toBeNull();
+      expect(targetLayer.querySelector('[data-target-id="bahamut"]')).not.toBeNull();
       key('Escape');
 
       expect(labels()).toEqual(['Attack', 'Black Magic', 'Change']);
       expect(container.querySelector('.ffx2cmd__title')).toBeNull();
       // Two mutually exclusive states at once is what made this visible: the
-      // reticle stayed drawn on the boss over the redrawn command window.
-      expect(targetLayer.innerHTML).toBe('');
+      // reticle stayed drawn on the boss over the redrawn command window. The
+      // cursor element itself lives in the layer for the menu's lifetime now,
+      // so the assertion is that it is drawing nothing.
+      expect(targetLayer.querySelectorAll('.ffx-target')).toHaveLength(0);
 
       // And the next confirm commits what the player actually chose.
       key('Enter');
-      expect(targetLayer.querySelector('[data-idx="0"]')).not.toBeNull();
+      expect(targetLayer.querySelector('[data-target-id="bahamut"]')).not.toBeNull();
       key('Enter');
       await expect(promise).resolves.toEqual({ kind: 'attack', targets: ['bahamut'] });
     });
@@ -261,7 +267,7 @@ describe('FFX-2 command menu', () => {
       // Back in Black Magic, where Firaga was picked — with the reticles gone.
       expect(container.querySelector('.ffx2cmd__title')?.textContent).toBe('Black Magic');
       expect(labels()).toEqual(['Firaga', 'Blizzaga']);
-      expect(targetLayer.innerHTML).toBe('');
+      expect(targetLayer.querySelectorAll('.ffx-target')).toHaveLength(0);
       key('Enter');
       key('Enter');
       await expect(promise).resolves.toEqual({ kind: 'ability', id: 'firaga', targets: ['bahamut'] });
@@ -274,7 +280,7 @@ describe('FFX-2 command menu', () => {
       expect(labels()).toEqual(['Attack', 'Black Magic', 'Change']);
       key('Escape'); // top: nothing left to step back to, the menu stays put
       expect(labels()).toEqual(['Attack', 'Black Magic', 'Change']);
-      expect(targetLayer.innerHTML).toBe('');
+      expect(targetLayer.querySelectorAll('.ffx-target')).toHaveLength(0);
     });
   });
 

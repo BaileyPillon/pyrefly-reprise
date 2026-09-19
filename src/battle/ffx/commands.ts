@@ -69,6 +69,9 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
     rank: rankOf(def),
     enabled,
     validTargets: targets,
+    // Who the ability hits, so the menu can tell "choose one of these" from
+    // "this hits all of these". See `AvailableCommand.targeting`.
+    targeting: def.targeting,
   };
   if (reason !== undefined) row.disabledReason = reason;
   if (def.minigame) row.opensMinigame = def.minigame;
@@ -173,6 +176,9 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
       rank: 2,
       enabled: targets.length > 0 || item.targeting === 'self',
       validTargets: targets,
+      // A party-wide item (a Mega-Potion, an X-Potion mix) must ring all three
+      // rather than asking which one — see `AvailableCommand.targeting`.
+      targeting: item.targeting,
     };
     if (!row.enabled) row.disabledReason = 'No target';
     if (item.description !== undefined) row.help = item.description;

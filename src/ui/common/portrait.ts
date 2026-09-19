@@ -575,3 +575,124 @@ if (typeof document !== 'undefined') {
     true,
   );
 }
+
+// ------------------------------------------------- measured body-crop rescue
+
+/**
+ * Frame a portrait tile on the painting's **actual silhouette**, measured from
+ * its alpha once the image has loaded.
+ *
+ * Bailey, on the Chapter 3 frame: *"Yu Pagoda's turn-list portrait is a letter
+ * tile."* It was not, quite — the body-crop layer was emitted and the image
+ * did load. What it framed was empty sky. {@link bodyCrop}'s estimate places a
+ * *humanoid head*: near the top of the canvas, a fifth of the way down, on a
+ * face-sized scale. A Yu Pagoda is a levitating stack of discs sitting small in
+ * the middle of a padded 1024-square canvas, so that crop landed on transparent
+ * pixels and the ink monogram painted straight through it — which is what a
+ * letter tile looks like.
+ *
+ * So measure. One `drawImage` into a small offscreen canvas gives the alpha
+ * box, and a square taken from the **top third** of that box is a portrait of
+ * whatever the subject actually is: a face for a figure, a spire for a pagoda,
+ * a muzzle for Vegnagun's head.
+ *
+ * Deliberately a **rescue, not a replacement**. A subject with a measured row
+ * in `face-crops.json` keeps it — those rows were measured by eye against the
+ * real paintings and beat any automatic rule. This only runs for an id with no
+ * row, which is exactly the set that was showing sky.
+ *
+ * Silent and non-fatal throughout: a tainted canvas, a missing 2D context or a
+ * fully transparent PNG all leave the existing crop alone.
+ */
+export function refineBodyCropFromAlpha(img: HTMLImageElement): void {
+  const id = img.getAttribute('data-body-id');
+  if (!id || !img.naturalWidth || !img.naturalHeight) return;
+  // A hand-measured row is better than anything measured here.
+  if (BODY_ROWS[id]) return;
+  if (img.dataset['bodyCropMeasured'] === '1') return;
+
+  const box = alphaBoxOf(img);
+  if (!box) return;
+  img.dataset['bodyCropMeasured'] = '1';
+
+  const boxW = box.x1 - box.x0;
+  const boxH = box.y1 - box.y0;
+  if (boxW <= 0 || boxH <= 0) return;
+
+  // A square over the top third of the silhouette, at least as wide as the
+  // silhouette is, so a tall thin subject is not cropped to a stripe.
+  const side = Math.max(boxW, Math.min(boxH, boxW * 1.25));
+  const cx = box.x0 + boxW / 2;
+  const cy = box.y0 + Math.min(boxH / 2, side / 2 + boxH * 0.08);
+
+  const scale = (img.naturalWidth / side) * 100;
+  const left = 50 - ((cx / img.naturalWidth) * scale);
+  const top = 50 - ((cy / img.naturalHeight) * ((img.naturalHeight / side) * 100));
+  img.style.setProperty('position', 'absolute');
+  img.style.setProperty('left', `${left.toFixed(2)}%`);
+  img.style.setProperty('top', `${top.toFixed(2)}%`);
+  img.style.setProperty('width', `${scale.toFixed(2)}%`);
+  img.style.setProperty('height', 'auto');
+  img.style.setProperty('max-width', 'none');
+  img.style.setProperty('object-fit', 'fill');
+}
+
+/** The painted content's bounding box in an image, in natural pixels. */
+function alphaBoxOf(img: HTMLImageElement): { x0: number; y0: number; x1: number; y1: number } | null {
+  if (typeof document === 'undefined') return null;
+  const sw = Math.min(img.naturalWidth, 128);
+  const sh = Math.min(img.naturalHeight, 128);
+  if (sw < 2 || sh < 2) return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = sw;
+  canvas.height = sh;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!ctx) return null;
+  let data: Uint8ClampedArray;
+  try {
+    ctx.drawImage(img, 0, 0, sw, sh);
+    data = ctx.getImageData(0, 0, sw, sh).data;
+  } catch {
+    // A cross-origin painting taints the canvas. Keep the estimate.
+    return null;
+  }
+  let x0 = sw;
+  let y0 = sh;
+  let x1 = -1;
+  let y1 = -1;
+  for (let y = 0; y < sh; y++) {
+    for (let x = 0; x < sw; x++) {
+      if (data[(y * sw + x) * 4 + 3]! < 90) continue;
+      if (x < x0) x0 = x;
+      if (x > x1) x1 = x;
+      if (y < y0) y0 = y;
+      if (y > y1) y1 = y;
+    }
+  }
+  if (x1 < 0 || y1 < 0) return null;
+  const kx = img.naturalWidth / sw;
+  const ky = img.naturalHeight / sh;
+  return { x0: x0 * kx, y0: y0 * ky, x1: (x1 + 1) * kx, y1: (y1 + 1) * ky };
+}
+
+/** Run {@link refineBodyCropFromAlpha} over every already-loaded body image. */
+export function refineBodyCropsIn(root: ParentNode): void {
+  for (const img of root.querySelectorAll<HTMLImageElement>('img[data-body-id]')) {
+    if (img.complete) refineBodyCropFromAlpha(img);
+  }
+}
+
+if (typeof document !== 'undefined') {
+  // `load` does not bubble; capture once for every body-crop image the game
+  // will ever draw, the same way the face-crop pass above does.
+  document.addEventListener(
+    'load',
+    (event) => {
+      const target = event.target;
+      if (target instanceof HTMLImageElement && target.hasAttribute('data-body-id')) {
+        refineBodyCropFromAlpha(target);
+      }
+    },
+    true,
+  );
+}

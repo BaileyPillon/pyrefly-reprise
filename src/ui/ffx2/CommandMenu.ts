@@ -33,6 +33,12 @@
  */
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../ffx/cancelClaim.ts';
+// The target cursor is shared with FFX and told which chrome to wear. The
+// bracket, the name plate with its letter tag and the ALL-target label are
+// both games; only the mark itself differs, and `setChrome('ffx2')` is what
+// keeps FFX's hand out of an X-2 fight (AGENTS.md rule 14).
+import { TargetCursor, type CursorSelection, type TargetEntry } from '../ffx/TargetCursor.ts';
+import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -147,6 +153,20 @@ export interface CommandMenuDeps {
   commands: AvailableCommand[];
   previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot;
   project: (id: CombatantId) => { x: number; y: number } | null;
+  /**
+   * The target's painted silhouette, in CSS pixels — what the bracket is
+   * scaled to. Optional: without it the cursor falls back to a box around
+   * {@link CommandMenuDeps.project}'s point, which is what the HUD mock does.
+   */
+  projectRect?: (id: CombatantId) => { x: number; y: number; w: number; h: number } | null;
+  /** Display names, so a plate never prints a raw combatant id. */
+  nameOf?: (id: CombatantId) => string;
+  /** The letter that tells one identical fiend from another. */
+  letterTagOf?: (id: CombatantId) => string | undefined;
+  /** Which side a target is on, for the accent: pink/gold enemy, green ally. */
+  kindOf?: (id: CombatantId) => 'enemy' | 'ally' | 'self';
+  /** Every change of selection, for the field's accent pool and quiet dim. */
+  onSelection?: (sel: CursorSelection | null) => void;
   /** Fed the live preview every time the highlighted row changes. */
   onPreview: (preview: TurnPreview[] | AtbSnapshot) => void;
   actorName: string;
@@ -209,16 +229,7 @@ const KEY_CANCEL = new Set(['Escape', 'KeyX', 'Backspace']);
 const CURSOR_SVG =
   '<svg class="ig-cmd__cursor" viewBox="0 0 12 16" aria-hidden="true"><path d="M11 1 L1 8 L11 15 Z" fill="#0B0A12"/></svg>';
 
-/** `.ig-reticle`'s four corners plus a name plate carrying the target id (no display-name lookup here). */
-function reticleHtml(id: string): string {
-  return `
-    <div class="ig-reticle__corner ig-reticle__corner--tl"></div>
-    <div class="ig-reticle__corner ig-reticle__corner--tr"></div>
-    <div class="ig-reticle__corner ig-reticle__corner--bl"></div>
-    <div class="ig-reticle__corner ig-reticle__corner--br"></div>
-    <div class="ig-reticle__name"><span class="ig-reticle__name-text">${id}</span></div>
-  `;
-}
+
 
 /** Opens the menu and resolves once the player has picked a command and (if needed) a target. */
 export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
@@ -247,17 +258,43 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
      */
     let pendingFrom: 'top' | 'sub' = 'top';
     let targetIds: CombatantId[] = [];
-    let targetIdx = 0;
+    /**
+     * FFX-2 wears its OWN chrome (AGENTS.md rule 14): a rotating six-petal
+     * flower as the field reticle, never FFX's pointing hand. The bracket, the
+     * name plate with its letter tag, the ALL-target label, the accent pool
+     * and the quiet dim are shared with FFX, which is why this is the same
+     * component with setChrome('ffx2') rather than a second implementation.
+     * [research/visual-bible.md 4.2 / 4.7; ffx-vs-ffx2-presentation.md 9 row 2:
+     * the two chromes must never be mixed.]
+     *
+     * It also replaces a name plate that printed the raw combatant id.
+     */
+    const cursor = new TargetCursor();
+    cursor.setChrome('ffx2');
+    cursor.setProjector((id) => {
+      const r = deps.projectRect?.(id);
+      if (r) return r;
+      const pt = deps.project(id);
+      return pt ? { x: pt.x, y: pt.y, w: 0, h: 0 } : null;
+    });
+    cursor.setOnSelection((sel) => deps.onSelection?.(sel));
+    cursor.setOnClick((id) => {
+      if (view === 'target' && pending) finish(pending, groupMode ? targetIds : [id]);
+    });
+    deps.targetLayer.append(cursor.el);
+    /** True while the chosen command hits every listed target. */
+    let groupMode = false;
 
     const cleanup = (): void => {
       // The menu is gone; Esc belongs to nobody until the next one opens.
       releaseCancel();
       window.removeEventListener('keydown', onKey);
       deps.container.removeEventListener('click', onClick);
-      deps.targetLayer.removeEventListener('click', onTargetClick);
       deps.container.classList.remove('ffx2cmd--more-above', 'ffx2cmd--more-below');
       deps.container.innerHTML = '';
-      deps.targetLayer.innerHTML = '';
+      cursor.hide();
+      cursor.dispose();
+      cursor.el.remove();
     };
 
     const finish = (command: AvailableCommand, targets: CombatantId[]): void => {
@@ -400,20 +437,26 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       emitPreview();
     }
 
+    /** One candidate, with the display name, the letter tag and the accent. */
+    function entryFor(id: CombatantId): TargetEntry {
+      const entry: TargetEntry = {
+        id,
+        // The plate used to print the raw combatant id -- `yu-pagoda-c` on a
+        // player-facing surface. Names come from the HUD now.
+        name: deps.nameOf?.(id) ?? id,
+        kind: deps.kindOf?.(id) ?? 'enemy',
+      };
+      const tag = deps.letterTagOf?.(id);
+      if (tag) entry.tag = tag;
+      return entry;
+    }
+
     function renderTargets(): void {
       view = 'target';
       claimCancel();
-      deps.targetLayer.innerHTML = targetIds
-        .map((id, i) => {
-          const pos = deps.project(id);
-          const selected = i === targetIdx ? ' ig-reticle--selected' : '';
-          if (pos) {
-            return `<div class="ig-reticle${selected}" data-idx="${i}" style="left:${pos.x}px;top:${pos.y}px">${reticleHtml(id)}</div>`;
-          }
-          // No projected position (headless/test): fall back to a stacked list.
-          return `<div class="ig-reticle ig-reticle--list${selected}" data-idx="${i}" style="left:16px;top:${16 + i * 24}px">${id}</div>`;
-        })
-        .join('');
+      const entries = targetIds.map(entryFor);
+      if (groupMode) cursor.showGroup(entries);
+      else cursor.showSingle(entries);
     }
 
     /** Opens a category. A group with nothing enabled in it (a Cursed Change) never opens. */
@@ -436,7 +479,12 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       // `renderTargets()` is about to overwrite it. See `pendingFrom`.
       pendingFrom = view === 'sub' ? 'sub' : 'top';
       targetIds = c.validTargets;
-      targetIdx = 0;
+      // A party-wide cure or an all-enemy spread hits everything it is legal
+      // against; asking which one, and bracketing one of three, is the defect
+      // Bailey photographed in FFX's Hastega. Shared logic, so both games.
+      const mode = resolveTargetMode(c);
+      groupMode = mode.mode === 'all';
+      if (mode.mode === 'all') targetIds = mode.targets;
       renderTargets();
     }
 
@@ -450,25 +498,18 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
      * exclusive states.
      */
     function cancelTargets(): void {
-      deps.targetLayer.innerHTML = '';
+      // `hide()` publishes the null selection, which is what restores every
+      // figure the quiet dim pushed toward grey.
+      cursor.hide();
       pending = null;
       targetIds = [];
-      targetIdx = 0;
+      groupMode = false;
       if (pendingFrom === 'sub' && subItems.length > 0) renderSub(subCategory);
       // `renderTop(true)` and not `renderTop()`: this is a cancel, and the
       // claim has to outlive the press that caused it or `BattleScreen` polls
       // the same Esc on the next frame and opens the pause menu on top.
       else renderTop(true);
     }
-
-    const onTargetClick = (e: MouseEvent): void => {
-      if (view !== 'target') return;
-      const el = (e.target as HTMLElement).closest('[data-idx]');
-      if (!el) return;
-      targetIdx = Number(el.getAttribute('data-idx'));
-      const id = targetIds[targetIdx];
-      if (pending && id) finish(pending, [id]);
-    };
 
     const onClick = (e: MouseEvent): void => {
       const el = (e.target as HTMLElement).closest('[data-idx]');
@@ -499,8 +540,10 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
           const c = subItems[subIdx];
           if (c) chooseLeaf(c);
         } else if (view === 'target') {
-          const id = targetIds[targetIdx];
-          if (pending && id) finish(pending, [id]);
+          // A multi-target command confirms the whole set; a single one
+          // confirms the id under the cursor.
+          const chosen = groupMode ? targetIds : cursor.targetIds;
+          if (pending && chosen.length) finish(pending, chosen);
         }
         return;
       }
@@ -516,17 +559,18 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         e.preventDefault();
         if (view === 'top') { topIdx = (topIdx - 1 + list) % list; renderTop(); }
         else if (view === 'sub') { subIdx = (subIdx - 1 + list) % list; renderSub(subCategory); }
-        else { targetIdx = (targetIdx - 1 + list) % list; renderTargets(); }
+        // The cursor steps through the ON-SCREEN order, left to right, so
+        // "left" means left however the engine happened to list the fiends.
+        else if (!groupMode) cursor.step(-1);
       } else if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
         e.preventDefault();
         if (view === 'top') { topIdx = (topIdx + 1) % list; renderTop(); }
         else if (view === 'sub') { subIdx = (subIdx + 1) % list; renderSub(subCategory); }
-        else { targetIdx = (targetIdx + 1) % list; renderTargets(); }
+        else if (!groupMode) cursor.step(1);
       }
     };
 
     deps.container.addEventListener('click', onClick);
-    deps.targetLayer.addEventListener('click', onTargetClick);
     window.addEventListener('keydown', onKey);
     renderTop();
   });

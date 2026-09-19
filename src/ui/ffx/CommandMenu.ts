@@ -13,7 +13,7 @@ import {
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { commandHelpText } from './commandHelp.ts';
-import type { Projector } from './DamageNumbers.ts';
+import type { CursorChrome, CursorSelection, RectProjector } from './TargetCursor.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
@@ -153,6 +153,27 @@ export interface CommandMenuOpenOptions {
    * the unit fixtures pass nothing and nothing changes for them.
    */
   onTargetChange?: (id: CombatantId | null) => void;
+  /**
+   * The whole selection — every id the command is aimed at, whether the player
+   * is cycling one or the cast hits all of them, and which accent it wears.
+   *
+   * Separate from {@link onTargetChange}, which names the *one* combatant the
+   * enemy plate should describe. The field's accent pool and quiet dim, the
+   * party rows and the turn-list tiles all need the full set, because a
+   * party-wide Hastega lights three rows and rings three figures.
+   */
+  onSelection?: (sel: CursorSelection | null) => void;
+  /**
+   * The letter that tells one Yu Pagoda from the other — the `A`/`B`/`C` the
+   * CTB tile shows. The HUD answers it from the turn preview it last
+   * rendered, so the field plate and the queue tile can never disagree.
+   */
+  letterTagOf?: (id: CombatantId) => string | undefined;
+  /**
+   * A one-line preview for a buff or heal, when it is knowable: "already
+   * Hasted", "HP full". Optional; nothing is shown when it answers nothing.
+   */
+  targetNoteOf?: (targetId: CombatantId, cmd: AvailableCommand) => string | undefined;
 }
 
 /**
@@ -225,8 +246,13 @@ export class CommandMenu {
     this.targetCursor.setOnClick((id) => this.tryConfirmTargetById(id));
   }
 
-  setProjector(project: Projector): void {
+  setProjector(project: RectProjector): void {
     this.targetCursor.setProjector(project);
+  }
+
+  /** FFX's hand, or FFX-2's flower. See {@link CursorChrome}. */
+  setChrome(chrome: CursorChrome): void {
+    this.targetCursor.setChrome(chrome);
   }
 
   open(opts: CommandMenuOpenOptions): Promise<Command> {
@@ -361,15 +387,23 @@ export class CommandMenu {
 
   private onTargetButton(b: UiButton): void {
     if (b === 'left' || b === 'up') {
-      this.targetCursor.setActiveIndex(this.targetCursor.index - 1);
-      this.updateTargetHelp(this.targetCursor.activeEntry);
+      // A step through the *on-screen* order, not through the engine's. Left
+      // has to mean left, or cycling reads as the cursor jumping at random,
+      // which is half of "not clear which enemy is being selected".
+      this.targetCursor.step(-1);
+      this.syncTargetSurfaces();
     } else if (b === 'right' || b === 'down') {
-      this.targetCursor.setActiveIndex(this.targetCursor.index + 1);
-      this.updateTargetHelp(this.targetCursor.activeEntry);
+      this.targetCursor.step(1);
+      this.syncTargetSurfaces();
     } else if (b === 'confirm') {
       this.confirmTarget();
     } else if (b === 'cancel') {
+      this.groupTargets = null;
       this.targetCursor.hide();
+      // `hide()` publishes the null selection, which is what restores every
+      // dimmed figure on the field. Restoring on cancel is the half of option
+      // B that a player notices only when it is missing.
+      this.opts?.onSelection?.(null);
       this.opts?.onTargetChange?.(null);
       this.state = this.preTargetState;
       this.renderStack();
@@ -469,10 +503,12 @@ export class CommandMenu {
   // -------------------------------------------------------------- targeting
 
   private pendingCmd: AvailableCommand | null = null;
+  /** Set while a multi-target command is awaiting confirmation. */
+  private groupTargets: CombatantId[] | null = null;
 
   private resolveCommand(cmd: AvailableCommand): void {
     const resolution = resolveTargetMode(cmd);
-    if (resolution.mode !== 'choose') {
+    if (resolution.mode === 'none' || resolution.mode === 'auto') {
       // Safe by construction: `resolution.targets` is `[]` for every command
       // kind whose own `Command.targets` type is the empty tuple (Defend,
       // Switch, Escape, Dismiss, Summon, Spherechange never offer >0
@@ -481,25 +517,71 @@ export class CommandMenu {
       this.finish({ ...cmd.command, targets: resolution.targets } as Command);
       return;
     }
-    const combatants = this.opts!.combatants;
-    const entries: TargetEntry[] = resolution.candidates.map((id) => ({
-      id,
-      name: combatants[id]?.name ?? id,
-      kind: reticleKind(id, this.opts!.actorId, combatants),
-    }));
+
+    const ids = resolution.mode === 'all' ? resolution.targets : resolution.candidates;
+    const entries = ids.map((id) => this.entryFor(id, cmd));
     this.pendingCmd = cmd;
     this.preTargetState = this.state === 'sub' ? 'sub' : 'top';
     this.state = 'target';
+
+    if (resolution.mode === 'all') {
+      // Hits everything: every target is ringed and flashes together under one
+      // "ALL ALLIES" / "ALL ENEMIES" label, and there is nothing to cycle. The
+      // player still confirms, so a party-wide cast can be backed out of — and
+      // so the frame Bailey photographed now says what it is doing.
+      this.groupTargets = ids;
+      this.targetCursor.showGroup(entries);
+      this.updateGroupHelp(entries);
+      return;
+    }
+
+    this.groupTargets = null;
+    // `showSingle` counts from the LEFT OF THE SCREEN, not into `entries`:
+    // the engine's order is slot-then-id, and opening on "the first one it
+    // listed" put the cursor on the aeon in the middle of the field while the
+    // player's eye was at the left edge.
     this.targetCursor.showSingle(entries, 0);
-    this.updateTargetHelp(entries[0] ?? null);
+    this.syncTargetSurfaces();
+  }
+
+  /** One candidate, with the letter tag and the note the HUD can answer for. */
+  private entryFor(id: CombatantId, cmd: AvailableCommand): TargetEntry {
+    const combatants = this.opts!.combatants;
+    const entry: TargetEntry = {
+      id,
+      name: combatants[id]?.name ?? id,
+      kind: reticleKind(id, this.opts!.actorId, combatants),
+    };
+    const tag = this.opts?.letterTagOf?.(id);
+    if (tag) entry.tag = tag;
+    const note = this.opts?.targetNoteOf?.(id, cmd);
+    if (note) entry.note = note;
+    return entry;
   }
 
   private confirmTarget(): void {
-    const id = this.targetCursor.activeTargetId;
     const cmd = this.pendingCmd;
-    if (!id || !cmd) return;
+    if (!cmd) return;
+    // A multi-target cast confirms the whole set; a single one confirms the id
+    // under the cursor. Both go through this one path, so Enter, a click and a
+    // CTB-tile click can never resolve a different Command.
+    const targets = this.groupTargets ?? (this.targetCursor.activeTargetId ? [this.targetCursor.activeTargetId] : []);
+    if (!targets.length) return;
+    this.groupTargets = null;
     this.targetCursor.hide();
-    this.finish({ ...cmd.command, targets: [id] } as Command);
+    this.finish({ ...cmd.command, targets } as Command);
+  }
+
+  /**
+   * Keep the enemy plate, the party rows, the turn list and the field's accent
+   * pool pointing at the same combatant — the four surfaces Bailey could not
+   * read an answer off in the Chapter 3 frame.
+   */
+  private syncTargetSurfaces(): void {
+    const sel = this.targetCursor.selection;
+    this.opts?.onSelection?.(sel);
+    this.opts?.onTargetChange?.(sel?.activeId ?? null);
+    this.updateTargetHelp();
   }
 
   /**
@@ -605,11 +687,34 @@ export class CommandMenu {
    * whatever Sensor knows about it (#28). The slab holds the pending command's
    * own line for the whole of the aim.
    */
-  private updateTargetHelp(entry: TargetEntry | null): void {
+  /**
+   * The help slab keeps describing the *command* while the player aims. The
+   * target's own name is on the field plate and in the enemy plate now, so the
+   * slab is no longer hijacked to print a bare name [round-02 #27, #28].
+   */
+  private updateTargetHelp(): void {
     if (!this.opts) return;
-    this.opts.onTargetChange?.(entry?.id ?? null);
     const cmd = this.pendingCmd;
     if (cmd) this.opts.setHelp(commandHelpText(cmd));
+  }
+
+  /**
+   * The help line for a multi-target cast.
+   *
+   * It names the group rather than a combatant, because there is no one target
+   * to name — the whole complaint about the Hastega frame was that nothing on
+   * screen said the cast was party-wide.
+   */
+  private updateGroupHelp(entries: TargetEntry[]): void {
+    if (!this.opts) return;
+    const cmd = this.pendingCmd;
+    const who = entries[0]?.kind === 'enemy' ? 'every enemy' : 'the whole party';
+    const help = cmd ? commandHelpText(cmd) : '';
+    this.opts.setHelp(help ? `${help} Hits ${who}.` : `Hits ${who}.`);
+    this.opts.onSelection?.(this.targetCursor.selection);
+    // No single combatant is being aimed at, so the enemy plate has nothing to
+    // describe; leaving the last one up would be a lie.
+    this.opts.onTargetChange?.(null);
   }
 
   private shake(): void {

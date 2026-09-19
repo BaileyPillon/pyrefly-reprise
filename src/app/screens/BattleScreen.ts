@@ -168,6 +168,21 @@ export class BattleScreen extends Screen {
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
+      // The targeting surface: silhouette rectangles out to the HUD, the
+      // accent pool and the quiet dim back in. This is what makes "which enemy
+      // is being selected" answerable — the HUD owns the bracket, the name
+      // plate and the letter tag, the field owns the light, and they agree
+      // because they share this one port (see `HudPort.TargetingPort`).
+      this.hud.setTargetingPort?.({
+        rect: (id) => this.stage?.projectRect(id) ?? null,
+        select: (sel) =>
+          sel
+            ? this.stage?.highlight.apply({ ...sel, side: null })
+            : this.stage?.highlight.clear(),
+        xray: (id) => this.stage?.xray(id),
+        visibility: (id) => this.stage?.visibility().get(id) ?? 1,
+        setPanels: (panels) => this.stage?.setPanels(panels),
+      });
       // The enemy-intent slab needs the live engine, not just the state the HUD
       // is synced with: predicting a rotation means dry-running its AI script,
       // and the script's memory (Yunalesca's `priv0004`, the BFA log cursor)

@@ -1679,6 +1679,23 @@ export interface AvailableCommand {
   disabledReason?: string;
   /** Combatant ids this command may legally target. Empty for self/no-target commands. */
   validTargets: CombatantId[];
+  /**
+   * Who this command hits, as the ability itself declares it.
+   *
+   * Additive, and the UI is the only consumer: `validTargets` already carries
+   * legality and nothing about resolution changes. It exists because the menu
+   * could not otherwise tell "pick one of these three allies" from "this hits
+   * all three" — both arrive as three `validTargets` and an empty
+   * `command.targets` — so Hastega asked the player to choose one party member
+   * and then (correctly, in the engine) buffed all three. That is the defect in
+   * Bailey's Chapter 3 frame: the only cue was a hairline bracket over two of
+   * the three, and nothing said the cast was party-wide.
+   *
+   * Optional so a caller that builds an `AvailableCommand` by hand (a fixture,
+   * a mock screen) is unaffected; the menu falls back to "choose one" when it
+   * is absent, which is the behaviour that was there before.
+   */
+  targeting?: Targeting;
   /** True when choosing this row opens a minigame overlay before the command resolves. */
   opensMinigame?: MinigameKind;
   /** Help-window copy. */

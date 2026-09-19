@@ -988,3 +988,54 @@
   padding: 3px 10px;
   border-left: 2px solid var(--ig-accent);
 }
+
+/* ==================================================== target selection (X-2) */
+
+/* The shared target cursor (`src/ui/ffx/TargetCursor.ts`) is mounted into this
+   HUD's overlay with `setChrome('ffx2')`, so the bracket, the name plate with
+   its letter tag and the ALL-target label are the same marks FFX wears, and
+   the field reticle is X-2's own rotating six-petal flower — never FFX's
+   pointing hand [research/visual-bible.md 4.2 / 4.7,
+   research/ffx-vs-ffx2-presentation.md 9 row 2: never mix the two chromes].
+   Those styles live in ffx-hud.css with the component. What is here is what
+   belongs to X-2 alone. */
+
+/* FFX-2 ONLY: the Active / Wait indicator, a real X-2 Config entry. It is up
+   while a target cursor is live, because an X-2 player aiming at Vegnagun
+   needs to know the ATB is still counting. FFX's CTB has no such setting and
+   this chip has no FFX counterpart. */
+.ffx2-atbmode {
+  position: absolute; left: 12px; top: 10px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px 5px;
+  background: var(--ig-ink, #0b0a12);
+  border-left: 2px solid var(--ig-pyre-pink, #f49ac8);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 7px;
+  letter-spacing: 0.2em; color: var(--ig-paper, #f4f1e8);
+  transform: skewX(var(--ig-skew, 12deg));
+}
+.ffx2-atbmode::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--ig-pyre-pink, #f49ac8);
+  animation: ffx2-atb-tick 1s ease-in-out infinite;
+}
+.ffx2-atbmode--wait::before { animation: none; background: rgba(244, 241, 232, 0.4); }
+@keyframes ffx2-atb-tick { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+/* The party row / boss-gauge block of whatever is being aimed at. */
+.ffx2hud .ffx2--targeted {
+  box-shadow: inset 0 0 0 2px var(--ig-pyre-pink, #f49ac8), 0 0 12px rgba(244, 154, 200, 0.35);
+}
+.ffx2hud .ffx2--targeted-ally {
+  box-shadow: inset 0 0 0 2px #7ee8b0, 0 0 12px rgba(126, 232, 176, 0.35);
+}
+
+/* The party panel yields while an enemy is being aimed at, so the spread
+   formation fits a 16:9 frame — the same trade-off the approved frames state
+   for FFX, and true of both games because both share this field renderer. */
+.ffx2hud--targeting-enemy .ffx2hud__party { opacity: 0.34; transform: translateX(-6%); }
+.ffx2hud .ffx2hud__party { transition: opacity 0.16s ease, transform 0.16s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx2-atbmode::before { animation: none; }
+}

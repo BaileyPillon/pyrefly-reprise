@@ -10,7 +10,7 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../battle/common/types.ts';
-import type { HudPort } from '../../engine/HudPort.ts';
+import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import { CommandMenu } from './CommandMenu.ts';
 import { CtbList } from './CtbList.ts';
@@ -23,6 +23,7 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
+import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
   advisorZone,
@@ -181,6 +182,13 @@ export class FFXBattleHud implements HudPort {
 
   private readonly ctbList = new CtbList();
   private readonly partyStatus = new PartyStatusWindow();
+  /**
+   * FFX's command stack — and, explicitly, FFX's cursor chrome: the pointing
+   * hand. `'ffx'` is the component's default, so this is belt and braces, but
+   * it is stated because the alternative is a rule violation rather than a
+   * cosmetic slip (AGENTS.md rule 14: the two games' chromes must never be
+   * mixed, `research/ffx-vs-ffx2-presentation.md` §9 row 2).
+   */
   private readonly commandMenu = new CommandMenu();
   private readonly telegraph = new TelegraphBanner();
   private readonly sensorPanel = new SensorPanel();
@@ -306,6 +314,9 @@ export class FFXBattleHud implements HudPort {
 
   constructor() {
     installInkGoldStyles();
+    // FFX's hand, never FFX-2's flower. Stated rather than left to the
+    // component's default — see the field's own comment.
+    this.commandMenu.setChrome('ffx');
 
     this.el = document.createElement('div');
     this.el.className = 'ffxhud ig';
@@ -446,7 +457,12 @@ export class FFXBattleHud implements HudPort {
       this.sensorPanel.hide();
     }
     this.lastState = state;
-    if (Array.isArray(preview)) this.ctbList.render(preview, state.combatants);
+    if (Array.isArray(preview)) {
+      // Kept so the field's name plate can print the same letter tag the queue
+      // tile shows — the only mark that tells Yu Pagoda B from Yu Pagoda C.
+      this.lastPreviewRows = preview;
+      this.ctbList.render(preview, state.combatants);
+    }
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
     this.guide.sync(state);
@@ -510,6 +526,13 @@ export class FFXBattleHud implements HudPort {
         // player is aiming [round-02 #27]. It is also one of the two moments
         // the plate is allowed to open [the fix-3 addendum's (a)].
         onTargetChange: (id) => this.focusEnemyPlate(id),
+        // The whole selection: the field's accent pool and quiet dim, the
+        // party rows, the turn-list tiles and the status panel's yield all
+        // read from this one call, so the surfaces can never disagree about
+        // what is being aimed at.
+        onSelection: (sel) => this.applySelection(sel),
+        letterTagOf: (id) => this.letterTagOf(id),
+        targetNoteOf: (id, cmd) => this.targetNoteOf(id, cmd),
       });
     } finally {
       this.guide.clearDecision();
@@ -611,10 +634,30 @@ export class FFXBattleHud implements HudPort {
     return this.advisor;
   }
 
+  /**
+   * The painted field's targeting surface — silhouette rectangles in, accent
+   * pool and quiet dim out. See {@link TargetingPort}.
+   *
+   * Optional on the port, so the HUD mock screens (which have no 3D field)
+   * simply never call it and keep the fixed-box fallback.
+   */
+  setTargetingPort(port: TargetingPort): void {
+    this.targeting = port;
+    this.commandMenu.setProjector((id) => port.rect(id));
+  }
+
   setProjector(project: Projector): void {
     const p: Projector = project;
     this.project = p;
-    this.commandMenu.setProjector(p);
+    // The point projector still drives the damage numerals; the target cursor
+    // wants a rectangle, and gets one from `setTargetingPort` when there is a
+    // field to ask. Until then it falls back to a box around this point.
+    this.commandMenu.setProjector((id) => {
+      const r = this.targeting?.rect(id);
+      if (r) return r;
+      const pt = p(id, 'chest');
+      return pt ? { x: pt.x, y: pt.y, w: 0, h: 0 } : null;
+    });
     this.damageNumbers.setProjector(p);
     this.damageNumbers.setSideResolver((id) => {
       const side = this.lastState?.combatants[id]?.side;
@@ -676,6 +719,125 @@ export class FFXBattleHud implements HudPort {
   /** The enemy plate, for tests and the debug snapshot. */
   get enemyPlate(): SensorPanel {
     return this.sensorPanel;
+  }
+
+  // ------------------------------------------------------- target selection
+
+  /**
+   * One selection, painted on every surface that has to agree about it.
+   *
+   * Bailey's Chapter 3 frame had four places a player might look for the
+   * answer to *"what am I aiming at?"* — the field, the party rows, the turn
+   * list and the enemy plate — and only the field said anything at all, in a
+   * hairline bracket. They are driven from this one call now:
+   *
+   * - the **field**: the accent pool under each target, the quiet dim on
+   *   everyone else, and the x-ray fade for the one case the spread formation
+   *   cannot clear (`TargetingPort`);
+   * - the **party rows**: every targeted ally's row lights green, which is
+   *   what makes a party-wide Hastega read as party-wide;
+   * - the **turn list**: the same combatants' tiles ring in the same accent,
+   *   so "Yu Pagoda C" on the field and "Yu Pagoda C" in the queue are
+   *   obviously the same fiend;
+   * - the **status panel**: it yields while an *enemy* is being aimed at, so
+   *   the spread formation fits a 16:9 frame. On an ally cast it stays lit and
+   *   the rows light instead — the same rule read the other way, exactly as
+   *   the approved frames state it.
+   *
+   * `null` restores all four.
+   */
+  private applySelection(sel: CursorSelection | null): void {
+    const ids = new Set(sel?.ids ?? []);
+    const kind = sel?.kind ?? 'enemy';
+
+    // The field.
+    if (this.targeting) {
+      // Tell the field where the HUD's own panels are before asking it how
+      // much of the target is visible — a fiend behind the command stack is
+      // just as hidden as one behind the aeon, and it is the other half of
+      // "they are not clearly visible".
+      this.targeting.setPanels(this.panelRects());
+      if (!sel) {
+        this.targeting.select(null);
+        this.targeting.xray(null);
+      } else {
+        this.targeting.select({ ids: [...ids], mode: sel.mode, accent: kind });
+        // Only when the layout genuinely left it covered. Option B answers
+        // occlusion by spreading the lane; this is the fallback for parts of
+        // one machine, and it stays off whenever the target is already clear.
+        const active = sel.activeId;
+        const covered = active !== null && this.targeting.visibility(active) < 0.75;
+        this.targeting.xray(covered ? active : null);
+      }
+    }
+
+    // The party rows and the turn-list tiles.
+    for (const el of this.el.querySelectorAll<HTMLElement>('[data-actor]')) {
+      const on = ids.has(el.dataset['actor'] ?? '');
+      el.classList.toggle('ig-party-row--targeted', on && el.classList.contains('ig-stat'));
+      const tile = el.querySelector<HTMLElement>('.ig-ctb__tile');
+      tile?.classList.toggle('ig-ctb__tile--targeted', on);
+      tile?.classList.toggle('ig-ctb__tile--targeted-ally', on && kind !== 'enemy');
+    }
+
+    // The status panel's yield.
+    this.el.classList.toggle('ffxhud--targeting-enemy', !!sel && kind === 'enemy');
+  }
+
+  /**
+   * The HUD panels that genuinely cover the field, in viewport pixels.
+   *
+   * The command stack, the turn list and the party-status panel. Measured
+   * rather than declared, because all three are laid out by the letterbox
+   * scale and their sizes change with the window. A panel that is hidden or
+   * has collapsed to nothing is skipped, so the status panel stops counting
+   * as an occluder the moment it yields.
+   */
+  private panelRects(): Array<{ x: number; y: number; w: number; h: number }> {
+    const out: Array<{ x: number; y: number; w: number; h: number }> = [];
+    const els = [this.commandMenu.stackEl, this.ctbList.el, this.partyStatus.el];
+    for (const el of els) {
+      if (!el || el.hidden) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) continue;
+      out.push({ x: r.left, y: r.top, w: r.width, h: r.height });
+    }
+    return out;
+  }
+
+  /**
+   * The letter that tells one Yu Pagoda from the other.
+   *
+   * Read off the turn preview the CTB list last rendered rather than
+   * re-derived, so the field plate and the queue tile can never print
+   * different letters for one fiend.
+   */
+  private letterTagOf(id: CombatantId): string | undefined {
+    return this.lastPreviewRows.find((r) => r.actorId === id)?.letterTag;
+  }
+
+  /**
+   * A one-line preview for a buff or heal, when it is knowable from state the
+   * player can already see: "already Hasted", "HP full".
+   *
+   * Deliberately narrow. It answers only from the target's own status list and
+   * HP, never from battle math, so it cannot disagree with what the engine
+   * will do, and it says nothing at all when it has nothing true to say.
+   */
+  private targetNoteOf(id: CombatantId, cmd: AvailableCommand): string | undefined {
+    const c = this.lastState?.combatants[id];
+    if (!c) return undefined;
+    const label = cmd.label.toLowerCase();
+    const statuses = (c as { statuses?: Record<string, unknown> }).statuses ?? {};
+    const has = (s: string): boolean => Boolean(statuses[s]);
+    if (label.startsWith('haste') && has('haste')) return 'already Hasted';
+    if (label.startsWith('protect') && has('protect')) return 'already Protected';
+    if (label.startsWith('shell') && has('shell')) return 'already Shelled';
+    if (label.startsWith('reflect') && has('reflect')) return 'already Reflecting';
+    if (cmd.category === 'whitemagic' && label.startsWith('cur') && c.alive && c.hp >= c.stats.maxHp) {
+      return 'HP full';
+    }
+    return undefined;
   }
 
   /**
@@ -1111,6 +1273,10 @@ export class FFXBattleHud implements HudPort {
 
   /** The presenter's projector, installed by `setProjector`. */
   private project: Projector = () => null;
+  /** The painted field's targeting surface, when there is a field. */
+  private targeting: TargetingPort | null = null;
+  /** The turn preview last rendered, for the letter tags. */
+  private lastPreviewRows: TurnPreview[] = [];
 
   /**
    * The HUD panels the intent slab may not cover, in viewport pixels.
