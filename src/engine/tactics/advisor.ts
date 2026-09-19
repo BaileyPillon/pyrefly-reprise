@@ -102,6 +102,7 @@ import {
   zombieCureReason,
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
+import { menuChipFor, onTheMenu } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
@@ -144,13 +145,19 @@ export interface MoveSuggestion {
   /** One line on why this is the pick. */
   reason: string;
   /**
-   * The submenu the player presses to reach this row — "Items", "White Magic".
+   * The submenu the player presses to reach this row — "Items" in FFX, "Item"
+   * in FFX-2 — or `''` when the row is already a top-level entry on the stack.
    *
    * The card prints it beside the label, and it is not decoration: Chapter 1's
    * Poison Fang is a *thrown item* every member carries, and named on its own
    * it reads as somebody else's ability. Bailey's report on the live build was
    * exactly that — "I'm controlling Tidus but the advisor is telling me to use
    * Poison Fang?" — for a row that was in Tidus's own Items list all along.
+   *
+   * Which makes it a promise about the menu, so it is computed from each
+   * game's own grouping rule rather than from one shared table: see
+   * `./advisor-menu.ts`, and the empty string is as load-bearing as the word —
+   * "Attack · in Attack" is directions to the row you are standing on.
    */
   menu: string;
   /**
@@ -276,20 +283,6 @@ const FRIENDLY_FIRE_WEIGHT = 4;
 const MAX_SIMULATIONS = 60;
 
 const YUNALESCA_ID = 'yunalesca';
-
-/** The submenu a row lives in, in the words printed on the command stack. */
-const MENU_WORDS: Partial<Record<string, string>> = {
-  attack: 'Attack',
-  skill: 'Special',
-  special: 'Special',
-  blackmagic: 'Black Magic',
-  whitemagic: 'White Magic',
-  summon: 'Summon',
-  overdrive: 'Overdrive',
-  aeon: 'Aeon',
-  item: 'Items',
-  dressphere: 'Dressphere',
-};
 
 // --------------------------------------------------------------- ownership
 
@@ -738,6 +731,7 @@ interface Candidate {
 function candidateFor(
   state: Readonly<BattleState>,
   actorId: CombatantId,
+  commands: readonly AvailableCommand[],
   row: AvailableCommand,
   targetId: CombatantId | null,
   sim: Sim,
@@ -801,7 +795,7 @@ function candidateFor(
   const base: Omit<MoveSuggestion, 'reason' | 'cite' | 'score' | 'source'> = {
     command,
     label: row.label,
-    menu: MENU_WORDS[row.category] ?? '',
+    menu: menuChipFor(state.game, commands, row),
     targetId,
     targetName: scoped ?? target?.name ?? null,
     effect: describeAbility(def, row, command),
@@ -831,6 +825,7 @@ function candidateFor(
 /** A switch row, which resolves to nothing and so is priced rather than simulated. */
 function switchCandidate(
   state: Readonly<BattleState>,
+  commands: readonly AvailableCommand[],
   row: AvailableCommand,
   targetId: CombatantId | null,
 ): Candidate {
@@ -839,7 +834,9 @@ function switchCandidate(
   const base: Omit<MoveSuggestion, 'reason' | 'cite' | 'score' | 'source'> = {
     command,
     label: row.label,
-    menu: 'Switch',
+    // FFX collapses every reserve into one Switch group, which opens its list
+    // even for a single benched member; FFX-2 has no bench at all.
+    menu: menuChipFor(state.game, commands, row),
     targetId: incoming?.id ?? null,
     // No target name: FFX labels a Switch row with the incoming member's own
     // name, so printing the target too reads "Auron -> Auron".
@@ -901,15 +898,18 @@ export function buildAdvisorView(
   for (const row of orderedRows(state, decision.commands, options)) {
     if (!row.enabled) continue;
     if (row.command.kind === 'escape') continue;
+    // A row the player cannot reach from the command window is not advice,
+    // whatever the simulation thinks of it — FFX's menu has no Defend entry.
+    if (!onTheMenu(state.game, row.command)) continue;
     if (row.command.kind === 'switch') {
-      candidates.push(switchCandidate(state, row, row.validTargets[0] ?? null));
+      candidates.push(switchCandidate(state, decision.commands, row, row.validTargets[0] ?? null));
       continue;
     }
     const def = defFor(state, row.command, options);
     for (const targetId of aimCandidates(state, row, def)) {
       if (simulations >= MAX_SIMULATIONS) break;
       simulations += 1;
-      const candidate = candidateFor(state, decision.actorId, row, targetId, sim, intent);
+      const candidate = candidateFor(state, decision.actorId, decision.commands, row, targetId, sim, intent);
       if (candidate) candidates.push(candidate);
     }
   }
@@ -926,8 +926,14 @@ export function buildAdvisorView(
 
   // **The hard gate.** Nothing reaches the card that this actor cannot press on
   // the menu currently in front of them — not a stale candidate, not a tactic's
-  // re-aim, not a row that was greyed out between the simulation and here.
-  const legal = ranked.filter((c) => ownedRow(decision.commands, c.suggestion.command) !== null);
+  // re-aim, not a row that was greyed out between the simulation and here, and
+  // not a row this game's command window does not paint at all ({@link
+  // onTheMenu}; FFX drops Defend).
+  const legal = ranked.filter(
+    (c) =>
+      ownedRow(decision.commands, c.suggestion.command) !== null &&
+      onTheMenu(state.game, c.suggestion.command),
+  );
   if (legal.length === 0) return null;
 
   const shown: Candidate[] = [legal[0]!];
@@ -957,7 +963,9 @@ export function buildAdvisorView(
       else shown.push(raise);
     }
   }
-  const suggestions = shown.map((c) => withRange(state, decision.actorId, c, sim, intent));
+  const suggestions = shown.map((c) =>
+    withRange(state, decision.actorId, decision.commands, c, sim, intent),
+  );
 
   return {
     actorId: decision.actorId,
@@ -1057,12 +1065,13 @@ function orderedRows(
 function withRange(
   state: Readonly<BattleState>,
   actorId: CombatantId,
+  commands: readonly AvailableCommand[],
   candidate: Candidate,
   sim: Sim,
   intent: AdvisorIntent | null,
 ): MoveSuggestion {
   if (!candidate.origin) return candidate.suggestion;
-  const full = candidateFor(state, actorId, candidate.origin.row, candidate.origin.targetId, sim, intent, true);
+  const full = candidateFor(state, actorId, commands, candidate.origin.row, candidate.origin.targetId, sim, intent, true);
   if (!full?.suggestion.estimate) return candidate.suggestion;
   return {
     ...candidate.suggestion,
@@ -1125,7 +1134,7 @@ function handOff(
       (c.command as { extra?: { inId?: CombatantId } }).extra?.inId === owner.id,
   );
   if (!row) return null;
-  const candidate = switchCandidate(state, row, null);
+  const candidate = switchCandidate(state, decision.commands, row, null);
   if (switchValue(state, candidate.suggestion.command) < SWITCH_PENALTY) return null;
   const label = 'id' in command ? String((command as { id?: unknown }).id).replace(/-/g, ' ') : 'that move';
   return {
@@ -1178,8 +1187,8 @@ function tacticSuggestion(
   if (!candidate) {
     candidate =
       command.kind === 'switch'
-        ? switchCandidate(state, row, aimedId)
-        : candidateFor(state, decision.actorId, row, aimedId, sim, intent);
+        ? switchCandidate(state, decision.commands, row, aimedId)
+        : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent);
   }
   if (!candidate) return null;
 

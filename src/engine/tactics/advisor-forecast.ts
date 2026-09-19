@@ -140,6 +140,10 @@ function ctxFromState(state: Readonly<BattleState>, content: FFXContentRegistry)
     canEscape: false,
     sensedIds: new Set(),
     pendingPartRevivals: [],
+    // The engine's stalemate watchdog (`engine.ts#STALEMATE_TURNS`). A forecast
+    // runs one enemy turn against a throwaway clone and never loops, so it
+    // starts fresh, exactly as `simulate.ts#runtimeFor` does.
+    progress: { bestEnemyHp: Number.POSITIVE_INFINITY, atTurn: 0 },
   };
   for (const [id, raw] of Object.entries(clone.combatants)) {
     const c = raw as FFXCombatant;

@@ -41,6 +41,7 @@ import {
   statusLabel,
   switchValue,
 } from '../../src/engine/tactics/advisor.ts';
+import { onTheMenu } from '../../src/engine/tactics/advisor-menu.ts';
 import { simulateFFXCommand } from '../../src/battle/ffx/simulate.ts';
 
 const MAX_DECISIONS = 500;
@@ -81,6 +82,11 @@ interface Walk {
   withNumbers: number;
   /** Labels of the suggestions that carried no figure, in order. */
   bare: string[];
+  /**
+   * Decisions the tactic answered with a row **FFX's command window does not
+   * paint** — today, Defend. See {@link walk}.
+   */
+  offMenuTactics: string[];
 }
 
 /**
@@ -89,10 +95,23 @@ interface Walk {
  * The battle is played by the shipped tactic (falling back to the first legal
  * row), so the boards the advisor is asked about are the ones a player
  * following the guide actually reaches.
+ *
+ * **One documented exception to "the card's top row is the tactic".** The
+ * tactic may name a row the *player's command window does not paint*, and then
+ * the card has to decline it: FFX's menu drops `defend` outright
+ * (`ui/ffx/CommandMenuLogic.ts:98` — it is a base action reached by an
+ * affordance, not an entry in the list) and no affordance is wired yet, so
+ * there is no key in the game that presses it. Chapter 2's line uses Defend on
+ * purpose and with numbers behind it (`tactics/yunalesca.ts:213`, 150 wins
+ * against 131), which makes this a *menu* gap rather than a tactic to argue
+ * with — but the card may not answer "what do I press" with something the
+ * player cannot press. Those decisions are counted here instead of counted
+ * against, and `docs/handoff/fix3-advisor.md` carries the request to the FFX
+ * HUD track.
  */
 function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
   const { engine, content } = newFfxEngine(groupId, seed, party);
-  const out: Walk = { decisions: 0, advised: 0, mismatches: [], switches: 0, pairs: 0, withNumbers: 0, bare: [] };
+  const out: Walk = { decisions: 0, advised: 0, mismatches: [], switches: 0, pairs: 0, withNumbers: 0, bare: [], offMenuTactics: [] };
 
   for (let i = 0; i < MAX_DECISIONS; i++) {
     const decision: Decision = engine.nextDecision();
@@ -115,8 +134,14 @@ function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
       // A switch at the top must always carry a runner-up.
       if (top.isSwitch) expect(view.suggestions.length).toBe(2);
       if (tactic && shape(top.command) !== shape(tactic)) {
-        out.mismatches.push(`${decision.actorId}: card ${shape(top.command)} vs tactic ${shape(tactic)}`);
+        if (onTheMenu(state.game, tactic)) {
+          out.mismatches.push(`${decision.actorId}: card ${shape(top.command)} vs tactic ${shape(tactic)}`);
+        } else {
+          out.offMenuTactics.push(`${decision.actorId}: ${shape(tactic)}`);
+        }
       }
+      // Whatever else the card does, it never names the unpressable row.
+      for (const s of view.suggestions) expect(s.command.kind).not.toBe('defend');
     }
 
     const chosen = tactic ?? fallback(decision.commands);
@@ -140,6 +165,20 @@ describe('buildAdvisorView — agreement with the shipped tactic', () => {
     const result = walk('yunalesca', 5, zanarkandBuild);
     expect(result.decisions).toBeGreaterThan(5);
     expect(result.mismatches).toEqual([]);
+  });
+
+  /**
+   * Chapter 2's line stalls with Defend, and FFX's command window has no Defend
+   * row — so on those decisions the card answers with the best row that *is* on
+   * the stack rather than with a move the player has no key for. See
+   * {@link walk}'s note; the menu gap itself is the FFX HUD track's.
+   */
+  it('declines a chapter line the FFX command window does not paint', () => {
+    const result = walk('yunalesca', 5, zanarkandBuild);
+    expect(result.offMenuTactics.length).toBeGreaterThan(0);
+    for (const entry of result.offMenuTactics) expect(entry).toContain('defend:');
+    // And the decisions it did decline still got advice, not silence.
+    expect(result.advised).toBe(result.decisions);
   });
 
   /**
