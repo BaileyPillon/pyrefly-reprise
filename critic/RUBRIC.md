@@ -34,6 +34,7 @@ Hard caps (apply before weighting):
 ## The loop (owner's rule, restated 2026-09-18)
 
 - The gate is a weighted total of **9.6**. Below it, the critic returns a **detailed ranked issue list** (severity, category, exact repro, file/line, suggested fix) and the build is revised and refined against that list, then the critic runs again. The loop repeats until the gate is met.
+- **MANDATORY, NO EXCEPTIONS (owner, 2026-09-18): the critic evaluates EVERY build that is pushed live.** A release is not finished until a full critic round has run against the live URL for that exact build (main commit and bundle hash recorded in the round report). `tools/deploy-pages.mjs` leaves a marker in `critic/pending/` for every deployed build; only the chief critic's report for that build clears it.
 - The critic never fixes anything itself and never softens a score because a fix is planned.
 - Every round is written to `critic/rounds/round-NN.md` (+ `.json`) and the top of the list is reported to the owner with the score.
 
