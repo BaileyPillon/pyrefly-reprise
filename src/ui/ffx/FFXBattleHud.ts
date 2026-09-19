@@ -24,7 +24,9 @@ import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import {
+  advisorChipDock,
   advisorZone,
+  GAP,
   SPRITE_FOOT_MARGIN_RATIO,
   SPRITE_HALF_WIDTH_RATIO,
   SPRITE_TOP_MARGIN_RATIO,
@@ -36,10 +38,48 @@ import {
 /** Clearance between the advisor card's top edge and its chip, in grid px. */
 const ADVISOR_CHIP_GAP = 2;
 
+/**
+ * The top of the fixed slot the command window's help slab is parked in.
+ *
+ * `ffx-hud.css` pins `.ffx-cmd-info` to `bottom: 206px` on the 360-tall grid —
+ * a bottom edge at y 154 — and caps it at 29 grid px, so the slot is
+ * y 125..154 and nothing it prints ever leaves it. Repeated here because two
+ * other things in this file are solved against it: the strategy guide's floor,
+ * and the reserved rect the advisor's solver is handed on the frames the slab
+ * happens to be empty (a stale box is better than a band that opens and shuts).
+ *
+ * **Why 154 and not "six px above the stack".** Measured on the round-02 gate
+ * build, the highest party head inside the command column's x-span is Yuna's
+ * at y 158.4 (Chapter 1); Chapters 2 and 3 put her at 188. A slab that stops
+ * at 154 is clear of all three by 4.4 grid px at the worst, in every state,
+ * which is the whole of the gate's third refutation.
+ */
+const CMD_INFO_TOP = 121;
+
+/**
+ * The whole slot, as the advisor's solver is handed it — the **painted** box,
+ * so the slab's own `skewX` reach is already inside these four numbers.
+ *
+ * It is a constant rather than a measurement because the slab is empty on the
+ * frames between one decision and the next, and a box the solver won while the
+ * slab was empty would be taken away by the next keystroke. Its width was
+ * `max-width: 240px` and the slab sized itself to its sentence, so SWITCH's —
+ * "Swap in a reserve member (L1 / Q). The member coming in takes this turn." —
+ * grew it to 248 grid px and ran it under the enemy-intent slab, 11 830 grid
+ * px² of overlap from one keypress. A fixed width wraps instead.
+ *
+ * `right: 196` is the number with the least room to spare: Kimahri's
+ * reconstructed rect in Chapter 1 starts at x 200.8, so the slab clears the
+ * only party member who stands this high in the command column by 4.8 grid px.
+ */
+const CMD_INFO_SLOT = { left: 24, top: CMD_INFO_TOP, right: 196, bottom: 154 } as const;
+
 /** What `solveAdvisorPlacement` holds for the length of one decision. */
 interface HeldAdvisorPlacement {
   key: string;
   zone: AdvisorZone | null;
+  /** Where the chip parks when `zone` is `null`; solved on the same frame. */
+  chipDock: { left: number; bottom: number } | null;
 }
 
 /**
@@ -106,9 +146,19 @@ export class FFXBattleHud implements HudPort {
     game: 'ffx',
     anchors: {
       below: () => this.bannerEl,
-      above: () => this.cmdAreaEl,
+      // **A constant floor, not the command area's travelling top edge.**
+      //
+      // The rail used to stop `CLEARANCE_GAP` above `.ffx-cmd-area`, which
+      // meant it grew and shrank by 90 grid px as the command stack did: the
+      // round-02 gate captured it at y 44..126 on the top-level menu and at
+      // y 44..202 with a Skill list open, in the same fight. Now the left
+      // column's other tenant — the help slab — has a fixed slot at
+      // {@link CMD_INFO_TOP}, so the rail ends a clearance above that slot and
+      // the two never trade pixels. Nothing rises past the slot either: the
+      // command stack's tallest measured top is 166.4 with `MAX_VISIBLE_ROWS`
+      // rows, 41 grid px below this floor.
       top: 44,
-      bottom: 34,
+      bottom: STAGE.height - (CMD_INFO_TOP - GAP),
     },
   });
   /**
@@ -142,7 +192,29 @@ export class FFXBattleHud implements HudPort {
    * genuinely land on, and the queue is the one the player is reading the
    * prediction *against*.
    */
-  private readonly intent = new EnemyIntentPanel({ game: 'ffx' });
+  private readonly intent = new EnemyIntentPanel({
+    game: 'ffx',
+    // **FFX opens every battle with the read-out folded to its chip, and the
+    // player's `E` opens it for that fight.**
+    //
+    // Round 02 #14 asked for "a default that does not hide the fight" and the
+    // previous answer was a shorter *body* (`density: 'brief'`). The gate
+    // measured what that actually ships: 150 x 119 grid px, hung at x 165..315
+    // in Chapter 1 and x 176..326 in Chapter 2 — the band directly above the
+    // party's heads, which on a 640x360 stage is also the only ground wide
+    // enough for the advisor card. Two opaque slabs, one band; something had
+    // to yield, and the one that explains *the decision the player is making
+    // right now* is the one to keep. With the slab folded, all three chapters
+    // solve a 132-wide advisor card in clear sky (`hudSafeZones.ts`).
+    //
+    // `readVisible`/`writeVisible` are overridden rather than the shared
+    // `Settings.intentVisible` default being changed, because that setting is
+    // FFX-2's as well and Bailey's rule of 2026-09-19 is that a change true of
+    // one game is not applied to the other. FFX-2 passes neither and keeps its
+    // persisted, default-on behaviour exactly as it shipped.
+    readVisible: () => false,
+    writeVisible: () => {},
+  });
 
   private lastState: BattleState | null = null;
   /** Whoever's `turn-start`/`action-start` fired most recently, for the message banner's name slab. `message` events carry no actor of their own. */
@@ -203,12 +275,28 @@ export class FFXBattleHud implements HudPort {
     this.infoEl.className = 'ig-cutin__info ffx-cmd-info';
     this.infoEl.hidden = true;
     this.infoEl.innerHTML = `<div class="ig-cutin__info-desc" data-role="text"></div>`;
-    cmdArea.append(this.commandMenu.stackEl, this.infoEl, this.commandMenu.breadcrumbEl);
+    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl);
 
     this.stage.append(
       this.bannerEl,
       this.ctbList.el,
       cmdArea,
+      // **Not inside `cmdArea`.** It used to be the middle child of that
+      // column-reverse stack, which pinned it `GAP` above whatever height the
+      // command stack happened to have — and the stack's height is the most
+      // variable thing on an FFX screen: 168 grid px at the top-level menu, 103
+      // while a Skill list is open, 76 during targeting. So the one panel that
+      // is up on *every* decision slid up and down the left column by 90 grid
+      // px, and at the bottom of that travel it printed across Yuna's chest
+      // (1 366 grid px² at 1280x720, Chapter 3, measured on the round-02 gate
+      // build) in ten of thirteen states.
+      //
+      // Given its own anchor it does not move at all — see
+      // `ffx-hud.css`'s `.ffx-cmd-info`, which parks it at y 125..154, above
+      // every party head in all three chapters and below the guide's rail.
+      // Two panels with two jobs, two rects, and the advisor's solver is told
+      // about both of them rather than about their union.
+      this.infoEl,
       this.triggerPrompt.el,
       this.partyStatus.el,
       this.sensorPanel.el,
@@ -614,21 +702,35 @@ export class FFXBattleHud implements HudPort {
     this.advisor.el.dataset['zone'] = zone ? zone.kind : 'free';
 
     if (!zone) {
-      // Done once, on the frame the card comes off a zone, rather than every
-      // frame: `MoveAdvisor.update` has already written this frame's box from
-      // its own anchors and re-clearing it per frame would throw that
-      // measurement away and park the card on the stylesheet's pre-layout
-      // `left: 196px`, which sits on the command stack.
+      // **The card comes down, and the chip stays.**
+      //
+      // For one round this branch did the opposite: it cleared the inline box
+      // and handed the card back to `MoveAdvisor`'s own anchors, on the
+      // reasoning that "a card in an imperfect place answers the question; a
+      // card that is not there does not". The round-02 gate measured what
+      // "imperfect" came to in Chapter 2 — the card printed across all three
+      // party sprites, 7 465 grid px² of it on Tidus alone, at every one of
+      // four viewports — and that is not an imperfect place, it is the fight
+      // with a slab over it.
+      //
+      // It is also a branch that should now be unreachable in the shipped
+      // chapters. `advisorZone` declines only when **no** rectangle on the
+      // frame holds even an 80px card clear of every panel and every fighter,
+      // and `tests/unit/ui-ffx-hud-safe-zones.test.ts` pins that all three
+      // chapters find a box at the full width. The chip is docked by the same
+      // solver, so what the player is left with is a real, readable `N BEST
+      // MOVE` affordance on clear ground rather than two words on Tidus.
       if (this.appliedAdvisorBox !== FREE_PLACEMENT) {
         this.appliedAdvisorBox = FREE_PLACEMENT;
         this.clearAdvisorBox(card, chip);
-        // `update` ends in the advisor's own `layout()`, so the card and chip
-        // leave this frame on the measured band instead of the bare stylesheet
-        // anchor, and `fitCard` re-walks its ladder against the 104px cap the
-        // cleared `max-height` just restored. Same trick as the box-change path
-        // below, for the same reason: no frame is painted at the density some
-        // other box earned.
-        this.advisor.update(0);
+      }
+      card.hidden = true;
+      if (chip) {
+        const dock = this.heldAdvisorChipDock;
+        if (dock) {
+          chip.style.left = `${dock.left.toFixed(2)}px`;
+          chip.style.bottom = `${dock.bottom.toFixed(2)}px`;
+        }
       }
       return;
     }
@@ -743,33 +845,56 @@ export class FFXBattleHud implements HudPort {
     // panel it stands for. The intent slab gets a coarser quantum because it is
     // the only input that moves *every frame*.
     const input = {
-      cmdArea: growToGrid(this.gridRect(this.cmdAreaEl), 1) ?? { left: 30, top: 205, right: 211, bottom: 334 },
+      // `.ig-cmd-stack` and the breadcrumb, **not** `.ffx-cmd-area`'s union
+      // with the help slab. The union's top edge was the slab's — y 131 in
+      // every state — so every box above the party was measured down to a line
+      // 35 grid px lower than the command window really reaches, and Chapter
+      // 1's open band came out 24 grid px tall. The slab is its own rect below.
+      cmdArea: growToGrid(this.gridRect(this.commandMenu.stackEl), 1) ?? {
+        left: 30,
+        top: 205,
+        right: 211,
+        bottom: 334,
+      },
+      // The slab's **reserved slot**, not its measured box, and never `null`:
+      // it is up on every decision, it is 29 grid px at its tallest, and a box
+      // solved while it happened to be empty would be taken away on the next
+      // keystroke. See `CMD_INFO_TOP`.
+      cmdInfo: { ...CMD_INFO_SLOT },
       partyStatus:
         growToGrid(this.gridRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
       guide: growToGrid(this.gridRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),
       sensor: growToGrid(this.gridRect(this.sensorPanel.el), 1),
       intent: growToGrid(this.viewportRectToGrid(this.intent.el.querySelector<HTMLElement>('.eint__panel')), 4),
+      intentChip: growToGrid(this.viewportRectToGrid(this.intent.el.querySelector<HTMLElement>('.eint__toggle')), 4),
       ctb: growToGrid(this.gridRect(this.ctbList.el), 1),
-      // Coarser again: the party is the one input that moves on *every* frame
+      // Coarser again: the cast is the one input that moves on *every* frame
       // and is never a reason to re-solve, so its snap has to be wide enough
       // that an idle cycle cannot change it even when a panel opening does
-      // force a fresh solve mid-decision. 4 grid px costs the card up to 4 of
-      // the pocket's 90 and buys a pocket that does not breathe.
+      // force a fresh solve mid-decision.
       sprites: this.partySpriteRects().map((r) => growToGrid(r, 4)!),
+      // **The bosses.** Absent from this input for two rounds, which is why the
+      // card was printed 773 grid px² deep into Seymour Flux and 1 626 into
+      // Braska's Final Aeon: the only fighters the solver had ever been told
+      // about were the party's.
+      enemies: this.enemySpriteRects().map((r) => growToGrid(r, 4)!),
     };
     const key = [
       this.advisorDecisionSeq,
       this.hudScale().toFixed(3),
       rectKey(input.cmdArea),
+      rectKey(input.cmdInfo),
       rectKey(input.partyStatus),
       rectKey(input.guide),
       rectKey(input.sensor),
       rectKey(input.intent),
+      rectKey(input.intentChip),
       rectKey(input.ctb),
-      // The party's *positions* are deliberately absent — see below. Their
+      // The cast's *positions* are deliberately absent — see below. Their
       // number is not: a KO or a switch changes it, and both are worth a fresh
       // solve on the frame they land.
       input.sprites.length,
+      input.enemies.length,
     ].join('|');
 
     const held = this.heldAdvisor;
@@ -785,9 +910,18 @@ export class FFXBattleHud implements HudPort {
     // genuinely come back is picked up.
     const zone = this.advisorFreeSeq === this.advisorDecisionSeq ? null : advisorZone(input);
     if (!zone) this.advisorFreeSeq = this.advisorDecisionSeq;
-    const solved: HeldAdvisorPlacement = { key, zone };
+    const solved: HeldAdvisorPlacement = {
+      key,
+      zone,
+      chipDock: zone ? null : advisorChipDock(input),
+    };
     this.heldAdvisor = solved;
     return solved;
+  }
+
+  /** Where the `N BEST MOVE` chip parks while the card is declined, or `null`. */
+  private get heldAdvisorChipDock(): { left: number; bottom: number } | null {
+    return this.heldAdvisor?.chipDock ?? null;
   }
 
   /** The advisor's held placement, for tests, the e2e harness and the debug snapshot. */
@@ -831,15 +965,34 @@ export class FFXBattleHud implements HudPort {
    * the zone is recomputed next frame.
    */
   private partySpriteRects(): Rect[] {
+    return this.spriteRects(this.lastState?.activeIds ?? []);
+  }
+
+  /**
+   * Every **living enemy**'s sprite, as a grid-space rect.
+   *
+   * A boss is as much of the fight as a party member is, and for two rounds
+   * `hudSafeZones.ts` was never told one was there: the card's bottom-right
+   * pocket ran from the party's right edge to the party-status column, which in
+   * all three chapters is straight through the boss. A dead enemy is skipped
+   * because its quad is already leaving the field.
+   */
+  private enemySpriteRects(): Rect[] {
     const state = this.lastState;
     if (!state) return [];
+    return this.spriteRects(state.enemyIds.filter((id) => state.combatants[id]?.alive !== false));
+  }
+
+  /** The shared half of {@link partySpriteRects} and {@link enemySpriteRects}. */
+  private spriteRects(ids: readonly CombatantId[]): Rect[] {
+    if (!this.lastState) return [];
     const scale = this.hudScale();
     if (!scale) return [];
     const host = this.el.getBoundingClientRect();
     const ox = host.left + (host.width - STAGE.width * scale) / 2;
     const oy = host.top + (host.height - STAGE.height * scale) / 2;
     const out: Rect[] = [];
-    for (const id of state.activeIds) {
+    for (const id of ids) {
       const head = this.project(id, 'head');
       const feet = this.project(id, 'feet');
       if (!head || !feet) continue;

@@ -269,8 +269,7 @@
   pointer-events: none;
 }
 .ffx-cmd-area .ig-cmd-stack,
-.ffx-cmd-area .ffx-cmd-breadcrumb,
-.ffx-cmd-area .ffx-cmd-info {
+.ffx-cmd-area .ffx-cmd-breadcrumb {
   pointer-events: auto;
 }
 /* .ig-cmd-stack is `position: absolute` in slabs.css by design (the HUD
@@ -350,10 +349,58 @@
 .ffxhud .ffx-cmd__face .ffx-portrait-fallback { font-size: 9px; }
 .ffxhud .ffx-cmd--member { padding-left: 6.2px; }
 
-/* Reusing .ig-cutin__info (designed for the turn cut-in's absolute
-   positioning) inside our own flex flow needs it to lay out in-flow instead. */
-.ffx-cmd-info { position: relative !important; max-width: 240px; }
-.ffx-cmd-info .ig-cutin__info-desc { font-style: normal; font-size: 8.5px; }
+/* ------------------------------------------------- the command help slab */
+
+/* **A fixed slot, not a flex item above the stack.**
+
+   This was the middle child of `.ffx-cmd-area`'s column-reverse stack, pinned
+   six px above whatever height the command window currently had. That height
+   is the most variable thing on an FFX screen -- 168 grid px at the top-level
+   menu, 103 with a Skill list open, 76 while the player is aiming -- so the
+   one panel that is up on *every* decision travelled 90 grid px up and down
+   the left column, and at the bottom of that travel it was printed across the
+   party. The round-02 gate measured it at 1 366 grid px² on Yuna in Chapter 3
+   at 1280x720, in ten of thirteen states, and 1 900 + 3 140 on Tidus and Yuna
+   in Chapter 1 with a White Magic list open.
+
+   y 121..154 is the slot it gets instead, and it never leaves it:
+
+   * the highest party head inside this column is Yuna's at y 158.4 in Chapter
+     1 (Chapters 2 and 3 put her at 188), so the slot clears the party by 4.4
+     grid px at the worst, in every chapter, in every state;
+   * Kimahri is the only party member who stands this high *and* this far left
+     in Chapter 1, at x 200.8, which is what the 160px width buys: the slab's
+     painted right edge, shear included, is 193.7;
+   * the strategy guide's rail ends a GAP above it (`FFXBattleHud`'s
+     `anchors.bottom`), so the two share the column without ever trading px;
+   * `FFXBattleHud.solveAdvisorPlacement` hands the advisor's solver this slot
+     as a constant (`CMD_INFO_SLOT`) rather than the measured box, so the band
+     above the party does not open and shut as the player moves down the menu.
+
+   `bottom: 206px` is `360 - 154`, and 33px of slot is two lines of an 8px face
+   plus the slab's padding -- which holds every sentence `commandHelp.ts`
+   produces at this width. A third line is clamped with an ellipsis rather than
+   cut through, so a longer one a later encounter brings says so. */
+.ffxhud .ffx-cmd-info {
+  position: absolute;
+  left: 30.22px;
+  bottom: 206px;
+  width: 160px;
+  max-width: none;
+  max-height: 33px;
+  padding: 3px 7px;
+  overflow: hidden;
+  pointer-events: auto;
+}
+.ffx-cmd-info .ig-cutin__info-desc {
+  font-style: normal;
+  font-size: 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 
 /* -------------------------------------------------------------- sensor */
 

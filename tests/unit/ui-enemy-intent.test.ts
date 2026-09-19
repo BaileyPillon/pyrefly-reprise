@@ -586,7 +586,7 @@ describe('attachEnemyIntent', () => {
 // ---------------------------------------------------------------- both HUDs
 
 describe('both battle HUDs mount it', () => {
-  it('FFX mounts it on its overlay, beside the numerals', () => {
+  it('FFX mounts it on its overlay, beside the numerals — folded, with its chip up', () => {
     const { hud, root } = mountHud(new FFXBattleHud());
     const el = root.querySelector<HTMLElement>('[data-role="enemy-intent"]');
     expect(el).not.toBeNull();
@@ -594,6 +594,23 @@ describe('both battle HUDs mount it', () => {
     expect(el!.classList.contains('eint--ffx2')).toBe(false);
     hud.setIntentSource(() => view());
     expect(el!.hidden).toBe(false);
+
+    // **FFX ships the read-out folded to its chip, and `E` opens it.** The
+    // round-02 gate measured the open slab at 150 x 119 grid px hanging at
+    // x 165..315 in Chapter 1 — the one band on a 640x360 stage wide enough
+    // for the advisor card, which is why that card had nowhere to stand and
+    // ended up on the party. See `FFXBattleHud`'s `readVisible` for why the
+    // shared `Settings.intentVisible` default is untouched: it is FFX-2's too,
+    // and Bailey's rule of 2026-09-19 is that a change true of one game is not
+    // applied to the other.
+    expect(hud.enemyIntent.isVisible).toBe(false);
+    expect(root.querySelector('[data-role="enemy-intent-toggle"]')!.textContent?.toLowerCase()).toContain(
+      'enemy move',
+    );
+    expect(panelEl(root).textContent).not.toContain('Total Annihilation');
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' }));
+    expect(hud.enemyIntent.isVisible).toBe(true);
     expect(panelEl(root).textContent).toContain('Total Annihilation');
   });
 
