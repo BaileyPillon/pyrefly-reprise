@@ -318,3 +318,52 @@ describe('poseForCommand', () => {
     expect(poseForCommand('escape')).toBe('ready');
   });
 });
+
+describe('switch', () => {
+  /**
+   * The member coming in has to be **staged**, not just looked up.
+   *
+   * `PaintedStage.stage()` only builds actors for the active three; a benched
+   * character is `removed` and deliberately has none. So the handler's
+   * `stage.actor(inId)` was always `undefined`, the fade-in ran on nothing,
+   * and the outgoing figure was removed with nobody put in its place.
+   *
+   * Verified live in Chapter 1 before the fix: after one Switch the engine's
+   * `activeIds` read `["auron","yuna","kimahri"]` while the field held
+   * `["yuna","kimahri", ...]`, and aiming a Potion at Auron drew a bracket over
+   * empty ground — which is what "not clear which ally is being selected"
+   * looks like in its worst form.
+   *
+   * GAME-AWARE (AGENTS.md rule 14): **FFX only.** Switch is FFX's own
+   * mid-battle party swap [visual-bible §3.3, "The Switch flow"]; FFX-2 has a
+   * fixed party of three and no equivalent command, which is why
+   * `src/battle/ffx2` emits no `switch` event and nothing there changed.
+   */
+  it('stages the member coming in, on the slot the outgoing one vacated', async () => {
+    const { stage, play } = setup();
+
+    await play([{ type: 'switch', outId: 'tidus', inId: 'auron' }]);
+
+    expect(stage.calls).toContain('remove:tidus');
+    expect(stage.calls).toContain('add:auron=auron');
+    expect(stage.actors.has('auron')).toBe(true);
+    expect(stage.actors.has('tidus')).toBe(false);
+  });
+
+  it('does not re-stage somebody already on the field', async () => {
+    const { stage, play } = setup();
+
+    await play([{ type: 'switch', outId: 'tidus', inId: 'yuna' }]);
+
+    expect(stage.calls.filter((c) => c.startsWith('add:yuna'))).toHaveLength(0);
+    expect(stage.actors.has('yuna')).toBe(true);
+  });
+
+  it('fades the incoming figure up rather than popping it in', async () => {
+    const { stage, play } = setup();
+
+    await play([{ type: 'switch', outId: 'tidus', inId: 'auron' }]);
+
+    expect(stage.calls).toContain('fade=1:auron');
+  });
+});

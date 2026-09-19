@@ -211,6 +211,14 @@ export interface BattleStage {
   addCombatant(id: CombatantId, opts: { artId: string; side: 'party' | 'enemy' | 'aeon'; slot: number }): Promise<ActorHandle | undefined>;
   /** Take a combatant off the field (dismiss, eject, destroyed part). */
   removeCombatant(id: CombatantId): void;
+  /**
+   * Which standing slot a staged combatant occupies, if the stage tracks one.
+   *
+   * Optional, so a test fake need not implement it. A party Switch uses it to
+   * stand the incoming member exactly where the outgoing one was, which is
+   * what keeps FFX's arc its own shape across a swap.
+   */
+  slotOf?(id: CombatantId): number | undefined;
 }
 
 /** Playback speed, driven by the skip/fast-forward controls. */

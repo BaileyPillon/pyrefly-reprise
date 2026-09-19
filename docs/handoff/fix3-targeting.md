@@ -130,6 +130,21 @@ Two visibility numbers are reported, and the split is deliberate:
 - **The bracket corners rendered as solid squares** in the first capture of this
   pass: the ink underlay was a `box-shadow`, which follows the whole border box.
   It is a pseudo-element inheriting the per-side border widths now.
+- **After a party Switch, the member coming in was never on the field.** Found
+  while verifying ally targeting, and the worst form of Bailey's complaint:
+  `PaintedStage.stage()` only builds actors for the active three, so a benched
+  character deliberately has none, and the `switch` event handler's
+  `stage.actor(inId)` was always `undefined` — the fade-in ran on nothing and
+  the outgoing figure was removed with nobody put in its place. Verified live
+  in Chapter 1: after one Switch the engine read
+  `activeIds = ["auron","yuna","kimahri"]` while the field held
+  `["yuna","kimahri", …]`, and aiming a Potion at Auron drew a bracket over
+  empty ground. The handler stages the incoming member on the slot the outgoing
+  one vacated (`BattleStage.slotOf`, additive and optional).
+  **FFX only** (AGENTS.md rule 14): Switch is FFX's own mid-battle party swap
+  [visual-bible §3.3, "The Switch flow"]; FFX-2 has a fixed party of three, no
+  equivalent command, and emits no `switch` event. Regression test in
+  `tests/unit/presenter-events.test.ts`.
 
 ## Known remaining, and the open questions
 
@@ -178,7 +193,11 @@ Engine data: `battle/common/types.ts`, `battle/ffx/commands.ts`,
 
 App/debug: `app/screens/BattleScreen.ts`, `debug/api.ts`.
 
+Presenter: `engine/BattlePresenterEvents.ts`, `engine/BattlePresenterPorts.ts`
+(the Switch staging fix).
+
 Tests: `tests/unit/engine/formation.test.ts`,
-`tests/unit/engine/screen-rects.test.ts`, `tests/unit/ui-target-cursor.test.ts`.
+`tests/unit/engine/screen-rects.test.ts`, `tests/unit/ui-target-cursor.test.ts`,
+`tests/unit/presenter-events.test.ts`.
 
 Screenshots and the measured report: `docs/screenshots/fix3/targeting/`.

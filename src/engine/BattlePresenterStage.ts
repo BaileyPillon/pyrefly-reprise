@@ -225,6 +225,11 @@ export class PaintedStage implements BattleStage {
     return this.actors.get(id)?.side;
   }
 
+  /** Which standing slot this combatant is on. See `BattleStage.slotOf`. */
+  slotOf(id: CombatantId): number | undefined {
+    return this.actors.get(id)?.slot;
+  }
+
   staged(): CombatantId[] {
     const ids = [...this.actors.entries()];
     ids.sort((a, b) => rank(a[1].side) - rank(b[1].side) || a[1].slot - b[1].slot);

@@ -269,10 +269,36 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
     }
 
     case 'switch': {
+      // The member coming in has to be STAGED, not just looked up.
+      //
+      // `PaintedStage.stage()` only ever builds actors for the active three
+      // (plus the aeon and the fiends) — a benched character is `removed` and
+      // is deliberately not on the field. So `stage.actor(event.inId)` was
+      // always `undefined` here, the fade-in was a no-op on nothing, and the
+      // outgoing figure was removed with nobody put in its place: after any
+      // Switch the field was one figure short and the character the player had
+      // just swapped in did not exist. Verified live before the fix —
+      // `activeIds` read `["auron","yuna","kimahri"]` while the field held
+      // `["yuna","kimahri",...]`, and aiming a Potion at Auron drew a bracket
+      // over empty ground.
+      //
+      // The incoming member takes the slot the outgoing one vacated, which is
+      // what FFX's swap does: the arc keeps its shape.
+      const slot = ctx.stage.slotOf?.(event.outId) ?? 0;
       const out = ctx.stage.actor(event.outId);
       await settled(ctx, out?.fadeTo(0, TIMING.switchOut), TIMING.switchOut);
       ctx.stage.removeCombatant(event.outId);
-      const to = ctx.stage.actor(event.inId);
+
+      let to = ctx.stage.actor(event.inId);
+      if (!to) {
+        // `artId` is the combatant id; the stage's own resolver tries the
+        // mapped id, the sprite key and the raw id before any stand-in.
+        to = await ctx.stage.addCombatant(event.inId, {
+          artId: event.inId,
+          side: 'party',
+          slot,
+        });
+      }
       to?.setAlpha(0);
       await settled(ctx, to?.fadeTo(1, TIMING.switchOut), TIMING.switchOut);
       return;
