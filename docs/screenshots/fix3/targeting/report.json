@@ -1,0 +1,666 @@
+{
+  "mode": "gpu",
+  "findings": [
+    {
+      "ok": true,
+      "label": "Chapter 1: command menu opened",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: seymour-flux visible",
+      "detail": "0.953"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: exactly the selection is ringed",
+      "detail": "ringed=[seymour-flux] selected=[seymour-flux]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: non-targets dimmed",
+      "detail": "4 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: HUD row/tile lit for the target",
+      "detail": "hud=[seymour-flux]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: mortiorchis visible",
+      "detail": "0.981"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: exactly the selection is ringed",
+      "detail": "ringed=[mortiorchis] selected=[mortiorchis]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: non-targets dimmed",
+      "detail": "4 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 enemy cycle: HUD row/tile lit for the target",
+      "detail": "hud=[mortiorchis]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1: cycled 2 of 2 enemies",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch1: ffx wears its own cursor chrome",
+      "detail": "hand=1 flower=0"
+    },
+    {
+      "ok": true,
+      "label": "Ch1: exactly one name plate",
+      "detail": "plates=1 \"Seymour FluxA\""
+    },
+    {
+      "ok": true,
+      "label": "Ch1: status panel yields while aiming at an enemy",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch1: cancel restores every dimmed figure",
+      "detail": "stillDim=[]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1: cancel clears the selection",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: yuna visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[yuna] selected=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: non-targets dimmed",
+      "detail": "4 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: tidus visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[tidus] selected=[tidus]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: non-targets dimmed",
+      "detail": "4 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[tidus]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: kimahri visible",
+      "detail": "0.991"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[kimahri] selected=[kimahri]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: non-targets dimmed",
+      "detail": "4 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch1 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[kimahri]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1: cycled 3 allies",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch1: ffx wears its own cursor chrome on an ally",
+      "detail": "hand=1 flower=0"
+    },
+    {
+      "ok": true,
+      "label": "Ch1: the status panel does NOT yield on an ally cast — the rows light instead",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch1: the targeted ally's row is lit",
+      "detail": "rows=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch1: opened an ally target cursor",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Chapter 2: command menu opened",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch2: an offensive command opened a target cursor",
+      "detail": "enemies=1"
+    },
+    {
+      "ok": true,
+      "label": "Ch2: cancel restores every dimmed figure",
+      "detail": "stillDim=[]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2: cancel clears the selection",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: yuna visible",
+      "detail": "0.886"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[yuna] selected=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: tidus visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[tidus] selected=[tidus]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[tidus]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: auron visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[auron] selected=[auron]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch2 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[auron]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2: cycled 3 allies",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch2: ffx wears its own cursor chrome on an ally",
+      "detail": "hand=1 flower=0"
+    },
+    {
+      "ok": true,
+      "label": "Ch2: the status panel does NOT yield on an ally cast — the rows light instead",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch2: the targeted ally's row is lit",
+      "detail": "rows=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch2: opened an ally target cursor",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Chapter 3: command menu opened",
+      "detail": null
+    },
+    {
+      "ok": false,
+      "label": "Ch3: an offensive command opened a target cursor",
+      "detail": "enemies=3"
+    },
+    {
+      "ok": true,
+      "label": "Ch3: cancel restores every dimmed figure",
+      "detail": "stillDim=[]"
+    },
+    {
+      "ok": true,
+      "label": "Ch3: cancel clears the selection",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Hastega is a party-wide cast, not a choice of one",
+      "detail": "all"
+    },
+    {
+      "ok": true,
+      "label": "Hastega rings every party member",
+      "detail": "ids=[tidus,yuna,auron]"
+    },
+    {
+      "ok": true,
+      "label": "Hastega says ALL ALLIES",
+      "detail": "ALL ALLIES"
+    },
+    {
+      "ok": true,
+      "label": "the field cursor is withdrawn on a multi-target cast",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "all three party rows light green",
+      "detail": "rows=[tidus,yuna,auron]"
+    },
+    {
+      "ok": false,
+      "label": "Ch3: opened an ally target cursor",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "yu-pagoda-left is clearly visible (was 0 in the reported frame)",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "yu-pagoda-right is clearly visible (was 0 in the reported frame)",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Chapter 4: command menu opened",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch4: an offensive command opened a target cursor",
+      "detail": "enemies=1"
+    },
+    {
+      "ok": true,
+      "label": "Ch4: cancel restores every dimmed figure",
+      "detail": "stillDim=[]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4: cancel clears the selection",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: yuna visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[yuna] selected=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: rikku visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[rikku] selected=[rikku]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[rikku]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: paine visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[paine] selected=[paine]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch4 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[paine]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4: cycled 3 allies",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch4: ffx2 wears its own cursor chrome on an ally",
+      "detail": "hand=0 flower=1"
+    },
+    {
+      "ok": true,
+      "label": "Ch4: FFX-2 Active/Wait indicator is up",
+      "detail": "ACTIVE — ATB RUNNING"
+    },
+    {
+      "ok": true,
+      "label": "Ch4: the status panel does NOT yield on an ally cast — the rows light instead",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch4: the targeted ally's row is lit",
+      "detail": "rows=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch4: opened an ally target cursor",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Chapter 5: command menu opened",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch5: an offensive command opened a target cursor",
+      "detail": "enemies=1"
+    },
+    {
+      "ok": true,
+      "label": "Ch5: cancel restores every dimmed figure",
+      "detail": "stillDim=[]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5: cancel clears the selection",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: yuna visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[yuna] selected=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: rikku visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[rikku] selected=[rikku]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[rikku]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: paine visible",
+      "detail": "1.000"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: exactly the selection is ringed",
+      "detail": "ringed=[paine] selected=[paine]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: non-targets dimmed",
+      "detail": "3 dimmed"
+    },
+    {
+      "ok": true,
+      "label": "Ch5 ally cycle: HUD row/tile lit for the target",
+      "detail": "hud=[paine]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5: cycled 3 allies",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch5: ffx2 wears its own cursor chrome on an ally",
+      "detail": "hand=0 flower=1"
+    },
+    {
+      "ok": true,
+      "label": "Ch5: FFX-2 Active/Wait indicator is up",
+      "detail": "ACTIVE — ATB RUNNING"
+    },
+    {
+      "ok": true,
+      "label": "Ch5: the status panel does NOT yield on an ally cast — the rows light instead",
+      "detail": null
+    },
+    {
+      "ok": true,
+      "label": "Ch5: the targeted ally's row is lit",
+      "detail": "rows=[yuna]"
+    },
+    {
+      "ok": true,
+      "label": "Ch5: opened an ally target cursor",
+      "detail": null
+    }
+  ],
+  "report": {
+    "seymour-flux": {
+      "staged": [
+        "tidus",
+        "yuna",
+        "kimahri",
+        "seymour-flux",
+        "mortiorchis"
+      ],
+      "visibilityIdle": {
+        "tidus": 1,
+        "yuna": 1,
+        "kimahri": 0.893,
+        "seymour-flux": 0.959,
+        "mortiorchis": 0.988
+      },
+      "enemyStops": 2,
+      "allyPath": "/^items?$/i > /^potion$/i",
+      "allyCommand": "Potion",
+      "allyCandidates": [
+        "yuna"
+      ],
+      "allyOffField": [],
+      "allyStops": 3
+    },
+    "yunalesca": {
+      "staged": [
+        "tidus",
+        "yuna",
+        "auron",
+        "yunalesca"
+      ],
+      "visibilityIdle": {
+        "tidus": 1,
+        "yuna": 1,
+        "auron": 0.96,
+        "yunalesca": 0.963
+      },
+      "allyPath": "/^items?$/i > /^potion$/i",
+      "allyCommand": "Potion",
+      "allyCandidates": [
+        "yuna"
+      ],
+      "allyOffField": [],
+      "allyStops": 3
+    },
+    "braskas-final-aeon": {
+      "staged": [
+        "tidus",
+        "yuna",
+        "auron",
+        "braskas-final-aeon",
+        "yu-pagoda-left",
+        "yu-pagoda-right"
+      ],
+      "visibilityIdle": {
+        "tidus": 1,
+        "yuna": 1,
+        "auron": 0.852,
+        "braskas-final-aeon": 0.939,
+        "yu-pagoda-left": 0.963,
+        "yu-pagoda-right": 1
+      }
+    },
+    "ffx2-bahamut": {
+      "staged": [
+        "yuna",
+        "rikku",
+        "paine",
+        "bahamut"
+      ],
+      "visibilityIdle": {
+        "yuna": 1,
+        "rikku": 1,
+        "paine": 1,
+        "bahamut": 0.981
+      },
+      "allyPath": "/^items?$/i > /^potion$/i",
+      "allyCommand": null,
+      "allyCandidates": [
+        "yuna"
+      ],
+      "allyOffField": [],
+      "allyStops": 3
+    },
+    "ffx2-vegnagun-shuyin": {
+      "staged": [
+        "yuna",
+        "rikku",
+        "paine",
+        "vegnagun-tail"
+      ],
+      "visibilityIdle": {
+        "yuna": 1,
+        "rikku": 0.944,
+        "paine": 1,
+        "vegnagun-tail": 0.881
+      },
+      "allyPath": "/^items?$/i > /^potion$/i",
+      "allyCommand": null,
+      "allyCandidates": [
+        "yuna"
+      ],
+      "allyOffField": [],
+      "allyStops": 3
+    }
+  },
+  "shots": [
+    "docs/screenshots/fix3/targeting/ch1-enemy-cycle.png",
+    "docs/screenshots/fix3/targeting/ch1-ally-cycle.png",
+    "docs/screenshots/fix3/targeting/ch2-ally-cycle.png",
+    "docs/screenshots/fix3/targeting/ch3-hastega-2000x1000.png",
+    "docs/screenshots/fix3/targeting/ch3-formation-2000x1000.png",
+    "docs/screenshots/fix3/targeting/ch4-ally-cycle.png",
+    "docs/screenshots/fix3/targeting/ch5-ally-cycle.png"
+  ]
+}

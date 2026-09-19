@@ -38,7 +38,7 @@ States are the driver's 22:15 notes plus `git log`; confirm before relying on on
 | ffx2-hud-prep | FFX-2 party-row portraits, measured face crops, prep tabs | fix pass 2 (`bf0e017`) | [fix3-ffx2-hud-prep](fix3-ffx2-hud-prep.md) |
 | pause | Full-bleed 2x plates, viewport-relative type | in verification; `PauseScreen.ts` modified, uncommitted | [fix3-pause](fix3-pause.md) |
 | audio | Sampled-orchestra prerender: 21 cues + 134 SFX (`e7a6ed5`); fix pass for QA's 7 findings (`6e8c145`) under way | **Bailey judges by ear**: `docs/audio/audition.html` | [AUDIO-GUIDE](../AUDIO-GUIDE.md), [THEMES](../audio/THEMES.md) |
-| targeting | Ground ring + chevron + name plate on targets, no enemy hidden behind another, visibility matrix per chapter | **staged, not started**; begins after both HUD tracks are final (same files) | criticism 8 in the owner's list |
+| targeting | Bailey's criticism 8, built to the approved option B (`docs/concepts/targeting/b-ring-and-dim/`): bracket scaled to the figure, ink name plate with its letter tag, FFX's hand / FFX-2's flower, accent pool + quiet dim, spread formation measured against the camera | **done**, `83ea60a` `177c0ac` `8653b63` `764528e`; verified live in all five chapters (107/109 checks, GPU mode), two open questions for Bailey | [fix3-targeting](fix3-targeting.md) |
 | art track 3 | X-2 cast and the X-2 bosses fix remain | Earlier art was painted with a corrupt checkpoint and IP-Adapter (replaced 21:43, checksums in `811682d`): check the A/B before spending GPU on re-rolls | `art3-*.md`, [ART-PIPELINE](../ART-PIPELINE.md) |
 | concept boards | 22 polish ideas as mockups in `docs/concepts/polish/` | **mockups only**; nothing is built until Bailey picks | |
 
@@ -68,6 +68,12 @@ Overdrive bare re-submit loop in both engines, the possessed-aeon data (Passado 
 
 ## Owner decisions in force
 
+- **Standing rule from 2026-09-19 (Bailey): every change is specific and game-aware.**
+  True to FFX but not FFX-2: it does not apply to FFX-2. True to FFX-2 but not FFX: it
+  does not apply to FFX. True to both: it applies to both. Decide from the sources
+  (`research/*.md`, `research/ffx-vs-ffx2-presentation.md`), write the case in the plan,
+  handoff and commit. AGENTS.md hard rule 14; the critic checks it as CHK-021.
+
 - Release order: the gameplay-fix build first, the audio build second, then **pause all
   work** until Bailey says go.
 - Local art generation is **on** (resumed the evening of 09-18) until that pause.
@@ -86,6 +92,26 @@ Template:
 - Left uncommitted:
 - Next:
 ```
+
+### 2026-09-19 (afternoon) — Claude Code side session (targeting pick on the board)
+- Did: at the driver session's request, recorded Bailey's targeting pick ("B: hand, ring and a quiet dim") in `docs/target/targets.json` as three approved tiles (`docs/concepts/targeting/b-ring-and-dim/s1..s3.png`) with their game-aware cases and build hints; updated the Leblanc tile (Chateau Leblanc), the battle-transition tile (canon by situation) and the chapters note (they wait for the 25 Sep allowance reset). Board republished: 50 approved, 0 awaiting a verdict, 9 gaps, 2 rejected.
+- Verified by: the three pictures viewed on a contact sheet before publishing.
+- Left uncommitted: `docs/target/targets.json`, this entry.
+- Next: remaining gaps are the move advisor card, the enemy next-move panel, the defeat screen, the cold open, the phone layout, the three chapters' concept sheets and one finished minute of play.
+
+### 2026-09-19 (afternoon) — Claude Code side session (game-aware rule)
+- Did: recorded Bailey's new standing rule (every change is FFX-only, FFX-2-only or both; see "Owner decisions in force") as `AGENTS.md` hard rule 14, `critic/CHECKS.md` CHK-021, a note in `docs/PRODUCT-BRIEF.md`, and memory `game-aware-changes`; told the busy driver session by message.
+- Verified by: nothing to run; docs only. CHK-021 is written to sit beside CHK-020 (shared plumbing and bug fixes are "both").
+- Left uncommitted: those four files and this entry.
+- Next: every plan, handoff note and commit states its case and its source.
+
+### 2026-09-19 (afternoon) — Claude Code side session (Bailey approved the end-state board)
+- Did: Bailey said "i approve everything you listed in the end state board and please let the other agents know". `docs/target/targets.json` now has 47 approved tiles, 0 awaiting a verdict, 10 gaps, 2 rejected. Newly approved: the four other scene backdrops, ten cast tiles (FFX party portraits, Tidus, Yuna, Auron, Seymour Flux, Yunalesca 1, Braska's Final Aeon 1, Shiva, Yuna Gunner, Shuyin), the rebuilt pause screen and every pause plate, the concept key art, and audio as a direction ("Right direction, keep refining" still stands). Also filed the 12 concept boards Bailey picked as approved tiles (with their FFX-only / FFX-2-only notes), and the three new chapters and the cold open as gaps. Board republished (same URL, version 3).
+- **What it means for every agent:** an approved painting is never replaced on an agent judge's say-so; a change needs Bailey's yes (the approved face pass on the weak close-ups is such a yes for the close-ups it names). sha256 of the 94 shipped files behind the approved tiles: `docs/target/approved-hashes.json`; backup copy: `D:\Tools\pyrefly-art-backup\approved\2026-09-19-board` (public/art has no git history). Part C of the rubric scores every approved tile from its `build` hint. **Targeting is still a gap: Bailey has not picked a look**, so a cheap options round comes before the staged targeting track builds.
+- Also new: `docs/PRODUCT-BRIEF.md`, a draft from Bailey's picks (faithful recreation + 2026 showpiece; "faithful core, showpiece surface" settles conflicts; seasons; "one more try" from the fight itself), waiting for Bailey's yes.
+- Verified by: none of the board's pictures or the shipped files behind them changed after the board Bailey looked at was generated (mtime check); the 12 concept mockups viewed on a contact sheet before publishing.
+- Left uncommitted: `docs/target/targets.json`, `docs/target/approved-hashes.json`, `docs/PRODUCT-BRIEF.md`, `AGENTS.md`, `critic/RUBRIC.md`, `tools/end-state-board.mjs`, this entry.
+- Next: when Bailey picks a new target, record it in `targets.json` (state, their words, date, `build` hint), run `node tools/end-state-board.mjs`, republish to the same artifact URL.
 
 ### 2026-09-18 23:40 — Claude Code side session (rubric Part C)
 - Did: on Bailey's word ("you can add that to the rubric as part C") added **Part C: fidelity to the approved end state** to `critic/RUBRIC.md` (Parts A and B untouched). It scores only `approved` tiles in `docs/target/targets.json`, from target-vs-build composites; the gate is now 9.6 on all three parts plus complete coverage of the board. The staged round script `pyrefly-critic-round-2.js` gained one Part C auditor (sonnet, medium effort), three totals in the chief's report and a "Waiting on the owner" list; backup beside it as `.pre-partc.bak`. `tools/end-state-board.mjs --pair <target> <build> --out <file.jpg>` makes the side-by-side; approved tiles carry a `build` hint and the Zanarkand tile its `sha256`.
