@@ -1,0 +1,2622 @@
+[
+ {
+  "tag": "battle5-1280x720-e",
+  "ok": true,
+  "states": [
+   {
+    "label": "menu",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 97.5,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 982.3,
+      "top": 353.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 459.3,
+      "top": 548.7,
+      "right": 910.7,
+      "bottom": 668,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 470.4,
+      "top": 529,
+      "right": 575.3,
+      "bottom": 544,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 42.7,
+      "top": 130,
+      "right": 306.7,
+      "bottom": 364,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 41.1,
+      "top": 108,
+      "right": 141.9,
+      "bottom": 123,
+      "panel": true
+     },
+     {
+      "name": "intent-panel",
+      "left": 745.1,
+      "top": 25,
+      "right": 1045.1,
+      "bottom": 221.3,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 984.3,
+      "top": 8,
+      "right": 1045.1,
+      "bottom": 23,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 982.3,
+      "top": 387.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 938,
+      "top": 520,
+      "right": 1266,
+      "bottom": 576,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 930,
+      "top": 582,
+      "right": 1258,
+      "bottom": 638,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 922,
+      "top": 644,
+      "right": 1250,
+      "bottom": 700,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 73.5,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 170,
+      "right": 307.7,
+      "top": 374.9,
+      "bottom": 620.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 338.4,
+      "right": 457.2,
+      "top": 353.1,
+      "bottom": 565.1,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 471.1,
+      "right": 574.9,
+      "top": 336.2,
+      "bottom": 521.6,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 562.2,
+      "right": 741.1,
+      "top": 127.6,
+      "bottom": 447.1,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 948,
+       "t": 528,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 934.3,
+         "t": 529.5,
+         "w": 67.5,
+         "h": 104.3
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 950,
+         "t": 522.8,
+         "w": 44.4,
+         "h": 64.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 940,
+       "t": 590,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 926.3,
+         "t": 591.6,
+         "w": 67.5,
+         "h": 103.3
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 937.8,
+         "t": 575.3,
+         "w": 40.4,
+         "h": 59.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 932,
+       "t": 652,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 918.3,
+         "t": 649.1,
+         "w": 67.5,
+         "h": 133.9
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1280x720-e-menu.png"
+   },
+   {
+    "label": "intent-off",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 97.5,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 982.3,
+      "top": 353.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 459.3,
+      "top": 548.7,
+      "right": 910.7,
+      "bottom": 668,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 470.4,
+      "top": 529,
+      "right": 575.3,
+      "bottom": 544,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 42.7,
+      "top": 130,
+      "right": 306.7,
+      "bottom": 366,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 41.1,
+      "top": 108,
+      "right": 141.9,
+      "bottom": 123,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 599.5,
+      "top": 92.6,
+      "right": 703.7,
+      "bottom": 107.6,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 982.3,
+      "top": 387.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 938,
+      "top": 520,
+      "right": 1266,
+      "bottom": 576,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 930,
+      "top": 582,
+      "right": 1258,
+      "bottom": 638,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 922,
+      "top": 644,
+      "right": 1250,
+      "bottom": 700,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 73.5,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 170,
+      "right": 307.8,
+      "top": 375.3,
+      "bottom": 621.4,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 338.5,
+      "right": 457.2,
+      "top": 353.4,
+      "bottom": 565.4,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 471.1,
+      "right": 574.9,
+      "top": 336.4,
+      "bottom": 521.7,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 562.1,
+      "right": 741.1,
+      "top": 127.5,
+      "bottom": 447.1,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 948,
+       "t": 528,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 934.3,
+         "t": 529.5,
+         "w": 67.5,
+         "h": 104.3
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 950,
+         "t": 522.8,
+         "w": 44.4,
+         "h": 64.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 940,
+       "t": 590,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 926.3,
+         "t": 591.6,
+         "w": 67.5,
+         "h": 103.3
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 937.8,
+         "t": 575.3,
+         "w": 40.4,
+         "h": 59.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 932,
+       "t": 652,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 918.3,
+         "t": 649.1,
+         "w": 67.5,
+         "h": 133.9
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1280x720-e-intent-off.png"
+   },
+   {
+    "label": "submenu",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 97.5,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 982.3,
+      "top": 353.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 457.3,
+      "top": 548.7,
+      "right": 910.7,
+      "bottom": 668,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 468.4,
+      "top": 529,
+      "right": 573.3,
+      "bottom": 544,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 42.7,
+      "top": 130,
+      "right": 306.7,
+      "bottom": 366,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 41.1,
+      "top": 108,
+      "right": 141.9,
+      "bottom": 123,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 982.3,
+      "top": 387.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 938,
+      "top": 520,
+      "right": 1266,
+      "bottom": 576,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 930,
+      "top": 582,
+      "right": 1258,
+      "bottom": 638,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 922,
+      "top": 644,
+      "right": 1250,
+      "bottom": 700,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 73.5,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 169.7,
+      "right": 307.4,
+      "top": 375.8,
+      "bottom": 621.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 338.3,
+      "right": 457,
+      "top": 353.7,
+      "bottom": 565.7,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 471,
+      "right": 574.8,
+      "top": 336.5,
+      "bottom": 521.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 562.2,
+      "right": 741.1,
+      "top": 127.4,
+      "bottom": 447,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 948,
+       "t": 528,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 934.3,
+         "t": 529.5,
+         "w": 67.5,
+         "h": 104.3
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 950,
+         "t": 522.8,
+         "w": 44.4,
+         "h": 64.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 940,
+       "t": 590,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 926.3,
+         "t": 591.6,
+         "w": 67.5,
+         "h": 103.3
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 937.8,
+         "t": 575.3,
+         "w": 40.4,
+         "h": 59.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 932,
+       "t": 652,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 918.3,
+         "t": 649.1,
+         "w": 67.5,
+         "h": 133.9
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1280x720-e-submenu.png"
+   },
+   {
+    "label": "rapid",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 97.5,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 982.3,
+      "top": 353.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 457.3,
+      "top": 548.7,
+      "right": 910.7,
+      "bottom": 668,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 468.4,
+      "top": 529,
+      "right": 573.3,
+      "bottom": 544,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 42.7,
+      "top": 130,
+      "right": 306.7,
+      "bottom": 366,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 41.1,
+      "top": 108,
+      "right": 141.9,
+      "bottom": 123,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 982.3,
+      "top": 387.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 938,
+      "top": 520,
+      "right": 1266,
+      "bottom": 576,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 930,
+      "top": 582,
+      "right": 1258,
+      "bottom": 638,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 922,
+      "top": 644,
+      "right": 1250,
+      "bottom": 700,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 520.6,
+      "bottom": 73.5,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 169,
+      "right": 306.7,
+      "top": 376.3,
+      "bottom": 622.3,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 337.8,
+      "right": 456.5,
+      "top": 354,
+      "bottom": 566,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 470.7,
+      "right": 574.5,
+      "top": 336.7,
+      "bottom": 522.1,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 562.2,
+      "right": 741.2,
+      "top": 127.3,
+      "bottom": 446.9,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 948,
+       "t": 528,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 934.3,
+         "t": 529.5,
+         "w": 67.5,
+         "h": 104.3
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 950,
+         "t": 522.8,
+         "w": 44.4,
+         "h": 64.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 940,
+       "t": 590,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 926.3,
+         "t": 591.6,
+         "w": 67.5,
+         "h": 103.3
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 937.8,
+         "t": 575.3,
+         "w": 40.4,
+         "h": 59.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 932,
+       "t": 652,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 918.3,
+         "t": 649.1,
+         "w": 67.5,
+         "h": 133.9
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1280x720-e-rapid.png"
+   },
+   {
+    "label": "wheel-probe",
+    "wheel": {
+     "wheelInDom": false,
+     "rows": [
+      "Attack",
+      "Attack"
+     ],
+     "blockedReloads": 0
+    }
+   },
+   {
+    "label": "chain-telegraph",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 543,
+      "bottom": 97.5,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 982.3,
+      "top": 353.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 457.3,
+      "top": 548.7,
+      "right": 910.7,
+      "bottom": 668,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 468.4,
+      "top": 529,
+      "right": 573.3,
+      "bottom": 544,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 42.7,
+      "top": 130,
+      "right": 306.7,
+      "bottom": 366,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 41.1,
+      "top": 108,
+      "right": 141.9,
+      "bottom": 123,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 982.3,
+      "top": 387.6,
+      "right": 1256,
+      "bottom": 487.1,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 938,
+      "top": 520,
+      "right": 1266,
+      "bottom": 576,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 930,
+      "top": 582,
+      "right": 1258,
+      "bottom": 638,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 922,
+      "top": 644,
+      "right": 1250,
+      "bottom": 700,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 42.7,
+      "top": 35.5,
+      "right": 543,
+      "bottom": 73.5,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 168,
+      "right": 305.7,
+      "top": 376.8,
+      "bottom": 622.7,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 337.1,
+      "right": 455.8,
+      "top": 354.3,
+      "bottom": 566.3,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 470.3,
+      "right": 574.2,
+      "top": 336.9,
+      "bottom": 522.3,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 562.3,
+      "right": 741.4,
+      "top": 127.2,
+      "bottom": 446.9,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 948,
+       "t": 528,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 934.3,
+         "t": 529.5,
+         "w": 67.5,
+         "h": 104.3
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 950,
+         "t": 522.8,
+         "w": 44.4,
+         "h": 64.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 940,
+       "t": 590,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 926.3,
+         "t": 591.6,
+         "w": 67.5,
+         "h": 103.3
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 937.8,
+         "t": 575.3,
+         "w": 40.4,
+         "h": 59.1
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 932,
+       "t": 652,
+       "w": 40,
+       "h": 40
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 918.3,
+         "t": 649.1,
+         "w": 67.5,
+         "h": 133.9
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1280x720-e-chain-telegraph.png"
+   },
+   {
+    "label": "solver",
+    "solver": {
+     "obstacleCount": 11,
+     "steered": 1,
+     "sameList": false
+    }
+   }
+  ],
+  "errors": [],
+  "missingArt": []
+ },
+ {
+  "tag": "battle5-1600x900-e",
+  "ok": true,
+  "states": [
+   {
+    "label": "menu",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 121.9,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 574.2,
+      "top": 685.9,
+      "right": 1138.3,
+      "bottom": 835,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 588,
+      "top": 661.3,
+      "right": 719.1,
+      "bottom": 680,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 53.3,
+      "top": 162.5,
+      "right": 383.3,
+      "bottom": 455,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 51.3,
+      "top": 135,
+      "right": 177.4,
+      "bottom": 153.8,
+      "panel": true
+     },
+     {
+      "name": "intent-panel",
+      "left": 930.2,
+      "top": 31.3,
+      "right": 1305.2,
+      "bottom": 276.6,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 1229.2,
+      "top": 10,
+      "right": 1305.2,
+      "bottom": 28.8,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 1172.6,
+      "top": 650,
+      "right": 1582.4,
+      "bottom": 720,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 1162.6,
+      "top": 727.5,
+      "right": 1572.4,
+      "bottom": 797.5,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 1152.6,
+      "top": 805,
+      "right": 1562.4,
+      "bottom": 875,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 91.9,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 212.3,
+      "right": 384.7,
+      "top": 468,
+      "bottom": 775.8,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 423,
+      "right": 571.5,
+      "top": 441,
+      "bottom": 706.2,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 588.9,
+      "right": 718.7,
+      "top": 420,
+      "bottom": 651.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 702.6,
+      "right": 926.3,
+      "top": 159.5,
+      "bottom": 559,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 1185,
+       "t": 660,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1167.8,
+         "t": 661.8,
+         "w": 84.4,
+         "h": 130.4
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1187.5,
+         "t": 653.6,
+         "w": 55.5,
+         "h": 81.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1175,
+       "t": 737.5,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1157.8,
+         "t": 739.5,
+         "w": 84.4,
+         "h": 129.2
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1172.2,
+         "t": 719.2,
+         "w": 50.5,
+         "h": 73.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1165,
+       "t": 815,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1147.8,
+         "t": 811.3,
+         "w": 84.4,
+         "h": 167.3
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1600x900-e-menu.png"
+   },
+   {
+    "label": "intent-off",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 121.9,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 571.7,
+      "top": 685.9,
+      "right": 1138.3,
+      "bottom": 835,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 585.5,
+      "top": 661.3,
+      "right": 716.6,
+      "bottom": 680,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 53.3,
+      "top": 162.5,
+      "right": 383.3,
+      "bottom": 455,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 51.3,
+      "top": 135,
+      "right": 177.4,
+      "bottom": 153.8,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 749.4,
+      "top": 115.8,
+      "right": 879.6,
+      "bottom": 134.5,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 1172.6,
+      "top": 650,
+      "right": 1582.4,
+      "bottom": 720,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 1162.6,
+      "top": 727.5,
+      "right": 1572.4,
+      "bottom": 797.5,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 1152.6,
+      "top": 805,
+      "right": 1562.4,
+      "bottom": 875,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 91.9,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 211.3,
+      "right": 383.6,
+      "top": 467.9,
+      "bottom": 775.5,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 422.3,
+      "right": 570.7,
+      "top": 440.9,
+      "bottom": 706,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 588.4,
+      "right": 718.2,
+      "top": 420,
+      "bottom": 651.8,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 702.8,
+      "right": 926.5,
+      "top": 159.6,
+      "bottom": 559,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 1185,
+       "t": 660,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1167.8,
+         "t": 661.8,
+         "w": 84.4,
+         "h": 130.4
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1187.5,
+         "t": 653.6,
+         "w": 55.5,
+         "h": 81.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1175,
+       "t": 737.5,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1157.8,
+         "t": 739.5,
+         "w": 84.4,
+         "h": 129.2
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1172.2,
+         "t": 719.2,
+         "w": 50.5,
+         "h": 73.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1165,
+       "t": 815,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1147.8,
+         "t": 811.3,
+         "w": 84.4,
+         "h": 167.3
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1600x900-e-intent-off.png"
+   },
+   {
+    "label": "submenu",
+    "overlaps": [
+     {
+      "a": "party",
+      "b": "cmd-stack",
+      "w": 410,
+      "h": 225
+     },
+     {
+      "a": "advisor-card",
+      "b": "cmd-stack",
+      "w": 106,
+      "h": 149.1
+     },
+     {
+      "a": "intent-panel",
+      "b": "cmd-stack",
+      "w": 273.2,
+      "h": 175.2
+     },
+     {
+      "a": "cmd-stack",
+      "b": "row:yuna",
+      "w": 397.4,
+      "h": 70
+     },
+     {
+      "a": "cmd-stack",
+      "b": "row:rikku",
+      "w": 407.4,
+      "h": 70
+     },
+     {
+      "a": "cmd-stack",
+      "b": "row:paine",
+      "w": 409.8,
+      "h": 70
+     }
+    ],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 121.9,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 1032.3,
+      "top": 58.9,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 571.7,
+      "top": 685.9,
+      "right": 1138.3,
+      "bottom": 835,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 585.5,
+      "top": 661.3,
+      "right": 716.6,
+      "bottom": 680,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 53.3,
+      "top": 162.5,
+      "right": 383.3,
+      "bottom": 455,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 51.3,
+      "top": 135,
+      "right": 177.4,
+      "bottom": 153.8,
+      "panel": true
+     },
+     {
+      "name": "intent-panel",
+      "left": 930.5,
+      "top": 31.3,
+      "right": 1305.5,
+      "bottom": 276.6,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 1229.5,
+      "top": 10,
+      "right": 1305.6,
+      "bottom": 28.8,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 1032.3,
+      "top": 101.4,
+      "right": 1570,
+      "bottom": 958.9,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 1172.6,
+      "top": 650,
+      "right": 1582.4,
+      "bottom": 720,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 1162.6,
+      "top": 727.5,
+      "right": 1572.4,
+      "bottom": 797.5,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 1152.6,
+      "top": 805,
+      "right": 1562.4,
+      "bottom": 875,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 91.9,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 210.1,
+      "right": 382.3,
+      "top": 468,
+      "bottom": 775.4,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 421.4,
+      "right": 569.8,
+      "top": 441,
+      "bottom": 705.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 587.9,
+      "right": 717.7,
+      "top": 420.1,
+      "bottom": 651.8,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 703,
+      "right": 926.7,
+      "top": 159.6,
+      "bottom": 559,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 1185,
+       "t": 660,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1167.8,
+         "t": 661.8,
+         "w": 84.4,
+         "h": 130.4
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1187.5,
+         "t": 653.6,
+         "w": 55.5,
+         "h": 81.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1175,
+       "t": 737.5,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1157.8,
+         "t": 739.5,
+         "w": 84.4,
+         "h": 129.2
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1172.2,
+         "t": 719.2,
+         "w": 50.5,
+         "h": 73.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1165,
+       "t": 815,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1147.8,
+         "t": 811.3,
+         "w": 84.4,
+         "h": 167.3
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1600x900-e-submenu.png"
+   },
+   {
+    "label": "rapid",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 121.9,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 569.2,
+      "top": 685.9,
+      "right": 1138.3,
+      "bottom": 835,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 583,
+      "top": 661.3,
+      "right": 714.1,
+      "bottom": 680,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 53.3,
+      "top": 162.5,
+      "right": 383.3,
+      "bottom": 455,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 51.3,
+      "top": 135,
+      "right": 177.4,
+      "bottom": 153.8,
+      "panel": true
+     },
+     {
+      "name": "intent-panel",
+      "left": 930.7,
+      "top": 31.3,
+      "right": 1305.7,
+      "bottom": 276.6,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 1229.7,
+      "top": 10,
+      "right": 1305.7,
+      "bottom": 28.8,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 1172.6,
+      "top": 650,
+      "right": 1582.4,
+      "bottom": 720,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 1162.6,
+      "top": 727.5,
+      "right": 1572.4,
+      "bottom": 797.5,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 1152.6,
+      "top": 805,
+      "right": 1562.4,
+      "bottom": 875,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 650.7,
+      "bottom": 91.9,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 208.9,
+      "right": 380.9,
+      "top": 468.2,
+      "bottom": 775.3,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 420.6,
+      "right": 568.8,
+      "top": 441.1,
+      "bottom": 705.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 587.4,
+      "right": 717.1,
+      "top": 420.2,
+      "bottom": 651.8,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 703.3,
+      "right": 926.9,
+      "top": 159.6,
+      "bottom": 558.9,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 1185,
+       "t": 660,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1167.8,
+         "t": 661.8,
+         "w": 84.4,
+         "h": 130.4
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1187.5,
+         "t": 653.6,
+         "w": 55.5,
+         "h": 81.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1175,
+       "t": 737.5,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1157.8,
+         "t": 739.5,
+         "w": 84.4,
+         "h": 129.2
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1172.2,
+         "t": 719.2,
+         "w": 50.5,
+         "h": 73.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1165,
+       "t": 815,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1147.8,
+         "t": 811.3,
+         "w": 84.4,
+         "h": 167.3
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1600x900-e-rapid.png"
+   },
+   {
+    "label": "wheel-probe",
+    "wheel": {
+     "wheelInDom": false,
+     "rows": [
+      "Attack◂",
+      "Skill◂",
+      "gunner",
+      "white-mage",
+      "Item◂"
+     ],
+     "blockedReloads": 0
+    }
+   },
+   {
+    "label": "chain-telegraph",
+    "overlaps": [],
+    "boxes": [
+     {
+      "name": "gauges",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 678.8,
+      "bottom": 121.9,
+      "panel": true
+     },
+     {
+      "name": "party",
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875,
+      "panel": true
+     },
+     {
+      "name": "command",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "advisor-card",
+      "left": 569.2,
+      "top": 685.9,
+      "right": 1138.3,
+      "bottom": 835,
+      "panel": true
+     },
+     {
+      "name": "advisor-chip",
+      "left": 583,
+      "top": 661.3,
+      "right": 714.1,
+      "bottom": 680,
+      "panel": true
+     },
+     {
+      "name": "guide-rail",
+      "left": 53.3,
+      "top": 162.5,
+      "right": 383.3,
+      "bottom": 455,
+      "panel": true
+     },
+     {
+      "name": "guide-chip",
+      "left": 51.3,
+      "top": 135,
+      "right": 177.4,
+      "bottom": 153.8,
+      "panel": true
+     },
+     {
+      "name": "intent-panel",
+      "left": 930.7,
+      "top": 31.3,
+      "right": 1305.7,
+      "bottom": 276.6,
+      "panel": true
+     },
+     {
+      "name": "intent-chip",
+      "left": 1229.7,
+      "top": 10,
+      "right": 1305.7,
+      "bottom": 28.8,
+      "panel": true
+     },
+     {
+      "name": "cmd-stack",
+      "left": 1174.5,
+      "top": 284.6,
+      "right": 1570,
+      "bottom": 608.9,
+      "panel": true
+     },
+     {
+      "name": "row:yuna",
+      "left": 1172.6,
+      "top": 650,
+      "right": 1582.4,
+      "bottom": 720,
+      "sub": "party"
+     },
+     {
+      "name": "row:rikku",
+      "left": 1162.6,
+      "top": 727.5,
+      "right": 1572.4,
+      "bottom": 797.5,
+      "sub": "party"
+     },
+     {
+      "name": "row:paine",
+      "left": 1152.6,
+      "top": 805,
+      "right": 1562.4,
+      "bottom": 875,
+      "sub": "party"
+     },
+     {
+      "name": "gauge:vegnagun-tail",
+      "left": 53.3,
+      "top": 44.4,
+      "right": 678.8,
+      "bottom": 91.9,
+      "sub": "gauges"
+     },
+     {
+      "name": "fighter:yuna",
+      "left": 208.9,
+      "right": 380.9,
+      "top": 468.2,
+      "bottom": 775.3,
+      "fighter": true
+     },
+     {
+      "name": "fighter:rikku",
+      "left": 420.6,
+      "right": 568.8,
+      "top": 441.1,
+      "bottom": 705.9,
+      "fighter": true
+     },
+     {
+      "name": "fighter:paine",
+      "left": 587.4,
+      "right": 717.1,
+      "top": 420.2,
+      "bottom": 651.8,
+      "fighter": true
+     },
+     {
+      "name": "fighter:vegnagun-tail",
+      "left": 703.3,
+      "right": 926.9,
+      "top": 159.6,
+      "bottom": 558.9,
+      "fighter": true
+     }
+    ],
+    "faces": [
+     {
+      "cls": "ffx2stat__face",
+      "title": "White Mage",
+      "text": "WM\n      \n  ",
+      "tile": {
+       "l": 1185,
+       "t": 660,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/yuna-white-mage/idle.png",
+        "nw": 758,
+        "nh": 1172,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1167.8,
+         "t": 661.8,
+         "w": 84.4,
+         "h": 130.4
+        }
+       },
+       {
+        "src": "/art/portraits/yuna.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1187.5,
+         "t": 653.6,
+         "w": 55.5,
+         "h": 81.2
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1175,
+       "t": 737.5,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/rikku-dark-knight/idle.png",
+        "nw": 787,
+        "nh": 1205,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1157.8,
+         "t": 739.5,
+         "w": 84.4,
+         "h": 129.2
+        }
+       },
+       {
+        "src": "/art/portraits/rikku.png",
+        "nw": 832,
+        "nh": 1216,
+        "complete": true,
+        "z": "2",
+        "box": {
+         "l": 1172.2,
+         "t": 719.2,
+         "w": 50.5,
+         "h": 73.9
+        }
+       }
+      ]
+     },
+     {
+      "cls": "ffx2stat__face",
+      "title": "Dark Knight",
+      "text": "DK\n      \n  ",
+      "tile": {
+       "l": 1165,
+       "t": 815,
+       "w": 50,
+       "h": 50
+      },
+      "imgs": [
+       {
+        "src": "/art/characters/paine-dark-knight/idle.png",
+        "nw": 609,
+        "nh": 1208,
+        "complete": true,
+        "z": "1",
+        "box": {
+         "l": 1147.8,
+         "t": 811.3,
+         "w": 84.4,
+         "h": 167.3
+        }
+       }
+      ]
+     }
+    ],
+    "tabs": [],
+    "overflow": [],
+    "shot": "battle5-1600x900-e-chain-telegraph.png"
+   },
+   {
+    "label": "solver",
+    "solver": {
+     "obstacleCount": 11,
+     "steered": 2,
+     "sameList": false
+    }
+   }
+  ],
+  "errors": [],
+  "missingArt": []
+ }
+]

@@ -1,0 +1,722 @@
+[
+ {
+  "label": "menu",
+  "overlaps": [
+   {
+    "a": "advisor-card",
+    "b": "fighter:rikku",
+    "w": 1.4,
+    "h": 54
+   },
+   {
+    "a": "advisor-chip",
+    "b": "fighter:paine",
+    "w": 51.1,
+    "h": 15
+   }
+  ],
+  "boxes": [
+   {
+    "name": "gauges",
+    "left": 42.7,
+    "top": 35.5,
+    "right": 516.6,
+    "bottom": 97.5
+   },
+   {
+    "name": "party",
+    "left": 928,
+    "top": 520,
+    "right": 1260,
+    "bottom": 700
+   },
+   {
+    "name": "advisor-card",
+    "left": 507.2,
+    "top": 529.2,
+    "right": 910.8,
+    "bottom": 668
+   },
+   {
+    "name": "advisor-chip",
+    "left": 520.4,
+    "top": 511,
+    "right": 625.3,
+    "bottom": 526
+   },
+   {
+    "name": "guide-rail",
+    "left": 42.7,
+    "top": 130,
+    "right": 306.7,
+    "bottom": 382
+   },
+   {
+    "name": "guide-chip",
+    "left": 41.1,
+    "top": 108,
+    "right": 141.9,
+    "bottom": 123
+   },
+   {
+    "name": "intent-panel",
+    "left": 802.4,
+    "top": 25,
+    "right": 1102.4,
+    "bottom": 220.9
+   },
+   {
+    "name": "intent-chip",
+    "left": 1041.6,
+    "top": 8,
+    "right": 1102.4,
+    "bottom": 23
+   },
+   {
+    "name": "cmd-stack",
+    "left": 939.6,
+    "top": 227.7,
+    "right": 1256,
+    "bottom": 487.1
+   },
+   {
+    "name": "row:yuna",
+    "left": 938,
+    "top": 520,
+    "right": 1266,
+    "bottom": 576,
+    "sub": "party"
+   },
+   {
+    "name": "row:rikku",
+    "left": 930,
+    "top": 582,
+    "right": 1258,
+    "bottom": 638,
+    "sub": "party"
+   },
+   {
+    "name": "row:paine",
+    "left": 922,
+    "top": 644,
+    "right": 1250,
+    "bottom": 700,
+    "sub": "party"
+   },
+   {
+    "name": "fighter:yuna",
+    "left": 225.8,
+    "right": 369.5,
+    "top": 392.6,
+    "bottom": 649.1,
+    "fighter": true
+   },
+   {
+    "name": "fighter:rikku",
+    "left": 385.1,
+    "right": 508.6,
+    "top": 362.6,
+    "bottom": 583.2,
+    "fighter": true
+   },
+   {
+    "name": "fighter:paine",
+    "left": 465.6,
+    "right": 571.5,
+    "top": 336.9,
+    "bottom": 526.2,
+    "fighter": true
+   },
+   {
+    "name": "fighter:bahamut",
+    "left": 622.4,
+    "right": 798.4,
+    "top": 117.2,
+    "bottom": 431.4,
+    "fighter": true
+   }
+  ],
+  "faces": [
+   {
+    "title": "White Mage",
+    "mono": "WM",
+    "imgs": [
+     {
+      "src": "/art/characters/yuna-white-mage/idle.png",
+      "nw": 758,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/yuna.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Dark Knight",
+    "mono": "DK",
+    "imgs": [
+     {
+      "src": "/art/characters/rikku-dark-knight/idle.png",
+      "nw": 787,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/rikku.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Warrior",
+    "mono": "WR",
+    "imgs": [
+     {
+      "src": "/art/characters/paine-warrior/idle.png",
+      "nw": 408,
+      "z": "1"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "label": "chain",
+  "overlaps": [
+   {
+    "a": "intent-panel",
+    "b": "chain-chip",
+    "w": 75.5,
+    "h": 68.3
+   }
+  ],
+  "boxes": [
+   {
+    "name": "gauges",
+    "left": 42.7,
+    "top": 35.5,
+    "right": 516.6,
+    "bottom": 97.5
+   },
+   {
+    "name": "party",
+    "left": 928,
+    "top": 520,
+    "right": 1260,
+    "bottom": 700
+   },
+   {
+    "name": "advisor-card",
+    "left": 569.2,
+    "top": 529.2,
+    "right": 910.8,
+    "bottom": 668
+   },
+   {
+    "name": "advisor-chip",
+    "left": 582.4,
+    "top": 511,
+    "right": 687.3,
+    "bottom": 526
+   },
+   {
+    "name": "guide-rail",
+    "left": 42.7,
+    "top": 130,
+    "right": 306.7,
+    "bottom": 384
+   },
+   {
+    "name": "guide-chip",
+    "left": 41.1,
+    "top": 108,
+    "right": 141.9,
+    "bottom": 123
+   },
+   {
+    "name": "intent-panel",
+    "left": 805.7,
+    "top": 25,
+    "right": 1105.7,
+    "bottom": 220.9
+   },
+   {
+    "name": "intent-chip",
+    "left": 1044.9,
+    "top": 8,
+    "right": 1105.7,
+    "bottom": 23
+   },
+   {
+    "name": "chain-chip",
+    "left": 678.7,
+    "top": 33.8,
+    "right": 881.2,
+    "bottom": 102.1
+   },
+   {
+    "name": "cmd-stack",
+    "left": 939.6,
+    "top": 227.7,
+    "right": 1256,
+    "bottom": 487.1
+   },
+   {
+    "name": "row:yuna",
+    "left": 938,
+    "top": 520,
+    "right": 1266,
+    "bottom": 576,
+    "sub": "party"
+   },
+   {
+    "name": "row:rikku",
+    "left": 930,
+    "top": 582,
+    "right": 1258,
+    "bottom": 638,
+    "sub": "party"
+   },
+   {
+    "name": "row:paine",
+    "left": 922,
+    "top": 644,
+    "right": 1250,
+    "bottom": 700,
+    "sub": "party"
+   },
+   {
+    "name": "fighter:yuna",
+    "left": 208.7,
+    "right": 358,
+    "top": 394.4,
+    "bottom": 660.8,
+    "fighter": true
+   },
+   {
+    "name": "fighter:rikku",
+    "left": 376.1,
+    "right": 503.7,
+    "top": 363,
+    "bottom": 590.9,
+    "fighter": true
+   },
+   {
+    "name": "fighter:paine",
+    "left": 460.4,
+    "right": 569.4,
+    "top": 336.4,
+    "bottom": 531,
+    "fighter": true
+   },
+   {
+    "name": "fighter:bahamut",
+    "left": 622.1,
+    "right": 801.8,
+    "top": 111.9,
+    "bottom": 432.8,
+    "fighter": true
+   }
+  ],
+  "faces": [
+   {
+    "title": "White Mage",
+    "mono": "WM",
+    "imgs": [
+     {
+      "src": "/art/characters/yuna-white-mage/idle.png",
+      "nw": 758,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/yuna.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Dark Knight",
+    "mono": "DK",
+    "imgs": [
+     {
+      "src": "/art/characters/rikku-dark-knight/idle.png",
+      "nw": 787,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/rikku.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Warrior",
+    "mono": "WR",
+    "imgs": [
+     {
+      "src": "/art/characters/paine-warrior/idle.png",
+      "nw": 408,
+      "z": "1"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "label": "telegraph",
+  "overlaps": [
+   {
+    "a": "telegraph",
+    "b": "intent-panel",
+    "w": 293.8,
+    "h": 62.4
+   }
+  ],
+  "boxes": [
+   {
+    "name": "gauges",
+    "left": 42.7,
+    "top": 35.5,
+    "right": 539.1,
+    "bottom": 97.5
+   },
+   {
+    "name": "party",
+    "left": 928,
+    "top": 520,
+    "right": 1260,
+    "bottom": 700
+   },
+   {
+    "name": "telegraph",
+    "left": 812.1,
+    "top": 35.5,
+    "right": 1244,
+    "bottom": 97.9
+   },
+   {
+    "name": "advisor-card",
+    "left": 569.2,
+    "top": 529.2,
+    "right": 910.8,
+    "bottom": 668
+   },
+   {
+    "name": "advisor-chip",
+    "left": 582.4,
+    "top": 511,
+    "right": 687.3,
+    "bottom": 526
+   },
+   {
+    "name": "guide-rail",
+    "left": 42.7,
+    "top": 130,
+    "right": 306.7,
+    "bottom": 384
+   },
+   {
+    "name": "guide-chip",
+    "left": 41.1,
+    "top": 108,
+    "right": 141.9,
+    "bottom": 123
+   },
+   {
+    "name": "intent-panel",
+    "left": 805.9,
+    "top": 25,
+    "right": 1105.9,
+    "bottom": 220.9
+   },
+   {
+    "name": "intent-chip",
+    "left": 1045.1,
+    "top": 8,
+    "right": 1105.9,
+    "bottom": 23
+   },
+   {
+    "name": "cmd-stack",
+    "left": 939.6,
+    "top": 227.7,
+    "right": 1256,
+    "bottom": 487.1
+   },
+   {
+    "name": "row:yuna",
+    "left": 938,
+    "top": 520,
+    "right": 1266,
+    "bottom": 576,
+    "sub": "party"
+   },
+   {
+    "name": "row:rikku",
+    "left": 930,
+    "top": 582,
+    "right": 1258,
+    "bottom": 638,
+    "sub": "party"
+   },
+   {
+    "name": "row:paine",
+    "left": 922,
+    "top": 644,
+    "right": 1250,
+    "bottom": 700,
+    "sub": "party"
+   },
+   {
+    "name": "fighter:yuna",
+    "left": 208,
+    "right": 357.2,
+    "top": 394.8,
+    "bottom": 661.1,
+    "fighter": true
+   },
+   {
+    "name": "fighter:rikku",
+    "left": 375.6,
+    "right": 503.2,
+    "top": 363.2,
+    "bottom": 591.1,
+    "fighter": true
+   },
+   {
+    "name": "fighter:paine",
+    "left": 460.1,
+    "right": 569.1,
+    "top": 336.5,
+    "bottom": 531.1,
+    "fighter": true
+   },
+   {
+    "name": "fighter:bahamut",
+    "left": 622.3,
+    "right": 802,
+    "top": 111.8,
+    "bottom": 432.7,
+    "fighter": true
+   }
+  ],
+  "faces": [
+   {
+    "title": "White Mage",
+    "mono": "WM",
+    "imgs": [
+     {
+      "src": "/art/characters/yuna-white-mage/idle.png",
+      "nw": 758,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/yuna.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Dark Knight",
+    "mono": "DK",
+    "imgs": [
+     {
+      "src": "/art/characters/rikku-dark-knight/idle.png",
+      "nw": 787,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/rikku.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Warrior",
+    "mono": "WR",
+    "imgs": [
+     {
+      "src": "/art/characters/paine-warrior/idle.png",
+      "nw": 408,
+      "z": "1"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "label": "ko",
+  "overlaps": [
+   {
+    "a": "advisor-card",
+    "b": "fighter:paine",
+    "w": 1.6,
+    "h": 2
+   }
+  ],
+  "boxes": [
+   {
+    "name": "gauges",
+    "left": 42.7,
+    "top": 35.5,
+    "right": 539.1,
+    "bottom": 97.5
+   },
+   {
+    "name": "party",
+    "left": 928,
+    "top": 520,
+    "right": 1260,
+    "bottom": 700
+   },
+   {
+    "name": "advisor-card",
+    "left": 567.2,
+    "top": 529.2,
+    "right": 910.8,
+    "bottom": 668
+   },
+   {
+    "name": "advisor-chip",
+    "left": 580.4,
+    "top": 511,
+    "right": 685.3,
+    "bottom": 526
+   },
+   {
+    "name": "guide-rail",
+    "left": 42.7,
+    "top": 130,
+    "right": 306.7,
+    "bottom": 489.1
+   },
+   {
+    "name": "guide-chip",
+    "left": 41.1,
+    "top": 108,
+    "right": 141.9,
+    "bottom": 123
+   },
+   {
+    "name": "intent-panel",
+    "left": 806.2,
+    "top": 25,
+    "right": 1106.2,
+    "bottom": 220.9
+   },
+   {
+    "name": "intent-chip",
+    "left": 1045.4,
+    "top": 8,
+    "right": 1106.2,
+    "bottom": 23
+   },
+   {
+    "name": "cmd-stack",
+    "left": 939.6,
+    "top": 227.7,
+    "right": 1256,
+    "bottom": 487.1
+   },
+   {
+    "name": "row:yuna",
+    "left": 938,
+    "top": 520,
+    "right": 1266,
+    "bottom": 576,
+    "sub": "party"
+   },
+   {
+    "name": "row:rikku",
+    "left": 930,
+    "top": 582,
+    "right": 1258,
+    "bottom": 638,
+    "sub": "party"
+   },
+   {
+    "name": "row:paine",
+    "left": 922,
+    "top": 644,
+    "right": 1250,
+    "bottom": 700,
+    "sub": "party"
+   },
+   {
+    "name": "fighter:rikku",
+    "left": 375,
+    "right": 502.5,
+    "top": 363.5,
+    "bottom": 591.3,
+    "fighter": true
+   },
+   {
+    "name": "fighter:paine",
+    "left": 459.8,
+    "right": 568.8,
+    "top": 336.6,
+    "bottom": 531.2,
+    "fighter": true
+   },
+   {
+    "name": "fighter:bahamut",
+    "left": 622.6,
+    "right": 802.3,
+    "top": 111.6,
+    "bottom": 432.6,
+    "fighter": true
+   }
+  ],
+  "faces": [
+   {
+    "title": "White Mage",
+    "mono": "WM",
+    "imgs": [
+     {
+      "src": "/art/characters/yuna-white-mage/idle.png",
+      "nw": 758,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/yuna.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Dark Knight",
+    "mono": "DK",
+    "imgs": [
+     {
+      "src": "/art/characters/rikku-dark-knight/idle.png",
+      "nw": 787,
+      "z": "1"
+     },
+     {
+      "src": "/art/portraits/rikku.png",
+      "nw": 832,
+      "z": "2"
+     }
+    ]
+   },
+   {
+    "title": "Warrior",
+    "mono": "WR",
+    "imgs": [
+     {
+      "src": "/art/characters/paine-warrior/idle.png",
+      "nw": 408,
+      "z": "1"
+     }
+    ]
+   }
+  ]
+ }
+]
