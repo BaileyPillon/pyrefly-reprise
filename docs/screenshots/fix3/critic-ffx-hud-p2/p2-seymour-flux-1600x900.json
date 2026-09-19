@@ -1,0 +1,4129 @@
+{
+  "chapter": "seymour-flux",
+  "viewport": "1600x900",
+  "phases": {
+    "A-idle-fold-timeline": {
+      "timeline": [
+        [
+          0,
+          false,
+          false
+        ],
+        [
+          1,
+          false,
+          false
+        ],
+        [
+          2,
+          false,
+          false
+        ],
+        [
+          3,
+          false,
+          false
+        ],
+        [
+          4,
+          false,
+          false
+        ],
+        [
+          5,
+          false,
+          false
+        ],
+        [
+          6,
+          true,
+          false
+        ],
+        [
+          7,
+          true,
+          false
+        ],
+        [
+          8,
+          true,
+          false
+        ],
+        [
+          9,
+          true,
+          false
+        ],
+        [
+          10,
+          true,
+          false
+        ],
+        [
+          11,
+          true,
+          false
+        ],
+        [
+          12,
+          true,
+          false
+        ],
+        [
+          13,
+          true,
+          false
+        ],
+        [
+          14,
+          true,
+          false
+        ],
+        [
+          15,
+          true,
+          false
+        ],
+        [
+          16,
+          true,
+          false
+        ]
+      ]
+    },
+    "A-after-idle": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": {
+        "left": 169,
+        "width": 132,
+        "bottom": 245,
+        "maxHeight": 84.68316733864329,
+        "kind": "shelf"
+      },
+      "advisorZoneAttr": "shelf",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "B0-before-E": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": {
+        "left": 169,
+        "width": 132,
+        "bottom": 245,
+        "maxHeight": 84.68316733864329,
+        "kind": "shelf"
+      },
+      "advisorZoneAttr": "shelf",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "B1-intent-open": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": true,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intent": [
+          413,
+          31,
+          788,
+          329
+        ],
+        "intentChip": [
+          708,
+          10,
+          784,
+          29
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          763,
+          816,
+          894,
+          835
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "B2-intent-closed-again": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Special menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the White Magic menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Items menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Swap in a reserve member (L1 / Q). The member coming in takes this turn.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 21,
+        "ch": 21,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          68,
+          311,
+          483,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-row4": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-row5": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Special menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub0-Items-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Restores a small amount of HP to one ally.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub0-Items-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Restores a moderate amount of HP to one ally.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub0-Items-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Fully restores HP to one ally.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub0-Items-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Restores a large amount of HP to the whole party.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 21,
+        "ch": 21,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          68,
+          311,
+          483,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub0-Items-row4": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "PANELxPANEL cmdInfo|breadcrumb = 2202"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Revives a fallen ally with a little HP.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          387,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          347,
+          164,
+          372
+        ]
+      }
+    },
+    "C-sub0-Items-row5": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "PANELxPANEL cmdInfo|breadcrumb = 2202"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Revives all fallen allies at full HP.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          387,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          347,
+          164,
+          372
+        ]
+      }
+    },
+    "C-sub0-after-escape": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Items menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "beforeRows": 6
+    },
+    "C-sub1-Special-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Inflicts Cheer",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub1-Special-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Inflicts Provoke",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub1-Special-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub1-Special-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub1-after-escape": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Special menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "beforeRows": 6
+    },
+    "C-sub2-Special-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40304"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub2-Special-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40306"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub2-Special-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40306"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub2-Special-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40307"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub2-Special-row4": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40308"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub2-Special-row5": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40308"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub2-after-escape": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40307"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "beforeRows": 6
+    },
+    "C-sub3-Special-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40304"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub3-Special-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40303"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub3-Special-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40301"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub3-Special-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40299"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub3-Special-row4": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40298"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub3-Special-row5": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40295"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      }
+    },
+    "C-sub3-after-escape": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40289"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "beforeRows": 6
+    },
+    "C-sub4-Special-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40279"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Inflicts Cheer",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub4-Special-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40276"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Inflicts Provoke",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub4-Special-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40272"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub4-Special-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40268"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Physical damage",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          578,
+          509,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          538,
+          198,
+          563
+        ]
+      }
+    },
+    "C-sub4-after-escape": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40258"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Special menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Special",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "beforeRows": 6
+    },
+    "C-sub5-Items-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40243",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Restores a small amount of HP to one ally.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub5-Items-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40238",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Restores a moderate amount of HP to one ally.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub5-Items-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40233",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Fully restores HP to one ally.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub5-Items-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40228",
+        "PANELxPANEL cmdInfo|breadcrumb = 815"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Restores a large amount of HP to the whole party.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 21,
+        "ch": 21,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          68,
+          311,
+          483,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          376,
+          164,
+          401
+        ]
+      }
+    },
+    "C-sub5-Items-row4": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40223",
+        "PANELxPANEL cmdInfo|breadcrumb = 2202"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Revives a fallen ally with a little HP.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          387,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          347,
+          164,
+          372
+        ]
+      }
+    },
+    "C-sub5-Items-row5": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40218",
+        "PANELxPANEL cmdInfo|breadcrumb = 2202"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Revives all fallen allies at full HP.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          387,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ],
+        "breadcrumb": [
+          76,
+          347,
+          164,
+          372
+        ]
+      }
+    },
+    "C-sub5-after-escape": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40204"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "intentVisible": false,
+      "advisorZone": null,
+      "advisorZoneAttr": "free",
+      "cmdInfoText": "Open the Items menu.",
+      "cmdInfoHidden": false,
+      "cmdInfoOverflow": {
+        "sh": 10,
+        "ch": 10,
+        "sw": 145,
+        "cw": 145
+      },
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "breadcrumb": "Items",
+      "bannerText": "",
+      "minigames": 0,
+      "dnums": 0,
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "advisorChip": [
+          503,
+          336,
+          634,
+          355
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "beforeRows": 6
+    },
+    "D-rows": {
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×4",
+        "White Magic▸×3",
+        "Items▸×27",
+        "Flee"
+      ]
+    },
+    "E-dnum-1": {
+      "issues": [],
+      "dnums": [
+        [
+          "806",
+          571,
+          292,
+          648,
+          332
+        ]
+      ]
+    },
+    "E-dnum-2": {
+      "issues": [
+        "PANELxFIGHTER intentChip x seymour-flux(enemy) = 2403",
+        "PANELxFIGHTER intentChip x mortiorchis(enemy) = 2442",
+        "PANELxFIGHTER ctb x seymour-flux(enemy) = 49763",
+        "PANELxFIGHTER ctb x mortiorchis(enemy) = 17176",
+        "DNUM-CLIP \"2430\" [-49,-20,49,20]"
+      ],
+      "dnums": [
+        [
+          "2529",
+          993,
+          573,
+          1090,
+          613
+        ],
+        [
+          "2430",
+          -49,
+          -20,
+          49,
+          20
+        ]
+      ]
+    },
+    "E-live-summary": {
+      "telegraphsSeen": 0,
+      "maxDnums": 2,
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = n",
+        "PANELxFIGHTER intentChip x seymour-flux(enemy) = n",
+        "PANELxFIGHTER intentChip x mortiorchis(enemy) = n",
+        "PANELxFIGHTER sensor x tidus(party) = n",
+        "PANELxFIGHTER sensor x kimahri(party) = n",
+        "PANELxFIGHTER ctb x seymour-flux(enemy) = n",
+        "PANELxFIGHTER ctb x mortiorchis(enemy) = n",
+        "PANELxFIGHTER party x tidus(party) = n",
+        "PANELxFIGHTER party x seymour-flux(enemy) = n",
+        "PANELxFIGHTER advisorChip x seymour-flux(enemy) = n",
+        "PANELxFIGHTER cmdInfo x kimahri(party) = n",
+        "PANELxFIGHTER party x kimahri(party) = n",
+        "PANELxFIGHTER advisor x seymour-flux(enemy) = n",
+        "PANELxFIGHTER cmdInfo x tidus(party) = n",
+        "PANELxFIGHTER cmdInfo x yuna(party) = n",
+        "PANELxFIGHTER advisor x mortiorchis(enemy) = n",
+        "PANELxFIGHTER ctb x kimahri(party) = n",
+        "DNUM-CLIP \"2430\" [-49,-20,49,20]"
+      ]
+    }
+  },
+  "findings": [
+    "no overdrive row found on the first actor"
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "chapter": "seymour-flux",
+  "viewport": "1600x900",
+  "steps": [
+    {
+      "label": "t0-menu",
+      "actor": null,
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×4",
+        "White Magic▸×3",
+        "Items▸×27",
+        "Flee"
+      ],
+      "cursor": 1,
+      "breadcrumb": "",
+      "banner": "",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        404,
+        118,
+        771,
+        288
+      ],
+      "advisorChip": [
+        421,
+        94,
+        552,
+        113
+      ],
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1067,
+        415,
+        1363,
+        633
+      ],
+      "cmdInfo": "Physical damage",
+      "screen": "battle"
+    },
+    {
+      "label": "t1-menu",
+      "actor": null,
+      "rows": [
+        "Cheer",
+        "Provoke4MP",
+        "Delay Attack8MP",
+        "Delay Buster18MP"
+      ],
+      "cursor": 0,
+      "breadcrumb": "Special",
+      "banner": "",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        404,
+        118,
+        771,
+        288
+      ],
+      "advisorChip": [
+        421,
+        94,
+        552,
+        113
+      ],
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1067,
+        415,
+        1363,
+        633
+      ],
+      "cmdInfo": "Inflicts Cheer",
+      "screen": "battle"
+    },
+    {
+      "label": "t2-menu",
+      "actor": null,
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×2",
+        "White Magic▸×14",
+        "Items▸×27",
+        "Summon▸×5"
+      ],
+      "cursor": 0,
+      "breadcrumb": "Special",
+      "banner": "Kimahri speaks",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        403,
+        73,
+        782,
+        288
+      ],
+      "advisorChip": [
+        424,
+        49,
+        555,
+        68
+      ],
+      "advisorText": "Next best moveYunaPoison Fang→Seymour FluxGuide’s pickin Items1,875–2,117no MPalways hits2% crit+ PoisonDeals heavy damage to one enemy and may poison it.Lands Poison on Seymour Flux.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1088,
+        415,
+        1224,
+        436
+      ],
+      "cmdInfo": "A one-off action this encounter offers",
+      "screen": "battle"
+    },
+    {
+      "label": "t3-menu",
+      "actor": null,
+      "rows": [
+        "Potion",
+        "Hi-Potion",
+        "X-Potion",
+        "Mega-Potion",
+        "Phoenix Down",
+        "Mega Phoenix"
+      ],
+      "cursor": 0,
+      "breadcrumb": "Items",
+      "banner": "Kimahri speaks",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        400,
+        76,
+        775,
+        288
+      ],
+      "advisorChip": [
+        421,
+        51,
+        552,
+        70
+      ],
+      "advisorText": "Next best moveYunaPoison Fang→Seymour FluxGuide’s pickin Items1,875–2,117no MPalways hits2% crit+ PoisonDeals heavy damage to one enemy and may poison it.Lands Poison on Seymour Flux.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1088,
+        415,
+        1224,
+        436
+      ],
+      "cmdInfo": "Restores a small amount of HP to one ally.",
+      "screen": "battle"
+    },
+    {
+      "label": "t4-menu",
+      "actor": null,
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×4",
+        "White Magic▸×3",
+        "Items▸×27",
+        "Flee"
+      ],
+      "cursor": 1,
+      "breadcrumb": "Items",
+      "banner": "Kimahri speaks",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        404,
+        118,
+        771,
+        288
+      ],
+      "advisorChip": [
+        421,
+        94,
+        552,
+        113
+      ],
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1067,
+        415,
+        1363,
+        633
+      ],
+      "cmdInfo": "Physical damage",
+      "screen": "battle"
+    },
+    {
+      "label": "t5-menu",
+      "actor": null,
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×4",
+        "White Magic▸×3",
+        "Items▸×27",
+        "Flee"
+      ],
+      "cursor": 1,
+      "breadcrumb": "Items",
+      "banner": "Kimahri speaks",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        404,
+        118,
+        771,
+        288
+      ],
+      "advisorChip": [
+        421,
+        94,
+        552,
+        113
+      ],
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1067,
+        415,
+        1363,
+        633
+      ],
+      "cmdInfo": "Physical damage",
+      "screen": "pause"
+    },
+    {
+      "label": "t6-menu",
+      "actor": null,
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×4",
+        "White Magic▸×3",
+        "Items▸×27",
+        "Flee"
+      ],
+      "cursor": 1,
+      "breadcrumb": "Items",
+      "banner": "Kimahri speaks",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": [
+        404,
+        118,
+        771,
+        288
+      ],
+      "advisorChip": [
+        421,
+        94,
+        552,
+        113
+      ],
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1067,
+        415,
+        1363,
+        633
+      ],
+      "cmdInfo": "Physical damage",
+      "screen": "battle"
+    },
+    {
+      "label": "t7-menu",
+      "actor": null,
+      "rows": [
+        "Talk",
+        "Attack",
+        "Special▸×4",
+        "White Magic▸×3",
+        "Items▸×27",
+        "Flee"
+      ],
+      "cursor": 1,
+      "breadcrumb": "Items",
+      "banner": "Kimahri speaks",
+      "minigames": [],
+      "minigameCount": 0,
+      "advisorCard": null,
+      "advisorChip": null,
+      "advisorText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns up · inflicts HasteHaste on the party.",
+      "guideChip": [
+        51,
+        83,
+        177,
+        101
+      ],
+      "sensor": [
+        1088,
+        415,
+        1236,
+        436
+      ],
+      "cmdInfo": "Physical damage",
+      "screen": "battle"
+    }
+  ],
+  "findings": [
+    "never reached an Overdrive picker in 8 turns"
+  ]
+}

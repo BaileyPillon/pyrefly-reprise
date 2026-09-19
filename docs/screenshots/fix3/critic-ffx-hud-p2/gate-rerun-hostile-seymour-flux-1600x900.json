@@ -1,0 +1,2410 @@
+{
+  "chapter": "seymour-flux",
+  "viewport": "1600x900",
+  "gpu": true,
+  "states": {
+    "01-menu": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40066",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79144",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79776",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9221",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          324,
+          427,
+          636,
+          786
+        ],
+        [
+          "yuna",
+          147,
+          396,
+          419,
+          709
+        ],
+        [
+          "kimahri",
+          505,
+          372,
+          744,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          88,
+          1051,
+          319
+        ]
+      ]
+    },
+    "02-row0": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40082",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79059",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79831",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9199",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Open the Special menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          324,
+          427,
+          636,
+          786
+        ],
+        [
+          "yuna",
+          147,
+          396,
+          419,
+          709
+        ],
+        [
+          "kimahri",
+          505,
+          372,
+          745,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          88,
+          1051,
+          319
+        ]
+      ]
+    },
+    "02-row1": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40098",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79028",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79877",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9192",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          324,
+          427,
+          637,
+          786
+        ],
+        [
+          "yuna",
+          147,
+          396,
+          419,
+          709
+        ],
+        [
+          "kimahri",
+          505,
+          372,
+          745,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          88,
+          1051,
+          319
+        ]
+      ]
+    },
+    "02-row2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40116",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79052",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79918",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9200",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Open the Items menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          324,
+          427,
+          637,
+          786
+        ],
+        [
+          "yuna",
+          147,
+          396,
+          419,
+          709
+        ],
+        [
+          "kimahri",
+          505,
+          372,
+          745,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          87,
+          1051,
+          319
+        ]
+      ]
+    },
+    "02-row3": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40135",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79134",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79951",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9223",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Swap in a reserve member (L1 / Q). The member coming in takes this turn.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          68,
+          311,
+          483,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          324,
+          427,
+          636,
+          786
+        ],
+        [
+          "yuna",
+          147,
+          396,
+          419,
+          709
+        ],
+        [
+          "kimahri",
+          505,
+          372,
+          745,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          87,
+          1051,
+          319
+        ]
+      ]
+    },
+    "02-row4": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40155",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79273",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79975",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9262",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          324,
+          427,
+          636,
+          786
+        ],
+        [
+          "yuna",
+          147,
+          397,
+          419,
+          710
+        ],
+        [
+          "kimahri",
+          505,
+          372,
+          744,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          87,
+          1051,
+          319
+        ]
+      ]
+    },
+    "03-top": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40174",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79459",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79991",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9313",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          323,
+          427,
+          636,
+          787
+        ],
+        [
+          "yuna",
+          146,
+          397,
+          419,
+          710
+        ],
+        [
+          "kimahri",
+          504,
+          372,
+          744,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          87,
+          1051,
+          319
+        ]
+      ]
+    },
+    "04-targeting": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40195",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79697",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79999",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9378",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Seymour Flux HP 70000 / 70000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          323,
+          428,
+          635,
+          787
+        ],
+        [
+          "yuna",
+          146,
+          397,
+          418,
+          710
+        ],
+        [
+          "kimahri",
+          504,
+          373,
+          744,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          850,
+          87,
+          1052,
+          318
+        ]
+      ]
+    },
+    "05-target-2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40215",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 79974",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79999",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9454",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          322,
+          428,
+          634,
+          787
+        ],
+        [
+          "yuna",
+          146,
+          397,
+          418,
+          710
+        ],
+        [
+          "kimahri",
+          504,
+          373,
+          744,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          851,
+          87,
+          1052,
+          318
+        ]
+      ]
+    },
+    "06-cancel": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40234",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 80268",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79992",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9535",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          321,
+          428,
+          633,
+          787
+        ],
+        [
+          "yuna",
+          145,
+          397,
+          417,
+          710
+        ],
+        [
+          "kimahri",
+          503,
+          373,
+          743,
+          648
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          851,
+          87,
+          1052,
+          318
+        ]
+      ]
+    },
+    "07-submenu": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40253",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 24484",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 17785",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Speeds the party’s turns up · inflicts Haste",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          645,
+          491,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          320,
+          429,
+          632,
+          788
+        ],
+        [
+          "yuna",
+          145,
+          397,
+          416,
+          710
+        ],
+        [
+          "kimahri",
+          503,
+          373,
+          743,
+          649
+        ],
+        [
+          "seymour-flux",
+          793,
+          34,
+          1285,
+          599
+        ],
+        [
+          "mortiorchis",
+          851,
+          86,
+          1053,
+          318
+        ]
+      ]
+    },
+    "08-esc-once": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40270",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 80909",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79965",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9710",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          319,
+          429,
+          631,
+          788
+        ],
+        [
+          "yuna",
+          144,
+          398,
+          416,
+          710
+        ],
+        [
+          "kimahri",
+          503,
+          373,
+          742,
+          649
+        ],
+        [
+          "seymour-flux",
+          793,
+          33,
+          1285,
+          600
+        ],
+        [
+          "mortiorchis",
+          852,
+          86,
+          1053,
+          318
+        ]
+      ]
+    },
+    "09-panels-off": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40286",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 81222",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79948",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9796",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "Seymour Flux4th in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punish",
+      "guideMore": true,
+      "guideClipped": false,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intent": [
+          413,
+          31,
+          788,
+          329
+        ],
+        "intentChip": [
+          708,
+          10,
+          784,
+          29
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guideChip": [
+          51,
+          110,
+          140,
+          129
+        ],
+        "advisorChip": [
+          38,
+          269,
+          162,
+          288
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          318,
+          429,
+          630,
+          788
+        ],
+        [
+          "yuna",
+          144,
+          398,
+          415,
+          710
+        ],
+        [
+          "kimahri",
+          502,
+          373,
+          742,
+          649
+        ],
+        [
+          "seymour-flux",
+          793,
+          33,
+          1285,
+          600
+        ],
+        [
+          "mortiorchis",
+          852,
+          86,
+          1054,
+          318
+        ]
+      ]
+    },
+    "10-panels-on": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40300",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 81511",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79931",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9877",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "Seymour Flux4th in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punish",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          317,
+          430,
+          629,
+          788
+        ],
+        [
+          "yuna",
+          143,
+          398,
+          415,
+          710
+        ],
+        [
+          "kimahri",
+          502,
+          373,
+          742,
+          649
+        ],
+        [
+          "seymour-flux",
+          793,
+          33,
+          1285,
+          600
+        ],
+        [
+          "mortiorchis",
+          852,
+          86,
+          1054,
+          318
+        ]
+      ]
+    },
+    "11-rapid": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40313",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 81774",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79915",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 9950",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Seymour Flux4th in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punish",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          316,
+          430,
+          628,
+          788
+        ],
+        [
+          "yuna",
+          143,
+          398,
+          414,
+          710
+        ],
+        [
+          "kimahri",
+          502,
+          373,
+          741,
+          649
+        ],
+        [
+          "seymour-flux",
+          792,
+          33,
+          1285,
+          600
+        ],
+        [
+          "mortiorchis",
+          853,
+          86,
+          1054,
+          318
+        ]
+      ]
+    },
+    "12-plate-toggle": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 2905",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 81977",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79903",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 10008",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": true,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV IMortiorchis",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Seymour Flux4th in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punish",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1088,
+          415,
+          1224,
+          436
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          316,
+          430,
+          627,
+          789
+        ],
+        [
+          "yuna",
+          142,
+          398,
+          414,
+          710
+        ],
+        [
+          "kimahri",
+          501,
+          373,
+          741,
+          649
+        ],
+        [
+          "seymour-flux",
+          792,
+          33,
+          1285,
+          600
+        ],
+        [
+          "mortiorchis",
+          853,
+          86,
+          1055,
+          318
+        ]
+      ]
+    },
+    "13-plate-toggle2": {
+      "issues": [
+        "PANELxFIGHTER sensor x seymour-flux(enemy) = 40330",
+        "DECLARED PANELxFIGHTER cmdStack x tidus(party) = 82136",
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 79896",
+        "DECLARED PANELxFIGHTER cmdStack x kimahri(party) = 10053",
+        "CITATION in guide: §4.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": false,
+      "sensorText": "Mortiorchis HP 4000 / 4000 FIREICETHUNDERWATERHOLYGRAV Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Seymour Flux4th in queueLance of AtrophyScriptedPhysical non-elemental damage to one character - never misses.DamageTidus707–79931% HPIf you attackA Delay attempt on either of them fails and is punish",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "kimahri",
+          "od": "Overdrive",
+          "ready": true,
+          "flash": "ig-stat__od ffx-stat__od ffx-stat__od--ready"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1417,
+          97,
+          1547,
+          116
+        ],
+        "sensor": [
+          1067,
+          415,
+          1363,
+          633
+        ],
+        "guide": [
+          53,
+          110,
+          383,
+          288
+        ],
+        "guideChip": [
+          51,
+          83,
+          177,
+          101
+        ],
+        "guideMore": [
+          53,
+          260,
+          383,
+          288
+        ],
+        "advisor": [
+          404,
+          118,
+          771,
+          288
+        ],
+        "advisorChip": [
+          421,
+          94,
+          552,
+          113
+        ],
+        "ctb": [
+          1369,
+          124,
+          1551,
+          501
+        ],
+        "cmdStack": [
+          76,
+          416,
+          544,
+          836
+        ],
+        "cmdInfo": [
+          70,
+          337,
+          481,
+          385
+        ],
+        "party": [
+          1007,
+          646,
+          1542,
+          870
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          315,
+          430,
+          627,
+          789
+        ],
+        [
+          "yuna",
+          142,
+          398,
+          414,
+          710
+        ],
+        [
+          "kimahri",
+          501,
+          373,
+          741,
+          649
+        ],
+        [
+          "seymour-flux",
+          792,
+          34,
+          1285,
+          600
+        ],
+        [
+          "mortiorchis",
+          853,
+          86,
+          1055,
+          317
+        ]
+      ]
+    }
+  },
+  "findings": [],
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}

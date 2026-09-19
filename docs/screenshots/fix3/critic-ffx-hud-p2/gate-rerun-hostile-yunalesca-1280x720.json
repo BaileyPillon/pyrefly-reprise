@@ -1,0 +1,2156 @@
+{
+  "chapter": "yunalesca",
+  "viewport": "1280x720",
+  "gpu": true,
+  "states": {
+    "01-menu": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 12038",
+        "PANELxFIGHTER party x yunalesca(enemy) = 387",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          511,
+          389,
+          768,
+          685
+        ],
+        [
+          "yuna",
+          390,
+          377,
+          618,
+          640
+        ],
+        [
+          "auron",
+          575,
+          363,
+          771,
+          589
+        ],
+        [
+          "yunalesca",
+          658,
+          126,
+          999,
+          519
+        ]
+      ]
+    },
+    "02-row0": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11976",
+        "PANELxFIGHTER party x yunalesca(enemy) = 383",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the Special menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          511,
+          389,
+          769,
+          685
+        ],
+        [
+          "yuna",
+          390,
+          377,
+          619,
+          640
+        ],
+        [
+          "auron",
+          575,
+          363,
+          771,
+          589
+        ],
+        [
+          "yunalesca",
+          658,
+          126,
+          999,
+          519
+        ]
+      ]
+    },
+    "02-row1": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11892",
+        "PANELxFIGHTER party x yunalesca(enemy) = 378",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          512,
+          389,
+          769,
+          685
+        ],
+        [
+          "yuna",
+          390,
+          377,
+          619,
+          640
+        ],
+        [
+          "auron",
+          575,
+          363,
+          772,
+          589
+        ],
+        [
+          "yunalesca",
+          658,
+          126,
+          999,
+          518
+        ]
+      ]
+    },
+    "02-row2": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11784",
+        "PANELxFIGHTER party x yunalesca(enemy) = 373",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the Items menu.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          512,
+          389,
+          770,
+          684
+        ],
+        [
+          "yuna",
+          391,
+          377,
+          619,
+          640
+        ],
+        [
+          "auron",
+          576,
+          363,
+          772,
+          589
+        ],
+        [
+          "yunalesca",
+          658,
+          126,
+          999,
+          518
+        ]
+      ]
+    },
+    "02-row3": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11664",
+        "PANELxFIGHTER party x yunalesca(enemy) = 368",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Swap in a reserve member (L1 / Q). The member coming in takes this turn.",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          54,
+          249,
+          387,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          513,
+          389,
+          770,
+          684
+        ],
+        [
+          "yuna",
+          391,
+          377,
+          620,
+          640
+        ],
+        [
+          "auron",
+          576,
+          363,
+          772,
+          588
+        ],
+        [
+          "yunalesca",
+          658,
+          126,
+          999,
+          518
+        ]
+      ]
+    },
+    "02-row4": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11530",
+        "PANELxFIGHTER party x yunalesca(enemy) = 362",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          514,
+          388,
+          771,
+          684
+        ],
+        [
+          "yuna",
+          392,
+          376,
+          620,
+          640
+        ],
+        [
+          "auron",
+          576,
+          363,
+          772,
+          588
+        ],
+        [
+          "yunalesca",
+          658,
+          126,
+          999,
+          518
+        ]
+      ]
+    },
+    "03-top": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11392",
+        "PANELxFIGHTER party x yunalesca(enemy) = 357",
+        "CITATION in guide: §10.2"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          326,
+          94,
+          638,
+          230
+        ],
+        "advisorChip": [
+          339,
+          75,
+          444,
+          90
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          333,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          515,
+          388,
+          772,
+          684
+        ],
+        [
+          "yuna",
+          392,
+          376,
+          621,
+          639
+        ],
+        [
+          "auron",
+          577,
+          363,
+          773,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          126,
+          998,
+          518
+        ]
+      ]
+    },
+    "04-targeting": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11261",
+        "PANELxFIGHTER party x yunalesca(enemy) = 352",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          515,
+          388,
+          772,
+          684
+        ],
+        [
+          "yuna",
+          393,
+          376,
+          621,
+          639
+        ],
+        [
+          "auron",
+          577,
+          363,
+          773,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          126,
+          998,
+          518
+        ]
+      ]
+    },
+    "05-target-2": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11133",
+        "PANELxFIGHTER party x yunalesca(enemy) = 348",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          516,
+          388,
+          773,
+          683
+        ],
+        [
+          "yuna",
+          393,
+          376,
+          622,
+          639
+        ],
+        [
+          "auron",
+          577,
+          363,
+          773,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          126,
+          998,
+          518
+        ]
+      ]
+    },
+    "06-cancel": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11125",
+        "PANELxFIGHTER party x yunalesca(enemy) = 348",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "pause",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          516,
+          388,
+          773,
+          683
+        ],
+        [
+          "yuna",
+          393,
+          376,
+          622,
+          639
+        ],
+        [
+          "auron",
+          577,
+          363,
+          773,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          126,
+          998,
+          518
+        ]
+      ]
+    },
+    "07-submenu": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 11017",
+        "PANELxFIGHTER party x yunalesca(enemy) = 345",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          517,
+          387,
+          774,
+          683
+        ],
+        [
+          "yuna",
+          394,
+          376,
+          622,
+          639
+        ],
+        [
+          "auron",
+          577,
+          363,
+          773,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          126,
+          998,
+          518
+        ]
+      ]
+    },
+    "08-esc-once": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 10926",
+        "PANELxFIGHTER party x yunalesca(enemy) = 342",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          517,
+          387,
+          774,
+          683
+        ],
+        [
+          "yuna",
+          394,
+          376,
+          623,
+          639
+        ],
+        [
+          "auron",
+          578,
+          362,
+          773,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          127,
+          998,
+          518
+        ]
+      ]
+    },
+    "09-panels-off": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 10854",
+        "PANELxFIGHTER party x yunalesca(enemy) = 341",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Yunalesca3rd in queueAbsorbScriptednon-elemental damage to one character - drains the damage back as HP - never misses.DamageAuron2,20050% HPYunalesca+969healsIf you attackAnswers a physical hit with ",
+      "guideMore": true,
+      "guideClipped": false,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intent": [
+          352,
+          25,
+          652,
+          263
+        ],
+        "intentChip": [
+          588,
+          8,
+          649,
+          23
+        ],
+        "guideChip": [
+          41,
+          88,
+          112,
+          103
+        ],
+        "advisorChip": [
+          31,
+          215,
+          131,
+          230
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          517,
+          387,
+          774,
+          682
+        ],
+        [
+          "yuna",
+          394,
+          375,
+          623,
+          638
+        ],
+        [
+          "auron",
+          578,
+          362,
+          774,
+          588
+        ],
+        [
+          "yunalesca",
+          657,
+          127,
+          998,
+          518
+        ]
+      ]
+    },
+    "10-panels-on": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 10812",
+        "PANELxFIGHTER party x yunalesca(enemy) = 341",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Physical damage",
+      "intentText": "Yunalesca3rd in queueAbsorbScriptednon-elemental damage to one character - drains the damage back as HP - never misses.DamageAuron2,20050% HPYunalesca+969healsIf you attackAnswers a physical hit with ",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          518,
+          386,
+          775,
+          682
+        ],
+        [
+          "yuna",
+          394,
+          375,
+          623,
+          638
+        ],
+        [
+          "auron",
+          578,
+          362,
+          774,
+          587
+        ],
+        [
+          "yunalesca",
+          657,
+          127,
+          998,
+          518
+        ]
+      ]
+    },
+    "11-rapid": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 10795",
+        "PANELxFIGHTER party x yunalesca(enemy) = 342",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "Yunalesca3rd in queueAbsorbScriptednon-elemental damage to one character - drains the damage back as HP - never misses.DamageAuron2,20050% HPYunalesca+969healsIf you attackAnswers a physical hit with ",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          518,
+          386,
+          775,
+          682
+        ],
+        [
+          "yuna",
+          394,
+          375,
+          623,
+          638
+        ],
+        [
+          "auron",
+          578,
+          362,
+          774,
+          587
+        ],
+        [
+          "yunalesca",
+          657,
+          127,
+          998,
+          518
+        ]
+      ]
+    },
+    "12-plate-toggle": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 10807",
+        "PANELxFIGHTER party x yunalesca(enemy) = 345",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "Yunalesca3rd in queueAbsorbScriptednon-elemental damage to one character - drains the damage back as HP - never misses.DamageAuron2,20050% HPYunalesca+969healsIf you attackAnswers a physical hit with ",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          517,
+          386,
+          775,
+          681
+        ],
+        [
+          "yuna",
+          394,
+          375,
+          623,
+          638
+        ],
+        [
+          "auron",
+          578,
+          362,
+          774,
+          587
+        ],
+        [
+          "yunalesca",
+          657,
+          127,
+          998,
+          518
+        ]
+      ]
+    },
+    "13-plate-toggle2": {
+      "issues": [
+        "DECLARED PANELxFIGHTER cmdStack x yuna(party) = 10845",
+        "PANELxFIGHTER party x yunalesca(enemy) = 348",
+        "CITATION in guide: §10.4"
+      ],
+      "sensorFolded": false,
+      "sensorHidden": true,
+      "sensorText": "Ihide",
+      "cmdInfoText": "Open the White Magic menu.",
+      "intentText": "Yunalesca3rd in queueAbsorbScriptednon-elemental damage to one character - drains the damage back as HP - never misses.DamageAuron2,20050% HPYunalesca+969healsIf you attackAnswers a physical hit with ",
+      "guideMore": true,
+      "guideClipped": true,
+      "odRows": [
+        {
+          "who": "tidus",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "yuna",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        },
+        {
+          "who": "auron",
+          "od": "OD",
+          "ready": false,
+          "flash": "ig-stat__od ffx-stat__od"
+        }
+      ],
+      "screenName": "battle",
+      "rects": {
+        "intentChip": [
+          1133,
+          78,
+          1238,
+          93
+        ],
+        "guide": [
+          43,
+          88,
+          307,
+          230
+        ],
+        "guideChip": [
+          41,
+          66,
+          142,
+          81
+        ],
+        "guideMore": [
+          43,
+          208,
+          307,
+          230
+        ],
+        "advisor": [
+          325,
+          78,
+          639,
+          230
+        ],
+        "advisorChip": [
+          339,
+          59,
+          444,
+          74
+        ],
+        "ctb": [
+          1109,
+          100,
+          1241,
+          401
+        ],
+        "cmdStack": [
+          60,
+          356,
+          436,
+          668
+        ],
+        "cmdInfo": [
+          56,
+          270,
+          384,
+          308
+        ],
+        "party": [
+          805,
+          517,
+          1234,
+          696
+        ]
+      },
+      "fighters": [
+        [
+          "tidus",
+          517,
+          386,
+          774,
+          681
+        ],
+        [
+          "yuna",
+          394,
+          375,
+          623,
+          638
+        ],
+        [
+          "auron",
+          578,
+          362,
+          774,
+          587
+        ],
+        [
+          "yunalesca",
+          657,
+          127,
+          998,
+          518
+        ]
+      ]
+    }
+  },
+  "findings": [],
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}
