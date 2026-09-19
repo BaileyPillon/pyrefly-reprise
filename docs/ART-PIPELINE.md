@@ -791,3 +791,9 @@ Re-verification after the swap, plus a same-day A/B against an old render made
 under the corrupt weights, is in `docs/handoff/` — see the health-check renders
 at `docs/screenshots/art/_modelcheck/` (`after-tidus.png`, `after-tidus-ref.png`,
 `ab.png`).
+
+### 9.1 Incident 2026-09-19: the image encoder rotted in place
+
+`clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors` verified against the publisher hash on 2026-09-18 and hashed `8f393fa8...` on 2026-09-19 with the same size and the same 2026-09-15 timestamp: bit rot on the D: volume (flagged dirty by Windows), not a bad download. Every `--ref` render came out as a black NaN frame while no-ref renders were fine. Replaced on 2026-09-19 with Bailey's direct permission from `https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors`, downloaded to `C:/PyreflyBackup/model-downloads/` (a verified spare stays there), hashed twice before the swap and once more in place (`6ca9667d...b030`, match), then proven with a reference render (`docs/screenshots/art/_modelcheck/clipcheck-ref.png`). The corrupt copy is kept in `D:/Tools/model-downloads/`.
+
+**Rule: re-hash every file in the table above before each art session.** A model that verified yesterday may not verify today on this machine.
