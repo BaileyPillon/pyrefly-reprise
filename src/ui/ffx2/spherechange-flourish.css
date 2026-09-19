@@ -30,18 +30,28 @@
   position: absolute;
   left: var(--sf-x);
   top: calc(var(--sf-head) - var(--sf-body) * 0.28);
-  width: calc(34px * var(--sf-scale));
+  width: calc(46px * var(--sf-scale));
   height: calc(var(--sf-body) * 1.32);
-  margin-left: calc(-17px * var(--sf-scale));
+  margin-left: calc(-23px * var(--sf-scale));
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.95) 22%,
-    #fff 50%,
-    rgba(255, 255, 255, 0.95) 78%,
+    #fff 18%,
+    #fff 82%,
     rgba(255, 255, 255, 0) 100%
   );
-  filter: blur(calc(1.5px * var(--sf-scale)));
+  /* §4.5.4 whites the silhouette out; a soft wash over a brightly-lit girl
+     does not read as that. Wider, barely blurred, and with a bloom of its own
+     so the figure behind it goes pale. Measured against the first capture,
+     where the column was invisible over Yuna's white mage robe. */
+  box-shadow:
+    0 0 calc(14px * var(--sf-scale)) calc(6px * var(--sf-scale)) rgba(255, 255, 255, 0.55),
+    0 0 calc(34px * var(--sf-scale)) calc(14px * var(--sf-scale)) rgba(247, 182, 217, 0.45);
+  /* Light, not a white box: the sides fall off so the column has no hard
+     vertical edge. */
+  mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  filter: blur(calc(0.8px * var(--sf-scale)));
   transform-origin: 50% 100%;
   animation: ffx2sf-column var(--sf-ms) cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
 }
@@ -157,6 +167,13 @@
   align-items: center;
   gap: calc(1px * var(--sf-scale));
   transform: translate(-50%, -100%);
+  /* Its own scrim. The plate is anchored to the girl, and the girl can be
+     standing in front of the strategy rail — measured at 1280x720, where
+     `GATE · Red + Green` landed on top of the rail's rules line. A transient
+     that cannot be read is not worth playing. */
+  padding: calc(3px * var(--sf-scale)) calc(8px * var(--sf-scale)) calc(4px * var(--sf-scale));
+  background: rgba(11, 10, 18, 0.72);
+  box-shadow: 0 0 calc(10px * var(--sf-scale)) rgba(11, 10, 18, 0.6);
   text-align: center;
   white-space: nowrap;
   text-shadow:
