@@ -230,6 +230,7 @@ const UNSIZED: PoseScale = {
   prone: false,
   footprint: 0,
   clamped: false,
+  contentBox: { x0: -0.5, x1: 0.5, y0: 0, y1: 1 },
 };
 
 let sharedNoise: Texture | null = null;
@@ -433,6 +434,7 @@ export class PaintedActor extends Group {
     dissolve: { value: number };
     dissolveColor: { value: Color };
     groundShade: { value: number };
+    desaturate: { value: number };
     alphaCut: { value: number };
     edgeFade: { value: number };
     noiseMap: { value: Texture };
@@ -479,6 +481,17 @@ export class PaintedActor extends Group {
   private readonly ringBaseOpacity: number;
   /** Hand control of the ring, or null to leave it to the life layer. */
   private ringOverride: number | null = null;
+  /**
+   * The selection accent — see {@link setSelectAccent}. Built on first use, so
+   * an actor that is never targeted (a cutscene figure, a diorama demo) never
+   * allocates a mesh or a material for it.
+   */
+  private accent: Mesh | null = null;
+  private accentWanted = 0;
+  /** Eased 0..1, so the pool fades in rather than snapping on. */
+  private accentLevel = 0;
+  private readonly accentColour = new Color(0xf2c21e);
+  private dimAmount = 0;
   /** Breathing phase in cycles, so a tempo change never snaps the chest. */
   private breathPhase = Math.random();
   /** A stable per-name offset, so a party does not breathe (or cheer) in step. */
@@ -540,6 +553,7 @@ export class PaintedActor extends Group {
       dissolve: { value: 0 },
       dissolveColor: { value: new Color(0x9dffc4) },
       groundShade: { value: opts.groundShade ?? 0.24 },
+      desaturate: { value: 0 },
       alphaCut: { value: opts.alphaCut ?? 0.02 },
       edgeFade: { value: opts.edgeFade ?? 0 },
       noiseMap: { value: noiseTexture() },
@@ -1145,6 +1159,146 @@ export class PaintedActor extends Group {
     this.ringOverride = null;
   }
 
+  // ---------------------------------------------------------- target selection
+
+  /**
+   * The **selection accent**: the soft pool on the ground under a figure the
+   * player is currently aiming at (option B, "hand, ring and a quiet dim",
+   * approved by Bailey 2026-09-19).
+   *
+   * Deliberately *not* the turn ring. The turn ring answers "whose decision is
+   * this?" and belongs to the life layer; this answers "what am I about to
+   * hit?", is driven by the command menu, and the two are on screen together
+   * all the time — the acting character's own ring is lit while they choose an
+   * enemy. Sharing one mesh made the aeon's ring flicker between two colours.
+   *
+   * A figure that **levitates** (`hover`) gets a halo *behind* it instead of a
+   * pool under it: Vegnagun's head and both Yu Pagodas have no feet, and a gold
+   * disc on the floor several units below them marks the floor, not the target.
+   *
+   * @param colour accent colour, or `null` to clear it.
+   */
+  setSelectAccent(colour: number | string | null): void {
+    if (colour === null) {
+      this.accentWanted = 0;
+      return;
+    }
+    this.ensureAccent();
+    this.accentColour.set(colour as never);
+    (this.accent!.material as MeshBasicMaterial).color.copy(this.accentColour);
+    this.accentWanted = 1;
+  }
+
+  /** Whether a selection accent is currently asked for. */
+  get hasSelectAccent(): boolean {
+    return this.accentWanted > 0;
+  }
+
+  /**
+   * The quiet dim: how far this figure is pushed toward grey and toward dark
+   * while somebody *else* is the target. 0 = untouched, 1 = fully grey.
+   *
+   * Option B dims a non-target "about a quarter", which is `0.25` here: the
+   * shader takes it as both the desaturation amount and (at a gentler rate) a
+   * brightness trim, so the change reads as the figure stepping out of the
+   * light rather than as a colour-grade bug.
+   */
+  setDim(amount: number): void {
+    const k = clamp01(amount);
+    this.dimAmount = k;
+    this.u.desaturate.value = k;
+    this.u.brightness.value = this.baseBrightness * (1 - k * 0.72);
+  }
+
+  get dim(): number {
+    return this.dimAmount;
+  }
+
+  /** True when this figure is staged off the ground and wants a halo, not a pool. */
+  get levitates(): boolean {
+    return this.hoverHeight > 0.05;
+  }
+
+  /**
+   * The painted silhouette's four corners in **world** space, in the order
+   * bottom-left, bottom-right, top-right, top-left of the plane's own frame.
+   *
+   * Taken from the pose's tight alpha box (`PoseScale.contentBox`) rather than
+   * the plane, and pushed through the plane's live world matrix, so it carries
+   * the interim yaw, the mirror, the lunge, the KO tilt and the hover bob. This
+   * is what `PaintedStage.projectRect` turns into the screen rectangle a target
+   * bracket is drawn on and an occlusion test is run against.
+   *
+   * `out` must hold four vectors; one is allocated per call when omitted.
+   */
+  contentQuad(out?: [Vector3, Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3, Vector3] {
+    const corners: [Vector3, Vector3, Vector3, Vector3] = out ?? [
+      new Vector3(),
+      new Vector3(),
+      new Vector3(),
+      new Vector3(),
+    ];
+    const slot = this.slots[this.active]!;
+    const box = slot.scale.contentBox;
+    // The mesh's own local frame is a unit plane centred on its origin, scaled
+    // by `mesh.scale` and lifted by `mesh.position.y` (= `scale.offsetY`). The
+    // content box is expressed against the *group* origin, so undo that lift
+    // and the scale to land back in unit-plane coordinates.
+    const sx = slot.mesh.scale.x;
+    const sy = slot.mesh.scale.y || 1;
+    const lift = slot.mesh.position.y;
+    // `sx` is negative on a mirrored plane, which flips the box with it —
+    // exactly right, because the silhouette is flipped too.
+    const u0 = sx === 0 ? -0.5 : box.x0 / sx;
+    const u1 = sx === 0 ? 0.5 : box.x1 / sx;
+    const v0 = (box.y0 - lift) / sy;
+    const v1 = (box.y1 - lift) / sy;
+    corners[0].set(u0, v0, 0);
+    corners[1].set(u1, v0, 0);
+    corners[2].set(u1, v1, 0);
+    corners[3].set(u0, v1, 0);
+    // `updateWorldMatrix` rather than trusting the last render's matrices: the
+    // HUD asks for this from its own reposition path, which can run before the
+    // renderer has touched the graph this frame.
+    slot.mesh.updateWorldMatrix(true, false);
+    for (const c of corners) c.applyMatrix4(slot.mesh.matrixWorld);
+    return corners;
+  }
+
+  /**
+   * Build the selection accent the first time one is asked for: a soft pool
+   * lying on the ground, or — for a figure that levitates — an upright halo
+   * behind it, parented to `inner` so it follows the bob.
+   */
+  private ensureAccent(): void {
+    if (this.accent) return;
+    const mat = new MeshBasicMaterial({
+      map: ringTexture(),
+      color: this.accentColour,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: AdditiveBlending,
+    });
+    const mesh = new Mesh(new CircleGeometry(1, 48), mat);
+    mesh.name = 'select-accent';
+    if (this.levitates) {
+      // Behind the figure, not under it. A lower `renderOrder` than the planes,
+      // with `depthWrite` off, is what makes the halo read as light around the
+      // silhouette rather than a disc pasted over it.
+      mesh.renderOrder = 3;
+      mesh.position.y = this.worldHeight * 0.5;
+      this.inner.add(mesh);
+    } else {
+      mesh.rotation.x = -Math.PI / 2;
+      // Above the contact shadow and the turn ring, still below the figure.
+      mesh.position.y = 0.026;
+      mesh.renderOrder = 6;
+      this.add(mesh);
+    }
+    this.accent = mesh;
+  }
+
   /**
    * Move the life state on, from a pose name, and fire whatever one-shots the
    * transition asks for. Called by every {@link setPose}.
@@ -1641,6 +1795,30 @@ export class PaintedActor extends Group {
       }
     }
 
+    // --- selection accent --------------------------------------------------
+    // Eased rather than switched, because the cursor moves between enemies on
+    // every arrow press and a pool that pops on and off at 12 Hz is a strobe.
+    if (this.accent) {
+      this.accentLevel = approach(this.accentLevel, this.accentWanted, 0.075, dt);
+      const visible = this.accentLevel > 0.01 && this._alpha > 0.02;
+      this.accent.visible = visible;
+      if (visible) {
+        // A slow breathe, distinct from the turn ring's faster pulse, so the
+        // two marks are still told apart when they land on the same figure.
+        const pulse = 0.86 + Math.sin(this.clock * 2.4) * 0.14;
+        if (this.levitates) {
+          const r = Math.max(0.6, this.worldHeight * 0.62) * (0.97 + 0.05 * pulse);
+          this.accent.scale.set(r, r, 1);
+        } else {
+          const r = Math.max(0.55, this.footprintRadius() * 1.35, this.worldHeight * 0.4);
+          this.accent.scale.set(r * (1 + 0.03 * pulse), r * 0.44 * (1 + 0.03 * pulse), 1);
+          this.accent.position.x = ox * 0.55;
+        }
+        (this.accent.material as MeshBasicMaterial).opacity =
+          0.72 * this.accentLevel * pulse * this._alpha;
+      }
+    }
+
     // --- contact shadow reacts to squash and hop ---------------------------
     if (this.shadow) {
       const lift = Math.min(1, (this.hopHeight + hover) / Math.max(0.001, this.worldHeight * 0.6));
@@ -1680,6 +1858,11 @@ export class PaintedActor extends Group {
     if (this.turnRing) {
       this.turnRing.geometry.dispose();
       (this.turnRing.material as MeshBasicMaterial).dispose();
+    }
+    if (this.accent) {
+      this.accent.geometry.dispose();
+      (this.accent.material as MeshBasicMaterial).dispose();
+      this.accent = null;
     }
     this.removeFromParent();
   }

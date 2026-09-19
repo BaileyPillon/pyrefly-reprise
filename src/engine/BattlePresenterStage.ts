@@ -17,6 +17,9 @@ import { PaintedActor } from './PaintedActor.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
 import type { SceneSlots } from '../scenes/index.ts';
+import { solveFormation, type FormationMember } from './Formation.ts';
+import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './ScreenRects.ts';
+import { TargetHighlight } from './TargetHighlight.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -37,6 +40,10 @@ interface StagedActor {
   slot: number;
   artId: string;
   kind: 'party' | 'enemy';
+  /** True for a destructible part of a larger machine (Vegnagun's leg). */
+  isPart?: boolean;
+  /** The machine this is a part of, when `isPart`. */
+  parentId?: CombatantId;
 }
 
 /** Colour a VFX key plays in. Unknown keys fall through to the generic impact. */
@@ -58,15 +65,32 @@ const VFX_COLOURS: Readonly<Record<string, number>> = {
 export class PaintedStage implements BattleStage {
   readonly camera: CameraPort;
   readonly vfx: VfxPort;
+  /**
+   * The selection marks on the field — the accent pool and the quiet dim of
+   * option B. The HUD drives it; the debug API reads it back.
+   */
+  readonly highlight: TargetHighlight;
 
   private readonly opts: PaintedStageOptions;
   private readonly actors = new Map<CombatantId, StagedActor>();
   private readonly hits: HitEffects;
   private readonly scratch = new Vector3();
+  private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [
+    new Vector3(),
+    new Vector3(),
+    new Vector3(),
+    new Vector3(),
+  ];
+  /** HUD panel rectangles that count as occluders. Published by the HUD. */
+  private panels: ScreenRect[] = [];
   private flashEl: HTMLElement | null = null;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
+    this.highlight = new TargetHighlight({
+      actor: (id) => this.actor(id),
+      staged: () => this.staged(),
+    });
     this.camera = opts.battleCamera;
     this.hits = new HitEffects(
       { size: 4.2, coreColor: 0xffffff, edgeColor: 0x9fd8ff, arc: 2.45, thickness: 0.075 },
@@ -106,6 +130,9 @@ export class PaintedStage implements BattleStage {
       .map((id) => state.combatants[id])
       .filter((c): c is AnyCombatant => !!c && !c.flags.hidden && !c.removed);
     await Promise.all(live.map((c) => this.add(c)));
+    // Only after every actor exists: the solver needs each fiend's real world
+    // height, which is not known until its idle painting has loaded.
+    this.applyFormation();
   }
 
   /** Add (or replace) one combatant's actor. */
@@ -161,7 +188,17 @@ export class PaintedStage implements BattleStage {
     if (!c.alive && c.side === 'party') actor.setPose('ko', { immediate: true });
 
     this.opts.scene.add(actor);
-    this.actors.set(c.id, { actor, side: c.side, slot: c.slot, artId, kind });
+    this.actors.set(c.id, {
+      actor,
+      side: c.side,
+      slot: c.slot,
+      artId,
+      kind,
+      // A destructible part is laid out along its machine rather than given a
+      // lane of its own — Vegnagun's leg is not a fourth fiend.
+      ...(c.flags.isPart ? { isPart: true } : {}),
+      ...(c.flags.partOf ? { parentId: c.flags.partOf } : {}),
+    });
     return actor;
   }
 
@@ -194,6 +231,138 @@ export class PaintedStage implements BattleStage {
       x: rect.left + (this.scratch.x * 0.5 + 0.5) * rect.width,
       y: rect.top + (-this.scratch.y * 0.5 + 0.5) * rect.height,
     };
+  }
+
+  /**
+   * The combatant's painted silhouette as a screen rectangle, in CSS pixels,
+   * with its distance from the camera.
+   *
+   * Projects the four corners of the pose's **tight alpha box**
+   * (`PaintedActor.contentQuad`) and takes their axis-aligned bounds, so the
+   * rectangle hugs the figure instead of the padded PNG — a Yu Pagoda's plane
+   * is most of a 1024-square canvas and only the middle strip of it is pagoda.
+   * That is what makes a bracket scaled to this land on the fiend, and what
+   * makes the 25%-coverage rule in the task mean what it says.
+   *
+   * Null for a combatant that is not staged, or while the canvas has no size.
+   */
+  projectRect(id: CombatantId): DepthRect | null {
+    const staged = this.actors.get(id);
+    if (!staged) return null;
+    const rect = this.opts.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+
+    const corners = staged.actor.contentQuad(this.quad);
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const c of corners) {
+      c.project(this.opts.camera);
+      const x = rect.left + (c.x * 0.5 + 0.5) * rect.width;
+      const y = rect.top + (-c.y * 0.5 + 0.5) * rect.height;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+    if (!Number.isFinite(minX) || !Number.isFinite(minY)) return null;
+
+    // Depth from the figure's own centre, not a corner: the corners of a plane
+    // yawed 30 degrees differ by most of a unit, and a tie-break on one of them
+    // flips which of two neighbours counts as "in front".
+    staged.actor.centerPoint(this.scratch);
+    const depth = this.scratch.distanceTo(this.opts.camera.position);
+
+    return { x: minX, y: minY, w: maxX - minX, h: maxY - minY, depth };
+  }
+
+  /** Every staged combatant's screen rectangle, keyed by id. */
+  screenRects(): Map<CombatantId, DepthRect> {
+    const out = new Map<CombatantId, DepthRect>();
+    for (const id of this.actors.keys()) {
+      const r = this.projectRect(id);
+      if (r) out.set(id, r);
+    }
+    return out;
+  }
+
+  /**
+   * How much of each combatant the player can actually see, 0..1, counting
+   * everything drawn in front of it plus any HUD panel that has declared
+   * itself ({@link setPanels}).
+   *
+   * This is the measurement Bailey's complaint is checked against, and the one
+   * the Playwright pass asserts (>= 0.75 for the selected target).
+   */
+  visibility(): Map<CombatantId, number> {
+    return visibilityOf(this.screenRects(), this.panels);
+  }
+
+  /** Which staged combatants are covering `id`. Drives the x-ray fade. */
+  occluders(id: CombatantId): CombatantId[] {
+    return occludersOf(id, this.screenRects());
+  }
+
+  /**
+   * HUD rectangles that cover the field — the command stack, the party-status
+   * panel, the turn list. The HUD publishes them so `visibility()` counts a
+   * fiend hidden behind a panel as hidden, which is the other half of "not
+   * clearly visible".
+   */
+  setPanels(panels: readonly ScreenRect[]): void {
+    this.panels = [...panels];
+  }
+
+  /**
+   * Fade whatever is covering `id` down to `alpha`, and restore everything
+   * else.
+   *
+   * The **fallback** path, not the main one: option B answers occlusion by
+   * spreading the formation (see `Formation.ts`), and the x-ray fade was
+   * option C's answer, which Bailey did not pick. It stays for the case the
+   * layout genuinely cannot solve — Vegnagun's parts, which touch because they
+   * are one machine — and for a scene whose slot table has not been re-laid
+   * yet. Pass `null` to restore the field.
+   */
+  xray(id: CombatantId | null, alpha = 0.35): void {
+    const cover = id ? new Set(this.occluders(id)) : new Set<CombatantId>();
+    for (const [otherId, staged] of this.actors) {
+      const wanted = cover.has(otherId) ? alpha : 1;
+      if (Math.abs(staged.actor.alpha - wanted) > 0.01) void staged.actor.fadeTo(wanted, 140);
+    }
+  }
+
+  /**
+   * Re-lay the enemy lane so no fiend's silhouette crosses another's.
+   *
+   * Runs after {@link stage}, over whoever actually ended up on the field, and
+   * only moves **enemies** — the party's arc is FFX's own and is not ours to
+   * restage. A scene's `SceneSlots.enemy` table stays the source of the lane's
+   * extent (near/far z, left/right x are read off it), so a location still
+   * decides where its fiends may stand; the solver only decides where in that
+   * lane each one goes. See `Formation.ts` for the rule and the game-aware
+   * case (both games).
+   */
+  applyFormation(): void {
+    const members: FormationMember[] = [];
+    for (const [id, staged] of this.actors) {
+      if (staged.kind !== 'enemy') continue;
+      const m: FormationMember = { id, height: staged.actor.height };
+      if (staged.isPart) {
+        m.isPart = true;
+        if (staged.parentId) m.parentId = staged.parentId;
+      }
+      members.push(m);
+    }
+    if (members.length < 2) return;
+
+    const lane = laneFrom(this.opts.slots.enemy);
+    for (const slot of solveFormation(members, lane)) {
+      const staged = this.actors.get(slot.id);
+      if (!staged) continue;
+      staged.actor.position.set(slot.spot[0], slot.spot[1], slot.spot[2]);
+    }
   }
 
   /** Swap a combatant's painting in place — form change, spherechange. */
@@ -337,6 +506,33 @@ export class PaintedStage implements BattleStage {
 
 function rank(side: Side): number {
   return side === 'party' ? 0 : side === 'aeon' ? 1 : 2;
+}
+
+/**
+ * The lane a scene's own enemy slots describe — its x and z extent, widened a
+ * little so the solver may spread past the exact spots the table lists.
+ *
+ * Reading it off the table rather than hard-coding one keeps each location in
+ * charge of where its fiends may stand: Dream's End's plain is wide and the
+ * Farplane's is not, and a formation solver that ignored that would walk
+ * figures into the backdrop.
+ */
+function laneFrom(spots: readonly [number, number, number][]): {
+  x: [number, number];
+  z: [number, number];
+} {
+  if (!spots.length) return { x: [0.4, 5.8], z: [-1.6, -5.4] };
+  const xs = spots.map((s) => s[0]);
+  const zs = spots.map((s) => s[2]);
+  const xLo = Math.min(...xs);
+  const xHi = Math.max(...xs);
+  const zLo = Math.min(...zs);
+  const zHi = Math.max(...zs);
+  // A one-slot table gives a degenerate lane; give it room either side rather
+  // than piling every fiend on one spot.
+  const padX = Math.max(1.4, (xHi - xLo) * 0.22);
+  const padZ = Math.max(0.6, (zHi - zLo) * 0.12);
+  return { x: [xLo - padX, xHi + padX], z: [zHi + padZ, zLo - padZ] };
 }
 
 /** The enemy-slot height `HitEffects`' bloom size was chosen against. */

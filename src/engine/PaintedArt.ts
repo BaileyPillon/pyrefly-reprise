@@ -8,7 +8,7 @@ import {
 } from 'three';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
-import type { PoseFrame } from './PaintedScale.ts';
+import type { AlphaBox, PoseFrame } from './PaintedScale.ts';
 
 // "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
 // there. It is deliberately not re-exported here: this file is already well
@@ -199,9 +199,16 @@ export async function loadPainted(
     // `height - 16`, not a measurement — so measure. Reading the *cleaned*
     // alpha is what plants a figure's feet exactly on the ground plane.
     let baselineY = meta?.baselineY ?? height;
-    if (fit !== false && pixels) {
-      const fitted = fitBaselineFromAlpha(pixels, width, height, fit ?? {});
-      if (fitted !== null) baselineY = fitted;
+    // One alpha pass answers both questions: where the feet are, and the tight
+    // box the figure occupies (which is what a target bracket is scaled from —
+    // see `measureAlpha`). The box is measured even when the caller has opted
+    // out of baseline fitting, because a hand-measured baseline says nothing
+    // about how much empty canvas surrounds the figure.
+    let content: AlphaBox | undefined;
+    if (pixels) {
+      const measured = measureAlpha(pixels, width, height, fit === false ? {} : (fit ?? {}));
+      if (fit !== false && measured.baselineY !== null) baselineY = measured.baselineY;
+      if (measured.box) content = measured.box;
     }
 
     return {
@@ -219,6 +226,7 @@ export async function loadPainted(
         // plane is mirrored, and that is a per-*pose* question (one old frontal
         // `cast.png` can sit in an otherwise right-facing set).
         ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),
+        ...(content ? { content } : {}),
       },
       placeholder: false,
       url,
@@ -287,41 +295,108 @@ export function fitBaselineFromAlpha(
   height: number,
   opts: BaselineFitOptions = {},
 ): number | null {
+  return measureAlpha(source, width, height, opts)?.baselineY ?? null;
+}
+
+/**
+ * The **tight box** the painted figure actually occupies inside its PNG, in
+ * source pixels — what a target bracket has to be scaled from.
+ *
+ * Generated character art is padded: a Yu Pagoda sits in the middle of a
+ * 1024x1024 canvas with most of the frame empty, so a bracket drawn around the
+ * *plane* is two to three times too big and lands on its neighbour. Measuring
+ * the alpha once at load time, alongside the baseline fit that was already
+ * reading these pixels, is what lets `PaintedActor.contentQuad` hand the HUD a
+ * rectangle that hugs the silhouette.
+ */
+export type { AlphaBox } from './PaintedScale.ts';
+
+/**
+ * One alpha pass over a painted PNG: the ground line **and** the tight content
+ * box, so the load path never rasterises the same image twice.
+ *
+ * The baseline uses a run threshold (a stray speck must not drag the feet to
+ * the bottom of the canvas); the box is deliberately more generous, taking any
+ * row or column that carries a couple of opaque pixels, because a bracket that
+ * clips the tip of a wing reads as a bug while one a few pixels wide of the
+ * silhouette does not.
+ */
+export function measureAlpha(
+  source: CanvasImageSource,
+  width: number,
+  height: number,
+  opts: BaselineFitOptions = {},
+): { baselineY: number | null; box: AlphaBox | null } {
+  const empty = { baselineY: null, box: null };
   const w = Math.max(1, Math.floor(width));
   const h = Math.max(1, Math.floor(height));
-  // Fitting is a per-row question, so the horizontal resolution can be cut hard.
   const sw = Math.min(w, 256);
   const sh = Math.min(h, 1024);
 
+  if (typeof document === 'undefined') return empty;
   const c = document.createElement('canvas');
   c.width = sw;
   c.height = sh;
   const ctx = c.getContext('2d', { willReadFrequently: true });
-  if (!ctx) return null;
+  if (!ctx) return empty;
   ctx.drawImage(source, 0, 0, sw, sh);
 
   let data: Uint8ClampedArray;
   try {
     data = ctx.getImageData(0, 0, sw, sh).data;
   } catch {
-    return null;
+    return empty;
   }
 
   const cut = Math.round((opts.threshold ?? 0.35) * 255);
   const need = Math.max(2, Math.round(sw * (opts.minRun ?? 0.006)));
+  /** A column or row counts toward the box on this many opaque pixels. */
+  const boxNeed = 2;
 
-  for (let y = sh - 1; y >= 0; y--) {
+  let baselineY: number | null = null;
+  let bx0 = sw;
+  let bx1 = -1;
+  let by0 = sh;
+  let by1 = -1;
+  const colRuns = new Int32Array(sw);
+
+  for (let y = 0; y < sh; y++) {
     let run = 0;
     for (let x = 0; x < sw; x++) {
-      if (data[(y * sw + x) * 4 + 3]! >= cut) run++;
+      if (data[(y * sw + x) * 4 + 3]! >= cut) {
+        run++;
+        colRuns[x]!++;
+      }
     }
-    if (run >= need) {
-      // +1 so the baseline is the ground line *under* the last painted row.
-      const fitted = Math.min(h, Math.round(((y + 1) / sh) * h));
-      return fitted;
+    if (run >= boxNeed) {
+      if (y < by0) by0 = y;
+      by1 = y;
+    }
+    // The last row with a real run is the ground line; keep overwriting.
+    if (run >= need) baselineY = y;
+  }
+  for (let x = 0; x < sw; x++) {
+    if (colRuns[x]! >= boxNeed) {
+      if (x < bx0) bx0 = x;
+      bx1 = x;
     }
   }
-  return null;
+
+  const scaleX = w / sw;
+  const scaleY = h / sh;
+  return {
+    // +1 so the baseline is the ground line *under* the last painted row.
+    baselineY: baselineY === null ? null : Math.min(h, Math.round((baselineY + 1) * scaleY)),
+    box:
+      bx1 < 0 || by1 < 0
+        ? null
+        : {
+            x0: Math.max(0, Math.floor(bx0 * scaleX)),
+            x1: Math.min(w, Math.ceil((bx1 + 1) * scaleX)),
+            y0: Math.max(0, Math.floor(by0 * scaleY)),
+            y1: Math.min(h, Math.ceil((by1 + 1) * scaleY)),
+          },
+  };
 }
 
 // ---------------------------------------------------------------------------

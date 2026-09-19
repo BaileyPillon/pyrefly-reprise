@@ -46,6 +46,13 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float dissolve;
   uniform vec3 dissolveColor;
   uniform float groundShade;
+  // 0 = the painting as painted, 1 = fully grey. The quiet dim that marks a
+  // figure as "not the target you are choosing" (option B, approved
+  // 2026-09-19) drops brightness AND colour together: brightness alone reads
+  // as a lighting change, and the eye still picks the saturated fiend out of a
+  // dark frame. Applied last, after the flash and before the dissolve, so a
+  // hit landing on a dimmed figure still reads.
+  uniform float desaturate;
   // UV height of the contact ramp. Set per plane from the pose's world height
   // (see contactBandFor) so the darkening is a fixed distance off the ground
   // instead of a fixed fraction of the image -- a landscape KO plane given the
@@ -141,6 +148,14 @@ export const paintedFragmentShader = /* glsl */ `
       vec3 reflectance = mix(vec3(FLASH_FLOOR), clamp(c, 0.0, 1.0), 1.0 - FLASH_FLOOR);
       vec3 lift = flashColor * (flashMask * FLASH_GAIN) * reflectance;
       c = min(c + lift, max(c, vec3(FLASH_CEIL)));
+    }
+
+    // --- the quiet dim ------------------------------------------------------
+    if (desaturate > 0.0) {
+      // Rec. 709 luma, so a red fiend and a green one lose the same amount of
+      // apparent brightness on the way to grey.
+      float luma = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      c = mix(c, vec3(luma), clamp(desaturate, 0.0, 1.0));
     }
 
     // --- dissolve -----------------------------------------------------------

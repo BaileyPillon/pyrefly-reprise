@@ -22,12 +22,34 @@
  * wide and low, which is what lying down looks like.
  */
 
+/**
+ * The tight box painted content occupies inside a PNG, in source pixels.
+ *
+ * Measured from alpha at load time (`PaintedArt.measureAlpha`). It exists
+ * because generated art is padded: a Yu Pagoda sits in the middle of a
+ * 1024x1024 canvas with most of the frame empty, so anything scaled to the
+ * *plane* — a target bracket above all — comes out two to three times too big
+ * and lands on its neighbour.
+ */
+export interface AlphaBox {
+  /** Left edge of painted content, pixels from the left of the PNG. */
+  x0: number;
+  /** Right edge, exclusive. */
+  x1: number;
+  /** Top edge, pixels from the top. */
+  y0: number;
+  /** Bottom edge, exclusive. */
+  y1: number;
+}
+
 /** The measurements of one painted pose that sizing cares about. */
 export interface PoseFrame {
   width: number;
   height: number;
   /** Y pixel from the top of the PNG where the figure meets the ground. */
   baselineY: number;
+  /** Tight alpha box, when it could be measured. See {@link AlphaBox}. */
+  content?: AlphaBox;
   /**
    * Sidecar override: multiply the derived pixel scale. `1.1` = "this render
    * came out 10% small". Ignored when absent or not finite/positive.
@@ -61,6 +83,11 @@ export interface PoseScaleOptions {
   minExtent?: number;
   /** Width/height ratio at which a pose counts as prone. Default 1.15. */
   proneAspect?: number;
+  /**
+   * The pose's tight alpha box, when the caller measured it somewhere other
+   * than the sidecar. Overrides {@link PoseFrame.content}.
+   */
+  content?: AlphaBox;
 }
 
 export interface PoseScale {
@@ -81,6 +108,16 @@ export interface PoseScale {
   footprint: number;
   /** True when {@link PoseScaleOptions.maxExtent} or `minExtent` had to bite. */
   clamped: boolean;
+  /**
+   * The painted silhouette's own box, in the plane's local world units, with
+   * the origin at the figure's ground point (the same origin
+   * {@link PoseScale.offsetY} is measured against): `x` runs right, `y` runs
+   * up. This is the rectangle a target bracket is drawn around.
+   *
+   * Falls back to the whole plane when the PNG's alpha could not be measured,
+   * so a caller never has to branch.
+   */
+  contentBox: { x0: number; x1: number; y0: number; y1: number };
 }
 
 const finitePositive = (v: number | undefined): v is number =>
@@ -161,6 +198,23 @@ export function computePoseScale(pose: PoseFrame, opts: PoseScaleOptions): PoseS
 
   const prone = w > h * (opts.proneAspect ?? 1.15);
 
+  // The silhouette's box, moved out of image space (origin top-left, y down)
+  // and into the plane's own space (origin at the ground point, y up). The
+  // whole plane is the honest fallback when alpha could not be read.
+  const box = opts.content ?? pose.content;
+  const valid =
+    box && Number.isFinite(box.x0) && Number.isFinite(box.y0) && box.x1 > box.x0 && box.y1 > box.y0;
+  const halfW = width / 2;
+  const contentBox = valid
+    ? {
+        x0: clamp(box.x0, 0, w) * unitsPerPixel - halfW,
+        x1: clamp(box.x1, 0, w) * unitsPerPixel - halfW,
+        // `anchorPx` is the ground row, so pixels *above* it are positive Y.
+        y0: (anchorPx - clamp(box.y1, 0, h)) * unitsPerPixel,
+        y1: (anchorPx - clamp(box.y0, 0, h)) * unitsPerPixel,
+      }
+    : { x0: -halfW, x1: halfW, y0: offsetY - height / 2, y1: offsetY + height / 2 };
+
   return {
     unitsPerPixel,
     width,
@@ -169,6 +223,7 @@ export function computePoseScale(pose: PoseFrame, opts: PoseScaleOptions): PoseS
     topY: offsetY + height / 2,
     anchorY: anchorPx,
     prone,
+    contentBox,
     // A standing figure's silhouette is much narrower than its PNG (arms, a
     // weapon, padding); a prone one fills nearly the whole frame and its
     // shadow has to stretch under the whole body or the figure reads as
