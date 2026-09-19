@@ -16,7 +16,7 @@
 import type { AtbSnapshot, CombatantId, FFX2Combatant } from '../../battle/common/types.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from './dressphereIcons.ts';
 import { statusChipsFor, statusChipsHtml } from './statusChips.ts';
-import { bodyFaceImgHtml, faceImgHtmlFrom } from '../common/portrait.ts';
+import { faceLayersHtml } from '../common/portrait.ts';
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
 export const TICKS_PER_BAR = 24000;
@@ -101,14 +101,15 @@ export interface PartyRowOptions {
  */
 function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string): string {
   const art = `${c.id}-${dressphere}`;
-  const portrait = faceImgHtmlFrom([art, `${c.id}-x2`, c.id], c.name, {
+  // The stacking itself lives in `ui/common/portrait.ts` so the prep screen's
+  // roster — which draws Paine's initial where this draws her face — can adopt
+  // it in one line (docs/handoff/fix3-ffx2-hud-prep.md).
+  const layers = faceLayersHtml([art, `${c.id}-x2`, c.id], art, c.name, {
     className: 'ffx2stat__face-img',
-    z: 2,
   });
-  const body = bodyFaceImgHtml(art, c.name, { className: 'ffx2stat__face-img', z: 1 });
   return `<div class="ffx2stat__face" title="${dressphereLabel(dressphere)}" style="--ffx2-job:${dressphereColour(dressphere)}">
       <span class="ffx2stat__mono">${monogram}</span>
-      ${body}${portrait}
+      ${layers}
       <i class="ffx2stat__job">${monogram}</i>
     </div>`;
 }

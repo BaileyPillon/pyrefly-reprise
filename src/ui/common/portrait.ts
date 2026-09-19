@@ -273,6 +273,36 @@ export function faceImgHtmlFrom(ids: readonly string[], alt = '', opts: FaceOpti
   return fallback ? faceImgHtml(fallback, alt, opts) : '';
 }
 
+/**
+ * The painted layers of a face tile, stacked: the best portrait the manifest
+ * has, over the head of a full-body painting for anyone the fleet has not
+ * painted a portrait of.
+ *
+ * The caller supplies the floor — a monogram, an initial — and this adds
+ * whatever real art exists above it. Layers are *stacked* rather than chosen
+ * because the art manifest may not have landed on the first frame; each `<img>`
+ * removes itself on a miss, so whichever layer is real wins and a miss costs
+ * nothing.
+ *
+ * The frame around this must be square, `position: relative`, `overflow:
+ * hidden` — and the floor must be positioned too, or it paints over the art
+ * (docs/handoff/bp1-portrait-basepath.md).
+ *
+ * FFX-2's party rows call this. `src/app/screens/PartyPrepContent.ts` is the
+ * other place that wants it: its roster draws `faceImgHtml(id)` alone, so
+ * **Paine**, who has no `portraits/paine.png`, gets her name initial on the
+ * prep screen where the battle gives her a painted face.
+ */
+export function faceLayersHtml(
+  portraitIds: readonly string[],
+  bodyId: string | undefined,
+  alt = '',
+  opts: Omit<FaceOptions, 'z'> = {},
+): string {
+  const body = bodyId ? bodyFaceImgHtml(bodyId, alt, { ...opts, z: 1 }) : '';
+  return body + faceImgHtmlFrom(portraitIds, alt, { ...opts, z: 2 });
+}
+
 /** The `z-index` declaration for a stacked tile, or nothing. */
 function zDecl(opts: FaceOptions): string {
   return opts.z === undefined ? '' : `;z-index:${opts.z}`;
