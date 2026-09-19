@@ -99,12 +99,37 @@
   width: 80%;
   display: grid;
   grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  /*
+   * One row, pinned to the container's own height rather than left `auto`.
+   *
+   * An `auto` row is sized to its tallest item's content, so it grows past
+   * `.prepchap`'s fixed 120px band the moment the 14px type floor
+   * (`chapter-panel.css`, `--cp-fs-floor`) asks a column for more height than
+   * the band has — `.prepchap`'s own `overflow: hidden` would then simply
+   * clip whatever does not fit, silently, with no way for the player to read
+   * the rest. `minmax(0, 1fr)` makes the row exactly the container's height
+   * instead, so each column (stretched to it by the grid default) has a real,
+   * definite height its own `overflow-y: auto` below can act on.
+   */
+  grid-template-rows: minmax(0, 1fr);
   gap: 0 11.56px; /* 0 26 */
   align-content: start;
 }
 .prepchap__col {
   min-width: 0;
-  overflow: hidden;
+  /*
+   * A scroller, not a clip.
+   *
+   * At most stage scales the floored type still fits the fixed band (the
+   * numbers are in `chapter-panel.css`'s `--cp-fs-floor` comment); at the
+   * smallest ones — a phone held upright — it cannot, because the floor is a
+   * *readable size* contract and the band is a *fixed grid-px* one, and
+   * nothing here is allowed to break either. `overflow: hidden` answered that
+   * by silently cutting the tip or the last objective off; a scrollbar at
+   * least gets the player to it.
+   */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* The objectives column is a briefing, and sits a touch lower than the title
@@ -122,16 +147,19 @@
  * The location line goes entirely: the shell already prints
  * `I - SEYMOUR FLUX - MT. GAGAZET - THE PROMINENCE` across the top right of
  * this very screen, and saying it twice costs a line the snapshots need.
+ *
+ * Pre-release pass: this used to set its own `font-size` on the title, the
+ * blurb and the caption, as a plain literal grid-px value with no floor at
+ * all — the type-floor failure the brief measured at four of six viewports
+ * was as much this file's doing as the shared one's. All three now fall
+ * through to `chapter-panel.css`'s own `--cp-fs-*` tokens, which carry the
+ * floor (`--cp-fs-floor`); nothing here overrides them any more.
  */
-.prepchap__cols .cpanel__title {
-  font-size: 16.89px; /* 38 */
-}
 .prepchap__cols .cpanel__where {
   display: none;
 }
 .prepchap__cols .cpanel__blurb {
   margin-top: 4px; /* 9 */
-  font-size: 5.11px; /* 11.5 */
   line-height: 1.45;
 }
 .prepchap__cols .cpanel__snaps {
@@ -141,21 +169,7 @@
 .prepchap__cols .cpanel__snap-img {
   height: 14.22px; /* 32 */
 }
-/*
- * One line, hard.
- *
- * The shared rule clamps to two lines with `-webkit-line-clamp`, which is the
- * right call where there is room for two. There is not here, and a clamp that
- * disagrees with its container's height clips the second line halfway through
- * the letters instead of ending the caption cleanly. A plain nowrap ellipsis
- * has no such failure mode.
- */
 .prepchap__cols .cpanel__snap-cap {
-  font-size: 4.44px; /* 10 */
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   padding-bottom: 1.78px; /* 4 */
 }
 /* The tile is a photograph pinned to a page that is already paper, so it

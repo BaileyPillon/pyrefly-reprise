@@ -29,6 +29,7 @@ import {
   objectivesHtml,
   snapshotsHtml,
   tipHtml,
+  watchHeroBackground,
 } from '../../common/chapterPanel.ts';
 import './chapter-panel-tab.css';
 
@@ -101,6 +102,15 @@ export function makeChapterPanel(game: GameId): PrepPanel {
           </div>
         </div>
       </div>`;
+
+    // Fix 3, pre-release pass: `heroBackground()` above only ever emits the
+    // 1x plate (plus the .webp/fallback chain) — a CSS background cannot ask
+    // a browser to pick between resolutions the way an `<img srcset>` can, so
+    // the upgrade to the 2x master, when one exists, has to be wired in by
+    // hand once the slab is actually in the document and has a real box to
+    // measure. See `watchHeroBackground`.
+    const hero = root.querySelector<HTMLElement>('.prepchap__hero');
+    if (hero) watchHeroBackground(hero, meta);
   };
 
   return {

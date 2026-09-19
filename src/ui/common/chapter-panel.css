@@ -44,19 +44,41 @@
    */
   --cp-u: 1px;
 
-  /* Type, named by role. Each default is the grid value it replaced. */
-  --cp-fs-eyebrow: calc(5.33 * var(--cp-u)); /* 12 */
-  --cp-fs-title: calc(18.67 * var(--cp-u)); /* 42 */
-  --cp-fs-subtitle: calc(6.22 * var(--cp-u)); /* 14 */
-  --cp-fs-where: calc(4.89 * var(--cp-u)); /* 11 */
-  --cp-fs-body: calc(5.33 * var(--cp-u)); /* 12 */
-  --cp-fs-label: calc(4.44 * var(--cp-u)); /* 10 */
-  --cp-fs-head: calc(4.89 * var(--cp-u)); /* 11 */
-  --cp-fs-numeral: calc(10.67 * var(--cp-u)); /* 24 */
-  --cp-fs-numeral-word: calc(9.33 * var(--cp-u)); /* 21 */
-  --cp-fs-count: calc(6.22 * var(--cp-u)); /* 14 */
-  --cp-fs-tip: calc(5.11 * var(--cp-u)); /* 11.5 */
-  --cp-fs-caption: calc(5.33 * var(--cp-u)); /* 12 */
+  /*
+   * The floor every letterboxed rendering of this panel has to clear: the
+   * brief's "nothing a player reads is under 14 CSS px" contract, converted
+   * out of the stage's own scale rather than guessed at per token.
+   *
+   * `LetterboxStage.layout` publishes `--lb-scale` on the stage element (the
+   * comment on it spells out exactly this formula), and `createFullBleedStage`
+   * — the pause screen's stage — publishes a flat `1` so a caller outside any
+   * stage gets plain CSS px back and this is a no-op there. `.cpanel--fluid`
+   * (only the pause screen sets it) redefines every token below from scratch
+   * on `vw`/`vh` instead, so this floor never has to do anything for it.
+   *
+   * Fix round 3, pre-release pass: before this, only `.cpanel__snap-cap` had
+   * a floor at all, and it was capped at a fixed grid-px ceiling that stopped
+   * binding below ~2.5x stage scale — which is most of the six viewports the
+   * brief asks this to hold at. Every other token here — the eyebrow, the
+   * title, the objectives, the tip, the labels — had no floor whatsoever.
+   */
+  --cp-fs-floor: calc(14px / var(--lb-scale, 1));
+
+  /* Type, named by role. Each default is the grid value it replaced, raised
+     to the floor above wherever a smaller stage scale would sink it under
+     14px on screen. */
+  --cp-fs-eyebrow: max(calc(5.33 * var(--cp-u)), var(--cp-fs-floor)); /* 12 */
+  --cp-fs-title: max(calc(18.67 * var(--cp-u)), var(--cp-fs-floor)); /* 42 */
+  --cp-fs-subtitle: max(calc(6.22 * var(--cp-u)), var(--cp-fs-floor)); /* 14 */
+  --cp-fs-where: max(calc(4.89 * var(--cp-u)), var(--cp-fs-floor)); /* 11 */
+  --cp-fs-body: max(calc(5.33 * var(--cp-u)), var(--cp-fs-floor)); /* 12 */
+  --cp-fs-label: max(calc(4.44 * var(--cp-u)), var(--cp-fs-floor)); /* 10 */
+  --cp-fs-head: max(calc(4.89 * var(--cp-u)), var(--cp-fs-floor)); /* 11 */
+  --cp-fs-numeral: max(calc(10.67 * var(--cp-u)), var(--cp-fs-floor)); /* 24 */
+  --cp-fs-numeral-word: max(calc(9.33 * var(--cp-u)), var(--cp-fs-floor)); /* 21 */
+  --cp-fs-count: max(calc(6.22 * var(--cp-u)), var(--cp-fs-floor)); /* 14 */
+  --cp-fs-tip: max(calc(5.11 * var(--cp-u)), var(--cp-fs-floor)); /* 11.5 */
+  --cp-fs-caption: max(calc(5.33 * var(--cp-u)), var(--cp-fs-floor)); /* 12 */
 
   /* The two picture blocks, which are proportions rather than type. */
   --cp-arena-h: calc(26.67 * var(--cp-u)); /* 60 */
@@ -379,17 +401,16 @@
  * The rule above was not enough, and the reason is worth writing down.
  *
  * `chapter-panel.css` is the shared dossier, but the prep menu's CHAPTER tab
- * adds its own sheet of overrides in `src/ui/ffx/party-prep/chapter-panel-tab.css`
- * — another track's file — and one of them is
- * `.prepchap__cols .cpanel__snap-cap { white-space: nowrap; text-overflow: ellipsis }`.
- * That selector is more specific than a bare `.cpanel__snap-cap`, so the fix
- * above reached the pause screen and stopped at the tab's doorstep: the CHAPTER
- * tab (the *default* tab, on the path into every chapter) still printed
- * "Limbo, a thousand y…" and "you don't get anothe…" — Bailey's exact reported
- * string, one screen over.
+ * used to add its own override in `src/ui/ffx/party-prep/chapter-panel-tab.css`
+ * — `.prepchap__cols .cpanel__snap-cap { white-space: nowrap; text-overflow:
+ * ellipsis }`. That selector was more specific than a bare `.cpanel__snap-cap`,
+ * so the fix above reached the pause screen and stopped at the tab's doorstep:
+ * the CHAPTER tab (the *default* tab, on the path into every chapter) still
+ * printed "Limbo, a thousand y…" and "you don't get anothe…" — Bailey's exact
+ * reported string, one screen over.
  *
  * So the reset is restated here at three classes' worth of specificity, which
- * beats the tab's two from whichever stylesheet lands last. `.cpanel__snap` is
+ * beats the tab's two regardless of stylesheet load order. `.cpanel__snap` is
  * the middle term rather than `.cpanel__snaps`, because the pause screen lifts
  * the bare `<figure>`s out of the dossier and lays them out itself — there is
  * no `.cpanel__snaps` wrapper on that ground, and this has to hold on both.
@@ -397,8 +418,15 @@
  * A caption is three to five words in the author's voice. Truncating one is
  * worse than any amount of wrapping, so it wraps, everywhere, always.
  *
- * `docs/handoff/fix3-pause.md` carries the ask to the tab's owner: delete the
- * override, and this guard (with the two sizing rules under it) can go.
+ * Pre-release pass: the tab's own `nowrap`/`ellipsis` override is gone now —
+ * this track owns the `.prepchap` rules that style this shared panel, so the
+ * ask a previous pass left for "the tab's owner" was done here instead of
+ * asked for. `--cp-fs-caption` already carries the floor (see `--cp-fs-floor`
+ * above); the `min()` cap that used to sit on top of it here — capping the
+ * grid-px value before the stage scale multiplied it back up, so it stopped
+ * binding below about 2.5x scale — is gone too, since it was the very thing
+ * that kept the caption under 14px at four of the six viewports the brief
+ * measures against.
  */
 .cpanel .cpanel__snap .cpanel__snap-cap {
   display: block;
@@ -406,34 +434,25 @@
   overflow: visible;
   text-overflow: clip;
   -webkit-line-clamp: none;
-  /*
-   * The readability floor, converted into the caller's units.
-   *
-   * On the pause screen `--lb-scale` is 1 and `--cp-fs-caption` already floors
-   * at 14px, so this is a no-op there. On the prep tab the dossier is inside a
-   * letterboxed stage that multiplies every length by `--lb-scale`
-   * (`LetterboxStage.ts` publishes it), so `14px / --lb-scale` is what renders
-   * *as* 14 CSS px. The `min()` caps how far that can push: on a small window
-   * the stage scale is small, the quotient explodes, and a caption set to it
-   * would need four lines the tab has no room for. At Bailey's 2000x1012 the
-   * cap is not reached and the caption renders at the floor.
-   */
-  font-size: max(var(--cp-fs-caption), min(calc(14px / var(--lb-scale, 1)), calc(5.6 * var(--cp-u))));
+  font-size: var(--cp-fs-caption);
 }
 
 /*
  * Two lines have to come from somewhere.
  *
- * Only on the letterboxed ground: the CHAPTER tab's band is a fixed 120 grid px
- * with `overflow: hidden` on the column, and it was already full to within a
- * pixel with one-line captions. Wrapping "Limbo, a thousand years dark" onto a
- * second line at a larger size needs about six grid pixels that do not exist,
- * so the polaroid's picture gives them up — a slightly shorter photograph is a
- * far smaller loss than half a sentence.
+ * Only on the letterboxed ground: the CHAPTER tab's band is a fixed 120 grid
+ * px, and it was already full to within a pixel with one-line captions.
+ * Wrapping "Limbo, a thousand years dark" onto a second line needs grid
+ * pixels that do not exist, so the polaroid's picture gives some up — a
+ * slightly shorter photograph is a far smaller loss than half a sentence.
  *
- * `--cp-fs-caption` is the default (5.33) on this path, but the tab overrides
- * the *used* value down; the height below is tuned against what the tab
- * actually renders, measured in the browser, not derived.
+ * This buys back space; it does not guarantee enough of it. At the smallest
+ * stage scale the 14px floor above can ask a caption for several times its
+ * old grid-px size (see `--cp-fs-floor`), which this fixed-height band and
+ * fixed-height image cannot always hold even wrapped. `.prepchap__col`'s own
+ * `overflow-y: auto` (`chapter-panel-tab.css`) is the backstop for that case:
+ * the column scrolls rather than clipping a line off or shrinking the type
+ * back under 14px, which the brief rules out either way.
  */
 .cpanel:not(.cpanel--fluid) .cpanel__snap .cpanel__snap-img {
   height: calc(9 * var(--cp-u));

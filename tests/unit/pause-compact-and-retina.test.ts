@@ -38,10 +38,15 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { hintBandPx } from '../../src/app/screens/PauseScreen.ts';
-import { coverSourceWidth } from '../../src/ui/common/chapterPanel.ts';
+import { coverSourceWidth, pickHeroBackgroundUrl } from '../../src/ui/common/chapterPanel.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SHEET = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'common', 'pause-screen.css'), 'utf8');
+const CPANEL_SHEET = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'common', 'chapter-panel.css'), 'utf8');
+const PREPCHAP_SHEET = readFileSync(
+  join(HERE, '..', '..', 'src', 'ui', 'ffx', 'party-prep', 'chapter-panel-tab.css'),
+  'utf8',
+);
 
 /** The body of one `@media` block, by the exact condition it is written with. */
 function mediaBlock(condition: string): string {
@@ -58,6 +63,51 @@ function mediaBlock(condition: string): string {
 
 const COMPACT = '(max-width: 720px), (max-aspect-ratio: 3 / 4)';
 const SHORT = '(max-height: 700px) and (min-width: 721px)';
+
+/** The body of one plain selector's rule, by its exact source text. */
+function ruleBlock(sheet: string, selector: string): string {
+  const at = sheet.indexOf(`${selector} {`) >= 0 ? sheet.indexOf(`${selector} {`) : sheet.indexOf(`${selector}{`);
+  expect(at, `"${selector}" is gone from the sheet`).toBeGreaterThan(-1);
+  const from = sheet.indexOf('{', at);
+  let depth = 0;
+  for (let i = from; i < sheet.length; i++) {
+    if (sheet[i] === '{') depth++;
+    else if (sheet[i] === '}' && --depth === 0) return sheet.slice(from, i);
+  }
+  throw new Error(`unterminated block for ${selector}`);
+}
+
+/**
+ * The `--cp-fs-<name>` token's declared grid-px base, read out of
+ * `chapter-panel.css` rather than re-typed — so a test that pins the floor
+ * arithmetic breaks the moment the token stops being `max(calc(N *
+ * var(--cp-u)), var(--cp-fs-floor))`, which is exactly the shape the fix
+ * requires and the shape the pre-fix file did not have (either no floor arm
+ * at all, or the capped `min()` on the caption alone).
+ */
+function tokenFloorBase(name: string): number {
+  const re = new RegExp(
+    `--cp-fs-${name}:\\s*max\\(\\s*calc\\(([\\d.]+)\\s*\\*\\s*var\\(--cp-u\\)\\)\\s*,\\s*var\\(--cp-fs-floor\\)\\s*\\)`,
+  );
+  const m = re.exec(CPANEL_SHEET);
+  expect(m, `--cp-fs-${name} is not a max(grid-value, --cp-fs-floor) token`).not.toBeNull();
+  return Number(m![1]);
+}
+
+/** `min(w/640, h/360)` — `LetterboxStage.createStage`'s own formula. */
+function lbScale(w: number, h: number): number {
+  return Math.min(w / 640, h / 360);
+}
+
+/** The six viewports the brief names for the shared chapter panel's floor. */
+const FLOOR_VIEWPORTS = [
+  [1280, 720],
+  [1600, 900],
+  [1920, 1080],
+  [2560, 1440],
+  [3840, 2160],
+  [390, 844],
+] as const;
 
 // ------------------------------------------------- failures 2 and 3: the band
 
@@ -176,28 +226,163 @@ describe('the compact layout cannot stack anything on anything', () => {
     expect(order('.pause__party')).toBeLessThan(order('.pause__panel'));
   });
 
-  it('leaves no window to a layout that cannot hold it', () => {
-    // The verifier's root cause: the short query is `(max-height: 700px) and
-    // (min-width: 721px)`, so a window that is narrow AND short got the
-    // compact stack instead. That is fine now — it is the stack that holds —
-    // but the invariant is worth stating: every window either folds, or has
-    // the room not to.
-    mediaBlock(SHORT); // it still exists, under that exact condition
+  it('the gap neither query claims relies on the grid, and the grid never traps content', () => {
+    // Pre-release pass: the test this replaces asserted
+    // `compact || short || roomy` where `roomy` was defined as the exact
+    // boolean negation of the other two — `h > 700 && w > 720 && w / h >
+    // 3 / 4` is `!(compact || short)` by construction, so the disjunction
+    // was a tautology, true for *any* definition of the three predicates,
+    // proving nothing about the actual breakpoints or the actual CSS. (Any
+    // claim of the shape "P or Q or not(P or Q)" is true by the law of
+    // excluded middle regardless of what P and Q are.)
+    //
+    // What is actually true, and falsifiable: there is a real gap — width
+    // and height both past the fold points, e.g. 721x701 — that neither
+    // `COMPACT` nor `SHORT` claims, so it falls to the base grid rule with no
+    // media query at all. That base rule holds anything, at any size, only
+    // because its two variable-length columns are internal scroll boxes
+    // (`min-height: 0` + `overflow-y: auto`) rather than because they are
+    // ever guaranteed to be tall enough on their own — the same lesson the
+    // BLOCKING failure taught the compact layout. Assert that mechanism is
+    // still there, in the base rules (outside every `@media` block), and
+    // that the gap sizes genuinely reach it rather than one of the queries.
+    mediaBlock(SHORT); // still exists, under that exact condition — the gap sits past both of these
+    const base = SHEET.slice(0, SHEET.indexOf('@media'));
+
+    expect(base).toMatch(/\.pause__rail\s*\{[^}]*min-height:\s*0/);
+    expect(base).toMatch(/\.pause__menu\s*\{[^}]*min-height:\s*0/);
+    expect(base).toMatch(/\.pause__menu\s*\{[^}]*overflow-y:\s*auto/);
+    expect(base).toMatch(/\.pause__panel\s*\{[^}]*min-height:\s*0/);
+    expect(base).toMatch(/\.pause__panel\s*\{[^}]*overflow-y:\s*auto/);
 
     const compactMatches = (w: number, h: number): boolean => w <= 720 || w / h <= 3 / 4;
     const shortMatches = (w: number, h: number): boolean => h <= 700 && w >= 721;
 
+    // The exact gap the verifier probed by hand in a real browser and found
+    // clean (docs/handoff/fix3-pause.md, "What is left" does not list it —
+    // this pins that it is the base grid rule doing that, not a query neither
+    // of us has read.
     for (const [w, h] of [
-      [640, 360], [640, 480], [700, 500], [720, 400], [720, 540], [390, 844], [414, 896],
-      [768, 1024], [800, 600], [900, 400], [1024, 768], [1152, 864], [1200, 360],
+      [721, 701], [760, 780], [800, 900], [900, 1000], [1000, 1200], [835, 1112],
     ] as const) {
-      const roomy = h > 700 && w > 720 && w / h > 3 / 4;
-      expect(compactMatches(w, h) || shortMatches(w, h) || roomy, `${w}x${h} falls through every query`).toBe(true);
+      expect(compactMatches(w, h), `${w}x${h} should not fold`).toBe(false);
+      expect(shortMatches(w, h), `${w}x${h} should not take the short layout`).toBe(false);
     }
-    // And the five sizes the verifier broke it at are all in the folding one.
+    // And the five sizes the verifier broke it at are still in the folding one.
     for (const [w, h] of [[640, 480], [700, 500], [720, 400], [720, 540], [640, 360]] as const) {
       expect(compactMatches(w, h), `${w}x${h} must fold`).toBe(true);
     }
+  });
+});
+
+// --------------------------------------- the shared chapter panel's type floor
+
+describe('the shared chapter panel clears the 14px floor on the letterboxed ground', () => {
+  // Every text token the prep tab's CHAPTER tab actually renders (no ledger —
+  // `ChapterPanel.ts` never calls `dossierHtml`, so the numeral/count tokens
+  // are excluded; `--cp-fs-where` is excluded too, since `.prepchap__cols
+  // .cpanel__where { display: none }` hides it on that ground).
+  const TOKENS = ['eyebrow', 'title', 'subtitle', 'body', 'label', 'head', 'tip', 'caption'];
+
+  it('every token is max(grid value, the --lb-scale floor), not a capped or absent one', () => {
+    // This is what the verifier's four-of-six-viewports failure actually was:
+    // every token but the caption had no floor at all, and the caption's own
+    // floor was capped at a fixed grid-px ceiling (`min(..., 5.6 * --cp-u)`)
+    // that stopped binding above ~2.5x stage scale. `tokenFloorBase` throws if
+    // a token is not literally `max(calc(N * var(--cp-u)), var(--cp-fs-floor))`,
+    // so this fails exactly as it would have against either shape of the bug.
+    for (const name of TOKENS) tokenFloorBase(name);
+    expect(CPANEL_SHEET).toMatch(/--cp-fs-floor:\s*calc\(14px \/ var\(--lb-scale,\s*1\)\)/);
+    // The old cap is gone, not just unused.
+    expect(CPANEL_SHEET).not.toMatch(/min\(calc\(14px/);
+  });
+
+  it('the pre-fix shape genuinely failed at the brief\'s viewports (proves the floor is load-bearing)', () => {
+    // Not a check that `max(base, floor)` clears 14px — that is true by
+    // definition of `max` for any `base`, at any scale, and asserting it
+    // would be exactly the tautology the verifier's finding (5) is about.
+    // What is worth pinning is that the *pre-fix* shape — the bare grid value
+    // with no floor arm at all, which is what every one of these tokens but
+    // the caption actually was — really did fail, so the floor this pass adds
+    // is fixing a real defect and not standing in front of one that could
+    // never have happened. `tokenFloorBase` reads today's `max(...)` token
+    // and returns its first argument, which is exactly that pre-fix value.
+    let anyBelowFloor = false;
+    for (const name of TOKENS) {
+      const base = tokenFloorBase(name);
+      for (const [w, h] of FLOOR_VIEWPORTS) {
+        if (base * lbScale(w, h) < 14) anyBelowFloor = true;
+      }
+    }
+    expect(anyBelowFloor, 'no token\'s bare grid value ever missed 14px — the floor would be dead code').toBe(true);
+  });
+
+  it('no longer bypasses the shared tokens with an unfloored literal size', () => {
+    // The prep tab's own `chapter-panel-tab.css` used to set `font-size:
+    // 16.89px` / `5.11px` / `4.44px` on the title, the blurb and the caption
+    // directly — a literal grid-px value at higher selector specificity than
+    // the shared `.cpanel__title` / `.cpanel__blurb` rules, so fixing the
+    // token in `chapter-panel.css` alone would have changed nothing here.
+    // None of the three should set `font-size` at all any more; `.cpanel__title`
+    // had nothing else to say once its `font-size` was gone, so that whole
+    // rule is gone with it — a selector this looks for and does not find is a
+    // pass, not a broken test, so it is checked for separately from the two
+    // that still exist for other properties.
+    expect(PREPCHAP_SHEET, 'the title override should be gone entirely, not just its font-size').not.toMatch(
+      /\.prepchap__cols \.cpanel__title\s*\{/,
+    );
+    for (const cls of ['cpanel__blurb', 'cpanel__snap-cap']) {
+      const block = ruleBlock(PREPCHAP_SHEET, `.prepchap__cols .${cls}`);
+      expect(block, `.prepchap__cols .${cls} still sets its own font-size`).not.toMatch(/font-size:/);
+    }
+    // And the caption's nowrap/ellipsis pair — the mechanism a previous pass
+    // asked "the tab's owner" to delete — is gone, not merely out-specificity'd.
+    const capBlock = ruleBlock(PREPCHAP_SHEET, '.prepchap__cols .cpanel__snap-cap');
+    expect(capBlock).not.toMatch(/white-space:\s*nowrap/);
+    expect(capBlock).not.toMatch(/text-overflow:\s*ellipsis/);
+  });
+
+  it('gives each column of the tab a definite, scrollable height', () => {
+    // `chapter-panel.css`'s comment above `.cpanel:not(.cpanel--fluid)
+    // .cpanel__snap .cpanel__snap-img` explains why: at the smallest stage
+    // scale (a phone) the floor can ask a column for several times its old
+    // grid-px height, more than the fixed 120px band can show even wrapped.
+    // Without a bounded row the column would grow past the band and get
+    // silently clipped by `.prepchap`'s own `overflow: hidden`; with one, it
+    // scrolls instead — read, not lost.
+    const cols = ruleBlock(PREPCHAP_SHEET, '.prepchap__cols');
+    expect(cols).toMatch(/grid-template-rows:\s*minmax\(0,\s*1fr\)/);
+    const col = ruleBlock(PREPCHAP_SHEET, '.prepchap__col');
+    expect(col).toMatch(/overflow-y:\s*auto/);
+  });
+});
+
+// ------------------------------------------- the prep tab's hero background
+
+describe('the prep tab\'s hero plate picks the master its box actually needs', () => {
+  const URL_1X = 'art/pause/ch1-seymour-flux.png';
+  const URL_2X = 'art/pause/ch1-seymour-flux.2x.webp';
+
+  it('upgrades at the verifier\'s own 3840x2160 measurement (2186.6x720, magnified 1.63x on the 1x plate)', () => {
+    expect(pickHeroBackgroundUrl(URL_1X, URL_2X, 2186.6, 720)).toBe(URL_2X);
+    // And the master itself is a downscale there, not an upscale.
+    expect(coverSourceWidth(2186.6, 720) / 2688).toBeLessThan(1.1);
+  });
+
+  it('never asks for the master when no manifest opinion exists yet', () => {
+    expect(pickHeroBackgroundUrl(URL_1X, null, 4000, 4000)).toBe(URL_1X);
+  });
+
+  it('does not over-fetch a small phone box even at a high DPR', () => {
+    // A prep-tab hero box at 390x844 (lb-scale 0.609): roughly 365 CSS px
+    // wide by 73 tall. `coverSourceWidth` is width-driven there (365 > 73 *
+    // 1.75), so even DPR 3 only asks for 1095 physical px — under the 1x
+    // plate's own 1344, so the retina master would be pure waste.
+    expect(pickHeroBackgroundUrl(URL_1X, URL_2X, 365, 73, 3)).toBe(URL_1X);
+  });
+
+  it('still answers only the 1x plate on a 720p window, unchanged from before', () => {
+    expect(pickHeroBackgroundUrl(URL_1X, URL_2X, 1280, 366, 1)).toBe(URL_1X);
   });
 });
 

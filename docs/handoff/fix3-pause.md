@@ -136,9 +136,18 @@ candidate answers.
 Covering a `w x h` box with a source of aspect `a` scales it by
 `max(w/srcW, h/srcH)`, so the width of source actually consumed is
 `max(w, h * a)`. That is `coverSourceWidth()`, and it is what `sizes` says now —
-of the element's own box, not the viewport, so the prep screen's much smaller
-dossier plate stops over-fetching the master as a side effect. A
-`ResizeObserver` keeps it truthful through a live resize.
+of the element's own box, not the viewport. A `ResizeObserver` keeps it
+truthful through a live resize.
+
+**Correction (pass 2's verifier, and this pass):** the sentence that used to
+sit here — "the prep screen's much smaller dossier plate stops over-fetching
+the master as a side effect" — was false, in both directions. The prep tab's
+CHAPTER tab has no `<img>` plate at all; `heroBackground()` in
+`src/ui/ffx/party-prep/ChapterPanel.ts` lays the hero art in as a CSS
+`background-image`, which has no `srcset`/`sizes` for `coverSourceWidth` to
+reach. It was not over-fetching before this fix (it never fetched the master)
+and this fix did not change that. See "What was wrong" in the pre-release pass
+section below for the real fix to that plate.
 
 The browser multiplies the hint by the DPR itself, so DPR needs no special case.
 Measured `currentSrc`, after:
@@ -288,3 +297,175 @@ Nothing outside the track was touched. No battle math, no boss, no outcome.
   while pruning 163MB of fresh PNGs down to 20MB. It was untracked, so it was
   nobody's committed evidence, but if it was pass-1 scratch belonging to
   another agent it is gone and I am sorry. Nothing in git was lost.
+
+---
+
+## Pre-release pass (2026-09-19)
+
+The second-pass verifier refuted brief item (5) — "the same plates and
+typography rules in the shared chapter panel (`chapterPanel.ts`) used by the
+prep screen's Chapter tab" — on the typography and the plate, though not the
+caption; it also caught a vacuous test and a lost cross-track ask. Full
+findings: `docs/handoff/fix3-verify2-findings.json`, key `pause`. This is a
+**time-boxed** pass: all four MUST items below are fixed and tested; nothing
+was widened, loosened or deleted to make a test pass. **Game case: both** —
+the shared chapter panel is Ink & Gold chrome used by every FFX and FFX-2
+chapter alike (`ChapterPanel.ts` takes a `GameId` and is registered once per
+game); this is shared plumbing and a bug fix, which `AGENTS.md` hard rule 14
+and `critic/CHECKS.md` CHK-020 both call "both" regardless of source. Verified
+the FFX-2 accent token (`--ig-accent-on-paper`, pink `#b8437e`) still resolves
+correctly on the floored panel — screenshot below.
+
+### What was wrong
+
+1. **The type floor never reached the prep tab.** `chapter-panel.css`'s
+   `--cp-fs-*` tokens had no floor at all — only `--cp-fs-caption` did, and it
+   was capped at a fixed grid-px ceiling (`min(..., 5.6 * --cp-u)`) that
+   stopped binding above roughly 2.5x stage scale, which is most of the six
+   viewports the brief measures against. On top of that,
+   `src/ui/ffx/party-prep/chapter-panel-tab.css` set its own literal, unfloored
+   `font-size` on the title, the blurb and the caption at higher selector
+   specificity, which would have defeated a token-only fix regardless.
+   Verified measurements: 14/15 text elements below 14px at 1280x720, 11/15 at
+   1600x900, worst case 2.71px at 390x844.
+2. **The hero plate never fetched the 2x master.** `heroArtCandidates()`
+   (`chapterPanel.ts`) only ever returned the 1x `.png`/`.webp`/fallback chain;
+   `pause2xUrlFor`, a few lines below in the same file, was never called for
+   the prep tab's CSS-background plate. Verified: `.2x.webp` was never
+   requested at any of seven windows/DPRs tried, including 3840x2160, where
+   the 1x plate was magnified 1.63x — Bailey's literal "looks like a
+   low-resolution image blown up" complaint, still present on this panel.
+3. **A false claim in the previous handoff** ("the prep screen's much smaller
+   dossier plate stops over-fetching the master") — there is no `<img>` plate
+   on that tab, so it was never fetching *or* over-fetching anything; the
+   sentence is corrected in place above, and the real fix is (2).
+4. **A lost cross-track ask.** Pass 1 left "the ask" for the tab's owner (`ffx2-hud-prep`)
+   to delete `.prepchap__cols .cpanel__snap-cap`'s `nowrap`/`ellipsis`/literal
+   `font-size`; pass 2 rewrote this document and dropped the record while the
+   override was still live. Since this track owns the `.prepchap` rules that
+   style this shared panel (not just the caption's specificity guard in
+   `chapter-panel.css`), the ask is done here instead of re-asked for.
+5. Separately, `tests/unit/pause-compact-and-retina.test.ts`'s "leaves no
+   window to a layout that cannot hold it" asserted `compact || short ||
+   roomy` where `roomy` was defined as the exact negation of the other two —
+   a tautology, true for any window, that could never fail. Replaced.
+
+### What changed
+
+- **`src/ui/common/chapter-panel.css`.** A new `--cp-fs-floor: calc(14px /
+  var(--lb-scale, 1))`, and every `--cp-fs-*` token is now `max(<its old grid
+  value>, var(--cp-fs-floor))` — `--lb-scale` is `LetterboxStage`'s own
+  published scale, so this is the same mechanism the caption already used,
+  generalised and uncapped. `.cpanel--fluid` (the pause screen) redefines
+  every token on `vw`/`vh` regardless, so this is a no-op there — verified
+  nothing on the pause screen moved. The caption guard's `min()` cap is gone.
+- **`src/ui/ffx/party-prep/chapter-panel-tab.css`.** The title/blurb/caption's
+  own literal `font-size` overrides are gone, so all three now read the
+  (now-floored) shared tokens. `.prepchap__cols` gets `grid-template-rows:
+  minmax(0, 1fr)` so its row — and so each column, stretched to it — has a
+  real, definite height instead of an `auto` one sized to content; each
+  `.prepchap__col` is `overflow-y: auto` rather than `hidden`, so a column the
+  floor makes taller than the fixed 120px band scrolls instead of silently
+  clipping. Verified live (see "How it was verified" below): the tip column
+  overflows and scrolls as low as 1280x720, and dramatically at 390x844
+  (scrollHeight up to 1033px in a 102px box) — nothing overlaps, nothing is
+  invisibly cut with no way to reach it, but there is **no visible scroll
+  affordance** (no scrollbar, no fade). Left open below.
+- **`src/ui/common/chapterPanel.ts`.** `pickHeroBackgroundUrl(url1x, url2x,
+  boxW, boxH, dpr)` — the `background-image` twin of `coverSourceWidth` +
+  `sizes`, since a CSS background has no hint the browser can pick against —
+  and `watchHeroBackground(el, meta)`, which applies it once immediately (the
+  existing fallback chain, unchanged) and again once the manifest resolves,
+  with a `ResizeObserver` for a live resize.
+- **`src/ui/ffx/party-prep/ChapterPanel.ts`.** Calls `watchHeroBackground` on
+  `.prepchap__hero` once it is mounted, in addition to the existing
+  `heroBackground()` string (kept as the immediate fallback chain).
+- **`tests/unit/pause-compact-and-retina.test.ts`.** The vacuous test is
+  replaced with one that reads the base (non-`@media`) rules for the actual
+  scroll mechanism (`min-height: 0` + `overflow-y: auto` on `.pause__rail`,
+  `.pause__menu`, `.pause__panel`) and checks the untested gap
+  (721x701..835x1112) genuinely reaches them rather than either media query —
+  falsifiable, because it fails if that mechanism or those thresholds change.
+  New tests for the type floor and the hero background, below.
+
+### The tests that pin it
+
+- **`tokenFloorBase()` + "every token is max(grid value, the --lb-scale
+  floor)"**: reads each `--cp-fs-*` token's literal text out of
+  `chapter-panel.css` and requires the `max(calc(N * var(--cp-u)),
+  var(--cp-fs-floor))` shape. Confirmed this fails against the pre-fix file —
+  every one of the eight tokens checked returns `false` (script output kept
+  in this session; not committed) — because none of them had that shape (no
+  floor arm at all, or the capped `min()` for the caption alone).
+- **"the pre-fix shape genuinely failed at the brief's viewports"**:
+  deliberately *not* an assertion that `max(base, floor) >= 14`, since that is
+  true by definition of `max` for any `base` at any scale and would be exactly
+  the finding-(5) tautology again. Instead asserts the extracted pre-floor
+  base values really did miss 14px at at least one of the six viewports —
+  proving the floor is fixing a real gap, not standing guard over one that
+  could never happen.
+- **"no longer bypasses the shared tokens with an unfloored literal size"**:
+  the title override is gone entirely (not just its `font-size`); the blurb
+  and caption rules that remain no longer set `font-size` at all; the
+  caption's `nowrap`/`ellipsis` pair is gone, not merely out-specificity'd.
+- **"gives each column of the tab a definite, scrollable height"**: the grid
+  and column CSS text directly.
+- **`pickHeroBackgroundUrl` (4 tests)**: the verifier's own 3840x2160
+  measurement (2186.6x720 box → picks the 2x master, and the master itself is
+  a *downscale* there, 0.81x); no manifest opinion → always the 1x url; a
+  phone-sized box at DPR 3 stays under the 1x plate's own width so it does not
+  over-fetch; a 720p-sized box still answers only the 1x plate, unchanged.
+- **The replaced compact-layout test**, described above.
+
+All 23 tests in the file pass; `npx tsc --noEmit` is clean; the full suite
+(`npx vitest run`) is 3960/3960 green, with no red anywhere (the
+`tests/unit/menu-cancel.test.ts` red the brief warned about was already fixed
+by another track's session by the time this pass ran).
+
+### How it was verified
+
+One short Playwright pass against `npx vite --port 5433 --strictPort` (dev
+server, not a production build — this track's own files, not the shared
+`dist/`), `PYREFLY_BROWSER=gpu`, stopped after (port confirmed dead). Real
+navigation only: `chapterSelect()` → `trigger('select:<chapter>')` →
+`trigger('prep:begin')`, never a raw DOM query without it.
+
+Measured every readable `.cpanel` text element's `getComputedStyle().fontSize`
+times `--lb-scale` (read off `.lb-stage`, the same property `LetterboxStage`
+publishes) at all six of the brief's viewports, on `seymour-flux`:
+
+| viewport | lb-scale | worst rendered px | hero plate |
+| --- | --- | --- | --- |
+| 1280x720 | 2 | 14.00 | `.png` (1x; box needs less than 1344) |
+| 1600x900 | 2.5 | 14.00 | `.png` (1x) |
+| 1920x1080 | 3 | 14.00 | `.png` (1x) |
+| 2560x1440 | 4 | 17.76 | `.2x.webp` |
+| 3840x2160 | 6 | 26.64 | `.2x.webp` |
+| 390x844 | 0.609 | 14.00 | `.png` (1x; box too small to need it) |
+
+Zero elements below 14px at any of the six, zero console errors. Also checked
+an FFX-2 chapter (`ffx2-bahamut`): `--cp-accent` resolves to `#b8437e` (the
+pink `--ig-accent-on-paper` FFX-2 repoints to), confirmed live in the
+screenshot below — the game-agnostic token chain is untouched by this fix.
+
+Screenshots: `docs/screenshots/fix3/prerelease/pause/prep-chapter-tab-<size>.png`
+for all six viewports, `prep-chapter-tab-ffx2-accent.png` for the FFX-2 check.
+
+### What is still open
+
+- **No visible scroll affordance on `.prepchap__col`.** The column scrolls
+  correctly and never overlaps anything, but there is no scrollbar and no
+  fade cue that there is more below — a player at 1280x720 or smaller sees
+  the tip cut off mid-sentence with no visual hint it is reachable. A fade
+  mask like `.pause__music-list`'s would need to appear only when the column
+  actually overflows (it does not, always, at every scale) which needs a
+  little script to toggle, not just CSS — out of scope for this time-boxed
+  pass. Worth a follow-up.
+- **The 390x844 case is real overflow, scrolled, not laid out for.** At the
+  smallest stage scale the 14px floor asks the tip/objectives column for up
+  to ~10x its old grid-px height (scrollHeight 1033px in a 102px box,
+  measured live). It is readable and reachable, never overlapping, but it is
+  a lot of scrolling for a phone. If Bailey wants a phone-specific layout for
+  this tab (a taller band, or a single column), that is a design decision
+  worth asking for, not something this pass should invent.
+- Everything under "What is left" above, unchanged by this pass.

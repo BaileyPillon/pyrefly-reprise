@@ -145,6 +145,80 @@ function watchCoverSizes(img: HTMLImageElement): void {
   sizedImages.set(img, ro);
 }
 
+/**
+ * Choose the 1x or 2x hero-plate URL for a `background-image` box.
+ *
+ * `<img srcset>`/`sizes` gets this decision from the browser for free —
+ * {@link applyCoverSizes} is the whole of that. A CSS `background-image` has
+ * no such hook, so the party-prep CHAPTER tab (which lays the hero art in as
+ * a background slab, not an `<img>`, so a 404 can be caught for the fallback
+ * chain — see `heroBackground()` in `ChapterPanel.ts`) has to make the same
+ * call by hand: {@link coverSourceWidth} of the box, times the DPR a `sizes`
+ * hint would have picked up automatically, against the 1x plate's own width.
+ *
+ * `null` for `url2x` (no manifest opinion yet, or no master for this plate)
+ * always answers the 1x url — the safe, already-shipped default.
+ *
+ * Exported so the choice can be pinned against real measured boxes without a
+ * browser: this is pure arithmetic, not a DOM query.
+ */
+export function pickHeroBackgroundUrl(
+  url1x: string,
+  url2x: string | null,
+  boxW: number,
+  boxH: number,
+  dpr: number = 1,
+): string {
+  if (!url2x) return url1x;
+  const safeDpr = Number.isFinite(dpr) && dpr > 0 ? dpr : 1;
+  const need = coverSourceWidth(boxW, boxH) * safeDpr;
+  return need > PLATE_1X_WIDTH ? url2x : url1x;
+}
+
+/** `.prepchap__hero` elements with a live resize watch, so a second mount replaces it rather than stacking one. */
+const sizedBackgrounds = new WeakMap<HTMLElement, ResizeObserver>();
+
+/**
+ * Point a CSS background slab at a chapter's hero art, upgrading to the 2x
+ * master the moment the box needs more than the 1x plate can give — the
+ * `background-image` twin of {@link mountHeroArt}'s `srcset`.
+ *
+ * `el` is expected to already be in the document with `heroBackground()`'s
+ * fallback chain as its `background-image` (see `ChapterPanel.ts`): this
+ * only ever rewrites the *first* layer, in place, so a missing 2x master or
+ * an unresolved manifest leaves the rest of that chain exactly as it was and
+ * the plate that was already painted stays painted while the manifest is in
+ * flight.
+ */
+export function watchHeroBackground(el: HTMLElement, meta: ChapterMeta): void {
+  const candidates = heroArtCandidates(meta);
+  const url1x = candidates[0];
+  if (!url1x) return;
+  const restLayers = candidates
+    .slice(1)
+    .map((u) => `url(${u})`)
+    .join(', ');
+
+  const apply = (retina: string | null): void => {
+    const rect = el.getBoundingClientRect();
+    const dpr = typeof window !== 'undefined' && Number.isFinite(window.devicePixelRatio) ? window.devicePixelRatio : 1;
+    const chosen = pickHeroBackgroundUrl(url1x, retina, rect.width, rect.height, dpr);
+    const top = `url(${chosen})`;
+    el.style.backgroundImage = restLayers ? `${top}, ${restLayers}` : top;
+  };
+
+  apply(null);
+  void loadArtManifest().then(() => {
+    const retina = pause2xUrlFor(url1x);
+    if (!retina) return;
+    apply(retina);
+    if (sizedBackgrounds.has(el) || typeof ResizeObserver !== 'function') return;
+    const ro = new ResizeObserver(() => apply(retina));
+    ro.observe(el);
+    sizedBackgrounds.set(el, ro);
+  });
+}
+
 /** Sidecars already fetched, by PNG url. `null` = fetched, nothing usable. */
 const focalCache = new Map<string, ArtFocal | null>();
 
