@@ -98,10 +98,10 @@ import {
   reviveReason,
   reviveRisk,
   reviveValue,
-  waitSentence,
   zombieCureReason,
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
+import { floorNote } from './advisor-floor.ts';
 import { menuChipFor, onTheMenu } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
@@ -971,7 +971,7 @@ export function buildAdvisorView(
     actorId: decision.actorId,
     actorName: actor.name,
     suggestions,
-    note: noteFor(state, shown, refused),
+    note: noteFor(state, shown, refused, decision, options, actor.name),
     considered: candidates.length,
   };
 }
@@ -1001,15 +1001,25 @@ export function buildAdvisorView(
  *  * **A revive that *is* on the card.** Its caution is already on that
  *    suggestion's own `warning`, next to the move it is about; a note would
  *    print the same sentence twice.
- *  * **A `'zombie'` refusal with no cure on the card.** "Cure the Zombie first"
- *    is only an answer when the cure is a row the player can press. When it is
- *    not, the advisor has nothing useful to say and says nothing — which is
- *    also what the live build does today.
+ *
+ *  3. **Anybody on the floor at all, when the card is not showing the raise.**
+ *    Rule 4 of this file, and the half of Bailey's report that three passes
+ *    left unanswered. The branch this replaced returned `''` for a `'zombie'`
+ *    refusal, on the grounds that "cure the Zombie first" is only an answer
+ *    when the cure is a row the player can press — true of the *sentence*, and
+ *    the wrong conclusion, because Chapter 1's boss zombifies on the way to
+ *    killing someone and the card was therefore silent on **138 of 166**
+ *    decisions with an ally down [critic, fix-3 pass 3, F-A]. `advisor-floor.ts`
+ *    writes the sentence the card is in a position to print instead, out of
+ *    this board and this actor's own rows.
  */
 function noteFor(
   state: Readonly<BattleState>,
   shown: readonly Candidate[],
   refused: { risk: ReviveRisk; fallenId: CombatantId } | null,
+  decision: GuideDecision,
+  options: AdvisorOptions,
+  actorName: string,
 ): string {
   for (const c of shown) {
     const cure = c.outcome?.statusChanges.find(
@@ -1017,8 +1027,52 @@ function noteFor(
     );
     if (cure) return zombieCureReason(state, cure.targetId);
   }
-  if (refused && refused.risk.kind !== 'zombie') return waitSentence(refused.risk);
-  return '';
+  // The raise is on the card: its caution rides on that suggestion's warning.
+  if (shown.some(isRevive)) return '';
+  const down = downedActives(state);
+  if (down.length === 0) return '';
+
+  // Talk about the body the advisor actually weighed, and failing that the one
+  // this actor could do something about.
+  const raises = new Map<CombatantId, string>();
+  for (const c of down) {
+    const row = raiseRowFor(state, decision.commands, c.id, options);
+    if (row) raises.set(c.id, row.label);
+  }
+  const fallenId =
+    refused?.fallenId ?? down.find((c) => raises.has(c.id))?.id ?? down[0]?.id ?? '';
+  return floorNote({
+    state,
+    actorName,
+    fallenId,
+    raiseLabel: raises.get(fallenId) ?? null,
+    refused: refused?.risk ?? null,
+  });
+}
+
+/**
+ * A raise this actor can press **at this body**, read off the offered rows.
+ *
+ * Deliberately not read off the simulated candidates: {@link MAX_SIMULATIONS}
+ * can cut a deep item list before the Phoenix Down is priced, and "nothing here
+ * raises them" has to be a fact about the command window, not about how far the
+ * preview got. Same predicate as {@link orderedRows}, plus `enabled` — a greyed
+ * row with no stock left is not an answer.
+ */
+function raiseRowFor(
+  state: Readonly<BattleState>,
+  commands: readonly AvailableCommand[],
+  fallenId: CombatantId,
+  options: AdvisorOptions,
+): AvailableCommand | null {
+  for (const row of commands) {
+    if (!row.enabled) continue;
+    if (!row.validTargets.includes(fallenId)) continue;
+    if (!onTheMenu(state.game, row.command)) continue;
+    const def = defFor(state, row.command, options);
+    if (def?.flags.includes('misses-if-target-alive') === true) return row;
+  }
+  return null;
 }
 
 /** True when this candidate's simulation stands somebody back up. */

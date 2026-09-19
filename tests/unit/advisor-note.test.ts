@@ -18,11 +18,28 @@
  *
  *  a. a **revive** is among the shown moves → its caution rides on that
  *     suggestion's own `warning`, and the note stays empty;
- *  b. the **cure** the note names is among the shown moves → the note is that
- *     pick's reason (`zombieCureReason`);
- *  c. an ally is **KO** and the revive was priced and refused as a guaranteed
- *     re-kill → the note says why it is missing and when to spend it;
+ *  b. the note **tells the player to cure** something → the cure is among the
+ *     shown moves (`zombieCureReason`); an instruction to press a row that is
+ *     not on the card is the defect the gate threw out;
+ *  c. an ally is **on the floor** and the card is not showing a raise → the
+ *     note says why not, naming that ally (`advisor-floor.ts`);
  *  d. anything else → `''`.
+ *
+ * ## Corrected 2026-09-19 (pre-release pass): (c) and (d) were the wrong way up
+ *
+ * Until this pass, (c) covered only the `'aimed'` and `'sweep'` refusals and
+ * (d) swallowed the rest, so a `'zombie'` refusal printed nothing — and three
+ * assertions in this file *pinned that silence as correct*, including one that
+ * named decisions 2 and 3 of seed 1 as decisions where "the advisor has
+ * nothing honest to say and says nothing". That was wrong, not merely
+ * incomplete: Chapter 1's boss zombifies on its way to killing someone, so the
+ * branch it made silent is the normal case there — 138 of 166 decisions with
+ * an ally down [critic, fix-3 pass 3, F-A] — and the silence *is* the half of
+ * Bailey's report ("and what about reviving yuna?") that stayed open for three
+ * passes. What the gate actually caught was an **unfollowable instruction**
+ * ("cure the Zombie first" with no cure on the card), which is (b); the
+ * conclusion that the card should therefore say nothing at all was a mistake.
+ * Silence while somebody is on the floor is now itself a fault.
  *
  * The scoring, the ranking and the card's DOM are elsewhere
  * (`advisor.test.ts`, `advisor-simulate.test.ts`, `ui-move-advisor.test.ts`);
@@ -146,20 +163,38 @@ function isRevive(state: Readonly<BattleState>, s: MoveSuggestion): boolean {
  */
 function noteFault(state: Readonly<BattleState>, view: AdvisorView): string | null {
   const note = view.note;
-  if (!note) return null;
+  const down = downedAllies(state);
+  const showsRevive = view.suggestions.some((s) => isRevive(state, s));
+  const curesZombie = view.suggestions.some((s) => s.cures.some((c) => /zombie/i.test(c)));
 
-  // (b) A note that names a condition is an instruction to cure it, and it is
-  //     only an answer when the cure is a row the player can actually press.
-  const named = /\bZombie\b/.exec(note);
-  if (named) {
-    const cured = view.suggestions.some((s) => s.cures.some((c) => c === named[0]));
-    return cured ? null : `names ${named[0]} but no shown move cures it`;
+  // (c) Silence is only allowed when nobody is waiting on the floor for an
+  //     answer — `advisor.ts` rule 4, and the half of Bailey's report that
+  //     three passes left open.
+  if (!note) {
+    return down.length > 0 && !showsRevive
+      ? 'an ally is on the floor and the card neither shows the raise nor says why not'
+      : null;
+  }
+
+  // (b) An instruction to *do something about* a condition is only an answer
+  //     when the row that does it is on the card. "Cure the Zombie first" over
+  //     Mighty Guard is the sentence the pre-deploy gate threw out; a reading
+  //     of the board that asks for nothing ("leave them down") is not.
+  if (/\bZombie\b/.test(note) && /\b(cure|clear)\b/i.test(note) && !curesZombie) {
+    return 'tells the player to cure a Zombie with no cure on the card';
   }
   // (a) The caution about a revive that is on the card.
-  if (view.suggestions.some((s) => isRevive(state, s))) return null;
-  // (c) A revive the advisor refused: somebody is down, and the note says when.
-  const down = downedAllies(state);
-  if (down.length > 0 && down.some((c) => note.includes(c.name))) return null;
+  if (showsRevive) return null;
+  // (c) The answer for the body on the floor names the body on the floor.
+  if (down.length > 0) {
+    return down.some((c) => note.includes(c.name)) || curesZombie
+      ? null
+      : 'an ally is on the floor and the note is about neither them nor a cure on the card';
+  }
+  // (b) again, for the living: the Zombie reading with the cure as the pick.
+  if (/\bZombie\b/.test(note)) {
+    return curesZombie ? null : 'names Zombie but no shown move cures it';
+  }
   return 'nobody is down and neither a revive nor a cure is on the card';
 }
 
@@ -226,19 +261,44 @@ describe('Chapter 1 at seed 1 — the board the gate reported', () => {
   });
 
   it('never prints a cure instruction above a move that is not the cure', () => {
-    // The regression, stated exactly: every card that says "Zombie" is a card
-    // showing the Holy Water. Before the fix, decisions 2 and 3 printed it over
-    // Mighty Guard and a thrown Poison Fang.
-    const offending = seen.cards.filter((c) => /note="[^"]*Zombie/.test(c) && !/cures Zombie|Holy Water|Esuna/.test(c));
-    expect(offending, 'a Zombie note over a card with no cure on it').toEqual([]);
+    // The regression, stated exactly: every card that tells the player to
+    // *cure* or *clear* a Zombie is a card showing the Holy Water. Before the
+    // fix, decisions 2 and 3 printed "so cure the Zombie first" over Mighty
+    // Guard and a thrown Poison Fang.
+    //
+    // Narrowed from "every card that says Zombie", which was the gate's
+    // finding stated one word too wide: the sentence that answers for a body
+    // on the floor also says Zombie, and asks the player for nothing.
+    const offending = seen.cards.filter(
+      (c) =>
+        /note="[^"]*Zombie/.test(c) &&
+        /note="[^"]*\b(cure|clear)\b/i.test(c) &&
+        !/cures Zombie|Holy Water|Esuna/.test(c),
+    );
+    expect(offending, 'a cure instruction over a card with no cure on it').toEqual([]);
   });
 
-  it('is silent on the decisions whose pick is neither a revive nor a cure', () => {
-    // Decisions 2 and 3: Yuna is on the floor and still a Zombie, the raise is
-    // correctly refused, and the actor has no cure for it — so the advisor has
-    // nothing honest to say and says nothing.
-    expect(seen.cards[1]).toMatch(/note=""/);
-    expect(seen.cards[2]).toMatch(/note=""/);
+  it('answers for the ally on the floor when the pick is neither a revive nor a cure', () => {
+    // The two decisions the gate filed as correctly silent are Bailey's own
+    // board: Yuna face-down and zombied, the raise refused because Full-Life
+    // hunts the zombied body [ffx-seymour-flux §4.8], and the card picking a
+    // thrown item. The refusal is still right; the silence was not.
+    //
+    // Keyed off what the card says, not off `seen.cards[1]` — the pin that
+    // made three of these go red when Kimahri got his Talk row back.
+    const answered = seen.cards.filter((c) => /note="Leave [^"]*still a Zombie/.test(c));
+    expect(answered.length, 'the body on the floor is spoken for').toBeGreaterThan(0);
+    for (const card of answered) {
+      expect(card, 'the answer only ever rides above a pick that is not the raise').not.toMatch(
+        /Phoenix Down|Mega Phoenix/,
+      );
+      expect(card, 'and never asks for a cure the card is not showing').not.toMatch(/cure the Zombie first/);
+    }
+    // Bailey's screenshot, decision for decision.
+    expect(
+      seen.cards.some((c) => /Poison Fang/.test(c) && /note="Leave Yuna down/.test(c)),
+      'the Poison Fang card now says what is happening to Yuna',
+    ).toBe(true);
   });
 
   /**
@@ -273,19 +333,24 @@ describe('Chapter 1 at seed 1 — the board the gate reported', () => {
     // and "take it first, then raise them" is an instruction the player can
     // follow with the card exactly as it stands.
     //
-    // It reaches them through whichever of the two channels the board earns —
-    // the note when the raise is refused outright, the revive's own warning
-    // when it is only a caution and the raise is still the pick. Both are the
-    // sentence; neither is silence. The refusal branch on a *named* step of
-    // Seymour's real script is pinned in `advisor-forecast.test.ts`; this asks
-    // whether the sentence survives natural play at all, which needs a wider
-    // walk than sixteen decisions of one seed.
+    // **Restored 2026-09-19 (pre-release pass).** The version this replaces
+    // asked whether the sentence appeared *anywhere* across twelve seeds and
+    // accepted the revive's own `warning` as equivalent to the note. The
+    // warning channel only exists when the raise is already on the card — i.e.
+    // exactly when the card is not silent — so the shape the assertion was
+    // written to detect had become undetectable, and the measured reality was
+    // one such sentence per 479 Chapter 1 decisions [critic, fix-3 pass 3,
+    // F-B]. Two universal assertions instead of one existential one:
+    //
+    //   1. on the sixteen decisions of seed 1 — the original scope — every
+    //      board with a body on the floor is answered, through `noteFault`;
+    //   2. across the wide walk, the timing sentence still reaches the player
+    //      through the **note** on its own, with no warning-channel escape.
+    expect(seen.faults, 'seed 1, decision by decision').toEqual([]);
     const wide = walk('seymour-flux', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 240, true);
-    const timing = wide.cards.filter((c) => /then raise/.test(c));
-    expect(timing.length).toBeGreaterThan(0);
-    for (const card of timing) {
-      expect(card).toMatch(/note="[^"]*then raise|warns: [^:]*then raise/);
-    }
+    expect(wide.faults, 'twelve seeds, decision by decision').toEqual([]);
+    const inNote = wide.cards.filter((c) => /note="[^"]*then raise/.test(c));
+    expect(inNote.length, 'a refused revive says when to spend it, in the note').toBeGreaterThan(0);
   });
 
   it('obeys the rule on every decision', () => {
