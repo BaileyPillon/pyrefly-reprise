@@ -8,6 +8,7 @@
  */
 
 import type { ReverbOptions } from './dsp/reverb.ts';
+import { tempoCurveOf, type TempoMap } from './tempo.ts';
 
 /** A pitch is a MIDI number (60 = C4) or a name like "C4", "F#3", "Bb5". */
 export type Pitch = number | string;
@@ -20,6 +21,39 @@ export interface ChannelFx {
   reverb?: number;
   /** Send into the track delay bus, 0..1. */
   delay?: number;
+}
+
+/**
+ * What one channel may say about *performance*, overriding the voice preset.
+ *
+ * Timing jitter and velocity spread are how a sampled section stops sounding
+ * like one trigger, so they live on the instrument — but two cues can want the
+ * same instrument played differently. Vegnagun is a machine and the Yunalesca
+ * canon is a rite: both need `<= 3 ms` (THEMES.md, Humanisation) out of voices
+ * whose presets ask for 14-18, and neither should drag every other cue that
+ * uses those voices tight with them.
+ *
+ * Absent, nothing changes: the preset's own figures apply, exactly as before.
+ */
+export interface ChannelPerformance {
+  /**
+   * Replaces the voice preset's `timingJitterMs` for this channel. `0` is a
+   * machine. Offline only — the runtime oscillator voices have never had
+   * start jitter, so there is nothing there to override.
+   */
+  timingJitterMs?: number;
+  /**
+   * Multiplies whatever jitter is in force after the field above: `0` is
+   * quantised, `1` is the preset as written, `0.5` is a tighter section.
+   */
+  humanise?: number;
+  /**
+   * Deterministic +/- velocity spread per note, on top of the written shape.
+   * THEMES.md's ceiling is **0.04**; past that the dynamic arch stops reading,
+   * so anything larger throws. Applies to the sampled and the synthesised
+   * render alike, because velocity is a sequencer-level number.
+   */
+  velocityJitter?: number;
 }
 
 export interface Channel {
@@ -35,6 +69,60 @@ export interface Channel {
   transpose?: number;
   notes: Note[];
   fx?: ChannelFx;
+  /** Per-channel timing and velocity overrides — see `ChannelPerformance`. */
+  perform?: ChannelPerformance;
+}
+
+/** The preset's jitter as this channel wants it played, in milliseconds. */
+export function effectiveJitterMs(presetJitterMs: number, perform?: ChannelPerformance): number {
+  const base = perform?.timingJitterMs ?? presetJitterMs;
+  const scaled = base * (perform?.humanise ?? 1);
+  return Number.isFinite(scaled) && scaled > 0 ? scaled : 0;
+}
+
+/**
+ * A stable tag for one channel's performance settings, or `''` when it has
+ * none.
+ *
+ * It goes into the note cache key, which is also the per-note random seed, so
+ * two channels on the same instrument with different jitter cannot share a
+ * cached render — and, just as important, a channel with no `perform` keeps
+ * the exact key (and therefore the exact seed, and therefore the exact
+ * samples) it had before this field existed.
+ */
+export function performanceKey(perform?: ChannelPerformance): string {
+  if (!perform) return '';
+  const parts: string[] = [];
+  if (perform.timingJitterMs !== undefined) parts.push(`j${perform.timingJitterMs}`);
+  if (perform.humanise !== undefined) parts.push(`h${perform.humanise}`);
+  if (perform.velocityJitter !== undefined) parts.push(`v${perform.velocityJitter}`);
+  return parts.length === 0 ? '' : `|${parts.join(',')}`;
+}
+
+/** THEMES.md: "Velocity jitter: +/-0.04 ... Never more." */
+export const MAX_VELOCITY_JITTER = 0.04;
+
+export function checkPerformance(channel: Channel): void {
+  const perform = channel.perform;
+  if (!perform) return;
+  const where = channel.name ?? channel.instrument;
+  if (perform.timingJitterMs !== undefined && !(perform.timingJitterMs >= 0)) {
+    throw new Error(`Channel "${where}": timingJitterMs must be >= 0`);
+  }
+  if (perform.humanise !== undefined && !(perform.humanise >= 0)) {
+    throw new Error(`Channel "${where}": humanise must be >= 0`);
+  }
+  if (perform.velocityJitter !== undefined) {
+    if (!(perform.velocityJitter >= 0)) {
+      throw new Error(`Channel "${where}": velocityJitter must be >= 0`);
+    }
+    if (perform.velocityJitter > MAX_VELOCITY_JITTER) {
+      throw new Error(
+        `Channel "${where}": velocityJitter ${perform.velocityJitter} is over the ` +
+          `${MAX_VELOCITY_JITTER} ceiling in THEMES.md — past that the dynamic arch stops reading`,
+      );
+    }
+  }
 }
 
 export interface TrackFx {
@@ -44,7 +132,15 @@ export interface TrackFx {
 
 export interface Track {
   name: string;
+  /** The written tempo. With no `tempo` map this is the whole of the pulse. */
   bpm: number;
+  /**
+   * Optional tempo map: the pulse bends instead of being a grid. See
+   * [`tempo.ts`](./tempo.ts) for the syntax and `rit` / `accel` / `fermata` /
+   * `aTempo` for the helpers. A track without one renders byte-identically to
+   * how it did before tempo maps existed.
+   */
+  tempo?: TempoMap;
   /** [beatsPerBar, beatUnit] — 4/4 is [4, 4]. */
   timeSig: [number, number];
   /** Loop points in beats. */
@@ -252,8 +348,16 @@ export function barStarts(firstBeat: number, bars: number, barBeats = 4): number
   return out;
 }
 
+/** How long the written music lasts, tempo map and fermatas included. */
 export function trackDurationSec(track: Track): number {
-  return (track.length * 60) / track.bpm;
+  return tempoCurveOf(track).secondsAt(track.length);
+}
+
+/** The loop body's real length in seconds — through the tempo map, if any. */
+export function loopDurationSec(track: Track): number {
+  const curve = tempoCurveOf(track);
+  return curve.secondsAt(track.loop.end) - curve.secondsAt(track.loop.start);
 }
 
 export * from './harmony.ts';
+export * from './tempo.ts';

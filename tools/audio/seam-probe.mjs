@@ -172,17 +172,22 @@ if (FIX) {
   if (fixes.length === 0) {
     console.log('\nevery loop point is already sample-exact.');
   } else {
-    // Re-read immediately before writing: other agents render into this same
-    // manifest, and a read-modify-write across a long analysis is exactly how
-    // the title and chapter-select entries were lost earlier today.
-    const live = JSON.parse(await readFile(path.join(AUDIO_DIR, 'manifest.json'), 'utf8'));
-    for (const fix of fixes) {
-      if (!live.music[fix.name]) continue;
-      live.music[fix.name].loopStart = fix.to.loopStart;
-      live.music[fix.name].loopEnd = fix.to.loopEnd;
-    }
-    const { writeFile } = await import('node:fs/promises');
-    await writeFile(path.join(AUDIO_DIR, 'manifest.json'), `${JSON.stringify(live, null, 2)}\n`);
+    // Under the manifest lock, re-reading inside it: other agents render into
+    // this same file, and a read-modify-write across a long analysis is
+    // exactly how the title and chapter-select entries were lost earlier
+    // today. `mergeIntoManifest` also re-reads each entry, so a cue this probe
+    // analysed and another agent has since re-rendered keeps ITS loop points —
+    // which are the right ones, because they came off newer audio.
+    const { updateManifest } = await import('./manifest-io.mjs');
+    await updateManifest(AUDIO_DIR, (live) => {
+      for (const fix of fixes) {
+        const entry = live.music[fix.name];
+        if (!entry) continue;
+        entry.loopStart = fix.to.loopStart;
+        entry.loopEnd = fix.to.loopEnd;
+      }
+      return live;
+    });
     console.log(`\nmoved ${fixes.length} loop point(s) onto the sample the renderer matched:`);
     for (const f of fixes) {
       console.log(

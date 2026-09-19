@@ -46,7 +46,9 @@ const { renderTrack } = await import('../../src/audio/render.ts');
 const { getTrack, trackNames } = await import('../../src/audio/tracks/index.ts');
 const { renderSfxWith, sfxNames, getSfxDesign } = await import('../../src/audio/sfx/index.ts');
 const { CATEGORY_RULES } = await import('../../src/audio/sfx/design.ts');
-const { pitchToFreq } = await import('../../src/audio/score.ts');
+const { pitchToFreq, effectiveJitterMs, performanceKey } = await import('../../src/audio/score.ts');
+const { tempoCurveOf, tempoWarnings } = await import('../../src/audio/tempo.ts');
+const { mergeIntoManifest, musicEntry, readManifest } = await import('./manifest-io.mjs');
 const { Hall } = await import('../../src/audio/dsp/hall.ts');
 const presets = await import('../../src/audio/voices/presets/index.ts');
 const { voiceForPreset, availableLibs, missingLibs, LIBRARIES, libPath } = await import('./libs.mjs');
@@ -87,8 +89,10 @@ function log(...a) {
  */
 function buildVoiceResolver() {
   const cache = new Map();
-  return (name) => {
-    const hit = cache.get(name);
+  return (name, perform) => {
+    const variant = performanceKey(perform);
+    const key = `${name}${variant}`;
+    const hit = cache.get(key);
     if (hit) return hit;
     if (!presets.hasPreset(name)) {
       throw new Error(
@@ -96,8 +100,15 @@ function buildVoiceResolver() {
           'Add one to src/audio/voices/presets/ (see docs/audio/PIPELINE.md).',
       );
     }
-    const voice = voiceForPreset(presets.getPreset(name));
-    cache.set(name, voice);
+    const preset = presets.getPreset(name);
+    // A channel's `perform` block overrides the preset's own humanisation for
+    // this channel only — Vegnagun's machine and the Yunalesca canon need
+    // <= 3 ms out of voices the rest of the score wants at 14-18.
+    const presetJitter = preset.timingJitterMs ?? 0;
+    const wanted = effectiveJitterMs(presetJitter, perform);
+    const tuned = wanted === presetJitter ? preset : { ...preset, timingJitterMs: wanted };
+    const voice = voiceForPreset(tuned, variant);
+    cache.set(key, voice);
     return voice;
   };
 }
@@ -250,6 +261,7 @@ async function renderCue(name, resolver, spatialiser) {
   right.set(rendered.right.subarray(loopStart, loopStart + tailLen), loopEnd);
 
   const measured = measureAll(left, right, sampleRate, loopStart, loopEnd);
+  const curve = tempoCurveOf(track);
   return {
     name,
     left,
@@ -260,6 +272,13 @@ async function renderCue(name, resolver, spatialiser) {
     measured,
     master: lastMaster,
     noteCount: rendered.noteCount,
+    tempo: curve.hasMap
+      ? {
+          marks: curve.marks,
+          warnings: tempoWarnings(track),
+          loopSec: curve.secondsAt(track.loop.end) - curve.secondsAt(track.loop.start),
+        }
+      : null,
     renderMs: Date.now() - started,
   };
 }
@@ -470,23 +489,6 @@ async function renderSfxSprite() {
   return { entries, bytes, count: names.length, seconds: total / sampleRate, parts };
 }
 
-// ------------------------------------------------------------------- manifest
-
-async function loadManifest() {
-  const path = join(outRoot, 'manifest.json');
-  if (!existsSync(path)) return { version: 1, sampleRate, music: {}, sfx: null };
-  try {
-    return JSON.parse(await readFile(path, 'utf8'));
-  } catch {
-    return { version: 1, sampleRate, music: {}, sfx: null };
-  }
-}
-
-async function saveManifest(manifest) {
-  await mkdir(outRoot, { recursive: true });
-  await writeFile(join(outRoot, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
-}
-
 // ----------------------------------------------------------------------- main
 
 function fmtSec(s) {
@@ -539,9 +541,7 @@ async function main() {
 
   const resolver = buildVoiceResolver();
   const spatialiser = buildSpatialiser();
-  const manifest = await loadManifest();
-  manifest.sampleRate = sampleRate;
-  manifest.music ??= {};
+  let manifest = await readManifest(outRoot);
 
   const rows = [];
   let failures = 0;
@@ -551,21 +551,25 @@ async function main() {
     const cue = await renderCue(name, resolver, spatialiser);
     const { bytes } = await writeCue(cue);
     const m = cue.measured;
-    manifest.music[name] = {
-      file: `music/${name}.mp3`,
-      // Six decimals, not four. Four decimal places of a second is 4.4 samples
-      // at 44.1 kHz, so a rounded loop point lands beside the sample the
-      // crossfade matched and the wrap steps by whatever the waveform was
-      // doing in between — a tick, every time the loop comes round, on cues
-      // that are otherwise seamless. Six decimals resolves to a twentieth of a
-      // sample and costs two bytes.
-      loopStart: Number((cue.loopStart / sampleRate).toFixed(6)),
-      loopEnd: Number((cue.loopEnd / sampleRate).toFixed(6)),
-      duration: Number((cue.total / sampleRate).toFixed(4)),
-      bytes,
-      lufs: Number(m.lufs.toFixed(2)),
-      truePeakDb: Number(m.truePeakDb.toFixed(2)),
-    };
+    // Merged into whatever is on disk *now*, under a lock, one cue at a time.
+    // Another agent may have finished three cues while this one rendered, and
+    // holding a six-minute-old snapshot in memory is precisely how their
+    // entries used to disappear. See tools/audio/manifest-io.mjs.
+    manifest = await mergeIntoManifest(outRoot, {
+      sampleRate,
+      music: {
+        [name]: musicEntry({
+          name,
+          loopStartSample: cue.loopStart,
+          loopEndSample: cue.loopEnd,
+          totalSamples: cue.total,
+          sampleRate,
+          bytes,
+          lufs: m.lufs,
+          truePeakDb: m.truePeakDb,
+        }),
+      },
+    });
     const problems = [];
     if (Math.abs(m.lufs + 16) > 2) problems.push(`LUFS ${m.lufs.toFixed(1)}`);
     if (m.truePeakDb > -1) problems.push(`peak ${m.truePeakDb.toFixed(2)} dBTP`);
@@ -584,17 +588,32 @@ async function main() {
     if (!m.seam.ok && !quiet) {
       log(`      seam: step ${m.seam.step.toFixed(5)} > allowed ${m.seam.allowed.toFixed(5)}`);
     }
+    // A cue with a tempo map: say what the map does, because the loop length
+    // is no longer "beats times 60 over bpm" and nobody can hear it from here.
+    if (cue.tempo && !quiet) {
+      log(
+        `      tempo: ${cue.tempo.marks
+          .map((mark) => `${mark.label ?? 'tempo'}@${mark.beat}→${mark.bpm.toFixed(0)}` +
+            (mark.holdSec ? ` +${mark.holdSec}s` : ''))
+          .join('  ')}`,
+      );
+      log(`      tempo: loop body ${cue.tempo.loopSec.toFixed(3)} s through the map`);
+      for (const warning of cue.tempo.warnings) console.error(`  ${name}: tempo map — ${warning}`);
+    }
   }
 
   if (wantSfx) {
     process.stdout.write(quiet ? '' : '  rendering sfx sprite ... ');
     const sprite = await renderSfxSprite();
-    manifest.sfx = {
-      file: 'sfx/sprite.mp3',
-      bytes: sprite.bytes,
-      duration: Number(sprite.seconds.toFixed(4)),
-      cues: sprite.entries,
-    };
+    manifest = await mergeIntoManifest(outRoot, {
+      sampleRate,
+      sfx: {
+        file: 'sfx/sprite.mp3',
+        bytes: sprite.bytes,
+        duration: Number(sprite.seconds.toFixed(4)),
+        cues: sprite.entries,
+      },
+    });
     log(`${sprite.count} cues, ${fmtSec(sprite.seconds)}, ${(sprite.bytes / 1e6).toFixed(2)} MB`);
 
     // Per-category levels: the one number that says whether the bank is
@@ -632,8 +651,9 @@ async function main() {
     }
   }
 
-  await saveManifest(manifest);
-
+  // Nothing to save here: every entry was merged under the lock as it was
+  // rendered, so a crash half way through leaves the cues that did finish
+  // listed and correct rather than losing the lot.
   const totalBytes =
     Object.values(manifest.music).reduce((a, m) => a + (m.bytes ?? 0), 0) +
     (manifest.sfx?.bytes ?? 0);

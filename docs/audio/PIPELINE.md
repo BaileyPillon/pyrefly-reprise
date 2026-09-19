@@ -123,7 +123,7 @@ that uses it.
 | `velocityTilt` | Soft notes get darker as well as quieter. Set `false` for a library with real velocity layers — Salamander's piano has sixteen and does not need help. |
 | `attackSec` | Extra attack. A slow bow, a breathy entry. |
 | `releaseSec` | Tail past note-off. **This is what makes legato legato**: overlapping tails are how separate events become a phrase. |
-| `timingJitterMs` | Deterministic per-note start jitter. A section is never exactly together, and without a few ms here it attacks on one sample and reads as a synth. The single most valuable field in this table. |
+| `timingJitterMs` | Deterministic per-note start jitter. A section is never exactly together, and without a few ms here it attacks on one sample and reads as a synth. The single most valuable field in this table. One channel can overrule it — see [Per-channel performance overrides](#per-channel-performance-overrides). |
 | `drum` | GM percussion note to fire. `pitchRef` lets a tuned drum still follow the score. |
 | `amp` | Amp-style drive and cabinet filter, for the electric guitars. |
 | `caveat` | Say so when the result is a stand-in, not the real instrument. |
@@ -138,6 +138,184 @@ a front-row harp without anyone touching a reverb control.
 Changing the apparent room for everything at once is one line — `sendOf()`.
 
 ---
+
+## Tempo maps — making the pulse bend
+
+Until recently a `Track` had one `bpm` and nothing else, so rubato had to be
+written into the note values. That can move a note; it cannot move the *pulse*,
+and the accompaniment stays on the grid under a melody that is trying to
+breathe. THEMES.md called a tempo map "the single biggest quality item left".
+
+A tempo map is an optional list of marks on `Track`, in beats. Both renders
+honour it — the offline sampled one and the browser's procedural fallback —
+because there is only one sequencer and this is a property of its clock.
+
+```ts
+// src/audio/tracks/ending-ffx.ts
+import { rit, aTempo, fermata, tempoMap } from '../score.ts';
+
+export const endingTrack: Track = {
+  name: 'ending-ffx',
+  bpm: 72,
+  tempo: tempoMap(
+    [64, 76],              // step: the second verse leans forward a little
+    rit(120, 128, 54),     // hold 76 to beat 120, then slow evenly to 54 by 128
+    fermata(128, 1.8),     // 1.8 s of held time after the downbeat of bar 33
+    aTempo(128),           // ...and back to the written 72
+  ),
+  timeSig: [4, 4],
+  loop: { start: 32, end: 160 },
+  // ...
+};
+```
+
+That is the whole syntax. Written out longhand, a mark is
+`{ beat, bpm?, curve?, holdSec?, label? }`:
+
+| Field | Means |
+|---|---|
+| `beat` | Where it takes effect. Marks run in non-decreasing beat order. |
+| `bpm` | The tempo from here. Omit it to anchor **the tempo already sounding** (which is how a ramp gets a starting point); `'base'` means the track's own `bpm`. |
+| `curve` | `'step'` (default) jumps on this beat; `'ramp'` glides across the whole span from the previous mark. |
+| `holdSec` | Time stops for this long *immediately after* the beat — a fermata. The note struck on that beat is held through it; everything later moves back. |
+| `label` | Printed in the render report. `'rit.'`, `'a tempo'`. |
+
+`rit`, `accel`, `fermata` and `aTempo` build those marks; `[beat, bpm]` is
+shorthand for a plain step. Mix them freely — `tempoMap()` flattens.
+
+**What it changes.** Everywhere a beat becomes a time, it goes through the
+curve: note starts, note *lengths* (the same half-note is longer at the end of
+a ritardando than at the start, which is what a ritardando is), the track's
+total length, and both loop points. The delay bus is the one exception — a
+delay line is one fixed length, and a delay that retuned itself mid-rit. would
+be a pitch shift, not an echo.
+
+**Mind the loop.** If the tempo at `loop.end` is not the tempo at `loop.start`,
+every wrap lurches: the waveform is continuous and the pulse is not. The
+renderer says so, per cue:
+
+```
+  rendering ending-ffx ... 14.2s  2:41.0  3.51 MB  -16.0 LUFS  -1.22 dBTP  ok
+      tempo: tempo@64→76  rit.@128→54 +1.8s  a tempo@128→72
+      tempo: loop body 104.213 s through the map
+  ending-ffx: tempo map — tempo at loop.end is 54.0 bpm but the loop restarts at
+  76.0 bpm — the wrap will lurch; finish the rit. before loop.end or a tempo
+  back onto it
+```
+
+**A track with no `tempo` is byte-identical to how it rendered before any of
+this existed** — the clock is still one multiplication by `60/bpm`, in the same
+order, and `tests/unit/audio-tempo.test.ts` hashes `boss-dread` against a
+render from the pre-tempo-map code to prove it. So none of the twenty-one
+shipped MP3s needs re-rendering. **A cue that gains a map does: re-render it.**
+
+## Per-channel performance overrides
+
+`timingJitterMs` belongs to the voice preset, which is right — a string section
+is never exactly together and that is a property of string sections. But two
+cues can want the same instrument played differently, and THEMES.md names two
+places where machine timing *is* the point: Vegnagun, and the Yunalesca canon,
+both `<= 3 ms` out of voices whose presets ask for 14-22.
+
+So a channel may override its preset, for that channel only:
+
+```ts
+// src/audio/tracks/boss-vegnagun.ts
+channels: [
+  {
+    name: 'machine ostinato',
+    instrument: 'strings-short',
+    perform: { timingJitterMs: 2 },   // the preset's 16 ms, for this desk only
+    notes: ostinato,
+  },
+  {
+    name: 'rite choir',
+    instrument: 'choir',
+    perform: { humanise: 0.15 },      // 15% of whatever the preset asks for
+    notes: canon,
+  },
+  {
+    name: 'strings',
+    instrument: 'strings',
+    perform: { velocityJitter: 0.03 },  // +/-0.03 on top of the written shape
+    notes: bed,
+  },
+],
+```
+
+| Field | Means |
+|---|---|
+| `timingJitterMs` | Replaces the preset's figure. `0` is a machine. Offline only: the runtime oscillator voices have never had start jitter, so there is nothing there to override. |
+| `humanise` | Multiplies whatever jitter is in force after that. `0` quantised, `1` as written. |
+| `velocityJitter` | Deterministic +/- velocity spread per note, on top of the written shape. Applies to **both** renders, because velocity is a sequencer-level number. THEMES.md's ceiling is `0.04` and anything larger throws. |
+
+Two channels naming the same instrument with different `perform` get different
+voices and different note-cache entries, so one cue pulling a kit tight does
+not drag every other cue that uses it. A channel with **no** `perform` keeps
+the exact cache key — and therefore the exact per-note seed, and therefore the
+exact samples — it had before the field existed.
+
+Boss-fight accents are exempt from all of this on purpose: `0.95` on the
+and-of-beat against `0.80` on the downbeat is written velocity, and no
+humaniser may level it. `velocityJitter` adds to the written shape, it does not
+flatten it.
+
+## Rendering while somebody else is rendering
+
+`public/audio/manifest.json` is one file that several agents write. The old
+code read it at the top of a six-minute run, held that snapshot, and wrote the
+whole object back at the end — so two overlapping renders meant the second
+one's write was built from before the first one finished, and **the first
+one's cues vanished from the manifest** while their MP3s sat on disk unlisted.
+An unlisted cue silently falls back to the oscillator render, which is the one
+failure this whole pipeline exists to prevent. It shipped a `title` entry whose
+`loopEnd` was eleven seconds past the end of the file it named.
+
+`tools/audio/manifest-io.mjs` fixes it three ways, all three needed:
+
+1. **A lock.** `open(path, 'wx')` is atomic, so exactly one process holds
+   `manifest.json.lock`. The lock carries its owner's pid: a crashed render's
+   lock is taken immediately rather than blocking the next one forever, and a
+   live owner is respected.
+2. **Re-read inside the lock.** The merge is against what is on disk *now*.
+   A render replaces only the cues it rendered; every other key is copied
+   through untouched, and the entries are written in sorted order so the diff
+   in a commit is only what changed.
+3. **Atomic rename.** A temp file in the same directory, renamed over the
+   target, retried through the EPERM Windows raises while another process has
+   it open. A reader sees the whole old file or the whole new one, never a
+   half-written one.
+
+Entries are merged **as each cue finishes**, not at the end, so a crash half
+way through leaves the cues that did finish listed and correct.
+
+Anything else that edits the manifest uses the same module — `seam-probe.mjs
+--fix` does:
+
+```js
+import { updateManifest, mergeIntoManifest, musicEntry } from './manifest-io.mjs';
+
+// Add or replace entries:
+await mergeIntoManifest(outRoot, {
+  sampleRate,
+  music: {
+    [name]: musicEntry({
+      name, loopStartSample, loopEndSample, totalSamples, sampleRate,
+      bytes, lufs, truePeakDb,
+    }),
+  },
+});
+
+// Or edit whatever is live, under the lock:
+await updateManifest(outRoot, (live) => {
+  live.music[name].loopEnd = corrected;
+});
+```
+
+Use `musicEntry()` rather than building the object by hand: it is what writes
+**loop points to six decimals**, and four decimals is 4.4 samples at 44.1 kHz
+— enough to put the wrap beside the sample the seam crossfade matched. See
+[Loops](#loops) below for what that sounded like.
 
 ## Checking it without ears
 
@@ -199,10 +377,12 @@ reason worth knowing:
   limited to exactly −1 dB and shipped at **−0.80 dBTP**. Same bug, one file,
   one line.
 - **The manifest can disagree with the file.** Several agents render into one
-  `manifest.json` with read-modify-write, so a slow render can save an entry
-  another agent has already replaced. That shipped a `title` entry whose
-  `loopEnd` was 11 s past the end of the file it named. Only a check that
-  opens the file can see it.
+  `manifest.json`, and it used to be read-modify-write, so a slow render saved
+  an entry another agent had already replaced. That shipped a `title` entry
+  whose `loopEnd` was 11 s past the end of the file it named. The write is
+  locked now (see [Rendering while somebody else is
+  rendering](#rendering-while-somebody-else-is-rendering)), but keep the check:
+  only something that opens the file can see a manifest that lies about it.
 - **`themes-audit.mjs` reads the score, not the audio**, and asks the question
   no measurement can: is the theme `THEMES.md` promises actually in this cue?
   It searches for each cell as an *interval* sequence, because every legal
@@ -302,6 +482,8 @@ time.
 | `tools/audio/master.mjs` | Bus compressor, loudness match, look-ahead limiter. |
 | `tools/audio/measure.mjs` | BS.1770 loudness, true peak, spectrum, seam. |
 | `tools/audio/render.mjs` | The CLI. |
+| `tools/audio/manifest-io.mjs` | The manifest, locked: one writer at a time, re-read before write, atomic rename. |
+| `src/audio/tempo.ts` | Beat-to-seconds through a tempo map. Every note time in the engine goes through it. |
 | `src/audio/voices/presets/` | **The instrument data. Start here.** |
 | `src/audio/sfx/design.ts` | The sound-design vocabulary and the rules it enforces. |
 | `src/audio/sfx/materials.ts` | The palette: glass, bells, harp, choir, cloth, sub, steel. |
