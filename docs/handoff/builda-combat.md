@@ -166,6 +166,12 @@ hand over a table that already existed.
   and refused if submitted.
 - **`tests/unit/ffx-overdrive-menu-rows.test.ts`**: the old guard's filter now
   excludes `overdrive-gauge{spent}`, and Rikku was added to its actor list.
+- **One live pass** (GPU-mode Chromium against the dev server, 1600x900, the
+  shipped Chapter-1 board): Switch Rikku in, then Steal -> `['action-start',
+  'message', 'action-end']` with the message **"Stole Elixir!"**, and Bio Fury
+  correctly answers with `minigame-request` rather than auto-rolling, because
+  live play is interactive and the Fury dial belongs to the player. Zero console
+  errors. Screenshot: `docs/screenshots/fix3/builda-combat-steal-live.png`.
 - `npx tsc --noEmit` clean; `node tools/orphans.mjs` shows `steal.ts` imported;
   full unit suite **3879 passed / 1 failed**, the one failure being
   `tests/unit/menu-cancel.test.ts`, the FFX-2 menu track's in-flight work.
