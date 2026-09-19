@@ -25,7 +25,7 @@
  * first without a step; nothing here is at constant velocity and nothing here
  * is loud.
  *
- * Form (36 bars, 144 beats, 72 s):
+ * Form (36 bars, 144 beats, 72.1 s through the map):
  *   bar   1- 4  fanfare  beats   0- 16  brass, horns, timpani, one cymbal
  *   bars  5-12  pass 1   beats  16- 48  pizzicato tune, piano under it       <- loop start
  *   bars 13-20  pass 2   beats  48- 80  piano takes the tune, harp, flute tag
@@ -34,12 +34,16 @@
  */
 
 import {
+  aTempo,
   arpLine,
   chordLine,
   chordRoots,
   concatNotes,
   drumLine,
   motif,
+  rit,
+  tempoMap,
+  toMidi,
   tracker,
   type Note,
   type Track,
@@ -81,9 +85,53 @@ function fanfare(velocity: number, transpose = 0): Note[] {
   });
 }
 
+/**
+ * The fanfare's strings, phrased.
+ *
+ * They used to be twenty-four notes at 0.52 — every one of them, for the whole
+ * fanfare — which is the one thing THEMES.md bans outright: "Never render a
+ * phrase at constant velocity, except the two places this document names",
+ * and neither of those is here. Nothing about the notes changes; the fanfare
+ * stays ORIGINAL in rhythm and contour because this function never touches
+ * either. What changes is how they are played:
+ *
+ *   the arch     the brass above them moves 0.84 / 0.88 / 0.92 / 0.86 across
+ *                the four bars, so the strings follow it at their own level
+ *                and the two read as one gesture instead of a tune over a pad.
+ *   the amen     bar 4 is the plagal cadence, F to C, and the melody's F4
+ *                leans on the E4 it falls to. The CHORD does the same: 0.56
+ *                under the leaning note, 0.46 under its resolution. A cadence
+ *                whose harmony crescendos into the tonic is a trophy; this cue
+ *                is supposed to be relief.
+ *   the tilt     +/-0.03 across each chord by pitch, so the top voice carries
+ *                and even a single struck chord is not four identical notes.
+ *
+ * The mean lands on 0.51, within a hair of the 0.52 it replaces, so the
+ * balance of the mix is unchanged and only the shape is new.
+ */
+const FANFARE_HALF_BARS = [0.44, 0.47, 0.5, 0.53, 0.57, 0.55, 0.56, 0.46];
+
 function fanfareHarmony(): Note[] {
-  return chordLine(VICTORY_FANFARE_CHORDS, {
+  const notes = chordLine(VICTORY_FANFARE_CHORDS, {
     barBeats: 2, octave: 3, center: 60, velocity: 0.52, dur: 1.9, roll: 0.05,
+  });
+  // `roll` nudges each member of a chord a little later, so a note is grouped
+  // by the half bar it was written in rather than by its exact start.
+  const halfOf = (n: Note): number =>
+    Math.min(FANFARE_HALF_BARS.length - 1, Math.floor(n[0] / 2 + 1e-6));
+  const members = new Map<number, number[]>();
+  for (const n of notes) {
+    const half = halfOf(n);
+    if (!members.has(half)) members.set(half, []);
+    members.get(half)!.push(toMidi(n[2]));
+  }
+  return notes.map((n): Note => {
+    const half = halfOf(n);
+    const chord = members.get(half)!;
+    const low = Math.min(...chord);
+    const span = Math.max(...chord) - low;
+    const tilt = span === 0 ? 0 : 0.03 * ((2 * (toMidi(n[2]) - low)) / span - 1);
+    return [n[0], n[1], n[2], Math.min(1, FANFARE_HALF_BARS[half]! + tilt)];
   });
 }
 
@@ -172,12 +220,15 @@ function pianoComp(): Note[] {
 /** Harp: a rolled chord a bar, never a run. It is here for the shimmer, not the notes. */
 function harpBed(): Note[] {
   return concatNotes(
-    chordLine(VICTORY_LOOP_CHORDS, {
+    // A rolled chord struck at exactly one level, eight bars running, is a
+    // sampler playing a chord rather than a harpist playing a phrase: the
+    // eight bars of each pass breathe once, gently.
+    breathe(chordLine(VICTORY_LOOP_CHORDS, {
       start: R2, octave: 4, center: 72, velocity: 0.3, dur: 3.6, roll: 0.12,
-    }),
-    chordLine(VICTORY_LOOP_CHORDS, {
+    }), 16, 0.16, 0.05),
+    breathe(chordLine(VICTORY_LOOP_CHORDS, {
       start: R4, octave: 4, center: 72, velocity: 0.22, dur: 3.6, roll: 0.16,
-    }),
+    }), 16, 0.16, 0.05),
   );
 }
 
@@ -219,9 +270,22 @@ function shakerLine(): Note[] {
   );
 }
 
-/** The only kit in the cue, and only in the fullest pass: kick on 1 and 3, hats on eighths. */
+/**
+ * The only kit in the cue, and only in the fullest pass: kick on 1 and 3, hats
+ * on eighths.
+ *
+ * Sixteen strokes at 0.42 was the last constant-velocity channel in the cue,
+ * and a bass drum is the worst place to leave one: it is the one instrument a
+ * listener can count, so an identical stroke every two beats reads as a click
+ * track even at this volume. The bar is a real bar now — the downbeat carries
+ * and the third beat answers it a little softer — with the same slow swell
+ * every other bed in the cue breathes with.
+ */
 function lightKit(): Note[] {
-  return drumLine('x.......x.......', { start: R3, step: 0.25, pitch: 'C1', velocity: 0.42, times: 8 });
+  const strokes = drumLine('x.......x.......', {
+    start: R3, step: 0.25, pitch: 'C1', velocity: 0.42, times: 8,
+  }).map((n): Note => [n[0], n[1], n[2], (n[0] - R3) % 4 < 1e-6 ? 0.45 : 0.37]);
+  return breathe(strokes, 16, 0.1, 0.05);
 }
 
 function hats(): Note[] {
@@ -235,9 +299,43 @@ function cymbal(): Note[] {
   ];
 }
 
+/**
+ * One gesture, and it is the whole reading of the cue.
+ *
+ * THEMES.md: the fanfare "closes PLAGAL — F to C ... so the release reads as
+ * relief rather than triumph", and the one emotion is "relief, not triumph".
+ * A fanfare that holds 120 bpm straight through its own amen and hands
+ * straight over to a groove has not relaxed; it has stopped. So the last bar
+ * broadens — 120 to 104 across beats 12-16, 13%, inside THEMES.md's ceiling —
+ * and the results loop then starts dead in tempo.
+ *
+ * `aTempo(16)` is also what keeps the loop honest: beat 16 is `loop.start` and
+ * there is no mark after it, so the tempo at `loop.end` (144) is the tempo the
+ * loop restarts on and the wrap cannot lurch.
+ */
+const TEMPO = tempoMap(
+  rit(12, 16, 104, 'rit. — the plagal amen'),
+  aTempo(16),
+);
+
+/**
+ * HUMANISATION, to the bible's own table (THEMES.md §Humanisation: section
+ * strings and choir 14-18 ms, solo piano 6-9, rock kit 4-6).
+ *
+ * The presets this cue plays sit outside that: `piano` is 3 ms, `strings` 22
+ * and `strings-low` 24. They are shared with every other cue and are not this
+ * arranger's to move, so the channels say how they want to be played instead
+ * — PIPELINE.md, "Per-channel performance overrides". Each figure lands
+ * mid-band: 7 ms for the piano, 16.1 for the sections.
+ */
+const PIANO_HANDS = { timingJitterMs: 7 } as const;
+const SECTION = { humanise: 0.73 } as const;
+const SECTION_LOW = { humanise: 0.67 } as const;
+
 export const victoryTrack: Track = {
   name: 'victory-ffx',
   bpm: 120,
+  tempo: TEMPO,
   timeSig: [4, 4],
   loop: { start: R1, end: LENGTH },
   length: LENGTH,
@@ -256,18 +354,18 @@ export const victoryTrack: Track = {
       notes: fanfare(0.8, 12).filter((n) => n[0] % 4 === 0),
       fx: { reverb: 0.2 },
     },
-    { name: 'fanfare strings', instrument: 'strings', volume: 0.5, pan: 0.1, notes: fanfareHarmony(), fx: { reverb: 0.3 } },
+    { name: 'fanfare strings', instrument: 'strings', volume: 0.5, pan: 0.1, perform: SECTION, notes: fanfareHarmony(), fx: { reverb: 0.3 } },
     { name: 'fanfare timpani', instrument: 'timpani', volume: 0.66, pan: 0, notes: fanfareTimpani(), fx: { reverb: 0.3 } },
     { name: 'cymbal', instrument: 'crash', volume: 0.42, pan: 0.1, notes: cymbal(), fx: { reverb: 0.35 } },
     { name: 'pizz tune', instrument: 'pluck', volume: 0.9, pan: 0.08, notes: pizzTune(), fx: { reverb: 0.26 } },
-    { name: 'piano tune', instrument: 'piano', volume: 0.85, pan: -0.06, notes: pianoTune(), fx: { reverb: 0.3 } },
-    { name: 'strings tune', instrument: 'strings', volume: 0.66, pan: 0.14, notes: stringTune(), fx: { reverb: 0.32, delay: 0.08 } },
+    { name: 'piano tune', instrument: 'piano', volume: 0.85, pan: -0.06, perform: PIANO_HANDS, notes: pianoTune(), fx: { reverb: 0.3 } },
+    { name: 'strings tune', instrument: 'strings', volume: 0.66, pan: 0.14, perform: SECTION, notes: stringTune(), fx: { reverb: 0.32, delay: 0.08 } },
     { name: 'flute tag', instrument: 'flute', volume: 0.6, pan: -0.1, notes: fluteTag(), fx: { reverb: 0.34, delay: 0.16 } },
-    { name: 'piano comp', instrument: 'piano', volume: 0.55, pan: -0.14, notes: pianoComp(), fx: { reverb: 0.26 } },
+    { name: 'piano comp', instrument: 'piano', volume: 0.55, pan: -0.14, perform: PIANO_HANDS, notes: pianoComp(), fx: { reverb: 0.26 } },
     { name: 'harp', instrument: 'harp', volume: 0.5, pan: -0.3, notes: harpBed(), fx: { reverb: 0.34, delay: 0.18 } },
-    { name: 'string bed', instrument: 'strings', volume: 0.42, pan: 0.2, notes: breathe(stringBed(), 24, 0.16), fx: { reverb: 0.38 } },
+    { name: 'string bed', instrument: 'strings', volume: 0.42, pan: 0.2, perform: SECTION, notes: breathe(stringBed(), 24, 0.16), fx: { reverb: 0.38 } },
     { name: 'horns', instrument: 'brass', volume: 0.4, pan: -0.26, notes: breathe(hornPad(), 32, 0.15), fx: { reverb: 0.36 } },
-    { name: 'cellos', instrument: 'strings-low', volume: 0.55, pan: 0.16, notes: cellos(), fx: { reverb: 0.3 } },
+    { name: 'cellos', instrument: 'strings-low', volume: 0.55, pan: 0.16, perform: SECTION_LOW, notes: cellos(), fx: { reverb: 0.3 } },
     { name: 'shaker', instrument: 'shaker', volume: 0.3, pan: 0.28, notes: breathe(shakerLine(), 16, 0.26, 0.14), fx: { reverb: 0.18 } },
     { name: 'kick', instrument: 'kick', volume: 0.5, pan: 0, notes: lightKit() },
     { name: 'hats', instrument: 'hat', volume: 0.3, pan: 0.22, notes: breathe(hats(), 8, 0.2, 0.1) },

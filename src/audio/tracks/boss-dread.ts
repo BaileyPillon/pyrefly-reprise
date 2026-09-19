@@ -17,10 +17,15 @@
  * THE ONE EMOTION: something is watching, and it is patient.
  *
  * Performance rules applied: the hymn takes NO rubato — a congregation does
- * not rubato — but it is never flat either, so every entry carries a written
- * four-bar arch; the breath in bar 4 (all four voices rest on beat 4) is left
- * empty; Seymour's snap up to the b6 is QUIETER than the note before it
- * (0.52 against 0.74), which is the whole character, so nothing may level it.
+ * not rubato, and this cue therefore has no tempo map and wants none — but it
+ * is never flat either, so every entry carries a written four-bar arch; the
+ * breath in bar 4 (all four voices rest on beat 4) is left empty; Seymour's
+ * snap up to the b6 is QUIETER than the note before it (0.52 against 0.74),
+ * which is the whole character, so nothing may level it. The three places the
+ * hymn states an appoggiatura — the bar 11 climax and the two amens — lean
+ * (see `LEAN_PAIRS`), and the canon's four-note head has its own small arch,
+ * because "a four-bar arch" gives one bar one level and a bar with two notes
+ * in it therefore had no shape at all.
  *
  * Form (32 bars, 128 beats, 85.3 s):
  *   bars  1- 4  intro   beats   0- 16  pedal, one toll, a cymbal breathing in
@@ -100,6 +105,40 @@ function hymnVoice(src: string, fromBar: number, toBar: number, start: number, a
     });
 }
 
+/**
+ * THE APPOGGIATURA RULE, at the three places this cue's hymn states one, as
+ * (leaning beat, resolving beat) in the cue's own beats.
+ *
+ * A four-bar arch hands a whole bar one level, so a bar holding two notes came
+ * out dead flat — and two of these three bars are the hymn's own cadence.
+ *
+ *   beat  44 / 46   HYMN bar 8, THE AMEN: the 2 over the iv falling home
+ *   beat  56 / 59   HYMN bar 11, THE CLIMAX: the highest note in the prayer,
+ *                   held three beats over the Cmaj7 and stepping down. It was
+ *                   0.82 against 0.82 — the loudest note in the cue, and no
+ *                   lean on it at all.
+ *   beat  76 / 78   HYMN bar 16, the amen again, "identical to bar 8"
+ *
+ * Half of THEMES.md's 0.08 goes up and half goes down, so the pair opens to
+ * the full 0.08 without the climax getting louder than the arch intended.
+ * Upper voices only: the bible puts the ache in the top voice ("Voice it so
+ * the 2 is the top note of the chord and the loudest note of the pair"), and
+ * the bass's bar-8 motion is a falling fourth — a root, not a leaning note.
+ */
+const LEAN_PAIRS: Array<[number, number]> = [[44, 46], [56, 59], [76, 78]];
+const LEAN = 0.04;
+
+function leanPairs(notes: Note[], pairs: Array<[number, number]>): Note[] {
+  const up = new Set(pairs.map((p) => p[0]));
+  const down = new Set(pairs.map((p) => p[1]));
+  return notes.map((n): Note => {
+    const v = n[3] ?? 0.8;
+    if (up.has(n[0])) return [n[0], n[1], n[2], Math.min(1, v + LEAN)];
+    if (down.has(n[0])) return [n[0], n[1], n[2], Math.max(0.05, v - LEAN)];
+    return n;
+  });
+}
+
 /** A' is the half of the hymn with the climax in it, so it is the loud half. */
 const ARCH_A = [0.5, 0.56, 0.6, 0.52, 0.54, 0.6, 0.64, 0.5];
 const ARCH_A2 = [0.6, 0.68, 0.82, 0.66, 0.62, 0.6, 0.56, 0.48];
@@ -108,10 +147,10 @@ const ARCH_LOW_2 = ARCH_A2.map((v) => v - 0.1);
 
 function upperVoices(): Note[] {
   return concatNotes(
-    hymnVoice(HYMN_SOPRANO, 1, 8, A, ARCH_A),
-    hymnVoice(HYMN_ALTO, 1, 8, A, ARCH_A.map((v) => v - 0.06)),
-    hymnVoice(HYMN_SOPRANO, 9, 16, A2, ARCH_A2),
-    hymnVoice(HYMN_ALTO, 9, 16, A2, ARCH_A2.map((v) => v - 0.06)),
+    leanPairs(hymnVoice(HYMN_SOPRANO, 1, 8, A, ARCH_A), LEAN_PAIRS),
+    leanPairs(hymnVoice(HYMN_ALTO, 1, 8, A, ARCH_A.map((v) => v - 0.06)), LEAN_PAIRS),
+    leanPairs(hymnVoice(HYMN_SOPRANO, 9, 16, A2, ARCH_A2), LEAN_PAIRS),
+    leanPairs(hymnVoice(HYMN_ALTO, 9, 16, A2, ARCH_A2.map((v) => v - 0.06)), LEAN_PAIRS),
     // A'' — the head returns unchanged. That return is what makes it a hymn.
     hymnVoice(HYMN_SOPRANO, 1, 2, OUTRO, [0.44, 0.4]),
     hymnVoice(HYMN_ALTO, 1, 2, OUTRO, [0.38, 0.34]),
@@ -143,6 +182,16 @@ function lowerVoices(): Note[] {
  * into a chord; they line up into a machine that happens to be made of a
  * prayer.
  */
+/**
+ * The head is `1 - b7 - 1 - b3`: a lower neighbour that falls and then LIFTS,
+ * and the lift is the point of it. Every entry used to be four notes at one
+ * velocity — a phrase held flat, which THEMES.md bans — so each entry now
+ * carries the shape the four notes describe: away on the neighbour, back on
+ * the return, and the b3 on top. This is not the Yunalesca canon; that is the
+ * one the bible locks at 0.62, and it is in another cue.
+ */
+const HEAD_SHAPE = [1, 0.92, 0.97, 1.08];
+
 function canonVoices(octave: 0 | 12): Note[] {
   const head = augment(HYMN_HEAD, 2);
   const offset = octave === 0 ? 0 : 4;
@@ -150,7 +199,9 @@ function canonVoices(octave: 0 | 12): Note[] {
   const levels = octave === 0 ? [0.5, 0.56, 0.6] : [0.42, 0.46, 0.5];
   return concatNotes(
     ...[0, 8, 16].map((bar, i) =>
-      motif(head, [CANON + bar + offset], [tonic]).map((n): Note => [n[0], n[1] * 0.99, n[2], levels[i]!]),
+      motif(head, [CANON + bar + offset], [tonic]).map(
+        (n, k): Note => [n[0], n[1] * 0.99, n[2], Math.min(1, levels[i]! * (HEAD_SHAPE[k] ?? 1))],
+      ),
     ),
   );
 }
@@ -306,6 +357,24 @@ function droneLine(): Note[] {
   });
 }
 
+/**
+ * HUMANISATION, to the bible's own table (THEMES.md §Humanisation: section
+ * strings and choir are 14-18 ms out).
+ *
+ * The presets are further out than that — `choir` 34 ms, `strings-low` 24,
+ * `strings` 22 — and at 90 bpm a 34 ms spread smears the attack of a chord
+ * the whole cue is built on holding still. The presets belong to every cue in
+ * the game, so the channels ask to be played tighter instead (PIPELINE.md,
+ * "Per-channel performance overrides"), landing mid-band at about 16 ms.
+ *
+ * This is NOT the Yunalesca canon. That rite is the one locked at <= 3 ms and
+ * velocity 0.62, and it is in another cue; this choir still breathes, it just
+ * breathes inside the table.
+ */
+const CHOIR = { humanise: 0.47 } as const;
+const SECTION = { humanise: 0.73 } as const;
+const SECTION_LOW = { humanise: 0.67 } as const;
+
 export const bossTrack: Track = {
   name: 'boss-dread',
   bpm: 90,
@@ -323,6 +392,7 @@ export const bossTrack: Track = {
       instrument: 'choir',
       volume: 0.82,
       pan: -0.08,
+      perform: CHOIR,
       notes: concatNotes(upperVoices(), canonVoices(12)),
       fx: { reverb: 0.55 },
     },
@@ -331,20 +401,22 @@ export const bossTrack: Track = {
       instrument: 'choir',
       volume: 0.6,
       pan: 0.2,
+      perform: CHOIR,
       notes: concatNotes(lowerVoices(), canonVoices(0)),
       fx: { reverb: 0.6 },
     },
-    { name: 'pedal', instrument: 'strings-low', volume: 0.72, pan: 0, notes: pedalLine(), fx: { reverb: 0.3 } },
+    { name: 'pedal', instrument: 'strings-low', volume: 0.72, pan: 0, perform: SECTION_LOW, notes: pedalLine(), fx: { reverb: 0.3 } },
     {
       name: 'seymour counter',
       instrument: 'strings-low',
       volume: 0.34,
       pan: -0.22,
+      perform: SECTION_LOW,
       notes: seymourCounter(),
       fx: { reverb: 0.28 },
     },
-    { name: 'string bed', instrument: 'strings', volume: 0.4, pan: 0.12, notes: breathe(stringBed(), 32, 0.14), fx: { reverb: 0.45 } },
-    { name: 'brass swells', instrument: 'brass', volume: 0.52, pan: -0.25, notes: brassSwells(), fx: { reverb: 0.4 } },
+    { name: 'string bed', instrument: 'strings', volume: 0.4, pan: 0.12, perform: SECTION, notes: breathe(stringBed(), 32, 0.14), fx: { reverb: 0.45 } },
+    { name: 'brass swells', instrument: 'brass', volume: 0.52, pan: -0.25, notes: breathe(brassSwells(), 32, 0.12), fx: { reverb: 0.4 } },
     { name: 'timpani', instrument: 'timpani', volume: 0.7, pan: 0.1, notes: timpaniLine(), fx: { reverb: 0.32 } },
     { name: 'bell', instrument: 'bell', volume: 0.46, pan: 0.35, notes: tolls(), fx: { reverb: 0.6, delay: 0.28 } },
     { name: 'cymbal', instrument: 'crash', volume: 0.3, pan: 0.15, notes: cymbalSwells(), fx: { reverb: 0.45 } },

@@ -13,75 +13,75 @@
     },
     "boss-dread": {
       "file": "music/boss-dread.mp3",
-      "loopStart": 10.666689,
-      "loopEnd": 85.333356,
+      "loopStart": 10.666667,
+      "loopEnd": 85.333333,
       "duration": 88.3333,
-      "bytes": 1310109,
+      "bytes": 1294744,
       "lufs": -16.02,
-      "truePeakDb": -1.47
+      "truePeakDb": -1.4
     },
     "boss-ffx2-aeon": {
       "file": "music/boss-ffx2-aeon.mp3",
       "loopStart": 12,
       "loopEnd": 114,
       "duration": 117,
-      "bytes": 1819659,
+      "bytes": 1820610,
       "lufs": -16,
       "truePeakDb": -1.38
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
-      "loopStart": 6.666689,
-      "loopEnd": 106.666689,
-      "duration": 109.6667,
-      "bytes": 1758394,
+      "loopStart": 6.666667,
+      "loopEnd": 107.121678,
+      "duration": 110.1217,
+      "bytes": 1764232,
       "lufs": -16.01,
-      "truePeakDb": -3.03
+      "truePeakDb": -2.8
     },
     "boss-seymour": {
       "file": "music/boss-seymour.mp3",
-      "loopStart": 7.272698,
-      "loopEnd": 98.181791,
-      "duration": 101.1818,
-      "bytes": 1592960,
+      "loopStart": 7.272721,
+      "loopEnd": 98.661791,
+      "duration": 101.6618,
+      "bytes": 1599137,
       "lufs": -15.99,
-      "truePeakDb": -1.49
+      "truePeakDb": -1.47
     },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",
-      "loopStart": 12.467506,
-      "loopEnd": 99.740227,
-      "duration": 102.7402,
-      "bytes": 1427416,
+      "loopStart": 12.551406,
+      "loopEnd": 102.796009,
+      "duration": 105.796,
+      "bytes": 1462658,
       "lufs": -16.08,
-      "truePeakDb": -1.36
+      "truePeakDb": -1.37
     },
     "boss-vegnagun": {
       "file": "music/boss-vegnagun.mp3",
-      "loopStart": 11.428594,
-      "loopEnd": 91.428594,
+      "loopStart": 11.428571,
+      "loopEnd": 91.428571,
       "duration": 94.4286,
-      "bytes": 1815674,
+      "bytes": 1825702,
       "lufs": -15.99,
       "truePeakDb": -1.39
     },
     "boss-yu-yevon": {
       "file": "music/boss-yu-yevon.mp3",
       "loopStart": 6,
-      "loopEnd": 210,
-      "duration": 213,
-      "bytes": 3151611,
-      "lufs": -16.03,
-      "truePeakDb": -1.39
+      "loopEnd": 215.6,
+      "duration": 218.6,
+      "bytes": 3208739,
+      "lufs": -16.06,
+      "truePeakDb": -1.38
     },
     "boss-yunalesca": {
       "file": "music/boss-yunalesca.mp3",
       "loopStart": 10.909093,
       "loopEnd": 100.909093,
       "duration": 103.9091,
-      "bytes": 1510224,
+      "bytes": 1514041,
       "lufs": -15.97,
-      "truePeakDb": -1.8
+      "truePeakDb": -1.9
     },
     "chapter-select": {
       "file": "music/chapter-select.mp3",
@@ -94,21 +94,21 @@
     },
     "ending-ffx": {
       "file": "music/ending-ffx.mp3",
-      "loopStart": 33.103401,
-      "loopEnd": 115.862018,
-      "duration": 118.8621,
-      "bytes": 1693720,
-      "lufs": -16.01,
+      "loopStart": 33.642358,
+      "loopEnd": 122.653741,
+      "duration": 125.6537,
+      "bytes": 1781521,
+      "lufs": -16.03,
       "truePeakDb": -1.4
     },
     "ending-ffx2": {
       "file": "music/ending-ffx2.mp3",
-      "loopStart": 11.428594,
-      "loopEnd": 114.285737,
-      "duration": 117.2857,
-      "bytes": 1660506,
-      "lufs": -16.07,
-      "truePeakDb": -1.4
+      "loopStart": 12.082494,
+      "loopEnd": 116.331655,
+      "duration": 119.3317,
+      "bytes": 1678825,
+      "lufs": -16.08,
+      "truePeakDb": -1.35
     },
     "pause": {
       "file": "music/pause.mp3",
@@ -124,7 +124,7 @@
       "loopStart": 19.2,
       "loopEnd": 105.6,
       "duration": 108.6,
-      "bytes": 1504208,
+      "bytes": 1503763,
       "lufs": -16.2,
       "truePeakDb": -1.38
     },
@@ -139,12 +139,12 @@
     },
     "scene-farplane": {
       "file": "music/scene-farplane.mp3",
-      "loopStart": 20.869592,
-      "loopEnd": 104.347846,
+      "loopStart": 20.869569,
+      "loopEnd": 104.347823,
       "duration": 107.3478,
-      "bytes": 1606046,
-      "lufs": -16,
-      "truePeakDb": -2.35
+      "bytes": 1609484,
+      "lufs": -15.99,
+      "truePeakDb": -2.11
     },
     "scene-gagazet": {
       "file": "music/scene-gagazet.mp3",
@@ -158,11 +158,11 @@
     "scene-zanarkand-dome": {
       "file": "music/scene-zanarkand-dome.mp3",
       "loopStart": 10,
-      "loopEnd": 130,
-      "duration": 133,
-      "bytes": 1771096,
-      "lufs": -16.1,
-      "truePeakDb": -1.39
+      "loopEnd": 126.165193,
+      "duration": 129.1652,
+      "bytes": 1707183,
+      "lufs": -16.07,
+      "truePeakDb": -1.37
     },
     "title": {
       "file": "music/title.mp3",
@@ -175,21 +175,21 @@
     },
     "victory-ffx": {
       "file": "music/victory-ffx.mp3",
-      "loopStart": 8,
-      "loopEnd": 72,
-      "duration": 75,
-      "bytes": 1099390,
-      "lufs": -16.09,
-      "truePeakDb": -1.37
+      "loopStart": 8.146508,
+      "loopEnd": 72.146508,
+      "duration": 75.1465,
+      "bytes": 1099961,
+      "lufs": -16.12,
+      "truePeakDb": -1.36
     },
     "victory-ffx2": {
       "file": "music/victory-ffx2.mp3",
       "loopStart": 7.5,
       "loopEnd": 67.5,
       "duration": 70.5,
-      "bytes": 1080749,
+      "bytes": 1078976,
       "lufs": -16.05,
-      "truePeakDb": -1.39
+      "truePeakDb": -1.38
     }
   },
   "sfx": {

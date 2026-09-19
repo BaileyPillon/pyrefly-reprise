@@ -225,11 +225,35 @@ describe('a track with no tempo map is byte-identical', () => {
    * neither must come out of the sequencer with the same bits, or all
    * twenty-one shipped MP3s would need re-rendering to stay in step with the
    * scores. If this fails, something in the note clock stopped being a plain
-   * `beat * 60 / bpm`.
+   * `beat * 60 / bpm`...
+   *
+   * ...OR SOMEBODY EDITED THE CUE, which is the one way this assertion can go
+   * red without anything being wrong. It pins the bytes of a real score, so it
+   * moves whenever that score does. It has moved once, on purpose:
+   *
+   *   7c132de48ddc96103e0cae56fafd46d966dc9c7971063cb13a7342d2444fd406
+   *     the original baseline, still exactly what `git show
+   *     3aa5440:src/audio/tracks/boss-dread.ts` renders to today — which is
+   *     how the clock was proved untouched when the number below changed.
+   *   6f9a20f9…  the hymn's three appoggiaturas now lean and the canon's
+   *     four-note head has an arch, per THEMES.md. Velocities only: no note
+   *     start, length or pitch in this cue was different.
+   *   d74e2a03…  (current) the brass swells breathe instead of holding one
+   *     level, and the choir and low strings ask to be played inside
+   *     THEMES.md's humanisation band (`perform`, 34 and 24 ms down to ~16).
+   *     Velocities and per-channel timing jitter only; still not one note
+   *     start, length or pitch. A `perform` block also changes the note-cache
+   *     key, which is why the samples move as well as the timing — see
+   *     PIPELINE.md, "Per-channel performance overrides".
+   *
+   * If you have to move it again, do it the same way: render the previous
+   * committed version of the cue and check it still hashes to the line above
+   * before you touch this one. Same bits from the old score means the clock is
+   * fine and only the music changed.
    */
   it('matches the pre-tempo-map renderer on boss-dread', () => {
     expect(digest('boss-dread', 8000)).toBe(
-      '7c132de48ddc96103e0cae56fafd46d966dc9c7971063cb13a7342d2444fd406',
+      'd74e2a03ce6d78f8525c3d7bd35ab676624c156254990471f2392a83b6b433e1',
     );
   });
 
@@ -241,7 +265,16 @@ describe('a track with no tempo map is byte-identical', () => {
    *
    *   title       41c9ec068f10c4da969f34101a8ca3483fcc2133dd82a66e43c424b08ce5eac9
    *   ending-ffx  72d4e15129957ca826edc5f7005517ee7407d7deec84b187215e0314a3904437
-   *   boss-dread at 44100: 97d05108b2d1a1cf4a5c7864b0816ac5b6d953236244fff0aaa963b8014ec59e
+   *                 — recorded before `ending-ffx` gained a tempo map, so it
+   *                   is now a note about a cue that no longer qualifies for
+   *                   this comparison at all: the track HAS a map, and the
+   *                   `secondsAt` path it takes is the mapped one by design.
+   *   boss-dread at 44100: 5bfffd2effdf84dff5e22cf22219821dfd978f6f9222b8a8b9e8bfaf5b0acb41
+   *                 (94d351a9… after the appoggiatura fix, and
+   *                  97d05108b2d1a1cf4a5c7864b0816ac5b6d953236244fff0aaa963b8014ec59e
+   *                  for the original baseline score — which is still what
+   *                  `git show 3aa5440:src/audio/tracks/boss-dread.ts`
+   *                  renders to, checked at both rates before this line moved)
    */
 
   it('measures every un-mapped cue exactly as beats over bpm', () => {
