@@ -46,6 +46,19 @@ interface StagedActor {
   parentId?: CombatantId;
 }
 
+/**
+ * How much of a combatant has to be in the clear before the field stops
+ * shuffling.
+ *
+ * A little above the 0.75 the targeting checks assert, so a figure that only
+ * just passes today does not fail tomorrow on a frame where the camera has
+ * eased a few pixels further in.
+ */
+const CLEAR_ENOUGH = 0.8;
+
+/** How far a destructible part may stray from its machine, in world units. */
+const PART_LEASH = 3.2;
+
 /** Colour a VFX key plays in. Unknown keys fall through to the generic impact. */
 const VFX_COLOURS: Readonly<Record<string, number>> = {
   fire: 0xff8a4a,
@@ -288,14 +301,29 @@ export class PaintedStage implements BattleStage {
   }
 
   /**
-   * How much of each combatant the player can actually see, 0..1, counting
-   * everything drawn in front of it plus any HUD panel that has declared
-   * itself ({@link setPanels}).
+   * How much of each combatant is clear **of other combatants**, 0..1.
    *
-   * This is the measurement Bailey's complaint is checked against, and the one
-   * the Playwright pass asserts (>= 0.75 for the selected target).
+   * This is the one the x-ray fade answers to, and the separation is not
+   * pedantry: fading the fiends in front of a target does nothing whatever
+   * about a HUD card sitting on top of it, so triggering the fade off a
+   * panel-inclusive number would fade the wrong things and still leave the
+   * target hidden.
    */
   visibility(): Map<CombatantId, number> {
+    return visibilityOf(this.screenRects());
+  }
+
+  /**
+   * How much of each combatant is clear of *everything* — other combatants
+   * **and** the HUD panels that have declared themselves ({@link setPanels}).
+   *
+   * The honest answer to "can the player see this fiend", and what the
+   * formation is relaxed against, because a fiend standing under the turn list
+   * is every bit as hidden as one standing behind the aeon. Measured live, it
+   * is also how the Sensor card was caught opening squarely on top of the very
+   * enemy the player had just aimed at.
+   */
+  visibilityInFrame(): Map<CombatantId, number> {
     return visibilityOf(this.screenRects(), this.panels);
   }
 
@@ -363,6 +391,127 @@ export class PaintedStage implements BattleStage {
       if (!staged) continue;
       staged.actor.position.set(slot.spot[0], slot.spot[1], slot.spot[2]);
     }
+  }
+
+  /**
+   * Push the fiends apart until their **projected** silhouettes clear.
+   *
+   * {@link applyFormation} lays the lane out in world space, and world space is
+   * not what the player sees. Measured live in Chapter 3, the world-space
+   * layout put Braska's Final Aeon at x 2.03, z -8 and the two Yu Pagodas at
+   * x 1.27 and x 3.33 — a clean spread on the ground, and on screen the aeon's
+   * rectangle ran 771..1152 while the Pagodas sat at 838..989 and 1035..1176,
+   * both inside it. The aeon is four units tall and three back; the Pagodas are
+   * two units tall and three forward. Perspective undoes in the frame what the
+   * ground plan got right.
+   *
+   * So finish the job against the camera. Each pass measures the real screen
+   * rectangles, finds the pairs that still overlap horizontally, and pushes
+   * both along **world x** by the deficit converted back through that actor's
+   * own screen-pixels-per-world-unit — which is what makes a near fiend move a
+   * little and a far one move a lot, exactly as it should. It converges in a
+   * handful of passes and then stops.
+   *
+   * Runs while the field is being staged, **never while a command is live**:
+   * moving enemies when the player has already opened a menu was option D's
+   * idea, and Bailey did not pick it.
+   *
+   * Returns true only when the field is **settled**: nothing moved on this
+   * call. False means "call me again" — either nothing could be measured yet
+   * (no canvas), or the passes ran out before it converged. Measured live,
+   * Chapter 3 needed one more call than Chapter 1 did, and a caller that
+   * stopped after the camera stilled left Auron two thirds behind Tidus.
+   */
+  relaxFormation(passes = 14): boolean {
+    const rect = this.opts.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return false;
+    if (this.actors.size < 2) return true;
+
+    const lanes = {
+      enemy: widen(laneFrom(this.opts.slots.enemy), 2.2),
+      party: widen(laneFrom(this.opts.slots.party), 0.9),
+    };
+
+    for (let pass = 0; pass < passes; pass++) {
+      const rects = this.screenRects();
+      if (rects.size < 2) return false;
+      // Panels included: the lane has to be clear of the turn list and the
+      // command stack, not only of the other fiends.
+      const vis = visibilityOf(rects, this.panels);
+
+      let moved = false;
+      for (const [id, fraction] of vis) {
+        if (fraction >= CLEAR_ENOUGH) continue;
+        const mine = rects.get(id);
+        if (!mine) continue;
+        for (const otherId of occludersOf(id, rects)) {
+          const theirs = rects.get(otherId);
+          if (!theirs) continue;
+          // How far they have to come apart horizontally to stop overlapping,
+          // taken a third at a time so the pass converges instead of
+          // oscillating between two figures shoving each other.
+          const overlap =
+            Math.min(mine.x + mine.w, theirs.x + theirs.w) - Math.max(mine.x, theirs.x);
+          if (overlap <= 0) continue;
+          const step = overlap * 0.34 + 3;
+          const dir = mine.x + mine.w / 2 <= theirs.x + theirs.w / 2 ? -1 : 1;
+          if (this.nudgeIn(id, (dir * step) / 2, lanes, rect.width)) moved = true;
+          if (this.nudgeIn(otherId, (-dir * step) / 2, lanes, rect.width)) moved = true;
+        }
+      }
+      if (!moved) return true;
+    }
+    // Ran out of passes with figures still moving: not settled yet.
+    return false;
+  }
+
+  /** {@link nudge}, into whichever lane this combatant belongs to. */
+  private nudgeIn(
+    id: CombatantId,
+    dxPx: number,
+    lanes: { enemy: { x: [number, number] }; party: { x: [number, number] } },
+    canvasW: number,
+  ): boolean {
+    const staged = this.actors.get(id);
+    if (!staged) return false;
+    const lane = staged.kind === 'enemy' ? lanes.enemy : lanes.party;
+    let lo = lane.x[0];
+    let hi = lane.x[1];
+    // A part stays on its machine. Vegnagun's leg may shuffle clear of its own
+    // tail; it may not walk across the field and stand beside the party.
+    const host = staged.parentId ? this.actors.get(staged.parentId) : undefined;
+    if (host) {
+      lo = Math.max(lo, host.actor.position.x - PART_LEASH);
+      hi = Math.min(hi, host.actor.position.x + PART_LEASH);
+    }
+    return this.nudge(id, dxPx, lo, hi, canvasW);
+  }
+
+  /**
+   * Move one actor `dxPx` screen pixels along world x, clamped to the lane.
+   *
+   * The conversion is measured rather than assumed: project the actor's
+   * position and the same point one world unit to the right, and the distance
+   * between them is this actor's own pixels-per-unit at its own depth.
+   */
+  private nudge(id: CombatantId, dxPx: number, xLo: number, xHi: number, canvasW: number): boolean {
+    const staged = this.actors.get(id);
+    if (!staged) return false;
+    const here = this.scratch.copy(staged.actor.position).project(this.opts.camera).x;
+    const there = new Vector3(
+      staged.actor.position.x + 1,
+      staged.actor.position.y,
+      staged.actor.position.z,
+    )
+      .project(this.opts.camera).x;
+    // NDC spans 2 across the canvas, so `(there - here) / 2 * width` is pixels.
+    const pxPerUnit = ((there - here) / 2) * canvasW;
+    if (!Number.isFinite(pxPerUnit) || Math.abs(pxPerUnit) < 1) return false;
+    const want = staged.actor.position.x + dxPx / pxPerUnit;
+    const next = Math.max(xLo, Math.min(xHi, want));
+    if (Math.abs(next - staged.actor.position.x) < 0.01) return false;
+    staged.actor.position.x = next;
+    return true;
   }
 
   /** Swap a combatant's painting in place — form change, spherechange. */
@@ -517,6 +666,11 @@ function rank(side: Side): number {
  * Farplane's is not, and a formation solver that ignored that would walk
  * figures into the backdrop.
  */
+/** A lane with `pad` world units of extra room on each side. */
+function widen(lane: { x: [number, number]; z: [number, number] }, pad: number): { x: [number, number] } {
+  return { x: [lane.x[0] - pad, lane.x[1] + pad] };
+}
+
 function laneFrom(spots: readonly [number, number, number][]): {
   x: [number, number];
   z: [number, number];

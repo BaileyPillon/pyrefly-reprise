@@ -6,6 +6,34 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-19 — targeting: `AvailableCommand` carries the ability's own `targeting`
+
+Key `fix3-targeting`. **Both games** [AGENTS.md hard rule 14, critic CHK-020]:
+this is a display defect in shared menu logic that both engines feed, so both
+engines publish the field and both HUDs read it. Additive and optional; nothing
+about resolution, legality or outcome changes.
+
+**`AvailableCommand.targeting?: Targeting`** (`src/battle/common/types.ts`),
+set by `src/battle/ffx/commands.ts` (ability rows and item rows) and
+`src/battle/ffx2/targeting.ts` (attack, ability and item rows).
+
+The UI is the only consumer. Before this, the command menu could not tell
+"pick one of these three allies" from "this hits all three": both arrive with
+an empty `command.targets` and three `validTargets`. So Hastega opened a
+single-target cursor, put a hairline bracket over one ally, and the engine then
+— correctly — buffed all three. That is the defect in the Chapter 3 screenshot
+Bailey sent with *"it's not clear which ally is being selected for buffs"*.
+
+`resolveTargetMode` (`src/ui/ffx/CommandMenuLogic.ts`) gains a fourth case,
+`{ mode: 'all', targets }`, for `all-enemies` / `all-allies` / `all`. A caller
+that builds an `AvailableCommand` by hand — a fixture, a mock screen — omits
+the field and gets exactly the old behaviour.
+
+Also additive on the presentation side, and not a `docs/CONTRACTS.md` file, so
+recorded here only because the HUD boundary moved: `HudPort` gains an optional
+`setTargetingPort(port)`. A HUD with no 3D field behind it (the mock screens)
+never receives one and falls back to a fixed box, as before.
+
 ## 2026-09-19 — combat fix pass: the FFX content registry carries Rikku's Mix table
 
 Key `builda-combat` (fix pass, after an adversarial verifier refuted two of the

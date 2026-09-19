@@ -585,14 +585,30 @@
 .ffx-target--self { --ffx-mark: #8fd0f0; }
 .ffx-target--clickable { pointer-events: auto; cursor: pointer; }
 
-/* Every stroke on a 1px ink underlay (the outer box-shadow), so the bracket
-   survives Dream's End's red sky and the lava below it. */
+/* Every stroke on an ink underlay, so the bracket survives Dream's End's red
+   sky and the lava below it.
+
+   The underlay is a PSEUDO-ELEMENT that inherits the corner's own per-side
+   border widths, not a `box-shadow`. A box-shadow follows the element's whole
+   border box, so it drew a complete 1px rectangle around each corner — which
+   turned four L-shaped corners into four solid little squares scattered over
+   the figure, and that is what the first capture of this pass
+   (docs/screenshots/fix3/targeting/) actually showed. `border-width: inherit`
+   takes the parent's computed per-side widths, so the underlay is the same L,
+   two pixels larger, sitting behind. */
 .ffx-target__c {
   position: absolute;
   width: var(--ffx-corner); height: var(--ffx-corner);
   border: 0 solid var(--ffx-mark);
-  box-shadow: 0 0 0 1px rgba(11, 10, 18, 0.85);
-  filter: drop-shadow(0 0 3px rgba(11, 10, 18, 0.9));
+  filter: drop-shadow(0 1px 2px rgba(11, 10, 18, 0.9));
+}
+.ffx-target__c::before {
+  content: '';
+  position: absolute; left: -2px; top: -2px; right: -2px; bottom: -2px;
+  border-style: solid;
+  border-width: inherit;
+  border-color: rgba(11, 10, 18, 0.9);
+  pointer-events: none;
 }
 .ffx-target__c--tl { left: 0; top: 0; border-left-width: 3px; border-top-width: 3px; }
 .ffx-target__c--tr { right: 0; top: 0; border-right-width: 3px; border-top-width: 3px; }
@@ -604,13 +620,18 @@
 .ffx-target--dim .ffx-target__c { opacity: 0.4; border-width: 2px; }
 .ffx-target--dim.ffx-target__c { opacity: 0.4; }
 
-/* Multi-target: every target flashes together, which is FFX's own rule. */
+/* Multi-target: every target flashes together, which is FFX's own rule.
+
+   The floor is 0.62, not 0.42: the approved frame is a STILL, and a capture
+   that lands on the bottom of the cycle showed three party members with marks
+   too faint to read — which is the complaint this whole pass exists to answer.
+   The pulse still reads as a pulse; it just never disappears. */
 .ffx-target--group .ffx-target__c {
-  opacity: 0.72;
+  opacity: 0.86;
   animation: ffx-target-flash 0.9s ease-in-out infinite;
 }
 @keyframes ffx-target-flash {
-  0%, 100% { opacity: 0.42; }
+  0%, 100% { opacity: 0.62; }
   50% { opacity: 1; }
 }
 

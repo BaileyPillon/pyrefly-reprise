@@ -194,11 +194,18 @@ export interface TargetingRect {
   /** Distance from the camera. Smaller draws in front. */
   depth: number;
   /**
-   * How much of this figure is not covered by anything nearer or by a HUD
-   * panel, 0..1. The number Bailey's "hidden behind bigger enemies" complaint
-   * is measured against.
+   * How much of this figure is not covered by another **combatant**, 0..1.
+   * The number Bailey's "hidden behind bigger enemies" complaint is measured
+   * against, and the one the x-ray fade answers to.
    */
   visible: number;
+  /**
+   * The same, also counting the HUD panels that cover the field. Lower than
+   * {@link TargetingRect.visible} whenever a card or a list is sitting on the
+   * figure — a layout collision rather than a staging one, reported separately
+   * so the two cannot be confused.
+   */
+  visibleInFrame: number;
   /** How far toward grey the quiet dim has pushed it, 0..1. */
   dim: number;
   /** True while a selection accent (pool or halo) is lit under it. */
@@ -240,12 +247,14 @@ function readTargeting(app: App): TargetingSnapshot | null {
         staged(): string[];
         projectRect(id: string): { x: number; y: number; w: number; h: number; depth: number } | null;
         visibility(): Map<string, number>;
+        visibilityInFrame(): Map<string, number>;
         occluders(id: string): string[];
       }
     | undefined;
   if (!stage || typeof stage.projectRect !== 'function') return null;
 
   const visibility = stage.visibility();
+  const inFrame = stage.visibilityInFrame();
   const rects: Record<string, TargetingRect> = {};
   for (const id of stage.staged()) {
     const r = stage.projectRect(id);
@@ -257,6 +266,7 @@ function readTargeting(app: App): TargetingSnapshot | null {
       h: r.h,
       depth: r.depth,
       visible: visibility.get(id) ?? 1,
+      visibleInFrame: inFrame.get(id) ?? 1,
       dim: stage.highlight?.dimOf(id) ?? 0,
       ringed: stage.highlight?.isSelected(id) ?? false,
       occludedBy: stage.occluders(id),

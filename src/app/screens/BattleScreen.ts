@@ -14,7 +14,7 @@
  * results screen shows in between.
  */
 
-import type { Camera, Scene } from 'three';
+import type { Camera, Scene, Vector3 } from 'three';
 import type {
   BattleEngine,
   BattleResult,
@@ -58,6 +58,18 @@ import { PauseScreen } from './PauseScreen.ts';
  * fires for something that missed its own deadline.
  */
 const STALL_LIMIT_MS = 45_000;
+
+/**
+ * How long after a formation is staged the field may still settle its own
+ * spacing. See {@link BattleScreen.formationSettleMs}.
+ *
+ * Long enough to cover the establishing camera move and the battle-start card,
+ * short enough that it is always over before the first command menu opens.
+ */
+const SETTLE_WINDOW_MS = 5000;
+
+/** Camera movement, in world units, that makes the framing worth re-checking. */
+const SETTLE_CAM_EPSILON = 0.02;
 
 export interface BattleScreenOptions {
   chapter: Chapter;
@@ -110,6 +122,26 @@ export class BattleScreen extends Screen {
   private presenterPaused = false;
   /** Sleeps parked on the pause gate, released when it opens. */
   private pauseWaiters: Array<() => void> = [];
+  /**
+   * How much longer the field may still settle itself, in milliseconds.
+   *
+   * The lane has to be clear **in the frame**, and the frame is not fixed when
+   * the field is staged: the camera eases from the establishing shot into the
+   * idle rig over the opening seconds, and a lane relaxed against frame one is
+   * relaxed against the wrong framing. Measured live, that is exactly what
+   * happened — Chapter 1 and Chapter 5 settled and Chapter 3 did not, because
+   * its camera was still moving when the budget ran out.
+   *
+   * So the window is a real one, it re-arms on camera movement inside it, and
+   * it is **over before the player's first decision**: moving enemies when a
+   * command goes live was option D's idea and Bailey did not pick it.
+   */
+  private formationSettleMs = SETTLE_WINDOW_MS;
+  /** Where the camera was at the last relaxation, to notice it has moved. */
+  private lastSettleCam: Vector3 | null = null;
+  /** True once a relaxation pass has come back with nothing left to move. */
+  private formationSettled = false;
+
   /** How many formations this chapter chains through. Measured in `enter`. */
   private chainLength = 1;
   /** Where the player asked to go from the pause menu. See {@link requestExit}. */
@@ -364,6 +396,11 @@ export class BattleScreen extends Screen {
         this.links = links;
         this.group = group;
         this.setup = setup;
+        // A new formation has been staged — Yunalesca's second form, the next
+        // Vegnagun part — so its lane owes its own settling window.
+        this.formationSettleMs = SETTLE_WINDOW_MS;
+        this.lastSettleCam = null;
+        this.formationSettled = false;
       },
     });
 
@@ -619,11 +656,52 @@ export class BattleScreen extends Screen {
     if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
 
     this.scene?.update(dt);
+    // Settle the enemy lane against the camera, before the player's first
+    // decision and never during one.
+    //
+    // `PaintedStage.applyFormation()` lays the fiends out on the ground when
+    // the field is staged, but the camera has not been framed then — the
+    // canvas can still be zero-sized — and the layout has to be true in the
+    // *frame*, not on the ground plan. So the first few frames of the battle
+    // finish it with the measured relaxation, which is exactly the window the
+    // battle-start card is up for. `relaxFormation` returns false while
+    // nothing can be projected yet, so a slow first frame simply retries.
+    this.settleFormation(dt);
     this.stage?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
     this.hud?.update?.(dt);
     this.cutscenes?.update(dt);
+  }
+
+  /**
+   * Keep the field's spacing true while the opening camera move settles.
+   *
+   * `PaintedStage.applyFormation()` lays the fiends out on the ground when the
+   * field is staged; this finishes the job against the camera, because the
+   * layout has to be clear in the *frame* and the frame is still moving then.
+   * It runs only inside {@link SETTLE_WINDOW_MS} (the establishing shot and
+   * the battle-start card), only when the camera has actually moved since the
+   * last pass, and never once a target cursor is live — nothing on this field
+   * moves in answer to a command.
+   */
+  private settleFormation(dt: number): void {
+    if (!this.stage || this.formationSettleMs <= 0) return;
+    this.formationSettleMs -= dt * 1000;
+    // A live menu means the player is deciding; the field holds still.
+    if (menuOwnsCancel()) {
+      this.formationSettleMs = 0;
+      return;
+    }
+    const cam = this.app.renderer.camera.position;
+    // Skip only when the framing is unchanged AND the field had already
+    // settled under it. Stopping the moment the camera stilled was not enough:
+    // Chapter 3 needed another pass to finish converging, and stopping early
+    // left Auron two thirds behind Tidus.
+    const still = this.lastSettleCam !== null && this.lastSettleCam.distanceTo(cam) < SETTLE_CAM_EPSILON;
+    if (still && this.formationSettled) return;
+    this.formationSettled = this.stage.relaxFormation();
+    this.lastSettleCam = cam.clone();
   }
 
   override handleInput(input: InputSnapshot): void {

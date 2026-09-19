@@ -467,6 +467,12 @@ export class FFXBattleHud implements HudPort {
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
     this.guide.sync(state);
     this.advisor.sync(state);
+    // Where the chrome is, so the field can settle its lane clear of it while
+    // the opening camera move is still running. Published on every sync rather
+    // than only when a cursor opens: by then the formation has stopped moving,
+    // and a fiend standing under the turn list is as hidden as one behind the
+    // aeon.
+    this.targeting?.setPanels(this.panelRects());
     // The prediction deep-clones the board two dozen times, so it is refreshed
     // when the engine state actually moved — once per playback step — and never
     // from `update(dt)`, which only re-projects the slab that is already drawn.
@@ -795,7 +801,23 @@ export class FFXBattleHud implements HudPort {
    */
   private panelRects(): Array<{ x: number; y: number; w: number; h: number }> {
     const out: Array<{ x: number; y: number; w: number; h: number }> = [];
-    const els = [this.commandMenu.stackEl, this.ctbList.el, this.partyStatus.el];
+    // The Sensor card counts too, and leaving it out was a live miss: in the
+    // first capture of this pass both Yu Pagodas stood behind it with a
+    // reported visibility of 1.000, because nothing had told the field that a
+    // card was sitting on top of them.
+    // The persistent chrome only. The Sensor card is deliberately absent: it
+    // opens *because* the player aimed and it follows whatever they aimed at,
+    // so a formation that settled seconds earlier cannot avoid it, and feeding
+    // it in only reports the fiend the player is looking at as invisible.
+    // That collision is real and is reported in docs/handoff/fix3-targeting.md
+    // rather than papered over here.
+    const els = [
+      this.commandMenu.stackEl,
+      this.ctbList.el,
+      this.partyStatus.el,
+      this.advisor.el,
+      this.guide.el,
+    ];
     for (const el of els) {
       if (!el || el.hidden) continue;
       const r = el.getBoundingClientRect();

@@ -282,6 +282,11 @@ export class TargetCursor {
       return;
     }
     const group = this.mode === 'group';
+    // One accent for a whole group. On Hastega the caster is one of the three
+    // targets, so his own bracket came out `self` blue among two `ally` greens
+    // — three figures marked by one cast, wearing two colours. The approved
+    // frame draws all three green ("one accent per context, never two").
+    const groupKind = group ? this.groupKind() : null;
     // Single mode shows every candidate (each independently clickable), not
     // just the active one — a mouse player must be able to click straight on
     // any valid enemy, not only the keyboard-highlighted one.
@@ -297,7 +302,7 @@ export class TargetCursor {
       const dim = group ? this.entries.length > 1 : i !== this.activeIndex;
       const cls = [
         'ffx-target',
-        `ffx-target--${entry.kind}`,
+        `ffx-target--${groupKind ?? entry.kind}`,
         dim ? 'ffx-target--dim' : '',
         group ? 'ffx-target--group' : '',
         clickable ? 'ffx-target--clickable' : '',
@@ -366,7 +371,7 @@ export class TargetCursor {
    * lets the flashing bracket set and this label carry it.
    */
   private groupLabelHtml(): string {
-    const kind = this.entries[0]?.kind ?? 'enemy';
+    const kind = this.groupKind();
     const label = kind === 'enemy' ? 'ALL ENEMIES' : 'ALL ALLIES';
     const boxes = this.entries
       .map((e, i) => this.rectFor(e.id, i))
@@ -379,6 +384,17 @@ export class TargetCursor {
       `<div class="ffx-target__all ffx-target__all--${kind}" style="left:${px((left + right) / 2)};top:${px(top)}">` +
       `<span>${label}</span></div>`
     );
+  }
+
+  /**
+   * The one accent a whole group wears.
+   *
+   * Any enemy in the set makes it an enemy cast; otherwise it is an ally cast,
+   * and the caster targeting himself alongside his party does not get a third
+   * colour of his own.
+   */
+  private groupKind(): ReticleKind {
+    return this.entries.some((e) => e.kind === 'enemy') ? 'enemy' : 'ally';
   }
 
   /**
