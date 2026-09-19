@@ -32,7 +32,7 @@
  * chosen inside it — see {@link CHANGE_LABEL}.
  */
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
-import { setMenuOwnsCancel } from '../common/menuCancel.ts';
+import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../ffx/cancelClaim.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -209,7 +209,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     const cleanup = (): void => {
       // The menu is gone; Esc belongs to nobody until the next one opens.
-      setMenuOwnsCancel(false);
+      releaseCancel();
       window.removeEventListener('keydown', onKey);
       deps.container.removeEventListener('click', onClick);
       deps.targetLayer.removeEventListener('click', onTargetClick);
@@ -272,11 +272,30 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       return `<div class="${cls}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${groupLabel(group)}</span>${reason}<span class="ffx2cmd__arrow">&#9666;</span>${cursor}</div>`;
     }
 
-    function renderTop(): void {
+    /**
+     * `fromCancel` is the whole point of `ui/ffx/cancelClaim.ts`.
+     *
+     * At the top row Esc has nowhere to step back to, so it is free for the
+     * pause menu. But the two halves run off different clocks: this menu is a
+     * DOM `keydown` listener firing between frames, while
+     * `BattleScreen.handleInput` polls `justPressed('cancel')` once per frame.
+     * Releasing the claim the instant Esc steps out of a submenu means the
+     * screen polls on the next frame, finds that same press still fresh as an
+     * edge, is told Esc is free, and opens the pause. One tap backed out of
+     * the submenu **and** paused the game.
+     *
+     * Measured live before the fix (`critic/scratch/fix3-ffx2/esc-probe.mjs`
+     * against a dev server on 5748): Esc out of the Change submenu *and* out of
+     * the Skill submenu both landed on `screen() === 'pause'`. The FFX track
+     * hit this in fix-3 and built `cancelClaim.ts` for it
+     * (`docs/handoff/fix3-ffx-hud.md`); FFX-2's menu never adopted it, so the
+     * bug was still live on this side. It is the same module, not a copy —
+     * one implementation, no drift.
+     */
+    function renderTop(fromCancel = false): void {
       view = 'top';
-      // At the top row the `KEY_CANCEL` branch below has nowhere to step back
-      // to, so Esc is free for the pause. See `ui/common/menuCancel.ts`.
-      setMenuOwnsCancel(false);
+      if (fromCancel) releaseCancelAfterPress();
+      else releaseCancel();
       const rows = topRows
         .map((row, i) => {
           const selected = i === topIdx;
@@ -290,7 +309,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderSub(title: string): void {
       view = 'sub';
-      setMenuOwnsCancel(true);
+      claimCancel();
       subCategory = title;
       const rows = subItems.map((c, i) => leafRowHtml(c, i, i === subIdx)).join('');
       deps.container.innerHTML = `<div class="ffx2cmd__title">${title}</div><div class="ig-cmd-stack">${rows}</div>`;
@@ -299,7 +318,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderTargets(): void {
       view = 'target';
-      setMenuOwnsCancel(true);
+      claimCancel();
       deps.targetLayer.innerHTML = targetIds
         .map((id, i) => {
           const pos = deps.project(id);
@@ -380,7 +399,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       if (KEY_CANCEL.has(e.code)) {
         e.preventDefault();
         if (view === 'target') renderSub(subCategory);
-        else if (view === 'sub') renderTop();
+        else if (view === 'sub') renderTop(true);
         return;
       }
       const list = view === 'top' ? topRows.length : view === 'sub' ? subItems.length : targetIds.length;
