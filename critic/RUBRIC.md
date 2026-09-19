@@ -22,6 +22,30 @@ Hard caps (apply before weighting):
 - Any placeholder sprite, missing boss form, or missing pre/post scene caps the total at **8.0**.
 - Any ripped retail asset or verbatim script transcript caps the total at **5.0** (legal risk).
 
+## Part B: game design coverage (added 2026-09-18 at the owner's request; Part A above is unchanged)
+
+The eight criteria above are **Part A: fidelity and craft**. They stay exactly as written, with their weights. The owner also wants the critic to cover **all aspects of game design**, so every round scores a second part the same way (0-10, one decimal, weighted total out of 10):
+
+| Category | Weight | What 10 means |
+|---|---:|---|
+| **Audio and music** | 15 | The score and the effects are beautiful and carry the soul of FFX and Clair Obscur: memorable original themes that return transformed, real-sounding instruments in one hall, effects that belong to the same world, mixing that never fatigues, music that follows the fight (phases, victory, defeat). **Beauty is scored by the owner** from the audition page and from play; the critic scores only the technical side (files present and playing, loudness, loop seams, ducking, no errors, every cue follows `docs/audio/THEMES.md`) and may not award more than 6 until the owner has scored the build's audio. |
+| **Game feel and feedback** | 12 | Every input answers instantly; hits, heals, KOs, Overdrives and boss attacks have weight through animation timing, camera, screen and sound working together; nothing feels floaty, laggy or silent; waiting is never dead time. |
+| **Clarity and information design** | 12 | At a glance the player knows whose turn it is, who is targeted (allies and enemies, single and all), what every enemy is and where it is, what just happened and why, what is about to happen, and what each command will do before committing. No panel ever shows wrong, stale or internal information; nothing important is hidden, clipped, overlapped or too small at any common window shape. |
+| **Onboarding and teachability** | 10 | A friend who never played FFX can open the link cold, understand what the game is, act within a minute, learn CTB, Overdrives, aeons, dresspheres and the Garment Grid through play, and understand why they won or lost. Help is there when wanted and out of the way when not. |
+| **Accessibility and options** | 8 | Remappable controls, readable text at every size with a scale option, cues that never rely on colour alone, reduced-motion and flash safety, separate music / effects / voice volumes, pause anywhere, optional assists that never alter canon for players who decline them. |
+| **Controls and platforms** | 8 | Keyboard, mouse, gamepad and touch are all first-class with correct prompts; works in current Chrome, Edge, Firefox and Safari, on a phone, and from 4:3 through 21:9 up to 4K; fast first load on the live URL; sensible behaviour when a tab loses focus or audio is blocked. |
+| **Difficulty and balance** | 8 | Each chapter's curve matches the original fight's tension; losses feel fair and teach something; no dominant degenerate tactic that canon did not have; any optional modifiers are clearly separated from the faithful default. |
+| **Replayability, retention and sharing** | 10 | There are real reasons to come back and to send the link to a friend: results worth improving, variety between runs, goals beyond the first clear, sessions that fit a short break, progress that persists, a link that previews well and needs no setup. |
+| **Progression, preparation and rewards** | 7 | Party prep gives meaningful, canon-plausible agency (Sphere Grid, equipment, dresspheres, Garment Grids, items) with clear consequences in the fight; results and rewards mean something; nothing is busywork. |
+| **Narrative presentation and direction** | 5 | Scenes are staged, paced and scored like cinema: camera, portraits, text rhythm, music entrances and silence make the emotional beats land; skipping and replaying scenes is painless. (The words themselves are judged in Part A.) |
+| **Cohesion and identity** | 5 | Art, UI, audio, writing and motion feel like one authored game from the title screen to the credits; transitions, loading, empty and error states are designed, not default; nothing looks like a debug tool. |
+
+Part B caps (apply before weighting): any panel that gives the player **wrong information** (for example an advisor naming a move the acting character cannot use) caps Part B at **8.0**; audio the owner has rejected caps **Audio and music** at **5.0** until the owner scores it higher.
+
+## The gate
+
+The gate is met only when **both** weighted totals reach **9.6**: Part A (fidelity and craft) and Part B (game design). The round report gives both totals, the lower of the two as the headline, and one ranked issue list across both parts (most damaging to the headline first). Proposals for expansions and novel ideas stay separate and unscored.
+
 ## Procedure
 
 1. `npm run build && npx playwright test` must pass. Read `docs/DEV.md`.
@@ -29,6 +53,7 @@ Hard caps (apply before weighting):
 3. Open the data files and compare at least 40 values per game against `research/*.md`.
 4. Review 12+ screenshots per chapter (pre-scene, command menu open, an Overdrive, a boss attack, a form change, post-scene, results).
 5. Read the story scripts against `research/writing-bible.md` beat sheets.
+5a. Part B: play as a first-time player with real input only; test keyboard, mouse, gamepad emulation and a phone viewport; open every options and help surface; measure input-to-response and first-load times; review window shapes from 4:3 to 21:9 and 4K; run the technical audio checks and read the owner's latest audio score.
 6. Produce `critic/rounds/round-NN.md`: category scores with evidence, weighted total, caps applied, and a **ranked issue list** (severity, category, exact repro, file/line, suggested fix).
 
 ## The loop (owner's rule, restated 2026-09-18)
