@@ -79,6 +79,8 @@ interface Walk {
   pairs: number;
   /** Suggestions that carried a damage or healing figure. */
   withNumbers: number;
+  /** Labels of the suggestions that carried no figure, in order. */
+  bare: string[];
 }
 
 /**
@@ -90,7 +92,7 @@ interface Walk {
  */
 function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
   const { engine, content } = newFfxEngine(groupId, seed, party);
-  const out: Walk = { decisions: 0, advised: 0, mismatches: [], switches: 0, pairs: 0, withNumbers: 0 };
+  const out: Walk = { decisions: 0, advised: 0, mismatches: [], switches: 0, pairs: 0, withNumbers: 0, bare: [] };
 
   for (let i = 0; i < MAX_DECISIONS; i++) {
     const decision: Decision = engine.nextDecision();
@@ -108,6 +110,7 @@ function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
       if (top.isSwitch) out.switches += 1;
       if (view.suggestions.length > 1) out.pairs += 1;
       if (top.estimate) out.withNumbers += 1;
+      else out.bare.push(top.label);
       expect(view.actorId).toBe(decision.actorId);
       // A switch at the top must always carry a runner-up.
       if (top.isSwitch) expect(view.suggestions.length).toBe(2);
@@ -139,9 +142,52 @@ describe('buildAdvisorView — agreement with the shipped tactic', () => {
     expect(result.mismatches).toEqual([]);
   });
 
-  it('puts a number on most of what it suggests', () => {
+  /**
+   * The real invariant is not a ratio — it is that **nothing that could carry a
+   * number goes without one.**
+   *
+   * The ratio was the assertion until 2026-09-19, at `withNumbers > advised /
+   * 2`, and the intended Chapter 1 line quietly grew out of it. Measured on
+   * seed 4 at that date: 24 advised, 10 numbered, and every single one of the
+   * fourteen without a figure is a row that genuinely has no damage or healing
+   * to report — Hastega, Mighty Guard, five Summons, three Cheers, a Light
+   * Curtain, Haste, and the two §4.7 Talk triggers that became executable in
+   * the same pass (critic round 02 #12). A card that printed a number on
+   * Hastega would be inventing one.
+   *
+   * So the ratio keeps a floor, loose enough not to be a tripwire for the
+   * chapter's own shape, and the sharp assertion moved to the list: a top
+   * suggestion with no figure must be a row from that family.
+   *
+   * **For the advisor track:** the open question this exposed is whether a
+   * summon or a party buff should carry a *forecast* of its own — "Bahamut,
+   * ~9,100 next turn", "Mighty Guard, halves the 2,400 coming" — rather than
+   * nothing. That is a card-design call, not a bug, and it is written up in
+   * `docs/handoff/builda-combat.md`.
+   */
+  const NUMBERLESS = new Set([
+    'Hastega',
+    'Haste',
+    'Mighty Guard',
+    'Cheer',
+    'Light Curtain',
+    'Lunar Curtain',
+    'Protect',
+    'Shell',
+    'Talk',
+    'Defend',
+    'Bahamut',
+    'Valefor',
+    'Ifrit',
+    'Ixion',
+    'Shiva',
+  ]);
+
+  it('puts a number on everything that has one', () => {
     const result = walk('seymour-flux', 4);
-    expect(result.withNumbers).toBeGreaterThan(result.advised / 2);
+    const unexplained = result.bare.filter((label) => !NUMBERLESS.has(label));
+    expect(unexplained, 'a row with damage or healing to report must report it').toEqual([]);
+    expect(result.withNumbers).toBeGreaterThan(result.advised / 4);
   });
 
   it('almost never leads with a party switch', () => {
