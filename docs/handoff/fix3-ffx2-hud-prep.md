@@ -139,10 +139,18 @@ applied to the other. This track kept them apart by construction.
 `ui-ffx2-chain-flourish`, `ui-ffx2-command-menu`, `ui-ffx-party-prep`,
 `ui-ffx2-prep-stats`, `ui-portrait-face-crop`.
 
+The full suite was run once: **3928 of 3929 green**. The one failure is
+`tests/unit/menu-cancel.test.ts:195` and it is **not from this round** — it
+reproduces identically with `CommandMenu.ts` checked out at `b8e3889^`. See
+"What is left".
+
 Live on a vite dev server (port 5732) with real `page.keyboard` presses,
-chapters 4 and 5, at 1280x720 / 1600x900 / 2000x1000 / 2560x1440. Rig:
-`critic/scratch/fix3-ffx2-hud-prep-fix/verify.mjs`; output
-`docs/screenshots/fix3/ffx2-hud-prep/verify.json`.
+chapters 4 and 5, at 1280x720 / 1600x900 / 2000x1000 / 2560x1440 — the full
+2 x 4 matrix green on all three FFX-2 defects, plus the FFX Equipment tab.
+Rig: `critic/scratch/fix3-ffx2-hud-prep-fix/verify.mjs`; output
+`docs/screenshots/fix3/ffx2-hud-prep/verify.json`, screenshots
+`pop-*`, `change-submenu-*`, `cancel-*`, `ffx-equipment-tab-*` in the same
+directory.
 
 The rig deliberately measures what the critic measured, not what the fix makes
 easy. In particular it freezes **`.ffx2chain__body`** at the 50% keyframe and
@@ -204,6 +212,31 @@ this is reported from the DOM rather than guessed at.
 
 ---
 
+The FFX Equipment tab, chapter 1, Tidus (`ffx-equipment-tab-1600x900.png`):
+
+```
+FFX prep tabs: ["CHAPTER","STATS","SPHERE GRID","EQUIPMENT","ITEMS","OVERDRIVE"]
+equipment chips: ["Strength +10%","HP +10%","Zombie Ward"]
+```
+
+Those are the same three the critic reported as `strength-10`, `hp-10`,
+`zombie-ward`.
+
+Two notes for anyone re-running the rig, both of which cost a run each here:
+
+- `gotoChapter`'s `skipPrep` **defaults to true**, so reaching the prep screen
+  needs `{ skipPrep: false }` explicitly.
+- the prep screen's name is `party-prep`, not `prep`.
+
+The rig drives at `setBattleSpeed('normal')`, not the critic rig's `'fast'`.
+The cancel sequence is a dozen real key presses inside one actor's turn, and
+at `'fast'` the turn can lapse mid-sequence — which surfaces as "never reached
+target selection", a rig artefact that says nothing about the build. The rig
+reports that case as an explicit failure rather than a pass, and retries up to
+six times before doing so.
+
+---
+
 ## What is left
 
 **For the art track.** `public/art` is gitignored, so a re-roll silently
@@ -219,6 +252,24 @@ node tools/portraits/measure-face-crops.mjs detect               # head-top / he
 `yuna-white-mage` is current as of 2026-09-19 14:41. If the sweep that produced
 `idle-c.*` picks a different candidate, the row needs re-measuring again — the
 guard test will say so.
+
+**For the FFX-HUD / cancel-claim track — one red test, not ours.**
+`tests/unit/menu-cancel.test.ts:195` ("takes Esc in a submenu and gives it back
+on the way out", FFX-2 block) expects `menuOwnsCancel()` to be `false`
+synchronously after the `Escape` that leaves a submenu. It is `true`.
+
+It is not this round's: checking `src/ui/ffx2/CommandMenu.ts` out at
+`b8e3889^` and re-running gives the identical failure. The cause looks like a
+timing contract rather than a logic bug — `releaseCancelAfterPress()`
+(`src/ui/ffx/cancelClaim.ts:93`) defers `setMenuOwnsCancel(false)` to
+`nextFrame()` **by design**, because the claim has to outlive the press that
+caused it, and the test asserts on the same tick. Both files belong to that
+track, so this round did not touch either.
+
+While you are in there: that module's header still describes FFX-2's cancel as
+stepping "`target -> sub -> top`". As of this round it steps
+`target -> wherever the command was picked from -> top`, which is the point of
+defect 2 above.
 
 **Standing request, unchanged from the previous round.** `EnemyIntent.layout`
 (another track's file) still resolves its obstacle list in a single greedy pass,
