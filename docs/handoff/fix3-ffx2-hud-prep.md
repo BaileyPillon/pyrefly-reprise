@@ -145,7 +145,50 @@ on screen but not in the DOM, so CHK-007's copy grep would have caught it.
 FFX names its modes Stoic, Warrior, Comrade — proper nouns — and now so does
 the row. **FFX-2 has no Overdrive modes and no such tab.**
 
-## 5 — The four carried-over defects, re-verified
+## 4a — One Esc, one meaning (found live; **not** caused by this round, FFX-2 only)
+
+Driving the new Change submenu with real keys turned up something worse than
+what I was looking for: **one tap of Esc in an FFX-2 submenu stepped back to
+the top row *and* opened the pause screen.** The probe
+(`critic/scratch/fix3-ffx2/esc-probe.mjs`) reproduces it on the *ability*
+submenu too, so it is not the Change row's doing — it has been in every FFX-2
+fight since the pause screen landed, and Bailey would have hit it the first
+time he pressed Esc in a Skill list.
+
+It is the exact race `src/ui/ffx/cancelClaim.ts` was written for during the FFX
+track's fix-3 round. The menu is a DOM `keydown` listener firing *between*
+frames; `BattleScreen.handleInput` polls `justPressed('cancel')` once *per*
+frame. Releasing the Esc claim the instant the menu steps back lets the screen
+find that same press still fresh as an edge a frame later and take it as its
+own. FFX-2's menu simply never adopted that module.
+
+It does now — the same module, not a copy. Before: both submenus ended on
+`screen() === 'pause'`. After: both end on `'battle'`.
+
+## 5 — A STATS tab for FFX-2 prep (rank 40's parity half, FFX-2 only)
+
+Of FFX's two extra tabs, one has a real X-2 counterpart and one does not.
+
+- **STATS does.** Added.
+- **EQUIPMENT and OVERDRIVE do not, and stay absent on purpose.** X-2 has no
+  weapons and no armour — the dressphere *is* the equipment and accessories are
+  the only slots, which the Accessories tab already covers — and it has no
+  Overdrive modes at all. This is rank 40's "written exception list".
+
+The tab earns more than parity. [ffx2-combat-core §5.1]: **a girl's stats are a
+function of (dressphere × level) only.** Yuna, Rikku and Paine are identical in
+the same sphere at the same level, which is why `FFX2MemberBuild` carries no
+stat block and the engine derives one. A player arriving from FFX will assume
+the exact opposite — that the character has the stats and the outfit is
+cosmetic — and nothing in the game has ever told them otherwise. So the tab
+prints her worn block and then every sphere she owns as a *delta* against it,
+the same comparison §4.5.4 puts on the Garment Grid, and the rule becomes
+self-evident rather than merely true.
+
+Read-only like every tab here; every figure comes from the engine's own
+`dressphereStats()`.
+
+## 6 — The four carried-over defects, re-verified
 
 Not re-done — re-measured live on this build, because §1–§3 touch the same
 surfaces.
@@ -153,7 +196,7 @@ surfaces.
 | defect | state |
 |---|---|
 | FFX-2 party rows show no painted portraits | closed at `7cb8417`/`bf0e017`; live rows carry `art/characters/<girl>-<dressphere>/idle.png` under `art/portraits/<girl>.png`, per the current dressphere, with the monogram as the floor. Re-measured this round. |
-| FFX-2 prep has only the Chapter tab | closed; four tabs (CHAPTER / DRESSPHERES / ACCESSORIES / ITEMS) reading the real build. |
+| FFX-2 prep has only the Chapter tab | closed; **five** tabs as of this round (CHAPTER / DRESSPHERES / STATS / ACCESSORIES / ITEMS), all reading the real build — see §5. |
 | Auron's HUD portrait is badly cropped | closed at `bf0e017`; every row in `src/ui/common/face-crops.json` is measured off the painting and pinned by `tests/unit/ui-portrait-face-crop.test.ts` (84 cases, including the file-size check that broke Auron in the first place). |
 | FFX-2 HUD overlap at four viewports | re-measured; §3a is the one new overlap this round introduced and closed. |
 
@@ -218,6 +261,13 @@ Not done here because the call site is the shell's, and changing
 `faceImgHtml`'s own semantics would silently push body crops into the pause
 screen and chapter select mid-round.
 
+**To the FFX HUD track — check `ui/ffx/CommandMenu.ts` for the Esc race.**
+FFX-2's menu had it and FFX's `cancelClaim.ts` is the cure, so the FFX menu is
+presumably already using it — but it was not verified from this side, and §4a
+shows how easy it is for one menu to be left behind. One run of
+`critic/scratch/fix3-ffx2/esc-probe.mjs` pointed at a Chapter 1–3 fight settles
+it.
+
 **To `src/ui/common/EnemyIntent.ts`'s track — a real placement pass.**
 `intentPlacement.ts` exists only because `layout()` dodges obstacles in one
 greedy pass. Two components now steer through that module from the outside
@@ -268,7 +318,56 @@ The measurement also greps every player-facing label element for anything still
 shaped like an internal kebab id, so the rank-26 class of defect fails the run
 rather than needing to be noticed.
 
-<!-- LIVE RESULTS -->
+### Two holes in the rig, found and closed
+
+Worth recording, because the previous round's screenshots have the first one
+too and nobody noticed.
+
+1. **A transient outlived by its own screenshot.** The chain counter lives
+   1.4 s and the spherechange light 0.8 s; a `page.screenshot` of a SwiftShader
+   frame takes longer than either. So the rig measured the chip in the DOM,
+   wrote "19 boxes, 0 overlaps" — and photographed a frame it had already
+   expired out of. The first version of this round's evidence showed an empty
+   patch of sky where the counter had been, and the report said it was there.
+   The rig now re-fires the event through the HUD's own port on an interval
+   until the shutter closes, and freezes the flourish's animations 420 ms in so
+   the captured frame is the same beat every time instead of whatever was
+   caught.
+2. **A skewed box is not an overflowing one.** The rig flags `.prep__sheet` as
+   overflowing horizontally (`scrollWidth` 373 vs `clientWidth` 364) on every
+   tab of both games. That 9 units is the `skewX` the sheet is drawn with
+   painting past its layout box; `overflow` is `visible` and nothing is
+   clipped. It is a false positive, not a defect — noted so the next reader
+   does not chase it.
+
+### What the matrix said
+
+Chapters 4 and 5, 1280x720 / 1600x900 / 2000x1000 / 2560x1440, across the
+command menu, the Change submenu, the chain counter at every escalation tier
+(3 / 7 / 12 / 22) and the spherechange transformation:
+
+- **zero panel-on-panel and panel-on-fighter overlaps**, including the two this
+  round introduced and then closed (§3a) — before the fix the counter wore
+  Bahamut (112x14) and the intent slab (99x81) at 1280x720;
+- **zero raw ids** on any player-facing label, in either game;
+- the command rows read `Attack / Skill / Change / Item`, and the Change
+  submenu `Gunner — GRANTS: Red` / `Black Mage — GRANTS: Yellow`;
+- the counter reads its count, its label and its multiplier, with six motes and
+  the right tier at each threshold;
+- the flourish names the outfit, prints the gate and draws its eight motes.
+
+Prep, both games, same four viewports, every tab and every member: **zero
+overlaps**; FFX-2 now reports five tabs
+(`CHAPTER / DRESSPHERES / STATS / ACCESSORIES / ITEMS`) against FFX's six.
+
+**One honest caveat.** In one run of the matrix the *first* measured frame after
+a battle opens showed the advisor card and the intent slab kissing Rikku and
+Bahamut (16x31 and 27x87). The next state in the same run, and every state of
+the runs either side of it, measured zero. The girls are still walking into
+formation on that frame and the fences are recomputed per frame from their
+projected boxes, so a placement can lag the formation by a frame at battle
+entry. It is not reproducible on demand and it is not a standing overlap, but
+it is not nothing either, and it is written down rather than rounded to zero.
 
 ---
 
@@ -289,3 +388,12 @@ rather than needing to be noticed.
 - **§4.5.4's gate-arrival "orb flies from the link to the girl"** is not drawn:
   there is no link on screen to fly from until the wheel is wired. The gate is
   named on the plate instead.
+- **The Stats tab shows two of twelve spheres at a time.** The panel gets
+  334x113.3 units and the comparison table gets what is left after the worn
+  block and the rule; the rest scroll behind a masked edge. A girl with
+  thirteen dresspheres wants a wider sheet or a second page, and both are the
+  shell's call.
+- **The chain counter is the loudest thing in the frame at 2560x1440.** §4.6's
+  28 px numeral scales with the letterbox, so at 4x it is a 112 px figure. It
+  is placed clear of everything, but whether that is the spectacle Bailey wants
+  is question 3 below, not something to decide from here.
