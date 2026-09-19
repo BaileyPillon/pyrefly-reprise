@@ -32,7 +32,7 @@ import { writeFile } from 'node:fs/promises';
 
 const { getTrack, trackNames } = await import('../../src/audio/tracks/index.ts');
 const THEMES = await import('../../src/audio/tracks/themes.ts');
-const { midiFromName } = await import('../../src/audio/score.ts');
+const { midiFromName, effectiveJitterMs } = await import('../../src/audio/score.ts');
 const { getPreset } = await import('../../src/audio/voices/presets/index.ts');
 
 // ------------------------------------------------------- the bible's map ---
@@ -57,6 +57,9 @@ const CUE_MAP = {
     // constant velocity is the point.
     constantVelocityOk: true,
     noLeadingTone: true,
+    // §Humanisation: "Vegnagun, the Yunalesca canon — <= 3". Only the canon:
+    // the cello solo, brass and timpani in this cue are human on purpose.
+    machineChannels: { match: /canon/i, maxJitterMs: 3 },
   },
   'boss-jecht': { key: 'D minor', bpm: 144, meter: [4, 4], themes: ['FATHER', 'FAREWELL_CLIMB'] },
   'boss-yu-yevon': { key: 'E minor', bpm: 40, meter: [4, 4], themes: ['HYMN_HEAD'] },
@@ -83,6 +86,28 @@ const CUE_MAP = {
   'boss-shuyin': { key: 'C# minor', bpm: 154, meter: [4, 4], themes: ['SONGSTRESS_DARK'] },
   'victory-ffx2': { key: 'Eb major', bpm: 128, meter: [4, 4], themes: ['SONGSTRESS_HOOK'] },
   'ending-ffx2': { key: 'Bb major', bpm: 84, meter: [4, 4], themes: ['SONGSTRESS_HOOK', 'FAREWELL_RISE'] },
+};
+
+/**
+ * Slow cues that are right to have no tempo map, with the bible's own reason.
+ *
+ * This list is the point of the check: "no tempo map" is only a finding when
+ * nobody decided it. §Rubato ends "HYMN, and the Yunalesca canon — zero", and
+ * a machine does not breathe, so three of these are the bible speaking. Any
+ * other lyrical cue that turns up without a map is an omission.
+ */
+const TEMPO_MAP_EXEMPT = {
+  pause: 'HYMN is the one lyrical theme with no rubato — a congregation does not rubato',
+  'boss-yunalesca': 'the rite does not breathe (§Rubato), and the cue says so in its own header',
+  'boss-vegnagun': 'the machine has no rubato by definition (cue map #18)',
+  // These two are QA's reading rather than a line of the bible, and an
+  // arranger may overturn either. Both are cues whose own Form column is a
+  // pulse: "A · A′ · canon · A" over a pedal, and "pulse · fragment ·
+  // poisoned prayer · pulse". A canon that bends its pulse stops being a
+  // canon, and the machine under the cathedral is a machine.
+  'boss-dread': "a patient canon over a pedal — QA's reading, not the bible's; an arranger may overturn it",
+  'scene-bevelle-underground':
+    "the cue's own form is pulse-to-pulse and its emotion is a machine — QA's reading, not the bible's",
 };
 
 /** Theme cells, as interval sequences. Tracker strings are parsed first. */
@@ -250,7 +275,15 @@ function performance(track, rules) {
       notes: list.length,
       velMean: mean,
       velSd: sd,
-      jitterMs: preset?.timingJitterMs ?? null,
+      // What this channel will actually be rendered with, not what its preset
+      // asks for. A `perform` block replaces the preset's figure and
+      // `humanise` scales whatever survives that, so reading the preset alone
+      // both invents failures (Vegnagun's desks are pulled to 1-3 ms by
+      // `perform` out of presets that want 14-34) and, worse, hides real ones
+      // (a preset at 2 ms that a channel pushes back up to 20). This is the
+      // same call `render.mjs` makes when it builds the voice.
+      jitterMs: preset ? effectiveJitterMs(preset.timingJitterMs ?? 0, channel.perform) : null,
+      presetJitterMs: preset?.timingJitterMs ?? null,
     });
     // "Never render a phrase at constant velocity" is about phrases. A kick
     // pattern or a crash at one level is an arrangement choice, not a
@@ -281,6 +314,29 @@ function performance(track, rules) {
     }
   } else if (jitters.length && jitters.every((j) => j === 0)) {
     findings.push('every voice has timingJitterMs 0 — nothing is humanised');
+  }
+
+  // The bible names TWO machine passages, not one. Vegnagun is a whole cue and
+  // gets `maxJitterMs` above; the Yunalesca canon is a handful of channels
+  // inside a cue whose brass, timpani and solo cello are meant to breathe, so
+  // the ceiling has to be aimed at the canon alone. Nothing checked it before,
+  // which meant half of §Humanisation's last row was unenforced.
+  if (rules.machineChannels) {
+    const { match, maxJitterMs } = rules.machineChannels;
+    const machine = channels.filter((c) => match.test(c.name));
+    if (!machine.length) {
+      findings.push(
+        `no channel matches ${match} — the cue's machine passage has been renamed ` +
+          'or removed, and its jitter ceiling is now checking nothing',
+      );
+    }
+    const over = machine.filter((c) => (c.jitterMs ?? 0) > maxJitterMs);
+    if (over.length) {
+      findings.push(
+        `${over.length} machine channel(s) exceed the ${maxJitterMs} ms ceiling: ` +
+          over.map((c) => `${c.name} ${c.jitterMs}ms`).join(', '),
+      );
+    }
   }
 
   if (rules.noLeadingTone) {
@@ -472,6 +528,24 @@ for (const name of names) {
         'a slow lyrical cue with no written rubato will read as typed rather than played',
     );
   }
+  // Tempo map. THEMES.md §Renderer requests called this "the single biggest
+  // quality item left" and the renderer has it now, so a lyrical cue without
+  // one is performing its rubato inside a fixed grid: the tune can lean, the
+  // accompaniment under it cannot. Nothing checked for it, so the ten cues
+  // that gained a map and the ones that did not looked identical from here.
+  row.tempoMarks = track.tempo?.length ?? 0;
+  if (!row.tempoMarks) {
+    const why = TEMPO_MAP_EXEMPT[name];
+    if (why) row.notes.push(`no tempo map, deliberately: ${why}`);
+    else if (rules.bpm <= 100) {
+      row.failures.push(
+        'no tempo map on a lyrical cue — rubato written into note values can move a note ' +
+          'but cannot bend the pulse, so the accompaniment stays on the grid under a melody ' +
+          'trying to breathe (THEMES.md §Renderer requests #1)',
+      );
+    }
+  }
+
   const lean = leaningNotes(track, lyricalChannels);
   if (lean?.length) {
     row.appoggiatura = lean;

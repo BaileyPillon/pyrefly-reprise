@@ -50,6 +50,13 @@
   .guide strong { color: var(--gold); }
   .check { border: 1px dashed var(--rule); border-radius: 8px; padding: 16px 20px; margin-top: 24px; }
   .first .cue { border-color: var(--gold); }
+  .changed { margin: 10px 0 0; font-size: 0.88rem; color: var(--ink); opacity: 0.85;
+             border-top: 1px solid var(--rule); padding-top: 9px; }
+  .changed span { display: inline-block; font: 11px/1.4 ui-monospace, Menlo, Consolas, monospace;
+                  letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold);
+                  margin-right: 8px; }
+  .cue.open { border-left: 3px solid var(--gold); }
+  .cue.open h4 { font-family: inherit; font-size: 1rem; }
   footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule);
            color: var(--muted); font-size: 0.85rem; }
   @media (max-width: 480px) { .wrap { padding: 28px 16px 64px; } h1 { font-size: 1.5rem; } }
@@ -87,49 +94,49 @@
           <h4>title</h4>
           <p class="emotion">The goodbye, unfinished — solo piano, a tone below its own key.</p>
           <audio controls preload="none" src="../../public/audio/music/title.mp3"></audio>
-          <p class="stats"><span>1:34</span><span>1.20 MB</span><span>-16.14 LUFS</span><span>-1.37 dBTP</span><span>loop 8.28s → 91.03s</span><span>tilt -10.2 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:38</span><span>1.25 MB</span><span>-16.2 LUFS</span><span>-1.39 dBTP</span><span>loop 8.28s → 94.83s</span><span>tilt -10.2 dB/band</span><span>all gates pass</span><span>58 bpm 4/4</span><span>tempo map 15 marks</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>chapter-select</h4>
           <p class="emotion">The same tune as a waltz. This is the Clair Obscur register.</p>
           <audio controls preload="none" src="../../public/audio/music/chapter-select.mp3"></audio>
-          <p class="stats"><span>1:16</span><span>1.00 MB</span><span>-16.09 LUFS</span><span>-1.37 dBTP</span><span>loop 4.29s → 72.86s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:18</span><span>1.02 MB</span><span>-16.08 LUFS</span><span>-1.37 dBTP</span><span>loop 4.29s → 74.77s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span><span>84 bpm 3/4</span><span>tempo map 100 marks</span><span>6 appoggiaturas, all leaning</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>battle-ffx</h4>
           <p class="emotion">The ordinary fight. Everything else is measured against this.</p>
           <audio controls preload="none" src="../../public/audio/music/battle-ffx.mp3"></audio>
-          <p class="stats"><span>1:20</span><span>1.28 MB</span><span>-16.01 LUFS</span><span>-1.55 dBTP</span><span>loop 6.40s → 76.80s</span><span>tilt -7.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:20</span><span>1.29 MB</span><span>-16.01 LUFS</span><span>-1.55 dBTP</span><span>loop 6.40s → 76.80s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span><span>150 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>boss-seymour</h4>
           <p class="emotion">Organ and band. He never gets loud; the band does.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-seymour.mp3"></audio>
-          <p class="stats"><span>1:41</span><span>1.59 MB</span><span>-15.99 LUFS</span><span>-1.49 dBTP</span><span>loop 7.27s → 98.18s</span><span>tilt -9.1 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:42</span><span>1.60 MB</span><span>-15.99 LUFS</span><span>-1.47 dBTP</span><span>loop 7.27s → 98.66s</span><span>tilt -9.1 dB/band</span><span>all gates pass</span><span>132 bpm 4/4</span><span>tempo map 4 marks</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>boss-yunalesca</h4>
           <p class="emotion">The prayer turned Phrygian and made into a machine.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-yunalesca.mp3"></audio>
-          <p class="stats"><span>1:44</span><span>1.51 MB</span><span>-15.97 LUFS</span><span>-1.8 dBTP</span><span>loop 10.91s → 100.91s</span><span>tilt -11.1 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:44</span><span>1.51 MB</span><span>-15.97 LUFS</span><span>-1.9 dBTP</span><span>loop 10.91s → 100.91s</span><span>tilt -11.0 dB/band</span><span>all gates pass</span><span>132 bpm 6/8</span><span>no tempo map</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>boss-jecht</h4>
           <p class="emotion">The riff and the goodbye, at the same time, arguing.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-jecht.mp3"></audio>
-          <p class="stats"><span>1:50</span><span>1.76 MB</span><span>-16.01 LUFS</span><span>-3.03 dBTP</span><span>loop 6.67s → 106.67s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:50</span><span>1.76 MB</span><span>-16.01 LUFS</span><span>-2.8 dBTP</span><span>loop 6.67s → 107.12s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span><span>144 bpm 4/4</span><span>tempo map 4 marks</span><span>3 appoggiaturas, all leaning</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>boss-ffx2-aeon</h4>
           <p class="emotion">The other game entirely — and the same four opening degrees.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-ffx2-aeon.mp3"></audio>
-          <p class="stats"><span>1:57</span><span>1.82 MB</span><span>-16 LUFS</span><span>-1.38 dBTP</span><span>loop 12.00s → 114.00s</span><span>tilt -8.0 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:57</span><span>1.82 MB</span><span>-16 LUFS</span><span>-1.38 dBTP</span><span>loop 12.00s → 114.00s</span><span>tilt -8.0 dB/band</span><span>all gates pass</span><span>160 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
         </article>
         <article class="cue">
           <h4>sound effects — montage</h4>
           <p class="emotion">Twelve effects in twenty-five seconds: glass, steel, choir, sub.</p>
           <audio controls preload="none" src="sfx-montage.mp3"></audio>
-          <p class="stats"><span>0:25</span><span>12 effects</span><span>cursor · confirm · menu · slash ×2 · guard · critical · cure · thunder · overdrive · summon · fayth</span></p>
+          <p class="stats"><span>0:32</span><span>12 effects</span><span>0.29 MB</span><span>cursor · confirm · menu · slash ×2 · guard · critical · cure · thunder · overdrive · summon · fayth</span></p>
         </article>
 </div>
 
@@ -141,25 +148,28 @@
         <article class="cue">
           <h4>title</h4>
           <p class="emotion">A story that is already over, being told anyway</p>
-          <p class="blurb">&quot;Tide, Remembered&quot; — the farewell theme, bars 1-8 only, a tone below its own key and never finishing: solo piano, then strings and a distant voice. A minor, 58 bpm.</p>
+          <p class="blurb">&quot;Tide, Remembered&quot; — FAREWELL bars 1-8 only on solo piano, the phrase never finishing, with HYMN_HEAD on flute at the very top; a story that is already over, being told anyway. A minor, 58 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/title.mp3"></audio>
-          <p class="stats"><span>1:34</span><span>1.20 MB</span><span>-16.14 LUFS</span><span>-1.37 dBTP</span><span>loop 8.28s → 91.03s</span><span>tilt -10.2 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:38</span><span>1.25 MB</span><span>-16.2 LUFS</span><span>-1.39 dBTP</span><span>loop 8.28s → 94.83s</span><span>tilt -10.2 dB/band</span><span>all gates pass</span><span>58 bpm 4/4</span><span>tempo map 15 marks</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Gained a tempo map (15 marks), so the piano can push and pull instead of sitting on the grid.</p>
         </article>
 
         <article class="cue">
           <h4>chapter-select</h4>
           <p class="emotion">Unhurried choosing; nothing here can hurt you yet</p>
-          <p class="blurb">&quot;Threshold, Unhurried&quot; — the farewell theme as a waltz: four passes of one eight-bar phrase, piano to quartet to an inverted texture and back. B minor, 84 bpm, 3/4.</p>
+          <p class="blurb">&quot;Threshold, Unhurried&quot; — HYMN_HEAD alone, four notes on flute, then FAREWELL_WALTZ bars 1-8 looping there; unhurried choosing; nothing here can hurt you yet. B minor, 84 bpm, 3/4.</p>
           <audio controls preload="none" src="../../public/audio/music/chapter-select.mp3"></audio>
-          <p class="stats"><span>1:16</span><span>1.00 MB</span><span>-16.09 LUFS</span><span>-1.37 dBTP</span><span>loop 4.29s → 72.86s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:18</span><span>1.02 MB</span><span>-16.08 LUFS</span><span>-1.37 dBTP</span><span>loop 4.29s → 74.77s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span><span>84 bpm 3/4</span><span>tempo map 100 marks</span><span>6 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map with a waltz lilt — 100 marks, one per bar, so the oom-pah-pah leans rather than ticks. Per-channel jitter set.</p>
         </article>
 
         <article class="cue">
           <h4>pause</h4>
           <p class="emotion">The game holding its breath</p>
-          <p class="blurb">&quot;Still Water&quot; — the prayer's first eight bars, one voice over a tenor drone, mostly air. E Aeolian, 46 bpm.</p>
+          <p class="blurb">&quot;Still Water&quot; — HYMN bars 1-8, solo soprano over a tenor drone — no alto, no bass, no percussion; the game holding its breath. E Aeolian, 46 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/pause.mp3"></audio>
-          <p class="stats"><span>0:50</span><span>0.74 MB</span><span>-16 LUFS</span><span>-1.39 dBTP</span><span>loop 5.22s → 46.96s</span><span>tilt -9.6 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>0:50</span><span>0.74 MB</span><span>-16.08 LUFS</span><span>-2.78 dBTP</span><span>loop 5.22s → 46.96s</span><span>tilt -9.6 dB/band</span><span>all gates pass</span><span>46 bpm 4/4</span><span>no tempo map</span><span>1 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Per-channel jitter set. Deliberately still has no tempo map: the prayer is the one lyrical theme the bible gives no rubato.</p>
         </article>
 
 <h3>Chapter I — Seymour Flux, Mt. Gagazet</h3>
@@ -168,41 +178,46 @@
         <article class="cue">
           <h4>scene-gagazet</h4>
           <p class="emotion">The mountain does not care</p>
-          <p class="blurb">&quot;Where the Horns Fell Silent&quot; — flute over an open-fifth choir, a clan horn call and distant taiko thunder. B minor with a dorian G#, 72 bpm.</p>
+          <p class="blurb">&quot;Where the Horns Fell Silent&quot; — FATHER_STRAIGHTENED on one unaccompanied horn, once; FAREWELL_RISE on solo cello, once; then thirty seconds of drone; the mountain does not care. B minor, 72 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/scene-gagazet.mp3"></audio>
-          <p class="stats"><span>1:46</span><span>1.44 MB</span><span>-16.15 LUFS</span><span>-1.38 dBTP</span><span>loop 40.00s → 103.33s</span><span>tilt -11.3 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:46</span><span>1.44 MB</span><span>-16.15 LUFS</span><span>-1.38 dBTP</span><span>loop 40.00s → 103.33s</span><span>tilt -11.3 dB/band</span><span>all gates pass</span><span>72 bpm 4/4</span><span>no tempo map</span><span>1 bible finding(s)</span></p>
+          <p class="changed"><span>changed</span> Unchanged this pass. Still has no tempo map — see the open findings at the foot of this page.</p>
         </article>
 
         <article class="cue">
           <h4>battle-ffx</h4>
           <p class="emotion">We can win this</p>
-          <p class="blurb">Driving rock-orchestral battle theme. E minor, 150 bpm.</p>
+          <p class="blurb">&quot;Hold the Trail&quot; — BATTLE_HOOK in full, with FATHER's rhythm (not its pitches) in the kit and bass; we can win this. E minor, 150 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/battle-ffx.mp3"></audio>
-          <p class="stats"><span>1:20</span><span>1.28 MB</span><span>-16.01 LUFS</span><span>-1.55 dBTP</span><span>loop 6.40s → 76.80s</span><span>tilt -7.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:20</span><span>1.29 MB</span><span>-16.01 LUFS</span><span>-1.55 dBTP</span><span>loop 6.40s → 76.80s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span><span>150 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> RE-RENDERED THIS PASS, and this is the one to listen to. The shipped MP3 was the previous composition: the score was rewritten and never re-rendered, so every check passed while the file played music that no longer existed in the repo. The old and new audio correlate at 0.03 — they are different pieces.</p>
         </article>
 
         <article class="cue">
           <h4>boss-dread</h4>
           <p class="emotion">Something is watching, and it is patient</p>
-          <p class="blurb">Slow choir/timpani dread for Seymour and Yunalesca. D minor, 90 bpm.</p>
+          <p class="blurb">&quot;The Unsent Hymn&quot; — HYMN in canon at the octave, choir over a pedal, SEYMOUR as a bass counter-line at half volume; something is watching, and it is patient. D minor, 90 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-dread.mp3"></audio>
-          <p class="stats"><span>1:28</span><span>1.31 MB</span><span>-16.02 LUFS</span><span>-1.47 dBTP</span><span>loop 10.67s → 85.33s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:28</span><span>1.29 MB</span><span>-16.02 LUFS</span><span>-1.4 dBTP</span><span>loop 10.67s → 85.33s</span><span>tilt -10.9 dB/band</span><span>all gates pass</span><span>90 bpm 4/4</span><span>no tempo map</span><span>1 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Appoggiatura pairs corrected in the choir — the leaning note is now louder than the note it falls to.</p>
         </article>
 
         <article class="cue">
           <h4>boss-seymour</h4>
           <p class="emotion">Contempt that has convinced itself it is mercy</p>
-          <p class="blurb">&quot;Ascension of the Unmaker&quot; — a demonic mass at battle tempo: choir over an organ lament bass, spiccato strings, taiko and a Sending counter-line. C# minor, 132 bpm.</p>
+          <p class="blurb">&quot;Noble Rot&quot; — SEYMOUR in pedal organ and contrabasses, SEYMOUR_MIRROR in the manuals, the minor-third sequence, SEYMOUR_UNMOORED once in the final section; contempt that has convinced itself it is mercy. C# minor, 132 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-seymour.mp3"></audio>
-          <p class="stats"><span>1:41</span><span>1.59 MB</span><span>-15.99 LUFS</span><span>-1.49 dBTP</span><span>loop 7.27s → 98.18s</span><span>tilt -9.1 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:42</span><span>1.60 MB</span><span>-15.99 LUFS</span><span>-1.47 dBTP</span><span>loop 7.27s → 98.66s</span><span>tilt -9.1 dB/band</span><span>all gates pass</span><span>132 bpm 4/4</span><span>tempo map 4 marks</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map, and performance overrides so the organ keeps its own pace under the band.</p>
         </article>
 
         <article class="cue">
           <h4>victory-ffx</h4>
           <p class="emotion">Relief, not triumph</p>
-          <p class="blurb">&quot;Bright After the Storm&quot; — a one-shot rising brass fanfare, then a pluck-and-piano results loop that grows and recedes. C major, 120 bpm.</p>
+          <p class="blurb">&quot;Bright After the Storm&quot; — VICTORY_FANFARE as a one shot into VICTORY_LOOP, with FAREWELL's incipit in the major on flute at bars 7-8; the fanfare closes F-C, not G-C; relief, not triumph. C major, 120 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/victory-ffx.mp3"></audio>
-          <p class="stats"><span>1:15</span><span>1.10 MB</span><span>-16.09 LUFS</span><span>-1.37 dBTP</span><span>loop 8.00s → 72.00s</span><span>tilt -9.6 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:15</span><span>1.10 MB</span><span>-16.12 LUFS</span><span>-1.36 dBTP</span><span>loop 8.15s → 72.15s</span><span>tilt -9.6 dB/band</span><span>all gates pass</span><span>120 bpm 4/4</span><span>tempo map 3 marks</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map, and the fanfare strings are no longer at one velocity for twenty-four notes — the fanfare is played now, not typed.</p>
         </article>
 
 <h3>Chapter II — Yunalesca, the Zanarkand dome</h3>
@@ -211,17 +226,19 @@
         <article class="cue">
           <h4>scene-zanarkand-dome</h4>
           <p class="emotion">Warmth remembered, which is worse than cold</p>
-          <p class="blurb">&quot;Where the Tide Stopped&quot; — sparse piano dyads, pad and bell in the ruined dome; the sigh returns, the question stays open. E minor, 58 bpm.</p>
+          <p class="blurb">&quot;Where the Tide Stopped&quot; — FAREWELL as a nocturne — melody up an octave, sextuplet left hand, soprano alone on bars 9-12 — and HYMN harmonised in strings, the only time it is ever warm; warmth remembered, which is worse than cold. B minor, 48 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/scene-zanarkand-dome.mp3"></audio>
-          <p class="stats"><span>2:13</span><span>1.77 MB</span><span>-16.1 LUFS</span><span>-1.39 dBTP</span><span>loop 10.00s → 130.00s</span><span>tilt -11.7 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>2:09</span><span>1.71 MB</span><span>-16.07 LUFS</span><span>-1.37 dBTP</span><span>loop 10.00s → 126.17s</span><span>tilt -11.6 dB/band</span><span>all gates pass</span><span>48 bpm 4/4</span><span>tempo map 15 marks</span><span>4 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map (15 marks) under the nocturne, so the left hand breathes with the tune.</p>
         </article>
 
         <article class="cue">
           <h4>boss-yunalesca</h4>
           <p class="emotion">A rite that will finish with or without you</p>
-          <p class="blurb">&quot;Rite Without End&quot; — a fixed-pitch choir chant over a relentless harp and spiccato ostinato; the rite never changes its note. F harmonic minor, 6/8, 132 bpm.</p>
+          <p class="blurb">&quot;Rite Without End&quot; — HYMN at +1, HYMN_HEAD as a four-entry canon three beats apart at the octave and the fourth with velocity locked at 0.62, then AMEN_PHRYGIAN; a rite that will finish with or without you. F Phrygian, 132 bpm, 6/8.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-yunalesca.mp3"></audio>
-          <p class="stats"><span>1:44</span><span>1.51 MB</span><span>-15.97 LUFS</span><span>-1.8 dBTP</span><span>loop 10.91s → 100.91s</span><span>tilt -11.1 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:44</span><span>1.51 MB</span><span>-15.97 LUFS</span><span>-1.9 dBTP</span><span>loop 10.91s → 100.91s</span><span>tilt -11.0 dB/band</span><span>all gates pass</span><span>132 bpm 6/8</span><span>no tempo map</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Lean pairs and timing corrected. Still no tempo map and still at constant velocity 0.62 in the canon — both are the bible naming this cue as the rite that does not breathe.</p>
         </article>
 
 <h3>Chapter III — Braska’s Final Aeon, and Yu Yevon</h3>
@@ -230,33 +247,37 @@
         <article class="cue">
           <h4>scene-dreams-end</h4>
           <p class="emotion">Unmoored</p>
-          <p class="blurb">&quot;A City That Never Was&quot; — celesta music box over whole-tone drift inside Sin; the title's rise, bent wrong. No tonic, 76 bpm.</p>
+          <p class="blurb">&quot;A City That Never Was&quot; — FAREWELL_RISE alone on celesta, bent, over whole voicings planing in parallel with no functional logic; unmoored. no tonic, 76 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/scene-dreams-end.mp3"></audio>
-          <p class="stats"><span>1:44</span><span>1.52 MB</span><span>-16.1 LUFS</span><span>-1.38 dBTP</span><span>loop 12.63s → 101.05s</span><span>tilt -10.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:44</span><span>1.52 MB</span><span>-16.1 LUFS</span><span>-1.38 dBTP</span><span>loop 12.63s → 101.05s</span><span>tilt -10.5 dB/band</span><span>all gates pass</span><span>76 bpm 4/4</span><span>no tempo map</span><span>1 bible finding(s)</span></p>
+          <p class="changed"><span>changed</span> Unchanged this pass. Still has no tempo map — see the open findings at the foot of this page.</p>
         </article>
 
         <article class="cue">
           <h4>boss-jecht</h4>
           <p class="emotion">Two people talking over each other, and both of them are right</p>
-          <p class="blurb">&quot;Blitz for Two&quot; — double-tracked drop-D guitar riffs and a real solo; the bridge turns to D major for the father's pride. D minor, 144 bpm.</p>
+          <p class="blurb">&quot;Blitz for Two&quot; — FATHER in full; FAREWELL bars 9-12 at half-time in the bridge; the two superimposed in the climax, FATHER entering two beats late; two people talking over each other, and both of them are right. D minor, 144 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-jecht.mp3"></audio>
-          <p class="stats"><span>1:50</span><span>1.76 MB</span><span>-16.01 LUFS</span><span>-3.03 dBTP</span><span>loop 6.67s → 106.67s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:50</span><span>1.76 MB</span><span>-16.01 LUFS</span><span>-2.8 dBTP</span><span>loop 6.67s → 107.12s</span><span>tilt -8.5 dB/band</span><span>all gates pass</span><span>144 bpm 4/4</span><span>tempo map 4 marks</span><span>3 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map, and the brass appoggiaturas turned back the right way round.</p>
         </article>
 
         <article class="cue">
           <h4>boss-yu-yevon</h4>
           <p class="emotion">No end</p>
-          <p class="blurb">&quot;What the Tide Keeps&quot; — organ, choir and full orchestra; Sending in dread, the sigh in answer, the rising cell triumphant in D major. B minor, 96 bpm.</p>
+          <p class="blurb">&quot;No End&quot; — HYMN whole at augment(2), choir over one drone, bars 12-16 unaccompanied, the amen replaced by a held iv that never resolves and a second choir a fifth above, eight beats late; no end. E Aeolian, 40 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-yu-yevon.mp3"></audio>
-          <p class="stats"><span>3:33</span><span>3.15 MB</span><span>-16.03 LUFS</span><span>-1.39 dBTP</span><span>loop 6.00s → 210.00s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>3:39</span><span>3.21 MB</span><span>-16.06 LUFS</span><span>-1.38 dBTP</span><span>loop 6.00s → 215.60s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span><span>40 bpm 4/4</span><span>tempo map 2 marks</span><span>2 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map, and the choir soprano’s leaning notes corrected.</p>
         </article>
 
         <article class="cue">
           <h4>ending-ffx</h4>
           <p class="emotion">Permission to stop</p>
-          <p class="blurb">&quot;Tide, Answered&quot; — the title's A-minor question answered in D major: solo piano, strings, then choir with the rising cell augmented. 66 bpm.</p>
+          <p class="blurb">&quot;The Dream That Has To End&quot; — FAREWELL complete twice — solo piano bars 1-8, then bars 1-16 on FAREWELL_CHORDS_RELEASED with full orchestra — and HYMN bars 13-16 with one Picardy third in the last bar; permission to stop. B minor → B major, 58 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/ending-ffx.mp3"></audio>
-          <p class="stats"><span>1:59</span><span>1.69 MB</span><span>-16.01 LUFS</span><span>-1.4 dBTP</span><span>loop 33.10s → 115.86s</span><span>tilt -10.9 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>2:06</span><span>1.78 MB</span><span>-16.03 LUFS</span><span>-1.4 dBTP</span><span>loop 33.64s → 122.65s</span><span>tilt -10.8 dB/band</span><span>all gates pass</span><span>58 bpm 4/4</span><span>tempo map 24 marks</span><span>7 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map (24 marks) and the bar-12 lean. The most heavily worked cue in the score.</p>
         </article>
 
 <h3>Chapter IV — FFX-2, Bahamut</h3>
@@ -265,25 +286,28 @@
         <article class="cue">
           <h4>scene-farplane</h4>
           <p class="emotion">Rest without forgetting</p>
-          <p class="blurb">&quot;Where the Pyreflies Rest&quot; — flute, harp and a soft supersaw pad; FFX's rising cell at peace, answered by Lenne's line. E major, 92 bpm.</p>
+          <p class="blurb">&quot;Where the Pyreflies Rest&quot; — HYMN harmonised in quartal stacks, distant; FAREWELL_RISE answered by SONGSTRESS_RISE; rest without forgetting. E major, 92 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/scene-farplane.mp3"></audio>
-          <p class="stats"><span>1:47</span><span>1.61 MB</span><span>-16 LUFS</span><span>-2.35 dBTP</span><span>loop 20.87s → 104.35s</span><span>tilt -12.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:47</span><span>1.61 MB</span><span>-15.99 LUFS</span><span>-2.11 dBTP</span><span>loop 20.87s → 104.35s</span><span>tilt -12.5 dB/band</span><span>all gates pass</span><span>92 bpm 4/4</span><span>no tempo map</span><span>1 bible finding(s)</span></p>
+          <p class="changed"><span>changed</span> An open-fifth floor under the quartal bed. Its key is an open question — see the findings below.</p>
         </article>
 
         <article class="cue">
           <h4>boss-ffx2-aeon</h4>
           <p class="emotion">A pop star fighting a god, and enjoying it</p>
-          <p class="blurb">&quot;Static Coronation&quot; — supersaw stabs on the Sphere hook recast in minor, octave-pumping synth-bass, breakbeats; the chorus turns the hook hopeful in Db. Bb minor, 160 bpm.</p>
+          <p class="blurb">&quot;Static Coronation&quot; — SONGSTRESS_DARK as supersaw stabs over octave-pumping synth bass and breakbeats; the bridge keeps its ii-V; a pop star fighting a god, and enjoying it. Bb minor, 160 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-ffx2-aeon.mp3"></audio>
-          <p class="stats"><span>1:57</span><span>1.82 MB</span><span>-16 LUFS</span><span>-1.38 dBTP</span><span>loop 12.00s → 114.00s</span><span>tilt -8.0 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:57</span><span>1.82 MB</span><span>-16 LUFS</span><span>-1.38 dBTP</span><span>loop 12.00s → 114.00s</span><span>tilt -8.0 dB/band</span><span>all gates pass</span><span>160 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Lean pairs reordered after the velocity arch.</p>
         </article>
 
         <article class="cue">
           <h4>victory-ffx2</h4>
           <p class="emotion">That was fun</p>
-          <p class="blurb">&quot;Sphere Shine&quot; — a synth-brass fanfare on the Sphere hook and an Eb9 hit, then an 808 results groove riffing on the hook. Eb major, 128 bpm.</p>
+          <p class="blurb">&quot;Sphere Shine&quot; — SONGSTRESS_HOOK as a brass fanfare, the identity leap intact and major, then an 808 results groove on the hook; that was fun. Eb major, 128 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/victory-ffx2.mp3"></audio>
-          <p class="stats"><span>1:11</span><span>1.08 MB</span><span>-16.05 LUFS</span><span>-1.39 dBTP</span><span>loop 7.50s → 67.50s</span><span>tilt -6.3 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:11</span><span>1.08 MB</span><span>-16.05 LUFS</span><span>-1.38 dBTP</span><span>loop 7.50s → 67.50s</span><span>tilt -6.3 dB/band</span><span>all gates pass</span><span>128 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Lean pairs reordered after the arch.</p>
         </article>
 
 <h3>Chapter V — Vegnagun and Shuyin</h3>
@@ -292,33 +316,52 @@
         <article class="cue">
           <h4>scene-bevelle-underground</h4>
           <p class="emotion">The machine under the cathedral</p>
-          <p class="blurb">&quot;Iron Undertow&quot; — arp-pluck sixteenths, half-time 808 and distant metal clangs beneath Bevelle; the Sphere hook in minor, fragment first. G minor, 100 bpm.</p>
+          <p class="blurb">&quot;Iron Undertow&quot; — HYMN_POISONED once on low clarinet, and a SONGSTRESS_DARK fragment on synth bass; the machine under the cathedral. G minor, 100 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/scene-bevelle-underground.mp3"></audio>
-          <p class="stats"><span>1:49</span><span>1.50 MB</span><span>-16.2 LUFS</span><span>-1.38 dBTP</span><span>loop 19.20s → 105.60s</span><span>tilt -10.6 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:49</span><span>1.50 MB</span><span>-16.2 LUFS</span><span>-1.38 dBTP</span><span>loop 19.20s → 105.60s</span><span>tilt -10.7 dB/band</span><span>all gates pass</span><span>100 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Lean pairs reordered after the arch, so the shape survives the correction.</p>
         </article>
 
         <article class="cue">
           <h4>boss-vegnagun</h4>
           <p class="emotion">Something enormous, and nobody is driving</p>
-          <p class="blurb">&quot;Iron Verdict&quot; — a never-ending synth-bass ostinato, metal-hit clangs and an alarm siren; bars lurch 3½ and 4½ beats like a machine missing a step. F minor, 168 bpm.</p>
+          <p class="blurb">&quot;Iron Verdict&quot; — SONGSTRESS_DARK mechanised: constant note lengths, jitter under 3 ms, bare octaves in low brass, the bridge stripped to a static pedal; something enormous, and nobody is driving. F minor, 168 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-vegnagun.mp3"></audio>
-          <p class="stats"><span>1:34</span><span>1.82 MB</span><span>-15.99 LUFS</span><span>-1.39 dBTP</span><span>loop 11.43s → 91.43s</span><span>tilt -9.0 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:34</span><span>1.83 MB</span><span>-15.99 LUFS</span><span>-1.39 dBTP</span><span>loop 11.43s → 91.43s</span><span>tilt -9.0 dB/band</span><span>all gates pass</span><span>168 bpm 4/4</span><span>no tempo map</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Per-channel timing pulled to 1-3 ms on every desk. Verified this pass: the earlier report that it breached its own ceiling was the audit tool reading the instrument instead of the channel.</p>
         </article>
 
         <article class="cue">
           <h4>boss-shuyin</h4>
           <p class="emotion">Grief that has curdled</p>
-          <p class="blurb">&quot;The Weight of a Thousand Years&quot; — a 16th-note piano riff under electronic rock; Lenne's theme as an anguished hook, tender in the half-time B. C# minor, 154 bpm.</p>
+          <p class="blurb">&quot;The Weight of a Thousand Years&quot; — SONGSTRESS in the parallel minor with the tonic unmoved, bar 7's borrowed joy gone merely diatonic; piano and strings, rubato in the half-time B; grief that has curdled. C# minor, 154 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/boss-shuyin.mp3"></audio>
-          <p class="stats"><span>1:43</span><span>1.43 MB</span><span>-16.08 LUFS</span><span>-1.36 dBTP</span><span>loop 12.47s → 99.74s</span><span>tilt -11.5 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:46</span><span>1.46 MB</span><span>-16.08 LUFS</span><span>-1.37 dBTP</span><span>loop 12.55s → 102.80s</span><span>tilt -11.5 dB/band</span><span>all gates pass</span><span>154 bpm 4/4</span><span>tempo map 15 marks</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map (15 marks) through the half-time bridge.</p>
         </article>
 
         <article class="cue">
           <h4>ending-ffx2</h4>
           <p class="emotion">The second game says goodbye more gently, because it can</p>
-          <p class="blurb">&quot;Wherever the Tide Takes Me&quot; — a pop ballad: epiano verses on the slowed Sphere hook, Lenne's line in major for the chorus, drums only in the last third, a final chorus up a step where FFX's rising cell visits. Bb major → C, 84 bpm.</p>
+          <p class="blurb">&quot;Wherever the Tide Takes Me&quot; — SONGSTRESS complete with its bridge; the last chorus up a step, FAREWELL_RISE visiting on flute; the second game says goodbye more gently, because it can. Bb major → C, 84 bpm.</p>
           <audio controls preload="none" src="../../public/audio/music/ending-ffx2.mp3"></audio>
-          <p class="stats"><span>1:57</span><span>1.66 MB</span><span>-16.07 LUFS</span><span>-1.4 dBTP</span><span>loop 11.43s → 114.29s</span><span>tilt -8.9 dB/band</span><span>all gates pass</span></p>
+          <p class="stats"><span>1:59</span><span>1.68 MB</span><span>-16.08 LUFS</span><span>-1.35 dBTP</span><span>loop 12.08s → 116.33s</span><span>tilt -8.9 dB/band</span><span>all gates pass</span><span>84 bpm 4/4</span><span>tempo map 18 marks</span><span>2 appoggiaturas, all leaning</span><span>bible: clean</span></p>
+          <p class="changed"><span>changed</span> Tempo map (18 marks) into the final chorus.</p>
+        </article>
+
+<h2>Still open</h2>
+<p class="group-note">Three things this pass found and deliberately did not fix, because each one is a musical decision rather than a broken file.</p>
+<article class="cue open">
+          <h4>scene-farplane is written in E minor; the cue map declares E major</h4>
+          <p class="blurb">Its pitch content is unambiguous: G natural outweighs G# by 90 to 4, and there is no D# anywhere in the cue. That is E Aeolian, not E major. It may well be the cue map that is wrong — the cue harmonises HYMN, which is E Aeolian and whose seventh may never be sharpened in any transformation, so an E major farplane would need the one note the prayer forbids. The single G# is the SONGSTRESS answer arriving in the major, which is probably what the Key column was reaching for. A music director has to say which document moves.</p>
+        </article>
+<article class="cue open">
+          <h4>scene-gagazet and scene-dreams-end have no tempo map</h4>
+          <p class="blurb">These are the two most exposed cues in the game — one unaccompanied horn and one solo cello over thirty seconds of drone, and a celesta drifting with no tonic. Rubato written into note values can move a note but cannot bend the pulse, so both are playing free music over a fixed grid. Composing the curve is an arranger’s job, not a QA re-render.</p>
+        </article>
+<article class="cue open">
+          <h4>scene-dreams-end does not contain FAREWELL_RISE as an interval sequence</h4>
+          <p class="blurb">The cue map asks for the rise &quot;bent&quot;, so an exact match was never the test — but nothing currently distinguishes &quot;bent on purpose&quot; from &quot;absent&quot;, and only an arranger can say which this is.</p>
         </article>
 
 <footer>

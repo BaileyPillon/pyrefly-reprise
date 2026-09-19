@@ -28,6 +28,7 @@
  *    the game would treat as "nothing is pre-rendered".
  */
 
+import { createHash } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -250,8 +251,46 @@ export function secondsAtSample(sample, sampleRate) {
   return Number((sample / sampleRate).toFixed(LOOP_DECIMALS));
 }
 
+/**
+ * A fingerprint of the score an MP3 was rendered from.
+ *
+ * Every other check in this folder can be passed by a file that is simply out
+ * of date. `themes-audit.mjs` reads the score and says the theme is present;
+ * `qa.mjs` decodes the MP3 and says it is well mastered; and both are content
+ * with an MP3 rendered from a composition that was replaced afterwards. That
+ * is not hypothetical — `battle-ffx` shipped exactly that way: the score was
+ * rewritten in a79e4bb and the render was never redone, so every tool agreed
+ * the cue was correct while the player heard the previous composition.
+ *
+ * So the renderer records what it rendered from. The hash covers only what
+ * changes the audio: tempo, meter, loop, and every channel's instrument,
+ * level, placement, sends, performance overrides and notes. Prose in the
+ * file's header does not move it, which matters — a comment-only edit must
+ * not demand six minutes of CPU on a shared machine.
+ */
+export function scoreFingerprint(track) {
+  const channels = (track.channels ?? []).map((c) => [
+    c.name ?? null,
+    c.instrument ?? null,
+    c.volume ?? null,
+    c.pan ?? null,
+    c.gate ?? null,
+    c.fx ? Object.entries(c.fx).sort(([a], [b]) => (a < b ? -1 : 1)) : null,
+    c.perform ? Object.entries(c.perform).sort(([a], [b]) => (a < b ? -1 : 1)) : null,
+    c.notes ?? [],
+  ]);
+  const shape = JSON.stringify([
+    track.bpm ?? null,
+    track.tempo ?? null,
+    track.timeSig ?? null,
+    track.loop ?? null,
+    channels,
+  ]);
+  return createHash('sha256').update(shape).digest('hex').slice(0, 16);
+}
+
 /** Build one music entry, with every field rounded where it should be. */
-export function musicEntry({ name, loopStartSample, loopEndSample, totalSamples, sampleRate, bytes, lufs, truePeakDb }) {
+export function musicEntry({ name, loopStartSample, loopEndSample, totalSamples, sampleRate, bytes, lufs, truePeakDb, score }) {
   return {
     file: `music/${name}.mp3`,
     loopStart: secondsAtSample(loopStartSample, sampleRate),
@@ -260,5 +299,9 @@ export function musicEntry({ name, loopStartSample, loopEndSample, totalSamples,
     bytes,
     lufs: Number(lufs.toFixed(2)),
     truePeakDb: Number(truePeakDb.toFixed(2)),
+    // Absent on an entry written before this field existed, which QA reports
+    // as unverifiable rather than as a failure: the cue simply has not been
+    // rendered since, and it fills itself in the next time anyone renders it.
+    ...(score ? { score } : {}),
   };
 }

@@ -23,8 +23,11 @@ import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { parseManifest } from '../../src/audio/manifest.ts';
-import { trackNames } from '../../src/audio/tracks/index.ts';
+import { getTrack, trackNames } from '../../src/audio/tracks/index.ts';
 import { sfxNames } from '../../src/audio/sfx/index.ts';
+import { tempoCurveOf } from '../../src/audio/tempo.ts';
+// @ts-expect-error -- the render tooling is plain .mjs with no declarations.
+import { scoreFingerprint } from '../../tools/audio/manifest-io.mjs';
 
 const AUDIO_DIR = new URL('../../public/audio/', import.meta.url);
 const raw = JSON.parse(readFileSync(new URL('manifest.json', AUDIO_DIR), 'utf8'));
@@ -109,6 +112,70 @@ describe('the shipped audio manifest', () => {
       expect(previousEnd, `${name} runs past the sprite`).toBeLessThanOrEqual(
         sprite.duration! + 1e-3,
       );
+    }
+  });
+
+  /**
+   * The shipped audio against the score it claims to be a render of.
+   *
+   * This is the defect none of the checks above could see. `battle-ffx` was
+   * rewritten from top to bottom and never re-rendered, so the manifest was
+   * internally consistent, the MP3 passed every loudness, peak, seam and
+   * spectral gate, and `themes-audit.mjs` confirmed the themes — all of them
+   * describing a file whose music no longer existed anywhere in the repo. The
+   * old and new renders correlate at 0.03: they are different pieces.
+   *
+   * Two things are checked, in the order of how much they can prove:
+   *
+   *   1. **Structure.** Put the score's own loop beats through its own tempo
+   *      curve and the seconds the manifest recorded at render time must come
+   *      back. This catches every edit that moves the music in time — a bar
+   *      added, a re-barring, a tempo map gained — and it works on every cue
+   *      today, whether or not it carries a fingerprint.
+   *   2. **The fingerprint**, where the renderer has written one. That covers
+   *      what structure cannot: a pitch or velocity rewrite that happens to
+   *      preserve the bar count, which is exactly what battle-ffx was.
+   *
+   * An entry with no `score` field is not a failure. It means the cue has not
+   * been rendered since the field was introduced, and it fills itself in the
+   * next time anyone renders it — deliberately, so this does not demand six
+   * CPU-minutes on a shared machine to go green.
+   */
+  it('was rendered from the score that is in the repo now', () => {
+    const stale: string[] = [];
+    const unverifiable: string[] = [];
+    for (const name of trackNames()) {
+      const entry = raw.music[name] as { loopStart: number; loopEnd: number; score?: string };
+      const track = getTrack(name);
+      if (!entry || !track?.loop) continue;
+
+      const curve = tempoCurveOf(track);
+      const drift = Math.max(
+        Math.abs(curve.secondsAt(track.loop.start) - entry.loopStart),
+        Math.abs(curve.secondsAt(track.loop.end) - entry.loopEnd),
+      );
+      if (drift > 0.02) {
+        stale.push(
+          `${name}: the score's loop now runs to ${curve.secondsAt(track.loop.end).toFixed(3)}s ` +
+            `but the render was made when it ran to ${entry.loopEnd.toFixed(3)}s`,
+        );
+        continue;
+      }
+
+      if (entry.score === undefined) unverifiable.push(name);
+      else if (entry.score !== scoreFingerprint(track)) {
+        stale.push(
+          `${name}: the score hashes ${scoreFingerprint(track)} but the shipped MP3 was ` +
+            `rendered from ${entry.score} — re-render it`,
+        );
+      }
+    }
+    expect(stale, `shipped audio that is not the current composition:\n${stale.join('\n')}`).toEqual(
+      [],
+    );
+    // Not an assertion: a note for whoever reads the run. Every render shrinks it.
+    if (unverifiable.length === trackNames().length) {
+      throw new Error('no cue carries a score fingerprint — did musicEntry stop writing it?');
     }
   });
 

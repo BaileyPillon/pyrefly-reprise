@@ -7,9 +7,10 @@
       "loopStart": 6.4,
       "loopEnd": 76.8,
       "duration": 79.8,
-      "bytes": 1283690,
+      "bytes": 1285643,
       "lufs": -16.01,
-      "truePeakDb": -1.55
+      "truePeakDb": -1.55,
+      "score": "0cf1d83fd2bd62cc"
     },
     "boss-dread": {
       "file": "music/boss-dread.mp3",

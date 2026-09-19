@@ -10,18 +10,71 @@
  *   node tools/audio/audition.mjs --qa=<report>
  */
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
+
+const execFileAsync = promisify(execFile);
+const FFPROBE =
+  process.env.FFPROBE_PATH ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffprobe.exe';
+
+/** Kept in step with `PROGRAMME` in tools/audio/montage.mjs. */
+const MONTAGE_COUNT = 12;
+const MONTAGE_ORDER =
+  'cursor · confirm · menu · slash ×2 · guard · critical · cure · thunder · overdrive · summon · fayth';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
 const qaPath = args.find((a) => a.startsWith('--qa='))?.slice(5);
 
+const themesPath = args.find((a) => a.startsWith('--themes='))?.slice(9);
+
 const { TRACK_BLURBS } = await import('../../src/audio/tracks/index.ts');
 const manifest = JSON.parse(await readFile(path.join(ROOT, 'public/audio/manifest.json'), 'utf8'));
 const qa = qaPath ? JSON.parse(await readFile(qaPath, 'utf8')) : { cues: [] };
 const measured = new Map(qa.cues.map((c) => [c.name, c]));
+/** `themes-audit.mjs --json` — what the score says, beside what the audio measures. */
+const themes = themesPath ? JSON.parse(await readFile(themesPath, 'utf8')) : [];
+const audited = new Map((themes.cues ?? themes).map((c) => [c.cue, c]));
+
+/**
+ * What changed for each cue in the audio rebuild, in one line.
+ *
+ * The page exists so Bailey can listen and judge, and "listen to twenty-one
+ * cues again" is a different and much worse request than "listen to what
+ * moved". These lines are the fix passes' own reports plus this QA pass,
+ * per cue, and a cue that genuinely did not change says so rather than being
+ * left blank — silence on a page like this reads as an oversight.
+ */
+const CHANGED = {
+  title: 'Gained a tempo map (15 marks), so the piano can push and pull instead of sitting on the grid.',
+  'chapter-select': 'Tempo map with a waltz lilt — 100 marks, one per bar, so the oom-pah-pah leans rather than ticks. Per-channel jitter set.',
+  pause: 'Per-channel jitter set. Deliberately still has no tempo map: the prayer is the one lyrical theme the bible gives no rubato.',
+  'battle-ffx':
+    'RE-RENDERED THIS PASS, and this is the one to listen to. The shipped MP3 was the previous composition: the score was rewritten and never re-rendered, so every check passed while the file played music that no longer existed in the repo. The old and new audio correlate at 0.03 — they are different pieces.',
+  'boss-dread': 'Appoggiatura pairs corrected in the choir — the leaning note is now louder than the note it falls to.',
+  'boss-seymour': 'Tempo map, and performance overrides so the organ keeps its own pace under the band.',
+  'boss-yunalesca':
+    'Lean pairs and timing corrected. Still no tempo map and still at constant velocity 0.62 in the canon — both are the bible naming this cue as the rite that does not breathe.',
+  'boss-jecht': 'Tempo map, and the brass appoggiaturas turned back the right way round.',
+  'boss-yu-yevon': 'Tempo map, and the choir soprano’s leaning notes corrected.',
+  'scene-gagazet': 'Unchanged this pass. Still has no tempo map — see the open findings at the foot of this page.',
+  'scene-zanarkand-dome': 'Tempo map (15 marks) under the nocturne, so the left hand breathes with the tune.',
+  'scene-dreams-end': 'Unchanged this pass. Still has no tempo map — see the open findings at the foot of this page.',
+  'scene-bevelle-underground': 'Lean pairs reordered after the arch, so the shape survives the correction.',
+  'scene-farplane': 'An open-fifth floor under the quartal bed. Its key is an open question — see the findings below.',
+  'victory-ffx':
+    'Tempo map, and the fanfare strings are no longer at one velocity for twenty-four notes — the fanfare is played now, not typed.',
+  'ending-ffx': 'Tempo map (24 marks) and the bar-12 lean. The most heavily worked cue in the score.',
+  'boss-ffx2-aeon': 'Lean pairs reordered after the velocity arch.',
+  'boss-vegnagun':
+    'Per-channel timing pulled to 1-3 ms on every desk. Verified this pass: the earlier report that it breached its own ceiling was the audit tool reading the instrument instead of the channel.',
+  'boss-shuyin': 'Tempo map (15 marks) through the half-time bridge.',
+  'victory-ffx2': 'Lean pairs reordered after the arch.',
+  'ending-ffx2': 'Tempo map (18 marks) into the final chorus.',
+};
 
 /** The cue map's "one emotion" column — the line that says what to listen for. */
 const EMOTION = {
@@ -118,7 +171,48 @@ function stats(name) {
     bits.push(`tilt ${m.tilt.toFixed(1)} dB/band`);
     bits.push(m.failures.length === 0 ? 'all gates pass' : `${m.failures.length} finding(s)`);
   }
+  // What the score says, beside what the audio measures. A cue can be
+  // perfectly mastered and still be wrong about its own key or play a phrase
+  // at one velocity, and only the score can answer that.
+  const a = audited.get(name);
+  if (a) {
+    bits.push(`${a.bpm} bpm ${a.meter?.join('/') ?? ''}`.trim());
+    bits.push(a.tempoMarks ? `tempo map ${a.tempoMarks} marks` : 'no tempo map');
+    if (a.appoggiatura?.length) {
+      const bad = a.appoggiatura.filter((l) => !l.ok).length;
+      bits.push(bad ? `${bad} of ${a.appoggiatura.length} appoggiaturas backwards` : `${a.appoggiatura.length} appoggiaturas, all leaning`);
+    }
+    bits.push(a.failures?.length ? `${a.failures.length} bible finding(s)` : 'bible: clean');
+  }
   return bits.map((b) => `<span>${esc(b)}</span>`).join('');
+}
+
+/**
+ * Real numbers for the montage, probed off the file.
+ *
+ * The page used to state "0:25" as a literal. The montage is built from the
+ * sprite now (`tools/audio/montage.mjs`), so its length moves whenever an
+ * effect's does, and a hand-typed duration is a caption that will eventually
+ * be wrong about the audio directly underneath it.
+ */
+async function montageStats() {
+  const file = path.join(ROOT, 'docs/audio/sfx-montage.mp3');
+  try {
+    const { size } = await stat(file);
+    const { stdout } = await execFileAsync(FFPROBE, [
+      '-v', 'error',
+      '-show_entries', 'format=duration',
+      '-of', 'default=noprint_wrappers=1:nokey=1',
+      file,
+    ]);
+    const seconds = Number(stdout.trim());
+    const clock = `${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
+    return `<span>${clock}</span><span>${MONTAGE_COUNT} effects</span>` +
+      `<span>${(size / 1e6).toFixed(2)} MB</span>` +
+      `<span>${MONTAGE_ORDER}</span>`;
+  } catch {
+    return '<span>montage not built — run <code>node tools/audio/montage.mjs</code></span>';
+  }
 }
 
 const cueBlock = (name) => `
@@ -128,7 +222,26 @@ const cueBlock = (name) => `
           <p class="blurb">${esc(TRACK_BLURBS[name] ?? '')}</p>
           ${player(name)}
           <p class="stats">${stats(name)}</p>
+          ${CHANGED[name] ? `<p class="changed"><span>changed</span> ${esc(CHANGED[name])}</p>` : ''}
         </article>`;
+
+const MONTAGE_STATS = await montageStats();
+
+/** Findings this pass could not close, stated on the page rather than buried in a report. */
+const OPEN_FINDINGS = [
+  [
+    'scene-farplane is written in E minor; the cue map declares E major',
+    'Its pitch content is unambiguous: G natural outweighs G# by 90 to 4, and there is no D# anywhere in the cue. That is E Aeolian, not E major. It may well be the cue map that is wrong — the cue harmonises HYMN, which is E Aeolian and whose seventh may never be sharpened in any transformation, so an E major farplane would need the one note the prayer forbids. The single G# is the SONGSTRESS answer arriving in the major, which is probably what the Key column was reaching for. A music director has to say which document moves.',
+  ],
+  [
+    'scene-gagazet and scene-dreams-end have no tempo map',
+    'These are the two most exposed cues in the game — one unaccompanied horn and one solo cello over thirty seconds of drone, and a celesta drifting with no tonic. Rubato written into note values can move a note but cannot bend the pulse, so both are playing free music over a fixed grid. Composing the curve is an arranger’s job, not a QA re-render.',
+  ],
+  [
+    'scene-dreams-end does not contain FAREWELL_RISE as an interval sequence',
+    'The cue map asks for the rise "bent", so an exact match was never the test — but nothing currently distinguishes "bent on purpose" from "absent", and only an arranger can say which this is.',
+  ],
+];
 
 const html = `<!doctype html>
 <html lang="en">
@@ -182,6 +295,13 @@ const html = `<!doctype html>
   .guide strong { color: var(--gold); }
   .check { border: 1px dashed var(--rule); border-radius: 8px; padding: 16px 20px; margin-top: 24px; }
   .first .cue { border-color: var(--gold); }
+  .changed { margin: 10px 0 0; font-size: 0.88rem; color: var(--ink); opacity: 0.85;
+             border-top: 1px solid var(--rule); padding-top: 9px; }
+  .changed span { display: inline-block; font: 11px/1.4 ui-monospace, Menlo, Consolas, monospace;
+                  letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold);
+                  margin-right: 8px; }
+  .cue.open { border-left: 3px solid var(--gold); }
+  .cue.open h4 { font-family: inherit; font-size: 1rem; }
   footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule);
            color: var(--muted); font-size: 0.85rem; }
   @media (max-width: 480px) { .wrap { padding: 28px 16px 64px; } h1 { font-size: 1.5rem; } }
@@ -220,7 +340,7 @@ ${FIRST_EIGHT.map(
           <h4>${esc(name === '__montage' ? 'sound effects — montage' : name)}</h4>
           <p class="emotion">${esc(why)}</p>
           ${player(name)}
-          ${name === '__montage' ? '<p class="stats"><span>0:25</span><span>12 effects</span><span>cursor · confirm · menu · slash ×2 · guard · critical · cure · thunder · overdrive · summon · fayth</span></p>' : `<p class="stats">${stats(name)}</p>`}
+          ${name === '__montage' ? `<p class="stats">${MONTAGE_STATS}</p>` : `<p class="stats">${stats(name)}</p>`}
         </article>`,
 ).join('\n')}
 </div>
@@ -231,6 +351,15 @@ ${GROUPS.map(
 <h3>${esc(g.title)}</h3>
 <p class="group-note">${esc(g.note)}</p>
 ${g.cues.map(cueBlock).join('\n')}`,
+).join('\n')}
+
+<h2>Still open</h2>
+<p class="group-note">Three things this pass found and deliberately did not fix, because each one is a musical decision rather than a broken file.</p>
+${OPEN_FINDINGS.map(
+  ([title, body]) => `<article class="cue open">
+          <h4>${esc(title)}</h4>
+          <p class="blurb">${esc(body)}</p>
+        </article>`,
 ).join('\n')}
 
 <footer>

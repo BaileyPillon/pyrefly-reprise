@@ -366,11 +366,71 @@ async function main() {
   const manifest = JSON.parse(await readFile(path.join(AUDIO_DIR, 'manifest.json'), 'utf8'));
   const report = { cues: [], sfx: null, manifest: { problems: [] }, totalBytes: 0 };
 
+  // Is each MP3 the render of the score that is in the repo right now?
+  //
+  // Nothing else here can answer that. `themes-audit.mjs` reads the score and
+  // approves of it; every measurement below decodes the MP3 and approves of
+  // that; and a file rendered from a composition that was later rewritten
+  // passes both while the player hears the old piece. `battle-ffx` shipped in
+  // exactly that state. The renderer now records a fingerprint of what it
+  // rendered from, so the two can be compared.
+  const { getTrack, hasTrack } = await import('../../src/audio/tracks/index.ts');
+  const { tempoCurveOf } = await import('../../src/audio/tempo.ts');
+  const { scoreFingerprint } = await import('./manifest-io.mjs');
+  const freshness = new Map();
+  for (const [name, entry] of Object.entries(manifest.music)) {
+    if (!hasTrack(name)) continue;
+    const track = getTrack(name);
+    const current = scoreFingerprint(track);
+
+    // Until every cue has been rendered once with a fingerprint, this is the
+    // check that still has teeth on the other twenty: put the score's own loop
+    // beats through its own tempo curve and see whether the seconds the
+    // manifest recorded at render time still come out. It costs nothing, and
+    // it catches every edit that moves the music in time — a bar added or
+    // removed, a re-barring, a tempo map gained or changed. It cannot see a
+    // pitch-only rewrite; the fingerprint is what closes that.
+    if (track.loop) {
+      const curve = tempoCurveOf(track);
+      const drift = Math.max(
+        Math.abs(curve.secondsAt(track.loop.start) - entry.loopStart),
+        Math.abs(curve.secondsAt(track.loop.end) - entry.loopEnd),
+      );
+      if (drift > 0.02) {
+        freshness.set(name, {
+          stale: true,
+          note:
+            `STALE RENDER: the score's loop runs to ${curve.secondsAt(track.loop.end).toFixed(3)}s ` +
+            `but this MP3 was rendered when it ran to ${entry.loopEnd.toFixed(3)}s — the score ` +
+            'has moved in time since and was never re-rendered',
+        });
+        continue;
+      }
+    }
+
+    if (entry.score === undefined) {
+      freshness.set(name, {
+        stale: false,
+        note: 'structurally current; no fingerprint yet, so a pitch-only edit would not show',
+      });
+    } else if (entry.score !== current) {
+      freshness.set(name, {
+        stale: true,
+        note:
+          `STALE RENDER: the score hashes ${current} but this MP3 was rendered from ` +
+          `${entry.score} — the shipped audio is not the composition in the repo`,
+      });
+    }
+  }
+
   log('cue                          dur     MB    LUFS   dBTP  clip  seam   flux   tilt');
   log('-'.repeat(82));
   for (const [name, entry] of Object.entries(manifest.music)) {
     if (only && !only.includes(name)) continue;
     const row = await auditCue(name, entry);
+    const fresh = freshness.get(name);
+    if (fresh?.stale) row.failures.push(fresh.note);
+    if (fresh) row.freshness = fresh.note;
     report.cues.push(row);
     report.totalBytes += row.bytes;
     log(

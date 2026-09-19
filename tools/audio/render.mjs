@@ -48,7 +48,7 @@ const { renderSfxWith, sfxNames, getSfxDesign } = await import('../../src/audio/
 const { CATEGORY_RULES } = await import('../../src/audio/sfx/design.ts');
 const { pitchToFreq, effectiveJitterMs, performanceKey } = await import('../../src/audio/score.ts');
 const { tempoCurveOf, tempoWarnings } = await import('../../src/audio/tempo.ts');
-const { mergeIntoManifest, musicEntry, readManifest } = await import('./manifest-io.mjs');
+const { mergeIntoManifest, musicEntry, readManifest, scoreFingerprint } = await import('./manifest-io.mjs');
 const { Hall } = await import('../../src/audio/dsp/hall.ts');
 const presets = await import('../../src/audio/voices/presets/index.ts');
 const { voiceForPreset, availableLibs, missingLibs, LIBRARIES, libPath } = await import('./libs.mjs');
@@ -567,6 +567,9 @@ async function main() {
           bytes,
           lufs: m.lufs,
           truePeakDb: m.truePeakDb,
+          // What this audio was rendered FROM, so a score that moves on
+          // without its render can be seen. See manifest-io.scoreFingerprint.
+          score: scoreFingerprint(getTrack(name)),
         }),
       },
     });
