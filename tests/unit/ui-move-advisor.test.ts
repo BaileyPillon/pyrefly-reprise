@@ -380,11 +380,14 @@ describe('both HUDs mount it', () => {
  * [fix-3 round 1, F1]. Neither the stylesheet nor the FFX HUD's safe zone
  * belongs to this track, so the card does the fitting itself.
  *
- * jsdom performs no layout, so the two numbers the fit is measured from are
- * supplied: `clientHeight` is the cap, and `scrollHeight` is made to depend on
+ * jsdom performs no layout, so the numbers the fit is measured from are
+ * supplied: the cap is an inline `max-height` — set exactly the way
+ * `FFXBattleHud.placeAdvisor` sets it — and `scrollHeight` is made to depend on
  * what was actually rendered, so the loop being tested is the real one.
  */
 function measured(card: HTMLElement, cap: number, perLine = 14): void {
+  card.style.maxHeight = `${cap}px`;
+  Object.defineProperty(card, 'clientWidth', { configurable: true, get: () => 210 });
   Object.defineProperty(card, 'clientHeight', {
     configurable: true,
     get: () => Math.min(cap, card.querySelectorAll('p, article').length * perLine),
@@ -458,17 +461,25 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     expect(text(1)).toContain('Puts Haste on the whole party');
     expect(text(2)).not.toContain('Puts Haste on the whole party');
 
-    // And at *every* density the card still answers the question: both moves,
-    // where they live, why the revive is being offered, and both warnings.
+    // Down to the second-to-last rung the card still answers the question in
+    // full: both moves, where they live, why the revive is being offered, and
+    // the warning that goes with it.
+    for (let d = 0 as Density; d < MAX_DENSITY; d = (d + 1) as Density) {
+      const t = text(d);
+      expect(t, `density ${d}`).toContain('in Items');
+      expect(t, `density ${d}`).toContain('stand Yuna up');
+      expect(t, `density ${d}`).toContain('Lance of Atrophy');
+    }
+    // And at *every* rung, including the last-resort one, it still names both
+    // moves and prints the note about the board.
     for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
       const t = text(d);
       expect(t, `density ${d}`).toContain('Mega Phoenix');
       expect(t, `density ${d}`).toContain('Hastega');
-      expect(t, `density ${d}`).toContain('in Items');
-      expect(t, `density ${d}`).toContain('stand Yuna up');
-      expect(t, `density ${d}`).toContain('Lance of Atrophy');
       expect(t, `density ${d}`).toContain('Cross Cleave hits the whole party');
     }
+    // The note is above the moves, because a cap cuts the card's bottom.
+    expect(text(0).indexOf('Cross Cleave hits')).toBeLessThan(text(0).indexOf('Hastega'));
   });
 
   it('compacts until it fits the cap it was given, on a real update tick', () => {
@@ -493,6 +504,8 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     const { advisor, stage } = mountAdvisor();
     const card = cardOf(stage);
     let cap = 60;
+    card.style.maxHeight = '60px';
+    Object.defineProperty(card, 'clientWidth', { configurable: true, get: () => 210 });
     Object.defineProperty(card, 'clientHeight', {
       configurable: true,
       get: () => Math.min(cap, card.querySelectorAll('p, article').length * 14),
@@ -509,7 +522,15 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     expect(tight).toBeGreaterThan(0);
 
     cap = 400;
+    card.style.maxHeight = '400px';
+    // A second of frames, because the fit deliberately trails the *tightest*
+    // box of the last second rather than the newest one — that hysteresis is
+    // what stops the live FFX card flickering between two densities while its
+    // safe zone breathes. Room that has genuinely come back is taken, a frame
+    // of it is not.
     advisor.update(16);
+    expect(advisor.printedDensity, 'one wide frame is not room').toBe(tight);
+    for (let i = 0; i < 60; i++) advisor.update(16);
     expect(advisor.printedDensity).toBeLessThan(tight);
     expect(card.textContent).toContain('Revives all fallen allies');
   });

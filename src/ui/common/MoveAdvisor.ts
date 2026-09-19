@@ -105,6 +105,8 @@ const CLEARANCE_GAP = 6;
 const MIN_CARD_WIDTH = 132;
 /** Widest the card is allowed to grow when the band is empty. */
 const MAX_CARD_WIDTH = 226;
+/** How many frames of measured boxes {@link MoveAdvisor.fitCard} fits against. */
+const FIT_WINDOW = 60;
 
 export class MoveAdvisor {
   readonly el: HTMLElement;
@@ -123,8 +125,10 @@ export class MoveAdvisor {
   private lastSignature = '';
   /** How much of each suggestion the last render printed. See {@link fitCard}. */
   private density: Density = 0;
-  /** `signature@height` the current density was measured for. */
+  /** `signature@cap@width` the current density was measured for. */
   private fittedFor = '';
+  /** The last {@link FIT_WINDOW} boxes the card was painted in. See {@link fitCard}. */
+  private readonly boxes: Array<{ width: number; cap: number; styleWidth: string }> = [];
 
   constructor(opts: MoveAdvisorOptions) {
     this.opts = opts;
@@ -219,12 +223,16 @@ export class MoveAdvisor {
   update(_dt: number): void {
     this.pollPad();
     if (!this.visible) return;
-    this.layout();
-    // After `layout`, and every frame: the FFX HUD re-writes the card's
-    // `max-height` from its safe zone *after* this tick (`placeAdvisor`), and
-    // the band narrows and widens as submenus open, so the room the card has is
-    // a moving number. `fitCard` returns immediately unless it changed.
+    // **Before** `layout`, deliberately. Three things write this card's box
+    // every frame: `layout` below, the FFX HUD's `placeAdvisor` after this tick
+    // (which is the one that lands, because it runs last), and the stylesheet.
+    // Fitting after `layout` measured a width the player never sees — the
+    // anchors' 180px rather than the safe zone's 112px — so the card was fitted
+    // wide and painted narrow, and the two lines that answer the report wrapped
+    // straight back off the bottom. Measuring first measures the box that was
+    // actually on screen for the last frame.
     this.fitCard();
+    this.layout();
   }
 
   private pollPad(): void {
@@ -309,36 +317,91 @@ export class MoveAdvisor {
   /**
    * Print less until the card fits the room it was given.
    *
-   * Measured, not guessed: `scrollHeight` is what the content wants and
-   * `clientHeight` is what the box allows, and they differ only while the cap
-   * (`max-height`, from the stylesheet or from the FFX HUD's zone) is biting.
-   * Each step of {@link cardHtml}'s density drops one layer of decoration and
-   * the card is measured again, so the same ladder works at any viewport, at
-   * any submenu depth, and under whatever cap either HUD hands over next.
+   * Measured, not guessed: `scrollHeight` is what the content wants and the
+   * **cap** is what it is allowed — `max-height`, from the stylesheet or from
+   * the FFX HUD's safe zone, read off the computed style rather than off
+   * `clientHeight`. That distinction is the whole of this method's history:
+   * `clientHeight` is the *content's* height whenever the cap is not biting, so
+   * keying the work off it meant the key changed every time the fit changed,
+   * and a card measured on one frame's width could be left standing at a
+   * density that overflowed the next one's. On a live board the FFX zone's
+   * width breathes with the party sprites' idle animation, so that is every
+   * other frame: `pocketLeft` is derived from `spritesRight`
+   * [`ffx/hudSafeZones.ts`].
    *
-   * Re-fitted when the advice changes or when the room does — the key carries
-   * both. A layout the browser has not performed yet (jsdom, a hidden card, the
-   * frame before mount) measures zero, and zero means "no reading", not "no
-   * room": the card is left exactly as it is.
+   * So the reading is (advice, cap, width) — width quantised to 4px, because
+   * a card that re-flowed on every pixel of sprite breathing would flicker
+   * between two densities for the whole battle — and when any of the three
+   * changes, the ladder is walked from the top. From the top, not from where it
+   * was: the room grows as well as shrinks (a submenu closes, the zone moves
+   * from the shelf to the pocket) and a card that only ever got terser would
+   * stay terse for the rest of the fight.
+   *
+   * A layout the browser has not performed yet (jsdom, a hidden card, the frame
+   * before mount) measures zero, and zero means "no reading", not "no room":
+   * the card is left exactly as it is.
    */
   private fitCard(): void {
     if (!this.cached || !this.visible || this.cardEl.hidden) return;
-    const room = this.cardEl.clientHeight;
-    if (room <= 0) return;
-    const key = `${this.lastSignature}@${Math.round(room)}`;
-    if (key === this.fittedFor) return;
+    const width = this.cardEl.clientWidth;
+    if (width <= 0) return;
+    const cap = this.capHeight();
+    if (cap <= 0) return;
 
-    // From the top every time: the room can grow as well as shrink (a submenu
-    // closes, the zone moves from the shelf to the pocket), and a card that
-    // only ever got terser would stay terse for the rest of the battle.
+    // The **tightest** box of the last second, not this frame's. On a live FFX
+    // board the card is painted at two different widths from one frame to the
+    // next: `placeAdvisor` is a no-op on any frame its safe zone cannot be
+    // solved, and the card then keeps `layout`'s much wider anchor box. Fitting
+    // whichever arrived last made the card relax on the wide frames and overflow
+    // on the narrow ones — measured at 1280x720 on Chapter 1: seven frames in
+    // twenty-four, which is a flicker rather than a fit. Fitting for the
+    // narrowest is right in both: the terser card simply has room to spare on
+    // the wide frames.
+    this.boxes.push({ width, cap, styleWidth: this.cardEl.style.width });
+    if (this.boxes.length > FIT_WINDOW) this.boxes.shift();
+    let tightest = this.boxes[0]!;
+    for (const box of this.boxes) if (box.width < tightest.width) tightest = box;
+    const floorCap = this.boxes.reduce((m, b) => Math.min(m, b.cap), cap);
+
+    const key = `${this.lastSignature}@${Math.round(floorCap)}@${Math.round(tightest.width / 4)}`;
+    if (key === this.fittedFor) return;
+    this.fittedFor = key;
+
+    // Measured in that tightest box, which means borrowing it for the length of
+    // this tick. Nothing paints in between — `layout()` runs immediately after
+    // and the HUD's own placement after that — so the borrow is invisible.
+    const restore = this.cardEl.style.width;
+    this.cardEl.style.width = tightest.styleWidth;
     let density: Density = 0;
     this.cardEl.innerHTML = cardHtml(this.cached, density);
-    while (density < MAX_DENSITY && this.cardEl.scrollHeight > this.cardEl.clientHeight + 1) {
+    while (density < MAX_DENSITY && this.cardEl.scrollHeight > floorCap + 1) {
       density = (density + 1) as Density;
       this.cardEl.innerHTML = cardHtml(this.cached, density);
     }
     this.density = density;
-    this.fittedFor = `${this.lastSignature}@${Math.round(this.cardEl.clientHeight)}`;
+    this.cardEl.style.width = restore;
+  }
+
+  /**
+   * The cap the card is actually held to, in its own pixels.
+   *
+   * `max-height` covers both owners — `move-advisor.css`'s 104px and the inline
+   * one `FFXBattleHud.placeAdvisor` writes from its safe zone. An uncapped card
+   * (a stylesheet that stops setting one, a test) reports `none`, and then the
+   * card's own height is the only honest answer: nothing is being cut off, so
+   * nothing has to be dropped.
+   */
+  private capHeight(): number {
+    let cap = Number.NaN;
+    try {
+      const raw = getComputedStyle(this.cardEl).maxHeight;
+      cap = raw.endsWith('px') ? parseFloat(raw) : Number.NaN;
+    } catch {
+      cap = Number.NaN;
+    }
+    if (Number.isFinite(cap) && cap > 0) return cap;
+    const own = this.cardEl.clientHeight;
+    return own > 0 ? Math.max(own, this.cardEl.scrollHeight) : 0;
   }
 
   /** How much the card is currently printing, for tests and the debug snapshot. */
@@ -416,9 +479,23 @@ function num(n: number): string {
  * | 2 | + the lead's effect line, and the runner-up's secondary chips |
  * | 3 | + the runner-up's numbers, down to the submenu chip |
  * | 4 | + the lead's reason and its secondary chips |
+ * | 5 | + the lead's chips and badge: its name and target, and nothing else |
+ * | 6 | + every reason and warning: two named moves, and the board's note |
+ *
+ * Seven rungs rather than the four the first pass shipped, because the room
+ * the card is given is much smaller than the stylesheet's 104px suggests. The
+ * FFX safe zone's pocket on Chapter 1 is about 112px *wide* at 1280x720 —
+ * narrow enough that one sentence takes three lines — and on the turns where
+ * the pocket does not fit at all the zone hands the card a **35px shelf**
+ * above the party's heads, which is four lines of anything.
+ *
+ * Rung 6 is what makes "the card never hides its own bottom edge" true even
+ * there: two moves named, the note that answers the board, and no prose. It is
+ * a last resort and it reads like one; the 35px shelf is the real defect and it
+ * belongs to the HUD's `hudSafeZones.ts` — see `docs/handoff/fix3-advisor.md`.
  */
-export type Density = 0 | 1 | 2 | 3 | 4;
-export const MAX_DENSITY: Density = 4;
+export type Density = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+export const MAX_DENSITY: Density = 6;
 
 function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
   const chips: string[] = lead ? [lead] : [];
@@ -478,21 +555,23 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
     ? `<span class="mad__arrow">→</span><span class="mad__target">${escapeHtml(s.targetName)}</span>`
     : '';
   const rankChip = total > 1 ? `<span class="mad__rank"><b>${rank}</b></span>` : '';
-  const badge = s.source === 'tactic' ? '<span class="mad__badge">Guide’s pick</span>' : '';
-  const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
   // See {@link Density}. A runner-up loses its decoration before the lead does,
-  // and the lead's reason is the last thing to go.
-  const showEffect = alt ? density < 1 : density < 2;
+  // the lead's reason goes before the runner-up's, and at the last rung both
+  // are a name and a target.
+  const bare = density >= MAX_DENSITY || (!alt && density >= 5);
+  const badge = s.source === 'tactic' && !bare ? '<span class="mad__badge">Guide’s pick</span>' : '';
+  const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
+  const showEffect = !bare && (alt ? density < 1 : density < 2);
   const trimStats = alt ? density >= 2 : density >= 4;
   const barStats = alt && density >= 3;
-  const showReason = alt || density < 4;
+  const showReason = !bare && (alt || density < 4);
   return [
     `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
     `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${badge}</p>`,
-    barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
+    bare ? '' : barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
     showEffect && s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
     showReason && s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
-    s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
+    !bare && s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
     '</article>',
   ].join('');
 }
@@ -506,10 +585,17 @@ export function cardHtml(view: AdvisorView, density: Density = 0): string {
     '<span class="mad__title">Next best move</span>',
     `<span class="mad__actor">${escapeHtml(view.actorName)}</span>`,
     '</div>',
-    moves || '<p class="mad__idle">Nothing legal to suggest.</p>',
     // The "wait for it" line, when an ally is down and raising them now would
-    // only feed the boss a second kill. It is advice about a move the card is
-    // *not* recommending, so it sits under the moves rather than inside one.
-    view.note ? `<p class="mad__warn">${escapeHtml(view.note)}.</p>` : '',
+    // only feed the boss a second kill.
+    //
+    // Directly under the head, above the moves, and that placement is load
+    // bearing: whatever cap the card is under cuts its **bottom**, and on a
+    // live Chapter 1 board the FFX safe zone hands it a 35px shelf often enough
+    // to matter (see `docs/handoff/fix3-advisor.md`). A footnote is the first
+    // thing lost there, and this sentence is the whole answer to "what about
+    // reviving Yuna?" — so it goes where nothing can take it. It also reads in
+    // the right order: the board first, then what to press on it.
+    view.note ? `<p class="mad__warn mad__warn--lead">${escapeHtml(view.note)}.</p>` : '',
+    moves || '<p class="mad__idle">Nothing legal to suggest.</p>',
   ].join('');
 }
