@@ -348,6 +348,8 @@ export class FFX2BattleHud implements HudPort {
     this.guide.unmount();
     this.advisor.unmount();
     this.intent.unmount();
+    // Nothing the cursor lit may outlive the HUD that lit it.
+    this.applySelection(null);
     this.el.remove();
     this.mounted = false;
   }
@@ -664,6 +666,14 @@ export class FFX2BattleHud implements HudPort {
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
+    // A decided battle keeps nothing targeting lit: the results screen fades
+    // up over this frame and an accent pool or a quiet dim left behind is
+    // painted under it. FFX-2's menu resolves its own promise and cleans up
+    // (`CommandMenu.cleanup` -> `cursor.hide()`), so this is the one route it
+    // has no handle on — the fight ending while a menu is still open. The FFX
+    // side takes the same precaution in `FFXBattleHud.sync`
+    // (AGENTS.md rule 14: shared plumbing behind a defect, critic CHK-020).
+    if (state.result) this.applySelection(null);
     this.lastState = state;
     this.guide.sync(state);
     this.advisor.sync(state);

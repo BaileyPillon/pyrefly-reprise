@@ -244,6 +244,24 @@ export class CommandMenu {
     // one) selects it and confirms through the exact same path Enter does —
     // mouse and keyboard can never resolve a different Command this way.
     this.targetCursor.setOnClick((id) => this.tryConfirmTargetById(id));
+    // **The one place a selection is published from.**
+    //
+    // It used to be published by hand at each call site, and `confirmTarget()`
+    // — the single most-used interaction in the game — was the site that
+    // forgot: Enter hid the cursor and finished the command without ever
+    // saying the selection had ended, so the quiet dim stayed on the whole
+    // party and on every other fiend for the rest of the fight, and
+    // `__pyrefly.targeting().selection` went on naming a stale ally group
+    // while the player aimed an enemy Attack. The cursor is the one object
+    // that knows whether anything is aimed at; wiring the handler here means
+    // every `show*`, every `step` and — crucially — every `hide()`, from
+    // wherever it is called, reports the truth.
+    //
+    // GAME-AWARE (AGENTS.md rule 14): the defect was FFX only, because
+    // `ui/ffx2/CommandMenu.ts` already wired this handler and its `cleanup()`
+    // already reported the end. This is the FFX side adopting the same rule,
+    // not a second implementation.
+    this.targetCursor.setOnSelection((sel) => this.opts?.onSelection?.(sel));
   }
 
   setProjector(project: RectProjector): void {
@@ -265,6 +283,11 @@ export class CommandMenu {
       this.unwireClicks?.();
       this.resolve = null;
     }
+    // Whatever the abandoned menu was aiming at is over, and it has to be
+    // reported to the HUD that opened *it* — so this runs before `opts` is
+    // replaced. Without it a menu that lost the race left its dim on the field
+    // and its ring under three allies while the next actor chose.
+    this.endSelection();
     this.suspended = false;
     this.opts = opts;
     this.rows = buildTopRows(opts.commands);
@@ -289,7 +312,10 @@ export class CommandMenu {
     releaseCancel();
     this.watcher.detach();
     this.unwireClicks?.();
-    this.targetCursor.hide();
+    // Every surface targeting lit — the field's accent pool and quiet dim, the
+    // party rows, the turn-list tiles, the enemy plate — goes out with the
+    // decision. This is the line `confirmTarget()` was missing.
+    this.endSelection();
     this.stackEl.hidden = true;
     this.breadcrumbEl.hidden = true;
     // The decision is over: the stack, its breadcrumb *and* its help line all
@@ -297,11 +323,51 @@ export class CommandMenu {
     // menu." stayed on screen through the boss's answering attack
     // (docs/screenshots/47-boss-attack.png).
     this.opts?.setHelp('');
-    this.opts?.onTargetChange?.(null);
     this.opts?.previewRank(null);
     const resolve = this.resolve;
     this.resolve = null;
     resolve?.(command);
+  }
+
+  /**
+   * Close the menu from outside the decision it belongs to: the battle ended,
+   * the HUD is being unmounted, a screen is tearing down.
+   *
+   * Deliberately *not* `suspend()`, which is reversible and leaves targeting
+   * alone because the player is still mid-decision. This one ends the
+   * selection, so nothing the cursor lit can outlive the fight. Idempotent.
+   */
+  close(): void {
+    this.suspended = false;
+    this.watcher.detach();
+    this.unwireClicks?.();
+    this.unwireClicks = null;
+    this.endSelection();
+    this.state = 'top';
+    this.stackEl.hidden = true;
+    this.breadcrumbEl.hidden = true;
+    this.opts?.setHelp('');
+    this.resolve = null;
+  }
+
+  /**
+   * **The one way a selection ends.** Confirm, cancel, the menu finishing, the
+   * menu being closed from outside, a menu abandoned because a strategy
+   * answered for the player — all five routes come through here, which is what
+   * makes "the dim never sticks" a property of the class rather than a rule
+   * each call site has to remember.
+   *
+   * `hide()` publishes the `null` through the handler wired in the
+   * constructor; the explicit call after it covers the case where the cursor
+   * had nothing to hide and the surfaces are being reset anyway (a command
+   * that needed no target at all).
+   */
+  private endSelection(): void {
+    this.groupTargets = null;
+    this.pendingCmd = null;
+    this.targetCursor.hide();
+    this.opts?.onSelection?.(null);
+    this.opts?.onTargetChange?.(null);
   }
 
   // --------------------------------------------------------------- suspend
@@ -398,13 +464,10 @@ export class CommandMenu {
     } else if (b === 'confirm') {
       this.confirmTarget();
     } else if (b === 'cancel') {
-      this.groupTargets = null;
-      this.targetCursor.hide();
-      // `hide()` publishes the null selection, which is what restores every
-      // dimmed figure on the field. Restoring on cancel is the half of option
-      // B that a player notices only when it is missing.
-      this.opts?.onSelection?.(null);
-      this.opts?.onTargetChange?.(null);
+      // The same chokepoint confirm goes through — restoring every dimmed
+      // figure on the field is the half of option B a player notices only when
+      // it is missing, and it must not depend on which branch you left by.
+      this.endSelection();
       this.state = this.preTargetState;
       this.renderStack();
       this.updateHelpAndPreview();
@@ -567,8 +630,10 @@ export class CommandMenu {
     // CTB-tile click can never resolve a different Command.
     const targets = this.groupTargets ?? (this.targetCursor.activeTargetId ? [this.targetCursor.activeTargetId] : []);
     if (!targets.length) return;
-    this.groupTargets = null;
-    this.targetCursor.hide();
+    // `finish` ends the selection (`endSelection`). It used to be ended here,
+    // by hand, with a bare `targetCursor.hide()` that nothing was listening
+    // to — which is exactly how the dim came to outlive every confirmed
+    // command in all three FFX chapters.
     this.finish({ ...cmd.command, targets } as Command);
   }
 
@@ -579,7 +644,9 @@ export class CommandMenu {
    */
   private syncTargetSurfaces(): void {
     const sel = this.targetCursor.selection;
-    this.opts?.onSelection?.(sel);
+    // `onSelection` is published by the cursor itself (see the constructor),
+    // so it is deliberately not called again here: each arrow key would
+    // otherwise re-run the field's panel measurement twice.
     this.opts?.onTargetChange?.(sel?.activeId ?? null);
     this.updateTargetHelp();
   }
@@ -711,7 +778,7 @@ export class CommandMenu {
     const who = entries[0]?.kind === 'enemy' ? 'every enemy' : 'the whole party';
     const help = cmd ? commandHelpText(cmd) : '';
     this.opts.setHelp(help ? `${help} Hits ${who}.` : `Hits ${who}.`);
-    this.opts.onSelection?.(this.targetCursor.selection);
+    // `showGroup` already published the selection through the cursor's handler.
     // No single combatant is being aimed at, so the enemy plate has nothing to
     // describe; leaving the last one up would be a lie.
     this.opts.onTargetChange?.(null);

@@ -443,6 +443,9 @@ export class FFXBattleHud implements HudPort {
     this.sensorPanel.unmount();
     this.damageNumbers.clear();
     this.telegraph.dispose();
+    // Ends any live selection, so no accent pool or quiet dim can outlive the
+    // HUD that lit it (`CommandMenu.close`).
+    this.commandMenu.close();
     this.clearTransientOverlays();
     this.el.remove();
     this.mounted = false;
@@ -454,6 +457,10 @@ export class FFXBattleHud implements HudPort {
     // it. `result` going non-null is the one state change that means "the
     // fight is over", and it is idempotent, so re-syncing is harmless.
     if (state.result) {
+      // The fight is over, so any command menu still standing is standing over
+      // the results screen — and anything its cursor lit (the accent pool, the
+      // quiet dim, the lit party rows) would be painted under it.
+      this.commandMenu.close();
       this.clearTransientOverlays();
       // The enemy plate goes with them. This is also the call `SensorPanel.hide()`
       // never had: before this round one Sensor in Chapter 1 left the card on
