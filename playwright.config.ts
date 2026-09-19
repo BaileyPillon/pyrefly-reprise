@@ -1,16 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
+import { currentChromiumArgs, resolveBrowserMode } from './tools/browser-mode.mjs';
 
 /**
- * Headless Chromium with SwiftShader so WebGL works without a GPU.
- * Keep these args in sync with tools/screenshot.mjs.
+ * Headless Chromium launch args. SwiftShader (software WebGL) by default, so
+ * results are identical on this machine, CI or another dev's laptop. Set
+ * PYREFLY_BROWSER=gpu to use the real GPU instead — much faster locally, but
+ * never for pixel-exact goldens. See docs/DEV.md "Fast browser" for the
+ * measured numbers and caveats. Keep tools/screenshot.mjs's copy in sync if
+ * you change the SwiftShader set (it does not import this file, to stay
+ * dependency-free of playwright.config.ts).
  */
-export const CHROMIUM_ARGS = [
-  '--use-angle=swiftshader',
-  '--enable-unsafe-swiftshader',
-  '--ignore-gpu-blocklist',
-  '--enable-webgl',
-  '--disable-gpu-sandbox',
-];
+export const CHROMIUM_ARGS: string[] = [...currentChromiumArgs()];
+
+/** For anything that wants to log or assert which mode a run used. */
+export const BROWSER_MODE = resolveBrowserMode();
 
 /**
  * Preview port. 4173 (Vite's default) is deliberately avoided because it is a

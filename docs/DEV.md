@@ -32,9 +32,75 @@ npx playwright install chromium   # once, for e2e + screenshots
 - The preview port is **4319** by default (4173 is a common squatter). Both
   `playwright.config.ts` and `tools/screenshot.mjs` read `PREVIEW_PORT`:
   `PREVIEW_PORT=4500 npm run test:e2e`.
-- Headless WebGL runs on SwiftShader. The Chromium flag list is duplicated in
-  `playwright.config.ts` (`CHROMIUM_ARGS`) and `tools/screenshot.mjs` — keep
-  them in sync.
+- Headless WebGL runs on SwiftShader by default. The Chromium flag list is
+  duplicated in `playwright.config.ts` (`CHROMIUM_ARGS`, via `tools/browser-mode.mjs`)
+  and `tools/screenshot.mjs` — keep them in sync. See "Fast browser" below for
+  an opt-in GPU mode that is ~15-20x faster on this machine.
+
+### Fast browser (opt-in GPU headless)
+
+SwiftShader is deterministic — same pixels on this machine, CI, or another
+dev's laptop — but it is a software rasterizer, and this game is a full
+Three.js WebGL scene. On this machine (RTX 5070 Ti) it draws at **about 3 fps**
+measured idle, and a Chapter 1 battle did not reach its first command menu in
+90 s. That is what makes local iteration (and a full critic round) slow.
+
+`PYREFLY_BROWSER=gpu` switches Chromium to the real GPU instead, still
+headless. `tools/browser-mode.mjs` exports both arg sets
+(`SWIFTSHADER_ARGS`, `GPU_ARGS`) plus `resolveBrowserMode()` /
+`currentChromiumArgs()`; `playwright.config.ts` reads the env var through it.
+Any other script that launches its own Chromium (e.g. a future harness tool)
+should import from the same module rather than hardcoding a third copy.
+
+```
+PYREFLY_BROWSER=gpu npm run test:e2e
+PYREFLY_BROWSER=gpu npx playwright test tests/e2e/boot.spec.ts
+```
+
+**Measured on this machine** (`tools/zz-measure-gpu.tmp.mjs`, a scratch
+script; not committed — the numbers below are its output), against a static
+`vite build` served by `vite preview` (no HMR, so a concurrent agent editing
+`src/` cannot tear down the page mid-measurement — the dev server does not
+have that guarantee and produced "Execution context was destroyed" errors
+during this investigation):
+
+| | SwiftShader (default) | GPU (`PYREFLY_BROWSER=gpu`) |
+|---|---|---|
+| `WEBGL_debug_renderer_info` | `SwiftShader Device (Subzero)` | `NVIDIA GeForce RTX 5070 Ti … D3D11` |
+| Boot to `__pyreflyReady` | 363 ms | 309 ms |
+| Idle-scene FPS (`demo` screen, rAF count / 8 s) | **3.00 fps** | **59.63 fps** |
+| Chapter 1 (`seymour-flux`) time to first command menu | **>90 s (timed out)** | **11.3 s** |
+| In-battle FPS (rAF count / 8 s) | not reached | **50.00 fps** |
+| Real end-to-end check | — | `PYREFLY_BROWSER=gpu npx playwright test tests/e2e/boot.spec.ts` passed, 2/2, in 58.8 s total run time |
+
+GPU mode is reliably faster — roughly **20x** the raw frame rate, and it turns
+a battle that could not open its command menu inside a 90 s budget into an 11 s
+wait. SwiftShader stays the default for everything that must be reproducible
+(CI, golden images, another machine); GPU is an opt-in for a human iterating
+locally.
+
+**Caveats:**
+- **Never use GPU mode for pixel-exact goldens.** ANGLE's D3D11 backend
+  antialiases and rounds slightly differently from SwiftShader's Vulkan path;
+  screenshots can differ by a pixel or two. `tools/screenshot.mjs` and any
+  golden-image comparison should keep using the default.
+- **The GPU is shared with ComfyUI.** `D:\Tools\ComfyUI` renders paintings on
+  the same RTX 5070 Ti (AGENTS.md hard rule 12). During this investigation
+  ComfyUI was using ~84% GPU utilization and ~15/16 GB VRAM, and one GPU-mode
+  Chromium launch under that load hit "Execution context was destroyed"
+  before it produced a usable page. If GPU mode misbehaves, check
+  `nvidia-smi` for VRAM headroom before assuming the flags are wrong.
+- GPU mode still needs a real GPU with current drivers; it silently falls
+  back toward software rendering on a machine without one, so a suspiciously
+  slow GPU-mode run should be checked with the renderer-string snippet below
+  rather than trusted.
+- To confirm which renderer a run actually used, from inside a test:
+  ```js
+  const canvas = document.createElement('canvas');
+  const gl = canvas.getContext('webgl2');
+  const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  console.log(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
+  ```
 
 ### Screenshot tool
 
