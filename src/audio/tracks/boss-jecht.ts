@@ -61,6 +61,7 @@
  */
 
 import {
+  accel,
   barStarts,
   chordLine,
   chordMidis,
@@ -68,8 +69,10 @@ import {
   concatNotes,
   drumLine,
   motif,
+  rit,
   scaleVelocity,
   shiftNotes,
+  tempoMap,
   toMidi,
   tracker,
   transposeNotes,
@@ -77,6 +80,7 @@ import {
   type Track,
 } from '../score.ts';
 import {
+  agogic,
   FAREWELL_DYNAMICS,
   FAREWELL_RH,
   FATHER,
@@ -245,16 +249,83 @@ function turnGuitar(): Note[] {
 // ------------------------------------------------------------- the lament
 
 /**
+ * A falling run performed as a run of appoggiaturas: the first note keeps its
+ * written weight and every note after it steps `drop` further down, so a
+ * stepwise descent actually descends.
+ *
+ * THEMES.md's number is 0.08 a pair and `lean()` spends it half up, half down —
+ * which is right in the middle of a phrase. It is wrong in two places here.
+ * Bar 11's leaning note is already at the theme's written peak of 0.94, "the
+ * loudest note in the score outside the boss fights", and pushing it past that
+ * to make room would be overruling the one table THEMES.md says is half the
+ * theme; so the gap is made underneath it instead. And bar 12 is a THREE-note
+ * fall — two pairs sharing their middle note — which `lean()` cannot express at
+ * all, because that note is a resolution and a leaning note at the same time.
+ */
+function fallingRun(notes: Note[], beats: number[], drop = 0.08): Note[] {
+  const rank = new Map(beats.map((b, i) => [b, i]));
+  return notes.map((n): Note => {
+    const step = rank.get(n[0]);
+    if (step === undefined) return n;
+    return [n[0], n[1], n[2], Math.max(0.05, (n[3] ?? 0.8) - step * drop)];
+  });
+}
+
+/**
+ * FAREWELL's own rubato, written into the note values — THEMES.md §Rubato,
+ * with its numbers, on the window's beats.
+ *
+ *   the climb, bars 9-10   "shorten each note by 4%, so the climb arrives
+ *                          slightly early and eager". Read as an anticipation:
+ *                          each attack comes 4% of its own length early and is
+ *                          held to the same release, so the line leans forward
+ *                          without any of it drifting off the bar the riff is
+ *                          counting. The phrase's first note does not move.
+ *   the climax, bar 11     "lengthen the first note by 12%" — `agogic()`, the
+ *                          bible's own helper, on the beat the octave releases.
+ *
+ * It is written into the notes and NOT into a tempo map on purpose. A tempo map
+ * would bend the pulse, and the pulse here belongs to FATHER: the whole design
+ * of this section is two people talking over each other, and a lament that can
+ * make the band follow it is not being talked over. The ceiling is 25% and the
+ * largest thing here is 12%.
+ */
+function breatheLament(window: Note[]): Note[] {
+  const pulled = agogic(window, [CLIMB_RELEASE], 0.12);
+  return pulled.map((n): Note => {
+    if (n[0] <= 0 || n[0] >= CLIMAX_BAR) return n;
+    const early = Math.min(0.04 * n[1], 0.25);
+    return [n[0] - early, n[1] + early, n[2], n[3]];
+  });
+}
+
+/** Window beat the climb's octave releases on — bar 11, second note. */
+const CLIMB_RELEASE = 17;
+/** Window beat FAREWELL's bar 11 begins on, at half-time. */
+const CLIMAX_BAR = 16;
+
+/**
  * FAREWELL bars 9-12, +3 into D minor, every value doubled so it plays at
  * half-time against the riff. `FAREWELL_DYNAMICS` is applied before the
  * augmentation, because half of this theme lives in that table: bar 9 steps
  * back to 0.66 so bar 11 has somewhere to come from, and bar 11's downbeat at
  * 0.94 is the loudest note in the score outside a boss fight — which this is.
  *
- * Bar 10 is `FAREWELL_FALL`: hold three beats, step down one. It is an
- * appoggiatura, so the HELD note is LOUDER than the note it falls to.
+ * On top of the table, every appoggiatura in the window leans, because the
+ * table is written one value a BAR and a fall inside a bar therefore comes out
+ * flat. In window beats, with FAREWELL's own degrees:
+ *
+ *   bar 10   8 -> 14   `FAREWELL_FALL`: hold three beats, step down one. The
+ *                      theme's signature rhythm and its canonical appoggiatura.
+ *   bar 11   16 -> 17  `8 -> b7`, the only quickening in the theme. The octave
+ *                      dips to the b7 and comes straight back, so the dip is
+ *                      the quiet one.
+ *   bar 11   20 -> 24  the b6 — THE ACHE — sounded over the tonic chord and
+ *                      falling into bar 12 across the barline.
+ *   bar 12   24 -> 28 -> 30   `5 - 4 - b3`, the descent out of the climax,
+ *                      falling in weight as well as in pitch.
  */
-function lament(start: number, velocityScale = 1): Note[] {
+function lament(start: number, velocityScale = 1, rubato = false): Note[] {
   const whole = tracker(FAREWELL_RH, { checkBars: 4, gate: 1.0 });
   const shaped = shapeByBar(whole, FAREWELL_DYNAMICS, 4);
   const window = shaped
@@ -262,7 +333,9 @@ function lament(start: number, velocityScale = 1): Note[] {
     .map((n): Note => [(n[0] - 32) * 2, n[1] * 2, toMidi(n[2]) + 3, (n[3] ?? 0.7) * velocityScale]);
   // Bar 10 at half-time: the held Bb4 starts at beat 8 and falls to A4 at 14.
   const leaned = lean(window, [[8, 14]]);
-  return shiftNotes(leaned, start);
+  const dipped = fallingRun(leaned, [CLIMAX_BAR, CLIMB_RELEASE]);
+  const settled = fallingRun(dipped, [24, 28, 30]);
+  return shiftNotes(rubato ? breatheLament(settled) : settled, start);
 }
 
 /**
@@ -286,8 +359,14 @@ function bridgeLamentWide(): Note[] {
   return bridgeLament().filter((n) => n[0] >= BRIDGE_WIDEN);
 }
 
+/**
+ * The climax, and the one statement of the lament that is allowed to breathe.
+ * FATHER is underneath it at full speed, two beats late, on a pulse that does
+ * not move; FAREWELL pushes into its climb and pulls at its top. That is the
+ * argument, and it only reads as an argument if one of the two is bending.
+ */
 function climaxLament(): Note[] {
-  return lament(CLIMAX, 1);
+  return lament(CLIMAX, 1, true);
 }
 
 // ---------------------------------------------------------------- the solos
@@ -513,6 +592,27 @@ function cleanGuitar(): Note[] {
 export const jechtTrack: Track = {
   name: 'boss-jecht',
   bpm: 144,
+  /**
+   * The pulse bends in exactly one place, and it is the one place the drums
+   * are not in the room.
+   *
+   * Beats 112-128 are the top of the half-time bridge: no kick, no snare, no
+   * hats, no riff, no bass. Strings and the lament, and nothing else — "the one
+   * place in the cue where the clock stops", which up to now was a figure of
+   * speech about note values while the clock carried on at 144. It slows to
+   * 126 across those twelve beats and is pulled back to 144 by `BRIDGE_WIDEN`,
+   * where the kick, the guitars and the brass come back with the theme's own
+   * arrival. The band takes the tempo back; that is what a band does coming out
+   * of a breakdown, and it is why the return lands.
+   *
+   * Everywhere else the pulse is 144 — including `loop.start` and `loop.end`,
+   * so the wrap cannot lurch — because everywhere else FATHER is playing, and
+   * FATHER does not follow anybody.
+   */
+  tempo: tempoMap(
+    rit(BRIDGE, BRIDGE + 12, 126, 'the clock slows'),
+    accel(BRIDGE + 12, BRIDGE_WIDEN, 144, 'the band takes it back'),
+  ),
   timeSig: [4, 4],
   loop: { start: A, end: LENGTH },
   length: LENGTH,

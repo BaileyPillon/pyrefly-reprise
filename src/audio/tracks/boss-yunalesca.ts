@@ -28,12 +28,25 @@
  * overrun. That contrast is the reading of the character. Everything else here
  * is indifferent; one voice is not, and it loses.
  *
- * Craft note: the choir is a section and carries 34 ms of timing jitter, which
- * is right for a congregation and wrong for a machine. Every canon entry is
- * therefore doubled at the unison by pizzicato, which has a hard, exact onset:
- * the pizz defines where the note *is* and the choir blooms behind it. A
- * `choir-rite` preset with jitter <= 3 ms would do this properly — filed in
- * `docs/audio/requests-ffx-bosses.md`.
+ * Craft note, and it is now settled. THEMES.md §Humanisation gives this cue one
+ * of the score's two exemptions: "Vegnagun, the Yunalesca canon — `<= 3 ms`.
+ * The only places machine timing is the point." The `choir` preset carries
+ * **34 ms**, which is right for a congregation and wrong for a rite, and it is
+ * a property of the instrument rather than of this cue. The channel-level
+ * `perform` block (PIPELINE.md §Per-channel performance overrides) is the
+ * answer: the three canon channels ask for **2 ms** and nothing else in the
+ * game that uses a choir, a pizzicato or a harp is dragged tight with them.
+ *
+ * What still breathes, deliberately: the harp keeps its preset's 4 ms and the
+ * solo cello is played as a SOLOIST at 10 ms — §Humanisation's 8-12 ms for solo
+ * strings, not `strings-low`'s 24 ms section spread, which smears one player
+ * into a desk. Those two are the only human timing in the cue, and the contrast
+ * between them and the canon is the whole reading of the character.
+ *
+ * The pizzicato doubling of every canon entry stays. It was originally a
+ * workaround for the jitter the preset would not give up, but it is a better
+ * orchestration than the bare voices: the pizz says where the note *is* and the
+ * choir blooms behind it. Now both of them arrive on time.
  *
  * Form (6/8, 74 bars, 222 beats, 100.9 s) — three sections for her three forms:
  *   bars  1- 8  ostinato   beats   0- 24  harp alone, then the cello names the
@@ -66,7 +79,6 @@ import {
   augment,
   HYMN_HEAD,
   HYMN_SOPRANO,
-  lean,
   type Note as ThemeNote,
 } from './themes.ts';
 import { withVelocity } from './motifs.ts';
@@ -233,15 +245,74 @@ function stringsShortBreathing(): Note[] {
 // ------------------------------------------------------------- the solo cello
 
 /**
+ * A ritardando you can hear: THEMES.md §Rubato gives it a number, **18% across
+ * the last two notes**, and this is that.
+ *
+ * It replaces an `agogic()` call that could never fire. `agogic()` marks
+ * phrase-end BEATS and lengthens whatever note ends on one; the beat it was
+ * given here was derived from the source bar count rather than from the line,
+ * landed 1.5 beats past the last note's start, and matched nothing. The cue
+ * has shipped without the ritardando its own comment promised.
+ */
+function ritardando(notes: Note[], count = 2, pull = 0.18): Note[] {
+  const out = notes.map((n): Note => [n[0], n[1], n[2], n[3]]);
+  let pushed = 0;
+  for (let i = Math.max(0, out.length - count); i < out.length; i++) {
+    const n = out[i]!;
+    const stretch = n[1] * pull;
+    out[i] = [n[0] + pushed, n[1] + stretch, n[2], n[3]];
+    pushed += stretch;
+  }
+  return out;
+}
+
+/**
+ * THE APPOGGIATURA RULE, applied by POSITION rather than by beat, and applied
+ * LAST.
+ *
+ * Both of those are the fix for a bug this line shipped with. `lean()` matches
+ * on start beats, and the Phrygian amen was leaned at beats 24 and 27 of a
+ * phrase that had already been shifted to start at beat 168 — so it matched
+ * nothing, and the cue's one appoggiatura, in the cue's one human line, came
+ * out BACKWARDS: the Gb that aches was 0.696 and the F it falls to was 0.781.
+ * That is the exact inversion THEMES.md calls "the loudest single tell of a
+ * synthetic performance".
+ *
+ * By position, because `agogic()` moves the beats and nobody can write them
+ * down afterwards, while both `agogic()` and `breathe()` preserve order. And
+ * last, because `breathe()`'s arch across an 18-beat phrase is worth more than
+ * 0.08 on its own and would otherwise be able to level the rule right back out.
+ */
+function leanByIndex(notes: Note[], from: number, to: number, lift = 0.08): Note[] {
+  return notes.map((n, i): Note => {
+    if (i === from) return [n[0], n[1], n[2], Math.min(1, (n[3] ?? 0.8) + lift)];
+    if (i === to) return [n[0], n[1], n[2], Math.max(0.05, (n[3] ?? 0.8) - lift)];
+    return n;
+  });
+}
+
+/**
  * The one human being in the room. HYMN's own soprano line in F Phrygian,
  * half speed, with real rubato — a breath at the end of each phrase, a
- * ritardando at the last two notes — and the appoggiatura rule applied to the
- * Phrygian amen, so the Gb that leans is LOUDER than the F it falls to.
+ * ritardando at the last two notes — and the appoggiatura rule applied to
+ * every stepwise fall, so the note that aches is LOUDER than the note it falls
+ * to.
  *
  * Bars 1-4 in the intro, unaccompanied over the harp, before any canon exists;
  * bars 5-8 in the third form, where the machine simply plays over the top.
+ *
+ * `leans` are indices into the phrase, as pairs. Bars 5-8 have two: bar 6's
+ * `4 -> b3` (Bb4 to Ab4) and bar 8's `b2 -> 1` — `AMEN_PHRYGIAN` itself, the
+ * Gb leaning on the iv and falling home. Bars 1-4 have none: bar 2 falls by a
+ * THIRD, which is arpeggiation and not a leaning note, and bars 3 and 4 rise.
  */
-function celloPhrase(hymnBarFrom: number, hymnBars: number, start: number, velocity: number): Note[] {
+function celloPhrase(
+  hymnBarFrom: number,
+  hymnBars: number,
+  start: number,
+  velocity: number,
+  leans: Array<[number, number]> = [],
+): Note[] {
   const sung = phrygian(tracker(HYMN_SOPRANO, { checkBars: 4, gate: 1.0 }));
   const from = (hymnBarFrom - 1) * 4;
   const to = from + hymnBars * 4;
@@ -250,17 +321,20 @@ function celloPhrase(hymnBarFrom: number, hymnBars: number, start: number, veloc
     .map((n): Note => [(n[0] - from) * 1.5, n[1] * 1.5, n[2], velocity]);
   // A breath at the end of each 4-bar phrase, and a ritardando into the last.
   const breathed = agogic(window, [6 * 1.5, 12 * 1.5], 0.08);
-  const shaped = agogic(breathed, [(to - from - 1) * 1.5], 0.18);
+  const shaped = ritardando(breathed, 2, 0.18);
   // The one line in the cue that is allowed to be a person: it swells and
   // falls across each of its two six-bar phrases while the machine does not.
   const played = breathe(shaped, 18, 0.14);
-  return played.map((n): Note => [n[0] + start, n[1], n[2], n[3]]);
+  // ...and then the appoggiaturas, which nothing above is allowed to level.
+  const leaned = leans.reduce((line, [up, down]) => leanByIndex(line, up, down), played);
+  return leaned.map((n): Note => [n[0] + start, n[1], n[2], n[3]]);
 }
 
 function celloLine(): Note[] {
   const intro = celloPhrase(1, 4, 12, 0.6);
-  // The Phrygian amen, bar 8 of the hymn: the leaning Gb is louder than the F.
-  const overrun = lean(celloPhrase(5, 4, FORM3 + 24, 0.72), [[24, 27]]);
+  // Bar 6's sigh, and then the Phrygian amen: the last two notes of the line,
+  // and the leaning Gb is louder than the F.
+  const overrun = celloPhrase(5, 4, FORM3 + 24, 0.72, [[4, 5], [9, 10]]);
   return concatNotes(intro, overrun);
 }
 
@@ -338,9 +412,32 @@ function taikoLine(): Note[] {
   );
 }
 
+/**
+ * The rite's timing, as a channel override rather than as a preset.
+ *
+ * THEMES.md §Humanisation: "Vegnagun, the Yunalesca canon — `<= 3 ms`. The only
+ * places machine timing is the point." Two, not zero: four entries arriving on
+ * the same sample is a trigger, and a machine that has been running for a
+ * thousand years should still be a machine made of parts.
+ */
+const RITE_TIMING = { timingJitterMs: 2 } as const;
+
+/**
+ * And the one line that is not a machine. `strings-low` is a section preset at
+ * 24 ms; this line is one player, and §Humanisation gives a solo string 8-12.
+ * It is still human — that is the point of it — just not a desk of six.
+ */
+const SOLOIST_TIMING = { timingJitterMs: 10 } as const;
+
 export const yunalescaTrack: Track = {
   name: 'boss-yunalesca',
   bpm: 132,
+  // No tempo map, and that is a decision rather than an omission: THEMES.md
+  // §Rubato ends with "HYMN, and the Yunalesca canon — zero. A congregation
+  // does not rubato, and the rite does not breathe." The pulse here is 132 bpm
+  // from the first beat to the last. The only rubato in the cue is written
+  // into the solo cello's note values with `agogic()`, which is exactly the
+  // point: one line bends and the room it is bending inside does not.
   timeSig: [6, 8],
   loop: { start: FORM1, end: LENGTH },
   length: LENGTH,
@@ -350,14 +447,16 @@ export const yunalescaTrack: Track = {
     delay: { timeBeats: 1.5, feedback: 0.24, damp: 2600 },
   },
   channels: [
-    { name: 'choir canon low', instrument: 'choir', volume: 0.85, pan: -0.12, notes: choirLow(), fx: { reverb: 0.42 } },
-    { name: 'choir canon high', instrument: 'choir', volume: 0.6, pan: 0.18, notes: choirHigh(), fx: { reverb: 0.46 } },
-    { name: 'canon onsets', instrument: 'pluck', volume: 0.34, pan: 0.04, notes: pluckLine(), fx: { reverb: 0.16 } },
+    { name: 'choir canon low', instrument: 'choir', volume: 0.85, pan: -0.12, perform: RITE_TIMING, notes: choirLow(), fx: { reverb: 0.42 } },
+    { name: 'choir canon high', instrument: 'choir', volume: 0.6, pan: 0.18, perform: RITE_TIMING, notes: choirHigh(), fx: { reverb: 0.46 } },
+    { name: 'canon onsets', instrument: 'pluck', volume: 0.34, pan: 0.04, perform: RITE_TIMING, notes: pluckLine(), fx: { reverb: 0.16 } },
         // Written for `cello-solo`, which has a sampled preset but no synthesised
     // voice, so naming it would throw on the runtime fallback path. `strings-low`
     // is cellos and basses together; the line is written high in the cello's
-    // singing register and kept quiet so it still reads as one player.
-    { name: 'cello solo', instrument: 'strings-low', volume: 0.72, pan: -0.06, notes: celloLine(), fx: { reverb: 0.34, delay: 0.1 } },
+    // singing register and kept quiet so it still reads as one player — and
+    // `perform` now takes the section's 24 ms spread down to a soloist's 10, so
+    // it reads as one player in its timing as well as in its register.
+    { name: 'cello solo', instrument: 'strings-low', volume: 0.72, pan: -0.06, perform: SOLOIST_TIMING, notes: celloLine(), fx: { reverb: 0.34, delay: 0.1 } },
     { name: 'harp ostinato', instrument: 'harp', volume: 0.62, pan: -0.3, notes: harpBreathing(), fx: { reverb: 0.14 } },
     { name: 'strings ostinato', instrument: 'strings-short', volume: 0.5, pan: 0.3, notes: stringsShortBreathing(), fx: { reverb: 0.18 } },
     { name: 'brass', instrument: 'brass', volume: 0.62, pan: -0.2, notes: brassLine(), fx: { reverb: 0.32 } },

@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { INSTRUMENTS } from '../../src/audio/instruments.ts';
-import { toMidi, type Channel, type Note, type Track } from '../../src/audio/score.ts';
+import { effectiveJitterMs, toMidi, type Channel, type Note, type Track } from '../../src/audio/score.ts';
+import { tempoCurveOf } from '../../src/audio/tempo.ts';
 import { getTrack } from '../../src/audio/tracks/index.ts';
 import { FATHER } from '../../src/audio/tracks/themes.ts';
+import { getPreset, hasPreset } from '../../src/audio/voices/presets/index.ts';
 
 /**
  * The FFX boss group's rules from `docs/audio/THEMES.md`, as tests.
@@ -39,6 +41,90 @@ function velocities(notes: Note[]): number[] {
 /** Concert pitch class, after the channel's own transpose. */
 function pitchClass(note: Note, ch: Channel): number {
   return (((toMidi(note[2]) + (ch.transpose ?? 0)) % 12) + 12) % 12;
+}
+
+/**
+ * Every attack sounding at `beat`, in time order.
+ *
+ * A `beat` is matched with slack because two things legitimately move an
+ * attack off the grid: `swell()` splits a held note into tied re-attacks, and
+ * written rubato pulls an attack up to 4% of its own length early. Both are
+ * the point; neither may be allowed to hide an inverted appoggiatura, so the
+ * slack is small and the FIRST attack at or after the window opens is the
+ * struck note.
+ */
+function attacksAt(notes: Note[], beat: number, slack = 0.3): Note[] {
+  return [...notes]
+    .filter((n) => n[0] >= beat - slack && n[0] < beat + slack)
+    .sort((a, b) => a[0] - b[0]);
+}
+
+/**
+ * THE APPOGGIATURA RULE, as an assertion: "the leaning note is LOUDER than its
+ * resolution" (THEMES.md §Dynamics — "the single most important number in this
+ * file"), and for Bailey, "if the aching note is the quiet one, we got it
+ * backwards and it will sound mechanical."
+ *
+ * Every attack of the leaning note is checked, not just its first. A held
+ * choir or string note is re-articulated to fake a hairpin, and a leaning note
+ * that grows into its own resolution puts the accent on the wrong one of the
+ * pair even though its first attack was louder.
+ */
+function expectLeans(ch: Channel, pairs: Array<[number, number, string]>): void {
+  for (const [leanBeat, resolveBeat, what] of pairs) {
+    const leaning = attacksAt(ch.notes, leanBeat);
+    const resolution = attacksAt(ch.notes, resolveBeat);
+    expect(leaning.length, `${ch.name}: nothing struck at beat ${leanBeat} (${what})`)
+      .toBeGreaterThan(0);
+    expect(resolution.length, `${ch.name}: nothing struck at beat ${resolveBeat} (${what})`)
+      .toBeGreaterThan(0);
+    const to = resolution[0]![3] ?? 0.8;
+    for (const attack of leaning) {
+      expect(
+        attack[3] ?? 0.8,
+        `${ch.name}: ${what} — the leaning note at beat ${attack[0]} is ` +
+          `${attack[3]} against ${to} on the note it falls to`,
+      ).toBeGreaterThan(to);
+    }
+  }
+}
+
+/**
+ * The same rule, asserted BY POSITION in the line rather than by beat.
+ *
+ * A line with real rubato in it has no fixed beats to assert against: the solo
+ * cello in `boss-yunalesca` is pulled by `agogic()` at two phrase ends and by
+ * an 18% ritardando across its last two notes, so every beat after the first
+ * breath has moved and will move again the next time anybody touches the
+ * phrasing. Its appoggiaturas are applied by index for exactly that reason,
+ * and this asserts them the same way. Negative indices count from the end, so
+ * `[-2, -1]` is "the last two notes of the line", which is what AMEN_PHRYGIAN
+ * is and what it will still be after the next rubato change.
+ */
+function expectLeansByIndex(
+  ch: Channel,
+  notes: Note[],
+  pairs: Array<[number, number, string]>,
+): void {
+  for (const [from, to, what] of pairs) {
+    const at = (i: number): Note | undefined => notes[i < 0 ? notes.length + i : i];
+    const leaning = at(from);
+    const resolution = at(to);
+    expect(leaning, `${ch.name}: no note at position ${from} (${what})`).toBeDefined();
+    expect(resolution, `${ch.name}: no note at position ${to} (${what})`).toBeDefined();
+    expect(
+      leaning![3] ?? 0.8,
+      `${ch.name}: ${what} — the leaning note at beat ${leaning![0].toFixed(3)} is ` +
+        `${leaning![3]} against ${resolution![3]} on the note it falls to at ` +
+        `beat ${resolution![0].toFixed(3)}`,
+    ).toBeGreaterThan(resolution![3] ?? 0.8);
+  }
+}
+
+/** What this channel's notes are actually played with, preset plus `perform`. */
+function jitterOf(ch: Channel): number {
+  const preset = hasPreset(ch.instrument) ? getPreset(ch.instrument) : undefined;
+  return effectiveJitterMs(preset?.timingJitterMs ?? 0, ch.perform);
 }
 
 describe('the FFX boss cues', () => {
@@ -94,6 +180,28 @@ describe('the FFX boss cues', () => {
         expect(distinct, `${name} / ${ch.name} is rendered at ${distinct} velocity value(s)`)
           .toBeGreaterThanOrEqual(3);
       }
+    }
+  });
+
+  /**
+   * A tempo map that is not the same tempo at both ends of the loop lurches on
+   * every wrap: the waveform is continuous and the pulse is not, which is the
+   * loop-seam problem one level up and the one mistake a tempo map makes that
+   * nobody can mix out. The renderer warns; this fails.
+   *
+   * And a fermata at or past `loop.end` is time nobody ever hears.
+   */
+  it.each(CUES)('%s comes round the loop at the tempo it left', (name) => {
+    const t = getTrack(name);
+    const curve = tempoCurveOf(t);
+    if (!curve.hasMap) return;
+    expect(curve.bpmAt(t.loop.end), `${name} wraps from a different tempo than it restarts at`)
+      .toBeCloseTo(curve.bpmAt(t.loop.start), 3);
+    for (const mark of curve.marks) {
+      if (mark.holdSec <= 0) continue;
+      expect(mark.beat, `${name}: the fermata at beat ${mark.beat} is past loop.end`)
+        .toBeLessThan(t.loop.end);
+      expect(mark.beat).toBeGreaterThanOrEqual(t.loop.start);
     }
   });
 });
@@ -174,11 +282,55 @@ describe('boss-seymour', () => {
     const inside = pedal.filter((n) => n[0] >= 182 && n[0] < 190);
     expect(inside).toEqual([]);
   });
+
+  /**
+   * "The organ pedal holds C#1 under bar 1 and G1 under the #4 — the tritone
+   * lives there, in the floor, not in the tune." The #4 is the only pitch in
+   * the motif that belongs to no key and it is dotted rather than passing so
+   * that it carries weight; the weight is this note. It went missing once.
+   */
+  it('puts the tritone in the floor under the #4', () => {
+    const pedal = channel(t, 'organ pedal').notes;
+    for (const head of [16, 24, 32, 40, 48, 135]) {
+      const under = pedal.filter((n) => Math.abs(n[0] - (head + 4)) < 1e-6);
+      expect(under.length, `nothing under the #4 of the statement at beat ${head}`).toBe(1);
+      expect(toMidi(under[0]![2]) % 12, `the note under the #4 at beat ${head + 4}`)
+        .toBe(toMidi('G1') % 12);
+      // One note, not the octave doubling: that is bar 1's alone.
+      expect(under[0]![3] ?? 0.8).toBeLessThan(
+        Math.max(...pedal.filter((n) => Math.abs(n[0] - head) < 1e-6).map((n) => n[3] ?? 0.8)),
+      );
+    }
+  });
+
+  /** Even six cymbals are a phrase, and the cue's shape has to reach them. */
+  it('does not crash at one velocity for the whole cue', () => {
+    const crash = channel(t, 'crash').notes;
+    expect(new Set(velocities(crash)).size).toBeGreaterThan(2);
+  });
+
+  /**
+   * "He moves at his own pace, unbothered by the band." The pulse may only
+   * bend where the band is not playing — the cold interlude, beats 119-135.
+   * Bending it under the seven-beat turnarounds would turn 2+2+3 into a
+   * mistake, and bending it under the riff sections would make him the one
+   * following.
+   */
+  it('bends the pulse only where he is alone', () => {
+    const curve = tempoCurveOf(t);
+    expect(curve.hasMap).toBe(true);
+    for (const beat of [0, 16, 48, 80, 87, 118, 135, 167, 174, 216]) {
+      expect(curve.bpmAt(beat), `the pulse moved at beat ${beat}`).toBeCloseTo(132, 3);
+    }
+    expect(curve.bpmAt(131)).toBeLessThan(120);
+  });
 });
 
 describe('boss-yunalesca', () => {
   const t = getTrack('boss-yunalesca');
   const CANONS = ['choir canon low', 'choir canon high', 'canon onsets'];
+  /** Beat her third form starts on: 8 intro bars + two 20-bar sections, in 6/8. */
+  const FORM3 = (8 + 20 + 20) * 3;
 
   /** "Velocity locked at 0.62 — deliberately unhumanised here and nowhere else." */
   it('locks the canon at 0.62', () => {
@@ -220,6 +372,48 @@ describe('boss-yunalesca', () => {
     }
   });
 
+  /**
+   * THEMES.md §Humanisation: "Vegnagun, the Yunalesca canon — `<= 3 ms`. The
+   * only places machine timing is the point." The `choir` preset is 34 ms,
+   * which is a congregation; the canon is not a congregation. `perform` takes
+   * it down for these three channels and for nothing else in the game.
+   */
+  it('runs the canon at machine timing and lets the rest of the cue breathe', () => {
+    for (const name of CANONS) {
+      expect(jitterOf(channel(t, name)), `${name} is not tight enough to be a machine`)
+        .toBeLessThanOrEqual(3);
+    }
+    // The two lines that are not the machine. The cello is a SOLOIST (8-12 ms
+    // per the same table), not a section, and not a machine either.
+    expect(jitterOf(channel(t, 'harp ostinato'))).toBeGreaterThan(3);
+    const cello = jitterOf(channel(t, 'cello solo'));
+    expect(cello).toBeGreaterThanOrEqual(8);
+    expect(cello).toBeLessThanOrEqual(12);
+  });
+
+  /**
+   * The two appoggiaturas in the solo cello: bar 6's sigh, and then the
+   * Phrygian amen — the Gb that leans is LOUDER than the F it falls to. They
+   * are the only ones in the cue, because it is the only line allowed to mean
+   * anything; everything else here is a machine on purpose.
+   *
+   * Asserted by position. This test used to name beats 192 and 195, and those
+   * beats stopped existing the moment the line got the ritardando its own
+   * comment had been promising: `agogic()` and an 18% pull across the last two
+   * notes move every attack in the phrase. The amen is the last two notes of
+   * the line, and that is true whatever the rubato does to where they land.
+   */
+  it('leans the sigh and the Phrygian amen in the cello', () => {
+    const cello = channel(t, 'cello solo');
+    // The overrun phrase — HYMN bars 5-8, over the top of the third form.
+    const overrun = cello.notes.filter((n) => n[0] >= FORM3 + 24 - 1e-6);
+    expect(overrun.length, 'the cello sings bars 5-8 over the third form').toBe(11);
+    expectLeansByIndex(cello, overrun, [
+      [4, 5, "bar 6's sigh, 4 -> b3"],
+      [-2, -1, 'AMEN_PHRYGIAN, bar 8: the b2 leaning on the iv, and home'],
+    ]);
+  });
+
   /** The cello is the one thing in the cue that is allowed to be a person. */
   it('gives the solo cello a shaped line and nothing else rubato', () => {
     const cello = channel(t, 'cello solo').notes;
@@ -232,6 +426,55 @@ describe('boss-yunalesca', () => {
 
 describe('boss-jecht', () => {
   const t = getTrack('boss-jecht');
+
+  /**
+   * THE APPOGGIATURA RULE IN THE BRASS, which audio QA found flat.
+   *
+   * The brass carries FAREWELL from the theme's own climax onward, in the
+   * bridge and again in the climax, and `FAREWELL_DYNAMICS` is written one
+   * value per BAR — so every fall inside a bar arrived at the same weight as
+   * the note it fell to until the lament started leaning. Bar 11's descent is
+   * three notes deep, `5 - 4 - b3`, where the middle note is a resolution and
+   * a leaning note at once; that is why it is shaped as a falling run rather
+   * than as `lean()` pairs, and why it is asserted as a chain here.
+   */
+  it('leans every fall in the lament, in the bridge and in the climax', () => {
+    const brass = channel(t, 'brass');
+    // The bridge's statement. Beats are on the grid: nothing is arguing yet.
+    expectLeans(brass, [
+      [128, 129, 'bridge, bar 11: the octave dips to the b7'],
+      [132, 136, 'bridge, bar 11: THE ACHE, the b6 over the tonic, into bar 12'],
+      [136, 140, 'bridge, bar 12: 5 -> 4'],
+      [140, 142, 'bridge, bar 12: 4 -> b3'],
+    ]);
+    // The climax's statement, which is also the one that breathes — so these
+    // beats are approximate and `attacksAt` is deliberately slack.
+    expectLeans(brass, [
+      [160, 161, 'climax, bar 11: the octave dips to the b7'],
+      [164, 168, 'climax, bar 11: THE ACHE, into bar 12'],
+      [168, 172, 'climax, bar 12: 5 -> 4'],
+      [172, 174, 'climax, bar 12: 4 -> b3'],
+    ]);
+  });
+
+  /**
+   * "Two people talking over each other, and both of them are right." The
+   * lament bends in the climax and FATHER does not follow it: the riff under
+   * it stays on the sixteenth grid while the tune is pulled off the beat.
+   */
+  it('lets FAREWELL breathe where it collides with FATHER', () => {
+    const CLIMAX = 144;
+    const inClimax = (n: Note): boolean => n[0] >= CLIMAX && n[0] < CLIMAX + 32;
+    const lament = channel(t, 'strings').notes.filter(inClimax);
+    const offGrid = lament.filter((n) => Math.abs(n[0] * 2 - Math.round(n[0] * 2)) > 1e-6);
+    expect(offGrid.length, 'the lament is still on the grid in the climax')
+      .toBeGreaterThan(0);
+    const riff = channel(t, 'guitar L').notes.filter(inClimax);
+    const riffOff = riff.filter((n) => Math.abs(n[0] * 4 - Math.round(n[0] * 4)) > 1e-6);
+    expect(riff.length).toBeGreaterThan(0);
+    expect(riffOff.map((n) => n[0]), 'FATHER followed the lament off the grid')
+      .toEqual([]);
+  });
 
   /**
    * Resemblance guard: "No repeated-note chug — the riff never restrikes the
@@ -300,6 +543,33 @@ describe('boss-jecht', () => {
 
 describe('boss-yu-yevon', () => {
   const t = getTrack('boss-yu-yevon');
+
+  /**
+   * THE APPOGGIATURA RULE IN THE TUNE, which audio QA found flat and, at the
+   * climax, backwards. Every held stepwise fall in HYMN's soprano, at this
+   * cue's double augmentation, with the hymn bar each one belongs to.
+   *
+   * Two of these are not `lean()` pairs and that is the point of asserting
+   * them here: bar 6's b3 falls across the barline into bar 7 while itself
+   * being the resolution of bar 6's sigh, and bar 10's neighbour sat at one
+   * velocity for all three of its notes. Both are written levels now.
+   *
+   * The climax is asserted twice because it is a six-beat note re-struck by
+   * `swell()`: BOTH of its attacks have to stay above the note it falls to,
+   * which is exactly what it used to get wrong.
+   */
+  it('leans every stepwise fall in the prayer', () => {
+    expectLeans(channel(t, 'choir soprano'), [
+      [44, 48, 'bar 6: the first sigh, 4 -> b3'],
+      [48, 52, 'bar 6 into bar 7, across the barline: b3 -> 2'],
+      [60, 64, 'bar 8: THE AMEN, 2 -> 1'],
+      [76, 80, 'bar 10: the neighbour inside the climb, 5 -> 4'],
+      [84, 90, 'bar 11: THE CLIMAX, 8 -> b7'],
+      [87, 90, 'bar 11: the climax re-struck by swell(), still above its fall'],
+      [92, 96, 'bar 12: the descent out of the climax, 5 -> 4'],
+      [108, 112, 'bar 14: the sigh again, on the way home, 4 -> b3'],
+    ]);
+  });
 
   /** "Choir only over a single low drone. No attack, no percussion." */
   it('has no percussion at all', () => {

@@ -48,30 +48,48 @@
  * technically resolved, never audibly resolved. The cue ends on it, and the
  * loop point is what "resolves" it.
  *
- * Form (4/4 unless marked, 214 beats, 97.3 s):
+ * Form (4/4 unless marked, 216 beats, 98.2 s written + 0.5 s of bent time):
  *   beats   0- 16  intro      organ alone, then the contrabass doubling
  *   beats  16- 48  A          the eight-bar period; band in                <- loop start
  *   beats  48- 80  B          the mirror answers in the manuals
  *   beats  80- 87  turn 1     SEVEN beats, grouped 2+2+3; organ rests
  *   beats  87-119  sequence   the period again, harder, brass doubling
- *   beats 119-135  cold       band gone; the organ alone, and quiet
+ *   beats 119-135  cold       band gone; the organ alone, quiet, and the one
+ *                             window where the PULSE goes with him
  *   beats 135-167  A2         the band at its loudest
  *   beats 167-174  turn 2     seven beats again
- *   beats 174-214  final form `SEYMOUR_UNMOORED` — the decline keeps going and
+ *   beats 174-216  final form `SEYMOUR_UNMOORED` — the decline keeps going and
  *                             turns WHOLE-TONE, and the pedal drops on the
  *                             first whole-tone note, so his scale stops
  *                             containing a tonic at the same instant the
  *                             harmony loses its floor. Used once, never again.
- * Loop 16 -> 214.
+ * Loop 16 -> 216. (Both figures used to read 214, which is the sum of the
+ * written sections and two beats short of a barline; see {@link LENGTH}.)
+ *
+ * ONE THING THE BIBLE ASKS FOR THAT THIS CUE CANNOT GIVE IT, stated here so
+ * the claim cannot drift away from the data. §SEYMOUR says of the mirror that
+ * "the two converge on a minor ninth exactly where the `#4` falls". They
+ * converge on an OCTAVE: `SEYMOUR`'s `#4` is `+6` from the root and
+ * `SEYMOUR_MIRROR`'s is `-6` from the same root, which is twelve semitones,
+ * and themes.ts is the one file an arranger may not edit. Rooting the mirror a
+ * semitone away to buy the thirteenth would put a foreign tone under the only
+ * functional Baroque progression in the score, which costs more than it pays.
+ * The convergence itself is real and audible — the two lines open at a major
+ * tenth on the snap and close to the octave at the `#4` — and the tritone the
+ * bible actually wants heard is in the pedal, where it asks for it.
  */
 
 import {
+  accel,
   chordLine,
   chordMidis,
   chordRoots,
   concatNotes,
   drumLine,
   motif,
+  rit,
+  tempoMap,
+  toMidi,
   type Note,
   type Track,
 } from '../score.ts';
@@ -213,11 +231,32 @@ function organMirror(): Note[] {
 }
 
 /**
- * C#1 and C#2 under the FIRST NOTE of each statement and nowhere else — the
- * bible is specific, and a pedal that holds through the motif turns a bow into
- * a drone. It stops dead at `UNMOOR`: the floor goes at the same instant the
- * scale does.
+ * The pedal, and it has TWO events in every two-bar cell, not one.
+ *
+ * THEMES.md §SEYMOUR, Counter-subject, verbatim: *"The organ pedal holds C#1
+ * under bar 1 and **G1 under the `#4`** — the tritone lives there, in the
+ * floor, not in the tune."* Only the first half of that was here. The `#4` is
+ * the one pitch in the motif that belongs to no key, it is dotted rather than
+ * passing precisely so that it carries weight, and the weight it was supposed
+ * to be carrying was a tritone in the bass that nobody had played.
+ *
+ * It costs nothing harmonically, because the band is already there: the cell's
+ * third half-bar chord is `Gdim7` — G is its ROOT. And it survives the
+ * minor-third sequence for free, because a diminished seventh is symmetric:
+ * `Gdim7`, `A#dim7` and `C#dim7` are the same four pitches, so C#, E and G all
+ * take the same G in the floor. The one statement that moves is the cold
+ * interlude's second, which is rooted on G# and therefore takes D.
+ *
+ * The doubling stays where the bible puts it — "pedal doubling at C2/C1 on the
+ * first note of each statement ONLY" — so bar 1 is two octaves and the tritone
+ * is one note, lower in level, further under the floor. And a pedal that held
+ * through the motif would turn a bow into a drone, so neither event does.
+ *
+ * It all stops dead at `UNMOOR`: the floor goes at the same instant the scale
+ * does.
  */
+const TRITONE = 6;
+
 function organPedal(): Note[] {
   const heads = [
     INTRO, INTRO + 8,
@@ -227,6 +266,8 @@ function organPedal(): Note[] {
     FINAL,
     COLLAPSE, COLLAPSE + 8,
   ];
+  /** Beats into a statement at which `SEYMOUR`'s `#4` is struck. */
+  const sharpFour = SEYMOUR[3]![0];
   const notes: Note[] = [];
   for (const at of heads) {
     if (at >= UNMOOR && at < COLLAPSE) continue; // the floor is gone
@@ -235,6 +276,7 @@ function organPedal(): Note[] {
     // floor of the room, not his voice.
     const level = 0.32 + drive(at) * 0.22;
     notes.push([at, 1.6, `${root}1`, level], [at, 1.6, `${root}2`, level * 0.88]);
+    notes.push([at + sharpFour, 1.2, toMidi(`${root}1`) + TRITONE, level * 0.78]);
   }
   return notes;
 }
@@ -446,8 +488,23 @@ function hatLine(): Note[] {
   );
 }
 
+/**
+ * Six cymbals, and they used to be six identical cymbals — the one channel in
+ * the cue rendered at a single velocity. THEMES.md: "Never render a phrase at
+ * constant velocity except the two places this document names", and neither of
+ * them is a crash cymbal in a prog band. It matters more here than the note
+ * count suggests: a crash is what marks a section head, so six at one weight
+ * told the listener that the first entry of the band and its loudest bar cost
+ * the drummer exactly the same. They follow `drive()` now, like everything else
+ * the kit does, so the cue's shape reaches the cymbals as well.
+ *
+ * The section heads themselves do not change. The cold interlude still gets no
+ * crash at all: the band is gone there, and a cymbal is a band instrument.
+ */
 function crashLine(): Note[] {
-  return [A, B, SEQ, A2, FINAL, COLLAPSE].map((beat): Note => [beat, 1.6, 'C5', 0.62]);
+  return [A, B, SEQ, A2, FINAL, COLLAPSE].map(
+    (beat): Note => [beat, 1.6, 'C5', 0.34 + drive(beat) * 0.34],
+  );
 }
 
 /** Fills into the section heads: a descending tom run, never a chromatic tag. */
@@ -509,6 +566,33 @@ function brassLine(): Note[] {
 export const seymourTrack: Track = {
   name: 'boss-seymour',
   bpm: 132,
+  /**
+   * "He moves at his own pace, unbothered by the band."
+   *
+   * THEMES.md §SEYMOUR says the motif is stated at 132 bpm but written in half-
+   * and quarter-notes so that it moves at its own pace — which was true of the
+   * note values and false of the clock, because the clock was the band's and it
+   * never moved. There is exactly one window in the cue where that can be
+   * fixed without contradicting anything: the cold interlude, beats 119-135.
+   * The kit, the bass, the comping, the ostinato, the tremolo bed and the brass
+   * all stop there and he plays two statements alone, at the quietest he is in
+   * the whole cue.
+   *
+   * So the pulse goes with him: 132 slackens to 116 across the first of those
+   * two statements, and the second is pulled back up so that the downbeat of A2
+   * — the band's return, and its loudest section — lands in time. He is not
+   * dragging the band. He simply stops being accompanied, takes his time, and
+   * is interrupted.
+   *
+   * Nothing else moves, deliberately. The seven-beat turnarounds are odd
+   * METER, not odd tempo: the band can count, and bending the pulse under them
+   * would turn a group of 2+2+3 into a mistake. `loop.start` and `loop.end` are
+   * both at 132, so the wrap cannot lurch.
+   */
+  tempo: tempoMap(
+    rit(COLD, COLD + 12, 116, 'alone, and in no hurry'),
+    accel(COLD + 12, A2, 132, 'the band takes it back'),
+  ),
   timeSig: [4, 4],
   loop: { start: A, end: LENGTH },
   length: LENGTH,
