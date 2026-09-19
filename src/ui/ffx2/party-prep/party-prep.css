@@ -219,3 +219,103 @@
 .x2prep-gate--yellow {
   background: #e3b94a;
 }
+
+/* ------------------------------------------------------------------ Stats */
+
+/*
+ * The Stats tab (`StatsPanel.ts`): her worn block, then every dressphere she
+ * owns as a delta against it. The deltas are the point — they make
+ * [ffx2-combat-core §5.1]'s "stats are a function of (dressphere x level)"
+ * visible instead of merely true.
+ */
+
+.x2prep-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px 8px;
+  margin: 4px 0 6px;
+}
+.x2prep-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  border-bottom: 0.89px solid rgba(11, 10, 18, 0.12);
+}
+.x2prep-stat__k {
+  font-family: var(--ig-font-display);
+  font-size: 6.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.65;
+}
+.x2prep-stat__v {
+  margin-left: auto;
+  font-family: var(--ig-font-numeral);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.x2prep-cmp {
+  max-height: 72px;
+  overflow-y: auto;
+  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 8px), transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 8px), transparent 100%);
+}
+.x2prep-cmp__row {
+  display: grid;
+  grid-template-columns: 72px repeat(10, 1fr);
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+  border-bottom: 0.89px solid rgba(11, 10, 18, 0.1);
+}
+.x2prep-cmp__row--head {
+  border-bottom-width: 1.78px;
+  opacity: 0.6;
+}
+.x2prep-cmp__row--head .x2prep-cmp__cell {
+  font-family: var(--ig-font-display);
+  font-size: 6px;
+  letter-spacing: 0.06em;
+}
+.x2prep-cmp__name {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--ig-font-display);
+  font-size: 7px;
+  font-weight: 700;
+}
+/* The dressphere's own job colour, as a two-letter chip — the same vocabulary
+   as the party rows and the Garment Grid, so a sphere is recognisable by its
+   colour wherever it appears. */
+.x2prep-cmp__name i {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  background: var(--ffx2-job);
+  color: var(--ig-ink);
+  font-style: normal;
+  font-size: 6px;
+}
+.x2prep-cmp__cell {
+  text-align: center;
+  font-family: var(--ig-font-numeral);
+  font-size: 7px;
+}
+.x2prep-delta--up {
+  color: #2f7a46;
+}
+.x2prep-delta--down {
+  color: #a5323a;
+}
+.x2prep-delta--same {
+  opacity: 0.3;
+}
