@@ -7,7 +7,7 @@
  */
 
 import type { AbilityDef, AvailableCommand, Command, FFXCombatant } from '../common/types.ts';
-import { type Ctx, abilityOf, canSwitchIn, has, rankOf, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, has, isSubmenuMarker, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
 import { validTargets } from './targeting.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
@@ -92,6 +92,10 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     const def = abilityOf(ctx, id);
     if (!def || def.category === 'overdrive') continue;
     if (def.category === 'summon') continue;
+    // A submenu label is not an action. The Item rows this menu already
+    // carries *are* the submenu it would open, so offering the label as well
+    // is a row that can only waste a turn [state.ts `isSubmenuMarker`].
+    if (isSubmenuMarker(def)) continue;
     const marker = markerCommand(def);
     const row = rowFor(ctx, user, def, marker ?? { kind: 'ability', id, targets: [] });
     if (marker?.kind === 'escape' && !ctx.rt.canEscape) {

@@ -6,6 +6,41 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-19 — combat fix pass: the FFX content registry carries Rikku's Mix table
+
+Key `builda-combat` (fix pass, after an adversarial verifier refuted two of the
+track's claims). **FFX only** [AGENTS.md hard rule 14]: Mix, Steal and the
+`Use` submenu are FFX commands in FFX data resolved by the FFX CTB engine, and
+nothing under `src/battle/ffx2` was touched. No shape in
+`src/battle/common/types.ts` changed. Additive.
+
+**1. `FFXContentRegistry` gains `addMixRecipes` / `mixResult` / `mixPairs`, and
+`registerFFXMixRecipes` joins `registerFFXAbilities` / `registerFFXItems`**
+(`src/battle/ffx/registry.ts`, wired at the documented boot join in
+`src/app/screens/BattleScreenContent.ts`). `src/data/ffx/mixes/recipes.ts` has
+shipped `MIX_RECIPES` since the data pass with **no reader anywhere in the
+project**, so `MixResult.resultAbilityId` was `null` on every path and Mix —
+Rikku's Overdrive in all three FFX builds — spent a full gauge and emitted no
+event at all. The layering rule keeps `src/battle/**` out of `src/data/**`, so
+the table arrives exactly the way abilities and items do.
+
+**2. `MixResult.resultAbilityId` is now optional in practice, not required.**
+The contract already describes the field as the resolved id "or `null` when the
+pair has no recipe"; `execute.ts` now resolves the pair itself from
+`MixResult.ingredients` when the overlay left it `null`, and a pair with no
+recipe is **refused out loud** (`"Mix failed!"`, the wording the `MessageKind`
+doc comment already uses) with the gauge kept, instead of resolving a
+`formula: 'none'`, `hits: 0` record in silence. An overlay that does resolve the
+pair is still honoured, so no caller has to change.
+
+**3. A connecting FFX hit that computes to 0 now emits `damage` with
+`amount: 0`.** Not a shape change — the event and its range already allow it —
+but a behaviour change for anything that counts `damage` events. §291's
+`immune_to_percentage_damage` enemies "take 0", and §5.7 authors Bio Fury and
+Death Fury at `power: 0` on purpose, so suppressing the event made three
+shipped Overdrive rows invisible. `formula: 'none'` actions (Steal, Cheer,
+`Use`) never ran a damage chain and are excluded.
+
 ## 2026-09-19 — critic round 02, combat track: two readers for fields that had none
 
 Key `builda-combat`. No shape changed; two doc comments in

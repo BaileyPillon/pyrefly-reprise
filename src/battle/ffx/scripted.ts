@@ -13,6 +13,9 @@
  * | `shatterOnKill` | boolean | a target killed by this hit shatters instead of KO-ing |
  * | `minigameParams` | object | merged into the `minigame-request` payload |
  * | `reelStrip` | string[] | symbol strip for a Slots default roll |
+ * | `deathChance` | number | raw instant-death chance byte, rolled on the `ko` path |
+ * | `ignoresAllResistance` | boolean | that roll ignores the target's resistance byte |
+ * | `stealRoll` | string | the ability makes §7.8.1's item-steal roll (`steal.ts`) |
  *
  * Deliberately **not** here: Mega Death. "Kills everything not Zombie" falls
  * straight out of the generic status model, because a living Zombie's
@@ -21,10 +24,12 @@
  */
 
 import type { AbilityDef, FFXCombatant } from '../common/types.ts';
-import { type Ctx, tryActor } from './state.ts';
-import { dealDamage, ejectActor } from './hp.ts';
+import { type Ctx, isAlive, tryActor } from './state.ts';
+import { dealDamage, ejectActor, koActor } from './hp.ts';
 import { addGauge } from './overdrive.ts';
 import { banishAeon } from './aeons.ts';
+import { rollStatus } from './statuses.ts';
+import { resolveSteal, stealsItem } from './steal.ts';
 
 /** Minimum max HP the Mortiorchis floors at [ffx-seymour-flux §2.2]. */
 export const MORTIORCHIS_MIN_MAX_HP = 1000;
@@ -51,6 +56,29 @@ export function runScriptedExtra(
   if (typeof gaugeGain === 'number' && gaugeGain > 0) {
     addGauge(ctx, target, gaugeGain, def.id);
   }
+
+  // **Instant death.** Six shipped records — Death, Death Fury, the aeon's
+  // Pain, Zanmato, and the two Wisps — carry `extra.deathChance` because Death
+  // in this contract is the same `'ko'` outcome a depleted HP bar produces and
+  // its chance is a flat byte, not a `StatusApplication`
+  // (`data/ffx/abilities/blackmagic-advanced.ts` header says so in as many
+  // words: "the engine rolls that on its own Death-specific path"). Nothing
+  // rolled it. Death Fury therefore spent a full Overdrive gauge and emitted
+  // nothing at all, and **Zanmato killed nobody**.
+  //
+  // `rollStatus` is the one roll, so a boss's `ko: 255` still refuses it — this
+  // strengthens the player's kit, never weakens a boss.
+  const deathChance = extra['deathChance'];
+  if (typeof deathChance === 'number' && deathChance > 0 && isAlive(target)) {
+    const ignoresResistance = extra['ignoresAllResistance'] === true;
+    if (ignoresResistance || rollStatus(ctx, target, 'ko', deathChance)) {
+      koActor(ctx, target, user.id);
+    }
+  }
+
+  // **Steal.** §7.8.1's roll, its per-monster counter and its message; see
+  // `steal.ts` for why it is keyed off the data's own `extra`.
+  if (stealsItem(def)) resolveSteal(ctx, user, target);
 
   const shatterOnKill = extra['shatterOnKill'] === true;
   const script = typeof extra['script'] === 'string' ? (extra['script'] as string) : undefined;

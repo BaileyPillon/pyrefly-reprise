@@ -9,7 +9,7 @@
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant, MinigameResult } from '../common/types.ts';
 import { byteRoll } from '../common/rng.ts';
-import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isAlive, rankOf, rtOf, spendItem, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isAlive, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
 import { applyStatus } from './statuses.ts';
@@ -122,9 +122,21 @@ function shapeOverdrive(
     if (rage) return { def: rage, options };
   }
 
-  if (result.kind === 'rikku-mix' && result.mix.resultAbilityId) {
-    const mix = abilityOf(ctx, result.mix.resultAbilityId);
-    if (mix) return { def: mix, options };
+  if (result.kind === 'rikku-mix') {
+    // The overlay reports the two **ingredients**; the recipe table is the
+    // engine's to read [§5.9, `registry.ts addMixRecipes`]. An overlay that
+    // already resolved the pair is honoured, and one that did not — every
+    // caller until now, which is why Mix spent a full gauge for no event —
+    // is resolved here.
+    const [a, b] = result.mix.ingredients;
+    const id = result.mix.resultAbilityId ?? (a && b ? ctx.content.mixResult(a, b) : undefined);
+    const mix = id ? abilityOf(ctx, id) : undefined;
+    if (mix) {
+      // Mix consumes both ingredients; the record says so (`extra.consumesTwoItems`).
+      if (a) spendItem(ctx, a);
+      if (b) spendItem(ctx, b);
+      return { def: mix, options };
+    }
   }
 
   return { def, options };
@@ -262,9 +274,14 @@ export function executeCommand(
   // carries `formula: 'none'` and `hits: 0`, so resolving it would spend the
   // gauge on a silent no-op that reads as a UI bug. Refuse it, keep the turn
   // open, and say which ids are legal [CONTRACT-CHANGES decision 9].
-  if (isMenuMarker(def)) {
+  if (isMenuMarker(def) || isSubmenuMarker(def)) {
     const choices = def.extra?.['resolvesToOneOf'];
-    const detail = Array.isArray(choices) && choices.length > 0 ? ` Choose one of: ${choices.join(', ')}.` : '';
+    const submenu = def.extra?.['opensSubmenu'];
+    const detail = Array.isArray(choices) && choices.length > 0
+      ? ` Choose one of: ${choices.join(', ')}.`
+      : typeof submenu === 'string'
+        ? ` It opens the ${submenu} list; choose an item from it.`
+        : '';
     ctx.emit({
       type: 'message',
       text: `${def.name} is a menu marker, not an action.${detail}`,
@@ -343,6 +360,15 @@ export function executeCommand(
     def = shaped.def;
     options = shaped.options;
     ctx.rt.pendingMinigame = null;
+    // The Mix selector survived the shaping, so no pair in the bag has a
+    // recipe. `types.ts` names this case ("`null` when the pair has no recipe
+    // — *Mix failed!*"), and the alternative is what shipped: a `formula:
+    // 'none'`, `hits: 0` record resolving in silence with the gauge gone.
+    // Refused, so the gauge is kept and the player chooses again.
+    if (def.minigame === 'rikku-mix' && def.extra?.['consumesTwoItems'] === true) {
+      ctx.emit({ type: 'message', text: 'Mix failed!', kind: 'system' });
+      return { rank: 0, rejected: true, damageDealt: 0 };
+    }
   }
 
   if (command.kind === 'item') {

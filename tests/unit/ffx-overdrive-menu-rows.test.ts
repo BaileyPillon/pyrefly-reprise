@@ -395,7 +395,15 @@ describe('every offered row is submittable as offered', () => {
           targets: live.validTargets.slice(0, 1),
         } as Command);
         const meaningful = events.filter(
-          (e) => e.type !== 'action-start' && e.type !== 'action-end' && e.type !== 'turn-start',
+          (e) =>
+            e.type !== 'action-start' &&
+            e.type !== 'action-end' &&
+            e.type !== 'turn-start' &&
+            // Spending the caster's own gauge is the row's **cost**, not its
+            // effect. Counting it is how Bio Fury, Death Fury and Demi Fury —
+            // three rows that emitted nothing else — passed this guard, which
+            // is exactly what an adversarial verifier came back with.
+            !(e.type === 'overdrive-gauge' && e.cause === 'spent'),
         );
         expect(meaningful.length, `${who}'s "${live.label}" did nothing at all`).toBeGreaterThan(0);
       }
@@ -404,5 +412,13 @@ describe('every offered row is submittable as offered', () => {
 
   it('holds for the Chapter 1 board, Wakka and Lulu included', () => {
     assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri']);
+  });
+
+  // Three named actors on one board is what let Rikku's `Steal`, `Use` and
+  // `Mix` through. The exhaustive version — every chapter, every actor, the
+  // bench included — is `tests/unit/trigger-commands.test.ts`; this line is
+  // the cheap part of it, on the board the refutation used.
+  it('and for Rikku, who was never asked', () => {
+    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['rikku', 'tidus']);
   });
 });

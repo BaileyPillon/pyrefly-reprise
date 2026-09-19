@@ -21,8 +21,8 @@
  * harvester written while the FFX index did not exist yet.
  */
 
-import { registerFFXAbilities, registerFFXItems } from '../../battle/ffx/index.ts';
-import { ALL_ABILITIES, ITEMS } from '../../data/ffx/index.ts';
+import { registerFFXAbilities, registerFFXItems, registerFFXMixRecipes } from '../../battle/ffx/index.ts';
+import { ALL_ABILITIES, ITEMS, MIX_RECIPES } from '../../data/ffx/index.ts';
 import * as data from '../../data/ffx2/index.ts';
 import {
   abilityRegistryFrom,
@@ -66,6 +66,12 @@ async function loadFfxContent(): Promise<void> {
   const items = Object.values(ITEMS).filter((i) => i.game === 'ffx');
   registerFFXAbilities(abilities);
   registerFFXItems(items);
+  // Rikku's Mix table [ffx-combat-core §5.9]. `MIX_RECIPES` shipped with the
+  // data layer and had no reader anywhere, so `MixResult.resultAbilityId` was
+  // `null` on every path and Mix — her Overdrive in all three FFX builds —
+  // spent a full gauge and produced no event at all. This is the same
+  // data-to-engine join the two lines above make [registry.ts addMixRecipes].
+  registerFFXMixRecipes(MIX_RECIPES);
   report = { ...report, abilitiesFfx: abilities.length, itemsFfx: items.length, ffxSource: 'index' };
 }
 

@@ -8,8 +8,10 @@
 
 import type {
   AbilityDef,
+  AbilityId,
   CombatantId,
   FFXCombatant,
+  ItemId,
   MinigameKind,
   MinigameResult,
   OverdriveModeId,
@@ -256,6 +258,19 @@ export function timerMsFor(def: AbilityDef): number {
   }
 }
 
+/**
+ * Every recipe the party can actually make right now [ffx-combat-core §5.9].
+ *
+ * A pair is mixable when both ingredients are in the bag — and when the two
+ * ids are the same (Potion + Potion -> Ultra Potion) the bag must hold **two**.
+ */
+export function mixablePairs(ctx: Ctx): Array<[ItemId, ItemId, AbilityId]> {
+  const held = (id: ItemId): number => ctx.rt.inventory.get(id) ?? 0;
+  return ctx.content
+    .mixPairs()
+    .filter(([a, b]) => (a === b ? held(a) >= 2 : held(a) >= 1 && held(b) >= 1));
+}
+
 /** The `<spell>-fury` rows a Fury marker expands into for this caster [§5.7]. */
 export function furySpellsFor(ctx: Ctx, user: FFXCombatant, marker: AbilityDef): AbilityDef[] {
   const out: AbilityDef[] = [];
@@ -372,8 +387,23 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       const sweptDegrees = ctx.rng.int(Math.floor(FURY_ANCHOR_BUDGET / 3), FURY_ANCHOR_BUDGET);
       return { kind, fury: { sweptDegrees, casts: furyCastsFor(def, user.stats.mag, sweptDegrees) } };
     }
-    case 'rikku-mix':
-      return { kind, mix: { ingredients: ['', ''], resultAbilityId: null } };
+    case 'rikku-mix': {
+      // Roll the *input*, as everywhere else in this switch: two ingredients
+      // out of the bag, not a chosen outcome. The shipped recipe table is
+      // explicitly partial ("only ONE confirmed recipe per result",
+      // `data/ffx/mixes/recipes.ts`), so the draw is made among the pairs the
+      // party is actually carrying that the table can resolve — a uniform draw
+      // over the whole bag would return "no recipe" almost every time and hand
+      // the player a spent gauge, which is the bug this replaces.
+      const pairs = mixablePairs(ctx);
+      const chosen = pairs.length > 0 ? ctx.rng.pick(pairs) : undefined;
+      return {
+        kind,
+        mix: chosen
+          ? { ingredients: [chosen[0], chosen[1]], resultAbilityId: chosen[2] }
+          : { ingredients: ['', ''], resultAbilityId: null },
+      };
+    }
     case 'kimahri-rage':
       // The Rage rode in on `OverdriveCommand.id`, exactly like Lulu's Fury
       // spell above, so `def` is already the record the player chose — a menu

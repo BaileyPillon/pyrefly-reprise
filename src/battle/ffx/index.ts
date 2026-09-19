@@ -23,6 +23,8 @@ export {
   FFXContentRegistry,
   registerFFXAbilities,
   registerFFXItems,
+  registerFFXMixRecipes,
+  mixKey,
   getFFXRegistry,
   resetFFXRegistry,
   CORE_ABILITIES,

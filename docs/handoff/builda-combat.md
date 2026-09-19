@@ -113,3 +113,79 @@ it:
    him in **ping-pongs against the rule that swaps Yuna in** — a switch is rank
    0 and hands the turn straight over, so the forty-seed sweep stopped
    terminating. Any future bench rule needs a one-directional guard.
+
+---
+
+# Fix pass — 2026-09-19, after the adversarial verifier
+
+The verifier refuted two of the claims above. Both were the same defect the
+track said it had closed, hiding in the two places the guard never looked: an
+actor it never asked (Rikku, one Switch off the Chapter-1 bench) and an event it
+miscounted as an effect (`overdrive-gauge{cause:'spent'}`, which is a row's
+**cost**). Closing them turned up two more of the same family. All five are
+**FFX only** — Steal, Mix, Fury, the Overdrive gauge and Rikku's `Use` submenu
+are FFX commands, in FFX data, resolved by the FFX CTB engine. Nothing under
+`src/battle/ffx2` was touched, and `tests/unit/trigger-commands.test.ts` audits
+chapters 4 and 5 unchanged to prove the FFX-2 side needed nothing
+[AGENTS.md hard rule 14].
+
+## What changed
+
+| # | Was | Now | Where |
+|---|---|---|---|
+| 1 | Bio / Death / Demi Fury spent a full gauge and emitted **no event at all** | A connecting hit that computes to 0 emits `damage` with `amount: 0`, the way FFX puts the number on screen | `src/battle/ffx/abilities.ts` |
+| 2 | `extra.deathChance` had **no reader** — Death, Death Fury, the aeon's Pain, **Zanmato** and the two Wisps all did nothing | Rolled on the `ko` path through `rollStatus`, honouring `extra.ignoresAllResistance` | `src/battle/ffx/scripted.ts` |
+| 3 | `Steal` was an enabled row that emitted nothing; `extra.stealRoll` and `EnemyFields.rewards.steal` had no reader | §7.8.1's roll, its per-monster counter, Master Thief / Pickpocket, and a message on every branch | `src/battle/ffx/steal.ts` (new) |
+| 4 | `Use` was an enabled row that spent a turn in silence | Not offered (this menu is flat, so the gems and grenades it fronts are rows already) and refused out loud if submitted anyway | `src/battle/ffx/state.ts`, `commands.ts`, `execute.ts` |
+| 5 | `MIX_RECIPES` had **no reader in the project**; Mix ate a full gauge | The registry carries the table, the engine resolves the pair and consumes both ingredients; an unresolvable bag is refused with `"Mix failed!"` and keeps the gauge | `registry.ts`, `overdrive.ts`, `execute.ts`, `index.ts`, `app/screens/BattleScreenContent.ts` |
+
+Number 5 is the one file outside this track's list: `BattleScreenContent.ts` is
+the documented data-to-engine join (`registerFFXAbilities` /
+`registerFFXItems`), it was clean in the tree, and the change is two lines that
+hand over a table that already existed.
+
+## How it is proven
+
+- **The verifier's own repro**, `critic/scratch/builda/REFUTATION.test.ts`, run
+  unchanged: 4 failures before, 0 after (the one remaining assertion is its
+  precondition "Use is offered", which is the fix).
+- **`tests/unit/trigger-commands.test.ts`** (new, the file critic #12's
+  suggested fix asked for by name): every chapter in `CHAPTERS`, every actor,
+  every enabled row, submitted verbatim on a fresh engine replayed to the same
+  turn, at three seeds — 8 tests. FFX chapters walk the bench in too, which is
+  where the two refuted rows were. `overdrive-gauge{spent}` no longer counts as
+  an effect. This is the test that found Mix: it listed
+  `rikku / Mix (overdrive)` as inert on chapters 1-3 before the fix.
+- **`tests/unit/ffx-unread-riders.test.ts`** (new, 14 tests): Bio Fury's hits
+  and its Poison rider actually rolling (and correctly failing against
+  Seymour's resistance 90 versus chance 80); Death killing a vulnerable target
+  and being refused by a `ko: 255` one, so **no boss is weakened**; Steal
+  guaranteed on the first attempt against a `baseChance: 100` table, halving on
+  success only, capped at eight, and saying so on every branch; Mix resolving
+  Potion + Potion to Ultra Potion and consuming both; `Use` gone from the menu
+  and refused if submitted.
+- **`tests/unit/ffx-overdrive-menu-rows.test.ts`**: the old guard's filter now
+  excludes `overdrive-gauge{spent}`, and Rikku was added to its actor list.
+- `npx tsc --noEmit` clean; `node tools/orphans.mjs` shows `steal.ts` imported;
+  full unit suite **3879 passed / 1 failed**, the one failure being
+  `tests/unit/menu-cancel.test.ts`, the FFX-2 menu track's in-flight work.
+
+## What is left
+
+1. **The gil-steal family is still unimplemented.** `nab-gil` is in two shipped
+   builds. It deals its Strength-formula damage, so it is not silent and the
+   guard holds — but §7.8.1 rolls the gil steal "against the monster's gil-steal
+   byte", and neither `EnemyFields` nor any shipped enemy record has that byte.
+   Implementing it would mean inventing game data [hard rule 6]. It needs a
+   sourced field first.
+2. **`extra.repeatsPreviousAllyAction` (Copycat) and `extra.opensItemMenuAtRank`
+   (Quick Pockets) still have no reader.** Neither is in any shipped build, so
+   no menu can offer them today and the guard cannot see them.
+3. **Items are the guard's one exemption**, and it is a fidelity call: an
+   Antidote used on somebody who is not poisoned legitimately does nothing in
+   both games, and `validTargets` does not filter by what an item would help.
+   Narrowing item targeting is a real improvement and a separate job.
+4. **The Mix overlay** (`src/ui/ffx/minigames/`) still reports
+   `resultAbilityId: null`. It does not have to change — the engine resolves the
+   pair from `ingredients` now — but it cannot preview the result to the player
+   until it reads the table too.

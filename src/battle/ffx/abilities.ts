@@ -282,6 +282,28 @@ export function resolveAbility(
             onHealDealt(ctx, user, target, -result.amount);
           }
         }
+      } else if ((pool === 'hp' || pool === 'both') && def.formula !== 'none' && isAlive(target)) {
+        // **A connecting hit that computes to zero is still a hit, and FFX puts
+        // the number on the screen.** `immune_to_percentage_damage` enemies
+        // "take 0 from Percentage Total / Percentage Current"
+        // [ffx-combat-core §291], and a Fury spell whose damage constant is 0 —
+        // Bio Fury, Death Fury — is authored `power: 0` on purpose
+        // [§5.7]: the cast is the *carrier* for a rider, not a blank.
+        //
+        // Suppressing the event made three shipped Overdrive rows invisible:
+        // Bio Fury, Death Fury and Demi Fury each spent a full gauge and
+        // emitted nothing but `action-start` / `overdrive-gauge{spent}` /
+        // `action-end`, which reads exactly like a broken button. `formula:
+        // 'none'` is excluded because those actions never ran a damage chain at
+        // all (Steal, Use, Cheer) and have no number to show.
+        dealDamage(ctx, target, 0, {
+          sourceId: user.id,
+          element: primaryElement,
+          affinity: result.affinity,
+          crit,
+          hitIndex,
+          hitCount: totalHits,
+        });
       }
 
       // Statuses, then removals, then delay — the decompile's order.

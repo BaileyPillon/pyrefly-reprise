@@ -281,6 +281,25 @@ export function canSwitchIn(c: Combatant): boolean {
   return c.alive && !has(c, 'ko') && !has(c, 'petrify') && !has(c, 'eject');
 }
 
+/**
+ * True for an ability that is only a **submenu label**, not an action.
+ *
+ * Rikku's `Use` is the shipped case: §7.6 row 23 "opens the special items
+ * submenu", authored `formula: 'none'`, `power: 0`, `extra.opensSubmenu:
+ * 'special-items'` — and this menu is flat, so the gems, grenades and fangs it
+ * fronts are already rows of their own beside it. Offered as an action it was
+ * `enabled: true` and, submitted verbatim, produced `['action-start',
+ * 'action-end']`: a spent turn, in silence.
+ *
+ * Treated exactly like Lulu's `fury` marker, and for the same reason — the row
+ * the menu offers must be submittable as offered [AGENTS.md hard rule 4].
+ * `commands.ts` does not offer it; `execute.ts` refuses it out loud if one
+ * arrives anyway.
+ */
+export function isSubmenuMarker(def: AbilityDef): boolean {
+  return typeof def.extra?.['opensSubmenu'] === 'string';
+}
+
 /** Party side while no aeon is out; the aeon alone while one is. */
 export function friendlySide(ctx: Ctx): Side {
   return ctx.state.aeonId ? 'aeon' : 'party';
