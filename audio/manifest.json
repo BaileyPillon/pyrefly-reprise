@@ -1,0 +1,1140 @@
+{
+  "version": 1,
+  "sampleRate": 44100,
+  "music": {
+    "chapter-select": {
+      "file": "music/chapter-select.mp3",
+      "loopStart": 4.285692,
+      "loopEnd": 72.85712,
+      "duration": 75.8571,
+      "bytes": 1003243,
+      "lufs": -16.09,
+      "truePeakDb": -1.37
+    },
+    "pause": {
+      "file": "music/pause.mp3",
+      "loopStart": 5.217392,
+      "loopEnd": 46.956531,
+      "duration": 49.9565,
+      "bytes": 735574,
+      "lufs": -16,
+      "truePeakDb": -1.39
+    },
+    "boss-seymour": {
+      "file": "music/boss-seymour.mp3",
+      "loopStart": 7.272698,
+      "loopEnd": 98.181791,
+      "duration": 101.1818,
+      "bytes": 1592960,
+      "lufs": -15.99,
+      "truePeakDb": -1.49
+    },
+    "title": {
+      "file": "music/title.mp3",
+      "loopStart": 8.275896,
+      "loopEnd": 91.034512,
+      "duration": 94.0345,
+      "bytes": 1199811,
+      "lufs": -16.14,
+      "truePeakDb": -1.37
+    },
+    "battle-ffx": {
+      "file": "music/battle-ffx.mp3",
+      "loopStart": 6.4,
+      "loopEnd": 76.8,
+      "duration": 79.8,
+      "bytes": 1283690,
+      "lufs": -16.01,
+      "truePeakDb": -1.55
+    },
+    "boss-dread": {
+      "file": "music/boss-dread.mp3",
+      "loopStart": 10.666689,
+      "loopEnd": 85.333356,
+      "duration": 88.3333,
+      "bytes": 1310109,
+      "lufs": -16.02,
+      "truePeakDb": -1.47
+    },
+    "scene-gagazet": {
+      "file": "music/scene-gagazet.mp3",
+      "loopStart": 40,
+      "loopEnd": 103.333333,
+      "duration": 106.3333,
+      "bytes": 1436068,
+      "lufs": -16.15,
+      "truePeakDb": -1.38
+    },
+    "scene-zanarkand-dome": {
+      "file": "music/scene-zanarkand-dome.mp3",
+      "loopStart": 10,
+      "loopEnd": 130,
+      "duration": 133,
+      "bytes": 1771096,
+      "lufs": -16.1,
+      "truePeakDb": -1.39
+    },
+    "boss-yunalesca": {
+      "file": "music/boss-yunalesca.mp3",
+      "loopStart": 10.909093,
+      "loopEnd": 100.909093,
+      "duration": 103.9091,
+      "bytes": 1510224,
+      "lufs": -15.97,
+      "truePeakDb": -1.8
+    },
+    "scene-dreams-end": {
+      "file": "music/scene-dreams-end.mp3",
+      "loopStart": 12.63161,
+      "loopEnd": 101.052653,
+      "duration": 104.0526,
+      "bytes": 1517895,
+      "lufs": -16.1,
+      "truePeakDb": -1.38
+    },
+    "boss-jecht": {
+      "file": "music/boss-jecht.mp3",
+      "loopStart": 6.666689,
+      "loopEnd": 106.666689,
+      "duration": 109.6667,
+      "bytes": 1758394,
+      "lufs": -16.01,
+      "truePeakDb": -3.03
+    },
+    "boss-yu-yevon": {
+      "file": "music/boss-yu-yevon.mp3",
+      "loopStart": 6,
+      "loopEnd": 210,
+      "duration": 213,
+      "bytes": 3151611,
+      "lufs": -16.03,
+      "truePeakDb": -1.39
+    },
+    "victory-ffx": {
+      "file": "music/victory-ffx.mp3",
+      "loopStart": 8,
+      "loopEnd": 72,
+      "duration": 75,
+      "bytes": 1099390,
+      "lufs": -16.09,
+      "truePeakDb": -1.37
+    },
+    "ending-ffx": {
+      "file": "music/ending-ffx.mp3",
+      "loopStart": 33.103401,
+      "loopEnd": 115.862018,
+      "duration": 118.8621,
+      "bytes": 1693720,
+      "lufs": -16.01,
+      "truePeakDb": -1.4
+    },
+    "scene-bevelle-underground": {
+      "file": "music/scene-bevelle-underground.mp3",
+      "loopStart": 19.2,
+      "loopEnd": 105.6,
+      "duration": 108.6,
+      "bytes": 1504208,
+      "lufs": -16.2,
+      "truePeakDb": -1.38
+    },
+    "scene-farplane": {
+      "file": "music/scene-farplane.mp3",
+      "loopStart": 20.869592,
+      "loopEnd": 104.347846,
+      "duration": 107.3478,
+      "bytes": 1606046,
+      "lufs": -16,
+      "truePeakDb": -2.35
+    },
+    "boss-vegnagun": {
+      "file": "music/boss-vegnagun.mp3",
+      "loopStart": 11.428594,
+      "loopEnd": 91.428594,
+      "duration": 94.4286,
+      "bytes": 1815674,
+      "lufs": -15.99,
+      "truePeakDb": -1.39
+    },
+    "boss-shuyin": {
+      "file": "music/boss-shuyin.mp3",
+      "loopStart": 12.467506,
+      "loopEnd": 99.740227,
+      "duration": 102.7402,
+      "bytes": 1427416,
+      "lufs": -16.08,
+      "truePeakDb": -1.36
+    },
+    "victory-ffx2": {
+      "file": "music/victory-ffx2.mp3",
+      "loopStart": 7.5,
+      "loopEnd": 67.5,
+      "duration": 70.5,
+      "bytes": 1080749,
+      "lufs": -16.05,
+      "truePeakDb": -1.39
+    },
+    "boss-ffx2-aeon": {
+      "file": "music/boss-ffx2-aeon.mp3",
+      "loopStart": 12,
+      "loopEnd": 114,
+      "duration": 117,
+      "bytes": 1819659,
+      "lufs": -16,
+      "truePeakDb": -1.38
+    },
+    "ending-ffx2": {
+      "file": "music/ending-ffx2.mp3",
+      "loopStart": 11.428594,
+      "loopEnd": 114.285737,
+      "duration": 117.2857,
+      "bytes": 1660506,
+      "lufs": -16.07,
+      "truePeakDb": -1.4
+    }
+  },
+  "sfx": {
+    "file": "sfx/sprite.mp3",
+    "bytes": 2709777,
+    "duration": 244.0362,
+    "cues": {
+      "cursor-move": {
+        "offset": 0.05,
+        "duration": 0.3388,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -17.95
+      },
+      "confirm": {
+        "offset": 0.4388,
+        "duration": 0.5484,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -16.29
+      },
+      "cancel": {
+        "offset": 1.0372,
+        "duration": 0.4187,
+        "category": "ui",
+        "lufs": -23.13,
+        "truePeakDb": -18.02
+      },
+      "error": {
+        "offset": 1.5059,
+        "duration": 0.4991,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -11.64
+      },
+      "menu-open": {
+        "offset": 2.055,
+        "duration": 0.6956,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -13.16
+      },
+      "menu-close": {
+        "offset": 2.8006,
+        "duration": 0.5959,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -14.94
+      },
+      "coin-tick": {
+        "offset": 3.4464,
+        "duration": 0.2187,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -15.92
+      },
+      "status-applied": {
+        "offset": 3.7151,
+        "duration": 0.8981,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -14.83
+      },
+      "overdrive-full": {
+        "offset": 4.6632,
+        "duration": 2.1949,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -1.9
+      },
+      "sword-slash-1": {
+        "offset": 6.9081,
+        "duration": 0.6103,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -8.23
+      },
+      "sword-slash-2": {
+        "offset": 7.5685,
+        "duration": 0.7378,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -3.87
+      },
+      "hit-1": {
+        "offset": 8.3563,
+        "duration": 0.885,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -1.02
+      },
+      "hit-2": {
+        "offset": 9.2912,
+        "duration": 0.593,
+        "category": "impact",
+        "lufs": -18.41,
+        "truePeakDb": -1
+      },
+      "critical": {
+        "offset": 9.9343,
+        "duration": 2.392,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -4.08
+      },
+      "ko-fall": {
+        "offset": 12.3763,
+        "duration": 2.5791,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -3.39
+      },
+      "footstep": {
+        "offset": 15.0054,
+        "duration": 0.3383,
+        "category": "impact",
+        "lufs": -17.23,
+        "truePeakDb": -1
+      },
+      "victory-fanfare": {
+        "offset": 15.3937,
+        "duration": 3.3962,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.99
+      },
+      "boss-roar": {
+        "offset": 18.8399,
+        "duration": 2.5983,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -2.8
+      },
+      "machina-whir": {
+        "offset": 21.4882,
+        "duration": 2.1868,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -15.45
+      },
+      "magic-charge": {
+        "offset": 23.725,
+        "duration": 1.4973,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.9
+      },
+      "fire": {
+        "offset": 25.2723,
+        "duration": 1.5973,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.05
+      },
+      "ice": {
+        "offset": 26.9196,
+        "duration": 1.6956,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.24
+      },
+      "thunder": {
+        "offset": 28.6653,
+        "duration": 1.8555,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.95
+      },
+      "water": {
+        "offset": 30.5708,
+        "duration": 1.7902,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.84
+      },
+      "holy": {
+        "offset": 32.411,
+        "duration": 2.5928,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.57
+      },
+      "cure": {
+        "offset": 35.0538,
+        "duration": 1.9641,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -4.85
+      },
+      "summon": {
+        "offset": 37.0679,
+        "duration": 3.5489,
+        "category": "flourish",
+        "lufs": -14.55,
+        "truePeakDb": -1
+      },
+      "pyrefly": {
+        "offset": 40.6668,
+        "duration": 2.1802,
+        "category": "ambience",
+        "lufs": -20.94,
+        "truePeakDb": -16.29
+      },
+      "slash-light": {
+        "offset": 42.8969,
+        "duration": 0.4951,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -7.44
+      },
+      "slash-heavy": {
+        "offset": 43.442,
+        "duration": 1.0849,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -4.42
+      },
+      "pierce": {
+        "offset": 44.5769,
+        "duration": 0.7926,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -3.89
+      },
+      "ball-hit": {
+        "offset": 45.4195,
+        "duration": 0.7931,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -2.39
+      },
+      "claw": {
+        "offset": 46.2626,
+        "duration": 0.4589,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -4.07
+      },
+      "dagger-flurry": {
+        "offset": 46.7715,
+        "duration": 0.704,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -8.86
+      },
+      "gunshot": {
+        "offset": 47.5255,
+        "duration": 0.6877,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -2.22
+      },
+      "gun-burst": {
+        "offset": 48.2632,
+        "duration": 1.0679,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -7.31
+      },
+      "whiff": {
+        "offset": 49.3812,
+        "duration": 0.4459,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -2.31
+      },
+      "guard": {
+        "offset": 49.8771,
+        "duration": 0.7254,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -2.7
+      },
+      "counter": {
+        "offset": 50.6525,
+        "duration": 0.9959,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -5.59
+      },
+      "breath-attack": {
+        "offset": 51.6984,
+        "duration": 2.3989,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.59
+      },
+      "laser-charge": {
+        "offset": 54.1473,
+        "duration": 1.5766,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -9.87
+      },
+      "laser-fire": {
+        "offset": 55.7739,
+        "duration": 1.2147,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.98
+      },
+      "explosion": {
+        "offset": 57.0385,
+        "duration": 2.3927,
+        "category": "impact",
+        "lufs": -16.85,
+        "truePeakDb": -1
+      },
+      "quake": {
+        "offset": 59.4812,
+        "duration": 3.1783,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -4.3
+      },
+      "whip": {
+        "offset": 62.7095,
+        "duration": 0.891,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -1.63
+      },
+      "dissolve-pyreflies": {
+        "offset": 63.6505,
+        "duration": 2.9749,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -15.98
+      },
+      "machina-destroy": {
+        "offset": 66.6754,
+        "duration": 2.2877,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -3.68
+      },
+      "boss-phase-shift": {
+        "offset": 69.0131,
+        "duration": 3.374,
+        "category": "flourish",
+        "lufs": -15.07,
+        "truePeakDb": -1
+      },
+      "boss-overdrive-warning": {
+        "offset": 72.4371,
+        "duration": 2.598,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.72
+      },
+      "petrify-shatter": {
+        "offset": 75.0851,
+        "duration": 1.9388,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -4.91
+      },
+      "ctb-tick": {
+        "offset": 77.0739,
+        "duration": 0.1792,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -20.72
+      },
+      "ctb-shift": {
+        "offset": 77.3031,
+        "duration": 0.3389,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -19.82
+      },
+      "turn-ready": {
+        "offset": 77.692,
+        "duration": 0.7985,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -15.02
+      },
+      "menu-page": {
+        "offset": 78.5405,
+        "duration": 0.3987,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -14.48
+      },
+      "battle-start": {
+        "offset": 78.9892,
+        "duration": 1.7843,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -2.68
+      },
+      "escape": {
+        "offset": 80.8235,
+        "duration": 0.5828,
+        "category": "weapon",
+        "lufs": -18,
+        "truePeakDb": -3.91
+      },
+      "od-cursor-tick": {
+        "offset": 81.4562,
+        "duration": 0.1392,
+        "category": "ui",
+        "lufs": -22.69,
+        "truePeakDb": -19.86
+      },
+      "od-timer-tick": {
+        "offset": 81.6454,
+        "duration": 0.1993,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -16.57
+      },
+      "od-hit-zone": {
+        "offset": 81.8947,
+        "duration": 0.6982,
+        "category": "ui",
+        "lufs": -22.61,
+        "truePeakDb": -15.05
+      },
+      "od-miss": {
+        "offset": 82.6429,
+        "duration": 0.3993,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -16.53
+      },
+      "od-input": {
+        "offset": 83.0922,
+        "duration": 0.2964,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -10.8
+      },
+      "od-sequence-complete": {
+        "offset": 83.4386,
+        "duration": 1.5934,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -4.27
+      },
+      "od-reel-spin": {
+        "offset": 85.082,
+        "duration": 0.3025,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -10.84
+      },
+      "od-reel-stop": {
+        "offset": 85.4346,
+        "duration": 0.3835,
+        "category": "impact",
+        "lufs": -16,
+        "truePeakDb": -2.31
+      },
+      "od-fury-rotation": {
+        "offset": 85.8681,
+        "duration": 0.2593,
+        "category": "ui",
+        "lufs": -21.54,
+        "truePeakDb": -17.77
+      },
+      "od-mix-select": {
+        "offset": 86.1774,
+        "duration": 0.3486,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -15.61
+      },
+      "od-success": {
+        "offset": 86.576,
+        "duration": 1.1953,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.38
+      },
+      "od-fail": {
+        "offset": 87.8213,
+        "duration": 0.7989,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -17.66
+      },
+      "chain-hit": {
+        "offset": 88.6702,
+        "duration": 0.2975,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -17.07
+      },
+      "chain-break": {
+        "offset": 89.0176,
+        "duration": 0.5986,
+        "category": "ui",
+        "lufs": -22.96,
+        "truePeakDb": -18
+      },
+      "spherechange": {
+        "offset": 89.6663,
+        "duration": 2.1771,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.44
+      },
+      "garment-grid-gate": {
+        "offset": 91.8934,
+        "duration": 1.0983,
+        "category": "ui",
+        "lufs": -22.91,
+        "truePeakDb": -15.72
+      },
+      "fire-2": {
+        "offset": 93.0417,
+        "duration": 2.1944,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -6.09
+      },
+      "fire-3": {
+        "offset": 95.2861,
+        "duration": 3.3446,
+        "category": "spell",
+        "lufs": -15.06,
+        "truePeakDb": -1
+      },
+      "ice-2": {
+        "offset": 98.6807,
+        "duration": 2.2911,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.47
+      },
+      "ice-3": {
+        "offset": 101.0217,
+        "duration": 3.1401,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -2.53
+      },
+      "lightning": {
+        "offset": 104.2118,
+        "duration": 1.1415,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -4.72
+      },
+      "lightning-2": {
+        "offset": 105.4033,
+        "duration": 2.1557,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -6.75
+      },
+      "lightning-3": {
+        "offset": 107.609,
+        "duration": 3.1818,
+        "category": "spell",
+        "lufs": -15.15,
+        "truePeakDb": -1
+      },
+      "water-2": {
+        "offset": 110.8409,
+        "duration": 2.3862,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.04
+      },
+      "water-3": {
+        "offset": 113.2771,
+        "duration": 3.3889,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.89
+      },
+      "holy-2": {
+        "offset": 116.7159,
+        "duration": 3.412,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.27
+      },
+      "gravity": {
+        "offset": 120.1779,
+        "duration": 1.9944,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.24
+      },
+      "gravity-2": {
+        "offset": 122.2223,
+        "duration": 2.7969,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -1.65
+      },
+      "flare": {
+        "offset": 125.0693,
+        "duration": 3.1637,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -2.52
+      },
+      "ultima": {
+        "offset": 128.283,
+        "duration": 3.7505,
+        "category": "flourish",
+        "lufs": -14.48,
+        "truePeakDb": -1
+      },
+      "bio": {
+        "offset": 132.0834,
+        "duration": 2.198,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -9.02
+      },
+      "death": {
+        "offset": 134.3314,
+        "duration": 2.9485,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.01
+      },
+      "doom-tick": {
+        "offset": 137.33,
+        "duration": 0.8986,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -11.66
+      },
+      "drain": {
+        "offset": 138.2786,
+        "duration": 1.9861,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.98
+      },
+      "osmose": {
+        "offset": 140.3147,
+        "duration": 1.5696,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -4.59
+      },
+      "meteor": {
+        "offset": 141.9343,
+        "duration": 3.5955,
+        "category": "flourish",
+        "lufs": -15.76,
+        "truePeakDb": -1
+      },
+      "cure-2": {
+        "offset": 145.5798,
+        "duration": 2.373,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.39
+      },
+      "cure-3": {
+        "offset": 148.0028,
+        "duration": 3.3576,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.81
+      },
+      "regen": {
+        "offset": 151.4104,
+        "duration": 2.3966,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -8.87
+      },
+      "life": {
+        "offset": 153.857,
+        "duration": 2.7641,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.99
+      },
+      "full-life": {
+        "offset": 156.6711,
+        "duration": 3.3606,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.32
+      },
+      "esuna": {
+        "offset": 160.0817,
+        "duration": 1.5925,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.32
+      },
+      "dispel": {
+        "offset": 161.7242,
+        "duration": 1.1977,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -7.24
+      },
+      "protect": {
+        "offset": 162.9719,
+        "duration": 1.9991,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.72
+      },
+      "shell": {
+        "offset": 165.021,
+        "duration": 1.9962,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -6.57
+      },
+      "reflect": {
+        "offset": 167.0672,
+        "duration": 1.5975,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -7.49
+      },
+      "reflect-bounce": {
+        "offset": 168.7147,
+        "duration": 1.2987,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.84
+      },
+      "haste": {
+        "offset": 170.0634,
+        "duration": 1.5635,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -9.91
+      },
+      "slow": {
+        "offset": 171.6768,
+        "duration": 1.9989,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.02
+      },
+      "stop": {
+        "offset": 173.7257,
+        "duration": 1.7965,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -6.52
+      },
+      "sleep": {
+        "offset": 175.5722,
+        "duration": 2.3954,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -6.57
+      },
+      "silence": {
+        "offset": 178.0176,
+        "duration": 1.3968,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.17
+      },
+      "blind": {
+        "offset": 179.4644,
+        "duration": 1.598,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -4.51
+      },
+      "poison": {
+        "offset": 181.1124,
+        "duration": 1.7982,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -10.54
+      },
+      "berserk": {
+        "offset": 182.9606,
+        "duration": 1.9988,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -2.51
+      },
+      "confuse": {
+        "offset": 185.0094,
+        "duration": 2.1951,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -11.28
+      },
+      "curse": {
+        "offset": 187.2545,
+        "duration": 2.3973,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -2.6
+      },
+      "scan": {
+        "offset": 189.7018,
+        "duration": 1.3956,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -16.5
+      },
+      "steal-success": {
+        "offset": 191.1473,
+        "duration": 1.1796,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -1.2
+      },
+      "steal-fail": {
+        "offset": 192.377,
+        "duration": 0.5369,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -11.18
+      },
+      "item-use": {
+        "offset": 192.9639,
+        "duration": 0.8755,
+        "category": "ui",
+        "lufs": -24,
+        "truePeakDb": -11.35
+      },
+      "phoenix-down": {
+        "offset": 193.8894,
+        "duration": 2.3954,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.58
+      },
+      "elixir": {
+        "offset": 196.3348,
+        "duration": 3.1792,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -4.17
+      },
+      "mp-restore": {
+        "offset": 199.564,
+        "duration": 1.7935,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -4.55
+      },
+      "buff-generic": {
+        "offset": 201.4076,
+        "duration": 1.3982,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -5.67
+      },
+      "debuff-generic": {
+        "offset": 202.8557,
+        "duration": 1.5982,
+        "category": "spell",
+        "lufs": -15,
+        "truePeakDb": -3.72
+      },
+      "summon-depart": {
+        "offset": 204.5039,
+        "duration": 2.9977,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -3.41
+      },
+      "aeon-overdrive": {
+        "offset": 207.5516,
+        "duration": 3.7507,
+        "category": "flourish",
+        "lufs": -14.07,
+        "truePeakDb": -1
+      },
+      "wind-high-altitude": {
+        "offset": 211.3523,
+        "duration": 3.5878,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -14.15
+      },
+      "wind-gust": {
+        "offset": 214.99,
+        "duration": 1.7917,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -13.8
+      },
+      "kimahri-roar": {
+        "offset": 216.8317,
+        "duration": 2.7965,
+        "category": "flourish",
+        "lufs": -14,
+        "truePeakDb": -2.79
+      },
+      "fayth-hum": {
+        "offset": 219.6782,
+        "duration": 3.7152,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -11.7
+      },
+      "dome-echo": {
+        "offset": 223.4434,
+        "duration": 3.5882,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -12
+      },
+      "yu-yevon-chant": {
+        "offset": 227.0816,
+        "duration": 3.7962,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -10.83
+      },
+      "machina-groan": {
+        "offset": 230.9278,
+        "duration": 2.8369,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -12.89
+      },
+      "farplane-voices": {
+        "offset": 233.8147,
+        "duration": 3.7956,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -15.41
+      },
+      "lenne-song": {
+        "offset": 237.6603,
+        "duration": 3.5361,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -12.51
+      },
+      "whistle-answer": {
+        "offset": 241.2464,
+        "duration": 2.7398,
+        "category": "ambience",
+        "lufs": -22,
+        "truePeakDb": -13.12
+      }
+    }
+  }
+}

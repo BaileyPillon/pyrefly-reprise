@@ -1,0 +1,38 @@
+{
+  "width": 533,
+  "height": 1207,
+  "baselineY": 1191,
+  "seed": 498104268,
+  "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, one single broken horn in the middle of his forehead, only a short blunt nub of horn left, snapped off close to the skull, pale tan horn, bare smooth forehead, furry male, anthro, blue fur, blue lion beastman, broad humanoid face, short muzzle, yellow eyes, slit pupils, long white mane, white beard, pierced ears, very muscular, black sleeveless top, white skull emblem on the chest, white fur tufts on the shoulders, red waist sash, blue hakama trousers, barefoot blue paw feet, blue tail, one spear, plain brown wooden spear shaft, silver leaf shaped spearhead, celebrating a victory, the single spear raised high above his head in one paw in triumph, his other arm raised beside it with the paw open and empty, chest out, head raised, mouth open in a roar of triumph, full body from head to feet, (broken horn:1.6), (one short blunt horn nub on his forehead:1.5), (black sleeveless top with a white skull emblem:1.35), (spear raised overhead in one paw:1.35), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, two horns, pair of horns, long horn, tall horn, curved horn, spiral horn, ram horns, bull horns, demon horns, antlers, horns on the sides of the head, unicorn horn, red horn, horn colored like the weapon, tree stump, tree trunk, log, wood grain, grass, outdoor scenery, second weapon, extra weapon, duplicate weapon, floating weapon, detached weapon, weapon standing on its own, ground shadow, cast shadow, greaves, boots, headband, long robe, pleated skirt, white blob, white patch, blank white shape, white paper, white cloth over the chest, floating white fragment, detached white shape, missing arm, arm hidden behind the body, folded arms, crossed arms, standing at rest, arms at his sides, weapon in each hand",
+  "cropBox": [
+    114,
+    2,
+    647,
+    1209
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "g1victory",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/kimahri/idle.png",
+  "refWeight": 0.72,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T22:38:50.306Z"
+}

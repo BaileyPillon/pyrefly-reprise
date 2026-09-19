@@ -1,0 +1,31 @@
+{
+  "width": 340,
+  "height": 1172,
+  "baselineY": 1156,
+  "seed": 993508,
+  "prompt": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, muscular, muscular male, long hair, messy hair, unkempt black hair, red eyes, red headband, bare chest, topless male, pectorals, abs, black tribal tattoo on his chest, black shorts, red sash tied at the waist, short sash over his right thigh, single pauldron, shoulder armor on his left shoulder, armored gauntlet on left forearm, barefoot, stubble, standing upright, relaxed standing pose, arms crossed below the chest, chest and tattoo visible, torso turned toward the viewer, looking at viewer, confident smirk, both feet flat on the ground, (three-quarter view:1.25), (black chest tattoo:1.35), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, cape, scarf, flowing cloth, floating fabric, long ribbon, fire, flames, sword, greatsword, weapon, shirt, shoes, boots, two gauntlets, armored right arm",
+  "cropBox": [
+    357,
+    17,
+    697,
+    1189
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-18T11:19:51.756Z"
+}

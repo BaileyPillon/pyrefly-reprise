@@ -1,0 +1,42 @@
+{
+  "width": 734,
+  "height": 1178,
+  "baselineY": 1162,
+  "seed": 357102,
+  "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, one single broken horn in the middle of his forehead, only a short blunt nub of horn left, snapped off close to the skull, pale tan horn, bare smooth forehead, furry male, anthro, blue fur, blue lion beastman, broad humanoid face, short muzzle, yellow eyes, slit pupils, long white mane, white beard, pierced ears, very muscular, bare blue chest, white fur tufts on the shoulders, wide carved gold waist belt, red waist sash, blue hakama trousers, barefoot blue paw feet, blue tail, one spear, plain brown wooden spear shaft, silver leaf shaped spearhead, standing, holding a small blue glass potion bottle up in front of his chest in one paw, the little bottle clearly visible, looking down at the bottle, his other paw closed around the single spear shaft holding it upright beside him, full body from head to feet, (broken horn:1.6), (one short blunt horn nub on his forehead:1.5), (small blue glass potion bottle:1.4), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, two horns, pair of horns, long horn, tall horn, curved horn, spiral horn, ram horns, bull horns, demon horns, antlers, horns on the sides of the head, unicorn horn, red horn, horn colored like the weapon, tree stump, tree trunk, log, wood grain, grass, outdoor scenery, second weapon, extra weapon, duplicate weapon, floating weapon, detached weapon, weapon standing on its own, ground shadow, cast shadow, three arms, extra arms, disembodied hand, shirt",
+  "cropBox": [
+    0,
+    27,
+    734,
+    1205
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "item",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/kimahri/idle.png",
+  "refWeight": 0.7,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T19:07:29.578Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T15:10:34.273962-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

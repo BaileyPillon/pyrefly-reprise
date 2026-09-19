@@ -1,0 +1,38 @@
+{
+  "width": 614,
+  "height": 1021,
+  "baselineY": 1005,
+  "seed": 444401,
+  "prompt": "1boy, monster boy, giant, hulking, monstrous, bipedal, brown scales, red and blue armor plating on the chest, plated armor, horns, white hair, tufts of white hair, large red headband, glowing orange eyes, six spike blades fanned from his back like wings, asymmetrical arms, huge oversized claw for a left hand, normal right arm holding a huge black sword, black greatsword, gripping the huge black sword low in front of him, dark energy gathering along the blade, spike blades folded close behind him, hunched, head turned to the left, the whole figure small in the frame with empty space all around it, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, human, normal proportions, bishounen, human face, knight, tail, dragon head, oni mask, bare chest, close-up, cropped limbs, feathered wings",
+  "cropBox": [
+    206,
+    0,
+    820,
+    1021
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "ref": "tools/gen/refs/bfa2-idle-ref.png",
+  "refWeight": 0.8,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T16:49:55.527Z"
+}

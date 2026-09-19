@@ -1,0 +1,33 @@
+{
+  "width": 461,
+  "height": 832,
+  "baselineY": 816,
+  "seed": 420203,
+  "prompt": "no humans, pagoda, tiered tower, four tiered pagoda, curved upturned eaves, overhanging tiled roofs, floating, levitating, dark blue grey stone, slate grey stone, red painted trim, gold rings, arched glowing windows, hanging bells, yevon glyph, ornate finial spire, floating upright, windows glowing warmly, leaning toward the left, brass finial spire intact at the very top, (curved upturned pagoda eaves:1.3), (dark blue grey stone:1.3), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, building, temple exterior, landscape, 1girl, 1boy, white marble, pale, lighthouse, cityscape, multiple towers, carved stone masonry",
+  "cropBox": [
+    184,
+    193,
+    645,
+    1025
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "img2img": "tools/gen/refs/yu-pagoda-v3-idle.png",
+  "denoise": 0.58,
+  "generatedAt": "2026-09-19T00:49:22.014Z"
+}

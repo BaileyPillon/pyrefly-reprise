@@ -1,0 +1,42 @@
+{
+  "width": 832,
+  "height": 1172,
+  "baselineY": 1156,
+  "seed": 1661676719,
+  "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, one full curved pale tan horn on his forehead and one horn snapped off to a short flat topped stub, the two horns are very different lengths, furry male, anthro, blue fur, blue lion beastman, broad humanoid face, short muzzle, yellow eyes, slit pupils, long white mane, white beard, pierced ears, very muscular, plain black sleeveless top with a white skull emblem on the chest, white fur tufts on the shoulders, red waist sash, blue hakama trousers, barefoot blue paw feet, blue tail, one spear, plain brown wooden spear shaft, silver leaf shaped spearhead, lunging forward in a deep stance, thrusting the single spear forward, his near paw gripping the spear shaft and his far paw gripping the shaft further back, both arms fully drawn from shoulder to paw and clearly separate from his chest, full body from head to feet, snarling, determined, (one long horn and one short broken stub:1.5), (plain black sleeveless top with a white skull emblem:1.4), (both arms fully visible:1.3), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, matched pair of horns, two identical horns, symmetrical horns, two long horns, curved pair of horns, ram horns, bull horns, demon horns, antlers, horns on the sides of the head, unicorn horn, red horn, horn colored like the weapon, gold armour, golden armor, ornate armor, plate armor, pauldrons, shoulder plate, filigree, brocade, embroidered robe, patterned robe, mask, skull mask over the face, helmet, circlet, headband, tree stump, tree trunk, log, wood grain, grass, outdoor scenery, second weapon, extra weapon, duplicate weapon, two spears, spear in each hand, floating weapon, detached weapon, weapon standing on its own, ground shadow, cast shadow, greaves, boots, long robe, pleated skirt, white blob, white patch, blank white shape, white paper, white cloth over the chest, floating white fragment, detached white shape, missing arm, arm hidden behind the body",
+  "cropBox": [
+    0,
+    26,
+    832,
+    1198
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "g2attack",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/kimahri/idle.png",
+  "refWeight": 0.72,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T22:47:06.974Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T19:04:17.941435-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

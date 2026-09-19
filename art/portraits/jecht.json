@@ -1,0 +1,43 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 552203,
+  "prompt": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, long hair, messy hair, unkempt black hair, red headband, dark red eyes, stubble, bare chest, muscular, single pauldron, shoulder armor on his left shoulder only, bare right shoulder, black tribal tattoo on his chest, head and shoulders and chest in frame, one armored shoulder and one bare shoulder, the chest tattoo visible, smirking, looking at viewer, (black hair:1.45), (black tribal tattoo on his chest:1.3), straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, grey hair, silver hair, white hair, blonde hair, glowing eyes, extreme close-up, two pauldrons, symmetrical armor, sword, weapon, cape",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "tools/gen/refs/jecht-idle-ref.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T17:00:03.152Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T13:01:41.132664-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image.",
+  "fixNote": "Fix pass 2 (2026-09-18). Judge flagged silver-grey hair, bright red eyes and a crop too tight for the chest tattoo and pauldron. Re-shot with (black hair:1.45) and (black tribal tattoo on his chest:1.3), eyes pushed to dark red, and pose tags asking for head+shoulders+chest. Mirrored with flip.py --set-facing none so the single pauldron sits on his LEFT arm (frame-right) per visual-bible 1.11; a straight-on bust has no facing for a mirror to break, so this fixes chirality rather than breaking it. Ships at facing:none per art3-contract.md section 1 - portraits are exempt from the battlefield facing rule."
+}

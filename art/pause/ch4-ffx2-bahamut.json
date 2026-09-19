@@ -1,0 +1,43 @@
+{
+  "subject": "Yuna (Gunner) (Ch.4 Bahamut)",
+  "mood": "eyes downcast, sorrow and guilt",
+  "seed": 20261525,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, short brown hair, one long thin brown tail of hair, heterochromia, blue eye, green eye, gunner dressphere, pink hood, white and pink top, red obi sash tails, blue arm bracer, a black armoured western dragon head with a broad crested skull and a segmented cowl at her shoulder, folded dark mechanical wings, bahamut, bevelle underground, teal machina glow, deep shadow, soft bokeh background, three-quarter view, eyes downcast, brow drawn, mouth closed, sorrow and guilt, shoulders low, her arm with a visible elbow and forearm taper, hands out of frame, (blue right eye:1.4), (green left eye:1.4), (a black armoured western dragon head with a broad crested skull:1.35), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, eastern dragon, oriental dragon, chinese dragon, serpent, snake body, whiskers, whiskered snout, ribbon body, green dragon, pale green dragon, coiling body, wingless, two dragon heads, tube arm, boneless arm, smooth tapering arm, no elbow, gold machine, disc drum, truncated gun, pistol, summoner obi, hakama, pleated skirt",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(blue right eye:1.4), (green left eye:1.4), (a black armoured western dragon head with a broad crested skull:1.35)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/yuna-gunner/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T16:52:09.643Z",
+  "fixPass": "round 5 (2026-09-18)",
+  "judgeFixes": "Bahamut is a black armoured western dragon with a crested skull (was a pale green eastern serpent); dragon connects to a body; arm has an elbow and forearm taper; no stub pistol; eye sides now match the rest of the set",
+  "alias": "ch4-bahamut",
+  "focal": {
+    "x": 0.48,
+    "y": 0.42
+  },
+  "master": {
+    "file": "ch4-ffx2-bahamut.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is this master downscaled to 1344x768; both are one image."
+  },
+  "aliasOf": "ch4-bahamut"
+}

@@ -1,0 +1,48 @@
+{
+  "width": 832,
+  "height": 1196,
+  "baselineY": 1180,
+  "seed": 782003,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, masculine face, pale blue-grey skin, light blue hair, very long hair, two long thick locks of hair falling down his back, hair over one eye, purple eyes, pronounced dark veins on his face, ornate dark blue robe, red trim, green sash, open robe, exposed chest, chest tattoo, wide sleeves, floating in midair, no legs, lower body fused into a bone frame, tattered robe hem, recoiling from a hit, torso arched backward, head thrown back, mouth open in a cry of pain, one arm flung up and back, the other arm braced across his chest, wide sleeves and robes whipping forward, (1boy:1.4), (mature male face:1.35), (pronounced dark veins on his face:1.3), (head thrown back:1.3), (no legs:1.25), (white background:1.3), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, female, woman, breasts, cleavage, lipstick, makeup, long eyelashes, feminine, androgynous, girl, horns, antlers, helmet, legs, thighs, feet, standing, shoes, scenery, floor, shadow, cast shadow, reflection, cropped, out of frame, bare midriff, topless",
+  "cropBox": [
+    0,
+    12,
+    832,
+    1208
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/seymour-flux-body/idle.png",
+  "refWeight": 0.6,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T13:51:13.136Z",
+  "unbackdropped": {
+    "at": "2026-09-18T09:55:01.076386-04:00",
+    "pixelsRemoved": 7094,
+    "removedFraction": 0.013,
+    "cut": 226,
+    "spread": 14,
+    "note": "Flat white backdrop the cutout kept, cleared by tools/gen/unbackdrop.py. The recorded seed reproduces the render, not this file."
+  },
+  "fixRound": "fix5 2026-09-18: regenerated. Judge read all three states as a feminine sorceress. Fixed by forcing the subject male in the unescaped --emphasis channel ((1boy:1.4), (mature male face:1.35)) and banning the feminine attractor in --negAdd, plus (pronounced dark veins on his face:1.3) for the canon Flux read. Idle unchanged (it passed) and still the --ref anchor at 0.6/0.3.",
+  "baselineNote": "qc.py reports DANGLE-83px: the tattered robe hem is the lowest content, 83px below the body mass. Deliberately NOT hand-corrected. The ART-PIPELINE section 5 caveat is about a prop hanging below the FEET; Seymour Flux has no feet — he is fused to Mortiorchis at the waist and floats, and the engine composites this sprite onto the mount. The lowest opaque pixel is the bottom of the subject, so baselineY is correct as generated. Same reasoning as the round-4 log."
+}

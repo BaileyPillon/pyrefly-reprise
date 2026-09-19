@@ -1,0 +1,47 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 775001,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, monster girl, upper body of a pale woman rising from a huge writhing clump of dark violet tentacles, no legs, her hips dissolving into thick matte violet tendrils, tendrils like coarse matted hair, root mass, silver hair, very long hair, yellow eyes, pale skin, blue headband headdress with two long silver plumes zigzagging into an M shape, blue beads, yellow tassels, blue and black bikini top, gold chain, gold bracelet, blue armband, green sash, revealing clothes, demonic, menacing, monster, attacking, lunging bodily forward toward the target on the left, one arm thrust straight out in front of her with the clawed hand open and fingers spread, the other arm flung back behind her, the tentacles lashing forward like thrown spears, mouth open snarling, hair streaming backward, (lunging forward:1.4), (one arm thrust straight forward:1.35), (tentacles lashing forward like spears:1.3), (no legs:1.25), (white background:1.35), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, long dress, gown, blonde hair, standing on ground, legs, thighs, bare legs, human legs, feet, sandals, shoes, skirt, armor, wings, scenery, floor, cropped, out of frame, white dress, glossy, shiny, latex, wet, rubber, ribbon, crown, tiara, feather fan, flower, shadow, cast shadow, reflection, standing upright, serene, calm, posing",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/yunalesca-2/idle.png",
+  "refWeight": 0.45,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.4,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T13:39:50.269Z",
+  "unbackdropped": {
+    "at": "2026-09-18T09:45:50.760339-04:00",
+    "pixelsRemoved": 1584,
+    "removedFraction": 0.0023,
+    "cut": 222,
+    "spread": 16,
+    "note": "Flat white backdrop the cutout kept, cleared by tools/gen/unbackdrop.py. The recorded seed reproduces the render, not this file."
+  },
+  "fixRound": "fix5 2026-09-18: regenerated. Idle failed the judge (cutout slab, glossy ribbon tendrils, non-canon feather crown), so the idle was redone first and every state re-referenced at it. Tendrils rewritten as matte hair-like mass; headdress as the canon blue headband with M-plumes. Cutout finished with unbackdrop.py --cut 222 --spread 16 --enclosed --enclosed-min-fraction 0.0015."
+}

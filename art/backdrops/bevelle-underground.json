@@ -1,0 +1,16 @@
+{
+  "seed": 1370196706,
+  "prompt": "no humans, scenery, vast machina chamber deep underground, giant machinery, industrial cathedral of riveted steel plate, ribbed vaults, catwalks at multiple heights, thick hanging cable bundles, circular pit floor, huge torn hole in the floor venting cyan light upward, dramatic uplighting from below, orange emergency lamps, teal and rust, steam, deep shadows, immense scale, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, aircraft, sky, sunlight, nature, trees, grass, outdoors",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-15T22:52:10.437Z"
+}

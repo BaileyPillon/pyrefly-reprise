@@ -1,0 +1,39 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 2125517154,
+  "prompt": "1other, solo, monster, demon head, humanoid beast head, reddish brown skin, short orange red mane, two huge curved cream bone ram horns curling beside the head, blunt demon muzzle, fangs, yellow eyes, aeon, final fantasy x, head and shoulders, face centered in the frame, head angled to the side, eyes and muzzle clearly visible, one head, clean plain white background behind the head, (two huge curved cream ram horns:1.45), (demon face:1.3), (head angled to the side:1.25), (from side:1.2), three-quarter view, (looking at viewer:1.2), portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, dragon, dragon head, reptile head, scales, scaly snout, long snout, fire breathing, grid, mesh, net, lattice, wire fence, muzzle guard, cage, cyan, neon cyan, blue fur, teal, gold rings, ring horns, straight horns, hair covering face, obscured face, extra heads, two faces, human face",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "_c6port",
+  "composition": "portrait",
+  "facing": "left",
+  "facingPhrase": "(from side:1.2), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/ifrit/idle.png",
+  "refWeight": 0.75,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T13:51:24.347Z"
+}

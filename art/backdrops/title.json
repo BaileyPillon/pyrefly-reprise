@@ -1,0 +1,16 @@
+{
+  "seed": 771001,
+  "prompt": "no humans, scenery, night ocean, very dark deep blue night sky filling the upper half, vast empty starry sky, low horizon line in the lower third, still black water, calm reflective sea, small distant burning island silhouette far away on the horizon, narrow warm orange glow band only at the horizon, faint violet at the horizon, tiny rising motes of light, wide shot, empty, minimal, quiet, melancholy, negative space, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, people, crowd, silhouette of a person, boat, ship, aircraft, sunset, sunbeams, bright clouds, fiery sky, sun",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-15T22:56:04.044Z"
+}

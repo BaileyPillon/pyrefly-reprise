@@ -1,0 +1,37 @@
+{
+  "width": 493,
+  "height": 1136,
+  "baselineY": 1120,
+  "seed": 841921653,
+  "prompt": "1girl, paine \\(ff10-2\\), final fantasy x-2, safe, solo, silver hair, short hair, red eyes, pale skin, serious, expressionless, gunner, dual wielding, holding gun, handgun, black tank top, black shorts, thigh strap, fingerless gloves, black knee boots, standing, guns lowered at her sides, looking at viewer, stern expression, straight-on, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background",
+  "cropBox": [
+    142,
+    58,
+    635,
+    1194
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/paine-warrior/idle.png",
+  "refWeight": 0.45,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-15T23:31:36.426Z"
+}

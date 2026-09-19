@@ -1,0 +1,46 @@
+{
+  "width": 796,
+  "height": 1203,
+  "baselineY": 1187,
+  "seed": 1921900288,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, silver hair, very long hair, hair spread out, yellow eyes, pale skin, blue headdress, ornate headdress, blue and black bikini top, gold chain, gold jewelry, gold bracelet, blue armband, green sash, black thong, barefoot, revealing clothes, navel, toned, elegant, recoiling, staggering backward, damaged, pained, (silver hair:1.25), (ornate headdress:1.2), (revealing outfit:1.15), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, long dress, gown, covered shoulders, robe, cape, armor, blonde hair, white dress, skirt, wings",
+  "cropBox": [
+    0,
+    12,
+    796,
+    1215
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurtV3",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/yunalesca-1/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T11:35:01.033Z",
+  "unbackdropped": {
+    "at": "2026-09-18T20:13:44.898299-04:00",
+    "pixelsRemoved": 23552,
+    "removedFraction": 0.0598,
+    "cut": 222,
+    "spread": 16,
+    "note": "Flat white backdrop the cutout kept, cleared by tools/gen/unbackdrop.py. The recorded seed reproduces the render, not this file."
+  }
+}

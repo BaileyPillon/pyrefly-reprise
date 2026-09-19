@@ -1,0 +1,43 @@
+{
+  "width": 688,
+  "height": 1078,
+  "baselineY": 955,
+  "seed": 828303,
+  "prompt": "no humans, pagoda, tiered tower, floating, levitating, dark blue grey stone, slate grey stone, red painted trim, gold rings, arched glowing windows, golden light, hanging bells, yevon glyph, ornate finial spire, cracked stone, chipped, windows flickering dim, tilting off balance, (dark blue grey stone:1.35), (red painted trim:1.25), three-quarter view, from side, tilted toward the left, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, building, temple exterior, landscape, cityscape, multiple towers, moss, plants, sky, white marble, pale, lantern, 1girl, 1boy",
+  "cropBox": [
+    73,
+    118,
+    761,
+    1196
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "three-quarter view, from side, tilted toward the left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/yu-pagoda/idle.png",
+  "refWeight": 0.6,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "img2img": "tools/gen/refs/yu-pagoda-v2-hurt.png",
+  "denoise": 0.55,
+  "generatedAt": "2026-09-18T15:34:16.654Z",
+  "baselineYAuto": 1062,
+  "baselineNote": "Broken stone fragments fall 106 px below the tower body; 955 is the base tier eave (pipeline section 5)."
+}

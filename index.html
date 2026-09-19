@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2." />
+    <title>Pyrefly Reprise</title>
+    <style>:root{--font-display:"Chakra Petch", "Cinzel", "Trajan Pro", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;--font-text:"Exo 2", "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;--font-mono:"Silkscreen", "Cascadia Mono", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;--font-numbers:"Rajdhani", "Exo 2", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;--ink:#eaf2ff;--ink-dim:#9fb3cf;--accent:#7fe3d0;--bg:#04060b}*{box-sizing:border-box}html,body{background:var(--bg);width:100%;height:100%;color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased;text-rendering:optimizelegibility;overscroll-behavior:none;touch-action:none;margin:0;padding:0;overflow:hidden}#app{background:var(--bg);display:block;position:fixed;inset:0}#game{z-index:0;position:absolute;inset:0}#game>canvas{width:100%;height:100%;display:block}#ui{z-index:10;pointer-events:none;-webkit-user-select:none;user-select:none;position:absolute;inset:0}#ui [data-action],#ui button,#ui .ui-interactive{pointer-events:auto;cursor:pointer}#fade{z-index:20;opacity:1;pointer-events:none;background:#000;transition:opacity .45s;position:absolute;inset:0}#fade[data-state=clear]{opacity:0}#boot{font-family:var(--font-display);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);place-items:center;font-size:13px;display:grid;position:absolute;inset:0}@media (prefers-reduced-motion:reduce){#fade{transition-duration:1ms}}</style>
+    <script type="module" crossorigin src="/pyrefly-reprise/assets/index-CF_L2xLd.js"></script>
+    <link rel="stylesheet" crossorigin href="/pyrefly-reprise/assets/index-B9fhag0K.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="game"></div>
+      <div id="ui" aria-live="polite"></div>
+      <div id="fade" data-state="opaque"></div>
+      <div id="boot">Loading</div>
+    </div>
+    <noscript>
+      <p style="padding: 2rem; font-family: sans-serif">
+        Pyrefly Reprise needs JavaScript and WebGL 2.
+      </p>
+    </noscript>
+  </body>
+</html>

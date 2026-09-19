@@ -1,0 +1,45 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 813001,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, pale blue-grey skin, light blue hair, hair lacquered and swept up into a tall wide fan-shaped crest, two long horn-like locks of hair falling down his back, purple eyes, pronounced dark veins branching across his face, ornate layered guado robe, dark blue robe with red trimmings, tall high collar lined with red, green sash, calm unsettling smile, head and shoulders, head turned toward the viewer, calm smile, unsettling, (1boy:1.4), (tall wide fan-shaped hair crest:1.4), (pronounced dark veins on his face:1.3), (plain white background:1.4), (from side:1.25), three-quarter view, head turned toward the viewer, (looking at viewer:1.3), portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, female, feminine, lipstick, makeup, beard, stubble, horns, antlers, helmet, mask, crown, armor, hood, scenery, cropped, out of frame, circle, ring, arc, halo, decorative frame, ornament, folding fan, feathers, wings, stained glass, banner, curtain",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "left",
+  "facingPhrase": "(from side:1.25), three-quarter view, head turned toward the viewer, (looking at viewer:1.3)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-18T14:25:20.366Z",
+  "unbackdropped": {
+    "at": "2026-09-18T10:27:55.004561-04:00",
+    "pixelsRemoved": 13425,
+    "removedFraction": 0.017,
+    "cut": 232,
+    "spread": 12,
+    "note": "Flat white backdrop the cutout kept, cleared by tools/gen/unbackdrop.py. The recorded seed reproduces the render, not this file."
+  },
+  "fixRound": "fix5 2026-09-18: regenerated. Judge could not name him unaided \u2014 no upswept hair crest, no facial markings, generic armoured collar, facing only marginal. Fixed by naming the crest as HAIR per cast.json (hair lacquered and swept up into a tall wide fan-shaped crest) with horns/antlers/helmet/mask banned, the Guado layered robe with a tall red-lined collar, (pronounced dark veins on his face:1.3), and the F1.5 softened portrait facing phrase pushed from 1.15 to 1.25. NOTE: the judge asked for pale blue eyes and orange-red facial markings; research/visual-bible.md section 1.8 records purple eyes as verified and the face marks as veins. The bible was followed. Contract owner should settle this.",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T20:44:01.062059-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

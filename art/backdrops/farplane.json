@@ -1,0 +1,12 @@
+{
+  "seed": 1158534573,
+  "prompt": "no humans, scenery, endless field of glowing flowers, lavender and pink flowers, floating lights, spirit lights, waterfalls in the distance, pastel sky, dreamlike, soft glow, ethereal afterlife, serene, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, airplane, aircraft, biplane, propeller, airship, vehicle, jet, wings, flying machine",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "generatedAt": "2026-09-15T17:55:43.870Z"
+}

@@ -1,0 +1,41 @@
+{
+  "width": 498,
+  "height": 1063,
+  "baselineY": 1047,
+  "seed": 949701,
+  "prompt": "no humans, pagoda, tiered tower, floating, levitating, dark blue grey stone, slate grey stone, red painted trim, gold rings, arched glowing windows, golden light, hanging bells, yevon glyph, ornate finial spire, the stacked tiers hovering apart from each other, seams of golden light between the tiers, runes lit, (dark blue grey stone:1.35), (red painted trim:1.25), three-quarter view, from side, tilted toward the left, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, building, temple exterior, cityscape, multiple towers, moss, sky, white marble, lantern, fire, flames, burning, cropped, 1girl, 1boy",
+  "cropBox": [
+    168,
+    79,
+    666,
+    1142
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "three-quarter view, from side, tilted toward the left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/yu-pagoda/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "img2img": "tools/gen/refs/yu-pagoda-v2-cast.png",
+  "denoise": 0.45,
+  "generatedAt": "2026-09-18T16:02:55.901Z"
+}
