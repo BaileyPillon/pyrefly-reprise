@@ -38,6 +38,20 @@ Hard caps (apply before weighting):
 - The critic never fixes anything itself and never softens a score because a fix is planned.
 - Every round is written to `critic/rounds/round-NN.md` (+ `.json`) and the top of the list is reported to the owner with the score.
 
+## When the critic runs (standing rules, adopted by the owner 2026-09-18)
+
+0. **After every build pushed live: a full round. Mandatory, no exceptions.**
+1. **Before each deploy: a short gate** on the production preview (changed areas, stability, a player's-eye screenshot review). Any blocker stops the release.
+2. **Whenever the owner reports a defect: a retrospective.** Why did the critic miss it? The answer becomes a check in `critic/CHECKS.md` (every auditor and the gate run the checks for their area) and, where possible, an automated test.
+3. **When an art batch lands: a visuals-only pass inside the running game**, never on a contact sheet alone.
+4. **Before building any sizeable feature or approved proposal: a paper critique** of the plan or mockup; build after a go.
+5. **After audio renders: a technical and thematic check** (loudness, loop seams, each cue uses its assigned themes). Beauty is the owner's call.
+6. **A first-time-player pass every few rounds** (someone who never played FFX grades onboarding and clarity).
+7. **A weekly round on the live site when idle**, once the score is near the gate, to track the trend and catch hosting or browser drift.
+8. **After any crash recovery: a quick integrity pass** (repo, live build, every shipped asset decodes, model hashes).
+
+The critic's browsers never run while a release build or sweep is running on this machine.
+
 ## Expansions and novel ideas (need the owner's approval first)
 
 Beyond the ranked issue list, the critic may **suggest and recommend expansions or novel ideas that would improve the game from any aspect of game design**: gameplay systems and addictive loops (progression, challenge modes, rankings, unlocks, replay hooks), new encounters or chapters, characters, aeons and dresspheres, difficulty and accessibility, onboarding and tutorials, narrative and presentation, art direction, animation and VFX, UI and UX, audio direction, controls, performance, social and sharing features, and anything else a good designer would raise. These go in a separate **Proposals** section of the round report, each with a short pitch, the player benefit, the rough cost, and the risk to fidelity, ranked by value for cost. **Nothing from that section is built until Bailey approves it**, and proposals never count for or against the score.
