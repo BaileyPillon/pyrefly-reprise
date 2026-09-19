@@ -398,6 +398,22 @@ function measured(card: HTMLElement, cap: number, perLine = 14): void {
   });
 }
 
+/**
+ * Put {@link crowdedView} on the card through the same entry point the HUDs
+ * use — `showDecision` computes a view from a board, and this one is written
+ * by hand, so the cached view is swapped and the card re-rendered.
+ */
+function showCrowded(advisor: MoveAdvisor): void {
+  const inner = advisor as unknown as {
+    cached: AdvisorView | null;
+    lastSignature: string;
+    render(): void;
+  };
+  inner.cached = crowdedView();
+  inner.lastSignature = '';
+  inner.render();
+}
+
 /** A two-suggestion view with a revive underneath, the shape that overflowed. */
 function crowdedView(): AdvisorView {
   const base = {
@@ -490,8 +506,7 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     // preview (162 wanted against 104 given).
     measured(card, 104, 10);
     advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
-    (advisor as unknown as { cached: AdvisorView | null }).cached = crowdedView();
-    (advisor as unknown as { lastSignature: string }).lastSignature = '';
+    showCrowded(advisor);
     advisor.update(16);
 
     expect(card.scrollHeight).toBeLessThanOrEqual(card.clientHeight + 1);
@@ -515,22 +530,25 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       get: () => card.querySelectorAll('p, article').length * 14,
     });
     advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
-    (advisor as unknown as { cached: AdvisorView | null }).cached = crowdedView();
-    (advisor as unknown as { lastSignature: string }).lastSignature = '';
+    showCrowded(advisor);
     advisor.update(16);
     const tight = advisor.printedDensity;
     expect(tight).toBeGreaterThan(0);
 
     cap = 400;
     card.style.maxHeight = '400px';
-    // A second of frames, because the fit deliberately trails the *tightest*
-    // box of the last second rather than the newest one — that hysteresis is
-    // what stops the live FFX card flickering between two densities while its
-    // safe zone breathes. Room that has genuinely come back is taken, a frame
-    // of it is not.
+    // Not mid-decision, however many frames pass: within one open decision the
+    // card only ever gives things up. The FFX safe zone is solvable on some
+    // frames and not on others, so a card that took the room back the instant
+    // it appeared spent the whole turn flickering between two densities.
+    for (let i = 0; i < 90; i++) advisor.update(16);
+    expect(advisor.printedDensity, 'room is not taken back mid-decision').toBe(tight);
+
+    // The next decision starts from nothing-given-up, which is where room that
+    // has genuinely come back is picked up.
+    advisor.showDecision('auron', makeFakeCommands(), makeFakeBattleState());
+    showCrowded(advisor);
     advisor.update(16);
-    expect(advisor.printedDensity, 'one wide frame is not room').toBe(tight);
-    for (let i = 0; i < 60; i++) advisor.update(16);
     expect(advisor.printedDensity).toBeLessThan(tight);
     expect(card.textContent).toContain('Revives all fallen allies');
   });

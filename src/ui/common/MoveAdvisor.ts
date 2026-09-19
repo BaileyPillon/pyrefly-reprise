@@ -105,8 +105,6 @@ const CLEARANCE_GAP = 6;
 const MIN_CARD_WIDTH = 132;
 /** Widest the card is allowed to grow when the band is empty. */
 const MAX_CARD_WIDTH = 226;
-/** How many frames of measured boxes {@link MoveAdvisor.fitCard} fits against. */
-const FIT_WINDOW = 60;
 
 export class MoveAdvisor {
   readonly el: HTMLElement;
@@ -127,8 +125,6 @@ export class MoveAdvisor {
   private density: Density = 0;
   /** `signature@cap@width` the current density was measured for. */
   private fittedFor = '';
-  /** The last {@link FIT_WINDOW} boxes the card was painted in. See {@link fitCard}. */
-  private readonly boxes: Array<{ width: number; cap: number; styleWidth: string }> = [];
 
   constructor(opts: MoveAdvisorOptions) {
     this.opts = opts;
@@ -348,38 +344,29 @@ export class MoveAdvisor {
     const cap = this.capHeight();
     if (cap <= 0) return;
 
-    // The **tightest** box of the last second, not this frame's. On a live FFX
-    // board the card is painted at two different widths from one frame to the
-    // next: `placeAdvisor` is a no-op on any frame its safe zone cannot be
-    // solved, and the card then keeps `layout`'s much wider anchor box. Fitting
-    // whichever arrived last made the card relax on the wide frames and overflow
-    // on the narrow ones — measured at 1280x720 on Chapter 1: seven frames in
-    // twenty-four, which is a flicker rather than a fit. Fitting for the
-    // narrowest is right in both: the terser card simply has room to spare on
-    // the wide frames.
-    this.boxes.push({ width, cap, styleWidth: this.cardEl.style.width });
-    if (this.boxes.length > FIT_WINDOW) this.boxes.shift();
-    let tightest = this.boxes[0]!;
-    for (const box of this.boxes) if (box.width < tightest.width) tightest = box;
-    const floorCap = this.boxes.reduce((m, b) => Math.min(m, b.cap), cap);
-
-    const key = `${this.lastSignature}@${Math.round(floorCap)}@${Math.round(tightest.width / 4)}`;
+    const key = `${this.lastSignature}@${Math.round(cap)}@${Math.round(width / 4)}`;
     if (key === this.fittedFor) return;
     this.fittedFor = key;
 
-    // Measured in that tightest box, which means borrowing it for the length of
-    // this tick. Nothing paints in between — `layout()` runs immediately after
-    // and the HUD's own placement after that — so the borrow is invisible.
-    const restore = this.cardEl.style.width;
-    this.cardEl.style.width = tightest.styleWidth;
-    let density: Density = 0;
-    this.cardEl.innerHTML = cardHtml(this.cached, density);
-    while (density < MAX_DENSITY && this.cardEl.scrollHeight > floorCap + 1) {
+    // **Tighter only, until the next decision.** The box the card is painted in
+    // is not one box: `placeAdvisor` is a no-op on any frame its safe zone
+    // cannot be solved and the card then keeps `layout`'s much wider anchor box,
+    // so on a live Chapter 1 board the width alternates between roughly 200 and
+    // 180 and 112 from one frame to the next. A fit that answered each of those
+    // in turn was correct on every single frame and *flickered* — chips and a
+    // whole sentence appearing and disappearing while the player read it.
+    //
+    // Going one way only settles that: within one open decision the card can
+    // give things up but never takes them back, so it converges on the
+    // narrowest box it has actually been painted in and then stays put.
+    // `render` resets it to nothing-given-up for every new decision, which is
+    // where room that has genuinely come back is picked up.
+    let density = this.density;
+    while (density < MAX_DENSITY && this.cardEl.scrollHeight > cap + 1) {
       density = (density + 1) as Density;
       this.cardEl.innerHTML = cardHtml(this.cached, density);
     }
     this.density = density;
-    this.cardEl.style.width = restore;
   }
 
   /**
