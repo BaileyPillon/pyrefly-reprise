@@ -374,14 +374,20 @@ Prep, both games, same four viewports, every tab and every member: **zero
 overlaps**; FFX-2 now reports five tabs
 (`CHAPTER / DRESSPHERES / STATS / ACCESSORIES / ITEMS`) against FFX's six.
 
-**One honest caveat.** In one run of the matrix the *first* measured frame after
-a battle opens showed the advisor card and the intent slab kissing Rikku and
-Bahamut (16x31 and 27x87). The next state in the same run, and every state of
-the runs either side of it, measured zero. The girls are still walking into
-formation on that frame and the fences are recomputed per frame from their
-projected boxes, so a placement can lag the formation by a frame at battle
-entry. It is not reproducible on demand and it is not a standing overlap, but
-it is not nothing either, and it is written down rather than rounded to zero.
+**The exact number.** The final matrix is eight battle contexts — Chapters 4
+and 5 at all four viewports — of nine measured states each. **One** of the
+seventy-two carries an overlap: Chapter 4 at 2000x1000, on the `menu` state
+only, `advisor-card X fighter:paine 82.4x13.5` and `advisor-chip X
+fighter:paine 61.5x20.9`. Every other state of every other context is zero,
+including all four chain tiers, the transformation, and 2560x1440 where the
+counter is at its largest.
+
+That one is the move-advisor card overrunning the band this HUD gives it, not
+the band being wrong — the request, with the numbers, is in the handoff section
+above. It is intermittent because it depends on where the formation is standing
+on the frame the card lays out; an earlier run showed the same class at
+1280x720 (16x31 on Rikku) and the runs either side of it measured zero at that
+viewport. It is written down rather than rounded away.
 
 ---
 
