@@ -183,3 +183,170 @@ re-placed several times a second — not a difference in what it says.
    derives its own forecast), but a HUD passing its live source gives a better
    one: `advisor: () => ({ ...registries, intent: () => this.enemyIntent.view() })`.
 5. **The judgement call above**, for Bailey.
+
+---
+
+# Pre-release pass (2026-09-19)
+
+Commit: `aceb8b9`. Files: **new** `src/engine/tactics/advisor-floor.ts`,
+`tests/unit/advisor-floor.test.ts`; changed `src/engine/tactics/advisor.ts`
+(`noteFor` plus a new `raiseRowFor`), `tests/unit/advisor-note.test.ts`.
+**Game case: both** (see below).
+
+## F-A — what was wrong
+
+`advisor.ts`'s documented rule 4 says *"an ally on the floor always gets an
+answer"*. It was a comment, not a behaviour. `buildAdvisorView` priced the
+raise, `reviveRisk` came back `kind: 'zombie'`, the refusal was recorded, and
+then `noteFor` dropped it:
+
+```ts
+if (refused && refused.risk.kind !== 'zombie') return waitSentence(refused.risk);
+return '';
+```
+
+The reasoning behind that line is right about the *sentence* and wrong about
+the *silence*. `advisor-revive.ts`'s zombie sentence ends "…so cure the Zombie
+first", and no cure can be aimed at a body on the floor — Holy Water, Remedy
+and Esuna all come back with the living as their legal targets, measured 0 of
+117 by the critic — so printing it would be an instruction the player cannot
+follow. That is the defect the pre-deploy gate caught on 2026-09-18, and it is
+still closed. But Chapter 1's boss zombifies **on its way to killing someone**
+(Lance of Atrophy, Zombie @ 100%, `can_target_dead` [ffx-seymour-flux §4.8]),
+so the branch that was switched off is the *normal* case there, not an edge:
+**138 of 166 Chapter 1 decisions with an ally down said nothing at all**, while
+the Phoenix Down was pressable in 106 of them [critic, fix-3 pass 3, F-A].
+Which is the half of Bailey's report — *"and what about reviving yuna?"* — that
+three passes left open.
+
+## What changed
+
+`src/engine/tactics/advisor-floor.ts` writes the sentence the card **is in a
+position to print**, from this board and this actor's own offered rows. Three
+branches, none of which names a row the player cannot press:
+
+| board | the card now says |
+|---|---|
+| raise refused, `'aimed'` / `'sweep'` | *"Total Annihilation hits the whole party next — take it first, then raise Tidus"* (unchanged sentence, unchanged reason) |
+| raise refused, `'zombie'` | *"Leave Yuna down for now — a raise brings Yuna back still a Zombie, and Full-Life kills a Zombie outright"* |
+| no raise on this actor's menu at all | *"Nothing Valefor can press stands Kimahri up — that raise has to come from somebody else"* |
+
+"Leave them down" is not a shrug: Full-Life picks a **random zombied character,
+dead or alive**, and inverts into 100% of max HP plus a guaranteed Death
+[ffx-seymour-flux §4.8, §3.3], so a zombied body left on the floor *wastes the
+boss's turn* and the same body stood back up is a free kill. `seymour-flux.ts`
+step 4 leaves it there for exactly that reason — the card and the auto-battler
+now teach the same fight.
+
+The "is a raise even possible" reading is taken from the **offered rows**
+(`raiseRowFor`: enabled, `onTheMenu`, `misses-if-target-alive`, this body among
+`validTargets`), never from the simulated candidates — `MAX_SIMULATIONS` can
+cut a deep item list before the Phoenix Down is priced, and "nothing here
+raises them" has to be a fact about the command window rather than about how
+far the preview got.
+
+**Nothing about scoring, refusal, targeting or battle math changed.** The raise
+is refused on exactly the boards it was refused on before and still wins on
+merit where it wins today.
+
+## The tests that pin it
+
+`tests/unit/advisor-floor.test.ts` — replays each chapter with the shipped
+auto-battler and asserts, over natural play rather than at a pinned decision
+index: while an ally is on the floor the card either **shows the raise** or
+**says one sentence about why not**; the sentence names that ally; it never
+tells the player to cure something the card is not showing; it is one line
+(<=120 chars, no trailing full stop — `MoveAdvisor` appends it).
+
+Chapter 1, twelve seeds, 505 decisions: **108 with an ally down — 17 show the
+raise, 91 carry the note, 0 silent** (was 138 silent of 166). All five chapters
+are at zero.
+
+## F-B — the widened test, restored
+
+`still says when to spend a revive it is holding back` had been widened twice:
+from sixteen decisions of seed 1 to 12 seeds x 240, and to accept the revive's
+own `warning` as equivalent to the note — but the warning channel only exists
+when the raise is already **on** the card, i.e. exactly when the card is not
+silent, so the failing shape had become undetectable (and its loop was vacuous:
+`describeCard` prints only those two channels). It now asserts two universal
+things instead of one existential one: seed 1 is clean decision by decision
+through `noteFault`, the twelve-seed walk is clean decision by decision, and
+the timing sentence still reaches the player **through the note on its own**,
+with no warning-channel escape.
+
+## An existing test that was wrong, and why
+
+`tests/unit/advisor-note.test.ts` had three assertions that pinned the silence
+as correct, one of them naming seed 1 decisions 2 and 3 — *Bailey's own board*
+— as decisions where "the advisor has nothing honest to say and says nothing".
+Rules (c) and (d) in that file's header were the wrong way up. What the
+pre-deploy gate actually caught was an **unfollowable instruction** ("cure the
+Zombie first" over Mighty Guard), which is rule (b) and still holds verbatim;
+the conclusion that the card should therefore say nothing at all was the
+mistake. So:
+
+* rule (b) narrowed from "every card that says *Zombie*" to "every card that
+  tells the player to **cure or clear** a Zombie" — the gate's finding stated
+  one word too wide, since the answer for a body on the floor also says Zombie
+  and asks the player for nothing;
+* rule (c) now covers every refusal, not just the timing ones, and **silence
+  while somebody is on the floor is itself a fault**, checked at every decision
+  of every chapter;
+* the index-pinned reproduction was rewritten content-first, and now asserts
+  the opposite of what it did: Bailey's Poison Fang card carries
+  `note="Leave Yuna down…"`.
+
+No assertion was deleted, skipped or loosened; the file is 12 green tests, as
+before.
+
+## Game case — both
+
+*An ally on the floor always gets an answer* is a property of **the card**, and
+`advisor.ts` is the one card FFX and FFX-2 share, so the rule is applied and
+asserted in all five chapters [AGENTS.md rule 14: shared plumbing and bug fixes
+are "both"]. The **Zombie** reading inside it is FFX's: FFX-2's data layer
+defines no `zombie` status anywhere (`src/data/ffx2/**`, `src/battle/ffx2/**` —
+the grep is empty), so `reviveRisk` can never return that kind there. The
+sentence that names **Full-Life** is gated on `state.game === 'ffx'` all the
+same, so a Zombie added to X-2 later cannot inherit an FFX boss's move name,
+and the X-2 half of `advisor-floor.test.ts` asserts no X-2 card ever prints the
+word.
+
+## Verified
+
+`npx tsc --noEmit` clean for every file this track owns. The nine advisor
+suites green: **114 tests** (105 before, +9 new). Full `npx vitest run` at the
+end of the pass — see NOW.md. `node tools/orphans.mjs` does not list
+`advisor-floor.ts` (it is imported by `advisor.ts`).
+
+Browser: one pass in **gpu** mode (`PYREFLY_BROWSER=gpu`, dev server on 5487,
+stopped after) at 1600x900 and 1280x720 —
+`docs/screenshots/fix3/prerelease/advisor/`. The card renders correctly after
+the change and the note channel paints live (the probe caught *"While Yuna is a
+Zombie the next Full-Life is a kill, not a heal — clear it now"* above the Holy
+Water). **The floor note itself was not photographed:** driving natural play to
+an actual KO takes more turns than this pass allowed — the round-3 critic hit
+the same wall and resorted to poking the state, which leaves the party strip
+stale. The load-bearing evidence for F-A is the headless replay, which mutates
+nothing; the shot is worth taking on the next HUD or art pass that is already
+in a browser. One note for whoever goes next: **the fight runs on a real clock,
+not on `frames()`** — `__pyrefly.frames(n)` alone never opens a decision,
+`page.waitForTimeout` does.
+
+## Still open on this track
+
+1. **Not built, needs Bailey (unchanged from pass 3).** May a much higher
+   simulated score outrank the strategy guide's pinned pick? On Bailey's board
+   Mega Phoenix prices at 11,300 against the chapter line's 555, and
+   `tacticSuggestion` still puts the chapter line first. That is a design
+   decision about whether the advisor and the auto-battler may teach different
+   fights, not a defect. The revive is on the card either way.
+2. **F-C, for the FFX HUD track (unchanged):** FFX has no pressable Defend, so
+   `onTheMenu` drops it and the advisor contradicts Chapter 2's researched
+   stall line on 44 of 360 Yunalesca decisions. The gate is right; the fix is a
+   HUD affordance Bailey has not picked.
+3. When several allies are down and the first priced raise is refused, the note
+   speaks for that body only. `buildAdvisorView` considers one raise per
+   decision (`legal.find(isRevive)`), which is ranking, not the note — left
+   alone deliberately in a pre-release pass.
