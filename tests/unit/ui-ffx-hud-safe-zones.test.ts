@@ -56,12 +56,13 @@ const CHROME = {
   partyStatus: { left: 402.7, top: 258.3, right: 616.9, bottom: 348 },
   guide: { left: 21.3, top: 44, right: 153.3, bottom: 200 },
   // Re-measured in round 03: the plate moved out of the shelf's band to
-  // x 436..536, y 176..254 (painted, with the house skew's shear), because it
-  // *was* the reason Chapter 1's shelf measured 24 grid px. See
+  // x 436..536, y 166..253 (painted, with the house skew's shear, and 87 tall
+  // because the fold chip adds 9), because it *was* the reason Chapter 1's
+  // shelf measured 24 grid px. See
   // `ffx-hud.css`'s `.ffx-sensor` comment and `docs/handoff/fix3-ffx-hud.md`
   // §6. The old band is still exercised as arithmetic below — the solver must
   // go on handling a plate up there — it simply is not where the game puts it.
-  sensor: { left: 427.7, top: 176, right: 544.3, bottom: 254 },
+  sensor: { left: 427.7, top: 166, right: 544.3, bottom: 253 },
   intent: { left: 344.2, top: 4, right: 494.2, bottom: 172.5 },
   ctb: { left: 547.6, top: 49.8, right: 620.5, bottom: 200.4 },
 } as const;

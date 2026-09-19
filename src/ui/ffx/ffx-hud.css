@@ -374,15 +374,17 @@
      printed across this plate's own name and HP, 41,235 square px of it, in
      every state at both viewports.
 
-   x 436..536, y 176..254 is free of the party in all three chapters (their
+   x 436..536, y 166..253 is free of the party in all three chapters (their
    union is x 65..374), clears the CTB rail's 547.6 by 3.6 even with the house
-   skew's 8px shear, clears the party-status column's 258 top edge by 4, and is
-   26 right of the advisor band's 414. It overlaps the boss's *legs* in all
+   skew's 8px shear, clears the party-status column's 258.4 top edge by 5, and
+   is 26 right of the advisor band's 414. The plate is 87 grid px tall, not the
+   78 it was: the fold chip adds 9, which the first placement forgot and the
+   browser pass measured as 3,506 square px of plate on the party rows. It overlaps the boss's *legs* in all
    three — which is the price, knowingly paid: a 100x78 panel over a boss's
    feet for seven seconds is a much smaller thing than a slab printed over
    another panel's text. */
 .ffx-sensor {
-  position: absolute; left: 436px; top: 176px; width: 100px;
+  position: absolute; left: 436px; top: 166px; width: 100px;
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);

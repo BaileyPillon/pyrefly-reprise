@@ -204,8 +204,14 @@ const EDGE_MARGIN = 4;
  * — because nothing capped it. A panel that cannot be dodged out of the way is
  * not a panel the layout can honour, so the body scrolls past this and the
  * stylesheet fades its last rows.
+ *
+ * 0.34 was the first value and the browser pass rejected it: at 1600x900 the
+ * slab stood 316 px tall, the band above the raised command-info card is 299,
+ * and a slab that cannot fit above an obstacle cannot dodge it either — it sat
+ * on the card's top edge in every submenu state at both viewports. 0.30 leaves
+ * 45 px of room at 1600x900 and 33 at 1280x720.
  */
-const MAX_HEIGHT_FRACTION = 0.34;
+const MAX_HEIGHT_FRACTION = 0.3;
 
 // ---------------------------------------------------------------------------
 // The E key, and the pause it collides with
