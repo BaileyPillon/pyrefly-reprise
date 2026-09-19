@@ -672,21 +672,22 @@
 /*
  * Two elements, not one, and the split is load-bearing.
  *
- * `.ffx2-chain-chip` is an **empty reservation box** sized by `ChainCounter` to
- * the pop's 1.45x peak (see its `CHAIN_POP_SCALE`) and given no paint of its
- * own; `.ffx2chain__body` is the ink slab, centred in it, and the one that
- * scales. The chip is what `placeSlab` places and what
- * `FFX2BattleHud.intentObstacles` measures, so the placed box and the painted
- * box are the same rectangle at every point in the animation. When the pop
- * lived on the chip itself the painted slab escaped the solved box by up to
- * 18 px on every single increment, off the top of the overlay and onto the boss
- * and the intent slab.
+ * `.ffx2-chain-chip` is the box `ChainCounter` places — the ink slab's own
+ * layout box, at §4.6's anchor beside the chained enemy — and `.ffx2chain__body`
+ * is the slab drawn inside it and the only thing that ever scales. The chip
+ * itself must stay untransformed, for two reasons:
  *
- * Keeping the chip untransformed has a second effect the flash tier depends on:
- * a transform makes an element the containing block for `position: fixed`
- * descendants, so `.ffx2chain--flash::after`'s "full-screen" flash collapsed to
- * the chip's own bounds for the 0.18 s the pop was running and snapped back
- * after. It is now fixed to the viewport, as §4.6 asks, for the whole time.
+ * - a transform makes an element the containing block for `position: fixed`
+ *   descendants, so `.ffx2chain--flash::after`'s full-viewport flash would
+ *   collapse to the chip's own bounds for the 0.18 s the pop is running;
+ * - `FFX2BattleHud.intentObstacles` measures `.ffx2-chain-chip`, and a chip
+ *   whose measured rect moved under it would steer the intent slab by numbers
+ *   that are only true between pops.
+ *
+ * The body's `transform-origin` is not fixed at the centre: `ChainCounter`
+ * picks it per placement (`choosePopOrigin`) so the 1.45x peak grows into the
+ * room the placement left instead of off the top of the overlay, which
+ * `.ffx2hud`'s `overflow: hidden` would simply erase.
  */
 .ffx2-chain-chip,
 .ffx2chain-broke {
@@ -703,8 +704,11 @@
   align-items: center;
   gap: calc(1px * var(--ffx2-scale, 1));
   /* The old small tag's -8deg tilt is gone — a 50-grid-px block set on a slant
-     is harder to read and §4.6 does not ask for one. */
-  transform-origin: 50% 50%;
+     is harder to read and §4.6 does not ask for one. The origin is written by
+     `ChainCounter.choosePopOrigin`; 50% 50% is what it picks when the pop has
+     room on every side, and the fallback for the decay, which is placed by the
+     same code but re-rendered without it. */
+  transform-origin: var(--ffx2-ox, 50%) var(--ffx2-oy, 50%);
   padding: calc(3px * var(--ffx2-scale, 1)) calc(9px * var(--ffx2-scale, 1)) calc(4px * var(--ffx2-scale, 1));
   background: var(--ig-ink);
   color: var(--ig-accent);
@@ -852,13 +856,42 @@
 .ffx2-chain-chip.ffx2chain--hot .ffx2chain__label {
   color: #fff0a8;
 }
-/* 20 adds a one-frame full-screen #FFD9EC flash at 15% on each increment. */
+/*
+ * 20 adds a one-frame full-screen #FFD9EC flash at 15% on each increment.
+ *
+ * "On each increment" and "one frame" are the whole rule, and the first version
+ * of this had neither: a bare `opacity: 0.15` on a `position: fixed; inset: 0`
+ * pseudo-element with no keyframe is not a flash, it is a filter. Measured by
+ * the pass-2 critic on the live build, every corner of the viewport lifted
+ * +29..+37/255 in R and stayed there for the chip's whole 1400 ms hold,
+ * re-extended by every further increment — a 15% pink wash over the entire game
+ * from chain 20 until the chain broke.
+ *
+ * So: the rest state is transparent, and the flash is an animation that ends
+ * transparent and is re-armed per increment (`ChainCounter.show` drops the
+ * class and re-adds it after a reflow). 32 ms of hold at 15% is two frames at
+ * 60 Hz — §4.6's "one frame" rounded up so it cannot fall between two of them —
+ * and everything is over 80 ms in. `forwards` matters: without it the veil
+ * would snap back to the rest value, and the rest value has to be 0 anyway for
+ * the case where the animation never runs at all.
+ */
 .ffx2-chain-chip.ffx2chain--flash::after {
   content: '';
   position: fixed;
   inset: 0;
   background: #ffd9ec;
-  opacity: 0.15;
+  opacity: 0;
+  animation: ffx2-chain-veil 0.08s linear forwards;
+}
+@keyframes ffx2-chain-veil {
+  0%,
+  40% {
+    opacity: 0.15;
+  }
+  41%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -185,13 +185,48 @@ describe('FFX-2 command menu', () => {
     expect(menuOwnsCancel()).toBe(false);
   });
 
-  it('takes Esc in a submenu and gives it back on the way out', () => {
-    void open();
+  /**
+   * The FFX sibling of this test (above) has always waited a frame for the
+   * claim to come back, because `src/ui/ffx/cancelClaim.ts` hands it back on
+   * the next animation frame *by design*: `BattleScreen.handleInput` polls
+   * `justPressed('cancel')` once per frame, so a claim dropped inside the
+   * `keydown` handler leaves that poll seeing a free Esc and one tap both backs
+   * out of the submenu and opens the pause menu.
+   *
+   * This half of the file was written before FFX-2's menu adopted that module
+   * and kept asserting the *synchronous* release — so from the commit that
+   * wired `renderTop(true)` into `cancelTargets()` onwards it has been red, and
+   * red for asking for the bug. It now asserts the same contract as the FFX
+   * one. This is the only test in this pass whose expectation changed rather
+   * than whose subject was fixed, and the reason is written out here and in
+   * `docs/handoff/fix3-ffx2-hud-prep.md`.
+   *
+   * The behaviour the test is really for — where Esc lands, and that it spends
+   * nothing — is asserted alongside it rather than left implied.
+   */
+  it('takes Esc in a submenu and gives it back on the way out', async () => {
+    const picked = open();
+    let committed = false;
+    void picked.then(() => {
+      committed = true;
+    });
     key('ArrowDown'); // onto the "Black Magic" group
     key('Enter');
     expect(menuOwnsCancel()).toBe(true);
+    expect(document.querySelector('.ffx2cmd__title')?.textContent).toBe('Black Magic');
 
-    key('Escape');
+    key('Escape'); // back to the top rows
+    // Still claimed for the rest of this frame — the press that backed out is
+    // the same press `BattleScreen` is about to poll, and it must not pause.
+    expect(menuOwnsCancel()).toBe(true);
+    // ...and the cancel landed on the list it came from, with nothing spent.
+    expect(document.querySelector('.ffx2cmd__title')).toBeNull();
+    expect(document.querySelectorAll('.ig-cmd')).toHaveLength(2); // Attack, Black Magic
+    expect(document.querySelector('.ig-cmd--selected')).not.toBeNull();
+    await Promise.race([picked, Promise.resolve()]);
+    expect(committed, 'a cancel must never commit a command').toBe(false);
+
+    await afterFrame();
     expect(menuOwnsCancel()).toBe(false);
   });
 

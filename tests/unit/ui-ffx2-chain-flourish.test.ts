@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CHAIN_POP_SCALE, ChainCounter, chainTier } from '../../src/ui/ffx2/ChainCounter.ts';
+import { CHAIN_POP_SCALE, CHAIN_HOLD_MS, ChainCounter, chainTier, popPeakRect } from '../../src/ui/ffx2/ChainCounter.ts';
 import { FLOURISH_MS, playSpherechangeFlourish } from '../../src/ui/ffx2/SpherechangeFlourish.ts';
 
 /**
@@ -123,43 +123,184 @@ describe('FFX-2 chain counter (visual-bible §4.6)', () => {
     });
   });
 
+  /** The pop's painted rect, from the chip's box and the origin `show()` wrote. */
+  function peakBox(): { left: number; top: number; right: number; bottom: number } {
+    const chip = overlay.querySelector<HTMLElement>('.ffx2-chain-chip')!;
+    const box = chipBox();
+    const ox = Number.parseFloat(chip.style.getPropertyValue('--ffx2-ox')) / 100;
+    const oy = Number.parseFloat(chip.style.getPropertyValue('--ffx2-oy')) / 100;
+    return popPeakRect({ left: box.left, top: box.top, w: box.right - box.left, h: box.bottom - box.top }, { x: ox, y: oy });
+  }
+
   /**
-   * Critic pass 1, finding 1. `show()` used to measure the **layout** box and
-   * place that, then add `.ffx2chain--pop`, which scales the painted chip to
-   * 1.45 about its centre on every increment — so the solver never saw the box
-   * the player sees. Live at the 50% keyframe: a 167x95 layout box painted
-   * 242.4x137, sitting 9.3 px above the overlay and 33.8x102.8 px onto the
-   * enemy-intent slab, at every tier and every viewport.
+   * Critic pass 1, finding 1: `show()` placed the **layout** box and then
+   * `.ffx2chain--pop` scaled the painted chip to 1.45 about its centre, so the
+   * painted slab sat 9.3 px above the overlay — clipped away by `.ffx2hud`'s
+   * `overflow: hidden` — at every tier and every viewport.
    *
-   * The chip is now the reservation box for the peak, so these two assertions
-   * are the same assertion — which is the point.
+   * That half of the pass-1 fix is still enforced here, but it is no longer
+   * enforced by *reserving* the peak. The reservation was what cost the counter
+   * its §4.6 anchor (see the anchor test below and `CHAIN_POP_SCALE`'s note),
+   * because a peak-sized box centred on the slab hangs below the head it
+   * anchors to and the solver evicts it. The chip is the slab again, and the
+   * peak is steered by `transform-origin` instead — so the assertion that used
+   * to read "the painted box is the placed box" now reads "the painted box is
+   * still on screen", which is the property the critic actually photographed.
+   *
+   * At 1280x720 the peak is 137 px tall against 107 px of headroom above
+   * Bahamut's head, so it cannot be both inside the overlay and clear of
+   * everything; it is the overlay that is non-negotiable.
    */
-  it('reserves the pop, so the painted box is the placed box', () => {
-    withBodySize(120, 100, () => {
-      chain.show('bahamut', 12, 2.1);
-      const chip = overlay.querySelector<HTMLElement>('.ffx2-chain-chip')!;
-      const body = chip.querySelector<HTMLElement>('.ffx2chain__body')!;
-      expect(body).not.toBeNull();
-      // The chip reserves 1.45x the body on both axes...
-      expect(Number.parseFloat(chip.style.width)).toBe(Math.ceil(120 * CHAIN_POP_SCALE));
-      expect(Number.parseFloat(chip.style.height)).toBe(Math.ceil(100 * CHAIN_POP_SCALE));
-      // ...and the body, centred in it, cannot leave it when it scales to the
-      // peak. Computed the way the critic measured it: the body's centre, its
-      // size multiplied by the keyframe's scale.
-      const box = chipBox();
-      const cx = box.left + (box.right - box.left) / 2;
-      const cy = box.top + (box.bottom - box.top) / 2;
-      const painted = {
-        left: cx - (120 * CHAIN_POP_SCALE) / 2,
-        right: cx + (120 * CHAIN_POP_SCALE) / 2,
-        top: cy - (100 * CHAIN_POP_SCALE) / 2,
-        bottom: cy + (100 * CHAIN_POP_SCALE) / 2,
-      };
-      expect(painted.left).toBeGreaterThanOrEqual(box.left - 0.5);
-      expect(painted.top).toBeGreaterThanOrEqual(box.top - 0.5);
-      expect(painted.right).toBeLessThanOrEqual(box.right + 0.5);
-      expect(painted.bottom).toBeLessThanOrEqual(box.bottom + 0.5);
+  it('never lets the pop paint outside the overlay, at every tier', () => {
+    withBodySize(160, 92, () => {
+      obstacles = [
+        { left: 560, top: 24, right: 860, bottom: 220 }, // enemy-intent slab
+        { left: 470, top: 120, right: 760, bottom: 450 }, // the boss
+      ];
+      for (const count of [3, 7, 12, 22]) {
+        chain.show('bahamut', count, 1 + count / 20);
+        // The chip is the slab's own box, not an inflated reservation.
+        const chip = overlay.querySelector<HTMLElement>('.ffx2-chain-chip')!;
+        expect(Number.parseFloat(chip.style.width)).toBe(160);
+        expect(Number.parseFloat(chip.style.height)).toBe(92);
+        const peak = peakBox();
+        expect(peak.left, `tier ${count}`).toBeGreaterThanOrEqual(-0.5);
+        expect(peak.top, `tier ${count}`).toBeGreaterThanOrEqual(-0.5);
+        expect(peak.right, `tier ${count}`).toBeLessThanOrEqual(1280.5);
+        expect(peak.bottom, `tier ${count}`).toBeLessThanOrEqual(720.5);
+      }
     });
+  });
+
+  /**
+   * Critic pass 2, finding 1 — the regression this pass exists for.
+   *
+   * §4.6: the popup is "anchored top-right of the enemy being chained; follows
+   * that enemy's screen position". Reserving the 1.45x peak permanently put the
+   * reserved box's bottom below the head it anchors to, which made the chained
+   * enemy an obstacle to the chip's own anchor; `placeSlab` only searches
+   * downward, so it evicted the counter across the stage. Measured live by the
+   * critic, in 32 of 32 cells: at 1280x720 chapter 4 the chip landed 116.8 px
+   * *below* Bahamut's head and 333 px to its left (it had been 16.5 px above
+   * the head with its centre within 2 px of it); chapter 5, 112.1 px below and
+   * 336 px away; at 2560x1440, 229 px below and 661 px away.
+   *
+   * The assertion is the one the critic's `anchorCheck` block makes: above the
+   * head line, and horizontally still on the enemy.
+   *
+   * The two chapter boards, rebuilt from the numbers in the critic's own
+   * `anchor.json` and `chain.json` at 1280x720 so that the solver is handed
+   * the problem it was actually handed live:
+   *
+   * - `head` and `enemy` are the measured head point and the painted boss box
+   *   (the boss's left edge is the one the evicted chip parked against:
+   *   376.7 + 243 + 4 = 623.7 in chapter 4, 315.3 + 247 = 562.3 in chapter 5);
+   * - `intent` is the enemy-intent slab exactly as `chain.json` recorded it;
+   * - `gauges` is the top strip whose bottom edge (97.5) is what the evicted
+   *   chip's top (101.5 = 97.5 + the solver's 4 px dodge gap) was measured
+   *   against, with a right edge that leaves the §4.6 spot free — which is why
+   *   the pre-regression build could take it.
+   *
+   * Replaying the pass-2 geometry on these boards reproduces the critic's
+   * placements to the pixel (376.7, 101.5 and 315.3, 101.5), and replaying this
+   * build's reproduces the pre-regression ones (627.7, 12.2 and 574.1, 16.5).
+   * The 1600x900 row of each chapter is the same board scaled by 1.25, which is
+   * what the critic measured there (708.8 x 1.25 = 886 against a measured
+   * 887.3; intent 798.8 x 1.25 = 998.5 against 998.9).
+   */
+  interface Rect {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+  }
+  interface Board {
+    layer: { width: number; height: number };
+    scale: number;
+    head: { x: number; y: number };
+    enemy: Rect;
+    body: { w: number; h: number };
+    obstacles: Rect[];
+  }
+
+  function scaleBoard(b: Board, k: number): Board {
+    const r = (x: number): number => Math.round(x * k * 10) / 10;
+    const rect = (o: Rect): Rect => ({ left: r(o.left), top: r(o.top), right: r(o.right), bottom: r(o.bottom) });
+    return {
+      layer: { width: Math.round(b.layer.width * k), height: Math.round(b.layer.height * k) },
+      scale: b.scale * k,
+      head: { x: r(b.head.x), y: r(b.head.y) },
+      enemy: rect(b.enemy),
+      body: { w: Math.round(b.body.w * k), h: Math.round(b.body.h * k) },
+      obstacles: b.obstacles.map(rect),
+    };
+  }
+
+  const CH4: Board = {
+    layer: { width: 1280, height: 720 },
+    scale: 2,
+    head: { x: 708.8, y: 123.2 },
+    enemy: { left: 623.7, top: 110, right: 795.5, bottom: 429.7 },
+    body: { w: 167, h: 95 },
+    obstacles: [
+      { left: 24, top: 16, right: 620, bottom: 97.5 }, // gauge / name strip
+      { left: 623.7, top: 110, right: 795.5, bottom: 429.7 }, // Bahamut
+      { left: 798.8, top: 25, right: 1098.8, bottom: 210.2 }, // enemy-intent slab
+      { left: 950, top: 430, right: 1268, bottom: 704 }, // command stack
+    ],
+  };
+  const CH5: Board = {
+    layer: { width: 1280, height: 720 },
+    scale: 2,
+    head: { x: 651.6, y: 127.5 },
+    enemy: { left: 562.3, top: 114, right: 741.3, bottom: 447.2 },
+    body: { w: 167, h: 95 },
+    obstacles: [
+      { left: 24, top: 16, right: 560, bottom: 97.5 },
+      { left: 562.3, top: 114, right: 741.3, bottom: 447.2 }, // Vegnagun's tail
+      { left: 745.8, top: 25, right: 1045.8, bottom: 207.5 },
+      { left: 950, top: 430, right: 1268, bottom: 704 },
+    ],
+  };
+
+  const BOARDS = [
+    { name: 'chapter 4 (Bahamut) at 1280x720', ...CH4 },
+    { name: 'chapter 4 (Bahamut) at 1600x900', ...scaleBoard(CH4, 1.25) },
+    { name: 'chapter 5 (Vegnagun) at 1280x720', ...CH5 },
+    { name: 'chapter 5 (Vegnagun) at 1600x900', ...scaleBoard(CH5, 1.25) },
+  ];
+
+  it.each(BOARDS)('sits by the enemy it counts — $name', (board) => {
+    const counter = new ChainCounter({
+      overlay: () => overlay,
+      scale: () => board.scale,
+      point: () => board.head,
+      obstacles: () => board.obstacles,
+      layer: () => board.layer,
+    });
+    try {
+      withBodySize(board.body.w, board.body.h, () => {
+        for (const count of [3, 7, 12, 22]) {
+          counter.show('bahamut', count, 1 + count / 20);
+          const box = chipBox();
+          // Inside the viewport — the pass-1 fix, which has to survive this one.
+          expect(box.top, `tier ${count}`).toBeGreaterThanOrEqual(0);
+          expect(box.left, `tier ${count}`).toBeGreaterThanOrEqual(0);
+          expect(box.right, `tier ${count}`).toBeLessThanOrEqual(board.layer.width);
+          expect(box.bottom, `tier ${count}`).toBeLessThanOrEqual(board.layer.height);
+          // ...and by its enemy: clear above the head line, and still over the
+          // enemy's own column rather than off across the stage. The pass-2
+          // build fails the first of these in every cell — it put the chip
+          // 112..229 px *below* the head — and the second at 1280x720, where
+          // the chip ended 333 px to the left of a boss it was still counting.
+          expect(box.bottom, `tier ${count} hangs below the head line`).toBeLessThanOrEqual(board.head.y + 1);
+          expect(box.right, `tier ${count} is off to the left of the enemy`).toBeGreaterThanOrEqual(board.enemy.left);
+          expect(box.left, `tier ${count} is off to the right of the enemy`).toBeLessThanOrEqual(board.enemy.right);
+        }
+      });
+    } finally {
+      counter.dispose();
+    }
   });
 
   /**
@@ -208,6 +349,95 @@ describe('FFX-2 chain counter (visual-bible §4.6)', () => {
     // for `.ffx2chain--flash::after`'s `position: fixed` full-screen flash.
     expect(css).toContain('.ffx2-chain-chip.ffx2chain--pop .ffx2chain__body {');
     expect(css).not.toMatch(/\.ffx2-chain-chip\.ffx2chain--pop\s*\{/);
+  });
+
+  /**
+   * Critic pass 2, finding 2. §4.6's chain-20 tier is "a **1-frame** full-screen
+   * #FFD9EC flash at 15% **on each increment**". What shipped was
+   * `.ffx2chain--flash::after { position: fixed; inset: 0; opacity: 0.15 }` with
+   * no keyframe at all — so from chain 20 until the chain broke, a 15% pink wash
+   * covered the whole game continuously, re-extended by every further hit.
+   * Measured live: every viewport corner up +29..+37/255 in R, 700 ms after the
+   * increment, long after the 0.18 s pop and the 0.42 s motes were done.
+   *
+   * jsdom runs no animations, so the pin is on the two facts that decide it:
+   * the veil's rest state is transparent, and the animation that raises it ends
+   * transparent, inside one frame-budget's worth of "brief".
+   */
+  it('flashes the chain-20 veil and clears it, instead of leaving it on', () => {
+    const css = readFileSync(HUD_CSS, 'utf8');
+    const rule = /\.ffx2-chain-chip\.ffx2chain--flash::after\s*\{([\s\S]*?)\n\}/.exec(css);
+    expect(rule, '.ffx2chain--flash::after not found').not.toBeNull();
+    const decls = rule![1]!;
+    // It is still §4.6's full-viewport #FFD9EC veil...
+    expect(decls).toMatch(/position:\s*fixed/);
+    expect(decls).toMatch(/inset:\s*0/);
+    expect(decls).toMatch(/background:\s*#ffd9ec/i);
+    // ...but at rest it is invisible, and it is driven by a real animation.
+    expect(decls, 'the veil must rest transparent').toMatch(/opacity:\s*0\s*;/);
+    const anim = /animation:\s*([\w-]+)\s+([\d.]+)s/.exec(decls);
+    expect(anim, 'the veil must be animated, not simply on').not.toBeNull();
+    const [, name, seconds] = anim!;
+    // "Brief" — well under the half second the fix brief allows, let alone the
+    // 1400 ms hold the veil used to cover.
+    expect(Number.parseFloat(seconds!)).toBeLessThan(0.5);
+    expect(decls, 'the end state has to stick, or it snaps back').toMatch(/\bforwards\b/);
+    const frames = new RegExp(`@keyframes ${name}\\s*\\{([\\s\\S]*?)\\n\\}`).exec(css);
+    expect(frames, `@keyframes ${name} not found`).not.toBeNull();
+    const at100 = /100%\s*\{[^}]*opacity:\s*([\d.]+)/.exec(frames![1]!);
+    expect(at100, 'the veil needs a 100% frame').not.toBeNull();
+    expect(Number.parseFloat(at100![1]!), 'the veil must end fully transparent').toBe(0);
+  });
+
+  /**
+   * ...and it has to be re-armed per increment. `show()` rewrites the class list
+   * on every hit, but assigning a list that already contains `ffx2chain--flash`
+   * restarts no animation — which is how a "flash" became a state. The class is
+   * therefore dropped and re-added around a forced reflow, exactly as the pop
+   * is, and that is observable from the DOM.
+   */
+  it('re-arms the veil on every increment past 20', () => {
+    chain.show('bahamut', 21, 2.4);
+    const chip = overlay.querySelector<HTMLElement>('.ffx2-chain-chip')!;
+    expect(chip.classList.contains('ffx2chain--flash')).toBe(true);
+    const seen = new MutationObserver(() => {});
+    seen.observe(chip, { attributes: true, attributeFilter: ['class'], attributeOldValue: true });
+    chain.show('bahamut', 22, 2.5);
+    const records = seen.takeRecords();
+    seen.disconnect();
+    const off = records.some((r) => !(r.oldValue ?? '').includes('ffx2chain--flash'));
+    expect(off, 'the flash class was never dropped, so the veil never restarts').toBe(true);
+    expect(chip.classList.contains('ffx2chain--flash')).toBe(true);
+  });
+
+  /** And when the chain lapses, the chip — the veil's only host — is gone. */
+  it('takes the veil with it when the chain lapses', () => {
+    chain.show('bahamut', 22, 2.5);
+    expect(overlay.querySelector('.ffx2chain--flash')).not.toBeNull();
+    vi.advanceTimersByTime(CHAIN_HOLD_MS + 400 + 1);
+    expect(overlay.querySelector('.ffx2chain--flash')).toBeNull();
+    expect(overlay.querySelector('.ffx2-chain-chip')).toBeNull();
+    expect(overlay.querySelector('.ffx2chain-broke')).toBeNull();
+  });
+
+  /**
+   * §4.6's chain counter is FFX-2's alone (AGENTS.md rule 14): FFX has no chain
+   * mechanic, emits no `chain` event and must never draw either the chip or its
+   * full-viewport veil. Nothing in the FFX HUD may reach this module, and every
+   * chain rule stays behind an `ffx2` class — the veil especially, since it is
+   * `position: fixed` and would otherwise be a wash over an FFX battle too.
+   */
+  it('is FFX-2 only — no FFX module or stylesheet can draw the chip or the veil', () => {
+    const ffxDir = join(process.cwd(), 'src', 'ui', 'ffx');
+    for (const name of readdirSync(ffxDir)) {
+      if (!/\.(ts|css)$/.test(name)) continue;
+      const src = readFileSync(join(ffxDir, name), 'utf8');
+      expect(src, `${name} reaches into the FFX-2 chain counter`).not.toMatch(/ChainCounter|ffx2chain|ffx2-chain-chip/);
+    }
+    const css = readFileSync(HUD_CSS, 'utf8');
+    for (const selector of css.matchAll(/^\s*(\.[\w.-]*chain[\w.-]*[^{,]*)[,{]/gm)) {
+      expect(selector[1], `${selector[1]!.trim()} is not FFX-2 scoped`).toMatch(/ffx2/);
+    }
   });
 
   it('stops being a chain counter the instant the chain breaks, and decays for 0.4 s', () => {
