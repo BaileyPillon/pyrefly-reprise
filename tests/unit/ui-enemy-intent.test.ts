@@ -201,8 +201,41 @@ describe('the slab is up the first time a boss takes a turn', () => {
     // The band, not a bare figure: the variance roll is a 32-step ladder and
     // the panel prints its ends rather than implying a single certain number.
     expect(text).toContain('2,250–2,540');
-    // The citation is never absent — the same rule the strategy guide keeps.
-    expect(text).toContain('ffx-seymour-flux §4');
+  });
+
+  /**
+   * Round 02 #26, which carried the Part B 8.0 cap ("a panel gives the player
+   * wrong information"): the live Chapter 1 slab printed `[ffx-seymour-flux
+   * §4.6]` inside a sentence, `[ffx-seymour-flux §4.3]` twice, and
+   * `ffx-seymour-flux §4` as a footer.
+   *
+   * This file used to assert the footer was **present**, on the reasoning that
+   * the panel should keep the same audit trail the strategy guide keeps. CHK-007
+   * says otherwise and is right: the guide is where a player goes to ask *why*,
+   * and this slab is read in the two seconds before a hit lands. The citations
+   * are still in `IntentView` — nothing about the data contract moved — they
+   * simply do not reach the screen.
+   */
+  it('prints no research citation anywhere, in the text or in the footer', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() => view());
+    const text = panelEl(overlay).textContent ?? '';
+    expect(text).not.toContain('§');
+    expect(text).not.toContain('ffx-seymour-flux');
+    expect(text).not.toContain('[');
+  });
+
+  it('strips a citation out of the middle of a sentence and leaves the sentence', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() => ({
+      ...view(),
+      description: 'Hits the whole party [ffx-seymour-flux §4.6] for heavy damage',
+      counters: ['A Delay attempt is punished with Slowga [ffx-seymour-flux §4.3]'],
+    }));
+    const text = panelEl(overlay).textContent ?? '';
+    expect(text).toContain('Hits the whole party for heavy damage');
+    expect(text).toContain('A Delay attempt is punished with Slowga');
+    expect(text).not.toContain('§');
   });
 
   it('marks a lethal row, and only the lethal one', () => {

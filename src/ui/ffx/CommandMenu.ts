@@ -12,6 +12,7 @@ import {
   type TopGroupRow,
   type TopRow,
 } from './CommandMenuLogic.ts';
+import { commandHelpText } from './commandHelp.ts';
 import type { Projector } from './DamageNumbers.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
@@ -112,10 +113,18 @@ function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: Record<
   return { ...vm, portrait: { key: c?.portraitKey, name: c?.name ?? cmd.label } };
 }
 
+/**
+ * What a *category* row says.
+ *
+ * A group the stack resolves flat — one enabled entry, which is most
+ * characters' Overdrive — describes that entry instead of offering to open a
+ * list the player will never see (`chooseTop`). Round 02 #27.
+ */
 function groupHelp(row: TopGroupRow): string {
-  return row.role === 'switch'
-    ? 'Swap in a reserve member (L1 / Q). The member coming in takes this turn.'
-    : `Open the ${row.label} menu.`;
+  if (row.role === 'switch') return 'Swap in a reserve member (L1 / Q). The member coming in takes this turn.';
+  const only = row.items.length === 1 ? row.items[0] : undefined;
+  if (only) return commandHelpText(only) || `Open the ${row.label} menu.`;
+  return `Open the ${row.label} menu.`;
 }
 
 function mpBadge(cmd: AvailableCommand): RowBadge | undefined {
@@ -134,6 +143,16 @@ export interface CommandMenuOpenOptions {
   previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot;
   combatants: Record<CombatantId, AnyCombatant>;
   setHelp: (text: string) => void;
+  /**
+   * The aim moved — the picker opened on a candidate, the player arrowed to
+   * another, or the picker closed (`null`).
+   *
+   * The FFX HUD points its enemy plate at whoever this names, which is how
+   * targeting gets a surface of its own and the help slab stops being hijacked
+   * to print a bare name (round 02 #27, #28). Optional: the mock screens and
+   * the unit fixtures pass nothing and nothing changes for them.
+   */
+  onTargetChange?: (id: CombatantId | null) => void;
 }
 
 /**
@@ -252,6 +271,7 @@ export class CommandMenu {
     // menu." stayed on screen through the boss's answering attack
     // (docs/screenshots/47-boss-attack.png).
     this.opts?.setHelp('');
+    this.opts?.onTargetChange?.(null);
     this.opts?.previewRank(null);
     const resolve = this.resolve;
     this.resolve = null;
@@ -350,6 +370,7 @@ export class CommandMenu {
       this.confirmTarget();
     } else if (b === 'cancel') {
       this.targetCursor.hide();
+      this.opts?.onTargetChange?.(null);
       this.state = this.preTargetState;
       this.renderStack();
       this.updateHelpAndPreview();
@@ -542,28 +563,53 @@ export class CommandMenu {
     wirePortraitFallbacks(this.stackEl);
   }
 
+  /**
+   * The slab under the stack: **what the highlighted row does, before the
+   * player commits to it.**
+   *
+   * Round 02 #27 found it empty on the row the menu opens on and on every leaf
+   * ability, because `AvailableCommand.help` is written for items and nothing
+   * else — see `commandHelp.ts` for why the sentence is derived from the move's
+   * own record rather than authored.
+   */
   private updateHelpAndPreview(): void {
     if (!this.opts) return;
     if (this.state === 'top') {
       const row = this.rows[this.topIndex];
       const cmd = row?.kind === 'direct' ? row.cmd : null;
-      this.opts.setHelp(cmd?.help ?? cmd?.disabledReason ?? (row?.kind === 'group' ? groupHelp(row) : ''));
+      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row) : '');
       this.opts.previewRank(cmd);
       return;
     }
     if (this.state === 'sub') {
       const group = this.rows[this.topIndex];
       const cmd = group?.kind === 'group' ? group.items[this.subIndex] : null;
-      const swap = group?.kind === 'group' && group.role === 'switch' && cmd ? `${cmd.label} takes this turn on entering the fight.` : null;
-      this.opts.setHelp(cmd?.help ?? swap ?? cmd?.disabledReason ?? '');
+      const swap =
+        group?.kind === 'group' && group.role === 'switch' && cmd
+          ? `${cmd.label} takes this turn on entering the fight.`
+          : null;
+      this.opts.setHelp(cmd ? (swap ?? commandHelpText(cmd)) : '');
       this.opts.previewRank(cmd ?? null);
     }
   }
 
+  /**
+   * Aiming does **not** take the help slab over any more.
+   *
+   * It used to print the target's `sensorText`, or its bare name — so the one
+   * surface that could have said what the command does spent the whole of
+   * targeting saying "Mortiorchis" instead, and the player committed without
+   * ever having read the move (#27). The target now has a surface of its own:
+   * the HUD's enemy plate, pointed here through {@link
+   * CommandMenuOpenOptions.onTargetChange}, which is also the panel that prints
+   * whatever Sensor knows about it (#28). The slab holds the pending command's
+   * own line for the whole of the aim.
+   */
   private updateTargetHelp(entry: TargetEntry | null): void {
-    if (!this.opts || !entry) return;
-    const c = this.opts.combatants[entry.id];
-    this.opts.setHelp(c?.sensorText ?? entry.name);
+    if (!this.opts) return;
+    this.opts.onTargetChange?.(entry?.id ?? null);
+    const cmd = this.pendingCmd;
+    if (cmd) this.opts.setHelp(commandHelpText(cmd));
   }
 
   private shake(): void {

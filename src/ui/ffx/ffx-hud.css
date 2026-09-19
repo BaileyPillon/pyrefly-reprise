@@ -211,6 +211,38 @@
 }
 .ffx-stat__statuses i { width: 5px; height: 5px; background: var(--ig-spira-sky); display: block; }
 
+/* ----------------------------------------------------- overdrive gauge */
+
+/* Round 02 #37: the gauge had no label, no ready state and no cue when it
+   filled — a second unexplained bar beside HP and MP that a first-timer has
+   no way to read. The label rides above the bar inside `.ig-stat__od`'s own
+   `position: relative` box, so no row geometry moves; READY recolours the
+   same word rather than adding a chip the 200px row has no width for. */
+.ffx-stat__od em {
+  position: absolute; right: 0; bottom: 4.4px;
+  font-family: var(--ig-font-display); font-weight: 700; font-style: normal;
+  font-size: 4.4px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.45);
+  white-space: nowrap;
+}
+.ffx-stat__od--ready em { color: var(--ig-accent); }
+.ffx-stat__od--ready i { box-shadow: 0 0 3px var(--ig-accent); }
+.ffx-stat__od--ready { animation: ffx-od-ready 1.1s ease-in-out infinite alternate; }
+@keyframes ffx-od-ready {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.5); }
+}
+/* One shot, on the render that crossed 100 — see PartyStatusWindow.prevGauge. */
+.ffx-stat__od--filled { animation: ffx-od-fill 0.7s ease-out 1 both; }
+@keyframes ffx-od-fill {
+  0% { filter: brightness(2.6); transform: scaleY(2.2); }
+  60% { filter: brightness(1.7); transform: scaleY(1.2); }
+  100% { filter: brightness(1); transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ffx-stat__od--ready, .ffx-stat__od--filled { animation: none; }
+}
+
 /* ------------------------------------------------------------- reticle */
 
 .ffx-reticle--dim { opacity: 0.55; }
@@ -336,8 +368,43 @@
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
 }
 .ffx-sensor > * { transform: skewX(var(--ig-skew-inverse)); }
+
+/* Folded: the plate gives the frame back and leaves one line saying whose
+   read-out it is and which key brings it back. `width: auto` is what makes
+   `FFXBattleHud.solveAdvisorPlacement` see a small obstacle again — the open
+   plate is 100x78 grid px in the middle of the shelf the advisor card wants,
+   and before this round it never came down at all (SensorPanel had no caller
+   for `hide()`; see the class comment there). */
+.ffx-sensor--folded {
+  width: auto;
+  padding: 1px 4px 1.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+.ffx-sensor--folded .ffx-sensor__body { display: none; }
+
+/* The chip is the fold control while the plate is open and the whole plate
+   while it is folded, so it is styled once and only its copy changes. */
+.ffx-sensor__toggle {
+  display: flex; align-items: center; gap: 3px;
+  margin: 3px 0 0; padding: 0; border: 0; background: none;
+  font-family: var(--ig-font-display); font-weight: 700;
+  font-size: 4.6px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #cfd6de; cursor: pointer;
+}
+.ffx-sensor--folded .ffx-sensor__toggle { margin-top: 0; }
+.ffx-sensor__toggle b { color: var(--ig-accent); font-weight: 700; }
+.ffx-sensor__toggle:hover, .ffx-sensor__toggle:focus-visible { color: var(--ig-paper); outline: none; }
+
+/* Unscanned: FFX shows no enemy HP until Sensor reads it, so neither does
+   this. The bar stays at zero width under a "? ? ?" readout and the panel
+   names the one command that fills it in [round-02 #28]. */
+.ffx-sensor__unknown {
+  font-family: var(--ig-font-display); font-size: 5px; letter-spacing: 0.1em;
+  color: rgba(244, 241, 232, 0.52); margin-top: 2px;
+}
 .ffx-sensor__name {
   font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
   font-size: 11px; color: var(--ig-paper); margin-bottom: 3px;

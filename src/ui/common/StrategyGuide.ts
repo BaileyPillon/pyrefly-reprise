@@ -108,6 +108,31 @@ const CHIP_RISE = 11;
  */
 const COMPACT_HEIGHT = 200;
 
+/**
+ * The density ladder, when even the compact form does not fit the rail.
+ *
+ * Round 02 #29: "the strategy guide hard-clips mid-sentence with no scrollbar,
+ * fade or affordance — '…beat the mount's Full-', 'Lance of Atrophy into
+ * Full-Life, then Dispel into' … at submenu heights it renders bare headings
+ * ('PHASE 1', 'RULES') with no body."
+ *
+ * The rail already scrolled and already faded its last few px, and neither
+ * helped, for two reasons the fix has to answer separately:
+ *
+ * * **Nothing said there was more.** A fade at the foot of an ink panel on a
+ *   dark painting is not an affordance; {@link StrategyGuide.moreEl} is.
+ * * **A player on a pad cannot scroll.** So the panel gives text up in a fixed
+ *   order until what is left fits, exactly as `MoveAdvisor.fitCard` does, and
+ *   the order is decoration first: rule citations, then the rules' paragraphs,
+ *   then the WATCH sentences, then rules past the third, then the rules
+ *   section. **What is never given up is a half-sentence** — every rung hides
+ *   whole elements, so nothing is ever cut through the middle of a word again.
+ *
+ * NEXT — the command the player is being told to press, its target and its one
+ * reason — survives every rung. It is the line the decision is about.
+ */
+const FIT_RUNGS = 5;
+
 export class StrategyGuide {
   readonly el: HTMLElement;
   private readonly panelEl: HTMLElement;
@@ -122,6 +147,12 @@ export class StrategyGuide {
   private padWasDown = false;
   /** Signature of the last render, so a per-frame `sync` does not re-write the DOM. */
   private lastSignature = '';
+  /** The scroll affordance; see {@link FIT_RUNGS}. */
+  private readonly moreEl: HTMLButtonElement;
+  /** `(content, rail height)` the current rung was solved for. */
+  private fitKey = '';
+  /** How much has been given up to make the content fit. 0 = nothing. */
+  private fitRung = 0;
 
   constructor(opts: StrategyGuideOptions) {
     this.opts = opts;
@@ -142,8 +173,22 @@ export class StrategyGuide {
 
     this.bodyEl = document.createElement('div');
     this.bodyEl.className = 'sgd__body';
+
+    // A mouse can wheel this panel and a pad cannot, so the affordance is also
+    // the control: one click pages down, and a click at the foot returns to the
+    // top. Hidden unless there is genuinely something below the fold.
+    this.moreEl = document.createElement('button');
+    this.moreEl.type = 'button';
+    this.moreEl.className = 'sgd__more';
+    this.moreEl.dataset['role'] = 'strategy-guide-more';
+    this.moreEl.hidden = true;
+    this.moreEl.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.pageDown();
+    });
+
     this.panelEl.append(this.bodyEl);
-    this.el.append(this.panelEl, this.toggleEl);
+    this.el.append(this.panelEl, this.moreEl, this.toggleEl);
 
     this.toggleEl.addEventListener('click', (e) => {
       e.preventDefault();
@@ -195,7 +240,13 @@ export class StrategyGuide {
     // `layout()` stops running while the guide is off, and an inline `top`
     // outranks the stylesheet, so the chip would otherwise stay frozen at
     // whatever height the last open panel happened to start at.
-    if (!this.visible) this.toggleEl.style.top = '';
+    if (!this.visible) {
+      this.toggleEl.style.top = '';
+      // The affordance belongs to the panel, not to the chip: with the guide
+      // off there is nothing below any fold.
+      this.moreEl.hidden = true;
+      this.moreEl.style.top = '';
+    }
     const keys = this.padConnected() ? GUIDE_HINT_ITEM.gamepad : GUIDE_HINT_ITEM.keyboard;
     this.toggleEl.innerHTML =
       `<b>${escapeHtml(keys)}</b><span>${escapeHtml(this.visible ? 'hide guide' : 'guide')}</span>`;
@@ -332,6 +383,51 @@ export class StrategyGuide {
     // Short rules while the menu is eating the rail; the paragraphs come back
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);
+    this.fit(available);
+    this.moreEl.style.top = `${(top + available - 8).toFixed(2)}px`;
+  }
+
+  /**
+   * Give text up, in {@link FIT_RUNGS}'s order, until the rail holds it.
+   *
+   * Solved once per `(content, rail height)` and then held, for the reason
+   * `MoveAdvisor.fitCard` records: a fit keyed on anything that moves per frame
+   * drops and restores a whole sentence several times a second while the player
+   * is reading it. A submenu opening changes the rail's height and re-solves,
+   * which is the one moment the rung should change.
+   *
+   * In jsdom every box measures 0, so `overflows()` is false, the rung stays at
+   * 0 and the affordance stays hidden — the unit tests see the full content,
+   * which is what they are asserting about.
+   */
+  private fit(available: number): void {
+    const key = `${this.lastSignature}|${Math.round(available)}`;
+    if (key !== this.fitKey) {
+      this.fitKey = key;
+      this.fitRung = 0;
+      this.applyRung();
+    }
+    while (this.fitRung < FIT_RUNGS && this.overflows()) {
+      this.fitRung++;
+      this.applyRung();
+    }
+    this.moreEl.hidden = !this.overflows();
+  }
+
+  private overflows(): boolean {
+    return this.panelEl.scrollHeight > this.panelEl.clientHeight + 1;
+  }
+
+  private applyRung(): void {
+    for (let r = 1; r <= FIT_RUNGS; r++) this.el.classList.toggle(`sgd--fit${r}`, this.fitRung >= r);
+  }
+
+  /** One page down, wrapping back to the top at the foot. */
+  private pageDown(): void {
+    const panel = this.panelEl;
+    const step = Math.max(24, panel.clientHeight - 12);
+    const atEnd = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 2;
+    panel.scrollTop = atEnd ? 0 : panel.scrollTop + step;
   }
 }
 

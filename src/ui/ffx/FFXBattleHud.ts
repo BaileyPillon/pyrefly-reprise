@@ -246,12 +246,19 @@ export class FFXBattleHud implements HudPort {
     // the HUD that owns it.
     this.guide.mount(this.stage);
     this.advisor.mount(this.stage);
+    this.sensorPanel.mount();
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.hudScale(),
       project: (id, anchor) => this.project(id, anchor),
       avoid: () => this.intentAvoidRects(),
       chipDock: () => this.intentChipDock(),
+      // FFX ships the slab **on** and the fight is what the player came for, so
+      // the default has to be the short read-out. See
+      // `EnemyIntentMountOptions.density` and round 02 #14. FFX-2 passes
+      // nothing and keeps the full slab, which is the rule Bailey set on
+      // 2026-09-19: a change true of one game is not applied to the other.
+      density: 'brief',
     });
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
@@ -263,6 +270,7 @@ export class FFXBattleHud implements HudPort {
     this.guide.unmount();
     this.advisor.unmount();
     this.intent.unmount();
+    this.sensorPanel.unmount();
     this.damageNumbers.clear();
     this.telegraph.dispose();
     this.clearTransientOverlays();
@@ -275,7 +283,14 @@ export class FFXBattleHud implements HudPort {
     // screen fades up over this frame and anything still drawn is drawn over
     // it. `result` going non-null is the one state change that means "the
     // fight is over", and it is idempotent, so re-syncing is harmless.
-    if (state.result) this.clearTransientOverlays();
+    if (state.result) {
+      this.clearTransientOverlays();
+      // The enemy plate goes with them. This is also the call `SensorPanel.hide()`
+      // never had: before this round one Sensor in Chapter 1 left the card on
+      // the field for the rest of the fight, which is what crowded the screen
+      // and starved the advisor's shelf (`critic/rounds/round-02.md`).
+      this.sensorPanel.hide();
+    }
     this.lastState = state;
     if (Array.isArray(preview)) this.ctbList.render(preview, state.combatants);
     const actingId = state.log.length ? findLastActorId(state.log) : null;
@@ -336,6 +351,11 @@ export class FFXBattleHud implements HudPort {
         previewRank: wrapped,
         combatants,
         setHelp: (t) => this.setHelp(t),
+        // The enemy plate is the surface targeting gets for itself, so the
+        // command slab can go on saying what the *command* does while the
+        // player is aiming [round-02 #27]. It is also one of the two moments
+        // the plate is allowed to open [the fix-3 addendum's (a)].
+        onTargetChange: (id) => this.focusEnemyPlate(id),
       });
     } finally {
       this.guide.clearDecision();
@@ -411,6 +431,9 @@ export class FFXBattleHud implements HudPort {
   /** Frame tick from `BattleScreen`, forwarded to the only things here that animate themselves. */
   update(dt: number): void {
     this.damageNumbers.update(dt);
+    // Before the advisor, because folding the enemy plate gives the shelf its
+    // height back and `placeAdvisor` should see that on the same frame.
+    this.sensorPanel.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
     // After the advisor's own `layout()`, never before: `MoveAdvisor` measures
@@ -478,6 +501,27 @@ export class FFXBattleHud implements HudPort {
 
   private nameOf(id: CombatantId): string {
     return this.lastState?.combatants[id]?.name ?? id;
+  }
+
+  /**
+   * Point the enemy plate at whoever the player is aiming at.
+   *
+   * Enemies only: aiming a Potion at Yuna is not a question about an enemy, and
+   * swapping the plate's subject to a party member would make the one panel that
+   * prints enemy health mean two different things [round-02 #28]. `null` — the
+   * picker closed — leaves the plate where it is; it folds itself on its own
+   * clock (`SensorPanel.update`).
+   */
+  private focusEnemyPlate(id: CombatantId | null): void {
+    if (!id) return;
+    const c = this.lastState?.combatants[id];
+    if (!c || c.side === 'party') return;
+    this.sensorPanel.focus(c);
+  }
+
+  /** The enemy plate, for tests and the debug snapshot. */
+  get enemyPlate(): SensorPanel {
+    return this.sensorPanel;
   }
 
   /**
@@ -855,6 +899,11 @@ export class FFXBattleHud implements HudPort {
       '.mad__toggle',
       '.sgd__panel',
       '.sgd__toggle',
+      // The reticles. Round 02 #14's repro at 1000x562 had *both* of them
+      // entirely inside the slab. Listing their boxes moves the slab and
+      // changes nothing about how a reticle is drawn or aimed, which is issue
+      // #08/#13's track, not this one.
+      '.ig-reticle',
     ] as const) {
       for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
         // Size alone. `ffx/DamageNumbers.ts` gates on `el.hidden ||
@@ -865,6 +914,64 @@ export class FFXBattleHud implements HudPort {
         if (r.width <= 0 || r.height <= 0) continue;
         out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
       }
+    }
+    out.push(...this.fighterViewportRects());
+    return out;
+  }
+
+  /**
+   * Every fighter on the field, as a viewport-pixel rectangle.
+   *
+   * **This list is the whole of round 02 #14.** `avoid` named HUD panels and
+   * nothing else, so a slab that had dodged the CTB queue and the command stack
+   * was free to sit on the encounter: measured live at 1000x562 the Chapter 1
+   * slab held x 532–766, y 6–269, with Seymour Flux, the Mortiorchis *and* both
+   * target reticles entirely behind it. CHK-008 asked for exactly this and it
+   * had never been done.
+   *
+   * Enemies as well as party, because both halves of that measurement are the
+   * fight. Reconstructed from the projector's head/feet points by the same
+   * three measured ratios {@link partySpriteRects} uses — that method answers in
+   * grid px for the advisor's arithmetic, and the slab lives on the unscaled
+   * overlay, so this one stays in viewport px rather than converting twice.
+   *
+   * **The slab's own subject is a special case, and has to be.** The panel
+   * hangs over that enemy's head with a tail pointing at it — that relationship
+   * *is* the answer to "whose turn", and a rect that reached above the head
+   * point would push the slab off the boss on every frame and delete the one
+   * thing the design is for. So the anchor enemy contributes its body from the
+   * head point **down**: air above the head stays legal, and a slab that has
+   * been clamped down onto the boss's chest is moved, which is the case #14
+   * actually measured.
+   *
+   * Snapped outwards to 4px. The slab re-lays out every frame and a sprite's
+   * idle cycle breathes a pixel either way; without the snap a fighter's edge
+   * crosses the dodge threshold several times a second and the slab twitches.
+   */
+  private fighterViewportRects(): Array<{ left: number; top: number; right: number; bottom: number }> {
+    const state = this.lastState;
+    if (!state) return [];
+    const out: Array<{ left: number; top: number; right: number; bottom: number }> = [];
+    const anchorId = this.intent.view()?.enemyId ?? null;
+    const ids = [...state.activeIds, ...state.enemyIds];
+    for (const id of ids) {
+      const c = state.combatants[id];
+      if (c && !c.alive) continue;
+      const head = this.project(id, 'head');
+      const feet = this.project(id, 'feet');
+      if (!head || !feet) continue;
+      const span = Math.abs(feet.y - head.y);
+      if (span <= 0) continue;
+      const half = span * SPRITE_HALF_WIDTH_RATIO;
+      const top =
+        id === anchorId ? Math.min(head.y, feet.y) : Math.min(head.y, feet.y) - span * SPRITE_TOP_MARGIN_RATIO;
+      const bottom = Math.max(head.y, feet.y) + span * SPRITE_FOOT_MARGIN_RATIO;
+      out.push({
+        left: Math.floor((head.x - half) / 4) * 4,
+        right: Math.ceil((head.x + half) / 4) * 4,
+        top: Math.floor(top / 4) * 4,
+        bottom: Math.ceil(bottom / 4) * 4,
+      });
     }
     return out;
   }

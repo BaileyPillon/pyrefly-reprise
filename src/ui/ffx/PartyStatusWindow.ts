@@ -10,6 +10,16 @@ import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts
 export class PartyStatusWindow {
   readonly el: HTMLElement;
   private readonly prevHp = new Map<CombatantId, number>();
+  /**
+   * Last frame's Overdrive gauge per member, so the row can say the one thing
+   * the bar could not: **it just filled**.
+   *
+   * Round 02 #37 — "Kimahri's gauge was visibly full in Chapter 1 with no
+   * flash, no label, no chip and no sound hook". A bar that is 53 grid px of
+   * gold at 99% and 53 grid px of gold at 100% carries no event, and the whole
+   * value of the gauge is the moment it crosses.
+   */
+  private readonly prevGauge = new Map<CombatantId, number>();
 
   constructor() {
     this.el = document.createElement('div');
@@ -35,6 +45,20 @@ export class PartyStatusWindow {
     const hurt = prev !== undefined && c.hp < prev;
     this.prevHp.set(id, c.hp);
 
+    // The Overdrive gauge: a label so it is not an unexplained second bar, a
+    // READY state so full is legible at a glance, and a one-shot flash on the
+    // render that crosses 100 so the fill is an event [round-02 #37]. The
+    // flash class is written on that render only — every later render draws
+    // the steady READY state, so the animation cannot loop.
+    const ready = gauge >= 100 && c.alive;
+    const prevG = this.prevGauge.get(id);
+    const justFilled = ready && prevG !== undefined && prevG < 100;
+    this.prevGauge.set(id, gauge);
+    const odCls = ['ig-stat__od', 'ffx-stat__od', ready ? 'ffx-stat__od--ready' : '', justFilled ? 'ffx-stat__od--filled' : '']
+      .filter(Boolean)
+      .join(' ');
+    const odLabel = ready ? 'Overdrive' : 'OD';
+
     const hpValueCls = ['ig-stat__value', !c.alive ? 'ffx-stat__value--ko' : hpFrac <= 0.125 ? 'ffx-stat__value--danger' : hpFrac < 0.5 ? 'ffx-stat__value--crit' : '']
       .filter(Boolean)
       .join(' ');
@@ -50,7 +74,7 @@ export class PartyStatusWindow {
       <span class="ig-stat__name">${escapeHtml(c.name)}</span>
       <span class="${hpValueCls}">${c.hp}<small>/${maxHp}</small></span>
       <span class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${maxMp}</small></span>
-      <span class="ig-stat__od"><i style="width:${gauge}%"></i></span>
+      <span class="${odCls}" title="Overdrive ${Math.round(gauge)}%"><i style="width:${gauge}%"></i><em>${odLabel}</em></span>
       ${statusHtml}
     </div>`;
   }

@@ -165,6 +165,24 @@ export interface EnemyIntentMountOptions {
    * every test) keeps the old head-anchored behaviour.
    */
   chipDock?: () => { x: number; y: number } | null;
+  /**
+   * How much of the read-out to print.
+   *
+   * `'full'` is everything the prediction knows and is what FFX-2 and the mock
+   * screens still mount. `'brief'` drops the rows a player is not reading in
+   * the two seconds before a hit lands — the odds table, the status list, the
+   * "Also" notes and every research citation — and keeps the move, what it
+   * does, the countdown, the damage per character and what it counters with.
+   *
+   * It exists because of round 02 #14: at 1000x562 the full slab measured
+   * x 532–766, y 6–269 and had **both** reticles, Seymour Flux and the
+   * Mortiorchis entirely behind it. A panel that ships on by default may not
+   * be the thing hiding the encounter, and the honest fix is for the default
+   * to be short enough to dodge rather than for the default to be off — the
+   * warning it carries (Total Annihilation, Mega Death) is the reason a
+   * first-timer survives them.
+   */
+  density?: 'full' | 'brief';
 }
 
 /** Standard-gamepad button 3 (Triangle / Y); see `INTENT_HINT_ITEM`. */
@@ -178,6 +196,16 @@ const PANEL_WIDTH = 150;
 
 /** Clearance the slab and the chip keep from the frame's edges, in grid px. */
 const EDGE_MARGIN = 4;
+
+/**
+ * The tallest the slab may be, as a fraction of the frame it is drawn on.
+ *
+ * Round 02 #14 measured it at 263 of 562 px — 47% of the window, over the boss
+ * — because nothing capped it. A panel that cannot be dodged out of the way is
+ * not a panel the layout can honour, so the body scrolls past this and the
+ * stylesheet fades its last rows.
+ */
+const MAX_HEIGHT_FRACTION = 0.34;
 
 // ---------------------------------------------------------------------------
 // The E key, and the pause it collides with
@@ -382,10 +410,11 @@ export class EnemyIntentPanel {
     this.el.hidden = view === null;
     if (!view) return;
     if (this.visible) {
-      const signature = signatureOf(view);
+      const density = this.mountOpts?.density ?? 'full';
+      const signature = `${density}~${signatureOf(view)}`;
       if (signature !== this.lastSignature) {
         this.lastSignature = signature;
-        this.bodyEl.innerHTML = bodyHtml(view);
+        this.bodyEl.innerHTML = bodyHtml(view, density);
       }
     }
     this.layout();
@@ -419,6 +448,12 @@ export class EnemyIntentPanel {
     const scale = opts.scale() || 1;
     this.panelEl.style.setProperty('--eint-scale', scale.toFixed(4));
     this.toggleEl.style.setProperty('--eint-scale', scale.toFixed(4));
+    // In the body's own unscaled px, because the panel's transform multiplies
+    // it with everything else — and on the *body*, so the tail notch that hangs
+    // below the panel is not clipped away. See MAX_HEIGHT_FRACTION.
+    const cap = (layer.height * MAX_HEIGHT_FRACTION) / scale;
+    this.bodyEl.style.maxHeight = `${cap.toFixed(1)}px`;
+    this.bodyEl.classList.toggle('eint__body--clipped', this.bodyEl.scrollHeight > cap + 0.5);
 
     // Panel off, and the owner named a rail to park the chip on: nothing here
     // is anchored to the boss any more, so the projection and the dodge below
@@ -474,15 +509,28 @@ export class EnemyIntentPanel {
     left = clampX(left);
     top = clampY(top);
 
-    for (const avoid of opts.avoid()) {
-      const a = { left: avoid.left - layer.left, top: avoid.top - layer.top, right: avoid.right - layer.left, bottom: avoid.bottom - layer.top };
-      const overlaps = left < a.right && left + w > a.left && top < a.bottom && top + h > a.top;
-      if (!overlaps) continue;
-      const roomLeft = a.left - 4;
-      const roomRight = layer.width - a.right - 4;
-      if (roomLeft >= w && roomLeft >= roomRight) left = clampX(a.left - w - 4);
-      else if (roomRight >= w) left = clampX(a.right + 4);
-      else top = clampY(a.bottom + 4);
+    // Two passes, not one: clearing a rectangle on the right can slide the slab
+    // back onto one on the left, and a single pass leaves it there. Two settles
+    // every arrangement these HUDs actually produce and costs nothing.
+    const obstacles = opts.avoid();
+    for (let pass = 0; pass < 2; pass++) {
+      for (const avoid of obstacles) {
+        const a = { left: avoid.left - layer.left, top: avoid.top - layer.top, right: avoid.right - layer.left, bottom: avoid.bottom - layer.top };
+        const overlaps = left < a.right && left + w > a.left && top < a.bottom && top + h > a.top;
+        if (!overlaps) continue;
+        const roomLeft = a.left - 4;
+        const roomRight = layer.width - a.right - 4;
+        if (roomLeft >= w && roomLeft >= roomRight) left = clampX(a.left - w - 4);
+        else if (roomRight >= w) left = clampX(a.right + 4);
+        // **Above before below.** The old order only ever went down, which is
+        // right for the CTB queue and wrong for everything added in round 03:
+        // pushed under a *fighter* the slab lands on the next one, and pushed
+        // under the boss it lands on the party. The slab's whole habit is to
+        // hang over a head, so it goes up when there is sky and down only when
+        // there is not [round-02 #14].
+        else if (a.top - 4 >= h) top = clampY(a.top - h - 4);
+        else top = clampY(a.bottom + 4);
+      }
     }
 
     this.el.classList.toggle(
@@ -585,6 +633,30 @@ function num(n: number): string {
 }
 
 /**
+ * A research citation, anywhere inside a sentence meant for the player.
+ *
+ * The engines' intent builders write their prose with the section they derived
+ * it from attached — `"Counters an attack with Lance of Atrophy
+ * [ffx-seymour-flux §4.6]"` — which is exactly right for a `research/` audit
+ * trail and exactly wrong on a slab hanging over a boss's head. Round 02 #26
+ * caught three of them in Chapter 1 alone and the Part B 8.0 cap with them.
+ *
+ * Matched on the bracket rather than on any one chapter's id so a new
+ * encounter cannot leak a new prefix: a bracketed run containing `§`, or one
+ * that is a bare `<game>-<slug>` research key.
+ */
+const CITE_IN_TEXT = /\s*\[[^\][]*(?:§|ffx-|ffx2-)[^\][]*\]/g;
+
+/** Player copy with its citations taken out. See {@link CITE_IN_TEXT}. */
+export function stripCitations(text: string): string {
+  return text.replace(CITE_IN_TEXT, '').replace(/\s{2,}/g, ' ').trim();
+}
+
+function plain(text: string): string {
+  return escapeHtml(stripCitations(text));
+}
+
+/**
  * "ACTS NEXT", or this enemy's place in the forecast.
  *
  * A queue position rather than "in N turns", which is the phrasing a charge row
@@ -645,7 +717,7 @@ function branchesHtml(view: IntentView): string {
 
 function listHtml(label: string, items: readonly string[], className = 'eint__lines'): string {
   if (items.length === 0) return '';
-  const rows = items.map((t) => `<li>${escapeHtml(t)}</li>`).join('');
+  const rows = items.map((t) => `<li>${plain(t)}</li>`).join('');
   return `<h4 class="eint__head">${escapeHtml(label)}</h4><ul class="${className}">${rows}</ul>`;
 }
 
@@ -659,31 +731,38 @@ function chargeHtml(view: IntentView): string {
       : `in ${charge.turnsLeft} turn${charge.turnsLeft === 1 ? '' : 's'}`;
   return (
     `<div class="eint__charge eint__charge--s${charge.stage}">` +
-    `<span class="eint__charge-name">${escapeHtml(what)}</span>` +
+    `<span class="eint__charge-name">${plain(what)}</span>` +
     `<span class="eint__charge-when">${escapeHtml(when)}</span>` +
-    `<span class="eint__cite">${escapeHtml(charge.cite)}</span>` +
     '</div>'
   );
 }
 
-function bodyHtml(view: IntentView): string {
+/**
+ * The slab's copy.
+ *
+ * **No citation reaches the player from here, at either density.** CHK-007 puts
+ * them in the strategy guide — the panel a player opens to ask *why* — and this
+ * one is read in the two seconds before a hit lands. That covers the three
+ * inline ones round 02 #26 found in Chapter 1, the charge row's, and the footer.
+ */
+function bodyHtml(view: IntentView, density: 'full' | 'brief' = 'full'): string {
   const elements = view.elements.filter((e) => e !== 'none');
+  const full = density === 'full';
   return [
     `<p class="eint__enemy"><span>${escapeHtml(view.enemyName)}</span><i>${escapeHtml(timingText(view))}</i></p>`,
-    `<p class="eint__move"><span class="eint__label">${escapeHtml(view.moveName)}</span>${confidenceHtml(view)}</p>`,
-    `<p class="eint__desc">${escapeHtml(view.description)}</p>`,
+    `<p class="eint__move"><span class="eint__label">${plain(view.moveName)}</span>${confidenceHtml(view)}</p>`,
+    `<p class="eint__desc">${plain(view.description)}</p>`,
     elements.length > 0
       ? `<p class="eint__els">${elements.map((e) => `<span>${escapeHtml(e)}</span>`).join('')}</p>`
       : '',
     chargeHtml(view),
     damageHtml(view),
-    view.statusText.length > 0
-      ? `<h4 class="eint__head">Statuses</h4><ul class="eint__lines">${view.statusText.map((s) => `<li>${escapeHtml(s)}</li>`).join('')}</ul>`
+    full && view.statusText.length > 0
+      ? `<h4 class="eint__head">Statuses</h4><ul class="eint__lines">${view.statusText.map((s) => `<li>${plain(s)}</li>`).join('')}</ul>`
       : '',
-    branchesHtml(view),
-    view.formNote ? `<p class="eint__form">${escapeHtml(view.formNote)}</p>` : '',
+    full ? branchesHtml(view) : '',
+    view.formNote ? `<p class="eint__form">${plain(view.formNote)}</p>` : '',
     listHtml('If you attack', view.counters),
-    listHtml('Also', view.notes),
-    `<p class="eint__cite">${escapeHtml(view.cite)}</p>`,
+    full ? listHtml('Also', view.notes) : '',
   ].join('');
 }

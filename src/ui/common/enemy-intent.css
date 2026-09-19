@@ -68,6 +68,30 @@
   pointer-events: auto;
 }
 
+/* The body, not the panel, carries the height cap: `.eint__panel::after` is the
+   tail notch and hangs 4px *below* the panel's own box, so an `overflow` on the
+   panel would clip it off.
+
+   `max-height` is written per frame by layout() (MAX_HEIGHT_FRACTION of the
+   frame, in this box's own unscaled px). Round 02 #14 measured the uncapped
+   slab at 47% of a 562px window with both reticles and both enemies behind it.
+   Past the cap the body scrolls; the last rows fade rather than being cut, and
+   no scrollbar is drawn across the art — the same treatment `strategy-guide.css`
+   records at length. */
+.eint__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.eint__body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.eint__body--clipped {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent 100%);
+}
+
 /* The tail: a small notch under the panel pointing at the head it belongs to,
    so a slab that had to dodge sideways still reads as *that* enemy's. Its x is
    set per frame by `layout()` (`--eint-tail`, in this box's own unscaled px),
