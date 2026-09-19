@@ -367,3 +367,197 @@ Tests: `tests/unit/engine/formation.test.ts`,
 `tests/unit/presenter-events.test.ts`.
 
 Screenshots and the measured report: `docs/screenshots/fix3/targeting/`.
+
+## Pre-release blocker pass (2026-09-19)
+
+A second adversarial pass (`docs/handoff/fix3-targeting-verify2.json`) drove
+the real game with real key presses and refuted the track again on eight
+counts. Items 1-5 are answered here; 6-8 stay open (below). Commits `18f2cd6`,
+`f9a5122`, `cc13b0a`. Screenshots and the raw numbers:
+`docs/screenshots/fix3/prerelease/targeting/`.
+
+### 1 + 2. The quiet dim and the accent were never cleared on CONFIRM
+
+**What was wrong.** `CommandMenu.confirmTarget()` hid the cursor and finished
+the command but never reported the selection as ended — only the *cancel*
+branch did (`opts.onSelection(null)`). So after the single most-used
+interaction in the game, Enter, the whole party and every other fiend stayed
+26% grey **for the rest of the fight**, and `window.__pyrefly.targeting()
+.selection` went on naming a stale ally group in `'all'` mode while the player
+aimed a single-target enemy Attack. `TargetCursor.hide()`'s own
+`selectionHandler?.(null)` was dead code in FFX, because the FFX menu never
+called `setOnSelection` — only `ui/ffx2/CommandMenu.ts` did.
+
+**What changed.** Fixed at the root, not by adding the missing line. The FFX
+`CommandMenu` wires the cursor's selection handler once, in its constructor,
+and **every** route out of a selection goes through one `endSelection()`:
+confirm, cancel, `finish()`, a menu abandoned because a strategy answered for
+the player (`open()` on a menu that still has a pending resolve), and a new
+public `close()`. `FFXBattleHud` calls `close()` on `unmount()` and the moment
+`state.result` appears; `FFX2BattleHud` clears the selection at the same two
+moments, which was its one uncovered route (its own menu already cleaned up
+after itself).
+
+**The test.** `tests/unit/ui-target-selection-ends.test.ts` — nine cases
+driving **real `KeyboardEvent`s through the real `CommandMenu`**, which is the
+only path `confirmTarget()` is on and the reason the whole suite missed this:
+single target, multi-target (Hastega), cancel, a no-target command, the stale
+group surviving into the next decision, `close()`, an abandoned menu, and the
+FFX-2 menu staying clean. All nine failed on `4a492e4`.
+
+**Measured** (ch3 `braskas-final-aeon`, 1280x720, GPU, real keys; White Magic →
+Hastega → Enter, then polled at +0.5/1/2/4/8/10 s):
+
+| | before | after |
+|---|---|---|
+| `selection` after confirm | `{ids:[tidus,yuna,auron], mode:'all'}` at every sample for 25 s | `null` at every sample |
+| figures still dimmed | aeon + both pagodas at `dim 0.26`, forever | `[]` |
+| figures still ringed | all three allies | `[]` |
+| `.ffx-target` elements | 0 (so nothing on screen explained the grey) | 0 |
+
+GAME-AWARE (rule 14): the sticking dim is **FFX only** — ch4/ch5 measured clean
+precisely because the FFX-2 menu wired the handler. The debug-surface half and
+the battle-end/unmount guard are shared plumbing behind a defect, so **both**
+(CHK-020).
+
+### 3. FFX-2's Active/Wait chip was drawn on top of the boss HP bar
+
+**What was wrong.** `.ffx2-atbmode` was pinned at 12,10 in the 640x360 grid and
+`.ig-bosshp` at 21.33,17.78, so the chip sat on the bar: "Vegnagun" read as
+"egnagun", "Bahamut" lost its B, and the PAUSE hint was buried — at 1280x720
+and 2000x1000, on the very first command menu of both FFX-2 chapters.
+
+**What changed.** The corner is two rows that never touch, as the approved
+frame `b-ring-and-dim/s3.png` draws it: chip at grid top 22, boss strip at 41,
+both tops **fixed** so the strip does not jump 22px every time a menu closes.
+22 rather than the frame's own 18.7 because `BattleScreen` mounts the PAUSE
+chip into the *screen root* in device px, and at 1280x720 that covers grid
+y 9..20.
+
+**The test.** `tests/unit/ui-ffx2-atbmode.test.ts` — the two rows cannot
+overlap (read off the stylesheet's own tokens), the chip starts below the PAUSE
+chip, and **a mounted FFX HUD never creates the indicator** while a mounted
+FFX-2 HUD does.
+
+**Measured** (chip up, real key presses):
+
+| | before | after |
+|---|---|---|
+| `chipOverBoss` px², ch5 @1280x720 | chip on the bar; name clipped to "egnagun" | **0** |
+| `chipOverName` px², ch4 @1280x720 | B cut off "Bahamut" | **0** |
+| `chipOverPause` px² | PAUSE buried | **0** |
+| the same three @1600x900, both chapters | — | **0 / 0 / 0** |
+
+GAME-AWARE: **FFX-2 only.** The indicator is a real FFX-2 Config entry; FFX's
+CTB has no such setting [`research/ffx-vs-ffx2-presentation.md`, the ATB/CTB
+rows].
+
+### 4. Targeting a KO'd ally was unreadable
+
+**What was wrong.** Chapter 1, Items → Phoenix Down on a downed Yuna. Her
+party-status row *did* light, but `.ffx-stat--ko` wears
+`opacity: .5; filter: grayscale(1)` — and a filter greys the element's own
+`box-shadow`, so the green selection ring came out pale white on exactly the
+row a player most needs to read. Her ink name plate was printed squarely across
+the MEGA PHOENIX row: the surface answering *"who am I reviving?"* laid over
+the choice being made.
+
+**What changed.**
+
+- Selection wins over the KO treatment on that one row
+  (`.ig-stat.ffx-stat--ko.ig-party-row--targeted`): `filter: none`,
+  `opacity: 1`, a stronger green glow. The struck-through name keeps saying she
+  is down, so nothing about "this ally is KO'd" is lost.
+- `TargetCursor.setPanels()` takes the HUD's painted panels — the same set the
+  field is measured against — and `dockFor()` hangs the plate off whichever
+  side of the figure is clear: under it as the approved frames draw it, else
+  above, right or left, scored by how much of the plate a panel or the frame
+  edge would eat. Four CSS dock rules match those four boxes.
+- "Bracket under the rows, plate over them" is impossible by construction
+  rather than by luck: both are children of the single `.ffx-targeting` layer,
+  its `z-index` is 36, and `ui-target-css.test.ts` fails if any rule inside it
+  gives a child a z-index of its own. (Measured live: `elementsFromPoint` over
+  the command stack returns `.ffx-target` **above** `.ig-cmd-stack` at both
+  `4a492e4` and HEAD, so the split the verifier read off the capture was the
+  green-on-ivory contrast of a stroke, not a stacking order.)
+
+**The tests.** `ui-target-cursor.test.ts` "the name plate dodges the HUD
+panels" (5 cases) and `ui-target-css.test.ts` "the whole cursor stacks as one
+layer" (3 cases).
+
+**Measured** (ch1 `seymour-flux`, 1280x720, Yuna KO'd in 3 rounds, Items →
+Phoenix Down):
+
+| | before | after |
+|---|---|---|
+| Yuna's row `filter` | `grayscale(1)` — the ring reads pale white | **`none`**, ring `rgb(126,232,176)` |
+| targeting layer `z-index` | 32 | 36 |
+| bracket vs command stack | `.ffx-target` above `.ig-cmd-stack` | unchanged, now pinned |
+| plate dock | always "below" | chosen per figure; "below" here (see below) |
+
+**Still open and not papered over:** with the item list open, Yuna herself is
+`coveredByHud 0.608` / `visibleInFrame 0.388`, so **no** side of her figure is
+clear and the plate takes the least-covered one (1648 px² of overlap against
+1768 right, 1836 above, and off-frame left). That is the party lane the
+approved frames deliberately draw the list across — open question 2 above,
+Bailey's to answer.
+
+### 5. "A party member is up to 100% hidden by the HUD" — NOT a regression
+
+The task's first instruction was to find out whether this came from this
+track's new lanes. It did not; the live build was worse.
+
+`__pyrefly.targeting()` does not exist before the track, so the comparable
+measurement on both builds is the one both stages can answer: each combatant's
+projected **anchor point** (`stage.project`) and the painted HUD panel
+rectangles, with the root command menu open. Run on a throwaway worktree of
+`4ce372c` (the commit before the track) on its own dev server, and on HEAD,
+both GPU, 1280x720. The baseline silhouette is then **derived** — HEAD's
+measured silhouette size re-centred on the baseline anchor — and sampled
+against the baseline's own panels with the same 24x24 grid.
+
+Chapter 3 `braskas-final-aeon`, root command menu, `coveredByHud`:
+
+| | `4ce372c` (the live build) | HEAD |
+|---|---|---|
+| `yuna` | **0.833** | **0.653** |
+| `tidus` | **0.405** | **0.288** |
+| `auron` | 0.007 | **0.000** |
+
+Anchor points moved apart, not inward — yuna x 227 → 151, auron x 496 → 550 —
+which is the spread doing its job; Yuna's anchor was inside a HUD panel on
+*both* builds, in Chapter 1 as well as Chapter 3. Per the task's own
+instruction, nothing was restaged.
+
+The verifier's `yuna coveredByHud 1.000` and this pass's 0.653 are the same
+figure measured two ways: taking `.ig-cmd-stack`'s whole bounding box (one
+solid block) versus taking the six painted `.ig-cmd` rows it actually draws,
+with the gaps between them. The row-level number is the honest one; both are
+far above 40% either way, and both were true of the live build.
+
+### Still open after this pass (verifier items 6-8)
+
+6. **Chapter 5 breaches requirement B(1)'s 25% cap on an ally cast** —
+   `vegnagun-tail.visibleInFrame` 0.66-0.67, because the panels yield only for
+   an *enemy* cursor.
+7. **Vegnagun's later parts and Shuyin are not staged at battle start**, so the
+   approved `s3.png` (a PART chip, "Vegnagun — Head") still has no live
+   measurement behind it.
+8. **The leader-line marker on every targetable enemy** is not implemented —
+   and it is **not part of option B**, which is what Bailey approved. It needs
+   Bailey's yes before anyone builds it (AGENTS.md rule 10).
+
+Also open, and belonging to the same family as 5: FFX-2's cursor is not fed
+its HUD's panels, so its name plate always docks below the figure. The
+mechanism is in the shared `TargetCursor`; only the wiring is missing.
+
+### How this pass was verified
+
+Its own vite dev server on port 5732 (started and stopped here), Playwright
+headless in GPU mode (`PYREFLY_BROWSER=gpu`) for every run, real key presses
+throughout, at 1280x720 and 1600x900. The baseline ran from a throwaway git
+worktree under `%TEMP%` — never a checkout, stash or reset in the shared tree.
+The probes are throwaway, under `critic/scratch/`
+(`prerelease-targeting.mjs`, `prerelease-party-lane.mjs`), and no product code
+lives in them. `npx tsc --noEmit` clean; `npx vitest run` **142 files / 4068
+tests, all green**.
