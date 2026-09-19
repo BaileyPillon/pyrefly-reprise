@@ -268,6 +268,20 @@ shows how easy it is for one menu to be left behind. One run of
 `critic/scratch/fix3-ffx2/esc-probe.mjs` pointed at a Chapter 1–3 fight settles
 it.
 
+**To the move-advisor track (`src/ui/common/MoveAdvisor.ts`) — the card
+overruns its band.** This is the one overlap left in the FFX-2 battle matrix
+and it is not the fence's. Measured on the `menu` state at 2000x1000:
+`advisor-card X fighter:paine 82.4x13.5` and `advisor-chip X fighter:paine
+61.5x20.9`. The fence this HUD publishes is right — it is parked past Paine's
+shoulder, it now includes the toggle chip's band above the card and the card's
+own skew lean, and every other state in the same run measures zero. What
+happens is that `layout()` is handed a band narrower than the card's minimum
+width (the girls on one side, the party column on the other) and resolves it by
+spilling *left*, back over the girl the fence was protecting. It needs to
+shrink, wrap or move up instead, and only that file can decide which. It is
+intermittent because it depends on where the formation is standing on the frame
+the card lays out: clean at 1280x720 and 1600x900 in the same run.
+
 **To `src/ui/common/EnemyIntent.ts`'s track — a real placement pass.**
 `intentPlacement.ts` exists only because `layout()` dodges obstacles in one
 greedy pass. Two components now steer through that module from the outside
