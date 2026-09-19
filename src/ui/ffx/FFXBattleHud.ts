@@ -850,7 +850,7 @@ export class FFXBattleHud implements HudPort {
       // every state — so every box above the party was measured down to a line
       // 35 grid px lower than the command window really reaches, and Chapter
       // 1's open band came out 24 grid px tall. The slab is its own rect below.
-      cmdArea: growToGrid(this.gridRect(this.commandMenu.stackEl), 1) ?? {
+      cmdArea: growToGrid(this.stageRect(this.commandMenu.stackEl), 1) ?? {
         left: 30,
         top: 205,
         right: 211,
@@ -862,12 +862,12 @@ export class FFXBattleHud implements HudPort {
       // keystroke. See `CMD_INFO_TOP`.
       cmdInfo: { ...CMD_INFO_SLOT },
       partyStatus:
-        growToGrid(this.gridRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
-      guide: growToGrid(this.gridRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),
-      sensor: growToGrid(this.gridRect(this.sensorPanel.el), 1),
-      intent: growToGrid(this.viewportRectToGrid(this.intent.el.querySelector<HTMLElement>('.eint__panel')), 4),
-      intentChip: growToGrid(this.viewportRectToGrid(this.intent.el.querySelector<HTMLElement>('.eint__toggle')), 4),
-      ctb: growToGrid(this.gridRect(this.ctbList.el), 1),
+        growToGrid(this.stageRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
+      guide: growToGrid(this.stageRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),
+      sensor: growToGrid(this.stageRect(this.sensorPanel.el), 1),
+      intent: growToGrid(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__panel')), 4),
+      intentChip: growToGrid(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__toggle')), 4),
+      ctb: growToGrid(this.stageRect(this.ctbList.el), 1),
       // Coarser again: the cast is the one input that moves on *every* frame
       // and is never a reason to re-solve, so its snap has to be wide enough
       // that an idle cycle cannot change it even when a panel opening does
@@ -930,15 +930,25 @@ export class FFXBattleHud implements HudPort {
   }
 
   /**
-   * An overlay child's box in grid px.
+   * **Any** element's box in the stage's own 640x360 grid px.
    *
-   * The enemy-intent slab is mounted on `this.overlay`, not on the scaled
-   * stage, because it is pinned to a projected actor and the projector answers
-   * in viewport pixels — so `offsetLeft` is viewport-space for that one panel
-   * and has to come back through the letterbox before it can be compared with
-   * anything else here.
+   * Every rect the advisor's solver is given goes through this, and it is not
+   * a stylistic preference: {@link gridRect} reads `offsetLeft`/`offsetTop`,
+   * which are relative to the element's **offset parent**, so it is only
+   * correct for a direct child of the scaled stage. The moment the command
+   * stack was handed over on its own rather than inside `.ffx-cmd-area` — which
+   * is `position: absolute` and therefore its children's offset parent — it
+   * started reporting a box at the stage's top-left corner, roughly
+   * x 0..188 / y 0..168, and that phantom rect sat across the exact band
+   * Chapter 1's card had just been given. The first browser pass after the
+   * rewrite caught it: all three chapters fell back to the 86px compact card
+   * with a 150px box free beside them.
+   *
+   * `getBoundingClientRect` is in viewport px for everything, so one division
+   * through the letterbox answers for a stage child, an overlay child and the
+   * enemy-intent slab alike.
    */
-  private viewportRectToGrid(el: HTMLElement | null): Rect | null {
+  private stageRect(el: HTMLElement | null): Rect | null {
     if (!el) return null;
     const b = el.getBoundingClientRect();
     if (b.width <= 0 || b.height <= 0) return null;
@@ -1009,17 +1019,6 @@ export class FFXBattleHud implements HudPort {
       out.push({ left: cx - half, right: cx + half, top, bottom });
     }
     return out;
-  }
-
-  /** An element's box in the stage's 640x360 grid px, or `null` if it is not laid out. */
-  private gridRect(el: HTMLElement | null): Rect | null {
-    if (!el || el.hidden || el.offsetWidth <= 0 || el.offsetHeight <= 0) return null;
-    return {
-      left: el.offsetLeft,
-      top: el.offsetTop,
-      right: el.offsetLeft + el.offsetWidth,
-      bottom: el.offsetTop + el.offsetHeight,
-    };
   }
 
   /** The presenter's projector, installed by `setProjector`. */
