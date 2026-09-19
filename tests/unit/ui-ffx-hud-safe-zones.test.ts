@@ -5,10 +5,16 @@ import { menuOwnsCancel } from '../../src/ui/common/menuCancel.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import {
   ADVISOR_CHIP_RESERVE,
+  advisorChipDock,
   advisorZone,
   GAP,
   MAX_ADVISOR_HEIGHT,
+  MAX_ADVISOR_WIDTH,
+  MIN_ADVISOR_HEIGHT,
   MIN_ADVISOR_WIDTH,
+  NARROW_ADVISOR_WIDTH,
+  SHELF_RIGHT,
+  SKEW,
   SPRITE_FOOT_MARGIN_RATIO,
   SPRITE_HALF_WIDTH_RATIO,
   SPRITE_TOP_MARGIN_RATIO,
@@ -35,13 +41,38 @@ import { openKimahriRage } from '../../src/ui/ffx/minigames/index.ts';
 
 // ---------------------------------------------------------------- measured
 
-/** The always-on chrome, identical in all three FFX chapters. */
+/**
+ * The always-on chrome, identical in all three FFX chapters, plus every
+ * optional panel up at once.
+ *
+ * `intent` and `ctb` joined this fixture with the fix-3 gate round: the
+ * enemy-intent slab is 150 x 168 grid px hung over the boss from y 4 and was
+ * not an input to `advisorZone` at all, which Chapter 1's shelf cleared by 1.6
+ * grid px of luck. Measured on the built preview at 1600x900, Chapter 1's first
+ * turn.
+ */
 const CHROME = {
   cmdArea: { left: 30.2, top: 204.5, right: 210.7, bottom: 334.2 },
   partyStatus: { left: 402.7, top: 258.3, right: 616.9, bottom: 348 },
   guide: { left: 21.3, top: 44, right: 153.3, bottom: 200 },
   sensor: { left: 191.7, top: 24, right: 308.3, bottom: 102 },
+  intent: { left: 344.2, top: 4, right: 494.2, bottom: 172.5 },
+  ctb: { left: 547.6, top: 49.8, right: 620.5, bottom: 200.4 },
 } as const;
+
+/**
+ * What is **actually** up on each chapter's first turn, measured on the same
+ * run. The Sensor card is the difference and it is the whole defect: FFX's
+ * `revealForSensorAuto` fires when the battle opens, `SensorPanel.hide()` has
+ * no caller, and so in Chapter 1 the scan result sits in the shelf's band for
+ * the entire fight. Chapters 2 and 3 never show it — their bosses keep their
+ * numbers — which is why only Chapter 1 shipped a sliced card.
+ */
+const LIVE: Record<string, Omit<typeof CHROME, 'sensor' | 'intent'> & { sensor: Rect | null; intent: Rect }> = {
+  'seymour-flux': { ...CHROME },
+  yunalesca: { ...CHROME, sensor: null, intent: { left: 347.8, top: 4, right: 497.8, bottom: 134.1 } },
+  'braskas-final-aeon': { ...CHROME, sensor: null, intent: { left: 347.8, top: 4, right: 497.8, bottom: 157.4 } },
+};
 
 /**
  * The party, measured live through the debug API at 1600x900, on the grid.
@@ -125,6 +156,55 @@ function overlaps(a: Rect, b: Rect): boolean {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
+/**
+ * The card as it is **painted**: the four corners of the sheared parallelogram.
+ *
+ * `skewX` slides each row by `SKEW * (y - the box's vertical centre)`, so the
+ * top edge ends up `SKEW * height / 2` right of the solved box and the bottom
+ * edge the same distance left of it.
+ */
+function cardQuad(zone: { left: number; width: number; bottom: number }, height: number): Array<[number, number]> {
+  const b = 360 - zone.bottom;
+  const t = b - height;
+  const d = (SKEW * height) / 2;
+  return [
+    [zone.left + d, t],
+    [zone.left + zone.width + d, t],
+    [zone.left + zone.width - d, b],
+    [zone.left - d, b],
+  ];
+}
+
+/** Does a painted parallelogram touch an axis-aligned rect? Rows the two share. */
+function quadHitsRect(quad: Array<[number, number]>, r: Rect): boolean {
+  const [tl, tr, br] = [quad[0]!, quad[1]!, quad[2]!];
+  const top = tl[1];
+  const bottom = br[1];
+  const yLo = Math.max(top, r.top);
+  const yHi = Math.min(bottom, r.bottom);
+  if (yHi <= yLo) return false;
+  // The shear is horizontal, so the card's edges at height y are its top edge
+  // slid by SKEW * (top - y). Both ends of the shared band bound the extremes.
+  for (const y of [yLo, yHi]) {
+    const slide = SKEW * (top - y);
+    const left = tl[0] + slide;
+    const right = tr[0] + slide;
+    if (left < r.right && right > r.left) return true;
+  }
+  return false;
+}
+
+/**
+ * The shortest the advisor card can render, in grid px, measured on the built
+ * preview at 1600x900 — the head line plus one move row, which is what the
+ * first turn of every chapter prints.
+ *
+ * The old `MIN_ADVISOR_HEIGHT` was 22 on the reasoning that this number was
+ * about 14. It is 31, and the eight grid px between those two are the sliced
+ * card Bailey reported.
+ */
+const CARD_MIN_MEASURED = 31;
+
 // ------------------------------------------------------------- advisorZone
 
 describe('the sprite rect the HUD reconstructs', () => {
@@ -147,9 +227,10 @@ describe('advisorZone', () => {
   for (const chapter of Object.keys(PARTY)) {
     describe(chapter, () => {
       const sprites = rectsFor(chapter);
+      const live = { ...LIVE[chapter]!, sprites };
 
       it('never puts the card on a party sprite, at any height the card can reach', () => {
-        const zone = advisorZone({ ...CHROME, sprites });
+        const zone = advisorZone(live);
         expect(zone).not.toBeNull();
         const box = cardRect(zone!, zone!.maxHeight);
         // Against the **painted** quad, not against the reconstruction the
@@ -160,40 +241,165 @@ describe('advisorZone', () => {
       });
 
       it('never puts the card on the command stack or the party-status column', () => {
-        const zone = advisorZone({ ...CHROME, sprites });
+        const zone = advisorZone(live);
         const box = cardRect(zone!, zone!.maxHeight);
         expect(overlaps(box, CHROME.cmdArea)).toBe(false);
         expect(overlaps(box, CHROME.partyStatus)).toBe(false);
       });
 
-      it('gives the card at least the width its chips need', () => {
-        expect(advisorZone({ ...CHROME, sprites })!.width).toBeGreaterThanOrEqual(MIN_ADVISOR_WIDTH);
+      it('never puts the card on the CTB queue or the enemy-intent slab', () => {
+        const zone = advisorZone(live);
+        const box = cardRect(zone!, zone!.maxHeight);
+        expect({ chapter, ctb: overlaps(box, CHROME.ctb) }).toMatchObject({ ctb: false });
+        expect({ chapter, intent: overlaps(box, live.intent) }).toMatchObject({ intent: false });
+      });
+
+      it('gives the card at least the width it can still be read at', () => {
+        const zone = advisorZone(live)!;
+        expect(zone.width).toBeGreaterThanOrEqual(NARROW_ADVISOR_WIDTH);
+        // The narrow pocket is the only placement allowed under the designed
+        // width, and only because the alternative on that screen is no card.
+        if (zone.kind !== 'pocket-narrow') expect(zone.width).toBeGreaterThanOrEqual(MIN_ADVISOR_WIDTH);
+      });
+
+      it('gives the card a box at least as tall as the card itself needs', () => {
+        // The regression this whole round is about. `CARD_MIN_MEASURED` is a
+        // hard number read off the built preview rather than a re-statement of
+        // the constant under test, so lowering `MIN_ADVISOR_HEIGHT` back to
+        // something the card does not fit in fails here too.
+        expect({ chapter, h: advisorZone(live)!.maxHeight }).toMatchObject({
+          h: expect.any(Number) as number,
+        });
+        expect(advisorZone(live)!.maxHeight).toBeGreaterThanOrEqual(CARD_MIN_MEASURED);
+        expect(advisorZone(live)!.maxHeight).toBeGreaterThanOrEqual(MIN_ADVISOR_HEIGHT);
       });
     });
   }
 
-  it('takes the shelf in all three chapters — no party leaves a usable pocket', () => {
-    // Against the party's real width the gap between the rightmost fighter and
-    // the party-status rail measures 93.5 (Chapter 1), none at all (Chapter 2)
-    // and 94.2 (Chapter 3) — all under the card's 132. The 96 floor the last
-    // round used to keep the card in the pocket was reading a sprite rect two
-    // measurement errors too narrow; see `SPRITE_HALF_WIDTH_RATIO`.
+  it('takes the shelf in chapters 2 and 3, and the narrow pocket in chapter 1', () => {
+    // Chapters 2 and 3 never raise the Sensor card, so their shelf runs from the
+    // stage's top rail down to the party's heads and offers the full 104.
+    // Chapter 1 does raise it, permanently, and what is left of its shelf is
+    // 24 grid px — so the card goes to the one piece of clear ground on that
+    // screen, the 93px pocket between Kimahri and the party-status column.
+    expect(
+      Object.fromEntries(
+        Object.keys(PARTY).map((c) => [c, advisorZone({ ...LIVE[c]!, sprites: rectsFor(c) })!.kind]),
+      ),
+    ).toEqual({
+      'seymour-flux': 'pocket-narrow',
+      yunalesca: 'shelf',
+      'braskas-final-aeon': 'shelf',
+    });
+  });
+
+  it('never hands back the 24px shelf that shipped the sliced card', () => {
+    // The exact board from the pre-deploy gate: Chapter 1, first turn, guide
+    // and Sensor and intent all up. The old solver answered
+    // `{ kind: 'shelf', maxHeight: 24.06 }` for a card whose shortest possible
+    // rendering is 31 grid px, and the card was painted cut through the middle
+    // of its own move line. Whatever this returns now, it is never that.
+    const zone = advisorZone({ ...LIVE['seymour-flux']!, sprites: rectsFor('seymour-flux') })!;
+    expect(zone.kind).not.toBe('shelf');
+    expect(zone.maxHeight).toBeGreaterThanOrEqual(31);
+    expect(zone.maxHeight).toBeGreaterThanOrEqual(MIN_ADVISOR_HEIGHT);
+  });
+
+  it('declines rather than return any box shorter than the card, at every band', () => {
+    // A property over the whole family of boards the three chapters can reach:
+    // push the Sensor card's bottom edge down one grid px at a time, which is
+    // the thing that squeezed Chapter 1's shelf, and assert the answer is
+    // always either null or a box the card fits in — never something between.
     for (const chapter of Object.keys(PARTY)) {
-      expect({ chapter, kind: advisorZone({ ...CHROME, sprites: rectsFor(chapter) })!.kind })
-        .toMatchObject({ kind: 'shelf' });
+      for (let bottom = 24; bottom <= 200; bottom++) {
+        const zone = advisorZone({
+          ...LIVE[chapter]!,
+          sensor: { left: 191.7, top: 24, right: 308.3, bottom },
+          sprites: rectsFor(chapter),
+        });
+        if (zone === null) continue;
+        expect({ chapter, bottom, h: zone.maxHeight, w: zone.width }).toMatchObject({
+          h: expect.any(Number) as number,
+        });
+        expect(zone.maxHeight).toBeGreaterThanOrEqual(MIN_ADVISOR_HEIGHT);
+        expect(zone.width).toBeGreaterThanOrEqual(NARROW_ADVISOR_WIDTH);
+        expect(zone.width).toBeLessThanOrEqual(MAX_ADVISOR_WIDTH);
+      }
     }
+  });
+
+  it('stands beside the enemy-intent slab rather than ducking under it', () => {
+    // Measured at 1280x720, and this is the whole reason the sub-band search
+    // exists: the slab is pinned to the boss through the render camera, so its
+    // grid-space left edge is 347.8 at 1600x900 and **339.7** at 1280x720. At
+    // 347.8 it is right of `SHELF_RIGHT` and invisible to the shelf; at 339.7 it
+    // is 0.3 grid px inside it, and a solver that answers "then the slab is my
+    // ceiling" hands Chapter 2 a 23px box at one viewport and 104 at the other,
+    // for the same board. Stopping a gap short of the slab costs 6px of width.
+    const sprites = rectsFor('yunalesca');
+    const tucked: Rect = { left: 339.7, top: 4, right: 489.7, bottom: 134.1 };
+    const zone = advisorZone({ ...LIVE['yunalesca']!, intent: tucked, sprites })!;
+    expect(zone.kind).toBe('shelf');
+    expect(zone.maxHeight).toBe(MAX_ADVISOR_HEIGHT);
+    expect(zone.left + zone.width).toBeLessThanOrEqual(tucked.left - GAP + 0.001);
+    // And it is the *same* box the wider viewport solves, bar the gap it pays
+    // to stand clear of the slab (6) and the 0.3 the slab reaches inside
+    // SHELF_RIGHT at this viewport.
+    const wide = advisorZone({ ...LIVE['yunalesca']!, sprites })!;
+    expect(zone.bottom).toBe(wide.bottom);
+    expect(zone.maxHeight).toBe(wide.maxHeight);
+    // Within the gap it pays to stand clear of the slab, the 0.3 the slab
+    // reaches inside SHELF_RIGHT at this viewport, and the couple of px of
+    // difference in the shear each rail reserves.
+    expect(wide.width - zone.width).toBeLessThanOrEqual(GAP + (SHELF_RIGHT - tucked.left) + 2);
+  });
+
+  it('keeps the card’s painted corners off the panels the skew reaches', () => {
+    // The card is sheared and `.ig-stat-list`, `.sgd__panel` and `.ffx-cmd-area`
+    // are not, so clearing them as *boxes* is not clearing them. Before
+    // `shearedRails` the solved boxes were a clean 6 grid px clear and the
+    // painted shapes were not: Chapter 1's top-right corner reached 0.8 px into
+    // the party-status column and Chapter 2's bottom-left corner 0.5 px into the
+    // strategy guide, both measured in Chromium off the built bundle.
+    //
+    // Checked at every height the density ladder can settle on, because which
+    // corner reaches furthest, and how far, both move with the card's height.
+    for (const chapter of Object.keys(PARTY)) {
+      const zone = advisorZone({ ...LIVE[chapter]!, sprites: rectsFor(chapter) })!;
+      for (let h = 8; h <= zone.maxHeight; h += 4) {
+        const card = cardQuad(zone, h);
+        for (const [name, r] of [
+          ['party status', CHROME.partyStatus],
+          ['strategy guide', CHROME.guide],
+          ['command area', CHROME.cmdArea],
+          ['CTB queue', CHROME.ctb],
+          ['enemy intent', LIVE[chapter]!.intent],
+          ...PARTY[chapter]!.map((s) => [`sprite ${s.name}`, s.quad] as const),
+        ] as Array<readonly [string, Rect]>) {
+          expect({ chapter, h, panel: name, hit: quadHitsRect(card, r) }).toMatchObject({ hit: false });
+        }
+      }
+    }
+  });
+
+  it('clamps the band to the width the card was designed at', () => {
+    // Guide off: the shelf measures 304 grid px, and a 304px NEXT BEST MOVE
+    // slab is a letterbox rather than a card.
+    const zone = advisorZone({ ...LIVE['yunalesca']!, guide: null, sprites: rectsFor('yunalesca') })!;
+    expect(zone.width).toBe(MAX_ADVISOR_WIDTH);
   });
 
   it('still takes the pocket when an encounter does leave one', () => {
     // The pocket is not dead code: a party standing left of x 250 leaves 146
     // grid px of it, and that is the placement nearest where the card shipped.
     const tucked: Rect[] = [
-      { left: 60, top: 180, right: 150, bottom: 320 },
-      { left: 140, top: 170, right: 250, bottom: 330 },
+      { left: 40, top: 180, right: 130, bottom: 320 },
+      { left: 120, top: 170, right: 220, bottom: 330 },
     ];
     const zone = advisorZone({ ...CHROME, sprites: tucked })!;
     expect(zone.kind).toBe('pocket');
-    expect(zone.left).toBeGreaterThanOrEqual(250 + GAP);
+    expect(zone.left).toBeGreaterThanOrEqual(220 + GAP);
+    expect(zone.width).toBeGreaterThanOrEqual(MIN_ADVISOR_WIDTH);
   });
 
   it('keeps room above the card for its own chip', () => {
@@ -207,11 +413,16 @@ describe('advisorZone', () => {
   });
 
   it('drops the shelf below the Sensor card rather than under it', () => {
+    // A Sensor card shallow enough to leave the shelf standing: the deep one
+    // Chapter 1 really shows leaves 24px and is declined outright, which is the
+    // separate case above.
     const sprites = rectsFor('yunalesca');
-    const withSensor = advisorZone({ ...CHROME, sprites })!;
-    const noSensor = advisorZone({ ...CHROME, sensor: null, sprites })!;
+    const shallow: Rect = { left: 191.7, top: 24, right: 308.3, bottom: 60 };
+    const withSensor = advisorZone({ ...LIVE['yunalesca']!, sensor: shallow, sprites })!;
+    const noSensor = advisorZone({ ...LIVE['yunalesca']!, sprites })!;
+    expect(withSensor.kind).toBe('shelf');
     expect(withSensor.maxHeight).toBeLessThanOrEqual(noSensor.maxHeight);
-    expect(cardRect(withSensor, withSensor.maxHeight).top).toBeGreaterThanOrEqual(CHROME.sensor.bottom);
+    expect(cardRect(withSensor, withSensor.maxHeight).top).toBeGreaterThanOrEqual(shallow.bottom);
   });
 
   it('clears the command stack when a submenu grows it up into the shelf', () => {
@@ -219,7 +430,7 @@ describe('advisorZone', () => {
     // which is inside Chapter 2's shelf. The card has to come up with it.
     const sprites = rectsFor('yunalesca');
     const open = { ...CHROME.cmdArea, top: 177.8 };
-    const zone = advisorZone({ ...CHROME, cmdArea: open, sprites })!;
+    const zone = advisorZone({ ...LIVE['yunalesca']!, cmdArea: open, sprites })!;
     const box = cardRect(zone, zone.maxHeight);
     expect(overlaps(box, open)).toBe(false);
     expect(box.bottom).toBeLessThanOrEqual(open.top - GAP + 0.001);
@@ -227,8 +438,8 @@ describe('advisorZone', () => {
 
   it('uses the whole band when the guide is off, since its rail is gone', () => {
     const sprites = rectsFor('yunalesca');
-    const on = advisorZone({ ...CHROME, sprites })!;
-    const off = advisorZone({ ...CHROME, guide: null, sprites })!;
+    const on = advisorZone({ ...LIVE['yunalesca']!, sprites })!;
+    const off = advisorZone({ ...LIVE['yunalesca']!, guide: null, sprites })!;
     expect(off.left).toBeLessThan(on.left);
     expect(off.width).toBeGreaterThan(on.width);
   });
@@ -239,30 +450,66 @@ describe('advisorZone', () => {
   });
 
   it('keeps the measured gap between the card and whatever bounds it', () => {
-    const sprites = rectsFor('seymour-flux');
-    const zone = advisorZone({ ...CHROME, sprites })!;
+    // Chapter 2, the shelf: right of the guide's rail, left of the party-status
+    // column, standing `GAP` above the highest head under it.
+    const sprites = rectsFor('yunalesca');
+    const zone = advisorZone({ ...LIVE['yunalesca']!, sprites })!;
     const headsTop = Math.min(...sprites.map((r) => r.top));
     expect(zone.left).toBeGreaterThanOrEqual(CHROME.guide.right + GAP - 0.001);
     expect(zone.left + zone.width).toBeLessThanOrEqual(CHROME.partyStatus.left - GAP + 0.001);
     expect(360 - zone.bottom).toBeLessThanOrEqual(headsTop - GAP + 0.001);
   });
 
+  it('keeps the measured gap between the narrow pocket and the party', () => {
+    // Chapter 1, the pocket: it starts a full `GAP` right of Kimahri's
+    // reconstructed edge and stops a full `GAP` short of the party-status rail.
+    const sprites = rectsFor('seymour-flux');
+    const zone = advisorZone({ ...LIVE['seymour-flux']!, sprites })!;
+    const spritesRight = Math.max(...sprites.map((r) => r.right));
+    expect(zone.left).toBeGreaterThanOrEqual(spritesRight + GAP - 0.001);
+    expect(zone.left + zone.width).toBeLessThanOrEqual(CHROME.partyStatus.left - GAP + 0.001);
+    // And its top clears the enemy-intent slab, which is what bounds it there.
+    expect(cardRect(zone, zone.maxHeight).top).toBeGreaterThanOrEqual(CHROME.intent.bottom + GAP - 0.001);
+  });
+
   it('never offers more height than the card was designed at', () => {
-    // The pocket's ceiling in chapters 1 and 3 is the stage's own top, so the
-    // raw room is ~220px — three times the card. Without the clamp the card
-    // grows to fill it and the NEXT BEST MOVE slab becomes a column.
+    // The pocket's raw room in chapters 1 and 3 is ~144px — well over the
+    // card. Without the clamp the card grows to fill it and the NEXT BEST MOVE
+    // slab becomes a column.
     for (const chapter of Object.keys(PARTY)) {
-      expect(advisorZone({ ...CHROME, sprites: rectsFor(chapter) })!.maxHeight).toBeLessThanOrEqual(MAX_ADVISOR_HEIGHT);
+      expect(advisorZone({ ...LIVE[chapter]!, sprites: rectsFor(chapter) })!.maxHeight).toBeLessThanOrEqual(
+        MAX_ADVISOR_HEIGHT,
+      );
     }
   });
 
-  it('still hands back the smaller room when the zone is the tighter of the two', () => {
-    // Chapter 2's shelf is bounded above by the Sensor card and below by the
-    // party's heads; that is less than MAX_ADVISOR_HEIGHT and must survive.
-    const zone = advisorZone({ ...CHROME, sprites: rectsFor('yunalesca') })!;
-    const headsTop = Math.min(...rectsFor('yunalesca').map((r) => r.top));
-    expect(zone.maxHeight).toBe(headsTop - GAP - (CHROME.sensor.bottom + GAP) - ADVISOR_CHIP_RESERVE);
+  it('still hands back the smaller room when that is honestly all there is', () => {
+    // A shelf bounded above by a shallow Sensor card and below by the party's
+    // heads: less than MAX_ADVISOR_HEIGHT, more than the card's minimum, and it
+    // must survive rather than be rounded up to a box that is not there.
+    const shallow: Rect = { left: 191.7, top: 24, right: 308.3, bottom: 60 };
+    const sprites = rectsFor('yunalesca');
+    const zone = advisorZone({ ...LIVE['yunalesca']!, sensor: shallow, sprites })!;
+    const headsTop = Math.min(...sprites.map((r) => r.top));
+    expect(zone.maxHeight).toBe(headsTop - GAP - (shallow.bottom + GAP) - ADVISOR_CHIP_RESERVE);
     expect(zone.maxHeight).toBeLessThan(MAX_ADVISOR_HEIGHT);
+    expect(zone.maxHeight).toBeGreaterThanOrEqual(MIN_ADVISOR_HEIGHT);
+  });
+
+  it('parks the chip in a band no card could use, when it declines', () => {
+    // Chapter 1 with every panel up and the party standing across the pocket
+    // too: nothing holds the card, and the chip still must not fall back to the
+    // stylesheet's anchor, which is on Tidus.
+    const sprites = [...rectsFor('seymour-flux'), { left: 300, top: 150, right: 400, bottom: 340 }];
+    const input = { ...LIVE['seymour-flux']!, sprites };
+    expect(advisorZone(input)).toBeNull();
+    const dock = advisorChipDock(input)!;
+    expect(dock).not.toBeNull();
+    // It sits in the 24px band under the Sensor card — too short for the card,
+    // roomy for an 8px chip — and left of every sprite's column.
+    expect(dock.left).toBeGreaterThanOrEqual(CHROME.guide.right + GAP - 0.001);
+    expect(360 - dock.bottom).toBeLessThanOrEqual(Math.min(...sprites.map((r) => r.top)) - GAP + 0.001);
+    expect(360 - dock.bottom).toBeGreaterThanOrEqual(CHROME.sensor.bottom + GAP + ADVISOR_CHIP_RESERVE - 0.001);
   });
 
   it('refuses a pocket too short to hold the card rather than squeezing one in', () => {
@@ -278,8 +525,8 @@ describe('advisorZone', () => {
   });
 
   it('lifts the pocket clear of the Sensor card when the two share a column', () => {
-    const tucked: Rect[] = [{ left: 60, top: 180, right: 250, bottom: 330 }];
-    const low: Rect = { left: 256, top: 24, right: 396, bottom: 180 };
+    const tucked: Rect[] = [{ left: 40, top: 180, right: 220, bottom: 330 }];
+    const low: Rect = { left: 226, top: 24, right: 396, bottom: 180 };
     const withSensor = advisorZone({ ...CHROME, sensor: low, sprites: tucked })!;
     expect(withSensor.kind).toBe('pocket');
     expect(cardRect(withSensor, withSensor.maxHeight).top).toBeGreaterThanOrEqual(low.bottom);
@@ -364,6 +611,128 @@ describe('a title slab never outlives its decision', () => {
     expect(banner.hidden).toBe(false);
     hud.onEvent({ type: 'turn-start', actorId: 'tidus', seq: 2 } as never);
     expect(banner.hidden).toBe(true);
+  });
+});
+
+// ------------------------------------------------- the HUD applying the zone
+
+/** The advisor's card and chip, as `placeAdvisor` sees them. */
+function advisorEls(hud: FFXBattleHud): { root: HTMLElement; card: HTMLElement; chip: HTMLElement } {
+  return {
+    root: hud.el.querySelector<HTMLElement>('[data-role="move-advisor"]')!,
+    card: hud.el.querySelector<HTMLElement>('[data-role="move-advisor-card"]')!,
+    chip: hud.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]')!,
+  };
+}
+
+/**
+ * A projector that answers with one fighter big enough to cover the stage.
+ *
+ * jsdom lays nothing out, so every HUD panel measures zero and `advisorZone`
+ * sees an empty screen — which is a solvable one. The party is the only input
+ * the HUD builds from the projector rather than from `offsetWidth`, so it is
+ * the one that can be driven from a test, and a fighter that fills the frame is
+ * the board on which every placement honestly fails.
+ */
+function wallProjector(): (id: string, anchor: string) => { x: number; y: number } {
+  // `hudScale()` falls back to the window (1024x768 in jsdom) => scale 1.6,
+  // origin (-512, -288). These two points reconstruct to a rect covering the
+  // whole 640x360 grid; see `partySpriteRects`.
+  return (_id, anchor) => (anchor === 'head' ? { x: 0, y: -288 } : { x: 0, y: 1760 });
+}
+
+describe('the FFX HUD applying the advisor zone', () => {
+  it('gives the card the whole box and never a fraction of one', () => {
+    const hud = mountHud();
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    hud.update(16);
+    const { card, root } = advisorEls(hud);
+    expect(hud.advisorPlacement).not.toBeNull();
+    expect(hud.advisorPlacement!.maxHeight).toBeGreaterThanOrEqual(MIN_ADVISOR_HEIGHT);
+    expect(root.dataset['zone']).toBe(hud.advisorPlacement!.kind);
+    expect(parseFloat(card.style.maxHeight)).toBeCloseTo(hud.advisorPlacement!.maxHeight, 1);
+  });
+
+  it('holds one placement for the whole decision, however many frames it takes', () => {
+    // The flapping half of the report: the zone's inputs include the party's
+    // projected rects, and re-solving per frame flipped the card between the
+    // shelf and its own placement several times a second.
+    const hud = mountHud();
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    hud.update(16);
+    const first = hud.advisorPlacement;
+    const { card } = advisorEls(hud);
+    const geometry = [card.style.left, card.style.width, card.style.bottom, card.style.maxHeight].join();
+    for (let i = 0; i < 60; i++) {
+      hud.update(16);
+      expect(hud.advisorPlacement).toBe(first);
+    }
+    expect([card.style.left, card.style.width, card.style.bottom, card.style.maxHeight].join()).toBe(geometry);
+  });
+
+  it('does not re-solve because the party moved inside a decision', () => {
+    // The acting character steps forward on their turn. A first attempt at the
+    // hold re-solved whenever the party's projected union drifted more than a
+    // few grid px, and the live matrix caught it at Chapter 1's second decision
+    // with three different boxes inside one turn. Every way the party can
+    // genuinely relocate is a command, and a command ends the decision.
+    const hud = mountHud();
+    hud.setProjector(((_id: string, anchor: string) =>
+      anchor === 'head' ? { x: -400, y: -200 } : { x: -400, y: 100 }) as never);
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    hud.update(16);
+    const first = hud.advisorPlacement;
+    expect(first).not.toBeNull();
+
+    // The whole party takes a long step to the right: 100 viewport px, which is
+    // 62 grid px at this scale — far past any drift threshold worth having.
+    hud.setProjector(((_id: string, anchor: string) =>
+      anchor === 'head' ? { x: -300, y: -200 } : { x: -300, y: 100 }) as never);
+    for (let i = 0; i < 30; i++) hud.update(16);
+    expect(hud.advisorPlacement).toBe(first);
+  });
+
+  it('solves again when the next decision opens', () => {
+    const hud = mountHud();
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    hud.update(16);
+    const first = hud.advisorPlacement;
+    void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+    hud.update(16);
+    expect(hud.advisorPlacement).not.toBe(first);
+    expect(hud.advisorPlacement).toMatchObject({ kind: first!.kind, maxHeight: first!.maxHeight });
+  });
+
+  it('takes the card down rather than slice it when nothing fits', () => {
+    const hud = mountHud();
+    hud.setProjector(wallProjector() as never);
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    hud.update(16);
+    const { card, root, chip } = advisorEls(hud);
+    expect(hud.advisorPlacement).toBeNull();
+    expect(card.hidden).toBe(true);
+    expect(root.dataset['zone']).toBe('none');
+    // The chip is the whole panel in this state, so it stays on the field.
+    expect(chip.hidden).toBe(false);
+  });
+
+  it('brings the card back the moment a box exists again', () => {
+    // A decline is a statement about this frame's screen, not a latch: the
+    // Sensor card comes down, a member is KO'd out of the band, the player
+    // switches the guide off, and the card is owed its box again.
+    const hud = mountHud();
+    hud.setProjector(wallProjector() as never);
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+    hud.update(16);
+    const { card, root } = advisorEls(hud);
+    expect(card.hidden).toBe(true);
+
+    hud.setProjector((() => null) as never);
+    void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+    hud.update(16);
+    expect(hud.advisorPlacement).not.toBeNull();
+    expect(card.hidden).toBe(false);
+    expect(root.dataset['zone']).not.toBe('none');
   });
 });
 

@@ -294,3 +294,29 @@
 .mad__toggle:focus-visible b {
   color: var(--ig-ink);
 }
+
+/* ------------------------------------------------------- the declined state */
+
+/* `FFXBattleHud.placeAdvisor` writes `data-zone` on the root every frame:
+   which of `hudSafeZones.ts`'s placements the card won, or `none` when the
+   screen was too full to hold a box the whole card fits in and the card was
+   taken down rather than sliced.
+
+   In that state the chip is the entire panel, so it must not offer to *hide*
+   something that is not on screen — `MoveAdvisor.applyVisible` writes "hide
+   moves" whenever the player's preference is on, and it has no way to know the
+   HUD declined. The label is swapped here rather than in the component because
+   only the FFX HUD has zones, and FFX-2 (which shares this stylesheet and never
+   sets `data-zone`) must keep the plain toggle.
+
+   Only the label changes: the key hint, the geometry and the click target are
+   the chip's own, and pressing N still stores the preference that decides what
+   happens the moment a zone comes back. */
+.mad[data-zone='none'] .mad__toggle span {
+  display: none;
+}
+.mad[data-zone='none'] .mad__toggle::after {
+  content: 'no room';
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse));
+}

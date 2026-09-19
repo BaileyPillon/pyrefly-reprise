@@ -24,16 +24,41 @@ import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import {
+  advisorChipDock,
   advisorZone,
   SPRITE_FOOT_MARGIN_RATIO,
   SPRITE_HALF_WIDTH_RATIO,
   SPRITE_TOP_MARGIN_RATIO,
   STAGE,
+  type AdvisorZone,
   type Rect,
 } from './hudSafeZones.ts';
 
 /** Clearance between the advisor card's top edge and its chip, in grid px. */
 const ADVISOR_CHIP_GAP = 2;
+
+/** What `solveAdvisorPlacement` holds for the length of one decision. */
+interface HeldAdvisorPlacement {
+  key: string;
+  zone: AdvisorZone | null;
+  chip: { left: number; bottom: number } | null;
+}
+
+/** A snapped rect's identity, for the placement key. */
+function rectKey(r: Rect | null): string {
+  return r ? `${r.left},${r.top},${r.right},${r.bottom}` : '-';
+}
+
+/** A rect snapped **outwards** to a multiple of `q`, so it never shrinks. */
+function growToGrid(r: Rect | null, q: number): Rect | null {
+  if (!r) return null;
+  return {
+    left: Math.floor(r.left / q) * q,
+    top: Math.floor(r.top / q) * q,
+    right: Math.ceil(r.right / q) * q,
+    bottom: Math.ceil(r.bottom / q) * q,
+  };
+}
 
 /** Grid px between the parked `E ENEMY MOVE` chip and the CTB queue's top edge. */
 const CHIP_DOCK_GAP = 11;
@@ -117,7 +142,22 @@ export class FFXBattleHud implements HudPort {
   /** Whoever's `turn-start`/`action-start` fired most recently, for the message banner's name slab. `message` events carry no actor of their own. */
   private currentActorId: CombatantId | null = null;
   private mounted = false;
-  private readonly onResize = (): void => this.layout();
+  /**
+   * Bumped every time a decision opens or closes, so the advisor's placement is
+   * solved once per decision rather than once per frame. See
+   * `solveAdvisorPlacement` for why that matters.
+   */
+  private advisorDecisionSeq = 0;
+  private heldAdvisor: HeldAdvisorPlacement | null = null;
+  /** The box last written to the card, so a new one can be fitted on arrival. */
+  private appliedAdvisorBox = '';
+  private readonly onResize = (): void => {
+    this.layout();
+    // A resize is the one layout change that moves every rect at once, and the
+    // letterbox scale is in the placement key anyway — but the party's
+    // projected rects lag it by a frame, so drop the held placement outright.
+    this.heldAdvisor = null;
+  };
 
   constructor() {
     installInkGoldStyles();
@@ -272,6 +312,7 @@ export class FFXBattleHud implements HudPort {
     // its promise, which is why the clear sits in a `finally`.
     // The advisor's card explains the same decision and follows the same
     // lifetime, so it opens and closes with the guide's NEXT line.
+    this.advisorDecisionSeq++;
     if (this.lastState) {
       this.guide.showDecision(actorId, commands, this.lastState);
       this.advisor.showDecision(actorId, commands, this.lastState);
@@ -287,6 +328,7 @@ export class FFXBattleHud implements HudPort {
     } finally {
       this.guide.clearDecision();
       this.advisor.clearDecision();
+      this.advisorDecisionSeq++;
     }
   }
 
@@ -460,7 +502,8 @@ export class FFXBattleHud implements HudPort {
   // ------------------------------------------------------------- safe zones
 
   /**
-   * Move the advisor card (and its chip) into the zone `hudSafeZones.ts` picks.
+   * Move the advisor card (and its chip) into the zone `hudSafeZones.ts` picks,
+   * or take the card down when there is no zone it fits in.
    *
    * Runs after `MoveAdvisor.update`, so the inline `left`/`width`/`bottom` it
    * writes are the ones that stand. Everything is read and written in the
@@ -468,9 +511,15 @@ export class FFXBattleHud implements HudPort {
    * `offsetLeft`/`offsetWidth` are already grid units, while the projector
    * answers in viewport px and has to be divided back through the letterbox.
    *
-   * A no-op when no zone fits — the card then keeps the advisor's own
-   * placement, because a visible overlap is easier to see and report than a
-   * card parked off the grid.
+   * **A declined zone takes the card down.** It used to be a no-op, which left
+   * the card at the advisor's own anchor — in the middle of the party — and
+   * that is only half of what went wrong: a zone that *was* returned could be
+   * 24 grid px tall against a card that needs 31, and the card is written to
+   * scroll with no scrollbar and a mask fade, so the player got a headline and
+   * the top half of one line of glyphs [Bailey, pre-deploy gate 2026-09-18].
+   * `hudSafeZones.MIN_ADVISOR_HEIGHT` is what makes the first case impossible;
+   * this is what makes the second honest. The chip alone is a complete state —
+   * it says what key brings the card back — and a sliced card is not.
    *
    * The **chip is placed whether the card is up or not**. `MoveAdvisor`
    * deliberately clears the chip's inline `left` when the card goes away so it
@@ -484,31 +533,175 @@ export class FFXBattleHud implements HudPort {
     const card = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-card"]');
     const chip = this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]');
     if (!card) return;
-    const cardUp = !card.hidden && card.offsetWidth > 0;
 
-    const zone = advisorZone({
-      cmdArea: this.gridRect(this.cmdAreaEl) ?? { left: 30, top: 205, right: 211, bottom: 334 },
-      partyStatus: this.gridRect(this.partyStatus.el) ?? { left: 403, top: 258, right: 617, bottom: 348 },
-      guide: this.gridRect(this.el.querySelector<HTMLElement>('.sgd__panel')),
-      sensor: this.gridRect(this.sensorPanel.el),
-      sprites: this.partySpriteRects(),
-    });
-    if (!zone) return;
+    const held = this.solveAdvisorPlacement();
+    const zone = held.zone;
+    const cardUp = this.advisor.isVisible && zone !== null;
 
-    if (cardUp) {
-      card.style.left = `${zone.left.toFixed(2)}px`;
-      card.style.width = `${zone.width.toFixed(2)}px`;
-      card.style.bottom = `${zone.bottom.toFixed(2)}px`;
-      card.style.maxHeight = `${zone.maxHeight.toFixed(2)}px`;
-      card.dataset['zone'] = zone.kind;
+    // `MoveAdvisor.applyVisible` is the only other writer of this flag and it
+    // only runs on a toggle, so owning it per frame here is safe: the card
+    // comes back the moment a zone does.
+    card.hidden = !cardUp;
+    this.advisor.el.dataset['zone'] = zone ? zone.kind : 'none';
+
+    if (zone && cardUp) {
+      const applied = `${zone.kind}@${zone.left}@${zone.width}@${zone.bottom}@${zone.maxHeight}`;
+      this.writeAdvisorBox(card, zone);
+      if (applied !== this.appliedAdvisorBox) {
+        // **Fit the card to the box in the same frame it is given it.**
+        //
+        // `MoveAdvisor.update` measures the card against the box that was on
+        // screen for the *previous* frame — deliberately, because that is the
+        // box the player saw — and `placeAdvisor` runs after it. So on the one
+        // frame a new box is applied, the card is painted at the density the
+        // old box earned, and if the new box is the smaller of the two that
+        // frame is a clipped card. It is a single frame, and a screenshot of a
+        // Chapter 1 turn where the card returned from a declined zone caught it.
+        //
+        // Ticking the advisor again closes the gap: `fitCard` now measures the
+        // box just written and walks its ladder against it. `update` ends by
+        // re-running the advisor's own `layout()`, which overwrites the card's
+        // left/width/bottom with its anchor geometry, so the box is written a
+        // second time afterwards. `maxHeight` survives — `layout` does not set
+        // it — which is what `fitCard` needed in between.
+        this.advisor.update(0);
+        this.writeAdvisorBox(card, zone);
+        this.appliedAdvisorBox = applied;
+      }
+    } else {
+      delete card.dataset['zone'];
+      this.appliedAdvisorBox = '';
     }
     if (chip) {
       // With the card up the chip rides just above it; with the card away it
-      // takes the card's own anchor, which is the one place in the zone that is
-      // known to be clear of both the party and the chrome.
-      chip.style.left = `${zone.left.toFixed(2)}px`;
-      chip.style.bottom = `${(cardUp ? zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP : zone.bottom).toFixed(2)}px`;
+      // takes the card's own anchor, or — when the card was declined outright —
+      // whatever band `advisorChipDock` found, which needs far less room.
+      const dock = zone
+        ? { left: zone.left, bottom: cardUp ? zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP : zone.bottom }
+        : held.chip;
+      if (dock) {
+        chip.style.left = `${dock.left.toFixed(2)}px`;
+        chip.style.bottom = `${dock.bottom.toFixed(2)}px`;
+      }
     }
+  }
+
+  /** The four inline values `placeAdvisor` writes, in one statement. */
+  private writeAdvisorBox(card: HTMLElement, zone: AdvisorZone): void {
+    card.style.left = `${zone.left.toFixed(2)}px`;
+    card.style.width = `${zone.width.toFixed(2)}px`;
+    card.style.bottom = `${zone.bottom.toFixed(2)}px`;
+    card.style.maxHeight = `${zone.maxHeight.toFixed(2)}px`;
+    card.dataset['zone'] = zone.kind;
+  }
+
+  /**
+   * The placement for the decision that is open, solved once and then held.
+   *
+   * Re-solving every frame is what made the card teleport. The zone's inputs
+   * include the party's projected rects, and a sprite's idle animation breathes
+   * a pixel or two either way, which is enough to flip a band from just-solvable
+   * to just-not several times a second: the card jumped between the shelf and
+   * its own bottom-right placement, changing width as it went, while the player
+   * was reading it [advisor track, `docs/handoff/fix3-advisor.md` §1]. It also
+   * fights `MoveAdvisor.fitCard`, which re-walks its density ladder whenever the
+   * width it is measured against moves by more than 4px.
+   *
+   * So the placement is keyed on the things that are genuinely *layout*: which
+   * decision is open, the letterbox, and every panel's box rounded to the grid's
+   * own pixel. A submenu opening, the Sensor card arriving, the guide being
+   * switched off and a window resize all change that key and re-solve.
+   *
+   * **Where the party is standing is deliberately not in the key.** It is an
+   * input to the zone, and it is read afresh on every re-solve, but it never
+   * *causes* one. A first attempt re-solved when the party's projected union
+   * drifted more than 8 grid px, on the reasoning that an idle cycle breathes a
+   * sprite by less than a pixel while a KO moves one by tens — and the live
+   * matrix failed on it at Chapter 1's second decision, three different boxes
+   * inside one turn, because the acting character steps forward. Every way the
+   * party can genuinely relocate — a KO, a switch, an Overdrive — is a command
+   * that *ends the decision*, and the decision ending is already in the key.
+   */
+  private solveAdvisorPlacement(): HeldAdvisorPlacement {
+    // **Everything is snapped to whole grid px before it is used**, not merely
+    // before it is hashed. A zone solved from raw rects is a continuous
+    // function of them, so a panel settling half a pixel — or a boss breathing,
+    // which moves the intent slab through the render camera — re-solved to a
+    // box one pixel along, and the card stepped sideways inside a decision that
+    // had not changed. Snapped, the zone is a pure function of the key below:
+    // re-solving without a real change cannot produce a different answer.
+    //
+    // Outwards, never inwards, so a snapped obstacle is never smaller than the
+    // panel it stands for. The intent slab gets a coarser quantum because it is
+    // the only input that moves *every frame*.
+    const input = {
+      cmdArea: growToGrid(this.gridRect(this.cmdAreaEl), 1) ?? { left: 30, top: 205, right: 211, bottom: 334 },
+      partyStatus:
+        growToGrid(this.gridRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
+      guide: growToGrid(this.gridRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),
+      sensor: growToGrid(this.gridRect(this.sensorPanel.el), 1),
+      intent: growToGrid(this.viewportRectToGrid(this.intent.el.querySelector<HTMLElement>('.eint__panel')), 4),
+      ctb: growToGrid(this.gridRect(this.ctbList.el), 1),
+      // Coarser again: the party is the one input that moves on *every* frame
+      // and is never a reason to re-solve, so its snap has to be wide enough
+      // that an idle cycle cannot change it even when a panel opening does
+      // force a fresh solve mid-decision. 4 grid px costs the card up to 4 of
+      // the pocket's 90 and buys a pocket that does not breathe.
+      sprites: this.partySpriteRects().map((r) => growToGrid(r, 4)!),
+    };
+    const key = [
+      this.advisorDecisionSeq,
+      this.hudScale().toFixed(3),
+      rectKey(input.cmdArea),
+      rectKey(input.partyStatus),
+      rectKey(input.guide),
+      rectKey(input.sensor),
+      rectKey(input.intent),
+      rectKey(input.ctb),
+      // The party's *positions* are deliberately absent — see below. Their
+      // number is not: a KO or a switch changes it, and both are worth a fresh
+      // solve on the frame they land.
+      input.sprites.length,
+    ].join('|');
+
+    const held = this.heldAdvisor;
+    if (held && held.key === key) return held;
+
+    const solved: HeldAdvisorPlacement = { key, zone: advisorZone(input), chip: null };
+    if (!solved.zone) solved.chip = advisorChipDock(input);
+    this.heldAdvisor = solved;
+    return solved;
+  }
+
+  /** The advisor's held placement, for tests, the e2e harness and the debug snapshot. */
+  get advisorPlacement(): AdvisorZone | null {
+    return this.heldAdvisor?.zone ?? null;
+  }
+
+  /**
+   * An overlay child's box in grid px.
+   *
+   * The enemy-intent slab is mounted on `this.overlay`, not on the scaled
+   * stage, because it is pinned to a projected actor and the projector answers
+   * in viewport pixels — so `offsetLeft` is viewport-space for that one panel
+   * and has to come back through the letterbox before it can be compared with
+   * anything else here.
+   */
+  private viewportRectToGrid(el: HTMLElement | null): Rect | null {
+    if (!el) return null;
+    const b = el.getBoundingClientRect();
+    if (b.width <= 0 || b.height <= 0) return null;
+    const scale = this.hudScale();
+    if (!scale) return null;
+    const host = this.el.getBoundingClientRect();
+    const ox = host.left + (host.width - STAGE.width * scale) / 2;
+    const oy = host.top + (host.height - STAGE.height * scale) / 2;
+    return {
+      left: (b.left - ox) / scale,
+      top: (b.top - oy) / scale,
+      right: (b.right - ox) / scale,
+      bottom: (b.bottom - oy) / scale,
+    };
   }
 
   /**
