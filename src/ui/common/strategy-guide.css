@@ -274,7 +274,6 @@
 .sgd--fit3 .sgd__phase .sgd__why,
 .sgd--fit3 .sgd__cite { display: none; }
 .sgd--fit4 .sgd__rules li:nth-child(n + 4) { display: none; }
-.sgd--fit5 .sgd__sec--rules { display: none; }
 
 /* The affordance the fade was not. Sits on the panel's own bottom edge; one
    click pages the rail down, and a click at the foot returns to the top — a

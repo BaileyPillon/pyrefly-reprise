@@ -124,14 +124,23 @@ const COMPACT_HEIGHT = 200;
  * * **A player on a pad cannot scroll.** So the panel gives text up in a fixed
  *   order until what is left fits, exactly as `MoveAdvisor.fitCard` does, and
  *   the order is decoration first: rule citations, then the rules' paragraphs,
- *   then the WATCH sentences, then rules past the third, then the rules
- *   section. **What is never given up is a half-sentence** — every rung hides
- *   whole elements, so nothing is ever cut through the middle of a word again.
+ *   then the WATCH sentences, then rules past the third. **What is never given
+ *   up is a half-sentence** — every rung hides whole elements, so nothing is
+ *   ever cut through the middle of a word again.
  *
  * NEXT — the command the player is being told to press, its target and its one
  * reason — survives every rung. It is the line the decision is about.
+ *
+ * **The ladder stops at four on purpose.** A fifth rung dropping the RULES
+ * section outright was written and measured: at 1600x900 with an FFX command
+ * menu open the rail is ~156 grid px and the ladder reached it in every state
+ * of the browser pass, so the encounter's standing truths — "kill Seymour, not
+ * the mount" — were gone from the panel for the whole of every decision, which
+ * is when they matter. Past the fourth rung the rail scrolls instead and
+ * {@link StrategyGuide.moreEl} says so. Round 02 #29 allows exactly that: "scroll
+ * or paginate with a visible affordance; never *silently* cut a sentence."
  */
-const FIT_RUNGS = 5;
+const FIT_RUNGS = 4;
 
 export class StrategyGuide {
   readonly el: HTMLElement;

@@ -502,10 +502,17 @@ export class EnemyIntentPanel {
     // a slab pushed against the top of the frame sat flush on the edge and read
     // as clipped (`docs/handoff/fix3-ffx-hud.md`, the 1280x720 Chapter 2 shot).
     const edge = EDGE_MARGIN * scale;
+    // The chip rides the panel's top-right corner, *above* its top edge, so the
+    // panel's own ceiling has to leave room for it. Without this a slab pushed
+    // against the top of the frame clamps to `edge`, the chip clamps to the
+    // same line, and `E ENEMY MOVE` is printed across the boss's name — 913
+    // square px of it, measured in every state of this round's browser pass.
+    const chipReserve = (this.toggleEl.getBoundingClientRect().height || 8 * scale) + scale;
+    const ceiling = this.visible ? edge + chipReserve : edge;
     const clampX = (v: number, width = w): number =>
       Math.max(edge, Math.min(Math.max(edge, layer.width - width - edge), v));
     const clampY = (v: number, height = h): number =>
-      Math.max(edge, Math.min(Math.max(edge, layer.height - height - edge), v));
+      Math.max(ceiling, Math.min(Math.max(ceiling, layer.height - height - edge), v));
     left = clampX(left);
     top = clampY(top);
 
@@ -562,8 +569,12 @@ export class EnemyIntentPanel {
       const chip = this.toggleEl.getBoundingClientRect();
       const chipW = chip.width || 40 * scale;
       const chipH = chip.height || 8 * scale;
+      // The chip's own clamp floors at `edge`, not at the panel's `ceiling` —
+      // the ceiling exists to keep this row of pixels free for the chip, and
+      // clamping the chip to it would put the two back on top of each other.
+      const chipTop = Math.max(edge, Math.min(Math.max(edge, layer.height - chipH - edge), top - chipH - 1 * scale));
       this.toggleEl.style.left = `${clampX(left + w - chipW, chipW).toFixed(1)}px`;
-      this.toggleEl.style.top = `${clampY(top - chipH - 1 * scale, chipH).toFixed(1)}px`;
+      this.toggleEl.style.top = `${chipTop.toFixed(1)}px`;
     }
   }
 }

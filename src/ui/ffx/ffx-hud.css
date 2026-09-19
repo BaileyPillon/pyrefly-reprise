@@ -359,12 +359,30 @@
 
 /* Not part of Ink & Gold's mocked component set - a small ink info card;
    gold marks a genuine weakness only, everything else stays neutral so it
-   doesn't compete with the accent's meaning elsewhere. Position kept from
-   the pre-restyle FFX layout (x360 y44 w180 h78 on this same 640x360 grid;
-   no @1440 conversion applies since it was never part of the Ink & Gold
-   mockups). */
+   doesn't compete with the accent's meaning elsewhere. Never part of the Ink
+   & Gold mockups, so no @1440 conversion applies to its geometry. */
+/* **Moved in round 03, out of the shelf and out of the slab's way.**
+   It sat at x 200..300, y 24..102 — inherited from the pre-restyle FFX layout
+   (x360 y44 w180 h78 on this same grid) and never revisited. Two things were
+   wrong with that once the optional panels shipped:
+
+   * it is the middle of the **advisor's shelf**, the band above the party's
+     heads, so Chapter 1's shelf measured 24 grid px whenever the card was up
+     (`hudSafeZones.ts`, and `docs/handoff/fix3-advisor.md` §1);
+   * it is also where the **enemy-intent slab** lands once it has been pushed
+     off the boss it hangs over. The round-03 browser pass caught the slab
+     printed across this plate's own name and HP, 41,235 square px of it, in
+     every state at both viewports.
+
+   x 436..536, y 176..254 is free of the party in all three chapters (their
+   union is x 65..374), clears the CTB rail's 547.6 by 3.6 even with the house
+   skew's 8px shear, clears the party-status column's 258 top edge by 4, and is
+   26 right of the advisor band's 414. It overlaps the boss's *legs* in all
+   three — which is the price, knowingly paid: a 100x78 panel over a boss's
+   feet for seven seconds is a much smaller thing than a slab printed over
+   another panel's text. */
 .ffx-sensor {
-  position: absolute; left: 200px; top: 24px; width: 100px;
+  position: absolute; left: 436px; top: 176px; width: 100px;
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);

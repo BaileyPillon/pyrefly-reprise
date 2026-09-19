@@ -55,10 +55,28 @@ const CHROME = {
   cmdArea: { left: 30.2, top: 204.5, right: 210.7, bottom: 334.2 },
   partyStatus: { left: 402.7, top: 258.3, right: 616.9, bottom: 348 },
   guide: { left: 21.3, top: 44, right: 153.3, bottom: 200 },
-  sensor: { left: 191.7, top: 24, right: 308.3, bottom: 102 },
+  // Re-measured in round 03: the plate moved out of the shelf's band to
+  // x 436..536, y 176..254 (painted, with the house skew's shear), because it
+  // *was* the reason Chapter 1's shelf measured 24 grid px. See
+  // `ffx-hud.css`'s `.ffx-sensor` comment and `docs/handoff/fix3-ffx-hud.md`
+  // §6. The old band is still exercised as arithmetic below — the solver must
+  // go on handling a plate up there — it simply is not where the game puts it.
+  sensor: { left: 427.7, top: 176, right: 544.3, bottom: 254 },
   intent: { left: 344.2, top: 4, right: 494.2, bottom: 172.5 },
   ctb: { left: 547.6, top: 49.8, right: 620.5, bottom: 200.4 },
 } as const;
+
+/**
+ * Where `.ffx-sensor` sat before round 03 moved it: x 200..300, y 24..102 on
+ * the grid, painted with the house skew's shear.
+ *
+ * It is kept as a fixture because the solver must go on handling a plate in the
+ * shelf's own band — a later scene, or FFX-2's own card, can still put one
+ * there — and because the boards below that *document a defect* have to keep
+ * reproducing it. What changed is where the game puts the plate, not what the
+ * arithmetic does with one.
+ */
+const SENSOR_IN_SHELF: Rect = { left: 191.7, top: 24, right: 308.3, bottom: 102 };
 
 /**
  * What is **actually** up on each chapter's first turn, measured on the same
@@ -277,20 +295,30 @@ describe('advisorZone', () => {
   }
 
   it('takes the shelf in chapters 2 and 3, and the narrow pocket in chapter 1', () => {
-    // Chapters 2 and 3 never raise the Sensor card, so their shelf runs from the
-    // stage's top rail down to the party's heads and offers the full 104.
-    // Chapter 1 does raise it, permanently, and what is left of its shelf is
-    // 24 grid px — so the card goes to the one piece of clear ground on that
-    // screen, the 93px pocket between Kimahri and the party-status column.
+    // **All three take the shelf now, and Chapter 1 is the one that changed.**
+    // It used to take the narrow pocket, because the Sensor plate sat in the
+    // middle of its shelf and left 24 grid px — and the plate sat there for the
+    // whole fight, because `SensorPanel.hide()` had no caller. Round 03 gave
+    // the plate a lifetime *and* moved it out of the band (`ffx-hud.css`), so
+    // Chapter 1's card is back in its full 104 px slot, which is what the
+    // round-02 addendum asked for.
     expect(
       Object.fromEntries(
         Object.keys(PARTY).map((c) => [c, advisorZone({ ...LIVE[c]!, sprites: rectsFor(c) })!.kind]),
       ),
     ).toEqual({
-      'seymour-flux': 'pocket-narrow',
+      'seymour-flux': 'shelf',
       yunalesca: 'shelf',
       'braskas-final-aeon': 'shelf',
     });
+    expect(advisorZone({ ...LIVE['seymour-flux']!, sprites: rectsFor('seymour-flux') })!.maxHeight).toBe(
+      MAX_ADVISOR_HEIGHT,
+    );
+    // And put a plate back in that band and the old answer returns, so this is
+    // a change of *where the plate is*, not a loosened rule.
+    expect(
+      advisorZone({ ...LIVE['seymour-flux']!, sensor: SENSOR_IN_SHELF, sprites: rectsFor('seymour-flux') })!.kind,
+    ).toBe('pocket-narrow');
   });
 
   it('never hands back the 24px shelf that shipped the sliced card', () => {
@@ -299,7 +327,11 @@ describe('advisorZone', () => {
     // `{ kind: 'shelf', maxHeight: 24.06 }` for a card whose shortest possible
     // rendering is 31 grid px, and the card was painted cut through the middle
     // of its own move line. Whatever this returns now, it is never that.
-    const zone = advisorZone({ ...LIVE['seymour-flux']!, sprites: rectsFor('seymour-flux') })!;
+    const zone = advisorZone({
+      ...LIVE['seymour-flux']!,
+      sensor: SENSOR_IN_SHELF,
+      sprites: rectsFor('seymour-flux'),
+    })!;
     expect(zone.kind).not.toBe('shelf');
     expect(zone.maxHeight).toBeGreaterThanOrEqual(31);
     expect(zone.maxHeight).toBeGreaterThanOrEqual(MIN_ADVISOR_HEIGHT);
@@ -407,9 +439,9 @@ describe('advisorZone', () => {
     // whatever bounds the zone from above. The live matrix caught it poking
     // into the Sensor card in every state the Sensor was up.
     const sprites = rectsFor('braskas-final-aeon');
-    const zone = advisorZone({ ...CHROME, sprites })!;
+    const zone = advisorZone({ ...CHROME, sensor: SENSOR_IN_SHELF, sprites })!;
     const chipTop = 360 - zone.bottom - zone.maxHeight - ADVISOR_CHIP_RESERVE;
-    expect(chipTop).toBeGreaterThanOrEqual(CHROME.sensor.bottom);
+    expect(chipTop).toBeGreaterThanOrEqual(SENSOR_IN_SHELF.bottom);
   });
 
   it('drops the shelf below the Sensor card rather than under it', () => {
@@ -463,8 +495,11 @@ describe('advisorZone', () => {
   it('keeps the measured gap between the narrow pocket and the party', () => {
     // Chapter 1, the pocket: it starts a full `GAP` right of Kimahri's
     // reconstructed edge and stops a full `GAP` short of the party-status rail.
+    // Reached with the plate back in the shelf, which is the only board on
+    // which the pocket is the answer — see the placement test above.
     const sprites = rectsFor('seymour-flux');
-    const zone = advisorZone({ ...LIVE['seymour-flux']!, sprites })!;
+    const zone = advisorZone({ ...LIVE['seymour-flux']!, sensor: SENSOR_IN_SHELF, sprites })!;
+    expect(zone.kind).toBe('pocket-narrow');
     const spritesRight = Math.max(...sprites.map((r) => r.right));
     expect(zone.left).toBeGreaterThanOrEqual(spritesRight + GAP - 0.001);
     expect(zone.left + zone.width).toBeLessThanOrEqual(CHROME.partyStatus.left - GAP + 0.001);
@@ -501,7 +536,7 @@ describe('advisorZone', () => {
     // too: nothing holds the card, and the chip still must not fall back to the
     // stylesheet's anchor, which is on Tidus.
     const sprites = [...rectsFor('seymour-flux'), { left: 300, top: 150, right: 400, bottom: 340 }];
-    const input = { ...LIVE['seymour-flux']!, sprites };
+    const input = { ...LIVE['seymour-flux']!, sensor: SENSOR_IN_SHELF, sprites };
     expect(advisorZone(input)).toBeNull();
     const dock = advisorChipDock(input)!;
     expect(dock).not.toBeNull();
@@ -509,7 +544,7 @@ describe('advisorZone', () => {
     // roomy for an 8px chip — and left of every sprite's column.
     expect(dock.left).toBeGreaterThanOrEqual(CHROME.guide.right + GAP - 0.001);
     expect(360 - dock.bottom).toBeLessThanOrEqual(Math.min(...sprites.map((r) => r.top)) - GAP + 0.001);
-    expect(360 - dock.bottom).toBeGreaterThanOrEqual(CHROME.sensor.bottom + GAP + ADVISOR_CHIP_RESERVE - 0.001);
+    expect(360 - dock.bottom).toBeGreaterThanOrEqual(SENSOR_IN_SHELF.bottom + GAP + ADVISOR_CHIP_RESERVE - 0.001);
   });
 
   it('refuses a pocket too short to hold the card rather than squeezing one in', () => {

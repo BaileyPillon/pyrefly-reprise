@@ -1,4 +1,5 @@
 import type { AbilityDef, AvailableCommand } from '../../battle/common/types.ts';
+import { CORE_ABILITIES } from '../../battle/ffx/registry.ts';
 import { ABILITIES, ITEMS } from '../../data/ffx/index.ts';
 import { describeAbility } from '../../engine/tactics/advisor.ts';
 
@@ -38,17 +39,33 @@ import { describeAbility } from '../../engine/tactics/advisor.ts';
  * today's behaviour — never a guess.
  */
 
+/**
+ * **Two registries, because the game has two.**
+ *
+ * Attack, Defend and the two aeon stances are *structural* — the engine cannot
+ * resolve a turn without them — so they ship in `battle/ffx/registry.ts` as
+ * `CORE_ABILITIES` and are not in `src/data` at all. The first run of this
+ * file's browser pass caught that immediately: the slab was blank on the row
+ * every FFX menu opens on, because `ABILITIES['attack']` is `undefined`. A data
+ * file may override a core id, so `ABILITIES` is asked first.
+ */
+const CORE_BY_ID = new Map(CORE_ABILITIES.map((a) => [a.id, a]));
+
+function abilityById(id: string): AbilityDef | null {
+  return ABILITIES[id] ?? CORE_BY_ID.get(id) ?? null;
+}
+
 /** The record behind a menu row, or `null` when the row is not an ability. */
 function defFor(cmd: AvailableCommand): AbilityDef | null {
   const c = cmd.command;
   switch (c.kind) {
     case 'attack':
-      return ABILITIES['attack'] ?? null;
+      return abilityById('attack');
     case 'defend':
-      return ABILITIES['defend'] ?? null;
+      return abilityById('defend');
     case 'ability':
     case 'overdrive':
-      return ABILITIES[c.id] ?? null;
+      return abilityById(c.id);
     case 'item': {
       // An item's effect is either the id of a shared ability or an inline
       // record for a one-off (`ItemDef.effect`). Only reached when the item had
@@ -56,7 +73,7 @@ function defFor(cmd: AvailableCommand): AbilityDef | null {
       // `help` and `commands.ts` writes that from the description.
       const item = ITEMS[c.id];
       if (!item) return null;
-      return typeof item.effect === 'string' ? (ABILITIES[item.effect] ?? null) : item.effect;
+      return typeof item.effect === 'string' ? abilityById(item.effect) : item.effect;
     }
     default:
       return null;
