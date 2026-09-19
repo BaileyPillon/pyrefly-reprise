@@ -238,6 +238,27 @@ export function capabilityLoss(state: Readonly<BattleState>, fallenId: Combatant
  * Anything short of that — a single-target threat that *might* pick them — is a
  * {@link reviveCaution}: the revive is still recommended, and the card prints
  * the warning next to it. `'likely'` branches never refuse at all.
+ *
+ * ## Every sentence here is about a revive, and only a card showing one may print it
+ *
+ * These sentences are cautions printed **next to a recommended revive** — that
+ * is what "so cure the Zombie first" and "take the hit, then raise them" are
+ * answers to. They are not general board commentary, and the pre-deploy gate
+ * caught them being used as such: Chapter 1 at seed 1 printed "Yuna is still a
+ * Zombie … so cure the Zombie first" above Mighty Guard, Hastega and a thrown
+ * Poison Fang, on three decisions out of four, because `advisor.ts` asked for a
+ * risk reading whenever *anybody* was on the floor and printed whatever came
+ * back [critic, pre-deploy gate 2026-09-18].
+ *
+ * So the rule the caller is held to (`advisor.ts`'s `noteFor`) is:
+ *
+ *  * a revive is on the card → the sentence rides on that suggestion's warning;
+ *  * the **cure** the sentence names is on the card → {@link zombieCureReason}
+ *    says the same thing as the reason for that pick;
+ *  * a revive was priced and **refused** for a reason that is about *timing*
+ *    (`'aimed'`, `'sweep'`) → the note says when to spend it instead;
+ *  * otherwise the card says nothing. A Zombie refusal whose cure nobody can
+ *    press is an instruction to do something that is not on the menu.
  */
 export function reviveRisk(
   state: Readonly<BattleState>,
@@ -372,6 +393,26 @@ function imminentCharge(state: Readonly<BattleState>): string | null {
 /** {@link reviveRisk}'s sentence, ready for the card. */
 export function waitSentence(risk: ReviveRisk): string {
   return risk.sentence;
+}
+
+/**
+ * The same reading as {@link reviveRisk}'s `'zombie'` branch, worded as the
+ * *reason for a move the card is actually showing*.
+ *
+ * `reviveRisk` says "cure the Zombie first", which is only an answer when the
+ * cure is somewhere the player can press. When the ranking has already put the
+ * Holy Water (or an Esuna) on the card, the board reading is the same and the
+ * sentence is the other way round: this is why that row is the turn.
+ *
+ * Both branches are the Mortiorchis's Full-Life on a zombied body — 100% of max
+ * HP as damage plus a guaranteed Death [ffx-seymour-flux §3.3, §4.8] — read
+ * from whether they are still standing.
+ */
+export function zombieCureReason(state: Readonly<BattleState>, zombieId: CombatantId): string {
+  const who = state.combatants[zombieId]?.name ?? 'them';
+  return state.combatants[zombieId]?.alive === false
+    ? `${who} comes back still a Zombie — clear it before anybody spends a Phoenix Down`
+    : `While ${who} is a Zombie the next Full-Life is a kill, not a heal — clear it now`;
 }
 
 // ------------------------------------------------------------------ pricing

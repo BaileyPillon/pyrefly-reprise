@@ -92,12 +92,14 @@ import {
 import { buildGuideView, recommendedCommand, type GuideDecision } from './guide.ts';
 import {
   type AdvisorIntent,
+  type ReviveRisk,
   downedActives,
   reviveCaution,
   reviveReason,
   reviveRisk,
   reviveValue,
   waitSentence,
+  zombieCureReason,
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
 import { scopeWord } from './targetLabel.ts';
@@ -178,11 +180,19 @@ export interface AdvisorView {
    */
   suggestions: MoveSuggestion[];
   /**
-   * One plain sentence the card prints under the moves, or `''`.
+   * One plain sentence the card prints above the moves, or `''`.
    *
-   * Currently only ever the "do not raise them into that" line: when an ally is
-   * down and the board would kill them again the moment they stand up, the card
-   * says *when* to spend the Phoenix Down instead of silently ranking it last.
+   * **It may only ever explain something the card is showing.** Two shapes
+   * reach it, and {@link noteFor} is the only writer:
+   *
+   *  * the pick is the **cure** for a Zombie the board is carrying, and the
+   *    note is that pick's reason (`zombieCureReason`);
+   *  * a revive was priced and **refused** because the board kills them again
+   *    the moment they stand up, and the note says when to spend it instead.
+   *
+   * A caution about a revive that *is* on the card rides on that suggestion's
+   * own `warning` instead, so the sentence never appears twice. Everything else
+   * — nobody down, a refusal whose remedy is not on the menu — is `''`.
    */
   note: string;
   /** How many legal rows were actually simulated, for the debug snapshot. */
@@ -921,7 +931,8 @@ export function buildAdvisorView(
   if (legal.length === 0) return null;
 
   const shown: Candidate[] = [legal[0]!];
-  let note = '';
+  /** A revive this board was offered, priced, and refused. See {@link noteFor}. */
+  let refused: { risk: ReviveRisk; fallenId: CombatantId } | null = null;
   if (shown[0]!.suggestion.isSwitch) {
     // "Switch" is not an answer to "what do I press" — show the best move too.
     const alternative = legal.find((c) => !c.suggestion.isSwitch);
@@ -930,18 +941,20 @@ export function buildAdvisorView(
     // An ally on the floor is the question the player is actually asking, and
     // the card used to answer it by saying nothing. Either the revive is shown
     // as the runner-up, or — when raising them now just feeds the boss another
-    // kill — the card says in one sentence when to spend the turn instead.
-    const down = downedActives(state)[0];
+    // kill — the refusal is recorded and {@link noteFor} decides whether the
+    // card is in a position to say anything honest about it.
+    //
+    // **Only a revive that was actually on the menu counts.** The branch this
+    // replaced read the risk off the first body on the floor whether or not a
+    // raise had been offered at all, which is how a Zombie caution ended up
+    // over Hastega, Mighty Guard and a thrown Poison Fang.
     const raise = legal.find(isRevive);
     if (raise) {
       const raisedId = raise.outcome?.revives[0] ?? raise.suggestion.targetId ?? '';
       const back = raise.outcome ? restoredHp(raise.outcome, raisedId) : undefined;
       const risk = reviveRisk(state, raisedId, intent, back);
-      if (risk) note = waitSentence(risk);
+      if (risk) refused = { risk, fallenId: raisedId };
       else shown.push(raise);
-    } else if (down) {
-      const risk = reviveRisk(state, down.id, intent);
-      if (risk) note = waitSentence(risk);
     }
   }
   const suggestions = shown.map((c) => withRange(state, decision.actorId, c, sim, intent));
@@ -950,9 +963,54 @@ export function buildAdvisorView(
     actorId: decision.actorId,
     actorName: actor.name,
     suggestions,
-    note,
+    note: noteFor(state, shown, refused),
     considered: candidates.length,
   };
+}
+
+/**
+ * The card's note, and the gate that keeps it truthful — `''` far more often
+ * than not.
+ *
+ * The rule, in one line: **the note may only explain something the card is
+ * showing.** `advisor-revive.ts` writes sentences about a revive, for printing
+ * beside a revive; the pre-deploy gate found them being printed beside whatever
+ * the ranking happened to pick, so Chapter 1 told the player to "cure the
+ * Zombie first" above Mighty Guard, Hastega and a thrown item, on three
+ * decisions out of four [critic, pre-deploy gate 2026-09-18].
+ *
+ * What reaches the card now:
+ *
+ *  1. **The cure is the pick.** A shown move takes Zombie off an ally, so the
+ *    board reading becomes that row's reason ({@link zombieCureReason}) instead
+ *    of a caution about a row nobody was offered.
+ *  2. **A refused revive whose answer is *time*.** `'aimed'` and `'sweep'` both
+ *    resolve into "take the hit, then raise them", which is an instruction the
+ *    player can follow with the card exactly as it stands.
+ *
+ * And what does not:
+ *
+ *  * **A revive that *is* on the card.** Its caution is already on that
+ *    suggestion's own `warning`, next to the move it is about; a note would
+ *    print the same sentence twice.
+ *  * **A `'zombie'` refusal with no cure on the card.** "Cure the Zombie first"
+ *    is only an answer when the cure is a row the player can press. When it is
+ *    not, the advisor has nothing useful to say and says nothing — which is
+ *    also what the live build does today.
+ */
+function noteFor(
+  state: Readonly<BattleState>,
+  shown: readonly Candidate[],
+  refused: { risk: ReviveRisk; fallenId: CombatantId } | null,
+): string {
+  for (const c of shown) {
+    const cure = c.outcome?.statusChanges.find(
+      (s) => !s.applied && s.status === 'zombie' && !isEnemy(state.combatants[s.targetId]),
+    );
+    if (cure) return zombieCureReason(state, cure.targetId);
+  }
+  if (refused && refused.risk.kind !== 'zombie') return waitSentence(refused.risk);
+  return '';
 }
 
 /** True when this candidate's simulation stands somebody back up. */

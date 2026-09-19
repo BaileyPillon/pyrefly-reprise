@@ -114,6 +114,8 @@ export class MoveAdvisor {
 
   private mounted = false;
   private visible: boolean;
+  /** The HUD found no box the whole card fits in. See {@link setDeclined}. */
+  private declined = false;
   private lastState: Readonly<BattleState> | null = null;
   private decision: { actorId: CombatantId; commands: AvailableCommand[] } | null = null;
   private padWasDown = false;
@@ -187,18 +189,61 @@ export class MoveAdvisor {
     if (on) this.render();
   }
 
+  /**
+   * The HUD has no box the whole card fits in, or has one again.
+   *
+   * Only `FFXBattleHud.placeAdvisor` calls this — FFX-2 has no safe zones and
+   * so is never declined — and it is the **one** place the state is expressed.
+   * The chip is the entire panel while a zone is declined, so it has to be a
+   * complete and truthful state on its own, and it was neither: it kept saying
+   * `N HIDE MOVES` over empty ground, pressing `N` turned that into
+   * `N BEST MOVE`, and a second press brought nothing back, because the label
+   * was written from the player's *preference* by a component that had no idea
+   * the HUD had taken the card down [critic, pre-deploy gate 2026-09-18].
+   *
+   * A round of this fix put the word in `move-advisor.css` as a
+   * `[data-zone='none']` pseudo-element instead. That is worse than it looks: a
+   * label that exists only as generated content cannot be read by a test, by
+   * assistive technology or by anything that asks the button what it says — the
+   * gate's own grep for the string found nothing in `src/` because the string
+   * was `content: 'no room'` in a stylesheet, uppercased by `text-transform`.
+   * So the word lives here, in the element, and the stylesheet styles it.
+   *
+   * **`N` still stores the preference** while declined: it is the answer to
+   * "show me the card when there is room", and the card obeys it the moment a
+   * zone comes back. What `N` no longer does is rewrite the chip to a promise
+   * the HUD cannot keep.
+   */
+  setDeclined(on: boolean): void {
+    if (this.declined === on) return;
+    this.declined = on;
+    this.applyVisible();
+  }
+
+  /** True while the HUD has no room for the card. For tests and the snapshot. */
+  get isDeclined(): boolean {
+    return this.declined;
+  }
+
   private applyVisible(): void {
-    this.cardEl.hidden = !this.visible;
+    this.cardEl.hidden = !this.visible || this.declined;
     this.el.classList.toggle('mad--off', !this.visible);
+    this.el.classList.toggle('mad--no-room', this.declined);
     // Drop the measured anchor with the card it was measured against, exactly
     // as `StrategyGuide.applyVisible` does: an inline `left` outranks the
     // stylesheet, so the chip would otherwise freeze at the last card's edge.
     if (!this.visible) this.toggleEl.style.left = '';
     const keys = padConnected() ? ADVISOR_HINT_ITEM.gamepad : ADVISOR_HINT_ITEM.keyboard;
-    this.toggleEl.innerHTML =
-      `<b>${escapeHtml(keys)}</b><span>${escapeHtml(this.visible ? 'hide moves' : 'best move')}</span>`;
-    this.toggleEl.setAttribute('aria-pressed', String(this.visible));
-    this.toggleEl.title = this.visible ? 'Hide the move advisor' : 'Show the next best move';
+    const word = this.declined ? 'no room' : this.visible ? 'hide moves' : 'best move';
+    this.toggleEl.innerHTML = `<b>${escapeHtml(keys)}</b><span>${escapeHtml(word)}</span>`;
+    // Nothing is pressed while the card is not on screen, whatever the stored
+    // preference says — the chip is reporting the screen, not the setting.
+    this.toggleEl.setAttribute('aria-pressed', String(this.visible && !this.declined));
+    this.toggleEl.title = this.declined
+      ? 'No room on screen for the card — it comes back when there is'
+      : this.visible
+        ? 'Hide the move advisor'
+        : 'Show the next best move';
   }
 
   /**

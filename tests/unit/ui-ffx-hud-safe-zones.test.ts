@@ -734,6 +734,70 @@ describe('the FFX HUD applying the advisor zone', () => {
     expect(card.hidden).toBe(false);
     expect(root.dataset['zone']).not.toBe('none');
   });
+
+  /**
+   * The chip is the entire panel while a zone is declined, so it has to be a
+   * complete and truthful state on its own — and it was neither. The gate found
+   * it still reading `N HIDE MOVES` over empty ground, `N` turning that into
+   * `N BEST MOVE`, and a second press bringing nothing back; the word "no room"
+   * existed only as a stylesheet `content:` string, which no test, no screen
+   * reader and no `textContent` could see [critic, pre-deploy gate 2026-09-18].
+   */
+  describe('the chip while the zone is declined', () => {
+    it('says there is no room, instead of offering to hide a card that is not there', () => {
+      const hud = mountHud();
+      hud.setProjector(wallProjector() as never);
+      hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+      hud.update(16);
+      const { chip } = advisorEls(hud);
+      expect(hud.advisorPlacement).toBeNull();
+      expect(hud.moveAdvisor.isDeclined).toBe(true);
+      // The label is in the element, readable by anything that asks the button
+      // what it says.
+      expect(chip.textContent?.toLowerCase()).toContain('no room');
+      expect(chip.textContent?.toLowerCase()).not.toContain('hide moves');
+      expect(chip.textContent?.toLowerCase()).not.toContain('best move');
+      // Nothing is pressed while the card is not on screen, whatever the stored
+      // preference says.
+      expect(chip.getAttribute('aria-pressed')).toBe('false');
+    });
+
+    it('does not change its story when N is pressed', () => {
+      const hud = mountHud();
+      hud.setProjector(wallProjector() as never);
+      hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+      hud.update(16);
+      const { card, chip } = advisorEls(hud);
+
+      for (let press = 0; press < 2; press += 1) {
+        window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyN' }));
+        hud.update(16);
+        expect(chip.textContent?.toLowerCase(), `after press ${press + 1}`).toContain('no room');
+        expect(card.hidden, `after press ${press + 1}`).toBe(true);
+      }
+      // `N` is still the answer to "show me the card when there is room": the
+      // preference was stored both times, which is what the card obeys the
+      // moment a zone comes back.
+      expect(hud.moveAdvisor.isVisible).toBe(true);
+    });
+
+    it('goes back to the ordinary label the moment a box exists again', () => {
+      const hud = mountHud();
+      hud.setProjector(wallProjector() as never);
+      hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+      hud.update(16);
+      const { card, chip } = advisorEls(hud);
+      expect(chip.textContent?.toLowerCase()).toContain('no room');
+
+      hud.setProjector((() => null) as never);
+      void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
+      hud.update(16);
+      expect(hud.moveAdvisor.isDeclined).toBe(false);
+      expect(card.hidden).toBe(false);
+      expect(chip.textContent?.toLowerCase()).toContain('hide moves');
+      expect(chip.textContent?.toLowerCase()).not.toContain('no room');
+    });
+  });
 });
 
 describe('an Overdrive picker with nothing to pick', () => {

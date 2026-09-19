@@ -538,9 +538,15 @@ export class FFXBattleHud implements HudPort {
     const zone = held.zone;
     const cardUp = this.advisor.isVisible && zone !== null;
 
+    // **Tell the card it was declined**, rather than leaving its chip to
+    // advertise a card that is not on screen. `setDeclined` is a no-op on every
+    // frame the answer has not changed, and it is the only thing that writes
+    // the chip's declined label — see `MoveAdvisor.setDeclined` for why that
+    // word is in the element and not in a stylesheet's `content`.
+    this.advisor.setDeclined(zone === null);
     // `MoveAdvisor.applyVisible` is the only other writer of this flag and it
-    // only runs on a toggle, so owning it per frame here is safe: the card
-    // comes back the moment a zone does.
+    // only runs on a toggle or a decline, so owning it per frame here is safe:
+    // the card comes back the moment a zone does.
     card.hidden = !cardUp;
     this.advisor.el.dataset['zone'] = zone ? zone.kind : 'none';
 
