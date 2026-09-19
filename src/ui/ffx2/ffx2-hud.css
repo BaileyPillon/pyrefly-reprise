@@ -538,6 +538,46 @@
 .ffx2hud .ig-cmd--selected .ffx2cmd__grants {
   color: var(--ig-accent);
 }
+/*
+ * A row that carries a gate line gives the gate line its own line.
+ *
+ * The Change submenu exists to show the destination **by name** (§4.5.2 — you
+ * open the Garment Grid and pick a destination inside it), and the names were
+ * the thing being thrown away: `.ig-cmd` is a fixed 129.78x23.11 box, and
+ * "Black Mage" (72 px) plus "GRANTS: Yellow" (66 px) plus the cursor does not
+ * fit across one 109 px content line. `.ffx2cmd__grants` was `flex: none`, so
+ * the *label* was the item that shrank, and every row read "BL..." / "GUN..."
+ * on screen while `textContent` — and so the round's own evidence — still said
+ * "Black Mage".
+ *
+ * The row is not widened to fix it: `.ffx2hud__command`'s left edge is a wall
+ * the scene has to stand its boss clear of (see its `right: 12px` note), and
+ * moving it outboard costs the stage more than the gate line is worth. Instead
+ * the gate drops beneath the name, right-aligned under a right-anchored stack,
+ * which is where the Garment Grid prints it anyway. `order: 1` puts it after
+ * the cursor triangle in flex order so the cursor stays up on the name's line
+ * rather than being pushed to a third.
+ */
+.ffx2hud .ig-cmd.ffx2cmd--gate {
+  height: auto;
+  min-height: 23.11px;
+  flex-wrap: wrap;
+  align-content: center;
+  padding-top: 2.67px; /* 6 */
+  padding-bottom: 2.67px;
+  row-gap: 1.78px; /* 4 */
+}
+.ffx2hud .ig-cmd.ffx2cmd--gate .ffx2cmd__label {
+  flex: 1 1 auto;
+  overflow: visible;
+  text-overflow: clip;
+}
+.ffx2hud .ig-cmd.ffx2cmd--gate .ffx2cmd__grants {
+  order: 1;
+  flex: 1 0 100%;
+  margin-left: 0;
+  text-align: right;
+}
 .ffx2cmd__reason {
   flex: none;
   font-size: 8px;
@@ -629,18 +669,41 @@
    counter any more, and anything asking the DOM "is a chain showing?" — a
    test, the critic's overlap probe — should get "no" on the same frame the
    engine says so, not 0.4 s later. It keeps the look by sharing the rules. */
+/*
+ * Two elements, not one, and the split is load-bearing.
+ *
+ * `.ffx2-chain-chip` is an **empty reservation box** sized by `ChainCounter` to
+ * the pop's 1.45x peak (see its `CHAIN_POP_SCALE`) and given no paint of its
+ * own; `.ffx2chain__body` is the ink slab, centred in it, and the one that
+ * scales. The chip is what `placeSlab` places and what
+ * `FFX2BattleHud.intentObstacles` measures, so the placed box and the painted
+ * box are the same rectangle at every point in the animation. When the pop
+ * lived on the chip itself the painted slab escaped the solved box by up to
+ * 18 px on every single increment, off the top of the overlay and onto the boss
+ * and the intent slab.
+ *
+ * Keeping the chip untransformed has a second effect the flash tier depends on:
+ * a transform makes an element the containing block for `position: fixed`
+ * descendants, so `.ffx2chain--flash::after`'s "full-screen" flash collapsed to
+ * the chip's own bounds for the 0.18 s the pop was running and snapped back
+ * after. It is now fixed to the viewport, as §4.6 asks, for the whole time.
+ */
 .ffx2-chain-chip,
 .ffx2chain-broke {
   position: absolute;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.ffx2chain__body {
+  flex: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: calc(1px * var(--ffx2-scale, 1));
-  /* Positioned by its own top-left, not centred: `ChainCounter` solves the
-     placement with `placeSlab`, which works in layout boxes, and a translated
-     box is not where its rect says it is. The old small tag's -8deg tilt goes
-     with it — a 50-grid-px block set on a slant is harder to read and §4.6
-     does not ask for one. */
+  /* The old small tag's -8deg tilt is gone — a 50-grid-px block set on a slant
+     is harder to read and §4.6 does not ask for one. */
   transform-origin: 50% 50%;
   padding: calc(3px * var(--ffx2-scale, 1)) calc(9px * var(--ffx2-scale, 1)) calc(4px * var(--ffx2-scale, 1));
   background: var(--ig-ink);
@@ -648,7 +711,6 @@
   font-family: var(--ig-font-display);
   font-weight: 700;
   white-space: nowrap;
-  pointer-events: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -715,7 +777,7 @@
 /* §4.6: numeral scale-pops 1.0 -> 1.45 -> 1.0 over 0.18 s and the colour
    flashes #FFFFFF for two frames. The pop is on the whole chip so the label
    travels with the numeral; the white flash is the numeral's alone. */
-.ffx2-chain-chip.ffx2chain--pop {
+.ffx2-chain-chip.ffx2chain--pop .ffx2chain__body {
   animation: ffx2-chain-pop 0.18s ease-out;
 }
 .ffx2-chain-chip.ffx2chain--pop .ffx2chain__n {
@@ -748,7 +810,7 @@
 /* §4.6 decay: "shrinks to 0.6x and fades over 0.4 s" when the chain breaks.
    The break is information — the multiplier the player was building is gone —
    so it is shown, not silently removed. */
-.ffx2chain-broke {
+.ffx2chain-broke .ffx2chain__body {
   animation: ffx2-chain-broke 0.4s ease-in forwards;
 }
 @keyframes ffx2-chain-broke {
@@ -763,7 +825,7 @@
 }
 
 /* §4.6 escalation: 5 gains a #F2C21E outer glow. */
-.ffx2-chain-chip.ffx2chain--warm {
+.ffx2-chain-chip.ffx2chain--warm .ffx2chain__body {
   box-shadow:
     0 0 6px 1px rgba(242, 194, 30, 0.7),
     0 2px 6px rgba(0, 0, 0, 0.5);
@@ -775,7 +837,7 @@
  * gradient on an orange ground — at 2560x1440 the bottom half of a "22"
  * disappeared into it. The tier now reads off the glow instead.
  */
-.ffx2-chain-chip.ffx2chain--hot {
+.ffx2-chain-chip.ffx2chain--hot .ffx2chain__body {
   box-shadow:
     0 0 10px 2px rgba(242, 113, 46, 0.85),
     0 2px 6px rgba(0, 0, 0, 0.5);
@@ -800,7 +862,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ffx2-chain-chip.ffx2chain--pop,
+  .ffx2-chain-chip.ffx2chain--pop .ffx2chain__body,
   .ffx2-chain-chip.ffx2chain--pop .ffx2chain__n,
   .ffx2-chain-chip.ffx2chain--pop .ffx2chain__motes i {
     animation-duration: 1ms;

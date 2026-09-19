@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { PrepPanel, PrepPanelContext } from '../../src/app/screens/PartyPrepScreen.ts';
 import { makeEquipmentPanel, makeItemsPanel, makeOverdrivePanel, makeStatsPanel } from '../../src/ui/ffx/party-prep/panels.ts';
 import { makeSphereGridPanel } from '../../src/ui/ffx/party-prep/SphereGridPanel.ts';
+import { AUTO_ABILITY_IDS, autoAbilityLabel } from '../../src/ui/ffx/party-prep/autoAbilityLabels.ts';
 import { makeFakePartyBuild } from '../../src/ui/ffx/testFixtures.ts';
 
 /**
@@ -173,6 +174,56 @@ describe('Equipment panel', () => {
     tidus.equipment.weapon.autoAbilities = [];
     const root = mountPanel(makeEquipmentPanel(), build, 'tidus');
     expect(root.querySelector('.ffxprep-chip--empty')).not.toBeNull();
+  });
+
+  /**
+   * Critic pass 1, finding 4: the tab printed `def.autoAbilities` raw, so it
+   * read `strength-10` / `hp-10` / `zombie-ward` — three internal ids on a
+   * player-facing surface, in the same round that routed the Items tab through
+   * `itemLabel()`.
+   */
+  it('names every auto-ability, and never prints a raw kebab-case id', () => {
+    const build = makeFakePartyBuild();
+    const tidus = build.members.find((m) => m.id === 'tidus')!;
+    tidus.equipment.weapon.autoAbilities = ['strength-10', 'piercing', 'evade-and-counter'];
+    tidus.equipment.armor.autoAbilities = ['hp-10', 'zombie-ward', 'sos-nulblaze', 'auto-haste'];
+    const root = mountPanel(makeEquipmentPanel(), build, 'tidus');
+    const chips = [...root.querySelectorAll('.ffxprep-chip')].map((c) => c.textContent);
+    expect(chips).toEqual([
+      'Strength +10%',
+      'Piercing',
+      'Evade & Counter',
+      'HP +10%',
+      'Zombie Ward',
+      'SOS NulBlaze',
+      'Auto-Haste',
+    ]);
+    // The general shape of the defect, not just the seven ids above: a chip
+    // that is a bare lower-case kebab word is an id that escaped the table.
+    for (const chip of chips) expect(chip).not.toMatch(/^[a-z0-9]+(-[a-z0-9]+)+$/);
+  });
+
+  /**
+   * Every id in the `AutoAbilityId` union is named. The map is typed
+   * `Record<AutoAbilityId, string>`, so `tsc` catches a missing id — this
+   * catches an id that is "named" with its own raw text.
+   */
+  it('has an FFX name for every auto-ability id in the union', () => {
+    for (const id of AUTO_ABILITY_IDS) {
+      const label = autoAbilityLabel(id);
+      expect(label.length).toBeGreaterThan(0);
+      expect(label).not.toBe(id);
+      expect(label).not.toMatch(/^[a-z0-9]+(-[a-z0-9]+)+$/);
+    }
+    // A representative from each family FFX spells differently, so a future
+    // "just title-case the id" shortcut fails here rather than on screen.
+    expect(autoAbilityLabel('magic-def-5')).toBe('Magic Def +5%');
+    expect(autoAbilityLabel('zombiestrike')).toBe('Zombiestrike');
+    expect(autoAbilityLabel('zombie-ward')).toBe('Zombie Ward');
+    expect(autoAbilityLabel('zombieproof')).toBe('Zombieproof');
+    expect(autoAbilityLabel('auto-med')).toBe('Auto-Med');
+    expect(autoAbilityLabel('sos-haste')).toBe('SOS Haste');
+    expect(autoAbilityLabel('one-mp-cost')).toBe('One MP Cost');
   });
 });
 

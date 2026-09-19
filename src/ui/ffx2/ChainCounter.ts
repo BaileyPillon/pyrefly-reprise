@@ -32,6 +32,36 @@ const FLASH_AT = 20;
 /** §4.6 decay: "shrinks to 0.6x and fades over 0.4 s". */
 const BREAK_MS = 400;
 
+/**
+ * §4.6's pop peak — the `scale()` at 50% of `@keyframes ffx2-chain-pop` in
+ * `ffx2-hud.css`, and the reason this module reserves more room than the chip
+ * appears to need.
+ *
+ * The first version of this file measured `el.offsetWidth/offsetHeight` — the
+ * **layout** box — handed that to {@link placeSlab}, and then added
+ * `.ffx2chain--pop`, which scales the chip to 1.45 about its centre on *every*
+ * increment. The solver had therefore never seen the box the player sees. Live
+ * at the 50% keyframe the painted slab measured 242.4x137 against a 167x95
+ * layout box, sat 9.3 px above the overlay (clipped away by `.ffx2hud`'s
+ * `overflow: hidden`), crossed Bahamut by 166.8x5.2 and covered the
+ * enemy-intent slab by 33.8x102.8 — worse than the pre-fix state the handoff
+ * recorded. It reproduced at every tier and every viewport, in both FFX-2
+ * chapters, and the builder's own 40-sample matrix missed it because the pop
+ * is 0.18 s of each increment and the samples landed between pops.
+ *
+ * The fix is structural rather than a fudge factor: the chip element is now an
+ * empty box the size of the **peak**, the ink slab is an inner
+ * `.ffx2chain__body` centred inside it, and the pop scales the body. So the
+ * element the solver places, the element `FFX2BattleHud.intentObstacles`
+ * measures as `.ffx2-chain-chip`, and the element any overlap probe reads are
+ * all the same rectangle — and nothing painted can leave it at any point in
+ * the animation.
+ *
+ * Exported so `tests/unit/ui-ffx2-chain-flourish.test.ts` can assert this
+ * constant and the CSS keyframe have not drifted apart.
+ */
+export const CHAIN_POP_SCALE = 1.45;
+
 export interface ChainCounterDeps {
   /**
    * The HUD's unscaled overlay, in viewport pixels. A getter, not the element:
@@ -96,20 +126,35 @@ export class ChainCounter {
     el.style.setProperty('--ffx2-scale', String(scale));
     el.className = `ffx2-chain-chip ${chainTier(count)} ${count >= FLASH_AT ? 'ffx2chain--flash' : ''}`.replace(/\s+/g, ' ').trim();
     el.innerHTML = `
-      <span class="ffx2chain__n">${count}</span>
-      <span class="ffx2chain__label">CHAIN <b>&times;${multiplier.toFixed(2)}</b></span>
-      <span class="ffx2chain__motes">${motesHtml()}</span>`;
-    // Measured after the markup lands and before it is placed: the chip's size
-    // depends on the numeral's digit count and on the scale, so it cannot be
-    // known up front.
-    const w = el.offsetWidth;
-    const h = el.offsetHeight;
+      <div class="ffx2chain__body">
+        <span class="ffx2chain__n">${count}</span>
+        <span class="ffx2chain__label">CHAIN <b>&times;${multiplier.toFixed(2)}</b></span>
+        <span class="ffx2chain__motes">${motesHtml()}</span>
+      </div>`;
+    // Measure the *body* with the chip's own size cleared, so it shrink-wraps:
+    // the slab's size depends on the numeral's digit count and on the scale, so
+    // it cannot be known up front. Then reserve the peak box around it — see
+    // CHAIN_POP_SCALE for why the layout box is not the box to place.
+    el.style.width = '';
+    el.style.height = '';
+    const body = el.firstElementChild as HTMLElement | null;
+    const bw = body?.offsetWidth ?? 0;
+    const bh = body?.offsetHeight ?? 0;
+    const w = Math.ceil(bw * CHAIN_POP_SCALE);
+    const h = Math.ceil(bh * CHAIN_POP_SCALE);
+    el.style.width = `${w}px`;
+    el.style.height = `${h}px`;
+    // The body is centred in the reserved box, so the box sits half the reserve
+    // further out on each axis than the body wants to be. Everything below is
+    // expressed in the box's coordinates and the body follows it.
+    const padX = (w - bw) / 2;
+    const padY = (h - bh) / 2;
     const anchor = this.deps.point(targetId);
     const layer = this.deps.layer();
     const edge = 6 * scale;
     // "Top-right of the enemy being chained" (§4.6), sitting clear above the
     // head rather than across the face.
-    const natural = { left: anchor.x + 12 * scale, top: anchor.y - h - 8 * scale };
+    const natural = { left: anchor.x + 12 * scale - padX, top: anchor.y - bh - 8 * scale - padY };
     const placed = placeSlab(natural, { w, h }, this.deps.obstacles(), layer, edge);
     el.style.left = `${placed.left}px`;
     el.style.top = `${placed.top}px`;

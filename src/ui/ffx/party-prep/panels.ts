@@ -3,6 +3,7 @@ import type { EffectiveStatRow } from '../../../battle/ffx/effectiveStats.ts';
 import { effectiveStats } from '../../../battle/ffx/effectiveStats.ts';
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
 import { itemLabel } from '../../common/resultsMath.ts';
+import { autoAbilityLabel } from './autoAbilityLabels.ts';
 
 /**
  * The Party / Equipment / Items / Overdrive-modes tabs: four small composing
@@ -112,7 +113,16 @@ export function makeStatsPanel(): PrepPanel {
 
 // --------------------------------------------------------------- Equipment
 
-/** The Equipment tab: weapon/armor names and their auto-ability chips. Read-only — an FFXPartyBuild carries no spare-gear pool to re-equip from, only what is already worn. */
+/**
+ * The Equipment tab: weapon/armor names and their auto-ability chips.
+ * Read-only — an FFXPartyBuild carries no spare-gear pool to re-equip from,
+ * only what is already worn.
+ *
+ * Chip text comes from {@link autoAbilityLabel}, for the same reason the Items
+ * tab goes through `itemLabel()`: the tab used to print `def.autoAbilities`
+ * raw, so Tidus's Brotherhood read `strength-10` / `hp-10` / `zombie-ward`
+ * instead of `Strength +10%` / `HP +10%` / `Zombie Ward`.
+ */
 export function makeEquipmentPanel(): PrepPanel {
   let build: FFXPartyBuild | null = null;
   let bodyEl: HTMLElement | null = null;
@@ -125,7 +135,7 @@ export function makeEquipmentPanel(): PrepPanel {
         <div class="ffxprep-gear__name"><b>${label}</b> ${escapeHtml(def.name)}</div>
         <div class="ffxprep-chips">${
           def.autoAbilities.length
-            ? def.autoAbilities.map((a) => `<span class="ffxprep-chip">${escapeHtml(a)}</span>`).join('')
+            ? def.autoAbilities.map((a) => `<span class="ffxprep-chip">${escapeHtml(autoAbilityLabel(a))}</span>`).join('')
             : '<span class="ffxprep-chip ffxprep-chip--empty">—</span>'
         }</div>
       </div>`;

@@ -204,6 +204,22 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     let subCategory = '';
     let subIdx = 0;
     let pending: AvailableCommand | null = null;
+    /**
+     * Which view the pending command was picked in, and therefore where Esc
+     * goes back to. Without it, every cancel out of target selection went to
+     * `renderSub(subCategory)` — whether or not this command came through a
+     * submenu.
+     *
+     * From a top-level leaf, `subItems`/`subCategory` still hold whatever
+     * submenu was opened last, so Attack -> target -> Esc redrew the **Change**
+     * submenu with the reticle still on the boss, and the next Enter spent the
+     * whole turn on a spherechange the player never asked for (verified live:
+     * `{"type":"spherechange","who":"paine","from":"warrior","to":"gunner"}`
+     * after pressing Attack). With no submenu ever opened it was worse in a
+     * quieter way: `subItems` was empty, so the cancel drew an empty command
+     * window that swallowed every key (`if (!list) return`) until a second Esc.
+     */
+    let pendingFrom: 'top' | 'sub' = 'top';
     let targetIds: CombatantId[] = [];
     let targetIdx = 0;
 
@@ -235,12 +251,15 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.onPreview(deps.previewRank(currentLeaf()));
     }
 
-    function rowClasses(selected: boolean, c: AvailableCommand): string {
+    function rowClasses(selected: boolean, c: AvailableCommand, gate = false): string {
       return [
         'ig-cmd',
         selected ? 'ig-cmd--selected' : '',
         c.enabled ? '' : 'ig-cmd--disabled',
         isSpherechange(c) ? 'ig-cmd--overdrive' : '',
+        // A row carrying a `GRANTS:` line is laid out differently — see
+        // `.ffx2cmd--gate` in `ffx2-hud.css`.
+        gate ? 'ffx2cmd--gate' : '',
       ]
         .filter(Boolean)
         .join(' ');
@@ -254,7 +273,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       const label = change ? spherechangeLabel(c) : c.label;
       const grants = change ? spherechangeHelp(c) : '';
       const gate = grants ? `<span class="ffx2cmd__grants">${grants}</span>` : '';
-      return `<div class="${rowClasses(selected, c)}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${label}</span>${gate}${reason}${mp}${cursor}</div>`;
+      return `<div class="${rowClasses(selected, c, Boolean(grants))}" data-idx="${i}" style="margin-right: calc(var(--ig-cascade-step) * ${i})"><span class="ffx2cmd__label">${label}</span>${gate}${reason}${mp}${cursor}</div>`;
     }
 
     /** A category row. `.ig-cmd--overdrive` for Change, because §4.5 costs the whole turn. */
@@ -348,9 +367,33 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         return;
       }
       pending = c;
+      // Recorded here, while `view` is still the one the row was picked in —
+      // `renderTargets()` is about to overwrite it. See `pendingFrom`.
+      pendingFrom = view === 'sub' ? 'sub' : 'top';
       targetIds = c.validTargets;
       targetIdx = 0;
       renderTargets();
+    }
+
+    /**
+     * Esc out of target selection: drop the reticles and the pending command,
+     * and go back to the list the command was actually picked from.
+     *
+     * Clearing `targetLayer` is half the fix on its own — the old cancel left
+     * the reticles drawn over the boss while it redrew the command window, so
+     * the screen showed a menu and a live target at the same time, two mutually
+     * exclusive states.
+     */
+    function cancelTargets(): void {
+      deps.targetLayer.innerHTML = '';
+      pending = null;
+      targetIds = [];
+      targetIdx = 0;
+      if (pendingFrom === 'sub' && subItems.length > 0) renderSub(subCategory);
+      // `renderTop(true)` and not `renderTop()`: this is a cancel, and the
+      // claim has to outlive the press that caused it or `BattleScreen` polls
+      // the same Esc on the next frame and opens the pause menu on top.
+      else renderTop(true);
     }
 
     const onTargetClick = (e: MouseEvent): void => {
@@ -398,7 +441,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       }
       if (KEY_CANCEL.has(e.code)) {
         e.preventDefault();
-        if (view === 'target') renderSub(subCategory);
+        if (view === 'target') cancelTargets();
         else if (view === 'sub') renderTop(true);
         return;
       }

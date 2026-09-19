@@ -79,7 +79,7 @@
     "rikku-thief": { "fx": 0.5324, "fy": 0.251, "ipd": 0.1197, "px": [558, 1212], "note": "the tallest hair in the game; her eyes are a quarter of the way down the file" },
     "rikku-white-mage": { "fx": 0.3355, "fy": 0.1714, "ipd": 0.069, "px": [626, 1213], "note": "she stands well left of centre" },
     "rikku": { "fx": 0.449, "fy": 0.1804, "ipd": 0.065, "px": [648, 1120] },
-    "yuna-white-mage": { "fx": 0.475, "fy": 0.1074, "ipd": 0.0456, "px": [758, 1172], "note": "Chapter 4 and 5's Yuna" },
+    "yuna-white-mage": { "fx": 0.6333, "fy": 0.1079, "ipd": 0.0861, "px": [581, 1183], "note": "Chapter 4 and 5's Yuna. Re-measured 2026-09-19 after the art fleet re-rolled and mirrored idle.png (758x1172 -> 581x1183; idle.json carries flipped: true) — the old row put her eye line on her collarbone. She stands right of centre inside a raised hood, so the rig's headCentreX 0.702 is the hood, not her face." },
     "yuna-black-mage": { "fx": 0.4412, "fy": 0.1777, "ipd": 0.0706, "px": [782, 1149] },
     "yuna-dark-knight": { "fx": 0.4851, "fy": 0.218, "ipd": 0.0787, "px": [549, 1195], "note": "the horned helm puts her eyes lowest of Yuna's set" },
     "yuna-gunner": { "fx": 0.52, "fy": 0.1124, "ipd": 0.1109, "px": [460, 1194] },
