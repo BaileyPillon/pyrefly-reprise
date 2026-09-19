@@ -26,7 +26,7 @@ const BOSS_ABILITY_IDS = [
   'full-life',
   'cross-cleave',
   'dispel',
-  'flare',
+  'flare-self',
   'reflect',
   'protect',
   'banish',
@@ -196,7 +196,7 @@ describe('Seymour Flux (§4)', () => {
     expect(idOf(chooseAiCommand(ctx, seymour))).toBe('banish');
   });
 
-  it('casts Flare at Self in phase 2, then waits while Reflect holds (§4.4.1)', () => {
+  it('loops Flare -> wait -> Flare while Reflect holds, and it is flare-self (§4.4.1)', () => {
     const { ctx } = seymourCtx();
     const seymour = at(ctx, 'seymour-flux');
     seymour.hp = 30000;
@@ -205,10 +205,20 @@ describe('Seymour Flux (§4)', () => {
       ctx.state.flags['seymour.lastEnemyActor'] = 'mortiorchis';
       return chooseAiCommand(ctx, seymour);
     };
+    // The encounter's own record, not the player's Blk Magic `flare`: power 80,
+    // `self`, `extra.selfTargetBounce`. Casting the player's row measured 927
+    // on Yuna against §5.2's 1,900-2,100 band and made §5.3's self-damage case
+    // unreachable.
     const flare = step();
-    expect(idOf(flare)).toBe('flare');
+    expect(idOf(flare)).toBe('flare-self');
     expect(flare?.targets).toEqual(['seymour-flux']);
+    // §4.4.1: one free turn on the turn he would recast Reflect — and then the
+    // loop restarts. It used to stop here for ever: ten phase-2 turns on seed 1
+    // contained exactly one Flare and nine threshold counters / waits.
     expect(step()).toBeNull(); // "Seymour waits"
+    expect(idOf(step())).toBe('flare-self');
+    expect(step()).toBeNull();
+    expect(idOf(step())).toBe('flare-self');
   });
 });
 

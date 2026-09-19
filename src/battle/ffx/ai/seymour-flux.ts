@@ -17,7 +17,7 @@
  */
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
-import { has, livingEnemies, livingFriendlies, rtOf, tryActor } from '../state.ts';
+import { type Ctx, has, livingEnemies, livingFriendlies, rtOf, tryActor } from '../state.ts';
 import { type AiContext, flag, registerAiScript, use } from './types.ts';
 
 /** Shared cycle state lives on the Seymour actor so both scripts read one copy. */
@@ -170,9 +170,24 @@ export const seymourFluxAi = (ai: AiContext): Command | null => {
 
   // Phase 2: Flare is *always* cast at Self. Reflect (or its absence) decides
   // who eats it — do not special-case the targeting [§4.4.1].
+  //
+  // The id is **`flare-self`**, the encounter's own record (power 80, `self`,
+  // `extra.selfTargetBounce`), not the player's Blk Magic `flare` (power 60,
+  // single-enemy). Casting the player's row was measured at 927 on Yuna against
+  // §5.2's 1,900-2,100 band, and it made §5.3's "Reflect dispelled, Flare
+  // detonates on Seymour for ~1,734" unreachable — the whole reason Dispel is a
+  // damage tool here [§4.4.1, §6 row 8].
   const flared = flag(ai.ctx.state.flags as AiContext['memory'], FLARED);
   const hasReflect = has(ai.self, 'reflect');
   if (hasReflect && flared) {
+    // §4.4.1: he **waits on the turn where he would recast Reflect**, because
+    // it is still up. That is one free turn, and then the loop restarts — so
+    // the flag is cleared here exactly as the dispelled branch clears it below.
+    // Leaving it set deadlocked phase 2: measured on seeds 1 and 7, Seymour's
+    // whole sub-50% script was one Flare followed by nothing but threshold
+    // counters and "Seymour waits". The loop §4.4.1 describes is
+    // Flare -> wait -> Flare -> wait.
+    setState(ai, FLARED, false);
     ai.ctx.emit({ type: 'message', text: 'Seymour waits', kind: 'telegraph' });
     return null;
   }
@@ -181,7 +196,7 @@ export const seymourFluxAi = (ai: AiContext): Command | null => {
     return use(ai, 'reflect', [ai.self.id]);
   }
   setState(ai, FLARED, true);
-  return use(ai, 'flare', [ai.self.id]);
+  return use(ai, 'flare-self', [ai.self.id]);
 };
 
 /**
@@ -259,6 +274,48 @@ export function seymourThresholdCounters(ai: AiContext, fromPoison: boolean): Co
     out.push(use(ai, 'reflect', [self.id]));
   }
   return out;
+}
+
+/**
+ * The **Talk** Trigger Command in this encounter [ffx-seymour-flux §4.7].
+ *
+ * "Certain party members can Talk to Seymour at the start of the fight for a
+ * permanent-for-this-battle stat bonus": **Kimahri +10 Strength**, **Yuna +10
+ * Magic Defense** `[verified: 2 sources]`. Nobody else has a line, and neither
+ * of them has a second one — §4.7 is a one-off bonus, not a stackable buff, so
+ * the charge is per character and battle-scoped.
+ *
+ * The bonus lands on `stats` rather than as a status because §4.7 calls it a
+ * stat bonus and §9 is explicit that only real stat points move the cubic
+ * `str^3 // 32` POWER term; a +N% status would be a different, smaller thing.
+ */
+const SEYMOUR_TALK_BONUS: Readonly<Record<string, { readonly stat: 'str' | 'mdef'; readonly amount: number; readonly label: string }>> = {
+  kimahri: { stat: 'str', amount: 10, label: 'Strength' },
+  yuna: { stat: 'mdef', amount: 10, label: 'Magic Defense' },
+};
+
+/** Who still has a Talk line left, for the menu and the intent panel. */
+export function seymourTalkAvailable(ctx: Ctx, talkerId: string): boolean {
+  if (!(talkerId in SEYMOUR_TALK_BONUS)) return false;
+  return ctx.state.flags[`${TALKED}${talkerId}`] !== true;
+}
+
+const TALKED = 'seymour.talked.';
+
+/** Spend `talker`'s one Talk line. Returns false when there is nothing to say. */
+export function consumeSeymourTalk(ctx: Ctx, talker: FFXCombatant): boolean {
+  const bonus = SEYMOUR_TALK_BONUS[talker.id];
+  if (!bonus) return false;
+  const key = `${TALKED}${talker.id}`;
+  if (ctx.state.flags[key] === true) return false;
+  ctx.state.flags[key] = true;
+  talker.stats[bonus.stat] += bonus.amount;
+  ctx.emit({
+    type: 'message',
+    text: `${talker.name}: +${bonus.amount} ${bonus.label}`,
+    kind: 'story',
+  });
+  return true;
 }
 
 /** A player delay attempt is punished with party-wide Slowga [§4.6]. */

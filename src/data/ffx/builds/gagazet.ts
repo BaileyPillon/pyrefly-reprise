@@ -120,6 +120,10 @@ function yuna(): FFXMemberBuild {
       'reflect',
       'dispel',
       'haste',
+      // The §4.7 Trigger Command [verified: 2 sources]: Yuna's line is worth
+      // **+10 Magic Defense** for the battle, which §5.2 shows materially
+      // reduces Total Annihilation on her. See the same note on Kimahri.
+      'talk',
     ],
     equipment: {
       weapon: { name: "Yuna's Staff", slots: 1, autoAbilities: [], bonusCrit: BASE_WEAPON_BONUS_CRIT },
@@ -165,7 +169,15 @@ function kimahri(): FFXMemberBuild {
     mp: 130,
     // §6.1, §7.4 [verified: 2 sources] — Mighty Guard and White Wind newly
     // learnable from Biran/Yenke Ronso on this very mountain via Lancet.
-    learnedAbilityIds: ['lancet', 'jump', 'mighty-guard', 'white-wind', 'self-destruct'],
+    //
+    // `'talk'` is the **Trigger Command**, not an ability: §4.7 [verified: 2
+    // sources] gives Kimahri a line at the start of this fight worth **+10
+    // Strength** for the battle, "a ~60% damage swing at these stat levels".
+    // It was listed on Tidus alone, who has no line here, so §4.7 was
+    // unreachable — the row existed and the two characters it belongs to could
+    // not see it. The engine routes it as a `TriggerCommand`
+    // (`data/ffx/abilities/special-menu-markers.ts`).
+    learnedAbilityIds: ['lancet', 'jump', 'mighty-guard', 'white-wind', 'self-destruct', 'talk'],
     equipment: {
       weapon: { name: "Kimahri's Spear", slots: 2, autoAbilities: ['piercing', 'sensor'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
       armor: { name: 'Glorious Armlet', slots: 3, autoAbilities: ['hp-10'] },

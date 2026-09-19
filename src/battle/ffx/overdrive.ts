@@ -19,7 +19,11 @@ import { type Ctx, has, tryActor } from './state.ts';
 import { estimatedDamage } from './formulas.ts';
 import { hasAuto } from './equipment.ts';
 import type { TimingBonus } from './formulas.ts';
-import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furyTierOf } from './fury.ts';
+import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
+import { attackReelHits } from './reels.ts';
+
+/** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
+const ATTACK_REEL_SYMBOLS = new Set(['1-hit', '2-hit', 'miss', '1hit', '2hit']);
 
 // Re-exported so callers have one import site for Overdrive behaviour.
 export {
@@ -28,6 +32,7 @@ export {
   FURY_MAX_CASTS,
   degreesPerCast,
   furyCastsFor,
+  furySpellIdsFor,
   furyTierOf,
   isMenuMarker,
 } from './fury.ts';
@@ -222,12 +227,26 @@ const TIMER_MS: Readonly<Record<string, number>> = {
   'blitz-ace': 2200,
 };
 
-/** Default timer for a minigame kind. */
+/**
+ * Default timer for a minigame kind, in ms. **`0` means "not a timed input"**,
+ * not "no time" — see {@link minigameParams}, which omits the field entirely in
+ * that case so an overlay cannot start a zero-length countdown.
+ *
+ * Lulu's Fury **is** timed: §5.7 gives it an input window of "~4 s, consistent
+ * with the other timed Overdrives" `[estimate]`. It returning 0 is why Fury
+ * settled in 431 ms with `{ sweptDegrees: 0, casts: 0 }` and spent the gauge
+ * for nothing. Ronso Rage and Mix are **pickers** — `types.ts` says so of Rage
+ * in as many words — and stay untimed. §5.2 excludes Fury from the *damage*
+ * bonus ("Lulu's timer always reaches 0"), which is about the bonus, not about
+ * whether the window exists; `timingBonusFrom` keeps honouring that.
+ */
 export function timerMsFor(def: AbilityDef): number {
   switch (def.minigame) {
     case 'tidus-timing':
       return TIMER_MS[def.id] ?? 3000;
     case 'auron-sequence':
+      return 4000;
+    case 'lulu-fury':
       return 4000;
     case 'wakka-reels':
     case 'ladyluck-reels':
@@ -237,10 +256,24 @@ export function timerMsFor(def: AbilityDef): number {
   }
 }
 
+/** The `<spell>-fury` rows a Fury marker expands into for this caster [§5.7]. */
+export function furySpellsFor(ctx: Ctx, user: FFXCombatant, marker: AbilityDef): AbilityDef[] {
+  const out: AbilityDef[] = [];
+  for (const id of furySpellIdsFor(marker, user.learnedAbilityIds)) {
+    const def = ctx.content.ability(id);
+    if (def) out.push(def);
+  }
+  return out;
+}
+
 /** Overlay tuning the UI needs, merged with anything the data file supplied. */
 export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): Record<string, unknown> {
   const authored = (def.extra?.['minigameParams'] as Record<string, unknown> | undefined) ?? {};
-  const base: Record<string, unknown> = { abilityId: def.id, timerMs: timerMsFor(def) };
+  const timerMs = timerMsFor(def);
+  // An untimed picker publishes **no** `timerMs` rather than `timerMs: 0`: the
+  // overlays read it as `num(params['timerMs'], 4000)` and a 0 passes that
+  // guard, so a picker opened a countdown that expired on its first step.
+  const base: Record<string, unknown> = { abilityId: def.id, ...(timerMs > 0 ? { timerMs } : {}) };
   switch (def.minigame) {
     case 'tidus-timing':
       Object.assign(base, { travelMs: 1400, zonePercent: 22 });
@@ -249,7 +282,14 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       Object.assign(base, { inputs: 7 });
       break;
     case 'wakka-reels':
-      Object.assign(base, { reels: 3, symbolsPerSecond: 6, strip: ['fire', 'ice', 'water', 'thunder'] });
+      // The strip comes off the reel set the player picked — it was hard-coded
+      // to the Element Reels symbols, so Attack, Status and Aurochs Reels all
+      // opened the wrong overlay [§5.6's per-set symbol table].
+      Object.assign(base, {
+        reels: 3,
+        symbolsPerSecond: 6,
+        strip: (def.extra?.['reelSymbols'] as string[] | undefined) ?? ['fire', 'ice', 'water', 'thunder'],
+      });
       break;
     case 'lulu-fury':
       Object.assign(base, {
@@ -306,12 +346,24 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
     }
     case 'wakka-reels':
     case 'ladyluck-reels': {
-      const strip = ((def.extra?.['reelStrip'] as string[] | undefined) ?? ['1hit', '2hit', 'miss']).slice();
+      // The strip is `extra.reelSymbols` — the key the four reel-set records
+      // actually ship. Reading a `reelStrip` that exists nowhere meant every
+      // set fell back to the **Attack Reels** strip, so Element, Status and
+      // Aurochs Reels were rolled against symbols they do not have and could
+      // never match anything. §5.6's own note applies: a uniform draw is an AI
+      // convenience, not the game's model — Slots is fully player-controlled.
+      const authored = (def.extra?.['reelSymbols'] ?? def.extra?.['reelStrip']) as string[] | undefined;
+      const strip = (authored && authored.length > 0 ? authored : ['1-hit', '2-hit', 'miss']).slice();
       const symbols: [string, string, string] = [ctx.rng.pick(strip), ctx.rng.pick(strip), ctx.rng.pick(strip)];
       const three = symbols[0] === symbols[1] && symbols[1] === symbols[2];
-      const value = (s: string): number => (s === '2hit' ? 2 : s === '1hit' ? 1 : 0);
-      const raw = value(symbols[0]) + value(symbols[1]) + value(symbols[2]);
-      return { kind, reels: { symbols, threeOfAKind: three, hits: three ? raw * 2 : raw, timeRemainingMs: 0 } };
+      // `hits` is **Attack Reels only** (`types.ts`); on any other set it used
+      // to come back 0 and overwrite the resolved shot's own hit count.
+      const hits = attackReelHits(symbols);
+      const attackStrip = strip.every((s) => ATTACK_REEL_SYMBOLS.has(s));
+      return {
+        kind,
+        reels: { symbols, threeOfAKind: three, ...(attackStrip ? { hits } : {}), timeRemainingMs: 0 },
+      };
     }
     case 'lulu-fury': {
       // Roll the *input*, not the outcome: a swept angle inside the published

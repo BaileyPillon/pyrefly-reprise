@@ -672,20 +672,17 @@ function nextAeon(commands: AvailableCommand[]): Command | null {
 /**
  * The Talk trigger [§1.6, §7.3].
  *
- * The command menu publishes Talk as an ability row, but `talk` is a **menu
- * marker**: its own catalog entry says so in as many words ("submit a
- * TriggerCommand with id:'talk', not an AbilityCommand with this id",
- * `data/ffx/abilities/special-menu-markers.ts`), and `execute.ts` only zeroes
- * the gauge for `{ kind: 'trigger' }`. Submitting the row as offered resolves a
- * `formula: 'none'`, `hits: 0` ability — a silently wasted turn. So the row is
- * read for *availability* and re-shaped into the command its own data record
- * says it resolves as. The engine still refuses the third charge on its own
- * (`consumeBfaTalk`), which is the deliberately inert offer §1.6 describes.
+ * The row is now submitted **exactly as the menu offers it**. It used to be
+ * re-shaped here — the menu published Talk as an `{ kind: 'ability' }` row
+ * while `execute.ts` only zeroed the gauge for `{ kind: 'trigger' }`, so the
+ * row as offered was a silently wasted turn and this tactic was the only thing
+ * in the project that could fire Talk at all. `commands.ts` now emits the kind
+ * the catalog record names, and the exhausted third charge arrives disabled, so
+ * `row`'s own `enabled` filter is the §1.6 charge limit.
  */
 function talk(commands: AvailableCommand[]): Command | null {
   const r = row(commands, ['Talk']);
-  if (!r) return null;
-  return { kind: 'trigger', id: 'talk', targets: [] };
+  return r ? (r.command as Command) : null;
 }
 
 /**
@@ -872,16 +869,31 @@ const SPELL_ORDER = [
  * `execute.ts` refuses it outright as a marker — a full gauge that could never
  * be spent.
  *
- * So the row is read for **availability** and re-shaped into the id its own
- * `resolvesToOneOf` list names, exactly as {@link talk} does for the Trigger
- * Command. Firaga's tier-3 Fury at Magic 48 is about **seven casts in one
+ * `commands.ts` now expands the marker into one row per Fury spell Lulu has
+ * actually learned, so the tactic no longer invents an id: it picks the biggest
+ * row on offer. Firaga's tier-3 Fury at Magic 48 is about **seven casts in one
  * turn** (`fury.ts` FURY_ANCHOR_CASTS interpolated) — 13,000 against the raw
  * boss, better than 30,000 against a Mental-Broken one, from a gauge her
  * `stoic` mode fills just by standing there being hit.
  */
+const FURY_ORDER: readonly string[] = [
+  'Firaga Fury',
+  'Thundaga Fury',
+  'Blizzaga Fury',
+  'Waterga Fury',
+  'Fira Fury',
+  'Thundara Fury',
+  'Blizzara Fury',
+  'Watera Fury',
+  'Fire Fury',
+  'Thunder Fury',
+  'Blizzard Fury',
+  'Water Fury',
+];
+
 export function fury(commands: AvailableCommand[], targetId: CombatantId): Command | null {
-  if (!row(commands, ['Fury'])) return null;
-  return { kind: 'overdrive', id: 'firaga-fury', targets: [targetId] };
+  const r = row(commands, FURY_ORDER, targetId) ?? row(commands, FURY_ORDER);
+  return r ? aim(r, targetId) : null;
 }
 
 function blackMagic(

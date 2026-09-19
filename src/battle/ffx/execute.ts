@@ -23,8 +23,9 @@ import {
   spendOverdrive,
   timingBonusFrom,
 } from './overdrive.ts';
+import { resolveReelSpin } from './reels.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
-import { consumeBfaTalk } from './ai/index.ts';
+import { applyTalkTrigger } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { revealForSensorAuto } from './sensor.ts';
 
@@ -87,14 +88,22 @@ function shapeOverdrive(
   }
 
   if (result.kind === 'wakka-reels' || result.kind === 'ladyluck-reels') {
-    const reels = result.reels;
-    // Three of a kind hits every enemy; two of a kind hits one random enemy.
-    const shaped: AbilityDef = {
-      ...def,
-      targeting: reels.threeOfAKind ? 'all-enemies' : 'random-enemy',
-      hits: reels.hits ?? def.hits,
-    };
-    return { def: shaped, options };
+    // The reel-set command is a wrapper that deals nothing: `formula: 'none'`,
+    // `power: 0`, `hits: 0`. Re-shaping *it* — which is all the old code did —
+    // therefore produced a full-gauge Overdrive with no damage event at all.
+    // The spin has to be resolved into one of the ten **shots**
+    // [ffx-combat-core §5.6, `reels.ts`].
+    const outcome = resolveReelSpin(def, result.reels);
+    if (!outcome) return { def, options };
+    const shot = abilityOf(ctx, outcome.shotId);
+    if (!shot) return { def, options };
+    // §5.6's match rule overrides the shot's own targeting; Aurochs Shot is
+    // authored `all-enemies` because that is its three-of-a-kind payoff, and a
+    // two-of-a-kind still means one random enemy.
+    const shaped: AbilityDef = { ...shot, targeting: outcome.targeting };
+    // The wrapper is where the 20 000 ms timer ran, so the shot inherits the
+    // §5.2 bonus already computed above and never carries the flag itself.
+    return { def: shaped, options: outcome.hits === undefined ? options : { ...options, hits: outcome.hits } };
   }
 
   if (result.kind === 'lulu-fury') {
@@ -197,22 +206,46 @@ export function executeCommand(
       return { rank: 0, handOffTo: inId, damageDealt: 0 };
     }
     case 'trigger': {
-      ctx.emit({ type: 'action-start', actorId: actor.id, command, abilityName: 'Talk', targets: command.targets });
+      // A Trigger Command is an authored, encounter-owned action, not an
+      // ability: `id` names the trigger, and the catalog row of the same id is
+      // read only for its label and its rank [types.ts `TriggerCommand`].
+      const triggerDef = abilityOf(ctx, command.id);
+      ctx.emit({
+        type: 'action-start',
+        actorId: actor.id,
+        command,
+        abilityId: command.id,
+        abilityName: triggerDef?.name ?? 'Talk',
+        targets: command.targets.slice(),
+      });
+      let accepted = false;
       if (command.id === 'talk') {
-        const boss = ctx.state.enemyIds
-          .map((id) => tryActor(ctx, id))
-          .find((c): c is FFXCombatant => c !== undefined && isAlive(c) && !c.flags.isPart);
-        if (boss) {
-          const accepted = consumeBfaTalk({ ctx, self: boss, memory: rtOf(ctx, boss.id).ai });
-          if (accepted) {
-            const from = boss.overdrive?.gauge ?? 0;
-            if (boss.overdrive) boss.overdrive.gauge = 0;
+        accepted = applyTalkTrigger(ctx, actor);
+        if (accepted) {
+          // A Trigger Command that lands must *say* it landed. Braska's Final
+          // Aeon's charge is often spent while his gauge already reads 0, and
+          // without this the whole action produced nothing but `action-start`
+          // and `action-end` — a row that works and looks broken.
+          ctx.emit({ type: 'message', text: `${actor.name} speaks`, kind: 'story' });
+          // Braska's Final Aeon keeps his gauge on the actor; the script's own
+          // mirror is zeroed inside `consumeBfaTalk` [ffx-bfa-yu-yevon §1.6].
+          const boss = ctx.state.enemyIds
+            .map((id) => tryActor(ctx, id))
+            .find((c): c is FFXCombatant => c !== undefined && isAlive(c) && !c.flags.isPart);
+          if (boss?.overdrive && boss.overdrive.gauge > 0) {
+            const from = boss.overdrive.gauge;
+            boss.overdrive.gauge = 0;
             ctx.emit({ type: 'overdrive-gauge', who: boss.id, from, to: 0, cause: 'talk' });
           }
         }
       }
+      // §1.6's third Talk is offered and **deliberately inert**; say so rather
+      // than spending a turn in silence, which reads as a broken button.
+      if (!accepted) {
+        ctx.emit({ type: 'message', text: `${actor.name} has nothing left to say`, kind: 'system' });
+      }
       ctx.emit({ type: 'action-end', actorId: actor.id });
-      return { rank: 3, damageDealt: 0 };
+      return { rank: triggerDef ? rankOf(triggerDef) : 3, damageDealt: 0 };
     }
     default:
       return NOTHING;

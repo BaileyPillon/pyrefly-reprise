@@ -6,13 +6,43 @@
  * [docs/CONTRACTS.md].
  */
 
-import type { AbilityDef, AvailableCommand, FFXCombatant } from '../common/types.ts';
+import type { AbilityDef, AvailableCommand, Command, FFXCombatant } from '../common/types.ts';
 import { type Ctx, abilityOf, canSwitchIn, has, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
 import { validTargets } from './targeting.ts';
-import { overdriveReady } from './overdrive.ts';
+import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
+import { talkAvailable } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
+
+/**
+ * The command a **menu marker** row must actually submit.
+ *
+ * Three ids in `learnedAbilityIds` are labels for a different `Command` kind,
+ * and each one says so in its own catalog record's `extra`
+ * (`data/ffx/abilities/special-menu-markers.ts`): Flee is an `EscapeCommand`
+ * with `mode: 'party'`, Talk is a `TriggerCommand`.
+ *
+ * Until this existed the menu offered them as `{ kind: 'ability' }`, which
+ * `execute.ts` resolved as a `formula: 'none'`, `hits: 0` record — a silently
+ * wasted turn. **Jecht's Overdrive gauge could therefore never be zeroed by a
+ * player**, although the guide and the intent panel both advertise Talk's two
+ * charges, and `engine/tactics/braskas-final-aeon.ts` had to re-shape the row
+ * by hand so the auto-battler worked at all. The row a menu offers must be
+ * submittable verbatim [AGENTS.md hard rule 4].
+ */
+function markerCommand(def: AbilityDef): Command | null {
+  const kind = def.extra?.['resolvesAsCommandKind'];
+  if (kind === 'trigger') {
+    const id = def.extra?.['triggerId'];
+    return { kind: 'trigger', id: typeof id === 'string' ? id : def.id, targets: [] };
+  }
+  if (kind === 'escape') {
+    const mode = def.extra?.['escapeMode'] === 'party' ? 'party' : 'single';
+    return { kind: 'escape', targets: [], extra: { mode } };
+  }
+  return null;
+}
 
 function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: AvailableCommand['command']): AvailableCommand {
   const cost = mpCostFor(user, def);
@@ -62,7 +92,19 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     const def = abilityOf(ctx, id);
     if (!def || def.category === 'overdrive') continue;
     if (def.category === 'summon') continue;
-    rows.push(rowFor(ctx, user, def, { kind: 'ability', id, targets: [] }));
+    const marker = markerCommand(def);
+    const row = rowFor(ctx, user, def, marker ?? { kind: 'ability', id, targets: [] });
+    if (marker?.kind === 'escape' && !ctx.rt.canEscape) {
+      row.enabled = false;
+      row.disabledReason = "Can't escape";
+    }
+    if (marker?.kind === 'trigger' && marker.id === 'talk' && !talkAvailable(ctx, user)) {
+      // §1.6 offers a third Talk on purpose and §4.7 gives each character one
+      // line; an exhausted row stays visible and says why.
+      row.enabled = false;
+      row.disabledReason = 'Nothing left to say';
+    }
+    rows.push(row);
   }
 
   // Overdrives. Silence never blocks one [ffx-combat-core §5.1].
@@ -70,6 +112,23 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     for (const id of user.overdrive?.unlockedOverdriveIds ?? []) {
       const def = abilityOf(ctx, id);
       if (!def) continue;
+      // Lulu's Overdrive is a **menu marker**: `'fury'` is the submenu label,
+      // and the real command names one of the 19 `<spell>-fury` rows, because
+      // `FuryResult` has no field to carry which spell was chosen
+      // [CONTRACT-CHANGES decision 9, ffx-combat-core §5.7]. The build shipped
+      // only the marker, `execute.ts` refuses a marker, and Fury was therefore
+      // **uncastable**. Expand it here, into the spells she has actually
+      // learned — §5.7's input begins "after choosing a learned Blk Magic
+      // spell".
+      if (isMenuMarker(def)) {
+        for (const spell of furySpellsFor(ctx, user, def)) {
+          const row = rowFor(ctx, user, spell, { kind: 'overdrive', id: spell.id, targets: [] });
+          row.enabled = row.validTargets.length > 0 || spell.targeting === 'self';
+          if (!row.enabled) row.disabledReason = 'No target';
+          rows.push(row);
+        }
+        continue;
+      }
       const row = rowFor(ctx, user, def, { kind: 'overdrive', id, targets: [] });
       row.enabled = row.validTargets.length > 0 || def.targeting === 'self';
       if (!row.enabled) row.disabledReason = 'No target';

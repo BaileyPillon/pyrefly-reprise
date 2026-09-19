@@ -112,3 +112,24 @@ export function furyCastsFor(def: AbilityDef, magic: number, sweptDegrees: numbe
 export function isMenuMarker(def: AbilityDef): boolean {
   return def.extra?.['isGenericMenuMarker'] === true;
 }
+
+/**
+ * The `<spell>-fury` ids a marker offers, given who is casting.
+ *
+ * §5.7's input begins "after choosing a **learned** Blk Magic spell", so the
+ * submenu is exactly the intersection of the marker's own `resolvesToOneOf`
+ * list with the caster's `learnedAbilityIds` — `firaga-fury` is offered iff she
+ * knows Firaga. The base id is the fury id with its `-fury` suffix removed,
+ * which is how every one of the 19 records is named
+ * (`data/ffx/abilities/overdrive-lulu-1.ts`, `-2.ts`).
+ *
+ * This is what stops the preset's bare `'fury'` marker from being Lulu's whole
+ * Overdrive menu: the marker is refused by `execute.ts` on purpose, so before
+ * this expansion existed her gauge could be filled and never spent.
+ */
+export function furySpellIdsFor(marker: AbilityDef, learnedAbilityIds: readonly string[]): string[] {
+  const choices = marker.extra?.['resolvesToOneOf'];
+  if (!Array.isArray(choices)) return [];
+  const learned = new Set(learnedAbilityIds);
+  return choices.filter((id): id is string => typeof id === 'string' && learned.has(id.replace(/-fury$/, '')));
+}

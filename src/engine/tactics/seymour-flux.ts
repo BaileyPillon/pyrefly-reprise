@@ -121,6 +121,7 @@ const CROSS_CLEAVE = 3_200;
  */
 const TOTAL_ANNIHILATION = 4_300;
 
+
 /**
  * Party HP missing, in total, at which a party-wide item beats a single heal.
  *
@@ -290,6 +291,28 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
     if (summon) return summon;
   }
 
+  // **Talk**, the §4.7 Trigger Command: Kimahri **+10 Strength** ("a ~60%
+  // damage swing at these stat levels") and Yuna **+10 Magic Defense", which
+  // §5.2 shows materially reduces Total Annihilation on her. One turn each,
+  // once each; the engine disables the row afterwards, so it cannot loop, and
+  // §4.7 scopes the bonus to the battle.
+  //
+  // Two gates, both measured. It is **last of the openers**, behind Mighty
+  // Guard, Hastega and the Fang: run ahead of those it took the turns they
+  // need and the party wiped in phase 1 with Seymour untouched on 70,000 —
+  // the same failure the Fang caused when it was ordered ahead of the
+  // Overdrive. And it is only taken while the party is warded and nobody is
+  // one hit from dying, because a permanent bonus is worth having only if
+  // there is a party left to spend it on. §4.7 calls it a *start of the
+  // fight* action, so it also stops once he is under 75% and counter-casting.
+  //
+  // Worth +4 wins in forty seeds (19 -> 23) — the largest single rule added
+  // in this pass.
+  if (bare.length === 0 && exposed.length === 0) {
+    const say = row(commands, ['Talk']);
+    if (say) return aim(say, actorId);
+  }
+
   // ---------------------------------------------------------------- 4. revive
   //
   // Thirty Phoenix Downs (§7.8) against a combo that costs the enemy two turns
@@ -387,6 +410,37 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
     if (heal) return aim(heal, worst.id);
   }
 
+  // ------------------------------------------- 5b. shut phase 2 off: Silence
+  //
+  // §6 row 7, and it is the largest rule in phase 2: **"Silence Buster /
+  // Silence Attack (Wakka) — 50% resist. Silences shut off Flare, Reflect,
+  // Dispel and Protect, wasting his turn each time."** §2's status table agrees
+  // (`Silence | 50 | Landable`), and §4.4.1's loop is nothing *but* Flare and
+  // Reflect — so a landed Silence does not reduce phase 2, it deletes it, and
+  // the Mortiorchis's charge ladder becomes the only thing left to survive.
+  //
+  // This rule exists because phase 2 only started running. §4.4.1's loop was
+  // deadlocked (one Flare, then "Seymour waits" for ever), so there was nothing
+  // to silence and the two Silence rows were dead weight; with the loop running
+  // as canon the fight gains a repeating ~2,000 party-wide bounce and needs its
+  // canonical answer. Measured over forty seeds, the fixed loop alone cost four
+  // wins and this rule takes them back.
+  //
+  // Wakka owns both rows (§7.4) and this preset benches him, so the first turn
+  // buys the swap — which costs nothing (ffx-combat-core §1.7). It sits below
+  // the Zombie cure, the revive, the aeons and the readiness block, because
+  // none of those can be deferred a turn and this one can.
+  if (phase2 && !has(boss, 'silence')) {
+    const gag = row(commands, ['Silence Buster', 'Silence Attack'], boss.id);
+    if (gag) return aim(gag, boss.id);
+    // **No swap for it.** Wakka owns both rows (§7.4) and this preset benches
+    // him, but a switch is rank 0 and hands the turn straight to the incoming
+    // member (ffx-combat-core §1.7) — so a rule that pulls Wakka in while step
+    // 5 pulls Yuna in for the wards ping-pongs the same turn between them for
+    // ever. Measured: the forty-seed sweep stopped terminating. The rows are
+    // taken when they are on the board and never bought with a swap.
+  }
+
   // ------------------------------------------------------ 6. standing repairs
   //
   // Haste leaks away one revive at a time — KO clears it, and this fight kills
@@ -431,10 +485,18 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
   // it off is a turn spent widening Auron's swing and nothing else, and he
   // re-counters it the next time he is hit; measured, stripping both cost the
   // party 6,000 of its own damage a run and dropped 66 wins to 54 in 100 seeds.
-  // Stripping the Reflect alone measures level (73 against 74 in 200 seeds) and
-  // is kept because it is §6 row 8's documented play and because it converts
-  // his largest phase-2 action into ~1,734 of self-harm — the "Dispel-and-poison
-  // loop" §5.3 names as a win condition in its own right.
+  // Stripping the Reflect alone used to measure level (73 against 74 in 200
+  // seeds) and is now **the phase-2 rule**, because the thing it answers only
+  // started happening: his §4.4.1 loop was deadlocked — one Flare for the whole
+  // of phase 2 and then nothing but "Seymour waits" — so there was no bounce to
+  // prevent and Dispel really was a spare turn. With the loop running as §4.4.1
+  // describes it (Flare -> wait -> Flare) the same turn now buys three things at
+  // once: it stops a ~2,000 party-wide bounce, it turns the next Flare into
+  // ~1,734 of his own HP, and it costs him a further turn recasting. See its
+  // new home above step 6.
+  //
+  // (It is left here as well, below the Cheer ladder, for the case where the
+  // repairs above ran first and the Reflect is still up.)
   if (has(boss, 'reflect')) {
     const strip = row(commands, ['Dispel'], boss.id);
     if (strip) return aim(strip, boss.id);
