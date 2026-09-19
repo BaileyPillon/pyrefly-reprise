@@ -152,7 +152,14 @@ export class StubCutscene extends ScreenBase implements FlowScreen<void> {
   override enter(): void {
     ensureStubStyle();
     this.root.className = 'screen fstub';
-    this.lines = collectLines(this.opts.script);
+    // The placeholder honours the `results()` marker the same way the real
+    // screen does, so the flow's post -> results -> post handoff is exercised
+    // even with no `ui/common` registered (critic round 02 #04).
+    const from = this.opts.resumeFrom ?? 0;
+    const marker = resultsMarker(this.opts.script, from);
+    const until = marker?.at ?? this.opts.script.length;
+    this.lines = collectLines(this.opts.script.slice(from, until));
+    if (marker) this.opts.onResultsMarker?.({ silent: marker.silent, resumeAt: marker.at + 1 });
     if (this.opts.skip || !this.lines.length) {
       this.resolve();
       return;
@@ -261,6 +268,15 @@ export class StubResults extends ScreenBase implements FlowScreen<void> {
   override snapshot(): Record<string, unknown> {
     return { chapter: this.opts.chapter.id, result: this.opts.result, stub: true };
   }
+}
+
+/** The first top-level `results()` at or after `from`, if the script has one. */
+function resultsMarker(script: StoryScript, from: number): { at: number; silent: boolean } | null {
+  for (let i = from; i < script.length; i++) {
+    const step = script[i];
+    if (step?.type === 'results') return { at: i, silent: step.silent ?? false };
+  }
+  return null;
 }
 
 /** Pull the spoken lines out of a script, following `parallel` and `ifFlag`. */

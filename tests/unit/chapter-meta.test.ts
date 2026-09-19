@@ -99,10 +99,23 @@ describe('CHAPTER_META', () => {
     expect(chapter).toBeDefined();
     if (!chapter) return;
     expect(meta.musicKeys.length).toBeGreaterThan(0);
+    // The dossier lists the cues a player hears in this chapter, which is the
+    // `Chapter.music` record **plus** anything the chapter's own scripts cue —
+    // Chapter 3's `ending-ffx` and Chapter 5's `ending-ffx2` are played by the
+    // coda after `results()`, not by a field.
+    const fromScripts: string[] = [];
+    for (const script of [chapter.scriptsRef.pre, chapter.scriptsRef.post]) {
+      for (const step of script) if (step.type === 'music' && step.track) fromScripts.push(step.track);
+    }
     const chapterKeys = new Set(
-      [chapter.music.scene, chapter.music.battle, chapter.music.phase2, chapter.music.victory, chapter.music.post].filter(
-        (k): k is string => typeof k === 'string',
-      ),
+      [
+        chapter.music.scene,
+        chapter.music.battle,
+        chapter.music.phase2,
+        chapter.music.victory,
+        chapter.music.post,
+        ...fromScripts,
+      ].filter((k): k is string => typeof k === 'string'),
     );
     for (const key of meta.musicKeys) {
       expect(chapterKeys.has(key)).toBe(true);

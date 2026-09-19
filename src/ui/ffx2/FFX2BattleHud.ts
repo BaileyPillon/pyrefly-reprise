@@ -237,6 +237,13 @@ export class FFX2BattleHud implements HudPort {
     overlay: () => this.overlay,
     scale: () => this.stageScale,
     point: (id) => this.overlayPoint(id, 0.4, 0.22),
+    // The same board the intent slab steers around, minus the chip itself —
+    // it must not dodge its own previous rectangle.
+    obstacles: () => this.chainObstacles(),
+    layer: () => {
+      const r = this.overlay?.getBoundingClientRect();
+      return r && r.width > 0 ? { width: r.width, height: r.height } : { width: window.innerWidth, height: window.innerHeight };
+    },
   });
   private telegraphHideTimer = 0;
   private damageFlashTimer = 0;
@@ -384,7 +391,7 @@ export class FFX2BattleHud implements HudPort {
   }
 
   /** Every box on the board the slab would rather not cover, in viewport px. */
-  private intentObstacles(): IntentAvoidRect[] {
+  private intentObstacles(opts: { skipChainChip?: boolean; addIntentPanel?: boolean } = {}): IntentAvoidRect[] {
     const out: IntentAvoidRect[] = [];
     const selectors = [
       '.ffx2hud__enemies',
@@ -401,7 +408,9 @@ export class FFX2BattleHud implements HudPort {
       // the solver hunting for a spot that does not exist. It is *meant* to be
       // over the slab, and it takes input while it is up.
     ] as const;
-    for (const selector of selectors) {
+    const all = opts.addIntentPanel ? [...selectors, '.eint__panel', '.eint__toggle'] : selectors;
+    for (const selector of all) {
+      if (opts.skipChainChip && selector === '.ffx2-chain-chip') continue;
       for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
         // Size alone: a zero-size box already means "not laid out", and it
         // covers `[hidden]` (forced to `display: none` by `tokens.css`) and a
@@ -413,6 +422,19 @@ export class FFX2BattleHud implements HudPort {
     }
     for (const box of this.fighterBoxes()) out.push(box);
     return out;
+  }
+
+  /**
+   * The board the chain counter has to stay off.
+   *
+   * The same list the intent slab steers around, **plus the intent slab
+   * itself** — that list exists to place the slab, so it necessarily leaves the
+   * slab out — and **minus the chain chip**, which must not dodge its own
+   * previous rectangle. The slab is standing furniture and the chip is a 1.4 s
+   * transient, so the chip is the one that moves.
+   */
+  private chainObstacles(): IntentAvoidRect[] {
+    return this.intentObstacles({ skipChainChip: true, addIntentPanel: true });
   }
 
   /**
@@ -537,7 +559,18 @@ export class FFX2BattleHud implements HudPort {
     });
 
     const card = this.stage.querySelector<HTMLElement>('.mad__card');
-    const cardTop = card && card.offsetHeight > 0 ? 360 - ADVISOR_BOTTOM - card.offsetHeight : 360 - ADVISOR_BOTTOM - 58;
+    // The card's **and its chip's** band. `MoveAdvisor` parks the `A HIDE`
+    // toggle on the card's top-left corner, above the card's own box, so a girl
+    // standing in that strip is not in the card's band by the card's height
+    // alone — and at 1280x720 that is exactly where Paine stands, wearing 52x15
+    // of the chip. The lean comes in for the same reason it does in
+    // `layoutColumnFence`: the house `skewX` paints the card's bottom-left
+    // corner further left than its layout box, and the fence is a layout offset.
+    const chip = this.stage.querySelector<HTMLElement>('.mad__toggle');
+    const cardH = card && card.offsetHeight > 0 ? card.offsetHeight : 58;
+    const chipH = chip && chip.offsetHeight > 0 ? chip.offsetHeight : 0;
+    const cardTop = 360 - ADVISOR_BOTTOM - cardH - chipH;
+    const cardLean = (cardH / 2) * SKEW_TANGENT;
 
     let fenceTop = 360 - GUIDE_FALLBACK_BOTTOM;
     let fenceRight = ADVISOR_FALLBACK_LEFT;
@@ -557,7 +590,7 @@ export class FFX2BattleHud implements HudPort {
       }
       // Standing in the card's band: start the card past her shoulder.
       if (Math.max(head.y, feet.y) > cardTop) {
-        fenceRight = Math.max(fenceRight, head.x + half);
+        fenceRight = Math.max(fenceRight, head.x + half + cardLean);
       }
     }
     top.style.top = `${Math.max(0, fenceTop).toFixed(2)}px`;

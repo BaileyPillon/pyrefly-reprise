@@ -17,10 +17,10 @@ import type { Screen } from '../Screen.ts';
 import type { App } from '../App.ts';
 import type { BattleResult, GameId } from '../../battle/common/types.ts';
 import type { Chapter, ChapterId } from '../../data/encounters.ts';
-import { getChapter } from '../../data/encounters.ts';
+import { CHAPTERS, getChapter } from '../../data/encounters.ts';
 import type { StoryScript } from '../../story/dsl.ts';
 import { audio } from '../../audio/index.ts';
-import { BattleScreen, type BattleScreenResult } from './BattleScreen.ts';
+import { BattleScreen, type BattleScreenOptions, type BattleScreenResult } from './BattleScreen.ts';
 import { PartyPrepScreen } from './PartyPrepScreen.ts';
 // Type-only: erased at build time, so this adds no runtime edge to the screen.
 import type { ResultsChoice } from './ResultsScreen.ts';
@@ -40,6 +40,23 @@ export interface CutsceneScreenOptions {
   script: StoryScript;
   phase: 'pre' | 'post';
   skip?: boolean;
+  /**
+   * Index of the first step to play — a `resumeAt` handed back from a previous
+   * run of the same script.
+   *
+   * Every `post` script puts its `results()` marker a few steps in and then
+   * keeps going: 28 further lines after Seymour's, 20 after Yunalesca's, 18
+   * after Braska's Final Aeon's, 11 after Vegnagun's. The runner stopped at the
+   * marker and the screen was thrown away, so **none of those lines had ever
+   * played** (critic round 02 #04). The flow now runs post → results →
+   * post-from-`resumeAt`.
+   */
+  resumeFrom?: number;
+  /**
+   * Called when the script stops at its `results()` marker. `resumeAt` is the
+   * step index to hand back as {@link resumeFrom}.
+   */
+  onResultsMarker?: (info: { silent: boolean; resumeAt: number }) => void;
 }
 
 export interface ResultsScreenOptions {
@@ -71,6 +88,16 @@ export interface FlowScreenFactories {
   partyPrep: (opts: { chapter: Chapter }) => FlowScreen<boolean>;
   cutscene: (opts: CutsceneScreenOptions) => FlowScreen<void>;
   results: (opts: ResultsScreenOptions) => FlowScreen<void>;
+  /**
+   * The battle itself.
+   *
+   * Nothing in the shipped game registers this — `runChapter` builds a real
+   * {@link BattleScreen} — but it is what lets `tests/unit/flow-*.test.ts`
+   * drive the whole Title → … → Results sequence without a renderer, which is
+   * how the post-battle scenes and the end of an arc are now proven (critic
+   * round 02 #01, #04, #32).
+   */
+  battle: (opts: BattleScreenOptions) => FlowScreen<BattleScreenResult>;
 }
 
 const factories: Partial<FlowScreenFactories> = {};
@@ -93,6 +120,29 @@ export function flowReport(): Record<string, boolean> {
     cutscene: factories.cutscene !== undefined,
     results: factories.results !== undefined,
   };
+}
+
+/** Drop every registered factory. Tests only; nothing in the game calls it. */
+export function resetFlowScreens(): void {
+  for (const key of Object.keys(factories)) delete (factories as Record<string, unknown>)[key];
+}
+
+/**
+ * The last chapter of each game's arc.
+ *
+ * Chapter 3 ends the FFX story (Yu Yevon, then Auron's sending and Tidus
+ * going) and Chapter 5 ends the FFX-2 one. `BattleScreenFlow` needs to know
+ * because the flow used to be a bare `for(;;)` with no notion of having
+ * finished anything (critic round 02 #32).
+ */
+export const ARC_FINALE: Readonly<Record<GameId, ChapterId>> = {
+  ffx: 'braskas-final-aeon',
+  ffx2: 'ffx2-vegnagun-shuyin',
+};
+
+/** True once every chapter of `game` is recorded as cleared. */
+export function arcCleared(game: GameId, cleared: (id: ChapterId) => boolean): boolean {
+  return CHAPTERS.filter((c) => c.game === game).every((c) => cleared(c.id));
 }
 
 export interface RunChapterOptions {
@@ -150,20 +200,70 @@ export class GameFlow {
     this.app = app;
   }
 
-  /** Title -> chapter select -> a chapter -> back to chapter select, forever. */
+  /**
+   * The screen this flow last put up.
+   *
+   * The flow is a long `await` chain and it is not the only thing that
+   * navigates: the pause menu's CHAPTER SELECT and QUIT TO TITLE both call
+   * `App.goto` from *under* a flow step, and `App.replace` pops the stack
+   * synchronously before it awaits. Two overlapping `replace` calls therefore
+   * leave two screen roots in `#ui` at once — which is what the critic
+   * photographed as "two hint strings overlapping and illegible" (round 02
+   * #36): a chapter-select strip and a cutscene strip, both `position:absolute;
+   * bottom:22px`, on top of each other.
+   *
+   * So every flow navigation goes through {@link show}, which refuses to stack
+   * a screen on top of one the flow did not put there.
+   */
+  private owned: Screen | null = null;
+
+  /** True when the flow stood down because something else navigated. */
+  private handedOver = false;
+
+  /** Title -> chapter select -> a chapter -> back to chapter select. */
   async start(): Promise<void> {
     if (this.running) return;
     this.running = true;
-    for (;;) {
-      const chapterId = await this.chapterSelect();
-      if (!chapterId) {
-        this.step = 'title';
-        await this.app.goto('title');
-        this.running = false;
-        return;
+    this.handedOver = false;
+    try {
+      for (;;) {
+        const chapterId = await this.chapterSelect();
+        if (this.handedOver) return;
+        if (!chapterId) {
+          this.step = 'title';
+          await this.app.goto('title');
+          return;
+        }
+        await this.runChapter(chapterId, {});
+        if (this.handedOver) return;
+        // Back to chapter select, including after the last chapter of an arc.
+        // A designed ending/credits screen is a separate, owner-approved piece
+        // of work (critic round 02 #32); until it exists the honest behaviour
+        // is to hand the player back the board with the chapter marked cleared,
+        // not to loop into another fight.
       }
-      await this.runChapter(chapterId, {});
+    } finally {
+      this.running = false;
+      this.owned = null;
+      this.step = 'idle';
     }
+  }
+
+  /**
+   * Put a flow screen up, unless something else owns the stack.
+   *
+   * Returns false when the flow has been navigated out from under — the caller
+   * then unwinds instead of pushing a second screen over whatever arrived.
+   */
+  private async show(screen: Screen): Promise<boolean> {
+    if (this.owned !== null && this.app.current !== this.owned) {
+      this.handedOver = true;
+      this.owned = null;
+      return false;
+    }
+    await this.app.replace(screen);
+    this.owned = screen;
+    return true;
   }
 
   /** Show chapter select and resolve with the player's pick. */
@@ -173,7 +273,7 @@ export class GameFlow {
       /* the track may not be composed yet */
     });
     const screen = makeChapterSelect();
-    await this.app.replace(screen);
+    if (!(await this.show(screen))) return null;
     return screen.done;
   }
 
@@ -196,7 +296,7 @@ export class GameFlow {
       if (!opts.skipPrep) {
         this.step = 'party-prep';
         const prep = factories.partyPrep?.({ chapter }) ?? new PartyPrepScreen({ chapter });
-        await this.app.replace(prep);
+        if (!(await this.show(prep))) return null;
         if (!(await prep.done)) return null;
       }
 
@@ -204,29 +304,33 @@ export class GameFlow {
 
       // The pre-battle scene plays once; a retry goes straight back in.
       if (!opts.skipCutscenes && attempt === 0) await this.playCutscene(chapter, 'pre');
+      if (this.handedOver) return null;
 
       this.step = 'battle';
-      const battle = new BattleScreen({
+      const battleOpts: BattleScreenOptions = {
         chapter,
         // A retry reseeds, so the same losing fight does not replay verbatim.
         seed: (opts.seed ?? 1) + attempt * 1000,
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
-      });
+      };
+      const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
       // FFX spins into a battle rather than cutting. The swirl holds the frame
       // covered while `replace` loads the diorama and stages the art, so the
       // unwind always reveals a finished first frame
       // (`src/ui/common/transitions/swirl.ts`).
-      let swapped: Promise<void> = Promise.resolve();
+      let swapped: Promise<boolean> = Promise.resolve(true);
       await playBattleSwirl(this.app.uiRoot, {
         instant: opts.speed === 'skip',
         onCover: () => {
-          swapped = this.app.replace(battle);
-          return swapped;
+          swapped = this.show(battle);
+          return swapped.then(() => undefined);
         },
       });
-      await swapped;
-      const outcome = await battle.finished;
+      if (!(await swapped)) return null;
+      // The real screen resolves `finished`; a registered stand-in (tests
+      // only) resolves the `FlowScreen` contract's `done`. Same value.
+      const outcome = await ('finished' in battle ? battle.finished : battle.done);
       attempt++;
 
       if (outcome.outcome === 'victory') {
@@ -237,8 +341,17 @@ export class GameFlow {
           const toRecord = clearTimeToRecord(outcome.result, outcome.elapsedMs, chapter.game, opts.auto);
           if (toRecord !== null) save.recordClear(id, toRecord, outcome.result.turns);
         }
-        if (!opts.skipCutscenes) await this.playCutscene(chapter, 'post');
+
+        // post (up to the `results()` marker) -> results -> the rest of post.
+        //
+        // The marker is a few steps into every `post` script and the authored
+        // scenes are *after* it, so a flow that stopped at the marker played
+        // none of them (critic round 02 #04). `resumeAt` comes back from the
+        // cutscene screen and goes straight back in.
+        let resumeAt: number | null = null;
+        if (!opts.skipCutscenes) resumeAt = await this.playCutscene(chapter, 'post');
         if (!opts.skipResults) await this.showResults(chapter, outcome, previousBestMs);
+        if (!opts.skipCutscenes && resumeAt !== null) await this.playCutscene(chapter, 'post', resumeAt);
         this.step = 'idle';
         return outcome;
       }
@@ -257,19 +370,49 @@ export class GameFlow {
     }
   }
 
-  private async playCutscene(chapter: Chapter, phase: 'pre' | 'post'): Promise<void> {
+  /**
+   * Play one authored scene. Returns the `resumeAt` index if the script
+   * stopped at its `results()` marker, or `null` if it ran to the end.
+   *
+   * `resumeFrom` plays the remainder of a script that stopped earlier.
+   */
+  private async playCutscene(
+    chapter: Chapter,
+    phase: 'pre' | 'post',
+    resumeFrom?: number,
+  ): Promise<number | null> {
     const script = phase === 'pre' ? chapter.scriptsRef?.pre : chapter.scriptsRef?.post;
-    if (!script?.length) return;
+    if (!script?.length) return null;
+    if (resumeFrom !== undefined && resumeFrom >= script.length) return null;
     this.step = `cutscene:${phase}`;
-    const track = phase === 'pre' ? chapter.music.scene : chapter.music.post;
-    void audio.playMusic(track, { fade: 1.4 }).catch(() => {
-      /* stand-in tracks only */
-    });
-    const screen =
-      factories.cutscene?.({ chapter, script, phase }) ??
-      new StubCutscene({ chapter, script, phase });
-    await this.app.replace(screen);
+    // The bed is the script's own: every one of the ten shipped scenes opens
+    // with a `music()` step of its own, so a cue forced in here was crossfaded
+    // straight back out (critic round 02 #02). `chapter.music.scene` is only
+    // the fallback for a script that says nothing, and the resumed half of a
+    // post scene never re-cues at all — it is the same scene continuing.
+    if (resumeFrom === undefined) {
+      const track = phase === 'pre' ? chapter.music.scene : chapter.music.post;
+      if (track && !scriptOpensWithMusic(script)) {
+        void audio.playMusic(track, { fade: 1.4 }).catch(() => {
+          /* stand-in tracks only */
+        });
+      }
+    }
+
+    let marker: number | null = null;
+    const opts: CutsceneScreenOptions = {
+      chapter,
+      script,
+      phase,
+      ...(resumeFrom !== undefined ? { resumeFrom } : {}),
+      onResultsMarker: ({ resumeAt }) => {
+        marker = resumeAt;
+      },
+    };
+    const screen = factories.cutscene?.(opts) ?? new StubCutscene(opts);
+    if (!(await this.show(screen))) return null;
     await screen.done;
+    return marker;
   }
 
   private async showResults(
@@ -298,12 +441,31 @@ export class GameFlow {
     const screen = factories.results?.(opts) ?? new StubResults(opts);
     // Spec "Motion & camera": battle -> results is the diagonal ivory wipe,
     // mirrored for FFX-2 chapters. The swap happens under the cover half.
-    let swapped: Promise<void> = Promise.resolve();
+    let swapped: Promise<boolean> = Promise.resolve(true);
     await playResultsWipe(this.app.uiRoot, chapter.game, () => {
-      swapped = this.app.replace(screen);
+      swapped = this.show(screen);
     });
-    await swapped;
+    if (!(await swapped)) return choice;
     await screen.done;
     return choice;
   }
 }
+
+/**
+ * True when a script sets its own bed before it says anything.
+ *
+ * "Before it says anything" is the whole test: every shipped scene opens with
+ * `music(...)` in its first few steps (`music(null)` counts — a post scene
+ * asking for silence is still the script deciding), so the flow's own cue only
+ * applies to a script that never mentions music at all.
+ */
+function scriptOpensWithMusic(script: StoryScript): boolean {
+  for (const step of script.slice(0, MUSIC_LOOKAHEAD)) {
+    if (step.type === 'music') return true;
+    if (step.type === 'say' || step.type === 'narrate' || step.type === 'choice') return false;
+  }
+  return false;
+}
+
+/** How far into a script to look for its own opening cue. */
+const MUSIC_LOOKAHEAD = 8;

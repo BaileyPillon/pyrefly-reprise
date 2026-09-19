@@ -16,13 +16,33 @@ import { ControlsHint } from '../../ui/common/ControlsHint.ts';
 import { romanNumeral } from '../../ui/common/roman.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
+import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { PauseScreen } from './PauseScreen.ts';
 
+/**
+ * One row, and it says what the keys actually do.
+ *
+ * Critic round 02 #30 measured runs of 13, 17, 29 and 36 consecutive Enter
+ * presses changing nothing, because the script spends 38.6 s of Chapter 1's
+ * opening inside `beat`/`wait` steps the dialogue box never sees — and the
+ * strip advertised only ADVANCE, with SKIP SCENE buried as the eighth row of
+ * the pause list. Enter now moves the script on at any point (see
+ * {@link CutsceneScreen.handleInput}), holding it fast-forwards, and the strip
+ * says both.
+ */
 const HINTS = [
   { keyboard: 'Enter', gamepad: 'Cross', label: 'advance', action: 'confirm' },
-  // Esc opens the pause menu, which is where SKIP SCENE now lives.
+  { keyboard: 'Hold Enter', gamepad: 'Hold Cross', label: 'skip', pointer: 'Hold click' },
+  // Esc opens the pause menu, which is where SKIP SCENE also lives.
   { keyboard: 'Esc', gamepad: 'Circle', label: 'menu', action: 'cancel' },
 ];
+
+/**
+ * How long Confirm has to be held before it stops advancing line by line and
+ * starts fast-forwarding. Long enough that a firm tap on a slow frame is still
+ * a tap.
+ */
+const HOLD_TO_SKIP_MS = 550;
 
 /**
  * A tiny built-in script so `window.__pyrefly.goto('cutscene')` always has
@@ -72,8 +92,16 @@ export interface CutsceneScreenOptions {
    * timed ones (dialogue, wait, camera, fx, moveActor) are skipped.
    */
   startSkipped?: boolean;
+  /**
+   * Index of the first step to play, from a previous run's
+   * `CutsceneRunResult.resumeAt`. This is how a `post` script plays its
+   * authored scenes *after* the results panel instead of being thrown away at
+   * the `results()` marker (critic round 02 #04).
+   */
+  resumeFrom?: number;
   onBattleStart?: (transition: Extract<CutsceneRunResult, { type: 'battleStart' }>['transition']) => void;
-  onResults?: (silent: boolean) => void;
+  /** `resumeAt` is the step index the script stopped on; hand it back as {@link resumeFrom}. */
+  onResults?: (silent: boolean, resumeAt: number) => void;
   /** Called when the script falls off the end with neither marker (a mid-battle-style script run as a standalone screen). */
   onEnd?: () => void;
 }
@@ -108,6 +136,10 @@ export class CutsceneScreen extends Screen {
   /** True while the script's own waits are held on the pause gate. */
   private scriptPaused = false;
   private pauseWaiters: Array<() => void> = [];
+  /** Confirm still held as of the last `handleInput`. See {@link update}. */
+  private confirmDown = false;
+  /** How long it has been held, in ms. Past {@link HOLD_TO_SKIP_MS} it fast-forwards. */
+  private confirmHeldMs = 0;
 
   constructor(private readonly opts: CutsceneScreenOptions = {}) {
     super();
@@ -175,7 +207,32 @@ export class CutsceneScreen extends Screen {
 
   override handleInput(input: InputSnapshot): void {
     this.hint?.handleInput(input);
-    this.dialogueBox?.handleInput(input);
+
+    // Confirm, in order of who has a use for it:
+    //
+    // 1. the dialogue box, if a line is typing or waiting — it completes the
+    //    reveal, then advances;
+    // 2. otherwise the **script**, which is where the 38.6 s of `beat`/`wait`
+    //    steps live. The box was the only reader, and it returns early when it
+    //    has no line in flight, so every press between lines was swallowed
+    //    (critic round 02 #30). `nudge()` releases the step in flight and
+    //    nothing more, so the next one still plays at its authored length.
+    //
+    // Held, it stops being an advance and becomes a fast-forward: `nudge()`
+    // every frame runs the rest of the scene at whatever speed the player's
+    // thumb asks for, without throwing the scene away the way SKIP does.
+    const box = this.dialogueBox;
+    const boxBusy = box?.visible === true && box.awaitingAdvance;
+    if (boxBusy) box?.handleInput(input);
+
+    // The hold itself is measured on the frame clock in `update`; this only
+    // records whether the key is still down.
+    this.confirmDown = input.pressed('confirm');
+
+    if (!boxBusy && (input.consume('confirm') || input.actions.includes('confirm'))) {
+      audio.playSfx('cursor-move');
+      this.runner?.nudge();
+    }
 
     const skippable = this.opts.skippable ?? true;
     const backedOut = input.consume('cancel') || input.actions.includes('cancel');
@@ -206,7 +263,11 @@ export class CutsceneScreen extends Screen {
       // A cutscene has no battle behind it, so the dossier's objectives all
       // read as untouched and ENCOUNTER PROGRESS has nothing to report —
       // which is the honest picture before the fight starts.
-      onPause: (paused) => this.setScriptPaused(paused),
+      onPause: (paused) => {
+        this.setScriptPaused(paused);
+        // Same hush as the battle's pause menu — see `ui/common/pauseMusic.ts`.
+        setPauseMusic(audio, paused);
+      },
       onResume: () => void this.closePause(),
       onChapterSelect: () => void this.app.goto('chapter-select'),
       onQuitToTitle: () => void this.app.goto('title'),
@@ -262,6 +323,18 @@ export class CutsceneScreen extends Screen {
 
   override update(dt: number): void {
     this.dialogueBox?.update(dt);
+
+    // Held Confirm = fast-forward. Measured here rather than in `handleInput`
+    // because this is the method with a clock, and a hold has to mean the same
+    // length of time on a 144 Hz monitor as on a 30 fps one.
+    if (!this.confirmDown) {
+      this.confirmHeldMs = 0;
+      return;
+    }
+    this.confirmHeldMs += dt * 1000;
+    if (this.confirmHeldMs < HOLD_TO_SKIP_MS) return;
+    this.runner?.nudge();
+    this.dialogueBox?.forceAdvance();
   }
 
   override trigger(name: string): boolean {
@@ -285,12 +358,13 @@ export class CutsceneScreen extends Screen {
   private async playScript(): Promise<void> {
     if (!this.runner) return;
     const script = this.opts.script ?? DEMO_CUTSCENE_SCRIPT;
-    const result = await this.runner.run(script);
+    const from = this.opts.resumeFrom ?? 0;
+    const result = await this.runner.run(script, undefined, from > 0 ? { from } : {});
     this.lastResult = result;
     this.finished = true;
 
     if (result.type === 'battleStart') this.opts.onBattleStart?.(result.transition);
-    else if (result.type === 'results') this.opts.onResults?.(result.silent);
+    else if (result.type === 'results') this.opts.onResults?.(result.silent, result.resumeAt);
     else this.opts.onEnd?.();
 
     // Resolve now rather than waiting for `exit()` — the flow's

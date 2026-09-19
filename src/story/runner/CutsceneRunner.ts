@@ -103,13 +103,32 @@ export function createNoopPorts(overrides: Partial<CutscenePorts> = {}): Cutscen
 
 export type CutsceneRunResult =
   /** Hit a `battleStart()` step. Only legal in a `pre` script. */
-  | { type: 'battleStart'; transition: BattleStartStep['transition'] }
+  | { type: 'battleStart'; transition: BattleStartStep['transition']; resumeAt: number }
   /** Hit a `results()` step. Only legal in a `post` script. */
-  | { type: 'results'; silent: boolean }
+  | { type: 'results'; silent: boolean; resumeAt: number }
   /** Ran off the end with neither — a mid-battle trigger script. */
-  | { type: 'end' };
+  | { type: 'end'; resumeAt: number };
 
-type StepOutcome = { type: 'jump'; to: string } | Extract<CutsceneRunResult, { type: 'battleStart' | 'results' }>;
+type StepOutcome =
+  | { type: 'jump'; to: string }
+  | Omit<Extract<CutsceneRunResult, { type: 'battleStart' }>, 'resumeAt'>
+  | Omit<Extract<CutsceneRunResult, { type: 'results' }>, 'resumeAt'>;
+
+/** Where a `run()` starts, and anything else a caller wants to vary per run. */
+export interface CutsceneRunOptions {
+  /**
+   * Index of the first step to execute. `0` (the default) plays from the top;
+   * a {@link CutsceneRunResult.resumeAt} plays the rest of a script that
+   * stopped at a marker.
+   *
+   * This is what makes the authored post-battle scenes reachable. Every `post`
+   * script puts `results()` a few steps in and then keeps going — 28 more lines
+   * after Seymour's, 20 after Yunalesca's, 18 after Braska's Final Aeon's, 11
+   * after Vegnagun's — and the runner used to stop at the marker and be thrown
+   * away, so none of them had ever played (critic round 02 #04).
+   */
+  from?: number;
+}
 
 const MAX_JUMPS = 1000;
 
@@ -187,10 +206,24 @@ export class CutsceneRunner {
     for (const w of waiters) w();
   }
 
+  /**
+   * Unblock the timed step in flight **without** fast-forwarding the rest.
+   *
+   * This is Confirm during a `beat`, a `wait`, a camera move: the press means
+   * "I have read this, move on", not "throw the scene away". `skip()` is the
+   * latch that means the second thing; this is a one-shot nudge, so the very
+   * next timed step waits its full length again. Holding Confirm calls it every
+   * frame, which is the fast-forward the critic asked for (round 02 #30).
+   */
+  nudge(): void {
+    const waiters = this.skipWaiters.splice(0);
+    for (const w of waiters) w();
+  }
+
   /** Run a script (or a labelled sub-script id, for documentation only). Resolves per {@link CutsceneRunResult}. */
-  async run(script: StoryScript, _ref?: StoryScriptRef): Promise<CutsceneRunResult> {
+  async run(script: StoryScript, _ref?: StoryScriptRef, opts: CutsceneRunOptions = {}): Promise<CutsceneRunResult> {
     const labels = indexLabels(script);
-    let ip = 0;
+    let ip = Math.max(0, Math.min(opts.from ?? 0, script.length));
     while (ip < script.length) {
       const step = script[ip];
       if (!step) {
@@ -216,9 +249,11 @@ export class CutsceneRunner {
         ip = target;
         continue;
       }
-      return outcome;
+      // `resumeAt` is the step *after* the marker, so a caller that hands it
+      // back to `run` continues the same script rather than replaying it.
+      return { ...outcome, resumeAt: ip + 1 };
     }
-    return { type: 'end' };
+    return { type: 'end', resumeAt: script.length };
   }
 
   /** Executes one step. Returns an outcome to bubble toward `run()`'s loop, or `undefined` to continue in place. */

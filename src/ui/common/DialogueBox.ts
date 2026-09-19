@@ -122,6 +122,21 @@ export class DialogueBox implements DialoguePort {
     return this.el.classList.contains('dbox--visible');
   }
 
+  /**
+   * True when a Confirm press has something to do **here**: a line is still
+   * typing, a revealed line is waiting to be advanced past, or a choice is
+   * open.
+   *
+   * `handleInput` returns without consuming anything when this is false, which
+   * is correct — the box has no line in flight — but it left the press with
+   * nowhere to go, and a cutscene spends most of its length in exactly that
+   * state (`beat`, `wait`, `camera`). The screen reads this to decide whether
+   * Confirm belongs to the box or to the script (critic round 02 #30).
+   */
+  get awaitingAdvance(): boolean {
+    return this.choiceState !== null || this.typingState !== 'idle';
+  }
+
   /** Hide immediately and drop any in-flight advance/choice (used by skip-scene teardown). */
   hide(): void {
     this.el.classList.remove('dbox--visible', 'dbox--waiting', 'dbox--narrate', 'dbox--choice', 'dbox--no-portrait');

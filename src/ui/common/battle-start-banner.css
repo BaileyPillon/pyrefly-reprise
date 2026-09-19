@@ -1,0 +1,271 @@
+/* Battle start — the approved Ink & Gold boss card.
+
+   Target: docs/screenshots/mockups/A-battle-start.jpg, spec
+   docs/handoff/presentation-ink-and-gold.md > Screens > "Battle start".
+   Critic round 02 #10: the card was approved and never built, so every fight
+   opened on the plain establishing shot.
+
+   Geometry is quoted from the spec at its 1440-wide authoring width and then
+   expressed in viewport units, so the card holds its proportions from a phone
+   to a 4K frame rather than being clipped the way a fixed-px slab would be. */
+
+.bstart {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  background: var(--ig-ink, #0b0a12);
+  /* The card is a moment, not a menu: it never eats a click meant for the
+     frame underneath once it has started leaving. */
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 260ms ease;
+}
+.bstart--leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- the ink side: the boss, full height ------------------------------- */
+
+/* The room, dimmed, so the cutout is standing somewhere rather than nowhere. */
+.bstart__wash {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 52%;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.4;
+  filter: saturate(0.7) blur(2px);
+}
+
+.bstart__art {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 46%;
+  /* A cutout, not a wallpaper: the whole figure is in frame, standing on the
+     gold strip rather than cropped by it. */
+  background-position: center bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+  /* Gold rim glow, spec "boss cutout full-height on the ink side with a gold
+     rim glow". A drop-shadow on the element reads as a rim on a cut-out PNG
+     and as an edge glow on a rectangular painting. */
+  filter: drop-shadow(0 0 22px rgba(227, 185, 74, 0.35));
+}
+.bstart__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11, 10, 18, 0.55) 0%, transparent 28%, transparent 76%, rgba(11, 10, 18, 0.5) 100%);
+}
+
+/* --- the ivory wedge ---------------------------------------------------- */
+
+.bstart__wedge {
+  position: absolute;
+  inset: 0;
+  background: var(--ig-ivory, #f4f1e8);
+  clip-path: polygon(46% 0, 100% 0, 100% 100%, 30% 100%);
+}
+/* The 1.4%-wide gold stripe on the wedge's leading edge. */
+.bstart__stripe {
+  position: absolute;
+  inset: 0;
+  background: var(--ig-accent, #e3b94a);
+  clip-path: polygon(44.6% 0, 46% 0, 30% 100%, 28.6% 100%);
+}
+
+.bstart__panel {
+  position: absolute;
+  left: 49%;
+  right: 4%;
+  top: 12%;
+  color: var(--ig-ink, #12111a);
+}
+
+.bstart__eyebrow {
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  font-size: clamp(9px, 1.04vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ig-accent-deep, #a67c16);
+  margin: 0 0 0.9em;
+}
+
+.bstart__name {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: 700;
+  /* Spec: 176px serif at 1440. Clamped so a long name on a phone still fits. */
+  font-size: clamp(38px, 12.2vw, 176px);
+  line-height: 0.92;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+/* "second line indented 140" — 140/1440 of the frame. */
+.bstart__name span + span {
+  display: block;
+  margin-left: 9.7%;
+}
+
+.bstart__rule {
+  width: 62%;
+  height: 3px;
+  background: var(--ig-ink, #12111a);
+  margin: 0.55em 0 0.5em;
+}
+
+.bstart__subline {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-size: clamp(13px, 1.6vw, 24px);
+  margin: 0;
+  color: rgba(18, 17, 26, 0.86);
+}
+
+/* --- the gold strip along the foot -------------------------------------- */
+
+.bstart__strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(58px, 6.7vh, 96px);
+  background: var(--ig-accent, #e3b94a);
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(8px, 1.4vw, 20px);
+  padding: 0 clamp(12px, 3vw, 44px) clamp(6px, 1.2vh, 14px) 38%;
+}
+
+.bstart__party {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1vw, 16px);
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+.bstart__member {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 0;
+}
+.bstart__tile {
+  width: clamp(26px, 2.6vw, 40px);
+  height: clamp(26px, 2.6vw, 40px);
+  flex: 0 0 auto;
+  background: var(--ig-ink, #12111a);
+  color: var(--ig-ivory, #f4f1e8);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  font-size: clamp(11px, 1.1vw, 16px);
+  font-weight: 700;
+}
+.bstart__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.bstart__who {
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  font-size: clamp(9px, 0.9vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ig-ink, #12111a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bstart__go {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(13px, 1.7vw, 24px);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ig-ink, #12111a);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* --- the skip line ------------------------------------------------------ */
+
+.bstart__skip {
+  position: absolute;
+  right: clamp(12px, 3vw, 44px);
+  top: clamp(10px, 2.4vh, 26px);
+  font-family: var(--font-display, 'Chakra Petch', sans-serif);
+  font-size: clamp(9px, 0.85vw, 12px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(18, 17, 26, 0.55);
+}
+
+/* --- motion ------------------------------------------------------------- */
+
+.bstart__wedge,
+.bstart__stripe,
+.bstart__strip {
+  animation: bstart-sweep 320ms cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+.bstart__panel {
+  animation: bstart-rise 380ms 90ms cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+.bstart__art {
+  animation: bstart-push 620ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes bstart-sweep {
+  from {
+    transform: translateX(16%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes bstart-rise {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes bstart-push {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* A player who asked for less motion gets the same card, held still. The card
+   is information (who am I fighting, with whom), so it is never skipped on
+   their behalf — only its sweep is. */
+@media (prefers-reduced-motion: reduce) {
+  .bstart__wedge,
+  .bstart__stripe,
+  .bstart__strip,
+  .bstart__panel,
+  .bstart__art {
+    animation: none;
+  }
+  .bstart {
+    transition: none;
+  }
+}

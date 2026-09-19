@@ -110,7 +110,7 @@ describe('CutsceneRunner — basic playback', () => {
 
     const result = await runner.run(script);
 
-    expect(result).toEqual({ type: 'end' });
+    expect(result).toMatchObject({ type: 'end' });
     expect(log).toEqual([
       'music:boss-dread',
       'say:auron:It is not over.',
@@ -129,7 +129,7 @@ describe('CutsceneRunner — basic playback', () => {
 
     const result = await runner.run(script);
 
-    expect(result).toEqual({ type: 'battleStart', transition: 'blackhole' });
+    expect(result).toMatchObject({ type: 'battleStart', transition: 'blackhole' });
     expect(log).toEqual(['say:tidus:Here we go.']);
   });
 
@@ -139,10 +139,10 @@ describe('CutsceneRunner — basic playback', () => {
     const runner = new CutsceneRunner(ports);
 
     const silent = await runner.run([results(true)]);
-    expect(silent).toEqual({ type: 'results', silent: true });
+    expect(silent).toMatchObject({ type: 'results', silent: true });
 
     const loud = await runner.run([results()]);
-    expect(loud).toEqual({ type: 'results', silent: false });
+    expect(loud).toMatchObject({ type: 'results', silent: false });
   });
 
   it('beat() allocates real wait time and never touches the dialogue port', async () => {
@@ -217,7 +217,7 @@ describe('CutsceneRunner — flags, branching and loops', () => {
 
     const result = await runner.run(script);
 
-    expect(result).toEqual({ type: 'end' });
+    expect(result).toMatchObject({ type: 'end' });
     expect(log.filter((l) => l === 'say:wakka:tick')).toHaveLength(3);
     expect(runner.getFlag('n')).toBe(3);
   });
@@ -276,7 +276,7 @@ describe('CutsceneRunner — parallel and actor steps', () => {
   it('an optional port with no implementation is simply skipped, not an error', async () => {
     const runner = new CutsceneRunner(createNoopPorts());
 
-    await expect(runner.run([showActor('auron'), { type: 'shake', px: 6, ms: 200 }])).resolves.toEqual({
+    await expect(runner.run([showActor('auron'), { type: 'shake', px: 6, ms: 200 }])).resolves.toMatchObject({
       type: 'end',
     });
   });
@@ -297,7 +297,7 @@ describe('CutsceneRunner — skip-scene support', () => {
     runner.skip();
     const result = await run;
 
-    expect(result).toEqual({ type: 'end' });
+    expect(result).toMatchObject({ type: 'end' });
     // The second say still fires (skip forwards instantaneous port calls / logs
     // the call itself), but the runner did not block on it either.
     expect(log).toContain('say:auron:second line');
@@ -322,7 +322,7 @@ describe('CutsceneRunner — skip-scene support', () => {
     const result = await run;
 
     expect(settled).toBe(true);
-    expect(result).toEqual({ type: 'end' });
+    expect(result).toMatchObject({ type: 'end' });
   });
 
   it('after skip(), every later timed step resolves immediately without waiting on its port', async () => {
@@ -337,7 +337,7 @@ describe('CutsceneRunner — skip-scene support', () => {
     const start = Date.now();
     const result = await runner.run([wait(50_000), wait(50_000), wait(50_000)]);
     expect(Date.now() - start).toBeLessThan(500);
-    expect(result).toEqual({ type: 'end' });
+    expect(result).toMatchObject({ type: 'end' });
     void log;
   });
 
@@ -348,7 +348,7 @@ describe('CutsceneRunner — skip-scene support', () => {
     runner.skip();
 
     const result = await runner.run([say('tidus', 'skipped'), battleStart()]);
-    expect(result).toEqual({ type: 'battleStart', transition: undefined });
+    expect(result).toMatchObject({ type: 'battleStart', transition: undefined });
   });
 });
 

@@ -51,16 +51,43 @@ export type ChapterId =
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
-  /** Plays over the pre-battle cutscene. */
+  /**
+   * The chapter's establishing cue.
+   *
+   * Every shipped `pre` script sets its own bed in its opening steps, so this
+   * is the fallback for a script that says nothing — and the chapter's entry
+   * in the pause menu's jukebox. It therefore names the cue the scene actually
+   * uses (`scene-gagazet`, `scene-zanarkand-dome`, ...) rather than a generic
+   * one the script would immediately crossfade away
+   * (`BattleScreenFlow.playCutscene`).
+   */
   scene: MusicKey;
-  /** The battle theme. */
+  /**
+   * The chapter's own boss theme.
+   *
+   * The formation's `musicCues` `{ at: 'start' }` entry wins over this at the
+   * battle screen (`BattleEncounterChain.cueForGroup`); the two agree for all
+   * five chapters. FFX chapters name FFX cues and FFX-2 chapters FFX-2 cues —
+   * the cue map in `docs/audio/THEMES.md` never crosses the two scores.
+   */
   battle: MusicKey;
-  /** Swapped in at the chapter's phase break, when it has one. */
+  /** The cue the chapter's second phase or later link switches to, when it has one. */
   phase2?: MusicKey;
-  /** Victory fanfare. Chapter 4 is deliberately silent — see its record. */
+  /**
+   * Victory fanfare, played by `BattleScreenFlow.showResults`. FFX chapters use
+   * `victory-ffx` ("Relief, not triumph"), FFX-2 chapters `victory-ffx2`
+   * ("That was fun") — the cue map in `docs/audio/THEMES.md` §"The cue map"
+   * rows 15 and 20. Chapter 4 is deliberately silent — see its record.
+   */
   victory?: MusicKey;
-  /** Plays over the post-battle cutscene. */
-  post: MusicKey;
+  /**
+   * The cue the post-battle scene plays under, when the script does not set
+   * one itself. All five scripts do (each opens with `music(null)` — the coda
+   * lands in silence and brings its own theme up afterwards), so this is
+   * absent everywhere and exists for a chapter whose post scene is scored from
+   * the outside.
+   */
+  post?: MusicKey;
 }
 
 /** One chapter: everything the app needs to select, stage, fight and resolve it. */
@@ -114,10 +141,9 @@ export const SEYMOUR_FLUX: Chapter = {
   enemyGroupRef: seymourFluxGroup,
   scriptsRef: seymourFluxScripts,
   music: {
-    scene: 'boss-dread',
-    battle: 'battle-ffx',
-    victory: 'title',
-    post: 'title',
+    scene: 'scene-gagazet',
+    battle: 'boss-seymour',
+    victory: 'victory-ffx',
   },
   sensorTexts: {
     'seymour-flux': 'Turns healing into a weapon. Kill the floating thing before it finishes counting.',
@@ -142,11 +168,13 @@ export const YUNALESCA: Chapter = {
   enemyGroupRef: yunalescaGroup,
   scriptsRef: yunalescaScripts,
   music: {
-    scene: 'boss-dread',
-    battle: 'battle-ffx',
-    phase2: 'boss-dread',
-    victory: 'title',
-    post: 'title',
+    scene: 'scene-zanarkand-dome',
+    // One cue through all three forms: the rite does not change its mind
+    // [docs/audio/THEMES.md cue map row 7, "a rite that will finish with or
+    // without you"]. Her forms are form-changes inside one formation, not a
+    // chain, so there is no second cue to switch to.
+    battle: 'boss-yunalesca',
+    victory: 'victory-ffx',
   },
   sensorTexts: {
     yunalesca: 'Weak to Holy, they say. They have been saying it for a thousand years.',
@@ -170,11 +198,13 @@ export const BRASKAS_FINAL_AEON: Chapter = {
   enemyGroupRef: braskasFinalAeonGroup,
   scriptsRef: braskasFinalAeonScripts,
   music: {
-    scene: 'boss-dread',
-    battle: 'battle-ffx',
-    phase2: 'boss-dread',
-    victory: 'title',
-    post: 'title',
+    scene: 'scene-dreams-end',
+    // Jecht, then Yu Yevon. Each formation in the chain declares the same two
+    // cues itself (`braskas-final-aeon.ts:247`, `:481`); these are the
+    // chapter-level statement of the same thing, and what the jukebox lists.
+    battle: 'boss-jecht',
+    phase2: 'boss-yu-yevon',
+    victory: 'victory-ffx',
   },
   sensorTexts: {
     'braskas-final-aeon': 'The pillars keep it standing. Take the pillars.',
@@ -207,10 +237,11 @@ export const FFX2_BAHAMUT: Chapter = {
   enemyGroupRef: bahamutGroup,
   scriptsRef: ffx2BahamutScripts,
   music: {
-    scene: 'boss-dread',
-    battle: 'battle-ffx',
+    scene: 'scene-bevelle-underground',
+    // "Yuna's Ballad" — the one aeon fight with its own leitmotif rather than a
+    // boss theme [bahamut.ts:114; THEMES.md cue map row 17].
+    battle: 'boss-ffx2-aeon',
     // No `victory`: the flourish is suppressed for this chapter.
-    post: 'title',
   },
   sensorTexts: {
     bahamut: 'An aeon that once fought alongside Yuna.',
@@ -234,11 +265,12 @@ export const FFX2_VEGNAGUN_SHUYIN: Chapter = {
   enemyGroupRef: vegnagunTailGroup,
   scriptsRef: ffx2VegnagunShuyinScripts,
   music: {
-    scene: 'boss-dread',
-    battle: 'battle-ffx',
-    phase2: 'boss-dread',
-    victory: 'title',
-    post: 'title',
+    scene: 'scene-farplane',
+    // The gun, then the boy inside it — the four Vegnagun formations each
+    // declare `boss-vegnagun` and `shuyin.ts:90` declares `boss-shuyin`.
+    battle: 'boss-vegnagun',
+    phase2: 'boss-shuyin',
+    victory: 'victory-ffx2',
   },
   sensorTexts: {
     'vegnagun-tail': 'Kill the arms before you look it in the face.',

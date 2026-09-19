@@ -146,7 +146,7 @@ const SEYMOUR_FLUX_META: ChapterMeta = {
     { image: 'characters/mortiorchis/idle.png', caption: 'the machine beneath him' },
   ],
   focalCharacterId: 'seymour',
-  musicKeys: ['boss-dread', 'battle-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-seymour', 'victory-ffx'],
 };
 
 /**
@@ -194,7 +194,7 @@ const YUNALESCA_META: ChapterMeta = {
     { image: 'portraits/auron.png', caption: "it isn't over" },
   ],
   focalCharacterId: 'yunalesca',
-  musicKeys: ['boss-dread', 'battle-ffx'],
+  musicKeys: ['scene-zanarkand-dome', 'boss-yunalesca', 'victory-ffx'],
 };
 
 /**
@@ -243,7 +243,7 @@ const BRASKAS_FINAL_AEON_META: ChapterMeta = {
     { image: 'characters/braskas-final-aeon-2/idle.png', caption: 'the second shape' },
   ],
   focalCharacterId: 'jecht',
-  musicKeys: ['boss-dread', 'battle-ffx'],
+  musicKeys: ['scene-dreams-end', 'boss-jecht', 'boss-yu-yevon', 'victory-ffx', 'ending-ffx'],
 };
 
 /**
@@ -298,7 +298,7 @@ const FFX2_BAHAMUT_META: ChapterMeta = {
     { image: 'characters/paine-warrior/idle.png', caption: "you don't get another option" },
   ],
   focalCharacterId: 'yuna-ffx2',
-  musicKeys: ['boss-dread', 'battle-ffx'],
+  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon'],
 };
 
 /**
@@ -347,7 +347,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
     { image: 'characters/lenne/idle.png', caption: 'the note he circles' },
   ],
   focalCharacterId: 'shuyin',
-  musicKeys: ['boss-dread', 'battle-ffx'],
+  musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
 /** All five chapters' pause-screen metadata, in play order. */

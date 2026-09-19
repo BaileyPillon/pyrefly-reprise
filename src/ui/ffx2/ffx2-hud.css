@@ -636,7 +636,12 @@
   flex-direction: column;
   align-items: center;
   gap: calc(1px * var(--ffx2-scale, 1));
-  transform: translate(-50%, -50%) rotate(-8deg);
+  /* Positioned by its own top-left, not centred: `ChainCounter` solves the
+     placement with `placeSlab`, which works in layout boxes, and a translated
+     box is not where its rect says it is. The old small tag's -8deg tilt goes
+     with it — a 50-grid-px block set on a slant is harder to read and §4.6
+     does not ask for one. */
+  transform-origin: 50% 50%;
   padding: calc(3px * var(--ffx2-scale, 1)) calc(9px * var(--ffx2-scale, 1)) calc(4px * var(--ffx2-scale, 1));
   background: var(--ig-ink);
   color: var(--ig-accent);
@@ -718,13 +723,13 @@
 }
 @keyframes ffx2-chain-pop {
   0% {
-    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+    transform: scale(1);
   }
   50% {
-    transform: translate(-50%, -50%) rotate(-8deg) scale(1.45);
+    transform: scale(1.45);
   }
   100% {
-    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+    transform: scale(1);
   }
 }
 @keyframes ffx2-chain-white {
@@ -749,11 +754,11 @@
 @keyframes ffx2-chain-broke {
   0% {
     opacity: 1;
-    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+    transform: scale(1);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) rotate(-8deg) scale(0.6);
+    transform: scale(0.6);
   }
 }
 

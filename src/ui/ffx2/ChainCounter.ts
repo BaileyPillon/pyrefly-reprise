@@ -19,6 +19,7 @@
  * letterbox scale, so it matches the chrome at any viewport.
  */
 import type { CombatantId } from '../../battle/common/types.ts';
+import { placeSlab, type SlabRect } from './intentPlacement.ts';
 
 /** How long a chip survives with no further increment. */
 export const CHAIN_HOLD_MS = 1400;
@@ -40,8 +41,21 @@ export interface ChainCounterDeps {
   overlay: () => HTMLElement;
   /** Current letterbox scale. */
   scale: () => number;
-  /** Where the chained enemy is, in viewport pixels. */
+  /** Where the chained enemy's head is, in viewport pixels. */
   point: (id: CombatantId) => { x: number; y: number };
+  /**
+   * Everything on the board the chip may not cover, in viewport pixels — the
+   * HUD's own panels and every living fighter, minus the chip itself.
+   *
+   * §4.6 anchors the popup to the enemy, which was fine when it was an 11 px
+   * tag; at §4.6's real size (a 28 px numeral over a 10 px label, ~50 grid px
+   * tall) the same anchor puts it across the boss and across the enemy-intent
+   * slab. It keeps its anchor when the spot is free and steps aside when it is
+   * not, using the same solver the intent slab steers with.
+   */
+  obstacles: () => readonly SlabRect[];
+  /** The overlay's own size in viewport pixels. */
+  layer: () => { width: number; height: number };
 }
 
 /** The escalation class for a chain length, per §4.6. */
@@ -79,15 +93,26 @@ export class ChainCounter {
     // the damage numerals' own ladder — which climbs up and to the *right* from
     // the chest anchor (`damageLadder.computeHitOffset`) — by starting above
     // the head instead of level with the hits.
-    const anchor = this.deps.point(targetId);
-    el.style.left = `${anchor.x + 34 * scale}px`;
-    el.style.top = `${anchor.y - 22 * scale}px`;
     el.style.setProperty('--ffx2-scale', String(scale));
     el.className = `ffx2-chain-chip ${chainTier(count)} ${count >= FLASH_AT ? 'ffx2chain--flash' : ''}`.replace(/\s+/g, ' ').trim();
     el.innerHTML = `
       <span class="ffx2chain__n">${count}</span>
       <span class="ffx2chain__label">CHAIN <b>&times;${multiplier.toFixed(2)}</b></span>
       <span class="ffx2chain__motes">${motesHtml()}</span>`;
+    // Measured after the markup lands and before it is placed: the chip's size
+    // depends on the numeral's digit count and on the scale, so it cannot be
+    // known up front.
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    const anchor = this.deps.point(targetId);
+    const layer = this.deps.layer();
+    const edge = 6 * scale;
+    // "Top-right of the enemy being chained" (§4.6), sitting clear above the
+    // head rather than across the face.
+    const natural = { left: anchor.x + 12 * scale, top: anchor.y - h - 8 * scale };
+    const placed = placeSlab(natural, { w, h }, this.deps.obstacles(), layer, edge);
+    el.style.left = `${placed.left}px`;
+    el.style.top = `${placed.top}px`;
     // Restart the pop and the mote burst even when the class list did not change.
     void el.offsetWidth;
     el.classList.add('ffx2chain--pop');

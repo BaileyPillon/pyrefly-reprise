@@ -13,15 +13,20 @@ import { FLOURISH_MS, playSpherechangeFlourish } from '../../src/ui/ffx2/Spherec
 describe('FFX-2 chain counter (visual-bible §4.6)', () => {
   let overlay: HTMLElement;
   let chain: ChainCounter;
+  /** The board the chip has to stay off. Empty by default; one test fills it. */
+  let obstacles: Array<{ left: number; top: number; right: number; bottom: number }> = [];
 
   beforeEach(() => {
     vi.useFakeTimers();
+    obstacles = [];
     overlay = document.createElement('div');
     document.body.append(overlay);
     chain = new ChainCounter({
       overlay: () => overlay,
       scale: () => 2,
       point: () => ({ x: 400, y: 200 }),
+      obstacles: () => obstacles,
+      layer: () => ({ width: 1280, height: 720 }),
     });
   });
 
@@ -55,13 +60,43 @@ describe('FFX-2 chain counter (visual-bible §4.6)', () => {
     expect(overlay.querySelector('.ffx2-chain-chip')!.classList.contains('ffx2chain--flash')).toBe(true);
   });
 
-  it('scales with the letterbox rather than drawing at grid size', () => {
+  it('scales with the letterbox, and takes its §4.6 anchor when the spot is free', () => {
     chain.show('bahamut', 3, 1.55);
     const chip = overlay.querySelector<HTMLElement>('.ffx2-chain-chip')!;
     expect(chip.style.getPropertyValue('--ffx2-scale')).toBe('2');
-    // Anchored up and to the right of the enemy, by a scaled offset (§4.6).
-    expect(chip.style.left).toBe(`${400 + 34 * 2}px`);
-    expect(chip.style.top).toBe(`${200 - 22 * 2}px`);
+    // Up and to the right of the enemy's head, by a scaled offset (§4.6).
+    // jsdom gives every element a zero offsetWidth/Height, so the chip is a
+    // degenerate box here and the anchor arithmetic is what is under test.
+    expect(chip.style.left).toBe(`${400 + 12 * 2}px`);
+    expect(chip.style.top).toBe(`${200 - 8 * 2}px`);
+  });
+
+  it('steps off the boss and the panels rather than drawing over them', () => {
+    // jsdom lays nothing out, so the chip would be a zero-size box and could
+    // never overlap anything. Give it the size it has on screen at scale 2 —
+    // a 28 px numeral over a 10 px label — and the solver has a real problem.
+    const w = 120;
+    const h = 100;
+    const ow = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth');
+    const oh = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
+    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', { configurable: true, get: () => w });
+    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', { configurable: true, get: () => h });
+    try {
+      // A wall across the whole band §4.6 wants the chip in.
+      obstacles = [{ left: 300, top: 60, right: 620, bottom: 240 }];
+      chain.show('bahamut', 9, 1.85);
+      const chip = overlay.querySelector<HTMLElement>('.ffx2-chain-chip')!;
+      const box = {
+        left: Number.parseFloat(chip.style.left),
+        top: Number.parseFloat(chip.style.top),
+      };
+      const hit =
+        box.left < 620 && box.left + w > 300 && box.top < 240 && box.top + h > 60;
+      expect(hit).toBe(false);
+    } finally {
+      if (ow) Object.defineProperty(HTMLElement.prototype, 'offsetWidth', ow);
+      if (oh) Object.defineProperty(HTMLElement.prototype, 'offsetHeight', oh);
+    }
   });
 
   it('stops being a chain counter the instant the chain breaks, and decays for 0.4 s', () => {

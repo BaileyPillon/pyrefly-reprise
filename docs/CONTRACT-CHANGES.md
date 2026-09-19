@@ -36,6 +36,53 @@ because the guard changes when a battle can end. Every canonical route out of
 Yu Yevon reaches a new minimum inside a handful of turns; the longest intended
 line in the project wins in ~195.
 
+## 2026-09-19 — Chapter music fields say which boss theme scores which fight
+
+Critic round 02 #02: every boss fight was scored with the generic `battle-ffx`,
+and the boss cue the pre-scene had faded in was crossfaded straight back out on
+the frame the battle screen appeared. The formations' own declared cues
+(`seymour-flux.ts:217`, `yunalesca.ts:157`, `braskas-final-aeon.ts:247`/`:481`,
+`bahamut.ts:114`, the four Vegnagun parts, `shuyin.ts:90`) were dead data: the
+only reader of `EnemyGroupDef.musicCues` was the *chained-link* branch of
+`BattleScreen`.
+
+**1. `src/data/encounters.ts` — `ChapterMusic.post` is now optional (additive).**
+
+Every shipped `post` script opens with a `music()` step of its own (each one
+`music(null, …)`: the chapter card lands in silence and the coda brings its own
+theme up afterwards), so the flow's forced `chapter.music.post` was a 1.4 s
+fade-in of `title` that the script immediately faded out. The field stays for a
+chapter whose post scene is scored from outside; no chapter sets it now.
+`BattleScreenFlow.playCutscene` only plays `scene`/`post` when the script does
+not name a cue in its opening steps.
+
+**2. `src/data/encounters.ts` — the five `music` records now name real cues.**
+
+No type change. `scene` moves from `boss-dread` to each chapter's own scene bed
+(`scene-gagazet`, `scene-zanarkand-dome`, `scene-dreams-end`,
+`scene-bevelle-underground`, `scene-farplane`) and `battle` from `battle-ffx` to
+each chapter's own boss theme (`boss-seymour`, `boss-yunalesca`, `boss-jecht`,
+`boss-ffx2-aeon`, `boss-vegnagun`), with `phase2` naming the real second cue
+where there is one (`boss-yu-yevon`, `boss-shuyin`) and dropped where there is
+not. FFX chapters name only FFX cues and FFX-2 chapters only FFX-2 cues; the two
+scores share none, and `tests/unit/flow-encounter-chain.test.ts` asserts it
+rather than assuming it.
+
+The fields keep their two jobs — the fallback when a formation or a script names
+nothing, and the "this fight" group in the pause menu's jukebox
+(`PauseScreen.chapterMusicKeys`, `CHAPTER_META.musicKeys`). Both now list what a
+player actually hears.
+
+**3. `src/data/chapter-meta.ts` — `musicKeys` follows.** Each chapter's dossier
+listed `['boss-dread', 'battle-ffx']`; it now lists that chapter's own cues,
+including the ending cue its coda plays.
+
+Note left for the owner: once boss routing is right, `battle-ffx` ("We can win
+this") and `boss-dread` ("Something is watching") have no encounter left in a
+five-boss game. They are still in the jukebox and are listed as deliberately
+unwired in `tests/unit/audio-cue-reachability.test.ts`. Whether the FFX arc
+should gain a normal-battle or approach cue is Bailey's call.
+
 ## 2026-09-17 (third pass) — Chapter 3: Doublecast resolves, and Lulu's Overdrive is reachable
 
 Key `braskas-final-aeon`. One engine change, in one function, reached only by an

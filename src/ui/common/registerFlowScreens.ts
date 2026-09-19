@@ -46,6 +46,13 @@ registerFlowScreens({
       chapterId: opts.chapter.id,
       script: opts.script,
       startSkipped: opts.skip ?? false,
+      // The two halves of the post-battle handoff: where to start, and where
+      // the script stopped so the flow can come back to it after the results
+      // panel (critic round 02 #04).
+      ...(opts.resumeFrom !== undefined ? { resumeFrom: opts.resumeFrom } : {}),
+      ...(opts.onResultsMarker
+        ? { onResults: (silent: boolean, resumeAt: number) => opts.onResultsMarker?.({ silent, resumeAt }) }
+        : {}),
     }),
 
   results: (opts) =>

@@ -37,7 +37,10 @@ import { loadScene, type LoadedScene } from '../../scenes/index.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
-import { findEnemyGroup, setupForChapter, setupForNextLink } from './BattleScreenSetup.ts';
+import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
+import { runEncounterChain } from './BattleEncounterChain.ts';
+import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
+import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
@@ -45,6 +48,16 @@ import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { attachEnemyIntent, consumeIntentKeyPress } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
+
+/**
+ * How long a decided battle may go without playing a single event before the
+ * screen resolves it itself. See {@link BattleScreen.checkForStall}.
+ *
+ * Comfortably longer than every port budget the presenter already keeps
+ * (`HUD_EVENT_BUDGET_MS` 600 ms, `SCRIPT_BUDGET_MS` 30 s), so this only ever
+ * fires for something that missed its own deadline.
+ */
+const STALL_LIMIT_MS = 45_000;
 
 export interface BattleScreenOptions {
   chapter: Chapter;
@@ -105,6 +118,8 @@ export class BattleScreen extends Screen {
   private pauseKeyPressed = false;
   /** The small PAUSE chip in the HUD corner — the mouse's way in. */
   private pauseChip: HTMLElement | null = null;
+  /** The approved battle-start boss card while it is up. See {@link showBattleStart}. */
+  private battleStartBanner: BattleStartBanner | null = null;
 
   /** Resolves when the encounter ends (victory, defeat, escape or exit). */
   readonly finished: Promise<BattleScreenResult>;
@@ -208,7 +223,10 @@ export class BattleScreen extends Screen {
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
 
-    void audio.playMusic(chapter.music.battle, { fade: 1.2 });
+    // The battle's own cue is resolved by `runEncounterChain` from the
+    // formation's `musicCues`, so the boss theme the pre-scene faded in is the
+    // one that keeps playing instead of being crossfaded out to the generic
+    // `battle-ffx` (critic round 02 #02). Nothing plays music here.
     void this.app.fade('clear', 600);
 
     // `P` has no abstract button in `app/Input.ts` — adding one would put a
@@ -243,7 +261,46 @@ export class BattleScreen extends Screen {
     void this.measureChain();
 
     // Run the encounter without blocking `enter()`, so the first frame draws.
-    void this.runEncounter();
+    // The approved battle-start card goes up first and the fight waits behind
+    // it (critic round 02 #10).
+    void this.showBattleStart().then(() => this.runEncounter());
+  }
+
+  /**
+   * The approved Ink & Gold boss card, once per encounter.
+   *
+   * Resolves immediately — and shows nothing — for a run with nobody watching
+   * (`speed: 'skip'`, which is e2e and the critic) and for the demo reel, which
+   * has no boss to name.
+   */
+  private async showBattleStart(): Promise<void> {
+    if (this.opts.speed === 'skip' || this.preview) return;
+    const chapter = this.opts.chapter;
+    const state = this.engine?.state();
+    if (!state) return;
+    const boss = state.enemyIds
+      .map((id) => state.combatants[id])
+      .find((c) => c && !c.removed && !c.flags.hidden && !c.flags.isPart);
+    if (!boss) return;
+    const party = state.activeIds
+      .map((id) => state.combatants[id])
+      .filter((c): c is NonNullable<typeof c> => Boolean(c))
+      .map((c) => ({ id: c.spriteKey || c.id, name: c.name }));
+
+    const banner = new BattleStartBanner({
+      root: this.root,
+      chapterNumber: chapter.number,
+      location: chapter.location,
+      bossName: boss.name,
+      subline: chapter.subtitle,
+      artKey: boss.spriteKey || boss.id,
+      backdropKey: chapter.sceneKey,
+      party,
+      game: chapter.game,
+    });
+    this.battleStartBanner = banner;
+    await banner.show();
+    this.battleStartBanner = null;
   }
 
   /** Walk `nextGroupId` to the end of the chain, counting formations. */
@@ -273,37 +330,24 @@ export class BattleScreen extends Screen {
       return;
     }
 
-    let outcome: BattleOutcome = { kind: 'aborted' };
-    for (;;) {
-      this.links++;
-      presenter.syncHud(this.engine!);
-      outcome = await presenter.run(this.engine!);
-
-      if (outcome.kind !== 'victory') break;
-
-      const nextId = this.group?.nextGroupId;
-      if (!nextId) break;
-
-      const nextGroup = await findEnemyGroup(nextId);
-      if (!nextGroup) {
-        console.warn(`[battle] chapter chains to "${nextId}" but no formation exports that id`);
-        break;
-      }
-
-      // Next link: same party, carried state, no results screen in between.
-      const state = this.engine!.state();
-      this.setup = setupForNextLink(this.setup!, nextGroup, state, (this.opts.seed ?? 1) + this.links);
-      this.group = nextGroup;
-      this.engine!.setSeed(this.setup.seed);
-      this.engine!.init(this.setup);
-      await this.stage!.stage(this.engine!.state());
-      // The formation's own cue wins; otherwise the chapter's phase-2 theme
-      // marks the turn, which is what Yunalesca's forms and the Vegnagun
-      // chain both want.
-      const cue = nextGroup.musicCues?.[0];
-      const track = cue?.track ?? this.opts.chapter.music.phase2;
-      if (track) void audio.playMusic(track, { fade: cue?.fadeMs ?? 1200 });
-    }
+    // The loop itself lives in `BattleEncounterChain.ts` so a test can replay a
+    // whole chapter to victory without a renderer (critic round 02 #01).
+    const { outcome } = await runEncounterChain({
+      chapter: this.opts.chapter,
+      presenter,
+      engine: this.engine!,
+      stage: this.stage!,
+      group: this.group!,
+      setup: this.setup!,
+      seed: this.opts.seed ?? 1,
+      findGroup: findEnemyGroup,
+      audio,
+      onLink: ({ links, group, setup }) => {
+        this.links = links;
+        this.group = group;
+        this.setup = setup;
+      },
+    });
 
     this.finish(outcome);
   }
@@ -411,6 +455,13 @@ export class BattleScreen extends Screen {
         // The other half of "exactly one screen reads the player": the HUD's
         // own pad watchers. The keyboard half is the claim taken below.
         setRawInputSuspended(paused);
+        // "The game holding its breath" [docs/audio/THEMES.md cue map row 3].
+        // The `pause` cue was composed, rendered and shipped, and nothing had
+        // ever asked for it (critic round 02 #02). It is wired from here rather
+        // than from `PauseScreen.ts` because the fight is what has to be
+        // returned to: this screen is the one that knows which boss theme was
+        // playing when the menu went up.
+        setPauseMusic(audio, paused);
       },
       onResume: () => void this.closePause(),
       onRestart: () => this.requestExit('restart'),
@@ -482,7 +533,67 @@ export class BattleScreen extends Screen {
 
   // ------------------------------------------------------------------ frame
 
+  /**
+   * The watchdog for "won, and then never ends".
+   *
+   * `tests/unit/flow-encounter-chain.test.ts` shows the engine, the presenter
+   * and the chain loop always reach an outcome, so nothing *inside* them
+   * explains what the critic measured — Bahamut at 0/8400 with the screen still
+   * on `'battle'` five minutes later (round 02 #01). What can still strand a
+   * fight is a port that never answers: a HUD transient, a mid-battle beat, an
+   * art load. Each of those already has its own budget, and each of those
+   * budgets could in principle be missed.
+   *
+   * So this is the backstop the critic asked for, and it is deliberately dumb:
+   * once the **engine** says the battle has a result, and playback has not
+   * advanced a single event for {@link STALL_LIMIT_MS}, the screen stops
+   * waiting and resolves with the result the engine already has. It is checked
+   * on the frame clock, which the pause overlay stops, so a paused fight is
+   * never mistaken for a stalled one.
+   */
+  private stalledMs = 0;
+  private lastPlayed = -1;
+
+  private checkForStall(dt: number): void {
+    if (this.preview || !this.presenter || !this.engine || this.finishedResolve === null) {
+      // Nothing running, or already finished.
+      if (this.finishedResolve === null) this.stalledMs = 0;
+      return;
+    }
+    const played = Number(this.presenter.snapshot()['played'] ?? 0);
+    if (played !== this.lastPlayed) {
+      this.lastPlayed = played;
+      this.stalledMs = 0;
+      return;
+    }
+    const result = this.engine.state().result;
+    if (!result) {
+      // Still fighting. A long wait for a human at the command menu is not a
+      // stall, which is why only a *decided* battle is ever force-resolved.
+      this.stalledMs = 0;
+      return;
+    }
+    this.stalledMs += dt * 1000;
+    if (this.stalledMs < STALL_LIMIT_MS) return;
+    console.error(
+      `[battle] ${this.opts.chapter.id}: the engine reported "${result.outcome}" but playback has not ` +
+        `advanced for ${Math.round(this.stalledMs)}ms. Resolving the encounter from the engine's own result.`,
+    );
+    this.stalledMs = 0;
+    this.presenter.abort();
+    this.setPresenterPaused(false);
+    this.finish(
+      result.outcome === 'defeat'
+        ? { kind: 'defeat', result }
+        : result.outcome === 'escape'
+          ? { kind: 'escape', result }
+          : { kind: 'victory', result },
+    );
+  }
+
   override update(dt: number): void {
+    this.checkForStall(dt);
+
     // Play time, for the pause screen's PLAY TIME row. `update` is only called
     // while this screen is on top, so the clock stops of its own accord the
     // moment the pause overlay goes up — time spent reading the menu is not
@@ -498,6 +609,18 @@ export class BattleScreen extends Screen {
   }
 
   override handleInput(input: InputSnapshot): void {
+    // The battle-start card is the first thing on screen and the first thing
+    // any press takes down — it must never hold a player longer than they want
+    // it to. It consumes that press so the same tap does not also open the
+    // pause or answer a command menu behind it.
+    if (this.battleStartBanner?.visible) {
+      const pressed =
+        input.consume('confirm') || input.consume('cancel') || input.consume('start') || this.pauseKeyPressed;
+      this.pauseKeyPressed = false;
+      if (pressed) this.battleStartBanner.dismiss();
+      return;
+    }
+
     // A mid-battle beat owns the input while it is on screen.
     this.cutscenes?.handleInput(input);
 
@@ -642,6 +765,11 @@ export class BattleScreen extends Screen {
 
   override exit(): void {
     window.removeEventListener('keydown', this.onPauseKey);
+    // A screen torn down while the card is up must settle its promise, or the
+    // `.then(() => this.runEncounter())` chain in `enter` would never run and
+    // the encounter would never finish.
+    this.battleStartBanner?.dismiss();
+    this.battleStartBanner = null;
     this.pauseChip?.remove();
     this.pauseChip = null;
     // A screen torn down with the pause still up must not leave the HUD's own
