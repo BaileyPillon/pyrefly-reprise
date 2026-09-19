@@ -768,9 +768,17 @@
     0 0 6px 1px rgba(242, 194, 30, 0.7),
     0 2px 6px rgba(0, 0, 0, 0.5);
 }
-/* 10 turns the numeral's fill to #FFF0A8 -> #F2712E. */
+/*
+ * 10 turns **the numeral's** fill to #FFF0A8 -> #F2712E. The slab stays ink at
+ * every tier: §4.6 escalates the numeral and the glow, never the plate, and
+ * the orange slab this inherited from the old one-line tag put an orange
+ * gradient on an orange ground — at 2560x1440 the bottom half of a "22"
+ * disappeared into it. The tier now reads off the glow instead.
+ */
 .ffx2-chain-chip.ffx2chain--hot {
-  background: #f2712e;
+  box-shadow:
+    0 0 10px 2px rgba(242, 113, 46, 0.85),
+    0 2px 6px rgba(0, 0, 0, 0.5);
 }
 .ffx2-chain-chip.ffx2chain--hot .ffx2chain__n {
   background: linear-gradient(180deg, #fff0a8 0%, #f2712e 100%);
