@@ -1,0 +1,40 @@
+{
+  "mode": "gpu",
+  "url": "http://127.0.0.1:5487/",
+  "shots": [
+    {
+      "tag": "ffx-ally-down-1600x900",
+      "captured": null
+    },
+    {
+      "tag": "ffx-ally-down-1280x720",
+      "captured": null
+    }
+  ],
+  "attempts": [
+    {
+      "seed": 3,
+      "ok": false
+    },
+    {
+      "seed": 7,
+      "ok": false
+    },
+    {
+      "seed": 11,
+      "ok": false
+    },
+    {
+      "seed": 3,
+      "ok": false
+    },
+    {
+      "seed": 7,
+      "ok": false
+    },
+    {
+      "seed": 11,
+      "ok": false
+    }
+  ]
+}
