@@ -324,6 +324,23 @@ No existing test was widened, skipped or deleted; none needed rewriting, and the
 63 tests of `ui-ffx-hud-safe-zones.test.ts` - including the whole "with no zone
 the card fits in" block that pins the decline behaviour - pass unchanged.
 
+### The browser check
+
+One short Playwright pass on this track's own dev server (port 5731, stopped
+afterwards, listener confirmed gone), **`PYREFLY_BROWSER=gpu`** — the real GPU,
+not SwiftShader — at 1600x900 and 1280x720, Chapter 1 at seed 1, real
+`page.keyboard.press('KeyE')`. The verifier's own reproduction, run against the
+fix:
+
+| viewport | before `E` | read-out open | after the second `E` | after a second round trip |
+|---|---|---|---|---|
+| 1600x900 | `shelf`, card [404, 118, 366, 170] | `free`, card down | `shelf`, card **[404, 118, 366, 170]** | `shelf`, same box |
+| 1280x720 | `shelf`, card [324, 94, 293, 136] | `free`, card down | `shelf`, card **[324, 94, 293, 136]** | `shelf`, same box |
+
+Same box to the pixel, inside the same decision, no page errors. Screenshots in
+`docs/screenshots/fix3/prerelease/ffx-hud/` (`A0-before-E`,
+`A1-readout-open`, `A2-E-twice-card-back` at both viewports).
+
 ### Still open (not touched in this pass, and why)
 
 Ranked by what the verifier measured, for whoever picks this up next week.
