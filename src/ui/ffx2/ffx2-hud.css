@@ -496,6 +496,23 @@
      rail instead of two (docs/ENGINE-API.md#hud-safe-area). */
   right: 12px;
   bottom: 116.44px; /* BattleFfx2.dc.html: right 40, bottom 262 @1440 */
+  /* Fixed to one `.ig-cmd` row's own width (`slabs.css`), not left to shrink-
+     to-fit. Round 03/builda1: `.ig-cmd-stack` never sets `align-items`, so it
+     defaults to the flex-start-equivalent every fixed-width flex item gets —
+     each row is left-aligned regardless of its own `margin-right` cascade
+     step, which never shifts a row's rendered box, only reserves dead space
+     after it. A shrink-to-fit `.ffx2hud__command` still counts that unused
+     margin toward its own width, so on a long submenu (Chapter 5's 16-row
+     White Magic) the wrapper measured ~236px of grid-space width — 106px
+     more than any row actually occupies — and `.ffx2cmd__fold` (below),
+     right-aligned to *this* box, ended up hanging in that dead space, off
+     the right edge of the visible list entirely (measured live: fold at grid
+     x 614-628, every row's own right edge at grid x 524). Pinning the width
+     to a row's removes the dead space the fold was drifting into. It does
+     not touch `.ig-cmd-stack`'s missing `align-items` — whether the cascade
+     itself is meant to visibly offset rows is a separate, first-time-visible
+     design question for an end-state pick, not a bugfix this track owns. */
+  width: 129.78px; /* 292 @1440, matches `.ig-cmd` */
   max-height: 220px;
   overflow-y: auto;
   overflow-x: hidden;
