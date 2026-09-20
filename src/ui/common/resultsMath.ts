@@ -183,9 +183,25 @@ function sphereGridDetail(sLv: number, bankedAp: number, levelsGained: number): 
 }
 
 /**
- * The per-member rows for a finished battle: the three active members in
+ * The per-member rows for a finished battle: every AP-eligible member in
  * FFX, all three girls in FFX-2. Pure, so `tests/unit` can assert the
  * progression arithmetic without a DOM.
+ *
+ * FFX **used to** always list `build.activeSlots` — the pre-battle roster —
+ * while `result.sphereLevelsGained` (`src/battle/ffx/results.ts`) is keyed
+ * by whoever actually earned AP this battle per ffx-combat-core.md §1.7's
+ * rule (took at least one full turn; not KO'd or petrified at the end). The
+ * two disagreeing was round 03's gate major: a member switched out mid-battle
+ * still got a row with full AP and no S.Lv gain (because their id was not a
+ * `sphereLevelsGained` key), while a member switched *in* who leveled up
+ * never got a row at all (their id was not in the pre-battle `activeSlots`).
+ * The row set now comes from `sphereLevelsGained`'s keys — the one place the
+ * sourced eligibility rule is computed — ordered by the build's own
+ * active-then-reserve listing for a stable, familiar row order.
+ *
+ * **FFX-2 only** has one build.members loop below, unaffected by this: it
+ * is not a chained-switch roster, and `result.levelsGained` was already
+ * keyed the same way `build.members` is read.
  */
 export function buildMemberRows(
   chapter: Chapter | undefined,
@@ -195,7 +211,10 @@ export function buildMemberRows(
   if (!build) return [];
 
   if (build.game === 'ffx') {
-    return build.activeSlots.map((id) => {
+    const earnedIds = new Set(Object.keys(result.sphereLevelsGained));
+    const known = [...build.activeSlots, ...build.reserve].filter((id) => earnedIds.has(id));
+    for (const id of earnedIds) if (!known.includes(id)) known.push(id);
+    return known.map((id) => {
       const member = build.members.find((m) => m.id === id);
       const sLv = member?.sphereGrid.sLv ?? 0;
       const banked = (member?.sphereGrid.ap ?? 0) + result.ap;

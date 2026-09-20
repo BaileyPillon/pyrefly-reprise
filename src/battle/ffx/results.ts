@@ -9,7 +9,7 @@
  */
 
 import type { BattleResult, CombatantId, ItemDrop } from '../common/types.ts';
-import { type Ctx, isAlive, tryActor } from './state.ts';
+import { type Ctx, has, isAlive, tryActor } from './state.ts';
 import { payVictorGauge } from './overdrive.ts';
 import { idiv } from './math.ts';
 
@@ -36,10 +36,40 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
   return { ap, gil, drops };
 }
 
-/** Sphere Levels each active member's banked AP plus this battle's AP buys. */
+/**
+ * Whether this party member earned this battle's AP at all.
+ *
+ * ffx-combat-core.md §1.7/AP: "Every party member who took at least one full
+ * turn earns AP at the end of a battle. Characters switched out during their
+ * first turn, KO'd, or petrified at the end earn nothing." `ActorRuntime.
+ * turnsTaken` only increments at `onTurnEnd` (`engine.ts`), so a member
+ * switched out mid-turn via the `switch` command's `handOffTo` never reaches
+ * it for that interrupted turn — exactly "switched out during their first
+ * turn" when it is their only turn so far. A member switched out *after*
+ * completing at least one earlier turn keeps the `turnsTaken` from those, so
+ * this reads as eligible regardless of whether they are on the field or
+ * benched when the battle ends — `isAlive` alone cannot be used here because
+ * it requires `onField`, which a benched member never satisfies even when
+ * perfectly healthy.
+ */
+function earnedAp(ctx: Ctx, id: CombatantId): boolean {
+  const member = tryActor(ctx, id);
+  if (!member || !member.alive || has(member, 'ko') || has(member, 'petrify')) return false;
+  return (ctx.rt.actors.get(id)?.turnsTaken ?? 0) > 0;
+}
+
+/**
+ * Sphere Levels every AP-eligible member's banked AP plus this battle's AP
+ * buys — every party member (active or benched) who {@link earnedAp}, not
+ * only whoever is standing in the active slots when the battle ends. See
+ * {@link earnedAp}'s doc for the sourced rule and why the active-only set was
+ * wrong: it both denied AP to a member switched out after acting, and never
+ * excluded one KO'd in an active slot at the very end.
+ */
 function sphereLevels(ctx: Ctx, ap: number): Record<CombatantId, number> {
   const out: Record<CombatantId, number> = {};
-  for (const id of ctx.state.activeIds) {
+  for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) {
+    if (!earnedAp(ctx, id)) continue;
     const member = tryActor(ctx, id);
     const grid = member?.sphereGrid;
     if (!member || !grid) continue;

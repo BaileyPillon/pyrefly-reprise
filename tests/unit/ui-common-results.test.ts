@@ -155,11 +155,21 @@ describe('buildMemberRows', () => {
     expect(buildMemberRows(undefined, { ...base, ap: 36 })).toEqual([]);
   });
 
+  /**
+   * The row set now comes from `sphereLevelsGained`'s keys — every member who
+   * earned this battle's AP (`ffx-combat-core.md §1.7`) — not the pre-battle
+   * `build.activeSlots`, per round 03's gate major on a switched member's
+   * row: see `tests/unit/ffx-results-ap.test.ts` for that scenario driven
+   * through a real engine. The ordinary no-switch case still lists all three
+   * active members, because in that case all three are `sphereLevelsGained`
+   * keys too — Yuna and Kimahri simply gained no S.Lv (`levelDelta` 0) from
+   * this battle's AP.
+   */
   it('lists the three active FFX members and pays each the full AP', () => {
     const rows = buildMemberRows(getChapter('seymour-flux'), {
       ...base,
       ap: 36,
-      sphereLevelsGained: { tidus: 1 },
+      sphereLevelsGained: { tidus: 1, yuna: 0, kimahri: 0 },
     });
     expect(rows.map((r) => r.id)).toEqual(['tidus', 'yuna', 'kimahri']);
     expect(rows.every((r) => r.award === 36 && r.awardUnit === 'AP')).toBe(true);
