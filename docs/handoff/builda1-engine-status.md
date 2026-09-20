@@ -170,3 +170,123 @@ statement on the convention — **see "Still open" below**.
    freed target's counter to the field minimum. It is right in every case seen
    so far, but a formation where several actors sit on the minimum resolves by
    the §1.6 tie-break rather than strictly after the user.
+
+## Round 04 repair (2026-09-20)
+
+Critic round 04 reviewed the Build A.1 candidate `bc2571c` **before** it was
+deployed and returned *changed area FAIL*, so nothing shipped. This is the
+engine track's repair batch: five issues plus the CHK-023 runtime proofs the
+review asked for. Every fix is the smallest one that satisfies the critic's own
+acceptance check, and each is proved by a test that fails on the code before it.
+
+| Issue | Game case | Source for the case |
+|---|---|---|
+| PR-0004 counter guard | **FFX only** | `ffx-combat-core` §4.2 (Threaten) and §11 C12 — the status is enemy-only and FFX-2 has no equivalent |
+| PR-0023 letter tags | **FFX only** | the CTB forecast's own tile label; FFX-2's ATB HUD builds its rows elsewhere |
+| PR-0040 file split | **FFX only** (source hygiene) | AGENTS.md hard rule 7 |
+| PR-0025 `[estimate]` label | **FFX only** | the CTB recovery ladder; FFX-2's ATB wait model does not share it |
+| PR-0024 Attack filter | **FFX-2 only** | dresspheres and `buildCommands` are ATB-side; FFX's menu has no dressphere concept |
+
+### PR-0004 (major) — a Threatened enemy counterattacked
+
+`canCounter()` at `src/battle/ffx/ai/reactions.ts` encoded §4.2's "cannot act
+**or counterattack**" from the start and **had no call site anywhere** —
+AGENTS.md hard rule 4 again. The per-enemy branch of `collectBossCounters` now
+consults it before building any counter command. One line plus its reason.
+
+Proof: `tests/unit/ffx-round04-engine.test.ts`. A control run first (an
+unthreatened Yunalesca *does* counter a landed hit, so the assertion below is
+not vacuous), then the real Chapter 2 encounter on eight seeds with Threaten on
+the boss at the instant of the hit — the action's log delta must carry the
+`damage` and no `counter`. On the old code every one of the eight produced
+`counter(yunalesca)->tidus, blind-counter`. A third test fails if `canCounter`
+ever loses its call site again.
+
+### PR-0023 (polish) — an enemy renamed mid-battle
+
+`letterTagFor` recomputed the name group from the enemies *currently on the
+field*, so a dead Yu Pagoda took the survivor's letter with it, and Chapter 3's
+Pagodas die and revive repeatedly. Letters are now built **once per battle**
+from `state.enemyIds`, the formation roster, which holds every record whether it
+is standing, dead or sent; the map is cached on `FFXRuntime.letterTags` and
+rebuilt only if the roster grows. A unique enemy still never gains a letter.
+
+Proof: a seeded Chapter 3 drive that attacks the left Pagoda until it goes down
+and reads the forecast after every step. Old code: "the surviving Yu Pagoda lost
+its letter while its twin was down".
+
+### PR-0040 (polish) — the 400-line house limit
+
+The Threaten/Sleep repair took `state.ts` to 415 lines. Split along its own
+banner: the single-combatant predicates (`has`, `statusOf`, `stacks`,
+`inTurnQueue`, `canAct`, `onField`, `targetable`, `isAlive`, `canSwitchIn`,
+`isSubmenuMarker`) moved to `src/battle/ffx/predicates.ts`, and `state.ts`
+re-exports every one of them, so no importer changed. 328 and 121 lines. A test
+pins both under 400 and pins the re-exports.
+
+### PR-0025 (polish) — an unsourced constant under a citation that does not state it
+
+The denied-turn branch charges `chargeForAction(ctx, actor.id, 3)`. **The value
+is unchanged** (hard rule 6 forbids inventing a replacement); it is now labelled
+`[estimate]` in `engine.ts` with its reason: 3 is the engine's own default
+action rank — `rankOf()`'s fallback for a rank-0 byte (§1.3) and the rank the
+CTB forecast assumes for everyone (§1.6) — so a turn spent on nothing recovers
+like the Attack that would have filled it.
+
+**Open question for Bailey.** No section of `ffx-combat-core.md` says what a
+*skipped* turn costs. §1.1, §4.1 and §4.2 give queue membership and the
+Sleep/Threaten clocks, not this number. It is load-bearing: it sets how many
+ticks a 3-turn Sleep or a Threaten locks a target out, and therefore how strong
+both are as tempo tools. Should a denied turn cost a full rank-3 recovery, or
+something shorter?
+
+**Not fixed here:** the critic also asked for `src/battle/ffx/results.ts`'s AP
+citation to be corrected from §1.7 to §10.1. `results.ts` is explicitly outside
+this track's files (another agent owns it), so it is left for that track.
+
+### PR-0024 (polish, FFX-2 only) — the duplicate-Attack filter was too wide
+
+`buildCommands` skipped the offered row by **category**, which would have taken
+every attack-category ability a dressphere owns: Lady Luck's Tantalize and the
+whole of Trainer's pet kit (which never had a duplicate to fix — Trainer ships
+no `x2-trainer-attack`), and Floral Fallal's Stigmas and Machina Maw's Howitzer
+and Blind Shell the day the specials reach this loop. Now filtered by identity:
+the entry is skipped only when its id is the `x2-<sphereId>-attack` record.
+
+Proof: `tests/unit/ffx2-command-attack-identity.test.ts` runs the real
+`buildCommands` against the real registries for **every shipped dressphere** —
+exactly one generic Attack row (none for Songstress, White Mage and Black Mage,
+§3.4-3.6), no row from the dressphere's own table missing, and Trainer's seven
+pets and Tantalize named individually. Five of its tests fail on the old filter.
+`ffx2-command-menu-attack-duplicate.test.ts`, the round 03 lock, still passes.
+
+### CHK-023 runtime proofs
+
+`tests/unit/chk023-runtime-proofs.test.ts`. Seeded runs of the real Chapter 3
+Yu Yevon link through the real `BattlePresenter`, with a `HudPort` that records
+every event in the order the presenter hands it over.
+
+- Every engine event reaches the HUD exactly once, in ascending `seq`, and every
+  one of them is in the engine's own log.
+- Gravija reaches the HUD hitting the whole field, Yu Yevon and both Pagodas
+  included (§3.3).
+- The Curaga counter answers player-side actions only, at most one per action
+  (§3.4.1) — 227 counters in the measured run, none provoked by an enemy-side
+  row.
+- A slept Yu Pagoda's turns still arrive at the HUD, spend nothing, and pay the
+  duration off; the same for a slept party member.
+
+Worth recording: under `intendedStrategy` this link ends in 17 turns because the
+party spends the Candle of Life on turn 2 and never damages the boss at all, so
+the counter is never provoked. The counter proofs therefore drive a local
+attack-the-boss strategy, which still only ever submits rows the engine offered.
+
+### Verification
+
+- `npx tsc --noEmit` clean.
+- `node tools/orphans.mjs`: `predicates.ts` is reachable; no new orphan.
+- One full `npx vitest run`: **162 files, 4,279 tests, all passing**.
+- Each fix was also run with the fix backed out, to confirm the new tests fail
+  on the old behaviour (PR-0004: 2 failures; PR-0023: 1; PR-0024: 5).
+- No browser pass: nothing in this batch is visible except the CTB tile letter,
+  which is asserted off the real forecast.
