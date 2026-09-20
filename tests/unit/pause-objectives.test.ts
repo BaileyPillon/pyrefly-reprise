@@ -309,14 +309,26 @@ describe('the five shipped chapters', () => {
 });
 
 describe('encounterProgress', () => {
-  it('counts links for a chained chapter', () => {
+  /**
+   * Round 03 gate major (CHK-007): the pause dossier printed the internal
+   * "LINK 2 OF 4" — engine vocabulary, never taught to the player — for both
+   * Chapter 3's seven-formation Braska's Final Aeon → possessed-aeon
+   * gauntlet → Yu Yevon chain and Chapter 5's five-formation Vegnagun →
+   * Shuyin chain. "Battle" is taught before either fight starts (party
+   * prep's own START BATTLE button, `src/ui/ffx/party-prep/index.ts`), so
+   * the row now reads "BATTLE 2 OF 4". **Case: both** — one `encounterProgress`
+   * function serves every chapter of both games; only FFX currently ships a
+   * chain longer than one formation.
+   */
+  it('counts links for a chained chapter, worded as a taught "BATTLE", not the internal "LINK"', () => {
     const p = encounterProgress(ctx([], { links: 2 }), { chainLength: 4 });
-    expect(p).toMatchObject({ label: 'LINK 2 OF 4', value: 2, total: 4 });
+    expect(p).toMatchObject({ label: 'BATTLE 2 OF 4', value: 2, total: 4 });
     expect(p?.ratio).toBeCloseTo(0.5);
+    expect(p?.label).not.toContain('LINK');
   });
 
   it('clamps a link count past the end of the chain', () => {
-    expect(encounterProgress(ctx([], { links: 9 }), { chainLength: 4 })?.label).toBe('LINK 4 OF 4');
+    expect(encounterProgress(ctx([], { links: 9 }), { chainLength: 4 })?.label).toBe('BATTLE 4 OF 4');
   });
 
   it('counts forms when the chapter has them instead', () => {

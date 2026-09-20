@@ -218,8 +218,14 @@ export function objectivesCleared(meta: ChapterMeta, ctx: ObjectiveContext): num
  * reports whichever one the encounter actually has, in order of how much it
  * tells the player:
  *
- * - a **chained** chapter (Vegnagun's four parts) counts links, because "2/4"
- *   is the only honest answer while three whole battles are still to come;
+ * - a **chained** chapter (Vegnagun's four parts, or Chapter 3's Braska's
+ *   Final Aeon → possessed-aeon gauntlet → Yu Yevon) counts links, because
+ *   "2/4" is the only honest answer while three whole battles are still to
+ *   come — worded as "BATTLE 2 OF 4", not the internal "LINK" the engine
+ *   calls this (round 03 gate major, CHK-007: no word the player was not
+ *   taught). "Battle" is: party prep's own START BATTLE button
+ *   (`src/ui/ffx/party-prep/index.ts`) teaches it before the player ever
+ *   reaches this screen;
  * - a chapter with **forms** (Yunalesca) counts the form it is on, for the
  *   same reason — one battle, but the player reads it as three;
  * - anything else falls back to the boss's remaining HP as a percentage.
@@ -242,7 +248,7 @@ export function encounterProgress(
   const chainLength = opts.chainLength ?? 0;
   if (chainLength > 1) {
     const link = Math.min(Math.max(1, ctx.links), chainLength);
-    return { label: `LINK ${link} OF ${chainLength}`, ratio: link / chainLength, value: link, total: chainLength };
+    return { label: `BATTLE ${link} OF ${chainLength}`, ratio: link / chainLength, value: link, total: chainLength };
   }
 
   const forms = ctx.log.filter((e) => e.type === 'form-change');
