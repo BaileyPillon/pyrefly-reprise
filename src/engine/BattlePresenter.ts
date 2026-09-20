@@ -22,6 +22,7 @@
 import type {
   BattleEngine,
   BattleEvent,
+  BattleState,
   Command,
   CombatantId,
   MinigameKind,
@@ -47,6 +48,7 @@ import {
   SPEED_SCALE,
   syncHud,
 } from './BattlePresenterUtil.ts';
+import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
 export type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
@@ -69,6 +71,19 @@ export class BattlePresenter {
   private lastCommand: Command | null = null;
   /** A bare re-submit still suspended: this engine needs a human for minigames. */
   private minigamesNeedOverlay = false;
+  /**
+   * The engine's own state object, kept so a mid-burst row render has something
+   * to splice the shown numbers into. It is the live reference the engine
+   * mutates, and the engine does not advance while `play` is running, so during
+   * a burst it is exactly the end-of-burst truth.
+   */
+  private liveState: BattleState | null = null;
+  /**
+   * What the status rows have actually been shown, re-seeded from the engine on
+   * every full `syncHud` and rolled forward one event at a time inside a burst.
+   * See `BattlePresenterVitals.ts` — this is critic round 03 #9.
+   */
+  private vitals: VitalsMap | null = null;
   /** Set while a HUD command menu is open, so auto-play can cut in. */
   private pendingMenu: {
     actorId: CombatantId;
@@ -195,6 +210,15 @@ export class BattlePresenter {
         continue;
       }
 
+      // The rows move with the blow, not with the burst.
+      //
+      // This one line is critic round 03 #9: before it, the only `syncHud` in
+      // the loop ran *after* `play()` returned, so every number on the HUD was
+      // the number from before the command for as long as the command took to
+      // animate — a KO'd Yuna drawn alive at 711/1500 for 2145 ms, and an
+      // ordinary hit's numeral 4.5 s ahead of its own bar.
+      this.presentVitals(event);
+
       this.phase = `play:${event.type}`;
       await playEvent(this.ctx, event);
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
@@ -224,6 +248,11 @@ export class BattlePresenter {
    * screen owns what happens next (chain, results, retry).
    */
   async run(engine: BattleEngine): Promise<BattleOutcome> {
+    // Ground the mid-burst row projection before a single event is played. The
+    // first burst of a fight (and of every later link of a chain, which re-runs
+    // on a fresh engine) happens before any `syncHud` in the loop below.
+    this.seedVitals(engine);
+
     // The opening shot, once per encounter: the party slides in, then the
     // headline enemy gets its slow push and name plate. A chained formation
     // (Yunalesca's forms, the Vegnagun chain) re-enters `run` on the same
@@ -417,7 +446,49 @@ export class BattlePresenter {
 
   /** Re-render the HUD from live engine state. */
   syncHud(engine: BattleEngine): void {
+    this.seedVitals(engine);
     syncHud(this.deps.hud, engine);
+  }
+
+  /**
+   * Re-seed the shown numbers from the engine.
+   *
+   * Every full sync passes through here, so the projection can never drift: it
+   * is re-grounded in the engine's own truth at the end of each burst, and a
+   * burst is one command. An event kind the projection does not know about
+   * costs at most the remainder of the burst it appeared in.
+   */
+  private seedVitals(engine: BattleEngine): void {
+    try {
+      const state = engine.state();
+      this.liveState = state;
+      this.vitals = captureVitals(state);
+    } catch {
+      // A battle that has not been `init`ed yet has no state to read. The next
+      // sync will have one; until then the mid-burst rows simply do not move.
+      this.liveState = null;
+      this.vitals = null;
+    }
+  }
+
+  /**
+   * Show one event's effect on the status rows, at the moment its animation
+   * starts — the same frame the damage numeral for that hit goes up.
+   *
+   * Never throws into the loop: a HUD that fails a row render must not be able
+   * to abandon a battle (the same rule `syncHud` follows).
+   */
+  private presentVitals(event: BattleEvent): void {
+    const hud = this.deps.hud;
+    const vitals = this.vitals;
+    const state = this.liveState;
+    if (!hud || !hud.syncVitals || !vitals || !state) return;
+    if (!applyEventToVitals(vitals, event)) return;
+    try {
+      hud.syncVitals(projectState(state, vitals));
+    } catch (err) {
+      console.warn('[presenter] HUD syncVitals threw', err);
+    }
   }
 
   /** Everything `window.__pyrefly.snapshotState()` wants from playback. */

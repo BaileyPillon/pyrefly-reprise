@@ -491,6 +491,28 @@ export class FFXBattleHud implements HudPort {
     this.intent.refresh();
   }
 
+  /**
+   * The party rows only, from a state the presenter has projected to the event
+   * it is playing right now (`HudPort.syncVitals`).
+   *
+   * Critic round 03 #9: the rows used to be re-rendered once per *burst*, so a
+   * KO'd Yuna stayed drawn alive at 711/1500 for 2145 ms and an ordinary hit's
+   * numeral led its own bar by 4.5 s. This is the cheap per-hit path — no
+   * forecast rebuild, no advisor, no enemy-intent prediction (which deep-clones
+   * the board two dozen times) — so it can run on every damage event.
+   *
+   * `lastState` is deliberately **not** reassigned: the menu, the guide and the
+   * advisor keep reading the engine's own state from the last full `sync`,
+   * which lands at the end of the burst a moment later.
+   *
+   * Game case: both. Shared playback plumbing, FFX-2 has the same call
+   * (AGENTS.md rule 14 / CHK-020).
+   */
+  syncVitals(state: BattleState): void {
+    const actingId = state.log.length ? findLastActorId(state.log) : null;
+    this.partyStatus.render(state.activeIds, state.combatants, actingId);
+  }
+
   /** Hand the panel its engine. See `EnemyIntent.attachEnemyIntent`. */
   setIntentSource(source: IntentSource | null): void {
     this.intent.setSource(source);

@@ -686,6 +686,28 @@ export class FFX2BattleHud implements HudPort {
     this.renderEnemies(state, preview);
   }
 
+  /**
+   * The party and enemy rows only, from a state the presenter has projected to
+   * the event it is playing right now (`HudPort.syncVitals`).
+   *
+   * Critic round 03 #9 — the rows were re-rendered once per burst, so HP, KO
+   * and status on screen trailed the engine by the length of whatever was still
+   * animating. The gauges come from the last snapshot: ATB position is the one
+   * thing that genuinely belongs to the end of the burst, and it is refreshed
+   * by the full `sync` that closes it.
+   *
+   * Cheap on purpose: no guide, no advisor, no `intent.refresh()`.
+   *
+   * Game case: both. Shared playback plumbing; FFX has the same call
+   * (AGENTS.md rule 14 / CHK-020).
+   */
+  syncVitals(state: BattleState): void {
+    const snapshot = this.lastSnapshot;
+    if (!snapshot) return;
+    this.renderParty(state, snapshot);
+    this.renderEnemies(state, snapshot);
+  }
+
   async chooseCommand(
     actorId: CombatantId,
     commands: AvailableCommand[],

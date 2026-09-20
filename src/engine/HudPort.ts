@@ -45,6 +45,26 @@ export interface HudPort {
   unmount(): void;
   /** Re-render from engine state. `preview` is predictTurnOrder() (FFX) or gaugeSnapshot() (FFX-2). */
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void;
+  /**
+   * Re-render **only the status rows** from a state the presenter has projected
+   * to the event it is playing right now. Called once per visible event, inside
+   * a burst, between the ordinary `sync` calls that bracket it.
+   *
+   * Optional and additive: a HUD that does not implement it simply keeps the
+   * old behaviour, which is what every mock screen and test double wants.
+   *
+   * Why it is separate from {@link sync}: `sync` also rebuilds the turn
+   * forecast, the strategy guide, the advisor and the enemy-intent slab, and
+   * the intent prediction deep-clones the whole board two dozen times. That is
+   * affordable once per playback step and not once per hit. This call must stay
+   * cheap enough to make on every damage numeral.
+   *
+   * Exists because the party row used to be 2.1–4.5 s behind the engine — a
+   * KO'd Yuna drawn alive at 711/1500 for 2145 ms (critic round 03 #9). See
+   * `BattlePresenterVitals.ts` for the projection and why it is not simply
+   * `engine.state()`.
+   */
+  syncVitals?(state: BattleState): void;
   /** Open the command menu; resolves the chosen command. previewRank re-renders the CTB list for the highlighted command. */
   chooseCommand(actorId: CombatantId, commands: AvailableCommand[], previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot): Promise<Command>;
   /** Called for every event before the presenter animates it; may show a transient (telegraph banner, chain popup) but must resolve within ~600 ms. */
