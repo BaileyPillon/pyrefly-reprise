@@ -517,6 +517,26 @@ export class AudioManager {
     if (this.sfxBus) this.sfxBus.gain.value = this.sfxVolume;
   }
 
+  /**
+   * Push a whole set of saved volumes into the mixer at once.
+   *
+   * The three setters below already do the right thing whether or not
+   * `unlock()` has run yet — they update the field `unlock()` reads when it
+   * builds the gain nodes, *and* push straight to a live node when one
+   * already exists — so calling this once, as early as the save file is
+   * available, is enough to cover both "at boot" and "after the context
+   * unlocks": `unlock()` never resets these fields, it only reads them.
+   * See `critic/rounds/round-03.md:377-388` (round 03 blocker #5) — the bug
+   * this exists to close was that nothing but `PauseScreen` ever called the
+   * setters at all, so a saved mute or a lowered volume never reached the
+   * mixer until the player opened pause.
+   */
+  applySettings(settings: { masterVolume: number; musicVolume: number; sfxVolume: number }): void {
+    this.setMasterVolume(settings.masterVolume);
+    this.setMusicVolume(settings.musicVolume);
+    this.setSfxVolume(settings.sfxVolume);
+  }
+
   setMuted(muted: boolean): void {
     this.muted = muted;
     if (this.master) this.master.gain.value = muted ? 0 : this.masterVolume;

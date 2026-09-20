@@ -6,6 +6,8 @@
  * falls back to defaults, and an older `version` goes through {@link migrate}.
  */
 
+import { audio } from '../audio/index.ts';
+
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
 
@@ -244,6 +246,12 @@ export class SaveStore {
     this.storage = storage;
     this.data = this.load();
     activeStore = this;
+    // Round 03 blocker #5 (critic/rounds/round-03.md:377-388): a saved mute
+    // or a lowered volume must reach the mixer the instant the save is read,
+    // not only once a player opens the pause OPTIONS panel. `load()` above
+    // always returns settings merged onto `defaultSettings()` (see
+    // `migrate`), so this is never NaN even for a pre-audio-settings save.
+    audio.applySettings(this.data.settings);
   }
 
   /** Current in-memory save. Mutate through the helpers, not directly. */
@@ -381,6 +389,12 @@ export class SaveStore {
 
   setSettings(patch: Partial<Settings>): void {
     this.data.settings = { ...this.data.settings, ...patch };
+    // Keep the mixer and the save file as one source of truth (round 03
+    // blocker #5): any caller that changes a volume through the save store
+    // reaches the mixer here, so a future caller does not have to remember
+    // to also call `audio.setMasterVolume`/`setMusicVolume`/`setSfxVolume`
+    // itself the way `PauseScreen` still does today.
+    audio.applySettings(this.data.settings);
     this.save();
   }
 
