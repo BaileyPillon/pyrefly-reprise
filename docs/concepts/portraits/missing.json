@@ -1,0 +1,105 @@
+{
+  "generatedAt": "2026-09-20",
+  "task": "Candidate portraits for the 8 speakers the critic found returning 404 on the live site.",
+  "source": [
+    "critic/rounds/round-03.md Part A 8.0 cap: 'portraits/paine.png returns 404 ... Seven further speaker portraits 404 the same way.'",
+    "critic/rounds/round-03.md finding 18: the 8 ids are braska, yu-yevon, fayth-boy, young-auron, yuna-x2, rikku-x2, paine, shuyin (w3-portraits.json probe).",
+    "critic/rounds/round-04.json PR-0014: Paine also 404s as the combatant portraitKey in the FFX-2 party rows (prep, results, pause).",
+    "Owner authority for this task, 2026-09-20: 'Yes, paint candidates.'"
+  ],
+  "howLookupWorks": "src/story/dsl.ts SpeakerId is the id say() takes. src/ui/common/portrait.ts (portraitImgHtml/faceImgHtml/faceImgHtmlFrom) resolves a speaker or combatant id straight to public/art/portraits/<id>.png unless a SayStep sets an explicit `portrait` override (none of the shipped scripts do). A combatant's HUD chip (CTB list, party status row, prep roster, results row, pause dossier) instead uses its data-file `portraitKey` via src/engine/BattlePresenterArt.ts artIdFor(), which for FFX-2 Yuna/Rikku already points at the existing FFX 'yuna'/'rikku' portraits (so those two only 404 as *dialogue* speakers, not in battle HUD).",
+  "missingPortraitKeys": [
+    {
+      "key": "paine",
+      "game": "ffx-2",
+      "usedBy": [
+        "src/story/scripts/ffx2-vegnagun-shuyin.ts and ffx2-bahamut.ts: say('paine', ...) lines -> dialogue card portrait art/portraits/paine.png",
+        "src/data/ffx2/builds/farplane.ts:106 and bevelle.ts:91: combatant portraitKey 'paine' -> CTB list, party status row, prep roster, results row, pause dossier via src/engine/BattlePresenterArt.ts artIdFor() and src/ui/common/portrait.ts faceLayersHtml/faceImgHtmlFrom",
+        "Chapter select / party prep falls through to her dressphere body (faceLayersHtml's bodyId), which is why she currently shows an ink 'P' monogram rather than a painted face (critic round-03 Part A 8.0 cap; round-04 PR-0014)"
+      ],
+      "existingReference": "public/art/characters/paine-warrior/idle.png (approved full-body idle, her default X-2 look)",
+      "canon": "research/visual-bible.md #1.16: 18, red eyes, short silver hair, black leather ensemble with a choker, elbow-length gloves, leather pants, high-heeled boots, skull-motif sword.",
+      "candidateRef": "paine-warrior/idle.png at default weight 0.65"
+    },
+    {
+      "key": "shuyin",
+      "game": "ffx-2",
+      "usedBy": [
+        "src/story/scripts/ffx2-vegnagun-shuyin.ts: say('shuyin', ...) lines throughout the E5 confrontation and the timed boss lines -> art/portraits/shuyin.png"
+      ],
+      "existingReference": "public/art/characters/shuyin/idle.png (approved full-body idle)",
+      "canon": "research/visual-bible.md #1.19: blond dishevelled hair, blue eyes, desaturated 'Tidus but wrong' palette, square red-and-black elbow sleeves.",
+      "candidateRef": "shuyin/idle.png at default weight 0.65",
+      "note": "tools/gen/cast.json already carries a queued 'portrait-shuyin' work order with this exact tag set; it had never been rendered. Reused verbatim."
+    },
+    {
+      "key": "yuna-x2",
+      "game": "ffx-2",
+      "usedBy": [
+        "src/story/scripts/ffx2-vegnagun-shuyin.ts and ffx2-bahamut.ts: say('yuna-x2', ...) lines -> art/portraits/yuna-x2.png",
+        "Her battle-HUD portraitKey is 'yuna' (farplane.ts:27, bevelle.ts:35), which already resolves to the existing FFX yuna.png, so only the dialogue card is affected."
+      ],
+      "existingReference": "public/art/characters/yuna-gunner/idle.png (her default X-2 look, approved)",
+      "canon": "research/visual-bible.md #1.14: short hair with an ankle-length red braid, heterochromia (blue/green), pink hood, gunner rig.",
+      "candidateRef": "yuna-gunner/idle.png at default weight 0.65"
+    },
+    {
+      "key": "rikku-x2",
+      "game": "ffx-2",
+      "usedBy": [
+        "src/story/scripts/ffx2-vegnagun-shuyin.ts and ffx2-bahamut.ts: say('rikku-x2', ...) lines -> art/portraits/rikku-x2.png",
+        "Her battle-HUD portraitKey is 'rikku' (farplane.ts:67, bevelle.ts:64), which already resolves to the existing FFX rikku.png, so only the dialogue card is affected."
+      ],
+      "existingReference": "public/art/characters/rikku-thief/idle.png (her default X-2 look, approved)",
+      "canon": "research/visual-bible.md #1.15: hair piled in a bun under a blue bandana, swirl-pupil green eyes, long two-tone scarf, Thief rig.",
+      "candidateRef": "rikku-thief/idle.png at default weight 0.65"
+    },
+    {
+      "key": "braska",
+      "game": "ffx",
+      "usedBy": [
+        "src/story/scripts/yunalesca.ts: say('braska', ...) in the Zanarkand Dome pyrefly memory",
+        "src/story/scripts/ffx2-vegnagun-shuyin.ts: say('braska', \"That's my daughter.\") and the 'farplane-voice-braska' mid-battle script -> art/portraits/braska.png"
+      ],
+      "existingReference": "None. No public/art/characters/braska/ folder exists yet -- he has never been painted (visual-bible #1.22.1 is a staged-presence sheet, not a fought character).",
+      "canon": "research/visual-bible.md #1.22.1: 35, tall, blue eyes, elaborate red petal-layered robe with wide sleeves, grey sash with the Yevon 'A' glyph, dark-blue keffiyeh-style headdress with pale-blue tassels, summoner staff.",
+      "candidateRef": "no --ref (fresh identity, nothing to pin to)"
+    },
+    {
+      "key": "young-auron",
+      "game": "ffx",
+      "usedBy": [
+        "src/story/scripts/yunalesca.ts: say('young-auron', ...) in the Zanarkand Dome memory -> art/portraits/young-auron.png"
+      ],
+      "existingReference": "None painted. research/visual-bible.md #1.22.2 is a documented delta off the present-day Auron sheet (public/art/characters/auron/idle.png): both eyes open (amber), no scar, no sunglasses, no grey in the hair, no stubble.",
+      "canon": "research/visual-bible.md #1.22.2: Auron at 25, two-eyed and unscarred, sunglasses and scar both acquired later -- 'the single most important read'.",
+      "candidateRef": "auron/idle.png at lowered weight 0.45 (family resemblance without inheriting the scar/sunglasses), plus negAdd banning scar/sunglasses/stubble/grey hair"
+    },
+    {
+      "key": "fayth-boy",
+      "game": "ffx",
+      "usedBy": [
+        "src/story/scripts/seymour-flux.ts: say('fayth-boy', ...) -- the Bahamut fayth's 'You are a dream' beat",
+        "src/story/scripts/ffx2-vegnagun-shuyin.ts: say('fayth-boy', ...) in the Farplane reunion choice -> art/portraits/fayth-boy.png"
+      ],
+      "existingReference": "None on disk, but tools/gen/cast.json already has a fully-specified, unrendered work order for this exact character under a DIFFERENT id -- 'portrait-bahamut-fayth', which writes to public/art/portraits/bahamut-fayth.png. src/story/dsl.ts documents the speaker as 'The Bahamut fayth, the child who explains the dream', i.e. the same character, but the code looks up the id actually passed to say(), 'fayth-boy'. The two filenames can never meet -- this is an unreported id-mismatch bug in the manifest, separate from the art itself.",
+      "canon": "cast.json portrait-bahamut-fayth tags: young boy, hooded purple cape, glowing eyes, mysterious/ethereal.",
+      "candidateRef": "no --ref; reused the existing cast.json 'portrait-bahamut-fayth' recipe verbatim, rendered under the id the code actually reads",
+      "offCanonNote": "Flagging the id mismatch for whoever picks a candidate: renaming cast.json's subject id (or adding a 'fayth-boy' alias) would prevent this from recurring if the manifest is ever used to regenerate this portrait for real."
+    },
+    {
+      "key": "yu-yevon",
+      "game": "ffx",
+      "usedBy": [
+        "src/story/scripts/braskas-final-aeon.ts: showActor/fx('yu-yevon-reveal', 'yu-yevon') and the 'yu-yevon-arrives' mid-battle trigger reference the id, though no shipped say() line was found for it in the current scripts",
+        "Listed as one of the 8 in the live portrait probe (w3-portraits.json) regardless -> art/portraits/yu-yevon.png"
+      ],
+      "existingReference": "public/art/characters/yu-yevon/idle.png (approved full-body battle idle)",
+      "canon": "research/visual-bible.md #1.12: a floating, tick-like parasite -- segmented body, 6-8 forward-hooked legs, no face, a flat self-illuminated Yevon glyph disc standing in for one. 'He has no dialogue and is never shown in human form.'",
+      "candidateRef": "yu-yevon/idle.png at default weight 0.65, negAdd banning human/humanoid/giant so the portrait crop doesn't drift toward a face"
+    }
+  ],
+  "candidatesRenderedPerKey": 3,
+  "totalRenders": 24,
+  "rerolls": 0
+}

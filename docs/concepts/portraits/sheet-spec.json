@@ -1,0 +1,87 @@
+{
+  "out": "docs/concepts/portraits/sheet.png",
+  "title": "Missing speaker portraits — candidates",
+  "subtitle": "8 keys x 3 candidates. Left column is an approved portrait of the same game, for style reference only.",
+  "rows": [
+    {
+      "label": "paine (ffx-2)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/yuna.png", "caption": "yuna.png (style ref; no ffx-2 portrait is approved yet)" },
+        { "path": "docs/concepts/portraits/paine/cand-1.png", "caption": "paine cand-1" },
+        { "path": "docs/concepts/portraits/paine/cand-2.png", "caption": "paine cand-2" },
+        { "path": "docs/concepts/portraits/paine/cand-3.png", "caption": "paine cand-3" }
+      ]
+    },
+    {
+      "label": "shuyin (ffx-2)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/yuna.png", "caption": "yuna.png (style ref; no ffx-2 portrait is approved yet)" },
+        { "path": "docs/concepts/portraits/shuyin/cand-1.png", "caption": "shuyin cand-1" },
+        { "path": "docs/concepts/portraits/shuyin/cand-2.png", "caption": "shuyin cand-2" },
+        { "path": "docs/concepts/portraits/shuyin/cand-3.png", "caption": "shuyin cand-3" }
+      ]
+    },
+    {
+      "label": "yuna-x2 (ffx-2)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/yuna.png", "caption": "yuna.png (her ffx self, style ref; no ffx-2 portrait is approved yet)" },
+        { "path": "docs/concepts/portraits/yuna-x2/cand-1.png", "caption": "yuna-x2 cand-1" },
+        { "path": "docs/concepts/portraits/yuna-x2/cand-2.png", "caption": "yuna-x2 cand-2" },
+        { "path": "docs/concepts/portraits/yuna-x2/cand-3.png", "caption": "yuna-x2 cand-3" }
+      ]
+    },
+    {
+      "label": "rikku-x2 (ffx-2)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/rikku.png", "caption": "rikku.png (her ffx self, style ref; no ffx-2 portrait is approved yet)" },
+        { "path": "docs/concepts/portraits/rikku-x2/cand-1.png", "caption": "rikku-x2 cand-1" },
+        { "path": "docs/concepts/portraits/rikku-x2/cand-2.png", "caption": "rikku-x2 cand-2" },
+        { "path": "docs/concepts/portraits/rikku-x2/cand-3.png", "caption": "rikku-x2 cand-3" }
+      ]
+    },
+    {
+      "label": "braska (ffx)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/auron.png", "caption": "auron.png (approved ref)" },
+        { "path": "docs/concepts/portraits/braska/cand-1.png", "caption": "braska cand-1" },
+        { "path": "docs/concepts/portraits/braska/cand-2.png", "caption": "braska cand-2" },
+        { "path": "docs/concepts/portraits/braska/cand-3.png", "caption": "braska cand-3" }
+      ]
+    },
+    {
+      "label": "young-auron (ffx)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/auron.png", "caption": "auron.png (present-day, approved ref)" },
+        { "path": "docs/concepts/portraits/young-auron/cand-1.png", "caption": "young-auron cand-1" },
+        { "path": "docs/concepts/portraits/young-auron/cand-2.png", "caption": "young-auron cand-2" },
+        { "path": "docs/concepts/portraits/young-auron/cand-3.png", "caption": "young-auron cand-3" }
+      ]
+    },
+    {
+      "label": "fayth-boy (ffx)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/yuna.png", "caption": "yuna.png (approved ref)" },
+        { "path": "docs/concepts/portraits/fayth-boy/cand-1.png", "caption": "fayth-boy cand-1" },
+        { "path": "docs/concepts/portraits/fayth-boy/cand-2.png", "caption": "fayth-boy cand-2" },
+        { "path": "docs/concepts/portraits/fayth-boy/cand-3.png", "caption": "fayth-boy cand-3" }
+      ]
+    },
+    {
+      "label": "yu-yevon (ffx)",
+      "cellHeight": 300,
+      "items": [
+        { "path": "public/art/portraits/ifrit.png", "caption": "ifrit.png (approved ref, creature)" },
+        { "path": "docs/concepts/portraits/yu-yevon/cand-1.png", "caption": "yu-yevon cand-1" },
+        { "path": "docs/concepts/portraits/yu-yevon/cand-2.png", "caption": "yu-yevon cand-2" },
+        { "path": "docs/concepts/portraits/yu-yevon/cand-3.png", "caption": "yu-yevon cand-3" }
+      ]
+    }
+  ]
+}
