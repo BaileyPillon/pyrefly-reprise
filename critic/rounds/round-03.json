@@ -1,0 +1,214 @@
+{
+  "round": 3,
+  "date": "2026-09-19",
+  "build": {
+    "mainSha": "9a56d80540663b261fcf1c9b8d30ea8175cdef02",
+    "deployedSha": "7191674d9f405d4e830d780e527a89f58d8019b1",
+    "bundle": "assets/index-hko3Xov1.js",
+    "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+    "bundleVerifiedLive": true,
+    "pyreflyVersion": "0.1.0",
+    "browserMode": "gpu",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "consoleErrors": 0,
+    "httpErrors": 0
+  },
+  "gate": 9.6,
+  "gateMet": false,
+  "headline": 4.09,
+  "headlineSource": "Part B (game design coverage)",
+  "totals": { "partA": 6.37, "partB": 4.09, "partC": 5.83 },
+  "previousRound": { "round": 2, "partA": 5.6, "partB": 3.5, "partC": 5.3, "headline": 3.5 },
+  "partA": {
+    "total": 6.37,
+    "weightSum": 100,
+    "pointSum": 637.0,
+    "scores": [
+      { "category": "Combat fidelity", "weight": 25, "score": 7.4, "source": "category auditor" },
+      { "category": "Encounter fidelity", "weight": 15, "score": 5.8, "source": "category auditor" },
+      { "category": "Fun and pacing", "weight": 15, "score": 6.3, "source": "category auditor" },
+      { "category": "Character and visual fidelity", "weight": 15, "score": 4.2, "source": "category auditor" },
+      { "category": "Scene fidelity and beauty", "weight": 10, "score": 7.0, "source": "chief critic, from round artifacts" },
+      { "category": "Writing and story", "weight": 10, "score": 7.5, "source": "chief critic, from round artifacts" },
+      { "category": "UI fidelity and polish", "weight": 5, "score": 5.0, "source": "chief critic, from round artifacts" },
+      { "category": "Stability and performance", "weight": 5, "score": 7.5, "source": "chief critic, from round artifacts" }
+    ],
+    "caps": [
+      {
+        "cap": 8.0,
+        "state": "triggered",
+        "binding": false,
+        "why": "Placeholder shipping on a live build: portraits/paine.png returns 404 and Paine renders as an ink 'P' monogram in both FFX-2 party-prep surfaces; seven further speaker portraits (shuyin, yuna-x2, rikku-x2, braska, yu-yevon, fayth-boy, young-auron) also 404. Confirmed twice: w3-portraits.json HTTP probe and the .prep__face DOM audit."
+      },
+      {
+        "cap": 6.0,
+        "state": "not triggered",
+        "why": "Chief critic's ruling. All five chapters reached VICTORY on the live build with the intended tactics (74/194 turns, 7 links, 77 turns, 5 links) and headlessly at 17/30, 29/30, 29/30, 15/15, 15/15. The Yu Yevon stalemate 'escape' terminus occurs only on deliberately-wrong attack-only or defend-only lines, so it is issue #16, not an unfinishable chapter."
+      },
+      { "cap": 5.0, "state": "not triggered", "why": "No verbatim transcript lifting found in any of the five scripts (analyse.mjs); no retail asset in public/art or the shipped bundle." }
+    ]
+  },
+  "partB": {
+    "total": 4.09,
+    "weightSum": 100,
+    "pointSum": 409.4,
+    "scores": [
+      { "category": "Audio and music", "weight": 15, "score": 6.0, "source": "category auditor" },
+      { "category": "Game feel and feedback", "weight": 12, "score": 5.8, "source": "category auditor" },
+      { "category": "Clarity and information design", "weight": 12, "score": 3.9, "source": "category auditor" },
+      { "category": "Onboarding and teachability", "weight": 10, "score": 2.8, "source": "category auditor" },
+      { "category": "Accessibility and options", "weight": 8, "score": 2.6, "source": "chief critic, from round artifacts" },
+      { "category": "Controls and platforms", "weight": 8, "score": 4.2, "source": "chief critic, from round artifacts" },
+      { "category": "Difficulty and balance", "weight": 8, "score": 3.2, "source": "chief critic, from round artifacts" },
+      { "category": "Replayability, retention and sharing", "weight": 10, "score": 3.6, "source": "chief critic, from round artifacts" },
+      { "category": "Progression, preparation and rewards", "weight": 7, "score": 3.0, "source": "chief critic, from round artifacts" },
+      { "category": "Narrative presentation and direction", "weight": 5, "score": 3.2, "source": "chief critic, from round artifacts" },
+      { "category": "Cohesion and identity", "weight": 5, "score": 4.4, "source": "chief critic, from round artifacts" }
+    ],
+    "caps": [
+      {
+        "cap": 8.0,
+        "state": "triggered",
+        "binding": false,
+        "why": "Wrong information shown to the player, proven twice on the live build: (a) src/engine/tactics/advisor.ts:441 describes single-target HASTE as 'Speeds the party's turns up' because the branch is `def.targeting.startsWith('all-all') || heals`; (b) the party status row reports 'Yuna 711 /1500' in living colours for 2145 ms after the engine logs her ko event (ko2.json)."
+      },
+      { "cap": 5.0, "state": "not triggered", "why": "The owner's only recorded audio verdict (2026-09-19) is 'Right direction, keep refining' — not a rejection." },
+      { "cap": 6.0, "state": "applied to Audio and music", "why": "No owner numeric score on record for this build's audio (docs/audio/OWNER-VERDICT.md records a direction check, not a score)." }
+    ]
+  },
+  "partC": {
+    "total": 5.83,
+    "weightSum": 90,
+    "pointSum": 524.5,
+    "scores": [
+      { "category": "Presentation", "weight": 30, "score": 5.5, "source": "chief critic (auditor scored 6.0; lowered on the battle-HUD composite the auditor did not have)" },
+      { "category": "Scenes", "weight": 15, "score": 7.5, "source": "category auditor" },
+      { "category": "Cast, bosses and aeons", "weight": 15, "score": 5.8, "source": "chief critic (auditor left unscored)" },
+      { "category": "How a fight plays", "weight": 15, "score": 4.5, "source": "chief critic (auditor left unscored)" },
+      { "category": "Pause screen", "weight": 5, "score": 9.0, "source": "chief critic (auditor left unscored)" },
+      { "category": "Phone layout", "weight": 5, "score": 8.5, "source": "chief critic, captured live this round" },
+      { "category": "Whole game and polish", "weight": 5, "score": 1.0, "source": "category auditor" }
+    ],
+    "notScored": [
+      { "category": "Music and sound", "weight": 10, "why": "No owner numeric score on record; the rubric leaves this category unscored, and its weight is excluded from the Part C denominator." }
+    ],
+    "caps": [
+      {
+        "cap": 5.0,
+        "state": "not triggered",
+        "why": "Chief critic hash-checked all 94 files behind the 16 approved sets in docs/target/approved-hashes.json: 94 match, 0 changed, 0 missing. No approved painting was replaced; the Zanarkand grey-hall failure mode did not recur."
+      },
+      {
+        "cap": 8.0,
+        "state": "not claimed",
+        "why": "The chapter-select right-hand panel and the battle HUD's guide / next-move / enemy-move slabs have no approved target, but they could not be dated to after 2026-09-18 from the repo and the rule exempts work already in flight. Raised as a question for the owner. Non-binding at 5.83."
+      }
+    ],
+    "coverage": {
+      "approved": 50,
+      "verdict": 0,
+      "gap": 9,
+      "rejected": 2,
+      "complete": false,
+      "waitingOnOwner": [
+        "Move advisor card (fight) — no target",
+        "Defeat screen (fight) — no target",
+        "Enemy next-move panel (fight) — no target",
+        "Cold open and taught first chapter (fight) — no target",
+        "Phone layout: every screen except pause — no target",
+        "Seymour and Anima, Macalania Temple (FFX) — new chapter concept sheets",
+        "Evrae on the airship (FFX) — new chapter concept sheets",
+        "The Leblanc Syndicate (FFX-2) — new chapter concept sheets",
+        "One finished minute of play (whole) — no target"
+      ]
+    },
+    "composites": [
+      "critic/rounds/round-03/part-c/pause-2000.jpg",
+      "critic/rounds/round-03/part-c/fight-pagoda.jpg",
+      "critic/rounds/round-03/part-c/presentation-battle.jpg",
+      "critic/rounds/round-03/part-c/phone-pause.jpg"
+    ]
+  },
+  "changedSincePreviousRound": {
+    "fixed": [
+      "All five chapters finish: round 02's Chapter 4 post-victory hang and Chapter 1 skip-speed stall are gone.",
+      "Boss music routing: each chapter settles on its own boss cue (round 02 blocker #2); the pause cue plays.",
+      "Post-battle scenes reach the player in all five chapters (round 02: 0 of 28 lines reachable in Chapter 1).",
+      "Both Yu Pagodas are visible beside Braska's Final Aeon (the owner's 2026-09-18 report; CHK-011).",
+      "Overdrive gauge has a label, a READY state and its own command row.",
+      "Esc opens the full-bleed pause from battle and from inside targeting (CHK-015, both games).",
+      "CTB names print in full at 1600x900 (CHK-009).",
+      "No approved painting has been altered: 94/94 sha256 match."
+    ],
+    "notFixed": [
+      "No onboarding, help, glossary or controls screen (round 02 asked).",
+      "No control remapping (round 02 issue 18, not started).",
+      "No text-scale option; type under the 14 px floor at the commonest sizes.",
+      "No battle-speed control in the pause options (round 02 issue #03).",
+      "No phone layout.",
+      "The battle HUD still does not match the approved mockup.",
+      "The PAUSE chip is a fixed 12 px to 3840x2160 (the owner's 2026-09-18 complaint)."
+    ],
+    "newThisRound": [
+      "Threaten and Sleep delete their target from the CTB queue permanently (canAct conflation).",
+      "Chapter 1's intended win rate measured at 57% (30 seeds) / 65% (40 seeds) against its own test file's claimed 73%.",
+      "The presenter runs 2.1-4.5 s behind engine state.",
+      "Every reward surface prints progression the game discards.",
+      "The live page ships no og:/twitter: metadata and calls the game 'HD-2D'.",
+      "Three Yunalesca plates ship with opaque white backgrounds matted at load, warned on the live console."
+    ]
+  },
+  "issueListCoverage": {
+    "auditorFindingsLogged": 353,
+    "deliveredToChiefCriticInFull": 41,
+    "rankedHere": 41,
+    "note": "The issue list delivered to the chief critic was truncated in transit at 41 entries. The list below is those entries plus the chief critic's own findings, de-duplicated and merged (the Chapter 1 win rate and the inverted-curve finding were one measurement filed twice and are merged as #13). The remaining auditor findings live in each auditor's evidence folder under critic/rounds/round-03/ and must be folded in by whoever works this list."
+  },
+  "rankedIssues": [
+    { "rank": 1, "severity": "blocker", "category": "onboarding", "title": "Nothing in the game teaches any system: no tutorial, how-to-play, glossary or controls reference", "where": "src/app/screens/ (no help screen); src/ui/common/registerFlowScreens.ts; src/app/screens/PauseScreen.ts", "gameCase": "both", "costs": "onboarding 2.8 (w10) — the largest single drag on the headline", "needsApprovedTarget": true },
+    { "rank": 2, "severity": "blocker", "category": "clarity", "title": "Single-target HASTE is described as hitting the whole party", "where": "src/engine/tactics/advisor.ts:441", "gameCase": "both", "costs": "triggers the Part B 8.0 cap; clarity 3.9 (w12)", "verdict": "CONFIRMED by the chief critic in source" },
+    { "rank": 3, "severity": "blocker", "category": "combat-fidelity", "title": "Threaten permanently deletes an enemy from the CTB queue — a one-command win button on Chapter 2", "where": "src/battle/ffx/state.ts:244 + src/battle/ffx/turnQueue.ts:64; only removal at src/battle/ffx/ticks.ts:98-99", "gameCase": "FFX only for Threaten; the canAct split is shared plumbing (both)", "costs": "combat 7.4 (w25); difficulty 3.2 (w8)", "verdict": "CONFIRMED by the chief critic in source" },
+    { "rank": 4, "severity": "blocker", "category": "combat-fidelity", "title": "Sleep never expires; a slept combatant is out for good unless something hits it physically", "where": "src/battle/ffx/state.ts:244; src/battle/ffx/statuses.ts:29 ticked only from ticks.ts:104 onTurnEnd", "gameCase": "both", "costs": "combat 7.4 (w25); encounter 5.8 (w15)", "verdict": "CONFIRMED by the chief critic in source" },
+    { "rank": 5, "severity": "blocker", "category": "accessibility", "title": "Audio settings are never applied at load: a player who mutes the game gets full volume back next visit", "where": "src/audio/AudioManager.ts:587 and :101-103; only callers are PauseScreen.ts:797,803,809", "gameCase": "both", "costs": "accessibility 2.6 (w8)" },
+    { "rank": 6, "severity": "blocker", "category": "accessibility", "title": "The OPTIONS panel shows a master volume the mixer is not using", "where": "src/app/SaveData.ts:142 vs src/audio/AudioManager.ts:101; rendered at PauseScreenPanels.ts:209", "gameCase": "both", "costs": "Part B wrong-information cap; accessibility 2.6 (w8)" },
+    { "rank": 7, "severity": "blocker", "category": "accessibility", "title": "No control remapping exists anywhere in the game", "where": "src/app/Input.ts:38 KEY_MAP, :72 PAD_MAP; PauseScreenPanels.ts:206", "gameCase": "both", "costs": "accessibility 2.6 (w8)", "note": "unchanged from round 02 issue 18" },
+    { "rank": 8, "severity": "blocker", "category": "accessibility", "title": "No text-size option, and type is under the 14 px floor at every size except 2560", "where": "fixed px inside the 640x360 LetterboxStage transform, e.g. TitleScreen.ts:81,90-95", "gameCase": "both", "costs": "accessibility 2.6 (w8); clarity 3.9 (w12); UI polish 5.0 (w5)" },
+    { "rank": 9, "severity": "blocker", "category": "game-feel", "title": "The party row shows a dead character alive at 711/1500 for 2.1 s, and lags ordinary damage by 4.5 s", "where": "the party-status port in src/engine/BattlePresenter*.ts (driven by the animation queue, not the engine event)", "gameCase": "both", "costs": "triggers the Part B 8.0 cap; game feel 5.8 (w12); clarity 3.9 (w12)" },
+    { "rank": 10, "severity": "blocker", "category": "fun-and-pacing", "title": "Chapter 5 is a 43-77 minute unbroken fight and a defeat on the last link throws the whole run away", "where": "src/app/screens/BattleScreenFlow.ts:289-370", "gameCase": "both (Chapter 3 has the identical 7-link shape)", "costs": "fun 6.3 (w15); replayability 3.6 (w10)" },
+    { "rank": 11, "severity": "blocker", "category": "fun-and-pacing", "title": "The only battle-speed control is hold-R, printed nowhere, with no pause option", "where": "src/app/screens/BattleScreen.ts:756-757; PauseScreenPanels.ts:200-221; no ControlsHint on either battle HUD", "gameCase": "both", "costs": "fun 6.3 (w15); accessibility 2.6 (w8); onboarding 2.8 (w10)", "note": "round 02 issue #03's fix has not shipped" },
+    { "rank": 12, "severity": "blocker", "category": "controls-platforms", "title": "Phone/touch UI is illegible and untappable at 390x844 (min text 3.9 px, ATTACK row 95.6 x 14.1 px)", "where": "TitleScreen.ts layout(); src/ui/ffx/CommandMenu.ts row sizing; the shared letterbox scale = min(w/640, h/360)", "gameCase": "both", "costs": "controls 4.2 (w8)", "needsApprovedTarget": true },
+    { "rank": 13, "severity": "blocker", "category": "encounter-fidelity", "title": "Chapter 1 wins 17/30 (57%) and 26/40 (65%) with the intended tactics while Chapter 4 wins 40/40 — the curve runs backwards", "where": "src/engine/tactics/seymour-flux.ts vs src/battle/ffx/ai/seymour-flux.ts; src/data/ffx2/enemies/bahamut.ts", "gameCase": "per chapter — FFX only for 1-3, FFX-2 only for 4-5", "costs": "encounter 5.8 (w15); difficulty 3.2 (w8)", "merged": "filed twice by two auditors; one measurement, one fix programme" },
+    { "rank": 14, "severity": "blocker", "category": "difficulty", "title": "Chapter 1's signature mechanic has no counter-play: zero player turns between Zombie and Full-Life in 47 of 47 kills", "where": "src/battle/ffx/ai/seymour-flux.ts vs ticks.ts/turnQueue.ts; objective text in src/data/encounters.ts via src/ui/common/chapterObjectives.ts", "gameCase": "FFX only", "costs": "difficulty 3.2 (w8); clarity 3.9 (w12)" },
+    { "rank": 15, "severity": "blocker", "category": "encounter-fidelity", "title": "Yu Yevon's Curaga counter fires off the Yu Pagodas' own Power Wave, which the research sets to zero", "where": "src/battle/ffx/ai/reactions.ts:37-45 — collectBossCounters never checks attacker.side", "gameCase": "FFX only (the attacker.side guard is shared plumbing)", "costs": "encounter 5.8 (w15)", "verdict": "CONFIRMED by the chief critic in source" },
+    { "rank": 16, "severity": "blocker", "category": "encounter-fidelity", "title": "Yu Yevon's attrition win route is unreachable and the fight ends on a stalemate guard with a bogus 'escape'", "where": "src/battle/ffx/ai/yu-yevon.ts:47; src/battle/ffx/engine.ts:397; formation canEscape:false at braskas-final-aeon.ts:415", "gameCase": "FFX only for Gravija; the stalemate-outcome fix is both", "costs": "encounter 5.8 (w15); stability 7.5 (w5)" },
+    { "rank": 17, "severity": "blocker", "category": "encounter-fidelity", "title": "Yunalesca's aeon sub-cycles target the off-stage party, so summoning no longer protects it", "where": "src/battle/ffx/ai/yunalesca.ts:128,146-147 (uses ctx.state.activeIds instead of livingFriendlies)", "gameCase": "FFX only", "costs": "encounter 5.8 (w15)", "verdict": "PLAUSIBLE — the confirmation pass received this finding truncated and could not reproduce it; re-verify before and after the fix" },
+    { "rank": 18, "severity": "blocker", "category": "character-visual", "title": "Paine ships as a 'P' ink monogram, and eight speakers have no portrait at all (404 on the live site)", "where": "src/app/screens/PartyPrepContent.ts:25, used at :42 and :80", "gameCase": "FFX-2 only for Paine and the two X2 ids; FFX only for braska/yu-yevon/fayth-boy/young-auron; the prep fallback is both", "costs": "triggers the Part A 8.0 cap; character/visual 4.2 (w15); writing 7.5 (w10); Part C cast 5.8 (w15)" },
+    { "rank": 19, "severity": "blocker", "category": "character-visual", "title": "Two of the three FFX-2 party members have only an idle painting — they never react in Chapters 4 or 5", "where": "public/art/manifest.json (rikku-dark-knight, rikku-thief, paine-warrior, paine-dark-knight); POSE_FALLBACKS at src/engine/BattlePresenterArt.ts:113-126", "gameCase": "FFX-2 only", "costs": "character/visual 4.2 (w15); Part C cast 5.8 (w15)" },
+    { "rank": 20, "severity": "blocker", "category": "character-visual", "title": "Chapter 5's boss has no attack, hurt or KO poses across three of its four parts, and Shuyin has only an idle", "where": "public/art/manifest.json; ENEMY_POSES at src/engine/BattlePresenterArt.ts:36", "gameCase": "FFX-2 only", "costs": "character/visual 4.2 (w15); Part C cast 5.8 (w15)" },
+    { "rank": 21, "severity": "blocker", "category": "character-visual", "title": "FFX party members are 66-75% buried under the command stack (Yuna 0.253 visible) against the ~48% the approved mockup shows", "where": "src/engine/BattlePresenterStage.ts:495-512; src/scenes/gagazet.ts:129 PARTY_SLOTS[1]", "gameCase": "FFX only", "costs": "character/visual 4.2 (w15); Part C presentation 5.5 (w30)" },
+    { "rank": 22, "severity": "blocker", "category": "fun-and-pacing", "title": "The FFX-2 advisor repeats the same three picks for every decision and never reacts to the party collapsing", "where": "src/engine/tactics/advisor-revive.ts header; src/engine/tactics/advisor.ts scoring; src/engine/tactics/ffx2-bahamut.ts", "gameCase": "both (a bug fix to the one panel the two games share)", "costs": "fun 6.3 (w15); clarity 3.9 (w12)" },
+    { "rank": 23, "severity": "blocker", "category": "progression", "title": "The FFX victory card reports Sphere Levels and AP the game throws away one screen later", "where": "src/ui/common/resultsMath.ts:177-183; src/app/SaveData.ts:128-138; BattleScreenFlow.ts:353", "gameCase": "both", "costs": "progression 3.0 (w7); clarity 3.9 (w12)" },
+    { "rank": 24, "severity": "blocker", "category": "progression", "title": "FFX-2 rewards are printed on every clear and banked on none: two clears, one identical card", "where": "src/app/screens/ResultsScreen.ts:296-306; src/ui/common/resultsMath.ts:160-175", "gameCase": "FFX-2 only for the dressphere ladder", "costs": "progression 3.0 (w7)" },
+    { "rank": 25, "severity": "major", "category": "progression", "title": "Results and party prep name a different 'next ability' for the same character and dressphere", "where": "src/ui/common/resultsMath.ts:169 (first unlearned) vs src/ui/ffx2/party-prep/panels.ts:160-162 (cheapest unlearned)", "gameCase": "FFX-2 only", "costs": "progression 3.0 (w7); Part B wrong-information cap" },
+    { "rank": 26, "severity": "major", "category": "narrative-presentation", "title": "97 authored camera and staging beats never reach the screen — every cutscene is a static wallpaper with a text box", "where": "src/app/screens/CutsceneScreen.ts:379,386; CutscenePorts optional at src/story/runner/CutsceneRunner.ts:73-75; no ports passed at registerFlowScreens.ts:44-56", "gameCase": "both", "costs": "narrative 3.2 (w5); cohesion 4.4 (w5); writing 7.5 (w10)" },
+    { "rank": 27, "severity": "major", "category": "part-c-presentation", "title": "The battle HUD is not the approved mockup: added advisor slabs, a FLEE row, count chips, no boss name plate", "where": "src/ui/ffx/FFXBattleHud.ts and the guide/next-move/enemy-move panels", "gameCase": "both", "costs": "Part C presentation 5.5 (w30)", "evidence": "critic/rounds/round-03/part-c/presentation-battle.jpg" },
+    { "rank": 28, "severity": "major", "category": "part-c-whole", "title": "None of the twelve approved polish moments ship", "where": "docs/handoff/NOW.md; docs/concepts/polish/", "gameCase": "per item (X-2 chain card and spherechange are FFX-2 only; the rest both)", "costs": "Part C whole 1.0 (w5)" },
+    { "rank": 29, "severity": "major", "category": "part-c-presentation", "title": "Chapter select diverges from its approved mockup in four ways", "where": "src/app/screens/ChapterSelectScreen.ts", "gameCase": "both", "costs": "Part C presentation 5.5 (w30)" },
+    { "rank": 30, "severity": "major", "category": "part-c-presentation", "title": "The battle-start and results rosters draw monogram letter tiles over portraits that exist (a decode race, not missing art)", "where": "the face fallback in src/ui/common/portrait.ts and the battle-start/results roster strips", "gameCase": "both", "costs": "Part C presentation 5.5 (w30); cohesion 4.4 (w5); UI polish 5.0 (w5)", "correction": "two auditors read this as missing art; w3-portraits.json returns 200 for all four portraits and clip.json shows the letter clipped under the face layer" },
+    { "rank": 31, "severity": "major", "category": "character-visual", "title": "Three shipped Yunalesca paintings have an opaque white studio background matted at runtime, warned on the live console", "where": "public/art/characters/yunalesca-1/ko.png, yunalesca-3/idle.png, yunalesca-3/hurt.png", "gameCase": "FFX only", "costs": "character/visual 4.2 (w15); scene 7.0 (w10); Part C cast 5.8 (w15)" },
+    { "rank": 32, "severity": "major", "category": "audio", "title": "The sound bible's ducking rule (music drops 3.5 dB under dialogue) is implemented nowhere", "where": "docs/audio/THEMES.md rule 7; duck()/unduck() called only from src/app/screens/PauseScreen.ts", "gameCase": "both", "costs": "audio 6.0 (w15)" },
+    { "rank": 33, "severity": "major", "category": "replayability", "title": "The live page has no link preview metadata, and its description calls the game 'HD-2D' — the rejected direction", "where": "index.html", "gameCase": "both", "costs": "replayability 3.6 (w10); cohesion 4.4 (w5)", "verdict": "CONFIRMED by the chief critic: fetched the live index; only charset, viewport, color-scheme and description are present" },
+    { "rank": 34, "severity": "major", "category": "accessibility", "title": "OPTIONS cannot be reached until a chapter and its 43 s cutscene have been started", "where": "TitleScreen.ts:98; ChapterSelectScreen.ts; PartyPrepScreen.ts", "gameCase": "both", "costs": "accessibility 2.6 (w8)" },
+    { "rank": 35, "severity": "major", "category": "cohesion", "title": "The dialogue box prints internal speaker ids: every FFX-2 line is spoken by 'Rikku X2' / 'Yuna X2'", "where": "src/ui/common/DialogueBox.ts:53-58; registerFlowScreens.ts:44-56; ids at src/story/dsl.ts:61,64", "gameCase": "FFX-2 only for the two ids; the plumbing fix is both", "costs": "cohesion 4.4 (w5); writing 7.5 (w10)" },
+    { "rank": 36, "severity": "major", "category": "clarity", "title": "The strategy guide clips mid-word under its own '▾ MORE' chip; the enemy-intent panel truncates with no affordance", "where": "src/ui/common/StrategyGuide.ts and the EnemyIntent panel", "gameCase": "both", "costs": "clarity 3.9 (w12); UI polish 5.0 (w5)" },
+    { "rank": 37, "severity": "major", "category": "clarity", "title": "Developer vocabulary on the glass in both games: SCRIPTED, CTB, S.LV 180, 'stacks multiplicatively... x0.083', WM/DK/WR, CRS", "where": "enemy-intent panel, chapter-select card, FFX-2 party rows", "gameCase": "both (FFX-2 is the weaker half — CHK-020)", "costs": "clarity 3.9 (w12); cohesion 4.4 (w5); onboarding 2.8 (w10)" },
+    { "rank": 38, "severity": "minor", "category": "cohesion", "title": "On a cold load the chapter-select cards are five flat black rectangles for seconds with no designed loading state", "where": "src/app/screens/ChapterSelectScreen.ts", "gameCase": "both", "costs": "cohesion 4.4 (w5); clarity 3.9 (w12)" },
+    { "rank": 39, "severity": "minor", "category": "onboarding", "title": "The title screen advertises 'ARROWS / WASD MOVE · ENTER CONFIRM · ESC CANCEL' and honours only Enter", "where": "src/app/screens/TitleScreen.ts:81 prints it; handleInput at :98 handles only confirm/start", "gameCase": "both", "costs": "onboarding 2.8 (w10); controls 4.2 (w8)" },
+    { "rank": 40, "severity": "minor", "category": "encounter-fidelity", "title": "Escape may leave both FFX-2 chapters stuck on screen()==='pause' where the FFX chapters back out cleanly", "where": "unknown — reproduce first", "gameCase": "to be decided once confirmed", "costs": "nothing yet", "verdict": "NEEDS CONFIRMATION — the clarity auditor reports Esc working in both games (CHK-015 pass), so this may be a harness fault" },
+    { "rank": 41, "severity": "question", "category": "scene-fidelity", "title": "Zanarkand Dome ships as an open-air lavender colonnade, not Yunalesca's sealed hall — is this what Bailey wants?", "where": "public/art/backdrops/zanarkand-dome.png (approved tile, sha256 matches)", "gameCase": "FFX only", "costs": "no action proposed — approved paintings are not replaced on an agent's say-so; this is a question for the owner" }
+  ],
+  "proposals": [],
+  "proposalsNote": "No design proposals this round. Every category auditor stayed on defects and the chief critic adds none: at a 4.09 headline this build needs the teaching layer, two honest panels and two engine fixes, not new ideas. The one thing needing the owner's attention is a gap, not a proposal: four board tiles that already exist as built surfaces (move advisor card, defeat screen, enemy next-move panel, cold open and taught first chapter) have no approved target and are being iterated on blind. One options round covering those four would unblock issues #1, #11 and #22 and close four of the nine coverage holes.",
+  "reportPath": "D:/Final Fantasy/critic/rounds/round-03.md",
+  "pendingMarkerCleared": "critic/pending/7191674.json"
+}
