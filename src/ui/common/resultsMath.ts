@@ -183,21 +183,32 @@ function sphereGridDetail(sLv: number, bankedAp: number, levelsGained: number): 
 }
 
 /**
- * The per-member rows for a finished battle: every AP-eligible member in
- * FFX, all three girls in FFX-2. Pure, so `tests/unit` can assert the
- * progression arithmetic without a DOM.
+ * The per-member rows for a finished battle: every member who fought in FFX,
+ * all three girls in FFX-2. Pure, so `tests/unit` can assert the progression
+ * arithmetic without a DOM.
  *
  * FFX **used to** always list `build.activeSlots` — the pre-battle roster —
  * while `result.sphereLevelsGained` (`src/battle/ffx/results.ts`) is keyed
- * by whoever actually earned AP this battle per ffx-combat-core.md §1.7's
+ * by whoever actually earned AP this battle per ffx-combat-core.md §10.1's
  * rule (took at least one full turn; not KO'd or petrified at the end). The
  * two disagreeing was round 03's gate major: a member switched out mid-battle
  * still got a row with full AP and no S.Lv gain (because their id was not a
  * `sphereLevelsGained` key), while a member switched *in* who leveled up
  * never got a row at all (their id was not in the pre-battle `activeSlots`).
- * The row set now comes from `sphereLevelsGained`'s keys — the one place the
- * sourced eligibility rule is computed — ordered by the build's own
- * active-then-reserve listing for a stable, familiar row order.
+ * The fix for that (commit 67e0a41) made the row set **come from**
+ * `sphereLevelsGained`'s keys, which introduced round 04's regression
+ * (PR-0003): §10.1 only says who *earns AP*, nothing about who is *listed*,
+ * so a defeat (the whole active party KO'd) zeroed `sphereLevelsGained`
+ * entirely and the ledger printed no member rows at all, and a victory with
+ * one member KO'd at the end silently dropped them from the list.
+ *
+ * The row set is now the roster — `build.activeSlots` plus any reserve
+ * member who is a `sphereLevelsGained` key (i.e. took a turn; see
+ * `earnedAp`'s doc in `results.ts`) — ordered active-then-reserve for a
+ * stable row order, and `sphereLevelsGained` is read only to decide each
+ * row's own AP/S.Lv: a member the sourced rule excludes still gets a row,
+ * with 0 AP and no Sphere Level badge, exactly as FFX-2's screen (and FFX
+ * itself) already does for a KO'd or benched member.
  *
  * **FFX-2 only** has one build.members loop below, unaffected by this: it
  * is not a chained-switch roster, and `result.levelsGained` was already
@@ -212,17 +223,18 @@ export function buildMemberRows(
 
   if (build.game === 'ffx') {
     const earnedIds = new Set(Object.keys(result.sphereLevelsGained));
-    const known = [...build.activeSlots, ...build.reserve].filter((id) => earnedIds.has(id));
+    const known = [...build.activeSlots, ...build.reserve.filter((id) => earnedIds.has(id))];
     for (const id of earnedIds) if (!known.includes(id)) known.push(id);
     return known.map((id) => {
       const member = build.members.find((m) => m.id === id);
+      const eligible = earnedIds.has(id);
       const sLv = member?.sphereGrid.sLv ?? 0;
-      const banked = (member?.sphereGrid.ap ?? 0) + result.ap;
-      const levelDelta = result.sphereLevelsGained[id] ?? 0;
+      const levelDelta = eligible ? (result.sphereLevelsGained[id] ?? 0) : 0;
+      const banked = (member?.sphereGrid.ap ?? 0) + (eligible ? result.ap : 0);
       return {
         id,
         name: member?.name ?? id,
-        award: result.ap,
+        award: eligible ? result.ap : 0,
         awardUnit: 'AP' as const,
         levelDelta,
         levelUnit: 'S.Lv' as const,
@@ -244,6 +256,19 @@ export function buildMemberRows(
       detail: dressphereDetail(member.currentDressphere, progress?.learned ?? [], banked),
     };
   });
+}
+
+/**
+ * Who stands in the results wedge: FFX's first active slot, FFX-2's first
+ * party member. Independent of `buildMemberRows`' row set on purpose (PR-0003)
+ * — a defeat or a KO'd leader must still show *someone's* fallen pose, and
+ * reading the leader off `rows[0]` broke the moment a row could be missing or
+ * reordered by AP eligibility.
+ */
+export function leaderId(chapter: Chapter | undefined): string | undefined {
+  const build = chapter?.buildRef;
+  if (!build) return undefined;
+  return build.game === 'ffx' ? build.activeSlots[0] : build.members[0].id;
 }
 
 /** The drops as one printed list: `Elixir, Phoenix Down ×2`. */

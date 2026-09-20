@@ -17,6 +17,7 @@ import {
   formatNumber,
   isNewBest,
   isSilentResultsChapter,
+  leaderId,
   pickVictoryQuip,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
@@ -260,9 +261,13 @@ export class ResultsScreen extends Screen {
    * The figure in the wedge. A win stands the leader's portrait there; a loss
    * uses their fallen pose, falling back through `hurt` -> `ko` -> no art at
    * all rather than grinning at the player under the word "Defeat".
+   *
+   * Reads the leader from the chapter build (`leaderId`), not `rows[0]`
+   * (PR-0003): the row list can legitimately be empty or reordered by AP
+   * eligibility, and the fallen pose must render regardless.
    */
   private heroHtml(): string {
-    const leader = this.rows[0]?.id;
+    const leader = leaderId(getChapter(this.opts.chapterId));
     if (!leader) return '';
     if (this.victory) {
       return portraitImgHtml(leader, '')?.replace('<img ', '<img class="rres__hero" ') ?? '';

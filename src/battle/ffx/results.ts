@@ -39,9 +39,12 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
 /**
  * Whether this party member earned this battle's AP at all.
  *
- * ffx-combat-core.md §1.7/AP: "Every party member who took at least one full
+ * ffx-combat-core.md §10.1/AP: "Every party member who took at least one full
  * turn earns AP at the end of a battle. Characters switched out during their
- * first turn, KO'd, or petrified at the end earn nothing." `ActorRuntime.
+ * first turn, KO'd, or petrified at the end earn nothing." (§1.7 is Switch and
+ * carries only the narrower switched-out-on-your-first-turn line; round 04's
+ * PR-0025 caught this file citing it instead of §10.1, where the AP rule
+ * actually lives.) `ActorRuntime.
  * turnsTaken` only increments at `onTurnEnd` (`engine.ts`), so a member
  * switched out mid-turn via the `switch` command's `handOffTo` never reaches
  * it for that interrupted turn — exactly "switched out during their first

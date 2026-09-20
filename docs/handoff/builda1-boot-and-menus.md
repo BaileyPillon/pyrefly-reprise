@@ -17,9 +17,9 @@ concept and is untouched.
 
 ### What was wrong
 
-`critic/rounds/round-03.md:377-388`: a player who lowered or muted a volume in OPTIONS got the
-default 0.9/0.7/0.9 back on every reload until they opened pause again. `AudioManager.ts` defaulted
-its three volumes in its constructor; the only callers of `setMasterVolume`/`setMusicVolume`/
+`critic/rounds/round-03.md:377-388`: a player who lowered a volume in OPTIONS (including all the way
+to 0) got the default 0.9/0.7/0.9 back on every reload until they opened pause again. `AudioManager.ts`
+defaulted its three volumes in its constructor; the only callers of `setMasterVolume`/`setMusicVolume`/
 `setSfxVolume` anywhere in `src/` were `PauseScreen.ts`'s three OPTIONS rows. Nothing on the boot
 path ever pushed a loaded save's settings into the mixer.
 
@@ -43,9 +43,26 @@ path ever pushed a loaded save's settings into the mixer.
 Fails on the pre-fix code with `TypeError: audio.applySettings is not a function`, then (once the
 method exists but isn't wired) with the mixer staying at defaults after a seeded save loads —
 exactly the critic's own repro shape (`audioDebug().volumes` disagreeing with `save.settings`).
-Cases: a muted/lowered save reaches the mixer before any pause screen exists; `setSettings` keeps
-pushing; an old save with no volume fields at all gets defaults, never NaN; a fresh profile with no
-storage backing does too.
+Cases: a lowered save (including one volume down at 0) reaches the mixer before any pause screen
+exists; `setSettings` keeps pushing; an old save with no volume fields at all gets defaults, never
+NaN; a fresh profile with no storage backing does too.
+
+### Correction (round 04, PR-0038) — the earlier release note overstated this fix
+
+The commit message for `ba0a5e4` said "a saved **mute** or a lowered volume never reached the
+mixer," and this file's own wording above used to say the same ("lowered or muted a volume"). That
+overstates what item 1 does: `Settings` has no `muted` field, `applySettings` (`AudioManager.ts:534`)
+touches the three volumes only, and no screen calls `setMuted()` (that method exists only on the
+debug API, `PyreflyDebugApi`, for the console). A save written with a hypothetical `muted: true`
+would read back unmuted, because nothing reads or writes that field at all — there is no
+player-facing mute control today, so no player has actually lost a setting; the claim was simply
+wider than the code. **Corrected claim: item 1 applies the three saved volumes at boot and on
+unlock. It does not implement mute.**
+
+**Open question for Bailey (not built):** should OPTIONS get a fourth row — a mute toggle,
+independent of the three volume sliders? That is a new control, not a bugfix (AGENTS.md rule 10),
+so nothing here adds one; flagging it since the wording that implied it already existed is what
+PR-0038 caught.
 
 ---
 
