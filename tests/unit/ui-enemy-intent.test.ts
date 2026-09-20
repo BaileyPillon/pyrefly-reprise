@@ -33,6 +33,8 @@ import {
 import { INTENT_HINT_ITEM } from '../../src/ui/common/ControlsHint.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
+import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
 
 // ------------------------------------------------------------------ helpers
 
@@ -269,6 +271,38 @@ describe('the slab is up the first time a boss takes a turn', () => {
     expect(row.classList.contains('eint__dmg--heal')).toBe(true);
     expect(row.textContent).toContain('heals');
     expect(row.textContent).toContain('+12,000');
+  });
+
+  /**
+   * Round 03 gate major: the FFX-2 intent panel printed a whole "Damage"
+   * section — "0" and "0% HP" — for Bahamut's Curse, a `formula: 'none'`,
+   * `power: 0` status move (`src/data/ffx2/enemies/bahamut-abilities.ts`).
+   * `predictNextFFX2EnemyIntent` still lists Curse's target in `perTarget`
+   * (the move touches them — it applies a status — even though it moves no
+   * HP: see `touchedFFX2` in `src/battle/ffx2/intent.ts`), so the panel is
+   * the layer that has to decide a zero-HP row is not damage. Real engine,
+   * no mock: `FFX2Engine` on Bahamut's fixed 12-action loop opens with Curse
+   * [ffx2-bahamut §2.1], exactly as `enemy-intent.test.ts` proves at the
+   * engine level. **Case: both** — `damageHtml` is the one component both
+   * `FFXBattleHud` and `FFX2BattleHud` mount, and the FFX side hits the same
+   * `perTarget.length === 0`-only guard for its own zero-damage flavour
+   * turns (round-03 #37's "a move that deals no damage shows no damage
+   * section at all, in both games").
+   */
+  it('prints no Damage section for a real status-only move (Bahamut\'s Curse)', () => {
+    const engine = new FFX2Engine({ minigames: false });
+    engine.init(bahamutSetup(1));
+    const intent = engine.intent();
+    expect(intent?.abilityId).toBe('bahamut-curse');
+    expect(intent?.estimate?.perTarget.length).toBeGreaterThan(0);
+    expect(intent?.estimate?.perTarget.every((t) => t.amount === 0)).toBe(true);
+
+    const { panel, overlay } = mountPanel({ game: 'ffx2' });
+    panel.setSource(() => intent);
+    const text = panelEl(overlay).textContent ?? '';
+    expect(text).not.toContain('Damage');
+    expect(text).not.toContain('0% HP');
+    expect(panelEl(overlay).querySelectorAll('.eint__dmg')).toHaveLength(0);
   });
 });
 

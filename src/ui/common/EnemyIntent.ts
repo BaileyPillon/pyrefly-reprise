@@ -692,8 +692,16 @@ function timingText(view: IntentView): string {
 
 function damageHtml(view: IntentView): string {
   const est = view.estimate;
-  if (!est || est.perTarget.length === 0) return '';
-  const rows = est.perTarget
+  if (!est) return '';
+  // A target the move merely *touched* — a status application with no HP
+  // change, e.g. Bahamut's Curse (`formula: 'none'`, `power: 0`) — is not
+  // damage and not a heal. `touchedFFX2`/its FFX twin list it in `perTarget`
+  // anyway (the move did something to it), so this is the layer that decides
+  // a zero row earns no place in a section titled "Damage". Round 03 #37: "a
+  // move that deals no damage shows no damage section at all, in both games."
+  const targets = est.perTarget.filter((t) => t.amount !== 0);
+  if (targets.length === 0) return '';
+  const rows = targets
     .map((t) => {
       // The sign is the engine's: positive means HP is lost. A boss healing
       // itself therefore reads as a negative amount, and the row says so rather
