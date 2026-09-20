@@ -201,6 +201,28 @@ export interface MenuContext {
  *
  * Berserk leaves only Attack; Itchy leaves only the L1 spherechange and Escape
  * (§2.8); Curse disables the L1 menu entirely (§4.2).
+ *
+ * **Gate major, fixed here:** every standard dressphere's data file now also
+ * ships its own `x2-<name>-attack` ability id in `abilityIds`
+ * (`research/ffx2-combat-core.md` §3.1-3.13). This function already builds
+ * the one true Attack row above (`ctx.abilities.get('attack')`, resolved by
+ * `command.kind === 'attack'` everywhere the engine executes or previews an
+ * attack — `execute.ts`, `simulate.ts`, and every tactics/strategy reader
+ * that pattern-matches that `kind`); it then *also* looped the dressphere's
+ * own ability list unfiltered, which pushed that same `x2-<name>-attack`
+ * entry again as a second, separately-clickable "Attack" — two
+ * `category: 'attack'` commands, so `CommandMenu.groupRows()` grouped them
+ * into an "Attack" submenu with two rows both labelled ATTACK, and the two
+ * rows were not even equivalent (different targeting/flags/message).
+ * The fix drops an attack-category entry from the *offered abilities* loop
+ * only — never the top-level generic row, so `command.kind` for "Attack" is
+ * unchanged everywhere else that reads it (a wider retarget of "Attack" onto
+ * the dressphere-specific ability id would change what every `kind ===
+ * 'attack'` reader sees, which is `src/engine/tactics/**`'s territory, not
+ * this menu-building function's — `tests/unit/strategy-ffx2-vegnagun-shuyin
+ * .test.ts`'s node-targeting harness catches exactly that if it is tried).
+ * Mascot (§3.14) has no ability table yet [data gap, not fixed here] and
+ * never had a duplicate to begin with.
  */
 export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableCommand[] {
   const out: AvailableCommand[] = [];
@@ -228,6 +250,10 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
     for (const id of offered) {
       const ability = ctx.abilities.get(id);
       if (!ability) continue;
+      // The generic row above is already this dressphere's one Attack; an
+      // attack-category entry here would only ever be that same command a
+      // second time (round 03 gate major — see the function doc comment).
+      if (ability.category === 'attack') continue;
       const mpCost = effectiveMpCost(actor, ability);
       const reason = disabledReason(actor, ability, mpCost);
       out.push({
