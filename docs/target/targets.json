@@ -1,0 +1,576 @@
+{
+  "title": "Pyrefly End-State Board",
+  "project": "Pyrefly Reprise",
+  "heading": "End-State Board",
+  "asOf": "20 Sep 2026",
+  "lede": "Every picture here is a target for the finished game. <b>Approved</b> means you said yes and it is on record. <b>Needs your verdict</b> means a picture exists and nobody has your yes or no written down. <b>No target yet</b> means there is nothing to look at, so that area gets an options round before anyone builds it.",
+  "foot": "Built from <code>docs/target/targets.json</code> by <code>node tools/end-state-board.mjs</code>. When you approve or reject something, the session you are talking to records it in that file with your words and the date, then reruns the script. Pictures are shrunk copies; the originals are in <code>docs/screenshots</code> and <code>public/art</code>.",
+  "waiting": [
+    {
+      "title": "Phone layout.",
+      "why": "At 390 × 844 every screen except pause is a letterboxed strip. It needs options before a build."
+    },
+    {
+      "title": "Move advisor, enemy next-move panel and defeat screen.",
+      "why": "All three exist only in your words or mine. One mockup of each would settle what right looks like."
+    },
+    {
+      "title": "Concept sheets for the three new chapters.",
+      "why": "They come to you as each chapter’s research is fact-checked."
+    },
+    {
+      "title": "A score out of ten for the audio, next time you listen.",
+      "why": "Your verdict was “Right direction, keep refining”. A number lets the critic’s audio category use your listening score; without one it stays unverified."
+    },
+    {
+      "title": "The product brief.",
+      "why": "docs/PRODUCT-BRIEF.md is a draft waiting for your yes."
+    }
+  ],
+  "groups": [
+    {
+      "id": "presentation",
+      "title": "Presentation: Ink & Gold",
+      "evidence": "“I really like that style I approve of it.” Bailey, 15 Sep 2026, after choosing direction A over B and C.",
+      "note": "Exact values are in docs/handoff/presentation-ink-and-gold.md. The remaining Overdrive overlays follow the Swordplay pattern and do not need a mockup each.",
+      "tiles": [
+        {
+          "label": "Style board",
+          "src": "docs/screenshots/mockups/A-style-board.jpg",
+          "state": "approved",
+          "build": "Not a screen: the palette, type and slab rules every other screen is checked against."
+        },
+        {
+          "label": "Title",
+          "src": "docs/screenshots/mockups/A-title.jpg",
+          "state": "approved",
+          "build": "The title screen as it first settles after loading the live URL."
+        },
+        {
+          "label": "Chapter select",
+          "src": "docs/screenshots/mockups/A-chapter-select.jpg",
+          "state": "approved",
+          "build": "Chapter select with chapter 1 (Seymour Flux) highlighted."
+        },
+        {
+          "label": "Party prep",
+          "src": "docs/screenshots/mockups/A-party-prep.jpg",
+          "state": "approved",
+          "build": "Party prep for chapter 1 (FFX) on its first tab."
+        },
+        {
+          "label": "Cutscene dialogue",
+          "src": "docs/screenshots/mockups/A-dialogue.jpg",
+          "state": "approved",
+          "build": "A pre-battle dialogue line in chapter 1 with the speaker portrait showing."
+        },
+        {
+          "label": "Battle start",
+          "src": "docs/screenshots/mockups/A-battle-start.jpg",
+          "state": "approved",
+          "build": "The boss-name banner at the start of the chapter 1 battle."
+        },
+        {
+          "label": "Battle HUD, FFX",
+          "src": "docs/screenshots/mockups/A-ink-and-gold-battle.jpg",
+          "state": "approved",
+          "build": "Chapter 1, Tidus's turn, command menu open, a damage number on screen if possible."
+        },
+        {
+          "label": "Turn cut-in",
+          "src": "docs/screenshots/mockups/A-turn-cut-in.jpg",
+          "state": "approved",
+          "build": "The character cut-in when a party member's turn begins in chapter 1."
+        },
+        {
+          "label": "Swordplay Overdrive",
+          "src": "docs/screenshots/mockups/A-swordplay-overlay.jpg",
+          "state": "approved",
+          "build": "Tidus's Swordplay Overdrive timing overlay in chapter 1."
+        },
+        {
+          "label": "Battle HUD, FFX-2",
+          "src": "docs/screenshots/mockups/A-ffx2-battle.jpg",
+          "state": "approved",
+          "note": "Pink replaces gold as the accent in the FFX-2 chapters.",
+          "build": "Chapter 4 (Bahamut), a party member's command menu open."
+        },
+        {
+          "label": "Results",
+          "src": "docs/screenshots/mockups/A-results.jpg",
+          "state": "approved",
+          "build": "The results screen after winning chapter 1."
+        },
+        {
+          "label": "B: Pyrefly Slash",
+          "src": "docs/screenshots/mockups/B-pyrefly-slash-battle.jpg",
+          "state": "rejected",
+          "note": "Kept so nobody proposes it again."
+        },
+        {
+          "label": "C: Sending Red",
+          "src": "docs/screenshots/mockups/C-sending-red-battle.jpg",
+          "state": "rejected",
+          "note": "Kept so nobody proposes it again."
+        }
+      ]
+    },
+    {
+      "id": "scenes",
+      "title": "The five battle scenes",
+      "evidence": "Painted 2.5D was approved on 15 Sep 2026 after the pixel-art look was rejected. The Zanarkand Dome was approved then; the other four paintings on 19 Sep 2026: “i approve everything you listed in the end state board” Bailey, 19 Sep 2026.",
+      "note": "The game ships the approved violet dome (checked: the file is byte-identical to the approved copy). Two older screenshots, docs/screenshots/concept-zanarkand-dome.png and docs/screenshots/art/zanarkand-dome.png, still show the grey hall that once replaced it; ignore them.",
+      "tiles": [
+        {
+          "label": "Ch. 1 · Mt. Gagazet",
+          "src": "docs/screenshots/concept-gagazet.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The chapter 1 battle backdrop as the camera first frames it.",
+          "hashes": "scene:gagazet"
+        },
+        {
+          "label": "Ch. 2 · Zanarkand Dome",
+          "src": "public/art/backdrops/zanarkand-dome.png",
+          "state": "approved",
+          "note": "Violet dome, golden sphere. Never regenerate.",
+          "build": "The chapter 2 (Yunalesca) battle backdrop as the camera first frames it.",
+          "sha256": "f48c5b05601a714f018b546bb71c7383d6c3cff556fef50e194f75ed31d274b0",
+          "hashes": "scene:zanarkand-dome"
+        },
+        {
+          "label": "Ch. 3 · Dream's End",
+          "src": "docs/screenshots/concept-dreams-end.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The chapter 3 battle backdrop as the camera first frames it.",
+          "hashes": "scene:dreams-end"
+        },
+        {
+          "label": "Ch. 4 · Bevelle Underground",
+          "src": "docs/screenshots/concept-bevelle-underground.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The chapter 4 battle backdrop as the camera first frames it.",
+          "hashes": "scene:bevelle-underground"
+        },
+        {
+          "label": "Ch. 5 · Farplane",
+          "src": "docs/screenshots/concept-farplane.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The chapter 5 battle backdrop as the camera first frames it.",
+          "hashes": "scene:farplane"
+        }
+      ]
+    },
+    {
+      "id": "cast",
+      "title": "Cast, bosses and aeons",
+      "note": "Approved as shown here. The shipped files behind each tile are hashed in docs/target/approved-hashes.json and backed up in D:\\Tools\\pyrefly-art-backup\\approved\\2026-09-19-board (public/art has no git history). Never replace one on an agent judge’s say-so: a change needs Bailey’s yes, and the approved “face pass on the weak close-ups” is such a yes for the close-ups it names. These were painted before the corrupt model files were replaced on 18 Sep; Bailey approved them as they are. Characters not shown here (Kimahri, Wakka, Lulu, Rikku, the other bosses, aeons and dresspheres) have no verdict yet.",
+      "evidence": "“i approve everything you listed in the end state board” Bailey, 19 Sep 2026.",
+      "tiles": [
+        {
+          "label": "FFX party portraits",
+          "src": "docs/screenshots/art/_v-ffxparty-portraits.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The portraits in the FFX turn list and party status window.",
+          "hashes": "portraits:ffx-party"
+        },
+        {
+          "label": "Tidus, battle poses",
+          "src": "docs/screenshots/art/tidus.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Tidus's shipped poses in chapter 1.",
+          "hashes": "cast:tidus"
+        },
+        {
+          "label": "Yuna, battle poses",
+          "src": "docs/screenshots/art/yuna.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Yuna's shipped poses in chapter 1.",
+          "hashes": "cast:yuna"
+        },
+        {
+          "label": "Auron, battle poses",
+          "src": "docs/screenshots/art/auron.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Auron's shipped poses in chapter 1.",
+          "hashes": "cast:auron"
+        },
+        {
+          "label": "Seymour Flux",
+          "src": "docs/screenshots/art/seymour-flux-body.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Seymour Flux on the field in chapter 1.",
+          "hashes": "cast:seymour-flux-body"
+        },
+        {
+          "label": "Yunalesca, first form",
+          "src": "docs/screenshots/art/yunalesca-1.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Yunalesca's first form on the field in chapter 2.",
+          "hashes": "cast:yunalesca-1"
+        },
+        {
+          "label": "Braska's Final Aeon",
+          "src": "docs/screenshots/art/braskas-final-aeon-1.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Braska's Final Aeon, first form, on the field in chapter 3.",
+          "hashes": "cast:braskas-final-aeon-1"
+        },
+        {
+          "label": "Shiva",
+          "src": "docs/screenshots/art/shiva.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Shiva summoned in an FFX chapter.",
+          "hashes": "cast:shiva"
+        },
+        {
+          "label": "Yuna, Gunner (FFX-2)",
+          "src": "docs/screenshots/art/_v-yuna-gunner-idle.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Yuna as Gunner on the field in chapter 4.",
+          "hashes": "cast:yuna-gunner",
+          "note": "The tile shows four idle candidates. What is protected is the idle that ships, recorded in the hashes file."
+        },
+        {
+          "label": "Shuyin",
+          "src": "docs/screenshots/art/shuyin.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Shuyin on the field in chapter 5.",
+          "hashes": "cast:shuyin"
+        }
+      ]
+    },
+    {
+      "id": "pause",
+      "title": "Pause screen",
+      "evidence": "Your note on the live build, 18 Sep 2026: the painting looked low-resolution and did not fill the screen. The rebuild below was approved on 19 Sep 2026: “i approve everything you listed in the end state board” Bailey, 19 Sep 2026.",
+      "note": "Full-bleed with 2688 × 1536 plates and type that scales with the window. These screenshots are now the target the shipped pause screen is held to.",
+      "tiles": [
+        {
+          "label": "Rebuilt pause, 2000 × 1012",
+          "src": "docs/screenshots/fix3/pause/v5-2000x1012.png",
+          "state": "approved",
+          "note": "The size you play at.",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Pause (Esc) during chapter 1 at 2000 x 1012, panels shown."
+        },
+        {
+          "label": "Panels hidden (H)",
+          "src": "docs/screenshots/fix3/pause/v5-2000x1012-panels-hidden.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Pause during chapter 1 at 2000 x 1012 with panels hidden (H)."
+        },
+        {
+          "label": "Party panel",
+          "src": "docs/screenshots/fix3/pause/v5-2000x1012-panel-party.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Pause during chapter 1 at 2000 x 1012 with the PARTY panel open."
+        },
+        {
+          "label": "Hero plate, chapter 1",
+          "src": "docs/screenshots/concept/pause-ch1.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The chapter 1 pause painting, full-bleed.",
+          "hashes": "pause:plates"
+        },
+        {
+          "label": "Hero plate, chapter 4",
+          "src": "docs/screenshots/concept/pause-ch4.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The chapter 4 pause painting, full-bleed.",
+          "hashes": "pause:plates"
+        },
+        {
+          "label": "All hero plates",
+          "src": "docs/screenshots/concept/pause-heroes.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Every pause painting that ships.",
+          "hashes": "pause:plates"
+        }
+      ]
+    },
+    {
+      "id": "fight",
+      "title": "How a fight plays",
+      "evidence": "The targeting look was picked by Bailey on 19 Sep 2026 from four mocked-up options: “B: hand, ring and a quiet dim”. The other three (A the hand and the help bar, C showpiece, D the field opens) were not picked; docs/concepts/targeting/sheet.png compares all four. The advisor, enemy panel and defeat screen were described in words only. Onboarding was picked by Bailey on 20 Sep 2026 from three mocked-up options (docs/concepts/onboarding/sheet.png, options.json, README.md): “C: Auron’s briefing”. A and B were not picked.",
+      "tiles": [
+        {
+          "label": "Targeting: a spell on the whole party",
+          "src": "docs/concepts/targeting/b-ring-and-dim/s1.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026, picked in the driver session: “B: hand, ring and a quiet dim”",
+          "build": "Chapter 3, Tidus, White Magic, Hastega highlighted: three party members ringed green, rows lit.",
+          "note": "FFX only: the pointing-hand cursor. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live."
+        },
+        {
+          "label": "Targeting: one Yu Pagoda, every enemy visible",
+          "src": "docs/concepts/targeting/b-ring-and-dim/s2.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026, picked in the driver session: “B: hand, ring and a quiet dim”",
+          "build": "Chapter 3, Attack aimed at one Yu Pagoda with the Final Aeon and both Pagodas all visible.",
+          "note": "FFX only: the pointing-hand cursor. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live."
+        },
+        {
+          "label": "Targeting in FFX-2: a Vegnagun part",
+          "src": "docs/concepts/targeting/b-ring-and-dim/s3.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026, picked in the driver session: “B: hand, ring and a quiet dim”",
+          "build": "Chapter 5, a single-target attack on one of Vegnagun’s parts while the ATB keeps running.",
+          "note": "FFX-2 only: a pink sparkle menu cursor and a rotating six-petal flower as the field reticle, with the ATB running and the Active / Wait indicator. No pointing hand. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live."
+        },
+        {
+          "label": "Move advisor card",
+          "state": "gap",
+          "empty": "Built without a picture",
+          "note": "Your spec: follows the selected character; move name, what it does, estimated damage or heal, MP, hit chance and the reason. In a fix pass now."
+        },
+        {
+          "label": "Defeat screen",
+          "state": "gap",
+          "empty": "Shown in words only",
+          "note": "From the product brief, 18 Sep 2026: the pull to play again comes from the fight itself, so a loss says why in plain words and gets you back in fast (retry from the form change, retry the chapter, change party prep). The text sketch in the picker was an illustration, not an approved design."
+        },
+        {
+          "label": "Enemy next-move panel",
+          "state": "gap",
+          "empty": "Built without a picture",
+          "note": "Your spec: near the enemies; name, effect, damage estimate, charge countdown; hideable. It is in the live build."
+        },
+        {
+          "label": "Onboarding C1: Auron’s briefing",
+          "src": "docs/concepts/onboarding/c-aurons-briefing/c1-briefing.png",
+          "state": "approved",
+          "approved": "Bailey, 20 Sep 2026, picked in the orchestrator's AskUserQuestion: “C: Auron’s briefing” — “Twenty skippable seconds in the game’s own voice (Auron’s painting, four lines framing both clocks), then one whispered line the first time something is real; FFX-2 lines come from Rikku with nothing paused; replayable from pause.”",
+          "build": "The first screen after the title on a first launch: the approved Auron painting on the left, four lines in his voice framing both clocks, a visible twenty-second timer, and skip / never-show-again on the same line. Skippable from frame one by key, mouse, touch and pad. Replayable from the title and from pause.",
+          "note": "Both games: this is the one shared surface, and it is where the two clocks are named once. Options A (taught first turn) and B (field notes) were not picked."
+        },
+        {
+          "label": "Onboarding C2: FFX first-use line (Auron)",
+          "src": "docs/concepts/onboarding/c-aurons-briefing/c2-first-use-ffx.png",
+          "state": "approved",
+          "approved": "Bailey, 20 Sep 2026, picked in the orchestrator's AskUserQuestion: “C: Auron’s briefing” — “Twenty skippable seconds in the game’s own voice (Auron’s painting, four lines framing both clocks), then one whispered line the first time something is real; FFX-2 lines come from Rikku with nothing paused; replayable from pause.”",
+          "build": "Chapter 1-3, the first time turn order is real: one italic line in Auron’s voice beside the command menu, ENTER CONTINUE, FIRST TIME ONLY. No dim, no numbered course, no second surface.",
+          "note": "FFX only (research/ffx-vs-ffx2-presentation.md §9 row 3: the turn-order preview is true for FFX and not for FFX-2). FFX is turn-based, so the line may hold the decision until one confirm press — the engine is already waiting for input and no clock runs."
+        },
+        {
+          "label": "Onboarding C3: FFX-2 first-use line (Rikku) and the pause rows",
+          "src": "docs/concepts/onboarding/c-aurons-briefing/c3-ffx2-replay.png",
+          "state": "approved",
+          "approved": "Bailey, 20 Sep 2026, picked in the orchestrator's AskUserQuestion: “C: Auron’s briefing” — “Twenty skippable seconds in the game’s own voice (Auron’s painting, four lines framing both clocks), then one whispered line the first time something is real; FFX-2 lines come from Rikku with nothing paused; replayable from pause.”",
+          "build": "Chapter 4-5, the first time a gauge fills: one line in Rikku’s voice beside the party rows that fades on its own with NOTHING PAUSED · GAUGES RUNNING, plus the two pause rows — REPLAY BRIEFING and BATTLE HELP ON / OFF.",
+          "note": "FFX-2 only for the voice and the non-blocking behaviour (§4.2 / FC-4 and §4.3 / FC-5: the gauge is a four-phase pipeline and its charge segment is canon’s own cost preview; teaching may never freeze it). BATTLE HELP is a real FFX-2 Config entry (research/ffx-vs-ffx2-presentation.md:278), so the toggle is labelled exactly as the game labels it. Replay and the toggle are both games."
+        },
+        {
+          "label": "A: Taught first turn (not chosen)",
+          "src": "docs/concepts/onboarding/a-taught-first-turn/a2-first-turn-ffx.png",
+          "state": "rejected",
+          "pill": "Not chosen",
+          "note": "A short cold open, then three coach marks on the real HUD, one at a time. Good work, simply not the one picked on 20 Sep 2026 — kept so the sheet stays readable and nobody re-proposes it as new."
+        },
+        {
+          "label": "B: Field notes (not chosen)",
+          "src": "docs/concepts/onboarding/b-field-notes/b2-hintbar-ffx.png",
+          "state": "rejected",
+          "pill": "Not chosen",
+          "note": "No interruption at all: one line on the hint bar and a HOW TO PLAY page on demand. Not picked on 20 Sep 2026; kept for the record, not rejected art."
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Music and sound",
+      "evidence": "“the music and sound effects need to be beautiful and capture the very essence and soul of final fantasy x/clair obscur: expedition 33” Bailey, 18 Sep 2026.",
+      "tiles": [
+        {
+          "label": "Score and sound effects",
+          "state": "approved",
+          "empty": "Listen, don't look",
+          "note": "Approved as the direction: the themes and the sampled-orchestra palette stay. Bailey’s verdict by ear on 19 Sep 2026 was “Right direction, keep refining” (docs/audio/OWNER-VERDICT.md), so refinement continues. No score out of 10 is on record, so the critic’s audio category stays unverified for listening quality. Listen at docs/audio/audition.html.",
+          "approved": "Bailey, 19 Sep 2026"
+        }
+      ]
+    },
+    {
+      "id": "phone",
+      "title": "Phone layout, 390 × 844",
+      "tiles": [
+        {
+          "label": "Every screen except pause",
+          "state": "gap",
+          "empty": "Needs a layout decision",
+          "note": "Today it is a letterboxed strip with unreadable text. Options first, then a build."
+        },
+        {
+          "label": "Pause on a phone",
+          "src": "docs/screenshots/fix3/pause/v6-390x844-phone.png",
+          "state": "approved",
+          "note": "The one screen with a phone layout so far.",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Pause during chapter 1 at 390 x 844."
+        }
+      ]
+    },
+    {
+      "id": "chapters",
+      "title": "Three new chapters",
+      "evidence": "Approved by Bailey on 19 Sep 2026. Order: Leblanc first, then Macalania, then Evrae. They, Build B and onboarding wait until the weekly allowance resets on 25 Sep (Bailey, 19 Sep: ship Build A, then stop).",
+      "note": "Each chapter’s cast and backdrop concept sheets come to you for a pick once its research is fact-checked. When you pick, the tiles move into Scenes and Cast.",
+      "tiles": [
+        {
+          "label": "Seymour and Anima, Macalania Temple (FFX)",
+          "state": "gap",
+          "empty": "Concept sheets on the way",
+          "note": "Three acts: Guado Guardians, Anima against Yuna’s new Shiva, Seymour cycling elemental spells. New art: the guardians, the temple."
+        },
+        {
+          "label": "Evrae on the airship (FFX)",
+          "state": "gap",
+          "empty": "Concept sheets on the way",
+          "note": "Distance through Cid’s Trigger commands, missiles, Poison Breath telegraphed by the inhale."
+        },
+        {
+          "label": "The Leblanc Syndicate (FFX-2)",
+          "state": "gap",
+          "empty": "Concept sheets on the way",
+          "note": "Set at Chateau Leblanc (FFX-2 Chapter 2), Bailey’s pick on 19 Sep. Leblanc, Logos and Ormi against Yuna, Rikku and Paine at low level. Doubles as the FFX-2 tutorial chapter."
+        }
+      ]
+    },
+    {
+      "id": "polish",
+      "title": "Polish ideas: the 12 you picked",
+      "evidence": "Picked by Bailey on 19 Sep 2026 from 23 mockups, with the rule: whatever is most true to each specific game. A change true to FFX but not FFX-2 is not applied to FFX-2, and the reverse.",
+      "note": "NOT approved, do not build: hit-feel, overkill-callout, overdrive-cinematic, victory-poses-results, aeon-arrival, clair-impact-feel, clair-command-camera, icons-loading-photo, cutout-animation, depth-normal-lighting, expressive-cutscene. Each board, with its before picture and motion clip, is in docs/concepts/polish/<id>/.",
+      "tiles": [
+        {
+          "label": "A front end that moves: parallax title and silhouette chapter cards",
+          "src": "docs/concepts/polish/showpiece-frontend/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/showpiece-frontend/ for the before picture and the motion clip."
+        },
+        {
+          "label": "The interface stops cutting and starts moving",
+          "src": "docs/concepts/polish/animated-ink-interface/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/animated-ink-interface/ for the before picture and the motion clip."
+        },
+        {
+          "label": "A face pass on the weak close-ups",
+          "src": "docs/concepts/polish/closeup-likeness/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/closeup-likeness/ for the before picture and the motion clip."
+        },
+        {
+          "label": "Backdrops with a floor and a sky",
+          "src": "docs/concepts/polish/living-backdrops/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/living-backdrops/ for the before picture and the motion clip."
+        },
+        {
+          "label": "The queue answers before you commit",
+          "src": "docs/concepts/polish/ctb-preview/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/ctb-preview/ for the before picture and the motion clip.",
+          "note": "FFX only. FFX-2 is ATB and has no turn queue."
+        },
+        {
+          "label": "The arena turns when the boss does",
+          "src": "docs/concepts/polish/phase-lighting/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/phase-lighting/ for the before picture and the motion clip."
+        },
+        {
+          "label": "Air in the arena",
+          "src": "docs/concepts/polish/pyrefly-atmosphere/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/pyrefly-atmosphere/ for the before picture and the motion clip."
+        },
+        {
+          "label": "Show me the room before you ask me to fight in it",
+          "src": "docs/concepts/polish/arena-camera-sweep/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/arena-camera-sweep/ for the before picture and the motion clip."
+        },
+        {
+          "label": "The pane breaks",
+          "src": "docs/concepts/polish/glass-shatter-transition/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/glass-shatter-transition/ for the before picture and the motion clip.",
+          "note": "Bailey’s pick on 19 Sep: canon by situation. A blur out of the scene; the FFX shatter on skip or retry; FFX-2’s own shatter in FFX-2; a black-hole implosion for Vegnagun’s parts."
+        },
+        {
+          "label": "Dissolved into pyreflies, not faded out",
+          "src": "docs/concepts/polish/pyrefly-death/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/pyrefly-death/ for the before picture and the motion clip.",
+          "note": "Only for things that canonically dissolve (fiends, aeons, the unsent). Human enemies do not."
+        },
+        {
+          "label": "Chain counter, and a results card that respects your time",
+          "src": "docs/concepts/polish/x2-chain-and-mission/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/x2-chain-and-mission/ for the before picture and the motion clip.",
+          "note": "FFX-2 only."
+        },
+        {
+          "label": "The spherechange gets its moment",
+          "src": "docs/concepts/polish/spherechange-sequence/after.png",
+          "state": "approved",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "The moment the mockup shows; see docs/concepts/polish/spherechange-sequence/ for the before picture and the motion clip.",
+          "note": "FFX-2 only, with the original’s short and off options."
+        }
+      ]
+    },
+    {
+      "id": "whole",
+      "title": "The whole game at a glance",
+      "evidence": "“i approve everything you listed in the end state board” Bailey, 19 Sep 2026.",
+      "tiles": [
+        {
+          "label": "Concept key art",
+          "src": "docs/screenshots/mockups/concept-key-art.jpg",
+          "state": "approved",
+          "note": "Approved as shown. One of the four frames drifted from the cast; Bailey approved the set as it is.",
+          "approved": "Bailey, 19 Sep 2026",
+          "build": "Not a screen: the yardstick for the whole-game look."
+        },
+        {
+          "label": "One finished minute of play",
+          "state": "gap",
+          "empty": "Nothing to look at yet",
+          "note": "A faked screenshot sequence of one full turn in the finished game: command, cut-in, impact, numbers, enemy reply. It would tie every target above together."
+        }
+      ]
+    }
+  ]
+}
