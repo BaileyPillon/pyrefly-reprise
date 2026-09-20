@@ -114,6 +114,13 @@ Overdrive bare re-submit loop in both engines, the possessed-aeon data (Passado 
 
 ## Owner decisions in force
 
+- **Critic policy v2 (Bailey, 2026-09-20): every deployed build is evaluated, and the depth of the review
+  follows what changed.** Deployment verification, changed-area acceptance and milestone acceptance are
+  separate verdicts; one weighted score (9.60 unrounded, every category at least 9.0) plus gates;
+  approved-target comparison is a gate; unknown or stale evidence is never a pass; an old score never
+  certifies a new build. `critic/RUBRIC.md`; `node tools/critic-plan.mjs` says which review a change needs.
+  The "full round after every deploy" rule is replaced by this; rounds 02 and 03 stay as rubric v1 history.
+
 - **Standing rule from 2026-09-19 (Bailey): every change is specific and game-aware.**
   True to FFX but not FFX-2: it does not apply to FFX-2. True to FFX-2 but not FFX: it
   does not apply to FFX. True to both: it applies to both. Decide from the sources
@@ -138,6 +145,12 @@ Template:
 - Left uncommitted:
 - Next:
 ```
+
+### 2026-09-20 01:45 EDT — Claude Code side session (critic policy v2 integrated; nothing deployed, the pause stands)
+- Did: Bailey approved the consolidated critic ("my approval of the proposed scoring, gates, cadence, and resource controls"). Integrated it: `critic/RUBRIC.md` is now policy v2 (three verdicts, a schedule where review depth follows the change, ONE weighted score over ten categories, acceptance gates, the approved-target gate that replaces Part C as a number); the old rubric is `critic/archive/RUBRIC-v1-ABC.md` and rounds 02 and 03 stay rubric v1 history. `critic/policy.json` holds the same rules as data. `critic/CHECKS.md` keeps CHK-001 to CHK-021 and B1 to B4 and adds CHK-022 (outcomes reach their destination), CHK-023 (subsystems are invoked through the real path), CHK-024 (saves survive an upgrade). New tools: `tools/critic-policy.mjs` (plan, score, gates, report validation), `critic-plan.mjs`, `critic-clear.mjs` (the only way an obligation is settled), `critic-score.mjs`, `artifact-manifest.mjs` (identity of every shipped file + byte-for-byte live verification); `critic-pending.mjs`, `critic-status.mjs` and `deploy-pages.mjs` reworked: a deploy now plans its review, refuses a shared-system change with no passing deep report, verifies the exact live artifact, and records separate `live` / `focused` / `deep` / `milestone` obligations; a replaced build's unsettled deep review moves to the new build. Review workflows: `critic/runner/release.js`, `focused.js`, `live.js`, `deep.js`; the driver's `pyrefly-release-clean.js` is now a copy of `release.js`, and the old `pyrefly-critic-round-2.js` and `pyrefly-critic-gate.js` refuse to run for a new build (backups beside them as `.pre-policy-v2.bak`). Seeded `critic/ledger.json` (baseline: round 03 on `7191674`, evidence only) and `critic/artifacts/7191674.json` (720 files, 367.7 MB, all media decode).
+- Verified by: `tests/unit/critic-policy-v2.test.ts` (51) and `tests/unit/artifact-manifest.test.ts` (10) plus the 19 existing marker tests, `npx tsc --noEmit` clean; `node tools/critic-plan.mjs` on the real tree (docs-only since `7191674`: LIVE; a pause caption: FOCUSED; `src/battle/ffx/ctb.ts`: DEEP before deploy); `verify-live` against the real site compared 48 files byte-identical and still answered UNVERIFIED because build `7191674` published no manifest (fail closed, as designed); `deploy-pages.mjs --dry-run` prints the plan; all workflow scripts pass a syntax check. **Not executed: the four review workflows and a real deploy with the new script** (paused, allowance at 99 percent).
+- Left uncommitted: everything above. **The release worktree is cut from committed `main`, so none of this applies to a release until it is committed;** `release.js` stops at the cut with that message if the tools are missing.
+- Next: commit the critic integration; at the next release watch the first `live.js` and `focused.js` runs and tune the time budgets after three real runs (RUBRIC §4).
 
 ### 2026-09-19 (afternoon) — Claude Code side session (targeting pick on the board)
 - Did: at the driver session's request, recorded Bailey's targeting pick ("B: hand, ring and a quiet dim") in `docs/target/targets.json` as three approved tiles (`docs/concepts/targeting/b-ring-and-dim/s1..s3.png`) with their game-aware cases and build hints; updated the Leblanc tile (Chateau Leblanc), the battle-transition tile (canon by situation) and the chapters note (they wait for the 25 Sep allowance reset). Board republished: 50 approved, 0 awaiting a verdict, 9 gaps, 2 rejected.

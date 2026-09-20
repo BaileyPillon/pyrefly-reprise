@@ -1,86 +1,168 @@
-# Pyrefly Reprise — Critic Rubric
+# Pyrefly Reprise — the critic (policy v2)
 
-The critic is adversarial. Its job is to find every way the build falls short of a faithful, fun, beautiful recreation of five FFX / FFX-2 encounters. It plays every chapter to the end (or to a loss), reads the data files against `research/`, and scores with evidence. **Gate: 9.60 / 10.** Anything below returns a ranked issue list.
+**In force since 2026-09-20.** Bailey approved the consolidated critic that day ("this message is my approval of the proposed scoring, gates, cadence, and resource controls"). It replaces the three-part rubric, which is archived at [archive/RUBRIC-v1-ABC.md](archive/RUBRIC-v1-ABC.md): rounds 02 and 03 were scored under it, keep their numbers, and are never compared with a score made here.
 
-## Scoring
+This file is the one scoring definition and the one schedule. Its machine-readable half is [policy.json](policy.json); `tools/critic-policy.mjs` enforces exactly that file, so a rule changes in both or it has not changed. The check library is [CHECKS.md](CHECKS.md).
 
-Score each category 0–10 with one decimal. Weighted total = Σ(score × weight) / 100.
+## 1. Purpose
 
-| Category | Weight | What 10 means |
+Protect the game Bailey actually wants: a beautiful, emotionally engaging, browser-based collection of memorable FFX and FFX-2 encounters, with faithful game-specific mechanics, convincing characters and environments, cinematic presentation and enjoyable replay.
+
+The critic is independent of the builder. It reports observable player problems, their causes where established, and the smallest useful corrections. It does not write product code, redesign approved work, inflate scores or manufacture defects to sound severe. Scrutiny means stronger evidence, consistent standards and useful prioritisation.
+
+**Every deployed build is evaluated. The depth of evaluation follows what changed. The finished-game standard remains 9.6 / 10.**
+
+## 2. Governing scope and decisions
+
+The project is `D:\Final Fantasy`, a TypeScript / Vite / Three.js browser game. Other projects inform lessons, never requirements.
+
+- FFX and FFX-2 stay distinct collections with their own rules, tone, characters, presentation conventions and progression. Faithful CTB and ATB, encounter mechanics, abilities, equipment and preparation, from the project's cited research; conflicting or missing evidence is reported, never invented (AGENTS.md hard rules 6 and 14). An ordinary party preset is a justified authored approximation, not a claimed average of all players.
+- Painted 2.5D and the approved Ink & Gold direction. A generated mockup is a target, never proof of implementation or performance.
+- Clair Obscur informs atmosphere and cinematic presentation; its parry / dodge mechanic is excluded. The games' own timed inputs (Overdrives) are canon and are not that mechanic. Persona influence is limited to specifically approved treatments.
+- The pause screen centres expressive character close-ups (Until Dawn), sharp, with usable controls and hideable panels.
+- Context, dialogue, banter, climax, aftermath and retry matter alongside the fight. A scene counts only when the player can reach it.
+- The strategy guide, the move advisor and the enemy-intent display are separate capabilities. The advisor offers legal, useful actions, says where they are in the menu and what they cost, handles recovery, and separates certainty from conditional or random outcomes.
+- **Approved artwork is protected.** Check its identity, crop, resolution, framing, staging and integration. Never replace it because a reviewer prefers something else (`docs/target/approved-hashes.json`). A separately approved face pass authorises only that named change.
+- Record every feature as **FFX only / FFX-2 only / both** with its source, and verify both the intended presence and the intended absence (CHK-021).
+
+Scope today: five chapters (Seymour Flux, Yunalesca, Braska's Final Aeon, FFX-2 Bahamut, Vegnagun and Shuyin). Bailey has also approved three more (Seymour and Anima at Macalania, Evrae, the Leblanc Syndicate at Chateau Leblanc) and twelve presentation changes; approval does not mean implemented, and their season is undecided. **Every review freezes a short release manifest**: included chapters and features, supported platforms and controls, changed files and assets, approved targets, known defects, the previous verified build and this candidate's identity. Future work does not block an unrelated interim release; a final milestone cannot silently drop promised scope to pass.
+
+Platform goals carry over: keyboard, mouse, gamepad and touch; Chrome, Edge, Firefox and Safari; phone and 4:3 to 21:9 and 4K; 60 fps at 1600×900 and a load under five seconds, measured on named hardware, browser, network and cache conditions, reporting frame-time spikes and first-ability stalls as well as the average. Missing hardware or native-browser evidence is UNVERIFIED, not a pass.
+
+Use the latest explicit owner decision on the same subject. `docs/PRODUCT-BRIEF.md` is a draft: its inferred lines are not orders. An approved adaptation is an exception with its exact scope, and is not penalised again for differing from the reference it adapts; it does not erase an observed usability defect.
+
+## 3. Three separate verdicts
+
+Every report distinguishes:
+
+1. **Deployment verification** — did this exact artifact load and behave as checked on the live URL?
+2. **Change acceptance** — did the changed area meet its approved target and avoid regressions?
+3. **Milestone quality** — does the complete declared milestone meet the 9.6 standard?
+
+Results are `PASS`, `FAIL`, `UNVERIFIED` or `NOT APPLICABLE` with a reason. A deployment can be verified while the milestone is unfinished. A failed test, an unavailable environment or missing evidence is never a pass. An old full score keeps its old build and date; a focused pass cannot make it the current build's score.
+
+## 4. When the critic runs
+
+Budgets are starting review-overhead budgets, not guarantees; they exclude builds, uploads and any uninterrupted playthrough a check requires. Tune them after three real runs. Required work never becomes optional because a budget ran out.
+
+| Trigger | Required review | Budget / stop rule |
+|---|---|---|
+| New screen, major presentation choice, mechanic or encounter | Plan / target check: source-game fit, explicit approval, feasibility, acceptance cases, scope | 5–10 min; ask only for the missing decision |
+| Ordinary local edit | Builder runs the relevant automated checks; no separate critic | No score ceremony |
+| Completed feature or defect batch, before deployment | **Focused** review on the immutable production preview: changed flow, dependencies, owner-reported regressions, applicable target comparisons | 5–15 min; extend only for a named risk |
+| **Every deployment** | **Live**: the exact artifact at the real URL (CHK-017), asset loading, real-input smoke, the changed flow | 2–5 min for a small change |
+| Changed artwork or audio batch | Subject-specific review in the running game; technical and listening checks for changed audio | Folded into the focused pass, same capture session |
+| Shared combat timing, battle presenter / lifecycle, save schema, asset loader, global layout, broad audio routing, new chapter, major integration, or a finished-milestone claim | **Deep** review of every affected chapter and system, **before public deployment**; a full **milestone** review when the change crosses most systems or is final acceptance | Checkpointed 30-minute blocks; complete the required coverage |
+| Three substantial checkpoints since the last deep review, or seven active development days with unreviewed changes | One accumulated-change deep review, sampling unchanged areas | One combined review, never one per commit |
+| Bailey finds a defect | Reproduce, explain the escape, strengthen the smallest relevant permanent check, verify the repair | Immediate focused retrospective; no unrelated rescore |
+| Onboarding / help changes, or every third deep review | Cold-start walkthrough with only visible instructions and ordinary controls | Inside the deep review; say whether the newcomer was simulated or real |
+| Crash or corruption touching the project or its assets | Integrity check of the affected files, build and media; model hashes when generation is implicated | Widen only on evidence |
+| No product change | Nothing scheduled | No automatic regrade |
+
+`node tools/critic-plan.mjs` decides which row applies from the changed paths (git, plus shipped art and audio from the artifact manifests, because `public/art` is not in git). Its rules are the `rules` list in policy.json. It fails closed: an unknown change set or an unclassified product path is a deep review; four focused systems or more than forty shipped files in one batch is a deep review; a request may raise the depth and nothing can lower it. The evidence baseline for reuse is round 03 on build `7191674`; its numbers stay history.
+
+A full review need not replay an unchanged chapter on the live site when the deployed artifact is verified identical to the production candidate, the chapter's evidence is still valid, and live smoke covers hosting risks. Example: a pause-caption repair needs real pause / hide / show input, clipping checks, a target comparison and live verification, not another combat audit. A CTB scheduler change needs the sourced engine regression cases and the affected FFX encounters; it is never a cosmetic fix. An asset-loader change needs every chapter's assets, FFX-2 included.
+
+## 5. Evidence
+
+- **Match proof to the claim.** Mechanics: seeded executable tests against sourced expectations. Interaction: real keyboard, pointer, touch or controller events and the resulting state. Appearance: validated in-game captures at actual display size. Motion: clips or timed sequences. Audio: decoded shipping files, runtime routing, measurements and listening. A hash needs no screenshot; a screenshot proves no key.
+- Debug hooks may set up a state. They cannot prove a player can reach it, win it, pause it or leave it. Milestone acceptance needs, for each included chapter, one continuous legal-input route from normal entry to outcome, reachable aftermath and results, and retry / return (CHK-022).
+- Exercise intended tactics and credible mistakes, defeat and recovery, cancel / back, scene skip, phase and actor changes, low resources, statuses, summons and game-specific commands. Never assume a boss pattern from memory or punish a canonical tactic for being strong.
+- Audit every changed data value against its source and run its dependent tests. Deep reviews also sample unchanged high-risk mechanics and documented boundary cases. The old quotas (forty values per game, twelve screenshots per chapter) are replaced by an explicit coverage matrix in the report.
+- Confirm screen, chapter, phase, actor and state before each capture (CHK-016). A failed wait throws or records `UNVERIFIED`; it never screenshots the title screen. Separate harness failures, a saturated host and product failures.
+- Compare target and build in the same context. A still approves the named visual properties; interaction and motion need their own criteria. Responsive adaptations that keep the approved composition and function are fine; pixel identity is not the goal.
+- Focused layout reviews use 1600×900 and Bailey's 2000×1012, plus 390×844 when phone or shared layout is touched. Deep coverage rotates the 4:3, wide, 1440p and 4K shapes. Emulation is not proof of a real controller, a real phone or Safari.
+- Check effective rendered text size, clipping and contrast, including transforms. An approved close-up may crop a head on purpose; accidental crop damage is the defect. Battle-facing rules do not apply to a viewer-facing pause portrait.
+- Record commit, **full artifact manifest hash** (art and audio ship separately from the bundle), target version, test version, seed, URL, device, browser, renderer and input path.
+- **Reuse evidence only with a recorded dependency argument**: relevant code, assets, settings, targets and test assumptions unchanged, compatible environment, no open related defect. A shared-system change invalidates what depends on it. Carried-forward evidence is shown as carried forward. Required untested items remain unknown.
+- A load succeeded when the content type is right and the file decodes, not when the server said 200. Undecodable or blank media is quarantined and cannot pass; intentional black or silence is listed as intentional (`intentionalFlatImages` in policy.json).
+- Say which tool heard what. No agent claims to have listened when it read data. Approving an audio direction approves neither every future cue nor a numeric beauty score.
+
+## 6. One quality score, plus gates that do not average
+
+| Category (`id`) | Weight | What the critic judges |
 |---|---:|---|
-| **Combat fidelity** | 25 | CTB tick/rank/haste maths, damage and healing formulas, statuses (incl. Zombie semantics), Breaks, elements, Overdrive modes and gauges, every character's skills with the right MP/rank, items, party switching, aeons (summon/dismiss/overdrives), FFX-2 ATB gauge speeds, charge/recovery, Chain multipliers, dresspheres and spherechange, Garment Grid gates. A player who knows the games would not notice a rule that is wrong. |
-| **Encounter fidelity** | 15 | Boss HP/stats/immunities, exact attack list and AI rotation (Lance of Atrophy → Full-Life; Hellbiter/Mega Death; Yu Pagodas; Mega Flare countdown; Terror of Zanarkand), form changes, counters, drops. The typical party build (stats, abilities, equipment, inventory) matches the researched average for that point. |
-| **Fun and pacing** | 15 | Decisions matter, the classic strategies work, tension curves like the real fight, animations are snappy with skip options, minigames feel good, no waiting on the engine, difficulty matches the original (winnable with the intended tactics, losable if you ignore them). |
-| **Character and visual fidelity** | 15 | Every party member, boss form, aeon and X-2 dressphere painting is immediately recognisable (silhouette, palette, weapon), consistently styled, animated (idle/attack/cast/hurt/ko/victory), with portraits in the CTB list. Attack VFX match the ability. |
-| **Scene fidelity and beauty** | 10 | Each diorama reads as its place (Gagazet snow trail, Zanarkand Dome hall, Dream's End, Bevelle Underground, Farplane) with FFX camera framing, lighting, particles, bloom/DoF. It looks like a 2026 painted 2.5D game (the owner rejected the pixel-art HD-2D look and approved the painted direction), not programmer art. |
-| **Writing and story** | 10 | Pre/mid/post-battle dialogue follows the canonical beats, sounds exactly like each character, includes banter, Tidus narration where appropriate, and lands the emotional moments (Yunalesca's truth, Jecht, Lenne). No verbatim script lifting beyond a few short iconic lines. |
-| **UI fidelity and polish** | 5 | The owner-chosen "Ink & Gold" presentation applied consistently (docs/handoff/presentation-ink-and-gold.md) while keeping FFX's information design: CTB list, party status window with Overdrive gauge, damage numbers, Sensor text, victory/results screen, X-2 ATB bars, chain popup, spherechange wheel, chapter select, party prep screens, controls hints, gamepad + keyboard + mouse. |
-| **Stability and performance** | 5 | No console errors, 60 fps at 1600×900 on a mid GPU, no soft locks, loads in < 5 s, works from the GitHub Pages URL, save data survives reload. |
+| Combat correctness (`combat`) | 20 | CTB versus ATB; formulas, resources, statuses, timing, switching, aeons and Overdrives or chains, dresspheres and Garment Grids |
+| Encounter authenticity and balance (`encounter`) | 10 | Party presets, boss phases, AI and counters, signature mechanics, intended strategy, fair wins and losses, correct difficulty |
+| Characters, environments and visual craft (`visual`) | 15 | Recognisability, expressions, costume, poses, facing, silhouettes, composition, staging, ground contact, lighting, consistency, correct rendering of approved art |
+| Game feel, animation and cinematic direction (`feel`) | 10 | Responsive input, action and reaction timing, coherent camera, impactful but readable effects, smooth transitions, respectful skip and replay |
+| Narrative, emotion and character voice (`narrative`) | 10 | Context, faithful beats, banter, stakes, reachable scenes, the right tone for each game, a satisfying aftermath |
+| Music, sound and audio direction (`audio`) | 10 | Technical health and routing, thematic coherence, phase transitions, mix, useful feedback, Bailey's listening assessment |
+| Interface, information and controls (`interface`) | 10 | Clear target sets, readable names and values, reliable input, legal and useful advice, honest intent, cleanup, pause and prep usability |
+| Onboarding, accessibility and options (`onboarding`) | 5 | Optional help that teaches the faithful rules, usable settings, text and input access, non-colour cues, motion and flash accommodations, device usability |
+| Preparation, rewards and replay value (`prep`) | 5 | Meaningful sourced prep, learning and mastery, fast retry, understandable results, reliable progress; no deduction for unapproved meta-systems |
+| Stability, performance and delivery (`delivery`) | 5 | Complete flows, valid media, save and reload, stable frame times, measured loading, browser and device coverage, the exact live artifact |
 
-Hard caps (apply before weighting):
-- Any chapter that cannot be finished (soft lock, crash, unwinnable with intended tactics) caps the total at **6.0**.
-- Any placeholder sprite, missing boss form, or missing pre/post scene caps the total at **8.0**.
-- Any ripped retail asset or verbatim script transcript caps the total at **5.0** (legal risk).
+Category scores run 0–10 with one decimal; total = Σ(score × weight) / 100, **tested unrounded against 9.60** (9.595 is not acceptance). Anchors: 5 = substantial gaps or placeholder delivery; 7 = functional with conspicuous weaknesses; 9 = polished with minor issues; 9.6 = the declared target delivered with only negligible defects; 10 = no material gap found in the complete tested scope. These are project acceptance judgments calibrated on Bailey's accepted and rejected examples, not an objective certification.
 
-## Part B: game design coverage (added 2026-09-18 at the owner's request; Part A above is unchanged)
+A final milestone is accepted only when **all** of these hold (`milestoneVerdict` in `tools/critic-policy.mjs`; a report that claims acceptance while a gate fails is rejected as evidence):
 
-The eight criteria above are **Part A: fidelity and craft**. They stay exactly as written, with their weights. The owner also wants the critic to cover **all aspects of game design**, so every round scores a second part the same way (0-10, one decimal, weighted total out of 10):
+- the weighted score is at least **9.60** and **every category is at least 9.0**;
+- the required evidence is complete: no `UNVERIFIED` category and no `UNVERIFIED` mandatory check;
+- no critical or major defect is open, every included encounter completes through its real flow, and no required form, scene or final asset is missing;
+- every required target in the milestone passes its acceptance criteria, protected assets are intact or explicitly revised, and the required human judgments are recorded;
+- the exact deployment passes live verification.
 
-| Category | Weight | What 10 means |
-|---|---:|---|
-| **Audio and music** | 15 | The score and the effects are beautiful and carry the soul of FFX and Clair Obscur: memorable original themes that return transformed, real-sounding instruments in one hall, effects that belong to the same world, mixing that never fatigues, music that follows the fight (phases, victory, defeat). **Beauty is scored by the owner** from the audition page and from play; the critic scores only the technical side (files present and playing, loudness, loop seams, ducking, no errors, every cue follows `docs/audio/THEMES.md`) and may not award more than 6 until the owner has scored the build's audio. |
-| **Game feel and feedback** | 12 | Every input answers instantly; hits, heals, KOs, Overdrives and boss attacks have weight through animation timing, camera, screen and sound working together; nothing feels floaty, laggy or silent; waiting is never dead time. |
-| **Clarity and information design** | 12 | At a glance the player knows whose turn it is, who is targeted (allies and enemies, single and all), what every enemy is and where it is, what just happened and why, what is about to happen, and what each command will do before committing. No panel ever shows wrong, stale or internal information; nothing important is hidden, clipped, overlapped or too small at any common window shape. |
-| **Onboarding and teachability** | 10 | A friend who never played FFX can open the link cold, understand what the game is, act within a minute, learn CTB, Overdrives, aeons, dresspheres and the Garment Grid through play, and understand why they won or lost. Help is there when wanted and out of the way when not. |
-| **Accessibility and options** | 8 | Remappable controls, readable text at every size with a scale option, cues that never rely on colour alone, reduced-motion and flash safety, separate music / effects / voice volumes, pause anywhere, optional assists that never alter canon for players who decline them. |
-| **Controls and platforms** | 8 | Keyboard, mouse, gamepad and touch are all first-class with correct prompts; works in current Chrome, Edge, Firefox and Safari, on a phone, and from 4:3 through 21:9 up to 4K; fast first load on the live URL; sensible behaviour when a tab loses focus or audio is blocked. |
-| **Difficulty and balance** | 8 | Each chapter's curve matches the original fight's tension; losses feel fair and teach something; no dominant degenerate tactic that canon did not have; any optional modifiers are clearly separated from the faithful default. |
-| **Replayability, retention and sharing** | 10 | There are real reasons to come back and to send the link to a friend: results worth improving, variety between runs, goals beyond the first clear, sessions that fit a short break, progress that persists, a link that previews well and needs no setup. |
-| **Progression, preparation and rewards** | 7 | Party prep gives meaningful, canon-plausible agency (Sphere Grid, equipment, dresspheres, Garment Grids, items) with clear consequences in the fight; results and rewards mean something; nothing is busywork. |
-| **Narrative presentation and direction** | 5 | Scenes are staged, paced and scored like cinema: camera, portraits, text rhythm, music entrances and silence make the emotional beats land; skipping and replaying scenes is painless. (The words themselves are judged in Part A.) |
-| **Cohesion and identity** | 5 | Art, UI, audio, writing and motion feel like one authored game from the title screen to the credits; transitions, loading, empty and error states are designed, not default; nothing looks like a debug tool. |
+Unknown categories are never averaged away and never scored zero: the assessment is provisional. An interim improvement may ship below 9.6 when its release checks pass, it adds no unaccepted major regression or unauthorised change, and inherited defects are disclosed. Save or progress corruption, a broken entry flow, an invalid release identity or an unapproved asset replacement are never waived by an improvement elsewhere. Score a defect where it belongs; cross-reference a separate demonstrated consequence; never multiply one issue across categories to push the total down. The gates replace the old numeric caps.
 
-Part B caps (apply before weighting): any panel that gives the player **wrong information** (for example an advisor naming a move the acting character cannot use) caps Part B at **8.0**; audio the owner has rejected caps **Audio and music** at **5.0** until the owner scores it higher.
+## 7. Approved-target acceptance (the old Part C, now a gate)
 
-## The gate
+Each required target has an owner decision, a reference and version, a game and release scope, the selected properties, the matching build state and concrete acceptance cases. `docs/target/targets.json` records the **design status** (approved / awaiting decision / rejected / superseded); the **delivery status** (not scheduled / in progress / implemented / verified) is tracked separately, in the review's release manifest. Approved tiles are decision counts, not verified implementations; tiles that approve an audio direction or key art are not scored as screenshot matches.
 
-The gate is met only when **both** weighted totals reach **9.6**: Part A (fidelity and craft) and Part B (game design). The round report gives both totals, the lower of the two as the headline, and one ranked issue list across both parts (most damaging to the headline first). Proposals for expansions and novel ideas stay separate and unscored.
+A rejected candidate does not block completion when the chosen alternative passes. A missing target for a future chapter does not block today's repair batch. A missing target for a feature the final milestone requires blocks that milestone. Frozen originals are hash-protected; an authorised compression, crop or responsive variant is recorded with its transformation; arbitrary lossy regeneration is not an optimisation. A new subjective direction needs a new decision (AGENTS.md hard rule 9); correcting the build to match an existing decision uses the existing approval.
 
-## Procedure
+Compare with `node tools/end-state-board.mjs --pair <target> <capture> --out <file.jpg>` and read the composite. The report counts targets **required / matched / failing / unverified / waiting on a decision**; for a milestone, anything but `matched` blocks acceptance.
 
-1. `npm run build && npx playwright test` must pass. Read `docs/DEV.md`.
-2. Play each chapter via the debug API and screenshots: default build, intended tactics, then deliberately wrong tactics (ignore Zombie at Yunalesca, let Mega Flare land, ignore Yu Pagodas). Record turn logs.
-3. Open the data files and compare at least 40 values per game against `research/*.md`.
-4. Review 12+ screenshots per chapter (pre-scene, command menu open, an Overdrive, a boss attack, a form change, post-scene, results).
-5. Read the story scripts against `research/writing-bible.md` beat sheets.
-5a. Part B: play as a first-time player with real input only; test keyboard, mouse, gamepad emulation and a phone viewport; open every options and help surface; measure input-to-response and first-load times; review window shapes from 4:3 to 21:9 and 4K; run the technical audio checks and read the owner's latest audio score.
-6. Produce `critic/rounds/round-NN.md`: category scores with evidence, weighted total, caps applied, and a **ranked issue list** (severity, category, exact repro, file/line, suggested fix).
+## 8. Findings, repair and reporting
 
-## The loop (owner's rule, restated 2026-09-18)
+One deduplicated issue list with stable IDs. Critical first (crash, lock, lost progress, failed outcome), then major (wrong mechanics or information, unusable controls, severe visual or target deviation, missing required content), then polish, then suggestions. Within a severity: Bailey's reported problems, frequency, player impact, coverage and effort. Never whatever most cheaply lifts a decimal.
 
-- The gate is a weighted total of **9.6**. Below it, the critic returns a **detailed ranked issue list** (severity, category, exact repro, file/line, suggested fix) and the build is revised and refined against that list, then the critic runs again. The loop repeats until the gate is met.
-- **MANDATORY, NO EXCEPTIONS (owner, 2026-09-18): the critic evaluates EVERY build that is pushed live.** A release is not finished until a full critic round has run against the live URL for that exact build (main commit and bundle hash recorded in the round report). `tools/deploy-pages.mjs` leaves a marker in `critic/pending/` for every deployed build; only the chief critic's report for that build clears it.
-- The critic never fixes anything itself and never softens a score because a fix is planned.
-- Every round is written to `critic/rounds/round-NN.md` (+ `.json`) and the top of the list is reported to the owner with the score.
+Every finding carries: build; game, chapter and state; expected versus observed; reproducible steps and seed; evidence; confidence and verification status; the requirement; file and line only if actually traced; the smallest proposed fix; its acceptance check. A suspected root cause says "suspected". One root defect across several chapters is one ticket.
 
-## When the critic runs (standing rules, adopted by the owner 2026-09-18)
+The builder gets the whole relevant batch once. Verification checks the repair and its neighbours. **After two unsuccessful attempts on the same failure, stop repeating the approach**: diagnose or escalate the blocker and continue independent authorised work. That is an operating limit, not permission to call the task done below the bar. Bailey's pause instructions are honoured.
 
-0. **After every build pushed live: a full round. Mandatory, no exceptions.**
-1. **Before each deploy: a short gate** on the production preview (changed areas, stability, a player's-eye screenshot review). Any blocker stops the release.
-2. **Whenever the owner reports a defect: a retrospective.** Why did the critic miss it? The answer becomes a check in `critic/CHECKS.md` (every auditor and the gate run the checks for their area) and, where possible, an automated test.
-3. **When an art batch lands: a visuals-only pass inside the running game**, never on a contact sheet alone.
-4. **Before building any sizeable feature or approved proposal: a paper critique** of the plan or mockup; build after a go.
-5. **After audio renders: a technical and thematic check** (loudness, loop seams, each cue uses its assigned themes). Beauty is the owner's call.
-6. **A first-time-player pass every few rounds** (someone who never played FFX grades onboarding and clarity).
-7. **A weekly round on the live site when idle**, once the score is near the gate, to track the trend and catch hosting or browser drift.
-8. **After any crash recovery: a quick integrity pass** (repo, live build, every shipped asset decodes, model hashes).
+Proposals live in a separate unscored section (idea, benefit, cost, source-game fit and risk, a concrete preview) and nothing is built without Bailey's yes. A concept image's incidental labels are not scope.
 
-The critic's browsers never run while a release build or sweep is running on this machine.
+Every report starts with:
 
-## Expansions and novel ideas (need the owner's approval first)
+```text
+Build / artifact / target version:
+Review: focused | live | deep | milestone
+Deployment: PASS / FAIL / UNVERIFIED
+Changed area: PASS / FAIL / UNVERIFIED
+Milestone: incomplete | not assessed | accepted
+Quality: current full score, or last full score + its original build and date
+Targets: required / matched / failing / unverified / waiting on decision
+Top issues: stable ID, impact, evidence, next correction
+Coverage: tested, reused with reason, not tested
+Next required review and why:
+Elapsed review time / repeated work avoided:
+```
 
-Beyond the ranked issue list, the critic may **suggest and recommend expansions or novel ideas that would improve the game from any aspect of game design**: gameplay systems and addictive loops (progression, challenge modes, rankings, unlocks, replay hooks), new encounters or chapters, characters, aeons and dresspheres, difficulty and accessibility, onboarding and tutorials, narrative and presentation, art direction, animation and VFX, UI and UX, audio direction, controls, performance, social and sharing features, and anything else a good designer would raise. These go in a separate **Proposals** section of the round report, each with a short pitch, the player benefit, the rough cost, and the risk to fidelity, ranked by value for cost. **Nothing from that section is built until Bailey approves it**, and proposals never count for or against the score.
+and is saved as JSON beside the prose: `critic/reviews/<sha>-focused.json`, `critic/reviews/<sha>-live.json`, `critic/rounds/round-NN.json` for deep and milestone reviews. `validateReport` requires: `rubricVersion: 2`; `review`; `build.mainSha` (plus `bundle` and `artifactHash` for live and milestone); `date`; `verdicts.deployment`, `verdicts.changedArea`, `verdicts.milestone`; and for each entry of `checks` an `id` from the library, a `result`, `mandatory` when it is, `evidence` for a PASS (or `reusedFrom` with its `dependencyArgument`), and a `reason` for UNVERIFIED or NOT APPLICABLE. Deep and milestone reports add `categories`, `issues`, `encounters`, `targets`, `humanJudgments` and `coverage.requiredNotTested`. A check record also names the game, chapter and state, artifact and target versions, environment, whether it was automated or manual, and the time it took.
 
-## Audio
+At a visible milestone show a little useful real-game evidence. Announce each live build with what changed and what to try, and the usage readings Bailey asked for. Do not make Bailey certify basic function by replaying every small deploy; ask for judgment when feel, sound or a subjective choice materially changed.
 
-No agent can hear. The critic checks audio only technically (files present and playing, loudness, no errors); whether the music and effects are beautiful is judged by the owner from the audition files.
+## 9. Keep it affordable and consistent
+
+Build one immutable candidate. **One process owns browser capture on this machine**; other reviewers reuse its validated evidence. Serialise capture with release builds and sweeps, and check GPU contention with art rendering. A resource-contention timeout is investigated before it is called a game defect. GPU captures (`PYREFLY_BROWSER=gpu`) and software-renderer goldens serve different purposes; say which was used.
+
+Use bounded specialist help only where it replaces distinct work, within the task's delegation authority and the usage readings (check the 5-hour and weekly allowance before any fan-out). Independent judgment matters more than agent count. Share a compact brief, the relevant sources, the evidence and the acceptance criteria, not whole histories. No recursive review swarm, no duplicated full playthroughs, no indefinite polling, no perpetual worker reactivation.
+
+Record review time and escaped owner-found defects to judge the critic itself. More checks or lower scores are not success if the same visible bugs keep reaching Bailey.
+
+## 10. How this is enforced (and what still is not)
+
+| Rule | Where it lives |
+|---|---|
+| Which review a change needs | `node tools/critic-plan.mjs`, rules in `policy.json`; `tools/deploy-pages.mjs` runs the same code and prints the plan even on `--dry-run` |
+| Shared-system change needs deep evidence before going public | `tools/deploy-pages.mjs` refuses unless a validated deep report with a passing changed area exists for that commit |
+| Exact-artifact identity, media that decodes (CHK-017, CHK-019) | `tools/artifact-manifest.mjs`: the deploy hashes and decode-checks every shipped file, publishes `artifact-manifest.json`, compares the live bytes, and stores the manifest in `critic/artifacts/<sha>.json` |
+| Separate obligations per live build | `critic/pending/<sha>.json` lists `live`, `focused`, `deep`, `milestone`; `npm run critic:status` shows them and fails while any is pending |
+| Only evidence settles an obligation | `node tools/critic-clear.mjs --report <file>`: validates the report, refuses another build's report, never lets a focused or live report settle a deep review, leaves UNVERIFIED pending. Reviewers never delete markers; settled ones move to `critic/cleared/` |
+| A replaced build's debt is not forgotten | the deploy moves an unsettled deep review to the new build and records what was never verified |
+| Accumulated-change trigger | `critic/ledger.json`, restarted by a settled deep review |
+| Score and acceptance gates | `weightedTotal`, `milestoneVerdict`; the status reader recomputes a v2 score from the categories and always names the build it belongs to |
+| The reviews themselves | workflow scripts in `critic/runner/` (`focused.js`, `live.js`, `deep.js`), launched by the release workflow according to the plan |
+
+Proved by `tests/unit/critic-policy-v2.test.ts` and `tests/unit/artifact-manifest.test.ts`. **Not automated yet** (each check's `automation` field in policy.json says planned / implemented / human): most CHK checks are still performed by a reviewer rather than by a test; delivery status per target is not tracked in `targets.json`; there is no physical-device, Safari or real-controller evidence path; review time and escaped-defect counts are recorded by hand in reports. Say so in a report instead of implying coverage that does not exist.

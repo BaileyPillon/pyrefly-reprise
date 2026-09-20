@@ -28,6 +28,57 @@ honest account of why the existing gates let it through, the exact check, what
 can be automated, and the scope the check generalises to. Merge into an existing
 entry when a new defect is the same class; add a new ID when it is not.
 
+## How checks are selected and recorded (policy v2, 2026-09-20)
+
+Bailey approved the consolidated critic on 2026-09-20 (`critic/RUBRIC.md`). Every
+ID below is kept, with its incident history. What changed is how they are used.
+
+**Selected by what changed, not run wholesale.** `node tools/critic-plan.mjs`
+lists the checks a candidate needs from its changed paths (the `rules` in
+`critic/policy.json`); CHK-016 and CHK-017 apply to every deployment; a deep or
+milestone review runs the broader set for every affected chapter. The entries
+still say "Rubric:" with a category of the archived three-part rubric; read them
+through this map: Combat fidelity → `combat`; Encounter fidelity → `encounter`;
+Character and visual fidelity, Scene fidelity → `visual`; Fun and pacing, Game
+feel → `feel`; Writing and story, Narrative direction → `narrative`; Audio →
+`audio`; UI fidelity, Clarity → `interface`; Onboarding, Accessibility →
+`onboarding`; Progression, Replayability → `prep`; Stability, Controls and
+platforms → `delivery`; Part C → the approved-target gate (RUBRIC §7).
+
+**Proof matches the claim.** Rules 1 and 2 above govern interaction and
+appearance. A technical check does not need a screenshot (a hash, a decode, a
+routing assertion); a visual check does not need a full replay; human judgment is
+asked for the changed subjective decision only.
+
+**Every selected check leaves a record**: ID, why it was selected, game, chapter
+and state, artifact and target versions, environment, result (`PASS`, `FAIL`,
+`UNVERIFIED`, `NOT APPLICABLE` with a reason), evidence, automated or manual, and
+the time it took. A skipped check records why and whether it was mandatory.
+Reused evidence names the earlier result and its dependency argument. Each
+check's `automation` field in `critic/policy.json` says **planned / implemented /
+executed / validated / human**: a written check is not an implemented test, and
+an implemented test is not a validated player experience.
+
+**Refinements adopted with the policy** (they narrow a check, they do not remove it):
+
+| ID | Read it as |
+|---|---|
+| CHK-001 | Technically valid, routed to the right real moments (no silent unintended fallback), and heard and approved at the right scope |
+| CHK-007 | Player meaning, no raw ids or debug text in the ordinary HUD; legitimate names and deliberate research or help citations are allowed |
+| CHK-010 | Judge the selection against the **approved targeting design** (`docs/target/targets.json`), not a compulsory inventory of rings and chevrons |
+| CHK-012 | Expected bytes, type and decode for every affected subject, and the actual crop in its destination |
+| CHK-013 | Protect the approved choice while checking how it renders at gameplay scale beside its neighbours |
+| CHK-014 | Battle-facing rules do not apply to intentional portrait or menu poses |
+| CHK-015 | Real keys, pointer, controller or touch on production, positive and cancel paths; a staging hook never establishes capability |
+| CHK-017 | The **exact artifact**: every shipped file's hash, base paths, content types and decodes, live smoke, save and reload where it applies (`tools/artifact-manifest.mjs`); a full review only when the risk requires it |
+| CHK-018 | Generated ids or validated references and every delivery file present; not a ban on every legitimate string literal |
+| CHK-019 | Blank or corrupt image and silence checks with listed intentional exceptions; undecodable is blocked or unverified, **never a pass** |
+| CHK-020 | Paired FFX and FFX-2 flows with explicit game-specific exceptions, and closure of cross-track defects |
+| CHK-B1 | A reusable verdict tied to exact cues and mix; approving a direction is not final cue acceptance |
+| CHK-B2 | Asked for after a material input, animation or pacing change or at a playable milestone, not after a typo fix |
+| CHK-B3 | Concrete comparable options, the selection recorded per property; no re-approval of a repair |
+| CHK-B4 | Proposal only: benefit, cost, fidelity risk and a preview; no score penalty for not adopting it |
+
 ---
 
 ## CHK-001. Sound is auditioned by a human and gated technically
@@ -665,6 +716,97 @@ lifetimes of CHK-006, and for the Esc handling of CHK-015.
 screens, the pause over either game, and the five chapters as a set: **chapters
 4 and 5 are reviewed first in the next round, precisely because they are always
 reviewed last.**
+
+## CHK-021. A change lands only in the game it is true to
+
+**Rubric:** all of Part A; Part B cohesion; Part C.
+**Owner said (2026-09-19, a standing rule):** "changes implemented must be specific
+and game aware. a change true to ffx but not ffx-2 does not apply to ffx-2. a change
+true to ffx-2 but not ffx does not apply to ffx. a change true to both ffx and ffx-2
+applies to both ffx and ffx-2."
+**Why it would be missed:** the two games share screens, components and style
+sheets, so the cheap way to build anything is once, for both. A turn-order preview
+is true to FFX's CTB and meaningless over FFX-2's ATB bars; a chain counter, a
+spherechange sequence and a mission-complete card are true to FFX-2 only; the
+glass-shatter battle transition is FFX's. CHK-020 pushes the other way (parity), and
+read alone it invites copying a game-specific idea across.
+**THE CHECK:** for every change in the build under review, find its written case
+(FFX only / FFX-2 only / both, with the source) in the plan, handoff note or commit.
+No written case is a finding. Then open a chapter from **each** game and prove it:
+an FFX-only change is present in chapters 1 to 3 and absent from 4 and 5; an
+FFX-2-only change is the reverse; a "both" change is present in both and is the same
+work (CHK-020). The source for the case is `research/*.md` and
+`research/ffx-vs-ffx2-presentation.md`; a case argued from memory is a finding.
+**AUTOMATE:** partly. Anything switched per game should read one flag (the chapter's
+game), and a unit test per game-specific feature asserts it is off for the other
+game's chapters.
+**SCOPE:** presentation, camera, transitions, HUD elements, results cards, audio
+cues, mechanics and wording; the approved concept boards in `docs/target/targets.json`
+carry their own FFX-only / FFX-2-only notes; the new chapters inherit their game's set.
+
+## CHK-022. A win, loss or scene transition reaches its real destination
+
+**Rubric:** `delivery`, `narrative`, `feel` (policy v2 categories).
+**Recorded failures (critic round 02, 2026-09-19; historical, not re-tested when
+this entry was written):** Chapter 4 never left the battle after the victory, the
+presenter stalled at skip speed in Chapter 1, and post-battle scenes could not be
+reached. Round 03 reported all five chapters finishing.
+**Why it was missed:** unit tests assert the engine's victory flag. A flag is not
+the player leaving the battle: the stall was in the presenter's awaited tweens
+(`Tween.kill` never settling), which no engine test touches.
+**THE CHECK:** run each affected chapter through legitimate input from its normal
+entry to its outcome. Confirm the required phase changes, the post-battle scene,
+the results screen, saved rewards, retry and return to chapter select. Exercise
+skip and cancel on the way, in both games. A chapter that reaches its outcome only
+through a debug hook has not passed.
+**AUTOMATE:** partly. A Playwright flow per chapter that plays to win and to loss
+with real keys and asserts the destination screen (CHK-016 state assertions) can
+run in the release gate; whether the aftermath lands emotionally cannot.
+**SCOPE:** every chapter's win and loss path, scene skip, retry from a form
+change, results to chapter select, and any new chapter before it is included in a
+release manifest. Mandatory for every included chapter at milestone acceptance.
+
+## CHK-023. A subsystem is invoked through the real presentation path
+
+**Rubric:** `combat`, `audio`, `interface`.
+**Recorded failures:** this project twice shipped a complete, tested subsystem
+that nothing called (AGENTS.md hard rule 4); round 02 found boss music that never
+played and Wakka's and Lulu's Overdrives and Talk inert in play although their
+unit tests passed.
+**Why it was missed:** a passing standalone test, or finding an importer with
+`node tools/orphans.mjs`, shows the code exists and is reachable. Neither shows
+that the normal runtime calls it with the expected data, or that something does
+not cancel or overwrite it a frame later.
+**THE CHECK:** trace one real input to the command or event, the effect, the
+visible or audible feedback and the resulting state. Cover every changed
+Overdrive input window, damage outcome, Trigger Command (Jecht's Talk), battle
+music selection and crossfade, and saved setting. Verify the runtime invokes it
+with the expected data and that the result survives the next frames.
+**AUTOMATE:** partly. Event-log assertions in a real-input Playwright run (the
+presenter's event stream, the AudioManager debug surface) can prove invocation
+and data; feel and mix cannot be asserted.
+**SCOPE:** every feature that has a unit test of its own and a separate call site
+in the presenter, HUD, audio router or settings boot.
+
+## CHK-024. Saves and settings survive an actual upgrade
+
+**Rubric:** `delivery`, `prep`.
+**Recorded failure (critic round 03):** saved audio settings were never applied at
+boot, so a returning player's volumes silently reset.
+**Why it was missed:** every automated run starts from a clean browser profile, so
+"it works on a fresh profile" was mistaken for "it works for the player who
+already has a save".
+**THE CHECK:** for a schema, storage or release change (`src/app/SaveData.ts`),
+test a fresh player, a returning player, a save written by the previous live
+build migrating forward, reload during every allowed state, invalid or truncated
+storage, and the reset / confirmation flow. Confirm progress and settings are
+preserved and applied. A pass produced from a clean test profile is not a pass.
+**AUTOMATE:** mostly. Keep a fixture of the previous release's `localStorage`
+under `tests/fixtures/saves/` and load it before boot in a unit test and a
+Playwright run. A lightweight reload smoke belongs to every deployment's live
+check; the full matrix runs when persistence changes.
+**SCOPE:** save data, best records, settings (volumes, speed, reduced motion),
+chapter unlocks, and anything a new chapter adds to the schema.
 
 ---
 

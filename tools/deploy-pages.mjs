@@ -12,18 +12,25 @@
  *   --dry-run      stop right after the dirty-tree check, printing how every
  *                  dirty path was classified — nothing is built or pushed
  *   --message=     extra free-text appended to the gh-pages commit message
+ *   --claim=milestone  this deploy asks for finished-milestone acceptance
+ *   --minimum=deep     raise the planned review (nothing can lower it)
  *
- * Pipeline: preflight -> `vite build` into dist-release/ -> re-init
- * dist-release as a throwaway single-commit `gh-pages` git repo and force-push
- * it -> kick a Pages build and poll it to completion -> verify the live site
- * serves the same bundle and that art assets resolve -> append a line to
- * docs/deploys.log -> leave a `critic/pending/<mainShortSha>.json` marker.
+ * Pipeline: preflight -> `vite build` into dist-release/ -> hash and
+ * decode-check every shipped file into `artifact-manifest.json` -> plan the
+ * review this change needs (tools/critic-plan.mjs) and refuse if it needs deep
+ * evidence before deploying and none is on record -> re-init dist-release as a
+ * throwaway single-commit `gh-pages` git repo and force-push it -> kick a
+ * Pages build and poll it to completion -> verify that the live URL serves
+ * this exact artifact, byte for byte (tools/artifact-manifest.mjs) -> append a
+ * line to docs/deploys.log -> leave a `critic/pending/<mainShortSha>.json`
+ * marker listing the separate review obligations this build owes.
  *
- * Owner's rule (critic/RUBRIC.md, "The loop"): every build pushed live gets a
- * full critic round, no exceptions. Every run (--dry-run included) starts by
- * printing any markers already sitting in critic/pending/ as a warning, and a
- * verified deploy ends by writing its own marker and a loud final banner —
- * see tools/critic-pending.mjs and tools/critic-status.mjs.
+ * Owner's rule (critic/RUBRIC.md, policy v2, 2026-09-20): every deployed build
+ * is evaluated, and the depth of the review follows what changed. Every run
+ * (--dry-run included) starts by printing what earlier live builds still owe
+ * and the review this candidate needs. Only a validated report, applied by
+ * tools/critic-clear.mjs, settles an obligation; a deep review still owed by
+ * the build this one replaces moves to this build's marker.
  *
  * Safe to run repeatedly: dist-release's .git is deleted and recreated every
  * run, so gh-pages always ends up with exactly one commit.
@@ -43,13 +50,19 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
+import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
 import {
+  archiveMarker,
   buildPendingMarker,
   formatPendingWarningBlock,
   readPendingMarkers,
+  supersedeMarkers,
   writePendingMarker,
 } from './critic-pending.mjs';
+import { lastDeployedSha, planForRepo, readLedger, writeLedger } from './critic-plan.mjs';
+import { loadPolicy, validateReport } from './critic-policy.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist-release');
@@ -59,6 +72,33 @@ const REPO_URL = `https://github.com/${REPO}.git`;
 const LIVE_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
 const LOG_PATH = join(ROOT, 'docs', 'deploys.log');
 const PENDING_DIR = join(ROOT, 'critic', 'pending');
+const CLEARED_DIR = join(ROOT, 'critic', 'cleared');
+const ARTIFACTS_DIR = join(ROOT, 'critic', 'artifacts');
+
+/** A validated deep or milestone report for this commit whose changed area passed. */
+function deepEvidenceFor(mainSha) {
+  const policy = loadPolicy(ROOT);
+  for (const dir of ['reviews', 'rounds']) {
+    const full = join(ROOT, 'critic', dir);
+    if (!existsSync(full)) continue;
+    for (const f of readdirSync(full).filter((n) => n.endsWith('.json'))) {
+      let report;
+      try { report = JSON.parse(readFileSync(join(full, f), 'utf8')); } catch { continue; }
+      const sha = report.build?.mainSha;
+      if (!sha || !(sha.startsWith(mainSha) || mainSha.startsWith(sha))) continue;
+      if (!['deep', 'milestone'].includes(report.review) || report.verdicts?.changedArea !== 'PASS') continue;
+      if (validateReport(report, policy).length === 0) return `critic/${dir}/${f}`;
+    }
+  }
+  return null;
+}
+
+function printPlan(plan) {
+  log(`critic plan: ${plan.review.toUpperCase()} review; this build will owe ${plan.obligations.join(' + ')}`);
+  for (const reason of plan.reasons) log(`  because: ${reason}`);
+  log(`  systems: ${plan.systems.join('; ') || 'none'} | chapters: ${plan.chapters.join(', ') || 'none'}`);
+  log(`  checks: ${plan.checks.join(' ')}`);
+}
 
 function parseArgs(argv) {
   const out = {};
@@ -87,6 +127,8 @@ const SKIP_TESTS = Boolean(args['skip-tests']);
 const ALLOW_DIRTY = Boolean(args['allow-dirty']);
 const DRY_RUN = Boolean(args['dry-run']);
 const EXTRA_MESSAGE = typeof args.message === 'string' ? args.message : '';
+const CLAIM = typeof args.claim === 'string' ? args.claim : null;
+const MINIMUM = typeof args.minimum === 'string' ? args.minimum : null;
 
 function log(msg) {
   console.log(`[deploy] ${msg}`);
@@ -205,10 +247,15 @@ async function main() {
     log('working tree clean');
   }
 
+  // With --allow-dirty the uncommitted build-relevant files ship too, so the review plan has to see them.
+  const dirtyShipped = dirty.buildRelevant.flatMap((entry) => entry.paths ?? []);
   const mainSha = capture('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT });
   log(`main repo at ${mainSha}`);
 
   if (DRY_RUN) {
+    // Tracked files only: the shipped art and audio are compared once the
+    // build exists, so the real plan can only be deeper than this one.
+    printPlan(planForRepo({ root: ROOT, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped }));
     log(
       `--dry-run: stopping after the dirty-tree check (${dirty.buildRelevant.length} build-relevant, ${dirty.fleetNoise.length} fleet-noise). Nothing was built, pushed or deployed.`,
     );
@@ -242,6 +289,40 @@ async function main() {
   if (!bundleMatch) fail(`could not find an assets/index-*.js reference in ${indexPath}`);
   const bundleHash = bundleMatch[1];
   log(`bundle hash: ${bundleHash}`);
+
+  // ---- 2b. Identity of the whole artifact, and the review it needs ---------
+  // The bundle name says nothing about the art and audio that ship beside it,
+  // so the build's identity is a manifest of every shipped file. Media that
+  // does not decode, or decodes to one flat colour, never ships as a pass.
+  writeFileSync(join(DIST, '.nojekyll'), '');
+  log('hashing and decode-checking every shipped file');
+  const manifest = await buildManifest(DIST);
+  const flatOk = new Set(loadPolicy(ROOT).intentionalFlatImages ?? []);
+  const problems = manifest.problems.filter((p) => !flatOk.has(p.split(':')[0]));
+  if (problems.length) {
+    for (const p of problems) log(`  ${p}`);
+    fail(`${problems.length} shipped file(s) are empty, undecodable or blank — fix them, or list a deliberate flat image under "intentionalFlatImages" in critic/policy.json`);
+  }
+  if (manifest.audioUnverified) log(`WARNING: ${manifest.audioUnverified} audio file(s) could not be decode-checked (no ffprobe): CHK-019 stays UNVERIFIED for them`);
+  writeFileSync(join(DIST, MANIFEST_NAME), `${JSON.stringify(manifest)}\n`);
+  log(`artifact ${manifest.artifactHash.slice(0, 16)}: ${manifest.count} files, ${(manifest.totalBytes / 1048576).toFixed(1)} MB`);
+
+  const previousSha = lastDeployedSha(ROOT);
+  const previousManifestPath = previousSha ? join(ARTIFACTS_DIR, `${previousSha}.json`) : null;
+  const previousManifest = previousManifestPath && existsSync(previousManifestPath)
+    ? JSON.parse(readFileSync(previousManifestPath, 'utf8'))
+    : null;
+  const plan = planForRepo({ root: ROOT, manifest, previousManifest, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped });
+  printPlan(plan);
+  if (plan.deepBeforeDeploy) {
+    const evidence = deepEvidenceFor(mainSha);
+    if (!evidence) {
+      fail(
+        `this change touches a shared system, so it needs a deep review of the production candidate BEFORE it goes public, and no validated deep report with a passing changed area exists for ${mainSha} under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md, "When the critic runs")`,
+      );
+    }
+    log(`deep evidence on record for this candidate: ${evidence}`);
+  }
 
   // ---- 3. Publish dist-release as a fresh gh-pages repo --------------------
   writeFileSync(join(DIST, '.nojekyll'), '');
@@ -320,12 +401,25 @@ async function main() {
   }
   log(`live site matches bundle ${bundleHash}`);
 
-  const artUrl = `${LIVE_URL}art/characters/tidus/idle.png`;
-  const artRes = await fetch(artUrl);
-  if (artRes.status !== 200) {
-    fail(`${artUrl} returned ${artRes.status}, expected 200`);
+  // The same bundle name is not the same artifact: download the page, all the
+  // code, every file that changed and an even sample of the rest from the real
+  // URL and compare bytes (CHK-017). A 200 is not a pass; identical bytes are.
+  const changedShipped = (() => {
+    const d = diffManifests(previousManifest, manifest);
+    return previousManifest ? [...d.added, ...d.changed] : [];
+  })();
+  let liveArtifact = null;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    liveArtifact = await verifyLive(manifest, LIVE_URL, { changed: changedShipped });
+    log(`live artifact check ${attempt}/4: ${liveArtifact.result} (${liveArtifact.checked} files compared, manifest ${liveArtifact.liveManifest})`);
+    if (liveArtifact.result === 'PASS') break;
+    if (attempt < 4) await sleep(30_000);
   }
-  log('art asset check ok: art/characters/tidus/idle.png -> 200');
+  if (liveArtifact.result !== 'PASS') {
+    for (const p of [...liveArtifact.mismatched, ...liveArtifact.missing, ...liveArtifact.wrongType, ...liveArtifact.errors].slice(0, 20)) log(`  ${p}`);
+    fail(`the live URL does not serve this exact artifact (${liveArtifact.result}): see the files above`);
+  }
+  log(`live site serves artifact ${manifest.artifactHash.slice(0, 16)} byte for byte (${liveArtifact.checked} files compared)`);
 
   const commitCount = Number(
     ghApi(['repos/' + REPO + '/commits?sha=gh-pages', '--jq', 'length']),
@@ -351,22 +445,46 @@ async function main() {
   log(summary);
   console.log(summary);
 
-  // ---- 7. Leave a critic-pending marker -------------------------------
-  // Only a full critic round against this exact live build clears this file
-  // (critic/RUBRIC.md, "The loop") — see tools/critic-pending.mjs and
-  // tools/critic-status.mjs.
+  // ---- 7. Record what this build owes the critic ------------------------
+  // The build this one replaces can no longer be verified live. A deep review
+  // it still owed moves here; its other open obligations are recorded as never
+  // verified. Nothing is deleted: closed markers move to critic/cleared/.
+  mkdirSync(ARTIFACTS_DIR, { recursive: true });
+  writeFileSync(join(ARTIFACTS_DIR, `${mainSha}.json`), `${JSON.stringify(manifest)}\n`);
+  const older = readPendingMarkers(PENDING_DIR).filter((m) => !m.parseError);
+  const { carriedDeep, closed } = supersedeMarkers(older, mainSha, isoNow);
+  for (const m of closed) {
+    const { file: _file, ageHours: _age, ...content } = m;
+    archiveMarker(PENDING_DIR, CLEARED_DIR, content);
+    log(`build ${m.mainSha} was replaced: its marker moved to critic/cleared/ with what was never verified`);
+  }
   const marker = buildPendingMarker({
     mainSha,
     bundle: bundleHash,
     deployedAt: isoNow,
     liveUrl: LIVE_URL,
     artFiles: artFileCount,
+    artifactHash: manifest.artifactHash,
+    plan,
+    carriedDeep,
+    liveArtifact: { result: liveArtifact.result, checked: liveArtifact.checked, at: isoNow },
   });
   const markerPath = writePendingMarker(PENDING_DIR, marker);
   log(`critic-pending marker written: ${markerPath}`);
+  // A focused or deep review made on the production candidate before this
+  // deploy counts now that the build it reviewed is the one that is live.
+  for (const r of applyStoredReports(ROOT, mainSha)) {
+    for (const s of r.settled) log(`  ${r.report} settled ${s.kind}: ${s.result}`);
+  }
+  const ledger = readLedger(ROOT, loadPolicy(ROOT));
+  writeLedger(ROOT, { ...ledger, deploysSinceDeep: [...ledger.deploysSinceDeep, { sha: mainSha, date: isoNow, substantial: plan.review !== 'live' }] });
 
-  const banner = `CRITIC ROUND REQUIRED for main ${mainSha} bundle ${bundleHash}: a release is not finished until the critic has evaluated this live build (critic/RUBRIC.md)`;
-  const rule = '='.repeat(banner.length);
+  const owed = (readPendingMarkers(PENDING_DIR).find((m) => m.mainSha === mainSha)?.obligations ?? [])
+    .filter((o) => o.status === 'pending').map((o) => o.kind);
+  const banner = owed.length
+    ? `REVIEW OWED for main ${mainSha} bundle ${bundleHash}: ${owed.join(' + ')} (planned review: ${plan.review}). A release is not finished until these are settled: npm run critic:status`
+    : `main ${mainSha} bundle ${bundleHash}: every review obligation is already settled`;
+  const rule = '='.repeat(Math.min(banner.length, 160));
   console.log('');
   console.log(rule);
   console.log(banner);
