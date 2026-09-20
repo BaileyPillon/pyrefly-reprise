@@ -33,9 +33,12 @@
  * ## What is never allowed to happen
  *
  * - **An FFX-2 fight is never held.** Every X-2 path here returns or resolves
- *   without awaiting the line; `onEvent` returns `undefined`, so the presenter
- *   does not wait for it either, and the gauges keep filling
- *   (`research/ffx-vs-ffx2-presentation.md` §4.2 / FC-4).
+ *   without awaiting the line, and the inner HUD's menu is opened in the *same
+ *   turn of the event loop* as the line goes up; `onEvent` returns `undefined`,
+ *   so the presenter does not wait for it either. Teaching costs an X-2 fight
+ *   nothing (`research/ffx-vs-ffx2-presentation.md` §4.2 / FC-4). What this
+ *   layer does **not** claim is anything about the engine's own clock during
+ *   command input — see the badge note in `CoachMark.ts`.
  * - **A game never shows the other's speaker.** `marksFor(game)` is the only
  *   source of a line, so an FFX chapter cannot reach Rikku's deck.
  * - **Two surfaces are never up at once** (REQUIRED 4). One live mark, and the
@@ -207,8 +210,8 @@ class CoachedHud implements HudPort {
    * Never returns a promise the presenter has to wait on.
    *
    * `HudPort.onEvent` may resolve within ~600 ms, and an X-2 line lasts five
-   * seconds. Returning `undefined` is what keeps the fight running underneath
-   * it — the whole point of C3's "nothing paused, gauges running" badge.
+   * seconds. Returning `undefined` is what lets the fight carry on underneath
+   * it — the whole point of C3's non-blocking voice.
    */
   onEvent(event: BattleEvent): void {
     // The menu was answered by something other than the player (`setAutoPlay`

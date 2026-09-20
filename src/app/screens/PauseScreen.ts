@@ -553,13 +553,10 @@ export class PauseScreen extends Screen {
   // ------------------------------------------------------------------- input
 
   override handleInput(input: InputSnapshot): void {
-    // The replayed briefing owns the screen while it is up: it took the
-    // keyboard claim itself, and this is how the gamepad reaches it, because
-    // raw HUD input is muted behind the pause overlay.
-    if (this.briefing && !this.briefing.finished) {
-      this.briefing.handleInput(input);
-      return;
-    }
+    // The replayed briefing owns input while it is up — keyboard through its
+    // exclusive claim, pad through its own watcher. Nothing is forwarded to it
+    // and nothing is read here; see `replayBriefing`.
+    if (this.briefing && !this.briefing.finished) return;
 
     this.hint?.handleInput(input);
 
@@ -867,13 +864,18 @@ export class PauseScreen extends Screen {
    * Play Auron's briefing again, over the pause menu.
    *
    * Bailey's approved C3 frame puts REPLAY BRIEFING on this menu precisely so
-   * that skipping it on boot is not a one-way door. It is `driven`, so this
-   * screen pumps its input: the pause overlay mutes raw HUD input, which would
-   * otherwise leave a gamepad with no way to dismiss it.
+   * that skipping it on boot is not a one-way door.
+   *
+   * It owns input outright while it is up (an exclusive claim on
+   * `app/Input.ts`, plus its own pad watcher that ignores the HUD mute). This
+   * screen deliberately does **not** forward it anything: forwarding is what
+   * made the replay unskippable in the first build — confirm reached
+   * `handleAction` a moment after the briefing had resolved and re-raised the
+   * still-selected REPLAY BRIEFING row, forever.
    */
   private async replayBriefing(): Promise<void> {
     if (this.briefing && !this.briefing.finished) return;
-    const briefing = makeBriefing(this.app, { driven: true });
+    const briefing = makeBriefing(this.app);
     this.briefing = briefing;
     try {
       await briefing.show();

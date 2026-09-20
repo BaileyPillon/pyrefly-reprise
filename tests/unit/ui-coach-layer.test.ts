@@ -10,12 +10,21 @@
  * makes its purple charge segment canon's own cost preview. Freezing that to
  * teach is the one thing X-2 never does.
  *
- * So the FFX-2 case here is not asserted against a flag. A **real
- * `FFX2Engine`** for Chapter 4 is ticked across the coached HUD's
- * `chooseCommand` and `onEvent` calls, and the test reads the engine's own ATB
- * snapshot on both sides. If the coach layer ever awaits an X-2 line, the
- * `chooseCommand` promise stops resolving before the tick and this file goes
- * red.
+ * So the FFX-2 case is asserted twice, and neither assertion can pass by
+ * accident:
+ *
+ * 1. The inner HUD is asked for the menu **before a single `await`** — the
+ *    line and the menu go up in the same turn of the event loop. One `await`
+ *    in front of it, which is exactly what the FFX branch does, makes that
+ *    zero.
+ * 2. A driver shaped like the presenter's own loop ticks a **real
+ *    `FFX2Engine`** once per turn while the HUD's promise is outstanding, and
+ *    counts the turns. A held line resolves only when its 5.2 s fade timer
+ *    fires, which in that loop is never, so the count runs to the cap.
+ *
+ * An earlier version of this file read the engine's gauges before and after a
+ * tick the *test itself* performed, and asserted they had grown. They always
+ * had. That proved nothing about the layer, and an adversarial pass said so.
  *
  * The FFX case is asserted the other way round: the menu must **not** open
  * until a real `KeyboardEvent` arrives.
@@ -185,31 +194,68 @@ describe('the coach layer', () => {
     expect(markEl(root)).toBeNull();
   });
 
-  it('FFX-2 never holds the fight: the real gauge advances across the line', async () => {
+  it('FFX-2 never holds the fight: the menu opens in the same turn as the line', async () => {
+    const spy = new SpyHud();
+    const hud = withCoach('ffx2', spy, { reduceMotion: true });
+    hud.mount(root);
+
+    const pending = hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
+
+    // **Not one await.** The sharpest form of "the line holds nothing": the
+    // real HUD was asked for the menu in the very turn of the event loop the
+    // line went up. A single `await shown` in front of it — the FFX branch —
+    // makes this zero.
+    expect(spy.menuOpened, 'the X-2 menu is asked for before anything is awaited').toBe(1);
+
+    await pending;
+    const line = markEl(root);
+    expect(line, 'and the line outlives its own promise, on screen while play continues').not.toBeNull();
+    expect(line?.dataset['mark']).toBe('ffx2-gauge');
+    expect(line?.textContent).toContain('Rikku');
+    // The badge only ever claims something about the line. It used to read
+    // "Nothing paused · gauges running", which is a claim about the engine's
+    // clock during command input that the running game does not honour — see
+    // the note in `CoachMark.ts`. Shipping a badge that contradicts the
+    // artifact is the defect this pins.
+    expect(line?.textContent, 'no claim about the engine on a HUD badge').not.toContain('gauges running');
+    expect(line?.textContent?.toLowerCase()).not.toContain('nothing paused');
+    expect(line?.textContent).toContain('Keep playing');
+  });
+
+  it('FFX-2 answers the presenter while a real engine is being ticked around it', async () => {
+    // A driver shaped like the presenter's own loop: it ticks a **real**
+    // Chapter 4 engine once per turn of the event loop for as long as the HUD
+    // has not answered. If the coach layer ever awaited an X-2 line, the answer
+    // would only come when the 5.2 s fade timer fired — which, in a loop that
+    // never advances the clock, is never — and `turns` would run to the cap.
     const engine = realFfx2Engine();
     const spy = new SpyHud();
     const hud = withCoach('ffx2', spy, { reduceMotion: true });
     hud.mount(root);
 
     const before = gauges(engine);
-    const pending = hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
-
-    // No key is pressed and no timer is advanced. If the layer ever awaited an
-    // X-2 line this would time out instead of resolving.
+    let answered = false;
+    let turns = 0;
+    const pending = hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview).then(() => {
+      answered = true;
+    });
+    while (!answered && turns < 50) {
+      engine.tick(100);
+      turns += 1;
+      await Promise.resolve();
+    }
+    // Asserted before the promise is awaited, so a layer that holds fails here
+    // in milliseconds instead of hanging until the suite's timeout.
+    expect(answered, 'the HUD answered rather than waiting the line out').toBe(true);
+    expect(turns, 'within a turn or two, not after the fade').toBeLessThan(5);
     await pending;
-    expect(spy.menuOpened, 'the X-2 menu opens immediately').toBe(1);
+    expect(markEl(root), 'with the line still up the whole time').not.toBeNull();
 
-    const line = markEl(root);
-    expect(line, 'the X-2 line is still on screen while play continues').not.toBeNull();
-    expect(line?.dataset['mark']).toBe('ffx2-gauge');
-    expect(line?.textContent).toContain('Rikku');
-    expect(line?.textContent).toContain('Nothing paused');
-
-    // The engine's own clock, read on both sides of the teaching.
-    engine.tick(1500);
+    // And the ticks the driver got in while the promise was outstanding are
+    // real ticks: this is the engine's own gauge, not a flag.
     const after = gauges(engine);
-    expect(after.elapsedMs, 'the battle clock ran under the line').toBeGreaterThan(before.elapsedMs);
-    expect(after.total, 'the gauges kept filling under the line').toBeGreaterThan(before.total);
+    expect(after.elapsedMs).toBeGreaterThan(before.elapsedMs);
+    expect(after.total).toBeGreaterThan(before.total);
   });
 
   it('FFX-2 onEvent returns nothing, so the presenter is never made to wait', () => {

@@ -18,7 +18,7 @@
  */
 
 export { Briefing } from './Briefing.ts';
-export type { BriefingOutcome, BriefingOptions, BriefingInput } from './Briefing.ts';
+export type { BriefingOutcome, BriefingOptions } from './Briefing.ts';
 export { CoachMark } from './CoachMark.ts';
 export type { CoachMarkOutcome, CoachMarkOptions } from './CoachMark.ts';
 export { withCoach, markForMenu, markForEvent } from './CoachLayer.ts';

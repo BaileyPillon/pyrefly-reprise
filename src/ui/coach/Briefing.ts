@@ -27,15 +27,23 @@
  * (`docs/plans/onboarding-review.md`, "Missing"). Nothing in it is FFX-only or
  * FFX-2-only; the per-game teaching is `CoachLayer.ts`'s job.
  *
- * ## Input
+ * ## Input: the briefing owns it, and the press that ends it dies with it
  *
- * Keyboard arrives through a **claim** on `app/Input.ts`, which runs in the
- * capture phase and stops the event before any screen or HUD widget behind the
- * briefing sees it — so replaying it over the pause menu cannot also close the
- * pause menu. Mouse and touch arrive as `click` on the element (a tap fires
- * one). Gamepad arrives either from the briefing's own watcher (when it is
- * raised over the title, where raw HUD input is live) or from
- * {@link Briefing.handleInput}, which a driving screen calls once a frame.
+ * The first build got this wrong, and an adversarial pass caught it on the
+ * running game: the claim stopped the DOM **event**, but `app/Input.ts` still
+ * latched the abstract **button**, so one frame later the screen behind acted
+ * on the same press — Enter carried a first-timer past the chapter board into
+ * party prep, Escape backed the board out to the title, and the pause replay
+ * re-raised itself forever.
+ *
+ * So the claim is now `exclusive` (`app/Input.ts`, `claimKeyboard`): while the
+ * briefing is up nothing behind it is told about any button, and the frame
+ * after it hands input back every edge is dropped. Mouse and touch arrive as
+ * `click` on the element, which stops there too. Gamepad arrives from the
+ * briefing's **own** watcher, which ignores the global HUD mute — that mute is
+ * what protects the fight from the pause menu, and the briefing is the overlay
+ * it is being protected from, so a pad must still be able to take it down when
+ * it is replayed from pause.
  */
 
 import './coach.css';
@@ -48,11 +56,6 @@ import { markSeen, setBattleHelp } from './coachState.ts';
 /** How the briefing ended. */
 export type BriefingOutcome = 'finished' | 'skipped' | 'never-again';
 
-/** A snapshot shape small enough that the pause screen can forward its own. */
-export interface BriefingInput {
-  justPressed(button: 'confirm' | 'cancel' | 'triangle' | 'start'): boolean;
-}
-
 export interface BriefingOptions {
   /** Where the briefing mounts. Usually `app.uiRoot`. */
   root: HTMLElement;
@@ -63,8 +66,6 @@ export interface BriefingOptions {
   claimKeyboard?: (onKey: (e: KeyboardEvent) => void) => () => void;
   /** Drop the fades. Defaults to `Settings.reduceMotion`, passed by the caller. */
   reduceMotion?: boolean;
-  /** True when a screen will drive {@link Briefing.handleInput} itself. */
-  driven?: boolean;
   /** Injectable clock for the twenty seconds. */
   setTimer?: (fn: () => void, ms: number) => number;
   clearTimer?: (handle: number) => void;
@@ -79,7 +80,7 @@ const TICK_MS = 200;
 
 export class Briefing {
   readonly el: HTMLElement;
-  private readonly watcher: RawInputWatcher | null;
+  private readonly watcher: RawInputWatcher;
   private readonly duration: number;
   private readonly setTimer: (fn: () => void, ms: number) => number;
   private readonly clearTimer: (handle: number) => void;
@@ -108,12 +109,16 @@ export class Briefing {
     el.addEventListener('click', this.onClick);
     this.el = el;
 
-    this.watcher = opts.driven
-      ? null
-      : new RawInputWatcher((button) => {
-          if (button === 'confirm' || button === 'cancel') this.skip();
-          else if (button === 'triangle') this.neverAgain();
-        });
+    // `ignoreSuspend`: see the input note at the top of the file. The pause
+    // menu mutes every other watcher, and the briefing is replayable from the
+    // pause menu, so this one has to keep reading the pad.
+    this.watcher = new RawInputWatcher(
+      (button) => {
+        if (button === 'confirm' || button === 'cancel') this.skip();
+        else if (button === 'triangle') this.neverAgain();
+      },
+      { ignoreSuspend: true },
+    );
   }
 
   private markup(): string {
@@ -145,6 +150,10 @@ export class Briefing {
   // ----------------------------------------------------------------- input
 
   private readonly onClick = (e: Event): void => {
+    // The briefing's own clicks stop here. `app/Input.ts` delegates `click` on
+    // `[data-action]` from the UI root, and a queued `briefing:skip` would be
+    // handed to whatever screen is behind on its next frame.
+    e.stopPropagation();
     const target = e.target as HTMLElement | null;
     const action = target?.closest<HTMLElement>('[data-action]')?.dataset['action'];
     if (action === 'briefing:never') this.neverAgain();
@@ -161,20 +170,6 @@ export class Briefing {
     this.skip();
   };
 
-  /**
-   * For a screen that is driving the briefing itself (the pause menu).
-   *
-   * Nothing calls this in the flow case — the briefing's own watcher covers
-   * keyboard and gamepad there.
-   */
-  handleInput(input: BriefingInput): void {
-    if (this.done) return;
-    if (input.justPressed('triangle')) this.neverAgain();
-    else if (input.justPressed('confirm') || input.justPressed('cancel') || input.justPressed('start')) {
-      this.skip();
-    }
-  }
-
   // ------------------------------------------------------------------ life
 
   /** Put the briefing up. Resolves when it ends, however it ends. */
@@ -187,7 +182,7 @@ export class Briefing {
       this.onWindowKey = this.onKey;
       window.addEventListener('keydown', this.onWindowKey);
     }
-    this.watcher?.attach();
+    this.watcher.attach();
 
     this.tickTimer = this.setTick(() => this.tick(), TICK_MS);
     this.endTimer = this.setTimer(() => this.finish('finished'), this.duration);
@@ -235,7 +230,7 @@ export class Briefing {
     if (this.tickTimer) this.clearTick(this.tickTimer);
     this.endTimer = 0;
     this.tickTimer = 0;
-    this.watcher?.detach();
+    this.watcher.detach();
     this.releaseKeyboard?.();
     this.releaseKeyboard = null;
     if (this.onWindowKey) window.removeEventListener('keydown', this.onWindowKey);

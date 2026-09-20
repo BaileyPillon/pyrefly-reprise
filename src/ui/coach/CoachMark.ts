@@ -82,9 +82,22 @@ export class CoachMark {
 
   private markup(): string {
     const { mark } = this.opts;
+    // **Only ever a claim about the line itself.** This badge used to read
+    // "Nothing paused · gauges running", which is a claim about the *engine* —
+    // and an adversarial pass measured the opposite on the running game: the
+    // presenter awaits `HudPort.chooseCommand` and the FFX-2 engine is ticked
+    // only in its `waiting` branch, so the gauges stand still during command
+    // input whether or not a line is up (`?coach=off` behaves identically).
+    // Whether the X-2 clock should run there at all is an Active-vs-Wait
+    // question for the combat core — `research/ffx-vs-ffx2-presentation.md`
+    // §4.2 row "Command input": *Active mode: time runs. Wait mode: time
+    // freezes on entering a submenu* — and it is not this layer's to answer.
+    // What this layer can promise, and what is measurably true, is that the
+    // line holds nothing and asks for nothing: the menu is open underneath it
+    // and the arrows still move the cursor while it fades.
     const running =
       mark.game === 'ffx2'
-        ? '<div class="coach-mark__running">Nothing paused &middot; gauges running</div>'
+        ? '<div class="coach-mark__running">Keep playing &middot; nothing to press</div>'
         : '';
     const foot = mark.holds
       ? '<span><b>Enter</b> continue</span><span>First time only</span>'

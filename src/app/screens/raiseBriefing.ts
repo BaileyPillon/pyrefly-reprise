@@ -18,17 +18,21 @@ import { shouldShow } from '../../ui/coach/coachState.ts';
 /**
  * Build a briefing bound to this `App`.
  *
- * `driven` tells it a screen will pump {@link Briefing.handleInput} itself —
- * what the pause menu does, because raw HUD input is muted while the pause
- * overlay is up and the gamepad would otherwise have no route in.
+ * The claim is **exclusive** (`app/Input.ts`): while the briefing is up no
+ * screen behind it is told about any button, and the frame after it hands input
+ * back every edge is dropped. That is what stops the press that dismissed the
+ * briefing from also being acted on by the chapter board, the title or the
+ * pause menu behind it — the defect an adversarial pass found in the first
+ * build, on all three of them.
  */
-export function makeBriefing(app: App, opts: { driven?: boolean } = {}): Briefing {
+export function makeBriefing(app: App): Briefing {
   const options: BriefingOptions = {
     root: app.uiRoot,
     reduceMotion: app.save?.settings?.reduceMotion ?? false,
   };
-  if (canDriveInput(app)) options.claimKeyboard = (onKey) => app.input.claimKeyboard(onKey);
-  if (opts.driven) options.driven = true;
+  if (canDriveInput(app)) {
+    options.claimKeyboard = (onKey) => app.input.claimKeyboard(onKey, { exclusive: true });
+  }
   return new Briefing(options);
 }
 

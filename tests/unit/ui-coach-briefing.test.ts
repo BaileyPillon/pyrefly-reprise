@@ -27,6 +27,7 @@ import { Briefing } from '../../src/ui/coach/Briefing.ts';
 import { BRIEFING_MS } from '../../src/ui/coach/coachCopy.ts';
 import { battleHelpOn, hasSeen, resetCoach, shouldShow } from '../../src/ui/coach/coachState.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
+import { setRawInputSuspended } from '../../src/ui/ffx/rawInput.ts';
 
 function memoryStorage(): Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> {
   const map = new Map<string, string>();
@@ -152,11 +153,20 @@ describe("Auron's briefing", () => {
     expect(released, 'and handed back on the way out').toBe(true);
   });
 
-  it('a driven briefing (the pause replay) takes input from the screen above it', async () => {
-    const briefing = new Briefing({ root, reduceMotion: true, driven: true });
-    const done = briefing.show();
-    briefing.handleInput({ justPressed: (b) => b === 'confirm' });
-    await expect(done).resolves.toBe('skipped');
+  it('the pause replay dismisses itself while every other HUD watcher is muted', async () => {
+    // The pause overlay mutes raw HUD input so a pad cannot drive the command
+    // menu behind it. The briefing is the overlay that mute protects the fight
+    // from, so it has to keep hearing input itself — the pause screen forwards
+    // it nothing, which is what made the replay unskippable in the first build.
+    setRawInputSuspended(true);
+    try {
+      const briefing = new Briefing({ root, reduceMotion: true });
+      const done = briefing.show();
+      press('Enter');
+      await expect(done).resolves.toBe('skipped');
+    } finally {
+      setRawInputSuspended(false);
+    }
   });
 
   it('prints Auron’s four lines and nothing else', () => {

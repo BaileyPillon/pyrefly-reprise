@@ -76,13 +76,37 @@ export function rawInputSuspended(): boolean {
   return suspended;
 }
 
+export interface RawInputWatcherOptions {
+  /**
+   * Keep reading input while every other watcher is muted.
+   *
+   * For the **overlay that the mute is protecting the game from**, and nothing
+   * else. Auron's briefing can be replayed from the pause menu, where
+   * {@link setRawInputSuspended} is on: without this its own dismiss watcher
+   * would be muted too and a gamepad would have no way to take it down, because
+   * the pause screen behind it is deaf while the briefing owns input.
+   */
+  ignoreSuspend?: boolean;
+}
+
 export class RawInputWatcher {
   private attached = false;
   private rafId = 0;
   private readonly padHeld = new Set<UiButton>();
   private readonly repeatAt = new Map<UiButton, number>();
+  private readonly ignoreSuspend: boolean;
 
-  constructor(private readonly onButton: (button: UiButton) => void) {}
+  constructor(
+    private readonly onButton: (button: UiButton) => void,
+    opts: RawInputWatcherOptions = {},
+  ) {
+    this.ignoreSuspend = opts.ignoreSuspend === true;
+  }
+
+  /** Is this watcher muted right now? */
+  private get muted(): boolean {
+    return suspended && !this.ignoreSuspend;
+  }
 
   attach(): void {
     if (this.attached) return;
@@ -101,7 +125,7 @@ export class RawInputWatcher {
   }
 
   private readonly onKeyDown = (e: KeyboardEvent): void => {
-    if (suspended) return;
+    if (this.muted) return;
     const button = KEY_MAP[e.code];
     if (!button) return;
     if (e.repeat && !DIRECTIONS.has(button)) return;
@@ -115,7 +139,7 @@ export class RawInputWatcher {
     // Keep polling (so the loop is still alive on resume) but report nothing.
     // `padHeld` is deliberately left as it was: a button held across the pause
     // must not fire a fresh edge the moment the menu closes.
-    if (suspended) return;
+    if (this.muted) return;
     const pads = navigator.getGamepads?.() ?? [];
     const next = new Set<UiButton>();
     for (const pad of pads) {

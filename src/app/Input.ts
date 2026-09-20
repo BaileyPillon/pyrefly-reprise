@@ -87,6 +87,9 @@ const PAD_MAP: Record<number, Button> = {
   15: 'right',
 };
 
+/** Shared empty list, so the blind `actions` getter allocates nothing. */
+const EMPTY_ACTIONS: readonly string[] = [];
+
 const AXIS_DEADZONE = 0.45;
 const REPEAT_DELAY_MS = 360;
 const REPEAT_INTERVAL_MS = 110;
@@ -109,6 +112,22 @@ export interface InputSnapshot {
   readonly gamepadConnected: boolean;
   /** Most recent input device, for showing the right button prompts. */
   readonly lastDevice: 'keyboard' | 'gamepad' | 'pointer';
+}
+
+/** What a claimant asked for. See {@link Input.claimKeyboard}. */
+interface KeyboardClaim {
+  onKey: (e: KeyboardEvent) => void;
+  /**
+   * True when the claimant owns **input**, not only the raw keys: no abstract
+   * button is latched for a key it swallows, and no screen behind it is told
+   * about any button at all.
+   */
+  exclusive: boolean;
+}
+
+export interface ClaimOptions {
+  /** See {@link KeyboardClaim.exclusive}. Defaults to `false`. */
+  exclusive?: boolean;
 }
 
 interface ButtonState {
@@ -148,8 +167,17 @@ export class Input implements InputSnapshot {
   private padDown = new Set<Button>();
   private attached = false;
   private now = 0;
-  /** The current exclusive keyboard claimant. See {@link claimKeyboard}. */
-  private keyboardClaim: ((e: KeyboardEvent) => void) | null = null;
+  /** The current keyboard claimant. See {@link claimKeyboard}. */
+  private keyboardClaim: KeyboardClaim | null = null;
+  /**
+   * Frames left to drop every edge, set when an exclusive claim is handed back.
+   *
+   * The press that dismissed an overlay belongs to the overlay. Without this,
+   * whichever of the two gamepad poll loops happened to run first — this class's
+   * `pollGamepads`, or the overlay's own `requestAnimationFrame` — decided
+   * whether the screen behind also acted on it.
+   */
+  private swallowFrames = 0;
 
   constructor(opts: InputOptions = {}) {
     this.pointerRoot =
@@ -203,15 +231,21 @@ export class Input implements InputSnapshot {
     // Chords are left alone so browser shortcuts (Ctrl+R, Cmd+Shift+I) still
     // work while a menu is up.
     const claim = this.keyboardClaim;
-    if (claim && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const claimed = claim !== null && !e.ctrlKey && !e.metaKey && !e.altKey;
+    if (claim && claimed) {
       e.stopImmediatePropagation();
-      claim(e);
+      claim.onKey(e);
     }
 
     const button = KEY_MAP[e.code];
     if (!button) return;
     // Tab and the arrows would otherwise scroll or move focus out of the game.
     if (e.code === 'Tab' || e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
+    // An exclusive claimant consumed this key outright. Stopping the DOM event
+    // is not enough: latching the abstract button here is what used to let the
+    // screen behind an overlay act on the very press that dismissed it, one
+    // frame later.
+    if (claimed && claim?.exclusive) return;
     if (e.repeat) return;
     this.heldKeys.add(e.code);
     this._lastDevice = 'keyboard';
@@ -334,7 +368,30 @@ export class Input implements InputSnapshot {
     }
 
     this.frameActions = this.pendingActions.splice(0, this.pendingActions.length);
+    if (this.swallowFrames > 0) {
+      this.swallowFrames -= 1;
+      this.absorbEdges();
+    }
     return this;
+  }
+
+  /**
+   * Drop every edge that is pending right now.
+   *
+   * Rolling `downPrev` forward by hand is the part that matters: a button still
+   * held when an overlay hands input back must not read as a fresh press, and
+   * must still produce one the next time it is genuinely pressed.
+   */
+  private absorbEdges(): void {
+    for (const b of BUTTONS) {
+      const s = this.state.get(b)!;
+      s.downPrev = s.down;
+      s.latched = false;
+      s.repeated = false;
+      s.consumed = true;
+    }
+    this.pendingActions.length = 0;
+    this.frameActions = [];
   }
 
   /** Call at the very end of the frame to roll edges forward. */
@@ -348,17 +405,29 @@ export class Input implements InputSnapshot {
 
   // --------------------------------------------------------------- snapshot
 
+  /**
+   * True while an exclusive overlay owns input, so every screen behind it is
+   * told there is none. The overlay reads the keyboard through its claim and
+   * the pad through its own watcher; nobody else reads anything.
+   */
+  private get blind(): boolean {
+    return this.keyboardClaim?.exclusive === true;
+  }
+
   pressed(button: Button): boolean {
+    if (this.blind) return false;
     return this.state.get(button)?.down ?? false;
   }
 
   justPressed(button: Button): boolean {
+    if (this.blind) return false;
     const s = this.state.get(button);
     if (!s || s.consumed) return false;
     return (s.down && !s.downPrev) || s.repeated || s.latched;
   }
 
   justReleased(button: Button): boolean {
+    if (this.blind) return false;
     const s = this.state.get(button);
     if (!s) return false;
     return !s.down && s.downPrev;
@@ -372,11 +441,11 @@ export class Input implements InputSnapshot {
   }
 
   get axis(): { x: number; y: number } {
-    return this._axis;
+    return this.blind ? { x: 0, y: 0 } : this._axis;
   }
 
   get actions(): readonly string[] {
-    return this.frameActions;
+    return this.blind ? EMPTY_ACTIONS : this.frameActions;
   }
 
   get gamepadConnected(): boolean {
@@ -410,15 +479,30 @@ export class Input implements InputSnapshot {
    *
    * Claims nest: releasing restores whatever claim was in force before, and
    * releasing twice is a no-op.
+   *
+   * ## `exclusive`
+   *
+   * The pause menu wants the keys *and* its own abstract buttons, so that is
+   * the default. A **modal overlay** — Auron's briefing — wants the opposite:
+   * it is the only thing on screen, and the press that takes it down must not
+   * also be acted on by whatever is behind it. `exclusive` gives it that: the
+   * key latches no button, screens behind read no input at all, and the frame
+   * after the claim is handed back drops every edge, so it makes no difference
+   * whether this class or the overlay's own watcher polled the pad first.
    */
-  claimKeyboard(onKey: (e: KeyboardEvent) => void = () => {}): () => void {
+  claimKeyboard(onKey: (e: KeyboardEvent) => void = () => {}, opts: ClaimOptions = {}): () => void {
     const previous = this.keyboardClaim;
-    this.keyboardClaim = onKey;
+    const claim: KeyboardClaim = { onKey, exclusive: opts.exclusive === true };
+    this.keyboardClaim = claim;
     let released = false;
     return () => {
       if (released) return;
       released = true;
-      if (this.keyboardClaim === onKey) this.keyboardClaim = previous;
+      if (this.keyboardClaim === claim) this.keyboardClaim = previous;
+      if (claim.exclusive) {
+        this.absorbEdges();
+        this.swallowFrames = 1;
+      }
     };
   }
 
