@@ -87,6 +87,26 @@ function sphereLevels(ctx: Ctx, ap: number): Record<CombatantId, number> {
   return out;
 }
 
+/**
+ * Every party member (active or benched) who completed at least one full
+ * turn, mapped to how many — independent of {@link earnedAp}'s AP-eligibility
+ * rule, which also excludes anyone KO'd or petrified at the end. This is the
+ * "did they act" question `sphereLevelsGained` cannot answer on its own: a
+ * reserve member switched in, who fought and was KO'd before the battle
+ * ended, has real `turnsTaken` here but no `sphereLevelsGained` entry.
+ * `resultsMath.ts` reads this to decide who gets a results row at all,
+ * separately from what AP/Sphere Level that row shows (round 04 PR-0003,
+ * second pass — see `docs/handoff/builda1-truthwording.md`).
+ */
+function turnParticipation(ctx: Ctx): Record<CombatantId, number> {
+  const out: Record<CombatantId, number> = {};
+  for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) {
+    const taken = ctx.rt.actors.get(id)?.turnsTaken ?? 0;
+    if (taken > 0) out[id] = taken;
+  }
+  return out;
+}
+
 /** Assemble the result for a finished battle. */
 export function buildBattleResult(
   ctx: Ctx,
@@ -107,6 +127,7 @@ export function buildBattleResult(
     drops,
     overkilled: [...ctx.rt.overkilled],
     sphereLevelsGained: sphereLevels(ctx, ap),
+    turnsTaken: turnParticipation(ctx),
   };
   if (outcome === 'victory' && nextGroupId !== undefined) result.nextGroupId = nextGroupId;
   return result;

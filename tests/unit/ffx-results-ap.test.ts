@@ -352,4 +352,40 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
     expect(kimahriRow?.award).toBe(0);
     expect(kimahriRow?.levelDelta).toBe(0);
   });
+
+  /**
+   * Round 04 repair, second pass (2026-09-20): the verifier refuted the first
+   * PR-0003 fix. That fix unioned a reserve member into the row set only when
+   * they were a `sphereLevelsGained` key — AP eligibility — but §10.1's AP
+   * rule *also* excludes anyone KO'd or petrified at the end, so a reserve
+   * member who switched in, fought, and was KO'd before the battle ended had
+   * no `sphereLevelsGained` entry and so still got no row: the exact defect
+   * PR-0003 is named after, surviving inside the "fix". These three seeds are
+   * the verifier's own reproduction (`critic/scratch/builda1-repair/v6-reserve.test.ts`),
+   * run here against the real engine and the real `intendedStrategy`, never a
+   * hand-built fixture. `gagazetBuild.reserve` is
+   * `['auron', 'wakka', 'lulu', 'rikku']`; `intendedStrategy` switches Auron
+   * in on all three.
+   */
+  it.each([12, 8, 3])(
+    'a reserve member (Auron) who switched in and took turns gets a row, even KO\'d at the end (seed %i)',
+    (seed) => {
+      const result = runSeymourFlux(seed);
+      const chapter = getChapter('seymour-flux');
+      const rows = buildMemberRows(chapter, result);
+      const ids = rows.map((r) => r.id);
+
+      const auronTurns = result.turnsTaken?.['auron'] ?? 0;
+      // Sanity on the scenario shape itself: Auron must actually have acted,
+      // or this test is not exercising the bug.
+      expect(auronTurns).toBeGreaterThan(0);
+
+      // The bug: Auron completed real turns but has no results row.
+      expect(ids).toContain('auron');
+      const auronRow = rows.find((r) => r.id === 'auron');
+      // Whatever AP/S.Lv he did or didn't earn, the row itself must exist and
+      // never crash on a missing `member` lookup.
+      expect(auronRow?.name).toBe('Auron');
+    },
+  );
 });

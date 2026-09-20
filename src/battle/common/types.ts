@@ -2107,6 +2107,18 @@ export interface BattleResult {
   /** Levels gained this battle, keyed by member id (FFX-2 only). */
   levelsGained?: Record<CombatantId, number>;
   /**
+   * Party member ids (FFX only) who completed at least one full turn this
+   * battle, mapped to how many turns — present only for a completed turn, so
+   * `Object.keys()` is the participation set. Deliberately **separate** from
+   * {@link sphereLevelsGained}'s AP-eligibility rule, which also excludes
+   * anyone KO'd or petrified at the end (`ffx-combat-core.md` §10.1): a
+   * reserve member who switched in, fought and was KO'd before the battle
+   * ended took real turns and must still get a results row (round 04
+   * PR-0003, second pass) even though they earn no AP. `sphereLevelsGained`
+   * alone cannot answer "did they act", only "do they earn AP".
+   */
+  turnsTaken?: Record<CombatantId, number>;
+  /**
    * The formation that follows this one with no menu between, copied from
    * {@link EnemyGroupDef.nextGroupId} on a victory. Present only when this
    * battle was a link in a chain (Yunalesca's forms, the Vegnagun chain).

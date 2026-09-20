@@ -203,12 +203,22 @@ function sphereGridDetail(sLv: number, bankedAp: number, levelsGained: number): 
  * one member KO'd at the end silently dropped them from the list.
  *
  * The row set is now the roster — `build.activeSlots` plus any reserve
- * member who is a `sphereLevelsGained` key (i.e. took a turn; see
- * `earnedAp`'s doc in `results.ts`) — ordered active-then-reserve for a
- * stable row order, and `sphereLevelsGained` is read only to decide each
- * row's own AP/S.Lv: a member the sourced rule excludes still gets a row,
- * with 0 AP and no Sphere Level badge, exactly as FFX-2's screen (and FFX
- * itself) already does for a KO'd or benched member.
+ * member who **took a turn**, ordered active-then-reserve for a stable row
+ * order — and `sphereLevelsGained` is read only to decide each row's own
+ * AP/S.Lv: a member the sourced rule excludes still gets a row, with 0 AP
+ * and no Sphere Level badge, exactly as FFX-2's screen (and FFX itself)
+ * already does for a KO'd or benched member.
+ *
+ * The first pass at this (round 04, first repair) read "took a turn" as
+ * "is a `sphereLevelsGained` key", which the verifier refuted: that key set
+ * is AP eligibility (`earnedAp`'s doc in `results.ts`), which *also* excludes
+ * anyone KO'd or petrified at the end — so a reserve member who switched in,
+ * fought, and was KO'd before the battle ended (Chapter 1, seeds 3/8/12,
+ * Auron) had no `sphereLevelsGained` entry and so no row at all, the exact
+ * defect this fix is named after. `result.turnsTaken` (`results.ts`,
+ * `BattleResult` per `docs/CONTRACT-CHANGES.md`) tracks turn participation on
+ * its own, so the row set now unions reserve members from **either** set:
+ * `sphereLevelsGained` (earned AP) or `turnsTaken` (acted at all).
  *
  * **FFX-2 only** has one build.members loop below, unaffected by this: it
  * is not a chained-switch roster, and `result.levelsGained` was already
@@ -223,8 +233,10 @@ export function buildMemberRows(
 
   if (build.game === 'ffx') {
     const earnedIds = new Set(Object.keys(result.sphereLevelsGained));
-    const known = [...build.activeSlots, ...build.reserve.filter((id) => earnedIds.has(id))];
-    for (const id of earnedIds) if (!known.includes(id)) known.push(id);
+    const actedIds = new Set(Object.keys(result.turnsTaken ?? {}));
+    const listedIds = new Set([...earnedIds, ...actedIds]);
+    const known = [...build.activeSlots, ...build.reserve.filter((id) => listedIds.has(id))];
+    for (const id of listedIds) if (!known.includes(id)) known.push(id);
     return known.map((id) => {
       const member = build.members.find((m) => m.id === id);
       const eligible = earnedIds.has(id);

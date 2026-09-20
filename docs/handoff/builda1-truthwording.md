@@ -292,3 +292,106 @@ plumbing, not a game-specific claim.
 
 None of the touched source files are listed in `docs/CONTRACTS.md`; no `CONTRACT-CHANGES.md`
 entry needed.
+
+## Round 04 repair, second pass (2026-09-20)
+
+The adversarial verifier read `docs/handoff/builda1-repair-verify.json` and refuted the PR-0003
+half of the batch above: PARTIALLY FIXED, not FIXED. (PR-0009, the strategy-guide track's item, was
+also refuted, but that track's own handoff owns it — not touched here.)
+
+### What the verifier found
+
+The first pass's fix (§ "PR-0003 (major, FFX)" above) unioned a reserve member into the row set
+only when they were a `sphereLevelsGained` key — i.e. only when they *earned AP*. But
+`ffx-combat-core.md` §10.1's AP rule reads "Every party member who took at least one full turn
+earns AP... Characters switched out during their first turn, **KO'd, or petrified at the end earn
+nothing**" — so a reserve member who switched in, completed several real turns, and was then KO'd
+before the battle ended is excluded from `sphereLevelsGained` for the *same reason* a member who
+never acted at all is: both read as "not eligible". The row-set union could not tell them apart,
+so the acted-but-died member still got no row — the defect the issue is titled after
+("a KO'd member vanishes"), surviving inside the fix that was supposed to close it.
+
+Seed sweep on the real engine (verifier's own numbers, Chapter 1 `seymour-flux`/`gagazetBuild`
+against the shipped `intendedStrategy`): seed 12 (defeat) — Auron, reserve, switched in, completed
+14 actions, died on the field, no row; seed 8 (victory) — Auron completed 2 actions, KO'd at the
+end, no row; seed 3 (defeat) — Auron completed 1 action, KO'd at the end, no row.
+
+### Root cause
+
+Conflating "earned AP" and "took a turn" a second time, one level down from the first pass's bug:
+`sphereLevelsGained`'s keys are the *only* signal `resultsMath.ts` had for "did this member act",
+and that signal is AP eligibility, which is strictly narrower than turn participation (it also
+excludes anyone dead or petrified at the end). There was no independent "took a turn" signal on
+`BattleResult` at all.
+
+### Fix — carry turn participation separately from AP eligibility, additively
+
+**`src/battle/common/types.ts`** (a `docs/CONTRACTS.md` file — entry added to
+`docs/CONTRACT-CHANGES.md`, newest first): `BattleResult` gains
+`turnsTaken?: Record<CombatantId, number>`, additive and optional, FFX only in practice today.
+Its keys are the participation set the way `sphereLevelsGained`'s keys are the eligibility set:
+present only for a member who completed at least one full turn, mapped to how many.
+
+**`src/battle/ffx/results.ts`**: new `turnParticipation(ctx)`, reading
+`ActorRuntime.turnsTaken` (`state.ts`, already tracked for `earnedAp`) over the *full* roster
+(`ctx.state.activeIds` + `ctx.state.reserveIds`) with **no** alive/KO/petrify filter — deliberately
+the one place that filter is absent, since the whole point is to count a turn that happened even
+if the actor died afterward. Wired into `buildBattleResult` as `turnsTaken`.
+
+**`src/ui/common/resultsMath.ts`, `buildMemberRows`**: the FFX row set is now
+`build.activeSlots` plus any reserve member in **either** `sphereLevelsGained`'s keys or
+`turnsTaken`'s keys (`listedIds`, the union) — not `sphereLevelsGained` alone. `sphereLevelsGained`
+still, and only, decides each row's own AP/S.Lv (`eligible = earnedIds.has(id)`, unchanged): a
+member who acted but is AP-ineligible still reads 0 AP / no badge, exactly as the first pass
+intended for the KO'd-active-member case.
+
+### Test — reproduced first, on the real engine, per hard rule 3
+
+`tests/unit/ffx-results-ap.test.ts`, new `it.each([12, 8, 3])` case inside the existing
+`describe('PR-0003: ...')` block, reusing that block's own `runSeymourFlux(seed)` helper (real
+`FFXContentRegistry` + `createFFXEngine`, real `gagazetBuild`, real `ENEMY_GROUPS_BY_ID['seymour-flux']`,
+the shipped `intendedStrategy` — the verifier's exact reproduction shape, never a hand-built
+fixture): asserts Auron (`result.turnsTaken['auron'] > 0`, a scenario-shape sanity check) gets a
+results row for all three seeds. Confirmed failing on the pre-fix `resultsMath.ts` logic first
+(temporarily reverted the row-set union back to `sphereLevelsGained`-only, ran the file, all three
+new cases failed with `expected [...] to include 'auron'`, restored the fix) before relying on it
+as a regression guard.
+
+**Existing cases left untouched and still green**, including the previously locked "switched out
+on their very first turn... gets no row at all" case (that member is in neither set, so the union
+changes nothing for it) and the FFX-2 parity case (`build.members`/`result.levelsGained`, entirely
+separate code path).
+
+**Verifier's own sweep, run without editing it, green:**
+`npx vitest run --config critic/scratch/builda1-repair/vitest.scratch.config.ts critic/scratch/builda1-repair/v6-reserve.test.ts`
+— 1 file, 1 test, passed (`no misses` logged for the seed 1-12 sweep over all four reserve members).
+
+### Game case: FFX only
+
+Same as the first pass and item 4 above: `research/ffx-combat-core.md` §10.1's switch/reserve
+roster and AP-eligibility rule are FFX Sphere Grid mechanics. FFX-2 has no reserve/switch concept
+at all (`research/ffx-vs-ffx2-presentation.md`: X-2 fields three girls with no bench), so
+`turnsTaken` is never populated on an FFX-2 result and `buildMemberRows`'s FFX-2 branch
+(`build.members`/`result.levelsGained`) is untouched and unaffected — asserted by the existing FFX-2
+parity test, still green.
+
+### Verification (this pass)
+
+- `npx tsc --noEmit`: clean.
+- `npx vitest run tests/unit/ffx-results-ap.test.ts tests/unit/ui-common-results.test.ts tests/unit/results-inkgold.test.ts`:
+  46/46 green (targeted, while iterating).
+- Verifier's sweep (`critic/scratch/builda1-repair/v6-reserve.test.ts`, own config, not edited):
+  1/1 green.
+- One full `npx vitest run`: **162 files, 4282 tests, all green** (up from the 4279 baseline named
+  in the repair brief by the 3 new seed cases here).
+- No push, no deploy, no npm install, no downloads, no ComfyUI. `D:/pyrefly-release` never touched.
+
+### Files touched (this pass)
+
+- `src/battle/common/types.ts` — `BattleResult.turnsTaken?` (additive, contract file)
+- `docs/CONTRACT-CHANGES.md` — entry for the above
+- `src/battle/ffx/results.ts` — new `turnParticipation`, wired into `buildBattleResult`
+- `src/ui/common/resultsMath.ts` — `buildMemberRows`'s FFX row set now unions `sphereLevelsGained`
+  and `turnsTaken`, doc comment updated
+- `tests/unit/ffx-results-ap.test.ts` — new seed 3/8/12 cases
+- `docs/handoff/builda1-truthwording.md` (this file)

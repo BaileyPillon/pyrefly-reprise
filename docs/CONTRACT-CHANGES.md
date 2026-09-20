@@ -6,6 +6,30 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-20 — results: `BattleResult` carries turn participation separately from AP eligibility
+
+Key `builda1-repair` (round 04 repair, second pass — the verifier refuted the
+first PR-0003 fix). **FFX only** [AGENTS.md hard rule 14]: the switch/reserve
+roster and the AP-eligibility rule this closes a gap in are both FFX Sphere
+Grid mechanics (`research/ffx-combat-core.md` §10.1); FFX-2 has no chained
+reserve concept and its own `levelsGained` path is untouched. Additive and
+optional; nothing about AP, Sphere Levels or outcome resolution changes.
+
+**`BattleResult.turnsTaken?: Record<CombatantId, number>`** (`src/battle/common/types.ts`),
+set by `src/battle/ffx/results.ts`'s `buildBattleResult` from `ActorRuntime.turnsTaken`
+over the full roster (`activeIds` + `reserveIds`), independent of `alive`/`ko`/`petrify`.
+`sphereLevelsGained`'s keys answer "did this member earn AP" (excludes anyone
+KO'd or petrified at the end); `turnsTaken`'s keys answer "did this member act
+at all". The verifier found the first PR-0003 fix still conflated the two:
+`src/ui/common/resultsMath.ts`'s `buildMemberRows` unioned reserve members into
+the row set only when they were a `sphereLevelsGained` key, so a reserve member
+who switched in, took turns, and was KO'd before the battle ended (Chapter 1,
+seeds 3/8/12, Auron) had no row at all — the defect PR-0003 is titled after,
+surviving inside the "fix". `buildMemberRows` now unions reserve members from
+**either** set, so a member who acted always gets a row (0 AP when ineligible),
+and a member switched out before completing a turn (never in either set) still
+correctly gets none.
+
 ## 2026-09-19 — targeting: `AvailableCommand` carries the ability's own `targeting`
 
 Key `fix3-targeting`. **Both games** [AGENTS.md hard rule 14, critic CHK-020]:
