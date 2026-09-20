@@ -45,8 +45,15 @@ export const yuYevonAi = (ai: AiContext): Command | null => {
   const idle = num(ai.memory, IDLE, 0);
   ai.memory[IDLE] = idle === 0 ? 1 : 0;
   if (idle === 0) return null;
-  // Gravija hits every target on the field, Yu Yevon included.
-  return use(ai, 'gravija', [...party, ai.self.id]);
+  // Gravija "removes exactly 75% of current HP from **every target on the
+  // field** — including Yu Yevon himself" [ffx-bfa-yu-yevon §3.3, verified: 2
+  // sources]. "Every target on the field" is every target: the two Yu Pagodas
+  // are on it too, and leaving them out of the list was what kept them topped
+  // up while they healed him, so the attrition route §3.5 documents could never
+  // land. The record already carries `targeting: 'all'` and
+  // `extra.includesUser`, so an empty target list lets `targeting.ts` expand it
+  // to the whole field rather than the hand-built party-plus-self list.
+  return use(ai, 'gravija', []);
 };
 
 /**

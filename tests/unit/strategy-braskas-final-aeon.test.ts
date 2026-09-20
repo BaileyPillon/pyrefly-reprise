@@ -358,9 +358,24 @@ describe('the shipped intended strategy beats Chapter 3', () => {
  *
  * With this party's best single action worth about 3,700 and the counter-heal
  * capped at 9,999, **every swing is a net heal of six thousand**. The wrapper
- * below plays the obvious game — hit the boss — and the assertion is not merely
- * that it fails to win but that his HP is *no lower than it started*, which is
- * the specific, legible shape of the failure §3.5 exists to warn about.
+ * below plays the obvious game — hit the boss — and what it measures is that
+ * swinging buys nothing: the fight is not won by the party's damage.
+ *
+ * **What it used to assert, and why that changed (Build A.1).** Until round 03
+ * blockers #15 and #16a were fixed this block asserted that the swinging line
+ * never ends and leaves him above 80,000 HP. That was not the research; it was
+ * two defects. (a) `collectBossCounters` never checked `attacker.side`, so
+ * every Yu Pagoda Power Wave aimed at him fired his own 9,999 Curaga — a row
+ * §3.4.1's table scores at **0** — and the two Pagodas healed him faster than
+ * anything could hurt him. (b) His Gravija's target list was hand-built as
+ * party-plus-self, though §3.3 says it "removes exactly 75% of current HP from
+ * **every target on the field**", so the Pagodas were never in its blast and
+ * never suppressed. With both fixed, §3.5's stated attrition route works as
+ * documented — "when Gravija starts showing 0, he is at 1 HP and any hit
+ * finishes him" — and the group record's "Cannot be lost" holds. So a party
+ * that does nothing but swing at him *does* eventually see him die, from his
+ * own Gravija, after hundreds of turns. That is the shape this block now pins:
+ * the counter still eats every swing, and the slow route stays slow.
  *
  * It reaches Yu Yevon by playing the shipped line for the first six links and
  * only overriding on the last one, so this measures the counter and nothing
@@ -368,7 +383,7 @@ describe('the shipped intended strategy beats Chapter 3', () => {
  */
 describe('out-damaging Yu Yevon stays a losing tactic', () => {
   for (const seed of [1, 42]) {
-    it(`a party that swings at him cannot move his HP (seed ${seed})`, () => {
+    it(`a party that swings at him wins only the slow way (seed ${seed})`, () => {
       let swings = 0;
       const r = runChain(seed, dreamsEndBuild, (d, engine) => {
         const state = engine.state();
@@ -389,15 +404,20 @@ describe('out-damaging Yu Yevon stays a losing tactic', () => {
         EXPECTED_LINKS,
       );
       expect(swings, 'the wrapper must actually have swung at him').toBeGreaterThan(10);
-      // And then the counter ate all of it. His own Gravija still quarters him
-      // now and then — that is §3.5's attrition route, and it is the *only*
-      // thing that moves his bar — so the assertion is that thousands of swings
-      // bought nothing: he finishes the run above 80 % of a 99,999-HP shell,
-      // and the party never wins.
-      expect(r.outcome, 'swinging at Yu Yevon must not win').not.toBe('victory');
-      const hp = Number(/yu-yevon (\d+)\//.exec(r.trail.at(-1) ?? '')?.[1] ?? 0);
-      expect(hp, 'the 9,999 Curaga counter must out-heal everything the party can swing').toBeGreaterThan(
-        80_000,
+
+      // The counter ate every swing; the only thing that moved his bar was his
+      // own Gravija, and §3.5 says that route ends at 1 HP with "any hit"
+      // finishing him. So the fight ends — after hundreds of turns of it.
+      expect(r.outcome, 'the fight has to reach an outcome').toBe('victory');
+      const lastLink = r.trail.at(-1) ?? '';
+      expect(lastLink, 'the last link in the trail must be Yu Yevon').toContain('yu-yevon');
+      const turns = Number(/turn=(\d+)/.exec(lastLink)?.[1] ?? 0);
+      // The shipped line (`intendedStrategy`, above) takes about 200 turns for
+      // the whole seven-link chain. Swinging at him takes that many on the last
+      // link alone: out-damaging the counter is still not a route this party
+      // has, which is what §3.5 warns about.
+      expect(turns, 'swinging must stay the slow route, not a way to out-damage him').toBeGreaterThan(
+        300,
       );
       // This one deliberately runs the last link to its decision ceiling, so it
       // is the slowest block in the file; the budget is for a loaded machine.

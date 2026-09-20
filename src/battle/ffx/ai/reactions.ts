@@ -42,6 +42,21 @@ export function collectBossCounters(
   const out: BossCounter[] = [];
   if (def.flags.includes('is-counter')) return out;
 
+  // **Only a player-side action provokes a counter.**
+  //
+  // `ffx-bfa-yu-yevon §3.4.1` states the rule as "at most one Curaga per
+  // **player-side action** that deals him damage", and its own table scores the
+  // enemy-side rows at **0** Curagas: "Yu Yevon's Curaga counter" excludes
+  // "Gravija's self-damage", "Yu Pagoda Power Wave" and the counter's own
+  // Zombie-inverted damage. Without this guard a Pagoda's Power Wave on Yu
+  // Yevon fired his 9,999 Curaga on the boss's own behalf — round 03 blocker
+  // #15 measured one Curaga per Power Wave, against the research's 0 — and the
+  // free healing is what made his attrition route unreachable.
+  //
+  // `ffx-yunalesca §14.11` draws the same line for her counters: they answer
+  // what the *party* did.
+  if (attacker.side === 'enemy') return out;
+
   for (const id of damagedEnemyIds) {
     const enemy = tryActor(ctx, id);
     if (!enemy || enemy.side !== 'enemy') continue;

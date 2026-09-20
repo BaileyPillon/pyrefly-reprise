@@ -17,6 +17,7 @@ import {
   type Ctx,
   FFXContentRegistry,
   applyStatus,
+  resolveTargets,
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { ability, enemy, setup } from './ffx-fixtures.test.ts';
@@ -433,7 +434,7 @@ describe("Braska's Final Aeon (§1.6)", () => {
 // ---------------------------------------------------------------------------
 
 describe('Yu Yevon (§3.4)', () => {
-  it('alternates a scripted no-op with Gravija, which also hits himself', () => {
+  it('alternates a scripted no-op with Gravija, which also hits himself', async () => {
     const { ctx } = makeCtx({
       enemies: {
         id: 'yy',
@@ -456,7 +457,23 @@ describe('Yu Yevon (§3.4)', () => {
     expect(chooseAiCommand(ctx, boss)).toBeNull();
     const gravija = chooseAiCommand(ctx, boss);
     expect(idOf(gravija)).toBe('gravija');
-    expect(gravija?.targets).toContain('yu-yevon');
+
+    // §3.3: Gravija "removes exactly 75% of current HP from **every target on
+    // the field** — including Yu Yevon himself" `[verified: 2 sources]`. The
+    // script used to hand-build that list as party-plus-self, which quietly
+    // left his two Yu Pagodas out of his own blast (round 03 blocker #16a). It
+    // now submits an empty list and lets `targeting.ts` expand the shipped
+    // record's `targeting: 'all'` over the whole field, so the reach is
+    // asserted on the resolved targets and on the record, not on the command.
+    expect(gravija?.targets, 'the script must defer to the record').toEqual([]);
+    const { gravija: gravijaDef } = await import(
+      '../../src/data/ffx/enemies/braskas-final-aeon-abilities.ts'
+    );
+    expect(gravijaDef.targeting).toBe('all');
+    expect(gravijaDef.extra?.['includesUser']).toBe(true);
+    const reach = resolveTargets(ctx, boss, gravijaDef, gravija?.targets ?? []).map((c) => c.id);
+    expect(reach, 'Gravija must catch Yu Yevon himself').toContain('yu-yevon');
+
     expect(chooseAiCommand(ctx, boss)).toBeNull();
   });
 
