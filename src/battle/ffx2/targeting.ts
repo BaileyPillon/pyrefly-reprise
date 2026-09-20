@@ -250,10 +250,22 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
     for (const id of offered) {
       const ability = ctx.abilities.get(id);
       if (!ability) continue;
-      // The generic row above is already this dressphere's one Attack; an
-      // attack-category entry here would only ever be that same command a
-      // second time (round 03 gate major — see the function doc comment).
-      if (ability.category === 'attack') continue;
+      // The generic row above is already this dressphere's one Attack, so skip
+      // **that exact record** and nothing else.
+      //
+      // Round 03's fix filtered by `category === 'attack'`, which is wider than
+      // the duplicate it was aimed at: every attack-category *ability* a
+      // dressphere owns went with it. Audited over the shipped tables (round 04
+      // PR-0024): Lady Luck lost Tantalize and Trainer lost its whole pet kit —
+      // Kogoro Blaze, Doom Kogoro, Pound!, Sneaky Ghiki, Ghiki Gouge, Bully
+      // Ghiki, Maulwings! — although Trainer ships no `x2-trainer-attack` and so
+      // never had a duplicate to fix at all. Identity, not category:
+      // `x2-<sphere>-attack` is the id convention every dressphere's own generic
+      // attack follows, and `hasAttack` is what put the row above on screen.
+      //
+      // FFX-2 only: this is the ATB engine's command builder. FFX's CTB menu is
+      // built in `src/battle/ffx/commands.ts` and never had this row.
+      if (id === `x2-${sphereId}-attack`) continue;
       const mpCost = effectiveMpCost(actor, ability);
       const reason = disabledReason(actor, ability, mpCost);
       out.push({
