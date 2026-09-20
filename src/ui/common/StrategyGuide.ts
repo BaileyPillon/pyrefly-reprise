@@ -454,7 +454,8 @@ export class StrategyGuide {
    * Every visible text line's bottom edge inside {@link bodyEl}, measured
    * from `bodyEl`'s own top (which is where `available` above is measured
    * from too — `.sgd__body` carries no margin or padding of its own, so its
-   * top edge *is* `.sgd__panel`'s content-box top).
+   * top edge *is* `.sgd__panel`'s content-box top) and converted into the
+   * same unscaled 640x360 stage-grid units `available`/`budget` are in.
    *
    * A single `Range` over the whole body, rather than one per element,
    * because a `Range.getClientRects()` already returns one rect per wrapped
@@ -463,6 +464,16 @@ export class StrategyGuide {
    * jsdom implements neither layout nor (reliably) this API, so this returns
    * `[]` there and {@link lastWholeLineBelow} falls back to the uncautious
    * height, exactly as documented on {@link StrategyGuide.fit}.
+   *
+   * Round 04 PR-0009: `getClientRects()`/`getBoundingClientRect()` report
+   * **transformed screen pixels**, because `FFXBattleHud.layout()` /
+   * `LetterboxStage.createStage()` scale an ancestor of this panel to fit the
+   * real viewport (`min(w/640, h/360)` — 2.5x at Bailey's 1600x900, ~2.81x at
+   * 2000x1012). `available`/`budget`/`MORE_HEIGHT` never pass through that
+   * transform, so handing `lastWholeLineBelow` the raw rect numbers compares
+   * two different units and finds a line that only coincidentally satisfies
+   * the arithmetic — not the true last whole line. {@link currentScale}
+   * divides the measurement back down to stage-grid units first.
    */
   private measureLineBottoms(): number[] {
     try {
@@ -471,10 +482,38 @@ export class StrategyGuide {
       const rects = range.getClientRects();
       if (!rects || rects.length === 0) return [];
       const top = this.bodyEl.getBoundingClientRect().top;
-      return Array.from(rects, (r) => r.bottom - top);
+      const scale = this.currentScale();
+      return Array.from(rects, (r) => (r.bottom - top) / scale);
     } catch {
       return [];
     }
+  }
+
+  /**
+   * The letterbox stage's current scale factor, recovered without needing a
+   * reference to whichever stage element actually applies it.
+   *
+   * A CSS `transform` on an ancestor changes what `getBoundingClientRect()`
+   * reports (screen pixels) but never `offsetHeight` (the element's own,
+   * pre-transform layout height) — the transform never touches layout, only
+   * paint. So the ratio between {@link bodyEl}'s measured height and its own
+   * `offsetHeight` *is* the ambient scale, for either stage implementation
+   * (`LetterboxStage.createStage`'s published `--lb-scale` custom property,
+   * or `FFXBattleHud.layout()`'s inline `scale(...)`, which sets no such
+   * property) and at any ancestor depth.
+   *
+   * Falls back to 1 — plain, unscaled px — whenever either side is
+   * unmeasurable: jsdom (no layout at all, matching {@link measureLineBottoms}'s
+   * own jsdom fallback), a body with no rendered height yet, or a panel not
+   * yet mounted into a scaled stage. A wrong scale would silently reintroduce
+   * this exact defect, so this never guesses past what it can measure.
+   */
+  private currentScale(): number {
+    const rectHeight = this.bodyEl.getBoundingClientRect().height;
+    const localHeight = this.bodyEl.offsetHeight;
+    if (!rectHeight || !localHeight) return 1;
+    const scale = rectHeight / localHeight;
+    return Number.isFinite(scale) && scale > 0 ? scale : 1;
   }
 
   /**

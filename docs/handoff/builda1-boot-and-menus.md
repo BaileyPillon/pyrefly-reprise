@@ -241,6 +241,129 @@ itself was not actually on screen. Real GPU-mode Playwright (`node <script>.mjs`
 `PYREFLY_BROWSER=gpu`, `tools/browser-mode.mjs`) was used instead once this was diagnosed, per
 `docs/DEV.md` "Fast browser". No fallback to the default SwiftShader mode was needed.
 
+## Round 04 repair (2026-09-20)
+
+**Item:** critic round 04 PR-0009 (major, both games) — critic/rounds/round-04.json / round-04.md. This
+build's own round-03 fix (item 2 above) did not hold at a real letterbox scale: at 1600x900 the panel
+still ended part-way through "PHASE 1", and at 2000x1012 (Bailey's own size) the MORE chip had no
+backing plate and landed directly on the second body line.
+
+### Confirmed root cause
+
+The critic's suspected cause was right. `StrategyGuide.measureLineBottoms()` derived line bottoms from
+`Range.getClientRects()` and `bodyEl.getBoundingClientRect()`, which report **transformed screen
+pixels** once an ancestor is scaled (`FFXBattleHud.layout()` / `FFX2BattleHud.layout()` /
+`LetterboxStage.createStage()` all apply a uniform `scale(min(w/640, h/360))`), while `available`,
+`budget` and `MORE_HEIGHT` in `layout()` are unscaled 640x360 stage-grid pixels a transform never
+touches. `lastWholeLineBelow` was handed one set of numbers in real px and asked to compare them
+against a limit in grid px — at any scale other than 1 (every viewport except an exact 640x360
+window) it either found no candidate (falling back to the raw, uncautious `budget`, reproducing the
+original slice) or a numerically-coincidental one, not the true last line.
+
+Reproduced first as a unit test (`tests/unit/strategy-guide-scale.test.ts`), confirmed against the
+pre-fix source: feeding `Range.getClientRects()` bottoms pre-multiplied by 2.5 (the exact scale
+`FFXBattleHud.hudScale()` computes at 1600x900) into the identical anchor/budget setup
+`strategy-guide-fold.test.ts` already uses (scale-1, expected last whole line 172) returned **100**,
+not 172 — a different, wrong line, exactly the class of defect the critic traced.
+
+### Fix — `src/ui/common/StrategyGuide.ts`
+
+- New private `currentScale()`: a CSS transform on an ancestor changes what `getBoundingClientRect()`
+  reports but never `offsetHeight` (transforms affect paint, not layout), so the ratio between
+  `bodyEl`'s measured height and its own `offsetHeight` *is* the ambient letterbox scale — for either
+  stage implementation (`LetterboxStage`'s published `--lb-scale` custom property, or
+  `FFXBattleHud`/`FFX2BattleHud`'s own inline `scale(...)`, which sets no such property) and at any
+  ancestor depth, with no dependency on which one mounted the panel. Falls back to `1` when either side
+  is unmeasurable (jsdom, an unlaid-out panel), matching the existing "no data" fallback.
+- `measureLineBottoms()` now divides every rect's distance from `bodyEl`'s top by `currentScale()`
+  before returning it, so `lastWholeLineBelow` compares stage-grid units to stage-grid units, as it
+  always assumed.
+- No change to the MORE-chip reservation math itself (`budget`/`clampedHeight`/`moreEl.style.top` in
+  `layout()`): once the units match, the existing "reserve `MORE_HEIGHT` grid px below the last whole
+  line" logic from round 03 is correct on its own terms.
+
+### Game case: both
+
+`StrategyGuide.ts` and its stylesheet carry no game branch other than the accent colour
+(`sgd--ffx2`), same finding as round 03 item 2. Verified against **both** HUD implementations
+(`FFXBattleHud.layout()`'s inline `scale(...)` and `FFX2BattleHud.layout()`'s own, separate
+`stageScale`/`--ffx2-scale`) — `currentScale()` reads neither directly, only `bodyEl`'s own measured
+vs. layout height, so it does not care which one is in play. `research/*.md` has no bearing here (this
+is presentation plumbing, not sourced game data; hard rule 6 does not apply and hard rule 14's "both"
+branch is the one the sources — `AGENTS.md` rule 14's own worked example, "shared plumbing and bug
+fixes are both" — name for this case).
+
+### Test — `tests/unit/strategy-guide-scale.test.ts` (1 case)
+
+Real `StrategyGuide`, stubbed `Range.prototype.getClientRects` and a stubbed `bodyEl.offsetHeight` /
+`getBoundingClientRect()` pair standing in for a 2.5x-scaled ancestor (Bailey's 1600x900). Fails
+against the pre-fix source (returns 100 instead of 172, confirmed by running it before applying the
+fix); passes after. `tests/unit/strategy-guide-fold.test.ts`'s 7 existing cases (scale-1 arithmetic and
+CSS checks) are unaffected and still pass.
+
+### Live verification (GPU-mode Playwright, `PYREFLY_BROWSER=gpu`, own `vite preview` server on a
+scratch `dist-guide-verify` build — never the shared `dist/` — port 5601, stopped after)
+
+**FFX-2 Chapter 4 (`ffx2-bahamut`), all five required viewports** (1280x720, 1600x900, 2000x1012,
+2560x1080, 3840x2160), command menu open so MORE shows:
+`docs/screenshots/builda1/guide/ffx2-bahamut-<w>-<h>.png`, raw numbers in
+`docs/screenshots/builda1/guide/measurements.json`. At every viewport the panel's own rendered height
+matches `panelEl.style.maxHeight * scale` to within 1 real px (2px at 3840x2160, a sub-pixel rounding
+accumulation at a 6x scale factor, not a functional miss), and `currentScale()`'s measured value
+matches the HUD's own `min(w/640, h/360)` to 3-4 decimal places at every size — the exact unit-mismatch
+PR-0009 named is closed, independent of which line in the body counts as "the last one". Visually
+confirmed on all five: the panel always ends on a complete sentence/line, and the "▾ MORE" chip sits
+in the blank strip below it, never over a glyph (checked closely at 1280x720 and 2000x1012 with a
+cropped zoom of the panel).
+
+**FFX Chapter 1 (`seymour-flux`) and Chapter 3 (`braskas-final-aeon`): not verified live this round —
+blocked, reported rather than guessed.** Both chapters reliably reach `screen: 'battle'` with the
+command stack mounted (`.ig-cmd-stack` present) but never populate a first row (`.ig-cmd`) within a
+180-second wait, at `setBattleSpeed('fast')` set immediately after `gotoChapter` fires. This is not a
+rendering-speed problem — `window.__pyrefly.snapshotState()` taken mid-wait shows `frameCount`
+advancing at a healthy clip (282 to 466 over 3.2s, ~57 fps, matching DEV.md's own GPU-mode number) and
+`elapsed` tracking real wall-clock time 1:1 — and it is not this fix: `StrategyGuide` never mounts
+until a decision opens, so this stall sits entirely upstream of the file this track owns, in FFX's own
+battle-flow/CTB timing. It reproduced identically against a prebuilt `vite preview` bundle (not just a
+cold dev server) and survived pressing Enter three times mid-wait. It is consistent with two things
+already on record and not part of this track's brief: NOW.md's own open item 6 ("Chapter 1 did not
+reach a first player turn within 40s on a saturated machine (unproven)... re-test on a quiet machine
+before calling it a bug") and the round-04 delivery finding that Chapter 1's win rate on the intended
+line is 57-65% versus Chapter 4's 40/40 — both point at FFX's own first-turn pacing being slower and
+more variable than FFX-2's, not at anything this track touched. No screenshot exists for either —
+the harness only captures one after the command-menu wait succeeds, and both timed out — but
+`measurements.json` records the two 180-second timeouts verbatim, including the selectors and
+chapter ids attempted, for whoever picks this back up.
+
+Because the fix itself carries no chapter- or game-specific branch (confirmed above, "both"), and the
+mechanism was verified against a real, independently-implemented HUD (`FFX2BattleHud`, which computes
+its own scale and never reads `LetterboxStage`'s `--lb-scale`), this is treated as sufficient evidence
+that the same fix holds for FFX's `FFXBattleHud` — but that is inference, not a live check, and
+whoever next has a working FFX battle-flow harness should still spend the five minutes to run the four
+FFX combos (1280x720/1600x900/2000x1012/2560x1080/3840x2160 x seymour-flux, braskas-final-aeon) this
+track could not reach.
+
+### Files touched
+
+| File | Change |
+|---|---|
+| `src/ui/common/StrategyGuide.ts` | `currentScale()` + `measureLineBottoms()` divides by it |
+| `tests/unit/strategy-guide-scale.test.ts` | new, reproduces PR-0009 then proves the fix |
+| `docs/screenshots/builda1/guide/` | 5 FFX-2 screenshots + `measurements.json` from this round's browser pass |
+
+None of the touched source files are listed in `docs/CONTRACTS.md`; no `CONTRACT-CHANGES.md` entry
+needed.
+
+### Verification
+
+- `npx tsc --noEmit` — clean.
+- `npx vitest run` — **159 files, 4230 tests, all green** (one full run; 4229 green going in per the
+  orchestrator's count, +1 for the new regression test). Ran the new file plus
+  `strategy-guide-fold.test.ts` and `ui-strategy-guide.test.ts` individually first while iterating.
+- `node tools/orphans.mjs` — unchanged (24 orphans, all pre-existing; no new module went unimported).
+- Live: see "Live verification" above. FFX-2 fully covered; FFX blocked and reported, not guessed
+  (hard rule 3).
+
 ## Still open (not this track's scope)
 
 - Mascot (`research/ffx2-combat-core.md` §3.14) has no ability table in `src/data/ffx2/abilities/

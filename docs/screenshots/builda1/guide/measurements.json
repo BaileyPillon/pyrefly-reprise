@@ -1,0 +1,135 @@
+[
+  {
+    "chapter": "ffx2-bahamut",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "pageErrors": [],
+    "present": true,
+    "moreVisible": true,
+    "panelStyleTop": "88px",
+    "panelStyleMaxHeight": "98.11px",
+    "panelRect": {
+      "top": 176,
+      "bottom": 372.21875
+    },
+    "moreRect": {
+      "top": 350,
+      "bottom": 372
+    },
+    "measuredScale": 2.0057218309859155,
+    "expectedScale": 2,
+    "panelHeightMatchesStyle": true
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "viewport": {
+      "width": 1600,
+      "height": 900
+    },
+    "pageErrors": [],
+    "present": true,
+    "moreVisible": true,
+    "panelStyleTop": "88px",
+    "panelStyleMaxHeight": "98.11px",
+    "panelRect": {
+      "top": 220,
+      "bottom": 465.2734375
+    },
+    "moreRect": {
+      "top": 437.5,
+      "bottom": 465
+    },
+    "measuredScale": 2.5071522887323945,
+    "expectedScale": 2.5,
+    "panelHeightMatchesStyle": true
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "viewport": {
+      "width": 2000,
+      "height": 1012
+    },
+    "pageErrors": [],
+    "present": true,
+    "moreVisible": true,
+    "panelStyleTop": "88px",
+    "panelStyleMaxHeight": "98.11px",
+    "panelRect": {
+      "top": 247.37680053710938,
+      "bottom": 523.1720581054688
+    },
+    "moreRect": {
+      "top": 491.9425048828125,
+      "bottom": 522.8646240234375
+    },
+    "measuredScale": 2.8191420864051495,
+    "expectedScale": 2.811111111111111,
+    "panelHeightMatchesStyle": true
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "viewport": {
+      "width": 2560,
+      "height": 1080
+    },
+    "pageErrors": [],
+    "present": true,
+    "moreVisible": true,
+    "panelStyleTop": "88px",
+    "panelStyleMaxHeight": "98.11px",
+    "panelRect": {
+      "top": 264,
+      "bottom": 558.328125
+    },
+    "moreRect": {
+      "top": 525,
+      "bottom": 558
+    },
+    "measuredScale": 3.008582746478873,
+    "expectedScale": 3,
+    "panelHeightMatchesStyle": true
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "viewport": {
+      "width": 3840,
+      "height": 2160
+    },
+    "pageErrors": [],
+    "present": true,
+    "moreVisible": true,
+    "panelStyleTop": "88px",
+    "panelStyleMaxHeight": "98.11px",
+    "panelRect": {
+      "top": 528,
+      "bottom": 1116.65625
+    },
+    "moreRect": {
+      "top": 1050,
+      "bottom": 1116
+    },
+    "measuredScale": 6.017165492957746,
+    "expectedScale": 6,
+    "panelHeightMatchesStyle": false
+  },
+  {
+    "chapter": "seymour-flux",
+    "viewport": {
+      "width": 1600,
+      "height": 900
+    },
+    "pageErrors": [],
+    "error": "TimeoutError: page.waitForFunction: Timeout 180000ms exceeded."
+  },
+  {
+    "chapter": "braskas-final-aeon",
+    "viewport": {
+      "width": 3840,
+      "height": 2160
+    },
+    "pageErrors": [],
+    "error": "TimeoutError: page.waitForFunction: Timeout 180000ms exceeded."
+  }
+]
