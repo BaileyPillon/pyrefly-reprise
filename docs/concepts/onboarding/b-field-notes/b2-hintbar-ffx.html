@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B2 — the first player turn teaches from the hint bar, and nothing stops</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="../_ob.css">
+<style>
+  /* The FFX turn-order preview made legible: the list shows where the move you
+     are hovering would put you. FFX only — X-2 has no queue to preview. */
+  .ob-preview {
+    position: absolute; display: flex; align-items: center; gap: 9px;
+    padding: 4px 11px 5px;
+    background: rgba(227, 185, 74, 0.94); color: var(--ig-ink);
+    font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .ob-ghost {
+    position: absolute; border: 2px dashed rgba(227, 185, 74, 0.9);
+    background: rgba(227, 185, 74, 0.14);
+  }
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch1-command-menu.png" alt="">
+
+  <!-- Nothing is dimmed, nothing is held. The turn-order list answers on its
+       own: the ghost slot is where Tidus lands if he picks the highlighted move. -->
+  <div class="ob-ghost" style="left: 1256px; top: 300px; width: 148px; height: 56px;"></div>
+  <div class="ob-preview" style="left: 1082px; top: 312px;">If you attack &rarr; you act again here</div>
+
+  <div class="ob-hintbar">
+    <span class="ob-hintbar__tag">Field note</span>
+    <span class="ob-hintbar__text">
+      The list on the right is the turn order. Pick a slower move and you slide
+      down it &mdash; the preview shows where before you commit.
+    </span>
+    <span class="ob-hintbar__keys"><b>H</b> how to play &nbsp;&middot;&nbsp; <b>D</b> hide notes</span>
+  </div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="ob-slate">B2 &middot; FFX &middot; one line, no interruption, turn not held</div>
+  <div class="concept-tag">Concept</div>
+</div>
+</body>
+</html>

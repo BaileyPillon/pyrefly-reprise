@@ -1,0 +1,178 @@
+{
+  "id": "onboarding",
+  "title": "Nothing teaches the game — three end-state options",
+  "for": "Bailey. Pick one, or name the parts you want from each.",
+  "approvedIdea": "Cold open and taught chapter (Bailey, 2026-09-19). The other four onboarding proposals were NOT approved and appear nowhere here: no medals, no challenge ribbons, no accessibility pack, no HUD density presets.",
+  "drivenBy": [
+    "critic/rounds/round-03.md issue 1 — onboarding 2.8 / 10, the number one issue on the live build",
+    "docs/plans/onboarding-review.md — paper critique, verdict 'revise', 14 required changes",
+    "AGENTS.md hard rule 9 (end state first) and hard rule 14 (every change is game-aware)"
+  ],
+  "resolution": "1600x900, HTML composited with docs/concepts/polish/_kit over real captures from the live build (main 7191674). Rendered with PYREFLY_BROWSER=gpu.",
+  "constraintsCommonToAllThree": [
+    "Every option has a visible skip and a visible 'never show again' on the first surface it puts on screen. No option can be entered without seeing both.",
+    "One teaching surface at a time: while a coaching surface is up, the move advisor card and any mid-battle bark are suppressed (paper critique REQUIRED 4).",
+    "Player words only, never developer words: 'turn order', 'the gauge', 'Overdrive', 'aeon', 'dressphere', 'chain'. The acronyms CTB and ATB appear nowhere on any frame (REQUIRED 14).",
+    "Keyed by MECHANIC, not by chapter — the first time turn order, an Overdrive, a gauge or a chain is real. None of these boards depends on the unbuilt Macalania or Leblanc chapters (REQUIRED 1).",
+    "An existing save with a cleared chapter is a veteran: every id pre-marked seen, coaching off (REQUIRED 7). A veteran sees none of this.",
+    "Suppression ships with the feature: ?coach=off plus __pyrefly.setCoaching(false), so Playwright, the screenshot tool and the critic's Part C composites never see it (REQUIRED 8)."
+  ],
+  "options": [
+    {
+      "key": "a",
+      "title": "Taught first turn",
+      "pitch": "A short cold open states the one thing a newcomer cannot guess — these are two games with two different clocks — and then three coach marks land on the real HUD, one at a time, at the moment each thing first matters.",
+      "frames": [
+        {
+          "file": "a-taught-first-turn/a1-cold-open.png",
+          "moment": "the very first screen after the title",
+          "notes": [
+            "Title painting stays on screen; a paper slab slides in over it, so nothing new has to be painted.",
+            "Two cards, side by side, say the only thing a newcomer cannot work out: I-III are turn-based, IV-V are real time.",
+            "A START HERE ribbon names Chapter I and one line says why, so a friend who jumps to Chapter V is a choice, not an accident.",
+            "Three keys on the footer: Enter begin, Esc skip straight to the chapters, D never show this again.",
+            "Budget: readable and skipped inside 3 s; the measured 60 s to first deliberate action is counted from the chapter card, not from here."
+          ]
+        },
+        {
+          "file": "a-taught-first-turn/a2-first-turn-ffx.png",
+          "moment": "the first player turn, FFX — mark 1 of 3",
+          "notes": [
+            "The whole frame dims to 70 percent ink except the turn-order column, which keeps its full paint and takes a gold border.",
+            "The mark names what is lit in three sentences and stops: turn order, slow versus fast, and that nothing moves until you choose.",
+            "The turn is held until one confirm press — true to FFX, whose engine holds the turn anyway (research/ffx-vs-ffx2-presentation.md row 3).",
+            "The advisor card and the next-best-move bark are suppressed for this beat; the intent panel is behind the dim, not stacked beside the mark.",
+            "Three marks total across the chapter — turn order, Overdrive ready, and what a loss meant — then never again."
+          ]
+        },
+        {
+          "file": "a-taught-first-turn/a3-ffx2-gauge.png",
+          "moment": "FFX-2, and where help is reached afterwards",
+          "notes": [
+            "No dim and no hold: a pink 'GAUGES STILL RUNNING' tag sits above the mark and the fight does not stop, because X-2 never stops to teach.",
+            "The mark names the gauge and the second colour that runs down before a move lands — the charge phase the real game already draws.",
+            "A small ink card offers Wait mode once, at the chapter's start, in X-2's own voice; whatever is picked is respected from then on.",
+            "Help afterwards lives where canon puts it: Pause, Options, Battle Help — a real FFX-2 Config entry, so the label is not invented.",
+            "Same three-mark budget, same skip and never-again keys, different chrome: pink spine, mirrored, anchored to the other edge."
+          ]
+        }
+      ],
+      "whatItTeaches": "Turn order (FFX) and the gauge (FFX-2) on the first turn; Overdrive when the bar first fills; why you lost on the defeat screen. Three marks per game, then silence forever.",
+      "cost": "M",
+      "risk": "It is the only option that puts something between the title and the game. If the cold open is a beat too long it is the first thing a returning player resents, and Part C reads a slab over the approved title painting as 'something added'.",
+      "gameAware": {
+        "ffxOnly": "The mark holds the turn until a confirm press, and mark 1 points at the turn-order list. Source: research/ffx-vs-ffx2-presentation.md §9 row 3 — the turn-order preview is TRUE for FFX and NOT TRUE for FFX-2; FFX's CTB waits for input by definition.",
+        "ffx2Only": "Nothing is ever frozen: the mark is non-blocking, rendered beside the party rows while all three gauges fill. Mark 1 points at the gauge and names its charge phase. The Active/Wait choice is offered once. Sources: research/ffx-vs-ffx2-presentation.md §4.2 / FC-4 (four-phase gauge: green fill, command input, purple charge, execution and recovery) and §4.3 / FC-5 (the charge segment is canon's own answer to 'what does this cost'), plus the Wait/Active indicator the game toggles by itself.",
+        "both": "The cold open, the START HERE ribbon, the seen-set, the off switch and the suppression hooks — shared plumbing, CHK-020. Both games also ship canon precedent for 'full the first time, short after': FFX's Config Aeons Short, FFX-2's Spherechanges toggle with its always-full-first-time override."
+      }
+    },
+    {
+      "key": "b",
+      "title": "Field notes",
+      "pitch": "Nothing is ever interrupted. The title goes straight to the chapter board, a single line appears on the hint bar the first time a system shows up, and a two-page HOW TO PLAY is there whenever anyone wants it.",
+      "frames": [
+        {
+          "file": "b-field-notes/b1-chapter-select.png",
+          "moment": "the very first screen after the title — which is the board itself",
+          "notes": [
+            "This option adds no screen at all. The title still goes where it goes today.",
+            "Two things are new on the board: a START HERE ribbon with one line of why, and an H — HOW TO PLAY entry beside the existing hint row.",
+            "Every chapter card carries one line saying which game it is and how that game moves, on the card, so it never has to be dismissed.",
+            "Nothing here can be skipped because nothing here interrupts; the never-show-again is instead a 'hide notes' key inside the fight.",
+            "Cheapest of the three and the only one that adds no time at all in front of a returning player."
+          ]
+        },
+        {
+          "file": "b-field-notes/b2-hintbar-ffx.png",
+          "moment": "the first player turn, FFX — taught without stopping",
+          "notes": [
+            "No dim, no hold, no confirm. One line arrives on the bottom hint bar and leaves on its own.",
+            "The teaching is really done by the HUD: the turn-order list shows a dashed ghost slot where this move would put you, before you commit.",
+            "That preview is the approved 'the queue answers before you commit' item, already half-built in the code (previewRank) and simply made legible.",
+            "The bar carries its own two keys at the right: H for the full page, D to stop showing notes.",
+            "Weakest on a player who is not looking at the bottom of the screen — which is the honest risk of a surface nobody is forced to read."
+          ]
+        },
+        {
+          "file": "b-field-notes/b3-codex-pause.png",
+          "moment": "how help is reached again, from the title menu or the pause menu, any time",
+          "notes": [
+            "HOW TO PLAY is a row on the existing pause menu and a page in the approved pause chrome — no new page style is invented (paper critique OPTIONAL 15).",
+            "Page 1 is the two games side by side: turn order, Overdrive and aeon on the left; the gauge, dressphere and chain on the right.",
+            "Each term gets one still from the real game, so a word is never explained only in words.",
+            "Page 2 holds the controls, the vocabulary, and the line that says why you lost and what to try — the half of the rubric row nothing covers today.",
+            "Reachable mid-fight without losing the fight, which is the case where a newcomer actually goes looking."
+          ]
+        }
+      ],
+      "whatItTeaches": "Turn order, the gauge, Overdrive, aeon, dressphere and chain — each named once on the hint bar when it first appears, and all of them permanently in the codex.",
+      "cost": "S",
+      "risk": "It can be missed entirely. A player who reads nothing learns nothing, and 'nothing teaches the game' could survive this option if the hint lines are not worded very well.",
+      "gameAware": {
+        "ffxOnly": "The dashed ghost slot and the 'you act again here' preview on the turn-order list. Source: research/ffx-vs-ffx2-presentation.md §9 row 3 and §4.1 — the Act List preview is FFX only, including the rank-3 assumption for every other unit. FFX-2 must never be given a queue.",
+        "ffx2Only": "The FFX-2 hint bar names the gauge and its charge segment instead, and the codex's right column carries dressphere and chain. Sources: §4.2 / FC-4 and §4.3 / FC-5; the chain counter is listed as FFX-2 only in §9.",
+        "both": "The hint bar itself, the codex page, the START HERE ribbon, the 'why you lost' line and the hide-notes key — shared plumbing, CHK-020, same work in both games with different content."
+      }
+    },
+    {
+      "key": "c",
+      "title": "Auron's briefing",
+      "pitch": "Twenty seconds in the game's own voice, before anything else, framing both clocks as a character would say them. After that the game says almost nothing — one whispered line, the first time something is genuinely real.",
+      "frames": [
+        {
+          "file": "c-aurons-briefing/c1-briefing.png",
+          "moment": "the very first screen after the title — the briefing",
+          "notes": [
+            "Auron's approved painting over an approved backdrop; four lines of speech, a thin timer, and the skip line.",
+            "He says the only two rules that matter and says them as opinions: in mine nothing moves until you move, in hers the clock does not wait.",
+            "Skippable from the very first frame with Esc; D retires it for good; it never plays twice on its own.",
+            "Twenty seconds, timed, with the progress visible — a player can see how long they are agreeing to.",
+            "The same still and the same sentence become the link preview card and the favicon frame, which the site does not have today."
+          ]
+        },
+        {
+          "file": "c-aurons-briefing/c2-first-use-ffx.png",
+          "moment": "the first player turn, FFX — one line, first use only",
+          "notes": [
+            "No numbered course, no dim, no panel of rules — the briefing already said it, so this is a reminder, not a lesson.",
+            "One line in Auron's register, in the serif, over empty sky: he moves after you, not before, use it.",
+            "The turn is held for exactly one confirm press, which is what FFX's engine does with a turn anyway.",
+            "The hint bar gains one key so the briefing can be called back, so the line never has to explain itself.",
+            "Roughly three of these exist per game and each fires exactly once, ever."
+          ]
+        },
+        {
+          "file": "c-aurons-briefing/c3-ffx2-replay.png",
+          "moment": "FFX-2 in its own voice, and how the briefing is reached again",
+          "notes": [
+            "A different character and a completely different register: Rikku, mid-fight, not a narrator.",
+            "The line fades on its own — nothing is held, no key is required, and all three gauges keep filling behind it.",
+            "Two permanent pause rows appear: replay the briefing, or turn the voices off for good.",
+            "Nothing inside a fight ever asks a second time, which is what keeps this option off a veteran's back.",
+            "Open question for you: canon's own X-2 tutorial voice is Shinra on the Celsius, already cited in our shipped data. Rikku is the warmer read; Shinra is the sourced one."
+          ]
+        }
+      ],
+      "whatItTeaches": "Both clocks, once, in character, before the first chapter; then turn order, Overdrive and the gauge as single lines the first time each one is live.",
+      "cost": "M",
+      "risk": "It is the most charming and the least explicit. A player who skips the briefing gets very little afterwards, and writing voice lines that teach without being cute is the hardest copy job of the three. It also needs a voice that exists in both games or two separate ones, which doubles the copy.",
+      "gameAware": {
+        "ffxOnly": "Auron carries the FFX half and the line holds the turn for one confirm. FFX chapters are 1 to 3. Source: research/ffx-vs-ffx2-presentation.md §9 row 3 plus the paper critique's REQUIRED 6 — FFX's own in-battle teaching halts the fight, so holding the turn is true to FFX.",
+        "ffx2Only": "An FFX-2 voice, non-blocking, fading on its own with every gauge running. FFX-2 chapters are 4 and 5. Source: the paper critique's REQUIRED 6 and research/ffx-vs-ffx2-presentation.md §4.2 — freezing an Active-mode X-2 fight to teach is the one thing X-2 never does. Canon's attested X-2 tutorial voice is Shinra's on the Celsius (src/data/ffx2/garment-grids/early.ts:30).",
+        "both": "The briefing slot, the timer, the skip, the never-again, the replay row and the suppression hooks — shared plumbing, CHK-020."
+      }
+    }
+  ],
+  "questionsForBailey": [
+    "Which option, or which parts of which? You can take A's three marks with B's codex, or C's briefing with B's hint bar — the frames are built so they mix.",
+    "The FFX-2 Config list in our sources names a real entry called Battle Help, so that label is canon for FFX-2. The FFX Config list we have sourced names no equivalent. Do you want the same words used in FFX (ours, honest but not canon), or a different FFX label?",
+    "Option C's FFX-2 voice: Rikku (warmer, in the fight) or Shinra (canon's own tutorial voice, already cited in our shipped data)?",
+    "Do you want the taught chapter flagged START HERE on the chapter board? The paper critique says yes and no hard lock. All three options assume yes; say the word and it comes off."
+  ],
+  "notBuilt": "Nothing under src/ was touched. These are mockups only; per hard rule 9 nothing is built until you pick.",
+  "openDependencies": [
+    "Round-02 #26, #27 and #29 (research citations printing in the intent slab, blank info slab on leaf rows, the strategy guide clipping mid-sentence) are the cheapest teaching in the game and should land before any of this.",
+    "Round-02 #30 (Chapter 1's 38.6 s pre-scene cannot be fast-forwarded) — otherwise a cold open pushes first input past two minutes.",
+    "A 390x844 variant of the picked option still has to be drawn; the phone layout is itself an open decision."
+  ]
+}

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C3 — FFX-2 gets its own voice, and the briefing can be replayed</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="../_ob.css">
+<style>
+  .ob-voice {
+    position: absolute; left: 14px; top: -24px;
+    font-family: var(--ig-font-display); font-weight: 700; font-size: 11px;
+    letter-spacing: 0.3em; text-transform: uppercase; color: #f7b6d9;
+  }
+  .ob-quote .ob-mark__body { font-family: var(--ig-font-serif); font-style: italic; font-size: 21px; }
+  .ob-running {
+    position: absolute; display: flex; align-items: center; gap: 10px;
+    padding: 5px 14px 6px; background: rgba(168, 71, 126, 0.92);
+    font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.24em; text-transform: uppercase; color: #fff4fa;
+  }
+</style>
+</head>
+<body>
+<div class="stage ig ig--ffx2" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch4-ffx2-hud.png" alt="">
+
+  <!-- A different character, a different register, and crucially no hold: the
+       line appears and fades on its own while all three gauges keep filling. -->
+  <div class="ob-mark ob-mark--ink ob-mark--small ob-quote" style="left: 622px; top: 612px;">
+    <div class="ob-voice">Rikku</div>
+    <div class="ob-mark__body">
+      &ldquo;Bar's full, she's up &mdash; don't wait for me, we all go at once!&rdquo;
+    </div>
+    <div class="ob-mark__foot"><span>Fades on its own</span><span>First time only</span></div>
+  </div>
+  <div class="ob-leader" style="left: 926px; top: 662px; width: 128px;"></div>
+  <div class="ob-node" style="left: 1054px; top: 662px;"></div>
+
+  <div class="ob-running" style="left: 622px; top: 572px;">Nothing paused &middot; gauges running</div>
+
+  <!-- How the briefing is reached again: a row on the pause menu, so a veteran
+       who skipped it on boot can still fetch it, and nobody is ever re-taught. -->
+  <div class="ob-rowmark" style="left: 46px; top: 132px; border-left-color: #f7b6d9;">
+    &rsaquo; &nbsp;Replay briefing
+  </div>
+  <div class="ob-chip" style="left: 46px; top: 182px;"><span>Battle help</span><b>On</b></div>
+  <div class="ob-mark ob-mark--ink ob-mark--small" style="left: 46px; top: 240px;">
+    <div class="ob-mark__step">Pause menu</div>
+    <div class="ob-mark__body">
+      Two rows, always there: replay the twenty seconds, or turn the voices off
+      for good. Nothing in a fight ever asks twice.
+    </div>
+    <div class="ob-mark__foot"><span>Reachable from title and pause</span></div>
+  </div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="ob-slate">C3 &middot; FFX-2 &middot; non-blocking voice &middot; briefing replayable from pause</div>
+  <div class="concept-tag">Concept</div>
+</div>
+</body>
+</html>

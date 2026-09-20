@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A3 — FFX-2: the same mark beside a running gauge, and where help lives after</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="../_ob.css">
+<style>
+  /* The "still running" read: the gauges are NOT frozen, and the mark says so. */
+  .ob-running {
+    position: absolute; display: flex; align-items: center; gap: 10px;
+    padding: 5px 14px 6px; background: rgba(168, 71, 126, 0.92);
+    font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.24em; text-transform: uppercase; color: #fff4fa;
+  }
+</style>
+</head>
+<body>
+<div class="stage ig ig--ffx2" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch4-ffx2-hud.png" alt="">
+
+  <!-- No spotlight, no dim: in FFX-2 nothing is taken away, because nothing
+       stops. The mark sits beside the party rows and the fight continues. -->
+  <div class="ob-mark" style="left: 592px; top: 560px;">
+    <div class="ob-mark__step">Mark 1 of 3 &middot; nothing is paused</div>
+    <div class="ob-mark__title">The gauge, not a queue</div>
+    <div class="ob-mark__body">
+      Each girl's bar fills on its own. Full means she can act. Choose, and a
+      second colour runs out before the move lands &mdash; that is what it costs.
+      All three fill at once, and they keep filling while you read this.
+    </div>
+    <div class="ob-mark__foot">
+      <span><b>Enter</b> got it</span><span><b>Esc</b> skip</span><span><b>D</b> never again</span>
+    </div>
+  </div>
+  <div class="ob-leader" style="left: 964px; top: 646px; width: 96px;"></div>
+  <div class="ob-node" style="left: 1060px; top: 646px;"></div>
+
+  <div class="ob-running" style="left: 592px; top: 520px;">Gauges still running</div>
+
+  <!-- How help is reached again later: the FFX-2 Config entry the real game
+       ships, named exactly as canon names it. -->
+  <div class="ob-chip" style="right: 44px; top: 524px;">
+    <span>Pause &rarr; Options &rarr; Battle help</span><b>On</b>
+  </div>
+
+  <!-- Offered once, at the taught chapter's start, in X-2's own voice. -->
+  <div class="ob-mark ob-mark--ink ob-mark--small" style="left: 58px; top: 590px;">
+    <div class="ob-mark__step">Asked once</div>
+    <div class="ob-mark__title">Want it to wait?</div>
+    <div class="ob-mark__body">
+      Menus can freeze the clock while you decide. On by default: they don't.
+    </div>
+    <div class="ob-mark__foot"><span><b>Active</b> / Wait</span></div>
+  </div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="ob-slate">A3 &middot; FFX-2 &middot; non-blocking &middot; help lives in Options</div>
+  <div class="concept-tag">Concept</div>
+</div>
+</body>
+</html>

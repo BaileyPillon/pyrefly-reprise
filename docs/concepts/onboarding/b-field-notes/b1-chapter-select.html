@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B1 — the first screen after the title is the chapter board itself</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="../_ob.css">
+<style>
+  .ob-entry {
+    position: absolute; display: flex; align-items: center; gap: 14px;
+    padding: 9px 20px 10px;
+    background: rgba(11, 10, 18, 0.84);
+    border-left: 3px solid var(--ig-accent);
+  }
+  .ob-entry__k {
+    font-family: var(--ig-font-display); font-weight: 700; font-size: 15px;
+    letter-spacing: 0.26em; text-transform: uppercase; color: var(--ig-accent);
+  }
+  .ob-entry__t {
+    font-family: var(--ig-font-body); font-size: 17px; color: rgba(244, 241, 232, 0.8);
+  }
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/chapter-select.png" alt="">
+
+  <!-- Option B adds no screen at all. The title goes straight here; the only
+       new things on this board are a ribbon and one menu entry. -->
+  <div class="ob-ribbon" style="left: 500px; top: 118px;">
+    <span class="ob-ribbon__label">Start here</span>
+    <span class="ob-ribbon__why">New to these games? This one explains itself as you play.</span>
+  </div>
+
+  <div class="ob-entry" style="left: 500px; top: 612px;">
+    <span class="ob-entry__k">H &nbsp;&middot;&nbsp; How to play</span>
+    <span class="ob-entry__t">Two pages. The two games, the controls, the words.</span>
+  </div>
+
+  <div class="ob-mark ob-mark--ink" style="left: 942px; top: 500px;">
+    <div class="ob-mark__step">Two games, one board</div>
+    <div class="ob-mark__title">Chapters I&ndash;III turn-based<br>IV&ndash;V real time</div>
+    <div class="ob-mark__body">
+      One line on every card says which game it is and how that game moves.
+      It is on the card, not in a pop-up, so it never has to be dismissed.
+    </div>
+    <div class="ob-mark__foot"><span>Always on screen &middot; nothing to skip</span></div>
+  </div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="ob-slate">B1 &middot; first screen after the title &middot; no cold open</div>
+  <div class="concept-tag">Concept</div>
+</div>
+</body>
+</html>

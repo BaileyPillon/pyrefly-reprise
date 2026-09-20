@@ -1,0 +1,295 @@
+/* ------------------------------------------------------------------------
+ * Onboarding concept boards — components layered on top of _kit/kit.css.
+ * Authoring space is the kit's 1440x810 stage; these pages scale it to
+ * 1600x900 (see .stage override in each page's <style>).
+ *
+ * Nothing here is product CSS. It is a frozen mockup vocabulary so the three
+ * options read as one family and differ only where they are meant to.
+ * ------------------------------------------------------------------------ */
+
+/* 1600x900 page, 1440x810 stage. */
+html, body { background: #000; }
+body { width: 1600px; height: 900px; }
+.stage { transform: scale(1.11111111); }
+
+/* ---------------------------------------------------------------- spotlight
+ * Option A only. A hole punched in a dim so exactly one HUD element reads.
+ * The dim is ink, never black, and never above 0.55 so the painting survives. */
+.ob-spot {
+  position: absolute;
+  z-index: 40;
+  box-shadow: 0 0 0 4000px rgba(8, 7, 14, 0.70);
+  border: 2px solid rgba(227, 185, 74, 0.75);
+  pointer-events: none;
+}
+/* Marks, leaders and chips sit above the dim. */
+.ob-mark, .ob-leader, .ob-node, .ob-chip, .ob-hintbar, .ob-ribbon,
+.ob-rowmark, .ob-codex { z-index: 50; }
+.ig--ffx2 .ob-spot { outline-color: rgba(247, 182, 217, 0.55); }
+
+/* ------------------------------------------------------------------- mark
+ * The coach mark itself: an ivory paper slab in the Ink & Gold skew, an
+ * accent spine, a numbered eyebrow, one sentence, and the affordance row.
+ * Body copy is 19px on the 1440 stage = 21 css px at 1600 — above CHK-003. */
+.ob-mark {
+  position: absolute;
+  width: 372px;
+  background: var(--ig-paper);
+  color: var(--ig-ink);
+  transform: skewX(var(--ig-skew));
+  border-left: 4px solid var(--ig-accent-on-paper);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+  padding: 15px 20px 13px 18px;
+}
+.ob-mark > * { transform: skewX(var(--ig-skew-inverse)); display: block; }
+.ob-mark__step {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ig-accent-on-paper);
+}
+.ob-mark__title {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 600;
+  font-size: 29px; line-height: 1.1; margin: 5px 0 6px;
+}
+.ob-mark__body {
+  font-family: var(--ig-font-body); font-size: 19px; line-height: 1.42;
+  color: #221f2c;
+}
+.ob-mark__foot {
+  margin-top: 11px; padding-top: 9px;
+  border-top: 1px solid rgba(11, 10, 18, 0.18);
+  font-family: var(--ig-font-display); font-weight: 600; font-size: 13px;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: rgba(11, 10, 18, 0.62);
+}
+.ob-mark__foot b { color: var(--ig-accent-on-paper); font-weight: 700; }
+.ob-mark__foot span + span::before { content: '·'; margin: 0 8px; opacity: 0.5; }
+
+/* Pink chrome, mirrored spine, for every FFX-2 frame. */
+.ig--ffx2 .ob-mark { border-left: 0; border-right: 4px solid #a8477e; }
+.ig--ffx2 .ob-mark__step,
+.ig--ffx2 .ob-mark__foot b { color: #a8477e; }
+
+/* Compact variant for the "first use only" whisper in option C. */
+.ob-mark--small { width: 300px; padding: 11px 16px 10px 14px; }
+.ob-mark--small .ob-mark__title { font-size: 22px; }
+.ob-mark--small .ob-mark__body { font-size: 17px; }
+
+/* Ink variant: the same slab in ink, for marks that sit on bright paint. */
+.ob-mark--ink {
+  background: rgba(11, 10, 18, 0.90);
+  color: var(--ig-paper);
+}
+.ob-mark--ink .ob-mark__body { color: rgba(244, 241, 232, 0.88); }
+.ob-mark--ink .ob-mark__step { color: var(--ig-accent); }
+.ob-mark--ink .ob-mark__foot { border-top-color: rgba(244, 241, 232, 0.22); color: rgba(244, 241, 232, 0.6); }
+.ob-mark--ink .ob-mark__foot b { color: var(--ig-accent); }
+
+/* --------------------------------------------------------------- leader line
+ * A hairline from the mark to the thing it names, with a small node at the
+ * end. Drawn as a plain absolutely-positioned bar so it never fights the skew. */
+.ob-leader {
+  position: absolute; height: 2px; background: var(--ig-accent);
+  opacity: 0.85; transform-origin: 0 50%;
+}
+.ig--ffx2 .ob-leader { background: #f7b6d9; }
+.ob-node {
+  position: absolute; width: 11px; height: 11px; margin: -5px 0 0 -5px;
+  background: var(--ig-accent); transform: rotate(45deg);
+}
+.ig--ffx2 .ob-node { background: #f7b6d9; }
+
+/* ----------------------------------------------------------------- hint bar
+ * Option B's whole teaching surface: one line, bottom centre, never blocks. */
+.ob-hintbar {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 16px;
+  max-width: 1120px;
+  padding: 10px 22px 11px;
+  background: rgba(11, 10, 18, 0.82);
+  border-left: 3px solid var(--ig-accent);
+}
+.ig--ffx2 .ob-hintbar { border-left: 0; border-right: 3px solid #f7b6d9; }
+.ob-hintbar__tag {
+  flex: none;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.28em; text-transform: uppercase; color: var(--ig-accent);
+}
+.ig--ffx2 .ob-hintbar__tag { color: #f7b6d9; }
+.ob-hintbar__text {
+  font-family: var(--ig-font-body); font-size: 20px; line-height: 1.3;
+  color: rgba(244, 241, 232, 0.94);
+}
+.ob-hintbar__keys {
+  flex: none; margin-left: auto; padding-left: 18px;
+  border-left: 1px solid rgba(244, 241, 232, 0.2);
+  font-family: var(--ig-font-display); font-weight: 600; font-size: 13px;
+  letter-spacing: 0.13em; text-transform: uppercase; color: rgba(244, 241, 232, 0.6);
+}
+.ob-hintbar__keys b { color: var(--ig-accent); font-weight: 700; }
+.ig--ffx2 .ob-hintbar__keys b { color: #f7b6d9; }
+
+/* ------------------------------------------------------------------- ribbon
+ * START HERE on the recommended chapter card (paper critique REQUIRED 10). */
+.ob-ribbon {
+  position: absolute;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 7px 18px 8px;
+  background: var(--ig-accent); color: var(--ig-ink);
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+.ob-ribbon > * { transform: skewX(var(--ig-skew-inverse)); }
+.ob-ribbon__label {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+}
+.ob-ribbon__why {
+  font-family: var(--ig-font-body); font-size: 15px; color: rgba(11, 10, 18, 0.78);
+}
+
+/* ------------------------------------------------------------------ chip
+ * The always-visible off switch / state readout ("Battle Help: on"). */
+.ob-chip {
+  position: absolute;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 5px 13px 6px;
+  background: rgba(11, 10, 18, 0.78);
+  border: 1px solid rgba(227, 185, 74, 0.5);
+  font-family: var(--ig-font-display); font-weight: 600; font-size: 12px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.8);
+}
+.ob-chip b { color: var(--ig-accent); font-weight: 700; }
+.ig--ffx2 .ob-chip { border-color: rgba(247, 182, 217, 0.5); }
+.ig--ffx2 .ob-chip b { color: #f7b6d9; }
+
+/* ----------------------------------------------------------------- codex
+ * Option B's HOW TO PLAY page, drawn as a pause panel (paper critique #15). */
+.ob-codex {
+  position: absolute;
+  background: rgba(244, 241, 232, 0.96);
+  color: var(--ig-ink);
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+  padding: 22px 28px 24px;
+}
+.ob-codex > * { transform: skewX(var(--ig-skew-inverse)); }
+.ob-codex__eyebrow {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.32em; text-transform: uppercase; color: var(--ig-accent-on-paper);
+}
+.ob-codex__title {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 600;
+  font-size: 38px; margin: 6px 0 14px;
+}
+.ob-codex__cols { display: flex; gap: 26px; }
+.ob-codex__col { flex: 1; }
+.ob-codex__game {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.26em; text-transform: uppercase;
+  padding-bottom: 5px; margin-bottom: 10px;
+  border-bottom: 2px solid var(--ig-accent-on-paper);
+  color: var(--ig-accent-on-paper);
+}
+.ob-codex__col--x2 .ob-codex__game { border-bottom-color: #a8477e; color: #a8477e; }
+.ob-codex__entry { margin-bottom: 11px; }
+.ob-codex__term {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 600; font-size: 21px;
+}
+.ob-codex__def {
+  font-family: var(--ig-font-body); font-size: 16px; line-height: 1.38; color: #2a2733;
+}
+.ob-codex__still {
+  width: 100%; height: 92px; object-fit: cover; display: block;
+  margin: 4px 0 6px; border: 1px solid rgba(11, 10, 18, 0.25);
+}
+
+/* ------------------------------------------------------- pause row highlight
+ * Shows where help is reached again, on the real pause menu. */
+.ob-rowmark {
+  position: absolute;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 6px 16px 7px;
+  background: rgba(11, 10, 18, 0.86);
+  border-left: 3px solid var(--ig-accent);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 16px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ig-paper);
+}
+
+/* --------------------------------------------------------------- briefing
+ * Option C: the in-fiction cold open. A figure on ink, a caption in the
+ * character's own voice, a timer strip, and the skip line. */
+.ob-brief-figure {
+  position: absolute; bottom: 0;
+  height: 810px; object-fit: contain; object-position: 50% 100%;
+  filter: drop-shadow(0 0 60px rgba(0, 0, 0, 0.8));
+}
+.ob-brief-line {
+  position: absolute;
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 500;
+  font-size: 40px; line-height: 1.28; color: var(--ig-paper);
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.9);
+}
+.ob-brief-line b { font-style: normal; color: var(--ig-accent); font-weight: 600; }
+.ob-brief-who {
+  position: absolute;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--ig-accent);
+}
+.ob-brief-who::before { content: ''; display: inline-block; width: 54px; height: 2px;
+  background: var(--ig-accent); vertical-align: 5px; margin-right: 16px; }
+.ob-timer {
+  position: absolute; height: 3px; background: rgba(244, 241, 232, 0.22);
+}
+.ob-timer > i { display: block; height: 100%; background: var(--ig-accent); }
+
+/* ------------------------------------------------------------------ cold open
+ * Option A's first screen: a paper slab over the title painting. */
+.ob-open {
+  position: absolute;
+  background: var(--ig-paper); color: var(--ig-ink);
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.66);
+  padding: 26px 34px 28px;
+}
+.ob-open > * { transform: skewX(var(--ig-skew-inverse)); }
+.ob-open__eyebrow {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.32em; text-transform: uppercase; color: var(--ig-accent-on-paper);
+}
+.ob-open__title {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 600;
+  font-size: 44px; line-height: 1.08; margin: 8px 0 12px;
+}
+.ob-open__body {
+  font-family: var(--ig-font-body); font-size: 21px; line-height: 1.45; color: #221f2c;
+}
+.ob-open__two { display: flex; gap: 24px; margin-top: 18px; }
+.ob-open__card { flex: 1; border-top: 3px solid var(--ig-accent-on-paper); padding-top: 9px; }
+.ob-open__card--x2 { border-top-color: #a8477e; }
+.ob-open__card h4 {
+  margin: 0 0 3px; font-family: var(--ig-font-display); font-weight: 700;
+  font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ig-accent-on-paper);
+}
+.ob-open__card--x2 h4 { color: #a8477e; }
+.ob-open__card p { margin: 0; font-family: var(--ig-font-body); font-size: 17px; line-height: 1.34; color: #2a2733; }
+.ob-open__foot {
+  margin-top: 20px; padding-top: 12px; border-top: 1px solid rgba(11, 10, 18, 0.18);
+  display: flex; gap: 22px; align-items: center;
+  font-family: var(--ig-font-display); font-weight: 600; font-size: 14px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(11, 10, 18, 0.62);
+}
+.ob-open__foot b { color: var(--ig-accent-on-paper); font-weight: 700; }
+
+/* ------------------------------------------------------------------ caption
+ * A small label naming the moment, bottom-left, outside the fiction. */
+.ob-slate {
+  position: absolute; left: 0; bottom: 0;
+  padding: 8px 18px 9px;
+  background: rgba(227, 185, 74, 0.92); color: var(--ig-ink);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.26em; text-transform: uppercase;
+  z-index: 98;
+}
+.ig--ffx2 .ob-slate { background: rgba(247, 182, 217, 0.94); }
