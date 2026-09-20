@@ -117,8 +117,10 @@ is exercised in both games rather than being a branch one of them takes.
 
 Browser mode: **`PYREFLY_BROWSER=gpu`** for every run (real GPU, no black canvas, no SwiftShader
 fallback needed). Local `vite` on port 5400, Chapter 1 and Chapter 4, seed 20260920, sampled every
-60 ms. Probe: `.lagprobe-tmp.mjs` + `.laganalyse-tmp.mjs` at the repo root (agent scratch), raw
-samples and shots under `docs/screenshots/builda1/presenter-sync/`.
+60 ms. Probe: `.lagprobe-tmp.mjs` + `.laganalyse-tmp.mjs` at the repo root (agent scratch), shots
+under `docs/screenshots/builda1/presenter-sync/`. The raw sample files (`*.json`, ~1.3 MB each) sit
+beside the shots **untracked** — rerun the probe to regenerate them rather than pulling 5 MB of
+timing dumps into the repo.
 
 "Before" is the same probe pointed at the **live Build A** (`https://baileypillon.github.io/pyrefly-reprise/`),
 same chapter, same seed, same viewport — so the two columns are one measurement, not two.
