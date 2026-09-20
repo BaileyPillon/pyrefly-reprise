@@ -439,7 +439,16 @@ export function describeAbility(
   if (revives) parts.push('Revives a fallen ally');
   else if (restoresHp) parts.push(`Restores HP${scope}`);
   else if (def.formula === 'ctb') {
-    parts.push(def.targeting.startsWith('all-all') || heals ? 'Speeds the party’s turns up' : 'Pushes the target’s turn back');
+    // Round 03 blocker: this used to gate the noun on `heals` (a *sign* flag —
+    // see the comment above `restoresHp` — not a scope flag), so single-target
+    // Haste and Chocobo Feather (`targeting: 'single-ally'`, `heals`) both read
+    // "Speeds the party's turns up". The scope word has to come from
+    // `def.targeting` — the same source `scope` above is computed from — not
+    // from whether the CTB change happens to be a speed-up.
+    const ctbWho =
+      def.targeting === 'all-allies' ? 'the party' : def.targeting === 'all-enemies' ? 'the enemies' : 'the target';
+    const ctbNoun = def.targeting === 'all-allies' || def.targeting === 'all-enemies' ? 'turns' : 'turn';
+    parts.push(heals ? `Speeds ${ctbWho}’s ${ctbNoun} up` : `Pushes ${ctbWho}’s ${ctbNoun} back`);
   } else if (def.flags.includes('drains')) parts.push('Drains HP to the user');
   else if (def.formula === 'percent-current') parts.push('Takes a fraction of current HP');
   else if (def.formula === 'fixed') parts.push(`Fixed damage${scope}`);

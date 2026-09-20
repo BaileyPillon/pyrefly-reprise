@@ -22,6 +22,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type {
+  AbilityDef,
   AvailableCommand,
   BattleState,
   Command,
@@ -30,6 +31,7 @@ import type {
 } from '../../src/battle/common/types.ts';
 import { CORE_ABILITIES, FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
+import { ALL_ABILITIES as FFX2_ALL_ABILITIES } from '../../src/data/ffx2/index.ts';
 import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
 import { zanarkandBuild } from '../../src/data/ffx/builds/zanarkand.ts';
 import { recommendedCommand } from '../../src/engine/tactics/guide.ts';
@@ -421,5 +423,69 @@ describe('the words', () => {
       help: 'Swing the sword.',
     } as unknown as AvailableCommand;
     expect(describeAbility(attack, row)).toBe('Swing the sword.');
+  });
+
+  /**
+   * Round 03 blocker (Part B 8.0 cap): "single-target HASTE's description bar
+   * reads 'Speeds the party's turns up' and the next confirm hits one ally"
+   * (`advisor.ts:441`, before the fix in this commit). The bug was
+   * `def.targeting.startsWith('all-all') || heals` — `heals` is a *sign* flag
+   * on the CTB formula (see the comment above `restoresHp` in
+   * `advisor.ts`), not a scope flag, so it also mis-scoped Chocobo Feather
+   * (single-ally) and Silver Hourglass (all-enemies).
+   *
+   * Table-driven over every player *command* whose blurb goes through the
+   * `formula === 'ctb'` branch — the one this commit touches — across both
+   * games' full ability registries (`ALL_ABILITIES` for FFX, which every
+   * chapter's builds and enemy rosters draw from; `FFX2_ALL_ABILITIES` for
+   * FFX-2), minus `category: 'enemy'` (scripted enemy-only actions, e.g.
+   * Seymour Flux's `slowgaCounter`, never printed to a player). This is
+   * deliberately scoped to CTB-formula abilities — the critic's fix note
+   * ("Unit-test that for every CTB-formula ability the blurb's target noun
+   * matches `def.targeting`") — rather than every ability's sentence in
+   * general: the other formula branches (status-only "inflicts X" text, for
+   * one) do not claim a scope word at all today, and rewriting them is a
+   * separate, unresearched change this item does not ask for.
+   *
+   * **Case: both.** `describeAbility` is one engine-agnostic function in
+   * `src/engine/tactics/advisor.ts`, shared plumbing per CHK-020. FFX-2 ships
+   * no `formula: 'ctb'` ability today — Haste/Slow are a CTB mechanic, and
+   * FFX-2 runs ATB (`research/ffx-vs-ffx2-presentation.md`) — so the FFX-2
+   * half of this table is currently empty; the test still iterates both
+   * registries so a future FFX-2 CTB ability is caught by the same check
+   * rather than needing a new test written for it.
+   */
+  describe('the CTB scope word matches the real targeting, for every player command', () => {
+    const ctbAbilities: Array<{ game: string; def: AbilityDef }> = [
+      ...ALL_ABILITIES.filter((d) => d.category !== 'enemy' && d.formula === 'ctb').map((def) => ({ game: 'ffx', def })),
+      ...FFX2_ALL_ABILITIES.filter((d) => d.category !== 'enemy' && d.formula === 'ctb').map((def) => ({
+        game: 'ffx2',
+        def,
+      })),
+    ];
+
+    it('found the four shipped FFX rows (Haste, Hastega, Slow, Slowga) plus the two CTB items', () => {
+      const ids = ctbAbilities.map((a) => a.def.id).sort();
+      expect(ids).toEqual(
+        ['chocobo-feather', 'chocobo-wing', 'haste', 'hastega', 'silver-hourglass', 'slow', 'slowga'].sort(),
+      );
+    });
+
+    it.each(ctbAbilities.map(({ game, def }) => [`${game}:${def.id}`, def] as const))('%s', (_label, def) => {
+      const text = describeAbility(def).toLowerCase();
+      if (def.targeting === 'all-allies') {
+        expect(text).toMatch(/\bparty\b/);
+        expect(text).not.toMatch(/\bthe target\b/);
+      } else if (def.targeting === 'all-enemies') {
+        expect(text).toMatch(/\benemies\b/);
+        expect(text).not.toMatch(/\bthe target\b/);
+      } else {
+        // single-ally / single-enemy / single-any: the sentence must claim
+        // exactly one target, not a group it does not hit.
+        expect(text).toMatch(/\bthe target\b/);
+        expect(text).not.toMatch(/\bthe party\b/);
+        expect(text).not.toMatch(/\benemies\b/);
+      }
+    });
   });
 });
