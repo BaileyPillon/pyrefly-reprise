@@ -1,7 +1,88 @@
 # Onboarding — option C, Auron's briefing
 
-**Status: built, green, not deployed.** Commits `5e8eca5` (the target) and the build
-commit that follows it. Live verification and the critic review are still owed.
+**Status: built, refuted in four places, repaired, green, not deployed.** Commits
+`5e8eca5` (the target), `b8a905f` (the build) and the fix-pass commit that follows.
+Live verification and the critic review are still owed.
+
+## The fix pass (2026-09-20) — what an adversarial verifier refuted, and the repair
+
+Four findings, none of them cosmetic. Each repair is pinned by a test that fails
+without it; the first three were re-measured on the running game afterwards.
+
+### 1–2. Confirm and cancel leaked through the briefing — **root cause, one bug, three symptoms**
+
+Measured before: first launch → Enter on the title → briefing → Enter again left
+`__pyrefly.screen() === 'party-prep'`, so a first-timer never saw the chapter board;
+Escape left `'title'`, backing the board out; the pause replay re-raised itself on
+every confirm, forever; the title replay started the flow. The two keys printed on the
+briefing's own foot were exactly the two that misbehaved.
+
+The cause was **not** in the briefing. `Input.claimKeyboard` stopped the DOM **event**
+in the capture phase but `Input.onKeyDown` then still ran `this.press(button)`, so the
+abstract `confirm` / `cancel` button was latched and the next screen's `handleInput`
+saw `justPressed()`. The gamepad had a worse version: the pad is polled both in
+`Input.update()` and in the overlay's own `requestAnimationFrame`, and whichever ran
+first decided whether the screen behind also acted.
+
+The repair (`src/app/Input.ts`) is a second kind of claim:
+`claimKeyboard(onKey, { exclusive: true })`.
+
+- a key an exclusive claimant swallows latches **no** abstract button;
+- while the claim is up every screen behind reads no button, no axis and no queued
+  `data-action` at all (`Input.blind`);
+- the frame **after** the claim is handed back drops every pending edge
+  (`absorbEdges`, `swallowFrames`), so the two poll loops' order stops mattering;
+- a still-held button never produces a second edge, and a genuinely new press after
+  the overlay is live input again — both asserted.
+
+Three consequences in the callers:
+
+- `raiseBriefing.ts` takes the exclusive claim. `Briefing.onClick` now
+  `stopPropagation()`s, so a `briefing:skip` click cannot be queued for the screen
+  behind either.
+- `PauseScreen` no longer forwards input to the briefing at all — forwarding is what
+  made the replay unskippable, because confirm reached `handleAction` a moment after
+  the briefing had resolved and re-activated the still-selected REPLAY BRIEFING row.
+  `Briefing.handleInput` and the `driven` option are gone with it.
+- The briefing's own pad watcher now sets `ignoreSuspend`
+  (`src/ui/ffx/rawInput.ts`): the pause overlay mutes every HUD watcher, and the
+  briefing is the overlay that mute protects the fight *from*, so it has to keep
+  reading the pad when it is replayed from pause.
+
+### 3. The FFX-2 badge asserted something the running game does not do
+
+The badge read **NOTHING PAUSED · GAUGES RUNNING**. Measured: Chapter 4,
+`state.ticks` 8189 → 8189 across 1 502 ms with the line up, per-actor ATB identical,
+rendered bar widths identical to four decimals; Chapter 5 the same. And the control
+run with `?coach=off` at the same moment is identical — **the coach layer is not the
+cause**. `BattlePresenter` awaits `HudPort.chooseCommand` and the FFX-2 engine is
+ticked only in its `waiting` branch, so the X-2 clock does not advance during command
+input in this build at all, with or without teaching.
+
+The verifier's own framing: either the badge goes or the X-2 input model runs the
+clock. The second is a combat-core change, it is an Active-vs-Wait question, and
+under hard rule 10 it needs Bailey's yes — so it is written up under "Open" and the
+badge went instead. It now reads **KEEP PLAYING · NOTHING TO PRESS**: two things that
+are measurably true of the line (the menu is open underneath it, the arrows move the
+cursor while it fades, and it asks for no key). Bailey named the property *"FFX-2
+lines come from Rikku with nothing paused"* — that is about the line, and it holds.
+The mockup's badge text was an incidental label in the image, not a named property,
+and the departure is recorded on the C3 tile in `docs/target/targets.json`.
+
+### 4. The test that was supposed to prove the clock keeps running proved nothing
+
+`ui-coach-layer.test.ts` read the engine's gauges, then ticked the engine **itself**,
+then asserted the gauges had grown. They always had. The coach layer never touches
+the engine, so the assertion could not fail. Replaced by two that can:
+
+1. the inner HUD is asked for the menu **before a single `await`** — the X-2 line and
+   the menu go up in the same turn of the event loop;
+2. a driver shaped like the presenter's own loop ticks a **real `FFX2Engine`** once
+   per turn while the HUD's promise is outstanding, and counts the turns; a held line
+   only resolves when its 5.2 s fade timer fires, which in that loop is never.
+
+Both were mutation-checked: adding `await shown` to the FFX-2 branch turns (1) red,
+and flipping `ffx2-gauge` to `holds: true` turns both red.
 
 ## What Bailey approved
 
@@ -123,7 +204,51 @@ framed with CSS only. **Nothing was generated, recropped or regraded.**
 - **R16 (reuse the cold open as the link preview / OG card)** — a metadata fix, not a
   perceivable screen; it belongs with round-02 #33.
 
-## How it was verified
+## How the fix pass was verified (2026-09-20)
+
+`npx tsc --noEmit` clean. **Full suite: 158 files, 4 229 tests, all green** (4 221
+before; +8 new). `node tools/orphans.mjs`: nothing in `src/ui/coach/` is an orphan.
+
+New and rewritten tests, each of which fails without its repair:
+
+- `tests/unit/ui-coach-input-leak.test.ts` (new, 7 tests) — a **real `Input`** attached
+  to a real `window`, a **real `Briefing`**, real `KeyboardEvent`s and a stubbed
+  `navigator.getGamepads`. Enter and Escape are dismissed and then *not* delivered on
+  that frame or the next; a click on the foot queues no action; the pad is swallowed
+  whichever way the two poll loops are ordered, and a fresh press afterwards still
+  arrives; an ordinary (non-exclusive) claim still reads its own keys, so the pause
+  menu is untouched; the briefing's watcher still hears input while every other one is
+  muted.
+- `tests/unit/ui-coach-layer.test.ts` — the two real FFX-2 assertions above, plus the
+  badge pin: the line must not contain "gauges running" or "nothing paused".
+- `tests/unit/ui-coach-briefing.test.ts` — the `driven` test replaced by one that
+  dismisses the replayed briefing while `setRawInputSuspended(true)`.
+
+**One browser pass**, my own Vite server on **port 5731** (`--strictPort`, stopped
+afterwards — the port is no longer listening), `PYREFLY_BROWSER=gpu` for every run.
+The verifier's own probes were re-run unchanged, so the numbers are comparable:
+
+| probe | before | after |
+|---|---|---|
+| first launch, Enter to skip (`probe3.mjs`) | `screen: party-prep` | **`chapter-select`** |
+| first launch, Escape / click / wait-out (`probe4.mjs`) | Escape → `title` | **all three → `chapter-select`** |
+| title replay, `B` then Enter (`probe3.mjs`) | `chapter-select` (flow started) | **`title`** (second Enter then starts the flow, correctly) |
+| pause replay, Enter (`probe2.mjs`) | briefing re-created on every press, forever | **first Enter dismisses it, `created 0`** (a later Enter replays it, because REPLAY BRIEFING is still the selected row — ordinary menu behaviour) |
+| pause replay, Escape (`fix-verify.mjs`) | briefing gone **and the pause menu closed** (`.pause__row` 0) | **briefing gone, `.pause__row` 12 → 12, `screen: pause`** |
+| FFX-2 badge, chapters 4 and 5 (`fix-verify.mjs`) | `NOTHING PAUSED · GAUGES RUNNING` | **`KEEP PLAYING · NOTHING TO PRESS`**, 3 command rows live under it, still up after an ArrowDown |
+| FFX line (`fix-verify.mjs`) | unchanged | 0 command rows under the held line, 6 after one Enter, line gone |
+
+Scratch scripts (not product code): `critic/scratch/onboarding/fix-verify.mjs` plus
+the verifier's existing `probe2.mjs`, `probe3.mjs`, `probe4.mjs`.
+
+Captures re-taken at 1600x900 and 390x844 after the fix, and the three
+target-versus-build pairs rebuilt and looked at:
+`docs/screenshots/onboarding/c{1,2,3}-*.png`,
+`docs/screenshots/onboarding/pairs/{c1-briefing,c2-first-use-ffx,c3-ffx2-replay}.jpg`.
+C1 and C2 read as the approved frames. C3 reads as the approved frame with the one
+badge departure above.
+
+## How it was verified (first build)
 
 - `npx tsc --noEmit` clean. `node tools/orphans.mjs`: nothing in `src/ui/coach/` is an
   orphan.
@@ -134,9 +259,9 @@ framed with CSS only. **Nothing was generated, recropped or regraded.**
   - `tests/unit/ui-coach-copy.test.ts` — the deck, both absence directions, CHK-007.
   - `tests/unit/save-coach-migration.test.ts` — the veteran rule, a corrupt
     `seenCoach`, a rubbish save blob, a real `SaveStore` over a real storage double.
-  - `tests/unit/ui-coach-layer.test.ts` — a **real `FFX2Engine`** for Chapter 4, ticked
-    across the line, with `elapsedMs` and the gauge sum read on both sides; real
-    `KeyboardEvent`s for the FFX hold.
+  - `tests/unit/ui-coach-layer.test.ts` — a **real `FFX2Engine`** for Chapter 4 and
+    real `KeyboardEvent`s for the FFX hold. **Superseded:** its gauge before/after
+    assertions were tautological and were replaced in the fix pass — see item 4 above.
   - `tests/unit/ui-coach-briefing.test.ts` — a fake clock for the twenty seconds, a
     real key press before the opening fade, a real click, the keyboard claim.
 - **Full suite: `npx vitest run` → 157 files, 4221 tests, all passing** (4191 before).
@@ -167,6 +292,20 @@ framed with CSS only. **Nothing was generated, recropped or regraded.**
 
 ## Open
 
+0. **A question for Bailey, not a defect to fix quietly: should the FFX-2 ATB run
+   while you are choosing a command?** Today it does not — `BattlePresenter` awaits
+   `HudPort.chooseCommand` and ticks the FFX-2 engine only in its `waiting` branch, so
+   every gauge stands still during command input, measured at 0 ticks across 1.5 s in
+   both X-2 chapters, with teaching on and off alike. The sources
+   (`research/ffx-vs-ffx2-presentation.md` §4.2, row "Command input": *Active mode:
+   time runs. Wait mode: time freezes on entering a submenu*; §4.3 / §14 FC-4) say
+   this is the **Active / Wait setting**, which the build does not implement at all —
+   and §4.2 also notes the real game shows an on-screen indicator when it toggles
+   itself, which we do not have either. Game case if it is taken on: **FFX-2 only**
+   (chapters 4-5); FFX is turn-based and has no such clock. This is a combat-core
+   change that would alter every X-2 fight's difficulty, so under hard rule 10 it
+   builds nothing without an explicit yes, and it would need a deep review. The
+   onboarding badge no longer depends on the answer either way.
 1. **Not deployed and not reviewed.** `node tools/critic-plan.mjs` will call this a
    shared-system change (save schema, `HudPort` wrapper, global layout), so it needs a
    **deep review before going public**.
