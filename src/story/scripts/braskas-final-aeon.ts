@@ -119,6 +119,14 @@ export const braskasFinalAeonScripts: ChapterScripts = {
     wait(2600),
     results(),
 
+    // The FFX ending cue. Chapter 5 does the same thing after its own
+    // `results()` (`ffx2-vegnagun-shuyin.ts`, the E5-CODA block): the chapter
+    // card lands in silence, then the theme comes up under the epilogue rather
+    // than over the kill. `ending-ffx` is "Permission to stop"
+    // [docs/audio/THEMES.md, cue map row 16] — solo piano first, so it can sit
+    // under Auron's sending and still be there when Tidus goes.
+    music('ending-ffx', 1800),
+
     camera('idle', 900),
     say('rikku', 'Is that it? Did we—'),
     say('wakka', "It's quiet. Ya. It's real quiet."),
