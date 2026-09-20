@@ -19,6 +19,7 @@ import { FFX2Engine } from '../../battle/ffx2/index.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { FFXBattleHud } from '../../ui/ffx/FFXBattleHud.ts';
 import { FFX2BattleHud } from '../../ui/ffx2/FFX2BattleHud.ts';
+import { withCoach } from '../../ui/coach/CoachLayer.ts';
 import { ffx2EngineOptions, registerBattleContent } from './BattleScreenContent.ts';
 
 // ---------------------------------------------------------------- engines
@@ -66,9 +67,19 @@ export async function createEngine(
 
 // -------------------------------------------------------------------- HUD
 
-/** A fresh HUD for a game. One per battle; the screen mounts and unmounts it. */
+/**
+ * A fresh HUD for a game. One per battle; the screen mounts and unmounts it.
+ *
+ * Wrapped in {@link withCoach}, which is what puts Bailey's approved first-use
+ * lines on the HUD — Auron's in the FFX chapters, holding the decision until a
+ * confirm press, and Rikku's in the FFX-2 chapters, fading on their own with
+ * **nothing paused** (`src/ui/coach/CoachLayer.ts` has the table and the
+ * sources). The wrapper is transparent when coaching is off, already seen, or
+ * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
+ */
 export function createHud(game: GameId): HudPort {
-  return game === 'ffx' ? new FFXBattleHud() : new FFX2BattleHud();
+  const hud: HudPort = game === 'ffx' ? new FFXBattleHud() : new FFX2BattleHud();
+  return withCoach(game, hud);
 }
 
 // --------------------------------------------------------- cutscene runner

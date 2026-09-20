@@ -1,0 +1,95 @@
+/**
+ * **The copy deck, read once, against Bailey's approved frames and the rules.**
+ *
+ * The one thing hard rule 14 asks of a per-game feature is a test that asserts
+ * the feature is *absent* for the other game. That is what most of this file
+ * is: FFX may never speak with Rikku's voice, FFX-2 may never be held, and
+ * neither deck may leak into the other. The rest is CHK-007's grep over player
+ * copy — no section marks, no research ids, no camelCase, and no bare "CTB" or
+ * "ATB", which appear on none of Bailey's nine mocked frames
+ * (`docs/plans/onboarding-review.md` REQUIRED 14).
+ */
+
+import { describe, expect, it } from 'vitest';
+import {
+  ALL_COACH_IDS,
+  ALL_MARKS,
+  BRIEFING_LINES,
+  BRIEFING_MS,
+  FFX2_MARKS,
+  FFX_MARKS,
+  markById,
+  marksFor,
+  speakerFor,
+} from '../../src/ui/coach/coachCopy.ts';
+
+/** Every word a player can read in the whole feature. */
+function everyPlayerString(): string[] {
+  const out: string[] = [];
+  for (const l of BRIEFING_LINES) out.push(l.lead, l.strong, l.tail);
+  for (const m of ALL_MARKS) out.push(m.speaker, m.body);
+  return out.filter((s) => s.length > 0);
+}
+
+describe('onboarding copy deck', () => {
+  it('FFX speaks as Auron and FFX-2 as Rikku, and neither deck reaches the other game', () => {
+    expect(speakerFor('ffx')).toBe('Auron');
+    expect(speakerFor('ffx2')).toBe('Rikku');
+
+    for (const mark of marksFor('ffx')) {
+      expect(mark.game, `${mark.id} is offered to FFX`).toBe('ffx');
+      expect(mark.speaker, `${mark.id} speaks in an FFX chapter`).toBe('Auron');
+    }
+    for (const mark of marksFor('ffx2')) {
+      expect(mark.game, `${mark.id} is offered to FFX-2`).toBe('ffx2');
+      expect(mark.speaker, `${mark.id} speaks in an FFX-2 chapter`).toBe('Rikku');
+    }
+
+    // The absence assertion, both directions.
+    const ffxIds = marksFor('ffx').map((m) => m.id);
+    const ffx2Ids = marksFor('ffx2').map((m) => m.id);
+    for (const id of ffx2Ids) expect(ffxIds, `${id} must never be offered to FFX`).not.toContain(id);
+    for (const id of ffxIds) expect(ffx2Ids, `${id} must never be offered to FFX-2`).not.toContain(id);
+  });
+
+  it('only FFX lines hold, and every FFX-2 line fades on its own', () => {
+    // research/ffx-vs-ffx2-presentation.md section 9 row 3 and section 4.2 /
+    // FC-4: FFX's engine waits for input by definition, FFX-2's gauge does not
+    // stop for anything. This is the rule the whole feature turns on.
+    for (const mark of FFX_MARKS) {
+      expect(mark.holds, `${mark.id} holds the decision`).toBe(true);
+    }
+    for (const mark of FFX2_MARKS) {
+      expect(mark.holds, `${mark.id} must never hold an FFX-2 fight`).toBe(false);
+      expect(mark.fadeMs, `${mark.id} needs a fade of its own`).toBeGreaterThan(0);
+    }
+  });
+
+  it('the briefing is Bailey’s four lines and twenty seconds', () => {
+    expect(BRIEFING_LINES).toHaveLength(4);
+    expect(BRIEFING_MS).toBe(20_000);
+    const whole = BRIEFING_LINES.map((l) => l.lead + l.strong + l.tail).join(' ');
+    // Both clocks, named once, which is the entire reason the briefing is the
+    // one surface shared by two games.
+    expect(whole).toContain('nothing moves until you move');
+    expect(whole).toContain('the clock does not wait');
+  });
+
+  it('no player-facing string carries developer or wiki vocabulary (CHK-007, REQUIRED 14)', () => {
+    for (const text of everyPlayerString()) {
+      expect(text, `section mark in: ${text}`).not.toMatch(/§/);
+      expect(text, `research id in: ${text}`).not.toMatch(/\bffx2?-[a-z-]+\b/);
+      expect(text, `camelCase in: ${text}`).not.toMatch(/[a-z][A-Z]/);
+      expect(text, `bare acronym in: ${text}`).not.toMatch(/\b(CTB|ATB)\b/);
+    }
+  });
+
+  it('every id is unique and the seen-set knows all of them', () => {
+    const ids = ALL_MARKS.map((m) => m.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ALL_COACH_IDS).toContain('briefing');
+    for (const id of ids) expect(ALL_COACH_IDS).toContain(id);
+    expect(markById('ffx-turn-order')?.game).toBe('ffx');
+    expect(markById('nothing-like-this')).toBeNull();
+  });
+});

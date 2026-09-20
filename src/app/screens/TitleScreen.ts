@@ -3,6 +3,8 @@ import type { InputSnapshot } from '../Input.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { audio } from '../../audio/index.ts';
 import { installInkGoldStyles, playWipe } from '../../ui/inkgold/index.ts';
+import type { Briefing } from '../../ui/coach/Briefing.ts';
+import { makeBriefing } from './raiseBriefing.ts';
 
 /**
  * Title card in the approved "Ink & Gold" presentation
@@ -19,7 +21,24 @@ export class TitleScreen extends Screen {
   readonly name = 'title';
   private advancing = false;
   private stage: HTMLElement | null = null;
+  /** Auron's briefing, while it is being replayed from here. */
+  private briefing: Briefing | null = null;
   private readonly onResize = (): void => this.layout();
+  /**
+   * `B` fetches the briefing back.
+   *
+   * Bailey's pick says "replayable from pause"; the title needs it too, because
+   * the title is where a first-timer who skipped it on boot actually is, and
+   * pause only exists once a chapter has started. `B` has no abstract button in
+   * `app/Input.ts` and adding one there for a single screen would put a global
+   * binding in a file thirty agents import — the same reasoning the pause
+   * screen's `H` is written down under. Mouse and touch use the chip.
+   */
+  private readonly onKey = (e: KeyboardEvent): void => {
+    if (e.code !== 'KeyB' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (this.advancing) return;
+    void this.replayBriefing();
+  };
 
   override enter(): void {
     installInkGoldStyles();
@@ -35,6 +54,7 @@ export class TitleScreen extends Screen {
     this.stage = stage;
 
     window.addEventListener('resize', this.onResize, { passive: true });
+    window.addEventListener('keydown', this.onKey);
     this.layout();
 
     void audio.playMusic('title', { fade: 1.6 }).catch(() => {
@@ -45,7 +65,22 @@ export class TitleScreen extends Screen {
 
   override exit(): void {
     window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    this.briefing?.skip();
+    this.briefing = null;
     this.stage = null;
+  }
+
+  /** Put the briefing back up over the title. Never starts the flow. */
+  private async replayBriefing(): Promise<void> {
+    if (this.briefing && !this.briefing.finished) return;
+    const briefing = makeBriefing(this.app);
+    this.briefing = briefing;
+    try {
+      await briefing.show();
+    } finally {
+      this.briefing = null;
+    }
   }
 
   private markup(): string {
@@ -79,6 +114,7 @@ export class TitleScreen extends Screen {
         <div class="ig-title__caption">FIVE ENCOUNTERS &middot; FINAL FANTASY X AND X-2</div>
         <div class="ig-hint-chip ig-title__hint">
           <b>ARROWS / WASD</b> MOVE &nbsp;&middot;&nbsp; <b>ENTER</b> CONFIRM &nbsp;&middot;&nbsp; <b>ESC</b> CANCEL
+          &nbsp;&middot;&nbsp; <span data-action="title:briefing" role="button" tabindex="0"><b>B</b> BRIEFING</span>
         </div>
       </div>
     `;
@@ -96,6 +132,10 @@ export class TitleScreen extends Screen {
   }
 
   override handleInput(input: InputSnapshot): void {
+    // While the briefing is up it owns the screen: it holds the keyboard claim,
+    // and a stray Enter here would start the flow behind it.
+    if (this.briefing && !this.briefing.finished) return;
+    if (input.actions.includes('title:briefing')) return void this.replayBriefing();
     if (this.advancing) return;
     if (input.justPressed('confirm') || input.justPressed('start')) return void this.advance();
     if (input.actions.includes('confirm')) void this.advance();

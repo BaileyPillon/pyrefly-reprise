@@ -66,6 +66,9 @@ import {
   type ControlHintItem,
 } from '../../ui/common/ControlsHint.ts';
 import { MusicPlayer } from '../../ui/common/MusicPlayer.ts';
+import type { Briefing } from '../../ui/coach/Briefing.ts';
+import { battleHelpOn, setBattleHelp } from '../../ui/coach/coachState.ts';
+import { makeBriefing } from './raiseBriefing.ts';
 import { PhotoMode } from '../../ui/common/PhotoMode.ts';
 import {
   dossierHtml,
@@ -188,6 +191,8 @@ export class PauseScreen extends Screen {
   private hint: ControlsHint | null = null;
   private music: MusicPlayer | null = null;
   private photo: PhotoMode | null = null;
+  /** The replayed briefing, while it is up. See {@link PauseScreen.replayBriefing}. */
+  private briefing: Briefing | null = null;
   /** Screen roots hidden for the duration of photo mode. See {@link enterPhotoMode}. */
   private hiddenUnder: HTMLElement[] = [];
 
@@ -364,6 +369,18 @@ export class PauseScreen extends Screen {
       label: this.panelsHidden ? 'Show Panels' : 'Hide Panels',
       panel: 'details',
     });
+    // Bailey's approved onboarding C3: "replayable from pause". Two rows,
+    // always there, in both games (shared plumbing, CHK-020) — fetch the
+    // twenty seconds again, or turn the voices off for good. BATTLE HELP is
+    // worded exactly as FFX-2's own Config list words it
+    // (`research/ffx-vs-ffx2-presentation.md:278`).
+    rows.push({ id: 'briefing', label: 'Replay Briefing', panel: 'details' });
+    rows.push({
+      id: 'battle-help',
+      label: 'Battle Help',
+      panel: 'details',
+      value: () => (battleHelpOn() ? 'ON' : 'OFF'),
+    });
     rows.push({ id: 'options', label: 'Options', panel: 'options', entersPanel: true });
     rows.push({ id: 'details', label: 'Encounter Details', panel: 'details' });
     rows.push({ id: 'party', label: 'Party', panel: 'party', entersPanel: true });
@@ -536,6 +553,14 @@ export class PauseScreen extends Screen {
   // ------------------------------------------------------------------- input
 
   override handleInput(input: InputSnapshot): void {
+    // The replayed briefing owns the screen while it is up: it took the
+    // keyboard claim itself, and this is how the gamepad reaches it, because
+    // raw HUD input is muted behind the pause overlay.
+    if (this.briefing && !this.briefing.finished) {
+      this.briefing.handleInput(input);
+      return;
+    }
+
     this.hint?.handleInput(input);
 
     if (this.photo) {
@@ -757,6 +782,13 @@ export class PauseScreen extends Screen {
         this.renderMenu();
         return;
       }
+      case 'briefing':
+        void this.replayBriefing();
+        return;
+      case 'battle-help':
+        setBattleHelp(!battleHelpOn());
+        this.renderMenu();
+        return;
       case 'restart':
         this.opts.onRestart?.();
         return;
@@ -827,6 +859,30 @@ export class PauseScreen extends Screen {
     audio.playSfx('cursor-move');
     this.renderPanel();
     this.renderMenu();
+  }
+
+  // --------------------------------------------------------------- briefing
+
+  /**
+   * Play Auron's briefing again, over the pause menu.
+   *
+   * Bailey's approved C3 frame puts REPLAY BRIEFING on this menu precisely so
+   * that skipping it on boot is not a one-way door. It is `driven`, so this
+   * screen pumps its input: the pause overlay mutes raw HUD input, which would
+   * otherwise leave a gamepad with no way to dismiss it.
+   */
+  private async replayBriefing(): Promise<void> {
+    if (this.briefing && !this.briefing.finished) return;
+    const briefing = makeBriefing(this.app, { driven: true });
+    this.briefing = briefing;
+    try {
+      await briefing.show();
+    } finally {
+      this.briefing = null;
+      // "Never show this again" turns BATTLE HELP off from inside the
+      // briefing, so the row beneath it has to be redrawn.
+      this.renderMenu();
+    }
   }
 
   // -------------------------------------------------------------- photo mode
@@ -989,6 +1045,9 @@ export class PauseScreen extends Screen {
     this.bareHint = null;
     this.photo?.dispose();
     this.photo = null;
+    // A briefing left up would outlive the screen that owns its input.
+    this.briefing?.skip();
+    this.briefing = null;
     // Closing the menu straight out of photo mode must not leave the battle
     // HUD invisible behind it.
     this.restoreScreensBelow();

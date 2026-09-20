@@ -28,6 +28,7 @@ import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
+import { runBriefingIfDue } from './raiseBriefing.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 
 /** A screen the flow can await. */
@@ -226,6 +227,12 @@ export class GameFlow {
     this.running = true;
     this.handedOver = false;
     try {
+      // Bailey's approved onboarding, option C (2026-09-20): twenty skippable
+      // seconds in Auron's voice **after the title and before the board**, on a
+      // first launch only. `runBriefingIfDue` is a no-op once it has been seen
+      // or dismissed, and with `?coach=off` — so no capture harness, e2e spec
+      // or returning player ever meets it. Game case: both.
+      await runBriefingIfDue(this.app);
       for (;;) {
         const chapterId = await this.chapterSelect();
         if (this.handedOver) return;

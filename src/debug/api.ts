@@ -22,6 +22,13 @@ import { BevelleUndergroundSceneScreen } from '../scenes/bevelle-underground-deb
 import { DreamsEndSceneScreen } from '../scenes/dreams-end-debug.ts';
 // Results agent: fixture-driven results panels, `goto('results-victory')` etc.
 import { registerResultsDemoScreens } from './resultsDemo.ts';
+import {
+  battleHelpOn,
+  coachingAllowed,
+  markAllSeen,
+  markSeen,
+  setCoachingEnabled,
+} from '../ui/coach/index.ts';
 
 export const VERSION = '0.1.0';
 
@@ -182,6 +189,28 @@ export interface PyreflyDebugApi {
    * working battle until a boss tries to cast something.
    */
   wiring(): Promise<Record<string, boolean | number | string>>;
+  /**
+   * Turn Bailey's onboarding off (or back on) for this page, without touching
+   * the save file.
+   *
+   * `docs/plans/onboarding-review.md` REQUIRED 8: every Playwright spec,
+   * `tools/screenshot.mjs` run, art-watch gallery load and Part C composite
+   * boots a **fresh browser profile**, which is exactly the first-launch
+   * condition Auron's briefing waits for. Without a switch the feature would
+   * front every capture and poison its own evidence. `?coach=off` in the URL
+   * does the same thing before any script has run.
+   */
+  setCoaching(on: boolean): void;
+  /**
+   * Mark onboarding surfaces as already seen — one id, or all of them.
+   *
+   * The difference from {@link PyreflyDebugApi.setCoaching} is that this one
+   * *does* write the save, which is how a spec sets up the "returning player"
+   * case it wants to assert.
+   */
+  markCoachSeen(id?: string): void;
+  /** What the onboarding state machine currently believes. */
+  coaching(): { allowed: boolean; battleHelp: boolean; seen: readonly string[] };
 }
 
 /** One combatant, as the targeting snapshot reports it. */
@@ -436,6 +465,16 @@ export function installDebugApi(app: App): PyreflyDebugApi {
     },
     targeting: () => readTargeting(app),
     wiring: () => wiringReport(),
+    setCoaching: (on: boolean) => setCoachingEnabled(on),
+    markCoachSeen: (id?: string) => {
+      if (id) markSeen(id);
+      else markAllSeen();
+    },
+    coaching: () => ({
+      allowed: coachingAllowed(),
+      battleHelp: battleHelpOn(),
+      seen: [...app.save.seenCoach],
+    }),
   };
 
   window.__pyrefly = api;

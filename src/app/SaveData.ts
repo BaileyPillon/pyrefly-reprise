@@ -7,6 +7,7 @@
  */
 
 import { audio } from '../audio/index.ts';
+import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
@@ -125,6 +126,22 @@ export interface Settings {
    * again and not re-press `H` on every chapter.
    */
   pausePanelsHidden: boolean;
+  /**
+   * Onboarding: Auron's briefing and the first-use lines
+   * (`src/ui/coach/`, end-state tiles C1/C2/C3 in `docs/target/targets.json`).
+   *
+   * **Named for FFX-2's own Config list**, which really does carry an entry
+   * called *Battle Help* (`research/ffx-vs-ffx2-presentation.md:278`), so the
+   * X-2 pause row is labelled exactly as the game labels it. The FFX chapters
+   * read the same switch — the off switch is shared plumbing (CHK-020), only
+   * the voice and the blocking behaviour are per game.
+   *
+   * **Defaults to `true`**, because the critic's number one issue on the live
+   * build is that nothing teaches the game. `migrate` turns it off for a save
+   * that has already cleared a chapter: that player is a veteran and must not
+   * be coached on his own game.
+   */
+  battleHelp: boolean;
 }
 
 export interface SaveData {
@@ -135,6 +152,15 @@ export interface SaveData {
   /** Ids of unlocked optional banter / bestiary entries. */
   unlocked: string[];
   settings: Settings;
+  /**
+   * Ids of the onboarding surfaces this player has already been shown —
+   * `'briefing'` plus one id per first-use line (`src/ui/coach/coachCopy.ts`).
+   *
+   * A set, not a counter: every line is shown **once, ever**. Absent from an
+   * older blob, in which case {@link migrate} decides — an empty list for a
+   * fresh save, every id for a save with a cleared chapter.
+   */
+  seenCoach: string[];
   /** Free-form flags other systems can set without a schema change. */
   flags: Record<string, number | string | boolean>;
 }
@@ -152,6 +178,7 @@ export function defaultSettings(): Settings {
     intentVisible: true,
     ffx2Atb: 'active',
     pausePanelsHidden: false,
+    battleHelp: true,
     reduceMotion:
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -166,6 +193,7 @@ export function defaultSave(): SaveData {
     chapters: {},
     unlocked: [],
     settings: defaultSettings(),
+    seenCoach: [],
     flags: {},
   };
 }
@@ -191,15 +219,46 @@ function sanitizeChapters(chapters: Record<string, ChapterRecord>): Record<strin
   return out;
 }
 
-/** Bring an older blob up to {@link SAVE_VERSION}. */
+/**
+ * Bring an older blob up to {@link SAVE_VERSION}.
+ *
+ * ## The veteran rule (`docs/plans/onboarding-review.md` REQUIRED 7)
+ *
+ * Onboarding's two new fields — {@link Settings.battleHelp} and
+ * {@link SaveData.seenCoach} — are younger than every save in the wild,
+ * Bailey's included, and his has cleared chapters. Merged naively he would be
+ * taught his own game the next time he replayed one. So a blob that predates
+ * the fields **and has cleared at least one chapter** is treated as a
+ * veteran's: every coaching id is marked seen and the help is switched off. A
+ * blob that predates them with nothing cleared is a first-timer's and gets the
+ * shipped defaults, so the briefing plays once.
+ *
+ * A blob that already carries `seenCoach` is left exactly as it is — the rule
+ * fires once, at the upgrade, and never re-decides afterwards. Nothing here can
+ * produce `NaN` or throw on a malformed value: a non-array `seenCoach` falls
+ * back to the decision above, and every entry is coerced to a string
+ * (`critic/CHECKS.md` CHK-024).
+ */
 export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData {
   const base = defaultSave();
+  const chapters = sanitizeChapters({ ...base.chapters, ...(raw.chapters ?? {}) });
+  const veteran = Object.values(chapters).some((rec) => rec.cleared === true);
+  const hadCoach = Array.isArray(raw.seenCoach);
+  const seenCoach = hadCoach
+    ? (raw.seenCoach as unknown[]).filter((id): id is string => typeof id === 'string')
+    : veteran
+      ? [...ALL_COACH_IDS]
+      : [];
+  const settings: Settings = { ...base.settings, ...(raw.settings ?? {}) };
+  if (!hadCoach && veteran) settings.battleHelp = false;
+  if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
   const out: SaveData = {
     ...base,
     ...raw,
     version: SAVE_VERSION,
-    chapters: sanitizeChapters({ ...base.chapters, ...(raw.chapters ?? {}) }),
-    settings: { ...base.settings, ...(raw.settings ?? {}) },
+    chapters,
+    settings,
+    seenCoach,
     flags: { ...base.flags, ...(raw.flags ?? {}) },
     unlocked: Array.isArray(raw.unlocked) ? [...raw.unlocked] : [],
   };
@@ -396,6 +455,33 @@ export class SaveStore {
     // itself the way `PauseScreen` still does today.
     audio.applySettings(this.data.settings);
     this.save();
+  }
+
+  // ------------------------------------------------------- onboarding
+
+  /**
+   * Has this player already been shown one onboarding surface?
+   *
+   * Never throws and never answers `undefined`: a save whose `seenCoach` was
+   * lost or corrupted reads as "nothing seen yet", which shows the briefing one
+   * more time rather than silently teaching nobody.
+   */
+  hasSeenCoach(id: string): boolean {
+    const seen = this.data.seenCoach;
+    return Array.isArray(seen) && seen.includes(id);
+  }
+
+  /** Record one onboarding surface as shown. Idempotent. */
+  markCoachSeen(id: string): void {
+    if (!Array.isArray(this.data.seenCoach)) this.data.seenCoach = [];
+    if (this.data.seenCoach.includes(id)) return;
+    this.data.seenCoach.push(id);
+    this.save();
+  }
+
+  /** Every onboarding id this player has been shown. */
+  get seenCoach(): readonly string[] {
+    return Array.isArray(this.data.seenCoach) ? this.data.seenCoach : [];
   }
 
   setFlag(key: string, value: number | string | boolean): void {
