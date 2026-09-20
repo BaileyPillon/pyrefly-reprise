@@ -252,16 +252,44 @@ export function statusIconsFor(c: FFXCombatant): StatusId[] {
  * letter is appended to on the CTB tile and on the targeting name plate — two
  * records that read the same on screen have to be told apart, and two that read
  * differently never need it.
+ *
+ * **Assigned once per battle, from the formation's roster.** The first cut read
+ * the *live* field, so when one of Chapter 3's two Yu Pagodas died the group
+ * fell below two and the survivor silently became plain "Yu Pagoda" — then got
+ * its letter back when the twin revived, over and over, renaming the same enemy
+ * mid-battle (round 04 PR-0023). The roster is `state.enemyIds`, which holds
+ * every enemy record of the formation whether it is standing, dead or sent, so
+ * the map is stable for the whole fight; it is recomputed only if the roster
+ * itself grows (an enemy that joins mid-battle), never as one dies.
+ *
+ * FFX only: this is the CTB forecast's own tile label. FFX-2's ATB HUD builds
+ * its rows elsewhere and is untouched.
  */
+function letterTags(ctx: Ctx): ReadonlyMap<CombatantId, string> {
+  const roster = ctx.state.enemyIds;
+  const cached = ctx.rt.letterTags;
+  if (cached && cached.rosterSize === roster.length) return cached.tags;
+
+  const byName = new Map<string, CombatantId[]>();
+  for (const id of roster) {
+    const e = tryActor(ctx, id);
+    if (e === undefined) continue;
+    const group = byName.get(e.name);
+    if (group) group.push(id);
+    else byName.set(e.name, [id]);
+  }
+  const tags = new Map<CombatantId, string>();
+  for (const group of byName.values()) {
+    if (group.length < 2) continue; // a unique enemy never gains a letter
+    group.forEach((id, i) => tags.set(id, String.fromCharCode(65 + i)));
+  }
+  ctx.rt.letterTags = { rosterSize: roster.length, tags };
+  return tags;
+}
+
 function letterTagFor(ctx: Ctx, c: FFXCombatant): string | undefined {
   if (c.side !== 'enemy') return undefined;
-  const sameName = ctx.state.enemyIds.filter((id) => {
-    const e = tryActor(ctx, id);
-    return e !== undefined && onField(e) && e.name === c.name;
-  });
-  if (sameName.length < 2) return undefined;
-  const idx = sameName.indexOf(c.id);
-  return idx >= 0 ? String.fromCharCode(65 + idx) : undefined;
+  return letterTags(ctx).get(c.id);
 }
 
 function overdriveReady(c: FFXCombatant): boolean {

@@ -61,6 +61,13 @@ export function collectBossCounters(
     const enemy = tryActor(ctx, id);
     if (!enemy || enemy.side !== 'enemy') continue;
     if (enemy.id === attacker.id) continue;
+    // **Threaten stops the counter, not just the turn** [ffx-combat-core §4.2:
+    // "Target cannot act **or counterattack**"]. {@link canCounter} has always
+    // encoded that sentence; until round 04 nothing called it, so a Threatened
+    // Yunalesca kept countering (round 04 PR-0004, observed twice at runtime).
+    // FFX only: Threaten is an FFX ability and the ATB engine has no equivalent
+    // status, so FFX-2 is untouched — this collector is FFX-side only.
+    if (!canCounter(ctx, enemy.id)) continue;
     const script = activeScriptId(enemy);
     const ai = aiContextFor(ctx, enemy);
 

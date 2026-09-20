@@ -252,6 +252,23 @@ export class FFXEngine implements FFXBattleEngine {
 
     if (command === null) {
       // A deliberate pass still costs a rank-3 turn.
+      //
+      // **`3` is an `[estimate]`, not a sourced constant** (round 04 PR-0025).
+      // Reason for the value: 3 is the engine's own default action rank — the
+      // fallback `rankOf()` applies to any ability whose rank byte is 0
+      // [ffx-combat-core §1.3] and the rank the CTB forecast assumes for every
+      // actor [§1.6] — so a turn spent on nothing recovers exactly like the
+      // ordinary Attack that would otherwise have filled it. No section of
+      // `ffx-combat-core.md` states what a *skipped* turn costs; §1.1, §4.1 and
+      // §4.2 give the queue-membership and the Sleep/Threaten clocks, not this
+      // number. It is load-bearing — it sets how many ticks a 3-turn Sleep or a
+      // Threaten locks a target out for, and therefore how strong they are as
+      // tempo tools — so it is **an open question for Bailey**, logged in
+      // `docs/handoff/builda1-engine-status.md`. Left at its shipped value here
+      // deliberately: AGENTS.md hard rule 6 forbids inventing a replacement.
+      //
+      // FFX only: this is the CTB recovery ladder. FFX-2's ATB engine has its
+      // own wait model and is untouched.
       chargeForAction(ctx, actor.id, 3);
       this.afterAction(actor, ctx.state.log.slice(startIndex));
       return;
