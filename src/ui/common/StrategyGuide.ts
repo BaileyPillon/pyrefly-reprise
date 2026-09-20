@@ -145,6 +145,28 @@ const FIT_RUNGS = 4;
 /** Height of the MORE affordance, in grid px. Mirrors `.sgd__more`'s own. */
 const MORE_HEIGHT = 11;
 
+/**
+ * The largest line bottom at or below `limit`, so a box can end there without
+ * slicing through the middle of a line's glyphs (round 03 #36:
+ * `critic/rounds/round-03.md:780-788` — "…the CTB margin the Holy / Water
+ * rhythm need[s to beat] the mount's Full-"). `lineBottoms` are each visible
+ * text line's bottom edge, measured from the same origin as `limit`.
+ *
+ * Pure and exported so the clamping rule itself is unit-testable without a
+ * layout engine: `StrategyGuide.measureLineBottoms` is the only caller that
+ * needs one, and jsdom (this project's unit tests) has none, which is why it
+ * hands back an empty array and this function falls back to `limit` — the
+ * same "no data, no fit run" the class already documents for `fit()`.
+ */
+export function lastWholeLineBelow(lineBottoms: readonly number[], limit: number): number {
+  if (lineBottoms.length === 0) return limit;
+  let best = 0;
+  for (const bottom of lineBottoms) {
+    if (bottom <= limit + 0.5 && bottom > best) best = bottom;
+  }
+  return best > 0 ? best : limit;
+}
+
 export class StrategyGuide {
   readonly el: HTMLElement;
   private readonly panelEl: HTMLElement;
@@ -396,11 +418,63 @@ export class StrategyGuide {
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);
     this.fit(available);
+    // `fit()` above gives up whole *elements* (a citation, a rule's paragraph,
+    // a whole rule) until the content roughly fits `available`, and — as a
+    // side effect — sets `moreEl.hidden` for whether that was enough.
+    //
+    // That still leaves the one case `fit()` cannot see: the element left
+    // standing at the fold — usually a `.sgd__why` sentence — running a
+    // fractional line past `available` and getting sliced through the middle
+    // of its glyphs by `overflow-y` (round 03 #36). `measureLineBottoms`
+    // reads the real rendered line boxes (jsdom has none, so this is a no-op
+    // there, like the rest of this method's pixel math) and
+    // `lastWholeLineBelow` finds where the box can end without cutting one.
+    //
+    // When the MORE chip is going to show, the line search budgets
+    // `MORE_HEIGHT` less than `available` for it, and the box is then given
+    // that reserved strip back on top of the clamped text height — MORE
+    // still occupies the box's trailing `MORE_HEIGHT`, exactly as originally
+    // authored, but now that strip is blank ink below a *complete* last
+    // line, never printed over the tail of one. Retrofitting the clamp
+    // without this reserve was tried first and produced the opposite defect
+    // life-tested: MORE painted directly over the last word of a fully
+    // legible sentence, which reads worse than the slice it replaced.
+    const budget = this.moreEl.hidden ? available : available - MORE_HEIGHT;
+    const textHeight = lastWholeLineBelow(this.measureLineBottoms(), budget);
+    const clampedHeight = this.moreEl.hidden ? textHeight : textHeight + MORE_HEIGHT;
+    this.panelEl.style.maxHeight = `${clampedHeight.toFixed(2)}px`;
     // Flush with the panel's own bottom edge, whichever of the two heights is
     // smaller: `available` is a cap, and a rail whose content stops short of it
     // would otherwise get a chip floating in mid-panel.
-    const panelHeight = Math.min(available, this.panelEl.offsetHeight || available);
+    const panelHeight = Math.min(clampedHeight, this.panelEl.offsetHeight || clampedHeight);
     this.moreEl.style.top = `${(top + panelHeight - MORE_HEIGHT).toFixed(2)}px`;
+  }
+
+  /**
+   * Every visible text line's bottom edge inside {@link bodyEl}, measured
+   * from `bodyEl`'s own top (which is where `available` above is measured
+   * from too — `.sgd__body` carries no margin or padding of its own, so its
+   * top edge *is* `.sgd__panel`'s content-box top).
+   *
+   * A single `Range` over the whole body, rather than one per element,
+   * because a `Range.getClientRects()` already returns one rect per wrapped
+   * line across everything it spans — which is the thing `element
+   * .getClientRects()` does *not* do for a block box. Real browsers only:
+   * jsdom implements neither layout nor (reliably) this API, so this returns
+   * `[]` there and {@link lastWholeLineBelow} falls back to the uncautious
+   * height, exactly as documented on {@link StrategyGuide.fit}.
+   */
+  private measureLineBottoms(): number[] {
+    try {
+      const range = document.createRange();
+      range.selectNodeContents(this.bodyEl);
+      const rects = range.getClientRects();
+      if (!rects || rects.length === 0) return [];
+      const top = this.bodyEl.getBoundingClientRect().top;
+      return Array.from(rects, (r) => r.bottom - top);
+    } catch {
+      return [];
+    }
   }
 
   /**

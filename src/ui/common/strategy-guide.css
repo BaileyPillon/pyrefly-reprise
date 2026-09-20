@@ -277,7 +277,15 @@
 
 /* The affordance the fade was not. Sits on the panel's own bottom edge; one
    click pages the rail down, and a click at the foot returns to the top — a
-   pad has no wheel, so the indicator has to be the control too. */
+   pad has no wheel, so the indicator has to be the control too.
+   Round 03 #36: `StrategyGuide.layout()` now clamps the panel's height to
+   the bottom of the last *whole* rendered line (`lastWholeLineBelow`), so
+   there is no longer a sliced half-line here for an opaque plateau to hide —
+   the line under this chip is always complete. That is what let the
+   `0%..64%` opaque stop the earlier fix added (to cover a slice) go: a plain
+   two-stop gradient is now a real fade over the chip's whole height, reading
+   as one continuous fade with the panel's own `mask-image` above it, not two
+   different fades stacked on top of a cut. */
 .sgd__more {
   position: absolute;
   left: 21.33px;
@@ -287,21 +295,15 @@
   margin: 0;
   padding: 0 0 0.5px;
   border: 0;
-  /* Opaque under the word, fading only across its top third. The first version
-     was a full-height fade and the browser pass caught the consequence: at a
-     rail that is genuinely overflowing, "MORE" was printed over the middle of
-     the last sentence it was announcing. The glyphs sit on the panel's own
-     bottom edge, under the `mask-image` fade the panel already draws, so the
-     two read as one affordance. */
-  background: linear-gradient(
-    to top,
-    var(--ig-ink-panel) 0%,
-    var(--ig-ink-panel) 64%,
-    rgba(11, 10, 18, 0) 100%
-  );
+  background: linear-gradient(to top, var(--ig-ink-panel) 0%, rgba(11, 10, 18, 0) 100%);
   color: var(--ig-accent);
   font-family: var(--ig-font-display);
-  font-size: 5px;
+  /* 7 grid px, not the old 5: at the smallest of the three viewports the
+     brief measures against (1280x720, letterbox scale 2x — `scale = min(w /
+     640, h / 360)`), 5px landed at 10 effective CSS px, under the project's
+     14px legibility floor. 7 clears all three (14 / 17.5 / ~19.7 px at
+     1280x720 / 1600x900 / 2000x1012). */
+  font-size: 7px;
   line-height: 1;
   letter-spacing: 0.2em;
   display: flex;
