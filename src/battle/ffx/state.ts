@@ -238,10 +238,41 @@ export function stacks(c: Combatant, status: StatusId): number {
   return c.statuses[status]?.stacks ?? 0;
 }
 
-/** True when the combatant is on the field and able to take turns. */
-export function canAct(c: Combatant): boolean {
+/**
+ * True when the combatant **owns a CTB counter** and can be picked as the next
+ * actor.
+ *
+ * §1.1 states the membership rule verbatim:
+ *
+ * > `nextActor = argmin(ctb) over living, non-Eject, non-Petrify actors`
+ *
+ * That list is exhaustive. Sleep and Threaten are **not** on it: they deny the
+ * *action*, not the *turn*, and both of their clocks are paid on the victim's
+ * own turn — Sleep "ticks down by 1 at the end of the victim's own action"
+ * (§4.1) and Threaten "lasts until the user's next turn" (§4.2). Filtering them
+ * out of the queue is what made round 03 blockers #3 and #4: the turn that
+ * would have ended the status could never arrive, so Threaten deleted Yunalesca
+ * from the fight for good and a Sleep sat on 3 turns remaining for 53 turns.
+ *
+ * Pair this with {@link canAct}: the engine asks this one *who goes next* and
+ * that one *whether they may do anything when they get there*.
+ * [ffx-combat-core §1.1, §4.1, §4.2]
+ */
+export function inTurnQueue(c: Combatant): boolean {
   if (!c.alive || c.removed) return false;
-  if (has(c, 'ko') || has(c, 'petrify') || has(c, 'eject') || has(c, 'sleep')) return false;
+  return !has(c, 'ko') && !has(c, 'eject') && !has(c, 'petrify');
+}
+
+/**
+ * True when the combatant may take an action on a turn that has arrived.
+ *
+ * See {@link inTurnQueue} for the other half of the split. A combatant that is
+ * in the queue but cannot act loses the turn: the engine charges it a rank-3
+ * recovery and runs the end-of-turn ticks, which is what pays Sleep's duration.
+ */
+export function canAct(c: Combatant): boolean {
+  if (!inTurnQueue(c)) return false;
+  if (has(c, 'sleep')) return false;
   if (has(c, 'threaten')) return false;
   return true;
 }

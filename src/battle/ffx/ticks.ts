@@ -8,7 +8,7 @@
 
 import type { AbilityDef, CombatantId, FFXCombatant, ItemId } from '../common/types.ts';
 import { idiv } from './math.ts';
-import { type Ctx, allCombatants, has, isAlive, livingFriendlies, onField, spendItem, statusOf, tryActor } from './state.ts';
+import { type Ctx, allCombatants, has, isAlive, livingFriendlies, onField, rtOf, spendItem, statusOf, tryActor } from './state.ts';
 import { dealDamage, healOutsideChain, koActor } from './hp.ts';
 import { clearUntilNextTurnStatuses, refreshCriticalStatus, removeStatus, tickDurationStatuses } from './statuses.ts';
 import { hasAuto } from './equipment.ts';
@@ -94,9 +94,37 @@ export function onTurnStart(ctx: Ctx, actor: FFXCombatant, elapsedTicks: number)
   const soleSurvivor = actor.side !== 'enemy' && livingFriendlies(ctx).length === 1;
   onTurnStartGauge(ctx, actor, soleSurvivor);
 
-  // A Threatened enemy's Threaten drops when its own turn comes round.
-  const threaten = statusOf(actor, 'threaten');
-  if (threaten) removeStatus(ctx, actor, 'threaten', 'expired');
+  releaseThreatenFrom(ctx, actor);
+
+  // A Threaten whose user has left the field (KO'd, dismissed, ejected) can
+  // never reach the release above, so it is released here instead — §4.2's
+  // "KO-ing the user removes Threaten", generalised to any way of leaving.
+  const own = statusOf(actor, 'threaten');
+  if (own) {
+    const user = own.sourceId === undefined ? undefined : tryActor(ctx, own.sourceId);
+    if (!user || !isAlive(user)) removeStatus(ctx, actor, 'threaten', 'expired');
+  }
+}
+
+/**
+ * Threaten "lasts until the **user's** next turn, and the target's next turn is
+ * then scheduled **immediately after** the user's" [ffx-combat-core §4.2].
+ *
+ * So the release is keyed to the *user* opening a turn, not to the target
+ * reaching one — the target reaching one is precisely what Threaten prevents.
+ * `StatusInstance.sourceId` exists for this rule. The reschedule is modelled by
+ * dropping the freed target's counter to the field minimum, which after the
+ * caller's `normalise()` is the acting user's own 0: the user finishes its
+ * action, its counter grows by its recovery, and the target is then the lowest
+ * on the field.
+ */
+function releaseThreatenFrom(ctx: Ctx, user: FFXCombatant): void {
+  for (const c of allCombatants(ctx)) {
+    const threaten = statusOf(c, 'threaten');
+    if (!threaten || threaten.sourceId !== user.id) continue;
+    removeStatus(ctx, c, 'threaten', 'expired');
+    rtOf(ctx, c.id).ctb = 0;
+  }
 }
 
 /** Everything that happens as a combatant's turn closes. */

@@ -17,11 +17,11 @@ import type {
 import { baseCtb, icvVariance, idiv } from './math.ts';
 import {
   type Ctx,
-  canAct,
   commandAbility,
   enemies,
   friendlies,
   has,
+  inTurnQueue,
   onField,
   rankOf,
   rtOf,
@@ -59,9 +59,17 @@ export function tieBreakRank(ctx: Ctx, c: FFXCombatant): number {
   return 100 + (enemyIndex >= 0 ? enemyIndex : c.slot);
 }
 
-/** Actors currently in the CTB queue. */
+/**
+ * Actors currently in the CTB queue.
+ *
+ * Membership is {@link inTurnQueue}, **not** {@link canAct}: §1.1's rule is
+ * "living, non-Eject, non-Petrify". A sleeping or Threatened actor still owns a
+ * counter and still reaches the front of the queue — it just loses the turn
+ * when it gets there, which is the only place Sleep's duration is paid
+ * [ffx-combat-core §1.1, §4.1].
+ */
 export function queueMembers(ctx: Ctx): FFXCombatant[] {
-  return [...friendlies(ctx), ...enemies(ctx)].filter((c) => onField(c) && canAct(c));
+  return [...friendlies(ctx), ...enemies(ctx)].filter((c) => onField(c) && inTurnQueue(c));
 }
 
 /**
@@ -233,15 +241,26 @@ export function statusIconsFor(c: FFXCombatant): StatusId[] {
   return out;
 }
 
-/** `A`, `B`, `C`... for the enemy icons, when the formation has more than one. */
+/**
+ * `A`, `B`, `C`... — the suffix FFX gives **duplicates of one enemy**, in
+ * formation order inside that name group.
+ *
+ * It is not a formation index. A formation of Seymour Flux and Mortiorchis is
+ * two different enemies, so neither carries a letter; a formation with two Yu
+ * Pagodas shows "Yu Pagoda A" and "Yu Pagoda B" while Yu Yevon beside them
+ * stays plain. Grouping is by **display name**, because that is the string the
+ * letter is appended to on the CTB tile and on the targeting name plate — two
+ * records that read the same on screen have to be told apart, and two that read
+ * differently never need it.
+ */
 function letterTagFor(ctx: Ctx, c: FFXCombatant): string | undefined {
   if (c.side !== 'enemy') return undefined;
-  const list = ctx.state.enemyIds.filter((id) => {
+  const sameName = ctx.state.enemyIds.filter((id) => {
     const e = tryActor(ctx, id);
-    return e !== undefined && onField(e);
+    return e !== undefined && onField(e) && e.name === c.name;
   });
-  if (list.length < 2) return undefined;
-  const idx = list.indexOf(c.id);
+  if (sameName.length < 2) return undefined;
+  const idx = sameName.indexOf(c.id);
   return idx >= 0 ? String.fromCharCode(65 + idx) : undefined;
 }
 

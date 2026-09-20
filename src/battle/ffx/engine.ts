@@ -26,6 +26,7 @@ import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import {
   type Ctx,
   type EventInput,
+  canAct,
   commandAbility,
   has,
   isAlive,
@@ -211,6 +212,18 @@ export class FFXEngine implements FFXBattleEngine {
     if (!isAlive(actor)) {
       ctx.rt.currentActorId = null;
       this.afterAction(actor, []);
+      return;
+    }
+
+    // The turn arrived, but a turn-denying status says the actor does nothing
+    // with it. This is the *only* place Sleep's duration is paid: §4.1 ticks it
+    // "at the end of the victim's own action", and `runTurn(actor, null)` is
+    // the pass path — it charges the rank-3 recovery and runs `afterAction`,
+    // which calls `onTurnEnd` -> `tickDurationStatuses`. Sleeping and
+    // Threatened actors therefore lose turns instead of leaving the battle
+    // [ffx-combat-core §1.1, §4.1, §4.2].
+    if (!canAct(actor)) {
+      this.runTurn(actor, null);
       return;
     }
 
