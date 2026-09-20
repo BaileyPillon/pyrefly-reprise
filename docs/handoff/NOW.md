@@ -1,5 +1,51 @@
 # NOW — where Pyrefly Reprise stands
 
+> **Snapshot: 2026-09-19 23:10 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **EVERYTHING IS PAUSED until Claude's weekly allowance resets on 2026-09-25 16:00 EDT** (98 percent used).
+> Bailey chose "ship Build A, then stop". Do not start work from the lists below before then unless Bailey says so.
+
+## Live (Build A)
+
+- https://baileypillon.github.io/pyrefly-reprise/ = `main 7191674`, bundle `hko3Xov1`, deployed 2026-09-19 21:18 EDT
+  (recorded in `9a56d80`), verified live with real keys (Esc, P, H, N, E), prerendered audio, 0 console errors, 0 404s.
+- **Critic round 03 is complete**: [critic/rounds/round-03.md](../../critic/rounds/round-03.md), commit `6d8fdc9`.
+  Headline **4.09** (round 02: 3.5). Part A 6.37 (5.6), Part B 4.09 (3.5), Part C 5.83 (5.3). Gate 9.6 not met;
+  board coverage incomplete (50 approved, 9 tiles with no target). `critic/pending/` is clear.
+- What Build A shipped: battle flow (Chapter 4 ends, scenes resume, boss / victory / ending music), combat
+  (Wakka reels, Lulu Fury, Talk and Trigger Commands, Charon, Yu Yevon, Seymour Flux phase 2), advisor (own menus,
+  always answers for a fallen ally), FFX and FFX-2 HUD passes, pause + prep chapter panel, and TARGETING option B
+  (approved frames `docs/concepts/targeting/b-ring-and-dim/`). Handoffs: `builda-*.md`, `fix3-*.md`,
+  findings data `fix3-verify2-findings.json`, `fix3-targeting-verify2.json`.
+
+## Next, when work resumes (in the critic's order; every item is game-aware, rule 14)
+
+1. Engine blockers, no end-state pick needed: Threaten and Sleep never expire (`state.ts` canAct excludes them from the
+   tick that would clear them); Yu Yevon counters ignore `attacker.side`; single-target Haste described as party-wide
+   (`advisor.ts:441`); saved audio settings never applied at boot; presenter lags the engine (a KO'd Yuna shown alive 2 s).
+2. Chapter 5 is 43-77 minutes with no checkpoint; Chapter 1 wins only 57-65 percent on the intended line while Chapter 4
+   wins 40/40 (never nerf a boss; tactics and teaching first; bring measured options to Bailey).
+3. Needs Bailey's pick first (rule 9): onboarding / how-to-play (approved idea: cold open and taught first chapter),
+   control remapping and text scale, an FFX Defend affordance (canon: Triangle), the 9 board tiles with no target,
+   whether a lone enemy (Chapter 2) should still show the targeting look, the advisor ranking judgement call.
+4. Art: Paine's portrait and seven more speaker portraits 404 (letter tiles live); art track 3's flagged poses; approved
+   paintings are never replaced (check with the approved-hash list; make `tools/check-approved-art.mjs` from the
+   session script). Gate majors: letter tags per duplicate group, strategy-guide last line sliced, two "Attack" rows
+   in FFX-2, "LINK 1 OF 7" wording, results AP line for a switched-out member, HUD over figures, 4:3 framing of Yuna.
+5. Then Build A part 2 plumbing, Build B (`docs/plans/build-b-review.md`), onboarding (`docs/plans/onboarding-review.md`),
+   the three chapters (research in `research/`), each with a paper critique and a critic round per live build.
+
+## Machine
+
+- D: is flagged dirty and RAM runs XMP 6400 past AMD's 5200 limit: crashes and in-place file corruption. Boot-time
+  chkdsk is scheduled for C: and D:. Bailey is turning XMP off in the BIOS, then updating the BIOS (FA2 to FC4c) and
+  trying 6000. Guides: `C:\PyreflyBackup\BIOS-quick-guide.pdf` (2 pages), `PC-stability-guide.pdf` (full).
+  After the repair: run `git fsck`, re-hash the ComfyUI models (ART-PIPELINE section 9), re-run the approved-art check.
+- Never run `npm ci` in this tree while dev servers are up (it half-deleted `node_modules` on 2026-09-19;
+  `npm ci --offline` restored it). Releases are cut from `D:\pyrefly-release`; delete its `dist-gate/` before deploying.
+
+---
+*Older snapshot (2026-09-19 08:05 EDT) kept below for the track tables; where it disagrees with the block above, the block above wins.*
+
 > **Snapshot: 2026-09-19 08:05 EDT**, written by a side session from `git`,
 > `docs/deploys.log` and the driver session's 22:15 notes. Whoever drives the project
 > refreshes this file at the end of every work block. If this date is more than a
