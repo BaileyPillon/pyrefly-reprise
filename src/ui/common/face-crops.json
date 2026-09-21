@@ -76,7 +76,10 @@
     "young-auron": { "fx": 0.5259, "fy": 0.2467, "ipd": 0.3381, "px": [832, 1216], "tight": true, "note": "picked 2026-09-21 (card 1); level gaze, pupils at (297, 300) and (578, 300)" },
     "fayth-boy": { "fx": 0.5128, "fy": 0.3933, "ipd": 0.3644, "px": [832, 1216], "tight": true, "note": "picked 2026-09-21 (card 1); hooded, glowing irises centred at (275, 478) and (578, 478)" },
     "braska": { "fx": 0.5034, "fy": 0.3856, "ipd": 0.2104, "px": [832, 1216], "note": "picked 2026-09-21 (card 1); pupils at (331, 469) and (506, 469). Headdress repaint is owed and goes past Bailey first: re-measure then" },
-    "yu-yevon": { "fx": 0.5, "fy": 0.36, "ipd": 0.22, "px": [832, 1216], "note": "picked 2026-09-21 (card 2); no eyes: fx is the axis of symmetry, fy sits between the hood peak and the sigil diamond at (416, 486), ipd is the human-equivalent value that keeps the hood and both horn swirls in the tile (the hood alone, 0.33 to 0.67 of the width, read as an abstract pattern)" }
+    "yu-yevon": { "fx": 0.5, "fy": 0.36, "ipd": 0.22, "px": [832, 1216], "note": "picked 2026-09-21 (card 2); no eyes: fx is the axis of symmetry, fy sits between the hood peak and the sigil diamond at (416, 486), ipd is the human-equivalent value that keeps the hood and both horn swirls in the tile (the hood alone, 0.33 to 0.67 of the width, read as an abstract pattern)" },
+    "leblanc": { "fx": 0.52, "fy": 0.29, "ipd": 0.3, "px": [832, 1216], "note": "Extreme close-up (fan held near her chin); eye positions read by hand off tools/portraits/measure-face-crops.mjs probe leblanc — approximate, worth a follow-up probe pass before shipping a dialogue card." },
+    "ormi": { "fx": 0.51, "fy": 0.325, "ipd": 0.25, "px": [832, 1216], "note": "Head-on close-up, brow furrowed low on the canvas. Eye positions read by hand off tools/portraits/measure-face-crops.mjs probe ormi — approximate." },
+    "logos": { "fx": 0.5, "fy": 0.25, "ipd": 0.3, "px": [832, 1216], "tight": true, "note": "Near-symmetrical helmet close-up; eyes sit high in the frame. Eye positions read by hand off tools/portraits/measure-face-crops.mjs probe logos — approximate, ipd is close to the 0.34 tight threshold so re-probe before trusting the crop at small sizes." }
   },
   "dialogue": {
     "jecht": {
