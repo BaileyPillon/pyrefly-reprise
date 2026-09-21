@@ -1,16 +1,18 @@
 # NOW — where Pyrefly Reprise stands
 
-> **Snapshot: 2026-09-21 16:50 EDT (machine clock)**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
-> **USAGE MODE: CONSERVE** (about 40 percent of the weekly allowance left; resets 2026-09-26 07:00 EDT). Hard rule 15.
-> **Art generation: ON** (Bailey, 2026-09-21: "Resume local art generation"). Pose prompts describe the BODY only; the
-> render tool is gaining a prompt lint and a cut-out guard (docs/ART-PIPELINE.md section 6).
-> **THE WORK IN FLIGHT IS AUTHORISED BY BAILEY TODAY**, verbatim: "you need to finish ALL chapters the new chapters need to
-> be done"; "the move advisor needs to be way smarter and way more aware of what is going on turn by turn and what
-> character you are controlling. music is too reminsicent of snes music instead of the more modern final fantasy titles
-> and clair obscur. all of these next to be fixed very next build. we can do this."; "yes you have my approvals there
-> for music" (CC0 sample libraries, a local ACE-Step model rendering OUR compositions, generated wordless choir layers,
-> a two-cue audition first). A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it:
-> the driver answers the owner; agents do the task in their brief.
+> **Snapshot: 2026-09-21 18:30 EDT (machine clock)**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **USAGE MODE: CONSERVE** (weekly all-models 71 percent used, 29 left; weekly Fable 67 percent used; 5-hour window 79
+> percent used, resets 20:30 EDT; the week resets 2026-09-26 07:00 EDT). No new large fan-out before the 20:30 EDT
+> reset. At 20 percent left or below, the mode becomes PROTECT. Hard rule 15.
+> **Art generation: ON** (Bailey, 2026-09-21: "Resume local art generation").
+> **BAILEY'S DECISIONS TODAY, verbatim:** on the pause menu remake (Until Dawn character-screen layout in our art style,
+> mockups in `docs/concepts/pause-until-dawn/`; asked grade A or B, may the text block move to the painting's empty
+> side, are the meters right, may MUSIC be its own tab) — **"B, yes, yes, yes."** On scope: **"This needs to be
+> included in our next build as well"**; **"The characters should be expressive and should be controllable by
+> keyboard ... The characters need to be animated. In motion."** On release pacing: **"I'll go with your
+> recommendation as usage becomes a concern. One chapter at a time is ok. I expect timely mockups for the pause menus
+> please."** A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it: the driver
+> answers the owner; agents do the task in their brief.
 
 ## Live: Build B.1
 
@@ -18,18 +20,21 @@
   the owner's release rules A + B + C (focused review before deploy: SHIP with disclosed majors; live check PASS, 761 files
   byte-identical; the deep review runs after the deploy on the live build). Contents: the moving title screen on the approved
   key art, silhouette chapter cards (eight chapters, the three new ones locked as Coming), 42 approved poses. The build before
-  it was A.2 (`fd0ae96`, owner override).
+  it was A.2 (`fd0ae96`, owner override). It still carries the 31 downgraded art4 poses (restored on main in `0180be3`,
+  ships with the next deploy).
+- Critic round 07 ran (`de4d25f`, focused review of this build: SHIP) but `critic/pending/8f48237.json` still lists a deep
+  review PENDING carried over from `fd0ae96`, even though round 07 ran: to be investigated before the next cut (two-deploy
+  cap, release rule B).
 
 ## In flight: Build C (the next live build)
 
-- Scope, in Bailey's words above: ALL three new chapters finished (Leblanc at the Chateau, Seymour and Anima at Macalania,
-  Evrae on the airship), move advisor v2 (a per-turn planner for the acting character; the chapter line is a prior, not a
-  pin), modern-sounding music, plus FFX-2 Active ATB (built and verified: `45f98b9`, `bf19c37`, `33dba4d`, `073f678`) and
-  onboarding switched on.
+- Scope: earlier today's directive still stands — all three new chapters finished (Leblanc at the Chateau, Seymour and
+  Anima at Macalania, Evrae on the airship), move advisor v2, modern-sounding music, FFX-2 Active ATB (built and
+  verified: `45f98b9`, `bf19c37`, `33dba4d`, `073f678`) and onboarding switched on. Bailey has now also folded the pause
+  menu remake into this build (see decisions above) and set the release pace to one chapter at a time as usage requires.
 - Done: engine and data for Macalania (`074a198`, 80 percent) and Evrae (`dc1979f`, `959fade`, 97.5 percent); quick wins
   (`c7f5be4`, `71059ae`, `8fe4f99`, `de99ba4`); three story scripts; decision records (`26ee387`); music plan
-  `docs/plans/music-modern-sound.md` (`fe11c60`); options sheets for the Evrae order widget and Anima's arrival; music
-  sketches on `docs/audio/audition.html`.
+  `docs/plans/music-modern-sound.md` (`fe11c60`).
 - **Move advisor v2 is BUILT and measured** (`55540b9`, `f0ff68a`; `docs/handoff/advisor-v2.md`). Forty seeds a chapter,
   a bot pressing the card's top row every turn: ch1 62.5 to **67.5** percent (the chapter line itself wins 65), ch2 82.5
   to 85 (line 97.5), **ch3 0.0 to 97.5** (line 97.5), ch4 100, ch5 100 to 97.5. Chapter 3's median falls from 448 turns
@@ -40,13 +45,41 @@
   changed. **Chapter 2 cannot reach its bar and the reason is measured, not tunable:** all 319 of its 319 divergences over
   eight seeds are the chapter line calling for Defend, which the FFX command window does not paint at all - so the
   auto-battler wins ch2 with a move no player can press. Bailey's call (handoff section 7).
-- Running: Leblanc engine (workflow wf_55ef87e9-9b0); render-tool guard; chapter art production
-  (one agent per chapter); Nul-spell targeting being sourced from the web; music library downloads by the driver into
-  `D:\Toolsudio-libs` and the ACE-Step checkpoint into ComfyUI.
-- Open with Bailey: Evrae widget (rec. A + C's staging), Anima arrival (rec. A then B's tag), Macalania cue mood A or B,
-  chapter 5 under Active ATB (0 of 40 wins at human decision times: measured options owed), Nul spells party-wide if sourced.
-
-
+- **DONE today: pause-remake options picked.** Bailey graded the Until Dawn options round "B, yes, yes, yes" — grade B,
+  the text block may move to the painting's empty side, the meters are right, and MUSIC gets its own tab.
+- **DONE today: living-portrait research and prototype** (`f1729e3`: `docs/plans/pause-living-portraits.md`,
+  `docs/concepts/pause-until-dawn/prototype/`; run `npx vite --port 5477`, open
+  `/docs/concepts/pause-until-dawn/prototype/`). Recommendation: procedural head-depth shader parallax plus blink and
+  expression patches inpainted with our own Animagine model, zero downloads (rejects LivePortrait: its InsightFace
+  buffalo_l dependency is non-commercial). GPU draw p50 0.036 ms. Awaits Bailey's verdict **by feel** on which reading
+  of the gaze to keep (head, eyes or camera) before it is ported into the pause screen's PortraitStage; blink and the
+  expression toggle are faked in the prototype and want inpainted patches; Wakka's tilted eye line and the one-eyed
+  plates (Auron, Kimahri) are not handled yet. Optional download needing a yes: `depth_anything_v2_vits.pth`, 99.2 MB,
+  Apache-2.0.
+- **DONE today: the music downloads Bailey approved** ("yes you have my approvals there for music") are on disk under
+  `D:/Tools/audio-libs` (vsco2-ce 3.2 GB, vcsl 6.2 GB, `_dl/sfizz-1.2.3-win64.zip`) and
+  `D:/Tools/ComfyUI/ComfyUI/models/checkpoints/ace_step_v1_3.5b.safetensors` (7.7 GB); the VSCO 2 CE SFZ patches branch
+  is cloning into `D:/Tools/audio-libs/vsco2-ce-sfz`. Checksums: `D:/Tools/audio-libs/_dl/fetch-music-2026-09-21.DONE.txt`.
+  Still needing a per-item yes: hall impulse responses, any ACE-Step custom nodes.
+- Running now (folder-owned; nobody else touches these paths until each reports):
+  1. `wf_4deb5674-19a` "pyrefly-pause-remake-build" (opus builder, then adversarial verifier, one fix pass). OWNS
+     `src/app/screens/Pause*.ts`, `src/app/screens/pause/**`, the pause stylesheets, the pause tests,
+     `docs/handoff/pause-remake.md`, and one entry each in `docs/target/targets.json` and `decisions.json`.
+  2. `wf_e702c876-6ad`: recipe R2 tool defaults, then production art for the three new chapters (Leblanc, Macalania,
+     Evrae) into `docs/concepts/chapters/<key>/production.png`, then web sourcing for the Nul spells. **ComfyUI/GPU is
+     busy with this: queue nothing else on the GPU until it reports.** Every production sheet gets looked at 1:1
+     before anything is installed — never approve art from thumbnails.
+- Next, in order: (1) pause remake verified, then the living portrait ported for the main party; (2) one tidy pass:
+  advisor v2 bench harness fallback and three test defects (`docs/handoff/advisor-v2.md`), Leblanc provenance labels,
+  front-end phone type floor FE-001; (3) first incremental release, round 08, launched **top-level** with
+  `critic/runner/release.js` from the clean worktree: pause remake + advisor v2 + Active ATB + onboarding switched on +
+  restored art + quick wins; (4) music workflow, after the 20:30 EDT reset and once the GPU is free: SFZ
+  multi-velocity renderer, ACE-Step restyle, A/B/C audition on `docs/audio/audition.html` for Bailey's ear; (5)
+  chapters one at a time (Leblanc, Macalania, Evrae): scenes, staging, guides, registration, release each.
+- Open with Bailey: the gaze reading by feel (prototype: head, eyes or camera); Evrae order widget (rec. A + C's
+  staging) and Anima arrival (rec. A then B's tag); Macalania cue mood A or B and the music audition; chapter 5 under
+  Active ATB (0 of 40 wins at human decision times: measured options owed); Nul spells party-wide if sourced; the
+  items already listed in "Waiting on Bailey" below that these facts do not close.
 
 ## Waiting on Bailey (none of these blocks the release)
 
