@@ -1,0 +1,51 @@
+{
+  "chapter": "leblanc",
+  "game": "ffx-2",
+  "status": "options — nothing built, nothing ships (AGENTS.md hard rule 9)",
+  "sources": [
+    "research/ffx2-leblanc-syndicate.md §2, §10",
+    "docs/ART-PIPELINE.md (facing contract v3, style/quality tags)"
+  ],
+  "rows": {
+    "backdrop": {
+      "question": "Which palette treatment for the basement treasure room (the 'Last Room' where Act III happens)?",
+      "canon_notes": "research §10.2: machina terminals, crated loot, cable runs, stolen spheres on shelves, a single door, the party's backs to the loot with the trio blocking the only exit. Palette direction: Guado base (sap-brown, root-black, mossy green-grey) with a Leblanc overlay (hot magenta, rose, gold) applied 'like paint over something older'; machina accents in cold cyan and sodium-amber; the Syndicate heart shape recurring at every scale.",
+      "options": {
+        "A": "Cool cyan terminal-glow dominant — reads more like a sci-fi server room than the Guado-timber-plus-loot brief; the crates and machina terminals are present but the warm Guado base and any heart motif are absent.",
+        "B": "Warm amber lanterns dominant — closest to a lived-in sphere-hunter's basement, but reads more 'Japanese storeroom' than 'Guado architecture with a Syndicate overlay'; no heart motif visible.",
+        "C": "Mixed magenta/cyan with a door and a visible teal heart-shaped panel on it — closest single render to the brief's 'heart appears at every scale' note, and it is the only one of the three with a clear door (the Act III exit the trio blocks)."
+      },
+      "off_canon_seen": "None of the three shows the 'one piece of Guado furniture that does not match' detail or explicit Guado root-arch architecture (that beat is called out for the upstairs cutscene room, not the basement arena, so its absence here is expected, not a miss)."
+    },
+    "boss_leblanc": {
+      "question": "Which Leblanc pose/light reads best — fan as a screen, fan open addressing an audience, or fan snapped shut?",
+      "canon_notes": "research §10.1: round face, purple eyes, short blonde hair, pinkish-purple robe open at the chest with the Syndicate heart mark, tasselled collar, furisode-style sleeves, thigh-high stockings, purple ankle boots, red-and-silver fan. Poses: fan raised half-open as a screen for her face; fan opens for Sonic Fan/Mach Fan; she snaps it shut on Love Tap.",
+      "options": {
+        "A": "Fan half-open as a screen, cool light — closest to the 'stage performer's address' silhouette note.",
+        "B": "Fan fully open, warm magenta light — best matches the Sonic Fan/Mach Fan 'shockwave emitter' pose, but her robe reads pink/purple ombre rather than the specific blue-and-white triangle-and-swirl pattern the research names.",
+        "C": "Fan snapped shut, smirk, rim light — matches the Love Tap beat."
+      },
+      "off_canon_seen": "None show the blue-and-white triangle/swirl pattern on the robe called out in the research, or the white crisscross material separating the furisode cuffs from the sleeve-ends — all three simplified the costume to a plain gradient robe. Worth a follow-up pass if Leblanc is picked."
+    },
+    "cast_ormi": {
+      "question": "Which Ormi — short, stout, large shield on his back?",
+      "canon_notes": "research §10.1: short and stout, a large shield worn on his back bearing the Syndicate heart logo, predominantly purple samurai-style attire, low centre of gravity, shield swung around on its strap for Shield Bash.",
+      "options": {
+        "A": "RE-ROLLED once (hard rule: at most one re-roll per item). The first roll came back as a tall, slim swordsman with a long curved blade — no shield, wrong build entirely. This reroll (tags forced away from 'sword/katana' and toward 'shield, no weapon in hand') is on-canon: purple attire, large round shield, stocky build.",
+        "B": "OFF-CANON, not re-rolled (the cap is one reroll per item and it was already spent on A). Came back as a slim martial artist holding a straight sword with the shield as a small round buckler — wrong build, wrong weapon, wrong shield scale.",
+        "C": "OFF-CANON, not re-rolled. Came back as a tall figure with a huge fan-shaped shield and a scythe-like weapon — closer to a Leblanc/Logos hybrid than to Ormi."
+      },
+      "off_canon_seen": "B and C both drifted toward slim swordsman/dueling archetypes despite 'short stout' and 'no weapon in hand' in the tags — Ormi's design (bulky, shield-only) seems to be a weak attractor for this checkpoint next to generic anime-samurai poses. A is the only option recommended for further use as-is."
+    },
+    "cast_logos": {
+      "question": "Which Logos — tall, slim, dual revolvers, black-and-silver helmet?",
+      "canon_notes": "research §10.1: tall and slim, a black-and-silver helmet with a chin protector tied with a purple strip, a blue robe and matching coat with the Syndicate logo on both shoulders and sweeping kimono-like sleeves, a purple sash, ankle wraps, two revolvers.",
+      "options": {
+        "A": "RE-ROLLED once (hard rule: at most one re-roll per item). The first roll produced a katana-wielding samurai with an antlered helmet and no visible gun — wrong weapon entirely. This reroll (tags forced toward 'revolvers' and away from 'sword/katana/horns') is on-canon: one revolver clearly visible, blue robe, kimono sleeves, purple sash; the helmet still carries a decorative crest the research does not call for.",
+        "B": "OFF-CANON, not re-rolled. He is holding what reads as a small wooden box/case, not a revolver — the gun did not survive this seed.",
+        "C": "On-canon and the best of the three: revolver clearly in hand, blue robe, kimono sleeves, purple sash, plain-ish helmet."
+      },
+      "off_canon_seen": "B is a clear miss (no visible firearm). A and C both keep a decorative helmet crest the research does not describe ('a black-and-silver helmet with a chin protector', nothing about antlers or feathers) — a follow-up pass would ask for a plainer helmet."
+    }
+  }
+}
