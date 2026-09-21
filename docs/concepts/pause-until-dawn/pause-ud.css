@@ -1,0 +1,422 @@
+/*
+ * Pause, rebuilt on the Until Dawn character-screen layout — CONCEPT ONLY.
+ *
+ * Self-contained: fonts are loaded straight off `public/fonts/` and every
+ * token below is hand-copied from `docs/handoff/presentation-ink-and-gold.md`.
+ * Nothing here imports product CSS (kit README §2: a mockup has to keep
+ * looking like the thing Bailey approved even after the product moves).
+ *
+ * Authored 1:1 at 1600x900 — the numbers in this file ARE the output pixels,
+ * so "14px" is 14 effective CSS px on the delivered frame.
+ */
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2') format('woff2');
+  font-weight: 300 700; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2');
+  font-weight: 300 700; font-style: italic; font-display: block;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../../../public/fonts/chakra-petch/ChakraPetch-Regular-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../../../public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: block;
+}
+
+:root {
+  --ink: #0b0a12;
+  --paper: #f4f1e8;
+  --gold: #e3b94a;
+  --pink: #f7b6d9;
+  --accent: var(--gold);
+
+  --t-dim: rgba(244, 241, 232, 0.38);
+  --t-quiet: rgba(244, 241, 232, 0.56);
+  --t-mid: rgba(244, 241, 232, 0.76);
+  --t-bright: rgba(244, 241, 232, 0.96);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--ink);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------ frame */
+
+.pf {
+  position: relative;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #04040a;
+  font-family: 'Chakra Petch', sans-serif;
+  color: var(--t-mid);
+}
+
+.pf--ffx2 { --accent: var(--pink); }
+
+/* ------------------------------------------------------------------- art */
+
+.pf__art { position: absolute; inset: 0; overflow: hidden; }
+.pf__art img { position: absolute; display: block; }
+
+/* the outgoing member, still dissolving */
+.pf__art--ghost { opacity: 0.38; filter: blur(3px); }
+
+/*
+ * GRADE A — "faithful": the reference's cool, desaturated, very dark teal-black.
+ * GRADE B — "ours":     the same composition on a warm ink-and-gold grade.
+ * Both are one filter on the painting plus one tint layer over it; nothing is
+ * baked into a file, so a grade is a one-line change in the real screen too.
+ */
+.pf[data-grade='a'] .pf__art img { filter: saturate(0.2) contrast(1.12) brightness(0.52) hue-rotate(-10deg); }
+.pf[data-grade='a'] .pf__tint {
+  position: absolute; inset: 0;
+  background: #04141d;
+  mix-blend-mode: multiply;
+  opacity: 0.74;
+}
+.pf[data-grade='a'] .pf__tint::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(80% 62% at 60% 42%, rgba(126, 178, 196, 0.16), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+.pf[data-grade='b'] .pf__art img { filter: saturate(0.58) contrast(1.05) brightness(0.66); }
+.pf[data-grade='b'] .pf__tint {
+  position: absolute; inset: 0;
+  background: #120d14;
+  mix-blend-mode: multiply;
+  opacity: 0.54;
+}
+.pf[data-grade='b'] .pf__tint::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(74% 58% at 60% 40%, rgba(227, 185, 74, 0.17), transparent 72%);
+  mix-blend-mode: screen;
+}
+
+/* The chrome side falls away to near-black so every line can sit on paint. */
+.pf__falloff { position: absolute; inset: 0; }
+.pf__falloff::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(to right,
+      rgba(4, 4, 10, 0.94) 0%, rgba(4, 4, 10, 0.88) 22%,
+      rgba(4, 4, 10, 0.5) 42%, rgba(4, 4, 10, 0.06) 62%, transparent 74%),
+    linear-gradient(to left, rgba(4, 4, 10, 0.72) 0%, transparent 18%),
+    linear-gradient(to bottom, rgba(4, 4, 10, 0.72) 0%, transparent 16%),
+    linear-gradient(to top, rgba(4, 4, 10, 0.8) 0%, transparent 26%);
+}
+.pf--mirror .pf__falloff::before {
+  background:
+    linear-gradient(to left,
+      rgba(4, 4, 10, 0.94) 0%, rgba(4, 4, 10, 0.88) 22%,
+      rgba(4, 4, 10, 0.5) 42%, rgba(4, 4, 10, 0.06) 62%, transparent 74%),
+    linear-gradient(to right, rgba(4, 4, 10, 0.72) 0%, transparent 18%),
+    linear-gradient(to bottom, rgba(4, 4, 10, 0.72) 0%, transparent 16%),
+    linear-gradient(to top, rgba(4, 4, 10, 0.8) 0%, transparent 26%);
+}
+
+.pf__vig {
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 58% 40%, transparent 38%, rgba(4, 4, 10, 0.72) 100%);
+}
+
+/* 13% fractal noise in overlay, exactly as the Ink & Gold "Surface" note asks */
+.pf__grain {
+  position: absolute; inset: 0;
+  opacity: 0.13;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+}
+
+/* ------------------------------------------------------------------- ui */
+
+.pf__ui { position: absolute; inset: 0; }
+.pf--bare .pf__ui { display: none; }
+
+.pf__brand {
+  position: absolute; left: 64px; top: 26px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.4em;
+  color: rgba(244, 241, 232, 0.24); text-transform: uppercase;
+}
+.pf--mirror .pf__brand { left: auto; right: 64px; }
+
+/* --------------------------------------------------------------- tab strip */
+
+.pf__tabs {
+  position: absolute; left: 64px; right: 64px; top: 54px;
+  display: flex; align-items: flex-end; gap: 26px;
+}
+
+.pf__bump {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--t-dim); flex: none;
+  padding-bottom: 4px;
+}
+.pf__bump b {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; height: 22px; padding: 0 6px;
+  border: 1px solid rgba(244, 241, 232, 0.3); border-radius: 3px;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+  color: rgba(244, 241, 232, 0.62);
+}
+.pf__bump i {
+  font-style: normal; font-size: 14px; font-weight: 500;
+  letter-spacing: 0.2em; color: rgba(244, 241, 232, 0.3);
+}
+.pf__bump--r { margin-left: auto; }
+
+.pf__tab {
+  position: relative; flex: none;
+  padding-bottom: 17px;
+  font-size: 15px; font-weight: 500; letter-spacing: 0.3em;
+  text-transform: uppercase; color: rgba(244, 241, 232, 0.4);
+  white-space: nowrap;
+}
+.pf__tab--on {
+  font-size: 20px; font-weight: 700; letter-spacing: 0.2em;
+  color: var(--t-bright);
+}
+.pf__tab--on::after {
+  content: ''; position: absolute; left: 0; right: 4px; bottom: 11px;
+  height: 2px; background: var(--accent);
+}
+/* the outgoing tab, mid cross-fade */
+.pf__tab--fading { color: rgba(244, 241, 232, 0.7); }
+
+/* HP hairline under a party member's tab — the at-a-glance read the old
+   bottom party cards used to carry. */
+.pf__tabhp {
+  position: absolute; left: 0; right: 4px; bottom: 0; height: 2px;
+  background: rgba(244, 241, 232, 0.11);
+}
+.pf__tabhp i { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(244, 241, 232, 0.36); }
+.pf__tabhp--low i { background: rgba(176, 42, 42, 0.85); }
+
+/* something new on that tab */
+.pf__dot {
+  position: absolute; right: -11px; top: 1px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ----------------------------------------------------------------- meters */
+
+.pf__meters {
+  position: absolute; left: 64px; top: 297px;
+  display: flex; gap: 48px;
+}
+.pf__col--wide .pf__k { width: 132px; }
+.pf__col--opt .pf__k { width: 152px; }
+.pf--mirror .pf__meters { left: auto; right: 64px; flex-direction: row-reverse; }
+.pf--mirror .pf__col > h3 { text-align: right; }
+.pf--mirror .pf__row,
+.pf--mirror .pf__act { flex-direction: row-reverse; }
+.pf--mirror .pf__k { text-align: left; }
+.pf--mirror .pf__v { text-align: right; min-width: 78px; }
+.pf--mirror .pf__act--sel::before { margin-left: 8px; margin-right: -13px; }
+
+.pf__col { display: flex; flex-direction: column; }
+.pf__col > h3 {
+  font-size: 14px; font-weight: 500; letter-spacing: 0.34em;
+  color: rgba(244, 241, 232, 0.3); text-transform: uppercase;
+  margin-bottom: 15px; font-weight: 500;
+}
+
+.pf__row {
+  display: flex; align-items: center; gap: 12px;
+  height: 27px;
+}
+.pf__k {
+  width: 100px; text-align: right; flex: none;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.15em;
+  color: rgba(244, 241, 232, 0.5); text-transform: uppercase;
+  white-space: nowrap;
+}
+.pf__bar {
+  position: relative; width: 124px; height: 3px; flex: none;
+  background: rgba(244, 241, 232, 0.13);
+}
+.pf__bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); opacity: 0.88; }
+/* the dim extension = what the Garment Grid and accessories add (FFX-2) */
+.pf__bar u { position: absolute; top: 0; bottom: 0; background: var(--accent); opacity: 0.3; }
+.pf__bar s {
+  position: absolute; top: -3px; bottom: -3px; width: 1px;
+  background: rgba(244, 241, 232, 0.62);
+}
+.pf__v {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px; font-weight: 600; letter-spacing: 0.05em;
+  color: rgba(244, 241, 232, 0.8); white-space: nowrap;
+}
+.pf__v em { font-style: normal; color: rgba(244, 241, 232, 0.38); }
+.pf__v b { font-weight: 600; color: var(--accent); opacity: 0.8; }
+
+/* a row with no meter: a status, a dressphere, a turn position */
+.pf__row--word .pf__bar { background: none; }
+.pf__row--word .pf__v {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(244, 241, 232, 0.84);
+}
+.pf__note {
+  font-size: 14px; font-weight: 500; letter-spacing: 0.16em;
+  color: rgba(244, 241, 232, 0.34); text-transform: uppercase; white-space: nowrap;
+}
+
+/* OPTIONS / CONTROLS rows land exactly where the meters were */
+.pf__act {
+  display: flex; align-items: center; gap: 12px; height: 27px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.16em;
+  color: rgba(244, 241, 232, 0.62); text-transform: uppercase;
+}
+.pf__act--sel { color: var(--t-bright); }
+.pf__act--sel::before {
+  content: ''; width: 5px; height: 5px; background: var(--accent);
+  margin-left: -13px; margin-right: 8px; flex: none;
+}
+.pf__act--sep { height: 27px; align-items: center; }
+.pf__act--sep span { display: block; width: 264px; height: 1px; background: rgba(244, 241, 232, 0.14); }
+
+/* --------------------------------------------------------------- objective */
+
+.pf__obj { position: absolute; left: 64px; top: 702px; width: 748px; }
+.pf--mirror .pf__obj { left: auto; right: 64px; text-align: right; }
+
+.pf__eyebrow {
+  display: block; margin-bottom: 14px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.4em;
+  color: rgba(227, 185, 74, 0.62); text-transform: uppercase;
+}
+.pf--ffx2 .pf__eyebrow { color: rgba(247, 182, 217, 0.62); }
+
+.pf__line {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300; font-size: 39px; line-height: 1.12;
+  letter-spacing: 0.085em; text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.95);
+}
+
+/* ------------------------------------------------------------------- back */
+
+.pf__back {
+  position: absolute; right: 64px; bottom: 52px;
+  display: flex; align-items: center; gap: 11px;
+  font-size: 15px; font-weight: 500; letter-spacing: 0.22em;
+  color: rgba(244, 241, 232, 0.72); text-transform: uppercase;
+}
+.pf--mirror .pf__back { right: auto; left: 64px; }
+.pf__key {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 22px; padding: 0 7px;
+  border: 1px solid rgba(244, 241, 232, 0.34); border-radius: 3px;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.06em;
+  color: rgba(244, 241, 232, 0.66);
+}
+.pf__hide {
+  position: absolute; right: 64px; bottom: 26px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.22em;
+  color: rgba(244, 241, 232, 0.34); text-transform: uppercase;
+}
+.pf--mirror .pf__hide { right: auto; left: 64px; }
+
+/* the one line that survives HIDE PANELS */
+.pf__baseline {
+  position: absolute; left: 64px; bottom: 34px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.26em;
+  color: rgba(244, 241, 232, 0.3); text-transform: uppercase;
+  display: none;
+}
+.pf--bare .pf__baseline { display: block; }
+
+/* ------------------------------------------------------------------- tag */
+
+.pf--mirror .pf__tag { right: auto; left: 16px; }
+.pf__tag {
+  position: absolute; right: 16px; top: 14px;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.34em;
+  color: rgba(244, 241, 232, 0.22);
+}
+
+/* ===================================================================== */
+/* PHONE — 390x844. The tabs become one swipeable strip; the meters stack   */
+/* under the face instead of beside it.                                    */
+/* ===================================================================== */
+
+.pf--phone .pf__brand { left: 20px; top: 16px; font-size: 12px; letter-spacing: 0.3em; }
+.pf--phone .pf__tag { right: 10px; top: 10px; font-size: 12px; letter-spacing: 0.26em; }
+
+.pf--phone .pf__falloff::before {
+  background:
+    linear-gradient(to bottom, rgba(4, 4, 10, 0.86) 0%, rgba(4, 4, 10, 0.2) 16%, transparent 30%),
+    linear-gradient(to top, rgba(4, 4, 10, 0.97) 0%, rgba(4, 4, 10, 0.94) 34%, rgba(4, 4, 10, 0.45) 48%, transparent 60%);
+}
+.pf--phone .pf__vig {
+  background: radial-gradient(110% 46% at 54% 26%, transparent 42%, rgba(4, 4, 10, 0.66) 100%);
+}
+
+.pf--phone .pf__tabs {
+  left: 0; right: 0; top: 40px;
+  gap: 0; align-items: center;
+  padding: 0 20px;
+  overflow: hidden;
+}
+.pf--phone .pf__swipe {
+  display: flex; align-items: flex-end; gap: 20px;
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0, #000 84%, transparent 100%);
+  width: 100%;
+}
+.pf--phone .pf__tab { font-size: 12px; letter-spacing: 0.24em; padding-bottom: 8px; }
+.pf--phone .pf__tab--on { font-size: 17px; letter-spacing: 0.16em; }
+.pf--phone .pf__dots {
+  position: absolute; left: 20px; top: 74px;
+  display: flex; gap: 5px;
+}
+.pf--phone .pf__dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(244, 241, 232, 0.2); }
+.pf--phone .pf__dots i.on { background: var(--accent); width: 14px; border-radius: 2px; }
+
+.pf--phone .pf__meters {
+  left: 20px; right: 20px; top: 470px;
+  flex-direction: column; gap: 14px;
+}
+.pf--phone .pf__col > h3 { font-size: 12px; letter-spacing: 0.3em; margin-bottom: 7px; }
+.pf--phone .pf__row { height: 20px; gap: 10px; }
+.pf--phone .pf__k { width: 92px; font-size: 12px; letter-spacing: 0.1em; }
+.pf--phone .pf__bar { width: 120px; }
+.pf--phone .pf__v { font-size: 13px; }
+.pf--phone .pf__note { font-size: 12px; letter-spacing: 0.12em; }
+
+.pf--phone .pf__obj { left: 20px; right: 20px; width: auto; top: 714px; }
+.pf--phone .pf__eyebrow { font-size: 12px; letter-spacing: 0.3em; margin-bottom: 7px; }
+.pf--phone .pf__line { font-size: 22px; letter-spacing: 0.07em; }
+
+.pf--phone .pf__back { right: 20px; bottom: 30px; font-size: 13px; letter-spacing: 0.18em; }
+.pf--phone .pf__hide { left: 20px; right: auto; bottom: 33px; font-size: 12px; letter-spacing: 0.18em; }

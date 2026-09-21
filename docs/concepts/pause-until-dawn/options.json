@@ -1,0 +1,150 @@
+{
+  "id": "pause-until-dawn",
+  "title": "Pause, rebuilt on the Until Dawn character-screen layout",
+  "state": "mockup — nothing built, nothing in src/ touched (AGENTS.md hard rule 9)",
+  "date": "2026-09-21",
+  "source": "neither (general polish)",
+  "reference": {
+    "what": "The Until Dawn character screen, as described to this agent in writing. No frame of the video was copied, downloaded or committed; the repo is public and hard rule 8 stands.",
+    "measuredProperties": [
+      "one full-bleed cinematic close-up, head and shoulders, three-quarter, head about 75% of the frame height",
+      "no panels, boxes or cards — every line floats on the picture; huge negative space",
+      "a thin tab strip across the full width at about 6% from the top, a shoulder glyph at each end, the active tab first and brighter with a fine underline, a tiny dot beside a tab with something new",
+      "two columns of thin horizontal meter bars between 33% and 65% of the height, inside the left 48% of the width; a tiny right-aligned caps label, a hairline bar with a brighter filled segment and a small marker",
+      "bottom left at 78-84% of the height: a tiny dim caps label and one large line in a thin, widely tracked serif in caps, spanning about 45% of the width",
+      "bottom right: a single small BACK prompt with its button glyph",
+      "thin quiet typography, mostly small caps, low contrast except the active tab and the big line; slow cross-fades when the character changes"
+    ]
+  },
+
+  "howOursDiffers": [
+    "The single accent is Yevon gold (#E3B94A) in FFX chapters and pyre pink (#F7B6D9) in FFX-2 chapters, never the reference's cyan. That swap is the approved Ink & Gold rule, not an invention (presentation-ink-and-gold.md, Tokens).",
+    "The close-ups are our approved painted 2x masters from public/art/pause/, framed with CSS only. No 3D face, no new render, no edit to a pixel of an approved painting.",
+    "Type is our faces: Chakra Petch for every tracked caps label, Rajdhani for numerals, Cormorant Garamond 300 for the big line. The reference's thin grotesque is answered by Chakra Petch Medium at low opacity.",
+    "Every text is at least 14 effective CSS px at 1600x900. The reference's row pitch (about 14px at 720p) would put our labels near 12px, so the row pitch is opened to 27px and the bar is 124x3. This is a knowing departure: fix3-pause.md's whole first pass was Bailey reporting that pause chrome was unreadable.",
+    "Our objective sentences are longer than the reference's one-word labels, so the big line is allowed to wrap to a second line at 39px rather than shrink below it.",
+    "A 13% fractal-noise grain and the ink vignette from the Ink & Gold surface pass sit over the whole frame, so chrome never sits on raw paint.",
+    "Our brand line (PYREFLY REPRISE · FINAL FANTASY X) sits above the tab strip at 24% opacity. The reference has no wordmark; the current pause screen does, so it was kept rather than silently dropped."
+  ],
+
+  "contentMap": {
+    "tabs": {
+      "order": "the active member first (as in the reference), then the other two on the field, then CHAPTER, GUIDE, OPTIONS, CONTROLS, MUSIC",
+      "cycling": "Q / E, or L1 / R1 — a glyph pair at each end of the strip",
+      "underEachMemberTab": "a 2px HP hairline, red below 30%. This is where the old bottom party-card strip's at-a-glance read went.",
+      "dot": "a tiny accent dot on a tab with something new — a status just landed, a track just unlocked",
+      "note": "MUSIC is a sixth non-character tab, added because the jukebox has its own cursor and 21 tracks and cannot be a row. It is the one tab the brief did not name; see README question 4."
+    },
+    "columnOne": {
+      "heading": "BATTLE STATS",
+      "ffx": ["HP", "MP", "Strength", "Magic", "Defence", "Magic Def", "Agility"],
+      "ffx2": ["HP", "MP", "Strength", "Magic", "Defence", "Magic Def", "Agility — read off the dressphere she is wearing, at her level"],
+      "barMeaning": "fill = this member's value divided by the best of the three on the field; the hairline tick = the three-member average. HP and MP fill current/max instead, and are the only rows that print a slash.",
+      "ffx2Extension": "a dimmer segment past the fill = what the Garment Grid and her two accessories add, printed as '+25' beside the number. FFX weapons and armour grant no stats at all (gagazet.ts header, research §7.7.1), so there is no such extension in an FFX chapter — that is a real difference between the games, not a missing feature."
+    },
+    "columnTwo": {
+      "heading": "IN THIS FIGHT",
+      "ffx": ["Overdrive gauge (meter)", "Mode (Warrior / Stoic / Healer ...)", "each status, with how long it has left", "Turn order — Nth of N in the CTB queue"],
+      "ffx2": ["ATB gauge (meter)", "Mode — Active / Wait", "Chain xN", "Dressphere", "Garment Grid", "Gates — N of 4 passed"],
+      "statusDurationFinding": "The brief asked for 'statuses with remaining duration'. In this engine's data most FFX statuses are durationModel 'battle-254' — Zombie, Haste, Slow, Shell, Protect, Reflect, Berserk, Confuse, Curse, Provoke, Poison, Petrify, Scan. They last the rest of the fight and a turn counter would be a lie. Only Silence, Sleep, Darkness and Regen are 'turns'; Doom is a 'counter'; Guard / Sentinel / Defend are 'until next turn'. So the row prints what the model actually is — REST OF BATTLE, N TURNS, or a Doom countdown. (src/data/ffx/statuses/core.ts)"
+    },
+    "bottomLeft": {
+      "eyebrow": "CHAPTER <n> · <location>, or the battle tally in a chained chapter (chapter 3 is four battles, chapter 5 is five)",
+      "line": "the chapter's current objective, verbatim from src/data/chapter-meta.ts — the first of its three that is not yet done"
+    },
+    "bottomRight": "Esc  RESUME, with a small 'H  hide panels' under it",
+    "optionsTab": "same picture, same tab strip; the rows float exactly where the meters were. Left column: master volume, music, sound effects, text speed, X-2 battle (Active/Wait), strategy guide, battle help. Right column: replay briefing, restart encounter, then a rule, then chapter select, quit to title.",
+    "controlsTab": "same picture; the rows are the key and pad map — which is where the current ControlsHint strip's chips go once the strip itself is gone.",
+    "hidden": "H still hides everything but the painting, leaving one line bottom-left: 'H show panels · Esc resume'. That is the current .pause--bare behaviour, unchanged."
+  },
+
+  "gameAware": {
+    "rule": "AGENTS.md hard rule 14 — each element is FFX only, FFX-2 only, or both, decided from the sources.",
+    "both": [
+      "the layout itself: full-bleed close-up, tab strip, two meter columns, objective line, back prompt, H to hide",
+      "column one's seven stat rows (both engines carry str/mag/def/mdef/agi on their StatBlock)",
+      "the tab strip's HP hairline and 'something new' dot",
+      "OPTIONS, CONTROLS, CHAPTER, GUIDE, MUSIC as tabs",
+      "the grade, the grain and the vignette"
+    ],
+    "ffxOnly": [
+      "gold as the accent",
+      "column two's Overdrive gauge and Overdrive mode",
+      "Turn order — 'Nth of N' is CTB; ATB has no queue to be Nth in",
+      "status rows that read REST OF BATTLE (the battle-254 model is FFX's)"
+    ],
+    "ffx2Only": [
+      "pink as the accent (presentation-ink-and-gold.md: --pyre-pink replaces gold for the whole accent role in FFX-2 chapters)",
+      "column two's ATB gauge, Active/Wait mode, Chain, Dressphere, Garment Grid and gate count",
+      "the dim bar extension for grid and accessory bonuses",
+      "column one reading off the worn dressphere rather than a fixed character stat block"
+    ]
+  },
+
+  "preservedFunctions": [
+    { "was": "RESUME row", "nowLives": "the bottom-right Esc RESUME prompt; Esc still resumes from anywhere in the screen" },
+    { "was": "RESTART ENCOUNTER row", "nowLives": "OPTIONS tab, right column, above the rule" },
+    { "was": "STRATEGY GUIDE ON/OFF row", "nowLives": "OPTIONS tab, left column (it is already an optionRow in the live code, listed twice today)" },
+    { "was": "HIDE PANELS / SHOW PANELS row", "nowLives": "the H hint bottom-right; H still toggles, and the bare state still prints one line bottom-left" },
+    { "was": "REPLAY BRIEFING row", "nowLives": "OPTIONS tab, right column, first row" },
+    { "was": "BATTLE HELP ON/OFF row", "nowLives": "OPTIONS tab, left column, last setting" },
+    { "was": "OPTIONS row and its panel (6 rows + adjust hint)", "nowLives": "the OPTIONS tab; Left/Right still adjust, Esc still backs out" },
+    { "was": "ENCOUNTER DETAILS row and the dossier (objectives + statuses, play time, encounter progress, scene)", "nowLives": "the CHAPTER tab. The current objective is also promoted to the big bottom-left line on every tab, so the thing the player paused to check is never more than zero clicks away." },
+    { "was": "the dossier's quote and handwritten caption", "nowLives": "CHAPTER tab" },
+    { "was": "the three polaroid snapshots along the bottom", "nowLives": "CHAPTER tab (they cannot live under the meters without becoming the cards the reference has none of)" },
+    { "was": "PARTY row and its tab (close-up + S.LV/LV, HP, MP, STR, MAG, DEF, AGI, WEAPON, ARMOR, OVERDRIVE mode / DRESSPHERE, statuses)", "nowLives": "dissolved into the per-member tabs — this is the whole idea of the redesign. WEAPON / ARMOR and S.LV are the three rows with no home in the two columns: see README question 3." },
+    { "was": "MUSIC PLAYER row and the jukebox panel", "nowLives": "the MUSIC tab, rows where the meters are" },
+    { "was": "CHAPTER SELECT row", "nowLives": "OPTIONS tab, right column, below the rule" },
+    { "was": "QUIT TO TITLE row", "nowLives": "OPTIONS tab, right column, below the rule" },
+    { "was": "extraRows (host-supplied rows, e.g. from BattleScreen)", "nowLives": "OPTIONS tab, right column, above the rule" },
+    { "was": "the live party cards along the bottom (face, name, HP/MP numbers and bars, Overdrive bar, KO state)", "nowLives": "the HP hairline under each member tab, plus that member's own tab for the numbers. The reference has no cards and adding them back would undo the layout." },
+    { "was": "the ControlsHint strip and its measured band", "nowLives": "the CONTROLS tab, plus the two prompts bottom-right. The strip is gone, which also retires the whole --pause-hint-band mechanism fix3-pause.md had to build." },
+    { "was": "PHOTO MODE (F)", "nowLives": "unchanged as a key, but it is now nearly the same picture as H. See README question 5." },
+    { "was": "the full-bleed 2x hero plate, focal sidecars, drift, vignette, grain", "nowLives": "unchanged — the same masters, the same focal points, the same surface pass" },
+    { "was": "hideScreensBelow / restoreScreensBelow, the exclusive keyboard claim, cursor-move and confirm SFX", "nowLives": "unchanged; none of it is layout" }
+  ],
+
+  "dataSources": {
+    "ffxStats": "src/data/ffx/builds/gagazet.ts (research/ffx-seymour-flux.md §7.3) — Tidus 2420/115, 31/16/20/18/30; Yuna 1500/270, 15/37/13/39/15; Kimahri 2310/130, 26/22/22/16/18. Overdrive gauges and modes from the same file (Tidus warrior, Yuna healer).",
+    "ffx2Stats": "the dressphere x level tables each girl is wearing at the chapter 4 build point — gunner.ts L23 (970/56, 49/26/31/31/53), dark-knight.ts L24, warrior.ts L25; bonuses from bevelle.ts accessories (circlet Mag+10/MDef+10, mythril gloves Def+20) and garment-grids/early.ts protection-halo (Def+5/MDef+5, 4 gate colours).",
+    "objectives": "src/data/chapter-meta.ts, verbatim labels",
+    "statuses": "src/data/ffx/statuses/core.ts duration models",
+    "chapters": "src/data/encounters.ts (titles, locations, game ids)",
+    "invented": "Only the live battle state a paused screen would happen to be showing — current HP/MP/gauge values, which statuses are up, the turn position, the chain count. No stat, cap, duration or name is invented."
+  },
+
+  "art": {
+    "rule": "framed with CSS only; no painting generated, re-rolled or edited",
+    "plates": "public/art/pause/<id>.2x.webp (2688x1536) with the sidecar's focal point",
+    "framing": "build.mjs plate() puts the focal point at a chosen spot and scales; it prints the head size and refuses a framing that magnifies a master past 1.25x",
+    "everyActiveMemberHasOne": true,
+    "perPlate": [
+      { "id": "tidus", "headOfSource": 0.62, "focalX": 0.46, "verdict": "good — zoom 1.26 puts the head at 79% of the frame, master downscaled 0.75x" },
+      { "id": "yuna", "headOfSource": 0.6, "focalX": 0.3, "verdict": "subject left of centre — needs the mirrored chrome" },
+      { "id": "kimahri", "headOfSource": 0.75, "focalX": 0.42, "verdict": "good" },
+      { "id": "auron", "headOfSource": 0.62, "focalX": 0.64, "verdict": "good, subject already right of centre" },
+      { "id": "wakka", "headOfSource": 0.75, "focalX": 0.52, "verdict": "good" },
+      { "id": "lulu", "headOfSource": 0.7, "focalX": 0.6, "verdict": "good" },
+      { "id": "rikku", "headOfSource": 0.8, "focalX": 0.5, "verdict": "good" },
+      { "id": "rikku-ffx2", "headOfSource": 0.8, "focalX": 0.53, "verdict": "good" },
+      { "id": "paine", "headOfSource": 0.48, "focalX": 0.25, "verdict": "subject left of centre — needs the mirrored chrome" },
+      { "id": "yuna-ffx2", "headOfSource": 0.35, "focalX": 0.44, "verdict": "the weakest plate for this layout: the smallest head in the set, so reaching 68% of the frame takes a 1.9x crop, the only one that magnifies its master (1.13x), and the crop loses the braid tip and the raised pistol that make the Gunner read" }
+    ],
+    "nothingMissing": "No active party member lacks a big close-up. The four FFX reserves (Auron, Wakka, Lulu, Rikku) have one too, so a mid-fight swap is already covered."
+  },
+
+  "files": {
+    "sheet": "sheet.png",
+    "grades": "grades.png",
+    "frames": [
+      "a-ffx-tidus.png (grade B, the recommended one)",
+      "a-grade-a-faithful.png",
+      "b-ffx-yuna.png",
+      "c-ffx2-yuna-gunner.png",
+      "d-options.png",
+      "e-hidden.png",
+      "f-phone.png"
+    ],
+    "sources": "pause-ud.css, build.mjs (emits every .html), compose.py (sheet + grades). Rendered with docs/concepts/polish/_kit/shoot.mjs, PYREFLY_BROWSER=gpu."
+  }
+}
