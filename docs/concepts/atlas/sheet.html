@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Interactive learning site: three end states</title>
+<style>
+  /* Local fonts only (public/fonts). Self-contained: no dependency on another concept folder. */
+  @font-face { font-family: 'Cormorant Garamond';
+    src: url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2');
+    font-weight: 300 700; font-style: italic; font-display: block; }
+  @font-face { font-family: 'Chakra Petch';
+    src: url('../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Chakra Petch';
+    src: url('../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2');
+    font-weight: 500; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Exo 2';
+    src: url('../../../public/fonts/exo2/Exo2-Variable-wght.woff2') format('woff2');
+    font-weight: 100 900; font-style: normal; font-display: block; }
+
+  :root { --ink: #07060c; --paper: #f4f1e8; --gold: #e3b94a; --pink: #f7b6d9; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--ink); width: 2400px; }
+  .sheet { padding: 36px 40px 30px; font-family: 'Exo 2', sans-serif; color: var(--paper); }
+
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 22px; }
+  h1 { margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 600;
+       font-size: 50px; line-height: 1.05; }
+  .sub { margin: 0; font-family: 'Chakra Petch', sans-serif; font-weight: 500; font-size: 15px;
+         letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244,241,232,0.55); }
+  .how { max-width: 900px; margin: 0; font-size: 17px; line-height: 1.45; color: rgba(244,241,232,0.78); text-align: right; }
+  .how b { color: var(--paper); font-weight: 600; }
+
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 10px; }
+  .cols div { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 14px;
+              letter-spacing: 0.24em; text-transform: uppercase; color: rgba(244,241,232,0.5);
+              padding-bottom: 8px; border-bottom: 1px solid rgba(244,241,232,0.16); }
+  .cols div span { color: var(--paper); margin-right: 10px; }
+
+  .row { margin-bottom: 30px; --accent: var(--gold); }
+  .row--x2 { --accent: var(--pink); }
+  .label { display: flex; align-items: center; gap: 22px; padding: 14px 0 12px; }
+  .label__key { flex: none; width: 66px; height: 66px; display: grid; place-items: center;
+                font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700;
+                font-size: 52px; line-height: 1; color: var(--ink); background: var(--accent);
+                transform: skewX(-8deg); }
+  .label__key i { transform: skewX(8deg); font-style: italic; padding-bottom: 6px; }
+  .label__text { flex: 1; min-width: 0; }
+  .label__title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 600;
+                  font-size: 36px; line-height: 1.1; color: var(--paper); }
+  .label__line { margin-top: 4px; font-size: 18px; line-height: 1.4; color: rgba(244,241,232,0.8); }
+  .label__line b { color: var(--accent); font-weight: 600; }
+  .chips { flex: none; display: flex; gap: 8px; }
+  .chip { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.16em;
+          text-transform: uppercase; padding: 7px 12px; border: 1px solid rgba(244,241,232,0.28);
+          color: rgba(244,241,232,0.78); white-space: nowrap; }
+  .chip--game { border-color: var(--accent); color: var(--accent); }
+
+  .frames { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .cell img { width: 100%; aspect-ratio: 16 / 9; display: block; border: 1px solid rgba(244,241,232,0.22); }
+  .cap { margin-top: 8px; font-size: 16px; line-height: 1.35; color: rgba(244,241,232,0.74); }
+  .cap b { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.14em;
+           color: var(--accent); margin-right: 8px; }
+
+  .foot { display: flex; justify-content: space-between; gap: 40px; margin-top: 4px; padding-top: 14px;
+          border-top: 1px solid rgba(244,241,232,0.16);
+          font-family: 'Chakra Petch', sans-serif; font-weight: 500; font-size: 14px;
+          letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,241,232,0.5); }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <h1>An interactive learning site: three things to take apart</h1>
+      <p class="sub">Pyrefly Reprise &middot; end-state options for Bailey &middot; pick one, mix them, or say what to change in each</p>
+    </div>
+    <p class="how">Every option keeps the same nine-part pattern from the two reference sites:
+      <b>one specimen on a stage</b>, a parts panel on the left, <b>the pull-it-apart slider</b> at the bottom,
+      a detail card with its source on the right, isolate, search, a view rail and credits. Only the subject and the look change.</p>
+  </div>
+
+  <div class="cols">
+    <div><span>0%</span>Assembled, nothing selected</div>
+    <div><span>55%</span>Pulled apart, one piece selected</div>
+    <div><span>100%</span>Every piece, laid flat</div>
+  </div>
+
+  <div class="row row--x2">
+    <div class="label">
+      <div class="label__key"><i>A</i></div>
+      <div class="label__text">
+        <div class="label__title">Pyrefly Atlas: the bosses, taken apart</div>
+        <div class="label__line"><b>Takes apart</b> a boss (here Vegnagun, chapter V) into its parts, moves, statuses, immunities, turn patterns and rewards
+          &middot; <b>you learn</b> what the boss is made of, which pieces are dangerous and how to answer each one.</div>
+      </div>
+      <div class="chips"><span class="chip chip--game">FFX-2 specimen &middot; pyre pink</span><span class="chip">Light, clinical look</span><span class="chip">Build: medium</span></div>
+    </div>
+    <div class="frames">
+      <div class="cell"><img src="a-boss-atlas/a1-assembled.png" alt="">
+        <div class="cap"><b>A1</b>The whole boss on the plinth, five battles pinned in order.</div></div>
+      <div class="cell"><img src="a-boss-atlas/a2-exploded-selected.png" alt="">
+        <div class="cap"><b>A2</b>Five parts apart, move cards on threads, Body / Core selected with &ldquo;How to answer it&rdquo; open.</div></div>
+      <div class="cell"><img src="a-boss-atlas/a3-inventory.png" alt="">
+        <div class="cap"><b>A3</b>119 pieces: 12 part tiles, then a wall of move, status and immunity chips.</div></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="label">
+      <div class="label__key"><i>B</i></div>
+      <div class="label__text">
+        <div class="label__title">Pyrefly Studio: one turn, taken apart</div>
+        <div class="label__line"><b>Takes apart</b> one turn of battle (Tidus attacks Seymour Flux, chapter I) into eight rule steps, computed by the game&rsquo;s own engine
+          &middot; <b>you learn</b> why a fight behaves as it does: turn order, hit, damage, status, Overdrive.</div>
+      </div>
+      <div class="chips"><span class="chip chip--game">FFX specimen &middot; Yevon gold</span><span class="chip">Dark studio look</span><span class="chip">Build: large</span></div>
+    </div>
+    <div class="frames">
+      <div class="cell"><img src="b-battle-studio/b1-assembled.png" alt="">
+        <div class="cap"><b>B1</b>One turn as one object, eight numbered pins. Small pink card: how the list changes for FFX-2.</div></div>
+      <div class="cell"><img src="b-battle-studio/b2-exploded-selected.png" alt="">
+        <div class="cap"><b>B2</b>Eight step cards around the stage; Turn order selected, with a live &ldquo;drag Tidus&rsquo;s Agility&rdquo; control.</div></div>
+      <div class="cell"><img src="b-battle-studio/b3-inventory.png" alt="">
+        <div class="cap"><b>B3</b>137 rules as text tiles in three sizes, hover card on Zombie. No pictures on this wall.</div></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="label">
+      <div class="label__key"><i>C</i></div>
+      <div class="label__text">
+        <div class="label__title">Pyrefly Reprise, exploded: the game, taken apart</div>
+        <div class="label__line"><b>Takes apart</b> one finished frame of the game (Lady Yunalesca, chapter II) into painted layers, the HUD, the engine, the presenter and the sound
+          &middot; <b>you learn</b> how a painted 2.5D browser game is put together.</div>
+      </div>
+      <div class="chips"><span class="chip chip--game">FFX specimen &middot; Yevon gold</span><span class="chip">Dark ink look</span><span class="chip">Build: medium to large</span></div>
+    </div>
+    <div class="frames">
+      <div class="cell"><img src="c-scene-exploded/c1-assembled.png" alt="">
+        <div class="cap"><b>C1</b>One battle frame on the stage, nine components listed, six on screen and three you never see.</div></div>
+      <div class="cell"><img src="c-scene-exploded/c2-exploded-selected.png" alt="">
+        <div class="cap"><b>C2</b>Eight sheets apart, boss billboard selected; below, rails for the engine, the presenter and the music.</div></div>
+      <div class="cell"><img src="c-scene-exploded/c3-inventory.png" alt="">
+        <div class="cap"><b>C3</b>377 shipped pieces, mostly real thumbnails; gold outline marks what chapter II uses.</div></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Concept &middot; faked screenshots at 1600&times;900 from the project&rsquo;s own paintings and sourced data &middot; no page is built</span>
+    <span>Unofficial fan tribute &middot; interaction pattern only, nothing copied from the reference sites</span>
+  </div>
+</div>
+</body>
+</html>

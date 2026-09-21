@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Pyrefly Studio · B2 exploded, Turn order selected</title><link rel="stylesheet" href="b.css"></head>
+<body class="b2-exploded-selected"><div class="studio" style="--cx:736px">
+<div class="spot"></div><div class="floor"></div>
+<div class="stage" style="--cx:736px;--cy:690px;--rx:330px;--sq:.19">
+<div class="cyc" style="left:501px;top:240px;width:470px;height:300px;opacity:.8;filter:blur(1.2px)"><img src="../../../../public/art/backdrops/gagazet.png" alt=""></div>
+<div class="plinth"></div><div class="turntable"><i class="ring"></i><i class="ticks"></i><i class="arc"></i></div>
+<svg class="lines">
+<path class="trk" d="M409 690 V 262 Q 409 156 616 156 H 856 Q 1065 156 1065 262 V 690"/>
+<path class="stub sel" d="M516 622 L537.4 607.2"/><circle class="sel" cx="537.4" cy="607.2" r="3"/><path class="stub" d="M524 464 L550.0 464.7"/><circle class="" cx="550.0" cy="464.7" r="3"/><path class="stub" d="M532 306 L552.3 322.3"/><circle class="" cx="552.3" cy="322.3" r="3"/><path class="stub" d="M615 222 L623.8 240.0"/><circle class="" cx="623.8" cy="240.0" r="3"/><path class="stub" d="M857 222 L848.2 240.0"/><circle class="" cx="848.2" cy="240.0" r="3"/><path class="stub" d="M942 306 L921.7 322.2"/><circle class="" cx="921.7" cy="322.2" r="3"/><path class="stub" d="M950 464 L924.0 464.7"/><circle class="" cx="924.0" cy="464.7" r="3"/><path class="stub" d="M958 622 L936.5 607.3"/><circle class="" cx="936.5" cy="607.3" r="3"/>
+</svg>
+<div class="shadow" style="left:526px;top:668px;width:220px;height:44px"></div>
+<div class="shadow" style="left:764px;top:646px;width:200px;height:40px;opacity:.7"></div>
+<img class="fig back" src="../../../../public/art/characters/mortiorchis/idle.png" style="left:710px;top:248px;width:236px" alt="">
+<img class="fig" src="../../../../public/art/characters/seymour-flux-body/idle.png" style="left:780px;top:398px;height:262px" alt="">
+<img class="fig" src="../../../../public/art/characters/tidus/attack.png" style="left:530px;top:410px;height:288px" alt="">
+<div class="dmg" style="left:708px;top:412px;transform:skewX(-12deg) rotate(-4deg) scale(.72);transform-origin:0 0"><b>803</b></div>
+<div class="step sel" style="left:296px;top:556px;width:226px;transform:perspective(1300px) rotateY(22deg) scale(1.03)"><div class="hd"><span class="no">01</span><span>Turn order</span></div><p>The lowest counter goes next. Three are tied at 0, and the party goes before enemies.</p><div class="lv two"><i class="e"></i><b>0 · 0 · 0 · 9 · 13</b><span class="pw">ticks each one must wait</span></div></div>
+<div class="step" style="left:304px;top:398px;width:226px;transform:perspective(1300px) rotateY(22deg)"><div class="hd"><span class="no">02</span><span>Command</span></div><p>Every command has a rank. A higher rank means a longer wait for your next turn.</p><div class="lv"><i class="e"></i>Rank 3 <b>8 × 3 = 24</b> ticks</div></div>
+<div class="step far" style="left:312px;top:240px;width:226px;transform:perspective(1300px) rotateY(22deg) scale(.97)"><div class="hd"><span class="no">03</span><span>Hit roll</span></div><p>A physical attack rolls to hit. Only 40% of Accuracy counts, against Evasion.</p><div class="lv"><i class="e"></i>Hit <b>100%</b> Critical <b>6%</b></div></div>
+<div class="step far" style="left:502px;top:92px;width:226px;transform:perspective(1300px) rotateX(-11deg)"><div class="hd"><span class="no">04</span><span>Damage</span></div><p>Strength cubed ÷ 32 + 30, cut by his Defense, then a 32-step random roll.</p><div class="lv"><i class="e"></i><b>732–827</b> dealt <b>803</b></div></div>
+<div class="step far" style="left:744px;top:92px;width:226px;transform:perspective(1300px) rotateX(-11deg)"><div class="hd"><span class="no">05</span><span>Element, affinity</span></div><p>Weak ×1.5, resists ×0.5, immune ×0, absorbs heals. The strongest one wins.</p><div class="lv"><i class="e"></i>No element <b>×1.0</b></div></div>
+<div class="step far" style="left:936px;top:240px;width:226px;transform:perspective(1300px) rotateY(-22deg) scale(.97)"><div class="hd"><span class="no">06</span><span>Status</span></div><p>A status lands if its chance, minus the target’s resistance, beats a 0–100 roll.</p><div class="lv"><i class="e"></i>His Poison resistance <b>90</b></div></div>
+<div class="step" style="left:944px;top:398px;width:226px;transform:perspective(1300px) rotateY(-22deg)"><div class="hd"><span class="no">07</span><span>Overdrive gauge</span></div><p>Warrior mode: damage × 10 ÷ your own undefended Attack, capped at 16.</p><div class="lv"><i class="e"></i>803×10÷960 <b>50 → 58%</b></div></div>
+<div class="step" style="left:952px;top:556px;width:226px;transform:perspective(1300px) rotateY(-22deg) scale(1.03)"><div class="hd"><span class="no">08</span><span>Boss’s next move</span></div><p>His script is fixed. The studio runs it ahead on a copy of the battle.</p><div class="lv two"><i class="e"></i><b class="sm">Lance of Atrophy</b><span class="pw">next · 50% chance of Zombie</span></div></div>
+</div>
+
+<aside class="glass detail"><div class="bar"></div><div class="in">
+<div class="eb"><span class="caps k">01 · Turn order</span><span class="only">FFX only</span></div>
+<h2>Turn order</h2>
+<div class="tabs"><span>Overview</span><span class="on">How it works</span></div>
+<p class="body">Everyone has a counter; the lowest goes next. Acting adds your base ticks × the command’s rank. Faster means fewer ticks.</p>
+<div class="claim"><i></i>Game rule · 2 sources agree · computed live</div>
+<div class="try"><div class="caps k"><span>Drag Tidus’s Agility</span><em><i></i>Live</em></div>
+<div class="agi"><div class="track" style="--p:65.4%"><div class="groove"></div><div class="fill"></div><div class="mark" data-l="30" style="left:38.5%"></div><div class="knob"></div></div><div class="val">44</div></div>
+<div class="sub">Base ticks <b>8 → 6</b> · Attack costs <b>24 → 18</b> ticks</div>
+<div class="cols"><div><div class="ch">At 30 (his build)</div><div class="tl me"><span>Tidus</span><span class="tk">0</span></div><div class="tl foe"><span>Seymour Flux</span><span class="tk">0</span></div><div class="tl foe"><span>Mortiorchis</span><span class="tk">0</span></div><div class="tl"><span>Kimahri</span><span class="tk">9</span></div><div class="tl"><span>Yuna</span><span class="tk">13</span></div><div class="tl foe"><span>Seymour Flux</span><span class="tk">21</span></div><div class="tl foe"><span>Mortiorchis</span><span class="tk">21</span></div><div class="tl me"><span>Tidus</span><span class="tk">24</span></div></div>
+<div><div class="ch now">At 44 (your drag)</div><div class="tl me"><span>Tidus</span><span class="tk">0</span></div><div class="tl foe"><span>Seymour Flux</span><span class="tk">6</span></div><div class="tl foe"><span>Mortiorchis</span><span class="tk">6</span></div><div class="tl"><span>Kimahri</span><span class="tk">15</span></div><div class="tl me moved"><span>Tidus</span><span class="tk">18</span></div><div class="tl"><span>Yuna</span><span class="tk">19</span></div><div class="tl foe"><span>Seymour Flux</span><span class="tk">27</span></div><div class="tl foe"><span>Mortiorchis</span><span class="tk">27</span></div></div></div>
+<div class="note">Numbers are ticks from now. His second turn moves from 8th to 5th.</div></div>
+<div class="facts2"><div><div class="fk">Source</div><div class="fv"><u>ffx-combat-core</u><br>§1.1, §1.2, §1.6</div></div>
+<div><div class="fk">Computed by</div><div class="fv">battle/ffx/turnQueue.ts<small>the game’s own file</small></div></div></div>
+</div>
+<div class="actions"><div class="isolate"><span>Isolate step</span></div><span class="clear">Clear selection</span></div></aside>
+<div class="grain"></div><div class="vignette"></div>
+<header class="title"><div class="eyebrow">Pyrefly Studio · Battle system</div><h1>One Turn</h1>
+<div class="facts">Tidus · Attack · Seymour Flux<br><b>137</b> sourced rules · live engine</div></header>
+<div class="gameswitch"><span class="on">FFX</span><span>FFX-2</span></div>
+<nav class="chapters"><div class="grp"><div class="row"><div class="chap on"><span class="face"><img src="../../../../public/art/portraits/seymour.png" alt=""></span><span class="n">I</span><span class="t">Seymour Flux</span></div><div class="chap"><span class="face"><img src="../../../../public/art/portraits/yunalesca.png" alt=""></span><span class="n">II</span><span class="t">Lady Yunalesca</span></div><div class="chap"><span class="face"><img src="../../../../public/art/portraits/jecht.png" alt=""></span><span class="n">III</span><span class="t">Braska's Final Aeon</span></div></div><div class="br">FFX · a turn list</div></div>
+<div class="grp"><div class="row"><div class="chap"><span class="face"><img src="../../../../public/art/portraits/bahamut.png" alt=""></span><span class="n">IV</span><span class="t">Bahamut</span></div><div class="chap"><span class="face"><img src="../../../../public/art/portraits/shuyin.png" alt=""></span><span class="n">V</span><span class="t">Vegnagun</span></div></div><div class="br">FFX-2 · gauges</div></div></nav>
+<div class="glass search"><i class="mag"></i><span class="ph">Find a rule, status or move</span><span class="kbd">/</span></div>
+<aside class="glass components"><div class="head"><span class="caps k">Components</span><span class="v">8</span></div>
+<div class="comp sel"><span class="no">01</span><i class="gl g1"></i><span class="nm">Turn order</span><span class="ct">8</span><span class="pl">Who goes next, and why</span></div>
+<div class="comp"><span class="no">02</span><i class="gl g2"></i><span class="nm">Command</span><span class="ct">13</span><span class="pl">What you pick, what it costs</span></div>
+<div class="comp"><span class="no">03</span><i class="gl g3"></i><span class="nm">Hit roll</span><span class="ct">6</span><span class="pl">Does it land? Is it critical?</span></div>
+<div class="comp"><span class="no">04</span><i class="gl g4"></i><span class="nm">Damage</span><span class="ct">34</span><span class="pl">How the number is worked out</span></div>
+<div class="comp"><span class="no">05</span><i class="gl g5"></i><span class="nm">Element and affinity</span><span class="ct">10</span><span class="pl">Weak, resist, immune, absorb</span></div>
+<div class="comp"><span class="no">06</span><i class="gl g6"></i><span class="nm">Status</span><span class="ct">37</span><span class="pl">Zombie, Poison, Haste and more</span></div>
+<div class="comp"><span class="no">07</span><i class="gl g7"></i><span class="nm">Overdrive gauge</span><span class="ct">18</span><span class="pl">What fills the big attack</span></div>
+<div class="comp chapter"><span class="no">08</span><i class="gl g8"></i><span class="nm">The boss's next move</span><span class="ct">11</span><span class="pl">His script, read ahead</span></div>
+<div class="foot"><span><b class="num" style="font-size:15px;color:var(--paper)">137</b> pieces visible</span><u>Hide all</u></div></aside>
+<aside class="glass live"><div class="caps k"><i class="dot"></i>Live engine</div>
+<p>Nothing here is typed in. This page runs the game's own battle code.</p>
+<div class="row"><span>Seed<b>1</b></span><span class="btn">Re-roll</span></div></aside>
+<div class="glass rail">
+<div class="rb on"><i class="v34"></i></div><div class="rb"><i class="vfront"></i></div><div class="rb"><i class="vside"></i></div><div class="rb"><i class="vtop"></i></div><hr>
+<div class="rb"><i class="plus"></i></div><div class="rb"><i class="minus"></i></div><hr><div class="rb"><i class="spin"></i></div><div class="rb"><i class="full"></i></div><div class="rb"><i class="q">?</i></div></div>
+<div class="caps xcap"><span>Separated steps</span></div>
+<div class="glass explode"><div class="toggle"><i></i><span class="lab on">Labels</span></div><div class="sep"></div>
+<span class="lab">Assembled</span><div class="track" style="--p:55%"><div class="groove"></div><div class="fill"></div><div class="ticks"></div><div class="knob"></div></div><span class="lab">Every rule</span>
+<div class="pct">55<small>%</small></div><span class="reset">Reset</span></div>
+<div class="hint"><span>Drag to orbit</span><i></i><span>Scroll to zoom</span><i></i><span>Click a step to inspect</span></div>
+<div class="concept">Concept · B2 · FFX</div>
+<div class="credits">Unofficial fan tribute · <u>sources &amp; credits</u></div>
+</div></body></html>

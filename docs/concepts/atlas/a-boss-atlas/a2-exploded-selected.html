@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Pyrefly Atlas: Vegnagun, 55% exploded, Body / Core selected</title>
+<meta name="viewport" content="width=1600">
+<link rel="stylesheet" href="a.css"></head>
+<body>
+
+<div class="floor" style="left:330px;top:424px;width:830px;height:354px"><i></i></div>
+<div class="plinth" style="left:528px;top:524px;width:420px;height:80px;opacity:.9"></div>
+<div class="gshadow" style="left:590px;top:540px;width:300px;height:34px;z-index:1"></div>
+<div class="gshadow" style="left:392px;top:746px;width:136px;height:22px;z-index:1"></div>
+<div class="gshadow" style="left:452px;top:508px;width:170px;height:28px;z-index:1;opacity:.55"></div>
+<div class="gshadow" style="left:1000px;top:556px;width:112px;height:16px;z-index:1;opacity:.6"></div>
+<div id="p-tail" class="part flip" style="left:936px;top:118px;width:190px;z-index:1;transform:perspective(720px) rotateY(-24deg);filter:drop-shadow(3px 3px 0 rgba(11,10,18,.14)) drop-shadow(0 10px 10px rgba(11,10,18,.2)) saturate(.72) brightness(1.1) blur(1px)"><img src="../../../../public/art/characters/vegnagun-tail/idle.png" alt=""></div>
+<div id="p-leg" class="part" style="left:1004px;top:402px;width:108px;z-index:1;transform:perspective(720px) rotateY(-24deg);filter:drop-shadow(5px 5px 0 rgba(11,10,18,.14)) drop-shadow(0 12px 12px rgba(11,10,18,.2)) saturate(.85) brightness(1.06) blur(.5px)"><img src="../../../../public/art/characters/vegnagun-leg/idle.png" alt=""></div>
+<div id="p-body" class="part" style="left:566px;top:322px;width:340px;z-index:2;transform:perspective(720px) rotateY(-24deg);filter:drop-shadow(2px 0 0 #b8437e) drop-shadow(-2px 0 0 #b8437e) drop-shadow(0 2px 0 #b8437e) drop-shadow(0 -2px 0 #b8437e) drop-shadow(8px 8px 0 rgba(11,10,18,.14)) drop-shadow(0 16px 16px rgba(11,10,18,.2))"><img src="../../../../public/art/characters/vegnagun-body/idle.png" alt=""><img src="../../../../public/art/characters/vegnagun-body/idle.png" alt="" style="position:absolute;left:0;top:0;opacity:.26;filter:sepia(1) hue-rotate(292deg) saturate(2.3) brightness(1.06)"></div>
+<div id="p-head" class="part flip" style="left:392px;top:108px;width:266px;z-index:3;transform:perspective(720px) rotateY(-24deg);filter:drop-shadow(12px 12px 0 rgba(11,10,18,.14)) drop-shadow(0 16px 16px rgba(11,10,18,.2))"><img src="../../../../public/art/characters/vegnagun-head/idle.png" alt=""></div>
+<div id="p-shuyin" class="part" style="left:402px;top:566px;width:116px;z-index:4;transform:perspective(720px) rotateY(-24deg);filter:drop-shadow(16px 16px 0 rgba(11,10,18,.14)) drop-shadow(0 18px 18px rgba(11,10,18,.2))"><img src="../../../../public/art/characters/shuyin/idle.png" alt=""></div>
+<span class="tag" style="left:1010px;top:100px">1 &middot; Tail</span>
+<span class="tag" style="left:1024px;top:378px">2 &middot; Leg</span>
+<span class="tag sel" style="left:676px;top:302px">3 &middot; Body / Core</span>
+<span class="tag" style="left:396px;top:98px">4 &middot; Head</span>
+<span class="tag" style="left:404px;top:546px">5 &middot; Shuyin</span>
+<svg class="threads" id="threads"></svg>
+<div class="thread-card" style="left:676px;top:106px" data-from="head" data-ax="0.78" data-ay="0.3" data-side="l"><div class="n">Nemo Ante Mortem Beatus</div><div class="f">magic, power <b>30</b> &middot; hits everyone</div></div>
+<div class="thread-card" style="left:676px;top:160px" data-from="head" data-ax="0.8" data-ay="0.5" data-side="l"><div class="n">Odi Et Amo</div><div class="f"><b>16</b> hits &middot; strips your buffs</div></div>
+<div class="thread-card k-part" style="left:676px;top:214px" data-from="head" data-ax="0.76" data-ay="0.72" data-side="l"><div class="n">Redoubt &times; 2</div><div class="f"><b>2,500</b> HP each &middot; they revive each other</div></div>
+<div class="thread-card" style="left:938px;top:262px" data-from="tail" data-ax="0.35" data-ay="0.85" data-side="t"><div class="n">Tail Beam</div><div class="f"><b>5/16</b> of max HP &middot; one target</div></div>
+<div class="thread-card" style="left:938px;top:316px" data-from="tail" data-ax="0.6" data-ay="0.9" data-side="t"><div class="n">Noli Me Tangere</div><div class="f">a flat <b>1,250</b> &middot; hits everyone</div></div>
+<div class="thread-card" style="left:916px;top:580px" data-from="leg" data-ax="0.4" data-ay="0.95" data-side="t"><div class="n">Vita Brevis</div><div class="f">magic, power <b>40</b> &middot; everyone &middot; Delay</div></div>
+<div class="thread-card" style="left:916px;top:634px" data-from="leg" data-ax="0.55" data-ay="0.95" data-side="t"><div class="n">Absorb</div><div class="f"><b>3/16</b> of your current HP and MP</div></div>
+<div class="thread-card k-part" style="left:916px;top:688px" data-from="leg" data-ax="0.7" data-ay="0.95" data-side="t"><div class="n">Node &times; 3</div><div class="f"><b>300,000</b> HP each &middot; not the fight</div></div>
+<div class="thread-card sel" style="left:360px;top:322px" data-from="body" data-ax="0.12" data-ay="0.3" data-side="r" data-sel="1"><div class="n">Charge Core</div><div class="f">counts to <b>3</b>, then it fires</div></div>
+<div class="thread-card sel" style="left:360px;top:376px" data-from="body" data-ax="0.1" data-ay="0.5" data-side="r" data-sel="1"><div class="n">Memento Mori</div><div class="f">magic, power <b>28</b> &middot; hits everyone</div></div>
+<div class="thread-card sel" style="left:360px;top:430px" data-from="body" data-ax="0.12" data-ay="0.7" data-side="r" data-sel="1"><div class="n">Full-Life</div><div class="f">stands a fallen Bulwark back up</div></div>
+<div class="thread-card k-part sel" style="left:566px;top:570px" data-from="body" data-ax="0.14" data-ay="0.92" data-side="t" data-sel="1"><div class="n">Right Bulwark</div><div class="f"><b>3,000</b> HP &middot; Level 39</div></div>
+<div class="thread-card k-part sel" style="left:744px;top:570px" data-from="body" data-ax="0.9" data-ay="0.92" data-side="t" data-sel="1"><div class="n">Left Bulwark</div><div class="f"><b>3,000</b> HP &middot; Level 39</div></div>
+<div class="thread-card k-immune sel" style="left:566px;top:628px" data-from="body" data-ax="0.5" data-ay="0.98" data-side="t" data-sel="1"><div class="n">Shrugs off <b>29</b> of 31 statuses</div><div class="f">what still lands: Def Up, Def Down &middot; Armor Break works</div></div>
+<div class="thread-card" style="left:536px;top:690px" data-from="shuyin" data-ax="0.85" data-ay="0.4" data-side="l"><div class="n">Terror of Zanarkand</div><div class="f"><b>9</b> hits on one girl &middot; ignores Defense</div></div>
+<div class="more" style="left:678px;top:270px">+ 3 more moves at 100%</div>
+<div class="more" style="left:918px;top:744px">+ 3 more moves, 11 on the Nodes</div>
+<div class="more" style="left:538px;top:746px">+ 4 more moves at 100%</div>
+
+<div class="title">
+  <div class="caps eyebrow">Pyrefly Atlas &middot; boss anatomy</div>
+  <h1>Vegnagun</h1>
+  <div class="sub">Take it apart before it finishes the note</div>
+  <div class="facts"><b>119</b> catalogued pieces &middot; <b>5</b> battles &middot; FFX-2, chapter 5<br>Source: research/ffx2-vegnagun-shuyin.md</div>
+</div>
+<div class="card switcher" data-audit><div class="chip-ch"><div class="thumb" style="background-image:url('../../../../public/art/characters/seymour-flux/idle.png');background-size:320% auto;background-position:50.0% 0.4%"></div><div><div class="k">I &middot; FFX</div><div class="n">Seymour Flux</div></div></div><div class="chip-ch"><div class="thumb" style="background-image:url('../../../../public/art/characters/yunalesca-1/idle.png');background-size:360% auto;background-position:41.7% 12.8%"></div><div><div class="k">II &middot; FFX</div><div class="n">Lady Yunalesca</div></div></div><div class="chip-ch"><div class="thumb" style="background-image:url('../../../../public/art/characters/braskas-final-aeon-1/idle.png');background-size:300% auto;background-position:21.5% 9.9%"></div><div><div class="k">III &middot; FFX</div><div class="n">Braska's Final Aeon</div></div></div><div class="chip-ch"><div class="thumb" style="background-image:url('../../../../public/art/characters/ffx2-bahamut/idle.png');background-size:300% auto;background-position:42.5% -5.5%"></div><div><div class="k">IV &middot; FFX-2</div><div class="n">Bahamut</div></div></div><div class="chip-ch on"><div class="thumb" style="background-image:url('../../../../public/art/characters/vegnagun-head/idle.png');background-size:270% auto;background-position:29.4% 89.2%"></div><div><div class="k">V &middot; FFX-2</div><div class="n">Vegnagun</div></div></div></div>
+<div class="card search" data-audit><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0b0a12" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg><span>Find a part, attack or status</span><b class="kbd">/</b></div>
+<div class="card rail" data-audit><div class="b on"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4"/><path d="M12 3v18"/><path d="M18 9.5l3 2.5-3 2.5"/></svg><span>Tilt</span></div><div class="b"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1.5"/><path d="M9 9h6v6H9z"/></svg><span>Front</span></div><div class="b"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5M8 11h6M11 8v6"/></svg><span>Closer</span></div><div class="b"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5M8 11h6"/></svg><span>Wider</span></div><div class="b"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v5h5"/></svg><span>Reset</span></div><div class="b"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.1 1-1.1 1.8M12 17v.2"/></svg><span>Help</span></div></div>
+<div class="card systems" data-audit>
+  <div class="hd"><span class="caps">Systems</span><span class="num">7</span></div>
+  <div class="tabs"><span class="tab on">All</span><span class="tab">What it does</span><span class="tab">What stops it</span></div>
+  <div class="sys sel"><span class="dot" style="background:var(--sys-parts)"></span><div class="nm">Parts and forms</div><span class="ct">12</span><span class="tog"></span><div class="pl">what stands on the field, battle by battle</div></div>
+  <div class="sys"><span class="dot" style="background:var(--sys-attacks)"></span><div class="nm">Attacks and abilities</div><span class="ct">50</span><span class="tog"></span><div class="pl">every move any part can make</div></div>
+  <div class="sys"><span class="dot" style="background:var(--sys-status)"></span><div class="nm">Statuses it inflicts</div><span class="ct">8</span><span class="tog"></span><div class="pl">what it can put on your party</div></div>
+  <div class="sys"><span class="dot" style="background:var(--sys-immune)"></span><div class="nm">Immunities</div><span class="ct">31</span><span class="tog"></span><div class="pl">statuses that some part shrugs off</div></div>
+  <div class="sys"><span class="dot" style="background:var(--sys-element)"></span><div class="nm">Elemental affinities</div><span class="ct">1</span><span class="tog"></span><div class="pl">Gravity does nothing, on all 12</div></div>
+  <div class="sys"><span class="dot" style="background:var(--sys-ai)"></span><div class="nm">Turn pattern (AI)</div><span class="ct">8</span><span class="tog"></span><div class="pl">how each kind of part decides its move</div></div>
+  <div class="sys"><span class="dot" style="background:var(--sys-rewards)"></span><div class="nm">Rewards</div><span class="ct">9</span><span class="tog"></span><div class="pl">what it drops, and what you can steal</div></div>
+  <div class="ft"><span><b>119</b> pieces visible</span><span class="link">Hide all</span></div>
+</div>
+<div class="card explode" data-audit>
+  <div class="main">
+    <div class="top"><span class="caps what">Pull it apart</span><span class="caps state">Separated parts</span></div>
+    <div class="track"><div class="bed"></div><div class="fill" style="width:55%"></div><i class="tick" style="left:0%"></i><i class="tick" style="left:25%"></i><i class="tick" style="left:50%"></i><i class="tick" style="left:75%"></i><i class="tick" style="left:100%"></i><div class="knob" style="left:55%"></div></div>
+    <div class="ends"><span class="end dim">Assembled</span><span class="plain">drag to take the boss apart</span><span class="end">Every piece</span></div>
+  </div>
+  <div class="side">
+    <span class="pct">55<small>%</small></span>
+    <div class="ctl"><span class="btn-reset">Reset</span><span class="labels"><span class="tog"></span>Labels</span></div>
+  </div>
+</div>
+<div class="hint">Drag to tilt <i>&middot;</i> Scroll to zoom <i>&middot;</i> Click any piece to inspect</div>
+<div class="concept">CONCEPT &middot; OPTION A</div>
+<div class="credits">Unofficial fan tribute &middot; <span class="link">sources &amp; credits</span></div>
+<div class="card detail" data-audit><div class="bar"></div><div class="in">
+  <div class="eb"><span class="caps">Part &middot; battle 3 of 5</span><span class="honest">Verified</span></div>
+  <h2>Body / Core</h2>
+  <div class="under">Vegnagun &middot; Level <b>43</b> &middot; <b>33,040</b> HP</div>
+  <p>Vegnagun's core. Charges energy, then unleashes a devastating attack; can also revive both Bulwarks — make it the primary target.</p>
+  <div class="kind">Scan text in this project&rsquo;s own words &middot; numbers are sourced &middot; the painting is an original interpretation</div>
+  <div class="dtabs"><span class="dtab">Overview</span><span class="dtab on">How to answer it</span></div>
+  <div class="answer"><div class="lab">Body and Bulwarks</div><div class="tx">Two Darknesses clear both Bulwarks and chunk the Core. Do not hit a Bulwark twice with the same damage class — they mirror it back.</div><div class="ci">Strategy guide &middot; ffx2-vegnagun-shuyin §7.2</div></div>
+  <div class="answer"><div class="lab">When you see &ldquo;Charge Core&rdquo;</div><div class="tx">Three unimpeded Core turns and it fires — killing a Bulwark makes the Core waste its turn on Full-Life and stops the counter.</div><div class="ci">Strategy guide &middot; ffx2-vegnagun-shuyin §4.1, §7.2</div></div>
+  <div class="facts-row"><div><div class="l">Research reference</div><div class="v">ffx2-vegnagun-shuyin &sect;3.3 &middot; verified: 2 sources</div></div><div><div class="l">Selected</div><div class="v n">1</div></div></div>
+  <div class="facts-note">Stats follow SinirothX (Mag 42 / Def 98); the wiki swaps the two.</div>
+  <div class="actions"><div class="btn primary"><span>Isolate</span></div><div class="btn ghost"><span>Fight this chapter</span></div></div>
+  <div class="clear"><span class="link">Clear selection</span></div>
+</div></div>
+
+<script>
+/* threads: from an anchor on the painted part to the near edge of each small card */
+(function () {
+  const svg = document.getElementById('threads');
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+  const bodyBox = document.getElementById('p-body').getBoundingClientRect();
+  const hub = [bodyBox.left + bodyBox.width / 2, bodyBox.top + bodyBox.height / 2];
+  for (const id of ['tail', 'leg', 'head', 'shuyin']) {
+    const r = document.getElementById('p-' + id).getBoundingClientRect();
+    mk('line', { x1: hub[0], y1: hub[1], x2: r.left + r.width / 2, y2: r.top + r.height / 2, stroke: 'rgba(11,10,18,.42)', 'stroke-width': 1.5, 'stroke-dasharray': '3 6' });
+  }
+  for (const c of document.querySelectorAll('.thread-card')) {
+    const p = document.getElementById('p-' + c.dataset.from).getBoundingClientRect();
+    const r = c.getBoundingClientRect();
+    const x1 = p.left + p.width * +c.dataset.ax, y1 = p.top + p.height * +c.dataset.ay;
+    const s = c.dataset.side;
+    const x2 = s === 'l' ? r.left : s === 'r' ? r.right : r.left + Math.min(28, r.width / 2);
+    const y2 = s === 't' ? r.top : s === 'b' ? r.bottom : r.top + r.height / 2;
+    const col = c.dataset.sel ? '#b8437e' : 'rgba(11,10,18,.45)';
+    mk('line', { x1, y1, x2, y2, stroke: col, 'stroke-width': c.dataset.sel ? 1.4 : 1 });
+    mk('circle', { cx: x1, cy: y1, r: 3, fill: col });
+    mk('circle', { cx: x2, cy: y2, r: 2, fill: col });
+  }
+})();
+</script>
+</body></html>

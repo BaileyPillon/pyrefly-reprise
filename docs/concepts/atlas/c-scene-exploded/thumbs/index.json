@@ -1,0 +1,689 @@
+{
+ "counts": {
+  "subjects": 51,
+  "poses": 163,
+  "backdrops": 7,
+  "portraits": 25,
+  "pausePlates": 19,
+  "paintings": 214,
+  "musicCues": 21,
+  "sfxCues": 134,
+  "audioCues": 155,
+  "sfxByCategory": {
+   "ui": 28,
+   "flourish": 20,
+   "weapon": 14,
+   "impact": 10,
+   "ambience": 12,
+   "spell": 50
+  }
+ },
+ "subjects": [
+  {
+   "id": "anima",
+   "poses": 3,
+   "w": 733,
+   "h": 1203,
+   "area": 881799
+  },
+  {
+   "id": "auron",
+   "poses": 7,
+   "w": 799,
+   "h": 1204,
+   "area": 961996
+  },
+  {
+   "id": "bahamut",
+   "poses": 3,
+   "w": 989,
+   "h": 966,
+   "area": 955374
+  },
+  {
+   "id": "braskas-final-aeon-1",
+   "poses": 5,
+   "w": 1004,
+   "h": 953,
+   "area": 956812
+  },
+  {
+   "id": "braskas-final-aeon-2",
+   "poses": 5,
+   "w": 982,
+   "h": 904,
+   "area": 887728
+  },
+  {
+   "id": "ffx2-bahamut",
+   "poses": 3,
+   "w": 1024,
+   "h": 1024,
+   "area": 1048576
+  },
+  {
+   "id": "ifrit",
+   "poses": 3,
+   "w": 975,
+   "h": 1018,
+   "area": 992550
+  },
+  {
+   "id": "ixion",
+   "poses": 3,
+   "w": 1191,
+   "h": 802,
+   "area": 955182
+  },
+  {
+   "id": "jecht",
+   "poses": 6,
+   "w": 432,
+   "h": 1186,
+   "area": 512352
+  },
+  {
+   "id": "kimahri",
+   "poses": 8,
+   "w": 768,
+   "h": 1198,
+   "area": 920064
+  },
+  {
+   "id": "lenne",
+   "poses": 1,
+   "w": 724,
+   "h": 1170,
+   "area": 847080
+  },
+  {
+   "id": "lulu",
+   "poses": 7,
+   "w": 485,
+   "h": 1165,
+   "area": 565025
+  },
+  {
+   "id": "mortiorchis",
+   "poses": 5,
+   "w": 1201,
+   "h": 829,
+   "area": 995629
+  },
+  {
+   "id": "paine-black-mage",
+   "poses": 1,
+   "w": 567,
+   "h": 1151,
+   "area": 652617
+  },
+  {
+   "id": "paine-dark-knight",
+   "poses": 1,
+   "w": 609,
+   "h": 1208,
+   "area": 735672
+  },
+  {
+   "id": "paine-gunner",
+   "poses": 1,
+   "w": 493,
+   "h": 1136,
+   "area": 560048
+  },
+  {
+   "id": "paine-samurai",
+   "poses": 1,
+   "w": 640,
+   "h": 1129,
+   "area": 722560
+  },
+  {
+   "id": "paine-warrior",
+   "poses": 1,
+   "w": 408,
+   "h": 1180,
+   "area": 481440
+  },
+  {
+   "id": "paine-white-mage",
+   "poses": 1,
+   "w": 820,
+   "h": 1140,
+   "area": 934800
+  },
+  {
+   "id": "rikku",
+   "poses": 8,
+   "w": 648,
+   "h": 1120,
+   "area": 725760
+  },
+  {
+   "id": "rikku-alchemist",
+   "poses": 1,
+   "w": 541,
+   "h": 1194,
+   "area": 645954
+  },
+  {
+   "id": "rikku-berserker",
+   "poses": 1,
+   "w": 555,
+   "h": 1215,
+   "area": 674325
+  },
+  {
+   "id": "rikku-black-mage",
+   "poses": 1,
+   "w": 683,
+   "h": 1190,
+   "area": 812770
+  },
+  {
+   "id": "rikku-dark-knight",
+   "poses": 1,
+   "w": 787,
+   "h": 1205,
+   "area": 948335
+  },
+  {
+   "id": "rikku-gunner",
+   "poses": 1,
+   "w": 364,
+   "h": 1062,
+   "area": 386568
+  },
+  {
+   "id": "rikku-thief",
+   "poses": 1,
+   "w": 558,
+   "h": 1212,
+   "area": 676296
+  },
+  {
+   "id": "rikku-white-mage",
+   "poses": 1,
+   "w": 626,
+   "h": 1213,
+   "area": 759338
+  },
+  {
+   "id": "seymour-flux",
+   "poses": 1,
+   "w": 832,
+   "h": 1214,
+   "area": 1010048
+  },
+  {
+   "id": "seymour-flux-body",
+   "poses": 5,
+   "w": 750,
+   "h": 1211,
+   "area": 908250
+  },
+  {
+   "id": "shiva",
+   "poses": 3,
+   "w": 574,
+   "h": 1147,
+   "area": 658378
+  },
+  {
+   "id": "shuyin",
+   "poses": 1,
+   "w": 694,
+   "h": 1136,
+   "area": 788384
+  },
+  {
+   "id": "tidus",
+   "poses": 7,
+   "w": 730,
+   "h": 1132,
+   "area": 826360
+  },
+  {
+   "id": "valefor",
+   "poses": 3,
+   "w": 1057,
+   "h": 830,
+   "area": 877310
+  },
+  {
+   "id": "vegnagun-body",
+   "poses": 1,
+   "w": 1213,
+   "h": 827,
+   "area": 1003151
+  },
+  {
+   "id": "vegnagun-head",
+   "poses": 1,
+   "w": 1216,
+   "h": 832,
+   "area": 1011712
+  },
+  {
+   "id": "vegnagun-leg",
+   "poses": 1,
+   "w": 777,
+   "h": 1175,
+   "area": 912975
+  },
+  {
+   "id": "vegnagun-tail",
+   "poses": 3,
+   "w": 1176,
+   "h": 822,
+   "area": 966672
+  },
+  {
+   "id": "wakka",
+   "poses": 7,
+   "w": 685,
+   "h": 1188,
+   "area": 813780
+  },
+  {
+   "id": "yojimbo",
+   "poses": 3,
+   "w": 823,
+   "h": 1180,
+   "area": 971140
+  },
+  {
+   "id": "yu-pagoda",
+   "poses": 5,
+   "w": 602,
+   "h": 920,
+   "area": 553840
+  },
+  {
+   "id": "yu-yevon",
+   "poses": 5,
+   "w": 786,
+   "h": 705,
+   "area": 554130
+  },
+  {
+   "id": "yuna",
+   "poses": 8,
+   "w": 803,
+   "h": 1075,
+   "area": 863225
+  },
+  {
+   "id": "yuna-black-mage",
+   "poses": 1,
+   "w": 782,
+   "h": 1149,
+   "area": 898518
+  },
+  {
+   "id": "yuna-dark-knight",
+   "poses": 1,
+   "w": 549,
+   "h": 1195,
+   "area": 656055
+  },
+  {
+   "id": "yuna-gunner",
+   "poses": 3,
+   "w": 460,
+   "h": 1194,
+   "area": 549240
+  },
+  {
+   "id": "yuna-songstress",
+   "poses": 1,
+   "w": 655,
+   "h": 1116,
+   "area": 730980
+  },
+  {
+   "id": "yuna-warrior",
+   "poses": 1,
+   "w": 728,
+   "h": 1183,
+   "area": 861224
+  },
+  {
+   "id": "yuna-white-mage",
+   "poses": 7,
+   "w": 581,
+   "h": 1183,
+   "area": 687323
+  },
+  {
+   "id": "yunalesca-1",
+   "poses": 5,
+   "w": 823,
+   "h": 1184,
+   "area": 974432
+  },
+  {
+   "id": "yunalesca-2",
+   "poses": 5,
+   "w": 832,
+   "h": 1216,
+   "area": 1011712
+  },
+  {
+   "id": "yunalesca-3",
+   "poses": 5,
+   "w": 1216,
+   "h": 832,
+   "area": 1011712
+  }
+ ],
+ "backdrops": [
+  {
+   "id": "bevelle-underground",
+   "w": 2688,
+   "h": 1536
+  },
+  {
+   "id": "chapter-select",
+   "w": 2688,
+   "h": 1536
+  },
+  {
+   "id": "dreams-end",
+   "w": 2688,
+   "h": 1536
+  },
+  {
+   "id": "farplane",
+   "w": 2688,
+   "h": 1536
+  },
+  {
+   "id": "gagazet",
+   "w": 2688,
+   "h": 1536
+  },
+  {
+   "id": "title",
+   "w": 2688,
+   "h": 1536
+  },
+  {
+   "id": "zanarkand-dome",
+   "w": 2688,
+   "h": 1536
+  }
+ ],
+ "portraits": [
+  {
+   "id": "anima",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "auron",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "bahamut",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "braska",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "fayth-boy",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "ifrit",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "ixion",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "jecht",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "kimahri",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "lulu",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "paine",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "rikku",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "rikku-x2",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "seymour",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "shiva",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "shuyin",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "tidus",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "valefor",
+   "w": 824,
+   "h": 1202,
+   "alpha": true
+  },
+  {
+   "id": "wakka",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "yojimbo",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "young-auron",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "yu-yevon",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "yuna",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "yuna-x2",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  },
+  {
+   "id": "yunalesca",
+   "w": 832,
+   "h": 1216,
+   "alpha": true
+  }
+ ],
+ "pause": [
+  {
+   "id": "auron",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch1-seymour-flux",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch2-yunalesca",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch3-braskas-final-aeon",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch4-bahamut",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch4-ffx2-bahamut",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch5-ffx2-vegnagun-shuyin",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "ch5-shuyin",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "jecht",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "kimahri",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "lulu",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "paine",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "rikku",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "rikku-ffx2",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "seymour",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "tidus",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "wakka",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "yuna",
+   "w": 1344,
+   "h": 768
+  },
+  {
+   "id": "yuna-ffx2",
+   "w": 1344,
+   "h": 768
+  }
+ ],
+ "music": [
+  "battle-ffx",
+  "boss-dread",
+  "boss-ffx2-aeon",
+  "boss-jecht",
+  "boss-seymour",
+  "boss-shuyin",
+  "boss-vegnagun",
+  "boss-yu-yevon",
+  "boss-yunalesca",
+  "chapter-select",
+  "ending-ffx",
+  "ending-ffx2",
+  "pause",
+  "scene-bevelle-underground",
+  "scene-dreams-end",
+  "scene-farplane",
+  "scene-gagazet",
+  "scene-zanarkand-dome",
+  "title",
+  "victory-ffx",
+  "victory-ffx2"
+ ]
+}

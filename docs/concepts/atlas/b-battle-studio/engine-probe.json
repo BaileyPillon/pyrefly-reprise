@@ -1,0 +1,454 @@
+{
+ "how": "real engine under node: createFFXEngine + nextDecision/submit, chapter 1 data, condition normal, triggers []",
+ "seedsTried": [
+  {
+   "seed": 1,
+   "first": "tidus"
+  }
+ ],
+ "seed": 1,
+ "actor": "tidus",
+ "beforeTidus": [],
+ "combatants": {
+  "tidus": {
+   "name": "Tidus",
+   "hp": 2420,
+   "maxHp": 2420,
+   "mp": 115,
+   "str": 31,
+   "def": 20,
+   "mag": 16,
+   "mdef": 18,
+   "agi": 30,
+   "luck": 18,
+   "acc": 24,
+   "eva": 22,
+   "baseTicks": 8,
+   "statuses": [],
+   "overdrive": {
+    "gauge": 50,
+    "mode": "warrior"
+   }
+  },
+  "yuna": {
+   "name": "Yuna",
+   "hp": 1500,
+   "maxHp": 1500,
+   "mp": 270,
+   "str": 15,
+   "def": 13,
+   "mag": 37,
+   "mdef": 39,
+   "agi": 15,
+   "luck": 17,
+   "acc": 11,
+   "eva": 33,
+   "baseTicks": 12,
+   "statuses": [],
+   "overdrive": {
+    "gauge": 40,
+    "mode": "healer"
+   }
+  },
+  "kimahri": {
+   "name": "Kimahri",
+   "hp": 2310,
+   "maxHp": 2310,
+   "mp": 130,
+   "str": 26,
+   "def": 22,
+   "mag": 22,
+   "mdef": 16,
+   "agi": 18,
+   "luck": 18,
+   "acc": 14,
+   "eva": 14,
+   "baseTicks": 11,
+   "statuses": [],
+   "overdrive": {
+    "gauge": 100,
+    "mode": "stoic"
+   }
+  },
+  "seymour-flux": {
+   "name": "Seymour Flux",
+   "hp": 70000,
+   "maxHp": 70000,
+   "mp": 512,
+   "str": 30,
+   "def": 40,
+   "mag": 15,
+   "mdef": 40,
+   "agi": 38,
+   "luck": 15,
+   "acc": 100,
+   "eva": 0,
+   "baseTicks": 7,
+   "statuses": [],
+   "overdrive": null
+  },
+  "mortiorchis": {
+   "name": "Mortiorchis",
+   "hp": 4000,
+   "maxHp": 4000,
+   "mp": 512,
+   "str": 40,
+   "def": 100,
+   "mag": 40,
+   "mdef": 0,
+   "agi": 38,
+   "luck": 15,
+   "acc": 100,
+   "eva": 0,
+   "baseTicks": 7,
+   "statuses": [],
+   "overdrive": null
+  }
+ },
+ "reserve": [
+  "auron",
+  "wakka",
+  "lulu",
+  "rikku"
+ ],
+ "commandCount": 42,
+ "commandsByCategory": {
+  "attack": 1,
+  "special": 11,
+  "whitemagic": 3,
+  "item": 27
+ },
+ "commands": [
+  {
+   "label": "Attack",
+   "category": "attack",
+   "mp": 0,
+   "rank": 3,
+   "enabled": true
+  },
+  {
+   "label": "Cheer",
+   "category": "special",
+   "mp": 0,
+   "rank": 2,
+   "enabled": true
+  },
+  {
+   "label": "Provoke",
+   "category": "special",
+   "mp": 4,
+   "rank": 3,
+   "enabled": true
+  },
+  {
+   "label": "Haste",
+   "category": "whitemagic",
+   "mp": 8,
+   "rank": 4,
+   "enabled": true
+  },
+  {
+   "label": "Hastega",
+   "category": "whitemagic",
+   "mp": 30,
+   "rank": 6,
+   "enabled": true
+  },
+  {
+   "label": "Slow",
+   "category": "whitemagic",
+   "mp": 12,
+   "rank": 3,
+   "enabled": true
+  },
+  {
+   "label": "Delay Attack",
+   "category": "special",
+   "mp": 8,
+   "rank": 6,
+   "enabled": true
+  },
+  {
+   "label": "Delay Buster",
+   "category": "special",
+   "mp": 18,
+   "rank": 8,
+   "enabled": true
+  },
+  {
+   "label": "Flee",
+   "category": "special",
+   "mp": 0,
+   "rank": 2,
+   "enabled": false,
+   "why": "Can't escape"
+  },
+  {
+   "label": "Talk",
+   "category": "special",
+   "mp": 0,
+   "rank": 3,
+   "enabled": false,
+   "why": "Nothing left to say"
+  },
+  {
+   "label": "Defend",
+   "category": "special",
+   "mp": 0,
+   "rank": 2,
+   "enabled": true
+  },
+  {
+   "label": "Auron",
+   "category": "special",
+   "mp": 0,
+   "rank": 3,
+   "enabled": true
+  },
+  {
+   "label": "Wakka",
+   "category": "special",
+   "mp": 0,
+   "rank": 3,
+   "enabled": true
+  },
+  {
+   "label": "Lulu",
+   "category": "special",
+   "mp": 0,
+   "rank": 3,
+   "enabled": true
+  },
+  {
+   "label": "Rikku",
+   "category": "special",
+   "mp": 0,
+   "rank": 3,
+   "enabled": true
+  }
+ ],
+ "turnOrder": [
+  {
+   "who": "Tidus",
+   "id": "tidus",
+   "tick": 0,
+   "party": true
+  },
+  {
+   "who": "Seymour Flux",
+   "id": "seymour-flux",
+   "tick": 0,
+   "party": false
+  },
+  {
+   "who": "Mortiorchis",
+   "id": "mortiorchis",
+   "tick": 0,
+   "party": false
+  },
+  {
+   "who": "Kimahri",
+   "id": "kimahri",
+   "tick": 9,
+   "party": true
+  },
+  {
+   "who": "Yuna",
+   "id": "yuna",
+   "tick": 13,
+   "party": true
+  },
+  {
+   "who": "Seymour Flux",
+   "id": "seymour-flux",
+   "tick": 21,
+   "party": false
+  },
+  {
+   "who": "Mortiorchis",
+   "id": "mortiorchis",
+   "tick": 21,
+   "party": false
+  },
+  {
+   "who": "Tidus",
+   "id": "tidus",
+   "tick": 24,
+   "party": true
+  },
+  {
+   "who": "Kimahri",
+   "id": "kimahri",
+   "tick": 42,
+   "party": true
+  },
+  {
+   "who": "Seymour Flux",
+   "id": "seymour-flux",
+   "tick": 42,
+   "party": false
+  }
+ ],
+ "turnOrderByCommand": {
+  "Cheer (rank 2)": "Tidus@0  Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Tidus@16  Seymour Flux@21  Mortiorchis@21",
+  "Attack (rank 3)": "Tidus@0  Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Seymour Flux@21  Mortiorchis@21  Tidus@24",
+  "Haste (rank 4)": "Tidus@0  Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Seymour Flux@21  Mortiorchis@21  Tidus@32",
+  "Hastega (rank 6)": "Tidus@0  Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Seymour Flux@21  Mortiorchis@21  Kimahri@42",
+  "Delay Buster (rank 8)": "Tidus@0  Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Seymour Flux@21  Mortiorchis@21  Kimahri@42"
+ },
+ "attackRecord": {
+  "name": "Attack",
+  "formula": "strength",
+  "power": 16,
+  "rank": 3,
+  "damageType": "physical",
+  "flags": [
+   "crit-eligible",
+   "adds-equipment-crit",
+   "inherits-weapon-properties",
+   "affected-by-darkness"
+  ]
+ },
+ "attack": {
+  "seymour-flux": {
+   "mid": 782,
+   "min": 732,
+   "max": 827,
+   "affinity": "normal",
+   "hitPercent": 100,
+   "critPercent": 6
+  },
+  "mortiorchis": {
+   "mid": 149,
+   "min": 140,
+   "max": 158,
+   "affinity": "normal",
+   "hitPercent": 100,
+   "critPercent": 6
+  }
+ },
+ "estimatedDamageTidus": 960,
+ "bossNextBefore": {
+  "enemy": "Seymour Flux",
+  "move": "Lance of Atrophy",
+  "turnsAway": 1,
+  "confidence": "scripted",
+  "description": "Physical non-elemental damage to one character - never misses.",
+  "statusText": [
+   "Zombie 50%"
+  ],
+  "cite": "ffx-seymour-flux §4",
+  "perTarget": [
+   {
+    "name": "Tidus",
+    "mid": 755,
+    "min": 707,
+    "max": 799,
+    "statuses": [
+     {
+      "status": "zombie",
+      "percent": 50,
+      "blocked": false
+     }
+    ]
+   }
+  ],
+  "counters": [
+   "A Delay attempt on either of them fails and is punished with party-wide Slowga [ffx-seymour-flux §4.6]",
+   "Below 75% HP Seymour answers with Protect [ffx-seymour-flux §4.3]",
+   "Below 50% HP Seymour answers with Reflect and phase 2 opens [ffx-seymour-flux §4.3]"
+  ]
+ },
+ "submitted": {
+  "events": [
+   {
+    "type": "action-start",
+    "actorId": "tidus",
+    "abilityId": "attack",
+    "abilityName": "Attack"
+   },
+   {
+    "type": "damage",
+    "targetId": "seymour-flux",
+    "amount": 803,
+    "crit": false
+   },
+   {
+    "type": "overdrive-gauge"
+   }
+  ],
+  "seymourHp": {
+   "before": 70000,
+   "after": 69197
+  },
+  "tidusGauge": {
+   "before": 50,
+   "after": 58,
+   "mode": "warrior"
+  },
+  "turnOrderAfter": "Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Seymour Flux@21  Mortiorchis@21  Tidus@24  Kimahri@42"
+ },
+ "bossNextAfter": {
+  "enemy": "Seymour Flux",
+  "move": "Lance of Atrophy",
+  "turnsAway": 0,
+  "confidence": "scripted",
+  "statusText": [
+   "Zombie 50%"
+  ],
+  "cite": "ffx-seymour-flux §4",
+  "perTarget": [
+   {
+    "name": "Yuna",
+    "mid": 796,
+    "min": 746,
+    "max": 842,
+    "statuses": [
+     {
+      "status": "zombie",
+      "percent": 50,
+      "blocked": false
+     }
+    ]
+   }
+  ]
+ },
+ "agilitySweep": {
+  "10": {
+   "baseTicks": 14,
+   "rank3Recovery": 42,
+   "firstToChoose": "kimahri",
+   "order": "Kimahri@0  Yuna@4  Seymour Flux@12  Mortiorchis@12  Kimahri@33  Seymour Flux@33  Mortiorchis@33  Yuna@40"
+  },
+  "20": {
+   "baseTicks": 10,
+   "rank3Recovery": 30,
+   "firstToChoose": "kimahri",
+   "order": "Kimahri@0  Yuna@4  Seymour Flux@12  Mortiorchis@12  Kimahri@33  Seymour Flux@33  Mortiorchis@33  Yuna@40"
+  },
+  "30": {
+   "baseTicks": 8,
+   "rank3Recovery": 24,
+   "firstToChoose": "tidus",
+   "order": "Tidus@0  Seymour Flux@0  Mortiorchis@0  Kimahri@9  Yuna@13  Seymour Flux@21  Mortiorchis@21  Tidus@24"
+  },
+  "35": {
+   "baseTicks": 7,
+   "rank3Recovery": 21,
+   "firstToChoose": "tidus",
+   "order": "Tidus@0  Seymour Flux@3  Mortiorchis@3  Kimahri@12  Yuna@16  Tidus@21  Seymour Flux@24  Mortiorchis@24"
+  },
+  "44": {
+   "baseTicks": 6,
+   "rank3Recovery": 18,
+   "firstToChoose": "tidus",
+   "order": "Tidus@0  Seymour Flux@6  Mortiorchis@6  Kimahri@15  Tidus@18  Yuna@19  Seymour Flux@27  Mortiorchis@27"
+  },
+  "62": {
+   "baseTicks": 5,
+   "rank3Recovery": 15,
+   "firstToChoose": "tidus",
+   "order": "Tidus@0  Seymour Flux@9  Mortiorchis@9  Tidus@15  Kimahri@18  Yuna@22  Tidus@30  Seymour Flux@30"
+  }
+ }
+}

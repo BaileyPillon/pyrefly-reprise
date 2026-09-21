@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Pyrefly Studio · B1 assembled</title><link rel="stylesheet" href="b.css"></head>
+<body class="b1-assembled"><div class="studio" style="--cx:740px">
+<div class="spot"></div><div class="floor"></div>
+<div class="stage" style="--cx:740px;--cy:676px;--rx:430px;--sq:.2">
+<div class="cyc" style="left:240px;top:84px;width:1000px;height:570px"><img src="../../../../public/art/backdrops/gagazet.png" alt=""></div>
+<div class="plinth"></div><div class="turntable"><i class="ring"></i><i class="ticks"></i><i class="arc"></i></div>
+<div class="shadow" style="left:410px;top:646px;width:300px;height:56px"></div>
+<div class="shadow" style="left:820px;top:624px;width:330px;height:64px"></div>
+<img class="fig back" src="../../../../public/art/characters/mortiorchis/idle.png" style="left:734px;top:150px;width:516px" alt="">
+<img class="fig" src="../../../../public/art/characters/seymour-flux-body/idle.png" style="left:864px;top:246px;height:410px" alt="">
+<img class="fig" src="../../../../public/art/characters/tidus/attack.png" style="left:396px;top:292px;height:392px" alt="">
+
+<div class="pin" style="left:336px;top:196px"><span class="d">02</span><span class="t">Command</span></div>
+<div class="banner" style="left:340px;top:232px"><span class="nm">Attack</span><span class="chip">Rank 3</span></div>
+<div class="plain" style="left:336px;top:276px">Rank 3: his next turn comes <b>24</b> ticks later</div>
+
+<div class="pin" style="left:688px;top:262px"><span class="d">04</span><span class="t">Damage</span></div>
+<div class="dmg" style="left:700px;top:298px"><b>803</b></div>
+<div class="chipline" style="left:674px;top:382px"><span class="d">03</span><span>Hit <b>100%</b></span><span>Crit <b>6%</b></span></div>
+<div class="chipline" style="left:674px;top:416px"><span class="d">05</span><span>No element <b>×1.0</b></span></div>
+<div class="chipline" style="left:674px;top:450px"><span class="d">06</span><span>No status applied</span></div>
+
+<div class="pin" style="left:410px;top:690px"><span class="d">07</span></div>
+<div class="odbar" style="left:444px;top:688px"><div class="k"><span>Overdrive gauge</span><b>50 → 58%</b></div><div class="bar"><i style="width:50%"></i><em style="left:50%;width:8%"></em></div></div>
+
+<div class="pin" style="left:890px;top:118px"><span class="d">08</span><span class="t">The boss's next move</span></div>
+<div class="intent" style="left:890px;top:152px"><span class="k">NEXT</span><span class="v">Lance of Atrophy</span></div>
+
+<div class="pin" style="left:1152px;top:516px"><span class="d">01</span><span class="t">Turn order</span></div>
+<div class="plain" style="left:1154px;top:545px">Ticks to wait. The lowest acts next.</div>
+<div class="actlist" style="left:1152px;top:570px"><div class="act now"><span class="face"><img src="../../../../public/art/portraits/tidus.png" alt=""></span><span class="nm">Tidus</span><span class="tk">0</span></div><div class="act foe"><span class="face"><img src="../../../../public/art/portraits/seymour.png" alt=""></span><span class="nm">Seymour Flux</span><span class="tk">0</span></div><div class="act foe"><span class="face mort"><img src="../../../../public/art/characters/mortiorchis/idle.png" alt=""></span><span class="nm">Mortiorchis</span><span class="tk">0</span></div><div class="act"><span class="face"><img src="../../../../public/art/portraits/kimahri.png" alt=""></span><span class="nm">Kimahri</span><span class="tk">9</span></div><div class="act"><span class="face"><img src="../../../../public/art/portraits/yuna.png" alt=""></span><span class="nm">Yuna</span><span class="tk">13</span></div></div>
+</div>
+
+<aside class="glass peek"><div class="head"><div class="caps k"><span>Switch to FFX-2</span><em>preview</em></div>
+<p>The list changes. FFX-2 has no turn list: each girl has her own gauge.</p></div>
+<div class="r new"><span class="no">01</span><span class="nm">The gauge<small>fill, command, charge, recovery</small></span></div><div class="r new"><span class="no">02</span><span class="nm">Command and charge time</span></div><div class="r"><span class="no">03</span><span class="nm">Hit roll</span></div><div class="r"><span class="no">04</span><span class="nm">Damage</span></div><div class="r"><span class="no">05</span><span class="nm">Element</span></div><div class="r"><span class="no">06</span><span class="nm">Status</span></div><div class="r new"><span class="no">07</span><span class="nm">Chain<small>hits in a row multiply damage</small></span></div><div class="r new"><span class="no">08</span><span class="nm">Spherechange<small>changing job costs the turn</small></span></div>
+<div class="src">ffx2-combat-core §1, §2, §4.2<br>ffx-vs-ffx2-presentation §4.2</div></aside>
+<div class="grain"></div><div class="vignette"></div>
+<header class="title"><div class="eyebrow">Pyrefly Studio · Battle system</div><h1>One Turn</h1>
+<div class="facts">Tidus · Attack · Seymour Flux<br><b>137</b> sourced rules · live engine</div></header>
+<div class="gameswitch"><span class="on">FFX</span><span>FFX-2</span></div>
+<nav class="chapters"><div class="grp"><div class="row"><div class="chap on"><span class="face"><img src="../../../../public/art/portraits/seymour.png" alt=""></span><span class="n">I</span><span class="t">Seymour Flux</span></div><div class="chap"><span class="face"><img src="../../../../public/art/portraits/yunalesca.png" alt=""></span><span class="n">II</span><span class="t">Lady Yunalesca</span></div><div class="chap"><span class="face"><img src="../../../../public/art/portraits/jecht.png" alt=""></span><span class="n">III</span><span class="t">Braska's Final Aeon</span></div></div><div class="br">FFX · a turn list</div></div>
+<div class="grp"><div class="row"><div class="chap"><span class="face"><img src="../../../../public/art/portraits/bahamut.png" alt=""></span><span class="n">IV</span><span class="t">Bahamut</span></div><div class="chap"><span class="face"><img src="../../../../public/art/portraits/shuyin.png" alt=""></span><span class="n">V</span><span class="t">Vegnagun</span></div></div><div class="br">FFX-2 · gauges</div></div></nav>
+<div class="glass search"><i class="mag"></i><span class="ph">Find a rule, status or move</span><span class="kbd">/</span></div>
+<aside class="glass components"><div class="head"><span class="caps k">Components</span><span class="v">8</span></div>
+<div class="comp"><span class="no">01</span><i class="gl g1"></i><span class="nm">Turn order</span><span class="ct">8</span><span class="pl">Who goes next, and why</span></div>
+<div class="comp"><span class="no">02</span><i class="gl g2"></i><span class="nm">Command</span><span class="ct">13</span><span class="pl">What you pick, what it costs</span></div>
+<div class="comp"><span class="no">03</span><i class="gl g3"></i><span class="nm">Hit roll</span><span class="ct">6</span><span class="pl">Does it land? Is it critical?</span></div>
+<div class="comp"><span class="no">04</span><i class="gl g4"></i><span class="nm">Damage</span><span class="ct">34</span><span class="pl">How the number is worked out</span></div>
+<div class="comp"><span class="no">05</span><i class="gl g5"></i><span class="nm">Element and affinity</span><span class="ct">10</span><span class="pl">Weak, resist, immune, absorb</span></div>
+<div class="comp"><span class="no">06</span><i class="gl g6"></i><span class="nm">Status</span><span class="ct">37</span><span class="pl">Zombie, Poison, Haste and more</span></div>
+<div class="comp"><span class="no">07</span><i class="gl g7"></i><span class="nm">Overdrive gauge</span><span class="ct">18</span><span class="pl">What fills the big attack</span></div>
+<div class="comp chapter"><span class="no">08</span><i class="gl g8"></i><span class="nm">The boss's next move</span><span class="ct">11</span><span class="pl">His script, read ahead</span></div>
+<div class="foot"><span><b class="num" style="font-size:15px;color:var(--paper)">137</b> pieces visible</span><u>Hide all</u></div></aside>
+<aside class="glass live"><div class="caps k"><i class="dot"></i>Live engine</div>
+<p>Nothing here is typed in. This page runs the game's own battle code.</p>
+<div class="row"><span>Seed<b>1</b></span><span class="btn">Re-roll</span></div></aside>
+<div class="glass rail">
+<div class="rb on"><i class="v34"></i></div><div class="rb"><i class="vfront"></i></div><div class="rb"><i class="vside"></i></div><div class="rb"><i class="vtop"></i></div><hr>
+<div class="rb"><i class="plus"></i></div><div class="rb"><i class="minus"></i></div><hr><div class="rb"><i class="spin"></i></div><div class="rb"><i class="full"></i></div><div class="rb"><i class="q">?</i></div></div>
+<div class="caps xcap"><span>One turn · assembled</span></div>
+<div class="glass explode"><div class="toggle"><i></i><span class="lab on">Labels</span></div><div class="sep"></div>
+<span class="lab on">Assembled</span><div class="track" style="--p:0%"><div class="groove"></div><div class="fill"></div><div class="ticks"></div><div class="knob"></div></div><span class="lab">Every rule</span>
+<div class="pct">0<small>%</small></div><span class="reset">Reset</span></div>
+<div class="hint"><span>Drag to orbit</span><i></i><span>Scroll to zoom</span><i></i><span>Click a piece to inspect</span></div>
+<div class="concept">Concept · B1 · FFX</div>
+<div class="credits">Unofficial fan tribute · <u>sources &amp; credits</u></div>
+</div></body></html>

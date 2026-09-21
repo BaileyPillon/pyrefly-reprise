@@ -1,0 +1,223 @@
+{
+  "id": "atlas",
+  "title": "An interactive learning site: three things to take apart",
+  "for": "Bailey. Pick one, or name the parts you want from each. Nothing you can see is built.",
+  "request": "Bailey, 2026-09-21: build an interactive learning website for this project, adapting the examples at Human Atlas and Model X Studio from Riley Brown's video (section 16, 'Interactive Learning Websites').",
+  "priorAnswerOnRecord": "docs/plans/learning-sites.md records that, shown the three as written directions, Bailey answered 'A, B, C all separately please'. If that holds, this round is three separate approvals of a look, not a choice between subjects. A pick approves only what Bailey names.",
+  "drivenBy": [
+    "docs/concepts/atlas/REFERENCE.md: what the two reference sites do, observed first-hand, and what carries over (interaction pattern only, nothing copied)",
+    "AGENTS.md hard rule 9 (end state first: options before anything perceivable is built) and ~/.claude/CLAUDE.md 'Raise the fidelity of the choices'",
+    "AGENTS.md hard rules 6 (never invent game data), 8 (original assets only) and 14 (every change is game-aware)",
+    "docs/handoff/presentation-ink-and-gold.md: tokens, type, one accent per context",
+    "docs/plans/learning-sites.md: the build plan these frames are the targets for"
+  ],
+  "resolution": "1600x900, deviceScaleFactor 1. Plain HTML with CSS 3D transforms (no WebGL, no behaviour): faked screenshots of the finished moment. Real paintings from public/art/**, local fonts from public/fonts/. Captured with Playwright over file://. Contact sheet: sheet.html to sheet.png, 2400x2061.",
+  "constraintsCommonToAllThree": [
+    "The nine pattern elements of the reference are on every option: one specimen on a lit stage; a title block with one quiet line of facts; a systems or components panel with counts; the pull-it-apart slider with percentage and Reset; a detail card with plain words, the kind of claim and the source; Isolate; search ('/' to focus); a slim view rail; provenance ('sources & credits', bottom right).",
+    "Every option shows the same three moments: slider at 0% with nothing selected, 55% with one piece selected and its card open, 100% as the flat inventory with a hover label.",
+    "Sourced facts only (hard rule 6): every number, move, status and rule on a frame comes from src/data/** or research/*.md and was recounted by a second agent. The damage numbers 803 (B) and 954 (C) came from running the real engine at seed 1. Where data and research disagree the frame says so (the four '?/12' chips on A3).",
+    "Original art only (hard rule 8): the project's own paintings, drawn glyphs, no retail asset, no logo, nothing copied from the reference sites. Every frame carries 'Unofficial fan tribute, sources & credits' and a CONCEPT tag.",
+    "Game-aware (hard rule 14): one accent per context. Pyre pink #F7B6D9 on the FFX-2 specimen (A), Yevon gold #E3B94A on the FFX specimens (B, C). No turn list is ever shown for FFX-2 (research/ffx-vs-ffx2-presentation.md §4.2, §4.3, §9 row 3).",
+    "Plain words first: every panel row has a plain-words line under its label.",
+    "No phone frame exists for any option; a 390x844 variant of whatever is picked still has to be drawn."
+  ],
+  "options": [
+    {
+      "key": "a",
+      "folder": "a-boss-atlas",
+      "title": "Pyrefly Atlas: the bosses, taken apart",
+      "pitch": "A boss stands whole on a lit plinth. Drag the slider and it comes apart into its parts, each part's moves swing out on threads with one plain number apiece, and at 100% everything the boss has settles into a flat wall. Click a part and a card gives the game's own Scan line, how to answer it, and the research section the claim comes from, with a button into the real fight.",
+      "specimen": "Chapter V, Vegnagun with Shuyin: 12 parts across 5 battles, 119 catalogued pieces in 7 systems.",
+      "look": "Light and clinical, after Human Atlas: paper ground, white rounded cards, pyre pink accent.",
+      "frames": [
+        {
+          "file": "a-boss-atlas/a1-assembled.png",
+          "moment": "Slider at 0%, 'Whole boss', nothing selected. FFX-2 only: pink accent, no turn list.",
+          "notes": [
+            "Four part paintings stack into one machine on the plinth, with Shuyin small at the front for scale.",
+            "Pins 1 to 5 on the figure match the battle-order card on the right: Tail, Leg, Body / Core, Head, Shuyin, each with its level and HP.",
+            "The left panel lists seven systems with counts from the data: 12 parts, 50 abilities, 8 statuses, 31 immunities, 1 affinity, 8 turn patterns, 9 rewards.",
+            "The slider runs the full width of its card with a big 0% readout, Reset and a Labels toggle.",
+            "All five chapters sit across the top, the two games marked in words only so the page keeps one accent."
+          ]
+        },
+        {
+          "file": "a-boss-atlas/a2-exploded-selected.png",
+          "moment": "Slider at 55%, 'Separated parts'. Five parts pulled apart, Body / Core selected and tinted pink, detail card open. FFX-2 only.",
+          "notes": [
+            "The parts separate along one diagonal, Tail far and small at top right, Shuyin near at bottom left.",
+            "Sixteen small cards hang off the parts on threads with one real number each, such as Tail Beam 5/16 of max HP.",
+            "The detail card carries the Scan text, a line saying what kind of claim it is, and Overview / How to answer it tabs with guide text and its cites.",
+            "Fact row: 'ffx2-vegnagun-shuyin §3.3, verified: 2 sources'. Buttons: Isolate, Fight this chapter, Clear selection.",
+            "Honest weak point: it is crowded, and the depth reads as paper cutouts on a light table."
+          ]
+        },
+        {
+          "file": "a-boss-atlas/a3-inventory.png",
+          "moment": "Slider at 100%, 'Inventory, 119 pieces', hover label on the Right Bulwark, view rail on Front, hint says 'Drag to pan'. FFX-2 only.",
+          "notes": [
+            "12 painted tiles and 107 chips, 119 in all; each group header matches its own tiles.",
+            "Five main parts come first, sorted by HP, then seven support tiles named Node, Bulwark or Redoubt.",
+            "Each immunity chip says how many of the 12 parts block that status, so the chapter's puzzle shows in one view: almost everything reads 12/12.",
+            "Four chips read '?/12' on purpose: the shipped Bulwark data and research §3.3 disagree, and the legend says so.",
+            "Honest weak point: only the 12 parts are pictures, so it reads as a tag wall rather than the references' grid of objects."
+          ]
+        }
+      ],
+      "whatItTeaches": "What a boss is made of, which pieces are dangerous, how to answer each one, and that every claim has a source. The one option that hands the visitor into the game ('Fight this chapter').",
+      "cost": "M",
+      "costNote": "Builder's estimate: about a week for one chapter, then a few days per further chapter. The data side is cheap (build-a.mjs already imports src/data/** into a plain page); the work is the stage, the threads, search, isolate and a phone layout.",
+      "risk": "Art, not code. Only Vegnagun has separate part paintings, and 7 of its 12 parts (3 Nodes, 2 Bulwarks, 2 Redoubts) are labelled zooms into a parent painting; which crop stands for which is a guess. The other four bosses do not come apart into body parts, so 'pull apart' there means forms and moves unless new layered paintings are approved.",
+      "gameAware": {
+        "case": "FFX-2 only, as drawn (chapter V).",
+        "ffx2Only": "Pyre pink throughout, no gold, no turn list. 'Turn pattern (AI)' is how each part picks its move (research/ffx2-vegnagun-shuyin.md §5), not a queue.",
+        "ffxOnly": "Nothing on these frames. Chapters I to III would take Yevon gold in the same shell.",
+        "both": "The shell: slider, panel, card, search, rail, chapter switcher."
+      },
+      "verdict": "ready-with-caveats"
+    },
+    {
+      "key": "b",
+      "folder": "b-battle-studio",
+      "title": "Pyrefly Studio: one turn, taken apart",
+      "pitch": "One moment of battle on a lit turntable: Tidus mid-swing, 803 on gold, eight numbered pins. Drag the slider and the turn comes apart into eight step cards, each a rule in one plain sentence with this turn's real numbers. Click 'Turn order', drag Tidus's Agility, and the turn list re-orders in front of you, because the page runs the game's own battle code.",
+      "specimen": "Chapter I, Tidus uses Attack on Seymour Flux, played by the real engine at seed 1. Eight components, 137 sourced rules.",
+      "look": "Dark studio, after Model X Studio: blue-black ground, lit turntable, glassy panels, Yevon gold accent.",
+      "frames": [
+        {
+          "file": "b-battle-studio/b1-assembled.png",
+          "moment": "Slider at 0%, nothing selected, Labels on. FFX only (chapter I, gold). A small pink card previews the FFX-2 list.",
+          "notes": [
+            "One turn as one object: Tidus swings at Seymour Flux, 803 lands, and eight numbered pins mark the parts of the turn.",
+            "Every number came from running the game's own battle code: hit 100%, crit 6%, 803 damage, gauge 50 to 58%, next boss move Lance of Atrophy.",
+            "Plain lines for newcomers: 'Rank 3: his next turn comes 24 ticks later' and 'Ticks to wait. The lowest acts next.'",
+            "The chapter switcher says the difference in words: 'FFX, a turn list' over I to III, 'FFX-2, gauges' over IV and V.",
+            "Top right in pink: how the list changes for FFX-2 (gauges, Chain, Spherechange). It is the one place in the set where a second accent shares a page."
+          ]
+        },
+        {
+          "file": "b-battle-studio/b2-exploded-selected.png",
+          "moment": "Slider at 55%. Eight glass step cards around a smaller stage, '01 Turn order' selected in gold, detail card open. FFX only.",
+          "notes": [
+            "Each card gives the rule in a plain sentence, then this turn's real numbers, for example '8 x 3 = 24 ticks'.",
+            "The detail card has a live control: drag Tidus's Agility from 30 to 44 and his second turn moves from 8th to 5th. Both lists are real engine runs.",
+            "The card names its source (ffx-combat-core §1.1, §1.2, §1.6) and the game file that computed it (battle/ffx/turnQueue.ts).",
+            "An 'FFX only' chip sits on the card, and a 'Live engine' box on the left shows the seed with a Re-roll button.",
+            "Honest weak point: the thing taken apart is an idea, so it reads as angled cards around a stage, not pieces flying apart."
+          ]
+        },
+        {
+          "file": "b-battle-studio/b3-inventory.png",
+          "moment": "Slider at 100%. The flat wall of all 137 rules, largest first, hover card open on Zombie. FFX only.",
+          "notes": [
+            "Three sizes, largest first: 17 mechanisms with their formula, 89 named rules, 31 single values.",
+            "Tiles are plain type plus a small drawn glyph matching the component list on the left. No game icons.",
+            "Hovering Zombie explains it in plain words, says why it matters in this fight, and cites the two source sections.",
+            "137 covers the core rules of one turn only. Items, character skills, aeons and equipment are not in it.",
+            "Honest weak point: no pictures at all, so it is a glossary wall; the hover card covers 14 tiles."
+          ]
+        }
+      ],
+      "whatItTeaches": "Why a fight behaves as it does: why a fast character gets more turns, what a command costs in time, how hit, damage, status and Overdrive are worked out, and that the boss's next move can be read ahead.",
+      "cost": "L",
+      "costNote": "Builder's estimate: 2 to 3 weeks for FFX chapters I to III, plus 1 to 2 weeks for FFX-2. The engine side is cheap (src/battle/** runs without a DOM; a what-if is a cloned party build). The work is eight detail cards per game each with a small live control, a second inventory for FFX-2, search, isolate and a phone layout.",
+      "risk": "Copy, not code: about 140 plain-words rule blurbs per game, none of which may be invented, each needing a checked citation so the site cannot drift from the research docs. Row 08 and the counts change per chapter, so each chapter needs its own curated layer.",
+      "gameAware": {
+        "case": "FFX only, as drawn (chapter I).",
+        "ffxOnly": "Turn order, command ranks, the turn list and Overdrive modes (research/ffx-combat-core.md §1, §5; research/ffx-vs-ffx2-presentation.md §4.1). The 'drag Agility, watch the turn list re-order' control must never appear in FFX-2.",
+        "ffx2Only": "Not drawn beyond the pink preview card on B1: the gauge, command and charge time, Chain, Spherechange (as cited on the card: ffx2-combat-core §1, §2, §4.2; ffx-vs-ffx2-presentation §4.2). 'There is no Act List and no turn-order queue in FFX-2' (§4.2).",
+        "both": "The shell: stage, slider, detail card, search, view rail, chapter switcher, inventory grid."
+      },
+      "verdict": "ready-with-caveats"
+    },
+    {
+      "key": "c",
+      "folder": "c-scene-exploded",
+      "title": "Pyrefly Reprise, exploded: the game, taken apart",
+      "pitch": "One finished frame of the game, large and lit. Drag the slider and the picture turns to a three-quarter angle and comes apart into flat sheets: backdrop and depth bands at the back, light and dust, the boss, the party, the hit effects, the HUD nearest to you. Under the stack, three rails show what you never see: the engine's events, the presenter playing them, the boss theme looping. At 100% every piece the game ships lies flat in a grid.",
+      "specimen": "Chapter II, Lady Yunalesca in the Zanarkand Dome at the instant Tidus's attack lands for 954 (real engine, seed 1). Nine components, 377 pieces in the whole game.",
+      "look": "Dark ink, the game's own Ink & Gold: squared panels, gold rules, Yevon gold accent.",
+      "frames": [
+        {
+          "file": "c-scene-exploded/c1-assembled.png",
+          "moment": "Slider at 0%, nothing selected, front view. FFX only (chapter II, gold, turn list in the HUD).",
+          "notes": [
+            "One battle frame from chapter II, composed from the real dome backdrop, the real cut-outs and an Ink & Gold HUD drawn in CSS.",
+            "954 is real: the game's own engine at seed 1. HP, MP, Overdrive and the turn order come from the same run.",
+            "The number is drawn the way the live game draws it, a white italic numeral at her chest.",
+            "Left panel: nine numbered components with plain-words lines, six on screen and three 'not on screen' (engine, presenter, music).",
+            "Caveat: the frame is assembled by hand and is cleaner than the live screen; it is not a capture."
+          ]
+        },
+        {
+          "file": "c-scene-exploded/c2-exploded-selected.png",
+          "moment": "Slider at 55%, three-quarter view, eight sheets apart, boss billboard selected with its card open. FFX only.",
+          "notes": [
+            "The frame turns and separates back to front: painting, two depth bands, light and dust, boss, party, hit effects, HUD, with numbered labels on leader lines.",
+            "The boss sheet is tinted gold. Her card shows the five real poses, the painting's size and feet line, her three forms' HP, and the doc section it comes from.",
+            "Honesty on the card: an 'AI-painted' chip and a line that the art comes from a local ComfyUI pipeline and the PNGs stay out of the public repo. The wording needs Bailey's yes.",
+            "Three rails show what you never see: the engine events for this attack, how the presenter plays them, and the boss theme with its loop.",
+            "The most convincing pull-apart in the set, because the game really is a stack of flat sheets. HUD text inside the tilted frame is too small to read."
+          ]
+        },
+        {
+          "file": "c-scene-exploded/c3-inventory.png",
+          "moment": "Slider at 100%: every piece the game ships, largest first, Yunalesca's tile hovered. Both games' assets, gold because the open specimen is an FFX chapter.",
+          "notes": [
+            "377 pieces: 214 paintings, 155 sound cues, 8 HUD parts, recounted from the two manifests and the Ink & Gold spec.",
+            "137 tiles: 102 real thumbnails (backdrops, pause plates, subjects, portraits), 8 HUD parts, 21 music cues, 6 sound families. A x5 badge means five painted poses in one tile.",
+            "A gold outline marks what chapter II uses; only sound families proved by the seed-1 run are outlined.",
+            "The hover label shows her name, pose list and folder. The view rail is on Front and the hint says drag to pan.",
+            "Closest of the three to the references' grid of objects."
+          ]
+        }
+      ],
+      "whatItTeaches": "How a painted 2.5D browser game is put together: a stack of paintings and a CSS interface, not 3D models, driven by a rules engine that only reports events. It teaches the craft, not how to play.",
+      "cost": "M-L",
+      "costNote": "Builder's estimate: about a week for one chapter end to end, about two for all five. Truest route: a second Vite entry reusing the game's own scene code, exploding the real planes along the camera axis. Cheaper fallback, as mocked: pre-exported layer PNGs per chapter in CSS 3D, which runs on any phone but needs a per-layer export tool.",
+      "risk": "The HUD is HTML, not WebGL, so putting it into a real 3D stack is the hard part. The specimen is a hand-assembled composite, not the live screen. The card says 'AI-painted' and names Bailey's PC on a public page. Two project docs lag the code the site would quote (battle event count; synthesised versus sampled music).",
+      "gameAware": {
+        "case": "FFX only for the specimen (C1, C2: chapter II). C3 lists both games' assets under the open chapter's gold.",
+        "ffxOnly": "The HUD in the specimen carries the turn list, true to FFX and not to FFX-2 (research/ffx-vs-ffx2-presentation.md §4.3).",
+        "ffx2Only": "Described, not drawn: a chapter IV or V specimen would switch the accent to pyre pink, mirror the chrome and show gauges and a chain in place of the turn list.",
+        "both": "The site pattern and the whole-game inventory."
+      },
+      "verdict": "ready-with-caveats"
+    }
+  ],
+  "theyMix": [
+    "Subject (boss / turn / frame) and look (light clinical / dark studio / dark ink) are separate axes; either can move.",
+    "A's subject in B's dark studio look, or in C's Ink & Gold.",
+    "A as the core, with C's sheet-explode as each boss's stage. That also answers what 'pull apart' means for a boss with no separate parts.",
+    "B's live engine control inside A's detail card.",
+    "C's thumbnail wall as A's inventory style, in place of the chip wall.",
+    "A pick approves only the properties Bailey names, not everything on the frames. After the reaction, record: liked, disliked, must remain, must change, still undecided."
+  ],
+  "questionsForBailey": [
+    "Which option, or which parts of which? If 'all three separately' still holds: which first, and does each frame's look stand as the target for its site?",
+    "Where does it live: a folder of the existing GitHub Pages site (the plan's default is /pyrefly-reprise/learn/) or a site of its own?",
+    "The name: 'Pyrefly Atlas', 'Pyrefly Studio', 'Pyrefly Reprise, exploded'? On B, is 'One Turn' the big line with the site name small, or the reverse?",
+    "Is a phone layout in scope for the first build? No 390x844 frame exists yet.",
+    "One look for everything, or one look per subject as drawn?",
+    "'Drag to tilt', not orbit: painted cutouts cannot turn all the way round and 3D models are ruled out. Is a parallax tilt enough? For C only: explode the game's real Three.js scene (truer, harder) or exported layers in CSS 3D (cheaper, runs on any phone)?",
+    "A: seven of Vegnagun's twelve parts are labelled zooms and which crop is which is a guess. Acceptable, or new paintings first? For the four bosses that do not come apart into body parts, may 'pull apart' mean forms, phases and moves?",
+    "What counts as a piece? A: 'Attacks and abilities 50' includes heals and buffs. B: 137 is one turn's core rules; items, skills, aeons and equipment would make several hundred. C: 377 counts 8 HUD parts (369 without) and folds poses into x5 badges.",
+    "B: plain Attack as the default turn, or chapter I's signature turn (Lance of Atrophy, Zombie, then Full-Life kills)? Keep row 08 as a per-chapter layer? Fixed seed by default with Re-roll optional?",
+    "FFX-2 for B and C is not drawn. Should B's FFX-2 version keep the turntable and eight-row list or take a different shape for real-time gauges? Which FFX-2 moment should C use?",
+    "Game labels in the switcher are words only. Would a small gold or pink dot per game be better? Related: keep or drop B1's pink FFX-2 preview card on a gold page?",
+    "C: an exact capture of the live build as the specimen, or a cleaned-up hero frame as drawn? And is the wording 'AI-painted' and 'Painted on Bailey's PC by a local ComfyUI pipeline, not by hand' what you want said in public?"
+  ],
+  "foundAlongTheWay": [
+    "Data bug, not fixed (src/ out of scope): the Bulwark record in src/data/ffx2/enemies/vegnagun-body.ts blocks the Strength and Magic breaks, while research/ffx2-vegnagun-shuyin.md §3.3 and the file's own comment say they land. A3 prints '?/12' on the four affected chips. The builder flagged it as a separate task.",
+    "Research lists steals the shipped data lacks (Tail X-Potion, Head Megalixir, Redoubt Phoenix Down, the Node's rare Hero Drink). By research A's rewards would be 10 and the total 120; the frames print what the data holds, 9 and 119.",
+    "research/ffx2-vegnagun-shuyin.md contradicts itself on Reflect: §7.2 says cast Reflect on the Leg, §3.2 and the data make the Leg immune. A3 follows the stat table.",
+    "docs/ARCHITECTURE.md lags the code in two places C would quote: about 22 battle events listed (the union in the code has 36), and music described as synthesised (it is prerendered samples). C cites the code and leaves the synthesis claim off."
+  ],
+  "notBuilt": "No page, look or layout exists. Nothing under src/, public/ or tools/ was touched by this round. A separate track has started the non-visual plumbing described in docs/plans/learning-sites.md (learn/shared/: five pure modules with unit tests). Per hard rule 9 nothing Bailey can see is built until Bailey answers.",
+  "openDependencies": [
+    "A 390x844 phone variant of whatever is picked.",
+    "The FFX-2 variants of B and C, drawn before they are built (hard rules 9 and 14).",
+    "A prototype rung for the slider and tilt: whether pulling painted cutouts apart feels good in the hand does not show in a still.",
+    "The frames load public/art/** by relative path and the art is gitignored, so they open only on this machine."
+  ]
+}
