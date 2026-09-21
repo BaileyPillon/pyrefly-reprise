@@ -1,0 +1,242 @@
+<!doctype html>
+<!--
+  Pyrefly Reprise — "living portrait" prototype for the Until Dawn-style pause screen.
+
+  This is a THROWAWAY FEEL TEST, not a layout mockup. Another agent owns the static
+  composition under docs/concepts/pause-until-dawn/. The only question this file
+  answers is the one a still cannot: does a painted portrait that turns its head,
+  breathes and blinks read as alive, and does driving its gaze from the keyboard
+  feel good?
+
+  No build step, no dependencies. Serve the repo root and open
+  /docs/concepts/pause-until-dawn/prototype/index.html
+  (file:// will NOT work: WebGL refuses to upload a texture from a local file).
+
+  See README.md for what is real and what is faked.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Living portrait — pause screen feel test</title>
+<style>
+  :root {
+    /* Ink & Gold tokens, copied from src/ui/inkgold/tokens.css so this file
+       stays dependency-free. Keep in sync by hand if the palette moves. */
+    --ig-ink: #0b0a12;
+    --ig-paper: #f4f1e8;
+    --ig-gold: #e3b94a;
+    --ig-pyre-pink: #f7b6d9;
+    --ig-spira-sky: #7fc6e8;
+    --ig-font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --ig-font-display: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+    /* FFX-2 chapter: the accent is pyre pink, not gold (tokens.css .ig--ffx2). */
+    --accent: var(--ig-pyre-pink);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--ig-ink);
+    color: var(--ig-paper);
+    font-family: var(--ig-font-serif);
+    overflow: hidden;
+  }
+
+  #stage { position: fixed; inset: 0; }
+
+  /* The painting lives here. Everything else is chrome laid over it. */
+  #gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* ---- left column: the Until Dawn character-screen furniture ---------- */
+
+  .panel {
+    position: absolute;
+    left: clamp(28px, 6vw, 120px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(34vw, 430px);
+    pointer-events: none;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+  }
+
+  .eyebrow {
+    font-family: var(--ig-font-display);
+    font-size: clamp(10px, 0.95vw, 14px);
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.85;
+    margin: 0 0 0.9em;
+  }
+
+  .name {
+    font-size: clamp(38px, 5.4vw, 86px);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .rule {
+    height: 1px;
+    margin: 1.4em 0 1.3em;
+    background: linear-gradient(90deg, var(--accent) 0%, rgba(247, 182, 217, 0.15) 62%, transparent 100%);
+  }
+
+  .stat { margin: 0 0 0.85em; }
+
+  .stat-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--ig-font-display);
+    font-size: clamp(9px, 0.8vw, 12px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.72;
+    margin-bottom: 0.45em;
+  }
+
+  .bar { height: 3px; background: rgba(244, 241, 232, 0.14); overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .bar.hp > i { background: var(--ig-paper); }
+  .bar.mp > i { background: var(--ig-spira-sky); }
+
+  .mood {
+    margin-top: 1.6em;
+    font-size: clamp(15px, 1.35vw, 22px);
+    font-style: italic;
+    opacity: 0.8;
+    letter-spacing: 0.02em;
+    min-height: 1.4em;
+  }
+
+  /* ---- legend ---------------------------------------------------------- */
+
+  .legend {
+    position: absolute;
+    right: clamp(20px, 2.4vw, 40px);
+    bottom: clamp(18px, 2.2vw, 36px);
+    font-family: var(--ig-font-display);
+    font-size: 12px;
+    line-height: 1.85;
+    letter-spacing: 0.06em;
+    background: rgba(11, 10, 18, 0.62);
+    border: 1px solid rgba(227, 185, 74, 0.22);
+    padding: 12px 16px;
+    max-width: 300px;
+    backdrop-filter: blur(3px);
+  }
+
+  .legend b { color: var(--ig-gold); font-weight: 600; letter-spacing: 0.1em; }
+  .legend .dim { opacity: 0.55; }
+  .legend[hidden] { display: none; }
+
+  kbd {
+    display: inline-block;
+    min-width: 1.55em;
+    padding: 0 0.35em;
+    text-align: center;
+    border: 1px solid rgba(244, 241, 232, 0.3);
+    border-radius: 2px;
+    font: inherit;
+    font-size: 0.92em;
+    opacity: 0.95;
+  }
+
+  /* ---- diagnostics ----------------------------------------------------- */
+
+  .hud {
+    position: absolute;
+    left: clamp(20px, 2.4vw, 40px);
+    bottom: clamp(18px, 2.2vw, 36px);
+    font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(244, 241, 232, 0.62);
+    white-space: pre;
+    pointer-events: none;
+  }
+  .hud[hidden] { display: none; }
+
+  .note {
+    position: absolute;
+    left: 50%;
+    top: clamp(16px, 2vw, 30px);
+    transform: translateX(-50%);
+    font-family: var(--ig-font-display);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(227, 185, 74, 0.8);
+    border: 1px solid rgba(227, 185, 74, 0.25);
+    padding: 6px 14px;
+    background: rgba(11, 10, 18, 0.55);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .note.show { opacity: 1; }
+
+  .fatal {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 5vw;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  .fatal[hidden] { display: none; }
+  .fatal code { color: var(--ig-gold); font-size: 15px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl"></canvas>
+
+  <div class="panel">
+    <p class="eyebrow" id="eyebrow">Chapter IV &middot; Party</p>
+    <h1 class="name" id="name">Yuna</h1>
+    <div class="rule"></div>
+
+    <div class="stat">
+      <div class="stat-head"><span>HP</span><span id="hpNum">1 860 / 2 400</span></div>
+      <div class="bar hp"><i id="hpBar" style="width:77%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-head"><span>MP</span><span id="mpNum">112 / 180</span></div>
+      <div class="bar mp"><i id="mpBar" style="width:62%"></i></div>
+    </div>
+
+    <p class="mood" id="mood">Holding steady.</p>
+  </div>
+
+  <div class="legend" id="legend">
+    <div><b>Gaze</b> <kbd>&larr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd><kbd>&rarr;</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / mouse / right stick</div>
+    <div><b>E</b> cycle state <span class="dim">calm &rarr; determined &rarr; hurt</span></div>
+    <div><b>B</b> blink now &nbsp; <b>R</b> reduced motion</div>
+    <div><b>F</b> diagnostics &nbsp; <b>H</b> hide this</div>
+    <div class="dim">Let go and she looks around on her own.</div>
+  </div>
+
+  <div class="hud" id="hud" hidden></div>
+  <div class="note" id="note"></div>
+
+  <div class="fatal" id="fatal" hidden>
+    <div>
+      <p id="fatalMsg">WebGL2 is not available in this browser.</p>
+      <p><code>npx vite --port 5477</code> from <code>D:\Final Fantasy</code>, then open<br />
+      <code>http://localhost:5477/docs/concepts/pause-until-dawn/prototype/</code></p>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./living-portrait.js"></script>
+</body>
+</html>
