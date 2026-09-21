@@ -225,8 +225,13 @@ export function applyStatus(
   target.statuses[status] = instance;
   ctx.emit({ type: 'status-add', targetId: target.id, status, instance: { ...instance } });
 
-  // Petrification wipes every other status; the stacking buffs survive it.
-  if (status === 'petrify') wipeStatuses(ctx, target, ['petrify', ...STACKING_BUFFS, ...MIX_FLAGS], 'overwritten');
+  // Petrification wipes every other status; stacking buffs survive it, and so
+  // does a **permanent** Haste or Slow — §1.4 "cannot receive the opposite
+  // status at all", §4.2 "Auto-Haste = immune" [C-8, ffx-evrae-airship §3.1].
+  if (status === 'petrify') {
+    const clock = (['haste', 'slow'] as const).filter((s) => statusOf(target, s)?.permanent === true);
+    wipeStatuses(ctx, target, ['petrify', ...STACKING_BUFFS, ...MIX_FLAGS, ...clock], 'overwritten');
+  }
   if (status === 'max-hp-x2' || status === 'max-mp-x2') applyPoolDoubler(target, status, true);
   // Haste halves the target's current counter and Slow doubles it. When the
   // action already used the `ctb` formula the shift has been applied there, so

@@ -16,6 +16,7 @@ import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/ind
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { macalaniaBuild } from '../../../src/data/ffx/builds/macalania.ts';
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../../src/data/ffx/enemies/seymour-anima-macalania-abilities.ts';
+import { PRE_SUMMON_DAMAGE_CAP } from '../../../src/battle/ffx/ai/macalania-rules.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { seymourAnimaMacalania } from '../../../src/engine/tactics/seymour-anima-macalania.ts';
 import { SEYMOUR_ANIMA_MACALANIA_GUIDE } from '../../../src/data/guides/seymour-anima-macalania.ts';
@@ -184,14 +185,89 @@ describe('Macalania — act one', () => {
     expect(cmb(engine, SEYMOUR).hp).toBe(before);
   });
 
+  /**
+   * A-3, the half that measures the **cap** rather than the floor.
+   *
+   * **Measured, and worth writing down:** on the shipped board the cap can
+   * never bind. `PRE_SUMMON_DAMAGE_CAP` is 5,999, his pool is 6,000 and
+   * `PRE_SUMMON_HP_FLOOR` is 1, so `hpBefore - floor` is *also* 5,999 and the
+   * floor alone clamps every oversized blow to the same number. Removing the
+   * `damageCapPerHit` assignment entirely changes no observable value in this
+   * encounter — checked by deleting it and re-running this file. The cap is
+   * therefore belt-and-braces on this board, and a test that only swings at the
+   * shipped 6,000 pool cannot tell the two clamps apart, which is how the
+   * capability shipped untested.
+   *
+   * So the cap is pinned where it *can* bind: the pool is widened on purpose so
+   * the floor is out of the way, and the blow is still a **real action through
+   * the real chain** — `hp.ts#dealDamage` is the single funnel, so only a
+   * resolved command exercises it. The second half then puts the shipped 6,000
+   * back and asserts the board-level consequence.
+   */
+  it('A-3: a single blow is clamped to the cap, and on the shipped pool leaves him on 1', () => {
+    const swing = (pool: number, str: number): ReturnType<typeof newEngine> => {
+      const engine = newEngine(3);
+      // Magic is never covered, but this party has no Blk Magic at all, so the
+      // Cover has to be off the board for a physical to reach him [§2.3].
+      for (const g of GUARDS) {
+        const c = cmb(engine, g);
+        c.hp = 0;
+        c.alive = false;
+      }
+      const seymour = cmb(engine, SEYMOUR);
+      expect(seymour.stats.maxHp).toBe(6000);
+      seymour.stats.maxHp = pool;
+      seymour.hp = pool;
+      // A Strength no sphere grid in the chapter can reach: the point is one
+      // blow that would kill him outright several times over.
+      cmb(engine, 'tidus').stats.str = str;
+
+      let swung = false;
+      for (let i = 0; i < 40 && !swung; i++) {
+        const d = engine.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (d.kind !== 'player-input') continue;
+        const r = d.commands.find((c) => c.command.kind === 'attack' && c.enabled && c.validTargets.includes(SEYMOUR));
+        if (d.actorId === 'tidus' && r) {
+          engine.submit({ kind: 'attack', targets: [SEYMOUR] });
+          swung = true;
+          continue;
+        }
+        engine.submit(attack(d));
+      }
+      expect(swung).toBe(true);
+      return engine;
+    };
+    const biggestOn = (engine: ReturnType<typeof newEngine>): number => {
+      const hits = engine
+        .state()
+        .log.filter((e: BattleEvent) => e.type === 'damage' && e.targetId === SEYMOUR && e.sourceId === 'tidus');
+      expect(hits.length).toBeGreaterThan(0);
+      return Math.max(...hits.map((e) => (e.type === 'damage' ? e.amount : 0)));
+    };
+
+    // 1. The cap, with the floor moved out of its way. Strength 400 is worth
+    //    well over 9,999 raw through `formulas.ts`, so what comes out is the
+    //    cap and nothing else.
+    const wide = swing(40_000, 400);
+    expect(biggestOn(wide)).toBe(PRE_SUMMON_DAMAGE_CAP);
+    expect(cmb(wide, SEYMOUR).alive).toBe(true);
+
+    // 2. The board-level consequence, on his real 6,000 pool: one blow that
+    //    would kill him several times over leaves him alive on exactly 1.
+    const real = swing(6000, 400);
+    expect(biggestOn(real)).toBeLessThanOrEqual(PRE_SUMMON_DAMAGE_CAP);
+    expect(cmb(real, SEYMOUR).hp).toBe(1);
+    expect(cmb(real, SEYMOUR).alive).toBe(true);
+  });
+
   // A-3. §5.2 [verified: 2 sources] — the HD clamp and floor.
-  it('A-3: he cannot be killed before he summons, and a huge hit leaves him at 1', () => {
+  it('A-3: across a whole real drive to the summon, he never drops below 1', () => {
     const engine = newEngine(3);
     const seymour = cmb(engine, SEYMOUR);
-    // Reach in through the public state the way a 12,000-damage Doublecast
-    // would: the clamp lives in `hp.ts#dealDamage`, so the only honest way to
-    // exercise it is to run a real action. Drive until the summon instead and
-    // assert the invariant across every step.
+    // The companion case above manufactures the one blow that measures the cap.
+    // This one measures the *invariant* instead: over every step of the real
+    // line, on the real board, the floor is never crossed.
     let everBelowOne = false;
     driveIntended(engine, () => {
       const hp = engine.state().combatants[SEYMOUR]?.hp ?? 0;
@@ -266,12 +342,71 @@ describe('Macalania — Steal economics', () => {
     }
     const robbed = GUARDS.filter((g) => engine.state().flags[`macalania.hasPotions.${g}`] === false);
     expect(robbed.length).toBeGreaterThan(0);
+    const id = robbed[0] as string;
 
-    // The Remedy rows are still in the robbed Guardian's action list — the
-    // supply gate is on the two potion rows only.
-    const g = cmb(engine, robbed[0] as string);
-    expect(g.learnedAbilityIds).toContain('guardian-remedy');
-    expect(g.learnedAbilityIds).toContain('guardian-remedy-self');
+    // **Stopped.** Auto-Potion is a counter, so it is measured by counting the
+    // counters the robbed Guardian actually fires. `learnedAbilityIds` would
+    // prove nothing either way: it is static data off `EnemyDef.abilityIds` and
+    // no code path can take an id out of it.
+    const potions = (): number =>
+      engine
+        .state()
+        .log.filter((e: BattleEvent) => e.type === 'counter' && e.actorId === id && e.abilityId === 'guardian-auto-potion')
+        .length;
+    const before = potions();
+    // The party is taken out of danger on purpose: this case measures a
+    // Guardian's supply, and a wipe would end the battle mid-measurement.
+    for (const pid of [...engine.state().activeIds, ...engine.state().reserveIds]) {
+      const c = engine.state().combatants[pid];
+      if (!c) continue;
+      c.stats.maxHp = 99_999;
+      c.hp = 99_999;
+    }
+    for (let i = 0; i < 40; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      const r = d.commands.find((c) => c.command.kind === 'attack' && c.enabled && c.validTargets.includes(id));
+      engine.submit(r ? { kind: 'attack', targets: [id] } : attack(d));
+    }
+    // It was being hit — and it healed itself not once.
+    const hits = engine
+      .state()
+      .log.filter((e: BattleEvent) => e.type === 'damage' && e.targetId === id && e.amount > 0);
+    expect(hits.length).toBeGreaterThan(0);
+    expect(potions()).toBe(before);
+
+    // **Still firing.** Poison the robbed Guardian and it reaches for a Remedy
+    // on its very next turn: the supply gate is on the two potion rows only,
+    // and gating the Remedies too would silently halve what the poison route
+    // costs the player [§2.3, §14 row 1].
+    const g = cmb(engine, id);
+    // Put the bar back: the loop above was beating on it, and a Guardian that
+    // dies of poison before its own turn measures nothing.
+    g.hp = g.stats.maxHp;
+    g.alive = true;
+    g.statuses['poison'] = {
+      id: 'poison',
+      turnsRemaining: 254,
+      ticksRemaining: null,
+      charges: null,
+      stacks: 0,
+      permanent: false,
+    };
+    const remedies = (): number =>
+      engine
+        .state()
+        .log.filter(
+          (e: BattleEvent) =>
+            e.type === 'action-start' && e.actorId === id && (e.abilityId ?? '').startsWith('guardian-remedy'),
+        ).length;
+    for (let i = 0; i < 60 && remedies() === 0; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      engine.submit({ kind: 'defend', targets: [] });
+    }
+    expect(remedies()).toBeGreaterThan(0);
   });
 });
 

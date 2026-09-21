@@ -66,7 +66,7 @@ this track does not own** — see the open question in §6.
 
 - `src/engine/tactics/seymour-anima-macalania.ts` — the intended line.
 - `src/data/guides/seymour-anima-macalania.ts` — the written panel content.
-- `tests/unit/chapters/macalania-engine.test.ts` — 14 cases (A-3 … A-9, A-11,
+- `tests/unit/chapters/macalania-engine.test.ts` — 15 cases (A-3 … A-9, A-11,
   plus the guide's citation check).
 - `tests/unit/strategy-macalania.test.ts` — A-1 and A-2.
 
@@ -240,10 +240,45 @@ member of `ImmunityFlag`; left out rather than widening a union).
   were already there.
 - **A-13**, approved-target parity — see question 4.
 
+## 7b. Fix pass, 2026-09-21 — two cases that were pinning nothing
+
+**Game case: FFX only** [rule 14]. Both are test-integrity repairs on this
+chapter's own unit file; **no product code changed** for either, and both new
+cases were mutation-checked against the real code rather than assumed.
+
+**A-7 was half tautology.** The "leaves both Remedy branches firing" half read
+`learnedAbilityIds`, which is static data copied off `EnemyDef.abilityIds` and
+which no code path can remove an id from — true before the Steal, after it, and
+true even if both Remedy branches *had* been gated on `hasPotions`, the exact
+regression §2.3 / §14 row 1 calls out. The "stops Auto-Potion" half only read
+the mirrored `macalania.hasPotions.<id>` flag, not that the counter stopped. It
+now measures behaviour on both sides: the robbed Guardian is beaten on for 40
+decisions and fires **zero** `guardian-auto-potion` counters, then is poisoned
+and reaches for a Remedy on its next turn. Checked by mutation — deleting
+`macalaniaGuardianCounter`'s steal gate fails the first half (13 counters),
+adding `&& hasPotions` to the Remedy branch fails the second.
+
+**A-3 never exercised the damage cap**, and the reason it could not is worth
+having on the record: **on the shipped board the cap cannot bind at all.**
+`PRE_SUMMON_DAMAGE_CAP` is 5,999, Seymour's pool is 6,000 and
+`PRE_SUMMON_HP_FLOOR` is 1, so `hpBefore - floor` is *also* 5,999 and the floor
+alone clamps every oversized blow to the same number — deleting the
+`damageCapPerHit` assignment changes no observable value in this encounter
+(measured). The cap is belt-and-braces here, and any test that only swings at
+the real 6,000 pool cannot tell the two clamps apart, which is how the
+capability shipped untested. The case now swings a real, manufactured blow
+(Strength 400, both Guardians off the board so the Cover does not eat it) twice:
+once at a widened pool, where the amount comes out **exactly 5,999** and the
+mutation is caught, and once at the shipped 6,000, where the board-level
+consequence — alive, on exactly 1 — is what is asserted. The older A-3 is kept
+and renamed to what it actually measures: the floor holding across a whole real
+drive to the summon.
+
 ## 8. How it was verified
 
 - `npx tsc --noEmit` clean of anything this track owns.
-- `npx vitest run tests/unit/chapters/macalania-engine.test.ts` — 13 passed.
+- `npx vitest run tests/unit/chapters/macalania-engine.test.ts` — 15 passed
+  (13 at first writing, 15 after the 2026-09-21 fix pass).
 - `npx vitest run tests/unit/strategy-macalania.test.ts` — 2 passed.
 - One full `npx vitest run`.
 - Every behavioural claim above was **run**, not grepped [AGENTS.md hard rule 3].

@@ -130,14 +130,69 @@ Measured over 12 seeds with the party defending, per hit:
 
 | Case | Result |
 |---|---|
-| **A-1 / A-4** — the shipped tactic, 40 contiguous seeds | **21 wins, 52.5 %** |
+| **A-1 / A-4** — the shipped tactic, 40 contiguous seeds | **39 wins, 97.5 %** (was 21 wins / 52.5 % — see "The reach gate ate the revive" below) |
 | **A-2** — the credible mistake, 20 seeds | **0 wins**, every one with Evrae above 28,000 of 32,000, inside ten turns |
 | **A-3** — attacking at FAR in phase 2 | Swooping Scythe counters, range flips to NEAR, the dodge dies. §4.5's trap fires as designed |
 
-**A-4's target is 90 % and the shipped line does not reach it.** The number is
-reported rather than engineered and **no boss number was touched**
+**A-4's target is 90 % and the shipped line now clears it at 97.5 %.** The number
+is reported rather than engineered and **no boss number was ever touched**
 [`memory/boss-side-fix-needs-measured-options`]. Chapter 1 shipped at 73 % and
-Macalania at 80 % under the same rule.
+Macalania at 80 % under the same rule. The one remaining loss is seed 25.
+
+### The reach gate ate the revive — fix pass, 2026-09-21
+
+**Game case: FFX only** [rule 14]. `targeting.ts` is FFX's; the FFX-2 ATB engine
+never calls it, and the absence test at the bottom of the unit file already
+pins that.
+
+The first cut of `reachesAtRange` asked "does this **row** reach" by
+whitelisting targeting tokens — `self | single-ally | all-allies |
+random-ally`, then magic / Lancet / a ranged weapon. **Phoenix Down is
+`single-any`**, because it doubles as the anti-undead item, so it fell through
+every branch and came back `enabled: false, disabledReason: 'Out of reach'`
+while the ship was away. `fahrenheitBuild` has no Yuna and no Life: Phoenix
+Down is the party's **only** revive, and FAR is the state rule 1 of the tactic
+tells the player to sit in. §4.3 says the opposite in as many words — *"Items
+and Wht Magic are irrelevant to reach **because they target your own party**"*
+— and its "Does not reach" row names only offensive `Use`.
+
+Reach is now asked **per side**, not per row:
+
+- `reachesFoesAtRange` — does this cross the gap (the old sourced list, unchanged);
+- `reachesAtRange` — is there anything at all this can be pointed at, which is
+  what `commands.ts` turns into "Out of reach";
+- `validTargets` and `resolveTargets` drop the **far side's candidates** instead
+  of the whole row, so a Phoenix Down at FAR offers the corpse on the deck and
+  not the wyrm, and an explicitly submitted enemy target cannot sneak past the
+  menu either.
+
+Measured, same 40 contiguous seeds, shipped tactic, one line of behaviour
+changed:
+
+| Reach gate | Wins / 40 | Non-victory seeds |
+|---|---:|---|
+| whole-row whitelist (as shipped) | 21 (52.5 %) | 4, 5, 6, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 28, 29, 33, 35, 40 |
+| **per-side** | **39 (97.5 %)** | 25 |
+
+So the phase-2 losses were **not** the party preset and **not** `ORDER_RANK`
+after all — open question 1 below is answered by this, and the two `[estimate]`
+numbers it suspected were never the cause. Nothing was tuned to get there.
+
+### C-8's Auto-Haste half was never true, and now is
+
+Also FFX only, and also found by running rather than reading. The old C-8 unit
+asserted its own fixtures back to itself and never resolved a Stone Gaze at
+all. Driven for real (seed 3, the whole active party given a permanent Haste),
+**Wakka came out of the Gaze Slowed, with no Haste left at all** — because
+Stone Gaze applies **Petrify first**, `applyStatus` wipes every other status on
+petrification, and the chance-255 Slow then landed on a character §4.2's own
+resistance column calls immune (*"Slowproof / Slow Ward (**Auto-Haste =
+immune**)"*).
+
+`statuses.ts` now keeps a **permanent** Haste or Slow through the petrify wipe,
+which is `ffx-combat-core` §1.4 `[verified: 2 sources]` — a stack-≥255 Haste
+"cannot be displaced" — applied to the one wipe that was displacing it. The
+stacking buffs and the mix flags survive as before; nothing else changed.
 
 A-2 is the diagnostic one and it is emphatic. §9.1: *"If this wins, the fight has
 no teeth and the range mechanic is decorative."* A competent first-timer who plays
@@ -171,7 +226,13 @@ in both cases more than Evrae's own melee dealt in the same battle.
 
 ## Open questions for Bailey
 
-1. **The 52.5 % win rate.** Nineteen of the twenty remaining losses are in phase 2
+1. ~~**The 52.5 % win rate.**~~ **ANSWERED 2026-09-21 by the fix pass above, and
+   nothing was tuned.** The cause was the reach gate refusing Phoenix Down at
+   FAR; the rate is **97.5 %** and the one remaining loss is seed 25. The three
+   candidates below were all wrong and are kept only so the guess is on the
+   record next to the measurement. Neither `[estimate]` number was touched.
+   The original text:
+   Nineteen of the twenty remaining losses are in phase 2
    with Evrae between 5,700 and 10,900 of 32,000 — the party gets three quarters
    of the way and loses the endgame. Three candidates, **none of them measured
    yet**, and each is a different kind of answer:
@@ -218,6 +279,6 @@ in both cases more than Evrae's own melee dealt in the same battle.
 ## How to run it
 
 ```
-npx vitest run tests/unit/chapters/evrae-engine.test.ts   # 26 mechanic units + the absence tests
+npx vitest run tests/unit/chapters/evrae-engine.test.ts   # 27 mechanic units + the absence tests
 npx vitest run tests/unit/strategy-evrae.test.ts          # A-1, A-2, A-3
 ```

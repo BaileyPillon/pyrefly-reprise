@@ -50,22 +50,22 @@ import {
  * it (Swooping Scythe, Photon Spray, Guided Missiles, Evrae's own Haste) are
  * unaffected. Note the flag keeps its **FFX-2** meaning wherever FFX-2 reads it
  * — no approach time, never breaks a chain — and nothing here touches that.
+ *
+ * **Reach is a property of the gap, not of the row.** It is asked per *side*,
+ * because several rows point at both: Phoenix Down is `single-any` (it doubles
+ * as the anti-undead item), and a whitelist of targeting tokens refused the
+ * party's only revive while the ship stood off — the state the chapter's whole
+ * tactic asks the player to sit in. {@link reachesFoesAtRange} answers "does
+ * this cross the gap", {@link reachesAtRange} answers "is there anything at all
+ * this can be pointed at", and {@link validTargets} drops the far side rather
+ * than the whole row.
  */
-export function reachesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef): boolean {
+export function reachesFoesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef): boolean {
   if (ctx.state.flags['airship.range'] !== 'far') return true;
   // The enemy side has its own range rules, enforced by its AI script rather
   // than by menu legality: Evrae simply does not select a melee row at FAR.
   if (user.side === 'enemy') return true;
 
-  switch (def.targeting) {
-    case 'self':
-    case 'single-ally':
-    case 'all-allies':
-    case 'random-ally':
-      return true;
-    default:
-      break;
-  }
   if (def.flags.includes('long-range')) return true;
   // "only magic, Lancet, and Wakka's physical attacks can reach Evrae" — the
   // categories are the sourced sentence, not a guess about individual rows.
@@ -75,12 +75,43 @@ export function reachesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef): b
   return false;
 }
 
+/** True when a targeting value can legally land on one of the user's own side. */
+function canPointAtAllies(def: AbilityDef): boolean {
+  switch (def.targeting) {
+    case 'self':
+    case 'single-ally':
+    case 'all-allies':
+    case 'random-ally':
+    case 'single-any':
+    case 'all':
+      return true;
+    default:
+      return false;
+  }
+}
+
+/**
+ * True when *something* is still in reach of this row — the predicate
+ * `commands.ts` turns into "Out of reach".
+ *
+ * §4.3: "Items and Wht Magic are irrelevant to reach **because they target your
+ * own party**." So any row that can point at an ally stays legal at FAR; only
+ * its enemy-side candidates are taken away.
+ */
+export function reachesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef): boolean {
+  if (ctx.state.flags['airship.range'] !== 'far') return true;
+  if (user.side === 'enemy') return true;
+  return canPointAtAllies(def) || reachesFoesAtRange(ctx, user, def);
+}
+
 /** Candidates a command may legally be pointed at. */
 export function validTargets(ctx: Ctx, user: FFXCombatant, def: AbilityDef): CombatantId[] {
-  if (!reachesAtRange(ctx, user, def)) return [];
   const canTargetDead = def.flags.includes('can-target-dead');
   const alive = (c: FFXCombatant): boolean => (canTargetDead ? onField(c) : isAlive(c));
-  const foes = (user.side === 'enemy' ? friendlies(ctx) : enemies(ctx)).filter((c) => targetable(c) && alive(c));
+  // The far side simply is not on the list. A foe-only row therefore comes back
+  // empty exactly as it used to, and a `single-any` row keeps its allies.
+  const reachable = reachesFoesAtRange(ctx, user, def) ? (user.side === 'enemy' ? friendlies(ctx) : enemies(ctx)) : [];
+  const foes = reachable.filter((c) => targetable(c) && alive(c));
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && alive(c));
 
   switch (def.targeting) {
@@ -121,7 +152,10 @@ export function resolveTargets(
   chosen: readonly CombatantId[],
 ): FFXCombatant[] {
   const pickAll = (list: FFXCombatant[]): FFXCombatant[] => list;
-  const foes = user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx);
+  // Resolution honours the same gap the menu does, so an explicitly submitted
+  // target cannot cross a gap the menu refused to offer.
+  const crosses = reachesFoesAtRange(ctx, user, def);
+  const foes = crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : [];
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && (def.flags.includes('can-target-dead') || isAlive(c)));
 
   switch (def.targeting) {
@@ -143,7 +177,7 @@ export function resolveTargets(
 
   const explicit = chosen
     .map((id) => tryActor(ctx, id))
-    .filter((c): c is FFXCombatant => c !== undefined && onField(c));
+    .filter((c): c is FFXCombatant => c !== undefined && onField(c) && (crosses || c.side === user.side));
   if (explicit.length > 0) return explicit.slice(0, 1);
 
   const fallback =

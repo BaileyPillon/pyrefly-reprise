@@ -12,7 +12,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AvailableCommand, BattleEngine, Command, Decision } from '../../../src/battle/common/types.ts';
+import type { AvailableCommand, BattleEngine, Command, Decision, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { fahrenheitBuild } from '../../../src/data/ffx/builds/fahrenheit.ts';
@@ -58,6 +58,17 @@ function drive(
 }
 
 const defend = (): Command => ({ kind: 'defend', targets: [] });
+
+/**
+ * Swing at the wyrm on every turn.
+ *
+ * The gaze counter only moves when the party targets Evrae (+2 physical), so a
+ * unit that needs a real Stone Gaze has to actually fight.
+ */
+function attackEvrae(d: Extract<Decision, { kind: 'player-input' }>): Command {
+  const r = d.commands.find((c) => c.command.kind === 'attack' && c.enabled && c.validTargets.includes('evrae'));
+  return r ? { kind: 'attack', targets: ['evrae'] } : defend();
+}
 
 /** Take the party out of danger so a mechanic unit measures the mechanic. */
 function makeInvincible(engine: BattleEngine): void {
@@ -220,9 +231,38 @@ describe('Evrae — the airship, run against the real engine', () => {
     expect(engine.state().flags['airship.order']).toBe('far');
     expect(engine.state().flags['airship.range']).toBe('near');
 
-    // A second, opposite order before Cid acts collapses onto the first.
-    engine.state().flags['airship.order'] = 'near';
+    // A second, opposite order before Cid acts collapses onto the first — run
+    // as a real second `trigger` submission, because a hand-written flag would
+    // pin nothing. The pair only counts when Cid has not flown in between, so
+    // the loop keeps trying pairs until it gets a clean one.
+    let collapsed = false;
+    let rangeAtFirstOrder = '';
+    let pending = false;
+    for (let i = 0; i < 400 && !collapsed; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      const owner = d.actorId === 'tidus' || d.actorId === 'rikku';
+      const order = engine.state().flags['airship.order'];
+      if (owner && pending && order === 'far') {
+        engine.submit({ kind: 'trigger', id: 'close-in', targets: [] });
+        collapsed = true;
+        continue;
+      }
+      if (owner) {
+        rangeAtFirstOrder = String(engine.state().flags['airship.range']);
+        engine.submit({ kind: 'trigger', id: 'pull-back', targets: [] });
+        pending = engine.state().flags['airship.order'] === 'far';
+        continue;
+      }
+      pending = pending && order === 'far';
+      engine.submit(defend());
+    }
+    expect(collapsed).toBe(true);
+    // One order is waiting, and it is the LAST one.
     expect(engine.state().flags['airship.order']).toBe('near');
+    // ...and neither order has moved the ship yet.
+    expect(engine.state().flags['airship.range']).toBe(rangeAtFirstOrder);
   });
 
   it('§2.3, §4.6 — exactly three volleys, then one announcement, then silence', () => {
@@ -352,6 +392,44 @@ describe('Evrae — the airship, run against the real engine', () => {
     expect(rows.get('tidus:Al Bhed Potion')?.enabled).toBe(true);
   });
 
+  it('§4.3 — a Phoenix Down still revives at FAR, and still cannot be thrown at the wyrm', () => {
+    // §4.3's asymmetry, in the one place it decides the fight: "Items and Wht
+    // Magic are irrelevant to reach **because they target your own party**".
+    // Phoenix Down is `single-any` — it doubles as the anti-undead item — so a
+    // gate written on the targeting token alone refuses the party's ONLY revive
+    // exactly where the chapter's whole tactic tells the player to stand.
+    const engine = newEngine(5);
+    const st = engine.state();
+    st.flags['airship.range'] = 'far';
+    const down = st.combatants['tidus'];
+    expect(down).toBeDefined();
+    if (!down) return;
+    down.hp = 0;
+    down.alive = false;
+
+    let row: AvailableCommand | undefined;
+    drive(
+      engine,
+      (d) => {
+        engine.state().flags['airship.range'] = 'far';
+        const c = d.commands.find((r) => r.label === 'Phoenix Down');
+        if (c && d.actorId !== 'tidus') row = c;
+        return defend();
+      },
+      () => row !== undefined,
+      400,
+    );
+
+    expect(row).toBeDefined();
+    expect(row?.disabledReason).toBeUndefined();
+    expect(row?.enabled).toBe(true);
+    // Reaches the corpse on the deck...
+    expect(row?.validTargets).toContain('tidus');
+    // ...and not the wyrm: throwing one at an undead enemy is `Use` as offence,
+    // which §4.3 lists under "Does not reach".
+    expect(row?.validTargets).not.toContain('evrae');
+  });
+
   it('§4.3 — at NEAR everything is legal again', () => {
     const engine = newEngine();
     const rows = new Map<string, AvailableCommand>();
@@ -429,41 +507,63 @@ describe('Evrae — the airship, run against the real engine', () => {
     expect(hastedParty.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('C-8 — Stone Gaze\'s Slow goes through a Slowproof resistance byte, and Auto-Haste blocks it', () => {
-    const engine = newEngine();
-    drive(engine, () => defend(), () => false, 10);
-    const st = engine.state();
-    const proofed = st.combatants[st.activeIds[0] ?? ''];
-    const hasted = st.combatants[st.activeIds[1] ?? ''];
-    expect(proofed).toBeDefined();
-    expect(hasted).toBeDefined();
-    if (!proofed || !hasted) return;
+  it("C-8 — Stone Gaze's Slow goes through a Slowproof resistance byte, and Auto-Haste blocks it", () => {
+    const gaze = EVRAE_ABILITIES['evrae-stone-gaze'];
+    expect(gaze?.statusEffects.find((s) => s.status === 'slow')?.chance).toBe(255);
+
+    // Both halves are read off a REAL Stone Gaze resolution. The row is
+    // `random-enemy`, so the whole active party is prepared the same way and
+    // the assertion holds whoever the roll picks.
+    const runGaze = (prepare: (c: FFXCombatant) => void): BattleEngine => {
+      const engine = newEngine(3);
+      makeInvincible(engine);
+      const st = engine.state();
+      for (const id of st.activeIds) {
+        const c = st.combatants[id] as FFXCombatant | undefined;
+        if (c) prepare(c);
+      }
+      drive(
+        engine,
+        attackEvrae,
+        (e) => e.state().log.some((x) => x.type === 'action-start' && x.abilityId === 'evrae-stone-gaze'),
+        600,
+      );
+      expect(
+        engine.state().log.some((x) => x.type === 'action-start' && x.abilityId === 'evrae-stone-gaze'),
+        'Stone Gaze never fired',
+      ).toBe(true);
+      return engine;
+    };
+    const actives = (engine: BattleEngine): FFXCombatant[] =>
+      engine
+        .state()
+        .activeIds.map((id) => engine.state().combatants[id])
+        .filter((c): c is FFXCombatant => c !== undefined);
 
     // Slowproof / Ribbon are a 255 resistance byte; a chance-255 application
-    // returns before `rollStatus` ever reads it.
-    proofed.immunities['slow'] = 255;
+    // returns before `rollStatus` ever reads it, so the Slow lands anyway.
+    const proofed = runGaze((c) => {
+      c.immunities['slow'] = 255;
+    });
+    expect(actives(proofed).every((c) => c.immunities['slow'] === 255)).toBe(true);
+    expect(actives(proofed).some((c) => c.statuses['slow'] !== undefined)).toBe(true);
+
     // Auto-Haste is a *permanent* Haste, and `applyStatus` refuses to displace
     // one — which is exactly the one thing the wiki says stops this Slow.
-    hasted.statuses['haste'] = {
-      id: 'haste',
-      turnsRemaining: 255,
-      ticksRemaining: null,
-      charges: null,
-      stacks: 0,
-      permanent: true,
-    };
-
-    const evrae = st.combatants['evrae'];
-    if (!evrae) return;
-    // Fire Stone Gaze at each of them directly through the engine.
-    engine.submit({ kind: 'defend', targets: [] });
-    const gaze = EVRAE_ABILITIES['evrae-stone-gaze'];
-    expect(gaze).toBeDefined();
-    expect(gaze?.statusEffects.find((s) => s.status === 'slow')?.chance).toBe(255);
-    // The engine's own rule, exercised: 255 ignores resistance, a permanent
-    // Haste is never displaced.
-    expect(proofed.immunities['slow']).toBe(255);
-    expect(hasted.statuses['haste']?.permanent).toBe(true);
+    const hasted = runGaze((c) => {
+      c.statuses['haste'] = {
+        id: 'haste',
+        turnsRemaining: 255,
+        ticksRemaining: null,
+        charges: null,
+        stacks: 0,
+        permanent: true,
+      };
+    });
+    // The action really resolved its statuses — the Petrify rider landed on
+    // somebody — and the Slow landed on nobody.
+    expect(actives(hasted).some((c) => c.statuses['petrify'] !== undefined)).toBe(true);
+    expect(actives(hasted).some((c) => c.statuses['slow'] !== undefined)).toBe(false);
   });
 });
 
