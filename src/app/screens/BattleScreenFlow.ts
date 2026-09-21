@@ -299,6 +299,27 @@ export class GameFlow {
     const save = this.app.save;
     let attempt = 0;
 
+    // A run started from outside {@link start}'s own loop — `main.ts` when the
+    // board resolves, the debug API's `gotoChapter`, the pause menu's RESTART
+    // ENCOUNTER — **is** the new owner of the stack, and has to say so before
+    // {@link show} looks at `owned`.
+    //
+    // `owned` is left pointing at whatever screen the *previous* run put up,
+    // and nothing since has gone through `show`: the board that `main.ts`
+    // `goto`s after a chapter ends is not a flow screen. So the first `show`
+    // of the next run saw `owned !== null && current !== owned`, read a fresh
+    // start as "something navigated out from under us", set `handedOver` and
+    // returned false — `runChapter` then answered `null` without showing
+    // anything. Measured on the real path: pause -> OPTIONS -> RESTART
+    // ENCOUNTER left the player on chapter select for good, while the same row
+    // through the debug harness restarted, because there `current` happened to
+    // still equal `owned`. Re-entrant calls (`start` is running) keep the
+    // guard: that is the case it was written for.
+    if (!this.running) {
+      this.owned = null;
+      this.handedOver = false;
+    }
+
     for (;;) {
       if (!opts.skipPrep) {
         this.step = 'party-prep';

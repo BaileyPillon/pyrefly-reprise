@@ -186,18 +186,50 @@ function ffxFightRows(c: AnyCombatant, turnOrder: readonly TurnPreview[] | null)
       fill: null,
     });
   }
-  if (turnOrder && turnOrder.length) {
-    const at = turnOrder.findIndex((t) => t.actorId === c.id);
-    if (at >= 0) {
-      // "Nth of N" counts the **actors in the queue**, not the depth the
-      // forecast was asked for. `predictTurnOrder(10)` returns ten tiles and
-      // most of them are the same six combatants coming round again; printing
-      // "1st of 10" would be reading out the request, not the fight.
-      const actors = new Set(turnOrder.map((t) => t.actorId)).size;
-      rows.push({ id: 'turn-order', k: 'Turn order', v: `${ordinal(at + 1)} of ${actors}`, fill: null });
-    }
-  }
+  const turn = turnOrderRow(c, turnOrder ?? []);
+  if (turn) rows.push(turn);
   return rows;
+}
+
+/**
+ * TURN ORDER — both halves of "Nth of N" on one scale, and a row for every
+ * member who is on the field.
+ *
+ * The first version counted two different things. The numerator was the index
+ * of the member's next **tile** in the depth-10 forecast (0..9); the
+ * denominator was `new Set(turnOrder.map(t => t.actorId)).size`, the distinct
+ * **actors** in it. A live chapter-1 forecast is ten tiles held by four
+ * actors — `[kimahri, kimahri, seymour-flux, mortiorchis, tidus, tidus,
+ * kimahri, seymour-flux, mortiorchis, tidus]` — so Tidus printed
+ * *"Turn order 5th of 4"*, and a run three turns in printed *"8th of 5"*.
+ * Worse, `findIndex` answering -1 dropped the row entirely: Yuna, who is slow
+ * enough that her next turn is past the tenth tile, was alive on the field
+ * with the screen silently refusing to answer a question it had just asked.
+ *
+ * Both halves now count **actors, in the order their next turn comes up**, so
+ * the ordinal can never exceed the count. A member past the end of the
+ * forecast is told so in words: the forecast genuinely does not know where she
+ * lands, and a number would be an invention (AGENTS.md rule 6). A member who
+ * is down is not in the queue at all, and says that instead.
+ *
+ * FFX only, like the rest of `ffxFightRows` — CTB has a queue to be Nth in
+ * [ffx2-combat-core §1.1; AGENTS.md rule 14].
+ */
+export function turnOrderRow(
+  c: AnyCombatant,
+  turnOrder: readonly TurnPreview[],
+): MeterRow | null {
+  if (turnOrder.length === 0) return null;
+  const queue: string[] = [];
+  for (const t of turnOrder) if (!queue.includes(t.actorId)) queue.push(t.actorId);
+  const at = queue.indexOf(c.id);
+  const v =
+    at >= 0
+      ? `${ordinal(at + 1)} of ${queue.length}`
+      : c.hp <= 0
+        ? 'Out of the queue'
+        : `After ${queue.length} others`;
+  return { id: 'turn-order', k: 'Turn order', v, fill: null };
 }
 
 function ffx2FightRows(c: AnyCombatant, mode: 'active' | 'wait'): MeterRow[] {

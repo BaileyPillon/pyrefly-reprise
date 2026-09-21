@@ -292,7 +292,14 @@ export class PauseScreen extends Screen {
   private readonly onClaimedKey = (e: KeyboardEvent): void => {
     if (e.repeat || this.closing || this.overlays?.briefingUp) return;
     const { intent, suppress } = pauseKeyIntent(e.code, e.shiftKey);
-    if (intent === null) return;
+    // A key that means nothing here but still carries an abstract button —
+    // Shift, which `KEY_MAP` binds to `triangle`. Dropping it before anything
+    // else looks at it is what stops "hold Shift, press Tab" from hiding the
+    // whole chrome and leaving the Tab dead behind it (`pause/keys.ts`).
+    if (intent === null) {
+      if (suppress) this.suppressed.add(suppress);
+      return;
+    }
     if (intent === 'hide') {
       if (!this.overlays?.photoUp) this.togglePanels();
       return;

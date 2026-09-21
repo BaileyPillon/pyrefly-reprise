@@ -45,8 +45,19 @@
   --pu-fs-line: clamp(26px, 2.4375vw, 46px);
   /* Rows: 27px at 900 tall. */
   --pu-row: clamp(24px, 3vh, 34px);
-  /* The key column and the bar: 100px and 124px at 1600 wide. */
-  --pu-key: clamp(84px, 6.25vw, 122px);
+  /*
+   * The key column and the bar: 100px and 124px at 1600 wide.
+   *
+   * The key floor is 96 and not 84. `--pu-fs` bottoms out at 14px on every
+   * desktop window, so the longest BATTLE STATS labels keep the width they
+   * need whatever the viewport does — measured in Chromium at that floor,
+   * `MAGIC DEF` is 89px and `STRENGTH` 87px — while 6.25vw kept shrinking and
+   * hit 84px at 1280x720. The cell is `overflow:hidden; text-overflow:
+   * ellipsis`, so both rows rendered as `MAGIC D…` and `STRENGT…` on the one
+   * laptop size in the set. A floor that scales with the type, not with the
+   * window, is the only one the ellipsis cannot get behind.
+   */
+  --pu-key: clamp(96px, 6.25vw, 122px);
   --pu-bar: clamp(88px, 7.75vw, 150px);
   /* Vertical anchors, as fractions of the mockup's 900px frame. */
   --pu-top-brand: clamp(14px, 2.9vh, 34px);

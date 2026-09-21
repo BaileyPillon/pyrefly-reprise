@@ -14,6 +14,19 @@
 
 import type { Button } from '../../Input.ts';
 
+/**
+ * A fifth key has no meaning of its own here and still has to be answered:
+ * **Shift**, which `KEY_MAP` also binds to `triangle`. Holding it to reach
+ * `Shift+Tab` latched `triangle`, the screen read that as "hide the chrome",
+ * and the `Tab` that followed hit `if (this.panelsHidden) return;` and died —
+ * so the advertised affordance blanked the screen instead of walking the strip
+ * backwards, and only appeared to work when a synthetic `press('Shift+Tab')`
+ * delivered both keys inside one frame. Shift therefore answers with **no
+ * intent and the button dropped**: on this screen it is a modifier and nothing
+ * else. The pad's own `triangle` and `H` still hide, which is exactly what the
+ * CONTROLS tab lists (`H / Triangle`).
+ */
+
 /** What a raw key press means on this screen. */
 export type PauseKeyIntent = 'hide' | 'photo' | 'tab-prev' | 'tab-next' | null;
 
@@ -42,6 +55,10 @@ export function pauseKeyIntent(code: string, shift = false): PauseKeyAnswer {
       return { intent: 'tab-next', suppress: 'start' };
     case 'Tab':
       return { intent: shift ? 'tab-prev' : 'tab-next', suppress: 'triangle' };
+    // A modifier, never an action: see the note at the top of this file.
+    case 'ShiftLeft':
+    case 'ShiftRight':
+      return { intent: null, suppress: 'triangle' };
     default:
       return NONE;
   }

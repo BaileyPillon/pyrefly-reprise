@@ -50,10 +50,15 @@ import {
   FOCAL_X,
   PLATE_FRAMING,
 } from '../../src/app/screens/pause/plates.ts';
-import { statusDurationLabel } from '../../src/app/screens/pause/meters.ts';
+import {
+  inThisFightRows,
+  statusDurationLabel,
+  turnOrderRow,
+  type MeterRow,
+} from '../../src/app/screens/pause/meters.ts';
 import { getChapter, type Chapter } from '../../src/data/encounters.ts';
 import type { App } from '../../src/app/App.ts';
-import type { BattleEngine } from '../../src/battle/common/types.ts';
+import type { BattleEngine, TurnPreview } from '../../src/battle/common/types.ts';
 import { FFXEngine } from '../../src/battle/ffx/index.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
@@ -273,6 +278,47 @@ describe('the tab strip', () => {
     expect(h.screen.snapshot()['tab']).toBe(ids[1]);
     keydown('Tab', { shiftKey: true });
     expect(h.screen.snapshot()['tab']).toBe(ids[0]);
+  });
+
+  it('holding Shift does not hide the chrome, and Shift+Tab still walks back', () => {
+    // The test above calls the claimed-key handler with `{shiftKey:true}` and
+    // never runs a frame of `Input` in between — which is what a synthetic
+    // `press('Shift+Tab')` does, both keys inside one frame. Real hardware
+    // sends Shift down, some frames pass, then Tab. `KEY_MAP` binds *both* to
+    // `triangle` and `triangle` hides the chrome, so holding Shift blanked the
+    // screen and the Tab behind it hit `if (this.panelsHidden) return;` and
+    // died. This walks the real `Input` frame by frame.
+    const h = mount('seymour-flux');
+    const ids = tabIds(h);
+    const frame = (at: number): void => {
+      h.screen.handleInput(h.input.update(at));
+      h.input.endFrame();
+    };
+
+    keydown('ShiftLeft', { shiftKey: true });
+    frame(0);
+    expect(h.screen.snapshot()['panelsHidden'], 'Shift alone is a modifier here').toBe(false);
+    frame(450);
+    expect(h.screen.snapshot()['panelsHidden'], 'and still is, held').toBe(false);
+
+    keydown('Tab', { shiftKey: true });
+    frame(460);
+    expect(h.screen.snapshot()['panelsHidden'], 'the chrome is still up to walk').toBe(false);
+    expect(h.screen.snapshot()['tab'], 'Shift+Tab wraps backwards to the last tab').toBe(
+      ids[ids.length - 1],
+    );
+  });
+
+  it('H and the pad still hide the chrome', () => {
+    // Shift losing the toggle must not cost the two the CONTROLS tab lists.
+    const h = mount('seymour-flux');
+    keydown('KeyH');
+    expect(h.screen.snapshot()['panelsHidden']).toBe(true);
+    keydown('KeyH');
+    expect(h.screen.snapshot()['panelsHidden']).toBe(false);
+    // A pad's triangle arrives as an abstract button with no keyboard event.
+    h.screen.handleInput(snapshot(['triangle']));
+    expect(h.screen.snapshot()['panelsHidden']).toBe(true);
   });
 
   it('the shoulder buttons walk it for a pad', () => {
@@ -548,6 +594,60 @@ describe('IN THIS FIGHT is game-aware, with an absence test each way', () => {
     expect(previewTurnOrder(x2.engine)).toEqual([]);
     expect(previewTurnOrder(null)).toEqual([]);
     expect(drawnRows(x2)).not.toContain('turn-order');
+  });
+
+  it('prints "Nth of N" on one scale, and gives every member on the field a row', () => {
+    // The forecast a live chapter-1 fight really answers a few turns in
+    // (measured off `engine.predictTurnOrder(10)`): ten tiles held by four
+    // actors, most of them coming round again, and Yuna — slow enough that her
+    // next turn is past the tenth tile — not in it at all. Read with the
+    // numerator on tiles and the denominator on actors, Tidus printed
+    // "5th of 4" and Yuna printed nothing.
+    const h = mount('seymour-flux');
+    const state = h.engine.state();
+    const [tidus, yuna, kimahri] = state.activeIds.map((id) => state.combatants[id]!);
+    const order = [
+      kimahri!.id,
+      kimahri!.id,
+      'seymour-flux',
+      'mortiorchis',
+      tidus!.id,
+      tidus!.id,
+      kimahri!.id,
+      'seymour-flux',
+      'mortiorchis',
+      tidus!.id,
+    ].map((actorId, index) => ({
+      actorId,
+      index,
+      tickValue: index * 100,
+      isParty: false,
+      statusIcons: [],
+      overdriveReady: false,
+    })) as unknown as TurnPreview[];
+
+    const turnRow = (c: typeof tidus): MeterRow | undefined =>
+      inThisFightRows(c!, 'ffx', { turnOrder: order }).find((r) => r.id === 'turn-order');
+
+    for (const c of [tidus, yuna, kimahri]) {
+      const row = turnRow(c);
+      expect(row, `${c!.id} is alive on the field and must be told where she stands`).toBeDefined();
+      const nth = /^(\d+)[a-z]{2} of (\d+)$/.exec(row!.v);
+      if (nth) expect(Number(nth[1]), row!.v).toBeLessThanOrEqual(Number(nth[2]));
+    }
+    expect(turnRow(kimahri)!.v, 'the queue is four actors deep').toBe('1st of 4');
+    expect(turnRow(tidus)!.v, 'and nothing in it can be 5th').toBe('4th of 4');
+    expect(turnRow(yuna)!.v, 'past the forecast: words, never an invented number').toBe(
+      'After 4 others',
+    );
+  });
+
+  it('never tells a downed member she is Nth in a queue she is not in', () => {
+    const h = mount('seymour-flux');
+    const state = h.engine.state();
+    const down = { ...state.combatants[state.activeIds[1]!]!, hp: 0 };
+    const order = [{ actorId: 'tidus', index: 0, tickValue: 0, isParty: true, statusIcons: [], overdriveReady: false }] as unknown as TurnPreview[];
+    expect(turnOrderRow(down, order)?.v).toBe('Out of the queue');
   });
 
   it('a status row prints the duration model it really has, never an invented count', () => {

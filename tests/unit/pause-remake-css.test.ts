@@ -116,6 +116,39 @@ describe('nothing on a desktop window can compute below 14px', () => {
     expect(at1600['--pu-fs-line']).toBeCloseTo(39, 6);
   });
 
+  /**
+   * The widest BATTLE STATS label, measured in Chromium at the 14px floor
+   * with this sheet's `letter-spacing: 0.15em; text-transform: uppercase`:
+   * `MAGIC DEF` needs 89px of `scrollWidth`, `STRENGTH` 87px.
+   *
+   * The cell is `width: var(--pu-key); overflow: hidden; text-overflow:
+   * ellipsis`, so a `--pu-key` below that is not a tight fit, it is an
+   * ellipsis: at 1280x720, where 6.25vw floored at 84px while `--pu-fs` stayed
+   * at 14, both rows printed as `MAGIC D…` and `STRENGT…`. The type stops
+   * shrinking and the column must not go on shrinking past it.
+   */
+  const LABEL_PX_AT_14 = 89;
+
+  /** `--pu-key`, wherever it is declared in a slice. */
+  const keyToken = (slice: string): string =>
+    /--pu-key:\s*([^;]+);/.exec(slice)?.[1]?.trim() ?? '';
+
+  for (const [w, h] of DESKTOP) {
+    it(`fits MAGIC DEF in the label column at ${w}x${h}`, () => {
+      const fs = evalClamp(typeTokens(beforePhone)[0]![1], w, h);
+      const key = evalClamp(keyToken(beforePhone), w, h);
+      const needs = (LABEL_PX_AT_14 * fs) / 14;
+      expect(key, `--pu-key is ${key}px and MAGIC DEF needs ${needs}px at ${w}x${h}`)
+        .toBeGreaterThanOrEqual(needs);
+    });
+  }
+
+  it('fits it on the phone too, where the type drops to 12px', () => {
+    const fs = lengthPx(typeTokens(phoneBlock)[0]![1], PHONE[0], PHONE[1]);
+    const key = lengthPx(keyToken(phoneBlock), PHONE[0], PHONE[1]);
+    expect(key).toBeGreaterThanOrEqual((LABEL_PX_AT_14 * fs) / 14);
+  });
+
   it('declares no bare font-size a player could not read', () => {
     const tiny: string[] = [];
     for (const m of beforePhone.matchAll(/font-size:\s*([^;]+);/g)) {

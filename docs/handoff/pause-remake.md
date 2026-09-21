@@ -1,6 +1,7 @@
 # Pause, remade on the Until Dawn character screen
 
-**Status:** built on `main`, green, not live and not yet reviewed.
+**Status:** built on `main`, green, **one fix pass applied** (see "Fix pass,
+21 Sep" at the end), not live and not yet reviewed.
 **Owner of this track:** the pause session. **Game:** both — see "Game-aware" below.
 **Approved target:** the tile *"Pause remade on the Until Dawn character screen"*
 in [`docs/target/targets.json`](../target/targets.json); decision **D-021** in
@@ -107,7 +108,8 @@ Both directions are asserted with an **absence** test in
    engine's runtime, not on `BattleState`, so it is handed in through
    `PauseScreenOptions.turnOrder`. Absent (a cutscene, FFX-2, a test) the row is
    not printed. "Nth of N" counts the **actors in the queue**, not the depth the
-   forecast was asked for.
+   forecast was asked for — on **both** sides of the "of" (see the fix pass at
+   the end; the first build counted tiles on one side and actors on the other).
 
 ---
 
@@ -225,3 +227,117 @@ the swipe. No horizontal page scroll anywhere.
   tab's content, the member-tab order) need a yes.
 - **The MUSIC tab's "something new" dot** is never set: there is no unlock feed
   to read. Member tabs carry the dot.
+
+---
+
+## Fix pass, 21 Sep 2026
+
+An adversarial verification of the build above refuted four claims. All four
+were measured on a real browser (its own vite server on 127.0.0.1, Playwright,
+`PYREFLY_BROWSER=gpu`), not read. Each is fixed at its root and pinned by a test
+that fails on the old code with the exact symptom that was photographed. **Game
+case: both** for all four — three are shared plumbing (input, stylesheet, the
+chapter flow) and the fourth is an FFX-only *row* fixed inside an FFX-only
+branch, so nothing about FFX-2 changes either way (AGENTS.md rule 14, CHK-020).
+
+### 1. TURN ORDER printed an impossible position and dropped a live member
+
+`pause/meters.ts`. The numerator was the index of the member's next **tile** in
+the depth-10 forecast (0..9); the denominator was the number of distinct
+**actors** in it. Two scales. A live chapter-1 forecast is ten tiles held by
+four or five actors, so Tidus printed **"5th of 4"** and a run three turns in
+printed **"8th of 5"**; and `findIndex` answering -1 dropped the row entirely,
+so Yuna — slow enough that her next turn is past the tenth tile — was alive on
+the field with the screen refusing to answer a question it had just asked.
+
+Both halves now count **actors, in the order their next turn comes up**, so the
+ordinal can never exceed the count. A member past the end of the forecast is
+told so in words (`After 4 others`) rather than given a number the forecast
+cannot support, and a member who is down says `Out of the queue`
+(AGENTS.md rule 6: the forecast does not know, so the screen does not guess).
+
+New export `turnOrderRow`. Pinned by `pause-remake.test.ts` — "prints *Nth of
+N* on one scale, and gives every member on the field a row" (fails on the old
+code with *`5th of 4: expected 5 to be less than or equal to 4`*) and "never
+tells a downed member she is Nth in a queue she is not in".
+
+### 2. Shift+Tab hid the whole screen instead of walking the strip back
+
+`pause/keys.ts` + `PauseScreen.onClaimedKey`. `KEY_MAP` binds **both** Shift and
+Tab to `triangle`, and `triangle` on this screen hides the chrome. Holding Shift
+latched it, the chrome went down, and the Tab behind it hit
+`if (this.panelsHidden) return;` and died. The affordance only ever looked like
+it worked under a synthetic `press('Shift+Tab')`, which delivers both keys
+inside one frame — which is exactly what the certifying test did, by calling the
+claimed-key handler directly with `{shiftKey:true}` and never running the
+`Input` layer where Shift means `triangle`.
+
+Shift now answers `{ intent: null, suppress: 'triangle' }`: on this screen it is
+a modifier and nothing else, and `onClaimedKey` drops the button before anything
+looks at it. `H` and the pad's own triangle still hide — which is exactly the
+pair the CONTROLS tab lists (`H / Triangle`); Shift was never advertised.
+
+Pinned by "holding Shift does not hide the chrome, and Shift+Tab still walks
+back", which walks the **real `Input`** frame by frame (Shift down, 450 ms of
+frames, then Tab), and by "H and the pad still hide the chrome".
+
+### 3. Two BATTLE STATS labels clipped at 1280x720
+
+`ui/common/pause-screen.css`. `--pu-fs` bottoms out at 14px on every desktop
+window, so the labels keep the width they need whatever the viewport does —
+`MAGIC DEF` is 89px and `STRENGTH` 87px at that floor — while `--pu-key` went on
+shrinking with `6.25vw` and hit its 84px floor at 1280x720. The cell is
+`overflow:hidden; text-overflow:ellipsis`, so both rows printed as `MAGIC D…`
+and `STRENGT…` on the one laptop size in the set.
+
+The floor is now **96px**: a floor that scales with the type, not with the
+window. Pinned by `pause-remake-css.test.ts`, which evaluates `--pu-key` and
+`--pu-fs` at all four desktop sizes and the phone and asserts the column fits
+the measured label; it fails on the old sheet at 1280x720 and nowhere else.
+
+### 4. RESTART ENCOUNTER did nothing on the path a player takes
+
+`BattleScreenFlow.runChapter` — **pre-existing plumbing, not introduced by the
+remake**, but preserved function 2 of `options.json` was not true, so it is
+fixed here. Entered the way a player enters a chapter (board → prep → fight),
+RESTART closed the pause and left the player on chapter select for good; through
+the debug one-shot harness the same row restarted.
+
+`GameFlow.owned` still pointed at the battle screen from the previous run, and
+`main.ts` sends the player back to the board with `goto`, which is not a flow
+navigation and never touched `owned` — so the next run's first `show` read a
+fresh start as *"something navigated out from under us"*, set `handedOver` and
+returned false. Under the debug harness there is no follow-up `goto`, `current`
+still equalled `owned`, and it worked. A run started from outside `start`'s own
+loop now says it owns the stack before `show` looks at `owned`; re-entrant calls
+keep the guard, which is the case it was written for.
+
+The same stale `owned` sat under **every second chapter of a session**, not only
+under RESTART. New file `tests/unit/pause-restart-flow.test.ts` pins both, on
+the same `FakeApp` shape `flow-post-scene.test.ts` uses; both cases fail on the
+old code with *"expected null not to be null"*.
+
+### Verified
+
+`npx tsc --noEmit` clean. Full `npx vitest run`: **216 files, 5223 passed, 2
+skipped, 0 failed.**
+
+Browser pass, own vite server on 127.0.0.1:5743, `PYREFLY_BROWSER=gpu`
+(`.pause-fixes-verify-tmp.mjs`, `.pause-fixes-pairs-tmp.mjs`; server stopped by
+its own listening PID afterwards):
+
+| | measured |
+|---|---|
+| **A** turn order | chapter 1, seed 1, ~9 s of `autoBattle('intended')`, then `P`. Live forecast = 5 distinct actors; Tidus **5th of 5**, Yuna **3rd of 5**, Kimahri **2nd of 5** — every member on the field has a row and no ordinal exceeds its count. |
+| **B** Shift+Tab | `keyboard.down('Shift')`, 450 ms, `press('Tab')`. Stage class stays `pause__stage lb-stage` throughout (never `pause--bare`), and the tab goes Tidus → **Music**: the backwards wrap. |
+| **C** clipping | 0 truncated labels at 1280x720, 1600x900, 2560x1080 and 390x844, measured as `scrollWidth > clientWidth` on every `.pause__k`. At 1280 the column is 96px and every label is 96. |
+| **D** restart | Board → prep → fight, played to **turn 4 / 42 log entries**, Esc → OPTIONS → RESTART. Ends on `battle`, pause closed, **turn 1 / 3 log entries**: a fresh fight, not the old one resumed. |
+
+Captures re-taken under [`docs/screenshots/pause-remake/`](../screenshots/pause-remake/):
+`a-ffx-tidus.png`, `b-ffx-yuna.png`, `size-1280x720.png`, `shift-tab.png`, and
+the target-versus-build pairs `pair-a-ffx-tidus.jpg` and `pair-b-ffx-yuna.jpg`.
+
+### Still not done
+
+`tests/e2e/pause.spec.ts` is still pointed at the old DOM (unchanged by this
+pass), and the three inferred placements still need Bailey's yes.
