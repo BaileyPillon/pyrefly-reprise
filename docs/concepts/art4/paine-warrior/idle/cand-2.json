@@ -1,0 +1,31 @@
+{
+  "width": 571,
+  "height": 1190,
+  "baselineY": 1174,
+  "seed": 1782451695,
+  "prompt": "1girl, paine \\(ff10-2\\), final fantasy x-2, safe, solo, silver hair, white hair, short hair, red eyes, pale skin, serious, expressionless, warrior, black leather outfit, bare shoulders, armor, pauldron, holding sword, \\(long straight silver longsword:1.3\\), skull motif at the ricasso, black belt with skull buckle, gloves, standing, sword point-down in front of her, looking at viewer, stern expression, \\(three-quarter view, not a flat profile:1.2\\), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, greatsword, oversized blade, red blade, flat profile, side view",
+  "cropBox": [
+    79,
+    23,
+    650,
+    1213
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-21T15:41:22.839Z"
+}

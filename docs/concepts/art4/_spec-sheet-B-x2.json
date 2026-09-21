@@ -1,0 +1,391 @@
+{
+  "out": "docs/concepts/art4/sheet-B-x2.png",
+  "title": "Pyrefly Reprise - art4 group B: FFX-2, judge-flagged poses",
+  "subtitle": "Dresspheres, the possessed FFX-2 Bahamut, and the four Vegnagun parts.",
+  "rows": [
+    {
+      "label": "YUNA-WHITE-MAGE - attack",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-white-mage/attack.png",
+          "caption": "yuna-white-mage/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-WHITE-MAGE - cast",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-white-mage/cast.png",
+          "caption": "yuna-white-mage/cast (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/cast/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/cast/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/cast/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-WHITE-MAGE - item",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-white-mage/item.png",
+          "caption": "yuna-white-mage/item (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/item/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/item/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/item/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-WHITE-MAGE - hurt",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-white-mage/hurt.png",
+          "caption": "yuna-white-mage/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-WHITE-MAGE - victory",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-white-mage/victory.png",
+          "caption": "yuna-white-mage/victory (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/victory/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/victory/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/victory/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-WHITE-MAGE - ko",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-white-mage/ko.png",
+          "caption": "yuna-white-mage/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-white-mage/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "PAINE-WARRIOR - idle",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/paine-warrior/idle.png",
+          "caption": "paine-warrior/idle (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/paine-warrior/idle/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/paine-warrior/idle/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/paine-warrior/idle/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "PAINE-DARK-KNIGHT - idle",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/paine-dark-knight/idle.png",
+          "caption": "paine-dark-knight/idle (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/paine-dark-knight/idle/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/paine-dark-knight/idle/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/paine-dark-knight/idle/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "FFX2-BAHAMUT - idle",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/ffx2-bahamut/idle.png",
+          "caption": "ffx2-bahamut/idle (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/idle/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/idle/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/idle/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "FFX2-BAHAMUT - hurt",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/ffx2-bahamut/hurt.png",
+          "caption": "ffx2-bahamut/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "FFX2-BAHAMUT - ko",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/ffx2-bahamut/ko.png",
+          "caption": "ffx2-bahamut/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/ffx2-bahamut/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "VEGNAGUN-TAIL - idle",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-tail/idle.png",
+          "caption": "vegnagun-tail/idle (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/idle/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/idle/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/idle/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "VEGNAGUN-TAIL - hurt",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-tail/hurt.png",
+          "caption": "vegnagun-tail/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "VEGNAGUN-TAIL - ko",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-tail/ko.png",
+          "caption": "vegnagun-tail/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-tail/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "VEGNAGUN-LEG - idle",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-leg/idle.png",
+          "caption": "vegnagun-leg/idle (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-leg/idle/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-leg/idle/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-leg/idle/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "VEGNAGUN-HEAD - idle",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/characters/vegnagun-head/idle.png",
+          "caption": "vegnagun-head/idle (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-head/idle/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-head/idle/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/vegnagun-head/idle/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    }
+  ]
+}
