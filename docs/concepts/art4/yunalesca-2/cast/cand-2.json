@@ -1,0 +1,38 @@
+{
+  "width": 1010,
+  "height": 975,
+  "baselineY": 959,
+  "seed": 1323838203,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, monster girl, silver hair, tentacle hair, yellow eyes, pale skin, blue and black bra, yellow chain, black thong, green sashes, gold bracelets, blue armbands, ornate blue headdress with plumes zigzagging into an M shape, bare feet, medusa, long hair becoming tendrils, arms spread, menacing, larger, summoning energy, glowing magic circle, dark energy swirling, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, long dress, gown, covered shoulders, robe, cape, blonde hair, white dress, skirt",
+  "cropBox": [
+    0,
+    24,
+    1010,
+    999
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "ref": "D:\\Final Fantasy\\public\\art\\characters\\yunalesca-2\\idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-21T15:34:16.486Z"
+}

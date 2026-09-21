@@ -1,0 +1,175 @@
+{
+  "out": "docs/concepts/art4/sheet-B-bosses.png",
+  "title": "Pyrefly Reprise - art4 group B: FFX bosses, judge-flagged poses",
+  "subtitle": "Jecht/ko is here, not in the party sheet: cast.json kind=boss, facing=left -- he is the enemy at Dream's End.",
+  "rows": [
+    {
+      "label": "YUNALESCA-2 - cast",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-2/cast.png",
+          "caption": "yunalesca-2/cast (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-2/cast/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-2/cast/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-2/cast/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNALESCA-3 - attack",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-3/attack.png",
+          "caption": "yunalesca-3/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-3/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-3/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-3/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNALESCA-3 - cast",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yunalesca-3/cast.png",
+          "caption": "yunalesca-3/cast (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-3/cast/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-3/cast/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yunalesca-3/cast/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YU-PAGODA - attack",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 340,
+      "items": [
+        {
+          "path": "public/art/characters/yu-pagoda/attack.png",
+          "caption": "yu-pagoda/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YU-PAGODA - cast",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 340,
+      "items": [
+        {
+          "path": "public/art/characters/yu-pagoda/cast.png",
+          "caption": "yu-pagoda/cast (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/cast/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/cast/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/cast/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YU-PAGODA - hurt",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 340,
+      "items": [
+        {
+          "path": "public/art/characters/yu-pagoda/hurt.png",
+          "caption": "yu-pagoda/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yu-pagoda/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "JECHT - ko",
+      "kind": "character",
+      "cellHeight": 340,
+      "cellWidth": 340,
+      "items": [
+        {
+          "path": "public/art/characters/jecht/ko.png",
+          "caption": "jecht/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/jecht/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/jecht/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/jecht/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    }
+  ]
+}

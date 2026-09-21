@@ -1,0 +1,199 @@
+{
+  "out": "docs/concepts/art4/sheet-B-party.png",
+  "title": "Pyrefly Reprise - art4 group B: FFX party, judge-flagged poses",
+  "subtitle": "yuna/hurt and tidus/ko are hash-protected (docs/target/approved-hashes.json) and were skipped, not re-rendered.",
+  "rows": [
+    {
+      "label": "LULU - attack",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/lulu/attack.png",
+          "caption": "lulu/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "LULU - hurt",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/lulu/hurt.png",
+          "caption": "lulu/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "LULU - ko",
+      "kind": "character",
+      "cellHeight": 260,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/lulu/ko.png",
+          "caption": "lulu/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/lulu/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "RIKKU - cast",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/rikku/cast.png",
+          "caption": "rikku/cast (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/cast/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/cast/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/cast/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "RIKKU - hurt",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/rikku/hurt.png",
+          "caption": "rikku/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "RIKKU - ko",
+      "kind": "character",
+      "cellHeight": 260,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/rikku/ko.png",
+          "caption": "rikku/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/rikku/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "KIMAHRI - attack",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/kimahri/attack.png",
+          "caption": "kimahri/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/kimahri/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/kimahri/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/kimahri/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "KIMAHRI - victory",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/kimahri/victory.png",
+          "caption": "kimahri/victory (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/kimahri/victory/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/kimahri/victory/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/kimahri/victory/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    }
+  ]
+}
