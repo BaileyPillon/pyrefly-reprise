@@ -8,3 +8,17 @@ export interface ReportSummary {
 export declare function readReports(dir: string, policy?: unknown): ReportSummary[];
 export declare function qualityLine(reports: ReportSummary[], liveSha: string | null | undefined): string;
 export declare function lastDeployed(root: string): { sha: string | null; bundle: string | null; at: string } | null;
+
+/** The `ownerOverride` block a pending marker carries (critic/RUBRIC.md section 10). */
+export interface OwnerOverride {
+  words: string;
+  date: string;
+  report: string | null;
+  changedArea: string | null;
+}
+
+/** Reads a pending marker file's `ownerOverride` block; `null` if absent or unreadable. */
+export declare function readOwnerOverride(markerPath: string): OwnerOverride | null;
+
+/** The status line for a marker deployed under an owner override. */
+export declare function formatOwnerOverrideLine(override: Pick<OwnerOverride, 'words'>): string;

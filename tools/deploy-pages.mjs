@@ -3,7 +3,7 @@
  * Build and deploy Pyrefly Reprise to GitHub Pages, in one command.
  *
  *   node tools/deploy-pages.mjs [--skip-tests] [--allow-dirty] [--dry-run]
- *                              [--message="text"]
+ *                              [--message="text"] [--owner-override="words"]
  *
  * Flags:
  *   --skip-tests   skip `npx tsc --noEmit` and `npx vitest run`
@@ -14,6 +14,17 @@
  *   --message=     extra free-text appended to the gh-pages commit message
  *   --claim=milestone  this deploy asks for finished-milestone acceptance
  *   --minimum=deep     raise the planned review (nothing can lower it)
+ *   --owner-override="<the owner's own words>"  ship past the "no passing
+ *                  deep report" refusal below. Off by default; requires at
+ *                  least 8 characters of the owner's own words (a bare flag
+ *                  or a too-short value is refused before anything runs).
+ *                  Nothing else is relaxed — tsc/vitest, the dirty-tree check,
+ *                  the artifact manifest and the byte-for-byte live
+ *                  verification all still run and can still fail the deploy.
+ *                  Every review obligation stays pending: an override ships
+ *                  the build, it never settles a review (critic/RUBRIC.md
+ *                  section 10, "Owner override of the deploy gate"). An agent
+ *                  never passes this flag on its own initiative.
  *
  * Pipeline: preflight -> `vite build` into dist-release/ -> hash and
  * decode-check every shipped file into `artifact-manifest.json` -> plan the
@@ -93,6 +104,96 @@ function deepEvidenceFor(mainSha) {
   return null;
 }
 
+/**
+ * The newest deep or milestone report on record for this commit, whatever its
+ * verdict — informational only, used to annotate an owner override with what
+ * the critic actually found. Never used to decide whether the override
+ * applies: `resolveDeepGate` decides that from `deepEvidenceFor`, which
+ * requires a validated PASS. Pure given the filesystem it reads.
+ */
+export function latestDeepReportFor(root, mainSha) {
+  let best = null;
+  for (const dir of ['reviews', 'rounds']) {
+    const full = join(root, 'critic', dir);
+    if (!existsSync(full)) continue;
+    for (const f of readdirSync(full).filter((n) => n.endsWith('.json'))) {
+      let report;
+      try { report = JSON.parse(readFileSync(join(full, f), 'utf8')); } catch { continue; }
+      const sha = report.build?.mainSha;
+      if (!sha || !(sha.startsWith(mainSha) || mainSha.startsWith(sha))) continue;
+      if (!['deep', 'milestone'].includes(report.review)) continue;
+      const date = report.date ?? '';
+      if (!best || date > best.date) best = { path: `critic/${dir}/${f}`, changedArea: report.verdicts?.changedArea ?? null, date };
+    }
+  }
+  return best ? { path: best.path, changedArea: best.changedArea } : null;
+}
+
+const OWNER_OVERRIDE_MIN_LENGTH = 8;
+
+/**
+ * Validate the raw `--owner-override` flag value from `parseArgs`. Absent
+ * means no override was requested (`words: null`). A bare flag (no value) or
+ * fewer than `OWNER_OVERRIDE_MIN_LENGTH` characters after trimming is
+ * refused: only the owner's own words authorise shipping past the deep-review
+ * gate (critic/RUBRIC.md section 10, "Owner override of the deploy gate").
+ */
+export function parseOwnerOverride(raw) {
+  if (raw === undefined) return { ok: true, words: null };
+  if (raw === true || typeof raw !== 'string') {
+    return { ok: false, error: '--owner-override requires the owner\'s own words as its value (e.g. --owner-override="Bailey: ship it now"), not a bare flag' };
+  }
+  const words = raw.trim();
+  if (words.length < OWNER_OVERRIDE_MIN_LENGTH) {
+    return { ok: false, error: `--owner-override needs at least ${OWNER_OVERRIDE_MIN_LENGTH} characters of the owner's own words, got ${JSON.stringify(raw)}` };
+  }
+  return { ok: true, words };
+}
+
+/**
+ * What to do when a shared-system change has no validated deep report with a
+ * passing changed area for this commit. Pure: the caller does the actual
+ * fail()/log() side effects. Without `ownerOverrideWords` this is always a
+ * hard refusal — nothing here can settle a review, it only decides whether
+ * the deploy is allowed to continue past the refusal.
+ */
+export function resolveDeepGate({ deepBeforeDeploy, evidence, ownerOverrideWords }) {
+  if (!deepBeforeDeploy || evidence) return { action: 'proceed' };
+  if (!ownerOverrideWords) {
+    return {
+      action: 'fail',
+      message: 'this change touches a shared system, so it needs a deep review of the production candidate BEFORE it goes public, and no validated deep report with a passing changed area exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md, "When the critic runs")',
+    };
+  }
+  return { action: 'proceed-with-warning', warningLines: formatOwnerOverrideWarning(ownerOverrideWords) };
+}
+
+/** The loud warning block printed (and, on --dry-run, previewed) for an owner override. */
+export function formatOwnerOverrideWarning(words) {
+  const bar = '!'.repeat(78);
+  return [
+    bar,
+    'WARNING: OWNER OVERRIDE of the deploy gate',
+    `  "${words}"`,
+    '  No validated deep report with a passing changed area exists for this commit.',
+    '  The owner has chosen to ship anyway. Nothing else is relaxed, and this does',
+    '  not settle any review: every obligation (live, focused, deep, milestone)',
+    '  stays PENDING, and the next candidate still has to address the open',
+    '  changed-area issues.',
+    bar,
+  ];
+}
+
+/**
+ * The `docs/deploys.log` line for one run. `overrideUsed` appends a trailing
+ * `override=owner` field so a build shipped past the deep-review gate is
+ * visible in the log itself, not only in `critic/pending/<sha>.json`.
+ */
+export function formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed = false }) {
+  const base = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=${status}`;
+  return `${overrideUsed ? `${base}\toverride=owner` : base}\n`;
+}
+
 function printPlan(plan) {
   log(`critic plan: ${plan.review.toUpperCase()} review; this build will owe ${plan.obligations.join(' + ')}`);
   for (const reason of plan.reasons) log(`  because: ${reason}`);
@@ -138,6 +239,10 @@ function fail(msg) {
   console.error(`[deploy] FAIL: ${msg}`);
   process.exit(1);
 }
+
+const OWNER_OVERRIDE_PARSE = parseOwnerOverride(args['owner-override']);
+if (!OWNER_OVERRIDE_PARSE.ok) fail(OWNER_OVERRIDE_PARSE.error);
+const OWNER_OVERRIDE_WORDS = OWNER_OVERRIDE_PARSE.words;
 
 /** Run a real executable (git.exe, gh.exe) with an argv array — no shell, so
  * arguments with spaces/colons (commit messages) don't need escaping. */
@@ -255,7 +360,20 @@ async function main() {
   if (DRY_RUN) {
     // Tracked files only: the shipped art and audio are compared once the
     // build exists, so the real plan can only be deeper than this one.
-    printPlan(planForRepo({ root: ROOT, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped }));
+    const dryPlan = planForRepo({ root: ROOT, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped });
+    printPlan(dryPlan);
+    if (dryPlan.deepBeforeDeploy) {
+      const evidence = deepEvidenceFor(mainSha);
+      const gate = resolveDeepGate({ deepBeforeDeploy: true, evidence, ownerOverrideWords: OWNER_OVERRIDE_WORDS });
+      if (gate.action === 'fail') {
+        log(`DRY RUN: would refuse to deploy — ${gate.message}`);
+      } else if (gate.action === 'proceed-with-warning') {
+        for (const line of gate.warningLines) log(line);
+        log('DRY RUN: would proceed under the owner override above');
+      } else {
+        log(`DRY RUN: deep evidence on record for this candidate: ${evidence}`);
+      }
+    }
     log(
       `--dry-run: stopping after the dirty-tree check (${dirty.buildRelevant.length} build-relevant, ${dirty.fleetNoise.length} fleet-noise). Nothing was built, pushed or deployed.`,
     );
@@ -314,14 +432,30 @@ async function main() {
     : null;
   const plan = planForRepo({ root: ROOT, manifest, previousManifest, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped });
   printPlan(plan);
+  let ownerOverrideUsed = false;
+  let ownerOverrideReportPath = null;
+  let ownerOverrideChangedArea = null;
   if (plan.deepBeforeDeploy) {
     const evidence = deepEvidenceFor(mainSha);
-    if (!evidence) {
-      fail(
-        `this change touches a shared system, so it needs a deep review of the production candidate BEFORE it goes public, and no validated deep report with a passing changed area exists for ${mainSha} under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md, "When the critic runs")`,
+    const gate = resolveDeepGate({ deepBeforeDeploy: true, evidence, ownerOverrideWords: OWNER_OVERRIDE_WORDS });
+    if (gate.action === 'fail') {
+      fail(`${gate.message} for ${mainSha}`);
+    } else if (gate.action === 'proceed-with-warning') {
+      for (const line of gate.warningLines) log(line);
+      const latest = latestDeepReportFor(ROOT, mainSha);
+      ownerOverrideUsed = true;
+      ownerOverrideReportPath = latest ? latest.path : null;
+      ownerOverrideChangedArea = latest ? latest.changedArea : null;
+      log(
+        latest
+          ? `nearest report on record for ${mainSha}: ${latest.path} (changed area ${latest.changedArea ?? 'missing'}) — proceeding under owner override`
+          : `no deep or milestone report at all exists for ${mainSha} — proceeding under owner override`,
       );
+    } else {
+      log(`deep evidence on record for this candidate: ${evidence}`);
     }
-    log(`deep evidence on record for this candidate: ${evidence}`);
+  } else if (OWNER_OVERRIDE_WORDS) {
+    log('--owner-override was set but this candidate does not need deep evidence before deploying: nothing to override');
   }
 
   // ---- 3. Publish dist-release as a fresh gh-pages repo --------------------
@@ -431,7 +565,7 @@ async function main() {
 
   // ---- 6. Log and summarize ---------------------------------------------
   const status = 'ok';
-  const logLine = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=${status}\n`;
+  const logLine = formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed: ownerOverrideUsed });
   mkdirSync(dirname(LOG_PATH), { recursive: true });
   if (!existsSync(LOG_PATH)) {
     writeFileSync(
@@ -458,7 +592,7 @@ async function main() {
     archiveMarker(PENDING_DIR, CLEARED_DIR, content);
     log(`build ${m.mainSha} was replaced: its marker moved to critic/cleared/ with what was never verified`);
   }
-  const marker = buildPendingMarker({
+  const baseMarker = buildPendingMarker({
     mainSha,
     bundle: bundleHash,
     deployedAt: isoNow,
@@ -469,6 +603,12 @@ async function main() {
     carriedDeep,
     liveArtifact: { result: liveArtifact.result, checked: liveArtifact.checked, at: isoNow },
   });
+  // An override ships the build, it never settles a review: every obligation
+  // above stays exactly as planned. This only records, on the marker itself,
+  // that the owner's own words shipped it past the deep-review refusal.
+  const marker = ownerOverrideUsed
+    ? { ...baseMarker, ownerOverride: { words: OWNER_OVERRIDE_WORDS, date: isoNow, report: ownerOverrideReportPath, changedArea: ownerOverrideChangedArea } }
+    : baseMarker;
   const markerPath = writePendingMarker(PENDING_DIR, marker);
   log(`critic-pending marker written: ${markerPath}`);
   // A focused or deep review made on the production candidate before this
@@ -491,6 +631,11 @@ async function main() {
   console.log(rule);
 }
 
-main().catch((err) => {
-  fail(err.stack || err.message || String(err));
-});
+// Guarded so tests can import this module's pure helper functions (parseOwnerOverride,
+// resolveDeepGate, formatOwnerOverrideWarning, formatDeployLogLine, latestDeepReportFor)
+// without triggering a real deploy — same pattern as critic-status.mjs / critic-plan.mjs.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    fail(err.stack || err.message || String(err));
+  });
+}

@@ -28,6 +28,17 @@ export function loadPolicy(root) {
   return JSON.parse(readFileSync(join(root, 'critic', 'policy.json'), 'utf8'));
 }
 
+/**
+ * The owner-override policy block (`critic/policy.json` `ownerOverride`,
+ * RUBRIC section 10). Only Bailey's own quoted words, passed as
+ * `--owner-override` to `tools/deploy-pages.mjs`, let a build ship past the
+ * "no passing deep report" refusal; it never settles an obligation and never
+ * changes a report's verdict. Defaults closed if the block is ever missing.
+ */
+export function ownerOverridePolicy(policy) {
+  return policy.ownerOverride ?? { allowed: false, requiresOwnerWords: true, settlesObligations: false };
+}
+
 /** `**` crosses folders, `*` stays inside one path segment. */
 export function globToRegExp(glob) {
   const DOUBLE = '<<double-star>>';
