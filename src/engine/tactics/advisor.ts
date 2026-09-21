@@ -16,7 +16,15 @@
  *
  * ## How a suggestion is chosen
  *
- * 1. **The chapter's own line wins when this actor can press it.**
+ * 0. **Nothing that does nothing.** Every row the card is about to offer —
+ *    the chapter's line included — has its simulated resolution read first,
+ *    and one that changes nothing measurable on this board goes behind every
+ *    row that changes something ({@link changesNothing}). A buff already on
+ *    everyone, a cure with nothing to cure, a Break this boss is immune to: the
+ *    advisor moves on rather than spending the player's turn on it. This is a
+ *    re-ordering, not a score: the ranking below is untouched.
+ * 1. **The chapter's own line wins when this actor can press it — and does
+ *    something.**
  *    `recommendedCommand` runs the shipped `intendedStrategy` read-only through
  *    `guide.ts`'s `stateOnlyEngine`, so the advisor's top row and the
  *    auto-battler can never disagree about *what* to do. The advisor's job on
@@ -102,10 +110,12 @@ import {
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
 import { floorNote } from './advisor-floor.ts';
+import { changesNothing } from './advisor-guard.ts';
 import { menuChipFor, onTheMenu } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
+export { changesNothing } from './advisor-guard.ts';
 
 // ------------------------------------------------------------------ the view
 
@@ -945,12 +955,28 @@ export function buildAdvisorView(
   );
   if (legal.length === 0) return null;
 
-  const shown: Candidate[] = [legal[0]!];
+  // **The state guard.** Anything whose simulated resolution changes nothing
+  // measurable on this board goes behind everything that does something — the
+  // chapter's own line included, which is the whole of PR-0006 ({@link
+  // changesNothing}). Order inside each half is untouched, so this re-orders
+  // the ranking without touching the scoring: the tactic still outranks the
+  // simulated rows, and the simulated rows still sit in score order. When
+  // *nothing* on the menu does anything the list stands as it was, because
+  // "there is nothing useful to press" is still answered with the best of what
+  // is offered rather than with an empty card.
+  const useful: Candidate[] = [];
+  const inert: Candidate[] = [];
+  for (const c of legal) {
+    (changesNothing(decision.actorId, c.suggestion.command, c.outcome) ? inert : useful).push(c);
+  }
+  const ordered = useful.length > 0 ? [...useful, ...inert] : legal;
+
+  const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */
   let refused: { risk: ReviveRisk; fallenId: CombatantId } | null = null;
   if (shown[0]!.suggestion.isSwitch) {
     // "Switch" is not an answer to "what do I press" — show the best move too.
-    const alternative = legal.find((c) => !c.suggestion.isSwitch);
+    const alternative = ordered.find((c) => !c.suggestion.isSwitch);
     if (alternative) shown.push(alternative);
   } else if (!isRevive(shown[0]!)) {
     // An ally on the floor is the question the player is actually asking, and
@@ -963,7 +989,7 @@ export function buildAdvisorView(
     // replaced read the risk off the first body on the floor whether or not a
     // raise had been offered at all, which is how a Zombie caution ended up
     // over Hastega, Mighty Guard and a thrown Poison Fang.
-    const raise = legal.find(isRevive);
+    const raise = ordered.find(isRevive);
     if (raise) {
       const raisedId = raise.outcome?.revives[0] ?? raise.suggestion.targetId ?? '';
       const back = raise.outcome ? restoredHp(raise.outcome, raisedId) : undefined;

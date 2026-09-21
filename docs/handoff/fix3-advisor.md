@@ -350,3 +350,135 @@ not on `frames()`** — `__pyrefly.frames(n)` alone never opens a decision,
    speaks for that body only. `buildAdvisorView` considers one raise per
    decision (`legal.find(isRevive)`), which is ranking, not the note — left
    alone deliberately in a pre-release pass.
+
+---
+
+# Pass 4 — PR-0006: the advisor stops recommending moves that do nothing
+
+New file: `src/engine/tactics/advisor-guard.ts`. New test:
+`tests/unit/advisor-noop-guard.test.ts`. Changed: `src/engine/tactics/advisor.ts`
+(one import, one re-export, one re-ordering in `buildAdvisorView`, and rule 0 in
+the header). `src/ui/common/MoveAdvisor.ts` is untouched — the card was never
+the problem here.
+
+## Game case — both
+
+**Both games** [AGENTS.md rule 14; `critic/CHECKS.md` CHK-020]. This is shared
+advisor plumbing: one card, two engines, and "do not tell the player to spend a
+turn on nothing" is a property of *advice*, not of FFX's CTB or FFX-2's ATB.
+The critic measured the FFX-2 half in Chapter 4 (Shell) and the FFX half in
+Chapter 1 (Hastega), and the new test asserts it over both — the seeded
+whole-fight runs cover `seymour-flux` (FFX) and `ffx2-bahamut` (FFX-2), and the
+behavioural pin covers `braskas-final-aeon` (FFX) and `ffx2-vegnagun-shuyin`
+(FFX-2). Nothing here reads a game id.
+
+## The ticket
+
+> The advisor repeats the chapter's scripted line whatever the board says: 301
+> of 301 picks were "Shell → the party", Yuna cast Shell on all 13 turns for
+> one landed Shell, the guided chapter 4 route took 9:05 against 2:22 blind.
+
+## What changed
+
+One guard, read off the **simulation** rather than the ability record:
+`changesNothing(actorId, command, outcome)` in `advisor-guard.ts`. It answers
+"did this previewed action change anything measurable on *this* board" — HP in
+either direction, a kill, a revive, a status added or removed, an MP transfer
+that is not the actor's own cost, a gauge, a form change, anything else the
+engine emitted. The default is **false** (it did something): only an outcome
+the preview can show to be empty is called empty, which is the safe direction
+for a rule that removes advice.
+
+`buildAdvisorView` then partitions the already-legal candidates into *useful*
+and *inert* and puts the inert half behind the useful half — the chapter's own
+line included, which is the whole ticket. **The scoring is untouched**: order
+inside each half is exactly what it was, so the tactic still outranks the
+simulated rows and the simulated rows still sit in score order. When nothing on
+the menu does anything the list stands as it was, so the card can never go
+empty.
+
+Two things it deliberately does **not** judge, both settled by measurement, not
+by argument:
+
+* **Kinds a preview cannot price** — `switch`, `summon`, `dismiss`,
+  `spherechange`, `defend`, `trigger`, `escape`. `simulate.ts` resolves the
+  action and nothing after it, so for these an empty outcome is not evidence of
+  no effect. Measured: a guided replay of Chapter 1 over twelve seeds flagged
+  76 flat-resolving picks and **every one** was a summon, a switch, Auron's
+  Talk or a Grand Summon. Nothing else in either chapter resolves to nothing.
+* **A whiff.** The first cut counted a previewed miss as nothing. A preview
+  answers every *branch* roll at its median, so a miss means hit chance ≤ 50 —
+  a coin flip, not an impossibility. With whiffs counted, Auron's line at
+  Yunalesca was demoted to a Remedy 20 times over twelve guided seeds and the
+  chapter went **11 wins in 12 → 9**. Removed, and pinned by its own test.
+
+## Measured — guided routes, twelve seeds, before and after
+
+"Guided" = the route the ticket describes: at every decision the advisor is
+asked and **its own top row is the command submitted**. `intendedStrategy`
+replays never visit the boards a card-follower reaches, which is how this
+shipped.
+
+| Chapter | before | after | no-op lines the guard caught |
+|---|---|---|---|
+| 1 Seymour Flux (FFX) | 7W 5L, 501 decisions | 7W 5L, 501 decisions | 0 |
+| 2 Yunalesca (FFX) | 11W 1L, 2 096 decisions | 11W 1L, 2 096 decisions | 0 |
+| 3 Braska's Final Aeon (FFX) | 0W, 9 defeat / 3 stalemate | 0W, 8 defeat / 4 stalemate | 198 (`Slow` on an already-slowed target → Cheer / Attack / X-Potion) |
+| 4 Bahamut (FFX-2) | 12W, 570 decisions | 12W, 570 decisions | 0 |
+| 5 Vegnagun → Shuyin (FFX-2) | 12W, 267 decisions | 12W, 279 decisions | 8 (`Pray` on a party at full HP → Light Curtain) |
+
+## What this does and does not settle about PR-0006
+
+**It does not reproduce at engine level, and that is the finding.** Driving
+Chapter 4 from `buildAdvisorView` itself — the same function the card renders —
+the guided route already resolved **12 victories in 12 seeds** *before* this
+change, in 45-50 decisions, with 11-14 distinct picks per fight and Shell
+appearing exactly once (Yuna's first turn; her second is Protect, her third a
+Cure). The advisor never repeated a no-op in Chapter 4 on any of the 570
+decisions measured, and the chapter's own line never returned one either: the
+tactic's Shell branch is already gated on `!has(c, 'shell')`
+(`ffx2-bahamut.ts:208`).
+
+So the guard is the right fix for the *class* of defect, and it demonstrably
+fires 226 times across the five chapters' guided routes — but the 301-identical-
+samples capture in `critic/rounds/round-06/evidence/ch4/supp-win-1600x900.json`
+is **not** produced by `buildAdvisorView`, and whatever produced it is still
+there. The two candidates left, in order:
+
+1. **The capture sampled one stalled decision.** 301 samples over 545 s is one
+   read every 1.8 s, against only 61 engine turns; a keyboard route that cannot
+   reach `White Magic → Shell` through the submenus leaves the same decision
+   open, and the card is *correct* to keep printing the same row while it is.
+   That would explain 301 samples / 1 distinct, 9:05 and no resolution all at
+   once, and it is a defect in the route, not in the advice.
+2. **The card holding a stale view.** Checked and not reproduced here:
+   `MoveAdvisor.showDecision` recomputes on every decision and both HUDs pass
+   the live state (`FFXBattleHud.ts:555`, `FFX2BattleHud.ts:739`). PR-0055
+   already refuted the actor-binding half from the browser side.
+
+Whoever runs the next deep review should re-take that capture with the pressed
+keys logged next to the sampled label. Until then PR-0006's *consequence*
+(9:05, unresolved) is unexplained by anything in this track's files.
+
+## Also measured, not in this ticket
+
+**Chapter 3's guided route never wins.** Braska's Final Aeon over twelve seeds
+ends 0W either side of this change (9 defeats / 3 stalemates before, 8/4 after);
+the guard moves which seed lands where and not whether the route can win. That
+is a separate, older defect — a player who follows the card through Chapter 3
+loses — and it belongs in its own ticket.
+
+## Verified
+
+* `npx tsc --noEmit` clean.
+* `tests/unit/advisor-noop-guard.test.ts` — 9 tests: the FFX-2 Shell board the
+  critic measured (lands once, then resolves empty, then is not on the card),
+  the switch and summon exemptions, the whiff, the behavioural pin in both
+  games, no no-op pick over 12 seeds × the whole fight in Chapters 1 and 4, and
+  Chapter 4's guided route reaching an outcome on every seed with more than
+  three distinct picks.
+* The nine existing advisor suites (122 tests) unchanged and green:
+  `advisor`, `advisor-floor`, `advisor-note`, `advisor-ownership`,
+  `advisor-menu`, `advisor-forecast`, `advisor-simulate`, `ui-move-advisor`,
+  `guide-advisor-target-agreement`.
+* `node tools/orphans.mjs` — `advisor-guard.ts` has an importer.
