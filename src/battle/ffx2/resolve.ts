@@ -123,9 +123,30 @@ function targetForHit(
   return living[0];
 }
 
-/** Apply an ability's status riders to one target. §2.6a "Status 1". */
+/**
+ * Apply an ability's status riders to one target. §2.6a "Status 1".
+ *
+ * **`extra.statusRollOneOf`** — a documented one-off key
+ * (`docs/CONTRACTS.md`: "Genuinely one-off scripted rules … go in
+ * `AbilityDef.extra`, with the keys documented in the data file that sets
+ * them"). Set, the loop below rolls **exactly one** of the listed applications
+ * instead of rolling each independently. Its only caller is Logos' Russian
+ * Roulette, whose canon is one of six outcomes, not up to six at once
+ * [`src/data/ffx2/enemies/leblanc-syndicate-abilities.ts`,
+ * `research/ffx2-leblanc-syndicate.md` §4.3]. FFX-2 only: no FFX ability sets
+ * the key and no FFX code path reads it.
+ *
+ * The draw is taken at the **end** of the step it belongs to — after the hit,
+ * crit and randomiser rolls the caller already made — so no existing replay at
+ * the same seed moves (`docs/CONTRACTS.md`, engine agents, rule 1).
+ */
 function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef): void {
-  for (const application of ability.statusEffects) {
+  const rollOneOf = ability.extra?.['statusRollOneOf'] === true && ability.statusEffects.length > 1;
+  const applications = rollOneOf
+    ? [ctx.rng.pick([...ability.statusEffects])]
+    : ability.statusEffects;
+
+  for (const application of applications) {
     const resist = target.immunities[application.status] ?? 0;
     if (resist >= 255) continue;
     const chance =
@@ -143,6 +164,17 @@ function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, abil
       instance,
     });
     if (application.status === 'ko') applyHpDelta(ctx, target, target.hp, user.id);
+    // **Eject removes the character from the battle.** `eject` has always been
+    // a live `FFX2StatusId`, has always been in `INFINITE_STATUSES` and has
+    // always had a HUD chip (`statusChips.ts: eject: 'EJT'`) — but nothing ever
+    // set `removed`, so an ejected girl kept an EJT badge and kept playing.
+    // (`resolve.ts`'s own "X-2 has no eject" note below is true of *Charon*,
+    // not of the status.) `targeting.ts::isTargetable`, `engine.ts`'s `party()`,
+    // `gauges.ts` and `results.ts` all already test `!u.removed`, so removal,
+    // untargetability, a frozen gauge and "all three gone = defeat" fall out
+    // with no further work; `revive()` above already clears the flag. FFX-2
+    // only: `eject` is settable by no FFX ability [§4.3, and the absence test].
+    if (application.status === 'eject') target.removed = true;
   }
 
   if (ability.flags.includes('removes-statuses')) {
@@ -163,7 +195,7 @@ export function resolveAbility(
   user: Ffx2Unit,
   ability: AbilityDef,
   requested: readonly CombatantId[],
-  options: { multiTarget?: boolean; isCounter?: boolean; hitsOverride?: number } = {},
+  options: { multiTarget?: boolean; isCounter?: boolean; hitsOverride?: number; inSequence?: boolean } = {},
 ): number {
   const pool = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
   if (pool.length === 0) return 0;
@@ -384,6 +416,32 @@ export function resolveAbility(
         hitCount: 1,
       });
       applyHpDelta(ctx, user, cost, user.id);
+    }
+  }
+
+  // **`extra.sequence`** — one action, several stages, one turn.
+  //
+  // A documented one-off key (`docs/CONTRACTS.md`, as for `statusRollOneOf`
+  // above): the named abilities resolve in order from the same user,
+  // immediately, as part of this action. Its only caller is the Leblanc
+  // Syndicate's **No Love Lost**, which §4.5 of
+  // `research/ffx2-leblanc-syndicate.md` describes as one loud, timed,
+  // three-beat set piece — 8 constant hits, then a party-wide constant, then a
+  // fraction of one character's remaining HP. Three formulas cannot be one
+  // `AbilityDef`, and spreading them over three enemy turns would destroy the
+  // set piece.
+  //
+  // `inSequence` is the recursion guard: a `sequence` on a sequenced ability is
+  // ignored. `chain.ts::registerHit()` is target-keyed, so each stage's
+  // chaining is already correct without further work. FFX-2 only — no FFX
+  // ability sets the key and no FFX code path reads it.
+  const sequence = options.inSequence ? undefined : ability.extra?.['sequence'];
+  if (Array.isArray(sequence) && user.alive) {
+    for (const nextId of sequence) {
+      if (typeof nextId !== 'string') continue;
+      const stage = ctx.abilities.get(nextId);
+      if (!stage) continue;
+      total += resolveAbility(ctx, user, stage, [], { ...options, inSequence: true });
     }
   }
 

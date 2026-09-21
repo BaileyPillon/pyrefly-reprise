@@ -280,6 +280,12 @@ export function clearAfterBattle(c: FFX2Combatant): void {
   for (const key of Object.keys(c.statuses) as StatusId[]) {
     if (!PERSISTS_AFTER_BATTLE.includes(key)) delete c.statuses[key];
   }
+  // **Eject is a battle-long removal, not a wound.** `eject` is not in
+  // `PERSISTS_AFTER_BATTLE`, so the status is already cleared above — the flag
+  // `resolve.ts::applyRiders` sets alongside it has to go with it, or a girl
+  // ejected in one link of a chained encounter would still be missing from the
+  // next [research/ffx2-leblanc-syndicate.md §4.3]. FFX-2 only.
+  c.removed = false;
 }
 
 /** Can this unit act at all? Silence, Curse and Itchy gate *commands*, not the gauge. */
