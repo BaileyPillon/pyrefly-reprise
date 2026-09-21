@@ -32,7 +32,11 @@ reported, not engineered: no boss number was touched
 (`memory/boss-side-fix-needs-measured-options`).
 
 The third row is the whole of the gap and it is **one `[estimate]` in a file
-this track does not own** — see the open question in §6.
+this track does not own** — see the open question in §6. That `[estimate]` was
+taken back to the sources on 2026-09-21 and **they do not settle it**: §7.5 has
+no Target column and nothing else in the corpus rules on Yuna's Nul spells, so
+the row stays single-target and the +10 points is a decision for Bailey rather
+than a correction anyone may make. Evidence table in §6, question 1.
 
 ---
 
@@ -186,23 +190,48 @@ member of `ImmunityFlag`; left out rather than widening a union).
 
 ## 6. Questions for Bailey
 
-1. **The Nul spells are single-target, and in FFX they are not.**
+1. **The Nul spells are single-target. The sources do not say whether that is
+   wrong — so nothing was changed, and this is now a decision, not a fix.**
    `src/data/ffx/abilities/whitemagic-protect.ts` ships `nulblaze` /
    `nulfrost` / `nulshock` / `nultide` as `targeting: 'single-ally'`, on its own
    explicit comment: `[estimate — no Target column in §7.5; standard FFX
-   convention]`. In FFX one cast nullifies the next hit of that element **for
-   the whole party**. Here that is not a detail: Seymour's rotation is fixed and
+   convention]`. Here that is not a detail: Seymour's rotation is fixed and
    published and he picks a *random* party member, so a single-target Nul covers
    one third of the risk. Measured, same tactic, same forty seeds, nothing else
    changed: **32 wins → 36 wins (80 % → 90 %)**, act-three losses 3 → 1.
-   The file belongs to the FFX player-data agent and the change moves every FFX
-   chapter, so nothing was touched. **May it be corrected?**
+
+   **Settled from the sources, 2026-09-21** (AGENTS.md rule 6; searched by the
+   FFX player-data owner, not answered from memory). The corpus is **silent**:
+
+   | Source checked | What it says about the Nul spells' target |
+   |---|---|
+   | `research/ffx-combat-core.md` §7.5, Yuna's Wht Magic, rows 46-49 | Rank 2, MP 2, "one charge, chance 254". **The table has no Target column at all** |
+   | §7.1, Tidus, for contrast | *Does* have a Target column: Haste/Slow "1", Hastega/Slowga "either party … whole party". So the corpus records party-wide targets where it knows them, and §7.5 records none |
+   | §4.2 full status table, Nul row | The *effect* only — "Nullify **one** attack of the matching element, consuming one stack. Beats Absorb". Nothing about how many allies one cast reaches |
+   | §5.8 Ronso Rage, **Mighty Guard** | The one sourced whole-party Nul application in the corpus — "whole party … Protect + Shell (254) + one charge of each of the four Nuls". It is a **Rage**, not Yuna's spell, so it does not transfer |
+   | `research/ffx-seymour-anima-macalania.md` §7 row 5 | Prescribes the Nul line — "single-use, consumed by the matching element" — and is silent on party vs single |
+   | `research/data/abtable.md`, `research/data/standard-hd-graph.json` | Command rows 46-49 and sphere-grid nodes 337-340 only. No target field in either |
+   | §11 recorded conflicts, and the closing Verification log | No entry for Nul targeting |
+
+   So the +10 points cannot be claimed as a fidelity fix; on the evidence we
+   hold it would be an **authored change**. Nothing was touched, `targeting`
+   stays `single-ally`, the MP costs and the message ids are untouched, and the
+   reasoning is written into the ability file's `nulBlaze` doc comment and
+   pinned by `tests/unit/data-ffx-nul-targeting.test.ts` (7 cases, green), which
+   fails loudly with a pointer back to this question if anyone flips it.
+
+   **Bailey's call.** Flipping it is one word per record
+   (`targeting: 'all-allies'`); it is FFX-only (rule 14: FFX Wht Magic rows,
+   the FFX-2 ATB engine has its own Nul records and is untouched — the absence
+   test is in the same file); and it moves **every** FFX chapter, so all four
+   would need their win rates re-measured, not only Macalania.
 2. **The `blk-magic-sphere`, `special-sphere` and `ability-sphere` reward items
    have no `ItemDef` row**, so the Steal and Results banners print the raw id.
    Chapter 1 already ships `lv-4-key-sphere` the same way. Three small rows in
    `src/data/ffx/items/`, or drop the rewards. Which?
 3. **Five points short of A-1's 85 % bar with the shipped data.** Question 1 is
-   the measured answer and it needs a yes. If it is a no, the remaining levers
+   the measured answer and it needs a yes — and after the 2026-09-21 source
+   search it needs one *as an authored change*, since no source makes it a fix. If it is a no, the remaining levers
    are all on the player side — Reflect on the party (§7 row 6; this Yuna does
    not know Reflect in §8.5's ability table, so giving it to her is a build
    change), or moving Auron onto the active three (which costs the Steal lesson).

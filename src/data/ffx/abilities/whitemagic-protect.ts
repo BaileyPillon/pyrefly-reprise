@@ -143,6 +143,35 @@ export const reflect: AbilityDef = {
  * dedicated charge count, so per the task brief this file encodes "one
  * charge" as `duration: 1`; the engine's `StatusInstance.charges` field is
  * what actually tracks charge consumption at runtime).
+ *
+ * **Targeting re-examined 2026-09-21 and deliberately left `single-ally`.**
+ * `docs/handoff/chapter-macalania-engine.md` question 1 asks for all four Nul
+ * spells to become party-wide, worth a measured +10 points of that chapter's
+ * win rate (80 % → 90 %). The sources were searched for a ruling and **there
+ * is none**:
+ *
+ * - `research/ffx-combat-core.md` §7.5 (Yuna's Wht Magic) has **no Target
+ *   column at all**, unlike §7.1 (Tidus), where Hastega and Slowga are
+ *   explicitly "either party / whole party" and Haste and Slow are "1".
+ * - §4.2's status table (line ~582) describes the four Nul statuses' *effect*
+ *   ("Nullify one attack of the matching element, consuming one stack") and
+ *   says nothing about how many allies one cast reaches.
+ * - §5.8's Ronso Rage row for **Mighty Guard** is the one sourced whole-party
+ *   Nul application in the corpus — "whole party … Protect + Shell (254) + one
+ *   charge of each of the four Nuls" — and it is an *enemy/Rage* row, not
+ *   Yuna's spell, so it does not transfer.
+ * - `research/ffx-seymour-anima-macalania.md` §7 row 5 prescribes the Nul line
+ *   ("NulBlaze/NulFrost/NulShock/NulTide, single-use, consumed by the matching
+ *   element") and is likewise silent on party versus single.
+ * - `research/data/abtable.md` and `research/data/standard-hd-graph.json` carry
+ *   only command rows (46-49) and sphere-grid nodes; neither has a target
+ *   field.
+ * - §11 (recorded conflicts) and the closing Verification log have no entry
+ *   for Nul targeting either.
+ *
+ * Per AGENTS.md rule 6 (never invent game data) this stays as it ships and the
+ * change is escalated to Bailey instead. Flipping it is one word per record
+ * (`targeting: 'all-allies'`) with the MP costs and help/message ids unchanged.
  */
 export const nulBlaze: AbilityDef = {
   id: 'nulblaze',
@@ -172,7 +201,8 @@ export const nulBlaze: AbilityDef = {
 
 /**
  * ffx-combat-core §7.5 [verified: 2 sources] — row 46, rank 2, MP 2. One
- * charge (see NulBlaze's doc comment for the `duration: 1` convention).
+ * charge (see NulBlaze's doc comment for the `duration: 1` convention, and for
+ * why `single-ally` survived the 2026-09-21 party-wide review unchanged).
  */
 export const nulFrost: AbilityDef = {
   id: 'nulfrost',
@@ -200,7 +230,7 @@ export const nulFrost: AbilityDef = {
 
 /**
  * ffx-combat-core §7.5 [verified: 2 sources] — row 48, rank 2, MP 2. One
- * charge (see NulBlaze's doc comment).
+ * charge, and `single-ally` — see NulBlaze's doc comment for both.
  */
 export const nulShock: AbilityDef = {
   id: 'nulshock',
@@ -228,7 +258,7 @@ export const nulShock: AbilityDef = {
 
 /**
  * ffx-combat-core §7.5 [verified: 2 sources] — row 49, rank 2, MP 2. One
- * charge (see NulBlaze's doc comment).
+ * charge, and `single-ally` — see NulBlaze's doc comment for both.
  */
 export const nulTide: AbilityDef = {
   id: 'nultide',
