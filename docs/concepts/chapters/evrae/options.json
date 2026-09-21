@@ -1,0 +1,32 @@
+{
+  "chapter": "evrae",
+  "game": "ffx",
+  "status": "options — nothing built, nothing ships (AGENTS.md hard rule 9)",
+  "sources": [
+    "research/ffx-evrae-airship.md §12",
+    "docs/ART-PIPELINE.md (backdrop preset, facing contract v3)"
+  ],
+  "rows": {
+    "backdrop": {
+      "question": "Which composition for the open foredeck of the Fahrenheit on the approach to Bevelle?",
+      "canon_notes": "research §12.1/§12.3: open foredeck, metal deck plating lettered 'Salvage Dream CID', a guard rail then nothing (the drop is the frame edge), open sky/cloud, Bevelle growing on the horizon as the fight goes on.",
+      "options": {
+        "A": "RE-ROLLED once (hard rule: at most one re-roll per item). Both the first roll and the reroll came back OFF-CANON — a bird's-eye canyon-city shot with the ship as a tiny distant speck, not the foredeck the party stands on. Kept and flagged rather than re-rolled a second time, per the one-reroll cap.",
+        "B": "Looking up at the ship's hull from the rail — closest to the research's 'over-the-shoulder from the deck' framing (§12.3 item 1), open sky, sense of motion.",
+        "C": "Golden-hour side view with the rail in the foreground and the ship itself visible alongside — reads as 'we are on a deck, this is our ship,' but shows the whole hull from outside rather than standing on it."
+      },
+      "off_canon_seen": "A is a clear miss both times — the model kept reading 'airship approach' as a flying city instead of the requested foredeck-with-rail composition. B and C are the usable pair; neither is a perfect match to the exact 'foredeck platform, party at the rail, Evrae's head filling the upper right, Bevelle's spires past its neck' shot in §12.3, since these are location-only backdrop renders (no humans, no boss composited in) — that composite would need to happen at the mockup/integration stage once a plate is picked."
+    },
+    "boss_evrae": {
+      "question": "Which silhouette for Evrae, and should the chapter card use the NEAR or FAR read?",
+      "canon_notes": "research §12.2: a wyrm — sea-serpent built for the sky, must read as 'eel and dragon, never bat'; two silhouettes for one creature (NEAR = head-and-claws filling the upper third; FAR = long diagonal streak, small head, legible body); the throat needs a paintable charging state (Poison Breath's Inhale telegraph); cold/reptilian against a warm sky, one saturated accent reserved for the throat-charge and the eyes.",
+      "options": {
+        "A": "NEAR read: red/black scales, head and coils filling the frame, teal accent scales.",
+        "B": "FAR read: cooler teal/gold palette, long diagonal coiled streak, more 'legible body' as the research asks for the chapter-card silhouette.",
+        "C": "Throat-charge framing: warm orange throat glow against the same cold body, closest match to the 'paintable charging state' requirement."
+      },
+      "off_canon_seen": "None disqualifying — silhouette reads as eel/dragon, not bat, in all three, and none show wings (correctly wingless). None yet show the scythe-limb forelimbs distinctly (they read as coiled body rather than bladed reaching limbs) — worth a note for whichever option is refined further."
+    }
+  },
+  "no_cast_row": "Per the brief: 'none for Evrae beyond the airship.' No supporting-cast render was queued for this chapter — Cid is invisible in the real encounter and the airship itself is the backdrop."
+}

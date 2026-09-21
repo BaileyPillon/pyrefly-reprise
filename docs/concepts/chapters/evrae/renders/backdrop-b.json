@@ -1,0 +1,16 @@
+{
+  "seed": 502002,
+  "prompt": "no humans, scenery, final fantasy x, open foredeck of an airship, metal deck plating, guard rail in foreground, looking up at open sky, dramatic upward angle, clouds streaking past, sense of speed, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-21T17:06:10.515Z"
+}

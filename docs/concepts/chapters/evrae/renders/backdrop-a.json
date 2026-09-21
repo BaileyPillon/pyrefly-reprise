@@ -1,0 +1,16 @@
+{
+  "seed": 502021,
+  "prompt": "no humans, scenery, final fantasy x, standing on the open foredeck of an airship, metal deck plating lettered signage, guard rail in foreground, bright daylight open sky, wide symmetrical composition, small distant city silhouette on the horizon, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, city skyline close, bridge, castle, spires filling frame, architecture",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-21T17:07:40.592Z"
+}
