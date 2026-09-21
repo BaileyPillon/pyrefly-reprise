@@ -1478,7 +1478,7 @@ All single-target Blk Magic is reflectable and Silence-blocked; **Demi and Ultim
 | Esuna | 51 | 3 | 5 | removes | Petrify, Poison, Confuse, Berserk, Sleep, Silence, Darkness, Slow. **NOT Zombie, NOT Curse** |
 | Life | 52 | 3 | 18 | %Total **8** | Revive at **50 %** max HP; `misses_if_target_alive`; **kills a living Zombie** |
 | Full-Life | 53 | 3 | 60 | %Total **16** | Revive at **100 %** max HP; same Zombie behaviour |
-| NulBlaze / NulFrost / NulShock / NulTide | 47 / 46 / 48 / 49 | **2** | **2** | — | one charge, chance 254 |
+| NulBlaze / NulFrost / NulShock / NulTide | 47 / 46 / 48 / 49 | **2** | **2** | — | one charge, chance 254. **Target: whole party** — see §7.5.1 |
 | Protect | 59 | 3 | 12 | — | Protect (254) |
 | Shell | 58 | 3 | 10 | — | Shell (254) |
 | Reflect | 60 | 3 | 14 | — | Reflect (254) |
@@ -1487,6 +1487,54 @@ All single-target Blk Magic is reflectable and Silence-blocked; **Demi and Ultim
 | Holy | 63 | **4** | **85** | Magic **100**, Holy element | shatter 100 |
 | Auto-Life | 64 | 3 | **97** | — | Auto-Life flag; revives at **25 %** max HP when consumed (row 287 = `%Total 4`). **Not reflectable** |
 | Pray | 25 | 3 | 0 | Healing **8**, type Other | Small party heal; always hits |
+
+#### 7.5.1 Nul-spell targeting, sourced 2026-09-21 [FFX only, AGENTS.md rule 14]
+
+The row above has no Target column in this corpus (see the note that used to
+sit here and in `docs/handoff/chapter-macalania-engine.md` question 1). Two
+independent web sources were checked to settle it, both structured
+ability-by-ability tables (not a single paraphrased blurb) that also correctly
+distinguish Haste (single) from Hastega (whole party) and Shell/Protect/Reflect
+(single) from these four — the same pattern this corpus already uses for
+Tidus's Haste/Hastega/Slow/Slowga in §7.1:
+
+| Spell | Target | MP | Blocks | Hits blocked |
+|---|---|---:|---|---|
+| NulBlaze | Whole party | 2 | Fire | 1 |
+| NulFrost | Whole party | 2 | Ice | 1 |
+| NulShock | Whole party | 2 | Thunder | 1 |
+| NulTide | Whole party | 2 | Water | 1 |
+
+Sources (accessed 2026-09-21):
+
+- Final Fantasy Wiki (Fandom), "Wht Magic (Final Fantasy X)":
+  <https://finalfantasy.fandom.com/wiki/Wht_Magic_(Final_Fantasy_X)> — "NulBlaze
+  ... Bestows NulBlaze status to **all members of a party**. Nullifies
+  Fire-elemental damage for one attack." Same wording pattern for NulFrost /
+  NulShock / NulTide (all-party), contrasted on the same page with Shell /
+  Protect / Reflect ("Bestows [status] to **a** [target/party member]") and
+  Haste ("to **one** target") vs Hastega ("to all members of a party").
+- GameFAQs, *Final Fantasy X / X-2 HD Remaster Walkthrough & Guide* (PC), by
+  bover_87, "Abilities":
+  <https://gamefaqs.gamespot.com/pc/190170-final-fantasy-x-x-2-hd-remaster/faqs/79145/abilities>
+  — "NulBlaze ... Grants NulBlaze status to **all allies**, granting Immunity
+  to one Fire-elemental attack." Same wording for NulFrost / NulShock /
+  NulTide, and the same FAQ explicitly gives Shell / Protect / Reflect /
+  Auto-Life / Regen as "Grants [status] to **one** character" for contrast.
+
+A third, less structured source (jegged.com's White Magic sphere-grid page)
+was also checked and is not treated as a disagreement: its one-line in-game
+quoted description reads *"Nullifies one fire attack **on party**"* (matching
+whole-party), while only its own paraphrased "EFFECT" prose says "a team
+member" — an internal inconsistency in that source's own wording, not a
+second reading backed by a structured table the way the two sources above are.
+
+**Both structured sources agree: whole party, not single-ally.** Per AGENTS.md
+rule 6 this replaces the shipped `single-ally` estimate in
+`src/data/ffx/abilities/whitemagic-protect.ts` with `targeting: 'all-allies'`;
+MP (2), rank (2) and the one-charge/chance-254 status application are
+unchanged. `docs/handoff/chapter-macalania-engine.md` question 1 is settled by
+this section.
 
 ### 7.6 Rikku
 
