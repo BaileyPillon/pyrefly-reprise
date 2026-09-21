@@ -46,6 +46,7 @@ import {
   type AdvisorOptions,
   abilityOwner,
   buildAdvisorView,
+  metaRowFor,
   ownedRow,
 } from '../../src/engine/tactics/advisor.ts';
 import {
@@ -165,8 +166,24 @@ function replay(chapterId: string, seed: number, play: 'intended' | 'random', bu
       expect(view.actorId).toBe(decision.actorId);
       expect(view.actorName).toBe(state.combatants[decision.actorId]?.name);
       for (const s of view.suggestions) {
-        if (ownedRow(decision.commands, s.command) === null) {
+        // **The promise is about the row, not about the aim.** `ownedRow` holds
+        // every suggestion to the row's own `validTargets`, which is right for
+        // a spell and wrong for a **meta command**: Lulu's Doublecast is offered
+        // as `validTargets: ['lulu']` because pressing it opens the two spells
+        // that pick the enemy, and the chapter's line accordingly aims it at the
+        // boss. Refusing that aim threw Chapter 3's line away on every Lulu
+        // turn — measured 2026-09-21, forty seeds: a card-follower won 0 of 40
+        // against the chapter line's 39 [`advisor.ts#metaRowFor`,
+        // `critic/bench/advisor-v2/`]. So a meta row counts as owned, and
+        // everything the player's promise rests on is still checked: the row is
+        // on this decision's list, it is enabled, and it is this actor's.
+        const owned =
+          ownedRow(decision.commands, s.command) ??
+          metaRowFor(decision.commands, decision.actorId, s.command);
+        if (owned === null) {
           out.illegal.push(`${chapterId}/${play}/${decision.actorId}: ${s.label} (${shape(s.command)})`);
+        } else if (!owned.enabled) {
+          out.illegal.push(`${chapterId}/${play}/${decision.actorId}: ${s.label} is greyed out`);
         }
       }
       // A switch at the top always carries a runner-up: "switch" alone is not

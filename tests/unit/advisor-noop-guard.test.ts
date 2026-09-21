@@ -58,6 +58,7 @@ import { simulateFFXCommand } from '../../src/battle/ffx/simulate.ts';
 import type { SimOutcome } from '../../src/battle/ffx/simulate.ts';
 import { simulateFFX2Command } from '../../src/battle/ffx2/simulate.ts';
 import { buildAdvisorView, changesNothing, type AdvisorOptions } from '../../src/engine/tactics/advisor.ts';
+import { inertAcrossBand, statusChances } from '../../src/engine/tactics/advisor-roll.ts';
 import { recommendedCommand } from '../../src/engine/tactics/guide.ts';
 
 /** Generous: Chapter 1's longest guided seed takes ~60 decisions and ~2,000 ticks. */
@@ -147,6 +148,31 @@ function preview(
   });
 }
 
+/**
+ * **The band-aware reading of "this does nothing".**
+ *
+ * `changesNothing` reads one median-branch preview, and a preview answers every
+ * *branch* roll at its median — so a status whose net chance is 40 comes back
+ * as "nothing happened". That is true of the preview and false of the board.
+ * Chapter 3 is won by landing Slow on both Yu Pagodas at about two chances in
+ * five, and calling it a no-op cost a card-follower the fight on all forty
+ * seeds while the chapter's own line won thirty-nine [`advisor-roll.ts`,
+ * `critic/bench/advisor-v2/`]. So the assertions below ask the same question of
+ * the whole probability band: **nothing measurable at the median, and no branch
+ * it could have won.**
+ *
+ * `changesNothing` itself is unchanged and its own tests above still pin it.
+ */
+function inert(
+  state: Readonly<BattleState>,
+  actorId: string,
+  command: Command,
+  options: AdvisorOptions,
+): boolean {
+  const out = preview(state, actorId, command, options);
+  return inertAcrossBand(actorId, command, out, statusChances(state, actorId, command, out));
+}
+
 function fallback(commands: AvailableCommand[]): Command | null {
   const r = commands.find((c) => c.enabled && c.validTargets.length > 0);
   return r ? ({ ...r.command, targets: [r.validTargets[0]!] } as Command) : null;
@@ -195,7 +221,7 @@ function guided(chapterId: string, seed: number): GuidedRun {
       const key = `${s.label} -> ${s.targetName ?? s.targetId ?? '-'}`;
       picks[key] = (picks[key] ?? 0) + 1;
       const out = preview(state, d.actorId, s.command, options);
-      if (changesNothing(d.actorId, s.command, out)) {
+      if (inertAcrossBand(d.actorId, s.command, out, statusChances(state, d.actorId, s.command, out))) {
         noOps.push(`${chapterId} seed ${seed} decision ${decisions}: ${view.actorName} — ${key}`);
       }
       chosen = s.command;
@@ -371,7 +397,12 @@ describe('the chapter line yields when it does nothing, and only then', () => {
    * Farplane line opens with Pray on a party at full HP.
    */
   for (const [chapterId, seeds] of [
-    ['braskas-final-aeon', [1, 2, 3]],
+    // Braska's Final Aeon used to be in this list, because its line re-cast
+    // Slow at a Yu Pagoda that already carried it. Under the band that is still
+    // a no-op — an application the engine refuses outright cannot roll — but the
+    // card no longer walks the chapter into it at all, so the case stopped
+    // firing and a test that never fires is not a test. The Chapter 3 board it
+    // was standing in for is asserted directly in the block below.
     ['ffx2-vegnagun-shuyin', [1, 2, 3, 4, 5, 6]],
   ] as const) {
     it(`${chapterId}: a no-op line is replaced by a row that does something`, () => {
@@ -396,12 +427,12 @@ describe('the chapter line yields when it does nothing, and only then', () => {
           } catch {
             line = null;
           }
-          if (line && changesNothing(d.actorId, line, preview(state, d.actorId, line, options))) {
+          if (line && inert(state, d.actorId, line, options)) {
             fired += 1;
             const top = view?.suggestions[0];
             if (!top) {
               wrong.push(`${chapterId} seed ${seed}: no card at all`);
-            } else if (changesNothing(d.actorId, top.command, preview(state, d.actorId, top.command, options))) {
+            } else if (inert(state, d.actorId, top.command, options)) {
               wrong.push(`${chapterId} seed ${seed}: card still offers a no-op (${top.label})`);
             }
           }
@@ -417,6 +448,77 @@ describe('the chapter line yields when it does nothing, and only then', () => {
       expect(wrong).toEqual([]);
     }, 60_000);
   }
+});
+
+describe('a coin flip is not a no-op (FFX, Chapter 3)', () => {
+  /**
+   * **The board that decides this track.** Chapter 3 is won by getting Slow onto
+   * both Yu Pagodas; Slow lands about two times in five, so the median-branch
+   * preview reports nothing at all. The shipped card read that report twice —
+   * `WASTED_TURN_PENALTY` in the score, *inert* in the ordering — and answered
+   * "what do I press" with Cheer.
+   *
+   * Measured on forty seeds, 2026-09-21 (`critic/bench/advisor-v2/`): the
+   * chapter's own line won **39 of 40** in a median 215 turns; a player pressing
+   * the card's top row every turn won **0 of 40**, thirty defeats and ten
+   * stalemates, median 448. The three assertions below are that fight in one
+   * decision.
+   *
+   * ## Which game
+   *
+   * **FFX only** for this board — the Yu Pagodas are Chapter 3's — but the rule
+   * it pins is **both**, and the FFX-2 half is the Chapter 5 case above
+   * [AGENTS.md rule 14].
+   */
+  it('Slow on an unslowed Yu Pagoda is the pick, not Cheer', () => {
+    // The board is found by asking the **chapter's own line** for it, not by
+    // hunting for a row: the claim under test is that the card keeps the line on
+    // the turn the line calls for Slow.
+    const at = walkUntil('braskas-final-aeon', 1, (state, d) => {
+      let line: Command | null = null;
+      try {
+        line = recommendedCommand(state, { actorId: d.actorId, commands: d.commands });
+      } catch {
+        return false;
+      }
+      if (!line || !('id' in line) || String((line as { id?: unknown }).id) !== 'slow') return false;
+      const target = (line.targets as readonly string[])[0];
+      return (
+        target !== undefined &&
+        target.startsWith('yu-pagoda') &&
+        !hasStatus(state.combatants[target]!, 'slow')
+      );
+    });
+    expect(at, 'a Chapter 3 turn whose line is Slow at an unslowed pagoda').not.toBeNull();
+    const command = recommendedCommand(at!.state, {
+      actorId: at!.decision.actorId,
+      commands: at!.decision.commands,
+    })!;
+    const pagoda = (command.targets as readonly string[])[0]!;
+    const out = preview(at!.state, at!.decision.actorId, command, at!.harness.options);
+
+    // The preview really does report nothing: this is not a straw man.
+    expect(out!.statusChanges).toEqual([]);
+    expect(out!.damageToEnemies).toBe(0);
+    expect(changesNothing(at!.decision.actorId, command, out)).toBe(true);
+
+    // …and the roll it is waiting on is real, so it is not inert.
+    const chances = statusChances(at!.state, at!.decision.actorId, command, out);
+    const slow = chances.find((c) => c.status === 'slow' && c.targetId === pagoda);
+    expect(slow, 'the engine offers a Slow roll against this pagoda').toBeDefined();
+    expect(slow!.percent).toBeGreaterThan(0);
+    expect(inertAcrossBand(at!.decision.actorId, command, out, chances)).toBe(false);
+
+    // …and the card says so.
+    const view = buildAdvisorView(
+      at!.state,
+      { actorId: at!.decision.actorId, commands: at!.decision.commands },
+      at!.harness.options,
+    );
+    expect(view).not.toBeNull();
+    expect(view!.suggestions[0]!.label).toBe('Slow');
+    expect(view!.suggestions[0]!.targetId).toBe(pagoda);
+  }, 60_000);
 });
 
 describe('no pick is a no-op, over whole seeded fights', () => {

@@ -81,6 +81,7 @@ import type {
   Command,
   CombatantId,
   StatusId,
+  TurnPreview,
 } from '../../battle/common/types.ts';
 import type { AbilityRegistry, ItemRegistry } from '../../battle/ffx2/internal.ts';
 import type { FFXContentRegistry } from '../../battle/ffx/registry.ts';
@@ -111,6 +112,13 @@ import {
 import { forecastFromState } from './advisor-forecast.ts';
 import { floorNote } from './advisor-floor.ts';
 import { changesNothing } from './advisor-guard.ts';
+import {
+  type StatusChance,
+  bestChance,
+  expectedStatusValue,
+  inertAcrossBand,
+  statusChances,
+} from './advisor-roll.ts';
 import { menuChipFor, onTheMenu } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
@@ -232,6 +240,27 @@ export interface AdvisorOptions {
    * memory, which a state-only rebuild cannot.
    */
   intent?: () => AdvisorIntent | null;
+  /**
+   * Run the **v2 planner** (`./advisor-plan.ts`) instead of the flat ranking.
+   *
+   * Defaults to on. The flag exists so the forty-seed bench
+   * (`critic/bench/advisor-v2/`) can drive both orderings through one binary
+   * and report them side by side — a regression in Chapters 1, 2, 4 or 5 has to
+   * be visible against the version it replaced, not against a number in a
+   * document [docs/plans/advisor-v2-review.md §8 R-1]. Passing `false` gives
+   * exactly the pre-v2 behaviour.
+   */
+  planner?: boolean;
+  /**
+   * The engine's own answer to "what does this command do to the turn list",
+   * supplied by a HUD that has an engine to ask.
+   *
+   * **FFX only** [AGENTS.md rule 14]: `predictTurnOrder` is on
+   * `FFXBattleEngine` and X-2 has no turn list to lose position in. When it is
+   * absent the tempo term is zero and tempo is **never cited** in the sentence,
+   * so the planner is complete without it and the tests stay engine-only.
+   */
+  turnOrder?: (previewCommand?: Command) => readonly TurnPreview[];
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -334,6 +363,68 @@ export function ownedRow(
     return row;
   }
   return null;
+}
+
+/**
+ * The same gate, for a **meta command** whose aim is taken in a second step.
+ *
+ * ## The row this exists for, and what it cost
+ *
+ * Lulu's Doublecast is offered as `{ label: 'Doublecast', enabled: true,
+ * validTargets: ['lulu'] }` — the row aims at its own caster, because pressing
+ * it opens the two spells it chains and *those* pick the enemy. Chapter 3's
+ * tactic accordingly returns `ability:doublecast -> braskas-final-aeon`, which
+ * the engine accepts and resolves; {@link ownedRow} refuses it, because the
+ * boss is not in the row's `validTargets`.
+ *
+ * So on **every Lulu turn of Chapter 3** the card silently threw the chapter's
+ * own line away and fell back to its simulated ranking — an X-Potion, a
+ * Lunar Curtain, a NulBlaze. Measured on forty seeds, 2026-09-21: the chapter's
+ * line wins 39/40 in a median 215 turns; a player following the card won
+ * **0 of 40**, thirty defeats and ten stalemates, median 448 turns. That one
+ * `continue` is the whole of it.
+ *
+ * The loosening is deliberately the narrowest shape that covers it: the row
+ * must exist, be enabled, match kind and id exactly, and offer **only the actor
+ * itself**. A row that lists real targets is still held to every one of them,
+ * so an aim at somebody a move cannot reach is refused exactly as before. The
+ * card's promise is unchanged — this row is on this actor's menu and can be
+ * pressed right now — and the aim is the chapter tactic's business, which is
+ * where the engine takes it from anyway.
+ *
+ * **Both games** [AGENTS.md rule 14]: the rule is a property of the card's
+ * ownership gate, not of CTB or ATB. Measured in FFX (Doublecast); FFX-2 ships
+ * no self-only meta row today, and the absence is asserted rather than assumed
+ * (`tests/unit/advisor-plan.test.ts`).
+ */
+export function metaRowFor(
+  commands: readonly AvailableCommand[],
+  actorId: CombatantId,
+  command: Command,
+): AvailableCommand | null {
+  const targets = command.targets as readonly CombatantId[];
+  if (targets.length === 0) return null;
+  if (targets.every((t) => t === actorId)) return null;
+  const id = 'id' in command ? String((command as { id?: unknown }).id) : '';
+  if (!id) return null;
+  for (const row of commands) {
+    if (!row.enabled) continue;
+    if (row.command.kind !== command.kind) continue;
+    const rowId = 'id' in row.command ? String((row.command as { id?: unknown }).id) : '';
+    if (rowId !== id) continue;
+    if (row.validTargets.length !== 1 || row.validTargets[0] !== actorId) continue;
+    return row;
+  }
+  return null;
+}
+
+/** The gate a tactic's own pick is held to: the strict row, or a meta row. */
+function tacticRow(
+  commands: readonly AvailableCommand[],
+  actorId: CombatantId,
+  command: Command,
+): AvailableCommand | null {
+  return ownedRow(commands, command) ?? metaRowFor(commands, actorId, command);
 }
 
 /**
@@ -561,7 +652,22 @@ function aimCandidates(
 export function scoreOutcome(
   state: Readonly<BattleState>,
   outcome: SimOutcome,
-  ctx: { command: Command; def: AbilityDef | null; intent?: AdvisorIntent | null },
+  ctx: {
+    command: Command;
+    def: AbilityDef | null;
+    intent?: AdvisorIntent | null;
+    /**
+     * The odds each status this action aims actually lands, from the engine's
+     * own formula (`./advisor-roll.ts`).
+     *
+     * Optional so the nine existing callers and their tests keep their meaning.
+     * When it is supplied, a move whose status **could** have landed is priced
+     * at its expectation instead of being charged {@link WASTED_TURN_PENALTY}
+     * for a median branch that said no — the single behaviour that lost
+     * Chapter 3 forty times out of forty.
+     */
+    chances?: readonly StatusChance[];
+  },
 ): { score: number; warning: string } {
   const boss = primaryBoss(state);
   let score = 0;
@@ -628,9 +734,38 @@ export function scoreOutcome(
     } else if (!warning) warning = 'Costs the party HP';
   }
 
+  // **The coin flip, priced as one.** A status the median branch missed is not
+  // an event, so nothing above has paid for it; here it is worth its own odds
+  // times what landing it is worth. `INFLICT_VALUE` / `CURE_VALUE` are the same
+  // tables the landed half is scored from, so a 40 % Slow is worth 40 % of a
+  // landed Slow and no more [./advisor-roll.ts].
+  if (ctx.chances && ctx.chances.length > 0) {
+    score += expectedStatusValue(ctx.chances, (status, targetId) => {
+      const target = state.combatants[targetId];
+      if (!target) return 0;
+      if (isEnemy(target)) return INFLICT_VALUE[status] ?? 200;
+      if (status === 'reflect' && state.combatants[YUNALESCA_ID]) return -REFLECT_AT_YUNALESCA_PENALTY;
+      return 300;
+    });
+  }
+
   // Tried to apply something, applied nothing, did nothing.
+  //
+  // **Only when there was no branch it could have won.** The preview answers a
+  // status roll at its median, so "applied nothing" covers both a target that
+  // is immune — a genuinely wasted turn — and one where the move lands two
+  // times in five. Charging the second as the first is what told a Chapter 3
+  // player to press Cheer while Braska's Final Aeon ran out the watchdog
+  // [docs/plans/advisor-v2-review.md §2.2; measured 0/40 before, in the handoff
+  // after]. With no `chances` supplied the old reading stands unchanged.
   const tried = ctx.def?.statusEffects.length ?? 0;
-  if (tried > 0 && outcome.statusChanges.every((c) => !c.applied) && outcome.damageToEnemies === 0) {
+  const couldLand = ctx.chances ? bestChance(ctx.chances) > 0 : false;
+  if (
+    tried > 0 &&
+    !couldLand &&
+    outcome.statusChanges.every((c) => !c.applied) &&
+    outcome.damageToEnemies === 0
+  ) {
     score -= WASTED_TURN_PENALTY;
     if (!warning) warning = 'This target is immune — nothing lands';
   }
@@ -688,6 +823,7 @@ function reasonFor(
   state: Readonly<BattleState>,
   s: Omit<MoveSuggestion, 'reason' | 'cite' | 'score' | 'source'>,
   outcome: SimOutcome,
+  chances: readonly StatusChance[] = [],
 ): string {
   const target = s.targetId ? state.combatants[s.targetId] : undefined;
   const name = target?.name ?? 'the target';
@@ -728,7 +864,28 @@ function reasonFor(
   if (s.estimate && s.estimate.kind === 'damage' && s.estimate.mid > 0) {
     return `Most damage on the board — ${formatRange(s.estimate)} to ${name}`;
   }
+  // **The gamble, said out loud.** Nothing landed at the median branch, but the
+  // roll is still to come — the Chapter 3 case, where Slow on a Yu Pagoda is
+  // the move that wins the fight and misses three times in five. The card is
+  // required to be honest about that rather than either hiding it or dropping
+  // the row [docs/plans/advisor-v2-review.md §4.4; Bailey's own question 3 in
+  // §9 is still open, so the voice here states the odds and no more].
+  const gamble = bestTry(chances);
+  if (gamble) {
+    const on = state.combatants[gamble.targetId]?.name ?? name;
+    return `${statusLabel(gamble.status)} on ${on} — about ${Math.round(gamble.percent)} in 100, and it is the line`;
+  }
   return 'The best of what is offered';
+}
+
+/** The likeliest application this action still has a roll coming for. */
+function bestTry(chances: readonly StatusChance[]): StatusChance | null {
+  let best: StatusChance | null = null;
+  for (const c of chances) {
+    if (c.landedAtMedian || c.percent <= 0) continue;
+    if (!best || c.percent > best.percent) best = c;
+  }
+  return best;
 }
 
 // --------------------------------------------------------------------- build
@@ -738,6 +895,8 @@ interface Candidate {
   outcome: SimOutcome | null;
   /** The row and aim this came from, so the range can be filled in later. */
   origin: { row: AvailableCommand; targetId: CombatantId | null } | null;
+  /** Every status this row is rolling for, with its real odds. See `./advisor-roll.ts`. */
+  chances: readonly StatusChance[];
 }
 
 /**
@@ -755,6 +914,7 @@ function candidateFor(
   targetId: CombatantId | null,
   sim: Sim,
   intent: AdvisorIntent | null,
+  planner: boolean,
   withRange = false,
 ): Candidate | null {
   const command = { ...row.command, targets: targetId ? [targetId] : [] } as Command;
@@ -810,7 +970,17 @@ function candidateFor(
       : previewCritChance(state, actorId, targetId, def)
     : 0;
 
-  const scored = scoreOutcome(state, mid, { command, def, intent });
+  // The probability band is the v2 half and is switchable, so the forty-seed
+  // bench can put the two orderings side by side in one binary (`AdvisorOptions
+  // .planner`). The ownership and command-identity repairs above it are plain
+  // correctness and are not switchable.
+  const chances = planner ? statusChances(state, actorId, command, mid) : [];
+  const scored = scoreOutcome(state, mid, {
+    command,
+    def,
+    intent,
+    ...(planner ? { chances } : {}),
+  });
   const base: Omit<MoveSuggestion, 'reason' | 'cite' | 'score' | 'source'> = {
     command,
     label: row.label,
@@ -831,9 +1001,10 @@ function candidateFor(
   return {
     outcome: mid,
     origin: { row, targetId },
+    chances,
     suggestion: {
       ...base,
-      reason: reasonFor(state, base, mid),
+      reason: reasonFor(state, base, mid, chances),
       cite: '',
       score: scored.score,
       source: 'simulated',
@@ -874,6 +1045,7 @@ function switchCandidate(
   return {
     outcome: null,
     origin: null,
+    chances: [],
     suggestion: {
       ...base,
       reason:
@@ -898,6 +1070,7 @@ export function buildAdvisorView(
 ): AdvisorView | null {
   const actor = state.combatants[decision.actorId];
   if (!actor) return null;
+  const planner = options.planner !== false;
   const sim = simulatorFor(state, options);
   // The forecast is only ever read by the revive rules, and a prediction is a
   // dozen board clones — so it is asked for exactly when somebody is on the
@@ -928,7 +1101,7 @@ export function buildAdvisorView(
     for (const targetId of aimCandidates(state, row, def)) {
       if (simulations >= MAX_SIMULATIONS) break;
       simulations += 1;
-      const candidate = candidateFor(state, decision.actorId, decision.commands, row, targetId, sim, intent);
+      const candidate = candidateFor(state, decision.actorId, decision.commands, row, targetId, sim, intent, planner);
       if (candidate) candidates.push(candidate);
     }
   }
@@ -938,7 +1111,7 @@ export function buildAdvisorView(
   // The chapter's own line, when this actor can actually press it, is the top
   // row. `tacticSuggestion` returns `null` rather than a row from somebody
   // else's menu, and the ranking below stands in for it when it does.
-  const tactic = tacticSuggestion(state, decision, candidates, sim, intent);
+  const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner);
   const ranked = tactic
     ? [tactic, ...candidates.filter((c) => !sameCommand(c.suggestion.command, tactic.suggestion.command))]
     : candidates;
@@ -950,7 +1123,9 @@ export function buildAdvisorView(
   // onTheMenu}; FFX drops Defend).
   const legal = ranked.filter(
     (c) =>
-      ownedRow(decision.commands, c.suggestion.command) !== null &&
+      (c.suggestion.source === 'tactic'
+        ? tacticRow(decision.commands, decision.actorId, c.suggestion.command)
+        : ownedRow(decision.commands, c.suggestion.command)) !== null &&
       onTheMenu(state.game, c.suggestion.command),
   );
   if (legal.length === 0) return null;
@@ -964,10 +1139,20 @@ export function buildAdvisorView(
   // *nothing* on the menu does anything the list stands as it was, because
   // "there is nothing useful to press" is still answered with the best of what
   // is offered rather than with an empty card.
+  //
+  // **The band.** Inert is read across the whole probability band, not off one
+  // median branch: a status move whose target is immune is a wasted turn, and
+  // one that lands two times in five is the move that wins Chapter 3. Before
+  // this split read the band, a card-follower lost Braska's Final Aeon on all
+  // forty seeds while the chapter's own line won thirty-nine of them
+  // [`./advisor-roll.ts#inertAcrossBand`].
   const useful: Candidate[] = [];
   const inert: Candidate[] = [];
   for (const c of legal) {
-    (changesNothing(decision.actorId, c.suggestion.command, c.outcome) ? inert : useful).push(c);
+    const dead = planner
+      ? inertAcrossBand(decision.actorId, c.suggestion.command, c.outcome, c.chances)
+      : changesNothing(decision.actorId, c.suggestion.command, c.outcome);
+    (dead ? inert : useful).push(c);
   }
   const ordered = useful.length > 0 ? [...useful, ...inert] : legal;
 
@@ -999,7 +1184,7 @@ export function buildAdvisorView(
     }
   }
   const suggestions = shown.map((c) =>
-    withRange(state, decision.actorId, decision.commands, c, sim, intent),
+    withRange(state, decision.actorId, decision.commands, c, sim, intent, planner),
   );
 
   return {
@@ -1158,9 +1343,10 @@ function withRange(
   candidate: Candidate,
   sim: Sim,
   intent: AdvisorIntent | null,
+  planner: boolean,
 ): MoveSuggestion {
   if (!candidate.origin) return candidate.suggestion;
-  const full = candidateFor(state, actorId, commands, candidate.origin.row, candidate.origin.targetId, sim, intent, true);
+  const full = candidateFor(state, actorId, commands, candidate.origin.row, candidate.origin.targetId, sim, intent, planner, true);
   if (!full?.suggestion.estimate) return candidate.suggestion;
   return {
     ...candidate.suggestion,
@@ -1186,12 +1372,36 @@ function defFor(
   }
 }
 
-/** Two commands the player would press the same way. */
+/**
+ * Two commands the player would press the same way.
+ *
+ * **The incoming member is part of a switch's identity.** FFX offers one row
+ * per benched character — "Wakka", "Lulu", "Rikku", "Kimahri" — and they share
+ * a `kind`, carry no `id`, and aim at nobody, so on `kind`/`id`/`targets` alone
+ * *every* switch is the same command. `tacticSuggestion` looks the tactic's
+ * pick up among the already-simulated candidates with this predicate, so
+ * Chapter 3's line "put Lulu in" matched the first switch in the list and the
+ * card said **Wakka** — a different character, a different fight.
+ *
+ * Measured, forty seeds, 2026-09-21: with the switches conflated a player
+ * following the card won **0 of 40** Braska's Final Aeon against the chapter
+ * line's 39; the party drifted to Wakka and Rikku, Lulu never cast, and the
+ * fight ran to the 400-turn watchdog. `ownedRow` already distinguished them
+ * (`extra.inId`); this did not, and it is the one that picks the row.
+ *
+ * **Both games** [AGENTS.md rule 14] — it is a property of command identity.
+ * FFX-2 fields no switch at all, which `advisor-plan.test.ts` asserts rather
+ * than assumes.
+ */
 function sameCommand(a: Command, b: Command): boolean {
   if (a.kind !== b.kind) return false;
   const idA = 'id' in a ? String(a.id) : '';
   const idB = 'id' in b ? String(b.id) : '';
-  return idA === idB && a.targets.join(',') === b.targets.join(',');
+  if (idA !== idB) return false;
+  if (a.targets.join(',') !== b.targets.join(',')) return false;
+  const inA = (a as { extra?: { inId?: CombatantId } }).extra?.inId;
+  const inB = (b as { extra?: { inId?: CombatantId } }).extra?.inId;
+  return inA === inB;
 }
 
 /**
@@ -1252,6 +1462,7 @@ function tacticSuggestion(
   candidates: Candidate[],
   sim: Sim,
   intent: AdvisorIntent | null,
+  planner: boolean,
 ): Candidate | null {
   let command: Command | null = null;
   try {
@@ -1266,7 +1477,7 @@ function tacticSuggestion(
   // its commands and the menu the player is looking at always agree" is the
   // promise the card lives or dies on, and it is cheap to make it structural
   // instead of trusting every present and future tactic to keep it.
-  const row = ownedRow(decision.commands, command);
+  const row = tacticRow(decision.commands, decision.actorId, command);
   if (!row) return handOff(state, decision, command);
 
   // `SwitchCommand.targets` is typed as the empty tuple, so the aimed id is
@@ -1277,7 +1488,7 @@ function tacticSuggestion(
     candidate =
       command.kind === 'switch'
         ? switchCandidate(state, decision.commands, row, aimedId)
-        : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent);
+        : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent, planner);
   }
   if (!candidate) return null;
 
@@ -1292,6 +1503,7 @@ function tacticSuggestion(
   return {
     outcome: candidate.outcome,
     origin: candidate.origin,
+    chances: candidate.chances,
     suggestion: {
       ...candidate.suggestion,
       cite,
