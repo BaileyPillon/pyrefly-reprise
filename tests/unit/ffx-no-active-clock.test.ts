@@ -131,4 +131,63 @@ describe('FFX never gets an Active clock (rule 14 absence test)', () => {
 
     presenter.abort();
   });
+
+  /**
+   * The absence half of the wave-1a silent critical.
+   *
+   * Active's repair added two gates: `FFX2Engine.submit` refuses a command
+   * whose input owner can no longer answer, and the presenter re-checks
+   * `inputValid` before it submits one. Both are reached only through
+   * `activeClockEngine`, which is `null` for FFX — so an FFX command is
+   * submitted exactly as it always was, by the actor whose menu opened, and no
+   * menu is ever torn down under a player who is simply thinking.
+   */
+  it('still submits an answered FFX command as its own actor, with no validity gate', async () => {
+    const engine = newFfxEngine(7);
+    const state = engine.state();
+    const turnStarts: CombatantId[] = [];
+    let opened: CombatantId | null = null;
+
+    class AnsweringHud extends SilentMenuHud {
+      override chooseCommand(actorId: CombatantId, commands: AvailableCommand[]): Promise<Command> {
+        this.chooseCommandCalls += 1;
+        if (this.chooseCommandCalls > 1) return new Promise<Command>(() => undefined);
+        opened = actorId;
+        const row = commands.find((c) => c.enabled);
+        if (!row) return new Promise<Command>(() => undefined);
+        const target = row.validTargets[0];
+        return Promise.resolve({
+          ...row.command,
+          ...(target ? { targets: [target] } : {}),
+        } as Command);
+      }
+      override onEvent(event: BattleEvent): void {
+        if (event.type === 'turn-start') turnStarts.push(event.actorId);
+      }
+    }
+
+    const hud = new AnsweringHud();
+    let clock = 0;
+    const presenter = new BattlePresenter({
+      stage: new FakeStage([...state.activeIds], [...state.enemyIds]),
+      hud,
+      damageNumbers: new FakeDamageNumbers(),
+      messageBar: new FakeMessageBar(),
+      audio: new FakeAudio(),
+      cutscenes: new FakeCutscenes(),
+      sleep: () => {
+        clock += 5000;
+        return Promise.resolve();
+      },
+      now: () => clock,
+    });
+
+    void presenter.run(engine);
+    await settle();
+
+    expect(opened).toBeTruthy();
+    expect(turnStarts).toContain(opened);
+    expect(hud.closeCalls).toBe(0);
+    presenter.abort();
+  });
 });

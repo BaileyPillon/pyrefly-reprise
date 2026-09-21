@@ -224,6 +224,25 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   }
 
   submit(command: Command): BattleEvent[] {
+    // **Active ATB, the silent critical (`active.ts`).** A command belongs to
+    // the girl whose menu was open and to nobody else. The clock runs while she
+    // reads that menu, so by the time Confirm arrives she may have been KO'd,
+    // Stopped, Slept, Petrified, chained or Berserked — and `nextActor()` below
+    // only *prefers* the owner: a dead one falls through to whoever else is
+    // ready. Measured before this guard (wave-1a verifier, ch. 4 seed 7): Paine
+    // confirms `x2-warrior-power-break` in the same pump step Bahamut KOs her,
+    // and the log reads `rikku:Power Break` — Rikku is not a Warrior, has no such
+    // ability, and her turn is spent on it, silently.
+    //
+    // Refuse instead. The turn is not spent, no events are emitted, and the
+    // next `nextDecision()` re-offers the menu to somebody who can answer it.
+    // Unreachable under Wait (nothing resolved while a menu was open), so this
+    // is **FFX-2 only** — FFX is CTB and has no clock
+    // (`research/ffx-vs-ffx2-presentation.md` §4.3).
+    if (this.inputOwner && !this.inputValid(this.inputOwner)) {
+      this.inputOwner = null;
+      return this.flush();
+    }
     const actor = this.nextActor();
     if (!actor) {
       this.inputOwner = null;

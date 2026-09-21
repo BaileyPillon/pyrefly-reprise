@@ -24,6 +24,7 @@ import {
 } from '../../src/battle/ffx2/index.ts';
 import { msToTicks } from '../../src/battle/ffx2/gauges.ts';
 import type {
+  AvailableCommand,
   BattleEvent,
   CombatantId,
   Command,
@@ -305,11 +306,61 @@ describe('Active ATB — the input owner (preflight §4.2)', () => {
     const state = engine.state();
     const lowestSlot = state.activeIds[0];
     expect(lowestSlot).toBeDefined();
+    // Without this the case is a tautology on any seed whose first menu owner
+    // *is* slot 0 (measured: yuna at seeds 1 and 3, paine at seed 7) — it would
+    // pass with the input-owner lock deleted. Seed 7 is pinned for that reason.
+    expect(first).not.toBe(lowestSlot);
 
     const events = engine.submit({ kind: 'defend', targets: [] } as Command);
     const turnStart = events.find((e) => e.type === 'turn-start');
 
     expect(turnStart && turnStart.type === 'turn-start' && turnStart.actorId).toBe(first);
+  });
+
+  it('refuses a command whose owner was KO’d under her menu — never runs it as another girl', () => {
+    const engine = newEngine(CH4, 7);
+    const owner = runToInput(engine);
+    const decision = engine.nextDecision();
+    if (decision.kind !== 'player-input') throw new Error('expected a menu');
+    const ability = decision.commands.find((c) => c.command.kind === 'ability' && c.enabled);
+    expect(ability).toBeDefined();
+
+    // Somebody else is standing ready, which is the whole danger: `nextActor`
+    // used to fall through to her and execute Paine's Warrior ability as Rikku.
+    makeAllReady(engine);
+    const others = engine.state().activeIds.filter((id) => id !== owner);
+    expect(others.length).toBeGreaterThan(0);
+
+    const girl = engine.state().combatants[owner] as { hp: number; alive: boolean };
+    girl.hp = 0;
+    girl.alive = false;
+
+    const turnBefore = engine.state().turn;
+    const enemyId = engine.state().enemyIds[0];
+    const events = engine.submit({ ...ability!.command, targets: [enemyId!] } as Command);
+
+    expect(events.length).toBe(0);
+    expect(engine.state().turn).toBe(turnBefore);
+    // And the battle moves on rather than hanging: the next menu belongs to
+    // somebody who can actually answer it.
+    const next = engine.nextDecision();
+    expect(next.kind).toBe('player-input');
+    if (next.kind === 'player-input') expect(next.actorId).not.toBe(owner);
+  });
+
+  it('refuses it just the same when nobody else is ready (no silent drop, no stolen turn)', () => {
+    const engine = newEngine(CH4, 7);
+    const owner = runToInput(engine);
+    const girl = engine.state().combatants[owner] as { hp: number; alive: boolean };
+    girl.hp = 0;
+    girl.alive = false;
+
+    const turnBefore = engine.state().turn;
+    const events = engine.submit({ kind: 'defend', targets: [] } as Command);
+
+    expect(events.length).toBe(0);
+    expect(engine.state().turn).toBe(turnBefore);
+    expect(engine.inputValid(owner)).toBe(false);
   });
 
   it('offers a queue of ready girls one at a time, in actorOrder', () => {
@@ -588,6 +639,123 @@ describe('Active ATB through the real presenter', () => {
     // The loop did not abort: it asked the engine again and someone else's
     // menu opened rather than the battle hanging on a dead one.
     expect(hud.chooseCommandCalls).toBeGreaterThan(asked);
+    expect(presenter.isAborted).toBe(false);
+    presenter.abort();
+  });
+
+  /**
+   * The wave-1a verifier's silent critical, through the real presenter.
+   *
+   * Confirm is pressed **in the same pump step** that KOs the menu's owner —
+   * the player answers while the enemy's hit is still animating. Before the
+   * fix the pump returned `'settled'` without re-asking `inputValid`, the
+   * command won the race, and `FFX2Engine.submit` fell through to whoever else
+   * sorted first: Paine's Warrior ability executed as Rikku, who does not have
+   * it, spending Rikku's turn. Measured then: `rikku:Power Break`.
+   */
+  it('never executes a command as a different girl when its owner dies in the same step', async () => {
+    const engine = newEngine(CH4, 7);
+    const state = engine.state();
+    const turnStarts: CombatantId[] = [];
+    const actionStarts: string[] = [];
+    let menuOwner: CombatantId | null = null;
+    let resolveMenu: ((c: Command) => void) | null = null;
+    let ownerCommands: AvailableCommand[] = [];
+    let fired = false;
+    let submitted: Command | null = null;
+
+    /** Answers the first menu at the worst possible instant, then goes silent. */
+    class RacyHud implements HudPort {
+      chooseCommandCalls = 0;
+      closeCalls = 0;
+      mount(): void {}
+      unmount(): void {}
+      sync(): void {}
+      syncGauges(): void {}
+      chooseCommand(actorId: CombatantId, commands: AvailableCommand[]): Promise<Command> {
+        this.chooseCommandCalls += 1;
+        const first = this.chooseCommandCalls === 1;
+        if (first) {
+          menuOwner = actorId;
+          ownerCommands = commands;
+        }
+        return new Promise<Command>((res) => {
+          if (first) resolveMenu = res;
+        });
+      }
+      closeCommandMenu(): void {
+        this.closeCalls += 1;
+      }
+      onEvent(event: BattleEvent): void {
+        if (event.type === 'turn-start') turnStarts.push(event.actorId);
+        if (event.type === 'action-start') actionStarts.push(`${event.actorId}:${event.abilityName ?? ''}`);
+        if (fired || !menuOwner) return;
+        if (event.type !== 'action-start' || !state.enemyIds.includes(event.actorId)) return;
+        // Is anybody else standing ready to steal the command?
+        const ready = state.activeIds.filter((id) => id !== menuOwner).filter((id) => {
+          const c = state.combatants[id] as {
+            alive: boolean;
+            atb?: { ticks: number; required: number; recovery: number };
+          };
+          return c.alive && !!c.atb && c.atb.recovery <= 0 && c.atb.ticks >= c.atb.required;
+        });
+        if (ready.length === 0) return;
+        fired = true;
+        const girl = state.combatants[menuOwner] as { hp: number; alive: boolean };
+        girl.hp = 0;
+        girl.alive = false;
+        const ability = ownerCommands.find((c) => c.command.kind === 'ability' && c.enabled);
+        submitted = ability
+          ? ({ ...ability.command, targets: [state.enemyIds[0]!] } as Command)
+          : ({ kind: 'defend', targets: [] } as Command);
+        resolveMenu?.(submitted);
+      }
+      openMinigame(): Promise<never> {
+        return new Promise<never>(() => undefined);
+      }
+      setVisible(): void {}
+      setProjector(): void {}
+    }
+
+    const hud = new RacyHud();
+    let clock = 0;
+    const presenter = new BattlePresenter({
+      stage: new FakeStage([...state.activeIds], [...state.enemyIds]),
+      hud,
+      damageNumbers: new FakeDamageNumbers(),
+      messageBar: new FakeMessageBar(),
+      audio: new FakeAudio(),
+      cutscenes: new FakeCutscenes(),
+      sleep: (ms) => {
+        clock += ms;
+        return Promise.resolve();
+      },
+      now: () => clock,
+    });
+    void presenter.run(engine);
+
+    await settleUntil(() => hud.chooseCommandCalls > 0);
+    expect(menuOwner).toBeTruthy();
+    await settleUntil(() => fired, 40_000);
+    expect(fired).toBe(true);
+    const armedAtTurn = turnStarts.length;
+    const armedAtAction = actionStarts.length;
+    await settleUntil(() => hud.closeCalls > 0 && hud.chooseCommandCalls > 1, 8000);
+
+    // Nobody in the party took a turn: the dead girl could not, and no other
+    // girl's turn may be spent on a command she never chose. Enemies carry on.
+    const partyTurns = turnStarts.slice(armedAtTurn).filter((id) => state.activeIds.includes(id));
+    expect(partyTurns).toEqual([]);
+    expect(submitted).not.toBeNull();
+    // Nor did the ability itself appear on anybody: measured before the fix,
+    // this held `rikku:Power Break`.
+    const stolen = actionStarts
+      .slice(armedAtAction)
+      .filter((line) => state.activeIds.some((id) => line.startsWith(`${id}:`)));
+    expect(stolen).toEqual([]);
+    // The menu was torn down and the fight moved on rather than hanging.
+    expect(hud.closeCalls).toBeGreaterThan(0);
+    expect(hud.chooseCommandCalls).toBeGreaterThan(1);
     expect(presenter.isAborted).toBe(false);
     presenter.abort();
   });

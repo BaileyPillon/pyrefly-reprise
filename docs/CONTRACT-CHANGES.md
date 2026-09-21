@@ -6,6 +6,42 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-21 — Active ATB: `FFX2BattleEngine.tick` takes options, and gains `inputValid`
+
+Key `ffx2-active-atb`. Shipped in `45f98b9` **without this entry** — hard rule 2
+was broken by a pushed commit, and the wave-1a verifier caught it. Recorded here
+after the fact rather than quietly; the change itself stands.
+
+**FFX-2 only** [AGENTS.md hard rule 14]. Active mode is an FFX-2 Config entry
+(`research/ffx2-combat-core.md` §1.5: time never stops, including while browsing
+a list or a submenu) and Bailey chose it for FFX-2 by name
+(`docs/target/decisions.json` D-009, 2026-09-21: *"For ffx-2 I choose active."*).
+FFX is CTB and has no clock to run (`research/ffx-vs-ffx2-presentation.md` §4.3),
+so `BattleEngine` — the interface FFX implements — is untouched, and
+`tests/unit/ffx-no-active-clock.test.ts` is the absence test.
+
+Both changes are on `FFX2BattleEngine` (`src/battle/common/types.ts`) and both
+are additive; no existing caller needed a line changed.
+
+**`tick(ms: number, opts?: { throughInput?: boolean }): BattleEvent[]`** — the
+second parameter is new and optional. Without it the method behaves exactly as
+before (the presenter's `'waiting'` branch still calls `tick(nextEventMs)` bare,
+and a run that never opens a menu is bit-identical). With `throughInput` a girl
+standing ready for a command is treated as *queued for input* rather than
+acting, so she no longer stops the sub-step loop.
+
+**`inputValid(actorId: CombatantId): boolean`** — new method. Is the command
+menu open for `actorId` still answerable: ready, able to act, not chain-locked,
+not Berserked, battle still running. The presenter polls it once per pump step,
+**and again before it submits a command** — the wave-1a repair, without which a
+command confirmed in the same step its owner was KO'd executed as a different
+girl. `FFX2Engine.submit` refuses such a command at the root.
+
+Implementations: `src/battle/ffx2/engine.ts` (predicates in
+`src/battle/ffx2/active.ts`). Consumers: `src/engine/BattlePresenter.ts` and
+`src/engine/BattlePresenterActive.ts`, both through the structural
+`activeClockEngine()` probe, which returns `null` for FFX.
+
 ## 2026-09-20 — results: `BattleResult` carries turn participation separately from AP eligibility
 
 Key `builda1-repair` (round 04 repair, second pass — the verifier refuted the

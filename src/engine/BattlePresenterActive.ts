@@ -130,9 +130,16 @@ export async function runActivePump(deps: ActivePumpDeps): Promise<PumpStop> {
       deps.syncGauges(deps.engine.gaugeSnapshot());
     }
 
-    // A command that arrived while we were playing wins; only then do we ask
-    // whether the menu is still answerable, so a girl who submitted on the same
-    // step she was KO'd is not robbed of her command.
+    // A command that arrived while we were playing ends the pump — but
+    // `'settled'` here means only "stop the clock", never "this command is
+    // good". The burst we just played may have KO'd, Stopped or chained the
+    // menu's owner in the very step that delivered her answer, and submitting
+    // it then used to execute her command as a *different* girl (wave-1a
+    // verifier, ch. 4 seed 7: `rikku:Power Break`). The caller re-checks
+    // `inputValid` before it submits, and `FFX2Engine.submit` refuses an owner
+    // who cannot act — this loop deliberately does not decide that here, so a
+    // command and an invalidation racing in the same step can only ever end in
+    // a refusal, never in a stolen turn.
     if (deps.settled()) return 'settled';
     if (!deps.engine.inputValid(deps.actorId)) return 'invalidated';
   }

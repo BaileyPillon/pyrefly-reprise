@@ -473,6 +473,35 @@ export class BattlePresenter {
     // one, and this handler is separate from the race's own.
     void decided.catch(() => undefined);
 
+    // Tear the DOM menu down and release the cancel claim, or Esc belongs to a
+    // menu that is no longer on screen and the pause key stops working — a
+    // defect this project has already paid for once.
+    const abandon = (): null => {
+      try {
+        hud.closeCommandMenu?.();
+      } catch (err) {
+        console.warn('[presenter] HUD closeCommandMenu threw', err);
+      }
+      this.inputAbandoned = true;
+      return null;
+    };
+
+    /**
+     * The last gate before a command is submitted, **FFX-2 Active only**.
+     *
+     * A command can win the race above and still be worthless: the pump plays
+     * an enemy's burst with `await`, and the player may confirm *during* that
+     * animation, in the same step the burst KO's (or Stops, or chains) the
+     * menu's owner. `runActivePump` deliberately lets a command that arrived
+     * mid-`play` win, so it returns `'settled'` without re-asking — which left
+     * the presenter submitting a dead girl's command. `FFX2Engine.submit`
+     * refuses it at the root; this is the half that also closes the menu and
+     * lets the loop ask the engine what happens next, instead of a submit that
+     * silently produces nothing.
+     */
+    const finish = (command: Command): Command | null =>
+      clock && !clock.inputValid(actorId) ? abandon() : command;
+
     try {
       if (!clock) return await decided;
       const pump = runActivePump({
@@ -489,20 +518,12 @@ export class BattlePresenter {
         decided.then((command) => ({ command }) as const),
         pump.then((stop) => ({ stop }) as const),
       ]);
-      if ('command' in outcome) return outcome.command;
-      if (outcome.stop === 'invalidated') {
-        // Tear the DOM menu down and release the cancel claim, or Esc belongs
-        // to a menu that is no longer on screen and the pause key stops
-        // working — a defect this project has already paid for once.
-        try {
-          hud.closeCommandMenu?.();
-        } catch (err) {
-          console.warn('[presenter] HUD closeCommandMenu threw', err);
-        }
-        this.inputAbandoned = true;
-        return null;
-      }
-      return await decided;
+      if ('command' in outcome) return finish(outcome.command);
+      if (outcome.stop === 'invalidated') return abandon();
+      // `'settled'` also covers a torn-down presenter, whose menu promise may
+      // never resolve at all; awaiting it there would park this task forever.
+      if (this.aborted) return null;
+      return finish(await decided);
     } catch (err) {
       if (this.aborted) return null;
       console.warn('[presenter] command menu failed; falling back', err);

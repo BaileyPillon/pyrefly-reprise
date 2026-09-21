@@ -37,10 +37,32 @@ because the FFX-2 ATB engine and the battle presenter are both shared systems).
 | `src/ui/ffx2/CommandMenu.ts` | `onOpen(close)` — an external teardown that releases the cancel claim |
 | `src/ui/coach/CoachMark.ts` | the C3 badge restored to the approved mockup's words (§6) |
 
-Two new modules rather than growing the old ones: `engine.ts` and
-`BattlePresenter.ts` were both already over the 400-line house limit (DEV.md
-"House rules") before this change. `node tools/orphans.mjs` is unchanged —
-each new module has exactly one importer.
+`node tools/orphans.mjs` is unchanged — each new module has exactly one importer.
+
+#### House limit (rule 7): the honest measurement
+
+An earlier draft of this note claimed the two new modules kept `engine.ts` and
+`BattlePresenter.ts` from growing past the house limit. **That claim was false
+as written** and the wave-1a verifier refuted it. All four files touched were
+already over 400 lines, and this track pushed every one of them further.
+Splitting `active.ts` and `BattlePresenterActive.ts` out avoided *more* growth;
+it did not bring anything under the limit. Measured
+(`git show 45f98b9^:<file> | wc -l` against the tree, then again after the
+wave-1a repair):
+
+| File | Before `45f98b9` | After `45f98b9` | After the repair |
+|---|---|---|---|
+| `src/battle/ffx2/engine.ts` | 479 | 618 | 637 |
+| `src/engine/BattlePresenter.ts` | 508 | 594 | 615 |
+| `src/ui/ffx2/FFX2BattleHud.ts` | 1078 | 1124 | 1124 |
+| `src/ui/ffx2/CommandMenu.ts` | 577 | 598 | 598 |
+
+Nothing caught it: the suite's own 400-line guard
+(`tests/unit/ffx-round04-engine.test.ts`) covers only `battle/ffx/state.ts` and
+`predicates.ts`. Bringing these four under 400 is a ~1000-line movement across
+files several agents are editing right now, so it is **not** done here and is
+listed as open work in §8 rather than claimed. It is pre-existing debt this
+track added to, not debt this track created.
 
 ### The three seams
 
@@ -51,14 +73,45 @@ each new module has exactly one importer.
    Wait"** is honoured without inventing a list of animations: the pump is not
    running while `play()` animates, so nothing ticks then. That alignment is
    **structural, not sourced**, and the deep review should read it that way.
-2. **An input owner**, so a command reaches the right girl. `submit` used to
-   resolve its actor as `nextActor()`, which was safe only because one girl
-   could be ready at a time. Under Active, Yuna can fill her bar while Rikku's
-   menu is open and `actorOrder` puts the lower slot first — Rikku's command
-   would have executed as Yuna's, silently. `nextActor` now returns the owner
-   first while she can still act. It lives on the engine, not in `BattleState`,
-   so no save or event shape changed, and setting it is idempotent, so
-   `nextDecision()` still never mutates for `'player-input'`.
+2. **An input owner**, so a command reaches the right girl **or nobody**.
+   `submit` used to resolve its actor as `nextActor()`, which was safe only
+   because one girl could be ready at a time. Under Active, Yuna can fill her
+   bar while Rikku's menu is open and `actorOrder` puts the lower slot first —
+   Rikku's command would have executed as Yuna's, silently. `nextActor` now
+   returns the owner first while she can still act. It lives on the engine, not
+   in `BattleState`, so no save or event shape changed, and setting it is
+   idempotent, so `nextDecision()` still never mutates for `'player-input'`.
+
+   **The first version of this seam was only half closed** (wave-1a verifier,
+   confirmed silent critical, repaired 2026-09-21). `nextActor` *prefers* the
+   owner — `if (owner && canTakeTurn(owner)) return owner;` — and a **dead**
+   owner fell straight through to the `actorOrder` loop. So a command confirmed
+   in the same pump step that KO'd its owner executed as a different girl, with
+   an ability she does not have, spending her turn. Measured through the real
+   presenter (ch. 4 `ffx2-bahamut`, seed 7): Paine's menu is open, Bahamut's
+   action is animating, the player confirms `x2-warrior-power-break`, Paine
+   drops to 0 HP — and the event log reads `rikku:Power Break`. Rikku is not a
+   Warrior. With no other girl ready the command was instead dropped with zero
+   events and no feedback at all. Unreachable under Wait; created by Active.
+
+   Closed in two places, so no ordering of the race can produce a stolen turn:
+
+   - **Root, in the engine.** `FFX2Engine.submit` now refuses outright when an
+     `inputOwner` is set and `inputValid(owner)` is false: the turn is not
+     spent, no events are emitted, `inputOwner` is cleared, and the next
+     `nextDecision()` offers a fresh menu to somebody who can answer it. It
+     reuses `inputValid` rather than a second predicate so the two can never
+     drift apart.
+   - **Presenter, in the FFX-2 input path.** `runActivePump` deliberately lets a
+     command that arrived during `play()` end the pump, so `'settled'` means
+     only "stop the clock", never "this command is good".
+     `BattlePresenter.chooseCommand` therefore re-checks `clock.inputValid`
+     immediately before it returns a command, and abandons the menu (close +
+     `inputAbandoned`) if the owner can no longer answer — which is what keeps
+     the fight moving instead of a submit that silently produces nothing.
+
+   FFX reaches neither gate: `activeClockEngine()` returns `null` for it, and
+   its own `submit` is untouched.
 3. **`inputValid(actorId)`**, polled once per pump step: ready, able to act, not
    chain-locked, not Berserked, battle still on. An invalid menu is torn down
    through `HudPort.closeCommandMenu` — which releases the cancel claim, or Esc
@@ -205,8 +258,8 @@ or `__pyrefly.autoBattle('intended')`.
 
 ## 5. Tests
 
-`tests/unit/ffx2-active-atb.test.ts` (19) and `tests/unit/ffx-no-active-clock.test.ts`
-(2). Real `FFX2Engine`, real Chapter 4 and Chapter 5 data, real pump, fake
+`tests/unit/ffx2-active-atb.test.ts` (22) and `tests/unit/ffx-no-active-clock.test.ts`
+(3). Real `FFX2Engine`, real Chapter 4 and Chapter 5 data, real pump, fake
 clock; the last two cases drive the **real `BattlePresenter`** with a HUD that
 opens a menu and never answers it.
 
@@ -231,6 +284,32 @@ opens a menu and never answers it.
   gets `closeCommandMenu` and the loop moves on without aborting;
 - **FFX absence**: the FFX engine offers no `tick`, `activeClockEngine` returns
   null, and five seconds of fake clock under an open FFX menu move nothing.
+
+### Added by the wave-1a repair (2026-09-21)
+
+Four cases, each of which fails on the code as it was pushed in `45f98b9`:
+
+- **the silent critical, engine level** — the owner is KO'd with other girls
+  standing ready; `submit` of her own ability must emit **nothing**, spend no
+  turn, and the next decision must belong to somebody else. *Before the repair:
+  3 events and a stolen turn.*
+- **the silent critical, through the real `BattlePresenter`** — Confirm is
+  pressed inside `onEvent` while the enemy burst that KO's the menu's owner is
+  animating, i.e. in the same pump step. No party member may take a turn and no
+  party member may appear in an `action-start`; the menu must be closed and a
+  fresh one opened. *Before the repair: `['rikku']` and `rikku:Power Break`.*
+- **the degenerate variant** — same thing with nobody else ready: still a
+  refusal, still no turn spent, rather than a silent drop.
+- **FFX absence for the new gates** — an answered FFX command is still
+  submitted as the actor whose menu opened, and `closeCommandMenu` is never
+  called (rule 14).
+
+The existing *"executes the command as the girl whose menu was open"* case was
+also a **tautology waiting to happen**: it read `state.activeIds[0]` and only
+asserted it was defined, so on any seed whose first menu owner *is* slot 0 it
+passed with the input-owner lock deleted (measured: yuna at seeds 1 and 3, paine
+at seed 7). It now asserts `first !== lowestSlot`, and seed 7 is pinned for that
+reason.
 
 `npx tsc --noEmit` clean. Full suite green (§8).
 
@@ -290,6 +369,30 @@ part of this change.
 4. Noted, not asked: auto-**retargeting** a command whose target died, instead
    of refusing and reopening (preflight §4.4 (b)). The retail games generally
    retarget, but there is no citation for X-2 specifically.
+5. **A girl KO'd in the very instant she confirms now loses her command.** That
+   is the safe answer and it is the one built: the engine is authoritative and
+   refuses, so the command can never land on somebody else. The alternative —
+   honour a command that arrived before the KO resolved — is a *player-facing*
+   fairness call, not a sourced rule, so under hard rule 9 it is Bailey's, not a
+   builder's. It is rare (it needs the confirm to land inside the animation of
+   the burst that kills her) and nothing on screen is misleading either way: the
+   menu simply closes.
+
+---
+
+## 7b. Wave-1a repair, open work (not done here)
+
+- **Rule 7, the four files over the 400-line house limit** (table in §1). Real,
+  pre-existing debt that this track added to. Bringing them under is a
+  ~1000-line movement across `engine.ts`, `BattlePresenter.ts`,
+  `FFX2BattleHud.ts` and `CommandMenu.ts` while several agents hold those files,
+  so it wants its own track rather than a fix pass. The 400-line guard in
+  `tests/unit/ffx-round04-engine.test.ts` should grow to cover more than
+  `battle/ffx/state.ts` and `predicates.ts` at the same time — it is what would
+  have caught this.
+- **Rule 2** is settled: `docs/CONTRACT-CHANGES.md` now carries the
+  2026-09-21 entry for `FFX2BattleEngine.tick(ms, opts)` and `inputValid`, which
+  `45f98b9` shipped without.
 
 ---
 
@@ -297,7 +400,8 @@ part of this change.
 
 - `npx tsc --noEmit` clean.
 - `node tools/orphans.mjs` unchanged.
-- New tests: 21, each failing without its repair.
+- New tests: 21 on the first pass, +4 on the wave-1a repair (25), each failing
+  without its repair.
 - Full unit suite green, run once at the end of the branch.
 - Browser pass at 1600x900 with `PYREFLY_BROWSER=gpu`, both FFX-2 chapters and
   the FFX control, six screenshots under `docs/screenshots/ffx2-active/`.
