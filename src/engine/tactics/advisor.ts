@@ -115,10 +115,19 @@ import { changesNothing } from './advisor-guard.ts';
 import {
   type StatusChance,
   bestChance,
+  confidenceOf,
   expectedStatusValue,
   inertAcrossBand,
   statusChances,
 } from './advisor-roll.ts';
+import { type BoardFact, evaluate } from './advisor-eval.ts';
+import {
+  PlanCache,
+  beatsPrior,
+  budgetFor,
+  cacheKeyFor,
+} from './advisor-plan.ts';
+import { sentenceFor } from './advisor-say.ts';
 import { menuChipFor, onTheMenu } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
@@ -193,6 +202,16 @@ export interface MoveSuggestion {
   isSwitch: boolean;
   /** `'tactic'` when this is the line the chapter was designed around. */
   source: 'tactic' | 'simulated';
+  /**
+   * Everything the planner proved about this row, each with the number that
+   * proved it and what proved it (`./advisor-eval.ts`).
+   *
+   * Not printed. It is the audit trail behind {@link reason}: a test can take
+   * this list, re-run the same simulation and the same forecast, and check every
+   * figure the sentence quotes against the engine's own answer
+   * [`tests/unit/advisor-sentence.test.ts`]. Empty with the planner switched off.
+   */
+  facts?: readonly BoardFact[];
 }
 
 /** Everything the card shows for one open decision. */
@@ -322,6 +341,22 @@ const FRIENDLY_FIRE_WEIGHT = 4;
 const MAX_SIMULATIONS = 60;
 
 const YUNALESCA_ID = 'yunalesca';
+
+/**
+ * One plan per open decision, so the FFX-2 Active pump cannot re-plan at 20 Hz.
+ *
+ * Module-level and tiny (eight entries, FIFO). The key carries the engine's own
+ * `nextSeq` plus a board digest, so a board that changed can never read a stale
+ * answer, and the stored `commands` reference is compared as well — a fresh
+ * command list means a fresh decision whatever the counters say
+ * [`./advisor-plan.ts`].
+ */
+const PLAN_CACHE = new PlanCache<{ view: AdvisorView | null; commands: readonly AvailableCommand[] }>();
+
+/** Empty the plan cache. For tests that assert determinism across a cold start. */
+export function clearAdvisorCache(): void {
+  PLAN_CACHE.clear();
+}
 
 // --------------------------------------------------------------- ownership
 
@@ -897,6 +932,8 @@ interface Candidate {
   origin: { row: AvailableCommand; targetId: CombatantId | null } | null;
   /** Every status this row is rolling for, with its real odds. See `./advisor-roll.ts`. */
   chances: readonly StatusChance[];
+  /** What the evaluation proved about this row. Empty with the planner off. */
+  facts: readonly BoardFact[];
 }
 
 /**
@@ -1002,6 +1039,7 @@ function candidateFor(
     outcome: mid,
     origin: { row, targetId },
     chances,
+    facts: [],
     suggestion: {
       ...base,
       reason: reasonFor(state, base, mid, chances),
@@ -1046,6 +1084,7 @@ function switchCandidate(
     outcome: null,
     origin: null,
     chances: [],
+    facts: [],
     suggestion: {
       ...base,
       reason:
@@ -1071,12 +1110,27 @@ export function buildAdvisorView(
   const actor = state.combatants[decision.actorId];
   if (!actor) return null;
   const planner = options.planner !== false;
+
+  // **The cache.** FFX-2 runs an Active ATB clock and `syncGauges` pumps the
+  // HUD at 20 Hz; without this, every one of those frames would re-plan a board
+  // that has not moved. `nextSeq` is the engine's own event counter, so a board
+  // that *has* moved cannot share a key [`./advisor-plan.ts#cacheKeyFor`].
+  const cacheKey = planner ? cacheKeyFor(state, decision.actorId) : null;
+  if (cacheKey) {
+    const hit = PLAN_CACHE.get(cacheKey);
+    if (hit && hit.commands === decision.commands) return hit.view;
+  }
+
   const sim = simulatorFor(state, options);
-  // The forecast is only ever read by the revive rules, and a prediction is a
-  // dozen board clones — so it is asked for exactly when somebody is on the
-  // floor and the question "does this raise survive" can actually come up.
+  // The forecast: once per decision, shared by every candidate.
+  //
+  // Before v2 it was asked for only when somebody was on the floor, because the
+  // revive rules were its only reader. The planner's first evaluation term is
+  // "does the party survive what is coming", so it is now read on every
+  // decision the planner runs — one forecast, measured at 1.5 ms in FFX and
+  // 0.6 ms in FFX-2, against a 15 ms / 8 ms budget [`./advisor-eval.ts`].
   let intent: AdvisorIntent | null = null;
-  if (downedActives(state).length > 0) {
+  if (planner || downedActives(state).length > 0) {
     try {
       intent = options.intent?.() ?? forecastFromState(state, options);
     } catch {
@@ -1086,6 +1140,11 @@ export function buildAdvisorView(
   }
 
   const candidates: Candidate[] = [];
+  // Work counts, never a wall clock: a clock-based cut would make the card's
+  // answer depend on how busy the machine is, and every acceptance number in
+  // `critic/bench/advisor-v2/` rests on the same seed giving the same advice
+  // [`./advisor-plan.ts`, docs/plans/advisor-v2-review.md §8 R-2].
+  const budget = planner ? budgetFor(state.game) : { maxSimulations: MAX_SIMULATIONS, maxForecasts: 1 };
   let simulations = 0;
   for (const row of orderedRows(state, decision.commands, options)) {
     if (!row.enabled) continue;
@@ -1099,21 +1158,93 @@ export function buildAdvisorView(
     }
     const def = defFor(state, row.command, options);
     for (const targetId of aimCandidates(state, row, def)) {
-      if (simulations >= MAX_SIMULATIONS) break;
+      if (simulations >= budget.maxSimulations) break;
       simulations += 1;
       const candidate = candidateFor(state, decision.actorId, decision.commands, row, targetId, sim, intent, planner);
       if (candidate) candidates.push(candidate);
     }
   }
 
+  // **The evaluation.** Every candidate is re-priced against what the enemy is
+  // about to do, and carries the facts that proved it
+  // (`./advisor-eval.ts`). The simulated score is untouched; this is added to
+  // it, so a regression is always attributable to one named term.
+  if (planner) {
+    for (const c of candidates) {
+      const ev = evaluate(
+        state,
+        decision.actorId,
+        c.suggestion.command,
+        c.outcome,
+        c.chances,
+        intent,
+        options.turnOrder,
+      );
+      c.facts = ev.facts;
+      c.suggestion = { ...c.suggestion, score: c.suggestion.score + ev.bonus };
+    }
+  }
+
   candidates.sort((a, b) => b.suggestion.score - a.suggestion.score);
 
-  // The chapter's own line, when this actor can actually press it, is the top
-  // row. `tacticSuggestion` returns `null` rather than a row from somebody
-  // else's menu, and the ranking below stands in for it when it does.
+  // The chapter's own line, when this actor can actually press it.
+  //
+  // **It is a prior now, not a pin.** Three passes of
+  // `docs/handoff/fix3-advisor.md` left the question open — a Mega Phoenix
+  // priced at 11 300 still lost to a line worth 555 — and Bailey answered it on
+  // 2026-09-21: the ranking may outrank the guide. So another row takes the top
+  // only when it beats the line by a ratio [`./advisor-plan.ts#beatsPrior`], and
+  // when it does, the sentence names the long plan in the same breath, so the
+  // card and the strategy panel are never teaching different fights.
   const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner);
+  if (tactic && planner) {
+    const ev = evaluate(
+      state,
+      decision.actorId,
+      tactic.suggestion.command,
+      tactic.outcome,
+      tactic.chances,
+      intent,
+      options.turnOrder,
+    );
+    tactic.facts = ev.facts;
+    tactic.suggestion = { ...tactic.suggestion, score: tactic.suggestion.score + ev.bonus };
+  }
+  const others = tactic
+    ? candidates.filter((c) => !sameCommand(c.suggestion.command, tactic.suggestion.command))
+    : candidates;
+  // **What it takes to overrule the chapter's line.**
+  //
+  // Bailey's answer on 2026-09-21 was that the ranking *may* outrank the guide.
+  // Measured on forty seeds a chapter, a score ratio alone is not a bar: with
+  // the override on a bare `beatsPrior`, Chapter 1 fell from 25 wins to 4 and
+  // Chapter 2 from 34 to **zero**, because a bigger damage number is available
+  // on almost every turn of a fight that is not won by damage. That is the
+  // "card and panel teach different fights" failure the last three passes
+  // refused to risk, arriving through the front door.
+  //
+  // So the override is gated on a **named, proved fact**, not on arithmetic: the
+  // challenger saves somebody the enemy's telegraphed next action would kill,
+  // and the line does not [`./advisor-eval.ts` `saves-from-lethal`]. That is the
+  // one board where "press this instead" is worth breaking the plan for, and
+  // the card says so — `./advisor-say.ts` names the long plan in the same
+  // sentence. Everything else keeps the line on top and competes for row 2.
+  let override: Candidate | null = null;
+  if (tactic && planner) {
+    const saves = (c: Candidate): boolean => c.facts.some((f) => f.kind === 'saves-from-lethal');
+    const challenger = others.find(saves);
+    if (
+      challenger &&
+      !saves(tactic) &&
+      beatsPrior(challenger.suggestion.score, tactic.suggestion.score)
+    ) {
+      override = challenger;
+    }
+  }
   const ranked = tactic
-    ? [tactic, ...candidates.filter((c) => !sameCommand(c.suggestion.command, tactic.suggestion.command))]
+    ? override
+      ? [override, tactic, ...others.filter((c) => c !== override)]
+      : [tactic, ...others]
     : candidates;
 
   // **The hard gate.** Nothing reaches the card that this actor cannot press on
@@ -1183,17 +1314,28 @@ export function buildAdvisorView(
       else shown.push(raise);
     }
   }
-  const suggestions = shown.map((c) =>
-    withRange(state, decision.actorId, decision.commands, c, sim, intent, planner),
-  );
+  const suggestions = shown.map((c) => {
+    const s = withRange(state, decision.actorId, decision.commands, c, sim, intent, planner);
+    if (!planner) return s;
+    // **The sentence.** Assembled from at most two proved facts, never from a
+    // per-chapter template, and `''` rather than a claim the board does not
+    // support [`./advisor-say.ts`]. When the ranking overruled the chapter's
+    // line, the line is named in the same sentence.
+    const longPlan =
+      override !== null && c === override && tactic ? tactic.suggestion.label : null;
+    const said = sentenceFor(c.facts, confidenceOf(c.chances), longPlan);
+    return { ...s, facts: c.facts, ...(said ? { reason: said } : {}) };
+  });
 
-  return {
+  const view: AdvisorView = {
     actorId: decision.actorId,
     actorName: actor.name,
     suggestions,
     note: noteFor(state, shown, refused, decision, options, actor.name),
     considered: candidates.length,
   };
+  if (cacheKey) PLAN_CACHE.set(cacheKey, { view, commands: decision.commands });
+  return view;
 }
 
 /**
@@ -1504,6 +1646,7 @@ function tacticSuggestion(
     outcome: candidate.outcome,
     origin: candidate.origin,
     chances: candidate.chances,
+    facts: candidate.facts,
     suggestion: {
       ...candidate.suggestion,
       cite,

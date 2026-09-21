@@ -89,6 +89,8 @@ interface Walk {
    * paint** — today, Defend. See {@link walk}.
    */
   offMenuTactics: string[];
+  /** Decisions where a proved save outranked the chapter's line. */
+  overrides: string[];
 }
 
 /**
@@ -113,7 +115,7 @@ interface Walk {
  */
 function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
   const { engine, content } = newFfxEngine(groupId, seed, party);
-  const out: Walk = { decisions: 0, advised: 0, mismatches: [], switches: 0, pairs: 0, withNumbers: 0, bare: [], offMenuTactics: [] };
+  const out: Walk = { decisions: 0, advised: 0, mismatches: [], switches: 0, pairs: 0, withNumbers: 0, bare: [], offMenuTactics: [], overrides: [] };
 
   for (let i = 0; i < MAX_DECISIONS; i++) {
     const decision: Decision = engine.nextDecision();
@@ -142,7 +144,25 @@ function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
       // A switch at the top must always carry a runner-up.
       if (top.isSwitch) expect(view.suggestions.length).toBe(2);
       if (tactic && shape(top.command) !== shape(tactic)) {
-        if (onTheMenu(state.game, tactic)) {
+        // **The one licensed exception**, and it has to prove itself.
+        //
+        // The chapter's line is a prior now, not a pin (Bailey, 2026-09-21:
+        // the ranking may outrank the guide). A score ratio alone was measured
+        // to be no bar at all — Chapter 1 fell from 25 wins in 40 to 4 and
+        // Chapter 2 to zero — so the override fires only where the evaluation
+        // can name an ally the enemy's telegraphed next action would kill and
+        // this row saves. With that gate Chapter 1 goes the other way: 25 wins
+        // to **27**, past the chapter line's own 26 [`critic/bench/advisor-v2/`,
+        // `advisor-eval.ts` `saves-from-lethal`].
+        //
+        // And the card has to say so: the long plan is named in the same
+        // sentence, so the card and the strategy panel never teach different
+        // fights.
+        const saves = (top.facts ?? []).some((f) => f.kind === 'saves-from-lethal');
+        if (saves) {
+          out.overrides.push(`${decision.actorId}: ${top.label} over ${shape(tactic)}`);
+          expect(top.reason, 'an override names the long plan').toMatch(/long plan is still/);
+        } else if (onTheMenu(state.game, tactic)) {
           out.mismatches.push(`${decision.actorId}: card ${shape(top.command)} vs tactic ${shape(tactic)}`);
         } else {
           out.offMenuTactics.push(`${decision.actorId}: ${shape(tactic)}`);

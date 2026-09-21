@@ -1,0 +1,152 @@
+{
+  "seeds": 40,
+  "at": "2026-09-21T20:31:34.606Z",
+  "rows": [
+    {
+      "chapterId": "seymour-flux",
+      "driver": "intended",
+      "seeds": 40,
+      "wins": 26,
+      "winRate": 65,
+      "medianTurns": 60.5,
+      "medianDecisions": 39.5,
+      "latencyP50": 0,
+      "latencyP95": 0,
+      "outcomes": {
+        "defeat": 14,
+        "victory": 26
+      }
+    },
+    {
+      "chapterId": "seymour-flux",
+      "driver": "advisor-v1",
+      "seeds": 40,
+      "wins": 25,
+      "winRate": 62.5,
+      "medianTurns": 60.5,
+      "medianDecisions": 39.5,
+      "latencyP50": 1.94,
+      "latencyP95": 3.8,
+      "outcomes": {
+        "defeat": 15,
+        "victory": 25
+      }
+    },
+    {
+      "chapterId": "yunalesca",
+      "driver": "intended",
+      "seeds": 40,
+      "wins": 39,
+      "winRate": 97.5,
+      "medianTurns": 205,
+      "medianDecisions": 146,
+      "latencyP50": 0,
+      "latencyP95": 0,
+      "outcomes": {
+        "victory": 39,
+        "defeat": 1
+      }
+    },
+    {
+      "chapterId": "yunalesca",
+      "driver": "advisor-v1",
+      "seeds": 40,
+      "wins": 33,
+      "winRate": 82.5,
+      "medianTurns": 246.5,
+      "medianDecisions": 170,
+      "latencyP50": 0.97,
+      "latencyP95": 1.89,
+      "outcomes": {
+        "victory": 33,
+        "defeat": 7
+      }
+    },
+    {
+      "chapterId": "braskas-final-aeon",
+      "driver": "intended",
+      "seeds": 40,
+      "wins": 39,
+      "winRate": 97.5,
+      "medianTurns": 215.5,
+      "medianDecisions": 141.5,
+      "latencyP50": 0,
+      "latencyP95": 0,
+      "outcomes": {
+        "victory": 39,
+        "defeat": 1
+      }
+    },
+    {
+      "chapterId": "braskas-final-aeon",
+      "driver": "advisor-v1",
+      "seeds": 40,
+      "wins": 0,
+      "winRate": 0,
+      "medianTurns": 448.5,
+      "medianDecisions": 225,
+      "latencyP50": 1.49,
+      "latencyP95": 3.48,
+      "outcomes": {
+        "defeat": 30,
+        "escape": 10
+      }
+    },
+    {
+      "chapterId": "ffx2-bahamut",
+      "driver": "intended",
+      "seeds": 40,
+      "wins": 40,
+      "winRate": 100,
+      "medianTurns": 76,
+      "medianDecisions": 47,
+      "latencyP50": 0,
+      "latencyP95": 0,
+      "outcomes": {
+        "victory": 40
+      }
+    },
+    {
+      "chapterId": "ffx2-bahamut",
+      "driver": "advisor-v1",
+      "seeds": 40,
+      "wins": 40,
+      "winRate": 100,
+      "medianTurns": 76,
+      "medianDecisions": 47,
+      "latencyP50": 2.42,
+      "latencyP95": 4.53,
+      "outcomes": {
+        "victory": 40
+      }
+    },
+    {
+      "chapterId": "ffx2-vegnagun-shuyin",
+      "driver": "intended",
+      "seeds": 40,
+      "wins": 40,
+      "winRate": 100,
+      "medianTurns": 42,
+      "medianDecisions": 23,
+      "latencyP50": 0,
+      "latencyP95": 0,
+      "outcomes": {
+        "victory": 40
+      }
+    },
+    {
+      "chapterId": "ffx2-vegnagun-shuyin",
+      "driver": "advisor-v1",
+      "seeds": 40,
+      "wins": 40,
+      "winRate": 100,
+      "medianTurns": 42,
+      "medianDecisions": 22,
+      "latencyP50": 3.34,
+      "latencyP95": 5.41,
+      "outcomes": {
+        "victory": 40
+      }
+    }
+  ]
+}
