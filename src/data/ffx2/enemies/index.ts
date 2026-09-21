@@ -14,6 +14,16 @@ import { shuyinGroup } from './shuyin.ts';
 import { vegnagunAbilities } from './vegnagun-abilities.ts';
 import { vegnagunBodyAbilities } from './vegnagun-body-abilities.ts';
 import { shuyinAbilities } from './shuyin-abilities.ts';
+// The Leblanc Syndicate — **dev-only, not a playable chapter.** No scene, no
+// story script, no art, no music, so it is deliberately absent from
+// `src/data/encounters.ts` and `src/data/chapter-meta.ts` and chapter select
+// keeps showing it as *Coming*. It is listed here so the unit suites and the
+// `window.__pyrefly` debug API can reach it through `ENEMY_GROUPS_BY_ID`,
+// exactly as the Macalania and Evrae engine tracks reach theirs through
+// `src/data/ffx/index.ts`. [docs/handoff/chapter-leblanc-engine.md]
+import { leblancSyndicateGroups } from './leblanc-syndicate-acts.ts';
+import { ormiAbilities, logosAbilities, goonAbilities } from './leblanc-syndicate-abilities.ts';
+import { leblancAbilities } from './leblanc-syndicate-leblanc-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -23,6 +33,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   vegnagunBodyGroup,
   vegnagunHeadGroup,
   shuyinGroup,
+  ...leblancSyndicateGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -35,7 +46,13 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...vegnagunAbilities,
   ...vegnagunBodyAbilities,
   ...shuyinAbilities,
+  ...ormiAbilities,
+  ...logosAbilities,
+  ...leblancAbilities,
+  ...goonAbilities,
 ];
+
+export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };
 
 export {
   bahamutGroup,

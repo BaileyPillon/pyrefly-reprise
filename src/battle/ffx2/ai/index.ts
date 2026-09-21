@@ -17,6 +17,11 @@ import { shuyinScript } from './shuyin.ts';
 import { vegnagunLegScript, vegnagunNodeScript, vegnagunTailScript } from './vegnagun.ts';
 import { vegnagunBodyScript, vegnagunBulwarkScript } from './vegnagun-body.ts';
 import { vegnagunHeadScript, vegnagunRedoubtScript } from './vegnagun-head.ts';
+// The Leblanc Syndicate (Chateau Leblanc, FFX-2 Ch. 2). **Not a registered
+// chapter** — the formations are reachable only from the unit suites and the
+// debug API — but the scripts have to be in this table or an enemy the tests
+// field falls back to `idleScript` and the fight does not happen.
+import { leblancSyndicateScripts } from './leblanc-syndicate.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -44,6 +49,7 @@ const SCRIPTS: readonly AiScript[] = [
   vegnagunHeadScript,
   vegnagunRedoubtScript,
   shuyinScript,
+  ...leblancSyndicateScripts,
   idleScript,
   basicAttackScript,
 ];
@@ -65,6 +71,8 @@ export function registerAiScript(script: AiScript): void {
 export function aiScriptIds(): string[] {
   return [...BY_ID.keys()];
 }
+
+export { leblancSyndicateScripts };
 
 export {
   bahamutScript,
