@@ -2199,12 +2199,12 @@
       "notes": "Head-and-shoulders for dialogue and menus. --ref the matching full-body idle so the menu face and the battle sprite are the same person."
     },
     {
-      "id": "portrait-bahamut-fayth",
+      "id": "portrait-fayth-boy",
       "kind": "portrait",
       "game": "ffx",
       "cmd": "character",
       "outDir": "public/art/portraits",
-      "out": "public/art/portraits/bahamut-fayth.png",
+      "out": "public/art/portraits/fayth-boy.png",
       "composition": "portrait",
       "facing": "none",
       "sizeHint": "832x1216",
@@ -2216,7 +2216,7 @@
           "notes": "Use --composition portrait. Never reach for a portrait by writing \"close-up\" into --poseTags while the full-body framing is still applied — the two fight and you get a mid-shot with cropped feet."
         }
       },
-      "notes": "The hooded boy. He is a character portrait, not an aeon — keep him small-featured and young or he reads as a short adult."
+      "notes": "Written to fayth-boy.png because that is the speaker id the cutscenes use (src/story/dsl.ts); the old out, bahamut-fayth.png, was read by nothing. The file there now is Bailey's approved pick (2026-09-21, docs/target/approved-hashes.json): a re-roll needs Bailey's yes. The hooded boy. He is a character portrait, not an aeon — keep him small-featured and young or he reads as a short adult."
     },
     {
       "id": "portrait-valefor",

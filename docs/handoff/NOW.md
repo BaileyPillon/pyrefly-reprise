@@ -40,6 +40,20 @@
   paine matters most, she is a HUD chip), a browser check of one line per speaker, and the `cast.json`
   `portrait-bahamut-fayth` id versus `fayth-boy`. Not yet seen in a browser. Game case: FFX-2 only (paine, shuyin,
   yuna-x2, rikku-x2), FFX only (young-auron, fayth-boy).
+  **Done 2026-09-21 01:30 EDT (side session "project status"):** eight measured rows in `face-crops.json` (eyes read
+  off gridded head sheets; acceptance sheet `docs/screenshots/portraits/face-crops-new8.png`). Three picks are painted
+  closer than the house framing (shuyin, young-auron, fayth-boy): the tile cannot zoom out past the file, so they carry
+  `"tight": true` and the guard test proves the cover clamp is what pins them (a falsely flagged row fails; checked by
+  mutation). Yu Yevon has no eyes: framed on the hood with both horn swirls, a judgement call, say if it reads wrong.
+  Browser check on a private Vite server (5741, stopped), GPU mode: one line per speaker for seven of the eight, Paine's
+  HUD chip frames her face, 0 console errors, 0 404s (`docs/screenshots/portraits/speaker-portraits-in-game.jpg`).
+  **Yu Yevon never `say`s a line in any script**, so his portrait is reachable only where a screen asks for it.
+  The check found the dialogue box printing the internal ids "Yuna X2" / "Rikku X2" as names: `defaultName` now drops
+  the `-x2` suffix (FFX-2 only in effect; both games call them Yuna and Rikku per `dsl.ts` / writing-bible §1.14-15).
+  `tools/gen/cast.json`: the generator entry now writes `fayth-boy.png` (the id the cutscenes read; `bahamut-fayth.png`
+  was read by nothing). `critic-plan` rates `face-crops.json` and `DialogueBox.ts` as shared (global layout): they ride
+  with the round 05 deep review. Open for Bailey: the name plate reads "Fayth Boy" beside a "FAYTH" chip, and "Young
+  Auron"; the sources in the repo do not say what the games print, so nothing was changed.
 - **Braska card 1 and Yu Yevon card 2:** recommended by the side session, Bailey said "yes to both recommendations".
   Shipped and recorded the same way (25 portraits in the manifest, eight new tiles in all). Braska's gold crest and
   sash are off-canon on every candidate: a headdress repaint is owed and goes past Bailey first. FFX only.

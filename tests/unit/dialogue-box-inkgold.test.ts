@@ -45,6 +45,16 @@ describe('dialogue role chip', () => {
     expect((box.el.querySelector('.dbox__role') as HTMLElement).hidden).toBe(true);
   });
 
+  it('names FFX-2 Yuna and Rikku by name, not by their internal -x2 ids', () => {
+    const { box } = mount();
+    void box.say(say('yuna-x2', "Um. That's a lot of creepy."));
+    expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Yuna');
+    expect(box.el.querySelector('.dbox__role')?.textContent).toBe('Sphere Hunter');
+
+    void box.say(say('rikku-x2', 'Creepy hole, creepy ladder.'));
+    expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Rikku');
+  });
+
   it('lets a screen override the role for its own context', () => {
     const { box } = mount({ roleFor: () => 'Lady of Bevelle' });
     void box.say(say('yuna', 'I will do it.'));

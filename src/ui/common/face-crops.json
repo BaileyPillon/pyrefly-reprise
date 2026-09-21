@@ -18,7 +18,12 @@
     "window of the painting under a grid labelled in FILE PIXELS, so the number under the",
     "crosshair is the number the row wants. Regenerate the probes after any art re-roll:",
     "  node tools/portraits/measure-face-crops.mjs probe <id>",
-    "and re-render the acceptance sheet before believing a row."
+    "and re-render the acceptance sheet before believing a row.",
+    "",
+    "tight    true when the painting is a closer close-up than the house framing (eyes wider than",
+    "         0.34 of the file, or too near its top edge). The tile cannot zoom out past the file, so",
+    "         the cover clamp pins it; the guard test then proves the pin and allows the eye line",
+    "         and head scale the painting forces. Never set it to excuse a wrong row."
   ],
   "targets": { "eyeY": 0.42, "ipd": 0.3 },
   "portraits": {
@@ -56,7 +61,15 @@
     "ixion": { "fx": 0.345, "fy": 0.424, "ipd": 0.173, "px": [832, 1216], "note": "horse head in profile; the one eye is at (287, 516), and the gold in his mane reads as an eye until you put a ruler on it" },
     "shiva": { "fx": 0.348, "fy": 0.4276, "ipd": 0.2007, "px": [832, 1216], "note": "frontal; eyes at (206, 520) and (373, 520)" },
     "valefor": { "fx": 0.563, "fy": 0.416, "ipd": 0.157, "px": [824, 1202], "note": "bird head in profile; the one eye is at (464, 500). The only portrait that is not 832x1216." },
-    "yojimbo": { "fx": 0.446, "fy": 0.192, "ipd": 0.155, "px": [832, 1216], "note": "masked face in shadow under a straw hat; the one lit eye is at (371, 234)" }
+    "yojimbo": { "fx": 0.446, "fy": 0.192, "ipd": 0.155, "px": [832, 1216], "note": "masked face in shadow under a straw hat; the one lit eye is at (371, 234)" },
+    "paine": { "fx": 0.4658, "fy": 0.356, "ipd": 0.2817, "px": [832, 1216], "note": "speaker portrait picked by Bailey 2026-09-21 (card 1); head rolled, pupils at (275, 466) and (500, 400); ipd is the true diagonal separation" },
+    "shuyin": { "fx": 0.5766, "fy": 0.2763, "ipd": 0.3677, "px": [832, 1216], "tight": true, "note": "picked 2026-09-21 (card 2); extreme close-up, head rolled, pupils at (328, 316) and (631, 356); true separation" },
+    "yuna-x2": { "fx": 0.5691, "fy": 0.3406, "ipd": 0.3274, "px": [832, 1216], "note": "picked 2026-09-21 (card 3); pupils at (338, 422) and (609, 406)" },
+    "rikku-x2": { "fx": 0.479, "fy": 0.4061, "ipd": 0.3385, "px": [832, 1216], "note": "picked 2026-09-21 (card 3); head rolled, pupils at (259, 516) and (538, 472); true separation" },
+    "young-auron": { "fx": 0.5259, "fy": 0.2467, "ipd": 0.3381, "px": [832, 1216], "tight": true, "note": "picked 2026-09-21 (card 1); level gaze, pupils at (297, 300) and (578, 300)" },
+    "fayth-boy": { "fx": 0.5128, "fy": 0.3933, "ipd": 0.3644, "px": [832, 1216], "tight": true, "note": "picked 2026-09-21 (card 1); hooded, glowing irises centred at (275, 478) and (578, 478)" },
+    "braska": { "fx": 0.5034, "fy": 0.3856, "ipd": 0.2104, "px": [832, 1216], "note": "picked 2026-09-21 (card 1); pupils at (331, 469) and (506, 469). Headdress repaint is owed and goes past Bailey first: re-measure then" },
+    "yu-yevon": { "fx": 0.5, "fy": 0.36, "ipd": 0.22, "px": [832, 1216], "note": "picked 2026-09-21 (card 2); no eyes: fx is the axis of symmetry, fy sits between the hood peak and the sigil diamond at (416, 486), ipd is the human-equivalent value that keeps the hood and both horn swirls in the tile (the hood alone, 0.33 to 0.67 of the width, read as an abstract pattern)" }
   },
   "bodies": {
     "paine-warrior": { "fx": 0.4887, "fy": 0.1292, "ipd": 0.0985, "px": [408, 1180] },

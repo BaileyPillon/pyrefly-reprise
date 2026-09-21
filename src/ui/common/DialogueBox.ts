@@ -52,7 +52,10 @@ const CHOICE_ACTION_RE = /^dbox-choice-(\d+)$/;
 
 function defaultName(who: SpeakerId): string {
   if (who === 'none' || who === 'narrator') return '';
+  // `yuna-x2` / `rikku-x2` are the FFX-2 voice and portrait sets of Yuna and
+  // Rikku (dsl.ts); the suffix is an internal id, never part of her name.
   return who
+    .replace(/-x2$/, '')
     .split('-')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');

@@ -56,6 +56,18 @@ import {
 } from '../../src/ui/common/portrait.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 import { farplaneBuild } from '../../src/data/ffx2/builds/farplane.ts';
+import faceCropData from '../../src/ui/common/face-crops.json';
+
+/**
+ * Rows marked `tight`: the painting is a closer close-up than the house framing,
+ * so the tile cannot zoom out far enough and the cover clamp decides. The flag
+ * is not an excuse — the test below proves the clamp really is pinning the tile.
+ */
+const TIGHT = new Set(
+  Object.entries(faceCropData.portraits as Record<string, { tight?: boolean }>)
+    .filter(([, row]) => row.tight === true)
+    .map(([id]) => id),
+);
 
 const ROOT = resolve(__dirname, '../..');
 
@@ -132,6 +144,22 @@ describe('every measured face lands on the house eye line', () => {
     const crop = portraitCrop(id);
     const { w, h } = pngSize(portraitFile(id));
     const p = placed(faceCropStyle(id), w / h, crop);
+
+    if (TIGHT.has(id)) {
+      // The painting forces the miss, and only the painting: the tile is pinned
+      // at its widest (the whole file's width) or against the file's top edge.
+      const pinned = Math.abs(p.w - 100) < 0.01 || Math.abs(p.top) < 0.01;
+      expect(pinned, `${id} is marked tight but nothing pins it: measure it properly`).toBe(true);
+      // Still a face in the frame: eyes above the middle, head no bigger than a third over.
+      expect(p.eyeY, `${id} eye line`).toBeGreaterThan(TARGET_EYE_Y - 0.07);
+      expect(p.eyeY, `${id} eye line`).toBeLessThan(TARGET_EYE_Y + 0.005);
+      expect(p.eyeX, `${id} eye midpoint x`).toBeGreaterThan(0.2);
+      expect(p.eyeX, `${id} eye midpoint x`).toBeLessThan(0.8);
+      expect(p.ipd, `${id} rendered eye separation`).toBeGreaterThan(TARGET_IPD - 0.04);
+      expect(p.ipd, `${id} rendered eye separation`).toBeLessThan(TARGET_IPD + 0.1);
+      expect(p.covers, `${id} leaves bare frame`).toBe(true);
+      return;
+    }
 
     // The eye line is the whole contract: a tile is a face at a shared scale
     // with its eyes on one line, or it is a crop of somebody's hair.
