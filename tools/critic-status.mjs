@@ -8,6 +8,7 @@
  *   - each marker in critic/pending/ with its separate obligations
  *     (live / focused / deep / milestone) and their results;
  *   - the build that is live now, from docs/deploys.log;
+ *   - issues that consecutive full reviews leave open (`STALLED:`, RUBRIC §8);
  *   - every finished report, labelled with the rubric it was scored under.
  *     Rubric v1 reports (Parts A, B and C) are history and are never shown as
  *     a current score; a v2 score is shown WITH its build, and is called out
@@ -25,7 +26,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { readPendingMarkers } from './critic-pending.mjs';
-import { loadPolicy, weightedTotal } from './critic-policy.mjs';
+import { loadPolicy, stalledIssues, weightedTotal } from './critic-policy.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -48,7 +49,7 @@ export function readReports(dir, policy = null) {
     // A v2 score is recomputed from the category scores, never trusted from a field a reviewer typed.
     const v2 = policy && rubricVersion >= 2 ? weightedTotal(data.categories, policy) : null;
     const total = rubricVersion >= 2 ? (v2 && !v2.provisional ? v2.display : null) : data.headline ?? data.weightedTotal ?? data.weighted_total ?? data.total ?? data.score;
-    return { file, id, rubricVersion, review: data.review ?? (rubricVersion === 1 ? 'full round (old policy)' : '?'), sha, total, date: data.date ?? data.generatedAt ?? null, verdicts: data.verdicts ?? null };
+    return { file, id, rubricVersion, review: data.review ?? (rubricVersion === 1 ? 'full round (old policy)' : '?'), sha, total, date: data.date ?? data.generatedAt ?? null, verdicts: data.verdicts ?? null, issues: Array.isArray(data.issues) ? data.issues : null };
   });
 }
 
@@ -106,6 +107,10 @@ function main() {
   console.log('');
   console.log(`quality: ${qualityLine(reports, live?.sha)}`);
   console.log('');
+  // The stagnation rule (RUBRIC §8): information for the next plan, never an exit code.
+  const stalled = stalledIssues(reports.filter((r) => !r.parseError), policy);
+  for (const s of stalled) console.log(`STALLED: ${s.id} (${s.severity}) ${s.reason} — the next batch starts with a method check. ${s.title}`);
+  if (stalled.length) console.log('');
   if (owed) {
     console.log(`critic:status FAIL — ${owed} review obligation(s) are still pending (critic/RUBRIC.md, "When the critic runs").`);
     process.exitCode = 1;

@@ -22,7 +22,14 @@
     "ffx2-bahamut": { "game": "ffx2", "scene": "bevelle-underground" },
     "ffx2-vegnagun-shuyin": { "game": "ffx2", "scene": "farplane" }
   },
-  "cadence": { "substantialCheckpoints": 3, "activeDays": 7, "repairAttemptsBeforeEscalation": 2 },
+  "cadence": { "substantialCheckpoints": 3, "activeDays": 7, "repairAttemptsBeforeEscalation": 2, "stalledAfterReviews": 2, "repairCyclesPerCandidate": { "normal": 2, "conserve": 1, "protect": 0 } },
+  "usageModes": {
+    "note": "Adopted by Bailey on 2026-09-21 (RUBRIC §9). Percent of the WEEKLY allowance still left; the 5-hour window uses the same thresholds and can only tighten the mode. Bailey sets the mode by word; agents may only tighten it. The reading comes from the desktop app, so nothing in node enforces this: it is written at the top of NOW.md and in every release announcement.",
+    "normal": { "weeklyLeftAbove": 50 },
+    "conserve": { "weeklyLeftAbove": 20 },
+    "protect": { "weeklyLeftAtOrBelow": 20 },
+    "pacingGapPoints": 5
+  },
   "escalation": { "focusedSystemsForDeep": 4, "productFilesForDeep": 40 },
   "alwaysAtDeploy": ["CHK-016", "CHK-017"],
   "baseline": {

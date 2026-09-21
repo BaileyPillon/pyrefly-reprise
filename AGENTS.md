@@ -27,7 +27,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | Dev server | `npm run dev` (5173; if taken: `npx vite --port 5190`) |
 | Production build to the shared `dist/` | `npm run build` |
 | Screenshot | `npm run screenshot -- --url=http://localhost:5173/ --out=docs/screenshots/<name>.png` |
-| What each live build still owes the critic | `npm run critic:status` |
+| What each live build still owes the critic, and which issues have stalled | `npm run critic:status` |
 | Which review a change needs, and why | `node tools/critic-plan.mjs` (`--paths a,b` to ask about files) |
 | Settle a review obligation with a report | `node tools/critic-clear.mjs --report <report.json>` (never delete a marker) |
 | Release | `npm run deploy` (read "Release" first) |
@@ -53,7 +53,7 @@ debug API that plays a chapter to an outcome from the console) is in
 | `critic/` | `RUBRIC.md` (policy v2: verdicts, schedule, one score, gates), `policy.json` (the same rules as data, enforced by `tools/critic-*.mjs`), `CHECKS.md` (CHK-001 to CHK-024, B1 to B4), `runner/` (the review workflows), `pending/` `cleared/` `reviews/` `rounds/` `artifacts/` `ledger.json` (obligations and evidence) | `RUBRIC.md` §4 and §10 before any release |
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
 | `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |
-| `docs/target/targets.json` | Bailey's approved end states, pictures awaiting a verdict, and the gaps. `node tools/end-state-board.mjs` renders the board | before building anything Bailey will see, hear or feel (hard rule 9) |
+| `docs/target/targets.json`, `decisions.json` | Bailey's approved end states, pictures awaiting a verdict, and the gaps; per tile, whether it is built (`delivery`) and what Bailey named versus what an agent guessed (`reaction`). `decisions.json` holds the decisions that are not pictures, with their state. `node tools/end-state-board.mjs` renders the board | before building anything Bailey will see, hear or feel (hard rule 9) |
 | `docs/CONTRACTS.md` | The shared files everyone imports | before touching any of them |
 
 ## Hard rules (each of these cost a day once)
@@ -103,6 +103,15 @@ debug API that plays a chapter to an outcome from the console) is in
     (FFX only / FFX-2 only / both, and why) in the plan, the handoff note and the
     commit. Shared plumbing and bug fixes are "both" (see `critic/CHECKS.md` CHK-020);
     FFX chapters are 1 to 3, FFX-2 chapters are 4 and 5, plus the new ones by game.
+15. **Pace the work and stop repeating it (Bailey, 2026-09-21; `critic/RUBRIC.md` §8 and §9).**
+    Read the usage allowance and write the mode at the top of NOW.md: normal above 50
+    percent of the week left, conserve from 20 to 50, protect at 20 or below; Bailey sets
+    the mode by word and agents may only tighten it. Two failed attempts on a failure, or
+    two reviews that leave the same issue open, mean a written method check before a third
+    try. A change `critic-plan --paths` classes as deep gets a 5-to-10-minute paper
+    preflight (`docs/plans/<track>-review.md`) before it is built. When Bailey reacts to
+    options, record liked / disliked / must remain / must change / undecided in the
+    tile's `reaction`, and keep your own guesses under `inferred`: ask before building one.
 
 ## Shared working tree
 

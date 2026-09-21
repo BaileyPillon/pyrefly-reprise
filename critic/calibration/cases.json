@@ -1,0 +1,47 @@
+{
+  "note": "Cases with a known answer, used to test the critic itself (critic/RUBRIC.md §9, adopted by Bailey on 2026-09-21). should-fail = a defect Bailey found on a build the critic had already seen; should-pass = something a reviewer or judge wrongly flagged. Every case is confirmed against a file in this repo before it goes in (`confirmedIn`); nothing is written from memory. Run the relevant reviewer over these when the rubric, a prompt in critic/runner/ or the reviewing model changes, never per release, and save the result in critic/calibration/runs/. No run has happened yet; size the first one and show Bailey the number before it starts.",
+  "cases": [
+    {
+      "id": "CAL-001",
+      "kind": "should-fail",
+      "game": "both",
+      "artefact": { "build": "822ae16", "state": "Chapter 1, pause opened with a real Escape on a wide window (2560x1080 or Bailey's 2000x1012)" },
+      "expected": "The pause screen is reported as low resolution and not full-bleed (dark side bars). Check CHK-002.",
+      "source": "Bailey, 2026-09-18: the pause screen \"looks low-res and does not fill the screen\"",
+      "confirmedIn": "critic/CHECKS.md CHK-002"
+    },
+    {
+      "id": "CAL-002",
+      "kind": "should-fail",
+      "game": "ffx",
+      "artefact": { "build": "822ae16", "state": "Chapter 1, Tidus's turn with the advisor card showing" },
+      "expected": "The advice is reported as unreadable for the acting character: it names Poison Fang with no submenu, so it reads as another character's ability. Check CHK-004.",
+      "source": "Bailey, 2026-09-18: \"im controlling tidus but the advisor is telling me to use poison fang? how does that make sense?\"",
+      "confirmedIn": "critic/CHECKS.md CHK-004"
+    },
+    {
+      "id": "CAL-003",
+      "kind": "should-fail",
+      "game": "ffx",
+      "artefact": { "build": "822ae16", "state": "Chapter 1, the Ronso Rage picker left without choosing, then Tidus's turn" },
+      "expected": "The stale \"Ronso Rage · Choose a rage\" banner over the guide chip and the Mortiorchis HP header is reported. Check CHK-006.",
+      "source": "Bailey, 2026-09-18 (critic/CHECKS.md CHK-006, \"Owner saw\")",
+      "confirmedIn": "critic/CHECKS.md CHK-006"
+    },
+    {
+      "id": "CAL-004",
+      "kind": "should-fail",
+      "game": "both",
+      "artefact": { "build": "822ae16", "state": "Chapter 1, the advisor card" },
+      "expected": "Developer vocabulary in player-facing copy is reported: the CHAPTER LINE chip and the citation \"ffx-seymour-flux §6 rows 5-6\". Check CHK-007.",
+      "source": "Bailey, 2026-09-18 (critic/CHECKS.md CHK-007, \"Owner saw\")",
+      "confirmedIn": "critic/CHECKS.md CHK-007"
+    }
+  ],
+  "toConfirm": [
+    "should-pass: a live check flagged Tidus having White Magic and Hastega as a defect; it is canon and the finding was withdrawn. Find the report or handoff that records it before adding the case.",
+    "should-pass: art track 3's judge scored approved paintings low and eight approved paintings were overwritten, then restored. The approved files and their hashes are in docs/target/approved-hashes.json; find the judge's scores before adding the case.",
+    "should-pass: a verifier whose own rig was wrong (b4-final.mjs subtracted unscaled padding from a scaled rect). Find the verifier note before adding the case.",
+    "visual set: the approved and rejected tiles of docs/target/targets.json as labelled examples for an art judge. Ask Bailey whether a 'not chosen' option counts as a should-fail; by the record it does not (those tiles say 'good work, simply not the one picked')."
+  ]
+}

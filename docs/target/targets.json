@@ -38,49 +38,80 @@
           "label": "Style board",
           "src": "docs/screenshots/mockups/A-style-board.jpg",
           "state": "approved",
-          "build": "Not a screen: the palette, type and slab rules every other screen is checked against."
+          "build": "Not a screen: the palette, type and slab rules every other screen is checked against.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c",
+          "reaction": {
+            "date": "2026-09-15",
+            "words": "I really like that style I approve of it.",
+            "how": "Bailey, after choosing direction A over B and C",
+            "liked": [
+              "the Ink & Gold style as a whole (direction A)"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the exact values in docs/handoff/presentation-ink-and-gold.md are the agents’ reading of the approved mockups, not properties Bailey named"
+            ]
+          }
         },
         {
           "label": "Title",
           "src": "docs/screenshots/mockups/A-title.jpg",
           "state": "approved",
-          "build": "The title screen as it first settles after loading the live URL."
+          "build": "The title screen as it first settles after loading the live URL.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Chapter select",
           "src": "docs/screenshots/mockups/A-chapter-select.jpg",
           "state": "approved",
-          "build": "Chapter select with chapter 1 (Seymour Flux) highlighted."
+          "build": "Chapter select with chapter 1 (Seymour Flux) highlighted.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Party prep",
           "src": "docs/screenshots/mockups/A-party-prep.jpg",
           "state": "approved",
-          "build": "Party prep for chapter 1 (FFX) on its first tab."
+          "build": "Party prep for chapter 1 (FFX) on its first tab.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Cutscene dialogue",
           "src": "docs/screenshots/mockups/A-dialogue.jpg",
           "state": "approved",
-          "build": "A pre-battle dialogue line in chapter 1 with the speaker portrait showing."
+          "build": "A pre-battle dialogue line in chapter 1 with the speaker portrait showing.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Battle start",
           "src": "docs/screenshots/mockups/A-battle-start.jpg",
           "state": "approved",
-          "build": "The boss-name banner at the start of the chapter 1 battle."
+          "build": "The boss-name banner at the start of the chapter 1 battle.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Battle HUD, FFX",
           "src": "docs/screenshots/mockups/A-ink-and-gold-battle.jpg",
           "state": "approved",
-          "build": "Chapter 1, Tidus's turn, command menu open, a damage number on screen if possible."
+          "build": "Chapter 1, Tidus's turn, command menu open, a damage number on screen if possible.",
+          "delivery": "implemented",
+          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c."
         },
         {
           "label": "Turn cut-in",
           "src": "docs/screenshots/mockups/A-turn-cut-in.jpg",
           "state": "approved",
-          "build": "The character cut-in when a party member's turn begins in chapter 1."
+          "build": "The character cut-in when a party member's turn begins in chapter 1.",
+          "delivery": "not-scheduled",
+          "deliveryNote": "Approved and never wired; NOW.md asks Bailey whether the tile still stands."
         },
         {
           "label": "Swordplay Overdrive",
@@ -176,7 +207,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "The portraits in the FFX turn list and party status window.",
-          "hashes": "portraits:ffx-party"
+          "hashes": "portraits:ffx-party",
+          "delivery": "implemented",
+          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c."
         },
         {
           "label": "Tidus, battle poses",
@@ -184,7 +217,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Tidus's shipped poses in chapter 1.",
-          "hashes": "cast:tidus"
+          "hashes": "cast:tidus",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Yuna, battle poses",
@@ -192,7 +227,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Yuna's shipped poses in chapter 1.",
-          "hashes": "cast:yuna"
+          "hashes": "cast:yuna",
+          "delivery": "implemented",
+          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c."
         },
         {
           "label": "Auron, battle poses",
@@ -200,7 +237,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Auron's shipped poses in chapter 1.",
-          "hashes": "cast:auron"
+          "hashes": "cast:auron",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Seymour Flux",
@@ -208,7 +247,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Seymour Flux on the field in chapter 1.",
-          "hashes": "cast:seymour-flux-body"
+          "hashes": "cast:seymour-flux-body",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Yunalesca, first form",
@@ -216,7 +257,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Yunalesca's first form on the field in chapter 2.",
-          "hashes": "cast:yunalesca-1"
+          "hashes": "cast:yunalesca-1",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Braska's Final Aeon",
@@ -224,7 +267,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Braska's Final Aeon, first form, on the field in chapter 3.",
-          "hashes": "cast:braskas-final-aeon-1"
+          "hashes": "cast:braskas-final-aeon-1",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Shiva",
@@ -241,7 +286,9 @@
           "approved": "Bailey, 19 Sep 2026",
           "build": "Yuna as Gunner on the field in chapter 4.",
           "hashes": "cast:yuna-gunner",
-          "note": "The tile shows four idle candidates. What is protected is the idle that ships, recorded in the hashes file."
+          "note": "The tile shows four idle candidates. What is protected is the idle that ships, recorded in the hashes file.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Shuyin",
@@ -312,7 +359,20 @@
           "approved": "Bailey, 21 Sep 2026: “yes to both recommendations” (Braska card 1)",
           "build": "A dialogue line spoken by Braska with the portrait showing (public/art/portraits/braska.png).",
           "note": "FFX only. Picked on the agent's recommendation: the only candidate with the dark blue head cloth research/visual-bible.md #1.22.1 calls for. Known departure: the gold crest and the sash are off-canon on all three; a headdress repaint is owed and needs Bailey's yes when it is shown.",
-          "hashes": "portrait:braska"
+          "hashes": "portrait:braska",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "yes to both recommendations",
+            "how": "Bailey accepted the side session’s recommendation of card 1",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [
+              "the headdress: the gold crest and sash are off-canon on every candidate; a repaint is owed and goes past Bailey first"
+            ],
+            "inferred": []
+          }
         },
         {
           "label": "Speaker portrait: Yu Yevon",
@@ -344,14 +404,18 @@
           "src": "docs/screenshots/fix3/pause/v5-2000x1012-panels-hidden.png",
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
-          "build": "Pause during chapter 1 at 2000 x 1012 with panels hidden (H)."
+          "build": "Pause during chapter 1 at 2000 x 1012 with panels hidden (H).",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Party panel",
           "src": "docs/screenshots/fix3/pause/v5-2000x1012-panel-party.png",
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
-          "build": "Pause during chapter 1 at 2000 x 1012 with the PARTY panel open."
+          "build": "Pause during chapter 1 at 2000 x 1012 with the PARTY panel open.",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Hero plate, chapter 1",
@@ -359,7 +423,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "The chapter 1 pause painting, full-bleed.",
-          "hashes": "pause:plates"
+          "hashes": "pause:plates",
+          "delivery": "verified",
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
         },
         {
           "label": "Hero plate, chapter 4",
@@ -367,7 +433,9 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
           "build": "The chapter 4 pause painting, full-bleed.",
-          "hashes": "pause:plates"
+          "hashes": "pause:plates",
+          "delivery": "implemented",
+          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c."
         },
         {
           "label": "All hero plates",
@@ -390,7 +458,27 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026, picked in the driver session: “B: hand, ring and a quiet dim”",
           "build": "Chapter 3, Tidus, White Magic, Hastega highlighted: three party members ringed green, rows lit.",
-          "note": "FFX only: the pointing-hand cursor. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live."
+          "note": "FFX only: the pointing-hand cursor. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live.",
+          "reaction": {
+            "date": "2026-09-19",
+            "words": "B: hand, ring and a quiet dim",
+            "how": "Bailey picked option B by its title from four mockups (docs/concepts/targeting/options.json)",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the pointing-hand cursor (FFX)",
+              "the soft ground ring under every selected figure",
+              "the quiet dim on everyone who is not a target"
+            ],
+            "mustChange": [],
+            "undecided": [
+              "a leader-line marker on every targetable enemy: not part of option B, needs Bailey’s yes (docs/handoff/fix3-targeting.md, open item 8)"
+            ],
+            "inferred": [
+              "the rest of option B’s pitch, picked as a package and never named one by one: name plate with the letter tag, the halo behind a floating part, spread enemy formation, ground decals, the party-status panel yielding while a cursor is live",
+              "options A, C and D were not picked; nothing on record says Bailey disliked any part of them"
+            ]
+          }
         },
         {
           "label": "Targeting: one Yu Pagoda, every enemy visible",
@@ -398,7 +486,8 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026, picked in the driver session: “B: hand, ring and a quiet dim”",
           "build": "Chapter 3, Attack aimed at one Yu Pagoda with the Final Aeon and both Pagodas all visible.",
-          "note": "FFX only: the pointing-hand cursor. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live."
+          "note": "FFX only: the pointing-hand cursor. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live.",
+          "reactionOf": "Targeting: a spell on the whole party"
         },
         {
           "label": "Targeting in FFX-2: a Vegnagun part",
@@ -406,7 +495,8 @@
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026, picked in the driver session: “B: hand, ring and a quiet dim”",
           "build": "Chapter 5, a single-target attack on one of Vegnagun’s parts while the ATB keeps running.",
-          "note": "FFX-2 only: a pink sparkle menu cursor and a rotating six-petal flower as the field reticle, with the ATB running and the Active / Wait indicator. No pointing hand. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live."
+          "note": "FFX-2 only: a pink sparkle menu cursor and a rotating six-petal flower as the field reticle, with the ATB running and the Active / Wait indicator. No pointing hand. Both games: ring, slight dim, brackets, name plate with the letter tag, spread enemy formation, ground decals, and the party-status panel that yields while a target cursor is live.",
+          "reactionOf": "Targeting: a spell on the whole party"
         },
         {
           "label": "Move advisor card",
@@ -432,7 +522,28 @@
           "state": "approved",
           "approved": "Bailey, 20 Sep 2026, picked in the orchestrator's AskUserQuestion: “C: Auron’s briefing” — “Twenty skippable seconds in the game’s own voice (Auron’s painting, four lines framing both clocks), then one whispered line the first time something is real; FFX-2 lines come from Rikku with nothing paused; replayable from pause.”",
           "build": "The first screen after the title on a first launch: the approved Auron painting on the left, four lines in his voice framing both clocks, a visible twenty-second timer, and skip / never-show-again on the same line. Skippable from frame one by key, mouse, touch and pad. Replayable from the title and from pause.",
-          "note": "Both games: this is the one shared surface, and it is where the two clocks are named once. Options A (taught first turn) and B (field notes) were not picked."
+          "note": "Both games: this is the one shared surface, and it is where the two clocks are named once. Options A (taught first turn) and B (field notes) were not picked.",
+          "delivery": "implemented",
+          "deliveryNote": "Built and adversarially verified on main (5e8eca5, b8a905f, e30ea5e); not live and not yet matched by a review.",
+          "reaction": {
+            "date": "2026-09-20",
+            "words": "C: Auron’s briefing",
+            "how": "Bailey selected option C in an AskUserQuestion; the properties below are the text of the option selected, not sentences Bailey typed",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "twenty skippable seconds",
+              "Auron’s painting, four lines framing both clocks",
+              "one whispered line the first time something is real",
+              "FFX-2 lines come from Rikku with nothing paused",
+              "replayable from pause"
+            ],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "options A and B were not picked; nothing on record says Bailey disliked them"
+            ]
+          }
         },
         {
           "label": "Onboarding C2: FFX first-use line (Auron)",
@@ -440,7 +551,10 @@
           "state": "approved",
           "approved": "Bailey, 20 Sep 2026, picked in the orchestrator's AskUserQuestion: “C: Auron’s briefing” — “Twenty skippable seconds in the game’s own voice (Auron’s painting, four lines framing both clocks), then one whispered line the first time something is real; FFX-2 lines come from Rikku with nothing paused; replayable from pause.”",
           "build": "Chapter 1-3, the first time turn order is real: one italic line in Auron’s voice beside the command menu, ENTER CONTINUE, FIRST TIME ONLY. No dim, no numbered course, no second surface.",
-          "note": "FFX only (research/ffx-vs-ffx2-presentation.md §9 row 3: the turn-order preview is true for FFX and not for FFX-2). FFX is turn-based, so the line may hold the decision until one confirm press — the engine is already waiting for input and no clock runs."
+          "note": "FFX only (research/ffx-vs-ffx2-presentation.md §9 row 3: the turn-order preview is true for FFX and not for FFX-2). FFX is turn-based, so the line may hold the decision until one confirm press — the engine is already waiting for input and no clock runs.",
+          "delivery": "implemented",
+          "deliveryNote": "Built and adversarially verified on main (5e8eca5, b8a905f, e30ea5e); not live and not yet matched by a review.",
+          "reactionOf": "Onboarding C1: Auron’s briefing"
         },
         {
           "label": "Onboarding C3: FFX-2 first-use line (Rikku) and the pause rows",
@@ -448,7 +562,10 @@
           "state": "approved",
           "approved": "Bailey, 20 Sep 2026, picked in the orchestrator's AskUserQuestion: “C: Auron’s briefing” — “Twenty skippable seconds in the game’s own voice (Auron’s painting, four lines framing both clocks), then one whispered line the first time something is real; FFX-2 lines come from Rikku with nothing paused; replayable from pause.”",
           "build": "Chapter 4-5, the first time a gauge fills: one line in Rikku’s voice beside the party rows that fades on its own with KEEP PLAYING · NOTHING TO PRESS, plus the two pause rows — REPLAY BRIEFING and BATTLE HELP ON / OFF.",
-          "note": "FFX-2 only for the voice and the non-blocking behaviour (§4.2 / FC-4 and §4.3 / FC-5: the gauge is a four-phase pipeline and its charge segment is canon’s own cost preview; teaching may never freeze it). BATTLE HELP is a real FFX-2 Config entry (research/ffx-vs-ffx2-presentation.md:278), so the toggle is labelled exactly as the game labels it. Replay and the toggle are both games. ONE KNOWING DEPARTURE FROM THE FRAME’S LABEL, 20 Sep 2026: the mockup’s badge reads NOTHING PAUSED · GAUGES RUNNING, and an adversarial pass measured the opposite on the running game — the presenter awaits HudPort.chooseCommand and the FFX-2 engine is ticked only in its waiting branch, so the gauges stand still during command input with the coach layer on OR off (?coach=off behaves identically). Bailey named the property “FFX-2 lines come from Rikku with nothing paused”, which is about the line, and the line is measurably non-blocking; the badge now claims only that. Whether the X-2 clock should run during command input at all is an Active-vs-Wait question for the combat core (§4.2 row “Command input”: Active mode time runs, Wait mode time freezes on entering a submenu) and needs Bailey’s yes — see docs/handoff/onboarding-c.md “Open”."
+          "note": "FFX-2 only for the voice and the non-blocking behaviour (§4.2 / FC-4 and §4.3 / FC-5: the gauge is a four-phase pipeline and its charge segment is canon’s own cost preview; teaching may never freeze it). BATTLE HELP is a real FFX-2 Config entry (research/ffx-vs-ffx2-presentation.md:278), so the toggle is labelled exactly as the game labels it. Replay and the toggle are both games. ONE KNOWING DEPARTURE FROM THE FRAME’S LABEL, 20 Sep 2026: the mockup’s badge reads NOTHING PAUSED · GAUGES RUNNING, and an adversarial pass measured the opposite on the running game — the presenter awaits HudPort.chooseCommand and the FFX-2 engine is ticked only in its waiting branch, so the gauges stand still during command input with the coach layer on OR off (?coach=off behaves identically). Bailey named the property “FFX-2 lines come from Rikku with nothing paused”, which is about the line, and the line is measurably non-blocking; the badge now claims only that. Whether the X-2 clock should run during command input at all is an Active-vs-Wait question for the combat core (§4.2 row “Command input”: Active mode time runs, Wait mode time freezes on entering a submenu) and needs Bailey’s yes — see docs/handoff/onboarding-c.md “Open”.",
+          "delivery": "implemented",
+          "deliveryNote": "Built and adversarially verified on main (5e8eca5, b8a905f, e30ea5e); not live and not yet matched by a review.",
+          "reactionOf": "Onboarding C1: Auron’s briefing"
         },
         {
           "label": "A: Taught first turn (not chosen)",

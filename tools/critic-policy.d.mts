@@ -16,7 +16,11 @@ export interface Policy {
   acceptance: { total: number; categoryFloor: number };
   categories: PolicyCategory[];
   chapters: Record<string, { game: string; scene: string }>;
-  cadence: { substantialCheckpoints: number; activeDays: number; repairAttemptsBeforeEscalation: number };
+  cadence: {
+    substantialCheckpoints: number; activeDays: number; repairAttemptsBeforeEscalation: number; stalledAfterReviews: number;
+    repairCyclesPerCandidate: { normal: number; conserve: number; protect: number };
+  };
+  usageModes: { normal: { weeklyLeftAbove: number }; conserve: { weeklyLeftAbove: number }; protect: { weeklyLeftAtOrBelow: number }; pacingGapPoints: number };
   escalation: { focusedSystemsForDeep: number; productFilesForDeep: number };
   alwaysAtDeploy: string[];
   rules: PolicyRule[];
@@ -45,7 +49,7 @@ export interface CriticReport {
   verdicts?: { deployment?: string; changedArea?: string; milestone?: string };
   checks?: { id: string; result?: string; mandatory?: boolean; reason?: string; evidence?: string[]; reusedFrom?: string; dependencyArgument?: string }[];
   categories?: CategoryScore[];
-  issues?: { id?: string; severity?: string; status?: string }[];
+  issues?: { id?: string; severity?: string; status?: string; title?: string; attempts?: unknown }[];
   encounters?: { id: string; completedRealFlow?: boolean }[];
   targets?: { required?: number; matched?: number; failing?: number; unverified?: number; waiting?: number };
   humanJudgments?: { what: string; recorded?: boolean }[];
@@ -67,3 +71,8 @@ export declare function planReview(input: {
 export declare function weightedTotal(categories: CategoryScore[] | undefined, policy: Policy): ScoreResult;
 export declare function milestoneVerdict(report: CriticReport, policy: Policy): { accepted: boolean; reasons: string[]; score: ScoreResult };
 export declare function validateReport(report: CriticReport, policy: Policy): string[];
+
+/** One report as the stagnation rule reads it, oldest first. */
+export interface ReportIssues { id: string; rubricVersion?: number; review?: string; issues?: CriticReport['issues'] | null }
+export interface StalledIssue { id: string; severity: string; title: string; reason: string; attempts: number | null }
+export declare function stalledIssues(reports: ReportIssues[], policy: Policy): StalledIssue[];

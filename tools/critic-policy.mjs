@@ -225,5 +225,37 @@ export function validateReport(report, policy) {
     const verdict = milestoneVerdict(report, policy);
     if (!verdict.accepted) errors.push(`report claims the milestone is accepted but the gates disagree: ${verdict.reasons.join('; ')}`);
   }
+  // Optional repair count per issue (RUBRIC §8); old reports carry none and stay valid.
+  for (const i of report.issues ?? []) {
+    if (i.attempts !== undefined && !(Number.isInteger(i.attempts) && i.attempts >= 0)) errors.push(`${i.id ?? 'issue'}: attempts must be a whole number of repair attempts`);
+  }
   return errors;
+}
+
+const isOpen = (issue) => !/^(fixed|closed|verified|withdrawn|refuted)/i.test(String(issue.status ?? 'open'));
+
+/**
+ * The stagnation rule (RUBRIC §8): issue IDs that the last N consecutive deep or
+ * milestone reports (N = `cadence.stalledAfterReviews`) all leave open at the same
+ * severity, plus any issue at or past `cadence.repairAttemptsBeforeEscalation`.
+ * `reports` are oldest first: `{ id, rubricVersion, review, issues }`. Information
+ * for the next plan; it never blocks a deploy.
+ */
+export function stalledIssues(reports, policy) {
+  const n = policy.cadence?.stalledAfterReviews ?? 2;
+  const cap = policy.cadence?.repairAttemptsBeforeEscalation ?? 2;
+  const full = reports.filter((r) => (r.rubricVersion ?? 1) >= policy.rubricVersion && ['deep', 'milestone'].includes(r.review) && Array.isArray(r.issues));
+  const out = [];
+  const window = full.slice(-n);
+  if (window.length === n) {
+    for (const issue of window[n - 1].issues.filter(isOpen)) {
+      const same = window.every((r) => r.issues.some((i) => i.id === issue.id && isOpen(i) && i.severity === issue.severity));
+      if (same) out.push({ id: issue.id, severity: issue.severity, title: issue.title ?? '', reason: `open in ${window.map((r) => r.id).join(', ')}`, attempts: issue.attempts ?? null });
+    }
+  }
+  const last = full[full.length - 1];
+  for (const issue of last?.issues.filter(isOpen) ?? []) {
+    if ((issue.attempts ?? 0) >= cap && !out.some((o) => o.id === issue.id)) out.push({ id: issue.id, severity: issue.severity, title: issue.title ?? '', reason: `${issue.attempts} repair attempts`, attempts: issue.attempts });
+  }
+  return out;
 }
