@@ -469,21 +469,89 @@
       "id": "pause",
       "title": "Pause screen",
       "evidence": "Your note on the live build, 18 Sep 2026: the painting looked low-resolution and did not fill the screen. The rebuild below was approved on 19 Sep 2026: “i approve everything you listed in the end state board” Bailey, 19 Sep 2026.",
-      "note": "Full-bleed with 2688 × 1536 plates and type that scales with the window. These screenshots are now the target the shipped pause screen is held to.",
+      "note": "Full-bleed with 2688 × 1536 plates and type that scales with the window. The layout below was remade on 21 Sep 2026 on the Until Dawn character screen; the three tiles it replaces are marked superseded and kept for history.",
       "tiles": [
+        {
+          "label": "Pause remade on the Until Dawn character screen",
+          "src": "docs/concepts/pause-until-dawn/sheet.png",
+          "state": "approved",
+          "pill": "Approved — the pause target",
+          "approved": "Bailey, 21 Sep 2026: “B, yes, yes, yes” — the four questions of docs/concepts/pause-until-dawn/README.md, answered in order.",
+          "note": "One full-bleed painted close-up per party member, graded B (“ours”, warm ink-and-gold). No panels. A thin full-width tab strip on top, two columns of hairline meters on the picture, the chapter's current objective as one big thin-serif line bottom-left, RESUME and the H hint bottom-right. The six frames are a–f in docs/concepts/pause-until-dawn/.",
+          "build": "Esc during chapter 1 (FFX) and chapter 4 (FFX-2) at 1600 x 900 and 2000 x 1012, plus the OPTIONS tab, the H-hidden state and the phone at 390 x 844.",
+          "frames": [
+            "docs/concepts/pause-until-dawn/a-ffx-tidus.png",
+            "docs/concepts/pause-until-dawn/b-ffx-yuna.png",
+            "docs/concepts/pause-until-dawn/c-ffx2-yuna-gunner.png",
+            "docs/concepts/pause-until-dawn/d-options.png",
+            "docs/concepts/pause-until-dawn/e-hidden.png",
+            "docs/concepts/pause-until-dawn/f-phone.png"
+          ],
+          "reference": [
+            "docs/concepts/pause-until-dawn/sheet.png",
+            "docs/concepts/pause-until-dawn/grades.png",
+            "docs/concepts/pause-until-dawn/options.json",
+            "docs/concepts/pause-until-dawn/README.md"
+          ],
+          "game": "both",
+          "gameNote": "The layout, the tab strip, the seven BATTLE STATS rows, the objective line and H are both games (shared plumbing, CHK-020). IN THIS FIGHT is game-aware: FFX gets Overdrive gauge, Overdrive mode, each status with the duration its own model really carries, and the CTB turn position; FFX-2 gets the ATB gauge, Active/Wait, Chain, Dressphere, Garment Grid and gates passed. Gold is the FFX accent, pyre pink the FFX-2 accent (presentation-ink-and-gold.md).",
+          "delivery": "planned",
+          "deliveryNote": "Recorded before a line of it was built (hard rule 9). Built in docs/handoff/pause-remake.md.",
+          "reaction": {
+            "date": "2026-09-21",
+            "how": "Bailey was shown docs/concepts/pause-until-dawn/ (sheet.png, grades.png, options.json, README.md) with four questions and answered all four in one line.",
+            "words": "B, yes, yes, yes",
+            "named": {
+              "words": "B, yes, yes, yes",
+              "answers": [
+                "Q1 “Grade A or grade B?” → B “ours”: the same composition on a warm ink-and-gold grade, the paint keeping its skin tones (grades.png).",
+                "Q2 “Should the chrome move to whichever side of the picture is empty?” → yes: mirror per character, as mocked in frame (b). Yuna's face sits at 30% of her plate and Paine's at 25%, so fixed left-hand chrome would sit on their faces.",
+                "Q3 “Are these the right meters?” → yes: BATTLE STATS (HP, MP, Strength, Magic, Defence, Magic Def, Agility) and IN THIS FIGHT as mocked.",
+                "Q4 “Is MUSIC allowed to be a tab?” → yes: MUSIC is its own sixth non-character tab."
+              ],
+              "earlier": [
+                "Bailey, 21 Sep 2026: “We need to remake the pause menus and please see here and carefully replicate it but with our art style and direction (ignore text on the screen)” (a link to the Until Dawn character screen).",
+                "Bailey, 21 Sep 2026: “This needs to be included in our next build as well.”"
+              ]
+            },
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "grade B, the warm ink-and-gold grade, not the cool faithful grade A",
+              "the text block sits on whichever side of THIS painting is empty",
+              "the meters as mocked: BATTLE STATS and IN THIS FIGHT",
+              "MUSIC is its own tab"
+            ],
+            "mustChange": [],
+            "undecided": [
+              "README question 5: whether H (hide panels) and F (photo mode) merge. Not asked, not answered — both keys are kept as they are.",
+              "README question 6: whether anything is missing from options.json → preservedFunctions. Nothing was reported missing."
+            ],
+            "inferred": [
+              "weapon / armour / Sphere Level live on the CHAPTER tab — README question 3 offered a third column, the CHAPTER tab, or dropping them; Bailey answered “yes” to the meters and named no home for these three. The CHAPTER tab is this agent's guess, not Bailey's word.",
+              "the GUIDE tab shows the chapter's designed line (ChapterMeta.tip) and the strategy-guide switch. Bailey named GUIDE as a tab but never said what is on it.",
+              "the member tabs are ordered with the chapter's focal character first, then the other two on the field. “The active party member first” was not defined against a live turn order."
+            ]
+          }
+        },
         {
           "label": "Rebuilt pause, 2000 × 1012",
           "src": "docs/screenshots/fix3/pause/v5-2000x1012.png",
           "state": "approved",
-          "note": "The size you play at.",
+          "pill": "Superseded",
+          "note": "The size you play at. Superseded by the Until Dawn remake, 21 Sep 2026.",
           "approved": "Bailey, 19 Sep 2026",
+          "supersededBy": "Pause remade on the Until Dawn character screen",
           "build": "Pause (Esc) during chapter 1 at 2000 x 1012, panels shown."
         },
         {
           "label": "Panels hidden (H)",
           "src": "docs/screenshots/fix3/pause/v5-2000x1012-panels-hidden.png",
           "state": "approved",
+          "pill": "Superseded",
+          "note": "Superseded by frame (e) of the Until Dawn remake, 21 Sep 2026. H still means the painting alone.",
           "approved": "Bailey, 19 Sep 2026",
+          "supersededBy": "Pause remade on the Until Dawn character screen",
           "build": "Pause during chapter 1 at 2000 x 1012 with panels hidden (H).",
           "delivery": "verified",
           "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
@@ -492,7 +560,10 @@
           "label": "Party panel",
           "src": "docs/screenshots/fix3/pause/v5-2000x1012-panel-party.png",
           "state": "approved",
+          "pill": "Superseded",
+          "note": "Superseded by the Until Dawn remake, 21 Sep 2026: the PARTY panel dissolves into one tab per member.",
           "approved": "Bailey, 19 Sep 2026",
+          "supersededBy": "Pause remade on the Until Dawn character screen",
           "build": "Pause during chapter 1 at 2000 x 1012 with the PARTY panel open.",
           "delivery": "verified",
           "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
@@ -502,6 +573,7 @@
           "src": "docs/screenshots/concept/pause-ch1.png",
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
+          "note": "Not superseded — the painting stands. The Until Dawn remake moves it from the whole pause screen to the CHAPTER tab, where the member tabs each show their own close-up instead.",
           "build": "The chapter 1 pause painting, full-bleed.",
           "hashes": "pause:plates",
           "delivery": "verified",
@@ -512,6 +584,7 @@
           "src": "docs/screenshots/concept/pause-ch4.png",
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
+          "note": "Not superseded — the painting stands. The Until Dawn remake moves it to the CHAPTER tab.",
           "build": "The chapter 4 pause painting, full-bleed.",
           "hashes": "pause:plates",
           "delivery": "implemented",
@@ -522,6 +595,7 @@
           "src": "docs/screenshots/concept/pause-heroes.png",
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
+          "note": "Not superseded — the paintings stand. The Until Dawn remake makes the per-member close-ups (public/art/pause/tidus, yuna, kimahri, auron, wakka, lulu, rikku, rikku-ffx2, paine, yuna-ffx2) the screen itself, one per tab.",
           "build": "Every pause painting that ships.",
           "hashes": "pause:plates"
         }
