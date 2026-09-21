@@ -36,11 +36,56 @@ function knownPresent(path: string): boolean {
   return manifestKnowsAssetNow(artUrl(path)) === true;
 }
 
-/** `<img>` markup for a portrait, or `''` when `id` is falsy. Removes itself on a 404. */
-export function portraitImgHtml(id: string | undefined, alt = ''): string {
+/**
+ * `<img>` markup for a portrait, or `''` when `id` is falsy. Removes itself on a 404.
+ *
+ * `style`, when given, is an extra inline `style` attribute — additive, so every
+ * existing caller that omits it (`ChapterSelectScreen`, `ResultsScreen`) gets the
+ * exact same markup as before. `DialogueBox` is the one caller that passes it: the
+ * dialogue card's own `object-fit: cover` placement (`dialogueObjectPosition`
+ * below), which has to travel with the `<img>` because this function, not the
+ * caller, decides whether the element exists at all (a 404'd or manifest-absent
+ * portrait renders nothing, style included).
+ *
+ * `manualCrop: true` stamps `data-face-crop-manual="1"` on the `<img>`, which
+ * {@link refineFaceCrop} refuses to touch (see its own comment for why this
+ * exists — critic PR-0020/PR-0056). Every other caller of this function leaves
+ * it `false`/omitted and is unaffected.
+ */
+export function portraitImgHtml(id: string | undefined, alt = '', opts: { style?: string; manualCrop?: boolean } = {}): string {
   if (!id || knownAbsent(`art/portraits/${id}.png`)) return '';
   const src = artUrl(`art/portraits/${id}.png`);
-  return `<img src="${src}" alt="${alt}" draggable="false" onerror="this.remove()" />`;
+  const styleAttr = opts.style ? ` style="${opts.style}"` : '';
+  const manualAttr = opts.manualCrop ? ' data-face-crop-manual="1"' : '';
+  return `<img src="${src}" alt="${alt}" draggable="false"${styleAttr}${manualAttr} onerror="this.remove()" />`;
+}
+
+/**
+ * Where the dialogue card's `object-fit: cover` should centre a speaker's
+ * portrait, as a CSS `object-position` value (`"<fx>% <fy>%"`).
+ *
+ * Deliberately **not** {@link portraitCrop} / {@link cropStyle}: that geometry
+ * assumes a square frame (the doc comment on {@link faceImgHtml} says so), and
+ * the dialogue card's cut-in is not one. `object-fit: cover` on the `<img>`
+ * itself asks the browser to do the covering — no zoom math, no clamp, no way
+ * to overflow the frame or leave a gap behind it — so all this needs to supply
+ * is *where the face is*, which `object-position` takes as a plain fraction of
+ * the source image.
+ *
+ * A speaker with a row in {@link DIALOGUE_CROPS} (measured for this frame,
+ * `face-crops.json`'s `dialogue` table — the dialogue-card track's own rows,
+ * separate from the `portraits` table other screens read) uses it; anyone else
+ * falls back to {@link portraitCrop}'s `fx`/`fy` (ignoring its `ipd`/`aspect`,
+ * which only matter to the square-frame zoom math), which is right for every
+ * speaker this card has actually shipped except Jecht — see the `dialogue.jecht`
+ * row's note for why he needed his own.
+ */
+const DIALOGUE_CROPS = (faceCropData.dialogue ?? {}) as Readonly<Record<string, { fx: number; fy: number }>>;
+
+export function dialogueObjectPosition(id: string | undefined): string {
+  if (!id) return '50% 25%';
+  const row = DIALOGUE_CROPS[id] ?? portraitCrop(id);
+  return `${(row.fx * 100).toFixed(2)}% ${(row.fy * 100).toFixed(2)}%`;
 }
 
 /** `<img>` markup for a chapter-select/results backdrop thumbnail. Same miss behaviour. */
@@ -462,8 +507,21 @@ function isFraction(v: unknown): v is number {
  * the painting is 832x1216: the assumed frame was 24 % too tall, so his eye
  * line landed a fifth of a tile below where it belongs and the crop ran off his
  * chin). Then, if the painting ships focal data, that replaces the row too.
+ *
+ * Refuses an element carrying `data-face-crop-manual` outright. This whole
+ * module watches the document for *any* `<img src=".../art/portraits/...">`
+ * and silently adopts and corrects it — right for a plain `<img>` a screen
+ * built by hand, wrong for `DialogueBox`'s cut-in (critic PR-0020/PR-0056):
+ * its `<img>` already carries its own `object-fit: cover` +
+ * `object-position` from {@link dialogueObjectPosition}, sized to a frame
+ * that this function's square-frame math was never meant for, and the sweep
+ * was overwriting that inline style with its own on the very next frame —
+ * which is how the dialogue card kept the overflow bug even after its own
+ * markup asked for cover framing. `portraitImgHtml`'s `manualCrop` option is
+ * the only way to set the attribute, so nothing else is affected.
  */
 export function refineFaceCrop(img: HTMLImageElement): void {
+  if (img.hasAttribute('data-face-crop-manual')) return;
   const id = img.getAttribute('data-face-crop');
   if (!id || !img.naturalWidth || !img.naturalHeight) return;
   const aspect = img.naturalWidth / img.naturalHeight;
@@ -511,7 +569,7 @@ function portraitIdFromSrc(src: string): string | null {
  */
 function adoptUntaggedPortraits(root: ParentNode): void {
   for (const img of root.querySelectorAll<HTMLImageElement>('img[src*="/art/portraits/"]:not([data-face-crop])')) {
-    if (img.hasAttribute('data-body-id') || img.hasAttribute('data-face-body')) continue;
+    if (img.hasAttribute('data-body-id') || img.hasAttribute('data-face-body') || img.hasAttribute('data-face-crop-manual')) continue;
     const id = portraitIdFromSrc(img.getAttribute('src') ?? '');
     if (!id) continue;
     img.setAttribute('data-face-crop', id);
@@ -563,6 +621,7 @@ if (typeof document !== 'undefined') {
     (event) => {
       const target = event.target;
       if (!(target instanceof HTMLImageElement)) return;
+      if (target.hasAttribute('data-face-crop-manual')) return;
       if (!target.hasAttribute('data-face-crop')) {
         // A portrait somebody else's module built; adopt it before correcting.
         if (target.hasAttribute('data-body-id')) return;

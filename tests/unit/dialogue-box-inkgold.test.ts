@@ -5,11 +5,16 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { DialogueBox } from '../../src/ui/common/DialogueBox.ts';
+import { dialogueObjectPosition, portraitCrop } from '../../src/ui/common/portrait.ts';
 import { SPEAKER_ROLES, speakerRole } from '../../src/ui/common/speaker-roles.ts';
 import { narrate, say } from '../../src/story/dsl.ts';
 
 const CSS = readFileSync(
   join(dirname(fileURLToPath(import.meta.url)), '../../src/ui/common/dialogue-box.css'),
+  'utf8',
+);
+const HINT_CSS = readFileSync(
+  join(dirname(fileURLToPath(import.meta.url)), '../../src/ui/common/controls-hint.css'),
   'utf8',
 );
 
@@ -134,5 +139,72 @@ describe('dialogue-box.css follows the approved mockup', () => {
 
   it('stops the advance triangle animating under prefers-reduced-motion', () => {
     expect(CSS).toMatch(/prefers-reduced-motion: reduce[\s\S]*animation: none/);
+  });
+});
+
+// --------------------------------------------------- PR-0020 / PR-0056 crop
+
+describe('the portrait always fits its slot (critic PR-0020, PR-0056)', () => {
+  it('crops with the browser\'s own object-fit: cover, not a fixed px width', () => {
+    // The old rule forced every portrait to a fixed 20.83vw regardless of this
+    // frame's own size, which is exactly how every speaker overhung the slot
+    // and Jecht (the widest source file relative to his face) overhung it most.
+    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*object-fit: cover;[^}]*\}/s);
+    expect(CSS).not.toMatch(/\.dbox__portrait img \{[^}]*max-width: none/s);
+  });
+
+  it('sizes the <img> to the frame exactly, so overflow: hidden never has anything to clip', () => {
+    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*inset: 0;[^}]*\}/s);
+    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*width: 100%;[^}]*\}/s);
+    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*height: 100%;[^}]*\}/s);
+  });
+
+  it('gives every speaker line an object-position from the measured face crop', () => {
+    const { box } = mount();
+    void box.say(say('tidus', 'So... Auron, you seeing this?'));
+
+    const img = box.el.querySelector('.dbox__portrait img') as HTMLImageElement;
+    expect(img).not.toBeNull();
+    const crop = portraitCrop('tidus');
+    expect(img.style.objectPosition).toBe(`${(crop.fx * 100).toFixed(2)}% ${(crop.fy * 100).toFixed(2)}%`);
+  });
+
+  it("frames Jecht from his own dialogue-card row, not the shared roster row his eyes were mismeasured on", () => {
+    const { box } = mount();
+    void box.say(say('jecht', "Don't get soft on me now, Braska."));
+
+    const img = box.el.querySelector('.dbox__portrait img') as HTMLImageElement;
+    const [, fyStr] = img.style.objectPosition.split(' ');
+    const fy = Number(fyStr!.replace('%', '')) / 100;
+    // His eyes sit right under the headband near the top of the file — nowhere
+    // near the shared 'portraits' table's 0.2673, which is his nose bridge.
+    expect(fy).toBeLessThan(0.15);
+    expect(dialogueObjectPosition('jecht')).not.toBe(dialogueObjectPosition(undefined));
+  });
+
+  it('changes no other speaker: everyone without a dialogue-table row keeps the roster fx/fy', () => {
+    for (const id of ['tidus', 'auron', 'yuna', 'wakka', 'kimahri']) {
+      const crop = portraitCrop(id);
+      expect(dialogueObjectPosition(id)).toBe(`${(crop.fx * 100).toFixed(2)}% ${(crop.fy * 100).toFixed(2)}%`);
+    }
+  });
+});
+
+// ------------------------------------------------------------- PR-0057 phone
+
+describe('phone width keeps the card readable and clear of the hint bar (critic PR-0057)', () => {
+  it('gives the dialogue card a fixed-px phone layout instead of the crushed vw one', () => {
+    expect(CSS).toMatch(/@media \(max-width: 560px\)[\s\S]*\.dbox__win \{[^}]*min-height: \d+px/);
+    // Raised well clear of the hint bar rather than left at the desktop 4.86vw.
+    expect(CSS).toMatch(/@media \(max-width: 560px\)[\s\S]*\.dbox__win \{[^}]*bottom: \d+px/);
+  });
+
+  it('keeps the portrait cropped the same way (object-fit: cover) at a smaller pixel size', () => {
+    expect(CSS).toMatch(/@media \(max-width: 560px\)[\s\S]*\.dbox__portrait \{[^}]*width: \d+px/);
+  });
+
+  it('shrinks and wraps the key-hint bar instead of overflowing a phone viewport', () => {
+    expect(HINT_CSS).toMatch(/@media \(max-width: 560px\)[\s\S]*\.chint \{[^}]*max-width: calc\(100vw/);
+    expect(HINT_CSS).toMatch(/@media \(max-width: 560px\)[\s\S]*\.chint \{[^}]*white-space: normal/);
   });
 });

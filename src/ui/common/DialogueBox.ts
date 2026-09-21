@@ -2,7 +2,7 @@ import './dialogue-box.css';
 import type { InputSnapshot } from '../../app/Input.ts';
 import type { ChoiceStep, NarrateStep, SayStep, SpeakerId } from '../../story/dsl.ts';
 import type { DialoguePort } from '../../story/runner/CutsceneRunner.ts';
-import { portraitImgHtml } from './portrait.ts';
+import { dialogueObjectPosition, portraitImgHtml } from './portrait.ts';
 import { speakerRole } from './speaker-roles.ts';
 import { escapeHtml } from './html.ts';
 import { autoAdvanceHoldMs, computeRevealCount, isFullyRevealed, typingDurationMs } from './typewriter.ts';
@@ -302,7 +302,16 @@ export class DialogueBox implements DialoguePort {
     this.roleEl.hidden = !role;
 
     const portraitId = opts.narrate || opts.who === 'none' ? undefined : (opts.portrait ?? this.opts.portraitFor?.(opts.who) ?? opts.who);
-    this.portraitEl.innerHTML = portraitImgHtml(portraitId);
+    // `object-position` is per-speaker (PR-0056: Jecht's face sits nowhere near
+    // where the others' do), so it travels on the `<img>` itself rather than as
+    // a shared CSS rule — `object-fit: cover` lives in dialogue-box.css since
+    // it never changes, but where to centre the crop does.
+    const style = portraitId ? `object-position:${dialogueObjectPosition(portraitId)}` : undefined;
+    // `manualCrop` opts this `<img>` out of `refineFaceCrop`'s document-wide
+    // sweep, which otherwise adopts any bare `art/portraits/*.png` image and
+    // overwrites its inline style with the square-frame crop system — see
+    // that function's own comment (critic PR-0020/PR-0056).
+    this.portraitEl.innerHTML = portraitImgHtml(portraitId, '', { style, manualCrop: true });
     this.el.classList.toggle('dbox--no-portrait', opts.narrate || !portraitId);
 
     this.renderRevealed();

@@ -57,3 +57,29 @@
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+
+/*
+ * Phone width (critic PR-0057): the strip is built for a landscape-ish window
+ * and `white-space: nowrap` let three items ("Enter Advance - Hold Enter Skip
+ * - Esc Menu") measure 443px wide inside a 390px viewport, overflowing both
+ * edges and drawing across whatever sits under it — the dialogue card's name
+ * and line, at this width (dialogue-box.css's own phone block raises the card
+ * to clear this bar's shrunk footprint). Shrinking and letting it wrap keeps
+ * every hint on screen instead of cropped by the viewport edge.
+ */
+@media (max-width: 560px) {
+  .chint {
+    bottom: 8px;
+    max-width: calc(100vw - 24px);
+    gap: 8px;
+    padding: 6px 10px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    white-space: normal;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .chint__item {
+    flex: 0 0 auto;
+  }
+}

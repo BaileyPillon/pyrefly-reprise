@@ -23,7 +23,14 @@
     "tight    true when the painting is a closer close-up than the house framing (eyes wider than",
     "         0.34 of the file, or too near its top edge). The tile cannot zoom out past the file, so",
     "         the cover clamp pins it; the guard test then proves the pin and allows the eye line",
-    "         and head scale the painting forces. Never set it to excuse a wrong row."
+    "         and head scale the painting forces. Never set it to excuse a wrong row.",
+    "",
+    "'dialogue' below is a separate table, owned by the dialogue-card track (DialogueBox.ts /",
+    "portrait.ts dialogueObjectPosition, critic PR-0056). The cutscene card's cut-in is not a",
+    "square frame, so it places its <img> with plain object-fit: cover and object-position:",
+    "<fx*100>% <fy*100>%, no ipd/zoom/clamp math -- a row here carries only fx/fy. A speaker with",
+    "no row here falls back to the 'portraits' table's own fx/fy, which is right for every",
+    "dialogue speaker shipped so far except Jecht."
   ],
   "targets": { "eyeY": 0.42, "ipd": 0.3 },
   "portraits": {
@@ -70,6 +77,14 @@
     "fayth-boy": { "fx": 0.5128, "fy": 0.3933, "ipd": 0.3644, "px": [832, 1216], "tight": true, "note": "picked 2026-09-21 (card 1); hooded, glowing irises centred at (275, 478) and (578, 478)" },
     "braska": { "fx": 0.5034, "fy": 0.3856, "ipd": 0.2104, "px": [832, 1216], "note": "picked 2026-09-21 (card 1); pupils at (331, 469) and (506, 469). Headdress repaint is owed and goes past Bailey first: re-measure then" },
     "yu-yevon": { "fx": 0.5, "fy": 0.36, "ipd": 0.22, "px": [832, 1216], "note": "picked 2026-09-21 (card 2); no eyes: fx is the axis of symmetry, fy sits between the hood peak and the sigil diamond at (416, 486), ipd is the human-equivalent value that keeps the hood and both horn swirls in the tile (the hood alone, 0.33 to 0.67 of the width, read as an abstract pattern)" }
+  },
+  "dialogue": {
+    "jecht": {
+      "fx": 0.5,
+      "fy": 0.0543,
+      "px": [832, 1216],
+      "note": "PR-0056 (round-06): the shared 'portraits.jecht' row above (fy 0.2673) is his nose-bridge shadow, not his eyes -- it was never run through this dialogue frame's geometry, which is what let it ship. Re-measured for the dialogue card 2026-09-21: eyes at (312, 42) and (520, 90) of the 832x1216 file, right under the headband; the painting itself gives him almost no headroom (the topmost ink pixel is row 0 of hair spikes), so unlike the square-frame table this crop is a plain top-anchored object-position, not a zoomed-and-clamped one."
+    }
   },
   "bodies": {
     "paine-warrior": {
