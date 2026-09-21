@@ -9,10 +9,10 @@
 import type { AbilityDef, AvailableCommand, Command, FFXCombatant } from '../common/types.ts';
 import { type Ctx, abilityOf, canSwitchIn, has, isSubmenuMarker, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
-import { validTargets } from './targeting.ts';
+import { reachesAtRange, validTargets } from './targeting.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
-import { talkAvailable } from './ai/index.ts';
+import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 
 /**
@@ -58,7 +58,12 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
     reason = 'Not enough MP';
   } else if (targets.length === 0 && def.targeting !== 'self') {
     enabled = false;
-    reason = 'No target';
+    // **Reach.** `validTargets` is the single place legality is computed, so an
+    // action that cannot cross the airship's range gap comes back with an empty
+    // list exactly as a dead formation would. The two cases read completely
+    // differently to a player, so they are told apart here — the one place
+    // `disabledReason` is written [research/ffx-evrae-airship.md §4.3].
+    reason = reachesAtRange(ctx, user, def) ? 'No target' : 'Out of reach';
   }
 
   const row: AvailableCommand = {
@@ -105,11 +110,16 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
       row.enabled = false;
       row.disabledReason = "Can't escape";
     }
-    if (marker?.kind === 'trigger' && marker.id === 'talk' && !talkAvailable(ctx, user)) {
-      // §1.6 offers a third Talk on purpose and §4.7 gives each character one
-      // line; an exhausted row stays visible and says why.
-      row.enabled = false;
-      row.disabledReason = 'Nothing left to say';
+    if (marker?.kind === 'trigger') {
+      // An exhausted or ineligible trigger row stays visible and says why —
+      // §1.6 offers a third Talk on purpose, and the Evrae orders belong to
+      // Tidus and Rikku alone. The reason comes from the trigger's own handler
+      // rather than from a hard-coded `id === 'talk'` [ai/index.ts].
+      const handler = triggerHandler(marker.id);
+      if (handler && !handler.available(ctx, user)) {
+        row.enabled = false;
+        row.disabledReason = handler.disabledReason;
+      }
     }
     rows.push(row);
   }
@@ -167,7 +177,8 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     const item = ctx.content.item(itemId);
     const effect = ctx.content.itemEffect(itemId);
     if (!item || !effect || !item.usableInBattle) continue;
-    const targets = validTargets(ctx, user, { ...effect, targeting: item.targeting });
+    const itemDef = { ...effect, targeting: item.targeting };
+    const targets = validTargets(ctx, user, itemDef);
     const row: AvailableCommand = {
       command: { kind: 'item', id: itemId, targets: [] },
       label: item.name,
@@ -180,7 +191,11 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
       // rather than asking which one — see `AvailableCommand.targeting`.
       targeting: item.targeting,
     };
-    if (!row.enabled) row.disabledReason = 'No target';
+    // Same two-case reason as an ability row: an offensive item that cannot
+    // cross the airship's range gap is "Out of reach", not "No target"
+    // [research/ffx-evrae-airship §4.3 — "Use as offence" does not reach, while
+    // every restorative does, because it targets your own party].
+    if (!row.enabled) row.disabledReason = reachesAtRange(ctx, user, itemDef) ? 'No target' : 'Out of reach';
     if (item.description !== undefined) row.help = item.description;
     rows.push(row);
   }

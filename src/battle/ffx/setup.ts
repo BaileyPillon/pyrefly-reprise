@@ -29,6 +29,7 @@ import { applyEquipmentToCombatant, AUTO_STATUS_ABILITIES, hasAuto } from './equ
 import { refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
+import { applyEvraeSetup } from './ai/evrae-rules.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -388,5 +389,8 @@ export function buildBattle(
   // Seymour's Shell are applied here rather than costing three enemy turns the
   // player would watch resolve before acting.
   applyMacalaniaSetup(ctx);
+  // The airship opens NEAR, Cid becomes a non-combatant turn-taker and Wakka's
+  // blitzball becomes a ranged weapon [ffx-evrae-airship §4.1, §2.1, §4.3].
+  applyEvraeSetup(ctx);
   return ctx;
 }

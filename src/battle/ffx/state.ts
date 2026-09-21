@@ -104,6 +104,36 @@ export interface ActorRuntime {
    * is an `[estimate]` — see `ANIMA_GAUGE_PER_TARGETING`.
    */
   gaugePerTargeting?: number;
+  /**
+   * **On the field and taking turns, but not a combatant**: never a victory
+   * condition and never a defeat condition.
+   *
+   * **Cid on the *Fahrenheit* is the only user.** He is an invisible enemy with
+   * his own CTB icon [ffx-evrae-airship §2], so he needs a turn and the
+   * tie-break rank `turnQueue.ts` reserves for the id `'cid'` — but he is
+   * unkillable and untargetable, so `engine.ts#checkEnd` would wait for him for
+   * ever. Widening `Side` would have forced a decision at ~30 `side === 'enemy'`
+   * sites; `flags.isPart` is false and would list him as a limb.
+   */
+  nonCombatant?: boolean;
+  /**
+   * **This character's weapon reaches a distant enemy**, whatever the action
+   * says. Read only by `targeting.ts#reachesAtRange`, and only at FAR. Wakka's
+   * blitzball is the only one: §4.3 is explicit that it is a **character**
+   * property and that the ordinary `attack` row is `long_range = false`, so the
+   * flag cannot live on the action.
+   */
+  rangedWeapon?: boolean;
+  /**
+   * Count every **player-side action that names this actor**, damage or not.
+   * {@link gaugePerTargeting} answers "was I targeted" with a gauge; this with a
+   * number a script compares against its own last reading. Evrae's Swooping
+   * Scythe fires on *being targeted* at range [§4.5], which includes a miss and
+   * a status-only command, so neither the damage nor the status set expresses
+   * it. Bumped by `onTargeted`, once per action.
+   */
+  countsPartyTargetings?: boolean;
+  partyTargetings?: number;
 }
 
 /** Battle-level engine bookkeeping. */

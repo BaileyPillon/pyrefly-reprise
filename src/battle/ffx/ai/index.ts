@@ -19,12 +19,19 @@ import {
   consumeMacalaniaTalk,
   macalaniaTalkAvailable,
 } from './seymour-anima-macalania.ts';
+import {
+  ORDER_CLOSE_IN,
+  ORDER_PULL_BACK,
+  airshipOrderAvailable,
+  queueAirshipOrder,
+} from './evrae-rules.ts';
 
 import './seymour-flux.ts';
 import './yunalesca.ts';
 import './braskas-final-aeon.ts';
 import './yu-yevon.ts';
 import './seymour-anima-macalania.ts';
+import './evrae.ts';
 
 export * from './types.ts';
 export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
@@ -45,6 +52,7 @@ export {
   macalaniaTalkAvailable,
   runMacalaniaPhaseHooks,
 } from './seymour-anima-macalania.ts';
+export * from './evrae.ts';
 
 /** True for any of the three actors in the Macalania formation. */
 function isMacalaniaScript(script: string): boolean {
@@ -105,6 +113,91 @@ export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
     return typeof used === 'number' ? used < 2 : true;
   }
   return false;
+}
+
+// ---------------------------------------------------------------------------
+// Trigger Command dispatch
+// ---------------------------------------------------------------------------
+
+/**
+ * One Trigger Command id, and everything both ends of the engine need for it.
+ *
+ * Until the Evrae chapter there was exactly one trigger in the project, so
+ * `commands.ts` and `execute.ts` each hard-coded `id === 'talk'` and every
+ * other id fell through to "nothing happened". `TriggerCommand.id` has always
+ * been an arbitrary string [types.ts], so the fix is a table rather than a
+ * contract change [preflight §4.2 E-4].
+ *
+ * `apply` returns false when the command had no effect, so the executor can say
+ * so instead of eating a turn in silence.
+ */
+export interface TriggerHandler {
+  available: (ctx: Ctx, user: FFXCombatant) => boolean;
+  apply: (ctx: Ctx, user: FFXCombatant) => boolean;
+  /** Why the menu row is greyed when `available` is false. */
+  disabledReason: string;
+  /** What the banner says when a submitted trigger is refused. */
+  rejectedMessage: (user: FFXCombatant) => string;
+}
+
+const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
+  /** Seymour Flux, Braska's Final Aeon, Macalania — see {@link applyTalkTrigger}. */
+  talk: {
+    available: (ctx, user) => talkAvailable(ctx, user),
+    apply: (ctx, user) => {
+      if (!applyTalkTrigger(ctx, user)) return false;
+      // A Trigger Command that lands must *say* it landed. Braska's Final Aeon's
+      // charge is often spent while his gauge already reads 0, and without this
+      // the whole action produced nothing but `action-start` and `action-end` —
+      // a row that works and looks broken.
+      ctx.emit({ type: 'message', text: `${user.name} speaks`, kind: 'story' });
+      // Braska's Final Aeon keeps his gauge on the actor; the script's own
+      // mirror is zeroed inside `consumeBfaTalk` [ffx-bfa-yu-yevon §1.6].
+      const boss = triggerHost(ctx);
+      if (boss?.overdrive && boss.overdrive.gauge > 0) {
+        const from = boss.overdrive.gauge;
+        boss.overdrive.gauge = 0;
+        ctx.emit({ type: 'overdrive-gauge', who: boss.id, from, to: 0, cause: 'talk' });
+      }
+      return true;
+    },
+    // §1.6's third Talk is offered and deliberately inert; say so rather than
+    // spending a turn in silence, which reads as a broken button.
+    disabledReason: 'Nothing left to say',
+    rejectedMessage: (user) => `${user.name} has nothing left to say`,
+  },
+  /**
+   * **Evrae, on the *Fahrenheit*** — the two orders to Cid
+   * [research/ffx-evrae-airship.md §4.2, verified: 3 sources for who may issue
+   * them]. Two ids rather than one id with a payload, deliberately:
+   * `TriggerCommand` has no `extra` field and adding one would be a contract
+   * change for no gain.
+   *
+   * The order does **not** move the ship. It is queued, last order wins, and
+   * Cid flies it on his next turn in place of a missile volley.
+   */
+  [ORDER_PULL_BACK]: {
+    available: (ctx, user) => airshipOrderAvailable(ctx, user.id),
+    apply: (ctx, user) => queueAirshipOrder(ctx, user, ORDER_PULL_BACK),
+    disabledReason: 'Not your call',
+    rejectedMessage: (user) => `${user.name} cannot give that order`,
+  },
+  [ORDER_CLOSE_IN]: {
+    available: (ctx, user) => airshipOrderAvailable(ctx, user.id),
+    apply: (ctx, user) => queueAirshipOrder(ctx, user, ORDER_CLOSE_IN),
+    disabledReason: 'Not your call',
+    rejectedMessage: (user) => `${user.name} cannot give that order`,
+  },
+};
+
+/** The handler for a `TriggerCommand.id`, or `undefined` for an unknown id. */
+export function triggerHandler(id: string): TriggerHandler | undefined {
+  return TRIGGERS[id];
+}
+
+/** Every registered trigger id, for the tests and the debug API. */
+export function registeredTriggerIds(): string[] {
+  return Object.keys(TRIGGERS).sort();
 }
 
 /** The script id in force for this combatant right now. */

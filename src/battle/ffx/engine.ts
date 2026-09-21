@@ -46,6 +46,7 @@ import { chooseAiCommand } from './ai/index.ts';
 import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
+import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { dismissAeon } from './aeons.ts';
 import { buildBattleResult } from './results.ts';
 
@@ -319,12 +320,23 @@ export class FFXEngine implements FFXBattleEngine {
     // time counters are collected `advanceForm` has already revived the boss in
     // its next form, so without this the blow would draw that form's counter.
     const transformed = new Set<CombatantId>();
+    // **Enemies this action landed a status on.** Only `damage` and `mp-damage`
+    // fed the counter input until the Evrae chapter, and its counter-Haste
+    // fires on **Slow landing** — a `status-add` event. Tidus's Slow uses the
+    // `ctb` formula and may or may not emit a `damage` event on the same
+    // action, so keying that counter off damage would have been incidental and
+    // seed-dependent: precisely the class of bug hard rule 3 exists to catch
+    // [preflight §4.2 E-5]. Existing bosses ignore the new set, so Chapters 1-3
+    // are byte-identical.
+    const statusAdded = new Set<CombatantId>();
     for (const e of actionEvents) {
       if (e.type === 'damage' && e.sourceId === actor.id && e.amount > 0) damaged.add(e.targetId);
       if (e.type === 'mp-damage' && e.sourceId === actor.id) damaged.add(e.targetId);
+      if (e.type === 'status-add') statusAdded.add(e.targetId);
       if (e.type === 'form-change') transformed.add(e.enemyId);
     }
     const counterable = [...damaged].filter((id) => !transformed.has(id));
+    const statusCounterable = [...statusAdded].filter((id) => !transformed.has(id));
 
     // The Mortiorchis never dies; it drains Seymour and comes back smaller.
     runMortibsorptionIfDown(ctx);
@@ -335,11 +347,17 @@ export class FFXEngine implements FFXBattleEngine {
     // in every other battle.
     runMacalaniaPhaseHooks(ctx);
 
+    // Evrae's 1/3-HP self-Haste is a hook, not a counter, because **Guided
+    // Missiles must trip it too** and `collectBossCounters` returns early on an
+    // enemy-side attacker [ffx-evrae-airship §5.4]. A no-op in every other
+    // battle.
+    runEvraePhaseHooks(ctx);
+
     // Boss counters fire from the hit hook and cost no turn.
     if (command) {
       const def = commandAbility(ctx, command);
       if (def) {
-        for (const counter of collectBossCounters(ctx, actor, def, counterable)) {
+        for (const counter of collectBossCounters(ctx, actor, def, counterable, statusCounterable)) {
           const counterActor = tryActor(ctx, counter.actorId);
           if (!counterActor || !isAlive(counterActor)) continue;
           this.push({
@@ -402,8 +420,17 @@ export class FFXEngine implements FFXBattleEngine {
     const bosses = ctx.state.enemyIds
       .map((id) => tryActor(ctx, id))
       .filter((c): c is FFXCombatant => c !== undefined);
-    const primary = bosses.filter((c) => !c.flags.isPart);
-    const relevant = primary.length > 0 ? primary : bosses;
+    // **A non-combatant is never a victory condition.** Cid rides on
+    // `side: 'enemy'` so he gets a CTB row and the tie-break rank reserved for
+    // him, but he is unkillable and untargetable — without this filter a living
+    // 410 HP airship pilot blocks victory for ever
+    // [`ActorRuntime.nonCombatant`, ffx-evrae-airship §2.1].
+    const nonCombatants = bosses.filter((c) => ctx.rt.actors.get(c.id)?.nonCombatant === true);
+    const fighters = nonCombatants.length > 0 && nonCombatants.length < bosses.length
+      ? bosses.filter((c) => !nonCombatants.includes(c))
+      : bosses;
+    const primary = fighters.filter((c) => !c.flags.isPart);
+    const relevant = primary.length > 0 ? primary : fighters;
     if (relevant.every((c) => !isAlive(c))) {
       this.finish('victory');
       return true;

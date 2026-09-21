@@ -17,6 +17,7 @@ import { activeScriptId } from './index.ts';
 import { aiContextFor } from './types.ts';
 import { seymourDelayCounter, seymourThresholdCounters } from './seymour-flux.ts';
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
+import { collectEvraeCounters } from './evrae-counters.ts';
 import { yunalescaCounter } from './yunalesca.ts';
 import { yuYevonCounter } from './yu-yevon.ts';
 
@@ -33,12 +34,21 @@ export interface BossCounter {
  * `damagedEnemyIds` is every enemy the action actually resolved against —
  * healing an ally, buffing, summoning or a party-targeted Overdrive provokes
  * nothing [ffx-yunalesca §14.11].
+ *
+ * `statusAddedEnemyIds` is every enemy the action landed a **status** on, and
+ * it is a separate list on purpose. Evrae answers **Slow landing** while it is
+ * already Hasted [ffx-evrae-airship §5.5, verified: 2 sources], and Slow's
+ * `ctb` formula may or may not emit a `damage` event on the same action — so a
+ * counter keyed off the damage set would fire or not fire by seed. Every boss
+ * that shipped before this parameter existed ignores it, which is what keeps
+ * Chapters 1-3's event logs byte-identical.
  */
 export function collectBossCounters(
   ctx: Ctx,
   attacker: FFXCombatant,
   def: AbilityDef,
   damagedEnemyIds: readonly CombatantId[],
+  statusAddedEnemyIds: readonly CombatantId[] = [],
 ): BossCounter[] {
   const out: BossCounter[] = [];
   if (def.flags.includes('is-counter')) return out;
@@ -109,6 +119,18 @@ export function collectBossCounters(
       if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
       continue;
     }
+  }
+
+  // **Evrae answers three different things**, and only one of them is "you hurt
+  // me": the Stone Gaze aggro counter reads the damage set, the counter-Haste
+  // reads the status set, and Swooping Scythe reads *being targeted at all*
+  // [ffx-evrae-airship §5.3, §5.5, §4.5]. Collected once for the encounter
+  // rather than once per damaged enemy, because two of the three do not have a
+  // damaged enemy to hang off. A no-op in every other battle.
+  for (const c of collectEvraeCounters(ctx, def, damagedEnemyIds, statusAddedEnemyIds)) {
+    const evrae = tryActor(ctx, c.actorId);
+    if (!evrae || !canCounter(ctx, c.actorId)) continue;
+    out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: [] }, cause: c.cause });
   }
   return out;
 }

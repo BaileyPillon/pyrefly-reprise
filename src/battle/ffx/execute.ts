@@ -25,7 +25,7 @@ import {
 } from './overdrive.ts';
 import { resolveReelSpin } from './reels.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
-import { applyTalkTrigger } from './ai/index.ts';
+import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { revealForSensorAuto } from './sensor.ts';
 
@@ -230,31 +230,19 @@ export function executeCommand(
         abilityName: triggerDef?.name ?? 'Talk',
         targets: command.targets.slice(),
       });
-      let accepted = false;
-      if (command.id === 'talk') {
-        accepted = applyTalkTrigger(ctx, actor);
-        if (accepted) {
-          // A Trigger Command that lands must *say* it landed. Braska's Final
-          // Aeon's charge is often spent while his gauge already reads 0, and
-          // without this the whole action produced nothing but `action-start`
-          // and `action-end` — a row that works and looks broken.
-          ctx.emit({ type: 'message', text: `${actor.name} speaks`, kind: 'story' });
-          // Braska's Final Aeon keeps his gauge on the actor; the script's own
-          // mirror is zeroed inside `consumeBfaTalk` [ffx-bfa-yu-yevon §1.6].
-          const boss = ctx.state.enemyIds
-            .map((id) => tryActor(ctx, id))
-            .find((c): c is FFXCombatant => c !== undefined && isAlive(c) && !c.flags.isPart);
-          if (boss?.overdrive && boss.overdrive.gauge > 0) {
-            const from = boss.overdrive.gauge;
-            boss.overdrive.gauge = 0;
-            ctx.emit({ type: 'overdrive-gauge', who: boss.id, from, to: 0, cause: 'talk' });
-          }
-        }
-      }
-      // §1.6's third Talk is offered and **deliberately inert**; say so rather
-      // than spending a turn in silence, which reads as a broken button.
+      // Dispatch on the trigger id rather than on `id === 'talk'`. Both ends of
+      // the engine hard-coded that literal until the Evrae chapter needed a
+      // second flavour; `TriggerCommand.id` has always been an arbitrary string
+      // [types.ts], so the table lives in `ai/index.ts` and no contract moved.
+      const handler = triggerHandler(command.id);
+      const accepted = handler ? handler.apply(ctx, actor) : false;
+      // A refused trigger says so rather than spending a turn in silence, which
+      // reads as a broken button — §1.6's third Talk is offered and
+      // deliberately inert, and an order from someone who cannot give one is
+      // never offered at all.
       if (!accepted) {
-        ctx.emit({ type: 'message', text: `${actor.name} has nothing left to say`, kind: 'system' });
+        const text = handler ? handler.rejectedMessage(actor) : `${actor.name} has nothing left to say`;
+        ctx.emit({ type: 'message', text, kind: 'system' });
       }
       ctx.emit({ type: 'action-end', actorId: actor.id });
       return { rank: triggerDef ? rankOf(triggerDef) : 3, damageDealt: 0 };

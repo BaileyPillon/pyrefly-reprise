@@ -48,6 +48,10 @@ import { ABILITIES as OVERDRIVE_KIMAHRI_1 } from './abilities/overdrive-kimahri-
 import { ABILITIES as OVERDRIVE_KIMAHRI_2 } from './abilities/overdrive-kimahri-2.ts';
 import { ABILITIES as OVERDRIVE_YUNA } from './abilities/overdrive-yuna.ts';
 import { ABILITIES as SPECIAL_MENU_MARKERS } from './abilities/special-menu-markers.ts';
+// The Evrae chapter's two Trigger Command markers ('pull-back' / 'close-in').
+// A separate file rather than rows inside `special-menu-markers.ts`, so that
+// chapter's track owns every file it writes while the tree is shared.
+import { ABILITIES as SPECIAL_ORDERS_EVRAE } from './abilities/special-orders-evrae.ts';
 
 // ---------------------------------------------------------------------------
 // Aeons — src/data/ffx/aeons/**
@@ -107,9 +111,11 @@ import { SEYMOUR_FLUX_ABILITIES } from './enemies/seymour-flux-abilities.ts';
 import { YUNALESCA_ABILITIES } from './enemies/yunalesca-abilities.ts';
 import { BRASKAS_FINAL_AEON_ABILITIES } from './enemies/braskas-final-aeon-abilities.ts';
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from './enemies/seymour-anima-macalania-abilities.ts';
+import { EVRAE_ABILITIES } from './enemies/evrae-abilities.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
+import { evraeGroup } from './enemies/evrae.ts';
 import {
   braskasFinalAeonGroup,
   possessedAeonGroups,
@@ -120,6 +126,7 @@ import { gagazetBuild } from './builds/gagazet.ts';
 import { zanarkandBuild } from './builds/zanarkand.ts';
 import { dreamsEndBuild } from './builds/dreams-end.ts';
 import { macalaniaBuild } from './builds/macalania.ts';
+import { fahrenheitBuild } from './builds/fahrenheit.ts';
 
 // ---------------------------------------------------------------------------
 // Ability catalog
@@ -182,6 +189,7 @@ export const ABILITIES: Record<AbilityId, AbilityDef> = {
   ...OVERDRIVE_KIMAHRI_2,
   ...OVERDRIVE_YUNA,
   ...SPECIAL_MENU_MARKERS,
+  ...SPECIAL_ORDERS_EVRAE,
   ...AEON_ABILITIES_CORE,
   ...AEON_ABILITIES_CORE_2,
   ...AEON_ABILITIES_OPTIONAL,
@@ -221,6 +229,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(YUNALESCA_ABILITIES),
   ...Object.values(BRASKAS_FINAL_AEON_ABILITIES),
   ...Object.values(SEYMOUR_ANIMA_MACALANIA_ABILITIES),
+  ...Object.values(EVRAE_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -270,6 +279,14 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // look the formation up by, so the engine and data tracks can be verified
   // before the presentation tracks exist.
   [seymourAnimaMacalaniaGroup.id]: seymourAnimaMacalaniaGroup,
+  // **Not yet a playable chapter either.** `evrae-airship` has no scene, no
+  // story script, no art and no music -- and its order widget (C-11) has not
+  // been mocked up or approved -- so it is deliberately absent from
+  // `src/data/encounters.ts` and `chapter-meta.ts`, and the chapter-select grid
+  // keeps showing it as Coming. Same dev-only registry hook as Macalania above:
+  // this entry is what the unit and strategy suites and the `window.__pyrefly`
+  // debug API look the formation up by.
+  [evraeGroup.id]: evraeGroup,
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -293,8 +310,9 @@ export {
   gagazetBuild,
   zanarkandBuild,
   dreamsEndBuild,
-  // Dev-only, like the formation above: the chapter is not registered yet.
+  // Dev-only, like the formations above: neither chapter is registered yet.
   macalaniaBuild,
+  fahrenheitBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

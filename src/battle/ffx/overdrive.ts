@@ -152,7 +152,13 @@ export function setGauge(ctx: Ctx, c: FFXCombatant, value: number, cause: string
  */
 export function onTargeted(ctx: Ctx, target: FFXCombatant, by: FFXCombatant): void {
   if (by.side === 'enemy' || target.side !== 'enemy') return;
-  const per = ctx.rt.actors.get(target.id)?.gaugePerTargeting;
+  const rt = ctx.rt.actors.get(target.id);
+  // A plain count of "the player pointed something at me", for a script that
+  // reacts to *being targeted* rather than to being hurt — Evrae's Swooping
+  // Scythe at range [ffx-evrae-airship §4.5, `ActorRuntime.countsPartyTargetings`].
+  // Inert unless the encounter's setup hook asked for it.
+  if (rt?.countsPartyTargetings === true) rt.partyTargetings = (rt.partyTargetings ?? 0) + 1;
+  const per = rt?.gaugePerTargeting;
   if (per === undefined || per <= 0) return;
   addGauge(ctx, target, per, 'targeted');
 }

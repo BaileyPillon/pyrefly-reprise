@@ -20,8 +20,64 @@ import {
   tryActor,
 } from './state.ts';
 
+/**
+ * **Reach — the airship range gate.** FFX only.
+ *
+ * `research/ffx-evrae-airship.md` §4.3 `[verified: 2 sources]`: while the
+ * *Fahrenheit* is pulled back, the only player actions that cross the gap are
+ * **Blk Magic, Wakka's physical attacks and Lancet**. Tidus, Auron, Rikku and
+ * Kimahri's ordinary attacks, Steal and offensive items do not.
+ *
+ * Three things about the shape of this function matter:
+ *
+ * 1. **It returns `true` unconditionally when `state.flags['airship.range']` is
+ *    unset**, which is every other battle in the project, so nothing outside
+ *    this one encounter changes behaviour. The FFX-2 ATB engine never reaches
+ *    it at all.
+ * 2. **Allies always reach.** Items, Wht Magic, Cheer, Focus and Rikku's party
+ *    Mixes target your own side, so "reach" is meaningless for them. §4.3 is
+ *    explicit that this asymmetry must not be smoothed: FAR is the *setup*
+ *    zone, not a dead zone, and that is the mechanical seed of the whole
+ *    chapter. C-2's recommended default — offensive items and Steal do **not**
+ *    reach — falls straight out of the same rule.
+ * 3. **Wakka's reach is a property of the character, not of the action**
+ *    (`ActorRuntime.rangedWeapon`, set by the encounter's setup hook). An
+ *    `AutoAbilityId` was considered and rejected: auto-abilities are
+ *    customisation slots the player can move, and the blitzball is not
+ *    customisable.
+ *
+ * The `'long-range'` ActionFlag is honoured too, so the enemy rows that carry
+ * it (Swooping Scythe, Photon Spray, Guided Missiles, Evrae's own Haste) are
+ * unaffected. Note the flag keeps its **FFX-2** meaning wherever FFX-2 reads it
+ * — no approach time, never breaks a chain — and nothing here touches that.
+ */
+export function reachesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef): boolean {
+  if (ctx.state.flags['airship.range'] !== 'far') return true;
+  // The enemy side has its own range rules, enforced by its AI script rather
+  // than by menu legality: Evrae simply does not select a melee row at FAR.
+  if (user.side === 'enemy') return true;
+
+  switch (def.targeting) {
+    case 'self':
+    case 'single-ally':
+    case 'all-allies':
+    case 'random-ally':
+      return true;
+    default:
+      break;
+  }
+  if (def.flags.includes('long-range')) return true;
+  // "only magic, Lancet, and Wakka's physical attacks can reach Evrae" — the
+  // categories are the sourced sentence, not a guess about individual rows.
+  if (def.category === 'blackmagic' || def.category === 'whitemagic') return true;
+  if (def.formula === 'lancet') return true;
+  if (def.damageType === 'physical' && ctx.rt.actors.get(user.id)?.rangedWeapon === true) return true;
+  return false;
+}
+
 /** Candidates a command may legally be pointed at. */
 export function validTargets(ctx: Ctx, user: FFXCombatant, def: AbilityDef): CombatantId[] {
+  if (!reachesAtRange(ctx, user, def)) return [];
   const canTargetDead = def.flags.includes('can-target-dead');
   const alive = (c: FFXCombatant): boolean => (canTargetDead ? onField(c) : isAlive(c));
   const foes = (user.side === 'enemy' ? friendlies(ctx) : enemies(ctx)).filter((c) => targetable(c) && alive(c));
