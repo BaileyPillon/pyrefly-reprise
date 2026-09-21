@@ -495,8 +495,8 @@
           ],
           "game": "both",
           "gameNote": "The layout, the tab strip, the seven BATTLE STATS rows, the objective line and H are both games (shared plumbing, CHK-020). IN THIS FIGHT is game-aware: FFX gets Overdrive gauge, Overdrive mode, each status with the duration its own model really carries, and the CTB turn position; FFX-2 gets the ATB gauge, Active/Wait, Chain, Dressphere, Garment Grid and gates passed. Gold is the FFX accent, pyre pink the FFX-2 accent (presentation-ink-and-gold.md).",
-          "delivery": "planned",
-          "deliveryNote": "Recorded before a line of it was built (hard rule 9). Built in docs/handoff/pause-remake.md.",
+          "delivery": "implemented",
+          "deliveryNote": "Recorded before a line of it was built (hard rule 9); built the same day on main. Not live and not yet matched by a review. Target-versus-build pairs for frames a, b, c and d are under docs/screenshots/pause-remake/; the track note is docs/handoff/pause-remake.md.",
           "reaction": {
             "date": "2026-09-21",
             "how": "Bailey was shown docs/concepts/pause-until-dawn/ (sheet.png, grades.png, options.json, README.md) with four questions and answered all four in one line.",

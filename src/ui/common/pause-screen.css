@@ -1,1359 +1,832 @@
 /*
- * PauseScreen — "Ink & Gold" (docs/handoff/presentation-ink-and-gold.md,
- * approved 2026-09-15 round 2; chrome reference docs/screenshots/mockups/
- * A-chapter-select.jpg and A-party-prep.jpg).
+ * The pause screen, remade on the Until Dawn character screen.
  *
- * The reference layout ("Until Dawn"'s memories screen) translated: the hero
- * painting is the whole frame, a dark ramp is pulled across its left third so
- * the command column has something to sit on, and every piece of chrome is an
- * ink or paper slab laid over paint — never a window that boxes it in.
+ * Approved by Bailey on 21 Sep 2026 — "B, yes, yes, yes" — against the six
+ * frames in `docs/concepts/pause-until-dawn/`. That folder's `pause-ud.css` is
+ * the mockup and is authored 1:1 at 1600x900; this file is the product and has
+ * to hold at 1280x720, 1600x900, 2000x1012, 2560x1080 and 390x844.
  *
- * ## Not on the 640x360 grid any more (fix round 3)
+ * ## How the two are kept in step
  *
- * Every other screen in this game is authored on the shared grid and scaled by
- * `LetterboxStage`. This one was too, and it was wrong twice over — both
- * halves of what Bailey reported from a 2000x1012 window:
+ * Every number the mockup states in pixels is written here as the viewport
+ * expression that **equals that number at 1600x900** and is then floored and
+ * capped. So `0.875vw` is 14px at 1600 wide, and `clamp(14px, 0.875vw, 17px)`
+ * is 14px at 1280, 14 at 1600, 17 at 2000 and 17 at 2560. The floors are the
+ * point: Bailey's first complaint about the previous pause screen was that the
+ * chrome was unreadable, so **nothing here can compute below 14px on a desktop
+ * window**, or below 12px on a phone. `tests/unit/pause-remake-css.test.ts`
+ * reads this file and asserts that of every size token.
  *
- * 1. **Bars.** A 640x360 stage is 16:9 and the window is not, so the hero
- *    painting — which is `inset: 0` *of the stage* — stopped 100px short of
- *    each edge and printed ink down both sides of a full-bleed painting.
- * 2. **A low-resolution image.** The stage's `scale(2.81)` meant every glyph
- *    was rasterised at 640x360 and resampled up. Chromium composites a scaled
- *    layer from one rasterisation; no amount of font-size fixes that, and the
- *    "PAUSE" wordmark and the hint line at the foot of the frame were the
- *    visible cost.
+ * ## Not a letterboxed stage
  *
- * So this screen mounts through `createFullBleedStage`: `position: fixed`,
- * no grid, no transform, and **every length below is viewport-relative**. The
- * fluid tokens are declared once on `.pause` and everything reads them, with
- * `clamp()` floors that hold the brief's "body text never below 14 CSS px" at
- * any window size and ceilings that stop a 4K screen printing a poster.
+ * The painting has to be the whole window at any aspect, and a 640x360 stage
+ * can only ever be 16:9 — which is what put ink bars down both sides of
+ * Bailey's 2000x1012 screenshot. `createFullBleedStage` gives an unscaled,
+ * viewport-sized element, so every length below is a real CSS pixel and no
+ * glyph is rasterised small and resampled up.
  *
- * The dossier column's own classes (`.cpanel*`) live in `chapter-panel.css`,
- * which is shared with the prep menu's CHAPTER tab; it is tokenised the same
- * way and this file hands it `.cpanel--fluid`.
+ * ## There are no panels
  *
- * Scoping (docs/CONTRACT-CHANGES.md decision 10): consumer stylesheet, so no
- * bare `.ig-*` rules — only `.pause*`, reading the shared layer through its
- * custom properties.
+ * That absence is the design. Nothing in this file paints a box, a card, a
+ * slab or a border around content; every line sits on the painting, and the
+ * painting is made readable underneath by one grade, one falloff gradient, one
+ * vignette and 13% grain — never by a scrim behind the text.
  */
 
-/*
- * Deliberately **transparent**, and deliberately `fixed`.
- *
- * The frozen battle is still being drawn on the WebGL canvas underneath this
- * overlay every frame, and photo mode's whole job is to reveal it by hiding
- * the stage's children. An opaque background here would survive that hiding —
- * it is the stage's *outer* element, not one of the children — and photo mode
- * would show a flat ink rectangle instead of the diorama, which is exactly
- * what it did before this comment existed.
- *
- * The screen is never see-through in normal use: `.pause__art` is a full-bleed
- * child with its own opaque ground, so it covers the canvas whether or not the
- * hero painting itself loads.
- *
- * `fixed` rather than `absolute` because this layer has to be the *window*,
- * not the screen root it happens to be appended to. Nothing above it in the
- * tree sets a transform or a filter, so `fixed` really does resolve against
- * the viewport here.
- */
+/* ---------------------------------------------------------------- tokens */
+
 .pause {
+  /* The gutter: 64px at 1600 wide. */
+  --pu-gut: clamp(20px, 4vw, 72px);
+  /* Type. 14 / 15 / 20 / 39 px at 1600 wide, all floored at 14. */
+  --pu-fs: clamp(14px, 0.875vw, 17px);
+  --pu-fs-v: clamp(15px, 0.9375vw, 18px);
+  --pu-fs-on: clamp(18px, 1.25vw, 24px);
+  --pu-fs-line: clamp(26px, 2.4375vw, 46px);
+  /* Rows: 27px at 900 tall. */
+  --pu-row: clamp(24px, 3vh, 34px);
+  /* The key column and the bar: 100px and 124px at 1600 wide. */
+  --pu-key: clamp(84px, 6.25vw, 122px);
+  --pu-bar: clamp(88px, 7.75vw, 150px);
+  /* Vertical anchors, as fractions of the mockup's 900px frame. */
+  --pu-top-brand: clamp(14px, 2.9vh, 34px);
+  --pu-top-tabs: clamp(34px, 6vh, 70px);
+  --pu-top-body: clamp(186px, 33vh, 380px);
+  --pu-top-obj: 78vh;
+  --pu-bot-back: clamp(34px, 5.8vh, 68px);
+  --pu-bot-hide: clamp(16px, 2.9vh, 34px);
+
+  --pu-paper: 244, 241, 232;
+  --pu-void: 4, 4, 10;
+  --pu-accent: var(--ig-accent, #e3b94a);
+
+  /*
+   * `fixed`, not `absolute`: the layer has to be the whole window whatever
+   * its parent is, which is what took the ink bars off the sides of Bailey's
+   * 2000x1012 screenshot in fix round 3. Kept through the remake.
+   */
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: transparent;
-  /*
-   * Above every piece of battle chrome.
-   *
-   * The pause overlay's root is appended after the battle screen's, so DOM
-   * order alone would put it on top — but the HUD's layers set z-indexes of
-   * their own (up to 40 across `src/ui/**`), and a positioned element with a
-   * z-index beats an unpositioned later sibling. Without this, a battle paused
-   * mid-burst printed its frozen damage numerals straight through the hero
-   * painting. 60 clears the highest in the tree with room to spare.
-   */
-  z-index: 60;
+  background: #04040a;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  color: var(--ig-paper, #f4f1e8);
+  color: rgba(var(--pu-paper), 0.76);
   -webkit-font-smoothing: antialiased;
-
-  /*
-   * ------------------------------------------------------------- the scale
-   *
-   * `--pu` is what one old grid pixel is worth now, and its clamp tracks the
-   * letterbox factor it replaced almost exactly on a 16:9 window (2.0 at
-   * 1280x720, 2.81 at 2000x1012) — so spacing and rules keep the proportions
-   * the mockup was approved at, while the *type* below is free to be bigger
-   * than a 1/2.25 reduction of a 1440 comp ever was.
-   *
-   * Mixing `vw` and `vh` in every clamp is the whole trick for "any aspect":
-   * `vw` alone doubles the chrome on a 21:9 window that has no more height
-   * than a 16:9 one, and `vh` alone shrinks it to nothing on a phone.
-   */
-  --pu: clamp(2px, 0.08vw + 0.12vh, 5px);
-
-  /* Safe margins. The frame never puts type closer than this to an edge. */
-  --pause-pad-x: clamp(18px, 3.4vw, 96px);
-  --pause-pad-y: clamp(16px, 3.2vh, 72px);
-  /* Room at the foot of the frame for the hint strip that lives outside it. */
-  --pause-hint-band: clamp(44px, 1.2vw + 2.6vh, 76px);
-
-  /* Type, by role. Every floor is >= 14px: that is the readability contract. */
-  --pause-fs-micro: clamp(14px, 0.28vw + 0.34vh, 19px);
-  --pause-fs-small: clamp(14px, 0.32vw + 0.39vh, 21px);
-  --pause-fs-body: clamp(14px, 0.4vw + 0.48vh, 26px);
-  --pause-fs-row: clamp(15px, 0.44vw + 0.53vh, 29px);
-  --pause-fs-num: clamp(15px, 0.46vw + 0.56vh, 28px);
-  --pause-fs-name: clamp(17px, 0.58vw + 0.7vh, 38px);
-  --pause-fs-quote: clamp(18px, 0.64vw + 0.78vh, 43px);
-  --pause-fs-wordmark: clamp(14px, 0.3vw + 0.36vh, 20px);
-  --pause-fs-game: clamp(20px, 0.76vw + 0.92vh, 50px);
 }
 
-/* Photo mode takes every piece of chrome away and leaves the diorama. */
-.lb-stage[data-photo='on'] > *:not(.pause__photo-hint) {
-  opacity: 0;
-  transition: opacity 180ms ease;
-  pointer-events: none;
-}
+/* --------------------------------------------------------------- the art */
 
-/* ------------------------------------------------------------------- art */
-
-/*
- * The hero painting, genuinely full bleed.
- *
- * `object-position` is written **inline** by `mountHeroArt`, from the plate's
- * `focal` sidecar (default 50% / 35%), because which part of a 1.75:1 painting
- * survives depends on the window: a 21:9 screen crops the top and bottom, a
- * phone held upright crops most of the width, and the one thing that must
- * never be cropped is the face. The value below is only the floor under a
- * plate whose sidecar has not answered yet.
- *
- * `data-art` is set by `mountHeroArt` in `chapterPanel.ts` as it walks the
- * candidate list: `hero` for the painted close-up, `fallback` once it has had
- * to drop back to a shipped CTB portrait (which was painted for a small square
- * tile, so it is pushed in and knocked back), and `missing` when every
- * candidate 404s — which hides the element rather than letting a browser draw
- * its broken-image glyph over the menu.
- */
 .pause__art {
   position: absolute;
   inset: 0;
-  background: #120f1c;
   overflow: hidden;
 }
-.pause__art-img {
+
+/*
+ * The box is set in JS (`pause/PortraitStage.layout`), because the framing is
+ * the approved composition: the plate is zoomed until the head reaches about
+ * three quarters of the frame and then panned so the face lands on the side
+ * the chrome is not on. `object-fit: cover` cannot do that — a 1.75 plate on a
+ * 16:9 window covers with almost no overflow, so there is nothing to pan and
+ * every face ends up dead centre. The defaults below are what a frame looks
+ * like before the first layout pass, and what a fallback portrait keeps.
+ */
+.pause__plate {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 35%;
-  display: block;
   /*
-   * A pushed-back exposure so the chrome stays the sharpest thing — and
-   * pointedly **no blur**. Past a certain window size a 1344x768 plate is
-   * being magnified whatever we do; the answer to that is the 2x master in
-   * `srcset` and the grain and vignette below, which make residual softness
-   * read as a painted surface. Blurring it on purpose would only ever make it
-   * a blurrier photograph of a painting.
+   * GRADE B, "ours" (Bailey, 21 Sep 2026). One filter on the painting plus one
+   * tint layer over it — the master file is never touched (hard rule 8).
+   * Grade A, the cool faithful grade, was the option Bailey did not pick.
    */
-  filter: saturate(0.94) contrast(1.02);
-  /*
-   * The slow drift. 3 percent of overscan, forty-six seconds end to end, so a
-   * player who pauses to look at the art gets a picture that breathes rather
-   * than a freeze-frame. The scale is constant and the translate stays inside
-   * the overscan it buys, so no edge of the frame is ever uncovered.
-   */
-  transform: scale(1.03);
-  animation: pause-art-drift 46s ease-in-out infinite alternate;
+  filter: saturate(0.58) contrast(1.05) brightness(0.66);
+  opacity: 1;
+  transition: opacity 520ms ease;
+  /* The slow push-in. 26 s, so it reads as a held breath and not as a zoom. */
+  animation: pause-push 26s ease-out forwards, pause-drift 44s ease-in-out infinite alternate;
   will-change: transform;
 }
-@keyframes pause-art-drift {
-  from {
-    transform: scale(1.03) translate(-0.7%, -0.45%);
-  }
-  to {
-    transform: scale(1.03) translate(0.7%, 0.45%);
-  }
-}
-.pause__art-img[data-art='fallback'] {
-  /* A CTB portrait painted for a 40px tile, standing in for a hero plate. */
-  object-position: 62% 18%;
-  filter: saturate(0.9) contrast(1.02) brightness(0.92);
-  transform: scale(1.18);
-  animation: none;
-}
-.pause__art-img[data-art='missing'] {
-  visibility: hidden;
+
+.pause__plate--entering {
+  opacity: 0;
 }
 
-/* The left ramp the menu sits on, plus a bottom ramp for the party strip. */
-.pause__scrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      100deg,
-      rgba(11, 10, 18, 0.97) 0%,
-      rgba(11, 10, 18, 0.9) 20%,
-      rgba(11, 10, 18, 0.45) 40%,
-      rgba(11, 10, 18, 0.08) 56%
-    ),
-    linear-gradient(180deg, rgba(11, 10, 18, 0.72) 0%, rgba(11, 10, 18, 0) 22%),
-    linear-gradient(0deg, rgba(11, 10, 18, 0.95) 0%, rgba(11, 10, 18, 0.55) 18%, rgba(11, 10, 18, 0) 38%);
+.pause__plate--leaving {
+  opacity: 0;
+  filter: saturate(0.58) contrast(1.05) brightness(0.66) blur(3px);
 }
-.pause__vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(118% 88% at 52% 40%, transparent 42%, rgba(11, 10, 18, 0.62));
+
+@keyframes pause-push {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+@keyframes pause-drift {
+  from { transform-origin: 48% 44%; }
+  to { transform-origin: 54% 48%; }
 }
 
 /*
- * Paper grain.
- *
- * An SVG `feTurbulence` tile, laid over the painting at 7% in `overlay`. It is
- * the difference between "a low-resolution photo" and "paint on a surface":
- * the eye reads the noise as tooth and stops reading the softness as a lack of
- * pixels. Inline as a data URI so it costs no request and cannot 404.
+ * Motion off, both ways round: the player's own setting and the OS's.
+ * The plate keeps its grade; only the movement stops.
  */
+.pause__art--still .pause__plate {
+  animation: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pause__plate {
+    animation: none;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* The shipped CTB portrait a missing plate falls back to was painted for a
+   40px tile, so it is shown whole rather than framed as a close-up. */
+.pause__plate[data-art='fallback'],
+.pause__plate[data-art='missing'] {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 40%;
+}
+
+/* The grade's tint, the falloff, the vignette and the grain. */
+.pause__tint {
+  position: absolute;
+  inset: 0;
+  background: #120d14;
+  mix-blend-mode: multiply;
+  opacity: 0.54;
+  pointer-events: none;
+}
+
+.pause__tint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(74% 58% at 60% 40%, rgba(227, 185, 74, 0.17), transparent 72%);
+  mix-blend-mode: screen;
+}
+
+.ig--ffx2 .pause__tint::after {
+  background: radial-gradient(74% 58% at 60% 40%, rgba(247, 182, 217, 0.15), transparent 72%);
+}
+
+/* The chrome side falls away to near-black so every line can sit on paint. */
+.pause__falloff {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right,
+      rgba(var(--pu-void), 0.94) 0%, rgba(var(--pu-void), 0.88) 22%,
+      rgba(var(--pu-void), 0.5) 42%, rgba(var(--pu-void), 0.06) 62%, transparent 74%),
+    linear-gradient(to left, rgba(var(--pu-void), 0.72) 0%, transparent 18%),
+    linear-gradient(to bottom, rgba(var(--pu-void), 0.72) 0%, transparent 16%),
+    linear-gradient(to top, rgba(var(--pu-void), 0.8) 0%, transparent 26%);
+}
+
+.pause--mirror .pause__falloff {
+  background:
+    linear-gradient(to left,
+      rgba(var(--pu-void), 0.94) 0%, rgba(var(--pu-void), 0.88) 22%,
+      rgba(var(--pu-void), 0.5) 42%, rgba(var(--pu-void), 0.06) 62%, transparent 74%),
+    linear-gradient(to right, rgba(var(--pu-void), 0.72) 0%, transparent 18%),
+    linear-gradient(to bottom, rgba(var(--pu-void), 0.72) 0%, transparent 16%),
+    linear-gradient(to top, rgba(var(--pu-void), 0.8) 0%, transparent 26%);
+}
+
+.pause__vig {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 58% 40%, transparent 38%, rgba(var(--pu-void), 0.72) 100%);
+}
+
 .pause__grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.07;
+  opacity: 0.13;
   mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-  background-repeat: repeat;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
 }
 
-/* ----------------------------------------------------------------- frame */
+/* ---------------------------------------------------------------- chrome */
 
-/*
- * The chrome, as a grid rather than as six absolutely-positioned slabs.
- *
- * Absolute coordinates were only ever honest inside a fixed 640x360 canvas.
- * With the layer at window size and the type on `clamp()`, a grid is what
- * keeps the safe margins safe and lets the whole thing fold to one column on a
- * phone without a second layout being written.
- *
- * ## Two areas, not six (fix round 3, second pass)
- *
- * The left-hand column used to be three grid rows — `brand`, `menu`, `quote` —
- * with the quote in a `minmax(0, 1fr)` row and `align-self: end`, so it would
- * hang at the bottom of whatever space was left over. On an 800x600 window
- * there was no space left over: the row collapsed to zero height, and an item
- * that is `end`-aligned in a zero-height row is laid out *upwards* out of it.
- * The Seymour quote was printed straight across MUSIC PLAYER, CHAPTER SELECT
- * and QUIT TO TITLE — three rows the cursor could still land on and activate.
- *
- * Grid areas are allowed to overlap; flex items are not. So the whole left
- * column is one area now (`rail`) holding one flex column, and the "hang the
- * quote at the bottom" trick is `margin-top: auto`, which yields when the space
- * runs out instead of reversing. It cannot print over the menu at any size.
- */
-.pause__frame {
+.pause__ui {
   position: absolute;
   inset: 0;
-  box-sizing: border-box;
-  /*
-   * The bottom padding reserves a band for the hint strip, which is not in
-   * this grid at all — it mounts on `.pause__chrome`, outside the painting,
-   * because `controls-hint.css` is another agent's file and is authored
-   * against the screen root. Without the reservation the strip prints
-   * straight through the party cards, which is exactly what it did at 720p.
-   */
-  padding: var(--pause-pad-y) var(--pause-pad-x) calc(var(--pause-pad-y) + var(--pause-hint-band));
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'rail  panel'
-    'party snaps';
-  column-gap: clamp(16px, 2.6vw, 64px);
-  row-gap: clamp(8px, 1.4vh, 26px);
-  align-items: start;
-  /* `#ui` is click-through; the rows and rails opt themselves back in. */
+}
+
+/* `H`: the painting, alone. The scrim and the vignette stay — they are the
+   grade, not chrome — but every line goes. */
+.pause--bare .pause__ui { display: none; }
+.pause--bare .pause__falloff { opacity: 0.35; }
+
+.pause__brand {
+  position: absolute;
+  left: var(--pu-gut);
+  top: var(--pu-top-brand);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.24);
   pointer-events: none;
 }
 
-/*
- * The left column: wordmark, menu, quote, top to bottom, never on top of one
- * another. `min-height: 0` is what lets the menu inside it scroll rather than
- * push the quote through the foot of the window on a short screen.
- */
-.pause__rail {
-  grid-area: rail;
-  align-self: stretch;
-  min-height: 0;
-  min-width: 0;
+.pause--mirror .pause__brand { left: auto; right: var(--pu-gut); }
+
+/* ------------------------------------------------------------ tab strip */
+
+.pause__tabs {
+  position: absolute;
+  left: var(--pu-gut);
+  right: var(--pu-gut);
+  top: var(--pu-top-tabs);
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(12px, 1.625vw, 32px);
 }
 
-/* -------------------------------------------------------------- wordmark */
+.pause__swipe {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(12px, 1.625vw, 32px);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
 
-.pause__brand {
+.pause__swipe::-webkit-scrollbar { display: none; }
+
+.pause__bump {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex: none;
+  padding-bottom: 4px;
+  color: rgba(var(--pu-paper), 0.38);
 }
-.pause__wordmark {
-  font-size: var(--pause-fs-wordmark);
+
+.pause__bump b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid rgba(var(--pu-paper), 0.3);
+  border-radius: 3px;
+  font-size: var(--pu-fs);
   font-weight: 700;
-  letter-spacing: 0.44em;
-  color: rgba(244, 241, 232, 0.72);
+  color: rgba(var(--pu-paper), 0.62);
 }
-.pause__game {
-  margin-top: calc(2.67 * var(--pu)); /* 6 */
-  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: var(--pause-fs-game);
+
+.pause__bump i {
+  font-style: normal;
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: rgba(var(--pu-paper), 0.3);
+}
+
+.pause__bump--r { margin-left: auto; }
+
+.pause__tab {
+  position: relative;
+  flex: none;
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0 0 clamp(14px, 1.9vh, 22px);
+  font-family: inherit;
+  font-size: var(--pu-fs-v);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.4);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.pause__tab:hover { color: rgba(var(--pu-paper), 0.72); }
+.pause__tab--ko { color: rgba(176, 42, 42, 0.68); }
+
+.pause__tab--on {
+  font-size: var(--pu-fs-on);
   font-weight: 700;
   letter-spacing: 0.2em;
-  line-height: 1.1;
-  color: var(--ig-accent, #e3b94a);
+  color: rgba(var(--pu-paper), 0.96);
 }
 
-/* ------------------------------------------------------------------ menu */
+.pause__tab--on::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 4px;
+  bottom: clamp(8px, 1.2vh, 14px);
+  height: 2px;
+  background: var(--pu-accent);
+}
 
-.pause__menu {
-  /*
-   * `0 1 auto`: the menu is the one thing in the rail allowed to run out of
-   * room, and when it does it scrolls inside its own box instead of pushing the
-   * quote (or itself) off the bottom of the window. `PauseScreen.renderMenu`
-   * keeps the selected row in view, so a pad player never loses the cursor.
-   */
-  flex: 0 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(227, 185, 74, 0.5) transparent;
-  /*
-   * A scroll container on one axis is a scroll container on both, and every row
-   * in here is skewed — its corners stick out past the box by about a tenth of
-   * its own height. Without this gutter that overhang is horizontal overflow,
-   * which Chromium answers with a scrollbar *inside the menu*. The gutter is
-   * given back as a negative margin, so the rows sit exactly where they did.
-   */
-  padding-inline: calc(2.4 * var(--pu));
-  margin-inline: calc(-2.4 * var(--pu));
-  margin-top: clamp(8px, 2vh, 40px);
-  /*
-   * As wide as its widest row and no wider. The selected row draws the only
-   * ink in the column, and at `width: 100%` that slab ran two hundred pixels
-   * past the end of "RESUME" and read as a stray bar across the painting.
-   */
-  width: fit-content;
-  max-width: min(100%, clamp(240px, 27vw, 540px));
+.pause__tabhp {
+  position: absolute;
+  left: 0;
+  right: 4px;
+  bottom: 0;
+  height: 2px;
+  background: rgba(var(--pu-paper), 0.11);
+}
+
+.pause__tabhp i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(var(--pu-paper), 0.36);
+}
+
+.pause__tabhp--low i { background: rgba(176, 42, 42, 0.85); }
+
+.pause__dot {
+  position: absolute;
+  right: -11px;
+  top: 1px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--pu-accent);
+}
+
+/* --------------------------------------------------------------- columns */
+
+.pause__body {
+  position: absolute;
+  left: var(--pu-gut);
+  top: var(--pu-top-body);
+  display: flex;
+  gap: clamp(22px, 3vw, 58px);
+  max-width: calc(100% - var(--pu-gut) * 2);
+}
+
+.pause--mirror .pause__body {
+  left: auto;
+  right: var(--pu-gut);
+  flex-direction: row-reverse;
+}
+
+.pause__col {
   display: flex;
   flex-direction: column;
-  gap: calc(0.89 * var(--pu)); /* 2 */
+  min-width: 0;
 }
 
-/*
- * Rows lean with every other slab in the system (`--ig-skew`, mirrored under
- * `.ig--ffx2`), and their contents lean back — the same pairing as
- * `.prep__member`. Only the selected row draws a ground; the rest are type on
- * paint, which is what keeps the painting the loudest thing on screen.
- */
+.pause__col > h3 {
+  margin: 0 0 clamp(9px, 1.7vh, 19px);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.3);
+}
+
+.pause--mirror .pause__col > h3 { text-align: right; }
+
 .pause__row {
   display: flex;
   align-items: center;
-  gap: calc(4.44 * var(--pu)); /* 10 */
-  padding: 0.34em 0.7em;
-  box-sizing: border-box;
-  font-size: var(--pause-fs-row);
-  transform: skewX(var(--ig-skew, -12deg));
-  cursor: pointer;
-  /*
-   * `#ui` is `pointer-events: none` so the WebGL canvas keeps the cursor when
-   * nothing on the overlay wants it, and that inherits all the way down.
-   * `index.html`'s `#ui [data-action]` rule already restores it, but this
-   * stylesheet should not depend on a global it does not own to make its own
-   * click targets clickable — the same reasoning as `.prep__member`.
-   */
-  pointer-events: auto;
-}
-.pause__row > * {
-  transform: skewX(var(--ig-skew-inverse, 12deg));
-}
-.pause__row-label {
-  font-size: 1em;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: rgba(244, 241, 232, 0.62);
-  white-space: nowrap;
-  transition: color 120ms ease;
-}
-.pause__row-value {
-  margin-left: auto;
-  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  /* Still on the 14px floor, even as a fraction of the row it sits in. */
-  font-size: max(14px, 0.82em);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--ig-accent, #e3b94a);
-}
-.pause__row:hover:not(.pause__row--sel) .pause__row-label {
-  color: rgba(244, 241, 232, 0.92);
-}
-
-.pause__row--sel {
-  background: var(--ig-ink-acting, rgba(11, 10, 18, 0.94));
-  /* The gold rule the brief asks for, on the leading edge — left in FFX and
-     right in FFX-2, driven by --ig-edge so no .ig--ffx2 override is needed
-     (see the comment on --ig-edge in src/ui/inkgold/tokens.css). */
-  border-style: solid;
-  border-color: var(--ig-accent, #e3b94a);
-  border-left-width: calc(max(2px, 1.78 * var(--pu)) * (1 - var(--ig-edge, 0))); /* 4 */
-  border-right-width: calc(max(2px, 1.78 * var(--pu)) * var(--ig-edge, 0));
-  border-top-width: 0;
-  border-bottom-width: 0;
-}
-.pause__row--sel .pause__row-label {
-  color: var(--ig-paper, #f4f1e8);
-}
-/* The cursor is on this row but the *panel* has focus: keep the row marked,
-   stop it claiming to be live. */
-.pause__row--dim {
-  opacity: 0.55;
-}
-
-/* ----------------------------------------------------------------- quote */
-
-/*
- * Hung at the foot of the rail by `margin-top: auto` rather than by
- * `align-self: end` in a flexible grid row — see the note on `.pause__frame`.
- * An auto margin gives its space back when there is none to give; an
- * end-aligned grid item in a collapsed row lays itself out backwards over the
- * menu, which is what printed the quote across three live rows at 800x600.
- */
-.pause__quote {
-  flex: none;
-  margin-top: auto;
-  margin-bottom: 0;
-  margin-inline: 0;
-  padding-top: clamp(8px, 1.4vh, 26px);
-  width: 100%;
-  max-width: clamp(260px, 30vw, 620px);
-  border-left: max(1px, calc(0.89 * var(--pu))) solid rgba(227, 185, 74, 0.5); /* 2 */
-  padding-left: calc(6.22 * var(--pu)); /* 14 */
-}
-.pause__quote-text {
-  display: block;
-  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: var(--pause-fs-quote);
-  font-style: italic;
-  line-height: 1.32;
-  color: rgba(244, 241, 232, 0.9);
-}
-.pause__quote-who {
-  display: block;
-  margin-top: calc(2.67 * var(--pu)); /* 6 */
-  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: var(--pause-fs-micro);
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  color: var(--ig-accent, #e3b94a);
-}
-/* The margin note: smaller, tilted, deliberately not aligned to anything. */
-.pause__hand {
-  display: block;
-  margin-top: calc(4.44 * var(--pu)); /* 10 */
-  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: var(--pause-fs-body);
-  font-style: italic;
-  color: rgba(244, 241, 232, 0.5);
-  transform: rotate(-1.6deg);
-  transform-origin: 0 50%;
-}
-
-/* ----------------------------------------------------------------- panel */
-
-/*
- * The right column. An ink slab, unskewed on purpose: everything else here
- * leans, but this one holds four paragraphs and a checklist, and skewing a
- * block of body copy costs more legibility than it buys consistency. It keeps
- * the system's voice through its accent edge instead.
- *
- * It spans the three upper rows and scrolls rather than clipping: the copy is
- * now set at a real reading size, and a 720p window is genuinely short of room
- * for a dossier at that size. A scrollbar is an honest answer; `overflow:
- * hidden` on a panel whose last line is the strategy tip is not.
- */
-.pause__panel {
-  grid-area: panel;
-  /* Hug the dossier rather than stretching an empty ink slab under it, but
-     never grow past the area — at that point the copy scrolls. */
-  align-self: start;
-  justify-self: end;
-  max-height: 100%;
-  width: 100%;
-  max-width: clamp(340px, 40vw, 780px);
-  min-height: 0;
-  box-sizing: border-box;
-  padding: calc(9.78 * var(--pu)) calc(11.56 * var(--pu)) calc(10.67 * var(--pu)); /* 22 26 24 */
-  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
-  border-top: max(2px, calc(1.78 * var(--pu))) solid var(--ig-accent, #e3b94a); /* 4 */
-  box-shadow: 0 calc(7.11 * var(--pu)) calc(17.78 * var(--pu)) rgba(0, 0, 0, 0.5); /* 16 40 */
-  backdrop-filter: blur(calc(2.67 * var(--pu)));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(227, 185, 74, 0.5) transparent;
-  pointer-events: auto;
-}
-
-.pause__empty {
-  font-size: var(--pause-fs-body);
-  letter-spacing: 0.2em;
-  color: rgba(244, 241, 232, 0.5);
-}
-
-.pause__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding-bottom: calc(3.56 * var(--pu)); /* 8 */
-  border-bottom: max(1px, calc(0.89 * var(--pu))) solid rgba(244, 241, 232, 0.16);
-}
-.pause__head-label {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.34em;
-  color: var(--ig-accent, #e3b94a);
-}
-
-/* --------------------------------------------------------------- options */
-
-.pause__opts {
-  margin-top: calc(5.33 * var(--pu)); /* 12 */
-  display: flex;
-  flex-direction: column;
-  gap: calc(1.33 * var(--pu)); /* 3 */
-}
-.pause__opt {
-  display: flex;
-  align-items: center;
-  gap: calc(5.33 * var(--pu)); /* 12 */
-  padding: calc(3.56 * var(--pu)) calc(4.44 * var(--pu)); /* 8 10 */
-  cursor: pointer;
-  pointer-events: auto; /* see the comment on .pause__row */
-}
-.pause__opt--sel {
-  background: rgba(244, 241, 232, 0.1);
-  box-shadow: inset max(2px, calc(1.78 * var(--pu))) 0 0 var(--ig-accent, #e3b94a); /* 4 */
-}
-.pause__opt-k {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: rgba(244, 241, 232, 0.72);
-  white-space: nowrap;
-}
-.pause__opt--sel .pause__opt-k {
-  color: var(--ig-paper, #f4f1e8);
-}
-.pause__opt-meter {
-  margin-left: auto;
-  width: clamp(72px, 9vw, 190px); /* 120 on the old grid */
-  height: calc(3.56 * var(--pu)); /* 8 */
-  background: #2a3246;
-  flex: none;
-}
-.pause__opt-meter-fill {
-  display: block;
-  height: 100%;
-  background: var(--ig-accent, #e3b94a);
-}
-.pause__opt-v {
-  margin-left: auto;
-  min-width: 3.4em;
-  text-align: right;
-  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: var(--pause-fs-small);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--ig-accent, #e3b94a);
-}
-/* A row with a meter has already spent its auto margin on the meter. */
-.pause__opt-meter + .pause__opt-v {
-  margin-left: calc(5.33 * var(--pu)); /* 12 */
-}
-.pause__opt-hint {
-  margin-top: calc(7.11 * var(--pu)); /* 16 */
-  font-size: var(--pause-fs-micro);
-  letter-spacing: 0.22em;
-  color: rgba(244, 241, 232, 0.45);
-}
-.pause__opt-hint b {
-  color: var(--ig-accent, #e3b94a);
-}
-
-/* ----------------------------------------------------------------- party */
-
-.pause__members {
-  display: flex;
-  flex-direction: column;
-  gap: calc(5.33 * var(--pu)); /* 12 */
-}
-.pause__member {
-  display: flex;
-  gap: calc(6.22 * var(--pu)); /* 14 */
-  padding-bottom: calc(5.33 * var(--pu)); /* 12 */
-  border-bottom: max(1px, calc(0.89 * var(--pu))) solid rgba(244, 241, 232, 0.14);
-}
-.pause__member:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-/* The close-up. Painted for this screen if it exists; the shipped CTB
-   portrait if it does not (`wireImageFallbacks`). */
-.pause__member-art {
-  flex: none;
-  width: clamp(64px, 7vw, 150px); /* 110 on the old grid */
-  height: clamp(82px, 8.9vw, 190px); /* 140 */
-  object-fit: cover;
-  object-position: 50% 12%;
-  background: #1a1526;
-  border-bottom: max(1px, calc(1.33 * var(--pu))) solid var(--ig-accent, #e3b94a); /* 3 */
-}
-.pause__member-info {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-.pause__member-name {
-  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: var(--pause-fs-name);
-  font-weight: 700;
-  font-style: italic;
-  line-height: 1.05;
-}
-.pause__member-rows {
-  margin-top: calc(3.56 * var(--pu)); /* 8 */
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 calc(7.11 * var(--pu)); /* 0 16 */
-}
-.pause__member-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: calc(3.56 * var(--pu));
-  padding: calc(1.33 * var(--pu)) 0; /* 3 */
-  border-bottom: 1px solid rgba(244, 241, 232, 0.12);
-}
-.pause__member-k {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  color: var(--ig-accent, #e3b94a);
-  white-space: nowrap;
-}
-.pause__member-v {
-  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: var(--pause-fs-small);
-  font-weight: 700;
-  color: rgba(244, 241, 232, 0.9);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pause__member-statuses {
-  margin-top: calc(3.11 * var(--pu)); /* 7 */
-  display: flex;
-  flex-wrap: wrap;
-  gap: calc(2.22 * var(--pu)); /* 5 */
-}
-.pause__status {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  padding: 0.1em 0.45em;
-  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
-  border: 1px solid rgba(244, 241, 232, 0.3);
-  color: rgba(244, 241, 232, 0.8);
-}
-
-/* ----------------------------------------------------------------- music */
-
-.pause__music-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding-bottom: calc(3.56 * var(--pu));
-  border-bottom: max(1px, calc(0.89 * var(--pu))) solid rgba(244, 241, 232, 0.16);
-}
-.pause__music-head-label {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.34em;
-  color: var(--ig-accent, #e3b94a);
-}
-.pause__music-head-act {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.26em;
-  color: rgba(244, 241, 232, 0.6);
-  cursor: pointer;
-  pointer-events: auto; /* see the comment on .pause__row */
-}
-.pause__music-head-act:hover {
-  color: var(--ig-paper, #f4f1e8);
-}
-.pause__music-list {
-  margin-top: calc(4.44 * var(--pu)); /* 10 */
-  max-height: clamp(180px, 46vh, 780px);
-  overflow-y: auto;
-  /* The list is longer than the panel and the cut lands mid-row. Fading the
-     last few pixels turns a clipped track title into a legible "there is more
-     below" instead of a rendering mistake. */
-  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 1.4em), transparent 100%);
-}
-.pause__music-row {
-  display: flex;
-  align-items: center;
-  gap: calc(4.44 * var(--pu)); /* 10 */
-  padding: calc(2.67 * var(--pu)) calc(3.56 * var(--pu)); /* 6 8 */
-  cursor: pointer;
-  pointer-events: auto; /* see the comment on .pause__row */
-}
-.pause__music-row--sel {
-  background: rgba(244, 241, 232, 0.1);
-  box-shadow: inset max(2px, calc(1.78 * var(--pu))) 0 0 var(--ig-accent, #e3b94a);
-}
-.pause__music-dot {
-  flex: none;
-  width: calc(2.67 * var(--pu)); /* 6 */
-  height: calc(2.67 * var(--pu));
-  border-radius: 50%;
-  background: var(--ig-accent, #e3b94a);
-}
-.pause__music-dot--off {
-  background: rgba(244, 241, 232, 0.22);
-}
-.pause__music-title {
-  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: var(--pause-fs-body);
-  font-style: italic;
-  font-weight: 700;
-  color: rgba(244, 241, 232, 0.8);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pause__music-row--sel .pause__music-title {
-  color: var(--ig-paper, #f4f1e8);
-}
-.pause__music-state {
-  margin-left: auto;
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  color: var(--ig-accent, #e3b94a);
-  white-space: nowrap;
-}
-.pause__music-row--playing .pause__music-title {
-  color: var(--ig-accent, #e3b94a);
-}
-
-/* --------------------------------------------------------- bottom strip */
-
-/* The three who are standing on the field, with their live numbers. */
-.pause__party {
-  grid-area: party;
-  align-self: end;
-  display: flex;
-  flex-wrap: wrap;
-  gap: calc(4.44 * var(--pu)); /* 10 */
-  width: 100%;
-}
-.pause__card {
-  display: flex;
-  align-items: center;
-  gap: calc(4.44 * var(--pu)); /* 10 */
-  /*
-   * Three across the left rail when they fit, and **a new row when they do
-   * not** — never three squeezed ones.
-   *
-   * This was `flex: 1 1 0; min-width: 0`, which says "share whatever is there,
-   * however little that is". On a 1024x768 window the left rail is 464px, each
-   * card got ~149 of it, the body got ~50 — and `2420/2420` is `nowrap` by
-   * contract, because 14px is the floor for a full HP pair too. So the numerals
-   * simply printed through the gold OD gauge beside them, and `Kimahri` came
-   * out as `Kima…`. The first pass moved the fix into a `max-width: 720px`
-   * query and left the 721–1100px band still doing it; a 4:3 window is exactly
-   * that band, and 4:3 is one of the aspects the brief names.
-   *
-   * `min-width: auto` (i.e. **not** overriding it) is the cure, and it is the
-   * one the flexbox spec is for: a flex item's automatic minimum size is its
-   * content's, so a card refuses to shrink past what its own numerals need and
-   * `flex-wrap` above sends the third one to a second row instead. Nothing
-   * measures a number or guesses a breakpoint — the contents state their width
-   * and the layout believes them.
-   *
-   * The basis stays at **0**, and that is not the half of the old declaration
-   * that was wrong. Flex lines are collected on each item's *hypothetical* main
-   * size — the basis clamped by min and max — so with the automatic minimum
-   * back in force a basis of 0 still reports "I need 157px", which is what makes
-   * the line break honest. `flex: 1 1 auto` (this pass's first attempt) reports
-   * the card's full content width instead, and at Bailey's own 2000x1012 that
-   * is ~300px a card: three of them plus their gaps overran the 900px rail by a
-   * hair and the strip came apart into two rows, on a window with room for
-   * three. Basis 0 lays all three out and lets them grow into the rail.
-   */
-  flex: 1 1 0;
-  /*
-   * The cap has to clear the floor, not sit under it.
-   *
-   * A flex item's automatic minimum size is itself clamped by `max-width`, so a
-   * cap smaller than what the card holds does not make the card wrap — it makes
-   * the card overflow. At 800x600 the cap's old floor was 150px and a card with
-   * `2420/2420` and the OD gauge beside it needs about 157, so all three cards
-   * painted their gauge 2–7px past their own right border. (Measured: 800x600
-   * had `scrollWidth 154, 150, 149` against `clientWidth 147`; 1024x768, where
-   * `16vw` is 164, had none.) The floor is 168 now, which is the widest a card
-   * asks for at the 14px type floor plus a little, and it only ever binds below
-   * ~1050px of window, where three cards and their gaps take 516 of the 736px
-   * the party strip has. Above that `16vw` is doing the work as before.
-   */
-  max-width: clamp(168px, 16vw, 400px);
-  box-sizing: border-box;
-  padding: calc(3.56 * var(--pu)) calc(4.44 * var(--pu)); /* 8 10 */
-  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
-  border-style: solid;
-  border-color: var(--ig-paper, #f4f1e8);
-  border-left-width: calc(max(2px, 1.78 * var(--pu)) * (1 - var(--ig-edge, 0))); /* 4 */
-  border-right-width: calc(max(2px, 1.78 * var(--pu)) * var(--ig-edge, 0));
-  border-top-width: 0;
-  border-bottom-width: 0;
-}
-.pause__card--ko {
-  opacity: 0.45;
-  border-color: var(--ig-blood, #b02a2a);
-}
-/*
- * Square, `position: relative`, `overflow: hidden` — the frame contract
- * `portrait.ts`'s `faceImgHtml` documents. Its `<img>` carries an inline
- * `position: absolute` with percentage offsets measured per painting, so the
- * frame must be the containing block or the portrait positions itself against
- * the whole stage and covers the screen (which is exactly what it did before
- * this rule said `relative`). Nothing here restyles that `<img>`: its inline
- * geometry wins over any stylesheet anyway, and that is the point of it.
- */
-.pause__card-face {
-  flex: none;
-  position: relative;
-  width: clamp(34px, 3.4vw, 76px); /* 40 on the old grid */
-  height: clamp(34px, 3.4vw, 76px);
-  overflow: hidden;
-  background: #1a1526;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--pause-fs-body);
-  font-weight: 700;
-  color: rgba(244, 241, 232, 0.55);
-}
-/* The initial sits behind the portrait, which covers it when it loads. */
-.pause__card-face > span {
-  position: absolute;
-}
-/*
- * No `min-width: 0` here either, and for the same reason: this is the box whose
- * content — a name and a full `2420/2420` pair — decides how narrow the card is
- * allowed to get. Zero it and the card above happily shrinks to nothing and
- * lets the numerals spill over the OD gauge.
- */
-.pause__card-body {
-  flex: 1 1 auto;
-}
-.pause__card-name {
-  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
-  font-size: var(--pause-fs-name);
-  font-weight: 700;
-  font-style: italic;
-  line-height: 1.05;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pause__card-nums {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: calc(4.44 * var(--pu)); /* 10 */
-  margin-top: calc(0.89 * var(--pu));
-  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: var(--pause-fs-num);
-  font-weight: 700;
-  line-height: 1.15;
-}
-.pause__card-nums > span {
-  white-space: nowrap;
-}
-.pause__card-nums i {
-  font-style: normal;
-  font-size: max(14px, 0.78em);
-  color: #9fb0c4;
-}
-.pause__card-hp {
-  color: var(--ig-paper, #f4f1e8);
-}
-.pause__card-mp {
-  color: var(--ig-spira-sky, #7fc6e8);
-}
-.pause__card-bar {
-  display: block;
-  height: max(2px, calc(1.33 * var(--pu))); /* 3 */
-  margin-top: calc(1.33 * var(--pu));
-  background: #2a3246;
-}
-.pause__card-bar-fill {
-  display: block;
-  height: 100%;
-  background: var(--ig-paper, #f4f1e8);
-}
-.pause__card-bar--mp .pause__card-bar-fill {
-  background: var(--ig-spira-sky, #7fc6e8);
-}
-.pause__card-od {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  gap: calc(0.89 * var(--pu));
-  width: clamp(28px, 2.6vw, 60px); /* 35 on the old grid */
-}
-.pause__card-od-label {
-  font-size: var(--pause-fs-micro);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--ig-accent, #e3b94a);
-}
-.pause__card-odbar {
-  display: block;
-  height: max(4px, calc(3.56 * var(--pu))); /* 8 */
-  background: #2a3246;
-}
-.pause__card-odbar-fill {
-  display: block;
-  height: 100%;
-  background: var(--ig-accent, #e3b94a);
-}
-
-/*
- * The polaroids, under the dossier and right of the party cards.
- *
- * `snapshotsHtml` emits three bare `<figure>`s, so the row is laid out here
- * rather than by `.cpanel__snaps` — the pause screen is the one caller that
- * takes the tiles out of the dossier column and hangs them in the frame.
- */
-.pause__snaps {
-  grid-area: snaps;
-  align-self: end;
-  justify-self: end;
-  width: 100%;
-  max-width: clamp(340px, 40vw, 780px);
-  display: flex;
-  gap: calc(6.22 * var(--pu)); /* 14 */
-  align-items: flex-end;
-}
-
-/* ---------------------------------------------------------- panels hidden */
-
-/*
- * HIDE PANELS (`H`, Triangle, or the menu row).
- *
- * The player asked for this so they could look at the painting, so "hidden"
- * means the scrim and the vignette go too — those exist only to give the
- * chrome something to sit on, and left behind they would be a dark ramp across
- * a picture with nothing on it. `.pause__art` stays, and it is the one child
- * that is still full bleed, so the frame is the painting and nothing else.
- * The grain is the one exception: it is part of the painting's surface, not
- * chrome, and taking it away would make the plate look *more* like a photo of
- * a painting at exactly the moment the player is looking hardest.
- *
- * Photo mode's rule (`[data-photo='on']`) is the same idea one level further —
- * it hides the art as well and hands the camera the diorama. The two never
- * overlap: entering photo mode takes this screen's input.
- */
-.pause--bare > *:not(.pause__art):not(.pause__grain) {
-  display: none;
-}
-
-/* ------------------------------------------------------------------ hint */
-
-/*
- * Both hint lines mount on `.pause__chrome`, a sibling layer outside the
- * painting, and both are now on the same `clamp()` scale as everything else:
- * `controls-hint.css`'s 12px was authored for a 1600x900 window and was the
- * single most illegible thing on Bailey's 2000x1012 screenshot.
- */
-.pause__hint.chint {
-  left: var(--pause-pad-x);
-  bottom: var(--pause-pad-y);
-  right: auto;
-  top: auto;
-  transform: skewX(-8deg);
-  font-size: var(--pause-fs-micro);
-  gap: clamp(10px, 1vw, 24px);
-  padding: 0.6em 1.2em;
-  border-left-width: max(3px, calc(1.33 * var(--pu)));
-  /*
-   * `right: auto` unbounds the strip, and on a 390px phone the line ran off
-   * the screen — the last hint read `F PHO`. It is anchored left because a
-   * skewed strip has to start somewhere fixed, so the bound goes on the width
-   * instead, and the row wraps rather than being cut. `--pause-hint-band`
-   * reserves two lines' worth at that width, so a wrapped strip still never
-   * lands on the dossier.
-   */
-  box-sizing: border-box;
-  max-width: calc(100vw - var(--pause-pad-x) * 2);
-  flex-wrap: wrap;
-  row-gap: 0.35em;
-}
-
-/*
- * The one line left when the panels are down.
- *
- * It sits where the hint strip was rather than centred, because the thing it
- * must not do is land on the subject's face — the whole point of the mode.
- */
-.pause__bare-hint {
-  position: absolute;
-  left: var(--pause-pad-x);
-  bottom: var(--pause-pad-y);
-  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: var(--pause-fs-small);
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  color: rgba(244, 241, 232, 0.62);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-  transform: skewX(-8deg);
-}
-.pause__bare-hint b {
-  color: var(--ig-accent, #e3b94a);
-  opacity: 0.95;
-}
-.pause__bare-hint b[data-action] {
-  cursor: pointer;
-  pointer-events: auto; /* see the comment on .pause__row */
-}
-.pause__bare-hint span {
-  opacity: 0.4;
-}
-
-/* ------------------------------------------------------- the battle chip */
-
-/*
- * The mouse's way into the pause menu, in the top-left corner of the battle
- * frame.
- *
- * It is mounted by `BattleScreen` into *its* screen root — outside the HUD's
- * letterboxed stage, so it is authored in device px — and it lives in this
- * stylesheet because this is the file that already comes along with
- * `PauseScreen`, which `BattleScreen` imports. z-index clears the HUD's own
- * layers (up to 40) and stays well under the pause overlay's 60, so the menu
- * it opens covers it.
- */
-.battle-pause-chip {
-  position: absolute;
-  left: 22px;
-  top: 18px;
-  z-index: 45;
-  margin: 0;
-  padding: 5px 12px;
+  gap: 12px;
+  height: var(--pu-row);
+  background: none;
   border: 0;
-  border-left: 3px solid var(--ig-accent, #e3b94a);
-  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
-  color: rgba(244, 241, 232, 0.72);
-  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  line-height: 1;
-  cursor: pointer;
-  pointer-events: auto; /* see the comment on .pause__row */
-  transform: skewX(-12deg);
-  opacity: 0.55;
-  transition: opacity 140ms ease, color 140ms ease;
-}
-.battle-pause-chip:hover,
-.battle-pause-chip:focus-visible {
-  opacity: 1;
-  color: var(--ig-paper, #f4f1e8);
 }
 
-/* Photo mode's one surviving line, centred at the foot of the frame. */
-.pause__photo-hint {
+.pause--mirror .pause__row { flex-direction: row-reverse; }
+
+.pause__row[role='button'] { cursor: pointer; }
+
+.pause__k {
+  width: var(--pu-key);
+  flex: none;
+  text-align: right;
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pause__col--wide .pause__k { width: clamp(118px, 9.5vw, 190px); }
+/* The commands column has no bar to set its width, so it says how wide it is. */
+.pause__col[data-col='encounter'] { min-width: clamp(190px, 16vw, 310px); }
+.pause--mirror .pause__k { text-align: left; }
+
+.pause__bar {
+  position: relative;
+  width: var(--pu-bar);
+  height: 3px;
+  flex: none;
+  background: rgba(var(--pu-paper), 0.13);
+}
+
+.pause__bar i {
   position: absolute;
   left: 0;
-  right: 0;
-  bottom: var(--pause-pad-y, 26px);
-  text-align: center;
-  font-size: clamp(14px, 0.32vw + 0.39vh, 21px);
-  font-weight: 700;
+  top: 0;
+  bottom: 0;
+  background: var(--pu-accent);
+  opacity: 0.88;
+}
+
+.pause__bar s {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: rgba(var(--pu-paper), 0.62);
+}
+
+.pause__v {
+  min-width: 0;
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs-v);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(var(--pu-paper), 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pause__v em {
+  font-style: normal;
+  color: rgba(var(--pu-paper), 0.38);
+}
+
+.pause--mirror .pause__v { text-align: right; }
+
+/* A row with no bar: a status, a dressphere, a turn position, a command. */
+.pause__row--word .pause__bar { background: none; }
+
+.pause__row--word .pause__v {
+  font-family: inherit;
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.84);
+}
+
+/*
+ * A command row, not a reading: the label takes the width it needs and there
+ * is no bar to align against. `RESTART ENCOUNTER` in a column sized for
+ * `MAGIC DEF` came out as `RESTART ENCOU…`, and an ellipsis on a menu row is
+ * a defect, not a style.
+ */
+.pause__row--cmd .pause__k {
+  width: auto;
+  text-align: left;
+  color: rgba(var(--pu-paper), 0.72);
+  letter-spacing: 0.16em;
+  overflow: visible;
+}
+
+.pause--mirror .pause__row--cmd .pause__k { text-align: right; }
+.pause__row--cmd .pause__bar { display: none; }
+.pause__row--cmd .pause__v { margin-left: auto; }
+.pause--mirror .pause__row--cmd .pause__v { margin-left: 0; margin-right: auto; }
+.pause__row--cmd:hover .pause__k { color: rgba(var(--pu-paper), 0.96); }
+
+.pause__row--head .pause__k {
+  color: rgba(var(--pu-paper), 0.82);
   letter-spacing: 0.24em;
-  color: rgba(244, 241, 232, 0.72);
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-  z-index: 9;
 }
-.pause__photo-hint b {
-  color: var(--ig-accent, #e3b94a);
+
+.pause__row--done .pause__v { color: var(--pu-accent); }
+
+.pause__row--sel .pause__k,
+.pause__row--sel .pause__v { color: rgba(var(--pu-paper), 0.96); }
+
+.pause__row--sel::before {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  margin-left: -13px;
+  background: var(--pu-accent);
 }
-.pause__photo-hint b[data-action] {
+
+.pause--mirror .pause__row--sel::before { margin-left: 0; margin-right: -13px; }
+
+.pause__row { position: relative; }
+
+.pause__row--rule {
+  height: var(--pu-row);
+  align-items: center;
+}
+
+.pause__row--rule span {
+  display: block;
+  width: clamp(180px, 16.5vw, 320px);
+  height: 1px;
+  background: rgba(var(--pu-paper), 0.14);
+}
+
+/* The dossier quote and the three chapter snapshots, on the CHAPTER tab. */
+.pause__quote {
+  margin: 0;
+  max-width: clamp(220px, 20vw, 400px);
+}
+
+.pause__quote-text {
+  display: block;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(18px, 1.375vw, 26px);
+  font-style: italic;
+  line-height: 1.3;
+  color: rgba(var(--pu-paper), 0.9);
+}
+
+.pause__quote-who,
+.pause__hand {
+  display: block;
+  margin-top: 8px;
+  font-size: var(--pu-fs);
+  font-style: normal;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.42);
+}
+
+.pause__hand {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', serif);
+  font-style: italic;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: var(--pu-fs-v);
+}
+
+.pause__snaps {
+  display: flex;
+  gap: 10px;
+  margin-top: clamp(10px, 1.6vh, 20px);
+}
+
+.pause__snap {
+  margin: 0;
+  width: clamp(72px, 6.5vw, 130px);
+}
+
+.pause__snap img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  filter: saturate(0.6) brightness(0.8);
+}
+
+.pause__snap figcaption {
+  margin-top: 5px;
+  font-size: var(--pu-fs);
+  letter-spacing: 0.1em;
+  color: rgba(var(--pu-paper), 0.38);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- objective */
+
+.pause__obj {
+  position: absolute;
+  left: var(--pu-gut);
+  top: var(--pu-top-obj);
+  width: clamp(240px, 47%, 820px);
+}
+
+.pause--mirror .pause__obj {
+  left: auto;
+  right: var(--pu-gut);
+  text-align: right;
+}
+
+.pause__eyebrow {
+  display: block;
+  margin-bottom: clamp(8px, 1.6vh, 18px);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(227, 185, 74, 0.62);
+}
+
+.ig--ffx2 .pause__eyebrow { color: rgba(247, 182, 217, 0.62); }
+
+.pause__line {
+  margin: 0;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', serif);
+  font-weight: 300;
+  font-size: var(--pu-fs-line);
+  line-height: 1.12;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.95);
+}
+
+/* ---------------------------------------------------------- the prompts */
+
+.pause__back {
+  position: absolute;
+  right: var(--pu-gut);
+  bottom: var(--pu-bot-back);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: var(--pu-fs-v);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.72);
   cursor: pointer;
-  pointer-events: auto; /* see the comment on .pause__row */
-}
-.pause__photo-hint span {
-  opacity: 0.45;
 }
 
-/*
- * Themed wrapper for the two hint strips, which mount on the screen root
- * rather than inside the painting layer (see the `ControlsHint` mount in
- * `PauseScreen.enter`). It carries `.ig` — and `.ig--ffx2` on an X-2 chapter —
- * so those strips can read `--ig-accent`, and it re-declares the fluid tokens
- * because it is *not* inside `.pause` and cannot inherit them. It draws
- * nothing itself and stays click-through except where a hint names an action.
- */
-.pause__chrome {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 61; /* just above `.pause`, for the same reason */
-  --pu: clamp(2px, 0.08vw + 0.12vh, 5px);
-  --pause-pad-x: clamp(18px, 3.4vw, 96px);
-  --pause-pad-y: clamp(16px, 3.2vh, 72px);
-  --pause-hint-band: clamp(44px, 1.2vw + 2.6vh, 76px);
-  --pause-fs-micro: clamp(14px, 0.28vw + 0.34vh, 19px);
-  --pause-fs-small: clamp(14px, 0.32vw + 0.39vh, 21px);
+.pause__key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 22px;
+  padding: 0 7px;
+  border: 1px solid rgba(var(--pu-paper), 0.34);
+  border-radius: 3px;
+  font-size: var(--pu-fs);
+  font-weight: 700;
+  color: rgba(var(--pu-paper), 0.66);
 }
 
-/* -------------------------------------------------------------- narrow */
+.pause__hide {
+  position: absolute;
+  right: var(--pu-gut);
+  bottom: var(--pu-bot-hide);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.34);
+  cursor: pointer;
+}
 
-/*
- * A phone held upright, or any window too narrow to carry two columns.
- *
- * The painting is still the whole screen — that is the one thing that must be
- * true at every aspect — and the chrome folds to a single column over it. The
- * polaroids go, because three tilted tiles across 358 usable pixels are three
- * smudges.
- *
- * ## The frame is the scroll box here (fix 3, pass 2)
- *
- * The first pass laid this out as `auto auto minmax(0, 1fr)` and let the two
- * `auto` rows take their content height. On a tall phone that is fine: there
- * is room. On a window that is narrow **and** short — 640x480, 700x500,
- * 720x400, and every other 4:3 or squat window under the 721px width bound —
- * there is not, and `auto` tracks do not shrink. The rail overflowed its own
- * track, the `1fr` dossier track collapsed to nothing, and the stack printed
- * the party cards and the dossier straight over live menu rows: at 640x480,
- * seven painted text-on-text intersections and a QUIT TO TITLE row whose
- * centre hit-tested as the dossier. A row the cursor is *on* that the player
- * cannot see is the worst thing this screen can do.
- *
- * The cure is not another breakpoint — it is to stop pretending the content
- * fits. The frame becomes a **column of flex items** that scrolls.
- *
- * Flex and not grid, and that distinction is the whole fix. A grid `auto`
- * track is not "as tall as its item": it is sized by the track algorithm, and
- * when the container's height is definite and there is not enough of it, the
- * algorithm sizes each track down towards its item's *min-content* height —
- * which for this rail is nearly nothing, because the rail sets `min-height: 0`
- * so the menu inside it can be its own scroll box on a desktop window. The
- * first attempt at this fix did exactly that, and made things worse: at
- * 640x480 the three tracks came out 121 / 79 / 165 px for a rail whose content
- * is 373 px tall, so the rail overflowed its own track by 250 px and printed
- * over both of the others. A column flex item at `flex: none` has no such
- * escape hatch — it is its content's height, it cannot be shrunk, and two of
- * them cannot occupy the same strip of the screen.
- *
- * So: a window with room looks exactly as it did (`scrollHeight ===
- * clientHeight`, no scrollbar), and a window without room hands the player the
- * rest with the same Down arrow they were already pressing — `renderMenu`'s
- * `scrollIntoView({ block: 'nearest' })` walks every scrolling ancestor, so the
- * cursor stays on screen for free.
- *
- * `overflow-x: clip` rather than `auto`: the rows are skewed and their corners
- * overhang their box by about a tenth of their height, and a *horizontal*
- * scrollbar across the foot of a painting is not a thing anyone asked for.
- */
-@media (max-width: 720px), (max-aspect-ratio: 3 / 4) {
-  .pause__frame {
-    display: flex;
+.pause--mirror .pause__back,
+.pause--mirror .pause__hide {
+  right: auto;
+  left: var(--pu-gut);
+}
+
+/* The one line that survives `H`. */
+.pause__baseline {
+  position: absolute;
+  left: var(--pu-gut);
+  bottom: clamp(20px, 3.8vh, 44px);
+  display: none;
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.3);
+}
+
+.pause--bare .pause__baseline { display: block; }
+.pause__baseline b { color: rgba(var(--pu-paper), 0.62); cursor: pointer; }
+
+/* ===================================================================== */
+/* Short windows. At 720p the body would otherwise start a third of the   */
+/* way down a frame that has 120px less to give than 900.                 */
+/* ===================================================================== */
+
+@media (max-height: 760px) {
+  .pause {
+    --pu-top-body: 30vh;
+    --pu-top-obj: 76vh;
+    --pu-row: clamp(22px, 3.1vh, 30px);
+  }
+  .pause__snaps { display: none; }
+}
+
+/* ===================================================================== */
+/* Phone, 390 x 844. The tab strip becomes one swipeable row and the      */
+/* columns stack under the face instead of beside it. The floor drops to  */
+/* 12px here and nowhere else: the paintings are landscape and the screen */
+/* is portrait, so there is a quarter of the width to work with.          */
+/* ===================================================================== */
+
+@media (max-width: 620px) {
+  .pause {
+    --pu-gut: 20px;
+    --pu-fs: 12px;
+    --pu-fs-v: 13px;
+    --pu-fs-on: 17px;
+    --pu-fs-line: 20px;
+    --pu-row: 20px;
+    --pu-key: 92px;
+    --pu-bar: 110px;
+    --pu-top-brand: 16px;
+    --pu-top-tabs: 40px;
+    --pu-top-body: 52vh;
+    --pu-top-obj: 82vh;
+    --pu-bot-back: 26px;
+    --pu-bot-hide: 26px;
+  }
+
+  /*
+   * Five rows a column, as approved frame (f) shows.
+   *
+   * A portrait screen has about a quarter of the height a 16:9 window has
+   * below the face, and the two columns stack instead of sitting side by side.
+   * Seven stat rows plus five fight rows plus two headings ran straight
+   * through the objective line and the two prompts. The mockup's answer was to
+   * print five and three; five and five fits with air to spare, and the rows
+   * that go are the last of each column — the member's own tab is one swipe
+   * away for the rest.
+   */
+  .pause__col > div:nth-of-type(n + 6) { display: none; }
+  .pause__row--rule { display: none; }
+
+  .pause__falloff {
+    background:
+      linear-gradient(to bottom, rgba(var(--pu-void), 0.86) 0%, rgba(var(--pu-void), 0.2) 16%, transparent 30%),
+      linear-gradient(to top, rgba(var(--pu-void), 0.97) 0%, rgba(var(--pu-void), 0.94) 34%,
+        rgba(var(--pu-void), 0.45) 48%, transparent 60%);
+  }
+
+  .pause--mirror .pause__falloff {
+    background:
+      linear-gradient(to bottom, rgba(var(--pu-void), 0.86) 0%, rgba(var(--pu-void), 0.2) 16%, transparent 30%),
+      linear-gradient(to top, rgba(var(--pu-void), 0.97) 0%, rgba(var(--pu-void), 0.94) 34%,
+        rgba(var(--pu-void), 0.45) 48%, transparent 60%);
+  }
+
+  .pause__vig {
+    background: radial-gradient(110% 46% at 54% 26%, transparent 42%, rgba(var(--pu-void), 0.66) 100%);
+  }
+
+  .pause__bump { display: none; }
+
+  .pause__swipe {
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 84%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 0, #000 84%, transparent 100%);
+    width: 100%;
+    gap: 20px;
+  }
+
+  .pause__tab { letter-spacing: 0.24em; padding-bottom: 8px; }
+  .pause__tab--on { letter-spacing: 0.16em; }
+
+  .pause__body,
+  .pause--mirror .pause__body {
+    left: var(--pu-gut);
+    right: var(--pu-gut);
     flex-direction: column;
-    align-items: stretch;
-    /*
-     * The hint band stops being *padding* and becomes the frame's bottom edge.
-     *
-     * Reserving it as padding is right for a layout that does not scroll: the
-     * content is laid out above the strip and stays there. It is wrong for one
-     * that does, twice over. Chromium leaves a scroll container's end padding
-     * out of its scrollable overflow, so the reservation vanished the moment
-     * the frame started scrolling (the dossier ran 57px under the strip at
-     * 640x480). And even with the padding honoured, only the *end* of the
-     * scroll is protected — scrolled anywhere else, the party cards and the
-     * menu simply travel underneath a strip that is `position: fixed` and
-     * always on top, which is what the measurements showed.
-     *
-     * Ending the scroll viewport at the band fixes both: there is no pixel of
-     * this frame, at any scroll offset, that is behind the hint strip.
-     */
-    bottom: calc(var(--pause-pad-y) + var(--pause-hint-band));
-    padding-bottom: 0;
-    overflow-x: clip;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(227, 185, 74, 0.5) transparent;
-    /* The frame is a scroll box now, so it has to be able to take a wheel or a
-       drag. It draws nothing and handles no clicks, so catching them here
-       costs the painting underneath nothing — and photo mode still takes the
-       whole layer away by direct-child rule. */
-    pointer-events: auto;
-  }
-  /* Air under the last slab when the player has scrolled to the end, since the
-     container's own end padding would be dropped (see above). */
-  .pause__frame::after {
-    content: '';
-    display: block;
-    flex: none;
-    order: 9;
-    height: var(--pause-pad-y);
-  }
-  /*
-   * Source order is rail, panel, party, snaps; reading order here is rail,
-   * party, panel — the dossier is the long thing and it goes last.
-   *
-   * `flex: none` on every one of them, and `align-self: stretch` because in a
-   * column flex container `align-self` is the *horizontal* axis, where the
-   * base rules' `start` / `end` would pin a full-width slab to one side.
-   */
-  .pause__rail,
-  .pause__party,
-  .pause__panel {
-    flex: none;
-    align-self: stretch;
-    min-height: auto;
-  }
-  .pause__rail {
-    order: 1;
-  }
-  .pause__party {
-    order: 2;
-  }
-  .pause__panel {
-    order: 3;
-  }
-  /*
-   * The menu stops being its own scroll box. Two nested scrollers on one axis
-   * means the player can scroll the menu to its end and find the frame has not
-   * moved — and `block: 'nearest'` is satisfied by the inner one, so the frame
-   * never scrolls the selected row back into the window at all. One scroller.
-   */
-  .pause__menu {
-    overflow: visible;
-    max-height: none;
-  }
-  /*
-   * Same reasoning for the dossier: `max-height: 100%` was 100% of a grid area
-   * that does not exist here, and a second scroller at worst. It prints in
-   * full and the frame carries it.
-   */
-  .pause__panel {
-    max-height: none;
-    overflow: visible;
-  }
-  .pause__menu,
-  .pause__panel,
-  .pause__snaps {
-    max-width: none;
-    justify-self: stretch;
-  }
-  .pause__quote,
-  .pause__snaps {
-    display: none;
-  }
-  .pause__card {
+    gap: 14px;
     max-width: none;
   }
-  /*
-   * The hint strip wraps here, and on a 390px phone the full control line is
-   * three rows of chips — a chip cannot be broken, so no amount of tightening
-   * gets it to one. The chips give back their generous desktop padding, which
-   * buys back most of a row.
-   *
-   * The *band* the strip needs is no longer guessed at in this file at all:
-   * `PauseScreen.measureHintBand` writes the measured height onto the frame.
-   * The clamp below is only the floor a browser sees before the first
-   * measurement lands (and if `ResizeObserver` is missing entirely).
-   */
-  .pause__hint.chint {
-    gap: 8px;
-    padding: 0.45em 0.8em;
-  }
-  .pause__frame {
-    --pause-hint-band: clamp(92px, 1.2vw + 8vh, 124px);
-  }
-  /* The ramp is a left-to-right wipe, which means nothing in one column. */
-  .pause__scrim {
-    background: linear-gradient(180deg, rgba(11, 10, 18, 0.9) 0%, rgba(11, 10, 18, 0.72) 55%, rgba(11, 10, 18, 0.9) 100%);
-  }
-}
 
-/* --------------------------------------------------------------- short */
+  /* On a portrait screen the chrome has nowhere else to go, so the mirror
+     only flips the horizontal anchors it still has: the objective and the
+     two prompts. The columns stay full width. */
+  .pause--mirror .pause__row,
+  .pause--mirror .pause__col > h3 { flex-direction: row; text-align: left; }
+  .pause--mirror .pause__k { text-align: right; }
 
-/*
- * A window with more width than height to spare: 800x600 and 1024x768 (4:3,
- * which the brief names), a laptop with a browser's chrome eating the bottom
- * third, a phone on its side.
- *
- * The rail's contents are a fixed cost — the wordmark, and ten menu rows that
- * are all real commands — so what gives is the decoration. The quote and the
- * polaroids go, and the party strip takes the whole width back, which is the
- * difference between three cards in a row and three cards stacked in three.
- *
- * This is a *height* query on purpose. The first pass folded the layout on
- * width alone (`max-width: 720px`), which is why an 800x600 window — not narrow
- * by that test, and not close to enough room by any other — was handed the full
- * desktop layout and printed the quote over MUSIC PLAYER, CHAPTER SELECT and
- * QUIT TO TITLE.
- */
-@media (max-height: 700px) and (min-width: 721px) {
-  .pause__frame {
-    grid-template-rows: minmax(0, 1fr) auto;
-    grid-template-areas:
-      'rail  panel'
-      'party party';
+  .pause__obj,
+  .pause--mirror .pause__obj {
+    left: var(--pu-gut);
+    right: var(--pu-gut);
+    width: auto;
+    text-align: left;
   }
-  .pause__quote,
-  .pause__snaps {
-    display: none;
-  }
-  /* Ten rows of the same type, in less height: the type holds its floor and
-     the padding around it gives way. */
-  .pause__row {
-    padding: 0.2em 0.6em;
-  }
-  .pause__menu {
-    margin-top: clamp(4px, 1vh, 12px);
-  }
-  .pause__party {
-    align-self: end;
-  }
-}
 
-/* -------------------------------------------------------- reduced motion */
+  .pause__snaps,
+  .pause__quote { display: none; }
 
-/*
- * Reduced motion: the chrome fade and — the one that matters — the drift.
- * A player who has asked the system for less movement has asked for a still
- * painting, not a slower one.
- */
-@media (prefers-reduced-motion: reduce) {
-  .lb-stage[data-photo='on'] > *:not(.pause__photo-hint) {
-    transition: none;
-  }
-  .pause__art-img {
-    animation: none;
-  }
+  .pause__back,
+  .pause--mirror .pause__back { right: var(--pu-gut); left: auto; }
+  .pause__hide,
+  .pause--mirror .pause__hide { left: var(--pu-gut); right: auto; }
 }

@@ -48,6 +48,7 @@ import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { attachEnemyIntent, consumeIntentKeyPress } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
+import { previewTurnOrder } from './pause/turnOrder.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -503,6 +504,12 @@ export class BattleScreen extends Screen {
     const screen = new PauseScreen({
       chapter,
       state: () => this.engine?.state() ?? null,
+      // The pause screen's TURN ORDER row, FFX only: `predictTurnOrder` is on
+      // the engine's runtime and not on `BattleState`, so the row can only
+      // exist if it is handed over here. An FFX-2 engine has no such method
+      // and the row is simply not printed (AGENTS.md rule 14; CTB has a queue
+      // to be Nth in, ATB has a clock).
+      turnOrder: () => previewTurnOrder(this.engine),
       links: () => Math.max(1, this.links),
       chainLength: this.chainLength,
       onPause: (paused) => {

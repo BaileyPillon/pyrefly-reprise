@@ -1,24 +1,25 @@
 // @vitest-environment jsdom
 /**
- * The pause screen's HIDE PANELS toggle, and the keyboard claim that makes the
- * whole pause fix possible.
+ * The keyboard claim, and `H` on the remade pause screen.
  *
- * Two things are under test here and they are two halves of the same bug report:
+ * Two halves of one bug report, and the half that is not about the layout is
+ * unchanged by the Until Dawn remake:
  *
- *  * **The claim.** `Esc` and `P` did nothing in a live battle because the pause
- *    refused to open over a command menu, and it refused because both command
- *    menus read the keyboard straight off `window` — a pause stacked on one
- *    would have had two screens on the same arrow keys and an Enter that
- *    resolves a real command from behind the menu. `Input.claimKeyboard` closes
- *    that at the source: `Input` listens in the **capture** phase, so a claim
- *    can stop the event before any other `window` listener in the page sees it.
- *    The tests below assert exactly that — a foreign listener goes silent while
- *    a claim is up, the claimant still plays normally, and the claim is handed
- *    back on release.
- *  * **The toggle.** `H`, Triangle, the HIDE PANELS row and the chip all drop
- *    every slab and leave the painting, the choice survives into
- *    `Settings.pausePanelsHidden`, and a pause opened afterwards comes up bare
- *    without being asked twice.
+ *  * **The claim.** `Esc` and `P` did nothing in a live battle because the
+ *    pause refused to open over a command menu, and it refused because both
+ *    command menus read the keyboard straight off `window`.
+ *    `Input.claimKeyboard` closes that at the source: `Input` listens in the
+ *    **capture** phase, so a claim can stop the event before any other
+ *    `window` listener in the page sees it. The remake leans on the claim for
+ *    more than it used to — `Q`, `E`, `F` and `Tab` all arrive through it
+ *    (`pause/keys.ts`) — so these tests matter more, not less.
+ *  * **The toggle.** `H`, Triangle and the hint drop every line and leave the
+ *    painting; the choice survives into `Settings.pausePanelsHidden`, and a
+ *    pause opened afterwards comes up bare without being asked twice.
+ *
+ * The rest of the remake is in `pause-remake.test.ts` (tabs, the nineteen
+ * preserved functions, the game-aware rows, the mirror, reduced motion) and
+ * `pause-remake-css.test.ts` (the type floors and the grade).
  *
  * jsdom, because all of it is DOM and listeners; nothing here needs a battle.
  */
@@ -113,34 +114,15 @@ function mountPause(settings: Partial<ReturnType<typeof defaultSettings>> = {}):
 /**
  * Whether the stage is in bare mode.
  *
- * Which children that *hides* is a stylesheet rule (`.pause--bare > *:not(
- * .pause__art)`), and vitest does not load CSS — asserting computed `display`
- * here would pass or fail for reasons that have nothing to do with this code.
- * The rule itself is checked where it can be: in the browser, by
- * `tests/e2e/pause.spec.ts` and the `pause-hidden.png` capture.
+ * Which children that *hides* is a stylesheet rule
+ * (`.pause--bare .pause__ui { display: none }`), and vitest does not load CSS —
+ * asserting computed `display` here would pass or fail for reasons that have
+ * nothing to do with this code. The rule itself is read out of the sheet by
+ * `pause-remake-css.test.ts` and looked at in a browser under
+ * `docs/screenshots/pause-remake/`.
  */
 function isBare(root: HTMLElement): boolean {
   return root.querySelector('.pause__stage')?.classList.contains('pause--bare') ?? false;
-}
-
-/**
- * The slabs the bare rule takes away, and the painting it leaves.
- *
- * The bare rule is written against the stage's **direct** children, and since
- * the screen went full-bleed (fix round 3) every piece of chrome is one child:
- * `.pause__frame`, the grid the slabs live in. So this looks below it — two
- * levels now, because the wordmark, the menu and the quote were wrapped again
- * in `.pause__rail` when the quote turned out to be able to lay itself out over
- * the menu as a separate grid area. The rule still hides all of them at once,
- * by hiding the one ancestor they share.
- */
-function slabs(root: HTMLElement): string[] {
-  const stage = root.querySelector('.pause__stage');
-  if (!stage) return [];
-  const frame = stage.querySelector('.pause__frame');
-  const inFrame = frame ? [...frame.children] : [];
-  const deeper = inFrame.flatMap((el) => [...el.children]);
-  return [...stage.children, ...inFrame, ...deeper].map((el) => el.className.split(' ')[0]!);
 }
 
 // ------------------------------------------------------------- the claim
@@ -220,7 +202,7 @@ describe('Input.claimKeyboard', () => {
 
 // ------------------------------------------------------------- the toggle
 
-describe('PauseScreen — HIDE PANELS', () => {
+describe('PauseScreen: H hides everything but the painting', () => {
   let h: Harness;
 
   beforeEach(() => {
@@ -232,24 +214,21 @@ describe('PauseScreen — HIDE PANELS', () => {
     vi.restoreAllMocks();
   });
 
-  it('starts with the panels up and the row offering to hide them', () => {
+  it('starts with the chrome up and the hint offering to hide it', () => {
     expect(h.screen.snapshot()['panelsHidden']).toBe(false);
-    expect(h.screen.snapshot()['rows']).toContain('panels');
-    const labels = [...h.root.querySelectorAll('.pause__row-label')].map((e) => e.textContent);
-    expect(labels).toContain('HIDE PANELS');
     expect(isBare(h.root)).toBe(false);
-    expect(slabs(h.root)).toContain('pause__menu');
+    expect(h.root.querySelector('.pause__ui')).not.toBeNull();
+    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('hide panels');
   });
 
   it('H leaves the painting and one line, and nothing else', () => {
     keydown('KeyH');
     expect(h.screen.snapshot()['panelsHidden']).toBe(true);
-    // The art is the only child the bare rule spares, and it is still there.
     expect(isBare(h.root)).toBe(true);
-    expect(slabs(h.root)).toContain('pause__art');
-    const bare = h.root.querySelector<HTMLElement>('.pause__bare-hint');
+    // The painting is still mounted; the bare rule spares it by class.
+    expect(h.root.querySelector('.pause__art')).not.toBeNull();
+    const bare = h.root.querySelector<HTMLElement>('.pause__baseline');
     expect(bare).not.toBeNull();
-    expect(bare!.style.display).not.toBe('none');
     expect(bare!.textContent).toContain('show panels');
     expect(bare!.textContent).toContain('resume');
   });
@@ -259,8 +238,6 @@ describe('PauseScreen — HIDE PANELS', () => {
     keydown('KeyH');
     expect(h.screen.snapshot()['panelsHidden']).toBe(false);
     expect(isBare(h.root)).toBe(false);
-    expect(slabs(h.root)).toContain('pause__panel');
-    expect(h.root.querySelector<HTMLElement>('.pause__bare-hint')!.style.display).toBe('none');
   });
 
   it('ignores a held H and a Ctrl+H', () => {
@@ -270,24 +247,24 @@ describe('PauseScreen — HIDE PANELS', () => {
     expect(h.screen.snapshot()['panelsHidden']).toBe(false);
   });
 
-  it('Triangle (the pad, or Shift/Tab/Q) toggles it too', () => {
+  it('Triangle (the pad) toggles it too', () => {
     h.screen.handleInput(snapshot(['triangle']));
     expect(h.screen.snapshot()['panelsHidden']).toBe(true);
     h.screen.handleInput(snapshot(['triangle']));
     expect(h.screen.snapshot()['panelsHidden']).toBe(false);
   });
 
-  it('the hint chip fires it for a mouse', () => {
+  it('the hint fires it for a mouse', () => {
     h.screen.handleInput(snapshot([], ['pause:panels']));
     expect(h.screen.snapshot()['panelsHidden']).toBe(true);
   });
 
-  it('the menu row fires it, and flips its own label', () => {
-    h.screen.handleInput(snapshot([], ['pause:row:panels']));
-    expect(h.screen.snapshot()['panelsHidden']).toBe(true);
-    const labels = [...h.root.querySelectorAll('.pause__row-label')].map((e) => e.textContent);
-    expect(labels).toContain('SHOW PANELS');
-    expect(labels).not.toContain('HIDE PANELS');
+  it('with the chrome down the strip does not move under Q or E', () => {
+    const before = h.screen.snapshot()['tab'];
+    keydown('KeyH');
+    keydown('KeyE');
+    keydown('KeyQ');
+    expect(h.screen.snapshot()['tab']).toBe(before);
   });
 
   it('remembers the answer in the save', () => {
@@ -304,28 +281,9 @@ describe('PauseScreen — HIDE PANELS', () => {
     expect(isBare(h.root)).toBe(true);
   });
 
-  it('while bare, Esc still resumes and the cursor keys do nothing', () => {
+  it('Esc still resumes with the chrome down', () => {
     keydown('KeyH');
-    const row = h.screen.snapshot()['row'];
-    h.screen.handleInput(snapshot(['down']));
-    h.screen.handleInput(snapshot(['confirm']));
-    expect(h.screen.snapshot()['row']).toBe(row);
-    expect(h.resumed()).toBe(0);
     h.screen.handleInput(snapshot(['cancel']));
     expect(h.resumed()).toBe(1);
-  });
-
-  it('claims the keyboard for as long as it is up, and gives it back', () => {
-    const heard: string[] = [];
-    const spy = (e: Event): void => void heard.push((e as KeyboardEvent).code);
-    window.addEventListener('keydown', spy);
-    keydown('ArrowDown');
-    expect(heard).toEqual([]); // the pause owns it
-    h.dispose();
-    keydown('ArrowDown');
-    expect(heard).toEqual(['ArrowDown']);
-    window.removeEventListener('keydown', spy);
-    // `dispose` already ran; make the shared teardown harmless.
-    h = mountPause();
   });
 });

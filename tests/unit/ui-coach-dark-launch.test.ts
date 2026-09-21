@@ -62,6 +62,10 @@ function mountPause(): Harness {
   screen.app = { save: store, input, screens: [screen], renderer: { camera: {} } } as unknown as App;
   screen.root = root;
   void screen.enter();
+  // The Until Dawn remake dissolved the left-hand command column into tabs:
+  // REPLAY BRIEFING and BATTLE HELP are rows of the OPTIONS tab now
+  // (docs/concepts/pause-until-dawn/options.json, preservedFunctions).
+  screen.trigger('pause:tab:options');
 
   return {
     screen,
@@ -75,10 +79,17 @@ function mountPause(): Harness {
   };
 }
 
-/** Every menu row the pause menu drew, in reading order. */
+/** Every row of the tab that is open, in reading order. */
 function rowLabels(root: HTMLElement): string[] {
   return Array.from(root.querySelectorAll<HTMLElement>('.pause__row')).map((r) =>
     (r.textContent ?? '').trim().toUpperCase(),
+  );
+}
+
+/** Every tab on the strip, in strip order. */
+function tabLabels(root: HTMLElement): string[] {
+  return Array.from(root.querySelectorAll<HTMLElement>('.pause__tab')).map((t) =>
+    (t.textContent ?? '').trim().toUpperCase(),
   );
 }
 
@@ -116,9 +127,11 @@ describe('onboarding, dark launched', () => {
     expect(labels.length, 'the rest of the menu is untouched').toBeGreaterThan(3);
     expect(labels.some((l) => l.includes('REPLAY BRIEFING'))).toBe(false);
     expect(labels.some((l) => l.includes('BATTLE HELP'))).toBe(false);
-    // The rows it must still have, so this is a guard and not a broken menu.
-    expect(labels.some((l) => l.includes('OPTIONS'))).toBe(true);
-    expect(labels.some((l) => l.includes('PARTY'))).toBe(true);
+    // The tabs it must still have, so this is a guard and not a broken menu.
+    const tabs = tabLabels(pause.root);
+    expect(tabs).toContain('OPTIONS');
+    expect(tabs).toContain('CHAPTER');
+    expect(tabs).toContain('MUSIC');
   });
 
   it('flipping it on restores the briefing, the lines and both pause rows', () => {

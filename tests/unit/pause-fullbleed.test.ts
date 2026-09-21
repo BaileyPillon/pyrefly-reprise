@@ -203,154 +203,23 @@ describe('parseArtFocal', () => {
 });
 
 // --------------------------------------------------------------- the CSS
-
-describe('pause-screen.css is authored for a window, not for a 640x360 stage', () => {
-  const sheet = css('pause-screen.css');
-
-  it('mounts the layer at viewport level', () => {
-    // `absolute` was the bars: the layer only covered the letterboxed stage.
-    expect(/\.pause \{[^}]*position: fixed;/s.test(sheet)).toBe(true);
-    expect(/\.pause \{[^}]*inset: 0;/s.test(sheet)).toBe(true);
-  });
-
-  it('declares no font-size a player could not read', () => {
-    const tiny: string[] = [];
-    for (const m of sheet.matchAll(/font-size:\s*([^;]+);/g)) {
-      const decl = m[1]!;
-      // Anything fluid is bounded by its own clamp floor, which the next test
-      // checks; a bare literal is the thing that went wrong here.
-      if (/var\(|clamp\(|max\(|inherit|1em/.test(decl)) continue;
-      const px = Number.parseFloat(decl);
-      if (Number.isFinite(px) && px < 14) tiny.push(decl.trim());
-    }
-    // The battle chip is the one survivor: it is battle chrome, sized in device
-    // px against the HUD, and is not part of this screen's type.
-    expect(tiny).toEqual(['12px']);
-  });
-
-  it('floors every clamp()ed type token at 14px', () => {
-    const floors = [...sheet.matchAll(/--pause-fs-[a-z-]+:\s*clamp\(([\d.]+)px/g)].map((m) =>
-      Number.parseFloat(m[1]!),
-    );
-    expect(floors.length).toBeGreaterThanOrEqual(8);
-    expect(Math.min(...floors)).toBeGreaterThanOrEqual(14);
-  });
-
-  it('never blurs the painting, and stops drifting for prefers-reduced-motion', () => {
-    const art = /\.pause__art-img \{(.*?)\n\}/s.exec(sheet)?.[1] ?? '';
-    expect(art).toContain('object-fit: cover');
-    expect(art).not.toMatch(/filter:[^;]*blur\(/);
-    expect(sheet).toContain('@keyframes pause-art-drift');
-    // The reduced-motion block is last in the file, so everything after its
-    // `@media` line is it.
-    const reduced = sheet.slice(sheet.indexOf('@media (prefers-reduced-motion: reduce)'));
-    expect(reduced).toMatch(/\.pause__art-img \{\s*animation: none;/);
-  });
-});
-
 /*
- * ------------------------------------------------------------ the party card
+ * Three describes stood here and are gone with what they described.
  *
- * `2420/2420` printed through the gold OD gauge, and `Kimahri` came out as
- * `Kima…`, on every window between 721 and ~1100 CSS px wide — 1024x768 and
- * 800x600, the 4:3 aspect the brief names. The first pass "fixed" it inside a
- * `max-width: 720px` query, which moved the defect rather than removing it.
+ * They pinned the old pause stylesheet: `.pause__art-img`'s framing, the
+ * `--pause-fs-*` clamp floors, the three party cards' flex minimums, and the
+ * `'rail panel'` grid that stopped the Seymour quote printing over QUIT TO
+ * TITLE. The Until Dawn remake (Bailey, 21 Sep 2026, "B, yes, yes, yes") has
+ * no cards, no rail and no grid: one painted plate per member fills the
+ * window and every line floats on it. What replaced those guarantees — the
+ * 14px floor on every desktop token, the 12px floor on the phone, the grade,
+ * the reduced-motion stop and the mirrored chrome — is pinned by
+ * `pause-remake-css.test.ts`, and the six approved frames are in
+ * `docs/concepts/pause-until-dawn/`.
  *
- * The root cause is one declaration: `min-width: 0` on a flex item, which
- * overrides the automatic minimum size that would otherwise stop a card
- * shrinking past its own contents. It is invisible in a screenshot at the size
- * the author happened to test, so it is pinned here as a declaration.
+ * Everything below this point is the shared `chapter-panel.css`, which party
+ * prep still uses and the remake did not touch.
  */
-describe('a party card is never narrower than the numbers inside it', () => {
-  // Comments out: this file explains itself in prose, and the prose quotes the
-  // very declarations these tests are asserting are gone.
-  const sheet = css('pause-screen.css').replace(/\/\*[\s\S]*?\*\//g, '');
-  const block = (selector: string): string => {
-    const at = sheet.indexOf(`\n${selector} {`);
-    return at < 0 ? '' : sheet.slice(at, sheet.indexOf('\n}', at));
-  };
-
-  it('does not zero the automatic minimum size of the card or its body', () => {
-    expect(block('.pause__card')).not.toMatch(/min-width:\s*0/);
-    expect(block('.pause__card-body')).not.toMatch(/min-width:\s*0/);
-  });
-
-  /*
-   * Flex lines are collected on the hypothetical main size — the basis clamped
-   * by min and max — so with the automatic minimum left alone a basis of 0 both
-   * wraps honestly *and* lets three cards grow into a rail that has room for
-   * three. `flex: 1 1 auto` broke the second half of that at 2000x1012.
-   */
-  it('lets a card that will not fit take a new row instead of shrinking', () => {
-    expect(block('.pause__card')).toMatch(/flex:\s*1 1 0/);
-    expect(block('.pause__party')).toMatch(/flex-wrap:\s*wrap/);
-  });
-
-  it('keeps a full HP pair on one line, which is why the width has to give', () => {
-    expect(block('.pause__card-nums > span')).toMatch(/white-space:\s*nowrap/);
-  });
-
-  /*
-   * The other half of the same rule, and the one the third pass caught.
-   *
-   * A flex item's automatic minimum size is itself clamped by `max-width`, so a
-   * cap below what the card holds does not make the card wrap — it makes the
-   * card overflow. At 800x600 the old 150px floor gave `scrollWidth` 154 against
-   * `clientWidth` 147 on all three cards and the OD gauge painted past the
-   * border. 168 is the measured need plus headroom; anything under about 160
-   * puts the defect back.
-   */
-  it('caps a card no tighter than its own contents at the type floor', () => {
-    const cap = /max-width:\s*clamp\((\d+)px,/.exec(block('.pause__card'));
-    expect(cap).not.toBeNull();
-    expect(Number(cap![1])).toBeGreaterThanOrEqual(160);
-  });
-});
-
-/*
- * ------------------------------------------------------------------ the rail
- *
- * At 800x600 the Seymour quote was printed straight across MUSIC PLAYER,
- * CHAPTER SELECT and QUIT TO TITLE — rows the cursor could still land on and
- * activate. Grid areas are allowed to overlap and an `end`-aligned item in a
- * collapsed `1fr` row lays itself out *upwards* out of that row, so the three
- * slabs of the left column could stack on each other. Flex items cannot.
- */
-describe('the left column cannot print one slab over another', () => {
-  const sheet = css('pause-screen.css');
-
-  it('is one grid area holding one flex column', () => {
-    const frame = /\n\.pause__frame \{(.*?)\n\}/s.exec(sheet)?.[1] ?? '';
-    expect(frame).toContain("'rail  panel'");
-    // The three-area version is what allowed the overlap.
-    expect(frame).not.toMatch(/'menu\s+panel'/);
-    const rail = /\n\.pause__rail \{(.*?)\n\}/s.exec(sheet)?.[1] ?? '';
-    expect(rail).toMatch(/display:\s*flex/);
-    expect(rail).toMatch(/flex-direction:\s*column/);
-    expect(rail).toMatch(/min-height:\s*0/);
-  });
-
-  it('hangs the quote with an auto margin, never with grid end-alignment', () => {
-    const quote = /\n\.pause__quote \{(.*?)\n\}/s.exec(sheet)?.[1] ?? '';
-    expect(quote).toMatch(/margin-top:\s*auto/);
-    expect(quote).not.toMatch(/align-self:\s*end/);
-    expect(quote).not.toMatch(/grid-area/);
-  });
-
-  it('folds on height as well as on width', () => {
-    // 800x600 is not narrow by any width test and has nowhere near the room.
-    expect(sheet).toMatch(/@media \(max-height: \d+px\)/);
-    const short = sheet.slice(sheet.indexOf('@media (max-height:'));
-    expect(short).toContain('.pause__quote,');
-    expect(short).toContain('display: none;');
-  });
-
-  it('scrolls the menu rather than pushing a row off the window', () => {
-    const menu = /\n\.pause__menu \{(.*?)\n\}/s.exec(sheet)?.[1] ?? '';
-    expect(menu).toMatch(/overflow-y:\s*auto/);
-    expect(menu).toMatch(/min-height:\s*0/);
-  });
-});
 
 describe('chapter-panel.css scales for both of its grounds', () => {
   const sheet = css('chapter-panel.css');
