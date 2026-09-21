@@ -1,0 +1,780 @@
+{
+  "generatedAt": "2026-09-21T15:32:19.458Z",
+  "method": "compared tools/gen/cast.json (the work order / roster of everything the game can paint) against public/art/manifest.json (what tools/gen/manifest.mjs found on disk: characters/<id>/<state>.png and portraits/<id>.png). A subject/state combo present in cast.json but absent from the manifest has no painting at all; the game falls back to a procedural placeholder (a letter tile) for it via BattlePresenterArt.POSE_FALLBACKS.",
+  "totalMissing": 109,
+  "renderedFirstTen": [
+    "yuna-gunner/hurt",
+    "yuna-gunner/ko",
+    "yuna-gunner/victory",
+    "yuna-black-mage/attack",
+    "yuna-black-mage/cast",
+    "yuna-black-mage/hurt",
+    "yuna-black-mage/ko",
+    "yuna-black-mage/victory",
+    "yuna-songstress/attack",
+    "yuna-songstress/dance"
+  ],
+  "missing": [
+    {
+      "type": "sprite",
+      "id": "yuna-gunner",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-gunner",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-gunner",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-black-mage",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-black-mage",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-black-mage",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-black-mage",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-black-mage",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-songstress",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-songstress",
+      "pose": "dance",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-songstress",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-songstress",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-songstress",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-dark-knight",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-dark-knight",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-dark-knight",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-dark-knight",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-dark-knight",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-warrior",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-warrior",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-warrior",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "yuna-warrior",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-thief",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-thief",
+      "pose": "steal",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-thief",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-thief",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-thief",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-alchemist",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-alchemist",
+      "pose": "item",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-alchemist",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-alchemist",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-alchemist",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-berserker",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-berserker",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-berserker",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-berserker",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-dark-knight",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-dark-knight",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-dark-knight",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-dark-knight",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-dark-knight",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-black-mage",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-black-mage",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-black-mage",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-black-mage",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-black-mage",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-white-mage",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-white-mage",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-white-mage",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-white-mage",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-white-mage",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-gunner",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-gunner",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-gunner",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "rikku-gunner",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-warrior",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-warrior",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-warrior",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-warrior",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-dark-knight",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-dark-knight",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-dark-knight",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-dark-knight",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-dark-knight",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-samurai",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-samurai",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-samurai",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-samurai",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-gunner",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-gunner",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-gunner",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-gunner",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-white-mage",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-white-mage",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-white-mage",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-white-mage",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-white-mage",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-black-mage",
+      "pose": "attack",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-black-mage",
+      "pose": "cast",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-black-mage",
+      "pose": "hurt",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-black-mage",
+      "pose": "ko",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "paine-black-mage",
+      "pose": "victory",
+      "kind": "dressphere",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "ffx2-bahamut",
+      "pose": "attack",
+      "kind": "aeon",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "ffx2-bahamut",
+      "pose": "cast",
+      "kind": "aeon",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-tail",
+      "pose": "attack",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-tail",
+      "pose": "cast",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-leg",
+      "pose": "attack",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-leg",
+      "pose": "cast",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-leg",
+      "pose": "hurt",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-leg",
+      "pose": "ko",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-body",
+      "pose": "attack",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-body",
+      "pose": "cast",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-body",
+      "pose": "hurt",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-body",
+      "pose": "ko",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-head",
+      "pose": "attack",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-head",
+      "pose": "cast",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-head",
+      "pose": "hurt",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "vegnagun-head",
+      "pose": "ko",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "shuyin",
+      "pose": "attack",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "shuyin",
+      "pose": "cast",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "shuyin",
+      "pose": "hurt",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "shuyin",
+      "pose": "ko",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "shuyin",
+      "pose": "victory",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "shuyin",
+      "pose": "talk",
+      "kind": "boss",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "lenne",
+      "pose": "sing",
+      "kind": "character",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "lenne",
+      "pose": "cast",
+      "kind": "character",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "lenne",
+      "pose": "hurt",
+      "kind": "character",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "sprite",
+      "id": "lenne",
+      "pose": "victory",
+      "kind": "character",
+      "severity": "pose-missing"
+    },
+    {
+      "type": "portrait",
+      "id": "lenne",
+      "severity": "whole-subject-missing"
+    }
+  ]
+}

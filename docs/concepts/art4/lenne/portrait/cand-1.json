@@ -1,0 +1,31 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 1550186499,
+  "prompt": "1girl, lenne, final fantasy x-2, safe, solo, brown hair, long hair, very long hair, straight hair, brown eyes, purple lipstick, gentle expression, songstress, blue tube top, white ruffles, asymmetrical clothes, black lace skirt, blue belt, black arm ribbons, blue glovelets, dangling earrings, translucent, spirit, looking at viewer, wistful smile, straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, pink dress",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-21T15:52:36.338Z"
+}

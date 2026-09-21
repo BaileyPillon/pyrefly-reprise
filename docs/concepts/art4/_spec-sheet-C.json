@@ -1,0 +1,271 @@
+{
+  "out": "docs/concepts/art4/sheet-C.png",
+  "title": "Pyrefly Reprise - art4 group C: first ten poses with no painting at all",
+  "subtitle": "No shipped file exists for these poses (procedural letter-tile placeholder in game today); left reference is the subject's existing idle, not the missing pose. Bonus row: lenne's portrait, the one entirely-missing portrait found.",
+  "rows": [
+    {
+      "label": "YUNA-GUNNER - hurt (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-gunner/idle.png",
+          "caption": "yuna-gunner/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-GUNNER - ko (MISSING)",
+      "kind": "character",
+      "cellHeight": 260,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-gunner/idle.png",
+          "caption": "yuna-gunner/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-GUNNER - victory (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-gunner/idle.png",
+          "caption": "yuna-gunner/victory (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/victory/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/victory/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-gunner/victory/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-BLACK-MAGE - attack (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-black-mage/idle.png",
+          "caption": "yuna-black-mage/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-BLACK-MAGE - cast (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-black-mage/idle.png",
+          "caption": "yuna-black-mage/cast (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/cast/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/cast/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/cast/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-BLACK-MAGE - hurt (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-black-mage/idle.png",
+          "caption": "yuna-black-mage/hurt (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/hurt/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/hurt/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/hurt/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-BLACK-MAGE - ko (MISSING)",
+      "kind": "character",
+      "cellHeight": 260,
+      "cellWidth": 360,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-black-mage/idle.png",
+          "caption": "yuna-black-mage/ko (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/ko/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/ko/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/ko/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-BLACK-MAGE - victory (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-black-mage/idle.png",
+          "caption": "yuna-black-mage/victory (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/victory/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/victory/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-black-mage/victory/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-SONGSTRESS - attack (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-songstress/idle.png",
+          "caption": "yuna-songstress/attack (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-songstress/attack/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-songstress/attack/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-songstress/attack/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "YUNA-SONGSTRESS - dance (MISSING)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/yuna-songstress/idle.png",
+          "caption": "yuna-songstress/dance (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-songstress/dance/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-songstress/dance/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/yuna-songstress/dance/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    },
+    {
+      "label": "LENNE - portrait (MISSING, bonus beyond the ten)",
+      "kind": "character",
+      "cellHeight": 380,
+      "cellWidth": 260,
+      "items": [
+        {
+          "path": "public/art/characters/lenne/idle.png",
+          "caption": "lenne/portrait (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/lenne/portrait/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/lenne/portrait/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/lenne/portrait/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    }
+  ]
+}

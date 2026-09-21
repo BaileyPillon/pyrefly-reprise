@@ -2,6 +2,8 @@
 
 > **Snapshot: 2026-09-21 05:40 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
 > **USAGE MODE: NORMAL** (about 66 percent of the weekly allowance left; weekly resets 2026-09-26 07:00 EDT). Hard rule 15.
+> **Art generation: ON** (Bailey, 2026-09-21: "Resume local art generation"); candidates only, under
+> docs/concepts/art4/; approved paintings are never replaced.
 > **The pause is lifted** (Bailey to the driver, 2026-09-20: "continue on with work please but do not forget our
 > delegation policy and carefully monitor token usage, weekly usage, 5 hour session usage so that we still meet our goals
 > with this project"). Releases and reviews are authorised; keep them economical: Sonnet for well-specified tracks, one
