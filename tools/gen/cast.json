@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updated": "2026-09-17",
+  "updated": "2026-09-21",
   "about": "The cast manifest: one entry per thing that has to be drawn, with the identity tags, the states, the framing and the canvas each one needs. It is a work order, not a config file — nothing reads it at runtime. Feed a row to tools/gen/comfy.mjs and judge the batch (docs/ART-PIPELINE.md §5).",
   "contract": {
     "note": "Style and quality tags are NOT in this file on purpose. They live in tools/gen/comfy.mjs (STYLE_TAGS, QUALITY_TAGS) and the generator appends them, so a cast row can never drift from the house style. `tags` is identity only; `poseTags` is action only.",
@@ -2357,6 +2357,118 @@
         }
       },
       "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
+    },
+    {
+      "id": "leblanc",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/leblanc",
+      "composition": "full",
+      "facing": "left",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1girl, leblanc (ff10-2), final fantasy x-2, safe, solo, round face, large purple eyes, short blonde hair falling to the chin with side-swept bangs, a pinkish-purple furisode-style robe left open at the chest revealing a red heart-shaped syndicate mark on her sternum, the robe patterned all over in blue and white triangles and swirls, a high curved tasselled collar standing up around her neck, long furisode sleeves with the cuffs separated from the sleeve ends by a band of white crisscrossed material, the robe cut away baring her right thigh, thigh-high stockings the same pinkish-purple as the robe, purple ankle boots with a low heel, holding a large red-and-silver folding fan, (blue and white triangle pattern robe:1.3), (heart mark on chest:1.15), (red and silver fan:1.15)",
+      "states": {
+        "idle": {
+          "poseTags": "standing, weight on one hip, fan raised half-open as a screen in front of the lower half of her face, looking at viewer over the fan, a stage performer's address"
+        },
+        "attack": {
+          "poseTags": "fan snapping open toward the viewer, lunging forward slightly, sharp confident smile, one arm outstretched",
+          "ref": "leblanc/idle"
+        },
+        "cast": {
+          "poseTags": "fan raised overhead in both hands, elemental magic circle glowing, hair blown back, dramatic casting pose",
+          "ref": "leblanc/idle"
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering back, fan lowered, startled hurt expression, off balance",
+          "ref": "leblanc/idle"
+        },
+        "ko": {
+          "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated, fan fallen open beside her",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "ref": "leblanc/idle"
+        }
+      },
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). Her idle.png measures 43% one colour, so every other state rendered WITHOUT --ref (the monochrome-reference guard fired) — costume was judged independently per state rather than identity-pinned, and colour balance drifts state to state (idle/attack lean pink-purple, cast/hurt lean blue-purple). The canon blue-and-white triangle/swirl robe pattern and the white crisscross cuff material render inconsistently across states despite (1.3) emphasis — the checkpoint resists this specific pattern on a purple base; flagged for a follow-up pass, not re-rolled further today (pace rule, AGENTS.md hard rule 15). idle pose shows the fan closed near her chin rather than the canon \"half-open screen\" — best of 3 candidates on quality/costume, pose is an approximation."
+    },
+    {
+      "id": "ormi",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/ormi",
+      "composition": "full",
+      "facing": "left",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "negAdd": "tall, slim, thin, sword, katana, blade",
+      "tags": "1boy, ormi (ff10-2), final fantasy x-2, safe, solo, extremely short and stout build, a big round belly, thick heavy limbs, wide barrel chest, short neck, bald head with a small red top-knot, a stern scowling face, thick eyebrows, wearing predominantly purple samurai-style armor with gold trim, a fur-trimmed mantle across the shoulders, a wide teal sash at the waist, a massive round shield strapped across his back nearly as tall as he is, the shield rimmed in gold with a red syndicate heart emblem at its center, low wide stance, thick short legs, sandals, (short and extremely stout:1.35), (huge round belly:1.3), (massive round shield:1.15)",
+      "states": {
+        "idle": {
+          "poseTags": "standing, arms crossed, stern expression, shield visible on back, low wide stance"
+        },
+        "attack": {
+          "poseTags": "swinging the round shield off his back into a shoulder shove, lunging forward, gritted teeth",
+          "ref": "ormi/idle"
+        },
+        "cast": {
+          "poseTags": "crouching low, muscles bulging, gathering strength, gritted teeth, about to charge forward",
+          "ref": "ormi/idle",
+          "notes": "Ormi has no magic per research §4.2 — stands in for Supercollider's charge-up beat."
+        },
+        "hurt": {
+          "poseTags": "staggering back, off balance, pained grimace, shield slipping off his shoulder",
+          "ref": "ormi/idle"
+        },
+        "ko": {
+          "poseTags": "lying on his back, shield fallen beside him, eyes closed, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "ref": "ormi/idle"
+        }
+      },
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). 2026-09-21: re-rendered HEAVIER than the picked concept (docs/concepts/chapters/leblanc/renders/ormi-a.png) per Bailey's note that canon Ormi is big and round, not athletic — \"(short and extremely stout:1.35)\" and \"(huge round belly:1.3)\" in the identity block. Shield emblem reads as an ornate sunburst/spiral rather than an explicit heart in most renders; the canon heart-on-shield detail is present in the tags but not always legible in the render."
+    },
+    {
+      "id": "logos",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/logos",
+      "composition": "full",
+      "facing": "left",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "negAdd": "sword, katana, antlers, horns, feathers, short, stout",
+      "tags": "1boy, logos (ff10-2), final fantasy x-2, safe, solo, tall and slim build, a black and silver helmet with a chin protector tied with a purple strip at the back of his head, sharp handsome face, a dark blue robe and matching coat with the syndicate heart logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one in each hand, (tall and slim:1.15), (two revolvers:1.2), (black and silver helmet:1.15)",
+      "states": {
+        "idle": {
+          "poseTags": "standing, side-on duelist stance, both revolvers held low, cool composed expression"
+        },
+        "attack": {
+          "poseTags": "aiming and firing both revolvers, muzzle flash, quick decisive lunge",
+          "ref": "logos/idle"
+        },
+        "cast": {
+          "poseTags": "spinning the cylinder of one revolver, holding it up beside his face, an ancient script ring, dramatic",
+          "ref": "logos/idle",
+          "notes": "Stands in for Russian Roulette's cylinder-spin beat (research §10.1)."
+        },
+        "hurt": {
+          "poseTags": "recoiling, staggering, one revolver lowered, pained expression",
+          "ref": "logos/idle"
+        },
+        "ko": {
+          "poseTags": "lying on the ground, revolvers fallen beside him, eyes closed, defeated",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "ref": "logos/idle"
+        }
+      },
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 62% one colour (near-monochrome dark blue/black), so every other state rendered WITHOUT --ref — judged independently per state. Two of three attack candidates drifted badly off-model (fairy wings; a laser rifle in place of the revolvers) despite the negAdd; the installed attack is the third candidate. The decorative helmet crest the research does not call for (plain \"black-and-silver helmet with a chin protector\") persists across states — a known checkpoint prior, same finding as the concept round's off_canon_seen note."
     }
   ]
 }
