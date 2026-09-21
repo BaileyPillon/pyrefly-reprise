@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
+import { resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 import { DialogueBox } from '../../src/ui/common/DialogueBox.ts';
 import { dialogueObjectPosition, portraitCrop } from '../../src/ui/common/portrait.ts';
 import { SPEAKER_ROLES, speakerRole } from '../../src/ui/common/speaker-roles.ts';
@@ -153,10 +154,15 @@ describe('the portrait always fits its slot (critic PR-0020, PR-0056)', () => {
     expect(CSS).not.toMatch(/\.dbox__portrait img \{[^}]*max-width: none/s);
   });
 
-  it('sizes the <img> to the frame exactly, so overflow: hidden never has anything to clip', () => {
-    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*inset: 0;[^}]*\}/s);
-    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*width: 100%;[^}]*\}/s);
+  it('sizes the <img> to the bounding box of the frame it leans inside, not to the frame', () => {
+    // A frame-sized <img> (`inset: 0` + 100%/100%, which is what this used to
+    // ask for) is an upright rectangle inside a parallelogram clip and leaves
+    // two wedges of the frame's own gradient bare. The numbers are measured in
+    // tests/unit/dialogue-portrait-geometry.test.ts; this is the shape of them.
+    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*width: calc\(100% \+ var\(--dbox-shear\)\);[^}]*\}/s);
+    expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*left: calc\(-0\.5 \* var\(--dbox-shear\)\);[^}]*\}/s);
     expect(CSS).toMatch(/\.dbox__portrait img \{[^}]*height: 100%;[^}]*\}/s);
+    expect(CSS).not.toMatch(/\.dbox__portrait img \{[^}]*inset: 0/s);
   });
 
   it('gives every speaker line an object-position from the measured face crop', () => {
@@ -187,6 +193,87 @@ describe('the portrait always fits its slot (critic PR-0020, PR-0056)', () => {
       const crop = portraitCrop(id);
       expect(dialogueObjectPosition(id)).toBe(`${(crop.fx * 100).toFixed(2)}% ${(crop.fy * 100).toFixed(2)}%`);
     }
+  });
+});
+
+// ------------------------------------------- PR-0020: a speaker with no art
+
+/**
+ * FFX **and** FFX-2 (AGENTS.md rule 14): the card is shared plumbing and the
+ * rule is the same in both games — no painting, no frame. The evidence came
+ * from FFX-2 (Nooj, chapter 5, has no `portraits/nooj.png`), so both cases are
+ * asserted below and the FFX one is the absence test.
+ */
+describe('a speaker the fleet has not painted gets no frame at all (critic PR-0020)', () => {
+  const PAINTED = ['tidus', 'auron', 'yuna', 'jecht', 'rikku-x2', 'yuna-x2'];
+
+  function withManifest<T>(run: () => T): T {
+    setArtManifest({
+      version: 1,
+      generatedAt: '2026-09-21T00:00:00.000Z',
+      subjects: {},
+      portraits: PAINTED,
+      backdrops: [],
+      pause: [],
+      pause2x: [],
+      title: [],
+      title2x: [],
+    });
+    try {
+      return run();
+    } finally {
+      resetArtManifest();
+    }
+  }
+
+  it('folds the frame away for Nooj, instead of leaving an empty grey slot over the slab', () => {
+    withManifest(() => {
+      const { box } = mount();
+      void box.say(say('nooj', 'The Crimson Squad was ten years ago.'));
+
+      // Before the fix the class came from the speaker id, which is truthy for
+      // exactly the speakers that have no art, so the frame stayed on screen
+      // with nothing in it and the body text stayed indented around it.
+      expect(box.el.querySelector('.dbox__portrait img')).toBeNull();
+      expect(box.el.classList.contains('dbox--no-portrait')).toBe(true);
+    });
+  });
+
+  it('keeps the frame for a speaker the fleet has painted, in both games', () => {
+    withManifest(() => {
+      const { box } = mount();
+      void box.say(say('tidus', 'So... Auron, you seeing this?'));
+      expect(box.el.classList.contains('dbox--no-portrait')).toBe(false);
+      expect(box.el.querySelector('.dbox__portrait img')).not.toBeNull();
+
+      void box.say(say('yuna-x2', "Um. That's a lot of creepy."));
+      expect(box.el.classList.contains('dbox--no-portrait')).toBe(false);
+    });
+  });
+
+  it('puts the frame back on the next line after an unpainted one', () => {
+    withManifest(() => {
+      const { box } = mount();
+      void box.say(say('nooj', 'The Crimson Squad was ten years ago.'));
+      expect(box.el.classList.contains('dbox--no-portrait')).toBe(true);
+      void box.say(say('rikku-x2', 'Creepy hole, creepy ladder.'));
+      expect(box.el.classList.contains('dbox--no-portrait')).toBe(false);
+      expect(box.el.querySelector('.dbox__portrait img')).not.toBeNull();
+    });
+  });
+
+  it('folds the frame when the painting 404s on a cold manifest, too', () => {
+    // No manifest loaded: `portraitImgHtml` emits the <img> and lets `onerror`
+    // remove it, which used to leave the same empty frame behind.
+    resetArtManifest();
+    const { box } = mount();
+    void box.say(say('nooj', 'The Crimson Squad was ten years ago.'));
+    const img = box.el.querySelector('.dbox__portrait img') as HTMLImageElement;
+    expect(img).not.toBeNull();
+    expect(box.el.classList.contains('dbox--no-portrait')).toBe(false);
+
+    img.dispatchEvent(new Event('error'));
+    expect(box.el.classList.contains('dbox--no-portrait')).toBe(true);
   });
 });
 

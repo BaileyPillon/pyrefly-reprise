@@ -311,8 +311,24 @@ export class DialogueBox implements DialoguePort {
     // sweep, which otherwise adopts any bare `art/portraits/*.png` image and
     // overwrites its inline style with the square-frame crop system — see
     // that function's own comment (critic PR-0020/PR-0056).
-    this.portraitEl.innerHTML = portraitImgHtml(portraitId, '', { style, manualCrop: true });
-    this.el.classList.toggle('dbox--no-portrait', opts.narrate || !portraitId);
+    // The frame is only ever shown when there is a painting to put in it.
+    // `portraitImgHtml` answers '' for a speaker the art manifest says has no
+    // `portraits/<id>.png` — Nooj, Baralai, Gippal in the FFX-2 chapters — and
+    // the class used to be decided from `portraitId` instead, which is truthy
+    // for exactly those speakers. The result was an empty frame: its own
+    // `linear-gradient(rgba(11,10,18,.2), rgba(11,10,18,.6))` painted over the
+    // ivory slab and read as a grey box where a face belongs, and the body text
+    // stayed indented around art that was never there (critic PR-0020).
+    const portraitHtml = portraitImgHtml(portraitId, '', { style, manualCrop: true });
+    this.portraitEl.innerHTML = portraitHtml;
+    this.el.classList.toggle('dbox--no-portrait', opts.narrate || !portraitHtml);
+    // Same again for the race the manifest cannot settle: with no manifest
+    // loaded `portraitImgHtml` emits the `<img>` and lets `onerror` remove it,
+    // which would leave the same empty frame behind. Fold the frame instead.
+    if (portraitHtml) {
+      const img = this.portraitEl.firstElementChild;
+      img?.addEventListener('error', () => this.el.classList.add('dbox--no-portrait'), { once: true });
+    }
 
     this.renderRevealed();
     this.show();

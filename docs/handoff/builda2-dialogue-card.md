@@ -124,3 +124,108 @@ unmodified and green.
   `adoptUntaggedPortraits` / the `load` listener.
 - `src/ui/common/face-crops.json` — new `dialogue` table (`jecht` row only).
 - `tests/unit/dialogue-box-inkgold.test.ts` — PR-0020/0056/0057 coverage.
+
+---
+
+# Fix pass — the two PR-0020 refutations (2026-09-21)
+
+**FFX and FFX-2, both.** `DialogueBox` and `dialogue-box.css` are one card for
+every chapter of both games (AGENTS.md rule 14, `critic/CHECKS.md` CHK-020:
+shared plumbing is "both"). The measurements below are taken in chapter 2
+(FFX, Braska) *and* chapters 4 and 5 (FFX-2, Rikku and Nooj), and the unit
+tests assert both — the FFX case is the absence test for the FFX-2 change and
+the other way round.
+
+The verifier refuted the previous pass twice. Both were real, both are fixed at
+the root, and each is pinned by a test that fails on the rule it replaced.
+
+## R1 — the counter-skew left two wedges of bare frame
+
+`.dbox__portrait` is a rectangle with **both** `overflow: hidden` and
+`transform: skewX(-12deg)`. The clip is applied in the frame's own coordinates
+and then skewed with it, so what it clips to is a **parallelogram**. The
+previous rule made the `<img>` exactly the frame (`inset: 0` + 100%/100%) and
+counter-skewed it `+12deg`, which cancels to an *upright rectangle of the same
+width*. An upright rectangle cannot cover a parallelogram of equal width: it
+misses a triangle bottom-left and a triangle top-right, each half the shear
+wide at the extreme row. Measured at 1600x900: a constant `113,111,112` for 28
+px on chapter 2 and 58 px on chapter 4, starting at x=103 — the verifier's own
+number.
+
+The `<img>` is now the parallelogram's **bounding box**: half a shear further
+left, a full shear wider. Its centre is unchanged, so the two skews still
+cancel and the painting still stands upright; at every row it spans the frame's
+width plus the lean, which is the smallest upright rectangle that can cover the
+clip. The shear is derived, not typed: `--dbox-portrait-h` carries the frame
+height and `--dbox-shear: calc(0.21256 * var(--dbox-portrait-h))` (tan 12deg)
+follows it, so the phone breakpoint overrides the height alone and cannot
+regrow the wedges.
+
+## R2a — the frame's own backing plate, behind a cut-out painting
+
+Fixing the geometry did not clear chapter 4: the flat `113,112,112` band was
+still 47 px wide at y=800, under Rikku's braid. The cause is different and was
+underneath the first one all along. Every file in `public/art/portraits/` is a
+**figure on an alpha canvas**, and `.dbox__portrait` carried
+`background: linear-gradient(rgba(11,10,18,.2), rgba(11,10,18,.6))` — invisible
+behind an opaque painting, a flat grey field behind a transparent one. PR-0020's
+own fix note asks for exactly this: *"remove the placeholder fill behind it"*.
+The frame now has no fill; a transparent corner shows the ivory slab the card
+is made of, which is what a cut-in standing on the card should show. The
+`box-shadow` stays, so the cut-in still casts onto the card.
+
+## R2b — a speaker the fleet has not painted got an empty frame
+
+`portraitImgHtml` answers `''` for a speaker the art manifest says has no
+`portraits/<id>.png`, but the `dbox--no-portrait` class was decided from
+`portraitId`, which is *truthy for exactly those speakers*. Nooj (chapter 5),
+and anyone else unpainted, therefore got the frame with nothing in it, and the
+body text stayed indented around art that was never there. The class is now
+decided from the markup that was actually produced, and an `<img>` that 404s on
+a cold manifest folds the frame too.
+
+## Measured, live, real keys (`PYREFLY_BROWSER=gpu`, dev server, `Enter`/arrows)
+
+Longest run of near-constant dark-neutral pixels across the slot, scanned at
+four rows, `critic/scratch/wave1a-quick-wins/scan-wedge.mjs`:
+
+| row (1600x900) | ch.2 before | ch.2 after | ch.4 before | ch.4 after |
+|---|---|---|---|---|
+| y=800 | 28 px @x=103, `113,111,112` | **0** | 58 px @x=103, `113,111,112` | **0** |
+| y=760 | 19 px @x=112 | **0** | 60 px @x=112 | **0** |
+| y=700 | 7 px @x=124 | **0** | 15 px @x=88 (off-card, unchanged) | 15 px @x=88 |
+| y=600 | 0 | **0** | 13 px @x=101 (off-card, unchanged) | 13 px @x=101 |
+
+The two rows that do not go to zero start **left of the frame** (the slot's left
+edge is x=95.6 and the parallelogram's left edge is x=145 at y=600), are
+identical before and after, and are the scene behind the card.
+
+Bottom-left wedge region mean, and the fraction of its pixels that are dark and
+neutral: ch.2 `96,94,97` / 0.618 → `134,121,111` / 0.024; ch.4 at 390x844
+`157,155,152` / 0.638 → `240,222,195` / **0.000**.
+
+DOM readback at every size: slot bounding box `315.3x333.3`, `<img>`
+`315.3x333.3` (was `244.5x333.3`) at 1600x900; `79.4x82` / `79.4x82` (was
+`62x82`) at 390x844.
+
+Chapter 5, Nooj, 1600x900 **and** 390x844: `dbox--no-portrait` true,
+`.dbox__portrait` computed `display: none`, no `<img>` in the DOM.
+
+Screenshots: `docs/screenshots/fix3/quick-wins/` — `ch4-wedge-before-4x.png` is
+the defect at 4x, `ch2-card-fixed-1600x900.png` and
+`ch4-card-fixed-1600x900.png` are the same cards after,
+`ch5-nooj-no-frame-*.png` are the unpainted speaker at both sizes.
+
+## Tests (each fails on the rule it replaced)
+
+- `tests/unit/dialogue-portrait-geometry.test.ts` (new) resolves the two rules
+  out of the stylesheet and does the coverage geometry in numbers at 390,
+  1280, 1600, 1920, 2000 and 2560 px. Two of its cases feed it the **previous**
+  `<img>` rules and require it to refuse them — the frame-sized one by the
+  35 px wedge it leaves, the one before that by the width it takes from the
+  viewport instead of from the frame. One more asserts the frame declares no
+  fill of any kind.
+- `tests/unit/dialogue-box-inkgold.test.ts` gains four cases for the unpainted
+  speaker (Nooj folded, Tidus and FFX-2 Yuna unaffected, the frame restored on
+  the next line, a 404 on a cold manifest folding it). Verified failing against
+  the old `!portraitId` toggle before the fix went in: 2 failed, 24 passed.

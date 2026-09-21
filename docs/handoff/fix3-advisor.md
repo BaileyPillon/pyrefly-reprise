@@ -482,3 +482,48 @@ loses — and it belongs in its own ticket.
   `advisor-menu`, `advisor-forecast`, `advisor-simulate`, `ui-move-advisor`,
   `guide-advisor-target-agreement`.
 * `node tools/orphans.mjs` — `advisor-guard.ts` has an importer.
+
+---
+
+# PR-0006, the browser half — closed with a real-keyboard capture (2026-09-21)
+
+**FFX-2 only** for the capture (chapter 4, Bahamut, ATB); the guard in
+`advisor-guard.ts` it exercises is shared plumbing and applies to both games,
+which `tests/unit/advisor*` already covers on the FFX chapters. Nothing in the
+shipped code changed in this pass — the gap was evidence, not behaviour, and
+the verifier said so.
+
+The verifier's own attempt did not settle it: "my sampler never captured a
+`.mad__move` row (the advisor card did not open under a KeyN press)". The card
+does not need a key — `SaveData.settings.advisorVisible` defaults to true and
+`FFX2BattleHud` calls `showDecision` on every turn. What was missing is that
+mashing `Enter` confirms whatever command is highlighted (Attack), so the
+advice is *never taken*, the board never changes, and of course the pick stays
+Shell. A capture that mashes Enter measures nothing about this ticket.
+
+`critic/scratch/wave1a-quick-wins/follow-guide.mjs` therefore **does what the
+card says**, with real keys only: it reads the top row's label and its
+`in <submenu>` chip, walks the FFX-2 command menu to that row with
+`ArrowUp`/`ArrowDown` (matching `.ffx2cmd__label` against `.ig-cmd--selected`),
+opens the submenu, walks to the move, and confirms.
+
+Chapter 4, 1600x900, `PYREFLY_BROWSER=gpu`, dev server, real `Enter` and arrow
+presses:
+
+- **27 decisions, 27 followed**, outcome `results` in **139 s**.
+- **Yuna took 8 turns and cast Shell exactly once** — her picks in order:
+  `Shell, Cura, Cura, Cura, Cura, Cura, Cura, Cura`.
+- Her **second turn** (decision 4, t=19 s) reads
+  `Cura → Yuna · Guide's pick · in White Magic · +312 · 10 MP · 95% to hit`.
+  The pick moved off Shell the moment Shell was actually on the party, which is
+  the acceptance check word for word.
+- The critic's measured instance (13 Shell casts in 13 turns) is explained
+  rather than left open: it is what the card correctly says when the advice is
+  not followed.
+
+Report: `critic/scratch/wave1a-quick-wins/fix-follow-report.json`. Screenshot:
+`docs/screenshots/fix3/quick-wins/ch4-advisor-yuna-turn2.png`. A second run
+with the same harness in plain Enter-mashing mode
+(`fix-verify.mjs advisor`) reached `results` in 70 s and captured 24
+`.mad__move` rows, which on its own closes the "the card's top row over a real
+route is still unmeasured" half.
