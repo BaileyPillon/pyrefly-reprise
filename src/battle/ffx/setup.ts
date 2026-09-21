@@ -13,6 +13,7 @@ import type {
   BattleSetup,
   BattleState,
   CombatantId,
+  ElementalAffinities,
   EnemyDef,
   FFXCombatant,
   FFXMemberBuild,
@@ -27,6 +28,7 @@ import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { applyEquipmentToCombatant, AUTO_STATUS_ABILITIES, hasAuto } from './equipment.ts';
 import { refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
+import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -108,6 +110,32 @@ const AEON_INNATE_IMMUNITIES: readonly StatusId[] = [
   'mental-break',
 ];
 
+/**
+ * The elemental eaters an aeon's **hidden default armour** carries, by aeon id.
+ *
+ * Exactly the same kind of table as {@link AEON_INNATE_IMMUNITIES} above and
+ * for exactly the same reason: `AeonBuild` has no `equipment` field, aeons are
+ * in neither `activeIds` nor `reserveIds` so `applyEquipmentToCombatant` never
+ * runs on them, and `aeonToCombatant` hard-coded `affinities: {}` — so an aeon
+ * armour ability that is pure data in the source game had nowhere to live.
+ *
+ * **Shiva's armour carries Ice Eater** [ffx-seymour-anima-macalania §8.4,
+ * verified: 2 sources]. Two published behaviours depend on it and both were
+ * silently doing nothing: healing Shiva with her own Blizzara (§7 row 13), and
+ * Macalania Seymour's Blizzaga step *healing* your aeon, because he uses the
+ * -ga tier on a summoned aeon regardless of absorption (§5.2). One turn in
+ * four, the boss tops up your Shiva. It is canon, it is funny, and it is a free
+ * teaching moment about elemental affinity.
+ *
+ * This is a **live rule for every chapter that summons Shiva**, not a Macalania
+ * special case — she has Ice Eater everywhere. No existing chapter aims an ice
+ * action at a summoned aeon, so no shipped outcome moves; affinity is a damage
+ * multiplier and draws no RNG, so seeded runs stay aligned either way.
+ */
+const AEON_INNATE_AFFINITIES: Readonly<Record<string, ElementalAffinities>> = {
+  shiva: { ice: 'absorb' },
+};
+
 function aeonToCombatant(a: AeonBuild, ownerId: CombatantId): FFXCombatant {
   const immunities: Partial<Record<StatusId, number>> = {};
   for (const status of AEON_INNATE_IMMUNITIES) immunities[status] = 255;
@@ -120,7 +148,7 @@ function aeonToCombatant(a: AeonBuild, ownerId: CombatantId): FFXCombatant {
     hp: a.hp,
     mp: a.mp,
     statuses: cloneStatuses(a.statuses),
-    affinities: {},
+    affinities: { ...(AEON_INNATE_AFFINITIES[a.id] ?? {}) },
     immunities,
     immunityFlags: [],
     controller: 'player',
@@ -156,7 +184,12 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
     immunityFlags: [...e.immunityFlags],
     controller: 'ai',
     alive: e.hp > 0,
-    removed: false,
+    // **An enemy may start off the field.** `flags.hidden` is documented as
+    // "a form waiting off-stage", and `predicates.ts` already honours it for
+    // targeting; reading it here as `removed` is what makes an arrival
+    // mid-battle possible at all (`forms.ts#revealEnemy`). Macalania's Anima
+    // is the only shipped enemy that sets it, so nothing else changes.
+    removed: e.flags.hidden === true,
     slot: e.slot,
     flags: { ...e.flags, ...(isPart ? { isPart: true } : {}) },
     learnedAbilityIds: [...e.abilityIds],
@@ -348,5 +381,12 @@ export function buildBattle(
   }
 
   seedInitialCtb(ctx, setup.condition ?? 'normal');
+
+  // Per-encounter scripted setup. A no-op in every battle but its own: the
+  // Macalania opening is "a scripted pre-turn sequence, not three ordinary
+  // turns" [ffx-seymour-anima-macalania §5.2], so the Guardians' Protect and
+  // Seymour's Shell are applied here rather than costing three enemy turns the
+  // player would watch resolve before acting.
+  applyMacalaniaSetup(ctx);
   return ctx;
 }

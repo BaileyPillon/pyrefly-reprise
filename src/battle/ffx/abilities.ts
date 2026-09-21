@@ -32,6 +32,7 @@ import {
   onDamageTaken,
   onFlatTrigger,
   onHealDealt,
+  onTargeted,
   TACTICIAN_STATUSES,
   VICTIM_STATUSES,
 } from './overdrive.ts';
@@ -129,6 +130,11 @@ export function resolveAbility(
 
   let targets = resolveTargets(ctx, user, def, chosenTargets);
   if (targets.length === 0 && def.targeting !== 'self') return 0;
+
+  // An enemy whose Overdrive gauge fills on **being targeted** is paid here,
+  // once per action, before any hit resolves — a heal or a debuff counts.
+  // Inert unless `ActorRuntime.gaugePerTargeting` is set [overdrive.ts].
+  for (const t of targets) onTargeted(ctx, t, user);
 
   const totalHits = perHitRandom ? hitCount : hitCount * Math.max(1, targets.length);
   let hitIndex = 0;
@@ -350,6 +356,31 @@ export function resolveAbility(
         if (shatterChance > 0 && percentRoll(ctx.rng) < shatterChance) {
           ejectActor(ctx, target, 'shatter');
         }
+      }
+
+      // **A petrified MONSTER always shatters** — no roll, no `shatter` flag
+      // needed on whatever petrified it [ffx-seymour-anima-macalania §2.2,
+      // verified: 2 sources: grayfox96's status-chance note + the FF Wiki
+      // strategy section]. The flagged path above is the *other* rule: a
+      // chance to shatter something that was **already** petrified, which is
+      // what Seymour's -ra spells carry at 10.
+      //
+      // Until this existed, Petrify was a dead end against an enemy. Rikku's
+      // Petrify Grenade and Kimahri's Stone Breath both apply `petrify` at
+      // chance 254 and neither carries the `shatter` flag, so a petrified
+      // Guado Guardian simply stood there: out of the turn queue
+      // (`predicates.ts#inTurnQueue` excludes Petrify) but still **alive**, so
+      // it went on Covering every physical aimed at Seymour and went on firing
+      // its 1,000 HP Auto-Potion counter. §7 row 2 — "Petrify the Guardians
+      // for an instant kill, at the cost of the overkill AP" — was unreachable
+      // and the tactic spent four turns finding that out.
+      //
+      // Draws no RNG, so a seeded run is unchanged wherever it does not fire,
+      // and it cannot fire in any shipped chapter: every FFX enemy this
+      // project ships outside Macalania carries `petrify: 255`. FFX-2 runs its
+      // own engine and is untouched [AGENTS.md rule 14].
+      if (target.side === 'enemy' && has(target, 'petrify') && onField(target)) {
+        ejectActor(ctx, target, 'shatter');
       }
 
       runScriptedExtra(ctx, user, def, target, result.amount);

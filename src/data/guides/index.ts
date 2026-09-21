@@ -37,6 +37,10 @@ export const GUIDES: readonly ChapterGuide[] = [
   BRASKAS_FINAL_AEON_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
+  // `SEYMOUR_ANIMA_MACALANIA_GUIDE` is written but NOT listed: the chapter is
+  // not playable yet and this file is integrator-only
+  // [docs/plans/chapter-macalania-review.md §8.1]. It lands with the tactic
+  // registration and `src/data/encounters.ts`, in one commit.
 ];
 
 /** The guide for one chapter id, if it has one. */

@@ -42,20 +42,37 @@ export function applyHpDelta(target: FFXCombatant, amount: number): number {
 export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info: DamageEventInfo): void {
   const wasAlive = isAlive(target);
   const hpBefore = target.hp;
-  applyHpDelta(target, amount);
+
+  // **A scripted per-hit cap and HP floor**, both engine-internal and both
+  // absent on every actor that does not set them
+  // [`ActorRuntime.damageCapPerHit` / `.hpFloor`]. This is the single funnel
+  // for every HP change from the damage chain, so a boss who "cannot be killed
+  // before he summons" is enforced here once rather than in each caller.
+  let applied = amount;
+  let capped = info.capped === true;
+  if (applied > 0) {
+    const rt = ctx.rt.actors.get(target.id);
+    if (rt?.damageCapPerHit !== undefined && applied > rt.damageCapPerHit) {
+      applied = rt.damageCapPerHit;
+      capped = true;
+    }
+    if (rt?.hpFloor !== undefined) applied = Math.min(applied, Math.max(0, hpBefore - rt.hpFloor));
+  }
+
+  applyHpDelta(target, applied);
 
   const enemyDef = target.enemy;
   const overkill =
-    amount > 0 &&
+    applied > 0 &&
     target.hp === 0 &&
     wasAlive &&
     enemyDef !== undefined &&
-    amount >= enemyDef.rewards.overkillThreshold;
+    applied >= enemyDef.rewards.overkillThreshold;
 
   const event: Parameters<Ctx['emit']>[0] = {
     type: 'damage',
     targetId: target.id,
-    amount,
+    amount: applied,
     element: info.element,
     crit: info.crit,
     hitIndex: info.hitIndex,
@@ -64,7 +81,7 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
   if (info.sourceId !== undefined) event.sourceId = info.sourceId;
   if (info.affinity !== undefined) event.affinity = info.affinity;
   if (overkill) event.overkill = true;
-  if (info.capped) event.capped = true;
+  if (capped) event.capped = true;
   ctx.emit(event);
 
   if (overkill && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
@@ -73,7 +90,7 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
     koActor(ctx, target, info.sourceId);
     // The killing blow is the only place the *excess* is knowable, so the
     // revive timer is armed here rather than inside `koActor`.
-    if (amount > 0) schedulePartRevival(ctx, target, Math.max(0, amount - hpBefore));
+    if (applied > 0) schedulePartRevival(ctx, target, Math.max(0, applied - hpBefore));
   }
 }
 

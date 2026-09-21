@@ -60,7 +60,17 @@ export {
 export { ffx2Bahamut, FFX2_BAHAMUT_ID } from './ffx2-bahamut.ts';
 export { ffx2VegnagunShuyin, FFX2_SHUYIN_ID, FFX2_VEGNAGUN_CHAIN_IDS } from './ffx2-vegnagun-shuyin.ts';
 
-/** Every chapter's slot, in encounter order. `null` = no line written yet. */
+/**
+ * Every chapter's slot, in encounter order. `null` = no line written yet.
+ *
+ * **`seymour-anima-macalania` is deliberately absent.** Its tactic is written
+ * and measured (`./seymour-anima-macalania.ts`,
+ * `tests/unit/strategy-macalania.test.ts`), but the chapter has no scene,
+ * script, art or music, so it is not registered anywhere a board can reach —
+ * this file and `src/data/guides/index.ts` are integrator-only
+ * [docs/plans/chapter-macalania-review.md §8.1]. Both lines land in the
+ * integrator's single commit, together with `src/data/encounters.ts`.
+ */
 const REGISTRY: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic | null }> = [
   { bossId: SEYMOUR_FLUX_ID, tactic: seymourFlux },
   { bossId: YUNALESCA_ID, tactic: yunalesca },

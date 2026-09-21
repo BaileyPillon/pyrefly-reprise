@@ -106,8 +106,10 @@ import type { FFXCharacterDef } from './characters/index.ts';
 import { SEYMOUR_FLUX_ABILITIES } from './enemies/seymour-flux-abilities.ts';
 import { YUNALESCA_ABILITIES } from './enemies/yunalesca-abilities.ts';
 import { BRASKAS_FINAL_AEON_ABILITIES } from './enemies/braskas-final-aeon-abilities.ts';
+import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from './enemies/seymour-anima-macalania-abilities.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
+import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
 import {
   braskasFinalAeonGroup,
   possessedAeonGroups,
@@ -117,6 +119,7 @@ import {
 import { gagazetBuild } from './builds/gagazet.ts';
 import { zanarkandBuild } from './builds/zanarkand.ts';
 import { dreamsEndBuild } from './builds/dreams-end.ts';
+import { macalaniaBuild } from './builds/macalania.ts';
 
 // ---------------------------------------------------------------------------
 // Ability catalog
@@ -217,6 +220,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(SEYMOUR_FLUX_ABILITIES),
   ...Object.values(YUNALESCA_ABILITIES),
   ...Object.values(BRASKAS_FINAL_AEON_ABILITIES),
+  ...Object.values(SEYMOUR_ANIMA_MACALANIA_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -258,6 +262,14 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   [braskasFinalAeonGroup.id]: braskasFinalAeonGroup,
   [yuYevonGroup.id]: yuYevonGroup,
   ...Object.fromEntries(possessedAeonGroups.map((g) => [g.id, g])),
+  // **Not yet a playable chapter.** `seymour-anima-macalania` has no scene, no
+  // story script, no art and no music, so it is deliberately absent from
+  // `src/data/encounters.ts` and `chapter-meta.ts` and the chapter-select grid
+  // keeps showing it as Coming. This entry is the dev-only registry hook: it
+  // is what the unit and strategy suites and the `window.__pyrefly` debug API
+  // look the formation up by, so the engine and data tracks can be verified
+  // before the presentation tracks exist.
+  [seymourAnimaMacalaniaGroup.id]: seymourAnimaMacalaniaGroup,
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -281,6 +293,8 @@ export {
   gagazetBuild,
   zanarkandBuild,
   dreamsEndBuild,
+  // Dev-only, like the formation above: the chapter is not registered yet.
+  macalaniaBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

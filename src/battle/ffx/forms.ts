@@ -61,6 +61,45 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
   return true;
 }
 
+/**
+ * Put an enemy that started **off the field** onto it, mid-battle.
+ *
+ * The one case: Seymour summons Anima at half his bar, and she joins a battle
+ * that is already running [ffx-seymour-anima-macalania §5.2, §5.3]. Nothing in
+ * the engine could do that before — `setup.ts#enemyToCombatant` is the only
+ * place `state.enemyIds` is ever written, so an enemy either started on the
+ * field or never appeared.
+ *
+ * Almost everything this needs was already here. `predicates.ts#onField` and
+ * `#targetable` honour `removed` and `flags.hidden`; `turnQueue.ts#letterTags`
+ * is explicitly written for "an enemy that joins mid-battle"; and
+ * `engine.ts#checkEnd` tests `isAlive`, which requires `onField`, so an
+ * off-field arrival never blocks victory and never grants a false one. All that
+ * was missing is the six lines below.
+ *
+ * The CTB surgery is `advanceForm`'s: the arrival takes the next turn.
+ *
+ * **Presenter note.** This emits `part-restored`, the only shipped event that
+ * means "a combatant that was off the field is on it, with this much HP". Its
+ * handler in `BattlePresenterEvents.ts` fades in an actor the stage already
+ * holds — see `docs/handoff/chapter-macalania-engine.md` for the one presenter
+ * change the arrival still needs.
+ */
+export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number): void {
+  enemy.removed = false;
+  enemy.flags.hidden = false;
+  if (slot !== undefined) enemy.slot = slot;
+  enemy.alive = enemy.hp > 0;
+  delete enemy.statuses['ko'];
+
+  rtOf(ctx, enemy.id).ctb = 0;
+  normalise(ctx);
+
+  const event: Parameters<Ctx['emit']>[0] = { type: 'part-restored', partId: enemy.id, hp: enemy.hp };
+  if (enemy.flags.partOf !== undefined) event.ownerId = enemy.flags.partOf;
+  ctx.emit(event);
+}
+
 /** True when this combatant still has a form left to enter. */
 export function hasNextForm(enemy: FFXCombatant): boolean {
   const fields = enemy.enemy;

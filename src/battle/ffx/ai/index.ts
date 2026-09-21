@@ -12,17 +12,48 @@ import { type Ctx, isAlive, livingFriendlies, tryActor } from '../state.ts';
 import { type AiContext, aiContextFor, getAiScript } from './types.ts';
 import { consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
 import { consumeBfaTalk } from './braskas-final-aeon.ts';
+import {
+  SEYMOUR_MACALANIA_SCRIPT,
+  GUADO_GUARDIAN_SCRIPT,
+  ANIMA_MACALANIA_SCRIPT,
+  consumeMacalaniaTalk,
+  macalaniaTalkAvailable,
+} from './seymour-anima-macalania.ts';
 
 import './seymour-flux.ts';
 import './yunalesca.ts';
 import './braskas-final-aeon.ts';
 import './yu-yevon.ts';
+import './seymour-anima-macalania.ts';
 
 export * from './types.ts';
 export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
 export { yunalescaCounter, yunalescaEntryAction } from './yunalesca.ts';
 export { bfaTalkCharges, consumeBfaTalk } from './braskas-final-aeon.ts';
 export { yuYevonCounter, YU_YEVON_CURAGA_THRESHOLD } from './yu-yevon.ts';
+export {
+  MACALANIA_ASSUMPTIONS,
+  MAC_ACT,
+  MAC_ANIMA_SUMMONED,
+  MAC_ELEMENT_STEP,
+  MAC_HAS_POTIONS,
+  applyMacalaniaSetup,
+  consumeMacalaniaTalk,
+  macalaniaAct,
+  macalaniaGuardianCounter,
+  macalaniaNextElement,
+  macalaniaTalkAvailable,
+  runMacalaniaPhaseHooks,
+} from './seymour-anima-macalania.ts';
+
+/** True for any of the three actors in the Macalania formation. */
+function isMacalaniaScript(script: string): boolean {
+  return (
+    script === SEYMOUR_MACALANIA_SCRIPT ||
+    script === GUADO_GUARDIAN_SCRIPT ||
+    script === ANIMA_MACALANIA_SCRIPT
+  );
+}
 
 /** The boss a Trigger Command is aimed at: the living non-part enemy. */
 function triggerHost(ctx: Ctx): FFXCombatant | undefined {
@@ -51,6 +82,11 @@ export function applyTalkTrigger(ctx: Ctx, talker: FFXCombatant): boolean {
   if (!boss) return false;
   const script = activeScriptId(boss) ?? boss.id;
   if (script === 'seymour-flux' || script === 'mortiorchis') return consumeSeymourTalk(ctx, talker);
+  // **Macalania has its OWN table** — Tidus / Yuna / Wakka, not Flux's
+  // Kimahri / Yuna. `research/ffx-seymour-anima-macalania.md` §13 row 4 calls
+  // a shared table a major defect; the Trigger Command master table lists a
+  // different set for every Seymour form.
+  if (isMacalaniaScript(script)) return consumeMacalaniaTalk(ctx, talker);
   if (script.startsWith('bfa') || script === 'braskas-final-aeon') {
     return consumeBfaTalk(aiContextFor(ctx, boss));
   }
@@ -63,6 +99,7 @@ export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
   if (!boss) return false;
   const script = activeScriptId(boss) ?? boss.id;
   if (script === 'seymour-flux' || script === 'mortiorchis') return seymourTalkAvailable(ctx, talker.id);
+  if (isMacalaniaScript(script)) return macalaniaTalkAvailable(ctx, talker.id);
   if (script.startsWith('bfa') || script === 'braskas-final-aeon') {
     const used = ctx.state.flags['bfa.talkUsed'];
     return typeof used === 'number' ? used < 2 : true;

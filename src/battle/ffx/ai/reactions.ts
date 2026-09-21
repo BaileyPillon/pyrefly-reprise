@@ -16,6 +16,7 @@ import { mortibsorption } from '../scripted.ts';
 import { activeScriptId } from './index.ts';
 import { aiContextFor } from './types.ts';
 import { seymourDelayCounter, seymourThresholdCounters } from './seymour-flux.ts';
+import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { yunalescaCounter } from './yunalesca.ts';
 import { yuYevonCounter } from './yu-yevon.ts';
 
@@ -84,6 +85,17 @@ export function collectBossCounters(
       for (const command of seymourThresholdCounters(ai, false)) {
         out.push({ actorId: enemy.id, command, cause: 'script' });
       }
+      continue;
+    }
+    // **The Guado Guardians' Auto-Potion** [ffx-seymour-anima-macalania §2.3]:
+    // a counter on being damaged, +1,000 HP, disabled by one successful Steal.
+    // Nothing here reuses `ticks.ts`'s Auto-Potion, which is the *character
+    // equipment* path (HP < 50%, `hasAuto`) and a different rule entirely.
+    // Trigger scope — any damage vs physical only — is the owner-approved
+    // assumption C-11, held behind one constant in the script file.
+    if (script === GUADO_GUARDIAN_SCRIPT) {
+      const command = macalaniaGuardianCounter(ai);
+      if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
       continue;
     }
     if (script?.startsWith('yunalesca')) {

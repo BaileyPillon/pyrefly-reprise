@@ -45,6 +45,7 @@ import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { chooseAiCommand } from './ai/index.ts';
 import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
+import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { dismissAeon } from './aeons.ts';
 import { buildBattleResult } from './results.ts';
 
@@ -327,6 +328,12 @@ export class FFXEngine implements FFXBattleEngine {
 
     // The Mortiorchis never dies; it drains Seymour and comes back smaller.
     runMortibsorptionIfDown(ctx);
+
+    // Macalania's act transitions fire from a **hit**, not from a turn: he
+    // summons the moment his HP reaches 3,000, and Anima is dismissed the
+    // moment hers reaches 0 [ffx-seymour-anima-macalania §5.2, §5.3]. A no-op
+    // in every other battle.
+    runMacalaniaPhaseHooks(ctx);
 
     // Boss counters fire from the hit hook and cost no turn.
     if (command) {

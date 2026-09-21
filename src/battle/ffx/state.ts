@@ -65,6 +65,45 @@ export interface ActorRuntime {
   abilityIds: string[];
   /** Successful steals against this enemy, halving the base chance each time. */
   stealCount: number;
+  /**
+   * Cap on every **single hit** of HP damage this actor takes, applied inside
+   * `hp.ts#dealDamage` before {@link hpFloor}.
+   *
+   * Macalania Seymour is the case this exists for: in the HD Remaster — this
+   * project's declared baseline — he "cannot be killed before he summons", and
+   * the build enforces it by capping every hit on him at **5,999** until Anima
+   * has been summoned [ffx-seymour-anima-macalania §5.2, verified: 2 sources].
+   * On PS2 the same situation with a 6,000+ second Doublecast **softlocks the
+   * game**; that is a bug, not a feature, and reproducing it would be an own
+   * goal.
+   *
+   * Engine-internal on purpose — `ActorRuntime` is not a contract file and
+   * nothing outside `src/battle/ffx/**` sees it, so this is a capability, not
+   * a schema change. The encounter's AI script sets it at setup and deletes it
+   * when the summon fires.
+   */
+  damageCapPerHit?: number;
+  /** Lowest HP any damage may take this actor to. Cleared with {@link damageCapPerHit}. */
+  hpFloor?: number;
+  /**
+   * **Enemy Cover**: a single-target *physical* party action aimed at this id
+   * lands on **this** actor instead [ffx-seymour-anima-macalania §2.3,
+   * verified: 2 sources]. Magic is never covered.
+   *
+   * The mirror image of the party-side Guard/Sentinel interception
+   * `targeting.ts#redirectTarget` has always had. Cleared implicitly when the
+   * coverer dies, because the redirect only considers living enemies.
+   */
+  coversAllyId?: CombatantId;
+  /**
+   * Overdrive gauge points this **enemy** gains every time a player-side action
+   * targets it, whether or not the action deals damage.
+   *
+   * `onDamageTaken` only fires on damage, and Anima's third clock advances on a
+   * heal or a debuff too [ffx-seymour-anima-macalania §3.4]. The value itself
+   * is an `[estimate]` — see `ANIMA_GAUGE_PER_TARGETING`.
+   */
+  gaugePerTargeting?: number;
 }
 
 /** Battle-level engine bookkeeping. */

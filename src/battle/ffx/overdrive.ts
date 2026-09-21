@@ -132,6 +132,31 @@ export function setGauge(ctx: Ctx, c: FFXCombatant, value: number, cause: string
   ctx.emit({ type: 'overdrive-gauge', who: c.id, from, to, cause });
 }
 
+/**
+ * **An enemy gauge that fills on being targeted**, not on being damaged.
+ *
+ * `onDamageTaken` below only fires on damage, and Macalania Anima's third clock
+ * advances "every time she gets a turn **or is attacked**", Boost-independent —
+ * a heal or a debuff aimed at her counts too
+ * [ffx-seymour-anima-macalania §3.4, §5.3]. Called from
+ * `abilities.ts#resolveAbility` once the targets are resolved and before the
+ * hit loop, so one action is one targeting however many hits it lands.
+ *
+ * The amount comes from {@link ActorRuntime.gaugePerTargeting}, which only the
+ * Macalania script sets, so this is inert in every other battle. The value
+ * itself is an `[estimate]` (C-4) and is labelled as one in-product.
+ *
+ * Note what this does **not** do: `addGauge` applies Boost's x1.5 only for
+ * `side === 'aeon'`, so an enemy under Boost gains nothing extra — which is
+ * exactly Anima's canon Boost-independence. Do not "fix" that.
+ */
+export function onTargeted(ctx: Ctx, target: FFXCombatant, by: FFXCombatant): void {
+  if (by.side === 'enemy' || target.side !== 'enemy') return;
+  const per = ctx.rt.actors.get(target.id)?.gaugePerTargeting;
+  if (per === undefined || per <= 0) return;
+  addGauge(ctx, target, per, 'targeted');
+}
+
 /** Stoic and Comrade: someone took damage. */
 export function onDamageTaken(ctx: Ctx, victim: FFXCombatant, amount: number, fromEnemy: boolean): void {
   if (amount <= 0 || !fromEnemy) return;

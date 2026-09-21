@@ -95,12 +95,43 @@ export function resolveTargets(
   return fallback.length > 0 ? [ctx.rng.pick(fallback)] : [];
 }
 
+/** True for the action class that either side's Cover intercepts. */
+function coverable(def: AbilityDef): boolean {
+  return def.damageType === 'physical' && def.targeting === 'single-enemy';
+}
+
 /**
- * Guard / Sentinel interception and Provoke redirection.
+ * **Enemy Cover** — the mirror image of Guard/Sentinel, and until the Macalania
+ * encounter it simply did not exist: `redirectTarget` opened with
+ * `if (attacker.side !== 'enemy') return target`, so a party-side action was
+ * never redirected at all.
+ *
+ * "While at least one Guardian lives, **physical** attacks targeted at Seymour
+ * are intercepted by a Guardian. **Magic is never covered.**"
+ * [ffx-seymour-anima-macalania §2.3, verified: 2 sources]
+ *
+ * The relationship lives on {@link ActorRuntime.coversAllyId}, which the
+ * encounter's own script sets at setup — no contract field, and no shipped
+ * enemy outside that encounter sets it, so nothing else changes behaviour.
+ * A dead coverer stops covering for free, because only living enemies are
+ * considered.
+ */
+function coverOf(ctx: Ctx, target: FFXCombatant, def: AbilityDef): FFXCombatant {
+  if (!coverable(def) || target.side !== 'enemy') return target;
+  for (const c of livingEnemies(ctx)) {
+    if (c.id === target.id || !targetable(c)) continue;
+    if (ctx.rt.actors.get(c.id)?.coversAllyId === target.id) return c;
+  }
+  return target;
+}
+
+/**
+ * Guard / Sentinel interception, enemy Cover, and Provoke redirection.
  *
  * A Guard user intercepts **all single-target physical attacks** aimed at the
  * other two members [ffx-combat-core §4.2]. Provoke forces an enemy to target
- * the provoker.
+ * the provoker. Going the other way, an enemy may cover an ally — see
+ * {@link coverOf}.
  */
 export function redirectTarget(
   ctx: Ctx,
@@ -108,9 +139,9 @@ export function redirectTarget(
   target: FFXCombatant,
   def: AbilityDef,
 ): FFXCombatant {
-  if (attacker.side !== 'enemy') return target;
+  if (attacker.side !== 'enemy') return coverOf(ctx, target, def);
 
-  if (def.damageType === 'physical' && def.targeting === 'single-enemy') {
+  if (coverable(def)) {
     for (const c of livingFriendlies(ctx)) {
       if (c.id === target.id) continue;
       if (has(c, 'guard') || has(c, 'sentinel')) return c;
