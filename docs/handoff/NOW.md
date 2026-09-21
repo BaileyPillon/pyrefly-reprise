@@ -1,11 +1,12 @@
 # NOW — where Pyrefly Reprise stands
 
-> **Snapshot: 2026-09-21 00:20 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
-> **THE PAUSE IS LIFTED.** On 2026-09-20 Bailey wrote to the driver: "continue on with work please but do not forget
-> our delegation policy and carefully monitor token usage, weekly usage, 5 hour session usage so that we still meet our
-> goals with this project". The driver now runs on a fresh Claude account (weekly 16 percent used at this snapshot,
-> resets 2026-09-26 07:00 EDT). Work, releases and reviews are authorised; keep them economical (about 15 weekly
-> points a day, Sonnet for well-specified tracks, one browser capture owner, stop servers by their own PID only).
+> **Snapshot: 2026-09-21 05:40 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **USAGE MODE: NORMAL** (about 66 percent of the weekly allowance left; weekly resets 2026-09-26 07:00 EDT). Hard rule 15.
+> **The pause is lifted** (Bailey to the driver, 2026-09-20: "continue on with work please but do not forget our
+> delegation policy and carefully monitor token usage, weekly usage, 5 hour session usage so that we still meet our goals
+> with this project"). Releases and reviews are authorised; keep them economical: Sonnet for well-specified tracks, one
+> browser capture owner, stop servers by their own PID only, NO polling watchers on long workflows (a driver wake-up
+> costs more than the agents do).
 
 ## Live (Build A)
 
@@ -14,56 +15,24 @@
 - **Critic policy v2 is in force and committed** (`4ccba89`, `d7b9dcb`): `critic/RUBRIC.md`, `node tools/critic-plan.mjs`,
   release through `critic/runner/release.js`.
 
-## In flight: Build A.2 (release candidate = `main` HEAD)
+## In flight: Build A.2 (release candidate = `main` HEAD), repair cycle 2 of 2 done
 
-- Build A.1 fixes (`dd12561` .. `bc2571c`): Threaten and Sleep expire, Yu Yevon's counters and Gravija, letter tags per
-  name group, HUD rows move with each blow, honest wording, saved volumes at boot, FFX-2 menu fixes. Handoffs
-  `builda1-*.md`.
-- **Deep review round 04** (`critic/rounds/round-04.md`, `0ed1e8b`) judged that candidate BEFORE deploy: changed area
-  FAIL (PR-0003 results ledger, PR-0004 Threaten counters, PR-0009 guide slices), so nothing was deployed.
-- Repairs, verified twice (`c7072ac`, `b7fcc34`, `1b0f274`, `959577d`, `c278f71`, `82e924a`, `ee49fc3`, verifier notes
-  `builda1-repair-verify.json`, `builda1-repair-verify2.md`): all five issues confirmed fixed; tsc clean, 4290 tests green.
-- **Onboarding, Bailey's pick "C: Auron's briefing"** (2026-09-20; targets.json tiles C1-C3; `5e8eca5`, `b8a905f`,
-  `e30ea5e`; handoff `onboarding-c.md`): built, adversarially verified, fix pass done.
-- **Next step: release this candidate** with `critic/runner/release.js`, round `05` (shared systems changed, so a deep
-  review of the production candidate comes first; reuse round 04's evidence for what these commits did not touch).
-- Portrait candidates for the eight missing speaker portraits are with Bailey (`docs/concepts/portraits/sheet.png`,
-  `d57aa41`); nothing ships until Bailey picks. `fayth-boy` also has a file-name mismatch to fix then.
-
-## Decided by Bailey, 2026-09-21 evening (side session; build work owed)
-
-- **Speaker portraits picked** from `docs/concepts/portraits/sheet.png`: paine 1, shuyin 2, yuna-x2 3, rikku-x2 3,
-  young-auron 1, fayth-boy 1. Copied (additive, nothing overwritten) to `public/art/portraits/<key>.png` + `.json`,
-  backed up in `D:\Tools\pyrefly-art-backup\approved\2026-09-21-speaker-portraits`, `public/art/manifest.json`
-  regenerated (23 portraits), six approved tiles in `targets.json` (cast group), hashes in `approved-hashes.json`.
-  **Owed:** measured rows in `src/ui/common/face-crops.json` for the new keys (`tools/portraits/measure-face-crops.mjs`;
-  paine matters most, she is a HUD chip), a browser check of one line per speaker, and the `cast.json`
-  `portrait-bahamut-fayth` id versus `fayth-boy`. Not yet seen in a browser. Game case: FFX-2 only (paine, shuyin,
-  yuna-x2, rikku-x2), FFX only (young-auron, fayth-boy).
-  **Done 2026-09-21 01:30 EDT (side session "project status"):** eight measured rows in `face-crops.json` (eyes read
-  off gridded head sheets; acceptance sheet `docs/screenshots/portraits/face-crops-new8.png`). Three picks are painted
-  closer than the house framing (shuyin, young-auron, fayth-boy): the tile cannot zoom out past the file, so they carry
-  `"tight": true` and the guard test proves the cover clamp is what pins them (a falsely flagged row fails; checked by
-  mutation). Yu Yevon has no eyes: framed on the hood with both horn swirls, a judgement call, say if it reads wrong.
-  Browser check on a private Vite server (5741, stopped), GPU mode: one line per speaker for seven of the eight, Paine's
-  HUD chip frames her face, 0 console errors, 0 404s (`docs/screenshots/portraits/speaker-portraits-in-game.jpg`).
-  **Yu Yevon never `say`s a line in any script**, so his portrait is reachable only where a screen asks for it.
-  The check found the dialogue box printing the internal ids "Yuna X2" / "Rikku X2" as names: `defaultName` now drops
-  the `-x2` suffix (FFX-2 only in effect; both games call them Yuna and Rikku per `dsl.ts` / writing-bible §1.14-15).
-  `tools/gen/cast.json`: the generator entry now writes `fayth-boy.png` (the id the cutscenes read; `bahamut-fayth.png`
-  was read by nothing). `critic-plan` rates `face-crops.json` and `DialogueBox.ts` as shared (global layout): they ride
-  with the round 05 deep review. Open for Bailey: the name plate reads "Fayth Boy" beside a "FAYTH" chip, and "Young
-  Auron"; the sources in the repo do not say what the games print, so nothing was changed.
-- **Braska card 1 and Yu Yevon card 2:** recommended by the side session, Bailey said "yes to both recommendations".
-  Shipped and recorded the same way (25 portraits in the manifest, eight new tiles in all). Braska's gold crest and
-  sash are off-canon on every candidate: a headdress repaint is owed and goes past Bailey first. FFX only.
-- **FFX-2 ATB: "For ffx-2 I choose active."** Active only, no Wait toggle. Per `research/ffx2-combat-core.md` §1.5:
-  time never stops while a command menu or submenu is open (today `BattlePresenter` ticks the FFX-2 engine only in its
-  `waiting` branch, so everything freezes); the forced freeze during certain long animations stays `[single source]`;
-  "an enemy hit closes the open menu and delays that character" is `[single source]` and needs Bailey's yes on its own.
-  FFX-2 only, combat core: deep review before deploy, measure chapters 4 and 5 before and after. Once built, the
-  onboarding C3 badge can go back to the mockup's "Nothing paused · gauges running". Whether the original defaults to
-  Active could not be sourced online (2026-09-21); Bailey's pick stands regardless.
+- Round 04 (`0ed1e8b`) failed the A.1 candidate's changed area; repairs confirmed. **Round 05** (`32c87bc`,
+  `critic/rounds/round-05.md`) confirmed every round 04 repair and failed the changed area on NEW defects: PR-0045
+  (critical, FFX-2 Berserk zero-row lock), PR-0050 (collapsed guide chip over the FFX-2 boss plate), PR-0048 / 0049 /
+  0051 / 0047 (onboarding), PR-0046 (FFX-2 clock claim), PR-0001 inside the rebuilt guide. Nothing deployed.
+- **Repair cycle 2** (`da83511`, `98aa12f`, `2c7b147`; verifier: nothing refuted; tsc clean, 4450 tests green):
+  a Berserked FFX-2 turn resolves without the player and `buildCommands` can never return zero rows; the four
+  onboarding defects; the collapsed chip keeps its anchor; guide type at least 14 effective px at 1600x900 and
+  2000x1012 (11.4 at 1280x720, disclosed).
+- **Onboarding ships SWITCHED OFF in this candidate** (`ONBOARDING_LIVE = false`, `src/ui/coach/coachState.ts`;
+  `__pyrefly.setCoaching(true)` forces it on for review): its approved line "In hers, the clock does not wait" becomes
+  true only with **Active ATB** (Bailey, 2026-09-21: Active only, no Wait toggle), which is the NEXT candidate (A.3):
+  paper preflight `docs/plans/ffx2-active-atb-review.md` first, then build, deep review, switch onboarding on and put
+  the C3 badge back to the mockup's words.
+- This is the last repair cycle the cap allows in normal mode: if the next deep review fails the changed area again,
+  take the failing change out and ship what passed, or ask Bailey.
+- Next step: `critic/runner/release.js`, round `06`.
 
 ## Waiting on Bailey (none of these blocks the release)
 
@@ -185,6 +154,21 @@ Template:
 - Left uncommitted:
 - Next:
 ```
+
+### 2026-09-21 01:00–03:10 EDT — Claude Code side session "learning sites" (new track; targets shown, plumbing built, nothing visible built, nothing deployed)
+- Did: Bailey asked for "an interactive learning website" adapted from Human Atlas and Model X Studio (section 16 of https://youtu.be/ifz8NGHuHtY; both sites used first-hand, write-up `docs/concepts/atlas/REFERENCE.md`: one specimen on a stage, a systems panel with counts, the explode slider from assembled to a flat inventory, a sourced detail card with two tabs, isolate, search; pattern only, no code or asset copied, hard rule 8). Options round `docs/concepts/atlas/` (README, `options.json`, `sheet.png`, nine 1600x900 frames, each set adversarially fact-checked and repaired: 7 wrong numbers corrected, all "ready with caveats", no blockers). Bailey, before the frames existed: **"A, B, C all separately please but please be mindful of delegation"** = three separate sites: A "Pyrefly Atlas" (a boss taken apart; Vegnagun, 119 sourced pieces), B "Pyrefly Studio" (one turn taken apart, the real FFX engine computing the numbers live), C "Pyrefly Reprise, exploded" (one battle frame taken apart into layers). **The looks are NOT approved: the frames are with Bailey awaiting a verdict.** Plan: `docs/plans/learning-sites.md`. Built (plumbing only, no DOM/CSS): new root folder `learn/` = `learn/shared` (model that refuses a piece with no cite, store, layout, inventory packer, search), `learn/atlas` (any of the five chapters → specimen from `src/data/**` + the guide text with per-sentence cites), `learn/studio` (`runExampleTurn` on the real `FFXEngine`, seed-1 numbers identical to the mockup's engine probe; 137 cited rules), `learn/exploded` (nine layers + asset inventory from the art manifest passed in at runtime; party/enemy role from the data, not from `facing`). 3,900-odd lines, 9 test files. **The game's `src/`, `public/`, `vite.config.ts`, `tsconfig.json`, `vitest.config.ts` are untouched; `learn/` only imports `src/battle/**` and `src/data/**`**, so `critic-plan` sees no shared-system change and the Build A.2 release is unaffected. Game case: **both** as a surface; every specimen is FFX only or FFX-2 only with that game's accent (derived from the chapter's `game`, never set by hand); a turn list is FFX only.
+- **Bailey restated the delegation rule in capitals ("DO NOT FORGET THIS NO MATTER WHAT"):** mechanical implementation, file searches, tests and routine execution go to sub-agents on Opus / Sonnet / Haiku; Fable is reserved for planning, architecture review and final validation. It now opens `~/.claude/CLAUDE.md` verbatim. **Set `model` on every `Agent` call and every workflow `agent()`**; omitting it inherits Fable. This session's first workflow (the mockup round, 7 agents) omitted it and cost about 11 weekly points and 19 Fable-weekly points; everything after ran on Sonnet.
+- Side findings from the fact-checkers, flagged as task chips, not fixed here: (1) Bulwark record blocks Str/Mag breaks against its own comment and research §3.3 (a separate session is on it); (2) the chapter 5 guide says "cast Reflect on the Leg" while §3.2 and the data make the Leg Reflect-immune, and several researched steals are missing from the data; (3) `docs/ARCHITECTURE.md` lags the code (about 22 battle events listed, 36 in the union; music described as synthesis). Also: painted subjects `jecht` and `lenne` are named by no party or enemy record (story-only), so site C lists them as unclassified.
+- Verified by: the main session re-ran everything itself: `npx tsc --noEmit` exit 0; `npx vitest run tests/unit/learn-` = 9 files, 107 tests green; no file over 400 lines; the nine frames looked at on the sheet and A2 at full size. Full `npm test` NOT run (nothing under `src/` changed; run it before any push). Usage: 5-hour 19 → 59, weekly 21 → 32, Fable weekly 22 → 41 across the mockup round.
+- Left uncommitted: `learn/`, `tests/unit/learn-*.test.ts` (9), `docs/concepts/atlas/`, `docs/plans/learning-sites.md`, this entry. Asked Bailey whether to commit to `main` without pushing.
+- Next: **wait for Bailey's verdict on each look (A, B, C)**, how plainly site C says the art is AI-generated, where the sites are published, and whether a phone layout is in the first build. Then: the DOM shell to the approved looks (Opus), the three pages wired to it (Sonnet), one real-input browser check per site with target beside build, targets recorded in `docs/target/targets.json`. Nothing visible is built before the verdict (hard rule 9).
+
+### 2026-09-21 (late evening) — Claude Code side session (six process rules adopted from `project-scaffolding`; nothing deployed)
+- Did: read Bailey's private repo `BaileyPillon/project-scaffolding` (read-only, GitHub API), wrote six proposals (`docs/plans/scaffold-proposals.md`), and on Bailey's **"adopt all six"** put them in force. (1) Stagnation: RUBRIC §8, `cadence.stalledAfterReviews`, `stalledIssues` in `tools/critic-policy.mjs`, `npm run critic:status` prints `STALLED:` (information only). (2) Repair counting and a cap per release candidate (2 / 1 / 0 cycles by usage mode; "take the failing change out and ship what passed"), `attempts` validated in reports. (3) Usage modes normal / conserve / protect in RUBRIC §9 and `policy.json`, the mode line at the top of this file; "protect at 80 percent used" replaces "ask above 85". (4) `delivery` / `verifiedBy` on target tiles (24 filled: 15 verified and 5 failing copied from round 04 by exact label, the three onboarding tiles, the Turn cut-in) and `docs/target/decisions.json` (14 decisions with their state). (5) `reaction` on tiles: what Bailey named versus what an agent inferred (targeting B, onboarding C, Ink & Gold, Braska's portrait). (6) `critic/calibration/cases.json` (four confirmed should-fail cases from CHECKS.md, four candidates to confirm) and a paper-preflight row in RUBRIC §4. AGENTS.md rule 15 summarises it. Game case: **both** (process only; every path is `no-product-effect`, so no review is owed).
+- Verified by: `npx tsc --noEmit` clean; `tests/unit/critic-policy-adoptions.test.ts` (12 new tests) plus the five other test files that read `policy.json` / `targets.json`: 165 green; `node tools/critic-status.mjs` and `node tools/end-state-board.mjs` still run (73 tiles). The full `npm test` was not run.
+- Committed as `62f4cbb` (not pushed): only this session's paths, staged one by one. Left uncommitted: this file, because it also carries another session's edits. Releases are cut from the clean worktree, so push `main` before the next cut for these rules to apply there.
+- Not done, on purpose: no calibration run (size it and show Bailey first); delivery status is not shown on the board (needs a mockup and Bailey's pick, hard rule 9); 49 tiles have no `delivery` yet because no report names them by exact label.
+- Next: run the paper preflight on the FFX-2 Active-only ATB build before it starts (RUBRIC §4); fill `attempts` and per-tile results in the round 05 report so `delivery` and `STALLED:` have data.
 
 ### 2026-09-20 (afternoon) — Claude Code sub-agent (onboarding option C: adversarial fix pass; nothing deployed)
 - Did: an adversarial verifier refuted four properties of the onboarding build `b8a905f` on the running game, and this pass fixed each at its root. (1)+(2) Enter and Escape skipped Auron's briefing **and** were acted on by the screen behind it one frame later — first launch went title → briefing → party prep with the chapter board never seen, Escape backed the board out to the title, and the pause replay re-raised itself on every confirm, forever. The cause was in `src/app/Input.ts`: `claimKeyboard` stopped the DOM event in the capture phase but `onKeyDown` still latched the abstract button. `claimKeyboard` now takes `{ exclusive: true }`: a swallowed key latches no button, screens behind read no button/axis/action while the claim is up, and the frame after it is handed back drops every pending edge (which also settles the gamepad, where the two poll loops' order used to decide the outcome). `PauseScreen` forwards the briefing nothing; `Briefing.handleInput` and the `driven` option are gone; the briefing's pad watcher ignores the HUD mute (`RawInputWatcher { ignoreSuspend }`) so the pause replay is still dismissible by pad. (3) The FFX-2 line's badge claimed "Nothing paused · gauges running" while the gauges were measurably frozen (8189 ticks → 8189 across 1.5 s in both X-2 chapters, **identical with `?coach=off`** — `BattlePresenter` awaits `HudPort.chooseCommand` and ticks the FFX-2 engine only in its `waiting` branch). The badge now reads "Keep playing · nothing to press", which is what the line itself does. (4) The test meant to prove the clock kept running ticked the engine itself and then asserted it had moved; replaced by two mutation-checked assertions that can fail. Commits `e30ea5e` (code + tests) and `6cd337e` (handoff, the C3 target tile's knowing departure from the mockup's badge label, re-captured shots and pairs). Game case: **both** — `Input.ts` is shared plumbing and these are bug fixes (CHK-020); the badge wording is FFX-2 only.
