@@ -1,0 +1,600 @@
+{
+ "generatedBy": "learn/exploded/make-thumbs.mjs",
+ "sizes": {
+  "sub-anima": {
+   "w": 733,
+   "h": 1203,
+   "src": "characters/anima/idle.png"
+  },
+  "sub-auron": {
+   "w": 799,
+   "h": 1204,
+   "src": "characters/auron/idle.png"
+  },
+  "sub-bahamut": {
+   "w": 989,
+   "h": 966,
+   "src": "characters/bahamut/idle.png"
+  },
+  "sub-braskas-final-aeon-1": {
+   "w": 1004,
+   "h": 953,
+   "src": "characters/braskas-final-aeon-1/idle.png"
+  },
+  "sub-braskas-final-aeon-2": {
+   "w": 982,
+   "h": 904,
+   "src": "characters/braskas-final-aeon-2/idle.png"
+  },
+  "sub-ffx2-bahamut": {
+   "w": 1024,
+   "h": 1024,
+   "src": "characters/ffx2-bahamut/idle.png"
+  },
+  "sub-guado-guardian": {
+   "w": 453,
+   "h": 1172,
+   "src": "characters/guado-guardian/idle.png"
+  },
+  "sub-ifrit": {
+   "w": 975,
+   "h": 1018,
+   "src": "characters/ifrit/idle.png"
+  },
+  "sub-ixion": {
+   "w": 1191,
+   "h": 802,
+   "src": "characters/ixion/idle.png"
+  },
+  "sub-jecht": {
+   "w": 432,
+   "h": 1186,
+   "src": "characters/jecht/idle.png"
+  },
+  "sub-kimahri": {
+   "w": 768,
+   "h": 1198,
+   "src": "characters/kimahri/idle.png"
+  },
+  "sub-leblanc": {
+   "w": 591,
+   "h": 1118,
+   "src": "characters/leblanc/idle.png"
+  },
+  "sub-lenne": {
+   "w": 724,
+   "h": 1170,
+   "src": "characters/lenne/idle.png"
+  },
+  "sub-logos": {
+   "w": 626,
+   "h": 1122,
+   "src": "characters/logos/idle.png"
+  },
+  "sub-lulu": {
+   "w": 485,
+   "h": 1165,
+   "src": "characters/lulu/idle.png"
+  },
+  "sub-mortiorchis": {
+   "w": 1201,
+   "h": 829,
+   "src": "characters/mortiorchis/idle.png"
+  },
+  "sub-ormi": {
+   "w": 489,
+   "h": 1189,
+   "src": "characters/ormi/idle.png"
+  },
+  "sub-paine-black-mage": {
+   "w": 567,
+   "h": 1151,
+   "src": "characters/paine-black-mage/idle.png"
+  },
+  "sub-paine-dark-knight": {
+   "w": 609,
+   "h": 1208,
+   "src": "characters/paine-dark-knight/idle.png"
+  },
+  "sub-paine-gunner": {
+   "w": 493,
+   "h": 1136,
+   "src": "characters/paine-gunner/idle.png"
+  },
+  "sub-paine-samurai": {
+   "w": 640,
+   "h": 1129,
+   "src": "characters/paine-samurai/idle.png"
+  },
+  "sub-paine-warrior": {
+   "w": 408,
+   "h": 1180,
+   "src": "characters/paine-warrior/idle.png"
+  },
+  "sub-paine-white-mage": {
+   "w": 820,
+   "h": 1140,
+   "src": "characters/paine-white-mage/idle.png"
+  },
+  "sub-rikku": {
+   "w": 648,
+   "h": 1120,
+   "src": "characters/rikku/idle.png"
+  },
+  "sub-rikku-alchemist": {
+   "w": 541,
+   "h": 1194,
+   "src": "characters/rikku-alchemist/idle.png"
+  },
+  "sub-rikku-berserker": {
+   "w": 555,
+   "h": 1215,
+   "src": "characters/rikku-berserker/idle.png"
+  },
+  "sub-rikku-black-mage": {
+   "w": 683,
+   "h": 1190,
+   "src": "characters/rikku-black-mage/idle.png"
+  },
+  "sub-rikku-dark-knight": {
+   "w": 787,
+   "h": 1205,
+   "src": "characters/rikku-dark-knight/idle.png"
+  },
+  "sub-rikku-gunner": {
+   "w": 364,
+   "h": 1062,
+   "src": "characters/rikku-gunner/idle.png"
+  },
+  "sub-rikku-thief": {
+   "w": 558,
+   "h": 1212,
+   "src": "characters/rikku-thief/idle.png"
+  },
+  "sub-rikku-white-mage": {
+   "w": 626,
+   "h": 1213,
+   "src": "characters/rikku-white-mage/idle.png"
+  },
+  "sub-seymour-flux": {
+   "w": 832,
+   "h": 1214,
+   "src": "characters/seymour-flux/idle.png"
+  },
+  "sub-seymour-flux-body": {
+   "w": 750,
+   "h": 1211,
+   "src": "characters/seymour-flux-body/idle.png"
+  },
+  "sub-seymour-macalania": {
+   "w": 528,
+   "h": 1136,
+   "src": "characters/seymour-macalania/idle.png"
+  },
+  "sub-shiva": {
+   "w": 574,
+   "h": 1147,
+   "src": "characters/shiva/idle.png"
+  },
+  "sub-shuyin": {
+   "w": 694,
+   "h": 1136,
+   "src": "characters/shuyin/idle.png"
+  },
+  "sub-tidus": {
+   "w": 730,
+   "h": 1132,
+   "src": "characters/tidus/idle.png"
+  },
+  "sub-valefor": {
+   "w": 1057,
+   "h": 830,
+   "src": "characters/valefor/idle.png"
+  },
+  "sub-vegnagun-body": {
+   "w": 1213,
+   "h": 827,
+   "src": "characters/vegnagun-body/idle.png"
+  },
+  "sub-vegnagun-head": {
+   "w": 1216,
+   "h": 832,
+   "src": "characters/vegnagun-head/idle.png"
+  },
+  "sub-vegnagun-leg": {
+   "w": 777,
+   "h": 1175,
+   "src": "characters/vegnagun-leg/idle.png"
+  },
+  "sub-vegnagun-tail": {
+   "w": 1176,
+   "h": 822,
+   "src": "characters/vegnagun-tail/idle.png"
+  },
+  "sub-wakka": {
+   "w": 685,
+   "h": 1188,
+   "src": "characters/wakka/idle.png"
+  },
+  "sub-yojimbo": {
+   "w": 823,
+   "h": 1180,
+   "src": "characters/yojimbo/idle.png"
+  },
+  "sub-yu-pagoda": {
+   "w": 602,
+   "h": 920,
+   "src": "characters/yu-pagoda/idle.png"
+  },
+  "sub-yu-yevon": {
+   "w": 786,
+   "h": 705,
+   "src": "characters/yu-yevon/idle.png"
+  },
+  "sub-yuna": {
+   "w": 803,
+   "h": 1075,
+   "src": "characters/yuna/idle.png"
+  },
+  "sub-yuna-black-mage": {
+   "w": 782,
+   "h": 1149,
+   "src": "characters/yuna-black-mage/idle.png"
+  },
+  "sub-yuna-dark-knight": {
+   "w": 549,
+   "h": 1195,
+   "src": "characters/yuna-dark-knight/idle.png"
+  },
+  "sub-yuna-gunner": {
+   "w": 460,
+   "h": 1194,
+   "src": "characters/yuna-gunner/idle.png"
+  },
+  "sub-yuna-songstress": {
+   "w": 655,
+   "h": 1116,
+   "src": "characters/yuna-songstress/idle.png"
+  },
+  "sub-yuna-warrior": {
+   "w": 728,
+   "h": 1183,
+   "src": "characters/yuna-warrior/idle.png"
+  },
+  "sub-yuna-white-mage": {
+   "w": 581,
+   "h": 1183,
+   "src": "characters/yuna-white-mage/idle.png"
+  },
+  "sub-yunalesca-1": {
+   "w": 823,
+   "h": 1184,
+   "src": "characters/yunalesca-1/idle.png"
+  },
+  "sub-yunalesca-2": {
+   "w": 832,
+   "h": 1216,
+   "src": "characters/yunalesca-2/idle.png"
+  },
+  "sub-yunalesca-3": {
+   "w": 1216,
+   "h": 832,
+   "src": "characters/yunalesca-3/idle.png"
+  },
+  "bd-bevelle-underground": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/bevelle-underground.png"
+  },
+  "bd-chapter-select": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/chapter-select.png"
+  },
+  "bd-dreams-end": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/dreams-end.png"
+  },
+  "bd-farplane": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/farplane.png"
+  },
+  "bd-gagazet": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/gagazet.png"
+  },
+  "bd-leblanc-last-room": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/leblanc-last-room.png"
+  },
+  "bd-macalania-temple": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/macalania-temple.png"
+  },
+  "bd-title": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/title.png"
+  },
+  "bd-zanarkand-dome": {
+   "w": 2688,
+   "h": 1536,
+   "src": "backdrops/zanarkand-dome.png"
+  },
+  "pp-auron": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/auron.png"
+  },
+  "pp-ch1-seymour-flux": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch1-seymour-flux.png"
+  },
+  "pp-ch2-yunalesca": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch2-yunalesca.png"
+  },
+  "pp-ch3-braskas-final-aeon": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch3-braskas-final-aeon.png"
+  },
+  "pp-ch4-bahamut": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch4-bahamut.png"
+  },
+  "pp-ch4-ffx2-bahamut": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch4-ffx2-bahamut.png"
+  },
+  "pp-ch5-ffx2-vegnagun-shuyin": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch5-ffx2-vegnagun-shuyin.png"
+  },
+  "pp-ch5-shuyin": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/ch5-shuyin.png"
+  },
+  "pp-jecht": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/jecht.png"
+  },
+  "pp-kimahri": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/kimahri.png"
+  },
+  "pp-leblanc": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/leblanc.png"
+  },
+  "pp-lulu": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/lulu.png"
+  },
+  "pp-paine": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/paine.png"
+  },
+  "pp-rikku": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/rikku.png"
+  },
+  "pp-rikku-ffx2": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/rikku-ffx2.png"
+  },
+  "pp-seymour": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/seymour.png"
+  },
+  "pp-tidus": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/tidus.png"
+  },
+  "pp-wakka": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/wakka.png"
+  },
+  "pp-yuna": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/yuna.png"
+  },
+  "pp-yuna-ffx2": {
+   "w": 1344,
+   "h": 768,
+   "src": "pause/yuna-ffx2.png"
+  },
+  "pt-anima": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/anima.png"
+  },
+  "pt-auron": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/auron.png"
+  },
+  "pt-bahamut": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/bahamut.png"
+  },
+  "pt-braska": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/braska.png"
+  },
+  "pt-fayth-boy": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/fayth-boy.png"
+  },
+  "pt-ifrit": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/ifrit.png"
+  },
+  "pt-ixion": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/ixion.png"
+  },
+  "pt-jecht": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/jecht.png"
+  },
+  "pt-kimahri": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/kimahri.png"
+  },
+  "pt-leblanc": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/leblanc.png"
+  },
+  "pt-lenne": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/lenne.png"
+  },
+  "pt-logos": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/logos.png"
+  },
+  "pt-lulu": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/lulu.png"
+  },
+  "pt-ormi": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/ormi.png"
+  },
+  "pt-paine": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/paine.png"
+  },
+  "pt-rikku": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/rikku.png"
+  },
+  "pt-rikku-x2": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/rikku-x2.png"
+  },
+  "pt-seymour": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/seymour.png"
+  },
+  "pt-shiva": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/shiva.png"
+  },
+  "pt-shuyin": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/shuyin.png"
+  },
+  "pt-tidus": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/tidus.png"
+  },
+  "pt-valefor": {
+   "w": 824,
+   "h": 1202,
+   "src": "portraits/valefor.png"
+  },
+  "pt-wakka": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/wakka.png"
+  },
+  "pt-yojimbo": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/yojimbo.png"
+  },
+  "pt-young-auron": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/young-auron.png"
+  },
+  "pt-yu-yevon": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/yu-yevon.png"
+  },
+  "pt-yuna": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/yuna.png"
+  },
+  "pt-yuna-x2": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/yuna-x2.png"
+  },
+  "pt-yunalesca": {
+   "w": 832,
+   "h": 1216,
+   "src": "portraits/yunalesca.png"
+  },
+  "pose-yunalesca-1-attack": {
+   "w": 832,
+   "h": 1216,
+   "src": "characters/yunalesca-1/attack.png"
+  },
+  "pose-yunalesca-1-cast": {
+   "w": 830,
+   "h": 1213,
+   "src": "characters/yunalesca-1/cast.png"
+  },
+  "pose-yunalesca-1-hurt": {
+   "w": 796,
+   "h": 1203,
+   "src": "characters/yunalesca-1/hurt.png"
+  },
+  "pose-yunalesca-1-idle": {
+   "w": 823,
+   "h": 1184,
+   "src": "characters/yunalesca-1/idle.png"
+  },
+  "pose-yunalesca-1-ko": {
+   "w": 1216,
+   "h": 832,
+   "src": "characters/yunalesca-1/ko.png"
+  }
+ }
+}

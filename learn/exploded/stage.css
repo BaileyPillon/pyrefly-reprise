@@ -1,0 +1,216 @@
+/*
+ * Site C's own stage styles: the eight sheets of one battle frame, the
+ * labels and rails around them, and the inventory at `explode` 1.
+ *
+ * Ported from the approved frames' `docs/concepts/atlas/c-scene-exploded/c.css`
+ * — the game frame is authored in its own 1440 x 810 space, so the HUD keeps
+ * that file's literal Ink & Gold numbers and the whole frame is scaled as a
+ * block by `frame.ts`. Colours come from the shared cinema theme's tokens,
+ * never re-declared here.
+ *
+ * Site chrome text (labels, rails, captions, tile names) is never below 13px.
+ * Text *inside* the pictured game frame is picture content, at the frame's
+ * own scale.
+ */
+
+/* ------------------------------------------------------- the 3D stack */
+.pyc-root { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.pyc-persp { position: absolute; perspective-origin: 50% 50%; }
+.pyc-edge { position: absolute; inset: -1px; border: 1px solid rgba(244, 241, 232, 0.22);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.7), 0 0 120px rgba(104, 84, 190, 0.22); pointer-events: none; }
+/* Neither the perspective host nor the frame box is ever a click target: in a 3D
+   scene the browser will otherwise answer `elementFromPoint` with the parent plane
+   in the gaps between sheets, and a click on a sheet a reader can plainly see would
+   select nothing. Only the sheets themselves, and their paint, take clicks. */
+.pyc-persp, .pyc-gf { pointer-events: none; }
+.pyc-gf { position: absolute; left: 50%; top: 50%; width: 1440px; height: 810px; margin: -405px 0 0 -720px;
+  transform-origin: 50% 50%; transform-style: preserve-3d; }
+
+/* A sheet is not a click target while the frame is assembled — its content is,
+   so a click lands on the layer whose paint is actually under the cursor. Once
+   the sheets stand apart, the whole sheet is the target, as the frame shows. */
+.pyc-pl { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+.pyc-pl > .pyc-clip { position: absolute; inset: 0; overflow: hidden; }
+.pyc-clip > * { pointer-events: auto; cursor: pointer; }
+.pyc-motes, .pyc-grade, .pyc-fx, .pyc-grain, .pyc-shadow, .pyc-pool { pointer-events: none !important; }
+.pyc-gf--apart .pyc-pl { pointer-events: auto; cursor: pointer;
+  outline: 3px solid rgba(244, 241, 232, 0.34); outline-offset: -2px; background: rgba(244, 241, 232, 0.035);
+  box-shadow: 0 50px 90px rgba(0, 0, 0, 0.45); }
+.pyc-gf--apart .pyc-pl--solid { background: none; }
+.pyc-gf--apart .pyc-pl--sel { outline: 6px solid var(--pyx-accent); background: rgba(var(--pyx-accent-rgb), 0.13);
+  box-shadow: 0 0 110px rgba(var(--pyx-accent-rgb), 0.45), 0 50px 90px rgba(0, 0, 0, 0.45); }
+.pyc-gf--apart .pyc-pl--sel .pyc-bb { filter: sepia(1) saturate(2.6) hue-rotate(-12deg) brightness(1.08)
+  drop-shadow(0 0 10px rgba(var(--pyx-accent-rgb), 0.95)) drop-shadow(0 0 34px rgba(var(--pyx-accent-rgb), 0.6)); }
+.pyc-pl:focus-visible { outline: 3px solid var(--pyx-accent); outline-offset: -2px; }
+.pyc-mk { position: absolute; left: 0; top: 0; width: 2px; height: 2px; pointer-events: none; }
+.pyc-mk--b { top: auto; bottom: 0; }
+
+/* -------------------------------------------- 01 the backdrop painting */
+.pyc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; display: block; }
+/* The two parallax bands are cut from the same painting, and fade out at both
+   ends rather than ending on a hard rectangular edge. */
+.pyc-bg--far { -webkit-mask-image: linear-gradient(to bottom, transparent 8%, #000 26%, #000 60%, transparent 76%);
+  mask-image: linear-gradient(to bottom, transparent 8%, #000 26%, #000 60%, transparent 76%); }
+.pyc-bg--near { -webkit-mask-image: linear-gradient(to bottom, transparent 42%, #000 58%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 42%, #000 58%, #000 96%, transparent 100%); }
+
+/* ------------------------------------------ 02 light and atmosphere */
+.pyc-shaft { position: absolute; top: -30px; height: 800px; mix-blend-mode: screen; filter: blur(9px);
+  background: linear-gradient(to bottom, rgba(232, 214, 255, 0.5), rgba(210, 190, 255, 0.2) 55%, rgba(210, 190, 255, 0)); }
+.pyc-shaft--1 { left: 330px; width: 330px; clip-path: polygon(46% 0, 66% 0, 78% 100%, 0 100%); }
+.pyc-shaft--2 { left: 470px; width: 260px; clip-path: polygon(30% 0, 44% 0, 100% 100%, 40% 100%); opacity: 0.6; }
+.pyc-shaft--3 { left: 180px; width: 300px; clip-path: polygon(70% 0, 82% 0, 46% 100%, 0 100%); opacity: 0.45; }
+.pyc-motes { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pyc-grade { position: absolute; inset: 0; background:
+  linear-gradient(to bottom, rgba(11, 10, 18, 0.42) 0%, rgba(11, 10, 18, 0) 18%, rgba(11, 10, 18, 0) 74%, rgba(11, 10, 18, 0.55) 100%),
+  radial-gradient(120% 90% at 55% 40%, rgba(11, 10, 18, 0) 45%, rgba(11, 10, 18, 0.55) 100%); }
+
+/* --------------------------------------- 03 / 04 the painted cutouts */
+.pyc-bb { position: absolute; display: block; width: auto;
+  filter: drop-shadow(0 0 2px rgba(196, 170, 255, 0.55)) drop-shadow(0 14px 18px rgba(8, 6, 20, 0.45)); }
+.pyc-bb--back { filter: brightness(0.86) drop-shadow(0 0 2px rgba(196, 170, 255, 0.5)); }
+.pyc-shadow { position: absolute; height: 40px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(6, 4, 16, 0.62), rgba(6, 4, 16, 0)); }
+.pyc-pool { position: absolute; height: 60px; border-radius: 50%; mix-blend-mode: screen;
+  background: radial-gradient(closest-side, rgba(255, 214, 140, 0.3), rgba(255, 214, 140, 0)); }
+
+/* ----------------------------------------------------- 05 the effects */
+.pyc-flash { position: absolute; border-radius: 50%; mix-blend-mode: screen;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 232, 170, 0.55) 34%, rgba(255, 200, 120, 0) 72%); }
+.pyc-fx { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: screen; }
+
+/* ------------------------------- 06 the Ink & Gold HUD, at 1440 scale */
+.pyc-banner { position: absolute; left: 48px; top: 40px; display: flex; align-items: center; gap: 18px;
+  padding: 10px 34px 12px 28px; background: var(--pyx-paper); border-bottom: 4px solid var(--pyx-accent);
+  transform: skewX(-12deg); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+.pyc-banner > * { transform: skewX(12deg); }
+.pyc-banner b { font-family: var(--pyx-serif); font-size: 46px; font-weight: 700; font-style: italic; color: var(--pyx-ink); line-height: 1; }
+.pyc-banner i { padding: 6px 12px 7px; background: var(--pyx-ink); color: var(--pyx-accent); font-family: var(--pyx-label);
+  font-weight: 700; font-style: normal; font-size: 18px; letter-spacing: 0.26em; text-transform: uppercase; }
+.pyc-ctb { position: absolute; right: 44px; top: 96px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.pyc-ctb span { position: relative; width: 46px; height: 46px; overflow: hidden; border: 2px solid var(--pyx-paper); background: #1a1526; display: block; }
+.pyc-ctb span img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pyc-ctb .pyc-cur { width: 64px; height: 64px; border: 3px solid var(--pyx-accent); box-shadow: 0 0 20px rgba(var(--pyx-accent-rgb), 0.6); }
+.pyc-ctb .pyc-foe { border-color: #b02a2a; background: #2a0f12; display: flex; align-items: center; justify-content: center;
+  font-family: var(--pyx-serif); font-size: 28px; font-weight: 700; font-style: italic; color: #d2493f; }
+.pyc-ctb span:nth-child(2) { transform: translateX(-8px); }
+.pyc-ctb span:nth-child(3) { transform: translateX(-16px); }
+.pyc-ctb span:nth-child(4) { transform: translateX(-24px); }
+.pyc-ctb span:nth-child(5) { transform: translateX(-32px); }
+.pyc-ctb span:nth-child(6) { transform: translateX(-40px); }
+.pyc-stats { position: absolute; right: 52px; bottom: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.pyc-stat { display: flex; align-items: center; gap: 14px; width: 470px; height: 62px; padding: 0 18px 0 0;
+  background: rgba(11, 10, 18, 0.84); border-left: 6px solid var(--pyx-paper); transform: skewX(-12deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45); }
+.pyc-stat > * { transform: skewX(12deg); }
+.pyc-stat:nth-child(2) { margin-right: 16px; }
+.pyc-stat:nth-child(3) { margin-right: 32px; }
+.pyc-stat--act { border-left-color: var(--pyx-accent); background: rgba(11, 10, 18, 0.94); }
+.pyc-stat__f { width: 62px; height: 62px; overflow: hidden; flex: none; margin-left: 8px; }
+.pyc-stat__f img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pyc-stat__n { width: 86px; font-family: var(--pyx-serif); font-size: 26px; font-weight: 700; font-style: italic; color: var(--pyx-paper); }
+.pyc-stat--act .pyc-stat__n { color: var(--pyx-accent); }
+.pyc-stat__v { display: flex; align-items: baseline; gap: 3px; font-family: var(--pyx-num); font-weight: 700; font-size: 28px; line-height: 1; color: var(--pyx-paper); }
+.pyc-stat__v small { font-size: 18px; font-weight: 600; color: #9fb0c4; }
+.pyc-stat__mp { color: #7fc6e8; }
+.pyc-stat__od { position: relative; width: 84px; height: 8px; margin-left: auto; background: #2a3246; }
+.pyc-stat__od i { position: absolute; inset: 0 auto 0 0; background: var(--pyx-accent); }
+/* The numeral as the live FFX HUD draws it (src/ui/common/damage-numbers.css `.dnum`). */
+.pyc-dmg { position: absolute; transform: translate(-50%, -50%); font-family: var(--pyx-label); font-weight: 700; font-style: italic;
+  font-size: 54px; line-height: 1; white-space: nowrap; color: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #d8dee8 100%); -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 1px #141420) drop-shadow(0 2px 0 #141420) drop-shadow(2px 0 0 #141420) drop-shadow(-2px 0 0 #141420)
+    drop-shadow(0 -2px 0 #141420) drop-shadow(0 4px 6px rgba(11, 10, 18, 0.6)); }
+.pyc-grain { position: absolute; inset: 0; opacity: 0.13; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>"); }
+
+/* -------------------------------------------- labels, rails, captions */
+.pyc-labels { position: absolute; left: 0; top: 0; pointer-events: none; }
+.pyc-lab { position: absolute; z-index: 12; height: 22px; padding: 0 9px; display: flex; align-items: center; gap: 8px;
+  background: rgba(11, 10, 18, 0.78); border: 1px solid rgba(244, 241, 232, 0.2); font-family: var(--pyx-label); font-weight: 500;
+  font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pyx-paper); white-space: nowrap; }
+.pyc-lab b { font-family: var(--pyx-num); font-weight: 700; font-size: 15px; letter-spacing: 0.04em; color: var(--pyx-accent); }
+.pyc-lab--sel { background: var(--pyx-accent); border-color: var(--pyx-accent); color: var(--pyx-ink); font-weight: 700; }
+.pyc-lab--sel b { color: var(--pyx-ink); }
+.pyc-lead { position: absolute; z-index: 11; width: 1px; background: rgba(244, 241, 232, 0.42); }
+.pyc-lead--sel { background: var(--pyx-accent); width: 2px; }
+.pyc-dot { position: absolute; z-index: 12; width: 7px; height: 7px; margin: -3px 0 0 -3px; border-radius: 50%;
+  background: var(--pyx-paper); box-shadow: 0 0 0 2px rgba(11, 10, 18, 0.8); }
+.pyc-dot--sel { background: var(--pyx-accent); }
+
+.pyc-caption, .pyc-note { position: absolute; z-index: 9; font-size: 13px; line-height: 1.5; color: var(--pyx-muted); }
+.pyc-caption b, .pyc-note b { font-weight: 600; color: var(--pyx-paper); }
+.pyc-caption em { font-style: normal; color: var(--pyx-accent); }
+
+.pyc-rails { position: absolute; z-index: 9; display: flex; flex-direction: column; gap: 4px; }
+.pyc-rl { display: flex; align-items: center; gap: 5px; height: 27px; padding: 0 10px 0 0; cursor: pointer;
+  background: linear-gradient(90deg, rgba(30, 27, 48, 0.86), rgba(15, 13, 25, 0.66)); border: 1px solid var(--pyx-line);
+  border-left: 3px solid rgba(244, 241, 232, 0.34); font-family: var(--pyx-label); font-weight: 500; font-size: 13px;
+  color: var(--pyx-paper); white-space: nowrap; overflow: hidden; }
+.pyc-rl:hover, .pyc-rl:focus-visible { border-left-color: var(--pyx-accent); outline: none; }
+.pyc-rl > b { flex: none; width: 28px; text-align: center; font-family: var(--pyx-num); font-weight: 700; font-size: 16px; color: var(--pyx-accent); }
+.pyc-rl__n { flex: none; width: 118px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pyx-muted); }
+/* The tail gives way first if a rail ever runs long, so the events themselves are
+   never the thing that gets chopped. */
+.pyc-rl__p { flex: 0 1 auto; min-width: 0; margin-left: auto; padding-left: 12px; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--pyx-text); font-weight: 400; color: var(--pyx-muted); }
+.pyc-ev { flex: none; }
+.pyc-ev { padding: 1px 6px 2px; border: 1px solid rgba(244, 241, 232, 0.2); background: rgba(244, 241, 232, 0.04); }
+.pyc-ev b { font-weight: 700; color: var(--pyx-accent); }
+.pyc-ar { color: var(--pyx-muted); }
+
+/* ------------------------------------------ the inventory at explode 1 */
+.pyc-inv { padding: 0 2px 28px; }
+.pyc-invhead { display: flex; align-items: baseline; gap: 10px; padding: 0 0 8px; }
+.pyc-invhead__n { font-family: var(--pyx-num); font-weight: 700; font-size: 26px; line-height: 1; color: var(--pyx-paper); }
+.pyc-invhead__t { font-family: var(--pyx-label); font-weight: 700; font-size: 13px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--pyx-accent); }
+.pyc-key { display: flex; gap: 16px; margin-left: auto; font-size: 13px; color: var(--pyx-muted); }
+.pyc-key span { display: flex; align-items: center; gap: 6px; }
+.pyc-key__u { width: 13px; height: 13px; border: 1px solid var(--pyx-accent); box-shadow: 0 0 0 1px var(--pyx-accent);
+  background: rgba(var(--pyx-accent-rgb), 0.18); }
+.pyc-key em { padding: 0 3px; background: rgba(11, 10, 18, 0.86); border: 1px solid rgba(244, 241, 232, 0.3);
+  font-family: var(--pyx-num); font-weight: 700; font-style: normal; font-size: 13px; line-height: 15px; color: var(--pyx-paper); }
+
+.pyc-grp { display: flex; align-items: center; gap: 8px; margin: 14px 0 7px; padding-top: 7px; border-top: 1px solid var(--pyx-line); }
+.pyc-grp i { width: 8px; height: 8px; flex: none; }
+.pyc-grp span { font-family: var(--pyx-label); font-weight: 700; font-size: 13px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--pyx-paper); }
+/* The count sits next to the name it counts, not out at the far edge — the
+   adjacency lesson from sites A and B. A hairline takes up the rest of the row. */
+.pyc-grp b { font-family: var(--pyx-num); font-weight: 700; font-size: 16px; color: var(--pyx-paper); }
+.pyc-grp::after { content: ''; flex: 1; height: 1px; background: var(--pyx-line); }
+
+.pyc-tiles { display: flex; flex-wrap: wrap; gap: 8px 6px; }
+.pyc-t { position: relative; flex: none; width: 92px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 4px 3px 5px; background: rgba(244, 241, 232, 0.045); border: 1px solid rgba(244, 241, 232, 0.1); cursor: pointer; }
+.pyc-t:focus-visible { outline: 2px solid var(--pyx-accent); outline-offset: 1px; }
+.pyc-t__im { position: relative; width: 100%; height: 52px; display: flex; align-items: flex-end; justify-content: center; }
+.pyc-t__im img { display: block; max-height: 52px; max-width: 84px; width: auto; }
+.pyc-t--wide .pyc-t__im img, .pyc-t--plate .pyc-t__im img { width: 84px; height: 48px; object-fit: cover; max-height: none; }
+.pyc-t--face .pyc-t__im img { width: 46px; height: 46px; object-fit: cover; object-position: 50% 12%; }
+.pyc-t__im--none { align-items: center; }
+.pyc-t__im--none i { width: 26px; height: 3px; background: var(--pyx-muted); transform: skewX(-12deg); }
+/* A name is never clipped to fit its tile: the few three-line ids (`ch5-ffx2-
+   vegnagun-tail`) make their own row a little taller instead. */
+.pyc-t__n { width: 100%; min-height: 30px; font-size: 13px; line-height: 15px; text-align: center;
+  color: var(--pyx-muted); overflow-wrap: anywhere; }
+.pyc-t--use { border-color: var(--pyx-accent); box-shadow: 0 0 0 1px var(--pyx-accent), 0 0 16px rgba(var(--pyx-accent-rgb), 0.3);
+  background: rgba(var(--pyx-accent-rgb), 0.1); }
+.pyc-t--use .pyc-t__n { color: var(--pyx-paper); }
+.pyc-t--sel { outline: 2px solid var(--pyx-paper); outline-offset: 1px; }
+.pyc-t em { position: absolute; right: 0; bottom: 0; padding: 0 3px; background: rgba(11, 10, 18, 0.86);
+  font-family: var(--pyx-num); font-weight: 700; font-style: normal; font-size: 13px; line-height: 15px; color: var(--pyx-paper); }
+
+/* ------------------------------ the detail card's pose strip (site C) */
+.pyc-poses { display: flex; gap: 5px; margin: 10px 0 8px; }
+.pyc-poses figure { margin: 0; width: 54px; text-align: center; }
+.pyc-poses div { height: 64px; display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(244, 241, 232, 0.05); border: 1px solid rgba(244, 241, 232, 0.1); }
+.pyc-poses img { max-width: 50px; max-height: 60px; display: block; }
+.pyc-poses figcaption { margin-top: 3px; font-family: var(--pyx-label); font-weight: 500; font-size: 13px; color: var(--pyx-muted); }
+.pyc-poses .pyc-poses--on div { border-color: var(--pyx-accent); background: rgba(var(--pyx-accent-rgb), 0.14); }
+.pyc-poses .pyc-poses--on figcaption { color: var(--pyx-accent); }
+.pyc-measure { font-size: 13px; line-height: 1.45; color: var(--pyx-muted); }
+.pyc-measure b { font-family: var(--pyx-num); color: var(--pyx-paper); }

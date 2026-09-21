@@ -133,3 +133,55 @@
 
 [data-pyx-theme='cinema'] .pyx-hint,
 [data-pyx-theme='cinema'] .pyx-credits { font-size: 13px; color: var(--pyx-muted); }
+
+/* ---------------------------------------------------------------------------
+ * Added when site C was wired to this theme. Everything below is scoped to
+ * `[data-pyx-theme='cinema']`, so sites A and B cannot be touched by it.
+ * Ported from the approved frames' `c.css` (`.explode`, `.card`, `.tip`).
+ * ------------------------------------------------------------------------- */
+
+/* The slider's two label rows each need a row layout of their own, or the
+   caps labels run into each other ("PULL IT APARTONE FINISHED FRAME"). */
+[data-pyx-theme='cinema'] .pyx-slider { padding: 9px 22px 10px 26px; }
+[data-pyx-theme='cinema'] .pyx-slider__top { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; white-space: nowrap; }
+[data-pyx-theme='cinema'] .pyx-slider__what { color: var(--pyx-accent); letter-spacing: 0.3em; }
+[data-pyx-theme='cinema'] .pyx-slider__state { font-family: var(--pyx-serif); font-weight: 700; font-style: italic; font-size: 21px;
+  letter-spacing: 0; text-transform: none; color: var(--pyx-paper); }
+[data-pyx-theme='cinema'] .pyx-slider__ends { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 3px; }
+[data-pyx-theme='cinema'] .pyx-end { font-family: var(--pyx-label); font-weight: 700; font-size: 13px; letter-spacing: 0.2em;
+  text-transform: uppercase; white-space: nowrap; color: var(--pyx-paper); }
+[data-pyx-theme='cinema'] .pyx-end--dim { color: var(--pyx-muted); font-weight: 500; }
+[data-pyx-theme='cinema'] .pyx-slider__plain { font-size: 13px; color: var(--pyx-muted); }
+[data-pyx-theme='cinema'] .pyx-slider__side { flex: 0 0 150px; display: flex; flex-direction: column; align-items: flex-end;
+  border-left: 1px solid var(--pyx-line); padding-left: 18px; }
+[data-pyx-theme='cinema'] .pyx-pct { line-height: 0.92; }
+[data-pyx-theme='cinema'] .pyx-pct small { font-size: 20px; color: var(--pyx-accent); margin-left: 2px; }
+[data-pyx-theme='cinema'] .pyx-slider__ctl { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+
+/* The detail card's eyebrow row. Site C's honesty note is a sentence, not a
+   word, so the row wraps it onto its own line rather than letting it overflow. */
+[data-pyx-theme='cinema'] .pyx-card__in { padding: 14px 20px 16px; }
+[data-pyx-theme='cinema'] .pyx-card__eb { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+[data-pyx-theme='cinema'] .pyx-honest { font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--pyx-muted); border: 1px solid var(--pyx-line); padding: 1px 7px 2px; }
+[data-pyx-theme='cinema'] .pyx-card__kind { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--pyx-muted); }
+[data-pyx-theme='cinema'] .pyx-card__tabtext { margin: 10px 0 0; font-size: 14px; line-height: 1.45; }
+/* The fact row is two columns in a 320px card: without a gutter the two cells'
+   sentences run into each other. */
+[data-pyx-theme='cinema'] .pyx-facts-row { gap: 8px 16px; padding: 8px 0 9px; }
+[data-pyx-theme='cinema'] .pyx-facts-row > div { min-width: 0; overflow-wrap: anywhere; }
+[data-pyx-theme='cinema'] .pyx-facts-row__v { line-height: 1.35; }
+
+/* The inventory's hover label (`c.css` `.tip`). */
+[data-pyx-theme='cinema'] .pyx-tip { padding: 10px 14px 12px; background: rgba(11, 10, 18, 0.96);
+  border-left: 4px solid var(--pyx-accent); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65); }
+[data-pyx-theme='cinema'] .pyx-tip__n { font-family: var(--pyx-serif); font-weight: 700; font-style: italic; font-size: 22px;
+  line-height: 1.1; color: var(--pyx-paper); }
+[data-pyx-theme='cinema'] .pyx-tip__f { margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--pyx-muted); }
+[data-pyx-theme='cinema'] .pyx-tip__c { margin-top: 4px; font-family: var(--pyx-label); font-size: 13px; color: var(--pyx-accent); }
+
+/* The title is one line in the approved frames; 22% of the canvas breaks it in
+   two. 26% is the widest it can be without reaching the switcher at 29.4%, so
+   the name comes down a couple of points to fit on that line. */
+[data-pyx-theme='cinema'] .pyx-title { width: 26%; }
+[data-pyx-theme='cinema'] .pyx-title__name { font-size: clamp(22px, 2.35vw, 38px); white-space: nowrap; }
