@@ -1,0 +1,48 @@
+{
+  "chapter": "macalania",
+  "game": "ffx",
+  "status": "options — nothing built, nothing ships (AGENTS.md hard rule 9)",
+  "sources": [
+    "research/ffx-seymour-anima-macalania.md",
+    "research/visual-bible.md §1.8 (Seymour Flux, cross-referenced for base Seymour), §1.13 (aeons)",
+    "docs/ART-PIPELINE.md (facing contract v3, style/quality tags)"
+  ],
+  "rows": {
+    "backdrop": {
+      "question": "Which light treatment for the antechamber outside the Chamber of the Fayth?",
+      "canon_notes": "Ice-as-masonry hall on frozen Lake Macalania per research §9.1: cold end (glacier blue/pale cyan/white with green core) + warm end (brazier gold, temple red, Guado ochre), Chamber-of-the-Fayth door glowing in the background, depth through the ice.",
+      "options": {
+        "A": "Warm brazier gold dominant, symmetrical wide hall, twin braziers foreground, calm and reverent.",
+        "B": "Cold blue dominant, deep one-point perspective toward a glowing central spire (reads as the Chamber door), most 'ice' of the three.",
+        "C": "Twilight/dusk side-lighting, warm sunset glow through the ice at the far door, most atmospheric depth."
+      },
+      "off_canon_seen": "None disqualifying. B reads more like a crystal spike than architecture — closest to 'ice pretending to be masonry' is A/C, which keep visible column-and-arch structure; B is the most purely abstract of the three."
+    },
+    "boss_seymour": {
+      "question": "Which Seymour (robed, human form — NOT the Flux mount) reads best for the tutorial-chapter boss portrait?",
+      "canon_notes": "research §9.2 + visual-bible line 370: purple eyes, light blue/pale hair with two long locks down the back, dark blue robe with red trim and green sash, open above the waist exposing a tattooed chest, pointed (not elf) ears, facial veins. No staff, no Overdrive in this fight.",
+      "options": {
+        "A": "Cold blue lighting, full stance in front of an ice/gold rosette motif (background bleed from the backdrop render, disregard — boss renders are meant to cut out to transparent for the engine).",
+        "B": "Arms crossed, warm brazier rim light, most 'courteous-then-obscene' read per the writing-bible direction.",
+        "C": "Three-quarter turn, cold cyan backlight, highest contrast."
+      },
+      "off_canon_seen": "All three keep the canon palette and the two hair locks. Ears read pointed but not strongly 'rounded/human' as the research insists (they read closer to a full Guado's elf ear) — flag for the painter pass if this option is picked. None show a staff (correct — he doesn't carry one in this fight)."
+    },
+    "cast": {
+      "question": "Which Guado Guardian reads as 'furniture that moves' — subordinate in silhouette to Seymour, and legible for the steal-a-potion gag?",
+      "canon_notes": "research §9.3 + visual-bible: tall and narrow, long pointed fingers, elf-like ears, pronounced veining, Guado ochre robe with green trim, visibly-full belt pouch for the steal gag. Two identical retainers flank Seymour in the real encounter.",
+      "options": {
+        "A": "RE-ROLLED once (hard rule: at most one re-roll per item). The first roll under `1other` produced an off-canon fox/kemonomimi creature with an animal mask — not a Guado at all — and was discarded rather than shipped as an option. This is the reroll under `1boy`: even lighting, spear held upright, face and pointed ears visible, blue-toned Guado skin.",
+          "B": "Masked/helmeted reading with a lantern the guardian carries — warm light, staff planted. Reads as a temple guard archetype but the face is fully hidden, which loses the steal-a-potion comedy beat the research calls out as the guardian's one visual job.",
+          "C": "Hooded/masked cool-rim silhouette. Strongest 'furniture that moves' read of the three but also fully hides the face; cutout has a small white artifact bottom-left that a real pass would need to clean up."
+      },
+      "off_canon_seen": "A's first roll (discarded) was a fox-eared kemonomimi creature — not shipped, not counted as an option. B and C drifted toward masked/helmeted temple-guard designs rather than the research's bare-faced 'elf-like ears, pronounced veining' Guado look; A is the closest to canon. None carry a visibly full belt pouch — the steal-gag detail would need a follow-up pass regardless of which is picked."
+    },
+    "cast_anima": {
+      "question": "No new options needed — may the boss reuse the already-approved aeon Anima painting?",
+      "canon_notes": "research §9.4 / §0.4 states outright: 'Seymour's Anima uses a different, notably shorter 3D model than Yuna's, Belgemine's or Dark Anima's... these are two different sizes of the same creature, and the Macalania one is the smaller.' Same creature, same canon design (towering two-part figure, bound upper half, horned-demon lower half, fayth medallion with a glowing halo) — only the in-game model scale differs.",
+      "recommendation": "Reuse public/art/characters/anima/idle.png (board-approved 2026-09-19) at a smaller on-screen scale for this fight rather than rendering a new painting. No new render was queued for her.",
+      "off_canon_seen": "None — this is the approved painting, unchanged."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "seed": 501001,
+  "prompt": "no humans, scenery, final fantasy x, macalania temple, chamber of the fayth antechamber, ice temple interior, translucent ice architecture, ice columns, glacier blue, pale cyan, guado ochre accents, symmetrical wide hall, warm gold brazier light glowing through ice, glowing door in background, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-21T17:01:27.203Z"
+}
