@@ -70,10 +70,13 @@ describe('1. a small change gets a focused check', () => {
 });
 
 describe('2. a shared-system change gets broader coverage', () => {
-  it('a CTB scheduler change is a deep review of every FFX chapter, required before deploying', () => {
+  it('a CTB scheduler change is a deep review of every FFX chapter, focused before the deploy and deep after it', () => {
     const p = plan(['src/battle/ffx/ctb.ts']);
     expect(p.review).toBe('deep');
-    expect(p.deepBeforeDeploy).toBe(true);
+    // RULE B (Bailey, 2026-09-21): only the save-data class still holds a build for a deep review.
+    expect(p.deepBeforeDeploy).toBe(false);
+    expect(p.focusedBeforeDeploy).toBe(true);
+    expect(p.deepAfterDeploy).toBe(true);
     expect(p.chapters).toEqual(FFX);
     expect(p.obligations).toEqual(['live', 'focused', 'deep']);
     expect(p.checks).toEqual(expect.arrayContaining(['CHK-022', 'CHK-023']));
@@ -93,8 +96,9 @@ describe('2. a shared-system change gets broader coverage', () => {
     expect(plan([path]).review).toBe('deep');
   });
 
-  it('a save-schema change selects the upgrade check', () => {
+  it('a save-schema change selects the upgrade check, and is the one class still reviewed deeply before the deploy', () => {
     expect(plan(['src/app/SaveData.ts']).checks).toContain('CHK-024');
+    expect(plan(['src/app/SaveData.ts']).deepBeforeDeploy).toBe(true);
   });
 
   it('an unknown change set, or a product path no rule knows, is never waved through', () => {
@@ -121,9 +125,12 @@ describe('2. a shared-system change gets broader coverage', () => {
 });
 
 const BUILD = { mainSha: 'abc1234', bundle: 'Bund1e', artifactHash: 'f'.repeat(64) };
+// Dated after the owner's release rules came in (2026-09-21), so every candidate
+// review here carries verdicts.ship and its reasons (RULE A, RUBRIC section 3).
 const report = (over: Partial<CriticReport>): CriticReport => ({
   rubricVersion: 2, review: 'focused', date: '2026-09-26T12:00:00.000Z', build: BUILD,
-  verdicts: { deployment: 'NOT APPLICABLE', changedArea: 'PASS', milestone: 'not assessed' },
+  verdicts: { deployment: 'NOT APPLICABLE', changedArea: 'PASS', milestone: 'not assessed', ship: 'SHIP' },
+  shipReasons: ['no critical defect and no regression against the live build'],
   checks: [{ id: 'CHK-015', result: 'PASS', evidence: ['real Esc and H key presses on the production preview'] }],
   ...over,
 });
@@ -259,7 +266,7 @@ describe('the single weighted score and its gates', () => {
   });
 
   const accepted = (): CriticReport => report({
-    review: 'milestone', verdicts: { deployment: 'PASS', changedArea: 'PASS', milestone: 'accepted' }, categories: scores(9.7),
+    review: 'milestone', verdicts: { deployment: 'PASS', changedArea: 'PASS', milestone: 'accepted', ship: 'SHIP' }, categories: scores(9.7),
     checks: [{ id: 'CHK-017', result: 'PASS', mandatory: true, evidence: ['verify-live --full'] }],
     issues: [{ id: 'PR-0001', severity: 'polish', status: 'open' }],
     encounters: ALL.map((id) => ({ id, completedRealFlow: true })),

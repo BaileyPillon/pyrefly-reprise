@@ -14,8 +14,8 @@
  *   --message=     extra free-text appended to the gh-pages commit message
  *   --claim=milestone  this deploy asks for finished-milestone acceptance
  *   --minimum=deep     raise the planned review (nothing can lower it)
- *   --owner-override="<the owner's own words>"  ship past the "no passing
- *                  deep report" refusal below. Off by default; requires at
+ *   --owner-override="<the owner's own words>"  ship past any refusal of the
+ *                  release gate below. Off by default; requires at
  *                  least 8 characters of the owner's own words (a bare flag
  *                  or a too-short value is refused before anything runs).
  *                  Nothing else is relaxed — tsc/vitest, the dirty-tree check,
@@ -28,16 +28,22 @@
  *
  * Pipeline: preflight -> `vite build` into dist-release/ -> hash and
  * decode-check every shipped file into `artifact-manifest.json` -> plan the
- * review this change needs (tools/critic-plan.mjs) and refuse if it needs deep
- * evidence before deploying and none is on record -> re-init dist-release as a
+ * review this change needs (tools/critic-plan.mjs) and apply the owner's
+ * release gate: refuse when this commit has no validated focused or deep
+ * report, when that report's ship verdict is HOLD, when a save-data change has
+ * only a focused report, or when the deep-review debt is already at its cap
+ * (critic/RUBRIC.md sections 3 and 4) -> re-init dist-release as a
  * throwaway single-commit `gh-pages` git repo and force-push it -> kick a
  * Pages build and poll it to completion -> verify that the live URL serves
  * this exact artifact, byte for byte (tools/artifact-manifest.mjs) -> append a
  * line to docs/deploys.log -> leave a `critic/pending/<mainShortSha>.json`
  * marker listing the separate review obligations this build owes.
  *
- * Owner's rule (critic/RUBRIC.md, policy v2, 2026-09-20): every deployed build
- * is evaluated, and the depth of the review follows what changed. Every run
+ * Owner's rules (critic/RUBRIC.md, policy v2, 2026-09-20): every deployed build
+ * is evaluated, and the depth of the review follows what changed; and
+ * 2026-09-21 ("A, B, and C together please."): a build ships when it is better
+ * than the live one, and a shared system's DEEP review runs after the deploy.
+ * Every run
  * (--dry-run included) starts by printing what earlier live builds still owe
  * and the review this candidate needs. Only a validated report, applied by
  * tools/critic-clear.mjs, settles an obligation; a deep review still owed by
@@ -67,13 +73,14 @@ import { classifyPorcelain } from './deploy-classify.mjs';
 import {
   archiveMarker,
   buildPendingMarker,
+  deepOwedBuilds,
   formatPendingWarningBlock,
   readPendingMarkers,
   supersedeMarkers,
   writePendingMarker,
 } from './critic-pending.mjs';
 import { lastDeployedSha, planForRepo, readLedger, writeLedger } from './critic-plan.mjs';
-import { loadPolicy, validateReport } from './critic-policy.mjs';
+import { loadPolicy, releasePolicy, validateReport } from './critic-policy.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist-release');
@@ -86,30 +93,44 @@ const PENDING_DIR = join(ROOT, 'critic', 'pending');
 const CLEARED_DIR = join(ROOT, 'critic', 'cleared');
 const ARTIFACTS_DIR = join(ROOT, 'critic', 'artifacts');
 
-/** A validated deep or milestone report for this commit whose changed area passed. */
-function deepEvidenceFor(mainSha) {
-  const policy = loadPolicy(ROOT);
+/**
+ * The validated candidate review the release gate is allowed to read: a
+ * focused, deep or milestone report for THIS commit, with the ship verdict it
+ * carries (RULE A, RUBRIC section 3). A deep or milestone report outranks a
+ * focused one, and among equals the newest date wins. A report from before the
+ * rules came in carries no `verdicts.ship`, so its changed-area verdict stands
+ * in — a FAIL or an UNVERIFIED reads as HOLD, exactly as the old gate did.
+ * Pure given the filesystem it reads.
+ */
+export function shipEvidenceFor(root, mainSha) {
+  const policy = loadPolicy(root);
+  const rank = { focused: 1, deep: 2, milestone: 3 };
+  let best = null;
   for (const dir of ['reviews', 'rounds']) {
-    const full = join(ROOT, 'critic', dir);
+    const full = join(root, 'critic', dir);
     if (!existsSync(full)) continue;
     for (const f of readdirSync(full).filter((n) => n.endsWith('.json'))) {
       let report;
       try { report = JSON.parse(readFileSync(join(full, f), 'utf8')); } catch { continue; }
       const sha = report.build?.mainSha;
       if (!sha || !(sha.startsWith(mainSha) || mainSha.startsWith(sha))) continue;
-      if (!['deep', 'milestone'].includes(report.review) || report.verdicts?.changedArea !== 'PASS') continue;
-      if (validateReport(report, policy).length === 0) return `critic/${dir}/${f}`;
+      if (!rank[report.review]) continue;
+      if (validateReport(report, policy).length !== 0) continue;
+      const ship = report.verdicts?.ship ?? (report.verdicts?.changedArea === 'PASS' ? 'SHIP' : 'HOLD');
+      const found = { path: `critic/${dir}/${f}`, review: report.review, ship, date: report.date ?? '' };
+      if (!best || rank[found.review] > rank[best.review] || (rank[found.review] === rank[best.review] && found.date > best.date)) best = found;
     }
   }
-  return null;
+  return best ? { path: best.path, review: best.review, ship: best.ship } : null;
 }
 
 /**
  * The newest deep or milestone report on record for this commit, whatever its
  * verdict — informational only, used to annotate an owner override with what
  * the critic actually found. Never used to decide whether the override
- * applies: `resolveDeepGate` decides that from `deepEvidenceFor`, which
- * requires a validated PASS. Pure given the filesystem it reads.
+ * applies: `resolveReleaseGate` decides that from `shipEvidenceFor`, which
+ * requires a validated report whose ship verdict is SHIP. Pure given the
+ * filesystem it reads.
  */
 export function latestDeepReportFor(root, mainSha) {
   let best = null;
@@ -151,37 +172,75 @@ export function parseOwnerOverride(raw) {
 }
 
 /**
- * What to do when a shared-system change has no validated deep report with a
- * passing changed area for this commit. Pure: the caller does the actual
- * fail()/log() side effects. Without `ownerOverrideWords` this is always a
- * hard refusal — nothing here can settle a review, it only decides whether
- * the deploy is allowed to continue past the refusal.
+ * The release gate (Bailey, 2026-09-21: "A, B, and C together please."). Pure:
+ * the caller does the actual fail()/log() side effects. It answers one
+ * question — may this candidate go public now? — from three refusals:
+ *
+ *   1. a change to a shipped file with no validated focused or deep report for
+ *      this commit (RULE B: focused review BEFORE the deploy, deep after it);
+ *   2. a candidate review whose ship verdict is HOLD (RULE A: a critical the
+ *      change introduced, a regression against live, or an unknown tag on a
+ *      critical). Disclosed majors do not appear here;
+ *   3. the third deploy while a deep review is still owed (RULE B's cap).
+ *
+ * The save-data class (`deepBeforeDeploy`) demands that the report be a deep
+ * one. Only the owner's own words turn the refusals into a warning, and they
+ * settle nothing (RULE C, unchanged from commit d333b06).
  */
-export function resolveDeepGate({ deepBeforeDeploy, evidence, ownerOverrideWords }) {
-  if (!deepBeforeDeploy || evidence) return { action: 'proceed' };
-  if (!ownerOverrideWords) {
-    return {
-      action: 'fail',
-      message: 'this change touches a shared system, so it needs a deep review of the production candidate BEFORE it goes public, and no validated deep report with a passing changed area exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md, "When the critic runs")',
-    };
+export function resolveReleaseGate({
+  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords,
+}) {
+  const refusals = [];
+  if (focusedBeforeDeploy || deepBeforeDeploy) {
+    if (!evidence) {
+      refusals.push(deepBeforeDeploy
+        ? 'this change touches save data, the one class that still needs a DEEP review of the production candidate before it goes public, and no validated deep report for this commit exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md section 4)'
+        : 'a shipped file changed, so this candidate needs a review of its changed area before it goes public, and no validated focused or deep report for this commit exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md section 4)');
+    } else if (evidence.ship !== 'SHIP') {
+      refusals.push(`the ${evidence.review} review of this candidate (${evidence.path}) says HOLD: a critical defect this change introduced, a regression against the live build, or an unknown tag on a critical (critic/RUBRIC.md section 3)`);
+    } else if (deepBeforeDeploy && evidence.review === 'focused') {
+      refusals.push(`this change touches save data, so a focused review (${evidence.path}) is not enough: the save-data class needs a deep review of the production candidate before it goes public (critic/RUBRIC.md section 4)`);
+    }
   }
-  return { action: 'proceed-with-warning', warningLines: formatOwnerOverrideWarning(ownerOverrideWords) };
+  if (deepOwed.length >= maxDeploysWithDeepOwed) {
+    refusals.push(`${deepOwed.length} live build(s) already owe a deep review (${deepOwed.join(', ')}): at most ${maxDeploysWithDeepOwed} deploys may go out while a deep review is owed, so this one refuses until one is settled with node tools/critic-clear.mjs (critic/RUBRIC.md section 4)`);
+  }
+  if (!refusals.length) return { action: 'proceed', refusals };
+  if (!ownerOverrideWords) return { action: 'fail', message: refusals.join('; '), refusals };
+  return { action: 'proceed-with-warning', warningLines: formatOwnerOverrideWarning(ownerOverrideWords, refusals), refusals };
 }
 
 /** The loud warning block printed (and, on --dry-run, previewed) for an owner override. */
-export function formatOwnerOverrideWarning(words) {
+export function formatOwnerOverrideWarning(words, refusals = []) {
   const bar = '!'.repeat(78);
   return [
     bar,
     'WARNING: OWNER OVERRIDE of the deploy gate',
     `  "${words}"`,
-    '  No validated deep report with a passing changed area exists for this commit.',
+    ...(refusals.length ? ['  The deploy would otherwise refuse, because:'] : []),
+    ...refusals.map((r) => `    - ${r}`),
     '  The owner has chosen to ship anyway. Nothing else is relaxed, and this does',
     '  not settle any review: every obligation (live, focused, deep, milestone)',
     '  stays PENDING, and the next candidate still has to address the open',
     '  changed-area issues.',
     bar,
   ];
+}
+
+/** `resolveReleaseGate` fed from this repo: the plan, the candidate's report and the outstanding deep reviews. */
+function releaseGateFor(plan, mainSha) {
+  const release = releasePolicy(loadPolicy(ROOT));
+  const evidence = plan.focusedBeforeDeploy || plan.deepBeforeDeploy ? shipEvidenceFor(ROOT, mainSha) : null;
+  const deepOwed = deepOwedBuilds(readPendingMarkers(PENDING_DIR).filter((m) => !m.parseError && m.mainSha !== mainSha));
+  const gate = resolveReleaseGate({
+    focusedBeforeDeploy: plan.focusedBeforeDeploy,
+    deepBeforeDeploy: plan.deepBeforeDeploy,
+    evidence,
+    deepOwed,
+    maxDeploysWithDeepOwed: release.maxDeploysWithDeepOwed,
+    ownerOverrideWords: OWNER_OVERRIDE_WORDS,
+  });
+  return { gate, evidence, deepOwed };
 }
 
 /**
@@ -194,9 +253,20 @@ export function formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount,
   return `${overrideUsed ? `${base}\toverride=owner` : base}\n`;
 }
 
+/** The release rules in one line: what has to happen before this deploy, and what after it. */
+export function formatWhenLine(plan) {
+  const when = [];
+  if (plan.focusedBeforeDeploy && !plan.deepBeforeDeploy) when.push('FOCUSED review of the candidate BEFORE this deploy');
+  if (plan.deepBeforeDeploy) when.push('DEEP review of the candidate BEFORE this deploy (save-data class or milestone claim)');
+  if (plan.deepAfterDeploy) when.push('DEEP review AFTER the deploy, on the live build');
+  if (!when.length) when.push('no candidate review: no shipped file changed');
+  return `  when: ${when.join('; ')}`;
+}
+
 function printPlan(plan) {
   log(`critic plan: ${plan.review.toUpperCase()} review; this build will owe ${plan.obligations.join(' + ')}`);
   for (const reason of plan.reasons) log(`  because: ${reason}`);
+  log(formatWhenLine(plan));
   log(`  systems: ${plan.systems.join('; ') || 'none'} | chapters: ${plan.chapters.join(', ') || 'none'}`);
   log(`  checks: ${plan.checks.join(' ')}`);
 }
@@ -362,17 +432,14 @@ async function main() {
     // build exists, so the real plan can only be deeper than this one.
     const dryPlan = planForRepo({ root: ROOT, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped });
     printPlan(dryPlan);
-    if (dryPlan.deepBeforeDeploy) {
-      const evidence = deepEvidenceFor(mainSha);
-      const gate = resolveDeepGate({ deepBeforeDeploy: true, evidence, ownerOverrideWords: OWNER_OVERRIDE_WORDS });
-      if (gate.action === 'fail') {
-        log(`DRY RUN: would refuse to deploy — ${gate.message}`);
-      } else if (gate.action === 'proceed-with-warning') {
-        for (const line of gate.warningLines) log(line);
-        log('DRY RUN: would proceed under the owner override above');
-      } else {
-        log(`DRY RUN: deep evidence on record for this candidate: ${evidence}`);
-      }
+    const dryGate = releaseGateFor(dryPlan, mainSha);
+    if (dryGate.gate.action === 'fail') {
+      log(`DRY RUN: would refuse to deploy — ${dryGate.gate.message}`);
+    } else if (dryGate.gate.action === 'proceed-with-warning') {
+      for (const line of dryGate.gate.warningLines) log(line);
+      log('DRY RUN: would proceed under the owner override above');
+    } else {
+      log(`DRY RUN: the release gate would let this build go out (${dryGate.evidence ? `${dryGate.evidence.review} review ${dryGate.evidence.path} says ${dryGate.evidence.ship}` : 'no candidate review required'})`);
     }
     log(
       `--dry-run: stopping after the dirty-tree check (${dirty.buildRelevant.length} build-relevant, ${dirty.fleetNoise.length} fleet-noise). Nothing was built, pushed or deployed.`,
@@ -435,27 +502,26 @@ async function main() {
   let ownerOverrideUsed = false;
   let ownerOverrideReportPath = null;
   let ownerOverrideChangedArea = null;
-  if (plan.deepBeforeDeploy) {
-    const evidence = deepEvidenceFor(mainSha);
-    const gate = resolveDeepGate({ deepBeforeDeploy: true, evidence, ownerOverrideWords: OWNER_OVERRIDE_WORDS });
-    if (gate.action === 'fail') {
-      fail(`${gate.message} for ${mainSha}`);
-    } else if (gate.action === 'proceed-with-warning') {
-      for (const line of gate.warningLines) log(line);
-      const latest = latestDeepReportFor(ROOT, mainSha);
-      ownerOverrideUsed = true;
-      ownerOverrideReportPath = latest ? latest.path : null;
-      ownerOverrideChangedArea = latest ? latest.changedArea : null;
-      log(
-        latest
-          ? `nearest report on record for ${mainSha}: ${latest.path} (changed area ${latest.changedArea ?? 'missing'}) — proceeding under owner override`
-          : `no deep or milestone report at all exists for ${mainSha} — proceeding under owner override`,
-      );
-    } else {
-      log(`deep evidence on record for this candidate: ${evidence}`);
-    }
-  } else if (OWNER_OVERRIDE_WORDS) {
-    log('--owner-override was set but this candidate does not need deep evidence before deploying: nothing to override');
+  const { gate, evidence, deepOwed } = releaseGateFor(plan, mainSha);
+  if (deepOwed.length) log(`deep review owed by ${deepOwed.length} live build(s): ${deepOwed.join(', ')}`);
+  if (gate.action === 'fail') {
+    fail(`${gate.message} (build ${mainSha})`);
+  } else if (gate.action === 'proceed-with-warning') {
+    for (const line of gate.warningLines) log(line);
+    const latest = latestDeepReportFor(ROOT, mainSha);
+    ownerOverrideUsed = true;
+    ownerOverrideReportPath = (latest ?? evidence)?.path ?? null;
+    ownerOverrideChangedArea = latest ? latest.changedArea : null;
+    log(
+      latest
+        ? `nearest deep report on record for ${mainSha}: ${latest.path} (changed area ${latest.changedArea ?? 'missing'}) — proceeding under owner override`
+        : `no deep or milestone report at all exists for ${mainSha} — proceeding under owner override`,
+    );
+  } else {
+    log(evidence
+      ? `release gate: the ${evidence.review} review ${evidence.path} says ${evidence.ship}`
+      : 'release gate: no candidate review is required for this change');
+    if (OWNER_OVERRIDE_WORDS) log('--owner-override was set but nothing refused this deploy: nothing to override');
   }
 
   // ---- 3. Publish dist-release as a fresh gh-pages repo --------------------
@@ -632,7 +698,8 @@ async function main() {
 }
 
 // Guarded so tests can import this module's pure helper functions (parseOwnerOverride,
-// resolveDeepGate, formatOwnerOverrideWarning, formatDeployLogLine, latestDeepReportFor)
+// resolveReleaseGate, shipEvidenceFor, formatOwnerOverrideWarning, formatWhenLine,
+// formatDeployLogLine, latestDeepReportFor)
 // without triggering a real deploy — same pattern as critic-status.mjs / critic-plan.mjs.
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main().catch((err) => {

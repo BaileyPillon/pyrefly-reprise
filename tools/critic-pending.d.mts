@@ -108,6 +108,13 @@ export declare function applyReport(
 
 export declare function allSettled(marker: { obligations?: Obligation[]; [key: string]: unknown }): boolean;
 
+/**
+ * Every build that still owes a deep or milestone review, counting both each
+ * marker's own build and the builds whose debt it carries (RULE B's cap of
+ * `release.maxDeploysWithDeepOwed` deploys with a deep review owed).
+ */
+export declare function deepOwedBuilds(markers: (PendingMarker | PendingMarkerEntry)[]): string[];
+
 export declare function supersedeMarkers(
   markers: PendingMarker[],
   newSha: string,

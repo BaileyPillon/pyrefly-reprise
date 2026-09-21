@@ -31,7 +31,7 @@ Platform goals carry over: keyboard, mouse, gamepad and touch; Chrome, Edge, Fir
 
 Use the latest explicit owner decision on the same subject. `docs/PRODUCT-BRIEF.md` is a draft: its inferred lines are not orders. An approved adaptation is an exception with its exact scope, and is not penalised again for differing from the reference it adapts; it does not erase an observed usability defect.
 
-## 3. Three separate verdicts
+## 3. Three separate verdicts, and the ship decision
 
 Every report distinguishes:
 
@@ -40,6 +40,18 @@ Every report distinguishes:
 3. **Milestone quality** — does the complete declared milestone meet the 9.6 standard?
 
 Results are `PASS`, `FAIL`, `UNVERIFIED` or `NOT APPLICABLE` with a reason. A deployment can be verified while the milestone is unfinished. A failed test, an unavailable environment or missing evidence is never a pass. An old full score keeps its old build and date; a focused pass cannot make it the current build's score.
+
+**Ship if better than live (adopted 2026-09-21).** Two candidates in a row were held for a day by the pre-deploy deep review although each was better than the live build. Bailey was offered three answers and replied **"A, B, and C together please."** So a fourth verdict, `verdicts.ship`, decides the deploy — the three above keep their meaning and none of them is the gate any more.
+
+A candidate **SHIPs** when its reviewed changed area has **no critical defect** (crash, lock, lost progress, an encounter that cannot finish) introduced or left reachable by the change, and **no regression** against the live build (something that works live and is broken in the candidate). Otherwise it is a **HOLD**. Therefore:
+
+- every issue at critical or major severity carries `introducedByCandidate` (true / false / unknown) and `regressionVsLive` (true / false / unknown), and `inNewFeature` when it is;
+- a regression at critical or major severity is a HOLD; a critical this change introduced is a HOLD; **unknown on a critical is a HOLD**;
+- **major defects that are not regressions are disclosed** in the release announcement and carried into the next batch — they do not hold the build;
+- a defect inside a **brand-new feature** does not block: that feature may ship switched off;
+- `shipReasons` says why, in the reviewer's own words.
+
+`changedArea` and `ship` are separate: a candidate with disclosed majors can be `changedArea: FAIL` and `ship: SHIP`, because it is still better than what is live. The deploy gate reads `verdicts.ship`, never `changedArea` (`shipVerdict` in `tools/critic-policy.mjs`; the numbers and classes are the `release` block of policy.json). Reports written before 2026-09-22 carry none of these fields and stay valid as history.
 
 ## 4. When the critic runs
 
@@ -50,15 +62,18 @@ Budgets are starting review-overhead budgets, not guarantees; they exclude build
 | New screen, major presentation choice, mechanic or encounter | Plan / target check: source-game fit, explicit approval, feasibility, acceptance cases, scope | 5–10 min; ask only for the missing decision |
 | A planned change that `node tools/critic-plan.mjs --paths <intended files>` classes as **deep** (adopted 2026-09-21) | **Paper preflight before building**: game case stated with its source (AGENTS.md rule 14), acceptance cases named, the before-and-after measurement named where behaviour changes, which existing evidence stays reusable. Result PROCEED / REPAIR / PIVOT, saved as `docs/plans/<track>-review.md` | 5–10 min; no browser, no build |
 | Ordinary local edit | Builder runs the relevant automated checks; no separate critic | No score ceremony |
-| Completed feature or defect batch, before deployment | **Focused** review on the immutable production preview: changed flow, dependencies, owner-reported regressions, applicable target comparisons | 5–15 min; extend only for a named risk |
+| Completed feature or defect batch, before deployment | **Focused** review on the immutable production preview: changed flow, dependencies, owner-reported regressions, applicable target comparisons, and the ship verdict of §3 | 10–15 min; extend only for a named risk |
 | **Every deployment** | **Live**: the exact artifact at the real URL (CHK-017), asset loading, real-input smoke, the changed flow | 2–5 min for a small change |
 | Changed artwork or audio batch | Subject-specific review in the running game; technical and listening checks for changed audio | Folded into the focused pass, same capture session |
-| Shared combat timing, battle presenter / lifecycle, save schema, asset loader, global layout, broad audio routing, new chapter, major integration, or a finished-milestone claim | **Deep** review of every affected chapter and system, **before public deployment**; a full **milestone** review when the change crosses most systems or is final acceptance | Checkpointed 30-minute blocks; complete the required coverage |
+| Shared combat timing, battle presenter / lifecycle, asset loader, global layout, broad audio routing, new chapter, major integration | A **focused** review of the production candidate before the deploy (ship verdict), then a **deep** review of every affected chapter and system **after the deploy, on the live build** (adopted 2026-09-21) | Focused 10–15 min; deep in checkpointed 30-minute blocks; complete the required coverage |
+| **Save data**: `src/app/SaveData.ts`, the save schema, a migration, anything that can lose a player's progress — or a finished-milestone claim | **Deep** (or **milestone**) review of the production candidate, still **before public deployment**. This is the one class the 2026-09-21 rule did not move | Checkpointed 30-minute blocks; complete the required coverage |
 | Three substantial checkpoints since the last deep review, or seven active development days with unreviewed changes | One accumulated-change deep review, sampling unchanged areas | One combined review, never one per commit |
 | Bailey finds a defect | Reproduce, explain the escape, strengthen the smallest relevant permanent check, verify the repair | Immediate focused retrospective; no unrelated rescore |
 | Onboarding / help changes, or every third deep review | Cold-start walkthrough with only visible instructions and ordinary controls | Inside the deep review; say whether the newcomer was simulated or real |
 | Crash or corruption touching the project or its assets | Integrity check of the affected files, build and media; model hashes when generation is implicated | Widen only on evidence |
 | No product change | Nothing scheduled | No automatic regrade |
+
+**The deep review runs after the deploy (adopted 2026-09-21, Bailey: "A, B, and C together please.").** It stays an obligation of the build that owes it, it is settled only by a validated deep report for that build, and its issue list drives the next batch. To keep the debt from piling up, **at most two deploys may go out while a deep review is owed: the third refuses** until one is settled, or the owner overrides (§10). `node tools/critic-plan.mjs` prints the three answers by name: `focusedBeforeDeploy`, `deepBeforeDeploy`, `deepAfterDeploy`.
 
 `node tools/critic-plan.mjs` decides which row applies from the changed paths (git, plus shipped art and audio from the artifact manifests, because `public/art` is not in git). Its rules are the `rules` list in policy.json. It fails closed: an unknown change set or an unclassified product path is a deep review; four focused systems or more than forty shipped files in one batch is a deep review; a request may raise the depth and nothing can lower it. The evidence baseline for reuse is round 03 on build `7191674`; its numbers stay history.
 
@@ -104,9 +119,11 @@ A final milestone is accepted only when **all** of these hold (`milestoneVerdict
 - every required target in the milestone passes its acceptance criteria, protected assets are intact or explicitly revised, and the required human judgments are recorded;
 - the exact deployment passes live verification.
 
-Unknown categories are never averaged away and never scored zero: the assessment is provisional. An interim improvement may ship below 9.6 when its release checks pass, it adds no unaccepted major regression or unauthorised change, and inherited defects are disclosed. Save or progress corruption, a broken entry flow, an invalid release identity or an unapproved asset replacement are never waived by an improvement elsewhere. Score a defect where it belongs; cross-reference a separate demonstrated consequence; never multiply one issue across categories to push the total down. The gates replace the old numeric caps.
+The **finished-milestone standard above is unchanged** by the release rules of 2026-09-21: 9.60 unrounded, every category at least 9.0, every gate. Shipping and finishing are different questions.
 
-**Owner override of the deploy gate (adopted 2026-09-21).** Only Bailey's own quoted words, passed as `--owner-override` to `tools/deploy-pages.mjs`, let a build ship past the "no passing deep report" refusal; an agent never invokes it on its own initiative, it does not change any report's verdict, every obligation (live, focused, deep, milestone) stays owed exactly as planned, and the next candidate still has to address the open changed-area issues.
+Unknown categories are never averaged away and never scored zero: the assessment is provisional. An interim improvement ships below 9.6 on the ship verdict of §3 — no critical this change introduced, no regression against live — with its remaining majors disclosed in the release announcement and carried into the next batch, and with no unauthorised change. Save or progress corruption, a broken entry flow, an invalid release identity or an unapproved asset replacement are never waived by an improvement elsewhere. Score a defect where it belongs; cross-reference a separate demonstrated consequence; never multiply one issue across categories to push the total down. The gates replace the old numeric caps.
+
+**Owner override of the deploy gate (adopted 2026-09-21).** Only Bailey's own quoted words, passed as `--owner-override` to `tools/deploy-pages.mjs`, let a build ship past any refusal of the release gate — a missing candidate report, a HOLD verdict, a save-data change with only a focused report, or the third deploy with a deep review owed. An agent never invokes it on its own initiative, it does not change any report's verdict, every obligation (live, focused, deep, milestone) stays owed exactly as planned, and the next candidate still has to address the open issues.
 
 ## 7. Approved-target acceptance (the old Part C, now a gate)
 
@@ -122,7 +139,7 @@ Compare with `node tools/end-state-board.mjs --pair <target> <capture> --out <fi
 
 One deduplicated issue list with stable IDs. Critical first (crash, lock, lost progress, failed outcome), then major (wrong mechanics or information, unusable controls, severe visual or target deviation, missing required content), then polish, then suggestions. Within a severity: Bailey's reported problems, frequency, player impact, coverage and effort. Never whatever most cheaply lifts a decimal.
 
-Every finding carries: build; game, chapter and state; expected versus observed; reproducible steps and seed; evidence; confidence and verification status; the requirement; file and line only if actually traced; the smallest proposed fix; its acceptance check. A suspected root cause says "suspected". One root defect across several chapters is one ticket.
+Every finding carries: build; game, chapter and state; expected versus observed; reproducible steps and seed; evidence; confidence and verification status; the requirement; file and line only if actually traced; the smallest proposed fix; its acceptance check. A suspected root cause says "suspected". One root defect across several chapters is one ticket. **Every critical and major finding also carries `introducedByCandidate`, `regressionVsLive` and, where it applies, `inNewFeature` (§3): the ship decision is read off those tags, not off a reviewer's impression.**
 
 The builder gets the whole relevant batch once. Verification checks the repair and its neighbours. **After two unsuccessful attempts on the same failure, stop repeating the approach**: diagnose or escalate the blocker and continue independent authorised work. That is an operating limit, not permission to call the task done below the bar. Bailey's pause instructions are honoured.
 
@@ -139,6 +156,7 @@ Build / artifact / target version:
 Review: focused | live | deep | milestone
 Deployment: PASS / FAIL / UNVERIFIED
 Changed area: PASS / FAIL / UNVERIFIED
+Ship: SHIP / HOLD, and why (plus the majors this release discloses)
 Milestone: incomplete | not assessed | accepted
 Quality: current full score, or last full score + its original build and date
 Targets: required / matched / failing / unverified / waiting on decision
@@ -148,7 +166,7 @@ Next required review and why:
 Elapsed review time / repeated work avoided:
 ```
 
-and is saved as JSON beside the prose: `critic/reviews/<sha>-focused.json`, `critic/reviews/<sha>-live.json`, `critic/rounds/round-NN.json` for deep and milestone reviews. `validateReport` requires: `rubricVersion: 2`; `review`; `build.mainSha` (plus `bundle` and `artifactHash` for live and milestone); `date`; `verdicts.deployment`, `verdicts.changedArea`, `verdicts.milestone`; and for each entry of `checks` an `id` from the library, a `result`, `mandatory` when it is, `evidence` for a PASS (or `reusedFrom` with its `dependencyArgument`), and a `reason` for UNVERIFIED or NOT APPLICABLE. Deep and milestone reports add `categories`, `issues`, `encounters`, `targets`, `humanJudgments` and `coverage.requiredNotTested`. A check record also names the game, chapter and state, artifact and target versions, environment, whether it was automated or manual, and the time it took.
+and is saved as JSON beside the prose: `critic/reviews/<sha>-focused.json`, `critic/reviews/<sha>-live.json`, `critic/rounds/round-NN.json` for deep and milestone reviews. `validateReport` requires: `rubricVersion: 2`; `review`; `build.mainSha` (plus `bundle` and `artifactHash` for live and milestone); `date`; `verdicts.deployment`, `verdicts.changedArea`, `verdicts.milestone`; for a focused, deep or milestone review dated 2026-09-22 or later, `verdicts.ship`, a non-empty `shipReasons`, and `introducedByCandidate` and `regressionVsLive` on every critical or major issue (a report that claims SHIP while the tags say HOLD is refused, as with the milestone gates); and for each entry of `checks` an `id` from the library, a `result`, `mandatory` when it is, `evidence` for a PASS (or `reusedFrom` with its `dependencyArgument`), and a `reason` for UNVERIFIED or NOT APPLICABLE. Deep and milestone reports add `categories`, `issues`, `encounters`, `targets`, `humanJudgments` and `coverage.requiredNotTested`. A check record also names the game, chapter and state, artifact and target versions, environment, whether it was automated or manual, and the time it took.
 
 At a visible milestone show a little useful real-game evidence. Announce each live build with what changed and what to try, and the usage readings Bailey asked for. Do not make Bailey certify basic function by replaying every small deploy; ask for judgment when feel, sound or a subjective choice materially changed.
 
@@ -177,8 +195,11 @@ Record review time and escaped owner-found defects to judge the critic itself. M
 | Rule | Where it lives |
 |---|---|
 | Which review a change needs | `node tools/critic-plan.mjs`, rules in `policy.json`; `tools/deploy-pages.mjs` runs the same code and prints the plan even on `--dry-run` |
-| Shared-system change needs deep evidence before going public | `tools/deploy-pages.mjs` refuses unless a validated deep report with a passing changed area exists for that commit |
-| Owner override of the deploy gate | `tools/deploy-pages.mjs --owner-override="<owner's words>"` (at least 8 characters, required); recorded in the marker's `ownerOverride` field and `critic/policy.json`'s `ownerOverride` block; `npm run critic:status` names it; settles no obligation |
+| Ship if better than live | `shipVerdict` in `tools/critic-policy.mjs` from each issue's `introducedByCandidate` / `regressionVsLive` / `inNewFeature`; `validateReport` requires the tags and refuses a report that claims SHIP while they say HOLD |
+| A candidate is reviewed before it goes public | `tools/deploy-pages.mjs` refuses unless `shipEvidenceFor` finds a validated focused or deep report for that commit whose `verdicts.ship` is SHIP |
+| The save-data class still needs deep evidence first | the `deepBeforeDeploy` flag, now carried by the `save-schema` rule alone (`release.deepBeforeDeployClasses` in policy.json); a focused report is refused for it |
+| The deep review runs after the deploy, and the debt is capped | `deepOwedBuilds` in `tools/critic-pending.mjs`; `resolveReleaseGate` refuses the deploy once `release.maxDeploysWithDeepOwed` live builds owe one |
+| Owner override of the deploy gate | `tools/deploy-pages.mjs --owner-override="<owner's words>"` (at least 8 characters, required) turns every refusal above into one loud warning; recorded in the marker's `ownerOverride` field and `critic/policy.json`'s `ownerOverride` block; `npm run critic:status` names it; settles no obligation |
 | Exact-artifact identity, media that decodes (CHK-017, CHK-019) | `tools/artifact-manifest.mjs`: the deploy hashes and decode-checks every shipped file, publishes `artifact-manifest.json`, compares the live bytes, and stores the manifest in `critic/artifacts/<sha>.json` |
 | Separate obligations per live build | `critic/pending/<sha>.json` lists `live`, `focused`, `deep`, `milestone`; `npm run critic:status` shows them and fails while any is pending |
 | Only evidence settles an obligation | `node tools/critic-clear.mjs --report <file>`: validates the report, refuses another build's report, never lets a focused or live report settle a deep review, leaves UNVERIFIED pending. Reviewers never delete markers; settled ones move to `critic/cleared/` |
@@ -189,4 +210,4 @@ Record review time and escaped owner-found defects to judge the critic itself. M
 | Score and acceptance gates | `weightedTotal`, `milestoneVerdict`; the status reader recomputes a v2 score from the categories and always names the build it belongs to |
 | The reviews themselves | workflow scripts in `critic/runner/` (`focused.js`, `live.js`, `deep.js`), launched by the release workflow according to the plan |
 
-Proved by `tests/unit/critic-policy-v2.test.ts`, `tests/unit/critic-policy-adoptions.test.ts` and `tests/unit/artifact-manifest.test.ts`. **Not automated yet** (each check's `automation` field in policy.json says planned / implemented / human): most CHK checks are still performed by a reviewer rather than by a test; delivery status per target has a field in `targets.json` (`delivery`, since 2026-09-21) that is filled only as reports verify tiles, so most tiles still read as unknown; no calibration run has happened yet; there is no physical-device, Safari or real-controller evidence path; review time and escaped-defect counts are recorded by hand in reports. Say so in a report instead of implying coverage that does not exist.
+Proved by `tests/unit/critic-policy-v2.test.ts`, `tests/unit/critic-policy-adoptions.test.ts`, `tests/unit/critic-release-rules.test.ts`, `tests/unit/critic-owner-override.test.ts` and `tests/unit/artifact-manifest.test.ts`. **Not automated yet** (each check's `automation` field in policy.json says planned / implemented / human): most CHK checks are still performed by a reviewer rather than by a test; delivery status per target has a field in `targets.json` (`delivery`, since 2026-09-21) that is filled only as reports verify tiles, so most tiles still read as unknown; no calibration run has happened yet; there is no physical-device, Safari or real-controller evidence path; review time and escaped-defect counts are recorded by hand in reports. Say so in a report instead of implying coverage that does not exist.

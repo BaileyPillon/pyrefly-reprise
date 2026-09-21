@@ -137,25 +137,44 @@ and a short progress fact with each milestone.
 ## Release (the owner's standing rule)
 
 **Critic policy v2 (Bailey, 2026-09-20; `critic/RUBRIC.md`): every deployed build is
-evaluated, and the depth of the review follows what changed.** Green tree → push `main`
-→ `node tools/critic-plan.mjs` says which review the change needs → review the
-production candidate (focused for a local change; a **deep review before going public**
-when a shared system changed: combat core, presenter, save schema, asset loader, global
-layout, audio routing, a new chapter) → `npm run deploy` → **live verification of the
-exact artifact** → tell Bailey (URL, main sha, what changed, what to try, the usage
-readings) → any deep review still owed. Three separate verdicts: deployment, changed
-area, milestone. The finished milestone needs the single weighted score at 9.60
-unrounded, every category at least 9.0, and every gate (evidence complete, no critical
-or major defect, every encounter through its real flow, every required target in
-`docs/target/targets.json` matched, the exact artifact verified live). An old score never
-certifies a new build; rounds 02 and 03 are rubric v1 history.
+evaluated, and the depth of the review follows what changed.** **Ship if better than
+live, deep review after the deploy (Bailey, 2026-09-21: "A, B, and C together
+please.")** Green tree → push `main` → `node tools/critic-plan.mjs` says which review
+the change needs and when (`focusedBeforeDeploy` / `deepBeforeDeploy` /
+`deepAfterDeploy`) → **focused review of the production candidate** → `npm run deploy`
+→ **live verification of the exact artifact** → the **deep review on the live build**
+when one is owed → tell Bailey (URL, main sha, what changed, what to try, **the majors
+this release discloses**, the usage readings).
+
+- The deploy gate is the review's `verdicts.ship`. A candidate **SHIPs** when its
+  changed area has no critical defect introduced or left reachable by the change and no
+  regression against the live build; majors that are not regressions are **disclosed**
+  and carried into the next batch; a defect inside a brand-new feature does not block
+  (the feature may ship switched off); **unknown on a critical is a HOLD**. Every
+  critical or major issue carries `introducedByCandidate` and `regressionVsLive`.
+- A **deep review before going public** survives only for the **save-data class**
+  (`src/app/SaveData.ts`, save schema or migration, anything that can lose progress)
+  and a milestone claim. Everything else shared — combat core, presenter, asset loader,
+  global layout, audio routing, a new chapter — gets the focused pass first and its
+  deep review afterwards, on the live build; that stays the build's obligation and its
+  issue list drives the next batch. **At most two deploys may go out while a deep
+  review is owed; the third refuses** until one is settled (or the owner overrides).
+
+Three separate verdicts stay: deployment, changed area, milestone. The finished
+milestone is unchanged — the single weighted score at 9.60 unrounded, every category at
+least 9.0, and every gate (evidence complete, no critical or major defect, every
+encounter through its real flow, every required target in `docs/target/targets.json`
+matched, the exact artifact verified live). An old score never certifies a new build;
+rounds 02 and 03 are rubric v1 history.
 
 - `npm run deploy` builds locally (the art is only on this disk), force-pushes a
   one-commit `gh-pages`, kicks the Pages build, appends to `docs/deploys.log`. It also
   hashes and decode-checks every shipped file (`artifact-manifest.json`), refuses a
-  shared-system change that has no passing deep report for that commit, compares the live
-  files with the build byte for byte, and leaves `critic/pending/<sha>.json` listing the
-  separate obligations that build owes (`live`, `focused`, `deep`, `milestone`). Only
+  candidate with no validated focused or deep report for that commit, one whose ship
+  verdict is HOLD, a save-data change with only a focused report, and the third deploy
+  while a deep review is owed; then compares the live files with the build byte for byte
+  and leaves `critic/pending/<sha>.json` listing the separate obligations that build owes
+  (`live`, `focused`, `deep`, `milestone`). Only
   `node tools/critic-clear.mjs --report <file>` settles one: a focused pass never settles
   a deep review, UNVERIFIED settles nothing, and a deep review a replaced build still
   owed moves to the new build. The GitHub Actions workflow is manual-only; ignore it.

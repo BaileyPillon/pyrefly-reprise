@@ -93,7 +93,11 @@ function main(argv) {
   });
   if (argv.includes('--json')) { console.log(JSON.stringify(plan, null, 1)); return; }
   console.log(`critic plan for ${plan.head} (previous build ${plan.previousBuild ?? 'unknown'})`);
-  console.log(`  review:       ${plan.review.toUpperCase()}${plan.deepBeforeDeploy ? '  (deep evidence is required BEFORE deploying)' : ''}`);
+  console.log(`  review:       ${plan.review.toUpperCase()}`);
+  // The owner's release rules (2026-09-21): focused before the deploy, deep after it,
+  // except the save-data class and a milestone claim.
+  console.log(`  before deploy: ${plan.deepBeforeDeploy ? 'DEEP review of the production candidate (save-data class or milestone claim)' : plan.focusedBeforeDeploy ? 'FOCUSED review of the production candidate' : 'nothing: no shipped file changed'}`);
+  console.log(`  after deploy:  live verification${plan.deepAfterDeploy ? ', then the DEEP review on the live build (this build owes it)' : ''}`);
   console.log(`  obligations:  ${plan.obligations.join(' + ')}`);
   for (const r of plan.reasons) console.log(`  because:      ${r}`);
   console.log(`  systems:      ${plan.systems.join('; ') || 'none'}`);

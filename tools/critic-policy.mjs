@@ -39,6 +39,90 @@ export function ownerOverridePolicy(policy) {
   return policy.ownerOverride ?? { allowed: false, requiresOwnerWords: true, settlesObligations: false };
 }
 
+const RELEASE_DEFAULTS = {
+  adopted: null, requiredFrom: null, deepAfterDeploy: false, deepBeforeDeployClasses: [], maxDeploysWithDeepOwed: 1,
+  shipVerdicts: ['SHIP', 'HOLD'], blockingSeverities: ['critical'], regressionBlockingSeverities: ['critical', 'major'],
+  discloseSeverities: ['critical', 'major'], unknownHoldsSeverities: ['critical'],
+};
+
+/**
+ * The release block (`critic/policy.json` `release`, RUBRIC sections 3, 4 and 10):
+ * the owner's rules of 2026-09-21, "A, B, and C together please." Missing
+ * fields fall back to the strictest sensible default, so a policy file without
+ * the block behaves like the old one (no deploys allowed with a deep review
+ * owed, nothing shipped on a critical).
+ */
+export function releasePolicy(policy) {
+  return { ...RELEASE_DEFAULTS, ...(policy?.release ?? {}) };
+}
+
+const ISSUE_IS_OPEN = (issue) => !/^(fixed|closed|verified|withdrawn|refuted)/i.test(String(issue.status ?? 'open'));
+const severityOf = (issue) => String(issue.severity ?? 'polish').toLowerCase();
+const tagIsUnknown = (value) => value === 'unknown' || value === null || value === undefined;
+
+/**
+ * RULE A, SHIP IF BETTER THAN LIVE (Bailey, 2026-09-21). Decides from the
+ * report's own issue list, not from a reviewer's opinion, whether the
+ * candidate may deploy:
+ *
+ *   - a REGRESSION against the live build (something that works live and is
+ *     broken in the candidate) holds the build at critical or major severity;
+ *   - a CRITICAL defect the change introduced or left reachable holds it;
+ *   - `unknown` on a critical holds it: an unproved critical is a critical;
+ *   - a defect inside a brand-new feature never holds the build — the feature
+ *     may ship switched off;
+ *   - everything else that is critical or major is DISCLOSED in the release
+ *     announcement and carried into the next batch.
+ *
+ * Pure. Issues already fixed and verified are ignored.
+ */
+export function shipVerdict(report, policy) {
+  const r = releasePolicy(policy);
+  const blocking = [], disclose = [], reasons = [];
+  for (const issue of (report?.issues ?? []).filter(ISSUE_IS_OPEN)) {
+    const sev = severityOf(issue);
+    const id = issue.id ?? issue.title ?? '(unnamed issue)';
+    const newFeature = issue.inNewFeature === true;
+    if (newFeature) {
+      if (r.discloseSeverities.includes(sev)) {
+        disclose.push(issue);
+        reasons.push(`${id} (${sev}) is inside a brand-new feature: it does not block, and that feature ships switched off`);
+      }
+      continue;
+    }
+    if (issue.regressionVsLive === true && r.regressionBlockingSeverities.includes(sev)) {
+      blocking.push(issue);
+      reasons.push(`${id} (${sev}) is a regression against the live build: something that works live is broken in this candidate`);
+      continue;
+    }
+    if (r.unknownHoldsSeverities.includes(sev) && (tagIsUnknown(issue.regressionVsLive) || tagIsUnknown(issue.introducedByCandidate))) {
+      blocking.push(issue);
+      reasons.push(`${id} (${sev}) leaves introducedByCandidate or regressionVsLive unknown, and unknown on a critical is a HOLD`);
+      continue;
+    }
+    if (r.blockingSeverities.includes(sev) && issue.introducedByCandidate === true) {
+      blocking.push(issue);
+      reasons.push(`${id} (${sev}) was introduced or left reachable by this change`);
+      continue;
+    }
+    if (r.discloseSeverities.includes(sev)) {
+      disclose.push(issue);
+      reasons.push(`${id} (${sev}) is disclosed in the release announcement and carried into the next batch: it is neither a regression nor a critical this change introduced`);
+    }
+  }
+  if (!blocking.length && !disclose.length) reasons.push('no critical defect and no regression against the live build');
+  return { ship: blocking.length ? 'HOLD' : 'SHIP', reasons, blocking, disclose };
+}
+
+/** Does this report fall under the new release rules, or is it history? */
+function releaseRulesApplyTo(report, policy) {
+  const from = releasePolicy(policy).requiredFrom;
+  if (!from) return false;
+  if (!['focused', 'deep', 'milestone'].includes(report.review)) return false;
+  const date = new Date(report.date ?? '');
+  return !Number.isNaN(date.getTime()) && date.getTime() >= new Date(`${from}T00:00:00.000Z`).getTime();
+}
+
 /** `**` crosses folders, `*` stays inside one path segment. */
 export function globToRegExp(glob) {
   const DOUBLE = '<<double-star>>';
@@ -148,7 +232,20 @@ export function planReview({ paths, policy, ledger = {}, carriedDeep = [], claim
   if (review !== 'live') obligations.push('focused');
   if (review === 'deep' || review === 'milestone') obligations.push('deep');
   if (review === 'milestone') obligations.push('milestone');
-  return { ...change, review, obligations, reasons, carriedDeep, deepBeforeDeploy: change.deepBeforeDeploy || review === 'milestone' };
+  // RULE B (Bailey, 2026-09-21): the candidate is reviewed FOCUSED before the
+  // deploy whenever a shipped file changed; the deep review runs AFTER it, on
+  // the live build. Deep-before-deploy survives only for the save-data class
+  // (the `deepBeforeDeploy` flag, now carried by that rule alone) and for a
+  // milestone claim, whose standard did not change.
+  const deepBeforeDeploy = change.deepBeforeDeploy || review === 'milestone';
+  const owesDeep = review === 'deep' || review === 'milestone';
+  return {
+    ...change, review, obligations, reasons, carriedDeep, deepBeforeDeploy,
+    // Only an actual change to a shipped file can be reviewed before the deploy:
+    // a review raised to deep by an accumulated debt has nothing new to look at.
+    focusedBeforeDeploy: change.depth !== 'none',
+    deepAfterDeploy: owesDeep && !deepBeforeDeploy,
+  };
 }
 
 /**
@@ -239,6 +336,28 @@ export function validateReport(report, policy) {
   // Optional repair count per issue (RUBRIC §8); old reports carry none and stay valid.
   for (const i of report.issues ?? []) {
     if (i.attempts !== undefined && !(Number.isInteger(i.attempts) && i.attempts >= 0)) errors.push(`${i.id ?? 'issue'}: attempts must be a whole number of repair attempts`);
+  }
+  // RULE A (Bailey, 2026-09-21). A candidate review written after the rule came
+  // in has to say whether the build is better than what is live, and every
+  // critical or major issue has to carry the two tags that decision reads.
+  // Reports from before `release.requiredFrom` (rounds 04 to 06) stay valid as
+  // history and are never rewritten.
+  if (releaseRulesApplyTo(report, policy)) {
+    const rel = releasePolicy(policy);
+    const TAGS = { introducedByCandidate: [true, false, 'unknown'], regressionVsLive: [true, false, 'unknown'] };
+    if (!rel.shipVerdicts.includes(v.ship)) errors.push(`verdicts.ship must be one of ${rel.shipVerdicts.join(' / ')}: a ${report.review} review decides whether this build is better than the live one`);
+    if (!Array.isArray(report.shipReasons) || !report.shipReasons.length) errors.push('shipReasons must say, in at least one line, why this build ships or is held');
+    for (const i of report.issues ?? []) {
+      if (!rel.discloseSeverities.includes(severityOf(i))) continue;
+      for (const [tag, allowed] of Object.entries(TAGS)) {
+        if (!allowed.includes(i[tag])) errors.push(`${i.id ?? 'issue'}: ${tag} must be ${allowed.map((a) => JSON.stringify(a)).join(' / ')} on a ${severityOf(i)} issue`);
+      }
+      if (i.inNewFeature !== undefined && typeof i.inNewFeature !== 'boolean') errors.push(`${i.id ?? 'issue'}: inNewFeature must be true or false`);
+    }
+    if (!errors.length && v.ship === 'SHIP') {
+      const verdict = shipVerdict(report, policy);
+      if (verdict.ship !== 'SHIP') errors.push(`report claims ship SHIP but the release rules say HOLD: ${verdict.reasons.join('; ')}`);
+    }
   }
   return errors;
 }

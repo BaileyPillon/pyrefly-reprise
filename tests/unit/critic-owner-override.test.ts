@@ -25,7 +25,7 @@ import {
   formatOwnerOverrideWarning,
   latestDeepReportFor,
   parseOwnerOverride,
-  resolveDeepGate,
+  resolveReleaseGate,
 } from '../../tools/deploy-pages.mjs';
 
 const REPO = resolve(__dirname, '..', '..');
@@ -71,27 +71,35 @@ describe('parseOwnerOverride: only the owner\'s own words unlock it', () => {
   });
 });
 
-describe('resolveDeepGate: without the flag the refusal stands', () => {
-  it('no deep evidence required at all: proceeds, override or not', () => {
-    expect(resolveDeepGate({ deepBeforeDeploy: false, evidence: null, ownerOverrideWords: null })).toEqual({ action: 'proceed' });
-    expect(resolveDeepGate({ deepBeforeDeploy: false, evidence: null, ownerOverrideWords: 'Bailey: ship it now' })).toEqual({ action: 'proceed' });
+// The gate is `resolveReleaseGate` since the owner's release rules of
+// 2026-09-21 ("A, B, and C together please."): the save-data class is what
+// still demands deep evidence before a deploy, and the override behaves
+// exactly as commit d333b06 made it.
+describe('resolveReleaseGate: without the flag the refusal stands', () => {
+  const save = { focusedBeforeDeploy: true, deepBeforeDeploy: true, maxDeploysWithDeepOwed: 2 };
+
+  it('no candidate review required at all: proceeds, override or not', () => {
+    const none = { focusedBeforeDeploy: false, deepBeforeDeploy: false, evidence: null, maxDeploysWithDeepOwed: 2 };
+    expect(resolveReleaseGate({ ...none, ownerOverrideWords: null }).action).toBe('proceed');
+    expect(resolveReleaseGate({ ...none, ownerOverrideWords: 'Bailey: ship it now' }).action).toBe('proceed');
   });
 
-  it('a validated deep report already passed: proceeds normally, override not needed', () => {
-    expect(resolveDeepGate({ deepBeforeDeploy: true, evidence: 'critic/reviews/abc1234-deep.json', ownerOverrideWords: null })).toEqual({ action: 'proceed' });
+  it('a validated deep report already says SHIP: proceeds normally, override not needed', () => {
+    const evidence = { path: 'critic/reviews/abc1234-deep.json', review: 'deep' as const, ship: 'SHIP' as const };
+    expect(resolveReleaseGate({ ...save, evidence, ownerOverrideWords: null }).action).toBe('proceed');
   });
 
   it('deep evidence required, none on record, no override: hard refusal (unchanged default behaviour)', () => {
-    const gate = resolveDeepGate({ deepBeforeDeploy: true, evidence: null, ownerOverrideWords: null });
+    const gate = resolveReleaseGate({ ...save, evidence: null, ownerOverrideWords: null });
     expect(gate.action).toBe('fail');
-    expect(gate.message).toMatch(/deep review/);
+    expect(gate.message).toMatch(/deep review/i);
     expect(gate.message).toMatch(/no validated deep report/);
   });
 
   it('deep evidence required, none on record, a valid override: proceeds with a loud warning', () => {
-    const gate = resolveDeepGate({ deepBeforeDeploy: true, evidence: null, ownerOverrideWords: 'Bailey: push the build please' });
+    const gate = resolveReleaseGate({ ...save, evidence: null, ownerOverrideWords: 'Bailey: push the build please' });
     expect(gate.action).toBe('proceed-with-warning');
-    expect(gate.warningLines!.join('\n')).toEqual(formatOwnerOverrideWarning('Bailey: push the build please').join('\n'));
+    expect(gate.warningLines!.join('\n')).toEqual(formatOwnerOverrideWarning('Bailey: push the build please', gate.refusals).join('\n'));
   });
 });
 

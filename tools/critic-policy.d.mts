@@ -22,6 +22,7 @@ export interface Policy {
   };
   usageModes: { normal: { weeklyLeftAbove: number }; conserve: { weeklyLeftAbove: number }; protect: { weeklyLeftAtOrBelow: number }; pacingGapPoints: number };
   escalation: { focusedSystemsForDeep: number; productFilesForDeep: number };
+  release?: Partial<ReleasePolicy>;
   alwaysAtDeploy: string[];
   rules: PolicyRule[];
   checks: { id: string; title: string; automation: string }[];
@@ -35,6 +36,34 @@ export interface ChangeClass {
 }
 export interface ReviewPlan extends Omit<ChangeClass, 'depth'> {
   depth: ChangeClass['depth']; review: ReviewKind; obligations: ReviewKind[]; carriedDeep: string[];
+  /** RULE B: a shipped file changed, so the candidate is reviewed before the deploy. */
+  focusedBeforeDeploy: boolean;
+  /** RULE B: the deep review runs after the deploy, on the live build. */
+  deepAfterDeploy: boolean;
+}
+
+/** The `release` block of critic/policy.json: the owner's rules of 2026-09-21. */
+export interface ReleasePolicy {
+  adopted: string | null;
+  /** Reports dated on or after this day must carry the ship verdict and the issue tags. */
+  requiredFrom: string | null;
+  deepAfterDeploy: boolean;
+  /** Rule ids that still need deep evidence BEFORE the deploy; today only `save-schema`. */
+  deepBeforeDeployClasses: string[];
+  maxDeploysWithDeepOwed: number;
+  shipVerdicts: string[];
+  blockingSeverities: string[];
+  regressionBlockingSeverities: string[];
+  discloseSeverities: string[];
+  unknownHoldsSeverities: string[];
+  [key: string]: unknown;
+}
+
+export interface ShipVerdict {
+  ship: 'SHIP' | 'HOLD';
+  reasons: string[];
+  blocking: NonNullable<CriticReport['issues']>;
+  disclose: NonNullable<CriticReport['issues']>;
 }
 
 export interface CategoryScore { id: string; score?: number | null; status?: string }
@@ -46,10 +75,20 @@ export interface ScoreResult {
 export interface CriticReport {
   rubricVersion?: number; review?: string; date?: string;
   build?: { mainSha?: string; bundle?: string; artifactHash?: string };
-  verdicts?: { deployment?: string; changedArea?: string; milestone?: string };
+  verdicts?: { deployment?: string; changedArea?: string; milestone?: string; ship?: string };
+  /** RULE A: why this build ships or is held, in the reviewer's own words. */
+  shipReasons?: string[];
   checks?: { id: string; result?: string; mandatory?: boolean; reason?: string; evidence?: string[]; reusedFrom?: string; dependencyArgument?: string }[];
   categories?: CategoryScore[];
-  issues?: { id?: string; severity?: string; status?: string; title?: string; attempts?: unknown }[];
+  issues?: {
+    id?: string; severity?: string; status?: string; title?: string; attempts?: unknown;
+    /** RULE A: did this change introduce the defect, or leave it reachable? */
+    introducedByCandidate?: boolean | 'unknown';
+    /** RULE A: does it work on the live build and break in this candidate? */
+    regressionVsLive?: boolean | 'unknown';
+    /** RULE A: a defect inside a brand-new feature never blocks; the feature may ship switched off. */
+    inNewFeature?: boolean;
+  }[];
   encounters?: { id: string; completedRealFlow?: boolean }[];
   targets?: { required?: number; matched?: number; failing?: number; unverified?: number; waiting?: number };
   humanJudgments?: { what: string; recorded?: boolean }[];
@@ -70,6 +109,12 @@ export interface OwnerOverridePolicy {
 
 /** The owner-override policy block (`critic/policy.json` `ownerOverride`, RUBRIC section 10). */
 export declare function ownerOverridePolicy(policy: Policy): OwnerOverridePolicy;
+
+/** The `release` block, with the strictest sensible defaults when a field is missing. */
+export declare function releasePolicy(policy: Policy | Record<string, never>): ReleasePolicy;
+
+/** RULE A, ship if better than live: SHIP or HOLD, decided from the report's own issue list. */
+export declare function shipVerdict(report: CriticReport, policy: Policy): ShipVerdict;
 export declare function globToRegExp(glob: string): RegExp;
 export declare function classifyChange(paths: string[] | null | undefined, policy: Policy): ChangeClass;
 export declare function accumulatedDeepDue(state: { substantialSinceDeep?: number; activeDaysSinceDeep?: number }, policy: Policy): string | null;

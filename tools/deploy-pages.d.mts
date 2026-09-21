@@ -17,21 +17,38 @@ export interface OwnerOverrideParseResult {
 /** Validate the raw `--owner-override` flag value. Absent (`undefined`) means no override was requested. */
 export declare function parseOwnerOverride(raw: string | boolean | undefined): OwnerOverrideParseResult;
 
-export interface DeepGateResult {
+export interface ReleaseGateResult {
   action: 'proceed' | 'fail' | 'proceed-with-warning';
   message?: string;
   warningLines?: string[];
+  refusals?: string[];
 }
 
-/** What to do when a shared-system change has no validated deep report with a passing changed area. */
-export declare function resolveDeepGate(input: {
+/** A validated candidate review for one commit, with the ship verdict it carries (RULE A). */
+export interface ShipEvidence {
+  path: string;
+  review: 'focused' | 'deep' | 'milestone';
+  ship: 'SHIP' | 'HOLD';
+}
+
+/** The newest validated focused / deep / milestone report for this commit, deep outranking focused. */
+export declare function shipEvidenceFor(root: string, mainSha: string): ShipEvidence | null;
+
+/** May this candidate go public now? The owner's release rules of 2026-09-21, as one pure function. */
+export declare function resolveReleaseGate(input: {
+  focusedBeforeDeploy: boolean;
   deepBeforeDeploy: boolean;
-  evidence: string | null;
+  evidence: ShipEvidence | null;
+  deepOwed?: string[];
+  maxDeploysWithDeepOwed?: number;
   ownerOverrideWords: string | null;
-}): DeepGateResult;
+}): ReleaseGateResult;
 
 /** The loud warning block printed (and, on --dry-run, previewed) for an owner override. */
-export declare function formatOwnerOverrideWarning(words: string): string[];
+export declare function formatOwnerOverrideWarning(words: string, refusals?: string[]): string[];
+
+/** One line saying which review this plan needs before the deploy, and which after it. */
+export declare function formatWhenLine(plan: { focusedBeforeDeploy?: boolean; deepBeforeDeploy?: boolean; deepAfterDeploy?: boolean }): string;
 
 /** The `docs/deploys.log` line for one run; `overrideUsed` appends a trailing `override=owner` field. */
 export declare function formatDeployLogLine(input: {

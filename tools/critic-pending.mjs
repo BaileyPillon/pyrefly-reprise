@@ -205,6 +205,27 @@ export function applyReport(marker, report, reportFile = null) {
 export const allSettled = (marker) => markerObligations(marker).every((o) => o.status !== 'pending');
 
 /**
+ * Every build that still owes a deep (or milestone) review, counting both the
+ * marker's own build and the builds whose debt it carries. RULE B (Bailey,
+ * 2026-09-21): at most `release.maxDeploysWithDeepOwed` deploys may go out
+ * while a deep review is owed; the next one refuses until one is settled, or
+ * the owner overrides. Pure: pass `readPendingMarkers(...)` or markers built
+ * in a test.
+ */
+export function deepOwedBuilds(markers) {
+  const owed = new Set();
+  for (const marker of markers ?? []) {
+    for (const o of markerObligations(marker)) {
+      if (o.status !== 'pending') continue;
+      if (o.kind !== 'deep' && o.kind !== 'milestone') continue;
+      if (marker.mainSha) owed.add(marker.mainSha);
+      for (const carried of o.carriedFrom ?? []) owed.add(carried);
+    }
+  }
+  return [...owed];
+}
+
+/**
  * A new build is about to replace these live builds. Their deep reviews move
  * to the new build; their live and focused obligations can no longer be
  * verified because the artifact is gone, and are recorded as exactly that.
