@@ -1,0 +1,31 @@
+{
+  "out": "docs/concepts/art4/sheet-A.png",
+  "title": "Pyrefly Reprise - art4 group A: Braska portrait repaint",
+  "subtitle": "Canon headdress (visual-bible Sec1.22.1: dark-blue keffiyeh-like wrap, blue stone band, two pale-blue tassels) vs the shipped gold-crown pick. Candidates only; nothing here ships.",
+  "rows": [
+    {
+      "label": "BRASKA - portrait",
+      "kind": "character",
+      "cellHeight": 420,
+      "cellWidth": 300,
+      "items": [
+        {
+          "path": "public/art/portraits/braska.png",
+          "caption": "braska/portrait (shipped)"
+        },
+        {
+          "path": "docs/concepts/art4/braska/portrait/cand-1.png",
+          "caption": "cand-1"
+        },
+        {
+          "path": "docs/concepts/art4/braska/portrait/cand-2.png",
+          "caption": "cand-2"
+        },
+        {
+          "path": "docs/concepts/art4/braska/portrait/cand-3.png",
+          "caption": "cand-3"
+        }
+      ]
+    }
+  ]
+}
