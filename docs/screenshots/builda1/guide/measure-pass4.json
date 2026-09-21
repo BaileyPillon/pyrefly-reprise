@@ -1,0 +1,3573 @@
+{
+ "pass": "measure-pass4",
+ "date": "2026-09-21",
+ "issues": [
+  "PR-0050",
+  "PR-0001 (guide column only)"
+ ],
+ "browserMode": "gpu",
+ "units": "screen CSS px at deviceScaleFactor 1; effectivePx = computed font-size x product of ancestor transform scales",
+ "server": "http://127.0.0.1:5731/",
+ "screenshots": [
+  "docs/screenshots/builda1/guide/pass4-ffx-1600x900-guide-off.png",
+  "docs/screenshots/builda1/guide/pass4-ffx-1600x900-guide-open.png",
+  "docs/screenshots/builda1/guide/pass4-ffx2-1600x900-guide-off.png",
+  "docs/screenshots/builda1/guide/pass4-ffx2-1600x900-guide-open.png"
+ ],
+ "results": [
+  {
+   "game": "ffx",
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "asserted": {
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "pageErrors": [],
+   "stageScale": 2,
+   "open": {
+    "rowCount": 30,
+    "minEffectivePx": 11.4,
+    "under14": [
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Tidus",
+      "cls": "sgd__actor sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "effectivePx": 12
+     },
+     {
+      "text": "Haste is ctb x 8/16 — roughly double the party’s share of th",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 10",
+      "cls": "sgd__cite sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Phase 1",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Lance of Atrophy into Full-Life, then Dispel into Cross Clea",
+      "cls": "sgd__why sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §4.2",
+      "cls": "sgd__cite sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Kill Seymour, not the mount. Mortiorchis has no death state ",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Kill Seymour, not the mount",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §2.2, §6 row 17",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Poison him on turn one. 2% of 70,000 is 1,400 a turn, for ev",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Poison him on turn one — 1,400 a turn, for ever",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 5-6, §4.3",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts. Lance of Atrophy ",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 4, §3.3",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Stand the party up before the hit, not after it. Dispel into",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Buff before the Dispel, never after it",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §4.2, §5.2, §5.5",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Provoke, the four Breaks and Delay Attack are all dead rows ",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Provoke, Breaks and Delay are dead rows here",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 19-21",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "effectivePx": 11.4
+     }
+    ],
+    "slicedOrOverflowing": [],
+    "outsideStack": [],
+    "rows": [
+     {
+      "text": "Seymour Flux",
+      "cls": "sgd__title sgd__u",
+      "cssFontPx": 8,
+      "scale": 2,
+      "effectivePx": 16,
+      "rect": [
+       58.7,
+       98,
+       234,
+       17.6
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       56.4,
+       123.6,
+       61.4,
+       21.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Tidus",
+      "cls": "sgd__actor sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       58.7,
+       150.1,
+       234,
+       17.1
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Hastega",
+      "cls": "sgd__label",
+      "cssFontPx": 9,
+      "scale": 2,
+      "effectivePx": 18,
+      "rect": [
+       58.7,
+       168.2,
+       61.5,
+       20.7
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "cssFontPx": 6,
+      "scale": 2,
+      "effectivePx": 12,
+      "rect": [
+       126.2,
+       172.2,
+       12,
+       13.8
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "the party",
+      "cls": "sgd__target",
+      "cssFontPx": 9,
+      "scale": 2,
+      "effectivePx": 18,
+      "rect": [
+       144.2,
+       168.2,
+       68.1,
+       20.7
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Haste is ctb x 8/16 — roughly double the party’s share of th",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 10",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Phase 1",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Lance of Atrophy into Full-Life, then Dispel into Cross Clea",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §4.2",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Kill Seymour, not the mount. Mortiorchis has no death state ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Kill Seymour, not the mount",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §2.2, §6 row 17",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Poison him on turn one. 2% of 70,000 is 1,400 a turn, for ev",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Poison him on turn one — 1,400 a turn, for ever",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 5-6, §4.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts. Lance of Atrophy ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 4, §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Stand the party up before the hit, not after it. Dispel into",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Buff before the Dispel, never after it",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §4.2, §5.2, §5.5",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Provoke, the four Breaks and Delay Attack are all dead rows ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Provoke, Breaks and Delay are dead rows here",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 19-21",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       52.8,
+       68,
+       9.3,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       68.1,
+       68,
+       78.5,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ]
+   },
+   "off": {
+    "panelHidden": true,
+    "inlineTop": "33px",
+    "chipRect": [
+     40.4,
+     66,
+     81.4,
+     21
+    ],
+    "chipMinEffectivePx": 11.4,
+    "chipRows": [
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       52.8,
+       68,
+       9.3,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       68.1,
+       68,
+       41.6,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ],
+    "hudRects": {
+     "ffx2 boss strip": null,
+     "ffx2 boss plate": null,
+     "ffx2 boss name": null,
+     "ffx2 boss head": null,
+     "ffx2 SCAN hint": null,
+     "ffx banner": null,
+     "ffx ctb queue": null,
+     "ffx cmd area": [
+      60.4,
+      332.6,
+      375.1,
+      335.9
+     ],
+     "ffx2 cmd": null,
+     "ffx2 party": null
+    },
+    "intersections": [],
+    "intersectingHudText": []
+   }
+  },
+  {
+   "game": "ffx",
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "asserted": {
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "pageErrors": [],
+   "stageScale": 2.5,
+   "open": {
+    "rowCount": 30,
+    "minEffectivePx": 14.25,
+    "under14": [],
+    "slicedOrOverflowing": [],
+    "outsideStack": [],
+    "rows": [
+     {
+      "text": "Seymour Flux",
+      "cls": "sgd__title sgd__u",
+      "cssFontPx": 8,
+      "scale": 2.5,
+      "effectivePx": 20,
+      "rect": [
+       73.3,
+       122.5,
+       292.5,
+       22
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       70.5,
+       154.5,
+       76.7,
+       26.8
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Tidus",
+      "cls": "sgd__actor sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       73.3,
+       187.6,
+       292.5,
+       21.4
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Hastega",
+      "cls": "sgd__label",
+      "cssFontPx": 9,
+      "scale": 2.5,
+      "effectivePx": 22.5,
+      "rect": [
+       73.3,
+       210.2,
+       76.9,
+       25.9
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "cssFontPx": 6,
+      "scale": 2.5,
+      "effectivePx": 15,
+      "rect": [
+       157.7,
+       215.2,
+       15,
+       17.2
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "the party",
+      "cls": "sgd__target",
+      "cssFontPx": 9,
+      "scale": 2.5,
+      "effectivePx": 22.5,
+      "rect": [
+       180.2,
+       210.2,
+       85.1,
+       25.9
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Haste is ctb x 8/16 — roughly double the party’s share of th",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 10",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Phase 1",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Lance of Atrophy into Full-Life, then Dispel into Cross Clea",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §4.2",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Kill Seymour, not the mount. Mortiorchis has no death state ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Kill Seymour, not the mount",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §2.2, §6 row 17",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Poison him on turn one. 2% of 70,000 is 1,400 a turn, for ev",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Poison him on turn one — 1,400 a turn, for ever",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 5-6, §4.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts. Lance of Atrophy ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 4, §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Stand the party up before the hit, not after it. Dispel into",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Buff before the Dispel, never after it",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §4.2, §5.2, §5.5",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Provoke, the four Breaks and Delay Attack are all dead rows ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Provoke, Breaks and Delay are dead rows here",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 19-21",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       66,
+       85,
+       11.6,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       85.1,
+       85,
+       98.2,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ]
+   },
+   "off": {
+    "panelHidden": true,
+    "inlineTop": "33px",
+    "chipRect": [
+     50.5,
+     82.5,
+     101.7,
+     26.3
+    ],
+    "chipMinEffectivePx": 14.25,
+    "chipRows": [
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       66,
+       85,
+       11.6,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       85.1,
+       85,
+       52,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ],
+    "hudRects": {
+     "ffx2 boss strip": null,
+     "ffx2 boss plate": null,
+     "ffx2 boss name": null,
+     "ffx2 boss head": null,
+     "ffx2 SCAN hint": null,
+     "ffx banner": null,
+     "ffx ctb queue": null,
+     "ffx cmd area": [
+      75.5,
+      415.7,
+      468.9,
+      419.8
+     ],
+     "ffx2 cmd": null,
+     "ffx2 party": null
+    },
+    "intersections": [],
+    "intersectingHudText": []
+   }
+  },
+  {
+   "game": "ffx",
+   "chapter": "seymour-flux",
+   "size": "2000x1012",
+   "asserted": {
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "pageErrors": [],
+   "stageScale": 2.8111,
+   "open": {
+    "rowCount": 30,
+    "minEffectivePx": 16.02,
+    "under14": [],
+    "slicedOrOverflowing": [],
+    "outsideStack": [],
+    "rows": [
+     {
+      "text": "Seymour Flux",
+      "cls": "sgd__title sgd__u",
+      "cssFontPx": 8,
+      "scale": 2.8111,
+      "effectivePx": 22.49,
+      "rect": [
+       182.9,
+       137.7,
+       328.9,
+       24.7
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       179.7,
+       173.7,
+       86.3,
+       30.2
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Tidus",
+      "cls": "sgd__actor sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       182.9,
+       210.9,
+       328.9,
+       24
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Hastega",
+      "cls": "sgd__label",
+      "cssFontPx": 9,
+      "scale": 2.8111,
+      "effectivePx": 25.3,
+      "rect": [
+       182.9,
+       236.4,
+       86.4,
+       29.1
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "cssFontPx": 6,
+      "scale": 2.8111,
+      "effectivePx": 16.87,
+      "rect": [
+       277.8,
+       242,
+       16.9,
+       19.4
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "the party",
+      "cls": "sgd__target",
+      "cssFontPx": 9,
+      "scale": 2.8111,
+      "effectivePx": 25.3,
+      "rect": [
+       303.1,
+       236.4,
+       95.7,
+       29.1
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Haste is ctb x 8/16 — roughly double the party’s share of th",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 10",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Phase 1",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Lance of Atrophy into Full-Life, then Dispel into Cross Clea",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §4.2",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Kill Seymour, not the mount. Mortiorchis has no death state ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Kill Seymour, not the mount",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §2.2, §6 row 17",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Poison him on turn one. 2% of 70,000 is 1,400 a turn, for ev",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Poison him on turn one — 1,400 a turn, for ever",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 5-6, §4.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts. Lance of Atrophy ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Holy Water a Zombie before the mount acts",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 row 4, §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Stand the party up before the hit, not after it. Dispel into",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Buff before the Dispel, never after it",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §4.2, §5.2, §5.5",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Provoke, the four Breaks and Delay Attack are all dead rows ",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Provoke, Breaks and Delay are dead rows here",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx-seymour-flux §6 rows 19-21",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       174.6,
+       95.6,
+       13.1,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       196.1,
+       95.6,
+       110.4,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ]
+   },
+   "off": {
+    "panelHidden": true,
+    "inlineTop": "33px",
+    "chipRect": [
+     157.3,
+     92.8,
+     114.4,
+     29.5
+    ],
+    "chipMinEffectivePx": 16.02,
+    "chipRows": [
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       174.6,
+       95.6,
+       13.1,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       196.1,
+       95.6,
+       58.5,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ],
+    "hudRects": {
+     "ffx2 boss strip": null,
+     "ffx2 boss plate": null,
+     "ffx2 boss name": null,
+     "ffx2 boss head": null,
+     "ffx2 SCAN hint": null,
+     "ffx banner": null,
+     "ffx ctb queue": null,
+     "ffx cmd area": [
+      185.4,
+      467.5,
+      527.2,
+      472.1
+     ],
+     "ffx2 cmd": null,
+     "ffx2 party": null
+    },
+    "intersections": [],
+    "intersectingHudText": []
+   }
+  },
+  {
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "size": "1280x720",
+   "asserted": {
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "pageErrors": [],
+   "stageScale": 2,
+   "open": {
+    "rowCount": 30,
+    "minEffectivePx": 11.4,
+    "under14": [
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Yuna",
+      "cls": "sgd__actor sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "effectivePx": 12
+     },
+     {
+      "text": "Shell halves Impulse and Mega Flare, the two biggest threats",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "The 12-action loop",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Curse, three physicals, two Impulses, then five countdown tu",
+      "cls": "sgd__why sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §2.1, §2.2",
+      "cls": "sgd__cite sgd__u",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Darkness is the damage route. It ignores Defense 160, hits e",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Darkness is the damage route",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §3.2",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Magic Break is the strongest opening in the fight. Five cast",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Five Magic Breaks defuse Mega Flare",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Shell before anything else if there is no Alchemist. Both Im",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Shell first when there is no Alchemist",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §2.4, §3.3",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Physical attacks are the wrong route: Defense 160 floors the",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "Physicals are floored by Defense 160",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "The countdown is five dead enemy actions. They are free part",
+      "cls": "sgd__rule-full",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "The countdown is five free party turns",
+      "cls": "sgd__rule-short",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "ffx2-bahamut §2.2, §2.5",
+      "cls": "sgd__cite",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "effectivePx": 11.4
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "effectivePx": 11.4
+     }
+    ],
+    "slicedOrOverflowing": [],
+    "outsideStack": [],
+    "rows": [
+     {
+      "text": "Bahamut",
+      "cls": "sgd__title sgd__u",
+      "cssFontPx": 8,
+      "scale": 2,
+      "effectivePx": 16,
+      "rect": [
+       56.7,
+       186,
+       234,
+       17.6
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       54.4,
+       211.6,
+       61.4,
+       21.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Yuna",
+      "cls": "sgd__actor sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       56.7,
+       238.1,
+       234,
+       17.1
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell",
+      "cls": "sgd__label",
+      "cssFontPx": 9,
+      "scale": 2,
+      "effectivePx": 18,
+      "rect": [
+       56.7,
+       256.2,
+       36.9,
+       20.7
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "cssFontPx": 6,
+      "scale": 2,
+      "effectivePx": 12,
+      "rect": [
+       99.6,
+       260.2,
+       12,
+       13.8
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "the party",
+      "cls": "sgd__target",
+      "cssFontPx": 9,
+      "scale": 2,
+      "effectivePx": 18,
+      "rect": [
+       117.6,
+       256.2,
+       68.1,
+       20.7
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell halves Impulse and Mega Flare, the two biggest threats",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The 12-action loop",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Curse, three physicals, two Impulses, then five countdown tu",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.1, §2.2",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Darkness is the damage route. It ignores Defense 160, hits e",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Darkness is the damage route",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.2",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Magic Break is the strongest opening in the fight. Five cast",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Five Magic Breaks defuse Mega Flare",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell before anything else if there is no Alchemist. Both Im",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell first when there is no Alchemist",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.4, §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Physical attacks are the wrong route: Defense 160 floors the",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Physicals are floored by Defense 160",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The countdown is five dead enemy actions. They are free part",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The countdown is five free party turns",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.2, §2.5",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       52.5,
+       156,
+       9.3,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       67.9,
+       156,
+       78.5,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ]
+   },
+   "off": {
+    "panelHidden": true,
+    "inlineTop": "77px",
+    "chipRect": [
+     40.4,
+     154,
+     81.4,
+     21
+    ],
+    "chipMinEffectivePx": 11.4,
+    "chipRows": [
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       52.5,
+       156,
+       9.3,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2,
+      "effectivePx": 11.4,
+      "rect": [
+       67.9,
+       156,
+       41.6,
+       16
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ],
+    "hudRects": {
+     "ffx2 boss strip": [
+      42.7,
+      82,
+      474,
+      62
+     ],
+     "ffx2 boss plate": [
+      42.7,
+      82,
+      474,
+      38
+     ],
+     "ffx2 boss name": [
+      54.7,
+      87,
+      77.8,
+      28
+     ],
+     "ffx2 boss head": [
+      38.6,
+      82,
+      482,
+      38
+     ],
+     "ffx2 SCAN hint": [
+      457.4,
+      94,
+      41.3,
+      14
+     ],
+     "ffx banner": null,
+     "ffx ctb queue": null,
+     "ffx cmd area": null,
+     "ffx2 cmd": [
+      996.5,
+      334.3,
+      259.5,
+      152.8
+     ],
+     "ffx2 party": [
+      928,
+      520,
+      332,
+      180
+     ]
+    },
+    "intersections": [],
+    "intersectingHudText": []
+   }
+  },
+  {
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "size": "1600x900",
+   "asserted": {
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "pageErrors": [],
+   "stageScale": 2.5,
+   "open": {
+    "rowCount": 30,
+    "minEffectivePx": 14.25,
+    "under14": [],
+    "slicedOrOverflowing": [],
+    "outsideStack": [],
+    "rows": [
+     {
+      "text": "Bahamut",
+      "cls": "sgd__title sgd__u",
+      "cssFontPx": 8,
+      "scale": 2.5,
+      "effectivePx": 20,
+      "rect": [
+       70.8,
+       232.5,
+       292.5,
+       22
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       68,
+       264.5,
+       76.7,
+       26.8
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Yuna",
+      "cls": "sgd__actor sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       70.8,
+       297.6,
+       292.5,
+       21.4
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell",
+      "cls": "sgd__label",
+      "cssFontPx": 9,
+      "scale": 2.5,
+      "effectivePx": 22.5,
+      "rect": [
+       70.8,
+       320.2,
+       46.1,
+       25.9
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "cssFontPx": 6,
+      "scale": 2.5,
+      "effectivePx": 15,
+      "rect": [
+       124.5,
+       325.2,
+       15,
+       17.2
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "the party",
+      "cls": "sgd__target",
+      "cssFontPx": 9,
+      "scale": 2.5,
+      "effectivePx": 22.5,
+      "rect": [
+       147,
+       320.2,
+       85.1,
+       25.9
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell halves Impulse and Mega Flare, the two biggest threats",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       70.8,
+       349.8,
+       292.5,
+       85.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The 12-action loop",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Curse, three physicals, two Impulses, then five countdown tu",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.1, §2.2",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Darkness is the damage route. It ignores Defense 160, hits e",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Darkness is the damage route",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.2",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Magic Break is the strongest opening in the fight. Five cast",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Five Magic Breaks defuse Mega Flare",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell before anything else if there is no Alchemist. Both Im",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell first when there is no Alchemist",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.4, §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Physical attacks are the wrong route: Defense 160 floors the",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Physicals are floored by Defense 160",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The countdown is five dead enemy actions. They are free part",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The countdown is five free party turns",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.2, §2.5",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       65.7,
+       195,
+       11.6,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       84.8,
+       195,
+       98.2,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ]
+   },
+   "off": {
+    "panelHidden": true,
+    "inlineTop": "77px",
+    "chipRect": [
+     50.5,
+     192.5,
+     101.7,
+     26.3
+    ],
+    "chipMinEffectivePx": 14.25,
+    "chipRows": [
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       65.7,
+       195,
+       11.6,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.5,
+      "effectivePx": 14.25,
+      "rect": [
+       84.8,
+       195,
+       52,
+       20
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ],
+    "hudRects": {
+     "ffx2 boss strip": [
+      53.3,
+      102.5,
+      592.5,
+      77.5
+     ],
+     "ffx2 boss plate": [
+      53.3,
+      102.5,
+      592.5,
+      47.5
+     ],
+     "ffx2 boss name": [
+      68.3,
+      108.8,
+      97.3,
+      35
+     ],
+     "ffx2 boss head": [
+      48.3,
+      102.5,
+      602.6,
+      47.5
+     ],
+     "ffx2 SCAN hint": [
+      571.7,
+      117.5,
+      51.6,
+      17.5
+     ],
+     "ffx banner": null,
+     "ffx ctb queue": null,
+     "ffx cmd area": null,
+     "ffx2 cmd": [
+      1245.6,
+      417.9,
+      324.4,
+      191.1
+     ],
+     "ffx2 party": [
+      1160,
+      650,
+      415,
+      225
+     ]
+    },
+    "intersections": [],
+    "intersectingHudText": []
+   }
+  },
+  {
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "size": "2000x1012",
+   "asserted": {
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "pageErrors": [],
+   "stageScale": 2.8111,
+   "open": {
+    "rowCount": 30,
+    "minEffectivePx": 16.02,
+    "under14": [],
+    "slicedOrOverflowing": [],
+    "outsideStack": [],
+    "rows": [
+     {
+      "text": "Bahamut",
+      "cls": "sgd__title sgd__u",
+      "cssFontPx": 8,
+      "scale": 2.8111,
+      "effectivePx": 22.49,
+      "rect": [
+       180.1,
+       261.4,
+       328.9,
+       24.7
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Next",
+      "cls": "sgd__head sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       176.9,
+       297.4,
+       86.3,
+       30.2
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Yuna",
+      "cls": "sgd__actor sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       180.1,
+       334.6,
+       328.9,
+       24
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell",
+      "cls": "sgd__label",
+      "cssFontPx": 9,
+      "scale": 2.8111,
+      "effectivePx": 25.3,
+      "rect": [
+       180.1,
+       360,
+       51.9,
+       29.1
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "→",
+      "cls": "sgd__arrow",
+      "cssFontPx": 6,
+      "scale": 2.8111,
+      "effectivePx": 16.87,
+      "rect": [
+       240.4,
+       365.7,
+       16.9,
+       19.4
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "the party",
+      "cls": "sgd__target",
+      "cssFontPx": 9,
+      "scale": 2.8111,
+      "effectivePx": 25.3,
+      "rect": [
+       265.7,
+       360,
+       95.7,
+       29.1
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell halves Impulse and Mega Flare, the two biggest threats",
+      "cls": "sgd__why sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Watch",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The 12-action loop",
+      "cls": "sgd__phase-label sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Curse, three physicals, two Impulses, then five countdown tu",
+      "cls": "sgd__why sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.1, §2.2",
+      "cls": "sgd__cite sgd__u",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Rules",
+      "cls": "sgd__head sgd__u sgd__u--out",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Darkness is the damage route. It ignores Defense 160, hits e",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Darkness is the damage route",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.2",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Magic Break is the strongest opening in the fight. Five cast",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Five Magic Breaks defuse Mega Flare",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell before anything else if there is no Alchemist. Both Im",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Shell first when there is no Alchemist",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.4, §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Physical attacks are the wrong route: Defense 160 floors the",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "Physicals are floored by Defense 160",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §3.3",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The countdown is five dead enemy actions. They are free part",
+      "cls": "sgd__rule-full",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "The countdown is five free party turns",
+      "cls": "sgd__rule-short",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "ffx2-bahamut §2.2, §2.5",
+      "cls": "sgd__cite",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       174.3,
+       219.3,
+       13.1,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "hide guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       195.8,
+       219.3,
+       110.4,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ]
+   },
+   "off": {
+    "panelHidden": true,
+    "inlineTop": "77px",
+    "chipRect": [
+     157.3,
+     216.5,
+     114.4,
+     29.5
+    ],
+    "chipMinEffectivePx": 16.02,
+    "chipRows": [
+     {
+      "text": "G",
+      "cls": "B",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       174.3,
+       219.3,
+       13.1,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     },
+     {
+      "text": "guide",
+      "cls": "SPAN",
+      "cssFontPx": 5.7,
+      "scale": 2.8111,
+      "effectivePx": 16.02,
+      "rect": [
+       195.8,
+       219.3,
+       58.5,
+       22.5
+      ],
+      "overflowY": 0,
+      "overflowX": 0
+     }
+    ],
+    "hudRects": {
+     "ffx2 boss strip": [
+      160.4,
+      115.3,
+      666.2,
+      87.1
+     ],
+     "ffx2 boss plate": [
+      160.4,
+      115.3,
+      666.2,
+      53.4
+     ],
+     "ffx2 boss name": [
+      177.3,
+      122.3,
+      109.4,
+      39.4
+     ],
+     "ffx2 boss head": [
+      154.7,
+      115.3,
+      677.5,
+      53.4
+     ],
+     "ffx2 SCAN hint": [
+      743.3,
+      132.1,
+      58,
+      19.7
+     ],
+     "ffx banner": null,
+     "ffx ctb queue": null,
+     "ffx cmd area": null,
+     "ffx2 cmd": [
+      1501,
+      469.8,
+      364.8,
+      214.8
+     ],
+     "ffx2 party": [
+      1404.8,
+      730.9,
+      466.6,
+      253
+     ]
+    },
+    "intersections": [],
+    "intersectingHudText": []
+   }
+  }
+ ]
+}

@@ -508,3 +508,105 @@ belonged to. None of these files is listed in `docs/CONTRACTS.md`, so no `CONTRA
 - Round 03 #6 (the OPTIONS panel's own displayed master-volume default, 0.8 in `SaveData.ts` vs 0.9
   in `AudioManager.ts`'s pre-fix default) is adjacent to item 1 but was not in this track's brief and
   touches `PauseScreenPanels.ts`, which another track owns; not fixed here.
+
+---
+
+## Round 05 repair (2026-09-21)
+
+Repair cycle 2 of 2 for the Build A.2 candidate. Two issues from
+`critic/rounds/round-05.json`, both inside `src/ui/common/StrategyGuide.ts` and
+`strategy-guide.css`.
+
+**Game case: both (hard rule 14, `critic/CHECKS.md` CHK-020).** The guide is shared plumbing —
+`StrategyGuide` and its sheet carry no game branch beyond the accent colour (`.sgd--ffx2`) — and
+both issues are bug fixes, so the same work lands in FFX and FFX-2 and both are measured below.
+PR-0050 was only *observed* in FFX-2 because that is the game whose chrome the broken fallback
+collides with; the source of the case is the code itself plus AGENTS.md rule 14, not a canon
+question, so nothing here needed `research/*.md`.
+
+### PR-0050 — the collapsed `G GUIDE` chip was drawn on the FFX-2 boss plate
+
+A regression of the column rebuild (ee49fc3 / c278f71). `applyVisible()` cleared the chip's inline
+`top` when the guide was switched off, on the theory that a stale measurement was worse than the
+authored default, and `update()` stopped calling `layout()` at all while the guide was down. The
+static fallback in the sheet is `top: 44px`, which is right for FFX — the thing above the rail is
+the action banner, ending at grid y 48 — and wrong for FFX-2, whose boss gauge strip is taller: the
+chip landed on Bahamut's nameplate, HP bar and SCAN label.
+
+The root fix is that the chip's anchor never depended on the panel. `railTop()` is now one method
+both states share, `layoutToggle()` places the chip `CHIP_RISE` above it, `applyVisible()` calls it
+instead of clearing the style, and `update()` calls it every frame while the guide is off — which
+also keeps the chip honest in FFX-2, where the strip loses a block each time an add dies. The
+`offsetHeight > 0` gate is unchanged, so hidden chrome still falls back to `anchors.top` and FFX's
+chip still sits where it did.
+
+### PR-0001, the guide column's half — the type floor
+
+Every authored size in `strategy-guide.css` is now **5.7 grid px or above**. The stage scales by
+`min(w / 640, h / 360)`, so the binding case of the two sizes this repair is scoped to is 1600x900
+at exactly 2.5x: the bare floor is `14 / 2.5 = 5.6` and 5.7 leaves headroom for a scale a hair under
+2.5. Raised: the panel's base 5.3 → 5.7 (body, reasons, rule bullets), section heads 4.6 → 5.7,
+`.sgd__actor` 4.6 → 5.7, `.sgd__timing` 4.8 → 5.7, `.sgd__cite` 4 → 5.7, `.sgd__phase-label`
+4.6 → 5.7, the toggle chip 4.4 → 5.7. Letter-spacing on the display-face labels comes down as their
+size goes up so the caps still fit the 132 px rail. The title (8), the command line (9), the arrow
+(6) and MORE (7) already cleared it and are untouched.
+
+**What 1280x720 measures: 11.4 effective px, 27 rows under the floor, in both games.** Clearing 14
+at 2x needs 7 authored grid px, which is a quarter again on top of this raise in the same 132 px
+rail — that is a content decision (how much of NEXT/WATCH/RULES survives), not a token floor, and it
+is out of this repair's scope. Flagged for whoever owns the next guide pass; the density ladder and
+the MORE row already decide *what* to drop, so the question is only how much.
+
+### Measured live
+
+One browser pass, own vite dev server on port 5731 (stopped by its listening PID, 12540),
+**`PYREFLY_BROWSER=gpu`**, real keys — title → chapter select → party prep → battle, no injection —
+Chapter 1 (Seymour Flux) and Chapter 4 (Bahamut). Saved as
+`docs/screenshots/builda1/guide/measure-pass4.json` with four screenshots
+(`pass4-{ffx,ffx2}-1600x900-guide-{open,off}.png`).
+
+**One unit system:** every number is a screen CSS px at `deviceScaleFactor: 1`, and an effective
+font size is the computed `font-size` times the product of every ancestor's transform scale walked
+up the chain. Nothing unscaled is subtracted from anything scaled — the trap the round-04 rig fell
+into, which read `6 x (scale - 1)` px low.
+
+| Game | Size | Stage scale | Min effective px | Rows under 14 | Sliced / outside the stack | Chip `top` with the guide off | HUD rects the chip intersects |
+|---|---|---|---|---|---|---|---|
+| FFX | 1280x720 | 2.000 | 11.40 | 27 | 0 / 0 | 33 px (authored fallback; banner hidden) | none |
+| FFX | 1600x900 | 2.500 | **14.25** | **0** | 0 / 0 | 33 px | none |
+| FFX | 2000x1012 | 2.811 | **16.02** | **0** | 0 / 0 | 33 px | none |
+| FFX-2 | 1280x720 | 2.000 | 11.40 | 27 | 0 / 0 | **77 px (measured)** | none |
+| FFX-2 | 1600x900 | 2.500 | **14.25** | **0** | 0 / 0 | **77 px (measured)** | none |
+| FFX-2 | 2000x1012 | 2.811 | **16.02** | **0** | 0 / 0 | **77 px (measured)** | none |
+
+The acceptance check for PR-0050 is the last two columns: at 1600x900 the FFX-2 chip's rect is
+`y 192.5..218.8` against a boss strip of `y 102.5..180.0` and a nameplate of `y 108.8..143.8`, and
+the rig also sweeps every painted leaf inside `.ffxhud` / `.ffx2hud` (excluding the guide's own) for
+an intersection: **zero, at all three sizes in both games.** Before the fix the same rig read
+`inlineTop=33px` in FFX-2, i.e. inside the strip.
+
+The whole-line fit from ee49fc3 still holds at the larger type: no row overflows its box and no row
+falls below `.sgd__stack`, at any of the six cells — fewer lines fit and the MORE row earns its
+place more often, which is the intended trade.
+
+### Files touched (round 05)
+
+| File | Change |
+|---|---|
+| `src/ui/common/StrategyGuide.ts` | `railTop()` extracted; new `layoutToggle()`; `applyVisible()` re-anchors instead of clearing; `update()` places the chip while the guide is off |
+| `src/ui/common/strategy-guide.css` | every authored `font-size` at or above the 5.7 grid-px floor, with the floor documented in the file header |
+| `tests/unit/strategy-guide-chip-and-type.test.ts` | new: the chip holds its measured anchor through a hide/show cycle in both games, still falls back when the anchor is not laid out, and the sheet is parsed so a new size under the floor fails the suite |
+| `tests/unit/ui-strategy-guide.test.ts` | the one case that asserted the *defect* ("drops the chip's measured anchor when the guide is switched off") now asserts the repair |
+
+Neither source file is in `docs/CONTRACTS.md`, so no `CONTRACT-CHANGES.md` entry.
+
+### Verification (round 05)
+
+- `npx tsc --noEmit` — clean.
+- `npx vitest run` — **174 files, 4428 tests, all green** in one full run.
+- Reproduced first (hard rule 3): the new test file failed 7 of 8 cases on the pre-fix code — the
+  chip cases read `top: ''` where the anchor says 49 px, and the sheet parse listed
+  `.sgd__panel 5.3`, `.sgd__head 4.6`, `.sgd__actor 4.6`, `.sgd__timing 4.8`, `.sgd__cite 4`,
+  `.sgd__phase-label 4.6`, `.sgd__toggle 4.4` as under the floor (11.24 to 13.49 effective px at
+  2000x1012). No test was loosened; one was corrected, because it encoded the defect.
+- `node tools/orphans.mjs` — 24 orphans, unchanged.

@@ -401,13 +401,27 @@ describe('the rail is measured, never fixed', () => {
     expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.style.top).toBe('');
   });
 
-  it('drops the chip’s measured anchor when the guide is switched off', () => {
+  /**
+   * Round 05 PR-0050 (both games; observed in FFX-2). This used to assert the
+   * opposite — that switching the guide off cleared the inline `top` so the
+   * chip fell back to `.sgd__toggle`'s static `top: 44px`. That fallback is
+   * only correct for FFX, whose action banner ends at grid y 48; in FFX-2 the
+   * chrome above the rail is the boss gauge strip, and the chip was drawn
+   * across the boss nameplate, HP bar and SCAN label. The anchor is chrome the
+   * owner named, not the panel, so it survives the panel being hidden.
+   */
+  it('keeps the chip’s measured anchor when the guide is switched off', () => {
     const { guide, stage } = mountGuide({ anchors: { below: () => boxed(20, 24), top: 44, bottom: 34 } });
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
-    expect(toggleOf(stage).style.top).not.toBe('');
+    // 20 + 24 + CLEARANCE_GAP(5) + CHIP_RISE(11) = 60 for the rail, 49 for the chip.
+    expect(Number.parseFloat(toggleOf(stage).style.top)).toBeCloseTo(49, 2);
     pressG();
-    expect(toggleOf(stage).style.top).toBe('');
+    expect(Number.parseFloat(toggleOf(stage).style.top)).toBeCloseTo(49, 2);
+    // And it is still the anchor, not a frozen value: the strip moves, the chip
+    // follows, with the panel still down.
+    guide.update(0.016);
+    expect(Number.parseFloat(toggleOf(stage).style.top)).toBeCloseTo(49, 2);
   });
 });
 

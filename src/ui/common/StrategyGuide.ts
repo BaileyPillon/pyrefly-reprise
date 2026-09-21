@@ -329,12 +329,18 @@ export class StrategyGuide {
   private applyVisible(): void {
     this.panelEl.hidden = !this.visible;
     this.el.classList.toggle('sgd--off', !this.visible);
-    // Drop the measured anchor with the panel it was measured against:
-    // `layout()` stops running while the guide is off, and an inline `top`
-    // outranks the stylesheet, so the chip would otherwise stay frozen at
-    // whatever height the last open panel happened to start at.
+    // The chip keeps its measured anchor. Round 05 PR-0050: this used to clear
+    // the inline `top` and let the chip fall back to `.sgd__toggle`'s static
+    // `top: 44px`, on the theory that a stale measurement was worse than the
+    // authored default. In FFX the default happens to be right — the thing
+    // above the rail is the action banner, which ends at grid y 48. In FFX-2
+    // the thing above the rail is the boss gauge strip, which is taller, so the
+    // fallback printed `G GUIDE` across Bahamut's nameplate, HP bar and SCAN
+    // label. The anchor does not depend on the panel: it is the bottom edge of
+    // whatever chrome the owner named, which is laid out whether the guide is
+    // up or not, so it is re-read here and every frame in `update()`.
     if (!this.visible) {
-      this.toggleEl.style.top = '';
+      this.layoutToggle();
       this.stackEl.style.top = '';
       this.stackEl.style.maxHeight = '';
       // The affordance belongs to the panel, not to the chip: with the guide
@@ -377,6 +383,11 @@ export class StrategyGuide {
   update(_dt: number): void {
     this.pollPad();
     if (this.visible) this.layout();
+    // With the guide off there is no rail to solve, but the chip still has to
+    // follow the chrome it sits under: in FFX-2 the boss gauge strip grows and
+    // shrinks a block per living enemy, so a top measured once at the start of
+    // the battle is wrong by the time the first add dies (round 05 PR-0050).
+    else this.layoutToggle();
   }
 
   private pollPad(): void {
@@ -444,23 +455,44 @@ export class StrategyGuide {
   }
 
   /**
+   * The rail's top edge, in stage-grid px: below whatever chrome the owner
+   * named, with room for the chip that rides above it.
+   *
+   * The chip rides `CHIP_RISE` **above** the rail's top edge, so the rail has
+   * to leave room for it under whatever it is clearing — otherwise the chip
+   * itself lands on that anchor. In FFX the anchor is the action banner
+   * (`.ig-banner`, grid y 17.8..48) and the chip is 7.5px tall, which is
+   * exactly how `G GUIDE` ended up printed across the banner in Bailey's
+   * Chapter 1 capture. The fallback `anchors.top` already has the rise counted
+   * in (44, with the chip at 33), so only the measured branch adds it.
+   *
+   * `offsetHeight > 0` is the gate, not merely "the element exists": chrome
+   * that is not laid out reports `offsetTop: 0` and would pull the rail to the
+   * top of the stage.
+   */
+  private railTop(): number {
+    const { anchors } = this.opts;
+    const below = anchors.below?.() ?? null;
+    return below && below.offsetHeight > 0
+      ? below.offsetTop + below.offsetHeight + CLEARANCE_GAP + CHIP_RISE
+      : anchors.top;
+  }
+
+  /**
+   * Put the chip `CHIP_RISE` above the rail's top edge — the only geometry that
+   * still applies when the panel under it is hidden (round 05 PR-0050).
+   */
+  private layoutToggle(): void {
+    this.toggleEl.style.top = `${Math.max(0, this.railTop() - CHIP_RISE).toFixed(2)}px`;
+  }
+
+  /**
    * Cap the rail at whatever chrome it has to clear. See the class comment on
    * why this is measured rather than a constant.
    */
   private layout(): void {
     const { anchors } = this.opts;
-    const below = anchors.below?.() ?? null;
-    // The chip rides `CHIP_RISE` **above** the rail's top edge, so the rail has
-    // to leave room for it under whatever it is clearing — otherwise the chip
-    // itself lands on that anchor. In FFX the anchor is the action banner
-    // (`.ig-banner`, grid y 17.8..48) and the chip is 7.5px tall, which is
-    // exactly how `G GUIDE` ended up printed across the banner in Bailey's
-    // Chapter 1 capture. The fallback `anchors.top` already has the rise
-    // counted in (44, with the chip at 33), so only the measured branch adds it.
-    const top =
-      below && below.offsetHeight > 0
-        ? below.offsetTop + below.offsetHeight + CLEARANCE_GAP + CHIP_RISE
-        : anchors.top;
+    const top = this.railTop();
 
     // `offsetTop` is already stage-space: every anchor and the panel share the
     // HUD stage as their offset parent.
@@ -478,7 +510,7 @@ export class StrategyGuide {
     const available = Math.max(MIN_PANEL_HEIGHT, floor - top);
     this.stackEl.style.top = `${top.toFixed(2)}px`;
     this.stackEl.style.maxHeight = `${available.toFixed(2)}px`;
-    this.toggleEl.style.top = `${Math.max(0, top - CHIP_RISE).toFixed(2)}px`;
+    this.layoutToggle();
     // Short rules while the menu is eating the rail; the paragraphs come back
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);

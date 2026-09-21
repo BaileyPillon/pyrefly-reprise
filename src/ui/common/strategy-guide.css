@@ -31,6 +31,26 @@
  * bottom-right, telegraph top-right — and stands its party column bottom-left.
  * A left rail that is measured to stop above whatever is beneath it is the one
  * position that clears the command menu and the CTB list in both.
+ *
+ * ## The type floor: 5.7 grid px
+ *
+ * Round 05 PR-0001 (both games): the column rebuilt in ee49fc3 still printed
+ * body text at 11.5 to 13.25 *effective* CSS px at 1600x900, under the
+ * project's 14 px legibility bar (`critic/CHECKS.md` CHK-003). The stage scales
+ * by `min(w / 640, h / 360)`, so an authored grid px is worth 2.5 screen px at
+ * 1600x900 and ~2.81 at 2000x1012: the floor is `14 / 2.5 = 5.6`, and every
+ * size in this file is authored at **5.7 or above** so a stage scale a hair
+ * under 2.5 still clears 14. Enforced by
+ * `tests/unit/strategy-guide-chip-and-type.test.ts`, which parses this sheet —
+ * a new `font-size` below the floor fails the suite.
+ *
+ * The letter-spacing on the display-face labels comes down as their size goes
+ * up (a 5.7px cap at 0.2em is wider than the 132px rail), and fewer lines fit
+ * the rail than before. That is the intended trade: the density ladder and the
+ * MORE row in `StrategyGuide.ts` already decide *what* to drop, and dropping a
+ * rule is recoverable where an unreadable one is not. 1280x720 (scale 2x) is
+ * NOT cleared by this floor — 5.7 is 11.4 px there — and is not in this
+ * repair's scope; see `docs/handoff/builda1-boot-and-menus.md`.
  */
 
 .sgd {
@@ -89,7 +109,7 @@
   background: var(--ig-ink-panel);
   color: var(--ig-paper);
   font-family: var(--ig-font-text);
-  font-size: 5.3px;
+  font-size: 5.7px;
   line-height: 1.5;
   box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45); /* 8 20 */
   /* Accent on the start edge: left in FFX (--ig-edge 0), right in FFX-2
@@ -140,7 +160,7 @@
   display: inline-block;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 4.6px; /* 10 @1440, the CTB name's register */
+  font-size: 5.7px;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--ig-ink);
@@ -153,8 +173,8 @@
 .sgd__actor {
   margin: 0;
   font-family: var(--ig-font-display);
-  font-size: 4.6px;
-  letter-spacing: 0.2em;
+  font-size: 5.7px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #b9c6d6;
 }
@@ -185,8 +205,8 @@
 }
 .sgd__timing {
   font-family: var(--ig-font-display);
-  font-size: 4.8px;
-  letter-spacing: 0.14em;
+  font-size: 5.7px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #e9d7a6;
 }
@@ -206,8 +226,8 @@
 .sgd__cite {
   margin: 0.5px 0 0;
   font-family: var(--ig-font-display);
-  font-size: 4px;
-  letter-spacing: 0.08em;
+  font-size: 5.7px;
+  letter-spacing: 0.04em;
   color: #7f8a99;
 }
 
@@ -241,8 +261,8 @@
   margin: 0 0 0.5px;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 4.6px;
-  letter-spacing: 0.2em;
+  font-size: 5.7px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ig-accent);
 }
@@ -381,8 +401,8 @@
   color: #cfd6de;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 4.4px;
-  letter-spacing: 0.18em;
+  font-size: 5.7px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   transform: skewX(var(--ig-skew));
   cursor: pointer;
