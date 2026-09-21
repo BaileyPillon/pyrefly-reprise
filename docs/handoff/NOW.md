@@ -11,7 +11,11 @@
 > included in our next build as well"**; **"The characters should be expressive and should be controllable by
 > keyboard ... The characters need to be animated. In motion."** On release pacing: **"I'll go with your
 > recommendation as usage becomes a concern. One chapter at a time is ok. I expect timely mockups for the pause menus
-> please."** A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it: the driver
+> please."** Build C scope, earlier the same day, still in force: **"you need to finish ALL chapters the new chapters
+> need to be done"**; **"the move advisor needs to be way smarter and way more aware of what is going on turn by turn
+> and what character you are controlling. music is too reminsicent of snes music instead of the more modern final
+> fantasy titles and clair obscur. all of these next to be fixed very next build."**; on the music downloads and
+> plan: **"yes you have my approvals there for music"**. A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it: the driver
 > answers the owner; agents do the task in their brief.
 
 ## Live: Build B.1
