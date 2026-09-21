@@ -30,7 +30,17 @@
   (`c7f5be4`, `71059ae`, `8fe4f99`, `de99ba4`); three story scripts; decision records (`26ee387`); music plan
   `docs/plans/music-modern-sound.md` (`fe11c60`); options sheets for the Evrae order widget and Anima's arrival; music
   sketches on `docs/audio/audition.html`.
-- Running: advisor v2 build and Leblanc engine (workflow wf_55ef87e9-9b0); render-tool guard; chapter art production
+- **Move advisor v2 is BUILT and measured** (`55540b9`, `f0ff68a`; `docs/handoff/advisor-v2.md`). Forty seeds a chapter,
+  a bot pressing the card's top row every turn: ch1 62.5 to **67.5** percent (the chapter line itself wins 65), ch2 82.5
+  to 85 (line 97.5), **ch3 0.0 to 97.5** (line 97.5), ch4 100, ch5 100 to 97.5. Chapter 3's median falls from 448 turns
+  to 216. Latency p50 1.4-3.6 ms, p95 2.3-5.1 ms. Three defects, all found by running the engine: a switch's incoming
+  member was not part of its command identity, so "put Lulu in" picked Wakka; the ownership gate refused Doublecast's aim
+  at the boss, so ch3's line was thrown away on every Lulu turn; and a status the preview answered at its median was
+  charged as a wasted turn, so ch3's Slow sorted behind Cheer. `MoveAdvisor.ts` untouched, nothing in `src/battle/**`
+  changed. **Chapter 2 cannot reach its bar and the reason is measured, not tunable:** all 319 of its 319 divergences over
+  eight seeds are the chapter line calling for Defend, which the FFX command window does not paint at all - so the
+  auto-battler wins ch2 with a move no player can press. Bailey's call (handoff section 7).
+- Running: Leblanc engine (workflow wf_55ef87e9-9b0); render-tool guard; chapter art production
   (one agent per chapter); Nul-spell targeting being sourced from the web; music library downloads by the driver into
   `D:\Toolsudio-libs` and the ACE-Step checkpoint into ComfyUI.
 - Open with Bailey: Evrae widget (rec. A + C's staging), Anima arrival (rec. A then B's tag), Macalania cue mood A or B,
