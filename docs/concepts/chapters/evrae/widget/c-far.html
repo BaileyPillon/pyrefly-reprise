@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Evrae order widget C — far</title>
+<link rel="stylesheet" href="../../../polish/_kit/kit.css">
+<style>
+  /* 1600x900 delivery: the kit authors on 1440x810 and scales to 1920; we
+     rescale the same stage to 1600 wide so the spec numbers stay literal. */
+  body { width: 1600px; height: 900px; }
+  .stage { transform: scale(1.1111111); }
+
+  .mk-tag {
+    position: absolute; left: 0; top: 0; z-index: 90;
+    display: flex; align-items: stretch;
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+    letter-spacing: 0.28em; text-transform: uppercase;
+  }
+  .mk-tag b {
+    padding: 9px 16px 10px; background: var(--ig-gold); color: #0b0a12;
+    font-size: 15px; letter-spacing: 0.22em;
+  }
+  .mk-tag span {
+    padding: 9px 18px 10px; background: rgba(11,10,18,0.82);
+    color: rgba(244,241,232,0.92); font-size: 13px;
+  }
+  /* deck plating + guard rail, drawn over the approved backdrop plate */
+  .mk-deck { position: absolute; left: 0; right: 0; bottom: 0; pointer-events: none; }
+  .mk-deck::before {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 100%;
+    background:
+      repeating-linear-gradient(97deg, rgba(255,255,255,0.045) 0 2px, rgba(0,0,0,0) 2px 46px),
+      linear-gradient(to bottom, rgba(7,6,12,0) 0%, rgba(9,8,14,0.72) 42%, rgba(6,5,10,0.95) 100%);
+  }
+  .mk-rail { position: absolute; left: -40px; right: -40px; pointer-events: none; }
+  .mk-rail i {
+    position: absolute; left: 0; right: 0; height: 5px;
+    background: linear-gradient(to right, rgba(120,110,95,0.25), rgba(206,186,140,0.62), rgba(120,110,95,0.25));
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
+  .mk-sil { position: absolute; bottom: 0; filter: brightness(0.06) contrast(1.4); }
+  .mk-sil img { display: block; height: 100%; width: auto; }
+  .mk-haze { position: absolute; inset: 0; pointer-events: none; }
+  .mk-boss { position: absolute; pointer-events: none; }
+  .mk-boss img { display: block; width: 100%; height: auto; }
+
+  .mk-order {
+    align-self: center; padding: 5px 11px 6px;
+    background: var(--ig-gold); color: #0b0a12;
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+    font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
+    transform: skewX(var(--ig-skew));
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  }
+  .mk-order--arrow { background: rgba(11,10,18,0.86); color: var(--ig-gold); border-bottom: 2px solid var(--ig-gold); }
+  .mk-tile-order { box-shadow: 0 0 0 2px var(--ig-gold), 0 0 14px rgba(227,185,74,0.55); }
+
+  /* A — the cost preview slab under the cascade */
+  .mk-cost {
+    position: absolute; padding: 12px 18px 14px 16px;
+    background: var(--ig-paper); color: #221f2c;
+    border-left: 5px solid var(--ig-gold-on-paper);
+    transform: skewX(var(--ig-skew));
+    box-shadow: 0 10px 24px rgba(0,0,0,0.5);
+    width: 372px;
+  }
+  .mk-cost > * { transform: skewX(var(--ig-skew-inverse)); display: block; }
+  .mk-cost__label { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ig-gold-on-paper); }
+  .mk-cost__line { font-family: 'Exo 2', sans-serif; font-size: 17px; line-height: 1.5; margin-top: 5px; }
+  .mk-cost__line b { font-family: 'Rajdhani', sans-serif; font-size: 19px; }
+  .mk-cost__ammo { display: flex; gap: 6px; margin-top: 9px; align-items: center; }
+  .mk-cost__ammo i { width: 34px; height: 9px; background: #b8862a; display: block; }
+  .mk-cost__ammo i.spent { background: rgba(34,31,44,0.22); }
+  .mk-cost__ammo i.forfeit { background: repeating-linear-gradient(45deg, #b02a2a 0 4px, rgba(176,42,42,0.25) 4px 8px); }
+  .mk-cost__ammo span { font-family: 'Chakra Petch', sans-serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6a6272; margin-left: 6px; }
+
+  /* B — the deck-side range gauge */
+  .mk-gauge {
+    position: absolute; left: 48px; top: 148px; width: 118px; height: 430px;
+    background: rgba(11,10,18,0.76); border-left: 3px solid var(--ig-gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+  }
+  .mk-gauge__cap {
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.26em; text-transform: uppercase; color: rgba(244,241,232,0.7);
+    position: absolute; left: 14px;
+  }
+  .mk-gauge__cap--near { bottom: 16px; }
+  .mk-gauge__cap--far { top: 16px; }
+  .mk-gauge__cap--on { color: var(--ig-gold); }
+  .mk-gauge__track { position: absolute; left: 34px; top: 52px; bottom: 52px; width: 4px; background: rgba(244,241,232,0.18); }
+  .mk-gauge__notch { position: absolute; left: -10px; width: 24px; height: 3px; background: rgba(244,241,232,0.42); }
+  .mk-gauge__ship {
+    position: absolute; left: -16px; width: 36px; height: 36px; margin-top: -18px;
+    background: var(--ig-gold); clip-path: polygon(0 50%, 74% 0, 100% 50%, 74% 100%);
+    box-shadow: 0 0 18px rgba(227,185,74,0.6);
+  }
+  .mk-gauge__ghost {
+    position: absolute; left: -12px; width: 28px; height: 28px; margin-top: -14px;
+    border: 2px dashed rgba(227,185,74,0.85); background: rgba(227,185,74,0.10);
+  }
+  .mk-gauge__pull {
+    position: absolute; left: 30px; width: 12px;
+    background: linear-gradient(to bottom, rgba(227,185,74,0.0), rgba(227,185,74,0.55));
+  }
+  .mk-gauge__eta {
+    position: absolute; left: 66px; width: 44px;
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ig-gold);
+    line-height: 1.35;
+  }
+  .mk-gauge__breath {
+    position: absolute; left: 0; right: 0; height: 74px;
+    background: repeating-linear-gradient(-45deg, rgba(176,42,42,0.34) 0 6px, rgba(176,42,42,0.08) 6px 12px);
+    border-top: 1px solid rgba(176,42,42,0.6); border-bottom: 1px solid rgba(176,42,42,0.6);
+  }
+  .mk-gauge__breath b {
+    position: absolute; right: 6px; bottom: 4px;
+    font-family: 'Chakra Petch', sans-serif; font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #f2b9b9;
+  }
+
+  /* C — the world says it: a one-shot order confirmation, no persistent widget */
+  .mk-shout {
+    position: absolute; left: 0; right: 0; top: 268px; text-align: center;
+  }
+  .mk-shout__rule { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: linear-gradient(to right, rgba(227,185,74,0), rgba(227,185,74,0.85), rgba(227,185,74,0)); }
+  .mk-shout__text {
+    position: relative; display: inline-block; padding: 10px 34px 12px;
+    background: rgba(11,10,18,0.82);
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700;
+    font-size: 40px; color: var(--ig-paper);
+  }
+  .mk-shout__text small {
+    display: block; font-family: 'Chakra Petch', sans-serif; font-style: normal;
+    font-size: 13px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--ig-gold);
+    margin-top: 4px;
+  }
+  .mk-wind { position: absolute; pointer-events: none; }
+  .mk-wind i {
+    position: absolute; height: 2px; display: block;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+  }
+
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+
+  <img class="stage__bg" id="bg" src="../renders/backdrop-b.png" alt=""
+       style="transform: scale(1); object-position: 38% 18%;">
+  <div class="stage__grade" style="background:
+      linear-gradient(to bottom, rgba(12,16,30,0.34) 0%, rgba(120,150,180,0.10) 45%, rgba(6,8,16,0.62) 100%);"></div>
+  <div class="mk-boss" style="left: 690px; top: 150px; width: 300px;
+         transform: rotate(-15deg); opacity: 0.88;
+         filter: drop-shadow(0 10px 18px rgba(0,0,0,0.5)) saturate(0.62) brightness(0.78) blur(0.4px);">
+         <img src="../renders/evrae-b.png" alt=""></div>
+  <div class="mk-haze" style="background: linear-gradient(to top, rgba(140,175,205,0) 40%, rgba(150,185,215,0.20) 72%, rgba(170,200,225,0.30) 100%);"></div>
+  <div class="mk-rail" style="top: 470px; height: 60px;">
+    <i style="top: 0; transform: rotate(-1.4deg);"></i>
+    <i style="top: 34px; height: 3px; opacity: 0.6; transform: rotate(-1.4deg);"></i>
+  </div>
+  <div class="mk-deck" style="height: 300px;"></div>
+  <div class="mk-sil" style="left: 120px; height: 296px;">
+    <img src="../../../../../public/art/characters/tidus/idle.png" alt="">
+  </div>
+  <div class="mk-sil" style="left: 300px; height: 268px; opacity: 0.94;">
+    <img src="../../../../../public/art/characters/wakka/idle.png" alt="">
+  </div>
+
+  <div class="ig-banner">
+    <span class="ig-banner__name">Rikku</span>
+    <span class="ig-banner__chip">Trigger — Close In</span>
+  </div>
+
+
+  <div class="ig-ctb">
+    <div class="ig-ctb__row">
+      <span class="ig-ctb__name">Tidus</span>
+      <span class="ig-ctb__tile ig-ctb__tile--current"><img src="../../../../../public/art/portraits/tidus.png" alt=""></span>
+    </div>
+    <div class="ig-ctb__row">
+      
+      
+      <span class="ig-ctb__name">Cid</span>
+      <span class="ig-ctb__tile"><span class="ig-ctb__mono">C</span></span>
+    </div>
+    <div class="ig-ctb__row">
+      <span class="ig-ctb__name">Evrae</span>
+      <span class="ig-ctb__tile ig-ctb__tile--enemy"><span class="ig-ctb__mono">E</span></span>
+    </div>
+    <div class="ig-ctb__row">
+      <span class="ig-ctb__name">Wakka</span>
+      <span class="ig-ctb__tile"><img src="../../../../../public/art/portraits/wakka.png" alt=""></span>
+    </div>
+    <div class="ig-ctb__row">
+      <span class="ig-ctb__name">Rikku</span>
+      <span class="ig-ctb__tile"><img src="../../../../../public/art/portraits/rikku.png" alt=""></span>
+    </div>
+  </div>
+
+  <div class="ig-stat-list">
+
+    <div class="ig-stat">
+      <span class="ig-stat__face"><img src="../../../../../public/art/portraits/tidus.png" alt=""></span>
+      <span class="ig-stat__name">Tidus</span>
+      <span class="ig-stat__value">1860<small>/2420</small></span>
+      <span class="ig-stat__value ig-stat__value--mp">96</span>
+      <span class="ig-stat__od"><i style="width: 55%"></i></span>
+    </div>
+
+    <div class="ig-stat">
+      <span class="ig-stat__face"><img src="../../../../../public/art/portraits/wakka.png" alt=""></span>
+      <span class="ig-stat__name">Wakka</span>
+      <span class="ig-stat__value">2010<small>/2280</small></span>
+      <span class="ig-stat__value ig-stat__value--mp">42</span>
+      <span class="ig-stat__od"><i style="width: 70%"></i></span>
+    </div>
+
+    <div class="ig-stat ig-stat--acting">
+      <span class="ig-stat__face"><img src="../../../../../public/art/portraits/rikku.png" alt=""></span>
+      <span class="ig-stat__name">Rikku</span>
+      <span class="ig-stat__value">1444<small>/1720</small></span>
+      <span class="ig-stat__value ig-stat__value--mp">38</span>
+      <span class="ig-stat__od"><i style="width: 30%"></i></span>
+    </div>
+  </div>
+
+  <div class="mk-shout">
+    <div class="mk-shout__rule"></div>
+    <div class="mk-shout__text">Take us in!<small>Order stands until Cid answers</small></div>
+  </div><div class="mk-wind" style="inset: 0;"><i style="top:150px; left:120px; width:180px; opacity:0.22; transform: rotate(-3deg);"></i><i style="top:201px; left:317px; width:233px; opacity:0.47; transform: rotate(-3deg);"></i><i style="top:252px; left:514px; width:286px; opacity:0.43; transform: rotate(-3deg);"></i><i style="top:303px; left:711px; width:219px; opacity:0.39; transform: rotate(-3deg);"></i><i style="top:325px; left:908px; width:272px; opacity:0.34; transform: rotate(-3deg);"></i><i style="top:376px; left:205px; width:205px; opacity:0.30; transform: rotate(-3deg);"></i><i style="top:427px; left:402px; width:258px; opacity:0.26; transform: rotate(-3deg);"></i><i style="top:478px; left:599px; width:191px; opacity:0.22; transform: rotate(-3deg);"></i><i style="top:500px; left:796px; width:244px; opacity:0.47; transform: rotate(-3deg);"></i></div>
+  <div class="ig-hint"><span><b>Enter</b> send order</span><span><b>Esc</b> back</span><span><b>Tab</b> what this costs</span></div>
+<div class="mk-tag"><b>C</b><span>Order widget &mdash; Far</span></div>
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="concept-tag">Concept</div>
+  
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "chapter": "seymour-anima-macalania",
+  "game": "ffx",
+  "gameCase": "FFX only — Macalania Temple is an FFX chapter; the beat is a summon inside an FFX CTB battle. Absence test: no stage carries `ig--ffx2`, no ATB bar, no dressphere row, no pink accent. A pick applies to this FFX chapter and to no FFX-2 chapter (AGENTS.md rule 14).",
+  "status": "options — nothing built, nothing wired, no src/ change (AGENTS.md hard rule 9)",
+  "round": "The fourth pick in docs/plans/chapter-macalania-review.md §6.4: 'Anima's arrival, 3 faked screenshots of the finished moment plus a few lines on how it plays'",
+  "question": "Which staging of Anima's arrival should be built — what the single continuous camera move leads with?",
+  "frames": "1600x900, composited with docs/concepts/polish/_kit over the approved plates: Macalania backdrop A (`../renders/backdrop-a.png`), Seymour B (`../renders/seymour-b.png`), Guado Guardian A (`../renders/guardian-a.png`) and the approved Anima painting (`public/art/characters/anima/idle.png`, `attack.png`).",
+  "sources": [
+    "research/ffx-seymour-anima-macalania.md §9.4 (painters' notes: bound upper half, horned lower half, the fayth picture at her neck, 'she arrives from below, still bound', 'the entrance is the chapter's money shot… a single continuous camera move, do not cut away'), §3.2/§5.2 (the summon kills every living Guardian)",
+    "docs/plans/chapter-macalania-review.md §2.3 (anima-pain-boss: power 28, ko chance 100, canMiss false), §5.2 C-2 (Seymour present but untargetable), §6.1 (the seal mark must be our own, hard rule 8), §6.4",
+    "docs/handoff/presentation-ink-and-gold.md"
+  ],
+  "beats_all_three_must_contain": [
+    "She arrives from below, still bound: chains and the eye before anything else.",
+    "Every living Guado Guardian dies on the summon — their CTB rows go out in the same move.",
+    "Seymour stays on the field and stops being a legal target until she is dismissed (decision C-2, assumption, recorded).",
+    "One continuous camera move, no cut.",
+    "Her seal mark is our own original mark, never the canon glyph."
+  ],
+  "options": {
+    "A": {
+      "id": "from-below-the-ice",
+      "title": "From below the ice — chains and the eye first",
+      "frame": "a.png",
+      "plays": [
+        "The camera drops to floor height behind the party; the antechamber's mirror floor fills the bottom third and the party are back-lit silhouettes at the edges.",
+        "Violet light cracks the ice from underneath before anything is visible, and the two Guardians' CTB rows strike through in the same second — the summon is what killed them.",
+        "Chains come up through the floor first and go taut; the horns follow; the single red eye clears the ice last and is the first thing that looks back at you.",
+        "The camera rises with her in one move and never cuts, so the size of her is learned by how long the rise takes.",
+        "Control returns with the camera still settling — the fight resumes under her, not after a cutscene ends."
+      ],
+      "leads_with": "the creature",
+      "cost": "M",
+      "risk": "The payoff depends entirely on a move a still cannot show; if the rise is short it reads as a pop-in. It also spends the beat on Anima and leaves Seymour's change of status to be discovered later, in a menu."
+    },
+    "B": {
+      "id": "seymour-steps-back",
+      "title": "Seymour steps back — the moment he stops being a target",
+      "frame": "b.png",
+      "plays": [
+        "The camera holds a two-shot: Seymour on the left, Anima rising on the right, both in frame the whole time.",
+        "He steps back out of the light as she comes up, and his reticle dies in place — grey corners, no name plate, the plate reading 'Cannot be targeted'.",
+        "The Guardians go out between them, pyreflies lifting off the floor where they stood, so the cost of the summon is paid on screen and not in the log.",
+        "Anima's reticle lights gold as his goes out: the target list changes in front of you instead of being discovered on the next turn.",
+        "He stays visible and idle for the whole of act two, which is what makes his return at her dismissal read as a return rather than a spawn."
+      ],
+      "leads_with": "the rule change",
+      "cost": "S",
+      "risk": "It is the least awe-struck of the three, and it spends the money shot on a UI fact. It also commits the picture to decision C-2, which the plan itself calls the highest-consequence assumption in the chapter."
+    },
+    "C": {
+      "id": "the-first-pain",
+      "title": "The first Pain — the arrival ends on the telegraph",
+      "frame": "c.png",
+      "plays": [
+        "The rise finishes centre-frame and the camera keeps pushing in until she fills it, the fayth picture at her neck catching the only warm light in the room.",
+        "Our own seal mark — concentric rings and eight spokes, not the canon glyph — draws itself beneath her as she settles.",
+        "Her CTB tile lights as the current actor immediately: the arrival does not buy the party a free turn.",
+        "The charge band names the attack before it lands — 'Pain: one of you. It will not miss.' — and the targeted party slab is outlined in blood red.",
+        "The KO arrives on a party member and the frame does not flinch; the lesson of act two is taught in the first three seconds of it."
+      ],
+      "leads_with": "the threat",
+      "cost": "M",
+      "risk": "It teaches the fight at the cost of the entrance: by the time the telegraph is on screen the player is reading text, not looking at her. It is also the frame that most needs the real seal mark to exist before it can be judged."
+    }
+  },
+  "recommendation": "A as the staging, with B's two beats folded into its tail: the rise leads (it is the money shot §9.4 asks for), and as the camera settles Seymour steps back and his reticle dies in the same continuous move, before Anima's first turn. C is the weakest as an entrance and the strongest as the shot immediately after it.",
+  "honest_limits": [
+    "All three composite the approved Anima painting. §9.4 note 1 says Seymour's Anima is a notably SHORTER creature than Yuna's; nothing here shows two sizes, so whichever staging is picked must record on its tile whether the shipped painting is being read as the short one (a knowing departure, not a silent one).",
+    "The seal in C is an original mark drawn in CSS for this mockup, not a designed asset. The real mark is a NEW asset (plan §6.1) and is the thing a still cannot settle.",
+    "Chains, ice cracks and pyreflies are CSS over the approved backdrop A plate — the engine would do them as particles and painted layers.",
+    "Frame B draws Seymour untargetable, which is decision C-2, an assumption the plan records rather than a sourced fact.",
+    "Numbers on screen are illustrative staging, not sourced encounter data."
+  ]
+}

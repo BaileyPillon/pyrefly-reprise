@@ -1,0 +1,75 @@
+{
+  "chapter": "evrae",
+  "game": "ffx",
+  "gameCase": "FFX only — the airship chapter is an FFX chapter (chapters 1-3 plus the new FFX ones). Trigger Commands, the CTB queue and Cid's own CTB row are FFX conventions. Absence test: nothing here touches FFX-2 — no `ig--ffx2` class on any stage, no ATB bar, no dressphere row, no pink accent. If Bailey picks one of these, it applies to the FFX airship chapter and to no FFX-2 chapter (AGENTS.md rule 14).",
+  "status": "options — nothing built, nothing wired, no src/ change (AGENTS.md hard rule 9)",
+  "round": "O-3 (the order widget) and O-4 (the range read without the HUD), answered together because the same frame has to answer both",
+  "question": "Which of the three ways to issue 'Pull back' / 'Close in' to Cid, and to read NEAR versus FAR at a glance, should the chapter be built around?",
+  "frames": "1600x900, composited with docs/concepts/polish/_kit over the approved plates: backdrop B (`../renders/backdrop-b.png`) and Evrae look B (`../renders/evrae-b.png`). Each option is a pair: NEAR and FAR.",
+  "sources": [
+    "docs/plans/chapter-evrae-review.md §2.5 (Cid's turn, order-vs-missile exclusivity), §2.6 (the distance mechanic, the Trigger Command, reach), §6.2 rounds O-3 and O-4, §9 R1/R4",
+    "research/ffx-evrae-airship.md §4.2, §4.3, §4.5, §12.3",
+    "docs/handoff/presentation-ink-and-gold.md (the chrome these frames are drawn in)"
+  ],
+  "rules_every_option_must_honour": [
+    "An order costs that character's turn, takes effect on CID'S NEXT TURN, and burns the volley he would otherwise have fired: three resources for one boolean flip (§2.5, §4.2).",
+    "Last order wins if two are issued before Cid acts; a redundant order still burns his turn (Q4, labelled tunable).",
+    "Only Tidus and Rikku own the Trigger Command (§4.2, verified: 3 sources).",
+    "At FAR only Blk Magic, Wakka's physical attack and Lancet reach; buffs, heals and items are legal because they target your own party (§4.3). Do not smooth the asymmetry.",
+    "§4.5: in phase 2 the correct play is often to do NOTHING. The interface has to make restraint legible, not just possible."
+  ],
+  "options": {
+    "A": {
+      "id": "trigger-pair-in-the-cascade",
+      "title": "The Trigger pair lives in the command cascade, with a cost preview",
+      "frames": { "near": "a-near.png", "far": "a-far.png" },
+      "plays": [
+        "On Tidus's or Rikku's turn the cascade grows two extra rows, 'Pull Back' and 'Close In', tagged Trigger; on everyone else's turn they are simply not there.",
+        "The row that matches the current range is greyed and reads 'Already near' / 'Already far', so the range itself is stated in words at the only moment you can change it.",
+        "Highlighting either row raises the ivory cost slab: 'Tidus's turn now · Cid's next turn · 1 missile volley', with the three volley pips and the one you are about to forfeit hatched in blood red.",
+        "Confirming sends the order; a gold ORDER chip clamps onto Cid's CTB tile and stays there until his turn consumes it, so the queue shows what he will do instead of firing.",
+        "Doing nothing needs no widget at all: you simply never open the rows, and the cost slab never appears — restraint costs zero clicks."
+      ],
+      "reads_range_without_hud": "Weakest of the three. With the HUD hidden you are back to reading the creature's size, which is exactly what O-4 asks about.",
+      "cost": "S",
+      "risk": "Two more rows in the cascade on two characters only — an inconsistency the player meets before it is explained. The cost slab is the part most likely to feel wrong in motion rather than in a still (plan §9 R1)."
+    },
+    "B": {
+      "id": "deck-side-range-gauge",
+      "title": "A deck-side gauge the airship slides along, orders issued from the cascade",
+      "frames": { "near": "b-near.png", "far": "b-far.png" },
+      "plays": [
+        "A gauge stands at the left edge for the whole fight: FAR at the top, NEAR at the bottom, a gold ship glyph sitting at the state you are in.",
+        "The red hatched band at the NEAR end is the stretch where Poison Breath reaches you; it is drawn once and never explained, and it is why pulling back mid-Inhale works.",
+        "Issuing an order from the cascade drops a dashed ghost ship at the other notch and draws the pull between them, captioned 'On Cid's turn' — the gauge, not a message, is what says the order is pending.",
+        "Cid's CTB row carries the same order as a small chevron label, so the pending change is visible in the queue as well as on the gauge.",
+        "Doing nothing is legible because the gauge simply holds still: no ghost, no pull, ship at its notch — the absence of a ghost is the picture of restraint."
+      ],
+      "reads_range_without_hud": "Strong when the HUD is on and worthless when it is off: this is the HUD answer to O-4, and it would have to be paired with option C's staging if the muted-UI bar in §12.3 is to be met.",
+      "cost": "M",
+      "risk": "A second persistent gauge on a screen that already carries CTB, slabs and cascade. If Bailey wants the fight to feel like a deck and not a cockpit, this is the option that fights that."
+    },
+    "C": {
+      "id": "the-field-is-the-widget",
+      "title": "No persistent widget: the battlefield is re-staged, and the order is a shout",
+      "frames": { "near": "c-near.png", "far": "c-far.png" },
+      "plays": [
+        "There is no gauge and no permanent range read; the camera is the read. NEAR is tight, warm and low, with Evrae's head over the rail and the deck in the bottom third.",
+        "FAR pulls back: more deck under your feet, cold haze, wind streaks across the plate, and Evrae reduced to a diagonal streak against open sky — you see less of it, not a smaller copy.",
+        "The Trigger rows are still where the orders are chosen, but the confirmation is a one-shot shout across the middle of the frame — 'Pull back, Cid!' — with the line 'order stands until Cid answers'.",
+        "Cid's CTB tile is left clean; the only trace of the pending order is that shout and the cloud drift, whose speed changes the instant the ship answers.",
+        "Doing nothing is the default state of the screen, which is the strongest reading of §4.5: the fight looks calm when you are playing it correctly."
+      ],
+      "reads_range_without_hud": "This is the only option that passes §12.3's bar on its own — with every HUD element hidden the frame still says near or far.",
+      "cost": "L",
+      "risk": "It leans on art that does not exist yet: the NEAR and FAR Evrae poses are both listed NEW in the plan's §6.1, and these frames fake FAR by shrinking and rotating the approved look-B painting. It also hides the cost of an order, which is the chapter's thesis — a player may never learn that a course change burned a volley."
+    }
+  },
+  "recommendation": "A for the order, C for the read — they are not exclusive. A answers 'what does this cost me' where the decision is made; C answers 'which state am I in' without the HUD. B is the one to drop if only two survive, because its gauge duplicates what C's staging gives for free.",
+  "honest_limits": [
+    "Every frame composites the approved look-B Evrae painting; the FAR frames shrink and rotate it because the FAR pose is an unpainted NEW asset (plan §6.1). The FAR silhouette Bailey eventually approves will change how strongly option C reads.",
+    "The deck plating and guard rail are CSS over backdrop B, not painted geometry. Backdrop B is the approved plate; the deck the party stands on is still to be painted.",
+    "The party figures on the deck are the approved FFX character paintings rendered as foreground silhouettes, because no back-facing pose exists.",
+    "Numbers on screen (HP, MP, three volley pips) are illustrative staging, not sourced encounter data; the only mechanic claims made here are the ones cited in `sources`."
+  ]
+}
