@@ -1,47 +1,42 @@
 # NOW — where Pyrefly Reprise stands
 
-> **Snapshot: 2026-09-21 14:30 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
-> **USAGE MODE: NORMAL** (about 66 percent of the weekly allowance left; weekly resets 2026-09-26 07:00 EDT). Hard rule 15.
-> **Art generation: ON** (Bailey, 2026-09-21: "Resume local art generation"); candidates only, under
-> docs/concepts/art4/; approved paintings are never replaced.
-> **The pause is lifted** (Bailey to the driver, 2026-09-20: "continue on with work please but do not forget our
-> delegation policy and carefully monitor token usage, weekly usage, 5 hour session usage so that we still meet our goals
-> with this project"). Releases and reviews are authorised; keep them economical: Sonnet for well-specified tracks, one
-> browser capture owner, stop servers by their own PID only, NO polling watchers on long workflows (a driver wake-up
-> costs more than the agents do).
-> **Live: Build A.2** (`fd0ae96`). **Build B.1 is in release.** **Wave 1a is in flight:** Active ATB, the Macalania and
-> Evrae engine work, quick wins, options rounds, and music sketches. Bailey said yes to all three chapters' preflight
-> recommendations and the remaining art-direction picks on 2026-09-21 ("Yes to all recommendations but the title screen
-> needs to match the target." / "Yes to these too.") — recorded in `docs/target/targets.json` (chapters group) and
-> `docs/target/decisions.json` D-018/D-019/D-020; D-009 (Active ATB) is now `in-progress`.
-> **Waiting on Bailey:** the Evrae order-widget mockups/prototype, the Anima-arrival options round, and the two
-> battle-cue / chapter music sketches.
+> **Snapshot: 2026-09-21 16:50 EDT (machine clock)**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **USAGE MODE: CONSERVE** (about 40 percent of the weekly allowance left; resets 2026-09-26 07:00 EDT). Hard rule 15.
+> **Art generation: ON** (Bailey, 2026-09-21: "Resume local art generation"). Pose prompts describe the BODY only; the
+> render tool is gaining a prompt lint and a cut-out guard (docs/ART-PIPELINE.md section 6).
+> **THE WORK IN FLIGHT IS AUTHORISED BY BAILEY TODAY**, verbatim: "you need to finish ALL chapters the new chapters need to
+> be done"; "the move advisor needs to be way smarter and way more aware of what is going on turn by turn and what
+> character you are controlling. music is too reminsicent of snes music instead of the more modern final fantasy titles
+> and clair obscur. all of these next to be fixed very next build. we can do this."; "yes you have my approvals there
+> for music" (CC0 sample libraries, a local ACE-Step model rendering OUR compositions, generated wordless choir layers,
+> a two-cue audition first). A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it:
+> the driver answers the owner; agents do the task in their brief.
 
-## Live (Build A)
+## Live: Build B.1
 
-- https://baileypillon.github.io/pyrefly-reprise/ = `main 7191674`, bundle `hko3Xov1`, deployed 2026-09-19 21:18 EDT
-  (recorded in `9a56d80`). Rounds 02 and 03 are rubric v1 history.
-- **Critic policy v2 is in force and committed** (`4ccba89`, `d7b9dcb`): `critic/RUBRIC.md`, `node tools/critic-plan.mjs`,
-  release through `critic/runner/release.js`.
+- https://baileypillon.github.io/pyrefly-reprise/ = `main 8f48237`, bundle `D260C6cS`, deployed 2026-09-21 14:24 EDT under
+  the owner's release rules A + B + C (focused review before deploy: SHIP with disclosed majors; live check PASS, 761 files
+  byte-identical; the deep review runs after the deploy on the live build). Contents: the moving title screen on the approved
+  key art, silhouette chapter cards (eight chapters, the three new ones locked as Coming), 42 approved poses. The build before
+  it was A.2 (`fd0ae96`, owner override).
 
-## In flight: Build A.2 (release candidate = `main` HEAD), repair cycle 2 of 2 done
+## In flight: Build C (the next live build)
 
-- Round 04 (`0ed1e8b`) failed the A.1 candidate's changed area; repairs confirmed. **Round 05** (`32c87bc`,
-  `critic/rounds/round-05.md`) confirmed every round 04 repair and failed the changed area on NEW defects: PR-0045
-  (critical, FFX-2 Berserk zero-row lock), PR-0050 (collapsed guide chip over the FFX-2 boss plate), PR-0048 / 0049 /
-  0051 / 0047 (onboarding), PR-0046 (FFX-2 clock claim), PR-0001 inside the rebuilt guide. Nothing deployed.
-- **Repair cycle 2** (`da83511`, `98aa12f`, `2c7b147`; verifier: nothing refuted; tsc clean, 4450 tests green):
-  a Berserked FFX-2 turn resolves without the player and `buildCommands` can never return zero rows; the four
-  onboarding defects; the collapsed chip keeps its anchor; guide type at least 14 effective px at 1600x900 and
-  2000x1012 (11.4 at 1280x720, disclosed).
-- **Onboarding ships SWITCHED OFF in this candidate** (`ONBOARDING_LIVE = false`, `src/ui/coach/coachState.ts`;
-  `__pyrefly.setCoaching(true)` forces it on for review): its approved line "In hers, the clock does not wait" becomes
-  true only with **Active ATB** (Bailey, 2026-09-21: Active only, no Wait toggle), which is the NEXT candidate (A.3):
-  paper preflight `docs/plans/ffx2-active-atb-review.md` first, then build, deep review, switch onboarding on and put
-  the C3 badge back to the mockup's words.
-- This is the last repair cycle the cap allows in normal mode: if the next deep review fails the changed area again,
-  take the failing change out and ship what passed, or ask Bailey.
-- Next step: `critic/runner/release.js`, round `06`.
+- Scope, in Bailey's words above: ALL three new chapters finished (Leblanc at the Chateau, Seymour and Anima at Macalania,
+  Evrae on the airship), move advisor v2 (a per-turn planner for the acting character; the chapter line is a prior, not a
+  pin), modern-sounding music, plus FFX-2 Active ATB (built and verified: `45f98b9`, `bf19c37`, `33dba4d`, `073f678`) and
+  onboarding switched on.
+- Done: engine and data for Macalania (`074a198`, 80 percent) and Evrae (`dc1979f`, `959fade`, 97.5 percent); quick wins
+  (`c7f5be4`, `71059ae`, `8fe4f99`, `de99ba4`); three story scripts; decision records (`26ee387`); music plan
+  `docs/plans/music-modern-sound.md` (`fe11c60`); options sheets for the Evrae order widget and Anima's arrival; music
+  sketches on `docs/audio/audition.html`.
+- Running: advisor v2 build and Leblanc engine (workflow wf_55ef87e9-9b0); render-tool guard; chapter art production
+  (one agent per chapter); Nul-spell targeting being sourced from the web; music library downloads by the driver into
+  `D:\Toolsudio-libs` and the ACE-Step checkpoint into ComfyUI.
+- Open with Bailey: Evrae widget (rec. A + C's staging), Anima arrival (rec. A then B's tag), Macalania cue mood A or B,
+  chapter 5 under Active ATB (0 of 40 wins at human decision times: measured options owed), Nul spells party-wide if sourced.
+
+
 
 ## Waiting on Bailey (none of these blocks the release)
 
