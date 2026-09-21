@@ -1,30 +1,60 @@
+import './frontend/frontend.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
-import { artUrl } from '../../engine/PaintedArt.ts';
 import { audio } from '../../audio/index.ts';
-import { installInkGoldStyles, playWipe } from '../../ui/inkgold/index.ts';
+import { installInkGoldStyles, playWipe, prefersReducedMotion } from '../../ui/inkgold/index.ts';
 import type { Briefing } from '../../ui/coach/Briefing.ts';
 import { makeBriefing } from './raiseBriefing.ts';
 import { onboardingLive } from '../../ui/coach/coachState.ts';
+import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
+import { MoteField } from './frontend/motes.ts';
+import { titleMarkup } from './frontend/titleMarkup.ts';
+import { readSetting } from '../SaveData.ts';
 
 /**
- * Title card in the approved "Ink & Gold" presentation
- * (docs/handoff/presentation-ink-and-gold.md; mockup docs/screenshots/mockups/
- * A-title.jpg, reference source docs/handoff/ink-and-gold/Title.dc.html).
+ * The title card, in the approved "Ink & Gold" presentation and now moving.
  *
- * Everything visual comes from `src/ui/inkgold` — this screen only composes
- * the classes, supplies the copy and the painting, and owns the transition
- * out. Authored on the same 640x360 logical grid the HUD uses (§ "Mockups are
- * authored at 1440x810 ... divide every px by 2.25"), letterbox-scaled with a
- * single transform exactly as `src/ui/ffx/HudMock.ts` does.
+ * Approved end state: `docs/concepts/polish/showpiece-frontend/after.png` —
+ * "A front end that moves: parallax title and silhouette chapter cards"
+ * (Bailey, 2026-09-19). The base look is the approved tile
+ * `docs/screenshots/mockups/A-title.jpg` and the spec in
+ * `docs/handoff/presentation-ink-and-gold.md`; what this adds is the plane
+ * split, the drift, the two on the shore and the pyreflies.
+ *
+ * Game-aware (AGENTS.md rule 14): **both**. The title is the front door to
+ * both halves of the game; nothing about it is true of one and not the other,
+ * and the strap names both by name.
+ *
+ * Two things changed from the screen this replaces, both deliberate:
+ * - it is **full bleed**, not a letterboxed 640x360 stage scaled by a
+ *   transform. Bailey plays at 2000x1012, which is not 16:9: the transform put
+ *   ink bars down the frame and rasterised every glyph at 640x360 before
+ *   blowing it up (the `fix3-pause` finding). CSS sizes everything from
+ *   `--fe-k` instead, so type is drawn at its real size.
+ * - the strap reads "Final Fantasy X and X-2" rather than the concept's "Five
+ *   encounters · Final Fantasy X and X-2". Bailey approved three more chapters
+ *   in the same message that approved this board, so the count on the plate is
+ *   an incidental label that is now wrong. Flagged for Bailey in
+ *   `docs/handoff/frontend-showpiece.md`.
  */
 export class TitleScreen extends Screen {
   readonly name = 'title';
   private advancing = false;
   private stage: HTMLElement | null = null;
+  private parallax: ParallaxField | null = null;
+  private motes: MoteField | null = null;
+  private reduceMotion = false;
   /** Auron's briefing, while it is being replayed from here. */
   private briefing: Briefing | null = null;
+
   private readonly onResize = (): void => this.layout();
+
+  private readonly onPointerMove = (e: PointerEvent): void => {
+    if (!this.parallax) return;
+    const { x, y } = normalisePointer(e.clientX, e.clientY, window.innerWidth, window.innerHeight);
+    this.parallax.setPointer(x, y);
+  };
+
   /**
    * `B` fetches the briefing back.
    *
@@ -45,19 +75,37 @@ export class TitleScreen extends Screen {
 
   override enter(): void {
     installInkGoldStyles();
-    this.root.className = 'screen ig-title-screen';
-    this.root.style.cssText = 'position:absolute;inset:0;overflow:hidden;background:#0B0A12;';
+    this.reduceMotion = prefersReducedMotion() || readSetting('reduceMotion') === true;
 
-    const stage = document.createElement('div');
-    stage.className = 'ig';
-    stage.style.cssText =
-      'position:absolute;left:0;top:0;width:640px;height:360px;transform-origin:0 0;pointer-events:auto;';
-    stage.innerHTML = this.markup();
-    this.root.appendChild(stage);
-    this.stage = stage;
+    this.root.className = 'screen fe fe-title ig';
+    this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive() });
+    this.stage = this.root;
+
+    const motes = this.root.querySelector('.fe-title__motes');
+    if (motes instanceof HTMLElement) {
+      this.motes = new MoteField(motes, {
+        reduceMotion: this.reduceMotion,
+        // The low-effects tier halves the field rather than dropping it: the
+        // frame still reads as Spira, at half the compositing cost.
+        count: readSetting('lowEffects') === true ? 8 : undefined,
+      });
+    }
+
+    const far = this.root.querySelector('.fe-title__plane--far');
+    const near = this.root.querySelector('.fe-title__plane--near');
+    const cast = this.root.querySelector('.fe-title__cast');
+    const layers = [
+      far instanceof HTMLElement ? { el: far, depth: 0.35, scale: 1.045 } : null,
+      near instanceof HTMLElement ? { el: near, depth: 1, scale: 1.11 } : null,
+      cast instanceof HTMLElement ? { el: cast, depth: 1.35, scale: 1 } : null,
+    ].filter((l): l is { el: HTMLElement; depth: number; scale: number } => l !== null);
+    this.parallax = new ParallaxField({ layers, reduceMotion: this.reduceMotion });
 
     window.addEventListener('resize', this.onResize, { passive: true });
     window.addEventListener('keydown', this.onKey);
+    if (!this.reduceMotion) {
+      this.root.addEventListener('pointermove', this.onPointerMove, { passive: true });
+    }
     this.layout();
 
     void audio.playMusic('title', { fade: 1.6 }).catch(() => {
@@ -69,6 +117,10 @@ export class TitleScreen extends Screen {
   override exit(): void {
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('keydown', this.onKey);
+    this.root.removeEventListener('pointermove', this.onPointerMove);
+    this.motes?.dispose();
+    this.motes = null;
+    this.parallax = null;
     this.briefing?.skip();
     this.briefing = null;
     this.stage = null;
@@ -86,61 +138,29 @@ export class TitleScreen extends Screen {
     }
   }
 
-  private markup(): string {
-    const painting = artUrl('art/backdrops/title.png');
-    const briefingChip = onboardingLive()
-      ? `&nbsp;&middot;&nbsp; <span data-action="title:briefing" role="button" tabindex="0"><b>B</b> BRIEFING</span>`
-      : '';
-    return `
-      <div class="ig-title">
-        <img alt="" src="${painting}"
-             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"
-             onerror="this.style.display='none'">
-        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,10,18,0.55) 0%,rgba(11,10,18,0) 55%);"></div>
-        <div class="ig-surface">
-          <div class="ig-surface__grain"></div>
-          <div class="ig-surface__vignette"></div>
-        </div>
-
-        <div class="ig-title__slab"></div>
-        <div class="ig-title__stripe"></div>
-
-        <div class="ig-title__content">
-          <div class="ig-title__eyebrow">AN UNOFFICIAL FAN TRIBUTE</div>
-          <div class="ig-title__name">Pyrefly</div>
-          <div class="ig-title__name ig-title__name--second">Reprise</div>
-          <div class="ig-title__rule"></div>
-          <div class="ig-title__chip" data-action="confirm" role="button" tabindex="0">
-            <svg viewBox="0 0 10 14" width="4.44" height="6.22" aria-hidden="true">
-              <path d="M1 1 L9 7 L1 13 Z" fill="currentColor"></path>
-            </svg>PRESS ENTER
-          </div>
-        </div>
-
-        <div class="ig-title__caption">FIVE ENCOUNTERS &middot; FINAL FANTASY X AND X-2</div>
-        <div class="ig-hint-chip ig-title__hint">
-          <b>ARROWS / WASD</b> MOVE &nbsp;&middot;&nbsp; <b>ENTER</b> CONFIRM &nbsp;&middot;&nbsp; <b>ESC</b> CANCEL
-          ${briefingChip}
-        </div>
-      </div>
-    `;
-  }
-
-  /** Letterbox the 640x360 grid into whatever the viewport is. */
+  /**
+   * The only place the frame's pixel size is read. The fields are told their
+   * size here and never measure anything inside the loop, so no animation
+   * frame can cost a layout.
+   */
   private layout(): void {
     if (!this.stage) return;
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const scale = Math.min(w / 640, h / 360);
-    const x = (w - 640 * scale) / 2;
-    const y = (h - 360 * scale) / 2;
-    this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+    this.motes?.resize(this.stage.clientWidth || window.innerWidth, this.stage.clientHeight || window.innerHeight);
+  }
+
+  override update(dt: number): void {
+    if (this.reduceMotion) return;
+    this.parallax?.update(dt);
+    this.motes?.update(dt);
   }
 
   override handleInput(input: InputSnapshot): void {
     // While the briefing is up it owns the screen: it holds the keyboard claim,
     // and a stray Enter here would start the flow behind it.
     if (this.briefing && !this.briefing.finished) return;
+    // The stick aims the parallax; it is the gamepad's half of "moves with
+    // pointer / stick / time" and costs nothing when the stick is at rest.
+    if (!this.reduceMotion) this.parallax?.setStick(input.axis.x, input.axis.y);
     if (input.actions.includes('title:briefing')) return void this.replayBriefing();
     if (this.advancing) return;
     if (input.justPressed('confirm') || input.justPressed('start')) return void this.advance();
@@ -170,6 +190,12 @@ export class TitleScreen extends Screen {
   }
 
   override snapshot(): Record<string, unknown> {
-    return { advancing: this.advancing, skin: 'ink-and-gold' };
+    return {
+      advancing: this.advancing,
+      skin: 'ink-and-gold',
+      reduceMotion: this.reduceMotion,
+      motes: this.motes?.size ?? 0,
+      parallax: this.parallax?.offset() ?? null,
+    };
   }
 }

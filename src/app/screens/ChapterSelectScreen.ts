@@ -1,32 +1,19 @@
-import '../../ui/common/chapter-select.css';
+import './frontend/frontend.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
-import { CHAPTERS, type Chapter, type ChapterId } from '../../data/encounters.ts';
-import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
+import type { ChapterId } from '../../data/encounters.ts';
 import { ControlsHint } from '../../ui/common/ControlsHint.ts';
-import { backdropImgHtml, faceImgHtml } from '../../ui/common/portrait.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
-import { romanNumeral } from '../../ui/common/roman.ts';
-import { escapeHtml } from '../../ui/common/html.ts';
-import { formatClearTime } from '../../ui/common/resultsMath.ts';
-
-function bossNames(chapter: Chapter): string {
-  return chapter.enemyGroupRef.enemies.map((e) => e.name).join(' + ');
-}
-
-/** The three who actually walk in — FFX's active slots, FFX-2's whole trio. */
-function recommendedParty(chapter: Chapter): Array<{ id: string; name: string }> {
-  const build = chapter.buildRef;
-  if (build.game === 'ffx') {
-    return build.activeSlots.flatMap((id) => {
-      const m = build.members.find((x) => x.id === id);
-      return m ? [{ id: m.id, name: m.name }] : [];
-    });
-  }
-  return build.members.map((m) => ({ id: m.id, name: m.name }));
-}
+import {
+  buildChapterTiles,
+  groupChapterTiles,
+  stepGroup,
+  stepSelection,
+  type ChapterTile,
+} from './frontend/chapterGrid.ts';
+import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
 
 export interface ChapterSelectScreenOptions {
   /** Called when the player confirms a card. The presenter wires the actual transition. */
@@ -38,15 +25,33 @@ export interface ChapterSelectScreenOptions {
 
 const HINTS = [
   { keyboard: 'Left/Right', gamepad: 'D-pad', label: 'choose' },
+  { keyboard: 'Up/Down', gamepad: 'D-pad', label: 'game' },
   { keyboard: 'Enter', gamepad: 'Cross', label: 'select', action: 'confirm' },
   { keyboard: 'Esc', gamepad: 'Circle', label: 'back', action: 'cancel' },
 ];
 
 /**
- * Five sphere cards in a shallow arc (`research/visual-bible.md` §5.3):
- * cursor left/right re-centres the arc on the newly selected card, confirm
- * emits the chosen {@link ChapterId} via `onSelect`. Cleared/best-time comes
- * from `App.save`; thumbnails from `public/art/backdrops/<sceneKey>.png`.
+ * The board of the whole game: every encounter as its boss's ink silhouette,
+ * in two game groups.
+ *
+ * Approved end state:
+ * `docs/concepts/polish/showpiece-frontend/chapter-select.png` — "every card
+ * carries its boss as a silhouette, so the board reads as five encounters
+ * rather than five thumbnails" (`card.json`). The base look is the approved
+ * tile `docs/screenshots/mockups/A-chapter-select.jpg`.
+ *
+ * It holds **eight**: the five built chapters plus the three Bailey approved on
+ * 2026-09-19 (Macalania and Evrae for FFX, Chateau Leblanc for FFX-2), which
+ * ride as locked COMING cards until their data lands. The list is derived from
+ * the chapter registry (`chapterGrid.ts`), so a chapter that lands lights up by
+ * itself and nothing fake is ever written into `src/data` (hard rule 6).
+ *
+ * Game-aware (AGENTS.md rule 14): **both**. The board is shared plumbing; the
+ * per-game half is the group heading and its accent, which is the existing
+ * `.ig--ffx2` token swap.
+ *
+ * Full bleed rather than the old letterboxed 640x360 stage, for the reason
+ * written down in `TitleScreen.ts`: Bailey's window is not 16:9.
  */
 export class ChapterSelectScreen extends Screen {
   readonly name = 'chapter-select';
@@ -62,14 +67,13 @@ export class ChapterSelectScreen extends Screen {
   private resolveDone!: (id: ChapterId | null) => void;
   private settled = false;
 
-  private stage: Stage | null = null;
   private hint: ControlsHint | null = null;
-  private selected: number;
+  private tiles: ChapterTile[] = [];
+  private selected = 0;
   private confirming = false;
 
   constructor(private readonly opts: ChapterSelectScreenOptions = {}) {
     super();
-    this.selected = Math.min(CHAPTERS.length - 1, Math.max(0, opts.initialIndex ?? 0));
     this.done = new Promise((resolve) => {
       this.resolveDone = resolve;
     });
@@ -77,20 +81,19 @@ export class ChapterSelectScreen extends Screen {
 
   override enter(): void {
     installInkGoldStyles();
-    this.stage = createStage(this.root, 'cselect');
-    // `.ig` scopes the Ink & Gold tokens this screen's CSS reads.
-    this.stage.el.classList.add('ig');
-    this.stage.stage.innerHTML = `
-      <div class="cselect__wash"></div>
-      <div class="cselect__veil"></div>
-      <div class="ig-surface">
-        <div class="ig-surface__grain"></div>
-        <div class="ig-surface__vignette"></div>
-      </div>
-      <div class="cselect__eyebrow"><i></i>CHAPTER SELECT</div>
-      <div class="cselect__arc"></div>
-      <div class="cselect__rail"></div>
-      <div class="cselect__aside"></div>
+    this.tiles = buildChapterTiles(this.app.save);
+    const wanted = this.opts.initialIndex ?? 0;
+    this.selected = this.tiles[wanted]?.playable ? wanted : this.tiles.findIndex((t) => t.playable);
+    if (this.selected < 0) this.selected = 0;
+
+    this.root.className = 'screen fe fe-cselect ig';
+    this.root.innerHTML = `
+      <div class="fe-cselect__wash"></div>
+      <div class="fe-cselect__veil"></div>
+      <div class="fe-cselect__eyebrow"><i></i>Chapter select</div>
+      <div class="fe-cselect__board"></div>
+      <div class="fe-rail"></div>
+      <div class="fe-aside"></div>
     `;
     this.hint = new ControlsHint({ root: this.root, items: HINTS });
     this.hint.mount();
@@ -100,7 +103,7 @@ export class ChapterSelectScreen extends Screen {
 
   override exit(): void {
     this.hint?.unmount();
-    this.stage?.destroy();
+    this.root.innerHTML = '';
     this.settle(null);
   }
 
@@ -110,14 +113,17 @@ export class ChapterSelectScreen extends Screen {
 
     if (input.consume('left')) this.move(-1);
     else if (input.consume('right')) this.move(1);
+    else if (input.consume('up')) this.moveGroup(-1);
+    else if (input.consume('down')) this.moveGroup(1);
 
     if (input.consume('confirm') || input.actions.includes('confirm')) this.confirm();
     else if (input.consume('cancel') || input.actions.includes('cancel')) this.cancel();
 
     for (const action of input.actions) {
-      const m = /^cselect-card-(\d+)$/.exec(action);
+      const m = /^fe-card-(\d+)$/.exec(action);
       if (!m?.[1]) continue;
       const index = Number(m[1]);
+      if (!this.tiles[index]?.playable) continue;
       if (index === this.selected) this.confirm();
       else {
         this.selected = index;
@@ -134,7 +140,7 @@ export class ChapterSelectScreen extends Screen {
     }
     if (name.startsWith('select:')) {
       const id = name.slice('select:'.length);
-      const index = CHAPTERS.findIndex((c) => c.id === id);
+      const index = this.tiles.findIndex((t) => t.id === id && t.playable);
       if (index < 0) return false;
       // Matches `StubChapterSelect`: picking by id also confirms it, so
       // `__pyrefly.trigger('select:seymour-flux')` jumps straight into the
@@ -148,27 +154,45 @@ export class ChapterSelectScreen extends Screen {
   }
 
   override snapshot(): Record<string, unknown> {
-    return { selectedIndex: this.selected, selectedId: CHAPTERS[this.selected]?.id };
+    const tile = this.tiles[this.selected];
+    return {
+      selectedIndex: this.selected,
+      selectedId: tile?.id,
+      tiles: this.tiles.length,
+      coming: this.tiles.filter((t) => !t.playable).map((t) => t.id),
+      cleared: this.tiles.filter((t) => t.cleared).map((t) => t.id),
+    };
   }
 
   // ------------------------------------------------------------------ nav
 
   private move(delta: number): void {
-    const n = CHAPTERS.length;
-    this.selected = ((this.selected + delta) % n + n) % n;
+    const next = stepSelection(this.tiles, this.selected, delta);
+    if (next === this.selected) return;
+    this.selected = next;
+    audio.playSfx('cursor-move');
+    this.refresh();
+  }
+
+  private moveGroup(delta: number): void {
+    const next = stepGroup(this.tiles, this.selected, delta);
+    if (next === this.selected) return;
+    this.selected = next;
     audio.playSfx('cursor-move');
     this.refresh();
   }
 
   private confirm(): void {
     if (this.confirming) return;
+    const tile = this.tiles[this.selected];
+    // A COMING card is never the cursor's home, but a stray `confirm` action
+    // from a click must not start a chapter that does not exist.
+    if (!tile?.playable) return;
     this.confirming = true;
     audio.playSfx('confirm');
-    const chapter = CHAPTERS[this.selected];
-    if (chapter) {
-      (this.opts.onSelect ?? defaultOnSelect)(chapter.id);
-      this.settle(chapter.id);
-    }
+    const id = tile.id as ChapterId;
+    (this.opts.onSelect ?? defaultOnSelect)(id);
+    this.settle(id);
     // A standalone (non-flow) registration keeps living after confirm — the
     // flow instead replaces this screen, which resolves `confirming` moot.
     window.setTimeout(() => {
@@ -190,137 +214,36 @@ export class ChapterSelectScreen extends Screen {
 
   // --------------------------------------------------------------- render
 
-  /**
-   * Fixed slots for the four unselected chapters, logical px. A single column
-   * to the right of the hero (the mockup's 2x2 block left the frame's right
-   * fifth empty once the dossier moved in beside it), so picking a different
-   * chapter swaps which painting is in the hero slab rather than sliding a
-   * carousel.
-   */
-  private static readonly CARD_SLOTS: ReadonlyArray<{ left: number; top: number }> = [
-    { left: 293.33, top: 57.78 },
-    { left: 293.33, top: 120 },
-    { left: 293.33, top: 182.22 },
-    { left: 293.33, top: 244.44 },
-  ];
-
   private refresh(): void {
-    if (!this.stage) return;
-    const chapter = CHAPTERS[this.selected];
-    if (!chapter) return;
+    const tile = this.tiles[this.selected];
+    if (!tile) return;
 
-    const wash = this.stage.stage.querySelector('.cselect__wash') as HTMLElement | null;
-    if (wash) wash.style.backgroundImage = `url(${artUrl(`art/backdrops/${chapter.sceneKey}.png`)})`;
+    // FFX-2's half of the board carries the pyre-pink accent, the existing
+    // token swap — never a new colour (presentation-ink-and-gold.md).
+    this.root.classList.toggle('ig--ffx2', tile.game === 'ffx2');
 
-    const arc = this.stage.stage.querySelector('.cselect__arc') as HTMLElement;
-    const others = CHAPTERS.map((c, i) => ({ c, i })).filter(({ i }) => i !== this.selected);
-    arc.innerHTML = [
-      this.heroHtml(chapter, this.selected),
-      ...others.map(({ c, i }, slot) => this.cardHtml(c, i, slot)),
-    ].join('');
+    const wash = this.root.querySelector('.fe-cselect__wash');
+    if (wash instanceof HTMLElement) {
+      wash.style.backgroundImage = tile.sceneKey
+        ? `url(${artUrl(`art/backdrops/${tile.sceneKey}.png`)})`
+        : 'none';
+    }
 
-    const rail = this.stage.stage.querySelector('.cselect__rail') as HTMLElement;
-    rail.innerHTML = this.railHtml(chapter);
+    const board = this.root.querySelector('.fe-cselect__board');
+    if (board instanceof HTMLElement) {
+      board.innerHTML = heroHtml(tile, this.selected) + proseHtml(tile);
+    }
 
-    const aside = this.stage.stage.querySelector('.cselect__aside') as HTMLElement;
-    aside.innerHTML = this.asideHtml(chapter);
-  }
+    const rail = this.root.querySelector('.fe-rail');
+    if (rail instanceof HTMLElement) {
+      rail.innerHTML = railHtml(groupChapterTiles(this.tiles), this.tiles, this.selected);
+    }
 
-  /** The selected chapter: the big bordered slab with its painting. */
-  private heroHtml(chapter: Chapter, index: number): string {
-    const record = this.app.save.chapter(chapter.id);
-    return `
-      <div class="cselect__hero" data-action="cselect-card-${index}" role="button" tabindex="0">
-        ${backdropImgHtml(chapter.sceneKey, chapter.title)}
-        <div class="cselect__hero-ramp"></div>
-        ${record.cleared ? '<div class="cselect__cleared" title="Cleared">&#10003;</div>' : ''}
-        <div class="cselect__hero-label">
-          <div class="cselect__hero-chapter">CHAPTER ${romanNumeral(chapter.number)}</div>
-          <div class="cselect__hero-name">${escapeHtml(chapter.title)}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  /** One unselected chapter in slot `slot` (0-3). */
-  private cardHtml(chapter: Chapter, index: number, slot: number): string {
-    const pos = ChapterSelectScreen.CARD_SLOTS[slot] ?? ChapterSelectScreen.CARD_SLOTS[0]!;
-    const record = this.app.save.chapter(chapter.id);
-    return `
-      <div class="cselect__card" data-action="cselect-card-${index}" role="button" tabindex="0"
-           style="left:${pos.left}px;top:${pos.top}px">
-        ${backdropImgHtml(chapter.sceneKey, chapter.title)}
-        <div class="cselect__card-ramp"></div>
-        ${record.cleared ? '<div class="cselect__cleared" title="Cleared">&#10003;</div>' : ''}
-        <div class="cselect__card-label">
-          <span class="cselect__card-num">${romanNumeral(chapter.number)}</span>
-          <span class="cselect__card-name">${escapeHtml(chapter.title.toUpperCase())}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /** The ivory information slab under the hero: what the chapter *is*. */
-  private railHtml(chapter: Chapter): string {
-    const badge = chapter.game === 'ffx' ? 'CTB' : 'ATB';
-    return `
-      <div class="cselect__info">
-        <div class="cselect__info-inner">
-          <div class="cselect__info-head">
-            <span class="cselect__info-title">${escapeHtml(chapter.subtitle)}</span>
-            <span class="cselect__badge">${badge}</span>
-          </div>
-          <div class="cselect__info-premise">${escapeHtml(chapter.blurb)}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * The right-hand dossier: where, who you take, what you fight, how fast it
-   * has been done. An ink slab mirroring the ivory one — same skew, the accent
-   * on its outer (right) edge, so the frame reads as one spread instead of a
-   * left-hand board with dead air beside it.
-   */
-  private asideHtml(chapter: Chapter): string {
-    const record = this.app.save.chapter(chapter.id);
-    const best = record.bestTimeMs !== null ? formatClearTime(record.bestTimeMs) : null;
-    const party = recommendedParty(chapter)
-      .map(
-        (m) => `
-          <div class="cselect__party-tile">
-            <div class="cselect__face">${faceImgHtml(m.id, m.name)}<span>${escapeHtml(
-              m.name.charAt(0).toUpperCase(),
-            )}</span></div>
-            <span class="cselect__party-name">${escapeHtml(m.name.toUpperCase())}</span>
-          </div>
-        `,
-      )
-      .join('');
-
-    return `
-      <div class="cselect__aside-inner">
-        <div class="cselect__aside-block">
-          <div class="cselect__aside-label">LOCATION</div>
-          <div class="cselect__aside-place">${escapeHtml(chapter.location)}</div>
-          <div class="cselect__aside-rule"></div>
-        </div>
-        <div class="cselect__aside-block">
-          <div class="cselect__aside-label">BOSS</div>
-          <div class="cselect__aside-boss">${escapeHtml(bossNames(chapter))}</div>
-        </div>
-        <div class="cselect__aside-block">
-          <div class="cselect__aside-label">PARTY</div>
-          <div class="cselect__party">${party}</div>
-        </div>
-        <div class="cselect__aside-block">
-          <div class="cselect__aside-label">BEST</div>
-          <div class="cselect__aside-best${best === null ? ' cselect__aside-best--none' : ''}">${
-            best ?? 'NOT CLEARED'
-          }</div>
-        </div>
-      </div>
-    `;
+    const aside = this.root.querySelector('.fe-aside');
+    if (aside instanceof HTMLElement) {
+      const record = tile.chapter ? this.app.save.chapter(tile.id) : null;
+      aside.innerHTML = asideHtml(tile, record?.bestTimeMs ?? null);
+    }
   }
 }
 

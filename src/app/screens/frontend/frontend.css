@@ -1,0 +1,823 @@
+/*
+ * The showpiece front end — parallax title and silhouette chapter cards.
+ *
+ * Approved end state: docs/concepts/polish/showpiece-frontend/after.png (title)
+ * and chapter-select.png (the board), "A front end that moves" (Bailey,
+ * 2026-09-19). The existing approved tiles A-title.jpg and A-chapter-select.jpg
+ * stay the base look; this adds the motion and the silhouettes to them, so
+ * every colour, rule, skew and typeface below is an Ink & Gold token from
+ * src/ui/inkgold/tokens.css and nothing new is invented here.
+ *
+ * AUTHORING GRID. The concept plates are authored at 1440x810 (house rule, see
+ * docs/handoff/presentation-ink-and-gold.md), so every literal below is a
+ * concept pixel multiplied by --fe-k. Unlike the 640x360 letterbox stage these
+ * screens used before, nothing is transformed: --fe-k resolves in CSS, so type
+ * is rasterised at its real size (the fix3-pause finding) and a window that is
+ * not 16:9 is filled rather than pillarboxed — which is what Bailey's 2000x1012
+ * window is.
+ *
+ * READABILITY. The smallest label is 13 grid units: 14.4 effective px at
+ * 1600x900 and 16.2 at 2000x1012, the floor fix round 3 set. At 1280x720 the
+ * same label is 11.6px, disclosed rather than clamped, because clamping it
+ * would push the rail off the frame.
+ *
+ * Game-aware (AGENTS.md rule 14): both. The only per-game rule here is which
+ * accent a group heading and its cards carry, and that is the existing
+ * .ig--ffx2 token swap, not a new idea.
+ */
+
+.fe {
+  --fe-k: max(0.5px, min(100vw / 1440, 100vh / 810));
+  --fe-accent: var(--ig-gold);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #05040a;
+  font-family: var(--ig-font-text);
+}
+
+/* ======================================================== title: the planes */
+
+.fe-title__plane {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transform-origin: 50% 50%;
+}
+.fe-title__plane img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/*
+ * The plane cut. card.json: "the shore plane here is cut on luminance from one
+ * painting". There is one approved title painting and nothing may be generated
+ * (hard rule 8 / the brief), so the near plane is the same file clipped to its
+ * bottom band and held a little larger and darker — the horizon line is where
+ * the cut lands, which is exactly where a luminance cut would put it.
+ */
+.fe-title__plane--far img {
+  filter: saturate(0.92) brightness(0.86) contrast(1.04);
+}
+.fe-title__plane--near {
+  clip-path: inset(57% 0 0 0);
+}
+.fe-title__plane--near img {
+  filter: brightness(0.76) saturate(0.88);
+}
+
+.fe-title__bloom {
+  position: absolute;
+  left: 40%;
+  top: 50%;
+  width: 32%;
+  height: 14%;
+  background: radial-gradient(closest-side, rgba(255, 214, 150, 0.42), rgba(255, 214, 150, 0));
+  filter: blur(calc(6 * var(--fe-k)));
+  pointer-events: none;
+}
+
+.fe-title__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 60% at 50% 62%, rgba(255, 196, 120, 0.14), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(
+      to bottom,
+      rgba(5, 4, 10, 0.66) 0%,
+      rgba(5, 4, 10, 0) 22%,
+      rgba(5, 4, 10, 0) 62%,
+      rgba(5, 4, 10, 0.72) 100%
+    ),
+    radial-gradient(120% 96% at 46% 46%, rgba(5, 4, 10, 0) 40%, rgba(5, 4, 10, 0.62) 100%);
+}
+
+/* ----------------------------------------------- the two on the shore */
+
+.fe-title__cast {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  pointer-events: none;
+}
+.fe-figure {
+  position: absolute;
+}
+.fe-figure img {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+
+/*
+ * Ink silhouette. `brightness(0)` keeps the painting's alpha and throws away
+ * every colour in it, which is what makes this honest: it is the approved
+ * painting, cropped and lit by CSS only, never a second asset.
+ */
+.fe-sil {
+  filter: brightness(0) drop-shadow(0 0 calc(1 * var(--fe-k)) var(--fe-accent))
+    drop-shadow(0 0 calc(4 * var(--fe-k)) rgba(227, 185, 74, 0.72))
+    drop-shadow(0 0 calc(14 * var(--fe-k)) rgba(227, 185, 74, 0.3));
+}
+.fe-figure--refl {
+  opacity: 0.22;
+  overflow: hidden;
+}
+.fe-figure--refl img {
+  transform: scaleY(-1);
+  transform-origin: top center;
+  filter: blur(calc(2.2 * var(--fe-k)));
+}
+
+/* ---------------------------------------------------------- pyreflies */
+
+.fe-title__motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fe-mote {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    circle,
+    rgba(255, 246, 224, 0.98) 0%,
+    rgba(255, 214, 150, 0.55) 38%,
+    rgba(255, 200, 120, 0) 72%
+  );
+}
+
+/* ======================================================== title: the chrome */
+
+.fe-title__slab {
+  position: absolute;
+  left: calc(-52 * var(--fe-k));
+  top: calc(214 * var(--fe-k));
+  width: calc(474 * var(--fe-k));
+  padding: calc(34 * var(--fe-k)) calc(46 * var(--fe-k)) calc(38 * var(--fe-k)) calc(86 * var(--fe-k));
+  background: var(--ig-paper);
+  transform: skewX(var(--ig-skew, -12deg));
+  box-shadow: 0 calc(26 * var(--fe-k)) calc(70 * var(--fe-k)) rgba(0, 0, 0, 0.72);
+  border-right: calc(6 * var(--fe-k)) solid var(--ig-gold);
+}
+.fe-title__slab > * {
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.fe-title__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+}
+.fe-title__eyebrow {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ig-gold-on-paper);
+}
+.fe-title__name {
+  margin: calc(14 * var(--fe-k)) 0 0;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(76 * var(--fe-k));
+  line-height: 0.94;
+  color: var(--ig-ink);
+  letter-spacing: -0.01em;
+}
+.fe-title__rule {
+  margin: calc(20 * var(--fe-k)) 0 0;
+  width: calc(228 * var(--fe-k));
+  height: calc(3 * var(--fe-k));
+  background: var(--ig-ink);
+}
+.fe-title__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(12 * var(--fe-k));
+  margin-top: calc(20 * var(--fe-k));
+  padding: calc(10 * var(--fe-k)) calc(22 * var(--fe-k)) calc(11 * var(--fe-k));
+  background: var(--ig-ink);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(15 * var(--fe-k));
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ig-gold);
+  cursor: pointer;
+}
+.fe-title__chip i {
+  width: 0;
+  height: 0;
+  border-left: calc(9 * var(--fe-k)) solid var(--ig-gold);
+  border-top: calc(6 * var(--fe-k)) solid transparent;
+  border-bottom: calc(6 * var(--fe-k)) solid transparent;
+}
+
+.fe-title__strap {
+  position: absolute;
+  right: calc(34 * var(--fe-k));
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(227, 185, 74, 0.78);
+}
+.fe-title__verr {
+  position: absolute;
+  right: calc(74 * var(--fe-k));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: calc(280 * var(--fe-k));
+  background: linear-gradient(
+    to bottom,
+    rgba(227, 185, 74, 0),
+    rgba(227, 185, 74, 0.55),
+    rgba(227, 185, 74, 0)
+  );
+}
+
+/* --------------------------------------------------------- shared hint */
+
+.fe-hint {
+  position: absolute;
+  left: calc(46 * var(--fe-k));
+  bottom: calc(26 * var(--fe-k));
+  display: flex;
+  gap: calc(22 * var(--fe-k));
+  padding: calc(9 * var(--fe-k)) calc(18 * var(--fe-k));
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  border-left: calc(3 * var(--fe-k)) solid var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.72);
+}
+.fe-hint b {
+  color: var(--ig-gold);
+  font-weight: 700;
+}
+.fe-hint span {
+  white-space: nowrap;
+}
+
+/* ================================================== chapter select: layout */
+
+.fe-cselect__wash {
+  position: absolute;
+  inset: -2%;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.45) brightness(0.34) blur(calc(3 * var(--fe-k)));
+  transition: background-image 200ms linear;
+}
+.fe-cselect__veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 92% at 38% 44%, rgba(7, 6, 13, 0) 30%, rgba(7, 6, 13, 0.86) 100%);
+}
+.fe-cselect__eyebrow {
+  position: absolute;
+  left: calc(58 * var(--fe-k));
+  top: calc(44 * var(--fe-k));
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--fe-k));
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(15 * var(--fe-k));
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ig-gold);
+}
+.fe-cselect__eyebrow i {
+  width: calc(64 * var(--fe-k));
+  height: calc(2 * var(--fe-k));
+  background: var(--ig-gold);
+}
+
+/* ------------------------------------------------------------ hero card */
+
+.fe-hero {
+  position: absolute;
+  left: calc(58 * var(--fe-k));
+  top: calc(120 * var(--fe-k));
+  width: calc(700 * var(--fe-k));
+  height: calc(394 * var(--fe-k));
+  border: calc(2 * var(--fe-k)) solid var(--fe-accent);
+  box-shadow: 0 calc(22 * var(--fe-k)) calc(56 * var(--fe-k)) rgba(0, 0, 0, 0.72);
+  overflow: hidden;
+  cursor: pointer;
+}
+.fe-hero__art {
+  position: absolute;
+  inset: 0;
+}
+.fe-hero__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.9) brightness(0.82);
+}
+.fe-hero__fade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(7, 6, 13, 0.94) 4%, rgba(7, 6, 13, 0.1) 52%),
+    linear-gradient(to right, rgba(7, 6, 13, 0.7), rgba(7, 6, 13, 0) 46%);
+}
+.fe-hero__sil {
+  position: absolute;
+  right: calc(10 * var(--fe-k));
+  bottom: 0;
+  height: 96%;
+}
+.fe-hero__sil img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+.fe-hero__sil--back {
+  right: calc(150 * var(--fe-k));
+  height: 84%;
+  opacity: 0.6;
+}
+.fe-hero__num {
+  position: absolute;
+  left: calc(26 * var(--fe-k));
+  bottom: calc(104 * var(--fe-k));
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(14 * var(--fe-k));
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--fe-accent);
+}
+.fe-hero__name {
+  position: absolute;
+  left: calc(24 * var(--fe-k));
+  bottom: calc(34 * var(--fe-k));
+  right: calc(24 * var(--fe-k));
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(62 * var(--fe-k));
+  line-height: 1;
+  color: var(--ig-paper);
+  text-shadow: 0 calc(6 * var(--fe-k)) calc(26 * var(--fe-k)) rgba(0, 0, 0, 0.8);
+}
+.fe-hero__check {
+  position: absolute;
+  right: calc(16 * var(--fe-k));
+  top: calc(14 * var(--fe-k));
+  font-size: calc(22 * var(--fe-k));
+  color: var(--fe-accent);
+}
+
+/* ------------------------------------------------------------ prose slab */
+
+.fe-prose {
+  position: absolute;
+  left: calc(58 * var(--fe-k));
+  top: calc(534 * var(--fe-k));
+  width: calc(700 * var(--fe-k));
+  padding: calc(20 * var(--fe-k)) calc(28 * var(--fe-k)) calc(22 * var(--fe-k));
+  background: var(--ig-paper);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 28 * var(--fe-k)) 100%, 0 100%);
+}
+.fe-prose__title {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(30 * var(--fe-k));
+  line-height: 1.12;
+  color: var(--ig-ink);
+  padding-right: calc(110 * var(--fe-k));
+}
+.fe-prose__body {
+  margin-top: calc(9 * var(--fe-k));
+  font-size: calc(16 * var(--fe-k));
+  line-height: 1.45;
+  color: #2c2838;
+}
+.fe-prose__badge {
+  position: absolute;
+  right: calc(34 * var(--fe-k));
+  top: calc(22 * var(--fe-k));
+  padding: calc(4 * var(--fe-k)) calc(11 * var(--fe-k)) calc(5 * var(--fe-k));
+  border: 1px solid var(--ig-ink);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.24em;
+  color: var(--ig-ink);
+}
+
+/* ----------------------------------------------------------- the card rail */
+
+.fe-rail {
+  position: absolute;
+  left: calc(782 * var(--fe-k));
+  top: calc(120 * var(--fe-k));
+  width: calc(320 * var(--fe-k));
+  height: calc(576 * var(--fe-k));
+  display: flex;
+  flex-direction: column;
+  gap: calc(7 * var(--fe-k));
+}
+.fe-rail__group {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--fe-k));
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fe-accent);
+  opacity: 0.85;
+}
+.fe-rail__group i {
+  flex: 1 1 auto;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+.fe-card {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(244, 241, 232, 0.18);
+  box-shadow: 0 calc(8 * var(--fe-k)) calc(20 * var(--fe-k)) rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  /* Only transforms and opacity animate: no card can cost a layout. */
+  transition:
+    transform 140ms ease-out,
+    box-shadow 140ms ease-out,
+    border-color 140ms ease-out;
+  will-change: transform;
+}
+.fe-card__art {
+  position: absolute;
+  inset: 0;
+}
+.fe-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.6) brightness(0.46);
+}
+.fe-card--cleared .fe-card__art img {
+  filter: saturate(0.95) brightness(0.72);
+}
+.fe-card__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(7, 6, 13, 0.92) 12%, rgba(7, 6, 13, 0.2) 64%);
+}
+.fe-card__sil {
+  position: absolute;
+  right: calc(6 * var(--fe-k));
+  bottom: calc(-6 * var(--fe-k));
+  height: 118%;
+}
+.fe-card__sil img {
+  height: 100%;
+  width: auto;
+  display: block;
+  opacity: 0.94;
+}
+.fe-card__num {
+  position: absolute;
+  left: calc(16 * var(--fe-k));
+  top: calc(13 * var(--fe-k));
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.3em;
+  color: var(--fe-accent);
+}
+.fe-card__name {
+  position: absolute;
+  left: calc(15 * var(--fe-k));
+  right: calc(96 * var(--fe-k));
+  bottom: calc(12 * var(--fe-k));
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(23 * var(--fe-k));
+  line-height: 1.02;
+  color: var(--ig-paper);
+  text-shadow: 0 calc(3 * var(--fe-k)) calc(12 * var(--fe-k)) rgba(0, 0, 0, 0.85);
+}
+.fe-card__check {
+  position: absolute;
+  right: calc(10 * var(--fe-k));
+  top: calc(8 * var(--fe-k));
+  font-size: calc(15 * var(--fe-k));
+  color: var(--fe-accent);
+  text-shadow: 0 0 calc(8 * var(--fe-k)) rgba(0, 0, 0, 0.9);
+}
+
+/* The card the cursor is on lifts and lights, exactly as the board shows. */
+.fe-card:hover,
+.fe-card:focus-visible {
+  transform: translate3d(calc(-6 * var(--fe-k)), 0, 0);
+  border-color: var(--fe-accent);
+  box-shadow: 0 calc(10 * var(--fe-k)) calc(26 * var(--fe-k)) rgba(0, 0, 0, 0.62);
+  outline: none;
+}
+
+/* A chapter Bailey has approved whose data has not landed yet. */
+.fe-card--coming {
+  cursor: default;
+  border-style: dashed;
+  border-color: rgba(244, 241, 232, 0.2);
+}
+.fe-card--coming .fe-card__name {
+  color: rgba(244, 241, 232, 0.62);
+}
+.fe-card--coming:hover {
+  transform: none;
+  border-color: rgba(244, 241, 232, 0.2);
+}
+.fe-card__locked {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 140% at 82% 50%, rgba(227, 185, 74, 0.09), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(120deg, #120f1c 0%, #0a0810 100%);
+}
+.fe-card__coming {
+  position: absolute;
+  right: calc(12 * var(--fe-k));
+  bottom: calc(13 * var(--fe-k));
+  padding: calc(3 * var(--fe-k)) calc(9 * var(--fe-k)) calc(4 * var(--fe-k));
+  border: 1px solid rgba(227, 185, 74, 0.55);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.22em;
+  color: rgba(227, 185, 74, 0.82);
+}
+
+/* --------------------------------------------------------- the dossier */
+
+.fe-aside {
+  position: absolute;
+  left: calc(1126 * var(--fe-k));
+  top: calc(120 * var(--fe-k));
+  width: calc(256 * var(--fe-k));
+  height: calc(576 * var(--fe-k));
+  padding: calc(22 * var(--fe-k)) calc(20 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.74);
+  border-right: calc(3 * var(--fe-k)) solid var(--fe-accent);
+  overflow: hidden;
+}
+.fe-aside__key {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--fe-accent);
+}
+.fe-aside__value {
+  margin: calc(6 * var(--fe-k)) 0 calc(20 * var(--fe-k));
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(21 * var(--fe-k));
+  line-height: 1.2;
+  color: var(--ig-paper);
+}
+.fe-aside__value--plain {
+  font-family: var(--ig-font-text);
+  font-style: normal;
+  font-weight: 500;
+  font-size: calc(16 * var(--fe-k));
+}
+.fe-aside__value--none {
+  color: rgba(244, 241, 232, 0.6);
+}
+.fe-aside__rule {
+  height: 1px;
+  background: rgba(244, 241, 232, 0.16);
+  margin: 0 0 calc(18 * var(--fe-k));
+}
+.fe-party {
+  display: flex;
+  gap: calc(8 * var(--fe-k));
+  margin: calc(8 * var(--fe-k)) 0 calc(20 * var(--fe-k));
+}
+.fe-party__tile {
+  width: calc(66 * var(--fe-k));
+}
+.fe-party__face {
+  position: relative;
+  width: calc(66 * var(--fe-k));
+  height: calc(66 * var(--fe-k));
+  overflow: hidden;
+  border: 1px solid rgba(244, 241, 232, 0.26);
+  background: #1a1526;
+}
+.fe-party__face > span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ig-font-serif);
+  font-size: calc(26 * var(--fe-k));
+  color: rgba(244, 241, 232, 0.5);
+}
+.fe-party__name {
+  display: block;
+  margin-top: calc(5 * var(--fe-k));
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: calc(13 * var(--fe-k));
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.66);
+  text-align: center;
+}
+
+/*
+ * The shared ControlsHint strip, sized on this screen only.
+ *
+ * `src/ui/common/controls-hint.css` sets a flat 12px, which is below the
+ * 14-effective-px floor at every window size. That file is shared with results
+ * and the cutscene screens, so it is not this track's to edit: the size is
+ * restated here, scoped to this screen, off the same --fe-k as everything else
+ * (13 units = 14.4px at 1600x900, 16.2px at 2000x1012).
+ */
+.fe-cselect .chint {
+  bottom: calc(22 * var(--fe-k));
+  gap: calc(14 * var(--fe-k));
+  padding: calc(9 * var(--fe-k)) calc(18 * var(--fe-k));
+  border-left-width: calc(3 * var(--fe-k));
+  font-size: calc(13 * var(--fe-k));
+}
+.fe-cselect .chint__item {
+  gap: calc(6 * var(--fe-k));
+}
+
+/* ============================================ narrow and portrait windows */
+
+/*
+ * 390x844 (round-02 #15). The 1440-grid composition is a 16:9 spread; on a
+ * phone it is re-laid rather than shrunk, because a shrunk one is the 2-3px
+ * band the critic found. Same elements, same tokens, one column.
+ */
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .fe {
+    --fe-k: max(0.5px, min(100vw / 430, 100vh / 1150));
+  }
+  /*
+   * The slab is skewed, so its bottom-left corner sits further left than its
+   * padding says. The left padding carries that lean plus a real margin —
+   * measured at 390x844, where 58 put the PRESS ENTER chip 2.9px off frame.
+   */
+  .fe-title__slab {
+    left: calc(-34 * var(--fe-k));
+    top: calc(120 * var(--fe-k));
+    width: calc(286 * var(--fe-k));
+    padding: calc(24 * var(--fe-k)) calc(24 * var(--fe-k)) calc(26 * var(--fe-k)) calc(78 * var(--fe-k));
+  }
+  .fe-title__name {
+    font-size: calc(56 * var(--fe-k));
+  }
+  .fe-title__rule {
+    width: calc(150 * var(--fe-k));
+  }
+  .fe-title__strap,
+  .fe-title__verr {
+    display: none;
+  }
+  .fe-hint {
+    left: calc(14 * var(--fe-k));
+    right: calc(14 * var(--fe-k));
+    bottom: calc(14 * var(--fe-k));
+    flex-wrap: wrap;
+    gap: calc(10 * var(--fe-k));
+  }
+  /* The shared strip is centred and `nowrap`; on a phone it has to wrap. */
+  .fe-cselect .chint {
+    left: calc(14 * var(--fe-k));
+    right: calc(14 * var(--fe-k));
+    bottom: calc(10 * var(--fe-k));
+    transform: skewX(-8deg);
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: normal;
+  }
+
+  .fe-cselect__eyebrow {
+    left: calc(16 * var(--fe-k));
+    top: calc(14 * var(--fe-k));
+  }
+  .fe-hero {
+    left: calc(16 * var(--fe-k));
+    top: calc(46 * var(--fe-k));
+    width: calc(398 * var(--fe-k));
+    height: calc(190 * var(--fe-k));
+  }
+  .fe-hero__name {
+    font-size: calc(34 * var(--fe-k));
+    bottom: calc(22 * var(--fe-k));
+  }
+  .fe-hero__num {
+    bottom: calc(60 * var(--fe-k));
+  }
+  .fe-prose {
+    left: calc(16 * var(--fe-k));
+    top: calc(246 * var(--fe-k));
+    width: calc(398 * var(--fe-k));
+    padding: calc(14 * var(--fe-k)) calc(20 * var(--fe-k)) calc(16 * var(--fe-k));
+  }
+  .fe-prose__title {
+    font-size: calc(22 * var(--fe-k));
+    padding-right: calc(72 * var(--fe-k));
+  }
+  .fe-prose__badge {
+    right: calc(26 * var(--fe-k));
+    top: calc(16 * var(--fe-k));
+  }
+  /*
+   * Seven cards, a hero, a prose slab and a dossier do not fit one phone
+   * frame, so the rail scrolls instead of shrinking its type to the 2-3px
+   * band round 02 #15 found. Nothing else on the screen moves.
+   */
+  .fe-rail {
+    left: calc(16 * var(--fe-k));
+    top: calc(462 * var(--fe-k));
+    width: calc(398 * var(--fe-k));
+    height: calc(280 * var(--fe-k));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .fe-card {
+    flex: 0 0 calc(58 * var(--fe-k));
+  }
+  /* A short card: the numeral and the name have to clear each other. */
+  .fe-card__num {
+    top: calc(6 * var(--fe-k));
+  }
+  .fe-card__name {
+    bottom: calc(6 * var(--fe-k));
+    font-size: calc(19 * var(--fe-k));
+  }
+  .fe-aside {
+    left: calc(16 * var(--fe-k));
+    top: calc(754 * var(--fe-k));
+    width: calc(398 * var(--fe-k));
+    height: calc(330 * var(--fe-k));
+    padding: calc(14 * var(--fe-k)) calc(18 * var(--fe-k));
+  }
+  .fe-aside__value {
+    margin-bottom: calc(10 * var(--fe-k));
+  }
+  .fe-aside__rule {
+    margin-bottom: calc(10 * var(--fe-k));
+  }
+  .fe-party {
+    margin: calc(6 * var(--fe-k)) 0 calc(10 * var(--fe-k));
+  }
+  .fe-party__tile,
+  .fe-party__face {
+    width: calc(44 * var(--fe-k));
+  }
+  .fe-party__face {
+    height: calc(44 * var(--fe-k));
+  }
+  .fe-party__face > span {
+    font-size: calc(18 * var(--fe-k));
+  }
+}
+
+/* The system switch wins over everything: a static composition, no loop. */
+@media (prefers-reduced-motion: reduce) {
+  .fe-card {
+    transition: none;
+  }
+}
