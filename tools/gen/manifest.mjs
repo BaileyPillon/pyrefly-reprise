@@ -21,8 +21,8 @@
  * - A pose needs its `.json` sidecar too. `PaintedArt` fetches the sidecar
  *   next to every PNG it loads, so a PNG without one would still be a 404 — it
  *   is listed as a state (the painting is real) but reported as a warning.
- * - `portraits/<id>.png`, `backdrops/<id>.png`, `pause/<id>.png` are flat
- *   lists under the same bare-name rule.
+ * - `portraits/<id>.png`, `backdrops/<id>.png`, `pause/<id>.png`,
+ *   `title/<id>.png` are flat lists under the same bare-name rule.
  * - `pause/<id>.2x.webp` is the **high-resolution master** of a pause plate
  *   (2688x1536 against the 1344x768 PNG). It is listed separately, in
  *   `pause2x`, because the pause screen is full-bleed on a desktop window and
@@ -30,6 +30,9 @@
  *   both through `srcset` and lets the browser pick. It is *only* ever listed
  *   when the file is really there: an `srcset` entry for a plate the fleet has
  *   not re-rendered would be a 404 on the one image the whole screen is.
+ * - `title/<id>.2x.webp` is the same contract for the title key art, listed in
+ *   `title2x`. The title card is the one screen that is *nothing but* a
+ *   full-bleed painting, so it softens first and needs the master most.
  * - A subject's `facing` comes from `idle.json`, or from the first state that
  *   declares one, and is the value `PaintedArt` would otherwise have had to
  *   fetch every sidecar to learn.
@@ -192,6 +195,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
   }
 
   const pause = chosenStems(join(artRoot, 'pause'));
+  const title = chosenStems(join(artRoot, 'title'));
   const manifest = {
     version: 1,
     generatedAt: now,
@@ -200,6 +204,8 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     backdrops: chosenStems(join(artRoot, 'backdrops')),
     pause,
     pause2x: retinaStems(join(artRoot, 'pause'), pause),
+    title,
+    title2x: retinaStems(join(artRoot, 'title'), title),
   };
 
   return { manifest, warnings, variantsOnly };
@@ -261,7 +267,8 @@ function main(argv) {
     console.log(
       `[art:manifest] ${subjectCount} subjects, ${stateCount} poses, ` +
         `${manifest.portraits.length} portraits, ${manifest.backdrops.length} backdrops, ` +
-        `${manifest.pause.length} pause paintings (${manifest.pause2x.length} with a 2x master) ` +
+        `${manifest.pause.length} pause paintings (${manifest.pause2x.length} with a 2x master), ` +
+        `${manifest.title.length} title plates (${manifest.title2x.length} with a 2x master) ` +
         `-> ${path}${changed ? '' : ' (unchanged)'}`,
     );
     for (const w of warnings) console.warn(`[art:manifest] warn: ${w}`);

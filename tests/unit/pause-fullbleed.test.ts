@@ -161,6 +161,8 @@ describe('pause plate urls', () => {
       backdrops: [],
       pause: ['ch1-seymour-flux', 'ch2-yunalesca'],
       pause2x: ['ch1-seymour-flux'],
+      title: [],
+      title2x: [],
     });
 
     expect(pause2xUrlFor('/art/pause/ch1-seymour-flux.png')).toBe('/art/pause/ch1-seymour-flux.2x.webp');

@@ -179,3 +179,75 @@ describe('what a card can and cannot start', () => {
     expect(picked).toEqual(['ffx2-vegnagun-shuyin']);
   });
 });
+
+/**
+ * The mouse. Real `click` events through the real `Input`, because the thing
+ * being pinned is a two-step gesture and a synthesised action would skip the
+ * step in between: the first click on a rail card only *chooses* it (the card
+ * becomes the plate), and the second — on the plate — starts it. A mouse
+ * player never loses a chapter to a stray double click.
+ */
+describe('the mouse', () => {
+  const click = (rig: Rig, el: Element): void => {
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    rig.frame();
+  };
+
+  const cardFor = (rig: Rig, label: string): Element =>
+    rig.root.querySelector(`.fe-card[aria-label="${label}"]`)!;
+
+  it('takes one click on a rail card to choose it and a second on the plate to begin', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    expect(selectedId(rig)).toBe('seymour-flux');
+
+    click(rig, cardFor(rig, 'Lady Yunalesca'));
+    expect(selectedId(rig)).toBe('yunalesca');
+    // The card has moved to the plate, and nothing has started.
+    expect(picked).toEqual([]);
+    expect(rig.root.querySelector('.fe-hero')?.getAttribute('aria-label')).toBe('Lady Yunalesca');
+    expect(cardFor(rig, 'Lady Yunalesca')).toBeNull();
+
+    click(rig, rig.root.querySelector('.fe-hero')!);
+    expect(picked).toEqual(['yunalesca']);
+  });
+
+  it('never starts a chapter on the first click, whichever card it lands on', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    click(rig, cardFor(rig, "Braska's Final Aeon"));
+    click(rig, cardFor(rig, 'Lady Yunalesca'));
+    click(rig, cardFor(rig, 'Bahamut'));
+    expect(picked).toEqual([]);
+    expect(selectedId(rig)).toBe('ffx2-bahamut');
+  });
+
+  it('a COMING card is not a click target at all', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    const coming = rig.root.querySelector('.fe-card--coming')!;
+    expect(coming.getAttribute('data-action')).toBeNull();
+    click(rig, coming);
+    expect(selectedId(rig)).toBe('seymour-flux');
+    expect(picked).toEqual([]);
+  });
+
+  it('says so in the hint bar the moment the player uses a mouse', () => {
+    const rig = mount();
+    const hint = rig.root.querySelector('[data-role="controls-hint"]')!;
+    expect(hint.textContent).toContain('Left/Right');
+    click(rig, cardFor(rig, 'Lady Yunalesca'));
+    expect(hint.textContent).toContain('Click a card');
+    expect(hint.textContent).toContain('Click the plate');
+    expect(hint.textContent).toContain('begin');
+  });
+});
+
+describe('the debug API', () => {
+  it('jumps straight into a built chapter by id', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    expect(rig.screen.trigger('select:ffx2-vegnagun-shuyin')).toBe(true);
+    expect(picked).toEqual(['ffx2-vegnagun-shuyin']);
+  });
+});

@@ -53,19 +53,67 @@
 
 /*
  * The plane cut. card.json: "the shore plane here is cut on luminance from one
- * painting". There is one approved title painting and nothing may be generated
- * (hard rule 8 / the brief), so the near plane is the same file clipped to its
- * bottom band and held a little larger and darker — the horizon line is where
- * the cut lands, which is exactly where a luminance cut would put it.
+ * painting" — and the painting is public/art/title/keyart.png, the very plate
+ * after.png was composited from.
+ *
+ * The concept baked that cut into plane-near.png as an alpha channel. Measured
+ * off that file, its alpha is nothing at 62 % of the frame and ramps to about
+ * 0.95 at the bottom edge, so the mask below is that ramp: no hard line
+ * anywhere, and the blend crosses the painting's own horizon instead of
+ * cutting across it. (The first build used clip-path: inset(57% 0 0 0), a hard
+ * edge above the horizon — the thing the verifier saw.)
+ *
+ * The grades are the concept's two applied twice over, because plane-far.png
+ * and plane-near.png were themselves already graded (measured against the
+ * plate: 0.86 and 0.713) before after.html put its CSS filter on top. Working
+ * from the ungraded plate, this screen has to do both.
  */
 .fe-title__plane--far img {
-  filter: saturate(0.92) brightness(0.86) contrast(1.04);
+  filter: saturate(0.94) brightness(0.78) contrast(1.08);
 }
 .fe-title__plane--near {
-  clip-path: inset(57% 0 0 0);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 61%,
+    rgba(0, 0, 0, 0.16) 67%,
+    rgba(0, 0, 0, 0.34) 70.5%,
+    rgba(0, 0, 0, 0.5) 74%,
+    rgba(0, 0, 0, 0.6) 78%,
+    rgba(0, 0, 0, 0.72) 82%,
+    rgba(0, 0, 0, 0.8) 89%,
+    rgba(0, 0, 0, 0.9) 95%,
+    rgba(0, 0, 0, 0.96) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 61%,
+    rgba(0, 0, 0, 0.16) 67%,
+    rgba(0, 0, 0, 0.34) 70.5%,
+    rgba(0, 0, 0, 0.5) 74%,
+    rgba(0, 0, 0, 0.6) 78%,
+    rgba(0, 0, 0, 0.72) 82%,
+    rgba(0, 0, 0, 0.8) 89%,
+    rgba(0, 0, 0, 0.9) 95%,
+    rgba(0, 0, 0, 0.96) 100%
+  );
 }
 .fe-title__plane--near img {
-  filter: brightness(0.76) saturate(0.88);
+  filter: brightness(0.6) saturate(0.88);
+}
+
+/*
+ * A build served without public/art (it is gitignored) still has a title
+ * screen: the plane marks itself when the painting 404s and the dusk gradient
+ * the screen shipped with takes over. The <img> keeps its box, so nothing
+ * moves — it simply has nothing in it.
+ */
+.fe-title__plane[data-art='missing'] img {
+  visibility: hidden;
+}
+.fe-title__plane--far[data-art='missing'] {
+  background:
+    radial-gradient(120% 70% at 50% 74%, rgba(255, 196, 120, 0.22), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(to bottom, #0b1024 0%, #1c2440 46%, #3a3352 62%, #120e1c 100%);
 }
 
 .fe-title__bloom {
@@ -113,6 +161,20 @@
 }
 
 /*
+ * The two on the shore carry a **thin** rim, not the card rim.
+ *
+ * `.fe-sil`'s third drop-shadow is 14 grid units wide, which on a chapter card
+ * (a small tile on a dark plate) reads as a lit edge and on a 225px figure
+ * standing in open sky reads as a halo — measured against after.png, where the
+ * concept's own sil-*.png has a one-pixel gold line and nothing else. Scoped
+ * to the cast so the board, which matches its own target, is untouched.
+ */
+.fe-title__cast .fe-sil {
+  filter: brightness(0) drop-shadow(0 0 calc(1 * var(--fe-k)) rgba(227, 185, 74, 0.95))
+    drop-shadow(0 0 calc(3 * var(--fe-k)) rgba(227, 185, 74, 0.3));
+}
+
+/*
  * Ink silhouette. `brightness(0)` keeps the painting's alpha and throws away
  * every colour in it, which is what makes this honest: it is the approved
  * painting, cropped and lit by CSS only, never a second asset.
@@ -122,14 +184,37 @@
     drop-shadow(0 0 calc(4 * var(--fe-k)) rgba(227, 185, 74, 0.72))
     drop-shadow(0 0 calc(14 * var(--fe-k)) rgba(227, 185, 74, 0.3));
 }
+/*
+ * The reflection in the wet shore.
+ *
+ * The box is the band the reflection is allowed to fill (`--fe-refl` of the
+ * figure's height, set by titleMarkup.ts); the image inside it is the **whole**
+ * figure, flipped about the box's top edge so the feet meet the feet, and
+ * clipped by the box. Dividing by `--fe-refl` is what gives the image its full
+ * height — without it the image is only as tall as the band, and
+ * `scaleY(-1)` about `top center` throws every pixel of it above the box, which
+ * is why the first build had no visible reflection at all.
+ *
+ * `translateY(100%)` is read against the image's own height and is applied
+ * after the flip (transforms compose right to left), so the two cancel to
+ * "same place, upside down".
+ */
 .fe-figure--refl {
-  opacity: 0.22;
+  opacity: 0.3;
   overflow: hidden;
 }
-.fe-figure--refl img {
-  transform: scaleY(-1);
+.fe-title__cast .fe-figure--refl img {
+  height: calc(100% / var(--fe-refl, 0.606));
+  transform: translateY(100%) scaleY(-1);
   transform-origin: top center;
-  filter: blur(calc(2.2 * var(--fe-k)));
+  /*
+   * This replaces the rim filter rather than adding to it (same element), so
+   * `brightness(0)` has to be restated: a reflection of an ink shape is ink,
+   * and the gold rim belongs to the figure standing up, not to its double in
+   * the water. The selector has to out-specify `.fe-title__cast .fe-sil`
+   * above, which is why it names the cast too.
+   */
+  filter: brightness(0) blur(calc(2.2 * var(--fe-k)));
 }
 
 /* ---------------------------------------------------------- pyreflies */

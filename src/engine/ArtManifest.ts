@@ -52,6 +52,19 @@ export interface ArtManifest {
    * Always a subset of {@link ArtManifest.pause}; empty on an older manifest.
    */
   readonly pause2x: readonly string[];
+  /**
+   * Full-bleed title plates in `public/art/title/` — today just `keyart`, the
+   * painting the title card splits into its parallax planes.
+   *
+   * Its own folder rather than `backdrops/`, because a backdrop is a *scene* a
+   * battle is staged in and this is the key art of the whole game: it is the
+   * approved end state `docs/concepts/polish/showpiece-frontend/after.png`,
+   * it carries a 2x master, and nothing in the battle presenter may pick it up
+   * by accident.
+   */
+  readonly title: readonly string[];
+  /** Title plates that also ship `title/<id>.2x.webp`. Subset of `title`. */
+  readonly title2x: readonly string[];
 }
 
 /** Public path of the manifest, resolved against the Vite base path. */
@@ -108,6 +121,11 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     // and an empty list is the safe one: the screen ships the 1x plate alone,
     // exactly as it did before.
     pause2x: strings(obj.pause2x),
+    // Same reasoning as `pause2x`: a manifest written before `public/art/title`
+    // existed simply has no opinion, and the title card then falls back to the
+    // plate-less gradient it shipped with rather than asking for a 404.
+    title: strings(obj.title),
+    title2x: strings(obj.title2x),
   };
 }
 
@@ -215,11 +233,42 @@ export function pause2xUrlFor(url: string): string | null {
   return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
 }
 
+/** Is `public/art/title/<key>.png` there? `null` when there is no manifest. */
+export function hasTitleArt(key: string): boolean | null {
+  return current ? current.title.includes(key) : null;
+}
+
+/** Is `public/art/title/<key>.2x.webp` there? `null` when there is no manifest. */
+export function hasTitle2xArt(key: string): boolean | null {
+  return current ? current.title2x.includes(key) : null;
+}
+
+/** The `title/<key>` stem a `public/art/title/...` URL names, or `null`. */
+export function titleStemOf(url: string): string | null {
+  const m = /(?:^|\/)art\/title\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(url);
+  return m?.[1] ?? null;
+}
+
+/**
+ * The `2x.webp` master's URL for a title plate URL, when the manifest says one
+ * exists. `null` otherwise — including before the manifest has loaded.
+ *
+ * The title card is one painting at window size, so on Bailey's 2000px window
+ * the 1344px plate is being upscaled by half again; this is the file that
+ * stops that, and offering it only when the scan really saw it is what keeps a
+ * missing master from 404-ing the one image the screen is.
+ */
+export function title2xUrlFor(url: string): string | null {
+  const stem = titleStemOf(url);
+  if (stem === null || hasTitle2xArt(stem) !== true) return null;
+  return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
+}
+
 /**
  * Any `public/art/**.png` URL the manifest has an opinion about.
  *
  * `true` it exists, `false` it does not (so **do not request it**), `null` we
- * cannot say — no manifest loaded, or a URL outside the four indexed folders
+ * cannot say — no manifest loaded, or a URL outside the five indexed folders
  * (a `.raw` intermediate, a numbered candidate, anything hand-built).
  *
  * This is the one gate that covers every loader path at once, including the
@@ -228,7 +277,7 @@ export function pause2xUrlFor(url: string): string | null {
  * and without this every one of those names would be a 404.
  */
 const ART_ASSET =
-  /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#]+)|(portraits|backdrops|pause)\/([^/?#]+))\.([a-z0-9]+)(?:$|[?#])/i;
+  /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#]+)|(portraits|backdrops|pause|title)\/([^/?#]+))\.([a-z0-9]+)(?:$|[?#])/i;
 
 function judge(manifest: ArtManifest, url: string): boolean | null {
   const m = ART_ASSET.exec(url);
@@ -254,7 +303,9 @@ function judge(manifest: ArtManifest, url: string): boolean | null {
       ? manifest.portraits
       : folder === 'backdrops'
         ? manifest.backdrops
-        : manifest.pause;
+        : folder === 'title'
+          ? manifest.title
+          : manifest.pause;
   return isPng && list.includes(key);
 }
 

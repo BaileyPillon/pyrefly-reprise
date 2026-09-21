@@ -23,11 +23,17 @@ export interface ChapterSelectScreenOptions {
   initialIndex?: number;
 }
 
+/**
+ * A mouse player gets the board's two-click rule in its own words: the first
+ * click on a rail card brings it to the plate, the second — on the plate —
+ * starts it. That is the behaviour `handleInput` has always had; nothing said
+ * so, which is what made it read as a dead click.
+ */
 const HINTS = [
-  { keyboard: 'Left/Right', gamepad: 'D-pad', label: 'choose' },
+  { keyboard: 'Left/Right', gamepad: 'D-pad', pointer: 'Click a card', label: 'choose' },
   { keyboard: 'Up/Down', gamepad: 'D-pad', label: 'game' },
-  { keyboard: 'Enter', gamepad: 'Cross', label: 'select', action: 'confirm' },
-  { keyboard: 'Esc', gamepad: 'Circle', label: 'back', action: 'cancel' },
+  { keyboard: 'Enter', gamepad: 'Cross', pointer: 'Click the plate', label: 'begin', action: 'confirm' },
+  { keyboard: 'Esc', gamepad: 'Circle', pointer: 'Esc', label: 'back', action: 'cancel' },
 ];
 
 /**

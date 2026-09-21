@@ -636,6 +636,16 @@
     "sha256": "8a01fccc2981fd4b1befd184be503ddacfff567c1e207640d8d55b61f838eb77",
     "mtime": "2026-09-21T15:52:36.201Z"
    }
+  },
+  "title:keyart": {
+   "public/art/title/keyart.png": {
+    "sha256": "835d56b4254eef20aef715335207a61392adc7b5ae500dbb7f3a70b9470f9f02",
+    "mtime": "2026-09-21T17:41:55.622Z"
+   },
+   "public/art/title/keyart.2x.webp": {
+    "sha256": "1ab89b73cc4316c111ae2147ff7fb28e9172396b8da51487dc379ee8c693b7a1",
+    "mtime": "2026-09-21T17:41:55.589Z"
+   }
   }
  }
 }

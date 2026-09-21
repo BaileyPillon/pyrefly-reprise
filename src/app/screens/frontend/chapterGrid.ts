@@ -122,6 +122,17 @@ function tileForComing(coming: ComingChapter): ChapterTile {
 }
 
 /**
+ * The two lists the board is built from. Both default to the real registries;
+ * a test passes its own so the "a coming chapter has landed" branch can be
+ * exercised for real, without writing a fake chapter into `src/data` (hard
+ * rule 6) and without waiting for one of the three to be built.
+ */
+export interface ChapterRegistries {
+  readonly chapters?: readonly Chapter[];
+  readonly coming?: readonly ComingChapter[];
+}
+
+/**
  * Every card on the board, FFX chapters first, then FFX-2, each game's built
  * chapters in play order followed by that game's approved-but-coming ones.
  *
@@ -129,16 +140,21 @@ function tileForComing(coming: ComingChapter): ChapterTile {
  * dropped: the real chapter is already in the list, so the card lights up by
  * itself the day the data lands and nobody has to remember to delete a row.
  */
-export function buildChapterTiles(save: ClearedLookup): ChapterTile[] {
-  const liveIds = new Set(CHAPTERS.map((c) => c.id as string));
-  const liveTitles = new Set(CHAPTERS.map((c) => c.title.toLowerCase()));
-  const coming = COMING_CHAPTERS.filter(
+export function buildChapterTiles(
+  save: ClearedLookup,
+  registries: ChapterRegistries = {},
+): ChapterTile[] {
+  const chapters = registries.chapters ?? CHAPTERS;
+  const comingRows = registries.coming ?? COMING_CHAPTERS;
+  const liveIds = new Set(chapters.map((c) => c.id as string));
+  const liveTitles = new Set(chapters.map((c) => c.title.toLowerCase()));
+  const coming = comingRows.filter(
     (c) => !liveIds.has(c.id) && !liveTitles.has(c.title.toLowerCase()),
   );
 
   const tiles: ChapterTile[] = [];
   for (const game of ['ffx', 'ffx2'] as const) {
-    for (const chapter of CHAPTERS) {
+    for (const chapter of chapters) {
       if (chapter.game === game) tiles.push(tileForChapter(chapter, save));
     }
     for (const row of coming) {

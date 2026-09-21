@@ -9,11 +9,22 @@
  * ever writes transforms, and reduced motion is the **still** composition —
  * which is after.png itself.
  */
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { MoteField } from '../../src/app/screens/frontend/motes.ts';
 import { ParallaxField, normalisePointer } from '../../src/app/screens/frontend/parallax.ts';
-import { titleMarkup } from '../../src/app/screens/frontend/titleMarkup.ts';
+import {
+  TITLE_PLATE,
+  titleMarkup,
+  titlePlateSizes,
+  upgradeTitlePlanes,
+} from '../../src/app/screens/frontend/titleMarkup.ts';
+import {
+  resetArtManifest,
+  setArtManifest,
+  type ArtManifest,
+} from '../../src/engine/ArtManifest.ts';
+import { artUrl } from '../../src/engine/PaintedArt.ts';
 
 function layer(): HTMLElement {
   const el = document.createElement('div');
@@ -138,8 +149,21 @@ describe('titleMarkup', () => {
     const near = html.match(/fe-title__plane--near/g) ?? [];
     expect(far).toHaveLength(1);
     expect(near).toHaveLength(1);
-    const sources = new Set(Array.from(html.matchAll(/src="([^"]+backdrops[^"]+)"/g), (m) => m[1]));
+    const sources = new Set(Array.from(html.matchAll(/src="([^"]+art\/title\/[^"]+)"/g), (m) => m[1]));
     expect(sources.size).toBe(1);
+  });
+
+  it('is the key art after.png was composited from, not a stand-in backdrop', () => {
+    expect(TITLE_PLATE).toBe('art/title/keyart.png');
+    expect(html).toContain('art/title/keyart.png');
+    // The first build reached for backdrops/title.png; nothing may again.
+    expect(html).not.toContain('backdrops/title.png');
+  });
+
+  it('gives a plane whose painting 404s a marker the stylesheet can fall back on', () => {
+    const planes = Array.from(html.matchAll(/class="fe-title__plane fe-title__plane--\w+"><img[^>]*>/g));
+    expect(planes).toHaveLength(2);
+    for (const [tag] of planes) expect(tag).toContain("data-art','missing'");
   });
 
   it('puts the two on the shore in as approved paintings, drawn as silhouettes', () => {
@@ -159,5 +183,126 @@ describe('titleMarkup', () => {
   it('shows the briefing chip only when onboarding is live', () => {
     expect(html).not.toContain('title:briefing');
     expect(titleMarkup({ briefingChip: true })).toContain('title:briefing');
+  });
+
+  /**
+   * The reflection's box starts at the figure's feet and the image inside it is
+   * the whole figure — the two numbers the stylesheet divides by `--fe-refl`.
+   * The first build sized the image to the box, and `scaleY(-1)` about
+   * `top center` then put every pixel of it above the box: no reflection at all.
+   */
+  it('hangs each reflection from its figure’s feet and hands CSS the ratio', () => {
+    const boxes = Array.from(
+      html.matchAll(/class="fe-figure fe-figure--refl" style="([^"]+)"/g),
+      (m) => m[1]!,
+    );
+    expect(boxes).toHaveLength(2);
+    for (const style of boxes) {
+      const ratio = Number(/--fe-refl:([\d.]+)/.exec(style)![1]);
+      const bottom = Number(/bottom:(-?[\d.]+)%/.exec(style)![1]) / 100;
+      const height = Number(/height:([\d.]+)%/.exec(style)![1]) / 100;
+      expect(ratio).toBeGreaterThan(0.5);
+      expect(ratio).toBeLessThan(0.7);
+      // Its top edge — bottom + height — is where the figure's feet are.
+      const feet = bottom + height;
+      expect(feet).toBeGreaterThan(0.12);
+      expect(feet).toBeLessThan(0.14);
+      // And the band is `ratio` of the figure it doubles.
+      expect(height / ratio).toBeGreaterThan(0.2);
+    }
+  });
+});
+
+// --------------------------------------------------------------- the plate
+
+const MANIFEST: ArtManifest = {
+  version: 1,
+  generatedAt: '',
+  subjects: {},
+  portraits: [],
+  backdrops: [],
+  pause: [],
+  pause2x: [],
+  title: ['keyart'],
+  title2x: ['keyart'],
+};
+
+function mountTitle(): HTMLElement {
+  const host = document.createElement('div');
+  host.innerHTML = titleMarkup({ briefingChip: false });
+  document.body.appendChild(host);
+  return host;
+}
+
+function planeImgs(host: HTMLElement): HTMLImageElement[] {
+  return Array.from(host.querySelectorAll('.fe-title__plane img'));
+}
+
+describe('the title plate', () => {
+  afterEach(() => {
+    resetArtManifest();
+    document.body.innerHTML = '';
+  });
+
+  it('asks for art/title/keyart.png, and only that', () => {
+    const imgs = planeImgs(mountTitle());
+    expect(imgs).toHaveLength(2);
+    for (const img of imgs) expect(img.getAttribute('src')).toContain(TITLE_PLATE);
+  });
+
+  /**
+   * Measured in the browser: emitting `src` alone and adding `srcset` a tick
+   * later makes Chromium start the 1x plate and abort it — a wasted megabyte
+   * and a failed request in the panel. The manifest is prefetched at bundle
+   * init, so by the time the title mounts it is normally already in hand.
+   */
+  it('puts the candidate list in the markup when the manifest is already in hand', () => {
+    setArtManifest(MANIFEST);
+    for (const img of planeImgs(mountTitle())) {
+      expect(img.getAttribute('srcset')).toContain('keyart.2x.webp 2688w');
+      expect(img.getAttribute('sizes')).toBe(titlePlateSizes());
+    }
+  });
+
+  it('offers the 2688px master once the manifest says it is on disk', async () => {
+    setArtManifest(MANIFEST);
+    const host = mountTitle();
+    await upgradeTitlePlanes(host);
+    const url = artUrl(TITLE_PLATE);
+    for (const img of planeImgs(host)) {
+      expect(img.getAttribute('srcset')).toBe(
+        `${url} 1344w, ${url.replace(/\.png$/, '.2x.webp')} 2688w`,
+      );
+      expect(img.getAttribute('sizes')).toBe(titlePlateSizes());
+    }
+  });
+
+  it('offers nothing when the master is not listed — never a 404 on the one image the screen is', async () => {
+    setArtManifest({ ...MANIFEST, title2x: [] });
+    const host = mountTitle();
+    await upgradeTitlePlanes(host);
+    for (const img of planeImgs(host)) expect(img.hasAttribute('srcset')).toBe(false);
+  });
+
+  it('falls back gracefully with no manifest at all, and again when the painting 404s', async () => {
+    setArtManifest(null);
+    const host = mountTitle();
+    await upgradeTitlePlanes(host);
+    for (const img of planeImgs(host)) {
+      expect(img.hasAttribute('srcset')).toBe(false);
+      // The plate is still requested; the screen is correct without a manifest.
+      expect(img.getAttribute('src')).toContain(TITLE_PLATE);
+      // And when it fails, the plane says so instead of leaving a broken glyph.
+      img.dispatchEvent(new Event('error'));
+    }
+    const planes = Array.from(host.querySelectorAll('.fe-title__plane'));
+    expect(planes.map((p) => p.getAttribute('data-art'))).toEqual(['missing', 'missing']);
+  });
+
+  it('hints a cover width, not 100vw: a tall window crops far more image than its own width', () => {
+    const sizes = titlePlateSizes();
+    expect(sizes).toContain('100vw');
+    expect(sizes).toContain('100vh');
+    expect(sizes.startsWith('calc(')).toBe(true);
   });
 });

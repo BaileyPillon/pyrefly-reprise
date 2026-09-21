@@ -9,7 +9,7 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { CHAPTERS } from '../../src/data/encounters.ts';
+import { CHAPTERS, type Chapter, type ChapterId } from '../../src/data/encounters.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { COMING_CHAPTERS } from '../../src/app/screens/frontend/comingChapters.ts';
 import {
@@ -61,6 +61,44 @@ describe('the board', () => {
   it('never invents a chapter: every coming id is absent from the registry', () => {
     const live = new Set(CHAPTERS.map((c) => c.id as string));
     for (const row of COMING_CHAPTERS) expect(live.has(row.id)).toBe(false);
+  });
+
+  /**
+   * The branch the track exists to make automatic: the day Macalania's data
+   * lands in `src/data/encounters.ts`, its COMING card has to stop being a
+   * COMING card by itself. Driven by handing `buildChapterTiles` a registry
+   * that already holds it — the real filter, the real rows, no fake chapter
+   * written into `src/data` (hard rule 6).
+   */
+  it('drops a coming row the day its real chapter lands — matched by id', () => {
+    const landed: Chapter = { ...CHAPTERS[0]!, id: 'seymour-anima-macalania' as ChapterId, game: 'ffx' };
+    const tiles = buildChapterTiles(save, { chapters: [landed] });
+    expect(tiles.filter((t) => t.id === 'seymour-anima-macalania')).toHaveLength(1);
+    const card = tiles.find((t) => t.id === 'seymour-anima-macalania')!;
+    expect(card.kind).toBe('chapter');
+    expect(card.playable).toBe(true);
+    // Only that one row goes: the other two are still coming.
+    expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
+      'Evrae',
+      'The Leblanc Syndicate',
+    ]);
+  });
+
+  it('drops a coming row matched by title alone, whatever id the chapter lands under', () => {
+    // The likely real case: the data agent picks its own id and keeps the name.
+    const landed: Chapter = { ...CHAPTERS[3]!, id: 'leblanc' as ChapterId, title: 'The Leblanc Syndicate', game: 'ffx2' };
+    const tiles = buildChapterTiles(save, { chapters: [landed] });
+    expect(tiles.filter((t) => t.title === 'The Leblanc Syndicate')).toHaveLength(1);
+    expect(tiles.find((t) => t.title === 'The Leblanc Syndicate')!.playable).toBe(true);
+    expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
+      'Seymour and Anima',
+      'Evrae',
+    ]);
+  });
+
+  it('leaves the board alone while nothing has landed', () => {
+    const tiles = buildChapterTiles(save, { chapters: CHAPTERS, coming: COMING_CHAPTERS });
+    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length);
   });
 
   it('reads cleared state from a real SaveStore, and only for the chapter cleared', () => {

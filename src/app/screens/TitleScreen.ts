@@ -8,7 +8,7 @@ import { makeBriefing } from './raiseBriefing.ts';
 import { onboardingLive } from '../../ui/coach/coachState.ts';
 import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
 import { MoteField } from './frontend/motes.ts';
-import { titleMarkup } from './frontend/titleMarkup.ts';
+import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
 import { readSetting } from '../SaveData.ts';
 
 /**
@@ -24,6 +24,13 @@ import { readSetting } from '../SaveData.ts';
  * Game-aware (AGENTS.md rule 14): **both**. The title is the front door to
  * both halves of the game; nothing about it is true of one and not the other,
  * and the strap names both by name.
+ *
+ * The painting is `public/art/title/keyart.png` — the plate `after.png` was
+ * itself composited from, installed from the concept folder on 2026-09-21.
+ * The first cut of this screen used `backdrops/title.png` instead (a sea and a
+ * horizon), on a brief that said "only art already in `public/art`"; that read
+ * of the rule was wrong here, because the key art is this project's own render
+ * and it is the picture Bailey approved.
  *
  * Two things changed from the screen this replaces, both deliberate:
  * - it is **full bleed**, not a letterboxed 640x360 stage scaled by a
@@ -80,6 +87,9 @@ export class TitleScreen extends Screen {
     this.root.className = 'screen fe fe-title ig';
     this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive() });
     this.stage = this.root;
+    // The 2688px master, once the manifest says it is on disk. Never awaited:
+    // the 1x plate is already decoding and the screen is correct without it.
+    void upgradeTitlePlanes(this.root);
 
     const motes = this.root.querySelector('.fe-title__motes');
     if (motes instanceof HTMLElement) {
