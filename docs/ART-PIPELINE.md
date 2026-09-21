@@ -368,13 +368,28 @@ That is what the `refState` field in `cast.json` records.
 
 #### The settings, and why they are what they are
 
-| Flag | Default | What it does |
+**2026-09-21 art-quality-pilot**
+(`docs/concepts/art-quality-pilot/README.md`, commit `0550cc8`) found that the
+defaults below — `refWeight 0.65`, `refStart 0.25`, `refEnd 0.85`,
+`refWeightType linear` — were the main cause of a quality drop Bailey flagged
+("some of the art work still looks significantly lower quality than before ...
+it's a huge downgrade in quality"). At 0.65 the adapter burns the checkpoint's
+own colour and dissolves outlines — worst on a reference that is itself nearly
+one colour — and cost renders to the cut-out sanity guard outright.
+`tools/gen/comfy.mjs`'s own defaults now match the pilot's winning recipe
+("R2"), calibrated on Tidus, Lulu, the Guado Guardian and Leblanc:
+
+| Flag | Default (was, pre-2026-09-21) | What it does |
 | --- | --- | --- |
-| `--refWeight` | `0.65` | How hard the reference pulls |
-| `--refStart` | `0.25` | When it switches **on**, as a fraction of the denoise |
-| `--refEnd` | `0.85` | When it switches **off** |
-| `--refWeightType` | `linear` | IP-Adapter weight curve |
-| `--refScaling` | `K+V` | How the embeds are applied |
+| `--refWeight` | `0.30` (was `0.65`) | How hard the reference pulls |
+| `--refStart` | `0.2` (unchanged) | When it switches **on**, as a fraction of the denoise |
+| `--refEnd` | `0.6` (was `0.85`) | When it switches **off** |
+| `--refWeightType` | `ease in` (was `linear`) | IP-Adapter weight curve |
+| `--refScaling` | `K+V` (unchanged) | How the embeds are applied |
+
+Every flag can still be overridden per call; these are only the defaults a
+caller gets by leaving them out. `--refStart 0` is refused outright when
+`--ref` is given — see below for why.
 
 `--refStart`, not `--refWeight`, is the flag that makes this usable, and it is
 not the one you reach for first. Tuned on Tidus, fixed seed, the `attack`
@@ -389,9 +404,10 @@ prompt against his approved `idle`:
 - **start 0.0, end 0.4** — cutting the adapter off early changed nothing about
   the pose. Composition is decided in the *first* steps; by the time you switch
   it off, the damage is done.
-- **start 0.25** — the prompt lays the figure out unassisted, the adapter
+- **start 0.2** — the prompt lays the figure out unassisted, the adapter
   switches on once a pose exists, and it lands the face, hair and costume on
-  top of it. This is the fix.
+  top of it. This is the fix, and `tools/gen/comfy.mjs` now throws if `--ref`
+  is given with `--refStart 0`.
 
 Two different mechanisms, needing two different flags:
 
@@ -400,8 +416,32 @@ Two different mechanisms, needing two different flags:
 2. **Material bleed** happens at the *end*. The adapter carries the
    reference's local surfaces and not just its identity — Tidus's idle handed
    every later pose its iridescent blade and red-and-blue shoulder plate as an
-   all-over gloss. Cure with `--refEnd`; the default 0.85 hands the last steps
-   back to the checkpoint and the style tags.
+   all-over gloss. Cure with `--refEnd`; the default (now `0.6`, pulled in
+   from `0.85` by the 2026-09-21 pilot) hands more of the denoise back to the
+   checkpoint and the style tags.
+
+**Colour bleed is a third mechanism, cured by `--refWeight` and
+`--refWeightType`, and it is the one the 2026-09-21 pilot found doing the most
+damage.** `linear` spreads full-strength pull evenly across the
+`refStart`..`refEnd` window; `ease in` (the new default) ramps it up instead,
+weakest exactly when composition is being decided. Combined with the lower
+weight, this is what let R2 match the approved quality bar at 1:1 where R3
+(the old 0.65/linear recipe) did not.
+
+**Never reference off a near-monochrome image, at any weight.** Lulu's idle
+(nearly all black) and the Guado Guardian's idle (nearly all one ochre) both
+failed badly at 0.65 — burnt colour, dissolved outlines, the face itself
+sometimes lost — while Leblanc's picked concept (a balanced purple/pink/gold
+image) referenced gracefully at the same weight. This is a production rule,
+not a weight to hunt for: `tools/gen/comfy.mjs` now decodes every `--ref`
+image before rendering and measures its colour spread (the share of opaque
+pixels sitting in the two largest quantised hue/value buckets). Above 40% —
+calibrated so both Lulu's and the Guado Guardian's approved idles trip it and
+Leblanc's picked concept does not — it prints a loud warning and renders
+**without** the reference instead, exactly as if `--ref` had not been passed.
+Pass `--forceRef` to use the reference anyway. If an idle itself is
+near-monochrome, judge its other states on costume rather than fighting the
+guard.
 
 And the caveat that is easy to miss: **`--ref` propagates the reference's
 mistakes too.** The approved Tidus idle wears an armoured forearm that is not
@@ -410,8 +450,36 @@ consistency — so be fussier about an `idle` than about any other frame in the
 set, because the whole character is downstream of it.
 
 For a *variant* of an existing subject (Shuyin from Tidus, the X-2 Bahamut from
-the FFX one) drop to about `0.45` and let the tags do the recolouring. At 0.65
-the reference's palette arrives with the face.
+the FFX one) drop further, to about `0.2`, and let the tags do the
+recolouring. Even at the new default the reference's palette can arrive with
+the face on a subject this different from its source.
+
+#### Writing an identity block
+
+**2026-09-21 art-quality-pilot, H3:** the pilot also found `tools/gen/cast.json`'s
+short, generic identity tags (`"black hair, braid, hair ornament, red eyes,
+lipstick, black dress, belt skirt, corset, ..."`) losing the costume entirely
+next to the long, specific description the approved idle was actually
+rendered from — the stacked leather belt skirt became a lace-trimmed gown, the
+single moogle became a floating balloon head, cowboy boots appeared from
+nowhere. **The specific description *is* the art direction; a short tag list
+is not a compressed version of it, it is a different, worse prompt.** Before
+writing `--tags` for a new state (or a new subject), read the approved idles'
+own sidecars — `public/art/characters/lulu/idle.json`,
+`public/art/characters/tidus/idle.json`,
+`public/art/characters/yuna/idle.json` — for the length and style to match:
+enumerate the costume piece by piece (cut, material, colour, how it sits on
+the body), not a handful of Danbooru tags standing in for it. `tools/gen/cast.json`
+is a work order, not read at runtime, so keeping its `tags` field in sync with
+what actually produced the approved art is a manual discipline, not something
+the generator can enforce.
+
+**Composition, not weight, fixes a striped or gradient-y flat garment.** If a
+robe or other large flat area keeps coming back with unwanted banding or a
+gradient instead of a flat cel fill, add a phrase to the identity block itself
+(e.g. "flat solid colour, no gradient, no pattern") rather than reaching for
+`--refWeight` — the pilot's Guado Guardian robe needed exactly this, and it
+was true even in the recipes with no reference at all.
 
 ### img2img — `--img2img`
 
@@ -445,6 +513,16 @@ in its defaults: **1216×832** landscape and `--composition boss`
 (`straight-on, full body, centered, imposing, …`). Bosses are rarely bipeds
 standing politely on a floor, so `standing, feet visible` is wrong for them and
 actively fights forms like Yu Yevon or Vegnagun.
+
+**But an ordinary standing humanoid needs `--composition full`, not `boss`,
+even in the `boss` preset.** The 2026-09-21 art-quality-pilot traced every
+non-idle Guado Guardian state and all of `seymour-macalania` doubling over and
+cropping through the head to exactly this: `boss`'s framing block has no
+`standing, feet visible`, and both subjects are ordinary bipeds who stand on a
+floor. `tools/gen/comfy.mjs` now prints a loud warning whenever
+`--composition boss` is used without `--nonBiped`, naming this finding — pass
+`--composition full` for a standing humanoid, or `--nonBiped` to say the
+subject genuinely floats, coils, or fills the frame the way `boss` expects.
 
 Pick the canvas per subject — `cast.json` carries one in `sizeHint`:
 
@@ -613,6 +691,19 @@ public/art/
   below that, something is dangling.
 - `*.raw.png` files are the pre-cutout renders. They are debugging aids; they
   are not shipped and should stay out of `public/` in a final build.
+  **2026-09-21: enforced by the generator, not just convention** —
+  `tools/gen/comfy.mjs` never writes a `.raw.png` under `public/art/`, even for
+  an explicit `--install` write; it lands under
+  `docs/concepts/_candidates/_raw/` instead.
+- **Candidates never land in `public/art/` either, by default.** A `--out`
+  under `public/art/` without `--install` is silently redirected to
+  `--candidateDir` (default `docs/concepts/_candidates/<name>/<pose>/`, same
+  filename) — a batch of unjudged renders belongs next to the judging process,
+  not in the folder the game reads from. Judge the candidates the usual way
+  (§6), then re-run the same command with `--install` (and `--batch 1 --seed
+  <the keeper's seed>`) to place the chosen render under `public/art/`. The
+  redirect is loud on stderr and the sidecar records `candidateOf` when it
+  fires, so a chosen render's origin is never a mystery.
 
 ---
 
@@ -811,6 +902,46 @@ background (`CHARACTER_COMPOSITION` and friends), not a defect — the lint
 never strips or replaces it, and the near-white guard's "internal to the
 figure, not touching the edge" carve-out is precisely what keeps it from
 flagging ordinary white clothing.
+
+### Reference burn
+
+**Symptom:** not black, not misrendered — just much worse. Outlines dissolve
+into soft, airbrushed smears; flat cel fills break into gradients or streaks
+(cream-and-teal vertical streaking on the 2026-09-21 Guado Guardian incident
+render); a costume's palette shifts toward the reference's own colour (Lulu's
+black corset and belt skirt came back blue and grey-purple); at the worst, the
+head crops out of frame entirely. Sometimes survives the cut-out guard,
+sometimes does not — two of six pilot renders at the old recipe were
+quarantined outright.
+
+**Cause (2026-09-21 art-quality-pilot, H1 — see §3 above for the full
+writeup):** `--ref` at the old default weight, `0.65`, on a `linear` curve.
+Sixty-three seconds apart, from the identical identity block and style
+contract, `guado-guardian/idle.png` (no reference) came back crisp cel
+shading with a readable face; `guado-guardian/attack.1.png` (reference at
+0.65) came back with no head in frame and the outlines dissolved into
+streaking. The severity scales with how extreme the reference's own palette
+is — nearly-monochrome references (Lulu's near-black idle, the Guado
+Guardian's near-ochre one) failed outright; a balanced reference (Leblanc's
+picked concept) referenced gracefully at the same weight.
+
+**What the tool now does:**
+
+1. **Lower defaults.** `refWeight 0.30`, `refStart 0.2`, `refEnd 0.6`,
+   `refWeightType 'ease in'` — the recipe that matched the approved quality
+   bar at 1:1 in the pilot ("R2"). See §3.
+2. **A monochrome-reference guard.** Every `--ref` image is decoded and its
+   colour spread measured before it reaches IP-Adapter; a reference that is
+   40% or more one colour is dropped and the render proceeds without it,
+   loudly, unless `--forceRef` is passed. See §3.
+3. **The pose-prompt lint and `EFFECTS_NEGATIVE`** (above) are unrelated but
+   confirmed harmless — the pilot's H5 checked whether the two fought and
+   found no difference at identical seeds.
+
+Not cured by this guard, because it was checked and rejected as a cause
+(pilot H2): the weighted facing phrase, `(from side:1.3) ... (looking at
+viewer:1.2)` — unweighting it bought nothing and cost the facing contract.
+Leave §2a alone.
 
 ---
 

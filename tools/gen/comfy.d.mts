@@ -47,3 +47,73 @@ export declare function buildCharacterPrompt(opts: {
 }): string;
 
 export declare function buildBackdropPrompt(opts: { tags: string }): string;
+
+// --------------------------------------------------------------------------
+// 2026-09-21 art-quality-pilot: reference defaults, the monochrome-reference
+// guard, and the candidate-staging rule. tests/unit/art-ref-defaults.test.ts
+// is what needs these.
+// --------------------------------------------------------------------------
+
+export declare const REF_WEIGHT_DEFAULT: number;
+export declare const REF_START_DEFAULT: number;
+export declare const REF_END_DEFAULT: number;
+export declare const REF_WEIGHT_TYPE_DEFAULT: string;
+
+export declare const MONOCHROME_HUE_BUCKETS: number;
+export declare const MONOCHROME_VALUE_BANDS: number;
+export declare const MONOCHROME_GRAY_BANDS: number;
+export declare const MONOCHROME_GRAY_SAT_MAX: number;
+export declare const MONOCHROME_TOP2_SHARE_MIN: number;
+export declare const MONOCHROME_MIN_OPAQUE_PIXELS: number;
+
+export interface DecodedPixels {
+  width: number;
+  height: number;
+  alpha: Uint8Array;
+  rgb: Uint8Array;
+}
+
+export declare function colorBucketCounts(pixels: DecodedPixels): {
+  counts: Map<string, number>;
+  opaque: number;
+};
+
+export interface ReferenceMonochromeResult {
+  opaque: number;
+  dominantShare: number;
+  top2Share: number;
+  monochrome: boolean;
+}
+
+export declare function evaluateReferenceMonochrome(
+  pixels: DecodedPixels,
+  opts?: { top2ShareMin?: number },
+): ReferenceMonochromeResult;
+
+export interface ReferenceOptionsResult {
+  width: number;
+  height: number;
+  refImage?: string;
+  refWeight: number;
+  refWeightType: string;
+  refScaling: string;
+  refStart: number;
+  refEnd: number;
+  initImage?: string;
+  denoise: number;
+  provenance: Record<string, unknown>;
+}
+
+export declare function referenceOptions(
+  args: Record<string, unknown>,
+  opts: { defaultWidth: number; defaultHeight: number },
+): Promise<ReferenceOptionsResult>;
+
+export declare function isUnderPublicArt(absPath: string): boolean;
+
+export declare function resolveCandidateOutPath(
+  outPath: string,
+  opts: { name: string; pose: string; candidateDirArg?: unknown; install: boolean },
+): { outPath: string; redirected: boolean };
+
+export declare function rawPathFor(outPath: string): string;

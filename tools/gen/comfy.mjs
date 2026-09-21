@@ -56,7 +56,7 @@ import {
   shouldRestartAfterBlack,
   shouldRestartGivenQueue,
 } from './black-frame.mjs';
-import { checkCutoutFile, quarantineCutout } from './cutout-guard.mjs';
+import { checkCutoutFile, decodeRgba, OPAQUE_ALPHA_MIN, quarantineCutout } from './cutout-guard.mjs';
 import { canonPosePhrase } from './pose-phrases.mjs';
 
 // Re-exported so the guard's decisions have one import path for callers and
@@ -70,6 +70,7 @@ export {
 };
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = resolve(HERE, '..', '..');
 
 // --------------------------------------------------------------------------
 // Configuration
@@ -137,12 +138,18 @@ const CLIP_VISION_MODEL =
  * How hard the reference pulls.
  *
  * 0.65 is the useful middle: identity, hair and costume carry over from the
- * idle, but the pose prompt still wins the argument about limbs. Above ~0.85
- * the adapter starts reproducing the reference *pose* too and `--poseTags`
- * stops mattering; below ~0.45 the costume drifts again and you may as well
- * not bother.
+ * idle, but the pose prompt still wins the argument about limbs.
+ *
+ * **2026-09-21 art-quality-pilot** (`docs/concepts/art-quality-pilot/README.md`,
+ * recipe "R2"): 0.65 was too hot. On a nearly-monochrome reference (Lulu's
+ * all-black idle, the Guado Guardian's single ochre robe) it burns the
+ * checkpoint's own colour and dissolves outlines — the "not black, not
+ * misrendered, just much worse" Bailey called out — and cost two of six
+ * pilot renders to the cut-out guard outright. 0.30 buys the identity
+ * consistency `--ref` exists for without carrying the reference's palette or
+ * surface across. See docs/ART-PIPELINE.md §3.
  */
-export const REF_WEIGHT_DEFAULT = 0.65;
+export const REF_WEIGHT_DEFAULT = 0.3;
 
 /**
  * When the reference starts pulling.
@@ -152,23 +159,41 @@ export const REF_WEIGHT_DEFAULT = 0.65;
  * fixed seed, an "attacking, swinging sword" prompt came back as the idle's
  * planted stance with cropped legs, three times out of three, at every weight
  * from 0.45 up. Letting the prompt lay out the figure first and switching the
- * reference on at 0.25 keeps the pose the prompt asked for and still lands the
+ * reference on at 0.2 keeps the pose the prompt asked for and still lands the
  * face, hair and costume. This flag, not `--refWeight`, is the one that makes
- * `--ref` usable.
+ * `--ref` usable. (2026-09-21 pilot: unchanged from the pre-pilot value —
+ * `refWeight` was the cause, not `refStart`.)
  */
-export const REF_START_DEFAULT = 0.25;
+export const REF_START_DEFAULT = 0.2;
 
 /**
  * When the reference lets go.
  *
- * The last 15% of the denoise runs unassisted. Left on to the very end the
- * adapter carries the reference's local *material* as well as its identity:
- * Tidus's idle handed later poses its iridescent blade and red-and-blue
- * shoulder plate as an all-over chrome gloss, and the cel-shading contract
- * went with it. Surface is settled late, so hand the last steps back to the
- * checkpoint and the style tags.
+ * Left on too long the adapter carries the reference's local *material* as
+ * well as its identity: Tidus's idle handed later poses its iridescent blade
+ * and red-and-blue shoulder plate as an all-over chrome gloss, and the
+ * cel-shading contract went with it. Surface is settled late, so hand the
+ * last third of the denoise back to the checkpoint and the style tags.
+ *
+ * **2026-09-21 art-quality-pilot**: pulled in from 0.85 to 0.6 alongside the
+ * weight drop — ending the reference earlier gave the checkpoint more of the
+ * denoise to re-assert flat cel fills before the style tags have to fight a
+ * baked-in gradient. See docs/ART-PIPELINE.md §3.
  */
-export const REF_END_DEFAULT = 0.85;
+export const REF_END_DEFAULT = 0.6;
+
+/**
+ * How the reference's pull is shaped over `refStart`..`refEnd`.
+ *
+ * **2026-09-21 art-quality-pilot**: `'linear'` spreads full-strength pull
+ * evenly across the window; `'ease in'` ramps it up instead, so the adapter is
+ * weakest exactly when composition is being decided and strongest only once
+ * the pose is settled. Recipe "R2" (weight 0.30, `ease in`) matched the
+ * approved quality bar at 1:1 on all three pilot subjects; `'linear'` at the
+ * same weight did not separate the win from R1 (no reference) as cleanly. See
+ * docs/ART-PIPELINE.md §3.
+ */
+export const REF_WEIGHT_TYPE_DEFAULT = 'ease in';
 
 /** img2img strength. 0.55 keeps the silhouette, repaints everything else. */
 export const IMG2IMG_DENOISE_DEFAULT = 0.55;
@@ -768,7 +793,7 @@ function baseTxt2Img({
   scheduler,
   refImage,
   refWeight = REF_WEIGHT_DEFAULT,
-  refWeightType = 'linear',
+  refWeightType = REF_WEIGHT_TYPE_DEFAULT,
   refScaling = 'K+V',
   refStart = REF_START_DEFAULT,
   refEnd = REF_END_DEFAULT,
@@ -1466,21 +1491,154 @@ export function parseSize(raw) {
   return { width, height };
 }
 
+// --------------------------------------------------------------------------
+// Monochrome-reference guard (2026-09-21 art-quality-pilot)
+// --------------------------------------------------------------------------
+//
+// The pilot's H1 (docs/concepts/art-quality-pilot/README.md §2): referencing
+// off a reference image that is itself nearly one colour is what made
+// `--ref` burn line quality and colour, worst of all the causes found. Lulu's
+// idle (near-black) and the Guado Guardian's idle (near-ochre) both failed at
+// weight 0.65; Leblanc's picked concept (a balanced purple/pink/gold image)
+// referenced gracefully at the same weight. This is a production rule, not a
+// weight-tuning one: below, catch the near-monochrome case and skip the
+// reference entirely rather than trying to find a "safe" weight for it.
+
+/** Quantised colour buckets: 18 hue x 3 value bands, plus 5 achromatic bands. */
+export const MONOCHROME_HUE_BUCKETS = 18;
+export const MONOCHROME_VALUE_BANDS = 3;
+export const MONOCHROME_GRAY_BANDS = 5;
+/** Below this saturation a pixel is bucketed by value only, not hue. */
+export const MONOCHROME_GRAY_SAT_MAX = 0.15;
+/**
+ * The share of opaque pixels sitting in the two largest colour buckets,
+ * above which a reference counts as near-monochrome.
+ *
+ * Calibrated 2026-09-21 against `public/art/characters/lulu/idle.png`
+ * (0.463) and `public/art/characters/guado-guardian/idle.png` (0.457) — both
+ * must trip it — versus the picked Leblanc concept
+ * `docs/concepts/chapters/leblanc/renders/leblanc-b.png` (0.366), which must
+ * not. 0.40 sits in the ~0.09 gap between them.
+ */
+export const MONOCHROME_TOP2_SHARE_MIN = 0.4;
+/** Below this many opaque pixels the measurement is too noisy to trust. */
+export const MONOCHROME_MIN_OPAQUE_PIXELS = 256;
+
+/**
+ * Bucket every opaque pixel by quantised colour and return each bucket's
+ * count. Pure function of decoded pixels, same shape as `cutout-guard.mjs`'s
+ * `evaluateCutout` family, so it can be unit-tested against synthetic pixel
+ * arrays with no PNG encoding involved.
+ */
+export function colorBucketCounts({ width, height, alpha, rgb }) {
+  const n = width * height;
+  const counts = new Map();
+  let opaque = 0;
+  for (let i = 0; i < n; i++) {
+    if (alpha[i] < OPAQUE_ALPHA_MIN) continue;
+    opaque++;
+    const r = rgb[i * 3] / 255;
+    const g = rgb[i * 3 + 1] / 255;
+    const b = rgb[i * 3 + 2] / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const d = max - min;
+    const sat = max === 0 ? 0 : d / max;
+    let key;
+    if (sat < MONOCHROME_GRAY_SAT_MAX) {
+      key = `gray${Math.min(MONOCHROME_GRAY_BANDS - 1, Math.floor(max * MONOCHROME_GRAY_BANDS))}`;
+    } else {
+      let h;
+      if (max === r) h = ((g - b) / d) % 6;
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+      if (h < 0) h += 360;
+      const hueBucket = Math.floor(h / (360 / MONOCHROME_HUE_BUCKETS));
+      const valBucket = Math.min(MONOCHROME_VALUE_BANDS - 1, Math.floor(max * MONOCHROME_VALUE_BANDS));
+      key = `h${hueBucket}v${valBucket}`;
+    }
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return { counts, opaque };
+}
+
+/**
+ * Decide whether a decoded reference image is near-monochrome, per the
+ * threshold above. `opaque` below `MONOCHROME_MIN_OPAQUE_PIXELS` returns
+ * `monochrome: false` rather than guessing off noise.
+ */
+export function evaluateReferenceMonochrome(pixels, { top2ShareMin = MONOCHROME_TOP2_SHARE_MIN } = {}) {
+  const { counts, opaque } = colorBucketCounts(pixels);
+  if (opaque < MONOCHROME_MIN_OPAQUE_PIXELS) {
+    return { opaque, dominantShare: 0, top2Share: 0, monochrome: false };
+  }
+  const sorted = [...counts.values()].sort((a, b) => b - a);
+  const dominantShare = sorted[0] / opaque;
+  const top2Share = (sorted[0] + (sorted[1] || 0)) / opaque;
+  return { opaque, dominantShare, top2Share, monochrome: top2Share >= top2ShareMin };
+}
+
+/**
+ * Decode `refPath` and run {@link evaluateReferenceMonochrome} against it.
+ * Fails open (`null`) on anything unreadable, the same policy as
+ * `cutout-guard.mjs`'s `referenceNearWhiteFraction` — a bug in this checker
+ * should not be able to stop the art fleet, only skip the check it would
+ * have run.
+ */
+async function checkReferenceMonochrome(refPath) {
+  try {
+    if (!refPath || !existsSync(refPath)) return null;
+    const pixels = await decodeRgba(refPath);
+    return evaluateReferenceMonochrome(pixels);
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Resolve --ref / --img2img / --size / --denoise once, for every preset.
  * Returns the graph-level knobs plus what to record in the sidecar.
+ *
+ * Async since 2026-09-21: a `--ref` is now decoded once here to run the
+ * monochrome guard above before it is ever handed to IP-Adapter.
  */
-function referenceOptions(args, { defaultWidth, defaultHeight }) {
+export async function referenceOptions(args, { defaultWidth, defaultHeight }) {
   const size = parseSize(args.size);
-  const refPath = args.ref && args.ref !== true ? String(args.ref) : null;
+  let refPath = args.ref && args.ref !== true ? String(args.ref) : null;
   const initPath = args.img2img && args.img2img !== true ? String(args.img2img) : null;
   const refWeight = num(args, 'refWeight', REF_WEIGHT_DEFAULT);
   const refWeightType =
-    args.refWeightType === true ? 'linear' : args.refWeightType || 'linear';
+    args.refWeightType === true ? REF_WEIGHT_TYPE_DEFAULT : args.refWeightType || REF_WEIGHT_TYPE_DEFAULT;
   const refScaling = args.refScaling === true ? 'K+V' : args.refScaling || 'K+V';
   const refStart = num(args, 'refStart', REF_START_DEFAULT);
   const refEnd = num(args, 'refEnd', REF_END_DEFAULT);
   const denoise = num(args, 'denoise', IMG2IMG_DENOISE_DEFAULT);
+  const forceRef = Boolean(args.forceRef) && args.forceRef !== 'false';
+
+  let monochrome = null;
+  if (refPath) {
+    // 0 lets the adapter dominate from the very first denoise step, before
+    // the prompt has laid out the pose — see REF_START_DEFAULT above.
+    if (refStart <= 0) {
+      throw new Error(
+        `--refStart ${refStart}: must be greater than 0 when --ref is given (0 reproduces the reference's ` +
+          `pose instead of the prompt's; see docs/ART-PIPELINE.md §3).`,
+      );
+    }
+    if (!forceRef) {
+      monochrome = await checkReferenceMonochrome(refPath);
+    }
+    if (monochrome && monochrome.monochrome) {
+      process.stderr.write(
+        `\n[gen] MONOCHROME REFERENCE: ${refPath} is ${(monochrome.top2Share * 100).toFixed(0)}% one colour ` +
+          `(threshold ${(MONOCHROME_TOP2_SHARE_MIN * 100).toFixed(0)}%). Rendering WITHOUT the reference — a ` +
+          `near-monochrome reference at any usable weight burns colour and dissolves outlines (2026-09-21 ` +
+          `art-quality-pilot H1, docs/ART-PIPELINE.md §3). Pass --forceRef to use it anyway.\n\n`,
+      );
+      refPath = null;
+    }
+  }
 
   return {
     width: num(args, 'width', size ? size.width : defaultWidth),
@@ -1504,6 +1662,9 @@ function referenceOptions(args, { defaultWidth, defaultHeight }) {
             refEnd,
             ipadapter: IPADAPTER_MODEL,
           }
+        : {}),
+      ...(monochrome && monochrome.monochrome && !forceRef
+        ? { refSkippedMonochrome: { attempted: args.ref, top2Share: monochrome.top2Share } }
         : {}),
       ...(initPath ? { img2img: initPath, denoise } : {}),
     },
@@ -1582,6 +1743,65 @@ async function runCutoutGuard(outPath, { meta, composition, refPath, keepBad }) 
   throw new Error(`Cut-out sanity guard rejected the render:\n${result.reasons.map((r) => `  - ${r}`).join('\n')}`);
 }
 
+// --------------------------------------------------------------------------
+// Candidate staging (2026-09-21): candidates never land in public/art
+// --------------------------------------------------------------------------
+//
+// A batch renders several candidates and a human judges them (cast.json's own
+// "workflow" list, ART-PIPELINE §5). Before today those candidates landed
+// straight in `public/art/`, so a picked keeper sat in the same folder as its
+// rejected siblings and the ".raw.png" pre-cutout files. Now only an explicit
+// `--install` writes under `public/art/`; everything else — any `--out` under
+// `public/art/` without `--install` — is redirected to `--candidateDir`
+// (default `docs/concepts/_candidates/<name>/<pose>/`, keeping the original
+// filename) so the folder never fills with unjudged renders.
+
+const PUBLIC_ART_SEGMENT = 'public/art/';
+
+/** True if an absolute, forward-slash path sits under the repo's `public/art/`. */
+export function isUnderPublicArt(absPath) {
+  const norm = resolve(absPath).split(/[\\/]/).join('/');
+  return norm.includes(`/${PUBLIC_ART_SEGMENT}`) || norm.startsWith(PUBLIC_ART_SEGMENT);
+}
+
+/**
+ * Where a candidate render's `--out` actually goes, given `--candidateDir`
+ * and `--install`.
+ *
+ * `public/art/` is never the destination unless the caller passed
+ * `--install` — a batch, or a caller who forgot the flag, lands in the
+ * candidate directory instead, filename unchanged, and is told so loudly.
+ */
+export function resolveCandidateOutPath(outPath, { name, pose, candidateDirArg, install }) {
+  if (install || !isUnderPublicArt(outPath)) return { outPath, redirected: false };
+  const candidateDir =
+    candidateDirArg && candidateDirArg !== true
+      ? resolve(process.cwd(), String(candidateDirArg))
+      : resolve(REPO_ROOT, 'docs', 'concepts', '_candidates', name, pose);
+  const redirected = resolve(candidateDir, basename(outPath));
+  process.stderr.write(
+    `[gen] --out is under public/art/ without --install; writing candidates to ${redirected} instead. ` +
+      `Judge them, then re-run with --install (and --batch 1 --seed <the keeper's seed>) to place the ` +
+      `chosen render under public/art/.\n`,
+  );
+  return { outPath: redirected, redirected: true };
+}
+
+/**
+ * Where the pre-cutout render lands. Never under `public/art/`, even for an
+ * explicit `--install` write — the raw file is debugging material for a bad
+ * cutout, not a shipped asset, and `public/art/` should hold only what
+ * `docs/CONTRACTS.md`-adjacent tooling expects to find there.
+ */
+export function rawPathFor(outPath) {
+  const raw = outPath.replace(/\.png$/i, '.raw.png');
+  if (!isUnderPublicArt(raw)) return raw;
+  const norm = resolve(raw).split(/[\\/]/).join('/');
+  const idx = norm.indexOf(`/${PUBLIC_ART_SEGMENT}`);
+  const tail = idx >= 0 ? norm.slice(idx + PUBLIC_ART_SEGMENT.length + 1) : basename(raw);
+  return resolve(REPO_ROOT, 'docs', 'concepts', '_candidates', '_raw', tail);
+}
+
 async function generateOne({ workflow, outPath, postProcess, margin, composition, refPath, keepBad }) {
   let shot = await renderOnce(workflow);
   if (isBlackFrame(shot.maxRgb)) {
@@ -1597,8 +1817,11 @@ async function generateOne({ workflow, outPath, postProcess, margin, composition
     return { outPath, seconds: elapsed, meta: null };
   }
 
-  // Land the raw render next to the final file so a bad cutout is debuggable.
-  const rawPath = outPath.replace(/\.png$/i, '.raw.png');
+  // Land the raw render next to the final file so a bad cutout is debuggable
+  // — unless "next to the final file" would be public/art/, which .raw.png
+  // must never touch (see rawPathFor above).
+  const rawPath = rawPathFor(outPath);
+  mkdirSync(dirname(rawPath), { recursive: true });
   writeFileSync(rawPath, buf);
   const meta = cutout(rawPath, outPath, margin);
   await runCutoutGuard(outPath, { meta, composition, refPath, keepBad });
@@ -1620,7 +1843,14 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
   let tags = required(args, 'tags');
   const pose = args.pose === true ? 'idle' : args.pose || 'idle';
   let poseTags = args.poseTags === true ? '' : args.poseTags || '';
-  const outPath = resolve(process.cwd(), required(args, 'out'));
+  const install = Boolean(args.install) && args.install !== 'false';
+  const requestedOutPath = resolve(process.cwd(), required(args, 'out'));
+  const { outPath, redirected: candidateRedirected } = resolveCandidateOutPath(requestedOutPath, {
+    name,
+    pose,
+    candidateDirArg: args.candidateDir,
+    install,
+  });
   const batch = Math.max(1, num(args, 'batch', 1));
   const steps = num(args, 'steps', 28);
   const cfg = num(args, 'cfg', 6);
@@ -1629,6 +1859,16 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
   const margin = num(args, 'margin', 16);
   const composition =
     args.composition === true ? defaultComposition : args.composition || defaultComposition;
+  if (composition === 'boss' && !(Boolean(args.nonBiped) && args.nonBiped !== 'false')) {
+    process.stderr.write(
+      `[gen] WARNING: --composition boss on ${name}/${pose} with no --nonBiped. The boss framing block ` +
+        `("full body, centered, imposing", no "standing, feet visible") is for a form that floats, coils or ` +
+        `fills the frame, not an ordinary standing biped — that doubles the figure over and crops through the ` +
+        `head (2026-09-21 art-quality-pilot, guado-guardian/seymour-macalania; docs/ART-PIPELINE.md §3). Pass ` +
+        `--composition full for a standing humanoid, or --nonBiped if this subject genuinely floats/coils/fills ` +
+        `the frame.\n`,
+    );
+  }
   const baseSeed = num(args, 'seed', seedFromName(`${name}:${pose}`));
   const keepBad = Boolean(args.keepBad) && args.keepBad !== 'false';
   const refPath = args.ref && args.ref !== true ? String(args.ref) : null;
@@ -1699,7 +1939,7 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
   const facingNegative =
     facing === 'none' || composition === 'prone' ? '' : FACING_NEGATIVE;
   const negative = withNegAdd(SPRITE_NEGATIVE, joinTags(facingNegative, args.negAdd === true ? '' : args.negAdd));
-  const ref = referenceOptions(args, { defaultWidth, defaultHeight });
+  const ref = await referenceOptions(args, { defaultWidth, defaultHeight });
   const results = [];
   const failures = [];
 
@@ -1785,6 +2025,7 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
       ...ref.provenance,
       ...(composition !== 'portrait' ? { lint: { stripped: lintStripped } } : {}),
       ...(r.meta.cutout ? { cutout: r.meta.cutout } : {}),
+      ...(candidateRedirected ? { candidateOf: requestedOutPath } : {}),
       generatedAt: new Date().toISOString(),
     };
     writeFileSync(target.replace(/\.png$/i, '.json'), `${JSON.stringify(sidecar, null, 2)}\n`);
@@ -1889,7 +2130,7 @@ async function runHero(args) {
     emphasis,
   });
   const negative = withNegAdd(HERO_NEGATIVE, args.negAdd === true ? '' : args.negAdd);
-  const ref = referenceOptions(args, { defaultWidth: 1344, defaultHeight: 768 });
+  const ref = await referenceOptions(args, { defaultWidth: 1344, defaultHeight: 768 });
   const results = [];
 
   for (let i = 0; i < batch; i++) {
@@ -1959,7 +2200,7 @@ async function runBackdrop(args) {
 
   const positive = buildBackdropPrompt({ tags });
   const negative = withNegAdd(BACKDROP_NEGATIVE, args.negAdd);
-  const ref = referenceOptions(args, { defaultWidth: 1344, defaultHeight: 768 });
+  const ref = await referenceOptions(args, { defaultWidth: 1344, defaultHeight: 768 });
   const results = [];
 
   for (let i = 0; i < batch; i++) {
@@ -2067,10 +2308,11 @@ pyrefly art generator (ComfyUI ${BASE})
       [--composition full|portrait|prone|boss] [--facing right|left|none]
       [--negAdd "<extra negatives>"]
       [--ref <png>] [--refWeight ${REF_WEIGHT_DEFAULT}] [--refStart ${REF_START_DEFAULT}] [--refEnd ${REF_END_DEFAULT}]
-      [--refWeightType linear] [--refScaling K+V]
+      [--refWeightType "${REF_WEIGHT_TYPE_DEFAULT}"] [--refScaling K+V] [--forceRef]
       [--img2img <png>] [--denoise ${IMG2IMG_DENOISE_DEFAULT}]
       [--size WxH] [--width N] [--height N]
-      [--strictPrompt] [--keepBad]
+      [--strictPrompt] [--keepBad] [--nonBiped]
+      [--candidateDir <dir>] [--install]
 
   node tools/gen/comfy.mjs boss --name <id> --tags "<danbooru tags>" --out <path.png>
       same flags; defaults to 1216x832 landscape and --composition boss
@@ -2115,9 +2357,39 @@ Reference consistency:
                     denoise. NOT zero: an adapter running from step 0
                     reproduces the reference's pose and ignores --poseTags.
                     This flag, not --refWeight, is what makes --ref usable.
+  --refWeight ${REF_WEIGHT_DEFAULT}  How hard the reference pulls. See docs/ART-PIPELINE.md §3 —
+                    2026-09-21: dropped from 0.65 after the art-quality-pilot
+                    found it burnt colour and dissolved outlines, worst on a
+                    near-monochrome reference.
+  --refWeightType "${REF_WEIGHT_TYPE_DEFAULT}"
+                    How the pull is shaped across --refStart..--refEnd.
   --img2img <png>   Blunter fallback: start from the pixels of <png> and
                     redraw them at --denoise (default ${IMG2IMG_DENOISE_DEFAULT}). Keeps the
                     silhouette; use when --ref is not enough (odd forms).
+
+Monochrome-reference guard (2026-09-21 art-quality-pilot):
+  Before a --ref is used, it is decoded and checked for colour spread. A
+  reference that is ${(MONOCHROME_TOP2_SHARE_MIN * 100).toFixed(0)}% or more one colour (Lulu's near-black idle, the Guado
+  Guardian's near-ochre one) is rendered WITHOUT the reference instead — at any
+  usable weight it burns colour and dissolves outlines rather than anchoring
+  identity. Loud on stderr when it fires. --forceRef uses the reference anyway.
+
+Biped/boss framing guard (2026-09-21 art-quality-pilot):
+  --composition boss with no --nonBiped prints a loud warning: the boss
+  framing block has no "standing, feet visible" and is for a form that floats,
+  coils or fills the frame, not an ordinary standing humanoid (the
+  guado-guardian/seymour-macalania finding). Use --composition full for a
+  standing biped, --nonBiped to confirm this subject is not one.
+
+Candidate staging (2026-09-21): candidates never land in public/art:
+  --out under public/art/ without --install is redirected to --candidateDir
+  (default docs/concepts/_candidates/<name>/<pose>/, same filename) so a batch
+  of unjudged candidates — and every .raw.png, which is never written under
+  public/art/ at all — cannot land there by accident. Judge the candidates,
+  then re-run with --install (and --batch 1 --seed <the keeper's seed>) to
+  place the chosen render under public/art/.
+  --candidateDir <dir>  Where a redirected candidate lands instead.
+  --install             Write straight to --out under public/art/, no redirect.
 
 Black frames:
   Every finished render is decoded before it is written anywhere — by ComfyUI's
