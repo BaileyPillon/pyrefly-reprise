@@ -1,38 +1,43 @@
 # NOW — where Pyrefly Reprise stands
 
-> **Snapshot: 2026-09-19 23:10 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
-> **EVERYTHING IS PAUSED until Claude's weekly allowance resets on 2026-09-25 16:00 EDT** (98 percent used).
-> Bailey chose "ship Build A, then stop". Do not start work from the lists below before then unless Bailey says so.
+> **Snapshot: 2026-09-21 00:20 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **THE PAUSE IS LIFTED.** On 2026-09-20 Bailey wrote to the driver: "continue on with work please but do not forget
+> our delegation policy and carefully monitor token usage, weekly usage, 5 hour session usage so that we still meet our
+> goals with this project". The driver now runs on a fresh Claude account (weekly 16 percent used at this snapshot,
+> resets 2026-09-26 07:00 EDT). Work, releases and reviews are authorised; keep them economical (about 15 weekly
+> points a day, Sonnet for well-specified tracks, one browser capture owner, stop servers by their own PID only).
 
 ## Live (Build A)
 
 - https://baileypillon.github.io/pyrefly-reprise/ = `main 7191674`, bundle `hko3Xov1`, deployed 2026-09-19 21:18 EDT
-  (recorded in `9a56d80`), verified live with real keys (Esc, P, H, N, E), prerendered audio, 0 console errors, 0 404s.
-- **Critic round 03 is complete**: [critic/rounds/round-03.md](../../critic/rounds/round-03.md), commit `6d8fdc9`.
-  Headline **4.09** (round 02: 3.5). Part A 6.37 (5.6), Part B 4.09 (3.5), Part C 5.83 (5.3). Gate 9.6 not met;
-  board coverage incomplete (50 approved, 9 tiles with no target). `critic/pending/` is clear.
-- What Build A shipped: battle flow (Chapter 4 ends, scenes resume, boss / victory / ending music), combat
-  (Wakka reels, Lulu Fury, Talk and Trigger Commands, Charon, Yu Yevon, Seymour Flux phase 2), advisor (own menus,
-  always answers for a fallen ally), FFX and FFX-2 HUD passes, pause + prep chapter panel, and TARGETING option B
-  (approved frames `docs/concepts/targeting/b-ring-and-dim/`). Handoffs: `builda-*.md`, `fix3-*.md`,
-  findings data `fix3-verify2-findings.json`, `fix3-targeting-verify2.json`.
+  (recorded in `9a56d80`). Rounds 02 and 03 are rubric v1 history.
+- **Critic policy v2 is in force and committed** (`4ccba89`, `d7b9dcb`): `critic/RUBRIC.md`, `node tools/critic-plan.mjs`,
+  release through `critic/runner/release.js`.
 
-## Next, when work resumes (in the critic's order; every item is game-aware, rule 14)
+## In flight: Build A.2 (release candidate = `main` HEAD)
 
-1. Engine blockers, no end-state pick needed: Threaten and Sleep never expire (`state.ts` canAct excludes them from the
-   tick that would clear them); Yu Yevon counters ignore `attacker.side`; single-target Haste described as party-wide
-   (`advisor.ts:441`); saved audio settings never applied at boot; presenter lags the engine (a KO'd Yuna shown alive 2 s).
-2. Chapter 5 is 43-77 minutes with no checkpoint; Chapter 1 wins only 57-65 percent on the intended line while Chapter 4
-   wins 40/40 (never nerf a boss; tactics and teaching first; bring measured options to Bailey).
-3. Needs Bailey's pick first (rule 9): onboarding / how-to-play (approved idea: cold open and taught first chapter),
-   control remapping and text scale, an FFX Defend affordance (canon: Triangle), the 9 board tiles with no target,
-   whether a lone enemy (Chapter 2) should still show the targeting look, the advisor ranking judgement call.
-4. Art: Paine's portrait and seven more speaker portraits 404 (letter tiles live); art track 3's flagged poses; approved
-   paintings are never replaced (check with the approved-hash list; make `tools/check-approved-art.mjs` from the
-   session script). Gate majors: letter tags per duplicate group, strategy-guide last line sliced, two "Attack" rows
-   in FFX-2, "LINK 1 OF 7" wording, results AP line for a switched-out member, HUD over figures, 4:3 framing of Yuna.
-5. Then Build A part 2 plumbing, Build B (`docs/plans/build-b-review.md`), onboarding (`docs/plans/onboarding-review.md`),
-   the three chapters (research in `research/`), each with a paper critique and a critic round per live build.
+- Build A.1 fixes (`dd12561` .. `bc2571c`): Threaten and Sleep expire, Yu Yevon's counters and Gravija, letter tags per
+  name group, HUD rows move with each blow, honest wording, saved volumes at boot, FFX-2 menu fixes. Handoffs
+  `builda1-*.md`.
+- **Deep review round 04** (`critic/rounds/round-04.md`, `0ed1e8b`) judged that candidate BEFORE deploy: changed area
+  FAIL (PR-0003 results ledger, PR-0004 Threaten counters, PR-0009 guide slices), so nothing was deployed.
+- Repairs, verified twice (`c7072ac`, `b7fcc34`, `1b0f274`, `959577d`, `c278f71`, `82e924a`, `ee49fc3`, verifier notes
+  `builda1-repair-verify.json`, `builda1-repair-verify2.md`): all five issues confirmed fixed; tsc clean, 4290 tests green.
+- **Onboarding, Bailey's pick "C: Auron's briefing"** (2026-09-20; targets.json tiles C1-C3; `5e8eca5`, `b8a905f`,
+  `e30ea5e`; handoff `onboarding-c.md`): built, adversarially verified, fix pass done.
+- **Next step: release this candidate** with `critic/runner/release.js`, round `05` (shared systems changed, so a deep
+  review of the production candidate comes first; reuse round 04's evidence for what these commits did not touch).
+- Portrait candidates for the eight missing speaker portraits are with Bailey (`docs/concepts/portraits/sheet.png`,
+  `d57aa41`); nothing ships until Bailey picks. `fayth-boy` also has a file-name mismatch to fix then.
+
+## Waiting on Bailey (none of these blocks the release)
+
+Portrait picks; FFX-2 Active versus Wait ATB (the engine stops the ATB while a command menu is open, and the Build A
+chip says ACTIVE); the cost of a denied turn (marked `[estimate]`); whether FFX-2 letters a boss's same-named parts;
+whether the advisor may overrule the guide's pinned pick when a revive scores far higher; a mute row in OPTIONS;
+whether the never-wired "Turn cut-in" tile still stands; options rounds for the defeat screen, the advisor card, the
+enemy-move panel and the phone layout; an audio score out of ten; Chapter 5 length and Chapter 1 difficulty (bring
+measured options).
 
 ## Machine
 
