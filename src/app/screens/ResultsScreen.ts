@@ -8,6 +8,7 @@ import { artUrl } from '../../engine/PaintedArt.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { portraitImgHtml } from '../../ui/common/portrait.ts';
+import { partyFaceHtml } from '../../ui/common/partyFace.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import {
   buildMemberRows,
@@ -373,7 +374,15 @@ export class ResultsScreen extends Screen {
       .map((row) => {
         // The initial is the face's fallback, not its alternative: a portrait
         // that 404s removes its own <img> and reveals the letter underneath.
-        const face = `<span>${escapeHtml(row.name.charAt(0).toUpperCase())}</span>${portraitImgHtml(row.id, '')}`;
+        // `partyFaceHtml` is the same dressphere/`-x2`-aware ladder the pause
+        // screen and battle HUD climb (LIVE-A2-1, docs/handoff/fix3-ffx2-hud-prep.md) —
+        // this row used to ask only `portraits/<row.id>.png`, right for FFX,
+        // a gap for FFX-2.
+        const face = `<span>${escapeHtml(row.name.charAt(0).toUpperCase())}</span>${partyFaceHtml({
+          id: row.id,
+          name: row.name,
+          dressphere: row.dressphere,
+        })}`;
         const levelHtml =
           this.victory && row.levelDelta > 0 && p >= 1
             ? `<span class="rres__level-up">+${row.levelDelta} ${escapeHtml(row.levelUnit)}</span>`

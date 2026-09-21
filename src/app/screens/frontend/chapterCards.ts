@@ -15,7 +15,7 @@
 import type { Chapter } from '../../../data/encounters.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
-import { faceImgHtml } from '../../../ui/common/portrait.ts';
+import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
 import { formatClearTime } from '../../../ui/common/resultsMath.ts';
 import type { ChapterGroup, ChapterTile } from './chapterGrid.ts';
 
@@ -25,7 +25,7 @@ export function bossNames(chapter: Chapter): string {
 }
 
 /** The three who actually walk in — FFX's active slots, FFX-2's whole trio. */
-export function recommendedParty(chapter: Chapter): Array<{ id: string; name: string }> {
+export function recommendedParty(chapter: Chapter): PartyFaceMember[] {
   const build = chapter.buildRef;
   if (build.game === 'ffx') {
     return build.activeSlots.flatMap((id) => {
@@ -33,7 +33,7 @@ export function recommendedParty(chapter: Chapter): Array<{ id: string; name: st
       return m ? [{ id: m.id, name: m.name }] : [];
     });
   }
-  return build.members.map((m) => ({ id: m.id, name: m.name }));
+  return build.members.map((m) => ({ id: m.id, name: m.name, dressphere: m.currentDressphere }));
 }
 
 /**
@@ -186,7 +186,7 @@ export function asideHtml(tile: ChapterTile, bestTimeMs: number | null): string 
     .map(
       (m) => `
         <div class="fe-party__tile">
-          <div class="fe-party__face">${faceImgHtml(m.id, m.name, { z: 1 })}<span>${escapeHtml(
+          <div class="fe-party__face">${partyFaceHtml(m, { z: 1 })}<span>${escapeHtml(
             m.name.charAt(0).toUpperCase(),
           )}</span></div>
           <span class="fe-party__name">${escapeHtml(m.name)}</span>

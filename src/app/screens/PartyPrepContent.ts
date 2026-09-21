@@ -11,7 +11,7 @@
 
 import type { FFX2PartyBuild, FFXPartyBuild } from '../../battle/common/types.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
-import { faceImgHtml } from '../../ui/common/portrait.ts';
+import { partyFaceHtml, type PartyFaceMember } from '../../ui/common/partyFace.ts';
 import { partyRole } from '../../ui/common/party-roles.ts';
 
 type PartyBuild = FFXPartyBuild | FFX2PartyBuild;
@@ -20,9 +20,16 @@ type PartyBuild = FFXPartyBuild | FFX2PartyBuild;
  * A portrait cropped to the head with its initial underneath, so a missing
  * file still reads. The crop comes from `portrait.ts`, which is what keeps
  * seven separately-painted heads at one scale on one eye line.
+ *
+ * The lookup itself goes through {@link partyFaceHtml}, the same
+ * dressphere/`-x2`-aware ladder the pause screen's party strip and the
+ * battle HUD's rows already climb — this screen used to ask only
+ * `portraits/<id>.png`, which is right for FFX but was the LIVE-A2-1 gap for
+ * FFX-2: Rikku and Paine both had painted art one name over
+ * (`docs/handoff/fix3-ffx2-hud-prep.md`).
  */
-export function faceHtml(id: string, name: string): string {
-  return `<span>${escapeHtml(name.charAt(0).toUpperCase())}</span>${faceImgHtml(id, '')}`;
+export function faceHtml(m: PartyFaceMember): string {
+  return `<span>${escapeHtml(m.name.charAt(0).toUpperCase())}</span>${partyFaceHtml(m)}`;
 }
 
 /** The roster column: every member the chapter lets the player look at. */
@@ -31,6 +38,12 @@ export function rosterHtml(build: PartyBuild, selected: number): string {
     build.game === 'ffx'
       ? build.members.map((m) => `S.LV ${m.sphereGrid.sLv}`)
       : build.members.map((m) => `LV ${m.level}`);
+  // Branched here, not read off `m` inside the shared `.map` below: `build`
+  // narrows on `build.game`, but `build.members`' element type was already
+  // fixed to the union the moment `.map` was called on it, so `m` never
+  // narrows to `FFX2MemberBuild` no matter what is checked inside.
+  const dresspheres: Array<string | undefined> =
+    build.game === 'ffx2' ? build.members.map((m) => m.currentDressphere) : build.members.map(() => undefined);
   return build.members
     .map((m, i) => {
       // Each row steps 10px (1440 grid) further right than the one above.
@@ -39,7 +52,7 @@ export function rosterHtml(build: PartyBuild, selected: number): string {
           <div class="prep__member${i === selected ? ' prep__member--sel' : ''}"
                data-action="prep:member-${i}" role="button" tabindex="0"
                style="margin-left:${indent.toFixed(2)}px">
-            <div class="prep__face">${faceHtml(m.id, m.name)}</div>
+            <div class="prep__face">${faceHtml({ id: m.id, name: m.name, dressphere: dresspheres[i] })}</div>
             <span class="prep__member-name">${escapeHtml(m.name)}</span>
             <span class="prep__member-lv">${levels[i] ?? ''}</span>
           </div>
@@ -50,7 +63,7 @@ export function rosterHtml(build: PartyBuild, selected: number): string {
 
 /** The three who actually walk in, along the bottom. */
 export function slotsHtml(build: PartyBuild): string {
-  type Slot = { id: string; name: string; sub: string; role: string | undefined };
+  type Slot = { id: string; name: string; sub: string; role: string | undefined; dressphere?: string };
   const slots: Slot[] =
     build.game === 'ffx'
       ? build.activeSlots.flatMap((id) => {
@@ -71,13 +84,14 @@ export function slotsHtml(build: PartyBuild): string {
           name: m.name,
           sub: `LV ${m.level} &middot; ${m.owned.length} DRESSPHERES`,
           role: m.currentDressphere.replace(/-/g, ' '),
+          dressphere: m.currentDressphere,
         }));
 
   return slots
     .map(
       (s) => `
           <div class="prep__slot">
-            <div class="prep__face">${faceHtml(s.id, s.name)}</div>
+            <div class="prep__face">${faceHtml({ id: s.id, name: s.name, dressphere: s.dressphere })}</div>
             <div>
               <div class="prep__slot-name">${escapeHtml(s.name)}</div>
               <div class="prep__slot-sub">${s.sub}</div>

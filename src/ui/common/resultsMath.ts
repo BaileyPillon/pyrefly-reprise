@@ -155,6 +155,14 @@ export interface ResultsMemberRow {
    * [ffx-combat-core §10.1, ffx2-combat-core §3.0].
    */
   detail: string;
+  /**
+   * FFX-2 only: the dressphere she fought this battle in, so the row's face
+   * can climb the same `-x2`/dressphere ladder the pause screen's party strip
+   * and the battle HUD rows use ({@link partyFaceHtml} in
+   * `ui/common/partyFace.ts`). Undefined for an FFX row — one portrait per id
+   * is already the right answer there.
+   */
+  dressphere?: string;
 }
 
 /** `Cura 60/80 AP`-style progress toward the next unlearned ability. */
@@ -266,6 +274,7 @@ export function buildMemberRows(
       levelDelta: result.levelsGained?.[member.id] ?? 0,
       levelUnit: 'Lv' as const,
       detail: dressphereDetail(member.currentDressphere, progress?.learned ?? [], banked),
+      dressphere: member.currentDressphere,
     };
   });
 }

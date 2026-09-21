@@ -464,3 +464,98 @@ every scroll metric as 0 and a DOM-only test would be asserting nothing.
 - **Not mine, unchanged:** `.ig-cmd`'s fixed 129.78x23.11 box
   (`src/ui/inkgold/slabs.css`) still has the label-vs-trailing-chip collision
   waiting for any future row.
+
+---
+
+## LIVE-A2-1 fix: one portrait resolver for every party strip (2026-09-21)
+
+**Game case: FFX-2 only.** FFX has one painted head per guardian and
+`portraitKey` already names the one file that exists; nothing about its
+lookup changed. Every branch below only changes behaviour for a build with a
+`currentDressphere` (FFX-2's `FFX2MemberBuild`/`FFX2Combatant`), and the new
+guard test (below) checks both games' shipped builds so an FFX regression
+would be caught, not just asserted away.
+
+**What was wrong** (`critic/reviews/fd0ae96-live.json`, issue LIVE-A2-1). The
+Chapter 4 party-prep screen showed Yuna with a painted portrait but Rikku and
+Paine as plain `R`/`P` letter tiles, although `portraits/paine.png` and
+`portraits/rikku-x2.png` both load and decode fine, and the same three girls
+render painted everywhere else the party's faces show up. Three call sites —
+`PartyPrepContent.faceHtml` (party prep's roster and bottom slots),
+`ResultsScreen.membersHtml` (the ledger rows) and `chapterCards.asideHtml`
+(chapter-select's recommended-party strip) — asked the single narrowest
+question, `faceImgHtml(id)` / `portraitImgHtml(id)`: does
+`portraits/<build-member-id>.png` exist? A build's `portraitKey` (and its
+plain `id`, which is the same string — `src/data/ffx2/builds/*.ts`) is
+`yuna`/`rikku`/`paine`. That is exactly right for FFX2's *pause-screen party
+strip's* underlying HUD rows, which never asked that narrow question in the
+first place: `ui/ffx2/PartyRows.ts`'s `faceStackHtml` (feeding the FFX-2
+battle HUD, visible behind the pause overlay) and
+`ui/common/BattleStartBanner.ts`'s pre-battle card both already climb a
+short ladder — the current dressphere's own portrait, then the
+dressphere-agnostic `-x2` likeness, then the plain id, then a crop of the
+dressphere's own idle painting — because a girl's actual painted likeness in
+FFX-2 is not reliably filed under her plain id. Rikku's and Paine's real
+files (`rikku-x2.png`, `paine.png`) exist one name over from what the three
+broken call sites asked for.
+
+**The fix.** `src/ui/common/partyFace.ts` (new, 59 lines) is one function,
+`partyFaceHtml(member, opts)`, that is exactly this ladder: FFX asks
+`portraits/<id>.png` alone; FFX-2 tries `<id>-<dressphere>`, then `<id>-x2`,
+then plain `<id>`, then falls back to a head-crop of
+`characters/<id>-<dressphere>/idle.png` (via `faceLayersHtml`, already in
+`portrait.ts`). It does not draw the initial-letter floor itself — the three
+callers keep their own (a name's first letter, positioned the same way the
+existing `.prep__face`/`.rres__face`/`.fe-party__face` frames already expect
+via CSS, per the stacking contract `ui-portrait-urls.test.ts` pins). All three
+call sites — `PartyPrepContent.ts`, `ResultsScreen.ts`,
+`frontend/chapterCards.ts` — now build a `PartyFaceMember` (`id`, `name`,
+optional `dressphere`) and call `partyFaceHtml` instead of the single-id
+helpers. `ResultsMemberRow` (`ui/common/resultsMath.ts`) gained one optional
+field, `dressphere`, populated only on the FFX-2 branch of `buildMemberRows`.
+`ui/ffx2/PartyRows.ts` and `ui/common/BattleStartBanner.ts` were left
+untouched — they already had the correct ladder; the point of the new module
+is that everyone else now shares their answer instead of re-deriving a
+narrower one.
+
+**The guard.** `tests/unit/party-face-manifest.test.ts` (new) does not import
+`partyFaceHtml` — it mirrors its candidate order by hand against the real
+`public/art/manifest.json` (gitignored, local-only, same assumption
+`ui-portrait-face-crop.test.ts` already makes) and asserts, for every member
+of every one of the five shipped `CHAPTERS` builds, that at least one
+candidate in that ladder exists. 27 tests (7 FFX guardians across three
+chapters + 6 FFX-2 girls across two chapters), all green against the current
+local art. This is a contract test, not an implementation test: if a future
+change narrows the ladder back down, or the art fleet ships a build whose
+member has painted nothing findable by it, this fails without needing a
+browser.
+
+**Verified live**, `tools/screenshot.mjs --url=http://localhost:5741/
+--screen=chapter-select --trigger=select:<chapterId>` (its `--url` mode stubs
+the Vite HMR socket, so a concurrent agent's save elsewhere in the shared
+tree cannot reload the page out from under the shot — the interactive
+browser session hit exactly that every few seconds while ~10 agents were
+editing at once). Chapter 4 (`ffx2-bahamut`) and Chapter 5
+(`ffx2-vegnagun-shuyin`), 1600x900:
+`docs/screenshots/fix3/ffx2-hud-prep/party-prep-ch4.png`,
+`…/party-prep-ch5.png`. Both show Yuna, Rikku and Paine painted in the roster
+and the bottom slot cards; a DOM read during the Chapter 4 pass confirmed
+each roster tile carries two `<img>` layers — the dressphere idle crop at
+`z-index:1` and the resolved portrait (`yuna-x2.png`, `rikku-x2.png`,
+`paine.png`) at `z-index:2`, both `complete` with a real `naturalWidth`.
+
+**Not touched, in scope for a later pass, not this one.**
+`PauseScreenPanels.ts`'s own `partyCardsHtml`/`partyTabHtml` still call the
+single-id `faceImgHtml(c.id)` directly rather than `partyFaceHtml` — they
+happen to render correctly today because `paine.png`/`rikku-x2.png` now
+exist as plain/`-x2` files, but they do not climb the per-dressphere or
+body-crop rungs, so the same class of gap could reopen there for a future
+girl/dressphere pairing with no plain-id portrait. Left alone because it is
+outside this track's named files and the brief's three named surfaces
+(`prep`, `results`, `chapter-select`) were already fixed and covered by the
+guard test. `src/ui/ffx2/PartyPrep.ts` (`mountFFX2PartyPrep`) is a second,
+apparently-orphaned FFX-2 prep component with its own simpler
+`portraitHtml` — it has no importer anywhere in `src/` (only its own test),
+so it never renders in the shipped game; flagged rather than touched (hard
+rule 4 is about a subsystem nothing imports, not one that duplicates a wired
+one).
