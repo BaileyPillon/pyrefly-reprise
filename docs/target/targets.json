@@ -382,6 +382,77 @@
           "build": "A dialogue line spoken by Yu Yevon with the portrait showing (public/art/portraits/yu-yevon.png).",
           "note": "FFX only. Picked on the agent's recommendation: the bright glyph core is nearest to the glowing Yevon disc. research/visual-bible.md #1.12: he has no dialogue and no human form, and no shipped line has him speaking, so this is a safety net against a 404 rather than a face.",
           "hashes": "portrait:yu-yevon"
+        },
+        {
+          "label": "Art round 4: 42 poses installed (groups B and C)",
+          "src": "docs/concepts/art4/chosen.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.” (from the five contact sheets in docs/concepts/art4/)",
+          "build": "The 42 shipped poses under public/art listed in docs/concepts/art4/CHOSEN.md: Lulu, Rikku and Kimahri battle poses (FFX); Yunalesca forms 2 and 3, the Yu Pagoda and Jecht (FFX); the White Mage, Gunner, Black Mage and Songstress dresspheres, both Paine dresspheres, the possessed Bahamut, three Vegnagun parts and Lenne’s speaker portrait (FFX-2).",
+          "note": "FFX and FFX-2 both: the round covers subjects in each game and each pose was decided from research/visual-bible.md and tools/gen/cast.json for its own game. Bailey approved the round; which of the three candidates shipped for each pose was delegated to the install agent. Group A (Braska) was NOT installed — his shipped portrait stays as picked on 21 Sep. Every row is one copy from D:\\Tools\\pyrefly-art-backup\\replaced\\2026-09-21-art4 away from being undone, so any row can still be vetoed from docs/concepts/art4/chosen.png.",
+          "hashes": "art4:2026-09-21",
+          "delivery": "implemented",
+          "deliveryNote": "Installed under public/art and resolving through public/art/manifest.json; not yet seen in a running fight or in a critic round.",
+          "reaction": {
+            "date": "2026-09-21",
+            "named": "I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.",
+            "words": "I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.",
+            "how": "Bailey, on the five art-round-4 contact sheets in docs/concepts/art4/",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "Braska's shipped speaker portrait: keep the one already picked, do not reroll or replace it"
+            ],
+            "mustChange": [],
+            "undecided": [
+              "which of the three candidates ships for each pose: Bailey did not name one, the install agent chose",
+              "yu-pagoda/cast and yu-pagoda/hurt: no candidate holds the tiered pagoda silhouette; flagged for a veto"
+            ],
+            "inferred": [
+              "lulu/attack: candidate 3 chosen by the install agent for canon and consistency",
+              "lulu/hurt: candidate 1 chosen by the install agent for canon and consistency",
+              "lulu/ko: candidate 2 chosen by the install agent for canon and consistency",
+              "rikku/cast: candidate 2 chosen by the install agent for canon and consistency",
+              "rikku/hurt: candidate 2 chosen by the install agent for canon and consistency",
+              "rikku/ko: candidate 3 chosen by the install agent for canon and consistency",
+              "kimahri/attack: candidate 1 chosen by the install agent for canon and consistency",
+              "kimahri/victory: candidate 2 chosen by the install agent for canon and consistency",
+              "yunalesca-2/cast: candidate 3 chosen by the install agent for canon and consistency",
+              "yunalesca-3/attack: candidate 2 chosen by the install agent for canon and consistency",
+              "yunalesca-3/cast: candidate 1 chosen by the install agent for canon and consistency",
+              "yu-pagoda/attack: candidate 1 chosen by the install agent for canon and consistency",
+              "yu-pagoda/cast: candidate 1 chosen by the install agent for canon and consistency",
+              "yu-pagoda/hurt: candidate 1 chosen by the install agent for canon and consistency",
+              "jecht/ko: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-white-mage/attack: candidate 2 chosen by the install agent for canon and consistency",
+              "yuna-white-mage/cast: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-white-mage/item: candidate 2 chosen by the install agent for canon and consistency",
+              "yuna-white-mage/hurt: candidate 2 chosen by the install agent for canon and consistency",
+              "yuna-white-mage/victory: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-white-mage/ko: candidate 1 chosen by the install agent for canon and consistency",
+              "paine-warrior/idle: candidate 1 chosen by the install agent for canon and consistency",
+              "paine-dark-knight/idle: candidate 2 chosen by the install agent for canon and consistency",
+              "ffx2-bahamut/idle: candidate 1 chosen by the install agent for canon and consistency",
+              "ffx2-bahamut/hurt: candidate 1 chosen by the install agent for canon and consistency",
+              "ffx2-bahamut/ko: candidate 1 chosen by the install agent for canon and consistency",
+              "vegnagun-tail/idle: candidate 3 chosen by the install agent for canon and consistency",
+              "vegnagun-tail/hurt: candidate 2 chosen by the install agent for canon and consistency",
+              "vegnagun-tail/ko: candidate 3 chosen by the install agent for canon and consistency",
+              "vegnagun-leg/idle: candidate 1 chosen by the install agent for canon and consistency",
+              "vegnagun-head/idle: candidate 2 chosen by the install agent for canon and consistency",
+              "yuna-gunner/hurt: candidate 2 chosen by the install agent for canon and consistency",
+              "yuna-gunner/ko: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-gunner/victory: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-black-mage/attack: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-black-mage/cast: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-black-mage/hurt: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-black-mage/ko: candidate 3 chosen by the install agent for canon and consistency",
+              "yuna-black-mage/victory: candidate 1 chosen by the install agent for canon and consistency",
+              "yuna-songstress/attack: candidate 2 chosen by the install agent for canon and consistency",
+              "yuna-songstress/dance: candidate 2 chosen by the install agent for canon and consistency",
+              "lenne/portrait: candidate 1 chosen by the install agent for canon and consistency"
+            ]
+          }
         }
       ]
     },
@@ -758,6 +829,149 @@
           "state": "gap",
           "empty": "Nothing to look at yet",
           "note": "A faked screenshot sequence of one full turn in the finished game: command, cut-in, impact, numbers, enemy reply. It would tie every target above together."
+        }
+      ]
+    },
+    {
+      "id": "learning-sites",
+      "title": "Interactive learning sites: Atlas, Studio, Exploded",
+      "evidence": "Bailey, 2026-09-21: \"A, B, C all separately please\" (docs/plans/learning-sites.md, the three subjects as separate sites), then on seeing the nine frames in docs/concepts/atlas/: \"all three looks are good\".",
+      "note": "Frames are faked screenshots (HTML/CSS 3D, no behaviour) at 1600x900; nothing under learn/, src/, public/ or tools/ is built yet. Build hints below are the intended page path and slider position, not a delivered route.",
+      "tiles": [
+        {
+          "label": "A1: Pyrefly Atlas, assembled",
+          "src": "docs/concepts/atlas/a-boss-atlas/a1-assembled.png",
+          "state": "approved",
+          "approved": "Bailey, 2026-09-21",
+          "build": "learn/atlas/, explode slider at 0%.",
+          "note": "FFX-2 only, as drawn (chapter V, Vegnagun with Shuyin).",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "A, B, C all separately please / all three looks are good",
+            "how": "Bailey approved the three subjects as separate sites, then approved each site's look on seeing its frames",
+            "liked": [
+              "the light, clinical look (paper ground, white rounded cards, pyre pink accent)",
+              "Atlas as its own separate site, distinct from Studio and Exploded"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the illustrative crops standing in for 7 of Vegnagun's 12 parts that have no separate painting (docs/concepts/atlas/README.md open question 7)",
+              "what counts as a 'piece' for the 119-piece count, e.g. whether heals and buffs belong in 'Attacks and abilities 50' (open question 8)",
+              "whether new part paintings are needed before build, versus accepting the labelled-zoom crops as-is (open question 7)",
+              "the site's name, 'Pyrefly Atlas' (open question 3)",
+              "where it lives: a /learn/ folder of the existing site vs. a site of its own (open question 2)",
+              "a phone layout, not yet drawn (open question 4)"
+            ]
+          }
+        },
+        {
+          "label": "A2: Pyrefly Atlas, exploded and selected",
+          "src": "docs/concepts/atlas/a-boss-atlas/a2-exploded-selected.png",
+          "state": "approved",
+          "build": "learn/atlas/, explode slider at 55%, Body / Core selected.",
+          "note": "FFX-2 only, as drawn.",
+          "reactionOf": "A1: Pyrefly Atlas, assembled"
+        },
+        {
+          "label": "A3: Pyrefly Atlas, inventory",
+          "src": "docs/concepts/atlas/a-boss-atlas/a3-inventory.png",
+          "state": "approved",
+          "build": "learn/atlas/, explode slider at 100%.",
+          "note": "FFX-2 only, as drawn.",
+          "reactionOf": "A1: Pyrefly Atlas, assembled"
+        },
+        {
+          "label": "B1: Pyrefly Studio, assembled",
+          "src": "docs/concepts/atlas/b-battle-studio/b1-assembled.png",
+          "state": "approved",
+          "approved": "Bailey, 2026-09-21",
+          "build": "learn/studio/, explode slider at 0%.",
+          "note": "FFX only, as drawn (chapter I, Tidus attacks Seymour Flux); a small pink card previews the FFX-2 list.",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "A, B, C all separately please / all three looks are good",
+            "how": "Bailey approved the three subjects as separate sites, then approved each site's look on seeing its frames",
+            "liked": [
+              "the dark studio look (blue-black ground, lit turntable, glassy panels, gold accent)",
+              "Studio as its own separate site, distinct from Atlas and Exploded"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "whether the default turn is a plain Attack (as drawn) or chapter I's signature turn sequence (open question 9)",
+              "whether the seed is fixed by default with an optional Re-roll (open question 9)",
+              "what counts as a 'rule' for the 137 count, which covers one turn's core rules only (open question 8)",
+              "the FFX-2 version's shape: keep the turntable and eight-row list, or something built for real-time gauges (open question 10)",
+              "the site's name and whether 'One Turn' or 'Pyrefly Studio' is the large line (open question 3)",
+              "a phone layout, not yet drawn (open question 4)"
+            ]
+          }
+        },
+        {
+          "label": "B2: Pyrefly Studio, exploded and selected",
+          "src": "docs/concepts/atlas/b-battle-studio/b2-exploded-selected.png",
+          "state": "approved",
+          "build": "learn/studio/, explode slider at 55%, '01 Turn order' selected.",
+          "note": "FFX only, as drawn.",
+          "reactionOf": "B1: Pyrefly Studio, assembled"
+        },
+        {
+          "label": "B3: Pyrefly Studio, inventory",
+          "src": "docs/concepts/atlas/b-battle-studio/b3-inventory.png",
+          "state": "approved",
+          "build": "learn/studio/, explode slider at 100%.",
+          "note": "FFX only, as drawn.",
+          "reactionOf": "B1: Pyrefly Studio, assembled"
+        },
+        {
+          "label": "C1: Pyrefly Reprise, exploded, assembled",
+          "src": "docs/concepts/atlas/c-scene-exploded/c1-assembled.png",
+          "state": "approved",
+          "approved": "Bailey, 2026-09-21",
+          "build": "learn/exploded/, explode slider at 0%.",
+          "note": "FFX only for the specimen (chapter II, Yunalesca in the Zanarkand Dome); C3 lists both games' assets under the open chapter's gold.",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "A, B, C all separately please / all three looks are good",
+            "how": "Bailey approved the three subjects as separate sites, then approved each site's look on seeing its frames",
+            "liked": [
+              "the dark ink, Ink & Gold look (squared panels, gold rules, gold accent)",
+              "Exploded as its own separate site, distinct from Atlas and Studio"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "whether the specimen is an exact capture of the live build or a cleaned-up hand-assembled hero frame, as drawn (open question 12)",
+              "the exact public wording of the 'AI-painted' honesty chip and the line naming Bailey's PC and local ComfyUI pipeline (open question 12)",
+              "which FFX-2 moment C would use, since no FFX-2 frame is drawn (open question 10)",
+              "whether the real Three.js scene is exploded, or exported layer PNGs in CSS 3D as mocked (README open question 6)",
+              "the site's name, 'Pyrefly Reprise, exploded' (open question 3)",
+              "a phone layout, not yet drawn (open question 4)"
+            ]
+          }
+        },
+        {
+          "label": "C2: Pyrefly Reprise, exploded, sheets and selected",
+          "src": "docs/concepts/atlas/c-scene-exploded/c2-exploded-selected.png",
+          "state": "approved",
+          "build": "learn/exploded/, explode slider at 55%, boss billboard selected.",
+          "note": "FFX only, as drawn.",
+          "reactionOf": "C1: Pyrefly Reprise, exploded, assembled"
+        },
+        {
+          "label": "C3: Pyrefly Reprise, exploded, inventory",
+          "src": "docs/concepts/atlas/c-scene-exploded/c3-inventory.png",
+          "state": "approved",
+          "build": "learn/exploded/, explode slider at 100%.",
+          "note": "Both games' assets listed, under the open (FFX) chapter's gold accent.",
+          "reactionOf": "C1: Pyrefly Reprise, exploded, assembled"
         }
       ]
     }

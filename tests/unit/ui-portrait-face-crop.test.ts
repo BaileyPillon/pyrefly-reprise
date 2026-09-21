@@ -251,11 +251,15 @@ describe('the regressions this round fixed stay fixed', () => {
   });
 
   it("Paine's Dark Knight row is her head, not her greatsword", () => {
-    // Chapter 5's Paine. Her eyes are at (365, 246) and (397, 255) of a 609x1208
-    // file; the generic estimate's fx 0.5 lands on the blade.
+    // Chapter 5's Paine. Re-pinned 2026-09-21: art round 4 replaced idle.png
+    // (609x1208 -> 830x1200) and the new file is mirrored, so her head sits LEFT
+    // of centre where it used to sit right of it. Her eyes are now at about
+    // (341, 180) and (378, 180) of the 830x1200 file. What the pin is for has
+    // not changed: the sword is still the topmost thing in the frame, so the
+    // generic estimate's fx 0.5 / fy 0.15 lands on the blade.
     const crop = bodyCrop('paine-dark-knight');
-    expect(crop.fx).toBeGreaterThan(0.58);
-    expect(crop.fy).toBeCloseTo(251 / 1208, 2);
+    expect(crop.fx).toBeLessThan(0.47);
+    expect(crop.fy).toBeCloseTo(180 / 1200, 2);
     // And it must differ from the generic estimate, or nothing was fixed.
     expect(crop.fx).not.toBeCloseTo(bodyCrop('nobody-has-painted-this').fx, 3);
   });

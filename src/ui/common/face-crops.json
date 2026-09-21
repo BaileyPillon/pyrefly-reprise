@@ -72,13 +72,19 @@
     "yu-yevon": { "fx": 0.5, "fy": 0.36, "ipd": 0.22, "px": [832, 1216], "note": "picked 2026-09-21 (card 2); no eyes: fx is the axis of symmetry, fy sits between the hood peak and the sigil diamond at (416, 486), ipd is the human-equivalent value that keeps the hood and both horn swirls in the tile (the hood alone, 0.33 to 0.67 of the width, read as an abstract pattern)" }
   },
   "bodies": {
-    "paine-warrior": { "fx": 0.4887, "fy": 0.1292, "ipd": 0.0985, "px": [408, 1180] },
+    "paine-warrior": {
+      "fx": 0.5650,
+      "fy": 0.1350,
+      "ipd": 0.0900,
+      "px": [459, 1156],
+      "note": "Re-measured 2026-09-21 after art round 4 replaced idle.png (408x1180 -> 459x1156, and the new file is mirrored to satisfy the facing contract, so her head moved from left of centre to right of it)."
+    },
     "paine-dark-knight": {
-      "fx": 0.6255,
-      "fy": 0.2076,
-      "ipd": 0.0534,
-      "px": [609, 1208],
-      "note": "Chapter 5's Paine. The greatsword's pommel is the topmost thing in the file and her head stands well right of centre, so the generic fx 0.5 / fy 0.15 estimate framed the blade."
+      "fx": 0.4330,
+      "fy": 0.1500,
+      "ipd": 0.0450,
+      "px": [830, 1200],
+      "note": "Chapter 5's Paine. Re-measured 2026-09-21 after art round 4 replaced idle.png (609x1208 -> 830x1200, mirrored). The sword is still the topmost thing in the file, so the generic fx 0.5 / fy 0.15 estimate would frame the blade rather than her face."
     },
     "paine-gunner": { "fx": 0.543, "fy": 0.1331, "ipd": 0.0779, "px": [493, 1136] },
     "paine-black-mage": { "fx": 0.4841, "fy": 0.1815, "ipd": 0.0603, "px": [567, 1151], "note": "the hat pushes her face down the canvas" },

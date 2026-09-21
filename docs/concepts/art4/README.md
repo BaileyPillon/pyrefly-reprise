@@ -1,5 +1,26 @@
 # Art round 4 — candidates only
 
+> **CLOSED 2026-09-21.** Bailey looked at the five sheets and wrote:
+> *"I already selected Braska why am I selecting it again with a reroll? Keep the one
+> you already have. I approve everything else."*
+>
+> - **Group A is closed and nothing from it was installed.** Braska's shipped
+>   `public/art/portraits/braska.png` stays exactly as Bailey picked it on 21 Sep;
+>   `braska/cand-{1,2,3}` here are dead candidates. The headdress repaint noted in the
+>   Braska tile of `docs/target/targets.json` is still owed and still needs Bailey's yes.
+> - **Groups B and C are installed**: all 42 poses are now shipped under `public/art`.
+>   Which of the three candidates shipped for each pose was delegated to the install
+>   agent — see [CHOSEN.md](CHOSEN.md) and [chosen.png](chosen.png) (one row per pose:
+>   what it replaced, what shipped, and the candidate number), so any row can still be
+>   vetoed at a glance.
+> - Everything replaced is copied to
+>   `D:\Tools\pyrefly-art-backup\replaced\2026-09-21-art4`; the installed files are
+>   backed up to `...\approved\2026-09-21-art4` and hashed in
+>   `docs/target/approved-hashes.json` under the set `art4:2026-09-21`.
+>
+> The "Everything Bailey needs to decide" section at the bottom is history now, except
+> for the group C question (which block of missing art to paint next), which is still open.
+
 Rendered 2026-09-21 under the standing gate in `AGENTS.md` hard rule 12: local art
 generation was OFF since Bailey's 2026-09-19 pause; the owner turned it back on this
 session ("Resume local art generation", recorded in `docs/handoff/NOW.md`).
