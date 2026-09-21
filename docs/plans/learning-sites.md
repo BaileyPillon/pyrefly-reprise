@@ -9,8 +9,14 @@ waste so many tokens and usage."**
 So: three separate sites, one shared engine under them, built thriftily. The reference pattern is
 in [docs/concepts/atlas/REFERENCE.md](../concepts/atlas/REFERENCE.md). The target pictures for
 each site are the verified frames in `docs/concepts/atlas/<a|b|c>-*/` (end state first, hard rule
-9): **the look of each site is built only to a frame Bailey has seen.** What Bailey has approved
-so far is what they named: the three subjects, and that they are separate.
+9): **the look of each site is built only to a frame Bailey has seen.**
+
+**APPROVED, 2026-09-21.** On seeing the nine frames Bailey wrote: **"yes commit it, all three
+looks are good  where can i actually view these websites?"** and later **"Links to all 3
+websites please?"** The frames are the approved targets (nine approved tiles in
+`docs/target/targets.json`, group `learning-sites`). What Bailey named: the three subjects, that
+they are separate sites, and the look of each as shown on its frames. **The visible build is
+authorised and wanted: Bailey is asking for links to sites that do not exist until they are built.**
 
 Game case (hard rule 14): **both**, as a whole (it is a new surface over both games); each
 specimen is FFX only or FFX-2 only and takes that game's accent and that game's rules. A turn

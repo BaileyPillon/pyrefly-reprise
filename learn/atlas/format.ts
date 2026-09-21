@@ -38,3 +38,45 @@ export function joinNatural(items: readonly string[]): string {
 export function countNoun(n: number, noun: string): string {
   return `${fmtNumber(n)} ${noun}${n === 1 ? '' : 's'}`;
 }
+
+/**
+ * A label that tells two combatants apart when the game gives them the same
+ * name.
+ *
+ * Vegnagun's tail, leg, body and head are all literally called "Vegnagun" in
+ * the data (`src/data/ffx2/enemies/vegnagun-*.ts`) — faithful, since that is
+ * what the game's own target list says — which makes five chain rows reading
+ * "Vegnagun" useless and is not what the approved frames show ("Tail",
+ * "Leg", "Body / Core", "Head"). Their **ids** already carry the distinction,
+ * so when a name is shared this drops the shared name off the front of the
+ * id and humanises what is left: `vegnagun-tail` + "Vegnagun" -> "Tail".
+ *
+ * When what is left is only a letter or two — the three Nodes are `node-a`,
+ * `node-b`, `node-c` — dropping the name would leave a chip reading "A", so
+ * the letter is appended instead: "Node A", "Bulwark L", "Redoubt R", which
+ * is exactly how the inventory frame labels them.
+ *
+ * This is formatting, not a new claim: no number, stat or behaviour is
+ * invented, and a name the id does not extend is returned untouched.
+ */
+export function distinguishName(name: string, id: string): string {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  if (slug.length === 0 || !id.startsWith(`${slug}-`)) return name;
+  const rest = id.slice(slug.length + 1);
+  if (rest.length === 0) return name;
+  return rest.length <= 2 ? `${name} ${rest.toUpperCase()}` : humanizeId(rest);
+}
+
+/**
+ * The one noun a set of sibling names shares, when they all end in it:
+ * `['Right Bulwark', 'Left Bulwark']` -> `'Bulwark'`, `['Node', 'Node']` ->
+ * `'Node'`. `undefined` when they have no last word in common, so a caller
+ * can fall back to a generic noun instead of picking one arbitrarily.
+ */
+export function sharedLastWord(names: readonly string[]): string | undefined {
+  if (names.length === 0) return undefined;
+  const lastWords = names.map((n) => n.trim().split(/\s+/).at(-1) ?? '');
+  const first = lastWords[0];
+  if (first === undefined || first.length === 0) return undefined;
+  return lastWords.every((w) => w === first) ? first : undefined;
+}

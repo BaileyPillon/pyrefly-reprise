@@ -84,6 +84,36 @@ export interface PieceCard {
 /** How a piece is rendered on stage: a painted cutout, a flat card, or a small tile (inventory-only pieces). */
 export type PieceKind = 'painting' | 'card' | 'tile';
 
+/**
+ * A piece's **authored** placement on stage, ported from an approved frame
+ * (`docs/concepts/atlas/a-boss-atlas/*.html`) rather than derived from
+ * `size`. Set it whenever a frame says how big a painted cutout is and which
+ * way it faces; leave it off and the stage falls back to the generic
+ * `size`-derived cell.
+ *
+ * Stage units are the design canvas's own pixels (1600 x 900, the size every
+ * approved frame was authored at), so a value can be copied straight out of a
+ * frame's inline style. Positions are relative to the stage origin.
+ *
+ * **Anchoring.** A piece that carries a `stage` is anchored by its **top-left
+ * corner**: `home`/`burst` are that corner. The frames record `left`, `top`
+ * and `width` and no heights, so a top-left anchor reproduces them exactly
+ * while a centre anchor would need each painting's aspect ratio guessed. A
+ * piece with no `stage` keeps the shared default and is centred on its point.
+ */
+export interface PieceStage {
+  /** On-stage width at `home`, in stage units. Height follows the art's own aspect unless {@link height} says otherwise. */
+  readonly width: number;
+  /** Explicit on-stage height, for a piece whose box is not set by an image (a laid-out card). */
+  readonly height?: number;
+  /** On-stage width once pulled apart, when the approved frame draws the piece at a different size there. Defaults to {@link width}. */
+  readonly burstWidth?: number;
+  /** Mirror the art horizontally, as the frame's `.part.flip` does. */
+  readonly flipX?: boolean;
+  /** Paint order, low to high — the frame's `z-index`. Also the stage's depth cue (nearer = longer paper shadow, farthest = faded). */
+  readonly layer?: number;
+}
+
 /** One part of a specimen: a boss's head, one turn's action, one frame's layer. */
 export interface Piece {
   readonly id: string;
@@ -98,6 +128,17 @@ export interface Piece {
   readonly home: Vec3;
   /** Pulled-apart position around `explode` 0.6 (`layout.ts`). */
   readonly burst: Vec3;
+  /** Authored on-stage box, when an approved frame gives one. See {@link PieceStage} — it also changes the anchor to the top-left corner. */
+  readonly stage?: PieceStage;
+  /**
+   * The piece this one hangs off: the part that owns this ability, the form
+   * that shrugs off this status. The stage threads a child to its parent,
+   * fans the children out around it, and counts the ones it had no room for
+   * ("+ N more at 100%"). Must name a piece of the same specimen.
+   */
+  readonly parentId?: string;
+  /** A short pin label drawn on the piece at `explode` 0 — site A's battle order, "1".."5". */
+  readonly badge?: string;
   readonly card: PieceCard;
 }
 
@@ -113,6 +154,33 @@ export interface System {
 /** A `System` as a data author writes it — `count` is derived, so there is nothing to get wrong here. */
 export type SystemInput = Omit<System, 'count'>;
 
+/**
+ * One row of a specimen's idle card — site A's chain of battles, in order:
+ * `label` "Tail", `sub` "Level 41", `value` "34,200 HP". Every field is a
+ * string the data layer formatted from real data; the card never computes.
+ */
+export interface SpecimenIdleRow {
+  readonly label: string;
+  readonly value: string;
+  /** A quieter second line under `label`. Omit when the source has nothing to put there. */
+  readonly sub?: string;
+}
+
+/**
+ * What the detail card shows with **nothing selected** — the approved frame's
+ * "THE CHAIN · NOTHING SELECTED" (`a1-assembled.html`): the specimen's
+ * structure in one read, rather than a generic summary. Rows are numbered by
+ * their order here, matching each piece's own `badge`.
+ */
+export interface SpecimenIdle {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly body: string;
+  readonly rows: readonly SpecimenIdleRow[];
+  readonly note?: string;
+  readonly cite: string;
+}
+
 /** The specimen a site puts on the stage: a boss chapter, a battle turn, a game frame. */
 export interface Specimen {
   readonly id: string;
@@ -122,6 +190,8 @@ export interface Specimen {
   readonly game: GameId;
   readonly systems: readonly System[];
   readonly pieces: readonly Piece[];
+  /** The nothing-selected card. A specimen without one falls back to the plain summary (`card.ts`). */
+  readonly idle?: SpecimenIdle;
 }
 
 /** What `defineSpecimen` accepts: systems already carry their (author-supplied) counts, checked against the pieces. */
@@ -133,6 +203,7 @@ export interface SpecimenInput {
   readonly game: GameId;
   readonly systems: readonly System[];
   readonly pieces: readonly Piece[];
+  readonly idle?: SpecimenIdle;
 }
 
 /** Fills in `System.count` from the pieces, so a data module never has to type or maintain one by hand. */
@@ -163,9 +234,11 @@ export function definePiece(piece: Piece): Piece {
 /**
  * Validates and returns a specimen. Throws on the mistakes that would
  * otherwise surface much later as a blank card or a silently-wrong count:
- * an empty `cite`, a piece naming a system that was never declared, a
- * repeated piece or system id, or a `System.count` that disagrees with the
- * pieces that actually name it (use {@link withCounts} so this never happens).
+ * an empty `cite`, a piece naming a system that was never declared, a piece
+ * whose `parentId` names no piece of this specimen (the stage would thread it
+ * to nothing and silently drop it from every "+ N more" count), a repeated
+ * piece or system id, or a `System.count` that disagrees with the pieces that
+ * actually name it (use {@link withCounts} so this never happens).
  */
 export function defineSpecimen(input: SpecimenInput): Specimen {
   const systemIds = new Set<string>();
@@ -192,6 +265,17 @@ export function defineSpecimen(input: SpecimenInput): Specimen {
     assertCite(piece.id, piece.card);
   }
 
+  for (const piece of input.pieces) {
+    if (piece.parentId !== undefined && !pieceIds.has(piece.parentId)) {
+      throw new Error(
+        `defineSpecimen("${input.id}"): piece "${piece.id}" names unknown parent "${piece.parentId}"`,
+      );
+    }
+    if (piece.parentId === piece.id) {
+      throw new Error(`defineSpecimen("${input.id}"): piece "${piece.id}" is its own parent`);
+    }
+  }
+
   for (const system of input.systems) {
     const actual = input.pieces.filter((piece) => piece.systemId === system.id).length;
     if (system.count !== actual) {
@@ -209,5 +293,6 @@ export function defineSpecimen(input: SpecimenInput): Specimen {
     game: input.game,
     systems: input.systems,
     pieces: input.pieces,
+    ...(input.idle !== undefined ? { idle: input.idle } : {}),
   };
 }

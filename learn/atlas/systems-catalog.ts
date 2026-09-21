@@ -65,6 +65,14 @@ function collectOwned(combatants: readonly EnemyDef[], keysOf: (combatant: Enemy
   return order.map((key) => ({ key, ownerId: ownerId.get(key) ?? key, count: count.get(key) ?? 0 }));
 }
 
+/** The piece an owned fact hangs off: `Piece.parentId`, which the stage threads and counts "+ N more" against. */
+type ParentSpread = { parentId: string } | Record<string, never>;
+
+function parentSpread(pieceIdByCombatantId: ReadonlyMap<string, string>, ownerId: string): ParentSpread {
+  const parentId = pieceIdByCombatantId.get(ownerId);
+  return parentId !== undefined ? { parentId } : {};
+}
+
 function requirePlacement(map: ReadonlyMap<string, Placement>, ownerId: string, systemLabel: string, key: string): Placement {
   const placement = map.get(ownerId);
   if (placement === undefined) {
@@ -73,7 +81,12 @@ function requirePlacement(map: ReadonlyMap<string, Placement>, ownerId: string, 
   return placement;
 }
 
-function buildImmunities(chapter: Chapter, combatants: readonly EnemyDef[], placementByCombatantId: ReadonlyMap<string, Placement>): Piece[] {
+function buildImmunities(
+  chapter: Chapter,
+  combatants: readonly EnemyDef[],
+  placementByCombatantId: ReadonlyMap<string, Placement>,
+  pieceIdByCombatantId: ReadonlyMap<string, string>,
+): Piece[] {
   return collectOwned(combatants, (c) => Object.keys(c.immunities)).map((fact) => {
     const placement = sitAtParent(requirePlacement(placementByCombatantId, fact.ownerId, 'immunity', fact.key));
     const body = `Blocked by ${countNoun(fact.count, 'combatant')} of ${combatants.length}.`;
@@ -85,6 +98,7 @@ function buildImmunities(chapter: Chapter, combatants: readonly EnemyDef[], plac
       size: tieredSize('tile', fact.count),
       home: placement.home,
       burst: placement.burst,
+      ...parentSpread(pieceIdByCombatantId, fact.ownerId),
       card: {
         eyebrow: 'Immunity',
         body,
@@ -97,7 +111,12 @@ function buildImmunities(chapter: Chapter, combatants: readonly EnemyDef[], plac
   });
 }
 
-function buildAffinities(chapter: Chapter, combatants: readonly EnemyDef[], placementByCombatantId: ReadonlyMap<string, Placement>): Piece[] {
+function buildAffinities(
+  chapter: Chapter,
+  combatants: readonly EnemyDef[],
+  placementByCombatantId: ReadonlyMap<string, Placement>,
+  pieceIdByCombatantId: ReadonlyMap<string, string>,
+): Piece[] {
   const facts = collectOwned(combatants, (c) => Object.entries(c.affinities).map(([element, value]) => `${element}:${value}`));
   return facts.map((fact) => {
     const [element, value] = fact.key.split(':');
@@ -111,6 +130,7 @@ function buildAffinities(chapter: Chapter, combatants: readonly EnemyDef[], plac
       size: tieredSize('tile', fact.count),
       home: placement.home,
       burst: placement.burst,
+      ...parentSpread(pieceIdByCombatantId, fact.ownerId),
       card: {
         eyebrow: 'Elemental affinity',
         body,
@@ -123,7 +143,12 @@ function buildAffinities(chapter: Chapter, combatants: readonly EnemyDef[], plac
   });
 }
 
-function buildTurnPatterns(chapter: Chapter, combatants: readonly EnemyDef[], placementByCombatantId: ReadonlyMap<string, Placement>): Piece[] {
+function buildTurnPatterns(
+  chapter: Chapter,
+  combatants: readonly EnemyDef[],
+  placementByCombatantId: ReadonlyMap<string, Placement>,
+  pieceIdByCombatantId: ReadonlyMap<string, string>,
+): Piece[] {
   return collectOwned(combatants, (c) => [c.aiScriptId]).map((fact) => {
     const placement = sitAtParent(requirePlacement(placementByCombatantId, fact.ownerId, 'AI script', fact.key));
     const body = `Used by ${countNoun(fact.count, 'combatant')}.`;
@@ -135,6 +160,7 @@ function buildTurnPatterns(chapter: Chapter, combatants: readonly EnemyDef[], pl
       size: tieredSize('tile', fact.count),
       home: placement.home,
       burst: placement.burst,
+      ...parentSpread(pieceIdByCombatantId, fact.ownerId),
       card: {
         eyebrow: 'Turn pattern',
         body,
@@ -160,6 +186,7 @@ function buildRewards(
   guide: ChapterGuide | undefined,
   combatants: readonly EnemyDef[],
   placementByCombatantId: ReadonlyMap<string, Placement>,
+  pieceIdByCombatantId: ReadonlyMap<string, string>,
 ): Piece[] {
   const items = itemsTableFor(chapter.game);
   return collectOwned(combatants, rewardItemIds).map((fact) => {
@@ -177,6 +204,7 @@ function buildRewards(
       size: tieredSize('tile', fact.count),
       home: placement.home,
       burst: placement.burst,
+      ...parentSpread(pieceIdByCombatantId, fact.ownerId),
       card: {
         eyebrow: 'Reward',
         body,
@@ -201,11 +229,12 @@ export function buildCatalogSystems(
   guide: ChapterGuide | undefined,
   combatants: readonly EnemyDef[],
   placementByCombatantId: ReadonlyMap<string, Placement>,
+  pieceIdByCombatantId: ReadonlyMap<string, string>,
 ): CatalogSystemsResult {
   return {
-    immunityPieces: buildImmunities(chapter, combatants, placementByCombatantId),
-    affinityPieces: buildAffinities(chapter, combatants, placementByCombatantId),
-    turnPatternPieces: buildTurnPatterns(chapter, combatants, placementByCombatantId),
-    rewardPieces: buildRewards(chapter, guide, combatants, placementByCombatantId),
+    immunityPieces: buildImmunities(chapter, combatants, placementByCombatantId, pieceIdByCombatantId),
+    affinityPieces: buildAffinities(chapter, combatants, placementByCombatantId, pieceIdByCombatantId),
+    turnPatternPieces: buildTurnPatterns(chapter, combatants, placementByCombatantId, pieceIdByCombatantId),
+    rewardPieces: buildRewards(chapter, guide, combatants, placementByCombatantId, pieceIdByCombatantId),
   };
 }

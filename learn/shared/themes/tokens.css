@@ -1,0 +1,305 @@
+/*
+ * Structural layout for the nine pattern elements
+ * (docs/concepts/atlas/REFERENCE.md), shared by every theme. Only position,
+ * size and generic shape live here — every colour, font and decorative
+ * texture is a theme file's job (paper.css / studio.css / cinema.css),
+ * selected by `[data-pyx-theme]` on the canvas root.
+ *
+ * The canvas is authored at a fixed 1600x900 design size (the same size
+ * every approved frame in docs/concepts/atlas/ was authored at) and scaled
+ * as a block to fit the viewport width, capped at 1600px so the verified
+ * target size renders pixel for pixel. Positions below are plain
+ * percentages of that canvas, taken from the pixel values in
+ * docs/concepts/atlas/a-boss-atlas/a.css.
+ */
+
+.pyx-viewport {
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.pyx-canvas {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  aspect-ratio: 1600 / 900;
+  min-height: 560px;
+  overflow: hidden;
+  flex: none;
+  /* The view rail's own width (`a.css` `.rail`, 60px at the 1600px canvas size). `.pyx-card`
+     reads this too, so the two can never end up sharing the same right edge again. */
+  --pyx-rail-w: 60px;
+}
+
+.pyx-canvas * {
+  box-sizing: border-box;
+}
+
+.pyx-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+.pyx-stage.pyx-stage--panning {
+  cursor: grabbing;
+}
+.pyx-stage__world {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform-style: preserve-3d;
+  perspective: 1400px;
+}
+.pyx-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.pyx-piece__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+.pyx-piece--card .pyx-piece__body {
+  pointer-events: none;
+}
+
+/* ---- authored stage (site A): the approved frames' own geometry ----
+   A piece with a `Piece.stage` is placed by left/top/width in stage units and
+   stacked by z-index, so the world drops out of 3D: `preserve-3d` would make
+   the browser ignore z-index and sort by depth instead. */
+.pyx-stage__world--flat {
+  transform-style: flat;
+  perspective: none;
+}
+.pyx-plinth,
+.pyx-gshadow,
+.pyx-floor,
+.pyx-pin,
+.pyx-tag,
+.pyx-mcard,
+.pyx-more,
+.pyx-threads {
+  position: absolute;
+}
+.pyx-threads {
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+.pyx-plinth,
+.pyx-gshadow,
+.pyx-floor {
+  pointer-events: none;
+}
+.pyx-piece--flip .pyx-piece__img,
+.pyx-piece--flip .pyx-piece__tint {
+  transform: scaleX(-1);
+}
+.pyx-piece__tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.pyx-pin,
+.pyx-tag,
+.pyx-more {
+  pointer-events: none;
+  z-index: 6;
+}
+.pyx-mcard {
+  z-index: 5;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* ---- the inventory at explode 1 ----
+   Outside the camera, so its type never tilts, zooms or drops below 13px:
+   when the flow is taller than the region it pans vertically instead. */
+.pyx-stage__inv {
+  position: absolute;
+  overflow: hidden;
+  z-index: 3;
+}
+.pyx-stage__inv--pannable {
+  cursor: grab;
+}
+.pyx-inv__flow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.pyx-tip {
+  position: absolute;
+  z-index: 40;
+  width: 268px;
+  pointer-events: none;
+}
+
+/* ---- title block, top left ---- */
+.pyx-title {
+  position: absolute;
+  left: 2.5%;
+  top: 2.7%;
+  width: 22%;
+  min-width: 260px;
+  z-index: 20;
+}
+
+/* ---- specimen switcher, top centre ---- */
+.pyx-switcher {
+  position: absolute;
+  left: 29.4%;
+  top: 2.4%;
+  right: 19.5%;
+  z-index: 22;
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+}
+
+/* ---- search, top right ---- */
+/* z-index 30: its own dropdown must win over everything else on the canvas
+   (the card sits at the same corner of the screen and would otherwise steal
+   its clicks — z-index only resolves within one stacking context, and this
+   element IS that stacking context for its dropdown). */
+.pyx-search {
+  position: absolute;
+  right: 1.5%;
+  top: 3.3%;
+  width: 17.5%;
+  min-width: 220px;
+  z-index: 30;
+}
+.pyx-search__input {
+  all: unset;
+  flex: 1;
+  min-width: 0;
+}
+.pyx-search__results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  max-height: 260px;
+  overflow: auto;
+  z-index: 30;
+}
+
+/* ---- view rail, right edge ---- */
+.pyx-rail {
+  position: absolute;
+  right: 1.5%;
+  top: 11.5%;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  width: var(--pyx-rail-w);
+}
+
+/* ---- systems panel, left ---- */
+.pyx-panel {
+  position: absolute;
+  left: 2.5%;
+  top: 23.5%;
+  width: 19%;
+  min-width: 260px;
+  max-height: 60%;
+  z-index: 20;
+  overflow: auto;
+}
+
+/* ---- explode slider, bottom centre (the signature) ---- */
+.pyx-slider {
+  position: absolute;
+  left: 50%;
+  bottom: 2.5%;
+  width: 44.5%;
+  min-width: 460px;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  gap: 20px;
+}
+.pyx-slider__main {
+  flex: 1;
+  min-width: 0;
+}
+.pyx-slider__track {
+  position: relative;
+  height: 38px;
+  margin: 6px 18px 0;
+}
+.pyx-slider__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ---- detail / idle card, right side ----
+   Sits left of the view rail with a real gap, so the rail's six buttons stay
+   visible and clickable beside the card at every explode state, rather than
+   sharing the rail's own right edge and disappearing under it (`a.css` keeps
+   the same gap between its `.rail` and its `.chain`/`.detail` cards). The
+   width comes in a little narrower than `a.css`'s own 358px detail card:
+   chapter 5's assembled machine (ported verbatim from `a1-assembled.html`,
+   `learn/atlas/arrange.ts`) already reaches to x=1176 at rest, so a card
+   this far right only has ~320px to work with before it would sit on top of
+   the Tail rather than beside it. */
+.pyx-card {
+  position: absolute;
+  right: calc(1.5% + var(--pyx-rail-w) + 8px);
+  top: 10.5%;
+  width: 20%;
+  min-width: 320px;
+  max-height: 78%;
+  z-index: 24;
+  overflow: auto;
+}
+
+/* ---- hint strip + credits ---- */
+.pyx-hint {
+  position: absolute;
+  left: 2.5%;
+  bottom: 1.5%;
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.pyx-credits {
+  position: absolute;
+  right: 1.5%;
+  bottom: 1.5%;
+  z-index: 20;
+}
+
+.pyx-hidden {
+  display: none !important;
+}
+.pyx-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

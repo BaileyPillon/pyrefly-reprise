@@ -149,6 +149,64 @@ describe('defineSpecimen', () => {
     };
     expect(() => defineSpecimen(input)).toThrow(/declares count/);
   });
+
+  it('accepts a parentId that names another piece of the same specimen', () => {
+    const input: SpecimenInput = {
+      ...baseSpecimenInput(),
+      pieces: [pieceA, piece({ id: 'p2', systemId: 'system-b', parentId: 'p1' })],
+    };
+    expect(defineSpecimen(input).pieces[1]?.parentId).toBe('p1');
+  });
+
+  it('throws when a parentId names no piece: the stage would thread it to nothing', () => {
+    const input: SpecimenInput = {
+      ...baseSpecimenInput(),
+      pieces: [pieceA, piece({ id: 'p2', systemId: 'system-b', parentId: 'nobody' })],
+    };
+    expect(() => defineSpecimen(input)).toThrow(/unknown parent/);
+  });
+
+  it('throws when a piece is its own parent', () => {
+    const input: SpecimenInput = {
+      ...baseSpecimenInput(),
+      pieces: [pieceA, piece({ id: 'p2', systemId: 'system-b', parentId: 'p2' })],
+    };
+    expect(() => defineSpecimen(input)).toThrow(/own parent/);
+  });
+
+  it('accepts a parent declared after the child, since order is not a contract', () => {
+    const input: SpecimenInput = {
+      ...baseSpecimenInput(),
+      pieces: [piece({ id: 'p1', systemId: 'system-a', parentId: 'p2' }), piece({ id: 'p2', systemId: 'system-b' })],
+    };
+    expect(() => defineSpecimen(input)).not.toThrow();
+  });
+
+  it('carries an authored stage box, a badge and an idle card through unchanged', () => {
+    const input: SpecimenInput = {
+      ...baseSpecimenInput(),
+      pieces: [
+        piece({ id: 'p1', systemId: 'system-a', badge: '1', stage: { width: 384, burstWidth: 190, flipX: true, layer: 3 } }),
+        pieceB,
+      ],
+      idle: {
+        eyebrow: 'The chain · nothing selected',
+        title: 'Fixture',
+        body: 'A placeholder lede.',
+        rows: [{ label: 'One', value: '10 HP', sub: 'Level 1' }],
+        note: 'A placeholder note.',
+        cite: 'fixture-source §1',
+      },
+    };
+    const specimen = defineSpecimen(input);
+    expect(specimen.pieces[0]?.stage).toEqual({ width: 384, burstWidth: 190, flipX: true, layer: 3 });
+    expect(specimen.pieces[0]?.badge).toBe('1');
+    expect(specimen.idle?.rows[0]?.sub).toBe('Level 1');
+  });
+
+  it('omits idle entirely when the caller gives none', () => {
+    expect('idle' in defineSpecimen(baseSpecimenInput())).toBe(false);
+  });
 });
 
 describe('PieceCardTab.sections', () => {

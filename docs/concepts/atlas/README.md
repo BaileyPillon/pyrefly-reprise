@@ -1,5 +1,22 @@
 # Interactive learning site: three end-state options
 
+> ## BAILEY'S VERDICT (2026-09-21): ALL THREE APPROVED, BUILD ALL THREE AS SEPARATE SITES
+>
+> Bailey's own words, in order, all on 2026-09-21:
+> 1. On seeing the three directions described: **"A, B, C all separately please but please be
+>    mindful of delegation here so we dont waste so many tokens and usage"**
+> 2. On seeing the nine frames below: **"yes commit it, all three looks are good  where can i
+>    actually view these websites?"**
+> 3. Later the same day: **"Links to all 3 websites please?"** (Bailey wants the sites to exist
+>    and be openable; the only way to satisfy this is to build them.)
+>
+> So the nine frames in this folder are the **approved targets** (recorded as nine approved tiles
+> in `docs/target/targets.json`, group `learning-sites`). What Bailey named: the look of each
+> site as shown on its frames, and that the three are separate sites. The build plan is
+> `docs/plans/learning-sites.md`; the pages live under `learn/atlas/`, `learn/studio/`,
+> `learn/exploded/`. Everything below this box is the options round as it was presented,
+> kept for the record: where it says "nothing is built" or "pick one", the box above wins.
+
 **For Bailey. Pick one, or name the parts you want from each. Nothing is built.**
 
 Start with **[`sheet.png`](sheet.png)**: all nine frames on one page, a row per option,

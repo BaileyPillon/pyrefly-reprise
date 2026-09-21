@@ -20,11 +20,11 @@ import type { Piece, PieceFact, PieceKind } from '../shared/model.ts';
 import { definePiece } from '../shared/model.ts';
 import { collectCombatants, parentIdFor, resolveChain } from './chain.ts';
 import { citeForCombatant } from './cites.ts';
-import { fmtNumber, humanizeId } from './format.ts';
+import { distinguishName, fmtNumber, humanizeId } from './format.ts';
 import { howToAnswerForCombatant, overviewTab } from './guide-notes.ts';
 import { tieredSize } from './size.ts';
 import type { Placement } from './arrange.ts';
-import { CH5_PAINTED_BURST, CH5_PAINTED_HOME, arrangeMainUnits, fanCard } from './arrange.ts';
+import { CH5_PAINTED, arrangeMainUnits, fanCard } from './arrange.ts';
 
 /** One placeable part — a whole single-form combatant, or one form of a multi-form combatant. */
 export interface PartUnit {
@@ -35,6 +35,19 @@ export interface PartUnit {
   readonly spriteKey: string;
   readonly hp: number;
   readonly aiScriptId: string;
+}
+
+/**
+ * Replaces a unit's `name` with a distinguishing one wherever the chapter
+ * fields two or more units under the same name (`distinguishName`). Every
+ * other unit keeps exactly the name the data gives it.
+ */
+export function distinguishUnitNames(units: readonly PartUnit[]): PartUnit[] {
+  const timesUsed = new Map<string, number>();
+  for (const unit of units) timesUsed.set(unit.name, (timesUsed.get(unit.name) ?? 0) + 1);
+  return units.map((unit) =>
+    (timesUsed.get(unit.name) ?? 0) > 1 ? { ...unit, name: distinguishName(unit.name, unit.combatant.id) } : unit,
+  );
 }
 
 export function buildPartUnits(combatants: readonly EnemyDef[]): PartUnit[] {
@@ -114,30 +127,47 @@ export interface PartsSystemResult {
   readonly combatants: readonly EnemyDef[];
   /** One representative placement per combatant id (its first/only form), for the other six systems to attach their pieces to. */
   readonly placementByCombatantId: ReadonlyMap<string, Placement>;
+  /** Combatant id -> the id of the piece that stands for it, so another system's piece can name it as its `parentId`. */
+  readonly pieceIdByCombatantId: ReadonlyMap<string, string>;
+}
+
+/**
+ * Combatant id -> its battle's 1-based place in the chain, for the numbered
+ * pins the assembled frame draws on each part ("1 · Tail" … "5 · Shuyin").
+ * Only a formation's *primary* enemy is pinned: the pins count battles, and
+ * a battle's supports share their parent's pin.
+ */
+function badgeByCombatantId(chain: readonly EnemyGroupDef[]): Map<string, string> {
+  const badges = new Map<string, string>();
+  if (chain.length < 2) return badges; // one battle: there is no order to number
+  chain.forEach((group, i) => {
+    const primary = group.enemies[0];
+    if (primary !== undefined && !badges.has(primary.id)) badges.set(primary.id, String(i + 1));
+  });
+  return badges;
 }
 
 export function buildPartsSystem(chapter: Chapter, guide: ChapterGuide | undefined): PartsSystemResult {
   const chain = resolveChain(chapter);
   const combatants = collectCombatants(chain);
-  const units = buildPartUnits(combatants);
+  const units = distinguishUnitNames(buildPartUnits(combatants));
 
   const mainUnits = units.filter((u) => kindForUnit(u, units) === 'painting');
   const cardUnits = units.filter((u) => kindForUnit(u, units) === 'card');
 
   const isCh5Ported = (unit: PartUnit): boolean =>
-    chapter.id === 'ffx2-vegnagun-shuyin' && unit.combatant.id in CH5_PAINTED_HOME;
+    chapter.id === 'ffx2-vegnagun-shuyin' && unit.combatant.id in CH5_PAINTED;
 
   const proceduralPlacements = arrangeMainUnits(mainUnits.filter((u) => !isCh5Ported(u)).length);
   const placementByUnitId = new Map<string, Placement>();
   let proceduralIndex = 0;
   for (const unit of mainUnits) {
     if (isCh5Ported(unit)) {
-      const home = CH5_PAINTED_HOME[unit.combatant.id];
-      const burst = CH5_PAINTED_BURST[unit.combatant.id];
-      if (home === undefined || burst === undefined) {
+      const ported = CH5_PAINTED[unit.combatant.id];
+      if (ported === undefined) {
         throw new Error(`learn/atlas: missing ported position for "${unit.combatant.id}"`);
       }
-      placementByUnitId.set(unit.id, { home, burst });
+      placementByUnitId.set(unit.id, ported);
     } else {
       const placement = proceduralPlacements[proceduralIndex];
       proceduralIndex += 1;
@@ -178,6 +208,17 @@ export function buildPartsSystem(chapter: Chapter, guide: ChapterGuide | undefin
     }
   }
 
+  // A unit stands for its combatant (its first form, for a combatant that changes form), so
+  // another system's piece can name it as a parent without knowing about forms at all.
+  const pieceIdByCombatantId = new Map<string, string>();
+  for (const unit of units) {
+    if (unit.formIndex === undefined || unit.formIndex === 0) {
+      pieceIdByCombatantId.set(unit.combatant.id, unit.id);
+    }
+  }
+
+  const badges = badgeByCombatantId(chain);
+
   const pieces = units.map((unit) => {
     const kind: PieceKind = kindForUnit(unit, units);
     const placement = placementByUnitId.get(unit.id);
@@ -188,6 +229,17 @@ export function buildPartsSystem(chapter: Chapter, guide: ChapterGuide | undefin
     const howTo = howToAnswerForCombatant(guide, unit.combatant, unit.formIndex);
     if (howTo !== undefined) tabs.push(howTo);
 
+    // A support part with no painting of its own hangs off the part it belongs to; a later
+    // form hangs off the first. A main unit hangs off nothing — it is the thing on stage.
+    const parentCombatantId = unit.combatant.flags.isPart === true ? parentIdFor(chain, unit.combatant) : undefined;
+    const parentId =
+      unit.formIndex !== undefined && unit.formIndex > 0
+        ? pieceIdByCombatantId.get(unit.combatant.id)
+        : parentCombatantId !== undefined && parentCombatantId !== unit.combatant.id
+          ? pieceIdByCombatantId.get(parentCombatantId)
+          : undefined;
+    const badge = unit.formIndex === undefined || unit.formIndex === 0 ? badges.get(unit.combatant.id) : undefined;
+
     return definePiece({
       id: unit.id,
       systemId: 'parts-and-forms',
@@ -197,6 +249,9 @@ export function buildPartsSystem(chapter: Chapter, guide: ChapterGuide | undefin
       size: tieredSize(kind, unit.hp),
       home: placement.home,
       burst: placement.burst,
+      ...(placement.stage !== undefined ? { stage: placement.stage } : {}),
+      ...(parentId !== undefined ? { parentId } : {}),
+      ...(badge !== undefined ? { badge } : {}),
       card: {
         eyebrow: eyebrowFor(unit, chain, combatants),
         body: bodyFor(unit),
@@ -208,5 +263,5 @@ export function buildPartsSystem(chapter: Chapter, guide: ChapterGuide | undefin
     });
   });
 
-  return { pieces, chain, combatants, placementByCombatantId };
+  return { pieces, chain, combatants, placementByCombatantId, pieceIdByCombatantId };
 }

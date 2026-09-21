@@ -25,6 +25,7 @@ import type { Specimen, SystemInput } from '../shared/model.ts';
 import { defineSpecimen, withCounts } from '../shared/model.ts';
 import { requireChapter } from './chain.ts';
 import { countNoun } from './format.ts';
+import { buildIdleCard } from './idle.ts';
 import { buildPartsSystem } from './parts.ts';
 import { buildAbilitiesAndStatuses } from './systems-abilities.ts';
 import { buildCatalogSystems } from './systems-catalog.ts';
@@ -50,12 +51,14 @@ export function buildChapterSpecimen(chapterId: ChapterId): Specimen {
     guide,
     parts.combatants,
     parts.placementByCombatantId,
+    parts.pieceIdByCombatantId,
   );
   const { immunityPieces, affinityPieces, turnPatternPieces, rewardPieces } = buildCatalogSystems(
     chapter,
     guide,
     parts.combatants,
     parts.placementByCombatantId,
+    parts.pieceIdByCombatantId,
   );
 
   const pieces = [
@@ -69,6 +72,14 @@ export function buildChapterSpecimen(chapterId: ChapterId): Specimen {
   ];
 
   const gameLabel = chapter.game === 'ffx' ? 'FFX' : 'FFX-2';
+  // The chain card names a combatant exactly as its own piece does, so a row and the pin on
+  // the stage never disagree (`parts.ts`'s `distinguishUnitNames` does the renaming).
+  const nameByPieceId = new Map(parts.pieces.map((piece) => [piece.id, piece.name]));
+  const idle = buildIdleCard(
+    chapter,
+    parts.chain,
+    (enemy) => nameByPieceId.get(parts.pieceIdByCombatantId.get(enemy.id) ?? '') ?? enemy.name,
+  );
 
   return defineSpecimen({
     id: chapter.id,
@@ -78,6 +89,7 @@ export function buildChapterSpecimen(chapterId: ChapterId): Specimen {
     game: chapter.game,
     systems: withCounts(SYSTEMS_INPUT, pieces),
     pieces,
+    ...(idle !== undefined ? { idle } : {}),
   });
 }
 

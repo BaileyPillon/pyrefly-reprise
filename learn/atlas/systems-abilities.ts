@@ -77,8 +77,14 @@ export function buildAbilitiesAndStatuses(
   guide: ChapterGuide | undefined,
   combatants: readonly EnemyDef[],
   placementByCombatantId: ReadonlyMap<string, Placement>,
+  pieceIdByCombatantId: ReadonlyMap<string, string>,
 ): AbilitiesResult {
   const owners = abilityOwners(combatants);
+  /** The piece an owned fact hangs off: `Piece.parentId`, which the stage threads and counts "+ N more" against. */
+  const parentOf = (combatantId: string): { parentId: string } | Record<string, never> => {
+    const parentId = pieceIdByCombatantId.get(combatantId);
+    return parentId !== undefined ? { parentId } : {};
+  };
 
   const byOwner = new Map<string, AbilityOwner[]>();
   for (const owner of owners) {
@@ -112,6 +118,7 @@ export function buildAbilitiesAndStatuses(
           size: tieredSize('card', ability.power),
           home: placement.home,
           burst: placement.burst,
+          ...parentOf(owner.ownerId),
           card: {
             eyebrow: 'Ability',
             body: abilityBody(ability),
@@ -156,6 +163,7 @@ export function buildAbilitiesAndStatuses(
       size: tieredSize('tile', info.abilityNames.length),
       home: placement.home,
       burst: placement.burst,
+      ...parentOf(info.ownerId),
       card: {
         eyebrow: 'Status it inflicts',
         body,

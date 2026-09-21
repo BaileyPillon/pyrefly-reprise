@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*.ts", "../tests/unit/learn-*.test.ts"],
+  "exclude": ["node_modules", "../dist-learn"]
+}

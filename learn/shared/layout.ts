@@ -49,6 +49,16 @@ function clamp01(value: number): number {
 }
 
 /**
+ * How far along the first leg (`home` -> `burst`) `explode` is, eased: 0 at
+ * `explode` 0, 1 at {@link BURST_END} and beyond. A stage that authors its
+ * own on-stage sizes (`Piece.stage`) interpolates them on exactly this curve,
+ * so a piece's box and its position never drift apart.
+ */
+export function burstProgress(explode: number): number {
+  return easeInOut(Math.min(clamp01(explode), BURST_END) / BURST_END);
+}
+
+/**
  * Where `piece` sits at `explode`, travelling toward `slot` (its inventory
  * cell) once past the burst. `explode` 0 returns exactly `piece.home`
  * (scale 1); `explode` 1 returns exactly the slot's `x`/`y` with `z` 0.
