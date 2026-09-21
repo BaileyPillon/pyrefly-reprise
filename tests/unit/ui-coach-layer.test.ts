@@ -212,14 +212,16 @@ describe('the coach layer', () => {
     expect(line, 'and the line outlives its own promise, on screen while play continues').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
     expect(line?.textContent).toContain('Rikku');
-    // The badge only ever claims something about the line. It used to read
-    // "Nothing paused · gauges running", which is a claim about the engine's
-    // clock during command input that the running game does not honour — see
-    // the note in `CoachMark.ts`. Shipping a badge that contradicts the
-    // artifact is the defect this pins.
-    expect(line?.textContent, 'no claim about the engine on a HUD badge').not.toContain('gauges running');
-    expect(line?.textContent?.toLowerCase()).not.toContain('nothing paused');
-    expect(line?.textContent).toContain('Keep playing');
+    // The badge claims the engine's clock is running under the menu, which is
+    // the approved C3 mockup's wording. It was demoted to "Keep playing ·
+    // nothing to press" while that claim was false (round 05 PR-0046 measured
+    // ticks 8189 -> 8189 over 2013 ms) and restored once FFX-2's Active ATB
+    // made it true: measured 8189 -> 11344 over 2445 ms on the same read, with
+    // the FFX control unchanged at 0. **This pin is the badge's other half:**
+    // if Active is ever backed out, `src/battle/ffx2/active.ts` goes with it
+    // and this line must go back to a claim the build can keep.
+    expect(line?.textContent).toContain('Nothing paused');
+    expect(line?.textContent).toContain('gauges running');
   });
 
   /**

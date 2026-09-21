@@ -90,22 +90,28 @@ export class CoachMark {
 
   private markup(): string {
     const { mark } = this.opts;
-    // **Only ever a claim about the line itself.** This badge used to read
-    // "Nothing paused · gauges running", which is a claim about the *engine* —
-    // and an adversarial pass measured the opposite on the running game: the
-    // presenter awaits `HudPort.chooseCommand` and the FFX-2 engine is ticked
-    // only in its `waiting` branch, so the gauges stand still during command
-    // input whether or not a line is up (`?coach=off` behaves identically).
-    // Whether the X-2 clock should run there at all is an Active-vs-Wait
-    // question for the combat core — `research/ffx-vs-ffx2-presentation.md`
-    // §4.2 row "Command input": *Active mode: time runs. Wait mode: time
-    // freezes on entering a submenu* — and it is not this layer's to answer.
-    // What this layer can promise, and what is measurably true, is that the
-    // line holds nothing and asks for nothing: the menu is open underneath it
-    // and the arrows still move the cursor while it fades.
+    // **The approved mockup's words, restored now that they are true.**
+    //
+    // The C3 badge was written as "Nothing paused · gauges running" and then
+    // demoted to "Keep playing · nothing to press", because an adversarial
+    // pass measured the opposite on the running game: the presenter awaited
+    // `HudPort.chooseCommand` and the FFX-2 engine was ticked only in its
+    // `waiting` branch, so the gauges stood still during command input
+    // (round 05 PR-0046: `ticks` 8189 -> 8189 over 2013 ms, and `?coach=off`
+    // behaved identically). Approved copy is not edited to fit a build, and a
+    // build is not rushed to unlock copy, so the claim was narrowed to
+    // something this layer could keep on its own.
+    //
+    // Bailey settled the underlying question on 2026-09-21 — *"For ffx-2 I
+    // choose active"* (`docs/target/decisions.json` D-009) — and the clock now
+    // genuinely runs under an open menu (`src/engine/BattlePresenterActive.ts`).
+    // Measured on the shipped build at 1600x900, same read, same chapter:
+    // **8189 -> 11344 over 2445 ms**, with the FFX control still 0 -> 0. The
+    // engine claim is true, so the approved words come back.
+    // FFX-2 only: FFX is CTB and its line holds the menu by design.
     const running =
       mark.game === 'ffx2'
-        ? '<div class="coach-mark__running">Keep playing &middot; nothing to press</div>'
+        ? '<div class="coach-mark__running">Nothing paused &middot; gauges running</div>'
         : '';
     const foot = mark.holds
       ? '<span><b>Enter</b> continue</span><span>First time only</span>'
