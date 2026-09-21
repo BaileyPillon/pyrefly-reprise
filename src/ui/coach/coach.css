@@ -314,3 +314,65 @@
     letter-spacing: 0.1em;
   }
 }
+
+/* Phone: the approved left/right split cannot survive a 390 px stage, so the
+   composition is **stacked** instead — painting above, words below on ink —
+   which keeps both halves of the frame (the man and his four lines) and keeps
+   the function (every line reads, the off switch is on the first screen).
+   RUBRIC §7 allows the adaptation; what it does not allow is what the round-05
+   capture found: gold type printed across Auron's red coat and the permanent
+   opt-out in grey on his coat tail, both of them under 4.5:1 (PR-0048, CHK-003).
+
+   Three rules do it, and they are ordered the way the elements paint:
+     1. the painting is confined to the top band and never reaches the text;
+     2. the grade stops being a side-lit vignette and becomes an opaque ink
+        slab from the fold down, so every glyph below it sits on flat ink;
+     3. the text, the timer and the footer live on that slab.
+   Nothing above 700 px is touched, so the desktop frame stays pixel-close. */
+@media (max-width: 700px) {
+  .coach-brief__figure {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: auto;
+    height: 34%;
+    opacity: 1;
+    object-position: center bottom;
+  }
+  /* The ink slab. Opaque well before the text starts, so the contrast a line
+     measures is against #0b0a12 and nothing else. */
+  .coach-brief__grade {
+    background: linear-gradient(
+      180deg,
+      rgba(6, 5, 12, 0.3) 0%,
+      rgba(6, 5, 12, 0.42) 24%,
+      rgba(6, 5, 12, 0.98) 35%,
+      var(--ig-ink, #0b0a12) 40%,
+      var(--ig-ink, #0b0a12) 100%
+    );
+  }
+  .coach-brief__text,
+  .coach-brief__timer,
+  .coach-brief__foot {
+    left: 5%;
+    right: 5%;
+  }
+  .coach-brief__text {
+    top: 41%;
+  }
+  .coach-brief__line {
+    font-size: clamp(17px, 4.4vw, 22px);
+    line-height: 1.36;
+  }
+  .coach-brief__timer {
+    bottom: 17%;
+  }
+  /* One control per line: side by side they wrapped into the timer, and the
+     opt-out is the line that must never be hard to find or hard to read. */
+  .coach-brief__foot {
+    bottom: 6%;
+    flex-direction: column;
+    gap: 10px;
+    color: rgba(244, 241, 232, 0.86);
+  }
+}

@@ -67,7 +67,7 @@ import {
 } from '../../ui/common/ControlsHint.ts';
 import { MusicPlayer } from '../../ui/common/MusicPlayer.ts';
 import type { Briefing } from '../../ui/coach/Briefing.ts';
-import { battleHelpOn, setBattleHelp } from '../../ui/coach/coachState.ts';
+import { battleHelpOn, onboardingLive, setBattleHelp } from '../../ui/coach/coachState.ts';
 import { makeBriefing } from './raiseBriefing.ts';
 import { PhotoMode } from '../../ui/common/PhotoMode.ts';
 import {
@@ -374,13 +374,18 @@ export class PauseScreen extends Screen {
     // twenty seconds again, or turn the voices off for good. BATTLE HELP is
     // worded exactly as FFX-2's own Config list words it
     // (`research/ffx-vs-ffx2-presentation.md:278`).
-    rows.push({ id: 'briefing', label: 'Replay Briefing', panel: 'details' });
-    rows.push({
-      id: 'battle-help',
-      label: 'Battle Help',
-      panel: 'details',
-      value: () => (battleHelpOn() ? 'ON' : 'OFF'),
-    });
+    // Both rows are behind the onboarding dark-launch switch for this candidate
+    // (`ui/coach/coachState.ts` ONBOARDING_LIVE): a menu must not advertise a
+    // feature that shows nothing. `__pyrefly.setCoaching(true)` brings them back.
+    if (onboardingLive()) {
+      rows.push({ id: 'briefing', label: 'Replay Briefing', panel: 'details' });
+      rows.push({
+        id: 'battle-help',
+        label: 'Battle Help',
+        panel: 'details',
+        value: () => (battleHelpOn() ? 'ON' : 'OFF'),
+      });
+    }
     rows.push({ id: 'options', label: 'Options', panel: 'options', entersPanel: true });
     rows.push({ id: 'details', label: 'Encounter Details', panel: 'details' });
     rows.push({ id: 'party', label: 'Party', panel: 'party', entersPanel: true });

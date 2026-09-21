@@ -148,7 +148,15 @@ export const FFX2_MARKS: readonly CoachMark[] = [
     id: 'ffx2-dressphere',
     game: 'ffx2',
     speaker: 'Rikku',
-    body: '“New dress, new moves! Swap any time — it costs her nothing.”',
+    // The cost is canon and it is steep: `research/ffx2-combat-core.md` §4.2,
+    // "the spherechange **consumes the whole turn**. The ATB gauge is spent and
+    // refills from empty" `[verified: 2 sources]`, and the destination must be
+    // "one link away". The first draft of this line said "swap any time — it
+    // costs her nothing", which is true only of MP and teaches a first-timer to
+    // throw away turns in the two hardest chapters (PR-0047). The build's own
+    // FFX-2 menu already says the true thing: `ui/ffx2/CommandMenu.ts` styles
+    // the Change row as an Overdrive "because §4.5 costs the whole turn".
+    body: '“New dress, new moves — but it eats her whole turn, bar back to empty! One step on the grid, so pick the gate that pays.”',
     holds: false,
     fadeMs: 5200,
   },

@@ -25,7 +25,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Briefing } from '../../src/ui/coach/Briefing.ts';
 import { BRIEFING_MS } from '../../src/ui/coach/coachCopy.ts';
-import { battleHelpOn, hasSeen, resetCoach, shouldShow } from '../../src/ui/coach/coachState.ts';
+import {
+  battleHelpOn,
+  hasSeen,
+  resetCoach,
+  setOnboardingLive,
+  shouldShow,
+} from '../../src/ui/coach/coachState.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { setRawInputSuspended } from '../../src/ui/ffx/rawInput.ts';
 
@@ -56,6 +62,10 @@ describe("Auron's briefing", () => {
     root = document.createElement('div');
     document.body.appendChild(root);
     resetCoach();
+    // This file is about the briefing's own behaviour, so it runs with the
+    // feature switched on. The dark launch itself is
+    // `tests/unit/ui-coach-dark-launch.test.ts`.
+    setOnboardingLive(true);
     storage = memoryStorage();
     // Constructing a store makes it the active one, which is how the module
     // under test reaches the save at all.
@@ -109,7 +119,7 @@ describe("Auron's briefing", () => {
   it('"never show this again" turns the first-use lines off as well', async () => {
     expect(battleHelpOn()).toBe(true);
     const done = new Briefing({ root, reduceMotion: true }).show();
-    press('ShiftLeft');
+    press('KeyD');
     await expect(done).resolves.toBe('never-again');
 
     expect(battleHelpOn(), 'the switch the pause row reads is off').toBe(false);
@@ -118,8 +128,88 @@ describe("Auron's briefing", () => {
     expect(shouldShow('ffx2-gauge')).toBe(false);
   });
 
+  /**
+   * PR-0049. The opt-out is a **persisted** preference and it was written by
+   * four different keys while the footer advertised one — Tab among them, which
+   * is the key a keyboard or switch player presses to reach the chip they
+   * actually want.
+   */
+  describe('the permanent opt-out answers to one named key and the chip', () => {
+    function chip(action: string): HTMLElement {
+      return el()!.querySelector<HTMLElement>(`[data-action="${action}"]`)!;
+    }
+
+    it('names the key the approved frame names, and binds that key', async () => {
+      const briefing = new Briefing({ root, reduceMotion: true });
+      const done = briefing.show();
+      const foot = chip('briefing:never');
+      expect(foot.querySelector('b')?.textContent, 'the footer prints the frame’s key').toBe('D');
+      press('KeyD');
+      await expect(done).resolves.toBe('never-again');
+      expect(battleHelpOn()).toBe(false);
+    });
+
+    it('Tab only moves focus between the two chips: it never opts out and never dismisses', () => {
+      const briefing = new Briefing({ root, reduceMotion: true });
+      void briefing.show();
+
+      press('Tab');
+      expect(document.activeElement, 'the first Tab lands on SKIP').toBe(chip('briefing:skip'));
+      expect(briefing.finished, 'and the briefing is still up').toBe(false);
+
+      press('Tab');
+      expect(document.activeElement, 'the second reaches NEVER SHOW THIS AGAIN').toBe(
+        chip('briefing:never'),
+      );
+      expect(briefing.finished).toBe(false);
+      expect(battleHelpOn(), 'reaching the control is not choosing it').toBe(true);
+      expect(hasSeen('briefing'), 'nor does it count the briefing as seen').toBe(false);
+
+      briefing.skip();
+    });
+
+    it('Enter on the focused chip activates that chip, the way a real button does', async () => {
+      const briefing = new Briefing({ root, reduceMotion: true });
+      const done = briefing.show();
+      press('Tab');
+      press('Tab');
+      press('Enter');
+      await expect(done).resolves.toBe('never-again');
+      expect(battleHelpOn()).toBe(false);
+    });
+
+    it('the keys the old build also bound no longer write the preference', async () => {
+      // Shift is half a chord and now does nothing at all; Q is an ordinary
+      // key and skips, like any other — what neither may do is opt out.
+      const first = new Briefing({ root, reduceMotion: true });
+      const firstDone = first.show();
+      press('ShiftLeft');
+      expect(first.finished, 'a bare modifier is not a decision').toBe(false);
+      press('ShiftRight');
+      expect(first.finished).toBe(false);
+      expect(battleHelpOn()).toBe(true);
+      first.skip();
+      await firstDone;
+
+      const second = new Briefing({ root, reduceMotion: true });
+      const secondDone = second.show();
+      press('KeyQ');
+      await expect(secondDone, 'Q skips, as any unnamed key does').resolves.toBe('skipped');
+      expect(battleHelpOn(), 'and leaves the teaching on').toBe(true);
+    });
+
+    it('the chip itself still writes it, for mouse and touch', async () => {
+      const briefing = new Briefing({ root, reduceMotion: true });
+      const done = briefing.show();
+      chip('briefing:never').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await expect(done).resolves.toBe('never-again');
+      expect(battleHelpOn()).toBe(false);
+    });
+  });
+
   it('a browser with no storage shows it once per session, not once per navigation', async () => {
     resetCoach();
+    setOnboardingLive(true);
     // A store with no storage behind it: every write is dropped, exactly as in
     // a private window with site data blocked.
     new SaveStore('k', null);

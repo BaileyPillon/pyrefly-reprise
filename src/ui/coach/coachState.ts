@@ -37,6 +37,55 @@ import { ALL_COACH_IDS, type CoachMarkId } from './coachCopy.ts';
  */
 const sessionSeen = new Set<string>();
 
+/**
+ * **Dark launch switch for the whole onboarding feature.**
+ *
+ * The approved briefing's fourth line says of FFX-2 *"the clock does not
+ * wait"*, and that only becomes true when Active ATB lands in the next
+ * candidate (PR-0046; the owner chose Active on 2026-09-21). Approved copy may
+ * not be edited to match a build, and a combat-core change does not belong in a
+ * repair cycle, so the honest answer for **this** candidate is to ship the
+ * feature switched off rather than ship a line that is not yet true
+ * (AGENTS.md hard rule 15: what cannot pass is taken out and ships later).
+ *
+ * While this is `false` there is no briefing, no first-use line, no REPLAY
+ * BRIEFING or BATTLE HELP row in pause and no BRIEFING chip on the title. The
+ * save-data migration is left alone: marking an existing save's owner a veteran
+ * is harmless while nothing is shown.
+ *
+ * The debug API still forces it on — `__pyrefly.setCoaching(true)` sets
+ * {@link override}, which wins — so the next review can exercise the whole
+ * feature on the shipped build.
+ *
+ * Game case: **both**. One switch over one shared subsystem (CHK-020).
+ */
+export const ONBOARDING_LIVE = false;
+
+/** The live switch itself. Only {@link setOnboardingLive} moves it. */
+let live: boolean = ONBOARDING_LIVE;
+
+/**
+ * Flip the dark-launch switch for a test or the next candidate's build.
+ *
+ * Not the player's switch and not the harness's: this is the feature's own
+ * on/off, and {@link resetCoach} puts it back to {@link ONBOARDING_LIVE}.
+ */
+export function setOnboardingLive(on: boolean): void {
+  live = on;
+}
+
+/**
+ * Should the onboarding **furniture** be drawn at all — the pause rows, the
+ * title chip, anything that advertises the feature?
+ *
+ * Separate from {@link coachingAllowed}, which answers "may a surface appear
+ * right now". A harness that forces coaching on wants the rows back too, so the
+ * override counts here as well.
+ */
+export function onboardingLive(): boolean {
+  return live || override === true;
+}
+
 /** Set by {@link setCoachingEnabled}; `null` means "nobody has overridden it". */
 let override: boolean | null = null;
 
@@ -66,6 +115,10 @@ export function setCoachingEnabled(on: boolean | null): void {
 /** Is any coaching allowed on this page at all? */
 export function coachingAllowed(): boolean {
   if (override !== null) return override;
+  // The dark launch. Nothing below this line is reached while the feature is
+  // switched off, which is what makes the switch a single point of failure
+  // instead of a guard per surface.
+  if (!live) return false;
   if (urlSaysOff()) return false;
   const save = activeSave();
   // No store yet (a HUD mounted in a unit test, a mock screen) falls back to
@@ -132,4 +185,5 @@ export function markAllSeen(): void {
 export function resetCoach(): void {
   sessionSeen.clear();
   override = null;
+  live = ONBOARDING_LIVE;
 }

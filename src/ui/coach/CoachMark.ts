@@ -50,6 +50,14 @@ export interface CoachMarkOptions {
 /** Attribute set on `<html>` while any line is up. See `coach.css`. */
 const MARK_FLAG = 'coachMark';
 
+/**
+ * The keys `ui/ffx/rawInput.ts` reads as **confirm**.
+ *
+ * Kept here rather than imported because this list is used for the opposite
+ * purpose: not to act on a press, but to make sure nobody else does.
+ */
+const CONFIRM_KEYS = new Set(['Enter', 'NumpadEnter', 'Space', 'KeyZ']);
+
 export class CoachMark {
   readonly el: HTMLElement;
   private readonly watcher: RawInputWatcher;
@@ -115,6 +123,34 @@ export class CoachMark {
   };
 
   /**
+   * **An overlay's dismissing press dies with the overlay** (the rule this
+   * build adopted in e30ea5e), for the one line that does not hold anything.
+   *
+   * FFX's line holds the menu until one confirm, so the menu is not open yet
+   * and the press is absorbed by construction. FFX-2's line never holds — the
+   * menu is opened in the same turn of the event loop, and both the line's own
+   * watcher and the command menu's read `keydown` off `window`. One Enter
+   * therefore cleared the line *and* opened the White Magic submenu the player
+   * never asked for (PR-0051).
+   *
+   * So the FFX-2 line takes the confirm key, and only the confirm key, in the
+   * capture phase: the press that takes the line down reaches nothing else.
+   * Every other key — arrows, cancel, the pause keys — is untouched, so the
+   * line still blocks no input and still holds no fight.
+   */
+  private readonly onConfirmCapture = (e: KeyboardEvent): void => {
+    if (this.done) return;
+    // A line whose HUD was torn down around it (a screen change, a test that
+    // dropped the root) is not on screen, so it has no press to claim.
+    if (!this.el.isConnected) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.repeat || !CONFIRM_KEYS.has(e.code)) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    this.finish('confirmed');
+  };
+
+  /**
    * Put the line up.
    *
    * **FFX** (`mark.holds`): resolves when the player confirms, cancels, or
@@ -131,6 +167,10 @@ export class CoachMark {
     }
     // A frame's grace so the opacity transition has a "from" to run out of.
     this.setTimer(() => this.el.classList.add('coach-mark--in'), 16);
+    // Before the watcher, so that on a host where the event is dispatched
+    // straight at `window` (a jsdom test) registration order gives the same
+    // answer the capture phase gives in a browser.
+    if (!this.opts.mark.holds) window.addEventListener('keydown', this.onConfirmCapture, true);
     this.watcher.attach();
 
     if (!this.opts.mark.holds) {
@@ -158,6 +198,7 @@ export class CoachMark {
     if (this.timer) this.clearTimer(this.timer);
     this.timer = 0;
     this.watcher.detach();
+    window.removeEventListener('keydown', this.onConfirmCapture, true);
     this.el.removeEventListener('click', this.onClick);
     this.el.classList.remove('coach-mark--in');
     this.el.remove();

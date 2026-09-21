@@ -5,6 +5,7 @@ import { audio } from '../../audio/index.ts';
 import { installInkGoldStyles, playWipe } from '../../ui/inkgold/index.ts';
 import type { Briefing } from '../../ui/coach/Briefing.ts';
 import { makeBriefing } from './raiseBriefing.ts';
+import { onboardingLive } from '../../ui/coach/coachState.ts';
 
 /**
  * Title card in the approved "Ink & Gold" presentation
@@ -35,6 +36,8 @@ export class TitleScreen extends Screen {
    * screen's `H` is written down under. Mouse and touch use the chip.
    */
   private readonly onKey = (e: KeyboardEvent): void => {
+    // Dark launch: no chip, no key (`ui/coach/coachState.ts` ONBOARDING_LIVE).
+    if (!onboardingLive()) return;
     if (e.code !== 'KeyB' || e.ctrlKey || e.metaKey || e.altKey) return;
     if (this.advancing) return;
     void this.replayBriefing();
@@ -85,6 +88,9 @@ export class TitleScreen extends Screen {
 
   private markup(): string {
     const painting = artUrl('art/backdrops/title.png');
+    const briefingChip = onboardingLive()
+      ? `&nbsp;&middot;&nbsp; <span data-action="title:briefing" role="button" tabindex="0"><b>B</b> BRIEFING</span>`
+      : '';
     return `
       <div class="ig-title">
         <img alt="" src="${painting}"
@@ -114,7 +120,7 @@ export class TitleScreen extends Screen {
         <div class="ig-title__caption">FIVE ENCOUNTERS &middot; FINAL FANTASY X AND X-2</div>
         <div class="ig-hint-chip ig-title__hint">
           <b>ARROWS / WASD</b> MOVE &nbsp;&middot;&nbsp; <b>ENTER</b> CONFIRM &nbsp;&middot;&nbsp; <b>ESC</b> CANCEL
-          &nbsp;&middot;&nbsp; <span data-action="title:briefing" role="button" tabindex="0"><b>B</b> BRIEFING</span>
+          ${briefingChip}
         </div>
       </div>
     `;

@@ -321,3 +321,83 @@ badge departure above.
 5. `docs/CONTRACTS.md` was **not** touched — `src/app/SaveData.ts` is not a listed
    contract file and both additions are optional-by-migration — so there is no
    `CONTRACT-CHANGES.md` entry. Worth a second opinion at the deep review.
+
+## Round 05 repair (2026-09-21)
+
+Repair cycle 2 of 2 for the Build A.2 candidate. Four issues from
+`critic/rounds/round-05.json`, plus the dark launch the repair cap asks for. Every
+fix was reproduced first with a test that fails on the pre-fix source (the four
+tests were run against a temporarily reverted tree and all four failed), then the
+behaviour was fixed at its root.
+
+- **PR-0049 (major, both).** The permanent opt-out fired on ShiftLeft, ShiftRight,
+  Tab and Q while the footer advertised Shift, and the approved C1 frame names **D**.
+  Tab was the one that mattered: both footer chips are `role="button" tabindex="0"`,
+  so a keyboard or switch player reaching for a chip wrote a persisted preference on
+  the first press. Now `Briefing.onKey` is ordered — a bare modifier does nothing,
+  **Tab moves focus between the two chips and leaves the briefing up**, Enter/Space
+  activates the focused chip, **D** opts out, anything else skips. The footer prints
+  `D`. The pad (Triangle) and the chips themselves are unchanged. The no-`App`
+  fallback listener is now **capture + `stopImmediatePropagation`**, standing in for
+  `Input.onKeyDown`: without it the briefing's own pad watcher (which maps Shift and Q
+  to Triangle) reached `neverAgain()` behind `onKey`'s back.
+  Real keys at 1600x900, GPU browser: `before {up:true,focus:null,battleHelp:true}` →
+  Tab `{up:true,focus:"briefing:skip"}` → Tab `{up:true,focus:"briefing:never"}` →
+  Q `{up:false,battleHelp:true}` → (fresh) D `{up:false,battleHelp:false}`.
+  Capture: `docs/screenshots/onboarding/round05-c1-tab-focus.png`.
+- **PR-0048 (major, both).** At 390x844 the painting filled the frame and every line
+  was printed over it. The approved left/right split cannot survive a 390 px stage, so
+  below 700 px the composition is **stacked**: the painting is confined to the top 34
+  percent, `.coach-brief__grade` becomes an opaque ink slab from the fold down, and the
+  text, timer and footer sit on that slab with the two controls on separate lines.
+  Nothing above 700 px changed, so the desktop frame is untouched.
+  Measured on the running game (background-only screenshot, per-pixel worst case
+  against each line's computed colour): 390x844 — no glyph intersects the figure, the
+  four lines and both footer controls at **17.44:1**, the AURON kicker at 10.6:1;
+  1600x900 — 4.85:1 to 14.46:1, unchanged. Captures:
+  `docs/screenshots/onboarding/round05-c1-390x844.png`, `round05-c1-1600x900.png`.
+- **PR-0051 (major, FFX-2 only).** The FFX-2 line never holds, so the command menu is
+  already open underneath it and both read `keydown` off `window`: one Enter cleared
+  the line **and** opened the White Magic submenu. The line now takes the confirm key,
+  and only the confirm key, in the **capture** phase (`CoachMark.onConfirmCapture`),
+  so the press that dismisses it reaches nothing else. Every other key — arrows,
+  cancel, pause — is untouched, so the line still blocks no input and holds no fight;
+  a line whose HUD was torn down around it (`el.isConnected === false`) claims nothing.
+  FFX is unchanged: its line holds the menu, so the press is absorbed by construction.
+  Chapter 4, real keys, GPU browser: with the line up `{line:true, rows:["White Magic",
+  "Change","Item"], submenu:false}`; one Enter later `{line:false, rows:["White Magic",
+  "Change","Item"], submenu:false}`. Capture: `round05-c3-confirm-claim.png`.
+- **PR-0047 (major, FFX-2 only).** Rikku's dressphere line taught the opposite of the
+  project's own source. `research/ffx2-combat-core.md` §4.2 `[verified: 2 sources]`:
+  the spherechange *"consumes the whole turn. The ATB gauge is spent and refills from
+  empty"*, and the destination must be *"one link away"*; only the MP cost is nil. The
+  line was written by the builder and never named by Bailey, so it was corrected, not
+  kept: *"New dress, new moves — but it eats her whole turn, bar back to empty! One
+  step on the grid, so pick the gate that pays."* Same voice, same non-blocking
+  behaviour. Pinned against the research by `tests/unit/ui-coach-copy.test.ts`, and
+  recorded as a second knowing departure on tile C3 in `docs/target/targets.json`, the
+  way the badge departure was recorded. **Not yet captured on screen after a real
+  CHANGE** — no real-input route performed a spherechange inside this budget; the
+  sibling FFX-2 line was captured rendering on the same component.
+- **Dark launch (both).** The approved fourth line says of FFX-2 *"the clock does not
+  wait"*, which only becomes true when Active ATB lands (PR-0046; Bailey chose Active
+  on 2026-09-21, `docs/handoff/NOW.md`). That is a combat-core change with its own
+  paper preflight and deep review, and approved copy may not be edited to fit a build,
+  so under the repair cap the whole feature is **taken out of this candidate rather
+  than shipped saying something untrue**: `ONBOARDING_LIVE = false` in
+  `src/ui/coach/coachState.ts`. While it is false there is no briefing, no first-use
+  line, no REPLAY BRIEFING or BATTLE HELP row in pause and no BRIEFING chip or `B` key
+  on the title. `__pyrefly.setCoaching(true)` forces the whole feature back on, which
+  is how every capture above was taken and how the next review can exercise it. The
+  save-data migration is untouched — marking an existing save's owner a veteran is
+  harmless while nothing is shown. `tests/unit/ui-coach-dark-launch.test.ts` asserts
+  both directions against a really-mounted pause menu.
+
+Verified: `npx tsc --noEmit` clean, `node tools/orphans.mjs` unchanged, the six coach
+suites green, one full `npx vitest run`. Browser work was `PYREFLY_BROWSER=gpu`
+(no fallback needed). Scratch driver: `.onboarding-c-round05-tmp.mjs`.
+
+**Still open after this cycle:** when the briefing is switched back on with Active ATB,
+its approved size and the italic setting of `.coach-brief__line` want one look against
+`c1-briefing.png` — this round's reviewer read the desktop frame as matching, so no
+typography was changed on a guess.

@@ -75,6 +75,37 @@ describe('onboarding copy deck', () => {
     expect(whole).toContain('the clock does not wait');
   });
 
+  /**
+   * PR-0047. FFX-2 only: dresspheres exist in no other game here.
+   *
+   * `research/ffx2-combat-core.md` §4.2, `[verified: 2 sources]`: the
+   * spherechange "**consumes the whole turn**. The ATB gauge is spent and
+   * refills from empty", and the destination must be "one link away". The line
+   * shipped in the candidate said "Swap any time — it costs her nothing",
+   * which is true only of MP and teaches a first-timer to throw turns away in
+   * the two hardest chapters. This pins the teaching to the research.
+   */
+  it('Rikku’s dressphere line teaches the sourced cost: a whole turn, one step', () => {
+    const line = markById('ffx2-dressphere');
+    expect(line?.game, 'the lesson exists only where dresspheres do').toBe('ffx2');
+    const body = (line?.body ?? '').toLowerCase();
+
+    // What the research says it costs.
+    expect(body, 'the turn is the price and the line has to say so').toMatch(/turn/);
+    expect(body, 'the bar is spent and refills from empty').toMatch(/empty|zero/);
+    // And the restriction the research puts on where she may go.
+    expect(body, 'one link away, not anywhere').toMatch(/one step|one link/);
+
+    // What it may never say again.
+    expect(body, 'the change is not free').not.toMatch(/costs (her|you|them) nothing|for free/);
+    expect(body, 'and it is not unrestricted').not.toMatch(/any\s?time|whenever/);
+
+    // Still Rikku, and still a line and not a rules table.
+    expect(line?.speaker).toBe('Rikku');
+    expect(line?.holds, 'no FFX-2 line holds the fight').toBe(false);
+    expect(line?.body.length ?? 0, 'one line, not a paragraph').toBeLessThan(160);
+  });
+
   it('no player-facing string carries developer or wiki vocabulary (CHK-007, REQUIRED 14)', () => {
     for (const text of everyPlayerString()) {
       expect(text, `section mark in: ${text}`).not.toMatch(/§/);

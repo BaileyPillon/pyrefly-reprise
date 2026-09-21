@@ -222,6 +222,45 @@ describe('the coach layer', () => {
     expect(line?.textContent).toContain('Keep playing');
   });
 
+  /**
+   * PR-0051. The FFX-2 line does not hold the menu, so the menu is already open
+   * underneath it and reads `keydown` off `window` exactly as this stand-in
+   * does. One Enter used to clear the line **and** open a submenu the player
+   * never asked for. The rule the build adopted in e30ea5e is that an overlay's
+   * dismissing press dies with the overlay — and only that press.
+   *
+   * The events are dispatched on `document.body`, not on `window`, so the
+   * capture phase decides the order here the same way it does in a browser.
+   */
+  it('FFX-2: the confirm that dismisses the line reaches nothing else, and no other key is touched', async () => {
+    const heard: string[] = [];
+    const menu = (e: KeyboardEvent): void => void heard.push(e.code);
+    window.addEventListener('keydown', menu);
+    try {
+      const spy = new SpyHud();
+      const hud = withCoach('ffx2', spy, { reduceMotion: true });
+      hud.mount(root);
+      await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
+      expect(markEl(root), 'the line is up over an open menu').not.toBeNull();
+
+      // Everything that is not the dismissing press still reaches the menu:
+      // the line blocks no input and holds no fight.
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown', bubbles: true }));
+      expect(heard, 'the cursor still moves under the line').toEqual(['ArrowDown']);
+      expect(markEl(root), 'and a cursor key does not dismiss it').not.toBeNull();
+
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(markEl(root), 'the confirm takes the line down').toBeNull();
+      expect(heard, 'and the menu behind it never hears that press').toEqual(['ArrowDown']);
+
+      // The very next confirm is the player's again, or the menu is dead.
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(heard, 'the press after the line is live input').toEqual(['ArrowDown', 'Enter']);
+    } finally {
+      window.removeEventListener('keydown', menu);
+    }
+  });
+
   it('FFX-2 answers the presenter while a real engine is being ticked around it', async () => {
     // A driver shaped like the presenter's own loop: it ticks a **real**
     // Chapter 4 engine once per turn of the event loop for as long as the HUD

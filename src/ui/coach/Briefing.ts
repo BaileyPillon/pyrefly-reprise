@@ -78,6 +78,36 @@ export interface BriefingOptions {
 /** How often the rule under the text is redrawn. */
 const TICK_MS = 200;
 
+/**
+ * The one key that turns the teaching off for good, and the label beside it.
+ *
+ * **Exactly one**, and the one the approved C1 frame prints: "D NEVER SHOW
+ * THIS AGAIN". The first build fired it on ShiftLeft, ShiftRight, Tab *and* Q
+ * while advertising only Shift (PR-0049). Tab was the one that mattered: the
+ * two chips are `role="button" tabindex="0"`, so a keyboard or switch player
+ * reaching for the chip they wanted wrote a permanent preference on the first
+ * press, with no confirmation and no trace. A persisted choice is made by the
+ * key the screen names or by the chip, and by nothing else.
+ */
+const NEVER_KEY = 'KeyD';
+const NEVER_KEY_LABEL = 'D';
+
+/** Keys that activate whichever chip has focus, as a native button would. */
+const ACTIVATE_KEYS = new Set(['Enter', 'NumpadEnter', 'Space']);
+
+/** Keys that are nothing but a modifier: they neither skip nor opt out. */
+const MODIFIER_KEYS = new Set([
+  'ShiftLeft',
+  'ShiftRight',
+  'ControlLeft',
+  'ControlRight',
+  'AltLeft',
+  'AltRight',
+  'MetaLeft',
+  'MetaRight',
+  'CapsLock',
+]);
+
 export class Briefing {
   readonly el: HTMLElement;
   private readonly watcher: RawInputWatcher;
@@ -142,7 +172,7 @@ export class Briefing {
       <div class="coach-brief__timer"><i data-role="coach-brief-fill"></i></div>
       <div class="coach-brief__foot">
         <span data-action="briefing:skip" role="button" tabindex="0"><b>Enter / Esc</b> Skip &mdash; ${seconds} seconds, once</span>
-        <span data-action="briefing:never" role="button" tabindex="0"><b>Shift</b> Never show this again</span>
+        <span data-action="briefing:never" role="button" tabindex="0"><b>${NEVER_KEY_LABEL}</b> Never show this again</span>
       </div>
     `;
   }
@@ -160,15 +190,62 @@ export class Briefing {
     else this.skip();
   };
 
+  /**
+   * Keyboard, from whichever route reached us — the exclusive claim in a real
+   * `App`, or our own capture listener in a harness that has no `Input`.
+   *
+   * The order is the whole point (PR-0049):
+   *
+   * 1. a **modifier alone** does nothing at all — it is half a chord, not a
+   *    decision, and the old build read Shift as "never again";
+   * 2. **Tab** moves focus between the two chips and leaves the briefing up,
+   *    which is how a keyboard or switch player reaches the control they want;
+   * 3. **Enter / Space** activates the focused chip, as a real button would;
+   * 4. **{@link NEVER_KEY}**, the key the approved frame prints, opts out;
+   * 5. anything else skips — the briefing is skippable from the first frame.
+   */
   private readonly onKey = (e: KeyboardEvent): void => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.code === 'Tab' || e.code === 'KeyQ') {
+    if (MODIFIER_KEYS.has(e.code)) return;
+    if (e.code === 'Tab') {
+      // `app/Input.ts` already calls preventDefault() on Tab, so native focus
+      // movement is not available to us even when we would want it.
+      e.preventDefault();
+      this.moveFocus(e.shiftKey ? -1 : 1);
+      return;
+    }
+    if (ACTIVATE_KEYS.has(e.code) && this.focusedAction() === 'briefing:never') {
+      e.preventDefault();
+      this.neverAgain();
+      return;
+    }
+    if (e.code === NEVER_KEY) {
       e.preventDefault();
       this.neverAgain();
       return;
     }
     this.skip();
   };
+
+  /** The two footer chips, in reading order. */
+  private chips(): HTMLElement[] {
+    return Array.from(this.el.querySelectorAll<HTMLElement>('[data-action]'));
+  }
+
+  /** Which chip, if any, the player has focused. */
+  private focusedAction(): string | undefined {
+    const active = document.activeElement as HTMLElement | null;
+    if (!active || !this.el.contains(active)) return undefined;
+    return active.closest<HTMLElement>('[data-action]')?.dataset['action'];
+  }
+
+  private moveFocus(step: 1 | -1): void {
+    const chips = this.chips();
+    if (chips.length === 0) return;
+    const at = chips.findIndex((c) => c === document.activeElement);
+    const next = at < 0 ? (step > 0 ? 0 : chips.length - 1) : (at + step + chips.length) % chips.length;
+    chips[next]?.focus();
+  }
 
   // ------------------------------------------------------------------ life
 
@@ -179,8 +256,17 @@ export class Briefing {
 
     if (this.opts.claimKeyboard) this.releaseKeyboard = this.opts.claimKeyboard(this.onKey);
     else {
-      this.onWindowKey = this.onKey;
-      window.addEventListener('keydown', this.onWindowKey);
+      // No `App` to claim through, so stand in for it: capture, and stop the
+      // event dead. Without that the pad watcher below — which maps Shift and
+      // Q to Triangle — would reach `neverAgain()` behind {@link onKey}'s back
+      // and PR-0049 would still be true off the claim path. A real `App` stops
+      // the event in `Input.onKeyDown` for the same reason.
+      this.onWindowKey = (e: KeyboardEvent): void => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        e.stopImmediatePropagation();
+        this.onKey(e);
+      };
+      window.addEventListener('keydown', this.onWindowKey, true);
     }
     this.watcher.attach();
 
@@ -233,7 +319,7 @@ export class Briefing {
     this.watcher.detach();
     this.releaseKeyboard?.();
     this.releaseKeyboard = null;
-    if (this.onWindowKey) window.removeEventListener('keydown', this.onWindowKey);
+    if (this.onWindowKey) window.removeEventListener('keydown', this.onWindowKey, true);
     this.onWindowKey = null;
     this.el.removeEventListener('click', this.onClick);
     this.el.classList.remove('coach-brief--in');
