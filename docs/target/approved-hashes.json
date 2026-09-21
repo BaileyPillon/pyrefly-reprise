@@ -1,0 +1,471 @@
+{
+ "recorded": "2026-09-19T16:55:31.658Z",
+ "boardSeenByBailey": "2026-09-18T23:36:07-04:00",
+ "note": "sha256 of the shipped files behind every approved tile, taken when Bailey approved the board. changedSinceSeen=true means the file was rewritten after the board Bailey looked at was generated, so it may not be the picture they approved.",
+ "sets": {
+  "scene:gagazet": {
+   "public/art/backdrops/gagazet.png": {
+    "sha256": "eccdee786bc749d9b97dc675f319d6c641f5c4bfd0cdec98667fe70237e5c822",
+    "mtime": "2026-09-15T18:00:12.135Z"
+   }
+  },
+  "scene:zanarkand-dome": {
+   "public/art/backdrops/zanarkand-dome.png": {
+    "sha256": "f48c5b05601a714f018b546bb71c7383d6c3cff556fef50e194f75ed31d274b0",
+    "mtime": "2026-09-16T03:41:03.092Z"
+   }
+  },
+  "scene:dreams-end": {
+   "public/art/backdrops/dreams-end.png": {
+    "sha256": "9cf70f7e5a5c3eed75709be93614e5597609a5f9501e2f42b36a3b43303e2052",
+    "mtime": "2026-09-15T22:51:19.685Z"
+   }
+  },
+  "scene:bevelle-underground": {
+   "public/art/backdrops/bevelle-underground.png": {
+    "sha256": "7c5a3e60b3755e6790db615297633e6cf2b9d144bfb978c68738e31ad6baa924",
+    "mtime": "2026-09-15T22:52:54.685Z"
+   }
+  },
+  "scene:farplane": {
+   "public/art/backdrops/farplane.png": {
+    "sha256": "ce6525e3c69dd098c6535bb831870965ca6f3156400bca483aa267cee416bbec",
+    "mtime": "2026-09-15T18:00:12.258Z"
+   }
+  },
+  "cast:tidus": {
+   "public/art/characters/tidus/attack.png": {
+    "sha256": "232bb9f262cd338116bdf7fc8fb057ae49da447cb19981363b4bafc3f613607b",
+    "mtime": "2026-09-18T04:01:30.867Z"
+   },
+   "public/art/characters/tidus/cast.png": {
+    "sha256": "30a7089d0794a3259cb17c235cea9f2c8bd41ccfea768f469e4e76eafe238feb",
+    "mtime": "2026-09-18T09:14:35.244Z"
+   },
+   "public/art/characters/tidus/hurt.png": {
+    "sha256": "4e7389001d452710a3021a82b0ce39013f4ad76eb75c3dd732ac04a991013668",
+    "mtime": "2026-09-18T09:14:35.279Z"
+   },
+   "public/art/characters/tidus/idle.png": {
+    "sha256": "8a630b88b416a07dfa0e63a6a96ac6fd993c02c10d8c86d9d8c3f568ed110750",
+    "mtime": "2026-09-18T03:54:30.300Z"
+   },
+   "public/art/characters/tidus/item.png": {
+    "sha256": "57841a4e8e77b93341e027c96ba135ba1b56e6bb73930f1ed516ec8825ef8363",
+    "mtime": "2026-09-18T09:14:35.262Z"
+   },
+   "public/art/characters/tidus/ko.png": {
+    "sha256": "a9addeb356d27080a24e68009861f2c6cd0539836848b47b68286e05bac74c28",
+    "mtime": "2026-09-18T19:11:31.481Z"
+   },
+   "public/art/characters/tidus/victory.png": {
+    "sha256": "212be0b9222b0cd6c370499c58022ec2c89cb68834a632ccd7d888b31b6dca07",
+    "mtime": "2026-09-18T09:14:35.291Z"
+   }
+  },
+  "cast:yuna": {
+   "public/art/characters/yuna/attack.png": {
+    "sha256": "74f3467202682f2c90847298658b7066b70af7eb28fdf9a96801e7c777fa88b2",
+    "mtime": "2026-09-18T03:57:42.869Z"
+   },
+   "public/art/characters/yuna/cast.png": {
+    "sha256": "6088f249b0d76ed456506258ba0ae9bfee54dc213a3bd817c4fae4bf0a9d94d3",
+    "mtime": "2026-09-18T04:00:29.679Z"
+   },
+   "public/art/characters/yuna/hurt.png": {
+    "sha256": "101c79151448e67975860cde240eeffd58b151eb87c672b4a30d0d8232b036b2",
+    "mtime": "2026-09-18T19:27:36.419Z"
+   },
+   "public/art/characters/yuna/idle.png": {
+    "sha256": "43d81943db4cf4145c1f61850e07db634afb91681057ef3a33800d3cb3576d61",
+    "mtime": "2026-09-18T03:55:29.759Z"
+   },
+   "public/art/characters/yuna/item.png": {
+    "sha256": "df46dc0e3ceda08dc962ad9b9e4bf68e6147a03aac8a2e4dec915945a7a0ea35",
+    "mtime": "2026-09-18T09:14:35.314Z"
+   },
+   "public/art/characters/yuna/ko.png": {
+    "sha256": "6c5b43f6d3d9406e3a4d1cd282bf6a3950abcfc6d6ade076ca2daefd3f894def",
+    "mtime": "2026-09-18T09:14:56.717Z"
+   },
+   "public/art/characters/yuna/summon.png": {
+    "sha256": "e6da79539089c536022bb4c0a7625549fed034dbb7cb860cbb5d114787ec2f4e",
+    "mtime": "2026-09-18T09:14:35.348Z"
+   },
+   "public/art/characters/yuna/victory.png": {
+    "sha256": "962c0daad0d578a7101fcdef3b5849b7f19238f519b38669c7245e3e3bf0d61b",
+    "mtime": "2026-09-18T09:14:35.338Z"
+   }
+  },
+  "cast:auron": {
+   "public/art/characters/auron/attack.png": {
+    "sha256": "3bb3ef518317f275a851f7559c83da58c24d5be8c4acdfd1a213bba89f9186c5",
+    "mtime": "2026-09-18T09:14:35.426Z"
+   },
+   "public/art/characters/auron/cast.png": {
+    "sha256": "11a31f7d23efafc397d967f48a5198a77268bd52b2e3e327ac37ae8218740d0a",
+    "mtime": "2026-09-18T18:52:17.005Z"
+   },
+   "public/art/characters/auron/hurt.png": {
+    "sha256": "46753884a92a8c4fe7a1a08de5308f89dab2aafc112b8d23de2a8a196ef7dadc",
+    "mtime": "2026-09-18T09:14:35.457Z"
+   },
+   "public/art/characters/auron/idle.png": {
+    "sha256": "4ddf2f4e0297f0e40b94cf0a790e09230226c435db7fa56598e5352387dc4f1f",
+    "mtime": "2026-09-18T04:04:49.600Z"
+   },
+   "public/art/characters/auron/item.png": {
+    "sha256": "33d9683be0574b526ea6e86eb2d4cf83c6e62fdfb96a040d582e991c866a4f93",
+    "mtime": "2026-09-18T09:14:35.447Z"
+   },
+   "public/art/characters/auron/ko.png": {
+    "sha256": "b243426aee0c67940a2b861ad8f59dfc99071d0af8f57d68ff32bf3cd47c4226",
+    "mtime": "2026-09-18T09:14:35.482Z"
+   },
+   "public/art/characters/auron/victory.png": {
+    "sha256": "4ac7cf854ee4576f0b6487e14fb77aa81bca6a83cc9cec49c2c41e507430ae8f",
+    "mtime": "2026-09-18T09:14:35.467Z"
+   }
+  },
+  "cast:seymour-flux-body": {
+   "public/art/characters/seymour-flux-body/attack.png": {
+    "sha256": "56edecc42c562fc8621cffd80dc8d00949b87f5960927d124bfc9000629584df",
+    "mtime": "2026-09-18T13:56:51.797Z"
+   },
+   "public/art/characters/seymour-flux-body/cast.png": {
+    "sha256": "72df28b0146a69f917e7332472fad641edb1c154bcad4a57e03d1131fd41975e",
+    "mtime": "2026-09-18T12:16:12.400Z"
+   },
+   "public/art/characters/seymour-flux-body/hurt.png": {
+    "sha256": "3903699778b8906378d2c15f7ae2ba54215d1c05f57f87b8d2aa7c1b06d11672",
+    "mtime": "2026-09-18T13:56:51.943Z"
+   },
+   "public/art/characters/seymour-flux-body/idle.png": {
+    "sha256": "b004f85c879f7260ef08086e723ed8f1e330441ddbf6959e7d4a08358f611088",
+    "mtime": "2026-09-19T01:22:47.315Z"
+   },
+   "public/art/characters/seymour-flux-body/ko.png": {
+    "sha256": "c030313e2d5c7b2403c15a907326bdb0b97461196e1df5af7d9b7485525fe397",
+    "mtime": "2026-09-18T13:56:52.058Z"
+   }
+  },
+  "cast:yunalesca-1": {
+   "public/art/characters/yunalesca-1/attack.png": {
+    "sha256": "4f3a7ec216b1f2a89e427aacb675610811a0eefa3e0edfd853678cfe1a602437",
+    "mtime": "2026-09-19T00:13:40.101Z"
+   },
+   "public/art/characters/yunalesca-1/cast.png": {
+    "sha256": "7ec22faf8a70e3af21c05fd90e362fc6cd8118a4c7fc2ed97833c366e6e15292",
+    "mtime": "2026-09-19T00:13:42.433Z"
+   },
+   "public/art/characters/yunalesca-1/hurt.png": {
+    "sha256": "9de476075edbe36f03e14c0aec2d9594171544493e007ace0596d555719689c7",
+    "mtime": "2026-09-19T00:13:44.888Z"
+   },
+   "public/art/characters/yunalesca-1/idle.png": {
+    "sha256": "4c91abb93387ccaeba0c5e549fd79332e7d2a5bcae5cb348bf2413077f47b94f",
+    "mtime": "2026-09-19T00:13:37.609Z"
+   },
+   "public/art/characters/yunalesca-1/ko.png": {
+    "sha256": "c40380f99f0235f54f3a420dc2a7243d84c85c9891257bffe1aeb60af13a4679",
+    "mtime": "2026-09-18T12:16:36.966Z"
+   }
+  },
+  "cast:braskas-final-aeon-1": {
+   "public/art/characters/braskas-final-aeon-1/attack.png": {
+    "sha256": "72afb128edb43ce39c82135f0df0396799aae4ac6159a1c5d07e6e5dd5a39cb9",
+    "mtime": "2026-09-18T12:19:21.929Z"
+   },
+   "public/art/characters/braskas-final-aeon-1/cast.png": {
+    "sha256": "4461a4893dd5eab19081863d2f60c07c4c884bf79683f6592aeb9ea37e170d54",
+    "mtime": "2026-09-18T12:19:22.026Z"
+   },
+   "public/art/characters/braskas-final-aeon-1/hurt.png": {
+    "sha256": "78dca3eff8b6656ef1930000d2cae71b6cf49b582e0ee6bc2f956a999e5c0b0d",
+    "mtime": "2026-09-19T00:46:20.729Z"
+   },
+   "public/art/characters/braskas-final-aeon-1/idle.png": {
+    "sha256": "eb2f7d7f274ba5f8de4bacdb9102e696f00d0ec6123d1756911c68196183f8ee",
+    "mtime": "2026-09-19T00:27:38.315Z"
+   },
+   "public/art/characters/braskas-final-aeon-1/ko.png": {
+    "sha256": "5157b5eb69255d05067b3bdfcacb7d87d33ede6074c8c819245a021d7c0d3f77",
+    "mtime": "2026-09-19T00:46:21.014Z"
+   }
+  },
+  "cast:shiva": {
+   "public/art/characters/shiva/attack.png": {
+    "sha256": "ee6a6b53061621b2740bea78bbb65073337184c8ef05c109ab8ee081f86c2541",
+    "mtime": "2026-09-19T01:00:10.263Z"
+   },
+   "public/art/characters/shiva/idle.png": {
+    "sha256": "beb7ffbaff3c2291720b8299266b1c40b4fb29f4f31f237dc8d9ecd3344bec52",
+    "mtime": "2026-09-18T12:36:05.407Z"
+   },
+   "public/art/characters/shiva/overdrive.png": {
+    "sha256": "de08ba712f473cd1f030a75bba629fcc2001278cd37e1ce0191120096a9f3a19",
+    "mtime": "2026-09-18T12:36:05.850Z"
+   }
+  },
+  "cast:yuna-gunner": {
+   "public/art/characters/yuna-gunner/attack.png": {
+    "sha256": "29aae5f48c8284c1a1aa7d33037e9048fa35a97a37476c4bc456ef892c57c897",
+    "mtime": "2026-09-15T23:30:07.979Z"
+   },
+   "public/art/characters/yuna-gunner/cast.png": {
+    "sha256": "566d9af83440f6cdf6b5c315a775e940c228bab2e396a2c3f28622c2d9d953ab",
+    "mtime": "2026-09-15T23:36:54.411Z"
+   },
+   "public/art/characters/yuna-gunner/idle.png": {
+    "sha256": "56918c5b104b005b943b0668b5fc29b908a341fc7a9cbf877c20f1e6b2de4a90",
+    "mtime": "2026-09-15T22:53:02.303Z"
+   }
+  },
+  "cast:shuyin": {
+   "public/art/characters/shuyin/idle.png": {
+    "sha256": "5425e3aeea63e0390215b2a7a066e2511e2e8be8dbd0a558399b4acae5ff0c11",
+    "mtime": "2026-09-18T17:13:07.465Z"
+   }
+  },
+  "portraits:ffx-party": {
+   "public/art/portraits/tidus.png": {
+    "sha256": "210337f4c5696ccee3e62b47885989a9edda20a6878d1356958ad8b66374dc9c",
+    "mtime": "2026-09-18T09:22:05.981Z"
+   },
+   "public/art/portraits/yuna.png": {
+    "sha256": "f580af0fd93748551b57d90f90a89396b8804190b77b909301849de5a2f2f90e",
+    "mtime": "2026-09-18T09:22:05.990Z"
+   },
+   "public/art/portraits/auron.png": {
+    "sha256": "2c9e975b6e2da872b2d2db5fd3aa5c7ebd409eda0cb56e479b6b1a0a49f98003",
+    "mtime": "2026-09-18T22:26:02.002Z"
+   },
+   "public/art/portraits/kimahri.png": {
+    "sha256": "63455b0789bc78e86003680322f43a04424525f1d1116086fa4b53c879dcd830",
+    "mtime": "2026-09-18T10:51:41.531Z"
+   },
+   "public/art/portraits/wakka.png": {
+    "sha256": "9cb7d22889e287a1029d4449ca2ec410ff9b8221d4c4ad281760306ecf71a80d",
+    "mtime": "2026-09-18T09:22:06.005Z"
+   },
+   "public/art/portraits/lulu.png": {
+    "sha256": "d040e0ea7c18a360bbcdf02106ccb1168ce6c6c5f369db429ee27b74d40b5495",
+    "mtime": "2026-09-18T19:32:24.693Z"
+   },
+   "public/art/portraits/rikku.png": {
+    "sha256": "3ec37d8b7f43fc05d2a18de902a8411c0c8a8aae4b285656242e81da22af078d",
+    "mtime": "2026-09-18T09:29:15.587Z"
+   }
+  },
+  "pause:plates": {
+   "public/art/pause/auron.2x.webp": {
+    "sha256": "ede35a3e47f5bfdfd548fff6afed6cf32df934016499e995b6d53bea814e63bb",
+    "mtime": "2026-09-18T23:08:39.810Z"
+   },
+   "public/art/pause/auron.png": {
+    "sha256": "af6cb87b8748ba1577bcaba1b5337bd6d18666c773435ea043928002f1c19701",
+    "mtime": "2026-09-18T23:08:39.823Z"
+   },
+   "public/art/pause/ch1-seymour-flux.2x.webp": {
+    "sha256": "250508c7748e718c4998c3a64a32272b40c29fcffedca27cde4211c596906159",
+    "mtime": "2026-09-18T23:09:59.562Z"
+   },
+   "public/art/pause/ch1-seymour-flux.png": {
+    "sha256": "bb63777b22f25b85030eb8a0874da17e0f2115f9206fc55e7204ac3828ec0bd6",
+    "mtime": "2026-09-18T23:09:59.569Z"
+   },
+   "public/art/pause/ch2-yunalesca.2x.webp": {
+    "sha256": "5a4cf389d3aac2b947a16d569af64cdc5c823cf8502b8e2be1003cb12186ef28",
+    "mtime": "2026-09-18T23:10:07.586Z"
+   },
+   "public/art/pause/ch2-yunalesca.png": {
+    "sha256": "624dfae7c70716754bb3751dbf923f9011ab62deb47efabbce935ffb42a770bf",
+    "mtime": "2026-09-18T23:10:07.609Z"
+   },
+   "public/art/pause/ch3-braskas-final-aeon.2x.webp": {
+    "sha256": "e5dde1b47c08ec96acb4c89bc6282be2462308843e6df6dd17f1b876060d854e",
+    "mtime": "2026-09-18T23:10:15.639Z"
+   },
+   "public/art/pause/ch3-braskas-final-aeon.png": {
+    "sha256": "24560ad46982a49e67565d287ae6eed32df2430e21875b177a1de9fcd5592b3c",
+    "mtime": "2026-09-18T23:10:15.648Z"
+   },
+   "public/art/pause/ch4-bahamut.2x.webp": {
+    "sha256": "ece2de6d0c58e6686ea65d6fc20ab299b589909ae8d25ba02a7e6fa0d21211f7",
+    "mtime": "2026-09-18T23:10:23.526Z"
+   },
+   "public/art/pause/ch4-bahamut.png": {
+    "sha256": "4f5b14994f6ebb42eadec4c2f2c5f7f21d60b5db0a36d23bd3834d22c2b61494",
+    "mtime": "2026-09-18T23:10:23.533Z"
+   },
+   "public/art/pause/ch4-ffx2-bahamut.2x.webp": {
+    "sha256": "ece2de6d0c58e6686ea65d6fc20ab299b589909ae8d25ba02a7e6fa0d21211f7",
+    "mtime": "2026-09-18T23:10:31.604Z"
+   },
+   "public/art/pause/ch4-ffx2-bahamut.png": {
+    "sha256": "4f5b14994f6ebb42eadec4c2f2c5f7f21d60b5db0a36d23bd3834d22c2b61494",
+    "mtime": "2026-09-18T23:10:31.609Z"
+   },
+   "public/art/pause/ch5-ffx2-vegnagun-shuyin.2x.webp": {
+    "sha256": "5680f3a388fc05c4de532a3594bd8e19faf245b84f3fdc9ce463273c0e49205e",
+    "mtime": "2026-09-18T23:55:09.834Z"
+   },
+   "public/art/pause/ch5-ffx2-vegnagun-shuyin.png": {
+    "sha256": "c63b6448c797b4315e7791cf8221aa30d0ad0fbdc9ccb08d4fedbcc760f9e172",
+    "mtime": "2026-09-18T23:55:09.836Z"
+   },
+   "public/art/pause/ch5-shuyin.2x.webp": {
+    "sha256": "5680f3a388fc05c4de532a3594bd8e19faf245b84f3fdc9ce463273c0e49205e",
+    "mtime": "2026-09-18T23:55:09.824Z"
+   },
+   "public/art/pause/ch5-shuyin.png": {
+    "sha256": "c63b6448c797b4315e7791cf8221aa30d0ad0fbdc9ccb08d4fedbcc760f9e172",
+    "mtime": "2026-09-18T23:55:09.832Z"
+   },
+   "public/art/pause/jecht.2x.webp": {
+    "sha256": "9b0f069fd95751837879805b3c04d04ffc14974720678954b016edbd668543e5",
+    "mtime": "2026-09-18T23:49:06.199Z"
+   },
+   "public/art/pause/jecht.png": {
+    "sha256": "3bbce167042cc18b46517a04041c4b94d42f9ef6be4fb67cebec8190b50c677d",
+    "mtime": "2026-09-18T23:49:06.301Z"
+   },
+   "public/art/pause/kimahri.2x.webp": {
+    "sha256": "7d044570546cf16b2d399b5e3f15c618cb134a907aec2ba5c3f22baebbf8821a",
+    "mtime": "2026-09-18T23:09:03.660Z"
+   },
+   "public/art/pause/kimahri.png": {
+    "sha256": "bad11c1c89dfdbe926413ec7fc0411690432afeaba953aaa2805c457c9ebb405",
+    "mtime": "2026-09-18T23:09:03.672Z"
+   },
+   "public/art/pause/lulu.2x.webp": {
+    "sha256": "a3f6e6c40fec90f4c0b4e64a6c41f29e1600499c4c0d98fac45c782ea9588388",
+    "mtime": "2026-09-18T23:48:34.307Z"
+   },
+   "public/art/pause/lulu.png": {
+    "sha256": "8c8dc470b5289a9eba55afb9c75fbc4c12a70d135a3fb1f4664462fdff929bb6",
+    "mtime": "2026-09-18T23:48:34.315Z"
+   },
+   "public/art/pause/paine.2x.webp": {
+    "sha256": "e8a182b8333dcd6fa33d844deb7f2b60359a04d2092052361f497f2c457c573c",
+    "mtime": "2026-09-18T23:09:35.612Z"
+   },
+   "public/art/pause/paine.png": {
+    "sha256": "1de559d4262305c26e866f6a7ca3eb555fcaeca6d6418a706f9d7ad4c8eb6815",
+    "mtime": "2026-09-18T23:09:35.620Z"
+   },
+   "public/art/pause/rikku-ffx2.2x.webp": {
+    "sha256": "974da5ccb86d35f21b2fb77f9c7d0124f2098d7e143a08b106194695e81a42bb",
+    "mtime": "2026-09-18T23:09:19.676Z"
+   },
+   "public/art/pause/rikku-ffx2.png": {
+    "sha256": "b19fe8a3e833a3fbaa238ba71b47bda0581264a74c097d16a11ab53739d6afb2",
+    "mtime": "2026-09-18T23:09:19.682Z"
+   },
+   "public/art/pause/rikku.2x.webp": {
+    "sha256": "7c54a67ffce3e832a86a03f8fcb628975f2122681df18b4fffe55fd250a4172c",
+    "mtime": "2026-09-18T23:48:01.863Z"
+   },
+   "public/art/pause/rikku.png": {
+    "sha256": "25eb0db9f52aae26a323b882709e5a3e82be2ad023589a06a3b592009350a166",
+    "mtime": "2026-09-18T23:48:01.870Z"
+   },
+   "public/art/pause/seymour.2x.webp": {
+    "sha256": "95a0f9893e79fca6197e86b06ee0e6de0580cc664f5fa3d12a6bb4474cab69e1",
+    "mtime": "2026-09-18T23:09:43.540Z"
+   },
+   "public/art/pause/seymour.png": {
+    "sha256": "b1a677eff97e5c1c50bed600c6eea095dc1e159ba1f6809fa5c656bb00882cf0",
+    "mtime": "2026-09-18T23:09:43.546Z"
+   },
+   "public/art/pause/tidus.2x.webp": {
+    "sha256": "7d9a7853d4c226e6dcb4681b92a9deb273292ce4a57403a4a4a16dbebdf11c95",
+    "mtime": "2026-09-18T23:08:23.986Z"
+   },
+   "public/art/pause/tidus.png": {
+    "sha256": "e6540b4666c0238ab45e92ba6363103abe3a729ac20a18d3ac3ae1d69abacdb1",
+    "mtime": "2026-09-18T23:08:23.994Z"
+   },
+   "public/art/pause/wakka.2x.webp": {
+    "sha256": "ed1f108d319bfd5a0a227caf086e7310c6884f8b6a0d0c0d40b5300dcb11d8f3",
+    "mtime": "2026-09-18T23:08:55.640Z"
+   },
+   "public/art/pause/wakka.png": {
+    "sha256": "c648153ab2f28265162a337bafe79a978c039f75e8814191771a51dee2ae5f32",
+    "mtime": "2026-09-18T23:08:55.648Z"
+   },
+   "public/art/pause/yuna-ffx2.2x.webp": {
+    "sha256": "3d60038ceead22c0d7e868eb3222f80e06def1a7b186b8452fc93991224217ec",
+    "mtime": "2026-09-18T23:55:18.421Z"
+   },
+   "public/art/pause/yuna-ffx2.png": {
+    "sha256": "f1efe21f6c7588d3c9a5b72b6374daabb02bbe0f3315ebe78ef5f29b958617bc",
+    "mtime": "2026-09-18T23:55:18.430Z"
+   },
+   "public/art/pause/yuna.2x.webp": {
+    "sha256": "f0f51d133713cfc2ea1af7f21c1e488fe3413375390b479f0a166ca5e3f83471",
+    "mtime": "2026-09-18T23:08:31.937Z"
+   },
+   "public/art/pause/yuna.png": {
+    "sha256": "116a4e4cb8c6b65e3a5ef233dd6f6d3f8dc8f0a9f57924e17881be37ccdcd9af",
+    "mtime": "2026-09-18T23:08:31.944Z"
+   }
+  },
+  "portrait:paine": {
+   "public/art/portraits/paine.png": {
+    "sha256": "72ec132c48b1b0b76581806f7e6b84693ce4cf978cf4e94be4a0e9cced30dbb7",
+    "mtime": "2026-09-21T04:21:01.335Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:shuyin": {
+   "public/art/portraits/shuyin.png": {
+    "sha256": "d041b832a254eee0b90b51196ced6fa0be8e6f519e46e042cba67c7bdb71f164",
+    "mtime": "2026-09-21T04:21:01.441Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:yuna-x2": {
+   "public/art/portraits/yuna-x2.png": {
+    "sha256": "7427dc7fc4811782c00be3888dbca713d04c3755328b179da3bfc5e1fd371200",
+    "mtime": "2026-09-21T04:21:01.543Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:rikku-x2": {
+   "public/art/portraits/rikku-x2.png": {
+    "sha256": "ac408f345f3ae5f7daf17d73027dcdfef756366fff8071dcaa5ef38ea06b1307",
+    "mtime": "2026-09-21T04:21:01.647Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:young-auron": {
+   "public/art/portraits/young-auron.png": {
+    "sha256": "547dc31631b6f16a33dd8d6f9fe7577f69fe945d276a56303a82fa62440d5883",
+    "mtime": "2026-09-21T04:21:01.749Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:fayth-boy": {
+   "public/art/portraits/fayth-boy.png": {
+    "sha256": "4367aa7af0c5e825c8356d7e0b5a4a037cdba6de4585a72d3e63fa31e1feb42a",
+    "mtime": "2026-09-21T04:21:01.851Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:braska": {
+   "public/art/portraits/braska.png": {
+    "sha256": "18cfa3a7c6e72d49167556b27c6fece5a89e60b76e47171c73ff67a418c70cc0",
+    "mtime": "2026-09-21T04:26:38.501Z",
+    "approved": "2026-09-21"
+   }
+  },
+  "portrait:yu-yevon": {
+   "public/art/portraits/yu-yevon.png": {
+    "sha256": "bb12993f1db50668196164c59eac6fa1d7d928df23226e2ac55f94c76d7bf5bb",
+    "mtime": "2026-09-21T04:26:38.582Z",
+    "approved": "2026-09-21"
+   }
+  }
+ }
+}

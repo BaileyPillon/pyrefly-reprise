@@ -250,6 +250,78 @@
           "approved": "Bailey, 19 Sep 2026",
           "build": "Shuyin on the field in chapter 5.",
           "hashes": "cast:shuyin"
+        },
+        {
+          "label": "Speaker portrait: Paine",
+          "src": "docs/concepts/portraits/paine/cand-1.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “Paine: card 1” (from docs/concepts/portraits/sheet.png)",
+          "build": "A dialogue line spoken by Paine with the portrait showing (public/art/portraits/paine.png).",
+          "note": "FFX-2 only. Also her face in the FFX-2 party rows, prep, results and pause (round 04 PR-0014).",
+          "hashes": "portrait:paine"
+        },
+        {
+          "label": "Speaker portrait: Shuyin",
+          "src": "docs/concepts/portraits/shuyin/cand-2.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “Shuyin: card 2” (from docs/concepts/portraits/sheet.png)",
+          "build": "A dialogue line spoken by Shuyin with the portrait showing (public/art/portraits/shuyin.png).",
+          "note": "FFX-2 only.",
+          "hashes": "portrait:shuyin"
+        },
+        {
+          "label": "Speaker portrait: Yuna (FFX-2)",
+          "src": "docs/concepts/portraits/yuna-x2/cand-3.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “Yuna: card 3” (from docs/concepts/portraits/sheet.png)",
+          "build": "A dialogue line spoken by Yuna (FFX-2) with the portrait showing (public/art/portraits/yuna-x2.png).",
+          "note": "FFX-2 only. Dialogue speaker portrait; her battle chip still uses the approved FFX portrait.",
+          "hashes": "portrait:yuna-x2"
+        },
+        {
+          "label": "Speaker portrait: Rikku (FFX-2)",
+          "src": "docs/concepts/portraits/rikku-x2/cand-3.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “Rikku: card 3” (from docs/concepts/portraits/sheet.png)",
+          "build": "A dialogue line spoken by Rikku (FFX-2) with the portrait showing (public/art/portraits/rikku-x2.png).",
+          "note": "FFX-2 only. Dialogue speaker portrait; her battle chip still uses the approved FFX portrait.",
+          "hashes": "portrait:rikku-x2"
+        },
+        {
+          "label": "Speaker portrait: Young Auron",
+          "src": "docs/concepts/portraits/young-auron/cand-1.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “Young Auron: card 1” (from docs/concepts/portraits/sheet.png)",
+          "build": "A dialogue line spoken by Young Auron with the portrait showing (public/art/portraits/young-auron.png).",
+          "note": "FFX only. Flag from the art session: the two irises may not read as the same amber at this size; Bailey picked it as shown.",
+          "hashes": "portrait:young-auron"
+        },
+        {
+          "label": "Speaker portrait: Fayth boy",
+          "src": "docs/concepts/portraits/fayth-boy/cand-1.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “Fayth boy: card 1” (from docs/concepts/portraits/sheet.png)",
+          "build": "A dialogue line spoken by Fayth boy with the portrait showing (public/art/portraits/fayth-boy.png).",
+          "note": "FFX only. Shipped under the id the code reads (fayth-boy); tools/gen/cast.json still names the subject portrait-bahamut-fayth.",
+          "hashes": "portrait:fayth-boy"
+        },
+        {
+          "label": "Speaker portrait: Braska",
+          "src": "docs/concepts/portraits/braska/cand-1.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “yes to both recommendations” (Braska card 1)",
+          "build": "A dialogue line spoken by Braska with the portrait showing (public/art/portraits/braska.png).",
+          "note": "FFX only. Picked on the agent's recommendation: the only candidate with the dark blue head cloth research/visual-bible.md #1.22.1 calls for. Known departure: the gold crest and the sash are off-canon on all three; a headdress repaint is owed and needs Bailey's yes when it is shown.",
+          "hashes": "portrait:braska"
+        },
+        {
+          "label": "Speaker portrait: Yu Yevon",
+          "src": "docs/concepts/portraits/yu-yevon/cand-2.png",
+          "state": "approved",
+          "approved": "Bailey, 21 Sep 2026: “yes to both recommendations” (Yu Yevon card 2)",
+          "build": "A dialogue line spoken by Yu Yevon with the portrait showing (public/art/portraits/yu-yevon.png).",
+          "note": "FFX only. Picked on the agent's recommendation: the bright glyph core is nearest to the glowing Yevon disc. research/visual-bible.md #1.12: he has no dialogue and no human form, and no shipped line has him speaking, so this is a safety net against a 404 rather than a face.",
+          "hashes": "portrait:yu-yevon"
         }
       ]
     },

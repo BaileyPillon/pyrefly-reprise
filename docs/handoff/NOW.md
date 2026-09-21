@@ -30,10 +30,31 @@
 - Portrait candidates for the eight missing speaker portraits are with Bailey (`docs/concepts/portraits/sheet.png`,
   `d57aa41`); nothing ships until Bailey picks. `fayth-boy` also has a file-name mismatch to fix then.
 
+## Decided by Bailey, 2026-09-21 evening (side session; build work owed)
+
+- **Speaker portraits picked** from `docs/concepts/portraits/sheet.png`: paine 1, shuyin 2, yuna-x2 3, rikku-x2 3,
+  young-auron 1, fayth-boy 1. Copied (additive, nothing overwritten) to `public/art/portraits/<key>.png` + `.json`,
+  backed up in `D:\Tools\pyrefly-art-backup\approved\2026-09-21-speaker-portraits`, `public/art/manifest.json`
+  regenerated (23 portraits), six approved tiles in `targets.json` (cast group), hashes in `approved-hashes.json`.
+  **Owed:** measured rows in `src/ui/common/face-crops.json` for the new keys (`tools/portraits/measure-face-crops.mjs`;
+  paine matters most, she is a HUD chip), a browser check of one line per speaker, and the `cast.json`
+  `portrait-bahamut-fayth` id versus `fayth-boy`. Not yet seen in a browser. Game case: FFX-2 only (paine, shuyin,
+  yuna-x2, rikku-x2), FFX only (young-auron, fayth-boy).
+- **Braska card 1 and Yu Yevon card 2:** recommended by the side session, Bailey said "yes to both recommendations".
+  Shipped and recorded the same way (25 portraits in the manifest, eight new tiles in all). Braska's gold crest and
+  sash are off-canon on every candidate: a headdress repaint is owed and goes past Bailey first. FFX only.
+- **FFX-2 ATB: "For ffx-2 I choose active."** Active only, no Wait toggle. Per `research/ffx2-combat-core.md` §1.5:
+  time never stops while a command menu or submenu is open (today `BattlePresenter` ticks the FFX-2 engine only in its
+  `waiting` branch, so everything freezes); the forced freeze during certain long animations stays `[single source]`;
+  "an enemy hit closes the open menu and delays that character" is `[single source]` and needs Bailey's yes on its own.
+  FFX-2 only, combat core: deep review before deploy, measure chapters 4 and 5 before and after. Once built, the
+  onboarding C3 badge can go back to the mockup's "Nothing paused · gauges running". Whether the original defaults to
+  Active could not be sourced online (2026-09-21); Bailey's pick stands regardless.
+
 ## Waiting on Bailey (none of these blocks the release)
 
-Portrait picks; FFX-2 Active versus Wait ATB (the engine stops the ATB while a command menu is open, and the Build A
-chip says ACTIVE); the cost of a denied turn (marked `[estimate]`); whether FFX-2 letters a boss's same-named parts;
+Whether Active mode includes "an enemy hit closes the open menu and delays that character" (asked 2026-09-21, not yet
+answered); the cost of a denied turn (marked `[estimate]`); whether FFX-2 letters a boss's same-named parts;
 whether the advisor may overrule the guide's pinned pick when a revive scores far higher; a mute row in OPTIONS;
 whether the never-wired "Turn cut-in" tile still stands; options rounds for the defeat screen, the advisor card, the
 enemy-move panel and the phone layout; an audio score out of ten; Chapter 5 length and Chapter 1 difficulty (bring
