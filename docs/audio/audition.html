@@ -55,6 +55,15 @@
   .changed span { display: inline-block; font: 11px/1.4 ui-monospace, Menlo, Consolas, monospace;
                   letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold);
                   margin-right: 8px; }
+  .score { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--rule);
+           font-size: 0.9rem; color: var(--muted); }
+  .score input { width: 4.5em; margin-left: 6px; padding: 4px 6px; font: inherit;
+                 color: var(--ink); background: var(--paper);
+                 border: 1px solid var(--rule); border-radius: 4px; }
+  #collect-scores { font: inherit; padding: 8px 16px; cursor: pointer; color: var(--paper);
+                    background: var(--gold); border: 0; border-radius: 6px; }
+  #scores-out { color: var(--ink); background: var(--paper); border: 1px solid var(--rule);
+                border-radius: 6px; padding: 10px; }
   .cue.open { border-left: 3px solid var(--gold); }
   .cue.open h4 { font-family: inherit; font-size: 1rem; }
   footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule);
@@ -86,6 +95,158 @@
     <p style="margin-bottom:0"><strong>Does it sound like one room?</strong> Sword hits, menu clicks and the orchestra all go through the same concert hall. If an effect sounds pasted on top, that is a bug, not a taste question.</p>
   </div>
 </div>
+
+<!-- ===================================================================== -->
+<!-- New chapters: sketches — 2026-09-21.                                  -->
+<!-- HAND-WRITTEN, not emitted by tools/audio/audition.mjs. That generator  -->
+<!-- walks public/audio/manifest.json, and these files are deliberately NOT -->
+<!-- in the manifest: they are sketches awaiting a verdict, not cues. If    -->
+<!-- audition.mjs is ever re-run it will overwrite this section; paste it   -->
+<!-- back, or teach the generator about docs/audio/sketches/.               -->
+<!-- ===================================================================== -->
+<h2>New chapters: sketches</h2>
+<p class="group-note">
+  <strong>Six sketches, about four minutes in total, and nothing here is in the game.</strong>
+  These are candidate cues for the three new chapters — Macalania, Evrae on the airship, and
+  the Leblanc Syndicate — rendered through the same instruments, the same concert hall and the
+  same mastering as everything else on this page, so what you hear is what the real cue would
+  sound like. Nothing is built past this point until you pick: Macalania is a straight
+  <em>A or B</em>, and the other three want a yes, a no, or a note about what to change.
+  Score each one 1&ndash;10 in the box; there is a button at the bottom that collects your
+  scores into one block of text to send back.
+</p>
+
+<h3>Macalania — the battle cue: pick A or B</h3>
+<p class="group-note">
+  The same fight, two readings of the same brief. Seymour&rsquo;s six-note theme is in both, at
+  the same place in the bar; what differs is what surrounds it. Listen to the first two seconds
+  of each: that is where they have to be told apart, and where each has to be told apart from
+  the Seymour Flux cue you already know.
+</p>
+
+<article class="cue">
+  <h4>A &mdash; &ldquo;The Courtesy&rdquo;</h4>
+  <p class="emotion">A court dance that curdles.</p>
+  <p class="blurb">
+    Good manners as a piece of music: harpsichord, pizzicato and an oboe, a dance that never once
+    syncopates. Halfway through, the tune&rsquo;s polite downward slither refuses to stop and keeps
+    walking down for three bars while the floor goes with it &mdash; and then the dance resumes
+    exactly as it was, which is the unsettling part. C# minor, 126 bpm, 45 s.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-21/macalania-a-court-dance.mp3"></audio>
+  <p class="stats"><span>0:50</span><span>0.68 MB</span><span>-16.00 LUFS</span><span>-2.82 dBTP</span><span>tilt -6.2 dB/band</span><span>all gates pass</span><span>126 bpm 4/4</span><span>380 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Macalania A — The Courtesy"></label></p>
+</article>
+
+<article class="cue">
+  <h4>B &mdash; &ldquo;The Processional&rdquo;</h4>
+  <p class="emotion">Ceremony with no dance in it.</p>
+  <p class="blurb">
+    Nothing charming. The tempo never changes and the harmony barely moves; the only thing that
+    develops is how finely the beat is cut &mdash; halves, then quarters, then eighths, then
+    sixteenths. The fight gets faster without the music getting faster. Trombone carries the theme,
+    a bell marks each tightening, and at the end everything stops but the bell. C# minor, 112 bpm, 45 s.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-21/macalania-b-processional.mp3"></audio>
+  <p class="stats"><span>0:50</span><span>0.61 MB</span><span>-16.00 LUFS</span><span>-1.39 dBTP</span><span>tilt -11.8 dB/band</span><span>all gates pass</span><span>112 bpm 4/4</span><span>226 notes</span></p>
+  <p class="changed"><span>flag</span> The chapter&rsquo;s written anti-brief says &ldquo;no relentless ostinato &mdash; that is the Flux chapter&rsquo;s.&rdquo; B walks straight up to that line on purpose, so you can judge it by ear instead of on paper. If it sounds like the Flux fight, that is the answer and A wins on the spot.</p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Macalania B — The Processional"></label></p>
+</article>
+
+<h3>Evrae &mdash; the airship</h3>
+<p class="group-note">
+  Best heard in order: the approach, then the battle. The brief for this chapter is
+  <em>machina, not menace</em> &mdash; the wyrm is not the subject, the airship is. No choir,
+  nothing sacred, no fanfare.
+</p>
+
+<article class="cue">
+  <h4>Approach sting</h4>
+  <p class="emotion">Altitude, engines, and one shape crossing the sky.</p>
+  <p class="blurb">
+    The twenty seconds between &ldquo;something is out there&rdquo; and the first turn. A sub that
+    never moves, engines somewhere below, and a two-note machine call answered fainter and later.
+    It ends <strong>unresolved</strong>: the battle cue lands the chord this one refuses to.
+    A minor, 88 bpm, 20 s.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-21/evrae-approach.mp3"></audio>
+  <p class="stats"><span>0:23</span><span>0.27 MB</span><span>-16.91 LUFS</span><span>-1.38 dBTP</span><span>tilt -11.5 dB/band</span><span>all gates pass</span><span>88 bpm 4/4</span><span>25 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Evrae — approach sting"></label></p>
+</article>
+
+<article class="cue">
+  <h4>Battle &mdash; &ldquo;Assault Under Open Sky&rdquo;</h4>
+  <p class="emotion">A ship under attack, and a crew with jobs to do.</p>
+  <p class="blurb">
+    Three things to listen for, because this sketch is built to answer three questions at once.
+    <strong>The two-bar figure</strong> has holes in it on purpose &mdash; the fight interrupts it
+    constantly, and a tune with air in it survives being cut off. <strong>At 0:20</strong> the
+    creature pulls away: the kit thins to a hat and one distant clang and the tune moves up and
+    widens, so at range you hear <em>less</em> of it rather than a quieter copy.
+    <strong>At 0:30</strong> phase two arrives &mdash; the tempo does not move by one beat, the
+    beat is simply cut twice as fine. If that reads as &ldquo;faster&rdquo; without sounding
+    rushed, the idea works. A minor, 144 bpm, 45 s.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-21/evrae-battle.mp3"></audio>
+  <p class="stats"><span>0:48</span><span>0.67 MB</span><span>-16.01 LUFS</span><span>-1.40 dBTP</span><span>tilt -9.3 dB/band</span><span>all gates pass</span><span>144 bpm 4/4</span><span>729 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Evrae — battle"></label></p>
+</article>
+
+<h3>Leblanc &mdash; the farce, and the moment it stops</h3>
+<p class="group-note">
+  These two only work in order, and the join is the point: play the farce, then play
+  &ldquo;Disquiet&rdquo; immediately after it.
+</p>
+
+<article class="cue">
+  <h4>Battle &mdash; &ldquo;A Fanfare She Wrote Herself&rdquo;</h4>
+  <p class="emotion">The music is on the trio&rsquo;s side, and the trio is ridiculous.</p>
+  <p class="blurb">
+    Big band, swung, and nothing in it is in a minor key. The tune announces itself like a fanfare
+    and then arrives <em>late</em>, on the second beat, twice &mdash; late at its own party. The
+    trombone answers every phrase by sliding down a tone, four times, and that is the only thing in
+    the cue that goes downward: it is the sound of somebody in the room not being impressed. One bar
+    near the end borrows a chord that does not belong, purely for the joy of it, and walks straight
+    back out. F major, 168 bpm, 45 s.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-21/leblanc-farce.mp3"></audio>
+  <p class="stats"><span>0:49</span><span>0.68 MB</span><span>-16.00 LUFS</span><span>-1.91 dBTP</span><span>tilt -8.4 dB/band</span><span>all gates pass</span><span>168 bpm 4/4</span><span>676 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Leblanc — farce"></label></p>
+</article>
+
+<article class="cue">
+  <h4>&ldquo;Disquiet&rdquo; &mdash; the reveal sting</h4>
+  <p class="emotion">The sound of a room that has just become a different kind of room.</p>
+  <p class="blurb">
+    Play this straight after the farce. It opens by cutting the farce off mid-note &mdash; no
+    cadence, no cymbal to cover the join &mdash; then a full second of nothing, and then a floor
+    arrives that never resolves. The chord is built out of fourths, so it is neither major nor
+    minor and has no home note. There is no melody at all; the only event in fifteen seconds is one
+    low machine tone sliding down a semitone and stopping. 60 bpm, 15 s.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-21/leblanc-disquiet.mp3"></audio>
+  <p class="stats"><span>0:20</span><span>0.22 MB</span><span>-17.36 LUFS</span><span>-2.00 dBTP</span><span>tilt -11.7 dB/band</span><span>all gates pass</span><span>60 bpm 4/4</span><span>13 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Leblanc — Disquiet sting"></label></p>
+</article>
+
+<div class="check">
+  <p style="margin-top:0"><strong>When you have scored them</strong> &mdash; press the button and send back the block of text. A score is enough; a sentence about what to change is better.</p>
+  <p><button type="button" id="collect-scores">Collect my scores</button></p>
+  <textarea id="scores-out" rows="9" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace" readonly placeholder="Your scores appear here."></textarea>
+  <p style="margin-bottom:0"><em>Nothing is saved anywhere and nothing is sent &mdash; the button only writes the text into the box.</em></p>
+</div>
+
+<script>
+  document.getElementById('collect-scores').addEventListener('click', function () {
+    var lines = ['Pyrefly Reprise — new-chapter music sketches, 2026-09-21', ''];
+    document.querySelectorAll('input[data-sketch]').forEach(function (input) {
+      var v = input.value.trim();
+      lines.push(input.dataset.sketch + ': ' + (v === '' ? '(not scored)' : v + '/10'));
+    });
+    lines.push('', 'Macalania pick (A / B / neither): ', 'Notes: ');
+    document.getElementById('scores-out').value = lines.join('\n');
+  });
+</script>
 
 <h2>Start here — eight files</h2>
 <p class="group-note">If there is only time for eight, these eight say what changed.</p>

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "macalania-a-court-dance",
+    "name": "sketch-macalania-a",
+    "seconds": 49.71,
+    "bytes": 716581,
+    "notes": 380,
+    "lufs": -16,
+    "truePeakDb": -2.82,
+    "tiltDbPerBand": -6.18,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -2.82
+    },
+    "renderMs": 3723
+  },
+  {
+    "id": "macalania-b-processional",
+    "name": "sketch-macalania-b",
+    "seconds": 50,
+    "bytes": 634977,
+    "notes": 226,
+    "lufs": -16,
+    "truePeakDb": -1.39,
+    "tiltDbPerBand": -11.8,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -1.39
+    },
+    "renderMs": 4107
+  },
+  {
+    "id": "evrae-battle",
+    "name": "sketch-evrae-battle",
+    "seconds": 48,
+    "bytes": 697362,
+    "notes": 729,
+    "lufs": -16.01,
+    "truePeakDb": -1.4,
+    "tiltDbPerBand": -9.29,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16.01,
+      "truePeakDb": -1.4
+    },
+    "renderMs": 4038
+  },
+  {
+    "id": "evrae-approach",
+    "name": "sketch-evrae-approach",
+    "seconds": 23.09,
+    "bytes": 287868,
+    "notes": 25,
+    "lufs": -16.91,
+    "truePeakDb": -1.38,
+    "tiltDbPerBand": -11.55,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16.91,
+      "truePeakDb": -1.38
+    },
+    "renderMs": 1952
+  },
+  {
+    "id": "leblanc-farce",
+    "name": "sketch-leblanc-farce",
+    "seconds": 48.71,
+    "bytes": 716633,
+    "notes": 676,
+    "lufs": -16,
+    "truePeakDb": -1.91,
+    "tiltDbPerBand": -8.44,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -1.91
+    },
+    "renderMs": 3897
+  },
+  {
+    "id": "leblanc-disquiet",
+    "name": "sketch-leblanc-disquiet",
+    "seconds": 20,
+    "bytes": 226533,
+    "notes": 13,
+    "lufs": -17.36,
+    "truePeakDb": -2,
+    "tiltDbPerBand": -11.71,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -17.36,
+      "truePeakDb": -2
+    },
+    "renderMs": 1607
+  }
+]
