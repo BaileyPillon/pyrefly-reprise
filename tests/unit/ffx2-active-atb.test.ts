@@ -644,6 +644,95 @@ describe('Active ATB through the real presenter', () => {
   });
 
   /**
+   * The regression guard for the gate itself.
+   *
+   * The repair added an `inputValid` check immediately before every FFX-2
+   * submit. Auto-battle returns from `chooseCommand` before the pump is even
+   * built, so the 40-seed strategy arms do **not** exercise that gate — if it
+   * were wrong, every ordinary command would be refused in silence and no
+   * existing suite would notice. This is a human answering an ordinary menu
+   * after the clock has been running under it for a while.
+   */
+  it('still submits an ordinary command, after the clock has run under the menu', async () => {
+    const engine = newEngine(CH4, 7);
+    const state = engine.state();
+    const turnStarts: CombatantId[] = [];
+    let owner: CombatantId | null = null;
+
+    class PatientHud implements HudPort {
+      chooseCommandCalls = 0;
+      closeCalls = 0;
+      answered: Command | null = null;
+      mount(): void {}
+      unmount(): void {}
+      sync(): void {}
+      syncGauges(): void {}
+      openMinigame(): Promise<never> {
+        return new Promise<never>(() => undefined);
+      }
+      setVisible(): void {}
+      setProjector(): void {}
+      closeCommandMenu(): void {
+        this.closeCalls += 1;
+      }
+      chooseCommand(actorId: CombatantId, commands: AvailableCommand[]): Promise<Command> {
+        this.chooseCommandCalls += 1;
+        if (this.chooseCommandCalls > 1) return new Promise<Command>(() => undefined);
+        owner = actorId;
+        // Let the clock actually run under the menu, then answer — the
+        // ordinary case. Bounded: read long enough and Bahamut chain-locks or
+        // KO's her, which is a different case (the one below).
+        const opened = engine.state().ticks;
+        return new Promise<Command>((res) => {
+          void (async () => {
+            for (let i = 0; i < 400 && engine.state().ticks < opened + 100; i++) {
+              await Promise.resolve();
+            }
+            const row = commands.find((c) => c.enabled && c.command.kind === 'attack')
+              ?? commands.find((c) => c.enabled);
+            const target = row?.validTargets[0];
+            this.answered = row
+              ? ({ ...row.command, ...(target ? { targets: [target] } : {}) } as Command)
+              : ({ kind: 'defend', targets: [] } as Command);
+            res(this.answered);
+          })();
+        });
+      }
+      onEvent(event: BattleEvent): void {
+        if (event.type === 'turn-start') turnStarts.push(event.actorId);
+      }
+    }
+
+    const hud = new PatientHud();
+    let clock = 0;
+    const presenter = new BattlePresenter({
+      stage: new FakeStage([...state.activeIds], [...state.enemyIds]),
+      hud,
+      damageNumbers: new FakeDamageNumbers(),
+      messageBar: new FakeMessageBar(),
+      audio: new FakeAudio(),
+      cutscenes: new FakeCutscenes(),
+      sleep: (ms) => {
+        clock += ms;
+        return Promise.resolve();
+      },
+      now: () => clock,
+    });
+    void presenter.run(engine);
+
+    await settleUntil(() => hud.chooseCommandCalls > 0);
+    const ticksAtMenu = engine.state().ticks;
+    await settleUntil(() => owner !== null && turnStarts.includes(owner), 20_000);
+
+    // The clock really did run under the menu, and her command still landed on
+    // her — the gate refuses a dead owner, never a live one.
+    expect(engine.state().ticks).toBeGreaterThan(ticksAtMenu);
+    expect(turnStarts).toContain(owner);
+    expect(hud.closeCalls).toBe(0);
+    presenter.abort();
+  });
+
+  /**
    * The wave-1a verifier's silent critical, through the real presenter.
    *
    * Confirm is pressed **in the same pump step** that KOs the menu's owner —

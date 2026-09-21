@@ -61,7 +61,7 @@ Nothing caught it: the suite's own 400-line guard
 (`tests/unit/ffx-round04-engine.test.ts`) covers only `battle/ffx/state.ts` and
 `predicates.ts`. Bringing these four under 400 is a ~1000-line movement across
 files several agents are editing right now, so it is **not** done here and is
-listed as open work in §8 rather than claimed. It is pre-existing debt this
+listed as open work in §7b rather than claimed. It is pre-existing debt this
 track added to, not debt this track created.
 
 ### The three seams
@@ -258,7 +258,7 @@ or `__pyrefly.autoBattle('intended')`.
 
 ## 5. Tests
 
-`tests/unit/ffx2-active-atb.test.ts` (22) and `tests/unit/ffx-no-active-clock.test.ts`
+`tests/unit/ffx2-active-atb.test.ts` (23) and `tests/unit/ffx-no-active-clock.test.ts`
 (3). Real `FFX2Engine`, real Chapter 4 and Chapter 5 data, real pump, fake
 clock; the last two cases drive the **real `BattlePresenter`** with a HUD that
 opens a menu and never answers it.
@@ -287,7 +287,7 @@ opens a menu and never answers it.
 
 ### Added by the wave-1a repair (2026-09-21)
 
-Four cases, each of which fails on the code as it was pushed in `45f98b9`:
+Five cases. Four of them fail on the code as it was pushed in `45f98b9`; the fifth guards the repair itself:
 
 - **the silent critical, engine level** — the owner is KO'd with other girls
   standing ready; `submit` of her own ability must emit **nothing**, spend no
@@ -303,6 +303,13 @@ Four cases, each of which fails on the code as it was pushed in `45f98b9`:
 - **FFX absence for the new gates** — an answered FFX command is still
   submitted as the actor whose menu opened, and `closeCommandMenu` is never
   called (rule 14).
+- **the regression guard for the gate itself** — a human answers an *ordinary*
+  Chapter 4 menu after the clock has run at least 100 ticks under it, and her
+  command lands on her. This one matters more than it looks: auto-battle
+  returns from `chooseCommand` before the pump is even built, so the 40-seed
+  strategy arms never touch the new `inputValid` gate. Mutation-checked — force
+  the gate to refuse and this is the **only** case in the whole suite that
+  fails.
 
 The existing *"executes the command as the girl whose menu was open"* case was
 also a **tautology waiting to happen**: it read `state.activeIds[0]` and only
