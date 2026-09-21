@@ -27,6 +27,16 @@ export declare function shouldRestartAfterBlack(
 ): boolean;
 
 /**
+ * Whether a ComfyUI restart is allowed now, given who else has work queued on
+ * this shared instance. `queueState` is the parsed `GET /queue` JSON (or
+ * `null`/anything unreadable, which fails open — allow the restart).
+ */
+export declare function shouldRestartGivenQueue(
+  queueState: { queue_running?: unknown[]; queue_pending?: unknown[] } | null | undefined,
+  ourPromptId: string | null | undefined,
+): boolean;
+
+/**
  * Largest R/G/B sample in an 8-bit non-interlaced PNG; null when the bytes
  * cannot be read as one. Alpha is ignored.
  */

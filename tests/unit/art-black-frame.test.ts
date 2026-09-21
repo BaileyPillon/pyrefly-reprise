@@ -37,6 +37,7 @@ import {
   quarantineTargetFor,
   resolveMaxRgb,
   shouldRestartAfterBlack,
+  shouldRestartGivenQueue,
 } from '../../tools/gen/black-frame.mjs';
 
 // --------------------------------------------------------------------------
@@ -383,5 +384,74 @@ describe('shouldRestartAfterBlack', () => {
 
   it('throttles on ten minutes', () => {
     expect(BLACK_RESTART_MIN_INTERVAL_MS).toBe(10 * 60 * 1000);
+  });
+});
+
+describe('shouldRestartGivenQueue', () => {
+  // 2026-09-21 correction: ComfyUI is shared with the rest of the art fleet.
+  // A black-frame restart kills whatever ANYONE has running or queued, not
+  // just this session's own job, so a restart must not happen while another
+  // session's prompt is on the queue.
+
+  it('allows the restart when the queue is empty', () => {
+    expect(shouldRestartGivenQueue({ queue_running: [], queue_pending: [] }, 'my-prompt')).toBe(true);
+  });
+
+  it('allows the restart when only our own (already-finished) prompt shows up', () => {
+    // ComfyUI's actual shape: [order, prompt_id, prompt, extra_data, outputs].
+    expect(
+      shouldRestartGivenQueue(
+        { queue_running: [[0, 'my-prompt', {}, {}, []]], queue_pending: [] },
+        'my-prompt',
+      ),
+    ).toBe(true);
+  });
+
+  it('refuses when another prompt is running', () => {
+    expect(
+      shouldRestartGivenQueue(
+        { queue_running: [[0, 'someone-elses-prompt', {}, {}, []]], queue_pending: [] },
+        'my-prompt',
+      ),
+    ).toBe(false);
+  });
+
+  it('refuses when another prompt is only pending, not yet running', () => {
+    expect(
+      shouldRestartGivenQueue(
+        { queue_running: [], queue_pending: [[1, 'queued-elsewhere', {}, {}, []]] },
+        'my-prompt',
+      ),
+    ).toBe(false);
+  });
+
+  it('accepts an object-shaped queue entry too, not only ComfyUI’s array-of-arrays', () => {
+    expect(
+      shouldRestartGivenQueue(
+        { queue_running: [{ prompt_id: 'someone-elses-prompt' }], queue_pending: [] },
+        'my-prompt',
+      ),
+    ).toBe(false);
+    expect(
+      shouldRestartGivenQueue({ queue_running: [{ prompt_id: 'my-prompt' }], queue_pending: [] }, 'my-prompt'),
+    ).toBe(true);
+  });
+
+  it('fails OPEN — allows the restart — when the queue could not be read at all', () => {
+    // A checker that fails closed here would strand a genuinely solo
+    // session's GPU over its own bug reading /queue, same policy as every
+    // other guard in this file.
+    expect(shouldRestartGivenQueue(null, 'my-prompt')).toBe(true);
+    expect(shouldRestartGivenQueue(undefined, 'my-prompt')).toBe(true);
+    expect(shouldRestartGivenQueue({}, 'my-prompt')).toBe(true);
+  });
+
+  it('is not confused by a missing prompt id on either side', () => {
+    expect(
+      shouldRestartGivenQueue({ queue_running: [[0, null, {}, {}, []]], queue_pending: [] }, 'my-prompt'),
+    ).toBe(true);
+    expect(shouldRestartGivenQueue({ queue_running: [[0, 'someone', {}, {}, []]], queue_pending: [] }, null)).toBe(
+      false,
+    );
   });
 });

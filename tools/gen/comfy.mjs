@@ -54,7 +54,10 @@ import {
   quarantineTargetFor,
   resolveMaxRgb,
   shouldRestartAfterBlack,
+  shouldRestartGivenQueue,
 } from './black-frame.mjs';
+import { checkCutoutFile, quarantineCutout } from './cutout-guard.mjs';
+import { canonPosePhrase } from './pose-phrases.mjs';
 
 // Re-exported so the guard's decisions have one import path for callers and
 // tests, even though the policy itself lives in the pure module.
@@ -92,6 +95,13 @@ const BLACK_RESTART_SENTINEL = join(COMFY_LOG_DIR, 'last-black-restart.txt');
  * GPU. Same folder the hand sweep used (see docs/handoff/art-ops.md).
  */
 const BLACK_QUARANTINE_DIR = join(COMFY_LOG_DIR, 'black-quarantine');
+
+/**
+ * Where a cutout the sanity guard rejected goes — beside the black-frame
+ * quarantine, same reasoning: never delete, a bad cutout is evidence about
+ * the prompt.
+ */
+const CUTOUT_QUARANTINE_DIR = join(COMFY_LOG_DIR, 'cutout-quarantine');
 
 /**
  * ComfyUI's own `output/` folder — where `SaveImage` has already written the
@@ -463,6 +473,61 @@ export const BASE_NEGATIVE = [
 ].join(', ');
 
 /**
+ * Effect words banned from a sprite's `--tags`/`--poseTags`.
+ *
+ * 2026-09-21 incident: a `yuna-dark-knight` `attack` render prompted with
+ * `holding greatsword, dark aura, black and purple, attacking, dynamic pose,
+ * action pose` came back as a coloured swirl wrapped around the figure, with
+ * duplicated blades and mangled limbs — `isnet-anime` kept the whole swirl as
+ * opaque content and the crop box came back covering the entire source frame.
+ * `docs/ART-PIPELINE.md` §2 item 4 already warned that `motion lines` and
+ * `action pose` do this; a written warning was not enough, so `lintSpritePrompt`
+ * strips these on sight rather than trusting every future caller to remember.
+ *
+ * Matched as whole words/phrases, case-insensitive, and inside weighted tags
+ * like `(dark aura:1.2)` — see `normalizeSegmentForLint`. Order here does not
+ * matter; `lintSpritePrompt` sorts by length so a segment matching both
+ * `slash` and `slash effect` is reported once, against the more specific
+ * phrase.
+ */
+export const EFFECTS_BANNED_TOKENS = Object.freeze([
+  'aura',
+  'glow',
+  'glowing',
+  'energy',
+  'magic effect',
+  'magic circle',
+  'sparks',
+  'particles',
+  'lightning',
+  'flames around',
+  'smoke',
+  'slash',
+  'slash effect',
+  'motion lines',
+  'speed lines',
+  'motion blur',
+  'afterimage',
+  'dynamic pose',
+  'action pose',
+  'attacking',
+  'casting spell',
+  'explosion',
+  'debris',
+]);
+
+const SORTED_EFFECTS_TOKENS = [...EFFECTS_BANNED_TOKENS].sort((a, b) => b.length - a.length);
+
+/**
+ * Extra negatives appended to every sprite render on top of `SPRITE_NEGATIVE`,
+ * so even a prompt the lint let through (an effect word phrased in a way the
+ * token list does not catch) still fights the checkpoint's own tendency to add
+ * one. See `EFFECTS_BANNED_TOKENS` for the incident this answers.
+ */
+export const EFFECTS_NEGATIVE =
+  'aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects';
+
+/**
  * Sprite-only negatives, on top of the shared block.
  *
  * Anything opaque that is not the character is not just ugly — rembg keeps it,
@@ -471,11 +536,115 @@ export const BASE_NEGATIVE = [
  * coloured swirl around the figure on this checkpoint (the same failure that
  * got `painterly` struck from the style block), and the crop box comes back as
  * the whole 832x1216 frame. These four tags cost nothing and stop it.
+ * `EFFECTS_NEGATIVE` is folded in unconditionally (see `lintSpritePrompt`), so
+ * every sprite negative already carries it — nothing else has to remember to
+ * ask for it.
  *
  * Deliberately NOT in `BASE_NEGATIVE`: backdrops inherit that, and
  * `chapter-select` is *supposed* to be an abstract coloured field.
  */
-export const SPRITE_NEGATIVE = `${BASE_NEGATIVE}, paint splatter, ink splash, colorful background, abstract background`;
+export const SPRITE_NEGATIVE = `${BASE_NEGATIVE}, paint splatter, ink splash, colorful background, abstract background, ${EFFECTS_NEGATIVE}`;
+
+/**
+ * Strip a weight wrapper and punctuation so a banned-token check sees the
+ * words underneath `(dark aura:1.2)` or `dark (aura:1.2)` alike.
+ */
+function normalizeSegmentForLint(segment) {
+  return String(segment || '')
+    .replace(/[()]/g, ' ')
+    .replace(/:\s*[\d.]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+/** The first (longest, most specific) banned token appearing whole-word in `core`. */
+function bannedEffectIn(core) {
+  for (const token of SORTED_EFFECTS_TOKENS) {
+    const re = new RegExp(`\\b${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    if (re.test(core)) return token;
+  }
+  return null;
+}
+
+/**
+ * The documented background phrase(s) for a sprite composition, read straight
+ * off `COMPOSITIONS` rather than duplicated here — so if the framing block
+ * ever changes, the lint's idea of "the documented background" changes with
+ * it instead of drifting.
+ */
+function documentedBackgroundPhrases(composition) {
+  const framing = COMPOSITIONS[composition] || '';
+  return (framing.match(/[a-z]+ background/gi) || []).map((s) => s.toLowerCase());
+}
+
+/**
+ * Compositions `lintSpritePrompt` actually acts on.
+ *
+ * `portrait` is excluded here (not just at the `runSprite` call site): a HUD
+ * head-shot has no business with pose-effect words in the first place, and
+ * portraits do not share the "the crop box comes back as the whole frame"
+ * failure mode this exists for. Backdrops are excluded by construction —
+ * `runBackdrop` builds its prompt with `buildBackdropPrompt` and never calls
+ * this function at all, so `smoke`/`lightning`/`explosion` stay available for
+ * scenery, which legitimately wants them.
+ */
+export const LINTED_COMPOSITIONS = Object.freeze(['full', 'boss', 'prone']);
+
+/**
+ * Strip banned effect tokens (and a caller's own conflicting background tag)
+ * out of a sprite's `--tags`/`--poseTags`, one comma-separated segment at a
+ * time.
+ *
+ * A no-op (nothing stripped) for any composition not in `LINTED_COMPOSITIONS`.
+ * Never touches `STYLE_TAGS`/`QUALITY_TAGS`/`compositionFor`'s own output —
+ * only the caller-supplied `tags`/`poseTags` strings, so the pipeline's own
+ * `simple background, white background` block is untouched (Bailey,
+ * 2026-09-21: that phrase is the documented sprite background, not a defect —
+ * never strip or replace it).
+ *
+ * @returns {{tags: string, poseTags: string, stripped: Array<{field: 'tags'|'poseTags', segment: string, token: string, reason: 'effect'|'background'}>}}
+ */
+export function lintSpritePrompt({ tags = '', poseTags = '', composition = 'full' } = {}) {
+  if (!LINTED_COMPOSITIONS.includes(composition)) {
+    return { tags: String(tags || ''), poseTags: String(poseTags || ''), stripped: [] };
+  }
+  const documentedBg = documentedBackgroundPhrases(composition);
+  function processField(field, raw) {
+    const segments = String(raw || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const kept = [];
+    const stripped = [];
+    for (const seg of segments) {
+      const core = normalizeSegmentForLint(seg);
+      const effectToken = bannedEffectIn(core);
+      if (effectToken) {
+        stripped.push({ field, segment: seg, token: effectToken, reason: 'effect' });
+        continue;
+      }
+      // Only relevant if a composition's documented background ever stops
+      // being "white background" — today every sprite composition uses it, so
+      // this branch is presently a no-op, kept for when that changes.
+      if (/\bwhite background\b/.test(core) && documentedBg.length && !documentedBg.includes('white background')) {
+        stripped.push({
+          field,
+          segment: seg,
+          token: 'white background',
+          reason: 'background',
+          replacedWith: documentedBg.join(', '),
+        });
+        continue;
+      }
+      kept.push(seg);
+    }
+    return { text: kept.join(', '), stripped };
+  }
+  const t = processField('tags', tags);
+  const p = processField('poseTags', poseTags);
+  return { tags: t.text, poseTags: p.text, stripped: [...t.stripped, ...p.stripped] };
+}
 
 export const BACKDROP_NEGATIVE = `${BASE_NEGATIVE}, 1girl, 1boy, character, people, person, human`;
 
@@ -822,6 +991,23 @@ async function fetchImage({ filename, subfolder, type }) {
   return Buffer.from(await res.arrayBuffer());
 }
 
+/**
+ * `GET /queue`, for `shouldRestartGivenQueue` — never throws.
+ *
+ * `null` means "could not read it", which `shouldRestartGivenQueue` treats as
+ * permission to restart (fail open), same policy as every other guard here:
+ * a bug in this one check should not be able to strand a solo session's GPU.
+ */
+async function fetchQueueSafely() {
+  try {
+    const res = await fetch(`${BASE}/queue`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 // --------------------------------------------------------------------------
 // Black-frame guard
 // --------------------------------------------------------------------------
@@ -1146,6 +1332,25 @@ async function recoverFromBlackFrame(workflow, shot) {
         `ago (< ${BLACK_RESTART_MIN_INTERVAL_MS / 60000} min), so it was NOT restarted again.\n${GPU_ATTENTION}`,
     );
   }
+
+  // ComfyUI is shared with the rest of the art fleet: killing it mid-job takes
+  // down whatever anyone else has running or queued, not just this prompt.
+  // See docs/ART-PIPELINE.md §6 "Black frames".
+  const queueState = await fetchQueueSafely();
+  if (!shouldRestartGivenQueue(queueState, shot.promptId)) {
+    process.stderr.write(
+      `\n[gen] ================= NOT RESTARTING: ANOTHER SESSION HAS WORK QUEUED =================\n` +
+        `[gen]   ${prefix} came back black, but ${BASE}/queue shows another job running or\n` +
+        `[gen]   pending on this shared ComfyUI. Restarting would kill it. The black frame is\n` +
+        `[gen]   quarantined (see above); retry this render once the GPU is free.\n` +
+        `[gen] ======================================================================================\n\n`,
+    );
+    throw new Error(
+      `BLACK FRAME (NaN state) on ${prefix}. Another session has work queued on the shared ` +
+        `ComfyUI, so it was NOT restarted. Retry once the GPU is free.\n${GPU_ATTENTION}`,
+    );
+  }
+
   writeRestartSentinel(now);
   await restartComfy();
 
@@ -1329,7 +1534,55 @@ async function renderOnce(workflow) {
   return { buf, promptId, image: images[0], maxRgb, seconds: (Date.now() - started) / 1000 };
 }
 
-async function generateOne({ workflow, outPath, postProcess, margin }) {
+/**
+ * Run the cut-out sanity guard against the file `cutout()` just wrote, and
+ * either accept it (recording the measurements) or quarantine it.
+ *
+ * Called exactly where the black-frame guard is called relative to its own
+ * step: immediately after the thing it is checking exists, before anything
+ * downstream (the sidecar, a batch's success count) can pick it up. See
+ * `docs/ART-PIPELINE.md` §6 "Painted-in effects and dirty cut-outs".
+ *
+ * Throws (so `runSprite`'s existing per-variant try/catch treats it exactly
+ * like a `rembg` "nothing left" failure — one variant lost, not the batch)
+ * unless `keepBad` is set, in which case it logs loudly and keeps the file.
+ */
+async function runCutoutGuard(outPath, { meta, composition, refPath, keepBad }) {
+  const result = await checkCutoutFile(outPath, {
+    sourceWidth: meta.sourceWidth,
+    sourceHeight: meta.sourceHeight,
+    composition,
+    refPath,
+  });
+  meta.cutout = result.measurements;
+  if (result.unverified) {
+    process.stderr.write(
+      `[gen] NOTE: cut-out guard could not read ${outPath} (${result.error}); left unverified.\n`,
+    );
+    return;
+  }
+  if (result.ok) return;
+
+  const stamp = fileStamp(new Date());
+  process.stderr.write(
+    `\n[gen] BAD CUT-OUT: ${outPath}\n` +
+      result.reasons.map((r) => `[gen]   - ${r}\n`).join('') +
+      `[gen]   docs/ART-PIPELINE.md §6 "Painted-in effects and dirty cut-outs" has the failure mode.\n`,
+  );
+  if (keepBad) {
+    process.stderr.write(`[gen]   --keepBad set: keeping the file despite the above.\n\n`);
+    return;
+  }
+  const quarantined = quarantineCutout(outPath, CUTOUT_QUARANTINE_DIR, stamp);
+  process.stderr.write(
+    quarantined
+      ? `[gen]   quarantined to ${quarantined}\n\n`
+      : `[gen]   could not quarantine it (already gone?) — check ${outPath} by hand.\n\n`,
+  );
+  throw new Error(`Cut-out sanity guard rejected the render:\n${result.reasons.map((r) => `  - ${r}`).join('\n')}`);
+}
+
+async function generateOne({ workflow, outPath, postProcess, margin, composition, refPath, keepBad }) {
   let shot = await renderOnce(workflow);
   if (isBlackFrame(shot.maxRgb)) {
     shot = await recoverFromBlackFrame(workflow, shot);
@@ -1348,6 +1601,7 @@ async function generateOne({ workflow, outPath, postProcess, margin }) {
   const rawPath = outPath.replace(/\.png$/i, '.raw.png');
   writeFileSync(rawPath, buf);
   const meta = cutout(rawPath, outPath, margin);
+  await runCutoutGuard(outPath, { meta, composition, refPath, keepBad });
   return { outPath, rawPath, seconds: elapsed, meta };
 }
 
@@ -1363,9 +1617,9 @@ function outFor(outPath, index, batch) {
  */
 async function runSprite(args, { preset, defaultComposition, defaultWidth, defaultHeight, label }) {
   const name = required(args, 'name');
-  const tags = required(args, 'tags');
+  let tags = required(args, 'tags');
   const pose = args.pose === true ? 'idle' : args.pose || 'idle';
-  const poseTags = args.poseTags === true ? '' : args.poseTags || '';
+  let poseTags = args.poseTags === true ? '' : args.poseTags || '';
   const outPath = resolve(process.cwd(), required(args, 'out'));
   const batch = Math.max(1, num(args, 'batch', 1));
   const steps = num(args, 'steps', 28);
@@ -1376,6 +1630,48 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
   const composition =
     args.composition === true ? defaultComposition : args.composition || defaultComposition;
   const baseSeed = num(args, 'seed', seedFromName(`${name}:${pose}`));
+  const keepBad = Boolean(args.keepBad) && args.keepBad !== 'false';
+  const refPath = args.ref && args.ref !== true ? String(args.ref) : null;
+
+  // Canon pose phrases (tools/gen/pose-phrases.mjs): a caller who names a pose
+  // but gives no --poseTags at all gets the effect-free body-language default
+  // instead of an empty pose prompt. Never overrides a caller's own text.
+  if (!poseTags) {
+    const canon = canonPosePhrase(pose);
+    if (canon) {
+      poseTags = canon;
+      process.stderr.write(
+        `[gen] no --poseTags for pose "${pose}"; using the canon phrase from tools/gen/pose-phrases.mjs.\n`,
+      );
+    }
+  }
+
+  // Pose-prompt lint: not for portraits (a HUD head-shot has no business with
+  // pose-effect words) and not for backdrops (a separate code path,
+  // runBackdrop, never calls this). See docs/ART-PIPELINE.md §6 "Painted-in
+  // effects and dirty cut-outs".
+  let lintStripped = [];
+  if (composition !== 'portrait') {
+    const lint = lintSpritePrompt({ tags, poseTags, composition });
+    lintStripped = lint.stripped;
+    if (lintStripped.length) {
+      for (const s of lintStripped) {
+        process.stderr.write(
+          `[gen] LINT: dropped "${s.segment}" from --${s.field} (${s.reason === 'effect' ? `banned token "${s.token}"` : 'conflicts with the documented sprite background'}) — ` +
+            `docs/ART-PIPELINE.md §2 item 4 / §6 "Painted-in effects and dirty cut-outs".\n`,
+        );
+      }
+      if (args.strictPrompt) {
+        throw new Error(
+          `--strictPrompt: banned pose-effect tokens found: ${lintStripped.map((s) => `"${s.segment}"`).join(', ')}. ` +
+            `Remove them from --tags/--poseTags (see docs/ART-PIPELINE.md §6).`,
+        );
+      }
+      tags = lint.tags;
+      poseTags = lint.poseTags;
+    }
+  }
+
   // v3 facing contract: party art faces right, enemy art faces left, and the
   // sprite's own preset decides that unless the caller says otherwise.
   const facing =
@@ -1405,6 +1701,7 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
   const negative = withNegAdd(SPRITE_NEGATIVE, joinTags(facingNegative, args.negAdd === true ? '' : args.negAdd));
   const ref = referenceOptions(args, { defaultWidth, defaultHeight });
   const results = [];
+  const failures = [];
 
   for (let i = 0; i < batch; i++) {
     const seed = (baseSeed + i) % 2147483647;
@@ -1434,7 +1731,31 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
         `${ref.refImage ? ` ref@${ref.refWeight}` : ''}` +
         `${ref.initImage ? ` img2img@${ref.denoise}` : ''}\n`,
     );
-    const r = await generateOne({ workflow, outPath: target, postProcess: true, margin });
+    // One variant must not be able to take the other four down with it.
+    //
+    // `rembg` exits non-zero on "nothing left after background removal" — a
+    // render so low-contrast that `isnet-anime` mattes the whole frame away.
+    // That is a per-*variant* verdict, and the point of a batch is that some
+    // variants fail; before this, the throw unwound the loop and discarded
+    // every render already on disk. docs/handoff/art3-bosses-a.md §G6 recorded
+    // it costing a four-render round trip in round 5, and it cost another in
+    // round 9. The failure is still reported, loudly and per variant, and it
+    // still counts: a batch where every variant failed returns nothing and the
+    // exit code below says so.
+    let r;
+    try {
+      r = await generateOne({ workflow, outPath: target, postProcess: true, margin, composition, refPath, keepBad });
+    } catch (err) {
+      // A black frame is NOT this: `generateOne` throws for a NaN'd GPU after
+      // it has already restarted and retried, and that verdict is about the
+      // machine rather than about one prompt. Re-throw so the run still stops.
+      if (/BLACK FRAME/.test(err.message)) throw err;
+      failures.push({ seed, target, error: err.message });
+      process.stderr.write(
+        `[gen] variant ${i + 1}/${batch} (seed ${seed}) FAILED and was skipped: ${err.message.split('\n')[0]}\n`,
+      );
+      continue;
+    }
     const sidecar = {
       width: r.meta.width,
       height: r.meta.height,
@@ -1453,14 +1774,35 @@ async function runSprite(args, { preset, defaultComposition, defaultWidth, defau
       composition,
       facing,
       ...(facingPhrase ? { facingPhrase } : {}),
+      // Recorded because `--emphasis` is the one channel that is NOT escaped
+      // and is therefore the only part of a sprite prompt that can carry real
+      // CLIP weights. It is already inside `prompt`, but only as a substring
+      // among four other blocks; rounds 4-8 of `bosses-a` had to keep their
+      // weights in prose in the handoff doc instead, and prose is not a recipe.
+      // `runHero` has recorded it since it was added; sprites now match.
+      ...(emphasis ? { emphasis } : {}),
       canvas: { width: ref.width, height: ref.height },
       ...ref.provenance,
+      ...(composition !== 'portrait' ? { lint: { stripped: lintStripped } } : {}),
+      ...(r.meta.cutout ? { cutout: r.meta.cutout } : {}),
       generatedAt: new Date().toISOString(),
     };
     writeFileSync(target.replace(/\.png$/i, '.json'), `${JSON.stringify(sidecar, null, 2)}\n`);
     results.push({ ...r, seed, sidecar: target.replace(/\.png$/i, '.json') });
     process.stderr.write(
       `[gen]   -> ${target} ${r.meta.width}x${r.meta.height} baselineY=${r.meta.baselineY} (${r.seconds.toFixed(1)}s)\n`,
+    );
+  }
+  if (failures.length) {
+    process.stderr.write(
+      `[gen] ${failures.length}/${batch} variant(s) failed and were skipped; ` +
+        `${results.length} written. Seeds: ${failures.map((f) => f.seed).join(', ')}\n`,
+    );
+  }
+  if (!results.length) {
+    throw new Error(
+      `All ${batch} variant(s) failed for ${name}/${pose}:\n` +
+        failures.map((f) => `  seed ${f.seed}: ${f.error.split('\n')[0]}`).join('\n'),
     );
   }
   return results;
@@ -1728,6 +2070,7 @@ pyrefly art generator (ComfyUI ${BASE})
       [--refWeightType linear] [--refScaling K+V]
       [--img2img <png>] [--denoise ${IMG2IMG_DENOISE_DEFAULT}]
       [--size WxH] [--width N] [--height N]
+      [--strictPrompt] [--keepBad]
 
   node tools/gen/comfy.mjs boss --name <id> --tags "<danbooru tags>" --out <path.png>
       same flags; defaults to 1216x832 landscape and --composition boss
@@ -1785,10 +2128,28 @@ Black frames:
   ${COMFY_OUTPUT_DIR} into
   ${BLACK_QUARANTINE_DIR}. It is
   logged to ${BLACK_FRAME_LOG}, ComfyUI is restarted (at most once
-  per 10 minutes, sentinel ${BLACK_RESTART_SENTINEL}) and the
-  same prompt is resubmitted once. Black again -> exit 1, GPU needs attention.
-  If neither decoder can read the bytes the render is written UNVERIFIED and
-  says so loudly on stderr. See docs/handoff/art-ops.md.
+  per 10 minutes, sentinel ${BLACK_RESTART_SENTINEL},
+  and only when /queue shows no one else's job running or pending on this
+  shared ComfyUI) and the same prompt is resubmitted once. Black again, or
+  someone else's job queued -> exit 1. If neither decoder can read the bytes
+  the render is written UNVERIFIED and says so loudly on stderr. See
+  docs/handoff/art-ops.md.
+
+Pose-prompt lint and cut-out sanity (sprite compositions only — not portraits,
+not backdrops, not hero):
+  Every --tags/--poseTags segment is checked against a banned-effect list
+  (aura, glow, dynamic pose, action pose, slash effect, ...) — see
+  EFFECTS_BANNED_TOKENS in this file and docs/ART-PIPELINE.md §6 "Painted-in
+  effects and dirty cut-outs". A hit is stripped by default; the finished
+  cutout is then checked for the failure that caused the 2026-09-21 incident
+  (crop box covering almost the whole source frame, a detached second blob, a
+  near-white patch rembg failed to remove) and quarantined beside the
+  black-frame quarantine (${CUTOUT_QUARANTINE_DIR}) if it fails.
+  --strictPrompt    Error instead of silently stripping a banned token.
+  --keepBad         Keep a cutout the sanity guard would otherwise quarantine
+                    (still logs the measurements loudly). Use when you know a
+                    render's high coverage or white patch is intentional (an
+                    imposing boss, a light-colored costume).
 
 Env: COMFY_HOST, COMFY_PORT, COMFY_ROOT, COMFY_INPUT, COMFY_OUTPUT, COMFY_CKPT,
      COMFY_UPSCALER, COMFY_IPADAPTER, COMFY_CLIPVISION, COMFY_LOG_DIR,

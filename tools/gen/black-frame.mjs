@@ -112,6 +112,49 @@ export function shouldRestartAfterBlack(
 }
 
 /**
+ * May ComfyUI be restarted, given who else has work queued on it right now?
+ *
+ * 2026-09-21 correction: ComfyUI is shared with the rest of the art fleet —
+ * several agent sessions can be queuing renders on the one GPU at once. A
+ * black-frame restart kills whatever ANYONE has running or pending, not just
+ * the caller's own job, so a restart that happens to land while another
+ * session has work queued would blow that job away too. `ourPromptId` is the
+ * prompt whose black frame triggered this restart; by the time `/queue` is
+ * read that prompt has already finished (successfully or not) and left the
+ * queue, so in practice this is close to "is the queue otherwise empty" — the
+ * `!== ourPromptId` filter is kept for the (currently hypothetical, but
+ * cheap-to-handle) case of a client with more than one prompt in flight at
+ * once.
+ *
+ * `queueState` is the raw parsed JSON from ComfyUI's `GET /queue`:
+ * `{queue_running: [...], queue_pending: [...]}`, each entry either
+ * `[order, prompt_id, ...]` (the shape ComfyUI actually sends) or
+ * `{prompt_id}` (accepted too, so a test or a future client shape does not
+ * have to match ComfyUI's array-of-arrays exactly).
+ *
+ * Fails OPEN (returns `true`, allow the restart) when the queue could not be
+ * read at all (`queueState` is `null`/not an object) — same policy as the
+ * black-frame decoders: a checker that fails closed would strand a genuinely
+ * solo session's GPU over its own bug reading `/queue`. It fails CLOSED
+ * (refuses) only when it positively saw someone else's work queued.
+ *
+ * @param {{queue_running?: Array, queue_pending?: Array}|null|undefined} queueState
+ * @param {string|null|undefined} ourPromptId
+ * @returns {boolean}
+ */
+export function shouldRestartGivenQueue(queueState, ourPromptId) {
+  if (!queueState || typeof queueState !== 'object') return true;
+  const running = Array.isArray(queueState.queue_running) ? queueState.queue_running : [];
+  const pending = Array.isArray(queueState.queue_pending) ? queueState.queue_pending : [];
+  const idOf = (entry) => (Array.isArray(entry) ? entry[1] : entry?.prompt_id);
+  const others = [...running, ...pending].filter((entry) => {
+    const id = idOf(entry);
+    return id != null && id !== ourPromptId;
+  });
+  return others.length === 0;
+}
+
+/**
  * Pick which decoder's answer the guard acts on.
  *
  * `comfy.mjs` prefers ComfyUI's embedded python (PIL + numpy), but that path is

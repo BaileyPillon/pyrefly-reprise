@@ -138,14 +138,26 @@ Rules:
    multi-subject bans (`multiple views, 2girls, 2boys`, …) that otherwise turn
    a sprite sheet into a group photo.
 4. Sprites carry a second negative block on top, `SPRITE_NEGATIVE`
-   (`paint splatter, ink splash, colorful background, abstract background`).
-   `motion lines` and `action pose` in a pose prompt reliably spray a coloured
-   swirl around the figure on this checkpoint — the same failure that got
-   `painterly` struck from the style block. It is not just ugly: rembg keeps
-   every opaque swirl, so the crop box comes back as the whole 832×1216 frame
-   and `baselineY` lands on a ribbon of paint instead of a boot. Backdrops
-   deliberately do *not* inherit it — `chapter-select` is supposed to be an
-   abstract coloured field.
+   (`paint splatter, ink splash, colorful background, abstract background`,
+   plus `EFFECTS_NEGATIVE` — see below). `motion lines` and `action pose` in a
+   pose prompt reliably spray a coloured swirl around the figure on this
+   checkpoint — the same failure that got `painterly` struck from the style
+   block. It is not just ugly: rembg keeps every opaque swirl, so the crop box
+   comes back as the whole 832×1216 frame and `baselineY` lands on a ribbon of
+   paint instead of a boot. Backdrops deliberately do *not* inherit it —
+   `chapter-select` is supposed to be an abstract coloured field.
+
+   **This is now enforced, not just documented** (2026-09-21, after a
+   `dark aura, attacking, dynamic pose, action pose` render did exactly the
+   above): `comfy.mjs` strips a banned-effect word out of `--tags`/
+   `--poseTags` on sight and rejects a cutout that shows the failure anyway.
+   §6 "Painted-in effects and dirty cut-outs" has the full mechanism, flags
+   and thresholds. If you are writing `--poseTags` by hand, start from the
+   effect-free body-language table in `tools/gen/pose-phrases.mjs`
+   (`CANON_POSE_PHRASES`) rather than reaching for a word like `aura` or
+   `dynamic pose` to sell the impact — the style contract already carries
+   that, and this list bans exactly the words that used to seem like the
+   obvious way to ask for it.
 
 ### Tag ordering (Animagine XL 4.0)
 
@@ -313,7 +325,14 @@ but it drifts on outfit details more than on faces.
 Flags: `--seed`, `--steps`, `--cfg`, `--batch`, `--margin`, `--width`,
 `--height`, `--size`, `--sampler`, `--scheduler`, `--composition`, `--facing`,
 `--facingPhrase`, `--negAdd`, `--ref`, `--refWeight`, `--refStart`, `--refEnd`,
-`--refWeightType`, `--refScaling`, `--img2img`, `--denoise`.
+`--refWeightType`, `--refScaling`, `--img2img`, `--denoise`, `--strictPrompt`,
+`--keepBad`.
+
+`--strictPrompt` turns the pose-prompt lint (§2 item 4, §6 "Painted-in effects
+and dirty cut-outs") into a hard error instead of a silent strip — use it when
+you want the run to stop rather than quietly rewrite what you typed.
+`--keepBad` keeps a cutout the sanity guard (§6, same section) would otherwise
+quarantine, for a render you have judged fine despite tripping a rule.
 
 `--size WxH` is shorthand for `--width`/`--height`, and rejects anything that
 is not a multiple of 8 — SDXL's VAE strides by 8, and other values round
@@ -668,6 +687,17 @@ render before it writes it anywhere:
   the same prompt one time. Restarts are throttled to one per 10 minutes via
   `D:\Tools\comfy-logs\last-black-restart.txt`, because ComfyUI is shared with
   the rest of the art fleet.
+- **The restart also checks who else is on the queue first** (2026-09-21
+  correction). Several agent sessions can be rendering on the one GPU at once,
+  and a restart kills whatever anyone has running or pending, not just the
+  prompt that came back black. Before restarting, `comfy.mjs` reads
+  `GET /queue`; if another session's prompt is running or pending there, it
+  does **not** restart — the black frame is still quarantined and logged as
+  above, but the run exits non-zero telling the operator to retry once the GPU
+  is free, rather than pulling ComfyUI out from under someone else's job. A
+  `/queue` that cannot be read at all fails open (restarts anyway), the same
+  policy as the decoder fallback above. The decision is `shouldRestartGivenQueue`
+  in `black-frame.mjs`.
 - If it comes back black again, or the throttle blocks the restart, the run
   **exits non-zero** and tells the operator the GPU needs attention. It does not
   loop: a GPU that NaNs twice is hardware, not a blip.
@@ -693,6 +723,94 @@ black renders and the healthy roster before shipping.
 
 Operational history, including what the driver was doing at the time, is in
 `docs/handoff/art-ops.md`.
+
+### Painted-in effects and dirty cut-outs
+
+**Symptom:** the finished cutout is a coloured swirl, slash trail or white
+blob wrapped around the figure, sometimes with a duplicated blade or a
+mangled limb, and it is not obviously a "bad costume" reroll — the character
+is often recognisable underneath the mess.
+
+**Cause:** a pose prompt that asked for an effect. 2026-09-21: a
+`yuna-dark-knight` `attack` render prompted with `holding greatsword, dark
+aura, black and purple, attacking, dynamic pose, action pose` came back
+exactly like this. §2 item 4 above already named `motion lines`/`action
+pose` as causing a coloured swirl that rembg keeps as opaque content — a
+written warning was not enough, because nothing stopped a caller from typing
+the words anyway.
+
+**What the tool now does**, both additive to `tools/gen/comfy.mjs` and
+applying to sprite compositions only (`character`/`boss`, including
+`--composition prone`; **not** portraits, and not backdrops, which build
+their prompt through a separate function and legitimately want words like
+`smoke` or `lightning`):
+
+1. **Pose-prompt lint.** Every `--tags`/`--poseTags` segment is checked
+   against a banned-effect list (`aura`, `glow`, `glowing`, `energy`, `magic
+   effect`, `magic circle`, `sparks`, `particles`, `lightning`, `flames
+   around`, `smoke`, `slash`, `slash effect`, `motion lines`, `speed lines`,
+   `motion blur`, `afterimage`, `dynamic pose`, `action pose`, `attacking`,
+   `casting spell`, `explosion`, `debris` — `EFFECTS_BANNED_TOKENS` in
+   `comfy.mjs`), matched whole-word/whole-phrase, case-insensitive, and
+   inside a weighted tag like `(dark aura:1.2)`. A hit is stripped and logged
+   with the doc section to read; `--strictPrompt` turns that into a hard
+   error instead. The pipeline's own `simple background, white background`
+   (from the composition block, not the caller's tags) is never touched —
+   see the correction below.
+2. **A standing effects negative.** `SPRITE_NEGATIVE` unconditionally carries
+   `EFFECTS_NEGATIVE` (`aura, glow, energy, magic, sparks, particles, smoke,
+   slash effect, motion lines, speed lines, afterimage, debris, extra
+   weapon, floating objects`) on top of the existing four tags, so even a
+   phrasing the lint's token list does not catch still fights the
+   checkpoint's tendency to add one.
+3. **A cut-out sanity guard**, `tools/gen/cutout-guard.mjs`, run immediately
+   after the rembg step — the same point in the pipeline the black-frame
+   guard runs relative to the render. It rejects (quarantines to
+   `D:\Tools\comfy-logs\cutout-quarantine\`, non-zero exit) a cutout when:
+   - the crop box covers more than **96.5%** of the source canvas in
+     **both** width and height, for `full`/`portrait` composition only.
+     `boss` and `prone` are exempt by design (`full body, centered, imposing`
+     and a downed figure spanning the ground both legitimately fill the
+     frame) — a sweep of the shipped cast found 36 boss- and 6
+     prone-composition files that legitimately measure 97-100% coverage on
+     both axes. The threshold itself is tuned against real approved art, not
+     the round 92% first proposed: Auron's idle legitimately covers 96.0% x
+     99.0% of its source (coat and katana reach close to both edges), while
+     the two incident renders measure 100% x 100% and 99.8% x 97.3%.
+   - a second connected blob of opaque pixels, more than 6% of the size of
+     the main figure and not touching it (within a few pixels — the
+     antialiased gap between a hand and a held weapon), survives — a
+     duplicated weapon or a scrap of swirl.
+   - near-white opaque pixels (all channels ≥ 245) exceed 3% of the opaque
+     area, concentrated in one region over 1.5% of it, **and** that region is
+     either its own detached blob or reaches the edge of the frame. The
+     detached-or-edge condition is the fix for a real false positive found
+     while calibrating this: white *clothing* (Yuna's sash, Yunalesca's
+     robe, Leblanc's fan) is legal, sits inside the figure's own blob, and
+     does not reach the crop margin — a leftover background patch does one
+     or the other. `--ref` renders get a further ceiling raised off the
+     referenced image's own near-white fraction, so a subject who is
+     legitimately mostly white does not need special-casing by name.
+   - `--keepBad` keeps the file anyway (still logs the measurements loudly)
+     for a render you know is fine despite tripping a rule — an
+     intentionally dramatic "dark aura" boss look, for instance; not every
+     hit is a defect, some are a judgement call the same way §6's numbered
+     list above is.
+4. **A canon pose phrase table**, `tools/gen/pose-phrases.mjs`
+   (`CANON_POSE_PHRASES`): body-only language with no effect words for
+   `idle`/`attack`/`cast`/`item`/`hurt`/`ko`/`victory`. `comfy.mjs` uses it
+   when `--pose <name>` is given and the caller supplies no `--poseTags` at
+   all; it never overrides a caller's own text. Agents writing a new pose by
+   hand should start from this table rather than reaching for an effect word
+   to sell the impact — the cel-shaded style and rim lighting already carry
+   that.
+
+Bailey's 2026-09-21 correction, folded into the design above: `simple
+background, white background` is the pipeline's own documented sprite
+background (`CHARACTER_COMPOSITION` and friends), not a defect — the lint
+never strips or replaces it, and the near-white guard's "internal to the
+figure, not touching the edge" carve-out is precisely what keeps it from
+flagging ordinary white clothing.
 
 ---
 
