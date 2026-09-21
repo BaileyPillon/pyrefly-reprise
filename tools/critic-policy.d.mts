@@ -61,6 +61,15 @@ export declare const REVIEW_KINDS: ReviewKind[];
 export declare const RESULTS: Result[];
 export declare const MILESTONE_STATES: string[];
 export declare function loadPolicy(root: string): Policy;
+
+export interface OwnerOverridePolicy {
+  allowed: boolean;
+  requiresOwnerWords: boolean;
+  settlesObligations: boolean;
+}
+
+/** The owner-override policy block (`critic/policy.json` `ownerOverride`, RUBRIC section 10). */
+export declare function ownerOverridePolicy(policy: Policy): OwnerOverridePolicy;
 export declare function globToRegExp(glob: string): RegExp;
 export declare function classifyChange(paths: string[] | null | undefined, policy: Policy): ChangeClass;
 export declare function accumulatedDeepDue(state: { substantialSinceDeep?: number; activeDaysSinceDeep?: number }, policy: Policy): string | null;

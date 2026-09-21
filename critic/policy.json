@@ -31,6 +31,7 @@
     "pacingGapPoints": 5
   },
   "escalation": { "focusedSystemsForDeep": 4, "productFilesForDeep": 40 },
+  "ownerOverride": { "allowed": true, "requiresOwnerWords": true, "settlesObligations": false },
   "alwaysAtDeploy": ["CHK-016", "CHK-017"],
   "baseline": {
     "note": "Evidence baseline for dependency reuse under policy v2. Its A/B/C numbers are historical (rubric v1) and are never shown as a v2 score.",

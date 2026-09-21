@@ -165,6 +165,10 @@ certifies a new build; rounds 02 and 03 are rubric v1 history.
   sequence; `focused.js`, `live.js`, `deep.js`). **If you cannot run the review the plan
   asks for, do not deploy:** commit, push `main` if green, and write "deploy + review
   owed" in NOW.md. Honour Bailey's pause instructions and check the usage allowance first.
+- Bailey alone can override the "no passing deep report" deploy refusal, by passing
+  `--owner-override="<Bailey's own words>"` to `tools/deploy-pages.mjs` (or `ownerOverride`
+  to `critic/runner/release.js`); it never settles a review obligation, and the next
+  candidate still owes the open changed-area issues (`critic/RUBRIC.md` section 10).
 
 ## End of every session
 

@@ -32,6 +32,27 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const sameSha = (a, b) => Boolean(a && b) && (String(a).startsWith(String(b)) || String(b).startsWith(String(a)));
 
+/**
+ * The `ownerOverride` block a pending marker carries, if the deploy used one
+ * (critic/RUBRIC.md section 10, "Owner override of the deploy gate").
+ * `readPendingMarkers` (critic-pending.mjs) only surfaces the fields every
+ * marker shares, so the raw file is read again here for this one extra field.
+ * Never throws: an unreadable or override-free marker reads as `null`.
+ */
+export function readOwnerOverride(markerPath) {
+  try {
+    const data = JSON.parse(readFileSync(markerPath, 'utf8'));
+    return data.ownerOverride ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** The status line for a marker deployed under an owner override. */
+export function formatOwnerOverrideLine(override) {
+  return `    deployed under owner override: "${override.words}"`;
+}
+
 /** Every report under `dir`, generous about the field names old rounds used. */
 export function readReports(dir, policy = null) {
   if (!existsSync(dir)) return [];
@@ -75,7 +96,8 @@ export function lastDeployed(root) {
 }
 
 function main() {
-  const pending = readPendingMarkers(join(ROOT, 'critic', 'pending'));
+  const pendingDir = join(ROOT, 'critic', 'pending');
+  const pending = readPendingMarkers(pendingDir);
   const policy = loadPolicy(ROOT);
   const reports = [...readReports(join(ROOT, 'critic', 'rounds'), policy), ...readReports(join(ROOT, 'critic', 'reviews'), policy)];
   const live = lastDeployed(ROOT);
@@ -88,6 +110,8 @@ function main() {
   for (const m of pending) {
     if (m.parseError) { console.log(`  ${m.file}  UNREADABLE (${m.parseError}) — counts as pending`); owed++; continue; }
     console.log(`  main=${m.mainSha}  bundle=${m.bundle ?? '?'}  age=${m.ageHours}h${m.review ? `  planned review=${m.review}` : ''}`);
+    const override = readOwnerOverride(join(pendingDir, m.file));
+    if (override) console.log(formatOwnerOverrideLine(override));
     for (const o of m.obligations) {
       const tail = o.status === 'pending' ? `PENDING  (${o.requires})` : `${o.status}${o.result ? ` ${o.result}` : ''}${o.settledBy ? `  by ${o.settledBy}` : ''}`;
       console.log(`    ${o.kind.padEnd(9)} ${tail}${o.carriedFrom ? `  carried from ${o.carriedFrom.join(', ')}` : ''}`);
