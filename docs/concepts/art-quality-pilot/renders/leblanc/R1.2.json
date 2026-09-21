@@ -1,0 +1,56 @@
+{
+  "width": 589,
+  "height": 1144,
+  "baselineY": 1128,
+  "seed": 700301,
+  "prompt": "1girl, leblanc \\(ff10-2\\), final fantasy x-2, safe, solo, blonde hair, short hair, purple eyes, round face, pinkish-purple robe, open chest, heart mark, tasselled collar, furisode sleeves, thigh-high stockings, purple ankle boots, holding fan, red and silver fan, standing, fan held fully open in front of her, chin lifted, warm magenta stage light, looking at viewer, confident expression, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, nude, bare chest, topless, two fans, extra fan, sword, gun, dark skin, elderly",
+  "cropBox": [
+    97,
+    24,
+    686,
+    1168
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "lint": {
+    "stripped": []
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 0.7079326923076923,
+      "heightFraction": 0.9407894736842105,
+      "checked": true,
+      "exceeds": false
+    },
+    "components": {
+      "componentCount": 3,
+      "largestPixels": 290675,
+      "secondPixels": 805,
+      "secondRatio": 0.002769416014449127,
+      "touchesLargest": true
+    },
+    "nearWhite": {
+      "fraction": 0.002048050413548641,
+      "largestRegionFraction": 0.0002637121769953936,
+      "detached": true,
+      "touchesEdge": false,
+      "allowanceUsed": 0.03
+    }
+  },
+  "generatedAt": "2026-09-21T21:10:29.147Z"
+}
