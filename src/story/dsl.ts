@@ -56,6 +56,14 @@ export type SpeakerId =
   | 'yenke'
   /** The Mt. Gagazet merchant. */
   | 'wantz'
+  /**
+   * Cid, the *Fahrenheit*'s owner, heard over the deck rather than seen
+   * [research/ffx-evrae-airship.md §12.1, §12.4 beat 7]. He is also a combatant
+   * in the Evrae encounter (`CID_ID`), so the speaker id and the combatant id
+   * are deliberately the same string. Untagged in `SPEAKER_ROLES` — the airship
+   * crew are known by name [ui/common/speaker-roles.ts].
+   */
+  | 'cid'
   // --- FFX-2 party --------------------------------------------------------
   /** FFX-2 Yuna. A separate voice and portrait set from `'yuna'` [writing-bible §1.14]. */
   | 'yuna-x2'

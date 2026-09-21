@@ -6,6 +6,31 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-21 — `SpeakerId` gains `'cid'` (the Evrae chapter's voice over the deck)
+
+Key `chapter-evrae-script`. **FFX only** [AGENTS.md hard rule 14].
+`research/ffx-evrae-airship.md` §0.4 fences the encounter in — the airship
+distance mechanic "has no X-2 counterpart" — and Cid appears aboard the
+*Fahrenheit* at a point in FFX's story. `src/battle/ffx2/**`, `src/data/ffx2/**`
+and every FFX-2 script are untouched; the absence case is the last describe
+block of `tests/unit/chapters/evrae-script.test.ts`.
+
+**Additive, one union member.** `src/story/dsl.ts`'s `SpeakerId` gains `'cid'`,
+under the FFX supporting cast. No existing script, runner or screen changes:
+
+- `SPEAKER_ROLES` (`src/ui/common/speaker-roles.ts`) is a `Partial` record and
+  deliberately leaves the airship crew untagged, so it needed no entry;
+- `DialogueBox`'s `defaultName` title-cases the id, giving `Cid`;
+- the id is the same string as the combatant id `CID_ID` in
+  `src/data/ffx/enemies/evrae.ts`, on purpose — Cid takes a CTB row in this
+  encounter and speaks on the same deck, and one name for one person keeps the
+  presenter's actor lookup honest.
+
+Why it was needed: preflight beats 7 and 9 (`docs/plans/chapter-evrae-review.md`
+§7) are Cid's by name — the mechanic delivered as characterisation, and the
+victory revoked a minute later by Bevelle's own guns. Writing them as `'none'`
+would have thrown away the only character in the chapter with an opinion.
+
 ## 2026-09-21 — Active ATB: `FFX2BattleEngine.tick` takes options, and gains `inputValid`
 
 Key `ffx2-active-atb`. Shipped in `45f98b9` **without this entry** — hard rule 2
