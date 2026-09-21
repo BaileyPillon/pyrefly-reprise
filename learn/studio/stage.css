@@ -1,0 +1,187 @@
+/*
+ * Site B's stage and its own chrome, ported from the approved frame
+ * docs/concepts/atlas/b-battle-studio/b.css. Only the parts that frame draws
+ * and the shared theme does not: the lit turntable and its figures, the eight
+ * pinned readouts, the ring of step cards, the rule wall, the game switch and
+ * the Live engine panel.
+ *
+ * The shared chrome (title, switcher, search, panel, slider, card, rail) is
+ * themes/studio.css's job and is not touched here.
+ *
+ * No text below is set under 13px. The frame's own smallest type is 13px and
+ * that is the floor: a wall of 137 rules that cannot be read is not an
+ * inventory.
+ */
+
+/* ------------------------------------------------------------- the studio */
+[data-pyx-theme='studio'] .pyb-floor { position: absolute; left: -800px; top: 122px; width: 1600px; height: 310px; pointer-events: none; background: linear-gradient(180deg, rgba(90, 108, 150, 0.16), rgba(11, 10, 18, 0) 62%); }
+[data-pyx-theme='studio'] .pyb-cyc { position: absolute; overflow: hidden; border-radius: 22px; box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.7), 0 30px 70px rgba(0, 0, 0, 0.55); pointer-events: none; }
+[data-pyx-theme='studio'] .pyb-cyc img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; filter: saturate(0.86) brightness(0.78) contrast(1.04); display: block; }
+[data-pyx-theme='studio'] .pyb-plinth, [data-pyx-theme='studio'] .pyb-table { position: absolute; border-radius: 50%; pointer-events: none; }
+[data-pyx-theme='studio'] .pyb-plinth { margin-top: 15px; background: linear-gradient(180deg, #232838 0%, #07070c 60%); box-shadow: 0 120px 160px rgba(0, 0, 0, 0.9); }
+[data-pyx-theme='studio'] .pyb-table { background: radial-gradient(circle at 50% 30%, #7c89ab 0%, #4a546f 22%, #262c3f 52%, #141722 80%, #0e1019 100%); }
+[data-pyx-theme='studio'] .pyb-table i { position: absolute; border-radius: 50%; }
+[data-pyx-theme='studio'] .pyb-table__r { inset: 16%; border: 2px solid rgba(244, 241, 232, 0.12); }
+[data-pyx-theme='studio'] .pyb-table__t { inset: 2.2%; background: repeating-conic-gradient(rgba(244, 241, 232, 0.5) 0 0.5deg, transparent 0.5deg 5deg); -webkit-mask: radial-gradient(closest-side, transparent 95.5%, #000 96%); mask: radial-gradient(closest-side, transparent 95.5%, #000 96%); }
+[data-pyx-theme='studio'] .pyb-table__a { inset: 7%; background: conic-gradient(from 150deg, transparent 0deg, var(--pyx-accent) 14deg, var(--pyx-accent) 46deg, transparent 60deg, transparent 360deg); -webkit-mask: radial-gradient(closest-side, transparent 96%, #000 96.6%); mask: radial-gradient(closest-side, transparent 96%, #000 96.6%); }
+[data-pyx-theme='studio'] .pyb-shadow { position: absolute; border-radius: 50%; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 68%); }
+[data-pyx-theme='studio'] .pyb-fig { position: absolute; display: block; pointer-events: none; filter: drop-shadow(0 20px 22px rgba(0, 0, 0, 0.55)); }
+[data-pyx-theme='studio'] .pyb-fig--back { filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.6)) brightness(0.86) saturate(0.9); }
+
+/* ------------------------------------------------- the eight pinned readouts */
+[data-pyx-theme='studio'] .pyb-pins > * { position: absolute; }
+[data-pyx-theme='studio'] .pyb-pin, [data-pyx-theme='studio'] .pyb-chipline { display: flex; align-items: center; gap: 7px; cursor: pointer; z-index: 6; }
+[data-pyx-theme='studio'] .pyb-pin__d { width: 24px; height: 24px; flex: none; border-radius: 50%; border: 1px solid var(--pyx-accent); background: rgba(11, 10, 18, 0.88); color: var(--pyx-accent); font: 600 14px/22px var(--pyx-num); text-align: center; box-shadow: 0 0 0 4px rgba(227, 185, 74, 0.1); }
+[data-pyx-theme='studio'] .pyb-pin__t { font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; text-shadow: 0 1px 6px #000, 0 0 12px #000; }
+[data-pyx-theme='studio'] .pyb-pin--sel .pyb-pin__d, [data-pyx-theme='studio'] .pyb-chipline--sel .pyb-pin__d { background: var(--pyx-accent); color: var(--pyx-ink); }
+[data-pyx-theme='studio'] .pyb-chip { font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 10px 3px; border-radius: 4px; background: rgba(11, 10, 18, 0.84); border: 1px solid var(--pyx-line); white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-chip b { font-family: var(--pyx-num); font-weight: 700; font-size: 15px; letter-spacing: 0.04em; color: var(--pyx-accent); margin-left: 7px; }
+[data-pyx-theme='studio'] .pyb-chipline--sel .pyb-chip { border-color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-plain { font-size: 13px; line-height: 1.3; color: rgba(244, 241, 232, 0.8); text-shadow: 0 1px 5px #000, 0 0 10px #000; white-space: nowrap; pointer-events: none; }
+[data-pyx-theme='studio'] .pyb-plain b { font-family: var(--pyx-num); font-weight: 700; font-size: 15px; color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-banner { transform: skewX(-12deg); background: var(--pyx-paper); color: var(--pyx-ink); border-bottom: 4px solid var(--pyx-accent); padding: 5px 20px 5px 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45); display: flex; align-items: center; gap: 12px; cursor: pointer; z-index: 6; }
+[data-pyx-theme='studio'] .pyb-banner > * { transform: skewX(12deg); }
+[data-pyx-theme='studio'] .pyb-banner__nm { font: italic 700 30px/1 var(--pyx-serif); }
+[data-pyx-theme='studio'] .pyb-banner__chip { background: var(--pyx-ink); color: var(--pyx-accent); font-family: var(--pyx-label); font-weight: 700; font-size: 13px; letter-spacing: 0.22em; padding: 4px 9px 3px; text-transform: uppercase; }
+[data-pyx-theme='studio'] .pyb-dmg { transform: skewX(-12deg) rotate(-4deg); transform-origin: 0 0; background: var(--pyx-accent); color: var(--pyx-ink); padding: 0 18px 2px 14px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5); cursor: pointer; z-index: 6; }
+[data-pyx-theme='studio'] .pyb-dmg b { display: block; transform: skewX(12deg); font: italic 700 58px/1.02 var(--pyx-serif); }
+[data-pyx-theme='studio'] .pyb-dmg--float { position: absolute; pointer-events: none; z-index: 4; }
+[data-pyx-theme='studio'] .pyb-intent { display: flex; align-items: center; gap: 9px; padding: 6px 13px 5px 10px; background: rgba(11, 10, 18, 0.86); border: 1px solid var(--pyx-line); border-left: 3px solid #9d3b3b; border-radius: 4px; cursor: pointer; z-index: 6; }
+[data-pyx-theme='studio'] .pyb-intent__k { font-family: var(--pyx-label); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-intent__v { font: italic 600 21px/1 var(--pyx-serif); }
+[data-pyx-theme='studio'] .pyb-od { cursor: pointer; z-index: 6; }
+[data-pyx-theme='studio'] .pyb-od__k { display: flex; justify-content: space-between; white-space: nowrap; font-family: var(--pyx-label); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pyx-muted); text-shadow: 0 1px 5px #000; }
+[data-pyx-theme='studio'] .pyb-od__k b { font-family: var(--pyx-num); font-weight: 700; font-size: 15px; color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-od__bar { position: relative; height: 7px; margin-top: 4px; background: rgba(11, 10, 18, 0.8); border: 1px solid var(--pyx-line); transform: skewX(-12deg); }
+[data-pyx-theme='studio'] .pyb-od__bar i { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(227, 185, 74, 0.55); }
+[data-pyx-theme='studio'] .pyb-od__bar em { position: absolute; top: 0; bottom: 0; background: var(--pyx-accent); box-shadow: 0 0 10px rgba(227, 185, 74, 0.9); }
+[data-pyx-theme='studio'] .pyb-acts { display: flex; flex-direction: column; gap: 5px; cursor: pointer; z-index: 6; }
+[data-pyx-theme='studio'] .pyb-act { display: flex; align-items: center; gap: 8px; height: 34px; width: 168px; padding: 0 12px 0 3px; background: rgba(11, 10, 18, 0.84); border: 1px solid var(--pyx-line); transform: skewX(-12deg); }
+[data-pyx-theme='studio'] .pyb-act > * { transform: skewX(12deg); }
+[data-pyx-theme='studio'] .pyb-act__f { width: 28px; height: 28px; flex: none; overflow: hidden; background: #1a1d2a; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+[data-pyx-theme='studio'] .pyb-act__f img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; transform: scale(1.4); }
+[data-pyx-theme='studio'] .pyb-act__n { flex: 1; font-size: 14px; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-act__t { font-family: var(--pyx-num); font-weight: 600; font-size: 15px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-act--now { width: 184px; background: var(--pyx-accent); border-color: var(--pyx-accent); color: var(--pyx-ink); }
+[data-pyx-theme='studio'] .pyb-act--now .pyb-act__t { color: var(--pyx-ink); }
+[data-pyx-theme='studio'] .pyb-act--foe { border-left: 3px solid #9d3b3b; }
+[data-pyx-theme='studio'] .pyb-acts--sel .pyb-act { border-color: var(--pyx-accent); }
+
+/* ---------------------------------------------- the ring of step cards (55%) */
+[data-pyx-theme='studio'] .pyb-lines { position: absolute; pointer-events: none; overflow: visible; z-index: 1; }
+[data-pyx-theme='studio'] .pyb-line__trk { stroke: rgba(244, 241, 232, 0.34); stroke-width: 1.6; fill: none; stroke-dasharray: 2 7; stroke-linecap: round; }
+[data-pyx-theme='studio'] .pyb-line__stub { stroke: rgba(244, 241, 232, 0.42); stroke-width: 1; fill: none; }
+[data-pyx-theme='studio'] .pyb-line__dot { fill: #0b0a12; stroke: rgba(244, 241, 232, 0.6); stroke-width: 1.2; }
+[data-pyx-theme='studio'] .pyb-line--sel { stroke: var(--pyx-accent); stroke-width: 1.6; }
+[data-pyx-theme='studio'] circle.pyb-line--sel { fill: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-step { position: absolute; display: flex; flex-direction: column; padding: 11px 14px 10px; border-radius: 12px; cursor: pointer; z-index: 5; background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 46%), rgba(17, 19, 30, 0.86); border: 1px solid var(--pyx-line); box-shadow: 0 22px 44px rgba(0, 0, 0, 0.5); }
+[data-pyx-theme='studio'] .pyb-step__hd { display: flex; align-items: baseline; gap: 8px; font-family: var(--pyx-label); font-weight: 500; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-step__no { font-family: var(--pyx-num); font-weight: 600; font-size: 15px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-step__p { flex: 1; margin: 6px 0 8px; font-size: 13.5px; line-height: 1.34; color: rgba(244, 241, 232, 0.8); }
+[data-pyx-theme='studio'] .pyb-step__lv { display: flex; align-items: baseline; flex-wrap: wrap; row-gap: 3px; gap: 7px; padding-top: 7px; border-top: 1px solid var(--pyx-line); font-size: 13px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-step__lv i { flex: none; width: 6px; height: 6px; border-radius: 50%; align-self: center; background: var(--pyx-accent); box-shadow: 0 0 8px rgba(227, 185, 74, 0.8); }
+[data-pyx-theme='studio'] .pyb-step__lv b { font-family: var(--pyx-num); font-weight: 700; font-size: 18px; line-height: 1; color: var(--pyx-paper); }
+[data-pyx-theme='studio'] .pyb-step__pw { flex-basis: 100%; padding-left: 13px; font-size: 13px; line-height: 1.25; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-step--sel { border-color: var(--pyx-accent); background: linear-gradient(180deg, rgba(227, 185, 74, 0.26), rgba(227, 185, 74, 0.07) 60%), rgba(24, 22, 22, 0.88); box-shadow: 0 0 0 1px rgba(227, 185, 74, 0.5), 0 0 44px rgba(227, 185, 74, 0.28), 0 28px 50px rgba(0, 0, 0, 0.6); }
+[data-pyx-theme='studio'] .pyb-step--sel .pyb-step__hd, [data-pyx-theme='studio'] .pyb-step--sel .pyb-step__no, [data-pyx-theme='studio'] .pyb-step--sel .pyb-step__lv b { color: var(--pyx-accent); }
+
+/* ----------------------------------------------------- the rule wall (100%) */
+[data-pyx-theme='studio'] .pyb-wall { display: flex; flex-direction: column; gap: 6px; }
+[data-pyx-theme='studio'] .pyb-wall__b { display: grid; grid-template-columns: repeat(var(--pyb-cols), minmax(0, 1fr)); gap: 4px 6px; }
+[data-pyx-theme='studio'] .pyb-wall__cap { display: flex; align-items: center; justify-content: flex-end; gap: 10px; height: 26px; color: var(--pyx-muted); font-size: 13px; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-wall__cap::before { content: ''; flex: 1; height: 1px; background: var(--pyx-line); }
+[data-pyx-theme='studio'] .pyb-wall__cap b { font: 700 20px/1 var(--pyx-num); color: var(--pyx-paper); }
+[data-pyx-theme='studio'] .pyb-wall__empty { font-size: 14px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-tile { position: relative; display: flex; align-items: center; gap: 7px; min-width: 0; height: 26px; padding: 0 9px; border-radius: 6px; cursor: pointer; font-size: 13px; background: rgba(17, 19, 30, 0.72); border: 1px solid var(--pyx-line); }
+[data-pyx-theme='studio'] .pyb-tile__n { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-tile--l { height: 74px; border-radius: 8px; display: grid; grid-template-columns: 14px minmax(0, 1fr); column-gap: 8px; align-content: center; padding: 0 11px; }
+[data-pyx-theme='studio'] .pyb-tile--l .pyb-tile__n { font-size: 14px; font-weight: 500; line-height: 1.2; }
+/* The large tiles carry the rule's whole sourced sentence, so it wraps rather than
+   being cut: a formula with its tail clipped off is not a formula. */
+[data-pyx-theme='studio'] .pyb-tile__fx { grid-column: 2; font-size: 13px; line-height: 1.22; color: var(--pyx-muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+[data-pyx-theme='studio'] .pyb-tile__no { position: absolute; right: 9px; top: 8px; font: 600 13px/1 var(--pyx-num); color: rgba(244, 241, 232, 0.34); }
+[data-pyx-theme='studio'] .pyb-tile--sel, [data-pyx-theme='studio'] .pyb-tile:hover { border-color: var(--pyx-accent); background: linear-gradient(180deg, rgba(227, 185, 74, 0.28), rgba(227, 185, 74, 0.09)), rgba(24, 22, 22, 0.9); z-index: 5; }
+[data-pyx-theme='studio'] .pyb-gl { position: relative; width: 14px; height: 14px; flex: none; display: inline-block; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-tile--sel .pyb-gl, [data-pyx-theme='studio'] .pyb-tile:hover .pyb-gl { color: var(--pyx-accent); }
+/* One glyph per component, exactly the eight b.css draws (`.gl.g1` to `.gl.g8`). */
+[data-pyx-theme='studio'] .pyb-gl--turn { background: linear-gradient(currentColor, currentColor) 0 2px / 14px 2px no-repeat, linear-gradient(currentColor, currentColor) 0 6px / 10px 2px no-repeat, linear-gradient(currentColor, currentColor) 0 10px / 6px 2px no-repeat; }
+[data-pyx-theme='studio'] .pyb-gl--command::before { content: ''; position: absolute; left: 3px; top: 2px; border-left: 9px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+[data-pyx-theme='studio'] .pyb-gl--hit { border: 1.5px solid currentColor; border-radius: 50%; }
+[data-pyx-theme='studio'] .pyb-gl--hit::before { content: ''; position: absolute; left: 3.5px; top: 3.5px; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+[data-pyx-theme='studio'] .pyb-gl--damage::before { content: ''; position: absolute; left: 2.5px; top: 2.5px; width: 9px; height: 9px; background: currentColor; transform: rotate(45deg); }
+[data-pyx-theme='studio'] .pyb-gl--element::before { content: ''; position: absolute; left: 1px; top: 1px; border-bottom: 12px solid currentColor; border-left: 6px solid transparent; border-right: 6px solid transparent; }
+[data-pyx-theme='studio'] .pyb-gl--status { border: 1.5px solid currentColor; border-radius: 50%; background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+[data-pyx-theme='studio'] .pyb-gl--overdrive { border: 1.5px solid currentColor; border-radius: 2px; height: 8px; margin-top: 3px; }
+[data-pyx-theme='studio'] .pyb-gl--overdrive::before { content: ''; position: absolute; left: 1px; top: 1px; bottom: 1px; width: 7px; background: currentColor; }
+[data-pyx-theme='studio'] .pyb-gl--boss { border: 1.5px solid currentColor; transform: rotate(45deg) scale(0.78); }
+
+/*
+ * On a card that has tabs, the Overview tab already prints the body, so the
+ * headline copy above the tabs is the same paragraph twice — and on site B
+ * that duplication is what pushed the live Agility control below the fold.
+ * The b2 frame shows one paragraph, under the tab that is open.
+ */
+[data-pyx-theme='studio'] .pyx-card__in:has(.pyx-dtabs) > .pyx-card__body { display: none; }
+
+/* ------------------------------------------- the live Agility control (card) */
+[data-pyx-theme='studio'] .pyb-try { margin-top: 10px; padding: 10px 12px 9px; border-radius: 10px; background: rgba(8, 9, 15, 0.62); border: 1px solid var(--pyx-line); }
+[data-pyx-theme='studio'] .pyb-try__k { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+[data-pyx-theme='studio'] .pyb-try__k em { display: flex; align-items: center; gap: 6px; font-style: normal; color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-try__k em i { width: 6px; height: 6px; border-radius: 50%; background: var(--pyx-accent); box-shadow: 0 0 8px rgba(227, 185, 74, 0.9); }
+[data-pyx-theme='studio'] .pyb-agi { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+[data-pyx-theme='studio'] .pyb-agi__track { position: relative; flex: 1; height: 28px; margin: 0 8px 0 4px; }
+[data-pyx-theme='studio'] .pyb-agi__groove { position: absolute; left: 0; right: 0; top: 11px; height: 6px; border-radius: 3px; background: rgba(244, 241, 232, 0.16); }
+[data-pyx-theme='studio'] .pyb-agi__fill { position: absolute; left: 0; top: 11px; height: 6px; border-radius: 3px; background: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-agi__mark { position: absolute; top: 5px; width: 2px; height: 18px; background: var(--pyx-paper); opacity: 0.7; }
+[data-pyx-theme='studio'] .pyb-agi__mark::after { content: attr(data-l); position: absolute; left: -20px; top: -16px; width: 42px; text-align: center; font: 600 13px/1 var(--pyx-num); color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-agi__knob { position: absolute; top: 3px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: var(--pyx-paper); border: 3px solid var(--pyx-accent); pointer-events: none; }
+[data-pyx-theme='studio'] .pyb-agi__input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+[data-pyx-theme='studio'] .pyb-agi__val { font: 700 30px/1 var(--pyx-num); color: var(--pyx-accent); width: 42px; text-align: right; }
+[data-pyx-theme='studio'] .pyb-try__sub { margin-top: 4px; font-size: 13px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-try__sub b { font-family: var(--pyx-num); font-weight: 600; font-size: 15px; color: var(--pyx-paper); }
+[data-pyx-theme='studio'] .pyb-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 8px; margin-top: 8px; }
+[data-pyx-theme='studio'] .pyb-col__h { font-size: 13px; color: var(--pyx-muted); margin-bottom: 4px; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-col__h--now { color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-tl { display: flex; align-items: center; justify-content: space-between; gap: 6px; height: 21px; padding: 0 7px; margin-bottom: 2px; font-size: 13px; background: rgba(244, 241, 232, 0.05); border-left: 2px solid transparent; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyb-tl span:first-child { overflow: hidden; text-overflow: ellipsis; }
+[data-pyx-theme='studio'] .pyb-tl__t { font-family: var(--pyx-num); font-weight: 600; font-size: 14px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-tl--foe { border-left-color: #9d3b3b; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-tl--me { background: rgba(227, 185, 74, 0.2); border-left-color: var(--pyx-accent); color: var(--pyx-paper); font-weight: 500; }
+[data-pyx-theme='studio'] .pyb-tl--me .pyb-tl__t { color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyb-tl--moved { background: var(--pyx-accent); color: var(--pyx-ink); }
+[data-pyx-theme='studio'] .pyb-tl--moved .pyb-tl__t { color: var(--pyx-ink); }
+[data-pyx-theme='studio'] .pyb-try__note { margin-top: 6px; font-size: 13px; line-height: 1.4; color: var(--pyx-muted); }
+
+/* ----------------------------------------------------- site B's own chrome */
+/*
+ * The switch sits under the title block rather than beside it, as the frames
+ * put it: with the shell's own chrome the title column is where there is room
+ * for the switch *and* for saying plainly why the other half of it is off.
+ */
+[data-pyx-theme='studio'] .pyb-gameswitch { position: absolute; left: 2.5%; top: 17%; width: 19%; min-width: 260px; z-index: 23; }
+[data-pyx-theme='studio'] .pyb-gameswitch__row { display: inline-flex; align-items: center; padding: 3px; border-radius: 999px; border: 1px solid var(--pyx-line); background: rgba(10, 11, 18, 0.6); }
+[data-pyx-theme='studio'] .pyb-gameswitch__b { all: unset; padding: 5px 13px 4px; border-radius: 999px; font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.16em; color: var(--pyx-muted); cursor: pointer; }
+[data-pyx-theme='studio'] .pyb-gameswitch__b--on { background: var(--pyx-accent); color: var(--pyx-ink); font-weight: 700; }
+[data-pyx-theme='studio'] .pyb-gameswitch__b:disabled { opacity: 0.45; cursor: not-allowed; }
+[data-pyx-theme='studio'] .pyb-gameswitch__note { display: block; margin-top: 4px; font-size: 13px; line-height: 1.25; color: var(--pyx-muted); }
+
+/* The title column stays inside the same chrome edge the panel under it uses, so the
+   facts line never runs out over the stage (`learn/shared/region.ts`'s CHROME.left).
+   The eyebrow's tracking comes in from the theme's 0.3em so the frame's own
+   "PYREFLY STUDIO · BATTLE SYSTEM" still sets on one line in that narrower column. */
+[data-pyx-theme='studio'] .pyx-title { width: 19%; }
+[data-pyx-theme='studio'] .pyx-title__eyebrow { letter-spacing: 0.17em; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyx-title__name { margin: 4px 0 6px; }
+[data-pyx-theme='studio'] .pyb-live { position: absolute; left: 2.5%; bottom: 9%; width: 19%; min-width: 260px; z-index: 20; padding: 13px 16px 12px; border-radius: 14px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0) 42%), var(--pyx-card); border: 1px solid var(--pyx-line); box-shadow: var(--pyx-soft-shadow); }
+[data-pyx-theme='studio'] .pyb-live__k { display: flex; align-items: center; gap: 8px; color: var(--pyx-paper); }
+[data-pyx-theme='studio'] .pyb-live__k i { width: 8px; height: 8px; border-radius: 50%; background: var(--pyx-accent); box-shadow: 0 0 0 4px rgba(227, 185, 74, 0.18), 0 0 14px rgba(227, 185, 74, 0.7); }
+[data-pyx-theme='studio'] .pyb-live p { margin: 7px 0 9px; font-size: 13.5px; line-height: 1.42; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-live__row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyb-live__row b { font-family: var(--pyx-num); font-weight: 600; font-size: 16px; color: var(--pyx-paper); margin-left: 6px; }
+[data-pyx-theme='studio'] .pyb-live__btn { all: unset; font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 11px 3px; border-radius: 999px; border: 1px solid var(--pyx-muted); color: var(--pyx-paper); cursor: pointer; }
+[data-pyx-theme='studio'] .pyb-xcap { position: absolute; left: 25%; right: 25%; top: 86%; z-index: 19; text-align: center; color: var(--pyx-muted); letter-spacing: 0.34em; pointer-events: none; }
+[data-pyx-theme='studio'] .pyb-xcap span { position: relative; padding: 0 18px; }
+[data-pyx-theme='studio'] .pyb-xcap span::before, [data-pyx-theme='studio'] .pyb-xcap span::after { content: ''; position: absolute; top: 50%; width: 70px; height: 1px; background: var(--pyx-line); }
+[data-pyx-theme='studio'] .pyb-xcap span::before { right: 100%; }
+[data-pyx-theme='studio'] .pyb-xcap span::after { left: 100%; }
+[data-pyx-theme='studio'] .pyb-vignette { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(ellipse 78% 74% at 50% 46%, transparent 58%, rgba(0, 0, 0, 0.62) 100%); }

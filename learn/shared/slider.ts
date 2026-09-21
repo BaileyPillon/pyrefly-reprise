@@ -8,6 +8,7 @@
 
 import type { Store } from './store.ts';
 import { requireEl } from './dom.ts';
+import { escapeHtml } from './text.ts';
 
 export interface SliderLabels {
   /** `explode` 0. Default "Assembled". */
@@ -48,7 +49,8 @@ export function renderSlider(host: HTMLElement, store: Store, options: SliderOpt
         <div class="pyx-slider__fill"></div>
         ${TICKS.map((t) => `<i class="pyx-slider__tick" style="left:${t}%"></i>`).join('')}
         <div class="pyx-slider__knob"></div>
-        <input type="range" class="pyx-slider__input" min="0" max="100" step="1" value="0" aria-label="Explode: how far apart the pieces are pulled">
+        <input type="range" class="pyx-slider__input" min="0" max="100" step="1" value="0"
+          aria-label="Pull it apart: ${escapeHtml(startLabel)} to ${escapeHtml(endLabel)}">
       </div>
       <div class="pyx-slider__ends">
         <span class="pyx-end pyx-slider__start">${startLabel}</span>
@@ -79,6 +81,8 @@ export function renderSlider(host: HTMLElement, store: Store, options: SliderOpt
     const state = store.getState();
     const percent = Math.round(state.explode * 100);
     input.value = String(percent);
+    // A range whose numbers mean nothing on their own: a screen reader reads "55" otherwise.
+    input.setAttribute('aria-valuetext', `${percent}% — ${stateFor(state.explode, options.visibleCount())}`);
     fill.style.width = `${percent}%`;
     knob.style.left = `${percent}%`;
     pct.textContent = String(percent);

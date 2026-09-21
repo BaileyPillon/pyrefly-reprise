@@ -4,15 +4,19 @@
  * pinch to zoom, click a piece to inspect, drag to pan the inventory once
  * everything has settled at `explode` 1.
  *
- * Two painters sit behind one camera:
+ * Three painters sit behind one camera:
+ *  - **A site's own** (`StageOptions.createPainter`) when the site brings one
+ *    — site B's `learn/studio/stage-studio.ts`, whose three states are its
+ *    own approved frames and whose live readouts come from a battle trace
+ *    this module must know nothing about.
  *  - **Authored** (`stage-authored.ts`) when the specimen's pieces carry a
  *    `Piece.stage` — site A, whose assembled, pulled-apart and inventory
  *    states are all approved frames.
- *  - **Generic** (`stage-generic.ts`) otherwise — sites B and C, which place
+ *  - **Generic** (`stage-generic.ts`) otherwise — a fallback that places
  *    every piece from `size` through `tile-size.ts`, `pack.ts` and
  *    `layout.ts`.
  *
- * This module owns only what both share: the DOM shell, the camera
+ * This module owns only what they share: the DOM shell, the camera
  * (tilt/zoom/pan), and turning a pointer or key into a `select`.
  */
 
@@ -20,13 +24,27 @@ import type { Specimen } from './model.ts';
 import { stageRotation } from './layout.ts';
 import type { PackBox } from './pack.ts';
 import { CANVAS, freeStagePercent } from './region.ts';
-import type { Store } from './store.ts';
+import type { ExplorerState, Store } from './store.ts';
 import { requireEl } from './dom.ts';
-import type { AuthoredPainter } from './stage-authored.ts';
 import { createAuthoredPainter } from './stage-authored.ts';
 import { DEFAULT_PACK_BOX, paintGeneric } from './stage-generic.ts';
 
 export { fadeInFor } from './stage-generic.ts';
+
+/** What every painter behind this stage offers: turn state into DOM, and clean up after itself. */
+export interface StagePainter {
+  paint(state: ExplorerState): void;
+  destroy(): void;
+}
+
+/**
+ * How a site supplies its own painter. `world` is the camera-transformed
+ * layer (stage units, origin at its own top-left); `invHost` sits outside the
+ * camera so the 100% inventory's type never scales or tilts, and a painter
+ * that wants the shared drag-to-pan puts its flow in a `[data-inv-flow]`
+ * element inside it.
+ */
+export type StagePainterFactory = (specimen: Specimen, world: HTMLElement, invHost: HTMLElement) => StagePainter;
 
 export interface CameraControls {
   zoomIn(): void;
@@ -36,6 +54,8 @@ export interface CameraControls {
 
 export interface StageOptions {
   readonly packBox?: PackBox;
+  /** A site's own painter. Takes precedence over the authored/generic choice below. */
+  readonly createPainter?: StagePainterFactory;
 }
 
 export interface StageHandle {
@@ -49,13 +69,15 @@ const ZOOM_STEP = 0.18;
 const DRAG_CLICK_THRESHOLD_PX = 6;
 
 export function renderStage(host: HTMLElement, specimen: Specimen, store: Store, options: StageOptions = {}): StageHandle {
-  const authored = specimen.pieces.some((piece) => piece.stage !== undefined);
-  host.innerHTML = authored
+  // A site's own painter and the authored one share the same shell: a flat world (z-index,
+  // not depth sorting), an inventory host outside the camera, and the hover tip that host uses.
+  const flat = options.createPainter !== undefined || specimen.pieces.some((piece) => piece.stage !== undefined);
+  host.innerHTML = flat
     ? `<div class="pyx-stage__world pyx-stage__world--flat"></div><div class="pyx-stage__inv" data-inv></div><div class="pyx-tip pyx-hidden" data-tip></div>`
     : `<div class="pyx-stage__world"></div>`;
   const world = requireEl(host, '.pyx-stage__world');
-  const invHost = authored ? requireEl(host, '[data-inv]') : undefined;
-  const tip = authored ? requireEl(host, '[data-tip]') : undefined;
+  const invHost = flat ? requireEl(host, '[data-inv]') : undefined;
+  const tip = flat ? requireEl(host, '[data-tip]') : undefined;
 
   if (invHost !== undefined) {
     const region = freeStagePercent();
@@ -65,7 +87,8 @@ export function renderStage(host: HTMLElement, specimen: Specimen, store: Store,
     invHost.style.height = region.height;
   }
 
-  const painter: AuthoredPainter | undefined = authored && invHost !== undefined ? createAuthoredPainter(specimen, world, invHost) : undefined;
+  const createPainter: StagePainterFactory = options.createPainter ?? createAuthoredPainter;
+  const painter: StagePainter | undefined = flat && invHost !== undefined ? createPainter(specimen, world, invHost) : undefined;
 
   let tiltX = 0;
   let tiltY = 0;

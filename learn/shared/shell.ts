@@ -21,6 +21,7 @@ import { renderRail } from './rail.ts';
 import { renderSwitcher } from './switcher.ts';
 import type { SwitcherEntry, SwitcherHandle } from './switcher.ts';
 import { renderStage } from './stage.ts';
+import type { StagePainterFactory } from './stage.ts';
 import { renderHint } from './hint.ts';
 import { installFonts } from './urls.ts';
 import { highlightNumbers } from './text.ts';
@@ -43,6 +44,8 @@ export interface MountExplorerOptions {
   readonly sliderLabels?: SliderLabels;
   readonly secondaryAction?: (specimen: Specimen, piece: Piece | undefined) => CardAction | undefined;
   readonly renderCardExtra?: (host: HTMLElement, specimen: Specimen, piece: Piece) => void | (() => void);
+  /** A site's own stage painter (site B). Omitted, the stage picks the authored or generic one itself. */
+  readonly createStagePainter?: StagePainterFactory;
   readonly credits?: string;
 }
 
@@ -131,7 +134,9 @@ export function mountExplorer(root: HTMLElement, options: MountExplorerOptions):
       secondaryAction: options.secondaryAction,
       renderExtra: options.renderCardExtra,
     });
-    const stageHandle = renderStage(stageHost, currentSpecimen, store);
+    const stageHandle = renderStage(stageHost, currentSpecimen, store, {
+      ...(options.createStagePainter !== undefined ? { createPainter: options.createStagePainter } : {}),
+    });
     const railDestroy = renderRail(railHost, store, stageHandle.camera);
 
     teardownSpecimenParts = () => {

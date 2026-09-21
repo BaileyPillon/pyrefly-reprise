@@ -44,7 +44,7 @@ const CARD_SIZE = 4;
 const TILE_SIZE_BY_TIER: Record<StudioRuleSize, number> = { L: 1.8, M: 1.3, S: 1 };
 
 function formatOrder(entries: readonly TurnOrderEntry[]): string {
-  return entries.map((e) => `${e.name}@${e.tick}`).join('  ');
+  return entries.map((e) => `${e.name} (${e.tick})`).join(', ');
 }
 
 /** One sourced sentence per system for the "How it works" tab, independent of any one turn's numbers. */
@@ -63,17 +63,33 @@ function fact(label: string, value: string): PieceFact {
   return { label, value };
 }
 
-/** Builds the one `PieceCard` for a system's step, from that step's own real numbers. */
-function cardFor(component: StudioComponent, step: TurnStep, trace: TurnTrace): PieceCard {
+/**
+ * Builds the one `PieceCard` for a system's step, from that step's own real
+ * numbers.
+ *
+ * Exported because the live Agility control re-runs the engine without
+ * rebuilding the page: it rebuilds just the affected card here and writes the
+ * new body, facts and cite into the open detail card, so the card a reader is
+ * looking at always shows the trace the stage is drawing (`learn/studio/live.ts`).
+ */
+export function buildStepCard(component: StudioComponent, step: TurnStep, trace: TurnTrace): PieceCard {
   let body: string;
   let facts: PieceFact[];
 
   switch (step.component) {
     case 'turn': {
-      const before = formatOrder(step.before);
-      const after = formatOrder(step.after);
-      body = `Before ${trace.actorName} acts the queue reads ${before}. After the ${trace.commandLabel} it reads ${after}.`;
-      facts = [fact('Before', before), fact('After', after)];
+      // The body is the read, not the dump: the frame prints five rows, and the fact row
+      // below already carries the whole forecast for anyone who wants it.
+      const again = step.after.find((e) => e.actorId === trace.actorId)?.tick;
+      const first = step.before[0];
+      body = `The lowest counter goes next: ${formatOrder(step.before.slice(0, 5))}. After the ${trace.commandLabel}, ${trace.actorName} comes back at ${again ?? '?'} ticks.`;
+      // Two cells, as the frame sets them. The whole forecast is not a fact row: it is the
+      // two columns of the live control, where you can read it against another Agility.
+      facts = [
+        fact('Up next', first !== undefined ? `${first.name} (${first.tick})` : '—'),
+        fact(`${trace.actorName} again`, again !== undefined ? `${again} ticks` : '—'),
+        fact('Computed by', 'battle/ffx/turnQueue.ts'),
+      ];
       break;
     }
     case 'command': {
@@ -142,11 +158,24 @@ function cardFor(component: StudioComponent, step: TurnStep, trace: TurnTrace): 
     claimKind: "Engine reading · this turn's real numbers",
     facts,
     cite: step.cite,
+    // Every one of these readings is the FFX CTB engine's (AGENTS.md hard rule 14); the
+    // frame's card wears the same chip, because none of it carries over to FFX-2's ATB.
+    honesty: 'FFX only',
     tabs: [
       { id: 'overview', label: 'Overview', body },
       { id: 'how-it-works', label: 'How it works', body: HOW_IT_WORKS[component.id] },
     ],
   };
+}
+
+/** The one place the id of a rule's inventory tile is spelled, so the wall and the specimen can never disagree about it. */
+export function tilePieceId(ruleId: string): string {
+  return `tile-${ruleId}`;
+}
+
+/** The one place the id of a component's step card is spelled. */
+export function stepPieceId(component: StudioComponentId): string {
+  return `card-${component}`;
 }
 
 function tileCard(rule: StudioRule, componentName: string): PieceCard {
@@ -175,14 +204,14 @@ export function buildTurnSpecimen(trace: TurnTrace, rules: readonly StudioRule[]
     const step = stepByComponent.get(component.id);
     if (!step) throw new Error(`buildTurnSpecimen: trace is missing the "${component.id}" step`);
     return definePiece({
-      id: `card-${component.id}`,
+      id: stepPieceId(component.id),
       systemId: component.id,
       name: component.name,
       kind: 'card',
       size: CARD_SIZE,
       home: stepHome(component.id),
       burst: stepBurst(component.id),
-      card: cardFor(component, step, trace),
+      card: buildStepCard(component, step, trace),
     });
   });
 
@@ -197,7 +226,7 @@ export function buildTurnSpecimen(trace: TurnTrace, rules: readonly StudioRule[]
     const ruleList = rulesByComponent.get(component.id) ?? [];
     return ruleList.map((rule, index) =>
       definePiece({
-        id: `tile-${rule.id}`,
+        id: tilePieceId(rule.id),
         systemId: component.id,
         name: rule.name,
         kind: 'tile',

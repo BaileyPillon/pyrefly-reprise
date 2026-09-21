@@ -137,3 +137,54 @@
 
 [data-pyx-theme='studio'] .pyx-hint,
 [data-pyx-theme='studio'] .pyx-credits { font-size: 13px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyx-hint i,
+[data-pyx-theme='studio'] .pyx-credits i { font-style: normal; color: rgba(244, 241, 232, 0.3); }
+
+/*
+ * Layout this theme was missing.
+ *
+ * The file was ported from `b.css` before any site used it, so it carried the
+ * studio's colours, type and glass but not the arrangement inside each of the
+ * nine pattern elements — a slider whose caption, ends and percentage all
+ * landed on top of each other, and chips with nowhere to put an honest "not
+ * built yet". `paper.css` sets the same things for site A; these are the
+ * studio's own versions, not a copy of that look.
+ */
+[data-pyx-theme='studio'] .pyx-switcher { padding: 6px; height: 62px; align-items: stretch; }
+[data-pyx-theme='studio'] .pyx-chip { flex: 1; min-width: 0; gap: 9px; padding: 4px 10px; position: relative; }
+[data-pyx-theme='studio'] .pyx-chip__meta { min-width: 0; }
+[data-pyx-theme='studio'] .pyx-chip__k,
+[data-pyx-theme='studio'] .pyx-chip__n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyx-chip__thumb--blank { display: flex; align-items: center; justify-content: center; font-family: var(--pyx-serif); font-style: italic; font-weight: 700; }
+/* An honest note, in the kicker's place so a disabled chip is the same size as the rest. */
+[data-pyx-theme='studio'] .pyx-chip__note { display: none; font-size: 13px; color: var(--pyx-accent); }
+[data-pyx-theme='studio'] .pyx-chip--disabled .pyx-chip__note { display: block; position: absolute; left: 51px; top: 7px; }
+[data-pyx-theme='studio'] .pyx-chip--disabled .pyx-chip__k { visibility: hidden; }
+
+[data-pyx-theme='studio'] .pyx-search { height: 46px; border-radius: 23px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 16px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyx-rail { padding: 6px 0; }
+[data-pyx-theme='studio'] .pyx-rail__btn { justify-content: center; height: 54px; }
+[data-pyx-theme='studio'] .pyx-panel__num { font-family: var(--pyx-num); font-size: 20px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyx-panel__tabs { display: flex; gap: 6px; padding: 0 14px 10px; border-bottom: 1px solid var(--pyx-line); flex-wrap: wrap; }
+[data-pyx-theme='studio'] .pyx-sys__dot { width: 10px; height: 10px; border-radius: 50%; }
+[data-pyx-theme='studio'] .pyx-panel__foot b { font-family: var(--pyx-num); font-size: 17px; color: var(--pyx-paper); }
+
+[data-pyx-theme='studio'] .pyx-slider { padding: 11px 22px 12px 26px; }
+[data-pyx-theme='studio'] .pyx-slider__top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyx-slider__what { color: var(--pyx-accent); letter-spacing: 0.3em; }
+[data-pyx-theme='studio'] .pyx-slider__state { letter-spacing: 0.18em; color: var(--pyx-paper); }
+[data-pyx-theme='studio'] .pyx-slider__ends { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 3px; }
+[data-pyx-theme='studio'] .pyx-slider__plain { font-size: 13px; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyx-end { font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyx-end--dim { color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyx-slider__side { flex: 0 0 150px; display: flex; flex-direction: column; align-items: flex-end; border-left: 1px solid var(--pyx-line); padding-left: 18px; }
+[data-pyx-theme='studio'] .pyx-pct { line-height: 0.92; }
+[data-pyx-theme='studio'] .pyx-pct small { font-size: 18px; color: var(--pyx-muted); margin-left: 2px; }
+[data-pyx-theme='studio'] .pyx-slider__ctl { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+
+[data-pyx-theme='studio'] .pyx-card__in { padding: 14px 20px 16px; }
+[data-pyx-theme='studio'] .pyx-card__eb { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+[data-pyx-theme='studio'] .pyx-honest { font-family: var(--pyx-label); font-weight: 500; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid var(--pyx-muted); border-radius: 4px; padding: 0 6px; white-space: nowrap; }
+[data-pyx-theme='studio'] .pyx-card__kind { margin-top: 6px; font-size: 13px; line-height: 1.3; color: var(--pyx-muted); }
+[data-pyx-theme='studio'] .pyx-card__tabtext { margin: 9px 0 0; font-size: 14px; line-height: 1.4; }
+[data-pyx-theme='studio'] .pyx-clear { text-align: center; margin-top: 10px; }
