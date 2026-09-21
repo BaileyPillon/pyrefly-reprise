@@ -1,0 +1,14 @@
+[mouse] title tap/click did NOT reach the board (screen=title); retrying with the PRESS ENTER chip
+[mouse] chip mouse -> chapter-select (ok)
+[mouse] card "III Braska's Final Aeon" seymour-flux->braskas-final-aeon; plate -> party-prep (started)
+[touch] title tap/click did NOT reach the board (screen=title); retrying with the PRESS ENTER chip
+[touch] chip touch -> chapter-select (ok)
+[touch] card "III Braska's Final Aeon" seymour-flux->braskas-final-aeon; plate -> party-prep (started)
+[cleared] save says cleared=["yunalesca"]; DOM {"clearedCards":["II ✓ Lady Yunalesca"],"checks":1}
+[art seymour-flux] newBadResponses=0 imgs=9 brokenImgs=0 []
+[art yunalesca] newBadResponses=0 imgs=9 brokenImgs=0 []
+[art braskas-final-aeon] newBadResponses=0 imgs=9 brokenImgs=0 []
+[art ffx2-bahamut] newBadResponses=0 imgs=6 brokenImgs=0 []
+[art ffx2-vegnagun-shuyin] newBadResponses=0 imgs=6 brokenImgs=0 []
+artRequests=262
+consoleErrors=0 badResponses=0

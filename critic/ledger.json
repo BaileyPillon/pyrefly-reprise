@@ -4,5 +4,11 @@
     "date": "2026-09-19",
     "source": "round-03 (rubric v1, evidence baseline only)"
   },
-  "deploysSinceDeep": []
+  "deploysSinceDeep": [
+    {
+      "sha": "8f48237",
+      "date": "2026-09-21T18:24:26.533Z",
+      "substantial": true
+    }
+  ]
 }

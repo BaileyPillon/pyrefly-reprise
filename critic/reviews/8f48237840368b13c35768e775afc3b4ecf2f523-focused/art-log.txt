@@ -1,0 +1,14 @@
+[onboarding] {"seen":null,"wiring":{}}
+[art seymour-flux] actors=[]
+[art seymour-flux] portraitChips=3 broken=0 visibleMonograms=0 []
+[art seymour-flux] chips=[{"src":"portraits/tidus.png","w":58,"h":85,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/yuna.png","w":60,"h":87,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/kimahri.png","w":63,"h":92,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false}]
+[art braskas-final-aeon] actors=[]
+[art braskas-final-aeon] portraitChips=3 broken=0 visibleMonograms=0 []
+[art braskas-final-aeon] chips=[{"src":"portraits/tidus.png","w":58,"h":85,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/yuna.png","w":60,"h":87,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/auron.png","w":50,"h":73,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false}]
+[art ffx2-bahamut] actors=[]
+[art ffx2-bahamut] portraitChips=6 broken=0 visibleMonograms=0 []
+[art ffx2-bahamut] chips=[{"src":"characters/yuna-white-mage/idle.png","w":139,"h":284,"nat":"581x1183","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/yuna.png","w":60,"h":87,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"characters/rikku-dark-knight/idle.png","w":265,"h":406,"nat":"787x1205","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/rikku.png","w":45,"h":66,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"characters/paine-warrior/idle.png","w":133,"h":336,"nat":"459x1156","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/paine.png","w":43,"h":62,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false}]
+[art ffx2-vegnagun-shuyin] actors=[]
+[art ffx2-vegnagun-shuyin] portraitChips=6 broken=0 visibleMonograms=0 []
+[art ffx2-vegnagun-shuyin] chips=[{"src":"characters/yuna-white-mage/idle.png","w":139,"h":284,"nat":"581x1183","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/yuna.png","w":60,"h":87,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"characters/rikku-dark-knight/idle.png","w":265,"h":406,"nat":"787x1205","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/rikku.png","w":45,"h":66,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false},{"src":"characters/paine-dark-knight/idle.png","w":267,"h":386,"nat":"830x1200","objPos":"50% 50%","fit":"fill","broken":false},{"src":"portraits/paine.png","w":43,"h":62,"nat":"832x1216","objPos":"50% 50%","fit":"fill","broken":false}]
+consoleErrors=0 bad=0

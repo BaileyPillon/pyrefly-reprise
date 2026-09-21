@@ -1,0 +1,108 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-21T13:20:00.000Z",
+  "build": {
+    "mainSha": "fd0ae96",
+    "bundle": "BscpFDXN",
+    "artifactHash": "7161398faefeb5db79e0b8696b575bb5c4ee6eab91110c2c37e4caf971e424f4"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/fd0ae96.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/7191674.json --full -> {result: PASS, liveManifest: match, checked: 736, mismatched: [], missing: [], wrongType: [], errors: []}",
+        "served index.html references assets/index-BscpFDXN.js, confirmed via document.scripts on the live page",
+        "artifactHash 7161398faefeb5db79e0b8696b575bb5c4ee6eab91110c2c37e4caf971e424f4 matches critic/artifacts/fd0ae96.json and critic/pending/fd0ae96.json"
+      ],
+      "game": "both",
+      "chapter": "all",
+      "state": "n/a (static asset identity)",
+      "automated": true,
+      "environment": "artifact-manifest.mjs against the public URL"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "window.__pyrefly.screen() polled before every capture and asserted against the expected value (chapter-select, party-prep, battle, pause) before each screenshot",
+        "window.__pyrefly.battleState() snapshot read (phase: 'command:yuna', awaitingMenu: true) to confirm the command-menu state before opening the Attack submenu on Chapter 4",
+        "DOM assertions (pause__* class presence, exact-line 'ATTACK' text match) used alongside screen state, not screenshots alone"
+      ],
+      "game": "both",
+      "chapter": "1, 3, 4",
+      "state": "title, chapter-select, party-prep, battle, pause",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu, 1600x900, fresh context per run"
+    },
+    {
+      "id": "CHK-024",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "reason": "The reload half of the check (app returns to a working title screen, existing save key intact, no console errors) passed, but toggling a pause setting and confirming it survives the same reload was not reliably reproduced within this pass's time budget (a sequencing issue in the test harness, not an observed product defect). The full upgrade matrix is explicitly out of scope for this pass per the task instructions.",
+      "game": "both",
+      "chapter": "1",
+      "state": "battle -> reload -> title -> chapter-select",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu, 1600x900"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact identity, full manifest (736 files)",
+      "Title -> chapter select -> Chapter 1 (FFX/CTB) party prep -> battle -> pause -> hide/show panels -> resume, all real keyboard/click input",
+      "Title -> chapter select -> Chapter 4 (FFX-2/ATB) party prep -> battle-start banner -> command menu -> pause, all real keyboard/click input (with skipCutscene() used only past an opening cutscene already proven reachable by real input)",
+      "Chapter 3 (FFX/CTB) enemy naming: Yu Pagoda A / Yu Pagoda B letter chips, unique enemy (Braska's Final Aeon) with no letter",
+      "Strategy guide panel ends on a whole MORE row at 1600x900 (captured live in Chapter 3 gameplay)",
+      "Paine's portrait: painted in the Chapter 4 pause screen; a plain letter tile in the Chapter 4 party-prep screen (regression logged, LIVE-A2-1)",
+      "Fresh-profile onboarding is off (no briefing text on title/chapter-select, no onboarding row in pause)",
+      "FFX-2 Attack submenu: Yuna's White Mage set has no Attack row (expected, matches FFX-2 design); Yuna as Gunner shows exactly one ATTACK row",
+      "Prerendered audio confirmed playing (audioDebug().playing/prerendered), not the procedural fallback",
+      "Console errors and network 404s counted across every run: 0 and 0",
+      "Reload returns cleanly to title with existing save data present in localStorage"
+    ],
+    "reused": [],
+    "notTested": [
+      "Chapters II (Lady Yunalesca) and V (Vegnagun/Shuyin) reachability",
+      "Full save/settings upgrade matrix (CHK-024 full scope)",
+      "Physical controller and Safari/real-device input",
+      "Combat correctness/balance beyond reaching the command menu",
+      "Whether P reliably reopens or resumes an already-open pause screen from a fully settled command-menu state (only observed to not resume; not exhaustively retested)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 58,
+  "issues": [
+    {
+      "id": "LIVE-A2-1",
+      "severity": "major",
+      "summary": "Rikku's and Paine's painted portraits do not render on the Chapter 4 (Bahamut) party-prep screen; they show plain letter-monogram tiles instead, while the same assets render correctly in the pre-battle banner and in the pause screen.",
+      "expected": "Party Prep roster and bottom party-stat cards show each character's painted portrait, as they do for Yuna and as Rikku/Paine both do in pause and the battle-start banner.",
+      "observed": "Party Prep (docs/screenshots/release-a2-live/10-party-prep-ch4.png): Yuna shows a painted portrait; Rikku and Paine show 'R' and 'P' monogram tiles in both the left roster and the bottom party-stat cards.",
+      "evidence": ["docs/screenshots/release-a2-live/10-party-prep-ch4.png", "docs/screenshots/release-a2-live/12-pause-ch4.png (same assets rendering correctly elsewhere)", "DOM read confirming art/portraits/paine.png and art/portraits/rikku-x2.png both load and decode (832x1216) while the prep screen is open"],
+      "confidence": "high",
+      "verification": "reproduced twice, live, with real input",
+      "suspectedCause": "suspected: the Party Prep roster component keys its portrait lookup off the currently-equipped dressphere art (characters/{id}-{dressphere}/idle.png) rather than falling back to the dressphere-agnostic portraits/{name}.png used elsewhere; not traced to a file/line"
+    },
+    {
+      "id": "LIVE-A2-2",
+      "severity": "polish",
+      "summary": "Pressing P while the FFX-2 pause screen is already open did not close/resume it in repeated automated runs; only Escape reliably resumed.",
+      "expected": "Unclear from the task brief whether P is meant to resume as well as open; flagging for a human decision rather than asserting a defect.",
+      "observed": "screen() stayed 'pause' after a KeyP press with the pause screen open; Escape reliably resumed in the same state.",
+      "evidence": ["manual/automated key-press sequences recorded in the session transcript"],
+      "confidence": "low",
+      "verification": "reproduced in automation only; not checked by a human with a real keyboard",
+      "suspectedCause": "suspected: by design (PauseScreen.ts binds resume only to the cancel/Escape action; BattleScreen.ts's P-key handler only ever requests opening the pause, never closing it) rather than a live regression"
+    }
+  ]
+}

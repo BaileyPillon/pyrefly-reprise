@@ -1,0 +1,401 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-09-21T00:00:00.000Z",
+  "build": {
+    "mainSha": "8f48237840368b13c35768e775afc3b4ecf2f523",
+    "candidateTree": "D:/pyrefly-release",
+    "artifact": "dist-gate built from 8f48237 with `npx vite build --outDir dist-gate --emptyOutDir` (515 modules, index-D260C6cS.js, index-D6xN-rN3.css)",
+    "servedAt": "http://127.0.0.1:5471/pyrefly-reprise/ (vite preview, production base)",
+    "previousLiveBuild": "fd0ae96",
+    "renderer": "PYREFLY_BROWSER=gpu (ANGLE d3d11, headless Chromium via Playwright); no black-canvas fallback was needed"
+  },
+  "targetVersion": "a086d8bf39f1b76c6dca5e9b196b4f570aa0e05d7664f7f35158d64c49ad6e49",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect: every one of the five chapters starts from the new chapter select with real keyboard, real mouse and real touch, reaches party-prep, and returns to the board on Escape; no crash, lock or lost progress was seen in any run.",
+    "No regression against the live build fd0ae96: the live site still serves the old `.ig-title-screen` title and a chapter board with no `.fe-card` elements, so every element this review found fault with exists only in the candidate. Nothing that works live is broken here.",
+    "The one major finding (FE-001, front-end text below the 14 px legibility floor at 390x844) sits entirely inside the brand-new front end, which does not exist on the live build — a new-feature defect under RUBRIC section 3, disclosed and carried rather than held.",
+    "The shared-system half of the change is clean where it matters most: 262 `/art/` requests across all five chapters returned zero 4xx and zero HTML-for-asset responses, no image failed to decode, no monogram fallback was visible in any staged battle, and 363 shipped PNGs scanned zero all-black and zero undecodable.",
+    "changedArea is FAIL and ship is SHIP on purpose (RUBRIC section 3): the phone legibility failure keeps the changed area from being accepted, and the candidate is still plainly better than what is live."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "Both new screens own the window at the three viewports this focused pass is scoped to. The 2560x1080 and 3840x2160 legs of CHK-002's six-size sweep, and the pause screen, were NOT measured here; they belong to the deep review that follows the deploy.",
+      "game": "both",
+      "chapter": "n/a (title, chapter select)",
+      "state": "title after settle; chapter select after Enter",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/title-1600x900.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/title-2000x1012.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/title-390x844.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/cselect-1600x900.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/fe-log.txt"
+      ],
+      "measurements": "documentElement.scrollWidth === clientWidth at 1600x900, 2000x1012 and 390x844, each in a fresh browser context. The far plane measures 1672x940 over a 1600x900 viewport and 2090x1057 over 2000x1012 (deliberate parallax overscan, full cover, no bars). Both planes resolve to the same single request, art/title/keyart.2x.webp.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 6
+    },
+    {
+      "id": "CHK-003",
+      "result": "FAIL",
+      "reason": "At 1600x900 and 2000x1012 nothing on either new screen falls below the 14 px effective floor (smallest 14.4 px and 16.2 px respectively) and nothing is clipped. At 390x844 the floor is broken badly: 8 elements on the title and 43 on the chapter select measure below 14 px, the smallest 9.5 px. See FE-001.",
+      "game": "both",
+      "chapter": "n/a (title, chapter select)",
+      "state": "title and chapter select, each at three viewports",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/fe-log.txt",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/title-390x844.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/cselect-390x844.png"
+      ],
+      "measurements": "Every visible text node under `#ui > [data-screen]` walked, getComputedStyle fontSize multiplied through every ancestor transform scale. 1600x900: min 14.4 px, 0 under 14, 0 clipped. 2000x1012: min 16.2 px, 0 under 14, 0 clipped. 390x844 title: min 9.5 px, 8 under 14 (eyebrow 9.5, chip 11.0, four hint labels 9.5). 390x844 chapter select: min 9.5 px, 43 under 14 (eyebrow 11.0, fe-hero__num 10.3, fe-prose__badge 9.5, fe-rail__group 9.5, fe-card__num 9.5, fe-card__name 13.9).",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 6
+    },
+    {
+      "id": "CHK-008",
+      "result": "NOT APPLICABLE",
+      "reason": "No HUD panel geometry changed in this candidate. The front end adds two non-battle screens that contain no painted actors, and the art half of the change moves crop boxes inside existing portrait chips (src/ui/common/face-crops.json) without touching any panel zone. Panel-against-actor intersection is a deep-review obligation for this build and is carried there.",
+      "game": "both",
+      "chapter": "n/a",
+      "state": "n/a",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 1
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "reason": "The longest names on the new board render in full at every viewport measured, including the new COMING cards.",
+      "game": "both",
+      "chapter": "n/a (chapter select)",
+      "state": "chapter select, all eight cards mounted",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/cselect-1600x900.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/cselect-2000x1012.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/cselect-390x844.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/fe-log.txt"
+      ],
+      "measurements": "Zero elements with `text-overflow: ellipsis` engaged at 1600x900, 2000x1012 or 390x844. \"Braska's Final Aeon\", \"The Leblanc Syndicate\", \"Seymour and Anima\", \"Lady Yunalesca\" and \"Seymour Flux + Mortiorchis\" all read in full in the captures.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 2
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "reason": "No fallback reached a shipped face. Every portrait chip in every staged battle is a painted layer that decoded, and no monogram element was visible anywhere.",
+      "game": "both",
+      "chapter": "seymour-flux, braskas-final-aeon, ffx2-bahamut, ffx2-vegnagun-shuyin",
+      "state": "battle staged, real battle state present, 60 settle frames",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/battle-ffx2-bahamut.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/battle-ffx2-vegnagun-shuyin.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/battle-seymour-flux.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/battle-braskas-final-aeon.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/zoom-ffx2-chips.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/art-log.txt"
+      ],
+      "measurements": "Visible monograms: 0 in all four chapters. Broken images: 0. Paine's HUD chip resolves to art/portraits/paine.png (832x1216 natural) in both FFX-2 chapters and the visible crop is her face; the re-measured face-crops rows for both Paine idles did not push the crop off her head. Her body poses fire correctly per chapter: characters/paine-warrior/idle.png in chapter 4, characters/paine-dark-knight/idle.png in chapter 5. Rikku (rikku-dark-knight) and Yuna (yuna-white-mage) likewise. Polish note recorded as FE-004: the Paine and Yuna chips cut the top of the hair, leaving no air above the head.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 8
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Every player-facing claim in the changed flow was produced by a real event, never by the debug API. The debug API was used only to read state and to pump frames.",
+      "game": "both",
+      "chapter": "all five",
+      "state": "title -> chapter select -> party-prep -> back",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow-log.txt",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow2-log.txt",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/start-seymour-flux.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/start-ffx2-vegnagun-shuyin.png"
+      ],
+      "measurements": "Keyboard: Enter on the title reaches chapter-select at all three viewports; ArrowRight x10 cycles exactly the five playable ids and never lands on a COMING card; ArrowUp/Down switches game group (ffx2-bahamut <-> seymour-flux); Enter starts each of the five chapters (0..4 arrow presses each) and Escape returns to chapter-select in one press every time. Mouse: page.mouse.click on the PRESS ENTER chip reaches the board, a click on a rail card moves the selection (seymour-flux -> braskas-final-aeon), a second click on the plate starts it. Touch: page.touchscreen.tap does the identical three steps with hasTouch enabled. Locked cards: a real click on a COMING card leaves selectedId unchanged and starts nothing.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 12
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every capture asserted its screen before it shot, and the stale-root check is clean.",
+      "game": "both",
+      "chapter": "all five",
+      "state": "asserted per capture",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/fe-log.txt",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow-log.txt"
+      ],
+      "measurements": "The title harness throws if screen() !== 'title' before the first shot; every chapter-select capture is preceded by a waitForFunction on screen() === 'chapter-select'; every battle capture waits on screen() === 'battle' AND a non-null battleState(), and records UNVERIFIED instead of shooting on timeout. `#ui > [data-screen]` listed exactly [\"chapter-select\"] with 0 `.ig-title-screen` leftovers at all three viewports, so the Enter-driven flow orphans no screen root.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 2
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "reason": "A focused pre-deploy review runs on the immutable production candidate, not on the live URL; live verification of the exact artifact is this build's own separate `live` obligation after the deploy. The live site was opened once in this review for a single purpose — to answer the regressionVsLive question — and not as deployment evidence.",
+      "game": "both",
+      "chapter": "n/a",
+      "state": "n/a",
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 3
+    },
+    {
+      "id": "CHK-018",
+      "result": "PASS",
+      "reason": "No shipped path in src/ sits on a promotable variant, and every art path the game actually asked for resolved.",
+      "game": "both",
+      "chapter": "all five",
+      "state": "each chapter played to an outcome with auto/intended",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/art-requests.txt",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow2-log.txt"
+      ],
+      "measurements": "`grep -rn '\\.[0-9]\\.png\\|\\.raw\\.png' src/ --include=*.ts` returns exactly one hit, and it is a doc-comment reference to the concept-folder source in titleMarkup.ts, not a shipped path. Across all five chapters played end to end: 262 distinct /art/ requests, 0 responses >= 400, 0 image responses served as text/html, 0 images with naturalWidth === 0. The new art/title/ folder resolves through the manifest (art/title/keyart.2x.webp served with the right type at every viewport).",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 4
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "reason": "Every shipped PNG in the candidate bundle was decoded and none is an all-zero frame.",
+      "game": "both",
+      "chapter": "n/a (whole bundle)",
+      "state": "dist-gate/art",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/art-log.txt"
+      ],
+      "measurements": "`maxRgbOfPng` from tools/gen/black-frame.mjs over dist-gate/art: 363 PNGs scanned, 0 all-black, 0 undecodable. In play, 0 of the images mounted across four staged battles had naturalWidth === 0. The WebP plates (art/title/keyart.2x.webp) are outside this PNG scan but were proved to decode by their rendered boxes at all three viewports.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 4
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "The chapter select is a single shared screen that gives both games the same work: same card treatment, same silhouette rule, same keys, same two-click pointer rule, same COMING treatment.",
+      "game": "both",
+      "chapter": "all five, both groups",
+      "state": "chapter select with all eight tiles",
+      "evidence": [
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/cselect-1600x900.png",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/pair-cselect-candidate.jpg",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow-log.txt"
+      ],
+      "measurements": "Board snapshot: 8 tiles, 3 COMING (seymour-anima-macalania, evrae-airship, ffx2-leblanc-syndicate), two labelled groups \"Final Fantasy X\" and \"Final Fantasy X-2\". The only per-game difference in the DOM is the `.ig--ffx2` accent class on the FFX-2 group heading and its cards — the existing token swap, not a new idea. All five chapters, three FFX and two FFX-2, start identically by keyboard, and both FFX-2 chapters were staged to a live battle with painted party chips.",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 4
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "The change carries a written game case and the build matches it.",
+      "game": "both",
+      "chapter": "all five",
+      "state": "chapter select and staged battles in both games",
+      "evidence": [
+        "docs/handoff/frontend-showpiece.md",
+        "src/app/screens/ChapterSelectScreen.ts",
+        "src/app/screens/frontend/chapterGrid.ts",
+        "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow-log.txt"
+      ],
+      "measurements": "The written case is BOTH, stated in docs/handoff/frontend-showpiece.md and repeated in the doc comments of ChapterSelectScreen.ts and chapterGrid.ts, with its reasoning: the title is the front door to both halves and the board holds both games' encounters, and CHK-020 makes shared plumbing 'both' by default. Proved in the build: both games' chapters are present, both groups are reachable with Up/Down, and every chapter from each game starts from the same board with the same keys. The per-game half is confined to the group heading and its `.ig--ffx2` accent, which is the existing tokens.css swap. The art half is likewise 'both' by scope: FFX poses (Lulu, Kimahri, Yu Pagoda) and FFX-2 poses (Rikku dark knight, Paine warrior and dark knight, FFX-2 Bahamut) were each spot-checked in their own game's chapters and neither leaked into the other's. No behaviour true of one game was found applied to the other.",
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 5
+    }
+  ],
+  "targets": {
+    "required": 3,
+    "matched": 3,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "detail": [
+      {
+        "group": "polish",
+        "label": "A front end that moves: parallax title and silhouette chapter cards",
+        "src": "docs/concepts/polish/showpiece-frontend/after.png",
+        "result": "matched",
+        "composite": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/pair-title-candidate.jpg",
+        "note": "Read as a composite, not as two full pictures. The sky, moon, spire, cloud bank, shore, headland and the two ink figures with their reflections in the shallows all land where the target puts them, and the Ink & Gold slab, gold edge, type, vertical strap and hint rail are the target's. Two deviations, both documented in the handoff and both deliberate: the strap reads \"Final Fantasy X and X-2\" without the now-wrong \"Five encounters\" count, and the board carries eight cards in two game groups where the concept shows five in one stack. One undocumented deviation recorded as FE-003 (polish): the build's figures are noticeably larger and sit further right than the target's."
+      },
+      {
+        "group": "polish",
+        "label": "A front end that moves — chapter select half",
+        "src": "docs/concepts/polish/showpiece-frontend/chapter-select.png",
+        "result": "matched",
+        "composite": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/pair-cselect-candidate.jpg",
+        "note": "Hero plate with the boss silhouette over the backdrop, chapter numeral and title, prose slab with its CTB badge, rail of cards, and the LOCATION / BOSS / PARTY / BEST aside all match. The two game group headings and the three COMING cards are the documented addition."
+      },
+      {
+        "group": "presentation",
+        "label": "Title and Chapter select (the base Ink & Gold look)",
+        "src": "docs/screenshots/mockups/A-title.jpg, docs/screenshots/mockups/A-chapter-select.jpg",
+        "result": "matched",
+        "composite": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/pair-A-title.jpg, critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/pair-A-chapter-select.jpg",
+        "note": "These two tiles approve the chrome, not the plate. The slab, its gold edge and skew, the display type, the PRESS ENTER chip, the vertical strap and the hint rail all carry over unchanged. The plate itself is superseded by the later decision of 2026-09-19 (the showpiece key art), which RUBRIC section 2 says to read as the latest explicit owner decision on the same subject."
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "FE-001",
+      "severity": "major",
+      "title": "At phone width the whole new front end sits under the 14 px legibility floor",
+      "game": "both",
+      "chapter": "n/a (title, chapter select)",
+      "expected": "CHK-003: zero text elements below 14 effective css px on any screen, at every supported viewport including 390x844.",
+      "observed": "At 390x844 the title has 8 elements under 14 px (eyebrow \"An unofficial fan tribute\" 9.5 px, the PRESS ENTER chip 11.0 px, all four hint-rail labels 9.5 px) and the chapter select has 43 (eyebrow 11.0, \"Chapter I\" 10.3, the CTB badge 9.5, both group headings 9.5, every card numeral 9.5, every card name 13.9). Nothing is clipped and the page does not scroll sideways, so the composition survives; it is simply too small to read on a phone. At 1600x900 and 2000x1012 the same screens are clean (minimum 14.4 px and 16.2 px).",
+      "repro": "Build dist-gate at 8f48237, vite preview, fresh Chromium context at 390x844, load the base, wait for __pyreflyReady, walk every visible text node under `#ui > [data-screen]` taking getComputedStyle fontSize times every ancestor transform scale. Press Enter and repeat on the chapter select.",
+      "evidence": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/fe-log.txt, title-390x844.png, cselect-390x844.png",
+      "confidence": "high, measured",
+      "requirement": "critic/CHECKS.md CHK-003; RUBRIC section 2 platform goals (phone is a supported device).",
+      "where": "src/app/screens/frontend/frontend.css — the front-end type tokens are fixed px rather than clamped against the viewport the way the Ink & Gold tokens are elsewhere.",
+      "fix": "Floor the front-end type scale the way the pause tokens are floored: give every `.fe-*` size a clamp() whose lower bound is 14 px, and let the phone layout drop cards from the rail rather than shrink their labels.",
+      "acceptanceCheck": "Re-run the same walk at 390x844 on both screens and see zero elements under 14 px with nothing clipped and no horizontal page scroll.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "attempts": 0
+    },
+    {
+      "id": "FE-002",
+      "severity": "polish",
+      "title": "The title's only way forward is a chip that tells a phone player to press Enter",
+      "game": "both",
+      "chapter": "n/a (title)",
+      "expected": "A touch player is told what to do in their own input's words, and a tap on the title advances.",
+      "observed": "With hasTouch enabled, a tap anywhere on the title plate does nothing; only a tap on the chip advances, and the chip reads \"PRESS ENTER\". The same is true of the mouse: a click on the background is inert. Once the chip is hit the board is reached normally.",
+      "repro": "Fresh context with hasTouch, load the base, tap (800, 450) — screen stays 'title'; tap the `.fe-title__chip` box — screen becomes 'chapter-select'.",
+      "evidence": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow2-log.txt",
+      "confidence": "high, measured",
+      "requirement": "RUBRIC section 2 platform goals (touch is a supported control); ControlsHint already words itself per input on the chapter select.",
+      "where": "src/app/screens/frontend/titleMarkup.ts — the chip's label is a constant, and the plate has no pointer handler.",
+      "fix": "Give the chip the same per-input wording ControlsHint already does on the board (\"Tap to begin\" on touch), and make the whole plate the target rather than only the chip.",
+      "acceptanceCheck": "On a touch context, a tap anywhere on the title reaches chapter-select and the chip's text names a tap.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "FE-003",
+      "severity": "polish",
+      "title": "The title figures are larger and further right than the approved frame",
+      "game": "both",
+      "chapter": "n/a (title)",
+      "expected": "The two ink figures sit where docs/concepts/polish/showpiece-frontend/after.png puts them, near the centre of the shore at the scale the target shows.",
+      "observed": "In the composite the build's pair is appreciably bigger and sits further toward the right edge, close under the headland, rather than centred on the open shore. Every other element of the frame lands on the target. Not covered by any of the deviations the handoff writes down.",
+      "repro": "node tools/end-state-board.mjs --pair docs/concepts/polish/showpiece-frontend/after.png <title-1600x900.png> and read the composite.",
+      "evidence": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/pair-title-candidate.jpg",
+      "confidence": "medium — judged from the composite at 1600x900; the figures' placement is responsive and may read differently at other shapes.",
+      "requirement": "RUBRIC section 7, approved-target acceptance.",
+      "where": "src/app/screens/frontend/titleMarkup.ts / frontend.css, the figure height and the shore anchor.",
+      "fix": "Measure the figure height and x anchor off after.png and restate the two CSS values; no new decision is needed, this is correcting the build to an existing approval.",
+      "acceptanceCheck": "A fresh composite at 1600x900 in which the pair's scale and x position read as the target's.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "FE-004",
+      "severity": "polish",
+      "title": "FFX-2 party chips cut the top of the head",
+      "game": "ffx2",
+      "chapter": "ffx2-bahamut, ffx2-vegnagun-shuyin",
+      "expected": "CHK-012: the visible crop contains the whole head, with air above the hair and below the chin.",
+      "observed": "Paine's and Yuna's battle-start party chips are cropped through the top of the hair — the face is complete, centred and recognisable, and Paine's is clearly her rather than a fallback, but there is no air above the head. Rikku's chip is the loosest of the three and reads correctly.",
+      "repro": "Stage chapter 4, let the battle-start card settle, zoom the party strip at the foot of the frame.",
+      "evidence": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/zoom-ffx2-chips.png, battle-ffx2-bahamut.png",
+      "confidence": "medium — the crop boxes for both Paine idles were re-measured in this candidate, so this may be the new measurement or may predate it; the live build's chips were not sampled.",
+      "requirement": "critic/CHECKS.md CHK-012.",
+      "where": "src/ui/common/face-crops.json, the Paine and Yuna rows.",
+      "fix": "Raise the top of those crop boxes by roughly one tenth of the plate height so the hairline clears the chip.",
+      "acceptanceCheck": "The zoomed party strip in both FFX-2 chapters shows visible background above every head.",
+      "introducedByCandidate": "unknown",
+      "regressionVsLive": "unknown",
+      "inNewFeature": false
+    },
+    {
+      "id": "FE-005",
+      "severity": "suggestion",
+      "title": "A click on a COMING card is silently ignored",
+      "game": "both",
+      "chapter": "n/a (chapter select)",
+      "expected": "A player who clicks a locked card learns why nothing happened.",
+      "observed": "Clicking a COMING card correctly starts nothing and correctly leaves the selection where it was — the guard works. But nothing at all responds, and the next Enter then starts whatever card was already selected, which can read as the locked card having started the wrong chapter.",
+      "repro": "On the board, click the \"Seymour and Anima — Coming\" card (selectedId stays seymour-flux), then press Enter (chapter 1 starts).",
+      "evidence": "critic/reviews/8f48237840368b13c35768e775afc3b4ecf2f523-focused/flow-log.txt",
+      "confidence": "high, measured",
+      "requirement": "RUBRIC section 6, interface category.",
+      "where": "src/app/screens/ChapterSelectScreen.ts handleInput, the `!this.tiles[index]?.playable` early continue.",
+      "fix": "Play the existing cancel cue and flash the card's COMING badge on a click at a locked tile.",
+      "acceptanceCheck": "A click on a COMING card produces a visible or audible refusal and still starts nothing.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Title screen composition, plane geometry and single-image request at 1600x900, 2000x1012 and 390x844, each in a fresh browser context.",
+      "Enter on the title reaching the chapter select at all three viewports, with the stale-root check after each transition.",
+      "Chapter select: eight tiles in two game groups, three COMING cards, arrow navigation skipping locked tiles, Up/Down switching game group.",
+      "All five existing chapters started from the new board with real keyboard input and returned to it with a real Escape.",
+      "The board reached and a chapter started with real mouse clicks and with real touch taps (two-click / two-tap rule).",
+      "A real click on a locked COMING card.",
+      "Cleared state read back from the save store after a reload (recordClear('yunalesca') -> the card carries the check mark and the board snapshot lists it).",
+      "All five chapters played to an outcome with the intended strategy while watching every network response and every mounted image.",
+      "Four chapters staged to a live battle for portrait chips, pose selection and facing (Yuna, Rikku, Kimahri, Auron, Tidus, Paine warrior and Paine dark knight, FFX-2 Bahamut).",
+      "Whole-bundle all-black and decode scan of the shipped PNGs.",
+      "Target composites against both showpiece concept frames and both base look tiles.",
+      "The live build opened once to establish that the front end is new and cannot be a regression.",
+      "Whether learn/ ships: it does not — it is absent from dist-gate and nothing under src/ references it, so it is out of scope for this review."
+    ],
+    "reused": [
+      {
+        "what": "The owner-approved 42 poses of docs/concepts/art4 and their hashes in docs/target/approved-hashes.json",
+        "from": "the art track's own installation record",
+        "why": "node tools/critic-plan.mjs --json returns approvedArtCheck: false and dataAudit: false for this change set, so a hash-by-hash re-verification and a research data audit are not this review's obligation. The shipped files were instead proved to load, decode and be non-black in play."
+      },
+      {
+        "what": "Round 06's issue list for the live build fd0ae96",
+        "from": "critic/rounds/round-06.json",
+        "why": "Those issues are carried and disclosed, not re-litigated here: none of them is in the changed area, and the candidate neither repairs nor worsens them."
+      }
+    ],
+    "notTested": [
+      "2560x1080, 3840x2160, 4:3 and 1440p layouts (CHK-002's wider sweep) — deep-review scope.",
+      "Gamepad input on the new board; emulation would not be proof anyway.",
+      "Safari, Firefox and any physical device or real controller — no evidence path exists (RUBRIC section 10).",
+      "Frame time and load time on the new title's parallax; no performance measurement was taken.",
+      "reduceMotion static fallback on the title — declared in the handoff, not exercised here.",
+      "Audio routing and cues on the new screens.",
+      "The pause screen, results, prep tabs and battle HUD panel geometry.",
+      "Whether FE-004's crop tightness also exists on the live build."
+    ],
+    "requiredNotTested": []
+  },
+  "regressions": [],
+  "nextReview": "The deep review this build owes, run after the deploy on the live build (node tools/critic-plan.mjs says depth deep, deepAfterDeploy true, and fd0ae96's deep review is carried forward to this build). It must cover the asset loader across every chapter in both games, the wider CHK-002 viewport sweep, HUD panel geometry against the painted actors, and the 42 installed poses against docs/target/approved-hashes.json. The separate `live` obligation for this build is settled by a live review of the exact artifact.",
+  "elapsedMinutes": 52,
+  "usageNote": "Review overhead ran past the 10-15 minute focused budget because the change is a shared-system one: five chapters had to be played for the asset loader, four battles staged for the art spot-check, and three viewports swept in fresh contexts. Named risk: the asset loader touches every chapter in both games, and a missed 404 there is exactly the class of defect CHK-017 exists for.",
+  "browserMode": "gpu"
+}
