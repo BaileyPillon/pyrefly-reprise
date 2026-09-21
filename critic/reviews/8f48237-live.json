@@ -1,0 +1,62 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-21T19:15:00.000Z",
+  "build": {
+    "mainSha": "8f48237",
+    "bundle": "D260C6cS",
+    "artifactHash": "913633433278986912b36e5ca1fb1503f712a963b237dee9a8fd760eeae31aa3"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/8f48237.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/fd0ae96.json --full -> {result: PASS, checked: 761, mismatched: 0, missing: 0, wrongType: 0, errors: 0}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Isolated Playwright context (own process/storage), GPU browser mode, 1600x900, cache-busted URL. Every step asserted via window.__pyrefly.screen() before proceeding: title -> chapter-select (real click) -> chapter-select unchanged after clicking a locked 'Coming' card -> party-prep (real clicks) -> cutscene (Enter) -> battle after 63 real Enter presses through the full scene (no debug skipCutscene used) with .ffxhud.ig computed display:block; pause via Escape and P, resume via Escape (all state-asserted); H hides pause-panel text (1074->32 chars) and restores it (32->1074) on a second press. Console errors 0, 404s 0 for the whole run. Prerendered audio confirmed via real network requests for title/chapter-select/scene/boss/pause music (not the synth fallback). A first attempt in the shared interactive browser pane appeared to show a cutscene freeze and a hidden battle HUD; this did not reproduce in the isolated context and is attributed to cross-session interference in the shared pane (see report note), not a product defect."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Wrote a settings.musicVolume=0.42 marker into pyrefly-reprise:save:v1, reloaded the page, read the marker back identical (0.42). The full save/settings upgrade matrix is not part of this lightweight pass.",
+      "reason": "notTested: the full upgrade matrix (older save shapes migrating forward) is explicitly out of scope for this pass"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact identity, 761/761 files, incl. changed-from fd0ae96 and --full",
+      "Real-input smoke: title -> chapter select -> party prep -> start battle -> full cutscene by real key presses -> battle (Chapter I, Seymour Flux)",
+      "Locked 'Coming' chapter cards do not open party prep",
+      "Pause (Escape, P) and resume (Escape)",
+      "Hide/restore pause panels (H)",
+      "Prerendered audio fetched over the network for title, chapter-select, chapter scene, boss theme, pause",
+      "Console errors and 404s for the whole run",
+      "Reload smoke: a changed setting (musicVolume) survives a reload",
+      "learn/ confirmed absent from the shipped artifact manifest (out of scope)"
+    ],
+    "reused": [],
+    "notTested": [
+      "The other four chapters' full real-input start/return cycle (only Chapter I was played end to end into battle; the others were not driven through party prep and cutscene in this pass)",
+      "Touch input (mouse/keyboard only were exercised)",
+      "In-battle progress (an actual turn taken, damage dealt) surviving a reload -- only a settings marker was exercised, per the lightweight CHK-024 pass this task asked for",
+      "Win/loss outcome and the results screen",
+      "The full save/settings upgrade matrix",
+      "Art spot-checks named in the task brief (Lulu, Rikku, Kimahri, Yu Pagoda, FFX-2 Bahamut poses firing/facing correctly; Paine HUD face-crop) -- deferred to the deep review already owed for this build",
+      "Milestone-level target-vs-build acceptance (RUBRIC section 7) -- not in scope for a live review"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35
+}
