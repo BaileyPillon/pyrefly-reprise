@@ -3,18 +3,23 @@
  * Round 03 gate major #36 (`critic/rounds/round-03.md:780-788`): "the strategy
  * guide clips mid-word and prints its own '▾ MORE' chip on top of the clipped
  * line" — repro quoted there: "…the CTB margin the Holy / Water rhythm
- * need[s to beat] the mount's Full-". Three separate defects, one file each
- * kind of proof can reach:
+ * need[s to beat] the mount's Full-". Still live as round 04 PR-0009 after two
+ * attempts (a CSS fade over the cut, then a scale conversion of the measured
+ * glyph rects), so `critic/RUBRIC.md` §8 applies and the approach changed
+ * rather than the arithmetic.
  *
- *  1. The box's height did not end on a whole line, so `overflow-y` sliced
- *     through whatever line happened to sit at the boundary. Fixed by
- *     `StrategyGuide.measureLineBottoms` + the exported pure
- *     {@link lastWholeLineBelow}, tested here both as arithmetic and as a
- *     real (stubbed) DOM measurement driving `layout()`.
- *  2. `.sgd__more`'s own background was opaque for its first 64% and only
- *     faded across the last third — not "a real fade" — read out of the
- *     stylesheet, the same technique `pause-compact-and-retina.test.ts` uses
- *     for a property-choice defect.
+ * The rail is a **column** now (`.sgd__stack`): the ink slab, then a MORE row
+ * that owns its own height in normal flow. Three separate defects, one file
+ * each kind of proof can reach:
+ *
+ *  1. The box's height did not end on a whole line, so `overflow` sliced
+ *     through whatever line sat at the boundary. Answered by
+ *     {@link fitWholeUnits} — the body can now only ever end where a *block*
+ *     ended — tested here both as arithmetic and as a stubbed DOM measurement
+ *     driving `layout()`.
+ *  2. `.sgd__more` was absolutely positioned over the panel's last two lines.
+ *     Answered by the column, read out of the stylesheet, the same technique
+ *     `pause-compact-and-retina.test.ts` uses for a property-choice defect.
  *  3. `.sgd__more`'s font-size (5px) fell under the project's 14 CSS px
  *     legibility floor once the letterbox scale at 1280x720 (2x), 1600x900
  *     (2.5x) and 2000x1012 (~2.811x) is applied — the same three viewports
@@ -27,8 +32,9 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { StrategyGuide, lastWholeLineBelow } from '../../src/ui/common/StrategyGuide.ts';
+import { StrategyGuide, fitWholeUnits } from '../../src/ui/common/StrategyGuide.ts';
 import { makeFakeBattleState } from '../../src/ui/ffx/testFixtures.ts';
+import { stubGuideLayout } from './helpers/guideLayoutStub.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SHEET = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'common', 'strategy-guide.css'), 'utf8');
@@ -48,23 +54,54 @@ function ruleBody(selector: string): string {
 
 // ---------------------------------------------------------- pure arithmetic
 
-describe('lastWholeLineBelow', () => {
-  it('picks the largest line bottom at or below the limit', () => {
-    expect(lastWholeLineBelow([40, 80, 120, 172, 210], 175)).toBe(172);
+describe('fitWholeUnits', () => {
+  /** Four 40px blocks; the fourth ends at 172 and a fifth would end at 210. */
+  const blocks = [40, 90, 140, 172, 210].map((bottom) => ({ bottom, glyphBottom: bottom - 2 }));
+
+  it('keeps every block that fits entirely and drops the one that would be cut', () => {
+    const fit = fitWholeUnits(blocks, 175);
+    expect(fit.shown).toBe(4);
+    expect(fit.clipped).toBe(true);
   });
 
-  it('is inclusive of a line that lands exactly on the limit', () => {
-    expect(lastWholeLineBelow([50, 100, 150], 100)).toBe(100);
+  it('ends the box on the last kept block’s glyphs, not a few px of leading below them', () => {
+    // 172 is the box bottom; 170 is where the type actually stops. Ending at
+    // 172 is what left the slab 3.3-3.7 grid px past the last line live.
+    expect(fitWholeUnits(blocks, 175).height).toBe(170);
   });
 
-  it('falls back to the limit when there is no line data at all (jsdom has no layout)', () => {
-    expect(lastWholeLineBelow([], 175)).toBe(175);
+  it('is inclusive of a block that lands exactly on the limit', () => {
+    const fit = fitWholeUnits(blocks, 172);
+    expect(fit.shown).toBe(4);
+    expect(fit.height).toBe(170);
   });
 
-  it('falls back to the limit when even the first line overflows it', () => {
-    // Never return 0 and collapse the panel to nothing — the uncautious
-    // height (whatever `fit()` already solved for) is the safer fallback.
-    expect(lastWholeLineBelow([300], 175)).toBe(175);
+  it('has nothing to say about content it was given none of', () => {
+    const fit = fitWholeUnits([], 175);
+    expect(fit.shown).toBe(0);
+    expect(fit.height).toBe(175);
+    expect(fit.clipped).toBe(false);
+  });
+
+  it('keeps the first block even when it overflows, rather than emptying the slab', () => {
+    // NEXT — the command the player is being told to press — survives every
+    // other rung of this panel's ladder; it survives this one too.
+    const fit = fitWholeUnits([{ bottom: 300, glyphBottom: 298 }], 175);
+    expect(fit.shown).toBe(1);
+    expect(fit.height).toBe(298);
+    expect(fit.clipped).toBe(false);
+  });
+
+  it('never ends on an orphan section head whose section was cut away', () => {
+    const withHead = [
+      { bottom: 40, glyphBottom: 38 },
+      { bottom: 80, glyphBottom: 78, heading: true },
+      { bottom: 200, glyphBottom: 198 },
+    ];
+    const fit = fitWholeUnits(withHead, 100);
+    expect(fit.shown).toBe(1);
+    expect(fit.height).toBe(38);
+    expect(fit.clipped).toBe(true);
   });
 });
 
@@ -78,22 +115,13 @@ function boxed(top: number, height: number): HTMLElement {
   return el;
 }
 
-describe('the rail ends on a whole line instead of slicing one (round-03 #36)', () => {
+describe('the rail ends on a whole block instead of slicing one (round-03 #36, round-04 PR-0009)', () => {
   const originalGetClientRects = Range.prototype.getClientRects;
   afterEach(() => {
     Range.prototype.getClientRects = originalGetClientRects;
   });
 
-  it('clamps maxHeight to the last fully-visible line, not the raw available height', () => {
-    // Fake line bottoms (grid px from `.sgd__body`'s own top): four whole
-    // lines land inside the 175px `available` this anchor pair produces (see
-    // `ui-strategy-guide.test.ts`'s identical setup), and a fifth line runs
-    // past it to 210 — the one `overflow-y` would otherwise slice.
-    const fakeBottoms = [40, 90, 140, 172, 210];
-    Range.prototype.getClientRects = function (this: Range) {
-      return fakeBottoms.map((bottom) => ({ bottom }) as DOMRect) as unknown as DOMRectList;
-    };
-
+  it('cuts the body at the last whole block and hides every block past it', () => {
     const stage = document.createElement('div');
     document.body.appendChild(stage);
     const guide = new StrategyGuide({
@@ -101,19 +129,44 @@ describe('the rail ends on a whole line instead of slicing one (round-03 #36)', 
       anchors: { below: () => boxed(20, 24), above: () => boxed(240, 80), top: 44, bottom: 34 },
     });
     guide.mount(stage);
-    const bodyEl = stage.querySelector<HTMLElement>('.sgd__body')!;
-    Object.defineProperty(bodyEl, 'getBoundingClientRect', {
-      value: () => ({ top: 0 }) as DOMRect,
-      configurable: true,
-    });
-
     guide.sync(makeFakeBattleState());
+
+    // `available` here is 175 grid px (240 - 5 - 60, the identical anchor pair
+    // to `ui-strategy-guide.test.ts`'s own case). Chrome (the slab's padding)
+    // is 11, so the rail's text budget is 164; the content is taller than that,
+    // so the MORE row shows and takes another 11, leaving 153 for whole blocks.
+    // Each block is 20 tall, so blocks end at 20, 40, 60 ... and the last one
+    // at or below 153 ends at 140, with its type stopping 2 px above that.
+    const stub = stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
+    guide.update(0.016);
+    expect(stub.units.length, 'the fixture guide got shorter than this case needs').toBeGreaterThan(8);
+
+    const body = stage.querySelector<HTMLElement>('.sgd__body')!;
+    expect(Number.parseFloat(body.style.height)).toBeCloseTo(138, 1); // 140 - 2 of leading
+    expect(stub.units[6]!.classList.contains('sgd__u--out')).toBe(false); // ends at 140
+    expect(stub.units[7]!.classList.contains('sgd__u--out')).toBe(true); // would end at 160
+    expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.hidden).toBe(false);
+
+    guide.unmount();
+  });
+
+  it('never lets the MORE row take its height out of the body after the cut', () => {
+    const stage = document.createElement('div');
+    document.body.appendChild(stage);
+    const guide = new StrategyGuide({
+      game: 'ffx',
+      anchors: { below: () => boxed(20, 24), above: () => boxed(240, 80), top: 44, bottom: 34 },
+    });
+    guide.mount(stage);
+    guide.sync(makeFakeBattleState());
+    stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
     guide.update(0.016);
 
-    const panel = stage.querySelector<HTMLElement>('[data-role="strategy-guide-panel"]')!;
-    // Unclamped `available` here is 175 (240 - 5 - 60, per the identical case
-    // in `ui-strategy-guide.test.ts`). The last *whole* line is at 172.
-    expect(Number.parseFloat(panel.style.maxHeight)).toBeCloseTo(172, 1);
+    const body = stage.querySelector<HTMLElement>('.sgd__body')!;
+    // 138 of text + 11 of slab chrome + 11 of MORE row = 165, inside the 175
+    // the anchors allow. The defect this pins is the old order — clamp the
+    // text first, then paint an 11px chip over its foot.
+    expect(Number.parseFloat(body.style.height) + 11 + 11).toBeLessThanOrEqual(175);
 
     guide.unmount();
   });
@@ -163,5 +216,37 @@ describe('the MORE affordance reads as a fade, not a slice (round-03 #36)', () =
         );
       }
     }
+  });
+
+  /**
+   * Round 04 PR-0009, measured live by the verifier at four viewports in two
+   * games: "MORE chip box 252.50-280.00 intersects 2 glyph line boxes" and
+   * "chip 437.50-465.00 intersects the visible 'Watch' heading line box". The
+   * chip could do that because it was `position: absolute` with a `top` the
+   * layout wrote at the panel's own bottom edge. A flex row of the column
+   * cannot overlap its sibling however the fit turns out, so the property is
+   * asserted where it now lives: in the stylesheet.
+   */
+  it('owns a row of the column instead of being positioned over the body', () => {
+    const more = ruleBody('.sgd__more');
+    expect(more, '.sgd__more is positioned again — it must be a flow row').not.toMatch(/position:\s*absolute/);
+    expect(more).toMatch(/flex:\s*0\s+0\s+auto/);
+    // The measured geometry belongs to the column, so the slab's own box can
+    // end exactly where the type does.
+    const stack = ruleBody('.sgd__stack');
+    expect(stack).toMatch(/position:\s*absolute/);
+    expect(stack).toMatch(/flex-direction:\s*column/);
+    expect(ruleBody('.sgd__panel'), '.sgd__panel must not carry its own position now').not.toMatch(
+      /position:\s*absolute/,
+    );
+  });
+
+  /**
+   * "No gradient may cover a readable glyph" — the panel used to fade its own
+   * last 7px, which is to say it faded whatever text was there.
+   */
+  it('leaves the slab itself unmasked', () => {
+    const panel = ruleBody('.sgd__panel');
+    expect(panel, '.sgd__panel masks its own foot again').not.toMatch(/mask-image\s*:/);
   });
 });

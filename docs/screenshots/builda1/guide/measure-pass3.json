@@ -1,0 +1,896 @@
+{
+ "what": "Round 04 PR-0009 second pass — live acceptance for the rebuilt whole-block clamp.",
+ "when": "2026-09-20",
+ "browser": "PYREFLY_BROWSER=gpu (tools/browser-mode.mjs resolved \"gpu\"); no black-canvas fallback needed",
+ "server": "npx vite --port 5400 (own dev server; shared dist/ never built or touched)",
+ "input": "real key presses via critic/rounds/round-04/r4-flow.mjs; the fight runs on a real clock",
+ "rig": "critic/scratch/builda1-repair/p3-guide-measure.mjs — the MEASURE block of the verifier's b4-final.mjs, one Range per text node (true glyph line boxes, no block-container rects)",
+ "acceptance": {
+  "panel content bottom equals a glyph line bottom within 1 px": "contentBottomTrue vs gapTruePx",
+  "zero sliced lines": "slicedLinesTrue",
+  "the MORE box intersects zero glyph boxes": "chipOverGlyphs"
+ },
+ "note_on_b4_final": "b4-final.mjs's own contentBottom subtracts getComputedStyle(panel).paddingBottom (the element's OWN px, which a CSS transform never scales) from getBoundingClientRect().bottom (screen px), so it lands 6*(scale-1) px below the real content box. gapToNearestLineBottomPx below is that number, kept verbatim for comparability; gapTruePx is the same edge with the padding converted like every other length.",
+ "screenshots": [
+  "pass3-crop-ffx-ch1.png",
+  "pass3-crop-ffx2-ch4.png",
+  "pass3-ffx-ch1-1280x720.png",
+  "pass3-ffx-ch1-1600x900.png",
+  "pass3-ffx-ch1-2000x1012.png",
+  "pass3-ffx-ch1-3840x2160.png",
+  "pass3-ffx-ch3-1600x900.png",
+  "pass3-ffx2-ch4-1600x900.png"
+ ],
+ "results": [
+  {
+   "name": "ffx-ch1-1280x720",
+   "chapter": "ffx-ch1",
+   "size": "1280x720",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 1.9888,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 193.53,
+    "contentBottom": 187.53,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 181.6,
+    "bodyBottom": 181.53,
+    "gapTruePx": 0.07,
+    "gapTrueStageUnits": 0.035,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 193.53,
+     "bottom": 215.53,
+     "h": 22
+    },
+    "gapToNearestLineBottomPx": 6,
+    "gapToNearestLineBottomStageUnits": 3.02,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 159.53,
+      "bottom": 181.53,
+      "left": 58.66,
+      "right": 120.16,
+      "text": "Hastega"
+     },
+     {
+      "top": 163.53,
+      "bottom": 179.53,
+      "left": 126.16,
+      "right": 138.16,
+      "text": "→"
+     },
+     {
+      "top": 159.53,
+      "bottom": 181.53,
+      "left": 144.16,
+      "right": 212.25,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch1-1600x900",
+   "chapter": "ffx-ch1",
+   "size": "1600x900",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.486,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 241.91,
+    "contentBottom": 235.91,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 227,
+    "bodyBottom": 226.91,
+    "gapTruePx": 0.09,
+    "gapTrueStageUnits": 0.036,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 241.91,
+     "bottom": 269.41,
+     "h": 27.5
+    },
+    "gapToNearestLineBottomPx": 9,
+    "gapToNearestLineBottomStageUnits": 3.62,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 199.41,
+      "bottom": 226.91,
+      "left": 73.32,
+      "right": 150.2,
+      "text": "Hastega"
+     },
+     {
+      "top": 204.41,
+      "bottom": 224.41,
+      "left": 157.7,
+      "right": 172.7,
+      "text": "→"
+     },
+     {
+      "top": 199.41,
+      "bottom": 226.91,
+      "left": 180.2,
+      "right": 265.31,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch1-2000x1012",
+   "chapter": "ffx-ch1",
+   "size": "2000x1012",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.7954,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 272.02,
+    "contentBottom": 266.02,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 255.25,
+    "bodyBottom": 255.15,
+    "gapTruePx": 0.1,
+    "gapTrueStageUnits": 0.036,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 272.02,
+     "bottom": 302.94,
+     "h": 30.92
+    },
+    "gapToNearestLineBottomPx": 10.87,
+    "gapToNearestLineBottomStageUnits": 3.89,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 224.23,
+      "bottom": 255.15,
+      "left": 182.88,
+      "right": 269.33,
+      "text": "Hastega"
+     },
+     {
+      "top": 229.85,
+      "bottom": 252.34,
+      "left": 277.76,
+      "right": 294.63,
+      "text": "→"
+     },
+     {
+      "top": 224.23,
+      "bottom": 255.15,
+      "left": 303.06,
+      "right": 398.77,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch1-2560x1080",
+   "chapter": "ffx-ch1",
+   "size": "2560x1080",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.9833,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 290.3,
+    "contentBottom": 284.3,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 272.4,
+    "bodyBottom": 272.3,
+    "gapTruePx": 0.1,
+    "gapTrueStageUnits": 0.034,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 290.3,
+     "bottom": 323.3,
+     "h": 33
+    },
+    "gapToNearestLineBottomPx": 12,
+    "gapToNearestLineBottomStageUnits": 4.02,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 239.3,
+      "bottom": 272.3,
+      "left": 407.98,
+      "right": 500.23,
+      "text": "Hastega"
+     },
+     {
+      "top": 245.3,
+      "bottom": 269.3,
+      "left": 509.23,
+      "right": 527.23,
+      "text": "→"
+     },
+     {
+      "top": 239.3,
+      "bottom": 272.3,
+      "left": 536.23,
+      "right": 638.38,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch1-3840x2160",
+   "chapter": "ffx-ch1",
+   "size": "3840x2160",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 5.9665,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 580.59,
+    "contentBottom": 574.59,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 544.79,
+    "bodyBottom": 544.59,
+    "gapTruePx": 0.2,
+    "gapTrueStageUnits": 0.034,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 580.59,
+     "bottom": 646.59,
+     "h": 66
+    },
+    "gapToNearestLineBottomPx": 30,
+    "gapToNearestLineBottomStageUnits": 5.03,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 478.59,
+      "bottom": 544.59,
+      "left": 175.97,
+      "right": 360.47,
+      "text": "Hastega"
+     },
+     {
+      "top": 490.59,
+      "bottom": 538.59,
+      "left": 378.47,
+      "right": 414.47,
+      "text": "→"
+     },
+     {
+      "top": 478.59,
+      "bottom": 544.59,
+      "left": 432.47,
+      "right": 636.75,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch3-1280x720",
+   "chapter": "ffx-ch3",
+   "size": "1280x720",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 1.9888,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 193.53,
+    "contentBottom": 187.53,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 181.6,
+    "bodyBottom": 181.53,
+    "gapTruePx": 0.07,
+    "gapTrueStageUnits": 0.035,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 193.53,
+     "bottom": 215.53,
+     "h": 22
+    },
+    "gapToNearestLineBottomPx": 6,
+    "gapToNearestLineBottomStageUnits": 3.02,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 159.53,
+      "bottom": 181.53,
+      "left": 58.66,
+      "right": 163.97,
+      "text": "Stamina Tonic"
+     },
+     {
+      "top": 163.53,
+      "bottom": 179.53,
+      "left": 169.97,
+      "right": 181.97,
+      "text": "→"
+     },
+     {
+      "top": 159.53,
+      "bottom": 181.53,
+      "left": 187.97,
+      "right": 256.06,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch3-1600x900",
+   "chapter": "ffx-ch3",
+   "size": "1600x900",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.486,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 241.91,
+    "contentBottom": 235.91,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 227,
+    "bodyBottom": 226.91,
+    "gapTruePx": 0.09,
+    "gapTrueStageUnits": 0.036,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 241.91,
+     "bottom": 269.41,
+     "h": 27.5
+    },
+    "gapToNearestLineBottomPx": 9,
+    "gapToNearestLineBottomStageUnits": 3.62,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 199.41,
+      "bottom": 226.91,
+      "left": 73.32,
+      "right": 204.96,
+      "text": "Stamina Tonic"
+     },
+     {
+      "top": 204.41,
+      "bottom": 224.41,
+      "left": 212.46,
+      "right": 227.46,
+      "text": "→"
+     },
+     {
+      "top": 199.41,
+      "bottom": 226.91,
+      "left": 234.96,
+      "right": 320.08,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch3-2000x1012",
+   "chapter": "ffx-ch3",
+   "size": "2000x1012",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.7954,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 272.02,
+    "contentBottom": 266.02,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 255.25,
+    "bodyBottom": 255.15,
+    "gapTruePx": 0.1,
+    "gapTrueStageUnits": 0.036,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 272.02,
+     "bottom": 302.94,
+     "h": 30.92
+    },
+    "gapToNearestLineBottomPx": 10.87,
+    "gapToNearestLineBottomStageUnits": 3.89,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 224.23,
+      "bottom": 255.15,
+      "left": 182.88,
+      "right": 330.91,
+      "text": "Stamina Tonic"
+     },
+     {
+      "top": 229.85,
+      "bottom": 252.34,
+      "left": 339.34,
+      "right": 356.21,
+      "text": "→"
+     },
+     {
+      "top": 224.23,
+      "bottom": 255.15,
+      "left": 364.64,
+      "right": 460.35,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch3-2560x1080",
+   "chapter": "ffx-ch3",
+   "size": "2560x1080",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.9833,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 290.3,
+    "contentBottom": 284.3,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 272.4,
+    "bodyBottom": 272.3,
+    "gapTruePx": 0.1,
+    "gapTrueStageUnits": 0.034,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 290.3,
+     "bottom": 323.3,
+     "h": 33
+    },
+    "gapToNearestLineBottomPx": 12,
+    "gapToNearestLineBottomStageUnits": 4.02,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 239.3,
+      "bottom": 272.3,
+      "left": 407.98,
+      "right": 565.95,
+      "text": "Stamina Tonic"
+     },
+     {
+      "top": 245.3,
+      "bottom": 269.3,
+      "left": 574.95,
+      "right": 592.95,
+      "text": "→"
+     },
+     {
+      "top": 239.3,
+      "bottom": 272.3,
+      "left": 601.95,
+      "right": 704.09,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx-ch3-3840x2160",
+   "chapter": "ffx-ch3",
+   "size": "3840x2160",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 5.9665,
+    "glyphLines": 6,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 580.59,
+    "contentBottom": 574.59,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 544.79,
+    "bodyBottom": 544.59,
+    "gapTruePx": 0.2,
+    "gapTrueStageUnits": 0.034,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 580.59,
+     "bottom": 646.59,
+     "h": 66
+    },
+    "gapToNearestLineBottomPx": 30,
+    "gapToNearestLineBottomStageUnits": 5.03,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 478.59,
+      "bottom": 544.59,
+      "left": 175.97,
+      "right": 491.91,
+      "text": "Stamina Tonic"
+     },
+     {
+      "top": 490.59,
+      "bottom": 538.59,
+      "left": 509.91,
+      "right": 545.91,
+      "text": "→"
+     },
+     {
+      "top": 478.59,
+      "bottom": 544.59,
+      "left": 563.91,
+      "right": 768.19,
+      "text": "the party"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx2-ch4-1280x720",
+   "chapter": "ffx2-ch4",
+   "size": "1280x720",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.0111,
+    "glyphLines": 10,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 344.81,
+    "contentBottom": 338.81,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 332.75,
+    "bodyBottom": 332.81,
+    "gapTruePx": 0.09,
+    "gapTrueStageUnits": 0.045,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 344.81,
+     "bottom": 366.81,
+     "h": 22
+    },
+    "gapToNearestLineBottomPx": 5.97,
+    "gapToNearestLineBottomStageUnits": 2.97,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 289.09,
+      "bottom": 301.09,
+      "left": 56.66,
+      "right": 245.25,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 304.97,
+      "bottom": 316.97,
+      "left": 56.66,
+      "right": 257.19,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 320.84,
+      "bottom": 332.84,
+      "left": 56.66,
+      "right": 92.25,
+      "text": "Shell halves Impulse and Meg"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx2-ch4-1600x900",
+   "chapter": "ffx2-ch4",
+   "size": "1600x900",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.5139,
+    "glyphLines": 10,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 431.02,
+    "contentBottom": 425.02,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 415.93,
+    "bodyBottom": 416.02,
+    "gapTruePx": 0.12,
+    "gapTrueStageUnits": 0.048,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 431.02,
+     "bottom": 458.52,
+     "h": 27.5
+    },
+    "gapToNearestLineBottomPx": 8.97,
+    "gapToNearestLineBottomStageUnits": 3.57,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 361.37,
+      "bottom": 376.37,
+      "left": 70.82,
+      "right": 306.56,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 381.21,
+      "bottom": 396.21,
+      "left": 70.82,
+      "right": 321.48,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 401.05,
+      "bottom": 416.05,
+      "left": 70.82,
+      "right": 115.31,
+      "text": "Shell halves Impulse and Meg"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx2-ch4-2000x1012",
+   "chapter": "ffx2-ch4",
+   "size": "2000x1012",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 2.8267,
+    "glyphLines": 10,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 484.65,
+    "contentBottom": 478.65,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 467.69,
+    "bodyBottom": 467.78,
+    "gapTruePx": 0.14,
+    "gapTrueStageUnits": 0.05,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 484.65,
+     "bottom": 515.57,
+     "h": 30.92
+    },
+    "gapToNearestLineBottomPx": 10.82,
+    "gapToNearestLineBottomStageUnits": 3.83,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 406.34,
+      "bottom": 423.2,
+      "left": 180.07,
+      "right": 445.15,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 428.65,
+      "bottom": 445.52,
+      "left": 180.07,
+      "right": 461.93,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 450.96,
+      "bottom": 467.83,
+      "left": 180.07,
+      "right": 230.1,
+      "text": "Shell halves Impulse and Meg"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx2-ch4-2560x1080",
+   "chapter": "ffx2-ch4",
+   "size": "2560x1080",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 3.0167,
+    "glyphLines": 10,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 517.22,
+    "contentBottom": 511.22,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 499.12,
+    "bodyBottom": 499.22,
+    "gapTruePx": 0.15,
+    "gapTrueStageUnits": 0.05,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 517.22,
+     "bottom": 550.22,
+     "h": 33
+    },
+    "gapToNearestLineBottomPx": 11.95,
+    "gapToNearestLineBottomStageUnits": 3.96,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 433.64,
+      "bottom": 451.64,
+      "left": 404.98,
+      "right": 687.88,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 457.45,
+      "bottom": 475.45,
+      "left": 404.98,
+      "right": 705.78,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 481.27,
+      "bottom": 499.27,
+      "left": 404.98,
+      "right": 458.38,
+      "text": "Shell halves Impulse and Meg"
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "name": "ffx2-ch4-3840x2160",
+   "chapter": "ffx2-ch4",
+   "size": "3840x2160",
+   "browser": "clean",
+   "guide": {
+    "mounted": true,
+    "visible": true,
+    "scale": 6.0334,
+    "glyphLines": 10,
+    "moreShown": true,
+    "morePosition": "static",
+    "moreEffectivePx": 7,
+    "panelBottom": 1034.44,
+    "contentBottom": 1028.44,
+    "paddingBottomCss": 6,
+    "contentBottomTrue": 998.24,
+    "bodyBottom": 998.44,
+    "gapTruePx": 0.29,
+    "gapTrueStageUnits": 0.048,
+    "slicedLinesTrue": 0,
+    "chip": {
+     "top": 1034.44,
+     "bottom": 1100.44,
+     "h": 66
+    },
+    "gapToNearestLineBottomPx": 29.91,
+    "gapToNearestLineBottomStageUnits": 4.96,
+    "slicedLines": 0,
+    "slicedSample": [],
+    "chipOverGlyphs": 0,
+    "overlapSample": [],
+    "lastLines": [
+     {
+      "top": 867.28,
+      "bottom": 903.28,
+      "left": 169.97,
+      "right": 735.75,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 914.91,
+      "bottom": 950.91,
+      "left": 169.97,
+      "right": 771.56,
+      "text": "Shell halves Impulse and Meg"
+     },
+     {
+      "top": 962.53,
+      "bottom": 998.53,
+      "left": 169.97,
+      "right": 276.75,
+      "text": "Shell halves Impulse and Meg"
+     }
+    ]
+   },
+   "errors": []
+  }
+ ]
+}

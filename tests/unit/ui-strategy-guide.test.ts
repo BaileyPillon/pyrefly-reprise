@@ -85,6 +85,19 @@ function panelOf(root: HTMLElement): HTMLElement {
   return root.querySelector<HTMLElement>('[data-role="strategy-guide-panel"]')!;
 }
 
+/**
+ * The measured column: the ink slab, then the MORE row.
+ *
+ * Round 04 PR-0009 moved the rail's geometry off `.sgd__panel` and onto
+ * `.sgd__stack`. The panel is the slab now and nothing else, so its box can
+ * end exactly where the type ends instead of eleven px further down with a
+ * MORE chip painted over the difference. The anchor arithmetic these tests
+ * pin is unchanged — it is read one element out.
+ */
+function stackOf(root: HTMLElement): HTMLElement {
+  return root.querySelector<HTMLElement>('[data-role="strategy-guide-stack"]')!;
+}
+
 function toggleOf(root: HTMLElement): HTMLButtonElement {
   return root.querySelector<HTMLButtonElement>('[data-role="strategy-guide-toggle"]')!;
 }
@@ -321,14 +334,14 @@ describe('the rail is measured, never fixed', () => {
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
 
-    const panel = panelOf(stage);
+    const stack = stackOf(stage);
     // 20 + 24 + the 5px clearance gap + the 11px the `G GUIDE` chip rides above
     // the rail's own top edge. The chip is what has to clear the anchor, not the
     // panel: without the reserve the rail cleared FFX's action banner and the
     // chip landed on it (docs/handoff/fix3-ffx-hud.md, defect 4).
-    expect(Number.parseFloat(panel.style.top)).toBeCloseTo(60, 1);
+    expect(Number.parseFloat(stack.style.top)).toBeCloseTo(60, 1);
     // 240 - 5 - 60.
-    expect(Number.parseFloat(panel.style.maxHeight)).toBeCloseTo(175, 1);
+    expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(175, 1);
     // ...and the chip now sits *below* the anchor's bottom edge, not on it.
     expect(Number.parseFloat(toggleOf(stage).style.top)).toBeGreaterThanOrEqual(20 + 24);
   });
@@ -341,11 +354,11 @@ describe('the rail is measured, never fixed', () => {
     const { guide, stage } = mountGuide({ anchors: { above: () => cmd, top: 44, bottom: 34 } });
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
-    const withSubmenu = Number.parseFloat(panelOf(stage).style.maxHeight);
+    const withSubmenu = Number.parseFloat(stackOf(stage).style.maxHeight);
 
     cmdTop = 290; // submenu closed: the stack is three rows again
     guide.update(0.016);
-    expect(Number.parseFloat(panelOf(stage).style.maxHeight)).toBeGreaterThan(withSubmenu);
+    expect(Number.parseFloat(stackOf(stage).style.maxHeight)).toBeGreaterThan(withSubmenu);
   });
 
   /**
@@ -360,14 +373,32 @@ describe('the rail is measured, never fixed', () => {
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
     // Falls back to `bottom`: 360 - 34 - 44.
-    expect(Number.parseFloat(panelOf(stage).style.maxHeight)).toBeCloseTo(282, 1);
+    expect(Number.parseFloat(stackOf(stage).style.maxHeight)).toBeCloseTo(282, 1);
   });
 
   it('never squeezes below a readable height', () => {
     const { guide, stage } = mountGuide({ anchors: { above: () => boxed(50, 300), top: 44, bottom: 34 } });
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
-    expect(Number.parseFloat(panelOf(stage).style.maxHeight)).toBe(56);
+    expect(Number.parseFloat(stackOf(stage).style.maxHeight)).toBe(56);
+  });
+
+  /**
+   * Round 04 PR-0009, measured live: "MORE chip box 252.50-280.00 intersects 2
+   * glyph line boxes". It could, because it was an absolutely positioned chip
+   * whose `top` the layout wrote at the slab's own bottom edge. As the second
+   * row of a flex column it has nowhere to overlap from.
+   */
+  it('lays the slab and the MORE row out as one column, so the chip can never sit on the text', () => {
+    const { guide, stage } = mountGuide({ anchors: { below: () => boxed(20, 24), top: 44, bottom: 34 } });
+    guide.sync(makeFakeBattleState());
+    guide.update(0.016);
+
+    const roles = [...stackOf(stage).children].map((c) => (c as HTMLElement).dataset['role']);
+    expect(roles).toEqual(['strategy-guide-panel', 'strategy-guide-more']);
+    // Nothing writes a `top` onto the affordance any more: its place in the
+    // column is its position.
+    expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.style.top).toBe('');
   });
 
   it('drops the chip’s measured anchor when the guide is switched off', () => {

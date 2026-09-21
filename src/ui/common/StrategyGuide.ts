@@ -136,39 +136,88 @@ const COMPACT_HEIGHT = 200;
  * menu open the rail is ~156 grid px and the ladder reached it in every state
  * of the browser pass, so the encounter's standing truths — "kill Seymour, not
  * the mount" — were gone from the panel for the whole of every decision, which
- * is when they matter. Past the fourth rung the rail scrolls instead and
- * {@link StrategyGuide.moreEl} says so. Round 02 #29 allows exactly that: "scroll
- * or paginate with a visible affordance; never *silently* cut a sentence."
+ * is when they matter. Past the fourth rung the rail **paginates** — whole
+ * blocks at a time, {@link StrategyGuide.pageDown} — and
+ * {@link StrategyGuide.moreEl} says so. Round 02 #29 allows exactly that:
+ * "scroll or paginate with a visible affordance; never *silently* cut a
+ * sentence."
  */
 const FIT_RUNGS = 4;
 
-/** Height of the MORE affordance, in grid px. Mirrors `.sgd__more`'s own. */
+/** Height of the MORE affordance row, in grid px. Mirrors `.sgd__more`'s own. */
 const MORE_HEIGHT = 11;
 
+/** The class that takes a block out of the body's flow entirely. */
+const OUT_CLASS = 'sgd__u--out';
+
 /**
- * The largest line bottom at or below `limit`, so a box can end there without
- * slicing through the middle of a line's glyphs (round 03 #36:
- * `critic/rounds/round-03.md:780-788` — "…the CTB margin the Holy / Water
- * rhythm need[s to beat] the mount's Full-"). `lineBottoms` are each visible
- * text line's bottom edge, measured from the same origin as `limit`.
+ * One block of text in the body, measured in the stage's own **layout** units.
  *
- * Pure and exported so the clamping rule itself is unit-testable without a
- * layout engine: `StrategyGuide.measureLineBottoms` is the only caller that
- * needs one, and jsdom (this project's unit tests) has none, which is why it
- * hands back an empty array and this function falls back to `limit` — the
- * same "no data, no fit run" the class already documents for `fit()`.
+ * Both numbers come from `offsetTop`/`offsetHeight` arithmetic, which a CSS
+ * `transform` on an ancestor never touches — that is the whole point. Round 04
+ * PR-0009 was twice fixed by converting *screen* measurements into grid units
+ * and twice stayed broken; the fit decision below reads nothing a transform can
+ * move.
  */
-export function lastWholeLineBelow(lineBottoms: readonly number[], limit: number): number {
-  if (lineBottoms.length === 0) return limit;
-  let best = 0;
-  for (const bottom of lineBottoms) {
-    if (bottom <= limit + 0.5 && bottom > best) best = bottom;
+export interface GuideFitUnit {
+  /** The block's own box bottom, relative to `.sgd__body`'s top edge. */
+  readonly bottom: number;
+  /**
+   * The bottom of this block's lowest **glyph**, same origin — always at or
+   * above {@link bottom}, because a line box carries half-leading and a block
+   * can carry padding under its last line. Ending the body here rather than at
+   * `bottom` is what makes the slab's edge land on the type instead of a few
+   * px of empty leading below it.
+   */
+  readonly glyphBottom: number;
+  /** A section head (`RULES`), which must never be the last thing shown. */
+  readonly heading?: boolean;
+}
+
+export interface GuideFit {
+  /** How many leading blocks stay; every later one is hidden outright. */
+  readonly shown: number;
+  /** The body's exact height: the last shown block's glyph bottom. */
+  readonly height: number;
+  /** At least one block had to go, so the MORE row is earned. */
+  readonly clipped: boolean;
+}
+
+/**
+ * Keep the leading run of blocks that fits `limit` **entirely**, and end the
+ * box on the last one's glyphs.
+ *
+ * Round 03 #36 and round 04 PR-0009: "…the CTB margin the Holy / Water rhythm
+ * need[s to beat] the mount's Full-". Every previous answer clamped a
+ * continuous height and hoped the boundary landed between two lines. This one
+ * cannot slice, because the only heights it can return are block boundaries:
+ * whatever `limit` is, the box ends where a block ended.
+ *
+ * Pure and exported so the rule is unit-testable without a layout engine —
+ * the class's only job is to read the two numbers per block off the DOM.
+ */
+export function fitWholeUnits(units: readonly GuideFitUnit[], limit: number): GuideFit {
+  if (units.length === 0) return { shown: 0, height: Math.max(0, limit), clipped: false };
+  let shown = 0;
+  for (const unit of units) {
+    if (unit.bottom > limit + 0.5) break;
+    shown++;
   }
-  return best > 0 ? best : limit;
+  // Not even the first block fits: show it anyway and let the rail run a
+  // couple of px long. NEXT — the command the player is being told to press —
+  // survives every other rung of this panel's ladder; it survives this one too,
+  // and an empty slab with a MORE chip under it would be the worse defect.
+  if (shown === 0) return { shown: 1, height: units[0]!.glyphBottom, clipped: units.length > 1 };
+  // Never end on an orphan `RULES` head whose bullets were all cut away.
+  while (shown > 1 && shown < units.length && units[shown - 1]!.heading) shown--;
+  const last = units[shown - 1]!;
+  return { shown, height: Math.min(last.glyphBottom, last.bottom), clipped: shown < units.length };
 }
 
 export class StrategyGuide {
   readonly el: HTMLElement;
+  /** The measured column: the slab, then the MORE row. See `.sgd__stack`. */
+  private readonly stackEl: HTMLElement;
   private readonly panelEl: HTMLElement;
   private readonly toggleEl: HTMLButtonElement;
   private readonly bodyEl: HTMLElement;
@@ -181,12 +230,16 @@ export class StrategyGuide {
   private padWasDown = false;
   /** Signature of the last render, so a per-frame `sync` does not re-write the DOM. */
   private lastSignature = '';
-  /** The scroll affordance; see {@link FIT_RUNGS}. */
+  /** The paging affordance; see {@link FIT_RUNGS}. */
   private readonly moreEl: HTMLButtonElement;
-  /** `(content, rail height)` the current rung was solved for. */
+  /** `(content, rail height, page)` the current fit was solved for. */
   private fitKey = '';
   /** How much has been given up to make the content fit. 0 = nothing. */
   private fitRung = 0;
+  /** Index of the first block of the page on screen. 0 = the top of the guide. */
+  private pageStart = 0;
+  /** Index the next MORE click jumps to; 0 wraps back to the top. */
+  private nextPage = 0;
 
   constructor(opts: StrategyGuideOptions) {
     this.opts = opts;
@@ -201,6 +254,10 @@ export class StrategyGuide {
     this.toggleEl.className = 'sgd__toggle';
     this.toggleEl.dataset['role'] = 'strategy-guide-toggle';
 
+    this.stackEl = document.createElement('div');
+    this.stackEl.className = 'sgd__stack';
+    this.stackEl.dataset['role'] = 'strategy-guide-stack';
+
     this.panelEl = document.createElement('div');
     this.panelEl.className = 'sgd__panel';
     this.panelEl.dataset['role'] = 'strategy-guide-panel';
@@ -208,9 +265,10 @@ export class StrategyGuide {
     this.bodyEl = document.createElement('div');
     this.bodyEl.className = 'sgd__body';
 
-    // A mouse can wheel this panel and a pad cannot, so the affordance is also
-    // the control: one click pages down, and a click at the foot returns to the
-    // top. Hidden unless there is genuinely something below the fold.
+    // A pad cannot wheel a panel, so the affordance is also the control: one
+    // click pages down, and a click at the foot returns to the top. Hidden
+    // unless there is genuinely something below the fold. It is the column's
+    // second row, so it owns its height instead of covering the body's.
     this.moreEl = document.createElement('button');
     this.moreEl.type = 'button';
     this.moreEl.className = 'sgd__more';
@@ -222,7 +280,8 @@ export class StrategyGuide {
     });
 
     this.panelEl.append(this.bodyEl);
-    this.el.append(this.panelEl, this.moreEl, this.toggleEl);
+    this.stackEl.append(this.panelEl, this.moreEl);
+    this.el.append(this.stackEl, this.toggleEl);
 
     this.toggleEl.addEventListener('click', (e) => {
       e.preventDefault();
@@ -276,10 +335,13 @@ export class StrategyGuide {
     // whatever height the last open panel happened to start at.
     if (!this.visible) {
       this.toggleEl.style.top = '';
+      this.stackEl.style.top = '';
+      this.stackEl.style.maxHeight = '';
       // The affordance belongs to the panel, not to the chip: with the guide
       // off there is nothing below any fold.
       this.moreEl.hidden = true;
-      this.moreEl.style.top = '';
+      // The fit is solved against a rail height that no longer applies.
+      this.fitKey = '';
     }
     const keys = this.padConnected() ? GUIDE_HINT_ITEM.gamepad : GUIDE_HINT_ITEM.keyboard;
     this.toggleEl.innerHTML =
@@ -375,6 +437,9 @@ export class StrategyGuide {
     }
     this.lastSignature = signature;
     this.bodyEl.innerHTML = bodyHtml(view);
+    // New text: back to page one, and re-solve the fit against it.
+    this.pageStart = 0;
+    this.fitKey = '';
     this.layout();
   }
 
@@ -411,152 +476,201 @@ export class StrategyGuide {
     const floor = above ? above.offsetTop - CLEARANCE_GAP : 360 - anchors.bottom;
 
     const available = Math.max(MIN_PANEL_HEIGHT, floor - top);
-    this.panelEl.style.top = `${top.toFixed(2)}px`;
-    this.panelEl.style.maxHeight = `${available.toFixed(2)}px`;
+    this.stackEl.style.top = `${top.toFixed(2)}px`;
+    this.stackEl.style.maxHeight = `${available.toFixed(2)}px`;
     this.toggleEl.style.top = `${Math.max(0, top - CHIP_RISE).toFixed(2)}px`;
     // Short rules while the menu is eating the rail; the paragraphs come back
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);
-    this.fit(available);
-    // `fit()` above gives up whole *elements* (a citation, a rule's paragraph,
-    // a whole rule) until the content roughly fits `available`, and — as a
-    // side effect — sets `moreEl.hidden` for whether that was enough.
-    //
-    // That still leaves the one case `fit()` cannot see: the element left
-    // standing at the fold — usually a `.sgd__why` sentence — running a
-    // fractional line past `available` and getting sliced through the middle
-    // of its glyphs by `overflow-y` (round 03 #36). `measureLineBottoms`
-    // reads the real rendered line boxes (jsdom has none, so this is a no-op
-    // there, like the rest of this method's pixel math) and
-    // `lastWholeLineBelow` finds where the box can end without cutting one.
-    //
-    // When the MORE chip is going to show, the line search budgets
-    // `MORE_HEIGHT` less than `available` for it, and the box is then given
-    // that reserved strip back on top of the clamped text height — MORE
-    // still occupies the box's trailing `MORE_HEIGHT`, exactly as originally
-    // authored, but now that strip is blank ink below a *complete* last
-    // line, never printed over the tail of one. Retrofitting the clamp
-    // without this reserve was tried first and produced the opposite defect
-    // life-tested: MORE painted directly over the last word of a fully
-    // legible sentence, which reads worse than the slice it replaced.
-    const budget = this.moreEl.hidden ? available : available - MORE_HEIGHT;
-    const textHeight = lastWholeLineBelow(this.measureLineBottoms(), budget);
-    const clampedHeight = this.moreEl.hidden ? textHeight : textHeight + MORE_HEIGHT;
-    this.panelEl.style.maxHeight = `${clampedHeight.toFixed(2)}px`;
-    // Flush with the panel's own bottom edge, whichever of the two heights is
-    // smaller: `available` is a cap, and a rail whose content stops short of it
-    // would otherwise get a chip floating in mid-panel.
-    const panelHeight = Math.min(clampedHeight, this.panelEl.offsetHeight || clampedHeight);
-    this.moreEl.style.top = `${(top + panelHeight - MORE_HEIGHT).toFixed(2)}px`;
+    this.refit(available);
   }
 
   /**
-   * Every visible text line's bottom edge inside {@link bodyEl}, measured
-   * from `bodyEl`'s own top (which is where `available` above is measured
-   * from too — `.sgd__body` carries no margin or padding of its own, so its
-   * top edge *is* `.sgd__panel`'s content-box top) and converted into the
-   * same unscaled 640x360 stage-grid units `available`/`budget` are in.
+   * Solve the column: density rung, then the whole-block cut, then MORE.
    *
-   * A single `Range` over the whole body, rather than one per element,
-   * because a `Range.getClientRects()` already returns one rect per wrapped
-   * line across everything it spans — which is the thing `element
-   * .getClientRects()` does *not* do for a block box. Real browsers only:
-   * jsdom implements neither layout nor (reliably) this API, so this returns
-   * `[]` there and {@link lastWholeLineBelow} falls back to the uncautious
-   * height, exactly as documented on {@link StrategyGuide.fit}.
+   * Round 04 PR-0009, second pass. Two earlier fixes clamped a *continuous*
+   * height computed from `Range` rects and both left a line sliced live, the
+   * second one because the rects and the budget were in different units. This
+   * reads no screen pixels at all for the decision:
    *
-   * Round 04 PR-0009: `getClientRects()`/`getBoundingClientRect()` report
-   * **transformed screen pixels**, because `FFXBattleHud.layout()` /
-   * `LetterboxStage.createStage()` scale an ancestor of this panel to fit the
-   * real viewport (`min(w/640, h/360)` — 2.5x at Bailey's 1600x900, ~2.81x at
-   * 2000x1012). `available`/`budget`/`MORE_HEIGHT` never pass through that
-   * transform, so handing `lastWholeLineBelow` the raw rect numbers compares
-   * two different units and finds a line that only coincidentally satisfies
-   * the arithmetic — not the true last whole line. {@link currentScale}
-   * divides the measurement back down to stage-grid units first.
+   *  1. every block that can be given up is given up, in {@link FIT_RUNGS}'s
+   *     order, while `.sgd__body`'s own `scrollHeight` — a layout number, in
+   *     stage-grid px, which no ancestor transform can move — exceeds the rail;
+   *  2. what is left is measured block by block off `offsetTop`/`offsetHeight`
+   *     and cut by {@link fitWholeUnits}: whole blocks only, so the box can
+   *     only ever end where a block ended;
+   *  3. the MORE row's own `MORE_HEIGHT` comes out of the budget **before** the
+   *     cut, not off the top of the finished box, because it is a row of the
+   *     column now rather than a chip laid over one.
+   *
+   * Solved once per `(content, rail height, page)` and then held, for the
+   * reason `MoveAdvisor.fitCard` records: a fit keyed on anything that moves
+   * per frame drops and restores a whole sentence several times a second while
+   * the player is reading it.
+   *
+   * In jsdom every box measures 0. There is no layout to fit to, so this
+   * restores the full content and leaves — which is what the unit tests in
+   * `ui-strategy-guide.test.ts` are asserting about.
    */
-  private measureLineBottoms(): number[] {
-    try {
-      const range = document.createRange();
-      range.selectNodeContents(this.bodyEl);
-      const rects = range.getClientRects();
-      if (!rects || rects.length === 0) return [];
-      const top = this.bodyEl.getBoundingClientRect().top;
-      const scale = this.currentScale();
-      return Array.from(rects, (r) => (r.bottom - top) / scale);
-    } catch {
-      return [];
+  private refit(available: number): void {
+    const key = `${this.lastSignature}|${Math.round(available)}|${this.pageStart}`;
+    if (key === this.fitKey) return;
+
+    // Clean slate. The fit only ever *removes* content, so it has to be solved
+    // against the whole of it rather than against last frame's leftovers.
+    this.bodyEl.style.height = '';
+    this.fitRung = 0;
+    this.applyRung();
+    const all = this.allUnits();
+    for (const unit of all) unit.classList.remove(OUT_CLASS);
+
+    const chrome = this.panelEl.offsetHeight - this.bodyEl.offsetHeight;
+    if (!(this.bodyEl.scrollHeight > 0) || !(chrome >= 0)) {
+      // No layout engine (jsdom) or nothing painted yet: show everything
+      // rather than clamp the body to a measured zero.
+      this.moreEl.hidden = true;
+      this.nextPage = 0;
+      return;
     }
-  }
+    this.fitKey = key;
 
-  /**
-   * The letterbox stage's current scale factor, recovered without needing a
-   * reference to whichever stage element actually applies it.
-   *
-   * A CSS `transform` on an ancestor changes what `getBoundingClientRect()`
-   * reports (screen pixels) but never `offsetHeight` (the element's own,
-   * pre-transform layout height) — the transform never touches layout, only
-   * paint. So the ratio between {@link bodyEl}'s measured height and its own
-   * `offsetHeight` *is* the ambient scale, for either stage implementation
-   * (`LetterboxStage.createStage`'s published `--lb-scale` custom property,
-   * or `FFXBattleHud.layout()`'s inline `scale(...)`, which sets no such
-   * property) and at any ancestor depth.
-   *
-   * Falls back to 1 — plain, unscaled px — whenever either side is
-   * unmeasurable: jsdom (no layout at all, matching {@link measureLineBottoms}'s
-   * own jsdom fallback), a body with no rendered height yet, or a panel not
-   * yet mounted into a scaled stage. A wrong scale would silently reintroduce
-   * this exact defect, so this never guesses past what it can measure.
-   */
-  private currentScale(): number {
-    const rectHeight = this.bodyEl.getBoundingClientRect().height;
-    const localHeight = this.bodyEl.offsetHeight;
-    if (!rectHeight || !localHeight) return 1;
-    const scale = rectHeight / localHeight;
-    return Number.isFinite(scale) && scale > 0 ? scale : 1;
-  }
-
-  /**
-   * Give text up, in {@link FIT_RUNGS}'s order, until the rail holds it.
-   *
-   * Solved once per `(content, rail height)` and then held, for the reason
-   * `MoveAdvisor.fitCard` records: a fit keyed on anything that moves per frame
-   * drops and restores a whole sentence several times a second while the player
-   * is reading it. A submenu opening changes the rail's height and re-solves,
-   * which is the one moment the rung should change.
-   *
-   * In jsdom every box measures 0, so `overflows()` is false, the rung stays at
-   * 0 and the affordance stays hidden — the unit tests see the full content,
-   * which is what they are asserting about.
-   */
-  private fit(available: number): void {
-    const key = `${this.lastSignature}|${Math.round(available)}`;
-    if (key !== this.fitKey) {
-      this.fitKey = key;
-      this.fitRung = 0;
-      this.applyRung();
-    }
-    while (this.fitRung < FIT_RUNGS && this.overflows()) {
+    const rail = Math.max(0, available - chrome);
+    while (this.fitRung < FIT_RUNGS && this.bodyEl.scrollHeight > rail + 0.5) {
       this.fitRung++;
       this.applyRung();
     }
-    this.moreEl.hidden = !this.overflows();
+
+    const visible = this.allUnits().filter((el) => el.offsetHeight > 0);
+    const start = Math.min(Math.max(0, this.pageStart), Math.max(0, visible.length - 1));
+    for (let i = 0; i < start; i++) visible[i]!.classList.add(OUT_CLASS);
+    const page = visible.slice(start);
+
+    // MORE owns a row, so its height is spent before the cut, never after it.
+    const overflowing = this.bodyEl.scrollHeight > rail + 0.5;
+    const reserve = overflowing || start > 0 ? MORE_HEIGHT : 0;
+    const budget = Math.max(0, rail - reserve);
+
+    const bodyTop = this.bodyEl.offsetTop;
+    const scale = this.stageScale();
+    const bodyTopPx = this.bodyEl.getBoundingClientRect().top;
+    const fit = fitWholeUnits(
+      page.map((el) => this.measureUnit(el, bodyTop, scale, bodyTopPx)),
+      budget,
+    );
+    for (let i = fit.shown; i < page.length; i++) page[i]!.classList.add(OUT_CLASS);
+    this.bodyEl.style.height = `${Math.max(0, fit.height).toFixed(2)}px`;
+    this.moreEl.hidden = !(fit.clipped || start > 0);
+    this.nextPage = fit.clipped ? start + fit.shown : 0;
   }
 
-  private overflows(): boolean {
-    return this.panelEl.scrollHeight > this.panelEl.clientHeight + 1;
+  /** Every block of text in the body, in reading order. */
+  private allUnits(): HTMLElement[] {
+    return Array.from(this.bodyEl.querySelectorAll<HTMLElement>('.sgd__u'));
+  }
+
+  /**
+   * One block's box bottom and glyph bottom, relative to the body's own top.
+   *
+   * The box bottom is pure layout arithmetic. The glyph bottom needs the
+   * rendered type, so it is read as **a proportion of this element's own
+   * rect** — numerator and denominator are both screen pixels of the *same*
+   * box, so whatever uniform scale the letterbox stage is applying cancels
+   * out exactly, at any ancestor depth and without the panel having to know
+   * which ancestor applies it. That is the lesson of the first two attempts:
+   * a measurement that has to be converted between coordinate systems is a
+   * measurement that can be converted wrongly.
+   *
+   * Falls back to the box bottom whenever the type cannot be measured — a few
+   * px of empty leading below the last line is not a defect, a sliced line is.
+   */
+  private measureUnit(el: HTMLElement, bodyTop: number, scale: number, bodyTopPx: number): GuideFitUnit {
+    const bottom = el.offsetTop - bodyTop + el.offsetHeight;
+    const heading = el.classList.contains('sgd__head');
+    return { bottom, glyphBottom: this.glyphBottom(el, bottom, scale, bodyTopPx), heading };
+  }
+
+  private glyphBottom(el: HTMLElement, boxBottom: number, scale: number, bodyTopPx: number): number {
+    if (!(scale > 0)) return boxBottom;
+    try {
+      let lowest = Number.NEGATIVE_INFINITY;
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (!node.textContent || !node.textContent.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        for (const glyphs of Array.from(range.getClientRects())) {
+          if (glyphs.height > 0.5 && glyphs.width > 0.5 && glyphs.bottom > lowest) lowest = glyphs.bottom;
+        }
+      }
+      if (!Number.isFinite(lowest)) return boxBottom;
+      const exact = (lowest - bodyTopPx) / scale;
+      // Guard rails, in the block's own terms: the type cannot be lower than
+      // its box (plus a px for `offsetTop`/`offsetHeight`'s integer rounding)
+      // and it cannot be half a box higher. Anything outside that is not a
+      // measurement of this block's last line, so the box bottom stands — a
+      // little empty leading is not a defect, a sliced line is.
+      if (!(exact > boxBottom - el.offsetHeight * 0.5) || exact > boxBottom + 1) return boxBottom;
+      return exact;
+    } catch {
+      return boxBottom;
+    }
+  }
+
+  /**
+   * The letterbox stage's scale, measured **exactly**.
+   *
+   * `FFXBattleHud.layout()` / `LetterboxStage.createStage()` scale an ancestor
+   * of this rail to fit the viewport, so every rect this file reads is in
+   * screen px while every length it writes is in stage-grid px. The previous
+   * attempt recovered the factor as `bodyRect.height / bodyEl.offsetHeight` —
+   * and `offsetHeight` is **rounded to a whole pixel**, so at 1280x720 that
+   * returns 1.9836 where the real factor is 2. Half a grid px of error there
+   * is a whole screen px at 2x and nearly four at 4K.
+   *
+   * A computed style is never rounded and never scaled: the slab's authored
+   * `padding` is exactly 5px + 6px whatever the stage is doing. The difference
+   * between the slab's rect height and its body's rect height is exactly that
+   * padding *after* the transform, and neither rect is rounded — so their
+   * ratio is the scale, to full precision, without the panel needing a
+   * reference to whichever ancestor applies it.
+   *
+   * Returns 0 when it cannot be measured (jsdom, nothing painted yet, a slab
+   * authored with no padding); callers then keep the unrounded box bottoms and
+   * lose only a px of leading.
+   */
+  private stageScale(): number {
+    try {
+      const cs = getComputedStyle(this.panelEl);
+      const chrome =
+        (Number.parseFloat(cs.paddingTop) || 0) +
+        (Number.parseFloat(cs.paddingBottom) || 0) +
+        (Number.parseFloat(cs.borderTopWidth) || 0) +
+        (Number.parseFloat(cs.borderBottomWidth) || 0);
+      if (!(chrome > 0)) return 0;
+      const painted = this.panelEl.getBoundingClientRect().height - this.bodyEl.getBoundingClientRect().height;
+      const scale = painted / chrome;
+      return Number.isFinite(scale) && scale > 0.05 ? scale : 0;
+    } catch {
+      return 0;
+    }
   }
 
   private applyRung(): void {
     for (let r = 1; r <= FIT_RUNGS; r++) this.el.classList.toggle(`sgd--fit${r}`, this.fitRung >= r);
   }
 
-  /** One page down, wrapping back to the top at the foot. */
+  /**
+   * One page down, wrapping back to the top at the foot.
+   *
+   * Pages by *block*, not by `scrollTop`, for the same reason the cut does: a
+   * scrolled panel puts an arbitrary offset at its bottom edge and slices
+   * whatever line is there. The next page starts at the first block this one
+   * could not show.
+   */
   private pageDown(): void {
-    const panel = this.panelEl;
-    const step = Math.max(24, panel.clientHeight - 12);
-    const atEnd = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 2;
-    panel.scrollTop = atEnd ? 0 : panel.scrollTop + step;
+    this.pageStart = this.nextPage;
+    this.fitKey = '';
+    this.layout();
   }
 }
 
@@ -574,27 +688,37 @@ function signatureOf(view: GuideView): string {
   ].join('');
 }
 
+/**
+ * The marker class every block of text in the body carries.
+ *
+ * `StrategyGuide.refit` hides whole `.sgd__u` blocks rather than clamping a
+ * height through the middle of one, so "a line is never sliced" is a property
+ * of the markup: a block whose last glyph would fall outside the rail is not
+ * drawn at all. Anything that prints type into the body needs this class.
+ */
+const U = 'sgd__u';
+
 function sectionHead(label: string): string {
-  return `<h4 class="sgd__head">${escapeHtml(label)}</h4>`;
+  return `<h4 class="sgd__head ${U}">${escapeHtml(label)}</h4>`;
 }
 
 function citeHtml(cite: string): string {
-  return cite ? `<p class="sgd__cite">${escapeHtml(cite)}</p>` : '';
+  return cite ? `<p class="sgd__cite ${U}">${escapeHtml(cite)}</p>` : '';
 }
 
 function nextHtml(view: GuideView): string {
   const next = view.next;
   if (!next) {
-    return `${sectionHead('Next')}<p class="sgd__idle">Waiting for your turn.</p>`;
+    return `${sectionHead('Next')}<p class="sgd__idle ${U}">Waiting for your turn.</p>`;
   }
   const target = next.targetName
     ? `<span class="sgd__arrow">→</span><span class="sgd__target">${escapeHtml(next.targetName)}</span>`
     : '';
   return [
     sectionHead('Next'),
-    `<p class="sgd__actor">${escapeHtml(next.actorName)}</p>`,
-    `<p class="sgd__cmd"><span class="sgd__label">${escapeHtml(next.label)}</span>${target}</p>`,
-    next.reason ? `<p class="sgd__why">${escapeHtml(next.reason)}.</p>` : '',
+    `<p class="sgd__actor ${U}">${escapeHtml(next.actorName)}</p>`,
+    `<p class="sgd__cmd ${U}"><span class="sgd__label">${escapeHtml(next.label)}</span>${target}</p>`,
+    next.reason ? `<p class="sgd__why ${U}">${escapeHtml(next.reason)}.</p>` : '',
     citeHtml(next.cite),
   ].join('');
 }
@@ -605,16 +729,16 @@ function watchHtml(view: GuideView): string {
     .map(
       (w) =>
         `<div class="sgd__charge sgd__charge--s${w.stage}">` +
-        `<p class="sgd__cmd"><span class="sgd__label">${escapeHtml(w.payload)}</span>` +
+        `<p class="sgd__cmd ${U}"><span class="sgd__label">${escapeHtml(w.payload)}</span>` +
         `<span class="sgd__timing">${escapeHtml(w.timing)}</span></p>` +
-        `<p class="sgd__why">${escapeHtml(w.advice)}.</p>` +
+        `<p class="sgd__why ${U}">${escapeHtml(w.advice)}.</p>` +
         citeHtml(w.cite) +
         '</div>',
     )
     .join('');
   const phase = view.phase
-    ? `<div class="sgd__phase"><p class="sgd__phase-label">${escapeHtml(view.phase.label)}</p>` +
-      `<p class="sgd__why">${escapeHtml(view.phase.note)}</p>${citeHtml(view.phase.cite)}</div>`
+    ? `<div class="sgd__phase"><p class="sgd__phase-label ${U}">${escapeHtml(view.phase.label)}</p>` +
+      `<p class="sgd__why ${U}">${escapeHtml(view.phase.note)}</p>${citeHtml(view.phase.cite)}</div>`
     : '';
   return `${sectionHead('Watch')}${charges}${phase}`;
 }
@@ -634,7 +758,7 @@ function rulesHtml(view: GuideView): string {
   const items = view.rules
     .map(
       (r) =>
-        '<li>' +
+        `<li class="${U}">` +
         `<span class="sgd__rule-full">${escapeHtml(r.text)}</span>` +
         `<span class="sgd__rule-short">${escapeHtml(r.short)}</span>` +
         `<span class="sgd__cite">${escapeHtml(r.cite)}</span>` +
@@ -646,7 +770,7 @@ function rulesHtml(view: GuideView): string {
 
 function bodyHtml(view: GuideView): string {
   return [
-    `<p class="sgd__title">${escapeHtml(view.title)}</p>`,
+    `<p class="sgd__title ${U}">${escapeHtml(view.title)}</p>`,
     `<section class="sgd__sec sgd__sec--next">${nextHtml(view)}</section>`,
     watchHtml(view) ? `<section class="sgd__sec sgd__sec--watch">${watchHtml(view)}</section>` : '',
     rulesHtml(view) ? `<section class="sgd__sec sgd__sec--rules">${rulesHtml(view)}</section>` : '',

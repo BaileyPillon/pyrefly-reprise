@@ -364,6 +364,138 @@ needed.
 - Live: see "Live verification" above. FFX-2 fully covered; FFX blocked and reported, not guessed
   (hard rule 3).
 
+## Round 04 repair, second pass (2026-09-20)
+
+**PR-0009 (major, both games) — the strategy guide's last line, rebuilt rather than re-measured.**
+
+`docs/handoff/builda1-repair-verify.json` REFUTED the first repair. Measured live, at four
+viewports in two games: the slab still ended 3.3 to 3.7 grid px below the nearest whole line, one
+line was sliced, and the `▾ MORE` chip was painted **on top of** two glyph lines. Two attempts had
+now failed on the same approach — a CSS fade over the cut, then a scale conversion of the measured
+glyph rects — so `critic/RUBRIC.md` §8 applies: the approach changed, not the arithmetic.
+
+### Game case: both
+
+`StrategyGuide.ts` and `strategy-guide.css` carry no game branch except the accent colour
+(`.sgd--ffx2`, which `tokens.css` repoints from the HUD root). Both `FFXBattleHud` and
+`FFX2BattleHud` mount the same rail through the same `StrategyGuideAnchors` contract, and both were
+measured live below. This is shared presentation plumbing and a bug fix, so AGENTS.md hard rule 14
+and `critic/CHECKS.md` CHK-020/CHK-021 put it squarely in the "both" case; nothing here reads a
+chapter's game flag, so there is no game-specific branch to test for absence.
+
+### What changed
+
+The rail is a **column** now, and the geometry it used to compute is geometry it can no longer get
+wrong:
+
+1. **`.sgd__stack`** is a new absolutely-positioned flex column that carries the measured `top` and
+   `max-height` `layout()` derives from the anchors. Its two rows are the ink slab and the MORE
+   affordance.
+2. **`.sgd__more` owns a row.** It was `position: absolute` with a `top` written at the slab's own
+   bottom edge — which is how it came to sit across two lines of body text. It is a flow row of the
+   column now, so it cannot intersect a glyph however the fit turns out, and its 11 grid px come out
+   of the budget **before** the cut instead of off the top of a finished box. It carries its own
+   backing plate (opaque ink where the word sits) and keeps its 7 grid px type, which is 14 effective
+   CSS px at the smallest viewport in the matrix.
+3. **The body is cut on whole blocks.** Every block of text the panel prints now carries `.sgd__u`.
+   `refit()` reads each one's `offsetTop` / `offsetHeight` — layout numbers, which a CSS transform
+   never touches — hides every block that does not fit the rail **entirely**, and sets
+   `.sgd__body`'s height to the last one that does. `overflow` has nothing left to cut through,
+   because the box can only ever end where a block ended. The decision itself is the pure, exported
+   `fitWholeUnits()`.
+4. **The edge lands on the type, not on the leading below it.** The last kept block's lowest glyph
+   is read with one `Range` per text node and converted to grid px by `stageScale()`, which recovers
+   the letterbox factor from the slab's **authored padding** (a computed style: never scaled, never
+   rounded) against two unrounded rects. The previous attempt recovered it as
+   `rect.height / offsetHeight`, and `offsetHeight` is rounded to a whole pixel — 1.9836 where the
+   real factor is 2. That third-decimal error is what left FFX-2 sitting 0.62 grid px below its last
+   line at every viewport, which is 3.7 screen px at 4K.
+5. **MORE pages by block.** `pageDown()` used to move `scrollTop`, which puts an arbitrary offset at
+   the box's bottom edge — the same slice by another route. It now starts the next page at the first
+   block this one could not show, and wraps to the top at the foot. `G` is unchanged.
+6. The panel's `mask-image` is gone: it faded the slab's last 7 px, which is to say it faded whatever
+   glyphs were there. The only gradient left in the file is the MORE row's own plate, and the only
+   thing under that is the painting.
+
+### Live proof
+
+`PYREFLY_BROWSER=gpu` for every run (`tools/browser-mode.mjs` resolved `gpu`; no black-canvas
+fallback needed), real key presses through `critic/rounds/round-04/r4-flow.mjs`, my own
+`npx vite --port 5400` (stopped afterwards; the shared `dist/` was never built or touched, and
+`D:/pyrefly-release` never opened). Rig:
+`critic/scratch/builda1-repair/p3-guide-measure.mjs`, a copy of the verifier's `b4-final.mjs`
+measurement block — one `Range` per text node, true glyph line boxes, no block-container rects —
+with the driver's `waitRows` pressing Enter on every poll, per the verifier's finding that the
+BATTLE START banner needs it and that FFX Chapter 1 reaches a populated command row about 15 s in.
+All 15 combinations reached their command menu; the "battle-flow stall" reported last time was a
+harness artifact and is not real.
+
+| Chapter | Viewport | scale | content bottom vs nearest glyph bottom | sliced lines | MORE over glyphs | MORE type |
+|---|---|---|---|---|---|---|
+| FFX Ch. 1 | 1280x720 | 2.000 | **0.07 px** (0.035 grid px) | **0** | **0** | 14.0 px |
+| FFX Ch. 1 | 1600x900 | 2.500 | **0.09 px** (0.036 grid px) | **0** | **0** | 17.5 px |
+| FFX Ch. 1 | 2000x1012 | 2.811 | **0.1 px** (0.036 grid px) | **0** | **0** | 19.7 px |
+| FFX Ch. 1 | 2560x1080 | 3.000 | **0.1 px** (0.034 grid px) | **0** | **0** | 21.0 px |
+| FFX Ch. 1 | 3840x2160 | 6.000 | **0.2 px** (0.034 grid px) | **0** | **0** | 42.0 px |
+| FFX Ch. 3 | 1280x720 | 2.000 | **0.07 px** (0.035 grid px) | **0** | **0** | 14.0 px |
+| FFX Ch. 3 | 1600x900 | 2.500 | **0.09 px** (0.036 grid px) | **0** | **0** | 17.5 px |
+| FFX Ch. 3 | 2000x1012 | 2.811 | **0.1 px** (0.036 grid px) | **0** | **0** | 19.7 px |
+| FFX Ch. 3 | 2560x1080 | 3.000 | **0.1 px** (0.034 grid px) | **0** | **0** | 21.0 px |
+| FFX Ch. 3 | 3840x2160 | 6.000 | **0.2 px** (0.034 grid px) | **0** | **0** | 42.0 px |
+| FFX-2 Ch. 4 | 1280x720 | 2.000 | **0.09 px** (0.045 grid px) | **0** | **0** | 14.0 px |
+| FFX-2 Ch. 4 | 1600x900 | 2.500 | **0.12 px** (0.048 grid px) | **0** | **0** | 17.5 px |
+| FFX-2 Ch. 4 | 2000x1012 | 2.811 | **0.14 px** (0.05 grid px) | **0** | **0** | 19.7 px |
+| FFX-2 Ch. 4 | 2560x1080 | 3.000 | **0.15 px** (0.05 grid px) | **0** | **0** | 21.0 px |
+| FFX-2 Ch. 4 | 3840x2160 | 6.000 | **0.29 px** (0.048 grid px) | **0** | **0** | 42.0 px |
+
+Saved: `docs/screenshots/builda1/guide/measure-pass3.json` and the `pass3-*.png` screenshots
+alongside it.
+
+### One finding about the verifier's own rig
+
+`b4-final.mjs` computes the slab's content bottom as
+
+```js
+const contentBottom = pr.bottom - (parseFloat(cs.paddingBottom) || 0) - (parseFloat(cs.borderBottomWidth) || 0);
+```
+
+`pr` is a `getBoundingClientRect()` — **screen** px, so scaled by the letterbox transform — while
+`cs.paddingBottom` is a computed style, which is reported in the element's **own** px and which a
+transform never scales. The line therefore subtracts an unscaled 6 from a scaled rect and lands
+`6 x (scale - 1)` px below the real content box: 9.0 px at 1600x900, 10.9 px at 2000x1012. That is
+most of the "3.3 to 3.7 stage units" the refutation attributed to the code. The defect it found was
+real and is fixed — one line *was* sliced and the chip *was* over the text, both measured
+independently of that expression — but the residual gap number was the rig's, not the panel's.
+`p3-guide-measure.mjs` reports both: `contentBottom` verbatim as `b4-final.mjs` computes it, and
+`contentBottomTrue` with the padding converted like every other length. Whoever re-runs `b4-final.mjs`
+unchanged against this build should expect `gapToNearestLineBottomPx` of about `6 x (scale - 1)` and
+read `gapTruePx` instead.
+
+### Files touched
+
+| File | Change |
+|---|---|
+| `src/ui/common/StrategyGuide.ts` | `.sgd__stack` column; `fitWholeUnits()`; `refit()`; `stageScale()`; `.sgd__u` on every text block; `pageDown()` pages by block |
+| `src/ui/common/strategy-guide.css` | `.sgd__stack`; `.sgd__panel` demoted to the slab and unmasked; `.sgd__more` as a flow row with a backing plate; `.sgd__u--out` |
+| `tests/unit/strategy-guide-fold.test.ts` | `fitWholeUnits` arithmetic, the stubbed whole-block cut, and the stylesheet assertions that the chip is not positioned over the body |
+| `tests/unit/strategy-guide-scale.test.ts` | rewritten: the cut must be identical at 1x, 2.5x and 6x, and must land on the glyphs even when every layout box is rounded |
+| `tests/unit/helpers/guideLayoutStub.ts` | new: a fake layout that scales only the *screen* rects and can round the layout boxes the way Chrome does |
+| `tests/unit/ui-strategy-guide.test.ts` | the rail's geometry assertions read `.sgd__stack`; one new case on the column's order |
+
+`lastWholeLineBelow()`, `measureLineBottoms()` and `currentScale()` are gone with the approach they
+belonged to. None of these files is listed in `docs/CONTRACTS.md`, so no `CONTRACT-CHANGES.md` entry.
+
+### Verification
+
+- `npx tsc --noEmit` — clean.
+- `npx vitest run` — **162 files, 4290 tests, all green** in one full run (4279 going in).
+- Reproduced first (hard rule 3): the rounding half of the defect fails on the old scale recovery
+  and passes on the new one — with `stageScale()` replaced by the previous
+  `bodyRect.height / bodyEl.offsetHeight`, `strategy-guide-scale.test.ts`'s rounding case returns
+  140.69 where the glyphs end at 140.8. The structural half is not reachable by arithmetic at all,
+  which is why it is asserted against the stylesheet and proved live.
+- `node tools/orphans.mjs` — 24 orphans, unchanged; nothing new went unimported.
+
 ## Still open (not this track's scope)
 
 - Mascot (`research/ffx2-combat-core.md` §3.14) has no ability table in `src/data/ffx2/abilities/
