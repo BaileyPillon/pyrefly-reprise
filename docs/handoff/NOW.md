@@ -1,6 +1,6 @@
 # NOW — where Pyrefly Reprise stands
 
-> **Snapshot: 2026-09-21 05:40 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **Snapshot: 2026-09-21 14:30 EDT**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
 > **USAGE MODE: NORMAL** (about 66 percent of the weekly allowance left; weekly resets 2026-09-26 07:00 EDT). Hard rule 15.
 > **Art generation: ON** (Bailey, 2026-09-21: "Resume local art generation"); candidates only, under
 > docs/concepts/art4/; approved paintings are never replaced.
@@ -9,6 +9,13 @@
 > with this project"). Releases and reviews are authorised; keep them economical: Sonnet for well-specified tracks, one
 > browser capture owner, stop servers by their own PID only, NO polling watchers on long workflows (a driver wake-up
 > costs more than the agents do).
+> **Live: Build A.2** (`fd0ae96`). **Build B.1 is in release.** **Wave 1a is in flight:** Active ATB, the Macalania and
+> Evrae engine work, quick wins, options rounds, and music sketches. Bailey said yes to all three chapters' preflight
+> recommendations and the remaining art-direction picks on 2026-09-21 ("Yes to all recommendations but the title screen
+> needs to match the target." / "Yes to these too.") — recorded in `docs/target/targets.json` (chapters group) and
+> `docs/target/decisions.json` D-018/D-019/D-020; D-009 (Active ATB) is now `in-progress`.
+> **Waiting on Bailey:** the Evrae order-widget mockups/prototype, the Anima-arrival options round, and the two
+> battle-cue / chapter music sketches.
 
 ## Live (Build A)
 

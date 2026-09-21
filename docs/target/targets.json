@@ -63,7 +63,9 @@
           "state": "approved",
           "build": "The title screen as it first settles after loading the live URL.",
           "delivery": "verified",
-          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c",
+          "supersededBy": "showpiece-frontend",
+          "note": "docs/plans/build-b-review.md REQUIRED 11: the parallax key-art title (polish group, 'A front end that moves') replaces this picture rather than standing beside it. Re-shot at docs/screenshots/frontend/pair-title.jpg."
         },
         {
           "label": "Chapter select",
@@ -71,7 +73,9 @@
           "state": "approved",
           "build": "Chapter select with chapter 1 (Seymour Flux) highlighted.",
           "delivery": "verified",
-          "verifiedBy": "critic/rounds/round-04.json @ bc2571c"
+          "verifiedBy": "critic/rounds/round-04.json @ bc2571c",
+          "supersededBy": "showpiece-frontend",
+          "note": "docs/plans/build-b-review.md REQUIRED 11: the painted-silhouette board (polish group, 'A front end that moves') replaces this picture rather than standing beside it. Re-shot at docs/screenshots/frontend/pair-chapter-select.jpg."
         },
         {
           "label": "Party prep",
@@ -696,21 +700,92 @@
       "tiles": [
         {
           "label": "Seymour and Anima, Macalania Temple (FFX)",
-          "state": "gap",
-          "empty": "Concept sheets on the way",
-          "note": "Three acts: Guado Guardians, Anima against Yuna’s new Shiva, Seymour cycling elemental spells. New art: the guardians, the temple."
+          "src": "docs/concepts/chapters/macalania/renders/backdrop-a.png",
+          "state": "approved",
+          "delivery": "in-progress",
+          "note": "Three acts: Guado Guardians, Anima against Yuna’s new Shiva, Seymour cycling elemental spells. New art: the guardians, the temple. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop A (docs/concepts/chapters/macalania/renders/backdrop-a.png, warm brazier gold), Seymour human-form B (renders/seymour-b.png, arms crossed, warm brazier rim light), Guado Guardian A (renders/guardian-a.png, the on-canon reroll), Anima reuses the board-approved public/art/characters/anima/idle.png at the Macalania scale rather than a new render (docs/plans/chapter-macalania-review.md §6.1 cast_anima). Preflight recommendations accepted: docs/target/decisions.json D-019.",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too.",
+            "named": [
+              "Yes to all recommendations but the title screen needs to match the target.",
+              "Yes to these too."
+            ],
+            "how": "Bailey answered the chapter-macalania-review.md §5/§6.4 preflight recommendations and the concept-sheet options (docs/concepts/chapters/macalania/options.json) together, then separately confirmed the art-direction picks named in the follow-up message.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "Guado Guardian A (the on-canon reroll) — face and pointed ears visible for the steal-a-potion gag",
+              "Anima reuses the approved aeon painting; no new Anima render"
+            ],
+            "mustChange": [
+              "backdrop: A (warm brazier gold dominant), not B or C",
+              "Seymour human form: B (arms crossed, warm brazier rim light), not A or C"
+            ],
+            "undecided": [
+              "whether public/art/portraits/seymour.png is human-form Seymour or Seymour Flux (NEW-1) — must be opened before the portrait is called reuse or new",
+              "Tromell — only if pre/post scenes show him; ask before commissioning"
+            ],
+            "inferred": []
+          }
         },
         {
           "label": "Evrae on the airship (FFX)",
-          "state": "gap",
-          "empty": "Concept sheets on the way",
-          "note": "Distance through Cid’s Trigger commands, missiles, Poison Breath telegraphed by the inhale."
+          "src": "docs/concepts/chapters/evrae/renders/backdrop-b.png",
+          "state": "approved",
+          "delivery": "in-progress",
+          "note": "Distance through Cid’s Trigger commands, missiles, Poison Breath telegraphed by the inhale. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop B (docs/concepts/chapters/evrae/renders/backdrop-b.png, looking up at the hull from the rail). Boss Evrae's palette is option B (renders/evrae-b.png, cooler teal/gold, FAR read); the NEAR and throat/breath-charge poses are to be rendered in B's colours rather than A's or C's own palette. Preflight recommendations accepted: docs/target/decisions.json D-020.",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too.",
+            "named": [
+              "Yes to all recommendations but the title screen needs to match the target.",
+              "Yes to these too."
+            ],
+            "how": "Bailey answered the chapter-evrae-review.md §5/§6 preflight recommendations and the concept-sheet options (docs/concepts/chapters/evrae/options.json) together, then separately confirmed the art-direction picks named in the follow-up message.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "backdrop: B (looking up at the hull from the rail), not the off-canon A or the outside-hull C",
+              "Evrae's look: B's cooler teal/gold palette carried into the NEAR pose and the throat/breath-charge pose, not A's or C's own colours"
+            ],
+            "undecided": [
+              "whether the fight is named for Evrae or for the airship (Q11) — Bailey's call, asked before the chapter-card options round"
+            ],
+            "inferred": []
+          }
         },
         {
           "label": "The Leblanc Syndicate (FFX-2)",
-          "state": "gap",
-          "empty": "Concept sheets on the way",
-          "note": "Set at Chateau Leblanc (FFX-2 Chapter 2), Bailey’s pick on 19 Sep. Leblanc, Logos and Ormi against Yuna, Rikku and Paine at low level. Doubles as the FFX-2 tutorial chapter."
+          "src": "docs/concepts/chapters/leblanc/renders/backdrop-c.png",
+          "state": "approved",
+          "delivery": "in-progress",
+          "note": "Set at Chateau Leblanc (FFX-2 Chapter 2), Bailey’s pick on 19 Sep. Leblanc, Logos and Ormi against Yuna, Rikku and Paine at low level. Doubles as the FFX-2 tutorial chapter. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop C (docs/concepts/chapters/leblanc/renders/backdrop-c.png, mixed magenta/cyan with the door and heart panel), Leblanc pose B (renders/leblanc-b.png, fan fully open, warm magenta — the Sonic Fan/Mach Fan pose), Ormi A (renders/ormi-a.png, the on-canon reroll) to be re-rendered heavier/stockier from A, Logos C (renders/logos-c.png, revolver clearly in hand) to be re-rendered with a plainer, canon helmet. Preflight recommendations accepted: docs/target/decisions.json D-018.",
+          "reaction": {
+            "date": "2026-09-21",
+            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too.",
+            "named": [
+              "Yes to all recommendations but the title screen needs to match the target.",
+              "Yes to these too."
+            ],
+            "how": "Bailey answered the chapter-leblanc-review.md §5/§6 preflight recommendations and the concept-sheet options (docs/concepts/chapters/leblanc/options.json) together, then separately confirmed the art-direction picks named in the follow-up message.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "Ormi A and Logos C as the base bodies — no re-roll, only a re-render pass toward canon"
+            ],
+            "mustChange": [
+              "backdrop: C (mixed magenta/cyan, visible door and heart panel), not A or B",
+              "Leblanc: B (fan fully open, warm magenta), not the screen pose A or the snapped-shut pose C",
+              "Ormi: re-rendered heavier/stockier from A, not shipped as-is",
+              "Logos: re-rendered with a plainer canon helmet from C, not shipped as-is"
+            ],
+            "undecided": [
+              "YRP in Syndicate-pink outfits — recommended deferred to v2, not this build"
+            ],
+            "inferred": []
+          }
         }
       ]
     },
@@ -725,7 +800,9 @@
           "src": "docs/concepts/polish/showpiece-frontend/after.png",
           "state": "approved",
           "approved": "Bailey, 19 Sep 2026",
-          "build": "The moment the mockup shows; see docs/concepts/polish/showpiece-frontend/ for the before picture and the motion clip."
+          "build": "The moment the mockup shows; see docs/concepts/polish/showpiece-frontend/ for the before picture and the motion clip.",
+          "delivery": "implemented",
+          "deliveryNote": "Supersedes the presentation-group 'Title' and 'Chapter select' tiles (docs/plans/build-b-review.md REQUIRED 11): the painted-silhouette parallax title and board replace those two approved pictures. Target/build pairs: docs/screenshots/frontend/pair-title.jpg, docs/screenshots/frontend/pair-chapter-select.jpg."
         },
         {
           "label": "The interface stops cutting and starts moving",
