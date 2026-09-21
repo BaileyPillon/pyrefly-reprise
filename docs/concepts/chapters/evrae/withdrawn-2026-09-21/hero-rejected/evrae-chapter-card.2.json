@@ -1,0 +1,23 @@
+{
+  "subject": "Evrae over the Fahrenheit",
+  "mood": "Bevelle's guardian wyrm closing on the airship, wide establishing shot",
+  "seed": 813702,
+  "prompt": "no humans, final fantasy x, looking up at the underside of a massive ancient airship hull from a foredeck guard rail in the foreground, riveted metal hull filling the upper left of the frame, open bright sky to the right, drifting clouds, alongside the ship in the open sky a long serpentine wyrm with smooth teal-blue-green scales and vivid orange fin-frills coils through the air, its full long body and small head both visible at a middle distance, cold reptilian creature against the warm sky, environment illustration, cinematic wide shot, sense of scale, close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, close-up, extreme close-up, portrait, face only, head only, cropped, wings, feathers, bird",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "refSkippedMonochrome": {
+    "attempted": "public/art/backdrops/evrae-airship-deck.png",
+    "top2Share": 0.664672367156498
+  },
+  "generatedAt": "2026-09-21T23:05:42.283Z"
+}

@@ -604,6 +604,44 @@
     "sha256": "d4655b8abe02a5360b6b05d7bf8c574b7f67d5704b4c8696fb9cdd7e33469899",
     "mtime": "2026-09-21T22:09:59.856Z"
    }
+  },
+  "chapter:evrae:2026-09-21": {
+   "public/art/backdrops/evrae-airship-deck.png": {
+    "sha256": "569f3b781bf0416dfd608d200991fcaf9691e5bac246c5c24b8e3939436e80ec",
+    "mtime": "2026-09-21T22:47:44.136Z"
+   },
+   "public/art/characters/evrae/idle.png": {
+    "sha256": "757b113e6b4a4c9acfe5663ab27544ad0b48d1f79c6ffaf7b65ce9d34f264dcb",
+    "mtime": "2026-09-21T23:06:56.399Z"
+   },
+   "public/art/characters/evrae/idle-near.png": {
+    "sha256": "757b113e6b4a4c9acfe5663ab27544ad0b48d1f79c6ffaf7b65ce9d34f264dcb",
+    "mtime": "2026-09-21T22:49:54.465Z"
+   },
+   "public/art/characters/evrae/idle-far.png": {
+    "sha256": "a2e3dcef6b23b39c3970ff1d5cdd2a06c674a4fc0239870132409b7b7de3ec7a",
+    "mtime": "2026-09-21T22:54:56.081Z"
+   },
+   "public/art/characters/evrae/breath-charge.png": {
+    "sha256": "9705ac19051b8083f8563341f1f125003e657397ee49fa19e6a0ab6c40b0dcc9",
+    "mtime": "2026-09-21T22:59:31.095Z"
+   },
+   "public/art/characters/evrae/hurt.png": {
+    "sha256": "80edb574fd51038150bf2006d09b63fc700d50061ff4ca4e8e72af0a9843e465",
+    "mtime": "2026-09-21T23:00:02.954Z"
+   },
+   "public/art/characters/evrae/ko.png": {
+    "sha256": "4f191dcbef6736b2dfa9b1a35d9edf603b1fa57ca7e5236ecc9d85548f131f1b",
+    "mtime": "2026-09-21T23:00:46.351Z"
+   },
+   "public/art/portraits/cid.png": {
+    "sha256": "c9357238eb577ab3d8b78d75232a466a13a86654f621f140f2a1ae6202e9442e",
+    "mtime": "2026-09-21T23:03:00.633Z"
+   },
+   "public/art/pause/evrae-chapter-card.png": {
+    "sha256": "75681c42a38630f1c72fc9fa727b161ce86627d46a671db78d3c4bc9d54935cf",
+    "mtime": "2026-09-21T23:06:26.728Z"
+   }
   }
  }
 }

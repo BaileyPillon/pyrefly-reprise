@@ -1,0 +1,57 @@
+{
+  "width": 1203,
+  "height": 832,
+  "baselineY": 832,
+  "seed": 812002,
+  "prompt": "no humans, evrae \\(ff10\\), final fantasy x, safe, solo, giant sky wyrm, serpentine dragon-eel hybrid, wingless, long sinuous segmented body trailing off into haze past the edge of the frame, smooth cold-toned teal-blue-green scales covering the whole body, vivid orange membranous fin-frills running down the spine and along the jawline, narrow reptilian eel-like head with a long tooth-filled jaw, two long scythe-like bladed forelimbs held close to the body, no visible wings, pale glinting eyes, cold reptilian colouring against a warm sky, \\(teal scales:1.3\\), \\(orange fin frills:1.3\\), \\(long sinuous eel-dragon body:1.2\\), \\(scythe-like forelimbs:1.15\\), extreme close view, the head and clawed forelimbs filling the upper frame, jaw held level with the camera, coils of the long body receding into haze behind it, an imposing presence looming very close, holding station in the air, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, bat, wings, feathers, insect, humanoid, person, human face, mammal, fur",
+  "cropBox": [
+    13,
+    0,
+    1216,
+    832
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle-near",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "lint": {
+    "stripped": []
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 0.9893092105263158,
+      "heightFraction": 1,
+      "checked": false,
+      "exceeds": false
+    },
+    "components": {
+      "componentCount": 1,
+      "largestPixels": 731336,
+      "secondPixels": 0,
+      "secondRatio": 0,
+      "touchesLargest": null
+    },
+    "nearWhite": {
+      "fraction": 0.0038532220484155024,
+      "largestRegionFraction": 0.0035578721681962873,
+      "detached": false,
+      "touchesEdge": true,
+      "allowanceUsed": 0.03
+    }
+  },
+  "candidateOf": "D:\\Final Fantasy\\public\\art\\characters\\evrae\\idle-near.png",
+  "generatedAt": "2026-09-21T22:48:38.039Z"
+}

@@ -1923,6 +1923,43 @@
       "notes": "Vegnagun's chamber. Teal fill against rust metal; the depth cue is a foreground catwalk occluder with the machine receding behind it."
     },
     {
+      "id": "evrae-airship-deck",
+      "kind": "backdrop",
+      "game": "ffx",
+      "cmd": "backdrop",
+      "outDir": "public/art/backdrops",
+      "composition": "scenery",
+      "sizeHint": "1344x768 -> 2688x1536",
+      "tags": "final fantasy x, the fahrenheit airship, open foredeck guard rail in extreme foreground, looking up at the underside of a massive ancient riveted metal airship hull filling the upper frame, deck plating lettered salvage dream cid, brass dial engraved with al bhed script, bright open sky beyond the hull, drifting clouds, streaking cloud motion suggesting speed and altitude, pale white spires of bevelle faint on the distant horizon below the hull line, cinematic dramatic upward perspective, sense of vertigo and scale",
+      "negAdd": "modern airplane, biplane, helicopter, spaceship, rocket, bird's eye view, aerial view of a city, flying city, distant tiny ship, canyon",
+      "states": {
+        "plate": {
+          "poseTags": "",
+          "notes": "Backdrops have one state; the file is <id>.png."
+        }
+      },
+      "notes": "Picked look B (research/ffx-evrae-airship.md §12.3, docs/concepts/chapters/evrae/options.json) — looking up at the hull from the rail. Best of 3: candidate 2 came back as an abstract circular/wormhole shape rather than a ship hull (rejected), candidate 1 lacked the foreground rail; installed candidate has the rail, the hull above and open sky but does not legibly show the 'Salvage Dream CID' lettering the research calls for. Withdrawn candidates in docs/concepts/chapters/evrae/withdrawn-2026-09-21/."
+    },
+    {
+      "id": "evrae-chapter-card",
+      "kind": "hero",
+      "game": "ffx",
+      "cmd": "hero",
+      "outDir": "public/art/pause",
+      "sizeHint": "1344x768",
+      "tags": "no humans, final fantasy x, looking up at the underside of a massive ancient airship hull from a foredeck guard rail in the foreground, riveted metal hull filling the upper left of the frame, open bright sky to the right, drifting clouds, alongside the ship in the open sky a long serpentine wyrm with smooth teal-blue-green scales and vivid orange fin-frills coils through the air, its full long body and small head both visible at a middle distance, cold reptilian creature against the warm sky, environment illustration, cinematic wide shot, sense of scale",
+      "negAdd": "close-up, extreme close-up, portrait, face only, head only, cropped, wings, feathers, bird",
+      "subject": "Evrae over the Fahrenheit",
+      "mood": "Bevelle's guardian wyrm closing on the airship, wide establishing shot",
+      "states": {
+        "hero": {
+          "poseTags": "",
+          "notes": "Chapter-card / pause-plate hero painting."
+        }
+      },
+      "notes": "Nine candidates across three rounds (nine renders, seeds 813501-813503, 813601-813603, 813701-813703) never produced the wide 'deck with the wyrm coiling alongside' establishing shot the brief asked for — the checkpoint consistently returns either an extreme close-up on the creature's head or the ship alone with no creature. Per the pace rule (AGENTS.md hard rule 15, two failed attempts before a method check), stopped after round 3 rather than a fourth. Installed candidate (round 3, seed 813701) is the closest compromise: Evrae's head and neck filling the frame in canon teal/orange colouring, roaring, with the airship's bow/deck edge visible beneath it — closer to research §12.3 money-shot #1 ('over-the-shoulder from the deck, Evrae's head filling the upper right') than to money-shot #2 (the FAR chapter-card silhouette this was actually meant to depict). Flagged for a follow-up pass, same as Leblanc's un-met pause-plate brief (docs/concepts/chapters/leblanc/production.md)."
+    },
+    {
       "id": "title",
       "kind": "backdrop",
       "game": "ui",
@@ -2359,6 +2396,25 @@
       "notes": "Aeon portrait for the summon menu. Same portrait framing as the party; the aeons get head-and-shoulders too."
     },
     {
+      "id": "portrait-cid",
+      "kind": "portrait",
+      "game": "ffx",
+      "cmd": "character",
+      "outDir": "public/art/portraits",
+      "out": "public/art/portraits/cid.png",
+      "composition": "portrait",
+      "facing": "none",
+      "sizeHint": "832x1216",
+      "tags": "1boy, cid (ff10), final fantasy x, al bhed, safe, solo, completely bald head, deeply tanned weathered skin, thick grey mustache, heavy stocky muscular build, broad shoulders, green al bhed eyes with a spiral pupil, orange and brown flight captain jacket with a wide collar, leather straps and buckles across the chest, goggles with round amber lenses pushed up and resting on his forehead, gruff commanding expression, weathered scar",
+      "states": {
+        "portrait": {
+          "poseTags": "head and shoulders, looking at viewer, confident commanding expression, airship captain",
+          "notes": "No visual-bible entry for Cid exists and research/ffx-evrae-airship.md §2 covers only his stats, not his appearance — the bald head, forehead goggles, grey mustache and heavy build are general FFX canon knowledge, not sourced from either project doc; flagged per AGENTS.md hard rule 6. --keepBad required: --composition portrait trips the cut-out sanity guard's coverage check on every candidate (a known tool gap, see docs/concepts/chapters/leblanc/production.md). Installed candidate shows the goggles doubled (a separate pair of forehead goggles and amber-tinted lenses over the eyes) rather than one set pushed up cleanly — an off-canon render quirk, not re-rolled further (pace rule, best of 3)."
+        }
+      },
+      "notes": "Al Bhed airship captain, owner of the Fahrenheit (research/ffx-evrae-airship.md §12.1). Invisible in the real encounter (per the chapter brief, no cast row for Evrae besides this portrait, used for his Trigger Command dialogue / comms only)."
+    },
+    {
       "id": "leblanc",
       "kind": "boss",
       "game": "ffx-2",
@@ -2393,6 +2449,49 @@
         }
       },
       "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). Her idle.png measures 43% one colour, so every other state rendered WITHOUT --ref (the monochrome-reference guard fired) — costume was judged independently per state rather than identity-pinned, and colour balance drifts state to state (idle/attack lean pink-purple, cast/hurt lean blue-purple). The canon blue-and-white triangle/swirl robe pattern and the white crisscross cuff material render inconsistently across states despite (1.3) emphasis — the checkpoint resists this specific pattern on a purple base; flagged for a follow-up pass, not re-rolled further today (pace rule, AGENTS.md hard rule 15). idle pose shows the fan closed near her chin rather than the canon \"half-open screen\" — best of 3 candidates on quality/costume, pose is an approximation."
+    },
+    {
+      "id": "evrae",
+      "kind": "boss",
+      "game": "ffx",
+      "cmd": "boss",
+      "outDir": "public/art/characters/evrae",
+      "composition": "boss",
+      "nonBiped": true,
+      "facing": "left",
+      "sizeHint": "1216x832",
+      "refState": "idle-near",
+      "tags": "no humans, evrae (ff10), final fantasy x, safe, solo, giant sky wyrm, serpentine dragon-eel hybrid, wingless, long sinuous segmented body trailing off into haze past the edge of the frame, smooth cold-toned teal-blue-green scales covering the whole body, vivid orange membranous fin-frills running down the spine and along the jawline, narrow reptilian eel-like head with a long tooth-filled jaw, two long scythe-like bladed forelimbs held close to the body, no visible wings, pale glinting eyes, cold reptilian colouring against a warm sky, (teal scales:1.3), (orange fin frills:1.3), (long sinuous eel-dragon body:1.2), (scythe-like forelimbs:1.15)",
+      "negAdd": "bat, wings, feathers, insect, humanoid, person, human face, mammal, fur",
+      "states": {
+        "idle": {
+          "poseTags": "extreme close view, the head and clawed forelimbs filling the upper frame, jaw held level with the camera, coils of the long body receding into haze behind it, an imposing presence looming very close, holding station in the air",
+          "notes": "Copy of idle-near.png, promoted so the engine has a plain idle to fall back to until the NEAR/FAR distance mechanic is wired (tools/gen/manifest.mjs otherwise flags evrae as un-promoted)."
+        },
+        "idle-near": {
+          "poseTags": "extreme close view, the head and clawed forelimbs filling the upper frame, jaw held level with the camera, coils of the long body receding into haze behind it, an imposing presence looming very close, holding station in the air"
+        },
+        "idle-far": {
+          "poseTags": "the entire creature seen tiny and far away against a vast bright empty sky, a thin long diagonal streak stretching corner to corner of the frame, the head small and simplified at one end of the streak, the body a slender line trailing into pale haze, no visible ground, wide open negative space, distant, small in frame",
+          "notes": "Rendered WITHOUT --ref after a referenced attempt (ref@0.3 off idle-near) kept reproducing idle-near's close coiled composition instead of a distant silhouette — composition capture at low refStart still won out over the pose prompt for this subject. Two rounds, three renders each; per the pace rule the third round dropped the reference entirely rather than trying a fourth. Even without --ref the result reads as a nearer coiled full-body shot rather than a literally tiny distant streak, and its colour balance skews orange/gold-dominant rather than the picked teal-dominant reading — flagged, not fixed further today."
+        },
+        "breath-charge": {
+          "poseTags": "close view on the head and throat, jaw mostly closed but the throat pouch beneath it swollen and lit from within with a bright warm orange inner light, head tilted slightly back, eyes narrowed in concentration, inhaling deeply before a breath attack, coiled tension, still",
+          "ref": "evrae/idle-near",
+          "notes": "The research's \"paintable charging throat\" requirement (§12.2) was not achieved after two rounds (6 candidates): the checkpoint does not render a legible swollen/lit throat sac distinct from the ordinary orange fin colouring, and 'glow'/'glowing' are banned pose-prompt tokens (docs/ART-PIPELINE.md §6) which narrowed the available phrasing further. Installed candidate is the best on facing, colour and cutout cleanliness; the Inhale telegraph will need to read through animation/UI timing rather than a visibly different throat in the art. Flagged for a follow-up pass, not re-rolled a third time (pace rule)."
+        },
+        "hurt": {
+          "poseTags": "close view, head thrown back and to the side, jaw open in a pained hiss, eyes squeezed shut, neck recoiling away from the viewer, body coiling back defensively, wounded, off balance",
+          "ref": "evrae/idle-near",
+          "notes": "Best of 3: the only candidate to show the scythe-like forelimbs as distinct clawed limbs rather than coiled body, and the closest colour match to the picked teal-dominant / orange-fin reading."
+        },
+        "ko": {
+          "poseTags": "the creature going limp and falling, head drooping downward, eyes closed, mouth slack, the long body hanging loosely in a slack downward curve, no more tension in the coils, defeated, streaking gently downward and out of the sky",
+          "ref": "evrae/idle-near",
+          "notes": "Best of 3 on the 'slack, streaking downward' body language research §12.5 beat 8 asks for; the eyes read as open rather than closed at this size — a minor miss, not re-rolled further (pace rule)."
+        }
+      },
+      "notes": "Evrae, guardian wyrm of Bevelle (research/ffx-evrae-airship.md §12.2, picked look B — teal body, orange fins — docs/concepts/chapters/evrae/options.json). No cast row: per the brief, Cid is invisible in the real encounter and the airship itself is the backdrop. --nonBiped and --composition boss are correct here (the creature coils and fills the frame per research). None of the five states show the bladed scythe-limb forelimbs as clearly reaching, bladed weapons — they mostly read as coiled body — the same gap the original concept-art round already flagged; worth a dedicated follow-up pass with an explicit forelimb-only pose."
     },
     {
       "id": "ormi",

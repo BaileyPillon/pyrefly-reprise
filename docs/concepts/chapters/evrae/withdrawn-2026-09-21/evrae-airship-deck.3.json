@@ -1,0 +1,16 @@
+{
+  "seed": 811003,
+  "prompt": "no humans, scenery, final fantasy x, the fahrenheit airship, open foredeck guard rail in extreme foreground, looking up at the underside of a massive ancient riveted metal airship hull filling the upper frame, deck plating lettered salvage dream cid, brass dial engraved with al bhed script, bright open sky beyond the hull, drifting clouds, streaking cloud motion suggesting speed and altitude, pale white spires of bevelle faint on the distant horizon below the hull line, cinematic dramatic upward perspective, sense of vertigo and scale, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, modern airplane, biplane, helicopter, spaceship, rocket, bird's eye view, aerial view of a city, flying city, distant tiny ship, canyon",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-21T22:47:10.933Z"
+}
