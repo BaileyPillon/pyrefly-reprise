@@ -65,7 +65,7 @@ import {
 } from './gauges.ts';
 import { advanceStatuses, canAct, ticksUntilStatusEvent } from './statuses.ts';
 import { applyHpDelta, heal, type ResolveContext } from './resolve.ts';
-import { buildCommands } from './targeting.ts';
+import { berserkCommand, buildCommands, type MenuContext } from './targeting.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
@@ -154,19 +154,19 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
     const actor = this.nextActor();
     if (actor && actor.controller === 'player') {
+      // Berserk takes the turn away from the player: §2.8 "can only use the
+      // basic Attack command; **player loses control**". It used to be offered
+      // anyway, and on a dressphere with no Attack (§3.4-3.6) the menu opened
+      // with zero rows and locked the battle [round 05 PR-0045]. A suspended
+      // minigame still belongs to the player and keeps its path. FFX-2 only.
+      if (actor.statuses.berserk && !this.awaitingMinigame) {
+        this.runBerserkTurn(actor);
+        return { kind: 'resolved', events: this.flush() };
+      }
       return {
         kind: 'player-input',
         actorId: actor.id,
-        commands: buildCommands(actor, {
-          units: this.units,
-          abilities: this.abilities,
-          dresspheres: this.dresspheres,
-          grid: this.grids.get(actor.dresspheres?.garmentGrid.id ?? ''),
-          gridNodes: this.gridNodes[actor.id],
-          canEscape: this.battleState.flags['canEscape'] === true,
-          ...(this.options.items ? { items: this.options.items } : {}),
-          inventory: inventoryCounts(this.battleState),
-        }),
+        commands: buildCommands(actor, this.menuContext(actor)),
       };
     }
 
@@ -342,6 +342,34 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       turn: this.battleState.turn,
       elapsedTicks: Math.round(this.battleState.ticks),
     });
+  }
+
+  /** Everything `buildCommands` needs for one girl's menu. */
+  private menuContext(actor: Ffx2Unit): MenuContext {
+    return {
+      units: this.units,
+      abilities: this.abilities,
+      dresspheres: this.dresspheres,
+      grid: this.grids.get(actor.dresspheres?.garmentGrid.id ?? ''),
+      gridNodes: this.gridNodes[actor.id],
+      canEscape: this.battleState.flags['canEscape'] === true,
+      ...(this.options.items ? { items: this.options.items } : {}),
+      inventory: inventoryCounts(this.battleState),
+    };
+  }
+
+  /**
+   * One Berserked party turn, resolved without the player. [§2.8; PR-0045]
+   *
+   * Same shape as `runAiTurn`. `berserkCommand` returns an Attack, or a pass on
+   * a dressphere that has none (the open sources question is documented there);
+   * either way the ATB slot is spent, so Berserk runs down its own clock.
+   */
+  private runBerserkTurn(actor: Ffx2Unit): void {
+    const before = this.drafts.length;
+    this.beginTurn(actor);
+    const command = berserkCommand(actor, this.menuContext(actor), this.rng);
+    performCommand(this.env(), actor, command, false, before);
   }
 
   private runAiTurn(actor: Ffx2Unit): void {

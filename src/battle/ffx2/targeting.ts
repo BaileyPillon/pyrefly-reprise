@@ -10,6 +10,7 @@ import type {
   AbilityDef,
   AvailableCommand,
   CombatantId,
+  Command,
   Rng,
   Side,
 } from '../common/types.ts';
@@ -356,5 +357,42 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
     });
   }
 
+  // Never an empty menu [PR-0045, critical, FFX-2 only]: Berserk closes
+  // abilities, spherechange and items (§2.8) and White Mage / Black Mage /
+  // Songstress have no Attack row (§3.4-3.6), so the list came out `[]` and the
+  // HUD opened a menu nothing could answer. `engine.nextDecision` is the repair
+  // (a Berserked turn never reaches the player); this is the invariant behind it.
+  // Not an invented damage row (hard rule 6 — see `berserkCommand`): `'defend'`
+  // is what `execute.ts`'s no-ability branch spends a turn on (X-2 has no Defend
+  // *command*, §2.3), so the row is labelled for what it does.
+  if (out.length === 0 && actor.alive && !actor.removed) {
+    out.push({
+      command: { kind: 'defend', targets: [] },
+      label: 'Wait',
+      category: 'special',
+      mpCost: 0,
+      enabled: true,
+      validTargets: [],
+      help: 'No command is available; the turn passes.',
+    });
+  }
+
   return out;
+}
+
+/**
+ * The command a Berserked girl takes, with no player involved. **FFX-2 only.**
+ *
+ * §2.8: she "can only use the basic Attack command; **player loses control**", so
+ * the engine resolves the turn itself and attacks a legal target drawn from the
+ * seeded RNG (the sources do not publish Berserk's target choice).
+ * **Open question for Bailey — the sources conflict:** §2.8 says only Attack,
+ * §3.4-3.6 say those three dresspheres have no Attack command, and `research/`
+ * does not settle it. Rather than invent a damage row (hard rule 6) the turn
+ * passes; only this function changes if the answer is "she swings anyway".
+ */
+export function berserkCommand(actor: Ffx2Unit, ctx: MenuContext, rng: Rng): Command {
+  const attack = buildCommands(actor, ctx).find((row) => row.command.kind === 'attack');
+  if (!attack || attack.validTargets.length === 0) return { kind: 'defend', targets: [] };
+  return { kind: 'attack', targets: [rng.pick(attack.validTargets)] };
 }

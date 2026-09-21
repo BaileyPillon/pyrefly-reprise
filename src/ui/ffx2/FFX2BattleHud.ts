@@ -714,6 +714,21 @@ export class FFX2BattleHud implements HudPort {
     previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot,
   ): Promise<Command> {
     const actor = this.lastState?.combatants[actorId];
+    // Zero-row guard (critic round 05 PR-0045). `openCommandMenu` on an empty
+    // list draws a menu with nothing submittable, so the promise below can never
+    // resolve: a hard lock rather than a stall. The engine's own invariant is
+    // that this cannot happen (`buildCommands` always offers at least one row
+    // for a living unit, and a Berserked turn never reaches the player at all),
+    // so if it ever does it is a data or engine regression: say so in the console
+    // and pass the turn instead of hanging the battle. FFX-2 only — this is the
+    // ATB HUD; the FFX HUD has its own chooseCommand.
+    if (commands.length === 0) {
+      console.error(
+        `[ffx2-hud] ${actorId} was offered zero commands; passing the turn rather ` +
+          'than opening a menu that cannot be answered (PR-0045)',
+      );
+      return { kind: 'defend', targets: [] };
+    }
     this.actingId = actorId;
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     this.commandEl.hidden = false;
