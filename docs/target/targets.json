@@ -390,24 +390,29 @@
         {
           "label": "Art round 4: 42 poses installed (groups B and C)",
           "src": "docs/concepts/art4/chosen.png",
-          "state": "approved",
+          "state": "rejected",
           "approved": "Bailey, 21 Sep 2026: “I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.” (from the five contact sheets in docs/concepts/art4/)",
           "build": "The 42 shipped poses under public/art listed in docs/concepts/art4/CHOSEN.md: Lulu, Rikku and Kimahri battle poses (FFX); Yunalesca forms 2 and 3, the Yu Pagoda and Jecht (FFX); the White Mage, Gunner, Black Mage and Songstress dresspheres, both Paine dresspheres, the possessed Bahamut, three Vegnagun parts and Lenne’s speaker portrait (FFX-2).",
-          "note": "FFX and FFX-2 both: the round covers subjects in each game and each pose was decided from research/visual-bible.md and tools/gen/cast.json for its own game. Bailey approved the round; which of the three candidates shipped for each pose was delegated to the install agent. Group A (Braska) was NOT installed — his shipped portrait stays as picked on 21 Sep. Every row is one copy from D:\\Tools\\pyrefly-art-backup\\replaced\\2026-09-21-art4 away from being undone, so any row can still be vetoed from docs/concepts/art4/chosen.png.",
+          "note": "FFX and FFX-2 both: the round covers subjects in each game and each pose was decided from research/visual-bible.md and tools/gen/cast.json for its own game. Bailey approved the round from small contact sheets; which of the three candidates shipped for each pose was delegated to the install agent. Group A (Braska) was NOT installed — his shipped portrait stays as picked on 21 Sep. WITHDRAWN 21 Sep 2026: seen at full size, the 31 poses that replaced an existing painting were a quality downgrade (see reaction.named) and were reverted to the paintings they replaced (docs/concepts/art4/WITHDRAWN.md; art4 versions kept at D:\\Tools\\pyrefly-art-backup\\withdrawn\\2026-09-21-art4). The vocabulary in this file has no 'withdrawn' state, so this tile uses 'rejected'. The 11 poses that had no prior painting (the 'missing' group; CHOSEN.md marks them replaced = none) remain installed — a weak painting beats a letter tile — and are the only files still listed under hashes 'art4:2026-09-21'.",
           "hashes": "art4:2026-09-21",
           "delivery": "implemented",
-          "deliveryNote": "Installed under public/art and resolving through public/art/manifest.json; not yet seen in a running fight or in a critic round.",
+          "deliveryNote": "The 11 missing-group poses (yuna-gunner/hurt, yuna-gunner/ko, yuna-gunner/victory, yuna-black-mage/attack, yuna-black-mage/cast, yuna-black-mage/hurt, yuna-black-mage/ko, yuna-black-mage/victory, yuna-songstress/attack, yuna-songstress/dance, lenne/portrait) stay installed under public/art and resolve through public/art/manifest.json. The other 31 poses were reverted to their pre-art4 paintings; see docs/concepts/art4/WITHDRAWN.md. Not yet seen in a running fight or in a critic round.",
           "reaction": {
             "date": "2026-09-21",
-            "named": "I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.",
+            "named": "I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else. / (2026-09-21, after seeing the full-size renders) some of the art work still looks significantly lower quality than before. it's not black or misrendered per say but it's a huge downgrade in quality.",
             "words": "I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.",
-            "how": "Bailey, on the five art-round-4 contact sheets in docs/concepts/art4/",
+            "how": "Bailey, on the five art-round-4 contact sheets in docs/concepts/art4/, then in chat on 21 Sep 2026 after seeing the installed art at full size",
             "liked": [],
-            "disliked": [],
-            "mustRemain": [
-              "Braska's shipped speaker portrait: keep the one already picked, do not reroll or replace it"
+            "disliked": [
+              "31 of the 42 installed poses, seen at full size: a huge downgrade in quality from the paintings they replaced (posterised colour, off-canon detail, garbled elements — e.g. lulu/attack vs. the older lulu/idle)"
             ],
-            "mustChange": [],
+            "mustRemain": [
+              "Braska's shipped speaker portrait: keep the one already picked, do not reroll or replace it",
+              "the 11 missing-group poses that had no prior painting: stay installed"
+            ],
+            "mustChange": [
+              "the 31 replaced poses: reverted to the paintings they replaced (done 21 Sep 2026, see docs/concepts/art4/WITHDRAWN.md)"
+            ],
             "undecided": [
               "which of the three candidates ships for each pose: Bailey did not name one, the install agent chose",
               "yu-pagoda/cast and yu-pagoda/hurt: no candidate holds the tiered pagoda silhouette; flagged for a veto"
