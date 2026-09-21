@@ -33,6 +33,7 @@ import type {
 } from '../battle/common/types.ts';
 import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
+import { activeClockEngine, runActivePump } from './BattlePresenterActive.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -57,6 +58,15 @@ export class BattlePresenter {
   private readonly deps: PresenterDeps;
   private readonly ctx: EventCtx;
   private readonly baseSleep: (ms: number) => Promise<void>;
+  /** Real elapsed time for the FFX-2 Active pump. Tests inject a fake clock. */
+  private readonly now: () => number;
+  /**
+   * Set when the Active pump closed a menu whose owner could no longer answer
+   * it (KO, Stop, Sleep, Petrify, chain lock, Berserk, battle over). The loop
+   * abandons that decision and asks the engine again rather than aborting the
+   * battle. **FFX-2 only** — nothing sets it on an FFX fight.
+   */
+  private inputAbandoned = false;
 
   private speed: PlaybackSpeed = 'normal';
   private timeScale: number;
@@ -95,6 +105,7 @@ export class BattlePresenter {
   constructor(deps: PresenterDeps) {
     this.deps = deps;
     this.baseSleep = deps.sleep ?? defaultSleep;
+    this.now = deps.now ?? (() => Date.now());
     this.timeScale = deps.timeScale ?? 1;
     this.ctx = createEventCtx(
       deps,
@@ -329,6 +340,16 @@ export class BattlePresenter {
           }
           this.phase = `command:${decision.actorId}`;
           const command = await this.chooseCommand(engine, decision.actorId, decision.commands);
+          // FFX-2 Active: the clock ran while the menu was open and its owner
+          // stopped being able to answer it. Nothing was submitted; ask the
+          // engine what happens next instead of hanging on a dead menu.
+          if (this.inputAbandoned) {
+            this.inputAbandoned = false;
+            inputStreak = 0;
+            streakActor = '';
+            this.syncHud(engine);
+            break;
+          }
           if (!command) return { kind: 'aborted' };
           const out = await this.submit(engine, command);
           if (out) return out;
@@ -433,14 +454,79 @@ export class BattlePresenter {
       this.pendingMenu = { actorId, commands, engine, resolve };
     });
 
+    // FFX-2 **Active** ATB: the clock keeps running underneath this menu.
+    // FFX gets `null` here and behaves exactly as it always has (rule 14).
+    const clock = activeClockEngine(engine);
+    let settled = false;
+    const decided = Promise.race([hud.chooseCommand(actorId, commands, previewRank), interrupt]).then(
+      (command) => {
+        settled = true;
+        return command;
+      },
+      (err: unknown) => {
+        settled = true;
+        throw err;
+      },
+    );
+    // The pump may win the race below, leaving `decided` pending forever; a
+    // late rejection from an abandoned menu must not surface as an unhandled
+    // one, and this handler is separate from the race's own.
+    void decided.catch(() => undefined);
+
     try {
-      return await Promise.race([hud.chooseCommand(actorId, commands, previewRank), interrupt]);
+      if (!clock) return await decided;
+      const pump = runActivePump({
+        engine: clock,
+        actorId,
+        settled: () => settled,
+        aborted: () => this.aborted,
+        sleep: (ms) => this.baseSleep(ms),
+        now: this.now,
+        play: (events) => this.play(events),
+        syncGauges: (snapshot) => this.syncGauges(snapshot),
+      });
+      const outcome = await Promise.race([
+        decided.then((command) => ({ command }) as const),
+        pump.then((stop) => ({ stop }) as const),
+      ]);
+      if ('command' in outcome) return outcome.command;
+      if (outcome.stop === 'invalidated') {
+        // Tear the DOM menu down and release the cancel claim, or Esc belongs
+        // to a menu that is no longer on screen and the pause key stops
+        // working — a defect this project has already paid for once.
+        try {
+          hud.closeCommandMenu?.();
+        } catch (err) {
+          console.warn('[presenter] HUD closeCommandMenu threw', err);
+        }
+        this.inputAbandoned = true;
+        return null;
+      }
+      return await decided;
     } catch (err) {
       if (this.aborted) return null;
       console.warn('[presenter] command menu failed; falling back', err);
       return firstEnabled(commands);
     } finally {
       this.pendingMenu = null;
+    }
+  }
+
+  /**
+   * Cheap gauge-only HUD refresh, once per Active pump step.
+   *
+   * Deliberately **not** `syncHud`: that also rebuilds the guide, the advisor
+   * and the enemy-intent slab, and the intent prediction deep-clones the whole
+   * board two dozen times. That is affordable once per playback step and would
+   * be a frame-rate defect at 20 Hz. Never throws into the loop.
+   */
+  private syncGauges(snapshot: AtbSnapshot): void {
+    const hud = this.deps.hud;
+    if (!hud?.syncGauges) return;
+    try {
+      hud.syncGauges(snapshot);
+    } catch (err) {
+      console.warn('[presenter] HUD syncGauges threw', err);
     }
   }
 

@@ -142,6 +142,8 @@ export class FFX2BattleHud implements HudPort {
    * runs Active, and the indicator reports what is true rather than guessing.
    */
   private atbMode: 'active' | 'wait' = 'active';
+  /** Tears the open command menu down from outside. Active ATB only. */
+  private closeMenu: (() => void) | null = null;
   /** The painted field's targeting surface, when there is a field. */
   private targeting: TargetingPort | null = null;
   /** Countdown to the next panel re-measure, so `visibleInFrame` never goes stale. */
@@ -708,6 +710,46 @@ export class FFX2BattleHud implements HudPort {
     this.renderEnemies(state, snapshot);
   }
 
+  /**
+   * The ATB bars only, from a fresh snapshot (`HudPort.syncGauges`).
+   *
+   * **FFX-2 only.** The Active pump (`BattlePresenterActive.ts`) calls this at
+   * 20 Hz while a command menu is open — the clock is genuinely running under
+   * that menu now (Bailey, D-009: *"For ffx-2 I choose active"*), and this is
+   * what makes the player see it. The mirror image of {@link syncVitals}: same
+   * two renders, same reason for not being `sync`, and the numbers come from
+   * `lastState` because only the gauges moved.
+   */
+  syncGauges(snapshot: AtbSnapshot): void {
+    this.lastSnapshot = snapshot;
+    const state = this.lastState;
+    if (!state) return;
+    this.renderParty(state, snapshot);
+    this.renderEnemies(state, snapshot);
+  }
+
+  /**
+   * Tear the open command menu down from outside (`HudPort.closeCommandMenu`).
+   *
+   * **FFX-2 only, and only reachable under Active**: the girl whose menu was
+   * open was KO'd, Stopped, Slept, Petrified, chain-locked or Berserked while
+   * she was reading it, or the battle ended under her. `chooseCommand`'s
+   * promise is abandoned rather than resolved, so the tidy-up it normally does
+   * on the way out happens here instead — including releasing the cancel claim
+   * inside `openCommandMenu`'s own cleanup.
+   */
+  closeCommandMenu(): void {
+    const close = this.closeMenu;
+    this.closeMenu = null;
+    if (close) close();
+    this.commandEl.hidden = true;
+    this.actingId = null;
+    this.guide.clearDecision();
+    this.advisor.clearDecision();
+    this.applySelection(null);
+    if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
+  }
+
   async chooseCommand(
     actorId: CombatantId,
     commands: AvailableCommand[],
@@ -762,7 +804,11 @@ export class FFX2BattleHud implements HudPort {
         this.renderParty(this.lastState, preview);
         this.renderEnemies(this.lastState, preview);
       },
+      onOpen: (close) => {
+        this.closeMenu = close;
+      },
     });
+    this.closeMenu = null;
     this.commandEl.hidden = true;
     this.actingId = null;
     this.guide.clearDecision();

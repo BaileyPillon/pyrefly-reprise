@@ -238,6 +238,15 @@ export interface PresenterDeps {
   midScripts?: Record<string, StoryScript>;
   /** Sleep hook. Tests pass a no-op so the loop runs instantly. */
   sleep?: (ms: number) => Promise<void>;
+  /**
+   * Real elapsed time, in milliseconds. Defaults to `Date.now`.
+   *
+   * The only reason it exists is FFX-2's **Active** ATB: the pump in
+   * `BattlePresenterActive.ts` hands the engine the time that genuinely passed
+   * while a command menu was open, so a test needs a fake clock to drive it
+   * without real timers. `BattleScreen` passes nothing.
+   */
+  now?: () => number;
   /** Overall pacing multiplier applied to every wait. 1 = authored timing. */
   timeScale?: number;
 }

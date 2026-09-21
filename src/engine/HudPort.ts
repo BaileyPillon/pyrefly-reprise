@@ -65,8 +65,34 @@ export interface HudPort {
    * `engine.state()`.
    */
   syncVitals?(state: BattleState): void;
+  /**
+   * Re-render **only the ATB gauges** from a fresh snapshot.
+   *
+   * Optional and additive, and **FFX-2 only in practice**: it exists for the
+   * Active pump (`BattlePresenterActive.ts`), which advances the FFX-2 clock
+   * at 20 Hz while a command menu is open and needs the bars to move with it.
+   * FFX is CTB, has no clock to run under a menu, and implements nothing here.
+   *
+   * Must stay as cheap as {@link syncVitals} and for the same reason: `sync`
+   * rebuilds the guide, the advisor and the enemy-intent slab, and the intent
+   * prediction deep-clones the board two dozen times. At 20 Hz that is a
+   * frame-rate defect dressed as a feature.
+   */
+  syncGauges?(snapshot: AtbSnapshot): void;
   /** Open the command menu; resolves the chosen command. previewRank re-renders the CTB list for the highlighted command. */
   chooseCommand(actorId: CombatantId, commands: AvailableCommand[], previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot): Promise<Command>;
+  /**
+   * Tear down an open command menu from outside, because its owner can no
+   * longer answer it — KO'd, Stopped, Slept, Petrified, chain-locked or
+   * Berserked while it was up, or the battle ended under her.
+   *
+   * Optional and additive, and again **FFX-2 only in practice**: only Active
+   * lets anything happen to the owner while her menu is open. The promise from
+   * {@link chooseCommand} is abandoned, never resolved — the implementation's
+   * job is to release the keyboard claim and clear the DOM, or Esc belongs to
+   * a menu that is no longer on screen.
+   */
+  closeCommandMenu?(): void;
   /** Called for every event before the presenter animates it; may show a transient (telegraph banner, chain popup) but must resolve within ~600 ms. */
   onEvent(event: BattleEvent): Promise<void> | void;
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult>;

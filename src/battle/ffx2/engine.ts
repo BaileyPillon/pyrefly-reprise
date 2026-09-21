@@ -53,7 +53,7 @@ import type {
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
-import { advanceChainWindows, isActionLocked, ticksUntilChainBreak } from './chain.ts';
+import { advanceChainWindows, ticksUntilChainBreak } from './chain.ts';
 import {
   advanceGauge,
   beginRecovery,
@@ -63,15 +63,23 @@ import {
   ticksToMs,
   ticksUntilNextEvent,
 } from './gauges.ts';
-import { advanceStatuses, canAct, ticksUntilStatusEvent } from './statuses.ts';
+import { advanceStatuses, ticksUntilStatusEvent } from './statuses.ts';
 import { applyHpDelta, heal, type ResolveContext } from './resolve.ts';
 import { berserkCommand, buildCommands, type MenuContext } from './targeting.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
-import { performCommand, type ExecEnv } from './execute.ts';
+import { abilityFor, performCommand, type ExecEnv } from './execute.ts';
 import { actorOrder, battleOutcome, buildResult, emptyState } from './results.ts';
+import {
+  allTargetsGone,
+  awaitsPlayerInput,
+  canTakeTurn,
+  inputStillValid,
+  substepTicks,
+  type TickOptions,
+} from './active.ts';
 
 /** Sub-steps per `tick()` call. A generous bound, never a normal exit path. */
 const TICK_SUBSTEP_LIMIT = 512;
@@ -88,6 +96,31 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   private drafts: EventDraft[] = [];
   private elapsedMs = 0;
   private awaitingMinigame: Command | null = null;
+  /**
+   * Whose command menu is open right now. **Active ATB (`active.ts`).**
+   *
+   * Under Wait only one girl could be ready at the moment of input, so
+   * `submit` could safely resolve its actor as `nextActor()`. Under Active she
+   * is not alone: while Rikku's menu is open Yuna can fill her bar, and
+   * `actorOrder` puts the lower slot first — Rikku's command would execute as
+   * Yuna's, silently. This is the lock that stops it. It lives on the engine,
+   * not in `BattleState`, so no save or event shape changes, and setting it is
+   * idempotent so `nextDecision()` still never mutates for `'player-input'`.
+   */
+  private inputOwner: CombatantId | null = null;
+  /**
+   * Ticks a `throughInput` step was handed but could not spend, because a ready
+   * enemy ended the sub-step loop so its events could be played.
+   *
+   * In the `'waiting'` path this never mattered: the presenter asks for exactly
+   * `nextEventMs`, so there is nothing left over. Under Active the pump hands
+   * over whatever really elapsed, and an enemy acting 10 ms into a 50 ms step
+   * would otherwise throw the other 40 ms away — game time lost, once per enemy
+   * action, for as long as a menu is open. Carried and drained on the next
+   * `throughInput` step instead. Untouched by Wait-mode ticks, so a run that
+   * never opens a menu is bit-identical to before Active existed.
+   */
+  private carriedTicks = 0;
 
   constructor(options: Ffx2EngineOptions = {}) {
     this.options = options;
@@ -108,6 +141,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     this.drafts = [];
     this.elapsedMs = this.options.carriedParty?.elapsedMs ?? 0;
     this.awaitingMinigame = null;
+    this.inputOwner = null;
+    this.carriedTicks = 0;
     this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
     this.flush();
   }
@@ -147,12 +182,19 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   }
 
   nextDecision(): Decision {
-    if (this.battleState.result) return { kind: 'battle-over', result: this.battleState.result };
+    if (this.battleState.result) {
+      this.inputOwner = null;
+      return { kind: 'battle-over', result: this.battleState.result };
+    }
 
     const finished = this.checkBattleEnd();
-    if (finished) return { kind: 'battle-over', result: finished };
+    if (finished) {
+      this.inputOwner = null;
+      return { kind: 'battle-over', result: finished };
+    }
 
     const actor = this.nextActor();
+    if (!actor || actor.controller !== 'player') this.inputOwner = null;
     if (actor && actor.controller === 'player') {
       // Berserk takes the turn away from the player: §2.8 "can only use the
       // basic Attack command; **player loses control**". It used to be offered
@@ -160,9 +202,12 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       // with zero rows and locked the battle [round 05 PR-0045]. A suspended
       // minigame still belongs to the player and keeps its path. FFX-2 only.
       if (actor.statuses.berserk && !this.awaitingMinigame) {
+        this.inputOwner = null;
         this.runBerserkTurn(actor);
         return { kind: 'resolved', events: this.flush() };
       }
+      // Idempotent: the same girl, decision after decision, until she submits.
+      this.inputOwner = actor.id;
       return {
         kind: 'player-input',
         actorId: actor.id,
@@ -180,11 +225,31 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   submit(command: Command): BattleEvent[] {
     const actor = this.nextActor();
-    if (!actor) return this.flush();
+    if (!actor) {
+      this.inputOwner = null;
+      return this.flush();
+    }
+    // Active ATB, `active.ts`: everything this command aimed at died while the
+    // menu was open. Refuse and reopen — the turn is not spent (preflight
+    // §4.4 (a)). Under Wait this branch was unreachable.
+    if (actor.controller === 'player' && allTargetsGone(this.units, command, abilityFor(this.env(), command))) {
+      return this.flush();
+    }
+    this.inputOwner = null;
     const before = this.drafts.length;
     if (actor.controller === 'player' && !this.awaitingMinigame) this.beginTurn(actor);
     performCommand(this.env(), actor, command, false, before);
     return this.flush();
+  }
+
+  /**
+   * Is the command menu open for `actorId` still answerable? **FFX-2 only.**
+   *
+   * The presenter polls this once per pump step while a menu is up; see
+   * `active.ts` {@link inputStillValid} for what can invalidate one.
+   */
+  inputValid(actorId: CombatantId): boolean {
+    return inputStillValid(this.units, actorId, Boolean(this.battleState.result), this.awaitingMinigame !== null);
   }
 
   /**
@@ -194,14 +259,28 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    * so a status expiry, a chain break and a gauge filling inside the same step
    * land in the right order. Returns as soon as something needs handling —
    * otherwise the clock would run past a player's input.
+   *
+   * **Active ATB (FFX-2 only, `active.ts`).** With `opts.throughInput` a girl
+   * standing ready for a command no longer stops the clock: she is queued for
+   * input, and gauges, statuses, chain windows and enemy turns carry on around
+   * her. A ready *enemy* still ends the step so its events can be played, which
+   * is also what gives us §1.5's "Automatic Wait" for free — the presenter's
+   * pump is not running while an animation plays, so nothing ticks then.
    */
-  tick(ms: number): BattleEvent[] {
+  tick(ms: number, opts?: TickOptions): BattleEvent[] {
     if (this.battleState.result) return this.flush();
+    const throughInput = opts?.throughInput === true;
     let remaining = msToTicks(Math.max(0, ms));
+    if (throughInput) {
+      remaining += this.carriedTicks;
+      this.carriedTicks = 0;
+    }
     let guard = 0;
 
     while (remaining > 0.0001 && guard++ < TICK_SUBSTEP_LIMIT) {
-      const step = Math.min(remaining, Math.max(1, this.nextEventTicks()));
+      const step = throughInput
+        ? substepTicks(remaining, this.soonestEventTicks())
+        : Math.min(remaining, Math.max(1, this.nextEventTicks()));
       remaining -= step;
       this.elapsedMs += ticksToMs(step);
       this.battleState.ticks += step;
@@ -223,13 +302,23 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       if (readyChanged) this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
       if (this.checkBattleEnd()) break;
 
-      const actor = this.nextActor();
-      if (actor && actor.controller === 'player') break;
+      const actor = this.nextActor(throughInput);
+      if (actor && actor.controller === 'player') {
+        // Under `throughInput` the only player unit `nextActor` can hand back
+        // is a Berserked one — the menu's owner and anyone else awaiting a
+        // command are skipped — and Berserk has already taken her turn away
+        // from the player (§2.8), so it resolves here rather than stalling.
+        if (throughInput) this.runBerserkTurn(actor);
+        break;
+      }
       if (actor) {
         this.runAiTurn(actor);
         break;
       }
     }
+
+    // Whatever an early break left unspent is owed to the next Active step.
+    if (throughInput) this.carriedTicks = remaining > 0.0001 ? remaining : 0;
 
     return this.flush();
   }
@@ -258,26 +347,54 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     }
   }
 
-  /** The unit whose turn it is, or `undefined` when nobody may act. */
-  private nextActor(): Ffx2Unit | undefined {
+  /**
+   * The unit whose turn it is, or `undefined` when nobody may act.
+   *
+   * `skipReadyPlayers` is Active ATB's sub-step policy (`active.ts`): the girl
+   * whose menu is open, and anyone else standing ready for a command, are
+   * queued for input rather than acting, so they must not block a ready enemy
+   * that `actorOrder` sorts behind them — party goes before enemies by slot
+   * (`results.ts`), so without this the pump would spin forever.
+   *
+   * The input owner comes first while she can still act, which is what makes
+   * `submit` resolve to the girl whose menu was open rather than to whoever
+   * `actorOrder` happens to put first by the time she presses Confirm.
+   */
+  private nextActor(skipReadyPlayers = false): Ffx2Unit | undefined {
+    if (!skipReadyPlayers && this.inputOwner) {
+      const owner = this.units.find((u) => u.id === this.inputOwner);
+      if (owner && canTakeTurn(owner)) return owner;
+    }
     for (const unit of actorOrder(this.units)) {
-      if (!isReady(unit) || !canAct(unit)) continue;
-      // A chained target cannot start its own action. §1.7
-      if (isActionLocked(unit)) continue;
-      if (unit.side === 'enemy' && (unit.thinkingTicks ?? 0) > 0) continue;
+      if (!canTakeTurn(unit)) continue;
+      if (skipReadyPlayers) {
+        if (unit.id === this.inputOwner) continue;
+        if (awaitsPlayerInput(unit, this.awaitingMinigame !== null)) continue;
+      }
       return unit;
     }
     return undefined;
   }
 
-  /** Ticks until the soonest scheduled state change anywhere on the field. */
-  private nextEventTicks(): number {
+  /**
+   * Ticks until the soonest scheduled state change anywhere on the field, or
+   * `Infinity` when nothing at all is scheduled. Only Active's sub-stepping
+   * reads the raw value ({@link substepTicks}); every other caller wants the
+   * clamped {@link nextEventTicks}.
+   */
+  private soonestEventTicks(): number {
     let soonest = ticksUntilChainBreak(this.units);
     for (const unit of this.units) {
       if (!unit.alive && unit.side === 'party') continue;
       if (isReady(unit)) continue;
       soonest = Math.min(soonest, ticksUntilNextEvent(unit), ticksUntilStatusEvent(unit));
     }
+    return soonest;
+  }
+
+  /** {@link soonestEventTicks}, floored at one tick so a step always advances. */
+  private nextEventTicks(): number {
+    const soonest = this.soonestEventTicks();
     if (!Number.isFinite(soonest) || soonest <= 0) return 1;
     return soonest;
   }
@@ -369,6 +486,28 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     const before = this.drafts.length;
     this.beginTurn(actor);
     const command = berserkCommand(actor, this.menuContext(actor), this.rng);
+    // PR-0052: she has no Attack to swing (§3.4-3.6's three dresspheres), and
+    // the turn used to pass with nothing on screen at all — `performCommand`'s
+    // no-ability branch emits only `action-end`, so a Berserked Paine on Lady
+    // Luck simply lost her turn in silence. The turn still passes, because the
+    // sources conflict about whether she swings anyway (see `berserkCommand`)
+    // and hard rule 6 forbids inventing the damage row — but it is now *named*,
+    // through the ordinary action banner and message path. FFX-2 only: FFX's
+    // Berserk is its own status on its own engine.
+    if (command.kind === 'defend') {
+      this.emit({
+        type: 'action-start',
+        actorId: actor.id,
+        command,
+        abilityName: 'Berserk',
+        targets: [],
+      });
+      this.emit({
+        type: 'message',
+        text: `${actor.name} is Berserk — no command is available; the turn passes.`,
+        kind: 'status',
+      });
+    }
     performCommand(this.env(), actor, command, false, before);
   }
 

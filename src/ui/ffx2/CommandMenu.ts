@@ -170,6 +170,19 @@ export interface CommandMenuDeps {
   /** Fed the live preview every time the highlighted row changes. */
   onPreview: (preview: TurnPreview[] | AtbSnapshot) => void;
   actorName: string;
+  /**
+   * Handed a function that tears this menu down from outside, once it is open.
+   *
+   * **FFX-2 only, and new with Active ATB.** Under Wait nothing could happen to
+   * the girl whose menu was open; now she can be KO'd, Stopped, Slept,
+   * Petrified, chain-locked or Berserked mid-input, and the presenter closes
+   * the menu rather than leaving one on screen that nobody can answer
+   * (`HudPort.closeCommandMenu`). The returned promise is then simply
+   * abandoned — what matters is that the cancel claim is released and the DOM
+   * is cleared, or Esc belongs to a menu that is gone and the pause key stops
+   * working. Calling it twice, or after the menu resolved, is a no-op.
+   */
+  onOpen?: (close: () => void) => void;
 }
 
 /** Every variant of {@link Command} carries a `targets` array; fill it in without an `as any`. */
@@ -285,7 +298,12 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     /** True while the chosen command hits every listed target. */
     let groupMode = false;
 
+    /** One-shot, so an external close after the menu resolved does nothing. */
+    let live = true;
+
     const cleanup = (): void => {
+      if (!live) return;
+      live = false;
       // The menu is gone; Esc belongs to nobody until the next one opens.
       releaseCancel();
       window.removeEventListener('keydown', onKey);
@@ -573,5 +591,8 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     deps.container.addEventListener('click', onClick);
     window.addEventListener('keydown', onKey);
     renderTop();
+    // Active ATB: hand the caller the teardown. The promise stays unresolved
+    // on purpose — an invalidated menu produced no command.
+    deps.onOpen?.(cleanup);
   });
 }

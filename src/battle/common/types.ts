@@ -2287,9 +2287,25 @@ export interface FFX2BattleEngine extends BattleEngine {
   /**
    * Advance the real-time clock by `ms` and return anything that resolved
    * (enemy turns, charge completions, status expiries, chain breaks).
-   * In Wait mode the presenter simply stops calling this while a submenu is open.
+   *
+   * **The fight runs in Active mode** (Bailey, 2026-09-21: *"For ffx-2 I choose
+   * active"* — `docs/target/decisions.json` D-009), so the presenter keeps
+   * calling this while a command menu, submenu or target cursor is open, with
+   * `throughInput` set: a girl standing ready for a command is queued for
+   * input, not acting, and does not stop the clock
+   * (`research/ffx2-combat-core.md` §1.5). FFX-2 only — FFX is CTB and has no
+   * clock to run.
    */
-  tick(ms: number): BattleEvent[];
+  tick(ms: number, opts?: { throughInput?: boolean }): BattleEvent[];
+  /**
+   * Is the command menu open for `actorId` still answerable — is she ready,
+   * able to act, not chain-locked, not Berserked, and is the battle still on?
+   *
+   * The presenter polls this once per pump step so a menu whose owner was KO'd,
+   * Stopped or Slept while it was open closes instead of hanging the loop.
+   * See `src/battle/ffx2/active.ts`.
+   */
+  inputValid(actorId: CombatantId): boolean;
 }
 
 // ---------------------------------------------------------------------------
