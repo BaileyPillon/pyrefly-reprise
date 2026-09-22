@@ -32,6 +32,28 @@
 > plan: **"yes you have my approvals there for music"**. A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it: the driver
 > answers the owner; agents do the task in their brief.
 
+## Running now (2026-09-22 13:55 EDT; folder-owned; the RUNNING-LINE RULE applies: if one of these is you, carry on)
+
+1. `wf_d471add8-24f` "pyrefly-release-09-batch": PR-0077 (`src/app/screens/pause/markup.ts`), FOC-05 (`src/ui/coach/**`),
+   FOC-06 (the `.mad__*` stylesheet), PR-0078 (results screen files), PR-0075 (`src/battle/ffx2/**` item accuracy, with a
+   preflight doc), PR-0076/PR-0080 + the sourced Config ATB speed lever (`src/battle/ffx2/**`, `BattlePresenterActive.ts`,
+   pause OPTIONS row, preflight `docs/plans/ffx2-active-menu-review.md`), then `critic/bench/ffx2-active/**` measurement,
+   an adversarial verifier and one repair pass. No deploy inside.
+2. `wf_84d8b42e-3be` "pyrefly-music-modern-sound" (the approved plan): OWNS `tools/audio/**`, `src/audio/**` (additive),
+   `public/audio/candidates/**`, `docs/audio/**`, `docs/handoff/music-modern-sound.md`. Ends in an A/B/C audition on
+   `docs/audio/audition.html` for Bailey's ear; no shipped cue changes.
+3. `wf_76c1ca8d-eb7` "pyrefly-chapter-art-round": method check `docs/plans/leblanc-art-method-check.md` (rule 15), pilot2,
+   Leblanc/Ormi/Logos failing states, then Macalania (never painted), then the Evrae redo. OWNS those subjects under
+   `public/art/**`, `docs/concepts/chapters/**`, `tools/gen/cast.json` rows. Everything CANDIDATE; no approved-hash entries.
+4. `wf_01f0974a-1e1` "pyrefly-video-flf-round3": end-anchor fix, one clip, judge with the hard-cut test, the set only if it
+   passes. OWNS `tools/gen/video-flf.mjs`, `tools/gen/join_report.py`, `docs/concepts/pause-until-dawn/video-flf/**`,
+   `D:/Tools/pyrefly-video/flf/**`. Its ComfyUI jobs take 60 to 90 minutes each.
+5. `wf_cc2af145-0bf` "pyrefly-living-portrait-v3": silhouette masks, hidden-region inpainting, mesh warp, colour-matched
+   patches, profile-right, closed eyes, renderer split, adversarial check. OWNS `docs/concepts/pause-until-dawn/prototype-v2/**`,
+   `tools/gen/rig-*`, `tools/gen/inpaint.mjs` (additive), `docs/handoff/living-portrait-v3.md`.
+
+ComfyUI (:8188) is shared by 2, 3, 4 and 5: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
+
 ## Live: Build C.1 (release 08)
 
 - https://baileypillon.github.io/pyrefly-reprise/ = `main 1b33971`, bundle `BvhtVfzJ`, deployed 2026-09-21 23:48 EDT under
