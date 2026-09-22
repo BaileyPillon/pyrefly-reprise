@@ -73,3 +73,22 @@ export function bandClearOf(mark: Rect, card: Rect, stage: Rect, gap = AVOID_GAP
   const width = mark.right - mark.left;
   return { left: mark.left, right: mark.left + width, top, bottom: top + height };
 }
+
+/**
+ * FOC-05 residue (release-09 verifier): below the card, the mark's left edge sat
+ * over the right tips of the command stack (the "Physical damage" help strip and
+ * the TALK row; 4,245 px² of box overlap at 1280x720, 2,833 at 1600x900). Slide
+ * the mark right until it clears `obstacle`, keeping its size and its top, as
+ * long as it stays inside `stage` and does not land back on `card`. `null` when
+ * nothing needs to move or no such slide exists (the vertical move above still
+ * stands; a few px of graze is smaller than giving up the card band).
+ */
+export function slideClearOf(mark: Rect, obstacle: Rect, card: Rect | null, stage: Rect, gap = AVOID_GAP): Rect | null {
+  if (!overlaps(mark, obstacle)) return null;
+  const width = mark.right - mark.left;
+  const left = obstacle.right + gap;
+  const moved = { left, right: left + width, top: mark.top, bottom: mark.bottom };
+  if (moved.right > stage.right) return null;
+  if (card && overlaps(moved, card)) return null;
+  return moved;
+}

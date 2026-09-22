@@ -29,7 +29,7 @@ import './coach.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
-import { bandClearOf } from './coachAvoid.ts';
+import { bandClearOf, slideClearOf } from './coachAvoid.ts';
 import type { CoachMark as CoachMarkDef } from './coachCopy.ts';
 
 /** How a line ended. */
@@ -244,10 +244,15 @@ export class CoachMark {
     const host = this.opts.root.parentElement;
     const card = host?.querySelector<HTMLElement>('.mad__card');
     if (!host || !card) return;
-    const moved = bandClearOf(this.el.getBoundingClientRect(), card.getBoundingClientRect(), host.getBoundingClientRect());
-    if (!moved) return;
     const hostRect = host.getBoundingClientRect();
-    this.el.style.top = `${moved.top - hostRect.top}px`;
+    const cardRect = card.getBoundingClientRect();
+    const moved = bandClearOf(this.el.getBoundingClientRect(), cardRect, hostRect);
+    if (moved) this.el.style.top = `${moved.top - hostRect.top}px`;
+    // Below the card the line can graze the command stack's right tips: slide it clear.
+    const stack = host.querySelector<HTMLElement>('.ig-cmd-stack');
+    if (!stack || stack.hidden || stack.offsetWidth === 0) return;
+    const slid = slideClearOf(this.el.getBoundingClientRect(), stack.getBoundingClientRect(), cardRect, hostRect);
+    if (slid) this.el.style.left = `${slid.left - hostRect.left}px`;
   }
 
   /** Take the line down now. Safe to call twice. */

@@ -21,7 +21,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { bandClearOf, overlaps, type Rect } from '../../src/ui/coach/coachAvoid.ts';
+import { bandClearOf, overlaps, slideClearOf, type Rect } from '../../src/ui/coach/coachAvoid.ts';
 
 /** The five windows AGENTS.md and the FOC-05 brief name, plus the phone. */
 const WINDOWS = [
@@ -111,5 +111,36 @@ describe('FOC-05: bandClearOf', () => {
     const card: Rect = { left: 200, top: 200, right: 300, bottom: 300 };
     const stage: Rect = { left: 0, top: 0, right: 400, bottom: 400 };
     expect(bandClearOf(mark, card, stage)).toBeNull();
+  });
+});
+
+/**
+ * Release-09 verifier (minor, FOC-05): once below the card, the mark's left edge
+ * grazed the command stack's right tips (4,245 px² of box overlap at 1280x720,
+ * 2,833 at 1600x900). Rects are the ones measured live at 1600x900 with the
+ * repair build: stack [76, 416, 544, 836], card [402, 91, 773, 288], mark placed
+ * below the card at [448, 300, 848, 445].
+ */
+describe('slideClearOf — the mark also clears the command stack (FOC-05 residue)', () => {
+  const stage: Rect = { left: 0, top: 0, right: 1600, bottom: 900 };
+  const card: Rect = { left: 402, top: 91, right: 773, bottom: 288 };
+  const stack: Rect = { left: 76, top: 416, right: 544, bottom: 836 };
+  const mark: Rect = { left: 448, top: 300, right: 848, bottom: 445 };
+
+  it('slides the mark right of the stack, same size and top, still clear of the card', () => {
+    expect(overlaps(mark, stack)).toBe(true);
+    const moved = slideClearOf(mark, stack, card, stage)!;
+    expect(moved).not.toBeNull();
+    expect(overlaps(moved, stack)).toBe(false);
+    expect(overlaps(moved, card)).toBe(false);
+    expect(moved.right - moved.left).toBe(400);
+    expect(moved.top).toBe(300);
+    expect(moved.left).toBe(544 + 12);
+  });
+
+  it('does nothing when there is no overlap, and refuses a slide off the stage or onto the card', () => {
+    expect(slideClearOf({ ...mark, left: 600, right: 1000 }, stack, card, stage)).toBeNull();
+    expect(slideClearOf(mark, { ...stack, right: 1400 }, card, stage)).toBeNull();
+    expect(slideClearOf(mark, stack, { ...card, right: 1200, bottom: 460 }, stage)).toBeNull(); // the slide would land on the card
   });
 });
