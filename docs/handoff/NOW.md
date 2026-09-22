@@ -3,9 +3,11 @@
 > **Snapshot: 2026-09-21 20:05 EDT (machine clock)**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
 > **USAGE MODE: NORMAL, set by Bailey's word** (2026-09-21 20:00 EDT, offered the spend order "1 release tonight, 2 living
 > portrait round 2, 3 music audition, 4 art consistency pilot; chapters after the weekly reset", Bailey answered:
-> **"1+2 and 1 new chapter finished. Don't hold back."**). Weekly all-models 80 percent used at 22:05 EDT (20 left, the
-> PROTECT threshold; Bailey's word keeps the three named tracks at full depth, nothing else starts); weekly Fable 73;
-> 5-hour 15; the week resets 2026-09-26 07:00 EDT. Bailey sets the mode by word and agents may only tighten it (hard rule 15): the three
+> **"1+2 and 1 new chapter finished. Don't hold back."**). **PROTECT from 2026-09-22 02:00 EDT: weekly all-models 94
+> percent used (6 left), weekly Fable 79, 5-hour 8; the week resets 2026-09-26 07:00 EDT.** The three named tracks are
+> finishing their last agents (deep review of release 08, the first-last-frame video judge, a rig re-capture); NO new
+> workflow or agent starts before the reset unless Bailey says so by word. Release 09 (Leblanc) waits for Bailey's two
+> answers and his word on spending the last points. Bailey sets the mode by word and agents may only tighten it (hard rule 15): the three
 > tracks below run at full depth; anything else still waits.
 > **RUNNING-LINE RULE (learned tonight):** when a workflow id below is listed as running, that line is ABOUT the agents of
 > that workflow. If you are one of them, it is you: carry on with your brief. Nobody stopped for being "a duplicate".
