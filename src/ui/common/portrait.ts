@@ -259,6 +259,35 @@ function cropStyle(crop: PortraitCrop, opts: FaceOptions): string {
   );
 }
 
+/**
+ * Like {@link cropStyle} but for a frame whose width and height are not
+ * assumed equal — {@link cropStyle}'s own comment says a square frame is a
+ * hard requirement, because its single percentage figure is applied against
+ * both axes. A tall, narrow frame (the results wedge, PR-0078) needs its own
+ * axis for each, so this takes the frame's real pixel size and returns an
+ * absolute pixel box instead of a percentage string.
+ *
+ * Same contract otherwise: the placement is zoomed from the measured
+ * `ipd`/`fx`/`fy` in {@link PortraitCrop} and then clamped so the painting
+ * always covers the frame — the head can end up off-centre, never with bare
+ * frame around it or the image short of an edge.
+ */
+export function coverCropBox(
+  crop: PortraitCrop,
+  frameW: number,
+  frameH: number,
+  opts: FaceOptions = {},
+): { left: number; top: number; width: number; height: number } {
+  let w = ((opts.ipd ?? TARGET_IPD) / crop.ipd) * frameW;
+  let h = w / crop.aspect;
+  const grow = Math.max(1, frameW / w, frameH / h);
+  w *= grow;
+  h *= grow;
+  const left = clamp(frameW - w, 0, frameW / 2 - crop.fx * w);
+  const top = clamp(frameH - h, 0, (opts.eyeY ?? TARGET_EYE_Y) * frameH - crop.fy * h);
+  return { left, top, width: w, height: h };
+}
+
 /** `cropStyle`'s numbers, applied to a live element without clobbering its other declarations. */
 function applyCrop(img: HTMLImageElement, crop: PortraitCrop, opts: FaceOptions): void {
   for (const decl of cropStyle(crop, opts).split(';')) {

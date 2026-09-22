@@ -122,6 +122,48 @@ Captured: `docs/screenshots/polish/results-victory.png` (header reads
 `npx tsc --noEmit` is clean. `tests/unit/ui-common-results.test.ts` (27) and
 `tests/unit/results-inkgold.test.ts` (9) pass.
 
+## PR-0078 fix — the victory portrait was showing one eye (2026-09-22)
+
+Round 08's deep review (`critic/rounds/round-08.md` #5) traced it: `heroHtml()`
+gave the victory `<img>` a fixed `height` and `width: auto`, so the browser's
+own intrinsic-ratio sizing (not any crop math) decided where the portrait
+landed, and `.rres__ink`'s `overflow: hidden` silently clipped whatever missed
+the wedge — both games, every chapter, not a regression of this release.
+
+Fixed both games (shared results plumbing, AGENTS.md rule 14 case: **both**):
+
+- `src/ui/common/portrait.ts` — new `coverCropBox(crop, frameW, frameH, opts)`,
+  {@link cropStyle}'s own placement generalised from percent-of-a-square-frame
+  to an absolute pixel box for a frame whose width and height differ (the
+  wedge is tall and narrow; `cropStyle`'s own comment says square is a hard
+  requirement).
+- `src/ui/common/resultsMath.ts` — `RESULTS_HERO_FRAME` (the wedge's portrait
+  box, mirrored in `results.css`'s `.rres__hero-frame`) and `resultsHeroBox(id)`,
+  which places the measured `face-crops.json` eye line inside it.
+- `src/app/screens/ResultsScreen.ts` — `heroHtml()`'s victory branch now wraps
+  the portrait in `.rres__hero-frame` and gives the `<img>` the computed box as
+  an inline style, `manualCrop: true` so {@link refineFaceCrop}'s DOM sweep
+  does not adopt it and overwrite the box with its own square-tile math. The
+  defeat branch (the fallen `hurt.png`/`ko.png` pose) is untouched — it already
+  framed correctly and was the control case in the review.
+- `src/ui/common/results.css` — added `.rres__hero-frame`; the pre-existing
+  `.rres__hero` rule is unchanged (its `left`/`top`/`height`/`width`/`object-fit`
+  are all overridden inline for the victory case, and still apply as before to
+  the untouched defeat `<img>`).
+
+Test-first: `tests/unit/ui-common-results.test.ts` — for every playable party
+portrait, `resultsHeroBox` always covers `RESULTS_HERO_FRAME` (no bare paper at
+an edge) and the measured eye line plus a head-height margin lands inside the
+frame. Confirmed failing before the fix (`resultsHeroBox`/`RESULTS_HERO_FRAME`
+did not exist), passing after.
+
+Verified live: `npx tsc --noEmit` clean; own vite dev server (`PYREFLY_BROWSER=gpu`),
+chapter 1 (`seymour-flux`) and chapter 4 (`ffx2-bahamut`) won through
+`window.__pyrefly.gotoChapter(..., { auto: 'intended', speed: 'skip' })`,
+screenshots at `docs/screenshots/results/pr-0078-ffx.png` and
+`pr-0078-ffx2.png` — Tidus's and Yuna's whole faces (both eyes, hair, chin) are
+inside the wedge on both.
+
 ## Left for someone else
 
 - **`BattleScreenFlow.ts:196` can write a `0:00` best time.** The flow calls

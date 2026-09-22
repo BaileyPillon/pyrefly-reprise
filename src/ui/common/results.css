@@ -71,8 +71,33 @@
   background: #3a3547;
 }
 
+/*
+ * The victory portrait's frame (PR-0078). `resultsMath.RESULTS_HERO_FRAME`
+ * carries the same left/top/width/height in TypeScript — keep the two in
+ * sync by hand, the way `coach.css`'s own comments already ask an editor to
+ * cross-check a sibling file's numbers.
+ *
+ * The `<img>` inside is placed by JS (`ResultsScreen.victoryHeroHtml`,
+ * `resultsMath.resultsHeroBox`) from the measured `face-crops.json` geometry,
+ * the same table {@link faceImgHtml} places a square tile from — this frame
+ * is the non-square exception, so the box math lives in
+ * `portrait.coverCropBox` rather than this file. `overflow: hidden` is what
+ * keeps the always-covers placement from spilling past the wedge, the same
+ * job a `.prep__face` tile's own `overflow: hidden` does.
+ */
+.rres__hero-frame {
+  position: absolute;
+  left: 364.44px; /* 820 */
+  top: -17.78px; /* -40 */
+  width: 220px;
+  height: 400px; /* 900 */
+  overflow: hidden;
+}
+
 /* The lead member, standing in the wedge (clipped by it, so a square portrait
-   can never spill onto the paper). */
+   can never spill onto the paper). The defeat variant below still uses this
+   directly (no frame wrapper): its fallen-pose art is placed with plain
+   object-fit, not a face crop, so it needs no non-square box math. */
 .rres__hero {
   position: absolute;
   left: 364.44px; /* 820 */

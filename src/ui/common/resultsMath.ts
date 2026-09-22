@@ -12,6 +12,7 @@ import {
   ITEMS as FFX2_ITEMS,
   STANDARD_DRESSPHERES,
 } from '../../data/ffx2/index.ts';
+import { coverCropBox, portraitCrop } from './portrait.ts';
 
 /** `mm:ss` clear time, per the results-panel convention in `visual-bible.md` §3.8. */
 export function formatClearTime(ms: number): string {
@@ -297,4 +298,29 @@ export function dropsLabel(drops: BattleResult['drops']): string {
   return drops
     .map((d) => itemLabel(d.itemId) + (d.count > 1 ? ` \u00d7${d.count}` : ''))
     .join(', ');
+}
+
+/**
+ * The victory wedge's portrait frame \u2014 the box `.rres__hero-frame` is sized
+ * to in `results.css` \u2014 in the screen's own 640x360 design units. PR-0078:
+ * the old markup gave the `<img>` a fixed height and `width: auto`, which
+ * lets the browser's own intrinsic-ratio sizing (not any crop math here) put
+ * the image wherever its native aspect happens to land, and the wedge's
+ * `overflow: hidden` then clips whatever falls outside it \u2014 so a win was
+ * being celebrated with whatever slice of the face happened to survive that.
+ * A fixed box plus {@link resultsHeroBox}'s measured crop always keeps the
+ * whole head inside it instead.
+ */
+export const RESULTS_HERO_FRAME = { left: 364.44, top: -17.78, width: 220, height: 400 } as const;
+
+/**
+ * Where a leader's face-crop portrait (`art/portraits/<id>.png`,
+ * `src/ui/common/face-crops.json`) is placed inside {@link RESULTS_HERO_FRAME}
+ * \u2014 the same measured-eye-line geometry {@link faceImgHtml} uses for a square
+ * tile ({@link coverCropBox} is its non-square generalisation), so the
+ * results wedge reproduces the house face crop rather than inventing a new
+ * composition.
+ */
+export function resultsHeroBox(id: string): { left: number; top: number; width: number; height: number } {
+  return coverCropBox(portraitCrop(id), RESULTS_HERO_FRAME.width, RESULTS_HERO_FRAME.height);
 }

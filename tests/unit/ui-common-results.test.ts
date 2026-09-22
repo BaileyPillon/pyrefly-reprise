@@ -12,7 +12,10 @@ import {
   isNewBest,
   isSilentResultsChapter,
   pickVictoryQuip,
+  RESULTS_HERO_FRAME,
+  resultsHeroBox,
 } from '../../src/ui/common/resultsMath.ts';
+import { portraitCrop } from '../../src/ui/common/portrait.ts';
 
 describe('formatClearTime', () => {
   it('formats sub-minute times with a zero-padded seconds field', () => {
@@ -190,6 +193,65 @@ describe('buildMemberRows', () => {
     expect(rows[0]?.awardUnit).toBe('EXP');
     expect(rows[0]?.levelUnit).toBe('Lv');
     expect(rows[0]?.detail.startsWith('WHITE MAGE')).toBe(true);
+  });
+});
+
+/**
+ * PR-0078: every results victory screen enlarged the leader's square face
+ * portrait to the full stage height with `object-fit: cover`, so a win was
+ * celebrated with one eye and hair strands — the browser's own
+ * intrinsic-ratio sizing (no crop math ran at all) landed the image wherever
+ * its native aspect fell, and `.rres__ink`'s `overflow: hidden` silently
+ * clipped whatever missed the wedge.
+ *
+ * This pins the fix at the geometry level, before any browser is involved:
+ * for every party portrait the game can put in the results wedge,
+ * `resultsHeroBox` must place the measured eye line
+ * ({@link https://../../src/ui/common/face-crops.json face-crops.json}) inside
+ * `RESULTS_HERO_FRAME` with room around it — the same "eyes on the house line,
+ * within the middle band, never bare frame at an edge" contract
+ * `tests/unit/ui-portrait-face-crop.test.ts` already proves for a square tile,
+ * carried over to the wedge's non-square box.
+ */
+describe('resultsHeroBox (PR-0078: the victory portrait must keep the whole head)', () => {
+  // The playable human roster's portrait ids (face-crops.json's `portraits`
+  // table minus the bosses/aeons/aeon-fights, which never stand in the
+  // results wedge — only a party member can be `leaderId`'s answer).
+  const PARTY_PORTRAIT_IDS = ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu', 'rikku', 'paine', 'yuna-x2', 'rikku-x2'];
+
+  const { width: frameW, height: frameH } = RESULTS_HERO_FRAME;
+
+  it.each(PARTY_PORTRAIT_IDS)('%s: the rendered box fully covers the frame', (id) => {
+    const box = resultsHeroBox(id);
+    // No bare paper at any edge of the frame — the wedge showing background
+    // instead of a face is the same class of defect as showing the wrong
+    // slice of one.
+    expect(box.left, `${id} left edge`).toBeLessThanOrEqual(0.01);
+    expect(box.top, `${id} top edge`).toBeLessThanOrEqual(0.01);
+    expect(box.left + box.width, `${id} right edge`).toBeGreaterThanOrEqual(frameW - 0.01);
+    expect(box.top + box.height, `${id} bottom edge`).toBeGreaterThanOrEqual(frameH - 0.01);
+  });
+
+  it.each(PARTY_PORTRAIT_IDS)('%s: the measured eye line lands inside the frame with a head-height margin', (id) => {
+    const crop = portraitCrop(id);
+    const box = resultsHeroBox(id);
+    const eyeX = box.left + crop.fx * box.width;
+    const eyeY = box.top + crop.fy * box.height;
+    // The face-crop rect: the eyes plus a margin scaled from the measured
+    // eye-to-eye distance (ipd), the same scale handle `cropStyle` zooms by —
+    // a generous stand-in for "the whole head", since no test can read a
+    // painting. This is the "rendered box contains the face-crop rect" check.
+    const ipdPx = crop.ipd * box.width;
+    const rect = {
+      left: eyeX - ipdPx * 1.1,
+      right: eyeX + ipdPx * 1.1,
+      top: eyeY - ipdPx * 1.3,
+      bottom: eyeY + ipdPx * 2.1,
+    };
+    expect(rect.left, `${id} face rect left`).toBeGreaterThanOrEqual(-0.5);
+    expect(rect.right, `${id} face rect right`).toBeLessThanOrEqual(frameW + 0.5);
+    expect(rect.top, `${id} face rect top`).toBeGreaterThanOrEqual(-0.5);
+    expect(rect.bottom, `${id} face rect bottom`).toBeLessThanOrEqual(frameH + 0.5);
   });
 });
 
