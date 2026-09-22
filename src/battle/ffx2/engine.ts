@@ -64,9 +64,10 @@ import {
   ticksToMs,
   ticksUntilNextEvent,
 } from './gauges.ts';
-import { advanceStatuses, ticksUntilStatusEvent } from './statuses.ts';
-import { applyHpDelta, heal, type ResolveContext } from './resolve.ts';
-import { berserkCommand, buildCommands, type MenuContext } from './targeting.ts';
+import { ticksUntilStatusEvent } from './statuses.ts';
+import type { ResolveContext } from './resolve.ts';
+import { buildCommands, type MenuContext } from './targeting.ts';
+import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, payStatusClocks } from './engineHooks.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
@@ -178,9 +179,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     this.atbRate = ATB_SPEED_MULTIPLIER[speed];
   }
 
-  atbSpeed(): AtbSpeed {
-    return this.speed;
-  }
+  atbSpeed(): AtbSpeed { return this.speed; }
 
   setSeed(n: number): void {
     this.rng.seed(n);
@@ -309,17 +308,15 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     return this.flush();
   }
 
-  /**
-   * Is the command menu open for `actorId` still answerable? **FFX-2 only.**
-   *
-   * The presenter polls this once per pump step while a menu is up; see
-   * `active.ts` {@link inputStillValid} for what can invalidate one.
-   */
   /** The command a chain-locked girl confirmed and is waiting to fire, if any. */
   heldCommand(): HeldCommand | null {
     return this.held ? { ...this.held } : null;
   }
 
+  /**
+   * Is the command menu open for `actorId` still answerable? **FFX-2 only.** The presenter
+   * polls this once per pump step while a menu is up; see `active.ts` {@link inputStillValid}.
+   */
   inputValid(actorId: CombatantId): boolean {
     return inputStillValid(this.units, actorId, Boolean(this.battleState.result), this.awaitingMinigame !== null);
   }
@@ -400,24 +397,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   /** Regen and Poison payouts plus status expiries, for one sub-step. */
   private advanceStatusClocks(step: number): void {
-    for (const unit of this.units) {
-      if (!unit.alive) continue;
-      const delta = advanceStatuses(unit, step, (e) => this.emit(e));
-      if (delta > 0) {
-        this.emit({
-          type: 'damage',
-          targetId: unit.id,
-          amount: delta,
-          element: 'none',
-          crit: false,
-          hitIndex: 0,
-          hitCount: 1,
-        });
-        applyHpDelta(this.resolveCtx(), unit, delta);
-      } else if (delta < 0) {
-        heal(this.resolveCtx(), unit, -delta, 'regen');
-      }
-    }
+    payStatusClocks(this.units, step, (e) => this.emit(e), this.resolveCtx());
   }
 
   /**
@@ -542,18 +522,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   }
 
   private aiContext(self: Ffx2Unit): AiContext {
-    return {
-      self,
-      units: this.units,
-      rng: this.rng,
-      flags: this.battleState.flags,
-      ticks: this.battleState.ticks,
-      ability: (id) => this.abilities.get(id),
-      party: () => this.units.filter((u) => u.side === 'party' && u.alive && !u.removed),
-      allies: () =>
-        this.units.filter((u) => u.side === 'enemy' && u.alive && !u.removed && u.id !== self.id),
-      emit: (e) => this.emit(e),
-    };
+    return aiContextFor(self, this.units, this.rng, this.battleState, this.abilities, (e) => this.emit(e));
   }
 
   private beginTurn(actor: Ffx2Unit): void {
@@ -580,39 +549,11 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     };
   }
 
-  /**
-   * One Berserked party turn, resolved without the player. [§2.8; PR-0045]
-   *
-   * Same shape as `runAiTurn`. `berserkCommand` returns an Attack, or a pass on
-   * a dressphere that has none (the open sources question is documented there);
-   * either way the ATB slot is spent, so Berserk runs down its own clock.
-   */
+  /** One Berserked party turn, resolved without the player (§2.8; `berserkTurnCommand`). */
   private runBerserkTurn(actor: Ffx2Unit): void {
     const before = this.drafts.length;
     this.beginTurn(actor);
-    const command = berserkCommand(actor, this.menuContext(actor), this.rng);
-    // PR-0052: she has no Attack to swing (§3.4-3.6's three dresspheres), and
-    // the turn used to pass with nothing on screen at all — `performCommand`'s
-    // no-ability branch emits only `action-end`, so a Berserked Paine on Lady
-    // Luck simply lost her turn in silence. The turn still passes, because the
-    // sources conflict about whether she swings anyway (see `berserkCommand`)
-    // and hard rule 6 forbids inventing the damage row — but it is now *named*,
-    // through the ordinary action banner and message path. FFX-2 only: FFX's
-    // Berserk is its own status on its own engine.
-    if (command.kind === 'defend') {
-      this.emit({
-        type: 'action-start',
-        actorId: actor.id,
-        command,
-        abilityName: 'Berserk',
-        targets: [],
-      });
-      this.emit({
-        type: 'message',
-        text: `${actor.name} is Berserk — no command is available; the turn passes.`,
-        kind: 'status',
-      });
-    }
+    const command = berserkTurnCommand(actor, this.menuContext(actor), this.rng, (e) => this.emit(e));
     performCommand(this.env(), actor, command, false, before);
   }
 
@@ -640,37 +581,9 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     performCommand(this.env(), unit, command, true);
   }
 
-  /**
-   * Tell every enemy that was hit by this action that it was hit.
-   *
-   * `AiScript.onDamaged` has existed in `internal.ts` since the FFX-2 scripts
-   * were written and **nothing ever called it**, so three canon mechanics were
-   * silently inert: the Core's one-slot attack log, which is the only thing
-   * that makes the Bulwarks retaliate at all and which
-   * [ffx2-vegnagun-shuyin §3.3] calls "the fight's whole identity"; the Nodes'
-   * colour machine, which §3.2 advances on "(own turn resolves) **OR** (hit by
-   * any attack)"; and the Head's hit counter, which fires Odi Et Amo (§3.4).
-   *
-   * Driven off the drafts this action produced rather than from inside
-   * `resolve.ts`, so one action notifies each target once with the true total,
-   * counters included, and the ordering of the event log is untouched.
-   */
+  /** Tell every enemy this action hit that it was hit (`notifyEnemiesDamaged`). */
   private notifyDamaged(startedAt: number, actor: Ffx2Unit): void {
-    const produced = this.drafts.slice(startedAt);
-    const totals = new Map<CombatantId, number>();
-    for (const draft of produced) {
-      if (draft.type !== 'damage') continue;
-      const hit = draft as { targetId: CombatantId; amount: number };
-      if (!(hit.amount > 0)) continue;
-      // An HP *cost* is the caster paying for her own ability, not a hit on her.
-      if (hit.targetId === actor.id && actor.side === 'party') continue;
-      totals.set(hit.targetId, (totals.get(hit.targetId) ?? 0) + hit.amount);
-    }
-    for (const [targetId, amount] of totals) {
-      const unit = this.units.find((u) => u.id === targetId);
-      if (!unit || unit.side !== 'enemy') continue;
-      aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(this.aiContext(unit), actor.id, amount);
-    }
+    notifyEnemiesDamaged(this.drafts.slice(startedAt), actor, this.units, (u) => this.aiContext(u));
   }
 
   /** Post-action bookkeeping: AI hooks, then story triggers and battle end. */
