@@ -3,8 +3,9 @@
 > **Snapshot: 2026-09-21 20:05 EDT (machine clock)**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
 > **USAGE MODE: NORMAL, set by Bailey's word** (2026-09-21 20:00 EDT, offered the spend order "1 release tonight, 2 living
 > portrait round 2, 3 music audition, 4 art consistency pilot; chapters after the weekly reset", Bailey answered:
-> **"1+2 and 1 new chapter finished. Don't hold back."**). Weekly all-models 75 percent used; weekly Fable 70; the week
-> resets 2026-09-26 07:00 EDT. Bailey sets the mode by word and agents may only tighten it (hard rule 15): the three
+> **"1+2 and 1 new chapter finished. Don't hold back."**). Weekly all-models 80 percent used at 22:05 EDT (20 left, the
+> PROTECT threshold; Bailey's word keeps the three named tracks at full depth, nothing else starts); weekly Fable 73;
+> 5-hour 15; the week resets 2026-09-26 07:00 EDT. Bailey sets the mode by word and agents may only tighten it (hard rule 15): the three
 > tracks below run at full depth; anything else still waits.
 > **RUNNING-LINE RULE (learned tonight):** when a workflow id below is listed as running, that line is ABOUT the agents of
 > that workflow. If you are one of them, it is you: carry on with your brief. Nobody stopped for being "a duplicate".
@@ -92,7 +93,12 @@
      `chapterGrid.ts` card DATA, `public/art/characters/{leblanc,ormi,logos}/**`, `docs/concepts/chapters/leblanc/**`,
      `tools/gen/cast.json` rows, `critic/bench/leblanc/**`. Renders on ComfyUI.
   3. Release 08: the tidy batch is committed (`65b57bd` onboarding on, `4dbcb8c` advisor evidence, `e6aee37` FE-001/002,
-     `c4a6d42` pause e2e); `critic/runner/release.js` runs top-level next (focused review, deploy, live, deep after).
+     `c4a6d42` pause e2e, `5e92289` pause test). **Candidate `5e92289` passed its FOCUSED review: SHIP**
+     (`critic/reviews/5e92289…-focused.md`; no critical, no regression vs live; disclosed majors FOC-01 FFX first-turn
+     coach mark hides the menu, FOC-02 phone tab strip does not scroll the selected tab into view; polish FOC-03/04).
+     **The deploy was REFUSED by the two-deploy deep-owed gate** (see the finding below). A Sonnet agent is fixing
+     FOC-01 to FOC-04 (files: `src/ui/coach/**`, `src/app/screens/pause/tabs.ts`, `pause-screen.css`, HUD label tokens);
+     then `release.js` runs again on the new sha, with Bailey's override words when he gives them.
      **DEPLOY GATE FINDING:** the live build `8f48237` carries an unsettled deep review (from `fd0ae96`); round 07 was a
      valid deep report but left five mandatory checks UNVERIFIED (CHK-001 / CHK-B1 audio need Bailey's ear, CHK-006,
      CHK-007, CHK-022 victory halves, hardware perf evidence), so `critic-clear` refused it. Two deploys already went
