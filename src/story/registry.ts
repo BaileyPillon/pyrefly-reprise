@@ -55,6 +55,7 @@ import { yunalescaScripts } from './scripts/yunalesca.ts';
 import { braskasFinalAeonScripts } from './scripts/braskas-final-aeon.ts';
 import { ffx2BahamutScripts } from './scripts/ffx2-bahamut.ts';
 import { ffx2VegnagunShuyinScripts } from './scripts/ffx2-vegnagun-shuyin.ts';
+import { ffx2LeblancScripts } from './scripts/ffx2-leblanc.ts';
 
 /** Chapter ids, matching `data/encounters.ts`. */
 export type ChapterKey =
@@ -62,7 +63,8 @@ export type ChapterKey =
   | 'yunalesca'
   | 'braskas-final-aeon'
   | 'ffx2-bahamut'
-  | 'ffx2-vegnagun-shuyin';
+  | 'ffx2-vegnagun-shuyin'
+  | 'ffx2-leblanc';
 
 /** Every chapter's story layer, in play order. */
 export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
@@ -71,6 +73,7 @@ export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
   'braskas-final-aeon': braskasFinalAeonScripts,
   'ffx2-bahamut': ffx2BahamutScripts,
   'ffx2-vegnagun-shuyin': ffx2VegnagunShuyinScripts,
+  'ffx2-leblanc': ffx2LeblancScripts,
 };
 
 export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
@@ -108,6 +111,9 @@ export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>
   yunalesca: [],
   'braskas-final-aeon': [],
   'ffx2-bahamut': [],
+  // No `leblanc-syndicate.ts` AI script emits `script-trigger`; every beat
+  // this chapter fires goes through `mid` (`ko`/`ability-used`) instead.
+  'ffx2-leblanc': [],
   'ffx2-vegnagun-shuyin': [
     'farplane-voice',
     'farplane-voice-braska',
@@ -157,6 +163,9 @@ export const CHAIN_SEAMS: Readonly<Record<ChapterKey, readonly string[]>> = {
   'ffx2-bahamut': [],
   // One per link of the Vegnagun chain, plus Shuyin stepping out of Baralai.
   'ffx2-vegnagun-shuyin': ['tail-down', 'leg-down', 'body-down', 'shuyin-appears'],
+  // The two between-act beats, per `ffx2-leblanc.ts`'s own wiring notes: a
+  // group boundary where the scene is the point, not an in-fight interrupt.
+  'ffx2-leblanc': ['act-one-cleared', 'act-two-cleared'],
 };
 
 /** The budget a given script has to fit inside. */

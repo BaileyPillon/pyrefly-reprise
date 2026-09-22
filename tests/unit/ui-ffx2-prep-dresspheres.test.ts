@@ -31,8 +31,8 @@ function mountFor(chapterId: string, memberId: string): HTMLElement {
 const FFX2_CHAPTERS = CHAPTERS.filter((c) => c.game === 'ffx2').map((c) => c.id);
 
 describe('FFX-2 Dresspheres tab', () => {
-  it('covers both X-2 chapters', () => {
-    expect(FFX2_CHAPTERS.length).toBe(2);
+  it('covers all three X-2 chapters', () => {
+    expect(FFX2_CHAPTERS.length).toBe(3);
   });
 
   for (const chapterId of FFX2_CHAPTERS) {

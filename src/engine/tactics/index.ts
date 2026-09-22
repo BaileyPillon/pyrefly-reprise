@@ -11,9 +11,9 @@
  * auto-battler that "fixes" it would be encoding the failure mode the encounter
  * exists to teach.
  *
- * **One file per chapter**, so five agents can work in parallel:
+ * **One file per chapter**, so several agents can work in parallel:
  * `./seymour-flux.ts`, `./yunalesca.ts`, `./braskas-final-aeon.ts`,
- * `./ffx2-bahamut.ts`, `./ffx2-vegnagun-shuyin.ts`, with the reading helpers
+ * `./ffx2-bahamut.ts`, `./ffx2-vegnagun-shuyin.ts`, `./ffx2-leblanc.ts`, with the reading helpers
  * they share in `./common.ts`. `src/engine/BattlePresenterTactics.ts` is now a
  * re-export of this module, so every existing import keeps working.
  *
@@ -36,6 +36,7 @@ import {
 } from './braskas-final-aeon.ts';
 import { FFX2_BAHAMUT_ID, ffx2Bahamut } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_CHAIN_IDS, ffx2VegnagunShuyin } from './ffx2-vegnagun-shuyin.ts';
+import { LEBLANC_BOSS_IDS, ffx2Leblanc } from './ffx2-leblanc.ts';
 
 export type { Tactic } from './common.ts';
 export {
@@ -59,6 +60,7 @@ export {
 } from './braskas-final-aeon.ts';
 export { ffx2Bahamut, FFX2_BAHAMUT_ID } from './ffx2-bahamut.ts';
 export { ffx2VegnagunShuyin, FFX2_SHUYIN_ID, FFX2_VEGNAGUN_CHAIN_IDS } from './ffx2-vegnagun-shuyin.ts';
+export { ffx2Leblanc, LEBLANC_BOSS_IDS } from './ffx2-leblanc.ts';
 
 /**
  * Every chapter's slot, in encounter order. `null` = no line written yet.
@@ -87,6 +89,10 @@ const REGISTRY: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic | null }> = 
   // the field — so the one tactic is registered under all five ids, or four
   // of its five links would quietly fall back to the generic strategy.
   ...FFX2_VEGNAGUN_CHAIN_IDS.map((bossId) => ({ bossId, tactic: ffx2VegnagunShuyin })),
+  // Chapter 6 is a three-act chain that fields eight distinct enemy ids
+  // across its own bestiary records (`leblanc-syndicate.ts`,
+  // `leblanc-syndicate-acts.ts`) — same reasoning as Chapter 5 above.
+  ...LEBLANC_BOSS_IDS.map((bossId) => ({ bossId, tactic: ffx2Leblanc })),
 ];
 
 /** Keyed by a boss combatant id that only that encounter fields. */

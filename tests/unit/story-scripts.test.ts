@@ -19,6 +19,7 @@ import { yunalescaScripts } from '../../src/story/scripts/yunalesca.ts';
 import { braskasFinalAeonScripts } from '../../src/story/scripts/braskas-final-aeon.ts';
 import { ffx2BahamutScripts } from '../../src/story/scripts/ffx2-bahamut.ts';
 import { ffx2VegnagunShuyinScripts } from '../../src/story/scripts/ffx2-vegnagun-shuyin.ts';
+import { ffx2LeblancScripts } from '../../src/story/scripts/ffx2-leblanc.ts';
 import { AI_EMITTED_TRIGGERS, type ChapterKey } from '../../src/story/registry.ts';
 
 const CHAPTERS: ReadonlyArray<readonly [string, ChapterScripts]> = [
@@ -27,6 +28,7 @@ const CHAPTERS: ReadonlyArray<readonly [string, ChapterScripts]> = [
   ['braskas-final-aeon', braskasFinalAeonScripts],
   ['ffx2-bahamut', ffx2BahamutScripts],
   ['ffx2-vegnagun-shuyin', ffx2VegnagunShuyinScripts],
+  ['ffx2-leblanc', ffx2LeblancScripts],
 ];
 
 /** Every script a chapter owns: `pre`, `post` and each `midScripts` entry. */

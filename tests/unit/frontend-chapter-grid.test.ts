@@ -31,14 +31,16 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds eight cards: five built chapters and three approved and coming', () => {
+  it('holds eight cards: six built chapters (Leblanc now landed) and two still coming', () => {
     const tiles = buildChapterTiles(save);
-    expect(tiles).toHaveLength(CHAPTERS.length + COMING_CHAPTERS.length);
+    // Leblanc's own COMING_CHAPTERS row is filtered out by id now that the
+    // real chapter is registered, so the raw `COMING_CHAPTERS.length` (3)
+    // overcounts by one — this asserts what the board actually shows.
+    expect(tiles).toHaveLength(8);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
       'Evrae',
-      'The Leblanc Syndicate',
     ]);
   });
 
@@ -47,7 +49,8 @@ describe('the board', () => {
     expect(groups.map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
-    // Five FFX cards (3 built + 2 coming), three FFX-2 (2 built + 1 coming).
+    // Five FFX cards (3 built + 2 coming), three FFX-2 (3 built, Leblanc's
+    // coming row now dropped).
     expect(groups[0]!.tiles).toHaveLength(5);
     expect(groups[1]!.tiles).toHaveLength(3);
     for (const group of groups) {
@@ -58,9 +61,18 @@ describe('the board', () => {
     }
   });
 
-  it('never invents a chapter: every coming id is absent from the registry', () => {
+  it('never invents a chapter: every still-coming id is absent from the registry', () => {
     const live = new Set(CHAPTERS.map((c) => c.id as string));
-    for (const row of COMING_CHAPTERS) expect(live.has(row.id)).toBe(false);
+    // Leblanc's row is the one deliberate exception: its id now matches the
+    // real, landed chapter on purpose, which is what drops it off the board
+    // automatically (see `comingChapters.ts`'s own comment on that row).
+    for (const row of COMING_CHAPTERS) {
+      if (row.id === 'ffx2-leblanc') {
+        expect(live.has(row.id)).toBe(true);
+      } else {
+        expect(live.has(row.id)).toBe(false);
+      }
+    }
   });
 
   /**
@@ -96,9 +108,12 @@ describe('the board', () => {
     ]);
   });
 
-  it('leaves the board alone while nothing has landed', () => {
+  it('passing the real registries through explicitly matches the default board', () => {
+    // Leblanc really has landed now, so its own coming row is still dropped
+    // here too — this pins that passing the real registries explicitly
+    // behaves exactly like the defaults, not that nothing has landed.
     const tiles = buildChapterTiles(save, { chapters: CHAPTERS, coming: COMING_CHAPTERS });
-    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length);
+    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length - 1);
   });
 
   it('reads cleared state from a real SaveStore, and only for the chapter cleared', () => {
@@ -129,8 +144,9 @@ describe('the cursor', () => {
     // Index 2 is the last built FFX chapter; +1 must jump the two coming ones.
     const fromLastFfx = tiles.findIndex((t) => t.id === 'braskas-final-aeon');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
-    // Wrapping backwards from the first card lands on the last *playable* one.
-    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-vegnagun-shuyin');
+    // Wrapping backwards from the first card lands on the last *playable* one
+    // — Leblanc now, since it landed as the sixth chapter.
+    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-leblanc');
     for (let i = 0; i < tiles.length; i++) {
       if (!tiles[i]!.playable) continue;
       expect(tiles[stepSelection(tiles, i, 1)]!.playable).toBe(true);

@@ -6,6 +6,55 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-22 — Chapter 6 registered: `ffx2-leblanc` (The Leblanc Syndicate)
+
+Key `chapter-leblanc-integration`. **FFX-2 only** [AGENTS.md hard rule 14].
+`docs/target/decisions.json` D-018 (Bailey, 2026-09-21) answers the paper
+preflight's Q1: chapter number 6, id `ffx2-leblanc`.
+
+**Additive only, three widened unions, one new record:**
+
+- `src/data/encounters.ts`: `ChapterId` gains `'ffx2-leblanc'`;
+  `Chapter.number` gains `6`; `FFX2_LEBLANC` added to `CHAPTERS`/`CHAPTER_IDS`
+  (sixth, last).
+- `src/data/chapter-meta.ts`: `ChapterMeta.numeral` gains `'VI'`;
+  `FFX2_LEBLANC_META` (`src/data/chapter-meta-ffx2-leblanc.ts`, now a real
+  `ChapterMeta` rather than the draft-relaxed type it shipped as) appended to
+  `CHAPTER_META`.
+- `src/story/registry.ts`: `ChapterKey` gains `'ffx2-leblanc'`;
+  `STORY_CHAPTERS`, `AI_EMITTED_TRIGGERS` (empty — no AI script emits
+  `script-trigger` in this chapter) and `CHAIN_SEAMS` (`act-one-cleared`,
+  `act-two-cleared`) all gain an entry.
+- `src/engine/tactics/index.ts`: `ffx2Leblanc` registered under all eight
+  `LEBLANC_BOSS_IDS`, the same one-tactic-many-ids pattern Chapter 5 uses.
+- `src/data/guides/index.ts`: `FFX2_LEBLANC_GUIDE` appended to `GUIDES`.
+
+**Reconciled while wiring** (both tracks' own handoffs flagged these as owed
+to the integrator, not invented here): `src/story/scripts/ffx2-leblanc.ts`'s
+`LEBLANC_COMBATANT_IDS.ormiActOne`/`logosActTwo` were `'ormi-act1'`/
+`'logos-act2'`, which matched no shipped enemy record — corrected to the real
+`'ormi-entrance'`/`'logos-room'` (the same ids the guide's own `phases` use).
+`LEBLANC_ABILITY_IDS.notSoMightyGuard` was `'x2-lb-not-so-mighty-guard'`
+against the shipped `'x2-leblanc-not-so-mighty-guard'` — corrected. No boss
+number changed.
+
+**No new `MusicKey`.** No cue is named for this chapter in
+`docs/plans/music-modern-sound.md` or `docs/audio/THEMES.md`, and composing
+one is outside this track's brief — inventing a `MUSIC_KEYS` entry with no
+real composition would need a `docs/audio/THEMES.md` cue-map row and a track
+file this track cannot author. Per the integrator's own brief ("if none is
+named, the cue chapter 4 uses, and say so"), `Chapter.music` and the story
+script's three `music()` calls reuse Chapter 4's `scene-bevelle-underground`
+and `boss-ffx2-aeon`, plus `scene-farplane` for the post-battle Vegnagun-reveal
+hush and the shared `victory-ffx2` fanfare — all three already real,
+registered `MUSIC_KEYS`. A future music track can compose this chapter's own
+cues and swap the three calls in `ffx2-leblanc.ts`.
+
+`sceneKey: 'leblanc-last-room'` (already registered in `src/scenes/index.ts`
+by an earlier track) is reused for all three acts, including the entrance and
+Logos' room — no options round has picked distinct dioramas for those yet.
+Recorded as a gap in `docs/handoff/chapter-leblanc.md`, not a silent guess.
+
 ## 2026-09-21 — `SpeakerId` gains `'cid'` (the Evrae chapter's voice over the deck)
 
 Key `chapter-evrae-script`. **FFX only** [AGENTS.md hard rule 14].

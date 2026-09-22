@@ -40,6 +40,8 @@ import { bahamutAbilities } from '../../src/data/ffx2/enemies/bahamut-abilities.
 import { vegnagunAbilities } from '../../src/data/ffx2/enemies/vegnagun-abilities.ts';
 import { vegnagunBodyAbilities } from '../../src/data/ffx2/enemies/vegnagun-body-abilities.ts';
 import { shuyinAbilities } from '../../src/data/ffx2/enemies/shuyin-abilities.ts';
+import { ormiAbilities, logosAbilities, goonAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-abilities.ts';
+import { leblancAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -80,6 +82,16 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     'redoubt-r': 'research/ffx2-vegnagun-shuyin.md §3.4 (src/data/ffx2/enemies/vegnagun-head.ts)',
     'redoubt-l': 'research/ffx2-vegnagun-shuyin.md §3.4 (src/data/ffx2/enemies/vegnagun-head.ts)',
     shuyin: 'research/ffx2-vegnagun-shuyin.md §3.5 (src/data/ffx2/enemies/shuyin.ts)',
+  },
+  'ffx2-leblanc': {
+    leblanc: 'research/ffx2-leblanc-syndicate.md §3.1 (src/data/ffx2/enemies/leblanc-syndicate.ts)',
+    logos: 'research/ffx2-leblanc-syndicate.md §3.2 (src/data/ffx2/enemies/leblanc-syndicate.ts)',
+    ormi: 'research/ffx2-leblanc-syndicate.md §3.3 (src/data/ffx2/enemies/leblanc-syndicate.ts)',
+    'ormi-entrance': 'research/ffx2-leblanc-syndicate.md §2 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
+    'ormi-logos-room': 'research/ffx2-leblanc-syndicate.md §2 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
+    'logos-room': 'research/ffx2-leblanc-syndicate.md §2 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
+    'dr-goon': 'research/ffx2-leblanc-syndicate.md §4.6 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
+    'fem-goon': 'research/ffx2-leblanc-syndicate.md §4.6 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
   },
 };
 
@@ -125,6 +137,12 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
     fileCite(vegnagunBodyAbilities, 'research/ffx2-vegnagun-shuyin.md §3.3 (src/data/ffx2/enemies/vegnagun-body-abilities.ts)'),
     fileCite(shuyinAbilities, 'research/ffx2-vegnagun-shuyin.md §3.4-3.5 (src/data/ffx2/enemies/shuyin-abilities.ts)'),
   ],
+  'ffx2-leblanc': [
+    fileCite(ormiAbilities, 'research/ffx2-leblanc-syndicate.md §4.1, §5.1 (src/data/ffx2/enemies/leblanc-syndicate-abilities.ts)'),
+    fileCite(logosAbilities, 'research/ffx2-leblanc-syndicate.md §4.2, §5.2 (src/data/ffx2/enemies/leblanc-syndicate-abilities.ts)'),
+    fileCite(goonAbilities, 'research/ffx2-leblanc-syndicate.md §4.6 (src/data/ffx2/enemies/leblanc-syndicate-abilities.ts)'),
+    fileCite(leblancAbilities, 'research/ffx2-leblanc-syndicate.md §4.4, §4.5 (src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts)'),
+  ],
 };
 
 /**
@@ -153,6 +171,9 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   },
   'ffx2-bahamut': {},
   'ffx2-vegnagun-shuyin': {},
+  // Every Leblanc/Ormi/Logos/goon ability id is `x2-`-prefixed and defined in
+  // the chapter's own two ability files (no shared player-catalog reuse).
+  'ffx2-leblanc': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

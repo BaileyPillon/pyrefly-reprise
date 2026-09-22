@@ -82,10 +82,10 @@ describe('the board on screen', () => {
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
   });
 
-  it('labels the three approved-but-unbuilt chapters COMING and makes them inert', () => {
+  it('labels the two remaining approved-but-unbuilt chapters COMING and makes them inert', () => {
     const { root } = mount();
     const coming = [...root.querySelectorAll('.fe-card--coming')];
-    expect(coming).toHaveLength(3);
+    expect(coming).toHaveLength(2);
     for (const card of coming) {
       expect(card.querySelector('.fe-card__coming')?.textContent).toBe('Coming');
       expect(card.getAttribute('data-action')).toBeNull();
@@ -134,7 +134,8 @@ describe('the keyboard', () => {
   it('wraps left from the first card to the last playable one', () => {
     const rig = mount();
     rig.key('ArrowLeft');
-    expect(selectedId(rig)).toBe('ffx2-vegnagun-shuyin');
+    // Leblanc now, since it landed as the sixth chapter.
+    expect(selectedId(rig)).toBe('ffx2-leblanc');
   });
 
   it('crosses between the two games with up and down', () => {
@@ -168,7 +169,7 @@ describe('what a card can and cannot start', () => {
     const picked: string[] = [];
     const rig = mount({ onSelect: (id) => picked.push(id) });
     expect(rig.screen.trigger('select:evrae-airship')).toBe(false);
-    expect(rig.screen.trigger('select:ffx2-leblanc-syndicate')).toBe(false);
+    expect(rig.screen.trigger('select:seymour-anima-macalania')).toBe(false);
     expect(picked).toEqual([]);
   });
 
@@ -177,6 +178,13 @@ describe('what a card can and cannot start', () => {
     const rig = mount({ onSelect: (id) => picked.push(id) });
     expect(rig.screen.trigger('select:ffx2-vegnagun-shuyin')).toBe(true);
     expect(picked).toEqual(['ffx2-vegnagun-shuyin']);
+  });
+
+  it('Leblanc now resolves too, having landed for real', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    expect(rig.screen.trigger('select:ffx2-leblanc')).toBe(true);
+    expect(picked).toEqual(['ffx2-leblanc']);
   });
 });
 

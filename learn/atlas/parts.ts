@@ -7,10 +7,18 @@
  * chapter's units (every main boss, every one of Yunalesca's three forms,
  * and Mortiorchis, which is flagged `isPart` but still has its own
  * distinct art) and a **card** when the `spriteKey` is shared by siblings
- * with no distinguishing art of their own (Vegnagun's Nodes all share
- * `'vegnagun-node'`, its Bulwarks `'vegnagun-bulwark'`, its Redoubts
- * `'vegnagun-redoubt'`, and the two Yu Pagodas `'yu-pagoda'`) — a purely
- * data-driven split, not a per-chapter list.
+ * *and* `flags.isPart` is set (Vegnagun's Nodes all share `'vegnagun-node'`,
+ * its Bulwarks `'vegnagun-bulwark'`, its Redoubts `'vegnagun-redoubt'`, and
+ * the two Yu Pagodas `'yu-pagoda'`) — a purely data-driven split, not a
+ * per-chapter list. The `isPart` half of that test matters once a `spriteKey`
+ * can collide for a reason other than "several simultaneous copies of one
+ * support part": Chapter 6's `ormi-entrance` / `ormi-logos-room` / `logos-
+ * room` reprise `ormi` / `logos` across the mission's three acts under
+ * separate bestiary records, sharing the pair's real sprite because they are
+ * literally the same two people, not a boss's subordinate parts — and
+ * neither carries `isPart` (rightly: it has its own gameplay meaning in the
+ * real battle engine, hard rule 6 forbids adding it with no source). Without
+ * the `isPart` half, they would be classed as cards with no boss to fan from.
  */
 
 import type { EnemyDef, EnemyGroupDef } from '../../src/battle/common/types.ts';
@@ -84,7 +92,7 @@ export function buildPartUnits(combatants: readonly EnemyDef[]): PartUnit[] {
 /** 'painting' when unique art; 'card' when this `spriteKey` is shared by two or more units (see the module doc comment). */
 export function kindForUnit(unit: PartUnit, allUnits: readonly PartUnit[]): 'painting' | 'card' {
   const sharedCount = allUnits.filter((u) => u.spriteKey === unit.spriteKey).length;
-  return sharedCount > 1 ? 'card' : 'painting';
+  return sharedCount > 1 && unit.combatant.flags.isPart === true ? 'card' : 'painting';
 }
 
 function unitIdForCombatant(units: readonly PartUnit[], combatantId: string): string | undefined {

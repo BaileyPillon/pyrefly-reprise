@@ -44,14 +44,13 @@
  *
  * ## Wiring notes for the integrator (this file registers itself nowhere)
  *
- * - **Music keys are placeholders on purpose.** `scene-chateau-leblanc`,
- *   `boss-leblanc` and `scene-disquiet` are the three cue ids
- *   `docs/plans/chapter-leblanc-review.md` §6 / E8 names. They are not in
- *   `MUSIC_KEYS` yet; the audio track owner composes them and the integrator
- *   adds them to `src/audio/tracks/index.ts` and `public/audio/manifest.json`.
- *   Until then `tests/unit/audio-story-cues.test.ts` will fail **the moment
- *   this chapter is added to `CHAPTERS`** — that is the intended tripwire, not
- *   a defect in this file.
+ * - **Music keys, resolved by the integrator (2026-09-22).** No dedicated cue
+ *   exists (named nowhere in `docs/plans/music-modern-sound.md` or
+ *   `docs/audio/THEMES.md`); per the brief ("if none is named, the cue
+ *   chapter 4 uses"), this file calls Chapter 4's `scene-bevelle-underground`
+ *   / `boss-ffx2-aeon` for the scene/battle beds and `scene-farplane` for the
+ *   beat-14 hush — real, already-registered `MUSIC_KEYS`, not invented ones.
+ *   A future music track can compose this chapter's own cues instead.
  * - **Every `sfx()` and `fx()` key used here already exists** in the banks, so
  *   nothing new is owed on that side.
  * - **Combatant ids.** The enemy data files do not exist yet, so the ids the
@@ -88,15 +87,16 @@ import {
 /**
  * The combatant ids this chapter's triggers key off, in one place.
  *
- * Act III uses the bare names; Acts I and II are suffixed so the #220 / #227
- * records are never confused with the #222 / #228 ones
- * [`ffx2-leblanc-syndicate.md` §12, "do NOT use these records"].
+ * **Reconciled against the real data** by the integrator: the script agent's
+ * proposed `ormi-act1` / `logos-act2` matched no shipped enemy record. The
+ * real Act I / II "boss" ids — matching the guide's own ACT I / II `phases`
+ * (`src/data/guides/ffx2-leblanc.ts`) — are `ormi-entrance` and `logos-room`.
  */
 export const LEBLANC_COMBATANT_IDS = {
   /** Act I — Ormi, bestiary #220, with a Dr. Goon and a Fem-Goon. */
-  ormiActOne: 'ormi-act1',
+  ormiActOne: 'ormi-entrance',
   /** Act II — Logos, bestiary #227. */
-  logosActTwo: 'logos-act2',
+  logosActTwo: 'logos-room',
   /** Act III — Leblanc, bestiary #231. */
   leblanc: 'leblanc',
   /** Act III — Logos, bestiary #228. */
@@ -106,11 +106,12 @@ export const LEBLANC_COMBATANT_IDS = {
 } as const;
 
 /**
- * Ability ids the Act III beats watch for. Both are named by the preflight
- * (§2.4, §2.5); the data owner owns the final spelling.
+ * Ability ids the Act III beats watch for. **Reconciled against the real
+ * data** by the integrator: the shipped id is `x2-leblanc-not-so-mighty-
+ * guard`, not the proposed `x2-lb-not-so-mighty-guard`. `x2-nll-1` matched.
  */
 export const LEBLANC_ABILITY_IDS = {
-  notSoMightyGuard: 'x2-lb-not-so-mighty-guard',
+  notSoMightyGuard: 'x2-leblanc-not-so-mighty-guard',
   /** Stage 1 of the three-stage combo; stages 2 and 3 follow in one action. */
   noLoveLostStageOne: 'x2-nll-1',
 } as const;
@@ -171,7 +172,10 @@ const mid: MidBattleTrigger[] = [
 
 export const ffx2LeblancScripts: ChapterScripts = {
   pre: [
-    music('scene-chateau-leblanc', 1200),
+    // No dedicated chateau cue exists yet (named nowhere in `docs/plans/
+    // music-modern-sound.md` or `docs/audio/THEMES.md`) — integrator's
+    // fallback to Chapter 4's scene cue, `src/data/encounters.ts`'s class doc.
+    music('scene-bevelle-underground', 1200),
     camera('idle', 0),
     fade('clear', 900),
 
@@ -226,7 +230,9 @@ export const ffx2LeblancScripts: ChapterScripts = {
     say('rikku-x2', 'Worth it.'),
 
     setPose('yuna-x2', 'ready'),
-    music('boss-leblanc', 1200),
+    // No dedicated boss cue exists yet — fallback to Chapter 4's, same reason
+    // as the scene cue above.
+    music('boss-ffx2-aeon', 1200),
     battleStart(),
   ],
 
@@ -256,7 +262,10 @@ export const ffx2LeblancScripts: ChapterScripts = {
     say('paine', 'Play it.'),
 
     // --- Beat 14: THE JOKE STOPS HERE. No banter until the truce. [§9.2]
-    music('scene-disquiet', 1600),
+    // No dedicated hush cue exists yet — `scene-farplane` ("rest without
+    // forgetting") is the project's other Vegnagun-adjacent ambient cue and
+    // reads closer to this beat's mood than reusing the entrance cue again.
+    music('scene-farplane', 1600),
     fx('pyrefly-memory'),
     camera('action', 1200),
     wait(2000),
@@ -340,8 +349,8 @@ export const ffx2LeblancScripts: ChapterScripts = {
     // --- Act III beat 1. Three buffs at once; the fight doubles in length if
     // nobody answers. Name the shape, not the button [writing-bible §5.1].
     'first-not-so-mighty-guard': [
-      say('leblanc', 'Not-So-Mighty Guard, darlings. Do keep up.', { auto: 1400 }),
-      say('paine', 'Three layers. She just doubled this fight.', { auto: 1300 }),
+      say('leblanc', 'Not-So-Mighty Guard, darlings. Do keep up.', { auto: 1100 }),
+      say('paine', 'Three layers. She just doubled this fight.', { auto: 1150 }),
       say('rikku-x2', 'So we peel them off! Dispel, Dispel!', { auto: 1300 }),
       say('paine', "Now you're thinking.", { auto: 1100 }),
     ],
@@ -350,11 +359,11 @@ export const ffx2LeblancScripts: ChapterScripts = {
     // execution [§4.5] — so the trio get to be ridiculous while it winds up.
     'first-no-love-lost': [
       camera('action', 400),
-      say('leblanc', 'Boys! The one we practised!', { auto: 1200 }),
-      say('ormi', 'The one we — oh! THAT one!', { auto: 1200 }),
-      say('logos', 'It has a name, Ormi. Use the name.', { auto: 1300 }),
-      say('leblanc', 'No Love Lost!', { auto: 1100 }),
-      say('paine', 'Brace.', { auto: 1000 }),
+      say('leblanc', 'Boys! The one we practised!', { auto: 900 }),
+      say('ormi', 'The one we — oh! THAT one!', { auto: 900 }),
+      say('logos', 'It has a name, Ormi. Use the name.', { auto: 1000 }),
+      say('leblanc', 'No Love Lost!', { auto: 900 }),
+      say('paine', 'Brace.', { auto: 900 }),
       camera('idle', 400),
     ],
 
@@ -370,8 +379,8 @@ export const ffx2LeblancScripts: ChapterScripts = {
     // --- Act III beat 3b. Her one unexplained kindness [§9.3, "the seam"].
     // It is late, it is short, and nobody comments on it.
     'ormi-down': [
-      say('ormi', 'Boss... I held the door.', { auto: 1300 }),
-      say('leblanc', 'You did, lamb. Badly. But you did.', { auto: 1500 }),
+      say('ormi', 'Boss... I held the door.', { auto: 1100 }),
+      say('leblanc', 'You did, lamb. Badly. But you did.', { auto: 1300 }),
       say('leblanc', 'Well. Nobody left to be clever with.', { auto: 1400 }),
       say('rikku-x2', 'No more combo! Go, go, go!', { auto: 1200 }),
     ],

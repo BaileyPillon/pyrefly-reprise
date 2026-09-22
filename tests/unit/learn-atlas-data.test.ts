@@ -15,7 +15,7 @@ import {
 import { FFX2_ABILITIES } from '../../src/data/ffx2/index.ts';
 
 describe('buildChapterSpecimen', () => {
-  it('builds all five chapters without throwing', () => {
+  it('builds all six chapters without throwing', () => {
     for (const id of CHAPTER_IDS) {
       expect(() => buildChapterSpecimen(id)).not.toThrow();
     }
@@ -31,13 +31,14 @@ describe('buildChapterSpecimen', () => {
     }
   });
 
-  it('uses gold for the FFX chapters (1-3) and pink for the FFX-2 chapters (4-5), via accentForGame', () => {
+  it('uses gold for the FFX chapters (1-3) and pink for the FFX-2 chapters (4-6), via accentForGame', () => {
     const expectedAccent: Record<ChapterId, 'gold' | 'pink'> = {
       'seymour-flux': 'gold',
       yunalesca: 'gold',
       'braskas-final-aeon': 'gold',
       'ffx2-bahamut': 'pink',
       'ffx2-vegnagun-shuyin': 'pink',
+      'ffx2-leblanc': 'pink',
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);

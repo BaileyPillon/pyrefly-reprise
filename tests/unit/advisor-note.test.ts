@@ -360,17 +360,26 @@ describe('Chapter 1 at seed 1 — the board the gate reported', () => {
 
 // ---------------------------------------------- every chapter, both engines
 
+// Enough seeds that the short links reach 200 decisions: Chapter 5's first
+// formation is over in twenty-odd turns, so one battle is nowhere near a
+// sample, and `walk` only ever plays a chapter's *first* formation (no chain
+// advance, same as every other chapter here) — Chapter 6's Act I entrance is
+// shorter still, "the cheapest possible form" of its own lesson
+// (`docs/handoff/chapter-leblanc-engine.md` §2), at roughly 3 decisions per
+// seed against the first fourteen seeds. The trailing seeds below cost
+// nothing for a chapter whose first fourteen already clear 200 — `walk`
+// breaks out of the seed loop the moment `want` is reached — so they exist
+// only to give Leblanc enough runway.
+const NOTE_WALK_SEEDS = [
+  1, 7, 42, 101, 202, 303, 404, 505, 606, 707, 808, 909, 20260918, 20260919,
+  11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+  41, 43, 44, 45, 46, 47, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71,
+];
+
 describe('the note explains the card, in every chapter', () => {
   for (const chapter of CHAPTERS) {
     it(`holds across 200+ decisions of ${chapter.number}. ${chapter.title}`, () => {
-      // Enough seeds that the short links reach 200 decisions: Chapter 5's
-      // first formation is over in twenty-odd turns, so one battle is nowhere
-      // near a sample. The walk stops at 200 whichever seed it is on.
-      const seen = walk(
-        chapter.id,
-        [1, 7, 42, 101, 202, 303, 404, 505, 606, 707, 808, 909, 20260918, 20260919],
-        200,
-      );
+      const seen = walk(chapter.id, NOTE_WALK_SEEDS, 200);
       expect(seen.decisions, 'the replay must reach the boards, not stall').toBeGreaterThanOrEqual(200);
       expect(seen.faults).toEqual([]);
     });

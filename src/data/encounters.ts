@@ -32,22 +32,26 @@ import { braskasFinalAeonGroup } from './ffx/enemies/braskas-final-aeon.ts';
 
 import { bevelleBuild } from './ffx2/builds/bevelle.ts';
 import { farplaneBuild } from './ffx2/builds/farplane.ts';
+import { chateauBuild } from './ffx2/builds/chateau.ts';
 import { bahamutGroup } from './ffx2/enemies/bahamut.ts';
 import { vegnagunTailGroup } from './ffx2/enemies/vegnagun-shuyin.ts';
+import { leblancEntranceGroup } from './ffx2/enemies/leblanc-syndicate-acts.ts';
 
 import { seymourFluxScripts } from '../story/scripts/seymour-flux.ts';
 import { yunalescaScripts } from '../story/scripts/yunalesca.ts';
 import { braskasFinalAeonScripts } from '../story/scripts/braskas-final-aeon.ts';
 import { ffx2BahamutScripts } from '../story/scripts/ffx2-bahamut.ts';
 import { ffx2VegnagunShuyinScripts } from '../story/scripts/ffx2-vegnagun-shuyin.ts';
+import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 
-/** The five chapter ids. Also the keys used in `SaveData.chapters`. */
+/** The six chapter ids. Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
   | 'seymour-flux'
   | 'yunalesca'
   | 'braskas-final-aeon'
   | 'ffx2-bahamut'
-  | 'ffx2-vegnagun-shuyin';
+  | 'ffx2-vegnagun-shuyin'
+  | 'ffx2-leblanc';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -94,8 +98,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–5. */
-  number: 1 | 2 | 3 | 4 | 5;
+  /** Display order on the chapter-select screen, 1–6. */
+  number: 1 | 2 | 3 | 4 | 5 | 6;
   /** Card title. The encounter's name. */
   title: string;
   /** Card subtitle. One clause, no period. */
@@ -279,13 +283,74 @@ export const FFX2_VEGNAGUN_SHUYIN: Chapter = {
   },
 };
 
-/** All five, in play order. */
+/**
+ * Chapter 6 — The Leblanc Syndicate, Chateau Leblanc.
+ *
+ * `docs/target/decisions.json` D-018 (Bailey, 2026-09-21, "Yes to all
+ * recommendations"): number 6, id `ffx2-leblanc`, per the paper preflight's
+ * Q1 (`docs/plans/chapter-leblanc-review.md` §5) — this is FFX-2's own
+ * Chapter 2 mission ("Faking and Entering") narratively, numbered 6th in
+ * display/select order because it lands after the five chapters already
+ * shipped.
+ *
+ * `enemyGroupRef` is Act I's entrance formation; the engine follows its
+ * `nextGroupId` chain through Act II (Logos' room) into Act III (the Last
+ * Room, all three Syndicate members) the same way Chapter 5 chains Vegnagun's
+ * four parts into Shuyin.
+ *
+ * `sceneKey` reuses the one Leblanc diorama that has been built and staged
+ * (`docs/handoff/chapter-leblanc-scene.md`) for all three acts, including the
+ * entrance and Logos' room — no options round has picked distinct dioramas
+ * for those two yet, so the Last Room's backdrop and camera rigs stand in for
+ * the whole mission rather than nothing at all. Recorded as a gap, not a
+ * silent guess.
+ *
+ * `music`: no dedicated cues exist for this chapter yet
+ * (`docs/plans/music-modern-sound.md` and `docs/audio/THEMES.md` name none).
+ * Per the integrator's brief, this falls back to the cues Chapter 4 uses —
+ * `scene-bevelle-underground` and `boss-ffx2-aeon` — rather than inventing a
+ * new `MusicKey`/track pair, which would need real composition and a
+ * `docs/audio/THEMES.md` cue-map row this track cannot author. `victory-ffx2`
+ * is the real, already-shipped FFX-2 victory fanfare (D-018: this chapter
+ * ships its flourish, unlike Chapter 4's suppressed one).
+ */
+export const FFX2_LEBLANC: Chapter = {
+  id: 'ffx2-leblanc',
+  game: 'ffx2',
+  number: 6,
+  title: 'Leblanc',
+  subtitle: 'A Farce, Armed',
+  location: 'Chateau Leblanc, Guadosalam',
+  blurb:
+    'Three stolen uniforms get the girls through the front door of a mansion playing dress-up as a rival ' +
+    "crew — right up until the ambush underground turns real. What they walk out with matters more than " +
+    'either side realizes yet.',
+  sceneKey: 'leblanc-last-room',
+  thumbnailKey: 'chapter-ffx2-leblanc',
+  buildRef: chateauBuild,
+  enemyGroupRef: leblancEntranceGroup,
+  scriptsRef: ffx2LeblancScripts,
+  music: {
+    // Fallback to Chapter 4's cues — see the class doc above.
+    scene: 'scene-bevelle-underground',
+    battle: 'boss-ffx2-aeon',
+    victory: 'victory-ffx2',
+  },
+  sensorTexts: {
+    leblanc: 'Defense 10. She wants spells thrown at her, not swords.',
+    logos: 'Evasion 40, the highest in the room. A plain swing mostly finds air.',
+    ormi: 'Defense 84, Magic Defense 16. Magic is the only thing that gets through.',
+  },
+};
+
+/** All six, in play order. */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX,
   YUNALESCA,
   BRASKAS_FINAL_AEON,
   FFX2_BAHAMUT,
   FFX2_VEGNAGUN_SHUYIN,
+  FFX2_LEBLANC,
 ] as const;
 
 /** Chapter ids, in play order. */
@@ -295,6 +360,7 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'braskas-final-aeon',
   'ffx2-bahamut',
   'ffx2-vegnagun-shuyin',
+  'ffx2-leblanc',
 ] as const;
 
 /** Look a chapter up by id. Returns `undefined` for an unknown id. */

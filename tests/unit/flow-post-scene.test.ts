@@ -341,9 +341,23 @@ describe('the end of an arc — critic round 02 #32', () => {
       const chapter = CHAPTERS.find((c) => c.id === id);
       expect(chapter, `${id} is not a chapter`).toBeDefined();
       expect(chapter!.game).toBe(game);
-      // The finale is the last chapter of its game, by display order.
+      // The finale is the last chapter of its game **by story order**, which
+      // display order (`Chapter.number`) usually but not always matches.
+      // Chapter 6 (Leblanc) is display-order last for FFX-2 — it landed after
+      // Vegnagun was already shipped — but it is narratively FFX-2's own
+      // Chapter 2 (`docs/plans/chapter-leblanc-review.md` Q1, `docs/target/
+      // decisions.json` D-018), earlier in the story than Vegnagun's "free
+      // Shuyin" ending. So `ARC_FINALE.ffx2` correctly stays
+      // `ffx2-vegnagun-shuyin`, the second-to-last by display order but the
+      // real story finale — the exception this comment documents rather than
+      // lets the assertion below quietly miss.
       const ofGame = CHAPTERS.filter((c) => c.game === game);
-      expect(ofGame[ofGame.length - 1]!.id).toBe(id);
+      const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
+      if (game === 'ffx2' && lastByDisplayOrder === 'ffx2-leblanc') {
+        expect(id).toBe('ffx2-vegnagun-shuyin');
+      } else {
+        expect(lastByDisplayOrder).toBe(id);
+      }
     }
   });
 

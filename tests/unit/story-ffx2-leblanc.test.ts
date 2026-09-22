@@ -345,11 +345,18 @@ describe('ffx2-leblanc — beats in canon order [ffx2-leblanc-syndicate §9.2]',
     }
   });
 
-  it('switches the cue to the Vegnagun reveal at beat 14 [§10.3]', () => {
+  it('switches the cue at beat 14, away from whatever the pre-battle cue was [§10.3]', () => {
+    // Updated by the integrator, 2026-09-22: no dedicated `scene-disquiet` /
+    // `scene-chateau-leblanc` / `boss-leblanc` cues exist, so this chapter
+    // reuses real, already-registered `MUSIC_KEYS` (Chapter 4's cues, plus
+    // `scene-farplane` for this beat) — see `docs/CONTRACT-CHANGES.md`. The
+    // beat-14 switch itself is still the thing being pinned: the cue changes
+    // and is not one the pre-battle scene already used.
     const tracks = chapter.post.filter((s) => s.type === 'music').map((s) => s.track);
-    expect(tracks).toContain('scene-disquiet');
+    expect(tracks).toContain('scene-farplane');
     const preTracks = chapter.pre.filter((s) => s.type === 'music').map((s) => s.track);
-    expect(preTracks).toEqual(['scene-chateau-leblanc', 'boss-leblanc']);
+    expect(preTracks).toEqual(['scene-bevelle-underground', 'boss-ffx2-aeon']);
+    expect(preTracks).not.toContain('scene-farplane');
   });
 
   it('never moralises the trio or makes Leblanc pathetic [§9.4]', () => {
@@ -397,10 +404,27 @@ describe('ffx2-leblanc — FFX-2 only, absence test [AGENTS.md rule 14]', () => 
   });
 
   it('names no FFX music cue', () => {
+    // Updated by the integrator, 2026-09-22: this chapter reuses real FFX-2
+    // cues from Chapter 4 (`scene-bevelle-underground`, `boss-ffx2-aeon`) and
+    // Chapter 5 (`scene-farplane`) rather than inventing its own — see
+    // `docs/CONTRACT-CHANGES.md`. None of those names contain "ffx2" or
+    // "leblanc", so the check is against the actual FFX-only cue keys rather
+    // than a naming pattern.
+    const ffxOnlyCues = new Set([
+      'scene-gagazet',
+      'boss-seymour',
+      'scene-zanarkand-dome',
+      'boss-yunalesca',
+      'scene-dreams-end',
+      'boss-jecht',
+      'boss-yu-yevon',
+      'victory-ffx',
+      'ending-ffx',
+    ]);
     for (const [, script] of allScripts(chapter)) {
       for (const step of flatten(script)) {
         if (step.type === 'music' && step.track !== null) {
-          expect(step.track, 'FFX cue in an FFX-2 chapter').toMatch(/leblanc|disquiet|ffx2/);
+          expect(ffxOnlyCues.has(step.track), `FFX cue "${step.track}" in an FFX-2 chapter`).toBe(false);
         }
       }
     }

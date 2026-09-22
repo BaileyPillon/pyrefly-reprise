@@ -523,9 +523,14 @@ describe('A9 — the both-games absence tests (rule 14, CHK-021)', () => {
     for (const a of SYNDICATE_ABILITIES) expect(ffxIds.has(a.id), a.id).toBe(false);
   });
 
-  it('the chapter is deliberately NOT registered — chapter select still shows Coming', async () => {
+  it('the integrator has now registered the chapter — chapter select no longer shows Coming', async () => {
+    // Updated 2026-09-22: this used to assert the opposite (deliberately NOT
+    // registered, per this file's own handoff §"Status"). The integrator's
+    // brief is exactly to make that no longer true — see
+    // `docs/CONTRACT-CHANGES.md`'s "Chapter 6 registered" entry.
     const encounters = await import('../../../src/data/encounters.ts');
-    const ids = encounters.CHAPTERS.map((c) => c.enemyGroupRef.id);
-    for (const id of LEBLANC_CHAIN_ORDER) expect(ids).not.toContain(id);
+    const chapter = encounters.CHAPTERS.find((c) => c.id === 'ffx2-leblanc');
+    expect(chapter, 'ffx2-leblanc is registered').toBeDefined();
+    expect(chapter?.enemyGroupRef.id).toBe(LEBLANC_CHAIN_ORDER[0]);
   });
 });

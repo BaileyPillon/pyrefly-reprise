@@ -335,14 +335,25 @@ careless mashing, Act III alone from full: ${wins}/12 wins`);
 
 // ---------------------------------------------------------------------------
 
-describe('the generic strategy is not a substitute for the line', () => {
-  it('`intendedStrategy` alone does not clear the mission', () => {
-    const generic: Line = (id, commands, engine) => intendedStrategy(id, commands, engine);
-    const runs = SEEDS.slice(0, 20).map((seed) => runChain(seed, 0, generic));
+/**
+ * **Updated by the integrator, 2026-09-22.** This chapter is now registered
+ * (`src/engine/tactics/index.ts`'s `TACTICS`), so `intendedStrategy` finds
+ * `ffx2Leblanc` through `tacticFor` on every call — exactly like the other
+ * four shipped chapters, none of which carry this control test any more for
+ * the same reason (see `strategy-ffx2-bahamut.test.ts`,
+ * `strategy-ffx2-vegnagun-shuyin.test.ts`: both drive `intendedStrategy`
+ * directly with no separate "generic-only" case). Measured at 3/40 for the
+ * unregistered generic ladder when this chapter was built
+ * (`docs/handoff/chapter-leblanc-engine.md` §1) — that number is the
+ * historical record of the tactic being load-bearing, not a live assertion,
+ * because there is no longer a code path that calls `intendedStrategy`
+ * without also finding the registered tactic.
+ */
+describe('the line is what `intendedStrategy` plays, now that it is registered', () => {
+  it('`intendedStrategy` clears the mission the same way the shipped line does', () => {
+    const viaDispatch: Line = (id, commands, engine) => intendedStrategy(id, commands, engine);
+    const runs = SEEDS.slice(0, 20).map((seed) => runChain(seed, 0, viaDispatch));
     const wins = runs.filter((r) => r.outcome === 'victory').length;
-    // Measured at 3/40 for the full forty seeds when this chapter was built;
-    // the bar here is only that it is not a clean sweep, so the tactic is
-    // demonstrably load-bearing rather than decorative.
-    expect(wins).toBeLessThan(runs.length);
+    expect(wins).toBe(runs.length);
   }, 300_000);
 });

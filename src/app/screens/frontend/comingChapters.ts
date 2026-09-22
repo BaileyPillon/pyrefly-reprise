@@ -83,7 +83,11 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
     research: 'research/ffx-evrae-airship.md',
   },
   {
-    id: 'ffx2-leblanc-syndicate',
+    // Matches `Chapter.id` in `src/data/encounters.ts` exactly, so this row
+    // is dropped automatically now that the real chapter is registered
+    // (`buildChapterTiles`'s `liveIds` filter) — kept rather than deleted in
+    // case that registration is ever reverted.
+    id: 'ffx2-leblanc',
     game: 'ffx2',
     title: 'The Leblanc Syndicate',
     location: 'Chateau Leblanc — Guadosalam',

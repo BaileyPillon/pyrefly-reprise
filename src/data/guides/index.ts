@@ -13,6 +13,7 @@ import { YUNALESCA_GUIDE } from './yunalesca.ts';
 import { BRASKAS_FINAL_AEON_GUIDE } from './braskas-final-aeon.ts';
 import { FFX2_BAHAMUT_GUIDE } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_SHUYIN_GUIDE } from './ffx2-vegnagun-shuyin.ts';
+import { FFX2_LEBLANC_GUIDE } from './ffx2-leblanc.ts';
 
 export type {
   ChapterGuide,
@@ -29,6 +30,7 @@ export {
   BRASKAS_FINAL_AEON_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
+  FFX2_LEBLANC_GUIDE,
 };
 
 export const GUIDES: readonly ChapterGuide[] = [
@@ -37,6 +39,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   BRASKAS_FINAL_AEON_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
+  FFX2_LEBLANC_GUIDE,
   // `SEYMOUR_ANIMA_MACALANIA_GUIDE` is written but NOT listed: the chapter is
   // not playable yet and this file is integrator-only
   // [docs/plans/chapter-macalania-review.md §8.1]. It lands with the tactic

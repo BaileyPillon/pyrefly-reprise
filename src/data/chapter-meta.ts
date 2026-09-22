@@ -19,6 +19,7 @@
 
 import type { GameId } from '../battle/common/types.ts';
 import type { ChapterId } from './encounters.ts';
+import { FFX2_LEBLANC_META } from './chapter-meta-ffx2-leblanc.ts';
 
 /**
  * The pause screen's objective rule vocabulary. Each rule is a pure
@@ -79,7 +80,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI';
   title: string;
   subtitle: string;
   location: string;
@@ -350,13 +351,14 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All five chapters' pause-screen metadata, in play order. */
+/** All six chapters' pause-screen metadata, in play order. */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META,
   YUNALESCA_META,
   BRASKAS_FINAL_AEON_META,
   FFX2_BAHAMUT_META,
   FFX2_VEGNAGUN_SHUYIN_META,
+  FFX2_LEBLANC_META,
 ] as const;
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */

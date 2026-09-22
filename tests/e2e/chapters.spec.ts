@@ -14,7 +14,8 @@ type ChapterId =
   | 'yunalesca'
   | 'braskas-final-aeon'
   | 'ffx2-bahamut'
-  | 'ffx2-vegnagun-shuyin';
+  | 'ffx2-vegnagun-shuyin'
+  | 'ffx2-leblanc';
 
 interface BattleOutcome {
   chapterId: string;
@@ -72,6 +73,7 @@ const CHAPTERS: Array<{ id: ChapterId; title: string }> = [
   { id: 'braskas-final-aeon', title: "Braska's Final Aeon" },
   { id: 'ffx2-bahamut', title: 'Bahamut' },
   { id: 'ffx2-vegnagun-shuyin', title: 'Vegnagun' },
+  { id: 'ffx2-leblanc', title: 'Leblanc' },
 ];
 
 async function boot(page: Page): Promise<string[]> {
@@ -108,11 +110,11 @@ test.describe('flow', () => {
     }
 
     const chapters = await page.evaluate(() => (window as Win).__pyrefly.chapters());
-    expect(chapters).toHaveLength(5);
+    expect(chapters).toHaveLength(6);
     expect(chapters[0]).toBe('seymour-flux');
   });
 
-  test('chapter select lists all five and starts one', async ({ page }) => {
+  test('chapter select lists all six and starts one', async ({ page }) => {
     const errors = await boot(page);
 
     await page.evaluate(() => (window as Win).__pyrefly.chapterSelect());
@@ -124,7 +126,7 @@ test.describe('flow', () => {
       () => (window as Win).__pyrefly.snapshotState()['screenState'] as Record<string, unknown>,
     );
     const listed = (state['chapters'] as string[] | undefined) ?? [];
-    if (listed.length) expect(listed).toHaveLength(5);
+    if (listed.length) expect(listed).toHaveLength(6);
 
     expect(errors, `console errors: ${errors.join(' | ')}`).toEqual([]);
   });
