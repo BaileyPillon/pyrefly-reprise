@@ -2431,34 +2431,71 @@
           "poseTags": "standing, weight on one hip, fan raised half-open as a screen in front of the lower half of her face, looking at viewer over the fan, a stage performer's address"
         },
         "attack": {
-          "poseTags": "fighting stance, holding fan, outstretched arm, leaning forward, open mouth, looking at viewer",
-          "ref": "leblanc/idle",
-          "forceRef": true,
+          "poseTags": "lunging, leaning forward, one leg forward, outstretched arm, reaching, holding folding fan, arm extended forward, serious, v-shaped eyebrows, looking ahead, closed mouth",
+          "ref": "docs/concepts/chapters/leblanc/pilot2/refs/idle-square.png + idle-head.png (batched, concat)",
           "refWeight": 0.4,
           "refStart": 0.2,
           "refEnd": 0.6,
-          "seed": 9211,
-          "notes": "REDO 2026-09-22 (pass 2): the pass-1 re-render (seed 8201, kept below for history) was independently judged FAIL 3/10 on outfit colour/pattern, same as cast/hurt/ko — see docs/concepts/chapters/leblanc/sets/leblanc/judge.md. Root cause: the tags string above used to carry the research canon's own 'blue and white triangle pattern robe' text, which idle.png itself never rendered (idle came out solid purple) -- every other state was chasing a pattern idle does not have. Fixed by dropping the pattern language from tags (now 'a plain, solid purple robe...no pattern') and raising refWeight 0.35 -> 0.4. Best of 6 candidates (seeds 9210-9217). Self-judged score: 6/10 (worst: pose reads as a fan flourish, not a hard lunge) -- installed as best-available-below-bar, not an independent pass. Pass-1 history: seed 8201, best of 6 (seeds 8201-8206; an earlier round at seeds 8101-8122 lost half its renders to the cut-out sanity guard correctly catching an unrequested swirl-effect artifact, not re-rolled with --keepBad)."
+          "seed": 22101,
+          "notes": "ROUND 3 (2026-09-22, FFX-2 only): method F (pilot 2 winner) with the pilot-2 judge's corrected words; attack self-judged 5/10 at 1:1 (below the bar of 7), installed as a CANDIDATE because it scores above the candidate it replaced. Judge notes: docs/concepts/chapters/leblanc/sets/leblanc/round3/judge.md. Replaced candidate backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/leblanc/replaced-2026-09-22/.",
+          "refWeightType": "ease in",
+          "recipe": "docs/concepts/chapters/leblanc/sets/leblanc/round3/run-round3.mjs",
+          "identityTags": "docs/concepts/chapters/leblanc/sets/leblanc/round3/identity.txt",
+          "emphasis": "docs/concepts/chapters/leblanc/sets/leblanc/round3/emphasis.txt",
+          "status": "CANDIDATE",
+          "canvas": "1024x1216",
+          "pass": "a (identity.txt)",
+          "history": [
+            {
+              "poseTags": "fighting stance, holding fan, outstretched arm, leaning forward, open mouth, looking at viewer",
+              "seed": 9211,
+              "notes": "REDO 2026-09-22 (pass 2): the pass-1 re-render (seed 8201, kept below for history) was independently judged FAIL 3/10 on outfit colour/pattern, same as cast/hurt/ko — see docs/concepts/chapters/leblanc/sets/leblanc/judge.md. Root cause: the tags string above used to carry the research canon's own 'blue and white triangle pattern robe' text, which idle.png itself never rendered (idle came out solid purple) -- every other state was chasing a pattern idle does not have. Fixed by dropping the pattern language from tags (now 'a plain, solid purple robe...no pattern') and raising refWeight 0.35 -> 0.4. Best of 6 candidates (seeds 9210-9217). Self-judged score: 6/10 (worst: pose reads as a fan flourish, not a hard lunge) -- installed as best-available-below-bar, not an independent pass. Pass-1 history: seed 8201, best of 6 (seeds 8201-8206; an earlier round at seeds 8101-8122 lost half its renders to the cut-out sanity guard correctly catching an unrequested swirl-effect artifact, not re-rolled with --keepBad)."
+            }
+          ]
         },
         "cast": {
-          "poseTags": "arm up, holding fan, raised hand, standing, looking up, open mouth",
-          "ref": "leblanc/idle",
-          "forceRef": true,
+          "poseTags": "standing, arm up, raised hand, holding folding fan, open fan, looking up, head back, serious, closed mouth",
+          "ref": "docs/concepts/chapters/leblanc/pilot2/refs/idle-square.png + idle-head.png (batched, concat)",
           "refWeight": 0.4,
           "refStart": 0.2,
           "refEnd": 0.6,
-          "seed": 9314,
-          "notes": "REDO 2026-09-22 (pass 2), same fix and same FAIL->6/10 story as attack (see attack's notes for the root cause writeup). Best of 6 candidates (seeds 9310-9316). Self-judged worst criterion: 'looking up' not clearly met (eyes read forward). Pass-1 history: seed 8305, best of 8 viewed (seeds 8301-8306 at refWeight 0.35, plus two refWeight-0.4 variants that finished before the shared ComfyUI queue was monopolised by another workflow's long-running image-to-video job); rejected candidates held the fan closed near her face/chin rather than open and raised, or drew the heart mark blue instead of red."
+          "seed": 22501,
+          "notes": "ROUND 3 (2026-09-22, FFX-2 only): method F (pilot 2 winner) with the pilot-2 judge's corrected words; cast self-judged 5/10 at 1:1 (below the bar of 7), installed as a CANDIDATE because it scores above the candidate it replaced. Judge notes: docs/concepts/chapters/leblanc/sets/leblanc/round3/judge.md. Replaced candidate backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/leblanc/replaced-2026-09-22/.",
+          "refWeightType": "ease in",
+          "recipe": "docs/concepts/chapters/leblanc/sets/leblanc/round3/run-round3.mjs",
+          "identityTags": "docs/concepts/chapters/leblanc/sets/leblanc/round3/identity-b.txt",
+          "emphasis": "docs/concepts/chapters/leblanc/sets/leblanc/round3/emphasis.txt",
+          "status": "CANDIDATE",
+          "pass": "b (identity-b.txt)",
+          "history": [
+            {
+              "poseTags": "arm up, holding fan, raised hand, standing, looking up, open mouth",
+              "seed": 9314,
+              "notes": "REDO 2026-09-22 (pass 2), same fix and same FAIL->6/10 story as attack (see attack's notes for the root cause writeup). Best of 6 candidates (seeds 9310-9316). Self-judged worst criterion: 'looking up' not clearly met (eyes read forward). Pass-1 history: seed 8305, best of 8 viewed (seeds 8301-8306 at refWeight 0.35, plus two refWeight-0.4 variants that finished before the shared ComfyUI queue was monopolised by another workflow's long-running image-to-video job); rejected candidates held the fan closed near her face/chin rather than open and raised, or drew the heart mark blue instead of red."
+            }
+          ]
         },
         "hurt": {
-          "poseTags": "recoiling from a heavy blow, doubled over at the waist, one arm clutched across her stomach, staggering backward off balance, eyes screwed shut, mouth open in a pained gasp, holding fan loosely at her side",
-          "ref": "leblanc/idle",
-          "forceRef": true,
+          "poseTags": "leaning back, off balance, wince, closed eyes, pained expression, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, holding closed fan",
+          "ref": "docs/concepts/chapters/leblanc/pilot2/refs/idle-square.png + idle-head.png (batched, concat)",
           "refWeight": 0.4,
           "refStart": 0.2,
           "refEnd": 0.6,
-          "seed": 9413,
-          "notes": "REDO 2026-09-22 (pass 2), the hardest state: tied-worst on TWO criteria across two independent judge passes now (outfit pattern, same fix as attack; and pose-reads-as-hurt, described both times as a coy wink/smile, not pain). Per the judge's own recommendation, the identity block's baseline expression ('confident smirk, half-lidded eyes', still used for idle/cast/attack/ko) was overridden for this state alone to 'pained grimace, eyes shut tight, gritted teeth', and poseTags rewritten from the old 'wince, one eye closed, leaning back, arm across chest' (pass 1; still read as coy) to the phrase above. Best of 6 candidates (seeds 9410-9415). Self-judged: 6/10, up from 3 -- a real improvement (reads as pained/tearful now, not smiling) but not a full fix; worst criteria tied between weapon (the fan reads closer to a held stick) and pose (posture reads more upset-standing than doubled-over). The single strongest expression of the six (a bared-teeth grimace) was rejected for an off-model blue-grey skin cast and a missing heart mark -- see judge.md's reject notes. This is attempt 2 on hurt's expression across both passes; AGENTS.md hard rule 15 says a third plain attempt needs a written method check first, not another re-roll."
+          "seed": 22303,
+          "notes": "ROUND 3 (2026-09-22, FFX-2 only): method F (pilot 2 winner) with the pilot-2 judge's corrected words; hurt self-judged 5/10 at 1:1 (below the bar of 7), installed as a CANDIDATE because it scores above the candidate it replaced. Judge notes: docs/concepts/chapters/leblanc/sets/leblanc/round3/judge.md. Replaced candidate backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/leblanc/replaced-2026-09-22/.",
+          "refWeightType": "ease in",
+          "recipe": "docs/concepts/chapters/leblanc/sets/leblanc/round3/run-round3.mjs",
+          "identityTags": "docs/concepts/chapters/leblanc/sets/leblanc/round3/identity-b.txt",
+          "emphasis": "docs/concepts/chapters/leblanc/sets/leblanc/round3/emphasis.txt",
+          "status": "CANDIDATE",
+          "pass": "b (identity-b.txt) + masked feet repaint (repaint-r3.mjs, box 445,945,221,255, denoise 0.6, seed 31003)",
+          "history": [
+            {
+              "poseTags": "recoiling from a heavy blow, doubled over at the waist, one arm clutched across her stomach, staggering backward off balance, eyes screwed shut, mouth open in a pained gasp, holding fan loosely at her side",
+              "seed": 9413,
+              "notes": "REDO 2026-09-22 (pass 2), the hardest state: tied-worst on TWO criteria across two independent judge passes now (outfit pattern, same fix as attack; and pose-reads-as-hurt, described both times as a coy wink/smile, not pain). Per the judge's own recommendation, the identity block's baseline expression ('confident smirk, half-lidded eyes', still used for idle/cast/attack/ko) was overridden for this state alone to 'pained grimace, eyes shut tight, gritted teeth', and poseTags rewritten from the old 'wince, one eye closed, leaning back, arm across chest' (pass 1; still read as coy) to the phrase above. Best of 6 candidates (seeds 9410-9415). Self-judged: 6/10, up from 3 -- a real improvement (reads as pained/tearful now, not smiling) but not a full fix; worst criteria tied between weapon (the fan reads closer to a held stick) and pose (posture reads more upset-standing than doubled-over). The single strongest expression of the six (a bared-teeth grimace) was rejected for an off-model blue-grey skin cast and a missing heart mark -- see judge.md's reject notes. This is attempt 2 on hurt's expression across both passes; AGENTS.md hard rule 15 says a third plain attempt needs a written method check first, not another re-roll."
+            }
+          ]
         },
         "ko": {
           "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated, fan fallen open beside her",
@@ -2473,7 +2510,7 @@
           "notes": "REDO 2026-09-22 (pass 2): fixed both the shared pattern defect (see attack's notes) and ko's own specific defect -- the heart mark rendering pink/rose instead of red -- by changing the heart phrase to '(vivid red heart-shaped mark:1.35)'. Best of 6 candidates (seeds 9610-9615; one candidate rendered a second figure, 'multiple girls', and was discarded outright). Self-judged score: 7/10 -- clears the bar; every named criterion from the redo list is met (solid purple robe, heart clearly red and on the sternum, eyes closed, fan fallen open beside her). Still not an independent pass. Pass-1 history: seed 8603, extending the pilot's forceRef/0.35/0.2-0.6 recipe to the prone composition for the first time -- best of 2 candidates that finished (8601-8602 timed out on a congested shared queue)."
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 43% one colour, near the monochrome-reference guard's threshold, but is on-model against the picked concept (docs/concepts/chapters/leblanc/renders/leblanc-b.png) and was left unchanged this round. 2026-09-21 consistency pilot (docs/concepts/chapters/leblanc/pilot/pilot.md, judge.md) found attack/cast/hurt had been rendered WITHOUT --ref (the guard fired) and drifted hair, robe colour and pattern state to state; it picked method A (--forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in, body-only Danbooru pose tags) as the fix. 2026-09-22 pass 1 re-rendered attack/cast/hurt/ko with that recipe; an independent judge pass then failed all four 3/10, tied on outfit colour/pattern (the shared tags string's own 'blue and white triangle pattern robe' text was driving a different invented pattern per state, none matching idle's actual plain purple) -- see docs/concepts/chapters/leblanc/sets/leblanc/judge.md. **2026-09-22 pass 2 (this round):** dropped the pattern language from tags above, added 'pale skin', raised refWeight 0.35 -> 0.4 for all four states, and rewrote hurt's expression/poseTags specifically for its separately-tied pose-reads-as-hurt failure. Outcome: outfit pattern is fixed on all four states (was the disqualifier on all four, now consistently 8/10); ko clears the 7 bar; attack/cast/hurt improved 3 -> 6 and are installed as best-available-below-bar, not approved -- see each state's own notes above and judge.md's redo-pass-2 section for the full score table and reject reasoning. Self-judged, not independent; an independent pass on this round is still owed, and CANDIDATE status (production.md) stands. `ormi` and `logos` were not touched this round -- out of scope for this pass (leblanc only, same ownership as its own renderer, per the orchestration brief)."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 43% one colour, near the monochrome-reference guard's threshold, but is on-model against the picked concept (docs/concepts/chapters/leblanc/renders/leblanc-b.png) and was left unchanged this round. 2026-09-21 consistency pilot (docs/concepts/chapters/leblanc/pilot/pilot.md, judge.md) found attack/cast/hurt had been rendered WITHOUT --ref (the guard fired) and drifted hair, robe colour and pattern state to state; it picked method A (--forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in, body-only Danbooru pose tags) as the fix. 2026-09-22 pass 1 re-rendered attack/cast/hurt/ko with that recipe; an independent judge pass then failed all four 3/10, tied on outfit colour/pattern (the shared tags string's own 'blue and white triangle pattern robe' text was driving a different invented pattern per state, none matching idle's actual plain purple) -- see docs/concepts/chapters/leblanc/sets/leblanc/judge.md. **2026-09-22 pass 2 (this round):** dropped the pattern language from tags above, added 'pale skin', raised refWeight 0.35 -> 0.4 for all four states, and rewrote hurt's expression/poseTags specifically for its separately-tied pose-reads-as-hurt failure. Outcome: outfit pattern is fixed on all four states (was the disqualifier on all four, now consistently 8/10); ko clears the 7 bar; attack/cast/hurt improved 3 -> 6 and are installed as best-available-below-bar, not approved -- see each state's own notes above and judge.md's redo-pass-2 section for the full score table and reject reasoning. Self-judged, not independent; an independent pass on this round is still owed, and CANDIDATE status (production.md) stands. `ormi` and `logos` were not touched this round -- out of scope for this pass (leblanc only, same ownership as its own renderer, per the orchestration brief). 2026-09-22 round 3: attack/hurt/cast re-rendered with pilot 2 method F and Danbooru identity tags matched to the installed idle (docs/concepts/chapters/leblanc/sets/leblanc/round3/identity-b.txt), NOT the prose `tags` above (which still describe the research canon: stockings, red-and-silver fan; hard rule 6 question for Bailey in pilot2/judge.md). All three are CANDIDATES at 5/10; see round3/judge.md."
     },
     {
       "id": "ormi",
