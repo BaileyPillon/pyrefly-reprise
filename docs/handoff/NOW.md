@@ -39,7 +39,7 @@
    preflight doc), PR-0076/PR-0080 + the sourced Config ATB speed lever (`src/battle/ffx2/**`, `BattlePresenterActive.ts`,
    pause OPTIONS row, preflight `docs/plans/ffx2-active-menu-review.md`), then `critic/bench/ffx2-active/**` measurement,
    an adversarial verifier and one repair pass. No deploy inside.
-2. `wf_84d8b42e-3be` "pyrefly-music-modern-sound" (the approved plan): OWNS `tools/audio/**`, `src/audio/**` (additive),
+2. `wf_84d8b42e-3be` "pyrefly-music-modern-sound" DONE 15:15 EDT (b789047 sketch A: sfizz + VSCO/VCSL renderer, performance model, convolution hall; 6e8a144 sketch B: ACE-Step restyle at denoise 0.40; 667904b sketch C + the 'Modern sound, round 1' section at the top of `docs/audio/audition.html`: today / A / B / C per cue, level-matched, with a scoring row that copies a summary line). AWAITING BAILEY'S EAR. Open questions for him: may model-generated audio ship (all of B, C's layers); a real concert-hall IR download (plan A2). It OWNED `tools/audio/**`, `src/audio/**` (additive),
    `public/audio/candidates/**`, `docs/audio/**`, `docs/handoff/music-modern-sound.md`. Ends in an A/B/C audition on
    `docs/audio/audition.html` for Bailey's ear; no shipped cue changes.
 3. `wf_76c1ca8d-eb7` "pyrefly-chapter-art-round": method check `docs/plans/leblanc-art-method-check.md` (rule 15), pilot2,
