@@ -81,6 +81,10 @@ interface Tally {
   declined: number;
   invalidated: number;
   refused: number;
+  /** Commands a chain-locked girl confirmed, held until her lock lifted (PR-0076). */
+  held: number;
+  /** Links of the chain won before the run ended. */
+  linksCleared: number;
   megaFlares: number;
   lastLink: string;
 }
@@ -97,6 +101,8 @@ function emptyTally(): Tally {
     declined: 0,
     invalidated: 0,
     refused: 0,
+    held: 0,
+    linksCleared: 0,
     megaFlares: 0,
     lastLink: '',
   };
@@ -147,7 +153,14 @@ function runLink(engine: FFX2Engine, decisionMs: number, tally: Tally): string |
     if (!picked) tally.declined += 1;
     const events = engine.submit(picked ?? fallback(d));
     if (events.length === 0) {
-      tally.refused += 1;
+      // A chain-locked girl's command is held, not refused: it fires as her
+      // when the lock lifts (docs/plans/ffx2-active-menu-review.md §3).
+      if (engine.heldCommand()) {
+        tally.held += 1;
+        tally.playerTurns += 1;
+      } else {
+        tally.refused += 1;
+      }
       continue;
     }
     tally.playerTurns += 1;
@@ -174,6 +187,7 @@ function runChapter4(seed: number, decisionMs: number): Tally {
     canEscape: false,
   });
   tally.outcome = runLink(engine, decisionMs, tally);
+  if (tally.outcome === 'victory') tally.linksCleared = 1;
   tally.lastLink = 'ffx2-bahamut';
   const state = engine.state();
   tally.aliveAtEnd = state.activeIds.filter((id) => state.combatants[id]?.alive).length;
@@ -204,6 +218,7 @@ function runChapter5(seed: number, decisionMs: number, party: FFX2PartyBuild = f
     const outcome = runLink(engine, decisionMs, tally);
     links += 1;
     tally.outcome = outcome;
+    if (outcome === 'victory') tally.linksCleared += 1;
     tally.lastLink = group.id;
     if (outcome !== 'victory') break;
     const nextId = group.nextGroupId;
@@ -246,11 +261,13 @@ function report(label: string, run: (seed: number, d: number) => Tally): void {
         median(runs.map((r) => r.megaFlares)).toFixed(0),
         runs.reduce((a, r) => a + r.invalidated, 0),
         runs.reduce((a, r) => a + r.refused, 0),
+        runs.reduce((a, r) => a + r.held, 0),
+        [0, 1, 2, 3, 4, 5].map((n) => runs.filter((r) => r.linksCleared === n).length).join('/'),
       ].join(' | '),
     );
   }
   console.log(
-    '\nchapter | D | wins | median s | worst s | player turns | enemy actions | KOs | chained | mega flares | menus invalidated | commands refused',
+    '\nchapter | D | wins | median s | worst s | player turns | enemy actions | KOs | chained | mega flares | menus invalidated | commands refused | commands held | runs by links cleared 0/1/2/3/4/5',
   );
   for (const row of rows) console.log(row);
 }

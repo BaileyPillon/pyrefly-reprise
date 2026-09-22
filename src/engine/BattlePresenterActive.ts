@@ -15,8 +15,9 @@
  * branch is byte-for-byte what it was — `tests/unit/ffx-no-active-clock.test.ts`
  * is the absence test.
  *
- * Five properties the shape below buys, each of which would otherwise be a
- * defect (`docs/plans/ffx2-active-atb-review.md` §4.5):
+ * Six properties the shape below buys, each of which would otherwise be a
+ * defect (`docs/plans/ffx2-active-atb-review.md` §4.5; the sixth is
+ * `docs/plans/ffx2-active-menu-review.md` §4):
  *
  * 1. **Pause freezes the ATB.** The wait is the presenter's `baseSleep`, which
  *    is `BattleScreen.pauseGate` — it parks while the overlay is up. No new
@@ -38,6 +39,11 @@
  *    is awaited inside the loop and `last` is **reset after it returns**, so
  *    the animation's own duration is never handed to the engine. Getting that
  *    one line wrong silently doubles the difficulty of both chapters.
+ * 6. **An open menu keeps its owner.** The pump never hands the menu to a
+ *    different girl: it stops only when the menu settles or its owner can no
+ *    longer answer at all, and a chain lock is not that (see {@link PumpStop}).
+ *    FFX-2 only; `tests/unit/ffx2-active-menu.test.ts` pins it through the
+ *    real presenter.
  */
 
 import type { AtbSnapshot, BattleEvent, CombatantId } from '../battle/common/types.ts';
@@ -81,7 +87,15 @@ export function activeClockEngine(engine: unknown): ActiveClockEngine | null {
 export type PumpStop =
   /** The menu settled (a command was picked, or the loop was abandoned). */
   | 'settled'
-  /** The owner can no longer answer: KO, Stop, Sleep, Petrify, chain lock, Berserk, battle over. */
+  /**
+   * The owner can no longer answer: KO, Stop, Sleep, Petrify, Berserk, battle
+   * over. **Not** a §1.7 chain lock (critic round 08 PR-0080): a chained girl
+   * keeps her menu, the next ready girl waits behind her in the ATB rows, and a
+   * command she confirms while chained is held by the engine and fires as her
+   * when the window closes (`src/battle/ffx2/active.ts` `ownsInput`,
+   * `HeldCommand`). Tearing the menu down there replaced her list in place with
+   * somebody else's in 262 ms, cursor on row 0, no keypress.
+   */
   | 'invalidated';
 
 export interface ActivePumpDeps {

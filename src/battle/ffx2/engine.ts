@@ -53,7 +53,7 @@ import type {
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
-import { advanceChainWindows, ticksUntilChainBreak } from './chain.ts';
+import { advanceChainWindows, isActionLocked, ticksUntilChainBreak } from './chain.ts';
 import {
   advanceGauge,
   beginRecovery,
@@ -76,8 +76,12 @@ import {
   allTargetsGone,
   awaitsPlayerInput,
   canTakeTurn,
+  heldStillPending,
   inputStillValid,
+  ownsInput,
   substepTicks,
+  withDefaultTimedInput,
+  type HeldCommand,
   type TickOptions,
 } from './active.ts';
 
@@ -108,6 +112,12 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    * idempotent so `nextDecision()` still never mutates for `'player-input'`.
    */
   private inputOwner: CombatantId | null = null;
+  /**
+   * A command its owner confirmed while §1.7 chain-locked, waiting for the lock
+   * to lift (`active.ts` {@link HeldCommand}; critic round 08 PR-0076). Never
+   * set by a zero-decision-time run, so every replay is untouched.
+   */
+  private held: HeldCommand | null = null;
   /**
    * Ticks a `throughInput` step was handed but could not spend, because a ready
    * enemy ended the sub-step loop so its events could be played.
@@ -142,6 +152,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     this.elapsedMs = this.options.carriedParty?.elapsedMs ?? 0;
     this.awaitingMinigame = null;
     this.inputOwner = null;
+    this.held = null;
     this.carriedTicks = 0;
     this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
     this.flush();
@@ -206,6 +217,11 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
         this.runBerserkTurn(actor);
         return { kind: 'resolved', events: this.flush() };
       }
+      // Her chain lock lifted with a command already chosen: it fires, as her.
+      if (this.held?.actorId === actor.id) {
+        this.fireHeld(actor);
+        return { kind: 'resolved', events: this.flush() };
+      }
       // Idempotent: the same girl, decision after decision, until she submits.
       this.inputOwner = actor.id;
       return {
@@ -255,6 +271,14 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       return this.flush();
     }
     this.inputOwner = null;
+    // Critic round 08 PR-0076: she answered while an enemy's hit had her
+    // chained. §1.7 stops her *starting* the action, not choosing it, so the
+    // command is held and fires as her the moment the window closes, instead
+    // of the menu being torn away. Unreachable at zero decision time.
+    if (actor.controller === 'player' && !this.awaitingMinigame && isActionLocked(actor)) {
+      this.held = { actorId: actor.id, command };
+      return this.flush();
+    }
     const before = this.drafts.length;
     if (actor.controller === 'player' && !this.awaitingMinigame) this.beginTurn(actor);
     performCommand(this.env(), actor, command, false, before);
@@ -267,6 +291,11 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    * The presenter polls this once per pump step while a menu is up; see
    * `active.ts` {@link inputStillValid} for what can invalidate one.
    */
+  /** The command a chain-locked girl confirmed and is waiting to fire, if any. */
+  heldCommand(): HeldCommand | null {
+    return this.held ? { ...this.held } : null;
+  }
+
   inputValid(actorId: CombatantId): boolean {
     return inputStillValid(this.units, actorId, Boolean(this.battleState.result), this.awaitingMinigame !== null);
   }
@@ -323,11 +352,14 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
       const actor = this.nextActor(throughInput);
       if (actor && actor.controller === 'player') {
-        // Under `throughInput` the only player unit `nextActor` can hand back
-        // is a Berserked one — the menu's owner and anyone else awaiting a
-        // command are skipped — and Berserk has already taken her turn away
-        // from the player (§2.8), so it resolves here rather than stalling.
-        if (throughInput) this.runBerserkTurn(actor);
+        // A held command whose lock just lifted fires here, under whatever
+        // menu is open (PR-0076). Otherwise, under `throughInput` the only
+        // player unit `nextActor` can hand back is a Berserked one — the
+        // menu's owner and anyone else awaiting a command are skipped — and
+        // Berserk has already taken her turn away from the player (§2.8), so it
+        // resolves here rather than stalling.
+        if (this.held?.actorId === actor.id) this.fireHeld(actor);
+        else if (throughInput) this.runBerserkTurn(actor);
         break;
       }
       if (actor) {
@@ -380,19 +412,51 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    * `actorOrder` happens to put first by the time she presses Confirm.
    */
   private nextActor(skipReadyPlayers = false): Ffx2Unit | undefined {
+    const held = this.heldUnit();
     if (!skipReadyPlayers && this.inputOwner) {
+      // `ownsInput`, not `canTakeTurn`: a chained owner keeps her menu
+      // (PR-0080) — the next ready girl waits behind her in the ATB rows.
       const owner = this.units.find((u) => u.id === this.inputOwner);
-      if (owner && canTakeTurn(owner)) return owner;
+      if (owner && ownsInput(owner)) return owner;
     }
     for (const unit of actorOrder(this.units)) {
       if (!canTakeTurn(unit)) continue;
-      if (skipReadyPlayers) {
+      // A held girl is not awaiting input — she has a command — so she is
+      // never skipped: that is how it fires under somebody else's menu.
+      if (skipReadyPlayers && unit !== held) {
         if (unit.id === this.inputOwner) continue;
         if (awaitsPlayerInput(unit, this.awaitingMinigame !== null)) continue;
       }
       return unit;
     }
     return undefined;
+  }
+
+  /** The held command's owner, dropping the command if she can no longer take it. */
+  private heldUnit(): Ffx2Unit | undefined {
+    const held = this.held;
+    if (!held) return undefined;
+    const unit = this.units.find((u) => u.id === held.actorId);
+    if (heldStillPending(unit)) return unit;
+    this.held = null;
+    return undefined;
+  }
+
+  /**
+   * Fire a held command as its owner: the ordinary submit path, or nothing at
+   * all when every target died while she waited — then she simply gets a fresh
+   * menu and the turn is not spent (§4.4 (a) of the Active preflight).
+   */
+  private fireHeld(actor: Ffx2Unit): void {
+    const held = this.held;
+    this.held = null;
+    if (!held) return;
+    const ability = abilityFor(this.env(), held.command);
+    if (allTargetsGone(this.units, held.command, ability)) return;
+    const command = withDefaultTimedInput(held.command, ability, this.rng, this.options.minigames !== false);
+    const before = this.drafts.length;
+    this.beginTurn(actor);
+    performCommand(this.env(), actor, command, false, before);
   }
 
   /**

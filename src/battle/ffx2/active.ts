@@ -19,10 +19,11 @@
  * and §3.3 for the two sourced rules it deliberately leaves out.
  */
 
-import type { AbilityDef, CombatantId, Command } from '../common/types.ts';
+import type { AbilityDef, CombatantId, Command, Rng } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
+import { rollDefault } from './minigames.ts';
 import { canAct } from './statuses.ts';
 
 /** Options on {@link FFX2Engine.tick}. `throughInput` is Active mode's whole ask. */
@@ -51,15 +52,75 @@ export function awaitsPlayerInput(unit: Ffx2Unit, minigamePending: boolean): boo
 }
 
 /**
- * The three predicates that decide whose turn it is, in one place so
- * `nextActor` and {@link inputStillValid} can never drift apart.
+ * Whether this unit could hold an open command menu: ready, able to act, and
+ * not an enemy still thinking — {@link canTakeTurn} **without** the chain lock.
+ *
+ * The difference is the whole of critic round 08 PR-0076 / PR-0080. §1.7 says a
+ * chained target *"cannot start executing its own action"*; it does not say she
+ * stops being the one choosing. Treating the lock as "she can no longer answer"
+ * tore her menu down the instant an enemy hit chained her and put the next
+ * ready girl's list in its place — four in five of the menus chapter 5 lost at
+ * human decision speed. So the lock gates *starting* the action (see
+ * {@link HeldCommand}), never *owning* the menu.
  */
-export function canTakeTurn(unit: Ffx2Unit): boolean {
+export function ownsInput(unit: Ffx2Unit): boolean {
   if (!isReady(unit) || !canAct(unit)) return false;
-  // A chained target cannot start its own action. §1.7
-  if (isActionLocked(unit)) return false;
   if (unit.side === 'enemy' && (unit.thinkingTicks ?? 0) > 0) return false;
   return true;
+}
+
+/**
+ * The predicates that decide whose turn it is, in one place so `nextActor` and
+ * {@link inputStillValid} can never drift apart.
+ */
+export function canTakeTurn(unit: Ffx2Unit): boolean {
+  if (!ownsInput(unit)) return false;
+  // A chained target cannot start its own action. §1.7
+  return !isActionLocked(unit);
+}
+
+/**
+ * A command confirmed by a girl who was chain-locked at the time. **FFX-2 only.**
+ *
+ * §1.7's lock stops her *starting* an action, so the command waits and fires as
+ * her — and as nobody else — in the first sub-step after the window closes.
+ * Engine-internal like `inputOwner`: no `BattleState` field, no event shape, no
+ * save shape. `docs/plans/ffx2-active-menu-review.md` §3.
+ */
+export interface HeldCommand {
+  actorId: CombatantId;
+  command: Command;
+}
+
+/**
+ * Whether a held command can still fire for `unit` one day: she is alive, can
+ * act and is not Berserked (§2.8 takes control away). A KO, Stop, Sleep or
+ * Petrify drops it — nothing is spent, and she chooses again when she is back.
+ */
+export function heldStillPending(unit: Ffx2Unit | undefined): boolean {
+  if (!unit || unit.removed || !unit.alive) return false;
+  if (unit.statuses.berserk) return false;
+  return canAct(unit);
+}
+
+/**
+ * The command a held girl actually fires.
+ *
+ * A timed-input command (Trigger Happy, Lady Luck's reels) cannot suspend on an
+ * overlay here — it fires from inside a running clock, under whatever menu is
+ * open by then — so its outcome is the engine's own seeded default, exactly the
+ * roll an automated run gets (`docs/CONTRACTS.md`, "Minigame protocol"). An
+ * outcome already attached is kept. Open question for Bailey, in the handoff.
+ */
+export function withDefaultTimedInput(
+  command: Command,
+  ability: AbilityDef | undefined,
+  rng: Rng,
+  minigamesOn: boolean,
+): Command {
+  if (!minigamesOn || !ability?.minigame || command.kind !== 'overdrive' || command.extra) return command;
+  const extra = rollDefault(ability.minigame, rng);
+  return extra ? { ...command, extra } : command;
 }
 
 /**
@@ -67,9 +128,10 @@ export function canTakeTurn(unit: Ffx2Unit): boolean {
  *
  * New with Active, and not a canon rule but a mechanical necessity: under Wait
  * nothing could happen to the owner while her menu was up. Now she can be KO'd,
- * Stopped, Slept, Petrified, chained into an action lock or Berserked, or the
- * battle can end under her — and in every one of those cases the menu has to go
- * (preflight §4.3). Deliberately *not* implemented: the single-sourced
+ * Stopped, Slept, Petrified or Berserked, or the battle can end under her — and
+ * in every one of those cases the menu has to go (preflight §4.3). A §1.7 chain
+ * lock is **not** one of them (critic round 08 PR-0080): she keeps the menu, and
+ * a command she confirms while chained is held ({@link HeldCommand}). Deliberately *not* implemented: the single-sourced
  * "an enemy hit closes the menu and delays her" rule (§3.3), which is an open
  * question for Bailey.
  */
@@ -82,7 +144,8 @@ export function inputStillValid(
   if (battleOver) return false;
   const unit = units.find((u) => u.id === actorId);
   if (!unit) return false;
-  if (!canTakeTurn(unit)) return false;
+  // Chained is still hers: see {@link ownsInput}.
+  if (!ownsInput(unit)) return false;
   return awaitsPlayerInput(unit, minigamePending);
 }
 
