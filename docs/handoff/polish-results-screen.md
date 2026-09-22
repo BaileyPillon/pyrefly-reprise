@@ -177,3 +177,10 @@ inside the wedge on both.
 - **`FFX_MS_PER_TICK = 400` is a guess.** It only matters for runs with no
   real clock, but if the CTB tick ever gets a wall-clock definition, that
   constant should follow it.
+
+## PR-0078, second pass (release-09 repair, 2026-09-22)
+
+The first fix kept the head but framed it in a 220-unit box ending at x 584 of 640: a hard vertical edge
+through the hair and a black band down the right, against the approved tile's full-bleed painting. The
+frame is now the wedge's bounding box (307.2 to 640, 420 tall) and the wedge's clip cuts the diagonal;
+the face sits at the tile's eye position. Details, tests and captures: `docs/handoff/release-09-repair.md`.

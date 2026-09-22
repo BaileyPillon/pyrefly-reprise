@@ -7,7 +7,6 @@ import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
-import { portraitImgHtml } from '../../ui/common/portrait.ts';
 import { partyFaceHtml } from '../../ui/common/partyFace.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import {
@@ -20,7 +19,7 @@ import {
   isSilentResultsChapter,
   leaderId,
   pickVictoryQuip,
-  resultsHeroBox,
+  victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
 
@@ -268,30 +267,11 @@ export class ResultsScreen extends Screen {
    * (PR-0003): the row list can legitimately be empty or reordered by AP
    * eligibility, and the fallen pose must render regardless.
    */
-  /**
-   * The victory portrait, face-cropped into {@link RESULTS_HERO_FRAME} from
-   * the measured `face-crops.json` geometry (PR-0078: the previous markup let
-   * the browser's intrinsic-ratio sizing land the image wherever it fell and
-   * the wedge's `overflow: hidden` clipped whatever missed, which is how a win
-   * was celebrated with one eye). `manualCrop: true` is load-bearing — without
-   * it {@link refineFaceCrop}'s DOM sweep adopts this `<img>` on its own next
-   * frame and overwrites the box below with its square-tile percentage math.
-   */
-  private victoryHeroHtml(leader: string): string {
-    const box = resultsHeroBox(leader);
-    const style =
-      `position:absolute;left:${box.left.toFixed(2)}px;top:${box.top.toFixed(2)}px;` +
-      `width:${box.width.toFixed(2)}px;height:${box.height.toFixed(2)}px;max-width:none;object-fit:fill`;
-    const img = portraitImgHtml(leader, '', { style, manualCrop: true }).replace('<img ', '<img class="rres__hero" ');
-    if (!img) return '';
-    return `<div class="rres__hero-frame">${img}</div>`;
-  }
-
   private heroHtml(): string {
     const leader = leaderId(getChapter(this.opts.chapterId));
     if (!leader) return '';
     if (this.victory) {
-      return this.victoryHeroHtml(leader);
+      return victoryHeroHtml(leader);
     }
     const hurt = artUrl(`art/characters/${leader}/hurt.png`);
     const ko = artUrl(`art/characters/${leader}/ko.png`);

@@ -255,6 +255,52 @@ describe('resultsHeroBox (PR-0078: the victory portrait must keep the whole head
   });
 });
 
+/**
+ * PR-0078, second pass (release-09 verifier): the first fix kept the head but ended
+ * the frame at x 584 of 640, a hard vertical line through the hair and a black band
+ * down the right, where the approved tile (docs/screenshots/mockups/A-results.jpg)
+ * runs the painting full-bleed. The wedge is `.rres__ink`'s polygon
+ * (62% 0, 100% 0, 100% 100%, 48% 100%) on the 640x360 stage.
+ */
+describe('resultsHeroBox is full-bleed inside the wedge (PR-0078, approved tile A-results)', () => {
+  const STAGE_W = 640;
+  const STAGE_H = 360;
+  /** x of the wedge's leading (diagonal) edge at stage height y. */
+  const wedgeLeftAt = (y: number): number => STAGE_W * (0.62 - 0.14 * (y / STAGE_H));
+  const IDS = ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu', 'rikku', 'paine', 'yuna-x2', 'rikku-x2'];
+
+  it('the frame spans from the wedge foot to the right edge and the full height', () => {
+    const f = RESULTS_HERO_FRAME;
+    expect(f.left).toBeLessThanOrEqual(STAGE_W * 0.48 + 0.01);
+    expect(f.left + f.width).toBeGreaterThanOrEqual(STAGE_W - 0.01);
+    expect(f.top).toBeLessThanOrEqual(0);
+    expect(f.top + f.height).toBeGreaterThanOrEqual(STAGE_H);
+    expect(f.top + f.height).toBeLessThanOrEqual(STAGE_H + 60); // bleeds off the bottom, not a second stage
+  });
+
+  it.each(IDS)('%s: the painting covers every visible wedge pixel and the face stays right of the diagonal', (id) => {
+    const f = RESULTS_HERO_FRAME;
+    const box = resultsHeroBox(id);
+    // Covers the frame, so no bare ink shows anywhere in the wedge.
+    expect(box.left).toBeLessThanOrEqual(0.01);
+    expect(box.left + box.width).toBeGreaterThanOrEqual(f.width - 0.01);
+    const crop = portraitCrop(id);
+    const ipd = crop.ipd * box.width;
+    const eyeX = f.left + box.left + crop.fx * box.width;
+    const eyeY = f.top + box.top + crop.fy * box.height;
+    // The critic's acceptance: eyes, mouth and chin all inside the wedge. The far
+    // eye's outer corner (half the eye gap plus half an eye) at the eye line, and the
+    // jaw (0.6 ipd either side) at the chin; hair may run into the stripe, as it
+    // does in the approved tile.
+    expect(eyeX - ipd * 0.75, `${id} far eye clears the diagonal`).toBeGreaterThan(wedgeLeftAt(eyeY));
+    const chinY = eyeY + ipd * 1.6;
+    expect(eyeX - ipd * 0.6, `${id} jaw clears the diagonal`).toBeGreaterThan(wedgeLeftAt(chinY));
+    expect(eyeX + ipd * 1.1).toBeLessThanOrEqual(STAGE_W);
+    expect(eyeY - ipd * 1.3, `${id} crown`).toBeGreaterThanOrEqual(0);
+    expect(chinY, `${id} chin`).toBeLessThanOrEqual(STAGE_H);
+  });
+});
+
 describe('dropsLabel', () => {
   it('prints names, with a count only where there is more than one', () => {
     expect(

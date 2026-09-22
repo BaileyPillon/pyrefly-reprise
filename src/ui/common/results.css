@@ -81,16 +81,17 @@
  * `resultsMath.resultsHeroBox`) from the measured `face-crops.json` geometry,
  * the same table {@link faceImgHtml} places a square tile from — this frame
  * is the non-square exception, so the box math lives in
- * `portrait.coverCropBox` rather than this file. `overflow: hidden` is what
- * keeps the always-covers placement from spilling past the wedge, the same
- * job a `.prep__face` tile's own `overflow: hidden` does.
+ * `coverCrop.coverCropBox` rather than this file. The frame is the wedge's
+ * whole bounding box (full-bleed, as the approved tile draws it: from the
+ * polygon's 48% foot to the right edge), so `.rres__ink`'s own clip cuts the
+ * diagonal and nothing draws a vertical edge through the painting.
  */
 .rres__hero-frame {
   position: absolute;
-  left: 364.44px; /* 820 */
+  left: 307.2px; /* 691.2 = 48% */
   top: -17.78px; /* -40 */
-  width: 220px;
-  height: 400px; /* 900 */
+  width: 332.8px; /* to the right edge */
+  height: 420px; /* 945: bleeds off the bottom, as the tile's shoulder does */
   overflow: hidden;
 }
 

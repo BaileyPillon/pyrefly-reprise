@@ -12,7 +12,8 @@ import {
   ITEMS as FFX2_ITEMS,
   STANDARD_DRESSPHERES,
 } from '../../data/ffx2/index.ts';
-import { coverCropBox, portraitCrop } from './portrait.ts';
+import { portraitCrop, portraitImgHtml } from './portrait.ts';
+import { coverCropBox } from './coverCrop.ts';
 
 /** `mm:ss` clear time, per the results-panel convention in `visual-bible.md` §3.8. */
 export function formatClearTime(ms: number): string {
@@ -301,26 +302,56 @@ export function dropsLabel(drops: BattleResult['drops']): string {
 }
 
 /**
- * The victory wedge's portrait frame \u2014 the box `.rres__hero-frame` is sized
- * to in `results.css` \u2014 in the screen's own 640x360 design units. PR-0078:
- * the old markup gave the `<img>` a fixed height and `width: auto`, which
- * lets the browser's own intrinsic-ratio sizing (not any crop math here) put
- * the image wherever its native aspect happens to land, and the wedge's
- * `overflow: hidden` then clips whatever falls outside it \u2014 so a win was
- * being celebrated with whatever slice of the face happened to survive that.
- * A fixed box plus {@link resultsHeroBox}'s measured crop always keeps the
- * whole head inside it instead.
+ * The victory wedge's portrait frame — the box `.rres__hero-frame` is sized
+ * to in `results.css` — in the screen's own 640x360 design units.
+ *
+ * PR-0078, twice. First the `<img>` had a fixed height and `width: auto`, so
+ * intrinsic-ratio sizing landed it anywhere and a win showed one eye. The first
+ * fix boxed it in a 220-unit frame that ended at x 584, which kept the head but
+ * drew a hard vertical edge through the hair and left a black band down the
+ * right (release-09 verifier). The approved tile
+ * (`docs/screenshots/mockups/A-results.jpg`) runs the painting **full-bleed**:
+ * from the wedge's own leading edge to the stage's right edge, top to bottom.
+ * So the frame is the wedge's bounding box — `.rres__ink`'s polygon starts at
+ * 48% (307.2) at the bottom — and the wedge's clip, not the frame, cuts the
+ * diagonal. It runs 42 units past the stage's bottom edge so a close-cropped
+ * portrait (Rikku X-2, eye gap 0.34 of the image) bleeds off the bottom the way
+ * the tile's shoulder does, instead of being pushed up into the crown.
  */
-export const RESULTS_HERO_FRAME = { left: 364.44, top: -17.78, width: 220, height: 400 } as const;
+export const RESULTS_HERO_FRAME = { left: 307.2, top: -17.78, width: 332.8, height: 420 } as const;
+
+/**
+ * Where the face sits in that frame, read off the approved tile at 1440x810:
+ * the eyes' midpoint at x ~1168 (519 units, so 0.636 of the frame) and an
+ * eye-to-eye distance of ~200px (89 units, 0.27 of the frame). The eye line
+ * sits at 0.40 of the 420-unit frame = stage y 150, where the first fix had it.
+ * The always-covers clamp wins over eyeX: most portraits put the eyes at
+ * 0.33-0.48 of the image, so the face lands at x 456-519, still clear of the
+ * diagonal (the wedge's edge is at x 359 on the eye line).
+ */
+export const RESULTS_HERO_FACE = { ipd: 0.27, eyeX: 0.636, eyeY: 0.4 } as const;
 
 /**
  * Where a leader's face-crop portrait (`art/portraits/<id>.png`,
  * `src/ui/common/face-crops.json`) is placed inside {@link RESULTS_HERO_FRAME}
- * \u2014 the same measured-eye-line geometry {@link faceImgHtml} uses for a square
- * tile ({@link coverCropBox} is its non-square generalisation), so the
- * results wedge reproduces the house face crop rather than inventing a new
- * composition.
+ * — the same measured-eye-line geometry {@link faceImgHtml} uses for a square
+ * tile ({@link coverCropBox} is its non-square generalisation).
  */
 export function resultsHeroBox(id: string): { left: number; top: number; width: number; height: number } {
-  return coverCropBox(portraitCrop(id), RESULTS_HERO_FRAME.width, RESULTS_HERO_FRAME.height);
+  return coverCropBox(portraitCrop(id), RESULTS_HERO_FRAME.width, RESULTS_HERO_FRAME.height, RESULTS_HERO_FACE);
+}
+
+/**
+ * The victory portrait's markup: the face-cropped `<img>` inside `.rres__hero-frame`
+ * (PR-0078). Moved here from `ResultsScreen.ts` (house rule 7). `manualCrop: true` is
+ * load-bearing: without it `refineFaceCrop`'s DOM sweep adopts this `<img>` on its next
+ * frame and overwrites the box with its square-tile percentage math.
+ */
+export function victoryHeroHtml(leader: string): string {
+  const box = resultsHeroBox(leader);
+  const style =
+    `position:absolute;left:${box.left.toFixed(2)}px;top:${box.top.toFixed(2)}px;` +
+    `width:${box.width.toFixed(2)}px;height:${box.height.toFixed(2)}px;max-width:none;object-fit:fill`;
+  const img = portraitImgHtml(leader, '', { style, manualCrop: true }).replace('<img ', '<img class="rres__hero" ');
+  return img ? `<div class="rres__hero-frame">${img}</div>` : '';
 }
