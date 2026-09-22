@@ -38,28 +38,27 @@ import { ALL_COACH_IDS, type CoachMarkId } from './coachCopy.ts';
 const sessionSeen = new Set<string>();
 
 /**
- * **Dark launch switch for the whole onboarding feature.**
+ * **The onboarding feature switch.**
  *
  * The approved briefing's fourth line says of FFX-2 *"the clock does not
- * wait"*, and that only becomes true when Active ATB lands in the next
- * candidate (PR-0046; the owner chose Active on 2026-09-21). Approved copy may
- * not be edited to match a build, and a combat-core change does not belong in a
- * repair cycle, so the honest answer for **this** candidate is to ship the
- * feature switched off rather than ship a line that is not yet true
- * (AGENTS.md hard rule 15: what cannot pass is taken out and ships later).
+ * wait"*, which was not true of this build until Active ATB landed (PR-0046;
+ * the owner chose Active on 2026-09-21, `docs/target/decisions.json` D-009).
+ * That measured-true engine change is why the dark launch of round 05
+ * (`ONBOARDING_LIVE = false`) can now be lifted: the copy is no longer ahead
+ * of the build (AGENTS.md hard rule 15). Bailey approved switching Auron's
+ * briefing on for this release (2026-09-21, "Yes to all recommendations").
  *
- * While this is `false` there is no briefing, no first-use line, no REPLAY
+ * While this was `false` there was no briefing, no first-use line, no REPLAY
  * BRIEFING or BATTLE HELP row in pause and no BRIEFING chip on the title. The
- * save-data migration is left alone: marking an existing save's owner a veteran
- * is harmless while nothing is shown.
+ * save-data migration was left alone throughout: marking an existing save's
+ * owner a veteran is harmless whether or not anything is shown.
  *
- * The debug API still forces it on — `__pyrefly.setCoaching(true)` sets
- * {@link override}, which wins — so the next review can exercise the whole
- * feature on the shipped build.
+ * The debug API can still force the feature off for a capture that must not
+ * show it — `__pyrefly.setCoaching(false)` sets {@link override}, which wins.
  *
  * Game case: **both**. One switch over one shared subsystem (CHK-020).
  */
-export const ONBOARDING_LIVE = false;
+export const ONBOARDING_LIVE = true;
 
 /** The live switch itself. Only {@link setOnboardingLive} moves it. */
 let live: boolean = ONBOARDING_LIVE;

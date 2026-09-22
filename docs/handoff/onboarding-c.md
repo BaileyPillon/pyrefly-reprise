@@ -401,3 +401,53 @@ suites green, one full `npx vitest run`. Browser work was `PYREFLY_BROWSER=gpu`
 its approved size and the italic setting of `.coach-brief__line` want one look against
 `c1-briefing.png` — this round's reviewer read the desktop frame as matching, so no
 typography was changed on a guess.
+
+## Switched on (2026-09-21)
+
+Bailey approved switching the whole feature on for this release ("Yes to all
+recommendations", offered alongside the release order 2026-09-21). Active ATB
+(PR-0046, D-009) had already made the approved fourth line true — the C3 badge
+was restored to the mockup's words in `bf19c37` — so the dark launch this
+candidate shipped with is lifted:
+
+- `ONBOARDING_LIVE = true` in `src/ui/coach/coachState.ts`. The debug API can
+  still force it off for a capture that must not show it
+  (`__pyrefly.setCoaching(false)`).
+- `tests/unit/ui-coach-dark-launch.test.ts` rewritten to assert the **live**
+  behaviour first (briefing and coach marks on a fresh profile, both pause
+  rows present), with the override tests re-pointed at *taking the feature
+  back out* rather than putting it in. Still five/six tests, still real
+  `PauseScreen`, `Input` and `SaveStore`, no hard-coded row hiding.
+- `tests/unit/pause-remake.test.ts` (not owned by this track) has one test —
+  "5 and 6. REPLAY BRIEFING and BATTLE HELP" — that mounts a pause screen with
+  no explicit `setOnboardingLive` call and expects the rows *absent*, relying
+  on the ambient default being off. It reads `setOnboardingLive`/`resetCoach`
+  from `coachState.ts` (not a hard-coded `'hidden'` string), so per this
+  track's brief it was left alone and reported to the orchestrator rather than
+  edited; it now fails and needs an explicit `setOnboardingLive(false)` added
+  to its "off" case by whoever owns that file.
+- One browser pass, own Vite server (`--strictPort`, random port in
+  5400-5990, stopped by PID afterwards), `PYREFLY_BROWSER=gpu`, real keys
+  throughout (`.onboarding-live-verify-tmp.mjs`, scratch, not product code): a
+  fresh save → Enter on the title → the briefing appears
+  (`docs/screenshots/onboarding/live-briefing.png`) → Enter dismisses it →
+  `chapter-select` → Chapter 1 (`seymour-flux`, an FFX chapter) → party prep →
+  cutscene skipped → battle → the first coach mark shows
+  (`Auron "He moves after you. Not before. Use it."`) → Enter dismisses it →
+  Esc opens pause → OPTIONS lists `REPLAY BRIEFING` and `BATTLE HELP ON`
+  (`docs/screenshots/onboarding/live-pause-options.png`). No console or page
+  errors.
+- `npx tsc --noEmit` clean. Full coach suites green
+  (`ui-coach-copy`, `ui-coach-input-leak`, `ui-coach-briefing`,
+  `ui-coach-dark-launch`, `ui-coach-layer`). Full `npm test`: 215/216 files
+  green, the one failure is the `pause-remake.test.ts` case above.
+  `node tools/orphans.mjs` unchanged.
+- Game case (hard rule 14): **both**, unchanged from the rest of this track —
+  the switch is shared plumbing (CHK-020). Chapter 1 (`seymour-flux`, FFX)
+  gets Auron's briefing voice and holding marks, verified above. FFX-2
+  chapters (`ffx2-bahamut`, `ffx2-vegnagun-shuyin`) get Rikku's voice and
+  marks that never hold (`FFX2_MARKS` in `coachCopy.ts`) — not re-verified
+  live in this pass (out of budget), but nothing in `coachCopy.ts` or
+  `CoachLayer.ts` changed, so the FFX-2 behaviour measured earlier in this
+  handoff (round 05, the Active-ATB badge fix) still holds.
+- Not touched: `src/app/Input.ts`'s exclusive keyboard claim.
