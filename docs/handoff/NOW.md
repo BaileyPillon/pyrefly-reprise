@@ -117,7 +117,15 @@
      expensive option Bailey chose ("I'm ok with an expensive option ... Show me a preview of what you can do"): a Wan 2.2
      image-to-video clip set of Yuna from her approved plate, judged, a clip-graph demo page and a stitched preview, plus a
      THA4 trial. OWNS `docs/concepts/pause-until-dawn/video-preview/**`, `tools/gen/video.mjs`, `D:/Tools/pyrefly-video/**`,
-     `D:/Tools/tha4/**`. Shares the ComfyUI queue with 1 and 2.
+     `D:/Tools/tha4/**`. Shares the ComfyUI queue with 1 and 2. RESULT: the 5B model kept Yuna's identity on subtle
+     motion (smile, breathing) and lost it on the head turn; the stitched preview was REJECTED by Bailey for its joins
+     ("absolutely no continuity"). THA4 is a dead end (CC-BY-NC weights; pinned torch cannot run on the RTX 5070 Ti).
+  5. `wf_a9432026-fba` "pyrefly-yuna-video-flf" (video route v2 on the first-and-last-frame model Bailey approved with
+     "yes": Wan 2.1 FLF2V 14B fp8 + clip_vision_h + wan_2.1_vae on disk, checksums in
+     `D:/Tools/video-models/_dl/fetch-flf2v-2026-09-21.DONE.txt`). Every clip starts and ends on the plate frame; an Opus
+     judge scores the joins at 1:1 with a hard-cut test; a demo is built only if the joins pass. OWNS
+     `docs/concepts/pause-until-dawn/video-flf/**`, `tools/gen/video*.mjs`, `D:/Tools/pyrefly-video/flf/**`.
+     **Rule (Bailey, 2026-09-21): nothing with a visible join is shown to him.**
 - Next, in order: (1) pause remake verified, then the living portrait ported for the main party; (2) one tidy pass:
   advisor v2 bench harness fallback and three test defects (`docs/handoff/advisor-v2.md`), Leblanc provenance labels,
   front-end phone type floor FE-001; (3) first incremental release, round 08, launched **top-level** with
