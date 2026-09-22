@@ -2466,6 +2466,64 @@
       "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). Her idle.png measures 43% one colour, so every other state rendered WITHOUT --ref (the monochrome-reference guard fired) — costume was judged independently per state rather than identity-pinned, and colour balance drifts state to state (idle/attack lean pink-purple, cast/hurt lean blue-purple). The canon blue-and-white triangle/swirl robe pattern and the white crisscross cuff material render inconsistently across states despite (1.3) emphasis — the checkpoint resists this specific pattern on a purple base; flagged for a follow-up pass, not re-rolled further today (pace rule, AGENTS.md hard rule 15). idle pose shows the fan closed near her chin rather than the canon \"half-open screen\" — best of 3 candidates on quality/costume, pose is an approximation. 2026-09-21 consistency pilot (docs/concepts/chapters/leblanc/pilot/pilot.md) tested three fixes for the drift on attack/cast/hurt and picked method A (--forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in — body-only Danbooru pose tags, not this file's longer poseTags prose) as the recipe worth re-rendering the installed sprites with; recorded on the three states above. img2img (method B) was rejected: it reproduces idle's own pose almost unchanged instead of a distinct attack/cast/hurt silhouette. A one-shot 'reference sheet' render (method C, multiple poses in one image) was rejected: costume colour/pattern was not stable seed to seed. This pilot answers the method question only; the installed attack/cast/hurt PNGs have not been re-rendered with it yet."
     },
     {
+      "id": "ormi",
+      "kind": "boss",
+      "game": "ffx-2",
+      "cmd": "character",
+      "outDir": "public/art/characters/ormi",
+      "composition": "full",
+      "facing": "left",
+      "sizeHint": "832x1216",
+      "refState": "idle",
+      "tags": "1boy, ormi (ff10-2), final fantasy x-2, safe, solo, extremely short and stout build, a big round belly, thick heavy limbs, wide barrel chest, short neck, bald head with a small red top-knot, a stern scowling face, thick eyebrows, wearing predominantly purple samurai-style armor with gold trim, a fur-trimmed mantle across the shoulders, a wide teal sash at the waist, a massive round shield strapped across his back nearly as tall as he is, the shield rimmed in gold with a red syndicate heart emblem at its center, thick short legs, sandals, (short and extremely stout build:1.3), (purple samurai armor:1.25), (heart emblem on shield:1.25)",
+      "negAdd": "tall, slim, thin, sword, katana, blade",
+      "states": {
+        "idle": {
+          "poseTags": "standing, arms crossed, stern expression, shield visible on back, low wide stance",
+          "notes": "Not re-rendered this pass. Checked against the picked concept (docs/concepts/chapters/leblanc/renders/ormi-a.png, options.json row cast_ormi option A) and research/ffx2-leblanc-syndicate.md line 830 (\"short and stout ... a large shield worn on his back ... predominantly purple samurai-style attire\"): idle is heavier/rounder than the concept sketch, which production.md records as intentional (Bailey's note that canon Ormi is big and round, not athletic), and it matches the research description better than the concept does."
+        },
+        "attack": {
+          "poseTags": "gripping the massive round shield with both hands, swinging it off his back into a heavy shoulder bash, lunging forward, gritted teeth, low wide stance",
+          "ref": "ormi/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "notes": "2026-09-21/22 re-render, seed 810001, kept from a batch of 4 (one seed quarantined by the cut-out guard and re-rolled to keep the batch at 4). Picked for the clearest, most explicit heart-on-shield of the four — the installed pre-pass set's known defect (production.md: \"shield emblem reads as an ornate sunburst rather than an explicit heart\"). One accepted defect: a faint red facial marking near the eye not present in idle, the least severe issue among the four candidates (rejected alternatives: a fully muscular bare torso that loses the stout/big-belly identity criterion and has no heart on its shield at all; a heart-on-shield candidate that also adds an unsourced heart tattoo on the forehead; a clean-faced candidate whose shield again carries no heart). See docs/concepts/chapters/leblanc/sets/ormi/README.md."
+        },
+        "cast": {
+          "poseTags": "gripping the massive round shield with both hands, crouching low, muscles bulging, gathering strength, gritted teeth, about to charge forward",
+          "ref": "ormi/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "notes": "2026-09-21/22 re-render, seed 820001, kept from a full batch of 4. Best colour/costume match to idle of the four (purple armor, gold trim, teal sash, explicit heart on the shield). One accepted defect: the off hand holds a second, smaller heart-emblem disc beside the main shield (an invented extra prop) — logged rather than hidden, and the least severe issue among the four candidates (rejected alternatives: a shield reshaped to an angular diamond and recoloured blue; two candidates with the torso armor repainted red/pink, one of which also adds an unsourced forehead heart tattoo). Ormi has no magic in his kit (research §4: Normal Attack, Shield Bash, Supercollider, Huggles, Concussive Blast only) — this state renders his one non-basic-attack special-ability pose, not literal spellcasting, same convention as the other physical-only cast members of this fight."
+        },
+        "hurt": {
+          "poseTags": "staggering back, off balance, pained grimace, still gripping the shield loosely at his side, low wide stance",
+          "ref": "ormi/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "notes": "2026-09-21/22 re-render, seed 800001, kept from only 2 successful candidates (of 4 attempted — 1 quarantined by the cut-out guard, 1 timed out waiting on a ComfyUI queue shared with two other active render workflows; not re-rolled further, see docs/concepts/chapters/leblanc/sets/ormi/README.md). Picked over the other survivor (seed 800003) for staying more predominantly purple (the runner-up's torso is a fully bare-armed red tank top); both are otherwise clean (explicit heart, no face paint, holding the shield) and either would have been defensible."
+        },
+        "ko": {
+          "poseTags": "lying on his back, defeated, the shield fallen beside him on the ground, eyes closed, head to the left, feet to the right",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "ref": "ormi/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "notes": "2026-09-21/22 re-render, seed 830001, kept from only 2 successful candidates (of 4 attempted — the other 2 client-side waits timed out on the same congested shared queue as hurt). Picked because the shield keeps idle's actual round, gold-rimmed shape and heart centre; the one accepted defect is that his eyes render open/smug rather than closed (the rejected alternative, seed 830002, has eyes closed but its shield renders as a giant heart-shaped panel instead of the canon round shield — a shape change to a named identity object, judged the more severe failure of the two)."
+        }
+      },
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1, line 830). idle.png (seed 1767754585) was rendered in an earlier session and is unchanged by this pass — see its own state note above for the anchor check against the picked concept. attack/cast/hurt/ko re-rendered 2026-09-21/22 with the Leblanc identity-consistency pilot's Method A recipe (docs/concepts/chapters/leblanc/pilot/judge.md: --ref --forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in) in place of the chapter's original default (--refWeight 0.30, no --forceRef), which production.md recorded as producing an ornate-sunburst shield instead of an explicit heart and a state-to-state armour-colour swap (purple/gold to solid red/gold). Full write-up, every candidate produced, and the reject rationale: docs/concepts/chapters/leblanc/sets/ormi/README.md and its sheet.png. hurt and ko each fell short of a full 4-candidate batch because the shared ComfyUI queue was saturated for long stretches by a sibling workflow's Wan2.2 video renders (single video jobs observed running 450-900+ seconds); every candidate that did complete was viewed at native pixel size before judging. CANDIDATE, not approved — no entry added to docs/target/approved-hashes.json (production.md's CANDIDATE status for this chapter's art stands)."
+    },
+    {
       "id": "evrae",
       "kind": "boss",
       "game": "ffx",
