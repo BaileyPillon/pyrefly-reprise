@@ -1,4 +1,4 @@
-# Identity judge — yaw keys, round "final" (2026-09-21, Sonnet, attempt 3)
+# Identity judge — yaw keys, round "final" + "fix1" second look (2026-09-21, Sonnet, attempt 3)
 
 Independent of the painter (`keys.md`, commit `6000edf`). No rendering, no editing —
 this is a 1:1 pixel read of the plate (`public/art/portraits/yuna-x2.png`) against
@@ -138,6 +138,101 @@ per-candidate landmark read).
   next, per `keys.md`'s own "not done, and why."
 - No other key needs a redo at the 7-bar. `q34-right`'s pick-order mismatch (use
   `.4`) is a bookkeeping fix, not a re-render.
+
+## Second look — round "fix1" (2026-09-21, same session, Sonnet, attempt 3)
+
+Independent of `keys.md`'s own "Redo — round 'fix1'" writeup (commit `fe56ac6`,
+the painter's self-report). Same method as above: 1:1 pixel read, no rendering,
+no editing, worst-criterion scoring, pass at 7+. Evidence: `sheets/profile-right-
+fix1.webp` (already committed by the painter — plate + the two judged `fix1`
+candidates + 1:1 eye crops, same format as the other four sheets) plus the raw
+`_cand/pilot-fix1/profile-right.{1,2}.png` at full resolution, viewed directly
+(not through the `.webp` recompression). `judge-sheet.png` in this folder is
+regenerated to append two columns (`profile-right.1.png`, `profile-right.2.png`
+from `pilot-fix1`) after the four existing picks, via
+`tools/gen/yaw-keys-sheet.py sheet` (pure PIL compositing of already-rendered
+pixels — no new generation, no ComfyUI call) — this drops the earlier hand-
+annotated score/verdict captions on the first five columns, which is a cosmetic
+loss; the score table in this file remains the source of truth.
+
+**Redo recipe checked**: `--refWeight 0.45`, `--emphasis "(heterochromia:1.3),
+(blue eye, green eye:1.2)"`, `--viewExtra "one eye visible, blue eye visible"`,
+new seed range, per the orchestrator's exact instructions. I independently
+confirm every claim in `keys.md`'s `fix1` writeup:
+
+1. **Direction bug: identical, not improved.** Both `.1` and `.2` still turn
+   toward frame-left — same silhouette family as `profile-left.1` and as round
+   `final`'s `profile-right.2`. In `.1`, the green (her-right) iris sits large
+   and in-focus in the near/left eye socket, the blue (her-left) iris is small
+   and set back in the far/upper-right socket. In `.2`, same pairing: green
+   near-and-large (left), blue small-and-far (upper right). I read the iris
+   pixels directly on both crops at 1:1 in `sheets/profile-right-fix1.webp`'s
+   bottom row — no ambiguity, no JPEG/WebP-artifact colour bleed at the sampled
+   points. This is the same wrong-handed turn `judge.md`'s round-`final` section
+   scored 1/10 on "eye colours on correct sides"; nothing about the heavier
+   `--refWeight` or the identity-tag `--emphasis` touched the geometry, exactly
+   as predicted (those are appearance tokens, not pose tokens).
+2. **New failure stacked on the old one: both eyes now render, where round
+   `final`'s candidates showed a clean single eye.** `--viewExtra "one eye
+   visible"` did not suppress the far eye in either `.1` or `.2` — both show two
+   irises, so a viewer sees two eyes with the direction still backwards, which
+   reads worse than a same-direction single-eye profile (round `final`'s
+   `profile-right.2`) because there is no clean "this is a true profile, just
+   the wrong-side iris" reading left; it's now unambiguously a three-quarter
+   pose mislabelled as a profile.
+3. **Quality regression confirmed independently.** I opened round `final`'s
+   `_cand/pilot-final/profile-right.2.png` (the current pick1) side by side with
+   both `fix1` candidates at full resolution. `final`'s `.2` has clean cel
+   shading, flat colour fields, a single warm rim-light gradient — the same
+   painterly quality as the approved plate. Both `fix1` candidates instead show
+   a dense, garish crosshatch/moiré texture across the entire hair mass and
+   large parts of the skin, with saturated red/gold/blue fighting for the same
+   pixels (worst in `.1`, where the top-of-hair area is almost unreadable as
+   hair at all) — consistent with `docs/ART-PIPELINE.md` §3's documented
+   "colour bleed above the calibrated 0.35 `--refWeight`" mechanism, and visibly
+   worse than any candidate scored in the round-`final` table above.
+
+**Score: both `fix1` candidates worst-criterion 1** (same "eye colours on
+correct sides" hard fail as round `final`'s `.2`/`.4`, now compounded by the
+two-eyes-visible and crosshatch issues, neither of which helps a re-score even
+if the iris criterion is set aside). **Verdict: FAIL, confirmed** — `fix1`
+produced zero usable candidates, and is a net regression versus round `final`,
+not a step toward passing.
+
+| Key | File used | Eye colours on correct sides | Verdict |
+|---|---|---|---|
+| `profile-right` (fix1.1) | `_cand/pilot-fix1/profile-right.1.png` | **1** (wrong-handed turn, both eyes visible, crosshatch) | **FAIL** |
+| `profile-right` (fix1.2) | `_cand/pilot-fix1/profile-right.2.png` | **1** (same) | **FAIL** |
+
+**Board state, unchanged from round `final` except this confirmation**: `pass`
+(all four keys have a passing candidate) is still **NO**. `q34-left`,
+`q34-right` (use pick2 `.4`, per the bookkeeping note above) and `profile-left`
+remain PASS at 7. `profile-right` has never produced a passing candidate across
+five rounds (`r2`, `r2b`, `r3`, `final`, `fix1`).
+
+**Best failing candidate to carry forward, since this key is not going to pass
+this session**: round `final`'s `profile-right.2.png` (`picked/profile-
+right.pick1.webp`) — it is the least-bad of everything rendered: a real,
+cleanly-painted profile silhouette with correct linework and lighting, wrong
+only on which iris colour sits in the visible eye (and the earring's near-ear
+drift, same family of bug as the other keys). Both `fix1` candidates are
+strictly worse (same wrong silhouette, plus two eyes instead of one, plus the
+crosshatch regression), so they supersede nothing. **Recommendation for the
+rig**: this is the "reduced yaw range" case in the brief — do not build a true
+profile-right key into the driver's yaw range at all this round. Cap the
+rig's right-side yaw at `q34-right` (the last *passing* key on that side, roughly
+a 40 degree three-quarter turn) and stop the morph there, the mirror image of
+how the left side already runs frontal -> `q34-left` -> `profile-left`. Do not
+substitute `profile-right.2.png` as if it were a real 90 degree key — it would
+silently ship the mirrored-silhouette bug into the rig — keep it only as
+on-file reference for whoever attempts the mirror+inpaint route next.
+
+**The two options from the round-`final` section stand, exactly as written
+there**: nothing this pass did touches the phrase-swap option (untried) or the
+`flip.py` + new-inpaint-tool option (half-built, needs a masked iris/earring
+inpaint tool that does not exist under `tools/gen/` yet). This session's redo
+budget for `profile-right` is spent; next steps are a design decision, not
+something to guess at inside a judging pass.
 
 ## What I did not do
 
