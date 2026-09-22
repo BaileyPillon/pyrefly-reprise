@@ -126,3 +126,111 @@ the close-up face fine even at a genuine profile angle.
 - **No mouth/brow/blink patch work, no rig.json, no `PortraitStage`-shaped
   driver.** Those are other owners' pieces of the same brief (the layered rig,
   the inpainted expression patches) — this note covers only the yaw keys.
+
+## Redo — round "fix1" (same session, Sonnet, per the independent judge)
+
+`judge.md` (independent 1:1 pixel read, separate from the painting pass above)
+confirmed the finding two paragraphs up with its own method and scored
+`profile-right` **1/10** ("eye colours on correct sides") — the only key that
+failed its 7-bar. The orchestrator's redo instructions for this round: raise
+`--refWeight` to 0.45 (up from R2's 0.35), add `--emphasis "(heterochromia:1.3),
+(blue eye, green eye:1.2)"`, a new seed range, and for a profile that loses its
+iris colour, append `"one eye visible, blue eye visible"` to the view phrase.
+`tools/gen/yaw-keys.mjs` gained `--viewExtra`/`--emphasis` flags so this could
+run without forking `KEYS`:
+
+```
+node tools/gen/yaw-keys.mjs render --key profile-right --batch 6 --config A \
+  --tag fix1 --refWeight 0.45 \
+  --emphasis "(heterochromia:1.3), (blue eye, green eye:1.2)" \
+  --viewExtra "one eye visible, blue eye visible"
+```
+
+**Result: still fails, and the new recipe is worse than "final," not better.**
+Judged the first 2 of 6 candidates (`.1`, `.2`) at 1:1 with zoomed eye crops
+(`sheets/profile-right-fix1.webp`) before writing this up — a second workflow's
+Wan2.2 video-generation jobs (`docs/handoff/NOW.md`, `wf_cfd6b0fa-19e`) were on
+the same shared ComfyUI queue the whole time, each taking 10+ minutes, so the
+remaining 4 candidates were still queued under `_cand/pilot-fix1/` (gitignored)
+when this note was written — variant `.3` even timed out waiting on the shared
+queue (`comfy.mjs`'s own prompt-wait timeout) and was skipped automatically,
+which is the congestion, not a new failure mode, and does not change anything
+below. Two zoomed, pixel-clear candidates already settle it past reasonable
+doubt, consistent with every prior round:
+
+- **The direction bug is identical, not improved.** Both `.1` and `.2` still
+  turn toward frame-*left*: the green (her-right) eye is the large, near,
+  in-focus one and the blue (her-left) eye is small and set back — the plate's
+  own `profile-left`-style composition, not a right turn. `--viewExtra`'s "one
+  eye visible" did not even suppress the second eye; both renders show *both*
+  eyes, a new failure mode stacked on the old one (round "final" at least kept
+  a single, cleanly-painted, if wrong-coloured, eye).
+- **New quality regression from `--refWeight 0.45`.** Both candidates are
+  visibly worse than the plate and worse than any round-"final" candidate: a
+  garish, oversaturated crosshatch texture covers the hair and skin, colours
+  clip toward saturated red/gold, and the clean cel-shaded linework is gone.
+  `docs/ART-PIPELINE.md` §3 already documents the mechanism: raising
+  `--refWeight` past R2's calibrated 0.35 increases "colour bleed." No
+  monochrome-guard warning fired (the plate is not near-monochrome, so that is
+  not what happened here) — this is the reference weight and/or the added
+  `--emphasis` tokens overloading the composition on their own.
+- **This was foreseeable, and it's in the repo's own docs.** Writing this up
+  turned up `docs/ART-PIPELINE.md` §2a: `body facing left/right` is
+  "decorative, and not to be trusted... SDXL's text encoder has no reliable
+  left/right grounding," and on this checkpoint "direction is fixed in post,
+  not in the prompt" — the documented fix is `tools/gen/flip.py`, a
+  mirror-and-relabel pass done *after* generation, not a heavier prompt.
+  Weighted identity tags (`heterochromia`, `blue eye, green eye`) are
+  appearance tokens, not pose tokens, so this recipe was never actually
+  targeting the geometry bug — only the iris-colour symptom — and it did not
+  fix that either (both eyes rendered, the wrong one prominent).
+
+**The phrase/weight family of fixes is exhausted.** Five prior rounds
+(`r2`, `r2b`, `r3`, `final`) plus this one have now tried stronger facing
+weights, reference weight and identity-tag emphasis, and `profile-right` has
+never once turned the correct way. `docs/ART-PIPELINE.md`'s own facing contract
+says this should be expected: prompt weight does not reliably steer left/right
+on this checkpoint. **This was the orchestrator's specified second and last
+attempt at this key**, so no further redo of this family is planned by this
+pass.
+
+**What's actually left — from `judge.md`'s own two options, neither exhausted:**
+1. **Untried cheap option:** a plain Danbooru phrase swap (`"looking to the
+   right, turned away, from the right, right side of face"` in place of
+   `(body facing right:1.4)`) — this round's brief asked for the weight/emphasis
+   experiment specifically, not this one, so it is still open. Given
+   `docs/ART-PIPELINE.md` §2a's own finding that the *word* `left`/`right` is
+   "decorative" on this checkpoint regardless of phrasing, low confidence it
+   fixes anything — worth a small 4-6 image A/B, not a full pilot, before
+   trusting it.
+2. **Guaranteed-geometry route, half-built:** `tools/gen/flip.py --set-facing
+   right` already exists and does exactly the mirror-plus-sidecar-fix this
+   route needs, using `profile-left`'s clean render as the source. But
+   `flip.py`'s own doc comment is explicit: **"mirroring is only safe when
+   nothing in the frame is chiral... for those, reroll instead"** — Yuna's
+   heterochromia, single braid and one-ear earring are exactly that. A mirror
+   needs a follow-up masked inpaint (iris colour swap, earring reseated) that
+   does not exist under `tools/gen/` yet (`docs/plans/pause-living-portraits-
+   techniques.md` Part 1: native ComfyUI inpainting nodes are on this machine,
+   but no inpainting-specific workflow file has been built here). Building
+   that tool is new work, out of scope for a redo/pick pass.
+
+**Picks unchanged.** `profile-right`'s round-"final" picks (`.2`/`.4`) stay the
+least-bad placeholders — every `fix1` candidate judged is strictly worse (same
+wrong direction, plus the new quality regression), so none was picked over
+them. **Do not build the rig against any `profile-right` candidate from any
+round yet.**
+
+**Bookkeeping fix carried over from `judge.md` (not a re-render):** for
+`q34-right`, wire the rig to pick2 (`.4`, seed 2023313964) as the primary
+candidate, not the labelled pick1 (`.3`, seed 2023313963) — the judge found
+`.3`'s earring has drifted to the green-eye side (scores ~4, would fail the
+key on its own), while `.4` keeps the earring on the canon blue-eye/near side
+and passes clean. The `picked/q34-right.pick1.webp` / `pick2.webp` file bytes
+are unchanged (still `.3` / `.4` respectively) — this only changes which one
+is "primary" for wiring, not what is committed.
+
+Not committed: `_cand/pilot-fix1/` (gitignored, same reason as every other
+round's candidates). Committed: `sheets/profile-right-fix1.webp` (plate + the
+two judged `fix1` candidates + their 1:1 eye crops, same sheet format as the
+other four).

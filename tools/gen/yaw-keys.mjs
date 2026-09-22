@@ -175,7 +175,10 @@ function run(cmd, args, { cwd = REPO_ROOT } = {}) {
  * Everything that is not the view phrase is held fixed across the four keys,
  * so a difference on a contact sheet is the yaw and nothing else.
  */
-export async function renderKey(key, { batch, config, outRoot, refWeight, refStart, tag }) {
+export async function renderKey(
+  key,
+  { batch, config, outRoot, refWeight, refStart, tag, viewExtra, emphasis },
+) {
   const spec = KEYS[key];
   if (!spec) throw new Error(`Unknown key "${key}" (have: ${Object.keys(KEYS).join(', ')})`);
   const cfg = CONFIGS[config];
@@ -185,6 +188,11 @@ export async function renderKey(key, { batch, config, outRoot, refWeight, refSta
   const dir = resolve(REPO_ROOT, outRoot, sub);
   mkdirSync(dir, { recursive: true });
   const out = resolve(dir, `${key}.png`);
+  // `--viewExtra` appends to the key's own view phrase (still the one channel
+  // comfy.mjs does not escape) instead of replacing it, so a redo round can add
+  // a targeted call-out — e.g. "one eye visible, blue eye visible" for a profile
+  // that keeps losing its iris colour — without forking KEYS itself.
+  const view = viewExtra ? `${spec.view}, ${viewExtra}` : spec.view;
 
   // `--facingPhrase` is the only prompt channel comfy.mjs does not run through
   // escapeTags, so it is the only one where (profile:1.4) reaches CLIP as a
@@ -196,7 +204,8 @@ export async function renderKey(key, { batch, config, outRoot, refWeight, refSta
     ...(cfg.preset === 'character' ? ['--pose', key] : []),
     '--tags', IDENTITY,
     '--poseTags', EXPRESSION,
-    '--facingPhrase', spec.view,
+    '--facingPhrase', view,
+    ...(emphasis ? ['--emphasis', emphasis] : []),
     '--negAdd', spec.negAdd ? `${NEG_ADD}, ${spec.negAdd}` : NEG_ADD,
     '--composition', cfg.composition,
     '--size', `${CANVAS.width}x${CANVAS.height}`,
@@ -261,7 +270,10 @@ async function main() {
     process.stdout.write(
       `Usage:\n` +
         `  node tools/gen/yaw-keys.mjs render --key all|<key> [--batch 6] [--config A|B|C]\n` +
-        `                                     [--refWeight 0.35] [--outRoot <dir>]\n` +
+        `                                     [--refWeight 0.35] [--refStart 0.2] [--tag <name>]\n` +
+        `                                     [--viewExtra "<phrase appended to the key's view>"]\n` +
+        `                                     [--emphasis "<(weighted:1.3) tags, unescaped>"]\n` +
+        `                                     [--outRoot <dir>]\n` +
         `  node tools/gen/yaw-keys.mjs list\n\n` +
         `Keys: ${Object.keys(KEYS).join(', ')}\n` +
         `Configs: ${Object.keys(CONFIGS).join(', ')}\n`,
@@ -275,6 +287,8 @@ async function main() {
   const refWeight = args.refWeight === true ? undefined : Number(args.refWeight ?? REF.weight);
   const refStart = args.refStart === true ? undefined : Number(args.refStart ?? REF.start);
   const tag = args.tag === true || !args.tag ? null : String(args.tag);
+  const viewExtra = args.viewExtra === true || !args.viewExtra ? null : String(args.viewExtra);
+  const emphasis = args.emphasis === true || !args.emphasis ? null : String(args.emphasis);
   const outRoot =
     args.outRoot === true || !args.outRoot
       ? 'docs/concepts/pause-until-dawn/prototype-v2/art/keys/_cand'
@@ -282,7 +296,7 @@ async function main() {
 
   const keys = key === 'all' ? Object.keys(KEYS) : [key];
   for (const k of keys) {
-    await renderKey(k, { batch, config, outRoot, refWeight, refStart, tag });
+    await renderKey(k, { batch, config, outRoot, refWeight, refStart, tag, viewExtra, emphasis });
   }
 }
 
