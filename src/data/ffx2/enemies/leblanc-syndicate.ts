@@ -120,10 +120,21 @@ export function statsOf(s: Omit<StatBlock, 'maxHp' | 'maxMp'>): StatBlock {
 // Act III — the three-on-three. §3.1-3.3
 // ---------------------------------------------------------------------------
 
+// **Fix pass, 2026-09-22 (verifier CRITICAL):** `spriteKey` on this trio (and
+// on the Act I/II earlier-record instances built from them, below) used to
+// carry an unnecessary `ffx2-` prefix (`'ffx2-leblanc'` etc.). Nothing in
+// `ART_ID_OVERRIDES`/`FFX2_PREFIXED` mapped that id, and the art track only
+// ever installed files at the un-prefixed `public/art/characters/{leblanc,
+// ormi,logos}/`, so every requested texture 404'd and every combatant drew
+// as a procedural placeholder in all three acts. `bahamut` genuinely needs
+// the prefix (it collides with an FFX id) and has files under both names;
+// Leblanc's trio does not collide with anything and should have matched its
+// folders exactly, the way Chapter 5's Vegnagun spriteKeys already do.
+// Regression test: `tests/unit/chapters/leblanc-art.test.ts`.
 export const leblancAct3: EnemyDef = {
   id: 'leblanc',
   name: 'Leblanc',
-  spriteKey: 'ffx2-leblanc',
+  spriteKey: 'leblanc',
   slot: 0,
   // §3.1 — Lv/HP/MP/EXP/gil [verified: 2 sources]; Str/Mag/Def/MDef/Agi/Eva/
   // Luck [single source]; `acc: 0` is the blank-field convention, gap G1.
@@ -147,7 +158,7 @@ export const leblancAct3: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
   // NOT immune [§3.1]: Darkness, Slow, Delay, MAG Down, MDEF Down. Mental Break
   // is the answer to MDef 62 and Magic Break scales her four spells and Mach Fan.
-  forms: [{ name: 'Leblanc', spriteKey: 'ffx2-leblanc', hp: 1380 }],
+  forms: [{ name: 'Leblanc', spriteKey: 'leblanc', hp: 1380 }],
   aiScriptId: 'ffx2-leblanc',
   rewards: {
     ap: 2,
@@ -193,7 +204,7 @@ export const leblancAct3: EnemyDef = {
 export const logosAct3: EnemyDef = {
   id: 'logos',
   name: 'Logos',
-  spriteKey: 'ffx2-logos',
+  spriteKey: 'logos',
   slot: 1,
   // §3.2 — HP 989, the lowest of the three, and Def 4, the lowest in the fight;
   // Eva 40 is the highest. Nothing defends him, but you have to hit him.
@@ -209,7 +220,7 @@ export const logosAct3: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
   // NOT immune [§3.2]: Darkness, Poison, Slow, Delay, **all four Breaks** — his
   // Lv 17 Djose entry carried STR Down immunity, this one does not.
-  forms: [{ name: 'Logos', spriteKey: 'ffx2-logos', hp: 989 }],
+  forms: [{ name: 'Logos', spriteKey: 'logos', hp: 989 }],
   aiScriptId: 'ffx2-leblanc-logos',
   rewards: {
     ap: 2,
@@ -234,7 +245,7 @@ export const logosAct3: EnemyDef = {
 export const ormiAct3: EnemyDef = {
   id: 'ormi',
   name: 'Ormi',
-  spriteKey: 'ffx2-ormi',
+  spriteKey: 'ormi',
   slot: 2,
   // §3.3 — the largest pool in the fight and the slowest unit on the field.
   // **Evasion is absent from the record -> implement as 0** [single source for
@@ -251,7 +262,7 @@ export const ormiAct3: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
   // NOT immune [§3.3]: Darkness, Poison, Slow, Delay, all four Breaks. Armor
   // Break on Ormi is the single best Break use in the fight [§7.3].
-  forms: [{ name: 'Ormi', spriteKey: 'ffx2-ormi', hp: 1344 }],
+  forms: [{ name: 'Ormi', spriteKey: 'ormi', hp: 1344 }],
   aiScriptId: 'ffx2-leblanc-ormi',
   rewards: {
     ap: 2,

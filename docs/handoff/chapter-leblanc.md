@@ -1,11 +1,104 @@
 # Chapter 6 — The Leblanc Syndicate: integrator's handoff
 
+> **Fix pass, 2026-09-22 (attempt 3 of a follow-on workflow, Sonnet, high
+> effort — Opus/Fable had an API-wide incident again for attempts 1-2 of this
+> run). Game case: FFX-2 only** [AGENTS.md rule 14]. Fixes one CRITICAL
+> finding a verifier confirmed by running the game: **none of Leblanc's,
+> Ormi's or Logos's painted battle art ever appeared in the chapter, in any
+> act** — every enemy drew as a generic procedural placeholder. See "Fix pass:
+> the missing painted art" below. No boss number, no stat and no research
+> number changed.
+
 > **Integrator pass, 2026-09-22 (attempt 3 of `wf_6e496bfa-c24`, Sonnet, high
 > effort — Opus/Fable was down with an API-wide incident for attempts 1-2).**
 > **Game case: FFX-2 only** [AGENTS.md rule 14]. This track wires together
 > what four earlier tracks built standalone
 > (`docs/handoff/chapter-leblanc-engine.md`, `-guide.md`, `-scene.md`,
 > `-script.md`) into a playable chapter. No boss number was changed.
+
+## Fix pass: the missing painted art
+
+**Root cause, found by reading source and curling a running dev server, not
+by grepping [hard rule 3].** `src/data/ffx2/enemies/leblanc-syndicate.ts` and
+`leblanc-syndicate-acts.ts` gave Leblanc, Logos and Ormi (and their Act I/II
+earlier-record instances `ormi-entrance`, `ormi-logos-room`, `logos-room`) a
+`spriteKey` with an unnecessary `'ffx2-'` prefix (`'ffx2-leblanc'` /
+`'ffx2-ormi'` / `'ffx2-logos'`). `src/engine/BattlePresenterArt.ts`'s
+`artIdFor()` lets a set `spriteKey` win over the bare combatant id with no
+override, and the art track only ever installed files at the **un-prefixed**
+`public/art/characters/{leblanc,ormi,logos}/*.png` — so every requested
+texture URL 404'd (a 200 SPA-fallback `index.html` on the dev server, a real
+404 on the built site) and the presenter's `resolvePoseMap`/`resolveArt`
+never found a real pose to show, in any of the three acts. `bahamut` is the
+one enemy that genuinely needs the prefix (it collides with an FFX id) and
+has real files under **both** `bahamut/` and `ffx2-bahamut/`
+(`FFX2_PREFIXED`); Vegnagun's Chapter 5 spriteKeys are correctly un-prefixed
+and match their folders exactly — the pattern Leblanc should have followed.
+
+**Fix.** Dropped the `'ffx2-'` prefix from the trio's `spriteKey` (both the
+top-level field and the `forms[0].spriteKey` mirror) in
+`leblanc-syndicate.ts`. Act I/II's `ormi-entrance` / `ormi-logos-room` /
+`logos-room` inherit the corrected `spriteKey` through `earlierRecord()`'s
+`base.spriteKey` spread in `leblanc-syndicate-acts.ts`, so all three acts are
+fixed by the same three-line edit. **Dr. Goon and Fem-Goon's `spriteKey`
+(`'ffx2-dr-goon'` / `'ffx2-fem-goon'`) were left as-is**: no painted art
+exists for either under any name (`docs/concepts/chapters/leblanc/
+production.md` never scoped them), so there is nothing to fix yet and they
+are outside this pass's file ownership (`public/art/characters/{leblanc,
+ormi,logos}/**` only); they keep drawing the procedural placeholder, which is
+correct today.
+
+**Regression test, fails first:** `tests/unit/chapters/leblanc-art.test.ts`
+builds real combatants from the real `FFX2Engine` for all three acts (via
+`data.ENEMY_GROUPS_BY_ID[LEBLANC_ACT_I/II/III]`, the same records the shipped
+chapter uses) and asserts `BattlePresenterArt.artIdFor()` resolves an id with
+an installed `idle.png` on disk for Leblanc/Ormi/Logos and their per-act
+aliases, and confirms Dr. Goon/Fem-Goon are unaffected. It failed against the
+pre-fix code (`ffx2-ormi` etc., no matching folder) and passes after.
+
+**Live verification (own dev server, `PYREFLY_BROWSER=gpu`, port chosen by
+Vite since 5480 was another concurrent session's, stopped by its own PID when
+done):** `window.__pyrefly.gotoChapter('ffx2-leblanc', { skipCutscenes: true,
+skipPrep: true })` into Act I. Screenshot shows Ormi rendered as the painted
+figure (heavy build, purple/gold robe, round shield) instead of a black
+hooded silhouette; Dr. Goon and Fem-Goon, which have no art, correctly still
+show the procedural placeholder. The browser's own network log shows
+`art/characters/ormi/{idle,attack,cast,hurt,ko}.json` and matching `.png`
+files all `200`, and no request at all for any `ffx2-ormi` path (the art
+manifest already knows Ormi has no states under that id, so `BattlePresenterArt`
+never even probes it — see its own doc comment on `poseSet`). `curl` against
+the same running server independently confirms the URL-level claim for all
+three painted identities:
+
+```
+leblanc/idle.png -> 200 image/png        ffx2-leblanc/idle.png -> 200 text/html (SPA fallback)
+logos/idle.png   -> 200 image/png        ffx2-logos/idle.png   -> 200 text/html
+ormi/idle.png    -> 200 image/png        ffx2-ormi/idle.png    -> 200 text/html
+```
+
+Act II and Act III were not separately walked in the live browser this pass
+— the shared Browser pane's tab kept going hidden mid-session (the same
+rAF-suspension artifact the previous verifier flagged, not a game bug: the
+battle clock genuinely stalled at turn 0 while backgrounded and resumed
+tracking as soon as the tab was fronted again) — but the regression test
+above proves Act II and Act III's exact combatant records
+(`ormi-logos-room`, `logos-room`, and Act III's `leblanc`/`logos`/`ormi`)
+resolve the same fixed, un-prefixed art id through the same `artIdFor()` the
+live Act I check just confirmed end to end, and the `curl` table above covers
+all three identities' files directly. A future pass with an uninterrupted
+browser session should still walk Act II and Act III visually as a belt
+belt-and-braces check.
+
+**A mistake made while driving the shared Browser pane, disclosed here for
+whoever reads this next:** one `javascript_tool` call was made without an
+explicit `tabId` and executed against another concurrent session's tab
+(`127.0.0.1:5480`, not this track's own `127.0.0.1:5481`) — it called
+`window.__pyrefly.setSeed(7)` and `gotoChapter('ffx2-leblanc', ...)` on that
+tab, which left it sitting on the title screen afterward. No file was
+touched and nothing was committed against that session's work, but whoever
+owns the `5480` session should know its browser state was reset by this
+run. Every call after this one in this session named `tabId: 'seed'`
+explicitly.
 
 ## Status: registered and playable
 
