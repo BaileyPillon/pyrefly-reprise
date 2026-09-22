@@ -1,0 +1,92 @@
+{
+  "character": "yuna-x2",
+  "source": "public/art/portraits/yuna-x2.png",
+  "sourceSha256": "7427dc7fc4811782c00be3888dbca713d04c3755328b179da3bfc5e1fd371200",
+  "frontalKey": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png",
+  "tool": "tools/gen/inpaint.mjs",
+  "canvas": { "width": 832, "height": 1216 },
+  "groups": {
+    "eyes": {
+      "box": [248, 345, 517, 125],
+      "pad": 24,
+      "feather": 8,
+      "states": {
+        "neutral": {
+          "file": null,
+          "note": "the plate's own open eyes — not a patch, no generation."
+        },
+        "half": {
+          "file": "eyes/half.png",
+          "sidecar": "eyes/half.json",
+          "denoise": 0.75,
+          "seed": 5201,
+          "verdict": "PASS",
+          "note": "both eyelids visibly drooping, lash line curving as required; heterochromia correct on both sides (green left / blue right, matching the plate)."
+        },
+        "closed": {
+          "file": "eyes/closed.png",
+          "sidecar": "eyes/closed.json",
+          "denoise": 0.9,
+          "seed": 5101,
+          "verdict": "DISCLOSED",
+          "note": "eyelids read as closed at UI scale (rolled lid, curved lash line, no dark bar) but at 1:1 the right eye (her blue/left eye) leaks a thin GREEN sliver under the lash instead of blue — a real identity miss, not a rendering artifact (checked directly against the source, see patches.md). Kept as the least-bad of two rounds; a redo aimed at killing the colour leak entirely (round 2, `_cand/eyes/closed-v2*`) made it worse (eyes stayed open, and two of three candidates lost the heterochromia altogether — both eyes came back blue). Two failed rounds; AGENTS.md rule 15 says stop and write this up rather than try a third blind reroll."
+        },
+        "blink-1": { "file": null, "note": "NOT ATTEMPTED — see patches.md 'Not done'." },
+        "blink-2": { "file": null, "note": "NOT ATTEMPTED — see patches.md 'Not done'." }
+      }
+    },
+    "mouth": {
+      "box": [300, 585, 320, 105],
+      "pad": 24,
+      "feather": 8,
+      "states": {
+        "closed-neutral": {
+          "file": null,
+          "note": "the plate's own mouth (a confident smirk, per its own sidecar prompt) — not a patch, no generation."
+        },
+        "parted": {
+          "file": "mouth/parted.png",
+          "sidecar": "mouth/parted.json",
+          "denoise": 0.8,
+          "seed": 5301,
+          "verdict": "PASS"
+        },
+        "smile": {
+          "file": "mouth/smile.png",
+          "sidecar": "mouth/smile.json",
+          "denoise": 0.8,
+          "seed": 5401,
+          "verdict": "PASS"
+        },
+        "pressed": {
+          "file": "mouth/pressed.png",
+          "sidecar": "mouth/pressed.json",
+          "denoise": 0.8,
+          "seed": 5501,
+          "verdict": "PASS"
+        }
+      }
+    },
+    "brows": {
+      "box": [260, 300, 500, 65],
+      "pad": 16,
+      "feather": 8,
+      "states": {
+        "neutral": { "file": null, "note": "the plate's own hair-covered brow line — not a patch." },
+        "raised": {
+          "file": null,
+          "verdict": "FAIL",
+          "note": "NOT DELIVERED — see patches.md 'Brows: not delivered, and why'."
+        },
+        "drawn": {
+          "file": null,
+          "verdict": "FAIL",
+          "note": "NOT DELIVERED — see patches.md 'Brows: not delivered, and why'."
+        }
+      }
+    },
+    "hurt": {
+      "states": { "wince": { "file": null, "note": "NOT ATTEMPTED — see patches.md 'Not done'." } }
+    }
+  }
+}

@@ -23,6 +23,12 @@ __pycache__/
 # and converted to WebP under prototype-v2/art/keys/picked/ (see keys.md).
 docs/concepts/pause-until-dawn/prototype-v2/art/keys/_cand/
 
+# inpainted expression/blink patch candidates (tools/gen/inpaint.mjs): full-frame
+# renders, masks and source crops kept locally for review only. The picked patch
+# per name is copied out and committed under prototype-v2/art/patches/<group>/
+# (see patches.md).
+docs/concepts/pause-until-dawn/prototype-v2/art/patches/_cand/
+
 # ---------------------------------------------------------------------------
 # Generated binaries: regenerable, large, and rewritten under the same names on
 # every run, so git history is the wrong place for them.

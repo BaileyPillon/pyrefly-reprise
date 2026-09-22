@@ -583,6 +583,69 @@ each sprite's `baselineY`, so the sheet doubles as a check that the whole cast
 stands on the same floor. `tools/gen/sheet-poc.json` is the committed spec —
 add rows to it as the cast grows rather than building sheets by hand.
 
+### Inpainting patches
+
+`tools/gen/inpaint.mjs` — masked, region-local repaints of an existing plate
+(a closed eye, a different mouth shape, a raised brow), built for the
+living-portrait rig's expression/blink patches
+(`docs/plans/pause-living-portraits-techniques.md` Part 1,
+`docs/concepts/pause-until-dawn/prototype-v2/art/patches/patches.md`). Native
+ComfyUI nodes only — `LoadImage` for the source, `LoadImageMask` for a
+feathered box mask (`tools/gen/inpaint-support.py mask`), `VAEEncodeForInpaint`
+(`grow_mask_by` feathers the latent boundary on top of the mask's own blur),
+`KSampler` at a low-to-medium denoise so the untouched surrounding pixels
+anchor identity, `VAEDecode`, `SaveImage`. No custom node, no download.
+
+```bash
+node tools/gen/inpaint.mjs \
+  --image docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png \
+  --box 248,345,517,125 --tags "eyes closed, closed eyes, sleeping eyes" \
+  --denoise 0.5 --count 3 --seed 4001 \
+  --out docs/concepts/pause-until-dawn/prototype-v2/art/patches/_cand/eyes/closed
+```
+
+- `--box x,y,w,h` is read in the **source image's own pixel coordinates**
+  (find it with `tools/gen/yaw-keys-sheet.py grid --image <src> --box ... --zoom 2`,
+  the same tool the yaw keys use to read pixels off a plate).
+- The mask is a feathered box (`--feather`, default 8 px, Gaussian-blurred
+  after a hard rectangle) so the seam blends; `--growMask` (default 6) is
+  `VAEEncodeForInpaint`'s own latent-side grow, on top of that.
+- `--denoise` 0.35–0.6 per the brief: low enough that the region around the
+  mask (which the model still sees, unmasked, as context) keeps pulling the
+  result toward the source's line weight and palette; high enough to actually
+  repaint the masked content rather than return it unchanged.
+- The identity block is the same one `tools/gen/yaw-keys.mjs` exports
+  (`IDENTITY`), imported directly so a patch and a yaw key never describe the
+  character two different ways. `--tags` is only the thing the mask should
+  paint (`"eyes closed"`, `"lips parted"`, ...), not a restatement of hair/eye
+  colour/costume — those already survive from the unmasked context plus the
+  identity block.
+- `--ref <plate.png> --refWeight 0.3` adds the same low-weight IP-Adapter
+  branch `--ref` uses elsewhere (§3 "Reference consistency"), for a patch
+  where the masked region is large enough that the unmasked context alone
+  isn't pulling identity hard enough (a whole-mouth or whole-eye-pair box
+  usually does not need it; use it if a batch's identity drifts).
+- Every run writes, per variant: `<out>.<n>.full.png` (the whole inpainted
+  frame — reference only, never shipped), `<out>.<n>.png` (the **tight
+  region crop**, box plus `--pad` margin, native resolution — this is the
+  patch), `<out>.<n>.json` (box, seed, denoise, prompt, model — provenance),
+  plus one `<out>.src.png` (the same box+pad cropped from the *source*, for a
+  fair side-by-side) and `<out>.sheet.png` (source crop first, then every
+  candidate, all at native pixels — **judge from this, never from a
+  downscaled thumbnail**, docs/ART-PIPELINE.md §6's own rule for every other
+  batch in this pipeline).
+- Candidates are gitignored (`prototype-v2/art/patches/_cand/`, same
+  convention as the yaw keys' `_cand/`); only the picked patch, its sidecar
+  and the sheet get copied out and committed under
+  `prototype-v2/art/patches/<group>/`, recorded in that folder's
+  `patches.json` and `patches.md`.
+- **Identity check before keeping a patch**: put the candidate crop and the
+  source crop side by side at 1:1 (the sheet already does this) and compare
+  eye colour, lash-line shape, lip colour and skin tone specifically — those
+  are the four properties this checkpoint drifts on first when a masked
+  region is repainted, per the yaw-key judging rounds (`keys.md`, `judge.md`)
+  finding the same four properties were the ones worth checking there.
+
 ---
 
 ## 4. The cast manifest
