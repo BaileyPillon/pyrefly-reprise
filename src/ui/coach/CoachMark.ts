@@ -29,6 +29,7 @@ import './coach.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
+import { bandClearOf } from './coachAvoid.ts';
 import type { CoachMark as CoachMarkDef } from './coachCopy.ts';
 
 /** How a line ended. */
@@ -187,6 +188,9 @@ export class CoachMark {
     } catch {
       /* no document element in an exotic host; the line still renders */
     }
+    // FOC-05: an immediate check, so a screenshot taken before the next
+    // `update()` tick (see `recheckPosition`) still shows the line clear.
+    if (this.opts.game === 'ffx') this.avoidAdvisorCard();
     // A frame's grace so the opacity transition has a "from" to run out of.
     this.setTimer(() => this.el.classList.add('coach-mark--in'), 16);
     // **Both games now, not only the ones that never hold (FOC-01).** Since
@@ -209,6 +213,41 @@ export class CoachMark {
     return new Promise<CoachMarkOutcome>((resolve) => {
       this.settle = resolve;
     });
+  }
+
+  /**
+   * FOC-05, called every frame while an FFX line is up (`CoachLayer.update`):
+   * `MoveAdvisor.layout()` re-solves `.mad__card`'s box against the party and
+   * the boss on its own schedule, not once when the menu opens, so the card
+   * measured the instant this line was created (a still-default CSS
+   * position, or last turn's box) is not the card this line has to clear by
+   * the time a player actually looks at the screen. Re-checking on every tick
+   * — cheap, two `getBoundingClientRect()` calls and some arithmetic — keeps
+   * the line correct against whatever the card is doing right now, rather
+   * than pinning it to what the card was doing when `show()` ran.
+   */
+  recheckPosition(): void {
+    if (this.opts.game === 'ffx' && !this.done) this.avoidAdvisorCard();
+  }
+
+  /**
+   * Give this line its own band clear of `.mad__card`, without touching the
+   * card. `this.opts.root` is `CoachLayer`'s `.coach-layer`, appended as a
+   * sibling of the HUD's own stage under the same host element
+   * `CoachedHud.mount` was given — the same element `MoveAdvisor`'s card
+   * mounts into (`FFXBattleHud.mount`, both `position: absolute; inset: 0`
+   * over it) — so `getBoundingClientRect()` on both puts them in one
+   * coordinate space with no conversion. No-op when the card is not on
+   * screen (an FFX-2 host, or a declined advisor zone with nothing to clear).
+   */
+  private avoidAdvisorCard(): void {
+    const host = this.opts.root.parentElement;
+    const card = host?.querySelector<HTMLElement>('.mad__card');
+    if (!host || !card) return;
+    const moved = bandClearOf(this.el.getBoundingClientRect(), card.getBoundingClientRect(), host.getBoundingClientRect());
+    if (!moved) return;
+    const hostRect = host.getBoundingClientRect();
+    this.el.style.top = `${moved.top - hostRect.top}px`;
   }
 
   /** Take the line down now. Safe to call twice. */

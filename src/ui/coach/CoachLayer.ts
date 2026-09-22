@@ -178,6 +178,10 @@ class CoachedHud implements HudPort {
 
   update(dt: number): void {
     this.inner.update?.(dt);
+    // FOC-05: `.mad__card` is re-solved by `MoveAdvisor.layout()` on its own
+    // schedule (`CoachMark.recheckPosition`'s own comment), so an FFX line
+    // has to keep checking, not just check once when it goes up.
+    this.live?.recheckPosition();
   }
 
   // ----------------------------------------------------------- the teaching
