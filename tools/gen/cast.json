@@ -2431,39 +2431,49 @@
           "poseTags": "standing, weight on one hip, fan raised half-open as a screen in front of the lower half of her face, looking at viewer over the fan, a stage performer's address"
         },
         "attack": {
-          "poseTags": "fan snapping open toward the viewer, lunging forward slightly, sharp confident smile, one arm outstretched",
-          "ref": "leblanc/idle",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6
-        },
-        "cast": {
-          "poseTags": "fan raised overhead in both hands, elemental magic circle glowing, hair blown back, dramatic casting pose",
-          "ref": "leblanc/idle",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6
-        },
-        "hurt": {
-          "poseTags": "recoiling, staggering back, fan lowered, startled hurt expression, off balance",
+          "poseTags": "fighting stance, holding fan, outstretched arm, leaning forward, open mouth, looking at viewer",
           "ref": "leblanc/idle",
           "forceRef": true,
           "refWeight": 0.35,
           "refStart": 0.2,
           "refEnd": 0.6,
-          "notes": "Pilot seeds 7301/7302 at this recipe: 1 of 2 candidates drifted the robe to solid navy/black and added an unrequested circular mandala background halo. Re-roll away from that failure mode rather than treating it as the identity baseline (docs/concepts/chapters/leblanc/pilot/pilot.md)."
+          "seed": 8201,
+          "notes": "RE-RENDERED 2026-09-22 with the consistency-pilot recipe (docs/concepts/chapters/leblanc/pilot/judge.md): best of 6 candidates (seeds 8201-8206; an earlier round at seeds 8101-8122 lost half its renders to the cut-out sanity guard correctly catching an unrequested swirl-effect artifact, not re-rolled with --keepBad). Body-only pose tags per the pilot, not this entry's old prose poseTags (kept above, superseded)."
+        },
+        "cast": {
+          "poseTags": "arm up, holding fan, raised hand, standing, looking up, open mouth",
+          "ref": "leblanc/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 8305,
+          "notes": "RE-RENDERED 2026-09-22: best of 8 viewed (seeds 8301-8306 at refWeight 0.35, plus two refWeight-0.4 variants that finished before the shared ComfyUI queue was monopolised by another workflow's long-running image-to-video job). Rejected candidates held the fan closed near her face/chin rather than open and raised, or drew the heart mark blue instead of red. Body-only pose tags per the pilot, not this entry's old prose poseTags (kept above, superseded)."
+        },
+        "hurt": {
+          "poseTags": "wince, one eye closed, leaning back, arm across chest, holding fan, open mouth",
+          "ref": "leblanc/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 8504,
+          "notes": "RE-RENDERED 2026-09-22: pilot seeds 7301/7302 drifted the robe to navy/black with an unrequested halo on this pose (see below); this round's seeds 8501-8506 did not repeat that failure but landed a different one instead — every candidate that finished (8501, 8504, 8505, 8506; 8502/8503 never completed, shared-queue congestion) reads as a coy wink/smile rather than a pained wince, which looks like a checkpoint bias for this pose+identity combination worth a rephrase in a follow-up pass rather than more seeds of the same prompt. Installed anyway as a clear identity improvement over the previous drifted hurt.png. Body-only pose tags per the pilot, not this entry's old prose poseTags (kept above, superseded)."
         },
         "ko": {
           "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated, fan fallen open beside her",
           "composition": "prone",
           "sizeHint": "1216x832",
           "ref": "leblanc/idle",
-          "notes": "Not covered by the 2026-09-21 consistency pilot (attack/cast/hurt only) — decide --forceRef for this state from a render, don't assume the same recipe transfers to a prone composition."
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 8603,
+          "notes": "RE-RENDERED 2026-09-22, extending the pilot's forceRef/0.35/0.2-0.6 recipe to the prone composition for the first time (it was not tested there) — it worked: best of 2 candidates that finished (seeds 8603-8604; 8601-8602 timed out on the shared, congested ComfyUI queue). Replaces a ko.png that predated the pilot (no --ref at all) and had drifted the hair slightly long and substituted a butterfly-shaped chest marking for the heart."
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). Her idle.png measures 43% one colour, so every other state rendered WITHOUT --ref (the monochrome-reference guard fired) — costume was judged independently per state rather than identity-pinned, and colour balance drifts state to state (idle/attack lean pink-purple, cast/hurt lean blue-purple). The canon blue-and-white triangle/swirl robe pattern and the white crisscross cuff material render inconsistently across states despite (1.3) emphasis — the checkpoint resists this specific pattern on a purple base; flagged for a follow-up pass, not re-rolled further today (pace rule, AGENTS.md hard rule 15). idle pose shows the fan closed near her chin rather than the canon \"half-open screen\" — best of 3 candidates on quality/costume, pose is an approximation. 2026-09-21 consistency pilot (docs/concepts/chapters/leblanc/pilot/pilot.md) tested three fixes for the drift on attack/cast/hurt and picked method A (--forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in — body-only Danbooru pose tags, not this file's longer poseTags prose) as the recipe worth re-rendering the installed sprites with; recorded on the three states above. img2img (method B) was rejected: it reproduces idle's own pose almost unchanged instead of a distinct attack/cast/hurt silhouette. A one-shot 'reference sheet' render (method C, multiple poses in one image) was rejected: costume colour/pattern was not stable seed to seed. This pilot answers the method question only; the installed attack/cast/hurt PNGs have not been re-rendered with it yet."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 43% one colour, near the monochrome-reference guard's threshold, but is on-model against the picked concept (docs/concepts/chapters/leblanc/renders/leblanc-b.png) and was left unchanged this round. 2026-09-21 consistency pilot (docs/concepts/chapters/leblanc/pilot/pilot.md, judge.md) found attack/cast/hurt had been rendered WITHOUT --ref (the guard fired) and drifted hair, robe colour and pattern state to state; it picked method A (--forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in, body-only Danbooru pose tags) as the fix. **2026-09-22: attack, cast, hurt and ko were all re-rendered with that recipe and reinstalled** (seeds and per-state judging notes above; judgeNotes in each installed state's own .json sidecar have the full candidate-by-candidate reasoning). All four now hold the short blonde bob, purple eyes, single red heart mark and blue/white diamond-pattern robe consistently. Remaining known gaps, not fixed this round: hurt's expression reads coy/smiling rather than pained on every candidate tried (5 seeds, see the hurt state's notes) — a rephrase of the pose tags, not another re-roll, is the recommended next step; the canon blue-and-white *triangle* pattern (as opposed to the diamond/argyle pattern that keeps rendering instead) has still never landed on any state, idle included, across two rounds now. A separate workflow's long-running ComfyUI image-to-video job monopolised the shared render queue for a large part of this round (one job sat 'running' for 10+ minutes at a stretch with 15+ jobs queued behind it), which is why cast and ko each shipped from a shorter candidate pool than attack's full 6; ComfyUI was not restarted, per the hard rule against restarting a non-empty/non-black queue. `ormi` and `logos` were not touched this round — they still carry the identity drift the driver found, and logos' idle.png has the same near-monochrome situation as leblanc's but has never been pilot-tested (see logos' own notes below)."
     },
     {
       "id": "ormi",
