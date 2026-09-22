@@ -2624,33 +2624,64 @@
       "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
-      "negAdd": "sword, katana, antlers, horns, feathers, short, stout",
-      "tags": "1boy, logos (ff10-2), final fantasy x-2, safe, solo, tall and slim build, a black and silver helmet with a chin protector tied with a purple strip at the back of his head, sharp handsome face, a dark blue robe and matching coat with the syndicate heart logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one in each hand, (tall and slim:1.15), (two revolvers:1.2), (black and silver helmet:1.15)",
+      "negAdd": "sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms",
+      "tags": "1boy, logos (ff10-2), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate heart logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns",
+      "emphasis": "(two revolvers:1.35), (holding guns:1.25), (plain black and silver helmet:1.2), (dark blue robe:1.1)",
       "states": {
         "idle": {
-          "poseTags": "standing, side-on duelist stance, both revolvers held low, cool composed expression"
+          "poseTags": "standing, side-on duelist stance, both revolvers held low, cool composed expression",
+          "ref": "docs/concepts/chapters/leblanc/renders/logos-c.png",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 91103,
+          "notes": "Re-rendered 2026-09-21/22 (seed 91103): the previously installed idle held a small red cup/box in one hand and nothing in the other, not two revolvers, per the concept-vs-installed check in docs/concepts/chapters/leblanc/sets/logos/sheet.png row 1 — off-model against both the research and the picked concept (docs/target/targets.json, Logos C). Re-rendered from the picked concept (logos-c.png) as forceRef anchor rather than from itself, since the old idle was the thing that needed fixing. Best of 4 (seeds 91101-91104); the other three either showed only one revolver or an unrelated multi-gun arsenal graphic behind him. This candidate still keeps a small dark feather-shaped crest remnant on the helmet (the research asks for a plain helmet) and an open coat baring the chest (not sourced either way) — flagged, not re-rolled again (pace rule, AGENTS.md hard rule 15)."
         },
         "attack": {
-          "poseTags": "aiming and firing both revolvers, muzzle flash, quick decisive lunge",
-          "ref": "logos/idle"
+          "poseTags": "aiming and firing both revolvers, muzzle flash, quick decisive lunge, leaning forward, looking at viewer",
+          "ref": "logos/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 91201,
+          "notes": "Re-rendered 2026-09-21/22 (seed 91201) off the fixed idle. Best of 3 (one of 4 variants timed out on the shared ComfyUI queue and was skipped, not re-run). Only one revolver is clearly visible in the winning candidate — the other hand is tucked back out of frame in the lunge — a softer miss than the other two candidates (one added an unrequested sci-fi cable/tube prop and a life-preserver-ring robe hem pattern; the other lost the dynamic lunge entirely and read as a static portrait). Not re-rolled a third time (pace rule)."
         },
         "cast": {
-          "poseTags": "spinning the cylinder of one revolver, holding it up beside his face, an ancient script ring, dramatic",
+          "poseTags": "spinning the cylinder of one revolver, holding it up beside his face, an ancient script ring, dramatic, looking at viewer",
           "ref": "logos/idle",
-          "notes": "Stands in for Russian Roulette's cylinder-spin beat (research §10.1)."
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 91301,
+          "notes": "Stands in for Russian Roulette's cylinder-spin beat (research §10.1). Re-rendered 2026-09-21/22 (seed 91301), best of 2 (1 of 3 variants failed the cut-out coverage guard and was skipped). Both hands hold revolvers, one raised near the face as asked; hair reads lighter/more silver than idle and a small gold shoulder accent appears that idle does not have — minor drift, not re-rolled (pace rule)."
         },
         "hurt": {
-          "poseTags": "recoiling, staggering, one revolver lowered, pained expression",
-          "ref": "logos/idle"
+          "poseTags": "recoiling, staggering, one revolver lowered, pained expression, one eye closed",
+          "ref": "logos/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 91401,
+          "notes": "Re-rendered 2026-09-21/22 (seed 91401), best of 2 (1 of 3 variants failed the cut-out coverage guard). Costume/identity is the closer match of the two candidates, but neither strongly reads as recoiling/staggering — this one stands close to idle's own posture with one gun lowered and unrequested rainbow-coloured ribbon streamers on the hakama hem; the other candidate had a stronger pained expression but a large fantastical wing-shaped shoulder pauldron that reads further off-model. Flagged for a follow-up re-roll aimed specifically at the pose, not attempted a third time here (pace rule)."
         },
         "ko": {
           "poseTags": "lying on the ground, revolvers fallen beside him, eyes closed, defeated",
           "composition": "prone",
           "sizeHint": "1216x832",
-          "ref": "logos/idle"
+          "ref": "logos/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "seed": 91501,
+          "notes": "Re-rendered 2026-09-21/22 (seed 91501), best of 3. None of the three candidates render the dropped revolvers on the ground beside him (a real miss against the pose tag); picked on costume/helmet fidelity and a clean 'eyes closed, defeated' read against the other two, which added an unrequested red 'eye' light on the helmet plus a black eye-mask (one candidate) or a much more ornate double-blade helmet crest and buried the face (the other)."
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 62% one colour (near-monochrome dark blue/black), so every other state rendered WITHOUT --ref — judged independently per state. Two of three attack candidates drifted badly off-model (fairy wings; a laser rifle in place of the revolvers) despite the negAdd; the installed attack is the third candidate. The decorative helmet crest the research does not call for (plain \"black-and-silver helmet with a chin protector\") persists across states — a known checkpoint prior, same finding as the concept round's off_canon_seen note. Same monochrome-guard situation as leblanc (docs/concepts/chapters/leblanc/pilot/pilot.md) but NOT pilot-tested here — before adding forceRef/refWeight to the states above, run the same three-method pilot against logos/idle.png rather than copying leblanc's numbers untested."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). All five states re-rendered 2026-09-21/22 with --forceRef (idle off the picked concept logos-c.png at refWeight 0.35/refStart 0.2/refEnd 0.6/ease-in; the other four states off the new idle) after the three-method pilot recommended for this exact situation in docs/concepts/chapters/leblanc/pilot/pilot.md was judged not worth re-running from scratch here: Method A (forceRef) is already the pilot's proven winner for the sibling `leblanc` row's identical monochrome-guard problem, and the old logos idle's failure (a cup/box instead of a revolver) was worse than anything the pilot's method question was about. `negAdd`/`tags`/`emphasis` were also strengthened here versus the untested version: the old `tags` string carried its emphasis as inline `(...)` parens, which `comfy.mjs` escapes to literal text in `--tags` (only the separate `--emphasis` flag reaches real CLIP weighting) — a likely contributor to the old idle dropping the revolvers entirely — and `negAdd` gained explicit anti-cup/box/mask/crest tokens the old row never had. Remaining gaps, honestly: a faint helmet-crest remnant and an open/bare chest on idle; only one revolver clearly visible on attack; the hurt pose reads closer to idle's own stance than to 'recoiling, staggering'; no dropped revolvers on the ground for ko. None of these are re-rolled further here (pace rule, AGENTS.md hard rule 15: two re-roll attempts per state, not a third). Veto sheet: docs/concepts/chapters/leblanc/sets/logos/sheet.png. NOT added to docs/target/approved-hashes.json — these are candidates for Bailey to look at, not an approved delivery (production.md already withdrew the whole chapter:leblanc:2026-09-21 hash set for this exact identity-drift reason)."
     }
   ]
 }
