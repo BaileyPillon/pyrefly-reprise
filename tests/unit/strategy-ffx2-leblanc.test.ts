@@ -271,9 +271,13 @@ describe('A2 — the credible mistake: leave Ormi for last', () => {
     const runs = SEEDS.slice(0, 20).map((seed) => runLastRoom(seed, 0, mistake));
     const withHuggles = runs.filter((r) => r.huggles > 0);
     expect(withHuggles.length, 'Ormi must reach the last-enemy branch').toBeGreaterThan(0);
-    // The teaching moment is that it *costs* — every run that saw a Huggles
-    // ended with the party smaller than it started.
-    for (const r of withHuggles) expect(r.aliveAtEnd).toBeLessThan(3);
+    // The teaching moment is that it *costs*. Measured on seeds 1-20: every
+    // Huggles run lost a member while a party heal could "miss" its own ally;
+    // since PR-0075 (FFX-2 heals on your own side never roll the hit check,
+    // `docs/plans/ffx2-item-accuracy-review.md`) 10 of 11 do, and seed 13
+    // heals through it. No boss number moved; the player's Cure now lands.
+    const costly = withHuggles.filter((r) => r.aliveAtEnd < 3).length;
+    expect(costly / withHuggles.length).toBeGreaterThanOrEqual(0.8);
   }, 300_000);
 
   it('the shipped order all but disarms it — Logos first, Ormi second', () => {

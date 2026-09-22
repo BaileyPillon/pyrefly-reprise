@@ -17,6 +17,16 @@
  *
  * The `D = 1500` arm was recorded after the two fixes and before the lever, so
  * it proves the lever's Normal is byte-identical on the Active path too.
+ *
+ * **Re-pinned once, deliberately, for PR-0075** (release-09 repair, 2026-09-22,
+ * `docs/plans/ffx2-item-accuracy-review.md`): a heal or item on the party's own
+ * side no longer rolls the §2.6 hit check, so it no longer draws from the seeded
+ * stream and every seed that cast one moved. Measured before re-pinning: under the
+ * old engine chapter 4 D=0 had friendly misses on 9 of 20 seeds, chapter
+ * 5 D=0 on 18 of 20; with the roll still drawn (a throwaway probe, not shipped)
+ * the 11 chapter 4 seeds that had none were byte-identical to the old hashes, so the
+ * only behaviour that moved is the friendly miss. After: zero friendly "evaded"
+ * misses on every seed, and D=0 is still 20/20 in both chapters.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -24,28 +34,29 @@ import { driveChapter4, driveChapter5, logHash } from './helpers/ffx2ChapterDriv
 
 const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
+/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. */
 const CH4_D0 = [
-  'da60312fcfd5dd34', '49631c5ab73bb999', 'aa98a8b91473173c', '00501f71ba0fec85', 'bc74cd09f10e3989',
-  '2d6a709bac4e2841', '4abf94a65599f526', '63d2e77ee6513bcb', '2fd720d96b588cc7', 'ae9686e5b40d2477',
-  '82058e15734bf3c7', '94d86e4f782ba6d6', '041ebe7b057109db', '24486a61891d4a61', '35a70dcaa68546bb',
-  '53fc3143e34beef1', '6ef3abe613f40b44', 'a5099ce117a53bd3', '7a27abedd94a3110', '5d3940e303878382',
+  '373c0af61dfb8aae', 'd0e49a7271c07e2b', '802486af811c9d6b', '03f91919f6b18a3e', '0a14b85f9f522050',
+  '339cceeb08ad7f45', 'f6620aa81bc8d4f6', '8b0f606610090fc9', '79f0c871706a29dd', 'ff518ae4bb362478',
+  'eba26c1a60ecedd5', '5ea5c660f8a30976', 'cb37596cb51386b6', '285c0ec16b43af5a', '3cfd436b50ba4f07',
+  '6a153f98a05af5cf', '5764b43c5c6b9c94', '2649ce030cbd66bc', 'de6d7169d7f08905', '7b311b79d378648d',
 ];
 
 const CH5_D0 = [
-  '18db4630271a090b', '0f4613c2e552653f', 'b608db6269308b8e', 'ce45ac053cc840f7', 'e352d9dae3d136e2',
-  'c031edf4e7a0fe95', '47d57d153956efdd', '9a2db3c673d249bf', 'd8b00268931c04e6', '2464db761e35c766',
-  'da6ebec53da04b6e', '7f5b674c77f0d2e4', 'e14867b1bc20ce58', '133db53ca6df211f', 'c960c031ad7e7c81',
-  '3221072cddc06a90', '440f071746152753', '7cb297a9381a453e', '6376ea66c11e3e16', '178c255400acc69f',
+  '5768c4da29cbb005', '2f6305d343ecd04f', '46b939d92205b0b1', 'af3aa760d6e49334', '566d0a98889bb960',
+  '3700fb016dec7c9b', 'dcffb12d092df765', 'b4070d9b40804b9f', '4215441079bc40dc', '6e62a395c64379ee',
+  'bad3d03e95722e68', 'cdfb2d39c051377d', '3aecc54139a8de33', '39546243805f0060', '9e8dbe70a76ab325',
+  '1341bcb1f1a2621c', '27020425d0dd3e92', '6eb7c2c7f1d16e49', 'dcf3a9e1589b6764', 'ba2a6f8c33e7cfbf',
 ];
 
 /** Recorded after the hold / owner fixes (commit 1 of the track), before the speed lever. */
 const CH4_D1500 = [
-  '06d856cf21831cf0', '86001f282dfa2689', '31a3789b74514b8c', '510a919fab2b367d', '95b6f16c5e729580',
-  '7c906d485fc5a1d1', 'cf8de5edec0227a7', '0518033afe081629', '089eadef2333d9a7', '9b50e029dc8e56a4',
+  'f7184d7b87948e2c', 'e162970a86a2268f', 'fc6c4f4b8b7cb240', '7f9abbf856f2464a', '4439b76d4c54cc7d',
+  '51f22c7af66239a8', 'd73d41236dc23eb0', '042fd279eda61cb1', '82058d0ebeeadaeb', '4ec0c1f9c35887d7',
 ];
 const CH5_D1500 = [
-  'db47b08ec7552d18', '60c1ea16ee79bdda', '3fbda8613f79ec20', 'f4239bde7b5c4b5f', '9306d2c88015fcb0',
-  'a5a099ab3072543c', '1eefe146b62be4d2', '015b2f7867a9984b', 'b667e6545822e445', 'c8e9c53cf33cb1ab',
+  'd9f15a6ad10a199f', '05ba836179afcebd', '4827ebd15aab9ddf', 'a70c9fdcaf9da8e1', 'bc1d1062c3d93496',
+  'bf11cdedc00e8d23', 'ff37f688300a472b', 'b70e3e0f01592f0c', '924faf301d1e8f50', '6c49eb62069b6105',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 

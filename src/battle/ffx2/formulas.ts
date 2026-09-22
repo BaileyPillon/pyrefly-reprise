@@ -1,6 +1,6 @@
 /**
  * The FFX-2 damage chain — SinirothX's canonical 20-step flowchart
- * [ffx2-combat-core §2.1], plus the hit check (§2.6) and criticals (§2.5).
+ * [ffx2-combat-core §2.1], re-exporting the hit check (§2.6) and criticals (§2.5) from `hit.ts`.
  *
  * This shares **nothing** with `battle/ffx/formulas`. X-2's pipeline is a
  * different shape: Level is a first-class term in the physical base, Defense is
@@ -23,7 +23,6 @@ import type {
 } from '../common/types.ts';
 import { AFFINITY_MULTIPLIER_FFX2 } from '../common/types.ts';
 import {
-  ACCU_POINTS_PER_LEVEL,
   BACK_ATTACK_MULTIPLIER,
   BASE_CUBIC_DIVISOR,
   BERSERK_MULTIPLIER,
@@ -31,12 +30,8 @@ import {
   DAMAGE_9999,
   DAMAGE_CAP,
   DAMAGE_CAP_BROKEN,
-  DARKNESS_ACCURACY_DIVISOR,
   DEFENSE_DIVISOR,
   DEFENSE_NUMERATOR,
-  ENEMY_BASE_ACCURACY,
-  EVA_POINTS_PER_LEVEL,
-  LUCK_POINTS_PER_LEVEL,
   MAGIC_CONSTANT_DIVISOR,
   MAGIC_RECOVERY_CONSTANT_DIVISOR,
   MULTI_TARGET_MULTIPLIER,
@@ -341,59 +336,6 @@ export function computeDamage(ctx: DamageContext): DamageResult {
   return { amount, affinity, capped, immune };
 }
 
-// ---------------------------------------------------------------------------
-// Hit check and criticals
-// ---------------------------------------------------------------------------
-
-/**
- * §2.6: a flat additive points race, not a ratio. Darkness **divides** Accuracy
- * by four, which is why blinding the party is X-2's most damaging debuff.
- */
-export function hitPercent(user: FFX2Combatant, target: FFX2Combatant, ability: AbilityDef): number {
-  if (typeof ability.accuracy === 'number') return Math.max(0, Math.min(100, ability.accuracy));
-  if (ability.canMiss === false) return 100;
-  // Status-only actions are gated by the §2.6a infliction formulas, not by the
-  // physical hit check — the same carve-out §2.6 makes for Death and Eject.
-  if (ability.formula === 'none') return 100;
-
-  // An enemy whose Accuracy is absent from the record uses the baseline; see
-  // ENEMY_BASE_ACCURACY for the conflict this resolves.
-  const ownAcc = user.side === 'enemy' && user.stats.acc === 0 ? ENEMY_BASE_ACCURACY : user.stats.acc;
-  const rawAcc = ability.flags.includes('affected-by-darkness') || ability.damageType === 'physical'
-    ? has(user, 'darkness')
-      ? Math.floor(ownAcc / DARKNESS_ACCURACY_DIVISOR)
-      : ownAcc
-    : ownAcc;
-
-  const attacker =
-    rawAcc +
-    user.stats.luck +
-    ACCU_POINTS_PER_LEVEL * (statLevel(user, 'accu-up') - statLevel(user, 'accu-down')) +
-    LUCK_POINTS_PER_LEVEL * (statLevel(user, 'luck-up') - statLevel(user, 'luck-down'));
-
-  // Sleep sets Evasion to 0; Stop and an open chain window forbid evading at all.
-  const evasion = has(target, 'sleep') || has(target, 'stop') ? 0 : target.stats.eva;
-  const defender =
-    evasion +
-    target.stats.luck +
-    EVA_POINTS_PER_LEVEL * (statLevel(target, 'eva-up') - statLevel(target, 'eva-down')) +
-    LUCK_POINTS_PER_LEVEL * (statLevel(target, 'luck-up') - statLevel(target, 'luck-down'));
-
-  return Math.max(0, Math.min(100, Math.floor(attacker - defender)));
-}
-
-/**
- * Critical chance. §2.5 says only "attacker's Luck vs target's Luck" — no
- * source publishes the curve, so this is an `[estimate]`: a quarter of the Luck
- * gap, plus the ability's own bonus. Tune here, not at call sites.
- */
-export function critPercent(user: FFX2Combatant, target: FFX2Combatant, ability: AbilityDef): number {
-  if (!ability.flags.includes('crit-eligible')) return 0;
-  const userLuck =
-    user.stats.luck + LUCK_POINTS_PER_LEVEL * (statLevel(user, 'luck-up') - statLevel(user, 'luck-down'));
-  const targetLuck =
-    target.stats.luck +
-    LUCK_POINTS_PER_LEVEL * (statLevel(target, 'luck-up') - statLevel(target, 'luck-down'));
-  const gap = Math.floor((userLuck - targetLuck) / 4);
-  return Math.max(0, Math.min(100, gap + (ability.bonusCrit ?? 0)));
-}
+// The hit check (§2.6) and criticals (§2.5) live in `hit.ts`; re-exported so no
+// importer changes.
+export { critPercent, hitPercent } from './hit.ts';
