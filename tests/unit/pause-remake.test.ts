@@ -411,7 +411,10 @@ describe('every function of the old pause screen is still reachable', () => {
     expect(h.root.querySelector('.pause__baseline')!.textContent).toContain('show panels');
   });
 
-  it('5 and 6. REPLAY BRIEFING and BATTLE HELP — OPTIONS tab, behind the dark launch', () => {
+  it('5 and 6. REPLAY BRIEFING and BATTLE HELP — OPTIONS tab, the flag forced off, then on', () => {
+    // Case (a): the flag forced off. A menu must not advertise a feature that
+    // shows nothing, so the rows are absent outright, not merely greyed.
+    setOnboardingLive(false);
     const off = mount('seymour-flux');
     off.screen.trigger('pause:tab:options');
     expect(rowIds(off), 'a menu must not advertise a feature that shows nothing').not.toContain('briefing');
@@ -419,6 +422,11 @@ describe('every function of the old pause screen is still reachable', () => {
     off.dispose();
     live = null;
 
+    // Case (b): the flag forced on — this build's own default since 65b57bd
+    // switched ONBOARDING_LIVE on, but forced explicitly here so this case
+    // does not depend on that default. Both rows are drawn and reachable.
+    // `afterEach` below (`resetCoach()`) restores the ambient flag once this
+    // test ends, so case (a)'s override cannot leak into a later test.
     setOnboardingLive(true);
     const on = mount('seymour-flux');
     on.screen.trigger('pause:tab:options');
