@@ -15,6 +15,24 @@
 /** Ticks consumed per second at Config ATB speed = Normal. §1.2 `[single source]` */
 export const TICK_RATE_BASE = 3000;
 
+/** FFX-2's Config "ATB Mode and Speed" speed setting (`research/ffx-vs-ffx2-presentation.md:278`). */
+export type AtbSpeed = 'slow' | 'normal' | 'fast';
+
+/**
+ * Config ATB speed multiplies the global tick rate — §1.2's `tickRate()`
+ * verbatim: `cfgMul = slow ? 0.53 / 0.71 : fast ? 0.53 / 0.42 : 1`, i.e.
+ * Slow 0.746x, Normal 1x, Fast 1.262x, derived from §2.8's status-duration
+ * constants (0.71 / 0.53 / 0.42 s per duration unit at Slow / Normal / Fast).
+ * `[single source]`. Kept as the research's own quotients, never rounded, so
+ * the three settings reproduce §2.8's seconds exactly. FFX-2 only: FFX's CTB
+ * has no tick rate.
+ */
+export const ATB_SPEED_MULTIPLIER: Readonly<Record<AtbSpeed, number>> = {
+  slow: 0.53 / 0.71,
+  normal: 1,
+  fast: 0.53 / 0.42,
+};
+
 /** One *drawn* full HUD bar. 24 000 ticks = 8.00 s of runway. §1.2 `[single source]` */
 export const TICKS_PER_BAR = 24000;
 

@@ -26,6 +26,7 @@ import type {
   Rng,
   StatBlock,
 } from '../common/types.ts';
+import type { AtbSpeed } from './constants.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -149,6 +150,13 @@ export interface Ffx2EngineOptions {
    * (`docs/CONTRACTS.md`, "Minigame protocol").
    */
   minigames?: boolean;
+  /**
+   * The Config ATB speed (`constants.ts` {@link ATB_SPEED_MULTIPLIER}, §1.2).
+   * Default `'normal'`, which is bit-for-bit the engine as it was before the
+   * setting existed (`tests/unit/ffx2-atb-golden.test.ts`). Changeable
+   * mid-battle with `FFX2Engine.setAtbSpeed`.
+   */
+  atbSpeed?: AtbSpeed;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

@@ -69,3 +69,13 @@ describe('FFX-2 golden event logs at zero decision time (D = 0)', () => {
     expect(runs.every((r) => r.outcome === 'victory')).toBe(true);
   }, 120_000);
 });
+
+describe('the Config ATB speed lever at Normal changes nothing (§1.2)', () => {
+  it('explicit atbSpeed: "normal" reproduces every golden, D = 0 and D = 1500', () => {
+    const normal = { atbSpeed: 'normal' as const };
+    expect(SEEDS.map((s) => logHash(driveChapter4(s, 0, normal)))).toEqual(CH4_D0);
+    expect(SEEDS.map((s) => logHash(driveChapter5(s, 0, normal)))).toEqual(CH5_D0);
+    expect(SEEDS_10.map((s) => logHash(driveChapter4(s, 1500, normal)))).toEqual(CH4_D1500);
+    expect(SEEDS_10.map((s) => logHash(driveChapter5(s, 1500, normal)))).toEqual(CH5_D1500);
+  }, 180_000);
+});

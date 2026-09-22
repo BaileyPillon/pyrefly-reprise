@@ -89,14 +89,19 @@ is not edited. No HudPort change: another ready girl already shows as a full ATB
 - `Ffx2EngineOptions.atbSpeed?: 'slow' | 'normal' | 'fast'` (default `'normal'`) and
   `FFX2Engine.setAtbSpeed()`. Multiplier = §1.2's own expression: `0.53 / 0.71`, `1`,
   `0.53 / 0.42` (0.7465 / 1 / 1.2619), in `constants.ts` with the citation.
-- **What scales** (game ticks per real ms): ATB, CTIM and RECTIM gauges, status clocks and
-  Regen/Poison payouts — §1.2 says the Config multiplies the global tick rate, and §2.8's
-  0.71 / 0.53 / 0.42 s-per-unit constants are exactly that rate change seen on durations.
-- **What does not**: the chain window stays 2 s / 3 s of real time (§1.7 gives it in
-  seconds, and `chain.ts` models it as a real-time recovery animation), and elapsed battle
-  time stays real ms. Whether retail scales the chain window with the Config is **not
-  sourced**; keeping the sourced seconds is the reading that invents nothing, and it is
-  written down as an open question.
+- **What scales** (game ticks per real ms): the one global game clock — ATB, CTIM and
+  RECTIM gauges, status clocks and Regen/Poison payouts, §1.7's chain windows, AI clocks.
+  §1.2 says the Config multiplies *the single global tick rate*, §2.8's 0.71 / 0.53 / 0.42
+  s-per-unit constants are exactly that rate change seen on durations, and `chain.ts` runs
+  the windows on the global clock. Only elapsed battle time stays real ms.
+- **Revised during the build, and why.** The first draft kept the chain window at 2 real
+  seconds at every speed. Measured, that made Slow a *balance* change: chapter 5 at zero
+  decision time fell from 40/40 to 37/40, because a shorter window in game time breaks
+  chains. A player-side speed setting must not re-tune the boss fight, and the research
+  names one global rate, so the whole clock scales as one: at any speed the fight is the
+  same fight in game time and only the real time per game second changes. Whether retail
+  scales the chain window with the Config is still **not sourced**; this is the reading
+  that adds no second clock, and it is written down as an open question.
 - Byte-identity at Normal: every new multiply/divide is by exactly `1`, which IEEE-754 leaves
   bit-identical; proven by I5 plus a golden at `D = 1500` recorded after the fixes and
   before the lever.

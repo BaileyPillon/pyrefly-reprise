@@ -38,6 +38,7 @@ import {
   dressphereRegistryFrom,
   garmentGridRegistryFrom,
   itemRegistryFrom,
+  ATB_SPEED_MULTIPLIER,
 } from '../../src/battle/ffx2/index.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
@@ -47,6 +48,9 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
+/** Optional Config ATB speed arm (§1.2): `PYREFLY_ATB_SPEED=slow|normal|fast`. Default Normal. */
+const SPEED =
+  (['slow', 'normal', 'fast'] as const).find((s) => s === process.env['PYREFLY_ATB_SPEED']) ?? 'normal';
 const MAX_DECISIONS = 30_000;
 /** AUTHORED measurement inputs, not game data: 0 = today, 1.5 s = a player who knows the menu, 4 s = a first-timer reading it. */
 const ARMS = [0, 1500, 4000];
@@ -59,6 +63,7 @@ function engineOptions() {
     dresspheres: dressphereRegistryFrom(Object.values(data.STANDARD_DRESSPHERES)),
     garmentGrids: garmentGridRegistryFrom(Object.values(data.GARMENT_GRIDS)),
     minigames: false as const,
+    atbSpeed: SPEED,
   };
 }
 
@@ -167,7 +172,8 @@ function runLink(engine: FFX2Engine, decisionMs: number, tally: Tally): string |
   }
 
   scoreEvents(tally, engine.state().log.slice(from), enemyIds);
-  tally.seconds += engine.state().ticks / 3000;
+  // Real seconds: game ticks over the Config rate (§1.2).
+  tally.seconds += engine.state().ticks / 3000 / ATB_SPEED_MULTIPLIER[SPEED];
   return outcome;
 }
 
@@ -267,7 +273,7 @@ function report(label: string, run: (seed: number, d: number) => Tally): void {
     );
   }
   console.log(
-    '\nchapter | D | wins | median s | worst s | player turns | enemy actions | KOs | chained | mega flares | menus invalidated | commands refused | commands held | runs by links cleared 0/1/2/3/4/5',
+    `\nATB speed ${SPEED}\nchapter | D | wins | median s | worst s | player turns | enemy actions | KOs | chained | mega flares | menus invalidated | commands refused | commands held | runs by links cleared 0/1/2/3/4/5`,
   );
   for (const row of rows) console.log(row);
 }

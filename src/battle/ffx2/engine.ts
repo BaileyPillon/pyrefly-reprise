@@ -51,6 +51,7 @@ import type {
   GarmentGridRegistry,
 } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
+import { ATB_SPEED_MULTIPLIER, type AtbSpeed } from './constants.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { advanceChainWindows, isActionLocked, ticksUntilChainBreak } from './chain.ts';
@@ -131,9 +132,24 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    * never opens a menu is bit-identical to before Active existed.
    */
   private carriedTicks = 0;
+  /**
+   * Game ticks per real tick: the Config ATB speed (`constants.ts`
+   * {@link ATB_SPEED_MULTIPLIER}, §1.2). Applied only where real milliseconds
+   * cross into the engine (`tick`) and back out (`'waiting'`, elapsed time),
+   * so the whole game clock — gauges, statuses, chain windows, AI clocks —
+   * scales as one: §1.2 calls the Config a multiplier on *the single global
+   * tick rate*, and §1.7's chain windows run on that global clock. A fight at
+   * any speed is the same fight in game time; only the real time a player has
+   * per game second changes. Exactly `1` at Normal, so every multiply and
+   * divide by it is the identity and Normal is bit-for-bit the engine as it
+   * was (`tests/unit/ffx2-atb-golden.test.ts`). FFX-2 only.
+   */
+  private atbRate = 1;
+  private speed: AtbSpeed = 'normal';
 
   constructor(options: Ffx2EngineOptions = {}) {
     this.options = options;
+    this.setAtbSpeed(options.atbSpeed ?? 'normal');
     this.abilities = chainRegistries(options.abilities, defaultAbilities);
     this.dresspheres = options.dresspheres ?? defaultDresspheres;
     this.grids = options.garmentGrids ?? defaultGarmentGrids;
@@ -156,6 +172,20 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     this.carriedTicks = 0;
     this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
     this.flush();
+  }
+
+  /**
+   * Change the Config ATB speed, mid-battle included (the pause menu's ATB
+   * SPEED row; the clock is frozen while it is open). Takes effect from the
+   * next `tick`. Survives `init`, so a chained chapter keeps it across links.
+   */
+  setAtbSpeed(speed: AtbSpeed): void {
+    this.speed = speed;
+    this.atbRate = ATB_SPEED_MULTIPLIER[speed];
+  }
+
+  atbSpeed(): AtbSpeed {
+    return this.speed;
   }
 
   setSeed(n: number): void {
@@ -236,7 +266,9 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       return { kind: 'resolved', events: this.flush() };
     }
 
-    return { kind: 'waiting', nextEventMs: Math.max(1, Math.round(ticksToMs(this.nextEventTicks()))) };
+    // Real ms until the next event: game ticks over the Config rate (§1.2).
+    const ms = ticksToMs(this.nextEventTicks()) / this.atbRate;
+    return { kind: 'waiting', nextEventMs: Math.max(1, Math.round(ms)) };
   }
 
   submit(command: Command): BattleEvent[] {
@@ -318,7 +350,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   tick(ms: number, opts?: TickOptions): BattleEvent[] {
     if (this.battleState.result) return this.flush();
     const throughInput = opts?.throughInput === true;
-    let remaining = msToTicks(Math.max(0, ms));
+    // Real ms become game ticks at the Config ATB speed (§1.2 `tickRate`).
+    let remaining = msToTicks(Math.max(0, ms)) * this.atbRate;
     if (throughInput) {
       remaining += this.carriedTicks;
       this.carriedTicks = 0;
@@ -330,7 +363,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
         ? substepTicks(remaining, this.soonestEventTicks())
         : Math.min(remaining, Math.max(1, this.nextEventTicks()));
       remaining -= step;
-      this.elapsedMs += ticksToMs(step);
+      this.elapsedMs += ticksToMs(step) / this.atbRate;
       this.battleState.ticks += step;
 
       advanceChainWindows(this.units, step, (e) => this.emit(e));
