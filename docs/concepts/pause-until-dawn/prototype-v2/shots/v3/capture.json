@@ -1,0 +1,156 @@
+{
+  "url": "http://localhost:5759/docs/concepts/pause-until-dawn/prototype-v2/",
+  "browser": "chromium, PYREFLY_BROWSER=gpu",
+  "stills": [
+    {
+      "name": "01-rest-reduced-motion",
+      "yaw": 0,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "R key: reduced motion, yaw 0, post grade on"
+    },
+    {
+      "name": "02-idle-centre",
+      "yaw": 1.54,
+      "aperture": 0.85,
+      "eye": "half",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "idle sway, no input"
+    },
+    {
+      "name": "03-left-20-blend",
+      "yaw": -24.31,
+      "aperture": 0.63,
+      "eye": "half",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowLeft held: frontal/q34-left mid-dissolve"
+    },
+    {
+      "name": "04-left-40",
+      "yaw": -42.52,
+      "aperture": 0.7,
+      "eye": "half",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowLeft held to q34-left"
+    },
+    {
+      "name": "05-left-62-blend",
+      "yaw": -64.58,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowLeft held: q34-left/profile-left mid-dissolve"
+    },
+    {
+      "name": "06-left-85",
+      "yaw": -84.14,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowLeft held to profile-left"
+    },
+    {
+      "name": "07-right-20-blend",
+      "yaw": 22.84,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowRight held: frontal/q34-right mid-dissolve"
+    },
+    {
+      "name": "08-right-40",
+      "yaw": 39.73,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowRight held to q34-right"
+    },
+    {
+      "name": "09-right-62-blend",
+      "yaw": 63.4,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "ArrowRight held: q34-right/profile-right mid-dissolve"
+    },
+    {
+      "name": "10-right-85",
+      "yaw": 84.02,
+      "aperture": 1,
+      "eye": "open",
+      "mouth": "smile",
+      "brow": "raised",
+      "note": "ArrowRight held to profile-right (new, mirrored)"
+    },
+    {
+      "name": "11-blink-1",
+      "yaw": 0.6,
+      "aperture": 0.66,
+      "eye": "closing",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "B key in slow motion, frozen at aperture <= 0.66"
+    },
+    {
+      "name": "12-half",
+      "yaw": 0.6,
+      "aperture": 0.5,
+      "eye": "closing",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "B key in slow motion, frozen at aperture <= 0.5"
+    },
+    {
+      "name": "13-blink-2",
+      "yaw": 0.6,
+      "aperture": 0.33,
+      "eye": "closing",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "B key in slow motion, frozen at aperture <= 0.33"
+    },
+    {
+      "name": "14-closed",
+      "yaw": 0.6,
+      "aperture": 0.02,
+      "eye": "closing",
+      "mouth": "neutral",
+      "brow": "neutral",
+      "note": "B key in slow motion, frozen at aperture <= 0.02"
+    },
+    {
+      "name": "15-brow-raised",
+      "yaw": 0,
+      "brow": "raised",
+      "note": "renderer driven directly in one task (no key drives brows): brow raised at weight 1, fringe lifted with raised"
+    },
+    {
+      "name": "16-brow-drawn",
+      "yaw": 0,
+      "brow": "drawn",
+      "note": "renderer driven directly in one task (no key drives brows): brow drawn at weight 1, fringe lifted with raised"
+    },
+    {
+      "name": "17-mouth-smile",
+      "yaw": 0,
+      "mouth": "smile",
+      "note": "renderer driven directly in one task: mouth smile at weight 1"
+    },
+    {
+      "name": "18-mouth-parted",
+      "yaw": 0,
+      "mouth": "parted",
+      "note": "renderer driven directly in one task: mouth parted at weight 1"
+    }
+  ]
+}
