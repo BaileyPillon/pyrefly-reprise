@@ -1,0 +1,82 @@
+{
+  "regions": {
+    "body/neck": 32587,
+    "hairBack/underBody": 12150,
+    "hairBack/underEarring": 15327,
+    "body/underEarring": 7775,
+    "headCore/underEarring": 3000,
+    "hairBack/understrand1": 5529,
+    "hairBack/understrand2": 5111,
+    "hairBack/underFringe": 2450,
+    "headCore/underFringe": 9503,
+    "eyeApertureR/underFringe": 0,
+    "eyeApertureL/underFringe": 354,
+    "irisR/underFringe": 0,
+    "irisL/underFringe": 376
+  },
+  "jobs": {
+    "neck": {
+      "layers": [
+        "body"
+      ],
+      "pixels": 32587,
+      "src": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/neck.src.png",
+      "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/neck.mask.png",
+      "tags": "neck, skin, soft shading",
+      "denoise": 0.35,
+      "negAdd": ""
+    },
+    "earCollar": {
+      "layers": [
+        "body"
+      ],
+      "pixels": 7775,
+      "src": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/earCollar.src.png",
+      "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/earCollar.mask.png",
+      "tags": "pink hood, fabric, soft shading",
+      "denoise": 0.0,
+      "negAdd": "braid, earring, jewelry, beads, tassel, ribbon"
+    },
+    "earHair": {
+      "layers": [
+        "hairBack",
+        "headCore"
+      ],
+      "pixels": 18327,
+      "src": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/earHair.src.png",
+      "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/earHair.mask.png",
+      "tags": "brown hair, hair strands, orange highlights, dark hair shadow",
+      "denoise": 0.4,
+      "negAdd": "braid, braided hair, earring, jewelry, beads, hair ornament, tassel"
+    },
+    "behind": {
+      "layers": [
+        "hairBack"
+      ],
+      "pixels": 22790,
+      "src": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/behind.src.png",
+      "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/behind.mask.png",
+      "tags": "dark brown hair, hair strands, hair behind neck",
+      "denoise": 0.55,
+      "negAdd": "braid, earring, jewelry"
+    },
+    "face": {
+      "layers": [
+        "headCore",
+        "eyeApertureR",
+        "eyeApertureL",
+        "irisR",
+        "irisL"
+      ],
+      "pixels": 10233,
+      "src": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/face.src.png",
+      "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/face.mask.png",
+      "tags": "forehead, eyebrows, thin eyebrows, eyelashes, skin, soft shading",
+      "denoise": 0.45,
+      "negAdd": ""
+    }
+  },
+  "range": "range-sym.json",
+  "fringeLiftPx": 3,
+  "marginPx": 2
+}
