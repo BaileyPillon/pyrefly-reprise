@@ -139,3 +139,114 @@ list — the engine/data side is done (see `docs/handoff/chapter-leblanc-engine.
 and art/registration are deliberately not — so chapter wiring (encounters
 registry, chapter select card, tactics lines, music routing, results screen)
 is a separate track's job and out of scope for this art-judging pass.
+
+## Redo pass 2 (2026-09-22) — self-judged, not independent
+
+This section is the producing pass for the redo this judge.md's own FAIL
+called for, run by the same agent that re-rendered the art (per the
+orchestration brief for this pass: "same ownership as its renderer"). It is
+**not** a third independent judge pass — treat the scores below as the
+producer's own honest self-assessment against the rubric above, the same way
+the original 2026-09-22 production round self-judged in each state's
+`judgeNotes`. A true independent pass over this round is still owed.
+
+**Root cause identified and fixed for all four states:** the shared identity
+block (`tools/gen/cast.json`'s `leblanc.tags`, `docs/concepts/chapters/leblanc/
+pilot/identity.txt`) itself said "the robe patterned all over in blue and
+white triangles and swirls" and carried a `(blue and white triangle pattern
+robe:1.35)` emphasis. That text is the *research-sourced canon* description
+(`research/ffx2-leblanc-syndicate.md` line 823) — but idle.png itself never
+rendered that pattern (it came out a plain solid purple, accepted on-model
+against Bailey's picked concept regardless), so every other state was being
+pulled toward *some* invented pattern by the prompt while being judged
+against idle's patternless reality. Fix: dropped the pattern language from
+`--tags` entirely, replaced the `--emphasis` token with `(plain solid purple
+robe, no pattern:1.4)` (up from `1.25`), added `pale skin` (the tan-skin drift
+the independent pass also flagged on attack/hurt), and raised `--refWeight`
+0.35 -> 0.4 (one step, per the judge's note). This is a deliberate, disclosed
+departure from the research's own robe description in favour of internal
+consistency between idle and the other four states — the research pattern has
+still never landed on any rendered state including idle across three rounds
+now, and matching idle beats matching a description the checkpoint cannot
+reproduce reliably. Flagged per AGENTS.md hard rule 6, not hidden.
+
+Six candidates were rendered per state (per the brief); one attack candidate
+and one cast candidate were lost to the cut-out sanity guard (full-canvas
+coverage, correctly rejected) and re-rolled once each to keep 6. One ko
+candidate rendered a second figure ("multiple girls") and was discarded
+without a re-roll (5 remained, still enough to judge). All candidates and a
+contact sheet per state are under `sets/leblanc/candidates/<state>/` and
+`sets/leblanc/sheet-<state>-fix.png`; `sheet-redo2.png` is a before/after/idle
+strip for the four installed states.
+
+| State | Hair | Face | Outfit colours/pattern | Marks | Weapon | Style | Pose reads as state | **Score (worst)** | Worst criterion |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| attack | 7 | 7 | 8 | 7 | 7 | 7 | 6 | **6** | pose (reads as a fan flourish, not a hard lunge) |
+| cast | 7 | 7 | 8 | 7 | 7 | 7 | 6 | **6** | pose ("looking up" not clearly met; eyes read forward) |
+| hurt | 7 | 6 | 8 | 7 | 6 | 7 | 6 | **6** | tied: weapon (fan reads closer to a held stick than an open fan) and pose (posture reads more upset/standing than doubled-over/staggering) |
+| ko | 7 | 7 | 8 | 8 | 7 | 7 | 8 | **7** | hair/face/weapon/style tied at 7 |
+
+**Outfit colours/pattern is fixed on all four states** — up from 3 (a blatant
+mismatched pattern on every state) to 8 (solid purple, no printed pattern,
+close match to idle). That was the disqualifying criterion on all four
+originally and no longer is.
+
+**ko clears the bar (7).** Its specific defect — the heart mark rendering
+pink/rose instead of red — is fixed (`(vivid red heart-shaped mark:1.35)`);
+every other criterion was already sound. Recommend treating ko as resolved,
+pending an independent confirmation pass.
+
+**attack, cast and hurt do not clear the bar.** Each improved from a 3
+(pattern, and for hurt also pose) to a 6, installed anyway per the brief
+("install the best even if it is still under 7") as **best available, below
+bar**:
+
+- **attack (6):** pattern and marks are both solid now; the remaining gap is
+  the pose reading as a stylish fan flourish rather than a clear attacking
+  lunge. A third attempt should hold the pattern/skin fix and push harder on
+  `--poseTags` for a forward-committed lunge silhouette specifically (the
+  original installed `attack.png`, pre-redo, had a stronger lunge read that
+  this round's candidates traded away for pattern/skin gains).
+- **cast (6):** same story — pattern and marks hold, "looking up" is the
+  weakest link. A follow-up should try `(looking up, eyes upturned:1.3)` as
+  its own emphasis token rather than leaving it to unweighted `--poseTags`
+  text, which the facing-contract research (`docs/ART-PIPELINE.md` §3) already
+  established does little unweighted.
+- **hurt (6):** the pose-reads-as-hurt criterion, tied-worst across three
+  rounds now (this one included), moved from an unambiguous 3 ("coy wink") to
+  a real 6 (reads as pained/tearful, not smiling) — the biggest single-state
+  improvement in this pass, but still short. The strongest *expression* of
+  the six candidates tried (`hurt-fix.2`, a bared-teeth grimace) was rejected
+  here for a worse defect (an off-model blue-grey skin cast and no visible
+  heart mark), which is itself worth a note: pushing the pain expression
+  harder on this checkpoint may cost skin tone or the heart mark, so a third
+  attempt should try to hold expression and skin/marks separately rather than
+  one more blended prompt (per AGENTS.md hard rule 15's two-attempts-then-a-
+  method-check: this is attempt 2 on hurt's pose-reads-as-state criterion
+  across this pass and the original pass combined, so a third plain re-roll
+  should not happen without a written method check first).
+
+## Redo pass 2 candidate reject notes
+
+- **attack:** `attack-fix.1` (soft tone-on-tone brocade still visible on the
+  skirt, borderline but not as clean as the pick), `attack-fix.3`/`.7` (both
+  still show a distinct printed pattern — chevron and diamond respectively),
+  `attack-fix.4` (clean robe and clear heart, but no fan visible in frame at
+  all — fails the weapon criterion outright).
+- **cast:** `cast-fix.2` (a lighter lining panel down the front reads close to
+  a two-tone pattern), `cast-fix.6` (very clean robe but the fan is closed,
+  held like a wand), `cast-fix.7` (no fan visible in frame).
+- **hurt:** `hurt-fix.2` (the best pain expression of the six, a genuine
+  bared-teeth grimace, but off-model blue-grey skin and no heart mark visible
+  in frame), `hurt-fix.1` (a workable wince in profile, but the robe's diagonal
+  faceted pattern is the most visible of the six), `hurt-fix.3` (a decent
+  one-eye-shut wince undercut by an unrelated white streak artifact across the
+  forehead), `hurt-fix.5`/`.6` (both read as a grin/smirk, the same failure
+  mode as before).
+- **ko:** `ko-fix.1` (two figures — "multiple girls" — discarded), `ko-fix.2`
+  (visible diamond print on the sleeve, eyes not fully closed), `ko-fix.3` (a
+  strong red heart but doubled and placed high at the choker rather than the
+  sternum, and the fan is held near her mouth rather than "fallen open beside
+  her" as the brief asks), `ko-fix.5` (heart renders coral/orange, not red —
+  the exact defect this round was fixing), `ko-fix.6` (clean robe and a red
+  heart, but eyes read open/lidded rather than closed).

@@ -1,0 +1,65 @@
+{
+  "width": 1216,
+  "height": 832,
+  "baselineY": 832,
+  "seed": 9614,
+  "prompt": "1girl, leblanc \\(ff10-2\\), final fantasy x-2, safe, solo, round face, large purple eyes, pale skin, short blonde hair falling to the chin with side-swept bangs, a pinkish-purple furisode-style robe left open at the chest revealing a red heart-shaped syndicate mark on her sternum, a plain, solid purple robe with soft shading-fold variation only, no pattern, a high curved tasselled collar standing up around her neck, long furisode sleeves with the cuffs separated from the sleeve ends by a band of white crisscrossed material, the robe cut away baring her right thigh, thigh-high stockings the same pinkish-purple as the robe, purple ankle boots with a low heel, holding a large red-and-silver folding fan, confident smirk, half-lidded eyes, \\(plain solid purple robe, no pattern\\), \\(vivid red heart-shaped mark\\), \\(red and silver fan\\), lying on ground, on side, eyes closed, unconscious, defeated, fan fallen open beside her, (short blonde bob:1.3), (plain solid purple robe, no pattern:1.4), (vivid red heart-shaped mark:1.35), head to the left, feet to the right, lying on ground, on side, eyes closed, full body, from side, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects",
+  "cropBox": [
+    0,
+    0,
+    1216,
+    832
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "prone",
+  "facing": "left",
+  "emphasis": "(short blonde bob:1.3), (plain solid purple robe, no pattern:1.4), (vivid red heart-shaped mark:1.35)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "ref": "public/art/characters/leblanc/idle.png",
+  "refWeight": 0.4,
+  "refWeightType": "ease in",
+  "refScaling": "K+V",
+  "refStart": 0.2,
+  "refEnd": 0.6,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "lint": {
+    "stripped": []
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 1,
+      "heightFraction": 1,
+      "checked": false,
+      "exceeds": false
+    },
+    "components": {
+      "componentCount": 2,
+      "largestPixels": 668169,
+      "secondPixels": 821,
+      "secondRatio": 0.0012287310545685299,
+      "touchesLargest": true
+    },
+    "nearWhite": {
+      "fraction": 0.03479274727574403,
+      "largestRegionFraction": 0.011393294369123605,
+      "detached": false,
+      "touchesEdge": false,
+      "allowanceUsed": 0.045513002710011845
+    }
+  },
+  "candidateOf": "D:\\Final Fantasy\\public\\art\\characters\\leblanc\\ko-fix.png",
+  "generatedAt": "2026-09-22T03:05:02.324Z"
+}

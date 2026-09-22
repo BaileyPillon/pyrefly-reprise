@@ -1,9 +1,18 @@
 # Production — the Leblanc Syndicate chapter (2026-09-21)
 
-**Status: CANDIDATE, not approved (2026-09-21):** identity drift between states —
+**Status: CANDIDATE, not approved (2026-09-22, updated):** identity drift between states —
 the driver found the leblanc/ormi/logos pose sets drift identity state to state.
 Removed from `docs/target/approved-hashes.json` (`chapter:leblanc:2026-09-21`
-withdrawn); re-render in progress.
+withdrawn). **2026-09-22 redo pass 2:** attack/cast/hurt/ko re-rendered again
+after an independent judge pass failed all four (3/10, tied on outfit
+colour/pattern) — see `docs/concepts/chapters/leblanc/sets/leblanc/judge.md`
+for the root cause (the identity block's own canon pattern text was driving
+the drift), the fix, and the self-judged score table. Outcome: outfit pattern
+is fixed on all four states; `ko` now clears the 7 bar; `attack`, `cast` and
+`hurt` improved from 3 to 6 and are installed as best-available-below-bar, not
+approved. Still needs an independent judge pass to confirm, and (per the
+judge's own notes) a third attempt on hurt's expression should get a written
+method check first (AGENTS.md hard rule 15) rather than another plain re-roll.
 
 Veto sheet: `production.png` (one row per installed item: picked concept where one
 exists, the installed painting whole, a 1:1 native-pixel face/detail crop, and a
