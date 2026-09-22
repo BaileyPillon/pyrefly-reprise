@@ -1,0 +1,1981 @@
+{
+  "generatedBy": "tools/audio/ace-step.mjs",
+  "runs": {
+    "B-battle-ffx-101": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "restyle",
+      "seed": 101,
+      "denoise": 0.4,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 14.2,
+      "file": "public/audio/candidates/B-battle-ffx-101.ogg",
+      "excerpt": "public/audio/candidates/B-battle-ffx-101-x12.ogg",
+      "gainDb": 2.7,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 437.1,
+        "tempoEst": 75,
+        "tempoEstFolded": 150,
+        "gridHit": 0.919,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.783
+        ],
+        "onsets": 295,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 0.841,
+        "onsetRecall": 0.77,
+        "onsetF": 0.804,
+        "lagMedianAbsMs": 10,
+        "lagMaxAbsMs": 230,
+        "lagSlopeMsPerMin": 13.11,
+        "windowsCorrelated": "12/12",
+        "windowCorrMean": 0.587,
+        "chromaSim": 0.889,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": 94.1,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -10,
+            "corr": 0.6
+          },
+          {
+            "t": 6.65,
+            "lagMs": -10,
+            "corr": 0.805
+          },
+          {
+            "t": 13.05,
+            "lagMs": -10,
+            "corr": 0.605
+          },
+          {
+            "t": 19.45,
+            "lagMs": -10,
+            "corr": 0.75
+          },
+          {
+            "t": 25.85,
+            "lagMs": -10,
+            "corr": 0.716
+          },
+          {
+            "t": 32.25,
+            "lagMs": -230,
+            "corr": 0.534
+          },
+          {
+            "t": 38.65,
+            "lagMs": -230,
+            "corr": 0.279
+          },
+          {
+            "t": 45.05,
+            "lagMs": -210,
+            "corr": 0.32
+          },
+          {
+            "t": 51.45,
+            "lagMs": 190,
+            "corr": 0.306
+          },
+          {
+            "t": 57.85,
+            "lagMs": -10,
+            "corr": 0.69
+          },
+          {
+            "t": 64.25,
+            "lagMs": -10,
+            "corr": 0.679
+          },
+          {
+            "t": 70.65,
+            "lagMs": -10,
+            "corr": 0.761
+          }
+        ],
+        "structureFidelity": 0.628,
+        "lufs": -16,
+        "lra": 6.1,
+        "truePeakDb": -1
+      }
+    },
+    "B-battle-ffx-202": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "restyle",
+      "seed": 202,
+      "denoise": 0.4,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 14.2,
+      "file": "public/audio/candidates/B-battle-ffx-202.ogg",
+      "excerpt": "public/audio/candidates/B-battle-ffx-202-x12.ogg",
+      "gainDb": 2.2,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 391.9,
+        "tempoEst": 75,
+        "tempoEstFolded": 150,
+        "gridHit": 0.818,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.832
+        ],
+        "onsets": 341,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 0.669,
+        "onsetRecall": 0.708,
+        "onsetF": 0.688,
+        "lagMedianAbsMs": 5,
+        "lagMaxAbsMs": 210,
+        "lagSlopeMsPerMin": 7.54,
+        "windowsCorrelated": "12/12",
+        "windowCorrMean": 0.556,
+        "chromaSim": 0.869,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": 48.9,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": 0,
+            "corr": 0.672
+          },
+          {
+            "t": 6.65,
+            "lagMs": 10,
+            "corr": 0.651
+          },
+          {
+            "t": 13.05,
+            "lagMs": 10,
+            "corr": 0.512
+          },
+          {
+            "t": 19.45,
+            "lagMs": 0,
+            "corr": 0.711
+          },
+          {
+            "t": 25.85,
+            "lagMs": 10,
+            "corr": 0.775
+          },
+          {
+            "t": 32.25,
+            "lagMs": 190,
+            "corr": 0.397
+          },
+          {
+            "t": 38.65,
+            "lagMs": -20,
+            "corr": 0.347
+          },
+          {
+            "t": 45.05,
+            "lagMs": 210,
+            "corr": 0.278
+          },
+          {
+            "t": 51.45,
+            "lagMs": 0,
+            "corr": 0.324
+          },
+          {
+            "t": 57.85,
+            "lagMs": 0,
+            "corr": 0.708
+          },
+          {
+            "t": 64.25,
+            "lagMs": 0,
+            "corr": 0.613
+          },
+          {
+            "t": 70.65,
+            "lagMs": 0,
+            "corr": 0.686
+          }
+        ],
+        "structureFidelity": 0.549,
+        "lufs": -16,
+        "lra": 6.8,
+        "truePeakDb": -0.9
+      }
+    },
+    "B-battle-ffx-303": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "restyle",
+      "seed": 303,
+      "denoise": 0.4,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 14.1,
+      "file": "public/audio/candidates/B-battle-ffx-303.ogg",
+      "excerpt": "public/audio/candidates/B-battle-ffx-303-x12.ogg",
+      "gainDb": 2.5,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 547.5,
+        "tempoEst": 75,
+        "tempoEstFolded": 150,
+        "gridHit": 0.958,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.893
+        ],
+        "onsets": 262,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 0.817,
+        "onsetRecall": 0.665,
+        "onsetF": 0.733,
+        "lagMedianAbsMs": 10,
+        "lagMaxAbsMs": 190,
+        "lagSlopeMsPerMin": 17.7,
+        "windowsCorrelated": "12/12",
+        "windowCorrMean": 0.578,
+        "chromaSim": 0.854,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": 204.5,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": 0,
+            "corr": 0.555
+          },
+          {
+            "t": 6.65,
+            "lagMs": -10,
+            "corr": 0.752
+          },
+          {
+            "t": 13.05,
+            "lagMs": -10,
+            "corr": 0.547
+          },
+          {
+            "t": 19.45,
+            "lagMs": -10,
+            "corr": 0.773
+          },
+          {
+            "t": 25.85,
+            "lagMs": -10,
+            "corr": 0.714
+          },
+          {
+            "t": 32.25,
+            "lagMs": -20,
+            "corr": 0.475
+          },
+          {
+            "t": 38.65,
+            "lagMs": -20,
+            "corr": 0.331
+          },
+          {
+            "t": 45.05,
+            "lagMs": 190,
+            "corr": 0.454
+          },
+          {
+            "t": 51.45,
+            "lagMs": 0,
+            "corr": 0.396
+          },
+          {
+            "t": 57.85,
+            "lagMs": -10,
+            "corr": 0.69
+          },
+          {
+            "t": 64.25,
+            "lagMs": -10,
+            "corr": 0.653
+          },
+          {
+            "t": 70.65,
+            "lagMs": -10,
+            "corr": 0.594
+          }
+        ],
+        "structureFidelity": 0.548,
+        "lufs": -16,
+        "lra": 6.5,
+        "truePeakDb": -1.5
+      }
+    },
+    "battle-ffx:source-x12": {
+      "cue": "battle-ffx",
+      "mode": "source",
+      "excerpt": "public/audio/candidates/B-battle-ffx-source-x12.ogg",
+      "excerptMeasure": {
+        "durationS": 12,
+        "centroidHz": 291.2,
+        "tempoEst": 75,
+        "tempoEstFolded": 150,
+        "gridHit": 0.979,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.791
+        ],
+        "onsets": 48,
+        "lufs": -16.5,
+        "lra": 0.7,
+        "truePeakDb": -3.2
+      },
+      "full": {
+        "durationS": 79.8,
+        "centroidHz": 343,
+        "tempoEst": 75,
+        "tempoEstFolded": 150,
+        "gridHit": 0.95,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.815
+        ],
+        "onsets": 322,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 1,
+        "onsetRecall": 1,
+        "onsetF": 1,
+        "lagMedianAbsMs": 0,
+        "lagMaxAbsMs": 0,
+        "lagSlopeMsPerMin": 0,
+        "windowsCorrelated": "12/12",
+        "windowCorrMean": 1,
+        "chromaSim": 1,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": 0,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 6.65,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 13.05,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 19.45,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 25.85,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 32.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 38.65,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 45.05,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 51.45,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 57.85,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 64.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 70.65,
+            "lagMs": 0,
+            "corr": 1
+          }
+        ],
+        "structureFidelity": 1,
+        "lufs": -15.9,
+        "lra": 4.6,
+        "truePeakDb": -1.8
+      }
+    },
+    "B-boss-ffx2-aeon-101": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "restyle",
+      "seed": 101,
+      "denoise": 0.4,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 20.1,
+      "file": "public/audio/candidates/B-boss-ffx2-aeon-101.ogg",
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-101-x12.ogg",
+      "gainDb": -0.8,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 210.2,
+        "tempoEst": 80,
+        "tempoEstFolded": 160,
+        "gridHit": 0.784,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "Bb major",
+          0.797
+        ],
+        "onsets": 379,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 0.689,
+        "onsetRecall": 0.694,
+        "onsetF": 0.691,
+        "lagMedianAbsMs": 30,
+        "lagMaxAbsMs": 40,
+        "lagSlopeMsPerMin": -5.61,
+        "windowsCorrelated": "19/19",
+        "windowCorrMean": 0.55,
+        "chromaSim": 0.87,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": -71.5,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -10,
+            "corr": 0.433
+          },
+          {
+            "t": 6.25,
+            "lagMs": -20,
+            "corr": 0.444
+          },
+          {
+            "t": 12.25,
+            "lagMs": -30,
+            "corr": 0.728
+          },
+          {
+            "t": 18.25,
+            "lagMs": -30,
+            "corr": 0.487
+          },
+          {
+            "t": 24.25,
+            "lagMs": -30,
+            "corr": 0.617
+          },
+          {
+            "t": 30.25,
+            "lagMs": -30,
+            "corr": 0.518
+          },
+          {
+            "t": 36.25,
+            "lagMs": -30,
+            "corr": 0.767
+          },
+          {
+            "t": 42.25,
+            "lagMs": -30,
+            "corr": 0.681
+          },
+          {
+            "t": 48.25,
+            "lagMs": -30,
+            "corr": 0.595
+          },
+          {
+            "t": 54.25,
+            "lagMs": -30,
+            "corr": 0.558
+          },
+          {
+            "t": 60.25,
+            "lagMs": -20,
+            "corr": 0.41
+          },
+          {
+            "t": 66.25,
+            "lagMs": -30,
+            "corr": 0.319
+          },
+          {
+            "t": 72.25,
+            "lagMs": -40,
+            "corr": 0.477
+          },
+          {
+            "t": 78.25,
+            "lagMs": -40,
+            "corr": 0.232
+          },
+          {
+            "t": 84.25,
+            "lagMs": -30,
+            "corr": 0.753
+          },
+          {
+            "t": 90.25,
+            "lagMs": -30,
+            "corr": 0.634
+          },
+          {
+            "t": 96.25,
+            "lagMs": -30,
+            "corr": 0.624
+          },
+          {
+            "t": 102.25,
+            "lagMs": -30,
+            "corr": 0.435
+          },
+          {
+            "t": 108.25,
+            "lagMs": -30,
+            "corr": 0.737
+          }
+        ],
+        "structureFidelity": 0.496,
+        "lufs": -16,
+        "lra": 5.4,
+        "truePeakDb": -1
+      }
+    },
+    "B-boss-ffx2-aeon-202": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "restyle",
+      "seed": 202,
+      "denoise": 0.4,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 20.1,
+      "file": "public/audio/candidates/B-boss-ffx2-aeon-202.ogg",
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-202-x12.ogg",
+      "gainDb": 0.5,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 220.6,
+        "tempoEst": 80,
+        "tempoEstFolded": 160,
+        "gridHit": 0.735,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "F major",
+          0.885
+        ],
+        "onsets": 408,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 0.657,
+        "onsetRecall": 0.713,
+        "onsetF": 0.684,
+        "lagMedianAbsMs": 20,
+        "lagMaxAbsMs": 40,
+        "lagSlopeMsPerMin": 4.21,
+        "windowsCorrelated": "19/19",
+        "windowCorrMean": 0.491,
+        "chromaSim": 0.881,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": -61.1,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -20,
+            "corr": 0.697
+          },
+          {
+            "t": 6.25,
+            "lagMs": -20,
+            "corr": 0.607
+          },
+          {
+            "t": 12.25,
+            "lagMs": -30,
+            "corr": 0.323
+          },
+          {
+            "t": 18.25,
+            "lagMs": -20,
+            "corr": 0.481
+          },
+          {
+            "t": 24.25,
+            "lagMs": -30,
+            "corr": 0.547
+          },
+          {
+            "t": 30.25,
+            "lagMs": -20,
+            "corr": 0.48
+          },
+          {
+            "t": 36.25,
+            "lagMs": -20,
+            "corr": 0.568
+          },
+          {
+            "t": 42.25,
+            "lagMs": -30,
+            "corr": 0.611
+          },
+          {
+            "t": 48.25,
+            "lagMs": -40,
+            "corr": 0.464
+          },
+          {
+            "t": 54.25,
+            "lagMs": -30,
+            "corr": 0.592
+          },
+          {
+            "t": 60.25,
+            "lagMs": -10,
+            "corr": 0.588
+          },
+          {
+            "t": 66.25,
+            "lagMs": -10,
+            "corr": 0.623
+          },
+          {
+            "t": 72.25,
+            "lagMs": 0,
+            "corr": 0.482
+          },
+          {
+            "t": 78.25,
+            "lagMs": -20,
+            "corr": 0.356
+          },
+          {
+            "t": 84.25,
+            "lagMs": -20,
+            "corr": 0.48
+          },
+          {
+            "t": 90.25,
+            "lagMs": -10,
+            "corr": 0.253
+          },
+          {
+            "t": 96.25,
+            "lagMs": -30,
+            "corr": 0.471
+          },
+          {
+            "t": 102.25,
+            "lagMs": -20,
+            "corr": 0.231
+          },
+          {
+            "t": 108.25,
+            "lagMs": -20,
+            "corr": 0.48
+          }
+        ],
+        "structureFidelity": 0.494,
+        "lufs": -16,
+        "lra": 3.8,
+        "truePeakDb": -1.4
+      }
+    },
+    "B-boss-ffx2-aeon-303": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "restyle",
+      "seed": 303,
+      "denoise": 0.4,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 22.2,
+      "file": "public/audio/candidates/B-boss-ffx2-aeon-303.ogg",
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-303-x12.ogg",
+      "gainDb": 0.4,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 284.7,
+        "tempoEst": 80,
+        "tempoEstFolded": 160,
+        "gridHit": 0.67,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "Bb minor",
+          0.746
+        ],
+        "onsets": 437,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 0.584,
+        "onsetRecall": 0.678,
+        "onsetF": 0.627,
+        "lagMedianAbsMs": 30,
+        "lagMaxAbsMs": 50,
+        "lagSlopeMsPerMin": 29.65,
+        "windowsCorrelated": "19/19",
+        "windowCorrMean": 0.546,
+        "chromaSim": 0.89,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": 3,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -30,
+            "corr": 0.524
+          },
+          {
+            "t": 6.25,
+            "lagMs": -40,
+            "corr": 0.485
+          },
+          {
+            "t": 12.25,
+            "lagMs": -40,
+            "corr": 0.564
+          },
+          {
+            "t": 18.25,
+            "lagMs": -30,
+            "corr": 0.583
+          },
+          {
+            "t": 24.25,
+            "lagMs": -30,
+            "corr": 0.732
+          },
+          {
+            "t": 30.25,
+            "lagMs": -50,
+            "corr": 0.468
+          },
+          {
+            "t": 36.25,
+            "lagMs": -40,
+            "corr": 0.785
+          },
+          {
+            "t": 42.25,
+            "lagMs": -50,
+            "corr": 0.636
+          },
+          {
+            "t": 48.25,
+            "lagMs": -40,
+            "corr": 0.589
+          },
+          {
+            "t": 54.25,
+            "lagMs": -10,
+            "corr": 0.563
+          },
+          {
+            "t": 60.25,
+            "lagMs": 10,
+            "corr": 0.408
+          },
+          {
+            "t": 66.25,
+            "lagMs": 20,
+            "corr": 0.255
+          },
+          {
+            "t": 72.25,
+            "lagMs": 20,
+            "corr": 0.455
+          },
+          {
+            "t": 78.25,
+            "lagMs": 30,
+            "corr": 0.372
+          },
+          {
+            "t": 84.25,
+            "lagMs": -10,
+            "corr": 0.572
+          },
+          {
+            "t": 90.25,
+            "lagMs": 0,
+            "corr": 0.689
+          },
+          {
+            "t": 96.25,
+            "lagMs": -10,
+            "corr": 0.643
+          },
+          {
+            "t": 102.25,
+            "lagMs": -10,
+            "corr": 0.603
+          },
+          {
+            "t": 108.25,
+            "lagMs": 0,
+            "corr": 0.449
+          }
+        ],
+        "structureFidelity": 0.511,
+        "lufs": -16,
+        "lra": 3.9,
+        "truePeakDb": -1.4
+      }
+    },
+    "boss-ffx2-aeon:source-x12": {
+      "cue": "boss-ffx2-aeon",
+      "mode": "source",
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-source-x12.ogg",
+      "excerptMeasure": {
+        "durationS": 12,
+        "centroidHz": 280.1,
+        "tempoEst": 80,
+        "tempoEstFolded": 160,
+        "gridHit": 0.943,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "F minor",
+          0.778
+        ],
+        "onsets": 35,
+        "lufs": -15.9,
+        "lra": 0.7,
+        "truePeakDb": -1.4
+      },
+      "full": {
+        "durationS": 117,
+        "centroidHz": 281.7,
+        "tempoEst": 80,
+        "tempoEstFolded": 160,
+        "gridHit": 0.896,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "F minor",
+          0.738
+        ],
+        "onsets": 376,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 1,
+        "onsetRecall": 1,
+        "onsetF": 1,
+        "lagMedianAbsMs": 0,
+        "lagMaxAbsMs": 0,
+        "lagSlopeMsPerMin": 0,
+        "windowsCorrelated": "19/19",
+        "windowCorrMean": 1,
+        "chromaSim": 1,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": 0,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 6.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 12.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 18.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 24.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 30.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 36.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 42.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 48.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 54.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 60.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 66.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 72.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 78.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 84.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 90.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 96.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 102.25,
+            "lagMs": 0,
+            "corr": 1
+          },
+          {
+            "t": 108.25,
+            "lagMs": 0,
+            "corr": 1
+          }
+        ],
+        "structureFidelity": 1,
+        "lufs": -15.9,
+        "lra": 4.2,
+        "truePeakDb": -1.4
+      }
+    },
+    "B-battle-ffx-t2m-101": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "t2m",
+      "seed": 101,
+      "denoise": 1,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 16.1,
+      "file": "public/audio/candidates/B-battle-ffx-t2m-101.ogg",
+      "excerpt": "public/audio/candidates/B-battle-ffx-t2m-101-x12.ogg",
+      "gainDb": -2.7,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 262.4,
+        "tempoEst": 166.5,
+        "tempoEstFolded": 166.5,
+        "gridHit": 0.4,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "D major",
+          0.767
+        ],
+        "onsets": 370,
+        "lufs": -16,
+        "lra": 6.8,
+        "truePeakDb": -3.6
+      }
+    },
+    "B-boss-ffx2-aeon-t2m-101": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "t2m",
+      "seed": 101,
+      "denoise": 1,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 20.1,
+      "file": "public/audio/candidates/B-boss-ffx2-aeon-t2m-101.ogg",
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-t2m-101-x12.ogg",
+      "gainDb": -2.9,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 294.4,
+        "tempoEst": 176.5,
+        "tempoEstFolded": 176.5,
+        "gridHit": 0.427,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "D minor",
+          0.898
+        ],
+        "onsets": 464,
+        "lufs": -16,
+        "lra": 4.6,
+        "truePeakDb": -2.8
+      }
+    },
+    "B-battle-ffx-101-d35": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "restyle",
+      "seed": 101,
+      "denoise": 0.35,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 14.5,
+      "file": null,
+      "excerpt": "public/audio/candidates/B-battle-ffx-101-d35-x12.ogg",
+      "gainDb": 2.2,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 452.5,
+        "tempoEst": 75,
+        "tempoEstFolded": 150,
+        "gridHit": 0.965,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.802
+        ],
+        "onsets": 282,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 0.848,
+        "onsetRecall": 0.742,
+        "onsetF": 0.791,
+        "lagMedianAbsMs": 10,
+        "lagMaxAbsMs": 220,
+        "lagSlopeMsPerMin": -49.83,
+        "windowsCorrelated": "12/12",
+        "windowCorrMean": 0.608,
+        "chromaSim": 0.897,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": 109.6,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": 0,
+            "corr": 0.634
+          },
+          {
+            "t": 6.65,
+            "lagMs": -10,
+            "corr": 0.778
+          },
+          {
+            "t": 13.05,
+            "lagMs": -10,
+            "corr": 0.614
+          },
+          {
+            "t": 19.45,
+            "lagMs": -10,
+            "corr": 0.79
+          },
+          {
+            "t": 25.85,
+            "lagMs": -10,
+            "corr": 0.757
+          },
+          {
+            "t": 32.25,
+            "lagMs": -220,
+            "corr": 0.501
+          },
+          {
+            "t": 38.65,
+            "lagMs": -30,
+            "corr": 0.254
+          },
+          {
+            "t": 45.05,
+            "lagMs": -210,
+            "corr": 0.414
+          },
+          {
+            "t": 51.45,
+            "lagMs": -210,
+            "corr": 0.419
+          },
+          {
+            "t": 57.85,
+            "lagMs": -10,
+            "corr": 0.712
+          },
+          {
+            "t": 64.25,
+            "lagMs": -10,
+            "corr": 0.716
+          },
+          {
+            "t": 70.65,
+            "lagMs": -10,
+            "corr": 0.705
+          }
+        ],
+        "structureFidelity": 0.643,
+        "lufs": -16,
+        "lra": 5.6,
+        "truePeakDb": -1
+      },
+      "note": "denoise ladder: only the 12 s excerpt is committed; measure is of the full-length render (scratch)"
+    },
+    "B-battle-ffx-101-d45": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "restyle",
+      "seed": 101,
+      "denoise": 0.45,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 18.4,
+      "file": null,
+      "excerpt": "public/audio/candidates/B-battle-ffx-101-d45-x12.ogg",
+      "gainDb": 1.6,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 396.9,
+        "tempoEst": 176.5,
+        "tempoEstFolded": 176.5,
+        "gridHit": 0.394,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "E minor",
+          0.779
+        ],
+        "onsets": 541,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 0.401,
+        "onsetRecall": 0.674,
+        "onsetF": 0.503,
+        "lagMedianAbsMs": null,
+        "lagMaxAbsMs": null,
+        "lagSlopeMsPerMin": null,
+        "windowsCorrelated": "0/12",
+        "windowCorrMean": 0.111,
+        "chromaSim": 0.845,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": 53.9,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -10,
+            "corr": 0.084
+          },
+          {
+            "t": 6.65,
+            "lagMs": 250,
+            "corr": 0.079
+          },
+          {
+            "t": 13.05,
+            "lagMs": -20,
+            "corr": 0.098
+          },
+          {
+            "t": 19.45,
+            "lagMs": 0,
+            "corr": 0.134
+          },
+          {
+            "t": 25.85,
+            "lagMs": -220,
+            "corr": 0.112
+          },
+          {
+            "t": 32.25,
+            "lagMs": -110,
+            "corr": 0.101
+          },
+          {
+            "t": 38.65,
+            "lagMs": -10,
+            "corr": 0.162
+          },
+          {
+            "t": 45.05,
+            "lagMs": 140,
+            "corr": 0.084
+          },
+          {
+            "t": 51.45,
+            "lagMs": 210,
+            "corr": 0.12
+          },
+          {
+            "t": 57.85,
+            "lagMs": 250,
+            "corr": 0.139
+          },
+          {
+            "t": 64.25,
+            "lagMs": 210,
+            "corr": 0.1
+          },
+          {
+            "t": 70.65,
+            "lagMs": -10,
+            "corr": 0.113
+          }
+        ],
+        "structureFidelity": 0.303,
+        "lufs": -16,
+        "lra": 6.3,
+        "truePeakDb": -1.2
+      },
+      "note": "denoise ladder: only the 12 s excerpt is committed; measure is of the full-length render (scratch)"
+    },
+    "B-battle-ffx-101-d55": {
+      "cue": "battle-ffx",
+      "game": "ffx",
+      "mode": "restyle",
+      "seed": 101,
+      "denoise": 0.55,
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 18.4,
+      "file": null,
+      "excerpt": "public/audio/candidates/B-battle-ffx-101-d55-x12.ogg",
+      "gainDb": -0.5,
+      "measure": {
+        "durationS": 79.78,
+        "centroidHz": 314.6,
+        "tempoEst": 85.75,
+        "tempoEstFolded": 171.5,
+        "gridHit": 0.395,
+        "gridHitChance": 0.4,
+        "keyEst": [
+          "A minor",
+          0.712
+        ],
+        "onsets": 372,
+        "source": {
+          "centroidHz": 343,
+          "tempoEst": 75,
+          "gridHit": 0.95,
+          "onsets": 322
+        },
+        "onsetPrecision": 0.438,
+        "onsetRecall": 0.506,
+        "onsetF": 0.47,
+        "lagMedianAbsMs": 150,
+        "lagMaxAbsMs": 240,
+        "lagSlopeMsPerMin": 241.07,
+        "windowsCorrelated": "3/12",
+        "windowCorrMean": 0.14,
+        "chromaSim": 0.806,
+        "chromaBaselineTwoBarsApart": 0.78,
+        "centroidShiftHz": -28.4,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": 80,
+            "corr": 0.193
+          },
+          {
+            "t": 6.65,
+            "lagMs": -150,
+            "corr": 0.233
+          },
+          {
+            "t": 13.05,
+            "lagMs": 240,
+            "corr": 0.225
+          },
+          {
+            "t": 19.45,
+            "lagMs": -180,
+            "corr": 0.147
+          },
+          {
+            "t": 25.85,
+            "lagMs": 0,
+            "corr": 0.268
+          },
+          {
+            "t": 32.25,
+            "lagMs": -120,
+            "corr": 0.104
+          },
+          {
+            "t": 38.65,
+            "lagMs": 20,
+            "corr": 0.146
+          },
+          {
+            "t": 45.05,
+            "lagMs": 130,
+            "corr": 0.074
+          },
+          {
+            "t": 51.45,
+            "lagMs": 110,
+            "corr": 0.067
+          },
+          {
+            "t": 57.85,
+            "lagMs": 250,
+            "corr": 0.063
+          },
+          {
+            "t": 64.25,
+            "lagMs": -180,
+            "corr": 0.075
+          },
+          {
+            "t": 70.65,
+            "lagMs": 40,
+            "corr": 0.085
+          }
+        ],
+        "structureFidelity": 0.242,
+        "lufs": -16,
+        "lra": 7.7,
+        "truePeakDb": -1.4
+      },
+      "note": "denoise ladder: only the 12 s excerpt is committed; measure is of the full-length render (scratch)"
+    },
+    "B-boss-ffx2-aeon-303-d35": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "restyle",
+      "seed": 303,
+      "denoise": 0.35,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 22.2,
+      "file": null,
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-303-d35-x12.ogg",
+      "gainDb": 0.3,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 278.6,
+        "tempoEst": 80,
+        "tempoEstFolded": 160,
+        "gridHit": 0.634,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "Bb minor",
+          0.727
+        ],
+        "onsets": 464,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 0.582,
+        "onsetRecall": 0.718,
+        "onsetF": 0.643,
+        "lagMedianAbsMs": 30,
+        "lagMaxAbsMs": 50,
+        "lagSlopeMsPerMin": 25.96,
+        "windowsCorrelated": "19/19",
+        "windowCorrMean": 0.543,
+        "chromaSim": 0.903,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": -3.1,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -30,
+            "corr": 0.6
+          },
+          {
+            "t": 6.25,
+            "lagMs": -40,
+            "corr": 0.521
+          },
+          {
+            "t": 12.25,
+            "lagMs": -30,
+            "corr": 0.565
+          },
+          {
+            "t": 18.25,
+            "lagMs": -20,
+            "corr": 0.547
+          },
+          {
+            "t": 24.25,
+            "lagMs": -30,
+            "corr": 0.717
+          },
+          {
+            "t": 30.25,
+            "lagMs": -40,
+            "corr": 0.451
+          },
+          {
+            "t": 36.25,
+            "lagMs": -40,
+            "corr": 0.77
+          },
+          {
+            "t": 42.25,
+            "lagMs": -50,
+            "corr": 0.585
+          },
+          {
+            "t": 48.25,
+            "lagMs": -30,
+            "corr": 0.596
+          },
+          {
+            "t": 54.25,
+            "lagMs": -20,
+            "corr": 0.498
+          },
+          {
+            "t": 60.25,
+            "lagMs": 10,
+            "corr": 0.43
+          },
+          {
+            "t": 66.25,
+            "lagMs": 20,
+            "corr": 0.277
+          },
+          {
+            "t": 72.25,
+            "lagMs": 40,
+            "corr": 0.445
+          },
+          {
+            "t": 78.25,
+            "lagMs": 30,
+            "corr": 0.462
+          },
+          {
+            "t": 84.25,
+            "lagMs": -10,
+            "corr": 0.537
+          },
+          {
+            "t": 90.25,
+            "lagMs": 0,
+            "corr": 0.678
+          },
+          {
+            "t": 96.25,
+            "lagMs": -10,
+            "corr": 0.615
+          },
+          {
+            "t": 102.25,
+            "lagMs": -10,
+            "corr": 0.572
+          },
+          {
+            "t": 108.25,
+            "lagMs": -10,
+            "corr": 0.444
+          }
+        ],
+        "structureFidelity": 0.54,
+        "lufs": -16,
+        "lra": 3.8,
+        "truePeakDb": -1.3
+      },
+      "note": "denoise ladder: only the 12 s excerpt is committed; measure is of the full-length render (scratch)"
+    },
+    "B-boss-ffx2-aeon-303-d45": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "restyle",
+      "seed": 303,
+      "denoise": 0.45,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 20.1,
+      "file": null,
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-303-d45-x12.ogg",
+      "gainDb": 1.4,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 222.5,
+        "tempoEst": 130.5,
+        "tempoEstFolded": 130.5,
+        "gridHit": 0.451,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "F major",
+          0.743
+        ],
+        "onsets": 390,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 0.356,
+        "onsetRecall": 0.37,
+        "onsetF": 0.363,
+        "lagMedianAbsMs": 140,
+        "lagMaxAbsMs": 140,
+        "lagSlopeMsPerMin": null,
+        "windowsCorrelated": "1/19",
+        "windowCorrMean": 0.151,
+        "chromaSim": 0.874,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": -59.1,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -140,
+            "corr": 0.445
+          },
+          {
+            "t": 6.25,
+            "lagMs": 50,
+            "corr": 0.132
+          },
+          {
+            "t": 12.25,
+            "lagMs": -90,
+            "corr": 0.199
+          },
+          {
+            "t": 18.25,
+            "lagMs": 40,
+            "corr": 0.144
+          },
+          {
+            "t": 24.25,
+            "lagMs": -20,
+            "corr": 0.125
+          },
+          {
+            "t": 30.25,
+            "lagMs": -100,
+            "corr": 0.098
+          },
+          {
+            "t": 36.25,
+            "lagMs": -50,
+            "corr": 0.192
+          },
+          {
+            "t": 42.25,
+            "lagMs": 60,
+            "corr": 0.064
+          },
+          {
+            "t": 48.25,
+            "lagMs": -140,
+            "corr": 0.159
+          },
+          {
+            "t": 54.25,
+            "lagMs": -90,
+            "corr": 0.164
+          },
+          {
+            "t": 60.25,
+            "lagMs": -140,
+            "corr": 0.185
+          },
+          {
+            "t": 66.25,
+            "lagMs": 20,
+            "corr": 0.105
+          },
+          {
+            "t": 72.25,
+            "lagMs": 40,
+            "corr": 0.102
+          },
+          {
+            "t": 78.25,
+            "lagMs": 30,
+            "corr": 0.159
+          },
+          {
+            "t": 84.25,
+            "lagMs": -40,
+            "corr": 0.176
+          },
+          {
+            "t": 90.25,
+            "lagMs": 0,
+            "corr": 0.136
+          },
+          {
+            "t": 96.25,
+            "lagMs": 220,
+            "corr": 0.064
+          },
+          {
+            "t": 102.25,
+            "lagMs": -20,
+            "corr": 0.119
+          },
+          {
+            "t": 108.25,
+            "lagMs": -10,
+            "corr": 0.102
+          }
+        ],
+        "structureFidelity": 0.26,
+        "lufs": -16,
+        "lra": 4.3,
+        "truePeakDb": -1.1
+      },
+      "note": "denoise ladder: only the 12 s excerpt is committed; measure is of the full-length render (scratch)"
+    },
+    "B-boss-ffx2-aeon-303-d55": {
+      "cue": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "mode": "restyle",
+      "seed": 303,
+      "denoise": 0.55,
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "lyrics": "[inst]",
+      "sampler": {
+        "steps": 50,
+        "cfg": 5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "shift": 5
+      },
+      "ckpt": "ace_step_v1_3.5b.safetensors",
+      "renderSeconds": 20.2,
+      "file": null,
+      "excerpt": "public/audio/candidates/B-boss-ffx2-aeon-303-d55-x12.ogg",
+      "gainDb": 1.6,
+      "measure": {
+        "durationS": 116.94,
+        "centroidHz": 208.9,
+        "tempoEst": 133.25,
+        "tempoEstFolded": 133.25,
+        "gridHit": 0.443,
+        "gridHitChance": 0.427,
+        "keyEst": [
+          "F major",
+          0.803
+        ],
+        "onsets": 307,
+        "source": {
+          "centroidHz": 281.7,
+          "tempoEst": 80,
+          "gridHit": 0.896,
+          "onsets": 376
+        },
+        "onsetPrecision": 0.362,
+        "onsetRecall": 0.295,
+        "onsetF": 0.325,
+        "lagMedianAbsMs": 90,
+        "lagMaxAbsMs": 230,
+        "lagSlopeMsPerMin": 207.33,
+        "windowsCorrelated": "6/19",
+        "windowCorrMean": 0.16,
+        "chromaSim": 0.855,
+        "chromaBaselineTwoBarsApart": 0.828,
+        "centroidShiftHz": -72.8,
+        "lagWindows": [
+          {
+            "t": 0.25,
+            "lagMs": -140,
+            "corr": 0.229
+          },
+          {
+            "t": 6.25,
+            "lagMs": -240,
+            "corr": 0.161
+          },
+          {
+            "t": 12.25,
+            "lagMs": 100,
+            "corr": 0.095
+          },
+          {
+            "t": 18.25,
+            "lagMs": 30,
+            "corr": 0.141
+          },
+          {
+            "t": 24.25,
+            "lagMs": -10,
+            "corr": 0.131
+          },
+          {
+            "t": 30.25,
+            "lagMs": -100,
+            "corr": 0.118
+          },
+          {
+            "t": 36.25,
+            "lagMs": -40,
+            "corr": 0.215
+          },
+          {
+            "t": 42.25,
+            "lagMs": 250,
+            "corr": 0.105
+          },
+          {
+            "t": 48.25,
+            "lagMs": -140,
+            "corr": 0.243
+          },
+          {
+            "t": 54.25,
+            "lagMs": -90,
+            "corr": 0.112
+          },
+          {
+            "t": 60.25,
+            "lagMs": 10,
+            "corr": 0.258
+          },
+          {
+            "t": 66.25,
+            "lagMs": 20,
+            "corr": 0.118
+          },
+          {
+            "t": 72.25,
+            "lagMs": -140,
+            "corr": 0.099
+          },
+          {
+            "t": 78.25,
+            "lagMs": 30,
+            "corr": 0.251
+          },
+          {
+            "t": 84.25,
+            "lagMs": -190,
+            "corr": 0.166
+          },
+          {
+            "t": 90.25,
+            "lagMs": -20,
+            "corr": 0.119
+          },
+          {
+            "t": 96.25,
+            "lagMs": 230,
+            "corr": 0.209
+          },
+          {
+            "t": 102.25,
+            "lagMs": -20,
+            "corr": 0.127
+          },
+          {
+            "t": 108.25,
+            "lagMs": -150,
+            "corr": 0.144
+          }
+        ],
+        "structureFidelity": 0.214,
+        "lufs": -16,
+        "lra": 4.3,
+        "truePeakDb": -1.2
+      },
+      "note": "denoise ladder: only the 12 s excerpt is committed; measure is of the full-length render (scratch)"
+    }
+  },
+  "best": {
+    "battle-ffx": {
+      "restyle": "B-battle-ffx-101",
+      "t2m": "B-battle-ffx-t2m-101",
+      "denoise": 0.4
+    },
+    "boss-ffx2-aeon": {
+      "restyle": "B-boss-ffx2-aeon-303",
+      "t2m": "B-boss-ffx2-aeon-t2m-101",
+      "denoise": 0.4
+    }
+  },
+  "bestRule": "restyle: highest measure.structureFidelity among seeds 101/202/303 at denoise 0.40 (the highest denoise at which all six cue-seed runs kept the cue tempo in the sweep, docs/audio/ace-step-sweep.json); t2m: of seeds 101/202/303, the folded tempo nearest the cue bpm (101 for both). Chosen by measurement; nobody listened (hard rule 13)."
+}

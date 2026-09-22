@@ -174,3 +174,107 @@ Ogg Vorbis q6: Chrome/Firefox/Edge play it; Safari before 17 does not.
 Extend the seating map to all 21 cues (choir, organ, harp, keys), move the renderer into the
 shipping path behind a flag, lower the quiet cues' loudness target, and ask Bailey about a real
 hall IR. Every cue's bytes and every `artifact-manifest` hash will move at once (plan A5).
+
+---
+
+# Sketch B — ACE-Step through ComfyUI (the model restyle)
+
+**Date:** 2026-09-22. **Game case (hard rule 14): BOTH.** One client renders the FFX cue
+(`battle-ffx`, chapters 1 to 3) and the FFX-2 cue (`boss-ffx2-aeon`, chapter 4). The only
+per-game difference is the style tags, taken from THEMES.md "Harmonic language, by world":
+FFX gets a symphony orchestra with taiko; FFX-2 gets orchestra plus electric bass, drum kit
+and electric piano. Nothing routed into the game; `public/audio/manifest.json`,
+`public/audio/music/` and `src/audio/**` untouched.
+
+**Status: built and measured, awaiting Bailey's ear.** Section "Modern sound: sketch B" in
+`docs/audio/audition.html` (blind X/Y pairs against today's cue, the key behind a fold).
+
+## What was built
+
+| File | Job |
+|---|---|
+| `tools/audio/ace-step.mjs` | ComfyUI client (the `tools/gen/comfy.mjs` pattern). `--mode=restyle` (shipped MP3 in, `--denoise`), `t2m` (tags only, cue length), `source` (12 s excerpt of today's cue), `remeasure` (no GPU). Waits for an empty queue before each job. |
+| `tools/audio/ace-measure.py` | numpy-only measurements, run with the ComfyUI embedded python (no librosa on this machine; nothing installed). |
+
+The graph (input names read from the live `/object_info`, ComfyUI 0.35.0):
+`CheckpointLoaderSimple(ace_step_v1_3.5b)` -> `TextEncodeAceStepAudio(tags, lyrics "[inst]")`
+(+ `ConditioningZeroOut` as negative) -> `ModelSamplingSD3(shift 5)` ->
+`LatentApplyOperationCFG(LatentOperationTonemapReinhard 1.0)` -> `KSampler(euler, simple,
+50 steps, cfg 5, denoise)` on `VAEEncodeAudio(LoadAudio(shipped cue))` or on
+`EmptyAceStepLatentAudio(cue seconds)` -> `VAEDecodeAudio` -> `SaveAudio`. Then ffmpeg trims
+to the cue length, gains to -16 LUFS, limits, encodes Opus 112k. Not used: a repaint path
+(`SetLatentNoiseMask` exists in core, but the brief asked for a restyle by denoise), and the
+`TextEncodeAceStepAudio1.5` nodes (they need the v1.5 checkpoint, which is not on disk).
+ComfyUI was not running at the start; it was started once with
+`schtasks /Run /TN PyreflyComfyUI` (nothing was queued, so no job was interrupted). Render
+time: 14 s for the 80 s cue, 20 s for the 117 s cue. The same seed and denoise rendered twice
+gave identical measurements.
+
+## How it was measured (no listening)
+
+Per render against the shipped cue: onset F-measure (+-50 ms); per 4-bar window the lag of
+the best onset-envelope cross-correlation (+-250 ms) = the onset-grid drift (median, max,
+slope in ms per minute); beat-by-beat chroma cosine similarity (8192-point STFT, 110 Hz to
+4.2 kHz) against a same-key baseline (the source against itself two bars later); share of
+onsets on the cue's eighth-note grid (+-40 ms; chance = 0.40 at 150 bpm, 0.43 at 160);
+autocorrelation tempo, octave-folded; Krumhansl key (coarse: it reads the aeon source as F
+minor, not Bb minor); energy-weighted spectral centroid; ebur128 integrated loudness and LRA.
+`structureFidelity` = mean of onset F, window correlation, and chroma gain over the baseline.
+The VAE round trip alone (denoise 0.05) scores 0.847: the ceiling of this metric.
+
+## Results
+
+Denoise sweep, 3 seeds each (mean fidelity; tempo per seed):
+
+| denoise | battle-ffx | tempo | boss-ffx2-aeon | tempo |
+|---|---|---|---|---|
+| 0.35 | 0.595 | 150/150/150 | 0.530 | 160/158/160 |
+| 0.40 | 0.575 | 150/150/150 | 0.500 | 160/160/160 |
+| 0.42 | 0.462 | 176.5/150/150 | 0.484 | 160/158/160 |
+| 0.45 | 0.447 | 176.5/150/150 | 0.389 | 160/160/130.5 |
+| 0.50 | 0.320 | 176.5/150/166.5 | 0.279 | 222/160/130.5 |
+| 0.55 | 0.303 | 171.5/150/166.5 | 0.278 | 120/160/133.25 |
+
+**Committed: denoise 0.40** (the highest at which all six runs kept the tempo), seeds 101,
+202, 303. Best by fidelity: `battle-ffx` seed 101 (0.628), `boss-ffx2-aeon` seed 303 (0.511).
+
+| file | fidelity | onset F | lag median / max | drift | grid | centroid (source) | LRA (source) |
+|---|---|---|---|---|---|---|---|
+| B-battle-ffx-101 | 0.628 | 0.804 | 10 / 230 ms | 13 ms/min | 0.92 | 437 Hz (343) | 6.1 LU (4.6) |
+| B-battle-ffx-202 | 0.549 | 0.688 | 5 / 210 ms | 8 ms/min | 0.82 | 392 Hz | 6.8 LU |
+| B-battle-ffx-303 | 0.548 | 0.733 | 10 / 190 ms | 18 ms/min | 0.96 | 548 Hz | 6.5 LU |
+| B-boss-ffx2-aeon-101 | 0.496 | 0.691 | 30 / 40 ms | -6 ms/min | 0.78 | 210 Hz (282) | 5.4 LU (4.2) |
+| B-boss-ffx2-aeon-202 | 0.494 | 0.684 | 20 / 40 ms | 4 ms/min | 0.74 | 221 Hz | 3.8 LU |
+| B-boss-ffx2-aeon-303 | 0.511 | 0.627 | 30 / 50 ms | 30 ms/min | 0.67 | 285 Hz | 3.9 LU |
+
+Reading: battle-ffx 101 sits at -10 ms in 8 of 12 windows; the four windows from 32 to 58 s
+lock one eighth note away (+-190 to 230 ms) at lower correlation (0.28 to 0.53): either the
+B-section ostinato moved by an eighth or the correlator picked the neighbouring eighth; the
+numbers cannot tell which. The aeon restyles sit a constant 20 to 30 ms early (no drift).
+The FFX restyles got brighter (+49 to +205 Hz centroid); the FFX-2 ones mostly darker. LRA
+rose on every FFX take (4.6 -> 6.1 to 6.8 LU): more dynamic movement than today.
+
+Text-to-music controls (seed 101 committed, nearest tempo of three): `battle-ffx` asked for
+150 bpm E minor, got 166.5 bpm (others 187.5, 171.25), key read D major, grid 0.40 = chance;
+`boss-ffx2-aeon` asked for 160 bpm Bb minor, got 176.5 (others 184.5, 130.5), key read D
+minor, grid 0.427 = chance. Unconstrained, the model follows neither tempo nor key.
+
+## Files (`public/audio/candidates/`, 25 files, 14 MB)
+
+`B-<cue>-<seed>.ogg` (full length) and `-x12.ogg` (12 s from loopStart: 6.4 s / 12 s) for
+seeds 101/202/303; `B-<cue>-t2m-101(.ogg|-x12.ogg)`; `B-<cue>-source-x12.ogg` (today, same
+window, same loudness); the ladder `B-battle-ffx-101-d35|d45|d55-x12.ogg` and
+`B-boss-ffx2-aeon-303-d35|d45|d55-x12.ogg`; `B-report.json` (every number, lag windows
+included, and the `best` pick with its rule). Opus 112k in Ogg: Safari before 17 will not
+play it.
+
+## Not done, and why
+
+- **No listening claim**; the pick is by measurement only. Bailey decides by ear.
+- **Loop seam**: not attempted. A model pass regenerates the audio; the restyles are
+  auditions, not loopable cues (plan §3 risk).
+- **Provenance**: whether model-generated audio may ship is still Bailey's question 3.
+- **No repaint / cover path** (the custom node pack needs Bailey's yes); no v1.5 checkpoint.
+- The key estimate is coarse and the chroma measure is energy-based; neither is a
+  transcription. The onset measures are the reliable ones.
+- No unit tests (`tests/` is outside this track's owned paths); `tsc` does not cover `tools/`.

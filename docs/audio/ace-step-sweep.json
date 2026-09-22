@@ -1,0 +1,1989 @@
+{
+ "generatedBy": "tools/audio/ace-step.mjs --out=<scratch> (audio not committed; measure = tools/audio/ace-measure.py, long-STFT chroma)",
+ "date": "2026-09-22",
+ "runs": {
+  "B-battle-ffx-101-d05": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.05,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 357.1,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.865,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.801
+    ],
+    "onsets": 333,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.853,
+    "onsetRecall": 0.882,
+    "onsetF": 0.867,
+    "lagMedianAbsMs": 0,
+    "lagMaxAbsMs": 0,
+    "lagSlopeMsPerMin": 0,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.777,
+    "chromaSim": 0.978,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 14.2,
+    "structureFidelity": 0.847,
+    "lufs": -16,
+    "lra": 3.8,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-battle-ffx-101-d2": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.2,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 409.9,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.891,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.82
+    ],
+    "onsets": 312,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.849,
+    "onsetRecall": 0.823,
+    "onsetF": 0.836,
+    "lagMedianAbsMs": 0,
+    "lagMaxAbsMs": 10,
+    "lagSlopeMsPerMin": -6.23,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.678,
+    "chromaSim": 0.944,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 66.9,
+    "structureFidelity": 0.752,
+    "lufs": -16,
+    "lra": 4.3,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-battle-ffx-101-d3": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.3,
+   "renderSeconds": 14.3,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 449.5,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.905,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.824
+    ],
+    "onsets": 305,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.833,
+    "onsetRecall": 0.789,
+    "onsetF": 0.81,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 220,
+    "lagSlopeMsPerMin": -0.66,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.622,
+    "chromaSim": 0.909,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 106.5,
+    "structureFidelity": 0.673,
+    "lufs": -16,
+    "lra": 4.7,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-battle-ffx-101-d35": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.35,
+   "renderSeconds": 14.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 452.5,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.965,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.802
+    ],
+    "onsets": 282,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.848,
+    "onsetRecall": 0.742,
+    "onsetF": 0.791,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 220,
+    "lagSlopeMsPerMin": -49.83,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.608,
+    "chromaSim": 0.897,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 109.6,
+    "structureFidelity": 0.643,
+    "lufs": -16,
+    "lra": 5.6,
+    "truePeakDb": -1
+   }
+  },
+  "B-battle-ffx-101-d55": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.55,
+   "renderSeconds": 18.4,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 314.6,
+    "tempoEst": 85.75,
+    "tempoEstFolded": 171.5,
+    "gridHit": 0.395,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "A minor",
+     0.712
+    ],
+    "onsets": 372,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.438,
+    "onsetRecall": 0.506,
+    "onsetF": 0.47,
+    "lagMedianAbsMs": 150,
+    "lagMaxAbsMs": 240,
+    "lagSlopeMsPerMin": 241.07,
+    "windowsCorrelated": "3/12",
+    "windowCorrMean": 0.14,
+    "chromaSim": 0.806,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": -28.4,
+    "structureFidelity": 0.242,
+    "lufs": -16,
+    "lra": 7.7,
+    "truePeakDb": -1.4
+   }
+  },
+  "B-battle-ffx-202-d35": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.35,
+   "renderSeconds": 18.3,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 396.2,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.855,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.843
+    ],
+    "onsets": 330,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.712,
+    "onsetRecall": 0.73,
+    "onsetF": 0.721,
+    "lagMedianAbsMs": 5,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 7.54,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.571,
+    "chromaSim": 0.885,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 53.2,
+    "structureFidelity": 0.589,
+    "lufs": -16,
+    "lra": 6.6,
+    "truePeakDb": -0.8
+   }
+  },
+  "B-battle-ffx-303-d35": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.35,
+   "renderSeconds": 16.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 507.3,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.984,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.892
+    ],
+    "onsets": 255,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.839,
+    "onsetRecall": 0.665,
+    "onsetF": 0.742,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 190,
+    "lagSlopeMsPerMin": 20,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.572,
+    "chromaSim": 0.855,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 164.4,
+    "structureFidelity": 0.552,
+    "lufs": -16,
+    "lra": 5.1,
+    "truePeakDb": -1.4
+   }
+  },
+  "B-battle-ffx-101-d38": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.38,
+   "renderSeconds": 18.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 449.1,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.95,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.798
+    ],
+    "onsets": 280,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.843,
+    "onsetRecall": 0.733,
+    "onsetF": 0.784,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 230,
+    "lagSlopeMsPerMin": -52.78,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.583,
+    "chromaSim": 0.893,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 106.1,
+    "structureFidelity": 0.626,
+    "lufs": -16,
+    "lra": 6,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-battle-ffx-202-d38": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.38,
+   "renderSeconds": 14.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 392.6,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.835,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.841
+    ],
+    "onsets": 327,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.709,
+    "onsetRecall": 0.72,
+    "onsetF": 0.715,
+    "lagMedianAbsMs": 5,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 7.54,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.565,
+    "chromaSim": 0.876,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 49.7,
+    "structureFidelity": 0.572,
+    "lufs": -16,
+    "lra": 6.6,
+    "truePeakDb": -0.9
+   }
+  },
+  "B-battle-ffx-303-d38": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.38,
+   "renderSeconds": 18.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 530.9,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.977,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.896
+    ],
+    "onsets": 257,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.813,
+    "onsetRecall": 0.649,
+    "onsetF": 0.722,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 190,
+    "lagSlopeMsPerMin": 17.37,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.59,
+    "chromaSim": 0.857,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 187.9,
+    "structureFidelity": 0.554,
+    "lufs": -16,
+    "lra": 6.3,
+    "truePeakDb": -1.5
+   }
+  },
+  "B-battle-ffx-101-d40": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.4,
+   "renderSeconds": 16.3,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 437.1,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.916,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.783
+    ],
+    "onsets": 296,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.838,
+    "onsetRecall": 0.77,
+    "onsetF": 0.803,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 230,
+    "lagSlopeMsPerMin": 13.11,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.587,
+    "chromaSim": 0.889,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 94.1,
+    "structureFidelity": 0.628,
+    "lufs": -16,
+    "lra": 6.1,
+    "truePeakDb": -1
+   }
+  },
+  "B-battle-ffx-202-d40": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.4,
+   "renderSeconds": 18.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 391.9,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.819,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.832
+    ],
+    "onsets": 342,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.67,
+    "onsetRecall": 0.711,
+    "onsetF": 0.69,
+    "lagMedianAbsMs": 5,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 7.54,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.556,
+    "chromaSim": 0.869,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 48.9,
+    "structureFidelity": 0.55,
+    "lufs": -16,
+    "lra": 6.8,
+    "truePeakDb": -0.9
+   }
+  },
+  "B-battle-ffx-303-d40": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.4,
+   "renderSeconds": 18.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 547.5,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.958,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.893
+    ],
+    "onsets": 262,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.817,
+    "onsetRecall": 0.665,
+    "onsetF": 0.733,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 190,
+    "lagSlopeMsPerMin": 17.7,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.578,
+    "chromaSim": 0.854,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 204.6,
+    "structureFidelity": 0.548,
+    "lufs": -16,
+    "lra": 6.5,
+    "truePeakDb": -1.5
+   }
+  },
+  "B-battle-ffx-101-d42": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.42,
+   "renderSeconds": 18.4,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 418.9,
+    "tempoEst": 176.5,
+    "tempoEstFolded": 176.5,
+    "gridHit": 0.39,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.784
+    ],
+    "onsets": 549,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.401,
+    "onsetRecall": 0.683,
+    "onsetF": 0.505,
+    "lagMedianAbsMs": null,
+    "lagMaxAbsMs": null,
+    "lagSlopeMsPerMin": null,
+    "windowsCorrelated": "0/12",
+    "windowCorrMean": 0.117,
+    "chromaSim": 0.855,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 76,
+    "structureFidelity": 0.321,
+    "lufs": -16,
+    "lra": 6.4,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-battle-ffx-202-d42": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.42,
+   "renderSeconds": 18.2,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 388.7,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.807,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.828
+    ],
+    "onsets": 358,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.659,
+    "onsetRecall": 0.733,
+    "onsetF": 0.694,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 5.9,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.547,
+    "chromaSim": 0.86,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 45.7,
+    "structureFidelity": 0.535,
+    "lufs": -16,
+    "lra": 6.7,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-battle-ffx-303-d42": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.42,
+   "renderSeconds": 18.7,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 546.7,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.973,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.897
+    ],
+    "onsets": 261,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.793,
+    "onsetRecall": 0.643,
+    "onsetF": 0.71,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 190,
+    "lagSlopeMsPerMin": 17.7,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.573,
+    "chromaSim": 0.848,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 203.7,
+    "structureFidelity": 0.53,
+    "lufs": -16,
+    "lra": 6.4,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-battle-ffx-101-d45": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.45,
+   "renderSeconds": 18.4,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 396.9,
+    "tempoEst": 176.5,
+    "tempoEstFolded": 176.5,
+    "gridHit": 0.394,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.779
+    ],
+    "onsets": 541,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.401,
+    "onsetRecall": 0.674,
+    "onsetF": 0.503,
+    "lagMedianAbsMs": null,
+    "lagMaxAbsMs": null,
+    "lagSlopeMsPerMin": null,
+    "windowsCorrelated": "0/12",
+    "windowCorrMean": 0.111,
+    "chromaSim": 0.845,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 53.9,
+    "structureFidelity": 0.303,
+    "lufs": -16,
+    "lra": 6.3,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-battle-ffx-202-d45": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.45,
+   "renderSeconds": 18.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 406.3,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.811,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.826
+    ],
+    "onsets": 375,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.653,
+    "onsetRecall": 0.761,
+    "onsetF": 0.703,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 2.95,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.537,
+    "chromaSim": 0.851,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 63.4,
+    "structureFidelity": 0.521,
+    "lufs": -16,
+    "lra": 6.5,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-battle-ffx-303-d45": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.45,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 504.7,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.99,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.896
+    ],
+    "onsets": 296,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.77,
+    "onsetRecall": 0.708,
+    "onsetF": 0.738,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": -21.63,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.568,
+    "chromaSim": 0.834,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 161.7,
+    "structureFidelity": 0.516,
+    "lufs": -16,
+    "lra": 6.2,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-battle-ffx-101-d50": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.5,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 380.1,
+    "tempoEst": 176.5,
+    "tempoEstFolded": 176.5,
+    "gridHit": 0.439,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.756
+    ],
+    "onsets": 515,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.377,
+    "onsetRecall": 0.602,
+    "onsetF": 0.464,
+    "lagMedianAbsMs": null,
+    "lagMaxAbsMs": null,
+    "lagSlopeMsPerMin": null,
+    "windowsCorrelated": "0/12",
+    "windowCorrMean": 0.114,
+    "chromaSim": 0.832,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 37.2,
+    "structureFidelity": 0.27,
+    "lufs": -16,
+    "lra": 6.8,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-battle-ffx-202-d50": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.5,
+   "renderSeconds": 14.5,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 401.6,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.894,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.801
+    ],
+    "onsets": 386,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.702,
+    "onsetRecall": 0.842,
+    "onsetF": 0.766,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 35.73,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.479,
+    "chromaSim": 0.81,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 58.6,
+    "structureFidelity": 0.459,
+    "lufs": -16,
+    "lra": 6.1,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-battle-ffx-303-d50": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.5,
+   "renderSeconds": 18.6,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 537.3,
+    "tempoEst": 166.5,
+    "tempoEstFolded": 166.5,
+    "gridHit": 0.391,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.856
+    ],
+    "onsets": 417,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.403,
+    "onsetRecall": 0.522,
+    "onsetF": 0.455,
+    "lagMedianAbsMs": null,
+    "lagMaxAbsMs": null,
+    "lagSlopeMsPerMin": null,
+    "windowsCorrelated": "0/12",
+    "windowCorrMean": 0.101,
+    "chromaSim": 0.81,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 194.4,
+    "structureFidelity": 0.23,
+    "lufs": -16,
+    "lra": 7.7,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-battle-ffx-202-d55": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.55,
+   "renderSeconds": 18.4,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 382.2,
+    "tempoEst": 75,
+    "tempoEstFolded": 150,
+    "gridHit": 0.923,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.803
+    ],
+    "onsets": 377,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.716,
+    "onsetRecall": 0.839,
+    "onsetF": 0.773,
+    "lagMedianAbsMs": 195,
+    "lagMaxAbsMs": 210,
+    "lagSlopeMsPerMin": 100.31,
+    "windowsCorrelated": "12/12",
+    "windowCorrMean": 0.501,
+    "chromaSim": 0.8,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 39.2,
+    "structureFidelity": 0.454,
+    "lufs": -16,
+    "lra": 5.9,
+    "truePeakDb": -1.6
+   }
+  },
+  "B-battle-ffx-303-d55": {
+   "cue": "battle-ffx",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.55,
+   "renderSeconds": 18.2,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 571.7,
+    "tempoEst": 166.5,
+    "tempoEstFolded": 166.5,
+    "gridHit": 0.402,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "E minor",
+     0.805
+    ],
+    "onsets": 468,
+    "source": {
+     "centroidHz": 343,
+     "tempoEst": 75,
+     "gridHit": 0.95,
+     "onsets": 322
+    },
+    "onsetPrecision": 0.382,
+    "onsetRecall": 0.556,
+    "onsetF": 0.453,
+    "lagMedianAbsMs": null,
+    "lagMaxAbsMs": null,
+    "lagSlopeMsPerMin": null,
+    "windowsCorrelated": "0/12",
+    "windowCorrMean": 0.096,
+    "chromaSim": 0.799,
+    "chromaBaselineTwoBarsApart": 0.78,
+    "centroidShiftHz": 228.8,
+    "structureFidelity": 0.212,
+    "lufs": -16,
+    "lra": 8.6,
+    "truePeakDb": -1.5
+   }
+  },
+  "B-boss-ffx2-aeon-101-d35": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.35,
+   "renderSeconds": 22.9,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 223,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.895,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.82
+    ],
+    "onsets": 334,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.737,
+    "onsetRecall": 0.654,
+    "onsetF": 0.693,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": -4.56,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.555,
+    "chromaSim": 0.879,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -58.7,
+    "structureFidelity": 0.514,
+    "lufs": -16,
+    "lra": 6.4,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-boss-ffx2-aeon-202-d35": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.35,
+   "renderSeconds": 22.3,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 215.1,
+    "tempoEst": 158,
+    "tempoEstFolded": 158,
+    "gridHit": 0.752,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.822
+    ],
+    "onsets": 420,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.655,
+    "onsetRecall": 0.731,
+    "onsetF": 0.691,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 30,
+    "lagSlopeMsPerMin": -0.53,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.537,
+    "chromaSim": 0.894,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -66.6,
+    "structureFidelity": 0.536,
+    "lufs": -16,
+    "lra": 2.9,
+    "truePeakDb": -1.4
+   }
+  },
+  "B-boss-ffx2-aeon-303-d35": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.35,
+   "renderSeconds": 22.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 278.6,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.634,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb minor",
+     0.727
+    ],
+    "onsets": 464,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.582,
+    "onsetRecall": 0.718,
+    "onsetF": 0.643,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 50,
+    "lagSlopeMsPerMin": 25.96,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.543,
+    "chromaSim": 0.903,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -3.1,
+    "structureFidelity": 0.54,
+    "lufs": -16,
+    "lra": 3.8,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-boss-ffx2-aeon-101-d38": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.38,
+   "renderSeconds": 22.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 209.1,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.82,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.798
+    ],
+    "onsets": 395,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.676,
+    "onsetRecall": 0.71,
+    "onsetF": 0.693,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": -3.51,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.566,
+    "chromaSim": 0.874,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -72.6,
+    "structureFidelity": 0.508,
+    "lufs": -16,
+    "lra": 5.6,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-boss-ffx2-aeon-202-d38": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.38,
+   "renderSeconds": 22.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 216.7,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.724,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.866
+    ],
+    "onsets": 420,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.657,
+    "onsetRecall": 0.734,
+    "onsetF": 0.693,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 30,
+    "lagSlopeMsPerMin": 4.04,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.501,
+    "chromaSim": 0.885,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -65,
+    "structureFidelity": 0.509,
+    "lufs": -16,
+    "lra": 3.4,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-boss-ffx2-aeon-303-d38": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.38,
+   "renderSeconds": 22.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 280.8,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.6,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb minor",
+     0.743
+    ],
+    "onsets": 440,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.586,
+    "onsetRecall": 0.686,
+    "onsetF": 0.632,
+    "lagMedianAbsMs": 25,
+    "lagMaxAbsMs": 50,
+    "lagSlopeMsPerMin": 25.47,
+    "windowsCorrelated": "18/19",
+    "windowCorrMean": 0.498,
+    "chromaSim": 0.894,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -0.9,
+    "structureFidelity": 0.504,
+    "lufs": -16,
+    "lra": 3.9,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-boss-ffx2-aeon-101-d40": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.4,
+   "renderSeconds": 18.6,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 210.2,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.784,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.797
+    ],
+    "onsets": 379,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.689,
+    "onsetRecall": 0.694,
+    "onsetF": 0.691,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": -5.61,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.55,
+    "chromaSim": 0.87,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -71.5,
+    "structureFidelity": 0.496,
+    "lufs": -16,
+    "lra": 5.4,
+    "truePeakDb": -1
+   }
+  },
+  "B-boss-ffx2-aeon-202-d40": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.4,
+   "renderSeconds": 22.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 220.6,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.737,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.885
+    ],
+    "onsets": 410,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.656,
+    "onsetRecall": 0.715,
+    "onsetF": 0.684,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": 4.21,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.491,
+    "chromaSim": 0.881,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -61.1,
+    "structureFidelity": 0.494,
+    "lufs": -16,
+    "lra": 3.8,
+    "truePeakDb": -1.4
+   }
+  },
+  "B-boss-ffx2-aeon-303-d40": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.4,
+   "renderSeconds": 22.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 284.7,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.67,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb minor",
+     0.746
+    ],
+    "onsets": 437,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.584,
+    "onsetRecall": 0.678,
+    "onsetF": 0.627,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 50,
+    "lagSlopeMsPerMin": 29.65,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.546,
+    "chromaSim": 0.89,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": 3,
+    "structureFidelity": 0.511,
+    "lufs": -16,
+    "lra": 3.9,
+    "truePeakDb": -1.4
+   }
+  },
+  "B-boss-ffx2-aeon-101-d42": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.42,
+   "renderSeconds": 22.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 211.1,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.759,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.804
+    ],
+    "onsets": 370,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.7,
+    "onsetRecall": 0.689,
+    "onsetF": 0.694,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": -7.02,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.54,
+    "chromaSim": 0.865,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -70.6,
+    "structureFidelity": 0.483,
+    "lufs": -16,
+    "lra": 5.1,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-boss-ffx2-aeon-202-d42": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.42,
+   "renderSeconds": 22.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 213,
+    "tempoEst": 158,
+    "tempoEstFolded": 158,
+    "gridHit": 0.722,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.899
+    ],
+    "onsets": 428,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.645,
+    "onsetRecall": 0.734,
+    "onsetF": 0.687,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": 4.74,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.468,
+    "chromaSim": 0.876,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -68.7,
+    "structureFidelity": 0.478,
+    "lufs": -16,
+    "lra": 4,
+    "truePeakDb": -1
+   }
+  },
+  "B-boss-ffx2-aeon-303-d42": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.42,
+   "renderSeconds": 22.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 284.7,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.613,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb minor",
+     0.719
+    ],
+    "onsets": 431,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.564,
+    "onsetRecall": 0.646,
+    "onsetF": 0.602,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 50,
+    "lagSlopeMsPerMin": 32.11,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.535,
+    "chromaSim": 0.885,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": 3,
+    "structureFidelity": 0.49,
+    "lufs": -16,
+    "lra": 4.1,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-boss-ffx2-aeon-101-d45": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.45,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 221.8,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.789,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.806
+    ],
+    "onsets": 375,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.691,
+    "onsetRecall": 0.689,
+    "onsetF": 0.69,
+    "lagMedianAbsMs": 30,
+    "lagMaxAbsMs": 40,
+    "lagSlopeMsPerMin": -7.02,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.539,
+    "chromaSim": 0.854,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -59.9,
+    "structureFidelity": 0.459,
+    "lufs": -16,
+    "lra": 5.3,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-boss-ffx2-aeon-202-d45": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.45,
+   "renderSeconds": 22.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 192.7,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.729,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.904
+    ],
+    "onsets": 424,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.644,
+    "onsetRecall": 0.726,
+    "onsetF": 0.682,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 50,
+    "lagSlopeMsPerMin": 2.63,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.431,
+    "chromaSim": 0.867,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -89,
+    "structureFidelity": 0.447,
+    "lufs": -16,
+    "lra": 4,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-boss-ffx2-aeon-303-d45": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.45,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 222.5,
+    "tempoEst": 130.5,
+    "tempoEstFolded": 130.5,
+    "gridHit": 0.451,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.743
+    ],
+    "onsets": 390,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.356,
+    "onsetRecall": 0.37,
+    "onsetF": 0.363,
+    "lagMedianAbsMs": 140,
+    "lagMaxAbsMs": 140,
+    "lagSlopeMsPerMin": null,
+    "windowsCorrelated": "1/19",
+    "windowCorrMean": 0.151,
+    "chromaSim": 0.874,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -59.1,
+    "structureFidelity": 0.26,
+    "lufs": -16,
+    "lra": 4.3,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-boss-ffx2-aeon-101-d50": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.5,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 328.6,
+    "tempoEst": 111,
+    "tempoEstFolded": 222,
+    "gridHit": 0.425,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.803
+    ],
+    "onsets": 294,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.327,
+    "onsetRecall": 0.255,
+    "onsetF": 0.287,
+    "lagMedianAbsMs": 15,
+    "lagMaxAbsMs": 170,
+    "lagSlopeMsPerMin": -48.35,
+    "windowsCorrelated": "4/19",
+    "windowCorrMean": 0.176,
+    "chromaSim": 0.833,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": 46.9,
+    "structureFidelity": 0.164,
+    "lufs": -16,
+    "lra": 6.2,
+    "truePeakDb": -0.9
+   }
+  },
+  "B-boss-ffx2-aeon-202-d50": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.5,
+   "renderSeconds": 20.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 188.2,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.738,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.892
+    ],
+    "onsets": 405,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.677,
+    "onsetRecall": 0.729,
+    "onsetF": 0.702,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 50,
+    "lagSlopeMsPerMin": 7.37,
+    "windowsCorrelated": "19/19",
+    "windowCorrMean": 0.427,
+    "chromaSim": 0.862,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -93.5,
+    "structureFidelity": 0.443,
+    "lufs": -16.1,
+    "lra": 4,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-boss-ffx2-aeon-303-d50": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.5,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 218.9,
+    "tempoEst": 130.5,
+    "tempoEstFolded": 130.5,
+    "gridHit": 0.42,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.776
+    ],
+    "onsets": 355,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.338,
+    "onsetRecall": 0.319,
+    "onsetF": 0.328,
+    "lagMedianAbsMs": 95,
+    "lagMaxAbsMs": 140,
+    "lagSlopeMsPerMin": 114.29,
+    "windowsCorrelated": "4/19",
+    "windowCorrMean": 0.162,
+    "chromaSim": 0.862,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -62.8,
+    "structureFidelity": 0.23,
+    "lufs": -16,
+    "lra": 4.3,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-boss-ffx2-aeon-101-d55": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 101,
+   "denoise": 0.55,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 325.9,
+    "tempoEst": 120,
+    "tempoEstFolded": 120,
+    "gridHit": 0.467,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "Bb major",
+     0.828
+    ],
+    "onsets": 319,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.37,
+    "onsetRecall": 0.314,
+    "onsetF": 0.34,
+    "lagMedianAbsMs": 20,
+    "lagMaxAbsMs": 160,
+    "lagSlopeMsPerMin": -16.59,
+    "windowsCorrelated": "5/19",
+    "windowCorrMean": 0.16,
+    "chromaSim": 0.809,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": 44.2,
+    "structureFidelity": 0.167,
+    "lufs": -16,
+    "lra": 8,
+    "truePeakDb": -1.3
+   }
+  },
+  "B-boss-ffx2-aeon-202-d55": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 202,
+   "denoise": 0.55,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 176.1,
+    "tempoEst": 80,
+    "tempoEstFolded": 160,
+    "gridHit": 0.695,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.876
+    ],
+    "onsets": 387,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.695,
+    "onsetRecall": 0.715,
+    "onsetF": 0.705,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 30,
+    "lagSlopeMsPerMin": 10.11,
+    "windowsCorrelated": "18/19",
+    "windowCorrMean": 0.445,
+    "chromaSim": 0.865,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -105.6,
+    "structureFidelity": 0.454,
+    "lufs": -16.1,
+    "lra": 2.8,
+    "truePeakDb": -0.9
+   }
+  },
+  "B-boss-ffx2-aeon-303-d55": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "restyle",
+   "seed": 303,
+   "denoise": 0.55,
+   "renderSeconds": 20.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 208.9,
+    "tempoEst": 133.25,
+    "tempoEstFolded": 133.25,
+    "gridHit": 0.443,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "F major",
+     0.803
+    ],
+    "onsets": 307,
+    "source": {
+     "centroidHz": 281.7,
+     "tempoEst": 80,
+     "gridHit": 0.896,
+     "onsets": 376
+    },
+    "onsetPrecision": 0.362,
+    "onsetRecall": 0.295,
+    "onsetF": 0.325,
+    "lagMedianAbsMs": 90,
+    "lagMaxAbsMs": 230,
+    "lagSlopeMsPerMin": 207.33,
+    "windowsCorrelated": "6/19",
+    "windowCorrMean": 0.16,
+    "chromaSim": 0.855,
+    "chromaBaselineTwoBarsApart": 0.828,
+    "centroidShiftHz": -72.8,
+    "structureFidelity": 0.214,
+    "lufs": -16,
+    "lra": 4.3,
+    "truePeakDb": -1.2
+   }
+  },
+  "B-battle-ffx-t2m-101": {
+   "cue": "battle-ffx",
+   "mode": "t2m",
+   "seed": 101,
+   "denoise": 1,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 262.4,
+    "tempoEst": 166.5,
+    "tempoEstFolded": 166.5,
+    "gridHit": 0.4,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "D major",
+     0.767
+    ],
+    "onsets": 370,
+    "lufs": -16,
+    "lra": 6.8,
+    "truePeakDb": -3.6
+   }
+  },
+  "B-battle-ffx-t2m-202": {
+   "cue": "battle-ffx",
+   "mode": "t2m",
+   "seed": 202,
+   "denoise": 1,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 333.5,
+    "tempoEst": 93.75,
+    "tempoEstFolded": 187.5,
+    "gridHit": 0.407,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "G minor",
+     0.771
+    ],
+    "onsets": 513,
+    "lufs": -16,
+    "lra": 8.3,
+    "truePeakDb": -1.1
+   }
+  },
+  "B-battle-ffx-t2m-303": {
+   "cue": "battle-ffx",
+   "mode": "t2m",
+   "seed": 303,
+   "denoise": 1,
+   "renderSeconds": 14.1,
+   "measure": {
+    "durationS": 79.78,
+    "centroidHz": 332.4,
+    "tempoEst": 171.25,
+    "tempoEstFolded": 171.25,
+    "gridHit": 0.416,
+    "gridHitChance": 0.4,
+    "keyEst": [
+     "B minor",
+     0.838
+    ],
+    "onsets": 365,
+    "lufs": -16,
+    "lra": 8.1,
+    "truePeakDb": -3.4
+   }
+  },
+  "B-boss-ffx2-aeon-t2m-101": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "t2m",
+   "seed": 101,
+   "denoise": 1,
+   "renderSeconds": 22.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 294.4,
+    "tempoEst": 176.5,
+    "tempoEstFolded": 176.5,
+    "gridHit": 0.425,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "D minor",
+     0.898
+    ],
+    "onsets": 466,
+    "lufs": -16,
+    "lra": 4.6,
+    "truePeakDb": -2.8
+   }
+  },
+  "B-boss-ffx2-aeon-t2m-202": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "t2m",
+   "seed": 202,
+   "denoise": 1,
+   "renderSeconds": 20.1,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 112.8,
+    "tempoEst": 92.25,
+    "tempoEstFolded": 184.5,
+    "gridHit": 0.425,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "B minor",
+     0.836
+    ],
+    "onsets": 537,
+    "lufs": -16.1,
+    "lra": 9.5,
+    "truePeakDb": -3.2
+   }
+  },
+  "B-boss-ffx2-aeon-t2m-303": {
+   "cue": "boss-ffx2-aeon",
+   "mode": "t2m",
+   "seed": 303,
+   "denoise": 1,
+   "renderSeconds": 22.2,
+   "measure": {
+    "durationS": 116.94,
+    "centroidHz": 221.9,
+    "tempoEst": 130.5,
+    "tempoEstFolded": 130.5,
+    "gridHit": 0.434,
+    "gridHitChance": 0.427,
+    "keyEst": [
+     "D minor",
+     0.912
+    ],
+    "onsets": 541,
+    "lufs": -16,
+    "lra": 9.8,
+    "truePeakDb": -2.9
+   }
+  }
+ }
+}

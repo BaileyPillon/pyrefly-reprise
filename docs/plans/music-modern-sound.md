@@ -569,3 +569,29 @@ Option A's audition sketch is built and measured; the handoff with every number 
 - **Felt piano** from Salamander's bottom 7 of 16 layers, auditioned on `title`'s piano.
 - **Audition:** `docs/audio/audition.html`, section "Modern sound: sketch A", blind X/Y pairs
   against loudness-matched excerpts of what ships. Nothing is routed into the game.
+
+---
+
+## Status — sketch B, ACE-Step (2026-09-22)
+
+**Built and measured, awaiting Bailey's ear** (hard rule 13: nobody on the agent side has
+heard it). Game case **BOTH**: one client for both games; only the style tags differ, per
+THEMES.md "Harmonic language, by world" (FFX orchestra; FFX-2 adds electric bass, kit,
+electric piano). No custom node and no download: ComfyUI 0.35.0's **core** nodes do
+audio-to-audio (`LoadAudio` -> `VAEEncodeAudio` -> `KSampler` at `denoise` < 1), so the §3
+worry that cover/repaint needs the ACE-Step node pack does not block a plain restyle.
+Client `tools/audio/ace-step.mjs`, measurements `tools/audio/ace-measure.py`; audio and
+per-file numbers in `public/audio/candidates/B-*` and `B-report.json`; the 51-render sweep in
+`docs/audio/ace-step-sweep.json`; section "Modern sound: sketch B" in `docs/audio/audition.html`.
+Details: `docs/handoff/music-modern-sound.md`, "Sketch B".
+
+**What the measurements say.** Restyle strength has a cliff between 0.40 and 0.45: at 0.40
+every take of both cues keeps the cue's tempo (150 / 160 bpm), every 4-bar window stays
+correlated with the source's onsets, and the median onset offset is 5 to 30 ms with no
+drift; at 0.45 one take of each cue loses the tempo; at 0.55 two of three do. So the model
+keeps our piece only at a strength where much of our recording's sound survives too; the
+ear has to say whether 0.40 moved the sound far enough. The text-to-music control ignores
+the asked tempo (166.5 and 176.5 bpm against 150 and 160) and its onsets fall on the cue's
+grid at chance level: unconstrained, it is not our music. Plan §3's risks still stand: the
+loop seam does not survive a model pass, and whether model audio may ship is Bailey's
+question 3.

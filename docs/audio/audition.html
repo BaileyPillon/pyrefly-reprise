@@ -168,6 +168,90 @@
 </details>
 
 <!-- ===================================================================== -->
+<!-- sketch-B:begin — ACE-Step through ComfyUI (docs/plans/music-modern-sound.md option B). -->
+<!-- HAND-WRITTEN, not emitted by tools/audio/audition.mjs. Files from                     -->
+<!-- tools/audio/ace-step.mjs; measurements in public/audio/candidates/B-report.json.        -->
+<!-- ===================================================================== -->
+<h2>Modern sound: sketch B, a music model restyles today&rsquo;s recording</h2>
+<p class="group-note">
+  <strong>Same recording in, a model&rsquo;s idea of an orchestra out.</strong> A local music model
+  (ACE-Step, run on this PC) was given today&rsquo;s shipped cue and asked to re-play it as a modern
+  film-score orchestra, keeping as much of the original as possible. Each pair is the same 12 seconds
+  at the same loudness; the order is mixed. Score each 1&ndash;10 before opening the key. This is a
+  <em>reference</em>, not something that can ship yet: whether model-made audio may ship at all is
+  still your call (plan question 3), and a model render cannot keep the loop seam.
+</p>
+
+<h3>battle-ffx &mdash; the ordinary fight (chapters 1&ndash;3)</h3>
+<article class="cue">
+  <h4>X</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/B-battle-ffx-101-x12.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Sketch B — battle-ffx X"></label></p>
+</article>
+<article class="cue">
+  <h4>Y</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/B-battle-ffx-source-x12.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Sketch B — battle-ffx Y"></label></p>
+</article>
+
+<h3>boss-ffx2-aeon &mdash; the chapter 4 fight (FFX-2)</h3>
+<article class="cue">
+  <h4>X</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/B-boss-ffx2-aeon-source-x12.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Sketch B — boss-ffx2-aeon X"></label></p>
+</article>
+<article class="cue">
+  <h4>Y</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/B-boss-ffx2-aeon-303-x12.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Sketch B — boss-ffx2-aeon Y"></label></p>
+</article>
+
+<h3>The model on its own (no recording in, only the tempo, key and style)</h3>
+<p class="group-note">
+  What the same model writes when it is told only &ldquo;150 bpm, E minor, orchestral battle&rdquo;
+  (and &ldquo;160 bpm, B-flat minor, orchestral with pop band&rdquo; for the FFX-2 fight). It is not
+  our music at all; it shows how the model sounds when nothing holds it back.
+</p>
+<article class="cue">
+  <h4>battle-ffx, unconstrained</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/B-battle-ffx-t2m-101-x12.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Sketch B — battle-ffx unconstrained"></label></p>
+</article>
+<article class="cue">
+  <h4>boss-ffx2-aeon, unconstrained</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/B-boss-ffx2-aeon-t2m-101-x12.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Sketch B — boss-ffx2-aeon unconstrained"></label></p>
+</article>
+
+<details class="cue">
+  <summary>The key, how hard the model was pushed, and what was measured (open after scoring)</summary>
+  <p class="blurb">battle-ffx: X is sketch B, Y is today. boss-ffx2-aeon: X is today, Y is sketch B.</p>
+  <p class="blurb">The restyle strength is 0.40 on a 0 to 1 scale: the strongest setting at which
+  every take of both cues kept the cue&rsquo;s tempo. Measured: at 0.40 the onsets stay on the score&rsquo;s
+  grid (median offset 10&nbsp;ms on battle-ffx, a constant 30&nbsp;ms early on boss-ffx2-aeon, no
+  drift over the cue); at 0.45 one take of each cue lost the tempo, and at 0.55 two of three did.
+  Nobody on the agent side has heard any of this; the takes were ranked by measurement only.</p>
+  <p class="blurb">The same take of each cue at three strengths (0.35, 0.45, 0.55), so you can hear
+  where it stops being our piece:</p>
+  <p class="blurb">battle-ffx:
+    <a href="../../public/audio/candidates/B-battle-ffx-101-d35-x12.ogg">0.35</a> &middot;
+    <a href="../../public/audio/candidates/B-battle-ffx-101-d45-x12.ogg">0.45</a> &middot;
+    <a href="../../public/audio/candidates/B-battle-ffx-101-d55-x12.ogg">0.55</a>.
+    boss-ffx2-aeon:
+    <a href="../../public/audio/candidates/B-boss-ffx2-aeon-303-d35-x12.ogg">0.35</a> &middot;
+    <a href="../../public/audio/candidates/B-boss-ffx2-aeon-303-d45-x12.ogg">0.45</a> &middot;
+    <a href="../../public/audio/candidates/B-boss-ffx2-aeon-303-d55-x12.ogg">0.55</a>.</p>
+  <p class="blurb">The other two takes at 0.40 (12 s; the one above ranked first on measured fidelity to the score):
+    battle-ffx <a href="../../public/audio/candidates/B-battle-ffx-202-x12.ogg">202</a>, <a href="../../public/audio/candidates/B-battle-ffx-303-x12.ogg">303</a>;
+    boss-ffx2-aeon <a href="../../public/audio/candidates/B-boss-ffx2-aeon-101-x12.ogg">101</a>, <a href="../../public/audio/candidates/B-boss-ffx2-aeon-202-x12.ogg">202</a>.</p>
+  <p class="blurb">Whole cues: <a href="../../public/audio/candidates/B-battle-ffx-101.ogg">battle-ffx</a> (1:20),
+    <a href="../../public/audio/candidates/B-boss-ffx2-aeon-303.ogg">boss-ffx2-aeon</a> (1:57);
+    unconstrained <a href="../../public/audio/candidates/B-battle-ffx-t2m-101.ogg">battle-ffx</a>,
+    <a href="../../public/audio/candidates/B-boss-ffx2-aeon-t2m-101.ogg">boss-ffx2-aeon</a>.</p>
+</details>
+<!-- sketch-B:end -->
+
+<!-- ===================================================================== -->
 <!-- New chapters: sketches — 2026-09-21.                                  -->
 <!-- HAND-WRITTEN, not emitted by tools/audio/audition.mjs. That generator  -->
 <!-- walks public/audio/manifest.json, and these files are deliberately NOT -->
