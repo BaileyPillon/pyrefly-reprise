@@ -1,116 +1,186 @@
-# Leblanc round 3: method F with corrected words (2026-09-22)
+# Leblanc round 3: independent set judge (2026-09-22)
 
-FFX-2 only (Chapter 6 boss art; no shared tool, no game file; AGENTS.md hard
-rule 14). Painter and judge are the same agent here, so every score below is a
-**self-judged** score, not an independent pass. Nothing is approved: the three
-new files are installed as **CANDIDATES** (sidecar `status: "CANDIDATE"`,
-`candidateOf`, `method`, `seed`); `docs/target/approved-hashes.json` lists 115
-files and all 115 hashed the same before and after this round (it has no
-Leblanc set).
+FFX-2 only (Chapter 6 boss art; no game file, no shared tool; AGENTS.md hard
+rule 14). This is an **independent** pass: nothing was rendered, re-rolled,
+installed or moved in `public/art/`. The producing pass's own report (it
+self-judged every pick at 5) is `production.md` in this folder.
 
-**Sheet:** `sheet.jpg` (idle, then the installed attack / hurt / cast; whole
-figure scaled, then the face, obi and feet at native pixels). Built by
-`build-sheet.py`, crops by `crops.py`.
+**Verdict: FAIL. Every installed state scores 4, against a bar of 7. There is
+no winner.** The new attack, hurt and cast are still the best Leblanc
+candidates made so far, so keeping them installed as CANDIDATES is right. But
+method F with corrected words did not reach the bar, and neither has any
+earlier method. Hard rule 15 applies here: this was the fifth Leblanc pose
+attempt. Queue no more Leblanc renders until Bailey has seen `judge-sheet.jpg`
+and picked a method.
 
-## What was run
+## How it was judged
 
-Recipe: `docs/concepts/chapters/leblanc/pilot2/judge.md` "Recipe for the next
-attempt" (winner F). `run-round3.mjs` uses pilot 2's graph unchanged
-(Animagine XL 4.0, 28 steps, cfg 6, euler_ancestral/normal, pilot 2 FRAMING,
-STYLE, QUALITY, SPRITE_NEGATIVE, FACING_NEGATIVE; IP-Adapter plus on the batch
-`pilot2/refs/idle-square.png` + `idle-head.png`, concat, 0.4, ease in,
-0.2 to 0.6). Only the words changed, as the recipe lists (identity, emphasis,
-the shared negatives, hurt's mouth negatives and new seed, attack's fan-leads
-tags at 1024x1216). Cast was included because its last score in
-`sets/leblanc/judge.md` is 6; ko (7 there) was left alone.
+- Anchor: the installed `public/art/characters/leblanc/idle.png` (591x1118,
+  seed 609757527). It is not scored.
+- Scored: the four installed battle states `attack.png`, `hurt.png`,
+  `cast.png` and `ko.png`. Ko was left alone in round 3 and still carries its
+  redo-2 self-score of 7. It is scored here because the brief says "every
+  installed state".
+- Crops were viewed at native pixels, 1:1 against idle: head, torso and obi,
+  fan, and feet. `judge-sheet.jpg` (JPEG q85) has one row per state: the
+  whole figure scaled, then head, body and one detail at 1:1. The producer's
+  `sheet.jpg` was checked too, but it has no ko row. The three files that
+  round 3 replaced were also looked at, from
+  `D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/leblanc/replaced-2026-09-22/`.
+- Criteria: the pilot judge's list (hair, face and eyes, skin, robe and obi
+  and dress, heart, fan, boots, style), plus "pose reads as its state". Each
+  criterion is scored 0 to 10 against idle. **A state's score is its lowest
+  criterion.** The bar is 7.
+- Approved art: `docs/target/approved-hashes.json` has 115 files and no
+  Leblanc entry. All 115 matched their recorded sha256 before this pass and
+  again after it.
 
-| Pass | Words | Candidates |
-|---|---|---|
-| a | `identity.txt` exactly as the recipe says (includes `argyle` and `heart tattoo, chest tattoo`) | attack, hurt, cast: 6 each, seeds 22101-06, 22302-07, 22501-06 |
-| b | `identity-b.txt`: pass a minus `argyle` and `chest tattoo`; negatives add `tribal tattoo, kanji, shoulder tattoo, argyle, quilted, plaid, belt, buckle` | the same 18 seeds |
-| repair | `repaint-r3.mjs`: masked repaint, the pilot 2 judge's named next tool (box mask, no face in it, both idle refs at 0.4) | hurt.b.22303 feet (3 seeds, denoise 0.6); cast.b.22503 fan (3 seeds, denoise 0.6) |
+## Scores
 
-Pass b was not a new attempt. The recipe said to check `argyle` at 1:1 and drop
-it if it printed a sweater. At 1:1 in pass a it printed a quilted knit over the
-whole hurt robe and the boots, and it pulled the whole hurt set into a looser,
-lower-quality paint style. `chest tattoo` drew tribal and kanji marks on the
-chest in three of the six cast frames. Pass b drops exactly those two words.
+| State | Hair | Face/eyes | Skin | Robe/obi/dress | Heart | Fan | Boots | Style | Pose reads as state | **Score** |
+|---|---|---|---|---|---|---|---|---|---|---|
+| attack (`attack.22101`) | 6 | 8 | 8 | **4** | 5 | 6 | 7 | 7 | 6 | **4** |
+| hurt (`hurt.b.22303.f3`) | 6 | 8 | 7 | **4** | 5 | **4** | 6 | 6 | 7 | **4** |
+| cast (`cast.b.22501`) | 6 | 7 | 8 | **4** | 6 | 5 | 5 | 7 | **4** | **4** |
+| ko (seed 9613, unchanged) | 7 | 5 | 7 | **4** | 8 | **4** | **4** | 6 | **4** | **4** |
 
-## What the word fix did (1:1, against idle)
+### attack: 4 (the producer said 5)
 
-- **Obi: fixed.** Crimson in all 36 frames; no gold obi anywhere, compared
-  with every contender in pilot 2. Several frames also carry idle's purple
-  cord knot and tassel.
-- **Boots: better, but not fixed.** Open-toe lace-up boots in about half the
-  frames (pilot 2: none). The rest are closed-toe patent boots.
-- **Hair:** both eyes show in every frame; `hair over one eye` is gone. The
-  colour is now an ash or silver platinum, a little cooler than idle's warm
-  pale blonde.
-- **New or remaining drift:** a red (sometimes pink) robe collar and lining
-  where idle is white-edged, in almost every frame, even with `red lining,
-  pink lining` in the negatives. Idle's lavender diamond pattern toward the
-  hem never appears without `argyle`, and appears as a quilted knit with it.
-  `heart tattoo` draws an outlined heart, not idle's flat red one, and without
-  `chest tattoo` the heart often disappears. The fan comes out pale wood,
-  white, grey or gold far more often than black.
-- **Masked repair:** the feet repaint worked (hurt f3: closed-toe black boots
-  became purple open-toe lace-up boots with a clean seam; one rear heel is
-  only half drawn). The fan repaint did not: cast.b.22503's staff-length
-  "fan" stayed a long stick in all three seeds, because the surrounding
-  context fixes its shape. So that frame was not picked.
+- **Robe (4).** Idle wears an open overcoat slipped off both shoulders over a
+  white high-cut halter dress; the dress is the main mass of the figure.
+  Attack draws something else: a closed purple kimono wrapped over a small
+  white halter bib, with a wide red collar band (idle's robe edge is white),
+  **black-and-white checkerboard panels on both sleeves**, and a striped teal
+  cuff. The obi is crimson (the word fix worked), but it is a saturated red
+  with gold edge bands, where idle's is a dusty crimson with a gold knot.
+  Taken together this is a different costume, not one drifted detail, so it
+  scores 4, not 5.
+- **Heart (5).** A black-outlined heart tattoo; idle's is a flat red heart.
+- **Hair (6).** Ash or silver platinum; idle is a warm pale blonde. The same
+  drift shows on hurt and cast. Of the four states, only ko keeps idle's warm
+  blonde.
+- **Pose (6).** A real lunge with the weight forward, which is the best
+  attack body so far. But the empty hand leads and the fan trails behind the
+  body, so it reads as a dash or a wind-up rather than a strike landing.
+- **Fan (6).** Black ribs with tan guards and a purple tassel. This is the
+  closest fan to idle's in any round.
+- Face, eyes and skin are good: a serious brow, purple eyes, pale skin. The
+  boots are open-toe lace-up heels, darker indigo than idle's lavender (7).
 
-## Picks and scores (worst criterion; bar 7)
+### hurt: 4 (the producer said 5)
 
-Criteria as in pilot 2: hair, cut, face, eyes, skin, robe/obi/dress, heart,
-fan, boots, style, pose reads as the state. The score is the lowest one.
+- **Robe (4).** The robe is closed at the hip and hangs to the ankle like a
+  long skirt, fading to pink at the hem. It has a red collar band and two
+  black riveted straps on the sleeve. Idle's white dress shows only in the
+  thigh slit.
+- **Fan (4).** A closed fan with **pale wood** guards. Idle's fan is black,
+  so this is a plain colour miss, not a shade drift.
+- **Heart (5).** Not visible from this angle, so the identity mark is gone.
+- **Boots (6).** The feet repaint worked: an open-toe lace-up heel. At 1:1
+  the boot is glossier and harder-edged than the rest of the figure, with a
+  black flared collar and a white strap at the top. The rear foot is only a
+  heel with a stray pink edge.
+- **Pose (7).** A closed-eye wince, a small open mouth and a hand on the
+  stomach, leaning back. This is the first Leblanc hurt, in any round, that
+  reads as being hit.
 
-| State | Installed | Score | Worst criterion | Next lowest |
-|---|---|---|---|---|
-| attack | `attack.22101` (pass a) | **5** | robe: a checkerboard panel on the rear sleeve; the heart is an outlined tattoo | fan 6 (black with tan guards and a purple tassel, near idle's, but held back: a wind-up rather than a strike); red collar 6; ash hair 6. Lunge 7, open-toe boots 8, crimson obi 7 |
-| hurt | `hurt.b.22303.f3` (pass b + feet repaint) | **5** | robe: hangs closed like a long skirt, with strap buckles on the sleeve; fan pale wood; heart not visible from this angle | open-toe boots after the repaint 6. Wince with closed eyes and a hand on the stomach reads as hit (7, the best hurt expression in five rounds); crimson obi 7 |
-| cast | `cast.b.22501` (pass b) | **5** | robe: pink drape over the shoulder and pink lining | closed fan dark grey, the right size (6); leans back looking up (pose 6). Small red heart 7, crimson obi 7, open-toe boots 8 |
+### cast: 4 (the producer said 5)
 
-**None reaches 7.** They are installed because the brief says to install the
-picks as candidates, and because each one scores above the candidate it
-replaces on the same criteria. The replaced files wear thigh-high stockings
-(attack), a closed full-length robe with no white dress (cast), and a
-blue-grey skin cast (hurt). They are backed up in
-`D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/leblanc/replaced-2026-09-22/`.
+- **Pose (4).** An extreme backbend: head thrown back looking up, the free
+  arm hanging down behind her, and the closed fan held flat at the hip like a
+  baton. The prompt asked for "arm up, raised hand, open fan", and none of
+  that landed. At game size this reads as being blown backwards (a hurt or
+  knockback), not as casting. The producer scored this 6; at 1:1 it is the
+  worst criterion on this frame.
+- **Robe (4).** A pink shoulder drape and pink lining, plus a bulky red obi
+  panel with a hanging maroon tail.
+- **Boots (5).** Dark indigo mid-calf lace-ups with grey turned-down cuffs;
+  idle's are lavender ankle boots.
+- **Fan (5).** Closed and grey, the right size, but not black and not open.
+- Heart (6): a small red heart, sitting high near the collarbone.
 
-Rejected at 1:1, for the record: attack.22104, .22106, .22102 and all of pass b
-except .22104 (closed-toe boots, or the fan held back); attack.22105 (fan
-covers the face). hurt pass a, all six (quilted robe and boots, style drop);
-hurt.b.22302, .22305, .22306 (closed boots); hurt.b.22304 (fan to the mouth
-reads as a swoon); hurt.b.22307 (a strong knocked-back pose, but a white fan
-and a yellow object at the waist). cast.22506 and cast.b.22502 (a halo effect;
-two fans); cast pass a (tribal chest tattoos); cast.b.22503 (the fan is a
-staff); cast.b.22504 (hardly looks up).
+### ko: 4 (the self-score in `../judge.md` redo 2 is 7)
 
-## Hard rule 15: stop here and show Bailey
+- **Pose (4).** At 1:1 her right eye is **open**, with a purple iris
+  showing, and she is **smiling**: a wink while lying on her side. That reads
+  as lounging or playing dead, not knocked out. The redo-2 note says "eyes
+  closed"; the pixels disagree.
+- **Robe (4).** A closed purple robe with no white dress, a strip of fishnet
+  at the waist, and a red-and-gold striped obi.
+- **Fan (4).** Red and pink (research colours, not idle's black).
+- **Boots (4).** Closed-toe heeled ankle boots with chain anklets.
+- The heart is a flat red heart on the sternum (8) and the hair is idle's
+  warm blonde (7). The line work is heavier and higher-contrast than idle's
+  (style 6). The bent leg's thigh and shin mass reads oddly at 1:1.
 
-The pilot 2 judge wrote: if the next run also fails the bar, stop and show
-Bailey the current best next to idle rather than trying a fifth time. This run
-fails the bar (5), so **no further Leblanc re-render should be queued without
-Bailey's word.** The sheet is the thing to show him. What is left is small:
-the robe's red lining, idle's hem diamonds, the flat red heart and the black
-fan. Words and the masked box repaint have not fixed these. What is still
-untried is a repaint masked to one colour region: mask exactly the red-lining
-pixels and the fan pixels rather than a box, or recolour the robe edge in
-image space. That is a method choice for Bailey, together with the hard rule 6
-question already open in `pilot2/judge.md`: whether the idle, which has bare
-legs, a black fan and a purple robe, should move toward the research
-description (stockings, a red-and-silver fan, a blue-and-white triangle
-pattern).
+## Were the replacements an improvement?
+
+Yes. The replaced candidates are worse on the same criteria. The old attack
+has black thigh-highs, red heels and a white-and-gold fan. The old hurt has a
+blue-grey skin cast, a closed ankle-length robe and a grimace that reads as a
+leer. The old cast has a closed full-length robe with no white dress and a
+lavender fan. The new frames bring back the white halter, the crimson obi,
+bare legs and open-toe boots. They lose idle's warm hair colour, which the
+old frames had. Keeping the new frames installed as CANDIDATES is right;
+none of them is approved.
+
+## What the four states have in common
+
+1. **Different garments.** Idle is an open overcoat off both shoulders, a
+   white high-cut dress, a crimson obi with a gold knot, and white-edged robe
+   lining. Every pose state draws a closed or wrapped kimono with red or pink
+   lining, or a red collar band. This has held through five methods (A, A at
+   0.4, the redo, F, F with corrected words) and two word sets. IP-Adapter at
+   0.4 from 0.2 to 0.6, with the reference cropped square, does not carry the
+   silhouette of the outfit into a new pose.
+2. **Fan colour.** Black appears in 1 of the 4 states.
+3. **Hair.** The corrected "platinum blonde" words cooled the hair to ash in
+   all three new frames.
+4. **Pose tags land only partly.** The body follows the words (attack
+   lunges, hurt winces), but the hands and the fan do not: the fan trails on
+   attack, cast has no raised arm, and ko has an open eye.
+
+## Redo: stop and show Bailey (hard rule 15)
+
+Queue no sixth word or seed pass. A method check already exists
+(`docs/plans/leblanc-art-method-check.md`), and round 3 was the attempt it
+planned. The pilot 2 judge said to stop and show Bailey if this run also
+failed. It failed at 4. So the next step is a method choice for Bailey,
+presented with this sheet. These are options, not work to start (hard rule
+10):
+
+- **(a) Keep the candidates and repair colours in image space.** Mask by
+  colour, not by box: recolour the red and pink lining to white and the fan
+  to black with a hue mask or a region-masked repaint. This fixes the colour
+  criteria (lining, fan, hair tint). It cannot fix the wrong garment
+  silhouette or cast's pose, so at best it lifts attack and hurt to about 5
+  or 6.
+- **(b) Pose the idle itself.** Img2img from idle with a pose ControlNet
+  (openpose or depth from a posed reference), at a denoise high enough to
+  move the limbs. Pilot method B (img2img without pose control) copied idle's
+  pose; a pose ControlNet is the missing piece. Adding the ControlNet node
+  needs a check that the model is already on disk (hard rule 11: nothing is
+  downloaded without a yes).
+- **(c) Accept a rig.** Animate the approved idle as a 2D puppet, as the
+  living-portrait rig v2 did, instead of painting new pose frames. Identity
+  is then exact by construction, and the cost is less dramatic poses.
+- **(d) Hard rule 6 question, still open.** Research
+  (`research/ffx2-leblanc-syndicate.md` §10.1) describes stockings, a
+  red-and-silver fan and a triangle pattern; idle has none of these. If
+  Bailey moves the anchor toward the research, the ko fan (red) and the old
+  stockings stop being misses, and the idle would be re-rendered first.
+
+**Per-state redo if work resumes:** attack should strike with the fan
+leading, and needs idle's open overcoat, white lining, flat red heart and
+warm hair. Hurt keeps this pose and wince, but needs a black fan, the open
+robe and the heart visible. Cast is a full redo: arm raised, fan open, no
+backbend. Ko is a full redo: both eyes closed, no smile, the white dress and
+open-toe boots.
 
 ## Files
 
-- `identity.txt`, `identity-b.txt`, `emphasis.txt`: the words.
-- `run-round3.mjs` (`PASS=b` for pass b), `repaint-r3.mjs`, `install-r3.mjs`.
-- `renders/`: every cutout plus its sidecar. The raw frames and masks are
-  gitignored and backed up to
-  `D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/leblanc/round3-renders/`.
-- `_strip-*.jpg` (survey), `_grid-*.jpg` (gridded, for reading face boxes),
-  `_crops-*.jpg` (1:1 head, obi and feet per candidate against idle; the
-  judging was done from these), `_look-*.jpg`, `_fans.jpg`, `_rep-*.jpg`
-  (native-pixel close looks).
-- `sheet.jpg`: the final sheet.
+- `judge-sheet.jpg`: this pass's sheet (idle, attack, hurt, cast, ko; whole
+  figure plus 1:1 head, body and detail crops).
+- `production.md`: the producing pass's report (moved here from this file's
+  path; content unchanged apart from its title line).
+- `sheet.jpg`: the producing pass's sheet (no ko row).
