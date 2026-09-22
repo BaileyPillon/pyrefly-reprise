@@ -31,3 +31,10 @@ OUT=docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out
 "$P" -s tools/gen/rig-keys.py outmerge --key profile-right --pick "$OUT/out-profile-right.1.full.png"
 "$P" -s tools/gen/rig-keys.py cut
 "$P" -s tools/gen/rig-json.py
+# v3.1 (runtime pass): re-slot the yaw keys so a turn never reverses (q34-right's painting faces LEFT),
+# fix the profile eye colours, clean the keys' own collar, then the warp landmarks (art/v3/warp/landmarks.json)
+"$P" -s tools/gen/rig-turns.py mirror
+"$P" -s tools/gen/rig-turns.py wire
+# the turned body: the frontal tassel's footprint inpainted (pick recorded in art/v3/jobs/tassel.merge.json)
+"$P" -s tools/gen/rig-collar.py job
+"$P" -s tools/gen/rig-collar.py merge --pick "$OUT/tassel2.1.full.png"

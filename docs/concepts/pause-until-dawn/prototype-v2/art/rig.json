@@ -18,192 +18,432 @@
       "file": "v3/layers/frontal/headCore.png",
       "landmarks": [
         [
-          338,
-          422
+          339,
+          421
         ],
         [
-          462,
-          522
+          470,
+          548
         ],
         [
-          462,
+          480,
           595
         ],
         [
-          395,
-          617
+          402,
+          616
         ],
         [
-          470,
-          610
+          480,
+          625
         ],
         [
-          470,
-          650
-        ],
-        [
-          470,
-          730
-        ],
-        [
-          390,
-          50
-        ]
-      ]
-    },
-    {
-      "id": "q34-left",
-      "yawDeg": -40,
-      "file": "v3/layers/q34-left/front.png",
-      "landmarks": [
-        [
-          320,
-          425
-        ],
-        [
-          415,
-          525
-        ],
-        [
-          450,
-          570
-        ],
-        [
-          410,
-          618
-        ],
-        [
-          490,
-          615
-        ],
-        [
-          490,
+          482,
           645
         ],
         [
-          460,
-          743
+          452,
+          750
         ],
         [
-          350,
-          200
-        ]
-      ]
-    },
-    {
-      "id": "q34-right",
-      "yawDeg": 40,
-      "file": "v3/layers/q34-right/front.png",
-      "landmarks": [
-        [
-          331,
-          442
+          470,
+          380
         ],
         [
-          314,
-          469
+          608,
+          406
         ],
         [
-          371,
-          549
+          282,
+          428
         ],
         [
-          371,
-          588
+          670,
+          425
         ],
         [
-          424,
-          584
+          575,
+          602
         ],
         [
-          424,
-          604
+          310,
+          610
         ],
         [
-          468,
-          730
-        ],
-        [
-          389,
-          119
-        ]
-      ]
-    },
-    {
-      "id": "profile-left",
-      "yawDeg": -85,
-      "file": "v3/layers/profile-left/front.png",
-      "landmarks": [
-        [
-          420,
-          410
-        ],
-        [
-          300,
-          545
-        ],
-        [
-          335,
-          605
-        ],
-        [
-          400,
-          635
-        ],
-        [
-          345,
-          625
-        ],
-        [
-          335,
-          650
-        ],
-        [
-          400,
-          683
+          655,
+          615
         ],
         [
           280,
-          80
+          505
+        ],
+        [
+          680,
+          505
+        ],
+        [
+          380,
+          690
+        ],
+        [
+          590,
+          690
+        ],
+        [
+          119,
+          180
+        ],
+        [
+          831,
+          180
         ]
       ]
     },
     {
-      "id": "profile-right",
-      "yawDeg": 85,
-      "file": "v3/layers/profile-right/front.png",
+      "id": "turn-l45",
+      "yawDeg": -45,
+      "file": "v3/layers/turns/turn-l45/front.png",
       "landmarks": [
         [
-          570,
-          410
+          338,
+          450
         ],
         [
-          690,
-          545
+          398,
+          560
         ],
         [
-          655,
+          410,
+          585
+        ],
+        [
+          390,
           605
         ],
         [
-          590,
-          635
+          430,
+          600
         ],
         [
-          645,
+          425,
+          612
+        ],
+        [
+          440,
+          725
+        ],
+        [
+          378,
+          400
+        ],
+        [
+          485,
+          380
+        ],
+        [
+          315,
+          440
+        ],
+        [
+          538,
+          360
+        ],
+        [
+          475,
+          590
+        ],
+        [
+          347,
           625
         ],
         [
-          655,
-          650
+          600,
+          630
+        ],
+        [
+          329,
+          505
+        ],
+        [
+          575,
+          505
+        ],
+        [
+          400,
+          680
+        ],
+        [
+          570,
+          690
+        ],
+        [
+          180,
+          180
+        ],
+        [
+          831,
+          180
+        ]
+      ]
+    },
+    {
+      "id": "turn-r45",
+      "yawDeg": 45,
+      "file": "v3/layers/turns/turn-r45/front.png",
+      "landmarks": [
+        [
+          505,
+          380
+        ],
+        [
+          592,
+          560
+        ],
+        [
+          580,
+          585
+        ],
+        [
+          515,
+          590
+        ],
+        [
+          560,
+          600
+        ],
+        [
+          565,
+          612
+        ],
+        [
+          550,
+          725
+        ],
+        [
+          612,
+          400
+        ],
+        [
+          652,
+          450
+        ],
+        [
+          452,
+          360
+        ],
+        [
+          675,
+          440
+        ],
+        [
+          600,
+          605
+        ],
+        [
+          390,
+          630
+        ],
+        [
+          643,
+          625
+        ],
+        [
+          415,
+          505
+        ],
+        [
+          661,
+          505
+        ],
+        [
+          420,
+          690
         ],
         [
           590,
-          683
+          680
         ],
         [
-          710,
-          80
+          181,
+          180
+        ],
+        [
+          807,
+          180
+        ]
+      ]
+    },
+    {
+      "id": "turn-l85",
+      "yawDeg": -85,
+      "file": "v3/layers/turns/turn-l85/front.png",
+      "landmarks": [
+        [
+          342,
+          436
+        ],
+        [
+          297,
+          547
+        ],
+        [
+          340,
+          592
+        ],
+        [
+          352,
+          633
+        ],
+        [
+          364,
+          640
+        ],
+        [
+          395,
+          665
+        ],
+        [
+          410,
+          688
+        ],
+        [
+          338,
+          395
+        ],
+        [
+          445,
+          430
+        ],
+        [
+          330,
+          428
+        ],
+        [
+          492,
+          432
+        ],
+        [
+          452,
+          635
+        ],
+        [
+          325,
+          625
+        ],
+        [
+          560,
+          650
+        ],
+        [
+          255,
+          495
+        ],
+        [
+          545,
+          505
+        ],
+        [
+          400,
+          690
+        ],
+        [
+          490,
+          782
+        ],
+        [
+          197,
+          180
+        ],
+        [
+          809,
+          180
+        ]
+      ]
+    },
+    {
+      "id": "turn-r85",
+      "yawDeg": 85,
+      "file": "v3/layers/turns/turn-r85/front.png",
+      "landmarks": [
+        [
+          545,
+          430
+        ],
+        [
+          693,
+          547
+        ],
+        [
+          650,
+          592
+        ],
+        [
+          538,
+          635
+        ],
+        [
+          626,
+          640
+        ],
+        [
+          595,
+          665
+        ],
+        [
+          580,
+          688
+        ],
+        [
+          652,
+          395
+        ],
+        [
+          648,
+          436
+        ],
+        [
+          498,
+          432
+        ],
+        [
+          660,
+          428
+        ],
+        [
+          638,
+          633
+        ],
+        [
+          430,
+          650
+        ],
+        [
+          665,
+          625
+        ],
+        [
+          445,
+          505
+        ],
+        [
+          735,
+          495
+        ],
+        [
+          500,
+          782
+        ],
+        [
+          590,
+          690
+        ],
+        [
+          181,
+          180
+        ],
+        [
+          787,
+          180
         ]
       ]
     }
@@ -283,7 +523,19 @@
       "lipUpper",
       "lipLower",
       "chin",
-      "hairlineCenter"
+      "browCenter",
+      "pupil_L",
+      "eyeOuter_R",
+      "eyeOuter_L",
+      "mouthCorner_L",
+      "jaw_R",
+      "jaw_L",
+      "cheek_R",
+      "cheek_L",
+      "jawMid_R",
+      "jawMid_L",
+      "hairSide_R",
+      "hairSide_L"
     ],
     "v3": {
       "frontal": {
@@ -409,7 +661,17 @@
             ],
             "motion": "earring"
           }
-        ]
+        ],
+        "bodyTurned": {
+          "file": "v3/layers/frontal/body-turned.png",
+          "box": [
+            0,
+            556,
+            832,
+            660
+          ],
+          "_readme": "rig-collar.py: the body with the tassel footprint inpainted; drawn for turned keys, faded in across a frontal-to-turn blend"
+        }
       },
       "keys": {
         "q34-left": {
@@ -489,6 +751,86 @@
               0,
               629,
               787
+            ]
+          }
+        },
+        "turn-l45": {
+          "back": {
+            "file": "v3/layers/turns/turn-l45/back.png",
+            "box": [
+              163,
+              0,
+              671,
+              894
+            ]
+          },
+          "front": {
+            "file": "v3/layers/turns/turn-l45/front.png",
+            "box": [
+              163,
+              0,
+              671,
+              849
+            ]
+          }
+        },
+        "turn-l85": {
+          "back": {
+            "file": "v3/layers/turns/turn-l85/back.png",
+            "box": [
+              192,
+              0,
+              629,
+              861
+            ]
+          },
+          "front": {
+            "file": "v3/layers/turns/turn-l85/front.png",
+            "box": [
+              192,
+              0,
+              629,
+              787
+            ]
+          }
+        },
+        "turn-r45": {
+          "back": {
+            "file": "v3/layers/turns/turn-r45/back.png",
+            "box": [
+              156,
+              0,
+              671,
+              894
+            ]
+          },
+          "front": {
+            "file": "v3/layers/turns/turn-r45/front.png",
+            "box": [
+              156,
+              0,
+              671,
+              849
+            ]
+          }
+        },
+        "turn-r85": {
+          "back": {
+            "file": "v3/layers/turns/turn-r85/back.png",
+            "box": [
+              156,
+              0,
+              639,
+              859
+            ]
+          },
+          "front": {
+            "file": "v3/layers/turns/turn-r85/front.png",
+            "box": [
+              156,
+              0,
+              639,
+              786
             ]
           }
         }
@@ -590,7 +932,76 @@
           }
         }
       },
-      "fringeLiftPx": 3
+      "fringeLiftPx": 3,
+      "warp": {
+        "frame": [
+          [
+            -300,
+            -300
+          ],
+          [
+            495,
+            -300
+          ],
+          [
+            1290,
+            -300
+          ],
+          [
+            -300,
+            560
+          ],
+          [
+            1290,
+            560
+          ],
+          [
+            -300,
+            1516
+          ],
+          [
+            495,
+            1516
+          ],
+          [
+            1290,
+            1516
+          ]
+        ],
+        "pins": [
+          [
+            40,
+            870
+          ],
+          [
+            250,
+            870
+          ],
+          [
+            495,
+            870
+          ],
+          [
+            740,
+            870
+          ],
+          [
+            950,
+            870
+          ]
+        ],
+        "source": "v3/warp/landmarks.json",
+        "_readme": "src/warp.ts: frame + pins are fixed points shared by every key; with the key landmarks they are Delaunay-triangulated per bracket (on the pair's midpoint set) and both keys are warped to the interpolated landmarks."
+      },
+      "retiredKeys": {
+        "_readme": "rig-turns.py: out of keys[] since v3.1. q34-right's painting faces LEFT (it is turn-l45 now); q34-left barely turns (about 15 degrees) and would put a second hair repaint inside the idle sway; profile-left/right had their visible iris colours backwards (turn-l85 / turn-r85 replace them).",
+        "ids": [
+          "q34-left",
+          "q34-right",
+          "profile-left",
+          "profile-right"
+        ]
+      }
     },
     "restProof": {
       "image": "rest-diff.png",

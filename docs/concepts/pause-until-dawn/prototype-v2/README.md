@@ -1076,3 +1076,52 @@ changed), so no patch edge shows.
 - profile-right's back of head is a clean curve, not a hair silhouette.
 - Brows, blink intermediates and profile-right have not been through an
   independent judge or Bailey.
+
+# Part 6 — v3.1 runtime: mesh warp, turn continuity, seam-matched patches (2026-09-22)
+
+Game case: **FFX-2 only** (the plate is Yuna X-2); the renderer plumbing
+works for any plate. Full check with every still, crop and number:
+`shots/RUNTIME-CHECK.md` (+ `shots/runtime-check.json`, `shots/sheet.png`,
+`shots/warp-vs-crossfade.png`).
+
+## What was built
+
+- **Per-triangle mesh warp** (`src/warp/delaunay.ts` Bowyer-Watson,
+  `src/warp/mesh.ts` `PairWarp` / `lerpLandmarks` / `mapPoint` /
+  `paintWeight`, `src/warp/cache.ts`, the warp program in `src/gl-layer.ts`).
+  20 shared landmarks per key (`art/v3/warp/landmarks.json`, order in
+  `artMeta.commonLandmarkOrder`) plus fixed frame and shoulder pins
+  (`artMeta.v3.warp`). One Delaunay topology per bracket, on the pair's
+  midpoint shape. Between two keys both are warped onto the interpolated
+  landmarks; shape follows smootherstep(t) across the span, paint swaps in the
+  middle half only. The two warped head passes (behind the body, in front of
+  it) are mixed by coverage (`mixUnion`), and the body is pinned and drawn
+  once. At a key (and at rest) nothing is warped: rest = plate, 0 pixels over
+  1 level in the live canvas. `?warp=0` shows v3's plain cross-dissolve.
+- **Keys re-slotted** (`tools/gen/rig-turns.py mirror|wire`). `q34-right`'s
+  painting faces the viewer's LEFT (it is `turn-l45` now); the right turn is
+  its mirror with both irises swapped (`turn-r45`); the profiles' visible eye
+  colours were backwards and are swapped by mirroring (`turn-l85` blue,
+  `turn-r85` green). q34-left and the four v3 key ids stay on disk
+  (`artMeta.v3.retiredKeys`). The keys' own collar fringe is keyed out and a
+  mirrored source's canvas cut fades out over 48 px.
+- **Patches** (`src/patch-blend.ts`, used by `src/layers.ts` at load): each
+  patch goes through its own feathered matte (eyes 2.5 px, brows and mouth
+  3 px), after a per-channel gain and offset solved by trimmed least squares
+  on the seam ring against `art/rest-composite.png`.
+- **Turned body** (`tools/gen/rig-collar.py`): the frontal tassel's whole
+  footprint inpainted into `art/v3/layers/frontal/body-turned.png`, drawn for
+  turned keys and lerped in across a frontal-to-turn blend.
+- `renderer.ts` 337 lines, all source files under 400; the driver seam is
+  unchanged. Rebuild: `bash tools/gen/rig-build.sh` now ends with the v3.1
+  steps. Capture: `node tools/gen/rig-runtime-check.mjs --url <prototype url>`
+  with `PYREFLY_BROWSER=gpu`. Landmark overlays:
+  `tools/gen/rig-landmarks.py overlay|sheet`.
+
+## Still not right (disclosed; the list with reasons is in shots/RUNTIME-CHECK.md)
+
+The right turn's braid hangs on her left (mirror); the profiles have no braid
+on the near side; the frontal's orange hair and the keys' brown hair
+cross-fade mid-turn; a faint profile line at -60; blinks exist only on the
+frontal key; the lid patch is a flat slab; `rig-range.mjs`'s envelope predates
+the warp.

@@ -1,0 +1,24 @@
+{
+  "from": "profile-right",
+  "axis": 495.0,
+  "layers": {
+    "back": {
+      "file": "v3/layers/turns/turn-l85/back.png",
+      "box": [
+        192,
+        0,
+        629,
+        861
+      ]
+    },
+    "front": {
+      "file": "v3/layers/turns/turn-l85/front.png",
+      "box": [
+        192,
+        0,
+        629,
+        787
+      ]
+    }
+  }
+}

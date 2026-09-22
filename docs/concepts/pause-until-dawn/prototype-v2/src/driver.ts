@@ -43,6 +43,8 @@ export interface LivingPortraitDriverOptions {
   debugTimeScale?: number;
   /** Debug (`?post=0`): skip the post grade so the rest pose can be diffed against the plate. */
   debugNoPost?: boolean;
+  /** Debug (`?warp=0`): plain cross-dissolve between yaw keys, for a before/after of the mesh warp. */
+  debugNoWarp?: boolean;
 }
 
 export class LivingPortraitDriver implements PortraitDriver {
@@ -93,6 +95,7 @@ export class LivingPortraitDriver implements PortraitDriver {
         this.state.setYawRange(range.min, range.max);
         this.renderer = new Renderer(canvas, rig, this.opts.assetBaseUrl);
         this.renderer.debugNoPost = this.opts.debugNoPost ?? false;
+        this.renderer.debugNoWarp = this.opts.debugNoWarp ?? false;
         await this.renderer.load();
         this.startLoop();
       })

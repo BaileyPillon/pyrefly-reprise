@@ -12,13 +12,18 @@
  *   yaw key   key.back (hair below the jaw), body, key.front (face + head hair)
  *
  * A yaw between two keys renders each key's composite into its own target and
- * mixes the two; a yaw on (or within a hair of) one key renders that key
- * alone, so the rest pose is the plate itself (proved pixel-exact by
- * `art/rest-diff.png`; `?post=0` shows it live). Degrades to a no-op when
- * WebGL2 is missing (jsdom in tests/unit).
+ * mixes the two. v3.1: both composites are first WARPED onto the same
+ * interpolated landmarks (`warp/mesh.ts`: a per-triangle, piecewise-affine
+ * mesh warp), so eyes, nose, mouth, chin and head outline of the two
+ * paintings sit on the same pixels and only the paint cross-fades - no
+ * double exposure. The body is pinned (never warped). A yaw on (or within a
+ * hair of) one key renders that key alone and unwarped, so the rest pose is
+ * the plate itself (proved pixel-exact by `art/rest-diff.png`; `?post=0`
+ * shows it live). Degrades to a no-op when WebGL2 is missing (jsdom in
+ * tests/unit).
  */
 import type { EyeState, MouthPatch, BrowPatch } from './face.ts';
-import { type Rig, type RigKey, sortedKeys, bracketForYaw, CHIN_LANDMARK_INDEX } from './rig.ts';
+import { type Rig, type RigKey, sortedKeys, bracketForYaw } from './rig.ts';
 import { createFramebufferTarget, loadImage, type FrameBufferTarget } from './gl-utils.ts';
 import { relightGainForYaw } from './light.ts';
 import { PostPass } from './post.ts';
@@ -26,6 +31,10 @@ import { RIG_CONSTANTS } from './constants.ts';
 import { LayerGL } from './gl-layer.ts';
 import { readV3, loadArt, uploadTexture, type LoadedArt, type Motion, type Tex } from './layers.ts';
 import { LooseMotion, chestOffsetPx, irisOffsetPx, yawNormFor, smootherstep, type Px } from './motion.ts';
+import { WarpCache, type PairFrame } from './warp/cache.ts';
+import { paintWeight } from './warp/mesh.ts';
+
+type KeyPart = 'all' | 'back' | 'front';
 
 export interface RenderFrame {
   yawDeg: number;
@@ -59,6 +68,8 @@ export class Renderer {
   readonly ok: boolean;
   /** Debug (`?post=0`): skip the grade/grain/focus pass so the rest pose can be compared to the plate byte for byte. */
   debugNoPost = false;
+  /** Debug (`?warp=0`): the v3 plain cross-dissolve, for a before/after of the mesh warp. */
+  debugNoWarp = false;
   private readonly gl: WebGL2RenderingContext | null;
   private readonly rig: Rig;
   private readonly base: string;
@@ -69,6 +80,7 @@ export class Renderer {
   private art: LoadedArt | null = null;
   private plate: Tex | null = null;
   private readonly loose = new LooseMotion();
+  private readonly warps: WarpCache;
   private width = 832;
   private height = 1216;
 
@@ -76,6 +88,7 @@ export class Renderer {
     this.rig = rig;
     this.base = assetBaseUrl;
     this.keysByYaw = sortedKeys(rig);
+    this.warps = new WarpCache(rig);
     let gl: WebGL2RenderingContext | null = null;
     try {
       gl = canvas.getContext('webgl2', { alpha: false, antialias: false, preserveDrawingBuffer: true });
@@ -123,32 +136,29 @@ export class Renderer {
     return yawNormFor(yawDeg, min, max);
   }
 
-  /** Head translation that lands two keys' chins on the same point mid-dissolve (plate px). */
-  private chinOffsets(a: RigKey, b: RigKey | null, w: number): { offA: Px; offB: Px } {
-    const ca = a.landmarks?.[CHIN_LANDMARK_INDEX];
-    const cb = b?.landmarks?.[CHIN_LANDMARK_INDEX];
-    if (!b || !ca || !cb) return { offA: [0, 0], offB: [0, 0] };
-    const tx = ca[0] + (cb[0] - ca[0]) * w;
-    const ty = ca[1] + (cb[1] - ca[1]) * w;
-    return { offA: [tx - ca[0], ty - ca[1]], offB: [tx - cb[0], ty - cb[1]] };
-  }
-
-  private bindTarget(t: FrameBufferTarget | null): void {
+  /** `bg`: the opaque backdrop; `clear`: transparent (a premultiplied head pass); `keep`: draw on top. */
+  private bindTarget(t: FrameBufferTarget | null, clear: 'bg' | 'clear' | 'keep' = 'bg'): void {
     const gl = this.gl!;
     gl.bindFramebuffer(gl.FRAMEBUFFER, t ? t.fbo : null);
     gl.viewport(0, 0, this.width, this.height);
     gl.disable(gl.BLEND);
-    gl.clearColor(BG[0], BG[1], BG[2], 1);
+    if (clear === 'keep') return;
+    if (clear === 'bg') gl.clearColor(BG[0], BG[1], BG[2], 1);
+    else gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
   }
 
-  private drawFrontal(frame: RenderFrame, m: Motions, gain: number): void {
+  private drawFrontal(frame: RenderFrame, m: Motions, gain: number, part: KeyPart): void {
     const art = this.art!;
     const L = this.layers!;
     const add = (a: Px, b: Px): Px => [a[0] + b[0], a[1] + b[1]];
     const offsetFor = (motion: Motion): Px => (motion === 'chest' ? m.chest : motion === 'head' ? m.head : add(m.head, m[motion]));
+    let behindBody = true;
     for (const { layer, t } of art.frontal) {
-      L.draw(t.tex, t.box, offsetFor(layer.motion), 1, layer.motion === 'chest' ? 1 : gain);
+      const pinned = layer.motion === 'chest';
+      if (pinned) behindBody = false;
+      if (part !== 'all' && (pinned || (part === 'back') !== behindBody)) continue;
+      L.draw(t.tex, t.box, offsetFor(layer.motion), 1, pinned ? 1 : gain, pinned);
       if (layer.name === 'headCore' && frame.mouth !== 'neutral') {
         const p = art.mouth.get(frame.mouth);
         if (p) L.draw(p.tex, p.box, m.head, frame.mouthWeight, gain);
@@ -173,20 +183,70 @@ export class Renderer {
     }
   }
 
-  private drawKey(key: RigKey, frame: RenderFrame, m: Motions, gain: number): void {
+  /**
+   * One key's composite (`all`), or just its head behind the body (`back`)
+   * or in front of it (`front`) - the two halves of a warped blend, each
+   * drawn into a transparent target and mixed around the one pinned body.
+   */
+  private drawKey(key: RigKey, frame: RenderFrame, m: Motions, gain: number, warp: Float32Array | null = null, part: KeyPart = 'all'): void {
     const art = this.art!;
     const L = this.layers!;
-    L.beginLayers();
+    L.beginLayers(warp);
     if (key.id === 'frontal') {
-      this.drawFrontal(frame, m, gain);
+      this.drawFrontal(frame, m, gain, part);
       return;
     }
     const k = art.keys.get(key.id);
-    const body = art.frontal.find((f) => f.layer.motion === 'chest');
-    if (!k || !body) return;
-    L.draw(k.back.tex, k.back.box, m.head, 1, gain);
-    L.draw(body.t.tex, body.t.box, m.chest, 1, 1);
-    L.draw(k.front.tex, k.front.box, m.head, 1, gain);
+    if (!k) return;
+    if (part !== 'front') L.draw(k.back.tex, k.back.box, m.head, 1, gain);
+    if (part === 'all') this.drawBody(m, true);
+    if (part !== 'back') L.draw(k.front.tex, k.front.box, m.head, 1, gain);
+  }
+
+  /** The pinned body: the plate's own, or (`turned`) the one with the frontal tassel's footprint filled. */
+  private drawBody(m: Motions, turned: boolean): void {
+    const art = this.art!;
+    const body = turned && art.bodyTurned ? art.bodyTurned : art.frontal.find((f) => f.layer.motion === 'chest')?.t;
+    if (body) this.layers!.draw(body.tex, body.box, m.chest, 1, 1, true);
+  }
+
+  /**
+   * The body between the two head halves. Frontal-to-turn: the plate's body
+   * and the turned body, an exact premultiplied lerp at the paint weight (both
+   * are the same pixels outside the tassel's footprint); otherwise one body.
+   */
+  private drawBlendBody(a: RigKey, b: RigKey, w: number, m: Motions): void {
+    const [scene, ta, tb] = this.targets as [FrameBufferTarget, FrameBufferTarget, FrameBufferTarget];
+    const turnedWeight = a.id === 'frontal' ? w : b.id === 'frontal' ? 1 - w : 1;
+    if (turnedWeight <= KEY_EPS || turnedWeight >= 1 - KEY_EPS || !this.art!.bodyTurned) {
+      this.bindTarget(scene, 'keep');
+      this.layers!.beginLayers(null);
+      this.drawBody(m, turnedWeight >= 0.5);
+      return;
+    }
+    this.bindTarget(ta, 'clear');
+    this.layers!.beginLayers(null);
+    this.drawBody(m, false);
+    this.bindTarget(tb, 'clear');
+    this.layers!.beginLayers(null);
+    this.drawBody(m, true);
+    this.bindTarget(scene, 'keep');
+    this.layers!.mixUnion(ta.tex, tb.tex, turnedWeight, false);
+  }
+
+  /** Warped blend: back halves, the pinned body once, front halves; each pair mixed by coverage. */
+  private drawWarpedBlend(a: RigKey, b: RigKey, w: number, pair: PairFrame, frame: RenderFrame, m: Motions, gain: number): void {
+    const [scene, ta, tb] = this.targets as [FrameBufferTarget, FrameBufferTarget, FrameBufferTarget];
+    this.bindTarget(scene, 'bg');
+    for (const part of ['back', 'front'] as const) {
+      this.bindTarget(ta, 'clear');
+      this.drawKey(a, frame, m, gain, pair.a, part);
+      this.bindTarget(tb, 'clear');
+      this.drawKey(b, frame, m, gain, pair.b, part);
+      this.bindTarget(scene, 'keep');
+      this.layers!.mixUnion(ta.tex, tb.tex, w);
+      if (part === 'back') this.drawBlendBody(a, b, w, m);
+    }
   }
 
   render(frame: RenderFrame): void {
@@ -204,30 +264,42 @@ export class Renderer {
       const lift = frame.brow === 'raised' ? -this.art.fringeLiftPx * frame.browWeight : 0;
       const gain = relightGainForYaw(yn);
       const { a, b, t } = bracketForYaw(this.keysByYaw, frame.yawDeg);
-      const w = b ? smootherstep(t) : 0;
-      const { offA, offB } = this.chinOffsets(a, b, w);
-      const motions = (head: Px): Motions => ({
-        head,
+      // geometry moves across the whole span; the paint swaps only in its middle half
+      const g = b ? smootherstep(t) : 0;
+      const c = b ? paintWeight(t) : 0;
+      const m: Motions = {
+        head: [0, 0],
         chest: chestOffsetPx(frame.chestSample),
         iris: irisOffsetPx(yn, frame.pitchNorm),
         fringe: [0, lift],
         strand1: loose.strand1,
         strand2: loose.strand2,
         earring: loose.earring,
-      });
-      if (!b || w <= KEY_EPS) {
+      };
+      const pair = b && g > KEY_EPS && g < 1 - KEY_EPS && !this.debugNoWarp ? this.warps.frame(a, b, g) : null;
+      if (!b || g <= KEY_EPS) {
         this.bindTarget(scene);
-        this.drawKey(a, frame, motions(offA), gain);
-      } else if (w >= 1 - KEY_EPS) {
+        this.drawKey(a, frame, m, gain);
+      } else if (g >= 1 - KEY_EPS) {
         this.bindTarget(scene);
-        this.drawKey(b, frame, motions(offB), gain);
+        this.drawKey(b, frame, m, gain);
+      } else if (pair && c <= KEY_EPS) {
+        this.bindTarget(scene);
+        this.drawKey(a, frame, m, gain, pair.a);
+      } else if (pair && c >= 1 - KEY_EPS) {
+        this.bindTarget(scene);
+        this.drawKey(b, frame, m, gain, pair.b);
+      } else if (pair) {
+        // both keys warped onto the same interpolated landmarks, then mixed by coverage
+        this.drawWarpedBlend(a, b, c, pair, frame, m, gain);
       } else {
+        // v3's plain cross-dissolve of two complete composites (no landmarks, or `?warp=0`)
         this.bindTarget(ta);
-        this.drawKey(a, frame, motions(offA), gain);
+        this.drawKey(a, frame, m, gain);
         this.bindTarget(tb);
-        this.drawKey(b, frame, motions(offB), gain);
+        this.drawKey(b, frame, m, gain);
         this.bindTarget(scene);
-        this.layers.mix(ta.tex, tb.tex, w);
+        this.layers.mix(ta.tex, tb.tex, g);
       }
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);

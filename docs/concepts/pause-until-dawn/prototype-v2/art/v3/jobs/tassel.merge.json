@@ -1,0 +1,8 @@
+{
+  "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/tassel2.1.full.png",
+  "region": "the earring's matte (alpha > 8) grown 2 px, where the body is opaque",
+  "to": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/frontal/body-turned.png",
+  "pixels": 10010,
+  "madeTransparent": 571,
+  "toneDrift": "ring 5-12 px outside the region, gaussian sigma 6"
+}

@@ -1,0 +1,26 @@
+{
+  "from": "q34-right",
+  "axis": 495.0,
+  "layers": {
+    "back": {
+      "file": "v3/layers/turns/turn-l45/back.png",
+      "box": [
+        163,
+        0,
+        671,
+        894
+      ],
+      "collarPxRemoved": 3250
+    },
+    "front": {
+      "file": "v3/layers/turns/turn-l45/front.png",
+      "box": [
+        163,
+        0,
+        671,
+        849
+      ],
+      "collarPxRemoved": 0
+    }
+  }
+}

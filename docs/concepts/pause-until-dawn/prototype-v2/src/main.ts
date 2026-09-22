@@ -27,6 +27,7 @@ function main(): void {
     rigUrl: './art/rig.json',
     debugTimeScale,
     debugNoPost: new URLSearchParams(location.search).get('post') === '0',
+    debugNoWarp: new URLSearchParams(location.search).get('warp') === '0',
   });
 
   const start = () => {

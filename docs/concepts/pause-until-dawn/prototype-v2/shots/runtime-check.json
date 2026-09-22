@@ -1,0 +1,279 @@
+{
+  "url": "http://localhost:5640/docs/concepts/pause-until-dawn/prototype-v2/",
+  "browser": "chromium, PYREFLY_BROWSER=gpu",
+  "viewport": "1000x2000",
+  "stills": [
+    {
+      "name": "01-yaw-0",
+      "yaw": 0,
+      "aperture": 1,
+      "eye": "open",
+      "note": "rest: R (reduced motion) holds yaw 0; post grade on"
+    },
+    {
+      "name": "02-yaw-m20",
+      "yaw": -20.12,
+      "aperture": 1,
+      "eye": "open",
+      "note": "ArrowLeft held (clock 0.08x), frozen at yaw -20: frontal/turn-l45 at t 0.44: both keys warped to the interpolated landmarks"
+    },
+    {
+      "name": "03-yaw-m40",
+      "yaw": -40.09,
+      "aperture": 1,
+      "eye": "open",
+      "note": "ArrowLeft held (clock 0.08x), frozen at yaw -40: frontal/turn-l45 at t 0.89"
+    },
+    {
+      "name": "04-yaw-m60",
+      "yaw": -60.14,
+      "aperture": 1,
+      "eye": "open",
+      "note": "ArrowLeft held (clock 0.08x), frozen at yaw -60: turn-l45/turn-l85 at t 0.38"
+    },
+    {
+      "name": "05-yaw-m80",
+      "yaw": -80.01,
+      "aperture": 1,
+      "eye": "open",
+      "note": "ArrowLeft held (clock 0.08x), frozen at yaw -80: turn-l45/turn-l85 at t 0.88"
+    },
+    {
+      "name": "06-yaw-p20",
+      "yaw": 20.63,
+      "aperture": 1,
+      "eye": "open",
+      "note": "ArrowRight held (clock 0.08x), frozen at yaw 20: frontal/turn-r45 at t 0.44"
+    },
+    {
+      "name": "07-yaw-p40",
+      "yaw": 40.22,
+      "aperture": 1,
+      "eye": "open",
+      "note": "ArrowRight held (clock 0.08x), frozen at yaw 40: frontal/turn-r45 at t 0.89"
+    },
+    {
+      "name": "08-mid-blink",
+      "yaw": 0.51,
+      "aperture": 0.5,
+      "eye": "closing",
+      "note": "B key in slow motion (0.02x), frozen mid-close"
+    },
+    {
+      "name": "09-nowarp-yaw-m20",
+      "yaw": -20.34,
+      "aperture": 1,
+      "eye": "open",
+      "note": "?warp=0 (plain cross-dissolve) at yaw -20, for comparison with the warped still"
+    },
+    {
+      "name": "10-nowarp-yaw-m60",
+      "yaw": -60.22,
+      "aperture": 1,
+      "eye": "open",
+      "note": "?warp=0 (plain cross-dissolve) at yaw -60, for comparison with the warped still"
+    }
+  ],
+  "crops": [
+    {
+      "name": "crop-eyes-m40",
+      "yaw": -40.09,
+      "aperture": 1,
+      "eye": "open",
+      "note": "1:1 crop of the -40 still: eyes",
+      "crop": [
+        250,
+        320,
+        360,
+        200
+      ]
+    },
+    {
+      "name": "crop-collar-m40",
+      "yaw": -40.09,
+      "aperture": 1,
+      "eye": "open",
+      "note": "1:1 crop of the -40 still: collar",
+      "crop": [
+        150,
+        640,
+        600,
+        300
+      ]
+    },
+    {
+      "name": "crop-hairline-m40",
+      "yaw": -40.09,
+      "aperture": 1,
+      "eye": "open",
+      "note": "1:1 crop of the -40 still: hairline",
+      "crop": [
+        140,
+        40,
+        560,
+        340
+      ]
+    },
+    {
+      "name": "crop-eyes-mid-blink",
+      "yaw": 0.51,
+      "aperture": 0.5,
+      "eye": "closing",
+      "note": "1:1 crop of the mid-blink still",
+      "crop": [
+        250,
+        320,
+        360,
+        200
+      ]
+    }
+  ],
+  "restDiff": {
+    "canvasPixel_400_600": [
+      231,
+      151,
+      133,
+      255
+    ],
+    "platePixel_400_600": [
+      231,
+      151,
+      133,
+      255
+    ],
+    "yaw": 0,
+    "differingPixelsOver1Level": 0,
+    "maxLevels": 1,
+    "meanLevels": 0.0025,
+    "note": "the WebGL canvas at rest (?post=0, R held reduced motion, eyes open) vs art/keys/frontal.png (the plate) over the clear colour, decoded without colour conversion",
+    "attempt": 1
+  },
+  "patchFits": [
+    {
+      "file": "v3/patches/eyes/blink-1.png",
+      "gain": [
+        1.0271809713413713,
+        0.9264336294656424,
+        0.8383086786599988
+      ],
+      "offset": [
+        -0.028788252457050998,
+        0.014567192692017346,
+        0.039555709268325405
+      ],
+      "samples": 1062
+    },
+    {
+      "file": "v3/patches/eyes/half.png",
+      "gain": [
+        0.9883740120191072,
+        0.8904219423023765,
+        0.8260581877431955
+      ],
+      "offset": [
+        -0.0043166557528609975,
+        0.018535286965812855,
+        0.024765574846085808
+      ],
+      "samples": 1116
+    },
+    {
+      "file": "v3/patches/eyes/blink-2.png",
+      "gain": [
+        0.9602468161660486,
+        0.819786301478914,
+        0.8
+      ],
+      "offset": [
+        0.003430837913415439,
+        0.025456334040061337,
+        0.02748190898257982
+      ],
+      "samples": 1181
+    },
+    {
+      "file": "v3/patches/eyes/closed-geo.png",
+      "gain": [
+        0.9271052173855256,
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.01610320611403571,
+        0.02479418891879612,
+        0.025910707601437485
+      ],
+      "samples": 1348
+    },
+    {
+      "file": "v3/patches/brows/raised.png",
+      "gain": [
+        0.9969276292087509,
+        0.9994523098787256,
+        0.9955079003120082
+      ],
+      "offset": [
+        0.002495905186160135,
+        0.0012245541632201439,
+        0.0034620139334741538
+      ],
+      "samples": 1209
+    },
+    {
+      "file": "v3/patches/brows/drawn.png",
+      "gain": [
+        0.9961856941696735,
+        0.9991976113425853,
+        0.9958491436048803
+      ],
+      "offset": [
+        0.003821991683009707,
+        0.0011023963690158475,
+        0.00314514629298641
+      ],
+      "samples": 1210
+    },
+    {
+      "file": "v3/patches/mouth/parted.png",
+      "gain": [
+        0.9708361678401058,
+        0.88166639681013,
+        0.8853430453714285
+      ],
+      "offset": [
+        0.030314203405581056,
+        0.06577187446927939,
+        0.05315051656725066
+      ],
+      "samples": 887
+    },
+    {
+      "file": "v3/patches/mouth/smile.png",
+      "gain": [
+        1.0001681708172,
+        0.9810405607262227,
+        0.9905769501526484
+      ],
+      "offset": [
+        0.0014746299181614933,
+        0.007261032166567071,
+        0.0020443643170574167
+      ],
+      "samples": 1098
+    },
+    {
+      "file": "v3/patches/mouth/pressed.png",
+      "gain": [
+        0.9864364834620639,
+        0.9814145125914964,
+        0.9956762665481277
+      ],
+      "offset": [
+        0.017047394671629343,
+        0.005082597580974116,
+        -0.003776280678768968
+      ],
+      "samples": 964
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "from": "q34-right",
+  "axis": 495.0,
+  "layers": {
+    "back": {
+      "file": "v3/layers/turns/turn-r45/back.png",
+      "box": [
+        156,
+        0,
+        671,
+        894
+      ],
+      "collarPxRemoved": 3250,
+      "fadedCutAtX": 156
+    },
+    "front": {
+      "file": "v3/layers/turns/turn-r45/front.png",
+      "box": [
+        156,
+        0,
+        671,
+        849
+      ],
+      "collarPxRemoved": 0,
+      "fadedCutAtX": 156,
+      "blueToGreenPx": 2305,
+      "greenToBluePx": 1080
+    }
+  }
+}

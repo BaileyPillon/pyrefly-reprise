@@ -1,0 +1,24 @@
+{
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/tassel.src.png",
+  "box": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "pad": 0,
+  "feather": 8,
+  "growMask": 6,
+  "seed": 8002,
+  "denoise": 0.85,
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "encode": "VAEEncode+SetLatentNoiseMask",
+  "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/tassel.mask.png",
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, brown hair, short hair, single long braid, heterochromia, blue eye, green eye, gunner, pink hood, pink hood, fabric folds, soft shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, braid, earring, jewelry, beads, tassel, ribbon, stripe, hair",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "generatedAt": "2026-09-22T20:07:31.542Z"
+}

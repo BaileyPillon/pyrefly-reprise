@@ -1,4 +1,35 @@
-# Living portrait v3 — art assembly (2026-09-22)
+# Living portrait v3 — art assembly + v3.1 runtime (2026-09-22)
+
+## v3.1 runtime pass (latest; read this first)
+
+Game case: **FFX-2 only** (Yuna X-2 plate); renderer plumbing is shared.
+Evidence: `docs/concepts/pause-until-dawn/prototype-v2/shots/RUNTIME-CHECK.md`.
+
+- **Mesh warp built**: `src/warp/{delaunay,mesh,cache}.ts` + the warp program
+  in `src/gl-layer.ts`; 20 landmarks per key (`art/v3/warp/landmarks.json`,
+  wired by `tools/gen/rig-turns.py wire`), frame + shoulder pins. Both keys
+  are warped onto the interpolated landmarks and mixed by coverage; paint
+  swaps in the middle half of a bracket only. Rest = plate (0 px over 1 level,
+  live canvas). `?warp=0` = v3's cross-dissolve for comparison.
+- **Turn continuity fixed**: `q34-right`'s painting faces LEFT, so +40 used to
+  turn her the wrong way. Keys are now `turn-l85 / turn-l45 / frontal /
+  turn-r45 / turn-r85` (`tools/gen/rig-turns.py mirror`); profile eye colours
+  corrected (a left turn shows her blue left eye).
+- **Patches**: own feathered matte + trimmed least-squares seam colour match
+  (`src/patch-blend.ts`), applied at load.
+- **Collar**: the frontal tassel's footprint inpainted into
+  `art/v3/layers/frontal/body-turned.png` (`tools/gen/rig-collar.py`, ComfyUI
+  pick `tassel2.1`), lerped in only when a turned key shows.
+- Tests: `tests/unit/pause-living-portrait-warp.test.ts` (lerp exactness,
+  identity warp, no fold on any real pair) and `-patch.test.ts`; all 6
+  living-portrait files green (53 tests); tsc clean.
+- Open: braid side on the right turn (mirror), no braid on the profiles' near
+  side, hair colour differs between the plate and the keys (cross-fades
+  mid-turn), faint profile line at -60, blinks only on the frontal key,
+  flat lid slab, `rig-range.mjs` envelope predates the warp. Nothing here has
+  had an independent judge or Bailey's look.
+
+## v3 art assembly (earlier the same day)
 
 Owner of this pass: `docs/concepts/pause-until-dawn/prototype-v2/**`,
 `tools/gen/rig-*.py`, `tools/gen/rig-*.mjs`, `tools/gen/rig-build.sh`,
@@ -32,7 +63,7 @@ write-up: the prototype README, Part 5.
   (`yawNormFor`); fixed in `src/motion.ts`. `renderer.ts` is 262 lines (was
   788).
 
-## Still open
+## Still open (as of the art assembly; 1 and 2 were done in v3.1 above)
 
 1. Per-triangle mesh warp: mid-dissolve stills still double-expose.
 2. The hood under the tassel shows as a soft strip in the yaw keys.
