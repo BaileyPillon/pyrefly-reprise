@@ -30,7 +30,8 @@
     "tags": "Identity tags only, Danbooru order: count, character, series, rating, everything else.",
     "negAdd": "Extra negatives for this subject, appended to BASE_NEGATIVE with --negAdd.",
     "refState": "Which state is the identity anchor the other states pass to --ref.",
-    "states": "pose -> { poseTags, optional composition, sizeHint, ref, notes }.",
+    "states": "pose -> { poseTags, optional composition, sizeHint, ref, forceRef, refWeight, refStart, refEnd, notes }.",
+    "forceRef": "Per-state override: use --ref even though the reference measured mostly one colour (comfy.mjs's monochrome-reference guard would otherwise silently drop it). See docs/concepts/chapters/leblanc/pilot/pilot.md.",
     "notes": "What to watch for when judging the batch.",
     "facing": "right | left | none. Which way the body is angled, --facing. right = party (stands left, fights right), left = enemy/boss/aeon, none = straight-on (portraits). Defaults if omitted: right for the character preset, left for the boss preset, none for --composition portrait."
   },
@@ -2431,24 +2432,38 @@
         },
         "attack": {
           "poseTags": "fan snapping open toward the viewer, lunging forward slightly, sharp confident smile, one arm outstretched",
-          "ref": "leblanc/idle"
+          "ref": "leblanc/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6
         },
         "cast": {
           "poseTags": "fan raised overhead in both hands, elemental magic circle glowing, hair blown back, dramatic casting pose",
-          "ref": "leblanc/idle"
+          "ref": "leblanc/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6
         },
         "hurt": {
           "poseTags": "recoiling, staggering back, fan lowered, startled hurt expression, off balance",
-          "ref": "leblanc/idle"
+          "ref": "leblanc/idle",
+          "forceRef": true,
+          "refWeight": 0.35,
+          "refStart": 0.2,
+          "refEnd": 0.6,
+          "notes": "Pilot seeds 7301/7302 at this recipe: 1 of 2 candidates drifted the robe to solid navy/black and added an unrequested circular mandala background halo. Re-roll away from that failure mode rather than treating it as the identity baseline (docs/concepts/chapters/leblanc/pilot/pilot.md)."
         },
         "ko": {
           "poseTags": "lying on ground, on side, eyes closed, unconscious, defeated, fan fallen open beside her",
           "composition": "prone",
           "sizeHint": "1216x832",
-          "ref": "leblanc/idle"
+          "ref": "leblanc/idle",
+          "notes": "Not covered by the 2026-09-21 consistency pilot (attack/cast/hurt only) — decide --forceRef for this state from a render, don't assume the same recipe transfers to a prone composition."
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). Her idle.png measures 43% one colour, so every other state rendered WITHOUT --ref (the monochrome-reference guard fired) — costume was judged independently per state rather than identity-pinned, and colour balance drifts state to state (idle/attack lean pink-purple, cast/hurt lean blue-purple). The canon blue-and-white triangle/swirl robe pattern and the white crisscross cuff material render inconsistently across states despite (1.3) emphasis — the checkpoint resists this specific pattern on a purple base; flagged for a follow-up pass, not re-rolled further today (pace rule, AGENTS.md hard rule 15). idle pose shows the fan closed near her chin rather than the canon \"half-open screen\" — best of 3 candidates on quality/costume, pose is an approximation."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). Her idle.png measures 43% one colour, so every other state rendered WITHOUT --ref (the monochrome-reference guard fired) — costume was judged independently per state rather than identity-pinned, and colour balance drifts state to state (idle/attack lean pink-purple, cast/hurt lean blue-purple). The canon blue-and-white triangle/swirl robe pattern and the white crisscross cuff material render inconsistently across states despite (1.3) emphasis — the checkpoint resists this specific pattern on a purple base; flagged for a follow-up pass, not re-rolled further today (pace rule, AGENTS.md hard rule 15). idle pose shows the fan closed near her chin rather than the canon \"half-open screen\" — best of 3 candidates on quality/costume, pose is an approximation. 2026-09-21 consistency pilot (docs/concepts/chapters/leblanc/pilot/pilot.md) tested three fixes for the drift on attack/cast/hurt and picked method A (--forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in — body-only Danbooru pose tags, not this file's longer poseTags prose) as the recipe worth re-rendering the installed sprites with; recorded on the three states above. img2img (method B) was rejected: it reproduces idle's own pose almost unchanged instead of a distinct attack/cast/hurt silhouette. A one-shot 'reference sheet' render (method C, multiple poses in one image) was rejected: costume colour/pattern was not stable seed to seed. This pilot answers the method question only; the installed attack/cast/hurt PNGs have not been re-rendered with it yet."
     },
     {
       "id": "evrae",
@@ -2567,7 +2582,7 @@
           "ref": "logos/idle"
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 62% one colour (near-monochrome dark blue/black), so every other state rendered WITHOUT --ref — judged independently per state. Two of three attack candidates drifted badly off-model (fairy wings; a laser rifle in place of the revolvers) despite the negAdd; the installed attack is the third candidate. The decorative helmet crest the research does not call for (plain \"black-and-silver helmet with a chin protector\") persists across states — a known checkpoint prior, same finding as the concept round's off_canon_seen note."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). idle.png measures 62% one colour (near-monochrome dark blue/black), so every other state rendered WITHOUT --ref — judged independently per state. Two of three attack candidates drifted badly off-model (fairy wings; a laser rifle in place of the revolvers) despite the negAdd; the installed attack is the third candidate. The decorative helmet crest the research does not call for (plain \"black-and-silver helmet with a chin protector\") persists across states — a known checkpoint prior, same finding as the concept round's off_canon_seen note. Same monochrome-guard situation as leblanc (docs/concepts/chapters/leblanc/pilot/pilot.md) but NOT pilot-tested here — before adding forceRef/refWeight to the states above, run the same three-method pilot against logos/idle.png rather than copying leblanc's numbers untested."
     }
   ]
 }
