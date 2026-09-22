@@ -101,3 +101,90 @@ whole-body PNG, a 1:1 face crop, a 1:1 torso/shield crop. Viewed at full size
 for this judge pass; every finding above is visible on it, including the
 attack face paint, the attack/cast double shields, hurt's pointed shield, and
 ko's closed eye.
+
+## Round 2 — redo, last attempt (2026-09-22)
+
+FFX-2 only, art only, same ownership as the renderer
+(`wf_6e496bfa-c24` "pyrefly-chapter-leblanc"). Re-rendered `attack`/`cast`/
+`hurt`/`ko` only (`idle` untouched, per the "re-render idle first" recommendation
+above — **not done this pass**, out of scope for this brief, flagged again
+below). 6 candidates requested per state; `attack` and `cast` got a clean 6,
+`hurt` got 5 (1 quarantined by the cut-out guard, seed 900201), `ko` got 6.
+Every candidate was opened and viewed at native pixel size (cropped further
+with a scratch `sharp` script, `.crop-ormi-tmp.mjs`, for the shield/face
+regions specifically) before picking — not judged from `sheet.png` thumbnails
+alone, though the sheet was rebuilt afterward and corroborates the picks.
+
+**Recipe change from round 1:** `--refWeight` raised one step, 0.35 → 0.40
+(round 1 was itself one step up from the chapter's old default of 0.30); a
+targeted `--emphasis` naming the state's specific worst criterion (e.g.
+`(single round shield:1.35)` for attack/cast, `(plain round shield:1.35)` for
+hurt, `(clear heart emblem on shield:1.35)` for ko) in place of round 1's
+generic identity emphasis; and a `--negAdd` list built specifically against
+each state's logged worst-criterion failure (duplicate/kite/pointed shields,
+face paint/tattoos, oversized pauldron, ambiguous emblem words) rather than
+round 1's generic `tall, slim, thin, sword, katana, blade`. Same `--tags`
+(`identity.txt`, unchanged), same pose tags as round 1's installed prompts,
+same `--ref public/art/characters/ormi/idle.png --forceRef`, same
+`--refStart 0.2 --refEnd 0.6 --refWeightType "ease in"`. Full commands and
+every candidate + sidecar are under `candidates/<state>/redo/`.
+
+**Result: the two hard-fail defects from round 1 (attack's face paint, the
+attack/cast duplicate-shield) are fixed on the installed picks.** No installed
+state carries face paint or a second shield. But the recipe change surfaced a
+new, state-independent failure mode not on record before this pass: **this
+checkpoint adds an invented facial marking (a red streak, lightning-bolt, or
+tattoo-like mark) on a majority of `hurt` candidates specifically** — 4 of 5
+successful `hurt` renders (900202, 900204, 900205, 900206) carry one, despite
+`identity.txt` and every `--negAdd` here naming nothing of the kind; only
+900203 (the installed pick) is clean of it. `cast` and `ko` each had one
+lighter instance (900101's forehead scratch-marks, not installed; ko's
+900301/900303 had bolder versions, not installed) but most candidates in
+those two states were clean. `attack` had none across all 6. This reads as a
+per-pose prompt/seed-range interaction, not something `--refWeight` or
+`--negAdd` wording fixes by itself — worth a `--strictPrompt`-style banned-
+token check for face markings if `hurt` needs another pass.
+
+### Scores (worst-criterion-wins, against idle, pass bar 7)
+
+| State | Installed seed | Worst criterion this pass | Score | vs round 1 |
+| --- | --- | --- | --- | --- |
+| attack | 900006 | marks — shield shows a purple/gold spoked wheel + red centre gem (echoes idle's own radial-spoke motif closely, but in idle's wrong colours: purple/gold spokes vs idle's blue/orange-on-red) | **6** | +5 (was 1; face paint gone, single round shield confirmed, best purple/gold/teal costume match of the six) |
+| cast | 900103 | marks — shield is shown edge-on (rim only, red/gold, single, correctly round); the face graphic is not visible from this angle so the heart/no-heart question can't be read off this render at all | **~4–5** | +1–2 (was 3; the off-hand duplicate disc is gone and the off hand is empty, the specific defect targeted; picked over 900105/900101 which showed clean single shields with a visible star or scratch-marked forehead — an invisible mark was judged less severe than an invented one) |
+| hurt | 900203 | weapon (shield outline is still pointed/heater-shaped, a point at the top — the exact round-vs-pointed defect targeted) tied with pose (stern, composed, arm resting on the shield — still does not read as staggering/pained) | **~4**, no clear improvement | +0 (was 4; this is the least-bad of 5 candidates, not a fix — see below) |
+| ko | 900305 | marks — shield shown edge-on/interior face (radial ribbing visible, consistent with idle's own radial motif, but no heart or any front graphic visible from this angle) | **5** | +0 net, but the *reason* changed for the better: round 1's worst criterion was outfit (oversized pauldron) tied with marks (ambiguous flourish); this pass's pauldron is plainly modest/small (the targeted fix worked) and the pose is a strong "defeated" read (eyes closed, a tear, shield fallen) — only the shield-face visibility keeps this off 7 |
+
+**`hurt` did not improve and should not be read as a win.** All 5 surviving
+candidates were either disqualified by an invented facial marking (4 of 5) or,
+for the one survivor (900203), still carry the same pointed-shield-shape and
+non-staggering-pose defects round 1's installed pick (800001) already had.
+900203 was installed anyway per this pass's brief ("install the best even if
+still under 7"), but a third attempt at `hurt` specifically should not just
+re-roll seeds at the same `--refWeight`/`--negAdd` combination — it visibly
+is not moving this state off worst-criterion ≈4, and the face-paint tendency
+noted above needs its own fix first (try `--strictPrompt` with an explicit
+face-marking ban token, or drop `--forceRef` for this one state and compare).
+
+**`idle` itself is still not re-rendered** — this pass's own recipe (and every
+other state's) is now visibly closer to idle in spoke/wheel-style "marks" than
+to an explicit heart, which is consistent with idle's real content (a
+sunburst, not a heart) but keeps the chapter's shield iconography inconsistent
+with `research/ffx2-leblanc-syndicate.md` line 830's "heart logo" across the
+whole set. Recommendation #1 from round 1 stands unaddressed.
+
+### Verdict
+
+Still **CANDIDATE, not approved** (no entry in
+`docs/target/approved-hashes.json`). `attack` is close to the bar (6) and a
+single further seed pass targeting shield colour (purple/gold → idle's actual
+red/gold/blue-orange) could plausibly clear 7. `cast` and `ko` are held back
+by the same structural issue — the picked shield is turned edge-on to the
+camera, so the "marks" criterion can't be scored positively even though
+nothing about the pick is wrong — a next pass should add
+`--poseTags`/`--emphasis` wording aimed at keeping the shield face toward the
+viewer (e.g. "shield face visible, shield turned toward camera"). `hurt` is
+the one state this pass leaves no better than before it started, and is
+flagged above for a different method rather than a fourth same-recipe re-roll
+(pace rule, `AGENTS.md` hard rule 15: two failed attempts at the same failure
+call for a written method check before a third try — this was hurt's second
+re-render attempt at the pointed-shield defect specifically).

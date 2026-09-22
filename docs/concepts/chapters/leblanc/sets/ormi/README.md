@@ -119,12 +119,36 @@ re-roll aimed specifically at "eyes closed, unconscious" while keeping the
 round shield would close it, but was not itself worth blocking this pass on
 (pace rule, `AGENTS.md` hard rule 15).
 
+## Round 2 — redo, last attempt (2026-09-22)
+
+The independent judge pass above (`judge.md`) failed all four states below the
+bar of 7. This is the requested redo: `attack`/`cast`/`hurt`/`ko` re-rendered
+again (`idle` still not touched), `--refWeight` raised one step (0.35 → 0.40)
+and a per-state `--emphasis`/`--negAdd` targeted at each state's own
+worst-criterion finding, 6 candidates requested per state (`hurt` landed 5,
+one quarantined). Full recipe, every candidate's reject rationale, and the new
+scores are in `judge.md`'s "Round 2" section — summary:
+
+| State | New seed | Result | Still below 7 because |
+| --- | --- | --- | --- |
+| attack | 900006 | face paint and the duplicate/kite shield are both fixed | shield's spoke-wheel mark is idle-like in structure but wrong colour (purple/gold vs idle's blue/orange-on-red) — score ≈6 |
+| cast | 900103 | the off-hand duplicate disc is gone, off hand empty | picked shield is edge-on to camera, so its face graphic (heart or otherwise) isn't visible to score — score ≈4–5 |
+| hurt | 900203 | **not fixed** — installed as "best available, below bar" per this pass's brief | 4 of 5 candidates this pass added an unrequested facial marking (a new, checkpoint-level failure mode logged in `judge.md`); the one clean survivor still has the pointed/heater shield shape and a composed, non-staggering pose — no real improvement over round 1's install |
+| ko | 900305 | oversized pauldron fixed (now modest); strong "defeated" pose (eyes closed, a tear) | picked shield is edge-on/interior-facing, so, same as cast, its face graphic isn't visible — score ≈5 |
+
+`hurt` in particular should not be re-rolled a third time with this same
+recipe — see `judge.md` for why and what to try instead (pace rule, `AGENTS.md`
+hard rule 15: two failed attempts at the same defect call for a method check).
+
 ## Files
 
 - `identity.txt` — the Ormi identity tag block.
-- `candidates/<state>/` — every candidate PNG + sidecar JSON produced this
-  pass (quarantined/timed-out attempts are not here — ComfyUI's own guard
-  moved those to `D:\Tools\comfy-logs\cutout-quarantine`).
+- `candidates/<state>/` — every round-1 candidate PNG + sidecar JSON
+  (quarantined/timed-out attempts are not here — ComfyUI's own guard moved
+  those to `D:\Tools\comfy-logs\cutout-quarantine`).
+- `candidates/<state>/redo/` — every round-2 candidate PNG + sidecar JSON, plus
+  the `zoom*.png`/`face*.png` 1:1 crops used to judge the shield/face regions
+  before picking (see `judge.md` "Round 2").
 - `build-sheet.mjs` → `sheet.png` — one row per installed state: the picked
   concept (idle row only — there is no per-pose concept), the installed whole
   PNG, a 1:1 face crop, a 1:1 torso/shield crop.
