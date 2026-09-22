@@ -1,0 +1,5 @@
+# Macalania production: every render image stays local and is backed up to
+# D:/Tools/pyrefly-art-backup/candidates/2026-09-22-macalania/ (the picks are
+# installed under public/art/, which is gitignored). Sidecars, words, refs,
+# scripts and the JPEG sheets are committed.
+renders/**/*.png

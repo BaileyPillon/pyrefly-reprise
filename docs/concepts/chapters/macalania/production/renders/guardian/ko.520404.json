@@ -1,0 +1,59 @@
+{
+  "tag": "ko.520404",
+  "subject": "guardian",
+  "outDir": "public/art/characters/guado-guardian",
+  "method": "F (Leblanc pilot 2 winner, Macalania words)",
+  "state": "ko",
+  "seed": 520404,
+  "positive": "1boy, guado, final fantasy x, safe, solo, tall, thin, slender, lanky, blue skin, red hair, spiked hair, topknot, long thin hair strands, pointy ears, long ears, yellow eyes, facial veins, long fingers, ochre robe, yellow robe, hooded robe, hood down, green trim, green collar, long robe, wide sleeves, plain robe, no pattern, brown belt, belt pouch, holding spear, polearm, lying, on side, unconscious, defeated, closed eyes, arms at sides, spear on ground, (lying on side:1.2), (closed eyes:1.2), (unconscious:1.15), (blue skin:1.2), (ochre robe with green trim:1.2), (red hair:1.1), (belt pouch:1.15), head to the left, feet to the right, lying on ground, full body, from side, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, animal ears, fox ears, kemonomimi, mask, beast, furry, short, fat, muscular, helmet, armor, lantern, staff, bald, pale skin, tan skin, dark skin, blue robe, purple robe, cape, female, 1girl, breasts, smile, open eyes, standing, sitting, kneeling, looking at viewer, floor, platform, bed, pillow",
+  "poseTags": "lying, on side, unconscious, defeated, closed eyes, arms at sides, spear on ground",
+  "emphasis": "(lying on side:1.2), (closed eyes:1.2), (unconscious:1.15), (blue skin:1.2), (ochre robe with green trim:1.2), (red hair:1.1), (belt pouch:1.15)",
+  "composition": "prone",
+  "nonBiped": false,
+  "facing": "left",
+  "ref": {
+    "images": [
+      "docs/concepts/chapters/macalania/production/refs/guardian-idle-square.png",
+      "docs/concepts/chapters/macalania/production/refs/guardian-idle-head.png"
+    ],
+    "combine": "concat",
+    "weight": 0.4,
+    "start": 0.2,
+    "end": 0.6,
+    "type": "ease in",
+    "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "scaling": "K+V"
+  },
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "cutout": {
+    "width": 1187,
+    "height": 818,
+    "baselineY": 803,
+    "cropBox": [
+      29,
+      14,
+      1216,
+      832
+    ],
+    "contentBox": [
+      45,
+      30,
+      1214,
+      817
+    ],
+    "sourceWidth": 1216,
+    "sourceHeight": 832,
+    "model": "isnet-anime"
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "seconds": 66,
+  "generatedAt": "2026-09-22T19:46:21.779Z"
+}

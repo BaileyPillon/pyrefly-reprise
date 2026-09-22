@@ -1,0 +1,59 @@
+{
+  "tag": "cast.520202",
+  "subject": "guardian",
+  "outDir": "public/art/characters/guado-guardian",
+  "method": "F (Leblanc pilot 2 winner, Macalania words)",
+  "state": "cast",
+  "seed": 520202,
+  "positive": "1boy, guado, final fantasy x, safe, solo, tall, thin, slender, lanky, blue skin, red hair, spiked hair, topknot, long thin hair strands, pointy ears, long ears, yellow eyes, facial veins, long fingers, ochre robe, yellow robe, hooded robe, hood down, green trim, green collar, long robe, wide sleeves, plain robe, no pattern, brown belt, belt pouch, holding spear, polearm, holding bottle, holding potion, small bottle, arm up, raising bottle, looking at object, holding spear, serious, closed mouth, (holding a small potion bottle up:1.25), (arm up:1.15), (blue skin:1.2), (ochre robe with green trim:1.2), (red hair:1.1), (belt pouch:1.15), (from side:1.3), three-quarter view, body facing left, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, animal ears, fox ears, kemonomimi, mask, beast, furry, short, fat, muscular, helmet, armor, lantern, staff, bald, pale skin, tan skin, dark skin, blue robe, purple robe, cape, female, 1girl, breasts, smile, grin, drinking, bottle to mouth, wine bottle, large bottle, cup",
+  "poseTags": "holding bottle, holding potion, small bottle, arm up, raising bottle, looking at object, holding spear, serious, closed mouth",
+  "emphasis": "(holding a small potion bottle up:1.25), (arm up:1.15), (blue skin:1.2), (ochre robe with green trim:1.2), (red hair:1.1), (belt pouch:1.15)",
+  "composition": "full",
+  "nonBiped": false,
+  "facing": "left",
+  "ref": {
+    "images": [
+      "docs/concepts/chapters/macalania/production/refs/guardian-idle-square.png",
+      "docs/concepts/chapters/macalania/production/refs/guardian-idle-head.png"
+    ],
+    "combine": "concat",
+    "weight": 0.4,
+    "start": 0.2,
+    "end": 0.6,
+    "type": "ease in",
+    "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "scaling": "K+V"
+  },
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cutout": {
+    "width": 754,
+    "height": 1208,
+    "baselineY": 1192,
+    "cropBox": [
+      59,
+      2,
+      813,
+      1210
+    ],
+    "contentBox": [
+      75,
+      18,
+      797,
+      1194
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "seconds": 33,
+  "generatedAt": "2026-09-22T19:39:41.473Z"
+}

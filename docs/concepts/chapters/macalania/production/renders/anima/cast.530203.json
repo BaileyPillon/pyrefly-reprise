@@ -1,0 +1,59 @@
+{
+  "tag": "cast.530203",
+  "subject": "anima",
+  "outDir": "public/art/characters/anima",
+  "method": "F (Leblanc pilot 2 winner, Macalania words)",
+  "state": "cast",
+  "seed": 530203,
+  "positive": "no humans, solo, monster, towering aeon, massive bulky figure, upper body bound in thick grey bandage wrappings and heavy iron chains, arms strapped against the sides, two long curved horns, one single red eye, mouth sewn shut with black stitches, dark violet armoured lower body, ragged torn lower body, mournful, final fantasy x, floating, looming forward, the masked head thrust forward, the single eye staring at the target, the heavy chains swinging forward, whole figure inside the frame from the top of the horns to the bottom of the body, zoomed out, head and bandaged face clearly visible, (head thrust forward:1.2), (single eye staring:1.15), (full body:1.2), (bandage wrappings:1.2), (only one eye:1.2), (two long curved horns:1.1), (from side:1.1), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, 1boy, human, slim, thin, skinny, bare skin, navel, breasts, holding a sword, weapon, close-up, cropped, lower body only, head out of frame, tail, long tail, beast jaw, open jaw, fangs, animal head, quadruped, wings, bare feet, two eyes, extra limbs, magenta, hot pink, neon, oni mask, spotlight, backlit, pedestal, floor, glowing background, white glow, looking up, head raised",
+  "poseTags": "floating, looming forward, the masked head thrust forward, the single eye staring at the target, the heavy chains swinging forward, whole figure inside the frame from the top of the horns to the bottom of the body, zoomed out, head and bandaged face clearly visible",
+  "emphasis": "(head thrust forward:1.2), (single eye staring:1.15), (full body:1.2), (bandage wrappings:1.2), (only one eye:1.2), (two long curved horns:1.1)",
+  "composition": "boss",
+  "nonBiped": true,
+  "facing": "left",
+  "ref": {
+    "images": [
+      "docs/concepts/chapters/macalania/production/refs/anima-idle-square.png",
+      "docs/concepts/chapters/macalania/production/refs/anima-idle-head.png"
+    ],
+    "combine": "concat",
+    "weight": 0.4,
+    "start": 0.2,
+    "end": 0.6,
+    "type": "ease in",
+    "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "scaling": "K+V"
+  },
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cutout": {
+    "width": 819,
+    "height": 1126,
+    "baselineY": 1110,
+    "cropBox": [
+      13,
+      54,
+      832,
+      1180
+    ],
+    "contentBox": [
+      29,
+      70,
+      822,
+      1164
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "seconds": 33,
+  "generatedAt": "2026-09-22T19:37:38.348Z"
+}

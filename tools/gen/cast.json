@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "about": "The cast manifest: one entry per thing that has to be drawn, with the identity tags, the states, the framing and the canvas each one needs. It is a work order, not a config file — nothing reads it at runtime. Feed a row to tools/gen/comfy.mjs and judge the batch (docs/ART-PIPELINE.md §5).",
   "contract": {
     "note": "Style and quality tags are NOT in this file on purpose. They live in tools/gen/comfy.mjs (STYLE_TAGS, QUALITY_TAGS) and the generator appends them, so a cast row can never drift from the house style. `tags` is identity only; `poseTags` is action only.",
@@ -867,6 +867,16 @@
           "poseTags": "energy gathering, glowing, dramatic lighting, aura, looking up, power building",
           "ref": "anima/idle",
           "notes": "The signature-attack frame the engine holds during the overdrive cut-in."
+        },
+        "hurt": {
+          "poseTags": "recoiling, leaning back (img2img from the approved idle tilted back 10 degrees, denoise 0.35)",
+          "ref": "anima/idle",
+          "notes": "Macalania enemy pose. Method E after two failed txt2img attempts: docs/concepts/chapters/macalania/production/anima-method-check.md, puppet.py."
+        },
+        "ko": {
+          "poseTags": "slumped, limp, head down, drooping (img2img from the approved idle tilted forward 14 degrees, denoise 0.3)",
+          "ref": "anima/idle",
+          "notes": "Macalania enemy pose, same method as hurt. cast is not painted: the engine falls back to the approved attack."
         }
       },
       "notes": "Tall and narrow (bible: 160x256). The chained lower half hangs below her — hand-correct baselineY or she floats a body-length above the floor."
@@ -2883,6 +2893,88 @@
         },
         "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). REDO 2026-09-22, third pass on this row, answering the independent judge's second pass (commit 42311e2: all five states score under the 7 bar, worst criterion first — idle 5 marks, attack 3 weapon, cast 2 marks, hurt 3 pose/hair/weapon, ko 1 weapon). All five states re-rendered again (6 candidates each, except cast/ko where the cut-out guard rejected 1-2 and hurt which needed a second 4-candidate batch after the first batch fixed the pose but dropped the helmet) off the same forceRef recipe (idle off the picked concept logos-c.png, the other four off the new idle), refWeight held at the pilot's proven 0.35 rather than raised a step as this round's brief first suggested — raising it to 0.42 against this near-monochrome forceRef anchor burned every render to a blank frame (repro and root cause in docs/handoff/fix-ffx2-logos-render.md's 'REDO 2026-09-22' section), which is a documented risk of this exact recipe (docs/ART-PIPELINE.md §3), not a GPU/queue fault. Every state's poseTags and negAdd were rewritten with an explicit trigger for that state's own worst-judged criterion (both-revolvers-visible for attack/hurt/ko, helmet-worn for cast, crest-shape tokens for idle) per this round's brief, and emphasis was rewritten to short (1-3 word) phrases with no internal commas — a longer comma-containing emphasis phrase was found this round to corrupt the whole prompt into a blank render (same root cause as the refWeight finding, both written up in the handoff). Also fixed a small sourcing error the judge flagged: the shared 'tags' string no longer calls the shoulder emblem a 'heart' logo (research never says so for Logos; that shape is Leblanc's chest mark only). Results, self-scored by this round's own honest re-read of the same 7-criteria rubric (not an independent pass): idle and hurt read as clearing the 7 bar; attack is close (worst ~6-7, an unsourced shoulder pauldron now the main drift); cast and ko are the two 'best available, below bar' installs the brief explicitly allows — cast fixes the helmet-absent defect (its worst-judged criterion) but still shows only one revolver clearly; ko fixes the zero-revolvers defect (its worst-judged criterion) but drops the helmet entirely (a new, disclosed trade, not previously flagged). None of this is self-certified as passing; an independent judge pass (a different agent, per this project's own practice) is still wanted before any of it goes to docs/target/approved-hashes.json. Veto sheet rebuilt: docs/concepts/chapters/leblanc/sets/logos/sheet.png. Candidates and the rejected batch backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-21-leblanc/logos-redo2/. NOT added to docs/target/approved-hashes.json — still a candidate for Bailey, not an approved delivery."
       }
+    },
+    {
+      "id": "seymour-macalania",
+      "kind": "boss",
+      "game": "ffx",
+      "facing": "left",
+      "refState": "idle",
+      "recipe": "method F (docs/concepts/chapters/leblanc/pilot2/judge.md): Animagine XL 4.0, 28 steps, cfg 6, euler_ancestral/normal, IP-Adapter = batch of refs/<id>-idle-square.png + -head.png, concat, 0.4, ease in, 0.2-0.6; idle from the picked concept's refs. Commands: docs/concepts/chapters/macalania/production/run.mjs; picks: docs/concepts/chapters/macalania/production/picks.json; every install a CANDIDATE.",
+      "cmd": "character",
+      "outDir": "public/art/characters/seymour-macalania",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "tags": "1boy, seymour guado, final fantasy x, safe, solo, male focus, tall, slender, adult male, mature male, sharp facial features, narrow eyes, thin lips, pale skin, light blue hair, very long hair, voluminous hair, two long hair locks down back, hair over one eye, purple eyes, facial veins, human ears, dark blue robe, long robe, floor-length robe, red trim, red lining, high collar, green sash, green underskirt, open robe, bare chest, pectorals, chest tattoo, red tattoo, veins on stomach, wide sleeves, sleeves past wrists, orange embroidery on hem",
+      "emphasis": "(light blue hair:1.2), (dark blue robe with red trim:1.2), (green sash:1.15), (bare chest with tattoo:1.2), (mature male:1.15)",
+      "negAdd": "staff, holding staff, weapon, sword, spear, polearm, crown, helmet, horns, armor, shoulder armor, (pointy ears:1.2), elf ears, long ears, blonde hair, white hair, pink hair, black robe, purple robe, necklace, glowing eyes, female, 1girl, breasts, androgynous, feminine, young, shirt, red shirt, barefoot",
+      "states": {
+        "idle": {
+          "poseTags": "standing, arms crossed, calm, light smile, closed mouth, looking down at viewer, head tilt",
+          "ref": "docs/concepts/chapters/macalania/renders/seymour-b.png (concept B, square + head refs)"
+        },
+        "attack": {
+          "poseTags": "outstretched arm, arm extended forward, open hand, palm forward, leaning forward, one leg forward, serious, v-shaped eyebrows, looking ahead, closed mouth, whole body in frame, zoomed out",
+          "size": "1024x1216",
+          "ref": "seymour-macalania/idle"
+        },
+        "cast": {
+          "poseTags": "arm up, hand raised, open hand, palm up, hand on own chest, head back, looking up, half-closed eyes, light smile, closed mouth",
+          "ref": "seymour-macalania/idle"
+        },
+        "hurt": {
+          "poseTags": "leaning back, off balance, wince, closed eyes, pained expression, clenched teeth, v-shaped eyebrows, hand on own chest, head tilt, arm at side",
+          "ref": "seymour-macalania/idle"
+        },
+        "ko": {
+          "poseTags": "lying, on side, unconscious, defeated, closed eyes, arms at sides, hair spread out",
+          "composition": "prone",
+          "size": "1216x832",
+          "ref": "seymour-macalania/idle"
+        }
+      },
+      "notes": "Seymour, human form (Macalania Temple, FFX). Research §9.2: rounded human ears (the picked concept B drew elf ears), no staff in this fight. Words are the round-2 idle words; round 1 read feminine."
+    },
+    {
+      "id": "guado-guardian",
+      "kind": "enemy",
+      "game": "ffx",
+      "facing": "left",
+      "refState": "idle",
+      "recipe": "method F (docs/concepts/chapters/leblanc/pilot2/judge.md): Animagine XL 4.0, 28 steps, cfg 6, euler_ancestral/normal, IP-Adapter = batch of refs/<id>-idle-square.png + -head.png, concat, 0.4, ease in, 0.2-0.6; idle from the picked concept's refs. Commands: docs/concepts/chapters/macalania/production/run.mjs; picks: docs/concepts/chapters/macalania/production/picks.json; every install a CANDIDATE.",
+      "cmd": "character",
+      "outDir": "public/art/characters/guado-guardian",
+      "composition": "full",
+      "sizeHint": "832x1216",
+      "tags": "1boy, guado, final fantasy x, safe, solo, tall, thin, slender, lanky, blue skin, red hair, spiked hair, topknot, long thin hair strands, pointy ears, long ears, yellow eyes, facial veins, long fingers, ochre robe, yellow robe, hooded robe, hood down, green trim, green collar, long robe, wide sleeves, plain robe, no pattern, brown belt, belt pouch, holding spear, polearm",
+      "emphasis": "(blue skin:1.2), (ochre robe with green trim:1.2), (red hair:1.1), (belt pouch:1.15)",
+      "negAdd": "animal ears, fox ears, kemonomimi, mask, beast, furry, short, fat, muscular, helmet, armor, lantern, staff, bald, pale skin, tan skin, dark skin, blue robe, purple robe, cape, female, 1girl, breasts",
+      "states": {
+        "idle": {
+          "poseTags": "standing, standing at attention, holding spear, stoic, expressionless, closed mouth, looking at viewer",
+          "ref": "docs/concepts/chapters/macalania/renders/guardian-a.png (concept A, square + head refs)"
+        },
+        "attack": {
+          "poseTags": "lunging, leaning forward, one leg forward, holding spear, spear pointed forward, thrusting, serious, v-shaped eyebrows, looking ahead, closed mouth",
+          "ref": "guado-guardian/idle"
+        },
+        "cast": {
+          "poseTags": "holding bottle, holding potion, small bottle, arm up, raising bottle, looking at object, holding spear, serious, closed mouth",
+          "ref": "guado-guardian/idle",
+          "notes": "Item use (Hi-Potion, Remedy): the engine shows an enemy's cast pose for it."
+        },
+        "hurt": {
+          "poseTags": "leaning back, off balance, wince, closed eyes, pained expression, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, holding spear",
+          "ref": "guado-guardian/idle"
+        },
+        "ko": {
+          "poseTags": "lying, on side, unconscious, defeated, closed eyes, arms at sides, spear on ground",
+          "composition": "prone",
+          "size": "1216x832",
+          "ref": "guado-guardian/idle"
+        }
+      },
+      "notes": "Two identical retainers (research §9.3). The belt pouch is the one visual job (the Steal gag); an EMPTY-pouch variant is not painted and the engine has no pose for it."
     }
   ]
 }

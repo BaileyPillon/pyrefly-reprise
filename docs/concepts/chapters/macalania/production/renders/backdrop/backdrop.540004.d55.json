@@ -1,0 +1,21 @@
+{
+  "tag": "backdrop.540004.d55",
+  "seed": 540004,
+  "denoise": 0.55,
+  "prompt": "no humans, scenery, final fantasy x, macalania temple, chamber of the fayth antechamber, ice temple interior, ice pretending to be masonry, carved polished ice columns and arches, rounded melted edges, translucent ice walls, warm gold brazier light travelling sideways through the ice walls, gold metalwork set into the ice, twin braziers, glacier blue, pale cyan, faint green core in thick ice, deep temple red and ochre accents, symmetrical wide hall, glowing door in background, reflective ice floor, empty hall, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, snow, snowfield, mountain, grey rock, opaque stone, outdoors, sky, character, silhouette",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "img2img": "docs/concepts/chapters/macalania/renders/backdrop-a.png",
+  "pickedFrom": "backdrop A (warm brazier gold), docs/target/targets.json",
+  "seconds": 49,
+  "generatedAt": "2026-09-22T19:45:26.517Z"
+}

@@ -1,0 +1,200 @@
+{
+  "note": "Macalania production picks (FFX only), 2026-09-22. Every item is a CANDIDATE: self-judged at 1:1 against the picked concept (idle) or the picked idle (other states), bar 7 on the worst criterion; not an independent judge, not approved. install.mjs and build-sheet.py read this file.",
+  "items": [
+    {
+      "kind": "sprite",
+      "subject": "seymour",
+      "label": "Seymour idle (7)",
+      "source": "renders/seymour/idle.510007.png",
+      "installed": "public/art/characters/seymour-macalania/idle.png",
+      "concept": "docs/concepts/chapters/macalania/renders/seymour-b.png",
+      "face": "auto",
+      "detail": "auto",
+      "note": "concept B, arms crossed; round 2 words|human ears (research 9.2), concept had elf ears|hair sleeker than the concept"
+    },
+    {
+      "kind": "sprite",
+      "subject": "seymour",
+      "label": "Seymour attack (5)",
+      "source": "renders/seymour/attack2.510113.png",
+      "installed": "public/art/characters/seymour-macalania/attack.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/seymour/idle.510007.png",
+      "face": [
+        0.3,
+        0.14
+      ],
+      "detail": "auto",
+      "note": "open-palm thrust, 1024 canvas (attempt 2)|red streaks across the face idle lacks|(veins drawn as paint); hem lattice missing"
+    },
+    {
+      "kind": "sprite",
+      "subject": "seymour",
+      "label": "Seymour cast (6)",
+      "source": "renders/seymour/cast.510202.png",
+      "installed": "public/art/characters/seymour-macalania/cast.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/seymour/idle.510007.png",
+      "face": [
+        0.62,
+        0.12
+      ],
+      "detail": "auto",
+      "note": "arm raised, hand on chest, eyes shut|robe a brighter blue than idle|a yellow ribbon idle lacks"
+    },
+    {
+      "kind": "sprite",
+      "subject": "seymour",
+      "label": "Seymour hurt (6)",
+      "source": "renders/seymour/hurt.510302.png",
+      "installed": "public/art/characters/seymour-macalania/hurt.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/seymour/idle.510007.png",
+      "face": "auto",
+      "detail": "auto",
+      "note": "head back, eyes shut, hand on chest|an orange/teal sleeve emblem|idle does not have"
+    },
+    {
+      "kind": "sprite",
+      "subject": "seymour",
+      "label": "Seymour ko (6)",
+      "source": "renders/seymour/ko.510401.png",
+      "installed": "public/art/characters/seymour-macalania/ko.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/seymour/idle.510007.png",
+      "face": [
+        0.25,
+        0.22
+      ],
+      "detail": "auto",
+      "note": "on his side, head left, eyes shut|chest tattoo reads as a red diamond"
+    },
+    {
+      "kind": "sprite",
+      "subject": "guardian",
+      "label": "Guado Guardian idle (6)",
+      "source": "renders/guardian/idle.520002.png",
+      "installed": "public/art/characters/guado-guardian/idle.png",
+      "concept": "docs/concepts/chapters/macalania/renders/guardian-a.png",
+      "face": "auto",
+      "detail": "auto",
+      "note": "concept A; full belt pouch (the Steal gag)|spear held blade-down, bare feet|ponytail, not the concept's tendrils"
+    },
+    {
+      "kind": "sprite",
+      "subject": "guardian",
+      "label": "Guado Guardian attack (6)",
+      "source": "renders/guardian/attack.520102.png",
+      "installed": "public/art/characters/guado-guardian/attack.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/guardian/idle.520002.png",
+      "face": [
+        0.68,
+        0.3
+      ],
+      "detail": "auto",
+      "note": "crouched low spear thrust|robe more orange than idle|spear head differs from idle's"
+    },
+    {
+      "kind": "sprite",
+      "subject": "guardian",
+      "label": "Guado Guardian cast (7)",
+      "source": "renders/guardian/cast.520203.png",
+      "installed": "public/art/characters/guado-guardian/cast.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/guardian/idle.520002.png",
+      "face": "auto",
+      "detail": "auto",
+      "note": "raises a potion (item use); pouch|shoes on one foot only|robe a shade more orange"
+    },
+    {
+      "kind": "sprite",
+      "subject": "guardian",
+      "label": "Guado Guardian hurt (7)",
+      "source": "renders/guardian/hurt.520301.png",
+      "installed": "public/art/characters/guado-guardian/hurt.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/guardian/idle.520002.png",
+      "face": "auto",
+      "detail": "auto",
+      "note": "head back, eyes shut, hand on stomach|pouch kept"
+    },
+    {
+      "kind": "sprite",
+      "subject": "guardian",
+      "label": "Guado Guardian ko (6)",
+      "source": "renders/guardian/ko.520402.png",
+      "installed": "public/art/characters/guado-guardian/ko.png",
+      "concept": "docs/concepts/chapters/macalania/production/renders/guardian/idle.520002.png",
+      "face": [
+        0.12,
+        0.5
+      ],
+      "detail": "auto",
+      "note": "face down, head left, spear beside him|spear tip at the frame edge"
+    },
+    {
+      "kind": "sprite",
+      "subject": "anima",
+      "label": "Anima hurt (7 identity)",
+      "source": "renders/anima/hurtE.530343.png",
+      "installed": "public/art/characters/anima/hurt.png",
+      "concept": "public/art/characters/anima/idle.png",
+      "face": [
+        0.42,
+        0.2
+      ],
+      "detail": [
+        0.45,
+        0.45
+      ],
+      "note": "attempt 3 (method check): the approved|idle tilted back, repainted at 0.35|a small recoil, not a new pose"
+    },
+    {
+      "kind": "sprite",
+      "subject": "anima",
+      "label": "Anima ko (6)",
+      "source": "renders/anima/koE.530442.png",
+      "installed": "public/art/characters/anima/ko.png",
+      "concept": "public/art/characters/anima/idle.png",
+      "face": [
+        0.3,
+        0.24
+      ],
+      "detail": [
+        0.45,
+        0.45
+      ],
+      "note": "attempt 3: idle drooped forward, 0.3|reads as a lean more than a collapse"
+    },
+    {
+      "kind": "backdrop",
+      "label": "Backdrop (7)",
+      "source": "renders/backdrop/backdrop.540001.d45.png",
+      "installed": "public/art/backdrops/macalania-temple.png",
+      "concept": "docs/concepts/chapters/macalania/renders/backdrop-a.png",
+      "face": [
+        0.5,
+        0.5
+      ],
+      "detail": [
+        0.27,
+        0.72
+      ],
+      "note": "backdrop A kept (img2img 0.45)|crisper metalwork, braziers kept|light-through-walls no stronger than A"
+    },
+    {
+      "kind": "hero",
+      "label": "Pause plate (6)",
+      "source": "renders/hero/hero.550003.png",
+      "installed": "public/art/pause/macalania.png",
+      "concept": "docs/concepts/chapters/macalania/renders/seymour-b.png",
+      "face": [
+        0.45,
+        0.45
+      ],
+      "detail": [
+        0.75,
+        0.3
+      ],
+      "focal": {
+        "x": 0.33,
+        "y": 0.4
+      },
+      "note": "hero preset; courteous smile, human ear|more saturated than the Leblanc bar|veins read as cracks"
+    }
+  ]
+}
