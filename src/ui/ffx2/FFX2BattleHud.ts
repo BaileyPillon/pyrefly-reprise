@@ -982,14 +982,9 @@ export class FFX2BattleHud implements HudPort {
     const h = rect.height || window.innerHeight;
     const scale = Math.min(w / 640, h / 360);
     this.stageScale = scale;
-    // Published to CSS for the few things that live on the *unscaled* overlay
-    // and still have to match the chrome's size (the chain chip).
-    this.el.style.setProperty('--ffx2-scale', scale.toFixed(4));
-    // Same number, under the shared name `move-advisor.css`'s `--mad-fs-floor`
-    // reads (FOC-06): the card sits inside this scaled stage, so a CSS floor
-    // on its *rendered* type has to divide by this factor. Same convention as
-    // `LetterboxStage.ts` and `chapter-panel.css`.
-    this.el.style.setProperty('--lb-scale', scale.toFixed(4));
+    // Published to CSS for the chain chip on the *unscaled* overlay, and as the shared
+    // `--lb-scale` that `move-advisor.css`'s rendered type floor divides by (FOC-06).
+    for (const v of ['--ffx2-scale', '--lb-scale']) this.el.style.setProperty(v, scale.toFixed(4));
     const x = (w - 640 * scale) / 2;
     const y = (h - 360 * scale) / 2;
     this.stageX = x;

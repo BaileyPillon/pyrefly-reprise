@@ -537,6 +537,12 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       expect(t, `density ${d}`).toContain('Hastega');
       expect(t, `density ${d}`).toContain('Cross Cleave hits the whole party');
     }
+    // FOC-06 on a phone (release-09 verifier): at the 12.2px floor the title
+    // badge wrapped to three lines and pushed the move under the cap. The last
+    // rung drops the title, never the actor or a move.
+    expect(text(MAX_DENSITY - 1 as Density)).toContain('Next best move');
+    expect(text(MAX_DENSITY)).not.toContain('Next best move');
+    expect(text(MAX_DENSITY)).toContain(view.actorName);
     // The note is above the moves, because a cap cuts the card's bottom.
     expect(text(0).indexOf('Cross Cleave hits')).toBeLessThan(text(0).indexOf('Hastega'));
   });

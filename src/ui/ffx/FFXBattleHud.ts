@@ -1591,14 +1591,9 @@ export class FFXBattleHud implements HudPort {
     const w = rect.width || window.innerWidth;
     const h = rect.height || window.innerHeight;
     const scale = Math.min(w / 640, h / 360);
-    const x = (w - 640 * scale) / 2;
-    const y = (h - 360 * scale) / 2;
+    const [x, y] = [(w - 640 * scale) / 2, (h - 360 * scale) / 2];
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
-    // Published for `move-advisor.css`'s `--mad-fs-floor` (FOC-06): the card
-    // sits inside this scaled stage, so a CSS floor on its *rendered* type has
-    // to divide by the same factor this transform multiplies by. Same
-    // convention as `LetterboxStage.ts` and `chapter-panel.css`.
-    this.el.style.setProperty('--lb-scale', scale.toFixed(4));
+    this.el.style.setProperty('--lb-scale', scale.toFixed(4)); // FOC-06: move-advisor.css's type floor divides by it
   }
 }
 

@@ -483,7 +483,7 @@ function num(n: number): string {
  * | 3 | + the runner-up's numbers, down to the submenu chip |
  * | 4 | + the lead's reason and its secondary chips |
  * | 5 | + the lead's chips and badge: its name and target, and nothing else |
- * | 6 | + every reason and warning: two named moves, and the board's note |
+ * | 6 | + every reason, warning and the title: named moves, the actor, the board's note |
  *
  * Seven rungs rather than the four the first pass shipped, because the room
  * the card is given is much smaller than the stylesheet's 104px suggests. The
@@ -585,7 +585,7 @@ export function cardHtml(view: AdvisorView, density: Density = 0): string {
     .join('');
   return [
     '<div class="mad__head">',
-    '<span class="mad__title">Next best move</span>',
+    density >= MAX_DENSITY ? '' : '<span class="mad__title">Next best move</span>', // phone: the title wrapped over the move
     `<span class="mad__actor">${escapeHtml(view.actorName)}</span>`,
     '</div>',
     // The "wait for it" line, when an ally is down and raising them now would
