@@ -1,0 +1,56 @@
+{
+  "layer": "eyeApertureR",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png",
+  "box": [
+    219,
+    370,
+    146,
+    94
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 1,
+  "polygon": [
+    [
+      224,
+      412
+    ],
+    [
+      255,
+      383
+    ],
+    [
+      300,
+      375
+    ],
+    [
+      345,
+      385
+    ],
+    [
+      358,
+      402
+    ],
+    [
+      352,
+      430
+    ],
+    [
+      320,
+      456
+    ],
+    [
+      280,
+      458
+    ],
+    [
+      244,
+      442
+    ]
+  ],
+  "subtract": [
+    "irisR"
+  ]
+}

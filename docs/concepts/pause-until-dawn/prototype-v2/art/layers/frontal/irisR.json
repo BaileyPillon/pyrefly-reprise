@@ -1,0 +1,46 @@
+{
+  "layer": "irisR",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png",
+  "box": [
+    291,
+    388,
+    64,
+    61
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 1,
+  "polygon": [
+    [
+      300,
+      398
+    ],
+    [
+      325,
+      393
+    ],
+    [
+      345,
+      405
+    ],
+    [
+      348,
+      424
+    ],
+    [
+      335,
+      442
+    ],
+    [
+      312,
+      443
+    ],
+    [
+      297,
+      425
+    ]
+  ],
+  "subtract": []
+}

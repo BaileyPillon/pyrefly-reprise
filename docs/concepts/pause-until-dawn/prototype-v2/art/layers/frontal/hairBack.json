@@ -1,0 +1,41 @@
+{
+  "layer": "hairBack",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png",
+  "box": [
+    0,
+    0,
+    832,
+    702
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 3,
+  "polygon": [
+    [
+      0,
+      0
+    ],
+    [
+      832,
+      0
+    ],
+    [
+      832,
+      950
+    ],
+    [
+      0,
+      950
+    ]
+  ],
+  "subtract": [
+    "headCore",
+    "hairFront",
+    "strand1",
+    "strand2",
+    "earring",
+    "body"
+  ]
+}

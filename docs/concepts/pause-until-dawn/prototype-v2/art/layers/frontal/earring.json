@@ -1,0 +1,50 @@
+{
+  "layer": "earring",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png",
+  "box": [
+    177,
+    486,
+    133,
+    533
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 3,
+  "polygon": [
+    [
+      195,
+      495
+    ],
+    [
+      285,
+      495
+    ],
+    [
+      300,
+      620
+    ],
+    [
+      280,
+      780
+    ],
+    [
+      255,
+      1000
+    ],
+    [
+      200,
+      1010
+    ],
+    [
+      185,
+      780
+    ],
+    [
+      190,
+      620
+    ]
+  ],
+  "subtract": []
+}

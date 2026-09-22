@@ -1,0 +1,36 @@
+{
+  "layer": "hair",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/q34-left.png",
+  "box": [
+    109,
+    180,
+    580,
+    680
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 3,
+  "polygon": [
+    [
+      100,
+      0
+    ],
+    [
+      700,
+      0
+    ],
+    [
+      700,
+      850
+    ],
+    [
+      100,
+      850
+    ]
+  ],
+  "subtract": [
+    "headCore"
+  ]
+}

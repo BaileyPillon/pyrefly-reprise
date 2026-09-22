@@ -1,0 +1,16 @@
+{
+  "_comment": "profile-left, aligned onto the plate canvas (art/keys/aligned/profile-left.png). Same coarser scope: headCore + hair only.",
+  "layers": [
+    {
+      "name": "headCore",
+      "polygon": [[150, 400], [250, 370], [400, 375], [470, 410], [480, 480], [460, 560], [400, 650], [350, 700], [300, 660], [220, 560], [160, 470]],
+      "feather": 3
+    },
+    {
+      "name": "hair",
+      "polygon": [[0, 0], [785, 0], [785, 850], [0, 850]],
+      "subtract": ["headCore"],
+      "feather": 3
+    }
+  ]
+}

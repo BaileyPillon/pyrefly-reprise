@@ -1,0 +1,691 @@
+{
+  "character": "yuna-x2",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "bodyFile": "layers/frontal/body.png",
+  "headBox": {
+    "x": 0.0,
+    "y": 0.0,
+    "w": 1.0,
+    "h": 0.8355
+  },
+  "keys": [
+    {
+      "id": "frontal",
+      "yawDeg": 0,
+      "file": "layers/frontal/head-flat.png",
+      "landmarks": [
+        [
+          338,
+          422
+        ],
+        [
+          462,
+          522
+        ],
+        [
+          462,
+          595
+        ],
+        [
+          395,
+          617
+        ],
+        [
+          470,
+          610
+        ],
+        [
+          470,
+          650
+        ],
+        [
+          470,
+          730
+        ],
+        [
+          390,
+          50
+        ]
+      ]
+    },
+    {
+      "id": "q34-left",
+      "yawDeg": -40,
+      "file": "layers/q34-left/head-flat.png",
+      "landmarks": [
+        [
+          320,
+          425
+        ],
+        [
+          415,
+          525
+        ],
+        [
+          450,
+          570
+        ],
+        [
+          410,
+          618
+        ],
+        [
+          490,
+          615
+        ],
+        [
+          490,
+          645
+        ],
+        [
+          470,
+          730
+        ],
+        [
+          350,
+          200
+        ]
+      ]
+    },
+    {
+      "id": "q34-right",
+      "yawDeg": 40,
+      "file": "layers/q34-right/head-flat.png",
+      "landmarks": [
+        [
+          355,
+          515
+        ],
+        [
+          335,
+          545
+        ],
+        [
+          400,
+          635
+        ],
+        [
+          400,
+          680
+        ],
+        [
+          460,
+          675
+        ],
+        [
+          460,
+          698
+        ],
+        [
+          470,
+          730
+        ],
+        [
+          420,
+          150
+        ]
+      ]
+    },
+    {
+      "id": "profile-left",
+      "yawDeg": -85,
+      "file": "layers/profile-left/head-flat.png",
+      "landmarks": [
+        [
+          420,
+          410
+        ],
+        [
+          300,
+          545
+        ],
+        [
+          335,
+          605
+        ],
+        [
+          400,
+          635
+        ],
+        [
+          345,
+          625
+        ],
+        [
+          335,
+          650
+        ],
+        [
+          350,
+          700
+        ],
+        [
+          280,
+          80
+        ]
+      ]
+    }
+  ],
+  "patches": {
+    "eyes": {
+      "box": [
+        248,
+        345,
+        517,
+        125
+      ],
+      "pad": 24,
+      "feather": 8,
+      "states": {
+        "neutral": {
+          "file": null,
+          "note": "the plate's own open eyes \u2014 not a patch, no generation."
+        },
+        "half": {
+          "file": "patches/eyes/half.png",
+          "sidecar": "eyes/half.json",
+          "denoise": 0.75,
+          "seed": 5201,
+          "verdict": "PASS",
+          "note": "both eyelids visibly drooping, lash line curving as required; heterochromia correct on both sides (green left / blue right, matching the plate)."
+        },
+        "closed": {
+          "file": "patches/eyes/closed.png",
+          "sidecar": "eyes/closed.json",
+          "denoise": 0.9,
+          "seed": 5101,
+          "verdict": "DISCLOSED",
+          "note": "eyelids read as closed at UI scale (rolled lid, curved lash line, no dark bar) but at 1:1 the right eye (her blue/left eye) leaks a thin GREEN sliver under the lash instead of blue \u2014 a real identity miss, not a rendering artifact (checked directly against the source, see patches.md). Kept as the least-bad of two rounds; a redo aimed at killing the colour leak entirely (round 2, `_cand/eyes/closed-v2*`) made it worse (eyes stayed open, and two of three candidates lost the heterochromia altogether \u2014 both eyes came back blue). Two failed rounds; AGENTS.md rule 15 says stop and write this up rather than try a third blind reroll."
+        },
+        "blink-1": {
+          "file": null,
+          "note": "NOT ATTEMPTED \u2014 see patches.md 'Not done'."
+        },
+        "blink-2": {
+          "file": null,
+          "note": "NOT ATTEMPTED \u2014 see patches.md 'Not done'."
+        }
+      }
+    },
+    "mouth": {
+      "box": [
+        300,
+        585,
+        320,
+        105
+      ],
+      "pad": 24,
+      "feather": 8,
+      "states": {
+        "closed-neutral": {
+          "file": null,
+          "note": "the plate's own mouth (a confident smirk, per its own sidecar prompt) \u2014 not a patch, no generation."
+        },
+        "parted": {
+          "file": "patches/mouth/parted.png",
+          "sidecar": "mouth/parted.json",
+          "denoise": 0.8,
+          "seed": 5301,
+          "verdict": "PASS"
+        },
+        "smile": {
+          "file": "patches/mouth/smile.png",
+          "sidecar": "mouth/smile.json",
+          "denoise": 0.8,
+          "seed": 5401,
+          "verdict": "PASS"
+        },
+        "pressed": {
+          "file": "patches/mouth/pressed.png",
+          "sidecar": "mouth/pressed.json",
+          "denoise": 0.8,
+          "seed": 5501,
+          "verdict": "PASS"
+        }
+      }
+    },
+    "brows": {
+      "box": [
+        260,
+        300,
+        500,
+        65
+      ],
+      "pad": 16,
+      "feather": 8,
+      "states": {
+        "neutral": {
+          "file": null,
+          "note": "the plate's own hair-covered brow line \u2014 not a patch."
+        },
+        "raised": {
+          "file": null,
+          "verdict": "FAIL",
+          "note": "NOT DELIVERED \u2014 see patches.md 'Brows: not delivered, and why'."
+        },
+        "drawn": {
+          "file": null,
+          "verdict": "FAIL",
+          "note": "NOT DELIVERED \u2014 see patches.md 'Brows: not delivered, and why'."
+        }
+      }
+    }
+  },
+  "artMeta": {
+    "_readme": "See ../README.md for the full write-up. Everything under artMeta is this pass's fuller record (per-layer files/boxes, named landmarks with visibility+confidence, judge verdicts, known issues) \u2014 the runtime's Rig interface (src/rig.ts) only reads the sibling top-level keys above; nothing here is consumed by loadRig today.",
+    "sourcePlate": "public/art/portraits/yuna-x2.png",
+    "sourceSha256": "7427dc7fc4811782c00be3888dbca713d04c3755328b179da3bfc5e1fd371200",
+    "commonLandmarkOrder": [
+      "pupil_R",
+      "noseTip",
+      "philtrum",
+      "mouthCorner_R",
+      "lipUpper",
+      "lipLower",
+      "chin",
+      "hairlineCenter"
+    ],
+    "commonLandmarkNote": "Only 8 of up to 31 named points are visible on *all four* keys at once (mostly centreline points \u2014 the profile key hides one whole side, and the far eye is occluded by hair on both q34 keys), so that is what keys[].landmarks carries, in this fixed order, for index-based correspondence across keys. The full named set per key, including occluded/not-visible points and their confidence, is in landmarks/<key>.json \u2014 read that for anything needing more than 8-point correspondence.",
+    "keys": {
+      "profile-right": {
+        "pass": false,
+        "judgeScore": 1,
+        "note": "FAILED across 5 rounds (keys.md, judge.md) \u2014 wrong-handed turn every time. Not built into this rig; right-side yaw stops at q34-right (yawDeg 40). Least-bad candidate kept on disk (art/keys/picked/profile-right.pick1.webp) for a future mirror+inpaint attempt."
+      },
+      "frontal": {
+        "pass": true,
+        "judgeScore": 7,
+        "source": "keys/frontal.png",
+        "alignment": null
+      },
+      "q34-left": {
+        "pass": true,
+        "judgeScore": 7,
+        "source": "keys/aligned/q34-left.png",
+        "alignment": {
+          "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/picked/q34-left.pick1.webp",
+          "measured": {
+            "eyeY": 335,
+            "chin": [
+              520,
+              795
+            ],
+            "eyeToChin": 460
+          },
+          "scale": 0.68696,
+          "offset": [
+            113,
+            184
+          ],
+          "canvas": [
+            832,
+            1216
+          ],
+          "plateAnchors": {
+            "canvas": [
+              832,
+              1216
+            ],
+            "pupils": [
+              [
+                338,
+                422
+              ],
+              [
+                609,
+                406
+              ]
+            ],
+            "eye_y": 414,
+            "chin": [
+              470,
+              730
+            ],
+            "eye_to_chin": 316
+          }
+        }
+      },
+      "q34-right": {
+        "pass": true,
+        "judgeScore": 7,
+        "source": "keys/aligned/q34-right.png",
+        "alignment": {
+          "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/picked/q34-right.pick2.webp",
+          "measured": {
+            "eyeY": 400,
+            "chin": [
+              300,
+              700
+            ],
+            "eyeToChin": 300
+          },
+          "scale": 1.05333,
+          "offset": [
+            154,
+            -7
+          ],
+          "canvas": [
+            832,
+            1216
+          ],
+          "plateAnchors": {
+            "canvas": [
+              832,
+              1216
+            ],
+            "pupils": [
+              [
+                338,
+                422
+              ],
+              [
+                609,
+                406
+              ]
+            ],
+            "eye_y": 414,
+            "chin": [
+              470,
+              730
+            ],
+            "eye_to_chin": 316
+          }
+        }
+      },
+      "profile-left": {
+        "pass": true,
+        "judgeScore": 7,
+        "source": "keys/aligned/profile-left.png",
+        "alignment": {
+          "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/picked/profile-left.pick1.webp",
+          "measured": {
+            "eyeY": 460,
+            "chin": [
+              215,
+              690
+            ],
+            "eyeToChin": 230
+          },
+          "scale": 1.37391,
+          "offset": [
+            175,
+            -218
+          ],
+          "canvas": [
+            832,
+            1216
+          ],
+          "plateAnchors": {
+            "canvas": [
+              832,
+              1216
+            ],
+            "pupils": [
+              [
+                338,
+                422
+              ],
+              [
+                609,
+                406
+              ]
+            ],
+            "eye_y": 414,
+            "chin": [
+              470,
+              730
+            ],
+            "eye_to_chin": 316
+          }
+        }
+      }
+    },
+    "layers": {
+      "frontal": {
+        "spec": "layers/frontal/frontal.spec.json",
+        "zOrder": [
+          "hairBack",
+          "body",
+          "headCore",
+          "eyeApertureR",
+          "eyeApertureL",
+          "irisR",
+          "irisL",
+          "hairFront",
+          "strand1",
+          "strand2",
+          "earring"
+        ],
+        "files": {
+          "hairBack": {
+            "file": "layers/frontal/hairBack.png",
+            "box": [
+              0,
+              0,
+              832,
+              702
+            ]
+          },
+          "body": {
+            "file": "layers/frontal/body.png",
+            "box": [
+              0,
+              586,
+              832,
+              630
+            ]
+          },
+          "headCore": {
+            "file": "layers/frontal/headCore.png",
+            "box": [
+              197,
+              199,
+              513,
+              555
+            ]
+          },
+          "eyeApertureR": {
+            "file": "layers/frontal/eyeApertureR.filled.png",
+            "box": [
+              219,
+              370,
+              146,
+              94
+            ]
+          },
+          "eyeApertureL": {
+            "file": "layers/frontal/eyeApertureL.filled.png",
+            "box": [
+              550,
+              355,
+              147,
+              101
+            ]
+          },
+          "irisR": {
+            "file": "layers/frontal/irisR.png",
+            "box": [
+              291,
+              388,
+              64,
+              61
+            ]
+          },
+          "irisL": {
+            "file": "layers/frontal/irisL.png",
+            "box": [
+              588,
+              373,
+              64,
+              56
+            ]
+          },
+          "hairFront": {
+            "file": "layers/frontal/hairFront.png",
+            "box": [
+              106,
+              0,
+              666,
+              285
+            ]
+          },
+          "strand1": {
+            "file": "layers/frontal/strand1.png",
+            "box": [
+              9,
+              325,
+              123,
+              444
+            ]
+          },
+          "strand2": {
+            "file": "layers/frontal/strand2.png",
+            "box": [
+              730,
+              212,
+              102,
+              356
+            ]
+          },
+          "earring": {
+            "file": "layers/frontal/earring.png",
+            "box": [
+              177,
+              486,
+              133,
+              533
+            ]
+          }
+        },
+        "headFlat": {
+          "file": "layers/frontal/head-flat.png",
+          "box": [
+            0,
+            0,
+            832,
+            1016
+          ],
+          "note": "hairBack+headCore+apertures+irises+hairFront+strands+earring, pre-composited (everything except body) \u2014 this is keys[0].file above."
+        }
+      },
+      "q34-left": {
+        "spec": "layers/q34-left/q34-left.spec.json",
+        "zOrder": [
+          "hair",
+          "headCore"
+        ],
+        "files": {
+          "hair": {
+            "file": "layers/q34-left/hair.png",
+            "box": [
+              109,
+              180,
+              580,
+              680
+            ]
+          },
+          "headCore": {
+            "file": "layers/q34-left/headCore.png",
+            "box": [
+              223,
+              259,
+              452,
+              495
+            ]
+          }
+        },
+        "headFlat": {
+          "file": "layers/q34-left/head-flat.png"
+        },
+        "note": "Coarser than the frontal breakdown by design \u2014 headCore + hair only, no separate front/back hair or strands for a yaw key. See ../README.md."
+      },
+      "q34-right": {
+        "spec": "layers/q34-right/q34-right.spec.json",
+        "zOrder": [
+          "hair",
+          "headCore"
+        ],
+        "files": {
+          "hair": {
+            "file": "layers/q34-right/hair.png",
+            "box": [
+              166,
+              0,
+              594,
+              860
+            ]
+          },
+          "headCore": {
+            "file": "layers/q34-right/headCore.png",
+            "box": [
+              271,
+              312,
+              399,
+              442
+            ]
+          }
+        },
+        "headFlat": {
+          "file": "layers/q34-right/head-flat.png"
+        },
+        "note": "Coarser than the frontal breakdown by design \u2014 headCore + hair only, no separate front/back hair or strands for a yaw key. See ../README.md."
+      },
+      "profile-left": {
+        "spec": "layers/profile-left/profile-left.spec.json",
+        "zOrder": [
+          "hair",
+          "headCore"
+        ],
+        "files": {
+          "hair": {
+            "file": "layers/profile-left/hair.png",
+            "box": [
+              190,
+              0,
+              605,
+              860
+            ]
+          },
+          "headCore": {
+            "file": "layers/profile-left/headCore.png",
+            "box": [
+              217,
+              361,
+              273,
+              304
+            ]
+          }
+        },
+        "headFlat": {
+          "file": "layers/profile-left/head-flat.png"
+        },
+        "note": "Coarser than the frontal breakdown by design \u2014 headCore + hair only, no separate front/back hair or strands for a yaw key. See ../README.md."
+      },
+      "hiddenRegionInpainting": {
+        "done": false,
+        "note": "Not attempted \u2014 see ../README.md 'Known issues'."
+      }
+    },
+    "landmarks": {
+      "dir": "landmarks",
+      "files": {
+        "frontal": "landmarks/frontal.json",
+        "q34-left": "landmarks/q34-left.json",
+        "q34-right": "landmarks/q34-right.json",
+        "profile-left": "landmarks/profile-left.json"
+      },
+      "overlaySheet": "landmarks/wire-overlay.png",
+      "namingConvention": "RIG-relative sides: '_R' is HER right (sampled green at PLATE_ANCHORS.pupils[0] on the frontal plate); '_L' is her left (sampled blue at pupils[1]). Not viewer-relative.",
+      "pivot": "chin point per key (survives yaw); see each landmarks/<key>.json."
+    },
+    "knownIssues": [
+      "The earring's canon side is inconsistently stated across this run's own docs (keys/judge.md says 'the same side as her blue eye'; direct pixel sampling of the frontal plate shows it on the GREEN-eye side) \u2014 flagged, not resolved. See README.md.",
+      "profile-left's `place` alignment input (chin=[215,690] on the raw candidate) was imprecise; the visually true chin sits closer to (350,700), recorded as such in landmarks/profile-left.json, but the key's overall scale/position is still calibrated to the original (slightly off) point. See README.md.",
+      "Hidden-region inpainting (forehead under bangs, cheek under a strand, neck under the jaw) was not attempted \u2014 the gap only shows once a layer is actually displaced by the driver. See README.md.",
+      "patches/patches.json's ['hurt'] group(s) have no box/pad/feather (nothing was attempted for them) and do not fit the runtime's PatchGroup shape, so they are left out of the embedded `patches` above rather than embedded malformed. Fix at the source (patches/patches.json) once that group has real geometry, and this embedding will pick it up automatically."
+    ]
+  }
+}

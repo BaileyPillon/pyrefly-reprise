@@ -1,0 +1,62 @@
+{
+  "layer": "headCore",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/profile-left.png",
+  "box": [
+    217,
+    361,
+    273,
+    304
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 3,
+  "polygon": [
+    [
+      150,
+      400
+    ],
+    [
+      250,
+      370
+    ],
+    [
+      400,
+      375
+    ],
+    [
+      470,
+      410
+    ],
+    [
+      480,
+      480
+    ],
+    [
+      460,
+      560
+    ],
+    [
+      400,
+      650
+    ],
+    [
+      350,
+      700
+    ],
+    [
+      300,
+      660
+    ],
+    [
+      220,
+      560
+    ],
+    [
+      160,
+      470
+    ]
+  ],
+  "subtract": []
+}

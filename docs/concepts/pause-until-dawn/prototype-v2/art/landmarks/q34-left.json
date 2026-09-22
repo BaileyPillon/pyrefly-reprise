@@ -1,0 +1,184 @@
+{
+  "key": "q34-left",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/q34-left.png",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "namingConvention": "Point names use RIG-relative, not viewer-relative, sides: '_R' is her own right (the eye sampled green at PLATE_ANCHORS.pupils[0] on the approved frontal plate; viewer-left when she faces the camera), '_L' is her own left (sampled blue at pupils[1]; viewer-right facing the camera). Verified by direct RGB sampling of docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png at both pupil anchors (green ~ (0,238,182) at (325,430); blue ~ (7,123,231) at (625,415)), not by eye.",
+  "pivot": {
+    "x": 470,
+    "y": 730,
+    "basis": "chin point; survives yaw, matches tools/gen/yaw-keys-sheet.py PLATE_ANCHORS.chin"
+  },
+  "points": {
+    "pupil_R": {
+      "visible": true,
+      "x": 320,
+      "y": 425,
+      "confidence": "measured"
+    },
+    "pupil_L": {
+      "visible": true,
+      "x": 590,
+      "y": 405,
+      "confidence": "measured"
+    },
+    "eyeOuter_R": {
+      "visible": true,
+      "x": 270,
+      "y": 415,
+      "confidence": "estimated"
+    },
+    "eyeInner_R": {
+      "visible": true,
+      "x": 368,
+      "y": 435,
+      "confidence": "estimated"
+    },
+    "eyeTop_R": {
+      "visible": true,
+      "x": 310,
+      "y": 395,
+      "confidence": "estimated"
+    },
+    "eyeBottom_R": {
+      "visible": true,
+      "x": 320,
+      "y": 455,
+      "confidence": "estimated"
+    },
+    "eyeOuter_L": {
+      "visible": true,
+      "x": 650,
+      "y": 405,
+      "confidence": "estimated"
+    },
+    "eyeInner_L": {
+      "visible": true,
+      "x": 540,
+      "y": 410,
+      "confidence": "estimated"
+    },
+    "eyeTop_L": {
+      "visible": true,
+      "x": 590,
+      "y": 388,
+      "confidence": "estimated"
+    },
+    "eyeBottom_L": {
+      "visible": true,
+      "x": 595,
+      "y": 430,
+      "confidence": "estimated"
+    },
+    "browApex_R": {
+      "visible": true,
+      "x": 300,
+      "y": 360,
+      "confidence": "estimated"
+    },
+    "browApex_L": {
+      "visible": true,
+      "x": 605,
+      "y": 355,
+      "confidence": "estimated"
+    },
+    "noseTip": {
+      "visible": true,
+      "x": 415,
+      "y": 525,
+      "confidence": "measured"
+    },
+    "nostril_R": {
+      "visible": true,
+      "x": 390,
+      "y": 578,
+      "confidence": "estimated"
+    },
+    "nostril_L": {
+      "visible": true,
+      "x": 460,
+      "y": 582,
+      "confidence": "estimated"
+    },
+    "philtrum": {
+      "visible": true,
+      "x": 450,
+      "y": 570,
+      "confidence": "estimated"
+    },
+    "mouthCorner_R": {
+      "visible": true,
+      "x": 410,
+      "y": 618,
+      "confidence": "estimated"
+    },
+    "mouthCorner_L": {
+      "visible": true,
+      "x": 595,
+      "y": 600,
+      "confidence": "estimated"
+    },
+    "lipUpper": {
+      "visible": true,
+      "x": 490,
+      "y": 615,
+      "confidence": "estimated"
+    },
+    "lipLower": {
+      "visible": true,
+      "x": 490,
+      "y": 645,
+      "confidence": "estimated"
+    },
+    "chin": {
+      "visible": true,
+      "x": 470,
+      "y": 730,
+      "confidence": "measured"
+    },
+    "jaw_R": {
+      "visible": true,
+      "x": 330,
+      "y": 690,
+      "confidence": "estimated"
+    },
+    "jaw_L": {
+      "visible": true,
+      "x": 660,
+      "y": 660,
+      "confidence": "estimated"
+    },
+    "temple_R": {
+      "visible": true,
+      "x": 240,
+      "y": 400,
+      "confidence": "estimated"
+    },
+    "temple_L": {
+      "visible": true,
+      "x": 680,
+      "y": 395,
+      "confidence": "estimated"
+    },
+    "hairlineCenter": {
+      "visible": true,
+      "x": 350,
+      "y": 200,
+      "confidence": "estimated"
+    },
+    "crown": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "earAttach_R": {
+      "visible": true,
+      "x": 215,
+      "y": 545,
+      "confidence": "estimated"
+    }
+  }
+}

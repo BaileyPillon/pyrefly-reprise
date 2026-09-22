@@ -1,0 +1,36 @@
+{
+  "layer": "hair",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/profile-left.png",
+  "box": [
+    190,
+    0,
+    605,
+    860
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 3,
+  "polygon": [
+    [
+      0,
+      0
+    ],
+    [
+      785,
+      0
+    ],
+    [
+      785,
+      850
+    ],
+    [
+      0,
+      850
+    ]
+  ],
+  "subtract": [
+    "headCore"
+  ]
+}

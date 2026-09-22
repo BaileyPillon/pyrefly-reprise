@@ -1,0 +1,75 @@
+{
+  "_comment": "Hand-authored polygons for the frontal key, read off docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png at native pixel resolution against the landmark set in ../../landmarks/frontal.json. Fed to tools/gen/rig-cut.py layer/overlay. Coordinates are polygon vertices in the 832x1216 source canvas, closed automatically.",
+  "layers": [
+    {
+      "name": "body",
+      "note": "Shoulders, hood/collar, neck. Pinned: the runtime never moves this layer except the shared breathing sway.",
+      "polygon": [[0, 605], [110, 595], [200, 655], [350, 700], [470, 730], [600, 690], [715, 635], [790, 595], [832, 605], [832, 1216], [0, 1216]],
+      "feather": 3
+    },
+    {
+      "name": "headCore",
+      "note": "Face skin, ears, hairline; the part of the moving head assembly that is skin, not hair. Eye apertures are cut separately and subtracted here so the iris/pupil layers can be composited independently on top.",
+      "polygon": [[245, 300], [390, 210], [500, 208], [625, 250], [685, 405], [700, 520], [672, 620], [600, 700], [470, 745], [340, 700], [262, 650], [212, 550], [206, 430]],
+      "subtract": ["eyeApertureR", "eyeApertureL"],
+      "feather": 3
+    },
+    {
+      "name": "eyeApertureR",
+      "note": "Her right (green) eye opening: sclera + lids, per landmarks eyeOuter_R/eyeInner_R/eyeTop_R/eyeBottom_R. Cut as its own layer so the iris can travel inside it. The iris disc is punched out (subtract) so this layer is sclera+lids only; the hole behind a travelling iris is then filled by `rig-cut.py fillhole` (cheap neighbour-clone, per the brief's own allowed alternative to a diffusion inpaint for this case) rather than left transparent.",
+      "polygon": [[224, 412], [255, 383], [300, 375], [345, 385], [358, 402], [352, 430], [320, 456], [280, 458], [244, 442]],
+      "subtract": ["irisR"],
+      "feather": 1
+    },
+    {
+      "name": "eyeApertureL",
+      "note": "Her left (blue) eye opening, mirrored geometry from the plate's own asymmetry. Iris punched out, same reasoning as eyeApertureR.",
+      "polygon": [[556, 396], [590, 366], [630, 360], [670, 372], [690, 402], [682, 428], [645, 450], [608, 448], [562, 424]],
+      "subtract": ["irisL"],
+      "feather": 1
+    },
+    {
+      "name": "irisR",
+      "note": "Her right (green) iris + pupil disc only, cut tight so it can travel inside eyeApertureR.",
+      "polygon": [[300, 398], [325, 393], [345, 405], [348, 424], [335, 442], [312, 443], [297, 425]],
+      "feather": 1
+    },
+    {
+      "name": "irisL",
+      "note": "Her left (blue) iris + pupil disc.",
+      "polygon": [[595, 385], [618, 378], [640, 388], [645, 406], [632, 422], [610, 423], [594, 408]],
+      "feather": 1
+    },
+    {
+      "name": "hairFront",
+      "note": "The fringe/bangs over the forehead, in front of headCore in z-order.",
+      "polygon": [[110, 0], [760, 0], [760, 130], [690, 195], [612, 150], [540, 240], [460, 155], [380, 250], [300, 165], [225, 275], [155, 195], [110, 265]],
+      "feather": 4
+    },
+    {
+      "name": "strand1",
+      "note": "Loose pink-tipped strand crossing the near/green-eye cheek, its own moving layer per the brief.",
+      "polygon": [[0, 260], [95, 300], [120, 470], [95, 650], [55, 760], [10, 700], [30, 500], [15, 340]],
+      "feather": 4
+    },
+    {
+      "name": "strand2",
+      "note": "Loose strand on the far/blue-eye side.",
+      "polygon": [[740, 220], [800, 260], [822, 420], [800, 560], [770, 500], [760, 360]],
+      "feather": 4
+    },
+    {
+      "name": "hairBack",
+      "note": "Everything else in the hair silhouette: the bulk of the side/back hair mass, behind headCore and the strands in z-order. Cut last so its subtract list punches out every other hair-region layer, leaving no double-covered pixels.",
+      "polygon": [[0, 0], [832, 0], [832, 950], [0, 950]],
+      "subtract": ["headCore", "hairFront", "strand1", "strand2", "earring", "body"],
+      "feather": 3
+    },
+    {
+      "name": "earring",
+      "note": "The braid, beads and tassel hanging from her right ear. Its own layer so it can lag on its own spring like the hair does.",
+      "polygon": [[195, 495], [285, 495], [300, 620], [280, 780], [255, 1000], [200, 1010], [185, 780], [190, 620]],
+      "feather": 3
+    }
+  ]
+}

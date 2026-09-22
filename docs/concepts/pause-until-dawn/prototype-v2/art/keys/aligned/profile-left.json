@@ -1,0 +1,42 @@
+{
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/picked/profile-left.pick1.webp",
+  "measured": {
+    "eyeY": 460,
+    "chin": [
+      215,
+      690
+    ],
+    "eyeToChin": 230
+  },
+  "scale": 1.37391,
+  "offset": [
+    175,
+    -218
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "plateAnchors": {
+    "canvas": [
+      832,
+      1216
+    ],
+    "pupils": [
+      [
+        338,
+        422
+      ],
+      [
+        609,
+        406
+      ]
+    ],
+    "eye_y": 414,
+    "chin": [
+      470,
+      730
+    ],
+    "eye_to_chin": 316
+  }
+}

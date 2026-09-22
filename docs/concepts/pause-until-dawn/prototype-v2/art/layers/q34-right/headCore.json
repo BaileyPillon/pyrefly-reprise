@@ -1,0 +1,58 @@
+{
+  "layer": "headCore",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/q34-right.png",
+  "box": [
+    271,
+    312,
+    399,
+    442
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 3,
+  "polygon": [
+    [
+      280,
+      470
+    ],
+    [
+      320,
+      380
+    ],
+    [
+      430,
+      320
+    ],
+    [
+      560,
+      340
+    ],
+    [
+      650,
+      420
+    ],
+    [
+      660,
+      540
+    ],
+    [
+      600,
+      650
+    ],
+    [
+      470,
+      745
+    ],
+    [
+      370,
+      700
+    ],
+    [
+      300,
+      600
+    ]
+  ],
+  "subtract": []
+}

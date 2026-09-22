@@ -1,0 +1,16 @@
+{
+  "_comment": "q34-right, aligned onto the plate canvas (art/keys/aligned/q34-right.png). Same coarser scope as q34-left: headCore + hair only.",
+  "layers": [
+    {
+      "name": "headCore",
+      "polygon": [[280, 470], [320, 380], [430, 320], [560, 340], [650, 420], [660, 540], [600, 650], [470, 745], [370, 700], [300, 600]],
+      "feather": 3
+    },
+    {
+      "name": "hair",
+      "polygon": [[100, 0], [750, 0], [750, 850], [100, 850]],
+      "subtract": ["headCore"],
+      "feather": 3
+    }
+  ]
+}

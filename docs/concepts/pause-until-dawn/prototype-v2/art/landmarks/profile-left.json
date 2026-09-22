@@ -1,0 +1,184 @@
+{
+  "key": "profile-left",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/profile-left.png",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "namingConvention": "Point names use RIG-relative, not viewer-relative, sides: '_R' is her own right (the eye sampled green at PLATE_ANCHORS.pupils[0] on the approved frontal plate; viewer-left when she faces the camera), '_L' is her own left (sampled blue at pupils[1]; viewer-right facing the camera). Verified by direct RGB sampling of docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png at both pupil anchors (green ~ (0,238,182) at (325,430); blue ~ (7,123,231) at (625,415)), not by eye.",
+  "pivot": {
+    "x": 470,
+    "y": 730,
+    "basis": "chin point; survives yaw, matches tools/gen/yaw-keys-sheet.py PLATE_ANCHORS.chin"
+  },
+  "points": {
+    "pupil_R": {
+      "visible": true,
+      "x": 420,
+      "y": 410,
+      "confidence": "measured"
+    },
+    "pupil_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "eyeOuter_R": {
+      "visible": true,
+      "x": 470,
+      "y": 395,
+      "confidence": "estimated"
+    },
+    "eyeInner_R": {
+      "visible": true,
+      "x": 390,
+      "y": 415,
+      "confidence": "estimated"
+    },
+    "eyeTop_R": {
+      "visible": true,
+      "x": 400,
+      "y": 383,
+      "confidence": "estimated"
+    },
+    "eyeBottom_R": {
+      "visible": true,
+      "x": 430,
+      "y": 440,
+      "confidence": "estimated"
+    },
+    "eyeOuter_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "eyeInner_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "eyeTop_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "eyeBottom_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "browApex_R": {
+      "visible": true,
+      "x": 410,
+      "y": 365,
+      "confidence": "estimated"
+    },
+    "browApex_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "noseTip": {
+      "visible": true,
+      "x": 300,
+      "y": 545,
+      "confidence": "measured"
+    },
+    "nostril_R": {
+      "visible": true,
+      "x": 330,
+      "y": 585,
+      "confidence": "estimated"
+    },
+    "nostril_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "philtrum": {
+      "visible": true,
+      "x": 335,
+      "y": 605,
+      "confidence": "estimated"
+    },
+    "mouthCorner_R": {
+      "visible": true,
+      "x": 400,
+      "y": 635,
+      "confidence": "estimated"
+    },
+    "mouthCorner_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "lipUpper": {
+      "visible": true,
+      "x": 345,
+      "y": 625,
+      "confidence": "estimated"
+    },
+    "lipLower": {
+      "visible": true,
+      "x": 335,
+      "y": 650,
+      "confidence": "estimated"
+    },
+    "chin": {
+      "visible": true,
+      "x": 350,
+      "y": 700,
+      "confidence": "measured"
+    },
+    "jaw_R": {
+      "visible": true,
+      "x": 480,
+      "y": 715,
+      "confidence": "estimated"
+    },
+    "jaw_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "temple_R": {
+      "visible": true,
+      "x": 350,
+      "y": 370,
+      "confidence": "estimated"
+    },
+    "temple_L": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "hairlineCenter": {
+      "visible": true,
+      "x": 280,
+      "y": 80,
+      "confidence": "estimated"
+    },
+    "crown": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    },
+    "earAttach_R": {
+      "visible": false,
+      "x": null,
+      "y": null,
+      "confidence": "not_on_this_pose"
+    }
+  }
+}

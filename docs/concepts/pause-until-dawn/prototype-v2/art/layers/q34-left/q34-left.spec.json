@@ -1,0 +1,17 @@
+{
+  "_comment": "q34-left, aligned onto the plate canvas (art/keys/aligned/q34-left.png). Coarser than the frontal spec by design: only headCore + hair are cut for a yaw key (the brief's own scope — body is reused from the frontal key, not re-cut per pose), disclosed as a simplification in README.md rather than also splitting front/back hair or strands here.",
+  "layers": [
+    {
+      "name": "headCore",
+      "polygon": [[240, 380], [340, 285], [460, 268], [580, 298], [662, 400], [665, 520], [605, 650], [470, 745], [372, 680], [282, 560], [232, 460]],
+      "feather": 3
+    },
+    {
+      "name": "hair",
+      "note": "Everything else above the shoulder line; the bottom edge is capped above the collar (~y=850 on this key) so the pinned body's own shoulder/collar pixels are never duplicated here.",
+      "polygon": [[100, 0], [700, 0], [700, 850], [100, 850]],
+      "subtract": ["headCore"],
+      "feather": 3
+    }
+  ]
+}

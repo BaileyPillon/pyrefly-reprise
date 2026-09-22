@@ -1,0 +1,42 @@
+{
+  "layer": "strand2",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/frontal.png",
+  "box": [
+    730,
+    212,
+    102,
+    356
+  ],
+  "canvas": [
+    832,
+    1216
+  ],
+  "feather": 4,
+  "polygon": [
+    [
+      740,
+      220
+    ],
+    [
+      800,
+      260
+    ],
+    [
+      822,
+      420
+    ],
+    [
+      800,
+      560
+    ],
+    [
+      770,
+      500
+    ],
+    [
+      760,
+      360
+    ]
+  ],
+  "subtract": []
+}
