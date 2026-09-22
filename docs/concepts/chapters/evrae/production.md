@@ -5,6 +5,10 @@ the driver found the evrae pose set drifts identity state to state. Removed from
 `docs/target/approved-hashes.json` (`chapter:evrae:2026-09-21` withdrawn);
 re-render in progress.
 
+**REDO 2026-09-22:** every state, and the chapter card, was re-rendered and re-installed as a CANDIDATE:
+[`redo/redo.md`](redo/redo.md), sheet [`redo/sheet.jpg`](redo/sheet.jpg). The tables below describe the 2026-09-21
+installs, which are backed up at `D:/Tools/pyrefly-art-backup/candidates/2026-09-22-evrae-redo/before/`.
+
 Veto sheet: `production.png` (one row per installed item: picked concept where one
 exists, the installed painting whole, a 1:1 native-pixel face/detail crop, and a
 1:1 native-pixel torso/hands crop).

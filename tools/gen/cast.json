@@ -2679,37 +2679,55 @@
       "facing": "left",
       "sizeHint": "1216x832",
       "refState": "idle-near",
-      "tags": "no humans, evrae (ff10), final fantasy x, safe, solo, giant sky wyrm, serpentine dragon-eel hybrid, wingless, long sinuous segmented body trailing off into haze past the edge of the frame, smooth cold-toned teal-blue-green scales covering the whole body, vivid orange membranous fin-frills running down the spine and along the jawline, narrow reptilian eel-like head with a long tooth-filled jaw, two long scythe-like bladed forelimbs held close to the body, no visible wings, pale glinting eyes, cold reptilian colouring against a warm sky, (teal scales:1.3), (orange fin frills:1.3), (long sinuous eel-dragon body:1.2), (scythe-like forelimbs:1.15)",
-      "negAdd": "bat, wings, feathers, insect, humanoid, person, human face, mammal, fur",
+      "tags": "no humans, evrae (ff10), final fantasy x, safe, solo, monster, dragon, eastern dragon, sea serpent, wingless, one head, serpentine body, very long body, coiled body, dark teal scales, deep blue-green scales, navy shadows on the scales, pale tan underbelly, cream belly scales, segmented belly plates, crimson red dorsal spines, orange-tipped spines, serrated fins along the whole spine, red swept-back head crest, red jaw frills, orange eyes, sharp teeth, thin whiskers, orange flame-shaped tail fin, two clawed forelimbs, reptilian",
+      "negAdd": "orange scales, orange body, yellow scales, gold scales, green scales, lime green, red body, brown body, multiple heads, two heads, extra head, wings, bat, feathers, bird, insect, humanoid, person, human face, mammal, fur, sky, clouds, blue background, gradient background, out of frame",
       "states": {
         "idle": {
-          "poseTags": "extreme close view, the head and clawed forelimbs filling the upper frame, jaw held level with the camera, coils of the long body receding into haze behind it, an imposing presence looming very close, holding station in the air",
-          "notes": "Copy of idle-near.png, promoted so the engine has a plain idle to fall back to until the NEAR/FAR distance mechanic is wired (tools/gen/manifest.mjs otherwise flags evrae as un-promoted)."
+          "poseTags": "full body, entire body within the frame, head raised on the upper left, looking at viewer, open mouth, sharp teeth, long body looping behind in wide coils, tail tip visible, hovering in midair",
+          "notes": "Same pixels as idle-near.png, promoted so the engine has a plain idle to fall back to until the NEAR/FAR distance mechanic is wired."
         },
         "idle-near": {
-          "poseTags": "extreme close view, the head and clawed forelimbs filling the upper frame, jaw held level with the camera, coils of the long body receding into haze behind it, an imposing presence looming very close, holding station in the air"
+          "poseTags": "full body, entire body within the frame, head raised on the upper left, looking at viewer, open mouth, sharp teeth, long body looping behind in wide coils, tail tip visible, hovering in midair",
+          "img2img": "docs/concepts/chapters/evrae/redo/refs/evrae-b-init.png",
+          "denoise": 0.6,
+          "seed": 822302,
+          "notes": "REDO 2026-09-22: img2img off the picked concept itself (one head) + forced ref; teal hue matches the anchor (median 202 vs 201); white holes cleared by redo/unhole.py. Whole creature in frame (no edge crop); the head is concept-sized, not the research's head-filling-the-upper-third NEAR read."
         },
         "idle-far": {
-          "poseTags": "the entire creature seen tiny and far away against a vast bright empty sky, a thin long diagonal streak stretching corner to corner of the frame, the head small and simplified at one end of the streak, the body a slender line trailing into pale haze, no visible ground, wide open negative space, distant, small in frame",
-          "notes": "Rendered WITHOUT --ref after a referenced attempt (ref@0.3 off idle-near) kept reproducing idle-near's close coiled composition instead of a distant silhouette — composition capture at low refStart still won out over the pose prompt for this subject. Two rounds, three renders each; per the pace rule the third round dropped the reference entirely rather than trying a fourth. Even without --ref the result reads as a nearer coiled full-body shot rather than a literally tiny distant streak, and its colour balance skews orange/gold-dominant rather than the picked teal-dominant reading — flagged, not fixed further today."
+          "poseTags": "full body, entire body within the frame, far away, small head on the upper left, long slender body in a diagonal s-curve, tail fin on the lower right, flying, mouth closed",
+          "img2img": "docs/concepts/chapters/evrae/redo/sketches/idle-far.png",
+          "denoise": 0.65,
+          "seed": 825002,
+          "cutout": "tools/gen/whitekey.py on the raw (rembg drops the thin body), then redo/dematte.py",
+          "notes": "REDO 2026-09-22: the long diagonal streak with a small head and a legible body (research §12.2 FAR)."
         },
         "breath-charge": {
-          "poseTags": "close view on the head and throat, jaw mostly closed but the throat pouch beneath it swollen and lit from within with a bright warm orange inner light, head tilted slightly back, eyes narrowed in concentration, inhaling deeply before a breath attack, coiled tension, still",
-          "ref": "evrae/idle-near",
-          "notes": "The research's \"paintable charging throat\" requirement (§12.2) was not achieved after two rounds (6 candidates): the checkpoint does not render a legible swollen/lit throat sac distinct from the ordinary orange fin colouring, and 'glow'/'glowing' are banned pose-prompt tokens (docs/ART-PIPELINE.md §6) which narrowed the available phrasing further. Installed candidate is the best on facing, colour and cutout cleanliness; the Inhale telegraph will need to read through animation/UI timing rather than a visibly different throat in the art. Flagged for a follow-up pass, not re-rolled a third time (pace rule)."
+          "poseTags": "full body, coiled body, head on the upper left, closed mouth, swollen throat, inflated throat pouch, dewlap, orange throat, bulging neck, inhaling, tense",
+          "img2img": "docs/concepts/chapters/evrae/redo/sketches/breath-charge-v2.png",
+          "denoise": 0.6,
+          "seed": 826204,
+          "negAddExtra": "fire, flames, fire breath, breathing fire, smoke, explosion",
+          "notes": "REDO 2026-09-22: the throat swelling painted into the neck silhouette (v2 sketch, after a flat disc came back as a flame puff twice); same coil as idle-near so the only change the player reads is the lit throat."
         },
         "hurt": {
-          "poseTags": "close view, head thrown back and to the side, jaw open in a pained hiss, eyes squeezed shut, neck recoiling away from the viewer, body coiling back defensively, wounded, off balance",
-          "ref": "evrae/idle-near",
-          "notes": "Best of 3: the only candidate to show the scythe-like forelimbs as distinct clawed limbs rather than coiled body, and the closest colour match to the picked teal-dominant / orange-fin reading."
+          "poseTags": "full body, entire body within the frame, head on the upper left, recoiling, head thrown back, looking up, screaming, open mouth, closed eyes, pained, coils thrashing",
+          "img2img": "docs/concepts/chapters/evrae/redo/sketches/hurt-puppet.png",
+          "denoise": 0.62,
+          "seed": 823203,
+          "notes": "REDO 2026-09-22: puppet of the idle-near pick tipped 18 degrees, head turned up; identity holds, the body stays close to idle (only the head recoils). Pose-reading alternative kept at redo/picks/alt/hurt-r2-4-flipped.png."
         },
         "ko": {
-          "poseTags": "the creature going limp and falling, head drooping downward, eyes closed, mouth slack, the long body hanging loosely in a slack downward curve, no more tension in the coils, defeated, streaking gently downward and out of the sky",
-          "ref": "evrae/idle-near",
-          "notes": "Best of 3 on the 'slack, streaking downward' body language research §12.5 beat 8 asks for; the eyes read as open rather than closed at this size — a minor miss, not re-rolled further (pace rule)."
+          "poseTags": "full body, entire body within the frame, falling, upside down, head down on the lower left, limp body, closed eyes, mouth slightly open, coils trailing upward, defeated",
+          "img2img": "docs/concepts/chapters/evrae/redo/sketches/ko-puppet.png",
+          "denoise": 0.6,
+          "seed": 824102,
+          "notes": "REDO 2026-09-22: puppet of the idle-near pick turned 105 degrees so it tumbles head-first (research §12.5 beat 8). The eyes read open, as before."
         }
       },
-      "notes": "Evrae, guardian wyrm of Bevelle (research/ffx-evrae-airship.md §12.2, picked look B — teal body, orange fins — docs/concepts/chapters/evrae/options.json). No cast row: per the brief, Cid is invisible in the real encounter and the airship itself is the backdrop. --nonBiped and --composition boss are correct here (the creature coils and fills the frame per research). None of the five states show the bladed scythe-limb forelimbs as clearly reaching, bladed weapons — they mostly read as coiled body — the same gap the original concept-art round already flagged; worth a dedicated follow-up pass with an explicit forelimb-only pose."
+      "notes": "Evrae, guardian wyrm of Bevelle (research/ffx-evrae-airship.md §12.2, picked look B — teal body, orange fins — docs/concepts/chapters/evrae/options.json). No cast row: per the brief, Cid is invisible in the real encounter and the airship itself is the backdrop. --nonBiped and --composition boss are correct here (the creature coils and fills the frame per research). None of the five states show the bladed scythe-limb forelimbs as clearly reaching, bladed weapons — they mostly read as coiled body — the same gap the original concept-art round already flagged; worth a dedicated follow-up pass with an explicit forelimb-only pose. REDO 2026-09-22 (docs/concepts/chapters/evrae/redo/redo.md, sheet.jpg): every state re-rendered against the picked concept B with an identity block naming the exact colours; FAR, breath-charge and the chapter card from PIL composition sketches by img2img. All CANDIDATE; no entry in docs/target/approved-hashes.json.",
+      "emphasis": "(dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15)",
+      "ref": "docs/concepts/chapters/evrae/redo/refs/evrae-b-square.png",
+      "refRecipe": "--forceRef --refWeight 0.45 --refStart 0.2 --refEnd 0.6 --refWeightType \"ease in\"; the picked concept B square-padded on white with its stray second head removed (redo/make-ref.py)"
     },
     {
       "id": "ormi",
