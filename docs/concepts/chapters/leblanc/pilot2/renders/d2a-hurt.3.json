@@ -1,0 +1,39 @@
+{
+  "tag": "d2a-hurt.3",
+  "method": "D stage 2a (figure)",
+  "state": "hurt",
+  "seed": 22803,
+  "denoise": 0.4,
+  "source": "renders/d1-hurt.3.raw.png",
+  "mask": "figure silhouette, dilated 12 px, feathered",
+  "refWeight": 0.55,
+  "refWindow": [
+    0,
+    1
+  ],
+  "positive": "1girl, leblanc \\(ff10-2\\), final fantasy x-2, safe, solo, round face, purple eyes, pale skin, blonde hair, short hair, bob cut, swept bangs, hair over one eye, purple choker, studded choker, white dress, halterneck, plunging neckline, highleg, red heart mark on chest, red obi, sash, gold sash ornament, tassel, purple kimono, open robe, off shoulder, bare shoulders, robe hanging from elbows, wide sleeves, striped cuffs, bare legs, purple boots, ankle boots, lace-up boots, open-toe footwear, high heels, black folding fan, leaning back, off balance, wince, closed eyes, pained expression, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, holding closed fan, (closed eyes:1.25), (pained expression:1.2), (leaning back:1.2), (white halterneck dress:1.2), (purple kimono robe off shoulders:1.2), (bare legs:1.15), (red heart mark on chest:1.15), (black folding fan:1.1), (from side:1.3), three-quarter view, body facing left, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, smile, smirk, grin, wink, seductive smile, happy, dancing, looking at viewer, thighhighs, stockings, pantyhose, closed robe, long dress, red fan, pink fan",
+  "cutout": {
+    "width": 636,
+    "height": 1173,
+    "baselineY": 1157,
+    "cropBox": [
+      30,
+      27,
+      666,
+      1200
+    ],
+    "contentBox": [
+      46,
+      43,
+      650,
+      1184
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "seconds": 35,
+  "generatedAt": "2026-09-22T18:11:45.905Z"
+}

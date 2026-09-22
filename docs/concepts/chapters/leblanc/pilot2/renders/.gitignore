@@ -1,0 +1,5 @@
+# Leblanc pilot 2: raw frames, masks and the D stage-2a intermediates stay local
+# (backed up to D:/Tools/pyrefly-art-backup/candidates/leblanc-pilot2-2026-09-22/).
+*.raw.png
+*mask.png
+d2a-*.png
