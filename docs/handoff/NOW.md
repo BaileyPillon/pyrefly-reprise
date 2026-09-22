@@ -98,8 +98,11 @@
      coach mark hides the menu, FOC-02 phone tab strip does not scroll the selected tab into view; polish FOC-03/04).
      **The deploy was REFUSED by the two-deploy deep-owed gate** (see the finding below). FOC-01 to FOC-04 are fixed in
      `56011e4` (coach layer opens the FFX menu in the same frame as the mark; pause strip scrolls the selected tab into
-     view; 44 px phone tabs; FFX HUD labels at 12 px; full suite 222 files green). `release.js` round 08 is running again
-     on `56011e4` (`wf_03f95efd-225`); the deploy step still needs Bailey's override words.
+     view; 44 px phone tabs; FFX HUD labels at 12 px; full suite 222 files green). **BAILEY'S OWNER OVERRIDE, verbatim,
+     2026-09-21 23:20 EDT, after being told the gate refuses a third deploy while two live builds owe a deep review:
+     "Push the live build now please".** `release.js` round 08 (`wf_bcad3493-d48`) runs with `ownerOverride` set to
+     exactly those words: cut, focused review of `56011e4`, deploy with `--owner-override`, live verification, then the
+     deep review on the live build. The deploy agent of that run is authorised by these words; they settle no obligation.
      **DEPLOY GATE FINDING:** the live build `8f48237` carries an unsettled deep review (from `fd0ae96`); round 07 was a
      valid deep report but left five mandatory checks UNVERIFIED (CHK-001 / CHK-B1 audio need Bailey's ear, CHK-006,
      CHK-007, CHK-022 victory halves, hardware perf evidence), so `critic-clear` refused it. Two deploys already went
