@@ -1,0 +1,208 @@
+browser mode: gpu
+
+=== A. FFX ch1 real-key entry @1600x900 ===
+screen at boot: title
+screens walked by real Enter presses: ["title","chapter-select","party-prep","cutscene"]
+screen after real keys: battle
+FOC-01 state: {
+ "screen": "battle",
+ "markVisible": true,
+ "markText": "AURON\n“He moves after you. Not before. Use it.”\nENTER CONTINUE\nFIRST TIME ONLY",
+ "markGameFlag": "ffx",
+ "stackDisplay": "flex",
+ "stackChildren": 7,
+ "stackRect": {
+  "w": 468.9,
+  "h": 419.8
+ },
+ "cardOpacity": "1",
+ "cardText": "NEXT BEST MOVE\nTidus\n\nHastega\n→\nthe party\nGUIDE’S PICK\n\nIN WHITE MAGIC\n30 MP\nALWAYS HITS\n+ HASTE\n\nSpeeds the party’s tur",
+ "waitingText": false,
+ "intent": "Mortiorchis\nHP  4000 / 4000\nFIRE\nICE\nTHUNDER\nWATER\nHOLY\nGRAV\nI\nHIDE",
+ "logLen": 3
+}
+mark/card overlap: {"mark":[448,99,400,145],"card":[402,98,370,189],"overlapPx":[324,145]}
+FOC-04 HUD text nodes: 86 under 12px effective: 8
+[
+ {
+  "text": "Next best move",
+  "css": 4.6,
+  "eff": 11.5,
+  "sel": "mad__title"
+ },
+ {
+  "text": "Guide’s pick",
+  "css": 3.9,
+  "eff": 9.75,
+  "sel": "mad__badge"
+ },
+ {
+  "text": "in White Magic",
+  "css": 4.2,
+  "eff": 10.5,
+  "sel": "mad__stat"
+ },
+ {
+  "text": "30 MP",
+  "css": 4.2,
+  "eff": 10.5,
+  "sel": "mad__stat"
+ },
+ {
+  "text": "always hits",
+  "css": 4.2,
+  "eff": 10.5,
+  "sel": "mad__stat"
+ },
+ {
+  "text": "+ Haste",
+  "css": 4.2,
+  "eff": 10.5,
+  "sel": "mad__stat mad__stat--status"
+ },
+ {
+  "text": "N",
+  "css": 4.4,
+  "eff": 11,
+  "sel": "B"
+ },
+ {
+  "text": "hide moves",
+  "css": 4.4,
+  "eff": 11,
+  "sel": "SPAN"
+ }
+]
+smallest 8: [{"text":"Guide’s pick","css":3.9,"eff":9.75,"sel":"mad__badge"},{"text":"in White Magic","css":4.2,"eff":10.5,"sel":"mad__stat"},{"text":"30 MP","css":4.2,"eff":10.5,"sel":"mad__stat"},{"text":"always hits","css":4.2,"eff":10.5,"sel":"mad__stat"},{"text":"+ Haste","css":4.2,"eff":10.5,"sel":"mad__stat mad__stat--status"},{"text":"N","css":4.4,"eff":11,"sel":"B"},{"text":"hide moves","css":4.4,"eff":11,"sel":"SPAN"},{"text":"Next best move","css":4.6,"eff":11.5,"sel":"mad__title"}]
+confirm-press before: {"submenu":false,"top":"TALK\nATTACK\nSPECIAL\n▸\n×4\nWHITE MAGIC\n▸\n×3\nITEMS\n▸\n×27\nFLEE\n▼"} 
+after: {"mark":false,"submenu":false,"stackChildren":7,"cardOpacity":"1","text":"TALK\nATTACK\nSPECIAL\n▸\n×4\nWHITE MAGIC\n▸\n×3\nITEMS\n▸\n×27\nFLEE\n▼"}
+battleLog 3 -> 14 (real attack through the menu)
+
+=== B. Pause @390x844 ===
+pause open: {"screen":"pause","pause":true,"tabs":["member:tidus","member:yuna","member:kimahri","chapter","guide","options","controls","music"]}
+FOC-03 tab rects: [{"tab":"member:tidus","w":62.7,"h":49},{"tab":"member:yuna","w":46.3,"h":44},{"tab":"member:kimahri","w":72.5,"h":44},{"tab":"chapter","w":78.8,"h":44},{"tab":"guide","w":52.8,"h":44},{"tab":"options","w":75.3,"h":44},{"tab":"controls","w":90.8,"h":44},{"tab":"music","w":54.4,"h":44}]
+FOC-03 min height: 44
+FOC-02 cycle: [
+ {
+  "tab": "member:tidus",
+  "left": 20,
+  "right": 82.7,
+  "inView": true,
+  "scrollLeft": 0
+ },
+ {
+  "tab": "member:yuna",
+  "left": 92,
+  "right": 148.4,
+  "inView": true,
+  "scrollLeft": 0
+ },
+ {
+  "tab": "member:kimahri",
+  "left": 151.3,
+  "right": 238.7,
+  "inView": true,
+  "scrollLeft": 7
+ },
+ {
+  "tab": "chapter",
+  "left": 146.8,
+  "right": 242.3,
+  "inView": true,
+  "scrollLeft": 104
+ },
+ {
+  "tab": "guide",
+  "left": 163.6,
+  "right": 227.3,
+  "inView": true,
+  "scrollLeft": 186
+ },
+ {
+  "tab": "options",
+  "left": 149.4,
+  "right": 240.3,
+  "inView": true,
+  "scrollLeft": 273
+ },
+ {
+  "tab": "controls",
+  "left": 185.7,
+  "right": 295.7,
+  "inView": true,
+  "scrollLeft": 332
+ },
+ {
+  "tab": "music",
+  "left": 304.5,
+  "right": 370.3,
+  "inView": true,
+  "scrollLeft": 324
+ }
+]
+FOC-02 offscreen count: 0
+after Escape screen: battle
+
+=== C. FFX-2 ch4 @2000x1012 ===
+FFX-2 coach/advisor state (CHK-021 absence half): {"markGameFlag":null,"mark":false,"cardOpacity":"1","stackChildren":-1}
+ATB ticks running: null -> null | paused: null -> null
+pause @2000x1012: {"tab":"member:yuna","inView":true,"tabH":50.2}
+resumed screen: battle
+
+=== D. Pause @1600x900 FFX ===
+pause tabs @1600x900: [
+ {
+  "tab": "member:tidus",
+  "inView": true,
+  "body": "BATTLE STATS\nHP\n2420/2420\nMP\n115/115\nSTRENGTH\n31\nMAGIC\n16\nDE"
+ },
+ {
+  "tab": "member:yuna",
+  "inView": true,
+  "body": "BATTLE STATS\nHP\n1500/1500\nMP\n270/270\nSTRENGTH\n15\nMAGIC\n37\nDE"
+ },
+ {
+  "tab": "member:kimahri",
+  "inView": true,
+  "body": "BATTLE STATS\nHP\n2310/2310\nMP\n130/130\nSTRENGTH\n26\nMAGIC\n22\nDE"
+ },
+ {
+  "tab": "chapter",
+  "inView": true,
+  "body": "THIS ENCOUNTER\n1. HOLY WATER A ZOMBIE BEFORE FULL-LIFE LANDS"
+ },
+ {
+  "tab": "guide",
+  "inView": true,
+  "body": "THE DESIGNED LINE\n“Bio him turn one — it deals a straight pe"
+ },
+ {
+  "tab": "options",
+  "inView": true,
+  "body": "SETTINGS\nMASTER VOLUME\n80\nMUSIC\n70\nSOUND EFFECTS\n90\nTEXT SPE"
+ },
+ {
+  "tab": "controls",
+  "inView": true,
+  "body": "GETTING AROUND\nPREVIOUS TAB\nQ / L1 / ←\nNEXT TAB\nE / R1 / →\nM"
+ },
+ {
+  "tab": "music",
+  "inView": true,
+  "body": "SOUND TEST STOP\nBright After the Storm\nNoble Rot\nWhere the H"
+ }
+]
+after H: [object Object]
+resumed: battle
+
+=== FFX-2 ch4 candidate @1600x900 ===
+FFX-2 command menu reached: {"n":3}
+FFX-2 state: {"markGame":"ffx2","markText":"NOTHING PAUSED · GAUGES RUNNING\nRIKKU\n“Bar's full, she's up — don't wait for me, we all go at once!”\nFADES ON ITS OWN\nFI","cardOpacity":"0","stack":3,"waiting":false}
+snapshot sample: {"chapter":"ffx2-bahamut","game":"ffx2","scene":"bevelle-underground","scenePlaceholder":false,"preview":false,"links":1,"chainLength":1,"paused":false,"canPause":true,"canPauseOnCancel":true,"exitIntent":null,"playTimeMs":9066.3,"hud":true,"rig":"idle","actors":[{"id":"yuna","side":"party","art":"y
+ATB gauge width running: 72.625px -> 72.625px | paused: 72.625px -> 72.625px
+resumed screen: battle
+
+=== LIVE 8f48237 @1600x900 ===
+live FFX ch1: {"hasAdvisorCard":true,"cardText":"NEXT BEST MOVE\nTidus\n\nHastega\n→\nthe party\nGUIDE’S PICK\n\nIN WHITE MAGIC\n30 MP\nALW","hasCoachMark":false,"stack":7,"waiting":false}
+live small type (<12px eff): [{"t":"OD","eff":11,"sel":"EM"},{"t":"OD","eff":11,"sel":"EM"},{"t":"Overdrive","eff":11,"sel":"EM"},{"t":"I","eff":11.5,"sel":"B"},{"t":"hide","eff":11.5,"sel":"SPAN"},{"t":"Next best move","eff":11.5,"sel":"mad__title"},{"t":"Guide’s pick","eff":9.75,"sel":"mad__badge"},{"t":"in White Magic","eff":10.5,"sel":"mad__stat"},{"t":"30 MP","eff":10.5,"sel":"mad__stat"},{"t":"always hits","eff":10.5,"sel":"mad__stat"},{"t":"+ Haste","eff":10.5,"sel":"mad__stat mad__stat--status"},{"t":"N","eff":11,"sel":"B"}]
+live phone pause: {"screen":"pause","tabs":[]}

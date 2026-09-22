@@ -44,9 +44,22 @@
   Active ATB, Auron's briefing switched on, art round 4 restored, the front-end type floor, and FOC-01 to FOC-04 fixed.
   The build before it was B.1 (`8f48237`).
 - Focused review of the candidate: SHIP, with disclosed majors FOC-05 (the FFX first-turn coach mark overlaps the advisor
-  card, first time only) and FOC-06 (the advisor card's type sits under 12 px, inherited from the live build). Obligations
-  still owed on this build: live verification (exact-artifact check against the live URL) and the deep review on the live
-  build, carried from `fd0ae96` and `8f48237` — both running now as top-level workflows.
+  card, first time only) and FOC-06 (the advisor card's type sits under 12 px, inherited from the live build). live
+  verification PASS (settled 2026-09-22 00:45 EDT, 863 files, real-input smoke, reload smoke, 0 console errors); deep
+  review round 08 ran on the live build (critic/rounds/round-08.md): deployment PASS, changed area FAIL, ship verdict
+  HOLD recorded against the NEXT candidate because of PR-0076 (chapter 5's intended line falls from 40/40 wins to 0/40
+  at any human decision time because Active ATB runs the clock under an open menu; a regression against the previous
+  live build) and PR-0080 (an open command menu is replaced in place by another character's list with no keypress, in
+  262 ms, under the player's thumb); the critic's player-side correction: let a chain-locked character keep her queued
+  command (four in five lost menus are chain locks), never tune a boss; disclosed majors PR-0077 (pause CHAPTER tab: 15
+  hand-written art paths miss their art/ segment, 84 404s, one-line fix at src/app/screens/pause/markup.ts:130, do not
+  prefix heroArtFallback), FOC-05, FOC-06, PR-0075 (FFX-2 healing items roll the enemy hit check against the ally's own
+  Evasion and are consumed on a miss; FFX's accuracy.ts has the carve-out FFX-2 lacks), PR-0078 (victory results screen
+  crops the leader's portrait to one eye with object-fit cover, both games); the deep obligation is STILL PENDING
+  (carried from `fd0ae96` and `8f48237`): it needs Bailey's audio audition verdict (CHK-001/CHK-B1, third round asking),
+  one real-input victory through to results per game (CHK-022), the advisor's on-screen checks CHK-004/005, the
+  CHK-002/007/009 sweeps and a chapter 3 in-battle capture; score provisional, audio unscored, every category under 9,
+  13 of 30 required targets matched.
 
 ## In flight: Build C (the next live build)
 
@@ -83,51 +96,35 @@
   `D:/Tools/ComfyUI/ComfyUI/models/checkpoints/ace_step_v1_3.5b.safetensors` (7.7 GB); the VSCO 2 CE SFZ patches branch
   is cloning into `D:/Tools/audio-libs/vsco2-ce-sfz`. Checksums: `D:/Tools/audio-libs/_dl/fetch-music-2026-09-21.DONE.txt`.
   Still needing a per-item yes: hall impulse responses, any ACE-Step custom nodes.
-- Running now, 2026-09-21 21:25 EDT (folder-owned; the RUNNING-LINE RULE above applies: if one of these is you, carry on).
-  Anthropic has an open incident (elevated errors on Opus / Fable / Mythos since ~20:40 EDT), so attempts 1 to 3 died and
-  these runs are on SONNET at high effort; the release runner `wf_e211d3cc-c59` (round 08) is cutting from `D:/pyrefly-release`:
-  1. `wf_ed01c548-b3c` "pyrefly-living-portrait-v2" (attempt 3, Sonnet). OWNS
-     `docs/concepts/pause-until-dawn/prototype-v2/**`, `tools/gen/inpaint.mjs`, `tools/gen/yaw-keys.mjs`, `tools/gen/rig-cut.*`.
-     Renders on ComfyUI (queue shared with 2).
-  2. `wf_6e496bfa-c24` "pyrefly-chapter-leblanc" (attempt 3, Sonnet; `573ea00` from the first run stands). OWNS the Leblanc data
-     and tests, `src/scenes/leblanc*`, the Leblanc guide / tactics / meta, `src/story/scripts/ffx2-leblanc.ts`
-     registration, additive entries in `src/data/encounters.ts` + registry + music routing (with `docs/CONTRACT-CHANGES.md`),
-     `chapterGrid.ts` card DATA, `public/art/characters/{leblanc,ormi,logos}/**`, `docs/concepts/chapters/leblanc/**`,
-     `tools/gen/cast.json` rows, `critic/bench/leblanc/**`. Renders on ComfyUI.
-  3. Release 08: the tidy batch is committed (`65b57bd` onboarding on, `4dbcb8c` advisor evidence, `e6aee37` FE-001/002,
-     `c4a6d42` pause e2e, `5e92289` pause test). **Candidate `5e92289` passed its FOCUSED review: SHIP**
-     (`critic/reviews/5e92289…-focused.md`; no critical, no regression vs live; disclosed majors FOC-01 FFX first-turn
-     coach mark hides the menu, FOC-02 phone tab strip does not scroll the selected tab into view; polish FOC-03/04).
-     **The deploy was REFUSED by the two-deploy deep-owed gate** (see the finding below). FOC-01 to FOC-04 are fixed in
-     `56011e4` (coach layer opens the FFX menu in the same frame as the mark; pause strip scrolls the selected tab into
-     view; 44 px phone tabs; FFX HUD labels at 12 px; full suite 222 files green). **BAILEY'S OWNER OVERRIDE, verbatim,
-     2026-09-21 23:20 EDT, after being told the gate refuses a third deploy while two live builds owe a deep review:
-     "Push the live build now please".** `release.js` round 08 (`wf_bcad3493-d48`) runs with `ownerOverride` set to
-     exactly those words: cut, focused review of `56011e4`, deploy with `--owner-override`, live verification, then the
-     deep review on the live build. The deploy agent of that run is authorised by these words; they settle no obligation.
-     **DEPLOY GATE FINDING:** the live build `8f48237` carries an unsettled deep review (from `fd0ae96`); round 07 was a
-     valid deep report but left five mandatory checks UNVERIFIED (CHK-001 / CHK-B1 audio need Bailey's ear, CHK-006,
-     CHK-007, CHK-022 victory halves, hardware perf evidence), so `critic-clear` refused it. Two deploys already went
-     out with the debt, so release 08 is refused unless Bailey overrides (`--owner-override="<his words>"`, which settles
-     nothing) or a deep review that closes those five gaps settles it.
-     **RELEASE 08 IS LIVE:** deployed as `main 1b33971` (bundle `BvhtVfzJ`) at 2026-09-21 23:48 EDT under the owner
-     override above; see "Live: Build C.1 (release 08)" at the top of this file. Still owed: live verification and the
-     deep review on the live build (both running now as top-level workflows).
-  4. Downloads Bailey approved ("yes to downloads but on D: please"): Wan 2.2 TI2V-5B + VAE + umt5 text encoder into
-     `D:/Tools/ComfyUI/ComfyUI/models/**`, THA4 repo into `D:/Tools/tha4`; log and checksums under
-     `D:/Tools/video-models/_dl/`. `wf_cfd6b0fa-19e` "pyrefly-yuna-video-preview" (Sonnet) is running on them: the
-     expensive option Bailey chose ("I'm ok with an expensive option ... Show me a preview of what you can do"): a Wan 2.2
-     image-to-video clip set of Yuna from her approved plate, judged, a clip-graph demo page and a stitched preview, plus a
-     THA4 trial. OWNS `docs/concepts/pause-until-dawn/video-preview/**`, `tools/gen/video.mjs`, `D:/Tools/pyrefly-video/**`,
-     `D:/Tools/tha4/**`. Shares the ComfyUI queue with 1 and 2. RESULT: the 5B model kept Yuna's identity on subtle
-     motion (smile, breathing) and lost it on the head turn; the stitched preview was REJECTED by Bailey for its joins
-     ("absolutely no continuity"). THA4 is a dead end (CC-BY-NC weights; pinned torch cannot run on the RTX 5070 Ti).
-  5. `wf_a9432026-fba` "pyrefly-yuna-video-flf" (video route v2 on the first-and-last-frame model Bailey approved with
-     "yes": Wan 2.1 FLF2V 14B fp8 + clip_vision_h + wan_2.1_vae on disk, checksums in
-     `D:/Tools/video-models/_dl/fetch-flf2v-2026-09-21.DONE.txt`). Every clip starts and ends on the plate frame; an Opus
-     judge scores the joins at 1:1 with a hard-cut test; a demo is built only if the joins pass. OWNS
-     `docs/concepts/pause-until-dawn/video-flf/**`, `tools/gen/video*.mjs`, `D:/Tools/pyrefly-video/flf/**`.
-     **Rule (Bailey, 2026-09-21): nothing with a visible join is shown to him.**
+
+## State of the three tracks (2026-09-22 02:40 EDT)
+
+(a) Release 08 LIVE as above; next batch must lead with PR-0076/PR-0080 (or Bailey's word that the Active trade is what
+he wants at this price) and PR-0077.
+
+(b) LEBLANC = Chapter 6, registered end to end (`c473de8` registration, `68b8b6b` scene, `e226a5a` guide/meta, `5e22dfb`
+data findings, `597e304` fixed a critical: the painted enemies never appeared because of an 'ffx2-' spriteKey prefix;
+`8c646c4` measured under Active ATB: 40/40 at zero decision time, 4/40 at 1.5 s, 0/40 at 4 s, chapter 4 control 40/40
+everywhere); ART for leblanc/ormi/logos re-rendered with the pilot's method A (forceRef 0.35 from the idle; pilot
+`9e08955`; sets `9621f0e`, `1b33971`, `66e3e83`, `177396e`, `920dac8`, `2e5672d`) and STILL CANDIDATE, below the bar
+(Leblanc attack reads as a flourish, hurt wears a different robe and does not read hurt after two attempts, Logos
+headgear changes between states, Ormi shield/heart inconsistent); no approved-hash entries; three music cues owed
+(chapter 4's reused), Paine art missing (stand-in), Act I/II dioramas reuse the Last Room. Waiting on Bailey: art 1A
+ship as disclosed candidates / 1B hold; ATB 2A ship disclosed like chapter 5 / 2B build the sourced Config ATB speed
+lever first; release 09 now or after the reset.
+
+(c) LIVING PORTRAIT: rig v2 (`docs/concepts/pause-until-dawn/prototype-v2/`, commits `6000edf` keys, `572e18f` patches,
+`63021ac` layers, `ebb71b0` runtime, `17b960e`, `98ff595` fix, `8d5c611` re-capture, handoff
+`docs/handoff/living-portrait-v2-fix.md`): motion passes the measured spec; the assembly does not: box-edged layer
+cut-ins, a collar seam in every still, a doubled iris and hair box edge at -40 degrees, patch rectangles; next round =
+silhouette-true masks (segmentation model download to propose), hidden-region inpainting, per-triangle mesh warp,
+colour-matched patches, profile-right by flip + iris swap, closed eyes and blink intermediates, brows via the fringe
+layer. Video route (`docs/concepts/pause-until-dawn/video-preview/` round 1 on the 5B model: identity holds on subtle
+motion, lost on turns, stitched preview REJECTED by Bailey; `video-flf/` round 2 on Wan 2.1 FLF2V 14B: identity 9, no
+framing drift, joins 19x better, but the END frame is not anchored because WanFirstLastFrameToVideo masks a phantom
+slot; fix = feed end_image as a 4-frame batch via RepeatImageBatch, motion peak earlier, 24 fps; ~72 min per clip; VAE
+floor face MAD 3.85; no earring on this plate, the markers are the braid and clasp); rule: nothing with a visible join
+is shown to Bailey.
 - Next, in order: (1) pause remake verified, then the living portrait ported for the main party; (2) one tidy pass:
   advisor v2 bench harness fallback and three test defects (`docs/handoff/advisor-v2.md`), Leblanc provenance labels,
   front-end phone type floor FE-001; (3) first incremental release, round 08, launched **top-level** with

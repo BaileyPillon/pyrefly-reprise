@@ -1,0 +1,11 @@
+{
+ "result": "PASS",
+ "artifactHash": "f29a55dfea95b61e35a26c0a676790d40bf778a90937361de1976271350621bf",
+ "liveManifest": "match",
+ "checked": 863,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": []
+}

@@ -1,0 +1,63 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-22T05:10:00.000Z",
+  "build": {
+    "mainSha": "1b33971",
+    "bundle": "BvhtVfzJ",
+    "artifactHash": "f29a55dfea95b61e35a26c0a676790d40bf778a90937361de1976271350621bf"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/1b33971.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/8f48237.json --full -> {\"result\":\"PASS\",\"artifactHash\":\"f29a55dfea95b61e35a26c0a676790d40bf778a90937361de1976271350621bf\",\"liveManifest\":\"match\",\"checked\":863,\"mismatched\":[],\"missing\":[],\"wrongType\":[],\"errors\":[],\"notes\":[]}; artifactHash matches critic/artifacts/1b33971.json and the last line of docs/deploys.log."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Real key/click input (no debug goto/gotoChapter) drove title -> Auron's-briefing onboarding -> chapter select (Coming locks verified on Seymour and Anima / Evrae / The Leblanc Syndicate) -> party prep (Chapter I - Seymour Flux) -> pre-battle cutscene -> battle. Screen/chapter/state asserted at each step via window.__pyrefly.screen() ('battle', 'pause') and the on-screen 'Chapter I . Mt. Gagazet - The Prominence' header. Pause remake exercised: Pause chip open, Tidus/Yuna/Kimahri tabs with live Battle Stats meters matching in-battle HUD values (e.g. Yuna 1500/1500 HP, 270/270 MP, Overdrive 40% in both places), Chapter/Guide/Options/Controls/Music tabs present, Music tab sound-test track list, H hide/show panels (full-bleed close-up confirmed then restored), Esc/Resume returned to screen()==='battle' with scene intact."
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Prerendered audio confirmed playing, not the synth fallback: network log shows real .mp3 GETs (audio/music/title.mp3, chapter-select.mp3, scene-gagazet.mp3, boss-seymour.mp3, pause.mp3, boss-ffx2-aeon.mp3), all 200; window.__pyrefly.audioDebug() reports playing:'pause' with that track's entry cached:true, source:'prerendered'."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke only (full upgrade matrix not tested, see coverage.notTested). Master Volume slider changed 80 -> 90 with a real click on the Options tab; page reloaded via fresh navigation; audioDebug().volumes.master === 0.9 after reload and localStorage['pyrefly-reprise:save:v1'].settings.masterVolume === 0.9; the same save also carried chapters['seymour-flux'].attempts: 2 (real progress from a battle entered this session) across the same reload."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact verify-live (863 files, full mode, changed-from 8f48237)",
+      "CHK-016 real-input smoke: title, onboarding, chapter select (locks), party prep, cutscene, battle, pause (tabs, meters, music, hide/show, resume)",
+      "prerendered-music-vs-fallback via network log + audioDebug()",
+      "CHK-024 lightweight: one setting (master volume) + one piece of progress (battle attempt count) survive a real page reload",
+      "console error count for the run",
+      "network 404/failed-request count for the run"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (every setting, a cleared chapter, unlock state)",
+      "1600x900 focused-layout capture (host/tooling rendering limitation, see notes; smoke was completed at the pane's native size instead)",
+      "a full chapter playthrough to a win/loss outcome",
+      "FFX-2 Active ATB chapter smoke (only confirmed ffx2Atb:'active' is present in the save/options; the FFX-2 chapters are still Coming-locked in chapter select and were not separately exercised)",
+      "the disclosed focused-review majors FOC-05 (coach-mark overlap) and FOC-06 (advisor-card type size) were not re-measured; they remain the focused report's disclosed, carried-forward issues"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35,
+  "notes": "Supersedes the stale UNVERIFIED critic/reviews/1b33971-live.{md,json} written before this build's deploy records existed in main; the deploy records (critic/artifacts/1b33971.json, docs/deploys.log, critic/pending/1b33971.json) are now in place and this report verifies against them. No code was changed; nothing was committed, pushed or deployed by this review. The deep review obligation on this build (carried from fd0ae96/8f48237) is untouched by this live pass."
+}
