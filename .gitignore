@@ -18,6 +18,11 @@ public/art/**/*.[0-9].png
 public/art/**/*.[0-9].json
 __pycache__/
 
+# yaw-key pilot candidates (tools/gen/yaw-keys.mjs): dozens of raw renders per
+# round, kept locally for review only. The picked two per key live curated
+# and converted to WebP under prototype-v2/art/keys/picked/ (see keys.md).
+docs/concepts/pause-until-dawn/prototype-v2/art/keys/_cand/
+
 # ---------------------------------------------------------------------------
 # Generated binaries: regenerable, large, and rewritten under the same names on
 # every run, so git history is the wrong place for them.
