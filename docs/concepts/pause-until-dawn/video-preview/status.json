@@ -1,0 +1,63 @@
+{
+  "tool": "tools/gen/video.mjs",
+  "model": "wan2.2_ti2v_5B_fp16.safetensors",
+  "plate": "public/art/pause/yuna-ffx2.png",
+  "settings": {
+    "width": 1280,
+    "height": 704,
+    "length": 121,
+    "fps": 24,
+    "steps": 24,
+    "cfg": 5,
+    "sampler": "uni_pc",
+    "scheduler": "simple",
+    "shift": 8
+  },
+  "queueNote": "ComfyUI at :8188 is shared with other agents (living-portrait rig, Leblanc chapter art). Renders that landed while the queue was quiet took 452-496s wall time; renders queued behind other agents' jobs (which force a model swap out of VRAM and back) took 960-1024s+. Budget accordingly for the rest of the clip set.",
+  "clips": {
+    "idle-breathing": {
+      "1": {
+        "wallSeconds": 452.3,
+        "frameCount": 121,
+        "webmKiB": 1060,
+        "webmCrf": 30,
+        "verdict": "PARTIAL -- keep, disclose the gap",
+        "note": "Identity held throughout (eye colours, hair, braid, outfit unchanged, no restyle). But frame 1 vs frame 121 shows a clear head-angle/hairstyle change and what reads as a slight camera push-in (background scale/position shifted) -- does not fully honour 'camera locked' / 'ends at exact starting pose'. Not an identity failure worth a re-seed, but a real motion-fidelity gap to show Bailey alongside the clip."
+      }
+    },
+    "turn-left-and-back": {
+      "1": {
+        "wallSeconds": 496.0,
+        "frameCount": 121,
+        "webmKiB": 1400,
+        "webmCrf": 30,
+        "verdict": "REJECTED",
+        "note": "By frame 60 her heterochromia is gone -- both eyes read blue, the green eye is missing. The head also never reaches anything like the prompted 60-degree turn (a small yaw plus her mouth opening, as if starting to speak, not a turn). Fails the brief's own reject criterion ('her eye colours ... change'). Re-seeded once per the brief's rule (seed 101), queued -- result not confirmed complete when this report was written; see clips/turn-left-and-back/ if a later session finds it finished (D:/Tools/pyrefly-video/turn-left-and-back/101/)."
+      }
+    },
+    "smile": {
+      "1": {
+        "wallSeconds": 960.3,
+        "frameCount": 121,
+        "webmKiB": 1323,
+        "webmCrf": 30,
+        "verdict": "PASS",
+        "note": "Best result of the three reviewed: eye colours, hair, braid and outfit hold across the whole clip, and the background/framing is essentially locked frame-to-frame (much steadier than idle-breathing or turn-left). The plate's own expression already reads as a soft smile, so 'a smile grows' is a subtle rather than dramatic change -- worth watching at full frame rate, not just the 5-frame contact sheet, to judge whether the growth reads."
+      }
+    },
+    "hair-breeze": {
+      "1": {
+        "verdict": "IN PROGRESS",
+        "note": "Queued and running at the time this report was written (>1000s wall time, mostly queue wait behind other agents' jobs); not confirmed complete or reviewed."
+      }
+    }
+  },
+  "notRendered": [
+    "idle-blinks",
+    "look-up-and-back",
+    "turn-right-and-back",
+    "determined",
+    "hurt"
+  ],
+  "secondSeedsNotRendered": "every clip's seed-2 pass, and idle-breathing/smile/hair-breeze's own re-seed-if-rejected check, per the brief's '2 seeds each, reject-and-reseed-once' rule."
+}
