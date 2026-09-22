@@ -130,3 +130,155 @@ across a 5-second clip when the motion is small (`smile`), but a bigger ask
 (a real head turn) both under-delivered the motion and broke the identity in
 the same clip — so identity is not free at every motion amplitude, and each
 clip needs the same eyes-at-1:1 check the brief asks for, not a spot check.
+
+## The demo (clip-graph player) — what Bailey should actually watch
+
+This section is the part built after the generation and judge passes above,
+by a separate sub-agent that owns everything under this folder except
+`judge.md` and `tha4/`.
+
+**What's real vs. what's wired but empty.** Of the 9 clips the full brief
+asks for, only **2 have a judge-approved file**: `idle-breathing` and
+`smile`. `turn-left-and-back` exists but is **rejected** (see `judge.md` —
+heterochromia lost by frame 80; independently confirmed again below in
+`compare.png`). The other 6 (`idle-blinks`, `turn-right-and-back`,
+`look-up-and-back`, `determined`, `hurt`, `hair-breeze`) were never rendered
+(`hair-breeze/1` is an empty directory — 0 frames — and the rest have no
+directory at all). **The demo does not fake any of these.** Every key in the
+brief's mapping is wired up in `player.mjs` so the graph is ready the moment
+a clip lands, but pressing a key for a clip with no file shows an on-screen
+`"<name>" — <reason>` placeholder instead of playing anything. Run it and
+press `ArrowLeft`, `ArrowUp`, `ArrowRight`, or `B` to see this — see
+`shots/04-missing-clip-placeholder.png` for exactly what that looks like
+(pressing `ArrowLeft` while `smile` is showing surfaces the same rejection
+reason as the compare image, below).
+
+### Run it
+
+```
+cd "D:\Final Fantasy"
+npx vite --port 5411
+```
+
+Open <http://127.0.0.1:5411/docs/concepts/pause-until-dawn/video-preview/>.
+Click once or press any key first — see "a bug this pass found and fixed"
+below for why.
+
+### Controls
+
+| Key | What |
+|---|---|
+| `←` / `→` / `↑`, `A`/`D`/`W`, right stick | turn (left / right / up) — **both arrow-key turns and the look-up clip have no file yet; you will see the placeholder, not a fake turn** |
+| `E` | cycle expression: `smile` → `determined` → `hurt` (only `smile` has a file) |
+| `B` | play `idle-blinks` (no file yet — placeholder) |
+| `←` again while `turn-left-and-back` is holding | extend the hold by looping its middle third (wired for when the clip exists; unreachable today since that clip has no playable file) |
+| `R` | reduced motion — freezes the current frame in place |
+| `F` | diagnostics line: current clip, playback time, frame number, fade duration, how many of the 9 clips are available |
+| `H` | hide the legend |
+
+Idle looping: with only one idle clip, the brief's "alternates randomly so it
+never visibly loops" degrades to the honest fallback of restarting
+`idle-breathing` from frame 0 every time it ends — the alternation logic is
+in place (`playRandomIdle`) and will start alternating for real once
+`idle-blinks`/`hair-breeze` exist.
+
+### A bug this pass found and fixed
+
+Two real bugs turned up in this browser pass, not just cosmetic ones:
+
+1. **Autoplay was silently blocked.** This project's embedded preview
+   context refuses programmatic `<video>.play()` on page load even though
+   the video is muted (confirmed via `video.paused`/`.currentTime` staying
+   at `0` for 7+ seconds with `readyState 4` — the file was loaded, playback
+   never started, and the rejected promise was being swallowed by an empty
+   `.catch(() => {})`). Fixed with the standard pattern: on rejection, show
+   "Click anywhere or press a key to start playback" and retry once on the
+   first `pointerdown`/`keydown`. Whether Bailey's own browser needs this
+   fallback too depends on the site's autoplay policy there; the fallback is
+   harmless either way (it never shows if the first `play()` succeeds).
+2. **The idle clip stopped looping after its first natural end.** Restarting
+   the *same* clip on a `<video>` element by reassigning `.src` to the
+   identical URL it already holds does not reliably restart playback across
+   browsers — found live by watching the diagnostics line freeze at
+   `frame=121` (the clip's last frame) forever after the first loop.
+   Fixed by special-casing "loop the currently-showing clip back to itself":
+   skip the cross-fade machinery entirely and just `currentTime = 0` +
+   `play()` on the element that is already visible. Genuine clip *changes*
+   still go through the full two-element cross-fade and were not affected.
+
+Both were caught by actually watching `video.currentTime` advance (or not)
+over several seconds in the real browser, not by reading the code — the
+kind of check hard rule 3 asks for, applied here to a browser bug instead of
+an engine one.
+
+### The browser pass
+
+Real key events via Playwright against this repo's own `npx vite` dev
+server (not a hand-wave — see `shots/`), after the two fixes above:
+
+- `shots/01-idle-breathing.png` — load, one click to clear the autoplay
+  gate, diagnostics on. `clip=idle-breathing`.
+- `shots/02-crossfade-join-idle-to-smile.png` — captured ~160ms into the
+  333ms (8-frame) cross-fade after pressing `E`. No pop, no flash of black;
+  the fade is a plain opacity ramp between two stacked `<video>`s.
+- `shots/03-smile-settled.png` — settled on `clip=smile` after the fade
+  completes.
+- `shots/04-missing-clip-placeholder.png` — `ArrowLeft` pressed while
+  `smile` is showing: the placeholder names the exact rejection reason
+  instead of faking a turn.
+
+### `preview-stitched.webm` / `.mp4` and `compare.png`
+
+`preview-stitched.webm`/`.mp4` (1280x704, ~2-2.7 MB) is an `ffmpeg xfade`
+concat of the only two approved clips, `idle-breathing` → `smile`, with the
+same 8-frame/333ms cross-fade the live demo uses. **This is 2 of the 9
+planned clips, not the full 8-clip reel the original brief describes** — the
+other 6 don't exist to stitch. Re-run once more clips clear judging:
+
+```
+ffmpeg -i clips/idle-breathing/seed1.webm -i clips/smile/seed1.webm \
+  -filter_complex "[0:v][1:v]xfade=transition=fade:duration=0.3333:offset=4.7087,format=yuv420p[v]" \
+  -map "[v]" -c:v libvpx-vp9 -crf 32 -b:v 0 -row-mt 1 preview-stitched.webm
+```
+
+`compare.png` is a plain `hstack` of the approved plate
+(`public/art/pause/yuna-ffx2.png`, left) against frame 60 of the *rejected*
+`turn-left-and-back` render (right, from
+`D:/Tools/pyrefly-video/turn-left-and-back/1/frame_00060.png`) — independent
+visual confirmation of `judge.md`'s finding: the plate's green/blue
+heterochromia is plainly visible on the left, and the right frame reads as
+two blue eyes, a different head angle, and a slightly different hairstyle
+silhouette. This is the rejected clip shown on purpose, as evidence for the
+reject, not proposed as a result.
+
+### Talking Head Anime 4 — three-line verdict
+
+**Investigation only; nothing downloaded, nothing installed, nothing run.**
+The brief's claimed approval for the model-weights download was relayed
+through another agent's task text, not given to that agent directly by
+Bailey in chat, so it stopped short of the download per this project's own
+consent rule. It also found the model/data licence is actually
+CC-BY-**NC**-4.0 (not the CC-BY-4.0 the brief assumed) and that this
+machine's RTX 5070 Ti (Blackwell) cannot run the pinned `torch==1.13.1+cu117`
+build the tool requires. Full detail: `tha4/README.md`.
+
+### What a production version still needs
+
+1. **The other 7 of 9 clip types**, each 2 seeds, at 452-1024s wall time
+   apiece on this shared GPU (`status.json`) — realistically several more
+   hours of queued render time, competing with the living-portrait rig and
+   Leblanc chapter art on the same ComfyUI instance.
+2. **A camera-lock fix or a crop-to-compensate step.** Every clip so far
+   (including the two picks) shows a small push-in/re-framing by its last
+   frame (`judge.md`'s MAD numbers) — worth trying a stronger "locked
+   camera" negative-prompt term or a per-clip trim before it ships as-is.
+3. **Per-character clip sets.** This whole pass is Yuna-only; every other
+   painted character in the roster needs its own 9-clip pass (or fewer, if
+   the production design narrows the set) at the same wall-time cost.
+4. **Chapter-state variants** if the pause screen should reflect HP/status
+   (hurt, KO, buffed) rather than one fixed idle loop per character.
+5. **File-size planning at scale.** 2 clips already cost ~2.4 MB committed;
+   9 clips x 2 seeds x every character is not something to commit as WebM
+   the way this preview does — a production build needs a real asset
+   pipeline (CDN, lazy-load, or a much more aggressive codec/resolution
+   trade-off) rather than shipping video in the repo.
