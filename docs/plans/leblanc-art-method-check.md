@@ -171,3 +171,44 @@ goes to Bailey as a recommendation with its sheet.
 Budget: about 60 renders on the shared ComfyUI queue (D: 8 stage-1 + 16
 repaint passes; E: 8; F: 8; plus re-runs), one batch at a time, polling
 `/queue` between batches.
+
+## 6. Logos: method check before round 3 (2026-09-22, hard rule 15)
+
+FFX-2 only (Chapter 6 art; no shared tool changes). Logos has failed two
+passes: `920dac8` (independent judge `42311e2`: idle 5, attack 3, cast 2,
+hurt 3, ko 1) and the redo `2e5672d` (self-scored 5 to 7, never judged
+independently; at 1:1 the idle wears a dark wide-brimmed hat with the eyes in
+shadow, attack grows an unsourced studded pauldron, cast and hurt each draw a
+different helmet, ko drops the helmet). A third attempt needs a different
+method, not another re-roll. Why the two passes failed, checked against the
+sidecars and pixels:
+
+1. **The words were prose, not tags.** Every Logos prompt carried sentences
+   ("a plain black and silver helmet with a chin protector tied at the back
+   of his head with a purple strip, no helmet crest, no plume, no feathers").
+   On Animagine a sentence is read as loose tokens: "no plume, no feathers"
+   puts `plume` and `feathers` in the positive, which is where the crest came
+   from. Pilot 2 showed the words decide at a 0.35 to 0.4 reference.
+2. **The anchor drifted, so everything referenced off it drifted.** The redo
+   rendered idle off `logos-c.png` and then the other four off that idle; the
+   idle itself came out as a brimmed hat, so the four states had no single
+   helmet to copy.
+3. **The concept reference carried the crest.** `logos-c.png` has a feather
+   plume and a crest spike; at 0.35 the adapter kept showing both, fighting
+   the negatives. Bailey's own note on the pick: "re-rendered with a plainer,
+   canon helmet from C".
+4. **The reference was the tall cutout** (the adapter centre-crops to a
+   square and loses the head), the same finding as §2.2 for Leblanc.
+
+Round 3 method: pilot 2's winner F unchanged (Animagine XL 4.0, 28 steps,
+cfg 6, euler_ancestral/normal; the reference is a batch of a square figure
+and a square head crop, concat, 0.4, ease in, 0.2 to 0.6), with Logos's own
+words as Danbooru tags and no negated phrases in the positive
+(`docs/concepts/chapters/leblanc/sets/logos/round3/identity.txt`,
+`states.json`). Idle first, referenced off `logos-c.png` with the plume and
+crest painted out of the reference (`round3/make-refs.py concept`); the
+picked idle then becomes the only anchor for attack, cast, hurt and ko, and
+the identity words are rewritten from its pixels before those four run.
+Judged at 1:1 (head, torso and feet crops against idle), worst criterion,
+bar 7. If this fails the bar, the next step is to show Bailey the best of
+each state next to idle, not a fourth pass.

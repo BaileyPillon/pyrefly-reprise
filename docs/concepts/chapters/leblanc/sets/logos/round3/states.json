@@ -1,0 +1,118 @@
+{
+  "negCommon": "hat, brim, wide-brimmed hat, bowler hat, hood, crest, helmet crest, fin, plume, feathers, horns, antlers, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, cup, box, ribbon streamers, rainbow, bare chest, shirtless, no headwear, bare head, long hair, single gun, one gun, (helmet crest:1.3), (winged helmet:1.3), dark skin, tan, gold trim, yellow sash, cape, capelet",
+  "states": {
+    "idle": {
+      "poseTags": "standing, legs apart, holding revolver, arms down, gun pointed down, serious, closed mouth",
+      "emphasis": "(standing:1.1)",
+      "negAdd": "",
+      "size": [
+        832,
+        1216
+      ],
+      "refs": [
+        "concept-square.png",
+        "concept-head.png"
+      ],
+      "seeds": [
+        94101,
+        94102,
+        94103,
+        94104,
+        94105
+      ]
+    },
+    "attack": {
+      "identity": "identity-anchor.txt",
+      "emphasisFile": "emphasis-anchor.txt",
+      "refs": [
+        "idle-square.png",
+        "idle-head.png"
+      ],
+      "poseTags": "aiming, dual wielding, holding revolver, outstretched arms, arms forward, leaning forward, legs apart, one leg forward, serious, v-shaped eyebrows, closed mouth",
+      "emphasis": "(aiming:1.25), (outstretched arms:1.2), (leaning forward:1.15)",
+      "negAdd": "arm behind back, hidden arm, arms down, smile, smirk, standing still",
+      "size": [
+        1024,
+        1216
+      ],
+      "seeds": [
+        94201,
+        94202,
+        94203,
+        94204,
+        94205
+      ]
+    },
+    "cast": {
+      "identity": "identity-anchor.txt",
+      "emphasisFile": "emphasis-anchor.txt",
+      "refs": [
+        "idle-square.png",
+        "idle-head.png"
+      ],
+      "poseTags": "standing, arm up, holding revolver, gun pointed up, revolver beside face, other hand holding revolver at side, dual wielding, smirk, closed mouth",
+      "emphasis": "(arm up:1.2), (gun pointed up:1.2), (smirk:1.1)",
+      "negAdd": "gun to head, pointing gun at self, aiming at self, arms down, both arms down",
+      "size": [
+        832,
+        1216
+      ],
+      "seeds": [
+        94301,
+        94302,
+        94303,
+        94304,
+        94305
+      ]
+    },
+    "hurt": {
+      "identity": "identity-anchor.txt",
+      "emphasisFile": "emphasis-anchor.txt",
+      "refs": [
+        "idle-square.png",
+        "idle-head.png"
+      ],
+      "poseTags": "leaning back, off balance, head back, wince, pained expression, clenched teeth, v-shaped eyebrows, arms spread, dual wielding, holding revolver",
+      "emphasis": "(leaning back:1.25), (pained expression:1.2), (clenched teeth:1.1)",
+      "negAdd": "smile, smirk, calm, neutral expression, standing still, looking at viewer",
+      "size": [
+        832,
+        1216
+      ],
+      "seeds": [
+        94401,
+        94402,
+        94403,
+        94404,
+        94405
+      ]
+    },
+    "ko": {
+      "identity": "identity-anchor.txt",
+      "emphasisFile": "emphasis-anchor-ko.txt",
+      "refs": [
+        "idle-square.png",
+        "idle-head.png"
+      ],
+      "prone": true,
+      "identityDrop": [
+        "dual wielding",
+        "holding gun"
+      ],
+      "poseTags": "lying, on back, defeated, unconscious, closed eyes, arms spread, revolver on ground, dropped weapon, gun on ground, two guns, wearing helmet",
+      "emphasis": "(gun on ground:1.3), (wearing helmet:1.25), (lying:1.1)",
+      "negAdd": "holding gun, standing, sitting, no helmet, helmet removed, blood",
+      "size": [
+        1216,
+        832
+      ],
+      "seeds": [
+        94501,
+        94502,
+        94503,
+        94504,
+        94505
+      ]
+    }
+  }
+}

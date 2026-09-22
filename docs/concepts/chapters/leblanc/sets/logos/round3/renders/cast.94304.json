@@ -1,0 +1,50 @@
+{
+  "tag": "cast.94304",
+  "method": "F (pilot 2 winner), Logos words",
+  "state": "cast",
+  "seed": 94304,
+  "positive": "1boy, logos \\(ff10-2\\), final fantasy x-2, safe, solo, male focus, tall, slim, pale skin, black hair, short hair, silver helmet, visor, chin guard, blue kimono, light blue robe, long coat, wide sleeves, black collar, emblem, shoulder strap, purple sash, grey hakama, ankle wraps, white bandages, black sandals, dual wielding, revolver, holding gun, silver gun, standing, arm up, holding revolver, gun pointed up, revolver beside face, other hand holding revolver at side, dual wielding, smirk, closed mouth, (arm up:1.2), (gun pointed up:1.2), (smirk:1.1), (silver helmet:1.2), (dual wielding:1.2), (light blue robe:1.1), (purple sash:1.1), (pale skin:1.1), (from side:1.3), three-quarter view, body facing left, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, hat, brim, wide-brimmed hat, bowler hat, hood, crest, helmet crest, fin, plume, feathers, horns, antlers, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, cup, box, ribbon streamers, rainbow, bare chest, shirtless, no headwear, bare head, long hair, single gun, one gun, (helmet crest:1.3), (winged helmet:1.3), dark skin, tan, gold trim, yellow sash, cape, capelet, gun to head, pointing gun at self, aiming at self, arms down, both arms down",
+  "width": 832,
+  "height": 1216,
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "ref": {
+    "images": [
+      "refs/idle-square.png",
+      "refs/idle-head.png"
+    ],
+    "weight": 0.4,
+    "start": 0.2,
+    "end": 0.6,
+    "type": "ease in",
+    "combine": "concat",
+    "scaling": "K+V",
+    "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors"
+  },
+  "cutout": {
+    "width": 624,
+    "height": 1055,
+    "baselineY": 1039,
+    "cropBox": [
+      80,
+      150,
+      704,
+      1205
+    ],
+    "contentBox": [
+      96,
+      166,
+      688,
+      1189
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "seconds": 37,
+  "generatedAt": "2026-09-22T18:52:56.056Z"
+}

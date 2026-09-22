@@ -2661,65 +2661,139 @@
       "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
-      "negAdd": "sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms, helmet crest, spiked crest, winged crest, back-swept fin, blade decoration, fin decoration, decorative fin, wing decoration, samurai crest, kabuto crest, maedate, helmet ornament, bare chest, open chest, exposed chest, shirtless, ribbon streamers, rainbow ribbon, colorful streamers",
-      "tags": "1boy, logos (ff10-2), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns",
-      "emphasis": "(two revolvers:1.3), (holding guns:1.2), (plain helmet:1.4)",
+      "negAdd": "hat, brim, wide-brimmed hat, bowler hat, hood, crest, helmet crest, fin, plume, feathers, horns, antlers, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, cup, box, ribbon streamers, rainbow, bare chest, shirtless, no headwear, bare head, long hair, single gun, one gun, (helmet crest:1.3), (winged helmet:1.3), dark skin, tan, gold trim, yellow sash, cape, capelet",
+      "tags": "1boy, logos (ff10-2), final fantasy x-2, safe, solo, male focus, tall, slim, pale skin, black hair, short hair, silver helmet, visor, chin guard, blue kimono, light blue robe, long coat, wide sleeves, black collar, emblem, shoulder strap, purple sash, grey hakama, ankle wraps, white bandages, black sandals, dual wielding, revolver, holding gun, silver gun",
+      "emphasis": "(silver helmet:1.2), (dual wielding:1.2), (light blue robe:1.1), (purple sash:1.1), (pale skin:1.1)",
       "_sourcingFix2026_09_22": "Dropped 'heart' from the shoulder-logo tag this round: research/ffx2-leblanc-syndicate.md §10.1 gives Logos 'the Syndicate logo on both shoulders' with no shape specified — the heart shape belongs to Leblanc's chest mark only. Flagged by the independent judge pass (commit 42311e2) as a sourcing note under hard rule 6; no installed render had actually drawn a heart there, so nothing was disqualified for it, but the prompt text was wrong and is fixed here.",
       "states": {
         "idle": {
-          "poseTags": "standing, side-on duelist stance, both revolvers held low, cool composed expression",
-          "ref": "docs/concepts/chapters/leblanc/renders/logos-c.png",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 93103,
-          "notes": "REDO 2026-09-22 (seed 93103, best of 6, seeds 93101-93106; 93105 rejected by the cut-out coverage guard), answering the independent judge's pass (commit 42311e2, score 5/10, worst criterion 'marks'): a clear dark spiked/winged crest remnant survived the previous round (920dac8) despite negAdd/tags already saying 'no crest'. This round tightened negAdd with explicit crest-shape tokens (spiked/winged/fin/blade-shaped decoration, samurai/kabuto crest, maedate) and shortened emphasis to a single short 'plain helmet' token — deliberately short, one to three words, per docs/ART-PIPELINE.md's own emphasis guidance; a longer descriptive phrase in emphasis (tried and reverted, see docs/handoff/fix-ffx2-logos-render.md 'REDO 2026-09-22' section) pushed the combined prompt across a length boundary that corrupted the whole positive prompt into a blank render. The crest is gone in all 5 non-rejected candidates this round. Trade made to get there: the winning candidate's headwear reads as a wide-brimmed hat with a rolled brim rather than a fitted helmet with a visible chin strap — a softer helmet-TYPE match than before, but no candidate in the batch that kept the strict helmet silhouette (idle.6 in the candidate set, closest single-piece helmet shape) also kept both revolvers visible, and weapon was not this state's failing criterion. Also not attempted twice: refWeight was tried at 0.42 (one step up, per this round's brief) against the near-monochrome logos-c.png forceRef anchor and burned the whole image to a blank near-uniform frame (docs/ART-PIPELINE.md §3's documented risk) — reverted to the pilot's proven 0.35 for every state this round, see the redo handoff for the full repro."
+          "poseTags": "standing, legs apart, holding revolver, arms down, gun pointed down, serious, closed mouth",
+          "emphasis": "(standing:1.1)",
+          "refs": [
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/concept-square.png",
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/concept-head.png"
+          ],
+          "seed": 94103,
+          "picked": "renders/idle.94103cr911.png",
+          "notes": "CANDIDATE. Best of 5 (94101-94105): the only one with both revolvers low in both hands, the research stance. It drew a winged fin on the helmet; masked repaints at 0.6 and 0.75 redrew the fin, so the fin pixels were filled (white above the dome, dome grey inside it) and a masked repaint at 0.5 (box 425,40,115,88, seed 94911) redrew a smooth dome. Own read, worst criterion 6: the far hand is tan against the pale near hand; no purple tie strip at the back of the helmet (research 10.1 asks for one; not visible from this side). Robe lighter blue than the concept."
         },
         "attack": {
-          "poseTags": "aiming and firing both revolvers forward, both arms extended forward, both hands and both guns visible in front of his body, muzzle flash, quick decisive lunge, leaning forward, looking at viewer",
-          "ref": "logos/idle",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 93201,
-          "notes": "REDO 2026-09-22 (seed 93201, best of 6) off the new idle, answering the judge's score 3/10 (worst criterion 'weapon': only one hand/revolver visible in frame). poseTags now spells out 'both hands and both guns visible in front of his body' explicitly and negAdd adds 'one hand, single revolver, one revolver, hidden arm, arm behind back, arm out of frame'. The winning candidate shows both hands and both revolvers clearly, one firing with a muzzle flash, and no crest. New, not previously disclosed drift: a silver studded shoulder pauldron/armour plate appears that is not in the research or tags — not re-rolled again this round (pace rule, AGENTS.md hard rule 15)."
+          "poseTags": "aiming, dual wielding, holding revolver, outstretched arms, arms forward, leaning forward, legs apart, one leg forward, serious, v-shaped eyebrows, closed mouth",
+          "sizeHint": "1024x1216",
+          "emphasis": "(aiming:1.25), (outstretched arms:1.2), (leaning forward:1.15)",
+          "negAdd": "arm behind back, hidden arm, arms down, smile, smirk, standing still",
+          "refs": [
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-head.png"
+          ],
+          "seed": 94202,
+          "flipped": true,
+          "scale": 0.62,
+          "picked": "renders/attack.94202.png",
+          "notes": "CANDIDATE. Best of 5 (94201-94205): both revolvers aimed forward in a lunge (Double Shot), costume closest to idle. Rendered facing right, mirrored with flip.py (Logos is not chiral: logo on both shoulders, a revolver in each hand). Sidecar scale 0.62: the head paints about 230 px against idle 145. Own read, worst criterion 6: helmet is a ribbed visor dome, same type as idle but not the same surface; a black shoulder strap clasp with a claw edge; an invented charm chain at the hip. Rejected: 94203/94204 helmet antennae, 94205 three guns, 94201 darker robe and open chest with a swept-back helmet."
         },
         "cast": {
-          "poseTags": "standing in his side-on duelist stance, still wearing his helmet, spinning the cylinder of one revolver held up beside his masked face, other hand holding the second revolver low, dramatic, looking at viewer",
-          "ref": "logos/idle",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 93301,
-          "notes": "REDO 2026-09-22 (seed 93301, best of 4 usable of 6; two rejected by the cut-out coverage guard). Treated as broken from scratch per the judge's score 2/10 ('the helmet is completely absent — no metal, chin protector or purple tie-strip anywhere, only loose flowing hair'). Rewrote poseTags to say explicitly 'still wearing his helmet' and added '(wearing his helmet:1.45), (black and silver helmet:1.3)' to emphasis; negAdd gained 'bare head, no helmet, hatless, bald, hood down, long loose hair'. The helmet is now clearly worn and visible in the winning candidate (confirmed at native pixel size) — the specific defect the judge called 'the most severe finding' is fixed. Remaining gap, not re-rolled again this round: only one revolver is clearly visible (the other hand is tucked out of frame near the waist) — of the 4 usable candidates, none combined a fully-worn helmet with two visible revolvers, and the helmet was the state's named worst criterion, so it was prioritised. Self-scored worst criterion (weapon) ~5/10 by this round's own honest re-read of the same 7-criteria rubric — still under the 7 bar; installed as best available per this round's brief, not re-rolled a third time (pace rule). Wants an independent judge pass, not self-certified."
+          "poseTags": "standing, arm up, holding revolver, gun pointed up, revolver beside face, other hand holding revolver at side, dual wielding, smirk, closed mouth",
+          "emphasis": "(arm up:1.2), (gun pointed up:1.2), (smirk:1.1)",
+          "negAdd": "gun to head, pointing gun at self, aiming at self, arms down, both arms down",
+          "refs": [
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-head.png"
+          ],
+          "seed": 94302,
+          "picked": "renders/cast.94302.png",
+          "notes": "CANDIDATE. Best of 5 (94301-94305): one revolver raised beside the face barrel up, the second low in the other hand, smirk (Russian Roulette beat, research 10.1). Own read, worst criterion 5: the helmet has a slotted visor that idle does not. Rejected: 94301/94304 facing right with a different helmet, 94303 a topknot plume, 94305 an invented orb pauldron."
         },
         "hurt": {
-          "poseTags": "still wearing his helmet, recoiling backward in pain, staggering off balance, both revolvers still gripped in both hands, gritted teeth, weight thrown backward",
-          "ref": "logos/idle",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 93503,
-          "notes": "REDO 2026-09-22 (seed 93503, second batch of 4 after the first batch of 6 — seeds 93401-93406 — all nailed the pained/recoiling pose but dropped the helmet entirely, a new drift not in the judge's own notes). Answers the judge's score 3/10 (pose/hair/weapon tied worst): poseTags now leads with 'still wearing his helmet' and 'recoiling backward in pain, staggering off balance', emphasis adds '(wearing his helmet:1.4), (staggering backward in pain:1.35)', negAdd adds 'dark brown hair, black hair' (the judge's hair finding: hurt's hair had drifted to dark brown against idle's own colouring) plus the existing rainbow-ribbon and bare-head tokens. The installed candidate shows the helmet worn and visible, a strongly pained open-mouthed/head-thrown-back read, hair colour close to idle's own, and both revolvers visible in both hands. This is the strongest result of the five re-rendered states this round."
+          "poseTags": "leaning back, off balance, head back, wince, pained expression, clenched teeth, v-shaped eyebrows, arms spread, dual wielding, holding revolver",
+          "emphasis": "(leaning back:1.25), (pained expression:1.2), (clenched teeth:1.1)",
+          "negAdd": "smile, smirk, calm, neutral expression, standing still, looking at viewer",
+          "refs": [
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-head.png"
+          ],
+          "seed": 94402,
+          "picked": "renders/hurt.94402.png",
+          "notes": "CANDIDATE. Best of 5 (94401-94405): thrown back away from the party, clenched teeth, both revolvers in hand, idle's ankle wraps and sandals. Own read, worst criterion 6: the chest emblem is gold where idle's is white. Rejected: 94401 silver pauldron, 94403 one gun, 94404 weak pose, 94405 recoils toward the party."
         },
         "ko": {
-          "poseTags": "lying on his back on the ground, defeated, eyes closed, both revolvers dropped on the ground clearly visible next to his open hands, one arm outstretched near a fallen revolver",
+          "poseTags": "lying, on back, defeated, unconscious, closed eyes, arms spread, revolver on ground, dropped weapon, gun on ground, two guns, wearing helmet",
           "composition": "prone",
           "sizeHint": "1216x832",
-          "ref": "logos/idle",
-          "forceRef": true,
-          "refWeight": 0.35,
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 93601,
-          "notes": "REDO 2026-09-22 (seed 93601, best of 6). Answers the judge's score 1/10, the second-most severe finding this round ('no revolvers anywhere in frame — not held, not dropped, not partially visible'): poseTags now spells out 'both revolvers dropped on the ground clearly visible next to his open hands' and emphasis leads with '(two revolvers dropped beside him:1.4)'. The installed candidate shows two revolvers clearly dropped on the ground beside his hands, a convincing face-down defeated read with eyes closed, and the shoulder Syndicate-logo emblem legible. New, disclosed trade: the helmet is not visible at all in this candidate (plausibly knocked off in the fall, the same kind of dropped-equipment beat Ormi's own ko state uses for his shield, but not something the pose tags asked for) — self-scored worst criterion (marks, for the missing helmet) ~6/10 by this round's own honest re-read, short of the 7 bar; installed as best available per this round's brief. Wants an independent judge pass, not self-certified."
+          "emphasis": "(gun on ground:1.3), (wearing helmet:1.25), (lying:1.1)",
+          "negAdd": "holding gun, standing, sitting, no helmet, helmet removed, blood",
+          "refs": [
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/logos/round3/refs/idle-head.png"
+          ],
+          "seed": 94505,
+          "scale": 0.7,
+          "picked": "renders/ko.94505c.png",
+          "notes": "CANDIDATE, below bar. Best of 6 (94501-94506): head toward the party, eyes shut, two revolvers on the floor, helmet still on but pushed to the back of the head. A detached floor shard was filled white before the cutout (renders/ko.94505c). Own read, worst criterion 4: brown leather strap (idle black), black-striped ankle wraps (idle white), the second revolver is drawn double-barrelled. A masked repaint to turn the strap black (0.5, 2 seeds) kept it brown and changed the emblem; discarded. Rejected: 94501 helmet off, 94502/94506 grille visor, 94506 three guns and shoes, 94503 a bare foot growing out of the sleeve, 94504 face-frame armour."
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). REDO 2026-09-22, third pass on this row, answering the independent judge's second pass (commit 42311e2: all five states score under the 7 bar, worst criterion first — idle 5 marks, attack 3 weapon, cast 2 marks, hurt 3 pose/hair/weapon, ko 1 weapon). All five states re-rendered again (6 candidates each, except cast/ko where the cut-out guard rejected 1-2 and hurt which needed a second 4-candidate batch after the first batch fixed the pose but dropped the helmet) off the same forceRef recipe (idle off the picked concept logos-c.png, the other four off the new idle), refWeight held at the pilot's proven 0.35 rather than raised a step as this round's brief first suggested — raising it to 0.42 against this near-monochrome forceRef anchor burned every render to a blank frame (repro and root cause in docs/handoff/fix-ffx2-logos-render.md's 'REDO 2026-09-22' section), which is a documented risk of this exact recipe (docs/ART-PIPELINE.md §3), not a GPU/queue fault. Every state's poseTags and negAdd were rewritten with an explicit trigger for that state's own worst-judged criterion (both-revolvers-visible for attack/hurt/ko, helmet-worn for cast, crest-shape tokens for idle) per this round's brief, and emphasis was rewritten to short (1-3 word) phrases with no internal commas — a longer comma-containing emphasis phrase was found this round to corrupt the whole prompt into a blank render (same root cause as the refWeight finding, both written up in the handoff). Also fixed a small sourcing error the judge flagged: the shared 'tags' string no longer calls the shoulder emblem a 'heart' logo (research never says so for Logos; that shape is Leblanc's chest mark only). Results, self-scored by this round's own honest re-read of the same 7-criteria rubric (not an independent pass): idle and hurt read as clearing the 7 bar; attack is close (worst ~6-7, an unsourced shoulder pauldron now the main drift); cast and ko are the two 'best available, below bar' installs the brief explicitly allows — cast fixes the helmet-absent defect (its worst-judged criterion) but still shows only one revolver clearly; ko fixes the zero-revolvers defect (its worst-judged criterion) but drops the helmet entirely (a new, disclosed trade, not previously flagged). None of this is self-certified as passing; an independent judge pass (a different agent, per this project's own practice) is still wanted before any of it goes to docs/target/approved-hashes.json. Veto sheet rebuilt: docs/concepts/chapters/leblanc/sets/logos/sheet.png. Candidates and the rejected batch backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-21-leblanc/logos-redo2/. NOT added to docs/target/approved-hashes.json — still a candidate for Bailey, not an approved delivery."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md 10.1). FFX-2 only. ROUND 3, 2026-09-22 (method check: docs/plans/leblanc-art-method-check.md section 6). All five states re-rendered with pilot 2 method F and Danbooru words; idle referenced off Bailey's pick logos-c.png with the plume painted out of the reference, the other four off the new idle. One helmet design now: a silver dome with a front visor, no crest, no plume, worn in every state. Every install is a CANDIDATE; nothing is in docs/target/approved-hashes.json. Own read (not independent), worst criterion, bar 7: idle 6, attack 6, cast 5, hurt 6, ko 4, so nothing clears 7; an independent judge pass is owed. Sheet: docs/concepts/chapters/leblanc/sets/logos/round3/sheet.jpg; notes: docs/concepts/chapters/leblanc/sets/logos/round3/round3.md; backup: D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/logos/ (pre-round3-installed, round3). Previous rounds: 920dac8, 2e5672d (judge 42311e2).",
+      "method": "ROUND 3 (2026-09-22): pilot 2 method F (docs/concepts/chapters/leblanc/pilot2/judge.md) run by docs/concepts/chapters/leblanc/sets/logos/round3/run-round3.mjs, not by comfy.mjs: the IP-Adapter reference is a batch of two squares (whole figure + head crop), concat, 0.4, ease in, 0.2-0.6, which comfy.mjs --ref cannot express. Per-state words: docs/concepts/chapters/leblanc/sets/logos/round3/states.json; idle words: identity.txt + emphasis.txt; the other four: identity-anchor.txt + emphasis-anchor.txt (rewritten from the installed idle).",
+      "_round2": {
+        "tags": "1boy, logos (ff10-2), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns",
+        "emphasis": "(two revolvers:1.3), (holding guns:1.2), (plain helmet:1.4)",
+        "negAdd": "sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms, helmet crest, spiked crest, winged crest, back-swept fin, blade decoration, fin decoration, decorative fin, wing decoration, samurai crest, kabuto crest, maedate, helmet ornament, bare chest, open chest, exposed chest, shirtless, ribbon streamers, rainbow ribbon, colorful streamers",
+        "states": {
+          "idle": {
+            "poseTags": "standing, side-on duelist stance, both revolvers held low, cool composed expression",
+            "ref": "docs/concepts/chapters/leblanc/renders/logos-c.png",
+            "forceRef": true,
+            "refWeight": 0.35,
+            "refStart": 0.2,
+            "refEnd": 0.6,
+            "seed": 93103,
+            "notes": "REDO 2026-09-22 (seed 93103, best of 6, seeds 93101-93106; 93105 rejected by the cut-out coverage guard), answering the independent judge's pass (commit 42311e2, score 5/10, worst criterion 'marks'): a clear dark spiked/winged crest remnant survived the previous round (920dac8) despite negAdd/tags already saying 'no crest'. This round tightened negAdd with explicit crest-shape tokens (spiked/winged/fin/blade-shaped decoration, samurai/kabuto crest, maedate) and shortened emphasis to a single short 'plain helmet' token — deliberately short, one to three words, per docs/ART-PIPELINE.md's own emphasis guidance; a longer descriptive phrase in emphasis (tried and reverted, see docs/handoff/fix-ffx2-logos-render.md 'REDO 2026-09-22' section) pushed the combined prompt across a length boundary that corrupted the whole positive prompt into a blank render. The crest is gone in all 5 non-rejected candidates this round. Trade made to get there: the winning candidate's headwear reads as a wide-brimmed hat with a rolled brim rather than a fitted helmet with a visible chin strap — a softer helmet-TYPE match than before, but no candidate in the batch that kept the strict helmet silhouette (idle.6 in the candidate set, closest single-piece helmet shape) also kept both revolvers visible, and weapon was not this state's failing criterion. Also not attempted twice: refWeight was tried at 0.42 (one step up, per this round's brief) against the near-monochrome logos-c.png forceRef anchor and burned the whole image to a blank near-uniform frame (docs/ART-PIPELINE.md §3's documented risk) — reverted to the pilot's proven 0.35 for every state this round, see the redo handoff for the full repro."
+          },
+          "attack": {
+            "poseTags": "aiming and firing both revolvers forward, both arms extended forward, both hands and both guns visible in front of his body, muzzle flash, quick decisive lunge, leaning forward, looking at viewer",
+            "ref": "logos/idle",
+            "forceRef": true,
+            "refWeight": 0.35,
+            "refStart": 0.2,
+            "refEnd": 0.6,
+            "seed": 93201,
+            "notes": "REDO 2026-09-22 (seed 93201, best of 6) off the new idle, answering the judge's score 3/10 (worst criterion 'weapon': only one hand/revolver visible in frame). poseTags now spells out 'both hands and both guns visible in front of his body' explicitly and negAdd adds 'one hand, single revolver, one revolver, hidden arm, arm behind back, arm out of frame'. The winning candidate shows both hands and both revolvers clearly, one firing with a muzzle flash, and no crest. New, not previously disclosed drift: a silver studded shoulder pauldron/armour plate appears that is not in the research or tags — not re-rolled again this round (pace rule, AGENTS.md hard rule 15)."
+          },
+          "cast": {
+            "poseTags": "standing in his side-on duelist stance, still wearing his helmet, spinning the cylinder of one revolver held up beside his masked face, other hand holding the second revolver low, dramatic, looking at viewer",
+            "ref": "logos/idle",
+            "forceRef": true,
+            "refWeight": 0.35,
+            "refStart": 0.2,
+            "refEnd": 0.6,
+            "seed": 93301,
+            "notes": "REDO 2026-09-22 (seed 93301, best of 4 usable of 6; two rejected by the cut-out coverage guard). Treated as broken from scratch per the judge's score 2/10 ('the helmet is completely absent — no metal, chin protector or purple tie-strip anywhere, only loose flowing hair'). Rewrote poseTags to say explicitly 'still wearing his helmet' and added '(wearing his helmet:1.45), (black and silver helmet:1.3)' to emphasis; negAdd gained 'bare head, no helmet, hatless, bald, hood down, long loose hair'. The helmet is now clearly worn and visible in the winning candidate (confirmed at native pixel size) — the specific defect the judge called 'the most severe finding' is fixed. Remaining gap, not re-rolled again this round: only one revolver is clearly visible (the other hand is tucked out of frame near the waist) — of the 4 usable candidates, none combined a fully-worn helmet with two visible revolvers, and the helmet was the state's named worst criterion, so it was prioritised. Self-scored worst criterion (weapon) ~5/10 by this round's own honest re-read of the same 7-criteria rubric — still under the 7 bar; installed as best available per this round's brief, not re-rolled a third time (pace rule). Wants an independent judge pass, not self-certified."
+          },
+          "hurt": {
+            "poseTags": "still wearing his helmet, recoiling backward in pain, staggering off balance, both revolvers still gripped in both hands, gritted teeth, weight thrown backward",
+            "ref": "logos/idle",
+            "forceRef": true,
+            "refWeight": 0.35,
+            "refStart": 0.2,
+            "refEnd": 0.6,
+            "seed": 93503,
+            "notes": "REDO 2026-09-22 (seed 93503, second batch of 4 after the first batch of 6 — seeds 93401-93406 — all nailed the pained/recoiling pose but dropped the helmet entirely, a new drift not in the judge's own notes). Answers the judge's score 3/10 (pose/hair/weapon tied worst): poseTags now leads with 'still wearing his helmet' and 'recoiling backward in pain, staggering off balance', emphasis adds '(wearing his helmet:1.4), (staggering backward in pain:1.35)', negAdd adds 'dark brown hair, black hair' (the judge's hair finding: hurt's hair had drifted to dark brown against idle's own colouring) plus the existing rainbow-ribbon and bare-head tokens. The installed candidate shows the helmet worn and visible, a strongly pained open-mouthed/head-thrown-back read, hair colour close to idle's own, and both revolvers visible in both hands. This is the strongest result of the five re-rendered states this round."
+          },
+          "ko": {
+            "poseTags": "lying on his back on the ground, defeated, eyes closed, both revolvers dropped on the ground clearly visible next to his open hands, one arm outstretched near a fallen revolver",
+            "composition": "prone",
+            "sizeHint": "1216x832",
+            "ref": "logos/idle",
+            "forceRef": true,
+            "refWeight": 0.35,
+            "refStart": 0.2,
+            "refEnd": 0.6,
+            "seed": 93601,
+            "notes": "REDO 2026-09-22 (seed 93601, best of 6). Answers the judge's score 1/10, the second-most severe finding this round ('no revolvers anywhere in frame — not held, not dropped, not partially visible'): poseTags now spells out 'both revolvers dropped on the ground clearly visible next to his open hands' and emphasis leads with '(two revolvers dropped beside him:1.4)'. The installed candidate shows two revolvers clearly dropped on the ground beside his hands, a convincing face-down defeated read with eyes closed, and the shoulder Syndicate-logo emblem legible. New, disclosed trade: the helmet is not visible at all in this candidate (plausibly knocked off in the fall, the same kind of dropped-equipment beat Ormi's own ko state uses for his shield, but not something the pose tags asked for) — self-scored worst criterion (marks, for the missing helmet) ~6/10 by this round's own honest re-read, short of the 7 bar; installed as best available per this round's brief. Wants an independent judge pass, not self-certified."
+          }
+        },
+        "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). REDO 2026-09-22, third pass on this row, answering the independent judge's second pass (commit 42311e2: all five states score under the 7 bar, worst criterion first — idle 5 marks, attack 3 weapon, cast 2 marks, hurt 3 pose/hair/weapon, ko 1 weapon). All five states re-rendered again (6 candidates each, except cast/ko where the cut-out guard rejected 1-2 and hurt which needed a second 4-candidate batch after the first batch fixed the pose but dropped the helmet) off the same forceRef recipe (idle off the picked concept logos-c.png, the other four off the new idle), refWeight held at the pilot's proven 0.35 rather than raised a step as this round's brief first suggested — raising it to 0.42 against this near-monochrome forceRef anchor burned every render to a blank frame (repro and root cause in docs/handoff/fix-ffx2-logos-render.md's 'REDO 2026-09-22' section), which is a documented risk of this exact recipe (docs/ART-PIPELINE.md §3), not a GPU/queue fault. Every state's poseTags and negAdd were rewritten with an explicit trigger for that state's own worst-judged criterion (both-revolvers-visible for attack/hurt/ko, helmet-worn for cast, crest-shape tokens for idle) per this round's brief, and emphasis was rewritten to short (1-3 word) phrases with no internal commas — a longer comma-containing emphasis phrase was found this round to corrupt the whole prompt into a blank render (same root cause as the refWeight finding, both written up in the handoff). Also fixed a small sourcing error the judge flagged: the shared 'tags' string no longer calls the shoulder emblem a 'heart' logo (research never says so for Logos; that shape is Leblanc's chest mark only). Results, self-scored by this round's own honest re-read of the same 7-criteria rubric (not an independent pass): idle and hurt read as clearing the 7 bar; attack is close (worst ~6-7, an unsourced shoulder pauldron now the main drift); cast and ko are the two 'best available, below bar' installs the brief explicitly allows — cast fixes the helmet-absent defect (its worst-judged criterion) but still shows only one revolver clearly; ko fixes the zero-revolvers defect (its worst-judged criterion) but drops the helmet entirely (a new, disclosed trade, not previously flagged). None of this is self-certified as passing; an independent judge pass (a different agent, per this project's own practice) is still wanted before any of it goes to docs/target/approved-hashes.json. Veto sheet rebuilt: docs/concepts/chapters/leblanc/sets/logos/sheet.png. Candidates and the rejected batch backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-21-leblanc/logos-redo2/. NOT added to docs/target/approved-hashes.json — still a candidate for Bailey, not an approved delivery."
+      }
     }
   ]
 }

@@ -1,0 +1,4 @@
+# Logos round 3: raw frames stay local (backed up to D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/logos/).
+renders/*.raw.png
+renders/*.mask.png
+renders/*.log
