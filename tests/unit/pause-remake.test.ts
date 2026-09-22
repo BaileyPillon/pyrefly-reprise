@@ -31,7 +31,7 @@
  */
 
 import { PerspectiveCamera } from 'three';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -66,9 +66,28 @@ import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { resetCoach, setOnboardingLive } from '../../src/ui/coach/coachState.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = join(HERE, '..', '..');
 const OPTIONS_JSON = JSON.parse(
   readFileSync(join(HERE, '..', '..', 'docs', 'concepts', 'pause-until-dawn', 'options.json'), 'utf8'),
 ) as { preservedFunctions: { was: string; nowLives: string }[] };
+
+/**
+ * Every path an `<img>` in the CHAPTER tab's snapshot strip actually requests
+ * resolves to a real file under `public/`. PR-0077: `snapsHtml` once passed
+ * the raw `chapter-meta.ts` snapshot value (`'backdrops/gagazet.png'`) to
+ * `artUrl` directly, which produced `/backdrops/gagazet.png` — missing the
+ * `art/` segment every other `artUrl` call site adds — and the live build
+ * logged three 404s per chapter, fifteen across the five shipped chapters.
+ */
+function assertSnapImagesResolve(root: ParentNode): void {
+  const imgs = root.querySelectorAll('.pause__snap img');
+  expect(imgs.length).toBeGreaterThan(0);
+  for (const img of Array.from(imgs)) {
+    const src = img.getAttribute('src')!;
+    const onDisk = join(REPO_ROOT, 'public', src.replace(/^\/+/, ''));
+    expect(existsSync(onDisk), `${src} does not resolve under public/`).toBe(true);
+  }
+}
 
 // ------------------------------------------------------------------ harness
 
@@ -522,6 +541,22 @@ describe('every function of the old pause screen is still reachable', () => {
     expect(h.root.querySelector('.pause__quote-text')!.textContent!.length).toBeGreaterThan(10);
     expect(h.root.querySelector('.pause__hand')!.textContent!.length).toBeGreaterThan(2);
     expect(h.root.querySelectorAll('.pause__snap')).toHaveLength(3);
+    assertSnapImagesResolve(h.root);
+  });
+
+  it('PR-0077. every CHAPTER tab snapshot resolves under public/art in all five shipped chapters', () => {
+    for (const chapterId of [
+      'seymour-flux',
+      'yunalesca',
+      'braskas-final-aeon',
+      'ffx2-bahamut',
+      'ffx2-vegnagun-shuyin',
+    ]) {
+      const h = mount(chapterId);
+      h.screen.trigger('pause:tab:chapter');
+      expect(h.root.querySelectorAll('.pause__snap'), chapterId).toHaveLength(3);
+      assertSnapImagesResolve(h.root);
+    }
   });
 
   it('11. the PARTY tab — dissolved into per-member tabs, with gear on CHAPTER', () => {

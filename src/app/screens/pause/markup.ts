@@ -127,7 +127,7 @@ function snapsHtml(snaps: readonly { image: string; caption: string }[]): string
       .map(
         (s) =>
           `<figure class="pause__snap"><img alt="" loading="lazy" src="${escapeHtml(
-            artUrl(s.image),
+            artUrl(`art/${s.image}`),
           )}"><figcaption>${escapeHtml(s.caption)}</figcaption></figure>`,
       )
       .join('') +
