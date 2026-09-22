@@ -1,83 +1,137 @@
 #!/usr/bin/env python
 """Join-report helper for tools/gen/video-flf.mjs.
 
-Computes numpy mean-absolute-difference (MAD, 0-255 per-channel-average)
-between the staged plate and a clip's first and last rendered frames, both
-full-frame and over a fixed face box, and writes the numbers to JSON.
+Round 3 rewrite (docs/concepts/pause-until-dawn/video-flf/judge.md SS2): the
+round-2 judge rejected this script's default face box (fractional 30-70% x
+15-48%, i.e. x384-896 at 1280x704) as "too wide -- about a third of that box
+is pinned background, trivially easy to reproduce, which drags the reported
+face MAD down and would flatter a drifting face". It also flagged that a
+plain mean (MAD) "cannot catch a recoloured iris covering 0.2% of the frame".
+
+This version:
+  - uses the judge's own head-only boxes (pixel-absolute, measured at
+    1280x704, the tool's native render resolution; scaled proportionally if a
+    frame comes out at a different size -- e.g. the fallback 1024x576),
+  - reports, per box: MAD, max-absolute-difference, and the 99.9th
+    percentile of per-pixel abs-diff (catches a small saturated region a
+    mean would wash out),
+  - reports the SAME three numbers for the measured VAE noise floor (plate
+    round-tripped through a bare VAEEncode/VAEDecode, no sampling) next to
+    every frame1/frameN number, so "identical within noise" has an actual
+    number to be judged against instead of being asserted.
 
 Usage:
-  python join_report.py <plate.png> <frame1.png> <frameN.png> <out.json> [faceBoxJson]
+  python join_report.py <plate.png> <frame1.png> <frameN.png> <out.json> \\
+      [--face-box '{"x0":..,"y0":..,"x1":..,"y1":..}'] [--vae-floor <floor.png>]
 
-faceBoxJson (optional): {"x":0.30,"y":0.15,"w":0.40,"h":0.33} as fractions of
-the frame -- both eyes plus brow, independent of resolution. Defaults to that
-box if not given.
+--face-box, if given and non-empty, REPLACES only the "face" box below (kept
+for callers that pin their own face box); the rest of BOXES is unaffected.
 """
+import argparse
 import json
-import sys
 
 import numpy as np
 from PIL import Image
 
-DEFAULT_FACE_BOX = {"x": 0.30, "y": 0.15, "w": 0.40, "h": 0.33}
+# Absolute pixel boxes at the reference resolution this tool renders at
+# (1280x704). Pinned by the round-2 judge by numerically locating the
+# saturated irises on the plate, then verified visually (judge.md SS2).
+REFERENCE_W, REFERENCE_H = 1280, 704
+BOXES = {
+    "face": (420, 20, 760, 400),
+    "eyes": (460, 140, 635, 285),
+    "greenEye": (468, 203, 546, 278),
+    "blueEye": (548, 145, 626, 220),
+    "mouth": (548, 252, 642, 308),
+    "braid": (468, 278, 542, 402),
+    "hairline": (436, 18, 724, 122),
+}
 
 
-def load(path):
-    return np.asarray(Image.open(path).convert("RGB"), dtype=np.float64)
+def load(path, size=None):
+    im = Image.open(path).convert("RGB")
+    if size is not None and im.size != size:
+        im = im.resize(size)
+    return np.asarray(im, dtype=np.float64)
 
 
-def mad(a, b):
-    return float(np.mean(np.abs(a - b)))
+def scaled_boxes(w, h):
+    sx, sy = w / REFERENCE_W, h / REFERENCE_H
+    out = {}
+    for name, (x0, y0, x1, y1) in BOXES.items():
+        out[name] = (int(x0 * sx), int(y0 * sy), int(x1 * sx), int(y1 * sy))
+    return out
 
 
-def face_crop(arr, box):
-    h, w = arr.shape[0], arr.shape[1]
-    x0 = int(box["x"] * w)
-    y0 = int(box["y"] * h)
-    x1 = x0 + int(box["w"] * w)
-    y1 = y0 + int(box["h"] * h)
+def crop(arr, box):
+    x0, y0, x1, y1 = box
     return arr[y0:y1, x0:x1]
 
 
+def stats(a, b):
+    """Per-pixel mean-abs-diff across channels, then MAD / max / p99.9 over pixels."""
+    diff = np.mean(np.abs(a - b), axis=-1)  # one scalar per pixel
+    return {
+        "mad": float(np.mean(diff)),
+        "maxAbs": float(np.max(diff)),
+        "p999": float(np.percentile(diff, 99.9)),
+    }
+
+
+def all_box_stats(a, b, boxes):
+    return {name: stats(crop(a, box), crop(b, box)) for name, box in boxes.items()}
+
+
+def ratios(observed, floor):
+    out = {}
+    for name, o in observed.items():
+        f = floor.get(name, {})
+        out[name] = {
+            k: (round(o[k] / f[k], 2) if f.get(k) not in (None, 0) else None)
+            for k in o
+        }
+    return out
+
+
 def main():
-    plate_path, frame1_path, frameN_path, out_path = sys.argv[1:5]
-    face_box = json.loads(sys.argv[5]) if len(sys.argv) > 5 else DEFAULT_FACE_BOX
+    ap = argparse.ArgumentParser()
+    ap.add_argument("plate")
+    ap.add_argument("frame1")
+    ap.add_argument("frameN")
+    ap.add_argument("out")
+    ap.add_argument("--face-box", default="", help="JSON {x0,y0,x1,y1} overriding BOXES['face']")
+    ap.add_argument("--vae-floor", default="", help="Path to a bare VAEEncode/VAEDecode round-trip of the plate")
+    args = ap.parse_args()
 
-    plate = load(plate_path)
-    frame1 = load(frame1_path)
-    frameN = load(frameN_path)
+    plate = load(args.plate)
+    h, w = plate.shape[0], plate.shape[1]
+    size = (w, h)
+    frame1 = load(args.frame1, size)
+    frameN = load(args.frameN, size)
 
-    # Frames may come out at a slightly different size than the staged plate
-    # if a fallback resolution was used mid-run; guard rather than crash.
-    if frame1.shape != plate.shape:
-        frame1 = np.asarray(
-            Image.open(frame1_path).convert("RGB").resize((plate.shape[1], plate.shape[0])),
-            dtype=np.float64,
-        )
-    if frameN.shape != plate.shape:
-        frameN = np.asarray(
-            Image.open(frameN_path).convert("RGB").resize((plate.shape[1], plate.shape[0])),
-            dtype=np.float64,
-        )
-
-    plate_face = face_crop(plate, face_box)
-    frame1_face = face_crop(frame1, face_box)
-    frameN_face = face_crop(frameN, face_box)
+    boxes = scaled_boxes(w, h)
+    if args.face_box:
+        fb = json.loads(args.face_box)
+        boxes["face"] = (fb["x0"], fb["y0"], fb["x1"], fb["y1"])
 
     result = {
-        "platePath": plate_path,
-        "frame1Path": frame1_path,
-        "frameNPath": frameN_path,
-        "faceBox": face_box,
-        "frame1": {
-            "fullMAD": mad(frame1, plate),
-            "faceMAD": mad(frame1_face, plate_face),
-        },
-        "frameN": {
-            "fullMAD": mad(frameN, plate),
-            "faceMAD": mad(frameN_face, plate_face),
-        },
+        "platePath": args.plate,
+        "frame1Path": args.frame1,
+        "frameNPath": args.frameN,
+        "boxes": boxes,
+        "frame1": all_box_stats(frame1, plate, boxes),
+        "frameN": all_box_stats(frameN, plate, boxes),
     }
-    with open(out_path, "w") as f:
+
+    if args.vae_floor:
+        floor_img = load(args.vae_floor, size)
+        floor = all_box_stats(floor_img, plate, boxes)
+        result["floor"] = floor
+        result["floorPath"] = args.vae_floor
+        result["frame1XFloor"] = ratios(result["frame1"], floor)
+        result["frameNXFloor"] = ratios(result["frameN"], floor)
+
+    with open(args.out, "w") as f:
         json.dump(result, f, indent=2)
     print(json.dumps(result, indent=2))
 

@@ -1,20 +1,32 @@
 {
+  "round": 3,
   "tool": "tools/gen/video-flf.mjs",
   "model": "wan2.1_flf2v_720p_14B_fp8_e4m3fn.safetensors",
   "plate": "public/art/pause/yuna-ffx2.png",
-  "note": "Pipeline built and verified against this ComfyUI's live /object_info (schemas saved in object-info/*.json). The graph was confirmed executing exactly as designed (checked via ComfyUI's own /queue listing mid-run). idle-breathing/seed1 was queued and left rendering for 2443s+ (40+ minutes) without error or completion by the end of this session -- this 14B fp8 model, on a 16GB card that had under ~1GB free VRAM before the job started, needs heavy automatic CPU offloading, so it is far slower per clip than round 1's 5B model (452-1024s/clip). It was left running detached (nohup) in the background at D:/Tools/pyrefly-video/flf/idle-breathing/1/ and D:/Tools/pyrefly-video/flf/idle-breathing-1.log; a follow-up pass should check whether it finished, then run `node tools/gen/video-flf.mjs join-report idle-breathing 1` and `contact-sheet idle-breathing 1` to score it. No clip in this pass reached a confirmed, scored completion, so nothing is picked or rejected yet -- this differs from round 1 in that nothing here failed the join/identity check, generation simply did not finish within this session's budget. At this per-clip cost, the full 9-clip x however-many-seeds brief is realistically many hours of wall time on this shared GPU, not one pass -- the same conclusion round 1's own README reached for its slower cases.",
-  "gpuBeforeFirstQueue": "15084 MiB / 16303 MiB used, 98% util (i.e. under 1.2GB headroom before the FLF job was queued)",
-  "clips": {
-    "idle-breathing": {
-      "1": {
-        "verdict": "NOT CONFIRMED COMPLETE",
-        "wallSecondsAtSessionEnd": 2443,
-        "note": "Queued cleanly (queue was empty), executed the exact graph documented in README.md (confirmed via /queue), no errors in 2443s+ of log output, GPU stayed healthy (99-100% util, 13.5-15.4GB/16.3GB used, no OOM). Left running in the background past the end of this session."
-      }
-    }
+  "fix": {
+    "summary": "Applied every fix judge.md \u00a75 asked for. Not yet rendered -- see queueGate.",
+    "endAnchor": "end_image fed through a new RepeatImageBatch(amount=4) node into WanFirstLastFrameToVideo's end_image input (CLIPVisionEncode still takes the single-frame end_image; only the pixel-mask anchor changes). Confirmed via /object_info that RepeatImageBatch is a core node (comfy_extras.nodes_images) on this ComfyUI instance -- no download.",
+    "fps": "16 -> 24 (FPS const in tools/gen/video-flf.mjs), matching the measured 150-170ms blink needing ~4 frames, not ~2.5.",
+    "length": "81 -> 97 frames (4.04s at 24fps), so the last ~25 frames (~1.04s) are a dedicated return-to-stillness window.",
+    "promptTiming": "NO_RESTYLE_SUFFIX now states motion must peak and settle within the first 60% of the clip and the final second is completely still, already back at the starting pose; idle-blinks' own prompt explicitly places two full blinks and one half-blink inside the first three seconds and nothing after.",
+    "joinReportRewrite": "tools/gen/join_report.py rewritten: head-only pixel-absolute boxes at the judge's own coordinates (measured at the tool's native 1280x704), scaled proportionally for other resolutions; reports MAD + max-abs-diff + p99.9 percentile per box (not just a mean); a new ensureVaeFloor() in video-flf.mjs queues a bare LoadImage->VAEEncode->VAEDecode->SaveImage of the staged plate once (cached by staged-plate filename) and every join number is now reported next to that floor, plus a floor-multiple ratio."
   },
+  "fixValidation": {
+    "method": "Ran join_report.py against the real staged plate (pyrefly-video-plate-f1efe21f6c75-1280x704.png) and a real VAE floor probe queued and executed on this session's live ComfyUI (not simulated).",
+    "measuredFloorMAD": { "face": 3.85, "eyes": 4.70, "mouth": 1.92, "braid": 6.31, "hairline": 3.06 },
+    "result": "Matches judge.md \u00a72's independently-measured floor numbers exactly (face 3.85 / eyes 4.70 / mouth 1.92 / braid 6.31 / hairline 3.06) -- strong evidence the box coordinates, resolution scaling and stats math are correct before spending any render time on them."
+  },
+  "queueGate": {
+    "rule": "Brief: poll GET /queue until it has been EMPTY for 10 consecutive minutes before queueing the one render job (this job would otherwise block the shared GPU for 60-90 minutes).",
+    "outcome": "NOT MET. Monitored continuously for roughly 50 minutes (2026-09-22 ~13:50-14:47 EDT); the queue was never empty for more than ~110 seconds at a stretch.",
+    "evidence": "Two other tracks were actively and visibly using the GPU back-to-back the whole time: an ACE-Step music-audition workflow (public/audio/candidates + D:/Tools/ComfyUI/output/pyrefly-ace, which grew from 34 to 62+ rendered .flac candidates across several seed/denoise/model-variant sweeps while this pass watched), immediately followed by an IPAdapter-based image generation job (CheckpointLoaderSimple/IPAdapterAdvanced/ImageBatch graph, seen running via GET /queue right after the audio track stopped producing new files).",
+    "decision": "Did not queue the render. Forcing a 60-90 minute job into that queue would have stalled two other in-progress tracks, which is exactly what the 10-minute gate exists to prevent. No GPU time was spent on the actual render or VRAM probe beyond the single few-second VAE-floor validation above.",
+    "nextStep": "Re-run the same wait-for-empty-10-minutes check, then `node tools/gen/video-flf.mjs render idle-blinks --seed 1` (defaults now apply the round-3 fix: 24fps, length 97, RepeatImageBatch end anchor)."
+  },
+  "clips": {},
   "notRendered": [
     "idle-blinks",
+    "idle-breathing",
     "smile-and-relax",
     "determined-and-relax",
     "hurt-and-relax",
@@ -22,5 +34,6 @@
     "turn-right-and-back",
     "look-up-and-back",
     "hair-breeze"
-  ]
+  ],
+  "previousRound": "Round 2's status (idle-breathing seed 1 left rendering 2443s+, never confirmed complete) is preserved in git history at the commit before this one."
 }

@@ -1,124 +1,139 @@
-# Living-portrait video, round 2 (Wan 2.1 FLF2V) — RESULT: no demo built
+# Living-portrait video, round 3 (Wan 2.1 FLF2V) — RESULT: fix applied and
 
-**Status: FAIL. `pass=false`. Zero clips picked. Nothing with a visible join is shown
-to Bailey — no `preview-seamless.webm`/`.mp4`, no `joins.png`, no `index.html` demo
-exist in this folder, and none were built by this pass.** This file replaces the
-pre-render design note that used to live here (still in git history at commit
-`0966cfd`); the pipeline and graph it documented are unchanged and still work — see
-`tools/gen/video-flf.mjs` / the object-info schemas in `object-info/*.json` for that.
+validated, render not queued (shared GPU never went 10 minutes idle)
 
-This is the exact reason, restated as a build log rather than a plan, so the next pass
-does not have to re-derive it from `judge.md`.
+**Status: fix DONE and validated on paper; render NOT run.** No clip was rendered
+this pass, so (as with round 2) there is still no `preview-seamless.webm`/`.mp4`,
+no `joins.png`, no `index.html` demo, and nothing with a visible join is shown to
+Bailey. This replaces round 2's result log; round 2's is at commit `8d5c611`'s
+parent, still in git history.
 
 ## Why this exists
 
-Bailey on round 1's stitched preview (2026-09-21): *"there is absolutely no continuity
-whatsoever... it needs to be better implemented."* The rule that follows
-(`docs/concepts/pause-until-dawn/video-flf/judge.md` §0): **a join is visible if frame 1
-or the last frame of a clip differs from the plate by more than noise at 1:1, and
-nothing with a visible join is ever shown to Bailey.** Round 2 tried the fix Bailey
-approved — `WanFirstLastFrameToVideo`, which conditions on the plate as both the first
-and last frame instead of hoping the model drifts back to it. It did not pass.
+Round 2 (`judge.md`) rejected `idle-breathing` seed 1 on JOIN-LAST only: the
+mouth was still mid-swell on the final frame, root-caused to
+`WanFirstLastFrameToVideo` only ever unmasking the plate's **one phantom** mask
+slot for the end anchor (past the real 81 frames) versus **four real, aligned**
+slots for the start anchor. `judge.md` §5 gave five concrete fixes; this pass
+applied all five in code:
 
-## The brief's bar, and where round 2 landed
+| # | Fix | Where |
+|---|---|---|
+| 1 | `end_image` fed through `RepeatImageBatch(amount=4)` before `WanFirstLastFrameToVideo`, so the end anchor is 4 real frames wide instead of 1 phantom slot | `tools/gen/video-flf.mjs` `buildFlfGraph` |
+| 2 | Prompt timing: all requested motion must peak and settle within the first 60% of the clip; the final second is scripted as already-still | `NO_RESTYLE_SUFFIX` |
+| 3 | 24 fps, not 16 (a 150–170 ms blink is then ~4 frames, not ~2.5) | `FPS` const |
+| 4 | Re-render the one target clip (`idle-blinks`, per this pass's brief) alone, not all nine, before judging again | this pass only queued (attempted) `idle-blinks` |
+| 5 | A demo still needs a library of several passing clips, not one — unchanged, out of scope for this pass | — |
 
-The seamless demo needs at least 3 passing clips (including one idle) to build a
-clip-graph player and a hard-cut preview from. Round 2 delivered:
+`RepeatImageBatch` was confirmed present and its exact input names read from
+this ComfyUI's live `/object_info` before writing any code (no download; see
+`object-info/RepeatImageBatch.json`, added this pass, `object-info/VAEEncode.json`
+likewise for the new noise-floor probe below).
 
-| Clip | Seed | Queued? | Rendered? | Judged? | Result |
-|---|---|---|---|---|---|
-| `idle-breathing` | 1 | yes | yes (81 frames, 16 fps, ~5.06 s) | yes | **REJECTED** — JOIN-LAST |
-| `idle-blinks` | — | no | — | — | never queued |
-| `smile-and-relax` | — | no | — | — | never queued |
-| `determined-and-relax` | — | no | — | — | never queued |
-| `hurt-and-relax` | — | no | — | — | never queued |
-| `turn-left-and-back` | — | no | — | — | never queued |
-| `turn-right-and-back` | — | no | — | — | never queued |
-| `look-up-and-back` | — | no | — | — | never queued |
-| `hair-breeze` | — | no | — | — | never queued |
+## `idle-blinks`' prompt, specifically
 
-**Clips rendered: 1 of 9. Clips passing: 0. Required to build anything: 3 (including an
-idle).** The other 8 never reached the GPU queue this pass — at ~72 minutes/clip on this
-14B fp8 model (see below), the 9-clip brief with re-seeds is 12+ hours on a GPU three
-other workflows share (`judge.md` §5.4), and the one clip that did render failed before
-a second was worth queuing (`judge.md` §5.4: "re-render this one clip and re-judge it
-before queueing the other eight").
+The render target this pass (per its brief) is `idle-blinks`, timed explicitly:
+*"In the first three seconds Yuna blinks fully closed twice, evenly spaced, and
+then does one half-blink where her eyelids only partly close and reopen; every
+blink is finished well before the three-second mark. After that she is
+completely still..."* — two full blinks + one half blink inside frames 1–72
+(3 s at 24 fps), stillness for the last ~25 frames, matching
+`docs/plans/pause-living-portraits-motion-spec.md` finding 5 (half blinks are as
+common as full ones) and finding 4 (blink shape/timing).
 
-## The one clip that rendered: `idle-breathing` seed 1, and exactly which test it failed
+## `join_report.py` rewrite
 
-Full detail in `judge.md`; the load-bearing numbers:
+Round 2's judge flagged this script's *own* default face box (fractional
+30–70% × 15–48%, i.e. x384–896 at 1280×704) as "too wide — about a third of
+that box is pinned background... would flatter a drifting face", and that a
+plain mean "cannot catch a recoloured iris covering 0.2% of the frame."
+Rewritten to use the judge's own **head-only, pixel-absolute** boxes (face,
+eyes, greenEye, blueEye, mouth, braid, hairline — all seven, not just face),
+scaled proportionally if a frame renders at a size other than the reference
+1280×704, and to report **MAD, max-absolute-difference, and the 99.9th
+percentile** per box, not a bare mean.
 
-| Test | Score | Bar | Pass? |
-|---|---|---|---|
-| JOIN-FIRST (frame 1 vs. plate) | **8** | visible-at-1:1 defects score ≤5 | pass |
-| **JOIN-LAST (last frame vs. plate)** | **5** | visible-at-1:1 defects score ≤5 | **FAIL** |
-| IDENTITY | 9 | — | pass |
-| MOTION | 6 | — | pass |
+**The VAE noise floor is now computed, not quoted.** `ensureVaeFloor()`
+(`tools/gen/video-flf.mjs`) queues a bare `LoadImage → VAEEncode → VAEDecode →
+SaveImage` of the staged plate on this session's live ComfyUI (core nodes,
+seconds of GPU, cached by staged-plate filename so it only runs once per
+resolution) and every join number in the report and the contact sheet is now
+printed next to it.
 
-- **JOIN-FIRST passed:** face MAD 5.23 against a measured VAE-encode/decode noise floor
-  of 3.85 (i.e. 1.36x floor, 79% of the deviation being the unavoidable floor pattern
-  itself), zero translation (a ±8px shift search returns `dx=0, dy=0`), mouth settled
-  and flat. Not distinguishable from the plate at 1:1 (`judge-face-ab.jpg`).
-- **JOIN-LAST failed:** mouth MAD **4.24** at the last frame vs. a **1.92** floor for
-  that box (2.2x floor, and still falling — the region was mid-swell at frame 73-77 and
-  ran out of frames before returning). The hard-cut test (`idle-breathing` concatenated
-  to itself, true `-c copy` cut, no cross-fade) measures the per-frame head-box step
-  across the boundary: **0.45, 1.49, then 4.28 at the cut itself, then 1.07, 1.08** —
-  the cut step is **4.2x its neighbours** and is visible at 1:1 as an expression snap
-  (the mouth pops from a wider mid-smile back to the plate's closed-lip smile).
-  `judge-hard-cut.jpg` is the six-frame strip across that cut.
-- **Root cause (not this generator's bug, upstream ComfyUI):**
-  `WanFirstLastFrameToVideo` only conditions the KSampler on the plate via
-  `concat_latent_image`/`concat_mask` — the plate's pixels are never written back into
-  the output. With `length=81` the mask only unmasks a single **phantom** slot (83, past
-  the 81 real pixel frames) for the end anchor, versus four real, aligned slots (0-3) for
-  the start — so the end anchor is structurally 4x weaker and points at nothing. Frame 81
-  is a prediction "encouraged" toward the plate, not pinned to it. Full derivation in
-  `judge.md` §1 (cites `comfy_extras/nodes_wan.py` directly).
-- **Compared to round 1 for the record (not a pass, just showing the fix partially
-  worked):** round 1's clips drifted bodily off the plate (a shift+scale search only
-  brought face MAD down from ~88 to ~74 — a real camera push-in) and lost identity
-  outright (`turn-left-and-back` scored 2 on IDENTITY, heterochromia lost). Round 2 has
-  **zero drift** (face MAD floor-to-observed ratio 1.36x vs. round 1's ~2.3x, translation
-  search returns exactly `dx=0,dy=0`) and IDENTITY 9. The fix is real; it is not
-  sufficient by itself, because the end-frame anchor is still too weak to land the final
-  expression.
+**Validation, done this pass without spending render time:** ran the rewritten
+`join_report.py` against the real staged plate and a real VAE-floor probe
+queued and executed on this session's live ComfyUI. Result — measured floor
+MAD: face **3.85**, eyes **4.70**, mouth **1.92**, braid **6.31**, hairline
+**3.06**. **These match `judge.md` §2's independently-measured floor numbers
+exactly**, box for box. That is strong evidence the box coordinates,
+resolution scaling and statistics are implemented correctly before any GPU
+time is spent rendering against them.
+
+## Why no clip was rendered
+
+The brief for this pass: poll `GET /queue` until it has been **empty for 10
+consecutive minutes** before queueing the one render job, because it would
+occupy the shared GPU for 60–90 minutes. **Monitored continuously for
+approximately 50 minutes (2026-09-22, roughly 13:50–14:47 EDT). The queue was
+never empty for more than ~110 seconds at a stretch.**
+
+Two other tracks were visibly, continuously active on the same GPU the entire
+time this pass watched:
+
+1. An **ACE-Step music-audition workflow** — `public/audio/candidates` and
+   `D:/Tools/ComfyUI/output/pyrefly-ace` grew from 34 to 62+ rendered `.flac`
+   candidates while this pass watched, sweeping seeds, denoise values and at
+   least one model-variant switch (`-t2m-` filenames) across multiple cues
+   (`battle-ffx`, `boss-ffx2-aeon`).
+2. Immediately after that track's file count stopped growing, `GET /queue`
+   showed a **different, IPAdapter-based image-generation graph** running
+   (`CheckpointLoaderSimple` / `IPAdapterModelLoader` / `IPAdapterAdvanced` /
+   `ImageBatch`) — consistent with the art-generation track NOW.md also lists
+   as active today.
+
+Queueing a 60–90 minute job into that queue would have stalled both of those
+in-progress tracks for the rest of their own runs — precisely what the
+10-minute-empty rule exists to prevent. **This pass chose not to force it
+through.** No GPU time was spent on the render itself or on any VRAM probe
+beyond the few seconds the VAE-floor validation above needed.
 
 ## What this means for this pass
 
-Per the brief: **pass is false, so no demo, no preview, and no player are built.** No
-files exist under `clips/`, no `index.html`/`player.mjs`, no
-`preview-seamless.webm`/`.mp4`, no `joins.png`, no browser screenshots. Building any of
-those would mean showing Bailey a clip whose own judge measured a 4.2x visible join at
-its only usable cut point — exactly what this whole round exists to prevent.
+Per the brief and the standing rule (nothing with a visible join is ever shown
+to Bailey): with no clip rendered, there is nothing to judge and nothing to
+show. No files exist under `clips/`, no `index.html`/`player.mjs`, no
+`preview-seamless.webm`/`.mp4`, no `joins.png`, no contact sheet, no browser
+screenshots — same as round 2's outcome, for a different reason (round 2
+rendered and failed the join test; this pass didn't get GPU time it could take
+without stalling other agents).
 
-## What a round 3 needs before a demo is buildable (from `judge.md` §5, not invented here)
+## What the next pass should do
 
-1. Feed `end_image` a 4-frame batch of the plate (`RepeatImageBatch`, a **core**
-   ComfyUI node, already confirmed present on this instance) so the mask zeroes slots
-   80-83 instead of only the phantom slot 83 — this covers the real last pixel frame and
-   makes the end anchor symmetric with the (working) start anchor.
-2. Move the requested expression event earlier in the 81-frame window so it has settled
-   by ~frame 77, not still peaking at 73-77.
-3. Re-time to 24 fps (round 1's rate) so a 150-170 ms blink is 3.6-4 frames instead of
-   16 fps's 2.4-2.7 — the motion-spec bar in
-   `docs/plans/pause-living-portraits-motion-spec.md` §11.
-4. Re-render and re-judge that one clip alone before queuing the other eight — at
-   ~72 min/clip this GPU cannot afford nine blind renders per round.
-5. A demo still needs a *library*, not one clip: `docs/plans/pause-living-portraits-motion-spec.md`
-   finding 8 is that a real idle is not a loop (autocorrelation 0.06-0.42; a clip that
-   starts and ends on its own single frame *is* a loop). Several distinct passing clips
-   joined at the shared plate frame, in varying order, is what round 3 needs to clear
-   the 3-clip bar this round did not reach.
+1. Poll `GET /queue` for a genuine 10-consecutive-minute empty window (the
+   fastest way to check is `curl -s http://127.0.0.1:8188/queue`; busy means
+   a non-empty `queue_running` or `queue_pending`).
+2. Once confirmed: `node tools/gen/video-flf.mjs render idle-blinks --seed 1`
+   — the round-3 fix (RepeatImageBatch end anchor, 24 fps, length 97, the
+   updated `idle-blinks` prompt) is already the default, no flags needed.
+3. Immediately after submitting, `GET /queue` once more and confirm the
+   running graph is this one (has `WanFirstLastFrameToVideo` and
+   `RepeatImageBatch` among its node types), not another agent's job that
+   slipped in first.
+4. The CLI's `render` command now automatically runs `ensureVaeFloor`,
+   `joinReport` (with the floor wired in) and `buildContactSheet` (frames 1,
+   25, 49, 73, N; eye crops at 1, 49, N; join numbers **and** the floor burned
+   in) — look at the sheet at 1:1 before deciding anything passed.
+5. If `idle-blinks` passes JOIN-FIRST and JOIN-LAST this time, `judge.md` §5.5
+   still applies: a demo needs a library of several passing clips, not one.
 
-## Evidence this round left behind (all pre-existing, none added by this pass)
+## Evidence this pass left behind
 
-- `judge.md` — the full verdict, method, and the upstream ComfyUI code citation.
-- `status.json` — the generator's own machine-readable log (what was queued, GPU state,
-  the 8 never-rendered clip names).
-- `judge-face-ab.jpg`, `judge-landmarks.jpg`, `judge-hard-cut.jpg` — the judge's images,
-  looked at directly, not just trusted from the numbers.
-- `object-info/*.json` — the live ComfyUI node schemas the graph was built against.
+- `status.json` — this pass's machine-readable log (the fix applied, the
+  validation numbers, the exact queue-contention evidence).
+- `object-info/RepeatImageBatch.json`, `object-info/VAEEncode.json` — the live
+  ComfyUI node schemas the round-3 fix was built and validated against.
+- `judge.md` (round 2, unchanged) — the defect this fix targets, still the
+  reference for what "pass" means.
 
-Nothing under `D:/Tools/pyrefly-video/flf/` is committed (scratch renders only, per the
-brief).
+Nothing under `D:/Tools/pyrefly-video/flf/` is committed (scratch renders
+only, per the brief) — moot this pass, since nothing was rendered.

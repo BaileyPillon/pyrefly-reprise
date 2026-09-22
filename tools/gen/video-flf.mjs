@@ -50,7 +50,7 @@ import {
   readdirSync,
   statSync,
 } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { resolve, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 
@@ -88,9 +88,28 @@ export const WIDTH = Number(process.env.WAN_FLF_WIDTH || 1280);
 export const HEIGHT = Number(process.env.WAN_FLF_HEIGHT || 704);
 export const FALLBACK_WIDTH = 1024;
 export const FALLBACK_HEIGHT = 576;
-/** 81 frames at the model's native 16 fps = ~5.06 s. */
-export const LENGTH = 81;
-export const FPS = 16;
+/**
+ * Round 3 (docs/concepts/pause-until-dawn/video-flf/judge.md §5): 24 fps, not
+ * round 2's 16, so a measured 150-170ms blink is 3.6-4 frames instead of
+ * 2.4-2.7 (docs/plans/pause-living-portraits-motion-spec.md finding 4). 97
+ * frames at 24 fps = 4.04s, leaving a clean last-25-frames (~1.04s) return
+ * window per the judge's fix note.
+ */
+export const LENGTH = Number(process.env.WAN_FLF_LENGTH || 97);
+export const FPS = 24;
+/**
+ * Round 3 fix for the JOIN-LAST defect (judge.md §1, §5.1): the end anchor
+ * WanFirstLastFrameToVideo actually respects is only the LAST `amount` pixel
+ * frames of `end_image`'s batch (mask[:, :, -end_image.shape[0]:] = 0). Round
+ * 2 passed a 1-frame end_image, so only one phantom mask slot past the real
+ * 81 frames got zeroed and the true last real frame (80) stayed unmasked.
+ * Feeding a 4-frame REPEAT of the plate as end_image makes the node zero the
+ * last 4 mask slots, which now covers the real last pixel frame -- same
+ * strength as the (already-working) 4-slot start anchor. Core node
+ * (comfy_extras.nodes_images.RepeatImageBatch), confirmed present via
+ * /object_info on 2026-09-22, no download.
+ */
+export const END_ANCHOR_FRAMES = 4;
 
 export const WAN_NEGATIVE =
   '色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，' +
@@ -98,11 +117,19 @@ export const WAN_NEGATIVE =
   '画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，' +
   '杂乱的背景，三条腿，背景人很多，倒着走';
 
-/** Every prompt names ONLY motion of this exact painted character (brief's wording). */
+/**
+ * Every prompt names ONLY motion of this exact painted character (brief's
+ * wording). Round 3 adds the timing shape judge.md §5.2 asked for: the
+ * requested motion peaks in the first 60% of the clip and settles well
+ * before the end, so the (now correctly anchored) final frames have nothing
+ * left to resolve.
+ */
 const NO_RESTYLE_SUFFIX =
   ', the same painted anime illustration, unchanged style and colours, ' +
-  'locked camera, background does not move, the character returns exactly ' +
-  'to the starting pose';
+  'locked camera, background does not move; all of the requested motion ' +
+  'happens and fully settles within the first sixty percent of the clip, ' +
+  'and for the final second she is completely still, already back in her ' +
+  'exact starting pose and expression, not still moving toward it';
 
 export const OUT_ROOT = process.env.PYREFLY_VIDEO_FLF_OUT || 'D:/Tools/pyrefly-video/flf';
 
@@ -123,8 +150,11 @@ export const CLIP_SET = {
   },
   'idle-blinks': {
     prompt:
-      'Yuna blinks fully twice and then does one half-blink where her eyelids only ' +
-      'partly close, otherwise she holds still.',
+      'In the first three seconds Yuna blinks fully closed twice, evenly spaced, and ' +
+      'then does one half-blink where her eyelids only partly close and reopen; every ' +
+      'blink is finished well before the three-second mark. After that she is ' +
+      'completely still and already resting in her exact starting expression for the ' +
+      'rest of the clip.',
   },
   'smile-and-relax': {
     prompt:
@@ -264,6 +294,14 @@ export function buildFlfGraph({
     negative_text: { class_type: 'CLIPTextEncode', inputs: { text: negative, clip: ['clip', 0] } },
     start_image: { class_type: 'LoadImage', inputs: { image: imageFilename } },
     end_image: { class_type: 'LoadImage', inputs: { image: imageFilename } },
+    // Round 3 fix (see END_ANCHOR_FRAMES above): WanFirstLastFrameToVideo's
+    // end anchor strength equals end_image's own batch size. CLIPVisionEncode
+    // stays on the single-frame end_image -- semantic conditioning, not the
+    // pixel mask, so it is unaffected by this.
+    end_image_anchor: {
+      class_type: 'RepeatImageBatch',
+      inputs: { image: ['end_image', 0], amount: END_ANCHOR_FRAMES },
+    },
     start_vision: {
       class_type: 'CLIPVisionEncode',
       inputs: { clip_vision: ['clip_vision', 0], image: ['start_image', 0], crop: 'center' },
@@ -285,7 +323,7 @@ export function buildFlfGraph({
         clip_vision_start_image: ['start_vision', 0],
         clip_vision_end_image: ['end_vision', 0],
         start_image: ['start_image', 0],
-        end_image: ['end_image', 0],
+        end_image: ['end_image_anchor', 0],
       },
     },
     sample: {
@@ -309,6 +347,37 @@ export function buildFlfGraph({
       inputs: { images: ['decode', 0], filename_prefix: filenamePrefix },
     },
   };
+}
+
+// --------------------------------------------------------------------------
+// VAE noise floor: a bare LoadImage -> VAEEncode -> VAEDecode -> SaveImage of
+// the plate, core nodes only. judge.md §2: "the bar is 'identical within
+// noise', but noise was never defined" -- this measures it once per staged
+// plate resolution so every join number in this pass is reported next to it,
+// not just quoted from a prior judge run. Cached by staged-plate filename so
+// a re-run (e.g. contact-sheet alone) does not re-queue GPU work.
+// --------------------------------------------------------------------------
+
+export async function ensureVaeFloor(imageFilename) {
+  const floorDir = join(OUT_ROOT, 'vae-floor');
+  mkdirSync(floorDir, { recursive: true });
+  const floorPath = join(floorDir, `${imageFilename.replace(/\.png$/, '')}-floor.png`);
+  if (existsSync(floorPath)) return floorPath;
+
+  await waitForServer();
+  const workflow = {
+    load: { class_type: 'LoadImage', inputs: { image: imageFilename } },
+    vae: { class_type: 'VAELoader', inputs: { vae_name: VAE_NAME } },
+    encode: { class_type: 'VAEEncode', inputs: { pixels: ['load', 0], vae: ['vae', 0] } },
+    decode: { class_type: 'VAEDecode', inputs: { samples: ['encode', 0], vae: ['vae', 0] } },
+    save: { class_type: 'SaveImage', inputs: { images: ['decode', 0], filename_prefix: 'pyrefly-video-flf/vae-floor' } },
+  };
+  const promptId = await queuePrompt(workflow);
+  const entry = await waitForResult(promptId, { timeoutMs: 5 * 60_000 });
+  const images = imagesFrom(entry, 'save');
+  if (!images.length) throw new Error('VAE floor probe: ComfyUI returned no image');
+  writeFileSync(floorPath, await fetchImage(images[0]));
+  return floorPath;
 }
 
 // --------------------------------------------------------------------------
@@ -417,15 +486,15 @@ export async function renderClip(name, seed, opts = {}) {
 // small python helper (numpy + Pillow, both present on this machine).
 // --------------------------------------------------------------------------
 
-export function joinReport(outDir, stagedPlatePath, { faceBox } = {}) {
+export function joinReport(outDir, stagedPlatePath, { faceBox, vaeFloorPath } = {}) {
   const have = readdirSync(outDir).filter((f) => /^frame_\d{5}\.png$/.test(f)).sort();
   if (!have.length) throw new Error(`No frames in ${outDir}`);
   const frame1 = join(outDir, have[0]);
   const frameN = join(outDir, have[have.length - 1]);
   const scriptPath = join(HERE, 'join_report.py');
   const outJson = join(outDir, 'join-report.json');
-  const args = [scriptPath, stagedPlatePath, frame1, frameN, outJson];
-  if (faceBox) args.push(JSON.stringify(faceBox));
+  const args = [scriptPath, stagedPlatePath, frame1, frameN, outJson, '--face-box', faceBox ? JSON.stringify(faceBox) : ''];
+  if (vaeFloorPath) args.push('--vae-floor', vaeFloorPath);
   const res = spawnSync('python', args, { encoding: 'utf8' });
   if (res.status !== 0) {
     throw new Error(`join_report.py failed:\n${res.stderr || res.stdout}`);
@@ -439,9 +508,12 @@ export function joinReport(outDir, stagedPlatePath, { faceBox } = {}) {
 // --------------------------------------------------------------------------
 
 export function buildContactSheet(outDir, { name, seed, join: joinNums } = {}) {
-  const wantedFrames = [1, 20, 40, 60, 81];
+  // Frames 1, 25, 49, 73 and the last frame (brief: idle-blinks' events land
+  // in the first 3s / first ~72 frames at 24fps, so this spread shows the
+  // busy part and the return). Eye crops at 1, 49 and N.
   const have = readdirSync(outDir).filter((f) => /^frame_\d{5}\.png$/.test(f));
   const maxFrame = have.length;
+  const wantedFrames = [1, 25, 49, 73, maxFrame];
   const clamped = wantedFrames.map((n) => Math.min(n, maxFrame));
   const framePaths = clamped.map((n) => join(outDir, `frame_${String(n).padStart(5, '0')}.png`));
   for (const p of framePaths) {
@@ -451,7 +523,7 @@ export function buildContactSheet(outDir, { name, seed, join: joinNums } = {}) {
   const sheetPath = join(outDir, 'contact-sheet.png');
   // Eye crop box: fractional (0.30, 0.15) to (0.70, 0.48) of the frame --
   // both eyes plus brow, independent of resolution (1280x704 or 1024x576).
-  const eyeSources = [framePaths[0], framePaths[2], framePaths[4]]; // 1, 40, 81
+  const eyeSources = [framePaths[0], framePaths[2], framePaths[4]]; // 1, 49, N
   const inputs = [];
   const filterParts = [];
   framePaths.forEach((p, idx) => {
@@ -472,12 +544,24 @@ export function buildContactSheet(outDir, { name, seed, join: joinNums } = {}) {
   filterParts.push('[row1][row2pad]vstack=inputs=2[stacked]');
 
   const j = joinNums || {};
-  const label =
-    `join MAD full: f1=${fmt(j.frame1?.fullMAD)} fN=${fmt(j.frameN?.fullMAD)}  ` +
-    `face: f1=${fmt(j.frame1?.faceMAD)} fN=${fmt(j.frameN?.faceMAD)}`;
-  const escaped = label.replace(/:/g, '\\:').replace(/'/g, "\\'");
+  const b = (frame, box) => j[frame]?.[box];
+  const floor = (box) => j.floor?.[box];
+  const line1 =
+    `face MAD f1=${fmt(b('frame1', 'face')?.mad)} fN=${fmt(b('frameN', 'face')?.mad)} ` +
+    `floor=${fmt(floor('face')?.mad)}  ` +
+    `mouth f1=${fmt(b('frame1', 'mouth')?.mad)} fN=${fmt(b('frameN', 'mouth')?.mad)} ` +
+    `floor=${fmt(floor('mouth')?.mad)}`;
+  const line2 =
+    `eyes p999 f1=${fmt(b('frame1', 'eyes')?.p999)} fN=${fmt(b('frameN', 'eyes')?.p999)} ` +
+    `floor=${fmt(floor('eyes')?.p999)}  ` +
+    `braid maxAbs f1=${fmt(b('frame1', 'braid')?.maxAbs)} fN=${fmt(b('frameN', 'braid')?.maxAbs)} ` +
+    `floor=${fmt(floor('braid')?.maxAbs)}`;
+  const escape = (s) => s.replace(/:/g, '\\:').replace(/'/g, "\\'");
   filterParts.push(
-    `[stacked]drawtext=fontfile='C\\:/Windows/Fonts/arial.ttf':text='${escaped}':x=10:y=h-30:fontsize=20:fontcolor=yellow:box=1:boxcolor=black@0.6[out]`,
+    `[stacked]drawtext=fontfile='C\\:/Windows/Fonts/arial.ttf':text='${escape(line1)}':x=10:y=h-52:fontsize=18:fontcolor=yellow:box=1:boxcolor=black@0.6[l1]`,
+  );
+  filterParts.push(
+    `[l1]drawtext=fontfile='C\\:/Windows/Fonts/arial.ttf':text='${escape(line2)}':x=10:y=h-26:fontsize=18:fontcolor=yellow:box=1:boxcolor=black@0.6[out]`,
   );
   const filter = filterParts.join(';');
 
@@ -492,6 +576,10 @@ export function buildContactSheet(outDir, { name, seed, join: joinNums } = {}) {
 
 function fmt(n) {
   return typeof n === 'number' ? n.toFixed(1) : 'n/a';
+}
+
+function basenameOf(p) {
+  return basename(p);
 }
 
 // --------------------------------------------------------------------------
@@ -542,7 +630,9 @@ async function main() {
     console.log(`[video-flf] gpu after: ${gpuSnapshot()}`);
     const webm = framesToWebm(outDir, { fps: FPS });
     console.log(`[video-flf] webm: ${webm.path} (${(webm.size / 1024).toFixed(0)} KiB, crf=${webm.crf})`);
-    const jr = joinReport(outDir, stagedPlatePath);
+    const vaeFloorPath = await ensureVaeFloor(basenameOf(stagedPlatePath));
+    console.log(`[video-flf] vae floor: ${vaeFloorPath}`);
+    const jr = joinReport(outDir, stagedPlatePath, { vaeFloorPath });
     console.log(`[video-flf] join report: ${JSON.stringify(jr)}`);
     const sheet = buildContactSheet(outDir, { name, seed, join: jr });
     console.log(`[video-flf] contact sheet: ${sheet}`);
@@ -558,7 +648,8 @@ async function main() {
       console.log(`[video-flf] rendering ${name} seed=${seed}...`);
       const { outDir, wallMs, frameCount, stagedPlatePath } = await renderClip(name, seed, { width, height });
       const webm = framesToWebm(outDir, { fps: FPS });
-      const jr = joinReport(outDir, stagedPlatePath);
+      const vaeFloorPath = await ensureVaeFloor(basenameOf(stagedPlatePath));
+      const jr = joinReport(outDir, stagedPlatePath, { vaeFloorPath });
       const sheet = buildContactSheet(outDir, { name, seed, join: jr });
       log.push({ name, seed, wallMs, frameCount, webm: webm.path, size: webm.size, sheet, join: jr });
       console.log(`[video-flf] ${name} seed=${seed}: ${(wallMs / 1000).toFixed(1)}s, join=${JSON.stringify(jr)}`);
@@ -573,7 +664,8 @@ async function main() {
     const outDir = join(OUT_ROOT, name, String(seed));
     const jobPath = join(outDir, 'job.json');
     const job = JSON.parse(readFileSync(jobPath, 'utf8'));
-    const jr = joinReport(outDir, job.stagedPlate);
+    const vaeFloorPath = await ensureVaeFloor(basenameOf(job.stagedPlate));
+    const jr = joinReport(outDir, job.stagedPlate, { vaeFloorPath });
     console.log(JSON.stringify(jr, null, 2));
     return;
   }
