@@ -1,15 +1,15 @@
 {
-  "width": 768,
-  "height": 1212,
-  "baselineY": 1196,
-  "seed": 91402,
-  "prompt": "1boy, logos \\(ff10-2\\), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate heart logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns, recoiling, staggering, one revolver lowered, pained expression, one eye closed, (two revolvers:1.35), (holding guns:1.25), (plain black and silver helmet:1.2), (dark blue robe:1.1), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
-  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms",
+  "width": 547,
+  "height": 1147,
+  "baselineY": 1131,
+  "seed": 93502,
+  "prompt": "1boy, logos \\(ff10-2\\), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns, still wearing his helmet, recoiling backward in pain, staggering off balance, both revolvers still gripped in both hands, gritted teeth, weight thrown backward, (wearing his helmet:1.4), (staggering backward in pain:1.35), (two revolvers:1.15), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms, helmet crest, spiked crest, winged crest, back-swept fin, blade decoration, fin decoration, decorative fin, wing decoration, samurai crest, kabuto crest, maedate, helmet ornament, bare head, no helmet, hatless, bald, hood down, one hand, single revolver, rainbow, multicolor ribbon, colorful ribbon trim, calm expression, neutral expression, smiling, coy expression, dark brown hair, black hair",
   "cropBox": [
+    116,
     48,
-    0,
-    816,
-    1212
+    663,
+    1195
   ],
   "source": {
     "width": 832,
@@ -23,7 +23,7 @@
   "pose": "hurt",
   "composition": "full",
   "facing": "left",
-  "emphasis": "(two revolvers:1.35), (holding guns:1.25), (plain black and silver helmet:1.2), (dark blue robe:1.1)",
+  "emphasis": "(wearing his helmet:1.4), (staggering backward in pain:1.35), (two revolvers:1.15)",
   "canvas": {
     "width": 832,
     "height": 1216
@@ -40,26 +40,26 @@
   },
   "cutout": {
     "coverage": {
-      "widthFraction": 0.9230769230769231,
-      "heightFraction": 0.9967105263157895,
+      "widthFraction": 0.6574519230769231,
+      "heightFraction": 0.9432565789473685,
       "checked": true,
       "exceeds": false
     },
     "components": {
       "componentCount": 1,
-      "largestPixels": 489843,
+      "largestPixels": 216114,
       "secondPixels": 0,
       "secondRatio": 0,
       "touchesLargest": null
     },
     "nearWhite": {
-      "fraction": 0.002263990707226601,
-      "largestRegionFraction": 0.000606316717805501,
+      "fraction": 0.003780412189862758,
+      "largestRegionFraction": 0.002966027189353767,
       "detached": false,
       "touchesEdge": false,
       "allowanceUsed": 0.03
     }
   },
   "candidateOf": "D:\\Final Fantasy\\public\\art\\characters\\logos\\hurt.png",
-  "generatedAt": "2026-09-22T02:50:31.145Z"
+  "generatedAt": "2026-09-22T03:32:18.418Z"
 }

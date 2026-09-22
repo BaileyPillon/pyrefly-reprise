@@ -1,15 +1,15 @@
 {
-  "width": 789,
-  "height": 1093,
-  "baselineY": 1077,
-  "seed": 93201,
+  "width": 768,
+  "height": 1158,
+  "baselineY": 1142,
+  "seed": 93205,
   "prompt": "1boy, logos \\(ff10-2\\), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns, aiming and firing both revolvers forward, both arms extended forward, both hands and both guns visible in front of his body, muzzle flash, quick decisive lunge, leaning forward, looking at viewer, (two revolvers:1.3), (both hands visible:1.35), (plain helmet:1.3), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms, helmet crest, spiked crest, winged crest, back-swept fin, blade decoration, fin decoration, decorative fin, wing decoration, samurai crest, kabuto crest, maedate, helmet ornament, one hand, single revolver, one revolver, hidden arm, arm behind back, arm out of frame, ribbon streamers, rainbow ribbon, colorful streamers",
   "cropBox": [
-    41,
-    98,
-    830,
-    1191
+    35,
+    34,
+    803,
+    1192
   ],
   "source": {
     "width": 832,
@@ -40,26 +40,26 @@
   },
   "cutout": {
     "coverage": {
-      "widthFraction": 0.9483173076923077,
-      "heightFraction": 0.8988486842105263,
+      "widthFraction": 0.9230769230769231,
+      "heightFraction": 0.9523026315789473,
       "checked": true,
       "exceeds": false
     },
     "components": {
       "componentCount": 1,
-      "largestPixels": 221632,
+      "largestPixels": 304581,
       "secondPixels": 0,
       "secondRatio": 0,
       "touchesLargest": null
     },
     "nearWhite": {
-      "fraction": 0.005382796708056598,
-      "largestRegionFraction": 0.0014483468091250362,
+      "fraction": 0.0059655723764778495,
+      "largestRegionFraction": 0.0026561078990482005,
       "detached": false,
       "touchesEdge": false,
       "allowanceUsed": 0.03
     }
   },
   "candidateOf": "D:\\Final Fantasy\\public\\art\\characters\\logos\\attack.png",
-  "generatedAt": "2026-09-22T03:25:58.805Z"
+  "generatedAt": "2026-09-22T03:26:42.779Z"
 }

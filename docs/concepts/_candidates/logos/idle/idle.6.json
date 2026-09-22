@@ -1,15 +1,15 @@
 {
-  "width": 634,
-  "height": 1154,
-  "baselineY": 1138,
-  "seed": 93104,
+  "width": 689,
+  "height": 1159,
+  "baselineY": 1143,
+  "seed": 93106,
   "prompt": "1boy, logos \\(ff10-2\\), final fantasy x-2, safe, solo, tall and slim build, a plain black and silver helmet with a chin protector tied at the back of his head with a purple strip, no helmet crest, no plume, no feathers, sharp handsome face, a dark blue robe and matching coat with the syndicate logo embroidered on both shoulders, sweeping kimono-like sleeves, a purple sash tied at the waist, wraps around his ankles, sandals, holding two revolvers, one revolver in each hand, both hands visible holding guns, standing, side-on duelist stance, both revolvers held low, cool composed expression, (two revolvers:1.3), (holding guns:1.2), (plain helmet:1.4), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, sword, katana, antlers, horns, feathers, short, stout, cup, teacup, wine glass, glass, drink, box, container, empty hand, empty hands, crest, plume, feathered helmet, ornate helmet decoration, mask, jewelry, gems, charms, helmet crest, spiked crest, winged crest, back-swept fin, blade decoration, fin decoration, decorative fin, wing decoration, samurai crest, kabuto crest, maedate, helmet ornament, bare chest, open chest, exposed chest, shirtless, ribbon streamers, rainbow ribbon, colorful streamers",
   "cropBox": [
-    184,
-    18,
-    818,
-    1172
+    78,
+    45,
+    767,
+    1204
   ],
   "source": {
     "width": 832,
@@ -40,26 +40,26 @@
   },
   "cutout": {
     "coverage": {
-      "widthFraction": 0.7620192307692307,
-      "heightFraction": 0.9490131578947368,
+      "widthFraction": 0.828125,
+      "heightFraction": 0.953125,
       "checked": true,
       "exceeds": false
     },
     "components": {
       "componentCount": 1,
-      "largestPixels": 268049,
+      "largestPixels": 306197,
       "secondPixels": 0,
       "secondRatio": 0,
       "touchesLargest": null
     },
     "nearWhite": {
-      "fraction": 0.0007946308324224302,
-      "largestRegionFraction": 0.00032083686191703754,
+      "fraction": 0.000009797613954414968,
+      "largestRegionFraction": 0.000003265871318138323,
       "detached": false,
       "touchesEdge": false,
       "allowanceUsed": 0.03
     }
   },
   "candidateOf": "D:\\Final Fantasy\\public\\art\\characters\\logos\\idle.png",
-  "generatedAt": "2026-09-22T03:23:15.040Z"
+  "generatedAt": "2026-09-22T03:23:39.399Z"
 }
