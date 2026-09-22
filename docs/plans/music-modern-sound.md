@@ -544,3 +544,28 @@ show that.
 [Stable Audio Open in ComfyUI](https://comfy.org/p/supported-models/stable-audio-open-1-0/).
 Sizes and licences are as the publishers state them and must be re-checked on
 the page at download time.*
+
+---
+
+## Status — Sketch A built (2026-09-22)
+
+Option A's audition sketch is built and measured; the handoff with every number is
+`docs/handoff/music-modern-sound.md`, the raw report `docs/audio/sketch-a-report.json`.
+
+- **Engine:** sfizz 1.2.3 (`D:/Tools/sfizz`, from the approved zip) through `sfizz_render`,
+  i.e. A4 route (ii), not the in-process reader of route (i): the Windows build has no C
+  headers and Node has no FFI without an npm install. Per-note expression survives because
+  parts are split into monophonic lanes, each with its own CC1/CC11 curves.
+- **Libraries:** VSCO 2 CE SFZ for strings, brass, flute, timpani, kick, snare, crash; VCSL
+  WAVs (SFZ generated from their names) for hi-hat and toms. Bass, sub, Rhodes, supersaw and
+  celesta stay on the SF2 voices (no CC0 equivalent on disk).
+- **Causes addressed:** 1.2 (2-7 layers per patch, crossfaded on CC1 for sustains), 1.3
+  (messa di voce in CC1/CC11), 1.4 (simulated legato via sfizz `trigger=legato`), 1.5 (2 takes
+  on shorts and percussion; none exist for VSCO sustains), 1.6 (old path bit-identical on
+  repeated bars, new path about +3 dB different), 1.7 (phrase arch velocity, section lean,
+  appoggiatura lean, late phrase-end release), 1.8 (convolution with a SYNTHESISED 2.2 s IR: a
+  real hall IR still needs Bailey's yes), 1.10 (LRA 4.6 -> 6.5 LU on battle-ffx, 4.2 -> 7.7 on
+  boss-ffx2-aeon, same -16 LUFS and -1 dBTP). Not addressed: 1.9 (choir).
+- **Felt piano** from Salamander's bottom 7 of 16 layers, auditioned on `title`'s piano.
+- **Audition:** `docs/audio/audition.html`, section "Modern sound: sketch A", blind X/Y pairs
+  against loudness-matched excerpts of what ships. Nothing is routed into the game.

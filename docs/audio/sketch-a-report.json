@@ -1,0 +1,1628 @@
+{
+  "sketch": "A",
+  "rendered": "2026-09-22T18:17:04.213Z",
+  "rate": 44100,
+  "sfizz": "D:/Tools/sfizz/bin/Release/sfizz_render.exe",
+  "hall": {
+    "kind": "synthesised IR",
+    "rt60Design": 2.2,
+    "rt60MeasuredBroadbandT20": 2.09,
+    "preDelayMs": 20,
+    "lengthSec": 3.2,
+    "energyMatchedToShippedHall": true,
+    "irScale": 0.04906061785441392
+  },
+  "layers": [
+    {
+      "instrument": "strings",
+      "patch": "ViolinEnsSusVib.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 1,
+      "samples": 22,
+      "keys": 32
+    },
+    {
+      "instrument": "strings",
+      "patch": "ViolaEnsSusVib.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 1,
+      "samples": 26,
+      "keys": 39
+    },
+    {
+      "instrument": "strings",
+      "patch": "CelloEnsSusVib.sfz",
+      "velocityLayers": "2-3",
+      "layersMedian": 2,
+      "roundRobins": 1,
+      "samples": 27,
+      "keys": 42
+    },
+    {
+      "instrument": "strings-low",
+      "patch": "ContrabassSusVB.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 1,
+      "samples": 26,
+      "keys": 37
+    },
+    {
+      "instrument": "strings-short",
+      "patch": "ViolinEnsSpic.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 2,
+      "samples": 44,
+      "keys": 32
+    },
+    {
+      "instrument": "strings-short",
+      "patch": "ViolinEnsPizz.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 2,
+      "samples": 44,
+      "keys": 32
+    },
+    {
+      "instrument": "strings-short",
+      "patch": "ViolaEnsSpic.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 2,
+      "samples": 48,
+      "keys": 39
+    },
+    {
+      "instrument": "brass",
+      "patch": "FHornSus.sfz",
+      "velocityLayers": "1-4",
+      "layersMedian": 3,
+      "roundRobins": 1,
+      "samples": 29,
+      "keys": 45
+    },
+    {
+      "instrument": "brass",
+      "patch": "TromboneSus.sfz",
+      "velocityLayers": "2-3",
+      "layersMedian": 3,
+      "roundRobins": 1,
+      "samples": 31,
+      "keys": 32
+    },
+    {
+      "instrument": "brass-stab",
+      "patch": "TrumpetStac.sfz",
+      "velocityLayers": "3-3",
+      "layersMedian": 3,
+      "roundRobins": 2,
+      "samples": 66,
+      "keys": 33
+    },
+    {
+      "instrument": "brass-stab",
+      "patch": "TrumpetSus.sfz",
+      "velocityLayers": "2-2",
+      "layersMedian": 2,
+      "roundRobins": 1,
+      "samples": 20,
+      "keys": 33
+    },
+    {
+      "instrument": "brass-stab",
+      "patch": "TromboneStac.sfz",
+      "velocityLayers": "4-7",
+      "layersMedian": 4,
+      "roundRobins": 2,
+      "samples": 55,
+      "keys": 37
+    },
+    {
+      "instrument": "flute",
+      "patch": "FluteSusVib.sfz",
+      "velocityLayers": "1-2",
+      "layersMedian": 1,
+      "roundRobins": 1,
+      "samples": 13,
+      "keys": 37
+    },
+    {
+      "instrument": "timpani",
+      "patch": "Timpani.sfz",
+      "velocityLayers": "2-3",
+      "layersMedian": 3,
+      "roundRobins": 2,
+      "samples": 28,
+      "keys": 25
+    },
+    {
+      "instrument": "kick",
+      "patch": "GM-StylePerc.sfz@36",
+      "velocityLayers": "7-7",
+      "layersMedian": 7,
+      "roundRobins": 2,
+      "samples": 14,
+      "keys": 1
+    },
+    {
+      "instrument": "snare",
+      "patch": "GM-StylePerc.sfz@38",
+      "velocityLayers": "3-5",
+      "layersMedian": 5,
+      "roundRobins": 2,
+      "samples": 13,
+      "keys": 2
+    },
+    {
+      "instrument": "crash",
+      "patch": "GM-StylePerc.sfz@49",
+      "velocityLayers": "1-4",
+      "layersMedian": 4,
+      "roundRobins": 2,
+      "samples": 9,
+      "keys": 2
+    },
+    {
+      "instrument": "hat",
+      "patch": "vcsl:hihat@42",
+      "velocityLayers": "1-4",
+      "layersMedian": 4,
+      "roundRobins": 2,
+      "samples": 10,
+      "keys": 2
+    },
+    {
+      "instrument": "tom",
+      "patch": "vcsl:toms",
+      "velocityLayers": "3-3",
+      "layersMedian": 3,
+      "roundRobins": 2,
+      "samples": 12,
+      "keys": 128
+    }
+  ],
+  "cues": [
+    {
+      "name": "battle-ffx",
+      "renderSec": 30.7,
+      "durationSec": 79.8,
+      "loop": {
+        "startSec": 6.4,
+        "endSec": 76.8
+      },
+      "excerpt": {
+        "startSec": 19.2,
+        "seconds": 12,
+        "beat": 48
+      },
+      "control": {
+        "file": "control-battle-ffx-excerpt.ogg",
+        "gainDb": 0.7,
+        "excerptLufsA": -14.7
+      },
+      "files": {
+        "ogg": "public/audio/candidates/A-battle-ffx.ogg",
+        "excerpt": "public/audio/candidates/A-battle-ffx-excerpt.ogg",
+        "wav": "build/audio-candidates/A-battle-ffx.wav"
+      },
+      "master": {
+        "lufs": -16.01,
+        "truePeakDb": -1.4
+      },
+      "gates": {
+        "lufs": -16.021560413879172,
+        "truePeakDb": -1.3973589562874664,
+        "seamOk": true,
+        "spectrumOk": true,
+        "spectrumProblems": []
+      },
+      "dynamics": {
+        "shippedMp3": {
+          "lufs": -15.9,
+          "lra": 4.6,
+          "truePeakDb": -1.8,
+          "peakDb": -1.79977,
+          "rmsDb": -18.006753,
+          "crestDb": 16.21
+        },
+        "sketchA": {
+          "lufs": -15.9,
+          "lra": 6.5,
+          "truePeakDb": -1.4,
+          "peakDb": -1.384542,
+          "rmsDb": -17.835532,
+          "crestDb": 16.45
+        },
+        "sketchAMixThroughShippedMaster": {
+          "lufs": -15.9,
+          "lra": 3.9,
+          "truePeakDb": -1.4,
+          "peakDb": -1.4,
+          "rmsDb": -17.812651,
+          "crestDb": 16.41
+        },
+        "note": "shippedMp3 is the whole shipped file; sketchA the whole candidate OGG; the third is the candidate mix up to loopEnd through the shipped 2:1 master"
+      },
+      "repeatProof": [
+        {
+          "channel": "kick",
+          "instrument": "kick",
+          "old": {
+            "bar1": 8,
+            "bar2": 12,
+            "hash1": "da683c0ed380ff27",
+            "hash2": "da683c0ed380ff27",
+            "identical": true,
+            "diffDb": "-inf (bit-identical)"
+          },
+          "new": {
+            "bar1": 8,
+            "bar2": 12,
+            "hash1": "d6a091f05f41f279",
+            "hash2": "263f268e649a5d31",
+            "identical": false,
+            "diffDb": 3.4
+          }
+        },
+        {
+          "channel": "snare",
+          "instrument": "snare",
+          "old": {
+            "bar1": 11,
+            "bar2": 12,
+            "hash1": "651368820e4cd12c",
+            "hash2": "651368820e4cd12c",
+            "identical": true,
+            "diffDb": "-inf (bit-identical)"
+          },
+          "new": {
+            "bar1": 11,
+            "bar2": 12,
+            "hash1": "8a955a0df4b654eb",
+            "hash2": "d40eab3186dbea12",
+            "identical": false,
+            "diffDb": 4.51
+          }
+        },
+        {
+          "channel": "hats",
+          "instrument": "hat",
+          "old": {
+            "bar1": 8,
+            "bar2": 9,
+            "hash1": "90380864c7d812b3",
+            "hash2": "90380864c7d812b3",
+            "identical": true,
+            "diffDb": "-inf (bit-identical)"
+          },
+          "new": {
+            "bar1": 8,
+            "bar2": 9,
+            "hash1": "fbb26d62eab7ca9a",
+            "hash2": "2a61ad5cd2e0d01e",
+            "identical": false,
+            "diffDb": 3.08
+          }
+        },
+        {
+          "channel": "brass stabs",
+          "instrument": "brass-stab",
+          "old": {
+            "bar1": 31,
+            "bar2": 36,
+            "hash1": "046d9821671027fe",
+            "hash2": "046d9821671027fe",
+            "identical": true,
+            "diffDb": "-inf (bit-identical)"
+          },
+          "new": {
+            "bar1": 31,
+            "bar2": 36,
+            "hash1": "4d47466d5a10daf5",
+            "hash2": "92360719781d47cc",
+            "identical": false,
+            "diffDb": 3.14
+          }
+        }
+      ],
+      "stats": {
+        "sfizzRenders": 40,
+        "bandNotes": 288,
+        "sfizzPasses": 48,
+        "clippedSamplesLeft": 0
+      },
+      "channels": [
+        {
+          "channel": "bass riff",
+          "instrument": "bass",
+          "role": "band",
+          "desks": [
+            {
+              "patch": "SF2 (shipped voice)",
+              "seat": "band-bass",
+              "notes": 240,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.11,
+                  "sd": 2.86,
+                  "min": -10.7,
+                  "max": 6.3
+                },
+                "velocities": {
+                  "writtenDistinct": 21,
+                  "playedDistinct": 61
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "renderSec": 0.2
+        },
+        {
+          "channel": "kick",
+          "instrument": "kick",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "GM-StylePerc.sfz",
+              "seat": "percussion-low",
+              "notes": 252,
+              "lanes": 1,
+              "phrases": 13,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.35,
+                  "sd": 2.43,
+                  "min": -6.3,
+                  "max": 6.5
+                },
+                "velocities": {
+                  "writtenDistinct": 14,
+                  "playedDistinct": 64
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 5.11,
+          "renderSec": 6.7
+        },
+        {
+          "channel": "snare",
+          "instrument": "snare",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "GM-StylePerc.sfz",
+              "seat": "percussion",
+              "notes": 226,
+              "lanes": 1,
+              "phrases": 82,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.05,
+                  "sd": 2.46,
+                  "min": -5.1,
+                  "max": 6.5
+                },
+                "velocities": {
+                  "writtenDistinct": 43,
+                  "playedDistinct": 77
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 4.11,
+          "renderSec": 2.5
+        },
+        {
+          "channel": "hats",
+          "instrument": "hat",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "vcsl:hihat",
+              "seat": "band-kit",
+              "notes": 448,
+              "lanes": 1,
+              "phrases": 12,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.03,
+                  "sd": 2.5,
+                  "min": -6.8,
+                  "max": 7.1
+                },
+                "velocities": {
+                  "writtenDistinct": 14,
+                  "playedDistinct": 65
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 2.31,
+          "renderSec": 1
+        },
+        {
+          "channel": "toms",
+          "instrument": "tom",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "vcsl:toms",
+              "seat": "band-kit",
+              "notes": 17,
+              "lanes": 1,
+              "phrases": 3,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.27,
+                  "sd": 1.89,
+                  "min": -3.8,
+                  "max": 3.6
+                },
+                "velocities": {
+                  "writtenDistinct": 3,
+                  "playedDistinct": 13
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 17.93,
+          "renderSec": 0.4
+        },
+        {
+          "channel": "crash",
+          "instrument": "crash",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "GM-StylePerc.sfz",
+              "seat": "percussion",
+              "notes": 6,
+              "lanes": 1,
+              "phrases": 6,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.22,
+                  "sd": 2.62,
+                  "min": -3.1,
+                  "max": 5.3
+                },
+                "velocities": {
+                  "writtenDistinct": 6,
+                  "playedDistinct": 6
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 5.98,
+          "renderSec": 0.6
+        },
+        {
+          "channel": "string ostinato",
+          "instrument": "strings-short",
+          "role": "short",
+          "desks": [
+            {
+              "patch": "ViolinEnsSpic.sfz",
+              "seat": "violin-1",
+              "notes": 384,
+              "lanes": 1,
+              "phrases": 11,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.18,
+                  "sd": 4.76,
+                  "min": -10.9,
+                  "max": 11.9
+                },
+                "velocities": {
+                  "writtenDistinct": 66,
+                  "playedDistinct": 66
+                },
+                "legato": 0
+              }
+            },
+            {
+              "patch": "ViolinEnsPizz.sfz",
+              "seat": "violin-2",
+              "notes": 384,
+              "lanes": 1,
+              "phrases": 11,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.18,
+                  "sd": 4.74,
+                  "min": -13.5,
+                  "max": 11.6
+                },
+                "velocities": {
+                  "writtenDistinct": 66,
+                  "playedDistinct": 64
+                },
+                "legato": 0
+              }
+            },
+            {
+              "patch": "ViolaEnsSpic.sfz",
+              "seat": "viola",
+              "notes": 384,
+              "lanes": 1,
+              "phrases": 11,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 1.85,
+                  "sd": 4.99,
+                  "min": -11.6,
+                  "max": 14
+                },
+                "velocities": {
+                  "writtenDistinct": 66,
+                  "playedDistinct": 67
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 5.12,
+          "renderSec": 3.4
+        },
+        {
+          "channel": "brass stabs",
+          "instrument": "brass-stab",
+          "role": "short",
+          "desks": [
+            {
+              "patch": "TrumpetStac.sfz / TrumpetSus.sfz",
+              "seat": "trumpet",
+              "notes": 183,
+              "lanes": 4,
+              "phrases": 41,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 4.21,
+                  "sd": 5.22,
+                  "min": -9.8,
+                  "max": 15.9
+                },
+                "velocities": {
+                  "writtenDistinct": 6,
+                  "playedDistinct": 40
+                },
+                "legato": 0
+              }
+            },
+            {
+              "patch": "TromboneStac.sfz / TromboneSus.sfz",
+              "seat": "trombone",
+              "notes": 183,
+              "lanes": 4,
+              "phrases": 41,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 8.43,
+                  "sd": 4.98,
+                  "min": -3.5,
+                  "max": 20.1
+                },
+                "velocities": {
+                  "writtenDistinct": 6,
+                  "playedDistinct": 39
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 11.8,
+          "renderSec": 2.7
+        },
+        {
+          "channel": "strings lead",
+          "instrument": "strings",
+          "role": "sustain",
+          "desks": [
+            {
+              "patch": "ViolinEnsSusVib.sfz",
+              "seat": "violin-1",
+              "notes": 122,
+              "lanes": 2,
+              "phrases": 10,
+              "legatoNotes": 110,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.04,
+                  "sd": 7.12,
+                  "min": -17.6,
+                  "max": 16.4
+                },
+                "velocities": {
+                  "writtenDistinct": 25,
+                  "playedDistinct": 52
+                },
+                "legato": 110
+              }
+            },
+            {
+              "patch": "ViolaEnsSusVib.sfz",
+              "seat": "viola",
+              "notes": 122,
+              "lanes": 2,
+              "phrases": 10,
+              "legatoNotes": 109,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.52,
+                  "sd": 7.31,
+                  "min": -15.1,
+                  "max": 18.6
+                },
+                "velocities": {
+                  "writtenDistinct": 25,
+                  "playedDistinct": 53
+                },
+                "legato": 109
+              }
+            }
+          ],
+          "calibrationDb": 12.4,
+          "renderSec": 2.1
+        },
+        {
+          "channel": "brass lead",
+          "instrument": "brass",
+          "role": "sustain",
+          "desks": [
+            {
+              "patch": "FHornSus.sfz",
+              "seat": "horn",
+              "notes": 63,
+              "lanes": 1,
+              "phrases": 6,
+              "legatoNotes": 57,
+              "performance": {
+                "onsetMs": {
+                  "mean": 10.45,
+                  "sd": 6.99,
+                  "min": -6.3,
+                  "max": 25.5
+                },
+                "velocities": {
+                  "writtenDistinct": 12,
+                  "playedDistinct": 28
+                },
+                "legato": 57
+              }
+            },
+            {
+              "patch": "FHornSus.sfz",
+              "seat": "horn",
+              "notes": 63,
+              "lanes": 1,
+              "phrases": 6,
+              "legatoNotes": 57,
+              "performance": {
+                "onsetMs": {
+                  "mean": 15.11,
+                  "sd": 5.95,
+                  "min": 4.4,
+                  "max": 29.9
+                },
+                "velocities": {
+                  "writtenDistinct": 12,
+                  "playedDistinct": 31
+                },
+                "legato": 57
+              }
+            },
+            {
+              "patch": "TromboneSus.sfz",
+              "seat": "trombone",
+              "notes": 52,
+              "lanes": 1,
+              "phrases": 6,
+              "legatoNotes": 47,
+              "performance": {
+                "onsetMs": {
+                  "mean": 6.67,
+                  "sd": 6.22,
+                  "min": -5.8,
+                  "max": 18.8
+                },
+                "velocities": {
+                  "writtenDistinct": 10,
+                  "playedDistinct": 24
+                },
+                "legato": 47
+              }
+            }
+          ],
+          "calibrationDb": 4.11,
+          "renderSec": 1.6
+        },
+        {
+          "channel": "flute",
+          "instrument": "flute",
+          "role": "solo",
+          "desks": [
+            {
+              "patch": "FluteSusVib.sfz",
+              "seat": "flute",
+              "notes": 23,
+              "lanes": 1,
+              "phrases": 2,
+              "legatoNotes": 21,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.1,
+                  "sd": 4.85,
+                  "min": -11.8,
+                  "max": 8.6
+                },
+                "velocities": {
+                  "writtenDistinct": 8,
+                  "playedDistinct": 16
+                },
+                "legato": 21
+              }
+            }
+          ],
+          "calibrationDb": 8.57,
+          "renderSec": 0.4
+        },
+        {
+          "channel": "strings low",
+          "instrument": "strings-low",
+          "role": "sustain",
+          "desks": [
+            {
+              "patch": "CelloEnsSusVib.sfz",
+              "seat": "cello",
+              "notes": 72,
+              "lanes": 1,
+              "phrases": 6,
+              "legatoNotes": 66,
+              "performance": {
+                "onsetMs": {
+                  "mean": 5.8,
+                  "sd": 7.14,
+                  "min": -7,
+                  "max": 22.4
+                },
+                "velocities": {
+                  "writtenDistinct": 13,
+                  "playedDistinct": 33
+                },
+                "legato": 66
+              }
+            },
+            {
+              "patch": "ContrabassSusVB.sfz",
+              "seat": "bass",
+              "notes": 66,
+              "lanes": 1,
+              "phrases": 6,
+              "legatoNotes": 60,
+              "performance": {
+                "onsetMs": {
+                  "mean": 9.54,
+                  "sd": 7.16,
+                  "min": -4,
+                  "max": 28
+                },
+                "velocities": {
+                  "writtenDistinct": 12,
+                  "playedDistinct": 33
+                },
+                "legato": 60
+              }
+            }
+          ],
+          "calibrationDb": 16.39,
+          "renderSec": 1
+        },
+        {
+          "channel": "timpani",
+          "instrument": "timpani",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "Timpani.sfz",
+              "seat": "timpani",
+              "notes": 30,
+              "lanes": 1,
+              "phrases": 23,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 4.13,
+                  "sd": 2.69,
+                  "min": -2.2,
+                  "max": 8.2
+                },
+                "velocities": {
+                  "writtenDistinct": 6,
+                  "playedDistinct": 19
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 19.67,
+          "renderSec": 1.1
+        },
+        {
+          "channel": "sub",
+          "instrument": "bass-sub",
+          "role": "band",
+          "desks": [
+            {
+              "patch": "SF2 (shipped voice)",
+              "seat": "band-bass",
+              "notes": 48,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.22,
+                  "sd": 2.54,
+                  "min": -5.5,
+                  "max": 5.6
+                },
+                "velocities": {
+                  "writtenDistinct": 24,
+                  "playedDistinct": 29
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "renderSec": 0.2
+        }
+      ]
+    },
+    {
+      "name": "boss-ffx2-aeon",
+      "renderSec": 51.8,
+      "durationSec": 117,
+      "loop": {
+        "startSec": 12,
+        "endSec": 114
+      },
+      "excerpt": {
+        "startSec": 36,
+        "seconds": 12,
+        "beat": 96
+      },
+      "control": {
+        "file": "control-boss-ffx2-aeon-excerpt.ogg",
+        "gainDb": 0.6,
+        "excerptLufsA": -15.1
+      },
+      "files": {
+        "ogg": "public/audio/candidates/A-boss-ffx2-aeon.ogg",
+        "excerpt": "public/audio/candidates/A-boss-ffx2-aeon-excerpt.ogg",
+        "wav": "build/audio-candidates/A-boss-ffx2-aeon.wav"
+      },
+      "master": {
+        "lufs": -16.01,
+        "truePeakDb": -1.33
+      },
+      "gates": {
+        "lufs": -16.036697091513687,
+        "truePeakDb": -1.3336298208112836,
+        "seamOk": true,
+        "spectrumOk": true,
+        "spectrumProblems": []
+      },
+      "dynamics": {
+        "shippedMp3": {
+          "lufs": -15.9,
+          "lra": 4.2,
+          "truePeakDb": -1.4,
+          "peakDb": -1.394798,
+          "rmsDb": -17.885197,
+          "crestDb": 16.49
+        },
+        "sketchA": {
+          "lufs": -15.9,
+          "lra": 7.7,
+          "truePeakDb": -1.2,
+          "peakDb": -1.172907,
+          "rmsDb": -18.236937,
+          "crestDb": 17.06
+        },
+        "sketchAMixThroughShippedMaster": {
+          "lufs": -15.9,
+          "lra": 4.8,
+          "truePeakDb": -1.4,
+          "peakDb": -1.4,
+          "rmsDb": -18.181687,
+          "crestDb": 16.78
+        },
+        "note": "shippedMp3 is the whole shipped file; sketchA the whole candidate OGG; the third is the candidate mix up to loopEnd through the shipped 2:1 master"
+      },
+      "repeatProof": [
+        {
+          "channel": "supersaw",
+          "instrument": "supersaw",
+          "old": {
+            "bar1": 14,
+            "bar2": 19,
+            "hash1": "23f2a654f7d671d7",
+            "hash2": "23f2a654f7d671d7",
+            "identical": true,
+            "diffDb": "-inf (bit-identical)"
+          },
+          "new": {
+            "bar1": 14,
+            "bar2": 19,
+            "hash1": "f6211c045e6f049b",
+            "hash2": "44407dd9e7f6d204",
+            "identical": false,
+            "diffDb": 5.14
+          }
+        }
+      ],
+      "stats": {
+        "sfizzRenders": 40,
+        "bandNotes": 1063,
+        "sfizzPasses": 50,
+        "clippedSamplesLeft": 0
+      },
+      "channels": [
+        {
+          "channel": "epiano",
+          "instrument": "epiano",
+          "role": "band",
+          "desks": [
+            {
+              "patch": "SF2 (shipped voice)",
+              "seat": "band-centre",
+              "notes": 724,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0,
+                  "sd": 2.63,
+                  "min": -11.9,
+                  "max": 6.9
+                },
+                "velocities": {
+                  "writtenDistinct": 56,
+                  "playedDistinct": 58
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "renderSec": 1.1
+        },
+        {
+          "channel": "trumpets",
+          "instrument": "brass-stab",
+          "role": "short",
+          "desks": [
+            {
+              "patch": "TrumpetStac.sfz / TrumpetSus.sfz",
+              "seat": "trumpet",
+              "notes": 108,
+              "lanes": 1,
+              "phrases": 8,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 3.92,
+                  "sd": 4.84,
+                  "min": -8.4,
+                  "max": 14
+                },
+                "velocities": {
+                  "writtenDistinct": 36,
+                  "playedDistinct": 39
+                },
+                "legato": 0
+              }
+            },
+            {
+              "patch": "TromboneStac.sfz / TromboneSus.sfz",
+              "seat": "trombone",
+              "notes": 48,
+              "lanes": 1,
+              "phrases": 8,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 8.82,
+                  "sd": 5.28,
+                  "min": -0.7,
+                  "max": 22.1
+                },
+                "velocities": {
+                  "writtenDistinct": 28,
+                  "playedDistinct": 30
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 10.47,
+          "renderSec": 2.9
+        },
+        {
+          "channel": "horns",
+          "instrument": "brass",
+          "role": "sustain",
+          "desks": [
+            {
+              "patch": "FHornSus.sfz",
+              "seat": "horn",
+              "notes": 58,
+              "lanes": 2,
+              "phrases": 8,
+              "legatoNotes": 40,
+              "performance": {
+                "onsetMs": {
+                  "mean": 9.82,
+                  "sd": 6.67,
+                  "min": -7.4,
+                  "max": 25.3
+                },
+                "velocities": {
+                  "writtenDistinct": 26,
+                  "playedDistinct": 33
+                },
+                "legato": 40
+              }
+            },
+            {
+              "patch": "FHornSus.sfz",
+              "seat": "horn",
+              "notes": 58,
+              "lanes": 1,
+              "phrases": 8,
+              "legatoNotes": 41,
+              "performance": {
+                "onsetMs": {
+                  "mean": 14.07,
+                  "sd": 7.79,
+                  "min": 1.9,
+                  "max": 32.2
+                },
+                "velocities": {
+                  "writtenDistinct": 26,
+                  "playedDistinct": 28
+                },
+                "legato": 41
+              }
+            },
+            {
+              "patch": "TromboneSus.sfz",
+              "seat": "trombone",
+              "notes": 56,
+              "lanes": 2,
+              "phrases": 8,
+              "legatoNotes": 38,
+              "performance": {
+                "onsetMs": {
+                  "mean": 8.19,
+                  "sd": 7.28,
+                  "min": -4.1,
+                  "max": 24.5
+                },
+                "velocities": {
+                  "writtenDistinct": 26,
+                  "playedDistinct": 32
+                },
+                "legato": 38
+              }
+            }
+          ],
+          "calibrationDb": 11.13,
+          "renderSec": 3.2
+        },
+        {
+          "channel": "flute",
+          "instrument": "flute",
+          "role": "solo",
+          "desks": [
+            {
+              "patch": "FluteSusVib.sfz",
+              "seat": "flute",
+              "notes": 25,
+              "lanes": 1,
+              "phrases": 3,
+              "legatoNotes": 20,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.68,
+                  "sd": 3.8,
+                  "min": -5.9,
+                  "max": 8.5
+                },
+                "velocities": {
+                  "writtenDistinct": 16,
+                  "playedDistinct": 21
+                },
+                "legato": 20
+              }
+            }
+          ],
+          "calibrationDb": 19.49,
+          "renderSec": 0.5
+        },
+        {
+          "channel": "brass punches",
+          "instrument": "brass-stab",
+          "role": "short",
+          "desks": [
+            {
+              "patch": "TrumpetStac.sfz / TrumpetSus.sfz",
+              "seat": "trumpet",
+              "notes": 40,
+              "lanes": 4,
+              "phrases": 10,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 3.44,
+                  "sd": 4.88,
+                  "min": -4.4,
+                  "max": 16.1
+                },
+                "velocities": {
+                  "writtenDistinct": 20,
+                  "playedDistinct": 23
+                },
+                "legato": 0
+              }
+            },
+            {
+              "patch": "TromboneStac.sfz / TromboneSus.sfz",
+              "seat": "trombone",
+              "notes": 40,
+              "lanes": 4,
+              "phrases": 10,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 6.04,
+                  "sd": 4.84,
+                  "min": -5.7,
+                  "max": 16.8
+                },
+                "velocities": {
+                  "writtenDistinct": 20,
+                  "playedDistinct": 21
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 11.81,
+          "renderSec": 4.1
+        },
+        {
+          "channel": "supersaw",
+          "instrument": "supersaw",
+          "role": "band",
+          "desks": [
+            {
+              "patch": "SF2 (shipped voice)",
+              "seat": "synth-wide",
+              "notes": 24,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.14,
+                  "sd": 2.61,
+                  "min": -5.6,
+                  "max": 4.3
+                },
+                "velocities": {
+                  "writtenDistinct": 5,
+                  "playedDistinct": 17
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "renderSec": 0.1
+        },
+        {
+          "channel": "strings",
+          "instrument": "strings",
+          "role": "sustain",
+          "desks": [
+            {
+              "patch": "ViolinEnsSusVib.sfz",
+              "seat": "violin-1",
+              "notes": 51,
+              "lanes": 3,
+              "phrases": 6,
+              "legatoNotes": 42,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.45,
+                  "sd": 7.62,
+                  "min": -16.4,
+                  "max": 19.9
+                },
+                "velocities": {
+                  "writtenDistinct": 28,
+                  "playedDistinct": 32
+                },
+                "legato": 42
+              }
+            },
+            {
+              "patch": "ViolaEnsSusVib.sfz",
+              "seat": "viola",
+              "notes": 69,
+              "lanes": 3,
+              "phrases": 6,
+              "legatoNotes": 49,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.22,
+                  "sd": 7.84,
+                  "min": -21.6,
+                  "max": 21.2
+                },
+                "velocities": {
+                  "writtenDistinct": 32,
+                  "playedDistinct": 38
+                },
+                "legato": 49
+              }
+            },
+            {
+              "patch": "CelloEnsSusVib.sfz",
+              "seat": "cello",
+              "notes": 23,
+              "lanes": 3,
+              "phrases": 6,
+              "legatoNotes": 9,
+              "performance": {
+                "onsetMs": {
+                  "mean": 5.46,
+                  "sd": 6.6,
+                  "min": -7.1,
+                  "max": 21.1
+                },
+                "velocities": {
+                  "writtenDistinct": 11,
+                  "playedDistinct": 15
+                },
+                "legato": 9
+              }
+            }
+          ],
+          "calibrationDb": 16.83,
+          "renderSec": 5.9
+        },
+        {
+          "channel": "bass",
+          "instrument": "bass",
+          "role": "band",
+          "desks": [
+            {
+              "patch": "SF2 (shipped voice)",
+              "seat": "band-bass",
+              "notes": 312,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.54,
+                  "sd": 2.81,
+                  "min": -10,
+                  "max": 6.1
+                },
+                "velocities": {
+                  "writtenDistinct": 64,
+                  "playedDistinct": 77
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "renderSec": 0.4
+        },
+        {
+          "channel": "kick",
+          "instrument": "kick",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "GM-StylePerc.sfz",
+              "seat": "percussion-low",
+              "notes": 332,
+              "lanes": 1,
+              "phrases": 33,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.13,
+                  "sd": 2.6,
+                  "min": -5.8,
+                  "max": 6.4
+                },
+                "velocities": {
+                  "writtenDistinct": 55,
+                  "playedDistinct": 58
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 5.11,
+          "renderSec": 13.4
+        },
+        {
+          "channel": "snare",
+          "instrument": "snare",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "GM-StylePerc.sfz",
+              "seat": "percussion",
+              "notes": 298,
+              "lanes": 1,
+              "phrases": 134,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.26,
+                  "sd": 2.34,
+                  "min": -5.1,
+                  "max": 6.5
+                },
+                "velocities": {
+                  "writtenDistinct": 52,
+                  "playedDistinct": 58
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 4.11,
+          "renderSec": 5.1
+        },
+        {
+          "channel": "hats",
+          "instrument": "hat",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "vcsl:hihat",
+              "seat": "band-kit",
+              "notes": 672,
+              "lanes": 1,
+              "phrases": 1,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.1,
+                  "sd": 2.52,
+                  "min": -6.9,
+                  "max": 6.2
+                },
+                "velocities": {
+                  "writtenDistinct": 64,
+                  "playedDistinct": 67
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 2.31,
+          "renderSec": 2
+        },
+        {
+          "channel": "toms",
+          "instrument": "tom",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "vcsl:toms",
+              "seat": "band-kit",
+              "notes": 12,
+              "lanes": 1,
+              "phrases": 3,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": -0.39,
+                  "sd": 1.97,
+                  "min": -3.8,
+                  "max": 2.5
+                },
+                "velocities": {
+                  "writtenDistinct": 12,
+                  "playedDistinct": 10
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 19.76,
+          "renderSec": 1
+        },
+        {
+          "channel": "crash",
+          "instrument": "crash",
+          "role": "drum",
+          "desks": [
+            {
+              "patch": "GM-StylePerc.sfz",
+              "seat": "percussion",
+              "notes": 5,
+              "lanes": 1,
+              "phrases": 5,
+              "legatoNotes": 0,
+              "performance": {
+                "onsetMs": {
+                  "mean": 0.03,
+                  "sd": 2.49,
+                  "min": -2.7,
+                  "max": 3.8
+                },
+                "velocities": {
+                  "writtenDistinct": 5,
+                  "playedDistinct": 5
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "calibrationDb": 6.01,
+          "renderSec": 2.6
+        },
+        {
+          "channel": "celesta",
+          "instrument": "celesta",
+          "role": "band",
+          "desks": [
+            {
+              "patch": "SF2 (shipped voice)",
+              "seat": "celesta",
+              "notes": 3,
+              "performance": {
+                "onsetMs": {
+                  "mean": 3.47,
+                  "sd": 1.48,
+                  "min": 1.4,
+                  "max": 4.8
+                },
+                "velocities": {
+                  "writtenDistinct": 2,
+                  "playedDistinct": 2
+                },
+                "legato": 0
+              }
+            }
+          ],
+          "renderSec": 0.1
+        }
+      ]
+    }
+  ],
+  "feltPiano": {
+    "cue": "title",
+    "excerptStartSec": 6.207,
+    "seconds": 12,
+    "loudnessMatchedLufs": -20,
+    "salamander": [
+      {
+        "key": 48,
+        "layers": 16,
+        "feltReaches": 7,
+        "feltVelocityRange": [
+          8,
+          53
+        ]
+      },
+      {
+        "key": 60,
+        "layers": 16,
+        "feltReaches": 7,
+        "feltVelocityRange": [
+          8,
+          53
+        ]
+      },
+      {
+        "key": 72,
+        "layers": 16,
+        "feltReaches": 7,
+        "feltVelocityRange": [
+          8,
+          53
+        ]
+      }
+    ],
+    "performance": [
+      {
+        "channel": "piano melody",
+        "onsetMs": {
+          "mean": -0.39,
+          "sd": 3.8,
+          "min": -9.3,
+          "max": 7
+        },
+        "velocities": {
+          "writtenDistinct": 25,
+          "playedDistinct": 27
+        },
+        "legato": 0
+      },
+      {
+        "channel": "piano left hand",
+        "onsetMs": {
+          "mean": 0.17,
+          "sd": 3.46,
+          "min": -8.1,
+          "max": 9.9
+        },
+        "velocities": {
+          "writtenDistinct": 28,
+          "playedDistinct": 32
+        },
+        "legato": 0
+      },
+      {
+        "channel": "piano bass",
+        "onsetMs": {
+          "mean": -0.66,
+          "sd": 3.69,
+          "min": -6,
+          "max": 7.3
+        },
+        "velocities": {
+          "writtenDistinct": 13,
+          "playedDistinct": 13
+        },
+        "legato": 0
+      }
+    ],
+    "results": {
+      "felt": {
+        "file": "public/audio/candidates/A-felt-piano-title-excerpt.ogg",
+        "above2kHzDb": -15.09,
+        "dynamics": {
+          "lufs": -19.9,
+          "lra": 3.4,
+          "truePeakDb": -1.7,
+          "peakDb": -1.710865,
+          "rmsDb": -22.226146,
+          "crestDb": 20.52
+        }
+      },
+      "concert": {
+        "file": "public/audio/candidates/A-concert-piano-title-excerpt.ogg",
+        "above2kHzDb": -12.41,
+        "dynamics": {
+          "lufs": -19.8,
+          "lra": 4.8,
+          "truePeakDb": -0.5,
+          "peakDb": -0.532352,
+          "rmsDb": -22.690549,
+          "crestDb": 22.16
+        }
+      }
+    }
+  }
+}

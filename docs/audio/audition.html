@@ -97,6 +97,77 @@
 </div>
 
 <!-- ===================================================================== -->
+<!-- sketch-A:begin — the renderer upgrade (docs/plans/music-modern-sound.md option A). -->
+<!-- HAND-WRITTEN, like the sketches section below; tools/audio/audition.mjs does not   -->
+<!-- emit it. Files: public/audio/candidates/ (not in the manifest, never routed).     -->
+<!-- ===================================================================== -->
+<h2>Modern sound: sketch A, the renderer upgrade</h2>
+<p class="group-note">
+  <strong>Same notes, different players.</strong> Each pair below is the same 12 seconds of the same
+  cue, from the same score, at the same loudness. One is what ships today; the other is played by
+  real multi-dynamic orchestral recordings (VSCO&nbsp;2 Community Edition and VCSL, both public
+  domain), performed phrase by phrase instead of note by note, in a new concert-hall reverb, with
+  more room between loud and soft. The order is mixed on purpose: decide which you prefer
+  <em>before</em> opening the key. Score each 1&ndash;10.
+</p>
+
+<h3>battle-ffx &mdash; the ordinary fight (chapters 1&ndash;3)</h3>
+<article class="cue">
+  <h4>X</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/A-battle-ffx-excerpt.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Modern sound — battle-ffx X"></label></p>
+</article>
+<article class="cue">
+  <h4>Y</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/control-battle-ffx-excerpt.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Modern sound — battle-ffx Y"></label></p>
+</article>
+
+<h3>boss-ffx2-aeon &mdash; the chapter 4 fight (FFX-2)</h3>
+<article class="cue">
+  <h4>X</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/control-boss-ffx2-aeon-excerpt.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Modern sound — boss-ffx2-aeon X"></label></p>
+</article>
+<article class="cue">
+  <h4>Y</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/A-boss-ffx2-aeon-excerpt.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Modern sound — boss-ffx2-aeon Y"></label></p>
+</article>
+
+<h3>The quiet end: a felt piano</h3>
+<p class="group-note">
+  The title theme&rsquo;s piano, the same performance twice: once on today&rsquo;s concert grand, once
+  on a &ldquo;felt&rdquo; version of the same recorded piano (only its softest recordings, a darker
+  top, the hammer and damper made audible). This is for the menus and quiet scenes, not the fights.
+</p>
+<article class="cue">
+  <h4>X</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/A-concert-piano-title-excerpt.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Piano — X"></label></p>
+</article>
+<article class="cue">
+  <h4>Y</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/A-felt-piano-title-excerpt.ogg"></audio>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-sketch="Piano — Y"></label></p>
+</article>
+
+<details class="cue">
+  <summary>The key, and what changed (open after scoring)</summary>
+  <p class="blurb">battle-ffx: X is sketch A, Y is today. boss-ffx2-aeon: X is today, Y is sketch A.
+  Piano: X is the concert grand, Y is the felt piano.</p>
+  <p class="blurb">What sketch A changes, in the order the plan ranked the causes: a forte is a
+  different recording from a piano, not the same one turned up; no two repeats of a figure are the
+  same waveform; held string, horn and flute notes swell and fade inside the note; slurred lines
+  connect without a new attack; players sit a few milliseconds apart the way a section does; the
+  hall is a convolution room (synthesised, 2.2&nbsp;s) instead of an algorithm; and the loudest bars
+  are allowed to be louder. Electric bass, Rhodes, the synth and the celesta are unchanged: there is
+  no free recording of them to use.</p>
+  <p class="blurb">Whole cues, if you want them: <a href="../../public/audio/candidates/A-battle-ffx.ogg">battle-ffx</a> (1:20),
+  <a href="../../public/audio/candidates/A-boss-ffx2-aeon.ogg">boss-ffx2-aeon</a> (1:57).</p>
+</details>
+
+<!-- ===================================================================== -->
 <!-- New chapters: sketches — 2026-09-21.                                  -->
 <!-- HAND-WRITTEN, not emitted by tools/audio/audition.mjs. That generator  -->
 <!-- walks public/audio/manifest.json, and these files are deliberately NOT -->
