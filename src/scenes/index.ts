@@ -32,6 +32,7 @@ import {
 } from './bevelle-underground.ts';
 import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
+import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
 import { mountScene, type SceneBuild, type SceneFactory } from './types.ts';
 
 /** A field position in world units. */
@@ -188,6 +189,25 @@ SCENES.set('farplane', {
   slots: FARPLANE_SLOTS,
   placeholder: false,
 });
+/**
+ * Chateau Leblanc, the Last Room — real now (`buildLeblancLastRoomScene` in
+ * {@link SCENE_FACTORIES}), so it stops reporting itself as a stand-in.
+ * `build` stays pointed at the demo diorama and is unreachable, same as
+ * `bevelle-underground`'s and `dreams-end`'s entries above.
+ *
+ * **Not yet a registered chapter** (`docs/handoff/chapter-leblanc-engine.md`):
+ * `src/data/encounters.ts` has no entry pointing `sceneKey` at this key. The
+ * integrator adds one line, `sceneKey: 'leblanc-last-room'`, to the chapter's
+ * `Chapter` record when it registers — this scene does not need to wait for
+ * that to exist and be looked up by key.
+ */
+SCENES.set('leblanc-last-room', {
+  key: 'leblanc-last-room',
+  title: 'Chateau Leblanc — the Last Room',
+  build: buildDemoScene,
+  slots: LEBLANC_LAST_ROOM_SLOTS,
+  placeholder: false,
+});
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -225,6 +245,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'zanarkand-dome': buildZanarkandDomeScene,
   'dreams-end': buildDreamsEndScene,
   'bevelle-underground': buildBevelleUndergroundScene,
+  'leblanc-last-room': buildLeblancLastRoomScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

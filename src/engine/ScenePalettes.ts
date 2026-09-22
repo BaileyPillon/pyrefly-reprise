@@ -120,6 +120,32 @@ export const ScenePalettes = {
     tiltBandWidth: 0.2,
     tiltMaxBlur: 5.4,
   },
+  /**
+   * Chateau Leblanc, the Last Room — hot magenta paint over a cold machina
+   * basement. Bloom is pushed a little further than the indoor norm because
+   * the picked backdrop (`renders/backdrop-c.png`) carries its own glowing
+   * heart-shaped door inlay that the grade is meant to let read as a light
+   * source, not just as paint.
+   */
+  chateauLeblanc: {
+    name: 'chateau-leblanc',
+    lift: [0.02, 0.006, 0.018],
+    gamma: [1.0, 0.98, 1.0],
+    gain: [1.08, 0.94, 1.05],
+    saturation: 1.1,
+    vignette: 0.44,
+    vignetteRadius: 0.6,
+    shadowTint: [0.32, 0.55, 0.82],
+    shadowTintAmount: 0.18,
+    grain: 0.026,
+    exposure: 1.0,
+    bloomThreshold: 0.86,
+    bloomStrength: 0.84,
+    bloomRadius: 0.68,
+    tiltFocus: 0.38,
+    tiltBandWidth: 0.15,
+    tiltMaxBlur: 4.6,
+  },
 } satisfies Record<string, ScenePalette>;
 
 export type ScenePaletteName = keyof typeof ScenePalettes;
