@@ -1,0 +1,63 @@
+{
+ "_comment": "Hidden-region spec for tools/gen/rig-fill.py plan. The displacement envelope comes from range-sym.json (tools/gen/rig-range.mjs run over the prototype's own state machine, symmetric yaw -85..85). fringeLiftPx is the brow-raise lift the rig applies to hairFront. neckColumn (ellipses [cx,cy,rx,ry], curved on purpose: no straight edge even on a hidden boundary) is where the body layer must continue up under the jaw (every yaw key's head uncovers part of it). browsUnderFringe (ellipses) marks where the brows sit under the fringe so they are inpainted even outside the lift band.",
+ "range": "range-sym.json",
+ "fringeLiftPx": 3,
+ "marginPx": 2,
+ "hairBehindReachPx": 40,
+ "strandRootReachPx": 14,
+ "neckColumn": [
+  [
+   495,
+   700,
+   124,
+   142
+  ]
+ ],
+ "browsUnderFringe": [
+  [
+   600,
+   338,
+   72,
+   22
+  ],
+  [
+   372,
+   346,
+   40,
+   15
+  ]
+ ],
+ "jobs": {
+  "neck": {
+   "tags": "neck, skin, soft shading",
+   "denoise": 0.35
+  },
+  "earCollar": {
+   "tags": "pink hood, fabric, soft shading",
+   "denoise": 0.0,
+   "negAdd": "braid, earring, jewelry, beads, tassel, ribbon",
+   "prefill": "pushPull",
+   "rejectEarringColours": true,
+   "knownPale": true,
+   "note": "no diffusion: every inpaint of this strip (5 rounds, rowClone / rowLerp / nearest prefills, denoise 0.3-0.6) invented tassel-like shapes or streaks; the hood fabric here is flat cel-shaded pink, so the smooth fill from the visible pale fabric around it is used as is (pick = the job's own src)."
+  },
+  "earHair": {
+   "tags": "brown hair, hair strands, orange highlights, dark hair shadow",
+   "denoise": 0.4,
+   "negAdd": "braid, braided hair, earring, jewelry, beads, hair ornament, tassel",
+   "prefill": "rowClone",
+   "rejectEarringColours": true
+  },
+  "behind": {
+   "tags": "dark brown hair, hair strands, hair behind neck",
+   "denoise": 0.55,
+   "negAdd": "braid, earring, jewelry"
+  },
+  "face": {
+   "tags": "forehead, eyebrows, thin eyebrows, eyelashes, skin, soft shading",
+   "denoise": 0.45
+  }
+ },
+ "lidRingPx": 6,
+ "neckSampleDepthPx": 40
+}

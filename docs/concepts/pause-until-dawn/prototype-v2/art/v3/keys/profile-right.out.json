@@ -1,0 +1,12 @@
+{
+  "from": "v3/keys/profile-right.png",
+  "outpaint": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/out-profile-right.1.full.png",
+  "paintedRect": [
+    159,
+    0,
+    832,
+    1216
+  ],
+  "blend": "the painted rectangle is kept; outside it the outpaint, cross-fading (smoothstep) over 10-48 px inside the old crop line",
+  "silhouette": "cut afterwards with isnet-anime (rig-keys.py cut)"
+}

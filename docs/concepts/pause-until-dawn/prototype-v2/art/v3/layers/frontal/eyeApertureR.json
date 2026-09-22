@@ -1,0 +1,17 @@
+{
+  "layer": "eyeApertureR",
+  "box": [
+    258,
+    362,
+    151,
+    124
+  ],
+  "feather": 1.5,
+  "motion": "head",
+  "zIndex": 5,
+  "ownedPixels": 5672,
+  "hiddenFillPixels": 0,
+  "source": "public/art/portraits/yuna-x2.png",
+  "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+  "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/eyeApertureR.png"
+}

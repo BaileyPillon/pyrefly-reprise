@@ -1,0 +1,50 @@
+{
+  "blink-1": {
+    "box": [
+      276,
+      347,
+      406,
+      82
+    ],
+    "aperture": 0.66,
+    "method": "measured lid slide (rig-face.py eyes)",
+    "source": "v3 frontal layers composited without the fringe",
+    "maxDiffOutsideLidRegion": 0.0
+  },
+  "half": {
+    "box": [
+      276,
+      347,
+      406,
+      88
+    ],
+    "aperture": 0.5,
+    "method": "measured lid slide (rig-face.py eyes)",
+    "source": "v3 frontal layers composited without the fringe",
+    "maxDiffOutsideLidRegion": 0.0
+  },
+  "blink-2": {
+    "box": [
+      276,
+      347,
+      406,
+      95
+    ],
+    "aperture": 0.33,
+    "method": "measured lid slide (rig-face.py eyes)",
+    "source": "v3 frontal layers composited without the fringe",
+    "maxDiffOutsideLidRegion": 0.0
+  },
+  "closed-geo": {
+    "box": [
+      276,
+      347,
+      406,
+      120
+    ],
+    "aperture": 0.0,
+    "method": "measured lid slide (rig-face.py eyes)",
+    "source": "v3 frontal layers composited without the fringe",
+    "maxDiffOutsideLidRegion": 0.0
+  }
+}

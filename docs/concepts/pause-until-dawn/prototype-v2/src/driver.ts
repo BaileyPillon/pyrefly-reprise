@@ -41,6 +41,8 @@ export interface LivingPortraitDriverOptions {
    * capture window, without changing the shipped default (1 = real time).
    */
   debugTimeScale?: number;
+  /** Debug (`?post=0`): skip the post grade so the rest pose can be diffed against the plate. */
+  debugNoPost?: boolean;
 }
 
 export class LivingPortraitDriver implements PortraitDriver {
@@ -90,6 +92,7 @@ export class LivingPortraitDriver implements PortraitDriver {
         const range = yawRangeForRig(rig);
         this.state.setYawRange(range.min, range.max);
         this.renderer = new Renderer(canvas, rig, this.opts.assetBaseUrl);
+        this.renderer.debugNoPost = this.opts.debugNoPost ?? false;
         await this.renderer.load();
         this.startLoop();
       })

@@ -1,0 +1,17 @@
+{
+  "layer": "headCore",
+  "box": [
+    213,
+    155,
+    507,
+    600
+  ],
+  "feather": 4,
+  "motion": "head",
+  "zIndex": 2,
+  "ownedPixels": 135084,
+  "hiddenFillPixels": 12503,
+  "source": "public/art/portraits/yuna-x2.png",
+  "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+  "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/headCore.png"
+}

@@ -1,0 +1,20 @@
+{
+  "from": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/q34-right.png",
+  "scale": 0.8852,
+  "anchor": [
+    540,
+    840
+  ],
+  "target": [
+    495,
+    730
+  ],
+  "measured": {
+    "eyeY": 483,
+    "chin": [
+      510,
+      840
+    ]
+  },
+  "why": "the first alignment placed the chin at (470,730) by construction but the key's real chin (read off a 1.5x gridded crop) sits at (510,840) and its eye line (mean of the two pupils, 447 and 519) at 483: the head was drawn about 13 percent too large and 110 px too low, so it could never sit on the frontal neck."
+}

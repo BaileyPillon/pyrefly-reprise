@@ -1,0 +1,12 @@
+{
+  "from": "v3/keys/q34-right.png",
+  "outpaint": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/out-q34-right.2.full.png",
+  "paintedRect": [
+    0,
+    0,
+    753,
+    1216
+  ],
+  "blend": "the painted rectangle is kept; outside it the outpaint, cross-fading (smoothstep) over 10-48 px inside the old crop line",
+  "silhouette": "cut afterwards with isnet-anime (rig-keys.py cut)"
+}

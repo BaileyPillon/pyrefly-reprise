@@ -1,0 +1,18 @@
+{
+  "from": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/profile-left.png",
+  "method": "horizontal mirror, then her visible eye (now her LEFT) recoloured from green to the plate's blue inside a measured iris mask (lines, pupil and highlights keep their own lightness)",
+  "irisEllipse": [
+    547,
+    421,
+    20,
+    44
+  ],
+  "recolouredPixels": 801,
+  "plateGreenIrisLum": 0.429,
+  "plateBlueIrisMean": [
+    41.20000076293945,
+    97.0999984741211,
+    178.6999969482422
+  ],
+  "markers": "braid: the plate hangs it on her right (green-eye) side, so profile-right (her left side) correctly shows none, and the mirrored source shows none either. clasp: the plate's red/cyan hair clasp sits on her LEFT side, so profile-right should show it near the back of the head; neither profile key has it (profile-left correctly hides it) - NOT added (a frontal clasp pasted onto a side view would be the wrong perspective), disclosed."
+}

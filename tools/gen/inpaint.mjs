@@ -212,6 +212,7 @@ function inpaintWorkflow({
   refImage,
   refWeight,
   prefix,
+  latent = false,
 }) {
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CHECKPOINT } },
@@ -249,6 +250,16 @@ function inpaintWorkflow({
     8: { class_type: 'VAEDecode', inputs: { samples: ['3', 0], vae: ['4', 2] } },
     9: { class_type: 'SaveImage', inputs: { filename_prefix: prefix, images: ['8', 0] } },
   };
+
+  // --latent (additive, living-portrait v3): VAEEncodeForInpaint greys the
+  // masked pixels out before encoding, which only works near denoise 1.0.
+  // For a LOW-denoise refine of a pre-filled hidden region, encode the
+  // pixels as they are and restrict the noise to the mask instead.
+  if (latent) {
+    g['12'] = { class_type: 'VAEEncode', inputs: { pixels: ['10', 0], vae: ['4', 2] } };
+    g['13'] = { class_type: 'SetLatentNoiseMask', inputs: { samples: ['12', 0], mask: ['11', 0] } };
+    g['3'].inputs.latent_image = ['13', 0];
+  }
 
   if (refImage) {
     g['20'] = { class_type: 'LoadImage', inputs: { image: refImage, upload: 'image' } };
@@ -345,6 +356,7 @@ async function main() {
   const negAdd = args.negAdd === true ? '' : args.negAdd || '';
   const refPath = args.ref && args.ref !== true ? resolve(REPO_ROOT, String(args.ref)) : null;
   const refWeight = Number(args.refWeight === true ? 0.3 : args.refWeight ?? 0.3);
+  const latent = args.latent === true || args.latent === 'true';
 
   await waitForServer(30_000);
 
@@ -392,6 +404,7 @@ async function main() {
       refImage: refImageName,
       refWeight,
       prefix: `pyrefly/inpaint_${basename(outPrefix)}`,
+      latent,
     });
     process.stderr.write(
       `[inpaint] ${basename(outPrefix)} variant ${i + 1}/${count} seed=${seed} denoise=${denoise} box=${box.join(',')}\n`,
@@ -409,6 +422,8 @@ async function main() {
     const sidecar = {
       source: imagePath.replace(REPO_ROOT + '\\', '').replace(REPO_ROOT + '/', '').replace(/\\/g, '/'),
       box, pad, feather, growMask, seed, denoise, steps, cfg, sampler, scheduler,
+      ...(latent ? { encode: 'VAEEncode+SetLatentNoiseMask' } : {}),
+      ...(args.mask && args.mask !== true ? { mask: String(args.mask) } : {}),
       prompt: positive, negative,
       model: CHECKPOINT,
       ...(refPath ? { ref: refPath.replace(REPO_ROOT + '\\', '').replace(REPO_ROOT + '/', '').replace(/\\/g, '/'), refWeight } : {}),

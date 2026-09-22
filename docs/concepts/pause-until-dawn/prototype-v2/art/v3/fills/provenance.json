@@ -1,0 +1,47 @@
+{
+  "neck": {
+    "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/neck.2.full.png",
+    "layers": {
+      "body": 32587
+    },
+    "toneDriftRemoved": "ring 3-10 px outside the mask, gaussian sigma 6",
+    "sidecar": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/neck.2.json"
+  },
+  "earCollar": {
+    "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/earCollar.src.png",
+    "layers": {
+      "body": 7775
+    },
+    "toneDriftRemoved": "ring 3-10 px outside the mask, gaussian sigma 6",
+    "sidecar": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/earCollar.src.png"
+  },
+  "earHair": {
+    "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/earHair.2.full.png",
+    "layers": {
+      "hairBack": 15327,
+      "headCore": 3000
+    },
+    "toneDriftRemoved": "ring 3-10 px outside the mask, gaussian sigma 6",
+    "sidecar": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/earHair.2.json"
+  },
+  "behind": {
+    "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/behind.1.full.png",
+    "layers": {
+      "hairBack": 22790
+    },
+    "toneDriftRemoved": "ring 3-10 px outside the mask, gaussian sigma 6",
+    "sidecar": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/behind.1.json"
+  },
+  "face": {
+    "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/face.2.full.png",
+    "layers": {
+      "headCore": 9503,
+      "eyeApertureR": 0,
+      "eyeApertureL": 354,
+      "irisR": 0,
+      "irisL": 376
+    },
+    "toneDriftRemoved": "ring 3-10 px outside the mask, gaussian sigma 6",
+    "sidecar": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out/face.2.json"
+  }
+}

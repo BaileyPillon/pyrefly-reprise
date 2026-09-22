@@ -1,0 +1,17 @@
+{
+  "layer": "hairFront",
+  "box": [
+    236,
+    0,
+    528,
+    466
+  ],
+  "feather": 4,
+  "motion": "fringe",
+  "zIndex": 7,
+  "ownedPixels": 171718,
+  "hiddenFillPixels": 0,
+  "source": "public/art/portraits/yuna-x2.png",
+  "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+  "fill": null
+}

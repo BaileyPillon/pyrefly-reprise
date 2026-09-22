@@ -1,0 +1,42 @@
+{
+  "measuredBy": "tools/gen/rig-range.mjs",
+  "yawRange": [
+    -85,
+    40
+  ],
+  "seconds": 1200,
+  "chestSamplePeak": 3.09,
+  "envelopePx": {
+    "chest": {
+      "dxMin": -8.8,
+      "dxMax": 8.5,
+      "dyMin": -25.1,
+      "dyMax": 24.3
+    },
+    "iris": {
+      "dxMin": -11,
+      "dxMax": 11,
+      "dyMin": -7,
+      "dyMax": 7
+    },
+    "earring": {
+      "dxMin": -28.3,
+      "dxMax": 28.8,
+      "dyMin": -6.2,
+      "dyMax": 5.9
+    },
+    "strand1": {
+      "dxMin": -34.4,
+      "dxMax": 30.6,
+      "dyMin": -8.8,
+      "dyMax": 8.7
+    },
+    "strand2": {
+      "dxMin": -28,
+      "dxMax": 28.9,
+      "dyMin": -7.8,
+      "dyMax": 7.2
+    }
+  },
+  "note": "px on the 832x1216 plate canvas, y down. chest applies to the body layer; iris/strand/earring are relative to the head group."
+}

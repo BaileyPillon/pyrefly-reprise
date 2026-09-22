@@ -1,0 +1,17 @@
+{
+  "layer": "earring",
+  "box": [
+    203,
+    473,
+    127,
+    553
+  ],
+  "feather": 3,
+  "motion": "earring",
+  "zIndex": 10,
+  "ownedPixels": 28052,
+  "hiddenFillPixels": 0,
+  "source": "public/art/portraits/yuna-x2.png",
+  "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+  "fill": null
+}

@@ -1,0 +1,73 @@
+{
+  "z": [
+    "hairBack",
+    "body",
+    "headCore",
+    "irisR",
+    "irisL",
+    "eyeApertureR",
+    "eyeApertureL",
+    "hairFront",
+    "strand1",
+    "strand2",
+    "earring"
+  ],
+  "pixels": {
+    "hairBack": 166929,
+    "body": 320714,
+    "headCore": 135084,
+    "irisR": 3964,
+    "irisL": 3684,
+    "eyeApertureR": 5672,
+    "eyeApertureL": 3037,
+    "hairFront": 171718,
+    "strand1": 32156,
+    "strand2": 26196,
+    "earring": 28052
+  },
+  "eyes": {
+    "irisR": {
+      "centre": [
+        340.6,
+        432.3
+      ],
+      "radii": [
+        27.0,
+        31.5
+      ],
+      "axes": [
+        [
+          -0.1266,
+          -0.992
+        ],
+        [
+          -0.992,
+          0.1266
+        ]
+      ],
+      "grow": 10.5
+    },
+    "irisL": {
+      "centre": [
+        610.6,
+        417.9
+      ],
+      "radii": [
+        24.0,
+        32.9
+      ],
+      "axes": [
+        [
+          -0.0234,
+          -0.9997
+        ],
+        [
+          -0.9997,
+          0.0234
+        ]
+      ],
+      "grow": 9.5
+    }
+  },
+  "method": "classes = geodesic from frontal.seeds.json; hair split by frontal.layers.json polygons + geodesic inside the hair; iris = ellipse fit to the non-sclera window pixels; lids = ring around the window; ink within inkReach px of an upper layer joins it."
+}

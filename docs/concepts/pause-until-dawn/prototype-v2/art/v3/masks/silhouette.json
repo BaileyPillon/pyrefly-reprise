@@ -1,0 +1,7 @@
+{
+  "model": "isnet-anime (rembg, local weights D:/Tools/ComfyUI/rembg-models)",
+  "input": "plate composited over mid grey",
+  "iouWithPlateAlpha": 0.9961,
+  "plateAlphaBinary": true,
+  "used": "plate alpha (exact rest composite needs the plate's own edge); isnet mask kept as the provenance check"
+}

@@ -1,0 +1,82 @@
+{
+ "_comment": "Spec for tools/gen/rig-face.py. brows.visiblePoly encloses her visible right brow (viewer-left, above the green eye), read off a 4x gridded crop; the left brow is its mirror across the perpendicular bisector of the iris centres. moves are px (y down): raised lifts the brow (more at the inner end), drawn pulls the inner end down and in. eyes.states are lid apertures (1 = the plate's open eye).",
+ "brows": {
+  "visiblePoly": [
+   [
+    262,
+    339
+   ],
+   [
+    270,
+    332
+   ],
+   [
+    310,
+    329
+   ],
+   [
+    352,
+    333
+   ],
+   [
+    380,
+    342
+   ],
+   [
+    383,
+    360
+   ],
+   [
+    340,
+    355
+   ],
+   [
+    300,
+    352
+   ],
+   [
+    264,
+    354
+   ]
+  ],
+  "R": {
+   "innerX": 378,
+   "outerX": 264
+  },
+  "L": {
+   "innerX": 569,
+   "outerX": 692
+  },
+  "moves": {
+   "raised": {
+    "dyOuter": -1,
+    "dyInner": -5,
+    "dxInner": 0
+   },
+   "drawn": {
+    "dyOuter": 0,
+    "dyInner": 3,
+    "dxInner": 2
+   }
+  }
+ },
+ "eyes": {
+  "bandPx": 16,
+  "lidShade": 0.93,
+  "states": {
+   "blink-1": 0.66,
+   "half": 0.5,
+   "blink-2": 0.33,
+   "closed-geo": 0.0
+  },
+  "mirrorBandFrom": [
+   "L"
+  ]
+ },
+ "mouthZone": [
+  470,
+  632,
+  118,
+  46
+ ]
+}

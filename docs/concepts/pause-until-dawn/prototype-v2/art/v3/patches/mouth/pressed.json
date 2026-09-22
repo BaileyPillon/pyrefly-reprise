@@ -1,0 +1,10 @@
+{
+  "box": [
+    391,
+    580,
+    190,
+    84
+  ],
+  "from": "docs/concepts/pause-until-dawn/prototype-v2/art/patches/mouth/pressed.png",
+  "method": "v2 inpaint re-matted: tone drift removed, alpha only where the mouth changed (rig-face.py mouth)"
+}

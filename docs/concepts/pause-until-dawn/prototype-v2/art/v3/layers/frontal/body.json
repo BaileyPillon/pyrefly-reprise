@@ -1,0 +1,17 @@
+{
+  "layer": "body",
+  "box": [
+    0,
+    556,
+    832,
+    660
+  ],
+  "feather": 4,
+  "motion": "chest",
+  "zIndex": 1,
+  "ownedPixels": 320714,
+  "hiddenFillPixels": 40362,
+  "source": "public/art/portraits/yuna-x2.png",
+  "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+  "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/body.png"
+}

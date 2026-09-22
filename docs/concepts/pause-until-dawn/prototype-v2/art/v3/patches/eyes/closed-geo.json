@@ -1,0 +1,11 @@
+{
+  "box": [
+    276,
+    347,
+    406,
+    120
+  ],
+  "aperture": 0.0,
+  "method": "measured lid slide (rig-face.py eyes)",
+  "source": "v3 frontal layers composited without the fringe"
+}

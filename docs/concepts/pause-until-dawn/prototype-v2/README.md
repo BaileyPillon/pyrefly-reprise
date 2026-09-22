@@ -10,6 +10,8 @@ the runtime existed; Part 2 is the runtime pass's own README (`index.html`,
 tree mid-session and the runtime was updated to use it. Neither pass edited
 the other's files; each documents its own half below.
 
+> **v3 (2026-09-22): see Part 5 at the end** — the art assembly and runtime were rebuilt; Parts 1-4 are the v2 history.
+
 Character: **Yuna, X-2** — `public/art/portraits/yuna-x2.png`, Bailey's
 approved pick of 2026-09-21 (card 3). The approved painting is never edited;
 every file under `art/` here is a derived copy or a new inpainted/cut piece,
@@ -926,3 +928,151 @@ that a jsdom no-GPU test can't see at all.
   explicitly logged as capture-method caveats, not confirmed defects, and
   nothing this pass touched (`light.ts`, `post.ts`'s grain shader) changed
   either mechanism.
+
+---
+
+# Part 5 — v3 art assembly (2026-09-22)
+
+Answers the re-capture of `8d5c611` (`shots/CAPTURE.md`): a tone seam across
+the collar in every still, a doubled iris and a box edge in the hair at -40,
+a box seam at -80, colour speckle in the fringe, a lighter blink rectangle,
+the braid and pendant floating under a turned face. Game case: **FFX-2 only**
+(the plate is Yuna X-2); the runtime plumbing is shared by any plate.
+
+New stills: `shots/v3/` (canvas pixels at native 832x1216, real GPU Chromium,
+real keys where a key exists; `capture.json` says which). Contact sheet
+`shots/v3/sheet.png`; plate vs rest composite vs live rest frame
+`shots/v3/target-vs-rest.png`. Rebuild everything with
+`bash tools/gen/rig-build.sh` (no ComfyUI needed: the picked inpaints are
+committed under `art/v3/jobs/out/`).
+
+## The collar seam: what it was
+
+Not colour management and not gamma. In v2 the bracket for yaw 0 is
+`(a = q34-left, b = frontal, t = 1)`, and `renderer.ts` drew `a` OPAQUE and
+frontal's head stack on top. The frontal head stack has no body layer, so
+q34-left's rectangular crop (its own neck and collar, graded differently,
+boxed to y 860) stayed visible over the pinned body at every yaw, dead centre
+and reduced motion included. The same mechanism made the -40 doubled iris
+(frontal's iris at partial weight over q34-left's) and the box edges in the
+hair (each key's crop rectangle).
+
+Fix (runtime: `src/renderer.ts` rewritten, 262 lines; `src/gl-layer.ts`,
+`src/layers.ts`, `src/motion.ts` new): every key renders as one COMPLETE
+composite into its own target (frontal: its 11 layers + patches; a yaw key:
+its back hair, the pinned body, its front head), and a yaw between keys mixes
+two complete composites. At a key, one composite is drawn alone. Proof:
+`art/rest-diff.png` (numpy: the 8-bit layer PNGs re-composited in z-order vs
+the plate, premultiplied RGB and alpha: **MAD 0.0, max 0, 0 differing
+pixels**) and the live WebGL canvas with `?post=0` at rest: **0 differing
+pixels** against the plate over the background colour (checked in the
+browser). With the post pass on, the grade, grain and vignette apply to the
+whole frame uniformly.
+
+Also found by running the runtime's own state machine
+(`tools/gen/rig-range.mjs`): v2's `yawNormFor` returned 0 for every left
+turn, so the iris, strands, earring and relight never moved to the left.
+Fixed in `src/motion.ts`.
+
+## Masks (item 1)
+
+`tools/gen/rig-masks.py`. Figure silhouette = the plate's alpha (binary;
+isnet-anime re-run on the plate agrees at IoU 0.9961, `masks/silhouette.json`).
+Classes hair / skin / body / earring / eye windows = a geodesic assignment
+from hand-drawn seed scribbles (`masks/frontal.seeds.json`) whose edge cost
+rises across dark ink and colour edges, so every class boundary snaps to the
+painting's own lines (k-means colour clustering found the seed colours). Hair
+splits into hairFront / strand1 / strand2 / hairBack the same way
+(`masks/frontal.layers.json`). Irises are ellipses fitted to the saturated
+iris pixels and grown by the limbal ring; lids are a ring around each eye
+window; outline ink within 3 px of an upper layer belongs to that layer (a
+moving layer carries its own outline); the tassel's cast shadow rides the
+earring. Feathers: 4 px (body, headCore, hairFront), 6 (strands), 3
+(earring), 1.5 (irises, lids: a 3 px feather visibly softens the lid line),
+0 (hairBack, the bottom layer). A feather only ever falls onto a lower
+layer's pixels and carries the plate's colour, which is why the rest pose is
+exact. Magenta checks: `art/v3/overlays/<layer>.png`; class maps
+`masks/classes-overlay.png`, `masks/owner-overlay.png`.
+
+Straight-edge audit (longest straight run on each layer's alpha boundary off
+the canvas edge): 11 to 50 px everywhere, except hairBack's 104 px at x 107,
+y 317-420, which is the plate's own alpha edge (the approved painting's cut,
+not ours), and hidden-fill boundaries that stay under an upper layer at every
+reachable displacement.
+
+## Hidden regions (item 2)
+
+`tools/gen/rig-range.mjs` runs `src/state.ts` for 1200 s per expression under
+adversarial input and applies the renderer's offsets: `art/v3/range-sym.json`
+(chest +-8.8 x +-25 px, iris +-11 x +-7, earring +-28, strands -34..31).
+`tools/gen/rig-fill.py plan` turns that into the region each layer can
+uncover and five inpaint jobs, pre-filled from the layer's own visible pixels
+and refined with `tools/gen/inpaint.mjs --latent` (new, additive: VAEEncode +
+SetLatentNoiseMask, so a low denoise keeps the pre-fill) with the plate's
+identity block:
+
+| job | pixels | what | pick |
+|---|---|---|---|
+| neck | 32587 | the neck under the jaw (every yaw key's head uncovers it) | variant 2, denoise 0.35 |
+| earHair | 18327 | hair and cheek under the swinging braid | variant 2, 0.4, row-clone prefill |
+| earCollar | 7775 | hood under the tassel | smooth fill only (see below) |
+| behind | 22790 | hair behind the body's moving outline and the strands | variant 1, 0.55 |
+| face | 10233 | forehead, brows, lids under the fringe's lower edge | variant 2, 0.45 |
+
+`merge` removes the diffusion pass's tone drift (measured in a ring just
+outside the mask) and the step at the join. Iris sockets are filled
+geometrically (sclera push-pull), no diffusion.
+
+## Profile-right (item 4)
+
+`tools/gen/rig-keys.py mirror`: profile-left mirrored about the pinned neck
+axis (x 495), then her visible eye (now her LEFT) recoloured from green to
+the plate's blue inside a measured iris mask, keeping every line and
+highlight (801 px; before/after at 3x:
+`art/v3/overlays/profile-right-iris-check.png`). Markers: the braid hangs on
+her right, so a right profile correctly shows none; the red/cyan clasp sits
+on her left but neither profile key has it: not added, disclosed. The
+mirrored key's old canvas cut is outpainted and the back of the head rounded
+by a curve. The rig's yaw range is now symmetric, -85..85.
+
+Also: q34-right re-placed (its first alignment read the chin 110 px too high
+and drew the head 13 percent too large, so it could never sit on the frontal
+neck); q34-left and q34-right outpainted beyond their crop rectangles. Every
+yaw key is cut into `back` (hair below the jaw, under the body) and `front`
+(face and head hair, over the body); its own neck and collar are dropped
+(the frontal body shows there).
+
+## Eyes, brows, mouth (items 5, 6)
+
+`tools/gen/rig-face.py`. Blink states are measured lid slides: the plate's
+own upper-lid band (lid line + lashes) slides down per column over the eye
+opening: blink-1 0.66, half 0.5, blink-2 0.33, closed 0. Her left upper lid
+is under the fringe, so its band is her right one mirrored. Difference
+outside the lid region: **0.0 levels** for every state
+(`art/v3/patches/eyes/*.diff.png`). The renderer shows the nearest measured
+state (crisp lids, never two cross-faded lash lines). A diffusion refine of
+the closed eyes was tried (6 candidates at denoise 0.55 and 0.65, "closed
+eyes, eyelashes" + the identity block): all rejected, 4 reopened the eye with
+a new iris and 2 changed the lash line. The geometric closed lid is used.
+
+Brows: her right brow is matted against a per-column forehead-to-lid skin
+gradient, mirrored across the bisector of the iris centres, and painted into
+headCore's hidden fill under the fringe (her left brow never shows in the
+plate). `raised` lifts the brows 1-5 px (more at the inner end) and lifts
+hairFront 3 px with them; `drawn` pulls the inner ends down 3 px and in 2 px.
+
+Mouth: the v2 inpaints re-matted (drift removed, alpha only where the mouth
+changed), so no patch edge shows.
+
+## Still not right (disclosed)
+
+- **Mid-dissolve double exposure.** Between keys (`03`, `05`, `07`, `09`) two
+  complete composites are mixed, so a partial blend still shows two faces.
+  Only a per-triangle mesh warp removes it; not built in this pass.
+- **Collar under the tassel in the yaw keys.** Five inpaint rounds invented
+  tassel-like shapes or streaks; the smooth fill used instead reads as a soft
+  strip where the braid hangs in the frontal (`06-left-85`, `10-right-85`).
+- q34-left still barely reads as a turn (a painting limit, `keys.md`).
+- profile-right's back of head is a clean curve, not a hair silhouette.
+- Brows, blink intermediates and profile-right have not been through an
+  independent judge or Bailey.

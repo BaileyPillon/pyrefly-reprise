@@ -1,0 +1,26 @@
+{
+  "key": "q34-left",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/keys/q34-left.png",
+  "silhouette": "isnet-anime on the key over grey (the aligned key is a rectangle, not a cutout)",
+  "spec": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/keys.json",
+  "layers": {
+    "back": {
+      "file": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/q34-left/back.png",
+      "box": [
+        39,
+        0,
+        795,
+        856
+      ]
+    },
+    "front": {
+      "file": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/q34-left/front.png",
+      "box": [
+        67,
+        0,
+        767,
+        855
+      ]
+    }
+  }
+}

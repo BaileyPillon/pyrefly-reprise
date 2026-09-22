@@ -1,0 +1,147 @@
+{
+ "_comment": "Layer spec for tools/gen/rig-masks.py owners. Polygons here only SEED a hair sub-layer (eroded by snapBand); the actual boundary between it and hairBack is found by the geodesic inside the hair class, so it follows strand ink lines. The canvas edge is the only straight edge allowed.",
+ "hairFront": {
+  "note": "the fringe/bangs: all hair over the forehead and face from the canvas top down, lifted 2-3 px with a raised brow",
+  "polys": [
+   [
+    [
+     245,
+     0
+    ],
+    [
+     740,
+     0
+    ],
+    [
+     748,
+     330
+    ],
+    [
+     738,
+     420
+    ],
+    [
+     700,
+     470
+    ],
+    [
+     600,
+     470
+    ],
+    [
+     540,
+     500
+    ],
+    [
+     470,
+     500
+    ],
+    [
+     420,
+     470
+    ],
+    [
+     380,
+     420
+    ],
+    [
+     330,
+     370
+    ],
+    [
+     262,
+     360
+    ],
+    [
+     250,
+     300
+    ]
+   ]
+  ],
+  "snapBand": 12
+ },
+ "strand1": {
+  "note": "the flared pink-tipped locks at the left edge (viewer-left), swinging on their own lag",
+  "polys": [
+   [
+    [
+     0,
+     450
+    ],
+    [
+     105,
+     440
+    ],
+    [
+     150,
+     480
+    ],
+    [
+     170,
+     560
+    ],
+    [
+     160,
+     660
+    ],
+    [
+     130,
+     790
+    ],
+    [
+     60,
+     790
+    ],
+    [
+     0,
+     760
+    ]
+   ]
+  ],
+  "snapBand": 10
+ },
+ "strand2": {
+  "note": "the lower right locks and tips (viewer-right)",
+  "polys": [
+   [
+    [
+     728,
+     600
+    ],
+    [
+     832,
+     590
+    ],
+    [
+     832,
+     880
+    ],
+    [
+     735,
+     875
+    ],
+    [
+     712,
+     760
+    ]
+   ]
+  ],
+  "snapBand": 10
+ },
+ "iris": {
+  "grow": 0.0,
+  "cover": 0.995,
+  "ring": 4.5
+ },
+ "lids": {
+  "ring": 16
+ },
+ "inkReach": 3,
+ "minIsland": 24,
+ "wispZone": [
+  380,
+  330,
+  570,
+  500
+ ]
+}

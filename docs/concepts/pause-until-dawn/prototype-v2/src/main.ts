@@ -26,6 +26,7 @@ function main(): void {
     assetBaseUrl: './art/',
     rigUrl: './art/rig.json',
     debugTimeScale,
+    debugNoPost: new URLSearchParams(location.search).get('post') === '0',
   });
 
   const start = () => {

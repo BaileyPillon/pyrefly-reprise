@@ -1,0 +1,30 @@
+{
+  "raised": {
+    "box": [
+      257,
+      310,
+      429,
+      56
+    ],
+    "move": {
+      "dyOuter": -1,
+      "dyInner": -5,
+      "dxInner": 0
+    },
+    "method": "brow matte displaced (rig-face.py browpatches)"
+  },
+  "drawn": {
+    "box": [
+      257,
+      312,
+      429,
+      57
+    ],
+    "move": {
+      "dyOuter": 0,
+      "dyInner": 3,
+      "dxInner": 2
+    },
+    "method": "brow matte displaced (rig-face.py browpatches)"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parted": {
+    "box": [
+      392,
+      597,
+      187,
+      83
+    ],
+    "from": "docs/concepts/pause-until-dawn/prototype-v2/art/patches/mouth/parted.png",
+    "method": "v2 inpaint re-matted: tone drift removed, alpha only where the mouth changed (rig-face.py mouth)",
+    "maxDiffOutsideRegion": 0.0
+  },
+  "smile": {
+    "box": [
+      345,
+      579,
+      234,
+      106
+    ],
+    "from": "docs/concepts/pause-until-dawn/prototype-v2/art/patches/mouth/smile.png",
+    "method": "v2 inpaint re-matted: tone drift removed, alpha only where the mouth changed (rig-face.py mouth)",
+    "maxDiffOutsideRegion": 0.0
+  },
+  "pressed": {
+    "box": [
+      391,
+      580,
+      190,
+      84
+    ],
+    "from": "docs/concepts/pause-until-dawn/prototype-v2/art/patches/mouth/pressed.png",
+    "method": "v2 inpaint re-matted: tone drift removed, alpha only where the mouth changed (rig-face.py mouth)",
+    "maxDiffOutsideRegion": 0.0
+  }
+}

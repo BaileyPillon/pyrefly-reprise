@@ -1,0 +1,210 @@
+{
+  "z": [
+    "hairBack",
+    "body",
+    "headCore",
+    "irisR",
+    "irisL",
+    "eyeApertureR",
+    "eyeApertureL",
+    "hairFront",
+    "strand1",
+    "strand2",
+    "earring"
+  ],
+  "layers": {
+    "hairBack": {
+      "layer": "hairBack",
+      "box": [
+        93,
+        0,
+        739,
+        902
+      ],
+      "feather": 0,
+      "motion": "head",
+      "zIndex": 0,
+      "ownedPixels": 166929,
+      "hiddenFillPixels": 40567,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/hairBack.png"
+    },
+    "body": {
+      "layer": "body",
+      "box": [
+        0,
+        556,
+        832,
+        660
+      ],
+      "feather": 4,
+      "motion": "chest",
+      "zIndex": 1,
+      "ownedPixels": 320714,
+      "hiddenFillPixels": 40362,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/body.png"
+    },
+    "headCore": {
+      "layer": "headCore",
+      "box": [
+        213,
+        155,
+        507,
+        600
+      ],
+      "feather": 4,
+      "motion": "head",
+      "zIndex": 2,
+      "ownedPixels": 135084,
+      "hiddenFillPixels": 12503,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/headCore.png"
+    },
+    "irisR": {
+      "layer": "irisR",
+      "box": [
+        297,
+        391,
+        85,
+        81
+      ],
+      "feather": 1.5,
+      "motion": "iris",
+      "zIndex": 3,
+      "ownedPixels": 3964,
+      "hiddenFillPixels": 0,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/irisR.png"
+    },
+    "irisL": {
+      "layer": "irisL",
+      "box": [
+        567,
+        366,
+        115,
+        88
+      ],
+      "feather": 1.5,
+      "motion": "iris",
+      "zIndex": 4,
+      "ownedPixels": 3684,
+      "hiddenFillPixels": 376,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/irisL.png"
+    },
+    "eyeApertureR": {
+      "layer": "eyeApertureR",
+      "box": [
+        258,
+        362,
+        151,
+        124
+      ],
+      "feather": 1.5,
+      "motion": "head",
+      "zIndex": 5,
+      "ownedPixels": 5672,
+      "hiddenFillPixels": 0,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/eyeApertureR.png"
+    },
+    "eyeApertureL": {
+      "layer": "eyeApertureL",
+      "box": [
+        559,
+        364,
+        140,
+        105
+      ],
+      "feather": 1.5,
+      "motion": "head",
+      "zIndex": 6,
+      "ownedPixels": 3037,
+      "hiddenFillPixels": 354,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/eyeApertureL.png"
+    },
+    "hairFront": {
+      "layer": "hairFront",
+      "box": [
+        236,
+        0,
+        528,
+        466
+      ],
+      "feather": 4,
+      "motion": "fringe",
+      "zIndex": 7,
+      "ownedPixels": 171718,
+      "hiddenFillPixels": 0,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": null
+    },
+    "strand1": {
+      "layer": "strand1",
+      "box": [
+        0,
+        433,
+        184,
+        368
+      ],
+      "feather": 6,
+      "motion": "strand1",
+      "zIndex": 8,
+      "ownedPixels": 32156,
+      "hiddenFillPixels": 0,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": null
+    },
+    "strand2": {
+      "layer": "strand2",
+      "box": [
+        697,
+        573,
+        135,
+        293
+      ],
+      "feather": 6,
+      "motion": "strand2",
+      "zIndex": 9,
+      "ownedPixels": 26196,
+      "hiddenFillPixels": 0,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": null
+    },
+    "earring": {
+      "layer": "earring",
+      "box": [
+        203,
+        473,
+        127,
+        553
+      ],
+      "feather": 3,
+      "motion": "earring",
+      "zIndex": 10,
+      "ownedPixels": 28052,
+      "hiddenFillPixels": 0,
+      "source": "public/art/portraits/yuna-x2.png",
+      "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+      "fill": null
+    }
+  },
+  "restDiff": {
+    "mad": 0.0,
+    "max": 0.0,
+    "differingPixels": 0,
+    "compared": "premultiplied RGB and alpha of the 8-bit layer PNGs re-composited in z-order vs public/art/portraits/yuna-x2.png"
+  }
+}

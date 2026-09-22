@@ -1,0 +1,26 @@
+{
+  "key": "profile-left",
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/keys/aligned/profile-left.png",
+  "silhouette": "the key's own alpha (already a rembg cutout)",
+  "spec": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/keys.json",
+  "layers": {
+    "back": {
+      "file": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/profile-left/back.png",
+      "box": [
+        195,
+        0,
+        639,
+        859
+      ]
+    },
+    "front": {
+      "file": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/profile-left/front.png",
+      "box": [
+        195,
+        0,
+        639,
+        786
+      ]
+    }
+  }
+}

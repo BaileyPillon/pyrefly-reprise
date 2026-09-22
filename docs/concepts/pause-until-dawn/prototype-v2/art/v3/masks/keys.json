@@ -1,0 +1,448 @@
+{
+ "_comment": "Cut spec for tools/gen/rig-keys.py. jaw = a polyline across the whole canvas through the key's measured jaw landmarks (art/landmarks/<key>.json: jaw_R, chin, jaw_L) that separates the FRONT (above) from the hair hanging below the jaw (BACK). neck = the key's own neck column below the jaw, and everything below collarY, are DROPPED (the pinned frontal body shows there). Only the seeds come from these lines; the boundaries snap to ink within snapBand px. frontBrushes force the braid into the front.",
+ "keys": {
+  "q34-left": {
+   "file": "v3/keys/q34-left.png",
+   "silhouette": "isnet",
+   "snapBand": 12,
+   "jaw": [
+    [
+     0,
+     560
+    ],
+    [
+     240,
+     600
+    ],
+    [
+     330,
+     690
+    ],
+    [
+     470,
+     732
+    ],
+    [
+     600,
+     700
+    ],
+    [
+     660,
+     660
+    ],
+    [
+     832,
+     600
+    ]
+   ],
+   "neck": [
+    [
+     360,
+     700
+    ],
+    [
+     600,
+     690
+    ],
+    [
+     600,
+     1216
+    ],
+    [
+     360,
+     1216
+    ]
+   ],
+   "frontBrushes": [
+    {
+     "pts": [
+      [
+       247,
+       480
+      ],
+      [
+       250,
+       620
+      ],
+      [
+       246,
+       760
+      ],
+      [
+       240,
+       845
+      ]
+     ],
+     "r": 7
+    }
+   ],
+   "collar": [
+    [
+     0,
+     820
+    ],
+    [
+     280,
+     835
+    ],
+    [
+     420,
+     890
+    ],
+    [
+     480,
+     860
+    ],
+    [
+     547,
+     770
+    ],
+    [
+     685,
+     775
+    ],
+    [
+     832,
+     780
+    ]
+   ]
+  },
+  "q34-right": {
+   "file": "v3/keys/q34-right.out.png",
+   "silhouette": "isnet",
+   "snapBand": 12,
+   "jaw": [
+    [
+     0,
+     560
+    ],
+    [
+     250,
+     640
+    ],
+    [
+     406,
+     686
+    ],
+    [
+     468,
+     730
+    ],
+    [
+     519,
+     724
+    ],
+    [
+     566,
+     701
+    ],
+    [
+     613,
+     683
+    ],
+    [
+     832,
+     700
+    ]
+   ],
+   "neck": [
+    [
+     420,
+     721
+    ],
+    [
+     584,
+     677
+    ],
+    [
+     601,
+     1063
+    ],
+    [
+     420,
+     1063
+    ]
+   ],
+   "frontBrushes": [
+    {
+     "pts": [
+      [
+       349,
+       624
+      ],
+      [
+       358,
+       695
+      ],
+      [
+       367,
+       765
+      ],
+      [
+       376,
+       836
+      ]
+     ],
+     "r": 6
+    }
+   ],
+   "collar": [
+    [
+     0,
+     905
+    ],
+    [
+     400,
+     885
+    ],
+    [
+     470,
+     840
+    ],
+    [
+     560,
+     800
+    ],
+    [
+     748,
+     765
+    ],
+    [
+     832,
+     765
+    ]
+   ]
+  },
+  "profile-left": {
+   "file": "keys/aligned/profile-left.png",
+   "silhouette": "alpha",
+   "snapBand": 12,
+   "jaw": [
+    [
+     0,
+     640
+    ],
+    [
+     330,
+     650
+    ],
+    [
+     400,
+     686
+    ],
+    [
+     480,
+     782
+    ],
+    [
+     560,
+     740
+    ],
+    [
+     640,
+     640
+    ],
+    [
+     832,
+     600
+    ]
+   ],
+   "neck": [
+    [
+     430,
+     700
+    ],
+    [
+     640,
+     690
+    ],
+    [
+     640,
+     1216
+    ],
+    [
+     430,
+     1216
+    ]
+   ],
+   "collar": [
+    [
+     0,
+     905
+    ],
+    [
+     450,
+     900
+    ],
+    [
+     520,
+     880
+    ],
+    [
+     620,
+     860
+    ],
+    [
+     832,
+     840
+    ]
+   ]
+  },
+  "profile-right": {
+   "file": "v3/keys/profile-right.out.png",
+   "silhouette": "isnet",
+   "snapBand": 12,
+   "jaw": [
+    [
+     0,
+     600
+    ],
+    [
+     350,
+     640
+    ],
+    [
+     430,
+     740
+    ],
+    [
+     510,
+     782
+    ],
+    [
+     590,
+     686
+    ],
+    [
+     660,
+     650
+    ],
+    [
+     832,
+     640
+    ]
+   ],
+   "neck": [
+    [
+     350,
+     690
+    ],
+    [
+     560,
+     700
+    ],
+    [
+     560,
+     1216
+    ],
+    [
+     350,
+     1216
+    ]
+   ],
+   "collar": [
+    [
+     0,
+     840
+    ],
+    [
+     370,
+     860
+    ],
+    [
+     470,
+     880
+    ],
+    [
+     540,
+     900
+    ],
+    [
+     832,
+     905
+    ]
+   ],
+   "clipEllipse": [
+    500,
+    400,
+    330,
+    900
+   ]
+  }
+ },
+ "mirror": {
+  "from": "keys/aligned/profile-left.png",
+  "to": "v3/keys/profile-right.png",
+  "irisEllipse": [
+   547,
+   421,
+   20,
+   44
+  ],
+  "checkCrop": [
+   499,
+   360,
+   639,
+   480
+  ],
+  "markers": "braid: the plate hangs it on her right (green-eye) side, so profile-right (her left side) correctly shows none, and the mirrored source shows none either. clasp: the plate's red/cyan hair clasp sits on her LEFT side, so profile-right should show it near the back of the head; neither profile key has it (profile-left correctly hides it) - NOT added (a frontal clasp pasted onto a side view would be the wrong perspective), disclosed.",
+  "neckAxis": 495
+ },
+ "replace": {
+  "q34-right": {
+   "from": "keys/aligned/q34-right.png",
+   "to": "v3/keys/q34-right.png",
+   "eyeY": 483,
+   "chin": [
+    510,
+    840
+   ],
+   "anchor": [
+    540,
+    840
+   ],
+   "target": [
+    495,
+    730
+   ],
+   "plateEyeToChin": 316,
+   "why": "the first alignment placed the chin at (470,730) by construction but the key's real chin (read off a 1.5x gridded crop) sits at (510,840) and its eye line (mean of the two pupils, 447 and 519) at 483: the head was drawn about 13 percent too large and 110 px too low, so it could never sit on the frontal neck."
+  }
+ },
+ "outpaint": {
+  "q34-left": {
+   "from": "keys/aligned/q34-left.png",
+   "to": "v3/keys/q34-left.png",
+   "paintedRect": [
+    113,
+    184,
+    686,
+    1020
+   ]
+  },
+  "q34-right": {
+   "from": "v3/keys/q34-right.png",
+   "to": "v3/keys/q34-right.out.png",
+   "paintedRect": [
+    0,
+    0,
+    753,
+    1216
+   ]
+  },
+  "profile-right": {
+   "from": "v3/keys/profile-right.png",
+   "to": "v3/keys/profile-right.out.png",
+   "paintedRect": [
+    159,
+    0,
+    832,
+    1216
+   ]
+  }
+ },
+ "outpaintPicks": {
+  "q34-left": "out-q34-left.2.full.png",
+  "q34-right": "out-q34-right.2.full.png"
+ }
+}

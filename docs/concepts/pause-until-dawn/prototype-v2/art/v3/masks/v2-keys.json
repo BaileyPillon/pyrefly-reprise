@@ -1,0 +1,167 @@
+{
+ "_comment": "The v2 rig.json top-level keys (commit 8d5c611), frozen so tools/gen/rig-json.py derives the v3 landmarks from them exactly once.",
+ "keys": [
+  {
+   "id": "frontal",
+   "yawDeg": 0,
+   "file": "layers/frontal/head-flat.png",
+   "landmarks": [
+    [
+     338,
+     422
+    ],
+    [
+     462,
+     522
+    ],
+    [
+     462,
+     595
+    ],
+    [
+     395,
+     617
+    ],
+    [
+     470,
+     610
+    ],
+    [
+     470,
+     650
+    ],
+    [
+     470,
+     730
+    ],
+    [
+     390,
+     50
+    ]
+   ]
+  },
+  {
+   "id": "q34-left",
+   "yawDeg": -40,
+   "file": "layers/q34-left/head-flat.png",
+   "landmarks": [
+    [
+     320,
+     425
+    ],
+    [
+     415,
+     525
+    ],
+    [
+     450,
+     570
+    ],
+    [
+     410,
+     618
+    ],
+    [
+     490,
+     615
+    ],
+    [
+     490,
+     645
+    ],
+    [
+     470,
+     730
+    ],
+    [
+     350,
+     200
+    ]
+   ]
+  },
+  {
+   "id": "q34-right",
+   "yawDeg": 40,
+   "file": "layers/q34-right/head-flat.png",
+   "landmarks": [
+    [
+     355,
+     515
+    ],
+    [
+     335,
+     545
+    ],
+    [
+     400,
+     635
+    ],
+    [
+     400,
+     680
+    ],
+    [
+     460,
+     675
+    ],
+    [
+     460,
+     698
+    ],
+    [
+     470,
+     730
+    ],
+    [
+     420,
+     150
+    ]
+   ]
+  },
+  {
+   "id": "profile-left",
+   "yawDeg": -85,
+   "file": "layers/profile-left/head-flat.png",
+   "landmarks": [
+    [
+     420,
+     410
+    ],
+    [
+     300,
+     545
+    ],
+    [
+     335,
+     605
+    ],
+    [
+     400,
+     635
+    ],
+    [
+     345,
+     625
+    ],
+    [
+     335,
+     650
+    ],
+    [
+     350,
+     700
+    ],
+    [
+     280,
+     80
+    ]
+   ]
+  }
+ ],
+ "headBox": {
+  "x": 0.0,
+  "y": 0.0,
+  "w": 1.0,
+  "h": 0.8355
+ }
+}

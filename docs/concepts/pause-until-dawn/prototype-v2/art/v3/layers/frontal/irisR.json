@@ -1,0 +1,17 @@
+{
+  "layer": "irisR",
+  "box": [
+    297,
+    391,
+    85,
+    81
+  ],
+  "feather": 1.5,
+  "motion": "iris",
+  "zIndex": 3,
+  "ownedPixels": 3964,
+  "hiddenFillPixels": 0,
+  "source": "public/art/portraits/yuna-x2.png",
+  "owner": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/masks/owner.npy",
+  "fill": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/fills/irisR.png"
+}
