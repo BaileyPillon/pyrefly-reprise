@@ -100,7 +100,11 @@
      nothing) or a deep review that closes those five gaps settles it.
   4. Downloads Bailey approved ("yes to downloads but on D: please"): Wan 2.2 TI2V-5B + VAE + umt5 text encoder into
      `D:/Tools/ComfyUI/ComfyUI/models/**`, THA4 repo into `D:/Tools/tha4`; log and checksums under
-     `D:/Tools/video-models/_dl/`. A video-clip preview workflow for Yuna launches when the marker appears.
+     `D:/Tools/video-models/_dl/`. `wf_cfd6b0fa-19e` "pyrefly-yuna-video-preview" (Sonnet) is running on them: the
+     expensive option Bailey chose ("I'm ok with an expensive option ... Show me a preview of what you can do"): a Wan 2.2
+     image-to-video clip set of Yuna from her approved plate, judged, a clip-graph demo page and a stitched preview, plus a
+     THA4 trial. OWNS `docs/concepts/pause-until-dawn/video-preview/**`, `tools/gen/video.mjs`, `D:/Tools/pyrefly-video/**`,
+     `D:/Tools/tha4/**`. Shares the ComfyUI queue with 1 and 2.
 - Next, in order: (1) pause remake verified, then the living portrait ported for the main party; (2) one tidy pass:
   advisor v2 bench harness fallback and three test defects (`docs/handoff/advisor-v2.md`), Leblanc provenance labels,
   front-end phone type floor FE-001; (3) first incremental release, round 08, launched **top-level** with
