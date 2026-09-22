@@ -1,5 +1,10 @@
 # Production — the Leblanc Syndicate chapter (2026-09-21)
 
+**Status: CANDIDATE, not approved (2026-09-21):** identity drift between states —
+the driver found the leblanc/ormi/logos pose sets drift identity state to state.
+Removed from `docs/target/approved-hashes.json` (`chapter:leblanc:2026-09-21`
+withdrawn); re-render in progress.
+
 Veto sheet: `production.png` (one row per installed item: picked concept where one
 exists, the installed painting whole, a 1:1 native-pixel face/detail crop, and a
 1:1 native-pixel torso/hands crop).
