@@ -34,17 +34,17 @@
 > plan: **"yes you have my approvals there for music"**. A sub-agent that sees a status question relayed from the chat ("eta?") must NOT answer it: the driver
 > answers the owner; agents do the task in their brief.
 
-## Live: Build B.1
+## Live: Build C.1 (release 08)
 
-- https://baileypillon.github.io/pyrefly-reprise/ = `main 8f48237`, bundle `D260C6cS`, deployed 2026-09-21 14:24 EDT under
-  the owner's release rules A + B + C (focused review before deploy: SHIP with disclosed majors; live check PASS, 761 files
-  byte-identical; the deep review runs after the deploy on the live build). Contents: the moving title screen on the approved
-  key art, silhouette chapter cards (eight chapters, the three new ones locked as Coming), 42 approved poses. The build before
-  it was A.2 (`fd0ae96`, owner override). It still carries the 31 downgraded art4 poses (restored on main in `0180be3`,
-  ships with the next deploy).
-- Critic round 07 ran (`de4d25f`, focused review of this build: SHIP) but `critic/pending/8f48237.json` still lists a deep
-  review PENDING carried over from `fd0ae96`, even though round 07 ran: to be investigated before the next cut (two-deploy
-  cap, release rule B).
+- https://baileypillon.github.io/pyrefly-reprise/ = `main 1b33971`, bundle `BvhtVfzJ`, deployed 2026-09-21 23:48 EDT under
+  Bailey's owner override, verbatim: **"Push the live build now please"** (the override authorised the deploy agent; it
+  settles no review obligation). Contents: the pause remake on the Until Dawn character screen, move advisor v2, FFX-2
+  Active ATB, Auron's briefing switched on, art round 4 restored, the front-end type floor, and FOC-01 to FOC-04 fixed.
+  The build before it was B.1 (`8f48237`).
+- Focused review of the candidate: SHIP, with disclosed majors FOC-05 (the FFX first-turn coach mark overlaps the advisor
+  card, first time only) and FOC-06 (the advisor card's type sits under 12 px, inherited from the live build). Obligations
+  still owed on this build: live verification (exact-artifact check against the live URL) and the deep review on the live
+  build, carried from `fd0ae96` and `8f48237` — both running now as top-level workflows.
 
 ## In flight: Build C (the next live build)
 
@@ -108,6 +108,9 @@
      CHK-007, CHK-022 victory halves, hardware perf evidence), so `critic-clear` refused it. Two deploys already went
      out with the debt, so release 08 is refused unless Bailey overrides (`--owner-override="<his words>"`, which settles
      nothing) or a deep review that closes those five gaps settles it.
+     **RELEASE 08 IS LIVE:** deployed as `main 1b33971` (bundle `BvhtVfzJ`) at 2026-09-21 23:48 EDT under the owner
+     override above; see "Live: Build C.1 (release 08)" at the top of this file. Still owed: live verification and the
+     deep review on the live build (both running now as top-level workflows).
   4. Downloads Bailey approved ("yes to downloads but on D: please"): Wan 2.2 TI2V-5B + VAE + umt5 text encoder into
      `D:/Tools/ComfyUI/ComfyUI/models/**`, THA4 repo into `D:/Tools/tha4`; log and checksums under
      `D:/Tools/video-models/_dl/`. `wf_cfd6b0fa-19e` "pyrefly-yuna-video-preview" (Sonnet) is running on them: the

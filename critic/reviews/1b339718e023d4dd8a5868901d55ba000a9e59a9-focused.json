@@ -1,0 +1,387 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-09-21T23:58:00.000Z",
+  "build": {
+    "mainSha": "1b339718e023d4dd8a5868901d55ba000a9e59a9",
+    "worktree": "D:/pyrefly-release",
+    "artifact": "dist-gate built with npx vite build --outDir dist-gate --emptyOutDir",
+    "servedAt": "http://localhost:5471/pyrefly-reprise/ (vite preview)",
+    "liveComparedWith": "8f48237 at https://baileypillon.github.io/pyrefly-reprise/",
+    "browserMode": "gpu (PYREFLY_BROWSER=gpu, Chromium/ANGLE d3d11, no black-canvas fallback needed)",
+    "seed": 1
+  },
+  "targetVersion": "68cc931043ce814d11844230a0fe89965014b9a5fb55b2f1e6fa2c97296b4f39",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect in the changed area: FFX chapter 1 was reached from the title screen with nothing but real Enter presses, the first-turn coach mark now appears over a live command menu, one Enter dismisses it without leaking into the menu, and a real command run through the menu advanced the engine (battleLog 3 -> 14).",
+    "No regression against live 8f48237: the live build was opened in the same session at 1600x900 and 390x844. Everything that works live still works here, and the three things this candidate changed all measure better here than live (OD label 11.0 -> 12.25 px effective, 'I hide' 11.5 -> >=12, phone pause tab 25 -> 44 px, selected tab off-screen 4 of 8 -> 0 of 8).",
+    "Both majors are disclosed, not holds. FOC-05 lives entirely inside the brand-new onboarding feature, which does not exist on the live site at all, and is dismissed by the one key its own prompt names. FOC-06 was measured identically on the live build in the same session, so it is inherited, not introduced.",
+    "The four issues the previous focused review left open (FOC-01 to FOC-04 on 5e92289) are all fixed and re-measured with real input here.",
+    "npx tsc --noEmit clean; 92 changed-area unit tests pass across the four test files this batch added or changed."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "The pause screen owns the window at all three widths: full-bleed painting, no letterbox band, tab strip and meters inside the viewport at 390x844, 1600x900 and 2000x1012.",
+      "game": "both",
+      "chapter": "seymour-flux (FFX), ffx2-bahamut (FFX-2)",
+      "state": "pause, opened with a real Escape from a live battle",
+      "evidence": [
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/b1-pause-phone-390x844.png",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/d1-pause-ffx-1600x900.png",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/c2-pause-ffx2-2000x1012.png"
+      ],
+      "mode": "manual",
+      "minutes": 3
+    },
+    {
+      "id": "CHK-003",
+      "result": "FAIL",
+      "reason": "FOC-04's two named items are fixed (the OD / Overdrive gauge label now measures 12.25 px effective through the 2.5x LetterboxStage transform, and 'I hide' clears the floor), but a walk of all 86 battle-HUD text nodes at 1600x900 still finds 8 under the 12 px floor, all of them in the move advisor card: 'Guide's pick' 9.75 px, the four stat chips 10.5 px, 'N hide moves' 11.0 px, 'Next best move' 11.5 px. The same nodes measure the same on the live build. See FOC-06.",
+      "game": "both (measured in FFX chapter 1; the card is shared)",
+      "chapter": "seymour-flux",
+      "state": "battle, turn 1, command menu open",
+      "evidence": [
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a1-ffx-first-turn-1600x900.png"
+      ],
+      "mode": "automated",
+      "minutes": 3
+    },
+    {
+      "id": "CHK-004",
+      "result": "PASS",
+      "reusedFrom": "critic/reviews/5e92289f9cc5a1d1bd0f65e9c00ebddeacdc40d1-focused.json",
+      "dependencyArgument": "git diff 5e92289..1b33971 -- src/ touches only PauseView.ts, the three coach files, pause-screen.css and ffx-hud.css. No advisor, engine or data source changed, so the previous candidate's advisor cross-read stands. It was also confirmed live here: the card named 'Hastega -> the party' with 'IN WHITE MAGIC', '30 MP', 'ALWAYS HITS' on the same turn the menu showed WHITE MAGIC x3.",
+      "reason": "Advice names a legal owned action and where it is in the menu.",
+      "game": "both",
+      "chapter": "seymour-flux",
+      "state": "battle, turn 1",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a1-ffx-first-turn-1600x900.png"],
+      "mode": "manual",
+      "minutes": 1
+    },
+    {
+      "id": "CHK-005",
+      "result": "UNVERIFIED",
+      "reason": "The broken-board advisor cases were not re-run in the browser in this focused pass. The advisor is untouched since the previously reviewed candidate, so this carries the same unknown that review recorded rather than a new one.",
+      "game": "both",
+      "chapter": "n/a",
+      "state": "n/a",
+      "mode": "manual",
+      "minutes": 0
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "reason": "The dismissing press dies with the overlay, now in both games. With Auron's line up and the FFX command menu open behind it, one Enter removed the mark, opened no submenu and left the stack on its 7 unchanged rows; the next two Enters then ran a real command. This was the specific hazard FOC-01's fix created by opening the menu in the same turn as the line, and CoachMark now registers the capture listener for holding lines too.",
+      "game": "both (FFX newly, FFX-2 already)",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "battle, first turn, coach mark up",
+      "evidence": [
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a2-ffx-after-confirm-1600x900.png"
+      ],
+      "mode": "manual",
+      "minutes": 3
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "reason": "No developer vocabulary in the changed surfaces: the coach lines, the pause tab labels and the pause body copy read as player text ('He moves after you. Not before. Use it.', 'H HIDE PANELS', 'ESC RESUME').",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "battle and pause",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/b1-pause-phone-390x844.png"],
+      "mode": "manual",
+      "minutes": 1
+    },
+    {
+      "id": "CHK-008",
+      "result": "FAIL",
+      "reason": "The FFX coach mark's plate is drawn over the move advisor card rather than beside it: mark rect [448,99,400x145] against card rect [402,98,370x189], an overlap of 324x145 px, so the card's title, the pick and its cost chips are behind an opaque panel for the whole of the first turn. See FOC-05. Nothing covers a painted actor: the party, Seymour Flux and Mortiorchis are all clear of the HUD at 1600x900.",
+      "game": "FFX only",
+      "chapter": "seymour-flux",
+      "state": "battle, turn 1, coach mark up",
+      "evidence": [
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a1-ffx-first-turn-1600x900.png",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/tile-c2-first-use-ffx.jpg"
+      ],
+      "mode": "manual",
+      "minutes": 4
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "reason": "Every pause tab label renders in full at 390x844 and no name is truncated: member:tidus, member:yuna, member:kimahri, chapter, guide, options, controls, music all measured with their full text width (46.3 to 90.8 px) inside a strip that now scrolls.",
+      "game": "both",
+      "chapter": "seymour-flux",
+      "state": "pause at 390x844",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "mode": "automated",
+      "minutes": 2
+    },
+    {
+      "id": "CHK-010",
+      "result": "PASS",
+      "reason": "What is selected is obvious and now always on screen: cycling all eight pause tabs with real E presses at 390x844, the selected tab's rect stayed inside [0, 390] on all eight (scrollLeft moved 0 -> 7 -> 104 -> 186 -> 273 -> 332 -> 324). It was 4 of 8 off-screen on the previous candidate.",
+      "game": "both",
+      "chapter": "seymour-flux",
+      "state": "pause at 390x844",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/b2-pause-phone-tab-cycle.png"],
+      "mode": "automated",
+      "minutes": 3
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Everything claimed here was driven by the player's own input. FFX chapter 1 was reached from the title with real Enter presses only (title -> chapter-select -> party-prep -> cutscene -> battle, no debug navigation); pause was opened and closed with real Escape, tabs cycled with real E, panels hidden and restored with real H. The debug API was used only to read state and, for the two non-entry captures, to set up the chapter.",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "title through battle and pause",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "mode": "manual",
+      "minutes": 6
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every capture asserted its screen and state first: waitForFunction on __pyreflyReady, then on screen() === 'battle', then on the command stack having children, before any screenshot. No capture was taken after a failed wait.",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "all",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "mode": "automated",
+      "minutes": 1
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "reason": "This is a pre-deploy focused review of the immutable production candidate, not a live review. The live site was opened only as the regression baseline for the ship tags. The candidate's own live obligation is created by the deploy.",
+      "game": "both",
+      "chapter": "n/a",
+      "state": "n/a",
+      "mode": "manual",
+      "minutes": 2
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "The shared work landed in both games where it is shared. The pause tab scroll fix, the 44 px tap target and the capture-phase confirm swallow are all in shared files and were checked in FFX chapter 1 and FFX-2 chapter 4; both games reach a real command menu with the coach layer active.",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "battle and pause",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/e1-ffx2-ch4-menu-1600x900.png"],
+      "mode": "manual",
+      "minutes": 4
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Presence in the intended game and absence in the other were both checked. FOC-01 is FFX only and its commit says so: in FFX the html carries data-coach-mark-game='ffx', the menu is open (7 rows) and .mad__card is opacity 1; in FFX-2 chapter 4 the flag is 'ffx2', Rikku's line is up, the menu is open (3 rows) and .mad__card is deliberately opacity 0, so one-teaching-surface-at-a-time still holds for FFX-2 alone, which is what coach.css's new [data-coach-mark-game='ffx2'] selector is for. FOC-04 is FFX only (ffx-hud.css alone; the FFX-2 HUD was untouched). FOC-02 and FOC-03 are both, in shared pause CSS, and were measured in both games' pause screens.",
+      "game": "both, split as stated",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "battle, first turn",
+      "evidence": [
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a1-ffx-first-turn-1600x900.png",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/e1-ffx2-ch4-menu-1600x900.png"
+      ],
+      "mode": "manual",
+      "minutes": 5
+    },
+    {
+      "id": "CHK-022",
+      "result": "UNVERIFIED",
+      "reason": "No chapter was played to a win or a loss in this pass, so the outcome half of the check is unproved, exactly as the previous focused review recorded. Entry and pause/resume transitions were proved: title to battle on real keys, Escape into pause and back to battle four times across both games.",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "entry and pause transitions only",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "mode": "manual",
+      "minutes": 2
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "reason": "Both changed subsystems were invoked through the real presentation path, not a harness: PauseView.scrollActiveTabIntoView ran because a real E press re-rendered the strip (scrollLeft moved), and CoachLayer/CoachMark ran because the real first FFX turn raised the mark from a cold context.",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "battle and pause",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "mode": "manual",
+      "minutes": 2
+    }
+  ],
+  "targets": {
+    "required": 6,
+    "matched": 4,
+    "failing": 1,
+    "unverified": 0,
+    "waiting": 1
+  },
+  "issues": [
+    {
+      "id": "FOC-05",
+      "severity": "major",
+      "title": "FFX first turn: the coach mark is drawn on top of the advisor card it was just fixed to reveal, not beside it",
+      "game": "FFX only (FFX-2 hides the card on purpose and is correct)",
+      "chapter": "seymour-flux (chapters 1 to 3, first time only)",
+      "expected": "The approved tile docs/concepts/onboarding/c-aurons-briefing/c2-first-use-ffx.png puts Auron's italic line in the upper middle of the stage and the NEXT BEST MOVE card low and separate, so the player reads both at once. The tile's own build note: 'one italic line in Auron's voice beside the command menu ... No dim, no numbered course, no second surface.'",
+      "observed": "FOC-01's fix works: the command menu is open (7 rows, 469x420), .mad__card is opacity 1 and the intent panel no longer claims 'Waiting for your turn'. But the advisor card now lays out at the top centre, directly under the mark, so the mark's opaque plate covers it: mark rect [448, 99, 400x145] against card rect [402, 98, 370x189], an overlap of 324x145 px. In the capture the card's title, 'GUIDE'S PICK', the 30 MP / ALWAYS HITS / + HASTE chips and the explanation line are all ghosted behind the plate. The card is technically visible and invisible in practice for the whole of the first turn.",
+      "repro": "Fresh context at 1600x900, production preview of dist-gate, seed 1. Reach FFX chapter 1 with real Enter presses from the title. On the first turn, before pressing anything, read the bounding rects of .coach-mark and .mad__card and screenshot.",
+      "evidence": [
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a1-ffx-first-turn-1600x900.png",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/tile-c2-first-use-ffx.jpg",
+        "critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"
+      ],
+      "confidence": "high, measured and seen in the target composite",
+      "requirement": "docs/target/targets.json group 'fight', tile 'Onboarding C2: FFX first-use line (Auron)', state approved; AGENTS.md rule 9",
+      "where": "src/ui/coach/coach.css (the FFX mark's placement band) with src/engine/tactics MoveAdvisor.layout()'s card band; suspected, not traced to a line",
+      "fix": "Give the FFX mark its own band clear of .mad__card's rect the way the FFX-2 mark clears the party rows: either raise the mark above the card's top edge, or move the FFX card back to the low band the approved tile pictures while a mark is up.",
+      "acceptanceCheck": "Fresh context, FFX chapter 1, first turn: the rects of .coach-mark and .mad__card do not intersect, and both are inside the viewport. Add the assertion beside the existing FOC-01 case in tests/e2e and tests/unit/ui-coach-layer.test.ts.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "attempts": 1
+    },
+    {
+      "id": "FOC-06",
+      "severity": "major",
+      "title": "The move advisor card's own type renders 9.75 to 11.5 px effective at 1600x900, under the 12 px floor the rest of this release was raised to",
+      "game": "both (the card is shared)",
+      "chapter": "seymour-flux measured; the card is on every chapter",
+      "expected": "FE-001 floored front-end type at 14/12 px this release and FOC-04 raised the FFX HUD's OD label and hide chip to clear 12 px effective through the 2.5x LetterboxStage transform. CHK-003 measures the in-stage HUD against the same floor.",
+      "observed": "Walking all 86 battle-HUD text nodes at 1600x900 through their accumulated DOMMatrix scale: 8 are under 12 px effective, and every one of them is in the move advisor card. 'Guide's pick' 9.75 px (3.9 css), the four stat chips 'in White Magic' / '30 MP' / 'always hits' / '+ Haste' 10.5 px (4.2 css), the 'N hide moves' chip 11.0 px, 'Next best move' 11.5 px (4.6 css). The previous review measured this HUD with the FFX coach mark up, when the card was opacity 0 and therefore skipped, which is why these nodes were reported as clear. The same nodes measure identically on the live build 8f48237, so this is inherited rather than introduced: 'Guide's pick' 9.75, the chips 10.5, 'Next best move' 11.5.",
+      "repro": "Fresh context at 1600x900, FFX chapter 1, command menu open, no coach mark. Walk every text node under body, multiply font-size by the accumulated transform scale of its ancestors, list everything under 12. Repeat against https://baileypillon.github.io/pyrefly-reprise/ for the live baseline.",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "confidence": "high, measured on both builds in the same session",
+      "requirement": "critic/CHECKS.md CHK-003; the 12 px floor FE-001 set this release",
+      "where": "the .mad__* rules in the move advisor's stylesheet",
+      "fix": "Raise .mad__badge to 4.8 css px and the .mad__stat / .mad__title / hide-chip rules to at least 4.8, the same arithmetic FOC-04 used for .ffx-stat__od em (4.8 css x 2.5 = 12.0), or document the exception in the floor.",
+      "acceptanceCheck": "At 1600x900 with the advisor card visible, every text node in the battle HUD measures at least 12 px effective. Extend tests/unit/ffx-hud-css-type-floor.test.ts to the .mad__* rules.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "attempts": 0
+    },
+    {
+      "id": "FOC-01",
+      "severity": "polish",
+      "title": "FIXED and re-verified: the FFX first-turn coach mark keeps the command menu, the advisor card and a truthful intent panel in the same frame",
+      "game": "FFX only",
+      "chapter": "seymour-flux",
+      "expected": "See the previous review. Menu visible, card populated, no false 'Waiting for your turn'.",
+      "observed": "Fixed. On the first FFX turn with the mark up: .ig-cmd-stack display flex, 7 children, 469x420 rect; .mad__card opacity 1 with its pick populated; the body text no longer contains 'Waiting for your turn'; the intent panel shows Mortiorchis at 4000/4000 with its affinity row. FFX-2 chapter 4 still behaves as it did. Carried forward as a record only; FOC-05 is the residue.",
+      "repro": "As FOC-05.",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/a1-ffx-first-turn-1600x900.png"],
+      "confidence": "high",
+      "requirement": "critic/reviews/5e92289f9cc5a1d1bd0f65e9c00ebddeacdc40d1-focused.json FOC-01",
+      "where": "src/ui/coach/CoachLayer.ts, CoachMark.ts, coach.css",
+      "fix": "none needed",
+      "acceptanceCheck": "met",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "attempts": 1
+    },
+    {
+      "id": "FOC-02",
+      "severity": "polish",
+      "title": "FIXED and re-verified: the phone pause tab strip scrolls the selected tab into view",
+      "game": "both",
+      "chapter": "seymour-flux",
+      "expected": "After each Q/E press the selected tab's rect lies inside [0, innerWidth] at 390x844.",
+      "observed": "Fixed. Cycling all eight tabs with real E presses at 390x844, every selected tab was inside the window (0 of 8 off-screen, was 4 of 8). scrollLeft moves 0, 0, 7, 104, 186, 273, 332, 324 as the selection walks the strip.",
+      "repro": "Fresh context 390x844, chapter seymour-flux, Escape to pause, press E seven times, read .pause__tab--on's rect against innerWidth.",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/b2-pause-phone-tab-cycle.png"],
+      "confidence": "high",
+      "requirement": "critic/reviews/5e92289...-focused.json FOC-02",
+      "where": "src/app/screens/pause/PauseView.ts scrollActiveTabIntoView",
+      "fix": "none needed",
+      "acceptanceCheck": "met",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "attempts": 1
+    },
+    {
+      "id": "FOC-03",
+      "severity": "polish",
+      "title": "FIXED and re-verified: the phone pause tab tap target is 44 px",
+      "game": "both",
+      "chapter": "seymour-flux",
+      "expected": "At 390x844 every .pause__tab rect is at least 44 px tall.",
+      "observed": "Fixed. Measured 44.0 px on seven tabs and 49.0 px on the selected one (was 25 px). Widths 46.3 to 90.8 px.",
+      "repro": "Fresh context 390x844, pause open, read every .pause__tab rect.",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/b1-pause-phone-390x844.png"],
+      "confidence": "high",
+      "requirement": "critic/reviews/5e92289...-focused.json FOC-03",
+      "where": "src/ui/common/pause-screen.css",
+      "fix": "none needed",
+      "acceptanceCheck": "met",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "attempts": 1
+    },
+    {
+      "id": "FOC-04",
+      "severity": "polish",
+      "title": "FIXED for the two items it named: the FFX HUD OD label and hide chip now clear the 12 px floor",
+      "game": "FFX only",
+      "chapter": "seymour-flux",
+      "expected": "Every battle HUD text node at least 12 px effective at 1600x900, or a documented exception.",
+      "observed": "The two named nodes are fixed: .ffx-stat__od em went 4.4 -> 4.9 css px (11.0 -> 12.25 effective) and the 'I hide' chip now clears the floor; neither appears in the under-12 list any more, and both measure 11.0 / 11.5 on the live build. The rest of the check's scope is now carried by FOC-06, which the previous measurement could not see.",
+      "repro": "As FOC-06.",
+      "evidence": ["critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused/driver-log.txt"],
+      "confidence": "high",
+      "requirement": "critic/reviews/5e92289...-focused.json FOC-04",
+      "where": "src/ui/ffx/ffx-hud.css",
+      "fix": "none needed for the named items; see FOC-06",
+      "acceptanceCheck": "met for the named items",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "attempts": 1
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Real-key entry: title -> chapter-select -> party-prep -> cutscene -> battle in FFX chapter 1, Enter presses only, no debug navigation",
+      "FFX first turn with the coach mark up: menu state, advisor card opacity and text, intent panel copy, mark/card geometry, effective type sizes of all 86 HUD text nodes",
+      "The dismissing press: one Enter clears the mark, opens no submenu, leaves the stack unchanged; two further Enters run a real command and the engine advances (battleLog 3 -> 14)",
+      "Pause at 390x844: open on real Escape, all eight tabs cycled with real E, tab rects and strip scrollLeft read each step, resume on real Escape back to battle",
+      "Pause at 1600x900 (FFX) and 2000x1012 (FFX-2): all eight tabs walked with body content read, H hide and restore, Escape resume",
+      "FFX-2 chapter 4 to a real command menu: Rikku's gauge line, data-coach-mark-game flag, advisor card gating, menu rows",
+      "The live build 8f48237 opened in the same session at 1600x900 and 390x844 for every regression tag, including the same effective-type walk",
+      "Target comparison of the C2 FFX first-use tile as a composite (tools/end-state-board.mjs --pair)",
+      "npx tsc --noEmit clean; 92 tests pass in ui-coach-layer, pause-remake, pause-remake-css and ffx-hud-css-type-floor"
+    ],
+    "reused": [
+      {
+        "what": "The engine, advisor, FFX-2 Active ATB, save migration, Nul-targeting data audit and the four matched target tiles",
+        "from": "critic/reviews/5e92289f9cc5a1d1bd0f65e9c00ebddeacdc40d1-focused.json (ship SHIP)",
+        "why": "git diff 5e92289..1b33971 -- src/ touches exactly six files: PauseView.ts, CoachLayer.ts, CoachMark.ts, coach.css, pause-screen.css and ffx-hud.css. No engine, data, advisor, ATB or save code changed, and everything else in the delta is tools/gen art pipeline that ships no product code. The dependency argument holds; the presentation surfaces that did change were re-measured here rather than carried."
+      }
+    ],
+    "notTested": [
+      "A win or a loss to the results screen in any chapter (CHK-022's outcome half)",
+      "CHK-005's broken-board advisor cases in the browser",
+      "Chapters 2, 3 and 5; Macalania, Evrae and Leblanc, which ship locked as Coming and are unreachable by a player",
+      "Audio: no listening assessment and none is claimed (AGENTS.md rule 13)",
+      "The candidate pose sets under public/art/characters for leblanc/ormi/logos/evrae: nothing playable references them and the plan set approvedArtCheck false",
+      "4:3, 1440p and 4K shapes; a real phone, a real controller, Safari",
+      "The living-portrait rig, the video-preview tool and the concept clips: tools and docs only, no product code path"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "The deep review this build owes, on the live build after the deploy (critic-plan: deepAfterDeploy, four focused systems and a shared-system change). It must carry FOC-05 and FOC-06, and note that two live builds now owe a deep review and the third deploy went out on Bailey's override of 2026-09-21.",
+  "elapsedMinutes": 38
+}
