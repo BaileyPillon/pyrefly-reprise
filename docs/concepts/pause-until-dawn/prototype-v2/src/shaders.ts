@@ -15,7 +15,7 @@ precision highp float;
 layout(location = 0) in vec2 aPos;
 layout(location = 1) in vec2 aUV;
 
-uniform vec4 uHeadBox; // x, y, w, h, normalised UV space
+uniform vec4 uHeadBox; // x, y, w, h, normalised UV space (canvas-relative, not this quad's own local UV)
 uniform float uYawNorm; // -1..1
 uniform float uPitchNorm; // -1..1
 uniform float uWarpScale;
@@ -28,9 +28,16 @@ uniform vec2 uOffset;
 // stand-in's full-canvas grid mesh uses the identity (scale 1, center 0).
 uniform vec2 uScale;
 uniform vec2 uCenter;
+// This quad's own box in CANVAS-normalised UV space (x, y, w, h), so
+// aUV (always 0..1 across just THIS quad/crop, never the whole canvas) can be
+// converted to a canvas-relative UV before it's compared against uHeadBox —
+// see the FIX note below. Identity (0,0,1,1) for the stand-in's full-canvas
+// grid mesh, where aUV already IS the canvas UV.
+uniform vec4 uUVBox;
 
 out vec2 vUV;
 out float vMask;
+out vec2 vCanvasUV;
 
 float headMask(vec2 uv) {
   vec2 c = uHeadBox.xy + uHeadBox.zw * 0.5;
@@ -42,9 +49,26 @@ float headMask(vec2 uv) {
 }
 
 void main() {
-  float mask = headMask(aUV);
+  // FIX (living-portrait-v2 fix pass): every placed sub-quad (an authored
+  // key's own crop, a frontal sub-layer, the body) is a SMALL quad whose own
+  // aUV always runs 0..1 across just that quad -- never across the whole
+  // canvas. uHeadBox/headMask are defined in CANVAS-normalised UV space
+  // (rig.json's own headBox). Feeding the quad's own local aUV straight into
+  // headMask (as this shader did before this pass) treats "the middle of
+  // whatever's been cropped" as "the middle of the actual head box" for
+  // every quad, independently -- a rectangular vignette centred on EACH
+  // quad's own crop, at full opacity, present even with no cross-dissolve
+  // happening at all (measured this pass: identical at yaw 0 with a single
+  // fully-opaque key). uUVBox is this quad's real box in canvas UV space
+  // (identity for the stand-in's one full-canvas mesh, where aUV already IS
+  // canvas UV); reconstructing the true canvas-relative UV from it before
+  // masking removes the false vignette. Texture sampling (vUV) is untouched
+  // -- it must stay local, or the crop would sample the wrong pixels of its
+  // own (smaller) texture.
+  vec2 canvasUV = uUVBox.xy + aUV * uUVBox.zw;
+  float mask = headMask(canvasUV);
   vec2 c = uHeadBox.xy + uHeadBox.zw * 0.5;
-  vec2 fromCenter = aUV - c;
+  vec2 fromCenter = canvasUV - c;
   // Horizontal squash (a real head turning presents a narrower silhouette)
   // plus a small rigid shift, both gated by the head mask so nothing outside
   // it ever moves.
@@ -54,6 +78,7 @@ void main() {
   gl_Position = vec4(displaced, 0.0, 1.0);
   vUV = aUV;
   vMask = mask;
+  vCanvasUV = canvasUV;
 }
 `;
 
@@ -62,6 +87,7 @@ export const BODY_FRAG = /* glsl */ `#version 300 es
 precision highp float;
 in vec2 vUV;
 in float vMask;
+in vec2 vCanvasUV;
 uniform sampler2D uTex;
 uniform float uRelightGain;
 uniform float uYawNorm;
@@ -70,7 +96,12 @@ out vec4 fragColor;
 
 void main() {
   vec4 c = texture(uTex, vUV);
-  float shadowSide = smoothstep(-1.0, 1.0, -uYawNorm * (vUV.x - 0.5) * 2.0);
+  // FIX (see the vertex shader's own note on uUVBox/canvasUV): the shadow
+  // side must fall off across the CANVAS (left half lit, right half not, or
+  // vice versa by yaw sign), not across each small quad's own local UV --
+  // using vUV.x here made every placed quad darken/lighten across its own
+  // width independently, another piece of the same false-vignette artifact.
+  float shadowSide = smoothstep(-1.0, 1.0, -uYawNorm * (vCanvasUV.x - 0.5) * 2.0);
   float gain = mix(1.0, uRelightGain, vMask);
   float shade = mix(1.0, 0.94, vMask * shadowSide * 0.5);
   c.rgb *= gain * shade;

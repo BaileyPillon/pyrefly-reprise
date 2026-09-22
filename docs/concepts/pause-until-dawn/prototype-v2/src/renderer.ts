@@ -54,6 +54,24 @@ const LOOSE_SWING_PX: Record<'earring' | 'strand1' | 'strand2', number> = { earr
 /** px amplitude of the extra continuous idle jiggle (BandNoise, same band as head/chest sway) so a loose part still moves when the head is still — spec §6: "the strand pattern changes independently of head position." */
 const LOOSE_IDLE_PX: Record<'earring' | 'strand1' | 'strand2', number> = { earring: 3, strand1: 5, strand2: 4 };
 
+/**
+ * Interpupillary distance in plate pixels — sampled directly from the frontal
+ * plate's own pixels (README Part 1: the green-eye pupil at (338,422), the
+ * blue-eye pupil at (609,406), both colour-sampled, not eyeballed), not a
+ * guess. `RIG_CONSTANTS.sway.chestAmpPctIpd` is a percentage of IPD; this is
+ * the only place that percentage needs an actual pixel distance to multiply.
+ */
+const PLATE_IPD_PX = Math.hypot(609 - 338, 406 - 422);
+/**
+ * How the pinned body layer's own breathing sway (`RenderFrame.chestSample`,
+ * `state.ts`'s `chestSway()`) splits between a mostly-vertical rise/fall and a
+ * smaller sideways component — a rig-geometry tuning choice (the spec gives
+ * an amplitude as a percentage of IPD, section 11, but not an axis split for
+ * a layer that doesn't rotate), not a measured constant, same reasoning as
+ * `IRIS_TRAVEL_PX`/`LOOSE_SWING_PX` above.
+ */
+const CHEST_SWAY_AXIS_WEIGHT: { x: number; y: number } = { x: 0.35, y: 1 };
+
 export interface RenderFrame {
   /** Real degrees. Bracketed against the rig's own keys when there's more than one. */
   yawDeg: number;
@@ -66,6 +84,8 @@ export interface RenderFrame {
   browWeight: number;
   timeSeconds: number;
   reducedMotion: boolean;
+  /** `state.ts`'s `chestSample` — unit-RMS band noise, independent phase from head sway, 0 when reduced motion. */
+  chestSample: number;
 }
 
 interface PatchQuad {
@@ -323,6 +343,14 @@ export class Renderer {
     center: [number, number];
     offset: [number, number];
     opacity: number;
+    /**
+     * This draw's own quad in canvas-normalised UV space — see the FIX note
+     * on `uUVBox` in `shaders.ts`. Omitted only for the stand-in's one
+     * full-canvas grid mesh, where the quad's local UV already IS canvas UV
+     * (identity, the shader's own default uniform value of 0 would be wrong,
+     * so this always sets it explicitly rather than relying on a GL default).
+     */
+    uvBox?: [number, number, number, number];
   }): void {
     const gl = this.gl!;
     gl.useProgram(this.bodyProgram);
@@ -339,6 +367,15 @@ export class Renderer {
     gl.uniform2f(gl.getUniformLocation(this.bodyProgram, 'uScale'), uniforms.scale[0], uniforms.scale[1]);
     gl.uniform2f(gl.getUniformLocation(this.bodyProgram, 'uCenter'), uniforms.center[0], uniforms.center[1]);
     gl.uniform2f(gl.getUniformLocation(this.bodyProgram, 'uOffset'), uniforms.offset[0], uniforms.offset[1]);
+    const uv = uniforms.uvBox ?? [0, 0, 1, 1];
+    gl.uniform4f(gl.getUniformLocation(this.bodyProgram, 'uUVBox'), uv[0], uv[1], uv[2], uv[3]);
+  }
+
+  /** A pixel box (rig canvas units) -> its own box in canvas-normalised UV space, for `uUVBox`. */
+  private boxToUvBox(box: [number, number, number, number]): [number, number, number, number] {
+    const cw = this.rig.canvas.width;
+    const ch = this.rig.canvas.height;
+    return [box[0] / cw, box[1] / ch, box[2] / cw, box[3] / ch];
   }
 
   /** A pixel-space delta (rig canvas units) -> the NDC offset `uOffset` expects. */
@@ -346,6 +383,20 @@ export class Renderer {
     const cw = this.rig.canvas.width;
     const ch = this.rig.canvas.height;
     return [(dxPx / cw) * 2, -((dyPx / ch) * 2)];
+  }
+
+  /**
+   * `RenderFrame.chestSample` (unit-RMS band noise, `state.ts`) -> the small
+   * NDC nudge applied to the pinned body layer only, so it breathes instead
+   * of sitting perfectly still (the architecture brief's own words: "a
+   * pinned body layer ... that never moves except breathing"). Was computed
+   * every frame and never read by anything (AGENTS.md hard rule 4) — fixed
+   * this pass by threading it through `state.ts: Frame.chestSample` ->
+   * `driver.ts` -> `RenderFrame.chestSample` -> here.
+   */
+  private chestOffsetNdc(chestSample: number): [number, number] {
+    const ampPx = (RIG_CONSTANTS.sway.chestAmpPctIpd / 100) * PLATE_IPD_PX;
+    return this.pxDeltaToNdc(chestSample * ampPx * CHEST_SWAY_AXIS_WEIGHT.x, chestSample * ampPx * CHEST_SWAY_AXIS_WEIGHT.y);
   }
 
   /** Draws one of the frontal key's own sub-layers (see FRONTAL_SUB_LAYERS) at its authored box, optionally nudged by `offset` (NDC). No-op if that layer didn't load. */
@@ -364,6 +415,7 @@ export class Renderer {
       center: placement.center,
       offset,
       opacity,
+      uvBox: this.boxToUvBox(layer.box),
     });
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -478,6 +530,29 @@ export class Renderer {
 
       const frontalReady = this.frontalLayers.size >= FRONTAL_SUB_LAYERS.length;
 
+      // Computed here (once) instead of after the fill-in, as the previous
+      // pass had it: the fill-in below needs to know *before* it draws
+      // whether frontal is genuinely part of the active bracket, or it draws
+      // frontal's headCore+hairFront a second time at a different offset —
+      // see the fix note on `frontalInBracket` below.
+      const bracket = bracketForYaw(this.keysByYaw, frame.yawDeg);
+      const { a, b, t } = bracket;
+      const frontalInBracket = a.id === 'frontal' || b?.id === 'frontal';
+
+      // Both the pinned body and hairBack move together for breathing (see
+      // chestOffsetNdc's own doc comment): hairBack's box (0,0,832,702)
+      // overlaps the body's own box along the collar, and the two are
+      // pixel-identical crops of the same plate there (rig-cut.py cut both
+      // from the same source). Giving the body a chest-sway offset without
+      // giving hairBack the SAME offset desyncs that shared boundary —
+      // found this pass, rendering a mid-turn frame with chest sway active:
+      // a visible seam opened and closed at the collar as the body slid a
+      // few pixels against a hairBack that hadn't moved. Both are part of
+      // the one rigid "pinned assembly" the brief describes ("a pinned body
+      // layer... that never moves except breathing") — hairBack breathes
+      // with it, it just isn't warped by the head's own yaw/pitch spring
+      // the way the head layers are.
+      const chestOffset = this.chestOffsetNdc(frame.chestSample);
       if (frontalReady) {
         // hairBack is BEHIND the pinned body in the art pass's own zOrder
         // (`hairBack, body, headCore, ...` — art/rig.json's artMeta.layers.
@@ -485,7 +560,7 @@ export class Renderer {
         // flattened head-flat.png fallback below draws hairBack baked in
         // *front* of body instead, which is the seam this pass found (the
         // hair silhouette clashing with the collar edge — see README).
-        this.drawFrontalLayer('hairBack', 1);
+        this.drawFrontalLayer('hairBack', 1, chestOffset);
       }
 
       // The pinned body layer: never warped, never relit (a huge/offscreen
@@ -500,25 +575,37 @@ export class Renderer {
         warpScale: 0,
         scale: bodyPlacement.scale,
         center: bodyPlacement.center,
-        offset: [0, 0],
+        offset: chestOffset,
         opacity: 1,
+        uvBox: this.boxToUvBox(bodyBox),
       });
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
       const perLayerOffsets = { iris: irisOffset, strand1: strand1Offset, strand2: strand2Offset, earring: earringOffset };
 
-      if (frontalReady) {
-        // Gap mitigation, unconditional (see the class-level doc comment on
-        // FRONTAL_SUB_LAYERS / the README's "known visual gap"): frontal's
-        // own front stack under whatever the yaw bracket draws next, so a
-        // key with no hidden-region art (q34-right, profile-left) shows
-        // frontal hair/collar through its own gaps instead of bare canvas.
-        // The bracket step below redraws this at the correct opacity/offset
-        // whenever frontal is actually part of the current bracket (which is
-        // every yaw in [-40, 40] — see bracketForYaw), so this pass is only
-        // load-bearing outside that range.
+      if (frontalReady && !frontalInBracket) {
+        // Gap mitigation, ONLY when frontal is not itself the pose being
+        // shown (see `frontalInBracket` above): frontal's own front stack
+        // under whatever the yaw bracket draws next, so a key with no
+        // hidden-region art (q34-right, profile-left) shows frontal
+        // hair/collar through its own gaps instead of bare canvas.
+        //
+        // FIX (this pass): this used to run unconditionally, every frame,
+        // at a fixed [0,0] offset, even for every yaw in (-40, 40] where
+        // frontal is ALSO the bracket's own `a` or `b` key (drawn again a
+        // few lines down, at the bracket's own non-zero chin-alignment
+        // offset — nonzero everywhere except exactly yaw 0, since the two
+        // keys being blended don't share a chin position). That produced two
+        // full-opacity copies of frontal's headCore+hairFront, one at [0,0]
+        // and one nudged sideways — a hard, growing-with-|t| double exposure
+        // at every yaw away from dead centre, confirmed at native resolution
+        // (see README "Fix pass" section). Scoping the fill-in to only the
+        // yaws where frontal ISN'T already being drawn by the bracket step
+        // removes the duplicate without losing any coverage: the bracket
+        // step below draws frontal's full stack, at the correct offset,
+        // for every yaw where it's part of the bracket.
         this.drawFrontalFrontStack(1, [0, 0], perLayerOffsets, false);
-      } else {
+      } else if (!frontalReady) {
         // Fallback: the art delivery is missing one of FRONTAL_SUB_LAYERS
         // (or this is an older rig.json with no artMeta at all) — fill in
         // with the flattened head-flat.png, as this pass's predecessor did.
@@ -526,7 +613,8 @@ export class Renderer {
         const frontalKey = this.keysByYaw.find((k) => k.yawDeg === 0);
         const frontalTex = frontalKey ? this.keyTextures.get(frontalKey.id) : null;
         if (frontalKey && frontalTex) {
-          const placement = this.pixelBoxToNdc(frontalKey.placementBox ?? [0, 0, this.rig.canvas.width, this.rig.canvas.height]);
+          const box = frontalKey.placementBox ?? [0, 0, this.rig.canvas.width, this.rig.canvas.height];
+          const placement = this.pixelBoxToNdc(box);
           this.drawHeadProgramCommon({
             tex: frontalTex,
             yawNorm: 0,
@@ -536,17 +624,41 @@ export class Renderer {
             center: placement.center,
             offset: [0, 0],
             opacity: 1,
+            uvBox: this.boxToUvBox(box),
           });
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         }
       }
 
-      const { a, b, t } = bracketForYaw(this.keysByYaw, frame.yawDeg);
-      const { offsetA, offsetB } = this.chinAlignmentNdc(a, b, t);
+      // FIX (this pass, second finding): a plain linear cross-dissolve
+      // (opacity = t, all the way across each 40deg bracket segment) means
+      // `b`'s own alpha-1 pixels still show through `a` at every t strictly
+      // between 0 and 1 — even at t=0.91 (yaw a couple of degrees off dead
+      // centre), 9% of a structurally different painted key bleeds through
+      // "opaque" face content, reading as a soft rectangular double-exposure.
+      // Measured this pass: the refutation's own sampled yaws (2.7, -13.4,
+      // -20..-25deg etc.) all land at |t| meaningfully away from both 0 and
+      // 1 under a LINEAR blend. `easedT` (smootherstep) doesn't remove that —
+      // two different paintings of a turned head still don't share pixel
+      // positions, so blending them at ANY nonzero weight always shows a
+      // soft double exposure; only a real per-triangle mesh warp of the
+      // interior (Part 2's own table: "NOT built", judged too much added
+      // risk/build time for that pass) removes it outright, and building
+      // that is out of this pass's own scope too (see README "Not fixed,
+      // and why"). What `easedT` DOES do, honestly: it shrinks the yaw RANGE
+      // over which the blend weight is large enough to be visible — flat
+      // near 0 and near 1, it spends most of each 40deg segment close to a
+      // single key, so only a narrower band near each segment's own midpoint
+      // shows a strong double-exposure, instead of the whole segment showing
+      // a weaker one (linear). Position (`chinAlignmentNdc`) uses the same
+      // eased weight so the rigid chin-anchor offset and the opacity move
+      // together, never disagreeing mid-blend.
+      const easedT = smootherstep(t);
+      const { offsetA, offsetB } = this.chinAlignmentNdc(a, b, easedT);
       const yawNorm = yawNormTarget;
-      // `a` is drawn opaque, `b` blended on top at weight `t` — this is what
-      // actually produces the cross-dissolve; the fill-in above only fills
-      // gaps outside it. Frontal is *always* one end of the bracket for
+      // `a` is drawn opaque, `b` blended on top at weight `easedT` — this is
+      // what actually produces the cross-dissolve; the fill-in above only
+      // fills gaps outside it. Frontal is *always* one end of the bracket for
       // yaw in [-40, 40] (bracketForYaw), so this redraws it there — with
       // its own zOrder-correct layer stack, not the flattened texture, or
       // the earlier hairBack/body fix would be undone the moment frontal
@@ -558,7 +670,8 @@ export class Renderer {
       } else {
         const texA = this.keyTextures.get(a.id);
         if (texA) {
-          const placementA = this.pixelBoxToNdc(a.placementBox ?? [0, 0, this.rig.canvas.width, this.rig.canvas.height]);
+          const boxA = a.placementBox ?? [0, 0, this.rig.canvas.width, this.rig.canvas.height];
+          const placementA = this.pixelBoxToNdc(boxA);
           this.drawHeadProgramCommon({
             tex: texA,
             yawNorm,
@@ -568,17 +681,19 @@ export class Renderer {
             center: placementA.center,
             offset: offsetA,
             opacity: 1,
+            uvBox: this.boxToUvBox(boxA),
           });
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         }
       }
-      if (b && t > 0.001) {
+      if (b && easedT > 0.001) {
         if (b.id === 'frontal' && frontalReady) {
-          this.drawFrontalFrontStack(t, offsetB, perLayerOffsets, true);
+          this.drawFrontalFrontStack(easedT, offsetB, perLayerOffsets, true);
         } else {
           const texB = this.keyTextures.get(b.id);
           if (texB) {
-            const placementB = this.pixelBoxToNdc(b.placementBox ?? [0, 0, this.rig.canvas.width, this.rig.canvas.height]);
+            const boxB = b.placementBox ?? [0, 0, this.rig.canvas.width, this.rig.canvas.height];
+            const placementB = this.pixelBoxToNdc(boxB);
             this.drawHeadProgramCommon({
               tex: texB,
               yawNorm,
@@ -587,7 +702,8 @@ export class Renderer {
               scale: placementB.scale,
               center: placementB.center,
               offset: offsetB,
-              opacity: t,
+              opacity: easedT,
+              uvBox: this.boxToUvBox(boxB),
             });
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
           }
@@ -656,4 +772,17 @@ export class Renderer {
 /** Yaw degrees -> the [-1, 1] fraction the shaders and light math use. */
 export function yawToNorm(yawDeg: number): number {
   return Math.max(-1, Math.min(1, yawDeg / RIG_CONSTANTS.yaw.maxDeg));
+}
+
+/**
+ * Ken Perlin's "smootherstep": 0 and 1 at the ends (exactly, so a bracket
+ * boundary still hands off at a clean 0/1 with no pop), first AND second
+ * derivative zero there too — flatter near both ends than `smoothstep`,
+ * which is the point (see the fix note above `easedT` in `render()`): most
+ * of a 40deg bracket segment stays close to a single key, and only a
+ * narrower band near its middle carries a visible two-key blend.
+ */
+function smootherstep(t: number): number {
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * x * (x * (x * 6 - 15) + 10);
 }

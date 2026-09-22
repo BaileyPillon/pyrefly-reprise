@@ -44,7 +44,27 @@ export function createTextureFromImage(gl: WebGL2RenderingContext, image: TexIma
   const tex = gl.createTexture();
   if (!tex) throw new Error('createTexture failed');
   gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  // FIX (living-portrait-v2 fix pass): this was `true`. Every draw in
+  // renderer.ts samples the texture straight (`vec4 c = texture(uTex, vUV)`,
+  // `fragColor = vec4(c.rgb, c.a * uOpacity)`) and blends with
+  // `gl.blendFunc(SRC_ALPHA, ONE_MINUS_SRC_ALPHA)` -- both are the STRAIGHT-
+  // alpha convention (the blend equation itself supplies the one multiply by
+  // alpha). Uploading with PREMULTIPLY_ALPHA true had the browser multiply
+  // each texel's RGB by its own alpha ONCE on upload, and the straight-alpha
+  // blend equation multiplies by alpha AGAIN -- any pixel with partial alpha
+  // (every soft-feathered cut edge these layer PNGs have: headCore, hairBack,
+  // hairFront, the eye apertures, the strands, the earring) got darkened by
+  // alpha^2 instead of alpha. Invisible at full opacity (alpha=1: 1^2 == 1)
+  // or full transparency (0^2 == 0), which is why the seam only shows at a
+  // texture's own soft edges, not its interior or the fully-clear canvas
+  // around it -- and why it reads as a "box" following the rectangular crop
+  // each layer file is stored in (that crop's OWN border is exactly where
+  // its alpha ramps through the partial range). Confirmed by re-rendering
+  // frontal alone (a=q34-left, b=frontal at opacity 1, zero contribution
+  // from any other key) with this flag false: the seam is gone; a plain
+  // `sharp` composite of the same layer files (no WebGL, no premultiply
+  // involved) never showed it either, which is what pointed here.
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);

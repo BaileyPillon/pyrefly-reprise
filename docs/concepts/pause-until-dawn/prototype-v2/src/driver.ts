@@ -153,6 +153,7 @@ export class LivingPortraitDriver implements PortraitDriver {
       browWeight: frame.browWeight,
       timeSeconds: frame.timeSeconds,
       reducedMotion: frame.reducedMotion,
+      chestSample: frame.chestSample,
     });
     if (this.diagnosticsVisible && this.hud) this.renderHud(frame);
   }

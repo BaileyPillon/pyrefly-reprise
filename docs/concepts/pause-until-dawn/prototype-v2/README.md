@@ -647,3 +647,282 @@ coverage of the fixes above exists at the logic level; they were verified by
 rendering to a real GPU canvas and looking, per this project's own "prove a
 bug by running the engine" rule (AGENTS.md hard rule 3) applied to
 presentation code, where the equivalent is "prove it by rendering it".
+
+---
+
+# Part 4 — the fix pass (attempt 3 on Sonnet, this pass)
+
+Owner of everything under `prototype-v2/` and `tools/gen/inpaint.mjs` this
+round; also added `tools/gen/defringe-layer.mjs` and
+`tools/gen/fillhole-fix.mjs`. The brief was an adversarial measurement
+refuting Part 3's own "fixed and only a faint, narrow-range double exposure
+remains" claim: a severe, hard-edged double-exposure was found at *every*
+sampled yaw away from dead centre, including inside the very bracket Part 3
+said it had fixed, and even in Part 3's own committed "clean" stills. This
+section is the root-cause chase for that finding, what it actually was (not
+what Part 3 guessed), and what is fixed versus still disclosed.
+
+## The critical finding was three bugs, not one, and the biggest one wasn't in `renderer.ts`'s bracket logic at all
+
+Reproducing the refutation's own sampled yaws (2.7°, -13.4°, -22.5°, -46°,
+-68.8°, -74.6°) at native 1:1 resolution confirmed it immediately: a hard,
+rectangular, wrong-toned patch sitting over the face, present even at exactly
+yaw 0° with a single fully-opaque key and zero cross-dissolve happening.
+That last fact ruled out the cross-dissolve as the sole cause before anything
+else was changed — a bracket-blend bug cannot appear at t=0/t=1 with a single
+key drawn once. Three real, independent bugs were found this way, each
+proven by isolating it (rendering with just that layer, or just that fix,
+toggled) rather than reasoned about from source alone:
+
+**1. A duplicate, un-scoped fill-in draw (confirmed, fixed).** The
+gap-mitigation fill-in (`drawFrontalFrontStack(1, [0,0], ..., false)`, the
+"known visual gap" mitigation from Part 2/3) ran unconditionally every frame,
+at a fixed `[0,0]` offset, even for every yaw in `(-40°, 40°]` where frontal
+is *also* the bracket's own `a` or `b` key — drawn a second time a few lines
+later at the bracket's own chin-alignment offset, which is non-zero
+everywhere except exactly yaw 0 (the two blended keys don't share a chin
+position). Two full-opacity copies of frontal's own `headCore`+`hairFront`,
+one static and one sliding with `t`, is a textbook double exposure that grows
+with `|t|` — exactly "every yaw away from dead centre" within that range.
+Fixed by computing the bracket *before* the fill-in and skipping it whenever
+frontal is already part of the active bracket (`frontalInBracket` in
+`renderer.ts`); the bracket step already draws frontal's full, correctly
+z-ordered stack at the right offset for every yaw where it applies, so
+nothing is lost outside that range either.
+
+**2. Every placed sub-quad fed its own LOCAL texture UV into a shader mask
+built for CANVAS-space UV (confirmed, fixed).** `BODY_VERT`'s `headMask()` compares
+`aUV` against `uHeadBox`, which is defined in canvas-normalised UV space
+(`rig.json`'s own `headBox`, roughly the whole plate). For the stand-in's one
+full-canvas grid mesh `aUV` *is* canvas UV, so this was correct there — but
+every authored-rig placed quad (an authored key's own crop, a frontal
+sub-layer, the pinned body) is drawn as a small quad whose `aUV` always runs
+0..1 across *just that crop*, never the canvas. Feeding that straight into
+`headMask()` silently mis-scored every one of these draws' own mask/shading
+independently of where it actually sits on the plate. Fixed by adding a
+`uUVBox` uniform (that quad's own box in canvas-normalised UV; identity for
+the stand-in) and reconstructing the true canvas UV from it before masking,
+in both the vertex shader (`headMask`) and the fragment shader (`shadowSide`,
+which used to read local `vUV.x` the same wrong way). This is a real,
+independently-confirmed bug — but rendering the maths by hand for `headCore`'s
+own box showed its own mask value was already ≈1 (uniform, no visible edge)
+either way at yaw 0, so on its own this did not explain the critical
+double-exposure; item 3 did.
+
+**3. `gl.pixelStorei(UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)` against a
+straight-alpha shader and blend function (confirmed, fixed — this is the one
+that actually produced the reported box).** `gl-utils.ts: createTextureFromImage`
+uploaded every texture pre-multiplied. `BODY_FRAG` samples the texture
+straight (`vec4 c = texture(uTex, vUV); fragColor = vec4(c.rgb, c.a * uOpacity)`)
+and the blend function is `gl.blendFunc(SRC_ALPHA, ONE_MINUS_SRC_ALPHA)` —
+both are the straight-alpha convention, which itself supplies the one
+multiply by alpha. Premultiplying on upload multiplied every texel's RGB by
+its own alpha *once*, and the straight-alpha blend multiplied by alpha
+*again* — any pixel with partial alpha (every soft-feathered cut edge on
+every one of these layer PNGs: `hairBack`, `headCore`, `hairFront`, both eye
+apertures, both strands, the earring) got darkened by alpha² instead of
+alpha. Invisible at alpha 0 or 1 (0²=0, 1²=1), which is exactly why it only
+ever showed up as a "box" tracing each layer's own soft-edged crop boundary,
+never in a texture's fully-opaque interior or the fully-clear canvas around
+it. **Isolated proof:** re-rendering frontal alone (`a`=q34-left, `b`=frontal
+at `t`=1, i.e. zero contribution from any other key, reduced motion on so the
+spring settles to exactly yaw 0) still showed the full box before this fix
+and showed nothing after it; a plain `sharp` composite of the same layer
+files at their authored boxes (no WebGL, no premultiply involved at all)
+never showed it either, which is what pointed here in the first place. Fixed
+by uploading straight (unmultiplied) alpha, matching the shader/blend
+pipeline that was already written for it.
+
+## A fourth, separate, real defect: a corrupted "filled" eye-aperture hole
+
+With the box above gone, a smaller, still-clearly-wrong grey-green rectangle
+remained sitting on each iris. Isolating layers by skipping them one at a
+time in a live page (`renderer.drawFrontalLayer` monkey-patched from outside)
+showed skipping `irisR`/`irisL` did **not** remove it, but skipping
+`eyeApertureR`/`eyeApertureL` did — so it lives in
+`eyeApertureR.filled.png` / `eyeApertureL.filled.png` themselves (the "iris
+hole filled from neighbouring sclera pixels" the art pass's own README
+describes). Rendering that file's RGB channel alone (alpha ignored) showed a
+flat, hard-edged rectangular block sitting over the iris — a real colour
+defect baked into the file, not a rendering bug at all. Comparing it against
+its own un-filled sibling (`eyeApertureR.png`, `eyeApertureL.png`, both still
+on disk) proved the original cut's colour was always fine — the un-filled
+file's RGB in that exact region is the real, correct iris art, just gated by
+alpha 0 there — so the corruption was introduced specifically by the
+original `rig-cut.py fillhole` run, not the cut itself, and not something
+this pass needed the plate for.
+
+**Fix: `tools/gen/fillhole-fix.mjs`** (new tool, mine to own this pass).
+Reconstructs each `.filled.png`: alpha comes from the existing filled file
+(the complete, intended visible shape); colour comes **only** from the
+unfilled file's own real pixels (wherever its alpha says there's real
+content) — the filled file's own colour is never trusted for anything, since
+it's the thing that turned out to be wrong. Whatever the unfilled file still
+leaves transparent (the actual hole) gets its colour by iteratively averaging
+already-resolved 8-neighbours inward from the hole's real border (the same
+ring-dilation idea `rig-cut.py fillhole` and this pass's `defringe-layer.mjs`
+both use, just driven by an explicit two-file hole mask instead of an alpha
+threshold on one file). A first version of this tool trusted the filled
+file's own colour for anything it didn't classify as "the hole" by an alpha
+test and dilated from there — checked by rendering the result, and it changed
+nothing, because the corruption extended into pixels that test didn't count
+as hole-shaped; the version committed here throws away the filled file's
+colour entirely and only ever seeds from the unfilled file. Applied to both
+eyes; `docs/target/approved-hashes.json` and `public/art/**` are untouched
+(these are `prototype-v2/art/` derivatives, never the approved plate).
+`tools/gen/defringe-layer.mjs` (also new, an alpha-edge colour-bleed fix for
+a plain soft-cut boundary, the same idea without the two-file hole logic) was
+built first while chasing this and is kept as a general-purpose tool even
+though the actual defect here turned out to need the two-file version.
+
+## Chest sway: built but wired to nothing (AGENTS.md hard rule 4), now wired
+
+`PortraitStateMachine.chestSway()` (correct band-noise maths, independent
+phase from the head, already covered by
+`tests/unit/pause-living-portrait-dynamics.test.ts`'s phase-independence
+check) was never called by anything — `driver.ts` never read it and
+`RenderFrame` had no field for it. Measured live: the pinned body/collar
+region's luminance over ~4s of idle moved by 0.0025 levels (pure noise
+floor) — literally motionless, contradicting the architecture brief's own
+"a pinned body layer... that never moves except breathing" and the README's
+own status table, which claimed this row "Real, tested" without qualifying
+that the chest half produced no visible output.
+
+Fixed by threading it through: `state.ts`'s `Frame` gained a `chestSample`
+field (the same value `chestSway()` already computed, now actually reaching
+somewhere) → `driver.ts` passes it into `RenderFrame` → `renderer.ts`
+converts it to a small NDC offset (`chestOffsetNdc`, amplitude from
+`RIG_CONSTANTS.sway.chestAmpPctIpd` against an IPD sampled directly from the
+plate's own pupils — `Math.hypot(609-338, 406-422)` ≈ 271.5px, per Part 1's
+own colour-sampled anchors) applied to the pinned body layer, mostly
+vertical (breathing) with a smaller horizontal component (a tuning split,
+not a measured constant, same reasoning as `IRIS_TRAVEL_PX`). Re-measured the
+same way: the collar region's luminance now moves by 0.92 levels over the
+same window — roughly 370× the old noise-floor reading, and a real, visible
+breathing motion on screen (`docs/screenshots` not re-captured for this
+specific measurement; verified in the browser and via the luminance probe in
+`critic/scratch`-style script, not committed).
+
+**A bug this introduced and this pass also fixed:** giving only the body
+layer a chest offset opened a visible seam at the collar during a turn —
+`hairBack`'s own box (`[0,0,832,702]`) overlaps the body's box along the
+collar, and the two are pixel-identical crops of the same plate there, so
+they need to move together. `hairBack` and the body now share one
+`chestOffsetNdc` value per frame instead of the body moving alone.
+
+## Idle sway wobbling against the yaw hard stop (plausible finding, addressed)
+
+Measured: held at the yaw limit (gaze target -1, i.e. -85°), the spring
+itself settles to a true 0 residual, but the *rendered* yaw (spring + always
+present idle sway) kept moving between -85° and about -83.8° indefinitely —
+reads as the head bouncing near the wall rather than "holding at the
+extreme". Not a spec violation on its own (the spec's hold description is of
+a held-stick reference clip, and idle sway is itself required), but easy to
+read as a defect and cheap to soften: `state.ts` now tapers the yaw sway's
+amplitude over the last 8° of room to whichever hard stop is nearer
+(`YAW_EDGE_TAPER_DEG`, a tuning choice, floor 0.2× rather than 0), fading
+smoothly rather than clamping the result after the fact. Re-measured the
+same way as the refutation: held at -85°, yaw now ranges -85.0° to -83.79°,
+a 1.2° spread — down from the refuted ~6° — while a moderate hold (e.g. -22°
+target) keeps its full, spec-matching sway amplitude, checked in
+`tests/unit/pause-living-portrait-state.test.ts` (spread at the extreme is
+asserted smaller than spread near the centre, and the value never dips below
+the hard stop).
+
+## Re-measured, re-verified: what changed and what's still exactly as disclosed
+
+| Yaw sampled (refutation's own list) | Before this pass | After this pass |
+|---|---|---|
+| 0° (dead centre) | Clean (Part 3's own claim) | Still clean |
+| 2.7°, -13.4°, -22.5° (inside the frontal↔q34 bracket) | Severe, hard-edged double exposure (refuted "fixed") | Clean eyes, no box; a much fainter residual tint from the inherent linear-then-eased cross-dissolve (see below), well below the severity found |
+| -40° (q34-left/frontal boundary) | Severe | The duplicate-draw and premultiply bugs are gone here too, but a visible ghost of a differently-lit pose remains — see "still not fixed" below |
+| -46°, -68.8°, -74.6° (profile-left↔q34-left) | Severe | Reduced (no more alpha² darkening), but the underlying gap is still visible — see below |
+| Tearing sweep, full range, native capture | No holes/broken geometry (this part of Part 3's claim held) | Still holds; re-swept this pass, no regressions |
+
+**Also addressed alongside the critical finding, both real, both root-caused:**
+a fourth eye-region artifact (the corrupted `.filled.png` colour, above), and
+a fifth (`headMask`/`uUVBox`), neither separately reported by the refutation
+but found while isolating it, described above.
+
+**A smaller, honest reduction, not an elimination — the cross-dissolve
+between structurally different paintings itself.** Blending frontal against
+`q34-right`/`q34-left` at any weight strictly between 0 and 1 always shows
+*some* double exposure, because the two paintings' facial features simply
+don't sit at the same pixel positions — that's the disclosed, deliberate
+absence of a real per-triangle mesh warp (Part 2's own table: "**Not
+built.**... judged not worth the added risk/build time"), and building the
+real fix is out of this pass's scope too (a mesh warp needs per-triangle
+deformation of the head geometry from the 8 shared landmarks, not a shader
+uniform fix or an art-file patch, and the previous pass's own risk/time
+judgement on it still applies). What this pass *can* do safely — and did —
+is shrink how much of each 40° bracket segment carries a strongly-visible
+blend: the cross-dissolve weight `t` is now passed through `smootherstep`
+(flat near 0 and 1, all its motion compressed toward the segment's own
+midpoint) before it reaches both the opacity and the chin-alignment offset,
+so only a narrower band near each transition's centre shows a strong blend
+instead of the whole segment showing a weaker one. This is a real,
+measurable narrowing of the affected range, not a claim that the ghosting
+itself is gone — re-sampling **-40°** and the **profile-left↔q34-left**
+range (outside the frontal bracket, where the fill-in — not the
+cross-dissolve — is the mechanism) still shows a visible double exposure,
+because those two mechanisms sit on top of the same root cause: the art
+delivery's own disclosed gap (`art/rig.json`'s `knownIssues`: "hidden-region
+inpainting... was not attempted"). Fixing that for real needs painted
+hidden-region art for `q34-left`/`profile-left`/`q34-right`, which is an
+art-pipeline task this pass does not own (its own scope, per the fix brief,
+is `prototype-v2/**` and `tools/gen/inpaint.mjs`/the two new tools above —
+runtime and derived-asset colour fixes, not new painted content). **Do not
+read the table above as "fixed everywhere" — read it as "the two independent
+runtime bugs that made an already-disclosed art gap look far worse than
+disclosed are gone; the art gap itself is still exactly what it always
+was, disclosed again here.**
+
+## Re-captured deliverables (`shots/`, all 10 stills + both clips replaced)
+
+Same method as Part 3 (real Chromium, `PYREFLY_BROWSER=gpu`, real Playwright
+input events, polling actual driver state rather than a fixed wait) —
+**and a capture bug of this pass's own found and fixed the same way Part 3
+found its own:** polling `springResidualDeg < 0.3` right after a fresh
+`setGaze` call can pass on its very first check if the *previous* target had
+already converged to ≈0 residual and no animation frame has run yet to
+recompute the residual against the *new* target — caught because the first
+draft of `02-three-quarter-left.png` came out dead centre instead of turned.
+Fixed by waiting ~120ms of real time (a few render ticks) before polling for
+convergence, so the check is only ever watching a real settle. All 10 stills
+and both clips (`clip-12s.webm`, `idle-8s.webm`) were re-rendered end to end
+after this fix and looked at.
+
+## Tests
+
+Full `npx tsc --noEmit` clean. All previous 31
+`tests/unit/pause-living-portrait-*.test.ts` still pass unchanged. Six new
+ones in `pause-living-portrait-state.test.ts` cover the two logic-level
+changes this pass made (chest sway wiring and the yaw-edge taper): `Frame.
+chestSample` is present, non-zero and varies over time when not reduced
+motion, is exactly 0 under reduced motion, and runs on an independent phase
+from the head's own yaw; and held-at-the-extreme yaw wobbles less than
+held-near-centre yaw while never dipping below the hard stop. The three
+renderer-level fixes (the duplicate draw, the UV-space mask bug, the
+premultiply bug) and the fillhole-fix tool have no logic-level test coverage
+— same reasoning as Part 3's own tests section: they were verified by
+rendering to a real GPU canvas and looking, because that is what "prove a
+bug by running the engine" (hard rule 3) means for a shader/compositing bug
+that a jsdom no-GPU test can't see at all.
+
+## Not done, and why
+
+- **The real per-triangle mesh warp.** Still not built, for the same
+  risk/time reasons Part 2 gave and this pass re-confirmed by measuring the
+  cost of *not* having it (see above). This is the actual fix for the
+  remaining cross-dissolve and fill-in ghosting.
+- **Hidden-region inpainting for `q34-left`/`q34-right`/`profile-left`.** An
+  art-pipeline task, disclosed by the art rig itself since Part 1, confirmed
+  still needed by this pass's own re-measurement.
+- **`profile-right`, `eyes/closed`'s disclosed identity miss, brow patches.**
+  Untouched, out of this pass's scope, exactly as Part 2/3 left them.
+- **The measurement caveats the refutation itself flagged as unconfirmed**
+  (relight-swing confound, grain below the spec band under a resized
+  compositor screenshot) were not chased further this pass — both were
+  explicitly logged as capture-method caveats, not confirmed defects, and
+  nothing this pass touched (`light.ts`, `post.ts`'s grain shader) changed
+  either mechanism.

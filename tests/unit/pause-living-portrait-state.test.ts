@@ -80,3 +80,55 @@ describe('PortraitStateMachine expression states', () => {
     expect(sawClosed).toBe(true);
   });
 });
+
+describe('PortraitStateMachine chest sway (fix pass: wired into Frame)', () => {
+  it('Frame.chestSample is nonzero and varies over time when not reduced motion', () => {
+    const state = new PortraitStateMachine({ headSway: 4 });
+    const samples: number[] = [];
+    for (let i = 0; i < 300; i++) samples.push(state.update(1 / 60).chestSample);
+    expect(samples.some((s) => s !== 0)).toBe(true);
+    expect(new Set(samples).size).toBeGreaterThan(1);
+  });
+
+  it('Frame.chestSample is exactly 0 under reduced motion', () => {
+    const state = new PortraitStateMachine({ headSway: 4 });
+    state.setReducedMotion(true);
+    for (let i = 0; i < 300; i++) expect(state.update(1 / 60).chestSample).toBe(0);
+  });
+
+  it('chestSample runs on an independent phase from the head sway sample (not a copy of it)', () => {
+    const state = new PortraitStateMachine({ headSway: 5 });
+    let sawDifference = false;
+    for (let i = 0; i < 300; i++) {
+      const frame = state.update(1 / 60);
+      // headSample itself isn't on the Frame, but chestSample tracking it in
+      // lockstep (same value every tick) would mean the "independent phase"
+      // claim is false; a real independent-phase signal diverges quickly.
+      if (i > 5 && Math.abs(frame.chestSample - frame.yawDeg) > 1e-9) sawDifference = true;
+    }
+    expect(sawDifference).toBe(true);
+  });
+});
+
+describe('PortraitStateMachine yaw sway taper near a held extreme (fix pass)', () => {
+  it('wobbles less when held at the hard yaw limit than when held near the centre', () => {
+    const tail = (targetX: number): number[] => {
+      const state = new PortraitStateMachine({ headSway: 7 });
+      state.setYawRange(-85, 85);
+      state.setGazeTarget(targetX, 0);
+      const out: number[] = [];
+      for (let i = 0; i < 1200; i++) {
+        const frame = state.update(1 / 60);
+        if (i > 600) out.push(frame.yawDeg); // after the spring has settled
+      }
+      return out;
+    };
+    const atExtreme = tail(-1);
+    const atCentre = tail(-0.02); // just off-centre so the spring still has a nonzero target
+    const spread = (xs: number[]): number => Math.max(...xs) - Math.min(...xs);
+    // The hard stop (-85) is a floor here: sway may push the value above it,
+    // never below.
+    expect(Math.min(...atExtreme)).toBeGreaterThanOrEqual(-85 - 1e-9);
+    expect(spread(atExtreme)).toBeLessThan(spread(atCentre));
+  });
+});

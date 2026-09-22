@@ -26,6 +26,15 @@ export interface Frame {
   reducedMotion: boolean;
   springResidualDeg: number;
   blinkLog: readonly string[];
+  /**
+   * Unit-RMS band-limited noise for the pinned body/chest layer's own small
+   * breathing sway — same band as `headSample`, independent phase (see
+   * `IdleSway`), zeroed under reduced motion. Was computed (`chestSway()`,
+   * below) but never read anywhere until this pass wired it into
+   * `renderer.ts`'s body-layer draw (AGENTS.md hard rule 4: built but wired
+   * to nothing).
+   */
+  chestSample: number;
 }
 
 export interface StateSeed {
@@ -129,7 +138,22 @@ export class PortraitStateMachine {
     if (!this.reducedMotion) {
       const headWidthFraction = (RIG_CONSTANTS.sway.headAmpPctHeadWidthMin + RIG_CONSTANTS.sway.headAmpPctHeadWidthMax) / 2 / 100;
       const swayDeg = headWidthFraction * maxYaw * 2; // sway expressed in the same degree units as the spring
-      yawDeg += this.sway.headSample(this.tSeconds) * swayDeg;
+      // Taper the yaw sway as the spring's own target nears the rig's hard
+      // yaw stop (measured this pass: held at -85deg, the *rendered* yaw kept
+      // wandering between -85 and about -79deg indefinitely — sway pushing
+      // past the limit, then getting clamped below, reads as the head
+      // bouncing against a wall instead of the spec's "holds at the extreme").
+      // Fading sway out over the last few degrees of room, rather than
+      // clamping its result after the fact, keeps a held extreme visually
+      // still without touching the spring itself or the sway's own amplitude
+      // anywhere but right at the limit. `YAW_EDGE_TAPER_DEG` and the taper
+      // floor are a tuning choice (the spec measured a held-stick hold, not
+      // this interaction), not a spec constant, so it stays local to this
+      // function rather than in `constants.ts`.
+      const YAW_EDGE_TAPER_DEG = 8;
+      const yawEdgeRoomDeg = Math.min(yawFollow - this.yawMin, this.yawMax - yawFollow);
+      const yawSwayTaper = Math.max(0.2, Math.min(1, yawEdgeRoomDeg / YAW_EDGE_TAPER_DEG));
+      yawDeg += this.sway.headSample(this.tSeconds) * swayDeg * yawSwayTaper;
       pitchDeg += this.sway.headSample(this.tSeconds + 100) * swayDeg * 0.6;
       const expr = this.exprScheduler.update(dt);
       mouth = expr.mouth;
@@ -158,10 +182,11 @@ export class PortraitStateMachine {
       reducedMotion: this.reducedMotion,
       springResidualDeg: this.yawSpring.residual(),
       blinkLog: this.blinkScheduler.log,
+      chestSample: this.chestSway(),
     };
   }
 
-  /** Chest sway alone, for a body/chest layer the renderer doesn't yet draw separately. */
+  /** Chest sway alone, for the pinned body/chest layer's own breathing sway. */
   chestSway(): number {
     return this.reducedMotion ? 0 : this.sway.chestSample(this.tSeconds);
   }
