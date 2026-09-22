@@ -1,150 +1,148 @@
-# Ormi round 3: method F, Ormi's own words (2026-09-22)
+# Ormi round 3: independent judge (2026-09-22)
 
-FFX-2 only (Chateau Leblanc, Act III; `research/ffx2-leblanc-syndicate.md`
-§10.1: "short and stout. A large shield worn on his back, bearing the
-Syndicate heart logo. Predominantly purple samurai-style attire"). Art only;
-no shared tool and no game file changed (AGENTS.md hard rule 14).
+FFX-2 only (Chateau Leblanc, Act III). Art review only; no game file, shared
+tool or render changed (AGENTS.md hard rule 14). This is a second pass by a
+different agent than the one that painted the set. The painter's report,
+scores and file list were moved unchanged to `production.md`.
 
-**Everything installed here is a CANDIDATE.** Nothing was added to
-`docs/target/approved-hashes.json`; its 115 files hash the same before and
-after this run. The four round-2 files that were replaced are backed up in
-`D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/ormi/replaced-round2/`,
-and every round-3 render (raw frames, masks, cutouts, sidecars) is backed up in
-`D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/ormi/round3/`.
+**Verdict: FAIL. No state reaches the bar of 7. No winner.** Every installed
+file stays a CANDIDATE. Nothing was added to `docs/target/approved-hashes.json`.
+Its 115 files hash the same before and after this pass (checked both times).
 
-**Sheet:** `sheet.jpg` (per state: idle, the installed file whole, a 1:1 face
-crop, a 1:1 costume and shield crop). Built by `build-sheet.py`. Every pick
-below was judged from native-pixel crops and the full-size cutouts, not from
-thumbnails.
+**Sheet:** `judge-sheet.jpg` (built by `judge-sheet.py`).
+- Row 1: idle, attack, cast, hurt and ko, all at **one pixel scale**, which is
+  how the engine sizes them (`computePoseScale` takes idle's pixels per world
+  unit).
+- Row 2: native 1:1 head crops.
+- Row 3: shield and costume crops, cut at native pixels.
 
-## Method (the Leblanc pilot 2 winner, only the words changed)
+All four installed files hash identical to the `candidateSource` their
+sidecars name (`attack.940001.heart950002`, `cast.940105`, `hurt.940204`,
+`ko.940302.heart950304`). I viewed all 24 first-batch contenders as whole
+figures. The six ko seeds, the round-2 files that were replaced (from the
+backup) and every installed file were also checked at 1:1.
 
-`run-round3.mjs`: Animagine XL 4.0, 28 steps, cfg 6, euler_ancestral /
-normal, the shared `STYLE_TAGS`, `QUALITY_TAGS`, `SPRITE_NEGATIVE`,
-`FACING_NEGATIVE`; IP-Adapter plus (ViT-H) with a batch of two references,
-`refs/idle-square.png` (Ormi's installed idle padded to a square) and
-`refs/idle-head.png` (a square crop of his head, topknot and collar), concat,
-0.4, ease in, 0.2 to 0.6 (`make-refs.py`). Framing is pilot 2's (no
-`standing`, no `looking at viewer`); KO uses the prone block. Attack renders
-at 1024x1216 because the shove overflows 832 px.
+## Method
 
-The words are an **idle-truth Danbooru block** (`identity-idle.txt`,
-`emphasis.txt`) instead of the old prose sentence: `fat man, short, stocky,
-bald, shaved head, topknot, hair tie, tassel, thick eyebrows, green eyes,
-scowl, purple armor, japanese armor, purple kimono, gold trim, gold collar,
-long sleeves, red sleeves, yellow sash, obi, teal pelvic curtain, purple
-hakama, long hakama, gold hem, sandals, zouri, round shield, huge shield, red
-shield, gold rim, studded rim, heart emblem`, emphasis `(bald:1.3), (fat
-man:1.3), (purple armor:1.25), (purple kimono:1.15), (huge round shield:1.2),
-(red heart emblem on shield:1.25)`. Negatives name every drift rounds 1 and 2
-logged (face paint and forehead marks, a second shield, kite / heater /
-pointed shields, a muscular build, a red chest) plus the ones the word pilot
-found. Pose tags are Danbooru tags; the sprite lint stripped nothing.
+- **Anchor:** `public/art/characters/ormi/idle.png`. It sits between Bailey's
+  picked concept `renders/ormi-a.png` and the research line in
+  `research/ffx2-leblanc-syndicate.md` §10.1: "short and stout", a large
+  shield on his back with the Syndicate heart, purple samurai attire.
+- **Scoring:** each criterion is 0 to 10. A candidate's score is its worst
+  criterion, and the bar is 7. The criteria are those of the pilot judge,
+  adapted to Ormi:
+  - head and topknot (colour, tie, tassel)
+  - face (green eyes, scowl, idle's cheek mark, no invented paint)
+  - costume (purple armour, crimson sleeves, gold collar, yellow sash, teal
+    pelvic curtain with its ornament, long purple hakama with a gold diamond
+    hem)
+  - shield (one, round, gold studded rim, heart)
+  - build
+  - line and shading style
+  - pose reads as its state
+- **Facing** is judged as a separate, set-level check (see below). It is not
+  counted inside the per-state score, because a sidecar edit fixes it without
+  a render.
 
-- attack (Shield Bash, "a straight shove"): `lunging, leaning forward, one
-  leg forward, holding shield, pushing, clenched teeth, v-shaped eyebrows,
-  angry, looking ahead`
-- cast (Supercollider's charge, "a charged body-check"; Ormi has no magic):
-  `fighting stance, crouching, knees bent, legs apart, leaning forward,
-  clenched hands, clenched teeth, v-shaped eyebrows, angry, shield on back`
-- hurt: `stumbling, leaning back, off balance, wince, closed eyes, pained
-  expression, open mouth, clenched teeth, v-shaped eyebrows, hand on own
-  stomach, head tilt, arm at side, shield on back`
-- ko: `lying, on side, unconscious, defeated, closed eyes, arms at sides,
-  shield on back`
+**The idle's shield has no heart.** At 1:1 its face is a purple and blue
+sunburst with a gold boss inside a red, gold-studded rim. So the heart
+criterion is judged against the research and the brief, not against idle.
+Every heart in this round is new relative to the anchor, and that alone keeps
+the shield criterion off 8.
 
-### Word pilot (one seed per state, looked at before any batch)
+## Scores
 
-| Pilot | What it showed | Change |
-| --- | --- | --- |
-| A (`renders/pilot-a/`) | `dark red hair` drew a full head of red hair; `fat, big belly, round belly` bared the belly; `red sleeves` became detached sleeves; KO lay **on** a giant wooden disc | drop the hair colour, `bald, shaved head`; negatives for a bare belly, detached sleeves, shorts |
-| B (`pilot-b/`) | bald and clothed, hearts on the shields, but the weight went away; attack drew two shields; KO still on a disc | weight up |
-| C (`pilot-c/`) | heavy again but the belly bared through plain negatives; face-down KO cropped and flipped | weighted negatives `(navel:1.3), (midriff:1.3), (bare stomach:1.3)`; KO on his side, shield on back |
-| D (`pilot-d/`) | heavy, belly covered, purple armour, red sleeves, yellow sash, hakama: on model; attack still two shields; KO drew the shield as a ring round the body | attack: fewer shield words; KO: `huge shield` out, `round shield on back` in |
-| E (the batch) | one shield in attack; KO a normal size | batch |
+| State | Pick | Head | Face | Costume | Shield | Build | Style | Pose | **Score** | Worst |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| attack | 940001 + heart 950002 | 6: dark brown topknot, no tassel | 7: green eye, bared teeth; idle's cheek mark gone | **5**: sheer lilac hakama, not idle's deep purple; invented red heart-bow on the belly; no teal curtain; blue sandal straps | 6: one round red shield, gold studded rim, a clear heart. The heart is glossy and 3D with a swirl inside, unlike the flat cel shield, and the old gold line shows around it | 7 | 7: nearest to idle's painterly shading | **5**: the shield arm is flung *behind* him while head, belly and lead foot drive the other way. It reads as a back-swing or wind-up, not a shove delivered with the shield | **5** | costume, pose |
+| cast | 940105 | 6: magenta topknot, yellow band, no tassel | 7 | 5: invented pink and rainbow collar scarf, lilac shoulder plates, orange-red sleeves, no teal curtain | **4**: one round shield, but purple with a red boss and **no heart**. The heart moved to the chest clasp | 7 | 6 | 6: low braced stance, clenched fists. It reads as bracing or a body-check charge, which suits Supercollider's wind-up | **4** | shield |
+| hurt | 940204 | 5: lavender ball topknot, no tassel | 6: eyes shut, mouth open, head thrown back, no marks. Could also read as a shout to the sky | 5: brown-orange sleeves, not crimson; rainbow-gradient collar; sash fringe fades yellow to green; orange hem band in place of the gold diamond hem; no teal curtain | 6: one round red shield with a clean flat heart. It hangs at his front, not on his back, and the lower rim bleeds green | 7 | **5**: heavy black outlines and flat fills. Beside idle it looks like a different illustrator | 6: a recoil, hand to the belly | **5** | head, costume, style |
+| ko | 940302 + heart 950304 | **4**: pale beige brush topknot (the red tie and tassel are right) | 7: eyes screwed shut, frown | **4**: the top sleeve and the back plate fill the frame in orange-red; purple only in the hakama | 6: one round shield with a clear heart. The heart is a glossy "jelly" with a white inner ring, a finish no other state has | 7 | 5: the same thick-outline, flat style as hurt | 8: collapsed on his side, unmistakable | **4** | head, costume |
 
-### Heart repaint (a masked pass on the shield face only)
+Against the painter's own scores (`production.md`):
+- **Attack 6 → 5.** At 1:1 the shield trails behind the lunge, so the pose does
+  not show a shield bash.
+- **Hurt 6 → 5.** Hurt and ko have drifted to a flatter, heavily outlined style,
+  and the painter did not score style.
+- **Cast 4 and ko 4:** I agree.
 
-`repaint-heart.mjs`: an ellipse on the shield face (no face, hand or costume
-in it), `SetLatentNoiseMask`, denoise 0.6 to 0.85, the text `round shield,
-studded rim, gold rim, (large red heart emblem:1.35), (heart symbol:1.2)`,
-everything outside the mask composited back pixel for pixel. This is the
-follow-up pilot 2's judge named for a drift the words do not fix.
+## Set-level findings the painter's report does not have
 
-- **ko 940302**: 0.6 and 0.7 drew a muddled double heart; 0.8 seed 950304
-  drew one clean red heart. Used.
-- **attack 940001**: its shield had a gold line-art motif that read as a leaf;
-  0.8 seed 950002 drew a gold-rimmed red heart. Used. At 1:1 a faint trace of
-  the old gold line survives outside the heart.
-- **cast 940105**: the visible shield face is a narrow crescent beside his
-  fist. 0.6 and 0.7 drew nothing; 0.85 turned the shield black and put a grey
-  object at the fist. **Two failed attempts, so no third (hard rule 15).**
+1. **Ormi turns round between states.**
+   - Measured at 1:1 on the head crops: idle and attack face **screen-right**;
+     cast, hurt and ko face **screen-left**.
+   - Every sidecar says `facing: "left"`. `PaintedActor.mirrorOf` passes the
+     per-pose `facing` to `mirrorFor`, and `mirrorFor('left', -1)` returns 1,
+     so none of the five is mirrored. An enemy's world facing is -1 under the
+     facing contract in `tools/gen/comfy.mjs`.
+   - Result: in battle he would face away from the party at idle and during
+     his attack, then about-face when he braces, is hit or falls.
+   - I read this from the code; I did not see it in a running battle.
+   - **Fix, no render needed:** mark idle and attack `facing: "right"` so the
+     engine mirrors them. `tools/gen/flip.py` also works. Ormi has no
+     one-sided feature that mirroring would break.
+   - Changing the sidecar of the idle Bailey saw is his call.
+2. **Idle no longer matches the set in size.** Row 1 of the sheet shows it:
+   - Idle is narrow. The poses are heavy and round, with heads about 1.5 times
+     idle's.
+   - Figure area (opaque pixels): idle 334,758; cast 452,799; hurt 562,545;
+     ko 541,554.
+   - Hurt stands as tall as idle but is nearly twice as wide. In game Ormi
+     swells when he is hit.
+   - This confirms the painter's open item 1. The round-3 build is the one
+     Bailey asked for ("heavier, from A"), so **idle is the file that is off**.
+3. **Two finishes.** Attack and cast keep idle's painterly shading. Hurt and ko
+   have moved to thick black outlines and flat fills, and their shields are
+   glossy in two different ways. Even with every colour fixed, the four states
+   would not look like one set.
+4. **Colour drift nobody has named.**
+   - Idle's sleeves are a deep crimson. Cast, hurt and ko have orange-red to
+     brown-orange sleeves.
+   - The teal pelvic curtain and its jewelled ornament are missing from all
+     four states.
+   - Idle's cheek mark (a pale circle on the cheekbone) is missing from all
+     four states.
+5. **Unlisted contender.** Ko 940305 is not in the painter's rejection list.
+   - It is the only purple-torso ko seed with a shield.
+   - It fails anyway: a teal ball for a topknot, purple sleeves, a garbled
+     card-suit emblem, an arm bent backwards, and the feet at the frame edge.
+   - The installed pick stays the better of the six.
 
-## Scores (worst criterion wins, bar 7, against idle at 1:1)
+## Against the files it replaced (round 2, from the backup)
 
-Criteria: topknot and head; face (marks, eyes, expression); costume colours
-(purple armour, red sleeves, gold collar and trim, yellow sash, teal pelvic
-curtain, purple hakama); shield (one, round, a clear heart); build (heavier and
-rounder than idle, per Bailey); style; pose reads as the state.
+Round 2 drew a slim, muscular swordsman type with red chest panels, a pointed
+shield and face paint. Round 3 is plainly Ormi in every state: bald, a
+topknot, heavy, purple armour, one round shield, no face paint, and a heart on
+the shield in three of four states. **The round-3 picks beat the files they
+replaced and should stay installed as CANDIDATES.**
 
-| State | Pick | Head | Face | Costume | Shield | Build | Pose | **Score** | Worst |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| attack | 940001 + heart 950002 | 7 (dark topknot, red tie, no tassel) | 7 (clean, green eye, gritted teeth) | **6** (lilac hakama; an invented heart-bow on the chest; no teal curtain) | 7 (one round red shield, gold studded rim, clear heart) | 8 | 8 (a real shove, weight forward) | **6** | costume |
-| cast | 940105 | 7 (maroon topknot, gold band) | 7 (clean, green eye, gritted teeth) | 6 (an invented pink collar scarf) | **4** (one round shield, purple with a red boss, **no heart**; the heart is on the chest clasp) | 8 | 7 (a low charge stance, fists clenched) | **4** | shield |
-| hurt | 940204 | 6 (plum topknot, no tassel) | 6 (clean, eyes shut, mouth open; the linework is simpler than idle's at 1:1) | **6** (orange-red sleeves, a lavender collar, a green-fading sash fringe in place of the teal curtain) | 8 (one round red shield, a clear red heart; worn at his front, not on his back) | 8 | 7 (head thrown back, hand at the stomach) | **6** | costume, face |
-| ko | 940302 + heart 950304 | 5 (the topknot is pale beige) | 7 (clean, eyes shut, a pained frown) | **4** (the top sleeve and the robe's back read **red**, not purple armour; purple only in the hakama) | 7 (one round shield, a clear heart, glossy) | 8 | 8 (collapsed on his side) | **4** | costume |
+## Redo, in order (the next method, not another blind pass)
 
-**Nothing reaches 7.** Against round 2 (`../judge.md`): attack 6 to 6 (now
-heavy, one shield and a clear heart instead of a purple-and-gold wheel);
-cast about 4 to 5, now 4 for a different reason (no heart instead of an
-edge-on shield); **hurt 4 to 6** (a real recoil, a round shield with a heart,
-no face paint: 0 of 6 hurt candidates carried a facial mark, round 2 had 4 of
-5); ko 5 to 4 (the heart and the weight gained, the purple lost). What round 3
-fixed across the set: every state is **bald with a topknot, heavy and round,
-in purple armour with red sleeves, one round shield**, no face paint anywhere,
-and the heart is on the shield in three of four states.
+This is the third failed pass on the Ormi set (rounds 1, 2 and 3). Hard rule
+15 applies: no fourth word-only batch. Show Bailey this sheet.
 
-What every contender rejected at 1:1 showed: attack 940004 a second head,
-940005 two shields, 940002 a thin build; cast 940103 faces right, 940106 a
-ring-shaped shield behind the whole body, 940102 a skin-coloured topknot;
-hurt 940203 and 940206 no heart on the shield; ko 940301 a small shield and
-red torso, 940303 / 940304 cropped, 940306 no shield at all, ko3 940311 head
-to the right and slim, 940312 cropped, 940313 fused anatomy, 940314 a crawl.
+1. **Facing** (sidecar or `flip.py`; no render). Ask Bailey before touching
+   idle.
+2. **Idle at the round-3 build.** Re-render idle with method F and this
+   round's words (arms crossed, shield on back), so the anchor, scale and
+   shield match. This changes the anchor Bailey saw: his call.
+3. **Masked repaints, the tool that already worked here** (`repaint-heart.mjs`):
+   - cast: repaint the shield *face* on a pose that shows the face, or accept
+     a new cast pose with the shield brought round to the front;
+   - ko: repaint the torso at denoise about 0.5 with `purple armor`;
+   - ko: recolour the topknot;
+   - attack: repaint the hakama and remove the belly heart-bow.
+4. **Style unification for hurt and ko:** img2img at low denoise (0.15 to 0.2,
+   the "last-mile" pass the pilot judge kept for method B), with idle as the
+   style reference. Or re-roll hurt from the attack/cast seeds' finish.
+5. **Attack pose:** the shield must lead. A pose word or an OpenPose control
+   with the shield arm forward, on the facing side.
 
-## What this round leaves open
+## Hard rule 6
 
-1. **Idle is now the odd one out, and the scale will show it.** The engine
-   sizes every pose at idle's pixel scale (`PaintedActor` `computePoseScale`).
-   Round 3's figures are heavier with bigger heads: attack's head is about
-   1.2x idle's, hurt's about 1.5x. In game, Ormi will look like he grows
-   when he is hit. The fix the round-1 judge already asked for, and which is
-   now the cheapest one, is to **re-render idle with this same recipe**
-   (arms crossed, shield on back, heart), after which the set shares one
-   build and one shield. That changes the identity anchor Bailey saw, so it
-   is his call. Not done here.
-2. **Cast's heart.** Six seeds never put the heart on the shield. It moved to
-   the chest clasp instead. A cast pose that shows the shield's face (say, the
-   shield held in front at chest height as he braces) is a pose change, not a
-   word change.
-3. **KO's colour.** Lying on his side, the red sleeve and the robe's back
-   fill the frame. Four more seeds with purple weighted up and `red sleeves`
-   dropped fixed the colour but lost the pose or the frame. A masked recolour
-   of the torso (the same tool as the heart, denoise about 0.5, `purple
-   armor`) is the next thing to try.
-4. **Hard rule 6.** The research gives Ormi "a large shield worn on his back,
-   bearing the Syndicate heart logo" and "purple samurai-style attire"; it does
-   not describe the shield's colours, the topknot, the red sleeves or the
-   sash. Those come from the installed idle, not from a source.
+§10.1 of the research supports only these: stout build, a large shield on his
+back with the Syndicate heart logo, and purple samurai-style attire.
 
-## Files
-
-- `identity-idle.txt`, `emphasis.txt`: the words; `make-refs.py`, `refs/`
-- `run-round3.mjs`: the renders (`node .../run-round3.mjs <state> [seeds]`;
-  `prompt <state>` prints the exact prompt)
-- `repaint-heart.mjs`: the shield-face repaint
-- `install.mjs`: installs the picks as CANDIDATE with sidecars (`status`,
-  `candidateOf`, `candidateSource`, `method`, `seed`, the repaint's own seed
-  and mask) and backs up what it replaces
-- `build-sheet.py`, `sheet.jpg`
-- `renders/`: every cutout and sidecar (raw frames and masks stay local,
-  `.gitignore`), `renders/pilot-a` to `pilot-d` for the word pilot
+The topknot colour, the red sleeves, the sash, the teal curtain and the
+shield's own colours come from the installed idle, not from a source. The
+same holds for the idle's heartless sunburst shield, which contradicts §10.1.
