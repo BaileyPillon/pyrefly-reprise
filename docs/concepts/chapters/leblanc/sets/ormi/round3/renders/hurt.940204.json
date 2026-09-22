@@ -1,0 +1,53 @@
+{
+  "tag": "hurt.940204",
+  "method": "F (Leblanc pilot 2 winner, Ormi words)",
+  "state": "hurt",
+  "seed": 940204,
+  "positive": "1boy, ormi \\(ff10-2\\), final fantasy x-2, safe, solo, fat man, short, stocky, thick arms, thick neck, bald, shaved head, topknot, hair tie, tassel, thick eyebrows, green eyes, scowl, purple armor, japanese armor, purple kimono, gold trim, gold collar, long sleeves, red sleeves, yellow sash, obi, teal pelvic curtain, purple hakama, long hakama, gold hem, sandals, zouri, toes, round shield, huge shield, red shield, gold rim, studded rim, heart emblem, stumbling, leaning back, off balance, wince, closed eyes, pained expression, open mouth, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, shield on back, (closed eyes:1.25), (pained expression:1.3), (leaning back:1.2), (bald:1.3), (fat man:1.3), (purple armor:1.25), (purple kimono:1.15), (huge round shield:1.2), (red heart emblem on shield:1.25), (from side:1.3), three-quarter view, body facing left, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, facial mark, facial tattoo, face paint, forehead mark, forehead tattoo, markings, whisker markings, scar on face, blood, multiple shields, two shields, dual wielding, kite shield, heater shield, pointed shield, square shield, muscular, muscular male, abs, pectorals, tall, slim, thin, sword, katana, blade, spear, red armor, red chest, bare chest, topless male, long hair, spiked hair, mohawk, helmet, feathers, short hair, bangs, sidelocks, crop top, sleeveless, bare arms, detached sleeves, bare shoulders, shorts, (navel:1.3), (midriff:1.3), (bare stomach:1.3), (multiple shields:1.3), (two shields:1.3), smile, grin, looking at viewer, arms crossed, standing still, holding shield",
+  "emphasis": "(closed eyes:1.25), (pained expression:1.3), (leaning back:1.2), (bald:1.3), (fat man:1.3), (purple armor:1.25), (purple kimono:1.15), (huge round shield:1.2), (red heart emblem on shield:1.25)",
+  "poseTags": "stumbling, leaning back, off balance, wince, closed eyes, pained expression, open mouth, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, shield on back",
+  "ref": {
+    "images": [
+      "refs/idle-square.png",
+      "refs/idle-head.png"
+    ],
+    "combine": "concat",
+    "weight": 0.4,
+    "start": 0.2,
+    "end": 0.6,
+    "type": "ease in",
+    "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors"
+  },
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cutout": {
+    "width": 809,
+    "height": 1165,
+    "baselineY": 1149,
+    "cropBox": [
+      23,
+      31,
+      832,
+      1196
+    ],
+    "contentBox": [
+      39,
+      47,
+      832,
+      1180
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "seconds": 61,
+  "generatedAt": "2026-09-22T18:58:37.903Z"
+}

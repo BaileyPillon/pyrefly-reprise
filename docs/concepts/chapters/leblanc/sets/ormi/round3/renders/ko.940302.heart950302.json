@@ -1,0 +1,46 @@
+{
+  "tag": "ko.940302.heart950302",
+  "method": "F + masked shield-face repaint",
+  "source": "renders/ko.940302.raw.png",
+  "mask": {
+    "ellipse": {
+      "cx": 242,
+      "cy": 524,
+      "rx": 115,
+      "ry": 100,
+      "angle": 0
+    },
+    "feather": 4
+  },
+  "denoise": 0.7,
+  "seed": 950302,
+  "positive": "round shield, studded rim, gold rim, (large red heart emblem:1.35), (heart symbol:1.2), heart, emblem painted on shield, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, face, head, eyes, hand, person, text, letters, star, cross, skull, flower, sunburst, spokes",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "cutout": {
+    "width": 1199,
+    "height": 773,
+    "baselineY": 757,
+    "cropBox": [
+      17,
+      44,
+      1216,
+      817
+    ],
+    "contentBox": [
+      33,
+      60,
+      1211,
+      801
+    ],
+    "sourceWidth": 1216,
+    "sourceHeight": 832,
+    "model": "isnet-anime"
+  },
+  "seconds": 21,
+  "generatedAt": "2026-09-22T19:09:15.686Z"
+}

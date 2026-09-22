@@ -1,0 +1,1 @@
+(bald:1.3), (fat man:1.3), (purple armor:1.25), (purple kimono:1.15), (huge round shield:1.2), (red heart emblem on shield:1.25)

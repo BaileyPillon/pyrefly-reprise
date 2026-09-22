@@ -1,0 +1,1 @@
+(fat man:1.25), (round belly:1.2), (purple armor:1.2), (bald:1.1), (huge round shield:1.2), (red heart emblem on shield:1.25)

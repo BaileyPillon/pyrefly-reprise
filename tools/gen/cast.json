@@ -2522,53 +2522,141 @@
       "facing": "left",
       "sizeHint": "832x1216",
       "refState": "idle",
-      "tags": "1boy, ormi (ff10-2), final fantasy x-2, safe, solo, extremely short and stout build, a big round belly, thick heavy limbs, wide barrel chest, short neck, bald head with a small red top-knot, a stern scowling face, thick eyebrows, wearing predominantly purple samurai-style armor with gold trim, a fur-trimmed mantle across the shoulders, a wide teal sash at the waist, a massive round shield strapped across his back nearly as tall as he is, the shield rimmed in gold with a red syndicate heart emblem at its center, thick short legs, sandals, (short and extremely stout build:1.3), (purple samurai armor:1.25), (heart emblem on shield:1.25)",
-      "negAdd": "tall, slim, thin, sword, katana, blade",
+      "tags": "1boy, ormi (ff10-2), final fantasy x-2, safe, solo, fat man, short, stocky, thick arms, thick neck, bald, shaved head, topknot, hair tie, tassel, thick eyebrows, green eyes, scowl, purple armor, japanese armor, purple kimono, gold trim, gold collar, long sleeves, red sleeves, yellow sash, obi, teal pelvic curtain, purple hakama, long hakama, gold hem, sandals, zouri, toes, round shield, huge shield, red shield, gold rim, studded rim, heart emblem",
+      "negAdd": "facial mark, facial tattoo, face paint, forehead mark, forehead tattoo, markings, whisker markings, scar on face, blood, multiple shields, two shields, dual wielding, kite shield, heater shield, pointed shield, square shield, muscular, muscular male, abs, pectorals, tall, slim, thin, sword, katana, blade, spear, red armor, red chest, bare chest, topless male, long hair, spiked hair, mohawk, helmet, feathers, short hair, bangs, sidelocks, crop top, sleeveless, bare arms, detached sleeves, bare shoulders, shorts, (navel:1.3), (midriff:1.3), (bare stomach:1.3), (multiple shields:1.3), (two shields:1.3)",
       "states": {
         "idle": {
           "poseTags": "standing, arms crossed, stern expression, shield visible on back, low wide stance",
           "notes": "Not re-rendered this pass. Checked against the picked concept (docs/concepts/chapters/leblanc/renders/ormi-a.png, options.json row cast_ormi option A) and research/ffx2-leblanc-syndicate.md line 830 (\"short and stout ... a large shield worn on his back ... predominantly purple samurai-style attire\"): idle is heavier/rounder than the concept sketch, which production.md records as intentional (Bailey's note that canon Ormi is big and round, not athletic), and it matches the research description better than the concept does."
         },
         "attack": {
-          "poseTags": "gripping the massive round shield with both hands, swinging it off his back into a heavy shoulder bash, lunging forward, gritted teeth, low wide stance",
-          "ref": "ormi/idle",
+          "poseTags": "lunging, leaning forward, one leg forward, holding shield, pushing, clenched teeth, v-shaped eyebrows, angry, looking ahead",
+          "sizeHint": "1024x1216",
+          "ref": [
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+          ],
+          "refCombine": "concat",
           "forceRef": true,
-          "refWeight": 0.35,
+          "refWeight": 0.4,
+          "refWeightType": "ease in",
           "refStart": 0.2,
           "refEnd": 0.6,
-          "notes": "2026-09-21/22 re-render, seed 810001, kept from a batch of 4 (one seed quarantined by the cut-out guard and re-rolled to keep the batch at 4). Picked for the clearest, most explicit heart-on-shield of the four — the installed pre-pass set's known defect (production.md: \"shield emblem reads as an ornate sunburst rather than an explicit heart\"). One accepted defect: a faint red facial marking near the eye not present in idle, the least severe issue among the four candidates (rejected alternatives: a fully muscular bare torso that loses the stout/big-belly identity criterion and has no heart on its shield at all; a heart-on-shield candidate that also adds an unsourced heart tattoo on the forehead; a clean-faced candidate whose shield again carries no heart). See docs/concepts/chapters/leblanc/sets/ormi/README.md."
+          "seed": 940001,
+          "status": "CANDIDATE",
+          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words, then a masked shield-face repaint (seed 950002, denoise 0.8, ellipse {\"cx\":205,\"cy\":538,\"rx\":100,\"ry\":115,\"angle\":0}) for the Syndicate heart",
+          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs attack",
+          "notes": "ROUND 3 2026-09-22 (method F, Leblanc pilot 2 winner, Ormi idle-truth words; renders at 1024x1216). Seed 940001 of 6 (940001-940006; 940004 drew a second head, 940005 two shields), then a masked shield-face repaint (repaint-heart.mjs, ellipse 205,538,100,115, denoise 0.8, seed 950002) for the Syndicate heart. Judge (round3/judge.md): 6, worst = costume (lilac hakama, an invented heart-bow on the chest, no teal pelvic curtain); one round shield with a clear heart, a real shove. CANDIDATE.",
+          "history": [
+            {
+              "poseTags": "gripping the massive round shield with both hands, swinging it off his back into a heavy shoulder bash, lunging forward, gritted teeth, low wide stance",
+              "ref": "ormi/idle",
+              "forceRef": true,
+              "refWeight": 0.35,
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "notes": "2026-09-21/22 re-render, seed 810001, kept from a batch of 4 (one seed quarantined by the cut-out guard and re-rolled to keep the batch at 4). Picked for the clearest, most explicit heart-on-shield of the four — the installed pre-pass set's known defect (production.md: \"shield emblem reads as an ornate sunburst rather than an explicit heart\"). One accepted defect: a faint red facial marking near the eye not present in idle, the least severe issue among the four candidates (rejected alternatives: a fully muscular bare torso that loses the stout/big-belly identity criterion and has no heart on its shield at all; a heart-on-shield candidate that also adds an unsourced heart tattoo on the forehead; a clean-faced candidate whose shield again carries no heart). See docs/concepts/chapters/leblanc/sets/ormi/README.md.",
+              "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            }
+          ]
         },
         "cast": {
-          "poseTags": "gripping the massive round shield with both hands, crouching low, muscles bulging, gathering strength, gritted teeth, about to charge forward",
-          "ref": "ormi/idle",
+          "poseTags": "fighting stance, crouching, knees bent, legs apart, leaning forward, clenched hands, clenched teeth, v-shaped eyebrows, angry, shield on back, looking ahead",
+          "ref": [
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+          ],
+          "refCombine": "concat",
           "forceRef": true,
-          "refWeight": 0.35,
+          "refWeight": 0.4,
+          "refWeightType": "ease in",
           "refStart": 0.2,
           "refEnd": 0.6,
-          "notes": "2026-09-21/22 re-render, seed 820001, kept from a full batch of 4. Best colour/costume match to idle of the four (purple armor, gold trim, teal sash, explicit heart on the shield). One accepted defect: the off hand holds a second, smaller heart-emblem disc beside the main shield (an invented extra prop) — logged rather than hidden, and the least severe issue among the four candidates (rejected alternatives: a shield reshaped to an angular diamond and recoloured blue; two candidates with the torso armor repainted red/pink, one of which also adds an unsourced forehead heart tattoo). Ormi has no magic in his kit (research §4: Normal Attack, Shield Bash, Supercollider, Huggles, Concussive Blast only) — this state renders his one non-basic-attack special-ability pose, not literal spellcasting, same convention as the other physical-only cast members of this fight."
+          "seed": 940105,
+          "status": "CANDIDATE",
+          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words",
+          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs cast",
+          "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words). Seed 940105 of 6 (940101-940106). Judge: 4, worst = the shield carries no heart (the heart went to the chest clasp in every cast candidate; two masked shield repaints, 950101-950104, failed and were not used, hard rule 15). Otherwise the strongest costume of the set: purple armour, red sleeves, yellow sash, hakama, heavy build, charge stance. CANDIDATE.",
+          "history": [
+            {
+              "poseTags": "gripping the massive round shield with both hands, crouching low, muscles bulging, gathering strength, gritted teeth, about to charge forward",
+              "ref": "ormi/idle",
+              "forceRef": true,
+              "refWeight": 0.35,
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "notes": "2026-09-21/22 re-render, seed 820001, kept from a full batch of 4. Best colour/costume match to idle of the four (purple armor, gold trim, teal sash, explicit heart on the shield). One accepted defect: the off hand holds a second, smaller heart-emblem disc beside the main shield (an invented extra prop) — logged rather than hidden, and the least severe issue among the four candidates (rejected alternatives: a shield reshaped to an angular diamond and recoloured blue; two candidates with the torso armor repainted red/pink, one of which also adds an unsourced forehead heart tattoo). Ormi has no magic in his kit (research §4: Normal Attack, Shield Bash, Supercollider, Huggles, Concussive Blast only) — this state renders his one non-basic-attack special-ability pose, not literal spellcasting, same convention as the other physical-only cast members of this fight.",
+              "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            }
+          ]
         },
         "hurt": {
-          "poseTags": "staggering back, off balance, pained grimace, still gripping the shield loosely at his side, low wide stance",
-          "ref": "ormi/idle",
+          "poseTags": "stumbling, leaning back, off balance, wince, closed eyes, pained expression, open mouth, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, shield on back",
+          "ref": [
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+          ],
+          "refCombine": "concat",
           "forceRef": true,
-          "refWeight": 0.35,
+          "refWeight": 0.4,
+          "refWeightType": "ease in",
           "refStart": 0.2,
           "refEnd": 0.6,
-          "notes": "2026-09-21/22 re-render, seed 800001, kept from only 2 successful candidates (of 4 attempted — 1 quarantined by the cut-out guard, 1 timed out waiting on a ComfyUI queue shared with two other active render workflows; not re-rolled further, see docs/concepts/chapters/leblanc/sets/ormi/README.md). Picked over the other survivor (seed 800003) for staying more predominantly purple (the runner-up's torso is a fully bare-armed red tank top); both are otherwise clean (explicit heart, no face paint, holding the shield) and either would have been defensible."
+          "seed": 940204,
+          "status": "CANDIDATE",
+          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words",
+          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs hurt",
+          "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words). Seed 940204 of 6 (940201-940206). Judge: 6, worst = costume (orange-red sleeves, a lavender collar, green sash fringe) and a simplified face at 1:1; head thrown back, eyes shut, mouth open, one round shield with a clear red heart (worn at his front, not on his back as in idle). No face paint in any of the 6 (round 2: 4 of 5). CANDIDATE.",
+          "history": [
+            {
+              "poseTags": "staggering back, off balance, pained grimace, still gripping the shield loosely at his side, low wide stance",
+              "ref": "ormi/idle",
+              "forceRef": true,
+              "refWeight": 0.35,
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "notes": "2026-09-21/22 re-render, seed 800001, kept from only 2 successful candidates (of 4 attempted — 1 quarantined by the cut-out guard, 1 timed out waiting on a ComfyUI queue shared with two other active render workflows; not re-rolled further, see docs/concepts/chapters/leblanc/sets/ormi/README.md). Picked over the other survivor (seed 800003) for staying more predominantly purple (the runner-up's torso is a fully bare-armed red tank top); both are otherwise clean (explicit heart, no face paint, holding the shield) and either would have been defensible.",
+              "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            }
+          ]
         },
         "ko": {
-          "poseTags": "lying on his back, defeated, the shield fallen beside him on the ground, eyes closed, head to the left, feet to the right",
+          "poseTags": "lying, on side, unconscious, defeated, closed eyes, arms at sides, shield on back",
           "composition": "prone",
           "sizeHint": "1216x832",
-          "ref": "ormi/idle",
+          "ref": [
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+          ],
+          "refCombine": "concat",
           "forceRef": true,
-          "refWeight": 0.35,
+          "refWeight": 0.4,
+          "refWeightType": "ease in",
           "refStart": 0.2,
           "refEnd": 0.6,
-          "notes": "2026-09-21/22 re-render, seed 830001, kept from only 2 successful candidates (of 4 attempted — the other 2 client-side waits timed out on the same congested shared queue as hurt). Picked because the shield keeps idle's actual round, gold-rimmed shape and heart centre; the one accepted defect is that his eyes render open/smug rather than closed (the rejected alternative, seed 830002, has eyes closed but its shield renders as a giant heart-shaped panel instead of the canon round shield — a shape change to a named identity object, judged the more severe failure of the two)."
+          "seed": 940302,
+          "status": "CANDIDATE",
+          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words, then a masked shield-face repaint (seed 950304, denoise 0.8, ellipse {\"cx\":242,\"cy\":524,\"rx\":115,\"ry\":100,\"angle\":0}) for the Syndicate heart",
+          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs ko",
+          "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words; lying on his side, shield on back; prone 1216x832). Seed 940302 of 10 (940301-940306; a second batch ko3 940311-940314 with purple weighted up and red sleeves dropped, none better), then a masked shield-face repaint (ellipse 242,524,115,100, denoise 0.8, seed 950304) for the heart. Judge: 4, worst = the torso reads red (the top sleeve and the robe back) in place of purple armour; the topknot is pale. Eyes shut, clean face, one round shield with a clear heart, heavy. CANDIDATE.",
+          "history": [
+            {
+              "poseTags": "lying on his back, defeated, the shield fallen beside him on the ground, eyes closed, head to the left, feet to the right",
+              "composition": "prone",
+              "sizeHint": "1216x832",
+              "ref": "ormi/idle",
+              "forceRef": true,
+              "refWeight": 0.35,
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "notes": "2026-09-21/22 re-render, seed 830001, kept from only 2 successful candidates (of 4 attempted — the other 2 client-side waits timed out on the same congested shared queue as hurt). Picked because the shield keeps idle's actual round, gold-rimmed shape and heart centre; the one accepted defect is that his eyes render open/smug rather than closed (the rejected alternative, seed 830002, has eyes closed but its shield renders as a giant heart-shaped panel instead of the canon round shield — a shape change to a named identity object, judged the more severe failure of the two).",
+              "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            }
+          ]
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1, line 830). idle.png (seed 1767754585) was rendered in an earlier session and is unchanged by this pass — see its own state note above for the anchor check against the picked concept. attack/cast/hurt/ko re-rendered 2026-09-21/22 with the Leblanc identity-consistency pilot's Method A recipe (docs/concepts/chapters/leblanc/pilot/judge.md: --ref --forceRef, refWeight 0.35, refStart 0.2, refEnd 0.6, ease-in) in place of the chapter's original default (--refWeight 0.30, no --forceRef), which production.md recorded as producing an ornate-sunburst shield instead of an explicit heart and a state-to-state armour-colour swap (purple/gold to solid red/gold). Full write-up, every candidate produced, and the reject rationale: docs/concepts/chapters/leblanc/sets/ormi/README.md and its sheet.png. hurt and ko each fell short of a full 4-candidate batch because the shared ComfyUI queue was saturated for long stretches by a sibling workflow's Wan2.2 video renders (single video jobs observed running 450-900+ seconds); every candidate that did complete was viewed at native pixel size before judging. CANDIDATE, not approved — no entry added to docs/target/approved-hashes.json (production.md's CANDIDATE status for this chapter's art stands)."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1: short and stout, a large shield on his back bearing the Syndicate heart logo, predominantly purple samurai-style attire). ROUND 3 2026-09-22: attack/cast/hurt/ko re-rendered with method F (docs/concepts/chapters/leblanc/pilot2/judge.md) and an idle-truth Danbooru identity block (round3/identity-idle.txt, emphasis.txt), heavier and rounder per Bailey, then a masked shield-face repaint on attack and ko for the heart. idle.png (seed 1767754585) is unchanged and is still the anchor: its shield is a sunburst, not a heart, and its proportions are taller and slimmer than the round-3 states (see round3/judge.md, recommendation 1). Everything CANDIDATE; no entry in docs/target/approved-hashes.json. Full write-up: docs/concepts/chapters/leblanc/sets/ormi/round3/judge.md and sheet.jpg. The second ormi row below this one is an older duplicate kept for history.",
+      "emphasis": "(bald:1.3), (fat man:1.3), (purple armor:1.25), (purple kimono:1.15), (huge round shield:1.2), (red heart emblem on shield:1.25)"
     },
     {
       "id": "evrae",
@@ -2649,7 +2737,8 @@
           "ref": "ormi/idle"
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). 2026-09-21: re-rendered HEAVIER than the picked concept (docs/concepts/chapters/leblanc/renders/ormi-a.png) per Bailey's note that canon Ormi is big and round, not athletic — \"(short and extremely stout:1.35)\" and \"(huge round belly:1.3)\" in the identity block. Shield emblem reads as an ornate sunburst/spiral rather than an explicit heart in most renders; the canon heart-on-shield detail is present in the tags but not always legible in the render."
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1). 2026-09-21: re-rendered HEAVIER than the picked concept (docs/concepts/chapters/leblanc/renders/ormi-a.png) per Bailey's note that canon Ormi is big and round, not athletic — \"(short and extremely stout:1.35)\" and \"(huge round belly:1.3)\" in the identity block. Shield emblem reads as an ornate sunburst/spiral rather than an explicit heart in most renders; the canon heart-on-shield detail is present in the tags but not always legible in the render.",
+      "_supersededBy": "the first ormi row in this file (round 3, 2026-09-22); kept for history, not used by the round-3 scripts"
     },
     {
       "id": "logos",

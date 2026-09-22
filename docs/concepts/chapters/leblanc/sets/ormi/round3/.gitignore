@@ -1,0 +1,6 @@
+# Ormi round 3: raw frames stay local (backed up to
+# D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/ormi/).
+*.raw.png
+*.mask.png
+# Word-pilot cutouts stay local (backed up with the rest); their sidecars and words are committed.
+renders/pilot-*/*.png
