@@ -44,6 +44,29 @@
   pointer-events: none;
   z-index: 4; /* above the guide rail's 3; they never overlap, but a stacking
                  order that depends on DOM order is a trap for the next agent */
+  /*
+   * FOC-06 (`critic/rounds/round-08.md` #8; disclosed as inherited in
+   * `critic/reviews/1b339718e023d4dd8a5868901d55ba000a9e59a9-focused.md`):
+   * eight rows in this card measured under 12 effective px at 1600x900 and
+   * 2000x1012, and every row collapses further on a phone (down to 2.38px)
+   * because this card is authored on the 640x360 grid `FFXBattleHud.ts` and
+   * `FFX2BattleHud.ts` scale by `min(w/640, h/360)` — on a narrow, tall phone
+   * window that factor is *smaller* than on desktop (0.609 at 390x844 vs 2.5
+   * at 1600x900), so a flat px raise that clears the desktop floor (FOC-04's
+   * approach on `ffx-hud.css`) still fails the phone one, and a flat raise
+   * that clears the phone floor would blow the card's authored geometry up
+   * ~4x on desktop.
+   *
+   * The floor is applied to the *rendered* result instead: both hosts publish
+   * `--lb-scale` (the same factor their `layout()` multiplies the stage by,
+   * the `LetterboxStage.ts` / `chapter-panel.css` convention), and every
+   * `font-size` below is `max(authored, var(--mad-fs-floor))`. Since
+   * `rendered = authored-or-floor * scale` and `var(--mad-fs-floor) * scale`
+   * is always this constant regardless of `scale`, every row clears the floor
+   * on any viewport without touching rows that already clear it (12.2px, not
+   * 12.0, for the same margin `ffx-hud.css` keeps over its 12px ask).
+   */
+  --mad-fs-floor: calc(12.2px / var(--lb-scale, 1));
 }
 
 /* -------------------------------------------------------------------- card */
@@ -62,7 +85,7 @@
   background: var(--ig-ink-panel);
   color: var(--ig-paper);
   font-family: var(--ig-font-text);
-  font-size: 5.3px;
+  font-size: max(5.3px, var(--mad-fs-floor));
   line-height: 1.45;
   box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45);
   transform: skewX(var(--ig-skew));
@@ -96,7 +119,7 @@
   padding: 1px 4px 1.2px;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 4.6px;
+  font-size: max(4.6px, var(--mad-fs-floor));
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--ig-ink);
@@ -106,7 +129,7 @@
   font-family: var(--ig-font-serif);
   font-weight: 700;
   font-style: italic;
-  font-size: 7px;
+  font-size: max(7px, var(--mad-fs-floor));
   color: var(--ig-paper);
 }
 
@@ -125,12 +148,12 @@
   flex-wrap: wrap;
   gap: 3px;
   font-family: var(--ig-font-numeral);
-  font-size: 8.4px;
+  font-size: max(8.4px, var(--mad-fs-floor));
   line-height: 1.15;
 }
 /* The runner-up is quieter than the pick, so the card still has one answer. */
 .mad__move--alt .mad__line {
-  font-size: 7px;
+  font-size: max(7px, var(--mad-fs-floor));
 }
 .mad__move--alt .mad__label {
   color: #e9d7a6;
@@ -144,7 +167,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--ig-font-display);
-  font-size: 4.4px;
+  font-size: max(4.4px, var(--mad-fs-floor));
   font-weight: 700;
   color: var(--ig-ink);
   background: var(--ig-accent);
@@ -164,7 +187,7 @@
 }
 .mad__arrow {
   color: #8d99a8;
-  font-size: 5.6px;
+  font-size: max(5.6px, var(--mad-fs-floor));
 }
 .mad__target {
   color: var(--ig-paper);
@@ -175,7 +198,7 @@
 .mad__badge {
   padding: 0.6px 3px 0.8px;
   font-family: var(--ig-font-display);
-  font-size: 3.9px;
+  font-size: max(3.9px, var(--mad-fs-floor));
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -195,7 +218,7 @@
   padding: 0.5px 3px 0.8px;
   background: var(--ig-ink-chip);
   font-family: var(--ig-font-display);
-  font-size: 4.2px;
+  font-size: max(4.2px, var(--mad-fs-floor));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #cfd6de;
@@ -204,13 +227,13 @@
 /* The number the player came for, in the numeral face at chip size. */
 .mad__stat--dmg {
   font-family: var(--ig-font-numeral);
-  font-size: 5.2px;
+  font-size: max(5.2px, var(--mad-fs-floor));
   letter-spacing: 0.04em;
   color: #f2d24a;
 }
 .mad__stat--heal {
   font-family: var(--ig-font-numeral);
-  font-size: 5.2px;
+  font-size: max(5.2px, var(--mad-fs-floor));
   letter-spacing: 0.04em;
   color: #9fe0a8;
 }
@@ -233,7 +256,7 @@
 .mad__cite {
   margin: 0.4px 0 0;
   font-family: var(--ig-font-display);
-  font-size: 4px;
+  font-size: max(4px, var(--mad-fs-floor));
   letter-spacing: 0.08em;
   color: #7f8a99;
 }
@@ -269,7 +292,7 @@
   color: #cfd6de;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 4.4px;
+  font-size: max(4.4px, var(--mad-fs-floor));
   letter-spacing: 0.18em;
   text-transform: uppercase;
   transform: skewX(var(--ig-skew));
