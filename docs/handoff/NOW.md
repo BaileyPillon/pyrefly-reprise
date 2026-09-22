@@ -80,11 +80,13 @@
   `D:/Tools/ComfyUI/ComfyUI/models/checkpoints/ace_step_v1_3.5b.safetensors` (7.7 GB); the VSCO 2 CE SFZ patches branch
   is cloning into `D:/Tools/audio-libs/vsco2-ce-sfz`. Checksums: `D:/Tools/audio-libs/_dl/fetch-music-2026-09-21.DONE.txt`.
   Still needing a per-item yes: hall impulse responses, any ACE-Step custom nodes.
-- Running now, 2026-09-21 21:10 EDT (folder-owned; the RUNNING-LINE RULE above applies: if one of these is you, carry on):
-  1. `wf_8d92439e-406` "pyrefly-living-portrait-v2" (attempt 2; the first died on API overload). OWNS
+- Running now, 2026-09-21 21:25 EDT (folder-owned; the RUNNING-LINE RULE above applies: if one of these is you, carry on).
+  Anthropic has an open incident (elevated errors on Opus / Fable / Mythos since ~20:40 EDT), so attempts 1 to 3 died and
+  these runs are on SONNET at high effort; the release runner `wf_e211d3cc-c59` (round 08) is cutting from `D:/pyrefly-release`:
+  1. `wf_ed01c548-b3c` "pyrefly-living-portrait-v2" (attempt 3, Sonnet). OWNS
      `docs/concepts/pause-until-dawn/prototype-v2/**`, `tools/gen/inpaint.mjs`, `tools/gen/yaw-keys.mjs`, `tools/gen/rig-cut.*`.
      Renders on ComfyUI (queue shared with 2).
-  2. `wf_b0dbd44c-18d` "pyrefly-chapter-leblanc" (attempt 2; `573ea00` from the first run stands). OWNS the Leblanc data
+  2. `wf_6e496bfa-c24` "pyrefly-chapter-leblanc" (attempt 3, Sonnet; `573ea00` from the first run stands). OWNS the Leblanc data
      and tests, `src/scenes/leblanc*`, the Leblanc guide / tactics / meta, `src/story/scripts/ffx2-leblanc.ts`
      registration, additive entries in `src/data/encounters.ts` + registry + music routing (with `docs/CONTRACT-CHANGES.md`),
      `chapterGrid.ts` card DATA, `public/art/characters/{leblanc,ormi,logos}/**`, `docs/concepts/chapters/leblanc/**`,
