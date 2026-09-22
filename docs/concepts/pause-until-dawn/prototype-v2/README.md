@@ -436,3 +436,214 @@ keyboard/mouse events, not just JS state pokes (`09-mouse-gaze-bonus.png` /
   findings from another agent's brief, not runtime bugs.
 - Pitch (vertical turn) has no separate painted keys; it stays the v1-style
   procedural nod, small on purpose.
+
+---
+
+# Part 3 — integration and tuning (this pass, attempt 3 on Sonnet)
+
+Owner of everything under `prototype-v2/` this round. The brief was to load
+the real `art/rig.json` into the runtime, fix every seam between the art and
+runtime halves, tune the constants by eye against the spec, make sure the
+turn never tears, and re-capture the deliverables. `art/rig.json` had already
+landed (Part 1/Part 2 above); this pass found the runtime was drawing it with
+two real bugs that only show up with a GPU actually rendering it, not from
+reading the source.
+
+## Real bugs found by looking at the render, not by reading the code
+
+**1. `hairBack` was drawn in front of the pinned body, not behind it —
+a visible seam at the collar.** `art/rig.json`'s own `artMeta.layers.
+frontal.zOrder` is `[hairBack, body, headCore, eyeApertureR, eyeApertureL,
+irisR, irisL, hairFront, strand1, strand2, earring]` — the art pass's own
+recipe for reconstructing the frontal key puts the body layer *between*
+`hairBack` and the rest. The runtime never read `zOrder`: it drew the pinned
+body first, then the whole frontal recipe as one flattened `head-flat.png`
+(which already has `hairBack` baked on top of everything) on top of that —
+so `hairBack` always painted over the collar/shoulder instead of tucking
+behind it, visible as a hard silhouette clash right at the join (screenshot
+comparison: `01-centre.png` before this fix showed a light rectangular seam
+across the collarbone; gone after). Fixed by loading the frontal key's own
+11 sub-layer files (`art/layers/frontal/*.png`, listed in `artMeta.layers.
+frontal.files`) instead of the flattened composite, and drawing `hairBack`
+before the body, the rest of the recipe after — see `renderer.ts`'s
+`FRONTAL_SUB_LAYERS`, `drawFrontalLayer`, `drawFrontalFrontStack`. Falls back
+to the old flattened-texture path (`frontalReady` false) if any of the 10
+files is missing, so a future rig with a coarser frontal delivery still
+renders instead of throwing.
+
+**2. Splitting the fill-in from the flattened texture broke the yaw
+bracket's own cross-dissolve — a hard rectangle, worse than bug 1.** The
+first attempt at fixing bug 1 skipped redrawing frontal inside the yaw
+bracket loop (reasoning: "it's already drawn by the fill-in, redrawing it
+would undo the z-order fix"). This is wrong: frontal is one end of the
+bracket for **every yaw in [-40°, 40°]** (`bracketForYaw` — q34-left to
+frontal, then frontal to q34-right), and the bracket's `b`-drawn-on-top-at-
+weight-`t` step is what actually *produces* the cross-dissolve, not the
+always-opacity-1 fill-in underneath. Skipping it meant the *other* key
+(`q34-left`/`q34-right`) ended up as the final, fully-opaque draw at every
+yaw near centre — a hard rectangle of a different, wrongly-lit painting
+sitting on top of the correctly-layered frontal content (caught in
+`01-centre.png`: a sharp rectangle of the correct face floating over a
+blurrier, mismatched ghost of `q34-left`'s texture). Fixed by giving frontal
+a real slot in the bracket: `drawFrontalFrontStack(opacity, chinOffset, ...)`
+runs in `a`'s or `b`'s position exactly like a flattened-texture draw would,
+just using the zOrder-correct layer stack and the chin-alignment offset the
+bracket already computes for a normal key. Found and fixed by rendering to a
+real GPU canvas and looking at 1:1 crops, both times — reading the diff would
+not have caught either one, since both are correct-looking code operating on
+a subtly wrong draw order.
+
+**3. The gap-mitigation fill-in was drawing small decorative layers
+(earring, strands, eyes) at their frontal-pose position underneath an
+already-opaque, differently-posed key — a duplicate earring floating over
+the turned head.** The original design (Part 2, "known visual gap") always
+draws frontal's content underneath whichever key is active, so a key with no
+hidden-region art shows frontal hair/collar through its own gaps instead of
+bare canvas. That reasoning holds for `headCore`/`hairFront` (a plausible
+face/hair smudge in a gap reads as a soft coverage error), but not for
+`earring`/`strand1`/`strand2`/the eye layers: q34-left and q34-right's own
+crops are otherwise fully opaque over the head region, so these small
+layers were never filling an actual gap — they were floating a second
+earring at the wrong (frontal) position over an already-complete turned
+face (seen at `02`/`03`'s -40°/+40° extremes: a second earring, clearly not
+attached to anything). Fixed by scoping the unconditional fill-in to
+`headCore` + `hairFront` only (`drawFrontalFrontStack(..., full: false)`);
+the decorative layers only draw when frontal is genuinely part of the active
+bracket (`full: true`), at the bracket's own weight and offset.
+
+## New this pass: iris travel and independent loose-part lag
+
+The brief's architecture calls for "eyes as a fixed aperture with the iris
+travelling inside it" and "loose strands on their own lag" — neither existed
+before this pass; the eyes and the earring/strands were baked into the
+flattened frontal texture at one fixed pose. The art pass's own per-layer
+cuts (`eyeApertureR/L.filled.png` with the iris punched out and neighbour-
+filled, `irisR/L.png`, `strand1/2.png`, `earring.png`) already have what a
+mesh-free version of this needs — no new art required:
+
+- **Iris travel** (`renderer.ts`, `IRIS_TRAVEL_PX`): `irisR`/`irisL` are
+  drawn on top of their own `eyeAperture*.filled.png` with a small NDC
+  offset driven by the head's own yaw/pitch — not an independent saccade
+  (the spec is explicit that gaze moves *with* the head turn, never on its
+  own, and that eye-lead over the head "could not be measured", §5/§12).
+  The travel range (±11px / ±7px) is a rig-geometry tuning choice, not a
+  measured constant, kept out of `constants.ts` for that reason and
+  commented as such.
+- **Earring/strand lag** (`LOOSE_LAG_TAU`, `LOOSE_SWING_PX`,
+  `LOOSE_IDLE_PX`): each of `earring`, `strand1`, `strand2` gets its own
+  `ExponentialSpring` chasing the head's own `yawNorm`, at a *different* tau
+  (0.5s / 0.32s / 0.38s) than the head spring itself (0.14s) — the gap
+  between the head's current position and this slower-following spring is
+  the visible swing, so a fast head turn leaves these parts visibly trailing
+  and catching up, and a held pose lets them settle back to rest. A small
+  `BandNoise` per part (same band as the head/chest sway, different seed and
+  phase) adds continuous idle jiggle so they still move when the head is
+  perfectly still, per §6 ("the strand pattern changes independently of
+  head position"). This is a disclosed simplification, not a physics sim: a
+  real pendulum's period depends on its own length and would ring rather
+  than monotonically catch up: the spring here is first-order (same
+  reasoning as the head spring, `constants.ts`'s own decision note), chosen
+  for the same reason — cheap, deterministic, and visually reads as "lags
+  behind," which is what the brief asked for.
+
+## Found and disclosed, not fixed (art-pipeline limitations, not runtime bugs)
+
+- **`q34-left`'s own painted key barely reads as a 3/4 turn.** Looking at
+  `art/layers/q34-left/head-flat.png` directly: both eyes are fully visible
+  and the face is nearly frontal — compare `art/layers/profile-left/
+  head-flat.png`, a genuine profile with one eye occluded, or `art/layers/
+  q34-right/head-flat.png`, which does show a real 3/4 angle. This is why
+  `02-three-quarter-left.png` looks close to `01-centre.png`: the runtime is
+  faithfully cross-dissolving toward a key that itself doesn't commit to the
+  angle its `yawDeg: -40` claims. Confirmed by direct pixel inspection of the
+  source art, not by eye on the composite alone. Not fixed here — regenerating
+  a key is an art-pipeline task (this pass owns integration only, and any
+  render queue time is shared with two other active workflows tonight); flagged
+  for whoever next touches the yaw keys.
+- **Mid-dissolve ghosting between `q34-left` and `profile-left`.** Around
+  yaw -55° to -70° (roughly 40-80% blended toward `profile-left`), the two
+  keys' structurally different face geometries show through each other as a
+  faint double eye/eyebrow, most visible if the head is held at exactly that
+  angle. This is the documented limitation from Part 2's own table (a plain
+  cross-dissolve + one rigid chin-anchor offset, not a per-triangle mesh
+  warp) — confirmed here by actually holding the yaw there and looking, not
+  newly introduced. Both endpoints (`q34-left` alone, `profile-left` alone)
+  are clean; only the transition between two very different face geometries
+  shows it. **Range was not reduced**: unlike a torn/broken key, both ends
+  render correctly and the brief's "reduce range" instruction is for a key
+  that itself breaks, not for an inherent limitation of a cross-dissolve
+  between two honestly-different paintings — cutting the range would remove
+  working content to hide a cosmetic transition artifact already on record.
+- A faint hair/face outline is still visible at `q34-left`/`q34-right`'s
+  extremes from the (now narrower) `headCore`+`hairFront` fill-in showing
+  through those keys' own alpha gaps — much fainter than the fixed earring
+  duplicate, and the same "smaller defect than a hole" tradeoff Part 2
+  already accepted.
+
+## Head turn: does it tear?
+
+Checked by sweeping gaze x from 0 to ±1 in fine steps (a dedicated verification
+pass, not eyeballing the live drag) and looking at every frame: no holes, no
+misaligned polygons, no broken geometry anywhere in the range. The only
+artifact found is the mid-dissolve ghosting above, which is soft (alpha
+cross-fade) rather than torn (a rip or a missing region) — so the full
+authored range (**-85° to +40°**) stays as-is, unreduced.
+
+## Re-captured deliverables (`shots/`)
+
+All 10 stills and both clips were re-rendered against the fixed runtime,
+real-Chromium (`PYREFLY_BROWSER=gpu`), real Playwright input events (mouse
+moves, held keys, `driver.setGaze`/`blink`/`forceHalfBlink`/`forceMouthEvent`
+— the same seam `PortraitStage.ts` will call) at 900x1300, looked at 1:1
+around the eyes/mouth/hairline before trusting any of them:
+
+| File | What it shows |
+|---|---|
+| `01-centre.png` | Frontal, idle — the seam-check pose (bugs 1/2 above) |
+| `02-three-quarter-left.png` | Settled at q34-left's own -40° (polled on `springResidualDeg`, not a fixed wait — see below) |
+| `03-three-quarter-right.png` | Settled at +40° (this rig's max on that side) |
+| `04-mid-blink.png` | Polled for the `closing`/`closed` eye state, not a fixed wait |
+| `05-half-blink.png` | Polled for the `half` eye state |
+| `06-mouth-event.png` | A forced `smile` mouth event just past its 400ms onset |
+| `07-hurt.png` | Hurt expression |
+| `08-reduced-motion.png` | Reduced motion on |
+| `09-mouse-gaze-bonus.png` | Real mouse move sets gaze via `input.ts` |
+| `10-keyboard-overrides-mouse-bonus.png` | A held arrow key overrides a stale mouse position (the Part 2 `input.ts` fix, re-verified) |
+| `clip-12s.webm` | ~14s (the "12s" name is inherited and kept for continuity) of driven motion: a turn, an expression change, a blink, a mouth event, back to centre — recorded in its own browser context |
+| `idle-8s.webm` (new) | ~9s of **pure idle, zero input** — sway, blink schedule and mouth/brow drift with nothing else going on, so those layers can be judged in isolation |
+
+**A capture bug found and fixed while producing these, worth recording:** a
+fixed `waitForTimeout` after `setGaze`/`blink` is not reliable against a real
+`requestAnimationFrame` loop under headless Playwright — a burst of queued
+RAF callbacks can each run with `dt` clamped to `driver.ts`'s 50ms cap and
+finish an entire ~150ms blink, or fully settle a spring, before the very
+first post-call state read ever happens; conversely the *very first* read
+right after the call can still show the *previous* target's already-zero
+residual, one tick too early. Fixed by polling the actual driver state
+(`snapshot().frame.eyeState` / `springResidualDeg`) instead of guessing a
+wall-clock delay — this is what actually caught bugs 1-3 above being
+consistently reproducible instead of intermittent-looking.
+
+## Updated: what is real vs. a documented stand-in
+
+Rows added or changed this pass (see Part 2's table above for the rest):
+
+| Piece | Status |
+|---|---|
+| Frontal z-order (`hairBack` behind the pinned body) | Real, fixed this pass (bug 1) |
+| Yaw-bracket cross-dissolve including frontal's own layered stack | Real, fixed this pass (bug 2) |
+| Iris travel inside its painted socket | Real, new this pass — moves with head yaw/pitch, no independent saccade |
+| Earring/strand lag (independent `ExponentialSpring` + idle `BandNoise` per part) | Real, new this pass — disclosed simplification, not a pendulum sim |
+| `q34-left`'s painted turn amount | **Art limitation, confirmed this pass** — the key itself barely turns; not a runtime bug, not fixed here |
+| Mid-dissolve double-exposure (q34-left ↔ profile-left) | **Known, confirmed this pass** — inherent to the disclosed no-mesh-warp design; both endpoints are clean |
+
+## Tests (unchanged, still pass)
+
+`npx tsc --noEmit` clean. All 31 `tests/unit/pause-living-portrait-*.test.ts`
+still pass unchanged — this pass touched only `renderer.ts` (the WebGL2
+layer, which those tests exercise only through the driver's no-GPU
+degradation path, `pause-living-portrait-driver.test.ts`), so no new test
+coverage of the fixes above exists at the logic level; they were verified by
+rendering to a real GPU canvas and looking, per this project's own "prove a
+bug by running the engine" rule (AGENTS.md hard rule 3) applied to
+presentation code, where the equivalent is "prove it by rendering it".
