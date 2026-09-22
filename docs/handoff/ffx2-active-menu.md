@@ -141,7 +141,9 @@ Screenshots: `docs/screenshots/ffx2-active-menu/ch4-chained-owner-menu-held.png`
 
 ## 7. Open for Bailey
 
-1. **Chapter 5 at human speed is still his decision (PR-0076).** 0/40 → 4/40 at a modelled
+1. **Chapter 5 at human speed is still his decision (PR-0076).** Re-measured after PR-0075 (release-09
+   repair, `docs/handoff/release-09-repair.md`): 32/40 at 500 ms, 27/40 at 750, 11/40 at 1000, 5/40 at
+   1500, 0/40 at 4000; the verifier refuted any claim that the HOLD is cleared. 0/40 → 4/40 at a modelled
    1.5 s per decision; the runs now die on the Head instead of the Tail. Player-side levers
    left, none built: a ready chime / clearer bar state; last-command repeat; leave it (the
    last fight, and the D model is an upper bound). The boss is not touched.

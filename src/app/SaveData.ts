@@ -115,18 +115,8 @@ export interface Settings {
    * chapter honours it. The pause screen's OPTIONS row is what writes it.
    */
   ffx2Atb: 'active' | 'wait';
-  /**
-   * FFX-2's Config ATB **speed** — Slow / Normal / Fast, a multiplier on the
-   * one global tick rate (`research/ffx2-combat-core.md` §1.2; the engine's
-   * `ATB_SPEED_MULTIPLIER`). Written by the pause screen's ATB SPEED row, which
-   * only an FFX-2 chapter shows; read when an FFX-2 engine is built and again
-   * when the pause closes (`BattleScreenWiring.applyAtbSpeed`).
-   *
-   * **Optional, with no migration** (`docs/handoff/ffx2-active-menu.md`): an
-   * absent value is Normal, which is the engine exactly as it was before the
-   * setting existed, so every save in the wild — Bailey's included — reads as
-   * it always played. Not added to {@link defaultSettings} for the same reason.
-   */
+  /** FFX-2 Config ATB speed (§1.2, `ATB_SPEED_MULTIPLIER`), written by the pause ATB SPEED row. Optional,
+   *  no migration: absent = Normal = the engine before the setting existed (`docs/handoff/ffx2-active-menu.md`). */
   ffx2AtbSpeed?: 'slow' | 'normal' | 'fast';
   /**
    * Hide the pause menu's panels, leaving the hero painting unobstructed
