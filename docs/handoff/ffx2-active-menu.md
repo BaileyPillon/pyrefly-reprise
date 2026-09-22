@@ -19,7 +19,7 @@ PROCEED). No boss was touched and no game data changed.
 |---|---|---|
 | `15385ab` | The two fixes: chain-locked owner keeps her menu; a command confirmed while chained is held and fires as her | FFX-2 ATB engine + presenter: focused before deploy, deep after |
 | `27c3601` | The Config ATB speed lever in the engine (Slow / Normal / Fast), default Normal, byte-identical | same |
-| (third commit) | Persistence (`Settings.ffx2AtbSpeed?`), the pause row, the engine wiring | **touches `src/app/SaveData.ts` → save-data class → deep review BEFORE deploy** (`critic/RUBRIC.md`, AGENTS.md "Release") |
+| `030d7e1` | Persistence (`Settings.ffx2AtbSpeed?`), the pause row, the engine wiring | **touches `src/app/SaveData.ts` → save-data class → deep review BEFORE deploy** (`critic/RUBRIC.md`, AGENTS.md "Release") |
 
 **The split is deliberate.** The HOLD fix (`15385ab`, and `27c3601` if wanted) can ship on a
 focused review without waiting on the save-data review the third commit owes.
@@ -170,7 +170,7 @@ Screenshots: `docs/screenshots/ffx2-active-menu/ch4-chained-owner-menu-held.png`
 - **House rule 7**: `src/battle/ffx2/engine.ts` 637 → 723 lines and `BattleScreen.ts`
   905 → 907, both already over 400 before this track (see `ffx2-active-atb.md` §7b); the new
   policy code went to `active.ts` (194) where it could.
-- `npx tsc --noEmit` reports five unused-import errors in
-  `tests/unit/ui-common-results.test.ts`, another agent's in-flight results work (its
-  `resultsMath.ts` / `ResultsScreen.ts` are modified and uncommitted); nothing in this track.
+- `npx tsc --noEmit` is clean at `030d7e1`. (During the build it briefly reported five
+  unused imports in `tests/unit/ui-common-results.test.ts`, another agent's in-flight
+  results work, since committed as `a202d16`.) Full unit suite: 232 files green.
 - `docs/handoff/NOW.md` is the orchestrator's; not edited here.
