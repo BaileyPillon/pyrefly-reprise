@@ -1,0 +1,581 @@
+{
+  "sketch": "C",
+  "rendered": "2026-09-22T19:02:56.783Z",
+  "rate": 44100,
+  "seed": 101,
+  "rule": "highest denoise in {0.35, 0.45, 0.55} whose output keeps the stem harmony (chroma gain over the same-key baseline >= 0.30, the low end of sketch B's committed 0.40 takes) AND correlates with the stem onsets in at least half the 4-bar windows; if none qualifies, 0.35",
+  "sweep": [
+    0.35,
+    0.45,
+    0.55
+  ],
+  "cues": [
+    {
+      "name": "battle-ffx",
+      "game": "ffx",
+      "renderSec": 133.4,
+      "durationSec": 79.8,
+      "loop": {
+        "startSec": 6.4,
+        "endSec": 76.8
+      },
+      "aLufs": -16.02,
+      "sumLufsBeforeTrim": -15.4,
+      "trimDb": -0.6,
+      "master": {
+        "lufs": -16,
+        "truePeakDb": -1.38,
+        "seamOk": true,
+        "seam": {
+          "ok": true,
+          "step": 0.08776558935642242,
+          "entryStep": 0.08776004612445831,
+          "allowed": 0.13985799004770172,
+          "rms": 0.07050806074813169,
+          "note": "wrap matches the first pass into the loop"
+        },
+        "spectrumOk": true,
+        "spectrumProblems": []
+      },
+      "dynamics": {
+        "sketchC": {
+          "lufs": -15.9,
+          "lra": 6,
+          "truePeakDb": -1.4,
+          "peakDb": -1.388217,
+          "rmsDb": -17.898985,
+          "crestDb": 16.51
+        },
+        "sketchA": {
+          "lufs": -15.9,
+          "lra": 6.5,
+          "truePeakDb": -1.4,
+          "peakDb": -1.384542,
+          "rmsDb": -17.835532,
+          "crestDb": 16.45
+        }
+      },
+      "files": {
+        "ogg": "public/audio/candidates/C-battle-ffx.ogg",
+        "wav": "build/audio-candidates/C-battle-ffx.wav",
+        "solos": [
+          "public/audio/candidates/C-battle-ffx-choir-solo-x12.ogg",
+          "public/audio/candidates/C-battle-ffx-low-solo-x12.ogg"
+        ]
+      },
+      "layers": [
+        {
+          "layer": "choir",
+          "inputChannels": [
+            "strings",
+            "brass",
+            "strings-low"
+          ],
+          "tags": "wordless mixed choir, sustained aah and ooh vowels, choral pad, slow swells, legato, large cathedral hall, orchestral film score, fantasy RPG, no drums, no percussion, E minor, 150 bpm",
+          "lyrics": "[inst]",
+          "lyricsVariant": "inst",
+          "lyricsRule": "among the lyric variants that still qualify at the chosen denoise, the fewest onsets per second (the most sustained); if none qualifies, the default (vowels)",
+          "seed": 101,
+          "bandHz": [
+            180,
+            7000
+          ],
+          "levelUnderA_dB": -10,
+          "gainAppliedDb": -7.16,
+          "rule": "highest denoise in {0.35, 0.45, 0.55} whose output keeps the stem harmony (chroma gain over the same-key baseline >= 0.30, the low end of sketch B's committed 0.40 takes) AND correlates with the stem onsets in at least half the 4-bar windows; if none qualifies, 0.35",
+          "denoise": 0.35,
+          "alignment": {
+            "lagMs": 0,
+            "windowsUsed": 9,
+            "note": "positive = the model output was late against the stem; the layer is moved earlier by this much"
+          },
+          "stem": {
+            "renderSec": 9.64,
+            "onsetsPerSec": 2.62,
+            "centroidHz": 756.1
+          },
+          "output": {
+            "onsetsPerSec": 6.74,
+            "centroidHz": 823.7
+          },
+          "gpuSecondsThisRun": 58.5,
+          "lyricsSweep": [
+            {
+              "denoise": 0.35,
+              "variant": "vowels",
+              "gpuSeconds": null,
+              "chromaGain": 0.81,
+              "qualifies": true,
+              "onsetsPerSec": 6.84,
+              "onsetF": 0.44,
+              "windowsCorrelated": "6/12",
+              "tempoEst": 158,
+              "centroidHz": 933.8
+            },
+            {
+              "denoise": 0.35,
+              "variant": "long",
+              "gpuSeconds": 18.1,
+              "chromaGain": 0.8,
+              "qualifies": true,
+              "onsetsPerSec": 6.82,
+              "onsetF": 0.441,
+              "windowsCorrelated": "6/12",
+              "tempoEst": 75.75,
+              "centroidHz": 917.8
+            },
+            {
+              "denoise": 0.35,
+              "variant": "inst",
+              "gpuSeconds": 40.4,
+              "chromaGain": 0.81,
+              "qualifies": true,
+              "onsetsPerSec": 6.74,
+              "onsetF": 0.455,
+              "windowsCorrelated": "9/12",
+              "tempoEst": 92.25,
+              "centroidHz": 823.7
+            }
+          ],
+          "sweep": [
+            {
+              "denoise": 0.35,
+              "variant": "default",
+              "gpuSeconds": null,
+              "chromaGain": 0.81,
+              "qualifies": true,
+              "onsetsPerSec": 6.84,
+              "onsetF": 0.44,
+              "windowsCorrelated": "6/12",
+              "lagMedianAbsMs": 0,
+              "chromaSim": 0.9,
+              "chromaBaseline": 0.486,
+              "centroidHz": 933.8,
+              "stemCentroidHz": 756.1,
+              "tempoEst": 158
+            },
+            {
+              "denoise": 0.45,
+              "variant": "default",
+              "gpuSeconds": null,
+              "chromaGain": 0.67,
+              "qualifies": false,
+              "onsetsPerSec": 7.01,
+              "onsetF": 0.396,
+              "windowsCorrelated": "3/12",
+              "lagMedianAbsMs": 20,
+              "chromaSim": 0.831,
+              "chromaBaseline": 0.486,
+              "centroidHz": 889.4,
+              "stemCentroidHz": 756.1,
+              "tempoEst": 162
+            },
+            {
+              "denoise": 0.55,
+              "variant": "default",
+              "gpuSeconds": null,
+              "chromaGain": 0.55,
+              "qualifies": false,
+              "onsetsPerSec": 7.13,
+              "onsetF": 0.406,
+              "windowsCorrelated": "2/12",
+              "lagMedianAbsMs": 25,
+              "chromaSim": 0.769,
+              "chromaBaseline": 0.486,
+              "centroidHz": 858,
+              "stemCentroidHz": 756.1,
+              "tempoEst": 127.75
+            }
+          ],
+          "soloExcerpt": {
+            "file": "public/audio/candidates/C-battle-ffx-choir-solo-x12.ogg",
+            "gainToMinus16Db": 9.26
+          }
+        },
+        {
+          "layer": "low",
+          "inputChannels": [
+            "strings-low",
+            "bass",
+            "bass-sub"
+          ],
+          "tags": "sustained cellos and double basses, legato low strings, bowed, dark orchestral string bed, large concert hall, orchestral film score, no drums, no percussion, E minor, 150 bpm",
+          "lyrics": "[inst]",
+          "lyricsVariant": "default",
+          "lyricsRule": null,
+          "seed": 101,
+          "bandHz": [
+            32,
+            320
+          ],
+          "levelUnderA_dB": -12,
+          "gainAppliedDb": -5.39,
+          "rule": "highest denoise in {0.35, 0.45, 0.55} whose output keeps the stem harmony (chroma gain over the same-key baseline >= 0.30, the low end of sketch B's committed 0.40 takes) AND correlates with the stem onsets in at least half the 4-bar windows; if none qualifies, 0.35",
+          "denoise": 0.45,
+          "alignment": {
+            "lagMs": -10,
+            "windowsUsed": 12,
+            "note": "positive = the model output was late against the stem; the layer is moved earlier by this much"
+          },
+          "stem": {
+            "renderSec": 6.53,
+            "onsetsPerSec": 3.28,
+            "centroidHz": 228.8
+          },
+          "output": {
+            "onsetsPerSec": 3.1,
+            "centroidHz": 269.3
+          },
+          "gpuSecondsThisRun": 0,
+          "lyricsSweep": [],
+          "sweep": [
+            {
+              "denoise": 0.35,
+              "variant": "default",
+              "gpuSeconds": null,
+              "chromaGain": 0.49,
+              "qualifies": true,
+              "onsetsPerSec": 3.01,
+              "onsetF": 0.761,
+              "windowsCorrelated": "11/12",
+              "lagMedianAbsMs": 10,
+              "chromaSim": 0.791,
+              "chromaBaseline": 0.59,
+              "centroidHz": 273.7,
+              "stemCentroidHz": 228.8,
+              "tempoEst": 150
+            },
+            {
+              "denoise": 0.45,
+              "variant": "default",
+              "gpuSeconds": null,
+              "chromaGain": 0.38,
+              "qualifies": true,
+              "onsetsPerSec": 3.1,
+              "onsetF": 0.754,
+              "windowsCorrelated": "12/12",
+              "lagMedianAbsMs": 10,
+              "chromaSim": 0.747,
+              "chromaBaseline": 0.59,
+              "centroidHz": 269.3,
+              "stemCentroidHz": 228.8,
+              "tempoEst": 150
+            },
+            {
+              "denoise": 0.55,
+              "variant": "default",
+              "gpuSeconds": null,
+              "chromaGain": 0.27,
+              "qualifies": false,
+              "onsetsPerSec": 4.95,
+              "onsetF": 0.499,
+              "windowsCorrelated": "4/12",
+              "lagMedianAbsMs": 55,
+              "chromaSim": 0.7,
+              "chromaBaseline": 0.59,
+              "centroidHz": 244.5,
+              "stemCentroidHz": 228.8,
+              "tempoEst": 74
+            }
+          ],
+          "soloExcerpt": {
+            "file": "public/audio/candidates/C-battle-ffx-low-solo-x12.ogg",
+            "gainToMinus16Db": 10.66
+          }
+        }
+      ],
+      "mixRoute": {
+        "denoise": 0.35,
+        "gpuSeconds": 20.1,
+        "onsetsPerSec": 4.91,
+        "sourceOnsetsPerSec": 4.24,
+        "onsetF": 0.737,
+        "chromaGain": 0.61,
+        "centroidHz": 372.3
+      }
+    },
+    {
+      "name": "boss-ffx2-aeon",
+      "game": "ffx2",
+      "renderSec": 358.55,
+      "durationSec": 117,
+      "loop": {
+        "startSec": 12,
+        "endSec": 114
+      },
+      "aLufs": -16.04,
+      "sumLufsBeforeTrim": -15.42,
+      "trimDb": -0.58,
+      "master": {
+        "lufs": -16.01,
+        "truePeakDb": -1.39,
+        "seamOk": true,
+        "seam": {
+          "ok": true,
+          "step": 0.03917202213779092,
+          "entryStep": 0.03917287057265639,
+          "allowed": 0.06376586705118825,
+          "rms": 0.06573987626836572,
+          "note": "wrap matches the first pass into the loop"
+        },
+        "spectrumOk": true,
+        "spectrumProblems": []
+      },
+      "dynamics": {
+        "sketchC": {
+          "lufs": -15.9,
+          "lra": 6.8,
+          "truePeakDb": -1.3,
+          "peakDb": -1.3223,
+          "rmsDb": -18.201345,
+          "crestDb": 16.88
+        },
+        "sketchA": {
+          "lufs": -15.9,
+          "lra": 7.7,
+          "truePeakDb": -1.2,
+          "peakDb": -1.172907,
+          "rmsDb": -18.236937,
+          "crestDb": 17.06
+        }
+      },
+      "files": {
+        "ogg": "public/audio/candidates/C-boss-ffx2-aeon.ogg",
+        "wav": "build/audio-candidates/C-boss-ffx2-aeon.wav",
+        "solos": [
+          "public/audio/candidates/C-boss-ffx2-aeon-choir-solo-x12.ogg",
+          "public/audio/candidates/C-boss-ffx2-aeon-low-solo-x12.ogg"
+        ]
+      },
+      "layers": [
+        {
+          "layer": "choir",
+          "inputChannels": [
+            "brass",
+            "strings",
+            "epiano"
+          ],
+          "tags": "airy wordless choir pad, sustained aah and ooh vowels, lush vocal pad, modern pop production, cinematic hybrid score, no drums, no percussion, Bb minor, 160 bpm",
+          "lyrics": "[inst]",
+          "lyricsVariant": "inst",
+          "lyricsRule": "among the lyric variants that still qualify at the chosen denoise, the fewest onsets per second (the most sustained); if none qualifies, the default (vowels)",
+          "seed": 101,
+          "bandHz": [
+            180,
+            7000
+          ],
+          "levelUnderA_dB": -10,
+          "gainAppliedDb": -7.12,
+          "rule": "highest denoise in {0.35, 0.45, 0.55} whose output keeps the stem harmony (chroma gain over the same-key baseline >= 0.30, the low end of sketch B's committed 0.40 takes) AND correlates with the stem onsets in at least half the 4-bar windows; if none qualifies, 0.35",
+          "denoise": 0.45,
+          "alignment": {
+            "lagMs": -30,
+            "windowsUsed": 19,
+            "note": "positive = the model output was late against the stem; the layer is moved earlier by this much"
+          },
+          "stem": {
+            "renderSec": 12.74,
+            "onsetsPerSec": 2.21,
+            "centroidHz": 548.2
+          },
+          "output": {
+            "onsetsPerSec": 3.64,
+            "centroidHz": 572.3
+          },
+          "gpuSecondsThisRun": 171.2,
+          "lyricsSweep": [
+            {
+              "denoise": 0.45,
+              "variant": "vowels",
+              "gpuSeconds": 30.1,
+              "chromaGain": 0.56,
+              "qualifies": true,
+              "onsetsPerSec": 3.86,
+              "onsetF": 0.44,
+              "windowsCorrelated": "16/19",
+              "tempoEst": 162,
+              "centroidHz": 568.2
+            },
+            {
+              "denoise": 0.45,
+              "variant": "long",
+              "gpuSeconds": 38.2,
+              "chromaGain": 0.53,
+              "qualifies": true,
+              "onsetsPerSec": 3.77,
+              "onsetF": 0.466,
+              "windowsCorrelated": "17/19",
+              "tempoEst": 162,
+              "centroidHz": 573.7
+            },
+            {
+              "denoise": 0.45,
+              "variant": "inst",
+              "gpuSeconds": 40.3,
+              "chromaGain": 0.51,
+              "qualifies": true,
+              "onsetsPerSec": 3.64,
+              "onsetF": 0.518,
+              "windowsCorrelated": "19/19",
+              "tempoEst": 80,
+              "centroidHz": 572.3
+            }
+          ],
+          "sweep": [
+            {
+              "denoise": 0.35,
+              "variant": "default",
+              "gpuSeconds": 32.2,
+              "chromaGain": 0.67,
+              "qualifies": true,
+              "onsetsPerSec": 3.67,
+              "onsetF": 0.608,
+              "windowsCorrelated": "18/19",
+              "lagMedianAbsMs": 30,
+              "chromaSim": 0.882,
+              "chromaBaseline": 0.64,
+              "centroidHz": 598.1,
+              "stemCentroidHz": 548.2,
+              "tempoEst": 80
+            },
+            {
+              "denoise": 0.45,
+              "variant": "default",
+              "gpuSeconds": 30.1,
+              "chromaGain": 0.56,
+              "qualifies": true,
+              "onsetsPerSec": 3.86,
+              "onsetF": 0.44,
+              "windowsCorrelated": "16/19",
+              "lagMedianAbsMs": 30,
+              "chromaSim": 0.841,
+              "chromaBaseline": 0.64,
+              "centroidHz": 568.2,
+              "stemCentroidHz": 548.2,
+              "tempoEst": 162
+            },
+            {
+              "denoise": 0.55,
+              "variant": "default",
+              "gpuSeconds": 30.4,
+              "chromaGain": 0.26,
+              "qualifies": false,
+              "onsetsPerSec": 4.63,
+              "onsetF": 0.275,
+              "windowsCorrelated": "7/19",
+              "lagMedianAbsMs": 140,
+              "chromaSim": 0.735,
+              "chromaBaseline": 0.64,
+              "centroidHz": 622.1,
+              "stemCentroidHz": 548.2,
+              "tempoEst": 130.5
+            }
+          ],
+          "soloExcerpt": {
+            "file": "public/audio/candidates/C-boss-ffx2-aeon-choir-solo-x12.ogg",
+            "gainToMinus16Db": 7.73
+          }
+        },
+        {
+          "layer": "low",
+          "inputChannels": [
+            "strings",
+            "bass"
+          ],
+          "tags": "sustained cellos and double basses, legato low strings, bowed, dark string bed under electric bass, cinematic hybrid score, no drums, no percussion, Bb minor, 160 bpm",
+          "lyrics": "[inst]",
+          "lyricsVariant": "default",
+          "lyricsRule": null,
+          "seed": 101,
+          "bandHz": [
+            32,
+            320
+          ],
+          "levelUnderA_dB": -12,
+          "gainAppliedDb": -7.9,
+          "rule": "highest denoise in {0.35, 0.45, 0.55} whose output keeps the stem harmony (chroma gain over the same-key baseline >= 0.30, the low end of sketch B's committed 0.40 takes) AND correlates with the stem onsets in at least half the 4-bar windows; if none qualifies, 0.35",
+          "denoise": 0.45,
+          "alignment": {
+            "lagMs": -30,
+            "windowsUsed": 11,
+            "note": "positive = the model output was late against the stem; the layer is moved earlier by this much"
+          },
+          "stem": {
+            "renderSec": 11.58,
+            "onsetsPerSec": 3.08,
+            "centroidHz": 190.4
+          },
+          "output": {
+            "onsetsPerSec": 4.7,
+            "centroidHz": 212.5
+          },
+          "gpuSecondsThisRun": 78.5,
+          "lyricsSweep": [],
+          "sweep": [
+            {
+              "denoise": 0.35,
+              "variant": "default",
+              "gpuSeconds": 34.2,
+              "chromaGain": 0.39,
+              "qualifies": true,
+              "onsetsPerSec": 3.92,
+              "onsetF": 0.643,
+              "windowsCorrelated": "18/19",
+              "lagMedianAbsMs": 30,
+              "chromaSim": 0.785,
+              "chromaBaseline": 0.645,
+              "centroidHz": 234.5,
+              "stemCentroidHz": 190.4,
+              "tempoEst": 80
+            },
+            {
+              "denoise": 0.45,
+              "variant": "default",
+              "gpuSeconds": 20.1,
+              "chromaGain": 0.36,
+              "qualifies": true,
+              "onsetsPerSec": 4.7,
+              "onsetF": 0.488,
+              "windowsCorrelated": "11/19",
+              "lagMedianAbsMs": 30,
+              "chromaSim": 0.772,
+              "chromaBaseline": 0.645,
+              "centroidHz": 212.5,
+              "stemCentroidHz": 190.4,
+              "tempoEst": 81
+            },
+            {
+              "denoise": 0.55,
+              "variant": "default",
+              "gpuSeconds": 24.2,
+              "chromaGain": 0.27,
+              "qualifies": false,
+              "onsetsPerSec": 4.6,
+              "onsetF": 0.43,
+              "windowsCorrelated": "6/19",
+              "lagMedianAbsMs": 20,
+              "chromaSim": 0.741,
+              "chromaBaseline": 0.645,
+              "centroidHz": 213.2,
+              "stemCentroidHz": 190.4,
+              "tempoEst": 84.5
+            }
+          ],
+          "soloExcerpt": {
+            "file": "public/audio/candidates/C-boss-ffx2-aeon-low-solo-x12.ogg",
+            "gainToMinus16Db": 12.28
+          }
+        }
+      ],
+      "mixRoute": {
+        "denoise": 0.45,
+        "gpuSeconds": 22.3,
+        "onsetsPerSec": 2.8,
+        "sourceOnsetsPerSec": 4.01,
+        "onsetF": 0.605,
+        "chromaGain": 0.41,
+        "centroidHz": 301.6
+      }
+    }
+  ]
+}

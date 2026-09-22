@@ -278,3 +278,152 @@ play it.
 - The key estimate is coarse and the chroma measure is energy-based; neither is a
   transcription. The onset measures are the reliable ones.
 - No unit tests (`tests/` is outside this track's owned paths); `tsc` does not cover `tools/`.
+
+---
+
+# Sketch C (the hybrid) and the round 1 audition
+
+**Date:** 2026-09-22. **Game case (hard rule 14): BOTH.** One method for the FFX cue
+(`battle-ffx`, chapters 1 to 3) and the FFX-2 cue (`boss-ffx2-aeon`, chapter 4). The only
+per-game difference is the words given to the model, from THEMES.md "Harmonic language, by
+world" (FFX: orchestral choir and low strings in E minor; FFX-2: the same beds under a pop
+production in Bb minor). **Neither cue's THEMES entry names a choir**: the pad is a test of the
+method for the cues that do have one (yu-yevon, yunalesca, vegnagun, dread, the endings), not a
+proposed arrangement change. Nothing is routed into the game: `public/audio/manifest.json`,
+`public/audio/music/` and `src/audio/**` are untouched.
+
+**Status: built and measured, awaiting Bailey's ear.** Agents cannot hear (hard rule 13).
+Bailey listens at `docs/audio/audition.html`, section **"Modern sound, round 1"** (top of the
+page, above the sketch A/B blind pairs): per cue, today's cue and sketches A, B and C side by
+side, the same 12 seconds, each at -16 LUFS; the full renders in a table below; a 1-10 row per
+version that copies one summary line to the clipboard for chat.
+
+## What was built
+
+| File | Job |
+|---|---|
+| `tools/audio/modern/render-c.mjs` | CLI: `node tools/audio/modern/render-c.mjs [--only=cue] [--seed=101] [--denoise=x] [--compare-mix] [--fresh] [--no-lyrics-sweep]`. Needs `render-a.mjs` to have run (reads `build/audio-candidates/A-<cue>.wav`). Set `ACE_MAX_AHEAD=6` when other workflows keep ComfyUI busy. Raw model output is cached in `build/audio-candidates/c-work/` and reused. |
+| `tools/audio/modern/texture.mjs` | Per-cue texture config (input channels, words, band, level), the pre-registered strength and word pick rules, alignment, band-limit and loop repair. |
+| `tools/audio/modern/pcm.mjs` | ffmpeg decode to float stereo; float / s16 / mono WAV writers. |
+| `tools/audio/modern/round1.mjs` | The round 1 excerpt set (same window, each to -16 LUFS, one codec) and the whole-cue measurements (`docs/audio/round1-report.json`). |
+| `tools/audio/modern/audition-round1.mjs` | Writes the round 1 section into `audition.html` between the `round1:begin` / `round1:end` markers from the two reports. Re-run it rather than editing by hand. |
+| `tools/audio/modern/render-a.mjs` (edit) | `renderCue` and `masterWide` exported; `renderCue` takes a `channelFilter`; `main()` runs only as a CLI. The CLI's output is unchanged. |
+| `tools/audio/ace-step.mjs` (edit) | Client functions exported, `buildGraph` takes `lyrics`, `main()` runs only as a CLI, and `ACE_MAX_AHEAD=N` lets one job join the END of the ComfyUI FIFO once at most N jobs are ahead (default 0 = the old wait-for-empty). Nothing running or pending is interrupted. |
+
+### How C is made
+
+1. A's own renderer (`renderCue`) renders two **stems** of the cue with the same seeds as A's full
+   mix, so each stem is the same playing as inside A. Choir input = A's sustained harmony
+   (`battle-ffx`: strings lead, brass lead, strings low; `boss-ffx2-aeon`: horns, strings,
+   epiano). Low-bed input = A's low parts (`battle-ffx`: strings low, bass riff, sub;
+   `boss-ffx2-aeon`: strings, bass).
+2. B's ACE-Step graph restyles each stem (core nodes, `ace_step_v1_3.5b`, 50 steps, cfg 5,
+   seed 101) with texture words ("wordless mixed choir ... choral pad", "sustained cellos and
+   double basses ... bowed"). The brief said "from A's mix"; stems were used because a full mix
+   brings its drums into the texture. The mix route was measured too (`--compare-mix`, below).
+3. **Strength rule (pre-registered before the sweep):** the highest of 0.35 / 0.45 / 0.55 whose
+   output keeps the stem's harmony (chroma gain over the same-key baseline >= 0.30) AND
+   correlates with the stem's onsets in at least half the 4-bar windows. **Choir words rule
+   (also pre-registered):** three variants (short vowels, long vowels, `[inst]`) at the chosen
+   strength; among those that qualify, the fewest onsets per second (the most sustained).
+4. **Alignment:** the median lag of the correlated 4-bar windows (`ace-measure.py` lag
+   windows), applied as a shift. **Band:** choir 180 Hz to 7 kHz, low bed 32 to 320 Hz (4-pole
+   each side). **Loop:** the last 300 ms before loopEnd crossfade into the layer's audio before
+   loopStart, and the run-on is rebuilt from the loop head, the same file layout as A.
+5. **Level:** choir 10 dB and low bed 12 dB under A's integrated loudness; the sum is trimmed
+   back to -16 LUFS (-0.6 dB) and limited at A's ceiling. A is not compressed a second time.
+
+## Results
+
+### The picks
+
+| Cue | Layer | Strength | Words | Chroma gain at 0.35 / 0.45 / 0.55 | Windows correlated | Shift applied | Onsets/s, stem -> texture |
+|---|---|---|---|---|---|---|---|
+| battle-ffx | choir | 0.35 | `[inst]` | 0.81 / 0.67 / 0.55 | 6/12, 3/12, 2/12 (words at 0.35: 6, 6, 9 of 12) | 0 ms | 2.62 -> 6.74 |
+| battle-ffx | low bed | 0.45 | `[inst]` | 0.49 / 0.38 / 0.27 | 11/12, 12/12, 4/12 | 10 ms later | 3.28 -> 3.10 |
+| boss-ffx2-aeon | choir | 0.45 | `[inst]` | 0.67 / 0.56 / 0.26 | 18/19, 16/19, 7/19 | 30 ms later | 2.21 -> 3.64 |
+| boss-ffx2-aeon | low bed | 0.45 | `[inst]` | 0.39 / 0.36 / 0.27 | 18/19, 11/19, 6/19 | 30 ms later | 3.08 -> 4.70 |
+
+Honest reading. **The battle-ffx "choir" is not measurably a pad**: its onset rate is 2.6 times
+the stem's at every strength and with every set of words (6.74 to 7.13 onsets/s), so the model
+re-articulates it like a rhythm part; the words barely matter (6.74 / 6.82 / 6.84). Whether it
+reads as a choir at all cannot be measured here; the solo excerpt on the page exists so Bailey
+can hear it. The aeon choir stays closer to a pad (3.6 onsets/s against the stem's 2.2). The
+model's output sits 30 ms early on the aeon stems, the same constant offset sketch B measured on
+the whole aeon cue; C corrects it, so C's onsets sit 0 ms (median) from A's and today's.
+
+**The full-mix route the brief named**, measured with the choir words at the same strength: on
+`battle-ffx` it keeps the mix's onset structure (onset F 0.74 against the mix, 4.91 onsets/s
+against the mix's 4.24, centroid 372 Hz: drums and all); on `boss-ffx2-aeon` onset F 0.61,
+2.8 onsets/s. A layer made that way is a second copy of the whole arrangement under A, not a
+texture, so the stems were kept.
+
+### Round 1 measurements (whole cues; `docs/audio/round1-report.json`, `docs/audio/sketch-c-report.json`)
+
+| Cue | Version | Velocity layers | LUFS | LRA (LU) | Crest (dB) | Onset offset vs today, median / max (ms) | Render time |
+|---|---|---|---|---|---|---|---|
+| battle-ffx | today | ~1 (Sonatina SF2, FluidR3 GM; plan 1.1) | -15.9 | 4.6 | 16.2 | - | 7.6 s (shipped renderer, no encode) |
+| battle-ffx | A | 1-7 per patch, median 2-3 (table above); band parts stay SF2 | -15.9 | 6.5 | 16.5 | 0 / 10 | 30.7 s |
+| battle-ffx | B | none (model output, no samples) | -16.0 | 6.1 | 17.1 | 10 / 230 | 14.2 s GPU |
+| battle-ffx | C | A's, plus 2 model layers | -15.9 | 6.0 | 16.5 | 0 / 10 | A + 2 stems (16 s) + 2 textures (18-40 s GPU each) + mix |
+| boss-ffx2-aeon | today | ~1 | -15.9 | 4.2 | 16.5 | - | 9.7 s |
+| boss-ffx2-aeon | A | as above | -15.9 | 7.7 | 17.1 | 0 / 10 | 51.8 s |
+| boss-ffx2-aeon | B | none | -16.0 | 3.9 | 16.2 | 30 / 50 | 22.2 s GPU |
+| boss-ffx2-aeon | C | A's, plus 2 model layers | -15.9 | 6.8 | 16.9 | 0 / 10 | A + 2 stems (24 s) + 2 textures (20-40 s GPU each) + mix |
+
+Reading: C gives back some of A's loudness range (6.5 -> 6.0 and 7.7 -> 6.8 LU): two sustained
+layers raise the floor of the quiet passages. Crest barely moves. C keeps A's timing (the layers
+are aligned to it). Wall time for this run: 133 s (battle-ffx, sweep cached) and 359 s (aeon,
+3 strengths x 2 layers + 2 word variants + the mix route = 9 ACE renders, behind other
+workflows' ComfyUI jobs). All C gates pass: -16.0 LUFS, true peak -1.38 / -1.39 dBTP, loop seam
+ok, spectral balance ok. The shipped-renderer times were measured by rendering into
+`build/audio-shipped-timing/` (`--out`, `--no-encode`), which touches nothing that ships.
+
+### Level matching on the page (12 s excerpts from 19.2 s / 36.0 s, the windows sketch A used)
+
+Each excerpt was cut from the lossless source (A and C float WAV, B's raw FLAC, today's MP3),
+measured, gained to -16 LUFS, faded 50 ms in / 600 ms out, and encoded Vorbis q6 (one codec
+for all four). Gains applied: battle-ffx today -0.61, A -1.29, B +2.78, C -1.34 dB;
+boss-ffx2-aeon today -0.37, A -0.89, B +0.81, C -1.17 dB. No excerpt needed limiting (highest
+true peak after gain -1.59 dBTP). Delivered: -16.0 / -16.1 LUFS each. The full renders in the
+table were already at -15.9 to -16.0 LUFS as delivered and are not re-levelled.
+
+**Verified in a browser** (Vite on :5741): all 20 files the section references load and decode
+(8 excerpts at 12.00 s, 8 full cues at their lengths, 4 texture solos at 12.00 s); a real mouse
+click on a score button marks it, fills the summary line and copies it (secure context,
+"Copied."); the scores also reach the page's existing "Collect my scores" box through hidden
+inputs; no horizontal scroll at 1000 px or 375 px. Screenshots:
+`docs/audio/sketch-c/audition-round1.png`, `docs/audio/sketch-c/audition-round1-phone.png`.
+
+## What a full re-render of all 21 cues would cost (2191 s of music, 36.5 min)
+
+Machine time on this PC from the measured rates (seconds of render per second of music:
+shipped renderer ~0.09, A 0.38 to 0.44, ACE-Step ~0.18 per texture on an idle GPU):
+
+| Route | Machine time for 21 cues | What else it needs |
+|---|---|---|
+| A | ~15 min render + ~10 min encode/measure = **~25 min** | The seating map covers only the two audition cues' instruments: choir, organ, harp, bells, piano, keys and the FFX-2 band need mapping and calibrating first (plan: option A is 45 to 55 agent-hours in total). A real hall IR needs Bailey's yes. |
+| B | ~7 min GPU per seed; 3 seeds plus measurement **~25 min** | Loops do not survive a model pass (every cue needs a seam solution), and Bailey's provenance answer (plan question 3). |
+| C | A + stems (~6 min) + 2 textures at fixed settings (~14 min GPU) + mix (~7 min) = **~50 min**; with this run's per-cue sweep (9 renders a cue) **~1 h 45 min** | Everything A needs, plus the provenance answer for the model layers, plus a strength/words pick per cue by ear. |
+
+Queue waits on the shared ComfyUI are extra (0 to 60 s per job today).
+
+## What needs Bailey
+
+1. **The pick** from round 1 (he pastes the copied line). Record liked / disliked / must remain /
+   must change / undecided in the audio tile's `reaction` (`docs/target/targets.json` is
+   outside this track's folders; the driver writes it).
+2. **A real hall IR** (plan A2): A and C still use a synthesised IR. Needs a yes per file.
+3. **Model audio in a shipping cue** (plan question 3): all of B, and C's two layers.
+4. Whether a choir belongs under `battle-ffx` / `boss-ffx2-aeon` at all (THEMES.md names none).
+   If C is picked for its texture, the choir would move to the cues that have one.
+
+## Not done, and why
+
+- **No listening claim.** Every pick is by the pre-registered rules above.
+- **One seed** (101) for the textures; seeds were not swept (B saw a fidelity spread of ~0.08 across seeds).
+- The choir is not verified to be a voice: nothing here can measure that.
+- C's layers are mixed after A's master (A's bus compressor does not see them), then trimmed and
+  limited; a production path would mix them before the master.
+- No unit tests (`tests/` is outside this track's folders); `tsc` does not cover `tools/`.
+- `docs/handoff/NOW.md` and `docs/target/targets.json` are the driver's to update.

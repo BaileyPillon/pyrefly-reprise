@@ -60,7 +60,7 @@ const WORK = join(ROOT, 'build/audio-sfz');
 /** The shipped FDN hall's settings (render.mjs hallFor), for the energy match. */
 const SHIPPED_HALL = { rt60: 2.2, hfDamping: 2.8, preDelay: 0.019, width: 0.95, earlyLevel: 0.55, lowCutHz: 95 };
 
-function encodeWavF32(left, right, rate) {
+export function encodeWavF32(left, right, rate) {
   const frames = left.length;
   const b = Buffer.alloc(44 + frames * 8);
   b.write('RIFF', 0);
@@ -88,7 +88,7 @@ function encodeWavF32(left, right, rate) {
  * eased from 2:1 to 1.5:1, so it touches only the loudest bars and a forte is
  * allowed to be louder than a mezzo inside the cue.
  */
-function masterWide(mix, rate) {
+export function masterWide(mix, rate) {
   busCompress(mix, rate, { thresholdDb: -10, ratio: 1.5, kneeDb: 6 });
   const before = measureLufs(mix.left, mix.right, rate);
   const gain = Math.pow(10, Math.min(18, -16 - before) / 20);
@@ -107,7 +107,7 @@ function place(seatName, channel) {
   return { gl: g.left, gr: g.right, send: presets.sendOf(seat), pan };
 }
 
-async function renderCue(name, ir) {
+export async function renderCue(name, ir, { channelFilter = null } = {}) {
   const started = Date.now();
   const track = getTrack(name);
   const tempo = tempoCurveOf(track);
@@ -120,7 +120,11 @@ async function renderCue(name, ir) {
   // Proof channels: the first repeated-bar pair per channel, captured dry.
   const proofs = [];
   for (const [ci, channel] of track.channels.entries()) {
-    const pair = findRepeatedBars(channel, track);
+    // Sketch C renders texture-input stems from a subset of channels; the
+    // channel index still seeds the performance, so a stem is the same
+    // playing as that channel inside A's full mix.
+    if (channelFilter && !channelFilter(channel)) continue;
+    const pair = channelFilter ? null : findRepeatedBars(channel, track);
     const capture = pair && proofs.length < 4 ? mk() : null;
     const t0 = Date.now();
     const report = await renderChannel({ cue: name, track, tempo, ci, channel, buses, rate: RATE, workDir: join(WORK, name), place, stats, capture });
@@ -259,4 +263,6 @@ async function main() {
   console.log(`  report: ${reportPath}`);
 }
 
-await main();
+// Run only as a CLI: sketch C (render-c.mjs) imports renderCue and the master.
+const invoked = process.argv[1] ? resolve(process.argv[1]).toLowerCase() : '';
+if (invoked === fileURLToPath(import.meta.url).toLowerCase()) await main();

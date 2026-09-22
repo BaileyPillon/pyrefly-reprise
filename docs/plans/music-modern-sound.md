@@ -595,3 +595,33 @@ the asked tempo (166.5 and 176.5 bpm against 150 and 160) and its onsets fall on
 grid at chance level: unconstrained, it is not our music. Plan §3's risks still stand: the
 loop seam does not survive a model pass, and whether model audio may ship is Bailey's
 question 3.
+
+---
+
+## Status — sketch C and the round 1 audition (2026-09-22)
+
+**Built and measured, awaiting Bailey's ear** (hard rule 13). Game case **BOTH**: one method,
+per-game words from THEMES.md "Harmonic language, by world". Details and every number:
+`docs/handoff/music-modern-sound.md`, "Sketch C"; raw numbers `docs/audio/sketch-c-report.json`
+and `docs/audio/round1-report.json`.
+
+- **Sketch C** (option C, narrowed): sketch A's sampled render stays the master; ACE-Step (B's
+  client, core nodes, no custom node, no download) restyles two **stems of A's own render** into
+  a choir pad (from A's sustained parts) and a low string bed (from A's low parts); each is
+  aligned to A by onset correlation, band-limited, loop-repaired and mixed 10 and 12 dB under A.
+  Strength and words were picked by rules written before the sweep: 0.35 / 0.45 for
+  `battle-ffx`, 0.45 / 0.45 for `boss-ffx2-aeon`, words `[inst]` in both. Stems rather than A's
+  full mix, because the full-mix restyle keeps the drums (measured). **Honest limit:** the
+  `battle-ffx` choir has 2.6 times its stem's onset rate at every strength and wording, so it is
+  not measurably a pad; whether either choir reads as a voice cannot be measured here.
+- **Measured:** C keeps A's timing (0 ms median against today) and most of A's widened dynamics
+  (LRA 4.6 today -> 6.5 A -> 6.0 C on `battle-ffx`; 4.2 -> 7.7 -> 6.8 on `boss-ffx2-aeon`);
+  every shipped gate passes (-16 LUFS, <= -1.38 dBTP, seam ok, spectrum ok).
+- **Audition:** `docs/audio/audition.html`, section **"Modern sound, round 1"**, at the top:
+  today, A, B and C per cue, the same 12 seconds, each at -16 LUFS (gains shown), one codec;
+  the full renders below; a 1-10 row per version that copies one summary line for chat.
+- **Cost of all 21 cues** (machine time, from measured rates): A ~25 min, B ~25 min for 3
+  seeds, C ~50 min at fixed settings or ~1 h 45 min with the per-cue sweep; A and C also need
+  the seating map extended to every instrument first (agent-hours, plan §2).
+- **Needs Bailey:** the round 1 pick; a real hall IR (A2); question 3 (model audio in a shipping
+  cue); whether these two cues should carry a choir at all.

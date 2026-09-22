@@ -96,13 +96,20 @@ async function api(p, init) {
   return res;
 }
 
-/** Wait for the server, then for an empty queue: a shared GPU, never jump a video job. */
-async function waitForIdle() {
+/**
+ * Wait for the server, then for the queue: a shared GPU, never jump a video job.
+ * By default the queue must be empty. ACE_MAX_AHEAD=N lets one job join the
+ * END of the FIFO once at most N jobs are ahead of it (ComfyUI runs them in
+ * order, so nothing running or pending is interrupted); sketch C sets it when
+ * another workflow keeps the queue busy with short image jobs.
+ */
+export async function waitForIdle() {
+  const maxAhead = Number(process.env.ACE_MAX_AHEAD ?? 0);
   for (let i = 0; ; i++) {
     try {
       const q = await (await api('/queue')).json();
       const busy = q.queue_running.length + q.queue_pending.length;
-      if (!busy) return;
+      if (busy <= maxAhead) return;
       if (i % 12 === 0) process.stderr.write(`[ace] queue busy (${busy} job(s)); waiting\n`);
     } catch {
       if (i % 12 === 0) process.stderr.write(`[ace] ComfyUI not answering on ${BASE}; waiting\n`);
@@ -116,7 +123,7 @@ async function ffmpeg(args) {
   return stderr;
 }
 
-async function upload(file) {
+export async function upload(file) {
   const fd = new FormData();
   fd.append('image', new Blob([await readFile(file)]), path.basename(file));
   fd.append('subfolder', 'pyrefly-ace');
@@ -127,12 +134,12 @@ async function upload(file) {
 }
 
 /** The API-format graph. `latentFrom` is either { audio } (restyle) or { seconds } (t2m). */
-export function buildGraph({ tags, seed, denoise, latentFrom, prefix }) {
+export function buildGraph({ tags, seed, denoise, latentFrom, prefix, lyrics = '[inst]' }) {
   const g = {
     1: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
     2: {
       class_type: 'TextEncodeAceStepAudio',
-      inputs: { clip: ['1', 1], tags, lyrics: '[inst]', lyrics_strength: 1.0 },
+      inputs: { clip: ['1', 1], tags, lyrics, lyrics_strength: 1.0 },
     },
     3: { class_type: 'ConditioningZeroOut', inputs: { conditioning: ['2', 0] } },
     4: { class_type: 'ModelSamplingSD3', inputs: { model: ['1', 0], shift: SAMPLER.shift } },
@@ -165,7 +172,7 @@ export function buildGraph({ tags, seed, denoise, latentFrom, prefix }) {
   return g;
 }
 
-async function generate(graph) {
+export async function generate(graph) {
   await waitForIdle();
   const res = await fetch(`${BASE}/prompt`, {
     method: 'POST',
@@ -192,7 +199,7 @@ async function generate(graph) {
   }
 }
 
-async function loudness(file) {
+export async function loudness(file) {
   const err = await ffmpeg(['-i', file, '-af', 'ebur128=peak=true', '-f', 'null', '-']);
   const tail = err.slice(err.lastIndexOf('Summary:'));
   const num = (re) => Number((tail.match(re) || [])[1]);
@@ -305,7 +312,9 @@ async function main() {
   }
 }
 
-main().catch((e) => {
+// Run only as a CLI: sketch C (tools/audio/modern/render-c.mjs) imports the client.
+const invoked = process.argv[1] ? path.resolve(process.argv[1]).toLowerCase() : '';
+if (invoked === fileURLToPath(import.meta.url).toLowerCase()) main().catch((e) => {
   process.stderr.write(`${e.stack || e}\n`);
   process.exit(1);
 });
