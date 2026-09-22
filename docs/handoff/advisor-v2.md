@@ -142,6 +142,118 @@ answer, asserted on boards the *player* made.
 
 ---
 
+## 2a. Re-measured 2026-09-22: four evidence defects in the bench and its tests
+
+A verifier of this track found four defects in the evidence itself, not in the
+advisor: **before** the numbers above can be trusted, the bench and its tests had
+to be fixed so each one fails against the defect and passes against the code.
+
+1. **`critic/bench/advisor-v2/harness.ts` was not testing a card-follower.** When
+   `buildAdvisorView` declined a turn (no suggestion), the harness fell back to
+   `intendedStrategy` — the chapter's own optimal line — instead of the generic
+   `fallback()` (the last legal thing on the menu) already used when *that*
+   comes up empty too. A win reached that way is not a win a player following
+   the card could reach. Fixed: a decline now falls straight to `fallback()`
+   and is counted in a new `declines` field, reported per chapter
+   (`declines N (M/40 seeds)`) in the bench table.
+   **Measured effect: zero.** Across all 5 chapters × 2 card drivers × 40 seeds
+   (2 400 replayed decisions), `declines` is **0** everywhere — the card never
+   had nothing to press. The bug was real (a future regression that *did*
+   cause declines would have had its win rate laundered silently) but it was
+   not inflating any number below.
+2. **`tests/unit/advisor-plan.test.ts`'s FFX-2 absence test asserted the wrong
+   thing.** It read as "FFX-2 offers no self-only meta row", but when it found
+   a row shaped that way it never failed — it just fed a synthetic
+   elsewhere-aimed command into `metaRowFor` and asserted that returned
+   non-null, which is a claim about the function, not about the absence. Worse,
+   the *literal* shape ("a row whose own `validTargets` is just the actor") is
+   not actually absent from FFX-2 — Yuna's Vigor is exactly that (a real
+   self-buff) — so the original test's premise doesn't hold under its own
+   name. What the handoff's own §1.2 claim needs is narrower: no FFX-2 turn
+   ever submits a command matching a self-only row's kind/id with targets
+   other than the actor (the way Chapter 3's Doublecast line does in FFX).
+   Fixed: the test now replays both the menu-mashing driver and
+   `intendedStrategy`'s own pick every decision, fails the run if either ever
+   diverges from a matching self-only row, and keeps a separate synthetic
+   check that `metaRowFor` itself still recognises the shape if it ever
+   appears. Verified against the code: with the old test's premise, this
+   correctly failed on Vigor until narrowed to the real claim.
+3. **`tests/unit/advisor-sentence.test.ts` never built a forecast.** Its header
+   claims "every figure the card prints is the engine's own", but the loop
+   only checked `f.source === 'sim'` facts and did `continue` on everything
+   else — so `incoming`, `saves-from-lethal` and `still-lethal` facts (all
+   `source: 'forecast'`) were counted toward `checked` and never actually
+   verified. Fixed: the test now calls `forecastFromState` fresh on the same
+   board and cross-checks `incoming`'s total against the forecast's own
+   `estimate.perTarget`, and that `saves-from-lethal`/`still-lethal` name a
+   target the forecast actually hits. Confirmed exercised: 300 forecast facts
+   across all 5 chapters in one run (113 `incoming` on Chapter 3 alone, plus
+   `still-lethal`/`saves-from-lethal` on three chapters). Confirmed it bites:
+   injecting a +50 offset into `incoming`'s value in `advisor-eval.ts` failed
+   the test immediately; reverting passed it again.
+4. **The same file's `phase` fact check was a tautology.** It compared
+   `f.value` (which `advisor-eval.ts` sets to `outcome.damageToEnemies`,
+   verbatim) against `out.damageToEnemies` from a second call to the *same*
+   pure simulate function with the *same* arguments — two calls of a
+   deterministic function will always agree, so the check could never fail
+   however wrong the reported number was. Fixed: it now sums the raw
+   per-combatant `hpDelta` over the state's own enemy combatants by hand,
+   independently of the `damageToEnemies` field, and compares that sum to
+   `f.value`. Confirmed it bites: injecting a +37 offset into the `phase`
+   fact's `value` in `advisor-eval.ts` failed the test immediately; reverting
+   passed it again.
+
+None of the four required a change to `src/engine/tactics/advisor*.ts` — all
+four were bugs in the bench/tests, not the advisor. Game case: **both**
+(shared advisor bench/test plumbing, same as §6).
+
+### The re-run: same harness rules, the fixed methodology
+
+40 seeds, 5 chapters, card-only bot (top row, nothing else), same decision-time
+settings as §2. Raw output:
+`critic/bench/advisor-v2/results-decline-fix.json` (2026-09-22T00:43:57Z).
+
+| Chapter | intended | v1 (old card) | **v2 (shipped)** | declines (v1/v2) |
+|---|---|---|---|---|
+| 1 Seymour Flux (FFX) | 65.0 % | 62.5 % | **67.5 %** | 0 / 0 |
+| 2 Yunalesca (FFX) | 97.5 % | 95.0 % | **92.5 %** | 0 / 0 |
+| 3 Braska's Final Aeon (FFX) | 97.5 % | 92.5 % | **97.5 %** | 0 / 0 |
+| 4 Bahamut (FFX-2) | 100 % | 100 % | **100 %** | 0 / 0 |
+| 5 Vegnagun → Shuyin (FFX-2) | 100 % | 100 % | **97.5 %** | 0 / 0 |
+
+**What changed from §2's table, and why:**
+
+- **Chapters 1, 4, 5 and v2's Chapter 3 are unchanged** (within the same seeds).
+  The decline fix moved nothing here because declines are 0.
+- **Chapter 3's v1 number moved from 0.0 % to 92.5 %, and Chapter 2's v1 moved
+  from 82.5 % to 95.0 %.** This is **not** the decline-fallback bug (declines
+  are 0 for v1 too, both then and now) — it is that `advisor-v1` only ever
+  toggled `AdvisorOptions.planner`, and §1.1/§1.2's fixes (`sameCommand`,
+  `ownedRow`/`metaRowFor`) are **not gated by that flag** — the code comment
+  over the evaluation call says as much: *"The ownership and command-identity
+  repairs above it are plain correctness and are not switchable."* So "v1" in
+  this codebase has never been the original pre-fix card since those repairs
+  landed — it is "v2 minus the band/evaluation/prior", which is a different,
+  weaker question than the one the original 0.0 %/82.5 % numbers answered
+  before those repairs existed. The original pre-fix baseline is preserved in
+  `results-baseline.json` and is not reproducible by toggling `planner` today.
+  **This finding is reported, not corrected** — nobody asked this track to
+  reconcile the v1 label, and doing so would mean touching `advisor.ts`'s
+  gating, which is out of this brief's scope.
+- **Chapter 2's v2 number moved from 85.0 % to 92.5 %**, above the §2 result on
+  the same seeds and same card logic. Chapter 2 is Yunalesca, whose fight
+  leans on Nul-spell interactions, and `git log` shows an unrelated, already
+  landed change since §2 was measured — 18cac82 *"FFX Nul spells: source
+  targeting as party-wide, sourced 2026-09-21"* — touching exactly that
+  mechanic. That is the likely cause of the shift, but it is **a different
+  track's sourced data change**, not anything this bench or its tests did;
+  confirming it is that track's evidence to produce, not this one's guess to
+  assert as fact.
+- **Chapter 2's Defend finding (§5) stands as Bailey's call, unchanged.** The
+  12.5-point gap between `intended` and the card was never about advice
+  quality — `defend` is not a row FFX's menu paints — and nothing here
+  touches that.
+
 ## 3. What was built
 
 New, all pure and DOM-free, all under the 400-line house cap, all in
@@ -329,3 +441,24 @@ docs/screenshots/advisor-v2-ch4.png     new
 
 `npx tsc --noEmit` clean for these files; `npm test` 206 files / 5 035 tests green;
 `node tools/orphans.mjs` reports nothing under `src/engine/tactics/`.
+
+### 2026-09-22 evidence-defect fixes (§2a)
+
+```
+critic/bench/advisor-v2/harness.ts                changed (no more intendedStrategy
+                                                    fallback on a decline; declines
+                                                    counted and reported)
+critic/bench/advisor-v2/bench.test.ts             changed (declines printed per row)
+critic/bench/advisor-v2/results-decline-fix.json  new (the re-run behind §2a)
+tests/unit/advisor-plan.test.ts                   changed (the FFX-2 absence test
+                                                    now asserts the real claim)
+tests/unit/advisor-sentence.test.ts               changed (forecast facts actually
+                                                    checked; the phase check is no
+                                                    longer a tautology)
+```
+
+`npx tsc --noEmit` clean; the four advisor test files
+(`advisor.test.ts`, `advisor-plan.test.ts`, `advisor-plan-recovery.test.ts`,
+`advisor-sentence.test.ts`, `advisor-ownership.test.ts`, `advisor-noop-guard.test.ts`)
+green; `node tools/orphans.mjs` unchanged (none of the touched files are under
+`src/`, so the orphan count cannot move). No change to `src/engine/tactics/advisor*.ts`.

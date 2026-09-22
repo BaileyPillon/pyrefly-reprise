@@ -35,6 +35,7 @@ import {
   clearAdvisorCache,
   metaRowFor,
 } from '../../src/engine/tactics/advisor.ts';
+import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 
 /** Six seeds, both drivers, for one chapter. */
 const SEEDS = 6;
@@ -166,6 +167,16 @@ describe('the two shapes FFX-2 does not have (AGENTS.md rule 14 absence tests)',
     it(`${chapterId} offers no switch row and no self-only meta row`, () => {
       const { engine } = harnessFor(chapterId, 1);
       let decisions = 0;
+      // The absence is narrower than "no row is self-only" — X-2 has plain
+      // self-buffs (Vigor: `validTargets: ['yuna']` on Yuna's own turn) and
+      // those are not the meta shape. The meta shape §1.2 repairs is a row
+      // whose own `validTargets` is self-only but whose *actual* command
+      // (the one a tactic or the auto-battler submits) aims somewhere else —
+      // the way Doublecast's row targets its own caster while the spell
+      // chosen inside it targets the enemy. So the real claim is: no command
+      // this fight ever submits, for a self-only row, diverges from that
+      // row's own target. Asserted, not assumed.
+      let selfOnlyMetaRow: { actorId: string; row: unknown; submitted: unknown } | null = null;
       for (let i = 0; i < MAX_STEPS && decisions < 40; i += 1) {
         const d: Decision = engine.nextDecision();
         if (d.kind === 'battle-over') break;
@@ -177,19 +188,49 @@ describe('the two shapes FFX-2 does not have (AGENTS.md rule 14 absence tests)',
         decisions += 1;
         for (const row of d.commands) {
           expect(row.command.kind, `${chapterId} offered a switch`).not.toBe('switch');
-          if (!row.enabled) continue;
-          // A self-only row aimed elsewhere is the meta shape. There is none,
-          // so `metaRowFor` can never fire in X-2.
-          if (row.validTargets.length === 1 && row.validTargets[0] === d.actorId) {
-            const elsewhere = { ...row.command, targets: ['nobody'] } as Command;
-            expect(metaRowFor(d.commands, d.actorId, elsewhere)).not.toBeNull();
-            // …but no X-2 tactic ever aims one elsewhere, which is the claim.
-          }
         }
         const chosen = d.commands.find((c) => c.enabled && c.validTargets.length > 0);
         if (!chosen) break;
-        engine.submit({ ...chosen.command, targets: [chosen.validTargets[0]!] } as Command);
+        const submitted = { ...chosen.command, targets: [chosen.validTargets[0]!] } as Command;
+        // Both routes a command can come from: the menu-mashing driver above,
+        // and the chapter's own tactic (the one route that could plausibly
+        // pick a target the row itself does not list, the way Chapter 3's
+        // Doublecast line does in FFX).
+        const tactic = intendedStrategy(d.actorId, d.commands, engine as never);
+        for (const candidate of [submitted, tactic].filter((c): c is Command => c !== null)) {
+          if (selfOnlyMetaRow) break;
+          const selfOnlyRow = d.commands.find(
+            (row) =>
+              row.enabled &&
+              row.validTargets.length === 1 &&
+              row.validTargets[0] === d.actorId &&
+              row.command.kind === candidate.kind &&
+              (candidate as { id?: unknown }).id !== undefined &&
+              (row.command as { id?: unknown }).id === (candidate as { id?: unknown }).id,
+          );
+          if (selfOnlyRow && candidate.targets.some((t) => t !== d.actorId)) {
+            selfOnlyMetaRow = { actorId: d.actorId, row: selfOnlyRow, submitted: candidate };
+          }
+        }
+        engine.submit(submitted);
       }
+      expect(
+        selfOnlyMetaRow,
+        `${chapterId} submitted a self-only row's command aimed elsewhere: ${JSON.stringify(selfOnlyMetaRow)}`,
+      ).toBeNull();
+      // The function itself must still recognise the shape if it ever shows
+      // up — a synthetic check, since the game never offers one for real.
+      const synthetic = { kind: 'doublecast', id: 'doublecast', targets: ['nobody'] } as unknown as Command;
+      const syntheticRows = [
+        {
+          command: { kind: 'doublecast', id: 'doublecast', targets: [] },
+          enabled: true,
+          validTargets: ['actor-x'],
+          label: 'x',
+          mpCost: 0,
+        },
+      ] as never;
+      expect(metaRowFor(syntheticRows, 'actor-x', synthetic)).not.toBeNull();
       expect(decisions).toBeGreaterThan(10);
     }, 60_000);
   }

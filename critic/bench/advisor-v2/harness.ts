@@ -139,6 +139,15 @@ export interface RunResult {
   turns: number;
   /** Per-decision `buildAdvisorView` wall time, ms. Empty for `intended`. */
   latencies: number[];
+  /**
+   * Decisions where the card had nothing to press (`view` or its top
+   * suggestion was `null`) and the run had to reach for {@link fallback} — the
+   * last legal thing on the menu, never the chapter's own line. A
+   * card-follower bot presses **only** what the card shows; a decline is a
+   * real outcome for that turn, not something the bench papers over by
+   * borrowing the answer key.
+   */
+  declines: number;
 }
 
 export interface RunOptions {
@@ -174,6 +183,7 @@ export function run(
   let decisions = 0;
   let outcome = 'unresolved';
   let turns = 0;
+  let declines = 0;
 
   for (let i = 0; i < MAX_STEPS; i += 1) {
     const d = engine.nextDecision();
@@ -197,6 +207,11 @@ export function run(
     } else if (driver === 'intended') {
       chosen = intendedStrategy(d.actorId, d.commands, engine as never);
     } else {
+      // A card-follower presses ONLY what the card shows — the top row, and
+      // nothing else. Falling back to `intendedStrategy` here would let the
+      // chapter's own line finish a turn the card declined, which inflates
+      // the published win rate with moves no player following the card would
+      // ever be shown. A decline is counted and reported, not laundered.
       const t0 = performance.now();
       const view = buildAdvisorView(
         state,
@@ -205,14 +220,14 @@ export function run(
       );
       latencies.push(performance.now() - t0);
       chosen = view?.suggestions[0]?.command ?? null;
-      if (!chosen) chosen = intendedStrategy(d.actorId, d.commands, engine as never);
+      if (!chosen) declines += 1;
     }
     if (!chosen) chosen = fallback(d.commands);
     if (!chosen) break;
     engine.submit(chosen);
   }
 
-  return { chapterId, seed, driver, outcome, decisions, turns, latencies };
+  return { chapterId, seed, driver, outcome, decisions, turns, latencies, declines };
 }
 
 export function median(xs: readonly number[]): number {
@@ -240,15 +255,23 @@ export interface ChapterSummary {
   latencyP50: number;
   latencyP95: number;
   outcomes: Record<string, number>;
+  /** Total decisions across all seeds where the card had nothing to press. */
+  declines: number;
+  /** Seeds that hit at least one decline. */
+  seedsWithDeclines: number;
 }
 
 export function summarise(runs: readonly RunResult[]): ChapterSummary {
   const wins = runs.filter((r) => r.outcome === 'victory').length;
   const outcomes: Record<string, number> = {};
   const latencies: number[] = [];
+  let declines = 0;
+  let seedsWithDeclines = 0;
   for (const r of runs) {
     outcomes[r.outcome] = (outcomes[r.outcome] ?? 0) + 1;
     latencies.push(...r.latencies);
+    declines += r.declines;
+    if (r.declines > 0) seedsWithDeclines += 1;
   }
   return {
     chapterId: runs[0]?.chapterId ?? '',
@@ -261,5 +284,7 @@ export function summarise(runs: readonly RunResult[]): ChapterSummary {
     latencyP50: Math.round(percentile(latencies, 50) * 100) / 100,
     latencyP95: Math.round(percentile(latencies, 95) * 100) / 100,
     outcomes,
+    declines,
+    seedsWithDeclines,
   };
 }

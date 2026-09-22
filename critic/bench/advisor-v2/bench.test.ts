@@ -60,6 +60,7 @@ describe('advisor v2 bench', () => {
               `turns~${String(s.medianTurns).padStart(4)}  ` +
               `dec~${String(s.medianDecisions).padStart(5)}  ` +
               `p50 ${String(s.latencyP50).padStart(6)}ms  p95 ${String(s.latencyP95).padStart(6)}ms  ` +
+              `declines ${s.declines} (${s.seedsWithDeclines}/${s.seeds} seeds)  ` +
               JSON.stringify(s.outcomes),
           );
         }

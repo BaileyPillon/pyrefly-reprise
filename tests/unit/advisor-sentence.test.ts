@@ -32,6 +32,7 @@ import { simulateFFXCommand } from '../../src/battle/ffx/simulate.ts';
 import { simulateFFX2Command } from '../../src/battle/ffx2/simulate.ts';
 import { buildAdvisorView, type AdvisorOptions } from '../../src/engine/tactics/advisor.ts';
 import type { BoardFact } from '../../src/engine/tactics/advisor-eval.ts';
+import { forecastFromState } from '../../src/engine/tactics/advisor-forecast.ts';
 import { citedFacts, overClaims, sentenceFor } from '../../src/engine/tactics/advisor-say.ts';
 
 function preview(
@@ -73,17 +74,56 @@ describe('every figure the card prints is the engine\'s own', () => {
         if (top) {
           const facts = (top.facts ?? []) as readonly BoardFact[];
           const out = preview(state, d.actorId, top.command, options);
+          // The forecast half of the join (§2 of the handoff): the enemy's
+          // own telegraphed next action, read fresh off this board — not
+          // trusted from whatever `buildAdvisorView` happened to cache.
+          const intent = forecastFromState(state, options);
           for (const f of facts) {
             checked += 1;
-            if (f.source !== 'sim') continue;
-            if (f.kind === 'phase' && out && f.value !== out.damageToEnemies) {
-              wrong.push(`${chapterId}: said ${f.value} damage, engine says ${out.damageToEnemies}`);
+            if (f.kind === 'phase' && out) {
+              // Independently re-derived from the raw per-combatant deltas,
+              // not from `out.damageToEnemies` itself — that field is exactly
+              // the sum this loop recomputes, so comparing the fact against
+              // the field would only ever be checking the engine's own
+              // aggregation against itself. Summing the enemy hits by hand
+              // here still catches `evaluate()` citing a stale or mis-scoped
+              // total.
+              let enemyDamage = 0;
+              for (const [id, delta] of Object.entries(out.hpDelta)) {
+                if (state.combatants[id]?.side === 'enemy' && delta > 0) enemyDamage += delta;
+              }
+              if (f.value !== enemyDamage) {
+                wrong.push(`${chapterId}: said ${f.value} damage, the per-target deltas say ${enemyDamage}`);
+              }
             }
             if (f.kind === 'kills' && out && !out.kills.includes(f.targetId ?? '')) {
               wrong.push(`${chapterId}: claimed a kill on ${f.targetId} the engine did not make`);
             }
             if ((f.kind === 'gamble' || f.kind === 'certain-status') && (f.value <= 0 || f.value > 100)) {
               wrong.push(`${chapterId}: ${f.kind} quoted ${f.value}%, which is not a percentage`);
+            }
+            // The forecast half: `incoming`/`saves-from-lethal`/`still-lethal`
+            // facts are never sim-sourced, so without this the "every figure
+            // re-derives" claim never actually built a forecast to check them
+            // against and these assertions passed on every board, vacuously.
+            if (f.source === 'forecast') {
+              if (!intent) {
+                wrong.push(`${chapterId}: cited a forecast fact ("${f.text}") with no forecast on this board`);
+                continue;
+              }
+              const hits = intent.estimate?.perTarget ?? [];
+              if (f.kind === 'incoming') {
+                const total = Math.round(hits.filter((h) => h.amount > 0).reduce((n, h) => n + h.amount, 0));
+                if (f.value !== total) {
+                  wrong.push(`${chapterId}: said the incoming move is worth ${f.value}, the forecast says ${total}`);
+                }
+              }
+              if (f.kind === 'saves-from-lethal' || f.kind === 'still-lethal') {
+                const hit = hits.find((h) => h.targetId === f.targetId && h.amount > 0);
+                if (!hit) {
+                  wrong.push(`${chapterId}: ${f.kind} named ${f.targetId}, who the forecast never targets`);
+                }
+              }
             }
           }
           // Rule 2: no over-claim, on every decision of every chapter.
