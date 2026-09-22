@@ -17,7 +17,10 @@ import { audio } from '../../../audio/index.ts';
 import type { SaveStore } from '../../SaveData.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
-const clamp01 = (v: number): number => Math.round(Math.min(1, Math.max(0, v)) * 100) / 100;
+/** FFX-2's Config ATB speeds, slowest first (`research/ffx2-combat-core.md` §1.2). */
+export const ATB_SPEEDS = ['slow', 'normal', 'fast'] as const;
+
+const clamp01 =(v: number): number => Math.round(Math.min(1, Math.max(0, v)) * 100) / 100;
 
 /** True when the id named a setting and it was written. */
 export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1): boolean {
@@ -50,6 +53,15 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1): boolean
     case 'ffx2Atb':
       save.setSettings({ ffx2Atb: settings.ffx2Atb === 'active' ? 'wait' : 'active' });
       return true;
+    case 'ffx2AtbSpeed': {
+      // FFX-2's Config ATB speed (§1.2). Steps and wraps, so Confirm (dir 1)
+      // is never a dead press on it; the engine is re-told when the pause
+      // closes (`BattleScreenWiring.applyAtbSpeed`).
+      const i = ATB_SPEEDS.indexOf(settings.ffx2AtbSpeed ?? 'normal');
+      const next = ATB_SPEEDS[(i + dir + ATB_SPEEDS.length) % ATB_SPEEDS.length] ?? 'normal';
+      save.setSettings({ ffx2AtbSpeed: next });
+      return true;
+    }
     case 'guideVisible':
       save.setSettings({ guideVisible: !settings.guideVisible });
       return true;

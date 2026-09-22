@@ -133,16 +133,10 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    */
   private carriedTicks = 0;
   /**
-   * Game ticks per real tick: the Config ATB speed (`constants.ts`
-   * {@link ATB_SPEED_MULTIPLIER}, §1.2). Applied only where real milliseconds
-   * cross into the engine (`tick`) and back out (`'waiting'`, elapsed time),
-   * so the whole game clock — gauges, statuses, chain windows, AI clocks —
-   * scales as one: §1.2 calls the Config a multiplier on *the single global
-   * tick rate*, and §1.7's chain windows run on that global clock. A fight at
-   * any speed is the same fight in game time; only the real time a player has
-   * per game second changes. Exactly `1` at Normal, so every multiply and
-   * divide by it is the identity and Normal is bit-for-bit the engine as it
-   * was (`tests/unit/ffx2-atb-golden.test.ts`). FFX-2 only.
+   * Game ticks per real tick, the Config ATB speed (§1.2, `constants.ts`).
+   * Applied only where real ms cross in (`tick`) and out (`'waiting'`, elapsed
+   * time), so the one global clock scales as one. Exactly `1` at Normal: the
+   * identity, so Normal is bit-for-bit the old engine (golden test).
    */
   private atbRate = 1;
   private speed: AtbSpeed = 'normal';
@@ -303,10 +297,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       return this.flush();
     }
     this.inputOwner = null;
-    // Critic round 08 PR-0076: she answered while an enemy's hit had her
-    // chained. §1.7 stops her *starting* the action, not choosing it, so the
-    // command is held and fires as her the moment the window closes, instead
-    // of the menu being torn away. Unreachable at zero decision time.
+    // PR-0076: chained (§1.7) as she answered — hold it; it fires as her when
+    // the window closes. Unreachable at zero decision time.
     if (actor.controller === 'player' && !this.awaitingMinigame && isActionLocked(actor)) {
       this.held = { actorId: actor.id, command };
       return this.flush();
@@ -386,11 +378,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       const actor = this.nextActor(throughInput);
       if (actor && actor.controller === 'player') {
         // A held command whose lock just lifted fires here, under whatever
-        // menu is open (PR-0076). Otherwise, under `throughInput` the only
-        // player unit `nextActor` can hand back is a Berserked one — the
-        // menu's owner and anyone else awaiting a command are skipped — and
-        // Berserk has already taken her turn away from the player (§2.8), so it
-        // resolves here rather than stalling.
+        // menu is open (PR-0076). Otherwise, under `throughInput`, the only
+        // player `nextActor` hands back is a Berserked one (§2.8): resolve her.
         if (this.held?.actorId === actor.id) this.fireHeld(actor);
         else if (throughInput) this.runBerserkTurn(actor);
         break;

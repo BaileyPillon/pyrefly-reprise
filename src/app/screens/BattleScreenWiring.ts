@@ -15,7 +15,8 @@
 
 import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/types.ts';
 import { FFXEngine } from '../../battle/ffx/index.ts';
-import { FFX2Engine } from '../../battle/ffx2/index.ts';
+import { FFX2Engine, type AtbSpeed } from '../../battle/ffx2/index.ts';
+import { readSetting } from '../SaveData.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { FFXBattleHud } from '../../ui/ffx/FFXBattleHud.ts';
 import { FFX2BattleHud } from '../../ui/ffx2/FFX2BattleHud.ts';
@@ -60,9 +61,25 @@ export async function createEngine(
     game === 'ffx'
       ? new FFXEngine({ autoResolveMinigames: automated })
       : new FFX2Engine({ ...ffx2EngineOptions(), minigames: !automated });
+  applyAtbSpeed(engine);
   engine.setSeed(setup.seed);
   engine.init(setup);
   return engine;
+}
+
+/**
+ * Tell an FFX-2 engine the player's Config ATB speed (the pause screen's ATB
+ * SPEED row, `Settings.ffx2AtbSpeed`; `research/ffx2-combat-core.md` §1.2).
+ *
+ * Called when the engine is built and again when the pause closes, so a change
+ * made mid-fight lands on the very next tick — the clock is frozen while the
+ * menu is up. An unset value is Normal, the engine exactly as it always was.
+ * FFX has no `setAtbSpeed` (CTB has no tick rate), so this is a no-op there
+ * (AGENTS.md rule 14).
+ */
+export function applyAtbSpeed(engine: BattleEngine | null): void {
+  const x2 = engine as (BattleEngine & { setAtbSpeed?: (s: AtbSpeed) => void }) | null;
+  x2?.setAtbSpeed?.(readSetting('ffx2AtbSpeed') ?? 'normal');
 }
 
 // -------------------------------------------------------------------- HUD

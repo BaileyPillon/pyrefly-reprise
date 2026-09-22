@@ -248,6 +248,7 @@ export class PauseView {
           canChapterSelect: this.deps.canChapterSelect,
           canQuit: this.deps.canQuit,
           extraRows: this.deps.extraRows,
+          game: this.game,
         });
       case 'controls':
         return controlsColumns();

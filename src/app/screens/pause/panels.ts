@@ -80,6 +80,8 @@ export interface OptionsContext {
   canQuit: boolean;
   /** Host-supplied rows — the cutscene pause's "Skip scene". */
   extraRows: readonly { id: string; label: string }[];
+  /** Whose chapter this is. FFX-2 alone gets the ATB SPEED row (rule 14). */
+  game?: GameId;
 }
 
 /**
@@ -97,6 +99,14 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     ratio: r.ratio,
     selectable: true,
   }));
+  if (ctx.game === 'ffx2') {
+    // FFX-2's Config "ATB Mode and Speed" (research/ffx2-combat-core.md §1.2;
+    // research/ffx-vs-ffx2-presentation.md:278). FFX's CTB has no tick rate,
+    // so an FFX chapter never prints it. Sits under the X-2 row it belongs to.
+    const at = settings.findIndex((r) => r.id === 'ffx2Atb');
+    const speed = ctx.settings.ffx2AtbSpeed ?? 'normal';
+    settings.splice(at < 0 ? settings.length : at + 1, 0, row('ffx2AtbSpeed', 'ATB SPEED', speed.toUpperCase(), { selectable: true }));
+  }
   if (ctx.battleHelpOn !== null) {
     settings.push(row('battleHelp', 'BATTLE HELP', ctx.battleHelpOn ? 'ON' : 'OFF', { selectable: true }));
   }
