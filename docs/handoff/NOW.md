@@ -80,14 +80,25 @@
   `D:/Tools/ComfyUI/ComfyUI/models/checkpoints/ace_step_v1_3.5b.safetensors` (7.7 GB); the VSCO 2 CE SFZ patches branch
   is cloning into `D:/Tools/audio-libs/vsco2-ce-sfz`. Checksums: `D:/Tools/audio-libs/_dl/fetch-music-2026-09-21.DONE.txt`.
   Still needing a per-item yes: hall impulse responses, any ACE-Step custom nodes.
-- Running now (folder-owned; nobody else touches these paths until each reports):
-  1. `wf_4deb5674-19a` "pyrefly-pause-remake-build" (opus builder, then adversarial verifier, one fix pass). OWNS
-     `src/app/screens/Pause*.ts`, `src/app/screens/pause/**`, the pause stylesheets, the pause tests,
-     `docs/handoff/pause-remake.md`, and one entry each in `docs/target/targets.json` and `decisions.json`.
-  2. `wf_e702c876-6ad`: recipe R2 tool defaults, then production art for the three new chapters (Leblanc, Macalania,
-     Evrae) into `docs/concepts/chapters/<key>/production.png`, then web sourcing for the Nul spells. **ComfyUI/GPU is
-     busy with this: queue nothing else on the GPU until it reports.** Every production sheet gets looked at 1:1
-     before anything is installed — never approve art from thumbnails.
+- Running now, 2026-09-21 21:10 EDT (folder-owned; the RUNNING-LINE RULE above applies: if one of these is you, carry on):
+  1. `wf_8d92439e-406` "pyrefly-living-portrait-v2" (attempt 2; the first died on API overload). OWNS
+     `docs/concepts/pause-until-dawn/prototype-v2/**`, `tools/gen/inpaint.mjs`, `tools/gen/yaw-keys.mjs`, `tools/gen/rig-cut.*`.
+     Renders on ComfyUI (queue shared with 2).
+  2. `wf_b0dbd44c-18d` "pyrefly-chapter-leblanc" (attempt 2; `573ea00` from the first run stands). OWNS the Leblanc data
+     and tests, `src/scenes/leblanc*`, the Leblanc guide / tactics / meta, `src/story/scripts/ffx2-leblanc.ts`
+     registration, additive entries in `src/data/encounters.ts` + registry + music routing (with `docs/CONTRACT-CHANGES.md`),
+     `chapterGrid.ts` card DATA, `public/art/characters/{leblanc,ormi,logos}/**`, `docs/concepts/chapters/leblanc/**`,
+     `tools/gen/cast.json` rows, `critic/bench/leblanc/**`. Renders on ComfyUI.
+  3. Release 08: the tidy batch is committed (`65b57bd` onboarding on, `4dbcb8c` advisor evidence, `e6aee37` FE-001/002,
+     `c4a6d42` pause e2e); `critic/runner/release.js` runs top-level next (focused review, deploy, live, deep after).
+     **DEPLOY GATE FINDING:** the live build `8f48237` carries an unsettled deep review (from `fd0ae96`); round 07 was a
+     valid deep report but left five mandatory checks UNVERIFIED (CHK-001 / CHK-B1 audio need Bailey's ear, CHK-006,
+     CHK-007, CHK-022 victory halves, hardware perf evidence), so `critic-clear` refused it. Two deploys already went
+     out with the debt, so release 08 is refused unless Bailey overrides (`--owner-override="<his words>"`, which settles
+     nothing) or a deep review that closes those five gaps settles it.
+  4. Downloads Bailey approved ("yes to downloads but on D: please"): Wan 2.2 TI2V-5B + VAE + umt5 text encoder into
+     `D:/Tools/ComfyUI/ComfyUI/models/**`, THA4 repo into `D:/Tools/tha4`; log and checksums under
+     `D:/Tools/video-models/_dl/`. A video-clip preview workflow for Yuna launches when the marker appears.
 - Next, in order: (1) pause remake verified, then the living portrait ported for the main party; (2) one tidy pass:
   advisor v2 bench harness fallback and three test defects (`docs/handoff/advisor-v2.md`), Leblanc provenance labels,
   front-end phone type floor FE-001; (3) first incremental release, round 08, launched **top-level** with
