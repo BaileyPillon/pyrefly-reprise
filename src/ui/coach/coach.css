@@ -117,10 +117,15 @@
   white-space: nowrap;
 }
 
-/* One teaching surface at a time (docs/plans/onboarding-review.md REQUIRED 4):
-   while a line is up, the move advisor's card stands down. The chip stays, so
+/* One teaching surface at a time (docs/plans/onboarding-review.md REQUIRED 4)
+   -- FFX-2 only now. FOC-01 (critic/reviews/5e92289…-focused.json): the
+   approved tile c2-first-use-ffx pictures Auron's line BESIDE a populated
+   advisor card, not standing alone over an empty one, so FFX no longer takes
+   the card down. FFX-2's line sits low (`.coach-mark[data-game='ffx2']`,
+   above) in the same bottom-centre band `MoveAdvisor.layout()` squeezes the
+   card into, so that half of REQUIRED 4 still holds there: the chip stays, so
    nothing appears to have broken. */
-[data-coach-mark='1'] .mad__card {
+[data-coach-mark-game='ffx2'] .mad__card {
   opacity: 0;
   pointer-events: none;
 }

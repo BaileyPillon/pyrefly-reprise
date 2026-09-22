@@ -217,11 +217,17 @@
    filled — a second unexplained bar beside HP and MP that a first-timer has
    no way to read. The label rides above the bar inside `.ig-stat__od`'s own
    `position: relative` box, so no row geometry moves; READY recolours the
-   same word rather than adding a chip the 200px row has no width for. */
+   same word rather than adding a chip the 200px row has no width for.
+   FOC-04 (`critic/reviews/5e92289…-focused.json`): at 4.4px this measured
+   11.0px effective through the 2.5x LetterboxStage transform at 1600x900,
+   under the 12px floor FE-001 set this release for front-end type — the same
+   floor CHK-003 measures the in-stage HUD against too. 4.8px is exactly 12 at
+   that scale; 4.9px leaves the same small margin `strategy-guide.css` keeps
+   above its own floor (5.7 for a required 5.6). */
 .ffx-stat__od em {
   position: absolute; right: 0; bottom: 4.4px;
   font-family: var(--ig-font-display); font-weight: 700; font-style: normal;
-  font-size: 4.4px; letter-spacing: 0.22em; text-transform: uppercase;
+  font-size: 4.9px; letter-spacing: 0.22em; text-transform: uppercase;
   color: rgba(244, 241, 232, 0.45);
   white-space: nowrap;
 }
@@ -456,12 +462,16 @@
 .ffx-sensor--folded .ffx-sensor__body { display: none; }
 
 /* The chip is the fold control while the plate is open and the whole plate
-   while it is folded, so it is styled once and only its copy changes. */
+   while it is folded, so it is styled once and only its copy changes.
+   FOC-04 (`critic/reviews/5e92289…-focused.json`): "I hide" measured 11.5px
+   effective at 1600x900 through the 2.5x LetterboxStage transform, under the
+   12px floor FE-001 set this release. 4.9px matches the same floor and margin
+   `.ffx-stat__od em` above was raised to, just above the bar minimum. */
 .ffx-sensor__toggle {
   display: flex; align-items: center; gap: 3px;
   margin: 3px 0 0; padding: 0; border: 0; background: none;
   font-family: var(--ig-font-display); font-weight: 700;
-  font-size: 4.6px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-size: 4.9px; letter-spacing: 0.18em; text-transform: uppercase;
   color: #cfd6de; cursor: pointer;
 }
 .ffx-sensor--folded .ffx-sensor__toggle { margin-top: 0; }

@@ -51,6 +51,19 @@ export interface CoachMarkOptions {
 const MARK_FLAG = 'coachMark';
 
 /**
+ * Which game's line is up, alongside {@link MARK_FLAG}.
+ *
+ * `coach.css` reads this rather than `data-game` on the mark element itself,
+ * because a descendant selector cannot reach back up to a sibling: the mark
+ * lives in its own `.coach-layer`, and the element it has to gate (`.mad__card`)
+ * is inside the HUD's own tree beside it, not under it. FOC-01 stopped FFX from
+ * hiding the advisor card while its line is up (the approved c2-first-use-ffx
+ * tile shows both), but FFX-2's line still sits low enough to meet the card's
+ * own bottom-centre band, so that half of REQUIRED 4 stays FFX-2 only.
+ */
+const MARK_GAME_FLAG = 'coachMarkGame';
+
+/**
  * The keys `ui/ffx/rawInput.ts` reads as **confirm**.
  *
  * Kept here rather than imported because this list is used for the opposite
@@ -130,19 +143,21 @@ export class CoachMark {
 
   /**
    * **An overlay's dismissing press dies with the overlay** (the rule this
-   * build adopted in e30ea5e), for the one line that does not hold anything.
+   * build adopted in e30ea5e), now for both games' lines.
    *
-   * FFX's line holds the menu until one confirm, so the menu is not open yet
-   * and the press is absorbed by construction. FFX-2's line never holds — the
-   * menu is opened in the same turn of the event loop, and both the line's own
-   * watcher and the command menu's read `keydown` off `window`. One Enter
-   * therefore cleared the line *and* opened the White Magic submenu the player
-   * never asked for (PR-0051).
+   * The menu is open in the same turn of the event loop as the line for FFX
+   * and FFX-2 alike (FOC-01), and both the line's own watcher and the command
+   * menu's read `keydown` off `window`. FFX-2 hit this first: one Enter used to
+   * clear the line *and* open the White Magic submenu the player never asked
+   * for (PR-0051). Leaving FFX's `mark.holds` line off this list had the same
+   * bug waiting for the day its menu stopped being gated behind the promise —
+   * which is exactly what FOC-01's fix does.
    *
-   * So the FFX-2 line takes the confirm key, and only the confirm key, in the
-   * capture phase: the press that takes the line down reaches nothing else.
-   * Every other key — arrows, cancel, the pause keys — is untouched, so the
-   * line still blocks no input and still holds no fight.
+   * So every line takes the confirm key, and only the confirm key, in the
+   * capture phase: the press that takes it down reaches nothing else. Every
+   * other key — arrows, cancel, the pause keys — is untouched, so the line
+   * still blocks no input and a holding FFX line still waits for its own next
+   * confirm rather than resolving twice.
    */
   private readonly onConfirmCapture = (e: KeyboardEvent): void => {
     if (this.done) return;
@@ -168,15 +183,23 @@ export class CoachMark {
     this.opts.root.appendChild(this.el);
     try {
       document.documentElement.dataset[MARK_FLAG] = '1';
+      document.documentElement.dataset[MARK_GAME_FLAG] = this.opts.game;
     } catch {
       /* no document element in an exotic host; the line still renders */
     }
     // A frame's grace so the opacity transition has a "from" to run out of.
     this.setTimer(() => this.el.classList.add('coach-mark--in'), 16);
-    // Before the watcher, so that on a host where the event is dispatched
-    // straight at `window` (a jsdom test) registration order gives the same
-    // answer the capture phase gives in a browser.
-    if (!this.opts.mark.holds) window.addEventListener('keydown', this.onConfirmCapture, true);
+    // **Both games now, not only the ones that never hold (FOC-01).** Since
+    // `CoachLayer.chooseCommand` opens the real menu in the same turn of the
+    // event loop as this line for FFX too, the FFX menu's own `RawInputWatcher`
+    // is listening on `window` for the very same press. Without this, the
+    // Enter that dismisses Auron's line would also fall through to whatever
+    // row the menu opens on — whatever `chooseTop(this.topIndex)` does for a
+    // menu the player has not looked at yet. Registered before `this.watcher`,
+    // so that on a host where the event is dispatched straight at `window` (a
+    // jsdom test) registration order gives the same answer the capture phase
+    // gives in a browser (see `onConfirmCapture`'s own comment).
+    window.addEventListener('keydown', this.onConfirmCapture, true);
     this.watcher.attach();
 
     if (!this.opts.mark.holds) {
@@ -210,6 +233,7 @@ export class CoachMark {
     this.el.remove();
     try {
       delete document.documentElement.dataset[MARK_FLAG];
+      delete document.documentElement.dataset[MARK_GAME_FLAG];
     } catch {
       /* see show() */
     }

@@ -178,6 +178,52 @@ describe('the phone runs at a 12px floor and nowhere lower', () => {
   });
 });
 
+describe('FOC-03: the pause tab tap target reaches 44px on the phone', () => {
+  /**
+   * `.pause__tab` measured 52x25px at 390x844 (`critic/reviews/5e92289…-
+   * focused.json`) — under the ~44px touch minimum. Keyboard and gamepad
+   * cycling already worked, so the fix only raises the phone breakpoint's
+   * padding; the type size, the wide layout and the underline's own `bottom`
+   * offset are untouched.
+   *
+   * A box's rendered height is padding plus its line box, and this file is
+   * arithmetic on text with no layout engine behind it (see the header), so
+   * the line-box half of that sum is a measured constant, the same way
+   * `LABEL_PX_AT_14` above is: on the running game at exactly 390x844, a plain
+   * tab's own line box (`--pu-fs-v`, 13px) is 17px tall and the active tab's
+   * (`--pu-fs-on`, 17px) is 22px, and both numbers held across two different
+   * padding trials while this fix was being sized. Only the padding this rule
+   * controls is asserted as a computed value; the two constants are the
+   * caption on the measurement, not something this file could derive itself.
+   */
+  const TAB_LINE_BOX_PX = 17;
+  const TAB_ON_LINE_BOX_PX = 22;
+  const TOUCH_MIN_PX = 44;
+
+  function verticalPadding(block: string, selector: string): number {
+    const body = new RegExp(`${selector.replace('.', '\\.')} \\{([^}]*)\\}`).exec(block)?.[1] ?? '';
+    const decl = /padding:\s*([^;]+);/.exec(body)?.[1]?.trim() ?? '';
+    const parts = decl.split(/\s+/).map((p) => Number.parseFloat(p));
+    if (parts.some((n) => Number.isNaN(n))) return Number.NaN;
+    // `padding: top [right [bottom [left]]]` — only top and bottom are ever
+    // used at this breakpoint (this sheet never sets a phone `.pause__tab`
+    // padding with four values).
+    const [top, right, bottom] = parts;
+    return parts.length >= 3 ? (top ?? 0) + (bottom ?? 0) : (top ?? 0) + (right ?? top ?? 0);
+  }
+
+  it('raises the phone padding enough that both tab sizes clear 44px', () => {
+    const vertical = verticalPadding(phoneBlock, '.pause__tab');
+    expect(Number.isFinite(vertical), '.pause__tab has a padding declaration on the phone').toBe(true);
+    expect(TAB_LINE_BOX_PX + vertical, 'a plain tab').toBeGreaterThanOrEqual(TOUCH_MIN_PX);
+    expect(TAB_ON_LINE_BOX_PX + vertical, 'the active tab').toBeGreaterThanOrEqual(TOUCH_MIN_PX);
+  });
+
+  it('leaves the desktop tab padding alone', () => {
+    expect(beforePhone).toMatch(/\.pause__tab \{[^}]*padding:\s*0 0 clamp\(14px, 1\.9vh, 22px\)/);
+  });
+});
+
 describe('grade B, the one Bailey picked', () => {
   it('grades the painting with a filter and a tint, never by editing a file', () => {
     // pause-ud.css grade B: saturate(0.58) contrast(1.05) brightness(0.66).

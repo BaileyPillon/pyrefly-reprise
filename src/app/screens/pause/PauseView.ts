@@ -123,11 +123,31 @@ export class PauseView {
 
     const tabsEl = this.q('tabs');
     if (tabsEl) tabsEl.innerHTML = tabsHtml(this.tabs, tabId);
+    this.scrollActiveTabIntoView(tabId);
 
     this.renderPlate();
     const rowId = this.renderBody({ ...at, tabId });
     this.renderObjective();
     return { tabId, focus: at.focus, rowId };
+  }
+
+  /**
+   * FOC-02 (`critic/reviews/5e92289…-focused.json`): at 390x844 the strip is
+   * `overflow-x: auto` (`.pause__swipe`) with a `scrollWidth` well past its
+   * `clientWidth`, and nothing ever moved `scrollLeft` — Guide, Options,
+   * Controls and Music were each *selected* while sitting outside the 350px
+   * window. `tabsHtml` rebuilds the strip's markup from scratch on every
+   * render, so the element this scrolls is always the one just inserted, never
+   * a stale reference from the previous tab.
+   */
+  private scrollActiveTabIntoView(tabId: string): void {
+    const el = this.q('tabs')?.querySelector<HTMLElement>(`[data-tab="${tabId}"]`);
+    if (!el || typeof el.scrollIntoView !== 'function') return;
+    el.scrollIntoView({
+      inline: 'center',
+      block: 'nearest',
+      behavior: this.deps.save.settings.reduceMotion ? 'auto' : 'smooth',
+    });
   }
 
   /**

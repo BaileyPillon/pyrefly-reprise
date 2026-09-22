@@ -183,16 +183,32 @@ class CoachedHud implements HudPort {
   // ----------------------------------------------------------- the teaching
 
   /**
-   * FFX holds here and FFX-2 does not, and that is the whole game-aware split.
+   * The menu opens in the same turn of the event loop as the line, **in both
+   * games** (FOC-01, critic/reviews/5e92289…-focused.json). It used to be the
+   * game-aware split: FFX awaited the line before opening the menu at all, on
+   * the theory that the engine is already parked waiting for a command so
+   * holding *that* freezes nothing. It does not freeze the engine, but it did
+   * freeze the presentation — the approved tile
+   * `docs/concepts/onboarding/c-aurons-briefing/c2-first-use-ffx.png` pictures
+   * Auron's line **beside** a visible command menu and a populated advisor
+   * card, and the build measured `display: none` / zero children instead, with
+   * the strategy guide's idle "Waiting for your turn." printed as if it were
+   * still the player's turn to wait for it. FFX-2 never had this problem: it
+   * already calls `show()` and throws the promise away — `CoachMark` resolves
+   * an X-2 line immediately by construction — then opens the menu in the same
+   * turn, so no gauge sees a gap. FFX now does the same thing structurally,
+   * and only `CoachMark`'s own `holds` flag decides whether the line itself
+   * waits for a confirm or fades on its own; see `CoachMark.show`.
    *
-   * The FFX branch awaits the line **before** opening the menu, which is the
-   * approved C2 behaviour: the engine is already parked waiting for a command,
-   * so one confirm press costs the player nothing and freezes nothing. The
-   * FFX-2 branch calls `show()` and throws the promise away — `CoachMark`
-   * resolves an X-2 line immediately by construction — then opens the menu in
-   * the same turn of the event loop, so no gauge sees a gap.
+   * `raise()` runs **before** `inner.chooseCommand()`, not after: both attach
+   * a `keydown` listener to `window`, and `CoachMark.onConfirmCapture` swallows
+   * the confirm key only if it is already registered when the real menu's own
+   * (bubble-phase) watcher would otherwise see the same press — the FFX
+   * equivalent of PR-0051 (`docs/handoff/onboarding-c.md`). Registration order
+   * is also what keeps a `window.dispatchEvent` test (no real capture-vs-bubble
+   * traversal when the target *is* `window`) agreeing with a browser.
    */
-  async chooseCommand(
+  chooseCommand(
     actorId: CombatantId,
     commands: AvailableCommand[],
     previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot,
@@ -200,8 +216,7 @@ class CoachedHud implements HudPort {
     const mark = this.due(markForMenu(this.game, commands, (id) => !shouldShow(id)));
     if (mark) {
       markSeen(mark.id);
-      const shown = this.raise(mark);
-      if (mark.holds) await shown;
+      void this.raise(mark);
     }
     return this.inner.chooseCommand(actorId, commands, previewRank);
   }

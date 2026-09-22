@@ -1,22 +1,16 @@
 // @vitest-environment jsdom
 /**
- * **The one rule this feature can break: an FFX-2 gauge that stops to be
- * taught.**
+ * **The rule this feature can break in either direction.**
  *
- * FFX (chapters 1-3) is turn-based, so a line may hold the decision and hurry
- * nothing — the engine is already parked waiting for a command. FFX-2 (4-5) is
- * not, and `research/ffx-vs-ffx2-presentation.md` §4.2 / FC-4 describes the
- * gauge as a four-phase pipeline that is running the whole time; §4.3 / FC-5
- * makes its purple charge segment canon's own cost preview. Freezing that to
- * teach is the one thing X-2 never does.
- *
- * So the FFX-2 case is asserted twice, and neither assertion can pass by
- * accident:
+ * FFX-2 (chapters 4-5): a gauge that stops to be taught.
+ * `research/ffx-vs-ffx2-presentation.md` §4.2 / FC-4 describes the gauge as a
+ * four-phase pipeline that is running the whole time; §4.3 / FC-5 makes its
+ * purple charge segment canon's own cost preview. Freezing that to teach is
+ * the one thing X-2 never does. So the FFX-2 case is asserted twice, and
+ * neither assertion can pass by accident:
  *
  * 1. The inner HUD is asked for the menu **before a single `await`** — the
- *    line and the menu go up in the same turn of the event loop. One `await`
- *    in front of it, which is exactly what the FFX branch does, makes that
- *    zero.
+ *    line and the menu go up in the same turn of the event loop.
  * 2. A driver shaped like the presenter's own loop ticks a **real
  *    `FFX2Engine`** once per turn while the HUD's promise is outstanding, and
  *    counts the turns. A held line resolves only when its 5.2 s fade timer
@@ -26,10 +20,24 @@
  * tick the *test itself* performed, and asserted they had grown. They always
  * had. That proved nothing about the layer, and an adversarial pass said so.
  *
- * The FFX case is asserted the other way round: the menu must **not** open
- * until a real `KeyboardEvent` arrives.
+ * FFX (chapters 1-3): a menu, an advisor card and a guide that stay hidden
+ * from the player they are for. FOC-01
+ * (`critic/reviews/5e92289…-focused.json`) found the opposite defect from the
+ * one above: the FFX branch used to `await` the line before calling
+ * `inner.chooseCommand` at all, so the approved tile
+ * `docs/concepts/onboarding/c-aurons-briefing/c2-first-use-ffx.png` — Auron's
+ * line **beside** a visible menu and a populated advisor card — rendered as
+ * the line alone over an empty board, with the strategy guide's idle
+ * "Waiting for your turn." printed on the player's own turn. The FFX case is
+ * now asserted the same way the FFX-2 case above is: the menu **must** open
+ * in the same turn of the event loop, and the confirm that dismisses the line
+ * must not double as the menu's own first input (the FFX equivalent of
+ * PR-0051).
  */
 
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { beforeEach, describe, expect, it } from 'vitest';
 import * as ffx2data from '../../src/data/ffx2/index.ts';
 import {
@@ -152,24 +160,64 @@ describe('the coach layer', () => {
     setCoachingEnabled(true);
   });
 
-  it('FFX holds the command menu until a real confirm press, then opens it once', async () => {
+  it('FOC-01: FFX shows the line beside a menu opened in the same turn, and Enter only dismisses the line', async () => {
     const spy = new SpyHud();
     const hud = withCoach('ffx', spy, { reduceMotion: true });
     hud.mount(root);
 
     const pending = hud.chooseCommand('tidus' as CombatantId, rows(['attack']), preview);
-    await Promise.resolve();
+
+    // Same shape as the FFX-2 assertion below: the real HUD is asked for the
+    // menu before anything is awaited, so the approved c2-first-use-ffx
+    // frame's menu, advisor card and guide are not gated behind the line any
+    // more (critic/reviews/5e92289…-focused.json FOC-01). A single `await
+    // shown` in front of it — what this branch used to do — makes this zero.
+    expect(spy.menuOpened, 'the FFX menu is asked for before anything is awaited').toBe(1);
 
     const line = markEl(root);
-    expect(line, 'the first FFX menu carries a line').not.toBeNull();
+    expect(line, 'the first FFX menu carries a line beside the open menu').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx-turn-order');
     expect(line?.textContent).toContain('Auron');
-    expect(spy.menuOpened, 'the menu must not open under the line').toBe(0);
+
+    await pending;
+    expect(markEl(root), 'the line still holds: it comes down on its own confirm, not on the answer').not.toBeNull();
 
     press('Enter');
-    await pending;
-    expect(spy.menuOpened).toBe(1);
     expect(markEl(root), 'the line comes down on confirm').toBeNull();
+  });
+
+  /**
+   * The FFX equivalent of PR-0051 (`docs/handoff/onboarding-c.md`): once the
+   * menu opens in the same turn as the line, a held line has the exact same
+   * "one Enter does two things" risk FFX-2's non-holding line had.
+   */
+  it('FOC-01: FFX — the confirm that dismisses the line reaches nothing else, and no other key is touched', () => {
+    const heard: string[] = [];
+    const menu = (e: KeyboardEvent): void => void heard.push(e.code);
+    window.addEventListener('keydown', menu);
+    try {
+      const spy = new SpyHud();
+      const hud = withCoach('ffx', spy, { reduceMotion: true });
+      hud.mount(root);
+      void hud.chooseCommand('tidus' as CombatantId, rows(['attack']), preview);
+      expect(markEl(root), 'the line is up over an open menu').not.toBeNull();
+
+      // Everything that is not the dismissing press still reaches the menu:
+      // the line blocks no input and holds no fight.
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown', bubbles: true }));
+      expect(heard, 'the cursor still moves under the line').toEqual(['ArrowDown']);
+      expect(markEl(root), 'and a cursor key does not dismiss it').not.toBeNull();
+
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(markEl(root), 'the confirm takes the line down').toBeNull();
+      expect(heard, 'and the menu behind it never hears that press').toEqual(['ArrowDown']);
+
+      // The very next confirm is the player's again, or the menu is dead.
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(heard, 'the press after the line is live input').toEqual(['ArrowDown', 'Enter']);
+    } finally {
+      window.removeEventListener('keydown', menu);
+    }
   });
 
   it('FFX never shows the same line twice, and never shows Rikku', async () => {
@@ -368,5 +416,23 @@ describe('the coach layer', () => {
     hud.unmount();
     expect(markEl(root)).toBeNull();
     expect(root.querySelector('[data-role="coach-layer"]')).toBeNull();
+  });
+});
+
+/**
+ * `coach.css`, read as text: jsdom under vitest does not apply imported
+ * stylesheets, so `.mad__card`'s opacity cannot be observed through
+ * `getComputedStyle` here — that half of FOC-01 is verified live in the
+ * browser instead (see the handoff). This pins the one thing a later edit
+ * could quietly regress: the rule staying scoped to FFX-2, rather than back
+ * to every game the way it shipped before FOC-01.
+ */
+describe('FOC-01: the advisor card only stands down for FFX-2', () => {
+  const HERE = dirname(fileURLToPath(import.meta.url));
+  const SHEET = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'coach', 'coach.css'), 'utf8');
+
+  it('hides .mad__card while data-coach-mark-game is ffx2, not for every mark', () => {
+    expect(SHEET).toMatch(/\[data-coach-mark-game=['"]ffx2['"]\]\s*\.mad__card\s*\{/);
+    expect(SHEET).not.toMatch(/\[data-coach-mark=['"]1['"]\]\s*\.mad__card/);
   });
 });

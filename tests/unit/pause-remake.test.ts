@@ -350,6 +350,64 @@ describe('the tab strip', () => {
     expect(h.root.querySelector('.pause__swipe')).not.toBeNull();
   });
 
+  /**
+   * FOC-02 (`critic/reviews/5e92289…-focused.json`): at 390x844 the strip's
+   * `scrollWidth` (674) outran its `clientWidth` (350) and `scrollLeft` never
+   * moved, so four of the eight tabs were selected off-screen. jsdom has no
+   * layout, so `scrollWidth`/`clientWidth` cannot be measured here — this
+   * stubs `Element.prototype.scrollIntoView` (jsdom does not implement it) and
+   * asserts it is called, with the newly *selected* tab, on every selection
+   * change. The real 390x844 measurement is the browser pass in the handoff.
+   */
+  it('FOC-02: scrolls the newly selected tab into view on every selection change', () => {
+    const calls: Array<{ tab: string | undefined; opts: ScrollIntoViewOptions | boolean | undefined }> = [];
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (
+      this: HTMLElement,
+      opts?: ScrollIntoViewOptions | boolean,
+    ): void {
+      calls.push({ tab: this.dataset['tab'], opts });
+    };
+    try {
+      const h = mount('seymour-flux');
+      const ids = tabIds(h);
+      // The opening render scrolls to the first tab too (harmless — it is
+      // already at the left edge), so count only what a real selection does.
+      calls.length = 0;
+
+      keydown('KeyE');
+      expect(calls, 'one scroll per selection change').toHaveLength(1);
+      expect(calls[0]?.tab, 'the tab that was just selected, not the one it replaced').toBe(ids[1]);
+      expect(calls[0]?.opts).toMatchObject({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+
+      keydown('KeyQ');
+      expect(calls).toHaveLength(2);
+      expect(calls[1]?.tab).toBe(ids[0]);
+
+      h.screen.handleInput(snapshot([], ['pause:tab:music']));
+      expect(calls).toHaveLength(3);
+      expect(calls[2]?.tab).toBe('music');
+    } finally {
+      Element.prototype.scrollIntoView = original;
+    }
+  });
+
+  it('FOC-02: the scroll is not animated when the player has reduced motion on', () => {
+    const calls: Array<ScrollIntoViewOptions | boolean | undefined> = [];
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (this: HTMLElement, opts?: ScrollIntoViewOptions | boolean): void {
+      calls.push(opts);
+    };
+    try {
+      mount('seymour-flux', { reduceMotion: true });
+      calls.length = 0;
+      keydown('KeyE');
+      expect(calls[0]).toMatchObject({ behavior: 'auto' });
+    } finally {
+      Element.prototype.scrollIntoView = original;
+    }
+  });
+
   it('the raw key table is the whole collision list', () => {
     expect(pauseKeyIntent('KeyQ')).toEqual({ intent: 'tab-prev', suppress: 'triangle' });
     expect(pauseKeyIntent('KeyE')).toEqual({ intent: 'tab-next', suppress: 'start' });

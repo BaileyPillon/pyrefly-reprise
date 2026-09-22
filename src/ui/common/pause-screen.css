@@ -806,7 +806,14 @@
     gap: 20px;
   }
 
-  .pause__tab { letter-spacing: 0.24em; padding-bottom: 8px; }
+  /*
+   * FOC-03 (`critic/reviews/5e92289…-focused.json`): `.pause__tab` measured
+   * 52x25px at 390x844 — a touch player had a 25px-tall target, under the
+   * ~44px minimum. Keyboard and gamepad cycling (Q/E, L1/R1) already worked,
+   * so only the padding changes; the type size, the underline and the wide
+   * layout above 620px are untouched.
+   */
+  .pause__tab { letter-spacing: 0.24em; padding: 9px 0 18px; }
   .pause__tab--on { letter-spacing: 0.16em; }
 
   .pause__body,
