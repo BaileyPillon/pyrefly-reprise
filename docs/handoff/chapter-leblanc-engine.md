@@ -272,3 +272,67 @@ the same way `docs/handoff/ffx2-active-atb.md` §7b lists its four files.
 - One full `npm test` — **200 files, 4 967 passed, 2 skipped**.
 - `node tools/orphans.mjs` — the two expected integrator-only names.
 - Every behavioural claim above was **run**, not grepped [hard rule 3].
+
+## 10. Verifier findings, closed 2026-09-21/22 (data and tests only, FFX-2 only)
+
+Four open findings from this track's verifier, all fixed inside the files this
+track owns (`src/data/ffx2/enemies/leblanc-syndicate-abilities.ts`,
+`leblanc-syndicate-acts.ts`, `tests/unit/chapters/leblanc-engine.test.ts`); no
+boss number was touched.
+
+1. **Supercollider's hit check versus Darkness.** §4.2 types Supercollider
+   "Fractional + Delay," not Physical, so `damageType: 'other'` (no Defense
+   term) stands and it is genuinely not a physical attack. But
+   `formula: 'percent-current'` is not `'none'` and the row carried no
+   `canMiss: false`, so `hitPercent()` already rolled a hit check for it —
+   it just never carried `affected-by-darkness`, so the party's Darkness
+   Dance opener silently did nothing against it. Fixed by adding
+   `affected-by-darkness` to the ability's flags, per §5.1's reading that the
+   Darkness-quarters-Accuracy term covers the trio's hit-checked actions in
+   general. New coverage: `tests/unit/chapters/leblanc-engine.test.ts`'s
+   "Supercollider rolls a hit check and Darkness quarters it" describe block,
+   proven on the real engine over 200 seeds. The A1/A2/A3 win-rate numbers in
+   §1 did not move (re-run, byte-identical: 40/40, 4/40, 0/40; Act III
+   mashing 6/12).
+2. **Russian Roulette's "canon" label corrected.** The code comment claimed
+   "canon is that the roulette always lands *something*"; §4.3 verifies the
+   six outcomes but says nothing about whether the ability can ever land
+   none of them, so "always lands something" is this project's AUTHORED
+   reading of "plus one of: ...", not a sourced fact. Label corrected in
+   place; the number (`chance: 254`, guaranteed application) is unchanged.
+3. **Three tautological tests, rewritten against the sourced/real value:**
+   - "a sequenced stage does not recurse" built two separate `ctxFor`
+     contexts and asserted on the `events` array from the one that was never
+     passed to `resolveAbility` — it could only ever read 0, by
+     construction. Now one context, asserting the real cap: 2 damage events
+     (depth 1, depth 2, then the guard).
+   - "every enemy resolves an AI script that is not the idle fallback"
+     asserted `typeof a === 'string'` over an array built with
+     `e.abilityId ?? ''`, which TypeScript guarantees is a `string`
+     regardless of behaviour. Now asserts each recorded action is a
+     non-empty id present in the shipped ability registry.
+   - "the `25 + uses` failsafe forces Not-So-Mighty Guard" recomputed
+     `turn % 8 === 3` inline — the exact predicate `leblancScript` itself
+     evaluates — and compared the AI's picks against a second copy of the
+     same formula, so a wrong period or phase in the script would have moved
+     both sides together. Now asserts the concrete turn-30-to-40 sequence by
+     name (only turn 35 fires No Love Lost).
+4. **The goon stats' source notes.** `leblanc-syndicate-acts.ts`'s Dr. Goon
+   and Fem-Goon carried one paragraph ("scaled to nothing") covering every
+   field, published and authored alike, with no per-field citation. Now the
+   file header and each stat line say which fields §4.6's table publishes
+   (HP, MP, EXP, gil, steal, drop, abilities — no Level, no
+   Str/Def/Mag/MDef/Agi/Luck/Eva column for either goon) and which are
+   AUTHORED, including why Dr. Goon's `acc: 0` is a routing decision around
+   his published Accuracy 3 (question 6, above) while the Fem-Goon's `acc: 0`
+   is the ordinary blank-field convention because her Accuracy is not
+   published at all.
+
+Re-verified after all four fixes: `npx tsc --noEmit` clean;
+`npx vitest run tests/unit/chapters/leblanc-engine.test.ts` — **26 passed**
+(24 + 2 new Supercollider cases); `npx vitest run
+tests/unit/strategy-ffx2-leblanc.test.ts` — **8 passed**, numbers unchanged;
+`npx vitest run tests/unit/strategy-ffx2-bahamut.test.ts
+tests/unit/ffx2-active-atb.test.ts tests/unit/ffx-no-active-clock.test.ts` —
+green; one full `npm test` — **225 files, 5 308 passed, 2 skipped**;
+`node tools/orphans.mjs` — same expected integrator-only names, nothing new.

@@ -26,6 +26,7 @@ import { aiHarness, aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import type { ResolveContext } from '../../../src/battle/ffx2/resolve.ts';
 import { applyStatus } from '../../../src/battle/ffx2/statuses.ts';
+import { hitPercent } from '../../../src/battle/ffx2/formulas.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../../src/data/ffx2/builds/chateau.ts';
 import {
@@ -179,6 +180,51 @@ describe('A4 — Huggles reproduces the published band', () => {
 
 // ---------------------------------------------------------------------------
 
+describe('Supercollider rolls a hit check and Darkness quarters it [verifier finding, §4.2, §5.1]', () => {
+  it('is not Physical [§4.2 types it "Fractional + Delay"] but still rolls, and Darkness on Ormi quarters the roll', () => {
+    const ormi = aiUnit('ormi', 'enemy', 1344);
+    ormi.level = 19;
+    // Matches the shipped record: acc: 0 routes to ENEMY_BASE_ACCURACY [G1].
+    const girl = aiUnit('yuna', 'party', 9999);
+    girl.stats = { ...girl.stats, eva: 4, luck: 15 };
+    const supercollider = ability('x2-ormi-supercollider');
+
+    // It is Fractional, not Physical: the Defense term is skipped either way
+    // (damageType 'other'), but that is a damage-formula fact, not a hit-check
+    // one — `formula: 'percent-current'` is not `'none'` and the row carries
+    // no `canMiss: false`, so it still rolls [`formulas.ts::hitPercent`].
+    const bareHit = hitPercent(ormi, girl, supercollider);
+    expect(bareHit).toBeGreaterThan(0);
+    expect(bareHit).toBeLessThan(100);
+
+    // Darkness on the user (Ormi) — the party's canonical Darkness Dance
+    // opener — must quarter it, the same as it does his Shield Bash, because
+    // §5.1's one settled fact is stated for the trio's hit-checked actions in
+    // general, not only their normal attacks.
+    applyStatus(ormi, { status: 'darkness', chance: 255, duration: 255 });
+    const darkHit = hitPercent(ormi, girl, supercollider);
+    expect(darkHit).toBeLessThan(bareHit);
+  });
+
+  it('the real engine: over 200 seeds under Darkness, Supercollider now misses some of the time', () => {
+    const ormi = aiUnit('ormi', 'enemy', 1344);
+    ormi.level = 19;
+    applyStatus(ormi, { status: 'darkness', chance: 255, duration: 255 });
+    let misses = 0;
+    for (let seed = 1; seed <= 200; seed++) {
+      const girl = aiUnit('yuna', 'party', 9999);
+      girl.stats = { ...girl.stats, eva: 4, luck: 15 };
+      const { ctx, events } = ctxFor([ormi, girl], seed);
+      resolveAbility(ctx, ormi, ability('x2-ormi-supercollider'), [girl.id]);
+      if (!events.some((e) => e.type === 'damage')) misses += 1;
+    }
+    // Before this fix Supercollider ignored Darkness entirely (0/200 misses).
+    expect(misses).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+
 describe('A5 — No Love Lost', () => {
   function leblancTurns(count: number, withHenchmen: boolean): Array<string | null> {
     const self = aiUnit('leblanc', 'enemy', 1380);
@@ -211,14 +257,34 @@ describe('A5 — No Love Lost', () => {
     // Four uses by turn 27, so `turn > 25 + uses` opens at turn 30. The two
     // overrides are listed in the source in this order, so a later `[8x - 5]`
     // turn (35, 43 …) still takes No Love Lost rather than the failsafe.
+    //
+    // **Verifier finding, fixed here.** The loop below used to recompute
+    // `turn % 8 === 3` inline and compare the picks against that — the exact
+    // predicate `leblancScript` itself evaluates (`NO_LOVE_LOST_PERIOD = 8`,
+    // `NO_LOVE_LOST_PHASE = 3`), so it was asserting the script's own
+    // decision against a second copy of the same formula rather than against
+    // the source. A wrong period or phase in the script would have moved
+    // both sides together and the test would still pass. Turns 30-40 are
+    // now spelled out as the concrete sequence [§4.5, §5.3]: only turn 35
+    // (the next `[8x - 5]` turn after the failsafe opens) fires No Love
+    // Lost; every other turn in the window is the failsafe's Not-So-Mighty
+    // Guard.
     const picks = leblancTurns(40, true);
     expect(picks[29]).toBe('x2-leblanc-not-so-mighty-guard');
-    for (let turn = 30; turn <= 40; turn++) {
-      expect([picks[turn - 1], turn]).toEqual([
-        turn % 8 === 3 ? 'x2-nll-1' : 'x2-leblanc-not-so-mighty-guard',
-        turn,
-      ]);
-    }
+    const expected = [
+      'x2-leblanc-not-so-mighty-guard', // 30
+      'x2-leblanc-not-so-mighty-guard', // 31
+      'x2-leblanc-not-so-mighty-guard', // 32
+      'x2-leblanc-not-so-mighty-guard', // 33
+      'x2-leblanc-not-so-mighty-guard', // 34
+      'x2-nll-1', // 35 — the next [8x - 5] turn
+      'x2-leblanc-not-so-mighty-guard', // 36
+      'x2-leblanc-not-so-mighty-guard', // 37
+      'x2-leblanc-not-so-mighty-guard', // 38
+      'x2-leblanc-not-so-mighty-guard', // 39
+      'x2-leblanc-not-so-mighty-guard', // 40
+    ];
+    expect(picks.slice(29, 40)).toEqual(expected);
   });
 
   it('E5 — one action, three stages, resolved from one turn [preflight E5]', () => {
@@ -238,13 +304,23 @@ describe('A5 — No Love Lost', () => {
   });
 
   it('a sequenced stage does not recurse [the guard in resolve.ts]', () => {
+    // **Verifier finding, fixed here.** The previous version of this test
+    // built two separate contexts (`ctxFor` called twice) and asserted on
+    // the `events` array from the FIRST one, which was never passed to
+    // `resolveAbility` at all — `events.length` could only ever be 0, by
+    // construction, regardless of whether the recursion guard worked. It
+    // asserted a value against itself, not the guard. One context now: the
+    // ability that names itself in `extra.sequence` resolves at depth 1 and
+    // recurses once to depth 2 before the guard in `resolve.ts` stops it, so
+    // exactly two damage events fire — the number the guard actually caps
+    // it at, not "the array I forgot to wire up stayed at its initial 0".
     const leblanc = aiUnit('leblanc', 'enemy', 1380);
     const girl = aiUnit('yuna', 'party', 9999);
-    const { events } = ctxFor([leblanc, girl], 3);
     const looping: AbilityDef = { ...ability('x2-nll-2'), extra: { flat: 106, sequence: ['x2-nll-2'] } };
-    const { ctx } = ctxFor([leblanc, girl], 3);
+    const { ctx, events } = ctxFor([leblanc, girl], 3);
     resolveAbility(ctx, leblanc, looping, [girl.id]);
-    expect(events.length).toBe(0); // the unused context stays empty
+    const hits = events.filter((e) => e.type === 'damage');
+    expect(hits.length).toBe(2); // depth 1, depth 2, then the guard stops it
     expect(girl.hp).toBeGreaterThan(9999 - 300); // two resolutions at most, not infinite
   });
 });
@@ -376,7 +452,17 @@ describe('A11 — act chain integrity', () => {
       expect(actions.length, id).toBeGreaterThan(0);
       // `idleScript` returns null and emits nothing, so a half-wired formation
       // would show up here as silence.
-      expect(actions.every((a) => typeof a === 'string'), id).toBe(true);
+      //
+      // **Verifier finding, fixed here.** `typeof a === 'string'` was
+      // asserted against `actions`, but every element was pushed as
+      // `e.abilityId ?? ''` — TypeScript guarantees that expression is a
+      // `string` no matter what `abilityId` holds, so the assertion could
+      // never fail and tested nothing about the AI scripts. The real claim
+      // this `it` makes ("not the idle fallback") needs every recorded
+      // action to be a non-empty id that resolves in the shipped ability
+      // table — `idleScript`'s silence would otherwise show up as an empty
+      // string slipping past a merely-type-level check.
+      expect(actions.every((a) => a !== '' && REGISTRY.get(a) !== undefined), id).toBe(true);
     }
   });
 

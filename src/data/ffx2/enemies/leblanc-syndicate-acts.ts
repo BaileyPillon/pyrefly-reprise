@@ -81,12 +81,29 @@ const logosRoom = earlierRecord(logosAct3, {
 });
 
 /**
- * Dr. Goon and Fem-Goon — Act I only. §4.6 [single source].
+ * Dr. Goon and Fem-Goon — Act I only. §4.6's table [single source].
  *
- * Only HP / MP / EXP / gil / abilities are published; the rest of the stat
- * block is **AUTHORED** the same way the earlier Syndicate records are, from
- * the Act I Ormi they stand beside, scaled to nothing. Both are immune only to
- * **Curse** and both can be bribed.
+ * **Verifier finding, fixed here: every stat field now carries its own
+ * source note** — "scaled to nothing" named no section and covered fields
+ * §4.6 does and does not publish alike. §4.6's table publishes, per enemy,
+ * only **HP, MP, EXP, gil, steal, drop and ability list** [§4.6, single
+ * source] — there is no Level column and no Str/Def/Mag/MDef/Agi/Luck/Eva
+ * column for either goon. Both are immune only to **Curse** and both can be
+ * bribed [§4.6].
+ *
+ * Fields below not in that table are **AUTHORED**, field by field:
+ * - `level: 17` — two less than Act I Ormi's published 19 [§2], read as
+ *   "rank and file standing beside their captain," not a source.
+ * - `str / def / mag / mdef / agi / luck / eva` — no comparable record to
+ *   borrow from (unlike Ormi/Logos's earlier acts, which reuse their own
+ *   later Act III numbers; §2's earlier-record technique does not apply to
+ *   an enemy with only one appearance). Authored low relative to the Act III
+ *   trio, matching §4.6's own read that the goons "exist to make Act I's
+ *   lesson legible, not to be a threat" (`leblanc-syndicate.ts` ai comment).
+ *   Unsourced; a question for the owner alongside N1 in the handoff.
+ * - `acc: 0` — see the Accuracy note below; AUTHORED routing, not a
+ *   published number, for the Dr. Goon; genuinely unpublished for the
+ *   Fem-Goon.
  *
  * **Accuracy.** Dr. Goon's `accuracy` *is* published, at **3** [§5.1] — and
  * that is precisely the value G1 says the hit model cannot digest: a literal 3
@@ -94,7 +111,10 @@ const logosRoom = earlierRecord(logosAct3, {
  * 0 % hit rate, so the Act I goon would never once connect. The record
  * therefore ships `acc: 0` to take the documented fallback, which is an
  * **AUTHORED routing decision, not the published number**, and it is a question
- * for the owner in the handoff.
+ * for the owner in the handoff. The Fem-Goon's Accuracy is not published at
+ * all [§4.6 — absent from the table], so her `acc: 0` takes the same
+ * blank-field convention the Syndicate's own six records use [§5.1, G1],
+ * not the Dr. Goon's routing decision.
  *
  * The Dr. Goon's **rare steal is a Grenade** — base 300 to every enemy. Steal
  * two in Act I and Act III opens with roughly a quarter of Leblanc's HP per
@@ -105,10 +125,13 @@ const drGoon: EnemyDef = {
   name: 'Dr. Goon',
   spriteKey: 'ffx2-dr-goon',
   slot: 1,
+  // hp/mp [§4.6, single source]; str/def/mag/mdef/agi/luck/eva AUTHORED, no
+  // comparable record — see the file header; acc: 0 is an AUTHORED routing
+  // decision around the published Accuracy 3, not the published number.
   stats: statsOf({ hp: 232, mp: 41, str: 20, def: 30, mag: 10, mdef: 10, agi: 40, luck: 3, eva: 0, acc: 0 }),
   hp: 232,
   mp: 41,
-  level: 17,
+  level: 17, // AUTHORED — see the file header; §4.6 publishes no Level column.
   affinities: {},
   immunities: { curse: 255 },
   immunityFlags: [],
@@ -139,10 +162,14 @@ const femGoon: EnemyDef = {
   name: 'Fem-Goon',
   spriteKey: 'ffx2-fem-goon',
   slot: 2,
+  // hp/mp [§4.6, single source]; str/def/mag/mdef/agi/luck/eva AUTHORED, no
+  // comparable record — see the file header; acc: 0 is genuinely unpublished
+  // for the Fem-Goon (not the Dr. Goon's routing decision) — the same
+  // blank-field convention as the Syndicate's own six records [§5.1, G1].
   stats: statsOf({ hp: 167, mp: 172, str: 12, def: 20, mag: 30, mdef: 20, agi: 45, luck: 3, eva: 0, acc: 0 }),
   hp: 167,
   mp: 172,
-  level: 17,
+  level: 17, // AUTHORED — see the file header; §4.6 publishes no Level column.
   affinities: {},
   immunities: { curse: 255 },
   immunityFlags: [],

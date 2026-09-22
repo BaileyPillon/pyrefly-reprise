@@ -149,6 +149,26 @@ export const ormiAbilities: AbilityDef[] = [
     // The `weak-delay` flag is carried for provenance; gap G4 — the magnitude
     // is unpublished, and **the FFX-2 engine has no reader for the flag today**
     // (only `src/battle/ffx/abilities.ts` reads it). Recorded, not invented.
+    //
+    // **Verifier finding, fixed here: the hit check versus Darkness.** §4.2's
+    // own table types Supercollider **"Fractional + Delay,"** not Physical —
+    // so `damageType: 'other'` (skipping the Defense term) is right and this
+    // ability is *not* a physical attack. But `formula: 'percent-current'` is
+    // not `'none'` and the row carries no `canMiss: false`, so
+    // `hitPercent()` already rolls a hit check for it [`formulas.ts`]. §5.1
+    // is explicit that the source's one settled fact — Darkness quartering
+    // Accuracy — is meant to cover **the whole trio's hit-checked actions**,
+    // not only their normal attacks ("Darkness Dance... covers all three at
+    // once," §5.1's Ormi/Logos/Leblanc hit-rate table treats every listed
+    // action the same way). Without `affected-by-darkness`,
+    // `hitPercent()`'s `damageType === 'physical'` branch never matches
+    // `'other'`, so Ormi's Supercollider silently ignored the party's
+    // Darkness Dance — the chapter's own canonical opener does nothing
+    // against Ormi's positional hit. `affected-by-darkness` closes that
+    // without turning it into a physical (no Defense term is added; only the
+    // hit check reads the flag). Proven on the real engine:
+    // `tests/unit/chapters/leblanc-engine.test.ts`'s "Supercollider rolls a
+    // hit check and Darkness quarters it" case.
     id: 'x2-ormi-supercollider',
     name: 'Supercollider',
     game: 'ffx2',
@@ -162,7 +182,7 @@ export const ormiAbilities: AbilityDef[] = [
     hits: 1,
     statusEffects: [],
     removesStatuses: [],
-    flags: ['weak-delay'],
+    flags: ['weak-delay', 'affected-by-darkness'],
     chargeTicks: CHARGE_VALUE_INSTANT, // §5.2 [estimate — G6]
     messageTemplate: 'Ormi uses Supercollider on {target}',
   },
@@ -262,8 +282,14 @@ export const logosAbilities: AbilityDef[] = [
     // sets them"). Read by `src/battle/ffx2/resolve.ts::applyRiders`.
     //
     // Each application carries `chance: 254`, which `applyRiders` reads as a
-    // guaranteed application: canon is that the roulette always lands
-    // *something*, and the roll being which of the six it is.
+    // guaranteed application. **Verifier finding, corrected label:** the
+    // previous comment here called this "canon" — §4.3 states the six
+    // outcomes [verified: 2 sources] but says nothing about whether the
+    // roulette can ever land *none* of them, so "always lands something" is
+    // this project's AUTHORED reading of "plus one of: ...", not a sourced
+    // fact. The number (`chance: 254`, i.e. guaranteed) is unchanged; only
+    // the label is corrected, the same way G10 relabelled
+    // `HUGGLES_IS_ACCURACY_CHECKED` above.
     //
     // **No petrify-shatter permanence in this chapter** (owner, 2026-09-21):
     // `'shattering'` has no reader anywhere under `src/battle/ffx2/` and this
