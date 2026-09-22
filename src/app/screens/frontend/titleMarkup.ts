@@ -110,7 +110,19 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
     ? `<span data-action="title:briefing" role="button" tabindex="0"><b>B</b> Briefing</span>`
     : '';
 
+  // FE-002 (round 07, focused review of 8f48237): on touch only the chip
+  // advanced, the rest of the plate was inert, and the chip read "Press
+  // Enter" whatever the input. `Input.onClick` resolves any click through
+  // `closest('[data-action]')`, so putting the attribute on the whole plate
+  // — rather than only the chip — makes a tap anywhere reach chapter-select,
+  // exactly like the chip already does; the chip keeps its own attribute so
+  // it still works (and still reads first) once it is the closest match.
+  // The two labels are a pure-CSS swap on `pointer: coarse`
+  // (`.fe-title__chip-label--key` / `--tap` in frontend.css), so a keyboard
+  // or mouse player is never told to tap and a touch player is never told
+  // to press a key that is not there.
   return `
+    <div class="fe-title__tap" data-action="confirm">
     ${plane('far')}
     <div class="fe-title__bloom"></div>
     ${plane('near')}
@@ -124,14 +136,17 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
       <div class="fe-title__name">Pyrefly</div>
       <div class="fe-title__name">Reprise</div>
       <div class="fe-title__rule"></div>
-      <span class="fe-title__chip" data-action="confirm" role="button" tabindex="0"><i></i>Press Enter</span>
+      <span class="fe-title__chip" data-action="confirm" role="button" tabindex="0"><i></i
+        ><span class="fe-title__chip-label fe-title__chip-label--key">Press Enter</span
+        ><span class="fe-title__chip-label fe-title__chip-label--tap">Tap to begin</span></span>
     </div>
 
     <div class="fe-title__verr"></div>
     <div class="fe-title__strap">Final Fantasy X and X-2</div>
 
     <div class="fe-hint">
-      <span><b>Arrows / WASD</b> move</span><span><b>Enter</b> confirm</span><span><b>Esc</b> cancel</span>${briefing}
+      <span class="fe-hint__key"><b>Arrows / WASD</b> move</span><span class="fe-hint__key"><b>Enter</b> confirm</span><span class="fe-hint__key"><b>Esc</b> cancel</span><span class="fe-hint__tap"><b>Tap</b> begin</span>${briefing}
+    </div>
     </div>
   `;
 }

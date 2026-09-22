@@ -275,3 +275,27 @@ Does not apply to this idea:
    eight chapters are approved. Keep it, or restore a count?
 3. The three coming chapters show as locked cards reading COMING with their names. Should
    an unbuilt chapter's name be visible at all, or should it read "Chapter to come"?
+
+## Front-end type floor: FE-001 to FE-005 (round 07's focused review, build 8f48237)
+
+**Game-aware case: both** — the same shared type/layout tokens, on the same shared
+title and chapter select. Fixed here, in scope (`frontend.css`, `titleMarkup.ts`,
+`chapterGrid.ts` for type/layout tokens only — no card data or lock logic touched, per
+this batch's brief):
+
+| | Target (what round 07 asked for) | Build (what shipped in this batch) |
+|---|---|---|
+| **FE-001** major — phone type floor | Nothing on the title or chapter select renders under 14 effective CSS px on a desktop window or 12 px on the phone (`critic/CHECKS.md` CHK-003; the same two numbers `pause-screen.css` floors at). | Every `.fe-*` `font-size` is now `max(var(--fe-fs-floor), calc(N * var(--fe-k)))`; `--fe-fs-floor` is `14px` on `.fe` and redeclared `12px` inside the phone media query. Measured live (own vite server, port 5713, `PYREFLY_BROWSER` not needed for a static-CSS check): title min was 9.54 px at 390x844, now 12 px, 0 nodes under floor; chapter select min was 9.54 px (43 nodes under), now 12 px, 0 under. Desktop unchanged at 14.44 px (1600x900) / 16.24 px (2000x1012) — no regression. Pinned by `tests/unit/frontend-css-type-floor.test.ts`, which evaluates every `.fe-*` token the way `pause-remake-css.test.ts` evaluates `pause-screen.css`, at 390x844, 1280x720, 1600x900, 2000x1012 and 2560x1080. |
+| **FE-002** polish — touch tap target and wording | A tap anywhere on the title reaches chapter-select, and the chip names the input it is talking to. | `titleMarkup.ts` wraps the whole plate in `<div class="fe-title__tap" data-action="confirm">`; `Input.onClick`'s `closest('[data-action]')` now resolves a click anywhere on the title the same way it already resolved one on the chip (verified live: `elementFromPoint` at an empty-backdrop coordinate returns an element whose `closest('[data-action]')` is `confirm`). The chip and the hint row each carry a `--key` / `--tap` pair swapped by `@media (pointer: coarse)` in `frontend.css`, so a mouse/keyboard player still reads "Press Enter" and a touch player reads "Tap to begin" / "Tap begin". Pinned by two new cases in `frontend-title-motion.test.ts`. |
+| **FE-003** polish — cast geometry vs `after.png` | The two figures sit at `after.html`'s own scale and position, not a rounded guess. | Already correct in the current tree: `titleMarkup.ts`'s `CAST` array reads `left:948 top:494 height:208` (Tidus) and `left:1068 top:512 height:194` (Yuna) straight off `docs/concepts/polish/showpiece-frontend/after.html`'s own 1440x810 stage (confirmed byte-for-byte against that file's `<div class="hero">` rules). This was fixed in the key-art commit (`8877431`) after round 07's focused pass found it; nothing further to change. Pinned by a new regression test in `frontend-title-motion.test.ts` so a future edit cannot round the numbers again silently. |
+| **FE-004** polish — FFX-2 party chips crop the hairline | Air above every head in the FFX-2 battle-start party chips. | **Not touched.** The fix is in `src/ui/common/face-crops.json`, outside this batch's file ownership (title/chapter-select type and layout tokens only). Left for whichever batch owns that file. |
+| **FE-005** suggestion — a click on a COMING card is silently ignored | A click on a locked card gives a visible/audible refusal. | **Not touched.** The fix is in `src/app/screens/ChapterSelectScreen.ts`'s `handleInput`, outside this batch's file ownership. Left for whichever batch owns that file. |
+
+Verification: `npx tsc --noEmit` clean; `npx vitest run tests/unit/frontend-css-type-floor.test.ts
+tests/unit/frontend-title-motion.test.ts tests/unit/frontend-chapter-grid.test.ts
+tests/unit/frontend-chapter-select-screen.test.ts` — 4 files, 59 tests, all green (the css-type-floor
+file is new, 8 tests). One browser pass on a dedicated `vite` dev server (port 5713, stopped by its
+own PID afterwards): title and chapter select rendered and measured at 390x844 and 1600x900 via
+`tools/screenshot.mjs` against that server, captures at
+`docs/screenshots/frontend/fe-fix-phone.png` and `fe-fix-desktop.png`. No console errors, no
+horizontal scroll at either size.

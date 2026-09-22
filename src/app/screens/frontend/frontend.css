@@ -28,6 +28,15 @@
 
 .fe {
   --fe-k: max(0.5px, min(100vw / 1440, 100vh / 810));
+  /*
+   * PR-0066 (round 07): --fe-k alone drove type below 14 effective px at
+   * 390x844 (down to 9.54) because it also drives layout and cannot be
+   * raised globally without pushing the rail off frame. Every `.fe-*`
+   * font-size is `max(var(--fe-fs-floor), calc(N * var(--fe-k)))`, so the
+   * grid still authors layout but type never renders under the floor: 14px
+   * on a desktop window, 12px on the phone, where this is redeclared.
+   */
+  --fe-fs-floor: 14px;
   --fe-accent: var(--ig-gold);
   position: absolute;
   inset: 0;
@@ -238,6 +247,18 @@
 
 /* ======================================================== title: the chrome */
 
+/*
+ * FE-002 (round 07): the tap target for "advance" used to be only the chip,
+ * and the chip always read "Press Enter" even on a touch device. This layer
+ * carries `data-action="confirm"` (see titleMarkup.ts) over the whole plate,
+ * so `Input.onClick`'s `closest('[data-action]')` resolves a tap anywhere on
+ * the title the same way it already resolved one on the chip.
+ */
+.fe-title__tap {
+  position: absolute;
+  inset: 0;
+}
+
 .fe-title__slab {
   position: absolute;
   left: calc(-52 * var(--fe-k));
@@ -263,7 +284,7 @@
 .fe-title__eyebrow {
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--ig-gold-on-paper);
@@ -273,7 +294,7 @@
   font-family: var(--ig-font-serif);
   font-style: italic;
   font-weight: 700;
-  font-size: calc(76 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(76 * var(--fe-k)));
   line-height: 0.94;
   color: var(--ig-ink);
   letter-spacing: -0.01em;
@@ -293,7 +314,7 @@
   background: var(--ig-ink);
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(15 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(15 * var(--fe-k)));
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--ig-gold);
@@ -306,6 +327,23 @@
   border-top: calc(6 * var(--fe-k)) solid transparent;
   border-bottom: calc(6 * var(--fe-k)) solid transparent;
 }
+/*
+ * FE-002: the chip names the input it is actually talking to. `pointer:
+ * coarse` is true for a touch screen and false for a mouse or a trackpad, so
+ * a device with both (most Windows laptops) keeps the keyboard/mouse wording
+ * — right, since Enter and a click both still work there.
+ */
+.fe-title__chip-label--tap {
+  display: none;
+}
+@media (pointer: coarse) {
+  .fe-title__chip-label--key {
+    display: none;
+  }
+  .fe-title__chip-label--tap {
+    display: inline;
+  }
+}
 
 .fe-title__strap {
   position: absolute;
@@ -315,7 +353,7 @@
   writing-mode: vertical-rl;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.42em;
   text-transform: uppercase;
   color: rgba(227, 185, 74, 0.78);
@@ -347,7 +385,7 @@
   background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
   border-left: calc(3 * var(--fe-k)) solid var(--ig-gold);
   font-family: var(--ig-font-display);
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(244, 241, 232, 0.72);
@@ -358,6 +396,19 @@
 }
 .fe-hint span {
   white-space: nowrap;
+}
+/* FE-002: same swap as the chip — the title's own hint row named three keys
+ * and nothing a touch player has. */
+.fe-hint__tap {
+  display: none;
+}
+@media (pointer: coarse) {
+  .fe-hint__key {
+    display: none;
+  }
+  .fe-hint__tap {
+    display: inline;
+  }
 }
 
 /* ================================================== chapter select: layout */
@@ -384,7 +435,7 @@
   gap: calc(14 * var(--fe-k));
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(15 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(15 * var(--fe-k)));
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--ig-gold);
@@ -448,7 +499,7 @@
   bottom: calc(104 * var(--fe-k));
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(14 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(14 * var(--fe-k)));
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--fe-accent);
@@ -461,7 +512,7 @@
   font-family: var(--ig-font-serif);
   font-style: italic;
   font-weight: 700;
-  font-size: calc(62 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(62 * var(--fe-k)));
   line-height: 1;
   color: var(--ig-paper);
   text-shadow: 0 calc(6 * var(--fe-k)) calc(26 * var(--fe-k)) rgba(0, 0, 0, 0.8);
@@ -470,7 +521,7 @@
   position: absolute;
   right: calc(16 * var(--fe-k));
   top: calc(14 * var(--fe-k));
-  font-size: calc(22 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k)));
   color: var(--fe-accent);
 }
 
@@ -489,14 +540,14 @@
   font-family: var(--ig-font-serif);
   font-style: italic;
   font-weight: 700;
-  font-size: calc(30 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(30 * var(--fe-k)));
   line-height: 1.12;
   color: var(--ig-ink);
   padding-right: calc(110 * var(--fe-k));
 }
 .fe-prose__body {
   margin-top: calc(9 * var(--fe-k));
-  font-size: calc(16 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k)));
   line-height: 1.45;
   color: #2c2838;
 }
@@ -508,7 +559,7 @@
   border: 1px solid var(--ig-ink);
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.24em;
   color: var(--ig-ink);
 }
@@ -532,7 +583,7 @@
   gap: calc(10 * var(--fe-k));
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--fe-accent);
@@ -597,7 +648,7 @@
   top: calc(13 * var(--fe-k));
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.3em;
   color: var(--fe-accent);
 }
@@ -609,7 +660,7 @@
   font-family: var(--ig-font-serif);
   font-style: italic;
   font-weight: 700;
-  font-size: calc(23 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(23 * var(--fe-k)));
   line-height: 1.02;
   color: var(--ig-paper);
   text-shadow: 0 calc(3 * var(--fe-k)) calc(12 * var(--fe-k)) rgba(0, 0, 0, 0.85);
@@ -618,7 +669,7 @@
   position: absolute;
   right: calc(10 * var(--fe-k));
   top: calc(8 * var(--fe-k));
-  font-size: calc(15 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(15 * var(--fe-k)));
   color: var(--fe-accent);
   text-shadow: 0 0 calc(8 * var(--fe-k)) rgba(0, 0, 0, 0.9);
 }
@@ -660,7 +711,7 @@
   border: 1px solid rgba(227, 185, 74, 0.55);
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.22em;
   color: rgba(227, 185, 74, 0.82);
 }
@@ -681,7 +732,7 @@
 .fe-aside__key {
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--fe-accent);
@@ -691,7 +742,7 @@
   font-family: var(--ig-font-serif);
   font-style: italic;
   font-weight: 700;
-  font-size: calc(21 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(21 * var(--fe-k)));
   line-height: 1.2;
   color: var(--ig-paper);
 }
@@ -699,7 +750,7 @@
   font-family: var(--ig-font-text);
   font-style: normal;
   font-weight: 500;
-  font-size: calc(16 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k)));
 }
 .fe-aside__value--none {
   color: rgba(244, 241, 232, 0.6);
@@ -732,7 +783,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--ig-font-serif);
-  font-size: calc(26 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k)));
   color: rgba(244, 241, 232, 0.5);
 }
 .fe-party__name {
@@ -740,7 +791,7 @@
   margin-top: calc(5 * var(--fe-k));
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(244, 241, 232, 0.66);
@@ -761,7 +812,7 @@
   gap: calc(14 * var(--fe-k));
   padding: calc(9 * var(--fe-k)) calc(18 * var(--fe-k));
   border-left-width: calc(3 * var(--fe-k));
-  font-size: calc(13 * var(--fe-k));
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
 }
 .fe-cselect .chint__item {
   gap: calc(6 * var(--fe-k));
@@ -777,6 +828,9 @@
 @media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
   .fe {
     --fe-k: max(0.5px, min(100vw / 430, 100vh / 1150));
+    /* FE-001: the phone floor is 12px, not 14 — the same floor pause-screen.css
+     * uses at this width (docs/handoff/fix3-pause.md). */
+    --fe-fs-floor: 12px;
   }
   /*
    * The slab is skewed, so its bottom-left corner sits further left than its
@@ -790,7 +844,7 @@
     padding: calc(24 * var(--fe-k)) calc(24 * var(--fe-k)) calc(26 * var(--fe-k)) calc(78 * var(--fe-k));
   }
   .fe-title__name {
-    font-size: calc(56 * var(--fe-k));
+    font-size: max(var(--fe-fs-floor), calc(56 * var(--fe-k)));
   }
   .fe-title__rule {
     width: calc(150 * var(--fe-k));
@@ -828,7 +882,7 @@
     height: calc(190 * var(--fe-k));
   }
   .fe-hero__name {
-    font-size: calc(34 * var(--fe-k));
+    font-size: max(var(--fe-fs-floor), calc(34 * var(--fe-k)));
     bottom: calc(22 * var(--fe-k));
   }
   .fe-hero__num {
@@ -841,7 +895,7 @@
     padding: calc(14 * var(--fe-k)) calc(20 * var(--fe-k)) calc(16 * var(--fe-k));
   }
   .fe-prose__title {
-    font-size: calc(22 * var(--fe-k));
+    font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k)));
     padding-right: calc(72 * var(--fe-k));
   }
   .fe-prose__badge {
@@ -870,7 +924,7 @@
   }
   .fe-card__name {
     bottom: calc(6 * var(--fe-k));
-    font-size: calc(19 * var(--fe-k));
+    font-size: max(var(--fe-fs-floor), calc(19 * var(--fe-k)));
   }
   .fe-aside {
     left: calc(16 * var(--fe-k));
@@ -896,7 +950,7 @@
     height: calc(44 * var(--fe-k));
   }
   .fe-party__face > span {
-    font-size: calc(18 * var(--fe-k));
+    font-size: max(var(--fe-fs-floor), calc(18 * var(--fe-k)));
   }
 }
 

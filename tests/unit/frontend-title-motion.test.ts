@@ -186,6 +186,53 @@ describe('titleMarkup', () => {
   });
 
   /**
+   * FE-002 (round 07 focused review, build 8f48237): on touch only the chip
+   * advanced, the rest of the plate did nothing, and the chip always read
+   * "Press Enter". `Input.onClick` resolves any click through
+   * `closest('[data-action]')`, so the whole plate now carries the attribute
+   * too — a tap anywhere reaches the same action the chip already did.
+   */
+  it('makes the whole plate a tap target, not only the chip', () => {
+    const tapWrapper = /<div class="fe-title__tap" data-action="confirm">/.exec(html);
+    expect(tapWrapper).not.toBeNull();
+    // Everything else this function builds is inside that one wrapper.
+    expect(html.trim().startsWith('<div class="fe-title__tap" data-action="confirm">')).toBe(true);
+    expect(html).toContain('class="fe-title__chip" data-action="confirm"');
+  });
+
+  it('names the input it is actually talking to, for both the chip and the hint row', () => {
+    expect(html).toContain('fe-title__chip-label--key">Press Enter<');
+    expect(html).toContain('fe-title__chip-label--tap">Tap to begin<');
+    expect(html).toContain('class="fe-hint__tap"><b>Tap</b> begin</span>');
+    // Three keyboard hints (move / confirm / cancel), each tagged so CSS can
+    // hide them on `pointer: coarse` without hiding the tap-only one too.
+    expect(html.match(/class="fe-hint__key"/g) ?? []).toHaveLength(3);
+  });
+
+  /**
+   * FE-003 (round 07 focused review): the first build rounded the cast's
+   * geometry and the two figures ended up bigger and further right than
+   * `after.png`. The fix reads the numbers straight off
+   * `docs/concepts/polish/showpiece-frontend/after.html`'s own 1440x810
+   * stage — Tidus `left:948 top:494 height:208`, Yuna `left:1068 top:512
+   * height:194` — and this pins those exact fractions so a future edit
+   * cannot round them again without this test failing first.
+   */
+  it('places the cast at after.html’s own pixel geometry, not a rounded guess', () => {
+    const boxes = Array.from(
+      html.matchAll(/class="fe-figure" style="left:([\d.]+)%;bottom:([\d.]+)%;height:([\d.]+)%"/g),
+    );
+    expect(boxes).toHaveLength(2);
+    const [tidus, yuna] = boxes;
+    expect(Number(tidus![1])).toBeCloseTo((948 / 1440) * 100, 2);
+    expect(Number(tidus![2])).toBeCloseTo((1 - (494 + 208) / 810) * 100, 2);
+    expect(Number(tidus![3])).toBeCloseTo((208 / 810) * 100, 2);
+    expect(Number(yuna![1])).toBeCloseTo((1068 / 1440) * 100, 2);
+    expect(Number(yuna![2])).toBeCloseTo((1 - (512 + 194) / 810) * 100, 2);
+    expect(Number(yuna![3])).toBeCloseTo((194 / 810) * 100, 2);
+  });
+
+  /**
    * The reflection's box starts at the figure's feet and the image inside it is
    * the whole figure — the two numbers the stylesheet divides by `--fe-refl`.
    * The first build sized the image to the box, and `scaleY(-1)` about
