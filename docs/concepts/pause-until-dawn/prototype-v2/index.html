@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Living portrait v2 &mdash; layered rig prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0a0806; }
+  body {
+    display: flex; align-items: center; justify-content: center;
+    font: 14px/1.5 -apple-system, Segoe UI, sans-serif; color: #e9dcb8;
+  }
+  #stage {
+    position: relative;
+    width: min(90vw, 62vh * (832 / 1216));
+    aspect-ratio: 832 / 1216;
+    background: #060504;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  #plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #legend {
+    position: fixed; right: 16px; bottom: 16px; max-width: 340px;
+    background: rgba(10,8,6,0.78); border: 1px solid rgba(233,220,184,0.35);
+    padding: 12px 14px; border-radius: 6px; font-size: 12px;
+  }
+  #legend h1 { font-size: 13px; margin: 0 0 8px; letter-spacing: 0.04em; text-transform: uppercase; }
+  #legend table { border-collapse: collapse; }
+  #legend td { padding: 1px 8px 1px 0; vertical-align: top; }
+  #legend td:first-child { color: #f2c14e; font-family: monospace; white-space: nowrap; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <img id="plate" src="art/keys/frontal.png" alt="Yuna, three-quarter close-up" crossorigin="anonymous" />
+  </div>
+  <div id="legend">
+    <h1>Living portrait v2</h1>
+    <table>
+      <tr><td>arrows / WASD / mouse / right stick</td><td>turn her gaze</td></tr>
+      <tr><td>E</td><td>cycle state: normal &rarr; determined &rarr; hurt</td></tr>
+      <tr><td>B</td><td>blink now</td></tr>
+      <tr><td>R</td><td>toggle reduced motion</td></tr>
+      <tr><td>F</td><td>diagnostics overlay</td></tr>
+      <tr><td>H</td><td>hide this legend</td></tr>
+    </table>
+  </div>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
