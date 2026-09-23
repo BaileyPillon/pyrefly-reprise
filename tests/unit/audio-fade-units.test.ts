@@ -48,9 +48,12 @@ describe('fadeMsToSec', () => {
   });
 });
 
-describe('AudioManager.playMusic: the ramp actually lands within its fade', () => {
-  // A trimmed version of the recording AudioContext from
-  // critic/rounds/round-09/audio/fade-units-proof.mjs.
+/**
+ * A trimmed version of the recording AudioContext from
+ * critic/rounds/round-09/audio/fade-units-proof.mjs: every gain ramp the
+ * manager schedules lands in `ramps`, with its absolute end time.
+ */
+function recordingContext(clock: { now: number }, ramps: Array<{ v: number; at: number }>) {
   class FakeParam {
     value = 1;
     setValueAtTime(v: number): void {
@@ -66,49 +69,71 @@ describe('AudioManager.playMusic: the ramp actually lands within its fade', () =
     connect(): void {}
     disconnect(): void {}
   }
-  let ramps: Array<{ v: number; at: number }>;
-  let now: number;
-
-  class FakeCtx {
-    state = 'running';
-    sampleRate = 48000;
-    destination = new FakeNode();
+  return {
+    state: 'running',
+    sampleRate: 48000,
+    destination: new FakeNode(),
     get currentTime(): number {
-      return now;
-    }
-    resume(): Promise<void> {
-      return Promise.resolve();
-    }
-    createGain(): FakeNode & { gain: FakeParam } {
-      return Object.assign(new FakeNode(), { gain: new FakeParam() });
-    }
-    createBufferSource(): FakeNode & { start: (at: number) => void; buffer?: unknown; loop?: boolean } {
-      return Object.assign(new FakeNode(), { start: () => {} });
-    }
-  }
+      return clock.now;
+    },
+    resume: (): Promise<void> => Promise.resolve(),
+    createGain: () => Object.assign(new FakeNode(), { gain: new FakeParam() }),
+    createBufferSource: () => Object.assign(new FakeNode(), { start: () => {}, stop: () => {} }),
+  };
+}
 
-  it('schedules the new cue’s ramp to finish within its fade (seconds), not minutes', async () => {
-    ramps = [];
-    now = 0;
-    const { AudioManager } = await import('../../src/audio/AudioManager.ts');
-    const am = new AudioManager({ useWorker: false, synthOnly: true });
-    // @ts-expect-error -- test double, not a real AudioContext
-    am.ctx = new FakeCtx();
-    // @ts-expect-error -- private, but this is exactly what unlock() sets up
-    am.musicBus = am.ctx.createGain();
-    // @ts-expect-error -- skip the real manifest/network path
-    am.loadManifest = async () => {};
-    // @ts-expect-error -- skip decoding a real buffer
-    am.loader.load = async () => ({ buffer: {}, loopStart: 0, loopEnd: 1 });
+/**
+ * The ramp a **real scene** schedules on the **real manager**: a
+ * `CutsceneScreen` plays `music('title', 1200)` and then `music(null, 800)`
+ * through its own port into the shared `audio` singleton, and the test reads
+ * the gain ramps that singleton put on its (recording) context. No value is
+ * converted by the test: before the fix the port forwarded 1200 and the
+ * fade-in ramp ended 1200 s after its start; the fade-out was never scheduled
+ * at all because `music(null)` never reached `stopMusic`.
+ */
+describe('CutsceneScreen → AudioManager: the ramps a scene schedules land within their fades', () => {
+  it('a 1200 ms fade-in ends ~1.2 s after it starts, and an 800 ms stop ends ~0.8 s after it', async () => {
+    const ramps: Array<{ v: number; at: number }> = [];
+    const clock = { now: 20 };
+    const am = audio as unknown as Record<string, unknown> & { loader: Record<string, unknown> };
+    const saved = { ctx: am['ctx'], musicBus: am['musicBus'], loadManifest: am['loadManifest'], load: am.loader['load'] };
+    try {
+      const ctx = recordingContext(clock, ramps);
+      am['ctx'] = ctx;
+      am['musicBus'] = ctx.createGain();
+      am['loadManifest'] = async () => {};
+      am.loader['load'] = async () => ({ buffer: {}, loopStart: 0, loopEnd: 1 });
 
-    now = 20;
-    // What CutsceneScreen/BattleEncounterChain now send after fadeMsToSec(1200, ...).
-    await am.playMusic('title', { fade: fadeMsToSec(1200, 1200) });
-    const inRamp = ramps.find((r) => r.v > 0.5);
-    expect(inRamp).toBeDefined();
-    // Within (about) 1.2s of `now`, not 1200s.
-    expect(inRamp!.at - now).toBeLessThan(2);
-    expect(inRamp!.at - now).toBeGreaterThan(0.5);
+      const play = async (script: StoryScript) => {
+        const screen = new CutsceneScreen({ script });
+        screen.app = { fade: () => Promise.resolve() } as unknown as App;
+        screen.root = document.createElement('div');
+        document.body.appendChild(screen.root);
+        screen.enter();
+        await screen.done;
+        // playMusic awaits the manifest and the loader before it schedules.
+        for (let i = 0; i < 10; i++) await Promise.resolve();
+      };
+
+      await play([music('title', 1200), battleStart()]);
+      const fadeIn = ramps.find((r) => r.v > 0.5);
+      expect(fadeIn, 'the scene never reached playMusic').toBeDefined();
+      expect(fadeIn!.at - clock.now).toBeCloseTo(1.2, 6);
+
+      clock.now = 30;
+      ramps.length = 0;
+      await play([music(null, 800), battleStart()]);
+      const fadeOut = ramps.find((r) => r.v < 0.001);
+      expect(fadeOut, 'music(null) never reached stopMusic').toBeDefined();
+      expect(fadeOut!.at - clock.now).toBeCloseTo(0.8, 6);
+    } finally {
+      am['current'] = null;
+      am['fading'] = [];
+      am['ctx'] = saved.ctx;
+      am['musicBus'] = saved.musicBus;
+      am['loadManifest'] = saved.loadManifest;
+      am.loader['load'] = saved.load;
+    }
   });
 });
 
@@ -206,18 +231,44 @@ describe('BattleEncounterChain: cueForGroup fadeMs (authored ms) reaches playMus
     expect(audioPort.fades[0]).toBeLessThan(5);
   });
 
-  it('chapter 5’s own Vegnagun → Shuyin phase cue (the browser proof could not reach it live: see docs/screenshots/audio/pr-0089-gains.json) converts the same way', async () => {
-    // The exact `cueForGroup(..., 'next')` call `runEncounterChain` makes when
-    // Vegnagun's head chains to Shuyin (`vegnagun-head.ts` `nextGroupId:
-    // 'shuyin'`), against the real chapter-5 data.
+  it('chapter 5: when Vegnagun chains to Shuyin, runEncounterChain plays boss-shuyin with its authored 600 ms as 0.6 s', async () => {
+    // The real chapter-5 chain from its first formation, through the real
+    // `runEncounterChain` link loop and the real engine re-init per link. Only
+    // the fight itself is stubbed (every link is won at once), because what is
+    // under test is the 'next' cue the loop hands the audio port, not combat.
+    await registerBattleContent();
     const chapter = CHAPTERS.find((c) => c.id === 'ffx2-vegnagun-shuyin')!;
     const shuyinGroup = (await findEnemyGroup('shuyin'))!;
-    const cue = cueForGroup(chapter, shuyinGroup, 'next');
-    expect(cue.track).toBe('boss-shuyin');
-    expect(cue.fadeMs).toBe(600); // authored in ms, shuyin.ts musicCues
-
+    expect(shuyinGroup.musicCues?.find((c) => c.at === 'start')?.fadeMs).toBe(600); // authored ms, shuyin.ts
+    const group = chapter.enemyGroupRef;
+    const setup = setupForChapter(chapter, 1);
+    const engine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+    const presenter = {
+      syncHud: () => {},
+      run: async () => ({ kind: 'victory', result: {} }),
+    } as unknown as BattlePresenter;
     const audioPort = new FakeAudio();
-    if (cue.track) audioPort.playMusic(cue.track, { fade: fadeMsToSec(cue.fadeMs, 1200) });
-    expect(audioPort.fades[0]).toBeCloseTo(0.6, 6); // not 600 (seconds)
+    const staged: string[] = [];
+
+    const result = await runEncounterChain({
+      chapter,
+      presenter,
+      engine,
+      stage: { stage: async () => { staged.push('link'); } },
+      group,
+      setup,
+      seed: 1,
+      audio: audioPort,
+      findGroup: findEnemyGroup,
+      onLink: ({ group: g }) => staged.push(g.id),
+    });
+
+    expect(staged, 'the chain must reach Shuyin').toContain('shuyin');
+    const at = audioPort.music.indexOf('boss-shuyin');
+    expect(at, `cues played: ${audioPort.music.join(', ')}`).toBeGreaterThanOrEqual(0);
+    expect(audioPort.fades[at]).toBeCloseTo(0.6, 6); // not 600 (seconds)
+    expect(result.outcome.kind).toBe('victory');
   });
 });
