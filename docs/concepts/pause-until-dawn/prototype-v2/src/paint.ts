@@ -38,21 +38,15 @@ export const PAINT_DISSOLVE_S = 0.2;
 export const PAINT_DISSOLVE_DEG = 8;
 
 /**
- * v4 'warp' paint: how much of the bracket's second key shows at bracket
- * position t (0..1) for a bracket `spanDeg` wide. The geometry morphs over the
- * whole bracket (every key is warped onto the same interpolated landmarks);
- * the paint swaps over a window of at most `PAINT_WINDOW_DEG` around the
- * bracket's middle (v3.1's paintWeight used the middle half: 12.5 degrees of
- * two paintings mixed between -60 and -85, where the far hair and the second
- * clip showed as a ghost). Outside the window one painting alone is on screen.
+ * v4.1 'warp': the same one-painting-at-a-time rule for the feature-registered
+ * keys (`warp/dense.ts`). v4 mixed the two bracket keys by the RENDERED yaw
+ * over an 8-degree window, so the idle sway swept a held gaze in and out of
+ * the mix (the check: two paintings in 40 of 40 samples at -30, -50, -72, +30,
+ * +50, +72; the v3.1 pulse again). Now the paint follows the spring's base yaw
+ * with hysteresis; with the keys registered feature by feature, the swap can
+ * be quick: 0.2 s, or 5 degrees of a fast turn.
  */
-export const PAINT_WINDOW_DEG = 8;
-
-export function paintWindowWeight(t: number, spanDeg: number, windowDeg = PAINT_WINDOW_DEG): number {
-  const half = Math.min(0.25, windowDeg / 2 / Math.max(1e-6, Math.abs(spanDeg)));
-  const x = Math.max(0, Math.min(1, (t - (0.5 - half)) / (2 * half)));
-  return x * x * x * (x * (x * 6 - 15) + 10);
-}
+export const WARP_PAINT = { hysteresisDeg: 3, dissolveS: 0.2, dissolveDeg: 5 } as const;
 
 function smoothstep(x: number): number {
   const t = Math.max(0, Math.min(1, x));
@@ -71,6 +65,7 @@ export class PaintSelector {
     keys: readonly PaintKey[],
     private readonly hysteresisDeg = PAINT_HYSTERESIS_DEG,
     private readonly dissolveS = PAINT_DISSOLVE_S,
+    private readonly dissolveDeg = PAINT_DISSOLVE_DEG,
   ) {
     if (keys.length === 0) throw new Error('PaintSelector needs at least one key');
     this.keys = [...keys].sort((a, b) => a.yawDeg - b.yawDeg);
@@ -112,7 +107,7 @@ export class PaintSelector {
       // new key (it can no longer be warped once the geometry leaves the
       // bracket the two share)
       const toward = Math.sign(this.current.yawDeg - this.swapYaw) || 1;
-      const spatial = Math.max(0, Math.min(1, ((baseYawDeg - this.swapYaw) * toward) / PAINT_DISSOLVE_DEG));
+      const spatial = Math.max(0, Math.min(1, ((baseYawDeg - this.swapYaw) * toward) / this.dissolveDeg));
       this.progress = Math.min(1, Math.max(this.progress + (this.dissolveS > 0 ? dt / this.dissolveS : 1), spatial));
     }
     if (this.progress >= 1) this.from = null;

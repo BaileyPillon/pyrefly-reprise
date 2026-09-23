@@ -11,6 +11,7 @@ tree mid-session and the runtime was updated to use it. Neither pass edited
 the other's files; each documents its own half below.
 
 > **v3 (2026-09-22): see Part 5 at the end** — the art assembly and runtime were rebuilt; Parts 1-4 are the v2 history.
+> **v4.1 (2026-09-23): Part 9 at the end** is the current rig (registered keys, one painting at a time, painted lids).
 
 Character: **Yuna, X-2** — `public/art/portraits/yuna-x2.png`, Bailey's
 approved pick of 2026-09-21 (card 3). The approved painting is never edited;
@@ -1234,3 +1235,56 @@ plate's own tassel at every yaw.
   composite (`layers.ts` `keyPatches`); `slightSmile` added to the mouth set.
 - Checks: `check/` 15 (adds `v4.test.ts` and the paint window), the six
   `tests/unit/pause-living-portrait-*` files 53, `tsc` clean.
+
+# Part 9 — v4.1: registered keys, one painting at a time, painted lids (2026-09-23)
+
+FFX-2 only (the Yuna X-2 plate). The v4 check refuted Part 8 (held gaze mixed
+two paintings, doubled features in every paint window, a different +85
+painting, tears at the wide turns, the tassel across the cheek, blob lids,
+weak expressions, pulses at every key). Handoff with the finding-by-finding
+table and the re-measured numbers: `docs/handoff/living-portrait-v4.md`
+("v4.1 fix pass"). Evidence: `shots/v4/` and `shots/v4/check/`.
+
+**Run:** `index.html` as before; `?paint=switch` = the v3.3 selector on the
+sparse landmark mesh; default `warp` = the selector on the dense meshes.
+
+## Runtime
+
+- **Paint** (`src/paint.ts` `WARP_PAINT`): one painting at a time, chosen from
+  the spring's base yaw (no idle sway), 3 degree hysteresis, a 0.2 s or
+  5 degree dissolve. A held gaze is one painting (0 of 40 samples mixed at
+  every yaw the check held).
+- **Geometry** (`src/renderer.ts` `pose`): the bracket weight is linear (v4's
+  smootherstep stopped the head at every key); the range's ends sit on their
+  outer pair at g = 0 / 1; a painted key outside the geometry's bracket is
+  posed on the pair that joins it to the geometry (`nearestPose`).
+- **Dense pair meshes** (`src/warp/dense.ts`, `LayerGL.drawDense`): per pair
+  a midpoint grid every 8 px with each vertex's texel in both keys and its
+  head weight; the GPU interpolates `(1 - g) pA + g pB` from static buffers.
+  The sparse landmark mesh stays for the body and for `?paint=switch`.
+- **Tassel** (`renderer.ts` `tasselFor`, `compose.ts drawFaceOver`): always
+  on top; while her right ear turns away (yaw < 0) each key's lower face and
+  neck (`artMeta.v4.tassel.faceOver`) are drawn back over it, then the mouth
+  patch again; faded out between -40 and -55. In a dissolve each key's front
+  pass carries the tassel and its own face-over, so they mix like the faces.
+- **Brows** (`compose.ts browOpacity`): the swell peaks at full patch
+  opacity; the spec's 40 percent is the movement's amplitude (the fringe lift).
+
+## Art (every step rebuilds without ComfyUI from the picks on disk)
+
+| step | tool | output |
+|---|---|---|
+| dense registration | `tools/gen/rig-flow.py build --check` (OpenCV DIS flow; the kohya venv's Python) | `art/v4/flow/<a>__<b>.bin`, `flow/check/` (midpoint mixes, sparse vs dense), `flow/report.json`, `artMeta.v4.flow` |
+| +60 / +85 | `tools/gen/rig-mirror.py` (the -60 / -85 keys about S = 946, irises by side, collar copies stripped) | `art/v4/layers/v4-r60`, `v4-r85`, `art/v4/masks/yaw+60`, `yaw+85` |
+| repaints | `tools/gen/lora-repaint.mjs` + `tools/gen/rig-v41fix.py prep / merge` (the far clip as hair) | `artMeta.v4.repaints` |
+| collar clean | `rig-v41fix.py clean` (-60, -85: the body's cloth copied into the head layers, small islands) | the key layers |
+| lids | `tools/gen/rig-lids2.py prep / build` (LoRA-painted closed eyes, unrolled per column) | `art/v3/patches/lids/<key>/a<NN>.png`, `artMeta.v4.lids` |
+| mouths | `rig-v41fix.py mouth` (the whole repainted region) and `heal` (the -40 dash) | `art/v4/patches/<key>/mouth/`, `artMeta.v4.expressions` |
+| tassel occluder | `rig-v41fix.py faceover` | `art/v4/layers/<key>/faceover.png`, `artMeta.v4.tassel.faceOver` |
+
+## Checks
+
+`check/` 20 tests (adds `dense.test.ts`: every pair present, no fold at 21
+weights, each key exact at its own end, the frame edges fixed; the warp paint
+held-gaze test), the six `tests/unit/pause-living-portrait-*` files 53, `tsc`
+clean, 115 approved hashes match before and after.

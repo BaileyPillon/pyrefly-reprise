@@ -10,6 +10,7 @@
  */
 import { linkProgram } from './gl-utils.ts';
 import type { PixelBox } from './layers.ts';
+import type { DenseDraw, DenseMeshes } from './warp/dense.ts';
 
 /**
  * Bilinear filtering done on PREMULTIPLIED texels (v3.3). The layer PNGs are
@@ -76,7 +77,7 @@ void main() {
   gl_Position = vec4(px.x / uCanvas.x * 2.0 - 1.0, 1.0 - px.y / uCanvas.y * 2.0, 0.0, 1.0);
 }`;
 
-const WARP_FRAG = /* glsl */ `#version 300 es
+export const WARP_FRAG = /* glsl */ `#version 300 es
 precision highp float;
 ${SAMPLE_PREMUL}
 in vec2 vUV;
@@ -159,6 +160,9 @@ export class LayerGL {
   private readonly u: Record<string, WebGLUniformLocation | null>;
   private readonly w: Record<string, WebGLUniformLocation | null>;
   private readonly m: Record<string, WebGLUniformLocation | null>;
+  /** v4.1: the dense pair meshes (`warp/dense.ts`); a head pass may route through one instead of a sparse mesh. */
+  private dense: DenseMeshes | null = null;
+  private headDense: DenseDraw | null = null;
 
   constructor(gl: WebGL2RenderingContext, private readonly canvasW: number, private readonly canvasH: number) {
     this.gl = gl;
@@ -204,12 +208,18 @@ export class LayerGL {
    * non-pinned `draw` through that mesh, `body` (`WarpCache.bodyMesh`) every
    * pinned one; null draws plain placed quads.
    */
-  beginLayers(head: Float32Array | null = null, body: Float32Array | null = null): void {
+  useDense(dense: DenseMeshes | null): void {
+    this.dense = dense;
+  }
+
+  beginLayers(head: Float32Array | DenseDraw | null = null, body: Float32Array | null = null): void {
     const gl = this.gl;
+    this.headDense = head && !(head instanceof Float32Array) ? head : null;
+    const sparseHead = head instanceof Float32Array ? head : null;
     gl.enable(gl.BLEND);
     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.activeTexture(gl.TEXTURE0);
-    [head, body].forEach((mesh, i) => {
+    [sparseHead, body].forEach((mesh, i) => {
       this.warpVerts[i] = 0;
       if (!mesh) return;
       gl.bindBuffer(gl.ARRAY_BUFFER, this.warpBuf[i]!);
@@ -229,6 +239,10 @@ export class LayerGL {
     if (opacity <= 0.001) return;
     const gl = this.gl;
     const slot = pinned ? 1 : 0;
+    if (!pinned && this.headDense && this.dense) {
+      this.drawDense(this.headDense, this.dense, tex, box, offset, opacity, gain);
+      return;
+    }
     const warped = this.warpVerts[slot]! > 0;
     const u = warped ? this.w : this.u;
     gl.useProgram(warped ? this.warpProg : this.layerProg);
@@ -244,6 +258,27 @@ export class LayerGL {
     gl.uniform1f(u.uGain!, gain);
     if (warped) gl.drawArrays(gl.TRIANGLES, 0, this.warpVerts[slot]!);
     else gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  /** A head layer through a dense pair mesh: the vertex positions are interpolated on the GPU. */
+  private drawDense(d: DenseDraw, dm: DenseMeshes, tex: WebGLTexture, box: PixelBox, offset: readonly [number, number], opacity: number, gain: number): void {
+    const gl = this.gl;
+    const u = dm.uniforms;
+    gl.useProgram(dm.program);
+    gl.bindVertexArray(d.vao);
+    const e = 0.5;
+    gl.uniform4f(u.uExt!, box[0] <= e ? 1 : 0, box[1] <= e ? 1 : 0, box[0] + box[2] >= this.canvasW - e ? 1 : 0, box[1] + box[3] >= this.canvasH - e ? 1 : 0);
+    gl.uniform2f(u.uCanvas!, this.canvasW, this.canvasH);
+    gl.uniform1i(u.uTex!, 0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.uniform4f(u.uBox!, box[0], box[1], box[2], box[3]);
+    gl.uniform2f(u.uOffset!, offset[0], offset[1]);
+    gl.uniform1f(u.uOpacity!, Math.min(1, opacity));
+    gl.uniform1f(u.uGain!, gain);
+    gl.uniform1f(u.uG!, d.g);
+    gl.uniform2f(u.uChest!, d.chest[0], d.chest[1]);
+    gl.uniform2f(u.uSway!, d.sway[0], d.sway[1]);
+    gl.drawElements(gl.TRIANGLES, d.count, gl.UNSIGNED_INT, 0);
   }
 
   /** Full-screen: mix(a, b, w) into the bound target (w = 0 copies a). */

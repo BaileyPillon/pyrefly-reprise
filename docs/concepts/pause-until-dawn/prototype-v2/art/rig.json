@@ -767,91 +767,91 @@
       "file": "v4/layers/v4-r60/front.png",
       "landmarks": [
         [
-          545.0,
-          425.0
+          549.0,
+          410.0
         ],
         [
-          731.0,
-          535.0
+          732.0,
+          520.0
         ],
         [
-          717.0,
-          588.0
+          694.0,
+          575.0
         ],
         [
-          592.0,
-          624.0
+          574.0,
+          586.0
         ],
         [
-          648.0,
-          630.0
+          626.0,
+          595.0
         ],
         [
-          655.0,
-          644.0
+          631.0,
+          614.0
         ],
         [
-          695.0,
-          725.0
+          621.0,
+          697.0
         ],
         [
-          645.0,
-          385.0
+          639.0,
+          378.0
         ],
         [
-          698.0,
-          412.0
+          714.0,
+          432.0
         ],
         [
-          452.0,
-          422.0
+          496.0,
+          418.0
         ],
         [
-          704.0,
-          424.0
+          754.0,
+          433.0
         ],
         [
-          721.0,
-          620.0
+          678.0,
+          600.0
         ],
         [
-          498.0,
-          610.0
+          462.0,
+          615.0
         ],
         [
-          726.0,
-          630.0
+          646.0,
+          655.0
         ],
         [
-          475.0,
+          449.0,
           505.0
         ],
         [
-          715.0,
-          505.0
+          734.0,
+          500.0
         ],
         [
-          512.0,
+          559.0,
           690.0
         ],
         [
-          701.0,
-          705.0
+          636.0,
+          668.0
         ],
         [
-          116,
+          123,
           180
         ],
         [
-          826,
+          827,
           180
         ],
         [
           831,
-          230
+          245
         ],
         [
-          110,
+          115,
           400
         ],
         [
@@ -859,11 +859,11 @@
           400
         ],
         [
-          69,
+          115,
           650
         ],
         [
-          815,
+          831,
           650
         ]
       ]
@@ -874,103 +874,103 @@
       "file": "v4/layers/v4-r85/front.png",
       "landmarks": [
         [
-          625.0,
-          440.0
+          631.0,
+          408.0
         ],
         [
-          772.0,
-          455.0
+          754.0,
+          532.0
         ],
         [
-          762.0,
-          510.0
-        ],
-        [
-          710.0,
-          562.0
-        ],
-        [
-          752.0,
-          558.0
-        ],
-        [
-          758.0,
-          582.0
-        ],
-        [
-          762.0,
-          675.0
-        ],
-        [
-          700.0,
-          385.0
-        ],
-        [
-          712.0,
-          438.0
-        ],
-        [
-          572.0,
-          428.0
-        ],
-        [
-          716.0,
-          440.0
-        ],
-        [
-          758.0,
-          560.0
-        ],
-        [
-          575.0,
-          605.0
-        ],
-        [
-          766.0,
+          699.0,
           600.0
         ],
         [
-          560.0,
+          611.0,
+          595.0
+        ],
+        [
+          674.0,
+          612.0
+        ],
+        [
+          666.0,
+          627.0
+        ],
+        [
+          624.0,
+          715.0
+        ],
+        [
+          696.0,
+          375.0
+        ],
+        [
+          696.0,
+          425.0
+        ],
+        [
+          594.0,
+          420.0
+        ],
+        [
+          714.0,
+          428.0
+        ],
+        [
+          676.0,
+          616.0
+        ],
+        [
+          549.0,
+          615.0
+        ],
+        [
+          674.0,
+          620.0
+        ],
+        [
+          546.0,
           505.0
         ],
         [
-          766.0,
-          470.0
+          718.0,
+          505.0
         ],
         [
-          650.0,
-          688.0
+          561.0,
+          690.0
         ],
         [
-          756.0,
-          655.0
+          631.0,
+          700.0
         ],
         [
-          156,
+          137,
           180
         ],
         [
-          631,
+          637,
           180
         ],
         [
-          681,
-          230
+          690,
+          250
         ],
         [
-          124,
+          139,
           400
         ],
         [
-          746,
+          706,
           400
         ],
         [
-          178,
+          138,
           650
         ],
         [
-          758,
+          660,
           650
         ]
       ]
@@ -1211,9 +1211,9 @@
           "back": {
             "file": "v4/layers/v4-l85/back.png",
             "box": [
-              175,
+              191,
               0,
-              657,
+              641,
               1039
             ]
           },
@@ -1222,7 +1222,7 @@
             "box": [
               192,
               310,
-              525,
+              471,
               710
             ]
           }
@@ -1242,7 +1242,7 @@
             "box": [
               183,
               352,
-              507,
+              459,
               521
             ]
           }
@@ -1331,19 +1331,19 @@
           "back": {
             "file": "v4/layers/v4-r60/back.png",
             "box": [
-              3,
+              115,
               0,
-              829,
-              924
+              717,
+              911
             ]
           },
           "front": {
             "file": "v4/layers/v4-r60/front.png",
             "box": [
-              403,
-              344,
-              324,
-              491
+              305,
+              352,
+              459,
+              521
             ]
           }
         },
@@ -1351,19 +1351,19 @@
           "back": {
             "file": "v4/layers/v4-r85/back.png",
             "box": [
-              104,
+              115,
               0,
-              669,
-              1073
+              641,
+              1039
             ]
           },
           "front": {
             "file": "v4/layers/v4-r85/front.png",
             "box": [
-              357,
-              363,
-              416,
-              654
+              284,
+              310,
+              471,
+              710
             ]
           }
         }
@@ -1379,7 +1379,7 @@
               259,
               339,
               431,
-              87
+              94
             ]
           },
           {
@@ -1391,7 +1391,7 @@
               259,
               339,
               431,
-              87
+              95
             ]
           },
           {
@@ -1403,7 +1403,7 @@
               259,
               339,
               431,
-              88
+              97
             ]
           },
           {
@@ -1415,7 +1415,7 @@
               259,
               339,
               431,
-              88
+              98
             ]
           },
           {
@@ -1427,7 +1427,7 @@
               259,
               339,
               431,
-              92
+              99
             ]
           },
           {
@@ -1439,7 +1439,7 @@
               259,
               339,
               431,
-              97
+              100
             ]
           },
           {
@@ -1451,7 +1451,7 @@
               259,
               339,
               431,
-              129
+              101
             ]
           },
           {
@@ -1463,7 +1463,7 @@
               259,
               339,
               431,
-              129
+              130
             ]
           }
         ],
@@ -1500,10 +1500,10 @@
           "slightSmile": {
             "file": "v4/patches/frontal/mouth/slightSmile.png",
             "box": [
-              362,
-              588,
-              254,
-              95
+              368,
+              594,
+              242,
+              83
             ]
           },
           "smile": {
@@ -1518,10 +1518,10 @@
           "pressed": {
             "file": "v4/patches/frontal/mouth/pressed.png",
             "box": [
-              362,
-              588,
-              254,
-              95
+              368,
+              594,
+              242,
+              83
             ]
           }
         }
@@ -1790,7 +1790,7 @@
               238,
               329,
               130,
-              74
+              81
             ]
           },
           {
@@ -1802,7 +1802,7 @@
               238,
               329,
               130,
-              74
+              83
             ]
           },
           {
@@ -1814,7 +1814,7 @@
               238,
               329,
               130,
-              74
+              84
             ]
           },
           {
@@ -1826,7 +1826,7 @@
               238,
               329,
               130,
-              74
+              85
             ]
           },
           {
@@ -1838,7 +1838,7 @@
               238,
               329,
               130,
-              76
+              86
             ]
           },
           {
@@ -1849,8 +1849,8 @@
             "box": [
               238,
               329,
-              130,
-              84
+              128,
+              88
             ]
           },
           {
@@ -1861,8 +1861,8 @@
             "box": [
               238,
               329,
-              133,
-              127
+              128,
+              89
             ]
           },
           {
@@ -1874,7 +1874,7 @@
               238,
               329,
               133,
-              127
+              128
             ]
           }
         ],
@@ -1885,10 +1885,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a85.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              138
+              280,
+              145
             ]
           },
           {
@@ -1897,10 +1897,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a70.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              138
+              280,
+              146
             ]
           },
           {
@@ -1909,10 +1909,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a55.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              138
+              280,
+              148
             ]
           },
           {
@@ -1921,10 +1921,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a42.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              139
+              281,
+              149
             ]
           },
           {
@@ -1933,10 +1933,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a30.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              139
+              281,
+              151
             ]
           },
           {
@@ -1945,10 +1945,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a18.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              139
+              281,
+              152
             ]
           },
           {
@@ -1957,10 +1957,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a08.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              144
+              281,
+              153
             ]
           },
           {
@@ -1969,10 +1969,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l60/a00.png",
             "box": [
-              183,
+              182,
               351,
-              279,
-              144
+              282,
+              171
             ]
           }
         ],
@@ -1985,8 +1985,8 @@
             "box": [
               196,
               357,
-              316,
-              84
+              317,
+              91
             ]
           },
           {
@@ -1997,8 +1997,8 @@
             "box": [
               196,
               357,
-              316,
-              86
+              317,
+              93
             ]
           },
           {
@@ -2009,8 +2009,8 @@
             "box": [
               196,
               357,
-              316,
-              87
+              317,
+              96
             ]
           },
           {
@@ -2022,7 +2022,7 @@
               196,
               357,
               317,
-              88
+              98
             ]
           },
           {
@@ -2034,7 +2034,7 @@
               196,
               357,
               317,
-              90
+              99
             ]
           },
           {
@@ -2046,7 +2046,7 @@
               196,
               357,
               317,
-              94
+              101
             ]
           },
           {
@@ -2058,7 +2058,7 @@
               196,
               357,
               317,
-              138
+              104
             ]
           },
           {
@@ -2070,7 +2070,7 @@
               196,
               357,
               317,
-              138
+              139
             ]
           }
         ],
@@ -2081,10 +2081,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a85.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              93
+              395,
+              99
             ]
           },
           {
@@ -2093,10 +2093,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a70.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              94
+              395,
+              99
             ]
           },
           {
@@ -2105,10 +2105,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a55.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              94
+              395,
+              99
             ]
           },
           {
@@ -2117,10 +2117,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a42.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              94
+              395,
+              99
             ]
           },
           {
@@ -2129,10 +2129,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a30.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              94
+              395,
+              99
             ]
           },
           {
@@ -2141,10 +2141,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a18.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              95
+              395,
+              99
             ]
           },
           {
@@ -2153,10 +2153,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a08.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              122
+              395,
+              99
             ]
           },
           {
@@ -2165,10 +2165,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-l20/a00.png",
             "box": [
-              231,
+              230,
               354,
-              394,
-              122
+              395,
+              123
             ]
           }
         ],
@@ -2181,8 +2181,8 @@
             "box": [
               318,
               350,
-              389,
-              85
+              390,
+              91
             ]
           },
           {
@@ -2193,8 +2193,8 @@
             "box": [
               318,
               350,
-              390,
-              85
+              391,
+              91
             ]
           },
           {
@@ -2205,8 +2205,8 @@
             "box": [
               318,
               350,
-              390,
-              85
+              391,
+              92
             ]
           },
           {
@@ -2217,8 +2217,8 @@
             "box": [
               318,
               350,
-              390,
-              85
+              391,
+              92
             ]
           },
           {
@@ -2229,8 +2229,8 @@
             "box": [
               318,
               350,
-              390,
-              86
+              391,
+              92
             ]
           },
           {
@@ -2242,7 +2242,7 @@
               318,
               350,
               391,
-              87
+              92
             ]
           },
           {
@@ -2254,7 +2254,7 @@
               318,
               350,
               391,
-              125
+              97
             ]
           },
           {
@@ -2266,7 +2266,7 @@
               318,
               350,
               391,
-              125
+              126
             ]
           }
         ],
@@ -2279,8 +2279,8 @@
             "box": [
               403,
               345,
-              319,
-              65
+              320,
+              72
             ]
           },
           {
@@ -2291,8 +2291,8 @@
             "box": [
               403,
               345,
-              319,
-              66
+              320,
+              74
             ]
           },
           {
@@ -2303,8 +2303,8 @@
             "box": [
               403,
               345,
-              319,
-              67
+              320,
+              80
             ]
           },
           {
@@ -2316,7 +2316,7 @@
               403,
               345,
               320,
-              72
+              89
             ]
           },
           {
@@ -2328,7 +2328,7 @@
               403,
               345,
               320,
-              79
+              99
             ]
           },
           {
@@ -2339,8 +2339,8 @@
             "box": [
               403,
               345,
-              320,
-              85
+              321,
+              108
             ]
           },
           {
@@ -2352,7 +2352,7 @@
               403,
               345,
               321,
-              119
+              116
             ]
           },
           {
@@ -2364,7 +2364,7 @@
               403,
               345,
               321,
-              119
+              123
             ]
           }
         ],
@@ -2375,10 +2375,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a85.png",
             "box": [
-              448,
-              367,
-              157,
-              49
+              483,
+              351,
+              282,
+              143
             ]
           },
           {
@@ -2387,10 +2387,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a70.png",
             "box": [
-              448,
-              367,
-              158,
-              50
+              483,
+              351,
+              282,
+              144
             ]
           },
           {
@@ -2399,10 +2399,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a55.png",
             "box": [
-              448,
-              367,
-              158,
-              51
+              483,
+              351,
+              282,
+              144
             ]
           },
           {
@@ -2411,10 +2411,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a42.png",
             "box": [
-              448,
-              367,
-              159,
-              53
+              483,
+              351,
+              282,
+              144
             ]
           },
           {
@@ -2423,10 +2423,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a30.png",
             "box": [
-              448,
-              367,
-              159,
-              61
+              483,
+              351,
+              282,
+              144
             ]
           },
           {
@@ -2435,10 +2435,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a18.png",
             "box": [
-              448,
-              367,
-              159,
-              68
+              483,
+              351,
+              282,
+              145
             ]
           },
           {
@@ -2447,10 +2447,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a08.png",
             "box": [
-              448,
-              367,
-              163,
-              106
+              483,
+              351,
+              282,
+              145
             ]
           },
           {
@@ -2459,10 +2459,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r60/a00.png",
             "box": [
-              448,
-              367,
-              163,
-              106
+              483,
+              351,
+              282,
+              153
             ]
           }
         ],
@@ -2473,9 +2473,9 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a85.png",
             "box": [
-              570,
-              380,
-              94,
+              579,
+              329,
+              130,
               79
             ]
           },
@@ -2485,10 +2485,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a70.png",
             "box": [
-              570,
-              380,
-              94,
-              81
+              578,
+              329,
+              131,
+              79
             ]
           },
           {
@@ -2497,10 +2497,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a55.png",
             "box": [
-              570,
-              380,
-              94,
-              82
+              578,
+              329,
+              131,
+              79
             ]
           },
           {
@@ -2509,10 +2509,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a42.png",
             "box": [
-              570,
-              380,
-              94,
-              84
+              578,
+              329,
+              131,
+              79
             ]
           },
           {
@@ -2521,10 +2521,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a30.png",
             "box": [
-              570,
-              380,
-              94,
-              85
+              578,
+              329,
+              131,
+              78
             ]
           },
           {
@@ -2533,10 +2533,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a18.png",
             "box": [
-              570,
-              380,
-              94,
-              86
+              577,
+              329,
+              132,
+              80
             ]
           },
           {
@@ -2545,10 +2545,10 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a08.png",
             "box": [
-              570,
-              380,
-              94,
-              98
+              577,
+              329,
+              132,
+              86
             ]
           },
           {
@@ -2557,15 +2557,15 @@
             "raw": true,
             "file": "v3/patches/lids/v4-r85/a00.png",
             "box": [
-              570,
-              380,
-              94,
-              98
+              575,
+              329,
+              134,
+              128
             ]
           }
         ]
       },
-      "keyLidsReadme": "tools/gen/rig-lids.py: per key, lid frames by aperture (nearest wins); transparent below the lid edge",
+      "keyLidsReadme": "tools/gen/rig-lids2.py (v4.1): per key, lid frames by aperture (nearest wins), each the key's own LoRA-painted closed eye unrolled down to the aperture's lid edge; transparent below the edge",
       "keyPatches": {
         "v4-l40": {
           "rest": "v4/layers/v4-l40/rest.png",
@@ -2573,19 +2573,19 @@
             "parted": {
               "file": "v4/patches/v4-l40/mouth/parted.png",
               "box": [
-                257,
-                574,
-                203,
-                96
+                263,
+                580,
+                191,
+                84
               ]
             },
             "slightSmile": {
               "file": "v4/patches/v4-l40/mouth/slightSmile.png",
               "box": [
-                257,
-                574,
-                203,
-                96
+                263,
+                580,
+                191,
+                84
               ]
             },
             "smile": {
@@ -2600,10 +2600,10 @@
             "pressed": {
               "file": "v4/patches/v4-l40/mouth/pressed.png",
               "box": [
-                257,
-                574,
-                203,
-                96
+                263,
+                580,
+                191,
+                84
               ]
             }
           },
@@ -2661,10 +2661,10 @@
             "pressed": {
               "file": "v4/patches/v4-l20/mouth/pressed.png",
               "box": [
-                317,
-                588,
-                221,
-                97
+                323,
+                594,
+                209,
+                85
               ]
             }
           },
@@ -2722,10 +2722,10 @@
             "pressed": {
               "file": "v4/patches/v4-r20/mouth/pressed.png",
               "box": [
-                433,
-                590,
-                222,
-                96
+                439,
+                596,
+                210,
+                84
               ]
             }
           },
@@ -2783,10 +2783,10 @@
             "pressed": {
               "file": "v4/patches/v4-r40/mouth/pressed.png",
               "box": [
-                493,
-                583,
-                199,
-                96
+                499,
+                589,
+                187,
+                84
               ]
             }
           },
@@ -3423,7 +3423,7 @@
       ]
     },
     "v4": {
-      "_readme": "Living-portrait v4 (FFX-2 only): nine keys every ~20 deg (-85..85), each the plate turned in 2.5D and repainted with the plate's LoRA (art/v4/keys.md), finished by rig-v4fix.py, masked by rig-sam.py, cut by rig-v4layers.py. The runtime warps adjacent keys continuously (paint = 'warp'); 'switch' is the v3.3 one-painting-at-a-time fallback (?paint=switch).",
+      "_readme": "Living-portrait v4 / v4.1 (FFX-2 only): nine keys every ~20 deg (-85..85); -85..+40 are the plate turned in 2.5D and repainted with the plate's LoRA (art/v4/keys.md), +60 and +85 are the judged -60 and -85 mirrored about the head axis (tools/gen/rig-mirror.py: irises recoloured by side, the far clip repainted as hair). Runtime 'warp' (v4.1): adjacent keys registered feature by feature (flow: tools/gen/rig-flow.py, a dense midpoint grid per pair), ONE painting at a time chosen from the spring's base yaw (3 deg hysteresis, 0.2 s / 5 deg dissolve); 'switch' is the v3.3 selector on the sparse landmark mesh (?paint=switch).",
       "paint": "warp",
       "tassel": {
         "dx": {
@@ -3434,13 +3434,60 @@
           "frontal": 0,
           "v4-r20": 29,
           "v4-r40": 88,
-          "v4-r60": 128,
-          "v4-r85": 223
+          "v4-r60": 110,
+          "v4-r85": 197
         },
-        "overFromDeg": -20,
+        "overFromDeg": -40,
         "underToDeg": -40,
         "hiddenBelowDeg": -55,
-        "_readme": "The plate's earring layer, drawn un-warped at dx (px) interpolated over the bracket; on top of the head from -20 up, under the face (between back and body) from -40 down, cross-faded between; gone behind the head by -55 (the far ear is behind the skull and under the far hair)."
+        "_readme": "The plate's earring layer, drawn un-warped at dx (px, where each key carries her right ear; +60 / +85 from the mirrored keys' jaw corner, jaw_R.x - 352 like the others) interpolated linearly over the bracket; always on top, with each key's cheek (faceOver) drawn back over it while the ear turns away (yaw < 0), so it passes behind the jaw; faded out between underToDeg (-40) and hiddenBelowDeg (-55) as the ear goes behind the skull. v4.1 (v4 cross-faded an over and an under copy: a ghost over cheek and mouth).",
+        "faceOver": {
+          "frontal": {
+            "file": "v4/layers/frontal/faceover.png",
+            "box": [
+              258,
+              462,
+              134,
+              234
+            ]
+          },
+          "v4-l20": {
+            "file": "v4/layers/v4-l20/faceover.png",
+            "box": [
+              273,
+              465,
+              352,
+              554
+            ]
+          },
+          "v4-l40": {
+            "file": "v4/layers/v4-l40/faceover.png",
+            "box": [
+              207,
+              473,
+              431,
+              546
+            ]
+          },
+          "v4-l60": {
+            "file": "v4/layers/v4-l60/faceover.png",
+            "box": [
+              215,
+              473,
+              281,
+              362
+            ]
+          },
+          "v4-l85": {
+            "file": "v4/layers/v4-l85/faceover.png",
+            "box": [
+              192,
+              466,
+              224,
+              554
+            ]
+          }
+        }
       },
       "layers": {
         "v4-l85": {
@@ -3529,31 +3576,15 @@
         },
         "v4-r60": {
           "rest": "v4/layers/v4-r60/rest.png",
-          "hiddenPx": 38033,
-          "envelopeUsed": {
-            "dx": [
-              -60.0,
-              60.0
-            ],
-            "dy": [
-              -52.5,
-              43.1
-            ]
-          }
+          "mirrorOf": "v4-l60",
+          "axisS": 946,
+          "_readme": "tools/gen/rig-mirror.py: the head layers of the source key mirrored about x = S/2, irises recoloured by side, the far clip cut for a repaint"
         },
         "v4-r85": {
           "rest": "v4/layers/v4-r85/rest.png",
-          "hiddenPx": 79886,
-          "envelopeUsed": {
-            "dx": [
-              -60.0,
-              13.4
-            ],
-            "dy": [
-              -20.5,
-              55.4
-            ]
-          }
+          "mirrorOf": "v4-l85",
+          "axisS": 946,
+          "_readme": "tools/gen/rig-mirror.py: the head layers of the source key mirrored about x = S/2, irises recoloured by side, the far clip cut for a repaint"
         }
       },
       "range": "v4/range-warp.json",
@@ -3561,10 +3592,10 @@
       "expressions": {
         "v4-l40": {
           "mouth": {
-            "parted": "m40-parted.2",
-            "slightSmile": "m40-slightSmile.1",
+            "parted": "v4.1 mouth.m40-parted.c2.png (whole region)",
+            "slightSmile": "v4.1 mouth.m40-slightSmile.c3.png (whole region)",
             "smile": "m40-smile.1",
-            "pressed": "m40-pressed.2"
+            "pressed": "v4.1 mouth.m40-pressed.c1.png (whole region)"
           },
           "brows": {
             "raised": "m40-raised.1",
@@ -3576,7 +3607,7 @@
             "parted": "m20-parted.1",
             "slightSmile": "m20-slightSmile.2",
             "smile": "m20-smile.2",
-            "pressed": "m20-pressed.1"
+            "pressed": "v4.1 mouth.m20-pressed.c1.png (whole region)"
           },
           "brows": {
             "raised": "m20-raised.1",
@@ -3586,9 +3617,9 @@
         "frontal": {
           "mouth": {
             "parted": "0-parted.1",
-            "slightSmile": "0-slightSmile.1",
+            "slightSmile": "v4.1 mouth.0-slightSmile.c2.png (whole region)",
             "smile": "0-smile.1",
-            "pressed": "0-pressed.2"
+            "pressed": "v4.1 mouth.0-pressed.c1.png (whole region)"
           },
           "brows": {
             "raised": "0-raised.1",
@@ -3600,7 +3631,7 @@
             "parted": "p20-parted.2",
             "slightSmile": "p20-slightSmile.2",
             "smile": "p20-smile.2",
-            "pressed": "p20-pressed.2"
+            "pressed": "v4.1 mouth.p20-pressed.c2.png (whole region)"
           },
           "brows": {
             "raised": "p20-raised.1",
@@ -3612,11 +3643,236 @@
             "parted": "p40-parted.1",
             "slightSmile": "p40-slightSmile.2",
             "smile": "p40-smile.1",
-            "pressed": "p40-pressed.2"
+            "pressed": "v4.1 mouth.p40-pressed.c4.png (whole region)"
           },
           "brows": {
             "raised": "p40-raised.1",
             "drawn": "p40-drawn.2"
+          }
+        }
+      },
+      "flow": {
+        "_readme": "tools/gen/rig-flow.py: per adjacent pair a midpoint grid (nx * ny vertices, row-major), float32 LE per vertex: pA.x, pA.y (texel in the lower-yaw key), pB.x, pB.y (texel in the higher), headW (1 = rides the head's sway, 0 = the chest's). At bracket weight g a vertex is drawn at (1 - g) pA + g pB.",
+        "nx": 105,
+        "ny": 153,
+        "step": 8,
+        "pairs": {
+          "v4-l85|v4-l60": "v4/flow/v4-l85__v4-l60.bin",
+          "v4-l60|v4-l40": "v4/flow/v4-l60__v4-l40.bin",
+          "v4-l40|v4-l20": "v4/flow/v4-l40__v4-l20.bin",
+          "v4-l20|frontal": "v4/flow/v4-l20__frontal.bin",
+          "frontal|v4-r20": "v4/flow/frontal__v4-r20.bin",
+          "v4-r20|v4-r40": "v4/flow/v4-r20__v4-r40.bin",
+          "v4-r40|v4-r60": "v4/flow/v4-r40__v4-r60.bin",
+          "v4-r60|v4-r85": "v4/flow/v4-r60__v4-r85.bin"
+        }
+      },
+      "repaints": {
+        "v4-r60.clip": {
+          "pick": "v4-r60.clip.c2.png",
+          "part": "back",
+          "grow": 24,
+          "featherPx": 6,
+          "tool": "tools/gen/lora-repaint.mjs + rig-v41fix.py merge"
+        },
+        "v4-r85.clip": {
+          "pick": "v4-r85.clip.c1.png",
+          "part": "back",
+          "grow": 14,
+          "featherPx": 6,
+          "tool": "tools/gen/lora-repaint.mjs + rig-v41fix.py merge"
+        },
+        "v4-l40.heal": {
+          "box": [
+            312,
+            624,
+            24,
+            20
+          ],
+          "what": "red dash under the mouth corner, refilled from the skin around it"
+        }
+      },
+      "lids": {
+        "frontal": {
+          "closedPick": "frontal.lidsB.c1.png",
+          "closedPickLeftEye": "frontal.lidsB.c4.png",
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                269,
+                393
+              ],
+              "closedLineMean": 433.2,
+              "openTopMean": 389.4
+            },
+            "pupil_L": {
+              "cols": [
+                561,
+                679
+              ],
+              "closedLineMean": 417.9,
+              "openTopMean": 375.8
+            }
+          }
+        },
+        "v4-l20": {
+          "closedPick": "v4-l20.lidsB.c1.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                238,
+                339
+              ],
+              "closedLineMean": 433.9,
+              "openTopMean": 394.3
+            },
+            "pupil_L": {
+              "cols": [
+                481,
+                620
+              ],
+              "closedLineMean": 425.7,
+              "openTopMean": 371.6
+            }
+          }
+        },
+        "v4-l40": {
+          "closedPick": "v4-l40.lidsB.c1.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                200,
+                278
+              ],
+              "closedLineMean": 446.3,
+              "openTopMean": 391.9
+            },
+            "pupil_L": {
+              "cols": [
+                392,
+                508
+              ],
+              "closedLineMean": 436.3,
+              "openTopMean": 375.1
+            }
+          }
+        },
+        "v4-l60": {
+          "closedPick": "v4-l60.lidsB.c4.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                188,
+                269
+              ],
+              "closedLineMean": 444.7,
+              "openTopMean": 404.0
+            },
+            "pupil_L": {
+              "cols": [
+                348,
+                459
+              ],
+              "closedLineMean": 417.9,
+              "openTopMean": 367.7
+            }
+          }
+        },
+        "v4-l85": {
+          "closedPick": "v4-l85.lidsB.c1.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_L": {
+              "cols": [
+                248,
+                363
+              ],
+              "closedLineMean": 381.1,
+              "openTopMean": 359.7
+            }
+          }
+        },
+        "v4-r20": {
+          "closedPick": "v4-r20.lidsB.c2.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                322,
+                468
+              ],
+              "closedLineMean": 438.9,
+              "openTopMean": 389.3
+            },
+            "pupil_L": {
+              "cols": [
+                610,
+                704
+              ],
+              "closedLineMean": 418.8,
+              "openTopMean": 371.4
+            }
+          }
+        },
+        "v4-r40": {
+          "closedPick": "v4-r40.lidsB.c1.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                413,
+                541
+              ],
+              "closedLineMean": 433.3,
+              "openTopMean": 386.3
+            },
+            "pupil_L": {
+              "cols": [
+                668,
+                718
+              ],
+              "closedLineMean": 415.4,
+              "openTopMean": 369.6
+            }
+          }
+        },
+        "v4-r60": {
+          "closedPick": "v4-r60.lidsB.c4.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                486,
+                598
+              ],
+              "closedLineMean": 416.3,
+              "openTopMean": 368.0
+            },
+            "pupil_L": {
+              "cols": [
+                677,
+                758
+              ],
+              "closedLineMean": 435.1,
+              "openTopMean": 406.3
+            }
+          }
+        },
+        "v4-r85": {
+          "closedPick": "v4-r85.lidsB.c3.png",
+          "closedPickLeftEye": null,
+          "eyes": {
+            "pupil_R": {
+              "cols": [
+                583,
+                698
+              ],
+              "closedLineMean": 398.9,
+              "openTopMean": 359.7
+            }
           }
         }
       }

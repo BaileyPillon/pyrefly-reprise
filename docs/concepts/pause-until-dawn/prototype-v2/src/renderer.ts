@@ -25,11 +25,12 @@ import { createFramebufferTarget, loadImage, type FrameBufferTarget } from './gl
 import { relightGainForYaw } from './light.ts';
 import { PostPass } from './post.ts';
 import { RIG_CONSTANTS } from './constants.ts';
-import { LayerGL } from './gl-layer.ts';
+import { LayerGL, WARP_FRAG } from './gl-layer.ts';
+import { DenseMeshes, readFlow } from './warp/dense.ts';
 import { readV3, readV4, loadArt, uploadTexture, type LoadedArt, type Tex, type V4Meta } from './layers.ts';
 import { LooseMotion, chestOffsetPx, headSwayPx, irisOffsetPx, yawNormFor, smootherstep, type Px } from './motion.ts';
 import { WarpCache, type WarpPose } from './warp/cache.ts';
-import { PaintSelector, paintWindowWeight, type PaintState } from './paint.ts';
+import { PaintSelector, WARP_PAINT, type PaintState } from './paint.ts';
 import { Composer, KEY_EPS, type Meshes, type Motions, type TasselDraw } from './compose.ts';
 
 /** v4 ('warp'): adjacent keys warped onto the same landmarks and mixed by the rendered yaw; 'switch': v3.3's one painting at a time. */
@@ -79,6 +80,9 @@ export class Renderer {
   private readonly loose = new LooseMotion();
   private readonly warps: WarpCache;
   private readonly paint: PaintSelector;
+  /** v4.1 'warp': the same one-painting selector, tuned for feature-registered keys (`WARP_PAINT`). */
+  private readonly warpPaint: PaintSelector;
+  private dense: DenseMeshes | null = null;
   private composer: Composer | null = null;
   private lastT: number | null = null;
   private lastPaint: PaintState | null = null;
@@ -91,6 +95,7 @@ export class Renderer {
     this.keysByYaw = sortedKeys(rig);
     this.warps = new WarpCache(rig);
     this.paint = new PaintSelector(this.keysByYaw);
+    this.warpPaint = new PaintSelector(this.keysByYaw, WARP_PAINT.hysteresisDeg, WARP_PAINT.dissolveS, WARP_PAINT.dissolveDeg);
     this.v4 = readV4(rig.artMeta);
     this.paintMode = this.v4?.paint ?? 'switch';
     let gl: WebGL2RenderingContext | null = null;
@@ -114,8 +119,20 @@ export class Renderer {
     if (!gl) return;
     const v3 = readV3(this.rig.artMeta);
     if (v3) {
-      this.art = await loadArt(gl, this.base, v3, Boolean(this.v4?.tassel));
+      this.art = await loadArt(gl, this.base, v3, Boolean(this.v4?.tassel), this.v4?.tassel?.faceOver ?? {});
       this.composer = new Composer(this.layers!, this.art, (t, c) => this.bindTarget(t, c));
+      const flow = readFlow(this.rig.artMeta);
+      if (flow) {
+        try {
+          const dense = new DenseMeshes(gl, WARP_FRAG);
+          await dense.load(this.base, flow);
+          this.dense = dense;
+          this.layers!.useDense(dense);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.warn('[living-portrait] dense pair meshes unavailable; sparse landmark mesh used:', err);
+        }
+      }
     } else {
       // No v3 art (the stand-in rig): show the plate itself, unmoving.
       const img = await loadImage(this.base + this.rig.bodyFile);
@@ -157,28 +174,59 @@ export class Renderer {
     return this.keysByYaw.find((k) => k.id === id) ?? this.keysByYaw[0]!;
   }
 
-  /** The pose's geometry: the bracket of the rendered yaw, carried by the chest and the head's sway. */
+  /**
+   * The pose's geometry: the bracket of the rendered yaw, carried by the chest
+   * and the head's sway. v4.1: the bracket weight is the plain linear t (v4's
+   * smootherstep stopped every landmark at each key, so a steady turn moved in
+   * pulses), and the ends of the range sit on their outer pair at g = 0 or 1.
+   */
   private pose(yawDeg: number, chest: Px, head: Px): WarpPose {
     const { a, b, t } = bracketForYaw(this.keysByYaw, yawDeg);
-    const g = b ? smootherstep(t) : 0;
-    if (!b || g <= KEY_EPS) return { a, b: null, g: 0, head, chest };
-    if (g >= 1 - KEY_EPS) return { a: b, b: null, g: 0, head, chest };
-    return { a, b, g, head, chest };
+    if (b) return { a, b, g: t, head, chest };
+    const i = this.keysByYaw.indexOf(a);
+    if (i === 0 && this.keysByYaw[1]) return { a, b: this.keysByYaw[1], g: 0, head, chest };
+    if (i > 0) return { a: this.keysByYaw[i - 1]!, b: a, g: 1, head, chest };
+    return { a, b: null, g: 0, head, chest };
   }
 
-  /** A painted key's meshes for this pose; NO_MESH = plain quads (a still pose on its own key). */
+  /**
+   * The painted key lies outside the geometry's bracket (the paint's
+   * hysteresis, or a jump of more than a key in one frame): pose it on the
+   * pair that joins it to the geometry, at that pair's end nearest the
+   * geometry, so it is drawn as close to the rendered yaw as its own mesh
+   * reaches.
+   */
+  private nearestPose(key: RigKey, pose: WarpPose): WarpPose {
+    const i = this.keysByYaw.indexOf(key);
+    const toward = key.yawDeg < pose.a.yawDeg ? this.keysByYaw[i + 1] : this.keysByYaw[i - 1];
+    if (!toward) return { a: key, b: null, g: 0, head: pose.head, chest: pose.chest };
+    return toward.yawDeg > key.yawDeg
+      ? { a: key, b: toward, g: 1, head: pose.head, chest: pose.chest }
+      : { a: toward, b: key, g: 0, head: pose.head, chest: pose.chest };
+  }
+
+  /** A painted key's meshes for this pose; NO_MESH = plain quads (a still pose exactly on its own key). */
   private meshes(key: RigKey, pose: WarpPose, moving: boolean): Meshes | null {
-    if (!pose.b && !moving && key.id === pose.a.id) return NO_MESH;
-    const head = this.warps.keyMesh(key, pose);
+    const onKey = (pose.g <= KEY_EPS && key.id === pose.a.id) || (pose.b !== null && pose.g >= 1 - KEY_EPS && key.id === pose.b.id) || (!pose.b && key.id === pose.a.id);
+    if (onKey && !moving) return NO_MESH;
+    const body = this.warps.bodyMesh(this.keyById('frontal'), pose);
+    if (this.dense && pose.b && this.paintMode === 'warp') {
+      const sway: Px = [pose.head[0] - pose.chest[0], pose.head[1] - pose.chest[1]];
+      const d = this.dense.draw(pose.a.id, pose.b.id, key.id, pose.g, pose.chest, sway);
+      if (d) return { head: d, body };
+    }
+    const sparse: WarpPose = pose.b && pose.g <= KEY_EPS ? { ...pose, b: null, g: 0 } : pose.b && pose.g >= 1 - KEY_EPS ? { ...pose, a: pose.b, b: null, g: 0 } : pose;
+    const head = this.warps.keyMesh(key, sparse);
     if (!head) return null;
-    return { head, body: this.warps.bodyMesh(this.keyById('frontal'), pose) };
+    return { head, body };
   }
 
   /** Advances the paint choice on the frame's own clock (a frozen debug clock freezes a dissolve too). */
   private paintFor(frame: RenderFrame): PaintState {
     const dt = this.lastT === null ? 0 : Math.max(0, Math.min(0.1, frame.timeSeconds - this.lastT));
     this.lastT = frame.timeSeconds;
-    return this.paint.update(frame.baseYawDeg ?? frame.yawDeg, dt);
+    const sel = this.paintMode === 'warp' ? this.warpPaint : this.paint;
+    return sel.update(frame.baseYawDeg ?? frame.yawDeg, dt);
   }
 
   private renderArt(frame: RenderFrame): void {
@@ -213,21 +261,12 @@ export class Renderer {
       this.layers!.mix(ta.tex, tb.tex, b ? smootherstep(t) : 0);
       return;
     }
-    if (this.paintMode === 'warp') {
-      this.renderWarp(frame, m, gain, chest, head, moving, loose.earring);
-      return;
-    }
-    let pose = this.pose(frame.yawDeg, chest, head);
+    const pose = this.pose(frame.yawDeg, chest, head);
     const to = this.keyById(paint.to);
-    let mTo = this.meshes(to, pose, moving);
-    if (!mTo) {
-      // the painted key lies outside the geometry's bracket (a jump of more than a key in one frame): pose on it alone
-      pose = { a: to, b: null, g: 0, head, chest };
-      mTo = this.meshes(to, pose, moving) ?? NO_MESH;
-    }
+    const mTo = this.meshes(to, pose, moving) ?? this.meshes(to, this.nearestPose(to, pose), moving) ?? NO_MESH;
     const td = this.tasselFor(frame.yawDeg, head, loose.earring);
     const from = paint.from && paint.w < 1 - KEY_EPS ? this.keyById(paint.from) : null;
-    const mFrom = from ? this.meshes(from, pose, moving) : null;
+    const mFrom = from ? (this.meshes(from, pose, moving) ?? this.meshes(from, this.nearestPose(from, pose), moving)) : null;
     if (!from || !mFrom) {
       this.bindTarget(scene);
       C.drawKey(to, frame, m, gain, mTo, 'all', td);
@@ -237,59 +276,27 @@ export class Renderer {
   }
 
   /**
-   * v4 'warp': the bracket's two keys, each warped onto the landmarks
-   * interpolated at the rendered yaw; the paint swaps over an 8-degree window
-   * at the bracket's middle (`paintWindowWeight`), so each key is seen alone,
-   * only reshaped, over most of the turn. With keys every ~20 degrees the two
-   * paintings are the same head a few degrees apart.
-   */
-  private renderWarp(frame: RenderFrame, m: Motions, gain: number, chest: Px, head: Px, moving: boolean, earring: Px): void {
-    const C = this.composer!;
-    const [scene] = this.targets as [FrameBufferTarget];
-    const { a, b, t } = bracketForYaw(this.keysByYaw, frame.yawDeg);
-    const w = b ? paintWindowWeight(t, b.yawDeg - a.yawDeg) : 0;
-    const pose = this.pose(frame.yawDeg, chest, head);
-    const td = this.tasselFor(frame.yawDeg, head, earring);
-    const single = !b || w <= KEY_EPS ? a : w >= 1 - KEY_EPS ? b : null;
-    if (single) {
-      this.lastPaint = { to: single.id, from: null, w: 1 };
-      this.bindTarget(scene);
-      C.drawKey(single, frame, m, gain, this.meshes(single, pose, moving) ?? NO_MESH, 'all', td);
-      return;
-    }
-    const mA = this.meshes(a, pose, moving);
-    const mB = this.meshes(b!, pose, moving);
-    this.lastPaint = { to: b!.id, from: a.id, w };
-    if (!mA || !mB) {
-      this.bindTarget(scene);
-      C.drawKey(w < 0.5 ? a : b!, frame, m, gain, NO_MESH, 'all', td);
-      return;
-    }
-    C.drawDissolve(a, b!, w, mA, mB, frame, m, gain, this.targets, td);
-  }
-
-  /**
-   * v4: where the plate's tassel goes for this yaw. Its x offset at each key
-   * is where that key's painting carries it (`artMeta.v4.tassel.dx`), blended
-   * with the geometry's own weight; it rides the head's translation and its
-   * own loose swing. On top from `overFromDeg` up, under the face from
-   * `underToDeg` down, cross-faded between (it passes behind the far jaw).
+   * Where the plate's tassel goes for this yaw. Its x offset at each key is
+   * where that key's painting carries her right ear (`artMeta.v4.tassel.dx`),
+   * interpolated linearly with the geometry; it rides the head's translation
+   * and its own loose swing. v4.1: it is always drawn on top, and while the ear
+   * turns away (yaw < 0) each key's cheek is drawn back over it
+   * (`Composer.drawFaceOver`), so it passes behind the jaw instead of across
+   * the cheek (v4 cross-faded an 'over' and an 'under' copy between -20 and
+   * -40: a ghost over cheek and mouth). Past `underToDeg` the ear is behind
+   * the skull: the tassel fades out by `hiddenBelowDeg`.
    */
   private tasselFor(yawDeg: number, head: Px, earring: Px): TasselDraw | null {
     const tv = this.v4?.tassel;
     const t = this.art?.tassel;
     if (!tv || !t) return null;
-    const { a, b, t: bt } = bracketForYaw(this.keysByYaw, yawDeg);
-    const g = b ? smootherstep(bt) : 0;
+    const { a, b, t: g } = bracketForYaw(this.keysByYaw, yawDeg);
     const da = tv.dx[a.id] ?? 0;
     const dx = b ? da + ((tv.dx[b.id] ?? da) - da) * g : da;
-    const span = Math.max(1e-6, tv.overFromDeg - tv.underToDeg);
-    const x = Math.max(0, Math.min(1, (yawDeg - tv.underToDeg) / span));
-    const over = x * x * (3 - 2 * x);
     const lo = tv.hiddenBelowDeg ?? -90;
     const h = Math.max(0, Math.min(1, (yawDeg - lo) / Math.max(1e-6, tv.underToDeg - lo)));
-    const under = yawDeg < tv.overFromDeg ? h * h * (3 - 2 * h) : 0;
-    return { t, offset: [dx + head[0] + earring[0], head[1] + earring[1]], under, over };
+    const over = h * h * (3 - 2 * h);
+    return { t, offset: [dx + head[0] + earring[0], head[1] + earring[1]], under: 0, over, occlude: yawDeg < 0 };
   }
 
   render(frame: RenderFrame): void {
@@ -334,6 +341,7 @@ export class Renderer {
       gl.deleteTexture(t.tex);
     }
     this.layers?.dispose();
+    this.dense?.dispose();
     this.post?.dispose();
   }
 }

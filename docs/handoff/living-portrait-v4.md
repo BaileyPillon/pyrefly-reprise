@@ -1,6 +1,107 @@
 # Living portrait v4: one Yuna across the turn (2026-09-23)
 
-## Rig assembly (latest; read this first)
+## v4.1 fix pass (latest; read this first)
+
+Game case: **FFX-2 only** (the Yuna X-2 plate); the tools (dense registration,
+mirror, painted lids, tassel occlusion) and the renderer plumbing are shared by
+any plate. Why: the v4 check refuted the rig (two paintings mixed while the
+viewer held still, a different +80..+85 painting sitting 60 to 90 px high,
+doubled irises and lashes in every paint window, the tassel across the cheek,
+tearing at the wide turns, blob lids, weak expressions, a turn that stopped at
+every key, a seam and no far eye at +60). Each is fixed at its root below and
+re-measured with the check's own tools (`critic/scratch/living-portrait-v4/`,
+run unchanged from a scratch copy against this build). Evidence:
+`docs/concepts/pause-until-dawn/prototype-v2/shots/v4/` (`clip-15s.webm`,
+`sheet.jpg`, stills, 1:1 crops) and `shots/v4/check/` (the sweep every 6
+degrees, the wide turns every 3, the tassel range, the eyes at every paint
+change's midpoint, blink, mouth and brow sheets, `measured.json`).
+
+### What is real now
+
+| v4 check finding | root fix | re-measured (same tool) |
+|---|---|---|
+| Held gaze: two paintings in 40 of 40 samples at -30, -50, -72, +30, +50, +72 (the paint weight followed the swaying rendered yaw) | `src/paint.ts`: 'warp' now uses the one-painting selector on the spring's BASE yaw (3 deg hysteresis, 0.2 s or 5 deg dissolve, `WARP_PAINT`); v4's `renderWarp` and `paintWindowWeight` removed | hold: **0 of 40** at 0, -30, -50, -72, +30, +50, +72, -40, +40; `?paint=switch` 0 of 20 at -30, -72, +72 |
+| Features doubled in every paint window (two irises, two catchlights, doubled lashes and jaw) | `tools/gen/rig-flow.py` + `src/warp/dense.ts`: every adjacent pair registered feature by feature (DIS optical flow both ways on top of the landmark map, kept where forward and backward agree, two passes, smoothed, capped, fold-repaired) into an 8 px midpoint grid; each key samples its own texel and at g = 0 / 1 is its own painting exactly | face mismatch with both keys warped to the pair's middle (MAD): 45 -> 28 (0 / +20), 43 -> 30 (-20 / 0), 42 -> 32 (-40 / -20), 44 -> 32 (+20 / +40), 45 -> 35 (-60 / -40), 40 -> 32 (-85 / -60); one iris and one lash line at w = 0.5 in every paint change from -46 to +34 (`check/mid-dissolve-eyes.png`) |
+| The turn moves in pulses (smootherstep per bracket: 0 px/deg at every key) | `renderer.ts` `pose`: linear bracket weight (the tassel offset too) | 1-degree image MAD min 6.9, median 9.8 (v4: 0 to 2 at each key, 15 to 22 between); no step over 3x the median at 1 or 5 degrees |
+| +80..+85 a different painting (flat glossy hair, no tips, teal smear, jagged jaw), face 60 to 90 px high; +60 a vertical seam and no far eye | `tools/gen/rig-mirror.py`: +60 and +85 are the judged -60 and -85 mirrored about the head axis (S = 946), irises recoloured by side (her right green, her left blue), the plate body's collar copies stripped before the flip, small islands removed; the mirrored far clip repainted as hair with the LoRA (`tools/gen/lora-repaint.mjs`, `rig-v41fix.py prep / merge`) | +85 nose y 532, chin 715 (the -85 key's; v4: 455 / 675); the +60 far eye is there; orange and pink tips on both (`check/sweep-wide.jpg`) |
+| Tears at -60..-85 and +60..+85 (horizontal streaks, edge bars, a white crescent, ghost hair) | `rig-flow.py` `occlusion_landmarks`: in the two wide brackets the 60-degree key's far-side hair landmarks sit on the profile's own silhouette (carried by the face's shift), so the profile is never stretched over hair it does not have; `edge_keep`: no motion across the frame line, only along it | no streaks or bars from -84 to -72 or +72 to +84 (`check/sweep-wide.jpg`); every pair's mesh is fold-free at 21 weights (`check/dense.test.ts`) |
+| The tassel crosses the cheek at -22..-26 and ghosts over cheek and mouth at -30..-34 | `rig-v41fix.py faceover` + `compose.ts drawFaceOver`: while her right ear turns away (yaw < 0) each key's lower face and neck are drawn back over the tassel (its mouth patch again after it); otherwise the tassel is on top; in a dissolve each key's pass carries its own | the tassel passes behind the cheek and jaw from -20 to -44 (`check/sweep-tassel.jpg`); no tassel over the mouth at -40 (`check/v-mouth.jpg`) |
+| Blinks on turned keys: flat pale blobs with torn outlines, a zig-zag 'V' at -40, a dark outlined oval at 0 | `tools/gen/rig-lids2.py`: every key's closed eyes PAINTED with the LoRA (masked to the eyes; per-eye picks where the sampler winked); each in-between frame is the closed painting's own lid unrolled down to the aperture's lid edge with its own lash line; strands stay in front, iris texels never do | the blink at 0, -40 and +20 rolls with painted skin and lashes (`check/v-blink.jpg`); timing unchanged (0.68, 0.35, 0.03, 0, then reopening); change outside the eye box 0.005 to 0.033 levels up to the closed frame (0.07 by the end of the reopening, as the clock runs) |
+| Expressions: a red dash under the -40 mouth, a pink wedge, the parted mouth shifted left, pressed breaking into fragments at 0 and +20, an orange smear at 0; brows barely visible | `rig-v41fix.py mouth`: a patch is the WHOLE repainted mouth region (soft ellipse), not the dark features cut out of it (which let two lip lines mix); new LoRA candidates for pressed (all five keys), -40 parted and slight smile, 0 slight smile; `heal` removed the dash from the -40 key, its composite and its patches; `compose.ts browOpacity`: the brow swell peaks at full opacity (the spec's 40 percent is movement, not paint opacity) | `check/v-mouth.jpg`, `check/v-brow.jpg`; change outside the mouth patch 0.01 to 0.79 levels |
+
+Unchanged and still passing: rest with `?post=0` is the plate to the pixel
+(MAD 0.0000, 0 px differ; post on 0.59, the corner grade); the body band
+below y 1016 differs from rest by 0.12 to 0.31 over the sweep; the logic layer
+(spring, blink timing, sway band 0.199 Hz, idle chest 4.96 percent of IPD) is
+untouched.
+
+### What remains (disclosed)
+
+1. **Two paintings still show for 38 of 169 degrees of a frozen 1-degree
+   sweep** (v4: 42): 5 degrees at each of the eight paint changes. They are
+   registered now (one iris, one lash line), so what changes is texture: hair
+   strands and shading. In real time a change takes 0.2 s or 5 degrees.
+2. **+40 -> +60 changes the fringe**: +60 is the mirrored -60, whose fringe
+   falls the other way from the +40 key's, so at the +50 swap two different
+   fringes dissolve for 0.2 s (`check/mid-dissolve-eyes.png`, the +54 panel;
+   face MAD 61 -> 59, barely registered). The fix is a +60 painted from +40
+   turned, not from the mirror.
+3. **The wide brackets fade the far hair**: between -60 and -85 (and +60 /
+   +85) the 60-degree painting's far-side hair is shown as painted until the
+   paint changes, then dissolves out in 0.2 s (one warp cannot slide it behind
+   the face).
+4. **The tassel fades out between -40 and -55** where it still shows below
+   the jaw (a faint cyan tassel end at -50).
+5. **The clip at -60 / -85 is the full red and cyan disc**: the plate shows
+   half of it at the frame edge and the turn reveals the whole, scaled from the
+   -40 key's (the plate's own design). The check called it a disc the plate
+   never shows; kept, and flagged for Bailey.
+6. **Leftward and rightward sweeps differ at the swap points** (MAD up to 50
+   at +50): with hysteresis the paint changes 3 degrees later in the direction
+   of travel. v4's spatial window had no hysteresis (and no held gaze).
+7. **Profile blinks**: at -85 / +85 the lid covers the upper eye first and the
+   iris goes at the last frame; the -40 parted mouth is barely open (the
+   sampler would not open it at a low denoise).
+8. No independent judge and no Bailey look at this pass.
+
+### Rebuild (no ComfyUI; the picks are on disk)
+
+```
+PY=D:/Tools/ComfyUI/python_embeded/python.exe
+CV=D:/Tools/sd-scripts/.venv/Scripts/python.exe          # the only Python here with OpenCV (rig-flow.py)
+W=D:/Tools/pyrefly-lora/yuna-x2/rig-v41
+$PY -s tools/gen/rig-v41fix.py clean --key v4-l85 ; $PY -s tools/gen/rig-v41fix.py clean --key v4-l60
+$PY -s tools/gen/rig-mirror.py --src v4-l60 --dst v4-r60 ; $PY -s tools/gen/rig-mirror.py --src v4-l85 --dst v4-r85
+$PY -s tools/gen/rig-v41fix.py merge --key v4-r60 --region clip --grow 24 --pick $W/v4-r60.clip.c2.png
+$PY -s tools/gen/rig-v41fix.py merge --key v4-r85 --region clip --grow 14 --pick $W/v4-r85.clip.c1.png
+#   (the far clip landmark of v4-r60 / v4-r85 and the tassel dx 110 / 197 are set in rig.json)
+$PY -s tools/gen/rig-lids2.py build --key frontal --pick $W/frontal.lidsB.c1.png --pick-l $W/frontal.lidsB.c4.png
+#   lidsB picks: v4-l20 c1, v4-l40 c1, v4-l60 c4, v4-l85 c1, v4-r20 c2, v4-r40 c1, v4-r60 c4, v4-r85 c3
+$PY -s tools/gen/rig-v41fix.py mouth --tag 0 --state pressed --pick $W/mouth.0-pressed.c1.png   # the others: artMeta.v4.expressions
+$PY -s tools/gen/rig-v41fix.py heal --key v4-l40 --box 312,624,24,20
+$PY -s tools/gen/rig-v41fix.py faceover
+$CV tools/gen/rig-flow.py build --check
+PYREFLY_BROWSER=gpu node tools/gen/rig-v4shots.mjs --url http://127.0.0.1:<port>/docs/concepts/pause-until-dawn/prototype-v2/ --out docs/concepts/pause-until-dawn/prototype-v2/shots/v4
+```
+
+The repaints (clip, closed eyes, mouths) came from `tools/gen/lora-repaint.mjs`
+(the yuna-x2 LoRA, core nodes, one prompt at a time behind the shared queue,
+about 9 s each; ComfyUI never restarted; no training this pass). The
+candidates live in `D:/Tools/pyrefly-lora/yuna-x2/rig-v41/` (not committed).
+
+A dev-server note: the repo's default Vite watcher crashed mid-check on
+another agent's browser profile under `critic/rounds/` (EBUSY); a config that
+ignores `critic/**` kept it up.
+
+### Needs Bailey
+
+- A look at `shots/v4/clip-15s.webm` and `sheet.jpg`, and **his pick of the
+  gaze reading by feel** (head, eyes or camera) in the prototype.
+- Whether the full clip disc at -60 / -85 stays (item 5), and whether +60 is
+  worth repainting from +40 (item 2).
+
+
+## Rig assembly (v4, superseded by v4.1 above)
 
 Game case: **FFX-2 only** (the Yuna X-2 plate); the tools and the renderer
 plumbing are shared by any plate. Write-up: the prototype README, Part 8.

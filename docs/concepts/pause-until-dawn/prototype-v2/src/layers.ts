@@ -68,6 +68,12 @@ export interface V4Meta {
     underToDeg: number;
     /** v4: faded out by this yaw (the far ear goes behind the skull and under the far hair). */
     hiddenBelowDeg?: number;
+    /**
+     * v4.1 (tools/gen/rig-v41fix.py faceover): per key on the tassel's side of
+     * the turn, the cheek and jaw beside the tassel (below the eyes, left of the
+     * mouth), drawn over the tassel while her right ear turns away (yaw < 0).
+     */
+    faceOver?: Record<string, PlacedFile>;
   };
 }
 
@@ -171,13 +177,15 @@ export interface LoadedArt {
   keyPatches: Map<string, { mouth: Map<string, Tex>; brows: Map<string, Tex> }>;
   /** v4: the plate's earring layer, drawn apart from every key (null: it rides in the frontal stack). */
   tassel: Tex | null;
+  /** v4.1: per key, the cheek drawn over the tassel while the ear turns away. */
+  faceOver: Map<string, Tex>;
   fringeLiftPx: number;
   all: WebGLTexture[];
   /** Per patch: the seam colour fit that was applied (identity when the rest composite could not be read). */
   patchFits: PatchFit[];
 }
 
-export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3Art, withTassel = false): Promise<LoadedArt> {
+export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3Art, withTassel = false, faceOverFiles: Record<string, PlacedFile> = {}): Promise<LoadedArt> {
   const all: WebGLTexture[] = [];
   const track = (t: Tex): Tex => (all.push(t.tex), t);
   const frontal = await Promise.all(art.frontal.layers.map(async (layer) => ({ layer, t: track(await loadPlaced(gl, base, layer)) })));
@@ -224,5 +232,7 @@ export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3A
     keyPatches.set(id, { mouth: km, brows: kb });
   }
   const earring = frontal.find((f) => f.layer.name === 'earring');
-  return { frontal, bodyTurned, keys, eyes, keyLids, brows, mouth, keyPatches, tassel: withTassel && earring ? earring.t : null, fringeLiftPx: art.fringeLiftPx, all, patchFits: fits };
+  const faceOver = new Map<string, Tex>();
+  for (const [id, p] of Object.entries(faceOverFiles)) faceOver.set(id, track(await loadPlaced(gl, base, p)));
+  return { frontal, bodyTurned, keys, eyes, keyLids, brows, mouth, keyPatches, tassel: withTassel && earring ? earring.t : null, faceOver, fringeLiftPx: art.fringeLiftPx, all, patchFits: fits };
 }

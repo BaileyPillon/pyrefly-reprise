@@ -87,23 +87,28 @@ describe('v3.2 paint selection (the fix for the mid-gaze pulse)', () => {
   });
 });
 
-import { paintWindowWeight } from '../src/paint.ts';
+import { WARP_PAINT } from '../src/paint.ts';
 
-describe('v4 warp paint window', () => {
-  it('is one painting outside an 8-degree window at the middle of the bracket, and continuous inside it', () => {
-    for (const span of [20, 25]) {
-      const t0 = 0.5 - 4 / span;
-      const t1 = 0.5 + 4 / span;
-      expect(paintWindowWeight(t0 - 0.01, span)).toBe(0);
-      expect(paintWindowWeight(t1 + 0.01, span)).toBe(1);
-      expect(paintWindowWeight(0.5, span)).toBeCloseTo(0.5, 6);
-      let prev = 0;
-      for (let i = 0; i <= 100; i++) {
-        const w = paintWindowWeight(i / 100, span);
-        expect(w).toBeGreaterThanOrEqual(prev - 1e-12);
-        expect(w - prev).toBeLessThan(0.1);
-        prev = w;
-      }
-    }
+describe('v4.1 warp paint (one painting, chosen from the base yaw)', () => {
+  function held(targetDeg: number, seconds: number, seed = 7) {
+    const sm = new PortraitStateMachine({ headSway: seed, blink: seed + 1, expression: seed + 2 });
+    sm.setYawRange(-85, 85);
+    sm.setGazeTarget(targetDeg / 85, 0);
+    const keys = [-85, -60, -40, -20, 0, 20, 40, 60, 85].map((y) => ({ id: `k${y}`, yawDeg: y }));
+    const p = new PaintSelector(keys, WARP_PAINT.hysteresisDeg, WARP_PAINT.dissolveS, WARP_PAINT.dissolveDeg);
+    for (let i = 0; i < 180; i++) p.update(sm.update(DT).baseYawDeg, DT);
+    let mixed = 0;
+    const n = Math.round(seconds / DT);
+    for (let i = 0; i < n; i++) if (p.update(sm.update(DT).baseYawDeg, DT).from) mixed++;
+    return mixed;
+  }
+  it('a gaze held mid-bracket (the v4 check, -72 .. +72) never shows two paintings', () => {
+    for (const t of [-72, -50, -30, -10, 10, 30, 50, 72, -40, 40, 0]) expect(held(t, 120), `target ${t}`).toBe(0);
+  });
+  it('a fast turn finishes the swap within 5 degrees', () => {
+    const p = new PaintSelector([{ id: 'a', yawDeg: 0 }, { id: 'b', yawDeg: 20 }], WARP_PAINT.hysteresisDeg, WARP_PAINT.dissolveS, WARP_PAINT.dissolveDeg);
+    p.update(0, DT);
+    expect(p.update(13.5, 0).from).toBe('a');
+    expect(p.update(18.6, 0).from).toBeNull();
   });
 });
