@@ -130,6 +130,33 @@
    */
   overflow-y: auto;
   overflow-x: hidden;
+  /*
+   * PR-0127: the scrollbar above was never a *visible* cue. This game is
+   * played with a pad or the keyboard as often as a mouse, Chromium's overlay
+   * scrollbar only appears on hover, and this column sits over the wash's
+   * near-opaque ivory (`.prepchap__wash`), which reads as a plain edge either
+   * way — measured at 1600x900, 1280x960 and 1280x720 in critic round 9: the
+   * TIP and the objectives ran past the band with nothing on screen saying
+   * more copy was one scroll away.
+   *
+   * The classic CSS-only "scroll shadow": two opaque covers that ride with
+   * the content (`background-attachment: local`) so they sit flush against
+   * whichever edge still has unscrolled copy behind it, and two ink shadows
+   * pinned to the viewport (`scroll`) that only peek out from under a cover
+   * when there is copy left to reveal — i.e. exactly when this column is not
+   * already scrolled to that edge. No script, no measuring: it disappears on
+   * its own the moment `scrollTop` reaches the end, which is also why it
+   * costs nothing when a column's copy already fits (both covers meet with
+   * nothing behind them to hide, so the ink shadows never show at all).
+   */
+  background-image: linear-gradient(rgba(244, 241, 232, 1) 40%, rgba(244, 241, 232, 0)),
+    linear-gradient(rgba(244, 241, 232, 0), rgba(244, 241, 232, 1) 60%),
+    linear-gradient(rgba(11, 10, 18, 0.32), rgba(11, 10, 18, 0)),
+    linear-gradient(rgba(11, 10, 18, 0), rgba(11, 10, 18, 0.32));
+  background-repeat: no-repeat;
+  background-size: 100% 8.89px, 100% 8.89px, 100% 4px, 100% 4px; /* 20 20 9 9 */
+  background-position: top, bottom, top, bottom;
+  background-attachment: local, local, scroll, scroll;
 }
 
 /* The objectives column is a briefing, and sits a touch lower than the title
