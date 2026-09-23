@@ -26,7 +26,7 @@ import { maxRgbOfPng, isBlackFrame } from '../../../../../../../tools/gen/black-
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, '../../../../../../..');
-const OUT = 'D:/Tools/pyrefly-lora/leblanc/poses';
+export const OUT = 'D:/Tools/pyrefly-lora/leblanc/poses';
 const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
 const CKPT = 'animagine-xl-4.0-opt.safetensors';
 const LORA = 'leblanc-x2.safetensors';
@@ -87,22 +87,81 @@ export const CANDS = [
 ];
 const SEED0 = { attack: 61100, cast: 61200, hurt: 61300, ko: 61400 };
 
+/** Set v4 (the redo after the independent judge, lora/leblanc/judge.md): attack and hurt only, on the
+ * re-posed v4 skeletons (skeletons.py; v3's are in skeletons/v3/). The judge's anatomy defects (a folded
+ * leg in a mid-air leap; one leg lost behind the robe) came with OpenPose at 0.6 to 0.7, which the words
+ * overrode, so v4 holds the pose harder (0.75 to 0.9) and adds the named negatives. Seeds SEED0 + 20 + n. */
+export const CANDS_V4 = [
+  { n: 1, lora: 0.8, cn: 0.8 }, { n: 2, lora: 0.8, cn: 0.9 }, { n: 3, lora: 0.75, cn: 0.8 },
+  { n: 4, lora: 0.75, cn: 0.9 }, { n: 5, lora: 0.8, cn: 0.75 }, { n: 6, lora: 0.85, cn: 0.85 },
+];
+export const V4_NEG = {
+  attack: 'wings, cape, flying, jumping, midair, floating, leg lift, knee up, foot off ground',
+  hurt: 'one leg, missing leg, amputee, floating, feet out of frame',
+};
+export const V4_POSE_ADD = {
+  attack: '(both feet on ground:1.1), feet planted, bent front knee, straight back leg',
+  hurt: '(both feet on ground:1.1), two legs, legs apart, standing',
+};
+
+/** Set v5 (attack only): v4 planted both feet, but at OpenPose 0.8+ the model put the fan in the far hand
+ * and swept it to screen-RIGHT, with the empty near hand pointing at the party, and the rear foot left the
+ * frame. The v5 skeleton (skeletons.py) keeps one extended arm only (the near, fan arm), puts the far hand
+ * on the hip and pulls the rear foot in to x ~710. Seeds SEED0 + 40 + n. */
+export const CANDS_V5 = [
+  { n: 1, lora: 0.8, cn: 0.75 }, { n: 2, lora: 0.8, cn: 0.85 }, { n: 3, lora: 0.75, cn: 0.75 },
+  { n: 4, lora: 0.75, cn: 0.85 }, { n: 5, lora: 0.8, cn: 0.7 }, { n: 6, lora: 0.85, cn: 0.8 },
+];
+/** Set v6 (attack only): v5 turned frontal too. v6's skeleton is near profile (skeletons.py); OpenPose back to
+ * 0.6 to 0.75, where v3 kept the facing; v4's planted-feet words and negatives. Seeds SEED0 + 60 + n. */
+export const CANDS_V6 = [
+  { n: 1, lora: 0.8, cn: 0.65 }, { n: 2, lora: 0.8, cn: 0.75 }, { n: 3, lora: 0.75, cn: 0.65 },
+  { n: 4, lora: 0.75, cn: 0.75 }, { n: 5, lora: 0.8, cn: 0.6 }, { n: 6, lora: 0.85, cn: 0.7 },
+];
+export const SETS = {
+  v4: { cands: CANDS_V4, seedOffset: 20, neg: V4_NEG, add: V4_POSE_ADD },
+  v5: {
+    cands: CANDS_V5, seedOffset: 40,
+    neg: { attack: `${V4_NEG.attack}, spread arms, arms out to both sides, fan in right hand, pointing` },
+    add: { attack: `${V4_POSE_ADD.attack}, (hand on own hip:1.1), fan held out toward the left, (fan in left hand:1.1)` },
+  },
+  // v7 (attack only): v6.3 was the one frame with the fan thrust at the party and both feet planted, but the
+  // fan left the 832 px canvas at x 0 and the rear boot met the bottom edge; an outpaint left a seam in the
+  // robe. So v6's words and skeleton on a 1024x1216 canvas, the skeleton shifted 150 px right and 40 px up
+  // (skeletons/v7/attack.png), strengths around v6.3's (LoRA 0.75, OpenPose 0.65). Seeds SEED0 + 80 + n.
+  v7: {
+    cands: [
+      { n: 1, lora: 0.75, cn: 0.65 }, { n: 2, lora: 0.75, cn: 0.65 }, { n: 3, lora: 0.75, cn: 0.65 },
+      { n: 4, lora: 0.8, cn: 0.65 }, { n: 5, lora: 0.75, cn: 0.7 }, { n: 6, lora: 0.8, cn: 0.6 },
+    ],
+    seedOffset: 80, size: [1024, 1216],
+    neg: { attack: `${V4_NEG.attack}, facing viewer, front view, spread arms, arms out to both sides` },
+    add: { attack: `${V4_POSE_ADD.attack}, (profile:1.1), facing left, (fan thrust forward:1.1), hand on own hip` },
+  },
+  v6: {
+    cands: CANDS_V6, seedOffset: 60,
+    neg: { attack: `${V4_NEG.attack}, facing viewer, front view, spread arms, arms out to both sides` },
+    add: { attack: `${V4_POSE_ADD.attack}, (profile:1.1), facing left, (fan thrust forward:1.1), hand on own hip` },
+  },
+};
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export function promptFor(state) {
+export function promptFor(state, set = '') {
   const s = STATES[state];
-  return `leblancX2, 1girl, solo, ${s.pose}, ${IDENTITY}, simple background, white background, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
+  const add = SETS[set]?.add[state] ? `, ${SETS[set].add[state]}` : '';
+  return `leblancX2, 1girl, solo, ${s.pose}${add}, ${IDENTITY}, simple background, white background, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
 }
-export const negativeFor = (state) => `${BASE_NEG}, ${STATES[state].neg}`;
+export const negativeFor = (state, set = '') => `${BASE_NEG}, ${STATES[state].neg}${SETS[set]?.neg[state] ? `, ${SETS[set].neg[state]}` : ''}`;
 
-export function graph({ state, seed, lora, cn, pose, refA, refB, prefix }) {
-  const [width, height] = STATES[state].size;
+export function graph({ state, seed, lora, cn, pose, refA, refB, prefix, set = '' }) {
+  const [width, height] = SETS[set]?.size || STATES[state].size;
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
     5: { class_type: 'EmptyLatentImage', inputs: { width, height, batch_size: 1 } },
     10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: LORA, strength_model: lora, strength_clip: lora } },
-    6: { class_type: 'CLIPTextEncode', inputs: { text: promptFor(state), clip: ['10', 1] } },
-    7: { class_type: 'CLIPTextEncode', inputs: { text: negativeFor(state), clip: ['10', 1] } },
+    6: { class_type: 'CLIPTextEncode', inputs: { text: promptFor(state, set), clip: ['10', 1] } },
+    7: { class_type: 'CLIPTextEncode', inputs: { text: negativeFor(state, set), clip: ['10', 1] } },
     30: { class_type: 'ControlNetLoader', inputs: { control_net_name: CONTROLNET } },
     31: { class_type: 'LoadImage', inputs: { image: pose, upload: 'image' } },
     32: {
@@ -140,7 +199,7 @@ async function queueEmpty() {
   }
 }
 
-async function run(workflow, outPath) {
+export async function run(workflow, outPath) {
   let noted = 0;
   while (!(await queueEmpty())) {
     if (Date.now() - noted > 60_000) { console.error('[poses] queue busy; waiting'); noted = Date.now(); }
@@ -169,32 +228,36 @@ async function main() {
   const state = argv[0];
   if (!STATES[state]) throw new Error('usage: render.mjs <attack|cast|hurt|ko> [--n 1,2] [--dry]');
   const ni = argv.indexOf('--n');
-  const want = ni >= 0 ? argv[ni + 1].split(',').map(Number) : CANDS.map((c) => c.n);
   const si = argv.indexOf('--set');
   const set = si >= 0 ? argv[si + 1] : '';
+  const cands = SETS[set]?.cands || CANDS;
+  const want = ni >= 0 ? argv[ni + 1].split(',').map(Number) : cands.map((c) => c.n);
   mkdirSync(OUT, { recursive: true });
-  const skeleton = join(HERE, 'skeletons', `${state}.png`);
+  // v4 and earlier used skeletons/<state>.png as it stood then (v3's attack and hurt are in skeletons/v3/,
+  // v4's attack in skeletons/v4/); a set with its own skeleton file uses it
+  const own = join(HERE, 'skeletons', set, `${state}.png`);
+  const skeleton = set && existsSync(own) ? own : join(HERE, 'skeletons', `${state}.png`);
   const pose = stageImage(skeleton);
   const refA = stageImage(join(REPO, REFS[0]));
   const refB = stageImage(join(REPO, REFS[1]));
-  for (const c of CANDS.filter((x) => want.includes(x.n))) {
-    const seed = SEED0[state] + c.n;
+  for (const c of cands.filter((x) => want.includes(x.n))) {
+    const seed = SEED0[state] + (SETS[set]?.seedOffset || 0) + c.n;
     const tag = set ? `${state}.${set}.${c.n}` : `${state}.${c.n}`;
     const raw = join(OUT, `${tag}.raw.png`);
     const cut = join(OUT, `${tag}.png`);
-    if (argv.includes('--dry')) { console.log(tag, seed, c, promptFor(state)); continue; }
+    if (argv.includes('--dry')) { console.log(tag, seed, c, promptFor(state, set), '|', negativeFor(state, set)); continue; }
     if (existsSync(join(OUT, `${tag}.json`))) { console.log(`[poses] ${tag} exists; skip`); continue; }
-    const g = graph({ state, seed, lora: c.lora, cn: c.cn, pose, refA, refB, prefix: `pyrefly/leblanc-poses/${state}` });
+    const g = graph({ state, seed, lora: c.lora, cn: c.cn, pose, refA, refB, prefix: `pyrefly/leblanc-poses/${state}`, set });
     const seconds = await run(g, raw);
     const maxRgb = maxRgbOfPng(readFileSync(raw));
     const black = maxRgb != null && isBlackFrame(maxRgb);
     const cutMeta = cutout(raw, cut);
-    const [w, h] = STATES[state].size;
+    const [w, h] = SETS[set]?.size || STATES[state].size;
     const guard = await checkCutoutFile(cut, { sourceWidth: w, sourceHeight: h, composition: STATES[state].composition });
     const side = {
-      tag, state, seed, lora: { file: LORA, step: LORA_STEP, strength: c.lora }, controlnet: { file: CONTROLNET, strength: c.cn, start: 0, end: 1, skeleton: `docs/concepts/chapters/leblanc/lora/leblanc/poses/skeletons/${state}.png` },
+      tag, state, seed, lora: { file: LORA, step: LORA_STEP, strength: c.lora }, controlnet: { file: CONTROLNET, strength: c.cn, start: 0, end: 1, skeleton: `docs/concepts/chapters/leblanc/lora/leblanc/poses/${skeleton.slice(HERE.length + 1).split('\\').join('/')}` },
       ipadapter: { file: IPADAPTER, weight: 0.3, type: 'ease in', start: 0.2, end: 0.6, scaling: 'K+V', combine: 'concat', images: REFS },
-      positive: promptFor(state), negative: negativeFor(state), model: CKPT, steps: 28, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
+      positive: promptFor(state, set), negative: negativeFor(state, set), set: set || null, model: CKPT, steps: 28, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
       width: w, height: h, composition: STATES[state].composition, facing: 'left', seconds, maxRgb, black, cutout: cutMeta,
       guard: { ok: guard.ok, reasons: guard.reasons }, generatedAt: new Date().toISOString(),
     };

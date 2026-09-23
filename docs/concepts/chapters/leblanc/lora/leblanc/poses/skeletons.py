@@ -96,16 +96,42 @@ def states():
         'idle': ((W, H), idle),
         # a fan STRIKE: deep lunge to screen-left, weight on the bent front (left) leg,
         # the fan arm driven out ahead of the body, the far arm swept back
-        'attack': ((W, H), body((470, 760), 245, s=0.9, head_deg=235, larm=(190, 185), rarm=(35, 55),
-                                lleg=(150, 95), rleg=(50, 45))),
+        # v4 (redo 2026-09-23, judge: v3.3 was a mid-air leap with a folded leg): the same strike,
+        # the hip moved left so the rear foot lands inside the frame (v3's was at x 824 of 832),
+        # the front shin near vertical to a planted front foot, the rear leg long and straight
+        # to a planted rear foot; both ankles on one ground line (y ~1100 to 1130).
+        # v3's skeleton: skeletons/v3/attack.png = body((470, 760), 245, ..., lleg=(150, 95), rleg=(50, 45))
+        'attack': ((W, H), body((430, 760), 245, s=0.9, head_deg=235, larm=(190, 185), rarm=(35, 55),
+                                lleg=(150, 92), rleg=(42, 42))),
+        # v5 (attack only; written to skeletons/v5/attack.png): v4 at OpenPose 0.8+ put the fan in the far
+        # hand and swung it to screen-right, the rear foot left the frame. One extended arm only (the near,
+        # fan arm, to screen-left); the far hand on the hip; the rear foot pulled in to x ~710.
+        'v5/attack': ((W, H), body((420, 760), 245, s=0.9, head_deg=235, larm=(190, 185), rarm=(60, 160),
+                                   lleg=(150, 92), rleg=(55, 60))),
+        # v6 (attack only; skeletons/v6/attack.png): v5 still turned frontal with the fan swung to screen-right.
+        # v3's frames led with the fan to screen-left at OpenPose 0.6, and v4/v5 turned frontal as the
+        # strength rose, reading the skeleton's full-width shoulders and hips as a body facing the viewer.
+        # So v6 draws the body near profile (shoulders and hips a third of the idle's width), the near
+        # (fan) arm driven out to screen-left, the far hand at the hip, v4's planted legs.
+        'v6/attack': ((W, H), body((420, 760), 245, s=0.9, head_deg=225, sh=16, hp=14, larm=(188, 182), rarm=(30, 115),
+                                   lleg=(150, 92), rleg=(52, 58))),
+        # v7 (attack only; skeletons/v7/attack.png, 1024x1216): v6's skeleton shifted 150 px right and 40 px up
+        # on a wider canvas, so the thrust fan and the rear boot both stay inside the frame
+        'v7/attack': ((1024, H), {k: (x + 150, y - 40) for k, (x, y) in
+                                  body((420, 760), 245, s=0.9, head_deg=225, sh=16, hp=14, larm=(188, 182), rarm=(30, 115),
+                                       lleg=(150, 92), rleg=(52, 58)).items()}),
         # cast: upright, the fan arm raised high above the head, the far hand out at the hip,
         # head tipped up toward the raised fan
         'cast': ((W, H), body((430, 700), 272, s=0.95, head_deg=258, up=6, larm=(262, 265), rarm=(62, 50),
                               lleg=(96, 92), rleg=(84, 88))),
         # hurt: recoil away from the party (screen-right), shoulders thrown back past the hips,
         # the near hand at the stomach, the fan arm flung back, a staggering back step
-        'hurt': ((W, H), body((380, 690), 300, s=0.95, head_deg=320, larm=(110, 10), rarm=(5, 30),
-                              lleg=(115, 100), rleg=(80, 88))),
+        # v4 (redo 2026-09-23, judge: v3.1 had one leg, the far one lost behind the robe): the far
+        # leg comes down to screen-LEFT of the hip, in front of the robe, which the flung-back fan
+        # arm carries off to screen-right; the near leg steps out further left. Both feet planted.
+        # v3's skeleton: skeletons/v3/hurt.png = body((380, 690), 300, ..., lleg=(115, 100), rleg=(80, 88))
+        'hurt': ((W, H), body((360, 620), 300, s=0.95, head_deg=320, larm=(110, 10), rarm=(5, 30),
+                              lleg=(105, 100), rleg=(92, 96))),
         # ko: lying on her side, head to screen-left
         'ko': ((1216, 832), lying((150, 470), s=0.95)),
     }
@@ -140,6 +166,7 @@ def main():
     tiles = []
     for name, (size, pts) in states().items():
         im = draw(size, pts)
+        (OUT / name).parent.mkdir(parents=True, exist_ok=True)
         im.save(OUT / f'{name}.png')
         tiles.append((name, im))
         oob = [k for k, (x, y) in pts.items() if not (0 <= x < size[0] and 0 <= y < size[1])]
@@ -154,7 +181,7 @@ def main():
     sheet = Image.new('RGB', (832 * 4 + 1216, 1216), (40, 40, 40))
     sheet.paste(base.convert('RGB'), (0, 0))
     x = 832
-    for name, im in tiles[1:]:
+    for name, im in [t for t in tiles[1:] if '/' not in t[0]]:
         sheet.paste(im, (x, 0 if im.size[1] == 1216 else 192))
         x += im.size[0]
     sheet.resize((sheet.width // 2, sheet.height // 2)).save(OUT / 'overlay.jpg', quality=85)

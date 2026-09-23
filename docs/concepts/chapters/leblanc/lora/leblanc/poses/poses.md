@@ -1,5 +1,9 @@
 # Leblanc battle poses with the identity LoRA (2026-09-23)
 
+> **Superseded for the installed picks by `redo.md`** (the redo after the independent
+> judge, `../judge.md`). `sheet.jpg` now shows the redo; this pass's sheet is in git
+> history (a6386b2). The v3 skeletons for attack and hurt are in `skeletons/v3/`.
+
 FFX-2 only (Chapter 6, the Leblanc Syndicate boss art; AGENTS.md hard rule 14:
 a per-subject art pass, no shared tool, no game file, no FFX art touched).
 **Every image here is a CANDIDATE.** Nothing was added to
