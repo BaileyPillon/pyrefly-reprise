@@ -1,0 +1,137 @@
+{
+ "frames": 480,
+ "perLoop": 160,
+ "floor": {
+  "face": 3.8504748344421387,
+  "eyes": 4.69707727432251,
+  "mouth": 1.9205926656723022,
+  "braid": 6.306160926818848,
+  "hairline": 3.0568687915802,
+  "body": 3.7382352352142334,
+  "full": 2.216593027114868
+ },
+ "cuts": {
+  "cut1": {
+   "face": {
+    "mad": 3.471,
+    "xMedian": 10.41,
+    "xFloor": 0.902
+   },
+   "eyes": {
+    "mad": 4.166,
+    "xMedian": 7.38,
+    "xFloor": 0.887
+   },
+   "mouth": {
+    "mad": 2.087,
+    "xMedian": 12.14,
+    "xFloor": 1.087
+   },
+   "braid": {
+    "mad": 4.712,
+    "xMedian": 7.78,
+    "xFloor": 0.747
+   },
+   "hairline": {
+    "mad": 2.987,
+    "xMedian": 10.5,
+    "xFloor": 0.977
+   },
+   "body": {
+    "mad": 3.311,
+    "xMedian": 11.62,
+    "xFloor": 0.886
+   },
+   "full": {
+    "mad": 2.369,
+    "xMedian": 17.59,
+    "xFloor": 1.069
+   }
+  },
+  "cut2": {
+   "face": {
+    "mad": 3.471,
+    "xMedian": 10.41,
+    "xFloor": 0.902
+   },
+   "eyes": {
+    "mad": 4.166,
+    "xMedian": 7.38,
+    "xFloor": 0.887
+   },
+   "mouth": {
+    "mad": 2.087,
+    "xMedian": 12.14,
+    "xFloor": 1.087
+   },
+   "braid": {
+    "mad": 4.712,
+    "xMedian": 7.78,
+    "xFloor": 0.747
+   },
+   "hairline": {
+    "mad": 2.987,
+    "xMedian": 10.5,
+    "xFloor": 0.977
+   },
+   "body": {
+    "mad": 3.311,
+    "xMedian": 11.62,
+    "xFloor": 0.886
+   },
+   "full": {
+    "mad": 2.369,
+    "xMedian": 17.59,
+    "xFloor": 1.069
+   }
+  }
+ },
+ "median": {
+  "face": 0.33357328176498413,
+  "eyes": 0.5642955899238586,
+  "mouth": 0.1719224900007248,
+  "braid": 0.6059284806251526,
+  "hairline": 0.28458866477012634,
+  "body": 0.28504395484924316,
+  "full": 0.13465094566345215
+ },
+ "max": {
+  "face": 3.4714293479919434,
+  "eyes": 4.16555643081665,
+  "mouth": 2.086942672729492,
+  "braid": 4.7122931480407715,
+  "hairline": 2.986778736114502,
+  "body": 3.3111088275909424,
+  "full": 2.3686041831970215
+ },
+ "decodedF1VsPlate": {
+  "face": {
+   "mad": 6.257,
+   "xFloor": 1.625
+  },
+  "eyes": {
+   "mad": 7.021,
+   "xFloor": 1.495
+  },
+  "mouth": {
+   "mad": 3.174,
+   "xFloor": 1.652
+  },
+  "braid": {
+   "mad": 9.533,
+   "xFloor": 1.512
+  },
+  "hairline": {
+   "mad": 5.283,
+   "xFloor": 1.728
+  },
+  "body": {
+   "mad": 6.245,
+   "xFloor": 1.67
+  },
+  "full": {
+   "mad": 4.032,
+   "xFloor": 1.819
+  }
+ }
+}
