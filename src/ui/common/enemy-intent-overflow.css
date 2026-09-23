@@ -1,0 +1,46 @@
+/**
+ * The enemy-intent panel's MORE row (`enemy-intent-overflow.ts`, round 09
+ * PR-0010). Split out of `enemy-intent.css` in the round-09 repair pass so
+ * that file could stay under the house 400-line ceiling (AGENTS.md rule 7)
+ * instead of growing past it for a rule this module owns.
+ *
+ * Its own row below the (possibly clipped) body, in normal flow, so — like
+ * `strategy-guide.css`'s `.sgd__more` — it can report on a cut row without
+ * ever being the thing painted over it. Hidden whenever the body does not
+ * overflow its cap.
+ *
+ * Both games: `EnemyIntent.ts` is the shared panel FFX and FFX-2 both mount
+ * (AGENTS.md rule 14, CHK-020).
+ */
+.eint__more {
+  display: block;
+  width: 100%;
+  margin: 1.5px 0 0;
+  padding: 1px 0 0;
+  border: 0;
+  border-top: 0.6px dashed #4c5563;
+  background: transparent;
+  color: #8d99a8;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  /* Round 09 repair: 3.6px was the smallest type on the panel (rendering
+     under the 14px legibility floor even on a 14px-clean stage). Raised to
+     match `.eint__head`/`.eint__toggle`'s 4.2px rather than invented — the
+     panel's other small badges (`.eint__els span`, `.eint__conf`) sit at
+     3.9px, so this keeps the newest, most load-bearing signpost at the large
+     end of that family instead of the small one. */
+  font-size: 4.2px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: right;
+  /* Not a button (see the class doc in enemy-intent-overflow.ts) — no
+     pointer cursor to imply a click it will never respond to. */
+  cursor: default;
+}
+.eint__more b {
+  color: var(--ig-blood, #b02a2a);
+  filter: brightness(1.7);
+}
+.eint__more--expanded {
+  color: var(--ig-paper, #f4f1e8);
+}

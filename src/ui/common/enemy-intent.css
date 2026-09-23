@@ -111,51 +111,12 @@
   mask-image: linear-gradient(to bottom, #000 calc(100% - 14px), transparent 100%);
 }
 
-/* The MORE row (`EnemyIntentOverflow`): its own row below the (possibly
-   clipped) body, in normal flow, so — like `strategy-guide.css`'s
-   `.sgd__more` — it can report on a cut row without ever being the thing
-   painted over it. Hidden whenever the body does not overflow its cap. */
-.eint__more {
-  display: block;
-  width: 100%;
-  margin: 1.5px 0 0;
-  padding: 1px 0 0;
-  border: 0;
-  border-top: 0.6px dashed #4c5563;
-  background: transparent;
-  color: #8d99a8;
-  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-weight: 700;
-  font-size: 3.6px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-align: right;
-  cursor: default;
-}
-.eint__more b {
-  color: var(--ig-blood, #b02a2a);
-  filter: brightness(1.7);
-}
-.eint__more--expanded {
-  color: var(--ig-paper, #f4f1e8);
-}
-
-/* PR-0011 (FFX only): the status chip promoted beside SCRIPTED/Likely at
-   brief density — see `enemy-intent-brief-status.ts`. Blood-accented like
-   `.eint__toggle b`: it names something bad about to happen to the party,
-   the same register `.eint__conf--scripted`'s gold reserves for "certain". */
-.eint__status-chip {
-  padding: 0.6px 3px 0.9px;
-  border: 0.6px solid var(--ig-blood, #b02a2a);
-  background: transparent;
-  color: var(--ig-blood, #b02a2a);
-  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-weight: 700;
-  font-size: 3.9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  filter: brightness(1.35);
-}
+/* The MORE row and the brief-density status chip (round 09 PR-0010/PR-0011)
+   moved out to their own sheets in the round-09 repair pass, imported by
+   `enemy-intent-overflow.ts` and `enemy-intent-brief-status.ts` respectively
+   — this file was already at the house 400-line ceiling and those two rules
+   are exactly the code those modules own. See `enemy-intent-overflow.css`
+   and `enemy-intent-brief-status.css`. */
 
 /* The tail: a small notch under the panel pointing at the head it belongs to,
    so a slab that had to dodge sideways still reads as *that* enemy's. Its x is

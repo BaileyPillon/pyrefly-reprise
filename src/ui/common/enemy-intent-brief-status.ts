@@ -1,3 +1,4 @@
+import './enemy-intent-brief-status.css';
 import { escapeHtml } from './html.ts';
 
 /**
@@ -9,7 +10,7 @@ import { escapeHtml } from './html.ts';
  * block entirely (`bodyHtml`'s `full &&` guard) — so Lance of Atrophy's 100%
  * Zombie, the fact the whole Seymour Flux chapter turns on, never reaches the
  * player even though `view.statusText` already carries it
- * (`src/battle/ffx/enemies/seymour-flux-abilities.ts`'s
+ * (`src/data/ffx/enemies/seymour-flux-abilities.ts`'s
  * `statusEffects: [{ status: 'zombie', chance: 100 }]`, read out by
  * `predictEnemyIntent`). Widening the panel is not the fix here: round 02
  * asked for brief density in FFX specifically, and PR-0010 is already fighting

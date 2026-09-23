@@ -1,0 +1,24 @@
+/**
+ * The enemy-intent panel's brief-density status chip (`enemy-intent-brief-status.ts`,
+ * round 09 PR-0011, FFX only — FFX-2 mounts the panel at `'full'` density,
+ * where the Statuses block already renders this fact). Split out of
+ * `enemy-intent.css` in the round-09 repair pass so that file could stay
+ * under the house 400-line ceiling (AGENTS.md rule 7) instead of growing past
+ * it for a rule this module owns.
+ *
+ * Blood-accented like `.eint__toggle b`: it names something bad about to
+ * happen to the party, the same register `.eint__conf--scripted`'s gold
+ * reserves for "certain".
+ */
+.eint__status-chip {
+  padding: 0.6px 3px 0.9px;
+  border: 0.6px solid var(--ig-blood, #b02a2a);
+  background: transparent;
+  color: var(--ig-blood, #b02a2a);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: 3.9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  filter: brightness(1.35);
+}

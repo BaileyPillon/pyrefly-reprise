@@ -1,3 +1,4 @@
+import './enemy-intent-overflow.css';
 import { escapeHtml } from './html.ts';
 
 /**
@@ -77,21 +78,25 @@ export function countHiddenRows(bodyEl: HTMLElement, cap: number): number {
  * to decide whether to lift the cap.
  */
 export class EnemyIntentOverflow {
-  readonly el: HTMLButtonElement;
+  readonly el: HTMLDivElement;
   private heldByKey = false;
   private heldByPad = false;
   private attached = false;
 
   constructor() {
-    this.el = document.createElement('button');
-    this.el.type = 'button';
+    // A `<div>`, not a `<button>` (round 09 repair): this row is read with
+    // the bound key or pad button only — it has no click/tap handler, and
+    // never will (holding is the whole design, see the class doc above), so
+    // giving it button semantics and a hand cursor was itself the bug a
+    // repair-pass review caught: it looked pressable on a mouse or phone and
+    // did nothing. `role="status"`/`aria-live` name what it actually is, a
+    // live readout, not a control.
+    this.el = document.createElement('div');
     this.el.className = 'eint__more';
     this.el.dataset['role'] = 'enemy-intent-more';
+    this.el.setAttribute('role', 'status');
+    this.el.setAttribute('aria-live', 'polite');
     this.el.hidden = true;
-    // Read with the bound key or pad button, not tabbed to — the panel itself
-    // is not part of the tab order either (it is an unscaled HUD overlay, not
-    // a form).
-    this.el.tabIndex = -1;
   }
 
   /** Is the body currently lifted past its cap? */
@@ -104,6 +109,12 @@ export class EnemyIntentOverflow {
     this.attached = true;
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
+    // Round 09 repair: a real `keyup` never arrives if the window loses focus
+    // while the key is held (alt-tab, a devtools click, a pad rebind dialog),
+    // which left the panel stuck expanded — `src/app/Input.ts` clears its own
+    // held keys on `blur` for the same reason, so this mirrors that guard
+    // rather than inventing a second convention for it.
+    window.addEventListener('blur', this.onBlur);
   }
 
   detach(): void {
@@ -111,6 +122,7 @@ export class EnemyIntentOverflow {
     this.attached = false;
     window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp);
+    window.removeEventListener('blur', this.onBlur);
     this.heldByKey = false;
     this.heldByPad = false;
   }
@@ -135,6 +147,10 @@ export class EnemyIntentOverflow {
 
   private readonly onKeyUp = (e: KeyboardEvent): void => {
     if (e.code !== OVERFLOW_KEY) return;
+    this.heldByKey = false;
+  };
+
+  private readonly onBlur = (): void => {
     this.heldByKey = false;
   };
 
