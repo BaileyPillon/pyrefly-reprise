@@ -25,10 +25,10 @@ const LEG_IMMUNITIES = {
   reflect: 255, // §3.2 — "as Tail plus Reflect"
 };
 
-function node(id: string, slot: number): EnemyDef {
+function node(id: string, name: string, slot: number): EnemyDef {
   return {
     id,
-    name: 'Node',
+    name,
     spriteKey: 'vegnagun-node',
     slot,
     // §3.2 — verified: 2 sources, additionally cross-confirmed by GamerGuides.
@@ -53,7 +53,7 @@ function node(id: string, slot: number): EnemyDef {
     // §3.2 — "as Leg plus Def Up/Down and MDef Up/Down": Armor Break and Mental Break do NOT land either.
     immunities: { ...LEG_IMMUNITIES, ...DEF_MDEF_MOD_IMMUNITY },
     immunityFlags: [],
-    forms: [{ name: 'Node', spriteKey: 'vegnagun-node', hp: 300000 }],
+    forms: [{ name, spriteKey: 'vegnagun-node', hp: 300000 }],
     aiScriptId: 'vegnagun-node',
     rewards: {
       ap: 10,
@@ -134,7 +134,9 @@ export const vegnagunLegGroup: EnemyGroupDef = {
       scanText: 'The leg that carries it. Bring down the Nodes’ support first, or ignore them entirely — only the leg matters.',
     },
   ],
-  parts: [node('node-a', 1), node('node-b', 2), node('node-c', 3)],
+// §13.2 S3 [verified: 2 sources] — the game names each part itself (SinirothX Monster's Name lines; FF Wiki infobox + bestiary
+  // #246-#248, *Node (Final Fantasy X-2)* rev 3999002), so no FFX-2 lettering is needed (PR-0013).
+  parts: [node('node-a', 'Node A', 1), node('node-b', 'Node B', 2), node('node-c', 'Node C', 3)],
   musicCues: [{ at: 'start', track: 'boss-vegnagun', fadeMs: 600 }],
 };
 

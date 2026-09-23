@@ -133,7 +133,9 @@ export const vegnagunBodyGroup: EnemyGroupDef = {
         "Vegnagun's core. Charges energy, then unleashes a devastating attack; can also revive both Bulwarks — make it the primary target.",
     },
   ],
-  parts: [bulwark('bulwark-r', 'Bulwark', 1), bulwark('bulwark-l', 'Bulwark', 2)],
+// §13.2 S3 [verified: 2 sources] — the game names each part itself (SinirothX Monster's Name lines; FF Wiki infobox + bestiary
+  // #250/#251, *Bulwark (Final Fantasy X-2)* rev 3990465), so no FFX-2 lettering is needed (PR-0013).
+  parts: [bulwark('bulwark-r', 'Right Bulwark', 1), bulwark('bulwark-l', 'Left Bulwark', 2)],
   musicCues: [{ at: 'start', track: 'boss-vegnagun', fadeMs: 600 }],
 };
 

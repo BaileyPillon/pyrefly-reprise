@@ -70,12 +70,19 @@ export function distinguishName(name: string, id: string): string {
 /**
  * The one noun a set of sibling names shares, when they all end in it:
  * `['Right Bulwark', 'Left Bulwark']` -> `'Bulwark'`, `['Node', 'Node']` ->
- * `'Node'`. `undefined` when they have no last word in common, so a caller
- * can fall back to a generic noun instead of picking one arbitrarily.
+ * `'Node'`, `['Node A', 'Node B']` -> `'Node'` (a trailing one-letter tag is
+ * the game's own designator — FFX-2 names the parts "Node A/B/C", research
+ * `ffx2-vegnagun-shuyin.md` §13.2 S3 — not the noun). `undefined` when they
+ * have no last word in common, so a caller can fall back to a generic noun
+ * instead of picking one arbitrarily.
  */
 export function sharedLastWord(names: readonly string[]): string | undefined {
   if (names.length === 0) return undefined;
-  const lastWords = names.map((n) => n.trim().split(/\s+/).at(-1) ?? '');
+  const lastWords = names.map((n) => {
+    const words = n.trim().split(/\s+/);
+    const last = words.at(-1) ?? '';
+    return words.length > 1 && /^[A-Z]$/.test(last) ? (words.at(-2) ?? '') : last;
+  });
   const first = lastWords[0];
   if (first === undefined || first.length === 0) return undefined;
   return lastWords.every((w) => w === first) ? first : undefined;

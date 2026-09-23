@@ -116,6 +116,7 @@ describe('display names', () => {
   it('finds the noun a set of sibling names shares, and refuses to invent one', () => {
     expect(sharedLastWord(['Right Bulwark', 'Left Bulwark'])).toBe('Bulwark');
     expect(sharedLastWord(['Node', 'Node', 'Node'])).toBe('Node');
+    expect(sharedLastWord(['Node A', 'Node B', 'Node C'])).toBe('Node');
     expect(sharedLastWord(['Node', 'Bulwark'])).toBeUndefined();
     expect(sharedLastWord([])).toBeUndefined();
   });
