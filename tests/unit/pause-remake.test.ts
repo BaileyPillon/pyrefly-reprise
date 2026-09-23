@@ -44,6 +44,7 @@ import { pauseKeyIntent } from '../../src/app/screens/pause/keys.ts';
 import {
   chromeSideFor,
   chromeSideForCombatant,
+  deriveChromeSide,
   framePlate,
   framingFor,
   plateIdFor,
@@ -541,6 +542,49 @@ describe('every function of the old pause screen is still reachable', () => {
     expect(h.fired.resumed).toBe(0);
   });
 
+  /**
+   * PR-0098 (round 09): at 390x844 OPTIONS clips to five rows the way a
+   * member's meter columns do, but a player can still arrow ATB SPEED and
+   * STRATEGY GUIDE (FFX-2's 6th and 7th settings rows) into selection while
+   * `.pause__col[data-col='settings'] > div:nth-of-type(n+6)` keeps them off
+   * screen. `pause-screen.css` makes that column scroll itself instead of
+   * hiding those rows; this is the FOC-02-style proof that every arrow-key
+   * selection carries itself into view, the same way the tab strip already
+   * does above.
+   */
+  it("PR-0098: scrolls a settings row past the fifth into view as it's selected", () => {
+    const calls: Array<{ row: string | undefined; opts: ScrollIntoViewOptions | boolean | undefined }> = [];
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (
+      this: HTMLElement,
+      opts?: ScrollIntoViewOptions | boolean,
+    ): void {
+      calls.push({ row: this.dataset['row'], opts });
+    };
+    try {
+      const h = mount('ffx2-bahamut');
+      h.screen.trigger('pause:tab:options');
+      expect(rowIds(h).slice(0, 7)).toEqual([
+        'masterVolume',
+        'musicVolume',
+        'sfxVolume',
+        'textSpeed',
+        'ffx2Atb',
+        'ffx2AtbSpeed',
+        'guideVisible',
+      ]);
+      calls.length = 0;
+      h.screen.handleInput(snapshot(['down'])); // tabs -> body, row 1
+      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: ffx2AtbSpeed
+      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('ffx2AtbSpeed');
+      expect(calls.at(-1)?.opts).toMatchObject({ block: 'nearest', behavior: 'smooth' });
+      h.screen.handleInput(snapshot(['down'])); // row 7: guideVisible
+      expect(calls.at(-1)?.row).toBe('guideVisible');
+    } finally {
+      Element.prototype.scrollIntoView = original;
+    }
+  });
+
   it('8, 9 and 10. the dossier, its quote and its three polaroids — the CHAPTER tab', () => {
     const h = mount('seymour-flux');
     h.screen.trigger('pause:tab:chapter');
@@ -788,14 +832,18 @@ describe('IN THIS FIGHT is game-aware, with an absence test each way', () => {
 // ======================================================= mirror and motion
 
 describe('the chrome stands on whichever side of the painting is empty', () => {
-  it('mirrors exactly the two plates options.json names, and no others', () => {
+  it('mirrors the two plates options.json names by eye, plus Kimahri, whom the eye missed', () => {
     // art.perPlate calls out two paintings as "subject left of centre — needs
-    // the mirrored chrome". Those two, and only those two.
+    // the mirrored chrome". A geometric read of the same framing (PR-0079,
+    // round 09) additionally mirrors Kimahri: his head is measured at 0.75 of
+    // the source, so the zoom his framing wants leaves almost no room to pan
+    // his face off the left-hand chrome, and it lands at 43% of the frame —
+    // still inside the chrome's own territory.
     const mirrored = Object.entries(PLATE_FRAMING)
       .filter(([, f]) => f.side === 'right')
       .map(([id]) => id)
       .sort();
-    expect(mirrored).toEqual(['paine', 'yuna']);
+    expect(mirrored).toEqual(['kimahri', 'paine', 'yuna']);
     // FFX-2 Yuna's focal is further left than Tidus's and she still keeps the
     // chrome on the left: her plate takes a 1.9x crop with room to push her
     // face right, which is what approved frame (c) shows.
@@ -804,6 +852,19 @@ describe('the chrome stands on whichever side of the painting is empty', () => {
     expect(chromeSideForCombatant('yuna', 'ffx')).toBe('right');
     expect(chromeSideForCombatant('paine', 'ffx2')).toBe('right');
     expect(chromeSideForCombatant('tidus', 'ffx')).toBe('left');
+    expect(chromeSideForCombatant('kimahri', 'ffx')).toBe('right');
+  });
+
+  it('PR-0079: derives every plate’s side from its own framing, not a per-plate guess', () => {
+    for (const [id, f] of Object.entries(PLATE_FRAMING)) {
+      expect(deriveChromeSide(f), id).toBe(f.side);
+    }
+    // Kimahri's face, laid out with the chrome pinned left the way the screen
+    // really renders it, lands left of centre — inside that chrome, not away
+    // from it — which is why he now mirrors.
+    const box = framePlate({ ...framingFor('kimahri'), side: 'left' }, 1600, 900);
+    const faceAt = (box.left + box.width * framingFor('kimahri').x) / 1600;
+    expect(faceAt).toBeLessThan(0.5);
   });
 
   it('falls back to the focal point for a painting nobody has judged yet', () => {

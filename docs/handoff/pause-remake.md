@@ -341,3 +341,26 @@ the target-versus-build pairs `pair-a-ffx-tidus.jpg` and `pair-b-ffx-yuna.jpg`.
 
 `tests/e2e/pause.spec.ts` is still pointed at the old DOM (unchanged by this
 pass), and the three inferred placements still need Bailey's yes.
+
+## Round-09 repair pass (23 Sep)
+
+Both: the fixes below are shared plumbing (the side-choice rule and the
+settings list, CHK-020).
+
+### PR-0079 — the mirror rule missed Kimahri
+
+The mustRemain rule ("the text block sits on whichever side of THIS painting
+is empty") picked the wrong side for Kimahri. `plates.ts`'s per-plate `side`
+table was hand-set to match `options.json`'s eyeballed *"subject left of
+centre"* call on two plates (Yuna, Paine); Kimahri's head measures large
+(0.75 of the source), so his framing barely zooms and his face lands at 43%
+of the frame even with the chrome pinned left — inside the chrome's own
+territory, which the eyeball read missed. `deriveChromeSide` now runs every
+plate through `framePlate` itself (chrome pinned left, 1600x900) and mirrors
+whichever ones still land left of centre: reproduces Yuna and Paine, adds
+Kimahri. Verified live (`PYREFLY_BROWSER=gpu`, real GPU) on all three FFX and
+all three FFX-2 member tabs at 1600x900 —
+`docs/screenshots/fix10b/pr0079-*.png`.
+
+`npx tsc --noEmit` clean; every `tests/unit/*pause*` file plus
+`css-comments.test.ts` green.
