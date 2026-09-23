@@ -61,6 +61,10 @@ function node(id: string, slot: number): EnemyDef {
       gil: 3000,
       overkillThreshold: 0,
       exp: 8000,
+      // §3.2 line 262 also lists a rare drop slot ("rare: Hero Drink ×1"), but gives no rate for that slot —
+      // `results.ts:86` lists every `drops` entry into the result unconditionally (no roll), so adding it
+      // would print a Hero Drink on every Node kill, which "rare" does not mean. Common slot only; open
+      // question for Bailey (research §11, docs/handoff/NOW.md, 2026-09-21).
       drops: [{ itemId: 'x2-megalixir', count: 1 }],
       steal: { baseChance: 50, common: { itemId: 'x2-megalixir', count: 1 }, rare: { itemId: 'x2-megalixir', count: 2 } },
     },
@@ -113,7 +117,11 @@ export const vegnagunLegGroup: EnemyGroupDef = {
         gil: 3000,
         overkillThreshold: 0,
         exp: 6000,
-        drops: [{ itemId: 'x2-mythril-bangle', count: 1 }],
+        // §3.2 line 233 — Mythril Bangle ×1. The id is the accessory registry's own key
+        // (`battle/ffx2/accessories.ts`), not an `x2-` item-table id — there is no `ItemDef` for a Mythril
+        // Bangle, only an `AccessoryEffect`, same as Bahamut's Gris-Gris Bag drop (`enemies/bahamut.ts:90`
+        // uses the bare `'gris-gris-bag'` accessory key, not `'x2-gris-gris-bag'`).
+        drops: [{ itemId: 'mythril-bangle', count: 1 }],
         steal: { baseChance: 50, common: { itemId: 'x2-elixir', count: 1 }, rare: { itemId: 'x2-elixir', count: 2 } },
       },
       abilityIds: [

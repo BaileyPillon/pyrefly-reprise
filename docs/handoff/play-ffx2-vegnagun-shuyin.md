@@ -169,6 +169,9 @@ Body and Shuyin and three at the Tail — action-race variance, not a wrong line
   your party too, and the Yellow Node's spells bounce back at the Leg"), which
   is most of why the Leg is still the least reliable link. (§3.2 makes the Leg
   itself Reflect-immune, so only the party half of that advice is live anyway.)
+  *2026-09-21:* the guide no longer repeats that line and the research carries a
+  CORRECTION note; by `ffx2-combat-core.md`'s verified Reflect rule most of the
+  party half is dead too. See `fix-ffx2-vegnagun-facts.md`.
 * **Garment Grid `autoAbilityTags` are dropped** by `adapters.ts` `toBonus`:
   only `statBonus`, wait-down and Break-Damage-Limit survive. Yuna wears
   **Tempered Will**, whose two gates are Double HP and Double MP (§6.6), and

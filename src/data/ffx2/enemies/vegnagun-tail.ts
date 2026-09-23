@@ -51,6 +51,8 @@ export const vegnagunTailGroup: EnemyGroupDef = {
         overkillThreshold: 0,
         exp: 5000,
         drops: [{ itemId: 'x2-megalixir', count: 1 }],
+        // §3.1 line 205 — Steal (50%): X-Potion ×4 / rare X-Potion ×6. [verified: 2 sources] (line 212).
+        steal: { baseChance: 50, common: { itemId: 'x2-x-potion', count: 4 }, rare: { itemId: 'x2-x-potion', count: 6 } },
       },
       abilityIds: ['x2-vegnagun-tail-beam', 'x2-vegnagun-noli-me-tangere'],
       flags: { isBoss: true },

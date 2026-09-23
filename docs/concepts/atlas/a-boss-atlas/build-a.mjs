@@ -69,7 +69,7 @@ const STATUS = {
   'def-up': 'Def Up', 'def-down': 'Def Down', 'mdef-up': 'MDef Up', 'mdef-down': 'MDef Down',
 };
 const ITEM = {
-  'x2-megalixir': 'Megalixir', 'x2-mythril-bangle': 'Mythril Bangle', 'x2-elixir': 'Elixir', 'x2-turbo-ether': 'Turbo Ether',
+  'x2-megalixir': 'Megalixir', 'x2-mythril-bangle': 'Mythril Bangle', 'mythril-bangle': 'Mythril Bangle', 'x2-elixir': 'Elixir', 'x2-turbo-ether': 'Turbo Ether',
   'x2-mega-potion': 'Mega-Potion', 'x2-x-potion': 'X-Potion', 'x2-phoenix-down': 'Phoenix Down', 'x2-l-bomb': 'L-Bomb',
   'x2-hero-drink': 'Hero Drink',
 };

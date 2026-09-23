@@ -128,11 +128,21 @@ export const FFX2_VEGNAGUN_SHUYIN_GUIDE: ChapterGuide = {
       note: 'Buffs are near-useless: Tail Beam is a percentage of max HP and Noli Me Tangere a flat constant. Keep everyone above 1,323 HP and hit it.',
       cite: 'ffx2-vegnagun-shuyin §7.2',
     },
+    // Corrected 2026-09-21, **FFX-2 only**. The old note repeated §7.2's
+    // untagged "Cast Reflect on the Leg". §3.2 (line 236, `[verified: 2
+    // sources]`) lists the Leg as immune "as Tail **plus Reflect**" and §3.5
+    // (line 441) restates it for every Vegnagun part but the Tail; the engine
+    // refuses the rider outright (`LEG_IMMUNITIES.reflect = 255` in
+    // `src/data/ffx2/enemies/vegnagun-leg.ts`, read by `resolve.ts`'s
+    // `applyRiders`), and the shipped Reflect is `all-allies`
+    // (`src/data/ffx2/abilities/white-mage.ts`), so it cannot be aimed at an
+    // enemy in the first place. The research's §7.2 row now carries a
+    // CORRECTION note saying the same.
     {
       bossId: 'vegnagun-leg',
       label: 'Leg and Nodes',
-      note: 'All 18,220 HP of damage goes into the Leg; the Nodes hold 300,000 and are not the fight. Reflect on the Leg bounces the Green Node’s buffs onto you.',
-      cite: 'ffx2-vegnagun-shuyin §7.2',
+      note: 'All 18,220 HP of damage goes into the Leg; the Nodes hold 300,000 and are not the fight. Green Nodes heal and buff the Leg, which is immune to Reflect.',
+      cite: 'ffx2-vegnagun-shuyin §3.2, §7.2',
     },
     {
       bossId: 'vegnagun-body',

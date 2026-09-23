@@ -28,7 +28,7 @@ function itemsTableFor(game: GameId): Record<ItemId, ItemDef> {
  * A reward's display name: the catalogued `ItemDef.name` when one exists,
  * else the id humanised. A handful of reward ids in this project's data
  * (key spheres, and a few FFX-2 accessories/armour: `lv-3-key-sphere`,
- * `lv-4-key-sphere`, `gris-gris-bag`, `x2-mute-shock`, `x2-mythril-bangle`,
+ * `lv-4-key-sphere`, `gris-gris-bag`, `mythril-bangle`, `x2-mute-shock`,
  * `x2-l-bomb`) have no `ItemDef` in `src/data/{ffx,ffx2}/items/**` at all —
  * see this project's final report for that contract note. `'x2-'` is this
  * project's own id namespace, never part of an in-game name (compare

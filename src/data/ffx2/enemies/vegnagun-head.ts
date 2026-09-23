@@ -71,6 +71,10 @@ function redoubt(id: string, name: string, slot: number, def: number, mdef: numb
     immunityFlags: [],
     forms: [{ name, spriteKey: 'vegnagun-redoubt', hp: 2500 }],
     aiScriptId: 'vegnagun-redoubt',
+    // §3.4 line 415 names a steal table — Phoenix Down / rare Mega Phoenix, 50% — but, unlike every other
+    // steal row in the document, prints no quantity for either slot. `ItemDrop.count` is required
+    // (`battle/common/types.ts`), so encoding a guessed count would invent a number [AGENTS.md hard rule 6].
+    // No `steal` field added; open question for Bailey (research §11, docs/handoff/NOW.md, 2026-09-21).
     rewards: { ap: 10, apOverkill: 10, gil: 0, overkillThreshold: 0, exp: 0, drops: [] },
     abilityIds:
       id === 'redoubt-r'
@@ -115,7 +119,19 @@ export const vegnagunHeadGroup: EnemyGroupDef = {
       immunityFlags: ['boss'],
       forms: [{ name: 'Vegnagun', spriteKey: 'vegnagun-head', hp: 38420 }],
       aiScriptId: 'vegnagun-head', // includes the real-time fail clock; see this file's doc comment
-      rewards: { ap: 10, apOverkill: 10, gil: 0, overkillThreshold: 0, exp: 0, drops: [] },
+      rewards: {
+        ap: 10,
+        apOverkill: 10,
+        gil: 0,
+        overkillThreshold: 0,
+        exp: 0,
+        drops: [],
+        // §3.4 line 387 documents only "Megalixir ×1" — one item, no separate common/rare wording. The type
+        // requires both slots, so both hold the same item, exactly as the Body's Turbo Ether does (§3.3 line
+        // 310) and as the research's own "common and rare" rows do (Tail Drop, Leg Drop). [verified: 2 sources]
+        // (line 392).
+        steal: { baseChance: 50, common: { itemId: 'x2-megalixir', count: 1 }, rare: { itemId: 'x2-megalixir', count: 1 } },
+      },
       abilityIds: [
         'x2-vegnagun-pallida-mors', 'x2-vegnagun-odi-et-amo', 'x2-vegnagun-mors-certa',
         'x2-vegnagun-nemo-ante-mortem-beatus', 'x2-vegnagun-acta-est-fabula',
