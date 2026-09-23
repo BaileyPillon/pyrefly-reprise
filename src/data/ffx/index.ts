@@ -93,6 +93,8 @@ import { ITEMS as ITEMS_OFFENSIVE_1A } from './items/offensive-1a.ts';
 import { ITEMS as ITEMS_OFFENSIVE_1B } from './items/offensive-1b.ts';
 import { ITEMS as ITEMS_OFFENSIVE_2A } from './items/offensive-2a.ts';
 import { ITEMS as ITEMS_OFFENSIVE_2B } from './items/offensive-2b.ts';
+// Sphere Grid reward items with no prior row (docs/plans/questions-for-bailey-2026-09-23.md Q3).
+import { ITEMS as ITEMS_SPHERES } from './items/spheres.ts';
 
 // ---------------------------------------------------------------------------
 // Statuses and characters — src/data/ffx/statuses/**, src/data/ffx/characters/**
@@ -210,6 +212,7 @@ export const ITEMS: Record<ItemId, ItemDef> = {
   ...ITEMS_OFFENSIVE_1B,
   ...ITEMS_OFFENSIVE_2A,
   ...ITEMS_OFFENSIVE_2B,
+  ...ITEMS_SPHERES,
 };
 
 /**
