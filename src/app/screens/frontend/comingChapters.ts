@@ -81,7 +81,9 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
     // while that id is in `LOCKED_CHAPTER_IDS` below.
     id: 'evrae-airship',
     game: 'ffx',
-    title: 'Evrae',
+    // Q11 (preflight docs/plans/chapter-evrae-review.md): the airship names
+    // the chapter, adopted D-020. `Evrae` stays the boss's name.
+    title: 'Fahrenheit',
     location: 'Deck of the Fahrenheit — the approach to Bevelle',
     silhouetteKeys: [],
     research: 'research/ffx-evrae-airship.md',

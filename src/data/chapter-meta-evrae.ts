@@ -37,7 +37,7 @@ export const EVRAE_META: ChapterMeta = {
   id: 'evrae-airship',
   gameLabel: 'FFX',
   numeral: 'VIII',
-  title: 'Evrae',
+  title: 'Fahrenheit',
   subtitle: "Bevelle's Doormat",
   location: 'The deck of the Fahrenheit',
   blurb:

@@ -21,9 +21,11 @@
  * Id `evrae-airship`: the formation's id (`EVRAE_GROUP_ID`) and the COMING
  * row's id, so the coming card drops off by itself the day the lock line goes.
  * Number 8: display order after the seven registered chapters (the D-018 rule
- * Leblanc's 6 and Macalania's 7 used). Title `Evrae`, the COMING card's own:
- * whether the airship names the chapter instead (preflight Q11) is recorded as
- * undecided on the chapter's target tile, so the card is not renamed here.
+ * Leblanc's 6 and Macalania's 7 used). Title `Fahrenheit`, the airship's own
+ * name: preflight Q11 recommended the airship name the chapter over the wyrm
+ * ("the wyrm is not the subject — the airship is", research §12.6), Bailey
+ * adopted it (D-020, "Yes to all recommendations"), and `docs/target/targets.json`
+ * is updated to match. `Evrae` stays the boss's name throughout.
  *
  * `music`: the chapter's own two cues, the two the preflight reserved
  * (§6 / research §12.6): `scene-fahrenheit` ("Within the Hour") and
@@ -45,7 +47,7 @@ export const EVRAE_AIRSHIP: Chapter = {
   id: 'evrae-airship',
   game: 'ffx',
   number: 8,
-  title: 'Evrae',
+  title: 'Fahrenheit',
   // research §12.5: "a fight with a doorman"; the approach to Bevelle (§9.1).
   subtitle: 'The wyrm posted at the door of Bevelle',
   // The COMING card's own wording [research header, §12.1].
