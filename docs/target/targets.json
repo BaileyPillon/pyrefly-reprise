@@ -875,6 +875,42 @@
           }
         },
         {
+          "label": "Evrae's order/range widget (FFX)",
+          "src": "docs/concepts/chapters/evrae/widget/sheet.png",
+          "state": "gap",
+          "pill": "Built to a recommendation — awaiting your pick",
+          "empty": "Not picked yet",
+          "delivery": "implemented",
+          "game": "ffx",
+          "gameNote": "FFX only: Trigger Commands, the CTB queue and Cid's own turn-taker row are FFX conventions with no FFX-2 counterpart; nothing here applies to any FFX-2 chapter.",
+          "note": "The options round (docs/concepts/chapters/evrae/widget/: A the Trigger pair in the command cascade with a cost preview, B a deck-side range gauge, C no persistent widget, the battlefield re-staged) has NOT been picked by Bailey. Built to the driver's recommendation: A's cascade-and-cost-preview widget for issuing the order (src/ui/ffx/AirshipOrderWidget.ts — two Trigger rows, the row matching the current range disabled and reading 'Already near/far', a cost preview on the highlighted row: 'Turn now · Cid's next turn · 1 volley' with three volley pips, keyboard reachable, 14 px type floor). Option C's half of the recommendation (no persistent gauge; the camera/backdrop re-staged so NEAR/FAR reads with the HUD hidden) is scene-presentation work this tile does not cover — it belongs to whoever wires src/scenes/** for this chapter.",
+          "build": "src/ui/ffx/AirshipOrderWidget.ts, its scoped CSS in src/ui/ffx/ffx-hud.css (new `.ffx-airship-order*` classes only — no existing rule touched), tests/unit/ui-ffx-airship-order-widget.test.ts (6 tests, all green). Mounts only when `BattleState.flags['airship.range']` is set, which only this encounter's engine ever sets, so no other chapter's screen changes. Not wired into FFXBattleHud.ts/CommandMenu.ts yet — that one-line integration is named in docs/handoff/chapter-evrae-guide.md for the integrator, the same pattern the chapter's guide and tactic registration already follow.",
+          "reference": [
+            "docs/concepts/chapters/evrae/widget/README.md",
+            "docs/concepts/chapters/evrae/widget/options.json",
+            "docs/concepts/chapters/evrae/widget/a-near.png",
+            "docs/concepts/chapters/evrae/widget/a-far.png",
+            "docs/concepts/chapters/evrae/widget/c-near.png",
+            "docs/concepts/chapters/evrae/widget/c-far.png"
+          ],
+          "reaction": {
+            "date": "2026-09-22",
+            "words": "",
+            "named": [],
+            "how": "No reaction yet: the options round is waiting for Bailey.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [
+              "which option Bailey picks: A, B, C or a mix — the driver's own recommendation note says A and C are not exclusive"
+            ],
+            "inferred": [
+              "built to the driver's recommendation A + C's staging, awaiting Bailey"
+            ]
+          }
+        },
+        {
           "label": "The Leblanc Syndicate (FFX-2)",
           "src": "docs/concepts/chapters/leblanc/renders/backdrop-c.png",
           "state": "approved",
