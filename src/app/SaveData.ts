@@ -9,6 +9,7 @@
 import { audio } from '../audio/index.ts';
 import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
 import { migrateFfx2Atb } from './saveFfx2Atb.ts';
+import { writeMerged } from './saveMerge.ts';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
@@ -313,6 +314,8 @@ export class SaveStore {
   private readonly key: string;
   /** Play time added since the last write. See {@link SaveStore.addPlayTime}. */
   private unflushedPlayTimeMs = 0;
+  /** The slot as this tab last read or wrote it; another tab's write differs (`saveMerge.ts`). */
+  private lastRaw: string | null = null;
 
   constructor(key = SAVE_KEY, storage: StorageLike | null = safeStorage()) {
     this.key = key;
@@ -339,7 +342,7 @@ export class SaveStore {
   load(): SaveData {
     if (!this.storage) return defaultSave();
     try {
-      const raw = this.storage.getItem(this.key);
+      const raw = (this.lastRaw = this.storage.getItem(this.key));
       if (!raw) return defaultSave();
       const parsed = JSON.parse(raw) as Partial<SaveData>;
       if (typeof parsed !== 'object' || parsed === null) return defaultSave();
@@ -352,17 +355,18 @@ export class SaveStore {
   save(): boolean {
     this.data.updatedAt = Date.now();
     if (!this.storage) return false;
-    try {
-      this.storage.setItem(this.key, JSON.stringify(this.data));
-      return true;
-    } catch {
-      return false;
-    }
+    // Folds in another open tab's newer write first (CHK-024-LIVE-1, `saveMerge.ts`).
+    const out = writeMerged(this.storage, this.key, this.lastRaw, this.data, migrate);
+    if (!out) return false;
+    if (out.data !== this.data) audio.applySettings((this.data = out.data).settings);
+    this.lastRaw = out.json;
+    return true;
   }
 
   reset(): void {
     this.data = defaultSave();
     this.unflushedPlayTimeMs = 0;
+    this.lastRaw = null;
     try {
       this.storage?.removeItem(this.key);
     } catch {
