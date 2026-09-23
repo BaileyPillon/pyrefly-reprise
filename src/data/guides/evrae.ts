@@ -99,6 +99,11 @@ export const EVRAE_GUIDE: ChapterGuide = {
       cite: 'ffx-evrae-airship §1.2, §6.5',
     },
     {
+      when: { labels: ['Lancet'] },
+      text: "One of the three swings that reach at FAR, with Lulu's Blk Magic and Wakka's blitzball — and it drains HP and MP on the way",
+      cite: 'ffx-evrae-airship §4.3',
+    },
+    {
       when: { kinds: ['attack'] },
       text: 'A physical swing rolls to hit like any other — the only thing guaranteed here is Cid missiles and the boss magic, not this',
       cite: 'ffx-evrae-airship §3.1',

@@ -34,7 +34,7 @@
  *    permanently gone, bench slot and all (§3.3 note 3). **"Rikku is not
  *    optional in this chapter."**
  * 2. **While a breath is charged and the ship is away: do not touch it.**
- *    §4.5. Buff or Defend instead. This is the rule the chapter exists for.
+ *    §4.5. Buff or heal instead (`./evrae-quiet.ts`). This is the rule the chapter exists for.
  * 3. **Dodge the breath.** Inhale seen at NEAR, no order queued, and an order
  *    owner has the turn → pull back. The dodge is a **race between two CTB
  *    counters**, not a button: Cid has to get a turn between the Inhale and the
@@ -92,6 +92,7 @@
 
 import type { AnyCombatant, AvailableCommand, BattleEngine, Command, CombatantId } from '../../battle/common/types.ts';
 import { type Tactic, aim, activeParty, has, hpFraction, revive, row, stacksOf } from './common.ts';
+import { benchReach, harmlessTurn } from './evrae-quiet.ts';
 
 /** The boss combatant id `tacticFor` keys this encounter on. */
 export const EVRAE_ID = 'evrae';
@@ -177,18 +178,6 @@ function alBhedPotion(commands: AvailableCommand[]): Command | null {
   return r ? aim(r) : null;
 }
 
-/** Something to spend a turn on that does **not** name Evrae [§4.5]. */
-function harmlessTurn(commands: AvailableCommand[], actor: AnyCombatant, living: AnyCombatant[]): Command | null {
-  if (stacksOf(actor, 'cheer') < 5 && living.length > 0) {
-    const cheer = row(commands, ['Cheer']);
-    if (cheer) return aim(cheer);
-  }
-  const focus = commands.find((c) => c.enabled && c.label === 'Focus');
-  if (focus && stacksOf(actor, 'focus') < 5) return aim(focus);
-  const defend = commands.find((c) => c.enabled && c.command.kind === 'defend');
-  return defend ? defend.command : null;
-}
-
 export const evrae: Tactic = (actorId, commands, engine) => {
   const party = activeParty(engine);
   const actor = party.find((c) => c.id === actorId);
@@ -218,7 +207,7 @@ export const evrae: Tactic = (actorId, commands, engine) => {
   //    a dodge in progress; naming Evrae now makes it Swoop, close, and breathe
   //    [§4.5, the best rule in the encounter].
   if (charged && far) {
-    const quiet = harmlessTurn(commands, actor, living);
+    const quiet = harmlessTurn(commands, living);
     if (quiet) return quiet;
   }
 
@@ -380,8 +369,10 @@ export const evrae: Tactic = (actorId, commands, engine) => {
   );
   if (attack) return aim(attack, EVRAE_ID);
 
-  // Nothing of ours reaches: bank the turn rather than waste it.
-  return harmlessTurn(commands, actor, living);
+  const lancet = row(commands, ['Lancet'], EVRAE_ID); // §4.3: the third reach, not reflectable
+  if (lancet) return aim(lancet, EVRAE_ID);
+  // Nothing of ours reaches: hand the turn to a reach, or bank it (`./evrae-quiet.ts`).
+  return (far ? benchReach(commands, party, actorId, boss) : null) ?? harmlessTurn(commands, living);
 };
 
 export default evrae;
