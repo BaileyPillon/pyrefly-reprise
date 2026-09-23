@@ -636,6 +636,26 @@ describe('every function of the old pause screen is still reachable', () => {
     expect(gear.some((g) => /S\.Lv \d+/.test(g)), 'FFX prints a Sphere Level').toBe(true);
   });
 
+  it('PR-0016: the CHAPTER tab shows the chapter’s own hero plate, not the last member’s close-up', () => {
+    // docs/target/targets.json's "Hero plate, chapter 1" / "…chapter 4" tiles
+    // are approved (Bailey, 19 Sep 2026) and say plainly that the Until Dawn
+    // remake "moves it to the CHAPTER tab" rather than dropping it — every
+    // shipped chapter has a `heroArt` plate for exactly this
+    // (`data/chapter-meta.ts`), so this never has to fall back for one that
+    // is missing (round 09 repair).
+    const h = mount('seymour-flux');
+    const state = h.engine.state();
+    const current = (): string | null =>
+      (h.screen.snapshot()['portrait'] as { plate: string | null }).plate;
+    h.screen.trigger(`pause:tab:member:${state.activeIds[0]}`);
+    expect(current()).toBe(state.activeIds[0]);
+    h.screen.trigger('pause:tab:chapter');
+    expect(current()).toBe('ch1-seymour-flux');
+    // Leaving CHAPTER goes right back to the member's own close-up.
+    h.screen.trigger(`pause:tab:member:${state.activeIds[0]}`);
+    expect(current()).toBe(state.activeIds[0]);
+  });
+
   it('12. MUSIC PLAYER — its own tab, on Bailey’s word', () => {
     const h = mount('seymour-flux');
     expect(tabIds(h)).toContain('music');
@@ -898,6 +918,46 @@ describe('the chrome stands on whichever side of the painting is empty', () => {
       expect(box.top + box.height, `${id} bottom`).toBeGreaterThanOrEqual(899.99);
       // build.mjs refuses a framing that magnifies a master past 1.25x.
       expect(box.magnify, `${id} magnification`).toBeLessThanOrEqual(1.25);
+    }
+  });
+
+  it('PR-0079 repair: pushes the face further from the chrome at 1280 wide, and never at 1600', () => {
+    // `--pu-key`/`--pu-bar` are CSS floors, so IN THIS FIGHT's own pixel width
+    // barely moves between 1280 and 1600 — measured live in Chromium
+    // (`docs/screenshots/fix10c/`), FFX-2 Yuna's 58% focal landed at 742px
+    // against a column reaching to 759px at 1280x960, and Rikku's landed 2px
+    // from the edge. 1600x900 is untouched (frames a, b and c stay exact);
+    // 1280 pushes every plate further from its own near edge with room to
+    // spare against the worst column measured (never past 759px).
+    // The face x every plate rendered at 1600x900 before this repair
+    // (`docs/screenshots/fix10c/`, `zz-testplates3` in the round's proof
+    // kit) — some are pan-clamped short of the raw 58%/42% target, so the
+    // golden number is the measured pixel, not the target fraction.
+    const FACE_X_1600: Readonly<Record<string, number>> = {
+      auron: 928,
+      kimahri: 672,
+      lulu: 928,
+      paine: 640,
+      rikku: 800,
+      'rikku-ffx2': 848,
+      tidus: 911,
+      wakka: 852,
+      yuna: 614,
+      'yuna-ffx2': 928,
+    };
+    for (const [id, f] of Object.entries(PLATE_FRAMING)) {
+      const at1600 = framePlate(f, 1600, 900);
+      const faceX1600 = at1600.left + at1600.width * f.x;
+      expect(faceX1600, `${id} unchanged at 1600x900`).toBeCloseTo(FACE_X_1600[id]!, 0);
+
+      const at1280 = framePlate(f, 1280, 960);
+      const faceAt1280 = at1280.left + at1280.width * f.x;
+      const faceFraction1280 = faceAt1280 / 1280;
+      if (f.side === 'left') {
+        expect(faceFraction1280, `${id} @1280 clears the left chrome`).toBeGreaterThanOrEqual(0.6);
+      } else {
+        expect(faceFraction1280, `${id} @1280 clears the right chrome`).toBeLessThanOrEqual(0.4);
+      }
     }
   });
 

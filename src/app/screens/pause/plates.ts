@@ -79,8 +79,33 @@ const MASTER_WIDTH = 2688;
 const MAX_MAGNIFY = 1.25;
 /** How much of the frame's height the head should take. The reference's own. */
 const TARGET_HEAD = 0.78;
-/** Where the focal point lands across the frame: on the side the chrome is not. */
-const FOCAL_AT_X = { left: 0.58, right: 0.42 } as const;
+/**
+ * Where the focal point lands across the frame: on the side the chrome is
+ * not — pinned at 1600x900 (the mockup's own width) and pushed further out
+ * at 1280, the narrowest desktop width this screen holds at.
+ *
+ * `--pu-key` and `--pu-bar` are CSS floors (`pause-screen.css`), so the two
+ * columns' pixel width barely moves between 1280 and 1600 wide while the
+ * window they sit in does — the same 58%/42% pan that clears them at 1600
+ * lands inside them at 1280, where that near-fixed pixel width is a bigger
+ * slice of a narrower frame. Verified live in Chromium at both widths across
+ * all ten shipped plates (round 09 repair, PR-0079;
+ * `docs/screenshots/fix10c/`): FFX-2 Yuna's focal point sat inside IN THIS
+ * FIGHT at 1280 (58% of 1280 = 742px, against a measured column reaching to
+ * 759px) and Rikku's sat 2px from the column edge, both at the unchanged 58%
+ * pan; 68.75% clears every plate's own column reach with room at 1280
+ * (`zz-testplates3` in the round's proof kit) and every 1600x900 plate keeps
+ * its exact current pixel framing — `at1600` is untouched, so frames (a),
+ * (b) and (c) are unaffected.
+ */
+function focalAtXFor(side: ChromeSide, frameW: number): number {
+  const at1280 = side === 'left' ? 0.6875 : 0.3125;
+  const at1600 = side === 'left' ? 0.58 : 0.42;
+  if (frameW <= 1280) return at1280;
+  if (frameW >= 1600) return at1600;
+  const t = (frameW - 1280) / (1600 - 1280);
+  return at1280 + (at1600 - at1280) * t;
+}
 const FOCAL_AT_Y = 0.45;
 
 export interface PlateBox {
@@ -121,7 +146,7 @@ export function framePlate(f: PlateFraming, frameW: number, frameH: number): Pla
   const portrait = frameW < frameH;
   const wanted = (TARGET_HEAD * frameH) / (Math.max(0.05, f.head) * coverH);
   const zoom = portrait ? 1 : Math.min(Math.max(1, wanted), (MASTER_WIDTH * MAX_MAGNIFY) / coverW);
-  const atX = portrait ? 0.5 : FOCAL_AT_X[f.side];
+  const atX = portrait ? 0.5 : focalAtXFor(f.side, frameW);
   const atY = portrait ? 0.26 : FOCAL_AT_Y;
 
   const width = coverW * zoom;
