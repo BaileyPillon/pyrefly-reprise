@@ -18,6 +18,13 @@ import { escapeHtml } from '../../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
 import { formatClearTime } from '../../../ui/common/resultsMath.ts';
 import type { ChapterGroup, ChapterTile } from './chapterGrid.ts';
+import { installDossierFaceReveal } from './dossierFaceReveal.ts';
+
+// PR-0065: keep the dossier's party faces from ever painting the letter
+// fallback as if it were the answer — see dossierFaceReveal.ts. A plain
+// side-effect import, called once; this module is `ChapterSelectScreen`'s
+// only path to the DOM it watches.
+installDossierFaceReveal();
 
 /** Every enemy in the chapter's first formation, as one line. */
 export function bossNames(chapter: Chapter): string {
