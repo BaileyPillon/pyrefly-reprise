@@ -1,5 +1,86 @@
 # Living portrait v4: one Yuna across the turn (2026-09-23)
 
+## Rig assembly (latest; read this first)
+
+Game case: **FFX-2 only** (the Yuna X-2 plate); the tools and the renderer
+plumbing are shared by any plate. Write-up: the prototype README, Part 8.
+Evidence: `docs/concepts/pause-until-dawn/prototype-v2/shots/v4/`
+(`clip-15s.webm`, `sheet.jpg`, stills at -80..+80, 1:1 crops of eyes,
+hairline, tassel and jaw per yaw, blink mid/closed, smile at 0 and -40, slight
+smile and raised brows at +20, `log-all.json` with each frame's yaw and paint).
+
+### What is real now
+
+- **Nine keys every ~20 degrees** (-85, -60, -40, -20, plate, +20, +40, +60,
+  +85) cut into back/front layers and wired into `art/rig.json`; the v3 turns
+  (different paintings) are retired.
+- **Continuous mesh warp between adjacent keys** is the default
+  (`artMeta.v4.paint = "warp"`); `?paint=switch` keeps the v3.3 one-painting
+  switch as a fallback. The paint swaps only inside an 8 degree window in the
+  middle of each bracket, so most of the turn is one painting reshaped by the
+  warp. 25 shared landmarks (20 face points + the hair clip + the head's
+  silhouette at two heights), read at 2x; no fold on any pair.
+- **Judge's fixes applied** to the failing keys: the plate-design clip at -60
+  and -85 (the cord and the headphone disc gone), rainbow hue cleared from the
+  hair, far hair behind +60's cheek, a rounded back of the head at +85, and the
+  plate's own tassel as one layer at every yaw (its footprint painted out of
+  each key; under the jaw at -40, gone past -55).
+- **Masks with SAM 2.1** (`tools/gen/rig-sam.py`): per layer the raw SAM edge,
+  SAM snapped to the ink, and the existing alternative (the v3 geodesic masks on
+  the plate, the repaint-mask cut on a key) are scored at the boundary; the kept
+  edge is recorded per layer in `art/v4/masks/choice.json`. On the plate SAM
+  won the face, tassel, eyes and clip; v3 kept the head, body and left iris.
+- **Blinks on every key** (eight lid frames each), **mouth (parted, slight
+  smile, smile, pressed) and brows (raised, drawn)** painted with the LoRA at
+  denoise 0.5 / 0.45 for the plate and the +-20 / +-40 keys.
+- Rest with `?post=0` is unchanged (the frontal stack is the v3 one).
+- `tsc` clean; `check/` 15 tests, the six `tests/unit/pause-living-portrait-*`
+  files 53 tests, all green. 115 approved hashes match before and after.
+
+### Still not right (seen at 1:1 in `shots/v4/`)
+
+1. **Mid-bracket frames still show two paintings for about 8 degrees**, most
+   at -60..-85 (the profile's hair mass and the clip differ from -60's): a
+   ghost of the other key's back hair while the swap runs. Between -40 and +60
+   the swap is hard to see.
+2. **+85's far side** (face contour against the back of the head) and **-85's
+   hair top** carry faint seams where the repaint met the key.
+3. **Profile eyes at +-85 and the +60 far eye** are small and the lids there
+   are thin; the brow patches change little at 0.45 denoise (raised reads,
+   drawn barely).
+4. **+-60 and +-85 have no mouth or brow patches** (the brief asked for 0,
+   +-20, +-40); an expression running into a wide turn fades out with the key.
+5. **The neck at -60** shows a flat skin patch between the hair and the collar.
+6. No independent judge and no Bailey look at this pass.
+
+### Rebuild (no ComfyUI; the picks are committed)
+
+```
+PY=D:/Tools/ComfyUI/python_embeded/python.exe
+$PY -s tools/gen/rig-sam.py masks --keys -85,-60,-40,-20,20,40,60,85 --src picked
+$PY -s tools/gen/rig-v4fix.py prep
+$PY -s tools/gen/rig-v4fix.py merge --picks cord-85:3,clip-60:1,far+60:init,blob+60:1,back+85:3,hole-20:init,hole+20:init,hole+40:init,hole+60:init,hole+85:init
+$PY -s tools/gen/rig-sam.py masks --keys -85,-60,-40,-20,20,40,60,85 --src notassel
+node tools/gen/rig-range.mjs --warp docs/concepts/pause-until-dawn/prototype-v2/art/v4/warp/landmarks.json --out docs/concepts/pause-until-dawn/prototype-v2/art/v4/range-warp.json
+$PY -s tools/gen/rig-v4layers.py
+for k in v4-l85 v4-l60 v4-l40 v4-l20 v4-r20 v4-r40 v4-r60 v4-r85; do $PY -s tools/gen/rig-lids.py --only $k; done
+$PY -s tools/gen/rig-v4face.py build --picks <see artMeta.v4.expressions>   # needs the candidates in D:/Tools/pyrefly-lora/yuna-x2/rig-v4/patches-jobs
+PYREFLY_BROWSER=gpu node tools/gen/rig-v4shots.mjs --url http://127.0.0.1:<port>/docs/concepts/pause-until-dawn/prototype-v2/ --out docs/concepts/pause-until-dawn/prototype-v2/shots/v4
+$PY -s tools/gen/rig-v4sheet.py docs/concepts/pause-until-dawn/prototype-v2/shots/v4
+```
+
+Intermediates (work images, every inpaint candidate, the finished keys as PNG)
+live in `D:/Tools/pyrefly-lora/yuna-x2/rig-v4/` (not committed).
+`tools/gen/inpaint.mjs` gained `--lora name:strength` (additive; the file was
+already over 400 lines before this pass).
+
+### Needs Bailey
+
+- A look at `shots/v4/clip-15s.webm` and `sheet.jpg`, and a judge pass on the
+  wide turns (items 1 and 2 above).
+
+## Keys track (rounds 1 and 2, earlier the same day)
+
 Game case: **FFX-2 only** (the Yuna X-2 plate). The tools are generic, the LoRA
 and the keys are this Yuna's.
 

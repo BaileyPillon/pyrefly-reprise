@@ -1,0 +1,342 @@
+{
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "stills": [
+    {
+      "name": "yaw-0",
+      "yaw": -0.38,
+      "base": 0.04,
+      "t": 0.874,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-m20",
+      "yaw": -19.48,
+      "base": -19.47,
+      "t": 1.374,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-l20",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-m40",
+      "yaw": -38.98,
+      "base": -39.5,
+      "t": 1.907,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-l40",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-m60",
+      "yaw": -58.67,
+      "base": -59.53,
+      "t": 2.407,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-l60",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-m80",
+      "yaw": -78.74,
+      "base": -79.41,
+      "t": 2.874,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-l85",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-p20",
+      "yaw": 20.11,
+      "base": 19.42,
+      "t": 3.64,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-r20",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-p40",
+      "yaw": 39.69,
+      "base": 39.65,
+      "t": 4.274,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-r40",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-p60",
+      "yaw": 59.34,
+      "base": 59.91,
+      "t": 15.84,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-r60",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "yaw-p80",
+      "yaw": 79.1,
+      "base": 79.51,
+      "t": 16.374,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-r85",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "blink-mid",
+      "yaw": 0.68,
+      "base": 0.48,
+      "t": 17.163,
+      "eye": "closing",
+      "ap": 0.55,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "blink-closed",
+      "yaw": 0.66,
+      "base": 0.43,
+      "t": 17.191,
+      "eye": "closed",
+      "ap": 0,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "smile-0",
+      "yaw": 0.86,
+      "base": 0.21,
+      "t": 17.716,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "smile",
+      "mw": 0.979,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "smile-m40",
+      "yaw": -39.05,
+      "base": -40.08,
+      "t": 74.505,
+      "eye": "half",
+      "ap": 0.85,
+      "mouth": "smile",
+      "mw": 0.979,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-l40",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "slight-smile-p20",
+      "yaw": 19.77,
+      "base": 19.84,
+      "t": 86.229,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "slightSmile",
+      "mw": 0.979,
+      "brow": "neutral",
+      "bw": 0,
+      "paint": {
+        "to": "v4-r20",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "name": "brow-raised-p20",
+      "yaw": 18.56,
+      "base": 19.84,
+      "t": 127.944,
+      "eye": "open",
+      "ap": 1,
+      "mouth": "neutral",
+      "mw": 0,
+      "brow": "raised",
+      "bw": 0.383,
+      "paint": {
+        "to": "v4-r20",
+        "from": null,
+        "w": 1
+      }
+    }
+  ],
+  "clip": [
+    {
+      "beat": "idle",
+      "ms": 13,
+      "yaw": -0.43,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "slow turn to -80",
+      "ms": 1417,
+      "yaw": 0.79,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "back",
+      "ms": 4769,
+      "yaw": -80.98,
+      "paint": {
+        "to": "v4-l85",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "turn to +80",
+      "ms": 7229,
+      "yaw": 0.7,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "back",
+      "ms": 9525,
+      "yaw": 78.78,
+      "paint": {
+        "to": "v4-r85",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "blink (B)",
+      "ms": 11525,
+      "yaw": 0.19,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "smile",
+      "ms": 12243,
+      "yaw": 0.09,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    },
+    {
+      "beat": "end",
+      "ms": 14147,
+      "yaw": 0.3,
+      "paint": {
+        "to": "frontal",
+        "from": null,
+        "w": 1
+      }
+    }
+  ]
+}

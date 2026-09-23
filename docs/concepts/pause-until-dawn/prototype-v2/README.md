@@ -1184,3 +1184,53 @@ the plate's own pixels, the turn is measured, the eyes are recoloured by side.
 Write-up and picks: `art/v4/keys.md` (section 7 for round 2), evidence in
 `art/v4/keys/sheets/`, handoff `docs/handoff/living-portrait-v4.md`. The keys
 are not yet cut into layers or wired into `art/rig.json`.
+
+# Part 8 — v4 rig: nine keys every ~20 degrees, warped continuously (2026-09-23)
+
+FFX-2 only (the Yuna X-2 plate). The runtime is now the continuous mesh warp
+between adjacent keys; the v3.3 one-painting-at-a-time switch is a fallback
+flag. Handoff: `docs/handoff/living-portrait-v4.md` ("Rig assembly").
+
+**Run:** `index.html` as before. `?paint=switch` = the v3.3 switch (one
+painting, 6 degree hysteresis, 0.2 s dissolve); default `warp`.
+
+## Art (every step rebuilds without ComfyUI from committed picks)
+
+| step | tool | output |
+|---|---|---|
+| fix the judged keys | `tools/gen/rig-v4fix.py prep / merge --picks ...` | `art/v4/keys/final/<yaw>.webp` (+ `.notassel.webp`), picks cropped in `keys/fix-picks/`, record `keys/fix-plan.json` |
+| masks | `tools/gen/rig-sam.py masks --src picked / notassel` (SAM 2.1 small) | `art/v4/masks/<yaw>/*.png`, overlays, `masks/choice.json` (the edge kept per layer and why) |
+| landmarks | `tools/gen/rig-v4lm.py sheet` (read at 2x on 10 px grids) | `art/v4/warp/landmarks.json`, sheets in `warp/read/` |
+| hidden regions | `tools/gen/rig-range.mjs --warp art/v4/warp/landmarks.json` | `art/v4/range-warp.json` |
+| layers + wiring | `tools/gen/rig-v4layers.py` | `art/v4/layers/v4-*/{back,front,rest}.png`, `rig.json` keys + `artMeta.v4` |
+| lids | `tools/gen/rig-lids.py --only v4-*` | `art/v3/patches/lids/v4-*/` |
+| expressions | `tools/gen/rig-v4face.py prep / build`, jobs by `tools/gen/rig-v4jobs.mjs` | `art/v4/patches/<key>/{mouth,brows}/`, check `patches/check.png` |
+| browser pass | `tools/gen/rig-v4shots.mjs`, `tools/gen/rig-v4sheet.py` | `shots/v4/` |
+
+Key fixes, per the round-2 judge's notes (`art/v4/keys/judge.md`): the clip at
+-60 and -85 is -40's own clip pixels scaled onto each key's clip (the cord and
+the old disc under it repainted with the LoRA); rainbow hue in the hair only is
+pulled to the plate's hair colour; +60's bald far side takes -60's far hair
+mirrored about the head axis (a LoRA repaint of that region painted armour and
+ornaments at every seed, so the mirrored paint is used as it is, with one small
+LoRA repaint where -60's face had been); +85's back of the head is repainted
+inside a round skull line down through the hair tips; each key's own tassel is
+painted out (hair continued from beside it) because the runtime draws the
+plate's own tassel at every yaw.
+
+## Runtime
+
+- `src/paint.ts` `paintWindowWeight`: the paint swaps over an 8 degree window
+  in the middle of each bracket; outside it one painting shows, reshaped by the
+  warp. `src/renderer.ts` `renderWarp` warps both bracket keys onto the
+  landmarks interpolated at the rendered yaw and mixes them.
+- 25 shared landmarks (the 20 face points, the clip, the head silhouette at rows
+  400 and 650); no triangle folds on any adjacent pair
+  (`tests/unit/pause-living-portrait-warp.test.ts`).
+- The plate's tassel is one layer for every key (`compose.ts` `drawTassel`),
+  moved with the ear (`artMeta.v4.tassel.dx`), on top from -20 up, under the
+  face at -40, gone behind the skull by -55.
+- Per-key mouth and brow patches, seam-matched against each key's own
+  composite (`layers.ts` `keyPatches`); `slightSmile` added to the mouth set.
+- Checks: `check/` 15 (adds `v4.test.ts` and the paint window), the six
+  `tests/unit/pause-living-portrait-*` files 53, `tsc` clean.
