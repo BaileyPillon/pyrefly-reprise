@@ -62,6 +62,11 @@ export interface FloorContext {
   raiseLabel: string | null;
   /** The reading that made the advisor hold the raise back, if it priced one. */
   refused: ReviveRisk | null;
+  /**
+   * A raise another girl already has on its way to {@link fallenId} (FFX-2
+   * only; `./advisor-committed.ts`, PR-0088): who, and the move's name.
+   */
+  incoming?: { byName: string; name: string } | null;
 }
 
 /**
@@ -72,6 +77,10 @@ export interface FloorContext {
  */
 export function floorNote(ctx: FloorContext): string {
   const who = ctx.state.combatants[ctx.fallenId]?.name ?? 'them';
+
+  // Somebody is already standing them up: that is the answer, and the card
+  // has left the second raise off on purpose (PR-0088).
+  if (ctx.incoming) return `${ctx.incoming.byName}'s ${ctx.incoming.name} is already on its way to ${who}`;
 
   if (ctx.refused) {
     // `'aimed'` and `'sweep'` already resolve into "take the hit, then raise

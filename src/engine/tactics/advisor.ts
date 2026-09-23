@@ -128,6 +128,13 @@ import {
   cacheKeyFor,
 } from './advisor-plan.ts';
 import { sentenceFor } from './advisor-say.ts';
+import {
+  type Committed,
+  type QueuedCommand,
+  committedByAllies,
+  queuedFrom,
+  spentAlready,
+} from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
@@ -280,6 +287,13 @@ export interface AdvisorOptions {
    * so the planner is complete without it and the tests stay engine-only.
    */
   turnOrder?: (previewCommand?: Command) => readonly TurnPreview[];
+  /**
+   * Commands another girl has confirmed that are not on `BattleState` yet —
+   * `FFX2Engine.heldCommand()` (PR-0076's chain-locked hold). **FFX-2 only**;
+   * FFX has no such command. The charge bar is read off the state without it;
+   * this adds the held one [`./advisor-committed.ts`, PR-0088].
+   */
+  queued?: () => readonly QueuedCommand[];
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -1115,7 +1129,9 @@ export function buildAdvisorView(
   // HUD at 20 Hz; without this, every one of those frames would re-plan a board
   // that has not moved. `nextSeq` is the engine's own event counter, so a board
   // that *has* moved cannot share a key [`./advisor-plan.ts#cacheKeyFor`].
-  const cacheKey = planner ? cacheKeyFor(state, decision.actorId) : null;
+  // A held command (PR-0076) is set without an event, so `nextSeq` cannot see
+  // it: a board carrying one is never served from the cache.
+  const cacheKey = planner && queuedFrom(options).length === 0 ? cacheKeyFor(state, decision.actorId) : null;
   if (cacheKey) {
     const hit = PLAN_CACHE.get(cacheKey);
     if (hit && hit.commands === decision.commands) return hit.view;
@@ -1138,6 +1154,11 @@ export function buildAdvisorView(
       intent = null;
     }
   }
+
+  // **What the other girls have already spent** (PR-0088, FFX-2 only). A
+  // command on an ally's charge bar is chosen and aimed; the board just has
+  // not caught up with it yet. Read once per decision [`./advisor-committed.ts`].
+  const committed = committedByAllies(state, decision.actorId, options);
 
   const candidates: Candidate[] = [];
   // Work counts, never a wall clock: a clock-based cut would make the card's
@@ -1252,14 +1273,23 @@ export function buildAdvisorView(
   // re-aim, not a row that was greyed out between the simulation and here, and
   // not a row this game's command window does not paint at all ({@link
   // pressable}: FFX drops Defend; Evrae's widget greys a redundant order).
-  const legal = ranked.filter(
+  const pressed = ranked.filter(
     (c) =>
       (c.suggestion.source === 'tactic'
         ? tacticRow(decision.commands, decision.actorId, c.suggestion.command)
         : ownedRow(decision.commands, c.suggestion.command)) !== null &&
       pressable(state, c.suggestion.command),
   );
-  if (legal.length === 0) return null;
+  if (pressed.length === 0) return null;
+  // **Already on its way** (PR-0088). A cure or raise an ally's charging
+  // command already makes, or an item whose last one is on somebody's charge
+  // bar, is not offered — the chapter's line included. Dropped rather than
+  // demoted, so the revive runner-up below can never pick it back up; when it
+  // is all the menu holds, the list stands as it was.
+  const unspent = pressed.filter(
+    (c) => !spentAlready(state, c.suggestion.command, c.outcome, committed),
+  );
+  const legal = unspent.length > 0 ? unspent : pressed;
 
   // **The state guard.** Anything whose simulated resolution changes nothing
   // measurable on this board goes behind everything that does something — the
@@ -1331,7 +1361,7 @@ export function buildAdvisorView(
     actorId: decision.actorId,
     actorName: actor.name,
     suggestions,
-    note: noteFor(state, shown, refused, decision, options, actor.name),
+    note: noteFor(state, shown, refused, decision, options, actor.name, committed),
     considered: candidates.length,
   };
   if (cacheKey) PLAN_CACHE.set(cacheKey, { view, commands: decision.commands });
@@ -1382,6 +1412,7 @@ function noteFor(
   decision: GuideDecision,
   options: AdvisorOptions,
   actorName: string,
+  committed: Committed,
 ): string {
   for (const c of shown) {
     const cure = c.outcome?.statusChanges.find(
@@ -1391,8 +1422,23 @@ function noteFor(
   }
   // The raise is on the card: its caution rides on that suggestion's warning.
   if (shown.some(isRevive)) return '';
-  const down = downedActives(state);
-  if (down.length === 0) return '';
+  const fallen = downedActives(state);
+  if (fallen.length === 0) return '';
+  // A body another girl's raise is already on its way to is answered by that
+  // raise (PR-0088): "nothing here stands them up" would be true and misleading.
+  const down = fallen.filter((c) => !committed.revives.has(c.id));
+  if (down.length === 0) {
+    const fallenId = fallen[0]!.id;
+    const raise = committed.revives.get(fallenId)!;
+    return floorNote({
+      state,
+      actorName,
+      fallenId,
+      raiseLabel: null,
+      refused: null,
+      incoming: { byName: state.combatants[raise.by]?.name ?? raise.by, name: raise.name },
+    });
+  }
 
   // Talk about the body the advisor actually weighed, and failing that the one
   // this actor could do something about.
