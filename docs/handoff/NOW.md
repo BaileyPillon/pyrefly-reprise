@@ -56,6 +56,8 @@
 7. `wf_cc2af145-0bf` (item 5) and `wf_4486692a-5b3` were interrupted by a session restart at ~18:50 EDT and RESUMED at 21:00 EDT with the same run ids; their interrupted agents re-run and find their own uncommitted work in the tree (prototype-v2/art/v3, prototype-v2/src, tools/gen/inpaint.mjs, rig-turns.py, video-flf.mjs).
 8. `wf_552781c6-d19` "pyrefly-chapters-macalania-evrae" (launched 21:05 EDT): Macalania then Evrae registered end to end like Leblanc (c473de8), both LOCKED as Coming until Bailey approves their art; Anima's arrival and the Evrae order widget built to the driver's recommendations (A then B's tag; A + C's staging) and recorded as INFERRED in docs/target/targets.json for Bailey's yes. OWNS src/scenes/{macalania,evrae}*, their data/guide/tactics/meta files, src/story registration, additive entries in encounters.ts + registries (docs/CONTRACT-CHANGES.md), chapterGrid card data, docs/handoff/chapter-{macalania,evrae}*.md.
 
+9. `wf_0f0e2938-66e` "pyrefly-ffx2-wait-mode" (launched 21:55 EDT): Bailey's decision built: FFX-2 WAIT mode (clock stops while a menu is open) as the DEFAULT, Active as the other setting; preflight `docs/plans/ffx2-wait-mode-review.md`, the decision record superseding D-009, the existing X-2 BATTLE ACTIVE/WAIT pause row wired, measurement, verifier, repair. OWNS `src/battle/ffx2/**` (this feature), `BattlePresenterActive.ts`, pause options/settings, `SaveData.ts` (one optional field), `BattleScreenWiring.ts`, `docs/target/decisions.json`, `docs/handoff/ffx2-wait-mode*.md`.
+
 ComfyUI (:8188) is shared by 2, 3, 5, 6: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
 
 ## Live: Build C.1 (release 08)
