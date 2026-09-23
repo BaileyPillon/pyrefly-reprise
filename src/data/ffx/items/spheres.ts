@@ -95,6 +95,18 @@ export const ITEMS: Record<string, ItemDef> = {
     iconKey: 'icon-special-sphere',
     description: 'Activates nodes used by allies on Sphere Grid.',
   },
+  'lv-3-key-sphere': {
+    id: 'lv-3-key-sphere',
+    name: 'Lv. 3 Key Sphere',
+    game: 'ffx',
+    effect: sphereGridEffect('lv-3-key-sphere', 'Lv. 3 Key Sphere'),
+    targeting: 'self',
+    usableInBattle: false,
+    usableInMenu: false,
+    price: 0, // no source lists a shop price for any Sphere Grid item
+    iconKey: 'icon-lv-3-key-sphere',
+    description: 'Opens Locks on Sphere Grid.',
+  },
 };
 
 export default ITEMS;
