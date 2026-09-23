@@ -298,7 +298,16 @@
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
-.ffx-cmd--trigger > .ffx-cmd__label { color: var(--ig-gold-on-paper); }
+/* PR-0018 (round 09, both games — this file is the FFX half): the trigger
+   label's tracked gold (`--ig-gold-on-paper`, #B8862A) measured 2.87:1 on the
+   cream row face and 1.74:1 on the gold `--ig-cmd--selected` face, both under
+   the 4.5:1 command labels need. `--ig-gold-on-paper` is the shared design
+   token other surfaces already use at large-text sizes (`--ig-gold-on-paper`
+   is not itself changed, in case something else on paper depends on its
+   exact value); a command row gets its own darker mark instead, computed to
+   clear 4.5:1 against *both* faces a trigger row can wear (8.57:1 on cream,
+   5.21:1 on the gold selected face — `docs/screenshots/fix10b/PR-0018-*`). */
+.ffx-cmd--trigger > .ffx-cmd__label { color: var(--ffx-trigger-ink, #5c3f0a); }
 
 /* --------------------------------------------- command rows: label + badge */
 
