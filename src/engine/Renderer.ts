@@ -14,6 +14,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { maskBloomHighPass } from './BloomMask.ts';
 import { TiltShiftShader } from './shaders/TiltShiftShader.ts';
 import { GradeShader } from './shaders/GradeShader.ts';
 
@@ -155,6 +156,8 @@ export class Renderer {
       DEFAULT_POST.bloomRadius,
       DEFAULT_POST.bloomThreshold,
     );
+    // The painted characters mask themselves out of the bloom (PR-0097, BloomMask.ts).
+    maskBloomHighPass(this.bloomPass);
     this.composer.addPass(this.bloomPass);
 
     this.tiltH = new ShaderPass(TiltShiftShader);

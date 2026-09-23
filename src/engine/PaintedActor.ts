@@ -43,6 +43,7 @@ import {
 } from './PaintedArt.ts';
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { placePlane } from './PaintedRest.ts';
+import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
@@ -686,6 +687,7 @@ export class PaintedActor extends Group {
       vertexShader: paintedVertexShader,
       fragmentShader: paintedFragmentShader,
       transparent: true,
+      ...PAINTED_BLENDING,
       depthWrite: false,
       depthTest: true,
       side: DoubleSide,
@@ -1710,6 +1712,7 @@ export class PaintedActor extends Group {
   /** @param dt seconds. Must be called every frame. */
   update(dt: number): void {
     this.tweens.update(dt);
+    for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0);
     this.clock += dt;
 
     // --- how much of what is on screen is a downed figure ------------------

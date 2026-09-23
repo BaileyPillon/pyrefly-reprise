@@ -109,7 +109,8 @@ export const GradeShader = {
       // dither
       c += bayer(gl_FragCoord.xy) * dither;
 
-      gl_FragColor = vec4(clamp(c, 0.0, 1.0), texel.a);
+      // Opaque: the frame alpha carries the bloom mask (BloomMask.ts) and must not reach the canvas.
+      gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
     }
   `,
 };
