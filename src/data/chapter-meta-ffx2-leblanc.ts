@@ -19,6 +19,13 @@
  * approved** (`docs/target/approved-hashes.json`), so these paths exist on
  * disk today but are not a claim that the pictures are final.
  *
+ * `heroArt` is `pause/leblanc`, matching the installed plate
+ * `public/art/pause/leblanc.png`. It used to name `pause/ffx2-leblanc`, which
+ * was never rendered under that stem, so the pause CHAPTER tab silently fell
+ * back to `heroArtFallback` (the flat portrait) instead of the commissioned
+ * close-up — the same class of bug `chapter-meta-seymour-anima-macalania.ts`
+ * documents for Chapter 7's `pause/macalania`.
+ *
  * `musicKeys` names the cues this chapter's `Chapter.music` record and its
  * story script actually use — Chapter 4's `scene-bevelle-underground` /
  * `boss-ffx2-aeon` (no dedicated Leblanc cue exists yet; see the class doc on
@@ -43,7 +50,7 @@ export const FFX2_LEBLANC_META: ChapterMeta = {
     'Three stolen uniforms get the girls through the front door of a mansion playing dress-up as a rival crew, ' +
     'right up until the ambush underground turns real. What they walk out with matters more than either side ' +
     'realizes yet.',
-  heroArt: 'pause/ffx2-leblanc',
+  heroArt: 'pause/leblanc',
   heroArtFallback: 'portraits/leblanc.png',
   quote: {
     text: "Darling, you didn't win. You simply arrived when I'd already decided to be finished.",

@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,6 +16,24 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'] as const;
 /** True when a path relative to `public/art/` names a file that exists on disk. */
 function artExists(relativePath: string): boolean {
   return existsSync(join(ART_ROOT, relativePath));
+}
+
+/**
+ * `public/art/manifest.json`, read the same way
+ * `tests/unit/chapters/leblanc-party-sprites.test.ts` does — `public/art/` is
+ * gitignored (AGENTS.md map), so this reads whatever the local art fleet has
+ * actually produced.
+ */
+interface PauseManifest {
+  pause: string[];
+}
+const manifest = JSON.parse(
+  readFileSync(join(ART_ROOT, 'manifest.json'), 'utf8'),
+) as PauseManifest;
+
+/** The `pause/<stem>` a `ChapterMeta.heroArt` names, with the folder stripped. */
+function pauseStem(heroArt: string): string {
+  return heroArt.replace(/^pause\//, '');
 }
 
 function wordCount(text: string): number {
@@ -68,6 +86,31 @@ describe('CHAPTER_META', () => {
       // just make sure it at least names a plausible relative path.
       expect(meta.heroArt.length).toBeGreaterThan(0);
       expect(meta.heroArt).not.toMatch(/\.(png|jpg|jpeg|webp)$/i);
+    },
+  );
+
+  /**
+   * Regression pin: Chapter 6 (`ffx2-leblanc`) named `heroArt: 'pause/ffx2-leblanc'`
+   * while the art fleet installed the plate as `public/art/pause/leblanc.png`
+   * — a naming mismatch `chapterPanel.ts#heroArtCandidates`'s manifest check
+   * (`manifestKnowsAssetNow`) turns into a silent fallback to the flat
+   * `heroArtFallback` portrait instead of the commissioned close-up, with no
+   * error anywhere (the manifest's `false` means "don't even ask the
+   * browser", per `ArtManifest.ts`'s own contract). Chapter 7's
+   * `pause/macalania` was the same class of bug, already fixed and
+   * documented in `chapter-meta-seymour-anima-macalania.ts`'s header. This
+   * pins all eight chapters at once so a future rename can't reintroduce
+   * either.
+   */
+  it.each(CHAPTER_META)(
+    '$id: heroArt resolves to an installed public/art/pause plate in manifest.json',
+    (meta) => {
+      const stem = pauseStem(meta.heroArt);
+      expect(
+        manifest.pause.includes(stem),
+        `${meta.id}: heroArt "${meta.heroArt}" names pause stem "${stem}", which is not in public/art/manifest.json's "pause" list`,
+      ).toBe(true);
+      expect(artExists(`pause/${stem}.png`), `pause/${stem}.png`).toBe(true);
     },
   );
 

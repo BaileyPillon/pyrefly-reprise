@@ -367,4 +367,52 @@ describe('resultsDensity', () => {
       }
     }
   });
+
+  // Regression: a real Chapter 7 (Macalania) four-drop haul —
+  // `docs/screenshots/chapters/macalania-flow-4-results-win.png` — wrapped
+  // the merged ITEMS line onto a second line that ran through Tidus's row.
+  // `dropsLabel` merging repeats (above) fixed *that* case, but a five-drop
+  // haul with longer names (`Ability Distiller, Silver Hourglass, Lightning
+  // Marble, Tetra Elemental, Speed Distiller`, all real item names) still
+  // wraps to two lines, and a real-browser measurement at 640x360 (the
+  // engine's native design resolution) found the naive per-row budget left
+  // only ~1.4 design units of clearance in the tightest realistic case
+  // (3 ledger rows, 7 party members, compact/tight) — positive, but thin
+  // enough that a different font stack could lose it. `itemsLong` folds the
+  // measured extra a wrapped `.rres__v--items-long` row costs into the same
+  // search, the same way a fifth or sixth member already tightens the party
+  // list, instead of trusting that coincidental fit.
+  const clearWithItems = (ledgerRows: number, members: number, itemsLong: boolean): number => {
+    const itemsLongExtra = { normal: 0, compact: 2.5 } as const;
+    const d = resultsDensity(ledgerRows, members, itemsLong);
+    const [face, gap] = member[d.party];
+    const partyTop = PARTY_BOTTOM - (face * members + gap * (members - 1));
+    const ledgerHeight =
+      ledgerRow[d.ledger] * ledgerRows + (itemsLong ? itemsLongExtra[d.ledger] : 0);
+    return partyTop - (LEDGER_TOP + ledgerHeight);
+  };
+
+  it('a long (wrapped) ITEMS row never reaches the party list either, one to seven members', () => {
+    for (const [rows, most] of [[2, 7], [3, 7], [4, 5]] as const) {
+      for (let members = 1; members <= most; members++) {
+        expect(
+          clearWithItems(rows, members, true),
+          `${rows} rows, ${members} members, long items`,
+        ).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
+
+  it('a long ITEMS row can pick a tighter density than a short one would, at the same rows/members', () => {
+    // Chapter 7's own four-member, three-row shape: a long list should never
+    // be looser than a short one, and the regression case (3 rows, 4
+    // members) is exactly where the extra should bite.
+    for (const [rows, members] of [[3, 3], [3, 4], [3, 7], [4, 1], [4, 3]] as const) {
+      const short = resultsDensity(rows, members, false);
+      const long = resultsDensity(rows, members, true);
+      const rank = { normal: 0, compact: 1, tight: 2 } as const;
+      expect(rank[long.ledger], `${rows}/${members} ledger`).toBeGreaterThanOrEqual(rank[short.ledger]);
+      expect(rank[long.party], `${rows}/${members} party`).toBeGreaterThanOrEqual(rank[short.party]);
+    }
+  });
 });

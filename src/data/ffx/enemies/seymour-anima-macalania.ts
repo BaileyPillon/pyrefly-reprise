@@ -114,11 +114,17 @@ export const ACT_THREE_MAGIC = 32;
  * *on* Seymour. The elemental content of this fight is his rotation hitting
  * *the party*, which is the opposite shape and is what makes it a good
  * teaching fight for Nul spells.
+ *
+ * `spriteKey: 'seymour-macalania'` — the installed art folder is
+ * `public/art/characters/seymour-macalania/`, distinct from Chapter 1's
+ * `seymour-flux`/`seymour-flux-body`. The bare `'seymour'` key this fight
+ * used to give him has no manifest subject at all, so he was found through
+ * `PaintedActor`'s fallback path instead of his real painting.
  */
 const seymour: EnemyDef = {
   id: SEYMOUR_MACALANIA_ID,
   name: 'Seymour',
-  spriteKey: 'seymour',
+  spriteKey: 'seymour-macalania',
   slot: 1, // M2 — the Guardians flank him [§4.2's Hi-Potion row targets "M2"]
   // §1.1 [verified: 2 sources] — decompile + wiki + GamerGuides agree.
   stats: {
@@ -163,7 +169,7 @@ const seymour: EnemyDef = {
   // the data but is flavour only — he is `ko`-immune anyway, same note as
   // Seymour Flux's file.
   immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
-  forms: [{ name: 'Seymour', spriteKey: 'seymour', hp: 6000 }],
+  forms: [{ name: 'Seymour', spriteKey: 'seymour-macalania', hp: 6000 }],
   aiScriptId: SEYMOUR_MACALANIA_SCRIPT,
   rewards: {
     ap: 2000, // §1.1 [verified: 2 sources]

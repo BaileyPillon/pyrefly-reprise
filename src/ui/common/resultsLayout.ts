@@ -29,14 +29,38 @@ const LEDGER_ROW = { normal: 36, compact: 25.34 } as const;
 const MEMBER_ROW = { normal: [21.33, 5.33], compact: [16, 2.67], tight: [13.33, 1.78] } as const;
 
 /**
+ * How much taller a two-line `.rres__v--items-long` row measures than an
+ * ordinary `LEDGER_ROW` entry, keyed by ledger level (measured live in
+ * Chrome at 640x360, `docs/screenshots/results/drops-four-fixed.png`'s repro:
+ * a normal-ledger row already budgets more than a wrapped items row needs
+ * (its smaller font more than pays for the second line), so `normal` gets no
+ * extra; a **compact** row does not, and a wrapped items line measured
+ * ~27.35 units against the compact budget's 25.34 — about 2 units short.
+ * Rounded up for a margin of error across fonts/renderers instead of hugging
+ * the exact measured value.
+ */
+const ITEMS_LONG_EXTRA = { normal: 0, compact: 2.5 } as const;
+
+/**
  * The loosest setting at which the party list does not climb into the ledger.
  *
  * Both are absolute blocks, so a fourth member (a switch-in earns AP in FFX)
  * pushed the list up through the ITEMS row: Macalania's results, critic pass on
  * 62b4927. The ledger gives way first (it already had a compact form for
  * FFX-2's four rows), then the member rows. Both games.
+ *
+ * `itemsLong` (the same `dropsLabel(...).length > ITEMS_LONG_CHARS` test
+ * `ledgerValueClass` uses) tells this the ITEMS row may wrap to the two lines
+ * `.rres__v--items-long`'s `-webkit-line-clamp: 2` allows, which a **compact**
+ * ledger's smaller row budget does not fully cover (`ITEMS_LONG_EXTRA`) — a
+ * five-drop haul (`Ability Distiller, Silver Hourglass, Lightning Marble,
+ * Tetra Elemental, Speed Distiller`) at four party members measured a 1.4-unit
+ * clearance without this term, thin enough that a different font stack could
+ * lose it. Folding the extra into the same search this function already runs
+ * lets a long list step down to a tighter party density exactly like a fifth
+ * or sixth member does, rather than trusting a coincidental fit.
  */
-export function resultsDensity(ledgerRows: number, members: number): ResultsDensity {
+export function resultsDensity(ledgerRows: number, members: number, itemsLong = false): ResultsDensity {
   const partyHeight = (level: ResultsDensity['party']): number => {
     const [face, gap] = MEMBER_ROW[level];
     return face * members + gap * Math.max(0, members - 1);
@@ -44,7 +68,9 @@ export function resultsDensity(ledgerRows: number, members: number): ResultsDens
   for (const party of ['normal', 'compact', 'tight'] as const) {
     for (const ledger of ['normal', 'compact'] as const) {
       if (ledger === 'normal' && ledgerRows > 3) continue;
-      if (LEDGER_TOP + LEDGER_ROW[ledger] * ledgerRows <= PARTY_BOTTOM - partyHeight(party)) return { ledger, party };
+      const ledgerHeight =
+        LEDGER_ROW[ledger] * ledgerRows + (itemsLong ? ITEMS_LONG_EXTRA[ledger] : 0);
+      if (LEDGER_TOP + ledgerHeight <= PARTY_BOTTOM - partyHeight(party)) return { ledger, party };
     }
   }
   return { ledger: 'compact', party: 'tight' };

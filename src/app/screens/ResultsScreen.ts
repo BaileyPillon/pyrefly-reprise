@@ -13,6 +13,7 @@ import {
   buildMemberRows,
   clearTimeMs,
   dropsLabel,
+  ITEMS_LONG_CHARS,
   ledgerValueClass,
   resultsDensity,
   formatClearTime,
@@ -338,7 +339,12 @@ export class ResultsScreen extends Screen {
     }
     if (this.wasNewBest) tags.push('NEW BEST');
 
-    const density = resultsDensity(this.ledger.length, this.rows.length);
+    // A wrapped `.rres__v--items-long` row (two lines) needs more room than a
+    // normal-height ledger row budgets for in compact mode — see
+    // `resultsDensity`'s own doc for the measured gap this closes.
+    const itemsLine = this.ledger.find((line) => line.kind === 'items');
+    const itemsLong = itemsLine !== undefined && itemsLine.value.length > ITEMS_LONG_CHARS;
+    const density = resultsDensity(this.ledger.length, this.rows.length, itemsLong);
     const ledgerHtml = this.ledger
       .map((line) => {
         const value =
