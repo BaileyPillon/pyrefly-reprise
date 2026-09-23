@@ -1,0 +1,146 @@
+/**
+ * **How a beaten enemy leaves the field: the presenter's departure kinds.**
+ *
+ * Until now every enemy KO was the same beat: the fiend comes apart into
+ * pyreflies and is sent (`ko()` in `BattlePresenterBeats.ts`). That is right
+ * for fiends and wrong for two kinds of opponent the chapters now carry:
+ *
+ * - **`'falls-away'`, Evrae (FFX only; Bailey D-031, "yes Evrae falls out of
+ *   the sky").** `research/ffx-evrae-airship.md` §12.5 beat 8 (line 889):
+ *   "Evrae breaks and falls out of the sky, down through the cloud layer, gone.
+ *   Not sent, not killed on screen". The creature lurches, then drops and
+ *   recedes below the deck's edge. The cloud veil that passes over it is the
+ *   scene's (`src/scenes/evrae-airship-fall.ts`, driven by the range director),
+ *   because clouds are the location's, not the presenter's.
+ * - **`'yields'`, Leblanc, Logos and Ormi (FFX-2 only; Bailey D-035).**
+ *   `docs/plans/art-method-r3/METHOD-CHECK.md` §4 Decision 2: "the beaten figure
+ *   stays standing in its hurt (or idle) plane, dims, and steps back out of
+ *   frame". The source for why: `research/ffx2-leblanc-syndicate.md` §10 beat
+ *   10 (line 762), "They lose and flee to warn Leblanc": living people who walk
+ *   off, not fiends who are sent. Every act's copy of Logos and Ormi is listed
+ *   (the act rosters, `src/data/ffx2/enemies/leblanc-syndicate-acts.ts`); the
+ *   Goons are rank and file and keep the dissolve, as the decision names only
+ *   the three.
+ *
+ * Everything else keeps `'dissolve'`. The kind is a presenter-side table keyed
+ * by combatant id (an enemy's combatant id is its `EnemyDef.id`,
+ * `src/battle/ffx2/setup.ts` `buildEnemy`), not an enemy-data field: it is a
+ * presentation choice with no engine meaning, so no shared contract widens.
+ *
+ * **The budget.** Both departures are longer than the 620 ms dissolve (a fall
+ * that took 620 ms would read as a blink), but every await goes through
+ * {@link settled}, so the victory event queued behind the last KO is never held
+ * for more than the animation plus `ACTOR_ANIM_GRACE_MS`: the critic round 02
+ * #01 rule (see `ko()`).
+ *
+ * Same rules as the other beat modules: no `three`, no DOM, ports only.
+ * Game case per kind is above; the table and the dispatch are shared plumbing
+ * (both games).
+ */
+
+import type { CombatantId } from '../battle/common/types.ts';
+import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
+import { settled, type EventCtx } from './BattlePresenterEvents.ts';
+
+export type DepartureKind = 'dissolve' | 'falls-away' | 'yields';
+
+/** Who leaves the field some other way than being sent. Keyed by combatant id. */
+export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind>>> = {
+  // FFX, Chapter VIII: D-031, research/ffx-evrae-airship.md line 889.
+  evrae: 'falls-away',
+  // FFX-2, Chapter VI: D-035, research/ffx2-leblanc-syndicate.md line 762.
+  leblanc: 'yields',
+  logos: 'yields',
+  ormi: 'yields',
+  'ormi-entrance': 'yields',
+  'ormi-logos-room': 'yields',
+  'logos-room': 'yields',
+};
+
+export function departureKindOf(id: CombatantId): DepartureKind {
+  return DEPARTURE_KINDS[id] ?? 'dissolve';
+}
+
+/**
+ * The fall, in milliseconds at timeScale 1: a lurch as it breaks, then the
+ * drop: two KO beats (`TIMING.ko` 620) end to end, so the anticlimax has time
+ * to read. Literals, not `TIMING.ko * 2`: this module and
+ * `BattlePresenterEvents.ts` import each other (through the beats), and a
+ * module-level read of `TIMING` here would run before it is initialised.
+ */
+export const FALL_MS = { lurch: 220, drop: 1240 } as const;
+/** How far the fall carries Evrae, world units: down past the deck's edge and away. */
+export const FALL_OFFSET = { x: 0.8, y: -7.5, z: -5 } as const;
+
+/** Yielding, in milliseconds at timeScale 1: the dim, then the step back. */
+export const YIELD_MS = { dim: 360, step: 1000 } as const;
+/** How dim a yielding figure gets before it steps back (brightness multiplier). */
+export const YIELD_DIM = 0.45;
+/** The step back, world units: away from the party and deeper into the room. */
+export const YIELD_STEP = { x: 3.2, z: -2.4 } as const;
+
+const at = (p: Point3): Point3 => ({ x: p.x, y: p.y, z: p.z });
+
+/** Evrae breaks, then falls out of the sky: down and away, fading as it goes. */
+async function fallsAway(ctx: EventCtx, actor: ActorHandle): Promise<void> {
+  const from = at(actor.position);
+  actor.setPose('hurt');
+  actor.shake(0.22, FALL_MS.lurch + 120);
+  actor.flash(0x8a8f9c, FALL_MS.lurch + 160, 0.55);
+  await settled(ctx, actor.moveTo({ x: from.x, y: from.y + 0.35, z: from.z }, FALL_MS.lurch), FALL_MS.lurch);
+  const to = { x: from.x + FALL_OFFSET.x, y: from.y + FALL_OFFSET.y, z: from.z + FALL_OFFSET.z };
+  const drop = actor.moveTo(to, FALL_MS.drop);
+  // The last third fades, so it is gone even where no deck edge or cloud covers it.
+  const fade = (async () => {
+    await ctx.sleep(FALL_MS.drop * 0.62);
+    await settled(ctx, actor.fadeTo(0, FALL_MS.drop * 0.38), FALL_MS.drop * 0.38);
+  })();
+  await Promise.all([settled(ctx, drop, FALL_MS.drop), fade]);
+}
+
+/** Where the party stands, on average, or `null` with nobody staged. */
+function partyCentre(ctx: EventCtx): Point3 | null {
+  let n = 0;
+  const c = { x: 0, y: 0, z: 0 };
+  for (const id of ctx.stage.staged()) {
+    if (ctx.stage.sideOf(id) !== 'party') continue;
+    const p = ctx.stage.actor(id)?.position;
+    if (!p) continue;
+    c.x += p.x;
+    c.z += p.z;
+    n++;
+  }
+  return n ? { x: c.x / n, y: 0, z: c.z / n } : null;
+}
+
+/** A living opponent gives up: stays on its feet, dims, and steps back out of frame. */
+async function yields(ctx: EventCtx, actor: ActorHandle): Promise<void> {
+  const from = at(actor.position);
+  actor.setPose('idle', { force: true });
+  const steps = 6;
+  for (let i = 1; i <= steps; i++) {
+    actor.setBrightness(1 - (1 - YIELD_DIM) * (i / steps));
+    await ctx.sleep(YIELD_MS.dim / steps);
+  }
+  const party = partyCentre(ctx);
+  const sx = party && from.x < party.x ? -1 : 1;
+  const to = { x: from.x + sx * YIELD_STEP.x, y: from.y, z: from.z + YIELD_STEP.z };
+  await Promise.all([
+    settled(ctx, actor.moveTo(to, YIELD_MS.step), YIELD_MS.step),
+    settled(ctx, actor.fadeTo(0, YIELD_MS.step), YIELD_MS.step),
+  ]);
+}
+
+/**
+ * Play `id`'s departure, if it has one other than the dissolve. Resolves
+ * `false` for `'dissolve'` (the caller plays the send), `true` once a
+ * falls-away or yields beat has finished (the caller removes the combatant).
+ */
+export async function depart(ctx: EventCtx, id: CombatantId, actor: ActorHandle | undefined): Promise<boolean> {
+  const kind = departureKindOf(id);
+  if (kind === 'dissolve') return false;
+  if (!actor) return true;
+  if (kind === 'falls-away') await fallsAway(ctx, actor);
+  else await yields(ctx, actor);
+  return true;
+}

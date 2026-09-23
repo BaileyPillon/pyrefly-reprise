@@ -31,6 +31,7 @@ import { artStatesFor } from '../engine/ArtManifest.ts';
 import type { LightRig } from '../engine/Lighting.ts';
 import type { PaintedActor } from '../engine/PaintedActor.ts';
 import type { AirshipDeck } from './evrae-airship-sky.ts';
+import { FallVeil } from './evrae-airship-fall.ts';
 import {
   EVRAE_BASELINE_PX,
   EVRAE_WORLD_HEIGHT,
@@ -81,11 +82,14 @@ export class AirshipRangeDirector {
   private swapToken = 0;
   private readonly keyFrom = new Color();
   private readonly keyTo = new Color();
+  /** The cloud Evrae falls through at its defeat (D-031, `evrae-airship-fall.ts`). */
+  private readonly veil: FallVeil;
 
   constructor(
     private readonly deck: AirshipDeck,
     private readonly lights: LightRig,
   ) {
+    this.veil = new FallVeil(deck.group);
     this.applyBlend('near', 'near', 1, 1);
   }
 
@@ -170,6 +174,7 @@ export class AirshipRangeDirector {
 
   /** @param dt seconds */
   update(dt: number): void {
+    this.veil.update(dt, this.evrae, RANGE_STAGING[this.range].evrae, this.shiftMs >= 0);
     if (this.shiftMs < 0) return;
     this.shiftMs += dt * 1000;
     const s = rangeShiftAt(this.shiftMs);
@@ -257,6 +262,7 @@ export class AirshipRangeDirector {
   }
 
   dispose(): void {
+    this.veil.dispose();
     this.swapToken++;
     this.camera = null;
     this.evrae = null;

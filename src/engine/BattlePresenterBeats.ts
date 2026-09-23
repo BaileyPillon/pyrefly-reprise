@@ -8,6 +8,7 @@
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
+import { depart } from './BattlePresenterDepartures.ts';
 import {
   banner,
   cue,
@@ -130,6 +131,12 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   const side = ctx.stage.sideOf(id);
   cue(ctx, 'ko');
   if (side === 'enemy') {
+    // Evrae falls out of the sky; Leblanc, Logos and Ormi yield
+    // (`BattlePresenterDepartures.ts`). Everyone else is sent.
+    if (await depart(ctx, id, actor)) {
+      ctx.stage.removeCombatant(id);
+      return;
+    }
     // A fiend is sent: it comes apart into pyreflies and leaves the field.
     //
     // `settled`, not a bare await: this is the exact line the whole of critic
