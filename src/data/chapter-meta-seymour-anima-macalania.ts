@@ -4,18 +4,13 @@
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. Nothing here is true of FFX-2.
  *
- * **Status: written, green, and deliberately registered nowhere**, for the
- * same reason `src/data/chapter-meta-ffx2-leblanc.ts` was before its
- * integrator commit (`c473de8`): `./chapter-meta.ts`'s `CHAPTER_META` array
- * carries a hard length-parity assertion against `CHAPTERS`
- * (`tests/unit/chapter-meta.test.ts`) that fails until `src/data/encounters.ts`
- * (a contract file) widens `ChapterId` to include `'seymour-anima-macalania'`
- * and adds the chapter record — integrator-only work
- * (`docs/plans/chapter-macalania-review.md` §8.1). `DraftChapterMeta` relaxes
- * only `id` and `numeral` to `string`; every other field is the real,
- * unrelaxed `ChapterMeta` shape, so once the integrator widens `ChapterId`
- * and picks a numeral this object typechecks with no further edit — exactly
- * the same contract the Leblanc draft used.
+ * **Registered** in `./chapter-meta.ts`'s `CHAPTER_META` by the integrator
+ * (`docs/handoff/chapter-macalania.md`), now a real `ChapterMeta`: the
+ * `DraftChapterMeta` relaxation of `id`/`numeral` went away once
+ * `src/data/encounters.ts` widened `ChapterId` and the chapter took number 7
+ * (display order, after the six already registered — the D-018 rule Leblanc
+ * followed). The chapter stays LOCKED as COMING on chapter select until
+ * Bailey approves its art.
  *
  * `heroArt`/`heroArtFallback`/snapshot images point at art already rendered
  * to `public/art/` from the chapter's engine-and-data pass (`074a198`) — that
@@ -23,21 +18,17 @@
  * no file yet and the screen falls back to the existing portrait, same
  * convention every other chapter's `heroArt` follows before its own close-up
  * is painted. These are CANDIDATE assets (`docs/target/targets.json`): none
- * of Macalania's art is Bailey-approved yet (`docs/handoff/NOW.md`, "Macalania
- * art was not started" — the pause and portrait pieces here were rendered
- * earlier, for the chapter tile and character sheet, not as a finished pass).
+ * of Macalania's art is Bailey-approved yet.
  *
- * `musicKeys` name the two cues `src/story/scripts/seymour-anima-macalania.ts`
- * already calls by id (`scene-macalania-temple` at line 103,
- * `boss-seymour-macalania` at line 181) — neither is a registered `MusicKey`
- * in `src/audio/tracks/index.ts` yet, so they are owed the same way
- * `ffx2-leblanc`'s two cues were before Track H landed — plus the shared
- * `victory-ffx` fanfare every other FFX chapter uses.
+ * `musicKeys` name the cues the chapter actually routes today
+ * (`./chapter-seymour-anima-macalania.ts` `music`): Chapter 1's
+ * `scene-gagazet` and `boss-seymour` as a recorded stopgap, plus the shared
+ * `victory-ffx`. The chapter's own two cues (`scene-macalania-temple`,
+ * `boss-seymour-macalania`, preflight §6.3) are new compositions that do not
+ * exist yet; when the audio track lands them, swap both here and there.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
-
-type DraftChapterMeta = Omit<ChapterMeta, 'id' | 'numeral'> & { id: string; numeral: string };
 
 /**
  * Seymour and Anima — Macalania Temple.
@@ -45,10 +36,10 @@ type DraftChapterMeta = Omit<ChapterMeta, 'id' | 'numeral'> & { id: string; nume
  * acts). Strategies: §7 (the numbered player-strategy table cited row by row
  * below).
  */
-export const SEYMOUR_ANIMA_MACALANIA_META: DraftChapterMeta = {
+export const SEYMOUR_ANIMA_MACALANIA_META: ChapterMeta = {
   id: 'seymour-anima-macalania',
   gameLabel: 'FFX',
-  numeral: 'IV',
+  numeral: 'VII',
   title: 'Seymour and Anima',
   subtitle: 'The Second Refusal',
   location: 'Macalania Temple',
@@ -56,7 +47,7 @@ export const SEYMOUR_ANIMA_MACALANIA_META: DraftChapterMeta = {
     'Seymour offers the pilgrimage a second time, and this time he does not ask — he calls Anima up ' +
     "through the chamber floor to make the answer for him. What she does to a party is not what she " +
     'does to the aeon summoned to stand in front of them, and the fight is built entirely out of that gap.',
-  heroArt: 'pause/ch4-seymour-anima-macalania',
+  heroArt: 'pause/ch7-seymour-anima-macalania',
   heroArtFallback: 'portraits/seymour.png',
   quote: {
     text: 'You already know the ending. I am only asking you to stop pretending otherwise.',
@@ -87,7 +78,7 @@ export const SEYMOUR_ANIMA_MACALANIA_META: DraftChapterMeta = {
     { image: 'characters/seymour-macalania/idle.png', caption: 'unhurried, still unhurried' },
   ],
   focalCharacterId: 'seymour',
-  musicKeys: ['scene-macalania-temple', 'boss-seymour-macalania', 'victory-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-seymour', 'victory-ffx'],
 };
 
 export default SEYMOUR_ANIMA_MACALANIA_META;

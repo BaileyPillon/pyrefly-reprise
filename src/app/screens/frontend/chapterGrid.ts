@@ -19,7 +19,7 @@
 import type { GameId } from '../../../battle/common/types.ts';
 import { CHAPTERS, type Chapter } from '../../../data/encounters.ts';
 import { romanNumeral } from '../../../ui/common/roman.ts';
-import { COMING_CHAPTERS, type ComingChapter } from './comingChapters.ts';
+import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS, type ComingChapter } from './comingChapters.ts';
 
 /**
  * Which painting is cut into the ink silhouette for a built chapter.
@@ -41,6 +41,9 @@ const SILHOUETTE_OVERRIDES: Readonly<Record<string, readonly string[]>> = {
   'braskas-final-aeon': ['braskas-final-aeon-1'],
   // The gun, not the boy inside it: Shuyin is the chapter's last reveal.
   'ffx2-vegnagun-shuyin': ['vegnagun-body'],
+  // Seymour, not his Guardian (the formation's first enemy) and not Anima,
+  // who is the chapter's mid-battle reveal. Used once the card is unlocked.
+  'seymour-anima-macalania': ['seymour-macalania'],
 };
 
 /** What a chapter tile needs to know about the save. `SaveStore` satisfies it. */
@@ -130,6 +133,8 @@ function tileForComing(coming: ComingChapter): ChapterTile {
 export interface ChapterRegistries {
   readonly chapters?: readonly Chapter[];
   readonly coming?: readonly ComingChapter[];
+  /** Registered chapters still shown as COMING. Defaults to `LOCKED_CHAPTER_IDS`. */
+  readonly locked?: ReadonlySet<string>;
 }
 
 /**
@@ -139,12 +144,15 @@ export interface ChapterRegistries {
  * A coming row whose id **or** title has since appeared in `CHAPTERS` is
  * dropped: the real chapter is already in the list, so the card lights up by
  * itself the day the data lands and nobody has to remember to delete a row.
+ * A registered chapter whose id is in `LOCKED_CHAPTER_IDS` is the exception:
+ * its tile is withheld and its coming row stays, until the lock line goes.
  */
 export function buildChapterTiles(
   save: ClearedLookup,
   registries: ChapterRegistries = {},
 ): ChapterTile[] {
-  const chapters = registries.chapters ?? CHAPTERS;
+  const locked = registries.locked ?? LOCKED_CHAPTER_IDS;
+  const chapters = (registries.chapters ?? CHAPTERS).filter((c) => !locked.has(c.id));
   const comingRows = registries.coming ?? COMING_CHAPTERS;
   const liveIds = new Set(chapters.map((c) => c.id as string));
   const liveTitles = new Set(chapters.map((c) => c.title.toLowerCase()));

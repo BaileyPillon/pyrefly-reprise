@@ -6,6 +6,51 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-22 — Chapter 7 registered, LOCKED: `seymour-anima-macalania` (Seymour and Anima)
+
+Key `chapter-macalania-integration`. **FFX only** [AGENTS.md hard rule 14]:
+an FFX encounter with an FFX party (`research/ffx-seymour-anima-macalania.md`).
+Number 7 by display order, after the six already registered (the rule
+`docs/target/decisions.json` D-018 used for Leblanc's 6); narratively it comes
+before Chapter 1.
+
+**Additive only, three widened unions, one new record, one new lock set:**
+
+- `src/data/encounters.ts`: `ChapterId` gains `'seymour-anima-macalania'`;
+  `Chapter.number` gains `7`; `SEYMOUR_ANIMA_MACALANIA` appended to
+  `CHAPTERS`/`CHAPTER_IDS` (seventh, last) and re-exported. The record itself
+  lives in `src/data/chapter-seymour-anima-macalania.ts` (type-only import of
+  `Chapter`, so no runtime cycle) to keep the contract file under 400 lines.
+- `src/data/chapter-meta.ts`: `ChapterMeta.numeral` gains `'VII'`;
+  `SEYMOUR_ANIMA_MACALANIA_META` (now a real `ChapterMeta`) appended.
+- `src/story/registry.ts`: `ChapterKey` gains the id; `STORY_CHAPTERS`,
+  `AI_EMITTED_TRIGGERS` (empty) and `CHAIN_SEAMS` (empty: one continuous
+  battle, every beat an in-fight interrupt) gain an entry.
+- `src/engine/tactics/index.ts`: `seymourAnimaMacalania` under its four
+  combatant ids (the guide's `bossIds`). `src/data/guides/index.ts`:
+  `SEYMOUR_ANIMA_MACALANIA_GUIDE` appended.
+- `src/scenes/index.ts`: `'macalania-temple'` in `SCENE_FACTORIES` and
+  `SCENES`; `src/debug/api.ts`: `scene-macalania-temple` debug screen.
+- **New: `LOCKED_CHAPTER_IDS`** in `src/app/screens/frontend/comingChapters.ts`,
+  read by `buildChapterTiles` (plus an optional `locked` on
+  `ChapterRegistries` for tests). A registered chapter listed there is hidden
+  from chapter select and its COMING row stays; everything else (the flow,
+  `gotoChapter`, the chapter-generic tests) reaches it. Unlocking is deleting
+  its one line. Macalania is listed: all of its art is CANDIDATE.
+- `src/ui/common/roman.ts` (shared plumbing, **both** games): `romanNumeral`
+  now covers I-VIII. It stopped at V, so Leblanc's cutscene eyebrow and prep
+  header printed "6" against its meta's "VI" (a live bug, fixed in passing).
+
+**No new `MusicKey`.** The chapter's own two cues (`scene-macalania-temple`,
+`boss-seymour-macalania`, preflight §6.3) are unbuilt compositions and neither
+`docs/audio/THEMES.md` nor `docs/plans/music-modern-sound.md` names one, so
+`Chapter.music`, the script's two `music()` calls, the formation's
+`musicCues` and the meta's `musicKeys` route Chapter 1's `scene-gagazet` /
+`boss-seymour` plus `victory-ffx` as a recorded stopgap. Three script `sfx()`
+keys that do not exist in the bank (`chamber-door`, `guado-robes`,
+`sphere-crack`) were swapped for `dome-echo`, `footstep`, `petrify-shatter`
+(an unknown cue throws in the cutscene runner). No boss number changed.
+
 ## 2026-09-22 — Chapter 6 registered: `ffx2-leblanc` (The Leblanc Syndicate)
 
 Key `chapter-leblanc-integration`. **FFX-2 only** [AGENTS.md hard rule 14].

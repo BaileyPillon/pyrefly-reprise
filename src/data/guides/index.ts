@@ -14,6 +14,7 @@ import { BRASKAS_FINAL_AEON_GUIDE } from './braskas-final-aeon.ts';
 import { FFX2_BAHAMUT_GUIDE } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_SHUYIN_GUIDE } from './ffx2-vegnagun-shuyin.ts';
 import { FFX2_LEBLANC_GUIDE } from './ffx2-leblanc.ts';
+import { SEYMOUR_ANIMA_MACALANIA_GUIDE } from './seymour-anima-macalania.ts';
 
 export type {
   ChapterGuide,
@@ -31,6 +32,7 @@ export {
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
   FFX2_LEBLANC_GUIDE,
+  SEYMOUR_ANIMA_MACALANIA_GUIDE,
 };
 
 export const GUIDES: readonly ChapterGuide[] = [
@@ -40,10 +42,9 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
   FFX2_LEBLANC_GUIDE,
-  // `SEYMOUR_ANIMA_MACALANIA_GUIDE` is written but NOT listed: the chapter is
-  // not playable yet and this file is integrator-only
-  // [docs/plans/chapter-macalania-review.md §8.1]. It lands with the tactic
-  // registration and `src/data/encounters.ts`, in one commit.
+  // Chapter 7 — registered with `src/data/encounters.ts` and the tactic, in
+  // the integrator's one commit [docs/plans/chapter-macalania-review.md §8.1].
+  SEYMOUR_ANIMA_MACALANIA_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

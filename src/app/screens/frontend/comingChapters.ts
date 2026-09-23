@@ -65,6 +65,8 @@ export interface ComingChapter {
  */
 export const COMING_CHAPTERS: readonly ComingChapter[] = [
   {
+    // Matches the real, registered Chapter 7 id. The row stays on the board
+    // while that id is in `LOCKED_CHAPTER_IDS` below.
     id: 'seymour-anima-macalania',
     game: 'ffx',
     title: 'Seymour and Anima',
@@ -95,3 +97,20 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
     research: 'research/ffx2-leblanc-syndicate.md',
   },
 ] as const;
+
+/**
+ * Chapters that are **registered** in `src/data/encounters.ts` (the flow, the
+ * debug API's `gotoChapter` and every chapter-generic test reach them) but
+ * that chapter select still shows as a locked COMING card, because Bailey has
+ * not approved their art yet (AGENTS.md hard rule 9).
+ *
+ * While an id is listed here, `buildChapterTiles` hides the real chapter's
+ * tile and keeps its `COMING_CHAPTERS` row instead. **Unlocking a chapter is
+ * deleting its one line here**: the coming row then drops off by itself (its
+ * id matches the real chapter) and the playable card takes its place.
+ */
+export const LOCKED_CHAPTER_IDS: ReadonlySet<string> = new Set<string>([
+  // Chapter 7, Macalania (FFX only): every painting CANDIDATE, Anima's arrival
+  // INFERRED (docs/target/targets.json), docs/handoff/chapter-macalania.md.
+  'seymour-anima-macalania',
+]);

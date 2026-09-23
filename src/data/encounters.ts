@@ -44,14 +44,19 @@ import { ffx2BahamutScripts } from '../story/scripts/ffx2-bahamut.ts';
 import { ffx2VegnagunShuyinScripts } from '../story/scripts/ffx2-vegnagun-shuyin.ts';
 import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 
-/** The six chapter ids. Also the keys used in `SaveData.chapters`. */
+// Chapter 7's record lives in its own file for the 400-line rule; it imports
+// only the `Chapter` type from here, so there is no runtime cycle.
+import { SEYMOUR_ANIMA_MACALANIA } from './chapter-seymour-anima-macalania.ts';
+
+/** The seven chapter ids. Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
   | 'seymour-flux'
   | 'yunalesca'
   | 'braskas-final-aeon'
   | 'ffx2-bahamut'
   | 'ffx2-vegnagun-shuyin'
-  | 'ffx2-leblanc';
+  | 'ffx2-leblanc'
+  | 'seymour-anima-macalania';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -98,8 +103,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–6. */
-  number: 1 | 2 | 3 | 4 | 5 | 6;
+  /** Display order on the chapter-select screen, 1–7. */
+  number: 1 | 2 | 3 | 4 | 5 | 6 | 7;
   /** Card title. The encounter's name. */
   title: string;
   /** Card subtitle. One clause, no period. */
@@ -343,7 +348,14 @@ export const FFX2_LEBLANC: Chapter = {
   },
 };
 
-/** All six, in play order. */
+export { SEYMOUR_ANIMA_MACALANIA };
+
+/**
+ * All seven, in play order. Chapter 7 (Macalania) is registered — the debug
+ * API, the flow and every chapter-generic test reach it — but chapter select
+ * shows it as a locked COMING card until Bailey approves its art
+ * (`LOCKED_CHAPTER_IDS` in `src/app/screens/frontend/comingChapters.ts`).
+ */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX,
   YUNALESCA,
@@ -351,6 +363,7 @@ export const CHAPTERS: readonly Chapter[] = [
   FFX2_BAHAMUT,
   FFX2_VEGNAGUN_SHUYIN,
   FFX2_LEBLANC,
+  SEYMOUR_ANIMA_MACALANIA,
 ] as const;
 
 /** Chapter ids, in play order. */
@@ -361,6 +374,7 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'ffx2-bahamut',
   'ffx2-vegnagun-shuyin',
   'ffx2-leblanc',
+  'seymour-anima-macalania',
 ] as const;
 
 /** Look a chapter up by id. Returns `undefined` for an unknown id. */

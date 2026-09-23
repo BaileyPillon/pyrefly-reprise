@@ -37,6 +37,7 @@ import {
 import { FFX2_BAHAMUT_ID, ffx2Bahamut } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_CHAIN_IDS, ffx2VegnagunShuyin } from './ffx2-vegnagun-shuyin.ts';
 import { LEBLANC_BOSS_IDS, ffx2Leblanc } from './ffx2-leblanc.ts';
+import { SEYMOUR_MACALANIA_ID, seymourAnimaMacalania } from './seymour-anima-macalania.ts';
 
 export type { Tactic } from './common.ts';
 export {
@@ -61,17 +62,14 @@ export {
 export { ffx2Bahamut, FFX2_BAHAMUT_ID } from './ffx2-bahamut.ts';
 export { ffx2VegnagunShuyin, FFX2_SHUYIN_ID, FFX2_VEGNAGUN_CHAIN_IDS } from './ffx2-vegnagun-shuyin.ts';
 export { ffx2Leblanc, LEBLANC_BOSS_IDS } from './ffx2-leblanc.ts';
+export { seymourAnimaMacalania, SEYMOUR_MACALANIA_ID } from './seymour-anima-macalania.ts';
 
 /**
  * Every chapter's slot, in encounter order. `null` = no line written yet.
  *
- * **`seymour-anima-macalania` is deliberately absent.** Its tactic is written
- * and measured (`./seymour-anima-macalania.ts`,
- * `tests/unit/strategy-macalania.test.ts`), but the chapter has no scene,
- * script, art or music, so it is not registered anywhere a board can reach —
- * this file and `src/data/guides/index.ts` are integrator-only
- * [docs/plans/chapter-macalania-review.md §8.1]. Both lines land in the
- * integrator's single commit, together with `src/data/encounters.ts`.
+ * Chapter 7 (`seymour-anima-macalania`) is registered under all four of its
+ * combatant ids, the same four its guide lists as `bossIds`
+ * [docs/handoff/chapter-macalania-guide.md §5].
  */
 const REGISTRY: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic | null }> = [
   { bossId: SEYMOUR_FLUX_ID, tactic: seymourFlux },
@@ -93,6 +91,12 @@ const REGISTRY: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic | null }> = 
   // across its own bestiary records (`leblanc-syndicate.ts`,
   // `leblanc-syndicate-acts.ts`) — same reasoning as Chapter 5 above.
   ...LEBLANC_BOSS_IDS.map((bossId) => ({ bossId, tactic: ffx2Leblanc })),
+  // Chapter 7 is one battle in three acts. Seymour is in the record the
+  // whole fight (untargetable in act two), so his id alone would find it; the
+  // other three are listed so the tactic and guide claim the same ids.
+  ...[SEYMOUR_MACALANIA_ID, 'anima-macalania', 'guado-guardian-a', 'guado-guardian-b'].map(
+    (bossId) => ({ bossId, tactic: seymourAnimaMacalania }),
+  ),
 ];
 
 /** Keyed by a boss combatant id that only that encounter fields. */

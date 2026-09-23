@@ -11,7 +11,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { CHAPTERS, type Chapter, type ChapterId } from '../../src/data/encounters.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
-import { COMING_CHAPTERS } from '../../src/app/screens/frontend/comingChapters.ts';
+import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS } from '../../src/app/screens/frontend/comingChapters.ts';
 import {
   buildChapterTiles,
   groupChapterTiles,
@@ -31,13 +31,15 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds eight cards: six built chapters (Leblanc now landed) and two still coming', () => {
+  it('holds eight cards: six playable chapters (Leblanc now landed) and two still coming', () => {
     const tiles = buildChapterTiles(save);
     // Leblanc's own COMING_CHAPTERS row is filtered out by id now that the
     // real chapter is registered, so the raw `COMING_CHAPTERS.length` (3)
     // overcounts by one — this asserts what the board actually shows.
+    // Macalania is registered (Chapter 7) but LOCKED, so its real tile is
+    // withheld and its COMING row stays.
     expect(tiles).toHaveLength(8);
-    expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
+    expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
       'Evrae',
@@ -66,8 +68,10 @@ describe('the board', () => {
     // Leblanc's row is the one deliberate exception: its id now matches the
     // real, landed chapter on purpose, which is what drops it off the board
     // automatically (see `comingChapters.ts`'s own comment on that row).
+    // Macalania is the other: registered as Chapter 7, but its row stays
+    // on the board while `LOCKED_CHAPTER_IDS` holds it.
     for (const row of COMING_CHAPTERS) {
-      if (row.id === 'ffx2-leblanc') {
+      if (row.id === 'ffx2-leblanc' || LOCKED_CHAPTER_IDS.has(row.id)) {
         expect(live.has(row.id)).toBe(true);
       } else {
         expect(live.has(row.id)).toBe(false);
@@ -84,7 +88,8 @@ describe('the board', () => {
    */
   it('drops a coming row the day its real chapter lands — matched by id', () => {
     const landed: Chapter = { ...CHAPTERS[0]!, id: 'seymour-anima-macalania' as ChapterId, game: 'ffx' };
-    const tiles = buildChapterTiles(save, { chapters: [landed] });
+    // Unlocked: what the board does once its `LOCKED_CHAPTER_IDS` line goes.
+    const tiles = buildChapterTiles(save, { chapters: [landed], locked: new Set() });
     expect(tiles.filter((t) => t.id === 'seymour-anima-macalania')).toHaveLength(1);
     const card = tiles.find((t) => t.id === 'seymour-anima-macalania')!;
     expect(card.kind).toBe('chapter');
@@ -94,6 +99,29 @@ describe('the board', () => {
       'Evrae',
       'The Leblanc Syndicate',
     ]);
+  });
+
+  it('keeps a registered but LOCKED chapter as its COMING card, and unlocks it with its one line', () => {
+    const macalania = CHAPTERS.find((c) => c.id === 'seymour-anima-macalania');
+    expect(macalania, 'Chapter 7 is registered').toBeDefined();
+    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(true);
+
+    const locked = buildChapterTiles(save);
+    const card = locked.filter((t) => t.id === 'seymour-anima-macalania');
+    expect(card).toHaveLength(1);
+    expect(card[0]!.kind).toBe('coming');
+    expect(card[0]!.playable).toBe(false);
+    expect(card[0]!.chapter).toBeNull();
+
+    // The unlock: the same real registries with the lock line removed.
+    const unlocked = buildChapterTiles(save, { locked: new Set() });
+    const live = unlocked.filter((t) => t.id === 'seymour-anima-macalania');
+    expect(live).toHaveLength(1);
+    expect(live[0]!.kind).toBe('chapter');
+    expect(live[0]!.playable).toBe(true);
+    expect(live[0]!.numeral).toBe('VII');
+    expect(live[0]!.silhouetteKeys).toEqual(['seymour-macalania']);
+    expect(unlocked.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
   });
 
   it('drops a coming row matched by title alone, whatever id the chapter lands under', () => {
@@ -112,8 +140,9 @@ describe('the board', () => {
     // Leblanc really has landed now, so its own coming row is still dropped
     // here too — this pins that passing the real registries explicitly
     // behaves exactly like the defaults, not that nothing has landed.
-    const tiles = buildChapterTiles(save, { chapters: CHAPTERS, coming: COMING_CHAPTERS });
+    const tiles = buildChapterTiles(save, { chapters: CHAPTERS, coming: COMING_CHAPTERS, locked: LOCKED_CHAPTER_IDS });
     expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length - 1);
+    expect(tiles).toEqual(buildChapterTiles(save));
   });
 
   it('reads cleared state from a real SaveStore, and only for the chapter cleared', () => {

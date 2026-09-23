@@ -42,11 +42,13 @@
  * establishing frame of the empty room** before any combatant walks into it —
  * that is the `wait(2000)` under the opening `fade('clear')`.
  *
- * `music()` steps carry the **cue ids the preflight names** (§6.3):
+ * `music()` steps: the preflight names two new cues (§6.3),
  * `scene-macalania-temple` and `boss-seymour-macalania`. Neither track exists
- * yet — T8 writes sketches, Bailey judges by ear (hard rule 13) — so the audio
- * agent routes these later; they are deliberately left as ids, not swapped for
- * an existing cue.
+ * yet — Bailey judges by ear (hard rule 13) — and an unregistered cue throws
+ * in the cutscene runner (`tests/unit/audio-story-cues.test.ts`), so the
+ * integrator routed Chapter 1's `scene-gagazet` / `boss-seymour` in their
+ * place. When the real cues land, swap the two calls back (and the chapter's
+ * `music` and the formation's `musicCues`).
  *
  * The pre-battle **Trigger Commands** (Talk: Tidus +10 STR, Yuna +10 MDef,
  * Wakka +10 MDef, §9.6 beat 8) are `TriggerCommand`s fired from the battle
@@ -100,7 +102,10 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
   pre: [
     // §9.1 — the room is shown before it is fought in. Light through ice,
     // the Chamber door glowing behind the enemy line, and no one in it.
-    music('scene-macalania-temple', 1400),
+    // Integrator: the preflight's own cue (`scene-macalania-temple`, §6.3) is
+    // an unbuilt composition, so this routes Chapter 1's scene cue until
+    // Bailey picks one by ear [docs/handoff/chapter-macalania.md].
+    music('scene-gagazet', 1400),
     camera('idle', 0),
     fade('clear', 1400),
     sfx('fayth-hum'),
@@ -159,7 +164,8 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     // §9.6 beat 7 — she comes out of the Chamber. She has just received Shiva
     // and the seal is still on her. The mark is OUR mark, not the canon glyph
     // [§6.2 VFX, hard rule 8].
-    sfx('chamber-door'),
+    // Integrator: no `chamber-door` sound exists; the stone-hall bell stands in.
+    sfx('dome-echo'),
     showActor('yuna', { at: { slot: 3, side: 'party' }, ms: 900 }),
     fx('shiva-seal', 'yuna'),
     beat(1600),
@@ -178,7 +184,9 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     say('seymour', 'Thank you. That was the last honest thing.'),
 
     // He stops pretending. The two retainers were always in the room.
-    music('boss-seymour-macalania', 1000),
+    // Integrator: `boss-seymour-macalania` (§9.8, its own theme) does not
+    // exist yet; Chapter 1's `boss-seymour` stands in, recorded as a stopgap.
+    music('boss-seymour', 1000),
     showActor(GUARDIAN_A, { at: { slot: 1, side: 'enemy' }, ms: 600, facing: -1 }),
     showActor(GUARDIAN_B, { at: { slot: 2, side: 'enemy' }, ms: 600, facing: -1 }),
     setPose('yuna', 'ready'),
@@ -212,7 +220,7 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     beat(1600),
 
     // The Guado. Tromell speaks; no portrait, so no name plate [see header].
-    sfx('guado-robes'),
+    sfx('footstep'), // integrator: no `guado-robes` sound exists
     say('none', 'Step away from Lord Seymour, Lady Summoner.'),
     say('none', 'You will not put hands on him again.'),
     setPose('yuna', 'idle'),
@@ -222,7 +230,7 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
 
     // The sphere — the only evidence in Spira, and it takes one hand.
     say('none', 'And this. This was never yours.'),
-    sfx('sphere-crack'),
+    sfx('petrify-shatter'), // integrator: no `sphere-crack` sound exists
     flash(220),
     beat(1600),
     say('lulu', 'They just destroyed the only proof.'),

@@ -42,6 +42,7 @@ import { vegnagunBodyAbilities } from '../../src/data/ffx2/enemies/vegnagun-body
 import { shuyinAbilities } from '../../src/data/ffx2/enemies/shuyin-abilities.ts';
 import { ormiAbilities, logosAbilities, goonAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-abilities.ts';
 import { leblancAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts';
+import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../src/data/ffx/enemies/seymour-anima-macalania-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -93,6 +94,12 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     'dr-goon': 'research/ffx2-leblanc-syndicate.md §4.6 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
     'fem-goon': 'research/ffx2-leblanc-syndicate.md §4.6 (src/data/ffx2/enemies/leblanc-syndicate-acts.ts)',
   },
+  'seymour-anima-macalania': {
+    'seymour-macalania': 'research/ffx-seymour-anima-macalania.md §1.1 (src/data/ffx/enemies/seymour-anima-macalania.ts)',
+    'guado-guardian-a': 'research/ffx-seymour-anima-macalania.md §2.1 (src/data/ffx/enemies/seymour-anima-macalania.ts)',
+    'guado-guardian-b': 'research/ffx-seymour-anima-macalania.md §2.1 (src/data/ffx/enemies/seymour-anima-macalania.ts)',
+    'anima-macalania': 'research/ffx-seymour-anima-macalania.md §3.1 (src/data/ffx/enemies/seymour-anima-macalania.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -143,6 +150,12 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
     fileCite(goonAbilities, 'research/ffx2-leblanc-syndicate.md §4.6 (src/data/ffx2/enemies/leblanc-syndicate-abilities.ts)'),
     fileCite(leblancAbilities, 'research/ffx2-leblanc-syndicate.md §4.4, §4.5 (src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts)'),
   ],
+  'seymour-anima-macalania': [
+    fileCite(
+      SEYMOUR_ANIMA_MACALANIA_ABILITIES,
+      'research/ffx-seymour-anima-macalania.md §4 (src/data/ffx/enemies/seymour-anima-macalania-abilities.ts)',
+    ),
+  ],
 };
 
 /**
@@ -174,6 +187,10 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   // Every Leblanc/Ormi/Logos/goon ability id is `x2-`-prefixed and defined in
   // the chapter's own two ability files (no shared player-catalog reuse).
   'ffx2-leblanc': {},
+  'seymour-anima-macalania': {
+    shell: 'research/ffx-seymour-anima-macalania.md §4.1 (src/data/ffx/enemies/seymour-anima-macalania.ts, reusing the shared Shell)',
+    protect: 'research/ffx-seymour-anima-macalania.md §4.2 (src/data/ffx/enemies/seymour-anima-macalania.ts, reusing the shared Protect)',
+  },
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

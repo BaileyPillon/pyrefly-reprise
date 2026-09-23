@@ -781,7 +781,8 @@
           "label": "Seymour and Anima, Macalania Temple (FFX)",
           "src": "docs/concepts/chapters/macalania/renders/backdrop-a.png",
           "state": "approved",
-          "delivery": "in-progress",
+          "delivery": "implemented",
+          "build": "Registered as Chapter 7 (seymour-anima-macalania) and playable through window.__pyrefly.gotoChapter, but LOCKED as a COMING card on chapter select until Bailey approves the art (one line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS; docs/handoff/chapter-macalania.md). Real-flow stills: docs/screenshots/chapters/macalania-flow-1-select-locked.png, -2-prep.png, -3-battle-menu.png, -4-results-win.png; the scene alone beside backdrop A: docs/screenshots/chapters/macalania-scene-target-vs-build.jpg. Every Macalania painting installed under public/art is CANDIDATE.",
           "note": "Three acts: Guado Guardians, Anima against Yuna’s new Shiva, Seymour cycling elemental spells. New art: the guardians, the temple. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop A (docs/concepts/chapters/macalania/renders/backdrop-a.png, warm brazier gold), Seymour human-form B (renders/seymour-b.png, arms crossed, warm brazier rim light), Guado Guardian A (renders/guardian-a.png, the on-canon reroll), Anima reuses the board-approved public/art/characters/anima/idle.png at the Macalania scale rather than a new render (docs/plans/chapter-macalania-review.md §6.1 cast_anima). Preflight recommendations accepted: docs/target/decisions.json D-019.",
           "reaction": {
             "date": "2026-09-21",
@@ -805,7 +806,11 @@
               "whether public/art/portraits/seymour.png is human-form Seymour or Seymour Flux (NEW-1) — must be opened before the portrait is called reuse or new",
               "Tromell — only if pre/post scenes show him; ask before commissioning"
             ],
-            "inferred": []
+            "inferred": [
+              "Anima’s arrival: built to the driver’s recommendation A + B’s tag, awaiting Bailey (its own tile below)",
+              "chapter number 7, by display order after Leblanc (the D-018 rule), not asked",
+              "music: Chapter 1’s scene-gagazet and boss-seymour stand in until the chapter’s own two cues (preflight §6.3) are composed and picked by ear"
+            ]
           }
         },
         {
@@ -818,7 +823,7 @@
           "game": "ffx",
           "gameNote": "FFX only: a summon inside the FFX CTB battle of chapter Macalania Temple; nothing here applies to an FFX-2 chapter.",
           "note": "The options round (docs/concepts/chapters/macalania/arrival/: A from below the ice, B Seymour steps back, C the first Pain) has NOT been picked by Bailey. The scene was built to the driver’s recommendation: A’s staging (the camera drops to floor height, violet light under the ice, both Guardians die, chains come up first and go taut, she rises through them while the camera rises with her, one continuous move, no cut) with B’s name tag (Seymour steps back out of the light, his grey reticle reads “Cannot be targeted”, Anima’s name lights gold). Changing the pick is a timeline edit in src/scenes/macalania-temple-arrival.ts. Knowing departure: she is the approved aeon painting at 3.6 world units plus a 0.3 hover; research §9.4 note 1 says Seymour’s Anima is the shorter model, and no source gives a number.",
-          "build": "docs/screenshots/chapters/macalania-arrival.png (the drop, the rise, landed with the tags) from the scene’s debug screen; side by side with frame A in docs/screenshots/chapters/macalania-arrival-target-vs-build.jpg.",
+          "build": "docs/screenshots/chapters/macalania-arrival.png (the drop, the rise, landed with the tags) from the scene’s debug screen; side by side with frame A in docs/screenshots/chapters/macalania-arrival-target-vs-build.jpg. In a REAL battle she is not drawn yet (integrator’s browser pass, 2026-09-22: the engine reveals her at Seymour 3,000 HP but the stage never adds her); the presenter hook in docs/handoff/chapter-macalania-engine.md §3 is owed, see docs/handoff/chapter-macalania.md.",
           "reference": [
             "docs/concepts/chapters/macalania/arrival/README.md",
             "docs/concepts/chapters/macalania/arrival/options.json",

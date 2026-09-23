@@ -15,7 +15,8 @@ type ChapterId =
   | 'braskas-final-aeon'
   | 'ffx2-bahamut'
   | 'ffx2-vegnagun-shuyin'
-  | 'ffx2-leblanc';
+  | 'ffx2-leblanc'
+  | 'seymour-anima-macalania';
 
 interface BattleOutcome {
   chapterId: string;
@@ -74,6 +75,8 @@ const CHAPTERS: Array<{ id: ChapterId; title: string }> = [
   { id: 'ffx2-bahamut', title: 'Bahamut' },
   { id: 'ffx2-vegnagun-shuyin', title: 'Vegnagun' },
   { id: 'ffx2-leblanc', title: 'Leblanc' },
+  // Registered but LOCKED on chapter select; `gotoChapter` reaches it anyway.
+  { id: 'seymour-anima-macalania', title: 'Seymour and Anima' },
 ];
 
 async function boot(page: Page): Promise<string[]> {

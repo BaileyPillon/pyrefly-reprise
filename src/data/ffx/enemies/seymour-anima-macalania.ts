@@ -391,11 +391,9 @@ export const seymourAnimaMacalaniaGroup: EnemyGroupDef = {
   enemies: [guardian(GUADO_GUARDIAN_A_ID, 0, 'A'), seymour, guardian(GUADO_GUARDIAN_B_ID, 2, 'B')],
   parts: [anima],
   musicCues: [
-    // §9.8: this fight has its OWN cue. It is NOT `boss-seymour` (the Flux
-    // chapter's "Challenge") and NOT "Fight With Seymour" (Omnis). The cue is
-    // an unbuilt composition; the key is reserved here so the audio track can
-    // fill it without touching this file.
-    { at: 'start', track: 'boss-seymour-macalania', fadeMs: 800 },
+    // STOPGAP: §9.8 wants its OWN cue (`boss-seymour-macalania`, unbuilt), NOT the
+    // Flux chapter's `boss-seymour` [docs/handoff/chapter-macalania.md]; swap when it lands.
+    { at: 'start', track: 'boss-seymour', fadeMs: 800 },
   ],
 };
 

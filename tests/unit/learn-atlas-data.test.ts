@@ -31,7 +31,7 @@ describe('buildChapterSpecimen', () => {
     }
   });
 
-  it('uses gold for the FFX chapters (1-3) and pink for the FFX-2 chapters (4-6), via accentForGame', () => {
+  it('uses gold for the FFX chapters (1-3, 7) and pink for the FFX-2 chapters (4-6), via accentForGame', () => {
     const expectedAccent: Record<ChapterId, 'gold' | 'pink'> = {
       'seymour-flux': 'gold',
       yunalesca: 'gold',
@@ -39,6 +39,7 @@ describe('buildChapterSpecimen', () => {
       'ffx2-bahamut': 'pink',
       'ffx2-vegnagun-shuyin': 'pink',
       'ffx2-leblanc': 'pink',
+      'seymour-anima-macalania': 'gold',
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);

@@ -257,11 +257,14 @@ describe('macalania story — structure', () => {
     }
   });
 
-  it('names the preflight’s cue ids and routes nothing itself [plan §6.3]', () => {
+  it('routes Chapter 1’s cues as the recorded stopgap for the two unbuilt ones [plan §6.3]', () => {
+    // The preflight's own `scene-macalania-temple` / `boss-seymour-macalania`
+    // do not exist yet; the integrator routed Chapter 1's pair in their place
+    // (docs/handoff/chapter-macalania.md). Swap both when the real cues land.
     const tracks = chapter.pre
       .filter((s) => s.type === 'music')
       .map((s) => (s.type === 'music' ? s.track : null));
-    expect(tracks).toEqual(['scene-macalania-temple', 'boss-seymour-macalania']);
+    expect(tracks).toEqual(['scene-gagazet', 'boss-seymour']);
     // `post` stops the music and lets the results screen own the fanfare.
     const postTracks = chapter.post
       .filter((s) => s.type === 'music')

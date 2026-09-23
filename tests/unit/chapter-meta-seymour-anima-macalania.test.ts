@@ -118,8 +118,10 @@ describe('SEYMOUR_ANIMA_MACALANIA_META', () => {
   });
 
   it('musicKeys are the cues the story script actually calls, plus the shared FFX fanfare', () => {
-    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('scene-macalania-temple');
-    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('boss-seymour-macalania');
+    // Chapter 1's pair, the recorded stopgap until the chapter's own two cues
+    // exist (docs/handoff/chapter-macalania.md).
+    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('scene-gagazet');
+    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('boss-seymour');
     expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys.length).toBeGreaterThan(0);
   });
 });

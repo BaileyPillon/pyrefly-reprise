@@ -11,7 +11,7 @@ import { CHAPTER_META, GAME_LABELS, getChapterMeta, type ChapterMeta } from '../
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const ART_ROOT = join(REPO_ROOT, 'public', 'art');
 
-const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'] as const;
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
 
 /** True when a path relative to `public/art/` names a file that exists on disk. */
 function artExists(relativePath: string): boolean {

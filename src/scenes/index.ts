@@ -33,6 +33,7 @@ import {
 import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
+import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { mountScene, type SceneBuild, type SceneFactory } from './types.ts';
 
 /** A field position in world units. */
@@ -208,6 +209,19 @@ SCENES.set('leblanc-last-room', {
   slots: LEBLANC_LAST_ROOM_SLOTS,
   placeholder: false,
 });
+/**
+ * Macalania Temple, the antechamber (Chapter 7, FFX only) — real
+ * (`buildMacalaniaTempleScene` in {@link SCENE_FACTORIES}); `build` is the
+ * unreachable demo diorama, as for Leblanc above
+ * [docs/handoff/chapter-macalania-scene.md §6].
+ */
+SCENES.set('macalania-temple', {
+  key: 'macalania-temple',
+  title: 'Macalania Temple — the antechamber',
+  build: buildDemoScene,
+  slots: MACALANIA_TEMPLE_SLOTS,
+  placeholder: false,
+});
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -246,6 +260,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'dreams-end': buildDreamsEndScene,
   'bevelle-underground': buildBevelleUndergroundScene,
   'leblanc-last-room': buildLeblancLastRoomScene,
+  'macalania-temple': buildMacalaniaTempleScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

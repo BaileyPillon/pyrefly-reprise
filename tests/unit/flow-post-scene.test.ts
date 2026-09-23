@@ -351,13 +351,14 @@ describe('the end of an arc — critic round 02 #32', () => {
       // `ffx2-vegnagun-shuyin`, the second-to-last by display order but the
       // real story finale — the exception this comment documents rather than
       // lets the assertion below quietly miss.
-      const ofGame = CHAPTERS.filter((c) => c.game === game);
+      // Chapter 7 (Macalania) is the same case for FFX: display-order last,
+      // but it comes before Seymour Flux in the story (research
+      // ffx-seymour-anima-macalania.md §9.7 beat 11: he is sent back unsent),
+      // so `ARC_FINALE.ffx` stays `braskas-final-aeon`.
+      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania']);
+      const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
-      if (game === 'ffx2' && lastByDisplayOrder === 'ffx2-leblanc') {
-        expect(id).toBe('ffx2-vegnagun-shuyin');
-      } else {
-        expect(lastByDisplayOrder).toBe(id);
-      }
+      expect(lastByDisplayOrder).toBe(id);
     }
   });
 
