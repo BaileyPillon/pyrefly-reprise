@@ -3,37 +3,29 @@
  * selector") because `src/ui/ffx/ffx-hud.css` had a `/* 14 *\/`-style
  * example written as a *literal, unescaped* `/* ... *\/` pair inside the
  * body of an outer `/* ... *\/` doc comment (lines 809-822 as of d030d82).
+ * CSS comments do not nest, so the inner `*\/` closed the outer comment
+ * early and its remaining prose was parsed as CSS. The house convention is to
+ * escape the inner example's closing slash as `*\/` (see `strategy-guide.css`,
+ * `slabs.css`, `tokens.css`).
  *
- * CSS comments do not nest: the lexer opens a comment at `/*` and closes it
- * at the very next `*\/`, full stop. So the inner example's own closing
- * `*\/` ended the OUTER comment early, and the outer comment's remaining
- * prose (`), so 14 real px is 6.22 grid px. Both sizes below clear it. *\/`)
- * was left to be parsed as real CSS — which is not valid CSS, hence the
- * build failure. The codebase's existing convention for exactly this
- * situation (see `strategy-guide.css`, `slabs.css`, `tokens.css`) is to
- * escape the inner example's closing slash as `*\/` (backslash before the
- * slash) so it never forms a real `*\/` token.
+ * **The check is the build's own minifier** (release 09 repair). The first
+ * version of this file stripped comments by hand and looked for an unmatched
+ * `)`. That caught PR-0085's exact shape and nothing else: a nested comment
+ * whose leftover prose has no paren (`/* outer /* 14 *\/ prose *\/`) passed it,
+ * while lightningcss rejects it ("Unexpected token Delim(/)") and the build
+ * fails. So every `.css` file under `src/` now goes through
+ * `lightningcss.transform({ minify: true })`, the call Vite 8 makes in
+ * `minifyCSS` (node_modules/vite/dist/node/chunks/node.js) when it builds the
+ * production bundle; lightningcss is a direct dependency of `vite`. A
+ * control fixture of each failure shape proves the gate can see them.
  *
- * This test reproduces the lexer's own real (non-nesting) comment-stripping
- * rule — open at `/*`, close at the first `*\/` after that, no nesting —
- * against every `.css` file under `src/`, then checks that what is left
- * over as "real CSS" never contains an unmatched closing paren. A comment
- * that closed early because of an embedded literal example reliably leaves
- * behind stray punctuation like the `)` in PR-0085's `), so 14 real px...`
- * fragment: valid CSS never has an unmatched `)` at the top level, so a
- * negative paren-depth anywhere in the "outside comment" text is exactly
- * the PR-0085 failure class, however it gets introduced.
- *
- * No jsdom, no CSS parser: this is the same lexical, string-level approach
- * `ffx-hud-css-type-floor.test.ts` and `pause-remake-css.test.ts` use for
- * their own sheet-arithmetic checks, and deliberately mirrors the real
- * lexer's own (dumb, non-nesting) comment rule rather than reimplementing a
- * parser.
+ * Both games: the sheets are shared plumbing (AGENTS.md rule 14, CHK-020).
  */
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { transform } from 'lightningcss';
 import { describe, expect, it } from 'vitest';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -43,86 +35,65 @@ function listCssFiles(dir: string): string[] {
   const out: string[] = [];
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
-    const info = statSync(full);
-    if (info.isDirectory()) {
-      out.push(...listCssFiles(full));
-    } else if (entry.endsWith('.css')) {
-      out.push(full);
-    }
+    if (statSync(full).isDirectory()) out.push(...listCssFiles(full));
+    else if (entry.endsWith('.css')) out.push(full);
   }
   return out;
 }
 
 /**
- * Strips comments the way a real CSS lexer does: `/*` opens, the very next
- * `*\/` closes, no nesting. Returns the concatenation of everything that
- * lexes as real code (comments themselves are dropped, but a placeholder
- * space is kept so line numbers stay meaningful for callers that care).
+ * What `vite build` would say about this sheet: lightningcss minify, as Vite's
+ * `minifyCSS` calls it. `null` when it minifies; otherwise the message and
+ * line the build would stop on.
  */
-function stripCommentsLikeARealLexer(source: string): string {
-  let out = '';
-  let i = 0;
-  while (i < source.length) {
-    if (source.startsWith('/*', i)) {
-      const close = source.indexOf('*/', i + 2);
-      if (close === -1) {
-        // Unterminated comment: nothing after it is code.
-        break;
-      }
-      // Drop the comment, but keep newlines so line numbers stay aligned.
-      out += source.slice(i, close + 2).replace(/[^\n]/g, ' ');
-      i = close + 2;
-      continue;
-    }
-    out += source[i];
-    i += 1;
+function minifyError(filename: string, source: string): string | null {
+  try {
+    transform({ filename, code: Buffer.from(source), minify: true });
+    return null;
+  } catch (e) {
+    const err = e as { message?: string; loc?: { line?: number; column?: number } };
+    return `${err.message ?? String(e)} at line ${err.loc?.line ?? '?'}:${err.loc?.column ?? '?'}`;
   }
-  return out;
 }
 
-/**
- * Finds the line (1-based) of the first unmatched closing paren in `code`
- * (comments already stripped). A real, valid CSS file never has one: every
- * `)` pairs with an earlier `(`. A comment that closed early because of an
- * embedded literal `/* ... *\/` example reliably leaves one behind, because
- * the intended-to-stay-commented prose lands in the code stream.
- */
-function findUnmatchedClosingParenLine(code: string): number | null {
-  let depth = 0;
-  let line = 1;
-  for (const ch of code) {
-    if (ch === '\n') line += 1;
-    else if (ch === '(') depth += 1;
-    else if (ch === ')') {
-      depth -= 1;
-      if (depth < 0) return line;
-    }
-  }
-  return null;
-}
+describe('the gate sees every comment-nesting failure shape (controls)', () => {
+  it('PR-0085 shape: an inner example closes the doc comment and leaves ") prose" as CSS', () => {
+    const sheet = 'a { color: red; }\n/* sizes: 14 real px (/* 14 */), so 14 real px is 6.22 grid px. */\nb { color: blue; }\n';
+    expect(minifyError('control-pr0085.css', sheet)).not.toBeNull();
+  });
 
-describe('every .css file under src/ survives real comment lexing without a stray unmatched )', () => {
+  it('no-paren shape: /* outer /* 14 */ prose */ — the case a paren count cannot see', () => {
+    const sheet = 'a { color: red; }\n/* outer /* 14 */ prose here */\nb { color: blue; }\n';
+    expect(minifyError('control-nested.css', sheet)).not.toBeNull();
+  });
+
+  it('the house escape (a backslash before the inner slash) minifies', () => {
+    const sheet = String.raw`a { color: red; }
+/* outer /* 14 *\/ prose here */
+b { color: blue; }
+`;
+    expect(minifyError('control-escaped.css', sheet)).toBeNull();
+  });
+});
+
+describe('every .css file under src/ minifies the way vite build minifies it', () => {
   const files = listCssFiles(SRC_ROOT);
 
-  it('found at least one .css file to check', () => {
+  it('found the sheets to check', () => {
     expect(files.length).toBeGreaterThan(0);
   });
 
   for (const file of files) {
     const label = relative(SRC_ROOT, file);
-    it(`${label}: no comment closes early and leaves an unmatched ")" in real CSS`, () => {
-      const source = readFileSync(file, 'utf8');
-      const code = stripCommentsLikeARealLexer(source);
-      const offenderLine = findUnmatchedClosingParenLine(code);
+    it(`${label}: lightningcss minify accepts it`, () => {
+      const why = minifyError(label, readFileSync(file, 'utf8'));
       expect(
-        offenderLine,
-        offenderLine === null
+        why,
+        why === null
           ? undefined
-          : `${label}:${offenderLine} has an unmatched ")" once comments are stripped the way a real ` +
-              'CSS lexer strips them (open at /*, close at the very next */, no nesting) — this is the ' +
-              'PR-0085 failure class: a literal, unescaped /* ... */ example written inside a comment ' +
-              "closed that comment early, so the comment's own remaining prose became real CSS. Escape " +
-              'the inner example\'s closing slash as *\\/ instead (see strategy-guide.css or slabs.css).',
+          : `${label}: ${why}. If a comment holds a literal /* ... */ example, escape its closing ` +
+              String.raw`slash as *\/ (see strategy-guide.css` +
+              ' or slabs.css): CSS comments do not nest.',
       ).toBeNull();
     });
   }
