@@ -1,0 +1,32 @@
+{
+ "yaw": 60,
+ "seed": 9704,
+ "lora": "yuna-x2.safetensors",
+ "strength": 0.8,
+ "cn": 0.7,
+ "cnEnd": 1,
+ "refWeight": 0.3,
+ "pose": "pyrefly-ref-yaw-60-01b5afc80f9f.png",
+ "ref": "pyrefly-ref-yuna-x2-7427dc7fc481.png",
+ "prefix": "pyrefly/lora-keys",
+ "prompt": "yunaX2, 1girl, solo, three-quarter view, from side, head turned away, looking to the side, portrait, close-up, upper body, light smile, closed mouth, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, chibi, sketch, monochrome, from behind, back view, 3d, realistic",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "controlnet": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "weight": 0.3,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "scaling": "K+V",
+  "image": "public/art/portraits/yuna-x2.png"
+ },
+ "steps": 30,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "width": 832,
+ "height": 1216,
+ "seconds": 12.411
+}
