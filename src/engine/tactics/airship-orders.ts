@@ -52,3 +52,27 @@ export function airshipOrderRefusal(
 export function refusedAirshipOrder(flags: Readonly<Record<string, unknown>>, command: Command): boolean {
   return command.kind === 'trigger' && airshipOrderRefusal(flags, command.id) !== null;
 }
+
+/**
+ * **The §4.5 trap, as a gate for the card.** A breath is charged and the ship
+ * is FAR: a command that names Evrae now makes it Swoop in and breathe anyway,
+ * so the dodge fails *because you attacked* (research/ffx-evrae-airship.md
+ * §4.5, "Evrae isn't targeted until the attack is executed"). The chapter's
+ * own line already refuses it (`./evrae.ts` rule 2); this keeps the card's
+ * simulated rows from putting it back on top (Chapter VIII end-to-end
+ * evidence, win-23: "Lancet -> Evrae" on Kimahri's charged FAR turn).
+ */
+export function baitsTheBreath(flags: Readonly<Record<string, unknown>>, command: Command): boolean {
+  if (!holdingForTheBreath(flags)) return false;
+  return (command.targets as readonly string[] | undefined)?.includes('evrae') === true;
+}
+
+/**
+ * A breath is charged and the ship is FAR: the dodge is in progress, and §4.5's
+ * answer is "do nothing, visibly, on purpose". The card keeps the chapter's
+ * quiet turn on top here even though it changes nothing measurable, because
+ * changing nothing *is* the play (`./advisor.ts`, the state guard).
+ */
+export function holdingForTheBreath(flags: Readonly<Record<string, unknown>>): boolean {
+  return flags['airship.range'] === 'far' && flags['airship.breathCharged'] === true;
+}

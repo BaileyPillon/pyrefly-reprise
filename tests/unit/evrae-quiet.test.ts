@@ -54,9 +54,17 @@ describe('Evrae quiet turn — a row FFX actually paints', () => {
     expect((harmlessTurn(MENU, living) as { itemId?: string }).itemId).toBe('al-bhed-potion');
   });
 
-  it('falls back to Defend only when nothing on the menu would do anything', () => {
+  it('with the party full and capped, spends a spare Potion on the most fragile member, never Defend (e2e F1)', () => {
     const living = [member('tidus', 1265, 1265, { ...CAPPED, haste: {} }), member('wakka', 1430, 1430, { ...CAPPED, haste: {} })];
-    expect(harmlessTurn(MENU, living)?.kind).toBe('defend');
+    const cmd = harmlessTurn(MENU, living);
+    expect((cmd as { itemId?: string }).itemId).toBe('potion');
+    expect(cmd?.targets).toEqual(['tidus']);
+  });
+
+  it('falls back to Defend only when the menu has no item left at all', () => {
+    const living = [member('tidus', 1265, 1265, { ...CAPPED, haste: {} }), member('wakka', 1430, 1430, { ...CAPPED, haste: {} })];
+    const bare = MENU.filter((r) => r.command.kind !== 'item');
+    expect(harmlessTurn(bare, living)?.kind).toBe('defend');
   });
 
   it('hands a reachless turn to Kimahri only while an order owner stays and Reflect is up for Rikku', () => {

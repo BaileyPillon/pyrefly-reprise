@@ -149,6 +149,9 @@ export function changesNothing(
     // The actor's own MP outlay is what the action *costs*. Draining an enemy's
     // MP, or putting MP back into an ally, is an effect and falls through.
     if (event.type === 'mp-damage' && event.targetId === actorId) continue;
+    // A `wrong-state` miss is not a roll (Phoenix Down on a living ally): the
+    // one `miss` that is certain nothing, unlike the whiffs above. Evrae e2e F1.
+    if (event.type === 'miss' && event.reason === 'wrong-state') continue;
     return false;
   }
   return true;

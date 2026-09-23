@@ -136,6 +136,7 @@ import {
   spentAlready,
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
+import { holdingForTheBreath } from './airship-orders.ts';
 import { scopeWord } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
@@ -1344,10 +1345,13 @@ export function buildAdvisorView(
   // [`./advisor-roll.ts#inertAcrossBand`].
   const useful: Candidate[] = [];
   const inert: Candidate[] = [];
+  // Except the line's quiet turn while Evrae's breath is held off (§4.5: doing
+  // nothing on purpose is the play, `./airship-orders.ts#holdingForTheBreath`).
+  const hold = holdingForTheBreath(state.flags);
   for (const c of legal) {
-    const dead = planner
+    const dead = !(hold && c.suggestion.source === 'tactic') && (planner
       ? inertAcrossBand(decision.actorId, c.suggestion.command, c.outcome, c.chances)
-      : changesNothing(decision.actorId, c.suggestion.command, c.outcome);
+      : changesNothing(decision.actorId, c.suggestion.command, c.outcome));
     (dead ? inert : useful).push(c);
   }
   const ordered = useful.length > 0 ? [...useful, ...inert] : legal;

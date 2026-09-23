@@ -56,7 +56,7 @@
  */
 
 import type { AvailableCommand, BattleState, Command } from '../../battle/common/types.ts';
-import { refusedAirshipOrder } from './airship-orders.ts';
+import { baitsTheBreath, refusedAirshipOrder } from './airship-orders.ts';
 
 /** Mirrors `ui/ffx/CommandMenuLogic.ts`'s `CATEGORY_LABEL`. */
 const FFX_CATEGORY_LABEL: Record<string, string> = {
@@ -119,10 +119,16 @@ export function onTheMenu(game: BattleState['game'], command: Command): boolean 
  * or already ordered far (and "Close in" likewise), though the engine keeps
  * them legal (`./airship-orders.ts`). A card that names a greyed row names
  * something the player cannot press. FFX only in effect; inert without the
- * airship flag.
+ * airship flag. Also refused: a row that names Evrae while its breath is
+ * charged and the ship is FAR (`./airship-orders.ts#baitsTheBreath`, §4.5):
+ * pressable, but the one press the card must never ask for.
  */
 export function pressable(state: Readonly<BattleState>, command: Command): boolean {
-  return onTheMenu(state.game, command) && !refusedAirshipOrder(state.flags, command);
+  return (
+    onTheMenu(state.game, command) &&
+    !refusedAirshipOrder(state.flags, command) &&
+    !baitsTheBreath(state.flags, command)
+  );
 }
 
 /**

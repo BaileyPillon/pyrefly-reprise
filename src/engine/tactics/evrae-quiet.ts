@@ -22,9 +22,9 @@
  * a dead zone — it is the *setup* zone. Tidus stacking Cheer, **Rikku queueing
  * an Al Bhed Potion** […] those all happen at range." So the ladder is every
  * buff that is still worth a stack, then Haste on an ally (§8 row 3), then a
- * heal from the item bag (§6.4, §8 row 2), and only then the engine's Defend,
- * which stays as the last resort for a board where nothing on the menu does
- * anything at all.
+ * heal from the item bag (§6.4, §8 row 2), then a **spare** item on an ally
+ * ({@link spareItem}), and only then the engine's Defend, which the FFX window
+ * cannot press and stays only for a menu with no item left at all.
  */
 
 import type { AnyCombatant, AvailableCommand, Command } from '../../battle/common/types.ts';
@@ -92,12 +92,36 @@ function healFromBag(commands: AvailableCommand[], living: AnyCombatant[]): Comm
 }
 
 /**
+ * **A turn spent on purpose, with the party full and every buff capped** — the
+ * board the end-to-end verifier found (Kimahri, FAR, breath charged: the line
+ * said Defend, which FFX's window has no row for, and the card put
+ * "Lancet -> Evrae" on top, the §4.5 trap itself). A Potion on the most
+ * fragile member is a real row under Items, names no enemy, and costs one of
+ * 25 the line otherwise barely touches; then Eye Drops and Echo Screen, which
+ * cure statuses Evrae never inflicts (its rows land Poison, Petrify and Slow
+ * and nothing else, §3.1-§3.3).
+ */
+const SPARE: readonly string[] = ['Potion', 'Eye Drops', 'Echo Screen'];
+
+function spareItem(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
+  const fragile = [...living].sort((a, b) => hpFraction(a) - hpFraction(b) || a.hp - b.hp);
+  for (const label of SPARE) {
+    for (const m of fragile) {
+      const r = row(commands, [label], m.id);
+      if (r) return aim(r, m.id);
+    }
+  }
+  return null;
+}
+
+/**
  * Something to spend a turn on that does **not** name Evrae [§4.5], and that
  * is on FFX's command window. `null` only when the menu has nothing at all.
  */
 export function harmlessTurn(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
   if (living.length > 0) {
-    const buff = stackingBuff(commands, living) ?? hasteAlly(commands, living) ?? healFromBag(commands, living);
+    const buff = stackingBuff(commands, living) ?? hasteAlly(commands, living) ?? healFromBag(commands, living)
+      ?? spareItem(commands, living);
     if (buff) return buff;
   }
   const defend = commands.find((c) => c.enabled && c.command.kind === 'defend');
