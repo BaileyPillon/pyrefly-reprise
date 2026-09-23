@@ -77,6 +77,10 @@
 16. `wf_37164f3c-400` "pyrefly-release10-batch2" (launched 11:25 EDT 09-23; 12 to 16 agents): five file-disjoint groups fix 17 round-09 majors, each group then gets an adversarial real-input verifier and at most one repair: command-menus (PR-0002, PR-0018, PR-0019, PR-0012; src/ui/ffx/**, FFX-2 command menu), presenter (PR-0022, the prone-KO placement, PR-0097, then PR-0005, PR-0031, PR-0094, PR-0061; src/engine/**, src/scenes/**), frontend-prep (PR-0127, PR-0063, PR-0065), intent-panel (PR-0010, PR-0011), advisor-noop (PR-0006; src/engine/tactics/**). Commits to main, no push; proof in docs/screenshots/fix10b/. If this line is about you: carry on.
 17. Pause cleanliness agent (plain Sonnet agent, launched 10:45 EDT): the advisor card and the damage numerals escape over the pause, the Wait-mode coach quote, the missing YUNA close-up; owns pause-screen.css, coachCopy.ts, move-advisor.css, the numerals layer, tests/e2e/intent-pause.spec.ts. If this is you: carry on.
 
+18. `wf_e9645b6e-d5d` "pyrefly-art-method-check-r3" (launched 11:35 EDT 09-23, 6 Opus agents, PAPER ONLY, no GPU): the rule-15 written method check before any third art round; three proposals (derive-from-idle rig, constrain-the-generator, change-what-is-asked), two judges, one synthesis to `docs/plans/art-method-r3/METHOD-CHECK.md` with a one-hour pilot and Bailey's options if a design choice is involved. If this line is about you: carry on.
+
+SENT TO BAILEY 11:33 EDT 09-23: the Evrae order-widget sheet and the Anima arrival sheet, asking for the two picks that unlock chapters VIII and VII (both built to the driver's recommendation and recorded INFERRED).
+
 ComfyUI (:8188) is shared by 2, 3, 5, 6, 11, 12: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
 
 ## Live: release 09 (Build C.2)
