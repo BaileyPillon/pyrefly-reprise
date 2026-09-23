@@ -1,0 +1,23 @@
+{
+ "attack": {
+  "tag": "attack.r2.3.boots81001.hair81103", "png": "attack.r2.3.boots81001.hair81103.noshadow.png",
+  "cutoutFrom": "attack.r2.3.boots81001.hair81103.noshadow.cutout.json", "scale": 0.9,
+  "repairs": ["boots: masked repaint to open-toe (seed 81001, denoise 0.7, LoRA r2 0.8)", "hair: masked repaint of the dark patch at the near cheek and jaw (seed 81103, denoise 0.65)", "painted ground shadow cleared from the alpha (poses/shadow.py, bottom band only: --keep 0,0,929,840)"],
+  "notes": "a fan strike on the fixed skeleton (r2/attack = v7): profile to screen-left, the closed black fan thrust out at the party at arm's length and leading the body, the far hand on the hip, a wide lunge with both boots planted, v-brows. Costume as idle (white halter dress, crimson obi with knot and purple tassel, purple robe off the shoulders with the diamond pattern, heart, choker). Worst: the choker's studs read as pale smudges; a white highlight strand crosses the hair over the eye; the robe's inner lining is a deeper blue than idle's"
+ },
+ "cast": {
+  "tag": "cast.r2.2.boots82001.jaw82103.choker82202.nk1.sm82302", "png": "cast.r2.2.boots82001.jaw82103.choker82202.nk1.sm82302.png", "scale": 1.16,
+  "repairs": ["boots: masked repaint to open-toe (seed 82001, denoise 0.7)", "jaw: masked repaint of the dark patches under the chin (seed 82103, denoise 0.6)", "choker: masked repaint with a stud (seed 82202, denoise 0.6)", "neck: the black patch left of the neck recoloured as the neck in shadow (poses/jaw.py --palette neck, 418,406,20,15) then a light repaint (seed 82302, denoise 0.35)"],
+  "notes": "the fan arm straight up, the fan open overhead, looking up at it, the other hand low: reads as a spell being raised. The open fan is red with black guards and pale silver ribs, research ffx2-leblanc-syndicate.md §10.1's red and silver (hard rule 6), rendered by the LoRA r2 (the dataset now holds the red-and-silver cast), not recoloured. Open-toe lace-up boots after the repaint; costume as idle. Worst: the far side of the hair's underside stays a solid black mass behind the neck (idle's nape shade is thinner); the choker is a plain lavender band with one stud, not idle's studded row"
+ },
+ "hurt": {
+  "tag": "hurt.r2.2.boots83001", "png": "hurt.r2.2.boots83001.png", "scale": 0.92,
+  "repairs": ["boots: masked repaint to open-toe (seed 83001, denoise 0.7)"],
+  "notes": "a recoil on the fixed skeleton (r2/hurt = v4): head tipped, one eye screwed shut and a pout, a hand clutching the stomach, the closed black fan held out low in the far hand, both legs down to two planted open-toe boots. Studded choker, heart, costume as idle; no fan tassel. Worst: the lean back is milder than the skeleton's; the hand on the stomach hides the obi's knot"
+ },
+ "ko": {
+  "tag": "ko.r2.1.boots84001.toes84101", "png": "ko.r2.1.boots84001.toes84101.png", "scale": 0.95,
+  "repairs": ["boots: masked repaint to open-toe (seed 84001, denoise 0.75), toes refined (seed 84101, denoise 0.45)", "no painted ground shadow (poses/shadow.py on the bottom band cleared 0 px)"],
+  "notes": "down flat on the fixed skeleton (r2/ko): on her side, head to screen-left on the ground at the outstretched fan arm, eyes closed, no smile, the closed black fan along the ground, knees bent. Studded choker, heart, crimson obi with knot and tassel, robe as idle. Worst: the boots are a deep purple where idle's are lavender; the head still rests near the arm; the open toes are soft at 2x"
+ }
+}

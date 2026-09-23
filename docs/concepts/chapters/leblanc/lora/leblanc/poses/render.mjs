@@ -31,6 +31,8 @@ const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
 const CKPT = 'animagine-xl-4.0-opt.safetensors';
 const LORA = 'leblanc-x2.safetensors';
 const LORA_STEP = 1500;
+/** Round 2's picked step (../round2/round2.md); set once the step test is read. */
+export const R2_STEP = Number(process.env.LEBLANC_R2_STEP || 0) || null;
 const CONTROLNET = 'xinsir-controlnet-openpose-sdxl-1.0.safetensors';
 const IPADAPTER = 'ip-adapter-plus_sdxl_vit-h.safetensors';
 const CLIPVISION = 'CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors';
@@ -118,6 +120,42 @@ export const CANDS_V6 = [
   { n: 1, lora: 0.8, cn: 0.65 }, { n: 2, lora: 0.8, cn: 0.75 }, { n: 3, lora: 0.75, cn: 0.65 },
   { n: 4, lora: 0.75, cn: 0.75 }, { n: 5, lora: 0.8, cn: 0.6 }, { n: 6, lora: 0.85, cn: 0.7 },
 ];
+/** ROUND 2 (2026-09-23; ../round2/round2.md): LoRA r2 (leblanc-x2-r2, trained on round 1's set plus the
+ * round-1 picks scored 6+, ../dataset-r2.md) + the fixed skeletons (skeletons/r2/: the v7 strike that leads
+ * with the fan, the v4 recoil with both legs, a flat ko). Negatives for every defect the judges named:
+ * closed-toe boots, a second fan, the fan at the mouth outside idle, the dark hair patch, a glossy finish.
+ * The open fan (cast) is red and silver (research ffx2-leblanc-syndicate.md §10.1), so `red fan` leaves
+ * the cast negative. Six per state, seeds SEED0 + 500 + n. */
+export const R2_NEG = 'closed-toe footwear, closed toe, covered toes, two fans, second fan, extra fan, fan in both hands, ' +
+  'fan to mouth, hand to mouth, fan over mouth, hair over mouth, black patch on face, dark shadow on face, ' +
+  'glossy, shiny skin, shiny clothes, glossy skin, latex, oily skin, 3d render';
+const R2_BASE_NEG = `${SPRITE_NEGATIVE}, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, ` +
+  'thighhighs, stockings, pantyhose, closed robe, long dress, gold obi, dual wielding, fan to mouth';
+export const R2 = {
+  lora: 'leblanc-x2-r2.safetensors', seedOffset: 500,
+  sizes: { attack: [1024, 1216] },
+  baseNeg: { attack: `${R2_BASE_NEG}, red fan, pink fan`, hurt: `${R2_BASE_NEG}, red fan, pink fan`, ko: `${R2_BASE_NEG}, red fan, pink fan`, cast: `${R2_BASE_NEG}, pink fan, lavender fan, purple fan, black fan leaf` },
+  identity: { cast: IDENTITY.replace('black folding fan', 'red and silver folding fan, red fan leaf, silver trim, black fan ribs') },
+  candsBy: {
+    attack: [{ n: 1, lora: 0.75, cn: 0.65 }, { n: 2, lora: 0.8, cn: 0.65 }, { n: 3, lora: 0.75, cn: 0.7 }, { n: 4, lora: 0.8, cn: 0.7 }, { n: 5, lora: 0.85, cn: 0.65 }, { n: 6, lora: 0.75, cn: 0.6 }],
+    cast: [{ n: 1, lora: 0.75, cn: 0.7 }, { n: 2, lora: 0.8, cn: 0.7 }, { n: 3, lora: 0.75, cn: 0.6 }, { n: 4, lora: 0.8, cn: 0.6 }, { n: 5, lora: 0.85, cn: 0.7 }, { n: 6, lora: 0.75, cn: 0.65 }],
+    hurt: [{ n: 1, lora: 0.8, cn: 0.75 }, { n: 2, lora: 0.8, cn: 0.85 }, { n: 3, lora: 0.75, cn: 0.8 }, { n: 4, lora: 0.85, cn: 0.75 }, { n: 5, lora: 0.75, cn: 0.9 }, { n: 6, lora: 0.8, cn: 0.8 }],
+    ko: [{ n: 1, lora: 0.8, cn: 0.7 }, { n: 2, lora: 0.8, cn: 0.8 }, { n: 3, lora: 0.75, cn: 0.7 }, { n: 4, lora: 0.85, cn: 0.75 }, { n: 5, lora: 0.75, cn: 0.8 }, { n: 6, lora: 0.8, cn: 0.65 }],
+  },
+  neg: {
+    attack: `${R2_NEG}, wings, cape, flying, jumping, midair, floating, leg lift, knee up, foot off ground, facing viewer, front view, spread arms, arms out to both sides, fan behind body`,
+    cast: `${R2_NEG}, closed fan`,
+    hurt: `${R2_NEG}, one leg, missing leg, amputee, floating, feet out of frame, fan tassel`,
+    ko: `${R2_NEG}, head on arm, sleeping, pillow, hand under head, drool`,
+  },
+  add: {
+    attack: '(both feet on ground:1.1), feet planted, bent front knee, straight back leg, (profile:1.1), facing left, (fan thrust forward:1.2), fan leading, hand on own hip',
+    cast: '',
+    hurt: '(both feet on ground:1.1), two legs, legs apart, standing',
+    ko: 'defeated, collapsed, lying flat, head on the ground, arm outstretched, limp',
+  },
+};
+
 export const SETS = {
   v4: { cands: CANDS_V4, seedOffset: 20, neg: V4_NEG, add: V4_POSE_ADD },
   v5: {
@@ -138,6 +176,7 @@ export const SETS = {
     neg: { attack: `${V4_NEG.attack}, facing viewer, front view, spread arms, arms out to both sides` },
     add: { attack: `${V4_POSE_ADD.attack}, (profile:1.1), facing left, (fan thrust forward:1.1), hand on own hip` },
   },
+  r2: R2,
   v6: {
     cands: CANDS_V6, seedOffset: 60,
     neg: { attack: `${V4_NEG.attack}, facing viewer, front view, spread arms, arms out to both sides` },
@@ -150,16 +189,19 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 export function promptFor(state, set = '') {
   const s = STATES[state];
   const add = SETS[set]?.add[state] ? `, ${SETS[set].add[state]}` : '';
-  return `leblancX2, 1girl, solo, ${s.pose}${add}, ${IDENTITY}, simple background, white background, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
+  const identity = SETS[set]?.identity?.[state] || IDENTITY;
+  return `leblancX2, 1girl, solo, ${s.pose}${add}, ${identity}, simple background, white background, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
 }
-export const negativeFor = (state, set = '') => `${BASE_NEG}, ${STATES[state].neg}${SETS[set]?.neg[state] ? `, ${SETS[set].neg[state]}` : ''}`;
+export const negativeFor = (state, set = '') => `${SETS[set]?.baseNeg?.[state] || BASE_NEG}, ${STATES[state].neg}${SETS[set]?.neg[state] ? `, ${SETS[set].neg[state]}` : ''}`;
+const sizeFor = (state, set = '') => SETS[set]?.sizes?.[state] || SETS[set]?.size || STATES[state].size;
 
 export function graph({ state, seed, lora, cn, pose, refA, refB, prefix, set = '' }) {
-  const [width, height] = SETS[set]?.size || STATES[state].size;
+  const [width, height] = sizeFor(state, set);
+  const loraFile = SETS[set]?.lora || LORA;
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
     5: { class_type: 'EmptyLatentImage', inputs: { width, height, batch_size: 1 } },
-    10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: LORA, strength_model: lora, strength_clip: lora } },
+    10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: loraFile, strength_model: lora, strength_clip: lora } },
     6: { class_type: 'CLIPTextEncode', inputs: { text: promptFor(state, set), clip: ['10', 1] } },
     7: { class_type: 'CLIPTextEncode', inputs: { text: negativeFor(state, set), clip: ['10', 1] } },
     30: { class_type: 'ControlNetLoader', inputs: { control_net_name: CONTROLNET } },
@@ -230,7 +272,7 @@ async function main() {
   const ni = argv.indexOf('--n');
   const si = argv.indexOf('--set');
   const set = si >= 0 ? argv[si + 1] : '';
-  const cands = SETS[set]?.cands || CANDS;
+  const cands = SETS[set]?.candsBy?.[state] || SETS[set]?.cands || CANDS;
   const want = ni >= 0 ? argv[ni + 1].split(',').map(Number) : cands.map((c) => c.n);
   mkdirSync(OUT, { recursive: true });
   // v4 and earlier used skeletons/<state>.png as it stood then (v3's attack and hurt are in skeletons/v3/,
@@ -252,10 +294,10 @@ async function main() {
     const maxRgb = maxRgbOfPng(readFileSync(raw));
     const black = maxRgb != null && isBlackFrame(maxRgb);
     const cutMeta = cutout(raw, cut);
-    const [w, h] = SETS[set]?.size || STATES[state].size;
+    const [w, h] = sizeFor(state, set);
     const guard = await checkCutoutFile(cut, { sourceWidth: w, sourceHeight: h, composition: STATES[state].composition });
     const side = {
-      tag, state, seed, lora: { file: LORA, step: LORA_STEP, strength: c.lora }, controlnet: { file: CONTROLNET, strength: c.cn, start: 0, end: 1, skeleton: `docs/concepts/chapters/leblanc/lora/leblanc/poses/${skeleton.slice(HERE.length + 1).split('\\').join('/')}` },
+      tag, state, seed, lora: { file: SETS[set]?.lora || LORA, step: set === 'r2' ? R2_STEP : LORA_STEP, strength: c.lora }, controlnet: { file: CONTROLNET, strength: c.cn, start: 0, end: 1, skeleton: `docs/concepts/chapters/leblanc/lora/leblanc/poses/${skeleton.slice(HERE.length + 1).split('\\').join('/')}` },
       ipadapter: { file: IPADAPTER, weight: 0.3, type: 'ease in', start: 0.2, end: 0.6, scaling: 'K+V', combine: 'concat', images: REFS },
       positive: promptFor(state, set), negative: negativeFor(state, set), set: set || null, model: CKPT, steps: 28, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
       width: w, height: h, composition: STATES[state].composition, facing: 'left', seconds, maxRgb, black, cutout: cutMeta,

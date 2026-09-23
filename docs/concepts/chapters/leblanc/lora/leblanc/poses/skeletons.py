@@ -89,6 +89,27 @@ def lying(head, s=0.9):
     return k
 
 
+def lying_r2(head, s=0.95):
+    """Ko, round 2 (2026-09-23): the round-1 ko read "a little like sleep" (judge.md: the head resting
+    on the arm). Here she is down flat: the head on the ground at screen-left, the near (fan) arm
+    flung out past the head along the ground, the far arm limp in front of the chest, the near leg
+    bent at the knee over the straight far leg. Shoulders and hips on one level line."""
+    k = {}
+    k[0] = head
+    k[1] = (head[0] + 88 * s, head[1] + 8 * s)
+    k[14] = (head[0] - 4 * s, head[1] - 24 * s); k[15] = (head[0] + 22 * s, head[1] - 26 * s)
+    k[17] = (head[0] + 52 * s, head[1] - 28 * s)
+    k[5] = (k[1][0] - 6 * s, k[1][1] - 40 * s)       # upper (near, left) shoulder
+    k[2] = (k[1][0] + 6 * s, k[1][1] + 38 * s)       # lower (far, right) shoulder
+    hip = (k[1][0] + 250 * s, k[1][1] + 12 * s)
+    k[11] = (hip[0], hip[1] - 38 * s); k[8] = (hip[0] + 6 * s, hip[1] + 36 * s)
+    k[6] = (k[5][0] - 125 * s, k[5][1] - 20 * s); k[7] = (k[6][0] - 120 * s, k[6][1] + 55 * s)   # fan arm flung out past the head
+    k[3] = (k[2][0] + 45 * s, k[2][1] + 70 * s); k[4] = (k[3][0] + 115 * s, k[3][1] + 10 * s)    # far arm limp on the ground
+    k[12] = (k[11][0] + 235 * s, k[11][1] + 55 * s); k[13] = (k[12][0] + 240 * s, k[12][1] - 5 * s)
+    k[9] = (k[8][0] + 255 * s, k[8][1] + 25 * s); k[10] = (k[9][0] + 250 * s, k[9][1] + 8 * s)
+    return k
+
+
 def states():
     W, H = 832, 1216
     idle = {i: (x + IDLE_OX, y + IDLE_OY) for i, (x, y) in IDLE.items()}
@@ -134,6 +155,17 @@ def states():
                               lleg=(105, 100), rleg=(92, 96))),
         # ko: lying on her side, head to screen-left
         'ko': ((1216, 832), lying((150, 470), s=0.95)),
+        # ROUND 2 (LoRA r2, 2026-09-23; skeletons/r2/): the skeletons the judges faulted, fixed.
+        # attack = v7 (the strike leads with the fan, both feet planted); hurt = v4 (the recoil keeps
+        # both legs); cast unchanged (its pose passed); ko = lying_r2 (down flat, not asleep on an arm).
+        'r2/attack': ((1024, H), {k: (x + 150, y - 40) for k, (x, y) in
+                                  body((420, 760), 245, s=0.9, head_deg=225, sh=16, hp=14, larm=(188, 182), rarm=(30, 115),
+                                       lleg=(150, 92), rleg=(52, 58)).items()}),
+        'r2/cast': ((W, H), body((430, 700), 272, s=0.95, head_deg=258, up=6, larm=(262, 265), rarm=(62, 50),
+                                 lleg=(96, 92), rleg=(84, 88))),
+        'r2/hurt': ((W, H), body((360, 620), 300, s=0.95, head_deg=320, larm=(110, 10), rarm=(5, 30),
+                                 lleg=(105, 100), rleg=(92, 96))),
+        'r2/ko': ((1216, 832), lying_r2((300, 520), s=0.95)),
     }
 
 

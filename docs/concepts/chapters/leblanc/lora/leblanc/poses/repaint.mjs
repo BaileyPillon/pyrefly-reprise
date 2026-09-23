@@ -8,7 +8,7 @@
  *
  *   node docs/concepts/chapters/leblanc/lora/leblanc/poses/repaint.mjs <state> <tag> <name>
  *        --ellipse cx,cy,rx,ry[,angle] [--ellipse ...] --seeds a,b --denoise 1 --lora 0.5
- *        --positive "..." --negative "..." [--inpaint 1]
+ *        --positive "..." --negative "..." [--inpaint 1] [--lorafile leblanc-x2-r2.safetensors]
  *
  * <tag> is D:/Tools/pyrefly-lora/leblanc/poses/<tag>.raw.png; ellipses are in raw
  * pixels. --inpaint 1 uses VAEEncodeForInpaint (fills the hole from scratch, denoise 1);
@@ -41,6 +41,8 @@ const src = join(dir, `${tag}.raw.png`);
 const seeds = String(opt.seeds || '970001').split(',').map(Number);
 const denoise = Number(opt.denoise ?? 1);
 const lora = Number(opt.lora ?? 0.5);
+// round 2: --lorafile leblanc-x2-r2.safetensors (default: round 1's LoRA)
+const loraFile = opt.lorafile || 'leblanc-x2.safetensors';
 const inpaint = opt.inpaint === '1';
 const positive = `leblancX2, ${opt.positive}, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
 const negative = `${BASE_NEGATIVE}, ${opt.negative || ''}`;
@@ -67,7 +69,7 @@ const msk = stageImage(mask);
 for (const seed of seeds) {
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
-    10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: 'leblanc-x2.safetensors', strength_model: lora, strength_clip: lora } },
+    10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: loraFile, strength_model: lora, strength_clip: lora } },
     6: { class_type: 'CLIPTextEncode', inputs: { text: positive, clip: ['10', 1] } },
     7: { class_type: 'CLIPTextEncode', inputs: { text: negative, clip: ['10', 1] } },
     11: { class_type: 'LoadImage', inputs: { image: img, upload: 'image' } },
@@ -89,12 +91,12 @@ for (const seed of seeds) {
   const out = `${tag}.${name}${seed}`;
   const secs = await R.run(g, join(dir, `${out}.raw.png`));
   const s = R.STATES[state];
-  const cut = cutout(join(dir, `${out}.raw.png`), join(dir, `${out}.png`));
-  const guard = await C.checkCutoutFile(join(dir, `${out}.png`), { sourceWidth: s.size[0], sourceHeight: s.size[1], composition: s.composition });
   const base = JSON.parse(readFileSync(join(dir, `${tag}.json`), 'utf8'));
+  const cut = cutout(join(dir, `${out}.raw.png`), join(dir, `${out}.png`));
+  const guard = await C.checkCutoutFile(join(dir, `${out}.png`), { sourceWidth: base.width || s.size[0], sourceHeight: base.height || s.size[1], composition: s.composition });
   writeFileSync(join(dir, `${out}.json`), JSON.stringify({
     ...base, tag: out, cutout: cut, guard: { ok: guard.ok, reasons: guard.reasons },
-    repaint: { from: `${tag}.raw.png`, name, seed, ellipses: opt.ellipse, feather: 3, inpaint, denoise: inpaint ? 1 : denoise, lora, positive, negative, seconds: secs },
+    repaint: { from: `${tag}.raw.png`, name, seed, ellipses: opt.ellipse, feather: 3, inpaint, denoise: inpaint ? 1 : denoise, lora, loraFile, positive, negative, seconds: secs },
   }, null, 1));
   console.log(`[leblanc-repaint] ${out} ${secs.toFixed(1)} s guard ${guard.ok ? 'ok' : 'REJECT ' + guard.reasons.join('; ')}`);
 }

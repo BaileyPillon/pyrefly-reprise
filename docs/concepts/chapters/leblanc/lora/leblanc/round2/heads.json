@@ -1,0 +1,9 @@
+{
+ "_what": "Head size in the installed cut-out's pixels, read at 2x on gridded crops of public/art/characters/leblanc/<state>.png: W = the bob's width across the head's axis (hair tip to hair tip), L = crown to chin along the axis (for ko, lying on her side: the head's horizontal and vertical extent). The size used is sqrt(W x L), so a foreshortened length (cast looks up) or a wide profile bob (attack) does not decide it alone.",
+ "_measured": {"idle": [189, 155], "attack": [206, 177], "cast": [158, 138], "hurt": [207, 168], "ko": [160, 205]},
+ "idle": 171.2,
+ "attack": 191.0,
+ "cast": 147.7,
+ "hurt": 186.5,
+ "ko": 181.1
+}

@@ -3,12 +3,14 @@
  * Chapter 6 art (FFX-2 only): the Leblanc identity LoRA (`leblancX2`).
  *
  *   node tools/gen/lora-leblanc.mjs gate        # wait for the shared GPU only (takes and releases the lock)
- *   node tools/gen/lora-leblanc.mjs train [--steps 2000 --dim 32 --alpha 16 --lr 1e-4]
+ *   node tools/gen/lora-leblanc.mjs train [--steps 2000 --dim 32 --alpha 16 --lr 1e-4] [--round r2]
  *   node tools/gen/lora-leblanc.mjs steptest [--loras none,pyrefly-lora-steps/leblanc-x2-step00000500.safetensors,...]
  *                                            [--seeds 9600,9601] [--strength 0.8] [--ref 0.3] [--pose idle|attack] [--tag steptest]
  *
  * Dataset: `D:/Tools/ComfyUI/python_embeded/python.exe -s docs/concepts/chapters/leblanc/lora/leblanc/build-dataset.py build`
  * (sources and sha256 in docs/concepts/chapters/leblanc/lora/leblanc/dataset.md).
+ * Round 2 (`--round r2`, 2026-09-23): the round-1 set plus the round-1 pose picks scored 6+
+ * (build-dataset-r2.py, dataset-r2.md); dataset-r2/, out-r2/, output name leblanc-x2-r2.
  * Trainer: kohya sd-scripts `sdxl_train_network.py` (D:/Tools/sd-scripts/.venv) on
  * Animagine XL 4.0 Opt, the settings that worked for the yuna-x2 run
  * (tools/gen/lora-train.mjs), saved every 500 steps to D:/Tools/pyrefly-lora/leblanc/out.
@@ -31,8 +33,10 @@ import { SPRITE_NEGATIVE, STYLE_TAGS, QUALITY_TAGS, stageImage } from './comfy.m
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, '..', '..');
 const ROOT = 'D:/Tools/pyrefly-lora/leblanc';
-const DATA = join(ROOT, 'dataset');
-const OUT = join(ROOT, 'out');
+const ROUND = (() => { const i = process.argv.indexOf('--round'); return i >= 0 ? process.argv[i + 1] : ''; })();
+const SUFFIX = ROUND ? `-${ROUND}` : '';
+const DATA = join(ROOT, `dataset${SUFFIX}`);
+const OUT = join(ROOT, `out${SUFFIX}`);
 const CAND = join(ROOT, 'cand');
 const LOCK = 'D:/Tools/pyrefly-lora/gpu-train.lock';
 const KOHYA = 'D:/Tools/sd-scripts/repo';
@@ -88,7 +92,7 @@ async function queueEmpty() {
 function takeLock() {
   try {
     const fd = openSync(LOCK, 'wx');
-    writeSync(fd, JSON.stringify({ owner: 'leblanc-x2 (tools/gen/lora-leblanc.mjs)', pid: process.pid, at: stamp() }));
+    writeSync(fd, JSON.stringify({ owner: `leblanc-x2${SUFFIX} (tools/gen/lora-leblanc.mjs)`, pid: process.pid, at: stamp() }));
     closeSync(fd);
     return true;
   } catch {
@@ -158,7 +162,7 @@ async function train(a) {
   mkdirSync(OUT, { recursive: true });
   const logFile = join(OUT, 'train.log');
   const log = (s) => { console.log(s); writeFileSync(logFile, s + '\n', { flag: 'a' }); };
-  const toml = join(ROOT, 'dataset.toml');
+  const toml = join(ROOT, `dataset${SUFFIX}.toml`);
   writeFileSync(toml, datasetToml());
   await gpuGate(log);
   const steps = Number(a.steps || 2000);
@@ -167,7 +171,7 @@ async function train(a) {
     `--pretrained_model_name_or_path=${CKPT_PATH}`,
     `--dataset_config=${toml}`,
     `--output_dir=${OUT}`,
-    '--output_name=leblanc-x2',
+    `--output_name=leblanc-x2${SUFFIX}`,
     '--save_model_as=safetensors',
     '--network_module=networks.lora',
     `--network_dim=${a.dim || 32}`,
@@ -259,6 +263,16 @@ export const PROMPTS = {
   attack:
     'leblancX2, 1girl, solo, full body, from side, lunging, leaning forward, one leg forward, outstretched arm, ' +
     'reaching, holding folding fan, serious, v-shaped eyebrows, closed mouth, feet, white background, simple background',
+  // round 2: the lunge is now in the set, so the unseen pose is a kneel (no dataset image kneels)
+  kneel:
+    'leblancX2, 1girl, solo, full body, from side, kneeling, on one knee, hand on own knee, holding folding fan, closed fan, ' +
+    'looking ahead, serious, closed mouth, feet, white background, simple background',
+  // the same kneel with the costume words the pose renders use (poses/render.mjs IDENTITY, short form)
+  kneelwords:
+    'leblancX2, 1girl, solo, full body, from side, kneeling, on one knee, hand on own knee, holding folding fan, closed fan, ' +
+    'looking ahead, serious, closed mouth, feet, blonde hair, short hair, bob cut, purple eyes, purple choker, white dress, ' +
+    'crimson obi, purple kimono, open robe, purple boots, lace-up boots, open-toe footwear, black folding fan, ' +
+    'white background, simple background',
 };
 export const NEGATIVE = `${SPRITE_NEGATIVE}, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, from behind, cropped`;
 
