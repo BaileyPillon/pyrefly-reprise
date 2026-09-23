@@ -2288,13 +2288,15 @@ export interface FFX2BattleEngine extends BattleEngine {
    * Advance the real-time clock by `ms` and return anything that resolved
    * (enemy turns, charge completions, status expiries, chain breaks).
    *
-   * **The fight runs in Active mode** (Bailey, 2026-09-21: *"For ffx-2 I choose
-   * active"* — `docs/target/decisions.json` D-009), so the presenter keeps
-   * calling this while a command menu, submenu or target cursor is open, with
-   * `throughInput` set: a girl standing ready for a command is queued for
-   * input, not acting, and does not stop the clock
-   * (`research/ffx2-combat-core.md` §1.5). FFX-2 only — FFX is CTB and has no
-   * clock to run.
+   * **Two Config ATB modes** (`research/ffx2-combat-core.md` §1.5). Under
+   * **Wait**, the default (Bailey, 2026-09-22, `docs/target/decisions.json`
+   * D-029), an open command menu holds the whole clock and this advances
+   * nothing until the command is confirmed. Under **Active** (D-009's build)
+   * the presenter keeps calling this while a command menu, submenu or target
+   * cursor is open, with `throughInput` set: a girl standing ready for a
+   * command is queued for input, not acting, and does not stop the clock. The
+   * mode is the engine's (`FFX2Engine.setAtbMode`), not a parameter here.
+   * FFX-2 only — FFX is CTB and has no clock to run.
    */
   tick(ms: number, opts?: { throughInput?: boolean }): BattleEvent[];
   /**

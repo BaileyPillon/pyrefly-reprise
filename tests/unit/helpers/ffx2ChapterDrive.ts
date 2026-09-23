@@ -7,6 +7,11 @@
  * suite (`ffx2-active-menu.test.ts`). `D` is an **input to a measurement, not
  * game data**; `D = 0` is the auto-battler's behaviour and the regression
  * control (`docs/plans/ffx2-active-menu-review.md`).
+ *
+ * **Drives the Active path unless told otherwise** (`atbMode: 'active'` below):
+ * the engine's own default became Wait with D-029 (2026-09-22), and every
+ * caller here measures what the clock does *under* a menu. Pass
+ * `{ atbMode: 'wait' }` for the Wait arm (`docs/plans/ffx2-wait-mode-review.md`).
  */
 
 import { createHash } from 'node:crypto';
@@ -35,6 +40,7 @@ export function ffx2Options(extra: Partial<Ffx2EngineOptions> = {}): Ffx2EngineO
     dresspheres: dressphereRegistryFrom(Object.values(data.STANDARD_DRESSPHERES)),
     garmentGrids: garmentGridRegistryFrom(Object.values(data.GARMENT_GRIDS)),
     minigames: false,
+    atbMode: 'active',
     ...extra,
   };
 }
@@ -91,9 +97,15 @@ function empty(): DriveResult {
   return { outcome: undefined, logs: [], ticks: 0, invalidated: 0, refused: 0, held: 0 };
 }
 
-export function driveChapter4(seed: number, decisionMs: number, extra: Partial<Ffx2EngineOptions> = {}): DriveResult {
+export function driveChapter4(
+  seed: number,
+  decisionMs: number,
+  extra: Partial<Ffx2EngineOptions> = {},
+  prepare?: (engine: FFX2Engine) => void,
+): DriveResult {
   const out = empty();
   const engine = new FFX2Engine(ffx2Options(extra));
+  prepare?.(engine);
   const group = data.ENEMY_GROUPS_BY_ID['ffx2-bahamut'];
   if (!group) throw new Error('ffx2-bahamut missing');
   engine.setSeed(seed);
@@ -104,9 +116,15 @@ export function driveChapter4(seed: number, decisionMs: number, extra: Partial<F
   return out;
 }
 
-export function driveChapter5(seed: number, decisionMs: number, extra: Partial<Ffx2EngineOptions> = {}): DriveResult {
+export function driveChapter5(
+  seed: number,
+  decisionMs: number,
+  extra: Partial<Ffx2EngineOptions> = {},
+  prepare?: (engine: FFX2Engine) => void,
+): DriveResult {
   const out = empty();
   const engine = new FFX2Engine(ffx2Options(extra));
+  prepare?.(engine);
   const first = data.ENEMY_GROUPS_BY_ID[VEGNAGUN_CHAIN_ORDER[0]!];
   if (!first) throw new Error('the Vegnagun chain is missing');
   let setup: BattleSetup = {

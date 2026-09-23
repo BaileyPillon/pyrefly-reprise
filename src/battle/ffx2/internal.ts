@@ -27,6 +27,7 @@ import type {
   StatBlock,
 } from '../common/types.ts';
 import type { AtbSpeed } from './constants.ts';
+import type { AtbMode } from './active.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -157,6 +158,14 @@ export interface Ffx2EngineOptions {
    * mid-battle with `FFX2Engine.setAtbSpeed`.
    */
   atbSpeed?: AtbSpeed;
+  /**
+   * The Config ATB mode (`active.ts` {@link AtbMode}, §1.5). Default **`'wait'`**
+   * (Bailey, `docs/target/decisions.json` D-029): the clock stops while a
+   * command menu is open. `'active'` keeps it running under the menu. No
+   * difference to a run that never ticks under a menu (every automated run).
+   * Changeable mid-battle with `FFX2Engine.setAtbMode`.
+   */
+  atbMode?: AtbMode;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

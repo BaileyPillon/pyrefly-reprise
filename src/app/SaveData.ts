@@ -108,7 +108,14 @@ export interface Settings {
   /**
    * FFX-2's ATB mode, the Active/Wait toggle from the original config menu —
    * `'active'` lets the gauges keep filling while a command menu is open,
-   * `'wait'` freezes them until the command is chosen.
+   * `'wait'` freezes them until the command is chosen. Read by the engine
+   * (`BattleScreenWiring.applyAtbMode`) since D-029.
+   *
+   * **Defaults to `'wait'`** (Bailey, 2026-09-22: *"I want the default to be
+   * wait mode instead of active mode please"*). Only the default changed — no
+   * migration, no version bump — so a save that already stores `'active'`
+   * (every save written while that was the default) keeps Active until the
+   * row is flipped; a fresh save, or one from before the row, gets Wait.
    *
    * Stored here (rather than per-chapter) because it is a preference, like
    * {@link Settings.guideVisible}: the player sets it once and every FFX-2
@@ -179,7 +186,7 @@ export function defaultSettings(): Settings {
     guideVisible: true,
     advisorVisible: true,
     intentVisible: true,
-    ffx2Atb: 'active',
+    ffx2Atb: 'wait',
     pausePanelsHidden: false,
     battleHelp: true,
     reduceMotion:

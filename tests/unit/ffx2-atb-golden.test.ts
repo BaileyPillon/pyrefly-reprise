@@ -90,3 +90,31 @@ describe('the Config ATB speed lever at Normal changes nothing (§1.2)', () => {
     expect(SEEDS_10.map((s) => logHash(driveChapter5(s, 1500, normal)))).toEqual(CH5_D1500);
   }, 180_000);
 });
+
+/**
+ * **Wait mode** (D-029, 2026-09-22; `docs/plans/ffx2-wait-mode-review.md` §5 I3/I4).
+ *
+ * Under Wait the clock does not move while a menu is open, so a human who reads
+ * every menu for 1.5 s plays **exactly** the auto-battler's fight: the `D = 1500`
+ * Wait arm must reproduce the `D = 0` golden byte for byte, and win 20/20.
+ * And the mode is a runtime switch: an engine built in Wait and told Active
+ * before its first decision must reproduce the Active `D = 1500` golden.
+ */
+describe('FFX-2 golden event logs under Wait mode (D-029)', () => {
+  it('D = 1500 under Wait is byte-identical to D = 0, chapters 4 and 5, seeds 1-20, 20/20', () => {
+    const wait = { atbMode: 'wait' as const };
+    const ch4 = SEEDS.map((s) => driveChapter4(s, 1500, wait));
+    const ch5 = SEEDS.map((s) => driveChapter5(s, 1500, wait));
+    expect(ch4.map(logHash)).toEqual(CH4_D0);
+    expect(ch5.map(logHash)).toEqual(CH5_D0);
+    expect([...ch4, ...ch5].every((r) => r.outcome === 'victory')).toBe(true);
+    expect([...ch4, ...ch5].every((r) => r.invalidated === 0 && r.held === 0 && r.refused === 0)).toBe(true);
+  }, 180_000);
+
+  it('a Wait engine switched to Active at runtime reproduces the Active D = 1500 golden', () => {
+    const wait = { atbMode: 'wait' as const };
+    const toActive = (e: { setAtbMode(m: 'active'): void }) => e.setAtbMode('active');
+    expect(SEEDS_10.map((s) => logHash(driveChapter4(s, 1500, wait, toActive)))).toEqual(CH4_D1500);
+    expect(SEEDS_10.map((s) => logHash(driveChapter5(s, 1500, wait, toActive)))).toEqual(CH5_D1500);
+  }, 120_000);
+});

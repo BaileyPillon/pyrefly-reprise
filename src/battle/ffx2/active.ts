@@ -1,12 +1,15 @@
 /**
- * **Active ATB** — the policy bits that let the FFX-2 clock run past an open
- * command menu. **FFX-2 ONLY.**
+ * **Active and Wait ATB** — the policy bits that decide whether the FFX-2
+ * clock runs past an open command menu. **FFX-2 ONLY.**
  *
- * The owner's decision, verbatim (`docs/target/decisions.json` D-009,
- * 2026-09-21): *"For ffx-2 I choose active."* — Active only, no Wait toggle.
- * The mechanic itself is `research/ffx2-combat-core.md` §1.5, Active row:
- * *"Time never stops, including while browsing the item list or a magic
- * submenu."* FFX is CTB and has no clock to run
+ * The owner's decision, verbatim (`docs/target/decisions.json` D-029,
+ * 2026-09-22 21:45 EDT, superseding D-009's "Active only"): *"1. C Wait mode.
+ * Also I want the default to be wait mode instead of active mode please."* —
+ * both modes, **Wait by default** ({@link AtbMode}). The mechanic is
+ * `research/ffx2-combat-core.md` §1.5: Active *"Time never stops, including
+ * while browsing the item list or a magic submenu"*; Wait freezes time in a
+ * submenu (the reading built — the whole menu, top level included — and why:
+ * `docs/plans/ffx2-wait-mode-review.md` §2). FFX is CTB and has no clock to run
  * (`research/ffx-vs-ffx2-presentation.md` §4.3), so none of this reaches it —
  * `tests/unit/ffx-no-active-clock.test.ts` is the absence test (AGENTS.md
  * rule 14 / CHK-021).
@@ -25,6 +28,31 @@ import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
 import { rollDefault } from './minigames.ts';
 import { canAct } from './statuses.ts';
+
+/**
+ * FFX-2's Config "ATB Mode" (§1.5). `'wait'` is the default (D-029): the clock
+ * stops while a command menu is open. `'active'` keeps it running (D-009's
+ * build, `docs/handoff/ffx2-active-atb.md`).
+ */
+export type AtbMode = 'wait' | 'active';
+
+/** The engine's default ATB mode (Bailey, D-029). */
+export const DEFAULT_ATB_MODE: AtbMode = 'wait';
+
+/**
+ * Whether the clock is held still by an open command menu: **Wait mode** with a
+ * `'player-input'` decision handed out and not yet answered. Then `tick` moves
+ * nothing at all — no gauge, no charge, no status second, no chain window, no
+ * enemy turn, nothing carried over — for as long as the menu is up, and the
+ * clock resumes on confirm (`submit` clears the owner).
+ * `docs/plans/ffx2-wait-mode-review.md` §3.
+ *
+ * Under Wait nothing can reach the owner while she chooses, so Active's
+ * held-command and menu-owner rules (15385ab) are never exercised: harmless.
+ */
+export function clockHeldByMenu(mode: AtbMode, inputOwner: CombatantId | null): boolean {
+  return mode === 'wait' && inputOwner !== null;
+}
 
 /** Options on {@link FFX2Engine.tick}. `throughInput` is Active mode's whole ask. */
 export interface TickOptions {

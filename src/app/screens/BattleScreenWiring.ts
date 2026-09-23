@@ -15,7 +15,7 @@
 
 import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/types.ts';
 import { FFXEngine } from '../../battle/ffx/index.ts';
-import { FFX2Engine, type AtbSpeed } from '../../battle/ffx2/index.ts';
+import { FFX2Engine, type AtbMode, type AtbSpeed } from '../../battle/ffx2/index.ts';
 import { readSetting } from '../SaveData.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { FFXBattleHud } from '../../ui/ffx/FFXBattleHud.ts';
@@ -61,7 +61,7 @@ export async function createEngine(
     game === 'ffx'
       ? new FFXEngine({ autoResolveMinigames: automated })
       : new FFX2Engine({ ...ffx2EngineOptions(), minigames: !automated });
-  applyAtbSpeed(engine);
+  applyAtbConfig(engine);
   engine.setSeed(setup.seed);
   engine.init(setup);
   return engine;
@@ -80,6 +80,26 @@ export async function createEngine(
 export function applyAtbSpeed(engine: BattleEngine | null): void {
   const x2 = engine as (BattleEngine & { setAtbSpeed?: (s: AtbSpeed) => void }) | null;
   x2?.setAtbSpeed?.(readSetting('ffx2AtbSpeed') ?? 'normal');
+}
+
+/**
+ * Tell an FFX-2 engine the player's Config ATB mode (the pause screen's X-2
+ * BATTLE ACTIVE/WAIT row, `Settings.ffx2Atb`; `research/ffx2-combat-core.md`
+ * §1.5). **Wait** unless the save says Active (Bailey, D-029). Same timing as
+ * {@link applyAtbSpeed}: at chapter start and when the pause closes, before the
+ * presenter is released, so the first pump step after the pause already runs
+ * the new mode. FFX has no `setAtbMode` (CTB has no clock under a menu), so
+ * this is a no-op there (AGENTS.md rule 14).
+ */
+export function applyAtbMode(engine: BattleEngine | null): void {
+  const x2 = engine as (BattleEngine & { setAtbMode?: (m: AtbMode) => void }) | null;
+  x2?.setAtbMode?.(readSetting('ffx2Atb') === 'active' ? 'active' : 'wait');
+}
+
+/** FFX-2's Config "ATB Mode and Speed", both halves: {@link applyAtbMode} and {@link applyAtbSpeed}. */
+export function applyAtbConfig(engine: BattleEngine | null): void {
+  applyAtbMode(engine);
+  applyAtbSpeed(engine);
 }
 
 // -------------------------------------------------------------------- HUD

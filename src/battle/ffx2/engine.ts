@@ -78,11 +78,14 @@ import {
   allTargetsGone,
   awaitsPlayerInput,
   canTakeTurn,
+  clockHeldByMenu,
+  DEFAULT_ATB_MODE,
   heldStillPending,
   inputStillValid,
   ownsInput,
   substepTicks,
   withDefaultTimedInput,
+  type AtbMode,
   type HeldCommand,
   type TickOptions,
 } from './active.ts';
@@ -141,10 +144,13 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    */
   private atbRate = 1;
   private speed: AtbSpeed = 'normal';
+  /** Config ATB mode (§1.5, `active.ts` {@link clockHeldByMenu}); Wait by default (D-029). */
+  private mode: AtbMode = DEFAULT_ATB_MODE;
 
   constructor(options: Ffx2EngineOptions = {}) {
     this.options = options;
     this.setAtbSpeed(options.atbSpeed ?? 'normal');
+    this.setAtbMode(options.atbMode ?? DEFAULT_ATB_MODE);
     this.abilities = chainRegistries(options.abilities, defaultAbilities);
     this.dresspheres = options.dresspheres ?? defaultDresspheres;
     this.grids = options.garmentGrids ?? defaultGarmentGrids;
@@ -180,6 +186,11 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   }
 
   atbSpeed(): AtbSpeed { return this.speed; }
+
+  /** Change the Config ATB mode, mid-battle included (the pause X-2 BATTLE row). Survives `init`. */
+  setAtbMode(mode: AtbMode): void { this.mode = mode; }
+
+  atbMode(): AtbMode { return this.mode; }
 
   setSeed(n: number): void {
     this.rng.seed(n);
@@ -338,6 +349,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    */
   tick(ms: number, opts?: TickOptions): BattleEvent[] {
     if (this.battleState.result) return this.flush();
+    // Wait mode (D-029, `active.ts`): an open command menu holds the whole clock.
+    if (clockHeldByMenu(this.mode, this.inputOwner)) return this.flush();
     const throughInput = opts?.throughInput === true;
     // Real ms become game ticks at the Config ATB speed (§1.2 `tickRate`).
     let remaining = msToTicks(Math.max(0, ms)) * this.atbRate;

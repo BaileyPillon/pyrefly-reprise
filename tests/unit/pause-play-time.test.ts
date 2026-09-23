@@ -167,21 +167,21 @@ describe('migration', () => {
 });
 
 describe('the options the pause menu writes', () => {
-  it('ships an X-2 ATB default of Active', () => {
-    expect(defaultSettings().ffx2Atb).toBe('active');
+  it('ships an X-2 ATB default of Wait (Bailey, D-029, 2026-09-22)', () => {
+    expect(defaultSettings().ffx2Atb).toBe('wait');
   });
 
   it('round-trips a changed setting', () => {
-    save.setSettings({ ffx2Atb: 'wait', guideVisible: false });
+    save.setSettings({ ffx2Atb: 'active', guideVisible: false });
     const reloaded = new SaveStore('test:play-time', storage);
-    expect(reloaded.settings.ffx2Atb).toBe('wait');
+    expect(reloaded.settings.ffx2Atb).toBe('active');
     expect(reloaded.settings.guideVisible).toBe(false);
   });
 
   it('fills the new setting in for a save that predates it', () => {
     const raw = { settings: { masterVolume: 0.5 } } as unknown as Partial<SaveData>;
     const out = migrate(raw);
-    expect(out.settings.ffx2Atb).toBe('active');
+    expect(out.settings.ffx2Atb).toBe('wait');
     expect(out.settings.masterVolume).toBe(0.5);
   });
 });

@@ -6,6 +6,21 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-22 — FFX-2 Wait mode: `FFX2BattleEngine.tick` doc comment only
+
+Key `ffx2-wait-mode`. **FFX-2 only** [AGENTS.md hard rule 14]. Bailey's D-029
+(`docs/target/decisions.json`): Wait mode, and Wait the default.
+
+**No shape change.** `src/battle/common/types.ts`: the doc comment on
+`FFX2BattleEngine.tick` said the fight runs in Active mode (D-009); it now
+names both Config ATB modes and says the mode belongs to the engine. The mode
+itself is engine-side and additive, outside the contract files:
+`Ffx2EngineOptions.atbMode?: 'wait' | 'active'` (default `'wait'`),
+`FFX2Engine.setAtbMode` / `atbMode()` (structural, like `setAtbSpeed`, not on
+the interface), and an optional `atbMode?()` on the presenter's
+`ActiveClockEngine` slice (`src/engine/BattlePresenterActive.ts`). Preflight
+`docs/plans/ffx2-wait-mode-review.md`; handoff `docs/handoff/ffx2-wait-mode.md`.
+
 ## 2026-09-22 — Chapter 7 registered, LOCKED: `seymour-anima-macalania` (Seymour and Anima)
 
 Key `chapter-macalania-integration`. **FFX only** [AGENTS.md hard rule 14]:

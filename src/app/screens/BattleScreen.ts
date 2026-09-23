@@ -41,7 +41,7 @@ import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { runEncounterChain } from './BattleEncounterChain.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
-import { applyAtbSpeed, createEngine, createHud } from './BattleScreenWiring.ts';
+import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
@@ -513,8 +513,9 @@ export class BattleScreen extends Screen {
       links: () => Math.max(1, this.links),
       chainLength: this.chainLength,
       onPause: (paused) => {
-        // FFX-2's ATB SPEED row, before the clock is released (no-op for FFX).
-        if (!paused) applyAtbSpeed(this.engine);
+        // FFX-2's X-2 BATTLE (Active/Wait) and ATB SPEED rows, before the
+        // clock is released (no-op for FFX).
+        if (!paused) applyAtbConfig(this.engine);
         this.setPresenterPaused(paused);
         // The other half of "exactly one screen reads the player": the HUD's
         // own pad watchers. The keyboard half is the claim taken below.

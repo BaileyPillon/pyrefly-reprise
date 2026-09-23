@@ -2,12 +2,14 @@
  * The **Active ATB pump**: the presenter's side of FFX-2's running clock.
  *
  * `BattlePresenter` parks on `HudPort.chooseCommand` in its `'player-input'`
- * branch, and under Wait that was the whole story — the FFX-2 engine was ticked
- * only in the `'waiting'` branch, so the gauges stood still for as long as a
- * player read the menu (measured: `critic/rounds/round-05.md` PR-0046, ticks
- * 8189 → 8189 over 2013 ms with the Chapter 4 menu open). Bailey chose Active
- * (`docs/target/decisions.json` D-009), so while the menu is open this pump
- * hands the engine **real elapsed time**, one clamped step at a time.
+ * branch. Under **Wait** — the default since Bailey's D-029 (2026-09-22, *"I
+ * want the default to be wait mode instead of active mode please"*) — the
+ * gauges stand still for as long as a player reads the menu, as they did before
+ * Active existed (`critic/rounds/round-05.md` PR-0046, ticks 8189 → 8189 over
+ * 2013 ms with the Chapter 4 menu open). Under **Active** (D-009's build) this
+ * pump hands the engine **real elapsed time**, one clamped step at a time. The
+ * pump runs for every FFX-2 menu and asks the mode each step (property 7), so
+ * the pause menu's X-2 BATTLE row lands on the very next step either way.
  *
  * **Shared plumbing, inert for FFX** (AGENTS.md rule 14 / CHK-020): one
  * presenter serves both engines, and the pump only runs for an engine that
@@ -44,6 +46,14 @@
  *    longer answer at all, and a chain lock is not that (see {@link PumpStop}).
  *    FFX-2 only; `tests/unit/ffx2-active-menu.test.ts` pins it through the
  *    real presenter.
+ * 7. **Wait hands the engine nothing.** A Wait engine never gets a pump
+ *    ({@link activeClockEngine} returns `null`), and a pump whose engine is
+ *    switched to Wait mid-menu (the pause's X-2 BATTLE row) stops at the next
+ *    step without calling `tick`, returning `'settled'`: the presenter then
+ *    simply awaits the command, clock held. Nothing read in Wait is ever banked.
+ *    The engine refuses a Wait tick under a menu on its own as well
+ *    (`src/battle/ffx2/active.ts` `clockHeldByMenu`).
+ *    `tests/unit/ffx2-wait-mode.test.ts`; `docs/plans/ffx2-wait-mode-review.md` §4.
  */
 
 import type { AtbSnapshot, BattleEvent, CombatantId } from '../battle/common/types.ts';
@@ -68,18 +78,30 @@ export interface ActiveClockEngine {
   tick(ms: number, opts?: { throughInput?: boolean }): BattleEvent[];
   inputValid(actorId: CombatantId): boolean;
   gaugeSnapshot(): AtbSnapshot;
+  /**
+   * FFX-2's Config ATB mode (§1.5). Optional: an engine without it reads as
+   * `'active'`, the pump exactly as it was before Wait existed.
+   */
+  atbMode?(): 'wait' | 'active';
 }
 
 /**
- * An engine that runs an Active clock, or `null`.
+ * An engine that runs an Active clock **for the menu opening now**, or `null`.
  *
  * This is the FFX/FFX-2 fork for the whole feature, in one place: FFX has no
- * `tick` at all, so its input branch never starts a pump.
+ * `tick` at all, so its input branch never starts a pump. Asked once per menu,
+ * so it is also the Wait fork (D-029): an FFX-2 engine in Wait holds its clock
+ * while the menu is open, there is nothing to pump, and the presenter takes the
+ * plain pre-Active path. (A pump that only idled would spin on an unscaled
+ * sleep that resolves at once — the `'skip'` speed, every test double.) A flip
+ * to Active in the pause lands from the next menu; a flip to Wait lands on the
+ * very next pump step (property 7).
  */
 export function activeClockEngine(engine: unknown): ActiveClockEngine | null {
   const e = engine as Partial<ActiveClockEngine> | null;
   if (!e || typeof e.tick !== 'function' || typeof e.inputValid !== 'function') return null;
   if (typeof e.gaugeSnapshot !== 'function') return null;
+  if (typeof e.atbMode === 'function' && e.atbMode() === 'wait') return null;
   return e as ActiveClockEngine;
 }
 
@@ -129,6 +151,9 @@ export async function runActivePump(deps: ActivePumpDeps): Promise<PumpStop> {
     if (deps.settled() || deps.aborted()) return 'settled';
     await deps.sleep(PUMP_MS);
     if (deps.settled() || deps.aborted()) return 'settled';
+
+    // Property 7: switched to Wait mid-menu (D-029) — the clock holds from here.
+    if (deps.engine.atbMode?.() === 'wait') return 'settled';
 
     const at = deps.now();
     const dt = Math.min(Math.max(0, at - last), MAX_STEP_MS);
