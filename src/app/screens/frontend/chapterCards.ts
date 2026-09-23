@@ -18,13 +18,7 @@ import { escapeHtml } from '../../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
 import { formatClearTime } from '../../../ui/common/resultsMath.ts';
 import type { ChapterGroup, ChapterTile } from './chapterGrid.ts';
-import { installDossierFaceReveal } from './dossierFaceReveal.ts';
-
-// PR-0065: keep the dossier's party faces from ever painting the letter
-// fallback as if it were the answer — see dossierFaceReveal.ts. A plain
-// side-effect import, called once; this module is `ChapterSelectScreen`'s
-// only path to the DOM it watches.
-installDossierFaceReveal();
+import './party-face-placeholder.css';
 
 /** Every enemy in the chapter's first formation, as one line. */
 export function bossNames(chapter: Chapter): string {
@@ -191,9 +185,22 @@ export function asideHtml(tile: ChapterTile, bestTimeMs: number | null): string 
   const best = bestTimeMs !== null ? formatClearTime(bestTimeMs) : null;
   const party = recommendedParty(chapter)
     .map(
+      // PR-0065 (round 09): a grey letter tile painted as if it were the
+      // answer, for however long the real portrait takes to decode, is
+      // exactly what CHK-012 calls out — "a fallback never ships as the
+      // final face". The round's own fix note allows the alternative to
+      // waiting on `img.decode()` (which belongs to `ChapterSelectScreen.ts`,
+      // outside this track): "make the fallback the ink silhouette the
+      // locked cards already use, so no state of this screen ever shows a
+      // letter." `.fe-party__ph` is that — a plain CSS bust silhouette, no
+      // text, no per-character art — so there is no longer a letter for a
+      // slow network to catch mid-reveal (the load-order dance this used to
+      // need to hide it, `dossierFaceReveal.ts`, went with it: nothing left
+      // to hide). The initial still exists, for a screen reader, as text a
+      // sighted player never sees.
       (m) => `
         <div class="fe-party__tile">
-          <div class="fe-party__face">${partyFaceHtml(m, { z: 1 })}<span>${escapeHtml(
+          <div class="fe-party__face">${partyFaceHtml(m, { z: 1 })}<span class="fe-party__ph" aria-hidden="true"></span><span class="fe-party__sr">${escapeHtml(
             m.name.charAt(0).toUpperCase(),
           )}</span></div>
           <span class="fe-party__name">${escapeHtml(m.name)}</span>

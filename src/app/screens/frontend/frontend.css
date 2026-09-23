@@ -776,16 +776,9 @@
   border: 1px solid rgba(244, 241, 232, 0.26);
   background: #1a1526;
 }
-.fe-party__face > span {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--ig-font-serif);
-  font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k)));
-  color: rgba(244, 241, 232, 0.5);
-}
+/* PR-0065's fallback rules (`.fe-party__ph`, `.fe-party__sr`) moved to
+   `party-face-placeholder.css` — `chapterCards.ts` imports it — to avoid
+   growing this already-over-400-line file (house rule 7). */
 .fe-party__name {
   display: block;
   margin-top: calc(5 * var(--fe-k));
@@ -948,9 +941,6 @@
   }
   .fe-party__face {
     height: calc(44 * var(--fe-k));
-  }
-  .fe-party__face > span {
-    font-size: max(var(--fe-fs-floor), calc(18 * var(--fe-k)));
   }
 }
 
