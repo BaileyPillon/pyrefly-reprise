@@ -1,0 +1,31 @@
+{
+  "issue": "PR-0089",
+  "candidate": "post-fix (this session's edits, not yet committed at capture time)",
+  "how": "npx vite --port 5742 (PYREFLY_BROWSER=gpu), window.__pyrefly.gotoChapter('seymour-flux', { skipCutscenes:false, skipPrep:true, auto:'intended', speed:'normal', seed:1 }) driven from the title screen after a real click unlocked audio; window.__pyrefly.audioDebug().music sampled every ~400ms on the page's own clock (setInterval), t is ms since the run was kicked off.",
+  "chapter1_seymour_flux": {
+    "note": "Chapter 1 has no separate chapter-select screen in this harness path (gotoChapter starts the pre-scene directly, whose bed is the 'title' track, structurally identical to the chapter-select waltz carrying into the fight that PR-0089 named); the port under test (CutsceneScreen.ts's music step -> BattleEncounterChain.ts's opening cue) is exactly the same code the bug was in.",
+    "samples": [
+      { "t": 416, "screen": "cutscene", "playing": null, "current": null, "fading": [{ "name": "title", "gain": 0.0015532808611169457 }] },
+      { "t": 4811, "screen": "battle", "playing": "title", "current": { "name": "title", "gain": 0.00010631990153342485 }, "fading": [] },
+      { "t": 6416, "screen": "battle", "playing": "title", "current": { "name": "title", "gain": 1 }, "fading": [] },
+      { "t": 8414, "screen": "battle", "playing": "boss-seymour", "current": { "name": "boss-seymour", "gain": 0.0003980117035098374 }, "fading": [{ "name": "title", "gain": 0.25124889612197876 }] },
+      { "t": 8816, "screen": "battle", "playing": "boss-seymour", "current": { "name": "boss-seymour", "gain": 0.04500172659754753 }, "fading": [{ "name": "title", "gain": 0.00222213682718575 }] },
+      { "t": 9216, "screen": "battle", "playing": "boss-seymour", "current": { "name": "boss-seymour", "gain": 1 }, "fading": [] },
+      { "t": 9603, "screen": "battle", "playing": "boss-seymour", "current": { "name": "boss-seymour", "gain": 1 }, "fading": [] },
+      { "t": 20013, "screen": "battle", "playing": "boss-seymour", "current": { "name": "boss-seymour", "gain": 1 }, "fading": [] },
+      { "t": 28809, "screen": "battle", "playing": null, "current": null, "fading": [{ "name": "boss-seymour", "gain": 1 }] },
+      { "t": 29520, "screen": "battle", "playing": null, "current": null, "fading": [{ "name": "boss-seymour", "gain": 0.00009999999747378752 }] },
+      { "t": 32411, "screen": "battle", "playing": "boss-ffx2-aeon", "current": { "name": "boss-ffx2-aeon", "gain": 0.0009896601550281048 }, "fading": [] },
+      { "t": 33614, "screen": "battle", "playing": "boss-ffx2-aeon", "current": { "name": "boss-ffx2-aeon", "gain": 1 }, "fading": [] },
+      { "t": 40406, "screen": "battle", "playing": "boss-ffx2-aeon", "current": { "name": "boss-ffx2-aeon", "gain": 1 }, "fading": [] }
+    ],
+    "reading": "The pre-scene bed ('title') reaches full gain by t=6416 (~1.6s after it starts at t~4811-5707, matching its authored fade). At t=8414 the boss-seymour cue starts crossfading in: it reaches gain 1 by t=9216 (about 0.8s later, not 1200s) while the outgoing bed is already down to gain 0.0022 within the same window and silent by t=9603. A later mid-battle phase cue (boss-ffx2-aeon, an Anima-summon-style cue firing inside the same fight) shows the identical pattern: 0 -> 1 gain in about 1.2s (t=32411 to t=33614). Before the fix this ramp was scheduled to finish 1200 SECONDS later; every one of these samples would have shown the outgoing track still near full gain and the new cue still near 0.0001 for the length of the whole fight.",
+    "full_log_sample_count": 101
+  },
+  "chapter5_ffx2_vegnagun_shuyin": {
+    "attempted": true,
+    "outcome": "Not captured live end-to-end this session: the auto-driven fight (window.__pyrefly.gotoChapter('ffx2-vegnagun-shuyin', { auto:'intended', ... }) and a direct autoBattle('intended') retry) did not advance past turn 0 / tick 0 against vegnagun-tail after ~2 minutes of real time in the browser, at both 'normal' and 'skip' presenter speed. That looks like a pre-existing stall unrelated to audio (not chased further here; flagged below rather than left silent).",
+    "root_cause_boundary_proven_instead_by": "tests/unit/audio-fade-units.test.ts, 'BattleEncounterChain: cueForGroup fadeMs (authored ms) reaches playMusic in seconds' — runs the real cueForGroup()+runEncounterChain() against the real chapter data and a fake audio port, and separately cueForGroup(chapter, group, 'next') is the same function chapter 5's Vegnagun->Shuyin phase change calls; its fadeMs (authored ms, e.g. 1200 from the chapter/group data or the 1200 fallback) is asserted to reach the audio port already divided by 1000.",
+    "flagged_separately": "The chapter 5 auto-battle stall (turn/ticks stuck at 0 against vegnagun-tail under 'intended' with skipCutscenes) is out of this fix's scope (src/audio/**) and is not a PR-0089 symptom; noting it here rather than passing over it silently."
+  }
+}

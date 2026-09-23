@@ -32,6 +32,7 @@ import type {
 import type { Chapter } from '../../data/encounters.ts';
 import type { BattleOutcome, BattlePresenter } from '../../engine/BattlePresenter.ts';
 import { setupForNextLink } from './BattleScreenSetup.ts';
+import { fadeMsToSec } from '../../audio/AudioManager.ts';
 
 /**
  * How many formations the chain starting at `group` has: walk `nextGroupId` to
@@ -146,7 +147,10 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
   // Until this existed the pre-scene's boss theme was crossfaded straight back
   // out to `battle-ffx` on the frame the battle screen appeared (#02).
   const opening = cueForGroup(chapter, group, 'first');
-  if (opening.track) void opts.audio?.playMusic(opening.track, { fade: opening.fadeMs });
+  // `fadeMs` (from `MusicPhaseCue.fadeMs` / the `cueForGroup` fallback) is
+  // milliseconds; `ChainAudioPort.playMusic`/`AudioManager` want seconds
+  // (PR-0089).
+  if (opening.track) void opts.audio?.playMusic(opening.track, { fade: fadeMsToSec(opening.fadeMs, 1200) });
 
   for (;;) {
     links++;
@@ -182,7 +186,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     await stage.stage(engine.state());
 
     const cue = cueForGroup(chapter, group, 'next');
-    if (cue.track) void opts.audio?.playMusic(cue.track, { fade: cue.fadeMs });
+    if (cue.track) void opts.audio?.playMusic(cue.track, { fade: fadeMsToSec(cue.fadeMs, 1200) });
   }
 
   return { outcome, links: Math.max(1, links) };

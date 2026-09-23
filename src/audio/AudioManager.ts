@@ -40,7 +40,7 @@ export interface AudioManagerOptions {
 }
 
 export interface PlayMusicOptions {
-  /** Crossfade time in seconds (default 1.2). */
+  /** Crossfade time in **seconds** (default 1.2). See {@link fadeMsToSec}. */
   fade?: number;
   /** Restart even if this track is already playing. */
   restart?: boolean;
@@ -51,6 +51,25 @@ export interface PlayMusicOptions {
    * victory sting). They are kept decoded; everything else is dropped.
    */
   upcoming?: string[];
+}
+
+/**
+ * Converts a fade duration authored in **milliseconds** (the DSL's
+ * `MusicStep.fade`, `MusicPhaseCue.fadeMs`, and every other authored fade in
+ * `docs/`/`src/data`/`src/story`) into the **seconds** that
+ * {@link PlayMusicOptions.fade} and {@link AudioManager.stopMusic} expect.
+ *
+ * PR-0089 (critic round 09): every screen-level port that forwards an
+ * authored fade to `AudioManager` (`CutsceneScreen.ts`,
+ * `BattleScreenCutscenes.ts`, `BattleEncounterChain.ts`) was passing the raw
+ * millisecond value straight through, so a `1200`-ms crossfade scheduled a
+ * 1200-*second* ramp: the chapter-select waltz kept playing and every boss or
+ * phase theme stayed near silent for the length of the fight. Route every
+ * ms-authored fade through this one function at the port boundary so the unit
+ * mismatch cannot recur file by file.
+ */
+export function fadeMsToSec(fadeMs: number | undefined, fallbackMs: number): number {
+  return (fadeMs ?? fallbackMs) / 1000;
 }
 
 export interface PlaySfxOptions {
@@ -553,6 +572,14 @@ export class AudioManager {
     playing: string | null;
     muted: boolean;
     volumes: { master: number; music: number; sfx: number };
+    /**
+     * The live gain of the current (fading-in) slot and every slot still
+     * fading out, read straight off each `GainNode`. Added for PR-0089
+     * (critic round 09): `playing` alone cannot show a stuck multi-minute
+     * fade — a track can already be `current` while its gain is still near
+     * `0.0001` seconds into a fade that was scheduled to take minutes.
+     */
+    music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }> };
     prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean };
     tracks: Array<{ name: string; about: string; cached: boolean; source: string | null }>;
     sfx: Array<{ name: string; about: string; cached: boolean; prerendered: boolean }>;
@@ -563,6 +590,10 @@ export class AudioManager {
       playing: this.currentMusic,
       muted: this.muted,
       volumes: { master: this.masterVolume, music: this.musicVolume, sfx: this.sfxVolume },
+      music: {
+        current: this.current ? { name: this.current.name, gain: this.current.gain.gain.value } : null,
+        fading: this.fading.map((s) => ({ name: s.name, gain: s.gain.gain.value })),
+      },
       prerendered: {
         manifest: this.manifest !== null,
         cues: this.manifest ? Object.keys(this.manifest.music).length : 0,

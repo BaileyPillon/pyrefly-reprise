@@ -73,6 +73,7 @@ import {
   type DialoguePort,
 } from '../../story/runner/CutsceneRunner.ts';
 import { MID_LINE_HOLD_MS, midBattleDeadlineMs } from '../../story/registry.ts';
+import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { DialogueBox } from '../../ui/common/DialogueBox.ts';
 import { typingDurationMs } from '../../ui/common/typewriter.ts';
 import '../../ui/common/cutscene.css';
@@ -325,8 +326,10 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
       });
     },
     music: (track, fade) => {
-      if (track) void opts.audio?.playMusic(track, { fade: fade ?? 1200 });
-      else opts.audio?.stopMusic(fade ?? 800);
+      // `fade` is the DSL's `MusicStep.fade`, authored in milliseconds
+      // (`story/dsl.ts`); `AudioPort`/`AudioManager` want seconds (PR-0089).
+      if (track) void opts.audio?.playMusic(track, { fade: fadeMsToSec(fade, 1200) });
+      else opts.audio?.stopMusic(fadeMsToSec(fade, 800));
     },
     wait: (ms) => wait(ms),
     moveActor: (who, to, ms) => {

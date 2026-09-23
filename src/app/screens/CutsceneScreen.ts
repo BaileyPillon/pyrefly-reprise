@@ -2,6 +2,7 @@ import '../../ui/common/cutscene.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
+import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { battleStart, beat, camera, fx, music, narrate, say, type SpeakerId, type StoryScript } from '../../story/dsl.ts';
@@ -379,7 +380,13 @@ export class CutsceneScreen extends Screen {
       camera: () => {}, // no 3D scene owned here — the presenter/scene agent overrides via `opts.ports`.
       fx: () => this.flash(undefined, 90),
       music: (track, fade) => {
-        if (track) void audio.playMusic(track, fade !== undefined ? { fade } : {});
+        // `fade` is the DSL's `MusicStep.fade`, authored in milliseconds
+        // (`story/dsl.ts`); `AudioManager` wants seconds. PR-0089: this used to
+        // forward the raw ms value, scheduling a multi-minute ramp instead of a
+        // sub-two-second one, and `track === null` (stop the music) was
+        // silently dropped instead of reaching `stopMusic`.
+        if (track) void audio.playMusic(track, { fade: fadeMsToSec(fade, 1200) });
+        else audio.stopMusic(fadeMsToSec(fade, 800));
       },
       wait: (ms) => this.waitGate(ms),
       moveActor: () => {},

@@ -206,6 +206,14 @@ export class FakeMessageBar implements MessageBarPort {
 export class FakeAudio implements AudioPort {
   readonly cues: string[] = [];
   readonly music: string[] = [];
+  /**
+   * The `fade` (or `stopMusic` argument) each `playMusic`/`stopMusic` call
+   * received, in call order, paired with `music` by index. `PlayMusicOptions`
+   * / `stopMusic` are documented in **seconds**
+   * (`src/audio/AudioManager.ts`) — a caller that forwards an
+   * authored-in-milliseconds fade unconverted is the PR-0089 bug this records.
+   */
+  readonly fades: Array<number | undefined> = [];
   /** Keys this bank does not have, so the fallback path can be exercised. */
   unknown = new Set<string>();
 
@@ -213,11 +221,13 @@ export class FakeAudio implements AudioPort {
     if (this.unknown.has(key)) throw new Error(`unknown sfx ${key}`);
     this.cues.push(key);
   }
-  playMusic(key: string): void {
+  playMusic(key: string, opts?: { fade?: number }): void {
     this.music.push(key);
+    this.fades.push(opts?.fade);
   }
-  stopMusic(): void {
+  stopMusic(fade?: number): void {
     this.music.push('stop');
+    this.fades.push(fade);
   }
 }
 
