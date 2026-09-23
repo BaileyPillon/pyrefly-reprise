@@ -306,21 +306,31 @@ describe('the coach layer', () => {
     expect(spy.menuOpened, 'the X-2 menu is asked for before anything is awaited').toBe(1);
 
     await pending;
+    // `ffx2-gauge`'s only body ("...don't wait for me, we all go at once!")
+    // is written for Active and reads as wrong advice under Wait — the whole
+    // point of the mode is that the player *can* wait. This test's fake save
+    // has no `ffx2Atb` setting, so `ffx2AtbMode()` reads the shipped default,
+    // Wait (D-029) — the same default a fresh profile gets — so `CoachLayer`
+    // skips the line rather than show it wrong (`coachCopy.ts` has no Wait
+    // wording for it yet; see `docs/handoff/*` for the driver's report to
+    // Bailey). Left unseen, not consumed (`CoachLayer.chooseCommand`'s own
+    // comment). The Active case is not separately exercised here — same
+    // reason the badge's Active half is not (the comment below): every other
+    // test in this describe block assumes `activeSave()` is null, and it runs
+    // the exact `markSeen` + `raise` this test used to see unconditionally,
+    // now simply un-gated when `ffx2AtbMode()` reads `'active'`.
+    expect(markEl(root), 'the Active-only line does not show under the Wait default').toBeNull();
+  });
+
+  it('FFX-2: the gauge line comes back under Active, where its words are true', async () => {
+    const spy = new SpyHud();
+    const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'active' });
+    hud.mount(root);
+    await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
     const line = markEl(root);
-    expect(line, 'and the line outlives its own promise, on screen while play continues').not.toBeNull();
+    expect(line, 'the mode-aware skip is conditional, not a removal').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
-    expect(line?.textContent).toContain('Rikku');
-    // Round 09 PR-0046 (reopened): the badge is mode-aware
-    // (`coachRunningBadge` in `coachCopy.ts`), because "nothing paused, gauges
-    // running" is true only under Active. This test's fake save has no
-    // `ffx2Atb` setting, so `ffx2AtbMode()` reads the shipped default, Wait
-    // (D-029) — the same default a fresh profile gets — where the engine
-    // holds every gauge while this very menu is open
-    // (`tests/unit/ffx2-wait-mode.test.ts`). The badge must say that, not the
-    // Active claim.
-    expect(line?.textContent).not.toContain('Nothing paused');
-    expect(line?.textContent).not.toContain('gauges running');
-    expect(line?.textContent?.toLowerCase()).toMatch(/hold|paus|wait/);
+    expect(line?.textContent).toContain("don't wait for me");
   });
 
   // The Active-mode half of this pin ("Nothing paused · gauges running" comes
@@ -348,7 +358,12 @@ describe('the coach layer', () => {
     window.addEventListener('keydown', menu);
     try {
       const spy = new SpyHud();
-      const hud = withCoach('ffx2', spy, { reduceMotion: true });
+      // 'active': this test is about input-swallowing, not about `ffx2-gauge`'s
+      // wording, and the mode-aware skip added for that (`CoachLayer.chooseCommand`)
+      // would otherwise leave nothing here to swallow input for under the
+      // Wait default (`ffx2AtbMode` is injectable for exactly this reason —
+      // the file's own tests may not construct a `SaveStore`).
+      const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'active' });
       hud.mount(root);
       await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
       expect(markEl(root), 'the line is up over an open menu').not.toBeNull();
@@ -379,7 +394,10 @@ describe('the coach layer', () => {
     // never advances the clock, is never — and `turns` would run to the cap.
     const engine = realFfx2Engine();
     const spy = new SpyHud();
-    const hud = withCoach('ffx2', spy, { reduceMotion: true });
+    // 'active': this test is about the presenter never being held while a
+    // real engine ticks, not about `ffx2-gauge`'s wording — see the note on
+    // the test above.
+    const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'active' });
     hud.mount(root);
 
     const before = gauges(engine);
