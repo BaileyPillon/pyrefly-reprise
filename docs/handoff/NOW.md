@@ -1,6 +1,6 @@
 # NOW — where Pyrefly Reprise stands
 
-> **Snapshot: 2026-09-22 13:50 EDT (machine clock)**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
+> **Snapshot: 2026-09-22 21:05 EDT (machine clock; session restarted ~18:50, work resumed on Bailey's word "Ok please continue on")**, written by the driver session ("FFX/FFX-2 2.5D game recreation").
 > **USAGE MODE: NORMAL, set by Bailey's word** (2026-09-21 20:00 EDT, offered the spend order "1 release tonight, 2 living
 > portrait round 2, 3 music audition, 4 art consistency pilot; chapters after the weekly reset", Bailey answered:
 > **"1+2 and 1 new chapter finished. Don't hold back."**). **NORMAL, set by Bailey's word, 2026-09-22 13:46 EDT, verbatim: "My usage just reset! Let's get serious and keep working. Awesome. Let's do it."** Weekly all-models 0 percent used, weekly Fable 0, 5-hour 0 (the week resets 2026-09-26 07:00 EDT). Five tracks run in parallel today (list below); the ComfyUI queue is shared by three of them, so a 60 to 90 minute video job may sit in front of a render: poll and wait, never restart ComfyUI while the queue has a job. Open with Bailey: his AUDIO score of the live build (settles the deep debt), the segmentation-model download for the portrait rig, and the Leblanc letters (art 1A/1B, ATB 2A/2B). Bailey sets the mode by word and agents may only tighten it (hard rule 15): the three
@@ -51,7 +51,11 @@
    patches, profile-right, closed eyes, renderer split, adversarial check. OWNS `docs/concepts/pause-until-dawn/prototype-v2/**`,
    `tools/gen/rig-*`, `tools/gen/inpaint.mjs` (additive), `docs/handoff/living-portrait-v3.md`.
 
-ComfyUI (:8188) is shared by 2, 3, 4 and 5: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
+6. `wf_4486692a-5b3` "pyrefly-video-flf-round4": tools/gen/video-post.mjs (colour match + ping-pong), the rule-15 method note, a same-seed A/B render (81 frames, 1-frame vs 4-frame end anchor), opus judge. OWNS `tools/gen/video-flf.mjs`, `tools/gen/video-post.*`, `docs/concepts/pause-until-dawn/video-flf/round4/**`.
+7. `wf_cc2af145-0bf` (item 5) and `wf_4486692a-5b3` were interrupted by a session restart at ~18:50 EDT and RESUMED at 21:00 EDT with the same run ids; their interrupted agents re-run and find their own uncommitted work in the tree (prototype-v2/art/v3, prototype-v2/src, tools/gen/inpaint.mjs, rig-turns.py, video-flf.mjs).
+8. `pyrefly-chapters-macalania-evrae` (launched 21:05 EDT, id in the next refresh): Macalania then Evrae registered end to end like Leblanc (c473de8), both LOCKED as Coming until Bailey approves their art; Anima's arrival and the Evrae order widget built to the driver's recommendations (A then B's tag; A + C's staging) and recorded as INFERRED in docs/target/targets.json for Bailey's yes. OWNS src/scenes/{macalania,evrae}*, their data/guide/tactics/meta files, src/story registration, additive entries in encounters.ts + registries (docs/CONTRACT-CHANGES.md), chapterGrid card data, docs/handoff/chapter-{macalania,evrae}*.md.
+
+ComfyUI (:8188) is shared by 2, 3, 5, 6: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
 
 ## Live: Build C.1 (release 08)
 
