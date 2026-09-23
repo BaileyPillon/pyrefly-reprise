@@ -1,0 +1,93 @@
+{
+ "tag": "attack.99121.r2c",
+ "state": "attack",
+ "seed": 99121,
+ "method": "lora-r2+openpose",
+ "positive": "logosX2, 1boy, solo, full body, from side, profile, facing left, lunging, leaning forward, legs apart, one leg forward, bent knee, aiming, arms forward, outstretched arms, holding gun, dual wielding, serious, v-shaped eyebrows, closed mouth, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, revolver, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, boots, closed shoes, sneakers, socks, glossy, shiny skin, oily skin, 3d, realistic, mesh, grille, crosshatch, net pattern, engraving, engraved helmet, lettering, text on helmet, helmet wings, slotted visor, cage, chin spike, hanging gun, dangling gun, finger in trigger guard, wooden grip, brown grip, double barrel, blank face, faceless, multiple ribbons, two ribbons, sash tail in front, arms down, arm behind back, smile, standing still, walking, raised knee, knee up, jumping, extra legs, three legs, both hands on one gun, floor, shadow, grey background",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "controlnet": {
+  "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+  "image": "docs/concepts/chapters/leblanc/lora/logos/round2/attack2-pose.png",
+  "strength": 0.6,
+  "start": 0,
+  "end": 0.8
+ },
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "images": [
+   "docs/concepts/chapters/leblanc/lora/logos/round2/refs/idle-square.png",
+   "docs/concepts/chapters/leblanc/lora/logos/round2/refs/idle-head.png"
+  ],
+  "weight": 0.3,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "combine": "concat",
+  "scaling": "K+V"
+ },
+ "width": 832,
+ "height": 1216,
+ "composition": "full",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "frame": {
+  "std": 82.4
+ },
+ "cutout": {
+  "width": 790,
+  "height": 1111,
+  "baselineY": 1095,
+  "cropBox": [
+   2,
+   104,
+   792,
+   1215
+  ],
+  "contentBox": [
+   18,
+   120,
+   776,
+   1199
+  ],
+  "sourceWidth": 832,
+  "sourceHeight": 1216,
+  "model": "isnet-anime"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.9495192307692307,
+    "heightFraction": 0.9136513157894737,
+    "checked": true,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 316127,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.007702600537125902,
+    "largestRegionFraction": 0.0013886823966317336,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "seconds": 13,
+ "generatedAt": "2026-09-23T13:09:36.022Z"
+}

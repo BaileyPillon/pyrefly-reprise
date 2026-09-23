@@ -1,0 +1,93 @@
+{
+ "tag": "ko.99412.r2b",
+ "state": "ko",
+ "seed": 99412,
+ "method": "lora-r2+openpose",
+ "positive": "logosX2, 1boy, solo, full body, from side, lying, on back, on ground, unconscious, closed eyes, arms at sides, gun on ground, dropped weapon, two guns, wearing helmet, (gun on ground:1.3), (two revolvers:1.2), revolver on floor, dropped gun, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, boots, closed shoes, sneakers, socks, glossy, shiny skin, oily skin, 3d, realistic, mesh, grille, crosshatch, net pattern, engraving, engraved helmet, lettering, text on helmet, helmet wings, slotted visor, cage, chin spike, hanging gun, dangling gun, finger in trigger guard, wooden grip, brown grip, double barrel, blank face, faceless, multiple ribbons, two ribbons, sash tail in front, holding gun, standing, sitting, kneeling, no helmet, helmet removed, blood, rifle, cast shadow, drop shadow, black shadow, lying on side, head on right, facing right, bare head, one gun",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "controlnet": {
+  "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+  "image": "docs/concepts/chapters/leblanc/lora/logos/round2/ko-pose.png",
+  "strength": 0.75,
+  "start": 0,
+  "end": 0.8
+ },
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "images": [
+   "docs/concepts/chapters/leblanc/lora/logos/round2/refs/idle-square.png",
+   "docs/concepts/chapters/leblanc/lora/logos/round2/refs/idle-head.png"
+  ],
+  "weight": 0.3,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "combine": "concat",
+  "scaling": "K+V"
+ },
+ "width": 1216,
+ "height": 832,
+ "composition": "prone",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "frame": {
+  "std": 79.7
+ },
+ "cutout": {
+  "width": 1214,
+  "height": 823,
+  "baselineY": 807,
+  "cropBox": [
+   0,
+   9,
+   1214,
+   832
+  ],
+  "contentBox": [
+   12,
+   25,
+   1198,
+   816
+  ],
+  "sourceWidth": 1216,
+  "sourceHeight": 832,
+  "model": "isnet-anime"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.9983552631578947,
+    "heightFraction": 0.9891826923076923,
+    "checked": false,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 2,
+    "largestPixels": 281805,
+    "secondPixels": 10625,
+    "secondRatio": 0.03770337644825322,
+    "touchesLargest": true
+   },
+   "nearWhite": {
+    "fraction": 0.02044249905960401,
+    "largestRegionFraction": 0.0020073179906302365,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "seconds": 13,
+ "generatedAt": "2026-09-23T13:06:54.814Z"
+}
