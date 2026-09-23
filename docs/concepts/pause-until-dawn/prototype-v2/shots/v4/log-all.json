@@ -3,9 +3,9 @@
   "stills": [
     {
       "name": "yaw-0",
-      "yaw": -0.38,
+      "yaw": -0.39,
       "base": 0.04,
-      "t": 0.874,
+      "t": 0.867,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -22,7 +22,7 @@
       "name": "yaw-m20",
       "yaw": -19.48,
       "base": -19.47,
-      "t": 1.374,
+      "t": 1.367,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -37,9 +37,9 @@
     },
     {
       "name": "yaw-m40",
-      "yaw": -38.98,
+      "yaw": -39.01,
       "base": -39.5,
-      "t": 1.907,
+      "t": 1.867,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -54,9 +54,9 @@
     },
     {
       "name": "yaw-m60",
-      "yaw": -58.67,
+      "yaw": -58.69,
       "base": -59.53,
-      "t": 2.407,
+      "t": 2.367,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -73,7 +73,7 @@
       "name": "yaw-m80",
       "yaw": -78.74,
       "base": -79.41,
-      "t": 2.874,
+      "t": 2.834,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -88,9 +88,9 @@
     },
     {
       "name": "yaw-p20",
-      "yaw": 20.11,
+      "yaw": 20.13,
       "base": 19.42,
-      "t": 3.64,
+      "t": 3.6,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -105,9 +105,9 @@
     },
     {
       "name": "yaw-p40",
-      "yaw": 39.69,
-      "base": 39.65,
-      "t": 4.274,
+      "yaw": 39.74,
+      "base": 39.74,
+      "t": 4.3,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -122,9 +122,9 @@
     },
     {
       "name": "yaw-p60",
-      "yaw": 59.34,
+      "yaw": 59.33,
       "base": 59.91,
-      "t": 15.84,
+      "t": 15.867,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -139,9 +139,9 @@
     },
     {
       "name": "yaw-p80",
-      "yaw": 79.1,
+      "yaw": 79.11,
       "base": 79.51,
-      "t": 16.374,
+      "t": 16.4,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -156,11 +156,11 @@
     },
     {
       "name": "blink-mid",
-      "yaw": 0.68,
+      "yaw": 0.71,
       "base": 0.48,
-      "t": 17.163,
+      "t": 17.189,
       "eye": "closing",
-      "ap": 0.55,
+      "ap": 0.54,
       "mouth": "neutral",
       "mw": 0,
       "brow": "neutral",
@@ -173,9 +173,9 @@
     },
     {
       "name": "blink-closed",
-      "yaw": 0.66,
+      "yaw": 0.69,
       "base": 0.43,
-      "t": 17.191,
+      "t": 17.216,
       "eye": "closed",
       "ap": 0,
       "mouth": "neutral",
@@ -190,9 +190,9 @@
     },
     {
       "name": "smile-0",
-      "yaw": 0.86,
+      "yaw": 0.87,
       "base": 0.21,
-      "t": 17.716,
+      "t": 17.741,
       "eye": "open",
       "ap": 1,
       "mouth": "smile",
@@ -209,7 +209,7 @@
       "name": "smile-m40",
       "yaw": -39.05,
       "base": -40.08,
-      "t": 74.505,
+      "t": 74.531,
       "eye": "half",
       "ap": 0.85,
       "mouth": "smile",
@@ -224,9 +224,9 @@
     },
     {
       "name": "slight-smile-p20",
-      "yaw": 19.77,
+      "yaw": 19.81,
       "base": 19.84,
-      "t": 86.229,
+      "t": 86.255,
       "eye": "open",
       "ap": 1,
       "mouth": "slightSmile",
@@ -243,7 +243,7 @@
       "name": "brow-raised-p20",
       "yaw": 18.56,
       "base": 19.84,
-      "t": 127.944,
+      "t": 127.97,
       "eye": "open",
       "ap": 1,
       "mouth": "neutral",
@@ -260,8 +260,8 @@
   "clip": [
     {
       "beat": "idle",
-      "ms": 13,
-      "yaw": -0.43,
+      "ms": 17,
+      "yaw": -0.42,
       "paint": {
         "to": "frontal",
         "from": null,
@@ -270,8 +270,8 @@
     },
     {
       "beat": "slow turn to -80",
-      "ms": 1417,
-      "yaw": 0.79,
+      "ms": 1423,
+      "yaw": 0.8,
       "paint": {
         "to": "frontal",
         "from": null,
@@ -280,8 +280,8 @@
     },
     {
       "beat": "back",
-      "ms": 4769,
-      "yaw": -80.98,
+      "ms": 4760,
+      "yaw": -80.96,
       "paint": {
         "to": "v4-l85",
         "from": null,
@@ -290,8 +290,8 @@
     },
     {
       "beat": "turn to +80",
-      "ms": 7229,
-      "yaw": 0.7,
+      "ms": 7210,
+      "yaw": 0.69,
       "paint": {
         "to": "frontal",
         "from": null,
@@ -300,8 +300,8 @@
     },
     {
       "beat": "back",
-      "ms": 9525,
-      "yaw": 78.78,
+      "ms": 9517,
+      "yaw": 78.77,
       "paint": {
         "to": "v4-r85",
         "from": null,
@@ -310,8 +310,8 @@
     },
     {
       "beat": "blink (B)",
-      "ms": 11525,
-      "yaw": 0.19,
+      "ms": 11575,
+      "yaw": 0.22,
       "paint": {
         "to": "frontal",
         "from": null,
@@ -320,8 +320,8 @@
     },
     {
       "beat": "smile",
-      "ms": 12243,
-      "yaw": 0.09,
+      "ms": 12279,
+      "yaw": 0.13,
       "paint": {
         "to": "frontal",
         "from": null,
@@ -330,8 +330,8 @@
     },
     {
       "beat": "end",
-      "ms": 14147,
-      "yaw": 0.3,
+      "ms": 14192,
+      "yaw": 0.24,
       "paint": {
         "to": "frontal",
         "from": null,
