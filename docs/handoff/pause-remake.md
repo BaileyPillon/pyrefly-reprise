@@ -365,6 +365,22 @@ all three FFX-2 member tabs at 1600x900 —
 `npx tsc --noEmit` clean; every `tests/unit/*pause*` file plus
 `css-comments.test.ts` green.
 
+### PR-0016 — CHAPTER tab plate: left for Bailey
+
+The CHAPTER tab shows the last member's close-up (Kimahri, Paine, ...)
+instead of the chapter's own hero plate. **Not fixed.** This tile's own
+`reaction.inferred` says the CHAPTER tab's content is an agent's guess, not
+Bailey's word: *"weapon / armour / Sphere Level live on the CHAPTER tab ...
+this agent's guess, not Bailey's word"* (`docs/target/targets.json`; the same
+line is in `panels.ts`'s doc comment on `chapterColumns`). Whether the tab
+should show a chapter *plate* behind those rows at all is the same kind of
+undecided design choice the tile does not make (AGENTS.md rule 9), so nothing
+here was changed.
+
+**Question for Bailey:** should the pause CHAPTER tab show the chapter's own
+hero plate (for example the approved Yuna-and-Bahamut art for chapter 4)
+behind its rows, in place of the last member's close-up it keeps today?
+
 ### PR-0098 — OPTIONS clipped past the fifth row on a phone
 
 At 390x844, OPTIONS' settings column was capped to the same five rows the
