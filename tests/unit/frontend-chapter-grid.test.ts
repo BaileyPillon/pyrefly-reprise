@@ -42,7 +42,7 @@ describe('the board', () => {
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
-      'Fahrenheit',
+      'Evrae',
     ]);
   });
 
@@ -96,7 +96,7 @@ describe('the board', () => {
     expect(card.playable).toBe(true);
     // Only that one row goes: the other two are still coming.
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
-      'Fahrenheit',
+      'Evrae',
       'The Leblanc Syndicate',
     ]);
   });
@@ -151,7 +151,7 @@ describe('the board', () => {
     expect(tiles.find((t) => t.title === 'The Leblanc Syndicate')!.playable).toBe(true);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
-      'Fahrenheit',
+      'Evrae',
     ]);
   });
 

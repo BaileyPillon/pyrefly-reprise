@@ -2,6 +2,14 @@
  * Pause-screen and prebattle-tab metadata — Evrae, on the deck of the
  * *Fahrenheit* (FFX) [research/ffx-evrae-airship.md].
  *
+ * Display `title` is `Evrae`, REVERTED from a prior pass's bare
+ * `Fahrenheit`: Q11 (adopted D-020) settles that the airship should name the
+ * chapter, but the exact display string is not sourced and not picked
+ * (docs/plans/chapter-evrae-finish.md item f) — see
+ * src/data/chapter-evrae-airship.ts's header for the full note. Left for
+ * Bailey (AGENTS.md rule 9); options in
+ * docs/screenshots/fix10c/evrae-title-options.png.
+ *
  * **Game case: FFX only** [AGENTS.md rule 14]. Nothing here is true of FFX-2.
  *
  * **Registered** in `./chapter-meta.ts`'s `CHAPTER_META` by the integrator
@@ -37,7 +45,7 @@ export const EVRAE_META: ChapterMeta = {
   id: 'evrae-airship',
   gameLabel: 'FFX',
   numeral: 'VIII',
-  title: 'Fahrenheit',
+  title: 'Evrae',
   subtitle: "Bevelle's Doormat",
   location: 'The deck of the Fahrenheit',
   blurb:

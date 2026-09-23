@@ -81,9 +81,13 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
     // while that id is in `LOCKED_CHAPTER_IDS` below.
     id: 'evrae-airship',
     game: 'ffx',
-    // Q11 (preflight docs/plans/chapter-evrae-review.md): the airship names
-    // the chapter, adopted D-020. `Evrae` stays the boss's name.
-    title: 'Fahrenheit',
+    // Q11 (preflight docs/plans/chapter-evrae-review.md, adopted D-020):
+    // the airship should name the chapter, but the exact display string is
+    // unsourced and unpicked (docs/plans/chapter-evrae-finish.md item f).
+    // REVERTED from a prior pass's bare 'Fahrenheit' (a design choice no
+    // tile/decision makes, AGENTS.md rule 9) back to 'Evrae' pending
+    // Bailey's pick; see docs/screenshots/fix10c/evrae-title-options.png.
+    title: 'Evrae',
     location: 'Deck of the Fahrenheit — the approach to Bevelle',
     silhouetteKeys: [],
     research: 'research/ffx-evrae-airship.md',
