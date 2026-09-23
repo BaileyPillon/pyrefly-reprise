@@ -1,0 +1,702 @@
+{
+ "injected": "chapter entry only: __pyrefly.setSeed + gotoChapter(skipCutscenes, skipPrep); every command by real keys off the card",
+ "summary": {
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "fps": 52,
+  "seed": 3,
+  "ms": 318853,
+  "turns": 49,
+  "distinct": 11,
+  "yunaPicks": [
+   "Shell->the party",
+   "Protect->the party",
+   "Cure->Yuna",
+   "Cura->Rikku",
+   "Cure->Rikku",
+   "Cure->Paine",
+   "Cure->Rikku",
+   "Cure->Rikku",
+   "Cure->Yuna",
+   "Cure->Rikku",
+   "Cura->Rikku",
+   "Cure->Paine",
+   "Cure->Rikku",
+   "Cure->Rikku",
+   "Cure->Paine",
+   "Cure->Rikku",
+   "Cure->Yuna",
+   "Cure->Rikku"
+  ],
+  "shellCasts": 1,
+  "cardVsEngineMismatch": 0,
+  "end": {
+   "screen": "results",
+   "tail": [],
+   "over": null,
+   "boss": null,
+   "statusAdds": 0,
+   "events": 0
+  }
+ },
+ "turns": [
+  {
+   "n": 1,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Shell",
+   "target": "the party",
+   "path": "White Magic",
+   "shelledBefore": 0,
+   "yunaTurn": 1,
+   "aimed": [
+    "yuna",
+    "rikku",
+    "paine"
+   ],
+   "engineAction": "Shell"
+  },
+  {
+   "n": 2,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 0,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Magic Break"
+  },
+  {
+   "n": 3,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 4,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Protect",
+   "target": "the party",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 2,
+   "aimed": [
+    "yuna",
+    "rikku",
+    "paine"
+   ],
+   "engineAction": "Protect"
+  },
+  {
+   "n": 5,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Magic Break"
+  },
+  {
+   "n": 6,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 7,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Magic Break"
+  },
+  {
+   "n": 8,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Yuna",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 3,
+   "aimed": [
+    "yuna"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 9,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cura",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 4,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cura"
+  },
+  {
+   "n": 10,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Magic Break"
+  },
+  {
+   "n": 11,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 12,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Magic Break"
+  },
+  {
+   "n": 13,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 5,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 14,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 15,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Mental Break"
+  },
+  {
+   "n": 16,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Paine",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 6,
+   "aimed": [
+    "paine"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 17,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 7,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 18,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Mental Break"
+  },
+  {
+   "n": 19,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 20,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 8,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 21,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Mental Break"
+  },
+  {
+   "n": 22,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 23,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Yuna",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 9,
+   "aimed": [
+    "yuna"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 24,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Mental Break"
+  },
+  {
+   "n": 25,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 10,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 26,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Mental Break"
+  },
+  {
+   "n": 27,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 28,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cura",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 11,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cura"
+  },
+  {
+   "n": 29,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Armor Break"
+  },
+  {
+   "n": 30,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 31,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Paine",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 12,
+   "aimed": [
+    "paine"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 32,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Armor Break"
+  },
+  {
+   "n": 33,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 13,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 34,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Armor Break"
+  },
+  {
+   "n": 35,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 36,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 14,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 37,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Armor Break"
+  },
+  {
+   "n": 38,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 39,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Paine",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 15,
+   "aimed": [
+    "paine"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 40,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Armor Break"
+  },
+  {
+   "n": 41,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 16,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 42,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Attack",
+   "target": "Bahamut",
+   "path": "",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Attack"
+  },
+  {
+   "n": 43,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 44,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Yuna",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 17,
+   "aimed": [
+    "yuna"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 45,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Attack",
+   "target": "Bahamut",
+   "path": "",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Attack"
+  },
+  {
+   "n": 46,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Attack",
+   "target": "Bahamut",
+   "path": "",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Attack"
+  },
+  {
+   "n": 47,
+   "actorId": "rikku",
+   "cardActor": "Rikku",
+   "label": "Darkness",
+   "target": "all enemies",
+   "path": "Skill",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Darkness"
+  },
+  {
+   "n": 48,
+   "actorId": "yuna",
+   "cardActor": "Yuna",
+   "label": "Cure",
+   "target": "Rikku",
+   "path": "White Magic",
+   "shelledBefore": 3,
+   "yunaTurn": 18,
+   "aimed": [
+    "rikku"
+   ],
+   "engineAction": "Cure"
+  },
+  {
+   "n": 49,
+   "actorId": "paine",
+   "cardActor": "Paine",
+   "label": "Attack",
+   "target": "Bahamut",
+   "path": "",
+   "shelledBefore": 3,
+   "aimed": [
+    "bahamut"
+   ],
+   "engineAction": "Attack"
+  }
+ ]
+}
