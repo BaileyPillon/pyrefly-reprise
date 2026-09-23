@@ -113,8 +113,8 @@ export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
       // Keyed on the target, not on Logos being in the fight [PR-0144]: with
       // `bossId` every Attack on Ormi read Logos' evasion as its reason.
       when: { kinds: ['attack'], targetId: 'logos' },
-      text: "Logos' Evasion 40 is the highest in the fight — a plain swing misses him more than it hits",
-      cite: 'ffx2-leblanc-syndicate §3.2',
+      text: "Logos' Evasion 40 is the highest in the fight — a Warrior misses him over a third of the time; a Gunner or Thief lands close to nine in ten",
+      cite: 'ffx2-leblanc-syndicate §3.2, §6.2',
     },
     {
       when: { kinds: ['attack'], targetId: 'leblanc' },
