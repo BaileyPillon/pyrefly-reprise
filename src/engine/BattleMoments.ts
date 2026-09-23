@@ -131,6 +131,8 @@ export class BattleMoments {
   private telegraphAtAction = -1;
   /** Enemies whose reveal plate has already played, so a chained form does not replay it. */
   private readonly revealed = new Set<CombatantId>();
+  /** Set while a Confirm press is cutting the opening short (`OpeningSkip.ts`, PR-0061): every wait collapses. */
+  hurry = false;
 
   constructor(deps: MomentDeps) {
     this.deps = deps;
@@ -139,7 +141,7 @@ export class BattleMoments {
   // ------------------------------------------------------------------ timing
 
   private get scale(): number {
-    return SPEED_SCALE[this.deps.speed()];
+    return this.hurry ? 0 : SPEED_SCALE[this.deps.speed()];
   }
 
   /** True when playback is collapsing every wait (e2e, the critic). */
@@ -301,7 +303,7 @@ export class BattleMoments {
    * up, then back out to `idle`. Plays once per enemy id.
    */
   async revealBoss(bossId: CombatantId, bossName: string | null): Promise<void> {
-    if (this.revealed.has(bossId)) return;
+    if (this.revealed.has(bossId) || this.hurry) return;
     this.revealed.add(bossId);
     if (this.skipping) return;
 

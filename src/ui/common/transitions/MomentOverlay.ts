@@ -23,6 +23,7 @@
 import './transitions.css';
 import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
 import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
+import { confirmPress, type ConfirmPress } from './confirmPress.ts';
 
 type SlabKind = 'reveal' | 'overdrive' | 'telegraph';
 
@@ -42,6 +43,8 @@ export class MomentOverlay implements MomentsPort {
   private readonly vig: HTMLElement;
   /** Timers for the slab's hold and exit, so a second slab cancels the first. */
   private slabTimers: number[] = [];
+  /** The pending slab's resolver, so a cleared or replaced slab never strands its caller. */
+  private slabDone: (() => void) | null = null;
   private disposed = false;
 
   constructor(root: HTMLElement) {
@@ -122,6 +125,7 @@ export class MomentOverlay implements MomentsPort {
     }
 
     return new Promise<void>((resolve) => {
+      this.slabDone = resolve;
       this.slabTimers.push(
         window.setTimeout(() => {
           this.slab.dataset['on'] = '0';
@@ -132,6 +136,11 @@ export class MomentOverlay implements MomentsPort {
   }
 
   // ----------------------------------------------------------------- cut-in
+
+  /** The next Confirm press, for cutting the opening short (PR-0061). */
+  confirmPress(): ConfirmPress {
+    return confirmPress(this.el.ownerDocument.defaultView ?? window);
+  }
 
   /** The approved turn cut-in (PR-0005); see `TurnCutInLayer.ts`. */
   turnCutIn(req: TurnCutInRequest): Promise<void> {
@@ -177,6 +186,9 @@ export class MomentOverlay implements MomentsPort {
   private clearSlabTimers(): void {
     for (const t of this.slabTimers) window.clearTimeout(t);
     this.slabTimers = [];
+    const done = this.slabDone;
+    this.slabDone = null;
+    done?.();
   }
 }
 

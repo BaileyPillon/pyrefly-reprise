@@ -279,6 +279,7 @@ export class BattleCamera {
 
   /** Ease a held {@link push} (and any roll) back to neutral. */
   release(ms = 420): Promise<void> {
+    if (ms <= 1) { this.fx.killAll(); this.punchAmount = 0; this.rollRad = 0; return Promise.resolve(); } // a cut kills a push still easing in (PR-0061)
     if (this.rollRad !== 0) void this.rollTo(0, ms);
     if (this.punchAmount === 0) return Promise.resolve();
     return this.fx.toAsync(this.punchAmount, 0, {

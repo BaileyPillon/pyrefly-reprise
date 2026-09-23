@@ -37,6 +37,7 @@ import { clockEngine, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
 import { settleForMenu } from './BattlePresenterBeats.ts';
+import { playOpening } from './OpeningSkip.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -389,11 +390,8 @@ export class BattlePresenter {
       .map((id) => state.combatants[id])
       .find((c) => c && !c.removed && !c.flags.hidden && !c.flags.isPart);
     this.phase = 'moment:battle-start';
-    await this.ctx.moments.battleStart({
-      partyIds: state.activeIds,
-      bossId: boss?.id ?? null,
-      bossName: boss?.name ?? null,
-    });
+    const opening = { partyIds: state.activeIds, bossId: boss?.id ?? null, bossName: boss?.name ?? null };
+    await playOpening(this.ctx, () => this.ctx.moments.battleStart(opening)); // a Confirm press ends it (PR-0061)
   }
 
   /** Submit one command and play everything it produced, minigames included. */

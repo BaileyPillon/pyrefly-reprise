@@ -14,13 +14,14 @@
  * A Confirm press (Enter, Space or Z, the game's confirm keys) ends the hold
  * early; the key is not swallowed, and no menu is open yet to receive it.
  *
- * Case: **both games**; FFX-2 slams in from the right with its pink accent
- * (the spec's "Not mocked yet: cut-ins from the right").
+ * Case: **both games**; FFX-2 takes its pink accent (`.ig--ffx2`). Both slam
+ * in from the left, as the one approved picture does (see `engine/TurnCutIn.ts`).
  */
 
 import { showTurnCutIn } from '../../inkgold/cutin.ts';
 import { manifestKnowsAssetNow } from '../../../engine/ArtManifest.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
+import { confirmPress } from './confirmPress.ts';
 
 export interface TurnCutInRequest {
   actorId: string;
@@ -33,7 +34,6 @@ export interface TurnCutInRequest {
 
 const FRAME_W = 640;
 const FRAME_H = 360;
-const CONFIRM_KEYS = new Set(['Enter', ' ', 'z', 'Z']);
 
 /** The tall portrait: FFX-2's own likeness first, then the shared one. */
 function portraitFor(actorId: string, game: 'ffx' | 'ffx2'): string {
@@ -77,20 +77,13 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
     side: req.side,
   });
 
-  await new Promise<void>((resolve) => {
-    const win = doc.defaultView ?? window;
-    const done = (): void => {
-      win.clearTimeout(timer);
-      win.removeEventListener('keydown', onKey, true);
-      resolve();
-    };
-    const onKey = (e: KeyboardEvent): void => {
-      if (CONFIRM_KEYS.has(e.key)) done();
-    };
-    // 180 ms entrance (cutin.ts SLAM_MS) plus the hold.
-    const timer = win.setTimeout(done, 180 + Math.max(0, req.holdMs));
-    win.addEventListener('keydown', onKey, true);
-  });
+  // 180 ms entrance (cutin.ts SLAM_MS) plus the hold, or a Confirm press.
+  const win = doc.defaultView ?? window;
+  const press = confirmPress(win);
+  let timer = 0;
+  await Promise.race([press.pressed, new Promise<void>((r) => (timer = win.setTimeout(r, 180 + Math.max(0, req.holdMs))))]);
+  win.clearTimeout(timer);
+  press.dispose();
   veil.style.opacity = '0';
   await handle.dismiss();
   layer.remove();

@@ -123,6 +123,12 @@ export interface MomentsPort {
     side: 'left' | 'right';
     holdMs: number;
   }): Promise<void>;
+  /**
+   * Watch for the player's next Confirm press (Enter, Space, Z) until
+   * `dispose`. Optional and additive (PR-0061): what lets a Confirm press cut
+   * the battle's opening sweep short (`OpeningSkip.ts`).
+   */
+  confirmPress?(): { pressed: Promise<void>; dispose(): void };
   /** Tear every layer down. */
   clear(): void;
 }
