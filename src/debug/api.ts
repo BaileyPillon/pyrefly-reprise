@@ -25,7 +25,7 @@ export const VERSION = '0.1.0';
 
 /** Options for {@link PyreflyDebugApi.gotoChapter}. */
 export interface GotoChapterOptions {
-  /** Jump straight past the pre/post cutscenes. */
+  /** Skip the pre/post story cutscenes only; the battle's opening moment (HUD down) follows {@link speed}. */
   skipCutscenes?: boolean;
   /** Skip the prep menu. Defaults to true — tests almost never want it. */
   skipPrep?: boolean;
