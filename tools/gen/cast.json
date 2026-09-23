@@ -2616,23 +2616,6 @@
           "notes": "Not re-rendered this pass. Checked against the picked concept (docs/concepts/chapters/leblanc/renders/ormi-a.png, options.json row cast_ormi option A) and research/ffx2-leblanc-syndicate.md line 830 (\"short and stout ... a large shield worn on his back ... predominantly purple samurai-style attire\"): idle is heavier/rounder than the concept sketch, which production.md records as intentional (Bailey's note that canon Ormi is big and round, not athletic), and it matches the research description better than the concept does."
         },
         "attack": {
-          "poseTags": "lunging, leaning forward, one leg forward, holding shield, pushing, clenched teeth, v-shaped eyebrows, angry, looking ahead",
-          "sizeHint": "1024x1216",
-          "ref": [
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
-          ],
-          "refCombine": "concat",
-          "forceRef": true,
-          "refWeight": 0.4,
-          "refWeightType": "ease in",
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 940001,
-          "status": "CANDIDATE",
-          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words, then a masked shield-face repaint (seed 950002, denoise 0.8, ellipse {\"cx\":205,\"cy\":538,\"rx\":100,\"ry\":115,\"angle\":0}) for the Syndicate heart",
-          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs attack",
-          "notes": "ROUND 3 2026-09-22 (method F, Leblanc pilot 2 winner, Ormi idle-truth words; renders at 1024x1216). Seed 940001 of 6 (940001-940006; 940004 drew a second head, 940005 two shields), then a masked shield-face repaint (repaint-heart.mjs, ellipse 205,538,100,115, denoise 0.8, seed 950002) for the Syndicate heart. Judge (round3/judge.md): 6, worst = costume (lilac hakama, an invented heart-bow on the chest, no teal pelvic curtain); one round shield with a clear heart, a real shove. CANDIDATE.",
           "history": [
             {
               "poseTags": "gripping the massive round shield with both hands, swinging it off his back into a heavy shoulder bash, lunging forward, gritted teeth, low wide stance",
@@ -2643,26 +2626,66 @@
               "refEnd": 0.6,
               "notes": "2026-09-21/22 re-render, seed 810001, kept from a batch of 4 (one seed quarantined by the cut-out guard and re-rolled to keep the batch at 4). Picked for the clearest, most explicit heart-on-shield of the four — the installed pre-pass set's known defect (production.md: \"shield emblem reads as an ornate sunburst rather than an explicit heart\"). One accepted defect: a faint red facial marking near the eye not present in idle, the least severe issue among the four candidates (rejected alternatives: a fully muscular bare torso that loses the stout/big-belly identity criterion and has no heart on its shield at all; a heart-on-shield candidate that also adds an unsourced heart tattoo on the forehead; a clean-faced candidate whose shield again carries no heart). See docs/concepts/chapters/leblanc/sets/ormi/README.md.",
               "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            },
+            {
+              "poseTags": "lunging, leaning forward, one leg forward, holding shield, pushing, clenched teeth, v-shaped eyebrows, angry, looking ahead",
+              "sizeHint": "1024x1216",
+              "ref": [
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+              ],
+              "refCombine": "concat",
+              "forceRef": true,
+              "refWeight": 0.4,
+              "refWeightType": "ease in",
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "seed": 940001,
+              "status": "CANDIDATE",
+              "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words, then a masked shield-face repaint (seed 950002, denoise 0.8, ellipse {\"cx\":205,\"cy\":538,\"rx\":100,\"ry\":115,\"angle\":0}) for the Syndicate heart",
+              "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs attack",
+              "notes": "ROUND 3 2026-09-22 (method F, Leblanc pilot 2 winner, Ormi idle-truth words; renders at 1024x1216). Seed 940001 of 6 (940001-940006; 940004 drew a second head, 940005 two shields), then a masked shield-face repaint (repaint-heart.mjs, ellipse 205,538,100,115, denoise 0.8, seed 950002) for the Syndicate heart. Judge (round3/judge.md): 6, worst = costume (lilac hakama, an invented heart-bow on the chest, no teal pelvic curtain); one round shield with a clear heart, a real shove. CANDIDATE.",
+              "recordedBefore": "LoRA pose round 2026-09-23 (this entry is the round-3 row as it stood; its files are in D:/Tools/pyrefly-art-backup/candidates/2026-09-23-leblanc-lora/ormi/replaced/)"
             }
-          ]
+          ],
+          "poseTags": "shield bash, lunging, leaning forward, one leg forward, (holding shield:1.2), (shield in front:1.2), arms forward, pushing, clenched teeth, v-shaped eyebrows, angry, looking ahead, (lunging:1.2), (shield bash:1.2)",
+          "sizeHint": "832x1216",
+          "seed": 960022,
+          "status": "CANDIDATE",
+          "method": "lora+openpose",
+          "lora": {
+            "file": "ormi-x2.safetensors",
+            "step": 1500,
+            "strength": 0.75
+          },
+          "controlnet": {
+            "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+            "image": "docs/concepts/chapters/leblanc/lora/ormi/poses/skel-attack2.png",
+            "strength": 0.7,
+            "start": 0,
+            "end": 0.8
+          },
+          "ipadapter": {
+            "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+            "weight": 0.3,
+            "type": "ease in",
+            "start": 0.2,
+            "end": 0.6,
+            "scaling": "K+V",
+            "combine": "concat",
+            "images": [
+              "public/art/characters/ormi/idle.png square-padded on white",
+              "public/art/characters/ormi/idle.png head crop 140,0,480,340"
+            ]
+          },
+          "script": "docs/concepts/chapters/leblanc/lora/ormi/poses/render.mjs attack (flags in poses.md)",
+          "edits": [
+            "erase.py attack.p3.960022.raw.png: the second, back-mounted shield erased to white (ellipse 316,250 r137x190, -6 deg, grow 8) with a 2 px outline on the new edge",
+            "repaint.mjs attack.p3.960022.erase back: masked repaint of the upper back (ellipse 362,382 r72) at denoise 0.85, LoRA 0.8, seed 970023, to regrow a convex back and the collar"
+          ],
+          "notes": "LORA POSE ROUND 2026-09-23 (ormiX2 step 1500 + xinsir OpenPose on a PIL skeleton + method-F idle refs; FFX-2 only). Pick attack.p3.960022.erase.back970023, self-judged 6/10, worst = costume: the hakama hem fades to a translucent white band instead of idle's gold diamond hem; a small heart brooch on the chest. CANDIDATE; an independent judge is still owed. Write-up: docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md, sheet poses/sheet.jpg."
         },
         "cast": {
-          "poseTags": "fighting stance, crouching, knees bent, legs apart, leaning forward, clenched hands, clenched teeth, v-shaped eyebrows, angry, shield on back, looking ahead",
-          "ref": [
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
-          ],
-          "refCombine": "concat",
-          "forceRef": true,
-          "refWeight": 0.4,
-          "refWeightType": "ease in",
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 940105,
-          "status": "CANDIDATE",
-          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words",
-          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs cast",
-          "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words). Seed 940105 of 6 (940101-940106). Judge: 4, worst = the shield carries no heart (the heart went to the chest clasp in every cast candidate; two masked shield repaints, 950101-950104, failed and were not used, hard rule 15). Otherwise the strongest costume of the set: purple armour, red sleeves, yellow sash, hakama, heavy build, charge stance. CANDIDATE.",
           "history": [
             {
               "poseTags": "gripping the massive round shield with both hands, crouching low, muscles bulging, gathering strength, gritted teeth, about to charge forward",
@@ -2673,26 +2696,62 @@
               "refEnd": 0.6,
               "notes": "2026-09-21/22 re-render, seed 820001, kept from a full batch of 4. Best colour/costume match to idle of the four (purple armor, gold trim, teal sash, explicit heart on the shield). One accepted defect: the off hand holds a second, smaller heart-emblem disc beside the main shield (an invented extra prop) — logged rather than hidden, and the least severe issue among the four candidates (rejected alternatives: a shield reshaped to an angular diamond and recoloured blue; two candidates with the torso armor repainted red/pink, one of which also adds an unsourced forehead heart tattoo). Ormi has no magic in his kit (research §4: Normal Attack, Shield Bash, Supercollider, Huggles, Concussive Blast only) — this state renders his one non-basic-attack special-ability pose, not literal spellcasting, same convention as the other physical-only cast members of this fight.",
               "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            },
+            {
+              "poseTags": "fighting stance, crouching, knees bent, legs apart, leaning forward, clenched hands, clenched teeth, v-shaped eyebrows, angry, shield on back, looking ahead",
+              "ref": [
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+              ],
+              "refCombine": "concat",
+              "forceRef": true,
+              "refWeight": 0.4,
+              "refWeightType": "ease in",
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "seed": 940105,
+              "status": "CANDIDATE",
+              "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words",
+              "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs cast",
+              "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words). Seed 940105 of 6 (940101-940106). Judge: 4, worst = the shield carries no heart (the heart went to the chest clasp in every cast candidate; two masked shield repaints, 950101-950104, failed and were not used, hard rule 15). Otherwise the strongest costume of the set: purple armour, red sleeves, yellow sash, hakama, heavy build, charge stance. CANDIDATE.",
+              "recordedBefore": "LoRA pose round 2026-09-23 (this entry is the round-3 row as it stood; its files are in D:/Tools/pyrefly-art-backup/candidates/2026-09-23-leblanc-lora/ormi/replaced/)"
             }
-          ]
+          ],
+          "poseTags": "legs apart, arm up, raised fist, clenched hand, fist raised overhead, shouting, open mouth, clenched teeth, v-shaped eyebrows, angry, shield on back, looking ahead, (arm up:1.2), (raised fist:1.15)",
+          "sizeHint": "832x1216",
+          "seed": 960106,
+          "status": "CANDIDATE",
+          "method": "lora+openpose",
+          "lora": {
+            "file": "ormi-x2.safetensors",
+            "step": 1500,
+            "strength": 0.8
+          },
+          "controlnet": {
+            "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+            "image": "docs/concepts/chapters/leblanc/lora/ormi/poses/skel-cast.png",
+            "strength": 0.6,
+            "start": 0,
+            "end": 0.8
+          },
+          "ipadapter": {
+            "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+            "weight": 0.3,
+            "type": "ease in",
+            "start": 0.2,
+            "end": 0.6,
+            "scaling": "K+V",
+            "combine": "concat",
+            "images": [
+              "public/art/characters/ormi/idle.png square-padded on white",
+              "public/art/characters/ormi/idle.png head crop 140,0,480,340"
+            ]
+          },
+          "script": "docs/concepts/chapters/leblanc/lora/ormi/poses/render.mjs cast (flags in poses.md)",
+          "edits": [],
+          "notes": "LORA POSE ROUND 2026-09-23 (ormiX2 step 1500 + xinsir OpenPose on a PIL skeleton + method-F idle refs; FFX-2 only). Pick cast.960106, self-judged 7/10, worst = costume: an invented heart clasp at the collar; the shield is carried at his side, not on his back. CANDIDATE; an independent judge is still owed. Write-up: docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md, sheet poses/sheet.jpg."
         },
         "hurt": {
-          "poseTags": "stumbling, leaning back, off balance, wince, closed eyes, pained expression, open mouth, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, shield on back",
-          "ref": [
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
-          ],
-          "refCombine": "concat",
-          "forceRef": true,
-          "refWeight": 0.4,
-          "refWeightType": "ease in",
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 940204,
-          "status": "CANDIDATE",
-          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words",
-          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs hurt",
-          "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words). Seed 940204 of 6 (940201-940206). Judge: 6, worst = costume (orange-red sleeves, a lavender collar, green sash fringe) and a simplified face at 1:1; head thrown back, eyes shut, mouth open, one round shield with a clear red heart (worn at his front, not on his back as in idle). No face paint in any of the 6 (round 2: 4 of 5). CANDIDATE.",
           "history": [
             {
               "poseTags": "staggering back, off balance, pained grimace, still gripping the shield loosely at his side, low wide stance",
@@ -2703,28 +2762,62 @@
               "refEnd": 0.6,
               "notes": "2026-09-21/22 re-render, seed 800001, kept from only 2 successful candidates (of 4 attempted — 1 quarantined by the cut-out guard, 1 timed out waiting on a ComfyUI queue shared with two other active render workflows; not re-rolled further, see docs/concepts/chapters/leblanc/sets/ormi/README.md). Picked over the other survivor (seed 800003) for staying more predominantly purple (the runner-up's torso is a fully bare-armed red tank top); both are otherwise clean (explicit heart, no face paint, holding the shield) and either would have been defensible.",
               "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            },
+            {
+              "poseTags": "stumbling, leaning back, off balance, wince, closed eyes, pained expression, open mouth, clenched teeth, v-shaped eyebrows, hand on own stomach, head tilt, arm at side, shield on back",
+              "ref": [
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+              ],
+              "refCombine": "concat",
+              "forceRef": true,
+              "refWeight": 0.4,
+              "refWeightType": "ease in",
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "seed": 940204,
+              "status": "CANDIDATE",
+              "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words",
+              "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs hurt",
+              "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words). Seed 940204 of 6 (940201-940206). Judge: 6, worst = costume (orange-red sleeves, a lavender collar, green sash fringe) and a simplified face at 1:1; head thrown back, eyes shut, mouth open, one round shield with a clear red heart (worn at his front, not on his back as in idle). No face paint in any of the 6 (round 2: 4 of 5). CANDIDATE.",
+              "recordedBefore": "LoRA pose round 2026-09-23 (this entry is the round-3 row as it stood; its files are in D:/Tools/pyrefly-art-backup/candidates/2026-09-23-leblanc-lora/ormi/replaced/)"
             }
-          ]
+          ],
+          "poseTags": "recoiling, leaning back, off balance, head back, looking up, wince, closed eyes, pained expression, clenched teeth, hand on own stomach, shield on back, (leaning back:1.3), (head back:1.2), (pained expression:1.3), (wince:1.2)",
+          "sizeHint": "832x1216",
+          "seed": 960262,
+          "status": "CANDIDATE",
+          "method": "lora+openpose",
+          "lora": {
+            "file": "ormi-x2.safetensors",
+            "step": 1500,
+            "strength": 0.75
+          },
+          "controlnet": {
+            "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+            "image": "docs/concepts/chapters/leblanc/lora/ormi/poses/skel-hurt2.png",
+            "strength": 0.7,
+            "start": 0,
+            "end": 0.8
+          },
+          "ipadapter": {
+            "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+            "weight": 0.3,
+            "type": "ease in",
+            "start": 0.2,
+            "end": 0.6,
+            "scaling": "K+V",
+            "combine": "concat",
+            "images": [
+              "public/art/characters/ormi/idle.png square-padded on white",
+              "public/art/characters/ormi/idle.png head crop 140,0,480,340"
+            ]
+          },
+          "script": "docs/concepts/chapters/leblanc/lora/ormi/poses/render.mjs hurt (flags in poses.md)",
+          "edits": [],
+          "notes": "LORA POSE ROUND 2026-09-23 (ormiX2 step 1500 + xinsir OpenPose on a PIL skeleton + method-F idle refs; FFX-2 only). Pick hurt.p8.960262, self-judged 4/10, worst = shield: seen edge-on behind his back, so no heart shows; also the sash rides up over the belly and the hem is gold stripes, not idle's diamonds; a flatter, more outlined finish. CANDIDATE; an independent judge is still owed. Write-up: docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md, sheet poses/sheet.jpg."
         },
         "ko": {
-          "poseTags": "lying, on side, unconscious, defeated, closed eyes, arms at sides, shield on back",
-          "composition": "prone",
-          "sizeHint": "1216x832",
-          "ref": [
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
-            "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
-          ],
-          "refCombine": "concat",
-          "forceRef": true,
-          "refWeight": 0.4,
-          "refWeightType": "ease in",
-          "refStart": 0.2,
-          "refEnd": 0.6,
-          "seed": 940302,
-          "status": "CANDIDATE",
-          "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words, then a masked shield-face repaint (seed 950304, denoise 0.8, ellipse {\"cx\":242,\"cy\":524,\"rx\":115,\"ry\":100,\"angle\":0}) for the Syndicate heart",
-          "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs ko",
-          "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words; lying on his side, shield on back; prone 1216x832). Seed 940302 of 10 (940301-940306; a second batch ko3 940311-940314 with purple weighted up and red sleeves dropped, none better), then a masked shield-face repaint (ellipse 242,524,115,100, denoise 0.8, seed 950304) for the heart. Judge: 4, worst = the torso reads red (the top sleeve and the robe back) in place of purple armour; the topknot is pale. Eyes shut, clean face, one round shield with a clear heart, heavy. CANDIDATE.",
           "history": [
             {
               "poseTags": "lying on his back, defeated, the shield fallen beside him on the ground, eyes closed, head to the left, feet to the right",
@@ -2737,11 +2830,68 @@
               "refEnd": 0.6,
               "notes": "2026-09-21/22 re-render, seed 830001, kept from only 2 successful candidates (of 4 attempted — the other 2 client-side waits timed out on the same congested shared queue as hurt). Picked because the shield keeps idle's actual round, gold-rimmed shape and heart centre; the one accepted defect is that his eyes render open/smug rather than closed (the rejected alternative, seed 830002, has eyes closed but its shield renders as a giant heart-shaped panel instead of the canon round shield — a shape change to a named identity object, judged the more severe failure of the two).",
               "recordedBefore": "round 3 (this entry is the row as it stood; it records the round-1 install, round 2 is written up in docs/concepts/chapters/leblanc/sets/ormi/judge.md)"
+            },
+            {
+              "poseTags": "lying, on side, unconscious, defeated, closed eyes, arms at sides, shield on back",
+              "sizeHint": "1216x832",
+              "composition": "prone",
+              "ref": [
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-square.png",
+                "docs/concepts/chapters/leblanc/sets/ormi/round3/refs/idle-head.png"
+              ],
+              "refCombine": "concat",
+              "forceRef": true,
+              "refWeight": 0.4,
+              "refWeightType": "ease in",
+              "refStart": 0.2,
+              "refEnd": 0.6,
+              "seed": 940302,
+              "status": "CANDIDATE",
+              "method": "F (Leblanc pilot 2 winner) with Ormi's idle-truth words, then a masked shield-face repaint (seed 950304, denoise 0.8, ellipse {\"cx\":242,\"cy\":524,\"rx\":115,\"ry\":100,\"angle\":0}) for the Syndicate heart",
+              "script": "docs/concepts/chapters/leblanc/sets/ormi/round3/run-round3.mjs ko",
+              "notes": "ROUND 3 2026-09-22 (method F, Ormi idle-truth words; lying on his side, shield on back; prone 1216x832). Seed 940302 of 10 (940301-940306; a second batch ko3 940311-940314 with purple weighted up and red sleeves dropped, none better), then a masked shield-face repaint (ellipse 242,524,115,100, denoise 0.8, seed 950304) for the heart. Judge: 4, worst = the torso reads red (the top sleeve and the robe back) in place of purple armour; the topknot is pale. Eyes shut, clean face, one round shield with a clear heart, heavy. CANDIDATE.",
+              "recordedBefore": "LoRA pose round 2026-09-23 (this entry is the round-3 row as it stood; its files are in D:/Tools/pyrefly-art-backup/candidates/2026-09-23-leblanc-lora/ormi/replaced/)"
             }
-          ]
+          ],
+          "poseTags": "lying, on back, unconscious, defeated, closed eyes, arms at sides, shield on ground, (lying on back:1.2), (closed eyes:1.25), (unconscious:1.15), head to the right, feet to the left",
+          "composition": "prone",
+          "sizeHint": "1216x832",
+          "seed": 960336,
+          "status": "CANDIDATE",
+          "method": "lora+openpose",
+          "lora": {
+            "file": "ormi-x2.safetensors",
+            "step": 1500,
+            "strength": 0.8
+          },
+          "controlnet": {
+            "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+            "image": "docs/concepts/chapters/leblanc/lora/ormi/poses/skel-ko.png",
+            "strength": 0.6,
+            "start": 0,
+            "end": 0.8
+          },
+          "ipadapter": {
+            "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+            "weight": 0.3,
+            "type": "ease in",
+            "start": 0.2,
+            "end": 0.6,
+            "scaling": "K+V",
+            "combine": "concat",
+            "images": [
+              "public/art/characters/ormi/idle.png square-padded on white",
+              "public/art/characters/ormi/idle.png head crop 140,0,480,340"
+            ]
+          },
+          "script": "docs/concepts/chapters/leblanc/lora/ormi/poses/render.mjs ko (flags in poses.md)",
+          "edits": [
+            "repaint.mjs ko.p4.960336 heart: masked shield-face repaint (ellipse 478,340 r120x105), denoise 0.8, no LoRA, seed 970103, the round-3 heart recipe (sets/ormi/round3/repaint-heart.mjs words)"
+          ],
+          "notes": "LORA POSE ROUND 2026-09-23 (ormiX2 step 1500 + xinsir OpenPose on a PIL skeleton + method-F idle refs; FFX-2 only). Pick ko.p4.960336.heart970103, self-judged 5/10, worst = style and shield: a glossy, saturated finish unlike idle's; the shield face is concentric red and blue, not idle's sunburst (the heart is repainted in). CANDIDATE; an independent judge is still owed. Write-up: docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md, sheet poses/sheet.jpg."
         }
       },
-      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1: short and stout, a large shield on his back bearing the Syndicate heart logo, predominantly purple samurai-style attire). ROUND 3 2026-09-22: attack/cast/hurt/ko re-rendered with method F (docs/concepts/chapters/leblanc/pilot2/judge.md) and an idle-truth Danbooru identity block (round3/identity-idle.txt, emphasis.txt), heavier and rounder per Bailey, then a masked shield-face repaint on attack and ko for the heart. idle.png (seed 1767754585) is unchanged and is still the anchor: its shield is a sunburst, not a heart, and its proportions are taller and slimmer than the round-3 states (see round3/judge.md, recommendation 1). Everything CANDIDATE; no entry in docs/target/approved-hashes.json. Full write-up: docs/concepts/chapters/leblanc/sets/ormi/round3/judge.md and sheet.jpg. The second ormi row below this one is an older duplicate kept for history.",
+      "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md §10.1: short and stout, a large shield on his back bearing the Syndicate heart logo, predominantly purple samurai-style attire). ROUND 3 2026-09-22: attack/cast/hurt/ko re-rendered with method F (docs/concepts/chapters/leblanc/pilot2/judge.md) and an idle-truth Danbooru identity block (round3/identity-idle.txt, emphasis.txt), heavier and rounder per Bailey, then a masked shield-face repaint on attack and ko for the heart. idle.png (seed 1767754585) is unchanged and is still the anchor: its shield is a sunburst, not a heart, and its proportions are taller and slimmer than the round-3 states (see round3/judge.md, recommendation 1). Everything CANDIDATE; no entry in docs/target/approved-hashes.json. Full write-up: docs/concepts/chapters/leblanc/sets/ormi/round3/judge.md and sheet.jpg. The second ormi row below this one is an older duplicate kept for history. LORA POSE ROUND 2026-09-23: attack/cast/hurt/ko re-rendered with the ormiX2 identity LoRA (step 1500) + ControlNet OpenPose skeletons, facing screen-right like the idle (sidecars facing \"right\"); idle unchanged. See docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md.",
       "emphasis": "(bald:1.3), (fat man:1.3), (purple armor:1.25), (purple kimono:1.15), (huge round shield:1.2), (red heart emblem on shield:1.25)"
     },
     {
