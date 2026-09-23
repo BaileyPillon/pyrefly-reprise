@@ -100,9 +100,61 @@
   width: 0;
   height: 0;
 }
+/* PR-0010: deepened from a 6px fade — round 09 found it read as "the panel
+   just ends here", not "there is more". 14px is roughly two of this panel's
+   own lines, enough for the last visible line to read as fading out mid-
+   thought rather than as the bottom of the box. The MORE row below (see
+   `.eint__more`) is what actually answers "how much", so the mask only has
+   to signal "there is a how much" — see `EnemyIntentOverflow`. */
 .eint__body--clipped {
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 14px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 14px), transparent 100%);
+}
+
+/* The MORE row (`EnemyIntentOverflow`): its own row below the (possibly
+   clipped) body, in normal flow, so — like `strategy-guide.css`'s
+   `.sgd__more` — it can report on a cut row without ever being the thing
+   painted over it. Hidden whenever the body does not overflow its cap. */
+.eint__more {
+  display: block;
+  width: 100%;
+  margin: 1.5px 0 0;
+  padding: 1px 0 0;
+  border: 0;
+  border-top: 0.6px dashed #4c5563;
+  background: transparent;
+  color: #8d99a8;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: 3.6px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: right;
+  cursor: default;
+}
+.eint__more b {
+  color: var(--ig-blood, #b02a2a);
+  filter: brightness(1.7);
+}
+.eint__more--expanded {
+  color: var(--ig-paper, #f4f1e8);
+}
+
+/* PR-0011 (FFX only): the status chip promoted beside SCRIPTED/Likely at
+   brief density — see `enemy-intent-brief-status.ts`. Blood-accented like
+   `.eint__toggle b`: it names something bad about to happen to the party,
+   the same register `.eint__conf--scripted`'s gold reserves for "certain". */
+.eint__status-chip {
+  padding: 0.6px 3px 0.9px;
+  border: 0.6px solid var(--ig-blood, #b02a2a);
+  background: transparent;
+  color: var(--ig-blood, #b02a2a);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: 3.9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  filter: brightness(1.35);
 }
 
 /* The tail: a small notch under the panel pointing at the head it belongs to,

@@ -3,6 +3,8 @@ import type { CombatantId, GameId } from '../../battle/common/types.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { INTENT_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
+import { EnemyIntentOverflow } from './enemy-intent-overflow.ts';
+import { briefStatusChip } from './enemy-intent-brief-status.ts';
 
 /**
  * The enemy-intent slab: **what the boss is about to do, hanging over its
@@ -253,6 +255,8 @@ export class EnemyIntentPanel {
   private readonly panelEl: HTMLElement;
   private readonly toggleEl: HTMLButtonElement;
   private readonly bodyEl: HTMLElement;
+  /** PR-0010: the MORE affordance for a body clipped past its height cap. */
+  private readonly overflow = new EnemyIntentOverflow();
   private readonly opts: EnemyIntentOptions;
 
   private mountOpts: EnemyIntentMountOptions | null = null;
@@ -281,7 +285,9 @@ export class EnemyIntentPanel {
 
     this.bodyEl = document.createElement('div');
     this.bodyEl.className = 'eint__body';
-    this.panelEl.append(this.bodyEl);
+    // PR-0010: the MORE row lives below the (possibly clipped) body, in
+    // normal flow, so it can report on it without ever painting over it.
+    this.panelEl.append(this.bodyEl, this.overflow.el);
 
     this.toggleEl = document.createElement('button');
     this.toggleEl.type = 'button';
@@ -304,12 +310,14 @@ export class EnemyIntentPanel {
     overlay.appendChild(this.el);
     this.mounted = true;
     window.addEventListener('keydown', this.onKeyDown);
+    this.overflow.attach();
     this.render();
   }
 
   unmount(): void {
     if (!this.mounted) return;
     window.removeEventListener('keydown', this.onKeyDown);
+    this.overflow.detach();
     this.el.remove();
     this.mounted = false;
     this.mountOpts = null;
@@ -429,6 +437,7 @@ export class EnemyIntentPanel {
   /** Per-frame tick from the HUD: polls the pad and re-projects. */
   update(_dt: number): void {
     this.pollPad();
+    this.overflow.pollPad();
     this.layout();
   }
 
@@ -495,8 +504,13 @@ export class EnemyIntentPanel {
     // it with everything else — and on the *body*, so the tail notch that hangs
     // below the panel is not clipped away. See MAX_HEIGHT_FRACTION.
     const cap = (layer.height * MAX_HEIGHT_FRACTION) / scale;
-    this.bodyEl.style.maxHeight = `${cap.toFixed(1)}px`;
-    this.bodyEl.classList.toggle('eint__body--clipped', this.bodyEl.scrollHeight > cap + 0.5);
+    const overflowing = this.bodyEl.scrollHeight > cap + 0.5;
+    // PR-0010: held key/pad lifts the cap so the body reaches its natural
+    // height; `cap` itself stays the collapsed value so `overflow.sync` keeps
+    // reporting "how much is hidden if you let go".
+    this.bodyEl.style.maxHeight = this.overflow.expanded ? 'none' : `${cap.toFixed(1)}px`;
+    this.bodyEl.classList.toggle('eint__body--clipped', overflowing && !this.overflow.expanded);
+    this.overflow.sync(this.bodyEl, cap, overflowing, this.padConnected());
 
     // Panel off, and the owner named a rail to park the chip on: nothing here
     // is anchored to the boss any more, so the projection and the dodge below
@@ -847,7 +861,11 @@ function bodyHtml(view: IntentView, density: 'full' | 'brief' = 'full'): string 
   const full = density === 'full';
   return [
     `<p class="eint__enemy"><span>${escapeHtml(view.enemyName)}</span><i>${escapeHtml(timingText(view))}</i></p>`,
-    `<p class="eint__move"><span class="eint__label">${plain(view.moveName)}</span>${confidenceHtml(view)}</p>`,
+    // PR-0011 (FFX only): brief density hides the Statuses block below, so a
+    // guaranteed/high-chance status rides beside the move name instead — see
+    // `enemy-intent-brief-status.ts`. A no-op at 'full' density (FFX-2),
+    // which already shows that block.
+    `<p class="eint__move"><span class="eint__label">${plain(view.moveName)}</span>${confidenceHtml(view)}${full ? '' : briefStatusChip(view.statusText)}</p>`,
     `<p class="eint__desc">${plain(view.description)}</p>`,
     elements.length > 0
       ? `<p class="eint__els">${elements.map((e) => `<span>${escapeHtml(e)}</span>`).join('')}</p>`
