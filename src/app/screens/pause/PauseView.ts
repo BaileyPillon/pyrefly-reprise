@@ -205,7 +205,23 @@ export class PauseView {
     const selectable = columns.flatMap((c) => c.rows.filter((r) => r.selectable));
     const rowId = selectable.some((r) => r.id === at.rowId) ? at.rowId : (selectable[0]?.id ?? null);
     el.innerHTML = columnsHtml(fromPanels(columns, at.focus === 'body' ? rowId : null));
+    this.scrollSelectedRowIntoView(el);
     return rowId;
+  }
+
+  /**
+   * PR-0098: OPTIONS' settings column scrolls on its own at phone width
+   * (`.pause__col[data-col='settings']`), so a selected row past the fifth
+   * used to stay off screen — FOC-02's tab-strip bug again. Same cure here.
+   */
+  private scrollSelectedRowIntoView(body: HTMLElement): void {
+    const el = body.querySelector<HTMLElement>('.pause__row--sel');
+    if (!el || typeof el.scrollIntoView !== 'function') return;
+    el.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+      behavior: this.deps.save.settings.reduceMotion ? 'auto' : 'smooth',
+    });
   }
 
   /**

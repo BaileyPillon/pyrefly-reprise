@@ -364,3 +364,19 @@ all three FFX-2 member tabs at 1600x900 —
 
 `npx tsc --noEmit` clean; every `tests/unit/*pause*` file plus
 `css-comments.test.ts` green.
+
+### PR-0098 — OPTIONS clipped past the fifth row on a phone
+
+At 390x844, OPTIONS' settings column was capped to the same five rows the
+member meter columns use (`.pause__col > div:nth-of-type(n+6){display:none}`,
+approved for the two-column member layout, frame f). ATB SPEED, STRATEGY
+GUIDE and BATTLE HELP were still selectable by arrow key while clipped out of
+view, with no cue that a sixth row existed. The cap is now scoped off
+`[data-col="settings"]` alone (member tabs are unchanged); that column scrolls
+itself under a fade, and `PauseView.scrollSelectedRowIntoView` carries the
+newly selected row into view the same way FOC-02 already does for the tab
+strip above it. Verified live at 390x844 in both games, keyboard-driven all
+the way to BATTLE HELP —  `docs/screenshots/fix10b/pr0098-*.png`.
+
+`npx tsc --noEmit` clean; every `tests/unit/*pause*` file plus
+`css-comments.test.ts` green.
