@@ -1,26 +1,28 @@
 {
-  "from": "q34-right",
+  "from": "heads/q34-right",
   "axis": 495.0,
   "layers": {
     "back": {
       "file": "v3/layers/turns/turn-l45/back.png",
       "box": [
-        163,
+        165,
         0,
-        671,
-        894
+        953,
+        915
       ],
-      "collarPxRemoved": 3250
+      "collarPxRemoved": 80,
+      "hairRecolouredPx": 555348
     },
     "front": {
       "file": "v3/layers/turns/turn-l45/front.png",
       "box": [
-        163,
+        165,
         0,
-        671,
-        849
+        953,
+        847
       ],
-      "collarPxRemoved": 0
+      "collarPxRemoved": 0,
+      "hairRecolouredPx": 499181
     }
   }
 }

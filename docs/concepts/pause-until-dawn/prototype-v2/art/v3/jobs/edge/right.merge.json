@@ -1,0 +1,12 @@
+{
+  "method": "edgeflow: continued along the strand direction from the border column (tools/gen/rig-margins.py)",
+  "layer": "v3/layers/frontal/hairBack.png",
+  "columns": [
+    832,
+    896
+  ],
+  "slopeRange": [
+    -3.0,
+    3.0
+  ]
+}

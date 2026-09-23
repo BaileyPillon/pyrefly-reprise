@@ -38,3 +38,20 @@ OUT=docs/concepts/pause-until-dawn/prototype-v2/art/v3/jobs/out
 # the turned body: the frontal tassel's footprint inpainted (pick recorded in art/v3/jobs/tassel.merge.json)
 "$P" -s tools/gen/rig-collar.py job
 "$P" -s tools/gen/rig-collar.py merge --pick "$OUT/tassel2.1.full.png"
+# v3.2/v3.3 (the fix pass after the v3.1 check): the backs of the heads finished past the frame
+# (picks in art/v3/layers/heads/<key>/provenance.json), the turns re-cut from them (hair to the
+# plate's colour, the profile's iris whole, a cool sheen warmed), the right turn's braid moved to
+# her right side, the warp landmarks, lids that roll for every key, mouth patches that change only
+# the mouth, and every layer made opaque under what covers it (no seam line under the warp)
+H=docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers
+"$P" -s tools/gen/rig-heads.py merge --key profile-left --pick "${PICK_PL:-$H/heads/jobs/out3/pl.1.full.png}"
+"$P" -s tools/gen/rig-heads.py merge --key q34-right --pick "${PICK_QR:-$H/heads/jobs/out3/qr.1.full.png}"
+"$P" -s tools/gen/rig-turns.py mirror
+"$P" -s tools/gen/rig-braid.py merge --pick "$H/braid/out/r45.1.full.png"
+"$P" -s tools/gen/rig-turns.py wire
+"$P" -s tools/gen/rig-lids.py
+"$P" -s tools/gen/rig-mouth.py
+"$P" -s tools/gen/rig-underfill.py
+# last: margins past the canvas (reflected; hairBack's right side continued along its own strands)
+"$P" -s tools/gen/rig-margins.py
+"$P" -s tools/gen/rig-margins.py edgeflow

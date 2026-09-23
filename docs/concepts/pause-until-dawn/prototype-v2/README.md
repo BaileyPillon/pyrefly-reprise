@@ -1125,3 +1125,51 @@ on the near side; the frontal's orange hair and the keys' brown hair
 cross-fade mid-turn; a faint profile line at -60; blinks exist only on the
 frontal key; the lid patch is a flat slab; `rig-range.mjs`'s envelope predates
 the warp.
+
+# Part 7 — v3.2/v3.3 fix pass after the v3.1 check (2026-09-22)
+
+Game case: **FFX-2 only** (the plate is Yuna X-2); the renderer plumbing is
+shared. Every refuted finding, its root cause, the fix and the re-measured
+number: `shots/v3.3/CHECK.md` (stills, crops, strips, `clip.webm`,
+`check.json`). Rest with `?post=0` is still the plate to the pixel.
+
+## Runtime
+
+- **One painting at a time** (`src/paint.ts`): the painted key comes from the
+  spring's base yaw with 6 deg hysteresis and a 0.2 s dissolve when it
+  changes; the geometry still follows the rendered yaw through the mesh warp
+  (`src/compose.ts` draws one key or a dissolve of two warped onto the same
+  landmarks). A held gaze never mixes two paintings.
+- **Motion to the spec's own measure** (`src/motion.ts`, `src/state.ts`,
+  `src/constants.ts`): the chest sways on two independent samples calibrated
+  to half the peak-to-peak of 5.5 s windows (`windowHalfP2POverRms` 1.48);
+  the head sways as a translation carried by the mesh (the neck stretches
+  between the jaw and the shoulder pins); the idle yaw wander is 1.2 deg p95.
+- **Premultiplied filtering** in the layer and warp programs
+  (`src/gl-layer.ts`): no dark fringe along a feathered edge under the warp.
+- **Post grade** (`src/shaders.ts`): the vignette darkens only the far corner.
+- Checks: `check/` (`npx vitest run --config docs/concepts/pause-until-dawn/prototype-v2/check/vitest.config.ts`):
+  paint selection, motion by the spec's window method, and the border pull.
+
+## Art (rebuild: `bash tools/gen/rig-build.sh`, its last block)
+
+- `tools/gen/rig-heads.py`: the backs of the heads painted past x 990 on a
+  1152-wide canvas (picks `art/v3/layers/heads/jobs/out3/pl.1`, `qr.1`), so
+  a mirrored right turn shows no end of the head; back hair behind the neck.
+- `tools/gen/rig-turns.py`: turns cut from those heads; hair to the plate's
+  hue; a cool sheen warmed to the plate's highlight; the profile iris whole;
+  hair-side landmarks pinned (`art/v3/warp/landmarks.json` `hairSideFixed`),
+  four side pins.
+- `tools/gen/rig-braid.py`: the right turn's braid on her right side.
+- `tools/gen/rig-lids.py`: eight lid frames per key (frontal and every turn),
+  harmonic lid skin, one tapered closed lash line, straight-alpha compositing.
+- `tools/gen/rig-mouth.py`: mouth patches that change only the mouth.
+- `tools/gen/rig-underfill.py`: hairBack and headCore opaque under the layers
+  drawn over them (no conflation line under the warp).
+- `tools/gen/rig-margins.py`: margins past the canvas (reflected; hairBack's
+  right side continued along its strands, `edgeflow`).
+- Captures: `tools/gen/rig-check.mjs` -> `tools/gen/rig-measure.py` ->
+  `tools/gen/rig-shots.py`. `tools/gen/inpaint.mjs` gained `--identity`,
+  `--style` and `INPAINT_WAIT_MIN` (additive).
+
+Still open: `shots/v3.3/CHECK.md`, "Still not right".

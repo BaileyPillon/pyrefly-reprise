@@ -1,0 +1,71 @@
+{
+  "key": "profile-left",
+  "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/heads/jobs/out3/pl.1.full.png",
+  "keepX": 826,
+  "overlap": 24,
+  "contour": [
+    [
+      700,
+      -120
+    ],
+    [
+      1120,
+      -120
+    ],
+    [
+      1132,
+      200
+    ],
+    [
+      1122,
+      420
+    ],
+    [
+      1092,
+      600
+    ],
+    [
+      1046,
+      740
+    ],
+    [
+      996,
+      826
+    ],
+    [
+      940,
+      858
+    ],
+    [
+      700,
+      858
+    ]
+  ],
+  "tips": [
+    620,
+    1010,
+    830,
+    48
+  ],
+  "matte": "side: the contour's anti-aliased edge x the painted hair; tips: isnet-anime on the pick inside the tips band",
+  "layers": {
+    "back": {
+      "file": "v3/layers/heads/profile-left/back.png",
+      "box": [
+        197,
+        0,
+        947,
+        911
+      ]
+    },
+    "front": {
+      "file": "v3/layers/heads/profile-left/front.png",
+      "box": [
+        197,
+        0,
+        947,
+        784
+      ]
+    }
+  }
+}

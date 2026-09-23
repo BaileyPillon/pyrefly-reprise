@@ -20,6 +20,8 @@ export interface PortraitDriver {
 
 export interface DriverSnapshot {
   standIn: boolean;
+  /** v3.2: the painting(s) on screen: `to` alone, or a dissolve from `from` at weight `w`. */
+  paint: { to: string; from: string | null; w: number } | null;
   reducedMotion: boolean;
   expression: ExpressionName;
   frame: Frame | null;
@@ -160,6 +162,9 @@ export class LivingPortraitDriver implements PortraitDriver {
       timeSeconds: frame.timeSeconds,
       reducedMotion: frame.reducedMotion,
       chestSample: frame.chestSample,
+      chestSampleX: frame.chestSampleX,
+      baseYawDeg: frame.baseYawDeg,
+      headSample: frame.headSample,
     });
     if (this.diagnosticsVisible && this.hud) this.renderHud(frame);
   }
@@ -167,7 +172,8 @@ export class LivingPortraitDriver implements PortraitDriver {
   private renderHud(frame: Frame): void {
     if (!this.hud) return;
     this.hud.textContent = [
-      `yaw ${frame.yawDeg.toFixed(1)} deg (residual ${frame.springResidualDeg.toFixed(2)})`,
+      `yaw ${frame.yawDeg.toFixed(1)} deg (base ${frame.baseYawDeg.toFixed(1)}, residual ${frame.springResidualDeg.toFixed(2)})`,
+      `paint ${this.paintLine()}`,
       `pitch ${frame.pitchDeg.toFixed(1)} deg`,
       `gaze ${frame.gaze.x.toFixed(2)}, ${frame.gaze.y.toFixed(2)}`,
       `eye ${frame.eyeState} aperture ${frame.eyeAperture.toFixed(2)}`,
@@ -179,6 +185,12 @@ export class LivingPortraitDriver implements PortraitDriver {
       '-- events --',
       ...frame.blinkLog.slice(-6),
     ].join('\n');
+  }
+
+  private paintLine(): string {
+    const p = this.renderer?.paintState();
+    if (!p) return '-';
+    return p.from ? `${p.from} -> ${p.to} ${(p.w * 100).toFixed(0)}%` : p.to;
   }
 
   setGaze(x: number, y: number): void {
@@ -214,6 +226,7 @@ export class LivingPortraitDriver implements PortraitDriver {
   snapshot(): DriverSnapshot {
     return {
       standIn: this.rig?.standIn ?? true,
+      paint: this.renderer?.paintState() ?? null,
       reducedMotion: this.state.isReducedMotion(),
       expression: this.state.getExpression(),
       frame: this.lastFrame,

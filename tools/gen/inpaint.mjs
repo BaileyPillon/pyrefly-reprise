@@ -75,8 +75,8 @@ const CLIP_VISION_MODEL =
  * blocks. No facing/composition contract here — a patch is a small region of
  * an already-composed frame, not a new composition.
  */
-function buildPatchPrompt(tags) {
-  return joinTags(PLATE_IDENTITY, escapeTags(tags), STYLE_TAGS, QUALITY_TAGS);
+function buildPatchPrompt(tags, identity = PLATE_IDENTITY, style = STYLE_TAGS) {
+  return joinTags(identity, escapeTags(tags), style, QUALITY_TAGS);
 }
 
 /** Negatives banned from every patch: no new faces/eyes appearing elsewhere. */
@@ -145,7 +145,11 @@ async function queuePrompt(workflow) {
   return json.prompt_id;
 }
 
-async function waitForResult(promptId, { timeoutMs = 600_000 } = {}) {
+// INPAINT_WAIT_MIN (additive, living-portrait v3.3): minutes to wait for one
+// result; the shared queue can hold a 60-90 minute video job in front of it.
+const WAIT_MS = Number(process.env.INPAINT_WAIT_MIN || 10) * 60_000;
+
+async function waitForResult(promptId, { timeoutMs = WAIT_MS } = {}) {
   const deadline = Date.now() + timeoutMs;
   for (;;) {
     const res = await api(`/history/${promptId}`);
@@ -357,6 +361,13 @@ async function main() {
   const refPath = args.ref && args.ref !== true ? resolve(REPO_ROOT, String(args.ref)) : null;
   const refWeight = Number(args.refWeight === true ? 0.3 : args.refWeight ?? 0.3);
   const latent = args.latent === true || args.latent === 'true';
+  // --identity (additive, living-portrait v3.2): replaces the plate's identity
+  // block for a region that is not a face (the back of a head must not be
+  // asked for "single long braid, heterochromia" again).
+  const identity = args.identity && args.identity !== true ? String(args.identity) : PLATE_IDENTITY;
+  // --style (additive, v3.2): replaces STYLE_TAGS; its "vibrant colors,
+  // colorful" painted rainbow streaks into a plain brown back of the head.
+  const style = args.style && args.style !== true ? String(args.style) : STYLE_TAGS;
 
   await waitForServer(30_000);
 
@@ -383,7 +394,7 @@ async function main() {
   const maskImageName = stageInput(maskPath);
   const refImageName = refPath ? stageInput(refPath) : null;
 
-  const positive = buildPatchPrompt(tags);
+  const positive = buildPatchPrompt(tags, identity, style);
   const negative = joinTags(BASE_NEGATIVE, PATCH_NEGATIVE_EXTRA, escapeTags(negAdd));
 
   const written = [];

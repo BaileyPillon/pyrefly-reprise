@@ -70,6 +70,17 @@ export class PairWarp {
     return [...lerpLandmarks(this.a, this.b, t), ...this.fixed];
   }
 
+  /**
+   * Every mesh vertex on screen at blend weight t, with the landmarks carried
+   * by `head` and the fixed points (frame, shoulder pins) by `chest` (v3.2:
+   * the head rides the chest and adds its own idle sway; the neck between
+   * the jaw landmarks and the pins stretches smoothly instead of sliding).
+   */
+  posed(t: number, head: Pt = [0, 0], chest: Pt = [0, 0]): Pt[] {
+    const lm = lerpLandmarks(this.a, this.b, t).map(([x, y]) => [x + head[0], y + head[1]] as Pt);
+    return [...lm, ...this.fixed.map(([x, y]) => [x + chest[0], y + chest[1]] as Pt)];
+  }
+
   /** Non-indexed triangle list, `WARP_VERTEX_FLOATS` per vertex, ready for a GL buffer. */
   vertexData(src: readonly Pt[], dst: readonly Pt[], out?: Float32Array): Float32Array {
     const size = this.tris.length * 3 * WARP_VERTEX_FLOATS;

@@ -35,6 +35,16 @@ export interface Frame {
    * to nothing).
    */
   chestSample: number;
+  /** v3.2: the chest's horizontal sample (own phase), unit RMS; 0 under reduced motion. */
+  chestSampleX: number;
+  /**
+   * v3.2: the head's yaw from the spring alone, without the idle wander.
+   * The renderer picks the painted key from this, so a held gaze never
+   * flickers between two paintings as the head wanders.
+   */
+  baseYawDeg: number;
+  /** v3.2: the head's own translation wander, two unit-RMS samples [x, y]; zeros under reduced motion. */
+  headSample: [number, number];
 }
 
 export interface StateSeed {
@@ -130,14 +140,17 @@ export class PortraitStateMachine {
 
     let yawDeg = yawFollow;
     let pitchDeg = pitchFollow;
+    let headSample: [number, number] = [0, 0];
     let mouth: MouthPatch = 'neutral';
     let mouthWeight = 0;
     let brow: BrowPatch = 'neutral';
     let browWeight = 0;
 
     if (!this.reducedMotion) {
-      const headWidthFraction = (RIG_CONSTANTS.sway.headAmpPctHeadWidthMin + RIG_CONSTANTS.sway.headAmpPctHeadWidthMax) / 2 / 100;
-      const swayDeg = headWidthFraction * maxYaw * 2; // sway expressed in the same degree units as the spring
+      // v3.2: the head's idle sway is a translation (`headSample`, carried by
+      // the renderer's mesh); the rotation keeps only a small wander, sized at
+      // p95 (v3.1 turned the head-width fraction into +-10 deg of yaw).
+      const swayDeg = RIG_CONSTANTS.sway.yawWanderDegP95 / RIG_CONSTANTS.sway.p95OverRms;
       // Taper the yaw sway as the spring's own target nears the rig's hard
       // yaw stop (measured this pass: held at -85deg, the *rendered* yaw kept
       // wandering between -85 and about -79deg indefinitely — sway pushing
@@ -155,6 +168,7 @@ export class PortraitStateMachine {
       const yawSwayTaper = Math.max(0.2, Math.min(1, yawEdgeRoomDeg / YAW_EDGE_TAPER_DEG));
       yawDeg += this.sway.headSample(this.tSeconds) * swayDeg * yawSwayTaper;
       pitchDeg += this.sway.headSample(this.tSeconds + 100) * swayDeg * 0.6;
+      headSample = [this.sway.headSample(this.tSeconds + 200), this.sway.headSample(this.tSeconds + 300)];
       const expr = this.exprScheduler.update(dt);
       mouth = expr.mouth;
       mouthWeight = expr.mouthWeight;
@@ -183,6 +197,9 @@ export class PortraitStateMachine {
       springResidualDeg: this.yawSpring.residual(),
       blinkLog: this.blinkScheduler.log,
       chestSample: this.chestSway(),
+      chestSampleX: this.reducedMotion ? 0 : this.sway.chestSample(this.tSeconds + 150),
+      baseYawDeg: Math.max(this.yawMin, Math.min(this.yawMax, yawFollow)),
+      headSample,
     };
   }
 

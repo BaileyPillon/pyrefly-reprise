@@ -306,6 +306,66 @@
   [
    950,
    870
+  ],
+  [
+   -40,
+   330
+  ],
+  [
+   -40,
+   600
+  ],
+  [
+   872,
+   330
+  ],
+  [
+   872,
+   600
   ]
- ]
+ ],
+ "hairSideFixed": {
+  "_readme": "v3.3 (tools/gen/rig-turns.py wire): the turn keys keep the hair-side points measured on the v3.2 heads. The v3.3 heads run the back of the head past the frame (x > 990 unmirrored), so a re-measured silhouette would be the back of the skull, not the side of the hair the frontal's point names, and would stretch the frontal across a turn.",
+  "turn-l45": [
+   [
+    180,
+    180
+   ],
+   [
+    887,
+    180
+   ]
+  ],
+  "turn-l85": [
+   [
+    200,
+    180
+   ],
+   [
+    904,
+    180
+   ]
+  ],
+  "turn-r45": [
+   [
+    102,
+    180
+   ],
+   [
+    809,
+    180
+   ]
+  ],
+  "turn-r85": [
+   [
+    85,
+    180
+   ],
+   [
+    789,
+    180
+   ]
+  ]
+ },
+ "_pinsReadme": "v3.3: four side pins just past the canvas (x -40 and 872, y 330 and 600) hold the frame's edges while the face turns and sways; without them the frontal's side hair, which the approved plate cuts at x 831, was pulled 20 px off the border at -20 degrees and the edge smeared"
 }

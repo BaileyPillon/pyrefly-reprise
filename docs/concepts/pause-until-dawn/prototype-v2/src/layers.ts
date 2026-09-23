@@ -24,11 +24,24 @@ export interface V3Layer extends PlacedFile {
 export interface V3EyeState extends PlacedFile {
   name: string;
   aperture: number;
+  /**
+   * v3.2 (tools/gen/rig-lids.py): built from the plate's own pixels with its
+   * own soft edges, so it is uploaded as it is. The seam fit fitted a
+   * different gain to every lid frame (the closed lid came out grey-violet on
+   * one eye and tan on the other) and is skipped.
+   */
+  raw?: boolean;
 }
 export interface V3Art {
   /** `bodyTurned` (tools/gen/rig-collar.py): the body with the tassel footprint filled, for turned keys. */
   frontal: { layers: V3Layer[]; bodyTurned?: PlacedFile };
   keys: Record<string, { back: PlacedFile; front: PlacedFile }>;
+  /**
+   * v3.2 (tools/gen/rig-lids.py): lid frames for each turned key, nearest
+   * aperture wins; each is transparent below its lid edge, so the key's own
+   * painted eye shows under it. Absent: a turned key does not blink.
+   */
+  keyLids?: Record<string, V3EyeState[]>;
   patches: {
     eyes: V3EyeState[];
     brows: Record<'raised' | 'drawn', PlacedFile>;
@@ -63,9 +76,14 @@ export function uploadTexture(gl: WebGL2RenderingContext, image: TexImageSource)
   return tex;
 }
 
+/**
+ * The quad is the image's own size at the box's corner: v3.1's rig carried
+ * boxes 2 px wider than their files for three turn keys (a 0.3 percent
+ * horizontal stretch and a resample of every texel), so the file wins.
+ */
 export async function loadPlaced(gl: WebGL2RenderingContext, base: string, p: PlacedFile): Promise<Tex> {
   const img = await loadImage(base + p.file);
-  return { tex: uploadTexture(gl, img), box: p.box };
+  return { tex: uploadTexture(gl, img), box: [p.box[0], p.box[1], img.width, img.height] };
 }
 
 /** Feather (px) of each patch group's own matte. Lids: 2.5 px, enough to take the stair-step off the lid mattes' top edge (1.5 left it, shots/RUNTIME-CHECK.md) while the lash line stays crisp. */
@@ -119,6 +137,8 @@ export interface LoadedArt {
   bodyTurned: Tex | null;
   keys: Map<string, { back: Tex; front: Tex }>;
   eyes: Array<{ state: V3EyeState; t: Tex }>;
+  /** Per turned key, its lid frames (open to closed). */
+  keyLids: Map<string, Array<{ aperture: number; t: Tex }>>;
   brows: Map<string, Tex>;
   mouth: Map<string, Tex>;
   fringeLiftPx: number;
@@ -148,11 +168,16 @@ export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3A
   const eyes = await Promise.all(
     [...art.patches.eyes]
       .sort((a, b) => b.aperture - a.aperture)
-      .map(async (state) => ({ state, t: track(await loadPatch(gl, base, state, rest, F.eyes, fits)) })),
+      .map(async (state) => ({ state, t: track(state.raw ? await loadPlaced(gl, base, state) : await loadPatch(gl, base, state, rest, F.eyes, fits)) })),
   );
   const brows = new Map<string, Tex>();
   for (const [k, p] of Object.entries(art.patches.brows)) brows.set(k, track(await loadPatch(gl, base, p, rest, F.brows, fits)));
   const mouth = new Map<string, Tex>();
   for (const [k, p] of Object.entries(art.patches.mouth)) mouth.set(k, track(await loadPatch(gl, base, p, rest, F.mouth, fits)));
-  return { frontal, bodyTurned, keys, eyes, brows, mouth, fringeLiftPx: art.fringeLiftPx, all, patchFits: fits };
+  const keyLids = new Map<string, Array<{ aperture: number; t: Tex }>>();
+  for (const [id, frames] of Object.entries(art.keyLids ?? {})) {
+    const sorted = [...frames].sort((a, b) => b.aperture - a.aperture);
+    keyLids.set(id, await Promise.all(sorted.map(async (f) => ({ aperture: f.aperture, t: track(await loadPlaced(gl, base, f)) }))));
+  }
+  return { frontal, bodyTurned, keys, eyes, keyLids, brows, mouth, fringeLiftPx: art.fringeLiftPx, all, patchFits: fits };
 }

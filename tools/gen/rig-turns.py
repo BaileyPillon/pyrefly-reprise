@@ -42,12 +42,18 @@ AXIS = 495.0  # the pinned body's neck axis (rig-keys.py mirror uses the same)
 OUT = L.V3 / "layers/turns"
 LAYERS = L.V3 / "layers"
 
+# v3.2: every turn is cut from the heads rig-heads.py finished (the backs of
+# the heads painted past the sources' canvas border), not from the cut keys;
+# `iris` recolours the visible profile iris WHOLE (the painting's own iris is
+# half blue, half green: the check counted 610 blue and 651 green pixels in
+# turn-r85's): "blue" / "green" = every iris pixel to the plate's colour.
+HEADS = L.V3 / "layers/heads"
 JOBS = {
-    "turn-l85": {"from": "profile-right", "mirror": True, "swapIris": False},
+    "turn-l85": {"from": "profile-left", "heads": True, "mirror": False, "swapIris": False, "iris": "blue"},
     # the painting's own collar shows as a pink/white fringe under its hair ends (x > 520, y > 720)
-    "turn-l45": {"from": "q34-right", "mirror": False, "swapIris": False, "collar": [520, 720]},
-    "turn-r45": {"from": "q34-right", "mirror": True, "swapIris": True, "collar": [520, 720]},
-    "turn-r85": {"from": "profile-left", "mirror": True, "swapIris": False},
+    "turn-l45": {"from": "q34-right", "heads": True, "mirror": False, "swapIris": False, "collar": [520, 720]},
+    "turn-r45": {"from": "q34-right", "heads": True, "mirror": True, "swapIris": True, "collar": [520, 720]},
+    "turn-r85": {"from": "profile-left", "heads": True, "mirror": True, "swapIris": False, "iris": "green"},
 }
 YAW = {"turn-l85": -85, "turn-l45": -45, "turn-r45": 45, "turn-r85": 85}
 FADE_PX = 48  # a mirrored key's hair, cut by the source canvas's right border, fades out over this many px
@@ -130,6 +136,85 @@ def recolour(rgba, region, src_colour, ref_pixels):
     return int(pick.sum())
 
 
+def iris_whole(rgba_canvas):
+    """The one visible iris of a profile, whatever its colours: the biggest
+    saturated blue-or-green blob in the eye band, holes filled, grown 2 px."""
+    rgb = rgba_canvas[..., :3]
+    a = rgba_canvas[..., 3] > 32
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    mx = rgb.max(-1); mn = rgb.min(-1)
+    sat = (mx - mn) / np.maximum(mx, 1)
+    band = np.zeros(a.shape, bool); band[300:540] = True
+    m = a & band & (sat > 0.3) & (((g > r + 25) & (g > b - 5)) | ((b > r + 40) & (b > g + 5)))
+    lab, n = ndi.label(ndi.binary_closing(m, iterations=3))
+    if n == 0:
+        raise SystemExit("no iris found")
+    sizes = ndi.sum(np.ones_like(lab), lab, range(1, n + 1))
+    blob = ndi.binary_fill_holes(ndi.binary_closing(lab == (1 + int(np.argmax(sizes))), iterations=4))
+    return L.dilate(blob, 2)
+
+
+# v3.2 hair: the keys' plain brown hair (Lab ab ~ 17-21, 17) moved to the
+# plate's orange-brown (hairFront + hairBack mean ab 23.2, 25.8), chroma x1.25;
+# lightness kept. Mask: the key's alpha minus the face (skin components
+# holding the nose/cheek/lip/jaw landmarks), the eyes and vivid accessories.
+PLATE_HAIR_AB = np.array([23.2, 25.8])
+HAIR_CHROMA_GAIN = 1.25
+
+
+def hair_mask(c, lm, order):
+    from skimage import color
+    rgb = c[..., :3] / 255.0
+    a = c[..., 3] > 128
+    hsv = color.rgb2hsv(rgb)
+    h, s_, v = hsv[..., 0] * 360, hsv[..., 1], hsv[..., 2]
+    skin = ndi.binary_opening((v > 0.62) & (s_ > 0.1) & (s_ < 0.6) & ((h < 45) | (h > 340)) & a, iterations=2)
+    lab, _ = ndi.label(skin)
+    keep = set()
+    for name in ("noseTip", "philtrum", "cheek_R", "cheek_L", "lipLower", "jawMid_R", "jawMid_L"):
+        x, y = lm[order.index(name)]
+        for dx in range(-6, 7, 3):
+            for dy in range(-6, 7, 3):
+                xx, yy = int(x + dx) + 200, int(y + dy)
+                if 0 <= yy < lab.shape[0] and 0 <= xx < lab.shape[1] and lab[yy, xx] > 0:
+                    keep.add(lab[yy, xx])
+    face = ndi.binary_fill_holes(ndi.binary_closing(np.isin(lab, list(keep)), iterations=5))
+    yy, xx = np.mgrid[: a.shape[0], : a.shape[1]]
+    eyes = np.zeros_like(a)
+    for name in ("pupil_R", "pupil_L"):
+        x, y = lm[order.index(name)]
+        eyes |= ((xx - x - 200) / 55.0) ** 2 + ((yy - y) / 45.0) ** 2 < 1
+    vivid = (s_ > 0.72) & (v > 0.35)
+    return a & ~face & ~eyes & ~vivid
+
+
+def hair_to_plate(c, lm, order):
+    from skimage import color
+    m = hair_mask(c, lm, order)
+    if m.sum() < 1000:
+        return 0
+    ys, xs = np.nonzero(c[..., 3] > 0)
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    sub = c[y0:y1, x0:x1]
+    mm = m[y0:y1, x0:x1]
+    lab = color.rgb2lab(np.clip(sub[..., :3] / 255.0, 0, 1))
+    mu = lab[..., 1:][mm].mean(0)
+    w = np.clip(ndi.gaussian_filter(mm.astype(np.float32), 1.2), 0, 1)[..., None]
+    cool_b = lab[..., 2].copy()
+    lab[..., 1:] = lab[..., 1:] * (1 - w) + ((lab[..., 1:] - mu) * HAIR_CHROMA_GAIN + PLATE_HAIR_AB) * w
+    # v3.3: the keys' sky-blue/grey sheen (L > 55, b < 8: ab ~ -4.6, -0.8 on turn-l85's crown)
+    # read as "camouflage blotches"; the plate's own hair highlights are warm (ab 10-14, 35-37 at
+    # L 75-90; 0, 23 above 90), so a cool sheen takes the plate's highlight colour for its lightness
+    Lc = lab[..., 0]
+    tgt_a = np.interp(Lc, [55, 75, 90, 100], [24, 12, 1, 0])
+    tgt_b = np.interp(Lc, [55, 75, 90, 100], [30, 36, 23, 18])
+    wc = w[..., 0] * np.clip((8 - cool_b) / 10, 0, 1) * np.clip((Lc - 50) / 10, 0, 1)
+    lab[..., 1] = lab[..., 1] * (1 - wc) + tgt_a * wc
+    lab[..., 2] = lab[..., 2] * (1 - wc) + tgt_b * wc
+    sub[..., :3] = np.clip(color.lab2rgb(lab), 0, 1) * 255
+    return int(mm.sum())
+
+
 def place(rgba, box):
     canvas = np.zeros((1216, 1400, 4), np.float32)  # wide enough for any mirrored box
     x, y = box[0] + 200, box[1]
@@ -146,21 +231,32 @@ def cmd_mirror():
     green_ref = plate[own == Z.index("irisR")]
     blue_ref = plate[own == Z.index("irisL")]
     report = {}
+    r0 = rig()
+    order = r0["artMeta"]["commonLandmarkOrder"]
+    old_lm = {k["id"]: k.get("landmarks") for k in r0["keys"]}
     for jid, job in JOBS.items():
-        src = v3["keys"][job["from"]]
-        rec = {"from": job["from"], "axis": AXIS, "layers": {}}
+        src = L.read_json(HEADS / job["from"] / "provenance.json")["layers"] if job.get("heads") else v3["keys"][job["from"]]
+        rec = {"from": ("heads/" if job.get("heads") else "") + job["from"], "axis": AXIS, "layers": {}}
         for part in ("back", "front"):
             placed = src[part]
             raw = L.load_rgba(L.ART / placed["file"])
             img = raw[:, ::-1].copy() if job["mirror"] else raw.copy()
-            box = mirror_box(placed["box"]) if job["mirror"] else list(placed["box"])
+            fbox = [placed["box"][0], placed["box"][1], raw.shape[1], raw.shape[0]]  # the file's own size wins
+            box = mirror_box(fbox) if job["mirror"] else fbox
             note = {}
             c = place(img, box)
             if "collar" in job:
                 note["collarPxRemoved"] = clean_collar(c, *job["collar"]) if not job["mirror"] else clean_collar(c[:, ::-1][:, :], *job["collar"])
-            if job["mirror"] and placed["box"][0] + placed["box"][2] >= 832:
+            if job["mirror"] and not job.get("heads") and placed["box"][0] + placed["box"][2] >= 832:
                 fade_cut(c, box[0])
                 note["fadedCutAtX"] = box[0]
+            if job.get("iris") and part == "front":
+                region = iris_whole(c)
+                ref = blue_ref if job["iris"] == "blue" else green_ref
+                n = recolour(c, region, "green", ref) + recolour(c, region, "blue", ref)
+                note.update({"irisTo": job["iris"], "irisRecolouredPx": n})
+            if old_lm.get(jid):
+                note["hairRecolouredPx"] = hair_to_plate(c, old_lm[jid], order)
             if job["swapIris"] and part == "front":
                 masks = iris_masks(c)
                 # after the mirror the eye on the viewer's left is blue: her right eye must be green, and vice versa
@@ -196,21 +292,24 @@ def cmd_mirror():
 
 def head_alpha(r, key_id):
     v3 = r["artMeta"]["v3"]
-    a = np.zeros((1216, 1400), np.float32)
+    a = np.zeros((1216 + 128, 1400), np.float32)  # rows offset 64: rig-margins.py layers start at y -48
     if key_id == "frontal":
         parts = [l for l in v3["frontal"]["layers"] if l["name"] in ("hairBack", "headCore", "hairFront")]
     else:
         parts = [v3["keys"][key_id]["back"], v3["keys"][key_id]["front"]]
     for p in parts:
         im = L.load_rgba(L.ART / p["file"])[..., 3]
-        x, y = p["box"][0] + 200, p["box"][1]
+        x, y = p["box"][0] + 200, p["box"][1] + 64
         h, w = im.shape
-        a[y:y + h, x:x + w] = np.maximum(a[y:y + h, x:x + w], im)
-    return a
+        xa, xb = max(0, x), min(a.shape[1], x + w)
+        a[y:y + h, xa:xb] = np.maximum(a[y:y + h, xa:xb], im[:, xa - x:xb - x])
+    return a[64:64 + 1216]
 
 
 def silhouette_pair(r, key_id, row):
     a = head_alpha(r, key_id)[row - 3:row + 4] > 128
+    a[:, :200] = False  # the silhouette inside the canvas only: a reflected margin (rig-margins.py) is not the painting's edge
+    a[:, 200 + 832:] = False
     cols = np.where(a.any(0))[0]
     return [int(cols.min()) - 200, row], [int(cols.max()) - 200, row]
 
@@ -233,6 +332,10 @@ def cmd_wire():
         lr, ll = silhouette_pair(r, mid, row)
         lms[mid][order.index("hairSide_R")] = lr
         lms[mid][order.index("hairSide_L")] = ll
+    for kid, (lr, ll) in {k: v for k, v in spec.get("hairSideFixed", {}).items() if not k.startswith("_")}.items():
+        if kid in lms:
+            lms[kid][order.index("hairSide_R")] = list(lr)
+            lms[kid][order.index("hairSide_L")] = list(ll)
     for k in r["keys"]:
         k["landmarks"] = lms[k["id"]]
     r["artMeta"]["commonLandmarkOrder"] = order

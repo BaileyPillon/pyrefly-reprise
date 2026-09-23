@@ -1,26 +1,28 @@
 {
-  "from": "profile-left",
+  "from": "heads/profile-left",
   "axis": 495.0,
   "layers": {
     "back": {
       "file": "v3/layers/turns/turn-r85/back.png",
       "box": [
-        156,
+        -154,
         0,
-        639,
-        859
+        947,
+        911
       ],
-      "fadedCutAtX": 156
+      "hairRecolouredPx": 587384
     },
     "front": {
       "file": "v3/layers/turns/turn-r85/front.png",
       "box": [
-        156,
+        -154,
         0,
-        639,
-        786
+        947,
+        784
       ],
-      "fadedCutAtX": 156
+      "irisTo": "green",
+      "irisRecolouredPx": 1630,
+      "hairRecolouredPx": 483810
     }
   }
 }

@@ -55,6 +55,36 @@ export const RIG_CONSTANTS = {
     headAmpPctHeadWidthMin: 1.5,
     headAmpPctHeadWidthMax: 3,
     chestAmpPctIpd: 3,
+    /**
+     * v3.2: the spec's chest sway per axis (section 11: +-3.6 % of IPD
+     * horizontally, +-2.9 % vertically; section 6: "+-" is half the
+     * peak-to-peak of a ~5.5 s window). v3.1 drove both axes from one
+     * sample at 0.35 : 1 and measured 2.0 % x / 5.75 % y at p95, inverted.
+     */
+    chestAmpPctIpdX: 3.6,
+    chestAmpPctIpdY: 2.9,
+    /**
+     * Head width in IPD for the head-sway amplitude (section 6's convention,
+     * "head width ~ 2.2 IPD"; section 11 says 3.0 - the check measured with 2.2).
+     */
+    headWidthIpd: 2.2,
+    /**
+     * v3.2: idle YAW wander, degrees at p95. v3.1 converted the head-width
+     * sway fraction into degrees of yaw (+-10 deg), which swept the paint
+     * between keys and overshot a held 40 deg target by 8.7 deg. The spec's
+     * head sway is a translation ("a wander, not a pendulum"); the rotation
+     * keeps only a small wander on top of it.
+     */
+    yawWanderDegP95: 1.2,
+    /** Unit-RMS band noise reaches this multiple of its RMS at p95 (measured on the BandNoise sum, 1.9-2.0). */
+    p95OverRms: 1.95,
+    /**
+     * v3.3: the spec's "+-" (section 6) is half the peak-to-peak of a ~5.5 s
+     * window, which for this band noise is 1.48 x its RMS (median window,
+     * 1200 s; check/motion.test.ts). v3.2 scaled the chest by the p95 (1.95)
+     * and measured 2.71 / 2.21 % IPD by the spec's method: 25 percent short.
+     */
+    windowHalfP2POverRms: 1.48,
     /** The chest lags the head by about a third of a cycle at the band's mean rate. */
     chestPhaseLagFraction: 1 / 3,
   },

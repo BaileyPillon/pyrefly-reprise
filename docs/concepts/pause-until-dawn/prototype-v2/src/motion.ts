@@ -16,7 +16,10 @@ export const LOOSE_SWING_PX = { earring: 16, strand1: 20, strand2: 18 } as const
 export const LOOSE_IDLE_PX = { earring: 3, strand1: 5, strand2: 4 } as const;
 /** Interpupillary distance sampled off the plate (pupils (338,422) and (609,406)). */
 export const PLATE_IPD_PX = Math.hypot(609 - 338, 406 - 422);
+/** Kept for callers of the v3.1 API; v3.2 drives each chest axis from its own sample (`chestOffsetPx`). */
 export const CHEST_SWAY_AXIS_WEIGHT = { x: 0.35, y: 1 } as const;
+/** Head width for the sway amplitude: the spec's 2.2 IPD convention. */
+export const HEAD_WIDTH_PX = RIG_CONSTANTS.sway.headWidthIpd * PLATE_IPD_PX;
 
 export type LoosePart = keyof typeof LOOSE_LAG_TAU;
 export type Px = [number, number];
@@ -32,9 +35,28 @@ export function yawNormFor(yawDeg: number, minDeg: number, maxDeg: number): numb
   return minDeg === 0 ? 0 : -Math.max(0, Math.min(1, yawDeg / minDeg));
 }
 
-export function chestOffsetPx(chestSample: number): Px {
-  const amp = (RIG_CONSTANTS.sway.chestAmpPctIpd / 100) * PLATE_IPD_PX;
-  return [chestSample * amp * CHEST_SWAY_AXIS_WEIGHT.x, chestSample * amp * CHEST_SWAY_AXIS_WEIGHT.y];
+/**
+ * The chest's own sway in plate px from two unit-RMS samples (x, y on
+ * independent phases), scaled so each axis reaches the spec's +- value by the
+ * spec's own measure (half the peak-to-peak of a 5.5 s window, median). With
+ * one argument (the v3.1 call) y alone moves.
+ */
+export function chestOffsetPx(sampleY: number, sampleX = 0): Px {
+  const s = RIG_CONSTANTS.sway;
+  const k = PLATE_IPD_PX / 100 / s.windowHalfP2POverRms;
+  return [sampleX * s.chestAmpPctIpdX * k, sampleY * s.chestAmpPctIpdY * k];
+}
+
+/**
+ * The head's own idle wander on top of the chest, plate px, from two
+ * unit-RMS samples: +-1.5-3 % of head width (the middle, 2.25 %) at p95 on
+ * both axes ("vertical is about the same size as horizontal", section 6).
+ */
+export function headSwayPx(sampleX: number, sampleY: number): Px {
+  const s = RIG_CONSTANTS.sway;
+  const pct = (s.headAmpPctHeadWidthMin + s.headAmpPctHeadWidthMax) / 2;
+  const k = ((pct / 100) * HEAD_WIDTH_PX) / s.p95OverRms;
+  return [sampleX * k, sampleY * k];
 }
 
 export function irisOffsetPx(yawNorm: number, pitchNorm: number): Px {

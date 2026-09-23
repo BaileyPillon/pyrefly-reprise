@@ -1,6 +1,60 @@
-# Living portrait v3 — art assembly + v3.1 runtime (2026-09-22)
+# Living portrait v3 — art assembly, v3.1 runtime, v3.2/v3.3 fix pass (2026-09-22)
 
-## v3.1 runtime pass (latest; read this first)
+## v3.2/v3.3 fix pass after the v3.1 check (latest; read this first)
+
+Game case: **FFX-2 only** (Yuna X-2 plate); renderer plumbing is shared.
+Evidence: `docs/concepts/pause-until-dawn/prototype-v2/shots/v3.3/CHECK.md`
+(one row per refuted finding: root cause, fix, re-measured number, still).
+Method: `tools/gen/rig-check.mjs` re-runs the v3.1 check's own captures
+(real keys, real B, a real resting mouse; GPU Chromium; canvas native);
+`rig-measure.py` reads the numbers; `rig-shots.py` curates `shots/v3.3/`.
+
+### What is real now
+
+- **Rest = the plate**: `?post=0`, reduced motion: 0 px differ. With the post
+  grade on (the shipped view): MAD 0.59, figure luminance 140.5 -> 140.1 (was
+  MAD 35.2, 28 % darker).
+- **One painting on screen** at every seam yaw and while the mouse rests at
+  15, 22, 25, 60 deg (0 % mixed, was 33-78 %): `src/paint.ts` picks the key
+  from the spring's base yaw with hysteresis; a 0.2 s dissolve only on change.
+- **No end of the head in the frame** at +40/+60/+80 and no box edge at -80:
+  the backs of both source heads repainted past x 990 (`rig-heads.py`, picks
+  `pl.1`, `qr.1` at denoise 0.8); hair behind the neck at -40/-60.
+- **No seam line under the warp**: premultiplied filtering (`gl-layer.ts`),
+  lower layers opaque under upper ones (`rig-underfill.py`), margins past the
+  canvas with the plate's right side hair continued along its strands
+  (`rig-margins.py`; `check/border.test.ts`: worst pull 39.3 px < 64 px margin).
+- **Blinks that read**: eight lid frames for the frontal AND every turned key,
+  harmonic lid skin, one tapered closed line (`rig-lids.py`); B closes both
+  eyes at -84..+84.
+- **Iris +80 green whole** (1508 green / 2 blue px); **braid** on her right in
+  the right turn; **crown sheen** warmed; **smile** changes only the mouth.
+- **Motion on spec by its own measure** (5.5 s windows, half peak-to-peak):
+  browser 180 s: chest 3.63 / 2.80 % IPD (spec 3.6 / 2.9), head 2.17 / 2.17 %
+  of head width (spec 1.5-3, vertical about equal); held 40 deg overshoot < 3.5.
+- Tests: `check/` (10, incl. border pull), the six `tests/unit/pause-living-portrait-*`
+  files (53), `tsc` clean. `renderer.ts` 275 lines; every source file < 400.
+- Rebuild: `bash tools/gen/rig-build.sh` (last block = this pass; no ComfyUI).
+
+### What remains
+
+1. The frontal-to-turn paint change (orange/pink hair and tassel -> brown hair
+   and red braid) is a 0.2 s dissolve at ~28 deg: a change of painting.
+2. Up to ~39 px of invented hair at the right frame edge at the frontal's
+   extreme pose (continued strands; a 0.55 outpaint came back as blur, a
+   reflection as chevrons).
+3. The new backs of the heads are diffusion-painted; no judge has seen them.
+4. Turned keys have no mouth or brow expressions.
+5. Nothing in this pass has had an independent judge or Bailey's look.
+
+### Needs Bailey
+
+- **The segmentation model download** (requested separately): masks are still
+  isnet-anime + colour clustering + hand polygons checked at 1:1.
+- **The pick of the gaze reading** by feel (head, eyes or camera) in the
+  prototype.
+
+## v3.1 runtime pass
 
 Game case: **FFX-2 only** (Yuna X-2 plate); renderer plumbing is shared.
 Evidence: `docs/concepts/pause-until-dawn/prototype-v2/shots/RUNTIME-CHECK.md`.

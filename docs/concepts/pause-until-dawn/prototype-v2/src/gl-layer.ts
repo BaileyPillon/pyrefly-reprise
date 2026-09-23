@@ -11,6 +11,30 @@
 import { linkProgram } from './gl-utils.ts';
 import type { PixelBox } from './layers.ts';
 
+/**
+ * Bilinear filtering done on PREMULTIPLIED texels (v3.3). The layer PNGs are
+ * straight alpha, and the hardware filter mixes a transparent texel's RGB
+ * (black or grey) into an edge pixel before alpha is applied: under the mesh
+ * warp every feathered layer edge drew a thin dark line (the eye aperture's
+ * rim showed as an outline under the eye at -20 degrees). At texel centres
+ * (the rest pose) this returns the texel exactly, so rest stays the plate.
+ */
+const SAMPLE_PREMUL = /* glsl */ `
+vec4 samplePremulStraight(sampler2D t, vec2 uv) {
+  ivec2 sz = textureSize(t, 0);
+  vec2 p = uv * vec2(sz) - 0.5;
+  vec2 f = fract(p);
+  ivec2 i0 = ivec2(floor(p));
+  ivec2 hi = sz - 1;
+  vec4 c00 = texelFetch(t, clamp(i0, ivec2(0), hi), 0);
+  vec4 c10 = texelFetch(t, clamp(i0 + ivec2(1, 0), ivec2(0), hi), 0);
+  vec4 c01 = texelFetch(t, clamp(i0 + ivec2(0, 1), ivec2(0), hi), 0);
+  vec4 c11 = texelFetch(t, clamp(i0 + ivec2(1, 1), ivec2(0), hi), 0);
+  c00.rgb *= c00.a; c10.rgb *= c10.a; c01.rgb *= c01.a; c11.rgb *= c11.a;
+  vec4 c = mix(mix(c00, c10, f.x), mix(c01, c11, f.x), f.y);
+  return c.a > 1e-6 ? vec4(c.rgb / c.a, c.a) : vec4(0.0);
+}`;
+
 const LAYER_VERT = /* glsl */ `#version 300 es
 precision highp float;
 layout(location = 0) in vec2 aPos; // unit quad corners, 0..1 (x right, y down)
@@ -27,13 +51,14 @@ void main() {
 
 const LAYER_FRAG = /* glsl */ `#version 300 es
 precision highp float;
+${SAMPLE_PREMUL}
 in vec2 vUV;
 uniform sampler2D uTex;
 uniform float uOpacity;
 uniform float uGain;
 out vec4 fragColor;
 void main() {
-  vec4 c = texture(uTex, vUV);
+  vec4 c = samplePremulStraight(uTex, vUV);
   fragColor = vec4(c.rgb * uGain, c.a * uOpacity);
 }`;
 
@@ -53,15 +78,21 @@ void main() {
 
 const WARP_FRAG = /* glsl */ `#version 300 es
 precision highp float;
+${SAMPLE_PREMUL}
 in vec2 vUV;
 uniform sampler2D uTex;
 uniform float uOpacity;
 uniform float uGain;
+uniform vec4 uExt; // 1 where this layer's box touches the canvas border (left, top, right, bottom)
 out vec4 fragColor;
 void main() {
-  // the mesh covers the whole canvas; outside this layer's own box there is nothing to draw
-  vec2 inside = step(vec2(0.0), vUV) * step(vUV, vec2(1.0));
-  vec4 c = texture(uTex, clamp(vUV, 0.0, 1.0));
+  // the mesh covers the whole canvas; outside this layer's own box there is nothing to draw,
+  // except past a side that touches the canvas border: a carried layer (chest, sway) keeps its
+  // edge row there instead of opening a strip of backdrop along the frame
+  vec2 lo = -1e3 * uExt.xy;
+  vec2 hi = vec2(1.0) + 1e3 * uExt.zw;
+  vec2 inside = step(lo, vUV) * step(vUV, hi);
+  vec4 c = samplePremulStraight(uTex, clamp(vUV, 0.0, 1.0));
   fragColor = vec4(c.rgb * uGain, c.a * uOpacity * inside.x * inside.y);
 }`;
 
@@ -121,9 +152,10 @@ export class LayerGL {
   private readonly warpProg: WebGLProgram;
   private readonly unionProg: WebGLProgram;
   private readonly vao: WebGLVertexArrayObject;
-  private readonly warpVao: WebGLVertexArrayObject;
-  private readonly warpBuf: WebGLBuffer;
-  private warpVerts = 0;
+  /** Two meshes per pass: [0] the head's (key landmarks), [1] the pinned body's. */
+  private readonly warpVao: WebGLVertexArrayObject[] = [];
+  private readonly warpBuf: WebGLBuffer[] = [];
+  private readonly warpVerts = [0, 0];
   private readonly u: Record<string, WebGLUniformLocation | null>;
   private readonly w: Record<string, WebGLUniformLocation | null>;
   private readonly m: Record<string, WebGLUniformLocation | null>;
@@ -144,20 +176,22 @@ export class LayerGL {
     gl.enableVertexAttribArray(0);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
     gl.bindVertexArray(null);
-    const wvao = gl.createVertexArray();
-    const wbuf = gl.createBuffer();
-    if (!wvao || !wbuf) throw new Error('warp buffers failed');
-    this.warpVao = wvao;
-    this.warpBuf = wbuf;
-    gl.bindVertexArray(wvao);
-    gl.bindBuffer(gl.ARRAY_BUFFER, wbuf);
-    gl.enableVertexAttribArray(0);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 16, 0);
-    gl.enableVertexAttribArray(1);
-    gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 16, 8);
+    for (let i = 0; i < 2; i++) {
+      const wvao = gl.createVertexArray();
+      const wbuf = gl.createBuffer();
+      if (!wvao || !wbuf) throw new Error('warp buffers failed');
+      this.warpVao.push(wvao);
+      this.warpBuf.push(wbuf);
+      gl.bindVertexArray(wvao);
+      gl.bindBuffer(gl.ARRAY_BUFFER, wbuf);
+      gl.enableVertexAttribArray(0);
+      gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 16, 0);
+      gl.enableVertexAttribArray(1);
+      gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 16, 8);
+    }
     gl.bindVertexArray(null);
     const wp = this.warpProg;
-    this.w = Object.fromEntries(['uBox', 'uOffset', 'uCanvas', 'uTex', 'uOpacity', 'uGain'].map((n) => [n, gl.getUniformLocation(wp, n)]));
+    this.w = Object.fromEntries(['uBox', 'uOffset', 'uCanvas', 'uTex', 'uOpacity', 'uGain', 'uExt'].map((n) => [n, gl.getUniformLocation(wp, n)]));
     const lp = this.layerProg;
     this.u = Object.fromEntries(['uBox', 'uOffset', 'uCanvas', 'uTex', 'uOpacity', 'uGain'].map((n) => [n, gl.getUniformLocation(lp, n)]));
     const mp = this.mixProg;
@@ -166,42 +200,49 @@ export class LayerGL {
 
   /**
    * Straight-alpha "over" into whatever target is bound; the target stays
-   * opaque. `warp` (from `PairWarp.vertexData`) routes every following
-   * non-pinned `draw` through that mesh; null draws plain placed quads.
+   * opaque. `head` (from `WarpCache.keyMesh`) routes every following
+   * non-pinned `draw` through that mesh, `body` (`WarpCache.bodyMesh`) every
+   * pinned one; null draws plain placed quads.
    */
-  beginLayers(warp: Float32Array | null = null): void {
+  beginLayers(head: Float32Array | null = null, body: Float32Array | null = null): void {
     const gl = this.gl;
     gl.enable(gl.BLEND);
     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.activeTexture(gl.TEXTURE0);
-    this.warpVerts = 0;
-    if (warp) {
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.warpBuf);
-      gl.bufferData(gl.ARRAY_BUFFER, warp, gl.DYNAMIC_DRAW);
-      this.warpVerts = warp.length / 4;
-      gl.useProgram(this.warpProg);
-      gl.uniform2f(this.w.uCanvas!, this.canvasW, this.canvasH);
-      gl.uniform1i(this.w.uTex!, 0);
-    }
+    [head, body].forEach((mesh, i) => {
+      this.warpVerts[i] = 0;
+      if (!mesh) return;
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.warpBuf[i]!);
+      gl.bufferData(gl.ARRAY_BUFFER, mesh, gl.DYNAMIC_DRAW);
+      this.warpVerts[i] = mesh.length / 4;
+    });
+    gl.useProgram(this.warpProg);
+    gl.uniform2f(this.w.uCanvas!, this.canvasW, this.canvasH);
+    gl.uniform1i(this.w.uTex!, 0);
     gl.useProgram(this.layerProg);
     gl.uniform2f(this.u.uCanvas!, this.canvasW, this.canvasH);
     gl.uniform1i(this.u.uTex!, 0);
   }
 
-  /** `pinned` layers (the body) never warp: they are the same pixels in every key. */
+  /** `pinned` layers (the body) take the body mesh: carried by the chest, never by the yaw geometry. */
   draw(tex: WebGLTexture, box: PixelBox, offset: readonly [number, number] = [0, 0], opacity = 1, gain = 1, pinned = false): void {
     if (opacity <= 0.001) return;
     const gl = this.gl;
-    const warped = this.warpVerts > 0 && !pinned;
+    const slot = pinned ? 1 : 0;
+    const warped = this.warpVerts[slot]! > 0;
     const u = warped ? this.w : this.u;
     gl.useProgram(warped ? this.warpProg : this.layerProg);
-    gl.bindVertexArray(warped ? this.warpVao : this.vao);
+    gl.bindVertexArray(warped ? this.warpVao[slot]! : this.vao);
+    if (warped) {
+      const e = 0.5;
+      gl.uniform4f(u.uExt!, box[0] <= e ? 1 : 0, box[1] <= e ? 1 : 0, box[0] + box[2] >= this.canvasW - e ? 1 : 0, box[1] + box[3] >= this.canvasH - e ? 1 : 0);
+    }
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.uniform4f(u.uBox!, box[0], box[1], box[2], box[3]);
     gl.uniform2f(u.uOffset!, offset[0], offset[1]);
     gl.uniform1f(u.uOpacity!, Math.min(1, opacity));
     gl.uniform1f(u.uGain!, gain);
-    if (warped) gl.drawArrays(gl.TRIANGLES, 0, this.warpVerts);
+    if (warped) gl.drawArrays(gl.TRIANGLES, 0, this.warpVerts[slot]!);
     else gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
@@ -251,7 +292,7 @@ export class LayerGL {
     this.gl.deleteProgram(this.warpProg);
     this.gl.deleteProgram(this.unionProg);
     this.gl.deleteVertexArray(this.vao);
-    this.gl.deleteVertexArray(this.warpVao);
-    this.gl.deleteBuffer(this.warpBuf);
+    for (const v of this.warpVao) this.gl.deleteVertexArray(v);
+    for (const b of this.warpBuf) this.gl.deleteBuffer(b);
   }
 }

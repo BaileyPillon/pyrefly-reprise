@@ -181,7 +181,7 @@
           180
         ],
         [
-          831,
+          887,
           180
         ]
       ]
@@ -264,11 +264,11 @@
           680
         ],
         [
-          181,
+          102,
           180
         ],
         [
-          807,
+          809,
           180
         ]
       ]
@@ -351,11 +351,11 @@
           782
         ],
         [
-          197,
+          200,
           180
         ],
         [
-          809,
+          904,
           180
         ]
       ]
@@ -438,11 +438,11 @@
           690
         ],
         [
-          181,
+          85,
           180
         ],
         [
-          787,
+          789,
           180
         ]
       ]
@@ -545,9 +545,9 @@
             "file": "v3/layers/frontal/hairBack.png",
             "box": [
               93,
-              0,
-              739,
-              902
+              -48,
+              803,
+              950
             ],
             "motion": "head"
           },
@@ -555,10 +555,10 @@
             "name": "body",
             "file": "v3/layers/frontal/body.png",
             "box": [
-              0,
+              -48,
               556,
-              832,
-              660
+              944,
+              708
             ],
             "motion": "chest"
           },
@@ -622,9 +622,9 @@
             "file": "v3/layers/frontal/hairFront.png",
             "box": [
               236,
-              0,
+              -48,
               528,
-              466
+              514
             ],
             "motion": "fringe"
           },
@@ -632,9 +632,9 @@
             "name": "strand1",
             "file": "v3/layers/frontal/strand1.png",
             "box": [
-              0,
+              -48,
               433,
-              184,
+              232,
               368
             ],
             "motion": "strand1"
@@ -645,7 +645,7 @@
             "box": [
               697,
               573,
-              135,
+              199,
               293
             ],
             "motion": "strand2"
@@ -665,10 +665,10 @@
         "bodyTurned": {
           "file": "v3/layers/frontal/body-turned.png",
           "box": [
-            0,
+            -48,
             556,
-            832,
-            660
+            944,
+            708
           ],
           "_readme": "rig-collar.py: the body with the tassel footprint inpainted; drawn for turned keys, faded in across a frontal-to-turn blend"
         }
@@ -758,19 +758,19 @@
           "back": {
             "file": "v3/layers/turns/turn-l45/back.png",
             "box": [
-              163,
-              0,
-              671,
-              894
+              165,
+              -48,
+              953,
+              963
             ]
           },
           "front": {
             "file": "v3/layers/turns/turn-l45/front.png",
             "box": [
-              163,
-              0,
-              671,
-              849
+              165,
+              -48,
+              953,
+              895
             ]
           }
         },
@@ -778,19 +778,19 @@
           "back": {
             "file": "v3/layers/turns/turn-l85/back.png",
             "box": [
-              192,
-              0,
-              629,
-              861
+              197,
+              -48,
+              947,
+              959
             ]
           },
           "front": {
             "file": "v3/layers/turns/turn-l85/front.png",
             "box": [
-              192,
-              0,
-              629,
-              787
+              197,
+              -48,
+              947,
+              832
             ]
           }
         },
@@ -798,19 +798,19 @@
           "back": {
             "file": "v3/layers/turns/turn-r45/back.png",
             "box": [
-              156,
-              0,
-              671,
-              894
+              -128,
+              -48,
+              953,
+              963
             ]
           },
           "front": {
             "file": "v3/layers/turns/turn-r45/front.png",
             "box": [
-              156,
-              0,
-              671,
-              849
+              -128,
+              -48,
+              953,
+              895
             ]
           }
         },
@@ -818,19 +818,19 @@
           "back": {
             "file": "v3/layers/turns/turn-r85/back.png",
             "box": [
-              156,
-              0,
-              639,
-              859
+              -154,
+              -48,
+              947,
+              959
             ]
           },
           "front": {
             "file": "v3/layers/turns/turn-r85/front.png",
             "box": [
-              156,
-              0,
-              639,
-              786
+              -154,
+              -48,
+              947,
+              832
             ]
           }
         }
@@ -838,47 +838,99 @@
       "patches": {
         "eyes": [
           {
-            "name": "blink-1",
-            "aperture": 0.66,
-            "file": "v3/patches/eyes/blink-1.png",
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a85.png",
             "box": [
-              276,
-              347,
-              406,
-              82
+              259,
+              339,
+              431,
+              87
             ]
           },
           {
-            "name": "half",
-            "aperture": 0.5,
-            "file": "v3/patches/eyes/half.png",
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a70.png",
             "box": [
-              276,
-              347,
-              406,
+              259,
+              339,
+              431,
+              87
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a55.png",
+            "box": [
+              259,
+              339,
+              431,
               88
             ]
           },
           {
-            "name": "blink-2",
-            "aperture": 0.33,
-            "file": "v3/patches/eyes/blink-2.png",
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a42.png",
             "box": [
-              276,
-              347,
-              406,
-              95
+              259,
+              339,
+              431,
+              88
             ]
           },
           {
-            "name": "closed",
-            "aperture": 0.0,
-            "file": "v3/patches/eyes/closed-geo.png",
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a30.png",
             "box": [
-              276,
-              347,
-              406,
-              120
+              259,
+              339,
+              431,
+              92
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a18.png",
+            "box": [
+              259,
+              339,
+              431,
+              97
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a08.png",
+            "box": [
+              259,
+              339,
+              431,
+              129
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/frontal/a00.png",
+            "box": [
+              259,
+              339,
+              431,
+              129
             ]
           }
         ],
@@ -904,30 +956,30 @@
         },
         "mouth": {
           "parted": {
-            "file": "v3/patches/mouth/parted.png",
+            "file": "v3/patches/mouth2/parted.png",
             "box": [
-              392,
-              597,
-              187,
-              83
+              378,
+              583,
+              215,
+              111
             ]
           },
           "smile": {
-            "file": "v3/patches/mouth/smile.png",
+            "file": "v3/patches/mouth2/smile.png",
             "box": [
-              345,
-              579,
-              234,
-              106
+              331,
+              565,
+              262,
+              134
             ]
           },
           "pressed": {
-            "file": "v3/patches/mouth/pressed.png",
+            "file": "v3/patches/mouth2/pressed.png",
             "box": [
-              391,
-              580,
-              190,
-              84
+              377,
+              566,
+              218,
+              112
             ]
           }
         }
@@ -988,6 +1040,22 @@
           [
             950,
             870
+          ],
+          [
+            -40,
+            330
+          ],
+          [
+            -40,
+            600
+          ],
+          [
+            872,
+            330
+          ],
+          [
+            872,
+            600
           ]
         ],
         "source": "v3/warp/landmarks.json",
@@ -1001,7 +1069,402 @@
           "profile-left",
           "profile-right"
         ]
-      }
+      },
+      "keyLids": {
+        "turn-l45": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a85.png",
+            "box": [
+              293,
+              294,
+              252,
+              157
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a70.png",
+            "box": [
+              293,
+              294,
+              252,
+              159
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a55.png",
+            "box": [
+              293,
+              294,
+              252,
+              161
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a42.png",
+            "box": [
+              293,
+              294,
+              252,
+              162
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a30.png",
+            "box": [
+              293,
+              294,
+              252,
+              165
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a18.png",
+            "box": [
+              293,
+              294,
+              252,
+              170
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a08.png",
+            "box": [
+              293,
+              294,
+              252,
+              195
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l45/a00.png",
+            "box": [
+              293,
+              294,
+              252,
+              195
+            ]
+          }
+        ],
+        "turn-r45": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a85.png",
+            "box": [
+              445,
+              294,
+              252,
+              157
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a70.png",
+            "box": [
+              445,
+              294,
+              252,
+              159
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a55.png",
+            "box": [
+              445,
+              294,
+              252,
+              161
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a42.png",
+            "box": [
+              445,
+              294,
+              252,
+              162
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a30.png",
+            "box": [
+              445,
+              294,
+              252,
+              165
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a18.png",
+            "box": [
+              445,
+              294,
+              252,
+              170
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a08.png",
+            "box": [
+              445,
+              294,
+              252,
+              195
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r45/a00.png",
+            "box": [
+              445,
+              294,
+              252,
+              195
+            ]
+          }
+        ],
+        "turn-l85": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a85.png",
+            "box": [
+              400,
+              343,
+              107,
+              66
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a70.png",
+            "box": [
+              400,
+              343,
+              107,
+              69
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a55.png",
+            "box": [
+              400,
+              343,
+              107,
+              71
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a42.png",
+            "box": [
+              400,
+              343,
+              107,
+              76
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a30.png",
+            "box": [
+              400,
+              343,
+              107,
+              83
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a18.png",
+            "box": [
+              400,
+              343,
+              107,
+              90
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a08.png",
+            "box": [
+              400,
+              343,
+              107,
+              126
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/turn-l85/a00.png",
+            "box": [
+              400,
+              343,
+              107,
+              126
+            ]
+          }
+        ],
+        "turn-r85": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a85.png",
+            "box": [
+              483,
+              343,
+              107,
+              66
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a70.png",
+            "box": [
+              483,
+              343,
+              107,
+              69
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a55.png",
+            "box": [
+              483,
+              343,
+              107,
+              71
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a42.png",
+            "box": [
+              483,
+              343,
+              107,
+              76
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a30.png",
+            "box": [
+              483,
+              343,
+              107,
+              83
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a18.png",
+            "box": [
+              483,
+              343,
+              107,
+              90
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a08.png",
+            "box": [
+              483,
+              343,
+              107,
+              126
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/turn-r85/a00.png",
+            "box": [
+              483,
+              343,
+              107,
+              126
+            ]
+          }
+        ]
+      },
+      "keyLidsReadme": "tools/gen/rig-lids.py: per key, lid frames by aperture (nearest wins); transparent below the lid edge"
     },
     "restProof": {
       "image": "rest-diff.png",

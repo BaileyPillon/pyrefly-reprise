@@ -1,30 +1,36 @@
 {
-  "from": "q34-right",
+  "from": "heads/q34-right",
   "axis": 495.0,
   "layers": {
     "back": {
       "file": "v3/layers/turns/turn-r45/back.png",
       "box": [
-        156,
+        -128,
         0,
-        671,
-        894
+        953,
+        915
       ],
-      "collarPxRemoved": 3250,
-      "fadedCutAtX": 156
+      "collarPxRemoved": 80,
+      "hairRecolouredPx": 555318
     },
     "front": {
       "file": "v3/layers/turns/turn-r45/front.png",
       "box": [
-        156,
+        -128,
         0,
-        671,
-        849
+        953,
+        847
       ],
       "collarPxRemoved": 0,
-      "fadedCutAtX": 156,
-      "blueToGreenPx": 2305,
-      "greenToBluePx": 1080
+      "hairRecolouredPx": 499151,
+      "blueToGreenPx": 2307,
+      "greenToBluePx": 1086
     }
+  },
+  "braid": {
+    "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/braid/out/r45.1.full.png",
+    "farBraidRemovedPx": 23085,
+    "nearBraidPx": 6576,
+    "why": "the mirror put the braid on her left; the plate hangs it on her right (tools/gen/rig-braid.py)"
   }
 }

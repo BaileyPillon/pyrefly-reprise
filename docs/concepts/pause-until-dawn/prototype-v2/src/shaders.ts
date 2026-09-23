@@ -182,14 +182,14 @@ float focusWeight(vec2 uv) {
   vec2 c = uHeadBox.xy + uHeadBox.zw * 0.5;
   vec2 h = uHeadBox.zw * 0.5;
   float d = length((uv - c) / max(h, vec2(1e-4)));
-  return clamp(1.0 - smoothstep(0.55, 1.6, d), 0.0, 1.0); // 1 = sharp face, 0 = soft background
+  return clamp(1.0 - smoothstep(0.8, 1.8, d), 0.0, 1.0); // 1 = sharp face, 0 = soft background
 }
 
 void main() {
   float focus = focusWeight(vUV);
   vec4 sharp = texture(uScene, vUV);
   vec4 blurred = vec4(0.0);
-  float r = mix(2.2, 0.0, focus);
+  float r = mix(1.0, 0.0, focus); // v3.2: 1 px at most (v3.1: 2.2 px softened the approved hair)
   if (r > 0.01) {
     blurred += texture(uScene, vUV + uTexel * vec2(r, 0.0));
     blurred += texture(uScene, vUV - uTexel * vec2(r, 0.0));
@@ -207,11 +207,13 @@ void main() {
   float n = (hash(vUV * vec2(1920.0, 1080.0) + uTime) - 0.5) * 2.0;
   color.rgb += n * uGrainAmount * (0.3 + 0.7 * shadowWeight) * (1.0 - uReduced);
 
-  // Asymmetric grade toward the bottom-right.
-  vec2 d = vUV - vec2(0.42, 0.38);
-  float radial = length(d);
-  float towardCorner = max(0.0, vUV.x - 0.5) * 0.6 + max(0.0, vUV.y - 0.5) * 0.6;
-  float vignette = clamp(radial * 0.55 + towardCorner * 0.6, 0.0, 0.55);
+  // Asymmetric grade toward the bottom-right corner (vUV.y = 0 is the bottom
+  // of the framebuffer). v3.2: v3.1's grade reached 55 percent and covered the
+  // figure (mean figure luminance 140.5 -> 100.9, the approved painting read
+  // desaturated); this one leaves the figure's core untouched and darkens only
+  // the far corner, by at most 22 percent.
+  vec2 d = (vUV - vec2(0.35, 0.7)) * vec2(1.0, 0.8);
+  float vignette = 0.22 * smoothstep(0.55, 1.25, length(d));
   color.rgb *= (1.0 - vignette);
 
   fragColor = vec4(color.rgb, 1.0);

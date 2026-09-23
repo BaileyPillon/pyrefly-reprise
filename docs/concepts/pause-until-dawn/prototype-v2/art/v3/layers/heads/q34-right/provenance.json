@@ -1,0 +1,71 @@
+{
+  "key": "q34-right",
+  "pick": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/heads/jobs/out3/qr.1.full.png",
+  "keepX": 740,
+  "overlap": 24,
+  "contour": [
+    [
+      640,
+      -120
+    ],
+    [
+      1100,
+      -120
+    ],
+    [
+      1112,
+      200
+    ],
+    [
+      1094,
+      420
+    ],
+    [
+      1058,
+      580
+    ],
+    [
+      1010,
+      700
+    ],
+    [
+      950,
+      790
+    ],
+    [
+      880,
+      846
+    ],
+    [
+      640,
+      846
+    ]
+  ],
+  "tips": [
+    640,
+    1000,
+    740,
+    120
+  ],
+  "matte": "side: the contour's anti-aliased edge x the painted hair; tips: isnet-anime on the pick inside the tips band",
+  "layers": {
+    "back": {
+      "file": "v3/layers/heads/q34-right/back.png",
+      "box": [
+        165,
+        0,
+        953,
+        915
+      ]
+    },
+    "front": {
+      "file": "v3/layers/heads/q34-right/front.png",
+      "box": [
+        165,
+        0,
+        953,
+        847
+      ]
+    }
+  }
+}
