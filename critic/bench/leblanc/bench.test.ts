@@ -62,6 +62,10 @@ function engineOptions() {
     dresspheres: dressphereRegistryFrom(Object.values(data.STANDARD_DRESSPHERES)),
     garmentGrids: garmentGridRegistryFrom(Object.values(data.GARMENT_GRIDS)),
     minigames: false as const,
+    // Measures the clock under a menu: Active, explicitly (the engine default
+    // is Wait since D-029) — this bench has always measured Active and must
+    // keep doing so, same fix as `tests/unit/ffx2-active-measure.test.ts`.
+    atbMode: 'active' as const,
   };
 }
 
