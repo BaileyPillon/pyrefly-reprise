@@ -1,0 +1,94 @@
+{
+ "tag": "ko.96406.r2",
+ "state": "ko",
+ "seed": 96406,
+ "method": "lora+openpose",
+ "positive": "logosX2, 1boy, solo, full body, from side, lying, on back, on ground, unconscious, closed eyes, arms at sides, gun on ground, dropped weapon, two guns, wearing helmet, (gun on ground:1.3), (two revolvers:1.2), revolver on floor, dropped gun, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, holding gun, standing, sitting, kneeling, no helmet, helmet removed, blood, double barrel, rifle, holding gun",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "controlnet": {
+  "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+  "image": "docs/concepts/chapters/leblanc/lora/logos/poses/ko-pose.png",
+  "strength": 0.6,
+  "start": 0,
+  "end": 0.8
+ },
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "images": [
+   "refs/idle-square.png",
+   "refs/idle-head.png"
+  ],
+  "weight": 0.3,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "combine": "concat",
+  "scaling": "K+V"
+ },
+ "width": 1216,
+ "height": 832,
+ "composition": "prone",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "frame": {
+  "maxRgb": 255,
+  "std": 85.1
+ },
+ "cutout": {
+  "width": 1216,
+  "height": 513,
+  "baselineY": 497,
+  "cropBox": [
+   0,
+   288,
+   1216,
+   801
+  ],
+  "contentBox": [
+   6,
+   304,
+   1216,
+   785
+  ],
+  "sourceWidth": 1216,
+  "sourceHeight": 832,
+  "model": "isnet-anime"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 1,
+    "heightFraction": 0.6165865384615384,
+    "checked": false,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 3,
+    "largestPixels": 256942,
+    "secondPixels": 25234,
+    "secondRatio": 0.09820893431202372,
+    "touchesLargest": true
+   },
+   "nearWhite": {
+    "fraction": 0.037350964736102325,
+    "largestRegionFraction": 0.007211357314400107,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "seconds": 14,
+ "generatedAt": "2026-09-23T07:49:35.911Z"
+}

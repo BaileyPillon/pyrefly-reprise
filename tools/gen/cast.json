@@ -2849,6 +2849,38 @@
           "notes": "CANDIDATE, below bar. Best of 6 (94501-94506): head toward the party, eyes shut, two revolvers on the floor, helmet still on but pushed to the back of the head. A detached floor shard was filled white before the cutout (renders/ko.94505c). Own read, worst criterion 4: brown leather strap (idle black), black-striped ankle wraps (idle white), the second revolver is drawn double-barrelled. A masked repaint to turn the strap black (0.5, 2 seeds) kept it brown and changed the emblem; discarded. Rejected: 94501 helmet off, 94502/94506 grille visor, 94506 three guns and shoes, 94503 a bare foot growing out of the sleeve, 94504 face-frame armour."
         }
       },
+      "_loraPoses2026_09_23": {
+        "method": "lora+openpose (FFX-2 only): LoraLoader logos-x2.safetensors (kohya step 2000, sha256 2252538f...) at 0.85 -> IPAdapterAdvanced (idle square-padded + head crop as one batch, 0.3, ease in, 0.2-0.6, K+V; method F) -> KSampler 28 steps cfg 6 euler_ancestral, conditioning through xinsir OpenPose SDXL on a PIL-drawn COCO-18 skeleton per state. Prompt = LoRA caption form + idle-truth costume words (docs/concepts/chapters/leblanc/lora/logos/poses/identity-idle.txt), no effect words. Script: docs/concepts/chapters/leblanc/lora/logos/poses/render.mjs; judge: poses/judge.md; sheet: poses/sheet.jpg.",
+        "installed": {
+          "attack": {
+            "render": "docs/concepts/chapters/leblanc/lora/logos/poses/renders/attack.96101.png",
+            "seed": 96101,
+            "openpose": "attack-pose.png @ 0.6",
+            "status": "CANDIDATE"
+          },
+          "cast": {
+            "render": "docs/concepts/chapters/leblanc/lora/logos/poses/renders/cast.96201.png",
+            "seed": 96201,
+            "openpose": "cast-pose.png @ 0.6",
+            "scale": 0.9,
+            "status": "CANDIDATE"
+          },
+          "hurt": {
+            "render": "docs/concepts/chapters/leblanc/lora/logos/poses/renders/hurt.96303.r2.png",
+            "seed": 96303,
+            "openpose": "hurt2-pose.png @ 0.85",
+            "status": "CANDIDATE"
+          },
+          "ko": {
+            "render": "docs/concepts/chapters/leblanc/lora/logos/poses/renders/ko.96402.r2.png",
+            "seed": 96402,
+            "openpose": "ko-pose.png @ 0.6 (1216x832 prone canvas)",
+            "extraPoseTags": "(gun on ground:1.3), (two revolvers:1.2), revolver on floor, dropped gun",
+            "status": "CANDIDATE"
+          }
+        },
+        "notes": "Supersedes the round-3 attack/cast/hurt/ko installs listed under states (backed up in D:/Tools/pyrefly-art-backup/candidates/2026-09-23-leblanc-lora/logos/replaced/). idle unchanged (the LoRA anchor). Nothing approved."
+      },
       "notes": "Chateau Leblanc, Act III (research/ffx2-leblanc-syndicate.md 10.1). FFX-2 only. ROUND 3, 2026-09-22 (method check: docs/plans/leblanc-art-method-check.md section 6). All five states re-rendered with pilot 2 method F and Danbooru words; idle referenced off Bailey's pick logos-c.png with the plume painted out of the reference, the other four off the new idle. One helmet design now: a silver dome with a front visor, no crest, no plume, worn in every state. Every install is a CANDIDATE; nothing is in docs/target/approved-hashes.json. Own read (not independent), worst criterion, bar 7: idle 6, attack 6, cast 5, hurt 6, ko 4, so nothing clears 7; an independent judge pass is owed. Sheet: docs/concepts/chapters/leblanc/sets/logos/round3/sheet.jpg; notes: docs/concepts/chapters/leblanc/sets/logos/round3/round3.md; backup: D:/Tools/pyrefly-art-backup/candidates/2026-09-22-leblanc/logos/ (pre-round3-installed, round3). Previous rounds: 920dac8, 2e5672d (judge 42311e2).",
       "method": "ROUND 3 (2026-09-22): pilot 2 method F (docs/concepts/chapters/leblanc/pilot2/judge.md) run by docs/concepts/chapters/leblanc/sets/logos/round3/run-round3.mjs, not by comfy.mjs: the IP-Adapter reference is a batch of two squares (whole figure + head crop), concat, 0.4, ease in, 0.2-0.6, which comfy.mjs --ref cannot express. Per-state words: docs/concepts/chapters/leblanc/sets/logos/round3/states.json; idle words: identity.txt + emphasis.txt; the other four: identity-anchor.txt + emphasis-anchor.txt (rewritten from the installed idle).",
       "_round2": {

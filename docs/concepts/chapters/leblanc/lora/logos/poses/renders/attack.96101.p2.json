@@ -1,0 +1,94 @@
+{
+ "tag": "attack.96101.p2",
+ "state": "attack",
+ "seed": 96101,
+ "method": "lora+openpose",
+ "positive": "logosX2, 1boy, solo, full body, from side, profile, facing left, lunging, leaning forward, legs apart, one leg forward, aiming, arms forward, outstretched arms, holding gun, dual wielding, serious, v-shaped eyebrows, closed mouth, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, purple sash, dark grey hakama, ankle wraps, white bandages, black sandals, revolver, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, arms down, arm behind back, smile, standing still",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "controlnet": {
+  "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+  "image": "docs/concepts/chapters/leblanc/lora/logos/poses/attack-pose.png",
+  "strength": 0.6,
+  "start": 0,
+  "end": 0.8
+ },
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "images": [
+   "refs/idle-square.png",
+   "refs/idle-head.png"
+  ],
+  "weight": 0.3,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "combine": "concat",
+  "scaling": "K+V"
+ },
+ "width": 832,
+ "height": 1216,
+ "composition": "full",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "frame": {
+  "maxRgb": 255,
+  "std": 60.7
+ },
+ "cutout": {
+  "width": 818,
+  "height": 1058,
+  "baselineY": 1042,
+  "cropBox": [
+   14,
+   111,
+   832,
+   1169
+  ],
+  "contentBox": [
+   30,
+   127,
+   825,
+   1153
+  ],
+  "sourceWidth": 832,
+  "sourceHeight": 1216,
+  "model": "isnet-anime"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.9831730769230769,
+    "heightFraction": 0.8700657894736842,
+    "checked": true,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 327474,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.00851059931475476,
+    "largestRegionFraction": 0.0014046916701783959,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "seconds": 15,
+ "generatedAt": "2026-09-23T07:19:58.523Z"
+}
