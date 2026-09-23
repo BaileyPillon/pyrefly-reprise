@@ -1,4 +1,4 @@
-import { spawn, spawnSync, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
 import net from 'node:net';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,10 +34,16 @@ import { expect, test, type Page } from '@playwright/test';
  * is only ever used to reach the first command menu quickly and (for the
  * advisor/numeral checks) to let the bot land a real hit so a numeral is
  * actually in flight, the way a player's own attack would put one there.
+ * Because that bot action can hand the next decision to a different
+ * character, every post-resume read that follows it is polled against the
+ * element's CURRENT rect, never the pixel captured before Escape.
  * **Case: both games** — FFX-2 (chapters 4, 6) ships the panel on by
  * default; FFX (chapter 1) ships the chip, and `E` opens the panel the same
- * fix has to cover. `enemy-intent.css`, `move-advisor.css`, `DamageNumbers.ts`
- * and `pause-screen.css` are all shared between the two games.
+ * fix has to cover. A second chapter-1 case runs chip-only (no `E`): the open
+ * panel covers the whole advisor card, so only the chip-only run actually
+ * exercises the card's hit-test in FFX. `enemy-intent.css`, `move-advisor.css`,
+ * `DamageNumbers.ts` and `pause-screen.css` are all shared between the two
+ * games.
  *
  * **Its own vite dev server**, exactly as `pause.spec.ts`'s header explains:
  * a fresh `vite` dev server (no build) on a random free port between 5400 and
@@ -75,7 +81,7 @@ const REPO_ROOT = join(HERE, '..', '..');
 const PORT_MIN = 5400;
 const PORT_MAX = 5990;
 
-let server: ChildProcessWithoutNullStreams | null = null;
+let server: ChildProcess | null = null;
 let baseUrl = '';
 
 function isFree(port: number): Promise<boolean> {
@@ -99,7 +105,11 @@ async function waitForServerReady(url: string, timeoutMs = 45_000): Promise<void
   let lastError: unknown = null;
   while (Date.now() - start < timeoutMs) {
     try {
-      const res = await fetch(url);
+      // Its own bound per attempt: without this, one stalled request (the
+      // dev server accepting the connection but not yet answering) can eat
+      // the whole `timeoutMs` budget in a single `await`, leaving no time for
+      // the retries this loop exists to make.
+      const res = await fetch(url, { signal: AbortSignal.timeout(5_000) });
       if (res.ok) return;
     } catch (err) {
       lastError = err;
@@ -110,6 +120,11 @@ async function waitForServerReady(url: string, timeoutMs = 45_000): Promise<void
 }
 
 test.beforeAll(async () => {
+  // The `beforeEach` budget above (480s) is for the TESTS; it does not apply
+  // to this hook, which still runs on the project's 90s `timeout` by default.
+  // A cold `vite` start measured 91s on this shared box on 2026-09-23, so the
+  // hook gets its own budget here.
+  test.setTimeout(300_000);
   const port = await pickFreePort();
   baseUrl = `http://127.0.0.1:${port}/`;
   server = spawn(
@@ -117,7 +132,7 @@ test.beforeAll(async () => {
     [join(REPO_ROOT, 'node_modules', 'vite', 'bin', 'vite.js'), '--port', String(port), '--strictPort', '--host', '127.0.0.1'],
     { cwd: REPO_ROOT, stdio: ['ignore', 'pipe', 'pipe'] },
   );
-  await waitForServerReady(baseUrl);
+  await waitForServerReady(baseUrl, 240_000);
 });
 
 test.afterAll(() => {
@@ -299,6 +314,48 @@ const centreOf = (r: { x: number; y: number; width: number; height: number }): {
   y: r.y + r.height / 2,
 });
 
+/** Just the intent panel's rect — same `{ present, rect }` shape as `madState`
+ *  below, so the after-resume poll (`backAtOwnRect`, near the end of the
+ *  test) can re-read it fresh on every attempt instead of trusting a rect
+ *  captured before Escape was pressed: a bot-played hit can legitimately
+ *  move the panel between the two reads. */
+const eintRect = (page: Page): Promise<OverlayRect> =>
+  page.evaluate(() => {
+    const panel = document.querySelector<HTMLElement>('[data-role="enemy-intent-panel"]');
+    const toggle = document.querySelector<HTMLElement>('[data-role="enemy-intent-toggle"]');
+    const shown = panel && !panel.hidden ? panel : toggle;
+    if (!shown) return { present: false, rect: null };
+    const r = shown.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) return { present: false, rect: null };
+    return { present: true, rect: { x: r.x, y: r.y, width: r.width, height: r.height } };
+  });
+
+/**
+ * Try a short list of points inside `rect` — the centre first, then the four
+ * points at 20%/80% of width and height (inset well inside the card, not on
+ * its edge) — and return the first whose `elementAt` result satisfies `hit`.
+ * `null` if none of them do, so the caller can skip a best-effort check
+ * instead of failing on a point that happened to land on something else.
+ */
+async function firstReachablePoint(
+  page: Page,
+  rect: { x: number; y: number; width: number; height: number },
+  hit: (at: Awaited<ReturnType<typeof elementAt>>) => boolean,
+): Promise<{ x: number; y: number } | null> {
+  const candidates = [
+    centreOf(rect),
+    { x: rect.x + rect.width * 0.2, y: rect.y + rect.height * 0.2 },
+    { x: rect.x + rect.width * 0.8, y: rect.y + rect.height * 0.2 },
+    { x: rect.x + rect.width * 0.2, y: rect.y + rect.height * 0.8 },
+    { x: rect.x + rect.width * 0.8, y: rect.y + rect.height * 0.8 },
+  ];
+  for (const candidate of candidates) {
+    const at = await elementAt(page, candidate.x, candidate.y);
+    if (hit(at)) return candidate;
+  }
+  return null;
+}
+
 /**
  * Let the bot play one real action so a numeral is in flight, the way a
  * player's own attack would put one there — not a synthetic DOM insert.
@@ -336,6 +393,8 @@ const CASES: Array<{
   chapterId: string;
   label: string;
   needsE: boolean;
+  /** What should be showing once `needsE` (if any) has been pressed — FFX-2 defaults to the panel; FFX defaults to the chip. */
+  expectedTarget: 'panel' | 'chip';
   screenshot: string | null;
   /** Fresh proof for this fix, at 1600x900 only — the old shot showed the escape, this shows it fixed. */
   cleanScreenshot: string | null;
@@ -344,13 +403,29 @@ const CASES: Array<{
     chapterId: 'seymour-flux',
     label: 'chapter 1 (FFX, chip -> E)',
     needsE: true,
+    expectedTarget: 'panel',
     screenshot: 'intent-pause-ch1.png',
     cleanScreenshot: 'pause-clean-ch1.png',
+  },
+  // Chip-only (no `E`): the panel the case above opens covers the whole
+  // advisor card (`.eint` z-index 2, unscaled, over `.mad` in the scaled
+  // stage beneath it), so no card pixel is hit-testable while it is up and
+  // the advisor-card check never runs. FFX ships the chip by default, so
+  // this run — `expectedTarget` is 'chip', and the `.eint` checks probe the
+  // chip's own rect — is what actually exercises that check in FFX.
+  {
+    chapterId: 'seymour-flux',
+    label: 'chapter 1 (FFX, chip only, no E)',
+    needsE: false,
+    expectedTarget: 'chip',
+    screenshot: null,
+    cleanScreenshot: 'pause-clean-ch1-chip.png',
   },
   {
     chapterId: 'ffx2-bahamut',
     label: 'chapter 4 (FFX-2, panel by default)',
     needsE: false,
+    expectedTarget: 'panel',
     screenshot: null,
     cleanScreenshot: null,
   },
@@ -358,6 +433,7 @@ const CASES: Array<{
     chapterId: 'ffx2-leblanc',
     label: 'chapter 6 (FFX-2, panel by default)',
     needsE: false,
+    expectedTarget: 'panel',
     screenshot: 'intent-pause-ch6.png',
     cleanScreenshot: 'pause-clean-ch6.png',
   },
@@ -384,15 +460,15 @@ for (const c of CASES) {
 
       const before = await eintState(page);
       expect(before.present, 'the intent layer never mounted').toBe(true);
-      expect(before.target, 'the full panel should be showing, not just the chip').toBe('panel');
+      expect(before.target, `expected the ${c.expectedTarget} to be showing`).toBe(c.expectedTarget);
       expect(before.suspended, 'not paused yet — nothing should be suspending it').toBe(false);
-      expect(before.rect, 'the panel needs a real rect to probe').not.toBeNull();
+      expect(before.rect, `the ${c.expectedTarget} needs a real rect to probe`).not.toBeNull();
       const cx = before.rect!.x + before.rect!.width / 2;
       const cy = before.rect!.y + before.rect!.height / 2;
 
-      // Sanity: before the pause, that point really is the panel.
+      // Sanity: before the pause, that point really is the target (panel or chip).
       const beforePoint = await elementAt(page, cx, cy);
-      expect(beforePoint.insideEint, `expected the panel at its own centre before pausing; got ${beforePoint.desc}`).toBe(true);
+      expect(beforePoint.insideEint, `expected the ${c.expectedTarget} at its own centre before pausing; got ${beforePoint.desc}`).toBe(true);
 
       // ---- the two other escapees `pause-screen.css`'s z-index fix owns,
       // proven only at 1600x900 per the brief: the advisor card (present the
@@ -404,15 +480,17 @@ for (const c of CASES) {
       if (size.width === 1600) {
         const madBefore = await madState(page);
         if (madBefore.present && madBefore.rect) {
-          const candidate = centreOf(madBefore.rect);
-          const beforeMad = await elementAt(page, candidate.x, candidate.y);
           // Best-effort, like `spawnNumeral` below: chapter 1's enemy-intent
           // panel (up because `needsE` just pressed `E`) can legitimately
-          // overlap the advisor card's own rect before the pause is even
-          // open — both real, both visible, nothing to do with the pause. Not
-          // the defect this file proves, so the point is skipped rather than
+          // overlap part of the advisor card's rect before the pause is even
+          // open — both real, both visible, nothing to do with the pause. So
+          // several points inside the card are tried (`firstReachablePoint`:
+          // centre, then the four 20%/80% corners) rather than only the
+          // centre, so one overlapping corner does not skip a check a
+          // different point in the same card could still prove; only when
+          // none of them lands on `.mad` is the point skipped rather than
           // failed on.
-          if (beforeMad.insideMad) madPoint = candidate;
+          madPoint = await firstReachablePoint(page, madBefore.rect, (at) => at.insideMad);
         }
         // `.dnum` is never hit-testable, paused or not (`damage-numbers.css`
         // never opts a numeral back in from `#ui`'s `pointer-events: none`,
@@ -421,6 +499,20 @@ for (const c of CASES) {
         // own geometry read inside `spawnNumeral`, not a hit-test.
         numeralPoint = await spawnNumeral(page);
       }
+
+      // Both checks above are best-effort and skip silently (null) rather
+      // than fail the run — so a report reader needs this line to tell a
+      // skipped check from one that ran and passed, and either from a size
+      // that never attempted them at all (the `if (size.width === 1600)`
+      // above).
+      const madLabel =
+        size.width !== 1600
+          ? 'not attempted (1600x900 only)'
+          : madPoint
+            ? `checked at ${Math.round(madPoint.x)},${Math.round(madPoint.y)}`
+            : 'skipped (not hit-testable before the pause)';
+      const numeralLabel = size.width !== 1600 ? 'not attempted (1600x900 only)' : numeralPoint ? 'checked' : 'skipped (none in flight)';
+      console.log(`[${c.label} ${size.width}x${size.height}] advisor card: ${madLabel}; numeral: ${numeralLabel}`);
 
       // ---- Esc opens the pause ----
       await page.keyboard.press('Escape');
@@ -479,13 +571,17 @@ for (const c of CASES) {
       await page.waitForTimeout(200);
       await duringPause('after H again');
 
-      if (c.screenshot) {
+      // `screenshot` and `cleanScreenshot` are independent — the chip-only
+      // case above sets only the latter — so each is guarded on its own
+      // rather than nesting one inside the other, which used to silently
+      // skip a `cleanScreenshot` whenever `screenshot` was null.
+      if ((c.screenshot ?? c.cleanScreenshot) && size.width === 1600) {
         mkdirSync(join(REPO_ROOT, 'docs', 'screenshots', 'fix10'), { recursive: true });
-        if (size.width === 1600) {
+        if (c.screenshot) {
           await page.screenshot({ path: join(REPO_ROOT, 'docs', 'screenshots', 'fix10', c.screenshot) });
-          if (c.cleanScreenshot) {
-            await page.screenshot({ path: join(REPO_ROOT, 'docs', 'screenshots', 'fix10', c.cleanScreenshot) });
-          }
+        }
+        if (c.cleanScreenshot) {
+          await page.screenshot({ path: join(REPO_ROOT, 'docs', 'screenshots', 'fix10', c.cleanScreenshot) });
         }
       }
 
@@ -498,23 +594,69 @@ for (const c of CASES) {
       const after = await eintState(page);
       expect(after.suspended, 'still suspended after resume').toBe(false);
       expect(after.target, 'the panel should be back in the same (visible) state it had before pausing').toBe(before.target);
-      const afterPoint = await elementAt(page, cx, cy);
-      expect(afterPoint.insideEint, `after resume, the old panel rect should be the panel again; got ${afterPoint.desc}`).toBe(true);
 
-      if (madPoint) {
-        // Polled, not single-shot: the card can legitimately be between two
-        // decisions (`clearDecision` / `showDecision`) for a beat right after
-        // resume, same as `waitForCommandMenu` polls rather than checking once.
-        let afterMad = await elementAt(page, madPoint.x, madPoint.y);
-        await waitUntil(
+      // At 1600x900 the bot-played hit can move the panel between Escape and
+      // resume, so the claim there is only "reachable again at its own rect"
+      // (below). At 1280x960 nothing moved it, but the panel can still re-lay
+      // out by a few px on resume, so the claim there is just "the old point
+      // is the panel again" — not exact-centre.
+      let afterDesc = '';
+      const backAtOwnRect = await waitUntil(
+        page,
+        async () => {
+          const state = await eintState(page);
+          if (state.display === 'none' || state.suspended) return false;
+          const r = await eintRect(page);
+          if (!r.present || !r.rect) return false;
+          const pt = centreOf(r.rect);
+          const at = await elementAt(page, pt.x, pt.y);
+          afterDesc = at.desc;
+          return at.insideEint;
+        },
+        { timeoutMs: 5_000, intervalMs: 200 },
+      );
+      expect(backAtOwnRect, `after resume, the panel should be reachable again at its own rect; got ${afterDesc}`).toBe(true);
+
+      if (size.width !== 1600) {
+        // The original PR-0122 claim, polled the same way: no bot action ran
+        // this size, so the OLD point (`cx, cy`) should be the panel again —
+        // not compared to a re-read centre, which can drift a few px on its
+        // own even with no battle change (measured ~4.8px in a prior run).
+        let oldPointDesc = '';
+        const backAtOldPoint = await waitUntil(
           page,
           async () => {
-            afterMad = await elementAt(page, madPoint!.x, madPoint!.y);
-            return afterMad.insideMad;
+            const at = await elementAt(page, cx, cy);
+            oldPointDesc = at.desc;
+            return at.insideEint;
           },
           { timeoutMs: 5_000, intervalMs: 200 },
         );
-        expect(afterMad.insideMad, `after resume, the advisor card should be reachable again; got ${afterMad.desc}`).toBe(true);
+        expect(
+          backAtOldPoint,
+          `without a battle change the old panel point should be the panel again; got ${oldPointDesc}`,
+        ).toBe(true);
+      }
+
+      if (madPoint) {
+        // Polled at the CURRENT rect, like the panel's block above: after a
+        // bot-played action the claim is "the pause no longer covers it", not
+        // "it is where it was" — the bot's hit can hand the next decision to
+        // a different character and move the card. A card that stayed hidden
+        // after resume still fails this: `present` must be true too.
+        let desc = '';
+        const backOnMad = await waitUntil(
+          page,
+          async () => {
+            const mad = await madState(page);
+            if (!mad.present || !mad.rect) return false;
+            const centre = centreOf(mad.rect);
+            desc = (await elementAt(page, centre.x, centre.y)).desc;
+            return (await firstReachablePoint(page, mad.rect, (at) => at.insideMad)) !== null;
+          },
+          { timeoutMs: 5_000, intervalMs: 200 },
+        );
+        expect(backOnMad, `after resume, the advisor card should be reachable again at its own rect; got ${desc}`).toBe(true);
       }
       // No equivalent check for the numeral: it is never hit-testable (see
       // above), and unlike `.eint` it carries no suspended state of its own
