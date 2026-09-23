@@ -1,0 +1,67 @@
+{
+ "_about": "Art method r3 pilot P4 (FFX-2 only, chapter 6 Leblanc): the hurt bake's joint rotations, in idle.png pixel coordinates (before padding). Positive angles turn clockwise on screen: she faces left, the hit comes from the party on the left, so she recoils back to the right. METHOD-CHECK step 3: upper body back 10 to 14 degrees about the hips, head back 8 to 12, fan arm down 20 to 30.",
+ "pad": {
+  "left": 110,
+  "right": 110,
+  "top": 30,
+  "bottom": 0
+ },
+ "hips": [
+  335,
+  470
+ ],
+ "theta1": 13,
+ "ramp": [
+  400,
+  540
+ ],
+ "farSide": {
+  "x0": 120,
+  "x1": 260,
+  "min": 0.4
+ },
+ "core": [
+  "head",
+  "torso",
+  "fanarm",
+  "fan",
+  "choker"
+ ],
+ "coreSigma": 16,
+ "neck": [
+  330,
+  200
+ ],
+ "theta2": 11,
+ "headSigma": 18,
+ "arm": [
+  "fan",
+  "fanarm"
+ ],
+ "armCutY": 338,
+ "elbow": [
+  492,
+  338
+ ],
+ "theta3": -10,
+ "eyeBox": [
+  300,
+  108,
+  396,
+  148
+ ],
+ "coreGrow": 16,
+ "headGrow": 20,
+ "jointDet": 0.12,
+ "_v2": "P6 re-run after the first look: v1 (theta1 11, theta2 10, theta3 +22 outward) swung the fan upright beside the head, which read as a raised fan, not a hit; the blurred head weight sheared the hair outline. v2: 13 / 11 / -18 (the fan drops off the lips toward the chin), rigid head and core inside grown masks, the fan's convex hull in the arm layer. After a look at v2 with -18: the fan covered the heart mark (an identity mark), and hair tips outside SAM's head mask tore off; -10 and a hair box. Then the head weight's edge was narrower than the head's displacement, so the map folded and hair tips were copied into the background: headSigma 18, headGrow 20, coreSigma 16. The remaining fold was the neck ramp (20 px tall while the far hair tips rise 15 px): neckRamp -5..45.",
+ "hairBox": [
+  230,
+  20,
+  300,
+  205
+ ],
+ "neckRamp": [
+  -5,
+  45
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "_about": "Art method r3 pilot P4 (FFX-2 only, chapter 6 Leblanc): the hurt bake's joint rotations, in idle.png pixel coordinates (before padding). Positive angles turn clockwise on screen: she faces left, the hit comes from the party on the left, so she recoils back to the right. METHOD-CHECK step 3: upper body back 10 to 14 degrees about the hips, head back 8 to 12, fan arm down 20 to 30.",
+ "pad": {"left": 110, "right": 110, "top": 30, "bottom": 0},
+ "hips": [335, 470],
+ "theta1": 11,
+ "ramp": [400, 540],
+ "farSide": {"x0": 120, "x1": 260, "min": 0.4},
+ "core": ["head", "torso", "fanarm", "fan", "choker"],
+ "coreSigma": 12,
+ "neck": [330, 200],
+ "theta2": 10,
+ "headSigma": 6,
+ "arm": ["fan", "fanarm"],
+ "armCutY": 338,
+ "elbow": [492, 338],
+ "theta3": 22,
+ "eyeBox": [300, 108, 396, 148]
+}
