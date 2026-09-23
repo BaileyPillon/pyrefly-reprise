@@ -1,0 +1,63 @@
+{
+ "tag": "attack.r2.98104.fix",
+ "key": "attack.r2",
+ "seed": 98104,
+ "method": "masked repaint on the installed cutout (lora inpaint)",
+ "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/attack.99121.r2c.png",
+ "baseSha256": "c8ecfae01c657c4b9b2e4d02f0e9dab737d61489c3f809b2771349d203ad5904",
+ "judge": "marks: the shoulder disc at 1:1 is a patterned plate with lettering-like marks, not the idle radial disc (the round-1 judge named the mesh disc on attack 96101)",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "emblem",
+   "crop": [
+    268,
+    118,
+    524,
+    374
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      396.5,
+      246,
+      25,
+      20
+     ]
+    }
+   ],
+   "feather": 3,
+   "prefill": [],
+   "denoise": 0.5,
+   "refs": [
+    "../poses/refs/idle-emblem.png"
+   ],
+   "refWeight": 0.45,
+   "positive": "logosX2, 1boy, solo, close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, mesh, grille, grid, crosshatch, net pattern, speaker, text, lettering, hexagon, glossy"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "proof": {
+  "changedPixels": 1862,
+  "changedOutsideMask": 0,
+  "maskPixels": 2971,
+  "maxAbsDiffInside": 250
+ },
+ "sha256": "434c278586d667d7bb30ee7a997f273ae0e0c4fb973151ad994865e54ca2b9d3",
+ "seconds": 7,
+ "generatedAt": "2026-09-23T13:13:46.573Z"
+}

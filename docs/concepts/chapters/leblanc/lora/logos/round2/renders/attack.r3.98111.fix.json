@@ -1,0 +1,77 @@
+{
+ "tag": "attack.r3.98111.fix",
+ "key": "attack.r3",
+ "seed": 98111,
+ "method": "masked repaint on the installed cutout (lora inpaint)",
+ "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/attack.r2.98106.fix.png",
+ "baseSha256": "91eae4a18c3d35861a2e7ed9bebeb7b89ffa2ad5a166ed8cb6b0b4fdacc417c0",
+ "judge": "marks: a round brass clasp on the front end of the sash; the idle has none there (the LoRA judge named the same ring on the sash in ko 96402.r2)",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "sash clasp",
+   "crop": [
+    286,
+    318,
+    542,
+    574
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      414,
+      445,
+      14,
+      24
+     ]
+    }
+   ],
+   "feather": 3,
+   "prefill": [
+    {
+     "ellipse": [
+      414,
+      445,
+      12,
+      22
+     ],
+     "color": [
+      120,
+      70,
+      190
+     ]
+    }
+   ],
+   "denoise": 0.45,
+   "refs": [
+    "../poses/refs/idle-square.png"
+   ],
+   "refWeight": 0.25,
+   "positive": "logosX2, 1boy, solo, close-up, purple sash, sash knot, blue robe, cloth folds, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, ring, clasp, buckle, metal, brooch, button, coin, glossy"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "proof": {
+  "changedPixels": 1532,
+  "changedOutsideMask": 0,
+  "maskPixels": 2273,
+  "maxAbsDiffInside": 163
+ },
+ "sha256": "e500bf803b26bffc5725217bdad1b3a765071c58ffd447ead7fcf8725aac5409",
+ "seconds": 11,
+ "generatedAt": "2026-09-23T13:25:44.485Z"
+}

@@ -1,0 +1,63 @@
+{
+ "tag": "hurt.r2.98305.fix",
+ "key": "hurt.r2",
+ "seed": 98305,
+ "method": "masked repaint on the installed cutout (lora inpaint)",
+ "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/hurt.99303.r2.png",
+ "baseSha256": "088a4f09b4a6664cb075f4ab08ac2565ea121bb1443b5a48cf284efda1c5b0eb",
+ "judge": "marks: a white hexagonal plate where the idle has its white radial disc (lens ring below it is kept)",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "emblem",
+   "crop": [
+    367,
+    110,
+    623,
+    366
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      495,
+      238,
+      18,
+      15
+     ]
+    }
+   ],
+   "feather": 3,
+   "prefill": [],
+   "denoise": 0.5,
+   "refs": [
+    "../poses/refs/idle-emblem.png"
+   ],
+   "refWeight": 0.45,
+   "positive": "logosX2, 1boy, solo, close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, mesh, grille, grid, crosshatch, net pattern, speaker, text, lettering, hexagon, glossy"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "proof": {
+  "changedPixels": 932,
+  "changedOutsideMask": 0,
+  "maskPixels": 1861,
+  "maxAbsDiffInside": 198
+ },
+ "sha256": "2e82a542333c37b3087bff6c4d2aeceb041121a195e5d0c0c81c63323ba1afe0",
+ "seconds": 7,
+ "generatedAt": "2026-09-23T13:14:49.625Z"
+}

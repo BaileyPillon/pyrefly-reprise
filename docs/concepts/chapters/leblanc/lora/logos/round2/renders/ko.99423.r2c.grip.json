@@ -1,0 +1,27 @@
+{
+ "tag": "ko.99423.r2c.grip",
+ "seed": null,
+ "method": "pixel edit: brown wooden grip recoloured to the idle dark grip (r2-support.py recolor, box 132,246..205,292, warm hues only, lightness kept)",
+ "judge": "LoRA judge (ko 96402.r2): the grips are brown wood where the idle's are dark",
+ "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/ko.99423.r2c.png",
+ "baseSha256": "59b1712460de6d8a4ba4cc66e21a314724b3f78f0966f202e2409de279c8193f",
+ "lora": null,
+ "passes": [
+  {
+   "name": "grip recolour",
+   "box": [
+    132,
+    246,
+    205,
+    292
+   ]
+  }
+ ],
+ "proof": {
+  "changedPixels": 1276,
+  "changedOutsideBox": 0,
+  "alphaIdentical": true,
+  "diffImage": "renders/ko.99423.r2c.grip.diff.png"
+ },
+ "sha256": "cd2187b21a2db2c49b51836b8999936d528c56ee4fe088e1e84a73f135f6eb43"
+}

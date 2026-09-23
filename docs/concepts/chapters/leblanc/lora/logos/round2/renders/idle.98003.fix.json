@@ -1,0 +1,113 @@
+{
+ "tag": "idle.98003.fix",
+ "key": "idle",
+ "seed": 98003,
+ "method": "masked repaint on the installed cutout (lora inpaint)",
+ "base": "public/art/characters/logos/idle.png",
+ "baseSha256": "64a43dc9a250ab231c443b57542b8071ee35c939775221c0db83e8e61f6d925f",
+ "judge": "round-3 judge, idle weapon 5; LoRA judge, cast weapon 6: the near revolver hangs from one finger through the trigger guard while the fist closes on a grey stub (the idle's own defect, learned by the LoRA)",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.5
+ },
+ "passes": [
+  {
+   "name": "near hand grips the revolver",
+   "crop": [
+    96,
+    456,
+    344,
+    704
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "poly": [
+      [
+       196,
+       526
+      ],
+      [
+       258,
+       524
+      ],
+      [
+       276,
+       546
+      ],
+      [
+       278,
+       592
+      ],
+      [
+       256,
+       612
+      ],
+      [
+       236,
+       630
+      ],
+      [
+       204,
+       634
+      ],
+      [
+       180,
+       618
+      ],
+      [
+       176,
+       590
+      ],
+      [
+       190,
+       560
+      ]
+     ]
+    }
+   ],
+   "feather": 5,
+   "prefill": [
+    {
+     "ellipse": [
+      257,
+      566,
+      12,
+      20
+     ],
+     "color": [
+      12,
+      12,
+      22
+     ]
+    }
+   ],
+   "denoise": 0.8,
+   "refs": [
+    "../poses/refs/attack-grip.png"
+   ],
+   "refWeight": 0.3,
+   "positive": "logosX2, 1boy, solo, close-up, hand, holding gun, fist, hand gripping revolver handle, revolver grip inside fist, index finger on trigger, gun pointing down, arm at side, silver revolver, black grip, pale skin, blue robe, dark blue hakama, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, open hand, finger in trigger guard, hanging gun, dangling gun, extra fingers, extra weapon, gun stub, fused fingers, glove"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "proof": {
+  "changedPixels": 9269,
+  "changedOutsideMask": 0,
+  "maskPixels": 13886,
+  "maxAbsDiffInside": 255
+ },
+ "sha256": "21315f81b2934ce27b5b6b891cbcd3b9732ebae31fc897e719cb3da2b080903b",
+ "seconds": 19,
+ "generatedAt": "2026-09-23T09:16:03.675Z"
+}

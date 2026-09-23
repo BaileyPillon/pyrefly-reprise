@@ -1,0 +1,109 @@
+{
+ "tag": "hurt.r2b.98315.fix",
+ "key": "hurt.r2b",
+ "seed": 98315,
+ "method": "masked repaint on the installed cutout (lora inpaint)",
+ "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/hurt.99303.r2.png",
+ "baseSha256": "088a4f09b4a6664cb075f4ab08ac2565ea121bb1443b5a48cf284efda1c5b0eb",
+ "judge": "marks: a white hexagonal plate where the idle has its white radial disc (lens ring below it is kept); round b: the plate cleared first so no ghost outline remains",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "hex plate cleared to robe",
+   "crop": [
+    367,
+    110,
+    623,
+    366
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      498,
+      237,
+      22,
+      17
+     ]
+    }
+   ],
+   "feather": 3,
+   "prefill": [
+    {
+     "ellipse": [
+      498,
+      237,
+      20,
+      15
+     ],
+     "color": [
+      134,
+      212,
+      253
+     ]
+    }
+   ],
+   "denoise": 0.35,
+   "refs": [
+    "../poses/refs/idle-emblem.png"
+   ],
+   "refWeight": 0.2,
+   "positive": "logosX2, 1boy, solo, close-up, shoulder, blue robe, plain fabric, black shoulder strap, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, emblem, patch, hexagon, plate, text, glossy"
+  },
+  {
+   "name": "emblem (after the plate is cleared)",
+   "crop": [
+    367,
+    110,
+    623,
+    366
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      497,
+      238,
+      19,
+      16
+     ]
+    }
+   ],
+   "feather": 3,
+   "prefill": [],
+   "denoise": 0.5,
+   "refs": [
+    "../poses/refs/idle-emblem.png"
+   ],
+   "refWeight": 0.45,
+   "positive": "logosX2, 1boy, solo, close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, mesh, grille, grid, crosshatch, net pattern, speaker, text, lettering, hexagon, glossy"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "proof": {
+  "changedPixels": 1350,
+  "changedOutsideMask": 0,
+  "maskPixels": 2355,
+  "maxAbsDiffInside": 213
+ },
+ "sha256": "ef6a68a12e2882c2e50d1d4bfa9f2d260eea700bf91c7b14a3c5a20a88a28a32",
+ "seconds": 21,
+ "generatedAt": "2026-09-23T13:17:31.639Z"
+}

@@ -1,0 +1,77 @@
+{
+ "tag": "attack.r3b.98125.fix",
+ "key": "attack.r3b",
+ "seed": 98125,
+ "method": "masked repaint on the installed cutout (lora inpaint)",
+ "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/attack.r2.98106.fix.png",
+ "baseSha256": "91eae4a18c3d35861a2e7ed9bebeb7b89ffa2ad5a166ed8cb6b0b4fdacc417c0",
+ "judge": "marks: a round brass clasp on the front end of the sash; the idle has none there (the LoRA judge named the same ring on the sash in ko 96402.r2); round b: a larger mask, the whole ring and its outline",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2-r2.safetensors",
+  "step": 2000,
+  "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "sash clasp",
+   "crop": [
+    286,
+    318,
+    542,
+    574
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      410,
+      448,
+      17,
+      27
+     ]
+    }
+   ],
+   "feather": 3,
+   "prefill": [
+    {
+     "ellipse": [
+      410,
+      448,
+      15,
+      25
+     ],
+     "color": [
+      110,
+      65,
+      180
+     ]
+    }
+   ],
+   "denoise": 0.65,
+   "refs": [
+    "../poses/refs/idle-square.png"
+   ],
+   "refWeight": 0.25,
+   "positive": "logosX2, 1boy, solo, close-up, purple sash, sash knot, blue robe, cloth folds, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, ring, clasp, buckle, metal, brooch, button, coin, glossy"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "proof": {
+  "changedPixels": 2041,
+  "changedOutsideMask": 0,
+  "maskPixels": 2829,
+  "maxAbsDiffInside": 168
+ },
+ "sha256": "5c722ad51f573aefebfecff340746a9e67bcb6470919738c60f1eea4768191a5",
+ "seconds": 8,
+ "generatedAt": "2026-09-23T13:27:35.575Z"
+}
