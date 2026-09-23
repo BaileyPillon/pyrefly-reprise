@@ -50,8 +50,8 @@ import './coach.css';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
-import { BRIEFING_LINES, BRIEFING_MS, BRIEFING_SPEAKER } from './coachCopy.ts';
-import { markSeen, setBattleHelp } from './coachState.ts';
+import { BRIEFING_MS, BRIEFING_SPEAKER, briefingLines } from './coachCopy.ts';
+import { ffx2AtbMode, markSeen, setBattleHelp } from './coachState.ts';
 
 /** How the briefing ended. */
 export type BriefingOutcome = 'finished' | 'skipped' | 'never-again';
@@ -154,12 +154,6 @@ export class Briefing {
   private markup(): string {
     const bg = artUrl('art/backdrops/dreams-end.png');
     const figure = artUrl('art/characters/auron/idle.png');
-    const lines = BRIEFING_LINES.map(
-      (l) =>
-        `<div class="coach-brief__line">${escapeHtml(l.lead)}` +
-        (l.strong ? `<b>${escapeHtml(l.strong)}</b>` : '') +
-        `${escapeHtml(l.tail)}</div>`,
-    ).join('');
     const seconds = Math.round(this.duration / 1000);
     return `
       <img class="coach-brief__bg" alt="" src="${bg}" onerror="this.style.display='none'">
@@ -167,7 +161,7 @@ export class Briefing {
       <img class="coach-brief__figure" alt="" src="${figure}" onerror="this.style.display='none'">
       <div class="coach-brief__text">
         <div class="coach-brief__who">${escapeHtml(BRIEFING_SPEAKER)}</div>
-        ${lines}
+        <div data-role="coach-brief-lines"></div>
       </div>
       <div class="coach-brief__timer"><i data-role="coach-brief-fill"></i></div>
       <div class="coach-brief__foot">
@@ -249,8 +243,26 @@ export class Briefing {
 
   // ------------------------------------------------------------------ life
 
+  /**
+   * The four lines, for the X-2 clock the save holds **now** (D-029 follow-up 3):
+   * Bailey's approved fourth line under ACTIVE, the Wait line under WAIT.
+   */
+  private renderLines(): void {
+    const box = this.el.querySelector<HTMLElement>('[data-role="coach-brief-lines"]');
+    if (!box) return;
+    box.innerHTML = briefingLines(ffx2AtbMode())
+      .map(
+        (l) =>
+          `<div class="coach-brief__line">${escapeHtml(l.lead)}` +
+          (l.strong ? `<b>${escapeHtml(l.strong)}</b>` : '') +
+          `${escapeHtml(l.tail)}</div>`,
+      )
+      .join('');
+  }
+
   /** Put the briefing up. Resolves when it ends, however it ends. */
   show(): Promise<BriefingOutcome> {
+    this.renderLines();
     this.opts.root.appendChild(this.el);
     this.setTimer(() => this.el.classList.add('coach-brief--in'), 16);
 

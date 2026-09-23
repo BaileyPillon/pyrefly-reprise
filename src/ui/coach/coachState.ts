@@ -25,7 +25,7 @@
  * FFX-2 line alike (CHK-020); nothing here knows which game is playing.
  */
 
-import { activeSave } from '../../app/SaveData.ts';
+import { activeSave, readSetting } from '../../app/SaveData.ts';
 import { ALL_COACH_IDS, type CoachMarkId } from './coachCopy.ts';
 
 /**
@@ -53,10 +53,9 @@ const sessionSeen = new Set<string>();
  * save-data migration was left alone throughout: marking an existing save's
  * owner a veteran is harmless whether or not anything is shown.
  *
- * **Open with Bailey (2026-09-22, D-029):** Wait is now FFX-2's default, so at
- * every command menu the clock *does* wait, and the fourth line is true only
- * for a player who picks ACTIVE. The approved copy is left as it is until he
- * decides (`docs/handoff/ffx2-wait-mode.md` §6); nothing here changed.
+ * **Settled by Bailey (2026-09-23, D-029 follow-up 3):** Wait is FFX-2's
+ * default, so the fourth line is mode-aware — his approved words when the save
+ * says ACTIVE, `BRIEFING_WAIT_LINE` under WAIT ({@link ffx2AtbMode}).
  *
  * The debug API can still force the feature off for a capture that must not
  * show it — `__pyrefly.setCoaching(false)` sets {@link override}, which wins.
@@ -140,6 +139,15 @@ export function coachingAllowed(): boolean {
 export function battleHelpOn(): boolean {
   const save = activeSave();
   return save ? save.settings.battleHelp : true;
+}
+
+/**
+ * The player's X-2 clock right now, for the briefing's fourth line. Read at
+ * show time, so a flip in the same pause is honoured. Anything but `'active'`
+ * reads as Wait, the shipped default. FFX-2 only in meaning.
+ */
+export function ffx2AtbMode(): 'active' | 'wait' {
+  return readSetting('ffx2Atb') === 'active' ? 'active' : 'wait';
 }
 
 /** Write the player's own switch. Persists immediately. */

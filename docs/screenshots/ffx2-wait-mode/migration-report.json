@@ -1,0 +1,107 @@
+{
+  "port": "5459",
+  "steps": [
+    {
+      "name": "A0-seeded-release-08",
+      "ffx2Atb": "active",
+      "marker": null,
+      "chapters": [
+        "seymour-flux",
+        "ffx2-bahamut"
+      ],
+      "cleared": true,
+      "best": 184000,
+      "seen": [
+        "briefing"
+      ]
+    },
+    {
+      "name": "A1-release-08-save-pause-row",
+      "row": "WAIT"
+    },
+    {
+      "name": "A2-flip-to-active",
+      "selected": "ffx2Atb",
+      "before": "WAIT",
+      "after": "ACTIVE",
+      "stored": {
+        "ffx2Atb": "active",
+        "marker": true,
+        "chapters": [
+          "seymour-flux",
+          "ffx2-bahamut"
+        ],
+        "cleared": true,
+        "best": 184000,
+        "seen": [
+          "briefing",
+          "ffx2-gauge"
+        ]
+      }
+    },
+    {
+      "name": "A3-after-reload",
+      "row": "ACTIVE",
+      "stored": {
+        "ffx2Atb": "active",
+        "marker": true,
+        "chapters": [
+          "seymour-flux",
+          "ffx2-bahamut"
+        ],
+        "cleared": true,
+        "best": 184000,
+        "seen": [
+          "briefing",
+          "ffx2-gauge"
+        ]
+      }
+    },
+    {
+      "name": "A4-replay-briefing-active",
+      "lines": [
+        "“Five fights. That is all this is.",
+        "In mine, nothing moves until you move —",
+        "read the list, take your time.",
+        "In hers, the clock does not wait.”"
+      ]
+    },
+    {
+      "name": "A5-flip-to-wait-then-replay",
+      "selected": "ffx2Atb",
+      "before": "ACTIVE",
+      "after": "WAIT",
+      "lines": [
+        "“Five fights. That is all this is.",
+        "In mine, nothing moves until you move —",
+        "read the list, take your time.",
+        "In hers, the clock holds while you choose.”"
+      ]
+    },
+    {
+      "name": "B1-fresh-first-launch-briefing",
+      "lines": [
+        "“Five fights. That is all this is.",
+        "In mine, nothing moves until you move —",
+        "read the list, take your time.",
+        "In hers, the clock holds while you choose.”"
+      ]
+    },
+    {
+      "name": "B2-fresh-stored",
+      "ffx2Atb": "wait",
+      "marker": true,
+      "chapters": [],
+      "cleared": null,
+      "best": null,
+      "seen": [
+        "briefing"
+      ]
+    },
+    {
+      "name": "B3-fresh-pause-row",
+      "row": "WAIT"
+    }
+  ],
+  "failures": []
+}

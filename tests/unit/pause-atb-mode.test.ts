@@ -72,11 +72,13 @@ describe('the X-2 BATTLE row (FFX-2 Config ATB Mode, §1.5)', () => {
     expect(new SaveStore('test:atb-mode', storage).settings.ffx2Atb).toBe('wait');
   });
 
-  it('no migration: a save from before the row gets Wait; a stored Active is kept', () => {
+  it('one-time migration (D-029 follow-up 1): an unmarked Active becomes Wait; a marked Active is kept', () => {
     const old = { settings: { masterVolume: 0.5 } } as unknown as Partial<SaveData>;
     expect(migrate(old).settings.ffx2Atb).toBe('wait');
     const stored = { settings: { ffx2Atb: 'active' } } as unknown as Partial<SaveData>;
-    expect(migrate(stored).settings.ffx2Atb).toBe('active');
+    expect(migrate(stored).settings.ffx2Atb).toBe('wait');
+    const chosen = { settings: { ffx2Atb: 'active', ffx2AtbMigrated: true } } as unknown as Partial<SaveData>;
+    expect(migrate(chosen).settings.ffx2Atb).toBe('active');
   });
 });
 

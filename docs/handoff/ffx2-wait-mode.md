@@ -162,3 +162,63 @@ contexts, stopped by its PID; `.ffx2-wait-repair-browser-tmp.mjs`, report
 track; the policy lives in `BattlePresenterActive.ts`, 261). Release: the presenter and coach
 changes make the candidate DEEP by `critic-plan` (shared systems); `SaveData.ts` from the
 build pass already requires a deep review **before** deploy.
+
+## 9. Follow-ups decided (2026-09-23): the migration, the deferred split, the mode-aware line
+
+Bailey, verbatim, 2026-09-23 00:00 EDT, on §6 items 1 to 3:
+
+> "1, 2, 3 I’ll take your recommendations on all please"
+
+Recorded on **D-029** in `docs/target/decisions.json` (`followUp`: his words and the three
+resolutions). Paper preflight first (save-data class):
+[docs/plans/ffx2-wait-migration-review.md](../plans/ffx2-wait-migration-review.md).
+
+| # | Resolution | Built | Game case |
+|---|---|---|---|
+| 1 | **Adopted.** A one-time migration moves every existing save to Wait | `src/app/saveFfx2Atb.ts` (new, 33 lines, called from `migrate` in `SaveData.ts`): a save whose settings lack `ffx2AtbMigrated === true` gets `ffx2Atb: 'wait'` and the marker, whatever `ffx2Atb` held; a marked save keeps the player's choice (a value that is neither mode reads as Wait); `defaultSettings()` carries the marker, so a fresh save is Wait and the rule never fires on it. No `SAVE_VERSION` bump (presence decides, as with `seenCoach`). `Settings.ffx2AtbMigrated?: boolean` is new and optional. | FFX-2 only |
+| 2 | **Deferred** to the next release: keep the whole-menu hold now; build the faithful split (top-level window runs, submenu freezes, §1.5) next | nothing | FFX-2 only |
+| 3 | **Adopted, B + C.** The briefing's fourth line is mode-aware | `coachCopy.ts`: `BRIEFING_LINES` untouched (his words), new `BRIEFING_WAIT_LINE` and `briefingLines(mode)`; `coachState.ts`: `ffx2AtbMode()`; `Briefing.ts`: the lines are rendered in `show()`, so the first launch, the title replay and the pause replay all print the line for the mode the save holds at that moment (a flip in the same pause included). Under ACTIVE: "In hers, *the clock does not wait*." Under WAIT: "In hers, *the clock holds while you choose*." | FFX-2 only in content (line 4 is the FFX-2 sentence; lines 1 to 3 unchanged) |
+
+**The Wait wording is INFERRED, awaiting Bailey's yes**: `docs/target/targets.json`, tile
+"Onboarding C1", `reaction.inferred`. It states only the built behaviour (the engine moves
+nothing while a command menu is open, and runs between turns). His approved words are
+unchanged and are what an ACTIVE player sees.
+
+**Tests (written first, seen failing: 12 of the 15 new cases and the changed pause case red before the code; the three green ones are guards: migrate-twice, his four lines, his line under ACTIVE).**
+New: `tests/unit/save-ffx2-atb-migration.test.ts` (8: a release-08 blob built by the current
+writer, `'active'` and the marker deleted, loads as Wait with the marker; **deep equality**:
+the migrated blob `toStrictEqual`s the fixture with only `ffx2Atb` and the marker changed,
+chapters / play time / unlocks / seen-set / flags / ATB speed named; every held value and a
+non-boolean marker migrate; a marked save keeps its choice; migrate twice = once; flip to
+ACTIVE, reload twice: ACTIVE; a load with no write migrates again to the same answer; fresh
+save), `tests/unit/ui-coach-briefing-mode.test.ts` (7: his four lines word for word; Active =
+his lines, Wait swaps line 4 only; same shape; fresh save shows the Wait line; ACTIVE shows
+his; the mode at show time wins; the gold halves). Changed: `pause-atb-mode.test.ts` (the old
+"no migration" case now pins the migration), `ui-coach-briefing.test.ts` (the four-lines case
+sets ACTIVE, the reading his line belongs to), `ui-coach-copy.test.ts` (the vocabulary scan
+includes the Wait line).
+
+**Checks.** `npx tsc --noEmit` clean; touched files 11/11, 140 tests; full `npx vitest run`
+250 files, 5670 passed, 2 skipped; `node tools/orphans.mjs` 24 orphans, all pre-existing
+(`saveFfx2Atb.ts` is reachable). `SaveData.ts` is not a listed contract (`docs/CONTRACTS.md`),
+so no CONTRACT-CHANGES entry. `SaveData.ts` 551 → 555 lines (over the cap before; the rule
+lives in its own module).
+
+**Browser, real input** (own Vite on 5459, HMR and watch off, `PYREFLY_BROWSER=gpu`,
+1600x900, stopped by its PID; `.wait-migration-browser-tmp.mjs`, report
+`docs/screenshots/ffx2-wait-mode/migration-report.json`, **0 failures**):
+- A release-08 save seeded in `localStorage` (Active, no marker, a cleared chapter 1 with a
+  184 s best), reload, chapter 4, pause OPTIONS: X-2 BATTLE reads **WAIT**
+  (`migration-01-release08-save-reads-wait.png`). ArrowRight: **ACTIVE**, stored `active` with
+  the marker, chapter 1 still cleared at 184 s (`migration-02-flipped-active.png`). Reload,
+  chapter 4, pause: **ACTIVE** (`migration-03-reload-stays-active.png`).
+- Same pause, mouse on REPLAY BRIEFING with ACTIVE: line 4 is **"In hers, the clock does not
+  wait."** (`migration-05-replay-active-approved-line.png`). Flip to WAIT in the same pause,
+  replay: **"In hers, the clock holds while you choose."**, lines 1 to 3 identical
+  (`migration-06-ch4-replay-wait-line.png`).
+- Fresh profile, Enter on the title: the first-launch briefing shows the **Wait line**
+  (`migration-04-fresh-first-launch-wait-line.png`); stored `wait` with the marker; chapter 4
+  pause reads **WAIT** (`migration-07-fresh-save-reads-wait.png`).
+
+**Release.** Save-data class: `critic-plan --paths src/app/SaveData.ts,...` says DEEP review
+of the candidate **before** deploy. Still open for Bailey: the Wait wording (INFERRED).

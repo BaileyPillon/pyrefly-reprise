@@ -91,6 +91,28 @@ export const BRIEFING_LINES: readonly BriefingLine[] = [
   { lead: 'In hers, ', strong: 'the clock does not wait', tail: '.”' },
 ];
 
+/**
+ * The fourth line under FFX-2's **Wait** mode (D-029 follow-up 3, Bailey
+ * 2026-09-23: *"1, 2, 3 I'll take your recommendations on all please"*).
+ *
+ * His approved line is true only when the X-2 clock runs under an open menu,
+ * so it is shown only when `Settings.ffx2Atb` is `'active'`. Under Wait the
+ * engine moves nothing while a command menu is open and runs between turns
+ * (`docs/handoff/ffx2-wait-mode.md` §1); this line says exactly that and no
+ * more. **Drafted by the agent, awaiting Bailey** (tile C1 `reaction.inferred`
+ * in `docs/target/targets.json`). FFX-2 only in content; lines 1-3 never change.
+ */
+export const BRIEFING_WAIT_LINE: BriefingLine = {
+  lead: 'In hers, ',
+  strong: 'the clock holds while you choose',
+  tail: '.”',
+};
+
+/** The four lines for the player's X-2 clock: Bailey's words under Active, the Wait line under Wait. */
+export function briefingLines(ffx2Atb: 'active' | 'wait'): readonly BriefingLine[] {
+  return ffx2Atb === 'active' ? BRIEFING_LINES : [...BRIEFING_LINES.slice(0, 3), BRIEFING_WAIT_LINE];
+}
+
 /** How long the briefing runs if nobody touches anything, in milliseconds. */
 export const BRIEFING_MS = 20_000;
 

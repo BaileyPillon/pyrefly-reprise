@@ -32,7 +32,7 @@ import {
   setOnboardingLive,
   shouldShow,
 } from '../../src/ui/coach/coachState.ts';
-import { SaveStore } from '../../src/app/SaveData.ts';
+import { SaveStore, activeSave } from '../../src/app/SaveData.ts';
 import { setRawInputSuspended } from '../../src/ui/ffx/rawInput.ts';
 
 function memoryStorage(): Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> {
@@ -260,6 +260,9 @@ describe("Auron's briefing", () => {
   });
 
   it('prints Auron’s four lines and nothing else', () => {
+    // His approved fourth line is the ACTIVE reading (D-029 follow-up 3); the
+    // Wait reading is `ui-coach-briefing-mode.test.ts`.
+    activeSave()?.setSettings({ ffx2Atb: 'active' });
     const briefing = new Briefing({ root, reduceMotion: true });
     void briefing.show();
     const node = el()!;

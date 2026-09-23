@@ -16,6 +16,7 @@ import {
   ALL_MARKS,
   BRIEFING_LINES,
   BRIEFING_MS,
+  BRIEFING_WAIT_LINE,
   FFX2_MARKS,
   FFX_MARKS,
   markById,
@@ -26,7 +27,7 @@ import {
 /** Every word a player can read in the whole feature. */
 function everyPlayerString(): string[] {
   const out: string[] = [];
-  for (const l of BRIEFING_LINES) out.push(l.lead, l.strong, l.tail);
+  for (const l of [...BRIEFING_LINES, BRIEFING_WAIT_LINE]) out.push(l.lead, l.strong, l.tail);
   for (const m of ALL_MARKS) out.push(m.speaker, m.body);
   return out.filter((s) => s.length > 0);
 }

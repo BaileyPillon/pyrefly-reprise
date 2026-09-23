@@ -8,6 +8,7 @@
 
 import { audio } from '../audio/index.ts';
 import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
+import { migrateFfx2Atb } from './saveFfx2Atb.ts';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
@@ -112,16 +113,17 @@ export interface Settings {
    * (`BattleScreenWiring.applyAtbMode`) since D-029.
    *
    * **Defaults to `'wait'`** (Bailey, 2026-09-22: *"I want the default to be
-   * wait mode instead of active mode please"*). Only the default changed — no
-   * migration, no version bump — so a save that already stores `'active'`
-   * (every save written while that was the default) keeps Active until the
-   * row is flipped; a fresh save, or one from before the row, gets Wait.
+   * wait mode instead of active mode please"*), and every existing save is moved
+   * to Wait **once** by {@link migrate} (D-029 follow-up 1, `saveFfx2Atb.ts`,
+   * guarded by {@link Settings.ffx2AtbMigrated}); a choice made after that is kept.
    *
    * Stored here (rather than per-chapter) because it is a preference, like
    * {@link Settings.guideVisible}: the player sets it once and every FFX-2
    * chapter honours it. The pause screen's OPTIONS row is what writes it.
    */
   ffx2Atb: 'active' | 'wait';
+  /** Set once the one-time Wait migration has run on this save (`saveFfx2Atb.ts`). Absent = release 08 or older. */
+  ffx2AtbMigrated?: boolean;
   /** FFX-2 Config ATB speed (§1.2, `ATB_SPEED_MULTIPLIER`), written by the pause ATB SPEED row. Optional,
    *  no migration: absent = Normal = the engine before the setting existed (`docs/handoff/ffx2-active-menu.md`). */
   ffx2AtbSpeed?: 'slow' | 'normal' | 'fast';
@@ -187,6 +189,7 @@ export function defaultSettings(): Settings {
     advisorVisible: true,
     intentVisible: true,
     ffx2Atb: 'wait',
+    ffx2AtbMigrated: true,
     pausePanelsHidden: false,
     battleHelp: true,
     reduceMotion:
@@ -262,6 +265,7 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   const settings: Settings = { ...base.settings, ...(raw.settings ?? {}) };
   if (!hadCoach && veteran) settings.battleHelp = false;
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
+  migrateFfx2Atb(settings, raw.settings);
   const out: SaveData = {
     ...base,
     ...raw,
