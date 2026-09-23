@@ -1,0 +1,22 @@
+{
+  "width": 804,
+  "height": 1191,
+  "baselineY": 1175,
+  "pose": "idle",
+  "composition": "full",
+  "nonBiped": false,
+  "facing": "left",
+  "status": "CANDIDATE",
+  "method": "r3 derive-from-concept (docs/plans/art-method-r3/METHOD-CHECK.md): the approved concept pick seymour-b.png's own pixels; halo peel of the rembg matte, masked repair of the ear only (research 9.2: rounded human ears) and of the robe hem cropped at the render's right edge; no re-render of anything else",
+  "concept": "docs/concepts/chapters/macalania/renders/seymour-b.png",
+  "conceptSeed": 501012,
+  "repairs": [
+    { "part": "ear (pointed -> rounded human, research/ffx-seymour-anima-macalania.md 9.2)", "box": [360, 20, 520, 180], "graph": "RealESRGAN_x4plus crop -> 1024, Animagine XL 4.0 Opt, SetLatentNoiseMask, 30 steps cfg 6 euler_ancestral", "seed": 7304, "denoise": 0.75, "maskPx": 2309 },
+    { "part": "robe hem corner cut by the render's right edge (canvas +48 px right)", "box": [603, 960, 829, 1186], "graph": "same", "seed": 7404, "denoise": 0.9, "maskPx": 7315 }
+  ],
+  "cutout": { "width": 804, "height": 1191, "baselineY": 1175, "contentBox": [16, 16, 787, 1174], "matte": "concept isnet-anime matte, white halo peeled (tools: D:/Tools/pyrefly-lora/seymour/r3/matte.py)" },
+  "sha256": "edb8a444172244a0ebdbb691dd9273e8bd6339fae28c151fc78f719cc34eb721",
+  "candidateOf": "public/art/characters/seymour-macalania/idle.png",
+  "judgeNotes": "self-judged at 1:1 and in battle; not an independent judge; not approved (never in approved-hashes.json)",
+  "generatedAt": "2026-09-23T17:07:17Z"
+}

@@ -1,0 +1,35 @@
+{
+ "url": "http://127.0.0.1:5400/",
+ "browser": "gpu",
+ "at": "2026-09-23T17:42:44.091Z",
+ "variants": {
+  "installed": {
+   "id": "seymour-macalania",
+   "rect": {
+    "x": 837.4806905153221,
+    "y": 263.3585461790598,
+    "w": 175.82859308946797,
+    "h": 377.4115226174282,
+    "depth": 16.889766345261407
+   },
+   "meta": {
+    "width": 553,
+    "height": 1176,
+    "baselineY": 1160,
+    "facing": "right"
+   },
+   "facingDir": -1,
+   "planeScaleX": -1.9545689655172414,
+   "worldHeight": 4.156551724137931,
+   "unitsPerPixel": 0.0035344827586206895,
+   "near": {
+    "x": 602.8058400590166,
+    "y": 99.02025884576324,
+    "w": 273.13879195871164,
+    "h": 603.5058315986984,
+    "depth": 10.736587571324058
+   }
+  }
+ },
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}
