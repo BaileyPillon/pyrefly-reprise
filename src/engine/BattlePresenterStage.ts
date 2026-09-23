@@ -11,7 +11,8 @@
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
 import { artIdFor, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
-import type { BattleStage, CameraPort, Point2, VfxPort } from './BattlePresenterPorts.ts';
+import type { ArrivalClock, BattleStage, CameraPort, Point2, VfxPort } from './BattlePresenterPorts.ts';
+import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
@@ -39,6 +40,8 @@ export interface PaintedStageOptions {
   overlayRoot?: HTMLElement | null;
   /** Rim colour handed down from the scene's light rig. */
   rim?: { color: number | string; dir: [number, number] };
+  /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
+  arrivals?: ArrivalDirectors;
 }
 
 interface StagedActor {
@@ -115,9 +118,18 @@ export class PaintedStage implements BattleStage {
   /** HUD panel rectangles that count as occluders. Published by the HUD. */
   private panels: ScreenRect[] = [];
   private flashEl: HTMLElement | null = null;
+  /**
+   * The state last staged from. The engines hand out their live state object,
+   * so this is also where {@link arrive} finds a combatant revealed mid-fight.
+   */
+  private lastState: BattleState | null = null;
+  private readonly arrivals: ArrivalDirectors;
+  /** What each arrival left on the field, undone when that figure leaves it. */
+  private readonly arrivalCleanups = new Map<CombatantId, ArrivalCleanup>();
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
+    this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({
       actor: (id) => this.actor(id),
       staged: () => this.staged(),
@@ -143,6 +155,7 @@ export class PaintedStage implements BattleStage {
    * second Wakka onto slot 0.
    */
   async stage(state: BattleState): Promise<void> {
+    this.lastState = state;
     const ids = new Set<CombatantId>([
       ...state.activeIds,
       ...(state.aeonId ? [state.aeonId] : []),
@@ -167,7 +180,7 @@ export class PaintedStage implements BattleStage {
   }
 
   /** Add (or replace) one combatant's actor. */
-  async add(c: AnyCombatant): Promise<PaintedActor | undefined> {
+  async add(c: AnyCombatant, worldHeight?: number): Promise<PaintedActor | undefined> {
     this.removeCombatant(c.id);
     const kind: 'party' | 'enemy' = c.side === 'enemy' ? 'enemy' : 'party';
     // The mapped id first, then the raw ones, so a figure whose art has not
@@ -185,7 +198,7 @@ export class PaintedStage implements BattleStage {
       // question, answered by each pose's sidecar; art painted to the contract
       // (party faces right, enemies face left) is drawn exactly as painted.
       side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
-      worldHeight: worldHeightFor(c, heights),
+      worldHeight: worldHeight ?? worldHeightFor(c, heights),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
       placeholder:
@@ -594,7 +607,46 @@ export class PaintedStage implements BattleStage {
     return this.add(stub);
   }
 
+  /**
+   * Stage a combatant revealed mid-fight and play its entrance. See
+   * `BattleStage.arrive`; the scene's director, when it has one, is in
+   * `StageArrivals.ts`.
+   */
+  async arrive(id: CombatantId, clock: ArrivalClock): Promise<PaintedActor | undefined> {
+    const existing = this.actors.get(id)?.actor;
+    if (existing) return existing;
+    const c = this.lastState?.combatants[id];
+    if (!c || c.removed) return undefined;
+    const director = this.arrivals[id];
+    const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
+    const actor = await this.add(c, director?.worldHeight?.(heights));
+    if (!actor) return undefined;
+    actor.setAlpha(0);
+    if (!director) {
+      await actor.fadeTo(1, clock.instant ? 0 : 520);
+      return actor;
+    }
+    const spots = this.opts.slots.enemy;
+    const cleanup = await director.play({
+      ...clock,
+      id,
+      actor,
+      other: (other) => this.actors.get(other)?.actor,
+      enemySlot: (i) => (spots[i] ? [spots[i]![0], spots[i]![1], spots[i]![2]] : undefined),
+      camera: this.opts.battleCamera,
+      rect: (other) => this.projectRect(other),
+      overlayRoot: this.opts.overlayRoot ?? null,
+    });
+    // Only if she is still here: a figure KO'd mid-entrance has already left.
+    if (cleanup && this.actors.get(id)?.actor === actor) this.arrivalCleanups.set(id, cleanup);
+    else cleanup?.();
+    return actor;
+  }
+
   removeCombatant(id: CombatantId): void {
+    const undo = this.arrivalCleanups.get(id);
+    this.arrivalCleanups.delete(id);
+    undo?.();
     const staged = this.actors.get(id);
     if (!staged) return;
     this.actors.delete(id);
@@ -700,6 +752,8 @@ export class PaintedStage implements BattleStage {
   }
 
   dispose(): void {
+    for (const undo of this.arrivalCleanups.values()) undo();
+    this.arrivalCleanups.clear();
     for (const { actor } of this.actors.values()) actor.dispose();
     this.actors.clear();
     this.hits.dispose();

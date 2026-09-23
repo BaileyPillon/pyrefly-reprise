@@ -725,3 +725,41 @@ Two things gate the work rather than stopping it, and they must be honoured:
 
 The engine and data tracks (T1, T3, T4) can start today, on paper's authority alone,
 because they are things Bailey never perceives.
+
+---
+
+## Addendum, 2026-09-22: fix-pass preflight (presenter arrival, eject, results)
+
+Written during the fix pass on 62b4927, not before its first line of code: the
+presenter work started as the critical defect's repair and `critic-plan --paths`
+classed it **DEEP** (battle presenter, chapter registry, global layout) once the
+file list was known. Recorded here so the paper trail rule 15 asks for exists,
+and honestly dated.
+
+**What changes, and the game case.**
+
+| Change | Files | Case |
+|---|---|---|
+| A `part-restored` for an enemy the stage never built is staged through a new optional `BattleStage.arrive`, held until the mid-battle beat right behind it has played, then the scene's arrival director runs (Anima: A's staging + B's tag, INFERRED) | `BattlePresenterArrivals.ts` (new), `BattlePresenterEvents.ts`, `BattlePresenter.ts` (flush at burst end), `BattlePresenterPorts.ts`, `BattlePresenterStage.ts`, `StageArrivals.ts` (new), `scenes/types.ts`, `scenes/index.ts`, `scenes/macalania-temple-arrival-battle.ts` (new) | plumbing **both**; the director FFX only |
+| `status-add eject` on an enemy dissolves it and takes it off the field (stone grey after a petrify) | `BattlePresenterArrivals.ts` | **both** |
+| Drops merge repeated items; a long ITEMS row steps down a size | `resultsMath.ts`, `ResultsScreen.ts`, `results.css` | **both** |
+
+**Risks, and what bounds each.**
+
+1. *Another chapter's `part-restored` changes.* Only an **unstaged** part takes the
+   new path; a staged one (the Yu Pagodas, Vegnagun's parts) keeps the old fade. A
+   presenter test pins both. No other shipped chapter reveals a `flags.hidden` enemy.
+2. *The hold never releases.* It flushes at the next non-script event and at the
+   end of every burst, and `settled` caps the whole arrival at 9 s.
+3. *Eject on the party.* Not touched: the engine does not refill the slot and what
+   FFX draws is not sourced here, so a party Eject keeps its old behaviour.
+4. *Skip speed / e2e.* The arrival lands its end state at once when the presenter
+   runs at `'skip'` (a test pins the clock's `instant`).
+5. *Results layout in FFX-2.* Merging drops only shortens the string; the smaller
+   size applies only past 26 characters.
+
+**Verification planned:** failing-first unit tests for each rule, then one real
+battle in a GPU browser (seed 1, the intended line): the Guardians leave on the
+shatter, Anima is staged and visible through act two with the rail showing her,
+act three removes her chains and restores Seymour, the results ITEMS row clears the
+party list.

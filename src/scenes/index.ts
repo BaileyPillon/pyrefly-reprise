@@ -35,6 +35,7 @@ import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farp
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { mountScene, type SceneBuild, type SceneFactory } from './types.ts';
+import { attachArrivals } from '../engine/StageArrivals.ts';
 
 /** A field position in world units. */
 export type Spot = [number, number, number];
@@ -299,6 +300,8 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
   const scene = new Scene();
   scene.name = key;
   mountScene(build, scene);
+  // The stage reads a scene's mid-battle entrances off this object.
+  if (build.arrivals) attachArrivals(scene, build.arrivals);
 
   const battleCamera = new BattleCamera(camera, { rigs: build.rigs, initial: 'idle' });
   const toSpot = (v: Vector3): Spot => [v.x, v.y, v.z];

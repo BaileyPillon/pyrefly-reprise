@@ -33,6 +33,7 @@ import {
   turnStart,
   victory,
 } from './BattlePresenterBeats.ts';
+import { flushArrivals, restorePart, statusAdded } from './BattlePresenterArrivals.ts';
 
 /** One numeral, minus the screen position the stage supplies. */
 type Numeral = Omit<Parameters<DamageNumbersPort['show']>[0], 'x' | 'y'>;
@@ -123,6 +124,10 @@ export interface EventCtx {
    * by hand now goes through here — see `BattleMoments.ts` for why.
    */
   readonly moments: BattleMoments;
+  /** The playback speed right now (an arrival lands at once at `'skip'`). */
+  readonly speed: () => PlaybackSpeed;
+  /** Mid-battle arrivals revealed but not yet played (`BattlePresenterArrivals.ts`). */
+  readonly pendingArrivals: CombatantId[];
 }
 
 export function createEventCtx(
@@ -140,7 +145,7 @@ export function createEventCtx(
     sleep,
     speed,
   });
-  return { stage: deps.stage, deps, sleep, actingId: null, moments };
+  return { stage: deps.stage, deps, sleep, actingId: null, moments, speed, pendingArrivals: [] };
 }
 
 // --------------------------------------------------------------------- audio
@@ -187,6 +192,8 @@ export async function banner(ctx: EventCtx, text: string, kind: MessageKind): Pr
 
 /** Play one event. Resolves when its animation has settled. */
 export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void> {
+  // A held arrival plays before whatever comes after the beat that named it.
+  if (ctx.pendingArrivals.length > 0) await flushArrivals(ctx);
   switch (event.type) {
     case 'turn-start':
       return turnStart(ctx, event.actorId);
@@ -222,13 +229,13 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       numeral(ctx, event.targetId, { kind: 'mp-heal', amount: event.amount });
       return ctx.sleep(TIMING.status);
 
-    case 'status-add': {
-      ctx.stage.actor(event.targetId)?.flash(0xc9a6ff, 260, 0.5);
-      cue(ctx, 'status', { volume: 0.5 });
-      return ctx.sleep(TIMING.status);
-    }
+    case 'status-add':
+      return statusAdded(ctx, event);
 
     case 'status-remove':
+      if (event.status === 'petrify') ctx.stage.actor(event.targetId)?.setBrightness(1);
+      return ctx.sleep(TIMING.status * 0.4);
+
     case 'status-tick':
       return ctx.sleep(TIMING.status * 0.4);
 
@@ -326,13 +333,8 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return;
     }
 
-    case 'part-restored': {
-      const a = ctx.stage.actor(event.partId);
-      a?.setDissolve(0);
-      a?.setAlpha(0);
-      await settled(ctx, a?.fadeTo(1, TIMING.revive), TIMING.revive);
-      return;
-    }
+    case 'part-restored':
+      return restorePart(ctx, event);
 
     case 'escape-attempt':
       await banner(ctx, event.success ? 'Escaped' : "Can't escape!", 'system');

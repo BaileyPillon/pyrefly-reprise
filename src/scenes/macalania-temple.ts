@@ -7,6 +7,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import { makeAnimaArrivalDirector } from './macalania-temple-arrival-battle.ts';
 
 // ---------------------------------------------------------------------------
 // Macalania Temple — the antechamber outside the Chamber of the Fayth (FFX)
@@ -320,8 +321,16 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
     });
   }
 
+  // Anima's arrival in a real battle (INFERRED: the driver's recommendation,
+  // A + B's tag; `macalania-temple-arrival-battle.ts`).
+  const animaArrival = makeAnimaArrivalDirector(group, 'seymour-macalania', {
+    to: SEYMOUR_STEP_BACK,
+    fromSlot: MACALANIA_ENEMY_SLOT['seymour-macalania'],
+  });
+
   return {
     group,
+    arrivals: { 'anima-macalania': animaArrival },
     get backdrop(): Backdrop {
       return backdrop;
     },
@@ -338,6 +347,7 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
     },
     dispose(): void {
       watcher?.stop();
+      animaArrival.dispose?.();
       for (const p of particles) p.dispose();
       for (const p of pools) {
         p.geometry.dispose();

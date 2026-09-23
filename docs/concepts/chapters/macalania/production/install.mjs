@@ -58,7 +58,10 @@ for (const it of picks.items) {
       prompt: side.positive, negative: side.negative, cropBox: c.cropBox,
       source: { width: c.sourceWidth, height: c.sourceHeight },
       model: side.model, steps: side.steps, cfg: side.cfg, sampler: side.sampler, scheduler: side.scheduler,
-      pose: side.state, composition: side.composition, nonBiped: side.nonBiped, facing: 'left',
+      pose: side.state, composition: side.composition, nonBiped: side.nonBiped,
+      // Which way the painting faces, as looked at: most picks face the party
+      // (left); a pick that came back facing away says so in picks.json.
+      facing: it.facing ?? 'left',
       emphasis: side.emphasis, canvas: side.canvas,
       ref: side.ref.images, refWeight: side.ref.weight, refWeightType: side.ref.type, refScaling: side.ref.scaling,
       refCombine: side.ref.combine, refStart: side.ref.start, refEnd: side.ref.end, ipadapter: side.ref.ipadapter,

@@ -1,3 +1,4 @@
+import type { ArrivalDirectors } from '../engine/StageArrivals.ts';
 import type { Group, Scene, Vector3 } from 'three';
 import type { Backdrop } from '../engine/Backdrop.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
@@ -77,6 +78,13 @@ export interface SceneBuild {
 
   /** Release every texture, geometry and material the scene owns. */
   dispose(): void;
+
+  /**
+   * Optional: how this location stages a combatant revealed mid-battle, by
+   * combatant id (`src/engine/StageArrivals.ts`). Without one, a revealed
+   * enemy fades in on its slot.
+   */
+  readonly arrivals?: ArrivalDirectors;
 }
 
 /** The rigs every scene must publish. */

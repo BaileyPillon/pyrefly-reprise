@@ -110,6 +110,10 @@ four optionals in the preflight are still the right shape.
 
 ## 3. What the presenter needs — **not built, and it is one item**
 
+> **Closed 2026-09-22** by the chapter's fix pass (`docs/handoff/chapter-macalania.md`,
+> "Fix pass"): neither option below; an optional `BattleStage.arrive` stages an
+> unstaged reveal and plays the scene's arrival director. No event or contract change.
+
 `src/engine/BattlePresenter.ts` and the stage belong to another agent, so this
 track stopped short. Exactly one thing is owed:
 

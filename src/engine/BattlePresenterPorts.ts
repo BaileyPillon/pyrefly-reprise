@@ -219,6 +219,25 @@ export interface BattleStage {
    * what keeps FFX's arc its own shape across a swap.
    */
   slotOf?(id: CombatantId): number | undefined;
+  /**
+   * Stage a combatant that was **not** on the field at battle start and play
+   * its entrance: `forms.ts#revealEnemy`'s `part-restored` for an enemy that
+   * began `flags.hidden` (Anima at Macalania). The stage knows the combatant
+   * from the state it was staged with, and plays the scene's arrival director
+   * for it when the scene has one (`StageArrivals.ts`), else a plain fade-in.
+   *
+   * Optional: a stage without it keeps the old behaviour (the event fades an
+   * actor that already exists, and does nothing for one that does not).
+   */
+  arrive?(id: CombatantId, clock: ArrivalClock): Promise<ActorHandle | undefined>;
+}
+
+/** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */
+export interface ArrivalClock {
+  /** The presenter's own sleep: scaled by the playback speed, frozen by the pause gate. */
+  sleep(ms: number): Promise<void>;
+  /** True at `'skip'` speed: land the arrival's end state at once, show no animation. */
+  instant: boolean;
 }
 
 /** Playback speed, driven by the skip/fast-forward controls. */

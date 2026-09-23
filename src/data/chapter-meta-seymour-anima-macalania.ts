@@ -12,13 +12,14 @@
  * followed). The chapter stays LOCKED as COMING on chapter select until
  * Bailey approves its art.
  *
- * `heroArt`/`heroArtFallback`/snapshot images point at art already rendered
- * to `public/art/` from the chapter's engine-and-data pass (`074a198`) — that
- * pass shipped combat sprites, not this screen's close-up, so `heroArt` has
- * no file yet and the screen falls back to the existing portrait, same
- * convention every other chapter's `heroArt` follows before its own close-up
- * is painted. These are CANDIDATE assets (`docs/target/targets.json`): none
- * of Macalania's art is Bailey-approved yet.
+ * `heroArt` is the installed pause plate, `public/art/pause/macalania.png`
+ * (+ `.2x.webp`; its sidecar says CANDIDATE, hero.550003, IP-Adapter on the
+ * installed Seymour idle head). It used to name
+ * `pause/ch7-seymour-anima-macalania`, which was never rendered, so the tab
+ * fell back to `portraits/seymour.png` (the Flux-era face) and the plate was
+ * wired to nothing (critic pass on 62b4927). `heroArtFallback` stays the
+ * portrait. These are CANDIDATE assets (`docs/target/targets.json`): none of
+ * Macalania's art is Bailey-approved yet.
  *
  * `musicKeys` name the cues the chapter actually routes today
  * (`./chapter-seymour-anima-macalania.ts` `music`): Chapter 1's
@@ -47,7 +48,7 @@ export const SEYMOUR_ANIMA_MACALANIA_META: ChapterMeta = {
     'Seymour offers the pilgrimage a second time, and this time he does not ask — he calls Anima up ' +
     "through the chamber floor to make the answer for him. What she does to a party is not what she " +
     'does to the aeon summoned to stand in front of them, and the fight is built entirely out of that gap.',
-  heroArt: 'pause/ch7-seymour-anima-macalania',
+  heroArt: 'pause/macalania',
   heroArtFallback: 'portraits/seymour.png',
   quote: {
     text: 'You already know the ending. I am only asking you to stop pretending otherwise.',

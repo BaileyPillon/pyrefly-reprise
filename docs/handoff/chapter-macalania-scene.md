@@ -157,7 +157,7 @@ These belong to the presenter and data owners, and each was checked by reading t
    - Anima (`isPart`) would be 2.26, which makes her the smallest enemy on the field.
 
    The staged sizes above are what this scene publishes; the presenter should read them.
-3. **The arrival still needs its presenter hook.** `docs/handoff/chapter-macalania-engine.md` §3 is
+3. **Closed 2026-09-22 (fix pass, `chapter-macalania.md`): the real battle now plays it through `macalania-temple-arrival-battle.ts`.** Was: **the arrival still needs its presenter hook.** `docs/handoff/chapter-macalania-engine.md` §3 is
    still owed: `part-restored` does nothing for an enemy that was never staged. This track's
    timeline is pure and ready for that handler to drive: `animaArrivalAt`, `ANIMA_ARRIVAL_CAMERA`,
    `makeFloorOccluder`, `makeArrivalChains`, `SEYMOUR_STEP_BACK`. B's tag in a real battle belongs

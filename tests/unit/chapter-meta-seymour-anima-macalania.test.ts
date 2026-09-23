@@ -66,6 +66,14 @@ describe('SEYMOUR_ANIMA_MACALANIA_META', () => {
     expect(SEYMOUR_ANIMA_MACALANIA_META.heroArt).not.toMatch(/\.(png|jpg|jpeg|webp)$/i);
   });
 
+  // Critic pass on 62b4927: `heroArt` named a file that was never rendered
+  // ('pause/ch7-seymour-anima-macalania'), so the pause tab fell back to the
+  // Flux-era portrait while the installed plate (`pause/macalania.png`, CANDIDATE)
+  // was wired to nothing. The plate exists, so the name must reach it.
+  it('heroArt names the installed pause plate', () => {
+    expect(artExists(`${SEYMOUR_ANIMA_MACALANIA_META.heroArt}.png`)).toBe(true);
+  });
+
   it('every snapshot image exists under public/art', () => {
     for (const snap of SEYMOUR_ANIMA_MACALANIA_META.snapshots) {
       expect(artExists(snap.image), snap.image).toBe(true);

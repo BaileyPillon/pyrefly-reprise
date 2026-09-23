@@ -296,10 +296,18 @@ export function leaderId(chapter: Chapter | undefined): string | undefined {
 
 /** The drops as one printed list: `Elixir, Phoenix Down ×2`. */
 export function dropsLabel(drops: BattleResult['drops']): string {
-  return drops
-    .map((d) => itemLabel(d.itemId) + (d.count > 1 ? ` \u00d7${d.count}` : ''))
+  // One entry per item: the engines list a drop per enemy, so a formation of
+  // look-alikes printed the same name three times and wrapped the ITEMS row
+  // into the party list (Macalania, critic pass on 62b4927). Both games.
+  const counts = new Map<BattleResult['drops'][number]['itemId'], number>();
+  for (const d of drops) counts.set(d.itemId, (counts.get(d.itemId) ?? 0) + d.count);
+  return [...counts]
+    .map(([id, count]) => itemLabel(id) + (count > 1 ? ` \u00d7${count}` : ''))
     .join(', ');
 }
+
+// The ledger's and the party list's density, and the ITEMS row's size.
+export { ITEMS_LONG_CHARS, ledgerValueClass, resultsDensity, type ResultsDensity } from './resultsLayout.ts';
 
 /**
  * The victory wedge's portrait frame — the box `.rres__hero-frame` is sized

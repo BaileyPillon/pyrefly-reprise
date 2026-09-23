@@ -29,9 +29,9 @@ import { Easing, lerp } from '../engine/Tween.ts';
 //
 // The timeline is a pure function of elapsed milliseconds ({@link
 // animaArrivalAt}) so it is deterministic, testable without a DOM, and can be
-// driven by either the preview (`macalania-temple-painted.ts`) or, later, the
-// presenter's `part-restored` handler (docs/handoff/chapter-macalania-engine.md
-// §3, which this track does not own). The cue it answers is the story
+// driven by either the preview (`macalania-temple-painted.ts`) or a real
+// battle (`macalania-temple-arrival-battle.ts`, which `PaintedStage.arrive`
+// plays when the engine reveals her). The cue it answers is the story
 // script's mid-battle `mac-anima-summon` (src/story/scripts/
 // seymour-anima-macalania.ts): Yuna's "An aeon. He is summoning an aeon." is
 // said *before* the player sees her, so the rise starts after that line.

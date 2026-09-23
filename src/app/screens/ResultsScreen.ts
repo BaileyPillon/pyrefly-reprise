@@ -13,6 +13,8 @@ import {
   buildMemberRows,
   clearTimeMs,
   dropsLabel,
+  ledgerValueClass,
+  resultsDensity,
   formatClearTime,
   formatNumber,
   isNewBest,
@@ -336,11 +338,12 @@ export class ResultsScreen extends Screen {
     }
     if (this.wasNewBest) tags.push('NEW BEST');
 
+    const density = resultsDensity(this.ledger.length, this.rows.length);
     const ledgerHtml = this.ledger
       .map((line) => {
         const value =
           line.kind === 'count' ? formatNumber(Math.round(line.value * p)) : escapeHtml(line.value);
-        const valueClass = line.kind === 'items' ? 'rres__v rres__v--items' : 'rres__v';
+        const valueClass = ledgerValueClass(line.kind === 'items' ? line.value : null);
         const detail = line.detail ? `<div class="rres__d">${escapeHtml(line.detail)}</div>` : '';
         return `<div class="rres__line">
             <div class="rres__k">${escapeHtml(line.key)}</div>
@@ -361,9 +364,9 @@ export class ResultsScreen extends Screen {
         ${this.quip ? `<div class="rres__quip">${escapeHtml(this.quip)}</div>` : ''}
       </div>
 
-      <div class="rres__ledger${this.ledger.length > 3 ? ' rres__ledger--compact' : ''}">${ledgerHtml}</div>
+      <div class="rres__ledger rres__ledger--${density.ledger}">${ledgerHtml}</div>
 
-      <div class="rres__party">${this.membersHtml(p)}</div>
+      <div class="rres__party rres__party--${density.party}">${this.membersHtml(p)}</div>
       ${this.victory ? this.confirmHtml() : this.actionsHtml()}
     `;
     this.stage.el.classList.add('rres--visible');

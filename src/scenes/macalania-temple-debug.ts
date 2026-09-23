@@ -24,23 +24,9 @@
 import { Vector3, type Camera, type Scene } from 'three';
 import { Screen } from '../app/Screen.ts';
 import type { PaintedActor } from '../engine/PaintedActor.ts';
+import { MACALANIA_TAG_CSS as TAG_CSS } from './macalania-temple-arrival-battle.ts';
 import { buildMacalaniaTemplePainted, type MacalaniaPainted } from './macalania-temple-painted.ts';
 
-const TAG_CSS = `
-.mac-tag{position:fixed;pointer-events:none;z-index:40;transform:translate(-50%,-100%);transition:opacity .45s ease;opacity:0}
-.mac-tag.is-on{opacity:1}
-.mac-tag__plate{font:700 13px/1 var(--ig-font-display,system-ui,sans-serif);letter-spacing:.3em;text-transform:uppercase;
-  padding:9px 14px;white-space:nowrap;background:rgba(10,14,24,.84);color:#c9ccd6;border:1px solid rgba(160,166,180,.35)}
-.mac-tag--gold .mac-tag__plate{font:italic 700 26px/1 var(--ig-font-serif,Georgia,serif);letter-spacing:0;text-transform:none;
-  color:#f3e7c4;background:transparent;border:0;border-bottom:2px solid #d9b45a;padding:4px 16px}
-.mac-reticle{position:fixed;pointer-events:none;z-index:39;border:0;opacity:0;transition:opacity .45s ease}
-.mac-reticle.is-on{opacity:1}
-.mac-reticle i{position:absolute;width:22px;height:22px;border-color:rgba(170,176,190,.7);border-style:solid;border-width:0}
-.mac-reticle i:nth-child(1){left:0;top:0;border-left-width:2px;border-top-width:2px}
-.mac-reticle i:nth-child(2){right:0;top:0;border-right-width:2px;border-top-width:2px}
-.mac-reticle i:nth-child(3){left:0;bottom:0;border-left-width:2px;border-bottom-width:2px}
-.mac-reticle i:nth-child(4){right:0;bottom:0;border-right-width:2px;border-bottom-width:2px}
-`;
 
 export class MacalaniaTempleSceneScreen extends Screen {
   readonly name = 'scene-macalania-temple';

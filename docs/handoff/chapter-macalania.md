@@ -11,6 +11,64 @@
 > guide, tactic and meta (`27ed39e`, `chapter-macalania-guide.md`) and the
 > scene with Anima's arrival (`823450d`, `chapter-macalania-scene.md`).
 
+## Fix pass, 2026-09-22 (critic pass on 62b4927)
+
+**Game case.** The chapter's own files are **FFX only**. Three fixes are shared
+plumbing and so **both** [AGENTS.md rule 14, CHK-020]: the presenter's arrival
+rule, the presenter's eject rule and the results layout. No boss number changed.
+The paper preflight for the DEEP part is the addendum at the end of
+`docs/plans/chapter-macalania-review.md` (written during this pass, dated so).
+
+| Verifier finding | Root cause, proven by running | Fix | Test that failed first |
+|---|---|---|---|
+| **CRITICAL** Anima never appears in a real battle | `forms.ts#revealEnemy` emits `part-restored` for a combatant the stage never built (`flags.hidden` at start); the handler faded `stage.actor(id)`, which was `undefined`. Engine probe (seed 1): `message`, `part-restored`, then `script-trigger mac-anima-summon` | New optional `BattleStage.arrive` (`BattlePresenterPorts.ts`); `BattlePresenterArrivals.ts` holds an unstaged reveal until the next non-script event or the end of the burst, then `PaintedStage.arrive` stages her from the live state and plays the scene's `ArrivalDirector` (`StageArrivals.ts`; published by `buildMacalaniaTempleScene` as `arrivals`, carried on the three.js scene's `userData` so `BattleScreen.ts`, another agent's file, is untouched). The Macalania director (`src/scenes/macalania-temple-arrival-battle.ts`) drives the preview's own pure timeline: camera drop and rise, chains, floor occluder, crack light, Seymour stepping back and greying (tint, not `setDim`, which the targeting highlight owns), B's tags for 3.2 s. When she leaves (act three) the chains go and Seymour walks back into the light | `tests/unit/presenter-arrival-eject.test.ts` (4 arrival cases, 5 of 6 failed before) |
+| **MAJOR** shattered Guardians stay standing | `hp.ts#ejectActor` emits `status-add eject`, never a `ko`; the presenter only flashed | `status-add eject` on an **enemy** dissolves it (stone grey after a petrify) and removes it; `petrify` flashes grey. A party Eject is unchanged (the engine does not refill the slot and what FFX draws is not sourced) | same file, the eject case |
+| **MAJOR** Guardian attack/hurt face away; Seymour hurt turned away | `install.mjs` wrote `facing: 'left'` for every pose; three paintings face frame-right (looked at 1:1) | `picks.json` declares `facing: 'right'` for Guardian attack, Guardian hurt, Seymour hurt; `install.mjs` reads it; the three installed sidecars patched (public/art is local only; copies in `D:/Tools/pyrefly-art-backup/candidates/2026-09-22-macalania/facing-fix/`) | none possible in a unit test (which way a painting faces is read by eye); the browser crops are the proof |
+| MINOR pause hero art wired to nothing | `heroArt` named an unrendered `pause/ch7-seymour-anima-macalania` | `heroArt: 'pause/macalania'` (the installed CANDIDATE plate) | `chapter-meta-seymour-anima-macalania.test.ts` "heroArt names the installed pause plate" |
+| MINOR four drops overlap Tidus's row | two causes: one drop per enemy printed the same name three times, **and** a fourth member (a switch-in earns AP) lifts the bottom-anchored party list into the ledger | `dropsLabel` merges repeated items (`Ability Sphere ×3, Blk Magic Sphere`); a long ITEMS row steps down a size; `resultsDensity` (`src/ui/common/resultsLayout.ts`) compacts the ledger, then the member rows, until the two blocks clear (1 to 7 members). Both games | `ui-common-results.test.ts`: the merge case and three `resultsDensity` cases |
+| MINOR four files over 400 lines, `api.ts` at 500 | | `macalania-rules.ts` 364 (+ `macalania-talk.ts`), the tactic 268 (+ `-helpers.ts`), the abilities 370 (+ `-anima-abilities.ts`), the build 310 (+ `macalania-bench.ts`), all re-exported so no import changed; `src/debug/api.ts` 467 (the seven scene debug screens moved to `src/debug/sceneScreens.ts`: **Evrae's scene screen registers there now**) | tsc + the chapter suites |
+
+### How the fix pass was verified
+
+- `npx tsc --noEmit` clean; the new and touched suites green; full `npm test`
+  (numbers in the commit).
+- `node tools/orphans.mjs`: none of the new modules is an orphan.
+- **Real battle, GPU browser** (`PYREFLY_BROWSER=gpu`, own Vite on :5743, stopped
+  by PID; scratch `tools/zz-macfix.tmp/`, not committed), seed 1, the intended
+  line, normal speed around the summon: the two Guardians are petrified and
+  leave the field on turn 18 (`staged()` loses both); Anima is staged the moment
+  Yuna's line ends, rises through the floor with the chains, Seymour steps back,
+  the tags land, the rail lists her first once the burst ends; in act three she
+  and the chains are gone and Seymour is back in the light; results: ITEMS reads
+  `Ability Sphere ×3, Blk Magic Sphere` and clears the four-member party list.
+  0 console errors, 0 HTTP errors. Stills:
+  `docs/screenshots/chapters/macalania-arrival-real.png` (four beats of the
+  real-battle arrival), `macalania-facing-fixed.png` (Guardian B and Seymour,
+  idle / attack / hurt at 1:1 in game), `macalania-results-fixed.png`.
+- The results demo screens (`results-victory`, `results-ffx2`) keep their
+  layout (`normal` / `compact` ledger over a `normal` list, 0 errors).
+
+### Still open after the fix pass
+
+1. **Seymour's attack pose** still blooms white in the hair and washes the face
+   (the renderer's bloom on near-white paint; CANDIDATE art, needs a repaint or a
+   darker hair pass, not a code fix). His hurt pose now faces the party but still
+   reads as the head thrown back, which is what the pick was.
+2. **"Cannot be targeted" is timed**, not persistent: the tags show for 3.2 s after
+   they land; the persistent version belongs to the targeting HUD.
+3. **Sizes.** In battle Anima is 1.2x the boss height with no hover (a labelled
+   presentation estimate: at the preview's 3.6 she would be shorter than the
+   stage's 4.1 Seymour). `fromSceneBuild` still hard-codes 1.82 / 4.1 (scene
+   handoff §7.2).
+4. **Leblanc has the same pause-art bug** (`heroArt: 'pause/ffx2-leblanc'`, the
+   installed plate is `pause/leblanc.png`); not fixed here, the Leblanc data is
+   another workflow's.
+5. **Observations, pre-existing and shared, not fixed:** the title screen's DOM
+   covers a battle reached by `gotoChapter` from a real-keys chapter select; the
+   advisor card does not refresh under `autoBattle` (it still recommended
+   Petrify Grenade after both Guardians had gone).
+6. `docs/handoff/NOW.md` was not edited (not this brief's file).
+
 ## Status: registered, playable, LOCKED as Coming
 
 `seymour-anima-macalania` is **Chapter 7** in `src/data/encounters.ts`
@@ -126,8 +184,7 @@ documents), `learn-atlas-data.test.ts` (gold accent), `story-scripts.test.ts`
 
 ## Not done, and found
 
-1. **Anima is invisible in a real battle (critical for this chapter, not
-   mine to fix).** Proven by running: at Seymour 2,829 HP the engine reveals
+1. **FIXED in the fix pass above.** ~~Anima is invisible in a real battle.~~ Was: Proven by running: at Seymour 2,829 HP the engine reveals
    her (`removed: false`, 18,000 HP) but the stage's `staged()` list never
    gains `anima-macalania`. `BattlePresenterEvents.ts`'s `part-restored`
    handler only fades an actor that already exists, and `stage()` skips
@@ -143,7 +200,7 @@ documents), `learn-atlas-data.test.ts` (gold accent), `story-scripts.test.ts`
    hard-codes them; scene handoff §7.2). Seymour's `spriteKey: 'seymour'`
    costs one wasted art probe (§7.1). Presenter and data owners.
 3. **The chapter's own music** (above) and three new SFX.
-4. **The results drop list overflows with four drops**: in
+4. **FIXED in the fix pass above.** Was: **the results drop list overflows with four drops**: in
    `-4-results-win.png` the second line ("Ability Sphere, Ability Sphere")
    overlaps Tidus's row. Shared results layout, both games; not fixed here.
 5. **Debug-path artifact, not this chapter:** calling `gotoChapter` while the

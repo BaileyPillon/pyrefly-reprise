@@ -13,6 +13,7 @@ import {
   isSilentResultsChapter,
   pickVictoryQuip,
   RESULTS_HERO_FRAME,
+  resultsDensity,
   resultsHeroBox,
 } from '../../src/ui/common/resultsMath.ts';
 import { portraitCrop } from '../../src/ui/common/portrait.ts';
@@ -311,7 +312,59 @@ describe('dropsLabel', () => {
     ).toBe('Phoenix Down \u00d72, Elixir');
   });
 
+  // Critic pass on 62b4927 (Macalania, four drops): 'Ability Sphere, Blk Magic
+  // Sphere, Ability Sphere, Ability Sphere' wrapped onto a second line and ran
+  // into Tidus's row. The engine lists one drop per enemy, so a repeated item
+  // is one line item with a count, the way the ledger already prints ×2.
+  it('prints a repeated item once, with its counts added up, in first-seen order', () => {
+    expect(
+      dropsLabel([
+        { itemId: 'ability-sphere', count: 1 },
+        { itemId: 'blk-magic-sphere', count: 1 },
+        { itemId: 'ability-sphere', count: 1 },
+        { itemId: 'ability-sphere', count: 1 },
+      ]),
+    ).toBe('Ability Sphere ×3, Blk Magic Sphere');
+  });
+
   it('is empty for no drops, so the ITEMS row can be dropped entirely', () => {
     expect(dropsLabel([])).toBe('');
+  });
+});
+
+// Critic pass on 62b4927 (Macalania): with a fourth member switched in, the
+// bottom-anchored party list climbed into the ledger and Tidus's row ran through
+// the ITEMS line (seen again after the drops were merged: ledger bottom 621 px,
+// party top 585 px at 1600x900). The ledger and the list are two absolute
+// blocks in 640x360 design units, so the density is chosen from both counts:
+// the ledger ends at 152 + its rows, the list starts at 335.11 minus its rows.
+describe('resultsDensity', () => {
+  const LEDGER_TOP = 152;
+  const PARTY_BOTTOM = 360 - 24.89;
+  const ledgerRow = { normal: 36, compact: 25.34 } as const;
+  const member = { normal: [21.33, 5.33], compact: [16, 2.67], tight: [13.33, 1.78] } as const;
+  const clear = (ledgerRows: number, members: number): number => {
+    const d = resultsDensity(ledgerRows, members);
+    const [face, gap] = member[d.party];
+    const partyTop = PARTY_BOTTOM - (face * members + gap * (members - 1));
+    return partyTop - (LEDGER_TOP + ledgerRow[d.ledger] * ledgerRows);
+  };
+
+  it('keeps the approved layout for three rows and three members', () => {
+    expect(resultsDensity(3, 3)).toEqual({ ledger: 'normal', party: 'normal' });
+  });
+
+  it('tightens the ledger when a fourth member joins the list', () => {
+    expect(resultsDensity(3, 4).ledger).toBe('compact');
+  });
+
+  // FFX pays AP to everyone who fought (up to seven, three ledger rows); only
+  // FFX-2 has a fourth row (EXP and AP), and its party is at most three.
+  it('never lets the party list reach the ledger, one to seven members', () => {
+    for (const [rows, most] of [[2, 7], [3, 7], [4, 5]] as const) {
+      for (let members = 1; members <= most; members++) {
+        expect(clear(rows, members), `${rows} rows, ${members} members`).toBeGreaterThanOrEqual(0);
+      }
+    }
   });
 });

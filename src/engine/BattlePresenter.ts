@@ -34,6 +34,7 @@ import type {
 import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
 import { activeClockEngine, runActivePump } from './BattlePresenterActive.ts';
+import { flushArrivals } from './BattlePresenterArrivals.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -238,6 +239,9 @@ export class BattlePresenter {
         return { ended: event.type, result: event.result, dropped: events.length - i - 1 };
       }
     }
+    // A reveal that ended the burst still arrives before the next menu opens.
+    this.phase = 'arrival';
+    await flushArrivals(this.ctx);
     this.phase = 'idle';
     return { dropped: 0 };
   }
