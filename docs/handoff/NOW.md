@@ -104,6 +104,10 @@ SENT TO BAILEY 11:33 EDT 09-23: the Evrae order-widget sheet and the Anima arriv
 
 31. `wf_c597728e-dc8` "pyrefly-ch6-art-decisions-apply" (launched 13:27 EDT, 4 agents): records the three decisions, transplants the heart onto Ormi's idle from his r1 cast's pixels, installs option A (Ormi r1 cast restored; the trio's attack/hurt/ko moved to backup after proving the engine falls back to idle), an independent judge, then locks the three idles in approved-hashes.json (Ormi's heart version only if it passes). Leblanc's cast waits for the choker agent. If this line is about you: carry on.
 
+**MACHINE LOAD, 13:41 EDT 09-23:** commit charge 96 of 103 GB (Windows grew the page file at 13:13: "Virtual Memory Minimum Too Low"), a headless Chrome died with 0xe0000008 (out of memory) at 13:39, about 15 agents plus Codex sessions (codex-runtimes node processes) run browsers and vite, ComfyUI holds 15.5 GB. The driver launches NOTHING new until several tracks finish; infrastructure failures in browser checks now are load, not product.
+32. e2e type-check DONE (eebe252): `npm run typecheck:e2e` 66 errors to 0, one shared Window.__pyrefly type from src/debug/api.ts (tests only).
+33. Opus gap agent (13:37 EDT): CHK-022 chapter 3 real-input win on live without Doublecast, CHK-024 same-origin save upgrade on live, a round-10 addendum and critic-clear. If this is you: carry on.
+
 ComfyUI (:8188) is shared by 2, 3, 5, 6, 11, 12: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
 
 ## Live: release 09 (Build C.2)
