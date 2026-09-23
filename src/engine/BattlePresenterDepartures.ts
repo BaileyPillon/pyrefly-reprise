@@ -28,10 +28,12 @@
  * presentation choice with no engine meaning, so no shared contract widens.
  *
  * **The budget.** Both departures are longer than the 620 ms dissolve (a fall
- * that took 620 ms would read as a blink), but every await goes through
- * {@link settled}, so the victory event queued behind the last KO is never held
- * for more than the animation plus `ACTOR_ANIM_GRACE_MS`: the critic round 02
- * #01 rule (see `ko()`).
+ * that took 620 ms would read as a blink), but the whole departure runs under
+ * one guard sized to its full length ({@link departureMs}), so
+ * the victory event queued behind the last KO is never held for more than the
+ * animation plus one `ACTOR_ANIM_GRACE_MS`: the critic round 02 #01 rule (see
+ * `ko()`). One deadline, not one per step: per-step guards let a hung fall hold
+ * victory about 5.5 s against 2.6 s for a hung dissolve (fix10c verifier).
  *
  * Same rules as the other beat modules: no `three`, no DOM, ports only.
  * Game case per kind is above; the table and the dispatch are shared plumbing
@@ -40,7 +42,7 @@
 
 import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
-import { settled, type EventCtx } from './BattlePresenterEvents.ts';
+import { ACTOR_ANIM_GRACE_MS, type EventCtx } from './BattlePresenterEvents.ts';
 
 export type DepartureKind = 'dissolve' | 'falls-away' | 'yields';
 
@@ -81,21 +83,51 @@ export const YIELD_STEP = { x: 3.2, z: -2.4 } as const;
 
 const at = (p: Point3): Point3 => ({ x: p.x, y: p.y, z: p.z });
 
+/**
+ * One guard for a whole departure: every actor animation in the beat races the
+ * same deadline (its full length plus `ACTOR_ANIM_GRACE_MS`), and once that has
+ * passed the beat's own pauses collapse, so a hung animation holds the victory
+ * behind the KO for one grace, not one per step. At `speed: 'skip'` the
+ * deadline is 0 and the beat runs straight through, as the dissolve does.
+ */
+function budget(ctx: EventCtx, ms: number) {
+  let expired = false;
+  let warned = false;
+  const startedAt = Date.now();
+  const deadline = ctx.sleep(ms + ACTOR_ANIM_GRACE_MS).then(() => {
+    expired = true;
+  });
+  const overran = (): void => {
+    if (warned || Date.now() - startedAt < 50) return;
+    warned = true;
+    console.warn(`[presenter] a departure did not finish within ${ms + ACTOR_ANIM_GRACE_MS}ms; carrying on`);
+  };
+  return {
+    guard: async (p: void | Promise<void>): Promise<void> => {
+      if (!p || expired) return;
+      const won = await Promise.race([p.then(() => true), deadline.then(() => false)]);
+      if (!won) overran();
+    },
+    sleep: (wait: number): Promise<void> => (expired ? Promise.resolve() : Promise.race([ctx.sleep(wait), deadline])),
+  };
+}
+type Budget = ReturnType<typeof budget>;
+
 /** Evrae breaks, then falls out of the sky: down and away, fading as it goes. */
-async function fallsAway(ctx: EventCtx, actor: ActorHandle): Promise<void> {
+async function fallsAway(actor: ActorHandle, b: Budget): Promise<void> {
   const from = at(actor.position);
-  actor.setPose('hurt');
+  actor.setPose('hurt', { force: true });
   actor.shake(0.22, FALL_MS.lurch + 120);
   actor.flash(0x8a8f9c, FALL_MS.lurch + 160, 0.55);
-  await settled(ctx, actor.moveTo({ x: from.x, y: from.y + 0.35, z: from.z }, FALL_MS.lurch), FALL_MS.lurch);
+  await b.guard(actor.moveTo({ x: from.x, y: from.y + 0.35, z: from.z }, FALL_MS.lurch));
   const to = { x: from.x + FALL_OFFSET.x, y: from.y + FALL_OFFSET.y, z: from.z + FALL_OFFSET.z };
   const drop = actor.moveTo(to, FALL_MS.drop);
   // The last third fades, so it is gone even where no deck edge or cloud covers it.
   const fade = (async () => {
-    await ctx.sleep(FALL_MS.drop * 0.62);
-    await settled(ctx, actor.fadeTo(0, FALL_MS.drop * 0.38), FALL_MS.drop * 0.38);
+    await b.sleep(FALL_MS.drop * 0.62);
+    await b.guard(actor.fadeTo(0, FALL_MS.drop * 0.38));
   })();
-  await Promise.all([settled(ctx, drop, FALL_MS.drop), fade]);
+  await Promise.all([b.guard(drop), fade]);
 }
 
 /** Where the party stands, on average, or `null` with nobody staged. */
@@ -114,21 +146,18 @@ function partyCentre(ctx: EventCtx): Point3 | null {
 }
 
 /** A living opponent gives up: stays on its feet, dims, and steps back out of frame. */
-async function yields(ctx: EventCtx, actor: ActorHandle): Promise<void> {
+async function yields(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<void> {
   const from = at(actor.position);
   actor.setPose('idle', { force: true });
   const steps = 6;
   for (let i = 1; i <= steps; i++) {
     actor.setBrightness(1 - (1 - YIELD_DIM) * (i / steps));
-    await ctx.sleep(YIELD_MS.dim / steps);
+    await b.sleep(YIELD_MS.dim / steps);
   }
   const party = partyCentre(ctx);
   const sx = party && from.x < party.x ? -1 : 1;
   const to = { x: from.x + sx * YIELD_STEP.x, y: from.y, z: from.z + YIELD_STEP.z };
-  await Promise.all([
-    settled(ctx, actor.moveTo(to, YIELD_MS.step), YIELD_MS.step),
-    settled(ctx, actor.fadeTo(0, YIELD_MS.step), YIELD_MS.step),
-  ]);
+  await Promise.all([b.guard(actor.moveTo(to, YIELD_MS.step)), b.guard(actor.fadeTo(0, YIELD_MS.step))]);
 }
 
 /**
@@ -140,7 +169,13 @@ export async function depart(ctx: EventCtx, id: CombatantId, actor: ActorHandle 
   const kind = departureKindOf(id);
   if (kind === 'dissolve') return false;
   if (!actor) return true;
-  if (kind === 'falls-away') await fallsAway(ctx, actor);
-  else await yields(ctx, actor);
+  const b = budget(ctx, departureMs(kind));
+  if (kind === 'falls-away') await fallsAway(actor, b);
+  else await yields(ctx, actor, b);
   return true;
+}
+
+/** A departure's full length at timeScale 1, the outer guard's budget. */
+export function departureMs(kind: Exclude<DepartureKind, 'dissolve'>): number {
+  return kind === 'falls-away' ? FALL_MS.lurch + FALL_MS.drop : YIELD_MS.dim + YIELD_MS.step;
 }

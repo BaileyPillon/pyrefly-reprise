@@ -861,6 +861,8 @@ export class PaintedActor extends Group {
       const want = lifeStateForPose(name);
       if (nextLifeState(life.state, want) !== want) return;
     }
+    // A forced pose is the caller's word: a pending flinch may not hand it back.
+    if (opts?.force) this.flinchToken++;
     const resolved = resolvePoseName(name, (p) => this.poses.has(p));
     this.enterLife(name, opts?.immediate === true);
     if (!resolved) return;
