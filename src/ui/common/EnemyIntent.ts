@@ -353,6 +353,43 @@ export class EnemyIntentPanel {
     this.toggleEl.title = this.visible ? 'Hide the enemy move read-out' : 'Show the enemy move read-out';
   }
 
+  // -------------------------------------------------------------- suspend
+
+  private suspended = false;
+
+  /**
+   * Hide the whole layer — panel *and* chip — while something else owns the
+   * screen (the pause menu), and put it back exactly as it was, the player's
+   * `E` setting untouched, when that something closes.
+   *
+   * PR-0122: `.eint` sits in the HUD's unscaled overlay with its own
+   * `z-index` (`enemy-intent.css`, `.eint { z-index: 2; }` — deliberately,
+   * so it paints over the field art and under a numeral). The pause screen's
+   * root is a later sibling `.screen` div with no `z-index` of its own
+   * (`App.makeScreenRoot`), so it stacks at the auto/0 level of the *same*
+   * containing block — and an explicit `z-index: 2` there beats DOM order
+   * regardless of which one mounted last. That is what let the intent slab
+   * paint over the pause's character close-up, its OPTIONS values and its
+   * THIS ENCOUNTER actions, and survive H.
+   *
+   * A CSS class rather than reusing `this.el.hidden`: `hidden` already
+   * answers "does this enemy have a predicted move at all" (see `render`),
+   * and this answers the unrelated question "is something else covering the
+   * whole HUD right now". Keeping them on separate properties means resuming
+   * needs no re-render to land back in the right state — removing the class
+   * is the whole restore, and it never touches `visible` (the `E` toggle).
+   */
+  setSuspended(suspended: boolean): void {
+    if (this.suspended === suspended) return;
+    this.suspended = suspended;
+    this.el.classList.toggle('eint--suspended', suspended);
+  }
+
+  /** For tests: is the layer currently forced off by {@link setSuspended}? */
+  get isSuspended(): boolean {
+    return this.suspended;
+  }
+
   /**
    * `KeyE`, edge-only, with the same chord and repeat guards the guide uses so
    * that typing elsewhere on the page cannot flip it.
@@ -626,6 +663,27 @@ export function attachEnemyIntent(hud: unknown, engine: unknown): void {
   });
 }
 
+/** A HUD whose intent slab can be told to stop drawing. Duck-typed, like {@link IntentAwareHud}. */
+interface SuspendableIntentHud {
+  setIntentSuspended?(suspended: boolean): void;
+}
+
+/**
+ * Hide the intent slab (panel and chip alike) while an overlay — the pause
+ * screen — sits on top of the battle, and restore it exactly as it was when
+ * the overlay closes.
+ *
+ * Duck-typed for the same reason {@link attachEnemyIntent} is: `HudPort` is
+ * not worth a shape change for one optional panel, so a HUD without the
+ * method (a mock, a future third HUD) is simply told nothing and stays as it
+ * was. See `BattleScreen.openPause` (PR-0122) and
+ * `EnemyIntentPanel.setSuspended`.
+ */
+export function setIntentSuspended(hud: unknown, suspended: boolean): void {
+  const h = hud as SuspendableIntentHud | null;
+  h?.setIntentSuspended?.(suspended);
+}
+
 // --------------------------------------------------------------- templates
 
 /** Everything that can change what the slab says, in one string. */
@@ -723,13 +781,27 @@ function damageHtml(view: IntentView): string {
   return `<h4 class="eint__head">Damage</h4><ul class="eint__dmgs">${rows}</ul>${hits}`;
 }
 
+/**
+ * PR-0123: this used to print `branches[0]` — the most-*sampled* branch —
+ * beside the move name whether or not it was the move actually rolled. On a
+ * countdown-vs-attack split that reads as the panel contradicting its own
+ * Odds table two lines down ("No action LIKELY 88%" over an Odds row that
+ * gives Attack 88%). The badge has to answer for `view.moveName`, so it
+ * looks that branch up by label instead of assuming position 0 — and only
+ * calls it "Most likely" when it *is* position 0, since a branch that is not
+ * the top one is not that, whatever its own share of the samples. Below 50%
+ * even the top branch is a coin flip or worse, so it reads as "Possible"
+ * rather than a confident "likely".
+ */
 function confidenceHtml(view: IntentView): string {
   if (view.confidence === 'scripted') {
     return '<span class="eint__conf eint__conf--scripted">Scripted</span>';
   }
-  const top = view.branches[0];
-  const pct = top ? `${top.percent}%` : '';
-  return `<span class="eint__conf eint__conf--likely">Likely ${escapeHtml(pct)}</span>`;
+  const match = view.branches.find((b) => b.label === view.moveName) ?? view.branches[0];
+  if (!match) return '';
+  const isTop = view.branches[0] === match;
+  const word = match.percent < 50 ? 'Possible' : isTop ? 'Most likely' : 'Likely';
+  return `<span class="eint__conf eint__conf--likely">${word} ${match.percent}%</span>`;
 }
 
 function branchesHtml(view: IntentView): string {

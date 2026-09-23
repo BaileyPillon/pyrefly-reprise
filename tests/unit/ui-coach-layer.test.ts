@@ -138,6 +138,9 @@ class OptionalSpyHud implements HudPort {
   setIntentSource(source: IntentSource | null): void {
     this.calls.push({ name: 'setIntentSource', args: [source] });
   }
+  setIntentSuspended(suspended: boolean): void {
+    this.calls.push({ name: 'setIntentSuspended', args: [suspended] });
+  }
 }
 
 function rows(kinds: Array<Command['kind']>): AvailableCommand[] {
@@ -471,13 +474,21 @@ describe('the coach layer', () => {
    * by name, against the interface in `src/engine/HudPort.ts` — keep this
    * list in sync with that file so a future optional method added there and
    * left unforwarded fails here instead of shipping quietly) plus the
-   * duck-typed `setIntentSource`, and asserts each one reaches the real HUD
-   * with the exact argument passed in.
+   * duck-typed `setIntentSource` and `setIntentSuspended`, and asserts each
+   * one reaches the real HUD with the exact argument passed in.
+   *
+   * `setIntentSuspended` is PR-0122's own instance of exactly this failure
+   * mode: a real browser run of `BattleScreen.openPause` proved `CoachedHud`
+   * (always what `this.hud` actually is — `BattleScreenWiring.createHud`
+   * wraps every HUD in `withCoach`) had no forward for it either, so the
+   * pause never suspended the slab even though `EnemyIntentPanel.setSuspended`
+   * itself worked in every unit test that called it directly.
    */
-  it('forwards every optional HudPort member, and the duck-typed setIntentSource, to the inner HUD', () => {
+  it('forwards every optional HudPort member, and the duck-typed setIntentSource / setIntentSuspended, to the inner HUD', () => {
     const spy = new OptionalSpyHud();
     const hud = withCoach('ffx', spy, { reduceMotion: true }) as HudPort & {
       setIntentSource(source: IntentSource | null): void;
+      setIntentSuspended(suspended: boolean): void;
     };
     hud.mount(root);
 
@@ -498,6 +509,7 @@ describe('the coach layer', () => {
 
     const source: IntentSource = () => null;
     hud.setIntentSource(source);
+    hud.setIntentSuspended(true);
 
     expect(spy.calls).toEqual([
       { name: 'syncVitals', args: [state] },
@@ -507,6 +519,7 @@ describe('the coach layer', () => {
       { name: 'setTargetingPort', args: [port] },
       { name: 'update', args: [0.5] },
       { name: 'setIntentSource', args: [source] },
+      { name: 'setIntentSuspended', args: [true] },
     ]);
   });
 

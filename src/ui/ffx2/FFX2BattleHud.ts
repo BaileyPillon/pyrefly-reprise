@@ -397,6 +397,15 @@ export class FFX2BattleHud implements HudPort {
     this.intent.setSource(source);
   }
 
+  /**
+   * Hide the intent slab while the pause screen is up, and restore it exactly
+   * as it was on resume. See `EnemyIntent.setIntentSuspended` /
+   * `EnemyIntentPanel.setSuspended` (PR-0122).
+   */
+  setIntentSuspended(suspended: boolean): void {
+    this.intent.setSuspended(suspended);
+  }
+
   /** The intent slab, for tests and the debug snapshot. */
   get enemyIntent(): EnemyIntentPanel {
     return this.intent;

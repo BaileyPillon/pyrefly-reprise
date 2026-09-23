@@ -46,7 +46,7 @@ import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScree
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
-import { attachEnemyIntent, consumeIntentKeyPress } from '../../ui/common/EnemyIntent.ts';
+import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
@@ -511,6 +511,14 @@ export class BattleScreen extends Screen {
         // The other half of "exactly one screen reads the player": the HUD's
         // pad watchers and the mouse on its DOM. The keyboard is claimed below.
         setRawInputSuspended(paused, this.root);
+        // PR-0122: the intent slab mounts in the HUD's unscaled overlay with
+        // its own `z-index` (`enemy-intent.css`), which stacks above the
+        // pause screen's root regardless of DOM order — so it painted over
+        // the pause's close-up, OPTIONS and THIS ENCOUNTER, and survived H.
+        // Hidden here, from the same place everything else about the HUD is
+        // suspended for the pause, and restored on resume in whatever state
+        // the player's own `E` setting left it.
+        setIntentSuspended(this.hud, paused);
         // "The game holding its breath" [docs/audio/THEMES.md cue map row 3].
         // The `pause` cue was composed, rendered and shipped, and nothing had
         // ever asked for it (critic round 02 #02). It is wired from here rather

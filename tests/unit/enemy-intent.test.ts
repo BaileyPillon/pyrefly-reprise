@@ -23,7 +23,14 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { BattleEvent, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
+import type {
+  BattleEvent,
+  BattleSetup,
+  Command,
+  Decision,
+  EnemyGroupDef,
+  FFXCombatant,
+} from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, buildBattle, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import type { Ctx } from '../../src/battle/ffx/state.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
@@ -36,7 +43,13 @@ import {
   statusWord,
 } from '../../src/battle/ffx/intent.ts';
 import { statusOdds } from '../../src/battle/ffx/estimate.ts';
-import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import {
+  FFX2Engine,
+  abilityRegistryFrom,
+  dressphereRegistryFrom,
+  garmentGridRegistryFrom,
+  itemRegistryFrom,
+} from '../../src/battle/ffx2/index.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
 import {
@@ -46,6 +59,11 @@ import {
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
 import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
 import { zanarkandBuild } from '../../src/data/ffx/builds/zanarkand.ts';
+import * as ffx2Data from '../../src/data/ffx2/index.ts';
+import { farplaneBuild } from '../../src/data/ffx2/builds/farplane.ts';
+import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
+import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
+import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 
 /**
  * The bundle `FFX2Engine.intent()` hands its predictor, rebuilt from outside so
@@ -225,9 +243,15 @@ describe('the predicted opener matches the shipped rotation', () => {
     const weighted = predictEnemyIntent(ctx, 'yunalesca', { samples: 64 });
     expect(weighted?.confidence).toBe('likely');
     expect(weighted!.branches.length).toBeGreaterThan(1);
+    // PR-0123: largest-remainder rounding (`roundSharesTo100`) guarantees this
+    // exactly, not merely approximately — a printed distribution that adds up
+    // to 101 is a defect, not a rounding nicety.
     const sum = weighted!.branches.reduce((n, b) => n + b.percent, 0);
-    expect(Math.abs(sum - 100)).toBeLessThanOrEqual(3); // rounding only
+    expect(sum).toBe(100);
     expect(weighted!.branches.map((b) => b.abilityId)).toContain('hellbiter');
+    // The badge answers for the move actually rolled, so that move's own
+    // label always has an entry to look up (`EnemyIntent.ts confidenceHtml`).
+    expect(weighted!.branches.find((b) => b.label === weighted!.moveName)).toBeDefined();
   });
 
   it('a one-sample prediction is never reported as scripted by accident', () => {
@@ -556,5 +580,93 @@ describe('FFX-2 intent', () => {
     expect(intent?.abilityId).toBe('impulse');
     expect(intent?.estimate?.perTarget.length).toBeGreaterThanOrEqual(1);
     for (const row of intent!.estimate!.perTarget) expect(row.amount).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------- PR-0123: the real Chapter 5 link 3 case
+
+/**
+ * Round 09's capture, reproduced against the shipped rotation rather than a
+ * crafted `IntentView` — the same registries `BattleScreenContent.ts` injects,
+ * the same chain-advance helper the battle screen calls between links, and the
+ * intended strategy driving every earlier decision, exactly as
+ * `strategy-ffx2-vegnagun-shuyin.test.ts` walks the whole chain. **Case:
+ * FFX-2 only** — the chain, its data tables and `setupForNextLink` are all
+ * X-2 (AGENTS.md rule 14); the fix itself is shared (see the "both games"
+ * tests in `ui-enemy-intent.test.ts`).
+ */
+function ffx2EngineOptions() {
+  return {
+    abilities: abilityRegistryFrom(Object.values(ffx2Data.ABILITIES)),
+    items: itemRegistryFrom(Object.values(ffx2Data.ITEMS)),
+    dresspheres: dressphereRegistryFrom(Object.values(ffx2Data.STANDARD_DRESSPHERES)),
+    garmentGrids: garmentGridRegistryFrom(Object.values(ffx2Data.GARMENT_GRIDS)),
+    minigames: false,
+  };
+}
+
+function chainFallback(d: Extract<Decision, { kind: 'player-input' }>): Command {
+  const row = d.commands.find((c) => c.enabled && c.command.kind === 'attack') ?? d.commands.find((c) => c.enabled);
+  const target = row?.validTargets[0];
+  if (!row) return { kind: 'defend', targets: [] };
+  return { ...row.command, targets: target ? [target] : [] } as Command;
+}
+
+/** Drive the Vegnagun chain to link 3's (Body/Bulwarks) first menu, seed 1. */
+function bulwarkIntentAtLink3(): ReturnType<FFX2Engine['intent']> {
+  const seed = 1;
+  const engine = new FFX2Engine(ffx2EngineOptions());
+  const first = ffx2Data.ENEMY_GROUPS_BY_ID[VEGNAGUN_CHAIN_ORDER[0]!];
+  if (!first) throw new Error('the Vegnagun chain is missing from the data layer');
+  let setup: BattleSetup = {
+    game: 'ffx2',
+    party: farplaneBuild,
+    enemies: first,
+    triggers: [],
+    seed,
+    condition: 'normal',
+    canEscape: false,
+  };
+  engine.setSeed(seed);
+  engine.init(setup);
+  let group: EnemyGroupDef = first;
+  let linkIndex = 0;
+  for (let i = 0; i < 200_000; i++) {
+    const d = engine.nextDecision();
+    if (d.kind === 'battle-over') {
+      const nextId = group.nextGroupId;
+      if (d.result.outcome !== 'victory' || !nextId) {
+        throw new Error(`chain stopped before link 3 (outcome ${d.result.outcome})`);
+      }
+      const next = ffx2Data.ENEMY_GROUPS_BY_ID[nextId];
+      if (!next) throw new Error(`chain points at "${nextId}" but no formation exports that id`);
+      setup = setupForNextLink(setup, next, engine.state(), seed + ++linkIndex);
+      group = next;
+      engine.setSeed(setup.seed);
+      engine.init(setup);
+      continue;
+    }
+    if (d.kind === 'waiting') {
+      engine.tick(Math.max(1, d.nextEventMs));
+      continue;
+    }
+    if (d.kind !== 'player-input') continue;
+    if (linkIndex === 2) return engine.intent();
+    const picked = intendedStrategy(d.actorId, d.commands, engine);
+    engine.submit(picked ?? chainFallback(d));
+  }
+  throw new Error('never reached link 3');
+}
+
+describe('PR-0123: the badge and the Odds table agree on the shipped rotation', () => {
+  it('Chapter 5 link 3, seed 1: the Bulwark rolls Protect at its own 29%, not Regen\'s 38%', () => {
+    const intent = bulwarkIntentAtLink3();
+    expect(intent?.enemyId).toBe('bulwark-r');
+    expect(intent?.moveName).toBe('Protect');
+    expect(intent?.confidence).toBe('likely');
+    const sum = intent!.branches.reduce((n, b) => n + b.percent, 0);
+    expect(sum).toBe(100);
+    const match = intent!.branches.find((b) => b.label === intent!.moveName);
+    expect(match?.percent).toBe(29);
   });
 });

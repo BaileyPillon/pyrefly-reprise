@@ -44,6 +44,19 @@
   z-index: 2;
 }
 
+/* PR-0122: this `z-index: 2` is exactly what let the slab paint over the
+   pause screen — the pause root is a later sibling with no `z-index` of its
+   own, so it stacks at the auto/0 level and loses to this regardless of DOM
+   order (see `EnemyIntentPanel.setSuspended`, which toggles this class from
+   the same place the pause suspends the rest of the battle HUD).
+   `display: none` rather than `visibility` or `opacity`: it also drops the
+   layer out of hit-testing, so `elementFromPoint` over the pause finds a
+   pause node instead of the (now invisible) `.eint__panel`. `!important`
+   because it has to win over `.eint__panel[hidden]`/`eint--off` alike. */
+.eint--suspended {
+  display: none !important;
+}
+
 /* ------------------------------------------------------------------ panel */
 
 .eint__panel {

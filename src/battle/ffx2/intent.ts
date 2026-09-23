@@ -466,6 +466,30 @@ function enemyOrder(env: Ffx2IntentEnv): CombatantId[] {
     .map((u) => u.id);
 }
 
+/**
+ * Share sample counts as whole percents that still sum to 100.
+ *
+ * See the FFX twin (`src/battle/ffx/intent.ts`) for why plain `Math.round`
+ * cannot be trusted here: round 09 PR-0123 measured 21 of 24 samples on one
+ * branch and 3 on another — 87.5% and 12.5% — which independent rounding
+ * turns into a printed 88% and 13%, a distribution that sums to 101. Largest
+ * remainder fixes that: floor every share (the total can only undershoot 100
+ * now), then hand the leftover points, one each, to the shares closest to
+ * rounding up.
+ */
+function roundSharesTo100(counts: readonly number[], total: number): number[] {
+  if (total <= 0) return counts.map(() => 0);
+  const raw = counts.map((c) => (c / total) * 100);
+  const floors = raw.map((r) => Math.floor(r));
+  const remainder = 100 - floors.reduce((sum, f) => sum + f, 0);
+  const order = raw
+    .map((r, i) => ({ i, frac: r - Math.floor(r) }))
+    .sort((a, b) => b.frac - a.frac);
+  const out = floors.slice();
+  for (let k = 0; k < remainder && k < order.length; k++) out[order[k]!.i]! += 1;
+  return out;
+}
+
 /** Predict one enemy's next command. */
 export function predictFFX2EnemyIntent(
   env: Ffx2IntentEnv,
@@ -510,9 +534,13 @@ export function predictFFX2EnemyIntent(
   }
 
   const total = [...tally.values()].reduce((sum, t) => sum + t.count, 0) || 1;
-  const branches: IntentBranch[] = [...tally.values()]
-    .sort((a, b) => b.count - a.count)
-    .map((t) => ({ abilityId: t.abilityId, label: t.label, percent: Math.round((t.count / total) * 100) }));
+  const sortedTally = [...tally.values()].sort((a, b) => b.count - a.count);
+  const percents = roundSharesTo100(sortedTally.map((t) => t.count), total);
+  const branches: IntentBranch[] = sortedTally.map((t, i) => ({
+    abilityId: t.abilityId,
+    label: t.label,
+    percent: percents[i]!,
+  }));
   const confidence: EnemyIntent['confidence'] = tally.size <= 1 ? 'scripted' : 'likely';
 
   const def = defFor(first.command);

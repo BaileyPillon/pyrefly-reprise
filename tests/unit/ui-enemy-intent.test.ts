@@ -29,6 +29,7 @@ import {
   type IntentView,
   attachEnemyIntent,
   consumeIntentKeyPress,
+  setIntentSuspended,
 } from '../../src/ui/common/EnemyIntent.ts';
 import { INTENT_HINT_ITEM } from '../../src/ui/common/ControlsHint.ts';
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
@@ -317,7 +318,7 @@ describe('a scripted rotation and a coin flip never look alike', () => {
     expect(panelEl(overlay).textContent).toContain('Scripted');
   });
 
-  it('prints the measured odds for a weighted branch', () => {
+  it('prints the measured odds for a weighted branch, and calls the top share "Most likely"', () => {
     const { panel, overlay } = mountPanel();
     panel.setSource(() =>
       view({
@@ -330,10 +331,95 @@ describe('a scripted rotation and a coin flip never look alike', () => {
       }),
     );
     const text = panelEl(overlay).textContent ?? '';
-    expect(text).toContain('Likely 70%');
+    expect(text).toContain('Most likely 70%');
     expect(text).toContain('Curaga');
     expect(text).toContain('30%');
     expect(panelEl(overlay).querySelector('.eint__conf--scripted')).toBeNull();
+  });
+});
+
+// --------------------------- PR-0123: the badge answers for the rolled move
+
+describe('the confidence badge names the rolled move\'s own odds (PR-0123)', () => {
+  /**
+   * Round 09's exact contradiction: Shuyin link 5 printed "No action LIKELY
+   * 88%" as the headline while its own Odds table gave "Attack 88%, no
+   * action 13%" — the badge was reading `branches[0]` (the most-*sampled*
+   * branch) instead of the branch for the move actually named. A player
+   * reading two lines an inch apart got two different numbers for the same
+   * fight.
+   */
+  it('gives the rolled move\'s own percent, not the top-sampled branch\'s', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() =>
+      view({
+        moveName: 'No action',
+        kind: 'pass',
+        confidence: 'likely',
+        branches: [
+          { label: 'Attack', percent: 88 },
+          { label: 'No action', percent: 12 },
+        ],
+      }),
+    );
+    const conf = panelEl(overlay).querySelector('.eint__conf');
+    expect(conf?.textContent).toBe('Possible 12%');
+    const odds = [...panelEl(overlay).querySelectorAll('.eint__odds li')].map((li) => li.textContent);
+    expect(odds).toEqual(['Attack88%', 'No action12%']);
+  });
+
+  it('names the rolled branch even when it is well behind the top share (chapter 5 link 3, the Bulwark)', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() =>
+      view({
+        moveName: 'Protect',
+        confidence: 'likely',
+        branches: [
+          { label: 'Regen', percent: 38 },
+          { label: 'Shell', percent: 33 },
+          { label: 'Protect', percent: 29 },
+        ],
+      }),
+    );
+    // The chapter 5 link 3 (Bulwark) case round 09 measured directly: the
+    // headline used to say "Protect LIKELY 38%" — Regen's share, not its own.
+    expect(panelEl(overlay).querySelector('.eint__conf')?.textContent).toBe('Possible 29%');
+  });
+
+  it('never calls a branch "Most likely" unless it is also the top share', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() =>
+      view({
+        moveName: 'Shell',
+        confidence: 'likely',
+        // A tie at the top: sorted order still puts "Protect" at index 0, so
+        // the rolled "Shell" (equally likely, just not first in the array) is
+        // "Likely", never "Most likely" — that word is reserved for the one
+        // branch the Odds table itself lists first.
+        branches: [
+          { label: 'Protect', percent: 50 },
+          { label: 'Shell', percent: 50 },
+        ],
+      }),
+    );
+    expect(panelEl(overlay).querySelector('.eint__conf')?.textContent).toBe('Likely 50%');
+  });
+
+  it('reads "Possible" rather than "likely" for anything under 50 percent, even the top share', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() =>
+      view({
+        moveName: 'Blizzard',
+        confidence: 'likely',
+        branches: [
+          { label: 'Blizzard', percent: 25 },
+          { label: 'Fire', percent: 25 },
+          { label: 'Thunder', percent: 25 },
+          { label: 'Water', percent: 25 },
+        ],
+      }),
+    );
+    expect(panelEl(overlay).querySelector('.eint__conf')?.textContent).toBe('Possible 25%');
   });
 });
 
@@ -614,6 +700,67 @@ describe('attachEnemyIntent', () => {
     const hud = { source: undefined as unknown, setIntentSource(s: unknown) { this.source = s; } };
     attachEnemyIntent(hud, {});
     expect(hud.source).toBeNull();
+  });
+});
+
+// --------------------------------- PR-0122: hidden while the pause is open
+
+describe('the whole layer hides for the pause and comes back as it was', () => {
+  it('setSuspended(true) hides the layer without touching the E setting', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() => view());
+    expect(panel.isVisible).toBe(true);
+    panel.setSuspended(true);
+    expect(panel.isSuspended).toBe(true);
+    expect(panelEl(overlay).closest('.eint')!.classList.contains('eint--suspended')).toBe(true);
+    // Neither the panel-vs-chip state nor the saved setting moved.
+    expect(panel.isVisible).toBe(true);
+
+    panel.setSuspended(false);
+    expect(panel.isSuspended).toBe(false);
+    expect(panelEl(overlay).closest('.eint')!.classList.contains('eint--suspended')).toBe(false);
+    expect(panel.isVisible).toBe(true);
+  });
+
+  it('restores a hidden-panel (E off) state exactly as it was, not forced open', () => {
+    const { panel, overlay } = mountPanel();
+    panel.setSource(() => view());
+    panel.setVisible(false); // chip only, same as a player pressing E first
+    panel.setSuspended(true);
+    expect(panelEl(overlay).closest('.eint')!.classList.contains('eint--suspended')).toBe(true);
+    panel.setSuspended(false);
+    // Still just the chip — suspending and resuming the pause never touched E.
+    expect(panel.isVisible).toBe(false);
+  });
+
+  it('is idempotent, so a stray second call cannot desync the class from the flag', () => {
+    const { panel } = mountPanel();
+    panel.setSuspended(true);
+    panel.setSuspended(true);
+    expect(panel.isSuspended).toBe(true);
+    panel.setSuspended(false);
+    panel.setSuspended(false);
+    expect(panel.isSuspended).toBe(false);
+  });
+
+  it('setIntentSuspended forwards to a HUD that has the method, and is a no-op otherwise', () => {
+    const { hud } = mountHud(new FFX2BattleHud());
+    setIntentSuspended(hud, true);
+    expect(hud.enemyIntent.isSuspended).toBe(true);
+    setIntentSuspended(hud, false);
+    expect(hud.enemyIntent.isSuspended).toBe(false);
+
+    expect(() => setIntentSuspended({}, true)).not.toThrow();
+    expect(() => setIntentSuspended(null, true)).not.toThrow();
+  });
+
+  it('both HUDs forward it to their own slab', () => {
+    const ffx = mountHud(new FFXBattleHud());
+    const ffx2 = mountHud(new FFX2BattleHud());
+    ffx.hud.setIntentSuspended(true);
+    ffx2.hud.setIntentSuspended(true);
+    expect(ffx.hud.enemyIntent.isSuspended).toBe(true);
+    expect(ffx2.hud.enemyIntent.isSuspended).toBe(true);
   });
 });
 

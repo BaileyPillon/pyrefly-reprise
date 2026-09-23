@@ -82,6 +82,8 @@ import type { IntentSource } from '../common/EnemyIntent.ts';
  */
 interface IntentAwareHud {
   setIntentSource?(source: IntentSource | null): void;
+  /** See {@link CoachedHud.setIntentSuspended} — the same wrapper hole, PR-0122. */
+  setIntentSuspended?(suspended: boolean): void;
 }
 
 export interface CoachLayerOptions {
@@ -198,6 +200,20 @@ class CoachedHud implements HudPort {
   // sees a real function on every `CoachedHud`, in both games.
   setIntentSource(source: IntentSource | null): void {
     (this.inner as IntentAwareHud).setIntentSource?.(source);
+  }
+
+  /**
+   * PR-0122, the exact same wrapper hole `setIntentSource` above documents for
+   * PR-0090: `BattleScreen.openPause`'s `onPause` callback calls
+   * `EnemyIntent.setIntentSuspended(this.hud, paused)` to hide the slab while
+   * the pause is up, and `this.hud` is always this wrapper, never the
+   * concrete `FFXBattleHud` / `FFX2BattleHud`. Left out, the duck-typed probe
+   * in `EnemyIntent.ts` finds nothing here and the slab keeps painting over
+   * the pause — round 09's own repro, confirmed live (a fresh `CoachedHud`
+   * had no `setIntentSuspended` at all until this line).
+   */
+  setIntentSuspended(suspended: boolean): void {
+    (this.inner as IntentAwareHud).setIntentSuspended?.(suspended);
   }
 
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult> {
