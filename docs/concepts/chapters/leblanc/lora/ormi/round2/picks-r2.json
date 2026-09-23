@@ -1,0 +1,223 @@
+{
+ "about": "Ormi round-2 picks (FFX-2 only, Chapter 6): LoRA r2 (ormi-x2-r2.safetensors = step 1500) + OpenPose (round2 skeletons) + the idle as IP-Adapter reference at 0.3. Tags are renders under D:/Tools/pyrefly-lora/ormi/r2/poses/<state>/. Boxes are in RAW-frame pixels (sheet-r2.py subtracts the installed cropBox). scale: sidecar 'scale' so the head matches idle's within 5 percent (measure.py; idle head 122.7 px). Scores are the painter's own at 1:1 (criteria of sets/ormi/round3/judge.md, the score is the worst, the bar is 7); an independent judge is still owed.",
+ "states": {
+  "attack": {
+   "tag": "attack.c.980002.knot982201",
+   "seed": 980002,
+   "step": 1500,
+   "canvas": [
+    1024,
+    1024
+   ],
+   "scale": 1.04,
+   "headPx": 118.0,
+   "boxes": {
+    "face": [
+     500,
+     60,
+     720,
+     290
+    ],
+    "costume": [
+     180,
+     260,
+     760,
+     760
+    ],
+    "feet": [
+     60,
+     740,
+     820,
+     1024
+    ],
+    "weapon": [
+     700,
+     30,
+     1024,
+     540
+    ]
+   },
+   "edits": [
+    "render: batch c, 1024x1024 canvas with skel-attack-sq.png (the lunge refitted to a square canvas; the 832x1216 batches a and b filled the empty top half with extra shields and cloth), CN 0.6, LoRA r2 0.8, trimmed shield words",
+    "repaint.mjs knot: the invented red cord knot on the belly painted out (ellipse 590,412 r24x32, denoise 0.75, LoRA r2 0.8, seed 982201); a small gold tassel is left"
+   ],
+   "judge": {
+    "score": 6,
+    "status": "best available, below bar",
+    "worst": "head, shield and style: a small maroon topknot with a red tie but no striped tassel; one shield leading the bash with a red heart on a purple sunburst face, but a plain gold rim (no red studded band); a flatter, brighter cel finish than the idle's painterly shading",
+    "scores": {
+     "head": 6,
+     "face": 7,
+     "costume": 7,
+     "shield": 6,
+     "build": 8,
+     "style": 6,
+     "pose": 8
+    }
+   }
+  },
+  "cast": {
+   "tag": "cast.a.980101.knot982003.tassel982013",
+   "seed": 980101,
+   "step": 1500,
+   "canvas": [
+    832,
+    1216
+   ],
+   "scale": 1.2,
+   "headPx": 101.9,
+   "boxes": {
+    "face": [
+     350,
+     230,
+     580,
+     440
+    ],
+    "costume": [
+     190,
+     380,
+     640,
+     920
+    ],
+    "feet": [
+     150,
+     980,
+     700,
+     1216
+    ],
+    "weapon": [
+     90,
+     430,
+     350,
+     1040
+    ]
+   },
+   "edits": [
+    "render: batch a, skel-cast-s85.png, CN 0.6, LoRA r2 0.8",
+    "repaint.mjs knot: the invented red knot with tassels at the collar painted out (ellipse 515,490 r82x56, denoise 0.75, LoRA r2 0.8, seed 982003); a gold collar band in its place",
+    "repaint.mjs tassel: the red tassel end left outside that mask painted out (ellipse 572,528 r24, denoise 0.75, seed 982013)"
+   ],
+   "judge": {
+    "score": 6,
+    "status": "best available, below bar",
+    "worst": "head and style: small topknot, no tassel; flatter cel finish than idle. Round 1's cast.960106 (independent judge 7) is backed up under .../2026-09-23-lora-r2/ormi/replaced/cast.png",
+    "scores": {
+     "head": 6,
+     "face": 7,
+     "costume": 7,
+     "shield": 7,
+     "build": 8,
+     "style": 6,
+     "pose": 7
+    }
+   }
+  },
+  "hurt": {
+   "tag": "hurt.c.980203.knot982106",
+   "seed": 980203,
+   "step": 1500,
+   "canvas": [
+    832,
+    1216
+   ],
+   "scale": 1.17,
+   "headPx": 105.1,
+   "boxes": {
+    "face": [
+     230,
+     280,
+     480,
+     470
+    ],
+    "costume": [
+     190,
+     430,
+     760,
+     1000
+    ],
+    "feet": [
+     120,
+     980,
+     760,
+     1216
+    ],
+    "weapon": [
+     170,
+     350,
+     340,
+     620
+    ]
+   },
+   "edits": [
+    "render: batch c, skel-hurt-s85.png (both feet planted), CN 0.8, LoRA r2 0.8, stronger recoil words (eyes shut tight, grimace, knocked back)",
+    "repaint.mjs knot: the invented red knot at the collar painted out (ellipse 420,505 r34x42, denoise 0.75, LoRA r2 0.8, seed 982106)"
+   ],
+   "judge": {
+    "score": 6,
+    "status": "best available, below bar",
+    "worst": "costume, shield, style and pose: the yellow sash ties in a large bow at his side; the shield on his back shows only its gold back (no heart); a stagger with a hand to the belly and eyes shut tight, a milder recoil than the skeleton",
+    "scores": {
+     "head": 7,
+     "face": 7,
+     "costume": 6,
+     "shield": 6,
+     "build": 8,
+     "style": 6,
+     "pose": 6
+    }
+   }
+  },
+  "ko": {
+   "tag": "ko.a.980305.noshield.head981036.badge981041.shadow2",
+   "seed": 980305,
+   "step": 1500,
+   "canvas": [
+    1216,
+    832
+   ],
+   "scale": 0.83,
+   "headPx": 147.4,
+   "boxes": {
+    "face": [
+     950,
+     240,
+     1180,
+     470
+    ],
+    "costume": [
+     480,
+     380,
+     1110,
+     810
+    ],
+    "feet": [
+     20,
+     560,
+     460,
+     832
+    ]
+   },
+   "edits": [
+    "render: batch a, skel-ko-s70.png, CN 0.6, LoRA r2 0.8 (batches b, 1216x832 at CN 0.85, and c, 1536x640, filled the frame with shields, mats and a second body)",
+    "erase-poly.py: the shield standing on edge behind his head ran off the right frame edge (a straight cut in the cut-out); erased to white right of x 1100 to 1127",
+    "repaint.mjs head: the back of the head and the topknot regrown (ellipse 1112,335 r42x95, denoise 0.8, LoRA r2 0.8, seed 981036): a maroon topknot with a red tie and a striped tassel",
+    "repaint.mjs badge: the invented heart badge on the chest painted out (ellipse 808,432 r50x26, denoise 0.75, seed 981041)",
+    "pixel edit (round2.md): the grey-blue floor shadow right of the sleeve whitened (low-saturation pass, then per row beyond the sleeve's last red or gold pixel) and the blue floor sliver under the sleeve"
+   ],
+   "judge": {
+    "score": 5,
+    "status": "best available, below bar",
+    "worst": "shield: none (the one render ran off the frame edge and was erased; research 10.1 puts the shield on his back). Costume 6: the hakama pattern is gold squares, not diamonds, and a faint smudge at the collar where the heart badge was",
+    "scores": {
+     "head": 7,
+     "face": 7,
+     "costume": 6,
+     "shield": 5,
+     "build": 8,
+     "style": 6,
+     "pose": 8
+    }
+   }
+  }
+ }
+}

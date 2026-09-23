@@ -11,6 +11,7 @@
  *        --positive "..." --negative "..." [--inpaint 1]
  *        [--poly x,y,x,y,... (repeatable)] [--whole 1] [--feather 3]
  *        [--ref a.png[,b.png] --refWeight 0.5 --refType linear --refStart 0 --refEnd 1]
+ *        [--root D:/Tools/pyrefly-lora/ormi/r2/poses --loraFile ormi-x2-r2.safetensors --size WxH]  (round 2)
  *
  * Added 2026-09-23 (the independent judge's redo, judge.md): --poly adds polygon masks,
  * --whole 1 repaints the whole frame (low-denoise img2img, the ko style pass), --ref
@@ -44,7 +45,9 @@ for (let i = 3; i < argv.length; i += 2) {
   else if (k === 'poly') opt.poly.push(argv[i + 1].split(',').map(Number));
   else opt[k] = argv[i + 1];
 }
-const dir = join(R.OUT, state);
+// Round 2 (2026-09-23): --root D:/Tools/pyrefly-lora/ormi/r2/poses --loraFile ormi-x2-r2.safetensors
+// --size 1024x1024 repaint a round-2 render with the r2 LoRA; without them nothing changes.
+const dir = join(opt.root || R.OUT, state);
 const src = join(dir, `${tag}.raw.png`);
 const seeds = String(opt.seeds || '970001').split(',').map(Number);
 const denoise = Number(opt.denoise ?? 1);
@@ -92,7 +95,7 @@ const refStaged = refs.map((r) => stageImage(r));
 for (const seed of seeds) {
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
-    10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: 'ormi-x2.safetensors', strength_model: lora, strength_clip: lora } },
+    10: { class_type: 'LoraLoader', inputs: { model: ['4', 0], clip: ['4', 1], lora_name: opt.loraFile || 'ormi-x2.safetensors', strength_model: lora, strength_clip: lora } },
     6: { class_type: 'CLIPTextEncode', inputs: { text: positive, clip: ['10', 1] } },
     7: { class_type: 'CLIPTextEncode', inputs: { text: negative, clip: ['10', 1] } },
     11: { class_type: 'LoadImage', inputs: { image: img, upload: 'image' } },
@@ -121,7 +124,7 @@ for (const seed of seeds) {
   }
   const out = `${tag}.${name}${seed}`;
   const secs = await R.run(g, join(dir, `${out}.raw.png`));
-  const s = R.STATES[state];
+  const s = opt.size ? { ...R.STATES[state], size: opt.size.split('x').map(Number) } : R.STATES[state];
   const cut = cutout(join(dir, `${out}.raw.png`), join(dir, `${out}.png`));
   const guard = await C.checkCutoutFile(join(dir, `${out}.png`), { sourceWidth: s.size[0], sourceHeight: s.size[1], composition: s.composition });
   const base = JSON.parse(readFileSync(join(dir, `${tag}.json`), 'utf8'));

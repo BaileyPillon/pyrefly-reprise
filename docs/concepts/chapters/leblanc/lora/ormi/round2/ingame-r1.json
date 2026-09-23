@@ -1,0 +1,128 @@
+{
+ "label": "r1",
+ "port": 5633,
+ "browser": "gpu",
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "viewport": [
+  1600,
+  900
+ ],
+ "dsf": 2,
+ "states": {
+  "idle": {
+   "pose": "idle",
+   "rect": {
+    "x": 779.8460776959724,
+    "y": 379.9703022382541,
+    "w": 63.16737569710483,
+    "h": 156.45052758775358,
+    "depth": 16.349330547694585
+   },
+   "meta": {
+    "width": 489,
+    "height": 1189,
+    "baselineY": 1173,
+    "scale": null,
+    "content": {
+     "x0": 15,
+     "x1": 474,
+     "y0": 16,
+     "y1": 1173
+    }
+   },
+   "url": "/art/characters/ormi/idle.png"
+  },
+  "attack": {
+   "pose": "attack",
+   "rect": {
+    "x": 754.6557893728307,
+    "y": 407.5164883451972,
+    "w": 104.13789450206912,
+    "h": 129.13001249156332,
+    "depth": 16.333828374859866
+   },
+   "meta": {
+    "width": 790,
+    "height": 988,
+    "baselineY": 972,
+    "scale": null,
+    "content": {
+     "x0": 15,
+     "x1": 775,
+     "y0": 16,
+     "y1": 972
+    }
+   },
+   "url": "/art/characters/ormi/attack.png"
+  },
+  "cast": {
+   "pose": "cast",
+   "rect": {
+    "x": 691.4056330590134,
+    "y": 369.6128504521011,
+    "w": 85.92061240695784,
+    "h": 175.11633616055423,
+    "depth": 15.094635003774659
+   },
+   "meta": {
+    "width": 611,
+    "height": 1214,
+    "baselineY": 1202,
+    "scale": null,
+    "content": {
+     "x0": 16,
+     "x1": 595,
+     "y0": 15,
+     "y1": 1203
+    }
+   },
+   "url": "/art/characters/ormi/cast.png"
+  },
+  "hurt": {
+   "pose": "hurt",
+   "rect": {
+    "x": 701.7216796338494,
+    "y": 407.3949502207568,
+    "w": 77.78178789502533,
+    "h": 145.22127237372723,
+    "depth": 14.58720490411929
+   },
+   "meta": {
+    "width": 503,
+    "height": 967,
+    "baselineY": 967,
+    "scale": null,
+    "content": {
+     "x0": 15,
+     "x1": 488,
+     "y0": 16,
+     "y1": 967
+    }
+   },
+   "url": "/art/characters/ormi/hurt.png"
+  },
+  "ko": {
+   "pose": "ko",
+   "rect": {
+    "x": 733.0429172674767,
+    "y": 445.68244847949654,
+    "w": 158.75261890675074,
+    "h": 92.16742879696903,
+    "depth": 16.37185356273647
+   },
+   "meta": {
+    "width": 1196,
+    "height": 710,
+    "baselineY": 694,
+    "scale": null,
+    "content": {
+     "x0": 14,
+     "x1": 1182,
+     "y0": 16,
+     "y1": 694
+    }
+   },
+   "url": "/art/characters/ormi/ko.png"
+  }
+ }
+}

@@ -1,0 +1,62 @@
+[
+ {
+  "state": "idle",
+  "figureScreenH": 156.8,
+  "idleScreenH": 156.8,
+  "figureVsIdle": 1.0,
+  "cameraDrift": 0.0059,
+  "headTexPx": 122.7,
+  "scale": null,
+  "headScreenPx": 16.63,
+  "idleHeadScreenPx": 16.63,
+  "headVsIdle": 1.0
+ },
+ {
+  "state": "attack",
+  "figureScreenH": 136.6,
+  "idleScreenH": 156.6,
+  "figureVsIdle": 0.872,
+  "cameraDrift": 0.0065,
+  "headTexPx": 118.0,
+  "scale": 1.04,
+  "headScreenPx": 16.6,
+  "idleHeadScreenPx": 16.61,
+  "headVsIdle": 0.999
+ },
+ {
+  "state": "cast",
+  "figureScreenH": 167.5,
+  "idleScreenH": 155.3,
+  "figureVsIdle": 1.079,
+  "cameraDrift": 0.0064,
+  "headTexPx": 101.9,
+  "scale": 1.2,
+  "headScreenPx": 16.46,
+  "idleHeadScreenPx": 16.47,
+  "headVsIdle": 0.999
+ },
+ {
+  "state": "hurt",
+  "figureScreenH": 139.8,
+  "idleScreenH": 157.5,
+  "figureVsIdle": 0.888,
+  "cameraDrift": 0.0066,
+  "headTexPx": 105.1,
+  "scale": 1.17,
+  "headScreenPx": 17.14,
+  "idleHeadScreenPx": 16.7,
+  "headVsIdle": 1.026
+ },
+ {
+  "state": "ko",
+  "figureScreenH": 62.2,
+  "idleScreenH": 155.9,
+  "figureVsIdle": 0.399,
+  "cameraDrift": 0.0045,
+  "headTexPx": 147.4,
+  "scale": 0.83,
+  "headScreenPx": 16.66,
+  "idleHeadScreenPx": 16.53,
+  "headVsIdle": 1.008
+ }
+]

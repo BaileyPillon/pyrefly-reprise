@@ -5,6 +5,8 @@
  *   node tools/gen/lora-ormi.mjs upscale     # dataset crops through RealESRGAN x4 in ComfyUI (stage/crops -> stage/up)
  *   node tools/gen/lora-ormi.mjs gate        # wait for the shared GPU only (takes and releases the lock)
  *   node tools/gen/lora-ormi.mjs train [--steps 2000 --dim 16 --alpha 8 --lr 1e-4]
+ *                                      [--toml D:/Tools/pyrefly-lora/ormi/r2/dataset.toml --out .../r2/out --name ormi-x2-r2]
+ *   node tools/gen/lora-ormi.mjs upscale [--src dir --dst dir]
  *   node tools/gen/lora-ormi.mjs steptest [--loras none,ormi-steps/ormi-x2-step00000500.safetensors,...]
  *                                         [--seeds 9300,9301] [--strength 0.8] [--ref 0.3] [--tag steptest]
  *
@@ -142,11 +144,14 @@ async function gpuGate(log) {
 }
 
 async function train(a) {
+  // Round 2 (2026-09-23): --toml <dataset.toml> --out <dir> --name <output name> train a grown
+  // dataset (round2/dataset-r2.py writes its own toml with two subsets); defaults are round 1.
+  const OUT = a.out || join(ROOT, 'out');
   mkdirSync(OUT, { recursive: true });
   const logFile = join(OUT, 'train.log');
   const log = (s) => { console.log(s); writeFileSync(logFile, s + '\n', { flag: 'a' }); };
-  const toml = join(ROOT, 'dataset.toml');
-  writeFileSync(toml,
+  const toml = a.toml || join(ROOT, 'dataset.toml');
+  if (!a.toml) writeFileSync(toml,
     `[general]\nenable_bucket = true\ncaption_extension = '.txt'\nshuffle_caption = false\n\n` +
     `[[datasets]]\nresolution = 1024\nbatch_size = 1\nmin_bucket_reso = 512\nmax_bucket_reso = 2048\nbucket_reso_steps = 64\n\n` +
     `[[datasets.subsets]]\nimage_dir = '${DATA}'\nnum_repeats = 1\n`);
@@ -157,7 +162,7 @@ async function train(a) {
     `--pretrained_model_name_or_path=${CKPT_PATH}`,
     `--dataset_config=${toml}`,
     `--output_dir=${OUT}`,
-    '--output_name=ormi-x2',
+    `--output_name=${a.name || 'ormi-x2'}`,
     '--save_model_as=safetensors',
     '--network_module=networks.lora',
     `--network_dim=${a.dim || 16}`,
@@ -239,9 +244,9 @@ async function run(workflow, outPath) {
   }
 }
 
-async function upscale() {
-  const src = join(ROOT, 'stage/crops');
-  const dst = join(ROOT, 'stage/up');
+async function upscale(a = {}) {
+  const src = a.src || join(ROOT, 'stage/crops');
+  const dst = a.dst || join(ROOT, 'stage/up');
   mkdirSync(dst, { recursive: true });
   for (const f of readdirSync(src).filter((n) => n.endsWith('.png') && !n.startsWith('full'))) {
     const g = {
@@ -344,10 +349,10 @@ const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(imp
 if (isMain) {
   const a = args();
   const cmd = a._[0];
-  if (cmd === 'upscale') await upscale();
+  if (cmd === 'upscale') await upscale(a);
   else if (cmd === 'gate') { await gpuGate(console.log); releaseLock(); }
   else if (cmd === 'train') {
-    if (!existsSync(join(DATA, 'manifest.json'))) throw new Error('build the dataset first (dataset.py finish)');
+    if (!a.toml && !existsSync(join(DATA, 'manifest.json'))) throw new Error('build the dataset first (dataset.py finish)');
     await train(a);
   } else if (cmd === 'steptest') await steptest(a);
   else console.log('usage: node tools/gen/lora-ormi.mjs upscale | gate | train [--steps N --dim N --alpha N --lr X] | steptest [--loras a,b --seeds 1,2]');
