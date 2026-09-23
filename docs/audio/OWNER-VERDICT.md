@@ -16,6 +16,28 @@ row.
 
 ---
 
+## 2026-09-23 — Chapter VIII (Evrae) cues: accepted on recommendation, not by ear
+
+Bailey answered the driver's three Chapter VIII recommendations (title, art,
+music) together, about 19:15 EDT:
+
+> I'll go with your recommendations let's get to work
+
+**This is not an ear verdict on scene-fahrenheit or boss-evrae.** He did not
+listen to the cues and judge them; he accepted the driver's recommendation
+that the chapter's own two composed cues (`src/audio/tracks/scene-fahrenheit.ts`,
+`src/audio/tracks/boss-evrae.ts`) ship in place of the Chapter 1 stand-ins
+(scene-gagazet, boss-seymour). **No agent can hear** (AGENTS.md hard rule 13),
+so this file's own rule holds: do not record this as "approved", "passing" or
+any numeric score. CHK-B1 (audio judged by ear) stays **unverified** for these
+two cues. The aftermath's scripted silence from beat 9 is unchanged by this
+acceptance.
+
+What this applies to: Chapter VIII (the Evrae airship encounter) only.
+Recorded in `docs/target/decisions.json` as D-039.
+
+---
+
 ## 2026-09-19 — the rebuilt, sampled audio
 
 Asked whether the new music and sound effects are right, Bailey answered:

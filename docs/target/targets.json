@@ -857,29 +857,32 @@
           "delivery": "implemented",
           "note": "Distance through Cid’s Trigger commands, missiles, Poison Breath telegraphed by the inhale. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop B (docs/concepts/chapters/evrae/renders/backdrop-b.png, looking up at the hull from the rail). Boss Evrae's palette is option B (renders/evrae-b.png, cooler teal/gold, FAR read); the NEAR and throat/breath-charge poses are to be rendered in B's colours rather than A's or C's own palette. Preflight recommendations accepted: docs/target/decisions.json D-020.",
           "reaction": {
-            "date": "2026-09-21",
-            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too.",
+            "date": "2026-09-23",
+            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too. / I'll go with your recommendations let's get to work",
             "named": [
               "Yes to all recommendations but the title screen needs to match the target.",
-              "Yes to these too."
+              "Yes to these too.",
+              "I'll go with your recommendations let's get to work"
             ],
-            "how": "Bailey answered the chapter-evrae-review.md §5/§6 preflight recommendations and the concept-sheet options (docs/concepts/chapters/evrae/options.json) together, then separately confirmed the art-direction picks named in the follow-up message.",
+            "how": "Bailey answered the chapter-evrae-review.md §5/§6 preflight recommendations and the concept-sheet options (docs/concepts/chapters/evrae/options.json) together, then separately confirmed the art-direction picks named in the follow-up message; on 2026-09-23 about 19:15 EDT he accepted the driver's three follow-up recommendations (title, art, music) in one message (docs/target/decisions.json D-037, D-038, D-039).",
             "liked": [],
             "disliked": [],
-            "mustRemain": [],
+            "mustRemain": [
+              "the two composed cues scene-fahrenheit and boss-evrae ship as the chapter's music, accepted on the driver's recommendation — NOT judged by ear, no numeric score given (CHK-B1 stays unverified; docs/audio/OWNER-VERDICT.md, dated section 2026-09-23); aftermath keeps its scripted silence from beat 9"
+            ],
             "mustChange": [
               "backdrop: B (looking up at the hull from the rail), not the off-canon A or the outside-hull C",
               "Evrae's look: B's cooler teal/gold palette carried into the NEAR pose and the throat/breath-charge pose, not A's or C's own colours",
-              "chapter title: the airship names the chapter (Q11, adopted D-020) — title 'Fahrenheit', not 'Evrae'; 'Evrae' stays the boss's name"
+              "chapter title (Q11 — DECIDED 2026-09-23, D-037, superseding D-020's reading of Q11 for the title only): title stays 'Evrae', subtitle 'Bevelle's Doormat', location line 'Deck of the Fahrenheit — the approach to Bevelle'; the airship still names the location, the mechanic and the music brief",
+              "Evrae art APPROVED as shown on docs/concepts/chapters/evrae/r3/sheet.jpg (D-038): backdrop (public/art/backdrops/evrae-airship-deck.png, concept B, byte-identical), idle-near.png, idle-far.png, breath-charge.png, hurt.png and idle.png; actions show the idle only, no cast painting; the breath glow colour (orange) is unsourced, chosen by the team; locked in docs/target/approved-hashes.json set 'chapter:evrae:2026-09-23'"
             ],
             "undecided": [],
             "inferred": [
               "chapter number 8, by display order after Macalania (the D-018 rule), not asked",
-              "music: Chapter 1's scene-gagazet and boss-seymour stand in until the chapter's own two cues (scene-fahrenheit, boss-evrae; preflight §6, research §12.6) are composed and picked by ear",
               "Cid is not drawn on the field (he keeps his CTB tile; his volleys come from off-frame): the integrator's chapter-local answer to scene handoff F-1, not a pick"
             ]
           },
-          "build": "Registered as Chapter 8 (evrae-airship) and playable through window.__pyrefly.gotoChapter, but LOCKED as a COMING card on chapter select until Bailey approves the art (one line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS; docs/handoff/chapter-evrae.md). In a real battle the deck re-stages NEAR/FAR when Cid flies an order (the scene's range director, hooked by src/app/screens/BattleScreenAirship.ts) and the order widget opens from an Orders row in the command cascade (src/ui/ffx/AirshipOrders.ts). Real-flow stills: docs/screenshots/chapters/evrae-flow-1-select-locked.png, -2-order-widget.png, -3-battle-far.png, -4-results-win.png. Every Evrae painting installed under public/art is CANDIDATE; the backdrop is darker than picked concept B (docs/handoff/chapter-evrae-scene.md §5)."
+          "build": "Registered as Chapter 8 (evrae-airship) and playable through window.__pyrefly.gotoChapter, but LOCKED as a COMING card on chapter select until Bailey approves the art (one line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS; docs/handoff/chapter-evrae.md). In a real battle the deck re-stages NEAR/FAR when Cid flies an order (the scene's range director, hooked by src/app/screens/BattleScreenAirship.ts) and the order widget opens from an Orders row in the command cascade (src/ui/ffx/AirshipOrders.ts). Real-flow stills: docs/screenshots/chapters/evrae-flow-1-select-locked.png, -2-order-widget.png, -3-battle-far.png, -4-results-win.png. Evrae's backdrop, idle-near, idle-far, breath-charge, hurt and idle paintings under public/art are now APPROVED (D-038, hash-locked in docs/target/approved-hashes.json 'chapter:evrae:2026-09-23'), not CANDIDATE; the backdrop is darker than picked concept B (docs/handoff/chapter-evrae-scene.md §5). The LOCKED coming-card flag and the chapter's displayed title string are unchanged by this record — both are owed to whichever pass next touches chapter registration."
         },
         {
           "label": "Evrae's order/range widget (FFX)",
