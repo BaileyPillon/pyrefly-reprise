@@ -73,6 +73,15 @@ export function departureKindOf(id: CombatantId): DepartureKind {
 export const FALL_MS = { lurch: 220, drop: 1240 } as const;
 /** How far the fall carries Evrae, world units: down past the deck's edge and away. */
 export const FALL_OFFSET = { x: 0.8, y: -7.5, z: -5 } as const;
+/**
+ * How much of its size Evrae keeps by the time it is gone (research
+ * `ffx-evrae-airship.md` line 889: "a shape getting smaller"). Chapter VIII
+ * e2e (commit 7119762f) caught the fall keeping full size the whole way down
+ * — this is what the six-frame capture now shows shrinking instead.
+ */
+export const FALL_SHRINK_TO = 0.22;
+/** Steps the shrink is quantised to, spread evenly across {@link FALL_MS}.drop. */
+const FALL_SHRINK_STEPS = 12;
 
 /** Yielding, in milliseconds at timeScale 1: the dim, then the step back. */
 export const YIELD_MS = { dim: 360, step: 1000 } as const;
@@ -113,6 +122,35 @@ function budget(ctx: EventCtx, ms: number) {
 }
 type Budget = ReturnType<typeof budget>;
 
+/**
+ * `actor`'s uniform scale, read structurally so this file stays on the
+ * headless side of the `three` line [AGENTS.md hard rule 1] — the same trick
+ * `evrae-airship-director.ts#rimOf` uses to reach a `PaintedActor` field
+ * `ActorHandle` does not declare. `null` for a fake/test handle with none.
+ */
+function scaleOf(actor: ActorHandle): { x: number; setScalar(v: number): void } | null {
+  return (actor as unknown as { scale?: { x: number; setScalar(v: number): void } }).scale ?? null;
+}
+
+/**
+ * Shrink `actor` toward {@link FALL_SHRINK_TO} of its starting size, in
+ * {@link FALL_SHRINK_STEPS} steps spread over `ms` — "a shape getting
+ * smaller" (`research/ffx-evrae-airship.md` line 889), run alongside the drop
+ * rather than after it. Every wait is `b.sleep`, which already races the
+ * departure's own deadline, so a hung shrink cannot hold the beat past what
+ * `moveTo`/`fadeTo` already guard for.
+ */
+async function shrinkFall(actor: ActorHandle, ms: number, b: Budget): Promise<void> {
+  const scale = scaleOf(actor);
+  if (!scale) return;
+  const start = scale.x || 1;
+  for (let i = 1; i <= FALL_SHRINK_STEPS; i++) {
+    const t = i / FALL_SHRINK_STEPS;
+    scale.setScalar(start * (1 - t * (1 - FALL_SHRINK_TO)));
+    await b.sleep(ms / FALL_SHRINK_STEPS);
+  }
+}
+
 /** Evrae breaks, then falls out of the sky: down and away, fading as it goes. */
 async function fallsAway(actor: ActorHandle, b: Budget): Promise<void> {
   const from = at(actor.position);
@@ -127,7 +165,8 @@ async function fallsAway(actor: ActorHandle, b: Budget): Promise<void> {
     await b.sleep(FALL_MS.drop * 0.62);
     await b.guard(actor.fadeTo(0, FALL_MS.drop * 0.38));
   })();
-  await Promise.all([b.guard(drop), fade]);
+  const shrink = shrinkFall(actor, FALL_MS.drop, b);
+  await Promise.all([b.guard(drop), fade, shrink]);
 }
 
 /** Where the party stands, on average, or `null` with nobody staged. */

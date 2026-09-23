@@ -584,7 +584,18 @@ export class FFXBattleHud implements HudPort {
         return;
       case 'sensor': {
         const target = this.lastState?.combatants[event.targetId];
-        if (target) this.sensorPanel.show(target);
+        // `flags.untargetable` is the same marker `predicates.ts#targetable`
+        // reads to keep a combatant off the aim cursor (Cid on the Fahrenheit,
+        // a machine's dormant part). Sensor's passive auto-reveal
+        // (`revealForSensorAuto`) walks every id in `state.enemyIds` with no
+        // such filter — Cid is "not meant to be read as an enemy"
+        // (`data/ffx/enemies/evrae.ts`) but still on that list — so without
+        // this guard his reveal lands here right after Evrae's and steals the
+        // plate: a blank "Cid / SENSOR FAILED" card at the panel's fixed grid
+        // spot, unanchored to any figure because nothing ever aimed at him
+        // (`docs/concepts/chapters/evrae/e2e` F5, `steerSensor` only runs from
+        // an actual target-cursor selection). Skip him instead of opening it.
+        if (target && !target.flags.untargetable) this.sensorPanel.show(target);
         return;
       }
       case 'damage':

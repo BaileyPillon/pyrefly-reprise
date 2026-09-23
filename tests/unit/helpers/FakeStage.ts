@@ -31,6 +31,13 @@ export class FakeActor implements ActorHandle {
   alpha = 1;
   dissolve = 0;
   facing: 1 | -1 = 1;
+  /** Structurally what `BattlePresenterDepartures.ts#scaleOf` reads off a real `PaintedActor`. */
+  readonly scale = {
+    x: 1,
+    setScalar(v: number): void {
+      this.x = v;
+    },
+  };
 
   constructor(
     readonly id: CombatantId,

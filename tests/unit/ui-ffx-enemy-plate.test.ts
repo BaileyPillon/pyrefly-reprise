@@ -113,6 +113,41 @@ describe('the enemy plate has a lifetime', () => {
     hud.sync(decided, makeFakeTurnPreview());
     expect(hud.enemyPlate.el.hidden).toBe(true);
   });
+
+  // Chapter VIII end-to-end evidence F5 (commit 7119762f): Cid's Sensor
+  // auto-reveal (`revealForSensorAuto` walks every id in `state.enemyIds`
+  // with no `untargetable` filter) fired a `'sensor'` event for him right
+  // after Evrae's own, and the plate opened on it — a blank "Cid" card at
+  // the panel's fixed grid spot, unanchored to any figure because nothing
+  // ever aimed at him. `flags.untargetable` is the same marker
+  // `predicates.ts#targetable` reads to keep him off the aim cursor in the
+  // first place. FFX only [AGENTS.md rule 14]: Cid, the Fahrenheit and
+  // `SensorPanel` are all FFX's.
+  it('an untargetable combatant (Cid on the Fahrenheit) never opens the enemy plate', () => {
+    const { hud } = mountHud();
+    const state = makeFakeBattleState();
+    const cid: FFXCombatant = {
+      ...enemy('mortiorchis'),
+      id: 'cid',
+      name: 'Cid',
+      flags: { untargetable: true, hideHpBar: true },
+      immunityFlags: ['immune-to-sensor'],
+    };
+    const withCid: BattleState = {
+      ...state,
+      enemyIds: [...state.enemyIds, 'cid'],
+      combatants: { ...state.combatants, cid },
+    };
+    hud.sync(withCid, makeFakeTurnPreview());
+    hud.onEvent({ seq: 1, type: 'sensor', targetId: 'mortiorchis', full: false, text: '' } as never);
+    expect(hud.enemyPlate.el.hidden).toBe(false);
+    expect(hud.enemyPlate.el.textContent).toContain('Mortiorchis');
+
+    // Cid's own reveal must not steal the plate off the real target.
+    hud.onEvent({ seq: 2, type: 'sensor', targetId: 'cid', full: false, text: '' } as never);
+    expect(hud.enemyPlate.el.textContent).toContain('Mortiorchis');
+    expect(hud.enemyPlate.el.textContent).not.toContain('Cid');
+  });
 });
 
 // ------------------------------------------------------ one health read-out

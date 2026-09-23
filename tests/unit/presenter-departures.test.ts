@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
-import { DEPARTURE_KINDS, departureKindOf } from '../../src/engine/BattlePresenterDepartures.ts';
+import { DEPARTURE_KINDS, FALL_SHRINK_TO, departureKindOf } from '../../src/engine/BattlePresenterDepartures.ts';
 import { fallVeilAmount } from '../../src/scenes/evrae-airship-fall.ts';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 import { FakeStage, noSleep } from './helpers/FakeStage.ts';
@@ -41,6 +41,22 @@ describe('departure kinds', () => {
     expect(stage.calls).toContain('fade=0:evrae');
     expect(stage.calls.some((c) => c.startsWith('dissolve'))).toBe(false);
     expect(stage.calls).toContain('remove:evrae');
+  });
+
+  // Chapter VIII e2e (commit 7119762f): the fall kept full size the whole way
+  // down (research `ffx-evrae-airship.md` line 889 says "a shape getting
+  // smaller"). FFX only — Evrae's fall is FFX's [AGENTS.md rule 14].
+  it('Evrae shrinks as it falls, and a victory queued behind it still plays', async () => {
+    const { stage, play } = setup(['evrae']);
+    const evrae = stage.actors.get('evrae')!;
+    await play([
+      { type: 'ko', targetId: 'evrae' },
+      { type: 'victory' } as Unsequenced<BattleEvent>,
+    ]);
+    expect(evrae.scale.x).toBeLessThan(1);
+    expect(evrae.scale.x).toBeCloseTo(FALL_SHRINK_TO, 5);
+    expect(stage.calls).toContain('remove:evrae');
+    expect(stage.calls).toContain('pose=victory:yuna');
   });
 
   it('Ormi yields: stands in idle, steps back and fades, never dissolved', async () => {
