@@ -2,44 +2,57 @@
   "status": "CANDIDATE for Bailey's Decision 1 (METHOD-CHECK section 4); NOT installed, no characters/evrae/cast.png exists",
   "game": "FFX only (Evrae, Chapter 8)",
   "width": 1171,
-  "height": 874,
-  "baselineY": 858,
+  "height": 784,
+  "baselineY": 768,
   "facing": "left",
   "pose": "cast",
-  "method": "r3-derive",
-  "methodNote": "idle-near's own pixels: head and neck as one layer reared up 60 px and pitched 8 deg snout-down toward the party, blended into the fixed body along the neck; idle's jaws are already open. No generated pixels. Head length 69.8 px vs idle 69.5.",
+  "method": "r3-derive (repair cycle)",
+  "methodNote": "idle-near's own pixels: the head and neck as one layer driven DOWN and FORWARD at the party (shift -55, +28 px, pitched 11 deg snout-down), the lower jaw opened 20 deg about the mouth corner (the gullet's own dark pixels stretch; the teeth are not folded). The body never moves. Hurt throws the head UP and BACK, so the two read as opposites. No generated pixels.",
   "why": "every Evrae action is kind 'ability', poseForCommand maps ability to the cast pose, and with no cast.png the idle stands in for every action",
   "derive": {
-    "padTop": 90,
+    "padTop": 0,
     "shift": [
-      -15.0,
-      -60.0
+      -55.0,
+      28.0
     ],
     "snout": [
-      219.0,
-      191.0
+      175.0,
+      284.0
     ],
     "eye": [
-      274.0,
-      148.0
+      221.0,
+      249.0
     ],
-    "headPx": 69.81403870282824,
+    "headPx": 69.5,
     "headPxIdle": 69.5,
-    "opaqueRatio": 1.0068363927539172,
-    "foldPx": 0,
-    "foldBox": null,
-    "angle": -8.0,
+    "opaqueRatio": 1.0241782891742033,
+    "foldPx": 266,
+    "foldBox": [
+      197,
+      268,
+      239,
+      296
+    ],
+    "angle": -11.0,
     "pivot": [
       520.0,
       230.0
     ],
     "ramp": [
-      420.0,
+      350.0,
       600.0
     ],
-    "jaw": 0.0,
-    "minJacobian": -0.19079764117453601,
-    "regionShare": 0.6938129685794673
+    "jaw": -20.0,
+    "minJacobian": -4.503986358642578,
+    "regionShare": 0.5468154420757625,
+    "headPxNote": "the head is a rigid layer (neck weight 1 over the whole head), so its length is idle's 69.5 px by construction; the script's nearest-point probe misreads it once the jaw map is composed"
   },
-  "sha256": "03c1937a52171917a9d6f9e7078b965fcb0d0420141a776288d88c49f448752d"
+  "script": "docs/concepts/chapters/evrae/r3/scripts/pose_derive2.py (SHIFTX=-55 SHIFTY=28, -11 520 230 350 600 -20)",
+  "replaces": {
+    "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-evrae-r3/cycle1/characters/evrae/cast-candidate.png",
+    "sha256": "03c1937a52171917a9d6f9e7078b965fcb0d0420141a776288d88c49f448752d",
+    "judged": "docs/concepts/chapters/evrae/r3/JUDGE.md",
+    "score": 6
+  },
+  "sha256": "f1723ed0a7c28929db95005d3176435e7ba59b1ce6b72f4a04aca74d6ca17b24"
 }
