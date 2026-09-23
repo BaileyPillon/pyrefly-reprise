@@ -1,0 +1,621 @@
+{
+ "idle": {
+  "base": "public/art/characters/logos/idle.png",
+  "seed0": 98001,
+  "lora": {
+   "file": "logos-x2.safetensors",
+   "step": 2000,
+   "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+   "strength": 0.5
+  },
+  "judge": "round-3 judge, idle weapon 5; LoRA judge, cast weapon 6: the near revolver hangs from one finger through the trigger guard while the fist closes on a grey stub (the idle's own defect, learned by the LoRA)",
+  "passes": [
+   {
+    "name": "near hand grips the revolver",
+    "crop": [
+     96,
+     456,
+     344,
+     704
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "poly": [
+       [
+        196,
+        526
+       ],
+       [
+        258,
+        524
+       ],
+       [
+        276,
+        546
+       ],
+       [
+        278,
+        592
+       ],
+       [
+        256,
+        612
+       ],
+       [
+        236,
+        630
+       ],
+       [
+        204,
+        634
+       ],
+       [
+        180,
+        618
+       ],
+       [
+        176,
+        590
+       ],
+       [
+        190,
+        560
+       ]
+      ]
+     }
+    ],
+    "feather": 5,
+    "alpha": "keep",
+    "denoise": [
+     0.7,
+     0.75,
+     0.8,
+     0.8,
+     0.85,
+     0.9
+    ],
+    "refs": [
+     "../poses/refs/attack-grip.png"
+    ],
+    "refWeight": 0.3,
+    "tags": "close-up, hand, holding gun, fist, hand gripping revolver handle, revolver grip inside fist, index finger on trigger, gun pointing down, arm at side, silver revolver, black grip, pale skin, blue robe, dark blue hakama",
+    "neg": "open hand, finger in trigger guard, hanging gun, dangling gun, extra fingers, extra weapon, gun stub, fused fingers, glove",
+    "prefill": [
+     {
+      "ellipse": [
+       257,
+       566,
+       12,
+       20
+      ],
+      "color": [
+       12,
+       12,
+       22
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "idle.r2": {
+  "base": "public/art/characters/logos/idle.png",
+  "seed0": 98011,
+  "lora": {
+   "file": "logos-x2.safetensors",
+   "step": 2000,
+   "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+   "strength": 0.5
+  },
+  "judge": "round-3 judge, idle weapon 5; LoRA judge, cast weapon 6: the near revolver hangs from one finger through the trigger guard while the fist closes on a grey stub (the idle's own defect, learned by the LoRA)",
+  "passes": [
+   {
+    "name": "near hand grips the revolver, round 2 (two grip refs, higher denoise)",
+    "crop": [
+     96,
+     456,
+     344,
+     704
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "poly": [
+       [
+        196,
+        526
+       ],
+       [
+        258,
+        524
+       ],
+       [
+        276,
+        546
+       ],
+       [
+        278,
+        592
+       ],
+       [
+        256,
+        612
+       ],
+       [
+        236,
+        630
+       ],
+       [
+        204,
+        634
+       ],
+       [
+        180,
+        618
+       ],
+       [
+        176,
+        590
+       ],
+       [
+        190,
+        560
+       ]
+      ]
+     }
+    ],
+    "feather": 5,
+    "alpha": "keep",
+    "denoise": [
+     0.85,
+     0.85,
+     0.9,
+     0.9,
+     0.95,
+     0.95
+    ],
+    "refs": [
+     "../poses/refs/attack-grip.png",
+     "refs/cast-lowhand.png"
+    ],
+    "refWeight": 0.3,
+    "tags": "close-up, hand, holding gun, clenched fist, fingers wrapped around revolver handle, hand gripping revolver grip, index finger on trigger, gun pointing down, arm at side, silver revolver, black grip, pale skin, blue robe, dark blue hakama",
+    "neg": "open hand, finger in trigger guard, hanging gun, dangling gun, extra fingers, extra weapon, gun stub, fused fingers, glove",
+    "prefill": [
+     {
+      "ellipse": [
+       257,
+       566,
+       12,
+       20
+      ],
+      "color": [
+       12,
+       12,
+       22
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "attack.r2": {
+  "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/attack.99121.r2c.png",
+  "seed0": 98101,
+  "lora": {
+   "file": "logos-x2-r2.safetensors",
+   "step": 2000,
+   "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+   "strength": 0.85
+  },
+  "judge": "marks: the shoulder disc at 1:1 is a patterned plate with lettering-like marks, not the idle radial disc (the round-1 judge named the mesh disc on attack 96101)",
+  "passes": [
+   {
+    "name": "emblem",
+    "crop": [
+     268,
+     118,
+     524,
+     374
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       396.5,
+       246,
+       25,
+       20
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "paste": {
+     "from": "public/art/characters/logos/idle.png",
+     "center": [
+      328,
+      259
+     ],
+     "r": 28,
+     "to": [
+      396.5,
+      246,
+      23,
+      18
+     ]
+    },
+    "denoise": [
+     0.4,
+     0.45,
+     0.45,
+     0.5,
+     0.5,
+     0.55
+    ],
+    "refs": [
+     "../poses/refs/idle-emblem.png"
+    ],
+    "refWeight": 0.45,
+    "tags": "close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading",
+    "neg": "mesh, grille, grid, crosshatch, net pattern, speaker, text, lettering, hexagon, glossy"
+   }
+  ]
+ },
+ "hurt.r2": {
+  "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/hurt.99303.r2.png",
+  "seed0": 98301,
+  "lora": {
+   "file": "logos-x2-r2.safetensors",
+   "step": 2000,
+   "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+   "strength": 0.85
+  },
+  "judge": "marks: a white hexagonal plate where the idle has its white radial disc (lens ring below it is kept)",
+  "passes": [
+   {
+    "name": "emblem",
+    "crop": [
+     367,
+     110,
+     623,
+     366
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       495,
+       238,
+       18,
+       15
+      ]
+     }
+    ],
+    "minus": [
+     {
+      "ellipse": [
+       490,
+       268,
+       21,
+       18
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "paste": {
+     "from": "public/art/characters/logos/idle.png",
+     "center": [
+      328,
+      259
+     ],
+     "r": 28,
+     "to": [
+      495,
+      238,
+      16,
+      13
+     ],
+     "keep": [
+      {
+       "ellipse": [
+        490,
+        268,
+        21,
+        18
+       ]
+      }
+     ]
+    },
+    "denoise": [
+     0.4,
+     0.45,
+     0.45,
+     0.5,
+     0.5,
+     0.55
+    ],
+    "refs": [
+     "../poses/refs/idle-emblem.png"
+    ],
+    "refWeight": 0.45,
+    "tags": "close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading",
+    "neg": "mesh, grille, grid, crosshatch, net pattern, speaker, text, lettering, hexagon, glossy"
+   }
+  ]
+ },
+ "hurt.r2b": {
+  "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/hurt.99303.r2.png",
+  "seed0": 98311,
+  "lora": {
+   "file": "logos-x2-r2.safetensors",
+   "step": 2000,
+   "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+   "strength": 0.85
+  },
+  "judge": "marks: a white hexagonal plate where the idle has its white radial disc (lens ring below it is kept); round b: the plate cleared first so no ghost outline remains",
+  "passes": [
+   {
+    "name": "hex plate cleared to robe",
+    "crop": [
+     367,
+     110,
+     623,
+     366
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       498,
+       237,
+       22,
+       17
+      ]
+     }
+    ],
+    "minus": [
+     {
+      "ellipse": [
+       490,
+       268,
+       21,
+       18
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "prefill": [
+     {
+      "ellipse": [
+       498,
+       237,
+       20,
+       15
+      ],
+      "color": [
+       134,
+       212,
+       253
+      ]
+     }
+    ],
+    "denoise": [
+     0.3,
+     0.3,
+     0.3,
+     0.35,
+     0.35,
+     0.35
+    ],
+    "refs": [
+     "../poses/refs/idle-emblem.png"
+    ],
+    "refWeight": 0.2,
+    "tags": "close-up, shoulder, blue robe, plain fabric, black shoulder strap, cel shading",
+    "neg": "emblem, patch, hexagon, plate, text, glossy"
+   },
+   {
+    "name": "emblem (after the plate is cleared)",
+    "crop": [
+     367,
+     110,
+     623,
+     366
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       497,
+       238,
+       19,
+       16
+      ]
+     }
+    ],
+    "minus": [
+     {
+      "ellipse": [
+       490,
+       268,
+       21,
+       18
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "paste": {
+     "from": "public/art/characters/logos/idle.png",
+     "center": [
+      328,
+      259
+     ],
+     "r": 28,
+     "to": [
+      497,
+      238,
+      17,
+      14
+     ],
+     "keep": [
+      {
+       "ellipse": [
+        490,
+        268,
+        21,
+        18
+       ]
+      }
+     ]
+    },
+    "denoise": [
+     0.4,
+     0.45,
+     0.45,
+     0.5,
+     0.5,
+     0.55
+    ],
+    "refs": [
+     "../poses/refs/idle-emblem.png"
+    ],
+    "refWeight": 0.45,
+    "tags": "close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading",
+    "neg": "mesh, grille, grid, crosshatch, net pattern, speaker, text, lettering, hexagon, glossy"
+   }
+  ]
+ },
+ "attack.r3": {
+  "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/attack.r2.98106.fix.png",
+  "seed0": 98111,
+  "lora": {
+   "file": "logos-x2-r2.safetensors",
+   "step": 2000,
+   "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+   "strength": 0.85
+  },
+  "judge": "marks: a round brass clasp on the front end of the sash; the idle has none there (the LoRA judge named the same ring on the sash in ko 96402.r2)",
+  "passes": [
+   {
+    "name": "sash clasp",
+    "crop": [
+     286,
+     318,
+     542,
+     574
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       414,
+       445,
+       14,
+       24
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "prefill": [
+     {
+      "ellipse": [
+       414,
+       445,
+       12,
+       22
+      ],
+      "color": [
+       120,
+       70,
+       190
+      ]
+     }
+    ],
+    "denoise": [
+     0.45,
+     0.5,
+     0.5,
+     0.55,
+     0.55,
+     0.6
+    ],
+    "refs": [
+     "../poses/refs/idle-square.png"
+    ],
+    "refWeight": 0.25,
+    "tags": "close-up, purple sash, sash knot, blue robe, cloth folds, cel shading",
+    "neg": "ring, clasp, buckle, metal, brooch, button, coin, glossy"
+   }
+  ]
+ },
+ "attack.r3b": {
+  "base": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/attack.r2.98106.fix.png",
+  "seed0": 98121,
+  "lora": {
+   "file": "logos-x2-r2.safetensors",
+   "step": 2000,
+   "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+   "strength": 0.85
+  },
+  "judge": "marks: a round brass clasp on the front end of the sash; the idle has none there (the LoRA judge named the same ring on the sash in ko 96402.r2); round b: a larger mask, the whole ring and its outline",
+  "passes": [
+   {
+    "name": "sash clasp",
+    "crop": [
+     286,
+     318,
+     542,
+     574
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       410,
+       448,
+       17,
+       27
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "prefill": [
+     {
+      "ellipse": [
+       410,
+       448,
+       15,
+       25
+      ],
+      "color": [
+       110,
+       65,
+       180
+      ]
+     }
+    ],
+    "denoise": [
+     0.55,
+     0.55,
+     0.6,
+     0.6,
+     0.65,
+     0.65
+    ],
+    "refs": [
+     "../poses/refs/idle-square.png"
+    ],
+    "refWeight": 0.25,
+    "tags": "close-up, purple sash, sash knot, blue robe, cloth folds, cel shading",
+    "neg": "ring, clasp, buckle, metal, brooch, button, coin, glossy"
+   }
+  ]
+ }
+}

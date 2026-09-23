@@ -1,0 +1,204 @@
+{
+ "tag": "after",
+ "url": "http://127.0.0.1:5403/",
+ "port": 5403,
+ "browser": "gpu",
+ "measuredAt": "2026-09-23T13:28:32.887Z",
+ "states": {
+  "idle": {
+   "pose": "idle",
+   "alive": true,
+   "rect": {
+    "x": 839.0590948840154,
+    "y": 380.4424980576258,
+    "w": 79.57849564447861,
+    "h": 155.8884097414068,
+    "depth": 16.412497223480703
+   },
+   "meta": {
+    "width": 604,
+    "height": 1160,
+    "baselineY": 1144,
+    "scale": null,
+    "content": {
+     "x0": 16,
+     "x1": 588,
+     "y0": 15,
+     "y1": 1145
+    }
+   },
+   "unitsPerPixel": 0.0014510489510489509,
+   "worldHeight": 1.683216783216783,
+   "screenPxPerTexel": 0.13795434490389982,
+   "headPngPx": 156.4,
+   "headScreenPx": 21.576059542969933,
+   "headNorm": 354.11701734264835,
+   "headVsIdle": 0.9951206143715647,
+   "headVsIdleRaw": 1,
+   "scaleForIdleHead": 1.0049033107725507
+  },
+  "attack": {
+   "pose": "attack",
+   "alive": true,
+   "rect": {
+    "x": 832.6932061423563,
+    "y": 416.0671143880477,
+    "w": 84.68175601159442,
+    "h": 120.1271405287406,
+    "depth": 16.405779907024684
+   },
+   "meta": {
+    "width": 790,
+    "height": 1111,
+    "baselineY": 1095,
+    "scale": 0.8,
+    "content": {
+     "x0": 15,
+     "x1": 775,
+     "y0": 17,
+     "y1": 1095
+    }
+   },
+   "unitsPerPixel": 0.0011608391608391607,
+   "worldHeight": 1.2896923076923075,
+   "screenPxPerTexel": 0.11143519529567773,
+   "headPngPx": 197,
+   "headScreenPx": 21.952733473248514,
+   "headNorm": 360.1517137196887,
+   "headVsIdle": 1.0120789938680674,
+   "headVsIdleRaw": 1.017457957488874,
+   "scaleForIdleHead": 0.790452133526137
+  },
+  "cast": {
+   "pose": "cast",
+   "alive": true,
+   "rect": {
+    "x": 842.0277411020878,
+    "y": 377.32098170569276,
+    "w": 68.51291486045454,
+    "h": 158.86244880035673,
+    "depth": 16.399192313088214
+   },
+   "meta": {
+    "width": 494,
+    "height": 1143,
+    "baselineY": 1127,
+    "scale": 1.03,
+    "content": {
+     "x0": 15,
+     "x1": 479,
+     "y0": 15,
+     "y1": 1128
+    }
+   },
+   "unitsPerPixel": 0.0014945804195804194,
+   "worldHeight": 1.7083054195804193,
+   "screenPxPerTexel": 0.14273355687363587,
+   "headPngPx": 151.7,
+   "headScreenPx": 21.65268057773056,
+   "headNorm": 355.0864728880735,
+   "headVsIdle": 0.9978449262535772,
+   "headVsIdleRaw": 1.0035512061230658,
+   "scaleForIdleHead": 1.032224519963387
+  },
+  "hurt": {
+   "pose": "hurt",
+   "alive": true,
+   "rect": {
+    "x": 844.608612933163,
+    "y": 416.27437059306754,
+    "w": 77.4125932540802,
+    "h": 124.47932271203246,
+    "depth": 16.39201601512519
+   },
+   "meta": {
+    "width": 643,
+    "height": 1053,
+    "baselineY": 1038,
+    "scale": 0.88,
+    "content": {
+     "x0": 15,
+     "x1": 628,
+     "y0": 15,
+     "y1": 1038
+    }
+   },
+   "unitsPerPixel": 0.0012769230769230768,
+   "worldHeight": 1.3445999999999998,
+   "screenPxPerTexel": 0.12168066736269058,
+   "headPngPx": 172.4,
+   "headScreenPx": 20.977747053327857,
+   "headNorm": 343.8675656593955,
+   "headVsIdle": 0.9663181559849318,
+   "headVsIdleRaw": 0.9722696126023149,
+   "scaleForIdleHead": 0.910673151021414
+  },
+  "ko": {
+   "pose": "ko",
+   "alive": true,
+   "rect": {
+    "x": 820.8886261226244,
+    "y": 503.51769411148626,
+    "w": 120.01403296913088,
+    "h": 33.523960278440825,
+    "depth": 16.47763869162963
+   },
+   "meta": {
+    "width": 1106,
+    "height": 327,
+    "baselineY": 311,
+    "scale": 0.81,
+    "content": {
+     "x0": 17,
+     "x1": 1089,
+     "y0": 17,
+     "y1": 311
+    }
+   },
+   "unitsPerPixel": 0.0011753496503496502,
+   "worldHeight": 0.38433933566433565,
+   "screenPxPerTexel": 0.11402707577700961,
+   "headPngPx": 188.1,
+   "headScreenPx": 21.448492953655506,
+   "headNorm": 353.4205173702994,
+   "headVsIdle": 0.9931633475742931,
+   "headVsIdleRaw": 0.9940875863333446,
+   "scaleForIdleHead": 0.815575808328356
+  },
+  "idle2": {
+   "pose": "idle",
+   "alive": true,
+   "rect": {
+    "x": 841.9844943776292,
+    "y": 379.4041473353317,
+    "w": 80.82642459019826,
+    "h": 157.75057068758667,
+    "depth": 16.377807696273706
+   },
+   "meta": {
+    "width": 604,
+    "height": 1160,
+    "baselineY": 1144,
+    "scale": null,
+    "content": {
+     "x0": 16,
+     "x1": 588,
+     "y0": 15,
+     "y1": 1145
+    }
+   },
+   "unitsPerPixel": 0.0014510489510489509,
+   "worldHeight": 1.683216783216783,
+   "screenPxPerTexel": 0.13960227494476696,
+   "headPngPx": 156.4,
+   "headScreenPx": 21.833795801361553,
+   "headNorm": 357.58970891440777,
+   "headVsIdle": 1.0048793856284355,
+   "headVsIdleRaw": 1.0119454740045708,
+   "scaleForIdleHead": 0.9951443071693783
+  }
+ },
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "id": "logos-room",
+ "idleHeadNorm": 355.85336312852803
+}
