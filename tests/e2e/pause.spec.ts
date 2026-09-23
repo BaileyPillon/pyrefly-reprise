@@ -1,4 +1,4 @@
-import { spawn, spawnSync, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
 import net from 'node:net';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -62,7 +62,7 @@ const REPO_ROOT = join(HERE, '..', '..');
 const PORT_MIN = 5400;
 const PORT_MAX = 5990;
 
-let server: ChildProcessWithoutNullStreams | null = null;
+let server: ChildProcess | null = null;
 let baseUrl = '';
 
 /** True if nothing is listening on `port` on 127.0.0.1 right now. */
@@ -87,7 +87,11 @@ async function waitForServerReady(url: string, timeoutMs = 45_000): Promise<void
   let lastError: unknown = null;
   while (Date.now() - start < timeoutMs) {
     try {
-      const res = await fetch(url);
+      // Its own bound per attempt: without this, one stalled request (the
+      // dev server accepting the connection but not yet answering) can eat
+      // the whole `timeoutMs` budget in a single `await`, leaving no time for
+      // the retries this loop exists to make.
+      const res = await fetch(url, { signal: AbortSignal.timeout(5_000) });
       if (res.ok) return;
     } catch (err) {
       lastError = err;
@@ -98,6 +102,11 @@ async function waitForServerReady(url: string, timeoutMs = 45_000): Promise<void
 }
 
 test.beforeAll(async () => {
+  // The `beforeEach` budget above (180s) is for the TESTS; it does not apply
+  // to this hook, which still runs on the project's 90s `timeout` by default.
+  // A cold `vite` start measured 91s on this shared box on 2026-09-23, so the
+  // hook gets its own budget here.
+  test.setTimeout(300_000);
   const port = await pickFreePort();
   baseUrl = `http://127.0.0.1:${port}/`;
   // `node_modules/vite/bin/vite.js` directly, not `npx vite`: no shell/cmd
@@ -108,7 +117,7 @@ test.beforeAll(async () => {
     [join(REPO_ROOT, 'node_modules', 'vite', 'bin', 'vite.js'), '--port', String(port), '--strictPort', '--host', '127.0.0.1'],
     { cwd: REPO_ROOT, stdio: ['ignore', 'pipe', 'pipe'] },
   );
-  await waitForServerReady(baseUrl);
+  await waitForServerReady(baseUrl, 240_000);
 });
 
 test.afterAll(() => {
