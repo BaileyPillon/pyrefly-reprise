@@ -487,10 +487,17 @@ function num(n: number): string {
 /**
  * How much of each suggestion the card prints.
  *
- * Ordered by what a player can most afford to lose, cheapest first. The four
- * things that are never dropped at any density are the move's name, the submenu
- * it lives in, the reason under a *runner-up* (which is where the revive lives,
- * and "why" is the whole of Bailey's second question), and any warning.
+ * Ordered by what a player can most afford to lose, cheapest first. Until the
+ * last, phone-compact rung, four things are never dropped: the move's name,
+ * the submenu it lives in (with its cost), the reason under a *runner-up*
+ * (which is where the revive lives, and "why" is the whole of Bailey's second
+ * question), and any warning.
+ *
+ * Critic round 09, PR-0126: the lead used to lose its "in <submenu>" chip and
+ * cost a rung early, at density 5 — the same rung that sheds only its badge
+ * now — because `bare` folded the two together. Chapter 5's real route hit
+ * that rung on 27 of 283 decisions. The menu path and cost now survive every
+ * rung but the last.
  *
  * | density | what goes |
  * |---|---|
@@ -499,8 +506,8 @@ function num(n: number): string {
  * | 2 | + the lead's effect line, and the runner-up's secondary chips |
  * | 3 | + the runner-up's numbers, down to the submenu chip |
  * | 4 | + the lead's reason and its secondary chips |
- * | 5 | + the lead's chips and badge: its name and target, and nothing else |
- * | 6 | + every reason, warning and the title: named moves, the actor, the board's note |
+ * | 5 | + the lead's badge |
+ * | 6 (phone compact) | + every "in <submenu>" chip, cost, reason, warning and the title: named moves, the actor, the board's note |
  *
  * Seven rungs rather than the four the first pass shipped, because the room
  * the card is given is much smaller than the stylesheet's 104px suggests. The
@@ -576,10 +583,12 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
     : '';
   const rankChip = total > 1 ? `<span class="mad__rank"><b>${rank}</b></span>` : '';
   // See {@link Density}. A runner-up loses its decoration before the lead does,
-  // the lead's reason goes before the runner-up's, and at the last rung both
-  // are a name and a target.
-  const bare = density >= MAX_DENSITY || (!alt && density >= 5);
-  const badge = s.source === 'tactic' && !bare ? '<span class="mad__badge">Guide’s pick</span>' : '';
+  // the lead's reason goes before the runner-up's, and only the last, phone-
+  // compact rung takes the menu path and cost down to a name and a target
+  // (critic round 09 PR-0126: `bare` used to fire for the lead a rung early,
+  // at density 5, which is now only the badge's rung).
+  const bare = density >= MAX_DENSITY;
+  const badge = s.source === 'tactic' && density < 5 ? '<span class="mad__badge">Guide’s pick</span>' : '';
   const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
   const showEffect = !bare && (alt ? density < 1 : density < 2);
   const trimStats = alt ? density >= 2 : density >= 4;

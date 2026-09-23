@@ -529,6 +529,19 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       expect(t, `density ${d}`).toContain('stand Yuna up');
       expect(t, `density ${d}`).toContain('Lance of Atrophy');
     }
+    // Critic round 09 PR-0126: the *lead*'s own "in <submenu>" chip used to
+    // vanish a rung early (density 5 folded the lead fully bare, dropping 27
+    // of 283 chapter 5 decisions' path chip). It now survives every rung but
+    // the phone-compact last one, same as the runner-up's.
+    for (let d = 0 as Density; d < MAX_DENSITY; d = (d + 1) as Density) {
+      expect(text(d), `density ${d}`).toContain('in White Magic');
+    }
+    expect(text(MAX_DENSITY)).not.toContain('in White Magic');
+    // The badge is decoration and still sheds one rung ahead of the wipe —
+    // but, unlike before, it no longer takes the menu chip down with it.
+    expect(text(4)).toContain('Guide’s pick');
+    expect(text(5)).not.toContain('Guide’s pick');
+    expect(text(5)).toContain('in White Magic');
     // And at *every* rung, including the last-resort one, it still names both
     // moves and prints the note about the board.
     for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
