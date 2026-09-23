@@ -64,8 +64,9 @@ export const damageEffectAbilities: AbilityDef[] = [
     hits: 1,
     statusEffects: [],
     removesStatuses: [],
+    // No guaranteed crit: 187-211 per enemy in three sources; `crit-eligible`
+    // rests on Split Infinity's "(CRIT!)" tag alone [ffx2-combat-core §8.1; PR-0087].
     flags: ['never-break-damage-limit', 'crit-eligible'],
-    bonusCrit: 100,
     messageTemplate: '{user} throws a Grenade',
   },
   {

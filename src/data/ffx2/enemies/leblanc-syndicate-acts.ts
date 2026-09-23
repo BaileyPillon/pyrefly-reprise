@@ -119,9 +119,10 @@ const logosRoom = earlierRecord(logosAct3, {
  * blank-field convention the Syndicate's own six records use [§5.1, G1],
  * not the Dr. Goon's routing decision.
  *
- * The Dr. Goon's **rare steal is a Grenade** — base 300 to every enemy. Steal
- * two in Act I and Act III opens with roughly a quarter of Leblanc's HP per
- * throw. A genuinely canonical, genuinely teachable item loop [§4.6].
+ * The Dr. Goon's **rare steal is a Grenade** — base 200, 187-211 to every enemy
+ * (§18 C18.1: the old "base 300" was the Lady Luck reel Primo Grenade). Steal
+ * two in Act I and each Act III throw takes about a seventh of Leblanc's
+ * 1,380 HP, before chain. A genuinely canonical, genuinely teachable item loop [§4.6].
  */
 const drGoon: EnemyDef = {
   id: 'dr-goon',

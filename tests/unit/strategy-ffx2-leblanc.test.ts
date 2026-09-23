@@ -288,9 +288,15 @@ describe('A2 — the credible mistake: leave Ormi for last', () => {
     const shippedHuggles = shipped.reduce((a, r) => a + r.huggles, 0);
     const wrongHuggles = wrong.reduce((a, r) => a + r.huggles, 0);
     expect(shippedHuggles).toBeLessThan(wrongHuggles / 4);
-    // And No Love Lost never fires at all, because Logos is dead long before
-    // Leblanc's third turn — §5.4 fact 1, measured.
-    expect(shipped.reduce((a, r) => a + r.noLoveLost, 0)).toBe(0);
+    // And No Love Lost almost never fires, because Logos is usually dead
+    // before Leblanc's third turn — §5.4 fact 1, measured. It read "never"
+    // (0 of 20) while the Grenade was a guaranteed crit; at the sourced base
+    // 200 with no forced crit (PR-0087, ffx2-combat-core §8.1) it fires on 2
+    // of 20 seeds (7, 12) against the mistake line's 16 casts, and every run
+    // still ends 20/20 with all three standing. No boss number moved.
+    const shippedNll = shipped.reduce((a, r) => a + r.noLoveLost, 0);
+    expect(shippedNll).toBeLessThanOrEqual(2);
+    expect(shippedNll).toBeLessThan(wrong.reduce((a, r) => a + r.noLoveLost, 0) / 4);
     expect(shipped.filter((r) => r.outcome === 'victory').length).toBe(shipped.length);
   }, 300_000);
 });

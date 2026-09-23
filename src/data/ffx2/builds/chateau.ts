@@ -181,8 +181,9 @@ export const chateauBuild: FFX2PartyBuild = {
   // Antidote for Poison, Phoenix Down for the Death roll. **Nothing answers
   // Eject**, and that is deliberate [§4.3, §7.5].
   //
-  // The Grenades are the Act I item loop made explicit: base 300 to every
-  // enemy, stealable from the Dr. Goon in Act I [§4.6].
+  // The Grenades are the Act I item loop made explicit: base 200, 187-211 to
+  // every enemy before chain, stealable from the Dr. Goon in Act I [§4.6;
+  // §18 C18.1 corrects the old "base 300", which was Primo Grenade].
   inventory: [
     { itemId: 'x2-potion', count: 60 },
     { itemId: 'x2-hi-potion', count: 20 },

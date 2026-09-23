@@ -41,7 +41,7 @@ export const damageItems: ItemDef[] = [
     usableInBattle: true,
     usableInMenu: false,
     price: 25,
-    description: 'Always-critical physical damage to all enemies.',
+    description: 'Physical damage to all enemies.',
   },
   {
     id: 'x2-fire-gem',
