@@ -1,34 +1,37 @@
+// @vitest-environment jsdom
 /**
  * **Chateau Leblanc, the Last Room — scene staging.**
  *
- * Everything here is checked against the **pure, DOM-free exports** of
- * `src/scenes/leblanc-last-room.ts`: the slot table and the actor-height
- * table. Nothing in this project's scene modules has unit coverage of the
- * actual `SceneFactory` build (`buildFarplaneScene`, `buildGagazetScene`,
- * etc.) because they paint textures with `document.createElement('canvas')`,
- * and `vitest.config.ts` runs in the `node` environment with no DOM — this
- * track does not introduce that gap, it is the standing shape of every scene
- * in `src/scenes/`. The one real-input check this scene got is a browser pass
- * against a live dev server (`docs/handoff/chapter-leblanc-scene.md`).
+ * The slot and height tables are checked through the **pure exports** of
+ * `src/scenes/leblanc-last-room.ts`. PR-0093 is checked through the path the
+ * game actually takes: `loadScene('leblanc-last-room', camera)` runs the real
+ * `SceneFactory` and the real `fromSceneBuild`, and the test reads the heights
+ * on the `LoadedScene.slots` the battle stage is handed. The factory paints
+ * its placeholder backdrop on a canvas, so this file runs under jsdom with a
+ * no-op 2D context and an art manifest that lists no backdrops (the loader
+ * goes straight to the placeholder, no image decode, no network). What the
+ * painting looks like is not under test here; the browser pass in
+ * `docs/handoff/chapter-leblanc-scene.md` and
+ * `docs/screenshots/chapters/pr-0093-scale.png` is.
  *
- * **Game case: FFX-2 only** [AGENTS.md rule 14]. Nothing here exists in FFX.
+ * **Game case: FFX-2 only** [AGENTS.md rule 14]. Nothing here exists in FFX;
+ * the Gagazet check below pins that the shared fallback leaves chapters 1-5
+ * where they were.
  */
 
 import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it } from 'vitest';
+import { PerspectiveCamera } from 'three';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   LEBLANC_LAST_ROOM_ACTOR_HEIGHTS,
   LEBLANC_LAST_ROOM_SLOTS,
 } from '../../../src/scenes/leblanc-last-room.ts';
-import { resolveSceneHeights } from '../../../src/scenes/index.ts';
+import { loadScene, resolveSceneHeights, type LoadedScene } from '../../../src/scenes/index.ts';
+import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { LEBLANC_ACT_III } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx2/index.ts';
-
-const LEBLANC_LAST_ROOM_SOURCE = readFileSync(
-  fileURLToPath(new URL('../../../src/scenes/leblanc-last-room.ts', import.meta.url)),
-  'utf8',
-);
 
 describe('leblanc-last-room — the trio and the party marks', () => {
   it('publishes exactly one slot per active party member and at least one per enemy the formation can field', () => {
@@ -83,31 +86,85 @@ describe('leblanc-last-room — the trio and the party marks', () => {
   });
 });
 
+/**
+ * A 2D context that accepts every call and draws nothing. `getImageData`
+ * hands back real (black) pixel arrays, because the backdrop samples its
+ * palette bands off the painting.
+ */
+function noopContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const pixels = (w: number, h: number) => ({
+    data: new Uint8ClampedArray(Math.max(1, Math.floor(w) * Math.floor(h)) * 4),
+    width: w,
+    height: h,
+  });
+  const stub: object = new Proxy(function () {}, {
+    get: (_t, prop) => (prop === 'then' ? undefined : stub),
+    apply: () => stub,
+    set: () => true,
+  });
+  return new Proxy({} as Record<string | symbol, unknown>, {
+    get(target, prop) {
+      if (prop in target) return target[prop];
+      if (prop === 'canvas') return canvas;
+      if (prop === 'getImageData') return (_x: number, _y: number, w: number, h: number) => pixels(w, h);
+      if (prop === 'createImageData') return (w: number, h: number) => pixels(w, h);
+      if (prop === 'measureText') return () => ({ width: 10 });
+      return () => stub;
+    },
+    set(target, prop, value) {
+      target[prop] = value;
+      return true;
+    },
+  }) as unknown as CanvasRenderingContext2D;
+}
+
 describe('leblanc-last-room — PR-0093: the trio stages at human scale, not the Gagazet-boss fallback', () => {
-  it('publishes its own partyHeight/enemyHeight on the returned SceneBuild, not just on the unused SceneSlots table', () => {
-    // `LEBLANC_LAST_ROOM_SLOTS` above already carried the right numbers, but
-    // `fromSceneBuild` in `src/scenes/index.ts` never read them — it always
-    // staged this scene's cast at the 4.1-unit Gagazet-boss fallback height,
-    // "short and stout" Ormi included (round-09 PR-0093). Pin that the scene's
-    // *build* object (what `fromSceneBuild` actually consumes) carries the
-    // same constants the slots table does, by source, since the build object
-    // cannot be constructed in this DOM-free test environment (file doc above).
-    expect(LEBLANC_LAST_ROOM_SOURCE).toMatch(
-      /partyHeight:\s*LEBLANC_LAST_ROOM_ACTOR_HEIGHTS\.yuna,/,
-    );
-    expect(LEBLANC_LAST_ROOM_SOURCE).toMatch(
-      /enemyHeight:\s*LEBLANC_LAST_ROOM_ACTOR_HEIGHTS\.leblanc,/,
-    );
+  const loaded: LoadedScene[] = [];
+
+  beforeAll(() => {
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (this: HTMLCanvasElement) {
+      return noopContext(this) as never;
+    });
+    // No painting is indexed, so `loadPainted` goes straight to the placeholder.
+    setArtManifest(parseArtManifest({ version: 1, subjects: {}, backdrops: [] }));
+    vi.stubGlobal('fetch', async () => new Response(null, { status: 404 }));
   });
 
-  it('resolveSceneHeights uses this scene\'s own numbers, well under the 4.1 boss fallback', () => {
-    const heights = resolveSceneHeights(LEBLANC_LAST_ROOM_SLOTS);
-    expect(heights.partyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna, 5);
-    expect(heights.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc, 5);
-    expect(heights.enemyHeight).toBeLessThan(2.3);
+  afterAll(() => {
+    for (const scene of loaded) scene.dispose();
+    resetArtManifest();
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
-  it('resolveSceneHeights falls back to the Gagazet-era 1.82/4.1 for a scene that publishes neither (chapters 1-5 stay pixel-identical)', () => {
+  async function stage(key: string): Promise<LoadedScene> {
+    const scene = await loadScene(key, new PerspectiveCamera(40, 16 / 9, 0.1, 200));
+    loaded.push(scene);
+    return scene;
+  }
+
+  it("loadScene hands the battle stage this scene's own heights, not 1.82 / 4.1", async () => {
+    // Before the fix `fromSceneBuild` hard-coded partyHeight 1.82 and
+    // enemyHeight 4.1 for every SceneFactory scene, so "short and stout" Ormi
+    // stood 2.25x the party (round 09 PR-0093).
+    const scene = await stage('leblanc-last-room');
+    expect(scene.key).toBe('leblanc-last-room');
+    expect(scene.slots.party).toHaveLength(3);
+    expect(scene.slots.partyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna, 5);
+    expect(scene.slots.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc, 5);
+    expect(scene.slots.enemyHeight).toBeLessThan(2.3);
+    // The stage and the published slot table agree.
+    expect(scene.slots.partyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_SLOTS.partyHeight!, 5);
+    expect(scene.slots.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_SLOTS.enemyHeight!, 5);
+  }, 60_000);
+
+  it('a scene that publishes no heights (Gagazet, chapter 1) still stages at 1.82 / 4.1', async () => {
+    const scene = await stage('gagazet');
+    expect(scene.slots.partyHeight).toBe(1.82);
+    expect(scene.slots.enemyHeight).toBe(4.1);
+  }, 60_000);
+
+  it('resolveSceneHeights falls back to the Gagazet-era 1.82/4.1 for a build that publishes neither', () => {
     expect(resolveSceneHeights({})).toEqual({ partyHeight: 1.82, enemyHeight: 4.1 });
     expect(resolveSceneHeights({ partyHeight: undefined, enemyHeight: undefined })).toEqual({
       partyHeight: 1.82,
@@ -121,10 +178,8 @@ describe('leblanc-last-room — FFX-2-only absence [AGENTS.md rule 14]', () => {
     // Read the module's own source rather than its runtime shape: an import of
     // `src/data/ffx/**` or `src/battle/ffx/**` would be a game-case violation
     // even if nothing it exported were used.
-    const src = readFileSync(
-      fileURLToPath(new URL('../../../src/scenes/leblanc-last-room.ts', import.meta.url)),
-      'utf8',
-    );
+    // `join` rather than `new URL(...)`: under jsdom the global URL is jsdom's.
+    const src = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../../../src/scenes/leblanc-last-room.ts'), 'utf8');
     expect(src).not.toMatch(/from ['"].*\/battle\/ffx\//);
     expect(src).not.toMatch(/from ['"].*\/data\/ffx\//);
   });

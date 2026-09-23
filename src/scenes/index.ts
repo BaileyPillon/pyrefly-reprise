@@ -314,9 +314,9 @@ export async function loadScene(key: string, camera: PerspectiveCamera): Promise
 /**
  * Publish a scene's own `partyHeight`/`enemyHeight` when its {@link SceneBuild}
  * provides them, falling back to the Gagazet-composition defaults otherwise
- * (PR-0093). Pulled out as its own pure function so it has unit coverage
- * without a DOM (`fromSceneBuild` cannot be exercised in `vitest`'s `node`
- * environment — see `tests/unit/chapters/leblanc-scene.test.ts`'s file doc).
+ * (PR-0093). `tests/unit/chapters/leblanc-scene.test.ts` checks it end to end
+ * through {@link loadScene} under jsdom (the real factory and
+ * `fromSceneBuild`), and this pure half on its own.
  */
 export function resolveSceneHeights(
   build: Pick<SceneBuild, 'partyHeight' | 'enemyHeight'>,
