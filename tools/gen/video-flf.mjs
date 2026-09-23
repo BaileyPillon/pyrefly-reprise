@@ -35,6 +35,7 @@
  *   node tools/gen/video-flf.mjs list
  *   node tools/gen/video-flf.mjs render idle-breathing --seed 1
  *   node tools/gen/video-flf.mjs render idle-breathing --seed 1 --width 1024 --height 576
+ *   node tools/gen/video-flf.mjs render ab-end-anchor-a --seed 7 --endBatch 1 --length 81
  *   node tools/gen/video-flf.mjs render-all --seed 1
  *   node tools/gen/video-flf.mjs join-report <clip> <seed>
  *   node tools/gen/video-flf.mjs contact-sheet <clip> <seed>
@@ -110,6 +111,19 @@ export const FPS = 24;
  * /object_info on 2026-09-22, no download.
  */
 export const END_ANCHOR_FRAMES = 4;
+
+/**
+ * Round 4 method check (docs/concepts/pause-until-dawn/video-flf/round4/
+ * method-check.md §3): judge-clip.md §5 flagged the 97-frame / 4-frame-end-
+ * anchor combination as a hypothesis, not a measured cause, of the blown-out
+ * last latent -- two variables (length, end-anchor batch) changed at once
+ * versus round 2. `--endBatch` and `--length` let the CLI override
+ * END_ANCHOR_FRAMES / LENGTH per render so a controlled A/B can hold one
+ * fixed while varying the other, with no code edit between renders. Both
+ * default to the existing round-3 values, so every other clip is unaffected.
+ */
+export const DEFAULT_END_BATCH = END_ANCHOR_FRAMES;
+export const DEFAULT_LENGTH = LENGTH;
 
 export const WAN_NEGATIVE =
   '色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，' +
@@ -195,6 +209,23 @@ export const CLIP_SET = {
       'A light breeze lifts and sways Yuna\u2019s hair and her long braid gently, ' +
       'while her face stays still, then the breeze settles.',
   },
+  // Round 4 method-check A/B (method-check.md \u00a73): deliberately inert motion
+  // (no blink, no head turn) so a measured tone/exposure difference between
+  // the two arms cannot be attributed to the requested motion itself. Both
+  // clip names share this exact prompt string on purpose -- the two arms
+  // differ ONLY by --endBatch, everything else (seed, prompt, length, fps)
+  // is held fixed. Two names (not one name / two seeds) so the outputs land
+  // in separate OUT_ROOT directories instead of colliding.
+  'ab-end-anchor-a': {
+    prompt:
+      'Subtle breathing, hair still, no blink, the character at rest for the ' +
+      'whole last second.',
+  },
+  'ab-end-anchor-b': {
+    prompt:
+      'Subtle breathing, hair still, no blink, the character at rest for the ' +
+      'whole last second.',
+  },
 };
 
 export function fullPrompt(name) {
@@ -275,6 +306,7 @@ export function buildFlfGraph({
   width = WIDTH,
   height = HEIGHT,
   length = LENGTH,
+  endBatch = END_ANCHOR_FRAMES,
   steps = 20,
   cfg = 5,
   sampler = 'uni_pc',
@@ -300,7 +332,7 @@ export function buildFlfGraph({
     // pixel mask, so it is unaffected by this.
     end_image_anchor: {
       class_type: 'RepeatImageBatch',
-      inputs: { image: ['end_image', 0], amount: END_ANCHOR_FRAMES },
+      inputs: { image: ['end_image', 0], amount: endBatch },
     },
     start_vision: {
       class_type: 'CLIPVisionEncode',
@@ -457,6 +489,7 @@ export async function renderClip(name, seed, opts = {}) {
         width,
         height,
         length: opts.length || LENGTH,
+        endBatch: opts.endBatch || END_ANCHOR_FRAMES,
         fps: FPS,
         steps: opts.steps || 20,
         cfg: opts.cfg || 5,
@@ -623,9 +656,15 @@ async function main() {
     const seed = Number(args.seed || 1);
     const width = args.width ? Number(args.width) : WIDTH;
     const height = args.height ? Number(args.height) : HEIGHT;
-    console.log(`[video-flf] rendering ${name} seed=${seed} ${width}x${height}...`);
+    const renderOpts = { width, height };
+    if (args.endBatch !== undefined) renderOpts.endBatch = Number(args.endBatch);
+    if (args.length !== undefined) renderOpts.length = Number(args.length);
+    console.log(
+      `[video-flf] rendering ${name} seed=${seed} ${width}x${height} ` +
+        `length=${renderOpts.length || DEFAULT_LENGTH} endBatch=${renderOpts.endBatch || DEFAULT_END_BATCH}...`,
+    );
     console.log(`[video-flf] gpu before: ${gpuSnapshot()}`);
-    const { outDir, wallMs, frameCount, stagedPlatePath } = await renderClip(name, seed, { width, height });
+    const { outDir, wallMs, frameCount, stagedPlatePath } = await renderClip(name, seed, renderOpts);
     console.log(`[video-flf] ${name} seed=${seed}: ${frameCount} frames in ${(wallMs / 1000).toFixed(1)}s -> ${outDir}`);
     console.log(`[video-flf] gpu after: ${gpuSnapshot()}`);
     const webm = framesToWebm(outDir, { fps: FPS });
@@ -687,7 +726,7 @@ async function main() {
   console.error(
     'Usage:\n' +
       '  node tools/gen/video-flf.mjs list\n' +
-      '  node tools/gen/video-flf.mjs render <clip> [--seed N] [--width W --height H]\n' +
+      '  node tools/gen/video-flf.mjs render <clip> [--seed N] [--width W --height H] [--endBatch 1|4] [--length N]\n' +
       '  node tools/gen/video-flf.mjs render-all [--seed N]\n' +
       '  node tools/gen/video-flf.mjs join-report <clip> <seed>\n' +
       '  node tools/gen/video-flf.mjs contact-sheet <clip> <seed>\n',
