@@ -177,3 +177,15 @@ the port `src/app/screens/pause/living/**` (new) and `src/app/screens/pause/Paus
 7. An independent judge at 1:1, then Bailey. Then the port: a real-input check in the pause screen (open the
    pause, move the gaze, change member, close), a screenshot in `docs/screenshots/`, `tsc` clean, and the pause
    test files green.
+
+## Review (adversarial, 2026-09-23, paper only)
+
+Verdict: **the pilot-first plan is sound. Correct the identity gate before the pilot runs.**
+- CONFIRMED: `measured.json` gives 38 of 169 degrees mixed and a median `mad1deg` of 9.79. The v4.1 handoff gives pair MADs of 28/30/32/32/35/32. There are 53 portrait tests (5+10+10+6+10+12). `renderer.ts` has 352 lines. `FB_TOL = 2.5`. `PortraitStage.attachDriver` exists. The motion spec gives yaw ">= ±45°" and tau 0.14 s (0.25 s reduced).
+- CONFIRMED by reading `PaintSelector.update`: `dissolveS = 0` alone gives a hard cut (progress jumps to 1), even with `dissolveDeg` 5.
+- CORRECTED: in `turn-sweep.txt` the swap steps run 0.6x to **1.8x** (75 -> 80), not 1.6x. It is still unflagged, so the point stands.
+- CORRECTED: in `t99-109.jpg` the second contour is visible in more than 9-10 frames (roughly 14-16 of 25, about 0.6 s, judged on the downscaled sheet). This strengthens the finding.
+- CORRECTED: with 3 degrees of hysteresis, a painting can be warped up to about 8 degrees from its key on a reversal, not 5.
+- PLAUSIBLE only: "the mismatch does not shrink with a smaller gap". Only 20- and 25-degree pairs exist, so the rejection of (a) is inferred. The pilot tests (d) directly, which is enough.
+- CORRECTED (gate): "identity <= 28 against the judged v4 keys" measures against paintings that differ from their own neighbours by 28-35. A propagated key that stays faithful to the plate can fail it. Gate identity against the plate: iris sides, tassel and tip colours, and face MAD against the plate warped through the same flow. Use v4 keys for pose and silhouette only.
+- Builder: `tools/gen/rig-flow.py` is already 418 lines. Put the v5 pair logic in `rig-chain.py`. The expression mapping (`normal/determined/hurt` by member state) is perceivable and INFERRED, so put it in the pilot ask. Rule 9 is otherwise respected: the pilot goes to Bailey before phase 1, and the ±40 departure and the (c0) fallback are disclosed.

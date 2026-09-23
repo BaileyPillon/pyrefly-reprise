@@ -196,3 +196,15 @@ The probes are in the session scratchpad `paper-pr0008/` (`autopsy`, `classify`,
 `npx vitest run --config <scratch>/vitest.config.mjs <name>` from the repo root.
 `critic/scratch/ch1-bench.test.ts` is the committed equivalent for the win-rate
 line.
+
+## Review (adversarial, 2026-09-23, paper only)
+
+Verdict: **recommendation stands, with two corrections.** Re-run on the working tree with an independent probe
+(own driver, engine log only; scratch `paper-review/zw/win.probe.ts`).
+- CONFIRMED: 26 / 21 / 24 / 29 = **100 of 160**; the 14 losing seeds of 1-40 are the ones listed (and match round 09's list); 1 loss before battle turn 10 (seed 20 at 8).
+- CONFIRMED: Seymour takes the first enemy turn in 114 of 160 and loses 51 of them. Retry odds 86% / 95% follow from 0.625.
+- CONFIRMED (sources): §4.2's "stripped of Protect *immediately before*" line; §6 rows 4 and 11; §1.3 Haste resistance 0. The guide's "only defence is Protect" line (`seymour-flux.ts`) is contradicted by §4.2.
+- NOT RE-RUN: the variant table and the Protect-before-Dispel counts (section 3, point 4); taken from the author's probes.
+- CORRECTED: the 36/40 bar comes from the critic's own PR-0008 `expected` ("as chapters 2-6 do") and `acceptanceCheck` ("at least 36/40, with no loss before **player** turn 10"). It does not come from `WIN_BAR` in `strategy-ffx2-leblanc.test.ts`, which is another chapter's test. Drop that sentence. The proposed check counts **battle** turns, so it must say that it changes the unit.
+- CORRECTED: the Haste-on-Seymour figure (99 vs 100 / 160) disagrees with PR-0007's probe (26 -> 21 on seeds 1-40). The two probes are designed differently. Reconcile them before either number goes to Bailey.
+- Builder: `src/data/guides/seymour-flux.ts` is also edited by PR-0007 option A (the Holy Water rule). Build both guide changes in one pass and show Bailey **one** set of wording options. Re-run the guide fold/scale tests, because a new rule can hit the PR-0010 height cap. Rules 9 and 10 are correctly held for Bailey. No boss value changes.

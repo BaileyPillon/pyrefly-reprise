@@ -197,3 +197,15 @@ agent's uncommitted edits. Read their handoff and continue from it; do not start
 7. Acceptance: all of the above are green, the equivalence hashes match, and the bench table is
    in the handoff (`docs/handoff/ffx2-wait-mode.md` §10). The default stays `waitSplit: false`
    until Bailey answers A or B, and D-029 `followUp` item 2 records his words.
+
+## Review (adversarial, 2026-09-23, paper only)
+
+Verdict: **sound. Keep the dark launch and put the A/B ask to Bailey.** Re-ran the author's Active-at-T bench from a copy (`paper-review/wait/`).
+- CONFIRMED, exact: ch5 40 / 32 / 11 / 5 / 0 and ch6 40 / 39 / 16 / 9 / 4 at T = 0 / 500 / 1000 / 1500 / 4000 ms. Ch4 is 40 in every arm. The invalidated / held counts match (80/531, 134/1101).
+- CAVEAT: round 09's independent Active bench on the real chain path gives different numbers: ch5 **2/40** and ch6 **14/40** at 1.5 s, with 250-460 refused submits. Show Bailey the direction and name the harness. Do not quote one number as the truth.
+- CONFIRMED (sources): ffx2-combat-core lines 51, 211, 212 and 2173, and presentation lines 212, 219 and 278 say what is quoted. Target selection is correctly marked INFERRED.
+- CORRECTED: the "indicator" quote is **ffx2-combat-core.md** line 3176, not the presentation file (which has 465 lines).
+- CORRECTED: Bailey's line **is** already in `src/ui/coach/coachCopy.ts:200` (`FFX2_GAUGE_BODY_WAIT`, committed; D-030). Build on it.
+- CONFIRMED: `MAX_STEP_MS = 250` (`BattlePresenterActive.ts:80`), so the 250 ms pause leak is plausible. Settle it with the section 11 step 2 test.
+- CONFIRMED: D-029 follow-up 2 is "deferred, build the split next release". The new A/B question is a new fact, correctly routed to Bailey (rule 10). The chip pairing is correctly INFERRED.
+- Builder: `CommandMenu.ts` (616) and `FFX2BattleHud.ts` (1225) are also over the cap, and `BattlePresenter.ts` is now 651. Put new logic in new or small files. Do not tune any boss.

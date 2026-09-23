@@ -171,3 +171,15 @@ would move (1). That makes it the test that separates them.
   1–30", which sourced FFX math cannot meet without weakening the boss. The new one is
   "every windowed Zombie is curable, and the player is told before the Lance when there is
   no window".
+
+## Review (adversarial, 2026-09-23, paper only)
+
+Verdict: **recommendation stands (option A, information), with two corrections.** Re-run with an independent probe
+that reads the engine's full log, not either event stream (scratch `paper-review/zw/zw.probe.ts`).
+- CONFIRMED: seeds 1-40: 26 wins and 82 Zombies. 47 are killed by the Mortiorchis with **0** party turns in between. 34 are cured by the party, each after at least 1 party turn. The last one is still open at battle end with 0 turns, which explains 34 + 47 = 81.
+- CONFIRMED (arithmetic): the enemy ICV `floor(2100/(100 - rng%11))` gives 21 / 22 / 23 with weights 5 / 4 / 2 out of 11. Seymour first or tied = 83/121, mount first = 38/121.
+- CONFIRMED (sources): the ffx-combat-core §1.9 formula; §4.2 "NOT Esuna"; and `SURVIVES_KO` includes zombie. research ffx-seymour-flux §6 row 4 goes further than this document says: it names the "**CTB turn prediction UI** so the player can see whether they get there first" as the mechanic the strategy requires. Cite that line, because it makes option A fidelity rather than a hint.
+- PLAUSIBLE: ties go to Seymour. §1.6 orders "a boss icon with no number first", and §2.2 puts Seymour in slot M1. No source orders two boss-side actors directly (single source, gap C-7).
+- CORRECTED: `src/ui/common/enemy-intent-brief-status.ts` has no uncommitted work. PR-0011 is committed (333bc2c7, 73d98c59).
+- CORRECTED: `src/battle/ffx/intent.ts` is already 709 lines, over the house cap. Put the `pairing` derivation in a new pure module, for example `intent-pairing.ts`, that `intent.ts` re-exports, and run `orphans.mjs`.
+- Builder: coordinate the guide edit with PR-0008 (the same file, one wording round). Option B's win delta disagrees with PR-0008's probe (see that review). Mockups first (rule 9). B and C stay parked (rule 10). No boss value changes.
