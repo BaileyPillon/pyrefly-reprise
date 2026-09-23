@@ -1,0 +1,23 @@
+{
+  "source": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/braid/r45.src.png",
+  "box": [
+    560,
+    440,
+    160,
+    460
+  ],
+  "pad": 20,
+  "feather": 8,
+  "growMask": 6,
+  "seed": 5101,
+  "denoise": 1,
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "mask": "docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/braid/r45.mask.png",
+  "prompt": "1girl, solo, brown hair, hair strands, cheek, neck, simple background, black background, anime coloring, cel shading, clean lineart, detailed hair, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, braid, hair ornament, earring, jewelry, ribbon, red, blue, rainbow, multicolored hair, text",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "generatedAt": "2026-09-22T22:17:17.636Z"
+}

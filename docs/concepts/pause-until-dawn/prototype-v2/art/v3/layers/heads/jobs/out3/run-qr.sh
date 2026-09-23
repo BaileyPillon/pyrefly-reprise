@@ -1,0 +1,4 @@
+set -e
+export INPAINT_WAIT_MIN=240
+cd "/d/Final Fantasy"
+node tools/gen/inpaint.mjs --image docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/heads/jobs/q34-right.src.png --mask docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/heads/jobs/q34-right.mask.png --latent --box 600,0,552,1000 --pad 0 --growMask 0 --feather 8 --tags "hair strands, back of head" --denoise 0.8 --count 4 --seed 4401   --identity "1girl, solo, brown hair, short hair, bob cut, back of head, hair strands, from side"   --style "anime coloring, cel shading, clean lineart, detailed hair, simple background, black background"   --negAdd "rainbow, multicolored hair, blue hair, pink hair, grey hair, braid, hair ornament, face, eyes, text, frame, border, rim light, glowing edges, helmet, hat"   --out docs/concepts/pause-until-dawn/prototype-v2/art/v3/layers/heads/jobs/out3/qr
