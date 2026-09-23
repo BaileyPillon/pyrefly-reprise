@@ -22,6 +22,7 @@
 
 import './transitions.css';
 import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
+import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 
 type SlabKind = 'reveal' | 'overdrive' | 'telegraph';
 
@@ -128,6 +129,14 @@ export class MomentOverlay implements MomentsPort {
         }, hold),
       );
     });
+  }
+
+  // ----------------------------------------------------------------- cut-in
+
+  /** The approved turn cut-in (PR-0005); see `TurnCutInLayer.ts`. */
+  turnCutIn(req: TurnCutInRequest): Promise<void> {
+    if (this.disposed) return Promise.resolve();
+    return playTurnCutIn(this.el, req);
   }
 
   // ---------------------------------------------------------------- vignette

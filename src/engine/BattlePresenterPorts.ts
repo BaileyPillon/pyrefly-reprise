@@ -110,6 +110,19 @@ export interface MomentsPort {
   }): Promise<void>;
   /** Start (or stop) the heartbeat vignette pulse. `bpm` sets the throb rate. */
   vignette(on: boolean, opts?: { bpm?: number; colour?: string }): void;
+  /**
+   * The Ink & Gold turn cut-in (`TurnCutIn.ts`): slam the portrait slab in,
+   * hold `holdMs`, slide it out; resolves once it is gone. Optional and
+   * additive (PR-0005); `label` is the part after `YOUR TURN · `.
+   */
+  turnCutIn?(opts: {
+    actorId: string;
+    name: string;
+    game: 'ffx' | 'ffx2';
+    label: string;
+    side: 'left' | 'right';
+    holdMs: number;
+  }): Promise<void>;
   /** Tear every layer down. */
   clear(): void;
 }

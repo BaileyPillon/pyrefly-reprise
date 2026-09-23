@@ -35,6 +35,7 @@ import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
 import { clockEngine, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
+import { TurnCutInBeat } from './TurnCutIn.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -58,6 +59,7 @@ export type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterP
 export class BattlePresenter {
   private readonly deps: PresenterDeps;
   private readonly ctx: EventCtx;
+  private readonly cutIns: TurnCutInBeat; // PR-0005: first turn of each party member
   private readonly baseSleep: (ms: number) => Promise<void>;
   /** Real elapsed time for the FFX-2 Active pump. Tests inject a fake clock. */
   private readonly now: () => number;
@@ -115,6 +117,7 @@ export class BattlePresenter {
       (ms) => this.sleep(ms),
       () => this.speed,
     );
+    this.cutIns = new TurnCutInBeat({ moments: deps.moments ?? null, speed: () => this.speed });
   }
 
   /** The shot picker, so the screen can tear its overlays down on exit. */
@@ -450,6 +453,7 @@ export class BattlePresenter {
     if (!hud) return firstEnabled(commands);
 
     this.ctx.stage.actor(actorId)?.setPose('ready');
+    await this.cutIns.play(engine.state(), actorId); // gone before the menu opens
     const previewRank = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot =>
       previewOf(engine, cmd?.command);
 
