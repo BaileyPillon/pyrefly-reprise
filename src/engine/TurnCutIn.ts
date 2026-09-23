@@ -19,8 +19,12 @@
  * {@link CUT_IN_HOLD_MS} is this module's own choice, short enough to read a
  * name and a face and no longer; a Confirm press ends it early.
  *
- * It is always gone before `HudPort.chooseCommand` is called, so it can never
- * sit over an open menu's rows: the presenter `await`s it first.
+ * It never delays input (PR-0061): the presenter starts it and does **not**
+ * wait for it, so the command menu opens (and takes keys) while the slab is
+ * still up, as in the approved picture, where the slab and a live menu share
+ * the frame. A Confirm press both answers the menu and ends the slab's hold.
+ * (Until release 10's repair it was awaited, which put ~0.8 s between the
+ * turn starting and the first usable menu.)
  *
  * GAME-AWARE (AGENTS.md rule 14): **both games.** The tile is an Ink & Gold
  * chrome addition that neither game has. The per-game differences are the

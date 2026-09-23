@@ -452,8 +452,9 @@ export class BattlePresenter {
     if (!hud) return firstEnabled(commands);
 
     this.ctx.stage.actor(actorId)?.setPose('ready');
+    // PR-0005/PR-0061: the cut-in plays over the settle and the open menu, never in front of it.
+    void this.cutIns.play(engine.state(), actorId);
     await settleForMenu(this.ctx); // PR-0094: the whole field in frame
-    await this.cutIns.play(engine.state(), actorId); // gone before the menu opens
     const previewRank = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot =>
       previewOf(engine, cmd?.command);
 

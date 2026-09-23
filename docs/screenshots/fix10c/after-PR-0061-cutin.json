@@ -1,0 +1,52 @@
+[
+ {
+  "ch": "seymour-flux",
+  "press": false,
+  "battleToMenuMs": 9690.79999999702,
+  "cutStartToMenuMs": 0,
+  "cutLenMs": 760.7000000029802,
+  "cutUpWhenMenuOpened": true,
+  "arrow": {
+   "before": [
+    "Attack"
+   ],
+   "after": [
+    "Special▸×4"
+   ],
+   "slabStillUp": true
+  }
+ },
+ {
+  "ch": "seymour-flux",
+  "press": true,
+  "battleToMenuMs": 8814.29999999702,
+  "cutStartToMenuMs": 0,
+  "cutLenMs": 767.9000000059605,
+  "cutUpWhenMenuOpened": true
+ },
+ {
+  "ch": "ffx2-bahamut",
+  "press": false,
+  "battleToMenuMs": 8498.29999999702,
+  "cutStartToMenuMs": 0,
+  "cutLenMs": 768.7999999970198,
+  "cutUpWhenMenuOpened": true,
+  "arrow": {
+   "before": [
+    "White Magic◂"
+   ],
+   "after": [
+    "Change◂"
+   ],
+   "slabStillUp": true
+  }
+ },
+ {
+  "ch": "ffx2-bahamut",
+  "press": true,
+  "battleToMenuMs": 8377.5,
+  "cutStartToMenuMs": 0,
+  "cutLenMs": 756.7999999970198,
+  "cutUpWhenMenuOpened": true
+ }
+]
