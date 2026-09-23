@@ -234,7 +234,8 @@ export function rowFor(commands: AvailableCommand[], command: Command): Availabl
     commands.find((c) => {
       if (c.command.kind !== command.kind) return false;
       const rowId = 'id' in c.command ? String(c.command.id) : null;
-      return rowId === id;
+      const inOf = (x: Command): unknown => (x as { extra?: { inId?: unknown } }).extra?.inId; // switch rows differ only here
+      return rowId === id && (inOf(command) === undefined || inOf(c.command) === undefined || inOf(command) === inOf(c.command));
     }) ?? null
   );
 }
