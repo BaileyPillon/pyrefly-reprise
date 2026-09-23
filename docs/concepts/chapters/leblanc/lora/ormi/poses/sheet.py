@@ -39,8 +39,13 @@ def font(size: int):
     return ImageFont.load_default()
 
 
+def clamp(box, im):
+    return (max(0, box[0]), max(0, box[1]), min(im.width, box[2]), min(im.height, box[3]))
+
+
 def row(state: str, boxes: dict, note: str) -> list[tuple[str, Image.Image]]:
     im = flat(Image.open(ART / f'{state}.png'))
+    boxes = {k: clamp(b, im) for k, b in boxes.items()}
     whole = im.resize((round(im.width * SCALE), round(im.height * SCALE)), Image.LANCZOS)
     return [
         (f'{state}: whole (0.5x, idle scale)', whole),
@@ -56,7 +61,8 @@ def main() -> None:
         crop = json.loads((ART / f'{state}.json').read_text(encoding='utf8'))['cropBox']
         boxes = {k: (b[0] - crop[0], b[1] - crop[1], b[2] - crop[0], b[3] - crop[1]) for k, b in p['boxes'].items()}
         worst = p['judge']['worst'].split(':')[0]
-        rows.append(row(state, boxes, f"{state}: {p['tag']}  (self-judged {p['judge']['score']}/10, worst: {worst})"))
+        flag = '  BEST AVAILABLE, BELOW BAR' if p['judge']['score'] < 7 else ''
+        rows.append(row(state, boxes, f"{state}: {p['tag']}  (self-judged {p['judge']['score']}/10, worst: {worst}){flag}"))
     f, fs = font(20), font(16)
     widths = [max(t[i][1].width for t, _ in rows) for i in range(3)]
     heights = [max(im.height for _, im in t) for t, _ in rows]

@@ -1,34 +1,148 @@
 {
- "about": "Ormi LoRA pose picks (FFX-2 only, Chapter 6). Tags are renders under D:/Tools/pyrefly-lora/ormi/poses/<state>/. Boxes are in RAW-frame pixels (sheet.py subtracts the installed cropBox). Scores follow sets/ormi/round3/judge.md: each criterion 0 to 10, the score is the worst, the bar is 7. Self-judged at 1:1; an independent judge is still owed. See poses.md.",
+ "about": "Ormi LoRA pose picks (FFX-2 only, Chapter 6). Tags are renders under D:/Tools/pyrefly-lora/ormi/poses/<state>/. Boxes are in RAW-frame pixels (sheet.py subtracts the installed cropBox). Scores follow sets/ormi/round3/judge.md: each criterion 0 to 10, the score is the worst, the bar is 7. Redo of 2026-09-23 after the independent judge (../judge.md): attack, hurt and ko edited as the judge named (redo.md); cast unchanged. The redo scores are the painter's own; an independent judge is still owed. Every state below 7 is 'best available, below bar'.",
  "states": {
   "attack": {
-   "tag": "attack.p3.960022.erase.back970023",
-   "boxes": { "face": [470, 220, 700, 440], "costume": [220, 380, 660, 920] },
+   "tag": "attack.p3.960022.erase.back970023.hemfix.blend972035.brooch972045.eye",
+   "boxes": {
+    "face": [
+     470,
+     220,
+     700,
+     440
+    ],
+    "costume": [
+     30,
+     380,
+     700,
+     1090
+    ]
+   },
    "edits": [
     "erase.py attack.p3.960022.raw.png: the second, back-mounted shield erased to white (ellipse 316,250 r137x190, -6 deg, grow 8) with a 2 px outline on the new edge",
-    "repaint.mjs attack.p3.960022.erase back: masked repaint of the upper back (ellipse 362,382 r72) at denoise 0.85, LoRA 0.8, seed 970023, to regrow a convex back and the collar"
+    "repaint.mjs attack.p3.960022.erase back: masked repaint of the upper back (ellipse 362,382 r72) at denoise 0.85, LoRA 0.8, seed 970023, to regrow a convex back and the collar",
+    "hemfix.py: both hakama hem bands (washed-out white with beige flames) re-coloured on attack's own purple ramp by luminance, then a row of cast's pale-gold diamonds drawn along each column's hem bottom (two diffusion passes had failed first: hem972001-006 kept the white value, hem3972021-026 inpaint drew skin; redo.md)",
+    "repaint.mjs blend: the two hem bands at denoise 0.4, LoRA 0.8, cast's hem as IP-Adapter reference 0.4, seed 972035",
+    "repaint.mjs brooch: the red heart brooch on the shoulder painted out (ellipse 510,420 r36x28, denoise 0.75, seed 972045); a small gold ornament is left in its place",
+    "eye: the grey iris (26 px, box 603,338 to 620,351) re-coloured on a green ramp keyed to luminance (idle's green eyes)"
    ],
-   "judge": { "score": 6, "worst": "costume: the hakama hem fades to a translucent white band instead of idle's gold diamond hem; a small heart brooch on the chest", "scores": { "head": 7, "face": 7, "costume": 6, "shield": 7, "build": 8, "style": 7, "pose": 8 } }
+   "judge": {
+    "score": 6,
+    "status": "best available, below bar",
+    "worst": "head and shield: no tassel on the topknot; the shield is edge-on, a gold rim and a red heart only (no studded red band, no sunburst). The hem is now purple with a gold diamond row; the brooch is gone; the iris is green",
+    "scores": {
+     "head": 6,
+     "face": 7,
+     "costume": 7,
+     "shield": 6,
+     "build": 8,
+     "style": 7,
+     "pose": 7
+    }
+   }
   },
   "cast": {
    "tag": "cast.960106",
-   "boxes": { "face": [300, 30, 560, 300], "costume": [300, 280, 690, 900] },
+   "boxes": {
+    "face": [
+     300,
+     30,
+     560,
+     300
+    ],
+    "costume": [
+     300,
+     280,
+     690,
+     900
+    ]
+   },
    "edits": [],
-   "judge": { "score": 7, "worst": "costume: an invented heart clasp at the collar; the shield is carried at his side, not on his back", "scores": { "head": 8, "face": 8, "costume": 7, "shield": 8, "build": 8, "style": 7, "pose": 7 } }
+   "judge": {
+    "score": 7,
+    "worst": "costume: an invented heart clasp at the collar; the shield is carried at his side, not on his back",
+    "scores": {
+     "head": 8,
+     "face": 8,
+     "costume": 7,
+     "shield": 8,
+     "build": 8,
+     "style": 7,
+     "pose": 7
+    }
+   }
   },
   "hurt": {
-   "tag": "hurt.p8.960262",
-   "boxes": { "face": [180, 180, 440, 400], "costume": [220, 330, 640, 900] },
-   "edits": [],
-   "judge": { "score": 4, "worst": "shield: seen edge-on behind his back, so no heart shows; also the sash rides up over the belly and the hem is gold stripes, not idle's diamonds; a flatter, more outlined finish", "scores": { "head": 7, "face": 6, "costume": 5, "shield": 4, "build": 8, "style": 5, "pose": 7 } }
+   "tag": "hurt.p5.960242.heart971005",
+   "boxes": {
+    "face": [
+     220,
+     270,
+     450,
+     470
+    ],
+    "costume": [
+     180,
+     480,
+     632,
+     1000
+    ]
+   },
+   "edits": [
+    "base changed to hurt.p5.960242 (the judge's pick: a real wince, idle's diamond hem and finish, the shield face visible), replacing hurt.p8.960262",
+    "repaint.mjs heart: the shield face (ellipse 210,625 r60x225) at denoise 0.8, no LoRA, cast's shield as IP-Adapter reference 0.5, seed 971005: a foreshortened red heart on a sunburst face"
+   ],
+   "judge": {
+    "score": 6,
+    "status": "best available, below bar",
+    "worst": "pose: the flung open hand still reads partly as reaching up (the optional hand repaint was not attempted); the repainted shield face is paler, pink-violet rather than idle's deep purple",
+    "scores": {
+     "head": 7,
+     "face": 7,
+     "costume": 7,
+     "shield": 6,
+     "build": 8,
+     "style": 7,
+     "pose": 6
+    }
+   }
   },
   "ko": {
-   "tag": "ko.p4.960336.heart970103",
-   "boxes": { "face": [950, 420, 1210, 640], "costume": [520, 420, 1060, 760] },
+   "tag": "ko.p4.960336.heart970103.floor.style973004.shieldfix.blend974016",
+   "boxes": {
+    "face": [
+     950,
+     420,
+     1210,
+     640
+    ],
+    "costume": [
+     520,
+     420,
+     1060,
+     760
+    ]
+   },
    "edits": [
-    "repaint.mjs ko.p4.960336 heart: masked shield-face repaint (ellipse 478,340 r120x105), denoise 0.8, no LoRA, seed 970103, the round-3 heart recipe (sets/ormi/round3/repaint-heart.mjs words)"
+    "repaint.mjs ko.p4.960336 heart: masked shield-face repaint (ellipse 478,340 r120x105), denoise 0.8, no LoRA, seed 970103, the round-3 heart recipe (sets/ormi/round3/repaint-heart.mjs words)",
+    "floor: the red floor-reflection shape under the arm erased to white (polygon about x 830 to 1070, y 684 to 750) with a 2 px outline on the new edge (erase.py method)",
+    "repaint.mjs style: whole-frame img2img at denoise 0.25, LoRA 0.8, IP-Adapter style transfer 0.8 on idle (square) + cast (square), seed 973004: less gloss, crimson rather than orange sleeves, idle's line work",
+    "shieldfix.py: the shield's blue band re-coloured to idle's red band and its blue centre and orange ornaments to a purple face with sunburst lines, the heart kept (a diffusion repaint, shield974001-006, came out salmon first)",
+    "repaint.mjs blend: the shield disc (clipped at y 442) at denoise 0.38, no LoRA, idle + cast's shield as IP-Adapter reference 0.5, seed 974016"
    ],
-   "judge": { "score": 5, "worst": "style and shield: a glossy, saturated finish unlike idle's; the shield face is concentric red and blue, not idle's sunburst (the heart is repainted in)", "scores": { "head": 7, "face": 7, "costume": 6, "shield": 5, "build": 8, "style": 5, "pose": 8 } }
+   "judge": {
+    "score": 5,
+    "status": "best available, below bar",
+    "worst": "style: the wrist guard and belly keep some gloss, the blended red band turned orange-red; the style pass added a small magenta tassel clasp on the chest. Shield now a gold studded rim, red band and purple sunburst face with the heart",
+    "scores": {
+     "head": 7,
+     "face": 7,
+     "costume": 6,
+     "shield": 6,
+     "build": 8,
+     "style": 5,
+     "pose": 8
+    }
+   }
   }
  }
 }

@@ -65,6 +65,7 @@ for (const [state, pick] of Object.entries(picks.states)) {
     canvas: { width: meta.width, height: meta.height },
     cutout: { ...c, guard: meta.guard },
     status: 'CANDIDATE',
+    ...(pick.judge?.score < 7 ? { note: 'best available, below bar' } : {}),
     candidateOf: `public/art/characters/ormi/${state}.png`,
     candidateSource: `D:/Tools/pyrefly-lora/ormi/poses/${state}/${pick.tag}.png (backup: ${BACKUP}/picks/)`,
     method: 'lora+openpose',
@@ -75,7 +76,7 @@ for (const [state, pick] of Object.entries(picks.states)) {
     edits: pick.edits,
     repaint: meta.repaint,
     judge: pick.judge,
-    round: 'docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md',
+    round: pick.judge?.status ? 'docs/concepts/chapters/leblanc/lora/ormi/poses/redo.md' : 'docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md',
     sha256: sha(png),
     installedAt: now,
   };
