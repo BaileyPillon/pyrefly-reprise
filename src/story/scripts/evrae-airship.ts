@@ -169,6 +169,18 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('auron', 'No.'),
 
     // --- Beat 9 — Bevelle opens up. The victory lasts a minute. ----------
+    // `showResults()` (`src/app/screens/BattleScreenFlow.ts`) starts
+    // `victory-ffx` on its own, outside this script, once the tally shows —
+    // the same way every chapter's fanfare starts. This half of `post` never
+    // re-cued after that, so the fanfare played on, uncut, under Bevelle's
+    // guns and the wedding narration (Chapter VIII e2e F2, evidence win-23).
+    // The other chapters that resume past `results()` into more scene all
+    // re-cue their own music as the first thing they do (`yunalesca.ts`,
+    // `braskas-final-aeon.ts` after its own `results()`); this chapter's
+    // silence belongs here instead, right as the win is revoked, so the
+    // fanfare plays out under beat 8's small anticlimax and is cut hard
+    // exactly when Bevelle takes the win back.
+    music(null, 300),
     sfx('explosion'), // requested: cannon-report
     flash(140),
     shake(14, 900),
@@ -215,6 +227,13 @@ export const evraeAirshipScripts: ChapterScripts = {
     {
       // Inhale is one of only two enemy telegraphs in the anthology (§12.2)
       // and the player has exactly one turn. Teach the dodge, never a button.
+      // §12.2's spec calls the Inhale frame "one turn of warning rendered as
+      // a held image" — the throat swelling is the telegraph, and it needs a
+      // beat on screen *unobstructed* before the dialogue box covers the
+      // lower frame. The callout used to fire the instant the camera cut in,
+      // so the line covered the charge instead of following it (Chapter VIII
+      // e2e F4, evidence win-19): fixed in `evrae-first-inhale` below by
+      // holding the frame before Wakka speaks. Words unchanged.
       id: 'evrae-first-inhale',
       when: { type: 'ability-used', who: 'evrae', ability: 'evrae-inhale' },
       once: true,
@@ -257,6 +276,7 @@ export const evraeAirshipScripts: ChapterScripts = {
   midScripts: {
     'evrae-first-inhale': [
       camera('action', 300),
+      wait(700), // hold the throat, uncovered, before the callout arrives
       say('wakka', 'Its throat! Look at its throat!', { auto: 1200 }),
       say('auron', 'Out of its reach. Now.', { auto: 1200 }),
       camera('idle', 300),
