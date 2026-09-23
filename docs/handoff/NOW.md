@@ -108,7 +108,7 @@ SENT TO BAILEY 11:33 EDT 09-23: the Evrae order-widget sheet and the Anima arriv
 32. e2e type-check DONE (eebe252): `npm run typecheck:e2e` 66 errors to 0, one shared Window.__pyrefly type from src/debug/api.ts (tests only).
 33. Opus gap agent (13:37 EDT): CHK-022 chapter 3 real-input win on live without Doublecast, CHK-024 same-origin save upgrade on live, a round-10 addendum and critic-clear. If this is you: carry on.
 
-34. Leblanc choker p7 DONE (e4bba83, 0 GPU min): colour CIEDE2000 1.70 (pass), seam ratio 2.20 (fail as written), self-score "a low 7"; the driver looked at choker-sheet.jpg: at 1:1 it reads as the idle's studded choker, at 2x the right end shows jagged dark stair-steps. `wf_0a58ae0f-698` (13:50 EDT): an independent judge, then install p7 as the candidate cast ONLY if it is no worse than r2.2 on every criterion. If this line is about you: carry on.
+34. Leblanc cast p7 INSTALLED 14:05 EDT as the Chapter VI hero cast CANDIDATE (sha256 772661a5...; judge 60bc201: 6 overall, choker a high 6 at 2x (right-end cluster, dashed bottom edge), obi 7, no worse than r2.2 anywhere; in-game shot 2906651, 0 404s). The judge advises NO further choker repair: Leblanc's cast ships below the bar, disclosed; at game size the choker is about 13 px. r2.2 backed up.
 
 ComfyUI (:8188) is shared by 2, 3, 5, 6, 11, 12: poll `/queue`, wait, queue one batch at a time, never restart it while a job runs.
 
