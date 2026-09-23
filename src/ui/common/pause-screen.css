@@ -83,6 +83,51 @@
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
   color: rgba(var(--pu-paper), 0.76);
   -webkit-font-smoothing: antialiased;
+
+  /*
+   * PR-0122 gave `.eint` (the enemy-intent slab) its own `setSuspended`, and
+   * the proof shot (`docs/screenshots/fix10/intent-pause-ch6.png`) still
+   * showed the move-advisor card (`.mad`, `move-advisor.css`'s `z-index: 4`)
+   * and two floating damage numerals over the paused screen. Both escape for
+   * the exact reason `.eint` did (see `EnemyIntent.ts`'s own comment on
+   * `setSuspended`): this element's parent, `App.makeScreenRoot`'s `.screen`
+   * div, carries no `z-index` of its own, so `.pause` (a `position: fixed`
+   * box, which always opens its own stacking context regardless of z-index)
+   * stacks at that containing block's auto/0 tier — and ANY battle overlay
+   * with an explicit positive `z-index`, wherever it is nested, is promoted
+   * past that tier and paints over it, in DOM order or not.
+   *
+   * Rather than hunt down and suspend every escaping layer one at a time —
+   * `.eint`'s 2, `.mad`'s 4, the numerals' 3-40 (`grep -rn z-index src`), and
+   * whatever the next one adds — this puts `.pause` itself into that same
+   * explicit-`z-index` competition, at a number higher than anything else in
+   * the codebase (the highest today is `coach.css`'s teaching-bubble 90), so
+   * the pause wins the stack against every current battle overlay and any
+   * future one without either side needing to know about the other. Verified
+   * with real keys against the advisor card and a live numeral in
+   * `tests/e2e/intent-pause.spec.ts`.
+   *
+   * `pointer-events: auto` goes with it and is not decorative: `#ui` (this
+   * element's great-grandparent, `index.html`) is `pointer-events: none` so a
+   * frozen HUD's own controls never see a click meant for the pause sitting
+   * over them (only `button`/`[data-action]`/`.ui-interactive` opt back in),
+   * and nothing here had opted `.pause` itself back in. That made it
+   * transparent to hit-testing — `document.elementFromPoint` over a plain
+   * stretch of the pause fell straight through the (still `none`) grade,
+   * falloff, vignette and grain layers below to `#game`'s canvas, `z-index: 0`
+   * behind everything — which is harmless today only because
+   * `setRawInputSuspended` (`BattleScreen.openPause`) separately swallows the
+   * click before any HUD handler sees it. Opting `.pause` in is what makes the
+   * `z-index` fix above actually win a hit-test the same way it wins the
+   * paint, so `elementFromPoint` over the pause finds a pause node and not
+   * whatever the escaping layer left behind (`tests/e2e/intent-pause.spec.ts`
+   * asserts exactly this). The four full-bleed `pointer-events: none` grade
+   * layers below stay opted out on purpose — they are pure paint, and this is
+   * what lets a hit-test see through them to `.pause` itself rather than
+   * stopping dead on the first one.
+   */
+  z-index: 999;
+  pointer-events: auto;
 }
 
 /* --------------------------------------------------------------- the art */
