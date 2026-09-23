@@ -1204,13 +1204,15 @@ export class PaintedActor extends Group {
    * Option B dims a non-target "about a quarter", which is `0.25` here: the
    * shader takes it as both the desaturation amount and (at a gentler rate) a
    * brightness trim, so the change reads as the figure stepping out of the
-   * light rather than as a colour-grade bug.
+   * light rather than as a colour-grade bug. The trim rate 0.9 lands the
+   * on-screen drop at about 17 percent after tone mapping (PR-0031; 0.72 read
+   * as no dim at all in the critic's frames).
    */
   setDim(amount: number): void {
     const k = clamp01(amount);
     this.dimAmount = k;
     this.u.desaturate.value = k;
-    this.u.brightness.value = this.baseBrightness * (1 - k * 0.72);
+    this.u.brightness.value = this.baseBrightness * (1 - k * 0.9);
   }
 
   get dim(): number {
@@ -1828,6 +1830,8 @@ export class PaintedActor extends Group {
           const r = Math.max(0.55, this.footprintRadius() * 1.35, this.worldHeight * 0.4);
           this.accent.scale.set(r * (1 + 0.03 * pulse), r * 0.44 * (1 + 0.03 * pulse), 1);
           this.accent.position.x = ox * 0.55;
+          // On the floor even when the station lifts the figure (the Yu Pagodas stand at y 1.01): PR-0031.
+          this.accent.position.y = 0.026 - this.position.y;
         }
         (this.accent.material as MeshBasicMaterial).opacity =
           0.72 * this.accentLevel * pulse * this._alpha;
