@@ -34,8 +34,15 @@ function defFor(cmd: AvailableCommand): AbilityDef | null {
  * `commandEffectText` writes Escape and Trigger itself.
  */
 export function commandEffectText(cmd: AvailableCommand): string {
-  const derived = describeAbility(defFor(cmd), cmd, cmd.command);
-  if (derived) return derived;
+  // Round 10 (PR-0012 repair, FFX-2 only): `escape` and `spherechange` are
+  // menu rows, not abilities with their own `AbilityDef` — `defFor` can still
+  // resolve *something* for a `spherechange` command (the destination
+  // dressphere's Garment Grid gate string, e.g. "Passes red"), and
+  // `describeAbility` had no way to know that string was not meant to answer
+  // "what does this row do". A verifier caught the FFX-2 command slab
+  // printing that gate string as the row's description. These two kinds are
+  // handled here, before `describeAbility` is ever asked, for the same
+  // reason FFX's own `commandEffectText` writes them itself.
   switch (cmd.command.kind) {
     case 'escape':
       return 'Leaves the battle, if this encounter allows it';
@@ -45,7 +52,7 @@ export function commandEffectText(cmd: AvailableCommand): string {
       // slab says what Change fundamentally is, not that fact again.
       return 'Changes into another dressphere; the destination spends the turn';
     default:
-      return '';
+      return describeAbility(defFor(cmd), cmd, cmd.command);
   }
 }
 
