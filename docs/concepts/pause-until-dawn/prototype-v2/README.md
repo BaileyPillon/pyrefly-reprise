@@ -1173,3 +1173,14 @@ number: `shots/v3.3/CHECK.md` (stills, crops, strips, `clip.webm`,
   `--style` and `INPAINT_WAIT_MIN` (additive).
 
 Still open: `shots/v3.3/CHECK.md`, "Still not right".
+
+# Part 6 — v4 keys: one Yuna across the turn (2026-09-23)
+
+FFX-2 only. The v3.3 keys were different paintings from the plate. v4 trains
+the plate's identity into a LoRA (round 1) and, after the judge failed round 1
+on turn amount and per-key invention, paints every key as a head-only img2img
+from the plate turned in 2.5D (round 2): body, frame and near-side tassel are
+the plate's own pixels, the turn is measured, the eyes are recoloured by side.
+Write-up and picks: `art/v4/keys.md` (section 7 for round 2), evidence in
+`art/v4/keys/sheets/`, handoff `docs/handoff/living-portrait-v4.md`. The keys
+are not yet cut into layers or wired into `art/rig.json`.

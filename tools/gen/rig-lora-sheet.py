@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import pathlib
 
 import numpy as np
@@ -102,14 +103,14 @@ def sheet(entries: list[tuple[str, Image.Image]], box, box_plate, title: str) ->
 
 CAND = pathlib.Path('D:/Tools/pyrefly-lora/yuna-x2/cand')
 V4 = REPO / 'docs/concepts/pause-until-dawn/prototype-v2/art/v4/keys'
+TAG = 'round 2 (warp)'
 
 
 def picks(out: pathlib.Path) -> None:
     """Copy the picks (picks.json) to picked/ as lossless webp + sidecar and draw
     the turn strip: pick 1 and pick 2 rows from -85 to +85 with the plate at 0,
     then the pick-1 faces at 1:1 in the same order."""
-    import json
-    import shutil
+
     spec = json.loads((V4 / 'picks.json').read_text(encoding='utf-8'))['picks']
     order = sorted(spec, key=float)
     (V4 / 'picked').mkdir(exist_ok=True)
@@ -124,19 +125,32 @@ def picks(out: pathlib.Path) -> None:
             else:
                 rnd, c = spec[y][k]
                 src = CAND / rnd / f'yaw{y}' / f'{c}.png'
+                side = src.with_suffix('.json')
+                if rnd.startswith('w'):          # second attempt: the finished key (rig-lora-fix.py)
+                    src = CAND / rnd / f'yaw{y}' / 'fixed' / f'{c}.png'
                 im = load(src)
                 name = f'{y} pick{k + 1} {rnd}.{c}'
                 dst = V4 / 'picked' / f'yaw{y}.pick{k + 1}'
                 Image.open(src).save(f'{dst}.webp', lossless=True, method=6)
-                shutil.copyfile(src.with_suffix('.json'), f'{dst}.json')
+                meta = json.loads(side.read_text(encoding='utf-8'))
+                mfile = src.parent / 'measure.json'
+                if mfile.exists():
+                    meta['measured'] = json.loads(mfile.read_text(encoding='utf-8'))['candidates'].get(c)
+                    meta['finishedBy'] = 'tools/gen/rig-lora-fix.py fix (plate outside the head mask, iris colour by side)'
+                pathlib.Path(f"{dst}.json").write_text(json.dumps(meta, indent=1), encoding='utf-8')
             rows[k].append(label(im.resize((312, 456), Image.LANCZOS), name))
             if k == 0:
                 faces.append(label(im.crop(face_box(float(y))).resize((312, 312), Image.LANCZOS), f'{y} face'))
     head = Image.new('RGB', (row(rows[0]).width, 34), BG)
-    ImageDraw.Draw(head).text((6, 10), 'v4 LoRA keys, -85 .. plate .. +85: row 1 pick 1, row 2 pick 2, row 3 pick-1 faces (0.56x)', fill=FG)
+    ImageDraw.Draw(head).text((6, 10), f'v4 LoRA keys {TAG}, -85 .. plate .. +85: row 1 pick 1, row 2 pick 2, row 3 pick-1 faces (0.56x)', fill=FG)
     im = stack([head, row(rows[0]), row(rows[1]), row(faces)])
     im.save(out.with_suffix('.png'))
     im.save(V4 / 'sheets' / 'turn-strip.webp', quality=90, method=6)
+    # the same pick-1 row as a flipbook, there and back (a head turning or not)
+    frames = [f.crop((0, 26, f.width, f.height)) for f in rows[0]]
+    loop = frames + frames[-2:0:-1]
+    loop[0].save(V4 / 'sheets' / 'turn-flip.webp', save_all=True, append_images=loop[1:],
+                 duration=220, loop=0, quality=85, method=6)
     print(out, im.size)
 
 
@@ -156,7 +170,17 @@ def main() -> None:
     entries = []
     for d in dirs:
         pre = f'{d.parent.name}.' if len(dirs) > 1 else ''
-        entries += [(pre + p.stem, load(p)) for p in sorted(d.glob('*.png'))]
+        meas = {}
+        if (d / 'measure.json').exists():
+            meas = json.loads((d / 'measure.json').read_text(encoding='utf-8'))['candidates']
+        for p in sorted(d.glob('*.png')):
+            tag = pre + p.stem
+            side = d.parent / f'{p.stem}.json' if d.name == 'fixed' else None
+            if side and side.exists():
+                    tag += f"  d{json.loads(side.read_text(encoding='utf-8')).get('denoise')}"
+            if p.stem in meas:
+                tag += f"  reads {meas[p.stem]['reads']:+d}"
+            entries.append((tag, load(p)))
     box = face_box(a.yaw)
     im = sheet(entries, box, face_box(0.0), a.title or f'{dirs[0].name}  yaw {a.yaw:+.0f}  face box {box}')
     out = pathlib.Path(a.out)

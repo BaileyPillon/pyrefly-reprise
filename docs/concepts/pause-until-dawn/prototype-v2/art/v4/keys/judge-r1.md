@@ -4,7 +4,7 @@ Game case: **FFX-2 only** (the plate is Yuna X-2, `public/art/portraits/yuna-x2.
 sha256 `7427dc7f...`, unchanged; 115/115 approved hashes match).
 
 **Verdict: FAIL.** No yaw has a key that reaches 7. The eight picks and the plate,
-laid in yaw order (`judge-sheet.jpg`), read as **nine illustrations of the same
+laid in yaw order (`judge-sheet-r1.jpg`), read as **nine illustrations of the same
 character by the same painter**, not as one head turning.
 
 The LoRA did fix the v3.3 problem it was trained for. Every key is now recognisably

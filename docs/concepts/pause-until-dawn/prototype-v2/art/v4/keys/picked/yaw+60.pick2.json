@@ -1,16 +1,19 @@
 {
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, chibi, sketch, monochrome, from behind, back view, 3d, realistic, hair flower, flower, choker, necklace, braid, braided hair, collar, brooch, headphones, headset",
  "yaw": 60,
- "seed": 9704,
+ "seed": 11303,
  "lora": "yuna-x2.safetensors",
  "strength": 0.8,
- "cn": 0.7,
+ "cn": 0.8,
  "cnEnd": 1,
  "refWeight": 0.3,
  "pose": "pyrefly-ref-yaw-60-01b5afc80f9f.png",
  "ref": "pyrefly-ref-yuna-x2-7427dc7fc481.png",
  "prefix": "pyrefly/lora-keys",
+ "init": "pyrefly-ref-yaw-60-init-038d7801b286.png",
+ "mask": "pyrefly-ref-yaw-60-mask-70a9ce1c26a8.png",
+ "denoise": 0.76,
  "prompt": "yunaX2, 1girl, solo, three-quarter view, from side, head turned away, looking to the side, portrait, close-up, upper body, light smile, closed mouth, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
- "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, chibi, sketch, monochrome, from behind, back view, 3d, realistic",
  "model": "animagine-xl-4.0-opt.safetensors",
  "controlnet": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
  "ipadapter": {
@@ -28,5 +31,27 @@
  "scheduler": "normal",
  "width": 832,
  "height": 1216,
- "seconds": 12.411
+ "seconds": 15.462,
+ "measured": {
+  "file": "c4.png",
+  "reads": 56,
+  "readsIpd": 47,
+  "err": 19.0,
+  "edge": false,
+  "irisRecoloured": {
+   "R": 2604,
+   "L": 1788
+  },
+  "eyes": {
+   "R": [
+    539,
+    429
+   ],
+   "L": [
+    722,
+    417
+   ]
+  }
+ },
+ "finishedBy": "tools/gen/rig-lora-fix.py fix (plate outside the head mask, iris colour by side)"
 }

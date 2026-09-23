@@ -1,0 +1,14 @@
+{
+ "_readme": "Living-portrait v4 (FFX-2 only): two picks per yaw from rounds r1/r2 of tools/gen/lora-keys.mjs (LoRA yuna-x2 step 2000). Sign: negative yaw = face turned toward screen-left (rig.json turn-l85 = -85). Candidates live in D:/Tools/pyrefly-lora/yuna-x2/cand/<round>/yaw<N>/c<i>.png with their sidecars; the picks are copied here as lossless webp + sidecar. Notes are what was checked at 1:1 on sheets/yaw<N>.webp.",
+ "lora": "D:/Tools/ComfyUI/ComfyUI/models/loras/yuna-x2.safetensors (= D:/Tools/pyrefly-lora/yuna-x2/out/yuna-x2-step00002000.safetensors, sha256 b5b540994c3d2c217d3937e8d133de9c6680891ac9c08e1695f32d36cdd61960)",
+ "picks": {
+  "-85": [["r1", "c1"], ["r1", "c4"]],
+  "-60": [["r1", "c2"], ["r2", "c1"]],
+  "-40": [["r2", "c2"], ["r2", "c3"]],
+  "-20": [["r2", "c1"], ["r1", "c5"]],
+  "+20": [["r1", "c5"], ["r1", "c4"]],
+  "+40": [["r2", "c2"], ["r1", "c1"]],
+  "+60": [["r1", "c3"], ["r2", "c5"]],
+  "+85": [["r2", "c2"], ["r2", "c3"]]
+ }
+}

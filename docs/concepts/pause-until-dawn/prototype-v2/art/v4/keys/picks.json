@@ -1,14 +1,86 @@
 {
- "_readme": "Living-portrait v4 (FFX-2 only): two picks per yaw from rounds r1/r2 of tools/gen/lora-keys.mjs (LoRA yuna-x2 step 2000). Sign: negative yaw = face turned toward screen-left (rig.json turn-l85 = -85). Candidates live in D:/Tools/pyrefly-lora/yuna-x2/cand/<round>/yaw<N>/c<i>.png with their sidecars; the picks are copied here as lossless webp + sidecar. Notes are what was checked at 1:1 on sheets/yaw<N>.webp.",
+ "_readme": "Living-portrait v4 keys, round 2 (FFX-2 only): two picks per yaw, each painted by tools/gen/lora-keys.mjs warp from the plate turned in 2.5D (tools/gen/rig-lora-init.py) and finished by tools/gen/rig-lora-fix.py (plate pixels outside the head mask, iris colour by side). Rounds w1..w6 differ in init fill, aim and denoise (keys.md section 7). Sign: negative yaw = face turned toward screen-left. Candidates: D:/Tools/pyrefly-lora/yuna-x2/cand/<round>/yaw<N>/c<i>.png + .json, finished keys in .../fixed/. Round 1 picks: picks-r1.json.",
  "lora": "D:/Tools/ComfyUI/ComfyUI/models/loras/yuna-x2.safetensors (= D:/Tools/pyrefly-lora/yuna-x2/out/yuna-x2-step00002000.safetensors, sha256 b5b540994c3d2c217d3937e8d133de9c6680891ac9c08e1695f32d36cdd61960)",
  "picks": {
-  "-85": [["r1", "c1"], ["r1", "c4"]],
-  "-60": [["r1", "c2"], ["r2", "c1"]],
-  "-40": [["r2", "c2"], ["r2", "c3"]],
-  "-20": [["r2", "c1"], ["r1", "c5"]],
-  "+20": [["r1", "c5"], ["r1", "c4"]],
-  "+40": [["r2", "c2"], ["r1", "c1"]],
-  "+60": [["r1", "c3"], ["r2", "c5"]],
-  "+85": [["r2", "c2"], ["r2", "c3"]]
+  "-85": [
+   [
+    "w3",
+    "c4"
+   ],
+   [
+    "w5",
+    "c4"
+   ]
+  ],
+  "-60": [
+   [
+    "w6",
+    "c1"
+   ],
+   [
+    "w6",
+    "c3"
+   ]
+  ],
+  "-40": [
+   [
+    "w6",
+    "c1"
+   ],
+   [
+    "w6",
+    "c6"
+   ]
+  ],
+  "-20": [
+   [
+    "w4",
+    "c5"
+   ],
+   [
+    "w4",
+    "c6"
+   ]
+  ],
+  "+20": [
+   [
+    "w2",
+    "c1"
+   ],
+   [
+    "w2",
+    "c3"
+   ]
+  ],
+  "+40": [
+   [
+    "w2",
+    "c4"
+   ],
+   [
+    "w2",
+    "c6"
+   ]
+  ],
+  "+60": [
+   [
+    "w5",
+    "c2"
+   ],
+   [
+    "w5",
+    "c4"
+   ]
+  ],
+  "+85": [
+   [
+    "w5",
+    "c2"
+   ],
+   [
+    "w3",
+    "c2"
+   ]
+  ]
  }
 }

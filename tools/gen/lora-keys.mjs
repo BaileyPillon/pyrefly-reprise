@@ -17,6 +17,8 @@
  * Prompt = trigger + view tags only; the LoRA carries the identity.
  *
  *   node tools/gen/lora-keys.mjs test   --loras none,pyrefly-lora-steps/yuna-x2-step00000500.safetensors,... [--seeds 2]
+ *   node tools/gen/lora-keys.mjs warp   --yaws -40 --denoise 0.55,0.65 [--count 6] [--cn 0.8 --cnEnd 1] [--aim -20:-26] [--negExtra -85:earrings] [--init <dir>]
+ *     (second attempt: img2img from the plate turned in 2.5D by rig-lora-init.py, head mask only)
  *   node tools/gen/lora-keys.mjs render --yaws -85,-60,-40,-20,20,40,60,85 [--count 6] [--lora yuna-x2.safetensors]
  *                                       [--strength 0.8] [--cn 0.6] [--seed 7100]
  *
@@ -36,6 +38,7 @@ const REPO = resolve(HERE, '..', '..');
 const V4 = join(REPO, 'docs/concepts/pause-until-dawn/prototype-v2/art/v4/keys');
 const PLATE = join(REPO, 'public/art/portraits/yuna-x2.png');
 const CAND = process.env.LORA_CAND || 'D:/Tools/pyrefly-lora/yuna-x2/cand';
+const INIT = 'D:/Tools/pyrefly-lora/yuna-x2/init';
 const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
 const CKPT = 'animagine-xl-4.0-opt.safetensors';
 const CONTROLNET = 'xinsir-controlnet-openpose-sdxl-1.0.safetensors';
@@ -56,6 +59,8 @@ const VIEW = {
 const NEGATIVE =
   `${BASE_NEGATIVE}, full body, wide shot, from afar, chibi, sketch, monochrome, ` +
   'from behind, back view, 3d, realistic';
+/** warp mode: the judge's invented extras (judge-r1.md: flower cap, choker, braid, collar; from w3 the clip grown into headphones), never in the plate */
+const NEGATIVE_WARP = `${NEGATIVE}, hair flower, flower, choker, necklace, braid, braided hair, collar, brooch, headphones, headset`;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -74,7 +79,7 @@ export function prompt(yaw) {
   return `yunaX2, 1girl, solo, ${view}, ${FRAMING}, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
 }
 
-export function graph({ yaw, seed, lora, strength, cn, cnEnd, refWeight, pose, ref, prefix }) {
+export function graph({ yaw, seed, lora, strength, cn, cnEnd, refWeight, pose, ref, prefix, init, mask, denoise = 1, negative = NEGATIVE }) {
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
     5: { class_type: 'EmptyLatentImage', inputs: { width: W, height: H, batch_size: 1 } },
@@ -92,7 +97,7 @@ export function graph({ yaw, seed, lora, strength, cn, cnEnd, refWeight, pose, r
     clip = ['10', 1];
   }
   g[6] = { class_type: 'CLIPTextEncode', inputs: { text: prompt(yaw), clip } };
-  g[7] = { class_type: 'CLIPTextEncode', inputs: { text: NEGATIVE, clip } };
+  g[7] = { class_type: 'CLIPTextEncode', inputs: { text: negative, clip } };
   let pos = ['6', 0];
   let neg = ['7', 0];
   if (pose && cn > 0) {
@@ -121,11 +126,23 @@ export function graph({ yaw, seed, lora, strength, cn, cnEnd, refWeight, pose, r
     };
     model = ['23', 0];
   }
+  let latent = ['5', 0];
+  if (init) {
+    // second attempt: start from the plate turned in 2.5D (rig-lora-init.py),
+    // repaint only inside the head mask; the pinned body keeps the plate's paint
+    delete g[5];
+    g[40] = { class_type: 'LoadImage', inputs: { image: init, upload: 'image' } };
+    g[41] = { class_type: 'VAEEncode', inputs: { pixels: ['40', 0], vae: ['4', 2] } };
+    g[42] = { class_type: 'LoadImage', inputs: { image: mask, upload: 'image' } };
+    g[43] = { class_type: 'ImageToMask', inputs: { image: ['42', 0], channel: 'red' } };
+    g[44] = { class_type: 'SetLatentNoiseMask', inputs: { samples: ['41', 0], mask: ['43', 0] } };
+    latent = ['44', 0];
+  }
   g[3] = {
     class_type: 'KSampler',
     inputs: {
-      seed, steps: 30, cfg: 6, sampler_name: 'euler_ancestral', scheduler: 'normal', denoise: 1,
-      model, positive: pos, negative: neg, latent_image: ['5', 0],
+      seed, steps: 30, cfg: 6, sampler_name: 'euler_ancestral', scheduler: 'normal', denoise,
+      model, positive: pos, negative: neg, latent_image: latent,
     },
   };
   return g;
@@ -169,13 +186,15 @@ async function run(workflow, outPath) {
 
 const poseFile = (yaw) => join(V4, 'pose', yaw === 0 ? 'yaw0.png' : `yaw${yaw > 0 ? '+' : ''}${yaw}.png`);
 
-async function job({ yaw, seed, lora, strength, cn, cnEnd, refWeight, out }) {
+async function job({ yaw, aim = yaw, seed, lora, strength, cn, cnEnd, refWeight, out, init, mask, denoise = 1, negExtra }) {
   const opts = {
-    yaw, seed, lora, strength, cn, cnEnd, refWeight,
-    pose: stageImage(poseFile(yaw)), ref: stageImage(PLATE), prefix: 'pyrefly/lora-keys',
+    yaw, ...(aim !== yaw ? { aim } : {}), seed, lora, strength, cn, cnEnd, refWeight,
+    pose: stageImage(poseFile(aim)), ref: stageImage(PLATE), prefix: 'pyrefly/lora-keys',
+    ...(init ? { init: stageImage(init), mask: stageImage(mask), denoise,
+      negative: negExtra ? `${NEGATIVE_WARP}, ${negExtra}` : NEGATIVE_WARP } : {}),
   };
   const secs = await run(graph(opts), `${out}.png`);
-  const side = { ...opts, prompt: prompt(yaw), negative: NEGATIVE, model: CKPT, controlnet: CONTROLNET,
+  const side = { negative: NEGATIVE, ...opts, prompt: prompt(yaw), model: CKPT, controlnet: CONTROLNET,
     ipadapter: { file: IPADAPTER, weight: refWeight, type: 'ease in', start: 0.2, end: 0.6, scaling: 'K+V', image: 'public/art/portraits/yuna-x2.png' },
     steps: 30, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal', width: W, height: H, seconds: secs };
   writeFileSync(`${out}.json`, JSON.stringify(side, null, 1));
@@ -214,8 +233,40 @@ async function main() {
         await job({ yaw, seed: base + (yaw + 100) * 10 + i, lora, strength, cn, cnEnd, refWeight, out: join(dir, `c${i + 1}`) });
       }
     }
+  } else if (a._[0] === 'warp') {
+    // --denoise a,b,...: candidate i uses denoise[i % n]; --denoiseFor '-85:0.7,...' overrides per yaw
+    const yaws = String(a.yaws || '-85,-60,-40,-20,20,40,60,85').split(',').map(Number);
+    const count = Number(a.count || 6);
+    const lora = a.lora || 'yuna-x2.safetensors';
+    const base = Number(a.seed || 8100);
+    const tag = a.tag || 'w1';
+    const initDir = a.init || INIT;
+    const dens = String(a.denoise || '0.55,0.65').split(',').map(Number);
+    const per = Object.fromEntries(String(a.denoiseFor || '').split(',').filter(Boolean)
+      .map((p) => { const [y, d] = p.split(':'); return [Number(y), d.split('/').map(Number)]; }));
+    // --aim '-20:-26,...': paint the target yaw from the init + skeleton of a
+    // further turn (the sampler gives back about a fifth of the turn at 20/40)
+    const aims = Object.fromEntries(String(a.aim || '').split(',').filter(Boolean)
+      .map((p) => { const [y, t] = p.split(':'); return [Number(y), Number(t)]; }));
+    // --negExtra '-85:earrings/earring': extra negative words for one yaw
+    // (the lone near ear at -60/-85 is her LEFT ear, which wears nothing)
+    const extra = Object.fromEntries(String(a.negExtra || '').split(',').filter(Boolean)
+      .map((p) => { const [y, w] = p.split(':'); return [Number(y), w.split('/').join(', ')]; }));
+    for (const yaw of yaws) {
+      const name = `yaw${yaw > 0 ? '+' : ''}${yaw}`;
+      const aim = aims[yaw] ?? yaw;
+      const aimName = `yaw${aim > 0 ? '+' : ''}${aim}`;
+      const dir = join(CAND, tag, name);
+      mkdirSync(dir, { recursive: true });
+      const ds = per[yaw] || dens;
+      for (let i = 0; i < count; i++) {
+        await job({ yaw, aim, seed: base + (yaw + 100) * 10 + i, lora, strength, cn, cnEnd, refWeight,
+          out: join(dir, `c${i + 1}`), init: join(initDir, `${aimName}.init.png`), mask: join(initDir, `${aimName}.mask.png`),
+          denoise: ds[i % ds.length], negExtra: extra[yaw] });
+      }
+    }
   } else {
-    console.log('usage: lora-keys.mjs test --loras a,b | render --yaws ... [--count 6]');
+    console.log('usage: lora-keys.mjs test --loras a,b | render --yaws ... [--count 6] | warp --yaws ... --denoise 0.55,0.65 [--count 6]');
   }
 }
 

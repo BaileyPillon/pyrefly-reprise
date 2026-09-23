@@ -10,9 +10,13 @@ wrong side, another line style. A turn read as a 0.2 s change of picture at
 about 28 degrees. This round trains the plate's identity into a LoRA and paints
 every key with it, so the keys and the plate are the same painting.
 
-**Start here:** `sheets/turn-strip.webp` (both picks per yaw, -85 .. plate ..
-+85, and the pick-1 faces), then `sheets/yaw<N>.webp` (all 12 candidates per
-yaw, whole and 1:1 faces), then `sheets/steptest.webp` (the checkpoint pick).
+**Round 2 (section 7) replaced the picks.** Start with `sheets/turn-strip.webp`
+(both picks per yaw, -85 .. plate .. +85, and the pick-1 faces) and
+`sheets/turn-flip.webp` (the pick-1 row as a there-and-back flipbook), then
+`sheets/yaw<N>.webp` (every round-2 candidate per yaw, finished, whole and at
+1:1, labelled with denoise and the measured turn) and `sheets/inits.webp`.
+Round 1 (sections 1 to 6) is kept for comparison: `sheets/r1/` (with the
+step test), `picks-r1.json`, `judge-r1.md`, `judge-sheet-r1.jpg`.
 
 ## 1. Dataset (17 images; sources read-only, hashed before and after)
 
@@ -79,7 +83,7 @@ checkpoint every 500.
 
 `node tools/gen/lora-keys.mjs test --loras none,<each step>` renders a frontal
 (OpenPose yaw 0 at 0.6, the plate as IP-Adapter reference at 0.3, LoRA 0.8, two
-seeds) and `sheets/steptest.webp` puts them next to the plate, whole and 1:1.
+seeds) and `sheets/r1/steptest.webp` puts them next to the plate, whole and 1:1.
 
 - **none** (same seeds, no LoRA): a different girl entirely (red eyes, black or
   multicolour hair). The IP-Adapter at 0.3 alone does not carry this identity.
@@ -177,3 +181,74 @@ the eye style. This is the thing v3.3 lacked.
 
 Nothing here has had an independent judge or Bailey's look. The keys are not
 yet cut into layers or wired into `rig.json`: that is the rig's next step.
+
+## 7. Round 2: every key starts from the plate's own paint (2026-09-23)
+
+The judge (`judge-r1.md`) failed round 1 at every yaw (best 3 to 6) and gave
+the sequence five reasons: the turn stepped unevenly (20 and 40 at half),
+accessories and outfit were redrawn in every key, framing and scale drifted,
+and the far eye went violet. Its redo list was: stronger pose control and a
+measured turn, shared paint (img2img from the warped plate), the body and
+frame locked, accessories from the plate's own pixels, the eyes recoloured.
+This round does each of those. The LoRA, its strength (0.8), the checkpoint
+step (2000), the IP-Adapter reference (plate, 0.3) and the prompt tags stayed:
+identity was the part round 1 got right, so none of it was touched.
+
+### What changed
+
+| judge's reason | change | tool |
+|---|---|---|
+| each key its own painting | the key is **img2img from the plate turned in 2.5D**: the plate's v3 layers (with their hidden fills) get a depth each (face ellipsoid plus a nose ridge on the skeleton's head, a flatter hair shell behind, the fringe in front), are rotated about the head axis x = 473 and z-buffered; the sampler repaints that at denoise 0.65 to 0.82 instead of inventing from noise | `rig-lora-init.py build`, `lora-keys.mjs warp` |
+| outfit, crop, scale change | **head-only mask**: the body layer is pinned, and everything outside the (grown, feathered) old-plus-new head is the plate's pixels, put back after decoding | `rig-lora-init.py` (mask), `rig-lora-fix.py fix` |
+| tassel redrawn, wrong or both ears | the tassel moves **rigidly with her right ear**; toward the camera (yaw >= 0, and -20 with `--keep-tassel`) it is drawn on top and **cut out of the repaint mask**, so it is the plate's own pixels; turned away it is drawn under the head and body; `--negExtra earrings` at -60 and -85, where the only visible ear is her left (bare) one | `rig-lora-init.py`, `lora-keys.mjs` |
+| 20 and 40 at half | the start paint already sits at the angle, and `--aim` paints 20 from the 25 geometry and 40 from 48 (the sampler gives back about a fifth of the turn); OpenPose 0.8 over the whole schedule (was 0.6 / 0.7) | `lora-keys.mjs warp --aim`, `rig-lora-pose.py` (new 25 and 48 skeletons) |
+| no measurement | **the turn is measured**: iris blobs matched to where the head model puts the pupils at each yaw (`reads`), plus the pupil spacing alone (`readsIpd`, blind to a head that slid sideways; weak near 0, absent in profile). On round 1's picks it gives -34 / -36 at "-40" and +12 / 0 at "+20", close to the judge's readings at +40 and +20 (not at -40); the plate reads +3 / 0 | `rig-lora-fix.py measure` |
+| far eye violet, profile eye green | each matched iris is **recoloured by side** (her right = the plate's green, her left = the plate's blue; hue and chroma from the plate's iris layers, lightness kept) | `rig-lora-fix.py fix` |
+| invented extras | the warp negative adds `hair flower, flower, choker, necklace, braid, braided hair, collar, brooch` (and from w3 `headphones, headset`) | `lora-keys.mjs` |
+
+### Rounds (6 candidates each, one at a time behind the shared queue, 16 to 35 s each)
+
+| round | yaws | start paint | aim | denoise | what it taught |
+|---|---|---|---|---|---|
+| pilot | -85, -40, +60 | blur fill | = target | 0.5 / 0.6 / 0.7 | 0.5 keeps the warp's smears; 0.6 to 0.7 turns cleanly; the lone profile eye comes out green (recolour needed) |
+| w1 | all 8 | blur fill | = target | 0.55 to 0.7 | frame, outfit and tassel locked; 20 reads 16-17, 40 reads 33; the blurred holes stay as a rainbow glow at 0.6 |
+| w2 | +-20, +-40 | blur fill | 25 / 48 | 0.6 to 0.7 | 20 reads 19-23, 40 reads 40-47: on target; 0.7 clean, 0.6 not |
+| w3 | +-60, +-85 | flat hair brown behind, white ahead | = target | 0.65 / 0.72 | true profiles at 85, but white ahead of the face cuts the nose and leaves the far side bald at 60 |
+| w4 | -20, -40 | flat, tassel kept at -20 | 25 / 48 | 0.7 / 0.72 | -20 keeps the plate's tassel to the pixel; -40 far side bald (flat is wrong below 85) |
+| w5 | +-60, +-85 | flat plus 30 px of nearest colour ahead | = target | 0.7 to 0.82 | the cleanest profiles at +-85 (+85 c2 clean, plate tassel); +-60 turn far but the far hair is thin |
+| w6 | -40, +-60 | blur fill | 48 at -40 | 0.7 / 0.74 | the most natural 40 and 60 (full far-side hair); +60 reads 55-60 by eye position but only 38-45 by spacing |
+
+Everything outside the repaint mask is the plate to the pixel in every key.
+Candidates, sidecars (seed, aim, init, mask, denoise, negative) and the
+finished keys: `D:/Tools/pyrefly-lora/yuna-x2/cand/<round>/yaw<N>/`
+(`fixed/` plus `measure.json`). `sheets/inits.webp` shows the start paint.
+
+### Picks (`picks.json`, copied to `picked/` with the sidecar and the measurement)
+
+| yaw | pick 1 | reads / spacing | pick 2 | reads / spacing | notes |
+|---|---|---|---|---|---|
+| -85 | w3.c4 | -85 / - | w5.c4 | -74 / - | true profiles, no earring on the near (left) ear; pick 2 reads short by the eye measure though the nose is in full profile |
+| -60 | w6.c1 | -59 / -51 | w6.c3 | -60 / - | far green eye a sliver; the hair clip is fully in view and larger than the plate's cropped one |
+| -40 | w6.c1 | -42 / -42 | w6.c6 | -44 / -38 | the far tassel shows under the far jaw (the geometry says it should at 40), its form simplified |
+| -20 | w4.c5 | -20 / -23 | w4.c6 | -20 / -24 | the plate's own tassel pixels |
+| +20 | w2.c1 | +21 / +21 | w2.c3 | +22 / +19 | the plate's tassel to the pixel (on top, near ear) |
+| +40 | w2.c4 | +40 / +38 | w2.c6 | +46 / +42 | the plate's tassel; far eye blue |
+| +60 | w5.c2 | +57 / - | w5.c4 | +56 / +47 | far eye hidden (c2) or a blue sliver (c4) |
+| +85 | w5.c2 | +86 / - | w3.c2 | +86 / - | c2 is the cleanest profile of the round; w3.c2 has a flat, unpainted back of the head and a disc ornament |
+
+### Still open (for the judge, not claimed as fixed)
+
+1. **The hair clip** at her left temple is cropped by the plate's edge, so the
+   plate never shows it whole; from -20 to -85 it comes into view and the
+   sampler completes it as a larger red-and-cyan disc, differently per key.
+   Pasting it needs a painted whole clip first.
+2. **The far tassel at -40 and -60** is repainted (the plate's pixels would
+   sit behind the jaw and neck); its form varies.
+3. **Hair on the far side at 60** differs between the blur-fill keys (full,
+   natural) and the flat-fill ones (thin): the picks use blur at -40 and -60
+   and flat at +60 and 85, so the far hair changes character on the way.
+4. **The measure reads eyes**, not the nose; at 85 it has one eye to go on
+   and can be 10 degrees off (-85 pick 2). It checks against the targets; it
+   is not the judge's reading.
+5. Not cut into layers, landmarked or wired into `rig.json` (the v3.3
+   `rig-*.py` chain is the path once a judge passes the keys).
