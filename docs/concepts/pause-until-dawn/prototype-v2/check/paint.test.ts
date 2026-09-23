@@ -86,3 +86,24 @@ describe('v3.2 paint selection (the fix for the mid-gaze pulse)', () => {
     expect(s2.from).toBeNull();
   });
 });
+
+import { paintWindowWeight } from '../src/paint.ts';
+
+describe('v4 warp paint window', () => {
+  it('is one painting outside an 8-degree window at the middle of the bracket, and continuous inside it', () => {
+    for (const span of [20, 25]) {
+      const t0 = 0.5 - 4 / span;
+      const t1 = 0.5 + 4 / span;
+      expect(paintWindowWeight(t0 - 0.01, span)).toBe(0);
+      expect(paintWindowWeight(t1 + 0.01, span)).toBe(1);
+      expect(paintWindowWeight(0.5, span)).toBeCloseTo(0.5, 6);
+      let prev = 0;
+      for (let i = 0; i <= 100; i++) {
+        const w = paintWindowWeight(i / 100, span);
+        expect(w).toBeGreaterThanOrEqual(prev - 1e-12);
+        expect(w - prev).toBeLessThan(0.1);
+        prev = w;
+      }
+    }
+  });
+});

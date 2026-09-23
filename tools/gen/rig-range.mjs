@@ -12,6 +12,15 @@
  * silhouette shifted by that amount.
  *
  *   node tools/gen/rig-range.mjs [--yaw -85,40] [--seconds 1800] [--out file.json]
+ *   node tools/gen/rig-range.mjs --warp <v4 landmarks.json> [--seconds 1800] [--out file.json]
+ *
+ * --warp (living-portrait v4): the envelope under the MESH WARP. Each yaw key
+ * is drawn warped from its own landmarks onto the bracket's interpolated ones
+ * (warp/mesh.ts) while its paint weight (paintWeight) is above 0.02, carried by
+ * the head's sway; the pinned body moves only with the chest. So per key, how
+ * far its jaw and cheek points (the head's edge against the neck and the
+ * collar) travel relative to the body is what its back layer must be filled
+ * under. Written per key id (rig-v4lib IDS), px on the plate canvas.
  *
  * Node 24 strips the TypeScript types itself; nothing is built.
  */
@@ -28,7 +37,7 @@ const { RIG_CONSTANTS } = await import(`file://${SRC}/constants.ts`);
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((acc, t, i, a) => (t.startsWith('--') ? [...acc, [t.slice(2), a[i + 1]]] : acc), []),
 );
-const [yawMin, yawMax] = (args.yaw ?? '-85,40').split(',').map(Number);
+const [yawMin, yawMax] = (args.yaw ?? (args.warp ? '-85,85' : '-85,40')).split(',').map(Number);
 const seconds = Number(args.seconds ?? 1800);
 
 // Copied from renderer.ts (keep in sync; the art depends on these numbers).
@@ -61,6 +70,59 @@ const note = (name, dx, dy) => {
   e.dxMin = Math.min(e.dxMin, dx); e.dxMax = Math.max(e.dxMax, dx);
   e.dyMin = Math.min(e.dyMin, dy); e.dyMax = Math.max(e.dyMax, dy);
 };
+
+if (args.warp) {
+  // copied from warp/mesh.ts paintWeight (that module uses parameter properties, which node's type stripping refuses)
+  const paintWeight = (t) => { const x = Math.max(0, Math.min(1, (t - 0.25) / 0.5)); return x * x * x * (x * (x * 6 - 15) + 10); };
+  const { headSwayPx, chestOffsetPx, smootherstep } = await import(`file://${SRC}/motion.ts`);
+  const { readFileSync } = await import('node:fs');
+  const spec = JSON.parse(readFileSync(resolve(process.cwd(), args.warp), 'utf8'));
+  const edge = ['jaw_R', 'jawMid_R', 'chin', 'jawMid_L', 'jaw_L', 'cheek_R', 'cheek_L'].map((n) => spec.order.indexOf(n));
+  const keys = Object.entries(spec.keys).map(([y, lm]) => ({ yaw: Number(y), lm })).sort((a, b) => a.yaw - b.yaw);
+  const id = (y) => (y === 0 ? 'frontal' : `v4-${y < 0 ? 'l' : 'r'}${Math.abs(y)}`);
+  const envK = {};
+  const sm = new PortraitStateMachine();
+  sm.setYawRange(yawMin, yawMax);
+  const dt = 1 / 60;
+  let nextSwitch = 0;
+  for (let t = 0; t < seconds; t += dt) {
+    if (t >= nextSwitch) {
+      sm.setGazeTarget(rnd() * 2 - 1, rnd() * 2 - 1);
+      nextSwitch = t + 0.15 + rnd() * 2.5;
+    }
+    const f = sm.update(dt);
+    let i = keys.findIndex((k) => k.yaw >= f.yawDeg);
+    if (i <= 0) i = 1;
+    const a = keys[i - 1];
+    const b = keys[i];
+    const tt = Math.max(0, Math.min(1, (f.yawDeg - a.yaw) / (b.yaw - a.yaw)));
+    const g = smootherstep(tt);
+    const w = paintWeight(tt);
+    const sway = headSwayPx(f.headSample[0], f.headSample[1]);
+    const chest = chestOffsetPx(f.chestSample, f.chestSampleX);
+    for (const [k, wk] of [[a, 1 - w], [b, w]]) {
+      if (wk < 0.02) continue;
+      const e = (envK[id(k.yaw)] ??= { dxMin: 0, dxMax: 0, dyMin: 0, dyMax: 0 });
+      for (const j of edge) {
+        const lx = a.lm[j][0] + (b.lm[j][0] - a.lm[j][0]) * g + sway[0] - chest[0];
+        const ly = a.lm[j][1] + (b.lm[j][1] - a.lm[j][1]) * g + sway[1] - chest[1];
+        const dx = lx - k.lm[j][0];
+        const dy = ly - k.lm[j][1];
+        e.dxMin = Math.min(e.dxMin, dx); e.dxMax = Math.max(e.dxMax, dx);
+        e.dyMin = Math.min(e.dyMin, dy); e.dyMax = Math.max(e.dyMax, dy);
+      }
+    }
+  }
+  const r1 = (e) => Object.fromEntries(Object.entries(e).map(([k, v]) => [k, Math.round(v * 10) / 10]));
+  const out = { measuredBy: 'tools/gen/rig-range.mjs --warp', landmarks: args.warp, seconds, yawRange: [yawMin, yawMax],
+    envelopePx: Object.fromEntries(Object.entries(envK).map(([k, v]) => [k, r1(v)])),
+    note: 'per key: how far its jaw/cheek landmarks move relative to the pinned body while it is painted (weight > 0.02) under the continuous mesh warp; px, y down' };
+  const json = `${JSON.stringify(out, null, 2)}
+`;
+  if (args.out) writeFileSync(resolve(process.cwd(), args.out), json);
+  process.stdout.write(json);
+  process.exit(0);
+}
 
 let chestPeak = 0;
 for (const expression of ['normal', 'determined', 'hurt']) {

@@ -124,7 +124,8 @@ export class BlinkScheduler {
   }
 }
 
-export type MouthPatch = 'neutral' | 'parted' | 'smile' | 'pressed';
+/** v4 adds `slightSmile` (painted for the plate and the +-20/+-40 keys, `rig-v4face.py`). */
+export type MouthPatch = 'neutral' | 'parted' | 'slightSmile' | 'smile' | 'pressed';
 export type BrowPatch = 'neutral' | 'raised' | 'drawn';
 
 export interface ExpressionFrame {
@@ -172,11 +173,16 @@ export class ExpressionScheduler {
     if (!this.mouthEvent) this.mouthEvent = { patch, startedAt: this.t };
   }
 
+  /** Debug/verification aid (v4): starts a brow event now, unless one is already running. */
+  forceBrowEvent(patch: BrowPatch = 'raised'): void {
+    if (!this.browEvent) this.browEvent = { patch, startedAt: this.t };
+  }
+
   update(dt: number): ExpressionFrame {
     this.t += dt;
 
     if (!this.mouthEvent && this.t >= this.nextMouthAt) {
-      const options: MouthPatch[] = ['parted', 'smile', 'pressed'];
+      const options: MouthPatch[] = ['parted', 'slightSmile', 'smile', 'pressed'];
       this.mouthEvent = { patch: options[Math.floor(this.rnd() * options.length)]!, startedAt: this.t };
     }
     let mouth: MouthPatch = 'neutral';

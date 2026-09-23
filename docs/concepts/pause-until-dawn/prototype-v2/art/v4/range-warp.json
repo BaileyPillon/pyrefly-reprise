@@ -1,0 +1,66 @@
+{
+  "measuredBy": "tools/gen/rig-range.mjs --warp",
+  "landmarks": "docs/concepts/pause-until-dawn/prototype-v2/art/v4/warp/landmarks.json",
+  "seconds": 600,
+  "yawRange": [
+    -85,
+    85
+  ],
+  "envelopePx": {
+    "v4-l20": {
+      "dxMin": -134.7,
+      "dxMax": 63.6,
+      "dyMin": -46.8,
+      "dyMax": 23.8
+    },
+    "frontal": {
+      "dxMin": -59.5,
+      "dxMax": 92.8,
+      "dyMin": -30.8,
+      "dyMax": 27.6
+    },
+    "v4-l40": {
+      "dxMin": -82.9,
+      "dxMax": 133.4,
+      "dyMin": -38.6,
+      "dyMax": 50
+    },
+    "v4-l60": {
+      "dxMin": -101.4,
+      "dxMax": 81.8,
+      "dyMin": -24.6,
+      "dyMax": 37.7
+    },
+    "v4-l85": {
+      "dxMin": -30.2,
+      "dxMax": 89.5,
+      "dyMin": -46,
+      "dyMax": 18.8
+    },
+    "v4-r20": {
+      "dxMin": -85.9,
+      "dxMax": 80.7,
+      "dyMin": -32.2,
+      "dyMax": 21.4
+    },
+    "v4-r40": {
+      "dxMin": -83.1,
+      "dxMax": 119.4,
+      "dyMin": -41.3,
+      "dyMax": 32.4
+    },
+    "v4-r60": {
+      "dxMin": -118.3,
+      "dxMax": 131.3,
+      "dyMin": -52.5,
+      "dyMax": 43.1
+    },
+    "v4-r85": {
+      "dxMin": -130.1,
+      "dxMax": 13.4,
+      "dyMin": -20.5,
+      "dyMax": 55.4
+    }
+  },
+  "note": "per key: how far its jaw/cheek landmarks move relative to the pinned body while it is painted (weight > 0.02) under the continuous mesh warp; px, y down"
+}

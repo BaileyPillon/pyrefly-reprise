@@ -7,7 +7,7 @@
  */
 import { PortraitStateMachine, type ExpressionName, type Frame } from './state.ts';
 import { loadRig, yawRangeForRig, type Rig } from './rig.ts';
-import { Renderer, yawToNorm } from './renderer.ts';
+import { Renderer, yawToNorm, type PaintMode } from './renderer.ts';
 import { InputController } from './input.ts';
 
 export interface PortraitDriver {
@@ -47,6 +47,8 @@ export interface LivingPortraitDriverOptions {
   debugNoPost?: boolean;
   /** Debug (`?warp=0`): plain cross-dissolve between yaw keys, for a before/after of the mesh warp. */
   debugNoWarp?: boolean;
+  /** Debug (`?paint=switch|warp`): override the rig's own paint mode (v4 default 'warp'; 'switch' = v3.3's fallback). */
+  debugPaint?: PaintMode;
 }
 
 export class LivingPortraitDriver implements PortraitDriver {
@@ -98,6 +100,7 @@ export class LivingPortraitDriver implements PortraitDriver {
         this.renderer = new Renderer(canvas, rig, this.opts.assetBaseUrl);
         this.renderer.debugNoPost = this.opts.debugNoPost ?? false;
         this.renderer.debugNoWarp = this.opts.debugNoWarp ?? false;
+        if (this.opts.debugPaint) this.renderer.paintMode = this.opts.debugPaint;
         await this.renderer.load();
         this.startLoop();
       })
@@ -219,8 +222,13 @@ export class LivingPortraitDriver implements PortraitDriver {
   }
 
   /** Debug/verification aid, not part of the `PortraitDriver` seam. */
-  forceMouthEvent(patch?: 'parted' | 'smile' | 'pressed'): void {
+  forceMouthEvent(patch?: 'parted' | 'slightSmile' | 'smile' | 'pressed'): void {
     this.state.forceMouthEvent(patch);
+  }
+
+  /** Debug/verification aid (v4), not part of the `PortraitDriver` seam. */
+  forceBrowEvent(patch?: 'raised' | 'drawn'): void {
+    this.state.forceBrowEvent(patch);
   }
 
   snapshot(): DriverSnapshot {

@@ -37,6 +37,23 @@ export const PAINT_DISSOLVE_S = 0.2;
 /** A dissolve is also complete once the head has turned this far past the swap point (a fast turn: 2-3 frames). */
 export const PAINT_DISSOLVE_DEG = 8;
 
+/**
+ * v4 'warp' paint: how much of the bracket's second key shows at bracket
+ * position t (0..1) for a bracket `spanDeg` wide. The geometry morphs over the
+ * whole bracket (every key is warped onto the same interpolated landmarks);
+ * the paint swaps over a window of at most `PAINT_WINDOW_DEG` around the
+ * bracket's middle (v3.1's paintWeight used the middle half: 12.5 degrees of
+ * two paintings mixed between -60 and -85, where the far hair and the second
+ * clip showed as a ghost). Outside the window one painting alone is on screen.
+ */
+export const PAINT_WINDOW_DEG = 8;
+
+export function paintWindowWeight(t: number, spanDeg: number, windowDeg = PAINT_WINDOW_DEG): number {
+  const half = Math.min(0.25, windowDeg / 2 / Math.max(1e-6, Math.abs(spanDeg)));
+  const x = Math.max(0, Math.min(1, (t - (0.5 - half)) / (2 * half)));
+  return x * x * x * (x * (x * 6 - 15) + 10);
+}
+
 function smoothstep(x: number): number {
   const t = Math.max(0, Math.min(1, x));
   return t * t * (3 - 2 * t);

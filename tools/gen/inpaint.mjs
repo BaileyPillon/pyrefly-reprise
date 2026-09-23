@@ -217,6 +217,7 @@ function inpaintWorkflow({
   refWeight,
   prefix,
   latent = false,
+  lora = null,
 }) {
   const g = {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CHECKPOINT } },
@@ -265,6 +266,18 @@ function inpaintWorkflow({
     g['3'].inputs.latent_image = ['13', 0];
   }
 
+  // --lora name[:strength] (additive, living-portrait v4): the character LoRA on the
+  // model and the text encoder, so an inpaint keeps the trained identity.
+  if (lora) {
+    g['30'] = {
+      class_type: 'LoraLoader',
+      inputs: { lora_name: lora.name, strength_model: lora.strength, strength_clip: lora.strength, model: ['4', 0], clip: ['4', 1] },
+    };
+    g['6'].inputs.clip = ['30', 1];
+    g['7'].inputs.clip = ['30', 1];
+    g['3'].inputs.model = ['30', 0];
+  }
+
   if (refImage) {
     g['20'] = { class_type: 'LoadImage', inputs: { image: refImage, upload: 'image' } };
     g['21'] = { class_type: 'IPAdapterModelLoader', inputs: { ipadapter_file: IPADAPTER_MODEL } };
@@ -272,7 +285,7 @@ function inpaintWorkflow({
     g['23'] = {
       class_type: 'IPAdapterAdvanced',
       inputs: {
-        model: ['4', 0],
+        model: lora ? ['30', 0] : ['4', 0],
         ipadapter: ['21', 0],
         image: ['20', 0],
         weight: refWeight,
@@ -368,6 +381,9 @@ async function main() {
   // --style (additive, v3.2): replaces STYLE_TAGS; its "vibrant colors,
   // colorful" painted rainbow streaks into a plain brown back of the head.
   const style = args.style && args.style !== true ? String(args.style) : STYLE_TAGS;
+  const lora = args.lora && args.lora !== true
+    ? { name: String(args.lora).split(':')[0], strength: Number(String(args.lora).split(':')[1] ?? 0.8) }
+    : null;
 
   await waitForServer(30_000);
 
@@ -416,6 +432,7 @@ async function main() {
       refWeight,
       prefix: `pyrefly/inpaint_${basename(outPrefix)}`,
       latent,
+      lora,
     });
     process.stderr.write(
       `[inpaint] ${basename(outPrefix)} variant ${i + 1}/${count} seed=${seed} denoise=${denoise} box=${box.join(',')}\n`,
@@ -434,6 +451,7 @@ async function main() {
       source: imagePath.replace(REPO_ROOT + '\\', '').replace(REPO_ROOT + '/', '').replace(/\\/g, '/'),
       box, pad, feather, growMask, seed, denoise, steps, cfg, sampler, scheduler,
       ...(latent ? { encode: 'VAEEncode+SetLatentNoiseMask' } : {}),
+      ...(lora ? { lora } : {}),
       ...(args.mask && args.mask !== true ? { mask: String(args.mask) } : {}),
       prompt: positive, negative,
       model: CHECKPOINT,

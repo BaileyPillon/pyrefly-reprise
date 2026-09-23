@@ -26,11 +26,14 @@ import { relightGainForYaw } from './light.ts';
 import { PostPass } from './post.ts';
 import { RIG_CONSTANTS } from './constants.ts';
 import { LayerGL } from './gl-layer.ts';
-import { readV3, loadArt, uploadTexture, type LoadedArt, type Tex } from './layers.ts';
+import { readV3, readV4, loadArt, uploadTexture, type LoadedArt, type Tex, type V4Meta } from './layers.ts';
 import { LooseMotion, chestOffsetPx, headSwayPx, irisOffsetPx, yawNormFor, smootherstep, type Px } from './motion.ts';
 import { WarpCache, type WarpPose } from './warp/cache.ts';
-import { PaintSelector, type PaintState } from './paint.ts';
-import { Composer, KEY_EPS, type Meshes, type Motions } from './compose.ts';
+import { PaintSelector, paintWindowWeight, type PaintState } from './paint.ts';
+import { Composer, KEY_EPS, type Meshes, type Motions, type TasselDraw } from './compose.ts';
+
+/** v4 ('warp'): adjacent keys warped onto the same landmarks and mixed by the rendered yaw; 'switch': v3.3's one painting at a time. */
+export type PaintMode = 'warp' | 'switch';
 
 export interface RenderFrame {
   yawDeg: number;
@@ -61,6 +64,9 @@ export class Renderer {
   debugNoPost = false;
   /** Debug (`?warp=0`): the v3 plain cross-dissolve, for a before/after of the mesh warp. */
   debugNoWarp = false;
+  /** How the painted keys follow the yaw: the rig's own `artMeta.v4.paint` unless overridden (`?paint=switch`). */
+  paintMode: PaintMode = 'switch';
+  private readonly v4: V4Meta | null;
   private readonly gl: WebGL2RenderingContext | null;
   private readonly rig: Rig;
   private readonly base: string;
@@ -85,6 +91,8 @@ export class Renderer {
     this.keysByYaw = sortedKeys(rig);
     this.warps = new WarpCache(rig);
     this.paint = new PaintSelector(this.keysByYaw);
+    this.v4 = readV4(rig.artMeta);
+    this.paintMode = this.v4?.paint ?? 'switch';
     let gl: WebGL2RenderingContext | null = null;
     try {
       gl = canvas.getContext('webgl2', { alpha: false, antialias: false, preserveDrawingBuffer: true });
@@ -106,7 +114,7 @@ export class Renderer {
     if (!gl) return;
     const v3 = readV3(this.rig.artMeta);
     if (v3) {
-      this.art = await loadArt(gl, this.base, v3);
+      this.art = await loadArt(gl, this.base, v3, Boolean(this.v4?.tassel));
       this.composer = new Composer(this.layers!, this.art, (t, c) => this.bindTarget(t, c));
     } else {
       // No v3 art (the stand-in rig): show the plate itself, unmoving.
@@ -205,6 +213,10 @@ export class Renderer {
       this.layers!.mix(ta.tex, tb.tex, b ? smootherstep(t) : 0);
       return;
     }
+    if (this.paintMode === 'warp') {
+      this.renderWarp(frame, m, gain, chest, head, moving, loose.earring);
+      return;
+    }
     let pose = this.pose(frame.yawDeg, chest, head);
     const to = this.keyById(paint.to);
     let mTo = this.meshes(to, pose, moving);
@@ -213,14 +225,71 @@ export class Renderer {
       pose = { a: to, b: null, g: 0, head, chest };
       mTo = this.meshes(to, pose, moving) ?? NO_MESH;
     }
+    const td = this.tasselFor(frame.yawDeg, head, loose.earring);
     const from = paint.from && paint.w < 1 - KEY_EPS ? this.keyById(paint.from) : null;
     const mFrom = from ? this.meshes(from, pose, moving) : null;
     if (!from || !mFrom) {
       this.bindTarget(scene);
-      C.drawKey(to, frame, m, gain, mTo);
+      C.drawKey(to, frame, m, gain, mTo, 'all', td);
       return;
     }
-    C.drawDissolve(from, to, paint.w, mFrom, mTo, frame, m, gain, this.targets);
+    C.drawDissolve(from, to, paint.w, mFrom, mTo, frame, m, gain, this.targets, td);
+  }
+
+  /**
+   * v4 'warp': the bracket's two keys, each warped onto the landmarks
+   * interpolated at the rendered yaw; the paint swaps over an 8-degree window
+   * at the bracket's middle (`paintWindowWeight`), so each key is seen alone,
+   * only reshaped, over most of the turn. With keys every ~20 degrees the two
+   * paintings are the same head a few degrees apart.
+   */
+  private renderWarp(frame: RenderFrame, m: Motions, gain: number, chest: Px, head: Px, moving: boolean, earring: Px): void {
+    const C = this.composer!;
+    const [scene] = this.targets as [FrameBufferTarget];
+    const { a, b, t } = bracketForYaw(this.keysByYaw, frame.yawDeg);
+    const w = b ? paintWindowWeight(t, b.yawDeg - a.yawDeg) : 0;
+    const pose = this.pose(frame.yawDeg, chest, head);
+    const td = this.tasselFor(frame.yawDeg, head, earring);
+    const single = !b || w <= KEY_EPS ? a : w >= 1 - KEY_EPS ? b : null;
+    if (single) {
+      this.lastPaint = { to: single.id, from: null, w: 1 };
+      this.bindTarget(scene);
+      C.drawKey(single, frame, m, gain, this.meshes(single, pose, moving) ?? NO_MESH, 'all', td);
+      return;
+    }
+    const mA = this.meshes(a, pose, moving);
+    const mB = this.meshes(b!, pose, moving);
+    this.lastPaint = { to: b!.id, from: a.id, w };
+    if (!mA || !mB) {
+      this.bindTarget(scene);
+      C.drawKey(w < 0.5 ? a : b!, frame, m, gain, NO_MESH, 'all', td);
+      return;
+    }
+    C.drawDissolve(a, b!, w, mA, mB, frame, m, gain, this.targets, td);
+  }
+
+  /**
+   * v4: where the plate's tassel goes for this yaw. Its x offset at each key
+   * is where that key's painting carries it (`artMeta.v4.tassel.dx`), blended
+   * with the geometry's own weight; it rides the head's translation and its
+   * own loose swing. On top from `overFromDeg` up, under the face from
+   * `underToDeg` down, cross-faded between (it passes behind the far jaw).
+   */
+  private tasselFor(yawDeg: number, head: Px, earring: Px): TasselDraw | null {
+    const tv = this.v4?.tassel;
+    const t = this.art?.tassel;
+    if (!tv || !t) return null;
+    const { a, b, t: bt } = bracketForYaw(this.keysByYaw, yawDeg);
+    const g = b ? smootherstep(bt) : 0;
+    const da = tv.dx[a.id] ?? 0;
+    const dx = b ? da + ((tv.dx[b.id] ?? da) - da) * g : da;
+    const span = Math.max(1e-6, tv.overFromDeg - tv.underToDeg);
+    const x = Math.max(0, Math.min(1, (yawDeg - tv.underToDeg) / span));
+    const over = x * x * (3 - 2 * x);
+    const lo = tv.hiddenBelowDeg ?? -90;
+    const h = Math.max(0, Math.min(1, (yawDeg - lo) / Math.max(1e-6, tv.underToDeg - lo)));
+    const under = yawDeg < tv.overFromDeg ? h * h * (3 - 2 * h) : 0;
+    return { t, offset: [dx + head[0] + earring[0], head[1] + earring[1]], under, over };
   }
 
   render(frame: RenderFrame): void {

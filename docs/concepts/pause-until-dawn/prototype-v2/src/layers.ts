@@ -45,9 +45,35 @@ export interface V3Art {
   patches: {
     eyes: V3EyeState[];
     brows: Record<'raised' | 'drawn', PlacedFile>;
-    mouth: Record<'parted' | 'smile' | 'pressed', PlacedFile>;
+    mouth: Partial<Record<'parted' | 'slightSmile' | 'smile' | 'pressed', PlacedFile>>;
   };
   fringeLiftPx: number;
+  /**
+   * v4 (tools/gen/rig-v4face.py): mouth and brow patches per turned key, each
+   * seam-matched against that key's own composite (`rest`, a canvas-sized PNG).
+   */
+  keyPatches?: Record<string, { rest: string; mouth?: Record<string, PlacedFile>; brows?: Record<string, PlacedFile> }>;
+}
+
+/** v4 (`artMeta.v4`, tools/gen/rig-v4layers.py): how the keys are painted and where the tassel goes. */
+export interface V4Meta {
+  /** 'warp': adjacent keys warped and mixed continuously; 'switch': one painting at a time (v3.3). */
+  paint: 'warp' | 'switch';
+  tassel?: {
+    /** The plate's earring layer's x offset (px) at each key, interpolated over the bracket. */
+    dx: Record<string, number>;
+    /** On top of the head from this yaw up. */
+    overFromDeg: number;
+    /** Under the face (between back and body) from this yaw down; cross-faded in between. */
+    underToDeg: number;
+    /** v4: faded out by this yaw (the far ear goes behind the skull and under the far hair). */
+    hiddenBelowDeg?: number;
+  };
+}
+
+export function readV4(artMeta: unknown): V4Meta | null {
+  const v4 = (artMeta as { v4?: V4Meta } | undefined)?.v4;
+  return v4 && (v4.paint === 'warp' || v4.paint === 'switch') ? v4 : null;
 }
 
 export interface Tex {
@@ -141,13 +167,17 @@ export interface LoadedArt {
   keyLids: Map<string, Array<{ aperture: number; t: Tex }>>;
   brows: Map<string, Tex>;
   mouth: Map<string, Tex>;
+  /** v4: per turned key, its own mouth and brow patches. */
+  keyPatches: Map<string, { mouth: Map<string, Tex>; brows: Map<string, Tex> }>;
+  /** v4: the plate's earring layer, drawn apart from every key (null: it rides in the frontal stack). */
+  tassel: Tex | null;
   fringeLiftPx: number;
   all: WebGLTexture[];
   /** Per patch: the seam colour fit that was applied (identity when the rest composite could not be read). */
   patchFits: PatchFit[];
 }
 
-export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3Art): Promise<LoadedArt> {
+export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3Art, withTassel = false): Promise<LoadedArt> {
   const all: WebGLTexture[] = [];
   const track = (t: Tex): Tex => (all.push(t.tex), t);
   const frontal = await Promise.all(art.frontal.layers.map(async (layer) => ({ layer, t: track(await loadPlaced(gl, base, layer)) })));
@@ -179,5 +209,20 @@ export async function loadArt(gl: WebGL2RenderingContext, base: string, art: V3A
     const sorted = [...frames].sort((a, b) => b.aperture - a.aperture);
     keyLids.set(id, await Promise.all(sorted.map(async (f) => ({ aperture: f.aperture, t: track(await loadPlaced(gl, base, f)) }))));
   }
-  return { frontal, bodyTurned, keys, eyes, keyLids, brows, mouth, fringeLiftPx: art.fringeLiftPx, all, patchFits: fits };
+  const keyPatches = new Map<string, { mouth: Map<string, Tex>; brows: Map<string, Tex> }>();
+  for (const [id, kp] of Object.entries(art.keyPatches ?? {})) {
+    let keyRest: RGBAImage | null = null;
+    try {
+      keyRest = await pixels(base + kp.rest);
+    } catch {
+      keyRest = null;
+    }
+    const km = new Map<string, Tex>();
+    const kb = new Map<string, Tex>();
+    for (const [k, p] of Object.entries(kp.mouth ?? {})) km.set(k, track(await loadPatch(gl, base, p, keyRest, F.mouth, fits)));
+    for (const [k, p] of Object.entries(kp.brows ?? {})) kb.set(k, track(await loadPatch(gl, base, p, keyRest, F.brows, fits)));
+    keyPatches.set(id, { mouth: km, brows: kb });
+  }
+  const earring = frontal.find((f) => f.layer.name === 'earring');
+  return { frontal, bodyTurned, keys, eyes, keyLids, brows, mouth, keyPatches, tassel: withTassel && earring ? earring.t : null, fringeLiftPx: art.fringeLiftPx, all, patchFits: fits };
 }

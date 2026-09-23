@@ -96,354 +96,882 @@
         [
           831,
           180
+        ],
+        [
+          819.8,
+          207.5
+        ],
+        [
+          107,
+          400
+        ],
+        [
+          831,
+          400
+        ],
+        [
+          81,
+          650
+        ],
+        [
+          831,
+          650
         ]
       ]
     },
     {
-      "id": "turn-l45",
-      "yawDeg": -45,
-      "file": "v3/layers/turns/turn-l45/front.png",
+      "id": "v4-l85",
+      "yawDeg": -85,
+      "file": "v4/layers/v4-l85/front.png",
       "landmarks": [
         [
-          338,
-          450
+          250.0,
+          425.0
         ],
         [
-          398,
-          560
+          192.0,
+          532.0
         ],
         [
-          410,
-          585
+          247.0,
+          600.0
         ],
         [
-          390,
-          605
+          270.0,
+          616.0
         ],
         [
-          430,
-          600
+          272.0,
+          612.0
         ],
         [
-          425,
-          612
+          280.0,
+          627.0
         ],
         [
-          440,
-          725
+          322.0,
+          715.0
         ],
         [
-          378,
-          400
+          250.0,
+          375.0
         ],
         [
-          485,
-          380
+          315.0,
+          408.0
         ],
         [
-          315,
-          440
+          232.0,
+          428.0
         ],
         [
-          538,
-          360
+          352.0,
+          420.0
         ],
         [
-          475,
-          590
+          335.0,
+          595.0
         ],
         [
-          347,
-          625
+          272.0,
+          620.0
         ],
         [
-          600,
-          630
+          397.0,
+          615.0
         ],
         [
-          329,
-          505
+          228.0,
+          505.0
         ],
         [
-          575,
-          505
+          400.0,
+          505.0
         ],
         [
-          400,
-          680
+          315.0,
+          700.0
         ],
         [
-          570,
-          690
+          385.0,
+          690.0
         ],
         [
-          180,
-          180
-        ],
-        [
-          887,
-          180
-        ]
-      ]
-    },
-    {
-      "id": "turn-r45",
-      "yawDeg": 45,
-      "file": "v3/layers/turns/turn-r45/front.png",
-      "landmarks": [
-        [
-          505,
-          380
-        ],
-        [
-          592,
-          560
-        ],
-        [
-          580,
-          585
-        ],
-        [
-          515,
-          590
-        ],
-        [
-          560,
-          600
-        ],
-        [
-          565,
-          612
-        ],
-        [
-          550,
-          725
-        ],
-        [
-          612,
-          400
-        ],
-        [
-          652,
-          450
-        ],
-        [
-          452,
-          360
-        ],
-        [
-          675,
-          440
-        ],
-        [
-          600,
-          605
-        ],
-        [
-          390,
-          630
-        ],
-        [
-          643,
-          625
-        ],
-        [
-          415,
-          505
-        ],
-        [
-          661,
-          505
-        ],
-        [
-          420,
-          690
-        ],
-        [
-          590,
-          680
-        ],
-        [
-          102,
+          309,
           180
         ],
         [
           809,
           180
+        ],
+        [
+          564.5,
+          256.5
+        ],
+        [
+          240,
+          400
+        ],
+        [
+          807,
+          400
+        ],
+        [
+          286,
+          650
+        ],
+        [
+          808,
+          650
         ]
       ]
     },
     {
-      "id": "turn-l85",
-      "yawDeg": -85,
-      "file": "v3/layers/turns/turn-l85/front.png",
+      "id": "v4-l60",
+      "yawDeg": -60,
+      "file": "v4/layers/v4-l60/front.png",
       "landmarks": [
         [
-          342,
-          436
+          232.0,
+          432.0
         ],
         [
-          297,
-          547
+          214.0,
+          520.0
         ],
         [
-          340,
-          592
+          252.0,
+          575.0
         ],
         [
-          352,
-          633
+          268.0,
+          600.0
         ],
         [
-          364,
-          640
+          320.0,
+          595.0
         ],
         [
-          395,
-          665
+          315.0,
+          614.0
         ],
         [
-          410,
-          688
+          325.0,
+          697.0
         ],
         [
-          338,
-          395
+          307.0,
+          378.0
         ],
         [
-          445,
-          430
+          397.0,
+          410.0
         ],
         [
-          330,
-          428
+          192.0,
+          433.0
         ],
         [
-          492,
-          432
+          450.0,
+          418.0
         ],
         [
-          452,
-          635
+          372.0,
+          586.0
         ],
         [
-          325,
-          625
+          300.0,
+          655.0
         ],
         [
-          560,
+          484.0,
+          615.0
+        ],
+        [
+          212.0,
+          500.0
+        ],
+        [
+          497.0,
+          505.0
+        ],
+        [
+          310.0,
+          668.0
+        ],
+        [
+          387.0,
+          690.0
+        ],
+        [
+          119,
+          180
+        ],
+        [
+          823,
+          180
+        ],
+        [
+          726.3,
+          256.2
+        ],
+        [
+          104,
+          400
+        ],
+        [
+          831,
+          400
+        ],
+        [
+          75,
           650
         ],
         [
-          255,
-          495
-        ],
-        [
-          545,
-          505
-        ],
-        [
-          400,
-          690
-        ],
-        [
-          490,
-          782
-        ],
-        [
-          200,
-          180
-        ],
-        [
-          904,
-          180
+          831,
+          650
         ]
       ]
     },
     {
-      "id": "turn-r85",
-      "yawDeg": 85,
-      "file": "v3/layers/turns/turn-r85/front.png",
+      "id": "v4-l40",
+      "yawDeg": -40,
+      "file": "v4/layers/v4-l40/front.png",
       "landmarks": [
         [
-          545,
-          430
+          245.0,
+          432.0
         ],
         [
-          693,
-          547
+          267.0,
+          538.0
         ],
         [
-          650,
-          592
+          335.0,
+          592.0
         ],
         [
-          538,
-          635
+          296.0,
+          611.0
         ],
         [
-          626,
-          640
+          352.0,
+          613.0
         ],
         [
-          595,
-          665
+          355.0,
+          630.0
         ],
         [
-          580,
-          688
+          340.0,
+          718.0
         ],
         [
-          652,
-          395
+          337.0,
+          380.0
         ],
         [
-          648,
-          436
+          450.0,
+          415.0
         ],
         [
-          498,
-          432
+          212.0,
+          428.0
         ],
         [
-          660,
-          428
+          515.0,
+          418.0
         ],
         [
-          638,
-          633
+          420.0,
+          600.0
         ],
         [
-          430,
+          250.0,
+          610.0
+        ],
+        [
+          552.0,
+          615.0
+        ],
+        [
+          222.0,
+          505.0
+        ],
+        [
+          570.0,
+          505.0
+        ],
+        [
+          305.0,
+          690.0
+        ],
+        [
+          420.0,
+          690.0
+        ],
+        [
+          119,
+          180
+        ],
+        [
+          826,
+          180
+        ],
+        [
+          764.9,
+          247.9
+        ],
+        [
+          102,
+          400
+        ],
+        [
+          831,
+          400
+        ],
+        [
+          67,
           650
         ],
         [
-          665,
-          625
+          831,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "v4-l20",
+      "yawDeg": -20,
+      "file": "v4/layers/v4-l20/front.png",
+      "landmarks": [
+        [
+          292.0,
+          424.0
         ],
         [
-          445,
-          505
+          358.0,
+          546.0
         ],
         [
-          735,
-          495
+          416.0,
+          598.0
         ],
         [
-          500,
-          782
+          357.0,
+          615.0
         ],
         [
-          590,
-          690
+          420.0,
+          627.0
+        ],
+        [
+          422.0,
+          645.0
+        ],
+        [
+          428.0,
+          756.0
+        ],
+        [
+          399.0,
+          380.0
+        ],
+        [
+          538.0,
+          407.0
+        ],
+        [
+          238.0,
+          428.0
+        ],
+        [
+          619.0,
+          420.0
+        ],
+        [
+          497.0,
+          610.0
+        ],
+        [
+          290.0,
+          610.0
+        ],
+        [
+          614.0,
+          615.0
+        ],
+        [
+          252.0,
+          505.0
+        ],
+        [
+          628.0,
+          505.0
+        ],
+        [
+          354.0,
+          690.0
+        ],
+        [
+          566.0,
+          690.0
+        ],
+        [
+          161,
+          180
+        ],
+        [
+          831,
+          180
+        ],
+        [
+          807.1,
+          234.5
+        ],
+        [
+          115,
+          400
+        ],
+        [
+          831,
+          400
+        ],
+        [
+          142,
+          650
+        ],
+        [
+          827,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "v4-r20",
+      "yawDeg": 20,
+      "file": "v4/layers/v4-r20/front.png",
+      "landmarks": [
+        [
+          410.0,
+          424.0
+        ],
+        [
+          558.0,
+          548.0
+        ],
+        [
+          555.0,
+          596.0
+        ],
+        [
+          472.0,
+          620.0
+        ],
+        [
+          536.0,
+          629.0
+        ],
+        [
+          540.0,
+          646.0
+        ],
+        [
+          535.0,
+          753.0
+        ],
+        [
+          540.0,
+          380.0
+        ],
+        [
+          660.0,
+          407.0
+        ],
+        [
+          325.0,
+          426.0
+        ],
+        [
+          705.0,
+          420.0
+        ],
+        [
+          615.0,
+          610.0
+        ],
+        [
+          365.0,
+          610.0
+        ],
+        [
+          680.0,
+          615.0
+        ],
+        [
+          330.0,
+          505.0
+        ],
+        [
+          692.0,
+          505.0
+        ],
+        [
+          446.0,
+          690.0
+        ],
+        [
+          600.0,
+          690.0
+        ],
+        [
+          117,
+          180
+        ],
+        [
+          823,
+          180
+        ],
+        [
+          789.6,
+          230.8
+        ],
+        [
+          103,
+          400
+        ],
+        [
+          831,
+          400
         ],
         [
           85,
+          650
+        ],
+        [
+          831,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "v4-r40",
+      "yawDeg": 40,
+      "file": "v4/layers/v4-r40/front.png",
+      "landmarks": [
+        [
+          495.0,
+          423.0
+        ],
+        [
+          668.0,
+          540.0
+        ],
+        [
+          630.0,
+          585.0
+        ],
+        [
+          532.0,
+          616.0
+        ],
+        [
+          588.0,
+          621.0
+        ],
+        [
+          592.0,
+          640.0
+        ],
+        [
+          570.0,
+          752.0
+        ],
+        [
+          600.0,
+          380.0
+        ],
+        [
+          702.0,
+          407.0
+        ],
+        [
+          408.0,
+          425.0
+        ],
+        [
+          717.0,
+          420.0
+        ],
+        [
+          652.0,
+          602.0
+        ],
+        [
+          424.0,
+          610.0
+        ],
+        [
+          678.0,
+          615.0
+        ],
+        [
+          405.0,
+          505.0
+        ],
+        [
+          710.0,
+          505.0
+        ],
+        [
+          482.0,
+          690.0
+        ],
+        [
+          637.0,
+          690.0
+        ],
+        [
+          120,
           180
         ],
         [
-          789,
+          831,
           180
+        ],
+        [
+          831,
+          230
+        ],
+        [
+          108,
+          400
+        ],
+        [
+          831,
+          400
+        ],
+        [
+          68,
+          650
+        ],
+        [
+          829,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "v4-r60",
+      "yawDeg": 60,
+      "file": "v4/layers/v4-r60/front.png",
+      "landmarks": [
+        [
+          545.0,
+          425.0
+        ],
+        [
+          731.0,
+          535.0
+        ],
+        [
+          717.0,
+          588.0
+        ],
+        [
+          592.0,
+          624.0
+        ],
+        [
+          648.0,
+          630.0
+        ],
+        [
+          655.0,
+          644.0
+        ],
+        [
+          695.0,
+          725.0
+        ],
+        [
+          645.0,
+          385.0
+        ],
+        [
+          698.0,
+          412.0
+        ],
+        [
+          452.0,
+          422.0
+        ],
+        [
+          704.0,
+          424.0
+        ],
+        [
+          721.0,
+          620.0
+        ],
+        [
+          498.0,
+          610.0
+        ],
+        [
+          726.0,
+          630.0
+        ],
+        [
+          475.0,
+          505.0
+        ],
+        [
+          715.0,
+          505.0
+        ],
+        [
+          512.0,
+          690.0
+        ],
+        [
+          701.0,
+          705.0
+        ],
+        [
+          116,
+          180
+        ],
+        [
+          826,
+          180
+        ],
+        [
+          831,
+          230
+        ],
+        [
+          110,
+          400
+        ],
+        [
+          831,
+          400
+        ],
+        [
+          69,
+          650
+        ],
+        [
+          815,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "v4-r85",
+      "yawDeg": 85,
+      "file": "v4/layers/v4-r85/front.png",
+      "landmarks": [
+        [
+          625.0,
+          440.0
+        ],
+        [
+          772.0,
+          455.0
+        ],
+        [
+          762.0,
+          510.0
+        ],
+        [
+          710.0,
+          562.0
+        ],
+        [
+          752.0,
+          558.0
+        ],
+        [
+          758.0,
+          582.0
+        ],
+        [
+          762.0,
+          675.0
+        ],
+        [
+          700.0,
+          385.0
+        ],
+        [
+          712.0,
+          438.0
+        ],
+        [
+          572.0,
+          428.0
+        ],
+        [
+          716.0,
+          440.0
+        ],
+        [
+          758.0,
+          560.0
+        ],
+        [
+          575.0,
+          605.0
+        ],
+        [
+          766.0,
+          600.0
+        ],
+        [
+          560.0,
+          505.0
+        ],
+        [
+          766.0,
+          470.0
+        ],
+        [
+          650.0,
+          688.0
+        ],
+        [
+          756.0,
+          655.0
+        ],
+        [
+          156,
+          180
+        ],
+        [
+          631,
+          180
+        ],
+        [
+          681,
+          230
+        ],
+        [
+          124,
+          400
+        ],
+        [
+          746,
+          400
+        ],
+        [
+          178,
+          650
+        ],
+        [
+          758,
+          650
         ]
       ]
     }
@@ -535,7 +1063,12 @@
       "jawMid_R",
       "jawMid_L",
       "hairSide_R",
-      "hairSide_L"
+      "hairSide_L",
+      "clip_L",
+      "hairSide_R400",
+      "hairSide_L400",
+      "hairSide_R650",
+      "hairSide_L650"
     ],
     "v3": {
       "frontal": {
@@ -674,163 +1207,163 @@
         }
       },
       "keys": {
-        "q34-left": {
+        "v4-l85": {
           "back": {
-            "file": "v3/layers/q34-left/back.png",
+            "file": "v4/layers/v4-l85/back.png",
             "box": [
-              39,
+              175,
               0,
-              795,
-              856
+              657,
+              1039
             ]
           },
           "front": {
-            "file": "v3/layers/q34-left/front.png",
+            "file": "v4/layers/v4-l85/front.png",
             "box": [
-              67,
+              192,
+              310,
+              525,
+              710
+            ]
+          }
+        },
+        "v4-l60": {
+          "back": {
+            "file": "v4/layers/v4-l60/back.png",
+            "box": [
+              25,
+              0,
+              807,
+              911
+            ]
+          },
+          "front": {
+            "file": "v4/layers/v4-l60/front.png",
+            "box": [
+              183,
+              352,
+              507,
+              521
+            ]
+          }
+        },
+        "v4-l40": {
+          "back": {
+            "file": "v4/layers/v4-l40/back.png",
+            "box": [
+              6,
+              0,
+              826,
+              1076
+            ]
+          },
+          "front": {
+            "file": "v4/layers/v4-l40/front.png",
+            "box": [
+              165,
+              358,
+              557,
+              668
+            ]
+          }
+        },
+        "v4-l20": {
+          "back": {
+            "file": "v4/layers/v4-l20/back.png",
+            "box": [
+              65,
               0,
               767,
-              855
+              1049
+            ]
+          },
+          "front": {
+            "file": "v4/layers/v4-l20/front.png",
+            "box": [
+              166,
+              355,
+              557,
+              670
             ]
           }
         },
-        "q34-right": {
+        "v4-r20": {
           "back": {
-            "file": "v3/layers/q34-right/back.png",
+            "file": "v4/layers/v4-r20/back.png",
             "box": [
-              163,
+              6,
               0,
-              671,
-              894
+              826,
+              1062
             ]
           },
           "front": {
-            "file": "v3/layers/q34-right/front.png",
+            "file": "v4/layers/v4-r20/front.png",
             "box": [
-              163,
+              154,
+              349,
+              569,
+              691
+            ]
+          }
+        },
+        "v4-r40": {
+          "back": {
+            "file": "v4/layers/v4-r40/back.png",
+            "box": [
               0,
-              671,
-              849
-            ]
-          }
-        },
-        "profile-left": {
-          "back": {
-            "file": "v3/layers/profile-left/back.png",
-            "box": [
-              195,
               0,
-              639,
-              859
+              832,
+              1064
             ]
           },
           "front": {
-            "file": "v3/layers/profile-left/front.png",
+            "file": "v4/layers/v4-r40/front.png",
             "box": [
-              195,
+              201,
+              346,
+              536,
+              685
+            ]
+          }
+        },
+        "v4-r60": {
+          "back": {
+            "file": "v4/layers/v4-r60/back.png",
+            "box": [
+              3,
               0,
-              639,
-              786
+              829,
+              924
+            ]
+          },
+          "front": {
+            "file": "v4/layers/v4-r60/front.png",
+            "box": [
+              403,
+              344,
+              324,
+              491
             ]
           }
         },
-        "profile-right": {
+        "v4-r85": {
           "back": {
-            "file": "v3/layers/profile-right/back.png",
+            "file": "v4/layers/v4-r85/back.png",
             "box": [
-              169,
+              104,
               0,
-              629,
-              861
+              669,
+              1073
             ]
           },
           "front": {
-            "file": "v3/layers/profile-right/front.png",
+            "file": "v4/layers/v4-r85/front.png",
             "box": [
-              169,
-              0,
-              629,
-              787
-            ]
-          }
-        },
-        "turn-l45": {
-          "back": {
-            "file": "v3/layers/turns/turn-l45/back.png",
-            "box": [
-              165,
-              -48,
-              953,
-              963
-            ]
-          },
-          "front": {
-            "file": "v3/layers/turns/turn-l45/front.png",
-            "box": [
-              165,
-              -48,
-              953,
-              895
-            ]
-          }
-        },
-        "turn-l85": {
-          "back": {
-            "file": "v3/layers/turns/turn-l85/back.png",
-            "box": [
-              197,
-              -48,
-              947,
-              959
-            ]
-          },
-          "front": {
-            "file": "v3/layers/turns/turn-l85/front.png",
-            "box": [
-              197,
-              -48,
-              947,
-              832
-            ]
-          }
-        },
-        "turn-r45": {
-          "back": {
-            "file": "v3/layers/turns/turn-r45/back.png",
-            "box": [
-              -128,
-              -48,
-              953,
-              963
-            ]
-          },
-          "front": {
-            "file": "v3/layers/turns/turn-r45/front.png",
-            "box": [
-              -128,
-              -48,
-              953,
-              895
-            ]
-          }
-        },
-        "turn-r85": {
-          "back": {
-            "file": "v3/layers/turns/turn-r85/back.png",
-            "box": [
-              -154,
-              -48,
-              947,
-              959
-            ]
-          },
-          "front": {
-            "file": "v3/layers/turns/turn-r85/front.png",
-            "box": [
-              -154,
-              -48,
-              947,
-              832
+              357,
+              363,
+              416,
+              654
             ]
           }
         }
@@ -936,50 +1469,59 @@
         ],
         "brows": {
           "raised": {
-            "file": "v3/patches/brows/raised.png",
+            "file": "v4/patches/frontal/brows/raised.png",
             "box": [
-              257,
-              310,
-              429,
-              56
+              260,
+              295,
+              432,
+              84
             ]
           },
           "drawn": {
-            "file": "v3/patches/brows/drawn.png",
+            "file": "v4/patches/frontal/brows/drawn.png",
             "box": [
-              257,
-              312,
-              429,
-              57
+              260,
+              295,
+              432,
+              84
             ]
           }
         },
         "mouth": {
           "parted": {
-            "file": "v3/patches/mouth2/parted.png",
+            "file": "v4/patches/frontal/mouth/parted.png",
             "box": [
-              378,
-              583,
-              215,
-              111
+              362,
+              588,
+              254,
+              95
+            ]
+          },
+          "slightSmile": {
+            "file": "v4/patches/frontal/mouth/slightSmile.png",
+            "box": [
+              362,
+              588,
+              254,
+              95
             ]
           },
           "smile": {
-            "file": "v3/patches/mouth2/smile.png",
+            "file": "v4/patches/frontal/mouth/smile.png",
             "box": [
-              331,
-              565,
-              262,
-              134
+              362,
+              588,
+              254,
+              95
             ]
           },
           "pressed": {
-            "file": "v3/patches/mouth2/pressed.png",
+            "file": "v4/patches/frontal/mouth/pressed.png",
             "box": [
-              377,
-              566,
-              218,
-              112
+              362,
+              588,
+              254,
+              95
             ]
           }
         }
@@ -1067,404 +1609,1209 @@
           "q34-left",
           "q34-right",
           "profile-left",
-          "profile-right"
-        ]
+          "profile-right",
+          "turn-l45",
+          "turn-l85",
+          "turn-r45",
+          "turn-r85"
+        ],
+        "v3turns": {
+          "q34-left": {
+            "back": {
+              "file": "v3/layers/q34-left/back.png",
+              "box": [
+                39,
+                0,
+                795,
+                856
+              ]
+            },
+            "front": {
+              "file": "v3/layers/q34-left/front.png",
+              "box": [
+                67,
+                0,
+                767,
+                855
+              ]
+            }
+          },
+          "q34-right": {
+            "back": {
+              "file": "v3/layers/q34-right/back.png",
+              "box": [
+                163,
+                0,
+                671,
+                894
+              ]
+            },
+            "front": {
+              "file": "v3/layers/q34-right/front.png",
+              "box": [
+                163,
+                0,
+                671,
+                849
+              ]
+            }
+          },
+          "profile-left": {
+            "back": {
+              "file": "v3/layers/profile-left/back.png",
+              "box": [
+                195,
+                0,
+                639,
+                859
+              ]
+            },
+            "front": {
+              "file": "v3/layers/profile-left/front.png",
+              "box": [
+                195,
+                0,
+                639,
+                786
+              ]
+            }
+          },
+          "profile-right": {
+            "back": {
+              "file": "v3/layers/profile-right/back.png",
+              "box": [
+                169,
+                0,
+                629,
+                861
+              ]
+            },
+            "front": {
+              "file": "v3/layers/profile-right/front.png",
+              "box": [
+                169,
+                0,
+                629,
+                787
+              ]
+            }
+          },
+          "turn-l45": {
+            "back": {
+              "file": "v3/layers/turns/turn-l45/back.png",
+              "box": [
+                165,
+                -48,
+                953,
+                963
+              ]
+            },
+            "front": {
+              "file": "v3/layers/turns/turn-l45/front.png",
+              "box": [
+                165,
+                -48,
+                953,
+                895
+              ]
+            }
+          },
+          "turn-l85": {
+            "back": {
+              "file": "v3/layers/turns/turn-l85/back.png",
+              "box": [
+                197,
+                -48,
+                947,
+                959
+              ]
+            },
+            "front": {
+              "file": "v3/layers/turns/turn-l85/front.png",
+              "box": [
+                197,
+                -48,
+                947,
+                832
+              ]
+            }
+          },
+          "turn-r45": {
+            "back": {
+              "file": "v3/layers/turns/turn-r45/back.png",
+              "box": [
+                -128,
+                -48,
+                953,
+                963
+              ]
+            },
+            "front": {
+              "file": "v3/layers/turns/turn-r45/front.png",
+              "box": [
+                -128,
+                -48,
+                953,
+                895
+              ]
+            }
+          },
+          "turn-r85": {
+            "back": {
+              "file": "v3/layers/turns/turn-r85/back.png",
+              "box": [
+                -154,
+                -48,
+                947,
+                959
+              ]
+            },
+            "front": {
+              "file": "v3/layers/turns/turn-r85/front.png",
+              "box": [
+                -154,
+                -48,
+                947,
+                832
+              ]
+            }
+          }
+        },
+        "_readmeV4": "v4 (rig-v4layers.py): the v3 turns (different paintings from the plate) are retired; their layers stay on disk."
       },
       "keyLids": {
-        "turn-l45": [
+        "v4-l85": [
           {
             "name": "lid-85",
             "aperture": 0.85,
             "raw": true,
-            "file": "v3/patches/lids/turn-l45/a85.png",
+            "file": "v3/patches/lids/v4-l85/a85.png",
             "box": [
-              293,
-              294,
-              252,
-              157
+              238,
+              329,
+              130,
+              74
             ]
           },
           {
             "name": "lid-70",
             "aperture": 0.7,
             "raw": true,
-            "file": "v3/patches/lids/turn-l45/a70.png",
+            "file": "v3/patches/lids/v4-l85/a70.png",
             "box": [
-              293,
-              294,
-              252,
-              159
+              238,
+              329,
+              130,
+              74
             ]
           },
           {
             "name": "lid-55",
             "aperture": 0.55,
             "raw": true,
-            "file": "v3/patches/lids/turn-l45/a55.png",
+            "file": "v3/patches/lids/v4-l85/a55.png",
             "box": [
-              293,
-              294,
-              252,
-              161
+              238,
+              329,
+              130,
+              74
             ]
           },
           {
             "name": "lid-42",
             "aperture": 0.42,
             "raw": true,
-            "file": "v3/patches/lids/turn-l45/a42.png",
+            "file": "v3/patches/lids/v4-l85/a42.png",
             "box": [
-              293,
-              294,
-              252,
-              162
+              238,
+              329,
+              130,
+              74
             ]
           },
           {
             "name": "lid-30",
             "aperture": 0.3,
             "raw": true,
-            "file": "v3/patches/lids/turn-l45/a30.png",
+            "file": "v3/patches/lids/v4-l85/a30.png",
             "box": [
-              293,
-              294,
-              252,
-              165
-            ]
-          },
-          {
-            "name": "lid-18",
-            "aperture": 0.18,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l45/a18.png",
-            "box": [
-              293,
-              294,
-              252,
-              170
-            ]
-          },
-          {
-            "name": "lid-08",
-            "aperture": 0.08,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l45/a08.png",
-            "box": [
-              293,
-              294,
-              252,
-              195
-            ]
-          },
-          {
-            "name": "lid-00",
-            "aperture": 0.0,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l45/a00.png",
-            "box": [
-              293,
-              294,
-              252,
-              195
-            ]
-          }
-        ],
-        "turn-r45": [
-          {
-            "name": "lid-85",
-            "aperture": 0.85,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a85.png",
-            "box": [
-              445,
-              294,
-              252,
-              157
-            ]
-          },
-          {
-            "name": "lid-70",
-            "aperture": 0.7,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a70.png",
-            "box": [
-              445,
-              294,
-              252,
-              159
-            ]
-          },
-          {
-            "name": "lid-55",
-            "aperture": 0.55,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a55.png",
-            "box": [
-              445,
-              294,
-              252,
-              161
-            ]
-          },
-          {
-            "name": "lid-42",
-            "aperture": 0.42,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a42.png",
-            "box": [
-              445,
-              294,
-              252,
-              162
-            ]
-          },
-          {
-            "name": "lid-30",
-            "aperture": 0.3,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a30.png",
-            "box": [
-              445,
-              294,
-              252,
-              165
-            ]
-          },
-          {
-            "name": "lid-18",
-            "aperture": 0.18,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a18.png",
-            "box": [
-              445,
-              294,
-              252,
-              170
-            ]
-          },
-          {
-            "name": "lid-08",
-            "aperture": 0.08,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a08.png",
-            "box": [
-              445,
-              294,
-              252,
-              195
-            ]
-          },
-          {
-            "name": "lid-00",
-            "aperture": 0.0,
-            "raw": true,
-            "file": "v3/patches/lids/turn-r45/a00.png",
-            "box": [
-              445,
-              294,
-              252,
-              195
-            ]
-          }
-        ],
-        "turn-l85": [
-          {
-            "name": "lid-85",
-            "aperture": 0.85,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l85/a85.png",
-            "box": [
-              400,
-              343,
-              107,
-              66
-            ]
-          },
-          {
-            "name": "lid-70",
-            "aperture": 0.7,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l85/a70.png",
-            "box": [
-              400,
-              343,
-              107,
-              69
-            ]
-          },
-          {
-            "name": "lid-55",
-            "aperture": 0.55,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l85/a55.png",
-            "box": [
-              400,
-              343,
-              107,
-              71
-            ]
-          },
-          {
-            "name": "lid-42",
-            "aperture": 0.42,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l85/a42.png",
-            "box": [
-              400,
-              343,
-              107,
+              238,
+              329,
+              130,
               76
             ]
           },
           {
-            "name": "lid-30",
-            "aperture": 0.3,
-            "raw": true,
-            "file": "v3/patches/lids/turn-l85/a30.png",
-            "box": [
-              400,
-              343,
-              107,
-              83
-            ]
-          },
-          {
             "name": "lid-18",
             "aperture": 0.18,
             "raw": true,
-            "file": "v3/patches/lids/turn-l85/a18.png",
+            "file": "v3/patches/lids/v4-l85/a18.png",
             "box": [
-              400,
-              343,
-              107,
-              90
+              238,
+              329,
+              130,
+              84
             ]
           },
           {
             "name": "lid-08",
             "aperture": 0.08,
             "raw": true,
-            "file": "v3/patches/lids/turn-l85/a08.png",
+            "file": "v3/patches/lids/v4-l85/a08.png",
             "box": [
-              400,
-              343,
-              107,
-              126
+              238,
+              329,
+              133,
+              127
             ]
           },
           {
             "name": "lid-00",
             "aperture": 0.0,
             "raw": true,
-            "file": "v3/patches/lids/turn-l85/a00.png",
+            "file": "v3/patches/lids/v4-l85/a00.png",
             "box": [
-              400,
-              343,
-              107,
-              126
+              238,
+              329,
+              133,
+              127
             ]
           }
         ],
-        "turn-r85": [
+        "v4-l60": [
           {
             "name": "lid-85",
             "aperture": 0.85,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a85.png",
+            "file": "v3/patches/lids/v4-l60/a85.png",
             "box": [
-              483,
-              343,
-              107,
-              66
+              183,
+              351,
+              279,
+              138
             ]
           },
           {
             "name": "lid-70",
             "aperture": 0.7,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a70.png",
+            "file": "v3/patches/lids/v4-l60/a70.png",
             "box": [
-              483,
-              343,
-              107,
-              69
+              183,
+              351,
+              279,
+              138
             ]
           },
           {
             "name": "lid-55",
             "aperture": 0.55,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a55.png",
+            "file": "v3/patches/lids/v4-l60/a55.png",
             "box": [
-              483,
-              343,
-              107,
-              71
+              183,
+              351,
+              279,
+              138
             ]
           },
           {
             "name": "lid-42",
             "aperture": 0.42,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a42.png",
+            "file": "v3/patches/lids/v4-l60/a42.png",
             "box": [
-              483,
-              343,
-              107,
-              76
+              183,
+              351,
+              279,
+              139
             ]
           },
           {
             "name": "lid-30",
             "aperture": 0.3,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a30.png",
+            "file": "v3/patches/lids/v4-l60/a30.png",
             "box": [
-              483,
-              343,
-              107,
-              83
+              183,
+              351,
+              279,
+              139
             ]
           },
           {
             "name": "lid-18",
             "aperture": 0.18,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a18.png",
+            "file": "v3/patches/lids/v4-l60/a18.png",
             "box": [
-              483,
-              343,
-              107,
-              90
+              183,
+              351,
+              279,
+              139
             ]
           },
           {
             "name": "lid-08",
             "aperture": 0.08,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a08.png",
+            "file": "v3/patches/lids/v4-l60/a08.png",
             "box": [
-              483,
-              343,
-              107,
-              126
+              183,
+              351,
+              279,
+              144
             ]
           },
           {
             "name": "lid-00",
             "aperture": 0.0,
             "raw": true,
-            "file": "v3/patches/lids/turn-r85/a00.png",
+            "file": "v3/patches/lids/v4-l60/a00.png",
             "box": [
-              483,
-              343,
-              107,
-              126
+              183,
+              351,
+              279,
+              144
+            ]
+          }
+        ],
+        "v4-l40": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a85.png",
+            "box": [
+              196,
+              357,
+              316,
+              84
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a70.png",
+            "box": [
+              196,
+              357,
+              316,
+              86
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a55.png",
+            "box": [
+              196,
+              357,
+              316,
+              87
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a42.png",
+            "box": [
+              196,
+              357,
+              317,
+              88
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a30.png",
+            "box": [
+              196,
+              357,
+              317,
+              90
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a18.png",
+            "box": [
+              196,
+              357,
+              317,
+              94
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a08.png",
+            "box": [
+              196,
+              357,
+              317,
+              138
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l40/a00.png",
+            "box": [
+              196,
+              357,
+              317,
+              138
+            ]
+          }
+        ],
+        "v4-l20": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a85.png",
+            "box": [
+              231,
+              354,
+              394,
+              93
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a70.png",
+            "box": [
+              231,
+              354,
+              394,
+              94
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a55.png",
+            "box": [
+              231,
+              354,
+              394,
+              94
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a42.png",
+            "box": [
+              231,
+              354,
+              394,
+              94
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a30.png",
+            "box": [
+              231,
+              354,
+              394,
+              94
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a18.png",
+            "box": [
+              231,
+              354,
+              394,
+              95
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a08.png",
+            "box": [
+              231,
+              354,
+              394,
+              122
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/v4-l20/a00.png",
+            "box": [
+              231,
+              354,
+              394,
+              122
+            ]
+          }
+        ],
+        "v4-r20": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a85.png",
+            "box": [
+              318,
+              350,
+              389,
+              85
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a70.png",
+            "box": [
+              318,
+              350,
+              390,
+              85
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a55.png",
+            "box": [
+              318,
+              350,
+              390,
+              85
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a42.png",
+            "box": [
+              318,
+              350,
+              390,
+              85
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a30.png",
+            "box": [
+              318,
+              350,
+              390,
+              86
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a18.png",
+            "box": [
+              318,
+              350,
+              391,
+              87
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a08.png",
+            "box": [
+              318,
+              350,
+              391,
+              125
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r20/a00.png",
+            "box": [
+              318,
+              350,
+              391,
+              125
+            ]
+          }
+        ],
+        "v4-r40": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a85.png",
+            "box": [
+              403,
+              345,
+              319,
+              65
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a70.png",
+            "box": [
+              403,
+              345,
+              319,
+              66
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a55.png",
+            "box": [
+              403,
+              345,
+              319,
+              67
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a42.png",
+            "box": [
+              403,
+              345,
+              320,
+              72
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a30.png",
+            "box": [
+              403,
+              345,
+              320,
+              79
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a18.png",
+            "box": [
+              403,
+              345,
+              320,
+              85
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a08.png",
+            "box": [
+              403,
+              345,
+              321,
+              119
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r40/a00.png",
+            "box": [
+              403,
+              345,
+              321,
+              119
+            ]
+          }
+        ],
+        "v4-r60": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a85.png",
+            "box": [
+              448,
+              367,
+              157,
+              49
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a70.png",
+            "box": [
+              448,
+              367,
+              158,
+              50
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a55.png",
+            "box": [
+              448,
+              367,
+              158,
+              51
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a42.png",
+            "box": [
+              448,
+              367,
+              159,
+              53
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a30.png",
+            "box": [
+              448,
+              367,
+              159,
+              61
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a18.png",
+            "box": [
+              448,
+              367,
+              159,
+              68
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a08.png",
+            "box": [
+              448,
+              367,
+              163,
+              106
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r60/a00.png",
+            "box": [
+              448,
+              367,
+              163,
+              106
+            ]
+          }
+        ],
+        "v4-r85": [
+          {
+            "name": "lid-85",
+            "aperture": 0.85,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a85.png",
+            "box": [
+              570,
+              380,
+              94,
+              79
+            ]
+          },
+          {
+            "name": "lid-70",
+            "aperture": 0.7,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a70.png",
+            "box": [
+              570,
+              380,
+              94,
+              81
+            ]
+          },
+          {
+            "name": "lid-55",
+            "aperture": 0.55,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a55.png",
+            "box": [
+              570,
+              380,
+              94,
+              82
+            ]
+          },
+          {
+            "name": "lid-42",
+            "aperture": 0.42,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a42.png",
+            "box": [
+              570,
+              380,
+              94,
+              84
+            ]
+          },
+          {
+            "name": "lid-30",
+            "aperture": 0.3,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a30.png",
+            "box": [
+              570,
+              380,
+              94,
+              85
+            ]
+          },
+          {
+            "name": "lid-18",
+            "aperture": 0.18,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a18.png",
+            "box": [
+              570,
+              380,
+              94,
+              86
+            ]
+          },
+          {
+            "name": "lid-08",
+            "aperture": 0.08,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a08.png",
+            "box": [
+              570,
+              380,
+              94,
+              98
+            ]
+          },
+          {
+            "name": "lid-00",
+            "aperture": 0.0,
+            "raw": true,
+            "file": "v3/patches/lids/v4-r85/a00.png",
+            "box": [
+              570,
+              380,
+              94,
+              98
             ]
           }
         ]
       },
-      "keyLidsReadme": "tools/gen/rig-lids.py: per key, lid frames by aperture (nearest wins); transparent below the lid edge"
+      "keyLidsReadme": "tools/gen/rig-lids.py: per key, lid frames by aperture (nearest wins); transparent below the lid edge",
+      "keyPatches": {
+        "v4-l40": {
+          "rest": "v4/layers/v4-l40/rest.png",
+          "mouth": {
+            "parted": {
+              "file": "v4/patches/v4-l40/mouth/parted.png",
+              "box": [
+                257,
+                574,
+                203,
+                96
+              ]
+            },
+            "slightSmile": {
+              "file": "v4/patches/v4-l40/mouth/slightSmile.png",
+              "box": [
+                257,
+                574,
+                203,
+                96
+              ]
+            },
+            "smile": {
+              "file": "v4/patches/v4-l40/mouth/smile.png",
+              "box": [
+                257,
+                574,
+                203,
+                96
+              ]
+            },
+            "pressed": {
+              "file": "v4/patches/v4-l40/mouth/pressed.png",
+              "box": [
+                257,
+                574,
+                203,
+                96
+              ]
+            }
+          },
+          "brows": {
+            "raised": {
+              "file": "v4/patches/v4-l40/brows/raised.png",
+              "box": [
+                190,
+                304,
+                348,
+                84
+              ]
+            },
+            "drawn": {
+              "file": "v4/patches/v4-l40/brows/drawn.png",
+              "box": [
+                189,
+                304,
+                349,
+                84
+              ]
+            }
+          }
+        },
+        "v4-l20": {
+          "rest": "v4/layers/v4-l20/rest.png",
+          "mouth": {
+            "parted": {
+              "file": "v4/patches/v4-l20/mouth/parted.png",
+              "box": [
+                317,
+                588,
+                221,
+                97
+              ]
+            },
+            "slightSmile": {
+              "file": "v4/patches/v4-l20/mouth/slightSmile.png",
+              "box": [
+                317,
+                588,
+                221,
+                97
+              ]
+            },
+            "smile": {
+              "file": "v4/patches/v4-l20/mouth/smile.png",
+              "box": [
+                317,
+                588,
+                221,
+                97
+              ]
+            },
+            "pressed": {
+              "file": "v4/patches/v4-l20/mouth/pressed.png",
+              "box": [
+                317,
+                588,
+                221,
+                97
+              ]
+            }
+          },
+          "brows": {
+            "raised": {
+              "file": "v4/patches/v4-l20/brows/raised.png",
+              "box": [
+                216,
+                296,
+                425,
+                84
+              ]
+            },
+            "drawn": {
+              "file": "v4/patches/v4-l20/brows/drawn.png",
+              "box": [
+                215,
+                296,
+                426,
+                84
+              ]
+            }
+          }
+        },
+        "v4-r20": {
+          "rest": "v4/layers/v4-r20/rest.png",
+          "mouth": {
+            "parted": {
+              "file": "v4/patches/v4-r20/mouth/parted.png",
+              "box": [
+                433,
+                590,
+                222,
+                96
+              ]
+            },
+            "slightSmile": {
+              "file": "v4/patches/v4-r20/mouth/slightSmile.png",
+              "box": [
+                433,
+                590,
+                222,
+                96
+              ]
+            },
+            "smile": {
+              "file": "v4/patches/v4-r20/mouth/smile.png",
+              "box": [
+                433,
+                590,
+                222,
+                96
+              ]
+            },
+            "pressed": {
+              "file": "v4/patches/v4-r20/mouth/pressed.png",
+              "box": [
+                433,
+                590,
+                222,
+                96
+              ]
+            }
+          },
+          "brows": {
+            "raised": {
+              "file": "v4/patches/v4-r20/brows/raised.png",
+              "box": [
+                302,
+                296,
+                426,
+                84
+              ]
+            },
+            "drawn": {
+              "file": "v4/patches/v4-r20/brows/drawn.png",
+              "box": [
+                302,
+                296,
+                426,
+                84
+              ]
+            }
+          }
+        },
+        "v4-r40": {
+          "rest": "v4/layers/v4-r40/rest.png",
+          "mouth": {
+            "parted": {
+              "file": "v4/patches/v4-r40/mouth/parted.png",
+              "box": [
+                493,
+                583,
+                199,
+                96
+              ]
+            },
+            "slightSmile": {
+              "file": "v4/patches/v4-r40/mouth/slightSmile.png",
+              "box": [
+                493,
+                583,
+                199,
+                96
+              ]
+            },
+            "smile": {
+              "file": "v4/patches/v4-r40/mouth/smile.png",
+              "box": [
+                493,
+                583,
+                199,
+                96
+              ]
+            },
+            "pressed": {
+              "file": "v4/patches/v4-r40/mouth/pressed.png",
+              "box": [
+                493,
+                583,
+                199,
+                96
+              ]
+            }
+          },
+          "brows": {
+            "raised": {
+              "file": "v4/patches/v4-r40/brows/raised.png",
+              "box": [
+                386,
+                296,
+                354,
+                84
+              ]
+            },
+            "drawn": {
+              "file": "v4/patches/v4-r40/brows/drawn.png",
+              "box": [
+                386,
+                296,
+                354,
+                84
+              ]
+            }
+          }
+        }
+      }
     },
     "restProof": {
       "image": "rest-diff.png",
@@ -2074,6 +3421,205 @@
         "Hidden-region inpainting (forehead under bangs, cheek under a strand, neck under the jaw) was not attempted \u2014 the gap only shows once a layer is actually displaced by the driver. See README.md.",
         "patches/patches.json's ['hurt'] group(s) have no box/pad/feather (nothing was attempted for them) and do not fit the runtime's PatchGroup shape, so they are left out of the embedded `patches` above rather than embedded malformed. Fix at the source (patches/patches.json) once that group has real geometry, and this embedding will pick it up automatically."
       ]
+    },
+    "v4": {
+      "_readme": "Living-portrait v4 (FFX-2 only): nine keys every ~20 deg (-85..85), each the plate turned in 2.5D and repainted with the plate's LoRA (art/v4/keys.md), finished by rig-v4fix.py, masked by rig-sam.py, cut by rig-v4layers.py. The runtime warps adjacent keys continuously (paint = 'warp'); 'switch' is the v3.3 one-painting-at-a-time fallback (?paint=switch).",
+      "paint": "warp",
+      "tassel": {
+        "dx": {
+          "v4-l85": 183,
+          "v4-l60": 94,
+          "v4-l40": 59,
+          "v4-l20": 12,
+          "frontal": 0,
+          "v4-r20": 29,
+          "v4-r40": 88,
+          "v4-r60": 128,
+          "v4-r85": 223
+        },
+        "overFromDeg": -20,
+        "underToDeg": -40,
+        "hiddenBelowDeg": -55,
+        "_readme": "The plate's earring layer, drawn un-warped at dx (px) interpolated over the bracket; on top of the head from -20 up, under the face (between back and body) from -40 down, cross-faded between; gone behind the head by -55 (the far ear is behind the skull and under the far hair)."
+      },
+      "layers": {
+        "v4-l85": {
+          "rest": "v4/layers/v4-l85/rest.png",
+          "hiddenPx": 43597,
+          "envelopeUsed": {
+            "dx": [
+              -30.2,
+              60.0
+            ],
+            "dy": [
+              -46,
+              18.8
+            ]
+          }
+        },
+        "v4-l60": {
+          "rest": "v4/layers/v4-l60/rest.png",
+          "hiddenPx": 30518,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              60.0
+            ],
+            "dy": [
+              -24.6,
+              37.7
+            ]
+          }
+        },
+        "v4-l40": {
+          "rest": "v4/layers/v4-l40/rest.png",
+          "hiddenPx": 78446,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              60.0
+            ],
+            "dy": [
+              -38.6,
+              50
+            ]
+          }
+        },
+        "v4-l20": {
+          "rest": "v4/layers/v4-l20/rest.png",
+          "hiddenPx": 68876,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              60.0
+            ],
+            "dy": [
+              -46.8,
+              23.8
+            ]
+          }
+        },
+        "v4-r20": {
+          "rest": "v4/layers/v4-r20/rest.png",
+          "hiddenPx": 67460,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              60.0
+            ],
+            "dy": [
+              -32.2,
+              21.4
+            ]
+          }
+        },
+        "v4-r40": {
+          "rest": "v4/layers/v4-r40/rest.png",
+          "hiddenPx": 47319,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              60.0
+            ],
+            "dy": [
+              -41.3,
+              32.4
+            ]
+          }
+        },
+        "v4-r60": {
+          "rest": "v4/layers/v4-r60/rest.png",
+          "hiddenPx": 38033,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              60.0
+            ],
+            "dy": [
+              -52.5,
+              43.1
+            ]
+          }
+        },
+        "v4-r85": {
+          "rest": "v4/layers/v4-r85/rest.png",
+          "hiddenPx": 79886,
+          "envelopeUsed": {
+            "dx": [
+              -60.0,
+              13.4
+            ],
+            "dy": [
+              -20.5,
+              55.4
+            ]
+          }
+        }
+      },
+      "range": "v4/range-warp.json",
+      "masks": "v4/masks/choice.json",
+      "expressions": {
+        "v4-l40": {
+          "mouth": {
+            "parted": "m40-parted.2",
+            "slightSmile": "m40-slightSmile.1",
+            "smile": "m40-smile.1",
+            "pressed": "m40-pressed.2"
+          },
+          "brows": {
+            "raised": "m40-raised.1",
+            "drawn": "m40-drawn.2"
+          }
+        },
+        "v4-l20": {
+          "mouth": {
+            "parted": "m20-parted.1",
+            "slightSmile": "m20-slightSmile.2",
+            "smile": "m20-smile.2",
+            "pressed": "m20-pressed.1"
+          },
+          "brows": {
+            "raised": "m20-raised.1",
+            "drawn": "m20-drawn.1"
+          }
+        },
+        "frontal": {
+          "mouth": {
+            "parted": "0-parted.1",
+            "slightSmile": "0-slightSmile.1",
+            "smile": "0-smile.1",
+            "pressed": "0-pressed.2"
+          },
+          "brows": {
+            "raised": "0-raised.1",
+            "drawn": "0-drawn.1"
+          }
+        },
+        "v4-r20": {
+          "mouth": {
+            "parted": "p20-parted.2",
+            "slightSmile": "p20-slightSmile.2",
+            "smile": "p20-smile.2",
+            "pressed": "p20-pressed.2"
+          },
+          "brows": {
+            "raised": "p20-raised.1",
+            "drawn": "p20-drawn.1"
+          }
+        },
+        "v4-r40": {
+          "mouth": {
+            "parted": "p40-parted.1",
+            "slightSmile": "p40-slightSmile.2",
+            "smile": "p40-smile.1",
+            "pressed": "p40-pressed.2"
+          },
+          "brows": {
+            "raised": "p40-raised.1",
+            "drawn": "p40-drawn.2"
+          }
+        }
+      }
     }
   }
 }

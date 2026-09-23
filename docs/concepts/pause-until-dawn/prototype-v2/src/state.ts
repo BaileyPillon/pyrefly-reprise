@@ -110,6 +110,11 @@ export class PortraitStateMachine {
     this.exprScheduler.forceMouthEvent(patch);
   }
 
+  /** Debug/verification aid (v4) — see `ExpressionScheduler.forceBrowEvent`. */
+  forceBrowEvent(patch?: BrowPatch): void {
+    this.exprScheduler.forceBrowEvent(patch);
+  }
+
   setReducedMotion(on: boolean): void {
     this.reducedMotion = on;
     this.yawSpring.tau = on ? RIG_CONSTANTS.reducedMotion.tau : RIG_CONSTANTS.spring.tau;

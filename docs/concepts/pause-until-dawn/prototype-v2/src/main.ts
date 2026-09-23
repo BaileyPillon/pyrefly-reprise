@@ -28,6 +28,7 @@ function main(): void {
     debugTimeScale,
     debugNoPost: new URLSearchParams(location.search).get('post') === '0',
     debugNoWarp: new URLSearchParams(location.search).get('warp') === '0',
+    debugPaint: ((p) => (p === 'switch' || p === 'warp' ? p : undefined))(new URLSearchParams(location.search).get('paint')),
   });
 
   const start = () => {

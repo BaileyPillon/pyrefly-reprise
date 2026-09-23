@@ -3,8 +3,13 @@
  *
  *   frontal   hairBack, body, headCore, mouth patch, irises, lids, eye patch,
  *             brow patch, hairFront, strands, earring - each on its own motion
- *   yaw key   key.back (hair below the jaw), body, key.front (face + head
- *             hair), then its own lid frame (`KeyLids`)
+ *   yaw key   key.back (the whole head), body, key.front (the face and the
+ *             hair over the body), its mouth patch, its own lid frame
+ *             (`KeyLids`), its brow patch
+ *   tassel    v4: the plate's earring drawn apart from every key, un-warped,
+ *             at the ear's offset for the pose (`TasselDraw`): under the face
+ *             (after the back halves) when the ear is turned away, over
+ *             everything when it faces the camera, cross-faded between
  *
  * Every head layer goes through the head mesh (the key's landmarks onto the
  * pose's), every pinned layer through the body mesh (the chest and the
@@ -42,6 +47,14 @@ export interface Meshes {
   body: Float32Array | null;
 }
 
+/** v4: the plate's tassel for this pose (offset in plate px; `under`/`over` opacities). */
+export interface TasselDraw {
+  t: Tex;
+  offset: Px;
+  under: number;
+  over: number;
+}
+
 /** Below this weight a key is not drawn at all (no faint crop ghost). */
 export const KEY_EPS = 0.002;
 
@@ -72,11 +85,12 @@ export class Composer {
     const offsetFor = (motion: Motion): Px => (motion === 'chest' || motion === 'head' ? [0, 0] : m[motion]);
     let behindBody = true;
     for (const { layer, t } of art.frontal) {
+      if (art.tassel && layer.name === 'earring') continue; // v4: drawn by drawTassel, un-warped
       const pinned = layer.motion === 'chest';
       if (pinned) behindBody = false;
       if (part !== 'all' && (pinned || (part === 'back') !== behindBody)) continue;
       L.draw(t.tex, t.box, offsetFor(layer.motion), 1, pinned ? 1 : gain, pinned);
-      if (layer.name === 'headCore' && face.mouth !== 'neutral') {
+      if (layer.name === 'headCore' && face.mouth !== 'neutral' && face.mouthWeight > KEY_EPS) {
         const p = art.mouth.get(face.mouth);
         if (p) L.draw(p.tex, p.box, [0, 0], face.mouthWeight, gain);
       }
@@ -99,25 +113,44 @@ export class Composer {
     if (body) this.L.draw(body.tex, body.box, [0, 0], 1, 1, true);
   }
 
+  /** v4: the plate's tassel, un-warped, at the pose's ear offset (`which` of its two opacities). */
+  drawTassel(td: TasselDraw | null, which: 'under' | 'over', gain: number): void {
+    const w = td ? td[which] : 0;
+    if (!td || w <= KEY_EPS) return;
+    this.L.beginLayers(null, null);
+    this.L.draw(td.t.tex, td.t.box, td.offset, w, gain);
+  }
+
   /** One key's composite (`all`), or its head behind the body (`back`) or in front of it (`front`). */
-  drawKey(key: RigKey, face: FaceFrame, m: Motions, gain: number, meshes: Meshes, part: KeyPart = 'all'): void {
+  drawKey(key: RigKey, face: FaceFrame, m: Motions, gain: number, meshes: Meshes, part: KeyPart = 'all', td: TasselDraw | null = null): void {
     const L = this.L;
     L.beginLayers(meshes.head, meshes.body);
     if (key.id === 'frontal') {
       this.drawFrontal(face, m, gain, part);
+      if (part === 'all') this.drawTassel(td, 'over', gain);
       return;
     }
     const k = this.art.keys.get(key.id);
     if (!k) return;
     if (part !== 'front') L.draw(k.back.tex, k.back.box, [0, 0], 1, gain);
-    if (part === 'all') this.drawBody(true);
+    if (part === 'all') {
+      this.drawTassel(td, 'under', gain);
+      L.beginLayers(meshes.head, meshes.body);
+      this.drawBody(true);
+    }
     if (part === 'back') return;
     L.draw(k.front.tex, k.front.box, [0, 0], 1, gain);
+    const kp = this.art.keyPatches.get(key.id);
+    const mouth = face.mouth !== 'neutral' ? kp?.mouth.get(face.mouth) : undefined;
+    if (mouth && face.mouthWeight > KEY_EPS) L.draw(mouth.tex, mouth.box, [0, 0], face.mouthWeight, gain);
     const lids = this.art.keyLids.get(key.id);
     if (lids) {
       const best = nearestLid(lids, face.eyeAperture);
       if (best) L.draw(best.t.tex, best.t.box, [0, 0], 1, gain);
     }
+    const brow = face.brow !== 'neutral' ? kp?.brows.get(face.brow) : undefined;
+    if (brow && face.browWeight > KEY_EPS) L.draw(brow.tex, brow.box, [0, 0], face.browWeight, gain);
+    if (part === 'all') this.drawTassel(td, 'over', gain);
   }
 
   /**
@@ -147,7 +180,7 @@ export class Composer {
    * A dissolve between two keys already warped onto the same pose: back
    * halves, the body once, front halves; each pair mixed by coverage.
    */
-  drawDissolve(from: RigKey, to: RigKey, w: number, mFrom: Meshes, mTo: Meshes, face: FaceFrame, m: Motions, gain: number, targets: FrameBufferTarget[]): void {
+  drawDissolve(from: RigKey, to: RigKey, w: number, mFrom: Meshes, mTo: Meshes, face: FaceFrame, m: Motions, gain: number, targets: FrameBufferTarget[], td: TasselDraw | null = null): void {
     const [scene, ta, tb] = targets as [FrameBufferTarget, FrameBufferTarget, FrameBufferTarget];
     const turned = (from.id !== 'frontal' ? 1 - w : 0) + (to.id !== 'frontal' ? w : 0);
     this.bind(scene, 'bg');
@@ -158,8 +191,12 @@ export class Composer {
       this.drawKey(to, face, m, gain, mTo, part);
       this.bind(scene, 'keep');
       this.L.mixUnion(ta.tex, tb.tex, w);
-      if (part === 'back') this.drawBlendBody(turned, mTo.body, targets);
+      if (part === 'back') {
+        this.drawTassel(td, 'under', gain);
+        this.drawBlendBody(turned, mTo.body, targets);
+      }
     }
+    this.drawTassel(td, 'over', gain);
   }
 }
 
