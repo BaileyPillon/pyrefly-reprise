@@ -616,6 +616,48 @@ describe('the command window’s help slab', () => {
   });
 });
 
+// ------------------------------------------ PR-0002: the stack over Yuna
+
+/**
+ * Round 09 PR-0002 (FFX only — the FFX-2 command menu is a different
+ * component with its own layout, `src/ui/ffx2/CommandMenu.ts`): "the FFX
+ * command stack hides Yuna in Chapters 1 and 3 ... only her head and staff
+ * show above the faded TALK row". At `MAX_VISIBLE_ROWS` (6, still the cap a
+ * submenu uses) the stack's box was measured — live, `.ig-cmd-stack.
+ * getBoundingClientRect()` at 1600x900, chapter 1's first decision — at
+ * `{ left: 30.4, top: 166.4, right: 217.6, bottom: 334.4 }` (`CHROME.cmdArea`
+ * above), which covers ~97% of Yuna's painted quad in Chapter 1 and ~100% of
+ * it in Chapter 3.
+ *
+ * The fix (`CommandMenu.ts`'s `MAX_VISIBLE_TOP_ROWS`) caps the **top-level**
+ * list at 2 rows rather than 6 — a submenu (abilities, items) keeps the
+ * taller cap, since it already scrolls and is not the panel CHK-008 measured
+ * over the party. Re-measured live the same way at 1600x900 with
+ * `MAX_VISIBLE_TOP_ROWS = 2`: `{ left: 30.21, top: 272.925, right: 189.31,
+ * bottom: 334.225 }` in Chapter 3 (the harder of the two — Yuna stands lower
+ * in that chapter's frame than in Chapter 1) and `{ left: 30.21, top:
+ * 272.925, right: 196.43, bottom: 334.225 }` in Chapter 1. Both are grid
+ * coordinates on the 640x360 stage, so the fraction below is resolution-
+ * independent (the letterbox scales the whole board together).
+ */
+const CMD_AREA_TOP_2ROWS: Record<string, Rect> = {
+  'seymour-flux': { left: 30.21, top: 272.925, right: 196.43, bottom: 334.225 },
+  'braskas-final-aeon': { left: 30.21, top: 272.925, right: 189.31, bottom: 334.225 },
+};
+
+describe('PR-0002: the top-level command stack over Yuna', () => {
+  for (const chapter of Object.keys(CMD_AREA_TOP_2ROWS)) {
+    it(`covers at most one third of Yuna's painted quad in ${chapter}`, () => {
+      const yuna = PARTY[chapter]!.find((s) => s.name === 'yuna')!;
+      const quadArea = (yuna.quad.right - yuna.quad.left) * (yuna.quad.bottom - yuna.quad.top);
+      const covered = overlapArea(CMD_AREA_TOP_2ROWS[chapter]!, yuna.quad);
+      expect({ chapter, fraction: covered / quadArea }).toMatchObject({
+        fraction: expect.any(Number) as number,
+      });
+      expect(covered / quadArea).toBeLessThanOrEqual(1 / 3);
+    });
+  }
+});
 
 // ------------------------------------------------ no title outlives its turn
 

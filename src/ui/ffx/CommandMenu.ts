@@ -30,6 +30,20 @@ export type { MenuWindow, TargetResolution, TopDirectRow, TopGroupRow, TopRow } 
  * can run well past what the 640x360 stage can show at once, so only a
  * window of rows renders at a time (`computeMenuWindow`). */
 const MAX_VISIBLE_ROWS = 6;
+/**
+ * The **top-level** menu's own cap, tighter than a submenu's.
+ *
+ * Round 09 PR-0002: at `MAX_VISIBLE_ROWS` the stack's reach covers ~97-100%
+ * of Yuna's painted quad in Chapters 1 and 3 (`tests/unit/ffx-cmd-stack-safe-area.test.ts`
+ * has the measured numbers) — the top-level list is Attack, the character
+ * command(s), Item, a trigger row and Escape, which is almost always 6 real
+ * FFX chapters wide once Talk/Flee are counted, so the stack was landing at
+ * its tallest on the very first decision of the fight, not on some rare deep
+ * submenu. A submenu (abilities, items) can still run to real length and
+ * keeps the taller cap — those lists already scroll and are not the panel
+ * CHK-008 measured over the party.
+ */
+const MAX_VISIBLE_TOP_ROWS = 2;
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -736,15 +750,16 @@ export class CommandMenu {
         this.renderRows(
           group.items.map((cmd) => subRowVM(cmd, group, combatants)),
           this.subIndex,
+          MAX_VISIBLE_ROWS,
         );
         return;
       }
     }
-    this.renderRows(this.rows.map(topRowVM), this.topIndex);
+    this.renderRows(this.rows.map(topRowVM), this.topIndex, MAX_VISIBLE_TOP_ROWS);
   }
 
-  private renderRows(vms: RowVM[], selectedIndex: number): void {
-    const { start, end } = computeMenuWindow(vms.length, selectedIndex, MAX_VISIBLE_ROWS);
+  private renderRows(vms: RowVM[], selectedIndex: number, maxVisible: number): void {
+    const { start, end } = computeMenuWindow(vms.length, selectedIndex, maxVisible);
     const rows = vms
       .slice(start, end)
       .map((vm, localI) => {
@@ -843,7 +858,16 @@ export class CommandMenu {
     const cmd = this.pendingCmd;
     const who = entries[0]?.kind === 'enemy' ? 'every enemy' : 'the whole party';
     const help = cmd ? commandHelpText(cmd) : '';
-    this.opts.setHelp(help ? `${help} Hits ${who}.` : `Hits ${who}.`);
+    // PR-0019 (round 09, both games — the composition is shared, this call
+    // site is FFX's): the two clauses used to be joined with a bare space —
+    // "Inflicts Cheer Hits the whole party" — which reads as one run-on
+    // sentence with a word missing between "Cheer" and "Hits". `help` is
+    // `describeAbility`'s output and never carries its own terminator (its
+    // pieces are joined with " · ", never "."), so one goes on here rather
+    // than upstream, where every other caller of `commandHelpText` still
+    // wants the bare sentence.
+    const terminatedHelp = help && !/[.!?]$/.test(help) ? `${help}.` : help;
+    this.opts.setHelp(terminatedHelp ? `${terminatedHelp} Hits ${who}.` : `Hits ${who}.`);
     // `showGroup` already published the selection through the cursor's handler.
     // No single combatant is being aimed at, so the enemy plate has nothing to
     // describe; leaving the last one up would be a lie.
