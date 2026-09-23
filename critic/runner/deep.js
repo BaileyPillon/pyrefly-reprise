@@ -11,7 +11,7 @@ const REVIEW = (args && args.review) === 'milestone' ? 'milestone' : 'deep'
 const SHA = (args && args.sha) || '(the main= value on the last line of docs/deploys.log)'
 const BUNDLE = (args && args.bundle) || '?'
 const ROOT = (args && args.root) || MAIN
-const SUBJECT = (args && args.candidate) ? `the PRODUCTION CANDIDATE built from ${ROOT} (build it into dist-gate with "npx vite build --outDir dist-gate --emptyOutDir" if it is not there, serve it with vite preview on a free port 5400-5990 and stop it afterwards); it is not deployed yet, so the deployment verdict is NOT APPLICABLE` : `the LIVE site ${LIVE}`
+const SUBJECT = (args && args.candidate) ? `the PRODUCTION CANDIDATE built from ${ROOT} (build it into dist-gate with "npx vite build --outDir dist-gate --emptyOutDir" if it is not there, serve it with vite preview on a free port 5400-5990 and stop it afterwards); it is not deployed yet, so the deployment verdict is NOT APPLICABLE. Before you return, stop every server you started by its own listening PID (never taskkill by image name), confirm the port is closed, and say so in your notes; a server left running blocks the next release cut.` : `the LIVE site ${LIVE}`
 const CHANGED = (args && args.changed) || 'read git log since the previous deep review named in critic/ledger.json'
 const SONNET = new Set((args && args.sonnetKeys) || [])
 const EVID = `${MAIN}/critic/rounds/round-${ROUND}`
