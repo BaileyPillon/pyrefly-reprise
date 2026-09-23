@@ -7,6 +7,7 @@
  */
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
+import { MOMENT_TIMING } from './BattleMoments.ts';
 import {
   banner,
   cue,
@@ -216,4 +217,25 @@ export async function defeat(ctx: EventCtx): Promise<void> {
     if (ctx.stage.sideOf(id) === 'party') ctx.stage.actor(id)?.setPose('ko');
   }
   await ctx.sleep(TIMING.defeat);
+}
+
+/**
+ * Before a command menu opens: if the shot is anywhere but `idle`, bring it
+ * back (and let go of any held push) so the player chooses with the whole
+ * field in frame.
+ *
+ * PR-0094: at the seam into chapter 5's link 5, `shuyin-appears` ends on
+ * `camera('action')`, and Shuyin's first turn raises the Terror of Zanarkand
+ * telegraph (held zoom on the `enemy` rig) and starts its cast; FFX-2's ATB
+ * then opens Yuna's menu mid-cast, so the menu sat on a Shuyin close-up with
+ * Yuna and Rikku off-frame and Paine cut at the edge. The telegraph's vignette
+ * and the HUD's banner stay up; only the framing returns. Presenter plumbing,
+ * so **both games** (CHK-020); FFX's CTB rarely opens a menu off `idle`, since
+ * every action's close already returns there.
+ */
+export async function settleForMenu(ctx: EventCtx): Promise<void> {
+  const idle = ctx.moments.pick('idle');
+  if (!idle || ctx.stage.camera.rigName === idle) return;
+  const ms = MOMENT_TIMING.returnOut;
+  await Promise.all([ctx.stage.camera.release?.(ctx.moments.ms(ms)), ctx.moments.moveToRig(idle, ms)]);
 }

@@ -36,6 +36,7 @@ import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvent
 import { clockEngine, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
+import { settleForMenu } from './BattlePresenterBeats.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -453,6 +454,7 @@ export class BattlePresenter {
     if (!hud) return firstEnabled(commands);
 
     this.ctx.stage.actor(actorId)?.setPose('ready');
+    await settleForMenu(this.ctx); // PR-0094: the whole field in frame
     await this.cutIns.play(engine.state(), actorId); // gone before the menu opens
     const previewRank = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot =>
       previewOf(engine, cmd?.command);
