@@ -17,6 +17,9 @@ import {
   BRIEFING_LINES,
   BRIEFING_MS,
   BRIEFING_WAIT_LINE,
+  COACH_RUNNING_BADGE_ACTIVE,
+  COACH_RUNNING_BADGE_WAIT,
+  coachRunningBadge,
   FFX2_MARKS,
   FFX_MARKS,
   markById,
@@ -29,6 +32,9 @@ function everyPlayerString(): string[] {
   const out: string[] = [];
   for (const l of [...BRIEFING_LINES, BRIEFING_WAIT_LINE]) out.push(l.lead, l.strong, l.tail);
   for (const m of ALL_MARKS) out.push(m.speaker, m.body);
+  // Strip the badges' HTML entities before the vocabulary grep (they are markup,
+  // not player-facing spelling) but still catch a stray research id or acronym.
+  out.push(COACH_RUNNING_BADGE_ACTIVE.replace(/&\w+;/g, ' '), COACH_RUNNING_BADGE_WAIT.replace(/&\w+;/g, ' '));
   return out.filter((s) => s.length > 0);
 }
 
@@ -105,6 +111,28 @@ describe('onboarding copy deck', () => {
     expect(line?.speaker).toBe('Rikku');
     expect(line?.holds, 'no FFX-2 line holds the fight').toBe(false);
     expect(line?.body.length ?? 0, 'one line, not a paragraph').toBeLessThan(160);
+  });
+
+  it('the FFX-2 running badge only claims the clock runs under Active, and states the Wait truth instead (round 09 PR-0046, reopened)', () => {
+    // Active: Bailey's approved C3 words, unchanged (D-009, 2026-09-21;
+    // measured true on the running engine in CoachMark.ts's own comment).
+    expect(coachRunningBadge('active')).toBe(COACH_RUNNING_BADGE_ACTIVE);
+    expect(COACH_RUNNING_BADGE_ACTIVE).toMatch(/nothing paused/i);
+    expect(COACH_RUNNING_BADGE_ACTIVE).toMatch(/running/i);
+
+    // Wait (the default since D-029): the engine holds every gauge while a
+    // command menu is open (tests/unit/ffx2-wait-mode.test.ts), so the badge
+    // must say the opposite of "nothing paused / gauges running" here.
+    expect(coachRunningBadge('wait')).toBe(COACH_RUNNING_BADGE_WAIT);
+    expect(COACH_RUNNING_BADGE_WAIT).not.toMatch(/nothing paused/i);
+    expect(COACH_RUNNING_BADGE_WAIT).not.toMatch(/gauges running/i);
+    expect(COACH_RUNNING_BADGE_WAIT.toLowerCase()).toMatch(/hold|paus|wait/);
+
+    // Still the same badge shape: two short phrases joined by a middle dot.
+    for (const badge of [COACH_RUNNING_BADGE_ACTIVE, COACH_RUNNING_BADGE_WAIT]) {
+      expect(badge).toMatch(/&middot;/);
+      expect(badge.replace(/&\w+;/g, ' ').length).toBeLessThan(48);
+    }
   });
 
   it('no player-facing string carries developer or wiki vocabulary (CHK-007, REQUIRED 14)', () => {

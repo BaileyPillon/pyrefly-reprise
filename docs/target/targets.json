@@ -696,7 +696,8 @@
             "undecided": [],
             "inferred": [
               "options A and B were not picked; nothing on record says Bailey disliked them",
-              "Wait-mode fourth line drafted by the agent, awaiting Bailey: “In hers, the clock holds while you choose.” It replaces only line 4, and only while the X-2 BATTLE row reads WAIT (D-029 follow-up 3, Bailey 2026-09-23: “1, 2, 3 I’ll take your recommendations on all please”, which adopted the mode-aware line but did not see this wording). His approved line “In hers, the clock does not wait” is unchanged and shows whenever the row reads ACTIVE. src/ui/coach/coachCopy.ts BRIEFING_WAIT_LINE."
+              "Wait-mode fourth line drafted by the agent, awaiting Bailey: “In hers, the clock holds while you choose.” It replaces only line 4, and only while the X-2 BATTLE row reads WAIT (D-029 follow-up 3, Bailey 2026-09-23: “1, 2, 3 I’ll take your recommendations on all please”, which adopted the mode-aware line but did not see this wording). His approved line “In hers, the clock does not wait” is unchanged and shows whenever the row reads ACTIVE. src/ui/coach/coachCopy.ts BRIEFING_WAIT_LINE.",
+              "Round 09 PR-0046 reopened: the C3 first-turn coach badge (this tile's third mockup) said 'Nothing paused · gauges running' under every FFX-2 mark, which D-029's Wait default made false again (the engine holds every gauge while a command menu is open). The badge is now mode-aware the same way line 4 is: 'Nothing paused · gauges running' still shows under ACTIVE (his approved C3 words, unchanged); under WAIT it draws the agent's draft, 'Menu's up · gauges holding', awaiting Bailey. src/ui/coach/coachCopy.ts COACH_RUNNING_BADGE_WAIT / coachRunningBadge(), read by src/ui/coach/CoachMark.ts at show time."
             ]
           }
         },
@@ -947,7 +948,9 @@
             "undecided": [
               "YRP in Syndicate-pink outfits — recommended deferred to v2, not this build"
             ],
-            "inferred": []
+            "inferred": [
+              "Round 09 PR-0093 (major, visual): the trio was staged at boss scale (worldHeight 4.1, `src/scenes/index.ts`'s `fromSceneBuild` hard-coded that for every scene), so 'short and stout' Ormi was the tallest figure on the field. Fixed by publishing this scene's own `partyHeight`/`enemyHeight` (`src/scenes/leblanc-last-room.ts`'s `LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna`/`.leblanc`) through `fromSceneBuild`, with 1.82/4.1 kept as the fallback for every scene that does not publish its own (chapters 1-5 unaffected, pinned by `tests/unit/chapters/leblanc-scene.test.ts`). A single scalar cannot give Ormi and Logos their own distinct heights — every Syndicate member is `isBoss`, so `BattlePresenterStage.ts`'s `worldHeightFor` scales all three off this one number — that would need a per-slot height table read by that file, which is out of this fix's scope (agent's inference, not asked of Bailey). Screenshot: docs/screenshots/chapters/pr-0093-scale.png (chapter 6, seed 1, real gotoChapter, PYREFLY_BROWSER=gpu)."
+            ]
           }
         }
       ]

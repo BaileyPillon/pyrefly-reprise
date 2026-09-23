@@ -59,7 +59,8 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../src/battle/common/types.ts';
-import type { HudPort } from '../../src/engine/HudPort.ts';
+import type { HudPort, TargetingPort } from '../../src/engine/HudPort.ts';
+import type { IntentSource } from '../../src/ui/common/EnemyIntent.ts';
 import { withCoach, markForEvent, markForMenu } from '../../src/ui/coach/CoachLayer.ts';
 import { resetCoach, setCoachingEnabled } from '../../src/ui/coach/coachState.ts';
 
@@ -91,6 +92,52 @@ class SpyHud implements HudPort {
   }
   setVisible(): void {}
   setProjector(): void {}
+}
+
+/**
+ * Records every call to `HudPort`'s optional members, plus the duck-typed
+ * `setIntentSource` (`EnemyIntent.ts`'s `IntentAwareHud`; not part of
+ * `HudPort` itself — see `CoachLayer.ts`'s own comment on why). PR-0090: the
+ * enemy-intent panel never appeared in either game because `CoachedHud` had
+ * no `setIntentSource` forward at all, so `attachEnemyIntent`'s
+ * `typeof h.setIntentSource === 'function'` probe on the wrapper silently
+ * failed and the real HUD's panel was never wired to an engine.
+ */
+class OptionalSpyHud implements HudPort {
+  calls: Array<{ name: string; args: unknown[] }> = [];
+  mount(): void {}
+  unmount(): void {}
+  sync(): void {}
+  chooseCommand(): Promise<Command> {
+    return Promise.resolve({ kind: 'attack', actor: 'a' as CombatantId, targets: [] } as Command);
+  }
+  onEvent(): void {}
+  openMinigame(): Promise<MinigameResult> {
+    return Promise.resolve({} as MinigameResult);
+  }
+  setVisible(): void {}
+  setProjector(): void {}
+  syncVitals(state: BattleState): void {
+    this.calls.push({ name: 'syncVitals', args: [state] });
+  }
+  syncGauges(snapshot: AtbSnapshot): void {
+    this.calls.push({ name: 'syncGauges', args: [snapshot] });
+  }
+  closeCommandMenu(): void {
+    this.calls.push({ name: 'closeCommandMenu', args: [] });
+  }
+  setAtbMode(mode: 'wait' | 'active'): void {
+    this.calls.push({ name: 'setAtbMode', args: [mode] });
+  }
+  setTargetingPort(port: TargetingPort): void {
+    this.calls.push({ name: 'setTargetingPort', args: [port] });
+  }
+  update(dt: number): void {
+    this.calls.push({ name: 'update', args: [dt] });
+  }
+  setIntentSource(source: IntentSource | null): void {
+    this.calls.push({ name: 'setIntentSource', args: [source] });
+  }
 }
 
 function rows(kinds: Array<Command['kind']>): AvailableCommand[] {
@@ -260,17 +307,27 @@ describe('the coach layer', () => {
     expect(line, 'and the line outlives its own promise, on screen while play continues').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
     expect(line?.textContent).toContain('Rikku');
-    // The badge claims the engine's clock is running under the menu, which is
-    // the approved C3 mockup's wording. It was demoted to "Keep playing ·
-    // nothing to press" while that claim was false (round 05 PR-0046 measured
-    // ticks 8189 -> 8189 over 2013 ms) and restored once FFX-2's Active ATB
-    // made it true: measured 8189 -> 11344 over 2445 ms on the same read, with
-    // the FFX control unchanged at 0. **This pin is the badge's other half:**
-    // if Active is ever backed out, `src/battle/ffx2/active.ts` goes with it
-    // and this line must go back to a claim the build can keep.
-    expect(line?.textContent).toContain('Nothing paused');
-    expect(line?.textContent).toContain('gauges running');
+    // Round 09 PR-0046 (reopened): the badge is mode-aware
+    // (`coachRunningBadge` in `coachCopy.ts`), because "nothing paused, gauges
+    // running" is true only under Active. This test's fake save has no
+    // `ffx2Atb` setting, so `ffx2AtbMode()` reads the shipped default, Wait
+    // (D-029) — the same default a fresh profile gets — where the engine
+    // holds every gauge while this very menu is open
+    // (`tests/unit/ffx2-wait-mode.test.ts`). The badge must say that, not the
+    // Active claim.
+    expect(line?.textContent).not.toContain('Nothing paused');
+    expect(line?.textContent).not.toContain('gauges running');
+    expect(line?.textContent?.toLowerCase()).toMatch(/hold|paus|wait/);
   });
+
+  // The Active-mode half of this pin ("Nothing paused · gauges running" comes
+  // back once the save says ACTIVE) lives in `ui-coach-copy.test.ts`
+  // (`coachRunningBadge('active')`) rather than here: this describe block's
+  // other tests all assume `activeSave()` is null (no test here constructs a
+  // `SaveStore`, unlike `ui-coach-briefing-mode.test.ts`), and `SaveStore`'s
+  // constructor sets the module-level active save for the rest of this file
+  // with no reset hook — a `SaveStore` built in one `it` here would leak into
+  // every test after it in this same file.
 
   /**
    * PR-0051. The FFX-2 line does not hold the menu, so the menu is already open
@@ -405,6 +462,52 @@ describe('the coach layer', () => {
     const sphere = { type: 'spherechange', who: 'y', from: 'a', to: 'b', gatesCrossed: [] } as unknown as BattleEvent;
     expect(markForEvent('ffx', sphere, unseen)).toBeNull();
     expect(markForEvent('ffx2', sphere, unseen)?.id).toBe('ffx2-dressphere');
+  });
+
+  /**
+   * PR-0090's failure mode was silent: an optional forward simply missing
+   * from `CoachedHud`, caught by nothing until a deep review's real browser
+   * capture. This drives every optional `HudPort` member (enumerated here,
+   * by name, against the interface in `src/engine/HudPort.ts` — keep this
+   * list in sync with that file so a future optional method added there and
+   * left unforwarded fails here instead of shipping quietly) plus the
+   * duck-typed `setIntentSource`, and asserts each one reaches the real HUD
+   * with the exact argument passed in.
+   */
+  it('forwards every optional HudPort member, and the duck-typed setIntentSource, to the inner HUD', () => {
+    const spy = new OptionalSpyHud();
+    const hud = withCoach('ffx', spy, { reduceMotion: true }) as HudPort & {
+      setIntentSource(source: IntentSource | null): void;
+    };
+    hud.mount(root);
+
+    const state = {} as BattleState;
+    hud.syncVitals?.(state);
+
+    const snapshot = {} as AtbSnapshot;
+    hud.syncGauges?.(snapshot);
+
+    hud.closeCommandMenu?.();
+
+    hud.setAtbMode?.('active');
+
+    const port = {} as TargetingPort;
+    hud.setTargetingPort?.(port);
+
+    hud.update?.(0.5);
+
+    const source: IntentSource = () => null;
+    hud.setIntentSource(source);
+
+    expect(spy.calls).toEqual([
+      { name: 'syncVitals', args: [state] },
+      { name: 'syncGauges', args: [snapshot] },
+      { name: 'closeCommandMenu', args: [] },
+      { name: 'setAtbMode', args: ['active'] },
+      { name: 'setTargetingPort', args: [port] },
+      { name: 'update', args: [0.5] },
+      { name: 'setIntentSource', args: [source] },
+    ]);
   });
 
   it('a line never outlives the HUD it was mounted on', async () => {

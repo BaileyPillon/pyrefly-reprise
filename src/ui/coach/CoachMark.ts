@@ -30,7 +30,8 @@ import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
 import { bandClearOf, slideClearOf } from './coachAvoid.ts';
-import type { CoachMark as CoachMarkDef } from './coachCopy.ts';
+import { coachRunningBadge, type CoachMark as CoachMarkDef } from './coachCopy.ts';
+import { ffx2AtbMode } from './coachState.ts';
 
 /** How a line ended. */
 export type CoachMarkOutcome = 'confirmed' | 'faded' | 'cancelled';
@@ -121,11 +122,18 @@ export class CoachMark {
     // genuinely runs under an open menu (`src/engine/BattlePresenterActive.ts`).
     // Measured on the shipped build at 1600x900, same read, same chapter:
     // **8189 -> 11344 over 2445 ms**, with the FFX control still 0 -> 0. The
-    // engine claim is true, so the approved words come back.
+    // engine claim is true, so the approved words come back for that mode.
+    //
+    // Round 09 PR-0046 (reopened): D-029 made Wait the default again, and the
+    // engine holds the clock while a command menu is open under Wait — the
+    // opposite of what the words above say. The badge is now mode-aware
+    // (`coachRunningBadge` in `coachCopy.ts`), read at show time so a flip in
+    // the same pause session is honoured, the same way the briefing's fourth
+    // line already reads `ffx2AtbMode()` (`Briefing.ts`).
     // FFX-2 only: FFX is CTB and its line holds the menu by design.
     const running =
       mark.game === 'ffx2'
-        ? '<div class="coach-mark__running">Nothing paused &middot; gauges running</div>'
+        ? `<div class="coach-mark__running">${coachRunningBadge(ffx2AtbMode())}</div>`
         : '';
     const foot = mark.holds
       ? '<span><b>Enter</b> continue</span><span>First time only</span>'

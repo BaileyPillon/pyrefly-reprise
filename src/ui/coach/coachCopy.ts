@@ -117,6 +117,34 @@ export function briefingLines(ffx2Atb: 'active' | 'wait'): readonly BriefingLine
 export const BRIEFING_MS = 20_000;
 
 /**
+ * The FFX-2 first-turn coach badge (round 09 PR-0046, reopened).
+ *
+ * `CoachMark.ts` printed `'Nothing paused &middot; gauges running'` for every
+ * FFX-2 mark, whatever the save's clock mode. That is Bailey's approved C3
+ * wording and it is true under **Active** (Bailey's 2026-09-21 pick, D-009) —
+ * the FFX-2 engine genuinely keeps ticking with a command menu open. D-029
+ * made **Wait** the default again on 2026-09-23, and under Wait the claim is
+ * false: the engine holds every gauge for as long as a command menu stays
+ * open (`docs/handoff/ffx2-wait-mode.md` §1;
+ * `tests/unit/ffx2-wait-mode.test.ts` "6 s with a menu open — no tick").
+ *
+ * {@link COACH_RUNNING_BADGE_WAIT} is the agent's draft, not Bailey's words —
+ * recorded INFERRED on tile "Onboarding C1: Auron's briefing" in
+ * `docs/target/targets.json` (rule 9), the same way {@link BRIEFING_WAIT_LINE}
+ * was. It keeps Rikku's badge voice and shape ("phrase &middot; phrase") and
+ * says only what the engine does: the menu itself is what is holding things.
+ *
+ * FFX-2 only — `CoachMark.ts` never shows this badge for an FFX mark.
+ */
+export const COACH_RUNNING_BADGE_ACTIVE = 'Nothing paused &middot; gauges running';
+export const COACH_RUNNING_BADGE_WAIT = 'Menu&rsquo;s up &middot; gauges holding';
+
+/** The FFX-2 running badge for the save's current clock mode. */
+export function coachRunningBadge(ffx2Atb: 'active' | 'wait'): string {
+  return ffx2Atb === 'active' ? COACH_RUNNING_BADGE_ACTIVE : COACH_RUNNING_BADGE_WAIT;
+}
+
+/**
  * FFX's lines. Auron, and each one holds the decision until a confirm press.
  *
  * Keyed by **mechanic**, not by chapter (`docs/plans/onboarding-review.md`
