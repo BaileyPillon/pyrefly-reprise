@@ -6,6 +6,8 @@ import { mkdirSync } from 'node:fs';
 
 import { expect, test, type Page } from '@playwright/test';
 
+import './support/pyrefly-window.ts';
+
 /**
  * PR-0122 (round 09, the one blocking issue): the enemy-intent slab
  * (`src/ui/common/EnemyIntent.ts`) painted **over** the pause screen — the
@@ -50,21 +52,6 @@ import { expect, test, type Page } from '@playwright/test';
  * 5990, torn down by its own PID in `afterAll` — never the shared `dist/`
  * another agent's e2e or screenshot pass may depend on mid-run.
  */
-
-declare global {
-  interface Window {
-    __pyrefly: {
-      screen(): string;
-      trigger(name: string): boolean;
-      skipCutscene(): void;
-      battleLog(): unknown[];
-      app: { screens: Array<{ name: string; snapshot(): Record<string, unknown> }> };
-      battle(): { snapshot(): Record<string, unknown> } | null;
-      autoBattle(strategy?: string): boolean;
-    };
-    __pyreflyReady?: boolean;
-  }
-}
 
 // Headless WebGL under a real chapter, plus this repo's shared-machine load
 // (several agents' own dev servers and browsers at once — `pause.spec.ts`
@@ -168,12 +155,12 @@ interface Look {
 
 const look = (page: Page): Promise<Look> =>
   page.evaluate(() => {
-    const battle = window.__pyrefly.battle();
+    const battle = window.__pyrefly!.battle();
     const b = (battle?.snapshot() ?? {}) as Record<string, never>;
     const playback = (b['playback'] ?? null) as { awaitingMenu?: boolean } | null;
     return {
-      screen: window.__pyrefly.screen(),
-      stack: window.__pyrefly.app.screens.map((s) => s.name),
+      screen: window.__pyrefly!.screen(),
+      stack: window.__pyrefly!.app.screens.map((s) => s.name),
       awaitingMenu: playback?.awaitingMenu ?? null,
     };
   });
@@ -191,7 +178,7 @@ async function waitUntil(
   }
 }
 
-const screenOf = (page: Page): Promise<string> => page.evaluate(() => window.__pyrefly.screen());
+const screenOf = (page: Page): Promise<string> => page.evaluate(() => window.__pyrefly!.screen());
 
 /** Title -> chapter select -> prep -> `chapterId`'s battle, real screen changes throughout. */
 async function enterChapter(page: Page, chapterId: string): Promise<void> {
@@ -205,19 +192,19 @@ async function enterChapter(page: Page, chapterId: string): Promise<void> {
   });
   expect(atChapterSelect, 'Enter never reached chapter select').toBe(true);
 
-  await page.evaluate((id) => window.__pyrefly.trigger(`select:${id}`), chapterId);
+  await page.evaluate((id) => window.__pyrefly!.trigger(`select:${id}`), chapterId);
   const atPrep = await waitUntil(page, async () => (await screenOf(page)) === 'party-prep', {
     timeoutMs: 30_000,
     intervalMs: 300,
   });
   expect(atPrep, `selecting ${chapterId} never reached party prep`).toBe(true);
 
-  await page.evaluate(() => window.__pyrefly.trigger('prep:begin'));
+  await page.evaluate(() => window.__pyrefly!.trigger('prep:begin'));
   const reachedBattle = await waitUntil(
     page,
     async () => {
       const s = await screenOf(page);
-      if (s === 'cutscene') await page.evaluate(() => window.__pyrefly.skipCutscene());
+      if (s === 'cutscene') await page.evaluate(() => window.__pyrefly!.skipCutscene());
       return s === 'battle';
     },
     { timeoutMs: 60_000, intervalMs: 300 },
@@ -226,10 +213,10 @@ async function enterChapter(page: Page, chapterId: string): Promise<void> {
 }
 
 async function waitForCommandMenu(page: Page): Promise<void> {
-  await page.evaluate(() => window.__pyrefly.trigger('battle:fast'));
+  await page.evaluate(() => window.__pyrefly!.trigger('battle:fast'));
   const ok = await waitUntil(page, async () => Boolean((await look(page)).awaitingMenu), { timeoutMs: 90_000, intervalMs: 300 });
   if (!ok) throw new Error('the battle never reached a command menu');
-  await page.evaluate(() => window.__pyrefly.trigger('battle:normal'));
+  await page.evaluate(() => window.__pyrefly!.trigger('battle:normal'));
 }
 
 // -------------------------------------------------------------- .eint reads
@@ -365,8 +352,8 @@ async function firstReachablePoint(
  * first move does no direct damage).
  */
 async function spawnNumeral(page: Page): Promise<{ x: number; y: number } | null> {
-  await page.evaluate(() => window.__pyrefly.trigger('battle:normal'));
-  await page.evaluate(() => window.__pyrefly.autoBattle('intended'));
+  await page.evaluate(() => window.__pyrefly!.trigger('battle:normal'));
+  await page.evaluate(() => window.__pyrefly!.autoBattle('intended'));
   const got = await waitUntil(page, async () => (await numeralState(page)).present, { timeoutMs: 20_000, intervalMs: 200 });
   const state = got ? await numeralState(page) : null;
   const point = state?.rect ? centreOf(state.rect) : null;
@@ -376,7 +363,7 @@ async function spawnNumeral(page: Page): Promise<{ x: number; y: number } | null
   // the already-proven "the panel is back after resume" assertion — nothing
   // to do with the pause fix itself, just this helper's own side effect.
   await page.evaluate(() => {
-    const presenter = (window.__pyrefly.battle() as unknown as { battlePresenter?: { setAutoPlay(s: null): void } } | null)
+    const presenter = (window.__pyrefly!.battle() as unknown as { battlePresenter?: { setAutoPlay(s: null): void } } | null)
       ?.battlePresenter;
     presenter?.setAutoPlay(null);
   });

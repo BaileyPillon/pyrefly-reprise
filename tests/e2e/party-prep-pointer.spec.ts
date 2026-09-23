@@ -10,31 +10,21 @@
 
 import { expect, test, type Page } from '@playwright/test';
 
+import './support/pyrefly-window.ts';
+
 interface ScreenState {
   tab?: string;
   member?: string;
   outcome?: string | null;
 }
 
-interface PyreflyApi {
-  screen(): string;
-  goto(name: string): Promise<boolean>;
-  frames(n: number): Promise<void>;
-  snapshotState(): Record<string, unknown>;
-  waitReady(): Promise<void>;
-}
-
-type Win = Window & { __pyrefly: PyreflyApi; __pyreflyReady?: boolean };
-
 async function boot(page: Page): Promise<void> {
   await page.goto('/');
-  await page.waitForFunction(() => (window as Win).__pyreflyReady === true, null, { timeout: 30_000 });
+  await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 30_000 });
 }
 
 async function screenState(page: Page): Promise<ScreenState> {
-  return page.evaluate(
-    () => (window as Win).__pyrefly.snapshotState()['screenState'] as ScreenState,
-  );
+  return page.evaluate(() => window.__pyrefly!.snapshotState()['screenState'] as ScreenState);
 }
 
 async function clickCenter(page: Page, selector: string): Promise<void> {
@@ -46,14 +36,14 @@ async function clickCenter(page: Page, selector: string): Promise<void> {
 test.describe('party prep — pointer clicks', () => {
   test('a real click on a roster row moves the sheet to that member', async ({ page }) => {
     await boot(page);
-    await page.evaluate(() => (window as Win).__pyrefly.goto('party-prep'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(4));
+    await page.evaluate(() => window.__pyrefly!.goto('party-prep'));
+    await page.evaluate(() => window.__pyrefly!.frames(4));
 
     const before = await screenState(page);
     expect(before.member).toBeTruthy();
 
     await clickCenter(page, '[data-action="prep:member-1"]');
-    await page.evaluate(() => (window as Win).__pyrefly.frames(2));
+    await page.evaluate(() => window.__pyrefly!.frames(2));
 
     const after = await screenState(page);
     expect(after.member).not.toBe(before.member);
@@ -61,8 +51,8 @@ test.describe('party prep — pointer clicks', () => {
 
   test('a real click on a tab switches the sheet to that panel', async ({ page }) => {
     await boot(page);
-    await page.evaluate(() => (window as Win).__pyrefly.goto('party-prep'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(4));
+    await page.evaluate(() => window.__pyrefly!.goto('party-prep'));
+    await page.evaluate(() => window.__pyrefly!.frames(4));
 
     const before = await screenState(page);
     expect(before.tab).toBe('stats');
@@ -71,7 +61,7 @@ test.describe('party prep — pointer clicks', () => {
     await expect(tabs.nth(1)).toBeVisible();
     const box = (await tabs.nth(1).boundingBox())!;
     await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-    await page.evaluate(() => (window as Win).__pyrefly.frames(2));
+    await page.evaluate(() => window.__pyrefly!.frames(2));
 
     const after = await screenState(page);
     expect(after.tab).not.toBe(before.tab);
@@ -79,11 +69,11 @@ test.describe('party prep — pointer clicks', () => {
 
   test('a real click on START BATTLE settles the screen to begin', async ({ page }) => {
     await boot(page);
-    await page.evaluate(() => (window as Win).__pyrefly.goto('party-prep'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(4));
+    await page.evaluate(() => window.__pyrefly!.goto('party-prep'));
+    await page.evaluate(() => window.__pyrefly!.frames(4));
 
     await clickCenter(page, '.prep__start');
-    await page.evaluate(() => (window as Win).__pyrefly.frames(2));
+    await page.evaluate(() => window.__pyrefly!.frames(2));
 
     const after = await screenState(page);
     expect(after.outcome).toBe('begin');

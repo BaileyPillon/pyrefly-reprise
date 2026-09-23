@@ -1,19 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-declare global {
-  interface Window {
-    __pyrefly: {
-      version: string;
-      screen(): string;
-      goto(name: string): Promise<boolean>;
-      frame(): Promise<void>;
-      snapshotState(): Record<string, unknown>;
-      setSeed(n: number): void;
-      waitReady(): Promise<void>;
-    };
-    __pyreflyReady?: boolean;
-  }
-}
+import './support/pyrefly-window.ts';
 
 test('boots, renders the demo diorama and logs no console errors', async ({ page }) => {
   const errors: string[] = [];
@@ -27,9 +14,9 @@ test('boots, renders the demo diorama and logs no console errors', async ({ page
 
   // The debug API is present and complete.
   const api = await page.evaluate(() => ({
-    version: window.__pyrefly.version,
-    screen: window.__pyrefly.screen(),
-    keys: Object.keys(window.__pyrefly).sort(),
+    version: window.__pyrefly!.version,
+    screen: window.__pyrefly!.screen(),
+    keys: Object.keys(window.__pyrefly!).sort(),
   }));
   expect(api.version).toBeTruthy();
   expect(api.screen).toBe('title');
@@ -45,17 +32,17 @@ test('boots, renders the demo diorama and logs no console errors', async ({ page
   expect(hasGl).toBe(true);
 
   // Jump to the demo scene and let it settle.
-  const ok = await page.evaluate(() => window.__pyrefly.goto('demo'));
+  const ok = await page.evaluate(() => window.__pyrefly!.goto('demo'));
   expect(ok).toBe(true);
   await page.evaluate(async () => {
-    for (let i = 0; i < 90; i++) await window.__pyrefly.frame();
+    for (let i = 0; i < 90; i++) await window.__pyrefly!.frame();
   });
   await page.waitForTimeout(700);
   await page.evaluate(async () => {
-    for (let i = 0; i < 20; i++) await window.__pyrefly.frame();
+    for (let i = 0; i < 20; i++) await window.__pyrefly!.frame();
   });
 
-  const state = await page.evaluate(() => window.__pyrefly.snapshotState());
+  const state = await page.evaluate(() => window.__pyrefly!.snapshotState());
   expect(state['screen']).toBe('demo');
   expect((state['frameCount'] as number) > 60).toBe(true);
 
@@ -103,14 +90,7 @@ test('the ability and item tables are registered with both engines', async ({ pa
   await page.goto('/');
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 30_000 });
 
-  const wiring = await page.evaluate(
-    () =>
-      (
-        window as unknown as {
-          __pyrefly: { wiring(): Promise<Record<string, number | string>> };
-        }
-      ).__pyrefly.wiring(),
-  );
+  const wiring = await page.evaluate(() => window.__pyrefly!.wiring());
 
   // Generous floors: the real tables are in the hundreds, so these only ever
   // fire when the wiring is genuinely gone, not when content is still growing.

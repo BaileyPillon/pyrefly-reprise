@@ -27,15 +27,7 @@
 
 import { expect, test, type Page, type Response } from '@playwright/test';
 
-/** The debug surface used here; declared locally — see `chapters.spec.ts`. */
-interface PyreflyApi {
-  screen(): string;
-  goto(name: string): Promise<boolean>;
-  frames(n: number): Promise<void>;
-  trigger(name: string): boolean;
-}
-
-type Win = Window & { __pyrefly: PyreflyApi; __pyreflyReady?: boolean };
+import './support/pyrefly-window.ts';
 
 /** One portrait/crop layer inside a chip, as read back out of the DOM. */
 interface Layer {
@@ -68,7 +60,7 @@ function watchArt404s(page: Page): string[] {
 
 async function boot(page: Page): Promise<void> {
   await page.goto('/');
-  await page.waitForFunction(() => (window as Win).__pyreflyReady === true, null, { timeout: 30_000 });
+  await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 30_000 });
 }
 
 /**
@@ -83,13 +75,13 @@ async function boot(page: Page): Promise<void> {
  * URL", and whether it came back with pixels is what the assertions are for.
  */
 async function show(page: Page, screen: string): Promise<void> {
-  const ok = await page.evaluate((s) => (window as Win).__pyrefly.goto(s), screen);
+  const ok = await page.evaluate((s) => window.__pyrefly!.goto(s), screen);
   expect(ok, `__pyrefly.goto("${screen}") must resolve to a registered screen`).toBe(true);
 
   await page.evaluate(
     () =>
       Promise.race([
-        (window as Win).__pyrefly.frames(12),
+        window.__pyrefly!.frames(12),
         new Promise<void>((resolve) => setTimeout(resolve, 8_000)),
       ]) as Promise<unknown>,
   );
@@ -125,9 +117,9 @@ async function show(page: Page, screen: string): Promise<void> {
  * SwiftShader, minutes of animation before a single tile is legible.
  */
 async function raiseHud(page: Page): Promise<void> {
-  const ok = await page.evaluate(() => (window as Win).__pyrefly.trigger('hud:on'));
+  const ok = await page.evaluate(() => window.__pyrefly!.trigger('hud:on'));
   expect(ok, 'the battle screen must accept the "hud:on" debug trigger').toBe(true);
-  await page.evaluate(() => (window as Win).__pyrefly.frames(4));
+  await page.evaluate(() => window.__pyrefly!.frames(4));
   await page.waitForFunction(
     () => {
       const hud = document.querySelector<HTMLElement>('.ffxhud');

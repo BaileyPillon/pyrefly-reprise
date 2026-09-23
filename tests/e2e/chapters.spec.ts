@@ -8,65 +8,9 @@
  */
 
 import { expect, test, type Page } from '@playwright/test';
+import type { ChapterId } from '../../src/data/encounters.ts';
 
-type ChapterId =
-  | 'seymour-flux'
-  | 'yunalesca'
-  | 'braskas-final-aeon'
-  | 'ffx2-bahamut'
-  | 'ffx2-vegnagun-shuyin'
-  | 'ffx2-leblanc'
-  | 'seymour-anima-macalania'
-  | 'evrae-airship';
-
-interface BattleOutcome {
-  chapterId: string;
-  outcome: 'victory' | 'defeat' | 'escape' | 'aborted';
-  result: { turns: number; outcome: string } | null;
-  elapsedMs: number;
-  links: number;
-  preview: boolean;
-}
-
-/**
- * The debug surface this spec uses.
- *
- * Declared locally rather than with `declare global`, because `boot.spec.ts`
- * already augments `Window.__pyrefly` with the smaller shape it needs and two
- * different global declarations of one property do not merge.
- */
-interface PyreflyApi {
-  version: string;
-  screen(): string;
-  goto(name: string): Promise<boolean>;
-  frames(n: number): Promise<void>;
-  trigger(name: string): boolean;
-  snapshotState(): Record<string, unknown>;
-  setSeed(n: number): void;
-  waitReady(): Promise<void>;
-  chapters(): readonly ChapterId[];
-  chapterSelect(): Promise<boolean>;
-  gotoChapter(
-    id: ChapterId,
-    opts?: {
-      skipCutscenes?: boolean;
-      skipPrep?: boolean;
-      seed?: number;
-      auto?: string;
-      speed?: 'normal' | 'fast' | 'skip';
-    },
-  ): Promise<BattleOutcome | null>;
-  battleState(): { turn: number } | null;
-  battleLog(): Array<{ seq: number; type: string }>;
-  autoBattle(strategy?: string): boolean;
-  setBattleSpeed(speed: 'normal' | 'fast' | 'skip'): boolean;
-  waitBattleEnd(): Promise<BattleOutcome | null>;
-  wiring(): Promise<Record<string, number | string>>;
-  scenes(): Array<{ key: string; placeholder: boolean }>;
-}
-
-/** Reach the API from inside a `page.evaluate` callback. */
-type Win = Window & { __pyrefly: PyreflyApi; __pyreflyReady?: boolean };
+import './support/pyrefly-window.ts';
 
 /** The chapters, and which engine each one needs to be runnable. */
 const CHAPTERS: Array<{ id: ChapterId; title: string }> = [
@@ -88,7 +32,7 @@ async function boot(page: Page): Promise<string[]> {
   });
   page.on('pageerror', (err) => errors.push(String(err)));
   await page.goto('/');
-  await page.waitForFunction(() => (window as Win).__pyreflyReady === true, null, { timeout: 30_000 });
+  await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 30_000 });
   return errors;
 }
 
@@ -96,7 +40,7 @@ test.describe('flow', () => {
   test('the debug API exposes the chapter and battle controls', async ({ page }) => {
     await boot(page);
 
-    const api = await page.evaluate(() => Object.keys((window as Win).__pyrefly).sort());
+    const api = await page.evaluate(() => Object.keys(window.__pyrefly!).sort());
     for (const key of [
       'autoBattle',
       'battleLog',
@@ -114,7 +58,7 @@ test.describe('flow', () => {
       expect(api, `__pyrefly.${key}() is part of the contract`).toContain(key);
     }
 
-    const chapters = await page.evaluate(() => (window as Win).__pyrefly.chapters());
+    const chapters = await page.evaluate(() => window.__pyrefly!.chapters());
     expect(chapters).toHaveLength(6);
     expect(chapters[0]).toBe('seymour-flux');
   });
@@ -122,13 +66,13 @@ test.describe('flow', () => {
   test('chapter select lists all six and starts one', async ({ page }) => {
     const errors = await boot(page);
 
-    await page.evaluate(() => (window as Win).__pyrefly.chapterSelect());
-    await page.evaluate(() => (window as Win).__pyrefly.frames(4));
-    expect(await page.evaluate(() => (window as Win).__pyrefly.screen())).toBe('chapter-select');
+    await page.evaluate(() => window.__pyrefly!.chapterSelect());
+    await page.evaluate(() => window.__pyrefly!.frames(4));
+    expect(await page.evaluate(() => window.__pyrefly!.screen())).toBe('chapter-select');
 
     // Every chapter is reachable from the screen, however it is skinned.
     const state = await page.evaluate(
-      () => (window as Win).__pyrefly.snapshotState()['screenState'] as Record<string, unknown>,
+      () => window.__pyrefly!.snapshotState()['screenState'] as Record<string, unknown>,
     );
     const listed = (state['chapters'] as string[] | undefined) ?? [];
     if (listed.length) expect(listed).toHaveLength(6);
@@ -138,7 +82,7 @@ test.describe('flow', () => {
 
   test('the scene registry answers for every chapter key', async ({ page }) => {
     await boot(page);
-    const scenes = await page.evaluate(() => (window as Win).__pyrefly.scenes());
+    const scenes = await page.evaluate(() => window.__pyrefly!.scenes());
     const keys = scenes.map((s) => s.key);
     for (const key of ['gagazet', 'zanarkand-dome', 'dreams-end', 'bevelle-underground', 'farplane']) {
       expect(keys, `scene "${key}" must be registered`).toContain(key);
@@ -148,10 +92,10 @@ test.describe('flow', () => {
   test('party prep opens and can begin the battle', async ({ page }) => {
     const errors = await boot(page);
 
-    await page.evaluate(() => (window as Win).__pyrefly.goto('party-prep'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(4));
-    expect(await page.evaluate(() => (window as Win).__pyrefly.screen())).toBe('party-prep');
-    expect(await page.evaluate(() => (window as Win).__pyrefly.trigger('prep:begin'))).toBe(true);
+    await page.evaluate(() => window.__pyrefly!.goto('party-prep'));
+    await page.evaluate(() => window.__pyrefly!.frames(4));
+    expect(await page.evaluate(() => window.__pyrefly!.screen())).toBe('party-prep');
+    expect(await page.evaluate(() => window.__pyrefly!.trigger('prep:begin'))).toBe(true);
 
     expect(errors, `console errors: ${errors.join(' | ')}`).toEqual([]);
   });
@@ -161,17 +105,17 @@ test.describe('battle', () => {
   test('stages a battle and plays an ordered, gapless event log', async ({ page }) => {
     const errors = await boot(page);
 
-    await page.evaluate(() => (window as Win).__pyrefly.goto('battle'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(30));
-    expect(await page.evaluate(() => (window as Win).__pyrefly.screen())).toBe('battle');
+    await page.evaluate(() => window.__pyrefly!.goto('battle'));
+    await page.evaluate(() => window.__pyrefly!.frames(30));
+    expect(await page.evaluate(() => window.__pyrefly!.screen())).toBe('battle');
 
     // 'skip' collapses every animation wait, so the fight resolves in the time
     // it takes to render a few frames instead of playing out in real time.
-    await page.evaluate(() => (window as Win).__pyrefly.setBattleSpeed('skip'));
-    await page.evaluate(() => (window as Win).__pyrefly.autoBattle('intended'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(20));
+    await page.evaluate(() => window.__pyrefly!.setBattleSpeed('skip'));
+    await page.evaluate(() => window.__pyrefly!.autoBattle('intended'));
+    await page.evaluate(() => window.__pyrefly!.frames(20));
 
-    const log = await page.evaluate(() => (window as Win).__pyrefly.battleLog());
+    const log = await page.evaluate(() => window.__pyrefly!.battleLog());
     if (!log.length) {
       test.skip(true, 'no engine is wired for FFX yet, so no events were produced');
       return;
@@ -186,11 +130,11 @@ test.describe('battle', () => {
 
   test('actors are staged onto the scene slots', async ({ page }) => {
     await boot(page);
-    await page.evaluate(() => (window as Win).__pyrefly.goto('battle'));
-    await page.evaluate(() => (window as Win).__pyrefly.frames(30));
+    await page.evaluate(() => window.__pyrefly!.goto('battle'));
+    await page.evaluate(() => window.__pyrefly!.frames(30));
 
     const actors = await page.evaluate(() => {
-      const s = (window as Win).__pyrefly.snapshotState()['screenState'] as Record<string, unknown>;
+      const s = window.__pyrefly!.snapshotState()['screenState'] as Record<string, unknown>;
       return (s['actors'] ?? []) as Array<{ id: string; side: string; art: string }>;
     });
 
@@ -212,7 +156,7 @@ test.describe('chapters', () => {
       const outcome = await page.evaluate(
         (id) =>
           Promise.race([
-            (window as Win).__pyrefly.gotoChapter(id as ChapterId, {
+            window.__pyrefly!.gotoChapter(id as ChapterId, {
               skipCutscenes: true,
               skipPrep: true,
               seed: 1,
@@ -257,7 +201,7 @@ test.describe('chapters', () => {
     // screen in between (CONTRACT-CHANGES.md decision 6).
     const outcome = await page.evaluate(() =>
       Promise.race([
-        (window as Win).__pyrefly.gotoChapter('yunalesca', {
+        window.__pyrefly!.gotoChapter('yunalesca', {
           skipCutscenes: true,
           skipPrep: true,
           seed: 1,

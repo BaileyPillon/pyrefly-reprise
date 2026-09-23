@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 import { expect, test, type Page } from '@playwright/test';
 
+import './support/pyrefly-window.ts';
+
 /**
  * The pause menu remade on the Until Dawn character screen
  * (`docs/handoff/pause-remake.md`), driven with real keys and a real click.
@@ -32,21 +34,6 @@ import { expect, test, type Page } from '@playwright/test';
  * 5990, and `test.afterAll` stops it by its own PID — never a broader
  * `taskkill` by image name.
  */
-
-declare global {
-  interface Window {
-    __pyrefly: {
-      screen(): string;
-      trigger(name: string): boolean;
-      skipCutscene(): void;
-      battleLog(): unknown[];
-      autoBattle(strategy?: string): boolean;
-      app: { screens: Array<{ name: string; snapshot(): Record<string, unknown> }> };
-      battle(): { snapshot(): Record<string, unknown> } | null;
-    };
-    __pyreflyReady?: boolean;
-  }
-}
 
 // Headless WebGL is slow and every one of these tests plays a real battle far
 // enough to reach a real command menu. 90s is the project default and is not
@@ -147,15 +134,15 @@ interface Look {
 
 const look = (page: Page): Promise<Look> =>
   page.evaluate(() => {
-    const battle = window.__pyrefly.battle();
+    const battle = window.__pyrefly!.battle();
     const b = (battle?.snapshot() ?? {}) as Record<string, never>;
     const playback = (b['playback'] ?? null) as { awaitingMenu?: boolean } | null;
     return {
-      screen: window.__pyrefly.screen(),
-      stack: window.__pyrefly.app.screens.map((s) => s.name),
+      screen: window.__pyrefly!.screen(),
+      stack: window.__pyrefly!.app.screens.map((s) => s.name),
       paused: (b['paused'] as boolean | undefined) ?? null,
       awaitingMenu: playback?.awaitingMenu ?? null,
-      logLen: window.__pyrefly.battleLog().length,
+      logLen: window.__pyrefly!.battleLog().length,
     };
   });
 
@@ -173,7 +160,7 @@ async function waitUntil(
   }
 }
 
-const screenOf = (page: Page): Promise<string> => page.evaluate(() => window.__pyrefly.screen());
+const screenOf = (page: Page): Promise<string> => page.evaluate(() => window.__pyrefly!.screen());
 
 /**
  * Title -> chapter select -> prep -> Chapter 1's battle, the way a player
@@ -199,19 +186,19 @@ async function intoChapterOne(page: Page): Promise<void> {
   });
   expect(atChapterSelect, 'Enter never reached chapter select').toBe(true);
 
-  await page.evaluate(() => window.__pyrefly.trigger('select:seymour-flux'));
+  await page.evaluate(() => window.__pyrefly!.trigger('select:seymour-flux'));
   const atPrep = await waitUntil(page, async () => (await screenOf(page)) === 'party-prep', {
     timeoutMs: 30_000,
     intervalMs: 300,
   });
   expect(atPrep, 'selecting chapter 1 never reached party prep').toBe(true);
 
-  await page.evaluate(() => window.__pyrefly.trigger('prep:begin'));
+  await page.evaluate(() => window.__pyrefly!.trigger('prep:begin'));
   const reachedBattle = await waitUntil(
     page,
     async () => {
       const s = await screenOf(page);
-      if (s === 'cutscene') await page.evaluate(() => window.__pyrefly.skipCutscene());
+      if (s === 'cutscene') await page.evaluate(() => window.__pyrefly!.skipCutscene());
       return s === 'battle';
     },
     { timeoutMs: 60_000, intervalMs: 300 },
@@ -221,10 +208,10 @@ async function intoChapterOne(page: Page): Promise<void> {
 
 /** Pump playback to fast and wait, on the real clock, for a command menu. */
 async function waitForCommandMenu(page: Page): Promise<void> {
-  await page.evaluate(() => window.__pyrefly.trigger('battle:fast'));
+  await page.evaluate(() => window.__pyrefly!.trigger('battle:fast'));
   const ok = await waitUntil(page, async () => Boolean((await look(page)).awaitingMenu), { timeoutMs: 90_000, intervalMs: 300 });
   if (!ok) throw new Error('the battle never reached a command menu');
-  await page.evaluate(() => window.__pyrefly.trigger('battle:normal'));
+  await page.evaluate(() => window.__pyrefly!.trigger('battle:normal'));
 }
 
 // =========================================================================
@@ -259,8 +246,8 @@ test('Esc opens the pause at the first command menu, freezes the battle dead, an
   await page.keyboard.press('Escape');
   await page.waitForTimeout(300);
   expect((await look(page)).stack).not.toContain('pause');
-  await page.evaluate(() => window.__pyrefly.trigger('battle:fast'));
-  await page.evaluate(() => window.__pyrefly.autoBattle('intended'));
+  await page.evaluate(() => window.__pyrefly!.trigger('battle:fast'));
+  await page.evaluate(() => window.__pyrefly!.autoBattle('intended'));
   const moved = await waitUntil(page, async () => (await look(page)).logLen > a, { timeoutMs: 60_000, intervalMs: 300 });
   expect(moved, 'the fight never continued after resume').toBe(true);
 });

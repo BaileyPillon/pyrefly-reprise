@@ -81,10 +81,20 @@ type Quad = Array<{ x: number; y: number }>;
 
 interface Probe {
   present: boolean;
-  /** The advisor has no advice at all, so its whole root is hidden. */
-  silent: boolean;
+  /**
+   * The advisor has no advice at all, so its whole root is hidden.
+   *
+   * Typed to match `HTMLElement.hidden` (`boolean | 'until-found'`, the
+   * find-in-page state DOM lib now allows) rather than plain `boolean`,
+   * because this field is computed straight from `root.hidden` below —
+   * narrowing it back to `boolean` would need a runtime coercion this spec
+   * has never done and does not need: every read here is a truthiness check
+   * (`if (p.silent)`) or an equality assert against `false`, both of which
+   * already treat `'until-found'` correctly as "not false".
+   */
+  silent: boolean | 'until-found';
   /** The player put the card away with `N`; the chip is then the panel. */
-  off: boolean;
+  off: boolean | 'until-found';
   /**
    * `free`: no measured zone fit, so the card is on its own placement — the
    * live build's, which is the band between the command stack and the party
@@ -462,7 +472,7 @@ for (const vp of VIEWPORTS) {
               expect(
                 { chapter, turn, el: el.tag, scrollH: el.scrollH, clientH: el.clientH },
                 'no element of the card is taller than its own box',
-              ).toMatchObject({ scrollH: expect.any(Number) as number });
+              ).toMatchObject({ scrollH: expect.any(Number) as unknown as number });
               expect(el.scrollH, `${chapter} turn ${turn}: ${el.tag} is clipped vertically`).toBeLessThanOrEqual(
                 el.clientH + 1,
               );
