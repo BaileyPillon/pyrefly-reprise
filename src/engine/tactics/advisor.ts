@@ -467,6 +467,30 @@ export function metaRowFor(
   return null;
 }
 
+/**
+ * The card's label for a **wrapper** row's command — `"Doublecast: Firaga"`,
+ * the name the battle log gives the action — or `null` when `command` is not
+ * a wrapper's or names no row of the wrapped category.
+ *
+ * The card has to say which spell, because the menu now asks for it: Special >
+ * Doublecast opens the Black Magic list and then that spell's target step
+ * (`ui/ffx/CommandMenu.ts`, `AvailableCommand.wrapsCategory`). "Doublecast ->
+ * Braska's Final Aeon" alone could not be followed [critic round 09, PR-0125].
+ * **FFX only** in practice [AGENTS.md rule 14]: only the FFX engine publishes a
+ * wrapper row.
+ */
+export function wrappedLabel(
+  commands: readonly AvailableCommand[],
+  row: AvailableCommand,
+  command: Command,
+): string | null {
+  if (!row.wrapsCategory || command.kind !== 'ability' || command.wrappedId === undefined) return null;
+  const inner = commands.find(
+    (c) => c.category === row.wrapsCategory && c.command.kind === 'ability' && c.command.id === command.wrappedId,
+  );
+  return inner ? `${row.label}: ${inner.label}` : null;
+}
+
 /** The gate a tactic's own pick is held to: the strict row, or a meta row. */
 function tacticRow(
   commands: readonly AvailableCommand[],
@@ -942,8 +966,12 @@ function bestTry(chances: readonly StatusChance[]): StatusChance | null {
 interface Candidate {
   suggestion: MoveSuggestion;
   outcome: SimOutcome | null;
-  /** The row and aim this came from, so the range can be filled in later. */
-  origin: { row: AvailableCommand; targetId: CombatantId | null } | null;
+  /**
+   * The row and aim this came from, so the range can be filled in later.
+   * `exact` is the whole command when it is more than row + aim — a wrapper
+   * row's (Doublecast's) `wrappedId` and targets [PR-0125].
+   */
+  origin: { row: AvailableCommand; targetId: CombatantId | null; exact?: Command } | null;
   /** Every status this row is rolling for, with its real odds. See `./advisor-roll.ts`. */
   chances: readonly StatusChance[];
   /** What the evaluation proved about this row. Empty with the planner off. */
@@ -967,8 +995,9 @@ function candidateFor(
   intent: AdvisorIntent | null,
   planner: boolean,
   withRange = false,
+  exact: Command | null = null,
 ): Candidate | null {
-  const command = { ...row.command, targets: targetId ? [targetId] : [] } as Command;
+  const command = exact ?? ({ ...row.command, targets: targetId ? [targetId] : [] } as Command);
   const mid = sim(state, actorId, command, 'mid');
   if (!mid) return null;
   const def = mid.ability;
@@ -1051,7 +1080,7 @@ function candidateFor(
 
   return {
     outcome: mid,
-    origin: { row, targetId },
+    origin: exact ? { row, targetId, exact } : { row, targetId },
     chances,
     facts: [],
     suggestion: {
@@ -1170,6 +1199,12 @@ export function buildAdvisorView(
   for (const row of orderedRows(state, decision.commands, options)) {
     if (!row.enabled) continue;
     if (row.command.kind === 'escape') continue;
+    // A wrapper row (Doublecast) aims through the spell chosen inside it, so
+    // its own self-only `validTargets` is a placeholder, not an aim: priced
+    // as offered it read "Doublecast -> Lulu". Only a command that names the
+    // wrapped spell and its target can be advised, and the chapter's line is
+    // the one caller that composes one [PR-0125, {@link wrappedLabel}].
+    if (row.wrapsCategory) continue;
     // A row the player cannot reach from the command window is not advice,
     // whatever the simulation thinks of it — FFX's menu has no Defend entry.
     if (!pressable(state, row.command)) continue;
@@ -1534,7 +1569,8 @@ function withRange(
   planner: boolean,
 ): MoveSuggestion {
   if (!candidate.origin) return candidate.suggestion;
-  const full = candidateFor(state, actorId, commands, candidate.origin.row, candidate.origin.targetId, sim, intent, planner, true);
+  const { row, targetId, exact } = candidate.origin;
+  const full = candidateFor(state, actorId, commands, row, targetId, sim, intent, planner, true, exact ?? null);
   if (!full?.suggestion.estimate) return candidate.suggestion;
   return {
     ...candidate.suggestion,
@@ -1671,12 +1707,16 @@ function tacticSuggestion(
   // `SwitchCommand.targets` is typed as the empty tuple, so the aimed id is
   // read through the shared shape rather than off the narrowed union.
   const aimedId = (command.targets as readonly CombatantId[])[0] ?? null;
-  let candidate = candidates.find((c) => sameCommand(c.suggestion.command, command!)) ?? null;
+  // A wrapper row's command is more than row + aim: the spell it wraps and
+  // where it goes are the whole of it, so it is simulated, carried and
+  // printed exactly as the tactic composed it [PR-0125].
+  const wrapped = wrappedLabel(decision.commands, row, command);
+  let candidate = wrapped ? null : (candidates.find((c) => sameCommand(c.suggestion.command, command!)) ?? null);
   if (!candidate) {
     candidate =
       command.kind === 'switch'
         ? switchCandidate(state, decision.commands, row, aimedId)
-        : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent, planner);
+        : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent, planner, false, wrapped ? command : null);
   }
   if (!candidate) return null;
 
@@ -1695,6 +1735,7 @@ function tacticSuggestion(
     facts: candidate.facts,
     suggestion: {
       ...candidate.suggestion,
+      ...(wrapped ? { label: wrapped } : {}),
       cite,
       source: 'tactic',
       // A switch the chapter's own line chose is not the "rarely worth it"

@@ -9,6 +9,9 @@ import {
   rowEnabled,
   switchRowIndex,
   switchTargetId,
+  wrapCommand,
+  wrappedGroup,
+  wrappedHelp,
   type TopGroupRow,
   type TopRow,
 } from './CommandMenuLogic.ts';
@@ -228,6 +231,13 @@ export class CommandMenu {
   private topIndex = 0;
   private subIndex = 0;
   private preTargetState: 'top' | 'sub' = 'top';
+  /**
+   * The open second step of a wrapper row (FFX's Doublecast, PR-0125): the
+   * list it opened, the row itself, and where Esc steps back to. `null`
+   * everywhere else. It survives a target-step cancel (back to the spell list)
+   * and nothing else.
+   */
+  private wrap: { wrapper: AvailableCommand; group: TopGroupRow; back: 'top' | 'sub'; backIndex: number } | null = null;
   private opts: CommandMenuOpenOptions | null = null;
   private resolve: ((cmd: Command) => void) | null = null;
   private readonly watcher = new RawInputWatcher((b) => this.onButton(b));
@@ -294,6 +304,7 @@ export class CommandMenu {
     // and its ring under three allies while the next actor chose.
     this.endSelection();
     this.suspended = false;
+    this.wrap = null;
     this.opts = opts;
     this.rows = buildTopRows(opts.commands);
     this.topIndex = firstEnabledIndex(this.rows);
@@ -311,6 +322,7 @@ export class CommandMenu {
 
   private finish(command: Command): void {
     this.suspended = false;
+    this.wrap = null;
     // No menu is open any more, so Esc is nobody's back button until the next
     // one opens. Without this a decision taken from a submenu would leave the
     // flag true and Esc dead for the rest of the battle.
@@ -344,6 +356,7 @@ export class CommandMenu {
    */
   close(): void {
     this.suspended = false;
+    this.wrap = null;
     this.watcher.detach();
     this.unwireClicks?.();
     this.unwireClicks = null;
@@ -442,13 +455,14 @@ export class CommandMenu {
   }
 
   private onSubButton(b: UiButton): void {
-    const group = this.rows[this.topIndex];
+    const group = this.currentGroup();
     if (group?.kind !== 'group') return;
     if (b === 'up' || b === 'down') {
       this.moveSub(group, b === 'up' ? -1 : 1);
     } else if (b === 'confirm') {
       this.chooseSub(group, this.subIndex);
     } else if (b === 'cancel') {
+      if (this.wrap) return this.closeWrap();
       this.state = 'top';
       this.breadcrumbEl.hidden = true;
       this.renderStack();
@@ -497,7 +511,7 @@ export class CommandMenu {
     const i = Number(action);
     if (Number.isNaN(i)) return;
     if (this.state === 'sub') {
-      const group = this.rows[this.topIndex];
+      const group = this.currentGroup();
       if (group?.kind !== 'group') return;
       this.subIndex = i;
       this.renderStack();
@@ -575,6 +589,7 @@ export class CommandMenu {
   private groupTargets: CombatantId[] | null = null;
 
   private resolveCommand(cmd: AvailableCommand): void {
+    if (cmd.wrapsCategory && !this.wrap) return this.openWrap(cmd);
     const resolution = resolveTargetMode(cmd);
     if (resolution.mode === 'none' || resolution.mode === 'auto') {
       // Safe by construction: `resolution.targets` is `[]` for every command
@@ -582,7 +597,7 @@ export class CommandMenu {
       // Switch, Escape, Dismiss, Summon, Spherechange never offer >0
       // `validTargets`), so the runtime shape always matches `Command` even
       // though the generic spread below cannot express that statically.
-      this.finish({ ...cmd.command, targets: resolution.targets } as Command);
+      this.finish(this.commandFor(cmd, resolution.targets));
       return;
     }
 
@@ -612,6 +627,48 @@ export class CommandMenu {
     this.syncTargetSurfaces();
   }
 
+  /**
+   * A wrapper row's second step: its list replaces the stack exactly as a
+   * submenu does, and the breadcrumb names the wrapper [PR-0125]. A list with
+   * nothing castable in it shakes rather than opening.
+   */
+  private openWrap(wrapper: AvailableCommand): void {
+    const group = wrappedGroup(wrapper, this.opts?.commands ?? []);
+    if (!group || !group.items.some((c) => c.enabled)) return this.shake();
+    this.wrap = { wrapper, group, back: this.state === 'sub' ? 'sub' : 'top', backIndex: this.subIndex };
+    this.state = 'sub';
+    this.subIndex = firstEnabledCmdIndex(group.items);
+    this.breadcrumbEl.hidden = false;
+    this.breadcrumbEl.textContent = group.label;
+    this.renderStack();
+    this.updateHelpAndPreview();
+  }
+
+  /** Esc from the wrapper's list: back to the list (or row) the wrapper was chosen from. */
+  private closeWrap(): void {
+    const wrap = this.wrap;
+    if (!wrap) return;
+    this.wrap = null;
+    this.state = wrap.back;
+    this.subIndex = wrap.backIndex;
+    const from = this.rows[this.topIndex];
+    this.breadcrumbEl.hidden = wrap.back !== 'sub';
+    if (wrap.back === 'sub' && from?.kind === 'group') this.breadcrumbEl.textContent = from.label;
+    this.renderStack();
+    this.updateHelpAndPreview();
+  }
+
+  /** The list the `'sub'` state is showing: a wrapper's, or the chosen category's. */
+  private currentGroup(): TopRow | undefined {
+    return this.wrap?.group ?? this.rows[this.topIndex];
+  }
+
+  /** The command a chosen row submits, wrapped when it was picked inside a wrapper's list. */
+  private commandFor(cmd: AvailableCommand, targets: CombatantId[]): Command {
+    if (this.wrap && this.wrap.group.items.includes(cmd)) return wrapCommand(this.wrap.wrapper, cmd, targets);
+    return { ...cmd.command, targets } as Command;
+  }
+
   /** One candidate, with the letter tag and the note the HUD can answer for. */
   private entryFor(id: CombatantId, cmd: AvailableCommand): TargetEntry {
     const combatants = this.opts!.combatants;
@@ -639,7 +696,7 @@ export class CommandMenu {
     // by hand, with a bare `targetCursor.hide()` that nothing was listening
     // to — which is exactly how the dim came to outlive every confirmed
     // command in all three FFX chapters.
-    this.finish({ ...cmd.command, targets } as Command);
+    this.finish(this.commandFor(cmd, targets));
   }
 
   /**
@@ -673,7 +730,7 @@ export class CommandMenu {
 
   private renderStack(): void {
     if (this.state === 'sub') {
-      const group = this.rows[this.topIndex];
+      const group = this.currentGroup();
       if (group?.kind === 'group') {
         const combatants = this.opts?.combatants ?? {};
         this.renderRows(
@@ -736,14 +793,16 @@ export class CommandMenu {
       return;
     }
     if (this.state === 'sub') {
-      const group = this.rows[this.topIndex];
+      const group = this.currentGroup();
       const cmd = group?.kind === 'group' ? group.items[this.subIndex] : null;
       const swap =
         group?.kind === 'group' && group.role === 'switch' && cmd
           ? `${cmd.label} takes this turn on entering the fight.`
           : null;
-      this.opts.setHelp(cmd ? (swap ?? commandHelpText(cmd)) : '');
-      this.opts.previewRank(cmd ?? null);
+      const help = cmd ? (swap ?? commandHelpText(cmd)) : '';
+      this.opts.setHelp(this.wrap && cmd ? wrappedHelp(this.wrap.wrapper, help) : help);
+      // Inside a wrapper the turn is charged at the wrapper's rank, not the spell's.
+      this.opts.previewRank(this.wrap ? this.wrap.wrapper : (cmd ?? null));
     }
   }
 
@@ -767,7 +826,9 @@ export class CommandMenu {
   private updateTargetHelp(): void {
     if (!this.opts) return;
     const cmd = this.pendingCmd;
-    if (cmd) this.opts.setHelp(commandHelpText(cmd));
+    if (!cmd) return;
+    const help = commandHelpText(cmd);
+    this.opts.setHelp(this.wrap ? wrappedHelp(this.wrap.wrapper, help) : help);
   }
 
   /**

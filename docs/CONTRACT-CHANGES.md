@@ -6,6 +6,36 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-23 — `AvailableCommand.wrapsCategory`: Doublecast asks for a spell and an enemy (PR-0125)
+
+Key `fix-ffx-doublecast-aim`. **FFX only** [AGENTS.md hard rule 14]: Doublecast
+is Lulu's FFX ability and chapter 3's `dreams-end` is the only build granting it.
+
+**Additive, one optional field** in `src/battle/common/types.ts`:
+`AvailableCommand.wrapsCategory?: AbilityCategory`. A row that sets it is a
+**wrapper**: choosing it opens that category's rows as a second step, and the
+command submitted is the wrapper's own id with the chosen row's id as the
+already-documented `AbilityCommand.wrappedId` and that row's target step
+supplying `targets`. Only the FFX engine sets it (`battle/ffx/commands.ts`, for
+any ability whose record carries `extra.castsTwoBlackMagicSpells` — today only
+`doublecast`, `'blackmagic'`). A consumer that ignores it behaves exactly as
+before.
+
+Why: critic round 09 (PR-0125) found the FFX menu read Doublecast's self-only
+`validTargets: ['lulu']` as a finished aim and submitted `{ id: 'doublecast',
+targets: ['lulu'] }` with no `wrappedId`; the engine's fallback cast Firaga twice
+on Lulu (self-KO on seeds 1 and 7). `research/ffx-combat-core.md` §7.4 row 41
+defines Doublecast as *"Two Blk Magic casts at a fixed rank 3"*, so the menu now
+opens the Black Magic list and that spell's enemy target step
+(`ui/ffx/CommandMenu.ts`, `CommandMenuLogic.ts wrappedGroup / wrapCommand`).
+
+Also in this change, no contract impact: the resolver moved to
+`src/battle/ffx/doublecast.ts` and gained a guard (an offensive spell whose aim
+is only the caster's own id, or nothing, is re-aimed at the spell's own legal
+targets); the advisor skips a wrapper row in its own ranking and prints the
+chapter line's Doublecast as `"Doublecast: <spell>"` with the exact `wrappedId`
+and targets (`engine/tactics/advisor.ts wrappedLabel`).
+
 ## 2026-09-23 — Chapter 8 registered, LOCKED: `evrae-airship` (Evrae)
 
 Key `chapter-evrae-integration`. **FFX only** [AGENTS.md hard rule 14]: the

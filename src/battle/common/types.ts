@@ -1698,6 +1698,18 @@ export interface AvailableCommand {
   targeting?: Targeting;
   /** True when choosing this row opens a minigame overlay before the command resolves. */
   opensMinigame?: MinigameKind;
+  /**
+   * A **wrapper** row: choosing it opens the rows of this category as a second
+   * step, and the command submitted is this row's own, with the chosen row's
+   * id as `AbilityCommand.wrappedId` and the chosen row's target step supplying
+   * `targets`. FFX's Doublecast is the one shipped case (`'blackmagic'`:
+   * "Two Blk Magic casts", ffx-combat-core §7.4 row 41).
+   *
+   * Additive and optional; only the FFX engine sets it. Without it the menu
+   * took the row's self-only `validTargets` as the aim and submitted
+   * Doublecast at its own caster (critic round 09, PR-0125).
+   */
+  wrapsCategory?: AbilityCategory;
   /** Help-window copy. */
   help?: string;
 }

@@ -1,0 +1,1669 @@
+{
+ "base": "http://127.0.0.1:5797/",
+ "seed": 1,
+ "luluTurns": [
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true,
+    "help": []
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 293
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 341
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 412
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 509
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 542
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 572
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 589
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 622
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 671
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 684
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 744
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 765
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 794
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 828
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 849
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 871
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 908
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 995
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1032
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1067
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1114
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1158
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1189
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1209
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1249
+  },
+  {
+   "spell": "Firaga",
+   "target": "braskas-final-aeon",
+   "targetName": "Braska's Final Aeon",
+   "special": true,
+   "dcRow": true,
+   "spellStep": {
+    "crumb": "Doublecast",
+    "labels": [
+     "Fire",
+     "Fira",
+     "Firaga",
+     "Blizzard",
+     "Blizzara",
+     "Blizzaga"
+    ],
+    "stillAwaiting": true
+   },
+   "spellRow": true,
+   "targetStep": {
+    "selection": {
+     "ids": [
+      "yu-pagoda-left"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "enemy"
+    },
+    "stillAwaiting": true,
+    "crumb": "Doublecast"
+   },
+   "aimedAt": [
+    "braskas-final-aeon"
+   ],
+   "closed": true,
+   "logFrom": 1308
+  }
+ ],
+ "manual": 26,
+ "other": 190,
+ "errors": [
+  "[presenter] mid-battle script \"jecht-falls\" did not finish within 30000ms; abandoning the beat and resuming the battle",
+  "[presenter] mid-battle script \"valefor-enters\" did not finish within 30000ms; abandoning the beat and resuming the battle"
+ ],
+ "steps": [],
+ "result": {
+  "outcome": "victory",
+  "links": 7,
+  "turns": 15
+ },
+ "luluEvents": [
+  {
+   "type": "action-start",
+   "seq": 279,
+   "actorId": "lulu",
+   "abilityName": "Stamina Tonic",
+   "targets": [
+    "lulu"
+   ]
+  },
+  {
+   "type": "action-start",
+   "seq": 293,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 295,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1607
+  },
+  {
+   "type": "damage",
+   "seq": 297,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1653
+  },
+  {
+   "type": "action-start",
+   "seq": 341,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 343,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3682
+  },
+  {
+   "type": "damage",
+   "seq": 345,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 4031
+  },
+  {
+   "type": "action-start",
+   "seq": 412,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 414,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1743
+  },
+  {
+   "type": "damage",
+   "seq": 416,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1658
+  },
+  {
+   "type": "action-start",
+   "seq": 509,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 511,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 4017
+  },
+  {
+   "type": "damage",
+   "seq": 513,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3789
+  },
+  {
+   "type": "action-start",
+   "seq": 542,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 544,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3293
+  },
+  {
+   "type": "damage",
+   "seq": 546,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1750
+  },
+  {
+   "type": "action-start",
+   "seq": 572,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 574,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1710
+  },
+  {
+   "type": "damage",
+   "seq": 576,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1626
+  },
+  {
+   "type": "action-start",
+   "seq": 589,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 591,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1730
+  },
+  {
+   "type": "damage",
+   "seq": 593,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1743
+  },
+  {
+   "type": "action-start",
+   "seq": 622,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 624,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 4077
+  },
+  {
+   "type": "damage",
+   "seq": 626,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3834
+  },
+  {
+   "type": "action-start",
+   "seq": 671,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 673,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1736
+  },
+  {
+   "type": "damage",
+   "seq": 675,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1581
+  },
+  {
+   "type": "action-start",
+   "seq": 684,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 686,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3865
+  },
+  {
+   "type": "damage",
+   "seq": 688,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3819
+  },
+  {
+   "type": "action-start",
+   "seq": 744,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 746,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3653
+  },
+  {
+   "type": "damage",
+   "seq": 748,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3668
+  },
+  {
+   "type": "action-start",
+   "seq": 765,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 767,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3804
+  },
+  {
+   "type": "damage",
+   "seq": 769,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 4046
+  },
+  {
+   "type": "action-start",
+   "seq": 794,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 796,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3850
+  },
+  {
+   "type": "damage",
+   "seq": 798,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3941
+  },
+  {
+   "type": "action-start",
+   "seq": 828,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 830,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3774
+  },
+  {
+   "type": "damage",
+   "seq": 832,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3971
+  },
+  {
+   "type": "action-start",
+   "seq": 849,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 851,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3774
+  },
+  {
+   "type": "damage",
+   "seq": 853,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3819
+  },
+  {
+   "type": "action-start",
+   "seq": 871,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 873,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1613
+  },
+  {
+   "type": "damage",
+   "seq": 875,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1581
+  },
+  {
+   "type": "action-start",
+   "seq": 908,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 910,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1601
+  },
+  {
+   "type": "damage",
+   "seq": 912,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1730
+  },
+  {
+   "type": "action-start",
+   "seq": 995,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 997,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1575
+  },
+  {
+   "type": "damage",
+   "seq": 999,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1562
+  },
+  {
+   "type": "action-start",
+   "seq": 1032,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1034,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1555
+  },
+  {
+   "type": "damage",
+   "seq": 1036,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1555
+  },
+  {
+   "type": "action-start",
+   "seq": 1067,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1069,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1691
+  },
+  {
+   "type": "damage",
+   "seq": 1071,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1743
+  },
+  {
+   "type": "action-start",
+   "seq": 1114,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1116,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1562
+  },
+  {
+   "type": "damage",
+   "seq": 1118,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1568
+  },
+  {
+   "type": "action-start",
+   "seq": 1158,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1160,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1640
+  },
+  {
+   "type": "damage",
+   "seq": 1162,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1653
+  },
+  {
+   "type": "action-start",
+   "seq": 1189,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1191,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3955
+  },
+  {
+   "type": "damage",
+   "seq": 1193,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 4092
+  },
+  {
+   "type": "action-start",
+   "seq": 1209,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1211,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3819
+  },
+  {
+   "type": "damage",
+   "seq": 1213,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3941
+  },
+  {
+   "type": "action-start",
+   "seq": 1249,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1251,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1555
+  },
+  {
+   "type": "damage",
+   "seq": 1253,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 1723
+  },
+  {
+   "type": "action-start",
+   "seq": 1291,
+   "actorId": "lulu",
+   "abilityName": "X-Potion",
+   "targets": [
+    "yuna"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1292,
+   "targetId": "yuna",
+   "sourceId": "lulu",
+   "amount": -9999
+  },
+  {
+   "type": "action-start",
+   "seq": 1308,
+   "actorId": "lulu",
+   "abilityName": "Doublecast: Firaga",
+   "targets": [
+    "braskas-final-aeon"
+   ]
+  },
+  {
+   "type": "damage",
+   "seq": 1310,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3834
+  },
+  {
+   "type": "damage",
+   "seq": 1312,
+   "targetId": "braskas-final-aeon",
+   "sourceId": "lulu",
+   "amount": 3668
+  },
+  {
+   "type": "victory",
+   "seq": 1318
+  },
+  {
+   "type": "battle-boundary"
+  },
+  {
+   "type": "victory",
+   "seq": 13
+  },
+  {
+   "type": "battle-boundary"
+  },
+  {
+   "type": "victory",
+   "seq": 40
+  },
+  {
+   "type": "battle-boundary"
+  },
+  {
+   "type": "victory",
+   "seq": 222
+  },
+  {
+   "type": "battle-boundary"
+  },
+  {
+   "type": "victory",
+   "seq": 62
+  },
+  {
+   "type": "battle-boundary"
+  },
+  {
+   "type": "victory",
+   "seq": 394
+  },
+  {
+   "type": "battle-boundary"
+  },
+  {
+   "type": "victory",
+   "seq": 72
+  }
+ ],
+ "summary": {
+  "luluActions": 28,
+  "doublecasts": 26,
+  "luluAtLulu": 0,
+  "selfDamage": 0,
+  "luluKos": 0,
+  "ends": [
+   "victory",
+   "victory",
+   "victory",
+   "victory",
+   "victory",
+   "victory",
+   "victory"
+  ]
+ },
+ "lastBattleEvents": 73
+}

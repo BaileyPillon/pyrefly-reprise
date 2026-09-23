@@ -177,6 +177,53 @@ export function resolveTargetMode(cmd: AvailableCommand): TargetResolution {
   return { mode: 'choose', candidates: cmd.validTargets };
 }
 
+/**
+ * The second step of a **wrapper** row (`AvailableCommand.wrapsCategory`): the
+ * list it opens, as a group the stack can render like any other submenu.
+ *
+ * FFX's Doublecast is the one shipped wrapper. §7.4 row 41 of
+ * `research/ffx-combat-core.md` defines it as *"Two Blk Magic casts at a fixed
+ * rank 3"*, so choosing it has to ask which Black Magic spell, and then that
+ * spell's own target step asks where. Before this the menu read the row's
+ * self-only `validTargets` as a finished aim (`resolveTargetMode` → `auto`)
+ * and submitted `{ id: 'doublecast', targets: ['lulu'] }`: Firaga twice on
+ * Lulu [critic round 09, PR-0125].
+ *
+ * The rows are the engine's own rows of that category, so each keeps its
+ * `enabled`, `disabledReason` (Silenced, Not enough MP), `validTargets` and
+ * `targeting` — the UI still never re-derives legality. `null` for a row that
+ * wraps nothing.
+ *
+ * **FFX only** [AGENTS.md rule 14]: only the FFX engine publishes a wrapper row.
+ */
+export function wrappedGroup(wrapper: AvailableCommand, commands: readonly AvailableCommand[]): TopGroupRow | null {
+  const category = wrapper.wrapsCategory;
+  if (!category || wrapper.command.kind !== 'ability') return null;
+  const items = commands.filter(
+    (c) => c !== wrapper && c.category === category && c.command.kind === 'ability' && !c.wrapsCategory,
+  );
+  return { kind: 'group', category, label: wrapper.label, items };
+}
+
+/**
+ * The command a wrapper submits once its wrapped row and that row's targets are
+ * chosen: the wrapper's own id, the chosen row's id as `wrappedId`, and the
+ * chosen targets — the shape `battle/ffx/doublecast.ts` reads and the Chapter 3
+ * tactic already submits.
+ */
+export function wrapCommand(wrapper: AvailableCommand, chosen: AvailableCommand, targets: CombatantId[]): Command {
+  if (wrapper.command.kind !== 'ability' || chosen.command.kind !== 'ability') {
+    return { ...chosen.command, targets } as Command;
+  }
+  return { kind: 'ability', id: wrapper.command.id, wrappedId: chosen.command.id, targets };
+}
+
+/** The help line for a row inside a wrapper's list: what the wrapper adds, then the row. */
+export function wrappedHelp(wrapper: AvailableCommand, rowHelp: string): string {
+  const lead = `${wrapper.label}: cast twice, each cast pays its own MP`;
+  return rowHelp ? `${lead} · ${rowHelp}` : lead;
+}
+
 export function reticleKind(targetId: CombatantId, actorId: CombatantId, combatants: Record<CombatantId, AnyCombatant>): ReticleKind {
   if (targetId === actorId) return 'self';
   const c = combatants[targetId];

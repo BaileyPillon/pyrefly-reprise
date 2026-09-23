@@ -28,6 +28,7 @@ import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { revealForSensorAuto } from './sensor.ts';
+import { resolveDoublecast } from './doublecast.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
 export interface ExecutionResult {
@@ -278,25 +279,10 @@ export function executeCommand(
     return { rank: 0, rejected: true, damageDealt: 0 };
   }
   // **Doublecast** [ffx-combat-core §7.4 row 41; ffx-bfa-yu-yevon §4.2
-  // "grant ... Doublecast + Firaga/Thundaga", verified: 2 sources].
-  //
-  // The ability shipped in the data with `extra.castsTwoBlackMagicSpells` and
-  // `formula: 'none'`, `hits: 1`, and **nothing read it** — so every build that
-  // was granted Doublecast (`dreams-end`'s Lulu is one) was offered a menu row
-  // that spent a whole turn resolving a no-damage, no-status ability. The
-  // contract already reserved the hook for it: `AbilityCommand.wrappedId`,
-  // documented in `types.ts` as *"Doublecast / Copycat wrapper: the ability id
-  // this one is repeating"*, had no reader anywhere in the engine.
-  //
-  // This is that reader, and it is deliberately narrow: only an ability whose
-  // own data record sets the flag takes this path, the wrapped spell must be
-  // Black Magic the caster actually knows, **both casts are paid for
-  // separately** (`extra.note` on the record says so in as many words), and the
-  // turn is charged at Doublecast's own rank 3 — which is the whole point of
-  // the ability and the whole of its power. A command that arrives without a
-  // usable `wrappedId` falls back to the strongest spell the caster can afford
-  // twice rather than being refused, because refusing a row the menu offered is
-  // how a headless caller ends up resubmitting it for ever.
+  // "grant ... Doublecast + Firaga/Thundaga", verified: 2 sources]. Only an
+  // ability whose own record sets the flag takes this path; the wrapped spell
+  // rides on `AbilityCommand.wrappedId`. See `./doublecast.ts`, which also
+  // holds the PR-0125 guard against a self-only placeholder aim.
   if (command.kind === 'ability' && def.extra?.['castsTwoBlackMagicSpells'] === true) {
     return resolveDoublecast(ctx, actor, def, command.wrappedId, command.targets);
   }
@@ -401,66 +387,6 @@ export function executeCommand(
   const damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
   ctx.emit({ type: 'action-end', actorId: actor.id });
   return { rank: rankOf(def), damageDealt, def };
-}
-
-/**
- * Resolve one Doublecast: the same Black Magic spell, twice, for one turn.
- *
- * `wrapped` is the spell the caller chose (`AbilityCommand.wrappedId`). Both
- * casts pay their own MP, as the ability record's own `extra.note` requires,
- * and the pair costs a single rank-3 turn.
- */
-function resolveDoublecast(
-  ctx: Ctx,
-  actor: FFXCombatant,
-  def: AbilityDef,
-  wrapped: string | undefined,
-  targets: readonly CombatantId[],
-): ExecutionResult {
-  let spell = wrapped !== undefined ? abilityOf(ctx, wrapped) : undefined;
-  if (spell && (spell.category !== 'blackmagic' || !actor.learnedAbilityIds.includes(spell.id))) spell = undefined;
-  if (!spell) spell = strongestAffordableBlackMagic(ctx, actor);
-  if (!spell) {
-    ctx.emit({ type: 'message', text: `${actor.name} has no spell to double`, kind: 'system' });
-    return { rank: rankOf(def), damageDealt: 0, def };
-  }
-  const cost = mpCostFor(actor, spell);
-  ctx.emit({
-    type: 'action-start',
-    actorId: actor.id,
-    command: { kind: 'ability', id: def.id, targets: targets.slice(), wrappedId: spell.id },
-    abilityId: spell.id,
-    abilityName: `${def.name}: ${spell.name}`,
-    targets: targets.slice(),
-  });
-  // Two casts, and **they do not have to land on the same target**: FFX's
-  // Doublecast asks for two spells and two targets in turn. One id in
-  // `targets` means both casts go there; two means one each, which is how a
-  // black mage takes both Yu Pagodas off the board in the same turn instead of
-  // killing one and leaving a lone survivor Cursing the party (§1.4).
-  const aims: CombatantId[][] = targets.length >= 2 ? [[targets[0]!], [targets[1]!]] : [targets.slice(), targets.slice()];
-  let dealt = 0;
-  for (const at of aims) {
-    if (cost > 0) {
-      if (actor.mp < cost) break;
-      applyMpDelta(ctx, actor, cost, actor.id);
-    }
-    dealt += resolveAbility(ctx, actor, spell, at);
-  }
-  ctx.emit({ type: 'action-end', actorId: actor.id });
-  return { rank: rankOf(def), damageDealt: dealt, def: spell };
-}
-
-/** The biggest Black Magic spell this caster knows and can pay for twice. */
-function strongestAffordableBlackMagic(ctx: Ctx, actor: FFXCombatant): AbilityDef | undefined {
-  let best: AbilityDef | undefined;
-  for (const id of actor.learnedAbilityIds) {
-    const d = abilityOf(ctx, id);
-    if (!d || d.category !== 'blackmagic' || d.power <= 0) continue;
-    if (mpCostFor(actor, d) * 2 > actor.mp) continue;
-    if (!best || d.power > best.power) best = d;
-  }
-  return best;
 }
 
 /** Charge the actor's counter for an action of `rank`, unless the turn was free. */

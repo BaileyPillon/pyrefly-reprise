@@ -80,6 +80,10 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
   };
   if (reason !== undefined) row.disabledReason = reason;
   if (def.minigame) row.opensMinigame = def.minigame;
+  // Doublecast opens the Black Magic list and then that spell's own target
+  // step [ffx-combat-core §7.4 row 41, "Two Blk Magic casts"]; the row's own
+  // self aim is only a placeholder (PR-0125, `./doublecast.ts`). FFX only.
+  if (def.extra?.['castsTwoBlackMagicSpells'] === true) row.wrapsCategory = 'blackmagic';
   return row;
 }
 
