@@ -25,6 +25,8 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { sensorSteerDx } from './sensorSteer.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
+// Evrae only (FFX): the airship order widget; a pass-through everywhere else.
+import { AirshipOrders } from './AirshipOrders.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
@@ -199,6 +201,8 @@ export class FFXBattleHud implements HudPort {
   private readonly sensorPanel = new SensorPanel();
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
+  /** Evrae's order widget + Cid's ORDER chip; inert unless the airship range flag is set. */
+  private readonly airship = new AirshipOrders();
   /**
    * The optional strategy guide (`src/ui/common/StrategyGuide.ts`), a left rail
    * measured to sit between the action banner and the command stack.
@@ -352,7 +356,7 @@ export class FFXBattleHud implements HudPort {
     this.infoEl.className = 'ig-cutin__info ffx-cmd-info';
     this.infoEl.hidden = true;
     this.infoEl.innerHTML = `<div class="ig-cutin__info-desc" data-role="text"></div>`;
-    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl);
+    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.airship.el);
 
     this.stage.append(
       this.bannerEl,
@@ -446,6 +450,7 @@ export class FFXBattleHud implements HudPort {
     // Ends any live selection, so no accent pool or quiet dim can outlive the
     // HUD that lit it (`CommandMenu.close`).
     this.commandMenu.close();
+    this.airship.dispose();
     this.clearTransientOverlays();
     this.el.remove();
     this.mounted = false;
@@ -461,6 +466,7 @@ export class FFXBattleHud implements HudPort {
       // the results screen — and anything its cursor lit (the accent pool, the
       // quiet dim, the lit party rows) would be painted under it.
       this.commandMenu.close();
+      this.airship.abandon();
       this.clearTransientOverlays();
       // The enemy plate goes with them. This is also the call `SensorPanel.hide()`
       // never had: before this round one Sensor in Chapter 1 left the card on
@@ -474,6 +480,7 @@ export class FFXBattleHud implements HudPort {
       // tile shows — the only mark that tells Yu Pagoda B from Yu Pagoda C.
       this.lastPreviewRows = preview;
       this.ctbList.render(preview, state.combatants);
+      this.airship.dockChip(this.ctbList.el, state);
     }
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
@@ -531,7 +538,10 @@ export class FFXBattleHud implements HudPort {
     const combatants = this.lastState?.combatants ?? {};
     const wrapped = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot => {
       const result = previewRank(cmd);
-      if (Array.isArray(result) && this.lastState) this.ctbList.render(result, this.lastState.combatants);
+      if (Array.isArray(result) && this.lastState) {
+        this.ctbList.render(result, this.lastState.combatants);
+        this.airship.dockChip(this.ctbList.el, this.lastState);
+      }
       return result;
     };
 
@@ -555,9 +565,11 @@ export class FFXBattleHud implements HudPort {
       this.advisor.showDecision(actorId, commands, this.lastState);
     }
     try {
-      return await this.commandMenu.open({
+      // Evrae only: the two airship orders fold into one row that opens the
+      // order widget (`AirshipOrders`); every other battle gets `commands` as is.
+      return await this.airship.choose(commands, this.lastState, (menuCommands) => this.commandMenu.open({
         actorId,
-        commands,
+        commands: menuCommands,
         previewRank: wrapped,
         combatants,
         setHelp: (t) => this.setHelp(t),
@@ -573,7 +585,7 @@ export class FFXBattleHud implements HudPort {
         onSelection: (sel) => this.applySelection(sel),
         letterTagOf: (id) => this.letterTagOf(id),
         targetNoteOf: (id, cmd) => this.targetNoteOf(id, cmd),
-      });
+      }));
     } finally {
       this.guide.clearDecision();
       this.advisor.clearDecision();
@@ -590,6 +602,7 @@ export class FFXBattleHud implements HudPort {
         // (`BattlePresenter.chooseCommand`). Either way the command stack and
         // its help line must not sit over the action.
         this.commandMenu.suspend();
+        this.airship.abandon();
         return;
       case 'turn-start':
         // The turn passing is the actor change: whatever the last actor left

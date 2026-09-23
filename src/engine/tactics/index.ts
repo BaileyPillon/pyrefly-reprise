@@ -38,6 +38,7 @@ import { FFX2_BAHAMUT_ID, ffx2Bahamut } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_CHAIN_IDS, ffx2VegnagunShuyin } from './ffx2-vegnagun-shuyin.ts';
 import { LEBLANC_BOSS_IDS, ffx2Leblanc } from './ffx2-leblanc.ts';
 import { SEYMOUR_MACALANIA_ID, seymourAnimaMacalania } from './seymour-anima-macalania.ts';
+import { EVRAE_ID, evrae } from './evrae.ts';
 
 export type { Tactic } from './common.ts';
 export {
@@ -63,6 +64,7 @@ export { ffx2Bahamut, FFX2_BAHAMUT_ID } from './ffx2-bahamut.ts';
 export { ffx2VegnagunShuyin, FFX2_SHUYIN_ID, FFX2_VEGNAGUN_CHAIN_IDS } from './ffx2-vegnagun-shuyin.ts';
 export { ffx2Leblanc, LEBLANC_BOSS_IDS } from './ffx2-leblanc.ts';
 export { seymourAnimaMacalania, SEYMOUR_MACALANIA_ID } from './seymour-anima-macalania.ts';
+export { evrae, EVRAE_ID } from './evrae.ts';
 
 /**
  * Every chapter's slot, in encounter order. `null` = no line written yet.
@@ -97,6 +99,11 @@ const REGISTRY: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic | null }> = 
   ...[SEYMOUR_MACALANIA_ID, 'anima-macalania', 'guado-guardian-a', 'guado-guardian-b'].map(
     (bossId) => ({ bossId, tactic: seymourAnimaMacalania }),
   ),
+  // Chapter 8 is one battle against one fighter. Cid is on the enemy side as
+  // a non-combatant turn-taker and is never a target, so Evrae's id alone
+  // finds it — the same single id the guide lists as `bossIds`
+  // [docs/handoff/chapter-evrae-engine.md].
+  { bossId: EVRAE_ID, tactic: evrae },
 ];
 
 /** Keyed by a boss combatant id that only that encounter fields. */

@@ -34,6 +34,7 @@ import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
+import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { mountScene, type SceneBuild, type SceneFactory } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -223,6 +224,20 @@ SCENES.set('macalania-temple', {
   slots: MACALANIA_TEMPLE_SLOTS,
   placeholder: false,
 });
+/**
+ * The deck of the Fahrenheit (Chapter 8, FFX only) — real
+ * (`buildEvraeAirshipDeckScene` in {@link SCENE_FACTORIES}, which also
+ * publishes the NEAR/FAR range director on the scene's `userData`); `build`
+ * is the unreachable demo diorama, as for Leblanc above
+ * [docs/handoff/chapter-evrae-scene.md §6].
+ */
+SCENES.set('evrae-airship-deck', {
+  key: 'evrae-airship-deck',
+  title: 'The deck of the Fahrenheit',
+  build: buildDemoScene,
+  slots: EVRAE_AIRSHIP_DECK_SLOTS,
+  placeholder: false,
+});
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -262,6 +277,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'bevelle-underground': buildBevelleUndergroundScene,
   'leblanc-last-room': buildLeblancLastRoomScene,
   'macalania-temple': buildMacalaniaTempleScene,
+  'evrae-airship-deck': buildEvraeAirshipDeckScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

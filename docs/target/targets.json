@@ -851,7 +851,7 @@
           "label": "Evrae on the airship (FFX)",
           "src": "docs/concepts/chapters/evrae/renders/backdrop-b.png",
           "state": "approved",
-          "delivery": "in-progress",
+          "delivery": "implemented",
           "note": "Distance through Cid’s Trigger commands, missiles, Poison Breath telegraphed by the inhale. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop B (docs/concepts/chapters/evrae/renders/backdrop-b.png, looking up at the hull from the rail). Boss Evrae's palette is option B (renders/evrae-b.png, cooler teal/gold, FAR read); the NEAR and throat/breath-charge poses are to be rendered in B's colours rather than A's or C's own palette. Preflight recommendations accepted: docs/target/decisions.json D-020.",
           "reaction": {
             "date": "2026-09-21",
@@ -871,8 +871,14 @@
             "undecided": [
               "whether the fight is named for Evrae or for the airship (Q11) — Bailey's call, asked before the chapter-card options round"
             ],
-            "inferred": []
-          }
+            "inferred": [
+              "chapter number 8, by display order after Macalania (the D-018 rule), not asked",
+              "chapter title stays Evrae (the COMING card's) while Q11, whether the airship names the chapter, is still undecided here",
+              "music: Chapter 1's scene-gagazet and boss-seymour stand in until the chapter's own two cues (scene-fahrenheit, boss-evrae; preflight §6, research §12.6) are composed and picked by ear",
+              "Cid is not drawn on the field (he keeps his CTB tile; his volleys come from off-frame): the integrator's chapter-local answer to scene handoff F-1, not a pick"
+            ]
+          },
+          "build": "Registered as Chapter 8 (evrae-airship) and playable through window.__pyrefly.gotoChapter, but LOCKED as a COMING card on chapter select until Bailey approves the art (one line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS; docs/handoff/chapter-evrae.md). In a real battle the deck re-stages NEAR/FAR when Cid flies an order (the scene's range director, hooked by src/app/screens/BattleScreenAirship.ts) and the order widget opens from an Orders row in the command cascade (src/ui/ffx/AirshipOrders.ts). Real-flow stills: docs/screenshots/chapters/evrae-flow-1-select-locked.png, -2-order-widget.png, -3-battle-far.png, -4-results-win.png. Every Evrae painting installed under public/art is CANDIDATE; the backdrop is darker than picked concept B (docs/handoff/chapter-evrae-scene.md §5)."
         },
         {
           "label": "Evrae's order/range widget (FFX)",
@@ -884,7 +890,7 @@
           "game": "ffx",
           "gameNote": "FFX only: Trigger Commands, the CTB queue and Cid's own turn-taker row are FFX conventions with no FFX-2 counterpart; nothing here applies to any FFX-2 chapter.",
           "note": "The options round (docs/concepts/chapters/evrae/widget/: A the Trigger pair in the command cascade with a cost preview, B a deck-side range gauge, C no persistent widget, the battlefield re-staged) has NOT been picked by Bailey. Built to the driver's recommendation: A's cascade-and-cost-preview widget for issuing the order (src/ui/ffx/AirshipOrderWidget.ts — two Trigger rows, the row matching the current range disabled and reading 'Already near/far', a cost preview on the highlighted row: 'Turn now · Cid's next turn · 1 volley' with three volley pips, keyboard reachable, 14 px type floor). Option C's half of the recommendation (no persistent gauge; the field itself says NEAR or FAR with the HUD hidden) is built in the scene (2026-09-22, docs/handoff/chapter-evrae-scene.md): NEAR is tight, warm and low with Evrae's head over the rail and its coils hidden by the deck edge; FAR pulls the camera back and up (more deck underfoot), cools the key light, raises a cold haze, speeds the cloud drift (the ship's speed, research §12.3) and shows Evrae as the installed CANDIDATE idle-far streak far out in open sky, drawn at the head-length ratio (69.5 / 55.1 px) so NEAR and FAR are one creature. C's one-shot 'Pull back, Cid!' shout is NOT built: A's ORDER chip on Cid's CTB tile is the confirmation. Knowing departures: the backdrop is the installed CANDIDATE painting, darker than the picked concept render, and it is rolled 11.6 degrees so its own rail lies level behind the deck edge.",
-          "build": "src/ui/ffx/AirshipOrderWidget.ts, its scoped CSS in src/ui/ffx/ffx-hud.css (new `.ffx-airship-order*` classes only — no existing rule touched), tests/unit/ui-ffx-airship-order-widget.test.ts (6 tests, all green). Mounts only when `BattleState.flags['airship.range']` is set, which only this encounter's engine ever sets, so no other chapter's screen changes. Not wired into FFXBattleHud.ts/CommandMenu.ts yet — that one-line integration is named in docs/handoff/chapter-evrae-guide.md for the integrator, the same pattern the chapter's guide and tactic registration already follow. C's staging: src/scenes/evrae-airship-{deck,range,director,sky,painted,debug,debug-battle}.ts, tests/unit/chapters/evrae-scene.test.ts; the range director follows state.flags['airship.range'] and is published on the scene group for the presenter's one-line hook (handoff §6). Verified in one browser pass with the real FFX engine, the real FFX HUD and this widget driven by the keyboard: Enter on 'Pull back' queued the order, the ORDER chip sat on Cid's tile, Cid flew it ('The Fahrenheit pulls back') and the deck re-staged to FAR. Stills: docs/screenshots/chapters/evrae-scene.png (NEAR), evrae-scene-far.jpg, evrae-order-near.jpg, evrae-order-sent.jpg, evrae-order-far.jpg, evrae-far-muted.jpg; C's frames beside the build: docs/screenshots/chapters/evrae-staging-target-vs-build.jpg.",
+          "build": "src/ui/ffx/AirshipOrderWidget.ts, its scoped CSS in src/ui/ffx/ffx-hud.css (new `.ffx-airship-order*` classes only — no existing rule touched), tests/unit/ui-ffx-airship-order-widget.test.ts (6 tests, all green). Mounts only when `BattleState.flags['airship.range']` is set, which only this encounter's engine ever sets, so no other chapter's screen changes. Not wired into FFXBattleHud.ts/CommandMenu.ts yet — that one-line integration is named in docs/handoff/chapter-evrae-guide.md for the integrator, the same pattern the chapter's guide and tactic registration already follow. C's staging: src/scenes/evrae-airship-{deck,range,director,sky,painted,debug,debug-battle}.ts, tests/unit/chapters/evrae-scene.test.ts; the range director follows state.flags['airship.range'] and is published on the scene group for the presenter's one-line hook (handoff §6). Verified in one browser pass with the real FFX engine, the real FFX HUD and this widget driven by the keyboard: Enter on 'Pull back' queued the order, the ORDER chip sat on Cid's tile, Cid flew it ('The Fahrenheit pulls back') and the deck re-staged to FAR. Stills: docs/screenshots/chapters/evrae-scene.png (NEAR), evrae-scene-far.jpg, evrae-order-near.jpg, evrae-order-sent.jpg, evrae-order-far.jpg, evrae-far-muted.jpg; C's frames beside the build: docs/screenshots/chapters/evrae-staging-target-vs-build.jpg. Wired into the REAL battle at registration (2026-09-23, docs/handoff/chapter-evrae.md): on Tidus's or Rikku's turn the two order rows fold into one \"Orders\" row in the command cascade; choosing it opens this widget (the two rows tagged Trigger or greyed \"Already near/far\" / \"Ordered\", and under them the ivory \"This order costs\" slab with the volley pips); Esc returns to the cascade without opening the pause menu; the ORDER chip sits on Cid's CTB tile until his turn flies the order, and the deck re-stages to FAR. On anyone else's turn the rows are not there (option A, step 1). Driven with real keys in the browser: docs/screenshots/chapters/evrae-flow-2-order-widget.png, evrae-flow-3-battle-far.png.",
           "reference": [
             "docs/concepts/chapters/evrae/widget/README.md",
             "docs/concepts/chapters/evrae/widget/options.json",
@@ -907,7 +913,8 @@
               "which option Bailey picks: A, B, C or a mix — the driver's own recommendation note says A and C are not exclusive"
             ],
             "inferred": [
-              "built to the driver's recommendation A + C's staging, awaiting Bailey"
+              "built to the driver's recommendation A + C's staging, awaiting Bailey",
+              "the \"Orders\" row that opens the widget is the integrator's reading of A (A draws the two rows straight in the cascade), and the cost moved from the row into A's separate slab"
             ]
           }
         },

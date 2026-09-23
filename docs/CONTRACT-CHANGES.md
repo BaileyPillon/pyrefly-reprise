@@ -6,6 +6,55 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-23 — Chapter 8 registered, LOCKED: `evrae-airship` (Evrae)
+
+Key `chapter-evrae-integration`. **FFX only** [AGENTS.md hard rule 14]: the
+airship distance mechanic "has no X-2 counterpart"
+(`research/ffx-evrae-airship.md` §0.4); an FFX party without Yuna. Number 8 by
+display order after the seven already registered (the D-018 rule Leblanc's 6
+and Macalania's 7 used); narratively it comes before Chapter 1. Id
+`evrae-airship` is the formation's id and the COMING row's, so the coming
+card drops off by itself the day its lock line goes.
+
+**Additive only, the same shape as Chapter 7's entry below:**
+
+- `src/data/encounters.ts`: `ChapterId` gains `'evrae-airship'`;
+  `Chapter.number` gains `8`; `EVRAE_AIRSHIP` appended to
+  `CHAPTERS`/`CHAPTER_IDS` (eighth, last) and re-exported. The record lives in
+  `src/data/chapter-evrae-airship.ts` (type-only import of `Chapter`).
+- `src/data/chapter-meta.ts`: `ChapterMeta.numeral` gains `'VIII'`;
+  `EVRAE_META` (now a real `ChapterMeta`, id `evrae-airship`) appended.
+- `src/story/registry.ts`: `ChapterKey` gains the id; `STORY_CHAPTERS`,
+  `AI_EMITTED_TRIGGERS` (empty) and `CHAIN_SEAMS` (empty: one formation, every
+  beat an in-fight interrupt) gain an entry.
+- `src/engine/tactics/index.ts`: `evrae` under `'evrae'` (the guide's one
+  `bossIds` entry; Cid is never a target). `src/data/guides/index.ts`:
+  `EVRAE_GUIDE` appended (its `id` corrected to the chapter id).
+- `src/scenes/index.ts`: `'evrae-airship-deck'` in `SCENE_FACTORIES` and
+  `SCENES`; `src/debug/sceneScreens.ts`: `scene-evrae-airship-deck`.
+- `src/app/screens/frontend/comingChapters.ts`: `'evrae-airship'` added to
+  `LOCKED_CHAPTER_IDS` (every Evrae painting is CANDIDATE; the order widget
+  and the NEAR/FAR staging are INFERRED).
+
+**Not contract files, recorded because they are shared:** `BattleScreen.ts`
+gains one optional hook (`BattleScreenAirship.ts`: returns `null` on every
+scene without a published range director); `FFXBattleHud.ts` routes the
+command menu through `AirshipOrders.choose`, a pass-through unless
+`state.flags['airship.range']` is set (only the Evrae encounter sets it).
+`src/battle/ffx/ai/index.ts`: the two order triggers now emit a `message`
+when queued, as Talk does (found by `trigger-commands.test.ts` on
+registration). `special-orders-evrae.ts`: `name` is the approved copy
+("Pull back" / "Close in", D-020 Q9) instead of the id.
+
+**No new `MusicKey`.** The preflight's two cues (`scene-fahrenheit`,
+`boss-evrae`) are unbuilt and `docs/audio/THEMES.md` names no Evrae cue, so
+`Chapter.music`, the script's two `music()` calls, the formation's
+`musicCues` and the meta's `musicKeys` route Chapter 1's `scene-gagazet` /
+`boss-seymour` plus `victory-ffx` as a recorded stopgap. Four script `sfx()`
+keys not in the bank were swapped (`airship-engine-loop` -> `machina-whir`,
+`comm-click` -> `cursor-move`, `wyrm-fall` -> `ko-fall`, `cannon-report` ->
+`explosion`). No boss number changed.
+
 ## 2026-09-22 — FFX-2 Wait mode: `FFX2BattleEngine.tick` doc comment only
 
 Key `ffx2-wait-mode`. **FFX-2 only** [AGENTS.md hard rule 14]. Bailey's D-029

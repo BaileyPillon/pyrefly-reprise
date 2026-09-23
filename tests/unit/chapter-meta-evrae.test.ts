@@ -34,7 +34,8 @@ function wordCount(text: string): number {
 describe('EVRAE_META', () => {
   it('is FFX', () => {
     expect(EVRAE_META.gameLabel).toBe('FFX');
-    expect(EVRAE_META.id).toBe('evrae');
+    expect(EVRAE_META.id).toBe('evrae-airship');
+    expect(EVRAE_META.numeral).toBe('VIII');
   });
 
   it('quote is original and under 18 words', () => {

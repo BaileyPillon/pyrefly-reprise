@@ -279,13 +279,10 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // look the formation up by, so the engine and data tracks can be verified
   // before the presentation tracks exist.
   [seymourAnimaMacalaniaGroup.id]: seymourAnimaMacalaniaGroup,
-  // **Not yet a playable chapter either.** `evrae-airship` has no scene, no
-  // story script, no art and no music -- and its order widget (C-11) has not
-  // been mocked up or approved -- so it is deliberately absent from
-  // `src/data/encounters.ts` and `chapter-meta.ts`, and the chapter-select grid
-  // keeps showing it as Coming. Same dev-only registry hook as Macalania above:
-  // this entry is what the unit and strategy suites and the `window.__pyrefly`
-  // debug API look the formation up by.
+  // Chapter 8 (`evrae-airship`, src/data/chapter-evrae-airship.ts) is now
+  // registered but LOCKED as Coming on chapter select until Bailey approves
+  // its art [docs/handoff/chapter-evrae.md]. The unit and strategy suites
+  // still look the formation up here by id.
   [evraeGroup.id]: evraeGroup,
 };
 

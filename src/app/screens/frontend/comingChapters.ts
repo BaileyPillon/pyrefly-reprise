@@ -77,6 +77,8 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
     research: 'research/ffx-seymour-anima-macalania.md',
   },
   {
+    // Matches the real, registered Chapter 8 id. The row stays on the board
+    // while that id is in `LOCKED_CHAPTER_IDS` below.
     id: 'evrae-airship',
     game: 'ffx',
     title: 'Evrae',
@@ -113,4 +115,8 @@ export const LOCKED_CHAPTER_IDS: ReadonlySet<string> = new Set<string>([
   // Chapter 7, Macalania (FFX only): every painting CANDIDATE, Anima's arrival
   // INFERRED (docs/target/targets.json), docs/handoff/chapter-macalania.md.
   'seymour-anima-macalania',
+  // Chapter 8, Evrae (FFX only): every painting CANDIDATE, the order widget
+  // and the NEAR/FAR staging INFERRED (docs/target/targets.json),
+  // docs/handoff/chapter-evrae.md.
+  'evrae-airship',
 ]);

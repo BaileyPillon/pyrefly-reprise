@@ -355,7 +355,10 @@ describe('the end of an arc — critic round 02 #32', () => {
       // but it comes before Seymour Flux in the story (research
       // ffx-seymour-anima-macalania.md §9.7 beat 11: he is sent back unsent),
       // so `ARC_FINALE.ffx` stays `braskas-final-aeon`.
-      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania']);
+      // Chapter 8 (Evrae) is the same again: the approach to Bevelle, before
+      // the wedding its own post scene ends on (research ffx-evrae-airship.md
+      // §12.5 beat 11), so it too is story-earlier than the FFX finale.
+      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship']);
       const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
       expect(lastByDisplayOrder).toBe(id);

@@ -47,8 +47,10 @@ import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 // Chapter 7's record lives in its own file for the 400-line rule; it imports
 // only the `Chapter` type from here, so there is no runtime cycle.
 import { SEYMOUR_ANIMA_MACALANIA } from './chapter-seymour-anima-macalania.ts';
+// Chapter 8's record, same reason and the same type-only import.
+import { EVRAE_AIRSHIP } from './chapter-evrae-airship.ts';
 
-/** The seven chapter ids. Also the keys used in `SaveData.chapters`. */
+/** The eight chapter ids. Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
   | 'seymour-flux'
   | 'yunalesca'
@@ -56,7 +58,8 @@ export type ChapterId =
   | 'ffx2-bahamut'
   | 'ffx2-vegnagun-shuyin'
   | 'ffx2-leblanc'
-  | 'seymour-anima-macalania';
+  | 'seymour-anima-macalania'
+  | 'evrae-airship';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -103,8 +106,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–7. */
-  number: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  /** Display order on the chapter-select screen, 1–8. */
+  number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   /** Card title. The encounter's name. */
   title: string;
   /** Card subtitle. One clause, no period. */
@@ -348,13 +351,14 @@ export const FFX2_LEBLANC: Chapter = {
   },
 };
 
-export { SEYMOUR_ANIMA_MACALANIA };
+export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP };
 
 /**
- * All seven, in play order. Chapter 7 (Macalania) is registered — the debug
- * API, the flow and every chapter-generic test reach it — but chapter select
- * shows it as a locked COMING card until Bailey approves its art
- * (`LOCKED_CHAPTER_IDS` in `src/app/screens/frontend/comingChapters.ts`).
+ * All eight, in play order. Chapters 7 (Macalania) and 8 (Evrae) are
+ * registered — the debug API, the flow and every chapter-generic test reach
+ * them — but chapter select shows each as a locked COMING card until Bailey
+ * approves its art (`LOCKED_CHAPTER_IDS` in
+ * `src/app/screens/frontend/comingChapters.ts`).
  */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX,
@@ -364,6 +368,7 @@ export const CHAPTERS: readonly Chapter[] = [
   FFX2_VEGNAGUN_SHUYIN,
   FFX2_LEBLANC,
   SEYMOUR_ANIMA_MACALANIA,
+  EVRAE_AIRSHIP,
 ] as const;
 
 /** Chapter ids, in play order. */
@@ -375,6 +380,7 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'ffx2-vegnagun-shuyin',
   'ffx2-leblanc',
   'seymour-anima-macalania',
+  'evrae-airship',
 ] as const;
 
 /** Look a chapter up by id. Returns `undefined` for an unknown id. */

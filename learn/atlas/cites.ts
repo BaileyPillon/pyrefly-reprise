@@ -43,6 +43,7 @@ import { shuyinAbilities } from '../../src/data/ffx2/enemies/shuyin-abilities.ts
 import { ormiAbilities, logosAbilities, goonAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-abilities.ts';
 import { leblancAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts';
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../src/data/ffx/enemies/seymour-anima-macalania-abilities.ts';
+import { EVRAE_ABILITIES } from '../../src/data/ffx/enemies/evrae-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -100,6 +101,10 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     'guado-guardian-b': 'research/ffx-seymour-anima-macalania.md §2.1 (src/data/ffx/enemies/seymour-anima-macalania.ts)',
     'anima-macalania': 'research/ffx-seymour-anima-macalania.md §3.1 (src/data/ffx/enemies/seymour-anima-macalania.ts)',
   },
+  'evrae-airship': {
+    evrae: 'research/ffx-evrae-airship.md §1.1 (src/data/ffx/enemies/evrae.ts)',
+    cid: 'research/ffx-evrae-airship.md §2.1 (src/data/ffx/enemies/evrae.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -156,6 +161,9 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
       'research/ffx-seymour-anima-macalania.md §4 (src/data/ffx/enemies/seymour-anima-macalania-abilities.ts)',
     ),
   ],
+  'evrae-airship': [
+    fileCite(EVRAE_ABILITIES, 'research/ffx-evrae-airship.md §2.2, §3.1, §3.2 (src/data/ffx/enemies/evrae-abilities.ts)'),
+  ],
 };
 
 /**
@@ -191,6 +199,9 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
     shell: 'research/ffx-seymour-anima-macalania.md §4.1 (src/data/ffx/enemies/seymour-anima-macalania.ts, reusing the shared Shell)',
     protect: 'research/ffx-seymour-anima-macalania.md §4.2 (src/data/ffx/enemies/seymour-anima-macalania.ts, reusing the shared Protect)',
   },
+  // Every Evrae and Cid ability id is `evrae-`/`cid-`-prefixed and defined in
+  // the chapter's own ability file (no shared player-catalog reuse).
+  'evrae-airship': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

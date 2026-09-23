@@ -15,6 +15,7 @@ import { FFX2_BAHAMUT_GUIDE } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_SHUYIN_GUIDE } from './ffx2-vegnagun-shuyin.ts';
 import { FFX2_LEBLANC_GUIDE } from './ffx2-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA_GUIDE } from './seymour-anima-macalania.ts';
+import { EVRAE_GUIDE } from './evrae.ts';
 
 export type {
   ChapterGuide,
@@ -33,6 +34,7 @@ export {
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
   FFX2_LEBLANC_GUIDE,
   SEYMOUR_ANIMA_MACALANIA_GUIDE,
+  EVRAE_GUIDE,
 };
 
 export const GUIDES: readonly ChapterGuide[] = [
@@ -45,6 +47,9 @@ export const GUIDES: readonly ChapterGuide[] = [
   // Chapter 7 — registered with `src/data/encounters.ts` and the tactic, in
   // the integrator's one commit [docs/plans/chapter-macalania-review.md §8.1].
   SEYMOUR_ANIMA_MACALANIA_GUIDE,
+  // Chapter 8 — registered with `src/data/encounters.ts` and the tactic, in
+  // the integrator's one commit [docs/handoff/chapter-evrae-guide.md].
+  EVRAE_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

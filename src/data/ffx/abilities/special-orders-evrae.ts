@@ -26,18 +26,16 @@
  * direction is carried by the id itself: `'pull-back'` and `'close-in'`,
  * exactly as the owner named them on 2026-09-21.
  *
- * ## The labels are deliberately NOT written here
+ * ## The labels (set at registration; see `name` below)
  *
- * The order widget is **C-11**: `research/visual-bible.md` §3.12 specifies two
- * Trigger Command flavours and both are one-shot Talks. A *persistent two-state
- * toggle* issued to an uncontrollable ally, with a preview of what the order
- * costs Cid this turn and a queued-order marker on his CTB row, is a new
- * interface and needs a mockup and Bailey's approval before anything renders it
- * [AGENTS.md rule 9; research §11 item 17 says so in terms]. The owner's
- * instruction for this track was "expose ids only", so `name` is the id and the
- * widget track sets the real copy — recommended, and still awaiting the
- * approval that would make it real: **"Pull back"** and **"Close in"** (C-9;
- * "Move in" is single-source *and* reads as the player moving).
+ * The owner's first instruction for this track was "expose ids only", so
+ * `name` shipped as the id. The copy was then approved with the preflight
+ * (`docs/target/decisions.json` D-020, Q9: **"Pull back"** and **"Close in"**,
+ * our own words; "Move in" is single-source *and* reads as the player moving),
+ * and the integrator set it when the chapter was registered. The order
+ * *widget* (C-11, `src/ui/ffx/AirshipOrderWidget.ts`) is a separate question
+ * and is still unpicked: it is built to the driver's recommendation and
+ * recorded as INFERRED [AGENTS.md rule 9].
  *
  * ## The cost is the whole design
  *
@@ -56,12 +54,15 @@
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
 
-function order(id: string, note: string): AbilityDef {
+function order(id: string, name: string, note: string): AbilityDef {
   return {
     id,
-    // **The id, on purpose.** See the file header: the player-facing label
-    // ships with the approved widget, not from here.
-    name: id,
+    // The player-facing label. The copy was approved with the preflight
+    // (docs/target/decisions.json D-020, Q9: "Pull back" / "Close in", our own
+    // words); the integrator set it when the chapter was registered, because
+    // the menu, the guide and the advisor all print `name`
+    // [docs/handoff/chapter-evrae.md]. The widget itself is still unpicked.
+    name,
     game: 'ffx',
     category: 'special',
     mpCost: 0,
@@ -81,7 +82,6 @@ function order(id: string, note: string): AbilityDef {
     extra: {
       resolvesAsCommandKind: 'trigger',
       triggerId: id,
-      labelPendingApproval: true,
       note,
     },
   };
@@ -90,11 +90,13 @@ function order(id: string, note: string): AbilityDef {
 export const ABILITIES: Record<string, AbilityDef> = {
   'pull-back': order(
     'pull-back',
-    "Menu marker only — submit a TriggerCommand with id:'pull-back'. Queues the manoeuvre; Cid flies it on his next turn instead of firing a volley. Label pending the approved order widget (C-11).",
+    'Pull back',
+    "Menu marker only — submit a TriggerCommand with id:'pull-back'. Queues the manoeuvre; Cid flies it on his next turn instead of firing a volley. Label per D-020 Q9.",
   ),
   'close-in': order(
     'close-in',
-    "Menu marker only — submit a TriggerCommand with id:'close-in'. Queues the manoeuvre; Cid flies it on his next turn instead of firing a volley. Label pending the approved order widget (C-11).",
+    'Close in',
+    "Menu marker only — submit a TriggerCommand with id:'close-in'. Queues the manoeuvre; Cid flies it on his next turn instead of firing a volley. Label per D-020 Q9.",
   ),
 };
 

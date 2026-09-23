@@ -4,19 +4,13 @@
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. Nothing here is true of FFX-2.
  *
- * **Not registered.** `src/data/chapter-meta.ts`'s `CHAPTER_META` carries a
- * hard length-parity assertion against `CHAPTERS` (`tests/unit/chapter-meta.test.ts`)
- * that fails until `src/data/encounters.ts` (a contract file) widens
- * `ChapterId` and adds the chapter record — integrator-only work
- * (`docs/handoff/chapter-evrae-engine.md` "Owed to other tracks"). The chapter
- * stays LOCKED as Coming in chapter select until then, and its art
- * (`docs/concepts/chapters/evrae/`) is CANDIDATE, not Bailey-approved.
- *
- * `numeral` is typed loosely here (`string`, not the closed union
- * `ChapterMeta` uses) via `DraftChapterMeta` — the same relaxation
- * `chapter-meta-seymour-anima-macalania.ts` used before its own promotion —
- * because this chapter's real display number is an integrator decision this
- * track does not make.
+ * **Registered** in `./chapter-meta.ts`'s `CHAPTER_META` by the integrator
+ * (`docs/handoff/chapter-evrae.md`), now a real `ChapterMeta`: the
+ * `DraftChapterMeta` relaxation went away once `src/data/encounters.ts`
+ * widened `ChapterId` with `'evrae-airship'` (the formation's id and the
+ * COMING row's) and the chapter took number 8 (display order, the D-018 rule).
+ * The chapter stays LOCKED as COMING on chapter select until Bailey approves
+ * its art (`docs/concepts/chapters/evrae/` is CANDIDATE).
  *
  * `heroArt` names the installed chapter-card plate,
  * `public/art/pause/evrae-chapter-card.png` (CANDIDATE, options round not yet
@@ -33,35 +27,15 @@
  * chapter's own cues and swap both.
  */
 
-import type { ChapterObjective, ChapterSnapshot } from './chapter-meta.ts';
-
-/** Same relaxation `chapter-meta-seymour-anima-macalania.ts` used before its own promotion. */
-interface DraftChapterMeta {
-  id: string;
-  gameLabel: 'FFX' | 'FFX-2';
-  numeral: string;
-  title: string;
-  subtitle: string;
-  location: string;
-  blurb: string;
-  heroArt: string;
-  heroArtFallback: string;
-  quote: { text: string; speaker: string };
-  handwritten: string;
-  objectives: readonly [ChapterObjective, ChapterObjective, ChapterObjective];
-  tip: string;
-  snapshots: readonly [ChapterSnapshot, ChapterSnapshot, ChapterSnapshot];
-  focalCharacterId: string;
-  musicKeys: readonly string[];
-}
+import type { ChapterMeta } from './chapter-meta.ts';
 
 /**
  * Evrae — on the deck of the *Fahrenheit*.
  * Beats: `research/ffx-evrae-airship.md` §12.4-12.5. Strategies: §8 (the
  * numbered player-strategy table cited row by row below).
  */
-export const EVRAE_META: DraftChapterMeta = {
-  id: 'evrae',
+export const EVRAE_META: ChapterMeta = {
+  id: 'evrae-airship',
   gameLabel: 'FFX',
   numeral: 'VIII',
   title: 'Evrae',

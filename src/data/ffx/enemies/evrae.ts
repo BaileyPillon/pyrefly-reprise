@@ -263,10 +263,10 @@ export const evraeGroup: EnemyGroupDef = {
   canEscape: false, // §1.3 `boss` — Escape and Flee are disabled
   enemies: [evrae, cid],
   musicCues: [
-    // §12.6 / C-16: **no source names the Evrae battle track.** The key is
-    // reserved here so the audio track can fill it without touching this file;
-    // the composition itself is O-5 and needs Bailey's ear [AGENTS.md rule 13].
-    { at: 'start', track: 'boss-evrae', fadeMs: 800 },
+    // STOPGAP: §12.6 / C-16, no source names the Evrae battle track; the
+    // reserved `boss-evrae` is unbuilt (O-5, Bailey's ear, rule 13), so Chapter
+    // 1's cue plays [docs/handoff/chapter-evrae.md]; swap when it lands.
+    { at: 'start', track: 'boss-seymour', fadeMs: 800 },
   ],
 };
 

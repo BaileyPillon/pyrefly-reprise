@@ -178,17 +178,31 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
    */
   [ORDER_PULL_BACK]: {
     available: (ctx, user) => airshipOrderAvailable(ctx, user.id),
-    apply: (ctx, user) => queueAirshipOrder(ctx, user, ORDER_PULL_BACK),
+    apply: (ctx, user) => sayOrder(ctx, user, ORDER_PULL_BACK, 'pull back'),
     disabledReason: 'Not your call',
     rejectedMessage: (user) => `${user.name} cannot give that order`,
   },
   [ORDER_CLOSE_IN]: {
     available: (ctx, user) => airshipOrderAvailable(ctx, user.id),
-    apply: (ctx, user) => queueAirshipOrder(ctx, user, ORDER_CLOSE_IN),
+    apply: (ctx, user) => sayOrder(ctx, user, ORDER_CLOSE_IN, 'close in'),
     disabledReason: 'Not your call',
     rejectedMessage: (user) => `${user.name} cannot give that order`,
   },
 };
+
+/**
+ * Queue an Evrae order and **say** it was queued, for the reason Talk says it
+ * spoke: an order changes nothing on the field until Cid's next turn, so
+ * without a line the row produced only `action-start` / `action-end` and read
+ * as a broken button (`tests/unit/trigger-commands.test.ts`, found when the
+ * chapter was registered). Placeholder copy, like the engine's other three
+ * airship messages [docs/handoff/chapter-evrae-engine.md "Owed"]. FFX only.
+ */
+function sayOrder(ctx: Ctx, user: FFXCombatant, orderId: string, words: string): boolean {
+  if (!queueAirshipOrder(ctx, user, orderId)) return false;
+  ctx.emit({ type: 'message', text: `${user.name} orders Cid to ${words}`, kind: 'story' });
+  return true;
+}
 
 /** The handler for a `TriggerCommand.id`, or `undefined` for an unknown id. */
 export function triggerHandler(id: string): TriggerHandler | undefined {

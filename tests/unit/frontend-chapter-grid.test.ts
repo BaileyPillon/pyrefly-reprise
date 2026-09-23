@@ -36,8 +36,8 @@ describe('the board', () => {
     // Leblanc's own COMING_CHAPTERS row is filtered out by id now that the
     // real chapter is registered, so the raw `COMING_CHAPTERS.length` (3)
     // overcounts by one — this asserts what the board actually shows.
-    // Macalania is registered (Chapter 7) but LOCKED, so its real tile is
-    // withheld and its COMING row stays.
+    // Macalania (Chapter 7) and Evrae (Chapter 8) are registered but LOCKED,
+    // so each real tile is withheld and its COMING row stays.
     expect(tiles).toHaveLength(8);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
@@ -122,6 +122,25 @@ describe('the board', () => {
     expect(live[0]!.numeral).toBe('VII');
     expect(live[0]!.silhouetteKeys).toEqual(['seymour-macalania']);
     expect(unlocked.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
+  });
+
+  it('keeps Chapter 8 (Evrae) as its COMING card while LOCKED, and unlocks it with its one line', () => {
+    expect(CHAPTERS.find((c) => c.id === 'evrae-airship'), 'Chapter 8 is registered').toBeDefined();
+    expect(LOCKED_CHAPTER_IDS.has('evrae-airship')).toBe(true);
+
+    const card = buildChapterTiles(save).filter((t) => t.id === 'evrae-airship');
+    expect(card).toHaveLength(1);
+    expect(card[0]!.kind).toBe('coming');
+    expect(card[0]!.playable).toBe(false);
+
+    // The unlock: every lock line but Evrae's kept.
+    const locked = new Set([...LOCKED_CHAPTER_IDS].filter((id) => id !== 'evrae-airship'));
+    const live = buildChapterTiles(save, { locked }).filter((t) => t.id === 'evrae-airship');
+    expect(live).toHaveLength(1);
+    expect(live[0]!.kind).toBe('chapter');
+    expect(live[0]!.playable).toBe(true);
+    expect(live[0]!.numeral).toBe('VIII');
+    expect(live[0]!.silhouetteKeys).toEqual(['evrae']);
   });
 
   it('drops a coming row matched by title alone, whatever id the chapter lands under', () => {

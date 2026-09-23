@@ -997,3 +997,25 @@ they need nothing from Bailey.
 ---
 
 *Preflight only. No code, no browser, no build. The only file this work commits is this one.*
+
+---
+
+## Addendum, 2026-09-23 — the integrator's paper check (rule 15, DEEP)
+
+Written during the registration pass (`docs/handoff/chapter-evrae.md`), after
+`node tools/critic-plan.mjs --paths` classed the change DEEP (chapter registry;
+FFX CTB engine). **Game case: FFX only** for everything the player can see
+change; the three shared files below are touched behind a gate only the Evrae
+encounter opens.
+
+| Shared file | What changes | Why it cannot move another chapter | Proof |
+|---|---|---|---|
+| `src/data/encounters.ts` + registries | `evrae-airship`, number 8, additive | the lock set keeps it off chapter select; every generic suite now walks it | full `npm test`; `trigger-commands`, `audio-story-cues`, `story-triggers` |
+| `src/ui/ffx/FFXBattleHud.ts` | the menu call goes through `AirshipOrders.choose`; chip docking after CTB renders; the widget abandoned on `action-start` / result | `choose` returns `openMenu(commands)` untouched unless `flags['airship.range']` is `near`/`far`, a flag only `evrae-rules.ts` sets | `ui-ffx-airship-orders.test.ts` "passes every other battle straight through"; `ui-ffx-hud.test.ts` green |
+| `src/app/screens/BattleScreen.ts` | one optional hook, `attachAirshipBattle` | returns `null` unless the scene published a range director (only `evrae-airship-deck.ts` does) | the other seven chapters' real flows are unchanged in the full suite; one GPU browser pass on Evrae |
+| `src/battle/ffx/ai/index.ts` | the two order triggers emit a `message` when queued | handlers keyed by `pull-back` / `close-in`; no RNG draw, so no measured number moves | `strategy-evrae.test.ts` (A-1..A-3) green; `trigger-commands.test.ts` found the silent row |
+
+Risks carried to the deep review: the `Orders` fold is a reading of option A
+(A draws the two rows straight in the cascade); Cid is removed from the stage
+on this scene only (F-1's presenter-wide rule is still open); the range move
+starts with the burst, not after the "pulls back" line is read.

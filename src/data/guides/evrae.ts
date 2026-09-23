@@ -15,7 +15,7 @@
 import type { ChapterGuide } from './types.ts';
 
 export const EVRAE_GUIDE: ChapterGuide = {
-  id: 'evrae',
+  id: 'evrae-airship',
   title: 'Evrae',
   bossIds: ['evrae'],
 

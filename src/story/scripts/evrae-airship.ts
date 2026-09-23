@@ -48,14 +48,22 @@
  *   2. Every `say` in a mid-battle script carries an explicit `auto` — the
  *      presenter abandons a beat that waits on a Confirm that never comes.
  *
- * `music()` cues are the ids the preflight reserves (`scene-fahrenheit`,
- * `boss-evrae`, §6 and §12.6). They are **not routed yet**: `src/audio/tracks/`
- * and `docs/audio/THEMES.md` are the integrator's, per the engine handoff.
+ * `music()` steps: the preflight reserves two NEW cues (`scene-fahrenheit`,
+ * `boss-evrae`, §6 and §12.6), and neither exists — no composition, no row in
+ * `docs/audio/THEMES.md`, and Bailey judges audio by ear (hard rule 13). An
+ * unregistered cue throws in the cutscene runner
+ * (`tests/unit/audio-story-cues.test.ts`), so the integrator routed Chapter
+ * 1's `scene-gagazet` / `boss-seymour` in their place, the stopgap Chapter 7
+ * uses. When the real cues land, swap the two calls back (and the chapter's
+ * `music` and the formation's `musicCues`).
  *
- * Not registered anywhere on purpose. `src/story/registry.ts`,
- * `src/data/encounters.ts` and friends belong to the chapter's single
- * integrator [`docs/handoff/chapter-evrae-engine.md`, "Owed to other tracks"],
- * so `node tools/orphans.mjs` listing this file is expected.
+ * `sfx()` steps: the writer's five requests are not in the SFX bank, so each
+ * plays the nearest existing sound [`docs/handoff/chapter-evrae.md`]:
+ * `airship-engine-loop` -> `machina-whir`, `comm-click` -> `cursor-move`,
+ * `wyrm-fall` -> `ko-fall`, `cannon-report` -> `explosion`; `wind-gust` exists.
+ *
+ * **Registered** as Chapter 8 by the integrator (`src/story/registry.ts`,
+ * `src/data/chapter-evrae-airship.ts`; `docs/handoff/chapter-evrae.md`).
  */
 
 import type { ChapterScripts } from '../dsl.ts';
@@ -80,10 +88,10 @@ export const evraeAirshipScripts: ChapterScripts = {
     // Full daylight, high altitude, open sky, engine noise under everything
     // [§12.1, §12.3]. No narration here: §2.1 places an interlude *after* an
     // emotional high, so the chapter opens cold on the deck.
-    music('scene-fahrenheit', 1400),
+    music('scene-gagazet', 1400), // stopgap for `scene-fahrenheit` (header)
     camera('idle', 0),
     fade('clear', 1100),
-    sfx('airship-engine-loop'),
+    sfx('machina-whir'), // requested: airship-engine-loop
     wait(1200),
 
     // --- Beat 1 — home is gone, and the Al Bhed are flying anyway ---------
@@ -95,7 +103,7 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('rikku', '...Yeah. Behind us.', { emotion: 'sad' }),
 
     // --- Beat 2 — Brother finds her; Cid turns the ship -------------------
-    sfx('comm-click'),
+    sfx('cursor-move'), // requested: comm-click
     // Brother speaks Al Bhed and Rikku carries it across, as she does all
     // through FFX. See the handoff: this is uncertain line 1.
     say('brother', 'YUNA! Bevelle! They are marrying her to that man!'),
@@ -136,7 +144,7 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('auron', 'Hmph. Mind the teeth.'),
 
     // --- Beat 7 — the mechanic, as characterisation. One line. -----------
-    music('boss-evrae', 900),
+    music('boss-seymour', 900), // stopgap for `boss-evrae` (header)
     shake(11, 700),
     camera('action', 600),
     say('cid', 'Listen up! I can move this ship, or I can shoot!'),
@@ -153,7 +161,7 @@ export const evraeAirshipScripts: ChapterScripts = {
 
     // --- Beat 8 — it falls. Not sent, not killed on screen. ---------------
     camera('idle', 900),
-    sfx('wyrm-fall'),
+    sfx('ko-fall'), // requested: wyrm-fall
     wait(1600),
     say('wakka', 'It just... dropped.'),
     beat(1600),
@@ -163,7 +171,7 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('auron', 'No.'),
 
     // --- Beat 9 — Bevelle opens up. The victory lasts a minute. ----------
-    sfx('cannon-report'),
+    sfx('explosion'), // requested: cannon-report
     flash(140),
     shake(14, 900),
     say('cid', 'Incoming! That is the city shooting at us!'),

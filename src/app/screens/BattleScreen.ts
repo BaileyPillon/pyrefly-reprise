@@ -49,6 +49,8 @@ import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts
 import { attachEnemyIntent, consumeIntentKeyPress } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
+// Chapter 8 (Evrae, FFX only): the deck's NEAR/FAR director; `null` on every other scene.
+import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -101,6 +103,7 @@ export class BattleScreen extends Screen {
   private readonly opts: BattleScreenOptions;
   private scene: LoadedScene | null = null;
   private stage: PaintedStage | null = null;
+  private airship: AirshipBattleHook | null = null;
   private presenter: BattlePresenter | null = null;
   private engine: BattleEngine | null = null;
   private hud: HudPort | null = null;
@@ -195,6 +198,12 @@ export class BattleScreen extends Screen {
     this.preview = this.engine === null;
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
+    this.airship = await attachAirshipBattle({
+      scene: this.scene.scene,
+      camera: this.scene.battleCamera,
+      stage: this.stage,
+      state: this.engine?.state() ?? null,
+    });
 
     // --- HUD + ports -------------------------------------------------------
     this.hud = createHud(chapter.game);
@@ -680,6 +689,7 @@ export class BattleScreen extends Screen {
     // battle-start card is up for. `relaxFormation` returns false while
     // nothing can be projected yet, so a slow first frame simply retries.
     this.settleFormation(dt);
+    this.airship?.sync(this.engine?.state());
     this.stage?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
@@ -900,6 +910,8 @@ export class BattleScreen extends Screen {
     this.cutscenes = null;
     this.momentOverlay?.dispose();
     this.momentOverlay = null;
+    this.airship?.dispose();
+    this.airship = null;
     this.stage?.dispose();
     this.stage = null;
     this.scene?.dispose();

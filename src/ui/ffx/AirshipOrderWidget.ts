@@ -1,5 +1,6 @@
 import type { AvailableCommand, Command } from '../../battle/common/types.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
+import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 
 /**
  * The Evrae chapter's order widget — **THIS CHAPTER ONLY**.
@@ -22,12 +23,10 @@ import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
  * string (`'near' | 'far'`), which only `src/battle/ffx/ai/evrae-rules.ts` ever
  * sets (`docs/handoff/chapter-evrae-engine.md` §"Engine capabilities"). No
  * other chapter's flags carry that key, so mounting this widget can never
- * change any other chapter's screen. This file makes no change to
- * `FFXBattleHud.ts`, `CommandMenu.ts` or any shared HUD file — wiring the
- * widget into the live command flow (calling {@link applies} against the real
- * `BattleState.flags` and swapping it in for the two Trigger rows) is left to
- * the integrator, exactly as the tactic and guide registration is
- * (`docs/handoff/chapter-evrae-guide.md`).
+ * change any other chapter's screen. The live command flow reaches it through
+ * `./AirshipOrders.ts` (the integrator's wiring, `docs/handoff/chapter-evrae.md`):
+ * the two Trigger rows fold into one "Orders" row in the cascade, and choosing
+ * it opens this widget; Esc goes back (the caller's `onCancel`).
  *
  * **The cost is the whole design** (`special-orders-evrae.ts`'s own header):
  * an order costs the speaking character's turn, executes on Cid's next turn
@@ -64,6 +63,14 @@ export interface AirshipOrderRow {
   disabledReason?: string;
 }
 
+/** {@link AirshipOrderWidget.open}'s optional extras. */
+export interface AirshipOrderOpenOptions {
+  /** The order already standing (`state.flags['airship.order']`); its row reads "Ordered". */
+  pending?: 'near' | 'far' | null;
+  /** Called on Escape / X / Backspace. Without it, cancel does nothing (the widget must be answered). */
+  onCancel?: () => void;
+}
+
 const ROWS: readonly Omit<AirshipOrderRow, 'disabled' | 'disabledReason'>[] = [
   { id: 'pull-back', label: 'Pull back' },
   { id: 'close-in', label: 'Close in' },
@@ -76,6 +83,7 @@ export class AirshipOrderWidget {
   private commands: AvailableCommand[] = [];
   private volleysLeft = 0;
   private resolve: ((c: Command) => void) | null = null;
+  private onCancel: (() => void) | null = null;
   private readonly watcher = new RawInputWatcher((b) => this.onButton(b));
   private unwireClicks: (() => void) | null = null;
 
@@ -101,16 +109,26 @@ export class AirshipOrderWidget {
    * cost preview the raw menu row does not carry. `volleysLeft` drives the
    * three-pip readout (`state.flags['airship.missilesLeft']`).
    */
-  open(commands: AvailableCommand[], range: 'near' | 'far', volleysLeft: number): Promise<Command> {
+  open(
+    commands: AvailableCommand[],
+    range: 'near' | 'far',
+    volleysLeft: number,
+    opts: AirshipOrderOpenOptions = {},
+  ): Promise<Command> {
     this.commands = commands.filter((c) => c.command.kind === 'trigger');
     this.volleysLeft = volleysLeft;
+    this.onCancel = opts.onCancel ?? null;
     this.rows = ROWS.map((r) => {
-      const already = (r.id === 'pull-back' && range === 'far') || (r.id === 'close-in' && range === 'near');
+      const target = r.id === 'pull-back' ? 'far' : 'near';
+      const already = target === range;
+      // The standing order, when there is one and the ship has not flown it
+      // yet: giving it again would burn a turn for nothing (last order wins).
+      const standing = !already && opts.pending === target;
       const offered = this.commands.some((c) => c.command.kind === 'trigger' && c.command.id === r.id && c.enabled);
       return {
         ...r,
-        disabled: already || !offered,
-        disabledReason: already ? `Already ${range}` : undefined,
+        disabled: already || standing || !offered,
+        disabledReason: already ? `Already ${range}` : standing ? 'Ordered' : undefined,
       };
     });
     this.index = this.rows.findIndex((r) => !r.disabled);
@@ -118,6 +136,9 @@ export class AirshipOrderWidget {
     this.el.hidden = false;
     this.render();
     this.watcher.attach();
+    // Esc is this widget's back button while it is open (and only when the
+    // caller gave it somewhere to go back to), not the pause menu's.
+    if (this.onCancel) claimCancel();
     this.unwireClicks = wireClicks(this.el, (action) => this.choose(Number(action)));
     return new Promise<Command>((resolve) => {
       this.resolve = resolve;
@@ -136,7 +157,34 @@ export class AirshipOrderWidget {
       this.render();
     } else if (b === 'confirm') {
       this.choose(this.index);
+    } else if (b === 'cancel' && this.onCancel) {
+      const cancel = this.onCancel;
+      this.close();
+      // Released a frame later, so the same Esc press cannot also open the
+      // pause menu (`cancelClaim.ts` has the race).
+      releaseCancelAfterPress();
+      cancel();
     }
+  }
+
+  /**
+   * Take the widget down without choosing: input off, hidden, the pending
+   * promise dropped. For a decision that was abandoned elsewhere (an action
+   * already resolving, the battle ending).
+   */
+  hide(): void {
+    const owned = this.onCancel !== null;
+    this.close();
+    if (owned) releaseCancel();
+  }
+
+  private close(): void {
+    this.watcher.detach();
+    this.unwireClicks?.();
+    this.unwireClicks = null;
+    this.el.hidden = true;
+    this.resolve = null;
+    this.onCancel = null;
   }
 
   private choose(i: number): void {
@@ -144,9 +192,12 @@ export class AirshipOrderWidget {
     if (!row || row.disabled) return;
     const cmd = this.commands.find((c) => c.command.kind === 'trigger' && c.command.id === row.id);
     if (!cmd) return;
+    const owned = this.onCancel !== null;
     this.watcher.detach();
     this.unwireClicks?.();
     this.el.hidden = true;
+    this.onCancel = null;
+    if (owned) releaseCancel();
     const resolve = this.resolve;
     this.resolve = null;
     resolve?.(cmd.command);
@@ -158,6 +209,12 @@ export class AirshipOrderWidget {
     return `<span class="ffx-airship-order__chip" title="${escapeHtml(label)} — Cid's next turn">ORDER</span>`;
   }
 
+  /**
+   * Option A's two parts: the rows in the cascade (each tagged "Trigger", or
+   * why it is greyed), and under them the ivory cost slab for the highlighted
+   * order. An order forgoes Cid's next volley; it does not spend one from the
+   * rack (`evrae-rules.ts#applyQueuedOrder`), so the pips count the rack.
+   */
   private render(): void {
     const pips = Array.from(
       { length: 3 },
@@ -169,15 +226,20 @@ export class AirshipOrderWidget {
         const cls = ['ig-cmd', 'ffx-cmd--trigger', selected ? 'ig-cmd--selected' : '', r.disabled ? 'ig-cmd--disabled' : '']
           .filter(Boolean)
           .join(' ');
-        const trail = r.disabled
+        const tag = r.disabled
           ? `<span class="ffx-airship-order__already">${escapeHtml(r.disabledReason ?? '')}</span>`
-          : selected
-            ? `<span class="ffx-airship-order__cost">Turn now &middot; Cid's next turn &middot; 1 volley <span class="ffx-airship-order__pips">${pips}</span></span>`
-            : '';
-        return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${i})" data-ui-action="${i}"><span class="ffx-cmd--trigger__label">${escapeHtml(r.label)}</span>${trail}</div>`;
+          : `<span class="ffx-airship-order__tag">Trigger</span>`;
+        return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${i})" data-ui-action="${i}"><span class="ffx-cmd--trigger__label">${escapeHtml(r.label)}</span>${tag}</div>`;
       })
       .join('');
-    this.el.innerHTML = rows;
+    const live = this.rows[this.index];
+    const slab =
+      live && !live.disabled
+        ? `<div class="ffx-airship-order__slab"><span class="ffx-airship-order__slab-title">This order costs</span>` +
+          `<span class="ffx-airship-order__cost">Turn now &middot; Cid's next turn &middot; 1 volley</span>` +
+          `<span class="ffx-airship-order__left"><span class="ffx-airship-order__pips">${pips}</span>Volleys left ${this.volleysLeft}</span></div>`
+        : '';
+    this.el.innerHTML = rows + slab;
   }
 
   dispose(): void {

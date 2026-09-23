@@ -820,20 +820,35 @@
    (`src/ui/inkgold/screens.css`'s trailing-comment convention, e.g.
    `font-size: 6.22px; /* 14 */`), so 14 real px is 6.22 grid px. Both sizes
    below clear it. */
-.ffx-airship-order .ffx-cmd--trigger__label {
-  font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.08em;
-  font-size: 7.2px; /* 16 at the 2.25x reference scale */
+.ffx-airship-order .ig-cmd { width: 172px; }
+.ffx-airship-order .ffx-cmd--trigger__label { white-space: nowrap; flex: none; }
+.ffx-airship-order__tag, .ffx-airship-order__already {
+  margin-left: auto; white-space: nowrap; font-family: var(--ig-font-text); font-weight: 600;
+  font-size: 6.22px; /* 14 at the 2.25x reference scale */
+  letter-spacing: 0.06em; text-transform: none; color: rgba(11, 10, 18, 0.72);
 }
-.ffx-airship-order__cost, .ffx-airship-order__already {
-  display: block; margin-top: 1.2px; font-family: var(--ig-font-text);
-  font-size: 6.4px; /* 14.4 at the 2.25x reference scale */
-  letter-spacing: 0.02em; color: rgba(11, 10, 18, 0.75);
+.ffx-airship-order__already { font-style: italic; }
+/* The ivory cost slab under the rows (option A, step 3). */
+.ffx-airship-order__slab {
+  display: flex; flex-direction: column; gap: 1.8px; width: 176px; margin-top: 2.7px;
+  padding: 4.4px 8px 4.9px 9.8px; background: var(--ig-paper); color: var(--ig-ink);
+  border-left: 1.8px solid var(--ig-accent); transform: skewX(var(--ig-skew));
+  box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45);
 }
-.ffx-airship-order__already { font-style: italic; opacity: 0.7; }
-.ffx-airship-order__pips { margin-left: 4px; display: inline-flex; gap: 2px; vertical-align: middle; }
-.ffx-airship-order__pips i { display: inline-block; width: 5px; height: 5px; border-radius: 50%; }
+.ffx-airship-order__slab > * { transform: skewX(var(--ig-skew-inverse)); }
+.ffx-airship-order__slab-title {
+  font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.24em;
+  font-size: 6.22px; /* 14 */ text-transform: uppercase; color: var(--ig-gold-on-paper, #8a6a1e);
+}
+.ffx-airship-order__cost, .ffx-airship-order__left {
+  font-family: var(--ig-font-text); font-size: 6.4px; /* 14.4 at the 2.25x reference scale */
+  letter-spacing: 0.02em; color: rgba(11, 10, 18, 0.85); white-space: nowrap;
+}
+.ffx-airship-order__left { display: flex; align-items: center; gap: 4px; color: rgba(11, 10, 18, 0.65); }
+.ffx-airship-order__pips { display: inline-flex; gap: 2px; }
+.ffx-airship-order__pips i { display: inline-block; width: 8px; height: 3px; transform: skewX(var(--ig-skew)); }
 .ffx-airship-order__pip--live { background: var(--ig-accent); }
-.ffx-airship-order__pip--spent { background: rgba(11, 10, 18, 0.25); }
+.ffx-airship-order__pip--spent { background: rgba(11, 10, 18, 0.22); }
 .ffx-airship-order__chip {
   font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.14em;
   font-size: 6.22px; /* 14 at the 2.25x reference scale */

@@ -22,6 +22,8 @@ import { DreamsEndSceneScreen } from '../scenes/dreams-end-debug.ts';
 import { LeblancLastRoomSceneScreen } from '../scenes/leblanc-last-room-debug.ts';
 // Scene agent (Macalania Temple): `goto('scene-macalania-temple')`.
 import { MacalaniaTempleSceneScreen } from '../scenes/macalania-temple-debug.ts';
+// Scene agent (the deck of the Fahrenheit): `goto('scene-evrae-airship-deck')`.
+import { EvraeAirshipSceneScreen } from '../scenes/evrae-airship-debug.ts';
 
 /** Register every scene debug screen on `app`. */
 export function registerSceneScreens(app: App): void {
@@ -47,4 +49,5 @@ export function registerSceneScreens(app: App): void {
   // `tools/screenshot.mjs --screen=scene-leblanc-last-room --rig=<name>`.
   app.register('scene-leblanc-last-room', () => new LeblancLastRoomSceneScreen());
   app.register('scene-macalania-temple', () => new MacalaniaTempleSceneScreen());
+  app.register('scene-evrae-airship-deck', () => new EvraeAirshipSceneScreen());
 }
