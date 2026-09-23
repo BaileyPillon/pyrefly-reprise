@@ -33,7 +33,7 @@ import type {
 } from '../battle/common/types.ts';
 import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
-import { activeClockEngine, runActivePump } from './BattlePresenterActive.ts';
+import { clockEngine, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
@@ -68,6 +68,8 @@ export class BattlePresenter {
    * battle. **FFX-2 only** — nothing sets it on an FFX fight.
    */
   private inputAbandoned = false;
+  /** Wakes an FFX-2 Wait menu parked in `runMenuClock` ({@link atbModeChanged}). */
+  private wakeMenuClock: (() => void) | null = null;
 
   private speed: PlaybackSpeed = 'normal';
   private timeScale: number;
@@ -180,6 +182,7 @@ export class BattlePresenter {
    */
   abort(): void {
     this.aborted = true;
+    this.atbModeChanged();
   }
 
   get isAborted(): boolean {
@@ -458,9 +461,9 @@ export class BattlePresenter {
       this.pendingMenu = { actorId, commands, engine, resolve };
     });
 
-    // FFX-2 **Active** ATB: the clock keeps running underneath this menu.
+    // FFX-2's ATB clock under this menu, Wait or Active (`runMenuClock`).
     // FFX gets `null` here and behaves exactly as it always has (rule 14).
-    const clock = activeClockEngine(engine);
+    const clock = clockEngine(engine);
     let settled = false;
     const decided = Promise.race([hud.chooseCommand(actorId, commands, previewRank), interrupt]).then(
       (command) => {
@@ -491,7 +494,8 @@ export class BattlePresenter {
     };
 
     /**
-     * The last gate before a command is submitted, **FFX-2 Active only**.
+     * The last gate before a command is submitted, **FFX-2, and only once
+     * the clock has run under this menu** (Active, or a pause flip to it).
      *
      * A command can win the race above and still be worthless: the pump plays
      * an enemy's burst with `await`, and the player may confirm *during* that
@@ -503,26 +507,25 @@ export class BattlePresenter {
      * lets the loop ask the engine what happens next, instead of a submit that
      * silently produces nothing.
      */
-    const finish = (command: Command): Command | null =>
-      clock && !clock.inputValid(actorId) ? abandon() : command;
+    const finish = (command: Command, ran = true): Command | null =>
+      ran && clock && !clock.inputValid(actorId) ? abandon() : command;
 
     try {
       if (!clock) return await decided;
-      const pump = runActivePump({
+      const outcome = await runMenuClock({
         engine: clock,
         actorId,
+        decided,
         settled: () => settled,
         aborted: () => this.aborted,
         sleep: (ms) => this.baseSleep(ms),
         now: this.now,
         play: (events) => this.play(events),
         syncGauges: (snapshot) => this.syncGauges(snapshot),
+        modeChanged: () => new Promise<void>((wake) => (this.wakeMenuClock = wake)),
+        showMode: (mode) => this.showAtbMode(mode),
       });
-      const outcome = await Promise.race([
-        decided.then((command) => ({ command }) as const),
-        pump.then((stop) => ({ stop }) as const),
-      ]);
-      if ('command' in outcome) return finish(outcome.command);
+      if ('command' in outcome) return finish(outcome.command, outcome.ran);
       if (outcome.stop === 'invalidated') return abandon();
       // `'settled'` also covers a torn-down presenter, whose menu promise may
       // never resolve at all; awaiting it there would park this task forever.
@@ -534,6 +537,28 @@ export class BattlePresenter {
       return firstEnabled(commands);
     } finally {
       this.pendingMenu = null;
+      this.wakeMenuClock = null;
+    }
+  }
+
+  /**
+   * FFX-2's Config ATB mode may have changed (the pause closed; BattleScreen
+   * has already pushed the X-2 BATTLE row into the engine). Wakes an open Wait
+   * menu so a flip to Active runs the clock under **that** menu, not only the
+   * next one. A no-op when no menu is parked; FFX never parks one.
+   */
+  atbModeChanged(): void {
+    const wake = this.wakeMenuClock;
+    this.wakeMenuClock = null;
+    wake?.();
+  }
+
+  /** The HUD's mode chip (`HudPort.setAtbMode`). FFX-2 only; never throws. */
+  private showAtbMode(mode: 'wait' | 'active'): void {
+    try {
+      this.deps.hud?.setAtbMode?.(mode);
+    } catch (err) {
+      console.warn('[presenter] HUD setAtbMode threw', err);
     }
   }
 

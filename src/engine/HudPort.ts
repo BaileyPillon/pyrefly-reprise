@@ -93,6 +93,18 @@ export interface HudPort {
    * a menu that is no longer on screen.
    */
   closeCommandMenu?(): void;
+  /**
+   * Which Config ATB mode the fight is in right now, for the HUD's mode chip
+   * (`research/ffx2-combat-core.md` §1.5 and §8, "Mode indicator": the words
+   * "Active mode" / "Wait mode", upper right).
+   *
+   * Optional and additive, **FFX-2 only**: the presenter calls it when an
+   * FFX-2 menu opens and whenever the pause's X-2 BATTLE row flips the mode
+   * under an open menu. FFX's CTB has no such setting and implements nothing.
+   * Without it the chip could only guess, and guessed wrong once Wait became
+   * the default (D-029; the verifier's ch. 4 seed 3 capture).
+   */
+  setAtbMode?(mode: 'wait' | 'active'): void;
   /** Called for every event before the presenter animates it; may show a transient (telegraph banner, chain popup) but must resolve within ~600 ms. */
   onEvent(event: BattleEvent): Promise<void> | void;
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult>;

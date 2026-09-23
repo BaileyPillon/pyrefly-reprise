@@ -517,6 +517,9 @@ export class BattleScreen extends Screen {
         // clock is released (no-op for FFX).
         if (!paused) applyAtbConfig(this.engine);
         this.setPresenterPaused(paused);
+        // ...and wake a menu that was open under the pause, so a flip to
+        // ACTIVE runs the clock under that same menu (FFX-2; no-op for FFX).
+        if (!paused) this.presenter?.atbModeChanged();
         // The other half of "exactly one screen reads the player": the HUD's
         // own pad watchers. The keyboard half is the claim taken below.
         setRawInputSuspended(paused);

@@ -46,17 +46,23 @@
  *    longer answer at all, and a chain lock is not that (see {@link PumpStop}).
  *    FFX-2 only; `tests/unit/ffx2-active-menu.test.ts` pins it through the
  *    real presenter.
- * 7. **Wait hands the engine nothing.** A Wait engine never gets a pump
- *    ({@link activeClockEngine} returns `null`), and a pump whose engine is
- *    switched to Wait mid-menu (the pause's X-2 BATTLE row) stops at the next
- *    step without calling `tick`, returning `'settled'`: the presenter then
- *    simply awaits the command, clock held. Nothing read in Wait is ever banked.
- *    The engine refuses a Wait tick under a menu on its own as well
- *    (`src/battle/ffx2/active.ts` `clockHeldByMenu`).
- *    `tests/unit/ffx2-wait-mode.test.ts`; `docs/plans/ffx2-wait-mode-review.md` §4.
+ * 7. **Wait hands the engine nothing, and a flip lands on the open menu.**
+ *    {@link runMenuClock} parks a Wait menu on "answered, or the mode changed"
+ *    — no pump, no spin, no `tick` — and a pump whose engine is switched to
+ *    Wait mid-menu (the pause's X-2 BATTLE row) stops at its next step without
+ *    calling `tick`, returning `'held'`. The pause-close hook wakes a parked
+ *    menu (`BattlePresenter.atbModeChanged`), so a flip to ACTIVE runs the
+ *    clock under the menu that was open under the pause, not only from the
+ *    next one (the Wait-mode verifier's ch. 4 seed 3 capture). Nothing read in
+ *    Wait is ever banked: a pump's first step measures from its own start. The
+ *    engine refuses a Wait tick under a menu on its own as well
+ *    (`src/battle/ffx2/active.ts` `clockHeldByMenu`). The HUD's mode chip is
+ *    told the mode at every one of these transitions (`HudPort.setAtbMode`).
+ *    `tests/unit/ffx2-wait-mode.test.ts`, `ffx2-wait-mode-repair.test.ts`;
+ *    `docs/plans/ffx2-wait-mode-review.md` §4.
  */
 
-import type { AtbSnapshot, BattleEvent, CombatantId } from '../battle/common/types.ts';
+import type { AtbSnapshot, BattleEvent, CombatantId, Command } from '../battle/common/types.ts';
 import type { PlayResult } from './BattlePresenterPorts.ts';
 
 /**
@@ -98,11 +104,24 @@ export interface ActiveClockEngine {
  * very next pump step (property 7).
  */
 export function activeClockEngine(engine: unknown): ActiveClockEngine | null {
+  const e = clockEngine(engine);
+  return e && modeOf(e) === 'active' ? e : null;
+}
+
+/**
+ * An engine that **has** an ATB clock (FFX-2), whatever its mode, or `null`
+ * (FFX: no `tick`, so its input branch is byte-for-byte the pre-Active one).
+ */
+export function clockEngine(engine: unknown): ActiveClockEngine | null {
   const e = engine as Partial<ActiveClockEngine> | null;
   if (!e || typeof e.tick !== 'function' || typeof e.inputValid !== 'function') return null;
   if (typeof e.gaugeSnapshot !== 'function') return null;
-  if (typeof e.atbMode === 'function' && e.atbMode() === 'wait') return null;
   return e as ActiveClockEngine;
+}
+
+/** The engine's Config ATB mode; an engine without `atbMode` reads as Active. */
+export function modeOf(engine: ActiveClockEngine): 'wait' | 'active' {
+  return engine.atbMode?.() === 'wait' ? 'wait' : 'active';
 }
 
 /** Why the pump stopped. */
@@ -118,7 +137,12 @@ export type PumpStop =
    * `HeldCommand`). Tearing the menu down there replaced her list in place with
    * somebody else's in 262 ms, cursor on row 0, no keypress.
    */
-  | 'invalidated';
+  | 'invalidated'
+  /**
+   * The engine was switched to **Wait** under the open menu (property 7). The
+   * menu is still open and still hers; the clock simply holds from here.
+   */
+  | 'held';
 
 export interface ActivePumpDeps {
   engine: ActiveClockEngine;
@@ -153,7 +177,7 @@ export async function runActivePump(deps: ActivePumpDeps): Promise<PumpStop> {
     if (deps.settled() || deps.aborted()) return 'settled';
 
     // Property 7: switched to Wait mid-menu (D-029) — the clock holds from here.
-    if (deps.engine.atbMode?.() === 'wait') return 'settled';
+    if (modeOf(deps.engine) === 'wait') return 'held';
 
     const at = deps.now();
     const dt = Math.min(Math.max(0, at - last), MAX_STEP_MS);
@@ -181,5 +205,57 @@ export async function runActivePump(deps: ActivePumpDeps): Promise<PumpStop> {
     // a refusal, never in a stolen turn.
     if (deps.settled()) return 'settled';
     if (!deps.engine.inputValid(deps.actorId)) return 'invalidated';
+  }
+}
+
+export interface MenuClockDeps extends ActivePumpDeps {
+  /** The menu's own answer (the HUD raced against the auto-play interrupt). */
+  decided: Promise<Command>;
+  /**
+   * Resolves the next time the Config mode may have changed — the pause
+   * closing (`BattlePresenter.atbModeChanged`) — or the presenter is torn down.
+   */
+  modeChanged: () => Promise<void>;
+  /** Tell the HUD's mode chip the truth (`HudPort.setAtbMode`). Never throws. */
+  showMode: (mode: 'wait' | 'active') => void;
+}
+
+/** How an FFX-2 menu ended: an answer, or the pump's reason for stopping. */
+export type MenuClockOutcome =
+  /** `ran`: the clock ran under this menu at some point (Active, before or after a flip). */
+  | { readonly command: Command; readonly ran: boolean }
+  | { readonly stop: Exclude<PumpStop, 'held'> };
+
+/**
+ * The clock under one open FFX-2 command menu, in **either** Config mode, for
+ * as long as it is open (property 7).
+ *
+ * - **Wait**: nothing ticks. The menu waits on its answer or on a mode change,
+ *   whichever comes first — never on a spin (an idle pump on the presenter's
+ *   unscaled sleep would resolve at once under `'skip'` and in every test
+ *   double, and hung the suite once).
+ * - **Active**: {@link runActivePump}, exactly as before.
+ * - A flip either way under the open menu lands at once on that same menu, and
+ *   the menu keeps its owner (property 6): nothing here re-asks anyone.
+ */
+export async function runMenuClock(deps: MenuClockDeps): Promise<MenuClockOutcome> {
+  let ran = false;
+  const answered = deps.decided.then((command) => ({ command }) as const);
+  for (;;) {
+    const mode = modeOf(deps.engine);
+    deps.showMode(mode);
+    if (mode === 'wait') {
+      const woke = await Promise.race([answered, deps.modeChanged().then(() => null)]);
+      if (woke) return { command: woke.command, ran };
+      if (deps.aborted()) return { stop: 'settled' };
+      if (deps.settled()) return { stop: 'settled' };
+      continue;
+    }
+    ran = true;
+    // Refresh the bars as the clock starts, so a pause flip shows at once.
+    deps.syncGauges(deps.engine.gaugeSnapshot());
+    const outcome = await Promise.race([answered, runActivePump(deps).then((stop) => ({ stop }) as const)]);
+    if ('command' in outcome) return { command: outcome.command, ran };
+    if (outcome.stop !== 'held') return { stop: outcome.stop };
   }
 }

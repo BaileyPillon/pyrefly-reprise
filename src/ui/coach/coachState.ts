@@ -53,6 +53,11 @@ const sessionSeen = new Set<string>();
  * save-data migration was left alone throughout: marking an existing save's
  * owner a veteran is harmless whether or not anything is shown.
  *
+ * **Open with Bailey (2026-09-22, D-029):** Wait is now FFX-2's default, so at
+ * every command menu the clock *does* wait, and the fourth line is true only
+ * for a player who picks ACTIVE. The approved copy is left as it is until he
+ * decides (`docs/handoff/ffx2-wait-mode.md` §6); nothing here changed.
+ *
  * The debug API can still force the feature off for a capture that must not
  * show it — `__pyrefly.setCoaching(false)` sets {@link override}, which wins.
  *

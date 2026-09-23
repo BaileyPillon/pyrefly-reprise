@@ -80,6 +80,30 @@ describe('the X-2 BATTLE row (FFX-2 Config ATB Mode, §1.5)', () => {
   });
 });
 
+describe('the X-2 BATTLE row is FFX-2 only (rule 14; verifier, ch. 1 seymour-flux)', () => {
+  const rows = (game: OptionsContext['game']) =>
+    optionsColumns({
+      settings: save.settings,
+      battleHelpOn: null,
+      canRestart: true,
+      canChapterSelect: true,
+      canQuit: true,
+      extraRows: [],
+      ...(game ? { game } : {}),
+    })[0]!.rows.map((r) => r.id);
+
+  it('an FFX pause has no X-2 BATTLE row (CTB has no clock under a menu)', () => {
+    expect(rows('ffx')).not.toContain('ffx2Atb');
+    expect(rows('ffx')).toContain('masterVolume');
+  });
+
+  it('an FFX-2 pause has it, with ATB SPEED straight under it', () => {
+    const ids = rows('ffx2');
+    expect(ids).toContain('ffx2Atb');
+    expect(ids.indexOf('ffx2AtbSpeed')).toBe(ids.indexOf('ffx2Atb') + 1);
+  });
+});
+
 describe('the engine hears the row (BattleScreenWiring)', () => {
   it('applyAtbMode tells an FFX-2 engine the stored mode', () => {
     const engine = new FFX2Engine({ atbMode: 'active' });

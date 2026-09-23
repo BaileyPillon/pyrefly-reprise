@@ -27,6 +27,7 @@ import type {
   TurnPreview,
 } from '../../battle/common/types.ts';
 import { openCommandMenu } from './CommandMenu.ts';
+import { DEFAULT_ATB_MODE, type AtbMode } from '../../battle/ffx2/active.ts';
 import type { CursorSelection } from '../ffx/TargetCursor.ts';
 import { accentFor } from '../../engine/TargetHighlight.ts';
 import { mountTriggerHappy } from './TriggerHappy.ts';
@@ -138,10 +139,12 @@ export class FFX2BattleHud implements HudPort {
   /** FFX-2's Active/Wait chip, shown while a target cursor is live. */
   private activeWaitEl: HTMLElement | null = null;
   /**
-   * Which ATB mode the fight is in. FFX-2's Config offers both; the engine
-   * runs Active, and the indicator reports what is true rather than guessing.
+   * Which ATB mode the fight is in (FFX-2 Config, §1.5). The presenter says
+   * so through {@link setAtbMode} at every menu and every pause flip; until
+   * then it is the default, Wait (Bailey, D-029). It used to be hardcoded
+   * `'active'`, which put "ACTIVE — ATB RUNNING" over a held clock.
    */
-  private atbMode: 'active' | 'wait' = 'active';
+  private atbMode: AtbMode = DEFAULT_ATB_MODE;
   /** Tears the open command menu down from outside. Active ATB only. */
   private closeMenu: (() => void) | null = null;
   /** The painted field's targeting surface, when there is a field. */
@@ -932,8 +935,9 @@ export class FFX2BattleHud implements HudPort {
       el.classList.toggle('ffx2--targeted-ally', on && kind !== 'enemy');
     }
 
-    // The ATB keeps running while the player aims — that is the whole point of
-    // showing the indicator — so the panel yields but never freezes.
+    // Whether the ATB runs while the player aims is the Config mode's call —
+    // that is the whole point of showing the indicator — so the panel yields
+    // but never freezes.
     this.el.classList.toggle('ffx2hud--targeting-enemy', !!sel && kind === 'enemy');
     this.setActiveWaitVisible(!!sel);
   }
@@ -951,6 +955,20 @@ export class FFX2BattleHud implements HudPort {
   private setActiveWaitVisible(on: boolean): void {
     if (!this.activeWaitEl) return;
     this.activeWaitEl.hidden = !on;
+    this.paintAtbMode();
+  }
+
+  /**
+   * The fight's Config ATB mode, from the presenter (`HudPort.setAtbMode`).
+   * FFX-2 only. A flip under a live target cursor repaints the chip at once.
+   */
+  setAtbMode(mode: AtbMode): void {
+    this.atbMode = mode;
+    this.paintAtbMode();
+  }
+
+  private paintAtbMode(): void {
+    if (!this.activeWaitEl) return;
     const active = this.atbMode === 'active';
     this.activeWaitEl.classList.toggle('ffx2-atbmode--wait', !active);
     this.activeWaitEl.textContent = active ? 'ACTIVE — ATB RUNNING' : 'WAIT — ATB HELD';

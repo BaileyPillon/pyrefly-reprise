@@ -512,11 +512,22 @@ describe('every function of the old pause screen is still reachable', () => {
   });
 
   it('7. the OPTIONS rows — all six, and Left/Right still adjust', () => {
+    // X-2 BATTLE (ffx2Atb) is FFX-2's Config ATB Mode and only an FFX-2
+    // chapter prints it (rule 14; the Wait-mode verifier's ch. 1 capture). An
+    // FFX pause keeps the other five.
+    const x2 = mount('ffx2-bahamut');
+    x2.screen.trigger('pause:tab:options');
+    for (const id of ['masterVolume', 'musicVolume', 'sfxVolume', 'textSpeed', 'ffx2Atb', 'guideVisible']) {
+      expect(rowIds(x2), id).toContain(id);
+    }
+    x2.dispose();
+    live = null;
     const h = mount('seymour-flux');
     h.screen.trigger('pause:tab:options');
-    for (const id of ['masterVolume', 'musicVolume', 'sfxVolume', 'textSpeed', 'ffx2Atb', 'guideVisible']) {
+    for (const id of ['masterVolume', 'musicVolume', 'sfxVolume', 'textSpeed', 'guideVisible']) {
       expect(rowIds(h), id).toContain(id);
     }
+    expect(rowIds(h)).not.toContain('ffx2Atb');
     // Walk the cursor onto MASTER VOLUME and push it left.
     h.screen.handleInput(snapshot(['down'])); // into the body
     const before = h.store.settings.masterVolume;

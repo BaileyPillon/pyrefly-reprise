@@ -154,3 +154,36 @@ Wiring hook in `onPause(false)`, one line beside `applyAtbSpeed`).
 - The browser pass: chapter 4 on a fresh save, a menu open for 6 s with ticks unchanged,
   confirm advances them, the OPTIONS row reads WAIT, flip to ACTIVE and the clock runs
   under the menu.
+
+## 8. Repair pass (after the adversarial verifier, 2026-09-22)
+
+The verifier (`critic/scratch/ffx2-wait/`) refuted four things. `critic-plan --paths` classes
+the repair DEEP (presenter + coach wrapper: shared systems), so this paper note comes before
+the build. **FFX-2 only**, except the coach forwarding and the pause-row filter, which are
+shared plumbing ("both", CHK-020) and are no-ops for FFX.
+
+1. **The HUD mode chip hardcoded `'active'`.** Root: nothing ever told the HUD the mode, and
+   `withCoach` (every battle's HUD) forwarded none of the three optional FFX-2 clock methods,
+   so `syncGauges` (the Active pump's 20 Hz bar refresh) and `closeCommandMenu` never reached
+   `FFX2BattleHud` either. Fix: an optional `HudPort.setAtbMode`, called by the presenter
+   whenever an FFX-2 menu opens and at every flip under it; `CoachedHud` forwards
+   `syncGauges`, `closeCommandMenu` and `setAtbMode`; the HUD defaults to `DEFAULT_ATB_MODE`
+   and repaints the chip when told. Chip wording unchanged (already built with both texts).
+2. **A pause flip to ACTIVE did not reach the menu open under the pause.** Root: the fork
+   was decided once per menu (`activeClockEngine` returned `null` for a Wait engine), and a
+   Wait engine got no pump because an idle pump spun on the instant test sleep. Fix:
+   `runMenuClock` parks a Wait menu on "answered, **or** the mode changed" (a promise, not a
+   spin); `BattlePresenter.atbModeChanged()` resolves it, called by the pause-close hook after
+   `applyAtbConfig`; abort resolves it too. A pump flipped to Wait returns `'held'` and the
+   same loop parks. Nothing read under Wait is ever banked: each pump start measures from
+   itself, and the pause gate holds the pump while the overlay is up. The inputValid gate
+   before submit applies only once the clock has run under that menu, so a pure Wait menu
+   is byte-for-byte the pre-Active path.
+3. **The X-2 BATTLE row showed in FFX chapters.** Fix: `optionsColumns` drops `ffx2Atb` for
+   any game but FFX-2, like ATB SPEED.
+4. **The briefing's fourth line** ("In hers, the clock does not wait"): approved copy, a
+   Bailey decision. Not changed; options in the handoff §6.
+
+Regressions to watch: an FFX menu (no `tick`) still takes `return await decided`; the Active
+goldens and `ffx2-active-menu.test.ts` run the same pump. Tests fail first in
+`tests/unit/ffx2-wait-mode-repair.test.ts` and `pause-atb-mode.test.ts`.

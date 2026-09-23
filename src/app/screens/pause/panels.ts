@@ -80,7 +80,7 @@ export interface OptionsContext {
   canQuit: boolean;
   /** Host-supplied rows — the cutscene pause's "Skip scene". */
   extraRows: readonly { id: string; label: string }[];
-  /** Whose chapter this is. FFX-2 alone gets the ATB SPEED row (rule 14). */
+  /** Whose chapter this is. FFX-2 alone gets the X-2 BATTLE and ATB SPEED rows (rule 14). */
   game?: GameId;
 }
 
@@ -99,7 +99,13 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     ratio: r.ratio,
     selectable: true,
   }));
-  if (ctx.game === 'ffx2') {
+  if (ctx.game !== 'ffx2') {
+    // X-2 BATTLE (ACTIVE / WAIT) is FFX-2's Config ATB Mode (§1.5), read by
+    // the FFX-2 engine alone; FFX's CTB has no clock under a menu, so an FFX
+    // chapter never prints it (rule 14; the Wait-mode verifier's ch. 1 capture).
+    const at = settings.findIndex((r) => r.id === 'ffx2Atb');
+    if (at >= 0) settings.splice(at, 1);
+  } else {
     // FFX-2's Config "ATB Mode and Speed" (research/ffx2-combat-core.md §1.2;
     // research/ffx-vs-ffx2-presentation.md:278). FFX's CTB has no tick rate,
     // so an FFX chapter never prints it. Sits under the X-2 row it belongs to.

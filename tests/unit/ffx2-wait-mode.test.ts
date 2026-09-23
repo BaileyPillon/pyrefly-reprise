@@ -206,7 +206,9 @@ describe('the presenter under Wait (src/engine/BattlePresenterActive.ts)', () =>
       play: () => Promise.resolve({ dropped: 0 }),
       syncGauges: () => undefined,
     });
-    expect(stop).toBe('settled');
+    // 'held': the menu is still open and still hers; `runMenuClock` parks it
+    // until it is answered or the mode flips back (ffx2-wait-mode-repair.test.ts).
+    expect(stop).toBe('held');
     expect(fed).toEqual([50, 50, 50, 50]);
   });
 

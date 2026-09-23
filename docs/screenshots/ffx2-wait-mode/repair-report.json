@@ -1,0 +1,80 @@
+{
+  "steps": [
+    {
+      "name": "ch4-wait-target-cursor",
+      "row": "Attack",
+      "targeting": true,
+      "indicator": {
+        "hidden": false,
+        "text": "WAIT — ATB HELD",
+        "wait": true
+      },
+      "mode": "wait",
+      "ticks": "10020 -> 10020",
+      "events": 0
+    },
+    {
+      "name": "flip-to-active",
+      "selected": "ffx2Atb",
+      "before": "WAIT",
+      "after": "ACTIVE"
+    },
+    {
+      "name": "same-menu-after-flip",
+      "preOwner": "rikku",
+      "mode": "active",
+      "ticks": "23715 -> 27432",
+      "events": 9,
+      "barsMoved": true,
+      "owners": [
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku",
+        "rikku"
+      ],
+      "menuStillUp": true
+    },
+    {
+      "name": "ch4-active-target-cursor",
+      "indicator": {
+        "hidden": false,
+        "text": "ACTIVE — ATB RUNNING",
+        "wait": false
+      }
+    },
+    {
+      "name": "flip-to-wait",
+      "selected": "ffx2Atb",
+      "before": "ACTIVE",
+      "after": "WAIT"
+    },
+    {
+      "name": "same-menu-after-flip-back",
+      "mode": "wait",
+      "ticks": "34260 -> 34260",
+      "events": 0
+    },
+    {
+      "name": "ch1-pause-options",
+      "rows": [
+        "masterVolume=80",
+        "musicVolume=70",
+        "sfxVolume=90",
+        "textSpeed=1x",
+        "guideVisible=ON",
+        "battleHelp=ON",
+        "briefing=▸",
+        "restart=▸",
+        "chapter-select=▸",
+        "quit=▸"
+      ]
+    }
+  ],
+  "failures": []
+}

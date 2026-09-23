@@ -153,6 +153,25 @@ class CoachedHud implements HudPort {
     this.inner.syncVitals?.(state);
   }
 
+  // The three optional FFX-2 clock methods. A wrapper that leaves an optional
+  // `HudPort` method out hides it from the presenter: until the Wait-mode
+  // repair pass the Active pump's `syncGauges` never reached the real HUD (the
+  // bars stood still under an open menu while the clock ran), a torn-down
+  // menu's `closeCommandMenu` never released its keyboard claim, and the mode
+  // chip was never told Wait from Active. `ffx2-wait-mode-repair.test.ts`.
+
+  syncGauges(snapshot: AtbSnapshot): void {
+    this.inner.syncGauges?.(snapshot);
+  }
+
+  closeCommandMenu(): void {
+    this.inner.closeCommandMenu?.();
+  }
+
+  setAtbMode(mode: 'wait' | 'active'): void {
+    this.inner.setAtbMode?.(mode);
+  }
+
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult> {
     // A minigame owns the whole screen; a line left under it would be the
     // second surface REQUIRED 4 forbids.

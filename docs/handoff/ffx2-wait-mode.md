@@ -26,7 +26,7 @@ Wait toggle) is marked superseded by it, his words kept as he said them.
 
 The pause row itself (`X-2 BATTLE`, `ACTIVE`/`WAIT`) was already built and written by
 `src/app/screens/pause/settings.ts` and `PauseScreenPanels.ts`; nothing in the engine read it
-until now, so neither file needed a change.
+until now. Since the repair pass (§8) only an FFX-2 chapter prints it.
 
 ## 2. The reading built, and where the source differs
 
@@ -75,7 +75,7 @@ instant sleep. That is why a Wait engine gets no pump at all (preflight §4 "As 
 `wait`, Paine's menu open; **ticks 5628 → 5628 over 6 s of real clock, gauges unchanged**.
 Enter, Enter: her turn starts, ticks 5628 → 13207. Pause, real keys to OPTIONS: `X-2 BATTLE`
 reads **WAIT**; ArrowRight → **ACTIVE**; Escape: engine `active`, save `active`. The menu that
-was open under the pause stays still (13207 → 13207, by design, §6); answer it; on the next
+was open under the pause stayed still (13207 → 13207; **fixed in §8**, it now runs); answer it; on the next
 menu the clock runs under it (18712 → 20757 over 1.5 s). Reload: the save still holds
 `active`. Screenshots in `docs/screenshots/ffx2-wait-mode/`:
 `ch4-wait-menu-open-3s.png`, `ch4-wait-menu-open-6s.png`, `ch4-wait-after-confirm.png`,
@@ -97,10 +97,17 @@ menu the clock runs under it (18712 → 20757 over 1.5 s). Reload: the save stil
    default: the clock still runs between turns but stops at every menu. Not touched (approved
    copy, and it does not name Active as the only mode). The C1 tile's delivery note in
    `docs/target/targets.json` also still says the line waits on Active; not edited here.
-4. A flip to ACTIVE in the pause lands from the **next** menu, not the one open under the
-   pause (a flip to WAIT lands at once). Making the open menu switch too needs a change in
-   `BattlePresenter.ts`; say if it matters.
-5. The "Active mode" / "Wait mode" HUD indicator from §1.5 is not built (HUD not this track's).
+   Options for him, none built: **A** keep the line (FFX-2's clock still runs between turns,
+   which FFX's does not; only the menus wait); **B** show the fourth line only when his
+   X-2 BATTLE row reads ACTIVE (under WAIT the briefing would end on line 3, whose closing
+   dash then needs a new ending: copy); **C** new wording for the Wait default, drafted by an
+   agent for his yes (for example "In hers, the clock runs between turns."). Rules 9 and 10:
+   approved copy changes only on his word.
+4. ~~A flip to ACTIVE lands from the next menu.~~ Fixed in the repair pass (§8): it lands on
+   the menu open under the pause.
+5. ~~The HUD indicator is not built.~~ Wrong: it was built (`FFX2BattleHud`, "ACTIVE — ATB
+   RUNNING" / "WAIT — ATB HELD", over a live target cursor) with its state hardcoded to
+   Active, so under the Wait default it lied. Fixed in §8.
 
 ## 7. Not done / noticed
 
@@ -113,3 +120,45 @@ menu the clock runs under it (18712 → 20757 over 1.5 s). Reload: the save stil
   (`node tools/critic-plan.mjs --paths src/app/SaveData.ts` says DEEP).
 - `engine.ts` grew 636 → 649 lines (over the house cap before this track; the policy is in
   `active.ts`).
+
+## 8. Repair pass (after the adversarial verifier)
+
+The verifier (`critic/scratch/ffx2-wait/`, report and ten shots) held the engine claims
+true and refuted four brief checks; paper note first: `docs/plans/ffx2-wait-mode-review.md` §8.
+
+| Failure | Root | Fix | Game case |
+|---|---|---|---|
+| MAJOR, introduced: in Wait the HUD chip read "ACTIVE — ATB RUNNING" over a held clock (ch. 4 seed 3, ch. 5 seed 7) | `FFX2BattleHud.atbMode` hardcoded `'active'`; nothing told the HUD; **and `withCoach` (every battle's HUD) forwarded none of the optional FFX-2 clock methods**, so the Active pump's `syncGauges` and `closeCommandMenu` never reached the real HUD either (pre-existing, live since release 08: under Active the bars moved only when an event played, and a torn-down menu's Esc claim was released only by its own promise) | optional `HudPort.setAtbMode`; the presenter tells the HUD the engine's mode when each FFX-2 menu opens and at every flip; `CoachedHud` forwards `syncGauges`, `closeCommandMenu`, `setAtbMode`; the HUD defaults to `DEFAULT_ATB_MODE` and repaints the chip when told | FFX-2 (forwarding: shared plumbing, no-op for FFX) |
+| Flip to ACTIVE in the pause did not run the clock under the menu open under it | the Wait/Active fork was decided once per menu | `runMenuClock` (`BattlePresenterActive.ts`) parks a Wait menu on "answered, or the mode changed" (a promise, never a spin); `BattlePresenter.atbModeChanged()` wakes it, called by `BattleScreen`'s pause-close hook after `applyAtbConfig`; a pump flipped to Wait returns `'held'` and parks in the same loop | FFX-2 |
+| Chapter 1 (FFX) pause printed X-2 BATTLE | `optionRows` lists it for every game | `optionsColumns` drops `ffx2Atb` unless the chapter is FFX-2 (like ATB SPEED) | both (rule 14) |
+| Briefing line 4 "the clock does not wait" false under the Wait default | approved copy vs D-029 | **not changed: Bailey's decision**, options in §6.3; a note in `coachState.ts` | both (shared briefing) |
+| Handoff said the indicator was not built | wrong | §6.5 corrected | docs |
+
+Tests written first and seen failing: `tests/unit/ffx2-wait-mode-repair.test.ts` (7: real
+presenter over real chapter 4 data; the HUD is told `wait` / `active`; Wait → ACTIVE under
+the same open menu runs the clock, same owner, no re-ask, bars refreshed; ACTIVE → Wait holds
+at once; an answered Wait menu plays its turn; abort releases a parked menu; the coach wrapper
+forwards the three methods; `FFX2BattleHud` reads WAIT by default and repaints on a flip),
+`pause-atb-mode.test.ts` (+2: no X-2 BATTLE row in FFX; FFX-2 keeps it with ATB SPEED under
+it). Changed: `ffx2-wait-mode.test.ts` (the flipped pump now stops `'held'`),
+`pause-remake.test.ts` case 7 (it asserted the FFX chapter printed `ffx2Atb`; now the FFX-2
+chapter does and the FFX one does not).
+
+**Browser, real keys** (own Vite on 5481, hmr off, `PYREFLY_BROWSER=gpu`, 1600x900, fresh
+contexts, stopped by its PID; `.ffx2-wait-repair-browser-tmp.mjs`, report
+`docs/screenshots/ffx2-wait-mode/repair-report.json`, 0 failures):
+- Ch. 4 seed 3, fresh save, Paine, Attack, target cursor: chip visible, **"WAIT — ATB HELD"**,
+  engine `wait`, ticks 10020 → 10020 over 3 s, 0 events (`repair-ch4-wait-target-chip.png`).
+- Next menu (Rikku) open, pause, X-2 BATTLE WAIT → ACTIVE, Escape: **the same menu's clock
+  runs**, ticks 23715 → 27432 over 2.5 s, 9 events, bars moved on screen, owner `rikku` in
+  all 10 samples, menu still up.
+- Under Active, target cursor: chip **"ACTIVE — ATB RUNNING"** (`repair-ch4-active-target-chip.png`).
+- Flip back to WAIT under an open menu: ticks 34260 → 34260 over 2.5 s, 0 events.
+- Ch. 1 (FFX) pause OPTIONS: master, music, SFX, text speed, guide, battle help; **no X-2
+  BATTLE, no ATB SPEED** (`repair-ch1-ffx-pause-options.png`).
+
+`npx tsc --noEmit` clean; full `npm test` 246 files, 5603 passed, 2 skipped. No new module
+(orphans unchanged). `BattlePresenter.ts` grew 619 → 644 lines (over the house cap before this
+track; the policy lives in `BattlePresenterActive.ts`, 261). Release: the presenter and coach
+changes make the candidate DEEP by `critic-plan` (shared systems); `SaveData.ts` from the
+build pass already requires a deep review **before** deploy.
