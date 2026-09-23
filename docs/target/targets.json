@@ -683,7 +683,9 @@
             "date": "2026-09-20",
             "words": "C: Auron’s briefing",
             "how": "Bailey selected option C in an AskUserQuestion; the properties below are the text of the option selected, not sentences Bailey typed",
-            "liked": [],
+            "liked": [
+              "FFX-2 first-time gauge coach line under Wait mode: draft 1 of three offered, approved verbatim 2026-09-23 (“Wait line 1”) — “Bar’s full, she’s up! Take your time, nobody moves while you’re picking.” src/ui/coach/coachCopy.ts FFX2_GAUGE_BODY_WAIT, shown by CoachLayer under Wait; the Active body is unchanged (docs/target/decisions.json D-030)."
+            ],
             "disliked": [],
             "mustRemain": [
               "twenty skippable seconds",

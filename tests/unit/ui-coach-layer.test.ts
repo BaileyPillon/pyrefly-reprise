@@ -306,29 +306,28 @@ describe('the coach layer', () => {
     expect(spy.menuOpened, 'the X-2 menu is asked for before anything is awaited').toBe(1);
 
     await pending;
-    // `ffx2-gauge`'s only body ("...don't wait for me, we all go at once!")
-    // is written for Active and reads as wrong advice under Wait — the whole
-    // point of the mode is that the player *can* wait. This test's fake save
-    // has no `ffx2Atb` setting, so `ffx2AtbMode()` reads the shipped default,
-    // Wait (D-029) — the same default a fresh profile gets — so `CoachLayer`
-    // skips the line rather than show it wrong (`coachCopy.ts` has no Wait
-    // wording for it yet; see `docs/handoff/*` for the driver's report to
-    // Bailey). Left unseen, not consumed (`CoachLayer.chooseCommand`'s own
-    // comment). The Active case is not separately exercised here — same
-    // reason the badge's Active half is not (the comment below): every other
-    // test in this describe block assumes `activeSave()` is null, and it runs
-    // the exact `markSeen` + `raise` this test used to see unconditionally,
-    // now simply un-gated when `ffx2AtbMode()` reads `'active'`.
-    expect(markEl(root), 'the Active-only line does not show under the Wait default').toBeNull();
+    // `ffx2-gauge` used to be skipped here: its only body ("...don't wait for
+    // me, we all go at once!") is written for Active and reads as wrong
+    // advice under Wait — the whole point of the mode is that the player
+    // *can* wait. This test's fake save has no `ffx2Atb` setting, so
+    // `ffx2AtbMode()` reads the shipped default, Wait (D-029) — the same
+    // default a fresh profile gets. Bailey has since approved a Wait body
+    // (`docs/target/decisions.json`), so `CoachLayer` no longer skips: the
+    // mark shows here too, reading that Wait body rather than the Active one.
+    const line = markEl(root);
+    expect(line, 'the mark shows under the Wait default too, with the Wait body').not.toBeNull();
+    expect(line?.dataset['mark']).toBe('ffx2-gauge');
+    expect(line?.textContent).toContain("nobody moves while you're picking");
+    expect(line?.textContent, 'not the Active-only advice').not.toContain("don't wait for me");
   });
 
-  it('FFX-2: the gauge line comes back under Active, where its words are true', async () => {
+  it('FFX-2: the gauge line reads the Active words when the save says Active', async () => {
     const spy = new SpyHud();
     const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'active' });
     hud.mount(root);
     await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
     const line = markEl(root);
-    expect(line, 'the mode-aware skip is conditional, not a removal').not.toBeNull();
+    expect(line, 'the mark shows under Active too — the body picks, nothing is skipped').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
     expect(line?.textContent).toContain("don't wait for me");
   });
@@ -359,10 +358,9 @@ describe('the coach layer', () => {
     try {
       const spy = new SpyHud();
       // 'active': this test is about input-swallowing, not about `ffx2-gauge`'s
-      // wording, and the mode-aware skip added for that (`CoachLayer.chooseCommand`)
-      // would otherwise leave nothing here to swallow input for under the
-      // Wait default (`ffx2AtbMode` is injectable for exactly this reason —
-      // the file's own tests may not construct a `SaveStore`).
+      // wording — the mark shows under either mode now (`CoachLayer`'s
+      // `withResolvedBody` picks the body, it no longer skips), so this is
+      // just kept explicit rather than relying on the shipped Wait default.
       const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'active' });
       hud.mount(root);
       await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);

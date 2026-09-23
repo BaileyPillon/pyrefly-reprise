@@ -181,6 +181,34 @@ export const FFX_MARKS: readonly CoachMark[] = [
 ];
 
 /**
+ * `ffx2-gauge`'s body under each of FFX-2's clock modes (D-029 follow-up 4,
+ * Bailey 2026-09-23). {@link FFX2_GAUGE_BODY_ACTIVE} is the original line,
+ * true only under Active — every character really does "go at once". Under
+ * Wait that is backwards advice, since the whole point of the mode is that
+ * nobody moves while a menu is open (`docs/handoff/ffx2-wait-mode.md` §1).
+ * Commit 21f6270 (earlier the same day) skipped the whole mark under Wait
+ * rather than invent the missing wording (hard rule 9: "never invent"
+ * extends to teaching copy, not just game numbers). Bailey has since picked
+ * one of three offered drafts, verbatim ("Wait line 1" —
+ * `docs/target/decisions.json`), so {@link FFX2_GAUGE_BODY_WAIT} is now his
+ * own words, not an inferred draft. `CoachLayer.chooseCommand` shows the mark
+ * under **both** modes now, reading whichever body is true through
+ * {@link ffx2GaugeBody}, and marks it seen the first time it is shown — in
+ * whichever mode that was.
+ */
+export const FFX2_GAUGE_BODY_ACTIVE = "“Bar's full, she's up — don't wait for me, we all go at once!”";
+export const FFX2_GAUGE_BODY_WAIT = "“Bar's full, she's up! Take your time, nobody moves while you're picking.”";
+
+/**
+ * `ffx2-gauge`'s body for the save's current clock mode — the only line in
+ * the deck whose text itself changes with the mode; every other mark's body
+ * is fixed. Mirrors {@link briefingLines} and {@link coachRunningBadge}.
+ */
+export function ffx2GaugeBody(ffx2Atb: 'active' | 'wait'): string {
+  return ffx2Atb === 'active' ? FFX2_GAUGE_BODY_ACTIVE : FFX2_GAUGE_BODY_WAIT;
+}
+
+/**
  * FFX-2's lines. Rikku, and **not one of them holds anything** — they are
  * rendered beside the running party rows and fade on their own while all three
  * gauges keep filling.
@@ -190,7 +218,7 @@ export const FFX2_MARKS: readonly CoachMark[] = [
     id: 'ffx2-gauge',
     game: 'ffx2',
     speaker: 'Rikku',
-    body: "“Bar's full, she's up — don't wait for me, we all go at once!”",
+    body: FFX2_GAUGE_BODY_ACTIVE,
     holds: false,
     fadeMs: 5200,
   },

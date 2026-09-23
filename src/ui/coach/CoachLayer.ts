@@ -62,7 +62,7 @@ import type {
 import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
-import { marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
+import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
 import { ffx2AtbMode, markSeen, shouldShow } from './coachState.ts';
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
@@ -93,10 +93,11 @@ export interface CoachLayerOptions {
   setTimer?: (fn: () => void, ms: number) => number;
   clearTimer?: (handle: number) => void;
   /**
-   * FFX-2's ATB clock mode, for `ffx2-gauge`'s mode-aware skip (see
-   * `chooseCommand`). Defaults to the save's own `ffx2AtbMode()`; injectable
-   * so a unit test can pick 'active' without constructing a `SaveStore` —
-   * this file's own tests assume `activeSave()` stays null throughout.
+   * FFX-2's ATB clock mode, for `ffx2-gauge`'s mode-aware body (see
+   * `chooseCommand`'s `withResolvedBody`). Defaults to the save's own
+   * `ffx2AtbMode()`; injectable so a unit test can pick 'active' without
+   * constructing a `SaveStore` — this file's own tests assume `activeSave()`
+   * stays null throughout.
    */
   ffx2AtbMode?: 'active' | 'wait';
 }
@@ -289,25 +290,32 @@ class CoachedHud implements HudPort {
   ): Promise<Command> {
     const mark = this.due(markForMenu(this.game, commands, (id) => !shouldShow(id)));
     if (mark) {
-      // `ffx2-gauge`'s only body ("...don't wait for me, we all go at once!")
-      // is true of Active and wrong under Wait, where the whole point of the
-      // mode is that the player *can* wait — D-029 made Wait the default
-      // 2026-09-23, after this line was written for Active. `coachCopy.ts` has
-      // no Wait wording for it yet and hard rule 9 says not to invent one
-      // here, so under Wait this first-time tip is skipped rather than shown
-      // wrong, and left **unseen** (not `markSeen`) rather than consumed: a
-      // save that starts in Wait and is later switched to Active still gets
-      // taught the mechanic, on the first menu opened after the switch.
-      // (`ffx2-dressphere` / `ffx2-chain` are unaffected either way — they are
-      // reached only through `markForEvent`, never through this function.)
-      const activeOnlyUnderWait =
-        mark.id === 'ffx2-gauge' && this.game === 'ffx2' && (this.opts.ffx2AtbMode ?? ffx2AtbMode()) !== 'active';
-      if (!activeOnlyUnderWait) {
-        markSeen(mark.id);
-        void this.raise(mark);
-      }
+      markSeen(mark.id);
+      void this.raise(this.withResolvedBody(mark));
     }
     return this.inner.chooseCommand(actorId, commands, previewRank);
+  }
+
+  /**
+   * `ffx2-gauge`'s only body used to read ("...don't wait for me, we all go
+   * at once!") — true of Active, backwards under Wait, where the whole point
+   * of the mode is that the player *can* wait. D-029 made Wait the default on
+   * 2026-09-23, and commit 21f6270 (earlier the same day) responded by
+   * skipping the mark entirely under Wait — hard rule 9 says not to invent
+   * wording here — and leaving it **unseen** so a save that started in Wait
+   * and was later switched to Active would still get taught the mechanic.
+   * Bailey has since approved a Wait body (one of three drafts offered,
+   * verbatim — `docs/target/decisions.json`), so the skip is gone: the mark
+   * now shows under **both** modes, reading whichever body is true at show
+   * time via `coachCopy.ts`'s `ffx2GaugeBody`, and is marked seen the first
+   * time it is shown, in whichever mode that was — there is no more "left
+   * unseen for a later mode switch" case, because both modes now have true
+   * words. (`ffx2-dressphere` / `ffx2-chain` are unaffected either way — they
+   * are reached only through `markForEvent`, never through this function.)
+   */
+  private withResolvedBody(mark: CoachMarkDef): CoachMarkDef {
+    if (mark.id !== 'ffx2-gauge') return mark;
+    return { ...mark, body: ffx2GaugeBody(this.opts.ffx2AtbMode ?? ffx2AtbMode()) };
   }
 
   /**
