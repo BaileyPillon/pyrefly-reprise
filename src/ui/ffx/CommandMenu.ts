@@ -31,19 +31,26 @@ export type { MenuWindow, TargetResolution, TopDirectRow, TopGroupRow, TopRow } 
  * window of rows renders at a time (`computeMenuWindow`). */
 const MAX_VISIBLE_ROWS = 6;
 /**
- * The **top-level** menu's own cap, tighter than a submenu's.
- *
- * Round 09 PR-0002: at `MAX_VISIBLE_ROWS` the stack's reach covers ~97-100%
- * of Yuna's painted quad in Chapters 1 and 3 (`tests/unit/ffx-cmd-stack-safe-area.test.ts`
- * has the measured numbers) — the top-level list is Attack, the character
- * command(s), Item, a trigger row and Escape, which is almost always 6 real
- * FFX chapters wide once Talk/Flee are counted, so the stack was landing at
- * its tallest on the very first decision of the fight, not on some rare deep
- * submenu. A submenu (abilities, items) can still run to real length and
- * keeps the taller cap — those lists already scroll and are not the panel
- * CHK-008 measured over the party.
+ * Round 09 PR-0002 (carried, repaired round 10): the top-level stack covers
+ * ~97-100% of Yuna's painted quad in Chapters 1 and 3 at `MAX_VISIBLE_ROWS`
+ * (`tests/unit/ui-ffx-hud-safe-zones.test.ts`, "PR-0002" describe block, has
+ * the measured numbers). A round-10 attempt capped the top-level list at 2
+ * rows (`MAX_VISIBLE_TOP_ROWS`); the adversarial verifier for that round
+ * measured the *same* stack in Chapter 3, live, as the cursor moved through
+ * it (not only at rest) and found it still covers 34-44% of Yuna's quad —
+ * over CHK-008's one-third bar — because the window's vertical anchor moves
+ * with `topIndex`, not just its row count. It also cut the FFX command
+ * stack from the approved 5-row Ink & Gold mock
+ * (`docs/screenshots/mockups/A-ink-and-gold-battle.jpg`) to 2 rows, and no
+ * options round or yes from Bailey was ever sought for that (AGENTS.md rule
+ * 9). Both problems need a design pick — how many rows the approved stack is
+ * allowed to show, and/or where slot 0 stands (round 09's other suggested
+ * fix, "move party slot 0 right", is a hand-tuned 6-rig scene composition
+ * change and is itself a rule-9 case) — so round 10 reverts to the
+ * approved-mockup row count (`MAX_VISIBLE_ROWS`) rather than ship an
+ * unapproved cut that does not even close the gap. Left for Bailey: see
+ * `docs/handoff/fix10b-repair-command-menus.md`.
  */
-const MAX_VISIBLE_TOP_ROWS = 2;
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -755,7 +762,7 @@ export class CommandMenu {
         return;
       }
     }
-    this.renderRows(this.rows.map(topRowVM), this.topIndex, MAX_VISIBLE_TOP_ROWS);
+    this.renderRows(this.rows.map(topRowVM), this.topIndex, MAX_VISIBLE_ROWS);
   }
 
   private renderRows(vms: RowVM[], selectedIndex: number, maxVisible: number): void {
