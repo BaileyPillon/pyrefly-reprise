@@ -25,14 +25,14 @@
  * whether the airship names the chapter instead (preflight Q11) is recorded as
  * undecided on the chapter's target tile, so the card is not renamed here.
  *
- * `music`: no cue for this chapter is routed. `docs/audio/THEMES.md` names no
- * Evrae or airship cue; the preflight reserves two NEW compositions
- * (`scene-fahrenheit`, `boss-evrae`, §6 / research §12.6, C-16 "no source
- * states which track plays for the Evrae battle") and Bailey judges audio by
- * ear (hard rule 13). Until one is picked this falls back to the cues Chapter
- * 1 uses — `scene-gagazet` and `boss-seymour` — and the shared FFX fanfare
- * `victory-ffx`. A recorded stopgap, not a claim that either is this fight's
- * theme.
+ * `music`: the chapter's own two cues, the two the preflight reserved
+ * (§6 / research §12.6): `scene-fahrenheit` ("Within the Hour") and
+ * `boss-evrae` ("Open Sky, Closed Gate"), original compositions written to
+ * §12.6's brief (docs/audio/THEMES.md cue map rows 22-23). C-16 stays true —
+ * no source states which retail track plays for this battle — so these fill
+ * the emotional slot, not a canon claim. Both are CANDIDATES until Bailey's
+ * ear rules on them (hard rule 13; docs/audio/audition.html "Chapter VIII,
+ * Evrae (new)"). The FFX fanfare `victory-ffx` is shared. FFX only.
  */
 
 import type { Chapter } from './encounters.ts';
@@ -61,9 +61,9 @@ export const EVRAE_AIRSHIP: Chapter = {
   enemyGroupRef: evraeGroup,
   scriptsRef: evraeAirshipScripts,
   music: {
-    // Fallback to Chapter 1's cues — see the file doc above.
-    scene: 'scene-gagazet',
-    battle: 'boss-seymour',
+    // The chapter's own cues — see the file doc above.
+    scene: 'scene-fahrenheit',
+    battle: 'boss-evrae',
     victory: 'victory-ffx',
   },
   // Duplicated from the enemy record's own `sensorText`, as the `Chapter`

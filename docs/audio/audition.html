@@ -75,7 +75,118 @@
 <div class="wrap">
 
 <h1>Pyrefly Reprise — the score</h1>
-<p class="sub">Twenty-one cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+<p class="sub">Twenty-three cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+
+<!-- evrae:begin — Chapter VIII's two cues, 2026-09-23 (FFX only). Written by hand; audition.mjs does not generate it. -->
+<h2 style="margin-top:0">Chapter VIII, Evrae (new)</h2>
+<p class="group-note">
+  <strong>The airship chapter now has its own music, and both pieces already play in the game</strong>
+  (until today it borrowed Chapter 1&rsquo;s). Both are original and both are candidates: nothing is
+  approved until you have listened. I cannot hear any of this &mdash; every number below is a
+  measurement, not a judgement. FFX only: the airship fight has no FFX-2 counterpart.
+  Every file in this section is levelled to the same loudness (&minus;16 LUFS), so you compare by ear, not by volume.
+</p>
+
+<article class="cue">
+  <h4>scene-fahrenheit &mdash; &ldquo;Within the Hour&rdquo;</h4>
+  <p class="emotion">No time, and no way back.</p>
+  <p class="blurb">
+    Plays on the deck before the fight, while Cid turns the ship toward Bevelle. No drum kit: the engine
+    is a piano turning over in open fifths with a low taiko heartbeat, and a high string note for the wind.
+    At <strong>0:09</strong> the violins play the opening of the goodbye theme slowly &mdash; Yuna, who is not
+    on this ship. At <strong>0:28</strong> a flute plays, once, the tune the fight is about to use. At
+    <strong>0:46</strong> Bevelle comes over the clouds: the peak, which ends on the score&rsquo;s &ldquo;amen&rdquo;.
+    D minor, 104 bpm, loops from 0:09 to 1:14.
+  </p>
+  <audio controls preload="none" src="../../public/audio/music/scene-fahrenheit.mp3"></audio>
+  <p class="stats"><span>1:17</span><span>1.13 MB</span><span>-16.0 LUFS</span><span>-1.2 dBTP</span><span>LRA 12.4 LU</span><span>loop seam ok</span><span>all gates pass</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-evrae="Within the Hour (scene)"></label></p>
+</article>
+
+<article class="cue">
+  <h4>boss-evrae &mdash; &ldquo;Open Sky, Closed Gate&rdquo;</h4>
+  <p class="emotion">The ship is the weapon; keep your distance.</p>
+  <p class="blurb">
+    The battle. <em>Machina, not menace</em>: engine-room drums, a clang that never quite lines up with the
+    bar, a low drone for altitude, and no choir, organ or fanfare &mdash; the wyrm is Bevelle&rsquo;s doorman,
+    the airship is the subject. The tune&rsquo;s first four notes are the goodbye theme&rsquo;s first four,
+    played fast, with a gap in every phrase so the fight can cut it off anywhere. Listen for
+    <strong>0:33</strong>, where the band thins to a hat and a distant flute; <strong>0:46</strong>, one beat of
+    total silence; and <strong>0:47</strong>, where the beat is cut twice as fine without the tempo moving
+    (the &ldquo;Evrae speeds up&rdquo; idea). A minor, 144 bpm, loops from 0:07 to 1:20.
+  </p>
+  <audio controls preload="none" src="../../public/audio/music/boss-evrae.mp3"></audio>
+  <p class="stats"><span>1:23</span><span>1.29 MB</span><span>-15.9 LUFS</span><span>-1.4 dBTP</span><span>LRA 8.4 LU</span><span>loop seam ok</span><span>all gates pass</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-evrae="Open Sky, Closed Gate (battle)"></label></p>
+</article>
+
+<h3>The range idea: NEAR and FAR (not in the game yet)</h3>
+<p class="group-note">
+  The research brief asks for the battle music in two states: <strong>NEAR</strong> (dry, loud, drums forward)
+  when Evrae is at the rail, and <strong>FAR</strong> (thin, wide, the tune further away) when Cid pulls the
+  ship back &mdash; cross-faded whenever the range flips. Same notes in both; only the balance and the room
+  change. The game cannot switch between them yet (that needs a hook in the battle code), so today it plays the
+  balanced version above. <strong>Play the third file</strong>: it flips at 0:14 (to FAR), 0:26 (NEAR),
+  0:50 (FAR) and 1:02 (NEAR), with the 1.2-second cross-fade the game uses. If you cannot hear the flips, the
+  idea is not worth building.
+</p>
+<article class="cue">
+  <h4>NEAR &mdash; Evrae at the rail</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/evrae-near.mp3"></audio>
+  <p class="stats"><span>1:23</span><span>1.29 MB</span><span>-16.0 LUFS</span><span>-1.4 dBTP</span><span>seam ok</span></p>
+</article>
+<article class="cue">
+  <h4>FAR &mdash; the ship pulled back</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/evrae-far.mp3"></audio>
+  <p class="stats"><span>1:23</span><span>1.28 MB</span><span>-16.0 LUFS</span><span>-1.5 dBTP</span><span>seam ok</span></p>
+</article>
+<article class="cue">
+  <h4>The two, cross-faded the way the fight would</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/evrae-range-crossfade.mp3"></audio>
+  <p class="stats"><span>1:15</span><span>1.15 MB</span><span>-16.1 LUFS</span><span>-1.3 dBTP</span><span>flips 0:14 · 0:26 · 0:50 · 1:02</span></p>
+  <p class="score"><label>Worth building? Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-evrae="NEAR/FAR range cross-fade"></label></p>
+</article>
+
+<h3>The same two pieces in the modern sound</h3>
+<p class="group-note">
+  The renderer from &ldquo;Modern sound: sketch A&rdquo; below (more recorded dynamics per instrument, a
+  performance model, a wider master) &mdash; and, new here, the <strong>impulse response of a real concert hall</strong>
+  (the Voxengo &ldquo;Musikvereinsaal&rdquo; file you approved downloading) instead of the synthesised hall.
+  Same notes as the two above. Piano, electric bass, taiko and the clang stay on today&rsquo;s instruments
+  (no free library on disk has better ones).
+</p>
+<article class="cue">
+  <h4>&ldquo;Within the Hour&rdquo; &mdash; modern sound</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/modern-scene-fahrenheit.mp3"></audio>
+  <p class="stats"><span>1:17</span><span>1.48 MB</span><span>-16.1 LUFS</span><span>-1.3 dBTP</span><span>LRA 10.4 LU</span><span>seam ok</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-evrae="Within the Hour (modern sound)"></label></p>
+</article>
+<article class="cue">
+  <h4>&ldquo;Open Sky, Closed Gate&rdquo; &mdash; modern sound</h4>
+  <audio controls preload="none" src="../../public/audio/candidates/modern-boss-evrae.mp3"></audio>
+  <p class="stats"><span>1:23</span><span>1.55 MB</span><span>-15.9 LUFS</span><span>-1.4 dBTP</span><span>LRA 10.9 LU</span><span>seam ok</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-evrae="Open Sky, Closed Gate (modern sound)"></label></p>
+</article>
+
+<div class="check">
+  <p style="margin-top:0"><strong>When you have listened</strong> &mdash; press the button and send back the text. A score is enough; a sentence about what to change is better.</p>
+  <p><button type="button" id="evrae-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my Evrae scores</button></p>
+  <textarea id="evrae-out" rows="7" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your scores appear here."></textarea>
+  <p style="margin-bottom:0"><em>Nothing is saved or sent; the button only writes the text into the box.</em></p>
+</div>
+<script>
+  document.getElementById('evrae-collect').addEventListener('click', function () {
+    var lines = ['Pyrefly Reprise — Chapter VIII, Evrae music, 2026-09-23', ''];
+    document.querySelectorAll('input[data-evrae]').forEach(function (input) {
+      var v = input.value.trim();
+      lines.push(input.dataset.evrae + ': ' + (v === '' ? '(not scored)' : v + '/10'));
+    });
+    lines.push('', "Today's sound or the modern sound: ", 'Notes: ');
+    document.getElementById('evrae-out').value = lines.join('\n');
+  });
+</script>
+<!-- evrae:end -->
+
 
 <div class="guide">
   <h2 style="margin-top:0">What to listen for</h2>

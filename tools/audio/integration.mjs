@@ -129,7 +129,9 @@ try {
   const debug0 = await page.evaluate(() => window.__pyrefly.audioDebug());
   check('manifest is installed in the AudioManager', debug0.prerendered.manifest,
     `${debug0.prerendered.cues} cues listed`);
-  check('all 21 cues are listed', debug0.prerendered.cues === 21, `${debug0.prerendered.cues}`);
+  // Every cue the repo's manifest lists (23 since Chapter VIII's two landed, 2026-09-23).
+  const listed = Object.keys(JSON.parse(await readFile(path.join(ROOT, 'public/audio/manifest.json'), 'utf8')).music).length;
+  check(`all ${listed} cues are listed`, debug0.prerendered.cues === listed, `${debug0.prerendered.cues}`);
   check('sprite is listed', debug0.prerendered.sprite === true);
 
   // ---------------------------------------------------------------- title ---

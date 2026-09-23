@@ -1,0 +1,78 @@
+{
+  "cue": "boss-evrae",
+  "game": "ffx",
+  "rendered": "2026-09-23T17:00:19.490Z",
+  "flips": [
+    {
+      "at": 14,
+      "to": "far"
+    },
+    {
+      "at": 26,
+      "to": "near"
+    },
+    {
+      "at": 50,
+      "to": "far"
+    },
+    {
+      "at": 62,
+      "to": "near"
+    }
+  ],
+  "fadeSec": 1.2,
+  "files": [
+    {
+      "file": "candidates/evrae-near.mp3",
+      "bytes": 1285197,
+      "range": "near",
+      "seconds": 83,
+      "loopStart": 6.666666666666667,
+      "loopEnd": 80,
+      "lufs": -15.95238241711247,
+      "truePeakDb": -1.394612408235999,
+      "seamOk": true,
+      "balanceOk": true,
+      "spectrumDb": {
+        "sub": -13.196093500003778,
+        "low": 0,
+        "low-mid": -1.936342834350089,
+        "mid": -11.597013623399839,
+        "high-mid": -16.65046657981113,
+        "presence": -26.586715393952485,
+        "air": -39.5948917721323
+      },
+      "attackIndexDb": 0.6462595925370305,
+      "renderSec": 78.114
+    },
+    {
+      "file": "candidates/evrae-far.mp3",
+      "bytes": 1282470,
+      "range": "far",
+      "seconds": 83,
+      "loopStart": 6.666666666666667,
+      "loopEnd": 80,
+      "lufs": -15.996094172977605,
+      "truePeakDb": -1.4496099550835266,
+      "seamOk": true,
+      "balanceOk": true,
+      "spectrumDb": {
+        "sub": -10.208653748987222,
+        "low": 0,
+        "low-mid": -1.4040731538781293,
+        "mid": -8.449258696666519,
+        "high-mid": -12.414927352346123,
+        "presence": -23.39161703148237,
+        "air": -37.75542507206645
+      },
+      "attackIndexDb": 0.605742232125476,
+      "renderSec": 18.587
+    },
+    {
+      "file": "candidates/evrae-range-crossfade.mp3",
+      "bytes": 1147625,
+      "range": "crossfade",
+      "seconds": 75
+    }
+  ]
+}

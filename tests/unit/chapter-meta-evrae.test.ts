@@ -115,9 +115,9 @@ describe('EVRAE_META', () => {
     expect(EVRAE_META.focalCharacterId.length).toBeGreaterThan(0);
   });
 
-  it('musicKeys are a recorded stopgap (§12.6 names no cue), plus the shared FFX fanfare', () => {
-    expect(EVRAE_META.musicKeys).toContain('scene-gagazet');
-    expect(EVRAE_META.musicKeys).toContain('boss-seymour');
+  it("musicKeys are the chapter's own two cues (the preflight's reserved pair), plus the shared FFX fanfare", () => {
+    expect(EVRAE_META.musicKeys).toContain('scene-fahrenheit');
+    expect(EVRAE_META.musicKeys).toContain('boss-evrae');
     expect(EVRAE_META.musicKeys).toContain('victory-ffx');
     for (const key of EVRAE_META.musicKeys) expect(key.startsWith('ffx2') || key.includes('ffx2')).toBe(false);
   });

@@ -526,6 +526,8 @@ lists only real compositions, so previews never render duplicates.
 | `boss-shuyin` | Shuyin | FFX-2 |
 | `victory-ffx2` | victory + results | FFX-2 |
 | `ending-ffx2` | ending / credits | FFX-2 |
+| `scene-fahrenheit` | the Fahrenheit's deck, Chapter VIII (Evrae), before the fight | FFX |
+| `boss-evrae` | Evrae, Chapter VIII | FFX |
 
 `battle-ffx` and `boss-dread` stay registered as general-purpose battle and dread cues.
 
@@ -576,6 +578,8 @@ root plays a major 3rd against it.
 | `ending-ffx2` — *"Wherever the Tide Takes Me"* | Bb major → C major, 84 bpm | 60 bars. Epiano vamp (1–4); a flute verse on the Sphere hook stretched to twice its length (5–20); pre-chorus and a chorus carrying Lenne's line in major over supersaw pad and strings (21–32); a bare epiano bridge on a borrowed iv (33–36); the second chorus, where soft 808, clap and hats finally enter (37–48); the final chorus up a whole step with FFX's rising cell in celesta and bell (49–56); a quiet coda pivoting back to Bb (57–60). Loop 16 → 240. |
 | `boss-vegnagun` — *"Iron Verdict"* | F minor, 168 bpm | 72 bars. Organ swell and teaser clangs (1–4); the groove, with every phrase lurching through a 3½-beat and a 4½-beat bar (5–20); a four-bar hush to bass, metal and hats, then the band slams back (21–28); the lurch again with the alarm an octave up (29–44); a system-overload breakdown that builds from an organ pedal (45–52); the fortissimo assault (53–68); a snare-roll turn onto C7 (69–72). Loop 16 → 288. |
 | `boss-shuyin` — *"The Weight of a Thousand Years"* | C# minor, 154 bpm | 68 bars. Piano riff alone (1–4); full band with Lenne's cell as a pwm hook (5–20); half-time, epiano and strings carry the cell augmented in dorian (21–36); the riff returns with the hook passed between registers and a piano answer (37–52); the climax with the hook in octaves (53–60); a dominant turn (61–68). Loop 16 → 272. |
+| `boss-evrae` — *"Open Sky, Closed Gate"* | A minor, 144 bpm | 48 bars. Engine room: clangs out of true, taiko, the drone opens (1–4); the pursuit phrase — FAREWELL_RISE driven at speed, a rest in every two bars — on strings over a piano sparkle (5–12); horns take it while the violins sing above (13–20); the air: a hat, piano open fifths, FAREWELL_RISE and FAREWELL_FALL on a distant flute, then one beat of dead stop (21–28); sixteenths under the same tempo, the tune in octaves (29–36); piano alone on the tune over the engine (37–44); bVI–bVII twice into the loop (45–48). Loop 16 → 192. NEAR/FAR balances of the same notes: `rangeVariant` in `fahrenheit.ts`, auditioned via `tools/audio/render-range.mjs`. |
+| `scene-fahrenheit` — *"Within the Hour"* | D minor, 104 bpm | 32 bars. Wind (a high string fourth), a distant clang, the piano engine turning over (1–4); FAREWELL_RISE at double length then FAREWELL_FALL on violins (5–12); the ship figure on flute as the engine quickens, a fourth above the battle (13–20); Bevelle over the cloud line, the peak closing on the AMEN over the iv6 (21–28); back to wind and engine, bVI–bVII home (29–32). No kit. Loop 16 → 128. |
 
 ## Checklist for a new track
 

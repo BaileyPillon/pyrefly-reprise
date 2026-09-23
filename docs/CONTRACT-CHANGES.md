@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-23 — Two music keys: `scene-fahrenheit`, `boss-evrae` (Chapter VIII)
+
+**FFX only** [AGENTS.md hard rule 14]: Evrae on the Fahrenheit is an FFX encounter
+(research/ffx-evrae-airship.md §0.4). Additive: `MUSIC_KEYS` in
+`src/audio/tracks/index.ts` (CONTRACT-CHANGES §8's list) gains the two keys the
+Chapter VIII preflight reserved, both composed and registered in `COMPOSED`
+(`scene-fahrenheit.ts`, `boss-evrae.ts`, shared material in `fahrenheit.ts`) and
+rendered into `public/audio/manifest.json`. `MusicKey` stays a plain `string`;
+nothing else changes. The chapter's `music`, the formation's `musicCues`, the
+chapter meta's `musicKeys` and the story script's two `music()` steps now name them
+instead of Chapter 1's stopgap pair. Handoff: `docs/handoff/chapter-evrae-music.md`.
+
 ## 2026-09-23 — `AvailableCommand.wrapsCategory`: Doublecast asks for a spell and an enemy (PR-0125)
 
 Key `fix-ffx-doublecast-aim`. **FFX only** [AGENTS.md hard rule 14]: Doublecast

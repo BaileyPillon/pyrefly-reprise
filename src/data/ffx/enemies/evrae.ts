@@ -263,10 +263,10 @@ export const evraeGroup: EnemyGroupDef = {
   canEscape: false, // §1.3 `boss` — Escape and Flee are disabled
   enemies: [evrae, cid],
   musicCues: [
-    // STOPGAP: §12.6 / C-16, no source names the Evrae battle track; the
-    // reserved `boss-evrae` is unbuilt (O-5, Bailey's ear, rule 13), so Chapter
-    // 1's cue plays [docs/handoff/chapter-evrae.md]; swap when it lands.
-    { at: 'start', track: 'boss-seymour', fadeMs: 800 },
+    // The chapter's own battle cue, composed to §12.6's brief (C-16: no source
+    // names the retail track, so this fills the slot, not a canon claim). A
+    // CANDIDATE until Bailey's ear rules on it (rule 13). FFX only.
+    { at: 'start', track: 'boss-evrae', fadeMs: 800 },
   ],
 };
 

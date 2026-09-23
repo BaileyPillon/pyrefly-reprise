@@ -22,6 +22,8 @@ import { shuyinTrack } from './boss-shuyin.ts';
 import { victoryFfx2Track } from './victory-ffx2.ts';
 import { bossFfx2AeonTrack } from './boss-ffx2-aeon.ts';
 import { endingFfx2Track } from './ending-ffx2.ts';
+import { sceneFahrenheitTrack } from './scene-fahrenheit.ts';
+import { bossEvraeTrack } from './boss-evrae.ts';
 
 /** The final music keys (CONTRACT-CHANGES §8). `playMusic` resolves every one. */
 export const MUSIC_KEYS = [
@@ -43,6 +45,9 @@ export const MUSIC_KEYS = [
   'boss-shuyin',
   'victory-ffx2',
   'ending-ffx2',
+  // Chapter VIII, Evrae on the Fahrenheit (FFX only): CONTRACT-CHANGES 2026-09-23.
+  'scene-fahrenheit',
+  'boss-evrae',
 ] as const;
 
 export type FinalMusicKey = (typeof MUSIC_KEYS)[number];
@@ -70,6 +75,8 @@ const COMPOSED: Record<string, Track> = {
   'victory-ffx2': victoryFfx2Track,
   'boss-ffx2-aeon': bossFfx2AeonTrack,
   'ending-ffx2': endingFfx2Track,
+  'scene-fahrenheit': sceneFahrenheitTrack,
+  'boss-evrae': bossEvraeTrack,
 };
 
 /**
@@ -249,6 +256,20 @@ export const TRACK_NOTES: Record<string, TrackNote> = {
     key: 'Bb major → C',
     themes: 'SONGSTRESS complete with its bridge; the last chorus up a step, FAREWELL_RISE visiting on flute',
     intent: 'the second game says goodbye more gently, because it can',
+  },
+  'boss-evrae': {
+    title: 'Open Sky, Closed Gate',
+    key: 'A minor',
+    themes:
+      'FAREWELL_RISE driven at speed as the head of a two-bar ship figure with rests in it; FAREWELL_RISE and FAREWELL_FALL at double length on a distant flute; no HYMN, no choir',
+    intent: 'the ship is the weapon; keep your distance',
+  },
+  'scene-fahrenheit': {
+    title: 'Within the Hour',
+    key: 'D minor',
+    themes:
+      'FAREWELL_RISE and FAREWELL_FALL at double length on violins; the ship figure foreshadowed on flute; the peak closes on the AMEN',
+    intent: 'no time, and no way back',
   },
 };
 

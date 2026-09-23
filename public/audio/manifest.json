@@ -21,6 +21,16 @@
       "lufs": -16.02,
       "truePeakDb": -1.4
     },
+    "boss-evrae": {
+      "file": "music/boss-evrae.mp3",
+      "loopStart": 6.666667,
+      "loopEnd": 80,
+      "duration": 83,
+      "bytes": 1287019,
+      "lufs": -15.97,
+      "truePeakDb": -1.4,
+      "score": "a660934bb598f632"
+    },
     "boss-ffx2-aeon": {
       "file": "music/boss-ffx2-aeon.mp3",
       "loopStart": 12,
@@ -137,6 +147,16 @@
       "bytes": 1517895,
       "lufs": -16.1,
       "truePeakDb": -1.38
+    },
+    "scene-fahrenheit": {
+      "file": "music/scene-fahrenheit.mp3",
+      "loopStart": 9.230771,
+      "loopEnd": 73.846145,
+      "duration": 76.8461,
+      "bytes": 1130820,
+      "lufs": -16.17,
+      "truePeakDb": -1.33,
+      "score": "6f81c0f19ff8fa2c"
     },
     "scene-farplane": {
       "file": "music/scene-farplane.mp3",

@@ -48,14 +48,12 @@
  *   2. Every `say` in a mid-battle script carries an explicit `auto` — the
  *      presenter abandons a beat that waits on a Confirm that never comes.
  *
- * `music()` steps: the preflight reserves two NEW cues (`scene-fahrenheit`,
- * `boss-evrae`, §6 and §12.6), and neither exists — no composition, no row in
- * `docs/audio/THEMES.md`, and Bailey judges audio by ear (hard rule 13). An
- * unregistered cue throws in the cutscene runner
- * (`tests/unit/audio-story-cues.test.ts`), so the integrator routed Chapter
- * 1's `scene-gagazet` / `boss-seymour` in their place, the stopgap Chapter 7
- * uses. When the real cues land, swap the two calls back (and the chapter's
- * `music` and the formation's `musicCues`).
+ * `music()` steps: the two cues the preflight reserved (§6 and §12.6),
+ * composed 2026-09-23 — `scene-fahrenheit` ("Within the Hour") under the
+ * approach and `boss-evrae` ("Open Sky, Closed Gate") from Cid's order into
+ * the battle (docs/audio/THEMES.md cue map rows 22-23). Candidates until
+ * Bailey's ear rules on them (hard rule 13); the chapter's `music` and the
+ * formation's `musicCues` name the same two.
  *
  * `sfx()` steps: the writer's five requests are not in the SFX bank, so each
  * plays the nearest existing sound [`docs/handoff/chapter-evrae.md`]:
@@ -88,7 +86,7 @@ export const evraeAirshipScripts: ChapterScripts = {
     // Full daylight, high altitude, open sky, engine noise under everything
     // [§12.1, §12.3]. No narration here: §2.1 places an interlude *after* an
     // emotional high, so the chapter opens cold on the deck.
-    music('scene-gagazet', 1400), // stopgap for `scene-fahrenheit` (header)
+    music('scene-fahrenheit', 1400),
     camera('idle', 0),
     fade('clear', 1100),
     sfx('machina-whir'), // requested: airship-engine-loop
@@ -144,7 +142,7 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('auron', 'Hmph. Mind the teeth.'),
 
     // --- Beat 7 — the mechanic, as characterisation. One line. -----------
-    music('boss-seymour', 900), // stopgap for `boss-evrae` (header)
+    music('boss-evrae', 900),
     shake(11, 700),
     camera('action', 600),
     say('cid', 'Listen up! I can move this ship, or I can shoot!'),

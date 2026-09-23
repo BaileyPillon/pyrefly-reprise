@@ -1,0 +1,99 @@
+{
+  "renderer": "modern (sketch A): sfizz + VSCO 2 CE / VCSL + shipped SF2 band voices, performance model, wide master",
+  "game": "ffx",
+  "rendered": "2026-09-23T17:03:34.561Z",
+  "hall": {
+    "kind": "Voxengo impulse response (Impulse Modeler)",
+    "file": "D:/Tools/audio-libs/ir/voxengo/Musikvereinsaal.wav",
+    "licence": "Voxengo IR licence: royalty-free use for any purpose; the IR files are not redistributed",
+    "directSoundAtMs": 20.02,
+    "removedBeforeMs": 21.52,
+    "rt60EstimateSec": 1.47,
+    "energyScaleToShippedHall": 0.0726,
+    "sourceClippedSamples": 0
+  },
+  "cues": [
+    {
+      "name": "scene-fahrenheit",
+      "file": "public/audio/candidates/modern-scene-fahrenheit.mp3",
+      "renderSec": 67.1,
+      "seconds": 76.85,
+      "loop": {
+        "startSec": 9.23077097505669,
+        "endSec": 73.84614512471656
+      },
+      "gates": {
+        "lufs": -16.23695916737751,
+        "truePeakDb": -1.3513723582689574,
+        "seamOk": true,
+        "spectrumOk": true,
+        "spectrumProblems": []
+      },
+      "dynamics": {
+        "modernMp3": {
+          "lufs": -16.1,
+          "lra": 10.4,
+          "truePeakDb": -1.3,
+          "peakDb": -1.261297,
+          "rmsDb": -19.083738,
+          "crestDb": 17.82
+        },
+        "shippedMp3": {
+          "lufs": -16,
+          "lra": 12.4,
+          "truePeakDb": -1.2,
+          "peakDb": -1.195648,
+          "rmsDb": -19.325406,
+          "crestDb": 18.13
+        }
+      },
+      "stats": {
+        "sfizzRenders": 45,
+        "bandNotes": 402,
+        "sfizzPasses": 48,
+        "clippedSamplesLeft": 0
+      }
+    },
+    {
+      "name": "boss-evrae",
+      "file": "public/audio/candidates/modern-boss-evrae.mp3",
+      "renderSec": 45.4,
+      "seconds": 83,
+      "loop": {
+        "startSec": 6.666666666666667,
+        "endSec": 80
+      },
+      "gates": {
+        "lufs": -15.980483626709168,
+        "truePeakDb": -1.3765214149096618,
+        "seamOk": true,
+        "spectrumOk": true,
+        "spectrumProblems": []
+      },
+      "dynamics": {
+        "modernMp3": {
+          "lufs": -15.9,
+          "lra": 10.9,
+          "truePeakDb": -1.4,
+          "peakDb": -1.36523,
+          "rmsDb": -18.699502,
+          "crestDb": 17.33
+        },
+        "shippedMp3": {
+          "lufs": -15.9,
+          "lra": 8.4,
+          "truePeakDb": -1.4,
+          "peakDb": -1.365408,
+          "rmsDb": -18.226694,
+          "crestDb": 16.86
+        }
+      },
+      "stats": {
+        "sfizzRenders": 54,
+        "bandNotes": 862,
+        "sfizzPasses": 63,
+        "clippedSamplesLeft": 0
+      }
+    }
+  ]
+}

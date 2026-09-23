@@ -115,6 +115,13 @@ export const MODERN_MAP = {
   epiano: { role: 'band', about: 'SF2 Rhodes (FluidR3) — no CC0 electric piano on disk' },
   supersaw: { role: 'band', about: 'SF2 saw stacks (FluidR3) — a synth by design' },
   celesta: { role: 'band', about: 'SF2 celesta (FluidR3) — neither VSCO 2 CE nor VCSL has one' },
+  // Added 2026-09-23 for Chapter VIII's two cues (boss-evrae, scene-fahrenheit;
+  // FFX only). The shipped voices, performed by the same model: Salamander's
+  // 16-layer grand is already the best piano on disk (VSCO's is an upright),
+  // and neither CC0 library has a taiko or a tam-tam clang.
+  piano: { role: 'band', about: 'Salamander concert grand (SF2, 16 velocity layers) — the shipped piano' },
+  taiko: { role: 'band', about: 'SF2 concert bass drum pitched down — the shipped taiko stand-in' },
+  'metal-hit': { role: 'band', about: 'SF2 tam-tam as an industrial clang — the shipped voice' },
 };
 
 export function modernEntry(instrument) {

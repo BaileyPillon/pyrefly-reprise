@@ -79,6 +79,18 @@ to offer.
 
 ---
 
+### Voxengo impulse responses (audition candidates only)
+
+`D:/Tools/audio-libs/ir/voxengo/` — Voxengo's free impulse-response set, made with
+Impulse Modeler by Aleksey Vaneev, downloaded 2026-09-22 with Bailey's yes (NOW.md,
+the five-item list, item 5). The licence (`license.txt` beside the files) grants
+royalty-free use for any purpose, commercial included, and restricts only
+redistributing the IR files themselves, which we never do: only music convolved
+with them is published. Used so far by `tools/audio/modern/render-evrae.mjs`
+(the "Musikvereinsaal" file) for the Chapter VIII modern-sound candidates in
+`public/audio/candidates/modern-*.mp3`; **no shipped cue uses it yet**. If one
+does, credit "Impulse responses: Voxengo (Aleksey Vaneev)".
+
 ## What must appear in the game credits
 
 Two entries, verbatim:

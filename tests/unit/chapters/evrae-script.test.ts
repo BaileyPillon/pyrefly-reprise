@@ -280,16 +280,15 @@ describe('Evrae script — absence test: FFX only [AGENTS.md rule 14]', () => {
     }
   });
 
-  // The preflight reserves `scene-fahrenheit` / `boss-evrae` [§6, §12.6]; neither
-  // is composed, so the integrator routed Chapter 1's pair as a recorded
-  // stopgap (docs/handoff/chapter-evrae.md). Swap both here when they land.
-  it('the only music cues are the recorded stopgap for the two the preflight reserves', () => {
+  // The preflight reserves `scene-fahrenheit` / `boss-evrae` [§6, §12.6]; both
+  // were composed 2026-09-23 (docs/audio/THEMES.md cue map rows 22-23).
+  it('the only music cues are the two the preflight reserves', () => {
     const cues = new Set<string>();
     for (const [, script] of allScripts()) {
       for (const step of flatten(script)) {
         if (step.type === 'music' && step.track) cues.add(step.track);
       }
     }
-    expect([...cues].sort()).toEqual(['boss-seymour', 'scene-gagazet']);
+    expect([...cues].sort()).toEqual(['boss-evrae', 'scene-fahrenheit']);
   });
 });

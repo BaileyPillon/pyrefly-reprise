@@ -86,6 +86,9 @@ const CUE_MAP = {
   'boss-shuyin': { key: 'C# minor', bpm: 154, meter: [4, 4], themes: ['SONGSTRESS_DARK'] },
   'victory-ffx2': { key: 'Eb major', bpm: 128, meter: [4, 4], themes: ['SONGSTRESS_HOOK'] },
   'ending-ffx2': { key: 'Bb major', bpm: 84, meter: [4, 4], themes: ['SONGSTRESS_HOOK', 'FAREWELL_RISE'] },
+  // Chapter VIII, FFX only (cue map rows 22-23, 2026-09-23).
+  'boss-evrae': { key: 'A minor', bpm: 144, meter: [4, 4], themes: ['FAREWELL_RISE', 'FAREWELL_FALL'] },
+  'scene-fahrenheit': { key: 'D minor', bpm: 104, meter: [4, 4], themes: ['FAREWELL_RISE', 'FAREWELL_FALL'] },
 };
 
 /**

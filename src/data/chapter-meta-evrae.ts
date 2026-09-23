@@ -19,12 +19,11 @@
  * playable Yuna and Tidus carries the beat sheet's opening lines
  * (`research/ffx-evrae-airship.md` §12.4).
  *
- * `musicKeys` names no new cue: §12.6 explicitly records "no source states
- * which track plays for the Evrae battle" as C-16. Chapter 1's
- * `scene-gagazet` / `boss-seymour` pair is reused as the recorded stopgap
- * (the same pattern `chapter-meta-seymour-anima-macalania.ts` used), plus the
- * shared `victory-ffx` fanfare. A future music track can compose this
- * chapter's own cues and swap both.
+ * `musicKeys` are the chapter's own two cues, `scene-fahrenheit` and
+ * `boss-evrae` (original compositions to research §12.6's brief; §12.6 still
+ * records "no source states which track plays for the Evrae battle" as C-16,
+ * so they fill the slot rather than claim the canon track), plus the shared
+ * `victory-ffx` fanfare. Candidates until Bailey's ear rules (rule 13).
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -75,7 +74,7 @@ export const EVRAE_META: ChapterMeta = {
     { image: 'characters/evrae/breath-charge.png', caption: 'the throat, charging' },
   ],
   focalCharacterId: 'tidus',
-  musicKeys: ['scene-gagazet', 'boss-seymour', 'victory-ffx'],
+  musicKeys: ['scene-fahrenheit', 'boss-evrae', 'victory-ffx'],
 };
 
 export default EVRAE_META;

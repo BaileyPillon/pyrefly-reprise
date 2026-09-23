@@ -544,7 +544,7 @@ cadence in the fanfare, and the fanfare is never longer than four bars.
 
 ## The cue map
 
-Twenty-one cues: the twenty shipped music keys plus the new **pause** cue. Every
+Twenty-three cues: the twenty shipped music keys, the new **pause** cue, and Chapter VIII's two (rows 22-23, FFX only, added 2026-09-23 and awaiting Bailey's ear). Every
 row says which themes appear, how they are transformed, and — the column that
 actually matters — **the one thing the cue must leave behind**.
 
@@ -571,6 +571,8 @@ actually matters — **the one thing the cue must leave behind**.
 | 19 | `boss-shuyin` | SONGSTRESS in the **parallel** minor, tonic unmoved; bar 7's borrowed joy becomes merely diatonic; piano and strings, rubato in the half-time B | C# minor | 154 (B at 77) | A · B (half-time) · A′ · coda | Grief that has curdled |
 | 20 | `victory-ffx2` | `SONGSTRESS_HOOK` as a brass fanfare, identity leap intact and major | Eb major | 128 | fanfare · results groove | That was fun |
 | 21 | `ending-ffx2` | SONGSTRESS complete with its bridge; last chorus up a step, `FAREWELL_RISE` visiting on flute | Bb major → C | 84 | verse · chorus · bridge · chorus +1 | The second game says goodbye more gently, because it can |
+| 22 | **`boss-evrae`** (new) | `FAREWELL_RISE` driven at speed as the head of a two-bar **ship figure** with a rest in every bar (`fahrenheit.ts`), so the fight can interrupt it anywhere; at range, `FAREWELL_RISE` and `FAREWELL_FALL` at double length on a distant flute. No HYMN, no choir, no organ: Bevelle's holiness is the scene's irony, not its sound (research §12.6). No dominant; `bVI - bVII - i` at every seam. Two range balances of the same notes (`rangeVariant`: NEAR dry and percussion forward, FAR thin and wide) | A minor | 144 | engine · A · A′ (horns) · B (air, a dead stop) · C (sixteenths, same tempo) · D (piano) · turn | The ship is the weapon; keep your distance |
+| 23 | **`scene-fahrenheit`** (new) | `FAREWELL_RISE` at double length then `FAREWELL_FALL` on violins — Yuna, who is not on the deck; the ship figure on flute a fourth up, foreshadowing the fight; the peak closes on `AMEN` over the iv6. No kit: the engine is a piano in open fifths and a taiko heartbeat | D minor | 104 | wind · A (violins) · B (the figure) · C (Bevelle, the amen) · wind | No time, and no way back |
 
 **Anti-fatigue rule.** `chapter-select` and `pause` are the two cues a player
 hears most, and neither is allowed the theme's heart: chapter-select loops bars
