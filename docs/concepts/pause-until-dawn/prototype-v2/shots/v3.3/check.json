@@ -1,0 +1,1029 @@
+{
+ "rest": {
+  "rest-post0": {
+   "madAll": 0.0302,
+   "maxAll": 0,
+   "pxOver1": 0,
+   "madFigure": 0.0,
+   "figureLumPlate": 140.52,
+   "figureLum": 140.52
+  },
+  "rest-post": {
+   "madAll": 0.6218,
+   "maxAll": 83,
+   "pxOver1": 122893,
+   "madFigure": 0.659,
+   "figureLumPlate": 140.52,
+   "figureLum": 140.1
+  }
+ },
+ "straight": {
+  "hairBack": {
+   "longestVertical": 104,
+   "longestHorizontal": 56
+  },
+  "body": {
+   "longestVertical": 44,
+   "longestHorizontal": 33
+  },
+  "headCore": {
+   "longestVertical": 31,
+   "longestHorizontal": 15
+  },
+  "irisR": {
+   "longestVertical": 10,
+   "longestHorizontal": 18
+  },
+  "irisL": {
+   "longestVertical": 12,
+   "longestHorizontal": 17
+  },
+  "eyeApertureR": {
+   "longestVertical": 8,
+   "longestHorizontal": 12
+  },
+  "eyeApertureL": {
+   "longestVertical": 9,
+   "longestHorizontal": 18
+  },
+  "hairFront": {
+   "longestVertical": 49,
+   "longestHorizontal": 17
+  },
+  "strand1": {
+   "longestVertical": 17,
+   "longestHorizontal": 16
+  },
+  "strand2": {
+   "longestVertical": 28,
+   "longestHorizontal": 26
+  },
+  "earring": {
+   "longestVertical": 29,
+   "longestHorizontal": 12
+  },
+  "turn-l45.back": {
+   "longestVertical": 74,
+   "longestHorizontal": 66
+  },
+  "turn-l45.front": {
+   "longestVertical": 51,
+   "longestHorizontal": 276
+  },
+  "turn-r45.back": {
+   "longestVertical": 51,
+   "longestHorizontal": 66
+  },
+  "turn-r45.front": {
+   "longestVertical": 51,
+   "longestHorizontal": 276
+  },
+  "turn-l85.back": {
+   "longestVertical": 60,
+   "longestHorizontal": 168
+  },
+  "turn-l85.front": {
+   "longestVertical": 60,
+   "longestHorizontal": 270
+  },
+  "turn-r85.back": {
+   "longestVertical": 60,
+   "longestHorizontal": 168
+  },
+  "turn-r85.front": {
+   "longestVertical": 60,
+   "longestHorizontal": 270
+  }
+ },
+ "idle": {
+  "frames": 1801,
+  "spec5p5sWindowsMedian": {
+   "windows": 32,
+   "headXPctHeadWidth": 2.17,
+   "headYPctHeadWidth": 2.17,
+   "chestXPctIpd": 3.63,
+   "chestYPctIpd": 2.8
+  },
+  "headXPctHeadWidth": 4.45,
+  "headYPctHeadWidth": 4.26,
+  "chestXPctIpd": 6.46,
+  "chestYPctIpd": 5.21,
+  "yawRangeDeg": [
+   -1.61,
+   1.89
+  ],
+  "paintsSeen": [
+   "frontal"
+  ],
+  "framesMixed": 0
+ },
+ "mouse": {
+  "15": {
+   "samples": 120,
+   "mixedShare": 0.0,
+   "paints": [
+    "frontal"
+   ],
+   "yawRange": [
+    13.22,
+    16.51
+   ]
+  },
+  "22": {
+   "samples": 120,
+   "mixedShare": 0.0,
+   "paints": [
+    "frontal"
+   ],
+   "yawRange": [
+    20.23,
+    23.52
+   ]
+  },
+  "25": {
+   "samples": 120,
+   "mixedShare": 0.0,
+   "paints": [
+    "frontal"
+   ],
+   "yawRange": [
+    23.24,
+    26.53
+   ]
+  },
+  "60": {
+   "samples": 120,
+   "mixedShare": 0.0,
+   "paints": [
+    "turn-r45"
+   ],
+   "yawRange": [
+    58.3,
+    61.59
+   ]
+  }
+ },
+ "blink": {
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "blink": [
+   {
+    "name": "blink-00-rest",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.8521000000000045,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "blink-01",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.868431999999999,
+    "eye": "closing",
+    "ap": 0.67336,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 16.3
+   },
+   {
+    "name": "blink-02",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.884431999999994,
+    "eye": "closing",
+    "ap": 0.3533599999999999,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 32.3
+   },
+   {
+    "name": "blink-03",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.900429999999987,
+    "eye": "closing",
+    "ap": 0.03340000000000076,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 48.3
+   },
+   {
+    "name": "blink-04",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.916429999999979,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 64.3
+   },
+   {
+    "name": "blink-05",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.9324299999999734,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 80.3
+   },
+   {
+    "name": "blink-06",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.948429999999967,
+    "eye": "opening",
+    "ap": 0.18684848484848507,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 96.3
+   },
+   {
+    "name": "blink-07",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.964427999999962,
+    "eye": "opening",
+    "ap": 0.42924242424242454,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 112.3
+   },
+   {
+    "name": "blink-08",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.980427999999955,
+    "eye": "opening",
+    "ap": 0.671666666666667,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 128.3
+   },
+   {
+    "name": "blink-09",
+    "yaw": 0,
+    "base": 0,
+    "t": 4.996429999999949,
+    "eye": "opening",
+    "ap": 0.9141212121212126,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 144.3
+   },
+   {
+    "name": "blink-10",
+    "yaw": 0,
+    "base": 0,
+    "t": 5.012431999999941,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    },
+    "dtMs": 160.3
+   }
+  ]
+ },
+ "turnblink": {
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "turnblink": [
+   {
+    "name": "turnblink-m30-closed",
+    "yaw": -29.999375148834396,
+    "base": -29.999375148834396,
+    "t": 2.4206300000007452,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-m30-open",
+    "yaw": -30.05183115625707,
+    "base": -30.05183115625707,
+    "t": 3.0539300000007437,
+    "eye": "open",
+    "ap": 0.9997580584188109,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-m45-closed",
+    "yaw": -45.05602326195886,
+    "base": -45.05602326195886,
+    "t": 4.620860000000729,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-m45-open",
+    "yaw": -45.08241594289478,
+    "base": -45.08241594289478,
+    "t": 5.270860000000735,
+    "eye": "open",
+    "ap": 0.9997580584188109,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-m84-closed",
+    "yaw": -84.08365848579476,
+    "base": -84.08365848579476,
+    "t": 6.8376920000007315,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-m84-open",
+    "yaw": -84.1522894186509,
+    "base": -84.1522894186509,
+    "t": 7.487692000000737,
+    "eye": "open",
+    "ap": 0.9997580584188109,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-p30-closed",
+    "yaw": 29.639757831503537,
+    "base": 29.639757831503537,
+    "t": 9.054622000000787,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-p30-open",
+    "yaw": 29.839913945955082,
+    "base": 29.839913945955082,
+    "t": 9.70452200000078,
+    "eye": "open",
+    "ap": 0.9997580584188109,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-p45-closed",
+    "yaw": 44.85562589675176,
+    "base": 44.85562589675176,
+    "t": 11.271454000000817,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-p45-open",
+    "yaw": 44.88203778179064,
+    "base": 44.88203778179064,
+    "t": 11.921354000000806,
+    "eye": "open",
+    "ap": 0.9997580584188109,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-p84-closed",
+    "yaw": 83.88334206287904,
+    "base": 83.88334206287904,
+    "t": 13.488386000000844,
+    "eye": "closed",
+    "ap": 0,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "turnblink-p84-open",
+    "yaw": 83.95191591599799,
+    "base": 83.95191591599799,
+    "t": 14.138286000000834,
+    "eye": "open",
+    "ap": 0.9997580584188109,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r85",
+     "from": null,
+     "w": 1
+    }
+   }
+  ]
+ },
+ "seams": {
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seams": [
+   {
+    "name": "seam-live-m20",
+    "yaw": -20.22398800470164,
+    "base": -19.832356585000593,
+    "t": 0.9253360000007455,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0.6981115624227683,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-m40",
+    "yaw": -40.23344648176291,
+    "base": -40.237442451348244,
+    "t": 1.3800360000007452,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0.8309060831634032,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-m60",
+    "yaw": -60.18193354460529,
+    "base": -60.770396059678546,
+    "t": 1.9866560000007445,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0.5568319072958254,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-m80",
+    "yaw": -80.0019388803816,
+    "base": -80.54318181444432,
+    "t": 2.8459760000007455,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": -0.11590061489775055,
+    "paint": {
+     "to": "turn-l85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-p20",
+    "yaw": 20.556069829563395,
+    "base": 19.71415758457483,
+    "t": 3.385876000000744,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": -0.41685085407039113,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-p40",
+    "yaw": 40.072335464153866,
+    "base": 39.702999894741914,
+    "t": 3.989232000000747,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": -0.6511763967742192,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-p60",
+    "yaw": 60.06463318791678,
+    "base": 60.558967955980116,
+    "t": 4.661224000000746,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "smile",
+    "mw": 0.5134799999999884,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": -0.7781414782399607,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-live-p80",
+    "yaw": 80.04332766829889,
+    "base": 80.84321509176075,
+    "t": 5.563180000000764,
+    "eye": "opening",
+    "ap": 0.9899393939393952,
+    "mouth": "smile",
+    "mw": 0.7767596667097763,
+    "brow": "raised",
+    "bw": 0.3677651470615533,
+    "chest": -0.11097717170763632,
+    "paint": {
+     "to": "turn-r85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-m20",
+    "yaw": -20.20213170986743,
+    "base": -20.20213170986743,
+    "t": 1.2593919999999998,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-m40",
+    "yaw": -40.17782469696597,
+    "base": -40.17782469696597,
+    "t": 2.032083999999999,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-m60",
+    "yaw": -60.07559064953913,
+    "base": -60.07559064953913,
+    "t": 3.118131999999995,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-m80",
+    "yaw": -80.02116667485691,
+    "base": -80.02116667485691,
+    "t": 4.706644000000038,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-l85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-p20",
+    "yaw": 20.306928798129913,
+    "base": 20.306928798129913,
+    "t": 5.745336000000042,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-p40",
+    "yaw": 40.20155886258031,
+    "base": 40.20155886258031,
+    "t": 6.651328000000049,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-p60",
+    "yaw": 60.09265549632088,
+    "base": 60.09265549632088,
+    "t": 7.903884000000062,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r45",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "name": "seam-p0rm-p80",
+    "yaw": 80.0244163749738,
+    "base": 80.0244163749738,
+    "t": 9.62578799999998,
+    "eye": "open",
+    "ap": 1,
+    "mouth": "neutral",
+    "mw": 0,
+    "brow": "neutral",
+    "bw": 0,
+    "chest": 0,
+    "paint": {
+     "to": "turn-r85",
+     "from": null,
+     "w": 1
+    }
+   }
+  ]
+ },
+ "smile": {
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "smile": {
+   "name": "smile-peak",
+   "yaw": 0.782332750530603,
+   "base": 0,
+   "t": 2.2544800000000036,
+   "eye": "open",
+   "ap": 1,
+   "mouth": "smile",
+   "mw": 0.9749500000000002,
+   "brow": "neutral",
+   "bw": 0,
+   "chest": 0.3445460325259157,
+   "paint": {
+    "to": "frontal",
+    "from": null,
+    "w": 1
+   }
+  }
+ },
+ "clip": {
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "clip": [
+   {
+    "beat": "idle",
+    "ms": 29,
+    "yaw": -0.4,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "ArrowLeft held",
+    "ms": 2530,
+    "yaw": 0.9,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "hold",
+    "ms": 3846,
+    "yaw": -85,
+    "paint": {
+     "to": "turn-l85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "centre",
+    "ms": 5351,
+    "yaw": -85,
+    "paint": {
+     "to": "turn-l85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "ArrowRight held",
+    "ms": 6679,
+    "yaw": 1.4,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "blink while turned (B)",
+    "ms": 8691,
+    "yaw": 85,
+    "paint": {
+     "to": "turn-r85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "centre",
+    "ms": 9594,
+    "yaw": 84.8,
+    "paint": {
+     "to": "turn-r85",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "blink (B)",
+    "ms": 10813,
+    "yaw": -0.3,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "smile",
+    "ms": 11617,
+    "yaw": 0,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "idle",
+    "ms": 13422,
+    "yaw": 1.1,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   },
+   {
+    "beat": "end",
+    "ms": 15125,
+    "yaw": -0.3,
+    "paint": {
+     "to": "frontal",
+     "from": null,
+     "w": 1
+    }
+   }
+  ]
+ }
+}
