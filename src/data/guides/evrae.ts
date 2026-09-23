@@ -112,7 +112,7 @@ export const EVRAE_GUIDE: ChapterGuide = {
       // FFX's window has no Defend row, so the quiet turn is a spare item on an
       // ally (`src/engine/tactics/evrae-quiet.ts#spareItem`).
       when: { labels: ['Potion', 'Eye Drops', 'Echo Screen'] },
-      text: 'A turn that names no enemy. While Evrae holds a breath and the ship is FAR, spending the turn on an ally is the dodge: naming Evrae now makes it Swoop in and breathe anyway',
+      text: 'A turn spent on an ally names no enemy. It is the dodge whenever Evrae holds a breath with the ship FAR, because naming Evrae then makes it Swoop in and breathe anyway',
       cite: 'ffx-evrae-airship §4.5',
     },
   ],
