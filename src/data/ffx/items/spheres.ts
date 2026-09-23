@@ -1,14 +1,20 @@
 /**
  * Sphere Grid items that ship as chapter/steal rewards but have no `ItemDef`
  * row — the five closed by `docs/plans/questions-for-bailey-2026-09-23.md`
- * Q3. Source: `research/ffx-combat-core.md` §10.2, quoting the FF Wiki help
- * text for each row (revision ids in the table below and in the plan doc).
+ * Q3. Source: `research/ffx-combat-core.md`, "Research sweep addendum
+ * (2026-09-23): the sphere items our boss rewards name" (around line 2304),
+ * quoting the FF Wiki help text for each row via the MediaWiki API
+ * (revision ids in the table below); the item *class* of each (Sphere Grid
+ * consumable) agrees with the grid mechanics documented at §10.2.
  *
  * These are Sphere Grid consumables, not battle items: none of them has a
  * usable-in-battle effect, so `usableInBattle: false` on every row and each
  * `effect` is a no-op `AbilityDef` (required field, per `ItemDef.effect`;
- * there is no in-battle behaviour to model). `price: 0` — no source has any
- * of the five in a shop (matches the convention in `cures-utility-1.ts` for
+ * there is no in-battle behaviour to model). `usableInMenu: false` follows
+ * the same sourced fact (Sphere Grid items are spent from the grid screen,
+ * not the item menu) but is this file's own inference — no source states
+ * "not usable in menu" in those words. `price: 0` — no source has any of
+ * the five in a shop (matches the convention in `cures-utility-1.ts` for
  * items with no priced source).
  *
  * | Row | Help text (FF Wiki, rev) |
@@ -23,10 +29,14 @@
  * `enemies/seymour-anima-macalania.ts` (G-10), `enemies/evrae.ts`,
  * `enemies/seymour-flux.ts` and `enemies/yunalesca.ts` — adding these rows
  * lets `steal.ts#itemName` and the Results screen show the real name instead
- * of falling back to the raw id.
+ * of falling back to the raw id. `special-sphere` has a row here (the brief
+ * asked for all five) but no current chapter reward references it: the
+ * addendum names it as a **rare** drop from Seymour at Macalania that our
+ * `seymour-anima-macalania.ts` reward table does not yet model — that gap is
+ * enemies/** data, owned by a different agent, not this file's to add.
  *
- * Rows land one at a time (one commit per item, per the task brief); each
- * `it` below is added alongside its row.
+ * Rows land one at a time (one commit per item, per the task brief); the
+ * proving test lives in `tests/unit/data-reward-items-resolve.test.ts`.
  */
 
 import type { AbilityDef, ItemDef } from '../../../battle/common/types.ts';
