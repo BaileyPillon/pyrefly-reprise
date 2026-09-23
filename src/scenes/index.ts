@@ -311,6 +311,22 @@ export async function loadScene(key: string, camera: PerspectiveCamera): Promise
   return fromPaintedScene(entry, await entry.build(camera));
 }
 
+/**
+ * Publish a scene's own `partyHeight`/`enemyHeight` when its {@link SceneBuild}
+ * provides them, falling back to the Gagazet-composition defaults otherwise
+ * (PR-0093). Pulled out as its own pure function so it has unit coverage
+ * without a DOM (`fromSceneBuild` cannot be exercised in `vitest`'s `node`
+ * environment — see `tests/unit/chapters/leblanc-scene.test.ts`'s file doc).
+ */
+export function resolveSceneHeights(
+  build: Pick<SceneBuild, 'partyHeight' | 'enemyHeight'>,
+): { partyHeight: number; enemyHeight: number } {
+  return {
+    partyHeight: build.partyHeight ?? 1.82,
+    enemyHeight: build.enemyHeight ?? 4.1,
+  };
+}
+
 /** Normalise a `SceneFactory` build. */
 function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamera): LoadedScene {
   const scene = new Scene();
@@ -334,8 +350,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       // parking spots a switched-in character walks from.
       party: build.partySlots.slice(0, 3).map(toSpot),
       enemy: build.enemySlots.map(toSpot),
-      partyHeight: 1.82,
-      enemyHeight: 4.1,
+      ...resolveSceneHeights(build),
     },
     update(dt): void {
       build.update(dt);

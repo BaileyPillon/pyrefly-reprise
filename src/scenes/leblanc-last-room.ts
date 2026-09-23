@@ -307,6 +307,18 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    // PR-0093: the trio is human-sized, not a boss the scale of Bahamut or
+    // Vegnagun's tail (`LEBLANC_LAST_ROOM_SLOTS` above already documented this,
+    // but nothing published it to `fromSceneBuild` in `src/scenes/index.ts`,
+    // which staged every enemy here at the 4.1-unit Gagazet-boss fallback —
+    // "short and stout" Ormi included). Leblanc's own sourced height stands in
+    // for the enemy side the same way it already does in `LEBLANC_LAST_ROOM_SLOTS`;
+    // a single scalar cannot give Ormi and Logos their own distinct heights
+    // (every Syndicate member is `isBoss`, so `worldHeightFor` scales all three
+    // off this one number) — that would need `BattlePresenterStage.ts` to read
+    // a per-slot height table, which is out of this fix's scope.
+    partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
+    enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
     palette: {
       ...ScenePalettes.chateauLeblanc,
     } satisfies ScenePalette,

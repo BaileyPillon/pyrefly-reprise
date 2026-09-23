@@ -73,6 +73,21 @@ export interface SceneBuild {
   /** The scene's grade + post settings, handed to `Renderer.applyPalette`. */
   readonly palette: ScenePalette;
 
+  /**
+   * This scene's own world heights (PR-0093), publishing what its own actor-height
+   * table already documents, e.g. {@link LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc}
+   * instead of the Gagazet-composition default every `SceneFactory` scene got
+   * before this field existed (`src/scenes/index.ts`'s `fromSceneBuild`, which
+   * hard-coded `partyHeight: 1.82, enemyHeight: 4.1` for every registered scene).
+   * Optional and additive: a scene that omits it keeps that same 1.82 / 4.1
+   * fallback, so the five scenes that do not set it render pixel-identically to
+   * before. A scene with human-scale enemies (no boss the size of Bahamut or
+   * Vegnagun's tail) should set `enemyHeight` to its own cast's scale so a
+   * `worldHeightFor(isBoss)` actor is not staged as a giant.
+   */
+  readonly partyHeight?: number;
+  readonly enemyHeight?: number;
+
   /** @param dt seconds. The caller must call this every frame. */
   update(dt: number): void;
 

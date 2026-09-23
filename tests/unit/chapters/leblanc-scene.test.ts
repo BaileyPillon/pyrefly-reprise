@@ -21,8 +21,14 @@ import {
   LEBLANC_LAST_ROOM_ACTOR_HEIGHTS,
   LEBLANC_LAST_ROOM_SLOTS,
 } from '../../../src/scenes/leblanc-last-room.ts';
+import { resolveSceneHeights } from '../../../src/scenes/index.ts';
 import { LEBLANC_ACT_III } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx2/index.ts';
+
+const LEBLANC_LAST_ROOM_SOURCE = readFileSync(
+  fileURLToPath(new URL('../../../src/scenes/leblanc-last-room.ts', import.meta.url)),
+  'utf8',
+);
 
 describe('leblanc-last-room — the trio and the party marks', () => {
   it('publishes exactly one slot per active party member and at least one per enemy the formation can field', () => {
@@ -74,6 +80,39 @@ describe('leblanc-last-room — the trio and the party marks', () => {
   it('gives partyHeight/enemyHeight sane fallbacks for a generic actor placed with no explicit height', () => {
     expect(LEBLANC_LAST_ROOM_SLOTS.partyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna, 5);
     expect(LEBLANC_LAST_ROOM_SLOTS.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc, 5);
+  });
+});
+
+describe('leblanc-last-room — PR-0093: the trio stages at human scale, not the Gagazet-boss fallback', () => {
+  it('publishes its own partyHeight/enemyHeight on the returned SceneBuild, not just on the unused SceneSlots table', () => {
+    // `LEBLANC_LAST_ROOM_SLOTS` above already carried the right numbers, but
+    // `fromSceneBuild` in `src/scenes/index.ts` never read them — it always
+    // staged this scene's cast at the 4.1-unit Gagazet-boss fallback height,
+    // "short and stout" Ormi included (round-09 PR-0093). Pin that the scene's
+    // *build* object (what `fromSceneBuild` actually consumes) carries the
+    // same constants the slots table does, by source, since the build object
+    // cannot be constructed in this DOM-free test environment (file doc above).
+    expect(LEBLANC_LAST_ROOM_SOURCE).toMatch(
+      /partyHeight:\s*LEBLANC_LAST_ROOM_ACTOR_HEIGHTS\.yuna,/,
+    );
+    expect(LEBLANC_LAST_ROOM_SOURCE).toMatch(
+      /enemyHeight:\s*LEBLANC_LAST_ROOM_ACTOR_HEIGHTS\.leblanc,/,
+    );
+  });
+
+  it('resolveSceneHeights uses this scene\'s own numbers, well under the 4.1 boss fallback', () => {
+    const heights = resolveSceneHeights(LEBLANC_LAST_ROOM_SLOTS);
+    expect(heights.partyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna, 5);
+    expect(heights.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc, 5);
+    expect(heights.enemyHeight).toBeLessThan(2.3);
+  });
+
+  it('resolveSceneHeights falls back to the Gagazet-era 1.82/4.1 for a scene that publishes neither (chapters 1-5 stay pixel-identical)', () => {
+    expect(resolveSceneHeights({})).toEqual({ partyHeight: 1.82, enemyHeight: 4.1 });
+    expect(resolveSceneHeights({ partyHeight: undefined, enemyHeight: undefined })).toEqual({
+      partyHeight: 1.82,
+      enemyHeight: 4.1,
+    });
   });
 });
 
