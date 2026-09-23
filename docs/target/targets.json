@@ -820,13 +820,11 @@
         {
           "label": "Anima’s arrival, Macalania Temple (FFX)",
           "src": "docs/concepts/chapters/macalania/arrival/sheet.png",
-          "state": "gap",
-          "pill": "Built to a recommendation — awaiting your pick",
-          "empty": "Not picked yet",
+          "state": "approved",
           "delivery": "implemented",
           "game": "ffx",
           "gameNote": "FFX only: a summon inside the FFX CTB battle of chapter Macalania Temple; nothing here applies to an FFX-2 chapter.",
-          "note": "The options round (docs/concepts/chapters/macalania/arrival/: A from below the ice, B Seymour steps back, C the first Pain) has NOT been picked by Bailey. The scene was built to the driver’s recommendation: A’s staging (the camera drops to floor height, violet light under the ice, both Guardians die, chains come up first and go taut, she rises through them while the camera rises with her, one continuous move, no cut) with B’s name tag (Seymour steps back out of the light, his grey reticle reads “Cannot be targeted”, Anima’s name lights gold). Changing the pick is a timeline edit in src/scenes/macalania-temple-arrival.ts. Knowing departure: she is the approved aeon painting at 3.6 world units plus a 0.3 hover; research §9.4 note 1 says Seymour’s Anima is the shorter model, and no source gives a number.",
+          "note": "The options round (docs/concepts/chapters/macalania/arrival/: A from below the ice, B Seymour steps back, C the first Pain) was picked by Bailey, 2026-09-23: A then B — exactly the driver’s recommendation the scene was already built to: A’s staging (the camera drops to floor height, violet light under the ice, both Guardians die, chains come up first and go taut, she rises through them while the camera rises with her, one continuous move, no cut) with B’s name tag (Seymour steps back out of the light, his grey reticle reads “Cannot be targeted”, Anima’s name lights gold). Changing the pick is a timeline edit in src/scenes/macalania-temple-arrival.ts. Knowing departure: she is the approved aeon painting at 3.6 world units plus a 0.3 hover; research §9.4 note 1 says Seymour’s Anima is the shorter model, and no source gives a number.",
           "build": "docs/screenshots/chapters/macalania-arrival.png (the drop, the rise, landed with the tags) from the scene’s debug screen; side by side with frame A in docs/screenshots/chapters/macalania-arrival-target-vs-build.jpg. In a REAL battle it now plays (fix pass 2026-09-22, docs/handoff/chapter-macalania.md “Fix pass”): the presenter holds her reveal until Yuna’s line has been spoken, stages her through PaintedStage.arrive and plays the same timeline (src/scenes/macalania-temple-arrival-battle.ts): the camera drop and rise, chains, the floor occluder, Seymour stepping back and greying, and B’s tags for 3.2 s after they land. Stills from a real battle: docs/screenshots/chapters/macalania-arrival-real.png. Two differences from the preview, both knowing: the Guardians die one beat earlier (the engine KOs them before the reveal, so they go in the ordinary KO beat, not the violet one), and in battle she is 1.2x the boss height with no hover (the stage sizes every boss at 4.1; at the preview’s 3.6 she would be shorter than Seymour).",
           "reference": [
             "docs/concepts/chapters/macalania/arrival/README.md",
@@ -835,20 +833,21 @@
             "docs/concepts/chapters/macalania/arrival/b.png"
           ],
           "reaction": {
-            "date": "2026-09-22",
-            "words": "",
-            "named": [],
-            "how": "No reaction yet: the options round is waiting for Bailey.",
+            "date": "2026-09-23",
+            "words": "Evrae widget A with C’s staging, Anima A then B",
+            "named": [
+              "Evrae widget A with C’s staging, Anima A then B"
+            ],
+            "how": "Bailey answered the arrival options round (docs/concepts/chapters/macalania/arrival/options.json) directly in chat, 2026-09-23, alongside the Evrae widget pick above — both were already built to exactly this reading.",
             "liked": [],
             "disliked": [],
-            "mustRemain": [],
-            "mustChange": [],
-            "undecided": [
-              "which staging Bailey picks: A, B, C or a mix"
+            "mustRemain": [
+              "Option A — the camera drops to floor height, violet light under the ice, chains up and taut, one continuous rise (src/scenes/macalania-temple-arrival.ts)",
+              "then option B’s beat — Seymour steps back out of the light, his reticle dies in place (\"Cannot be targeted\"), Anima’s reticle lights gold"
             ],
-            "inferred": [
-              "built to the driver’s recommendation A + B’s tag, awaiting Bailey"
-            ]
+            "mustChange": [],
+            "undecided": [],
+            "inferred": []
           }
         },
         {
@@ -887,13 +886,11 @@
         {
           "label": "Evrae's order/range widget (FFX)",
           "src": "docs/concepts/chapters/evrae/widget/sheet.png",
-          "state": "gap",
-          "pill": "Built to a recommendation — awaiting your pick",
-          "empty": "Not picked yet",
+          "state": "approved",
           "delivery": "implemented",
           "game": "ffx",
           "gameNote": "FFX only: Trigger Commands, the CTB queue and Cid's own turn-taker row are FFX conventions with no FFX-2 counterpart; nothing here applies to any FFX-2 chapter.",
-          "note": "The options round (docs/concepts/chapters/evrae/widget/: A the Trigger pair in the command cascade with a cost preview, B a deck-side range gauge, C no persistent widget, the battlefield re-staged) has NOT been picked by Bailey. Built to the driver's recommendation: A's cascade-and-cost-preview widget for issuing the order (src/ui/ffx/AirshipOrderWidget.ts — two Trigger rows, the row matching the current range disabled and reading 'Already near/far', a cost preview on the highlighted row: 'Turn now · Cid's next turn · 1 volley' with three volley pips, keyboard reachable, 14 px type floor). Option C's half of the recommendation (no persistent gauge; the field itself says NEAR or FAR with the HUD hidden) is built in the scene (2026-09-22, docs/handoff/chapter-evrae-scene.md): NEAR is tight, warm and low with Evrae's head over the rail and its coils hidden by the deck edge; FAR pulls the camera back and up (more deck underfoot), cools the key light, raises a cold haze, speeds the cloud drift (the ship's speed, research §12.3) and shows Evrae as the installed CANDIDATE idle-far streak far out in open sky, drawn at the head-length ratio (69.5 / 55.1 px) so NEAR and FAR are one creature. C's one-shot 'Pull back, Cid!' shout is NOT built: A's ORDER chip on Cid's CTB tile is the confirmation. Knowing departures: the backdrop is the installed CANDIDATE painting, darker than the picked concept render, and it is rolled 11.6 degrees so its own rail lies level behind the deck edge.",
+          "note": "The options round (docs/concepts/chapters/evrae/widget/: A the Trigger pair in the command cascade with a cost preview, B a deck-side range gauge, C no persistent widget, the battlefield re-staged) was picked by Bailey, 2026-09-23: option A with C's staging — exactly the driver's recommendation built below: A's cascade-and-cost-preview widget for issuing the order (src/ui/ffx/AirshipOrderWidget.ts — two Trigger rows, the row matching the current range disabled and reading 'Already near/far', a cost preview on the highlighted row: 'Turn now · Cid's next turn · 1 volley' with three volley pips, keyboard reachable, 14 px type floor). Option C's half of the recommendation (no persistent gauge; the field itself says NEAR or FAR with the HUD hidden) is built in the scene (2026-09-22, docs/handoff/chapter-evrae-scene.md): NEAR is tight, warm and low with Evrae's head over the rail and its coils hidden by the deck edge; FAR pulls the camera back and up (more deck underfoot), cools the key light, raises a cold haze, speeds the cloud drift (the ship's speed, research §12.3) and shows Evrae as the installed CANDIDATE idle-far streak far out in open sky, drawn at the head-length ratio (69.5 / 55.1 px) so NEAR and FAR are one creature. C's one-shot 'Pull back, Cid!' shout is NOT built: A's ORDER chip on Cid's CTB tile is the confirmation. Knowing departures: the backdrop is the installed CANDIDATE painting, darker than the picked concept render, and it is rolled 11.6 degrees so its own rail lies level behind the deck edge.",
           "build": "src/ui/ffx/AirshipOrderWidget.ts, its scoped CSS in src/ui/ffx/ffx-hud.css (new `.ffx-airship-order*` classes only — no existing rule touched), tests/unit/ui-ffx-airship-order-widget.test.ts (6 tests, all green). Mounts only when `BattleState.flags['airship.range']` is set, which only this encounter's engine ever sets, so no other chapter's screen changes. Not wired into FFXBattleHud.ts/CommandMenu.ts yet — that one-line integration is named in docs/handoff/chapter-evrae-guide.md for the integrator, the same pattern the chapter's guide and tactic registration already follow. C's staging: src/scenes/evrae-airship-{deck,range,director,sky,painted,debug,debug-battle}.ts, tests/unit/chapters/evrae-scene.test.ts; the range director follows state.flags['airship.range'] and is published on the scene group for the presenter's one-line hook (handoff §6). Verified in one browser pass with the real FFX engine, the real FFX HUD and this widget driven by the keyboard: Enter on 'Pull back' queued the order, the ORDER chip sat on Cid's tile, Cid flew it ('The Fahrenheit pulls back') and the deck re-staged to FAR. Stills: docs/screenshots/chapters/evrae-scene.png (NEAR), evrae-scene-far.jpg, evrae-order-near.jpg, evrae-order-sent.jpg, evrae-order-far.jpg, evrae-far-muted.jpg; C's frames beside the build: docs/screenshots/chapters/evrae-staging-target-vs-build.jpg. Wired into the REAL battle at registration (2026-09-23, docs/handoff/chapter-evrae.md): on Tidus's or Rikku's turn the two order rows fold into one \"Orders\" row in the command cascade; choosing it opens this widget (the two rows tagged Trigger or greyed \"Already near/far\" / \"Ordered\", and under them the ivory \"This order costs\" slab with the volley pips); Esc returns to the cascade without opening the pause menu; the ORDER chip sits on Cid's CTB tile until his turn flies the order, and the deck re-stages to FAR. On anyone else's turn the rows are not there (option A, step 1). Driven with real keys in the browser: docs/screenshots/chapters/evrae-flow-2-order-widget.png, evrae-flow-3-battle-far.png.",
           "reference": [
             "docs/concepts/chapters/evrae/widget/README.md",
@@ -905,20 +902,22 @@
             "docs/screenshots/chapters/evrae-staging-target-vs-build.jpg"
           ],
           "reaction": {
-            "date": "2026-09-22",
-            "words": "",
-            "named": [],
-            "how": "No reaction yet: the options round is waiting for Bailey.",
+            "date": "2026-09-23",
+            "words": "Evrae widget A with C’s staging, Anima A then B",
+            "named": [
+              "Evrae widget A with C’s staging, Anima A then B"
+            ],
+            "how": "Bailey answered the widget options round (docs/concepts/chapters/evrae/widget/options.json) directly in chat, 2026-09-23, alongside the Anima’s-arrival pick below — both were already built to exactly this reading.",
             "liked": [],
             "disliked": [],
-            "mustRemain": [],
-            "mustChange": [],
-            "undecided": [
-              "which option Bailey picks: A, B, C or a mix — the driver's own recommendation note says A and C are not exclusive"
+            "mustRemain": [
+              "Option A — the Trigger pair in the command cascade with a cost preview (src/ui/ffx/AirshipOrderWidget.ts)",
+              "Option C’s staging — the field itself re-staged for NEAR and FAR, no persistent gauge (src/scenes/evrae-airship-*.ts)"
             ],
+            "mustChange": [],
+            "undecided": [],
             "inferred": [
-              "built to the driver's recommendation A + C's staging, awaiting Bailey",
-              "the \"Orders\" row that opens the widget is the integrator's reading of A (A draws the two rows straight in the cascade), and the cost moved from the row into A's separate slab"
+              "the \"Orders\" row that opens the widget is the integrator’s reading of A (A draws the two rows straight in the cascade), and the cost moved from the row into A’s separate slab — a build detail, not itself named by Bailey"
             ]
           }
         },
