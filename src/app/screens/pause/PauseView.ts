@@ -125,7 +125,7 @@ export class PauseView {
     if (tabsEl) tabsEl.innerHTML = tabsHtml(this.tabs, tabId);
     this.scrollActiveTabIntoView(tabId);
 
-    this.renderPlate();
+    this.renderPlate(tabId);
     const rowId = this.renderBody({ ...at, tabId });
     this.renderObjective();
     return { tabId, focus: at.focus, rowId };
@@ -153,15 +153,31 @@ export class PauseView {
   /**
    * The painting, and which side the chrome stands on.
    *
-   * A fixed tab keeps the last member's plate, so CHAPTER or OPTIONS never
-   * blanks the screen and the mirror does not flip under a tab change that had
-   * nothing to do with the art.
+   * A fixed tab keeps the last member's plate, so OPTIONS, GUIDE, CONTROLS
+   * and MUSIC never blank the screen and the mirror does not flip under a tab
+   * change that had nothing to do with the art.
+   *
+   * CHAPTER is the one fixed tab with an approved painting of its own: the
+   * target tile "Hero plate, chapter 1" / "…chapter 4" (`docs/target/
+   * targets.json`, approved by Bailey 19 Sep 2026) says the Until Dawn remake
+   * "moves it to the CHAPTER tab" rather than dropping it — every shipped
+   * chapter has a `heroArt` plate and a `heroArtFallback` for exactly this
+   * (`data/chapter-meta.ts`), so this never has to guess when one is missing
+   * (round 09, PR-0016). No `PLATE_FRAMING` row exists for a chapter plate, so
+   * it frames through {@link framingFor}'s unmeasured-plate default and the
+   * chrome stays on its own left, same as any other plate nobody has judged.
    */
-  private renderPlate(): void {
+  private renderPlate(tabId: string): void {
+    const meta = this.deps.meta;
+    if (tabId === 'chapter' && meta) {
+      this.portrait.show(meta.heroArt.replace(/^pause\//, ''));
+      this.root.classList.toggle('pause--mirror', false);
+      return;
+    }
     const state = this.deps.state();
     const memberId = this.plateMemberId ?? state?.activeIds[0] ?? null;
     if (memberId) this.portrait.show(plateIdFor(memberId, this.game), memberId);
-    else if (this.deps.meta) this.portrait.show(this.deps.meta.heroArt.replace(/^pause\//, ''));
+    else if (meta) this.portrait.show(meta.heroArt.replace(/^pause\//, ''));
     const side = memberId ? chromeSideForCombatant(memberId, this.game) : 'left';
     this.root.classList.toggle('pause--mirror', side === 'right');
   }
