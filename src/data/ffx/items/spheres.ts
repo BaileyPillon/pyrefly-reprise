@@ -83,6 +83,18 @@ export const ITEMS: Record<string, ItemDef> = {
     iconKey: 'icon-blk-magic-sphere',
     description: 'Activates nodes used by allies on Sphere Grid.',
   },
+  'special-sphere': {
+    id: 'special-sphere',
+    name: 'Special Sphere',
+    game: 'ffx',
+    effect: sphereGridEffect('special-sphere', 'Special Sphere'),
+    targeting: 'self',
+    usableInBattle: false,
+    usableInMenu: false,
+    price: 0, // no source lists a shop price for any Sphere Grid item
+    iconKey: 'icon-special-sphere',
+    description: 'Activates nodes used by allies on Sphere Grid.',
+  },
 };
 
 export default ITEMS;
