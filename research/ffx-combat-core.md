@@ -2300,3 +2300,17 @@ Fact-check pass results, per claim (see updated confidence tags and §11 C4 inli
 **Gap-fill pass (this revision).** Thirteen flagged gaps were addressed: two blockers (aeon stat models, Sphere Grid data) and eleven majors. Ten were closed with sourced data, three were closed with explicitly-labelled authored models resting on verified anchors (Swordplay/Bushido input rules, the Slots spin rate, the aeon gauge increment). Four previously-published numbers were found to be **wrong** and corrected (Overdrive Mode Victim/Ally/Daredevil rows, Warrior's `× 3`, Blitz Ace's hit count, Tornado's success row, Bushido's button sequences), and one cross-document verdict was **overturned** (`ffx-yunalesca.md` §15.2 defect #4's claim that Regen was invented). One cross-document verdict was **upheld** (defect #10's "2.4× too durable").
 
 Confirmed claims had their confidence tag upgraded to `[verified: 2 sources]` and the corroborating source cited inline plus added to the Sources section. The one contradicted claim (low-Agility CTB table) was annotated in place and in §11 C4 with the conflicting SinirothX values, the corroborating decompile-derived second source, and an explicit recommendation to keep the decompile value. Unverifiable claims were left unchanged (no confidence tag was lowered, since the original decompile sourcing stands; only claims marked "confirmed" or "contradicted" were edited per instructions).
+
+## Research sweep addendum (2026-09-23): the sphere items our boss rewards name
+
+Our FFX boss rewards name five sphere items that have no item row yet. Their names, help text and use, from FF Wiki raw wikitext via the MediaWiki API: *Ability Sphere* (rev 4033565), *Blk Magic Sphere* (rev 4033582), *Special Sphere* (rev 4033579), *Lv. 3 Key Sphere* (rev 4032267), *Lv. 4 Key Sphere* (rev 4032268), and the *Final Fantasy X items* Spheres table (rev 4033953). The class of each agrees with §10.2 above, so every row is `[verified: 2 sources]` for name and use.
+
+| Item (in-game spelling) | Help text | Use | Our bosses that give it (research file) |
+|---|---|---|---|
+| **Ability Sphere** | "Activates nodes on Sphere Grid." | red sphere: activates Skill, Special, Wht Magic and Blk Magic nodes | Guado Guardian, Anima (`ffx-seymour-anima-macalania.md` §2.5, §3.3) |
+| **Blk Magic Sphere** | "Activates nodes used by allies on Sphere Grid." | yellow sphere: activates a Blk Magic node another party member has already activated | Seymour at Macalania, common drop (§1.4 there); Evrae (`ffx-evrae-airship.md` §1.4) |
+| **Special Sphere** | "Activates nodes used by allies on Sphere Grid." | yellow sphere: activates a Special node another party member has already activated | Seymour at Macalania, **rare** drop (§1.4 there) |
+| **Lv. 3 Key Sphere** | "Opens Locks on Sphere Grid." | opens a Lv. 3 lock (the node becomes empty) | Yunalesca (`ffx-yunalesca.md`) |
+| **Lv. 4 Key Sphere** | "Opens Locks on Sphere Grid." | opens a Lv. 4 lock | Seymour Flux (`ffx-seymour-flux.md`) |
+
+None of the five has a use in battle. The *Final Fantasy X items* Spheres table lists drop, steal, bribe and field sources for each and **no shop**, so a price of 0 ("never sold" in the `ItemDef` contract) is `[single source]`.
