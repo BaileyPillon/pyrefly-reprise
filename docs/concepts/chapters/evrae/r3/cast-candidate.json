@@ -1,0 +1,45 @@
+{
+  "status": "CANDIDATE for Bailey's Decision 1 (METHOD-CHECK section 4); NOT installed, no characters/evrae/cast.png exists",
+  "game": "FFX only (Evrae, Chapter 8)",
+  "width": 1171,
+  "height": 874,
+  "baselineY": 858,
+  "facing": "left",
+  "pose": "cast",
+  "method": "r3-derive",
+  "methodNote": "idle-near's own pixels: head and neck as one layer reared up 60 px and pitched 8 deg snout-down toward the party, blended into the fixed body along the neck; idle's jaws are already open. No generated pixels. Head length 69.8 px vs idle 69.5.",
+  "why": "every Evrae action is kind 'ability', poseForCommand maps ability to the cast pose, and with no cast.png the idle stands in for every action",
+  "derive": {
+    "padTop": 90,
+    "shift": [
+      -15.0,
+      -60.0
+    ],
+    "snout": [
+      219.0,
+      191.0
+    ],
+    "eye": [
+      274.0,
+      148.0
+    ],
+    "headPx": 69.81403870282824,
+    "headPxIdle": 69.5,
+    "opaqueRatio": 1.0068363927539172,
+    "foldPx": 0,
+    "foldBox": null,
+    "angle": -8.0,
+    "pivot": [
+      520.0,
+      230.0
+    ],
+    "ramp": [
+      420.0,
+      600.0
+    ],
+    "jaw": 0.0,
+    "minJacobian": -0.19079764117453601,
+    "regionShare": 0.6938129685794673
+  },
+  "sha256": "03c1937a52171917a9d6f9e7078b965fcb0d0420141a776288d88c49f448752d"
+}
