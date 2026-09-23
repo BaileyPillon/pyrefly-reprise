@@ -809,6 +809,40 @@
           }
         },
         {
+          "label": "Anima’s arrival, Macalania Temple (FFX)",
+          "src": "docs/concepts/chapters/macalania/arrival/sheet.png",
+          "state": "gap",
+          "pill": "Built to a recommendation — awaiting your pick",
+          "empty": "Not picked yet",
+          "delivery": "implemented",
+          "game": "ffx",
+          "gameNote": "FFX only: a summon inside the FFX CTB battle of chapter Macalania Temple; nothing here applies to an FFX-2 chapter.",
+          "note": "The options round (docs/concepts/chapters/macalania/arrival/: A from below the ice, B Seymour steps back, C the first Pain) has NOT been picked by Bailey. The scene was built to the driver’s recommendation: A’s staging (the camera drops to floor height, violet light under the ice, both Guardians die, chains come up first and go taut, she rises through them while the camera rises with her, one continuous move, no cut) with B’s name tag (Seymour steps back out of the light, his grey reticle reads “Cannot be targeted”, Anima’s name lights gold). Changing the pick is a timeline edit in src/scenes/macalania-temple-arrival.ts. Knowing departure: she is the approved aeon painting at 3.6 world units plus a 0.3 hover; research §9.4 note 1 says Seymour’s Anima is the shorter model, and no source gives a number.",
+          "build": "docs/screenshots/chapters/macalania-arrival.png (the drop, the rise, landed with the tags) from the scene’s debug screen; side by side with frame A in docs/screenshots/chapters/macalania-arrival-target-vs-build.jpg.",
+          "reference": [
+            "docs/concepts/chapters/macalania/arrival/README.md",
+            "docs/concepts/chapters/macalania/arrival/options.json",
+            "docs/concepts/chapters/macalania/arrival/a.png",
+            "docs/concepts/chapters/macalania/arrival/b.png"
+          ],
+          "reaction": {
+            "date": "2026-09-22",
+            "words": "",
+            "named": [],
+            "how": "No reaction yet: the options round is waiting for Bailey.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [
+              "which staging Bailey picks: A, B, C or a mix"
+            ],
+            "inferred": [
+              "built to the driver’s recommendation A + B’s tag, awaiting Bailey"
+            ]
+          }
+        },
+        {
           "label": "Evrae on the airship (FFX)",
           "src": "docs/concepts/chapters/evrae/renders/backdrop-b.png",
           "state": "approved",
