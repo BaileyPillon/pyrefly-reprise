@@ -137,8 +137,7 @@ export function setGauge(ctx: Ctx, c: FFXCombatant, value: number, cause: string
  *
  * `onDamageTaken` below only fires on damage, and Macalania Anima's third clock
  * advances "every time she gets a turn **or is attacked**", Boost-independent —
- * a heal or a debuff aimed at her counts too
- * [ffx-seymour-anima-macalania §3.4, §5.3]. Called from
+ * a heal or a debuff aimed at her counts too [ffx-seymour-anima-macalania §3.4, §5.3]. Called from
  * `abilities.ts#resolveAbility` once the targets are resolved and before the
  * hit loop, so one action is one targeting however many hits it lands.
  *
@@ -153,14 +152,9 @@ export function setGauge(ctx: Ctx, c: FFXCombatant, value: number, cause: string
 export function onTargeted(ctx: Ctx, target: FFXCombatant, by: FFXCombatant): void {
   if (by.side === 'enemy' || target.side !== 'enemy') return;
   const rt = ctx.rt.actors.get(target.id);
-  // A plain count of "the player pointed something at me", for a script that
-  // reacts to *being targeted* rather than to being hurt — Evrae's Swooping
-  // Scythe at range [ffx-evrae-airship §4.5, `ActorRuntime.countsPartyTargetings`].
-  // Inert unless the encounter's setup hook asked for it.
-  if (rt?.countsPartyTargetings === true) rt.partyTargetings = (rt.partyTargetings ?? 0) + 1;
-  const per = rt?.gaugePerTargeting;
-  if (per === undefined || per <= 0) return;
-  addGauge(ctx, target, per, 'targeted');
+  if (rt?.countsPartyTargetings === true) rt.partyTargetings = (rt.partyTargetings ?? 0) + 1; // Evrae §4.5
+  const per = rt?.gaugePerTargeting ?? 0;
+  if (per > 0) addGauge(ctx, target, per, 'targeted');
 }
 
 /** Stoic and Comrade: someone took damage. */

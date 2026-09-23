@@ -27,6 +27,7 @@
 import { Color, type Object3D } from 'three';
 import type { BattleCamera } from '../engine/BattleCamera.ts';
 import { characterUrl, resolvePoseMap } from '../engine/BattlePresenterArt.ts';
+import { artStatesFor } from '../engine/ArtManifest.ts';
 import type { LightRig } from '../engine/Lighting.ts';
 import type { PaintedActor } from '../engine/PaintedActor.ts';
 import type { AirshipDeck } from './evrae-airship-sky.ts';
@@ -37,6 +38,7 @@ import {
   farWorldWidth,
   RANGE_STAGING,
   airshipRangeOf,
+  breathChargedOf,
   farActorScale,
   rangeShiftAt,
   type AirshipFlags,
@@ -44,6 +46,15 @@ import {
 } from './evrae-airship-range.ts';
 
 const KEY = 'pyrefly:airship-range';
+
+/**
+ * The rim-strength uniform of a painted actor. `PaintedActor` keeps its
+ * uniforms private and has no getter; this chapter-local read avoids growing
+ * that 1,600-line shared file for one boss (house style, rule 7).
+ */
+function rimOf(actor: PaintedActor): { value: number } | null {
+  return (actor as unknown as { u?: { rimStrength?: { value: number } } }).u?.rimStrength ?? null;
+}
 
 /** The rigs a range owns, under the scene's generic names. */
 const RANGE_RIGS = ['idle', 'action', 'enemy'] as const;
@@ -60,6 +71,11 @@ export class AirshipRangeDirector {
   private artId = 'evrae';
   private worldHeight = EVRAE_WORLD_HEIGHT;
   private nearPoses: Record<string, string> | null = null;
+  /** The breath-charge painting's URL when the subject has one; see {@link sync}. */
+  private chargeUrl: string | null = null;
+  private charged = false;
+  /** Evrae's rim strength as the stage set it; `null` until bound. See {@link quietRimOnKo}. */
+  private rimBase: number | null = null;
   /** Set once the swapped poses have loaded; the fade-in waits for it. */
   private readyAtMs = -1;
   private swapToken = 0;
@@ -97,8 +113,11 @@ export class AirshipRangeDirector {
     this.evrae = actor;
     this.artId = artId;
     this.worldHeight = worldHeight;
+    this.rimBase = actor ? (rimOf(actor)?.value ?? null) : null;
     if (!actor) return;
     this.nearPoses = await resolvePoseMap(artId, 'enemy');
+    const states = await artStatesFor(artId);
+    this.chargeUrl = states === null || states.includes('breath-charge') ? characterUrl(artId, 'breath-charge') : null;
     await this.placeEvrae(this.range);
   }
 
@@ -106,6 +125,28 @@ export class AirshipRangeDirector {
   sync(state: AirshipFlags | null | undefined): void {
     const r = airshipRangeOf(state);
     if (r && r !== this.range) this.setRange(r);
+    this.quietRimOnKo();
+    // **Inhale's telegraph** [research §3.3 note 4, §12.2]: while the breath is
+    // charged at NEAR, Evrae rests on the breath-charge painting (the idle
+    // slot, so the presenter's own attack/hurt beats still play over it). At
+    // FAR the breath whiffs, and the far streak stays.
+    const charged = breathChargedOf(state);
+    if (charged === this.charged) return;
+    this.charged = charged;
+    if (this.range === 'near' && this.shiftMs < 0) void this.placeEvrae('near');
+  }
+
+  /**
+   * No rim light on the KO painting. It is mostly coils and holes, and the
+   * stage's rim lights every interior alpha edge: measured in the browser on
+   * the same frame, rim on reads as bright blue-white outlines along every
+   * coil, rim off as the painting (critic 2026-09-23; `rim-ko-compare.png`
+   * under `critic/scratch/evrae/fix/shots/`). Every other pose keeps it.
+   */
+  private quietRimOnKo(): void {
+    const rim = this.evrae ? rimOf(this.evrae) : null;
+    if (!rim || this.rimBase === null) return;
+    rim.value = this.evrae!.pose === 'ko' ? 0 : this.rimBase;
   }
 
   /** Move the field to `range`. `immediate` snaps (a battle opening, a screenshot). */
@@ -195,6 +236,7 @@ export class AirshipRangeDirector {
       this.nearPoses = near;
       const map: Record<string, string> = {};
       for (const p of FAR_POSES) if (near[p]) map[p] = near[p]!;
+      if (this.charged && this.chargeUrl) map['idle'] = this.chargeUrl;
       await actor.loadPoses(map, 'idle');
       actor.scale.setScalar(1);
     }

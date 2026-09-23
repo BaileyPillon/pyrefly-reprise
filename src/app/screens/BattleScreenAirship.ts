@@ -39,27 +39,30 @@ export interface AirshipBattleHook {
   dispose(): void;
 }
 
-export interface AirshipBattleHookOptions {
+/** The loaded scene's two handles this hook reads (`LoadedScene` satisfies it). */
+export interface AirshipSceneHandles {
   /** The three.js scene the deck factory built (`SceneBuild.scene`). */
   scene: Object3D;
-  camera: BattleCamera;
-  stage: PaintedStage;
-  state: BattleState | null;
+  battleCamera: BattleCamera;
 }
 
 /** Wire the range director into a staged battle, or `null` for every scene without one. */
-export async function attachAirshipBattle(opts: AirshipBattleHookOptions): Promise<AirshipBattleHook | null> {
-  const director: AirshipRangeDirector | null = airshipRangeDirectorOf(opts.scene);
+export async function attachAirshipBattle(
+  loaded: AirshipSceneHandles,
+  stage: PaintedStage,
+  state: BattleState | null,
+): Promise<AirshipBattleHook | null> {
+  const director: AirshipRangeDirector | null = airshipRangeDirectorOf(loaded.scene);
   if (!director) return null;
 
-  const cid = opts.state?.combatants[CID_ID];
+  const cid = state?.combatants[CID_ID];
   if (cid && cid.side === 'enemy' && cid.flags.untargetable && cid.flags.hideHpBar) {
-    opts.stage.removeCombatant(CID_ID);
+    stage.removeCombatant(CID_ID);
   }
 
-  director.bindCamera(opts.camera);
-  await director.bindEvrae(opts.stage.actor(EVRAE_ID) ?? null);
-  director.sync(opts.state);
+  director.bindCamera(loaded.battleCamera);
+  await director.bindEvrae(stage.actor(EVRAE_ID) ?? null);
+  director.sync(state);
 
   return {
     sync: (state) => director.sync(state),

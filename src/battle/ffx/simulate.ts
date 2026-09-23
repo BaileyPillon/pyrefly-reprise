@@ -66,6 +66,7 @@ import { executeCommand } from './execute.ts';
 import { commandAbility } from './state.ts';
 import { critChance, hitChance } from './formulas.ts';
 import { equipmentCrit } from './equipment.ts';
+import { markEvraeRuntime } from './ai/evrae-rules.ts';
 
 // ---------------------------------------------------------------- the rolls
 
@@ -312,9 +313,7 @@ function runtimeFor(state: BattleState, command: Command): FFXRuntime {
     canEscape: false,
     sensedIds: new Set(),
     pendingPartRevivals: [],
-    // A preview never reaches the stalemate check; the field exists so the
-    // runtime literal matches `FFXRuntime`.
-    progress: { bestEnemyHp: Number.POSITIVE_INFINITY, atTurn: 0 },
+    progress: { bestEnemyHp: Number.POSITIVE_INFINITY, atTurn: 0 }, // unread by a preview; typed for `FFXRuntime`
   };
   for (const [id, raw] of Object.entries(state.combatants)) {
     const c = raw as FFXCombatant;
@@ -323,6 +322,7 @@ function runtimeFor(state: BattleState, command: Command): FFXRuntime {
     rt.actors.set(id, actorRt);
     if (c.side === 'aeon') rt.aeonRoster.set(id, c);
   }
+  markEvraeRuntime(state.flags, rt.actors); // setup marks a rebuilt runtime would lose (Wakka's reach)
   if (command.kind === 'item') {
     const stocked = state.flags[`inventory:${command.id}`];
     rt.inventory.set(command.id, typeof stocked === 'number' && stocked > 0 ? stocked : 99);

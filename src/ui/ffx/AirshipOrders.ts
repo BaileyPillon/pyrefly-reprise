@@ -59,7 +59,7 @@ export class AirshipOrders {
     const orders = commands.filter(isOrderRow);
     if (!AirshipOrderWidget.applies(range) || orders.length === 0) return openMenu(commands);
 
-    const folded = foldOrders(commands, orders);
+    const folded = airshipMenuRows(commands, state?.flags);
     for (;;) {
       const picked = await openMenu(folded);
       if (!isOrderCommand(picked)) return picked;
@@ -123,6 +123,21 @@ function afterFrames(n: number): Promise<void> {
     };
     step(n);
   });
+}
+
+/**
+ * The list the cascade paints on this board: the two orders folded into one
+ * "Orders" row in the airship battle, `commands` itself in every other one.
+ * Exported so the advisor card's "in Orders" chip is checked against the stack
+ * the player actually sees (`tests/unit/advisor-menu.test.ts`).
+ */
+export function airshipMenuRows(
+  commands: AvailableCommand[],
+  flags: Readonly<Record<string, unknown>> | undefined,
+): AvailableCommand[] {
+  const orders = commands.filter(isOrderRow);
+  if (!AirshipOrderWidget.applies(flags?.[AIRSHIP_RANGE]) || orders.length === 0) return commands;
+  return foldOrders(commands, orders);
 }
 
 function isOrderRow(c: AvailableCommand): boolean {

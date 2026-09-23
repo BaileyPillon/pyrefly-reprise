@@ -56,6 +56,7 @@
  */
 
 import type { AvailableCommand, BattleState, Command } from '../../battle/common/types.ts';
+import { refusedAirshipOrder } from './airship-orders.ts';
 
 /** Mirrors `ui/ffx/CommandMenuLogic.ts`'s `CATEGORY_LABEL`. */
 const FFX_CATEGORY_LABEL: Record<string, string> = {
@@ -113,6 +114,18 @@ export function onTheMenu(game: BattleState['game'], command: Command): boolean 
 }
 
 /**
+ * {@link onTheMenu}, plus the rows a chapter's own widget greys out on this
+ * board: Evrae's order widget refuses "Pull back" when the ship is already far
+ * or already ordered far (and "Close in" likewise), though the engine keeps
+ * them legal (`./airship-orders.ts`). A card that names a greyed row names
+ * something the player cannot press. FFX only in effect; inert without the
+ * airship flag.
+ */
+export function pressable(state: Readonly<BattleState>, command: Command): boolean {
+  return onTheMenu(state.game, command) && !refusedAirshipOrder(state.flags, command);
+}
+
+/**
  * The submenu title the player opens to reach `row`, or `''` when the row is
  * already a top-level entry on the stack.
  *
@@ -134,6 +147,8 @@ function ffxChip(row: AvailableCommand): string {
   // Dropped by `buildTopRows`; `onTheMenu` is the gate that keeps it off the
   // card, and there is no submenu to name either way.
   if (kind === 'defend') return '';
+  // Evrae's two orders fold into one "Orders" row (`ui/ffx/AirshipOrders.ts`).
+  if (kind === 'trigger' && (row.command.id === 'pull-back' || row.command.id === 'close-in')) return 'Orders';
   if (FFX_DIRECT_KINDS.has(kind)) return '';
   return FFX_CATEGORY_LABEL[row.category] ?? capitalize(row.category);
 }

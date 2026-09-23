@@ -36,6 +36,8 @@ export interface PanelRow {
   rule?: boolean;
   /** A ticked objective. */
   done?: boolean;
+  /** An objective: its label wraps rather than ellipsizes (it is what the tab is for). */
+  obj?: boolean;
   /** Quieter, e.g. a member's name heading inside a list. */
   head?: boolean;
   /**
@@ -238,7 +240,7 @@ function gearRows(members: readonly AnyCombatant[]): PanelRow[] {
 export function chapterColumns(ctx: ChapterContext): PanelColumn[] {
   const meta = ctx.meta;
   const detail: PanelRow[] = ctx.objectives.map((o, i) =>
-    row(`obj-${o.id}`, `${i + 1}. ${o.label}`, o.done ? 'Done' : '—', { done: o.done }),
+    row(`obj-${o.id}`, `${i + 1}. ${o.label}`, o.done ? 'Done' : '—', { done: o.done, obj: true }),
   );
   detail.push(row('play-time', 'Play time', formatPlayTime(ctx.playTimeMs)));
   if (ctx.progress) detail.push(row('progress', 'Encounter', ctx.progress.label));

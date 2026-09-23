@@ -128,7 +128,7 @@ import {
   cacheKeyFor,
 } from './advisor-plan.ts';
 import { sentenceFor } from './advisor-say.ts';
-import { menuChipFor, onTheMenu } from './advisor-menu.ts';
+import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { scopeWord } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
@@ -1151,7 +1151,7 @@ export function buildAdvisorView(
     if (row.command.kind === 'escape') continue;
     // A row the player cannot reach from the command window is not advice,
     // whatever the simulation thinks of it — FFX's menu has no Defend entry.
-    if (!onTheMenu(state.game, row.command)) continue;
+    if (!pressable(state, row.command)) continue;
     if (row.command.kind === 'switch') {
       candidates.push(switchCandidate(state, decision.commands, row, row.validTargets[0] ?? null));
       continue;
@@ -1251,13 +1251,13 @@ export function buildAdvisorView(
   // the menu currently in front of them — not a stale candidate, not a tactic's
   // re-aim, not a row that was greyed out between the simulation and here, and
   // not a row this game's command window does not paint at all ({@link
-  // onTheMenu}; FFX drops Defend).
+  // pressable}: FFX drops Defend; Evrae's widget greys a redundant order).
   const legal = ranked.filter(
     (c) =>
       (c.suggestion.source === 'tactic'
         ? tacticRow(decision.commands, decision.actorId, c.suggestion.command)
         : ownedRow(decision.commands, c.suggestion.command)) !== null &&
-      onTheMenu(state.game, c.suggestion.command),
+      pressable(state, c.suggestion.command),
   );
   if (legal.length === 0) return null;
 

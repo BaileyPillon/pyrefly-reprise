@@ -51,6 +51,7 @@ import { recommendedCommand } from '../../src/engine/tactics/guide.ts';
 import { type AdvisorOptions, buildAdvisorView } from '../../src/engine/tactics/advisor.ts';
 import { menuChipFor, onTheMenu } from '../../src/engine/tactics/advisor-menu.ts';
 import { buildTopRows } from '../../src/ui/ffx/CommandMenuLogic.ts';
+import { airshipMenuRows } from '../../src/ui/ffx/AirshipOrders.ts';
 import { openCommandMenu } from '../../src/ui/ffx2/CommandMenu.ts';
 
 // ------------------------------------------------------- the two real windows
@@ -97,7 +98,9 @@ function ffx2TopLabels(commands: AvailableCommand[], actorName: string): string[
 }
 
 function topLabels(state: Readonly<BattleState>, commands: AvailableCommand[], actorName: string): string[] {
-  return state.game === 'ffx2' ? ffx2TopLabels(commands, actorName) : ffxTopLabels(commands);
+  // Evrae's cascade folds its two orders into one "Orders" row (FFX only; a
+  // pass-through in every other battle), so the stack is the folded one.
+  return state.game === 'ffx2' ? ffx2TopLabels(commands, actorName) : ffxTopLabels(airshipMenuRows(commands, state.flags));
 }
 
 // --------------------------------------------------------------- the engines

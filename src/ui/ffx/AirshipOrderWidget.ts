@@ -1,6 +1,7 @@
 import type { AvailableCommand, Command } from '../../battle/common/types.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
+import { airshipOrderRefusal } from '../../engine/tactics/airship-orders.ts';
 
 /**
  * The Evrae chapter's order widget — **THIS CHAPTER ONLY**.
@@ -118,18 +119,14 @@ export class AirshipOrderWidget {
     this.commands = commands.filter((c) => c.command.kind === 'trigger');
     this.volleysLeft = volleysLeft;
     this.onCancel = opts.onCancel ?? null;
+    // "Already near/far" for the range the ship is in, "Ordered" for the order
+    // standing (giving it again burns a turn for nothing: last order wins). One
+    // rule, shared with the move-advisor card (`engine/tactics/airship-orders.ts`).
+    const flags = { 'airship.range': range, 'airship.order': opts.pending ?? '' };
     this.rows = ROWS.map((r) => {
-      const target = r.id === 'pull-back' ? 'far' : 'near';
-      const already = target === range;
-      // The standing order, when there is one and the ship has not flown it
-      // yet: giving it again would burn a turn for nothing (last order wins).
-      const standing = !already && opts.pending === target;
+      const refusal = airshipOrderRefusal(flags, r.id);
       const offered = this.commands.some((c) => c.command.kind === 'trigger' && c.command.id === r.id && c.enabled);
-      return {
-        ...r,
-        disabled: already || standing || !offered,
-        disabledReason: already ? `Already ${range}` : standing ? 'Ordered' : undefined,
-      };
+      return { ...r, disabled: refusal !== null || !offered, disabledReason: refusal ?? undefined };
     });
     this.index = this.rows.findIndex((r) => !r.disabled);
     if (this.index < 0) this.index = 0;

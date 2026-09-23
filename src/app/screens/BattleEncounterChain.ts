@@ -33,6 +33,26 @@ import type { Chapter } from '../../data/encounters.ts';
 import type { BattleOutcome, BattlePresenter } from '../../engine/BattlePresenter.ts';
 import { setupForNextLink } from './BattleScreenSetup.ts';
 
+/**
+ * How many formations the chain starting at `group` has: walk `nextGroupId` to
+ * the end (a cycle ends it). Moved out of `BattleScreen.ts` unchanged.
+ */
+export async function chainLengthOf(
+  group: EnemyGroupDef | null,
+  find: (id: string) => Promise<EnemyGroupDef | null>,
+): Promise<number> {
+  let count = 1;
+  const seen = new Set<string>();
+  while (group?.nextGroupId && !seen.has(group.nextGroupId)) {
+    seen.add(group.nextGroupId);
+    const next = await find(group.nextGroupId);
+    if (!next) break;
+    group = next;
+    count++;
+  }
+  return count;
+}
+
 /** The audio surface the chain needs. `AudioManager` satisfies it structurally. */
 export interface ChainAudioPort {
   playMusic(name: string, options?: { fade?: number }): unknown;

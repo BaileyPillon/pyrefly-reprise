@@ -38,7 +38,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
-import { runEncounterChain } from './BattleEncounterChain.ts';
+import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
@@ -49,7 +49,6 @@ import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts
 import { attachEnemyIntent, consumeIntentKeyPress } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
-// Chapter 8 (Evrae, FFX only): the deck's NEAR/FAR director; `null` on every other scene.
 import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
 
 /**
@@ -198,12 +197,7 @@ export class BattleScreen extends Screen {
     this.preview = this.engine === null;
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
-    this.airship = await attachAirshipBattle({
-      scene: this.scene.scene,
-      camera: this.scene.battleCamera,
-      stage: this.stage,
-      state: this.engine?.state() ?? null,
-    });
+    this.airship = await attachAirshipBattle(this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8 only
 
     // --- HUD + ports -------------------------------------------------------
     this.hud = createHud(chapter.game);
@@ -315,7 +309,7 @@ export class BattleScreen extends Screen {
     // How many formations this chapter chains through, for the pause screen's
     // ENCOUNTER PROGRESS row ("LINK 2 OF 4"). Async because resolving a
     // `nextGroupId` is, and not worth blocking the first frame for.
-    void this.measureChain();
+    void chainLengthOf(this.group, findEnemyGroup).then((n) => (this.chainLength = n));
 
     // Run the encounter without blocking `enter()`, so the first frame draws.
     // The approved battle-start card goes up first and the fight waits behind
@@ -361,21 +355,6 @@ export class BattleScreen extends Screen {
     this.battleStartBanner = banner;
     await banner.show();
     this.battleStartBanner = null;
-  }
-
-  /** Walk `nextGroupId` to the end of the chain, counting formations. */
-  private async measureChain(): Promise<void> {
-    let group = this.group;
-    let count = 1;
-    const seen = new Set<string>();
-    while (group?.nextGroupId && !seen.has(group.nextGroupId)) {
-      seen.add(group.nextGroupId);
-      const next = await findEnemyGroup(group.nextGroupId);
-      if (!next) break;
-      group = next;
-      count++;
-    }
-    this.chainLength = count;
   }
 
   // ------------------------------------------------------------------- loop
@@ -530,8 +509,8 @@ export class BattleScreen extends Screen {
         // ACTIVE runs the clock under that same menu (FFX-2; no-op for FFX).
         if (!paused) this.presenter?.atbModeChanged();
         // The other half of "exactly one screen reads the player": the HUD's
-        // own pad watchers. The keyboard half is the claim taken below.
-        setRawInputSuspended(paused);
+        // pad watchers and the mouse on its DOM. The keyboard is claimed below.
+        setRawInputSuspended(paused, this.root);
         // "The game holding its breath" [docs/audio/THEMES.md cue map row 3].
         // The `pause` cue was composed, rendered and shipped, and nothing had
         // ever asked for it (critic round 02 #02). It is wired from here rather

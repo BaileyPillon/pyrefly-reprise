@@ -68,7 +68,7 @@
  */
 
 import type { CombatantId, FFXCombatant, StatusId } from '../../common/types.ts';
-import { type Ctx, rtOf, tryActor } from '../state.ts';
+import { type ActorRuntime, type Ctx, rtOf, tryActor } from '../state.ts';
 
 // ---------------------------------------------------------------------------
 // Ids — duplicated from the data file on purpose: `src/battle/**` must not
@@ -279,17 +279,36 @@ export function applyEvraeSetup(ctx: Ctx): void {
   ctx.state.flags[AIRSHIP_NEAR_STEP] = 0;
   ctx.state.flags[AIRSHIP_TARGETINGS] = 0;
 
-  rtOf(ctx, EVRAE_ID).countsPartyTargetings = true;
+  for (const id of [EVRAE_ID, CID_ID, ...RANGED_WEAPON_ACTORS]) if (tryActor(ctx, id)) rtOf(ctx, id);
+  if (tryActor(ctx, CID_ID)) rtOf(ctx, CID_ID).ai['missilesLeft'] = MISSILE_COUNT;
+  markEvraeRuntime(ctx.state.flags, ctx.rt.actors);
+}
 
-  const cid = tryActor(ctx, CID_ID);
-  if (cid) {
-    const rt = rtOf(ctx, CID_ID);
-    rt.nonCombatant = true;
-    rt.ai['missilesLeft'] = MISSILE_COUNT;
-  }
-
+/**
+ * The three runtime marks this encounter needs (Evrae counts being targeted,
+ * Cid is a non-combatant, Wakka's blitzball reaches), read off the published
+ * state alone so **a rebuilt runtime gets them too**.
+ *
+ * `simulate.ts#runtimeFor` rebuilds the runtime a preview runs on from
+ * `BattleState`, which does not carry `ActorRuntime`. Before this was shared,
+ * the preview lost `rangedWeapon`, so Wakka's Attack at FAR (the one physical
+ * swing that reaches, §4.3) previewed as nothing, the advisor's no-op guard
+ * buried the chapter's own line under it, and a player following the card
+ * stalled the fight at the stalemate guard on four seeds in five
+ * (`tests/unit/chapters/evrae-advisor.test.ts`). A no-op in every other battle.
+ */
+export function markEvraeRuntime(
+  flags: Readonly<Record<string, unknown>>,
+  actors: ReadonlyMap<CombatantId, ActorRuntime>,
+): void {
+  if (flags[AIRSHIP_RANGE] === undefined) return;
+  const evrae = actors.get(EVRAE_ID);
+  if (evrae) evrae.countsPartyTargetings = true;
+  const cid = actors.get(CID_ID);
+  if (cid) cid.nonCombatant = true;
   for (const id of RANGED_WEAPON_ACTORS) {
-    if (tryActor(ctx, id)) rtOf(ctx, id).rangedWeapon = true;
+    const rt = actors.get(id);
+    if (rt) rt.rangedWeapon = true;
   }
 }
 

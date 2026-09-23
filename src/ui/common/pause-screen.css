@@ -445,6 +445,18 @@
 }
 
 .pause__col--wide .pause__k { width: clamp(118px, 9.5vw, 190px); }
+
+/* An objective is what the CHAPTER tab is opened for: it wraps, never "SURVIVE POIS…". */
+.pause__row--obj {
+  height: auto;
+  min-height: var(--pu-row);
+}
+
+.pause__row--obj .pause__k {
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1.35;
+}
 /* The commands column has no bar to set its width, so it says how wide it is. */
 .pause__col[data-col='encounter'] { min-width: clamp(190px, 16vw, 310px); }
 .pause--mirror .pause__k { text-align: left; }
@@ -616,11 +628,11 @@
 .pause__snap figcaption {
   margin-top: 5px;
   font-size: var(--pu-fs);
+  line-height: 1.3;
   letter-spacing: 0.1em;
   color: rgba(var(--pu-paper), 0.38);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* Wraps: a dozen letters and an ellipsis ("the foredec…") said nothing. */
+  overflow-wrap: break-word;
 }
 
 /* ------------------------------------------------------------- objective */

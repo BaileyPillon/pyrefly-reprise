@@ -25,8 +25,8 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { sensorSteerDx } from './sensorSteer.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
-// Evrae only (FFX): the airship order widget; a pass-through everywhere else.
 import { AirshipOrders } from './AirshipOrders.ts';
+import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
@@ -37,7 +37,6 @@ import {
   SPRITE_TOP_MARGIN_RATIO,
   STAGE,
   type AdvisorZone,
-  type AdvisorZoneInput,
   type Rect,
 } from './hudSafeZones.ts';
 
@@ -99,48 +98,6 @@ interface HeldAdvisorPlacement {
  */
 const FREE_PLACEMENT = 'free';
 
-/** A snapped rect's identity, for the placement key. */
-function rectKey(r: Rect | null): string {
-  return r ? `${r.left},${r.top},${r.right},${r.bottom}` : '-';
-}
-
-/**
- * *Which* panels and fighters are on the screen, ignoring where they are.
- *
- * The shape of the frame rather than its measurements: a panel opening or
- * folding, a party member going down, a boss leaving the field. Used by
- * {@link FFXBattleHud.solveAdvisorPlacement} to decide when a declined solve is
- * worth asking again — measurements move every frame and are never a reason on
- * their own, presence moves only when something really happened.
- *
- * The two always-on panels (`cmdArea`, `partyStatus`) and the help slab's
- * reserved slot are deliberately absent: they are never `null`, so they could
- * not distinguish anything.
- */
-function panelPresence(input: AdvisorZoneInput): string {
-  const on = (r: Rect | null | undefined): string => (r ? '1' : '0');
-  return [
-    on(input.guide),
-    on(input.sensor),
-    on(input.intent),
-    on(input.intentChip),
-    on(input.ctb),
-    input.sprites.length,
-    input.enemies?.length ?? 0,
-  ].join(':');
-}
-
-/** A rect snapped **outwards** to a multiple of `q`, so it never shrinks. */
-function growToGrid(r: Rect | null, q: number): Rect | null {
-  if (!r) return null;
-  return {
-    left: Math.floor(r.left / q) * q,
-    top: Math.floor(r.top / q) * q,
-    right: Math.ceil(r.right / q) * q,
-    bottom: Math.ceil(r.bottom / q) * q,
-  };
-}
-
 /** Grid px between the parked `E ENEMY MOVE` chip and the CTB queue's top edge. */
 const CHIP_DOCK_GAP = 11;
 
@@ -201,8 +158,7 @@ export class FFXBattleHud implements HudPort {
   private readonly sensorPanel = new SensorPanel();
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
-  /** Evrae's order widget + Cid's ORDER chip; inert unless the airship range flag is set. */
-  private readonly airship = new AirshipOrders();
+  private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
   /**
    * The optional strategy guide (`src/ui/common/StrategyGuide.ts`), a left rail
    * measured to sit between the action banner and the command stack.
@@ -565,8 +521,7 @@ export class FFXBattleHud implements HudPort {
       this.advisor.showDecision(actorId, commands, this.lastState);
     }
     try {
-      // Evrae only: the two airship orders fold into one row that opens the
-      // order widget (`AirshipOrders`); every other battle gets `commands` as is.
+      // Evrae only: the orders fold into one row (`AirshipOrders`); elsewhere `commands` as is.
       return await this.airship.choose(commands, this.lastState, (menuCommands) => this.commandMenu.open({
         actorId,
         commands: menuCommands,

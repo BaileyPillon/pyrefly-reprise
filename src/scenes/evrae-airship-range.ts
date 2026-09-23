@@ -34,6 +34,7 @@
 
 import type { BattleState } from '../battle/common/types.ts';
 import {
+  AIRSHIP_BREATH_CHARGED,
   AIRSHIP_MISSILES,
   AIRSHIP_ORDER,
   AIRSHIP_RANGE,
@@ -61,6 +62,11 @@ export function airshipRangeOf(state: AirshipFlags | null | undefined): AirshipR
 export function airshipOrderOf(state: AirshipFlags | null | undefined): AirshipRange | null {
   const v = state?.flags?.[AIRSHIP_ORDER];
   return v === 'far' || v === 'near' ? v : null;
+}
+
+/** Inhale has charged Poison Breath and it has not fired or whiffed yet (§3.3 note 4). */
+export function breathChargedOf(state: AirshipFlags | null | undefined): boolean {
+  return state?.flags?.[AIRSHIP_BREATH_CHARGED] === true;
 }
 
 /** Volleys still in Cid's rack. §2.3: three uses. */

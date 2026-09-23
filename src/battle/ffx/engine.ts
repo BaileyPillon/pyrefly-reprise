@@ -15,7 +15,6 @@ import type {
   BattleSetup,
   BattleState,
   Command,
-  CombatantId,
   Decision,
   FFXBattleEngine,
   FFXCombatant,
@@ -47,6 +46,7 @@ import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
+import { counterInputs } from './counter-inputs.ts';
 import { dismissAeon } from './aeons.ts';
 import { buildBattleResult } from './results.ts';
 
@@ -312,31 +312,8 @@ export class FFXEngine implements FFXBattleEngine {
     const ctx = this.requireCtx();
     void damageDealt;
 
-    // Enemies this action actually resolved against.
-    const damaged = new Set<CombatantId>();
-    // Enemies this action pushed into a new form. The killing blow of a form is
-    // never countered: in the decompile, `onHit` runs the transformation block
-    // *instead of* the counter switch [ffx-yunalesca §2.4, offset 0600]. By the
-    // time counters are collected `advanceForm` has already revived the boss in
-    // its next form, so without this the blow would draw that form's counter.
-    const transformed = new Set<CombatantId>();
-    // **Enemies this action landed a status on.** Only `damage` and `mp-damage`
-    // fed the counter input until the Evrae chapter, and its counter-Haste
-    // fires on **Slow landing** — a `status-add` event. Tidus's Slow uses the
-    // `ctb` formula and may or may not emit a `damage` event on the same
-    // action, so keying that counter off damage would have been incidental and
-    // seed-dependent: precisely the class of bug hard rule 3 exists to catch
-    // [preflight §4.2 E-5]. Existing bosses ignore the new set, so Chapters 1-3
-    // are byte-identical.
-    const statusAdded = new Set<CombatantId>();
-    for (const e of actionEvents) {
-      if (e.type === 'damage' && e.sourceId === actor.id && e.amount > 0) damaged.add(e.targetId);
-      if (e.type === 'mp-damage' && e.sourceId === actor.id) damaged.add(e.targetId);
-      if (e.type === 'status-add') statusAdded.add(e.targetId);
-      if (e.type === 'form-change') transformed.add(e.enemyId);
-    }
-    const counterable = [...damaged].filter((id) => !transformed.has(id));
-    const statusCounterable = [...statusAdded].filter((id) => !transformed.has(id));
+    // Who this action damaged, landed a status on, or pushed into a new form.
+    const { damaged, counterable, statusCounterable } = counterInputs(actor.id, actionEvents);
 
     // The Mortiorchis never dies; it drains Seymour and comes back smaller.
     runMortibsorptionIfDown(ctx);
@@ -347,10 +324,7 @@ export class FFXEngine implements FFXBattleEngine {
     // in every other battle.
     runMacalaniaPhaseHooks(ctx);
 
-    // Evrae's 1/3-HP self-Haste is a hook, not a counter, because **Guided
-    // Missiles must trip it too** and `collectBossCounters` returns early on an
-    // enemy-side attacker [ffx-evrae-airship §5.4]. A no-op in every other
-    // battle.
+    // Evrae's 1/3-HP self-Haste: a hook, so Guided Missiles trip it too [§5.4]. No-op elsewhere.
     runEvraePhaseHooks(ctx);
 
     // Boss counters fire from the hit hook and cost no turn.
@@ -373,7 +347,7 @@ export class FFXEngine implements FFXBattleEngine {
 
       // Equipment reactions: Counterattack, Auto-Potion, Auto-Med, Auto-Phoenix.
       if (def) {
-        for (const reaction of collectReactions(ctx, actor, def, [...damaged])) {
+        for (const reaction of collectReactions(ctx, actor, def, damaged)) {
           const reactor = tryActor(ctx, reaction.actorId);
           if (!reactor) continue;
           this.push({
@@ -420,11 +394,7 @@ export class FFXEngine implements FFXBattleEngine {
     const bosses = ctx.state.enemyIds
       .map((id) => tryActor(ctx, id))
       .filter((c): c is FFXCombatant => c !== undefined);
-    // **A non-combatant is never a victory condition.** Cid rides on
-    // `side: 'enemy'` so he gets a CTB row and the tie-break rank reserved for
-    // him, but he is unkillable and untargetable — without this filter a living
-    // 410 HP airship pilot blocks victory for ever
-    // [`ActorRuntime.nonCombatant`, ffx-evrae-airship §2.1].
+    // A non-combatant (Cid, `ActorRuntime.nonCombatant`) never blocks victory [ffx-evrae-airship §2.1].
     const nonCombatants = bosses.filter((c) => ctx.rt.actors.get(c.id)?.nonCombatant === true);
     const fighters = nonCombatants.length > 0 && nonCombatants.length < bosses.length
       ? bosses.filter((c) => !nonCombatants.includes(c))

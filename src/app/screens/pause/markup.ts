@@ -32,6 +32,7 @@ export interface RenderRow {
   selected?: boolean;
   rule?: boolean;
   done?: boolean;
+  obj?: boolean;
   head?: boolean;
   cmd?: boolean;
 }
@@ -91,6 +92,7 @@ function rowHtml(r: RenderRow): string {
   if (r.fill === null) cls.push('pause__row--word');
   if (r.selected) cls.push('pause__row--sel');
   if (r.done) cls.push('pause__row--done');
+  if (r.obj) cls.push('pause__row--obj');
   if (r.head) cls.push('pause__row--head');
   if (r.cmd) cls.push('pause__row--cmd');
   const bar =
@@ -191,6 +193,7 @@ export function fromPanels(columns: readonly PanelColumn[], selectedRowId: strin
         selected: r.selectable && r.id === selectedRowId,
         ...(r.rule ? { rule: true } : {}),
         ...(r.done ? { done: true } : {}),
+        ...(r.obj ? { obj: true } : {}),
         ...(r.head ? { head: true } : {}),
         ...(r.cmd ? { cmd: true } : {}),
       }),

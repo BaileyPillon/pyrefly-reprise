@@ -33,7 +33,8 @@ shipped `evrae` tactic (`src/engine/tactics/index.ts`) for `EVRAE_ID`;
 | chapter | driver | wins | rate | median turns | KOs | escapes | declines | losing seeds |
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | evrae-airship | intended | **39/40** | **97.5%** | 98 | 1 | 0 | 0 | 25 |
-| evrae-airship | advisor-top-row | **0/40** | **0.0%** | 483.5 | 3 | 37 | 0 | all 40 |
+| evrae-airship | advisor-top-row (before the fix pass) | **0/40** | **0.0%** | 483.5 | 3 | 37 | 0 | all 40 |
+| evrae-airship | advisor-top-row (after the fix pass, 2026-09-23) | **26/40** | **65.0%** | 86 | 14 | 0 | 0 | 1,4,6,9,10,21,22,26,27,32,34,36,37,39 |
 | seymour-flux (control) | intended | 26/40 | 65.0% | 60.5 | 14 | 0 | 0 | 1,3,10,12,14,15,16,18,20,22,25,27,29,36 |
 | seymour-flux (control) | advisor-top-row | 27/40 | 67.5% | 66.5 | 13 | 0 | 0 | 1,3,7,10,15,16,18,20,22,27,29,31,36 |
 
@@ -50,67 +51,50 @@ and engine plumbing has not moved between that session and this one.
 
 ---
 
-## 2. (b) is a real, reportable failure — not a bug in the bench
+## 2. (b) The advisor failure, and why: CORRECTED 2026-09-23
 
-The advisor-top-row arm goes to **0/40**, and it is worth saying plainly why,
-since it is a different shape of loss than the intended line's one miss.
-Probing seed 1 directly (`buildAdvisorView`, top suggestion, every decision):
+**This section's first version was wrong.** It said the advisor "never once suggests a range
+order" and that the 0/40 came from the range never changing. An adversarial verifier ran the
+real engine (`critic/scratch/evrae/probe/probe3.test.ts`, seeds 1 to 5) and refuted it: the
+card suggested range orders often, and the ship sat FAR for 367 of 370 decisions. The real
+causes, each proved by running the engine and each fixed with a test that failed first
+(`tests/unit/chapters/evrae-advisor.test.ts`, `tests/unit/advisor-stack-cap.test.ts`):
 
-- The advisor never once suggests a **range order** (Cid's "pull back" /
-  "close in"). Over 370 decisions in the seed-1 run its command mix is
-  `{ trigger: 32, attack: 1, item: 65, ability: 270, switch: 2 }` — no `order`
-  kind at all.
-- Because the range never changes, the fight settles into a long war of
-  attrition instead of the intended NEAR-heal / FAR-dodge rhythm
-  (`docs/handoff/chapter-evrae-engine.md` §"A-2 is the diagnostic one": *"stays
-  NEAR, never orders ... loses 20 of 20 with 88% of the boss's bar still
-  up"*).
-- Here the outcome is usually **`escape`**, not `defeat`: seed 1 ends at turn
-  481 with `outcome: "escape"` after 370 player decisions, and 37 of 40 seeds
-  in this arm end the same way (3 end in `defeat`). This reads as the
-  engine's own stalemate/long-fight handling ending the encounter, not a
-  crash or a bench artifact — the run completes cleanly every time
-  (`unresolved` count is 0 across all 160 runs in this bench).
+1. **The preview could not see Wakka's reach.** `simulate.ts#runtimeFor` rebuilt the engine
+   runtime from `BattleState` and lost `ActorRuntime.rangedWeapon`, so Wakka's Attack at FAR
+   (the one physical swing that reaches, research §4.3) previewed as `action-start,
+   action-end` and nothing else. The no-op guard then correctly, on what it was shown, put the
+   chapter's own line ("Attack") behind every other row: Wakka's top row was Attack on 0 of
+   125 to 161 FAR turns. Fix: `markEvraeRuntime` in `evrae-rules.ts`, shared by the setup hook
+   and the preview.
+2. **A buff at its stack cap was priced as possible.** `advisor-roll.ts` priced every
+   stacking buff at its 254 chance byte; FFX's `applyStatus` refuses a sixth stack
+   (`statuses.ts:187`). Aim or Cheer on a capped target topped the card 208 to 272 times a
+   run. Fix: a capped stacking buff is `blocked` in the band, with each game's own ceiling
+   (FFX 5, FFX-2 `STAT_STACK_MAX` 10).
+3. **The card named orders the widget refuses.** "Pull back" while already FAR or already
+   ordered FAR topped the card 29 to 66 times a run; the order widget greys that row out
+   ("Already far" / "Ordered"), so the player could not press it. Fix: one rule,
+   `engine/tactics/airship-orders.ts#airshipOrderRefusal`, read by the widget and by the
+   advisor's hard gate (`advisor-menu.ts#pressable`). The engine keeps a redundant order
+   legal (owner decision C-7 / G-2).
 
-This is exactly the risk `docs/handoff/chapter-evrae-engine.md`'s open
-question 3 named: *"The order widget (C-11) is still the chapter's highest
-risk and nothing was built for it."* The generic move-advisor has no notion
-of this chapter's bespoke range/order mechanic, so a player who only ever
-presses the top-row suggestion never engages it — matching the shape (not the
-exact outcome label) of the A-2 acceptance case already on record. **Nothing
-was tuned in response**; this is reported, not fixed, because the fix belongs
-to the advisor or the order-widget track, not to a measurement session, and
-because the order widget itself is still unapproved (docs/target/targets.json,
-`reaction.inferred`, awaiting Bailey).
+With the three fixed, the verifier's probe reads, seeds 1 to 5: 0 capped-buff tops on the
+card's own targets (Cheer on a party with one member below five still tops, correctly),
+0 refused orders, Wakka's Attack on top on 12 to 18 of his FAR turns, 3 wins and 2 defeats,
+no stalemate. The Evrae HP no longer freezes.
 
----
+## 3. Verdict (fix pass)
 
-## 3. Verdict
+**(a) and (c) still reproduce exactly** after the fix pass: intended 39/40 (seed 25), Chapter
+1 control 26/40 and 27/40 with the same losing seeds, and the Evrae rows were byte-identical
+again after the `engine.ts` house-style move. **(b) the card's top row now wins 26 of 40
+(65.0%)** where it won none, with 0 stalemates (37 before). The 14 losses are defeats. The
+shared advisor change (the stack cap) was measured on chapters 1 to 5 with
+`critic/bench/advisor-v2` (advisor arm, 40 seeds, before and after): 27, 37, 39, 40, 38 wins,
+identical. Nothing was tuned and no boss number changed.
 
-**(a) the shipped intended line reproduces the engine handoff's number exactly:
-97.5% (39/40), seed 25 the only loss.** No boss number was touched to get
-there or to keep it. **(c) the Chapter 1 control reproduces its own prior
-number exactly**, so the harness and this build are trustworthy. **(b) the
-move-advisor's top row alone cannot clear this fight (0/40)** because it never
-issues a range order, the chapter's central mechanic — a real gap, not a
-regression, and one this track does not have the mandate to close.
-
-This does not block anything: the chapter ships LOCKED as Coming regardless
-(art is CANDIDATE), and the advisor gap is a known, disclosed limitation of a
-chapter whose defining mechanic (the order widget) has no built UI yet and no
-approved design. Options for whoever picks this up next:
-
-1. **Leave it disclosed.** The intended line is what the chapter is measured
-   and balanced against (§9.1's own 90% bar, cleared at 97.5%); the advisor's
-   blind spot here is no different in kind from any other boss-specific
-   mechanic a generic top-row driver cannot see.
-2. **Teach the advisor about range orders** once the order widget itself is
-   built and approved — before that, there is no player-facing surface for
-   the advisor to point at, so building advisor awareness now would be
-   guessing at UI that does not exist yet (rule 9, end state first).
-3. Do nothing further to the bench; it already reproduces both numbers this
-   session needed and its 0/40 finding is now on record for whoever builds
-   the order widget or the advisor's mechanic awareness next.
-
-Nothing here recommends one option over another to Bailey; the intended
-line's 97.5% is the number this chapter ships measured against.
+What is still open: the chapter's line asks for Defend when nothing reaches (`harmlessTurn`),
+and FFX's command window has no Defend row, so on those turns the card shows its best
+simulated row instead of the line. That is a design question about the tactic, not a
+measurement one, and it is recorded in `docs/handoff/chapter-evrae.md`.

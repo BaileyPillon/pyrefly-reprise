@@ -1019,3 +1019,25 @@ Risks carried to the deep review: the `Orders` fold is a reading of option A
 (A draws the two rows straight in the cascade); Cid is removed from the stage
 on this scene only (F-1's presenter-wide rule is still open); the range move
 starts with the burst, not after the "pulls back" line is read.
+
+---
+
+## Addendum 2, 2026-09-23: the fix pass's paper check (rule 15, DEEP)
+
+Written before the verifier's nine findings were fixed (`docs/handoff/chapter-evrae.md`,
+"Fix pass"). `node tools/critic-plan.mjs --paths` classes the pass DEEP because it touches
+the FFX CTB engine (`simulate.ts`, `engine.ts`), the shared advisor, and the pause
+stylesheet. Each shared touch, why it cannot move another chapter, and how that was proved:
+
+| Shared file | Change | Game case | Why no other chapter moves | Proof |
+|---|---|---|---|---|
+| `src/battle/ffx/simulate.ts` | a rebuilt preview runtime gets the encounter's setup marks (`markEvraeRuntime`) | FFX only | the marks apply only while `flags['airship.range']` exists | Chapter 1 control in `critic/bench/evrae` is byte-identical; `advisor-simulate.test.ts` green |
+| `src/battle/ffx/engine.ts` | the counter-input block moved to `counter-inputs.ts` unchanged; two comments shortened (house style) | both (pure move) | same inputs, same order, no RNG | `critic/bench/evrae` rows byte-identical before and after the move; full suite |
+| `src/engine/tactics/advisor-roll.ts` | a stacking buff at its ceiling is priced as blocked (FFX 5, FFX-2 `STAT_STACK_MAX` 10) | both, each game's own cap | only removes rows the engine refuses anyway | `critic/bench/advisor-v2` advisor arm on chapters 1-5, 40 seeds, before and after: identical win counts |
+| `src/engine/tactics/advisor-menu.ts` / `advisor.ts` | the card never names a row the Evrae order widget greys out | FFX only in effect | `refusedAirshipOrder` is `false` without the airship flag | `evrae-advisor.test.ts` "silent in every battle without the airship flag" |
+| `src/ui/ffx/rawInput.ts` + `BattleScreen.ts` | the pause also swallows clicks on the battle's own DOM | both | clicks only, only inside the battle root, only while paused; photo mode (pointerdown on body) untouched | `pause-pointer-leak.test.ts`; browser re-run of the verifier's leak |
+| `src/ui/common/pause-screen.css` + pause markup | objective labels and snapshot captions wrap instead of an ellipsis | both | layout of three row kinds only; the 14 px floor rules untouched | `pause-remake-css.test.ts` green; `pause-chapter-tab-wrap.test.ts`; browser still of the CHAPTER tab |
+
+Measured risk carried to the deep review: the advisor-top-row arm on Evrae goes from 0/40
+(37 stalemates) to 26/40 with no stalemate; the intended line stays 39/40. The remaining
+14 losses are defeats, not no-op advice.

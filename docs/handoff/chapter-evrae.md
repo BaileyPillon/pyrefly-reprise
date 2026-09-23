@@ -203,3 +203,57 @@ exactly) and added the Evrae case; the stale version is kept at
 - Q11: the chapter's name (Evrae or the airship).
 - The Evrae art (CANDIDATE throughout; the backdrop is darker than concept B).
 - The music (two new cues, by ear).
+
+---
+
+## Fix pass, 2026-09-23 (after the adversarial verifier)
+
+**Game case, per item below.** The chapter's own fixes are FFX only; four shared fixes are
+"both" (shared plumbing, CHK-020), each measured on the other chapters. Paper check:
+`docs/plans/chapter-evrae-review.md`, "Addendum 2". No boss number changed; the chapter
+stays LOCKED as Coming (the one-line unlock above is unchanged).
+
+| # | Finding | Root cause (proved by running it) | Fix | Test that failed first |
+|---|---|---|---|---|
+| 1 | ADVISOR: following the card stalls (4 of 5 seeds at the 400-turn guard) | three: the preview lost Wakka's reach (`simulate.ts#runtimeFor` rebuilt the runtime without `rangedWeapon`, so his FAR Attack previewed as nothing and the no-op guard buried the line); capped Aim/Cheer priced at 254; orders the widget refuses were offered | `evrae-rules.ts#markEvraeRuntime` shared by setup and preview (FFX only); `advisor-roll.ts` blocks a capped stacking buff with each game's ceiling (both: FFX 5, FFX-2 10); `engine/tactics/airship-orders.ts` is the one refusal rule for the widget and the card's hard gate (`advisor-menu.ts#pressable`), and the card's chip for an order says "in Orders" (FFX only) | `tests/unit/chapters/evrae-advisor.test.ts` (7), `tests/unit/advisor-stack-cap.test.ts` (3); `advisor-menu.test.ts` now checks chips against the folded Evrae stack |
+| 1b | the measure handoff's wrong reason | it said the card "never once suggests a range order" | `chapter-evrae-measure.md` §2-§3 rewritten with the real causes and the new numbers | |
+| 2 | PAUSE LEAK: clicks reach the battle HUD under the pause | the pause claimed the keyboard and muted the pad, never the mouse (pre-existing; Chapter 1 opened Items the same way) | `rawInput.ts#setRawInputSuspended(paused, battleRoot)` also swallows `click`/`dblclick`/`auxclick`/`contextmenu` on the battle's own DOM while paused; `pointerdown` is left alone for photo mode (both) | `tests/unit/pause-pointer-leak.test.ts` (3) |
+| 3 | INHALE TELEGRAPH never shown | the live actor only ever loaded idle/attack/cast/hurt/ko | the range director swaps Evrae's resting (idle) painting to `breath-charge` while `airship.breathCharged` stands at NEAR, and back (FFX only); at FAR the streak stays (the breath whiffs) | `tests/unit/chapters/evrae-telegraph.test.ts` |
+| 4 | ART: no attack painting | there is no `characters/evrae/attack.png`; the pose falls back to idle | **not fixed**: art, and the art method is under the rule-15 stop until Bailey picks the next method (NOW.md item 3) | |
+| 5 | ART: blue-white rims on KO | **proved: the scene's rim light**, not the painting. Same frame, rim 0.7 vs 0: the bright outlines along every interior coil edge go away (`docs/screenshots/chapters/evrae-fix-5-ko-rim-on-off.png`); a faint 1 px fringe stays in the PNG | the director puts the rim out while the KO painting shows, restores it after (FFX only) | same telegraph test file |
+| 6 | BACKDROP darker than picked concept B | the installed plate (`backdrops/evrae-airship-deck.png`) is **not** concept B: it is a later render whose upper half is the dark underside of the hull, and the rolled-plane framing shows that half. Concept B (`renders/backdrop-b.png`) is bright sky and cream cloud with the hull on the right | **not fixed**: swapping the plate means new art (the rail geometry is fitted to the installed plate) and the art track is stopped; disclosed as a miss against the picked target | |
+| 7 | PAUSE CHAPTER TAB cuts objectives and captions | fixed key column and `nowrap` + ellipsis; every chapter's captions were cut the same way | objective rows (`pause__row--obj`) and snapshot captions wrap (both) | `tests/unit/pause-chapter-tab-wrap.test.ts` (3) |
+| 8 | HOUSE STYLE: four over-400 files grew | the Evrae commits | back to or below their pre-Evrae length: `engine.ts` 473 (was 476 before Evrae; the counter-input block moved to `counter-inputs.ts` unchanged), `overdrive.ts` 479 (479), `BattleScreen.ts` 902 (911; `measureChain` moved to `BattleEncounterChain.ts#chainLengthOf`, the airship hook is one line), `FFXBattleHud.ts` 1575 (1606; three placement-key helpers moved to `hudPlacementKeys.ts`); `simulate.ts` and `advisor.ts` did not grow | full suite; the Evrae bench rows byte-identical before and after the move |
+| 9 | FAR readability; CTB over NEAR's head | measured on the three range rigs: Evrae's right edge is at 1201-1228 px against the CTB column at 1380 px (1600x900), so idle/action/enemy are clear. The overlap in the verifier's still is the **party / victory rigs** (shared, they look at the party; Evrae's box starts at 0.71-0.73 of the width and runs off the right edge) | **not fixed**: a NEAR-specific party rig is a staging change for Bailey's options round; FAR size is the documented head-ratio scale | |
+
+### Measured
+
+- Evrae bench (`critic/bench/evrae/results.json`, 40 seeds): intended 39/40 (unchanged);
+  **advisor top row 0/40 → 26/40, stalemates 37 → 0**; Chapter 1 control unchanged.
+- Advisor arm on chapters 1-5 (`critic/bench/advisor-v2`, 40 seeds, before/after the stack
+  cap): 27, 37, 39, 40, 38 wins, identical.
+
+### Verified
+
+- `npx tsc --noEmit` clean; full `npm test` **255 files, 5,691 passed, 2 skipped, 0 failed**;
+  `node tools/orphans.mjs` lists no new module.
+- Browser re-run (own Vite on :5571, stopped by Windows PID 17308, nothing left listening;
+  `PYREFLY_BROWSER=gpu`, real clock, 1600x900; scratch harness
+  `critic/scratch/evrae/fix/fixflow.mjs`, not committed): under the pause, mouse clicks on
+  Orders and Pull back leave `airship.order` and the log unchanged, and the pause's own
+  CHAPTER tab still takes a mouse click; the CHAPTER tab shows both objectives and all three
+  captions whole (no element overflows); after resume, Enter on Orders then Enter still
+  sends Pull back; at Wakka's first FAR turn the card reads "Attack → Evrae, Guide's pick,
+  450-508"; a NEAR Inhale shows the breath-charge painting on the live actor; the KO pose
+  drops the rim to 0 and idle restores 0.7. 0 console errors, 0 failed HTTP requests.
+  Stills: `docs/screenshots/chapters/evrae-fix-1..5-*.png`.
+
+### Still open (and owed to Bailey)
+
+- The line's `harmlessTurn` asks for Defend, which FFX's window does not show, so on those
+  turns the card falls back to its best simulated row (this is most of the remaining gap
+  between the line's 97.5 % and the card's 65 %).
+- An attack painting, and a backdrop that matches concept B: both art, both waiting on the
+  art method decision.
+- The party/victory rigs framing NEAR Evrae under the CTB column; FAR Evrae's size.
+- The advisor card still sits over part of the FAR streak (item 2 of "Found, not fixed").

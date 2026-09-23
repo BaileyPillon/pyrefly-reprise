@@ -66,9 +66,37 @@ const DIRECTIONS = new Set<UiButton>(['up', 'down', 'left', 'right']);
  */
 let suspended = false;
 
-/** Stop / resume every `RawInputWatcher` in the page. */
-export function setRawInputSuspended(value: boolean): void {
+/**
+ * Clicks a paused battle's own DOM must not hear. The pause menu is drawn over
+ * the HUD but did not stop the mouse: on Evrae, two clicks (Orders, then "Pull
+ * back") spent Tidus's turn under the pause (critic, 2026-09-23;
+ * `tests/unit/pause-pointer-leak.test.ts`). Every HUD command handler listens
+ * for `click`; `pointerdown` is left alone because photo mode, opened from the
+ * pause, orbits the camera off `document.body`'s pointerdown.
+ */
+const POINTER_EVENTS = ['click', 'dblclick', 'auxclick', 'contextmenu'];
+let releasePointer: (() => void) | null = null;
+
+function swallow(e: Event): void {
+  e.stopPropagation();
+  e.preventDefault();
+}
+
+/**
+ * Stop / resume every `RawInputWatcher` in the page, and, when `pointerRoot`
+ * is given, the mouse on everything inside it (a capture listener on the root
+ * runs before any HUD handler below it). Only that root: the pause menu, photo
+ * mode and the briefing live outside the battle's own DOM and keep the mouse.
+ */
+export function setRawInputSuspended(value: boolean, pointerRoot?: HTMLElement): void {
   suspended = value;
+  releasePointer?.();
+  releasePointer = null;
+  if (!value || !pointerRoot) return;
+  for (const type of POINTER_EVENTS) pointerRoot.addEventListener(type, swallow, true);
+  releasePointer = () => {
+    for (const type of POINTER_EVENTS) pointerRoot.removeEventListener(type, swallow, true);
+  };
 }
 
 /** Whether raw HUD input is currently muted. */

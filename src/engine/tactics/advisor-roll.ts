@@ -68,6 +68,10 @@ import type {
 import type { SimOutcome } from '../../battle/ffx/simulate.ts';
 import { statusOdds } from '../../battle/ffx/estimate.ts';
 import { statusChanceLinear } from '../../battle/ffx2/statuses.ts';
+import { STAT_STACK_MAX } from '../../battle/ffx2/constants.ts';
+
+/** FFX's ceiling for the six stacking buffs: `ffx/statuses.ts#applyStatus` adds a level only below five. */
+const FFX_STACK_MAX = 5;
 import { changesNothing } from './advisor-guard.ts';
 
 /** One status this action is trying to put on one combatant, with its real odds. */
@@ -220,7 +224,13 @@ export function statusChances(
       // number is 39.
       const existing = (target.statuses as Record<string, { stacks?: number } | undefined>)[app.status];
       const stacking = app.stacks !== undefined && app.stacks > 0;
-      if (existing && !stacking) {
+      // …and **a stacking buff already at its ceiling cannot take another
+      // level**: FFX's `applyStatus` stops at five (Cheer/Aim/…, ffx-combat-core
+      // §2.9 table: "at 5 stacks"), FFX-2's at `STAT_STACK_MAX` (§2.8). Priced
+      // at its 254 byte, Aim on a capped party topped Evrae's card 208 to 272
+      // times a fight (`tests/unit/chapters/evrae-advisor.test.ts`).
+      const capped = existing && stacking && (existing.stacks ?? 0) >= (state.game === 'ffx2' ? STAT_STACK_MAX : FFX_STACK_MAX);
+      if ((existing && !stacking) || capped) {
         out.push({ targetId, status: app.status, percent: 0, landedAtMedian: false, blocked: true });
         continue;
       }
