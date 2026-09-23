@@ -40,6 +40,13 @@ export interface GuideHintMatch {
   targetLacks?: StatusId;
   /** Only when the acting character is this combatant. */
   actorId?: CombatantId;
+  /**
+   * Only when the command is aimed at this combatant. A stat line about one
+   * enemy ("Logos' Evasion 40") keys here, never on {@link bossId}: in a
+   * three-on-three fight that one is true whenever he is in the fight at all,
+   * whoever the swing is aimed at [PR-0144].
+   */
+  targetId?: CombatantId;
   /** Only while this boss is the one on the field (chain chapters). */
   bossId?: CombatantId;
   /** Only while the chapter's primary boss is at or below this fraction of its max HP. */

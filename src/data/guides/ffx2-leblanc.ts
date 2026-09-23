@@ -73,7 +73,9 @@ export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
 
   hints: [
     {
-      when: { labels: ['Fira', 'Blizzara', 'Thundara', 'Watera', 'Fire', 'Blizzard', 'Thunder', 'Water'] },
+      // On Ormi only: aimed at Leblanc (Magic Defense 62) this line would be
+      // backwards, the same target-blind shape as PR-0144.
+      when: { labels: ['Fira', 'Blizzara', 'Thundara', 'Watera', 'Fire', 'Blizzard', 'Thunder', 'Water'], targetId: 'ormi' },
       text: "Ormi's Magic Defense is only 16 against his Defense 84 — this is the route that actually hurts him",
       cite: 'ffx2-leblanc-syndicate §3.4, §6.2',
     },
@@ -108,13 +110,15 @@ export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
       cite: 'ffx2-leblanc-syndicate §4.2, §4.3',
     },
     {
-      when: { kinds: ['attack'], bossId: 'logos' },
+      // Keyed on the target, not on Logos being in the fight [PR-0144]: with
+      // `bossId` every Attack on Ormi read Logos' evasion as its reason.
+      when: { kinds: ['attack'], targetId: 'logos' },
       text: "Logos' Evasion 40 is the highest in the fight — a plain swing misses him more than it hits",
       cite: 'ffx2-leblanc-syndicate §3.2',
     },
     {
-      when: { kinds: ['attack'], bossId: 'leblanc' },
-      text: 'Her Defense 10 makes this the correct route on her — she wants spells, not swords, the opposite of Ormi',
+      when: { kinds: ['attack'], targetId: 'leblanc' },
+      text: 'Her Defense 10 against a Magic Defense of 62 makes the sword the right route on her — the opposite of Ormi',
       cite: 'ffx2-leblanc-syndicate §3.1, §3.4',
     },
   ],

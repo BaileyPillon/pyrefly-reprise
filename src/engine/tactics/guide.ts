@@ -272,6 +272,7 @@ function hintMatches(
   if (w.targetHas && !has(ctx.target, w.targetHas)) return false;
   if (w.targetLacks && has(ctx.target, w.targetLacks)) return false;
   if (w.actorId && w.actorId !== ctx.actorId) return false;
+  if (w.targetId && ctx.target?.id !== w.targetId) return false;
   if (w.bossId && ctx.state.combatants[w.bossId] === undefined) return false;
   if (w.bossBelowHp !== undefined || w.bossAboveHp !== undefined) {
     const boss = primaryBoss(ctx.state, ctx.guide);
