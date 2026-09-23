@@ -2,12 +2,27 @@ import { Scene, type PerspectiveCamera } from 'three';
 import { BattleCamera } from '../engine/BattleCamera.ts';
 import { PaintedActor } from '../engine/PaintedActor.ts';
 import { HitEffects } from '../engine/VFX.ts';
+import { chateauBuild } from '../data/ffx2/builds/chateau.ts';
 import type { AssetReport, PaintedScene } from './demo.ts';
 import {
   LEBLANC_LAST_ROOM_ACTOR_HEIGHTS,
   buildLeblancLastRoomScene,
 } from './leblanc-last-room.ts';
 import { mountScene } from './types.ts';
+
+/**
+ * The painted-art id for one of `chateauBuild`'s girls — `<girl>-<dressphere>`
+ * (`yuna-gunner`, `rikku-thief`, `paine-warrior`), the same convention
+ * `BattlePresenterArt.ts::artIdFor` derives from a live combatant's
+ * `dresspheres.current` for the real battle, and the same keys
+ * `bevelleBuild`/`farplaneBuild` (Chapters 4 and 5) give their own girls. A
+ * bare girl id (`paine`) is never a painted subject on its own — only
+ * `portraits`/`pause` art is — so falling back to it here would be the same
+ * miss this function exists to avoid.
+ */
+function girlSpriteKey(id: 'yuna' | 'rikku' | 'paine'): string {
+  return chateauBuild.members.find((m) => m.id === id)?.spriteKey ?? id;
+}
 
 /**
  * {@link buildLeblancLastRoomScene} with Yuna, Rikku and Paine on the party
@@ -45,20 +60,24 @@ export async function buildLeblancLastRoomPainted(camera: PerspectiveCamera): Pr
   };
   const PARTY_POSES = ['idle', 'attack', 'cast', 'hurt', 'ko', 'victory'] as const;
 
-  // Rikku carries a full pose set; she is the fallback shape for whichever of
-  // her two teammates is still a placeholder (`docs/handoff/chapter-leblanc-
-  // scene.md` — Paine has no painted art in this repo yet).
-  const rikku = await PaintedActor.fromSubject('rikku', {
+  // Dressphere-keyed subjects — `chateauBuild`'s own `spriteKey` per girl,
+  // exactly what the real battle resolves to for this chapter's party
+  // (`girlSpriteKey` above). Rikku still carries the fallback pose set for
+  // whichever teammate's painting is ever missing; that used to be Paine
+  // every time (`docs/handoff/chapter-leblanc-scene.md` §6, now stale — her
+  // `paine-warrior` painting is installed) and is kept as the same
+  // never-throws guard the rest of this file relies on.
+  const rikku = await PaintedActor.fromSubject(girlSpriteKey('rikku'), {
     ...commonParty,
     worldHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.rikku,
     states: PARTY_POSES,
   });
-  const yuna = await PaintedActor.fromSubject('yuna', {
+  const yuna = await PaintedActor.fromSubject(girlSpriteKey('yuna'), {
     ...commonParty,
     worldHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     states: PARTY_POSES,
   });
-  const paine = await PaintedActor.fromSubject('paine', {
+  const paine = await PaintedActor.fromSubject(girlSpriteKey('paine'), {
     ...commonParty,
     worldHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.paine,
     states: PARTY_POSES,
