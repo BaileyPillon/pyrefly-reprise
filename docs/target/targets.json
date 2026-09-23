@@ -928,23 +928,29 @@
           "delivery": "in-progress",
           "note": "Set at Chateau Leblanc (FFX-2 Chapter 2), Bailey’s pick on 19 Sep. Leblanc, Logos and Ormi against Yuna, Rikku and Paine at low level. Doubles as the FFX-2 tutorial chapter. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop C (docs/concepts/chapters/leblanc/renders/backdrop-c.png, mixed magenta/cyan with the door and heart panel), Leblanc pose B (renders/leblanc-b.png, fan fully open, warm magenta — the Sonic Fan/Mach Fan pose), Ormi A (renders/ormi-a.png, the on-canon reroll) to be re-rendered heavier/stockier from A, Logos C (renders/logos-c.png, revolver clearly in hand) to be re-rendered with a plainer, canon helmet. Preflight recommendations accepted: docs/target/decisions.json D-018.",
           "reaction": {
-            "date": "2026-09-21",
-            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too.",
+            "date": "2026-09-23",
+            "words": "All recommendations on the three art decisions.",
             "named": [
               "Yes to all recommendations but the title screen needs to match the target.",
-              "Yes to these too."
+              "Yes to these too.",
+              "All recommendations on the three art decisions."
             ],
-            "how": "Bailey answered the chapter-leblanc-review.md §5/§6 preflight recommendations and the concept-sheet options (docs/concepts/chapters/leblanc/options.json) together, then separately confirmed the art-direction picks named in the follow-up message.",
+            "how": "Bailey answered the chapter-leblanc-review.md §5/§6 preflight recommendations and the concept-sheet options (docs/concepts/chapters/leblanc/options.json) together, then separately confirmed the art-direction picks named in the follow-up message. On 2026-09-23 about 13:25 EDT he answered the three sheets in docs/concepts/chapters/art-r3-decisions/ (README.md, docs/plans/art-method-r3/METHOD-CHECK.md §4) the same way: all recommendations. Recorded as D-034 (Decision 1: fewest paintings), D-035 (Decision 2: Yields exit), D-036 (Decision 3: anchors, fan, heart, disc) in docs/target/decisions.json.",
             "liked": [],
             "disliked": [],
             "mustRemain": [
-              "Ormi A and Logos C as the base bodies — no re-roll, only a re-render pass toward canon"
+              "Ormi A and Logos C as the base bodies — no re-roll, only a re-render pass toward canon",
+              "Leblanc's fan stays the red leaf with silver ribs the installed cast already shows (D-036, no change)",
+              "Logos's shoulder disc stays as is (unsourced, idle and installed cast already agree; D-036)"
             ],
             "mustChange": [
               "backdrop: C (mixed magenta/cyan, visible door and heart panel), not A or B",
               "Leblanc: B (fan fully open, warm magenta), not the screen pose A or the snapped-shut pose C",
               "Ormi: re-rendered heavier/stockier from A, not shipped as-is",
-              "Logos: re-rendered with a plainer canon helmet from C, not shipped as-is"
+              "Logos: re-rendered with a plainer canon helmet from C, not shipped as-is",
+              "Chapter 6 state map: idle plus one hero cast painting per subject, no attack painting, hurt = idle under the engine's flinch (D-034)",
+              "Ormi's idle gains the Syndicate heart logo on his shield, sourced from research/ffx2-leblanc-syndicate.md §10.1 and his r1 cast.960106 (D-036)",
+              "Exit for Leblanc, Logos and Ormi is 'Yields' — stays standing, dims, steps back — not the pyrefly dissolve (D-035; build owed to the presenter pass that also builds D-031, not built by this decision)"
             ],
             "undecided": [
               "YRP in Syndicate-pink outfits — recommended deferred to v2, not this build"
