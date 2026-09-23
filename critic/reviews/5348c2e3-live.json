@@ -1,0 +1,57 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-23T21:59:33.000Z",
+  "build": {
+    "mainSha": "5348c2e3",
+    "bundle": "CcBx7HBL",
+    "artifactHash": "e8e31b1856ea405a1743b8b569a5ac12939d55cad261ce98aa134f7cf178e5de"
+  },
+  "verdicts": {
+    "deployment": "FAIL",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/5348c2e3.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/5ddfde3.json --full, run twice: first pass -> {\"result\":\"FAIL\",...,\"missing\":[\"art/characters/paine-gunner/idle.png (503)\"]}; second pass -> {\"result\":\"FAIL\",...,\"missing\":[\"art/characters/rikku-dark-knight/cast.2.png (503)\",\"art/characters/yu-pagoda/idle.json (503)\"]}. Both flagged files were manually re-fetched with a cache-busting query immediately after (curl, 2-3 attempts each) and returned 200 every time. This is GitHub Pages rate-limiting under the ~885-request full-manifest sweep, not a missing or corrupted artifact: artifactHash matches critic/artifacts/5348c2e3.json and docs/deploys.log's last line in every run, liveManifest is 'match', and mismatched/wrongType/errors were empty across all runs. Also confirmed live in the browser: assets/index-CcBx7HBL.js and assets/index-BqHP4QuQ.css both 200 under /pyrefly-reprise/, matching the recorded bundle hash."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Real key/click input drove: title -> Enter -> chapter select (confirmed Chapters VII 'Seymour and Anima' and VIII 'Evrae' both show as locked 'Coming' cards, per the release note) -> Right x5 to Chapter VI Leblanc -> Enter -> party prep (header 'VI . Leblanc . Chateau Leblanc, Guadosalam', Rikku shown as Thief) -> Enter -> pre-battle cutscene (advanced several lines with real Enter presses, then window.__pyrefly.skipCutscene() to finish it) -> battle. window.__pyrefly.screen() asserted 'battle' before capturing state; the FFX-2 Wait coach line 'Bar's full, she's up! Take your time, nobody moves while you're picking.' (Rikku, first-time-only) appeared on the very first FFX-2 menu of this profile, matching the sourced coach copy exactly. Rikku's Steal (SKILL -> STEAL -> target Ormi, real Enter presses) resolved with battleLog 'Rikku stole X-Potion!' (positive path). Enemy-intent panel visible (Fem-Goon Blizzard/odds/damage breakdown) and hidden with Escape (opens the pause screen instead of just hiding the panel; the panel's own 'E / HIDE' toggle was also exercised). Pause screen: YUNA/RIKKU/PAINE/CHAPTER/GUIDE/OPTIONS/CONTROLS/MUSIC tabs present; no advisor card or damage numbers anywhere in the pause DOM/text dump; H hid all panels down to the full-bleed close-up portrait (confirmed by screenshot) and H again restored them; CHAPTER tab showed Chapter VI's own plate/objectives (not a stale chapter). At 390x844 the OPTIONS tab's content (pause__body, scrollHeight 95 === clientHeight 95) fits without overflow, so no clipping regression to check by scrolling. Battle 1 of 3 was played to defeat (real Attack/Steal actions plus window.__pyrefly.autoBattle('intended') to finish the remaining exchanges) and the three Syndicate enemies showed hp:0/alive:false/removed:false in battleState() -- they stay in the encounter (not removed) rather than dissolving; after a brief scene-transition fade the screen showed Ormi and Logos still standing, dimmed, no pyrefly-dissolve VFX. Chapter III (Braska's Final Aeon) reached via gotoChapter+skipCutscene (debug hooks used only to set up this second, already-real-input-proven state, per RUBRIC section 5) then driven entirely by real input: Auron's SWITCH command -> Lulu; Lulu's SPECIAL -> DOUBLECAST -> spell list (Fire/Fira/Firaga/Blizzard/...) -> Fire selected -> Yu Pagoda targeted -> Enter; battleLog confirmed two separate 'action-start'/'damage' pairs for ability 'doublecast' wrapping 'fire' against yu-pagoda-left, i.e. Doublecast asked for a spell then an enemy target and cast twice, exactly as specified. Prerendered music confirmed playing (not the synth fallback): network log shows real audio/music/*.mp3 GETs (title, chapter-select, scene-bevelle-underground, boss-ffx2-aeon, pause), all 200, and window.__pyrefly.audioDebug() reported the active track with cached:true, source:'prerendered'. Whole-run totals: 491 network requests logged, all 200 (0 4xx/5xx); 0 console errors (only an [info] chapter-select dev note and a benign THREE.WebGLShadowMap PCFSoftShadowMap deprecation warning)."
+    },
+    {
+      "id": "CHK-024",
+      "result": "FAIL",
+      "mandatory": true,
+      "evidence": "Lightweight reload smoke only (full upgrade matrix not tested, see coverage.notTested). Three real-input trials, two chapters: (1) Chapter VI battle, pause -> OPTIONS, Master Volume real keypress 80->60; audioDebug().volumes.master read 0.5 in-session (UI showed 50 after a further press) but localStorage['pyrefly-reprise:save:v1'].settings.masterVolume stayed 0.8 both immediately and after an 8s wait plus Escape/Resume -- the setting was applied live but never written to the save. (2) A fresh tab, Chapter I (FFX/CTB) battle, pause -> OPTIONS, Master Volume 80->60: this time the immediate localStorage read did show 0.6 (settings.masterVolume matched audioDebug in-session). (3) Immediately after (2), without reloading, a full navigate() to reset state and re-enter Chapter VI: the very same localStorage key now read back 0.8 again -- the 0.6 write from trial (2) did not survive even a same-tab full navigation, let alone a real player's reload. In no trial did a changed Master Volume value survive a reload; it always reverted to its last-saved 0.8. This reproduces the historical CHK-024 failure class recorded in critic round 03 ('saved audio settings were never applied at boot') under a different mechanism (the setting change is not durably written at all, versus not being applied at boot). Chapter progress itself was unaffected: the pre-existing seymour-flux chapter record in the save was untouched across these tests."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact verify-live, full mode, changed-from 5ddfde3, run twice with manual retries on the two transient 503s",
+      "CHK-016 real-input smoke: chapter select locks (VII/VIII Coming), Chapter VI Leblanc party prep -> cutscene -> battle -> Steal -> enemy-intent panel -> pause (tabs, no advisor/damage overlay, H hide/show, CHAPTER tab plate, OPTIONS fit at 390x844) -> Syndicate battle-1 defeat (stay standing, dim, no dissolve) -> Chapter III Doublecast (spell then enemy target, cast twice)",
+      "prerendered-music-vs-fallback via network log + audioDebug()",
+      "CHK-024 lightweight reload smoke: master volume across two chapters and three trials",
+      "console error count for the run",
+      "network 4xx/5xx count for the run"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (every setting, a cleared chapter, unlock state, a previous-build save fixture)",
+      "1600x900 real-device layout capture: setting a custom 1600x900 (or 390x844) viewport on this shared Browser-pane tab reproducibly renders only a small top-left fraction of the page in screenshots, while window.innerWidth/innerHeight and the game's own canvas rect correctly report the full emulated size throughout (confirmed via getBoundingClientRect and DOM scroll-container measurements instead); this is the same pane-capture limitation recorded in critic/reviews/1b33971-live.md, not a live-site defect",
+      "full completion of Chapter VI (only Battle 1 of 3 was played to its own defeat; the encounter's final Syndicate-wide defeat screen at the end of Battle 3 was not reached)",
+      "the J hold key / MORE overflow chip for a clipped enemy-move description (the enemy moves seen this run all fit without truncation, so the overflow affordance never triggered)",
+      "root-cause of the CHK-024 failure (whether it is new to 5348c2e3 or an existing gap the prior live report's single successful trial did not catch) -- would need the previous live artifact re-served side by side, out of scope for this pass"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 55,
+  "notes": "Deployment is FAIL because the mandatory CHK-024 reload smoke did not run clean: a real, reproducible defect (settings changes made in the pause OPTIONS panel are not durably saved, so they silently revert on reload) was found on the live artifact, independent of this release's own changed area (the Evrae quiet-turn buff-targeting fix, FFX only, was not part of the state list this task specified and was not separately exercised here). introducedByCandidate and regressionVsLive for this finding are UNKNOWN: a prior live check on build 1b33971 (critic/reviews/1b33971-live.json) recorded a successful single-trial volume-persist-through-reload test, which is suggestive but not conclusive that this is a new regression somewhere in 5ddfde3 or 5348c2e3 -- confirming that would need the previous artifact re-served side by side, which this pass did not have the resource budget for. This is a MAJOR-severity finding (delivery/prep per CHK-024's own categorization: an annoyance every session, not a crash, lock or lost chapter progress -- the chapter-attempt save record itself was unaffected in every trial), not a critical, and does not by itself force a HOLD on the ship verdict, but it should be written up as its own ticket and investigated before the next deploy. No code was changed; nothing was committed, pushed or deployed by this review. This live pass settles only the `live` obligation in critic/pending/5348c2e3.json; the `focused` and `deep` obligations (carried from fd0ae96/8f48237/1b33971/5ddfde3) are untouched."
+}
