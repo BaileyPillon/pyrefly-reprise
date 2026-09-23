@@ -83,8 +83,18 @@ No ACE-Step, nothing on ComfyUI.
 `chapter-meta-evrae`, `chapters/evrae-script` and the rest of `tests/unit/audio*.test.ts`.
 Audition page in a real browser (`tools/zz-evrae-audition.tmp.mjs`): all seven new files
 decode, the score button fills its box on a real click, no horizontal scroll at 1000 / 375 px
-(`docs/screenshots/audio/evrae-audition-{desktop,phone}.png`). In-game cue order:
-`tools/zz-evrae-music.tmp.mjs` (see the result in the commit / final report).
+(`docs/screenshots/audio/evrae-audition-{desktop,phone}.png`). In-game cue order, real flow
+through `window.__pyrefly.gotoChapter('evrae-airship')` on a private production build (the dev
+server could not boot under 100 % CPU; `tools/zz-evrae-music.tmp.mjs`, GPU: RTX 5070 Ti, D3D11):
+8/8 — the manifest lists 23 cues; `scene-fahrenheit` plays under the pre-battle cutscene and
+`boss-evrae` in the battle, both from the pre-rendered MP3s (HTTP 200); the stopgap pair never
+plays; `victory-ffx` on the results; no page errors.
+
+**Pre-existing, not from this change:** at every battle start the debug flow passes through
+chapter select and `title` (Chapter 1 also `chapter-select`) plays for 2-5 s before the boss
+cue loads — measured identically on Chapter 1 (`seymour-flux`). The cutscene's own
+`music('boss-*')` step fires, but its fetch/decode lands after the screen change. Worth a look
+by the flow / audio owners (src/app/**, src/audio/AudioManager.ts).
 
 ## Open for Bailey
 
