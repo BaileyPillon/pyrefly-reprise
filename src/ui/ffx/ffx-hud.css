@@ -817,9 +817,9 @@
    changes no other chapter's screen [AGENTS.md rule 14/hard rule 9].
 
    14 px type floor: this HUD's own reference scale is 2.25x
-   (`src/ui/inkgold/screens.css`'s trailing-comment convention, e.g.
-   `font-size: 6.22px; /* 14 */`), so 14 real px is 6.22 grid px. Both sizes
-   below clear it. */
+   (`src/ui/inkgold/screens.css`'s trailing-comment convention, e.g. writing
+   `font-size: 6.22px;` with a trailing note giving the real-px value, 14),
+   so 14 real px is 6.22 grid px. Both sizes below clear it. */
 .ffx-airship-order .ig-cmd { width: 172px; }
 .ffx-airship-order .ffx-cmd--trigger__label { white-space: nowrap; flex: none; }
 .ffx-airship-order__tag, .ffx-airship-order__already {
