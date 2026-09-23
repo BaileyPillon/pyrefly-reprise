@@ -10,6 +10,7 @@ import type { SceneSlots } from './index.ts';
 import { AirshipRangeDirector, attachAirshipRange } from './evrae-airship-director.ts';
 import { DECK, EVRAE_WORLD_HEIGHT, RANGE_STAGING, type RigNumbers } from './evrae-airship-range.ts';
 import { buildAirshipDeck } from './evrae-airship-sky.ts';
+import { applyDaylightFill, EVRAE_DAYLIGHT, showPlateAsPainted } from './evrae-airship-daylight.ts';
 
 // ---------------------------------------------------------------------------
 // The Fahrenheit's foredeck, on the approach to Bevelle (FFX)
@@ -147,26 +148,27 @@ export const EVRAE_AIRSHIP_DECK_BACKDROP = BACKDROP;
 
 /**
  * High altitude, full daylight: "cold and reptilian against a warm sky"
- * (§12.2). The gain leans warm for the sky; the shadow tint is steel blue so
- * the deck and Evrae's teal stay cold; bloom is modest (the sun is off-frame,
- * §12.3) and the tilt band is wide because this is the one scene with depth
- * all the way to the horizon.
+ * (§12.2), graded to B, Bailey's approved plate. The plate itself is shown as
+ * painted (`evrae-airship-daylight.ts`), so the grade stays close to neutral:
+ * no warm gain (it pushed B's cloud tops to salmon), a light steel shadow tint
+ * so the deck and Evrae's teal stay cold, a soft vignette, and a bloom
+ * threshold above B's brightest cloud (0.93 of white) so the sky does not glow.
  */
 export const EVRAE_AIRSHIP_DECK_PALETTE: ScenePalette = {
   name: 'evrae-airship-deck',
-  lift: [0.01, 0.014, 0.03],
-  gamma: [1.0, 0.99, 0.98],
-  gain: [1.05, 1.01, 0.97],
-  saturation: 1.04,
-  vignette: 0.36,
-  vignetteRadius: 0.7,
+  lift: [0.004, 0.006, 0.012],
+  gamma: [1.0, 1.0, 1.0],
+  gain: [1.0, 1.0, 1.01],
+  saturation: 1.0,
+  vignette: 0.26,
+  vignetteRadius: 0.72,
   shadowTint: [0.34, 0.46, 0.66],
-  shadowTintAmount: 0.16,
+  shadowTintAmount: 0.08,
   grain: 0.02,
-  exposure: 1.03,
-  bloomThreshold: 0.84,
-  bloomStrength: 0.5,
-  bloomRadius: 0.55,
+  exposure: 1.0,
+  bloomThreshold: 0.95,
+  bloomStrength: 0.32,
+  bloomRadius: 0.5,
   tiltFocus: 0.5,
   tiltBandWidth: 0.26,
   tiltMaxBlur: 2.6,
@@ -205,7 +207,7 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
     ground: false,
     fog: { near: 40, far: 150, colorMix: 0.12 },
     fogPlanes: false,
-    background: 0x16264a,
+    background: EVRAE_DAYLIGHT.background,
   } satisfies BackdropOptions;
 
   // The roll: a pivot at the painting's centre, so the plane turns in place.
@@ -220,6 +222,8 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
 
   let backdrop = await Backdrop.create(backdropOptions);
   backdrop.applyTo(skyInner);
+  // B's own pixels, not a dusk grade of them (`evrae-airship-daylight.ts`).
+  showPlateAsPainted(skyInner);
 
   const deck = buildAirshipDeck({ low });
   group.add(deck.group);
@@ -238,6 +242,7 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
     luma: { key: 0.85, fill: 0.62, rim: 0.9, ambient: 0.55 },
     shadows: low ? false : { mapSize: 1024, area: 14, radius: 3.0, bias: -0.0012 },
   });
+  applyDaylightFill(lights);
   group.add(lights.group);
 
   // Wind-borne grit crossing the deck: "Wind: constant" (§12.3). Driven at the
@@ -281,6 +286,7 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
         backdrop.dispose();
         backdrop = next;
         if (wasIn) backdrop.applyTo(wasIn);
+        showPlateAsPainted(skyInner);
       })();
     });
   }

@@ -161,7 +161,11 @@ export interface RangeStaging {
   haze: number;
   /** Cloud and wind speed multiplier: the ship's speed. */
   wind: number;
-  /** Key light colour and strength: warm and shadowed NEAR, cool and open FAR. */
+  /**
+   * Key light colour and strength: B's sun (warm white) and the deck in Evrae's
+   * shadow NEAR, cool and open FAR. Re-keyed 2026-09-23 from a dusk orange
+   * (0xffcf9e at 0.85) to B's daylight (`evrae-airship-daylight.ts`).
+   */
   key: { color: number; intensity: number };
   /** Ambient strength: the deck is "shadowed by its bulk" at NEAR (§12.3). */
   ambient: number;
@@ -182,8 +186,8 @@ export const RANGE_STAGING: Readonly<Record<AirshipRange, RangeStaging>> = {
     },
     haze: 0.0,
     wind: 1.0,
-    key: { color: 0xffcf9e, intensity: 0.85 },
-    ambient: 0.5,
+    key: { color: 0xfff0e2, intensity: 1.7 },
+    ambient: 1.1,
   },
   far: {
     evrae: [6.4, 3.3, -30],
@@ -194,8 +198,8 @@ export const RANGE_STAGING: Readonly<Record<AirshipRange, RangeStaging>> = {
     },
     haze: 0.32,
     wind: 2.1,
-    key: { color: 0xe4eeff, intensity: 1.2 },
-    ambient: 0.72,
+    key: { color: 0xf2f6ff, intensity: 2.0 },
+    ambient: 1.15,
   },
 };
 

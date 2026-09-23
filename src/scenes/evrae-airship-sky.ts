@@ -234,7 +234,7 @@ export function buildAirshipDeck(opts: { low?: boolean } = {}): AirshipDeck {
   disposables.push(lip.geometry, lipMat);
 
   // ------------------------------------------------------------------ rail
-  const railMat = new MeshLambertMaterial({ color: 0x33373f, emissive: new Color(0x0b0d12) });
+  const railMat = new MeshLambertMaterial({ color: 0x747a86, emissive: new Color(0x141820) });
   const postGeo = new BoxGeometry(0.09, DECK.railHeight, 0.09);
   const barGeo = new BoxGeometry(DECK.halfWidth * 2, 0.07, 0.07);
   disposables.push(railMat, postGeo, barGeo);
