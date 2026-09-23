@@ -298,16 +298,49 @@
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
-/* PR-0018 (round 09, both games — this file is the FFX half): the trigger
-   label's tracked gold (`--ig-gold-on-paper`, #B8862A) measured 2.87:1 on the
-   cream row face and 1.74:1 on the gold `--ig-cmd--selected` face, both under
-   the 4.5:1 command labels need. `--ig-gold-on-paper` is the shared design
-   token other surfaces already use at large-text sizes (`--ig-gold-on-paper`
-   is not itself changed, in case something else on paper depends on its
-   exact value); a command row gets its own darker mark instead, computed to
-   clear 4.5:1 against *both* faces a trigger row can wear (8.57:1 on cream,
-   5.21:1 on the gold selected face — `docs/screenshots/fix10b/PR-0018-*`). */
-.ffx-cmd--trigger > .ffx-cmd__label { color: var(--ffx-trigger-ink, #5c3f0a); }
+/* PR-0018 (round 09, both games — this file is the FFX half; repaired round
+   10). The trigger label's tracked gold (`--ig-gold-on-paper`, #B8862A)
+   measured 2.87:1 on the cream row face and 1.74:1 on the gold
+   `--ig-cmd--selected` face, both under the 4.5:1 command labels need.
+   `--ig-gold-on-paper` is the shared design token other surfaces already use
+   at large-text sizes (not itself changed, in case something else on paper
+   depends on its exact value); a command row gets its own darker mark
+   instead.
+   Round 09's first mark (`#5c3f0a`) cleared 4.5:1 on the *declared* colour
+   pair (8.57:1 cream, 5.21:1 gold) but a round-10 adversarial pass measured
+   the live, rendered pixels — under `.ig-surface__vignette`'s corner
+   darkening, which this row sits inside on every FFX chapter — at 3.76:1
+   selected, still short. `#5c3f0a`'s own headroom over the 4.5 floor (0.71
+   on gold) is smaller than the vignette can eat in that corner, so round 10
+   darkens the mark further (`#3d2806`) for a bigger margin against the same
+   worst-case pixels: computed 12.36:1 on cream, 7.51:1 on gold (`tests/unit/
+   ffx-cmd-trigger-contrast.test.ts` reads this exact value from this file,
+   not a copy, so a revert here fails that test). The vignette's own darkening
+   of *every* selected row's face (not only the trigger's) — the verifier's
+   other finding, that `.ig-surface__vignette` can sit above the whole command
+   stack and dim rows regardless of their label colour — is a stacking-order
+   question for the shared `src/ui/inkgold/slabs.css` component the whole HUD
+   uses for atmosphere, out of this track's owned files; flagged in
+   `docs/handoff/fix10b-repair-command-menus.md`, left for Bailey. */
+.ffx-cmd--trigger > .ffx-cmd__label { color: var(--ffx-trigger-ink, #3d2806); }
+
+/* PR-0018, disabled rows (round 10): `.ig-cmd--disabled` (`slabs.css`, shared
+   — not overridden here) fades the *whole row* to 42% opacity, which blends
+   both the row's face and its label toward whatever is behind the HUD at
+   once; measured live that lands TALK's disabled state at 2.24:1 (Chapter 1)
+   and Flee's at 1.98-2.25:1 (both chapters), all short of 4.5:1, because the
+   blend target (the painted scene) is dark. Rather than touch the shared
+   opacity rule other Ink & Gold surfaces also use, FFX's own disabled rows
+   get the fix round 09 suggested — "an inverted slab": a flat, fully opaque
+   face so the row's contrast never depends on what is painted behind it.
+   `rgba` inputs are intentionally fully opaque (alpha 1) for the same reason. */
+.ffxhud .ig-cmd--disabled {
+  opacity: 1;
+  background: #2a2a30;
+  color: #d8d8de;
+}
+.ffxhud .ig-cmd--disabled .ffx-cmd__label,
+.ffxhud .ig-cmd--disabled.ffx-cmd--trigger > .ffx-cmd__label { color: #d8d8de; }
 
 /* --------------------------------------------- command rows: label + badge */
 
@@ -406,6 +439,25 @@
   padding: 3px 7px;
   overflow: hidden;
   pointer-events: auto;
+  /* PR-0019 repair (round 10, both games): the "ALL ALLIES"/"ALL ENEMIES"
+     chip (`TargetCursor.ts`'s `.ffx-target__all`, mounted in `.ffxhud__overlay`,
+     which paints after `.ffxhud__stage` in DOM order) can land centred over
+     this slab when a whole-party command is aimed, covering the tail of the
+     sentence ("Inflicts Cheer. Hits the whole ~~party.~~"). Neither element's
+     own position is wrong on its own terms (the chip centres on the actual
+     target boxes; the slab is fixed per the comment above) — this is two
+     independently-anchored elements sharing the same screen band, which is a
+     real layout collision, not readable text vs. an inert decoration. A
+     positive `z-index` here (an actual stacking context, since `.ffx-cmd-info`
+     is `position: absolute`) lifts the whole sentence above the chip within
+     their nearest shared context (neither `.ffxhud__stage` nor
+     `.ffxhud__overlay` establishes its own, so this is enough) rather than
+     moving either element's tuned position. The chip itself stays exactly
+     where it was, just no longer painted on top of the words it would
+     otherwise obscure — verified live at 1280x720 and 3840x2160,
+     Chapter 1, Special > Cheer, confirmed to raise the group frame:
+     `docs/screenshots/fix10b/PR-0019-*`. */
+  z-index: 2;
 }
 .ffx-cmd-info .ig-cutin__info-desc {
   font-style: normal;
