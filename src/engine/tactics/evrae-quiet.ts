@@ -54,9 +54,17 @@ const STACKING: ReadonlyArray<readonly [label: string, status: string]> = [
  */
 function stackingBuff(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
   for (const [label, status] of STACKING) {
-    if (living.every((c) => stacksOf(c, status) >= MAX_STACKS)) continue;
+    const short = living.filter((c) => stacksOf(c, status) < MAX_STACKS);
+    if (short.length === 0) continue;
     const r = row(commands, [label]);
-    if (r) return aim(r);
+    if (!r) continue;
+    // Name a member who is still short of the cap: `aim` alone takes the first
+    // valid target, which can already hold five stacks while a member just
+    // switched in holds none (tests/unit/chapters/evrae-advisor.test.ts).
+    // The buff is party-wide, so a short member outside the row's target list
+    // still gains the stack; only then does the row keep its default target.
+    const target = short.find((c) => r.validTargets.includes(c.id));
+    return target ? aim(r, target.id) : aim(r);
   }
   return null;
 }
