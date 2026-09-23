@@ -1,0 +1,38 @@
+{
+  "mainSha": "5ddfde3",
+  "bundle": "Jw5R1yWQ",
+  "deployedAt": "2026-09-23T11:55:36.724Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 600,
+  "artifactHash": "7093e5c3171d8cb8a1120bb75ca4be9b82710eb71f9a2722d344ca24d1436cd3",
+  "review": "deep",
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "superseded-unverified",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "note": "never verified: the build was replaced by 5348c2e3",
+      "at": "2026-09-23T21:29:50.977Z"
+    },
+    {
+      "kind": "focused",
+      "status": "superseded-unverified",
+      "requires": "acceptance of the changed area",
+      "note": "never verified: the build was replaced by 5348c2e3",
+      "at": "2026-09-23T21:29:50.977Z"
+    },
+    {
+      "kind": "deep",
+      "status": "carried",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971"
+      ],
+      "carriedTo": "5348c2e3",
+      "at": "2026-09-23T21:29:50.977Z"
+    }
+  ],
+  "supersededBy": "5348c2e3"
+}
