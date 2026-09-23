@@ -77,6 +77,16 @@ export interface MoveAdvisorAnchors {
   right: number;
   /** Distance from the stage's bottom edge. */
   bottom: number;
+  /**
+   * Which anchor the card may never cross when the band between the two is
+   * narrower than its minimum width. `'before'` keeps the right edge clear of
+   * `before` and lets the card slide back over `after` instead: FFX-2's
+   * `before` is the party HP rows and its `after` only the girls' shoulders
+   * (critic round 09 PR-0091). Unset keeps the left edge and lets the card run
+   * past `before`, as it always has; the FFX HUD replaces this box with its own
+   * safe zone (`ffx/hudSafeZones.ts`) whenever it can solve one.
+   */
+  wall?: 'before';
 }
 
 export interface MoveAdvisorOptions {
@@ -105,6 +115,12 @@ const CLEARANCE_GAP = 6;
 const MIN_CARD_WIDTH = 132;
 /** Widest the card is allowed to grow when the band is empty. */
 const MAX_CARD_WIDTH = 226;
+/** The same three, for a HUD that solves the band the card is placed in (`ffx2/advisorLane.ts`). */
+export {
+  CLEARANCE_GAP as ADVISOR_CLEARANCE_GAP,
+  MIN_CARD_WIDTH as ADVISOR_MIN_CARD_WIDTH,
+  MAX_CARD_WIDTH as ADVISOR_MAX_CARD_WIDTH,
+};
 
 export class MoveAdvisor {
   readonly el: HTMLElement;
@@ -425,13 +441,14 @@ export class MoveAdvisor {
     const { anchors } = this.opts;
     const afterEl = anchors.after?.() ?? null;
     const after = afterEl && afterEl.offsetWidth > 0 ? afterEl : null;
-    const left = after ? after.offsetLeft + after.offsetWidth + CLEARANCE_GAP : anchors.left;
+    let left = after ? after.offsetLeft + after.offsetWidth + CLEARANCE_GAP : anchors.left;
 
     const beforeEl = anchors.before?.() ?? null;
     const before = beforeEl && beforeEl.offsetWidth > 0 ? beforeEl : null;
     const right = before ? before.offsetLeft - CLEARANCE_GAP : anchors.right;
 
     const width = Math.max(MIN_CARD_WIDTH, Math.min(MAX_CARD_WIDTH, right - left));
+    if (anchors.wall === 'before' && left + width > right) left = Math.max(0, right - width);
     this.cardEl.style.left = `${left.toFixed(2)}px`;
     this.cardEl.style.width = `${width.toFixed(2)}px`;
     this.cardEl.style.bottom = `${anchors.bottom.toFixed(2)}px`;

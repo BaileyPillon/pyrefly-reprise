@@ -43,6 +43,7 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
 import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
+import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 
 /**
  * The FFX-2 battle HUD.
@@ -243,6 +244,9 @@ export class FFX2BattleHud implements HudPort {
       left: 160,
       right: 458,
       bottom: 26,
+      // The rows are the hard wall: a band too narrow for the card slides it
+      // back over the girls, never onto the HP rows (PR-0091).
+      wall: 'before',
     },
     advisor: () => {
       const options = ffx2EngineOptions();
@@ -278,6 +282,8 @@ export class FFX2BattleHud implements HudPort {
   private fenceTopEl: HTMLElement | null = null;
   private fenceRightEl: HTMLElement | null = null;
   private fenceColumnEl: HTMLElement | null = null;
+  /** The card's `max-height` from `advisorLane.ts` for the open decision; only tightens until the next one. */
+  private advisorCap: number | null = null;
   private readonly onResize = (): void => this.layout();
 
   // -------------------------------------------------------------- HudPort
@@ -585,7 +591,7 @@ export class FFX2BattleHud implements HudPort {
     const top = this.fenceTopEl;
     const right = this.fenceRightEl;
     if (!top || !right) return;
-    this.layoutColumnFence();
+    const wall = this.layoutColumnFence();
     const rect = this.el.getBoundingClientRect();
     const scale = this.stageScale || 1;
     const toStage = (p: { x: number; y: number }): { x: number; y: number } => ({
@@ -604,11 +610,10 @@ export class FFX2BattleHud implements HudPort {
     const chip = this.stage.querySelector<HTMLElement>('.mad__toggle');
     const cardH = card && card.offsetHeight > 0 ? card.offsetHeight : 58;
     const chipH = chip && chip.offsetHeight > 0 ? chip.offsetHeight : 0;
-    const cardTop = 360 - ADVISOR_BOTTOM - cardH - chipH;
     const cardLean = (cardH / 2) * SKEW_TANGENT;
 
     let fenceTop = 360 - GUIDE_FALLBACK_BOTTOM;
-    let fenceRight = ADVISOR_FALLBACK_LEFT;
+    const figures: LaneFigure[] = [];
     const state = this.lastState;
     for (const id of state?.activeIds ?? []) {
       const c = state?.combatants[id];
@@ -623,15 +628,38 @@ export class FFX2BattleHud implements HudPort {
       if (head.x + half > GUIDE_RAIL_LEFT && head.x - half < GUIDE_RAIL_RIGHT) {
         fenceTop = Math.min(fenceTop, head.y);
       }
-      // Standing in the card's band: start the card past her shoulder.
-      if (Math.max(head.y, feet.y) > cardTop) {
-        fenceRight = Math.max(fenceRight, head.x + half + cardLean);
-      }
+      figures.push({ left: head.x - half - cardLean, right: head.x + half + cardLean, foot: Math.max(head.y, feet.y) });
     }
     top.style.top = `${Math.max(0, fenceTop).toFixed(2)}px`;
+    // The card's lane: past the girls standing in its band while that still
+    // leaves a readable card, else under their feet with a height cap, and
+    // never across the party rows (`advisorLane.ts`, PR-0091).
+    const lane = solveAdvisorLane({
+      figures,
+      floor: ADVISOR_FALLBACK_LEFT,
+      wall: wall ?? 458,
+      base: 360 - ADVISOR_BOTTOM,
+      chip: chipH,
+      cardHeight: cardH,
+      cap: this.advisorCap,
+    });
     // `MoveAdvisor.layout` reads `offsetLeft + offsetWidth`, so the fence's own
     // 1px is part of the clearance it hands back.
-    right.style.left = `${Math.max(0, Math.min(639, fenceRight)).toFixed(2)}px`;
+    right.style.left = `${Math.max(0, Math.min(639, lane.after)).toFixed(2)}px`;
+    this.applyAdvisorCap(lane.maxHeight, card);
+  }
+
+  /** Write the lane's cap onto the card, only when it changed (the card re-fits on a new cap). */
+  private applyAdvisorCap(cap: number | null, card: HTMLElement | null): void {
+    this.advisorCap = cap;
+    if (!card) return;
+    const want = cap === null ? '' : `${cap.toFixed(1)}px`;
+    if (card.style.maxHeight !== want) card.style.maxHeight = want;
+  }
+
+  /** A new (or no) decision: the cap starts over with the card's full text. */
+  private resetAdvisorCap(): void {
+    this.applyAdvisorCap(null, this.stage?.querySelector<HTMLElement>('.mad__card') ?? null);
   }
 
   /**
@@ -646,10 +674,10 @@ export class FFX2BattleHud implements HudPort {
    * With no rows laid out yet the fence is left where it was, and the anchor
    * falls back to the container — which is what it used to be.
    */
-  private layoutColumnFence(): void {
+  private layoutColumnFence(): number | null {
     const fence = this.fenceColumnEl;
     const party = this.partyEl;
-    if (!fence || !party) return;
+    if (!fence || !party) return null;
     const host = this.el.getBoundingClientRect();
     const scale = this.stageScale || 1;
     let left: number | null = null;
@@ -659,7 +687,10 @@ export class FFX2BattleHud implements HudPort {
       const stageLeft = (r.left - host.left - this.stageX) / scale;
       left = left === null ? stageLeft : Math.min(left, stageLeft);
     }
-    if (left === null) return;
+    if (left === null) {
+      const parked = parseFloat(fence.style.left);
+      return Number.isFinite(parked) ? parked : null;
+    }
     // And back off by the *card's* own lean, for the same reason: `MoveAdvisor`
     // positions its layout box, the house `skewX` paints the box's corner
     // further out than that, and `CLEARANCE_GAP` alone is 0.2 grid px short of
@@ -667,7 +698,9 @@ export class FFX2BattleHud implements HudPort {
     // row the card was still touching.
     const card = this.stage.querySelector<HTMLElement>('.mad__card');
     const lean = ((card?.offsetHeight ?? 0) / 2) * SKEW_TANGENT;
-    fence.style.left = `${Math.max(0, Math.min(639, left - lean)).toFixed(2)}px`;
+    const wall = Math.max(0, Math.min(639, left - lean));
+    fence.style.left = `${wall.toFixed(2)}px`;
+    return wall;
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
@@ -749,6 +782,7 @@ export class FFX2BattleHud implements HudPort {
     this.actingId = null;
     this.guide.clearDecision();
     this.advisor.clearDecision();
+    this.resetAdvisorCap();
     this.applySelection(null);
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
   }
@@ -780,6 +814,7 @@ export class FFX2BattleHud implements HudPort {
     // NEXT explains the decision that is open right now; cleared below, after
     // the menu resolves.
     if (this.lastState) {
+      this.resetAdvisorCap();
       this.guide.showDecision(actorId, commands, this.lastState);
       this.advisor.showDecision(actorId, commands, this.lastState);
     }
@@ -816,6 +851,7 @@ export class FFX2BattleHud implements HudPort {
     this.actingId = null;
     this.guide.clearDecision();
     this.advisor.clearDecision();
+    this.resetAdvisorCap();
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     return command;
   }
