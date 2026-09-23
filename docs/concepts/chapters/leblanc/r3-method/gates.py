@@ -105,12 +105,15 @@ def margins(rgba):
 
 
 def gate_cast(a, pal, idle, out):
-    base = R.load_rgba(R.CAST)
+    r22 = R.load_rgba(R.CAST)
+    # MAD and alpha are measured against --base (default cast.r2.2; P7: p6/cast.p6.png, whose obi must stay exact)
+    base = R.load_rgba(R.SCR / a.base) if a.base else r22
+    regions = tuple(a.regions.split(","))
     cand = R.load_rgba(R.SCR / a.cast)
     p2 = R.SCR / a.p2; p3 = R.SCR / a.p3
-    res = {"file": a.cast}
+    res = {"file": a.cast, "base": a.base or "cast.r2.2.png", "regionsChecked": list(regions)}
     grown = np.zeros(base.shape[:2], bool); M_all = np.zeros_like(grown); P_all = np.zeros_like(grown); band_all = np.zeros_like(grown)
-    for region in ("obi", "choker"):
+    for region in regions:
         meta = R.read_json(p3 / f"{region}.meta.json")
         M = R.load_mask(p3 / f"{region}.M.png"); P = R.load_mask(p3 / f"{region}.P.png"); band = R.load_mask(p3 / f"{region}.band.png")
         grown |= dil(M, meta["grow"]); M_all |= M; P_all |= P; band_all |= band
@@ -122,6 +125,8 @@ def gate_cast(a, pal, idle, out):
     parts = {"obi": ("obi", ["idle.obi", "idle.knot"]), "tassel": ("tassel", ["idle.tassel"]), "choker": ("choker", ["idle.choker"])}
     res["regions"] = {}
     for name, (pm, srcs) in parts.items():
+        if name not in a.parts.split(","):
+            continue
         P = R.load_mask(p2 / f"mask.{pm}.png")
         S = np.zeros(idle.shape[:2], bool)
         for s in srcs:
@@ -133,12 +138,12 @@ def gate_cast(a, pal, idle, out):
         O = np.zeros(base.shape[:2], bool)
         for s in old:
             O |= R.load_mask(R.ATLAS / f"{s}.png")
-        de22, _, _ = median_de(base, O, idle, S)
+        de22, _, _ = median_de(r22, O, idle, S)
         g = grad(cand[..., :3])
         edge = dil(P, 2) & ~ero(P, 2) & (cand[..., 3] > 200)
         far = dil(P, 14) & ~dil(P, 10) & (cand[..., 3] > 200)
         ratio = float(g[edge].mean() / max(g[far].mean(), 1e-6))
-        g22 = grad(base[..., :3])
+        g22 = grad(r22[..., :3])
         # the idle's own ratio for the same part: its ink outline makes the edge ring busy by design
         gi = grad(idle[..., :3])
         ei = dil(S, 2) & ~ero(S, 2) & (idle[..., 3] > 200); fi = dil(S, 14) & ~dil(S, 10) & (idle[..., 3] > 200)
@@ -150,11 +155,11 @@ def gate_cast(a, pal, idle, out):
                                 "seamRatioIdleOwnPart": round(idle_ratio, 3), "medianDE2000Core2px": round(de_core, 2)}
     sp = Sampled(idle)
     res["invented"] = {"measure": "dE76 > 10 from all of 2,000 sampled idle colours (the proposal's; 6,000 sampled px for whole files)",
-                       "idleVsItself": round(sp.share_sampled(idle), 4), "wholeR22": round(sp.share_sampled(base), 4),
+                       "idleVsItself": round(sp.share_sampled(idle), 4), "wholeR22": round(sp.share_sampled(r22), 4),
                        "wholeCand": round(sp.share_sampled(cand), 4)}
     reg = (M_all | band_all) & (cand[..., 3] > 200)
-    for name, m in (("region", reg),) + tuple((n, (R.load_mask(p3 / f"{n}.M.png") | R.load_mask(p3 / f"{n}.band.png")) & (cand[..., 3] > 200)) for n in ("obi", "choker")):
-        iv, _ = sp.invented(cand[..., :3][m]); iv22, _ = sp.invented(base[..., :3][m])
+    for name, m in (("region", reg),) + tuple((n, (R.load_mask(p3 / f"{n}.M.png") | R.load_mask(p3 / f"{n}.band.png")) & (cand[..., 3] > 200)) for n in regions):
+        iv, _ = sp.invented(cand[..., :3][m]); iv22, _ = sp.invented(r22[..., :3][m])
         ivs, _ = pal.invented(cand[..., :3][m])
         res["invented"][name] = {"px": int(m.sum()), "cand": round(float(iv.mean()), 4), "r22SamePx": round(float(iv22.mean()), 4),
                                  "candDE2000vsEveryIdleColour": round(float(ivs.mean()), 4)}
@@ -167,10 +172,10 @@ def gate_cast(a, pal, idle, out):
     res["invented"]["idleOwnPartsFloor"] = round(float(sp.invented(idle[..., :3][own])[0].mean()), 4)
     # and against every idle colour (dE76), which has no sampling floor
     allp = cKDTree(R.rgb2lab(np.unique(idle[..., :3][idle[..., 3] > 200].astype(np.uint8), axis=0).astype(np.float64)))
-    for name in ("region", "obi", "choker"):
+    for name in ("region",) + regions:
         m = reg if name == "region" else (R.load_mask(p3 / f"{name}.M.png") | R.load_mask(p3 / f"{name}.band.png")) & (cand[..., 3] > 200)
         d, _ = allp.query(R.rgb2lab(cand[..., :3][m].astype(np.float64)), k=1)
-        d22, _ = allp.query(R.rgb2lab(base[..., :3][m].astype(np.float64)), k=1)
+        d22, _ = allp.query(R.rgb2lab(r22[..., :3][m].astype(np.float64)), k=1)
         res["invented"][name]["candDE76vsEveryIdleColour"] = round(float((d > 10).mean()), 4)
         res["invented"][name]["r22DE76vsEveryIdleColour"] = round(float((d22 > 10).mean()), 4)
     res["inventedShareRegion"] = res["invented"]["region"]["cand"]
@@ -179,7 +184,7 @@ def gate_cast(a, pal, idle, out):
     prov = np.zeros_like(cand); prov[..., 3] = (cand[..., 3] > 8) * 255
     prov[..., :3] = 150
     interior = np.zeros_like(grown)
-    for region in ("obi", "choker"):
+    for region in regions:
         interior |= ero(R.load_mask(p3 / f"{region}.P.png"), a.repaste)
     changed = (np.abs(cand[..., :3] - base[..., :3]).max(-1) > 0) & grown
     prov[band_all & changed] = [230, 40, 200, 255]
@@ -250,25 +255,35 @@ def main():
     ap.add_argument("--bake", default="p4v2")
     ap.add_argument("--hurtMasks", default="p4r/holes3.band.png,p4r/winceA.band.png")
     ap.add_argument("--out", default="gates")
-    ap.add_argument("--repaste", type=int, default=4, help="the merge's interior re-paste erosion (P3: 4, P6: 1)")
+    ap.add_argument("--repaste", type=int, default=4, help="the merge's interior re-paste erosion (P3: 4, P6: 1, P7: 0)")
+    ap.add_argument("--base", default="", help="the file MAD and alpha are measured against (default cast.r2.2; P7: p6/cast.p6.png)")
+    ap.add_argument("--regions", default="obi,choker", help="the p3-style regions whose M/band bound the change (P7: choker)")
+    ap.add_argument("--parts", default="obi,tassel,choker", help="the parts whose colour and seam are measured (P7: choker)")
+    ap.add_argument("--skipHurt", type=int, default=0)
     a = ap.parse_args()
     out = R.SCR / a.out; out.mkdir(parents=True, exist_ok=True)
     idle = R.load_rgba(R.IDLE)
     pal = Palette(idle)
-    rep = {"cast": gate_cast(a, pal, idle, out), "hurt": gate_hurt(a, idle, out)}
+    rep = {"cast": gate_cast(a, pal, idle, out)}
+    if not a.skipHurt:
+        rep["hurt"] = gate_hurt(a, idle, out)
     c = rep["cast"]
     rep["verdicts"] = {
         "cast.madOutside0": c["madOutside"] == 0 and c["alphaChanged"] == 0,
-        "cast.obiChokerDE<=3": all(c["regions"][k]["medianDE2000"] <= 3 for k in ("obi", "choker")),
-        "cast.tasselDE<=3": c["regions"]["tassel"]["medianDE2000"] <= 3,
+        "cast.obiChokerDE<=3": all(c["regions"][k]["medianDE2000"] <= 3 for k in ("obi", "choker") if k in c["regions"]),
         "cast.seam<=1.5": all(v["seamRatio"] <= 1.5 for v in c["regions"].values()),
         "cast.invented<=1%": c["inventedShareRegion"] <= 0.01,
         "cast.margins16": min(c["margins"].values()) >= 16,
-        "hurt.idleShare>=90%": rep["hurt"]["idleShare"] >= 0.90,
-        "hurt.headChord100+-2": abs(rep["hurt"]["headChordArea"] - 1) <= 0.02,
-        "hurt.height>=95%": rep["hurt"]["heightRatio"] >= 0.95,
-        "hurt.margins16": min(rep["hurt"]["margins"].values()) >= 16,
     }
+    if "tassel" in c["regions"]:
+        rep["verdicts"]["cast.tasselDE<=3"] = c["regions"]["tassel"]["medianDE2000"] <= 3
+    if "hurt" in rep:
+        rep["verdicts"].update({
+            "hurt.idleShare>=90%": rep["hurt"]["idleShare"] >= 0.90,
+            "hurt.headChord100+-2": abs(rep["hurt"]["headChordArea"] - 1) <= 0.02,
+            "hurt.height>=95%": rep["hurt"]["heightRatio"] >= 0.95,
+            "hurt.margins16": min(rep["hurt"]["margins"].values()) >= 16,
+        })
     R.write_json(rep, out / "gates.json")
     import json
     print(json.dumps(rep, indent=1))

@@ -1,0 +1,4 @@
+{
+ "_about": "Art method r3, the last choker repair (P7; FFX-2 only, chapter 6 Leblanc). Hand-placed on a 14x grid crop of cast.r2.2 (the installed cast.png), cast pixel coordinates. underside = r2.2's old choker underside that its SAM mask (atlas/cast.choker) left out: the red lower edge line, the pale lavender V patch and its mauve outline under the band's middle and right. It stops right of r2.2's white halter's inner edge line and left of r2.2's black strap, which stay r2.2's pixels.",
+ "underside": [[359, 421], [378, 428], [392, 431], [401, 428], [404, 436], [403, 444], [400, 448], [393, 447], [385, 443], [377, 437], [369, 431], [362, 427]]
+}
