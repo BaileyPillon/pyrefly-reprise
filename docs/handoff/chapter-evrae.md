@@ -257,3 +257,7 @@ stays LOCKED as Coming (the one-line unlock above is unchanged).
   art method decision.
 - The party/victory rigs framing NEAR Evrae under the CTB column; FAR Evrae's size.
 - The advisor card still sits over part of the FAR streak (item 2 of "Found, not fixed").
+- Evrae's death exit is now **DECIDED**, not open: Bailey, 2026-09-23, verbatim: "yes Evrae
+  falls out of the sky" (`docs/target/decisions.json` D-031) — the faithful fall through the
+  cloud layer (`research/ffx-evrae-airship.md` line 889), not today's generic pyreflies
+  dissolve. Nothing built yet: owed to Chapter VIII's part 2.
