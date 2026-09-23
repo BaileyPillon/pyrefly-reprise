@@ -59,6 +59,7 @@ function node(id: string, slot: number): EnemyDef {
       ap: 10,
       apOverkill: 10,
       gil: 3000,
+      stolenGil: 10000, // §3.2 line 261 "(Pilfer 10,000)"
       overkillThreshold: 0,
       exp: 8000,
       // §3.2 line 262 also lists a rare drop slot ("rare: Hero Drink ×1"), but gives no rate for that slot —
@@ -115,6 +116,7 @@ export const vegnagunLegGroup: EnemyGroupDef = {
         ap: 5,
         apOverkill: 5,
         gil: 3000,
+        stolenGil: 3000, // §3.2 line 232 "(Pilfer 3,000)"
         overkillThreshold: 0,
         exp: 6000,
         // §3.2 line 233 — Mythril Bangle ×1. The id is the accessory registry's own key

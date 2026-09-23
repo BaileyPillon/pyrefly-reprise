@@ -895,8 +895,15 @@ export interface EnemyRewards {
   /** Damage in a single killing blow that counts as an overkill. */
   overkillThreshold: number;
   drops: ItemDrop[];
-  /** Steal table: `baseChance` is a percentage 0–100 that halves per successful steal. */
-  steal?: { baseChance: number; common: ItemDrop; rare: ItemDrop };
+  /**
+   * Steal table: `baseChance` is a percentage 0–100 that halves per successful steal (FFX).
+   * `stealRate` (FFX-2 only, optional) is the published steal byte out of 255
+   * (192 = 75.3 %); the FFX-2 engine rolls against it, or against `baseChance`
+   * on the /255 scale when absent [ffx2-bahamut §1.6].
+   */
+  steal?: { baseChance: number; stealRate?: number; common: ItemDrop; rare: ItemDrop };
+  /** FFX-2 only: the gil Pilfer Gil takes, once per enemy ("Stolen Gil"). Range 0–99 999. */
+  stolenGil?: number;
   /** Bribe: gil >= `maxHP * 25` is a guaranteed success [ffx-combat-core §0 V12]. */
   bribe?: { item: ItemDrop; immune: boolean };
   /** EXP (FFX-2 only; FFX has no EXP). Range 0–99 999. */

@@ -48,6 +48,7 @@ export const vegnagunTailGroup: EnemyGroupDef = {
         ap: 5,
         apOverkill: 5,
         gil: 3000,
+        stolenGil: 3000, // §3.1 line 203 "(Pilfer Gil 3,000)"
         overkillThreshold: 0,
         exp: 5000,
         drops: [{ itemId: 'x2-megalixir', count: 1 }],

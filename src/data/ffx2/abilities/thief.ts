@@ -73,6 +73,8 @@ export const thiefAbilities: AbilityDef[] = [
     removesStatuses: [],
     flags: [],
     messageTemplate: '{user} uses Pilfer Gil',
+    // Takes the target's `rewards.stolenGil` once; no damage [§3.2, §8.3]. Read by `battle/ffx2/steal.ts`.
+    extra: { stealsGil: true },
   },
   {
     id: 'x2-thief-pilfer-hp',

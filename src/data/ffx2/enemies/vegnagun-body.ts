@@ -58,6 +58,7 @@ function bulwark(id: string, name: string, slot: number): EnemyDef {
       ap: 10,
       apOverkill: 10,
       gil: 150,
+      stolenGil: 300, // §3.3 line 338 "(Pilfer 300)"; §13.2 S2 [verified: 2 sources]
       overkillThreshold: 0,
       exp: 200,
       drops: [{ itemId: 'x2-mega-potion', count: 1, chance: 50 }, { itemId: 'x2-x-potion', count: 1, chance: 50 }],
@@ -119,6 +120,7 @@ export const vegnagunBodyGroup: EnemyGroupDef = {
         ap: 10,
         apOverkill: 10,
         gil: 3000,
+        stolenGil: 4000, // §3.3 line 308 "(Pilfer 4,000)"
         overkillThreshold: 0,
         exp: 7000,
         drops: [{ itemId: 'x2-megalixir', count: 1 }],

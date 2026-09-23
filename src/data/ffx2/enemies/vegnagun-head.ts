@@ -123,6 +123,7 @@ export const vegnagunHeadGroup: EnemyGroupDef = {
         ap: 10,
         apOverkill: 10,
         gil: 0,
+        stolenGil: 8000, // §3.4 line 385 "(Pilfer 8,000)"
         overkillThreshold: 0,
         exp: 0,
         drops: [],

@@ -6,6 +6,25 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-23 — `EnemyRewards.stolenGil` and `steal.stealRate`: FFX-2 Steal and Pilfer Gil work
+
+**FFX-2 only** [AGENTS.md hard rule 14]: the Thief's Steal and Pilfer Gil are FFX-2
+commands resolved by `src/battle/ffx2/steal.ts`; the FFX engine reads neither field.
+**Additive, two optional fields** in `src/battle/common/types.ts` `EnemyRewards`:
+
+- `steal.stealRate?: number` — the published steal byte out of 255 (Leblanc 192,
+  Bahamut 128). The FFX-2 engine rolls `rng.int(0, 254) < stealRate`, or
+  `baseChance` on the /255 scale when absent [`ffx2-bahamut.md` §1.6].
+- `stolenGil?: number` — what Pilfer Gil takes, once per enemy (SinirothX "Stolen Gil",
+  `ffx2-combat-core.md` §8.3). Set on the Act III Syndicate (1,500 / 640 / 600), Bahamut
+  (2,200) and every Vegnagun part and Shuyin (`ffx2-vegnagun-shuyin.md` §3).
+
+Why: chapter 6 (live since release 09) offers Rikku both commands and neither did
+anything (Steal: `action-start`, `action-end`, nothing between; Pilfer Gil: a
+0-damage hit). Stolen items go to the `inventory:<id>` flags; pilfered gil goes to
+`flags.stolenGil` and `BattleResult.gil` (not on a defeat). Plan:
+`docs/plans/questions-for-bailey-2026-09-23.md` Q5.
+
 ## 2026-09-23 — Two music keys: `scene-fahrenheit`, `boss-evrae` (Chapter VIII)
 
 **FFX only** [AGENTS.md hard rule 14]: Evrae on the Fahrenheit is an FFX encounter

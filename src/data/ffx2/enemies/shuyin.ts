@@ -64,6 +64,7 @@ export const shuyinGroup: EnemyGroupDef = {
         ap: 20,
         apOverkill: 20,
         gil: 0,
+        stolenGil: 10000, // ffx2-vegnagun-shuyin §3.5 line 435 "(Pilfer 10,000)"
         overkillThreshold: 0,
         exp: 0,
         drops: [],

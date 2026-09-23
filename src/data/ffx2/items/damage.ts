@@ -20,6 +20,19 @@ export const damageItems: ItemDef[] = [
     description: 'Unblockable special damage plus Poison.',
   },
   {
+    // The Dr. Goon's common steal in Chapter 6 [ffx2-leblanc-syndicate §4.6]. Price and damage:
+    // ffx2-combat-core §5.5 ("12 / —", 18-22) and §2.9.3 (power 0.4 -> 20).
+    id: 'x2-budget-grenade',
+    name: 'Budget Grenade',
+    game: 'ffx2',
+    effect: 'x2-item-budget-grenade',
+    targeting: 'all-enemies',
+    usableInBattle: true,
+    usableInMenu: false,
+    price: 12,
+    description: 'Light physical damage to all enemies.',
+  },
+  {
     id: 'x2-grenade',
     name: 'Grenade',
     game: 'ffx2',

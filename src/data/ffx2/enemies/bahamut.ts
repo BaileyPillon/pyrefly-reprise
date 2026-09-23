@@ -84,6 +84,7 @@ export const bahamutGroup: EnemyGroupDef = {
         ap: 15,
         apOverkill: 15, // X-2 has no overkill; kept equal for schema uniformity.
         gil: 1000,
+        stolenGil: 2200, // §1.6 "Steal gil 2,200" [single source]
         overkillThreshold: 0,
         exp: 1300,
         // §1.6 — drop is guaranteed, both slots hold the same item (deterministic).
@@ -93,6 +94,7 @@ export const bahamutGroup: EnemyGroupDef = {
         // consumable ItemDef since it is an accessory; tracked here as a loot id only.
         steal: {
           baseChance: 50,
+          stealRate: 128, // §1.6 the published byte
           common: { itemId: 'x2-mute-shock', count: 1 },
           rare: { itemId: 'x2-mute-shock', count: 1 },
         },

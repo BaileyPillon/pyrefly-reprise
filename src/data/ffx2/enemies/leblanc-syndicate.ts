@@ -172,9 +172,11 @@ export const leblancAct3: EnemyDef = {
     // common/rare split is cosmetic. Bribe is flagged **Immune**.
     steal: {
       baseChance: 75,
+      stealRate: 192,
       common: { itemId: 'x2-elixir', count: 1 },
       rare: { itemId: 'x2-elixir', count: 1 },
     },
+    stolenGil: 1500, // §3.1 "Gil (stealable) 1,500" [single source]; §6.3
   },
   abilityIds: [
     'x2-leblanc-fan-slap',
@@ -231,9 +233,11 @@ export const logosAct3: EnemyDef = {
     drops: [{ itemId: 'charm-bangle', count: 1 }],
     steal: {
       baseChance: 75,
+      stealRate: 192, // §3.2 "Steal rate 192 / 255" [single source]
       common: { itemId: 'x2-mega-potion', count: 1 },
       rare: { itemId: 'x2-elixir', count: 1 },
     },
+    stolenGil: 640, // §3.2 "Gil (stealable) 640" [single source]; §6.3
   },
   abilityIds: ['x2-logos-double-shot', 'x2-logos-russian-roulette', 'x2-logos-hail-of-bullets'],
   flags: { isBoss: true },
@@ -273,9 +277,11 @@ export const ormiAct3: EnemyDef = {
     drops: [{ itemId: 'twist-headband', count: 1 }],
     steal: {
       baseChance: 75,
+      stealRate: 192, // §6.3: all three steals "at a 75.3 % steal rate" (192/255); §3.3's table prints no rate row
       common: { itemId: 'x2-x-potion', count: 1 },
       rare: { itemId: 'x2-elixir', count: 1 },
     },
+    stolenGil: 600, // §3.3 "Gil (stealable) 600" [single source]; §6.3
   },
   abilityIds: [
     'x2-ormi-shield-bash',

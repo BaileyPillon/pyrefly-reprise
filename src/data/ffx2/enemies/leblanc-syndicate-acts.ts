@@ -41,6 +41,9 @@ function earlierRecord(
   base: EnemyDef,
   over: { id: string; name: string; level: number; hp: number; mp: number; def: number; mdef: number; eva?: number; exp: number; gil: number; slot: number },
 ): EnemyDef {
+  // Stolen gil is published for the Act III records only [§3]; the earlier
+  // records do not inherit it (their steal tables are the authored carry above).
+  const { stolenGil: _act3Only, ...rewards } = base.rewards;
   return {
     ...base,
     id: over.id,
@@ -58,7 +61,7 @@ function earlierRecord(
       eva: over.eva ?? base.stats.eva,
     }),
     forms: [{ name: over.name, spriteKey: base.spriteKey, hp: over.hp }],
-    rewards: { ...base.rewards, exp: over.exp, gil: over.gil },
+    rewards: { ...rewards, exp: over.exp, gil: over.gil },
   };
 }
 

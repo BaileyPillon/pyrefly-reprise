@@ -54,6 +54,10 @@ export interface Ffx2Unit extends FFX2Combatant {
   sdspPartIds?: CombatantId[];
   /** Grid node count she transformed from, 2–6. Drives main-part stat scaling. */
   sdspGridNodeCount?: number;
+  /** Set on an enemy once an item has been stolen from it: one per battle (`steal.ts`). */
+  stolenFrom?: boolean;
+  /** Set on an enemy once Pilfer Gil has taken its gil: once per battle (`steal.ts`). */
+  gilPilfered?: boolean;
 }
 
 /** Ability lookup. Data files register the real table; `abilities.ts` is the fallback. */

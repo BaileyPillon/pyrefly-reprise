@@ -32,6 +32,7 @@ import type {
 } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
+import { resolveTheft } from './steal.ts';
 import { attachedResult, hitsFromOutcome, rollDefault } from './minigames.ts';
 import { beginCharge, beginRecovery, chargeTicksFor, extraRecoveryTicks } from './gauges.ts';
 import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from './constants.ts';
@@ -220,10 +221,14 @@ export function performCommand(
     : null;
   const hits = hitsFromOutcome(outcome);
 
-  resolveAbility(env.resolveCtx(), actor, ability, command.targets, {
-    multiTarget,
-    ...(hits !== null ? { hitsOverride: hits } : {}),
-  });
+  // Steal and Pilfer Gil are thefts, not hits (`steal.ts`); everything else resolves normally.
+  const theft = { units: env.units, state: env.state, rng: env.rng, emit: (e: EventDraft) => env.emit(e), ...(env.items ? { items: env.items } : {}) };
+  if (!resolveTheft(theft, actor, ability, command.targets)) {
+    resolveAbility(env.resolveCtx(), actor, ability, command.targets, {
+      multiTarget,
+      ...(hits !== null ? { hitsOverride: hits } : {}),
+    });
+  }
 
   const recoveryValue = ability.flags.includes('2xrt')
     ? ATB_DOUBLE_RECOVERY_VALUE

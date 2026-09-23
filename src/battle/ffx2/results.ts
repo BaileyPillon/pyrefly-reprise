@@ -64,6 +64,12 @@ export function battleOutcome(
   return null;
 }
 
+/** Gil Pilfer Gil took this battle; kept on a win or an escape, lost with the party. */
+function stolenGil(state: BattleState, outcome: BattleResult['outcome']): number {
+  const gil = state.flags['stolenGil'];
+  return outcome !== 'defeat' && typeof gil === 'number' ? gil : 0;
+}
+
 /** Build the result record, including the chain link when there is one. */
 export function buildResult(
   units: readonly Ffx2Unit[],
@@ -82,7 +88,8 @@ export function buildResult(
     // FFX-2 pays EXP, not Sphere Levels; `ap` is still per-dressphere AP.
     ap: won ? rewards.reduce((sum, r) => sum + (r?.ap ?? 0), 0) : 0,
     exp: won ? rewards.reduce((sum, r) => sum + (r?.exp ?? 0), 0) : 0,
-    gil: won ? rewards.reduce((sum, r) => sum + (r?.gil ?? 0), 0) : 0,
+    // Pilfered gil was taken mid-battle (`steal.ts`), so it counts unless the party fell.
+    gil: (won ? rewards.reduce((sum, r) => sum + (r?.gil ?? 0), 0) : 0) + stolenGil(state, outcome),
     drops: won ? rewards.flatMap((r) => r?.drops ?? []) : [],
     // X-2 has no Overkill; the field stays empty rather than being faked.
     overkilled: [],
