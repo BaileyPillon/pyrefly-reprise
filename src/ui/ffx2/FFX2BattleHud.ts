@@ -47,6 +47,25 @@ import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 
 /**
+ * PR-0012 repair (round 10, FFX-2 only): a verifier measured `.ffx2-cmd-info`
+ * (below) overlapping `.ffx2hud__party` — 21,920 CSS px² at 1600x900 in
+ * Chapters 4-6, printing across a party member's HP/MP and ATB gauge — a real
+ * collision this HUD shipped switched on by default (`battleHelpOn()` reads
+ * true for a player with no save yet). The description text itself is
+ * correct and game-aware (`commandHelp.ts`); the mount point is not: no
+ * placement inside `.ffx2hud__command`'s cramped right-hand column
+ * (`ffx2-hud.css`'s own comment on `.ffx2-cmd-info`) clears the party column
+ * without moving one of the two, which is a layout call for Bailey (AGENTS.md
+ * rule 9), not a redesign to make unasked. Mounting is what this file owns,
+ * so until that pick is made the slab stays off — the plumbing behind it
+ * (this whole feature) ships switched off rather than with a known collision,
+ * per the release rules' "the feature may ship switched off" allowance. Flip
+ * this once `docs/target/decisions.json` records Bailey's placement pick.
+ * See `docs/handoff/fix10b-repair-command-menus.md`.
+ */
+const FFX2_COMMAND_HELP_PLACEMENT_RESOLVED = false;
+
+/**
  * The FFX-2 battle HUD.
  *
  * Composes the shared Ink & Gold layer (`src/ui/inkgold/`) in its pink
@@ -879,7 +898,7 @@ export class FFX2BattleHud implements HudPort {
    * nothing on this side of the game before this row.
    */
   private setCommandHelp(text: string): void {
-    const show = battleHelpOn() && text.length > 0;
+    const show = FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn() && text.length > 0;
     this.commandInfoEl.hidden = !show;
     if (show) this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
   }
