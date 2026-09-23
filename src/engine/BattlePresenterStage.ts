@@ -28,6 +28,7 @@ import {
   type ScreenRect,
 } from './ScreenRects.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
+import { layProneFigures } from './ProneLay.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -719,6 +720,7 @@ export class PaintedStage implements BattleStage {
   /** @param dt seconds. Drive from the screen's update loop. */
   update(dt: number): void {
     for (const { actor } of this.actors.values()) actor.update(dt);
+    layProneFigures([...this.actors.values()].map((s) => s.actor), this.opts.camera, this.opts.battleCamera);
     this.hits.update(dt, this.opts.camera);
   }
 

@@ -468,6 +468,7 @@ export class PaintedActor extends Group {
   /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
   private fallTilt = 0;
   private fallDrop = 0;
+  private proneShift = 0;
   /** 0..1 damage tint, lerped from `baseTint` toward {@link HURT_TINT}. */
   private hurtTint = 0;
   private readonly baseTint: Color;
@@ -1600,7 +1601,13 @@ export class PaintedActor extends Group {
   }
 
   private placeSlot(slot: PlaneSlot): void {
-    placePlane(slot.mesh, slot.scale, slot.meta);
+    placePlane(slot.mesh, slot.scale, slot.meta, this.proneShift);
+  }
+
+  /** Slide a prone body along the floor, world units (`ProneLay` picks it). */
+  setProneShift(dx: number): void {
+    this.proneShift = dx;
+    for (const slot of this.slots) this.placeSlot(slot);
   }
 
   private applyMirror(): void {
