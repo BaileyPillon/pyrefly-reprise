@@ -15,6 +15,14 @@ import type { ScenePalette } from './Renderer.ts';
  * 2. **Saturation is left near 1.0.** Flat sprite palettes needed desaturating;
  *    a painting already has its own colour decisions baked in.
  */
+/**
+ * The FFX-2 stages' figure bloom mask (`BloomMask.ts`, critic PR-0097): how far
+ * the painted figures are kept out of the whole-frame bloom. Tuned so FFX-2's
+ * Yuna lands on her approved painting's luminance at the Chapter 6 first menu;
+ * the FFX stages leave it unset (0), their figures already matched theirs.
+ */
+export const FFX2_FIGURE_BLOOM_MASK = 0.7;
+
 export const ScenePalettes = {
   /** Mt. Gagazet trail — cold, high-key, low contrast, a warm sun band. */
   gagazet: {
@@ -82,6 +90,7 @@ export const ScenePalettes = {
   /** Bevelle Underground — cold teal-and-orange split tone. */
   bevelleUnderground: {
     name: 'bevelle-underground',
+    figureBloomMask: FFX2_FIGURE_BLOOM_MASK,
     lift: [0.004, 0.01, 0.017],
     gamma: [1.0, 1.0, 1.0],
     gain: [0.96, 1.03, 1.07],
@@ -103,6 +112,7 @@ export const ScenePalettes = {
   /** Farplane — dreamy, washed, luminous, raised black point. */
   farplane: {
     name: 'farplane',
+    figureBloomMask: FFX2_FIGURE_BLOOM_MASK,
     lift: [0.03, 0.018, 0.034],
     gamma: [1.06, 1.04, 1.06],
     gain: [1.06, 0.96, 1.05],
@@ -129,6 +139,7 @@ export const ScenePalettes = {
    */
   chateauLeblanc: {
     name: 'chateau-leblanc',
+    figureBloomMask: FFX2_FIGURE_BLOOM_MASK,
     lift: [0.02, 0.006, 0.018],
     gamma: [1.0, 0.98, 1.0],
     gain: [1.08, 0.94, 1.05],

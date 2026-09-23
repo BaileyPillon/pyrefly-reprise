@@ -14,7 +14,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { maskBloomHighPass } from './BloomMask.ts';
+import { maskBloomHighPass, setFigureBloomMask } from './BloomMask.ts';
 import { TiltShiftShader } from './shaders/TiltShiftShader.ts';
 import { GradeShader } from './shaders/GradeShader.ts';
 
@@ -79,6 +79,8 @@ export interface ScenePalette {
   tiltFocus?: number;
   tiltBandWidth?: number;
   tiltMaxBlur?: number;
+  /** How far the painted figures are kept out of the bloom, 0..1 (`BloomMask.ts`). Unset is 0, not "keep". */
+  figureBloomMask?: number;
 }
 
 /**
@@ -246,6 +248,7 @@ export class Renderer {
       ...(palette.tiltBandWidth !== undefined ? { tiltBandWidth: palette.tiltBandWidth } : {}),
       ...(palette.tiltMaxBlur !== undefined ? { tiltMaxBlur: palette.tiltMaxBlur } : {}),
     });
+    setFigureBloomMask(this.bloomPass, palette.figureBloomMask ?? 0);
     this.palette = palette;
   }
 

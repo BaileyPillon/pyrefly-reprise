@@ -20,11 +20,22 @@
  * normal blending ({@link syncPaintedBloom}) so a fiend's death glow blooms as
  * it always did.
  *
- * GAME-AWARE (AGENTS.md rule 14): **both games.** The renderer and the painted
- * actor are shared by every chapter; the white-costume case was observed in
- * FFX-2 (Yuna Gunner / White Mage, Leblanc), and FFX's paintings (Yuna's white
- * sleeves, Lulu's pale skin) take the same whole-frame bloom, so they are
- * covered by the same rule rather than by a per-game exception.
+ * ## How much of the mask a scene uses ({@link setFigureBloomMask})
+ *
+ * The mask is a strength, `ScenePalette.figureBloomMask`, 0 (the figures bloom
+ * as they always did) to 1 (no bloom on them at all), set per scene. A full
+ * mask over-corrects: under the renderer's display transform an unbloomed
+ * figure reads about 0.8 of its painting's luminance, so the whole mask left
+ * FFX-2's Yuna 21 percent darker than her approved PNG and pushed FFX's Yuna,
+ * who matched hers (0.999), down to 0.78 (verifier, fix10b). The strength
+ * keeps just enough of the bloom to land the figure on its painting.
+ *
+ * GAME-AWARE (AGENTS.md rule 14): the plumbing is shared (**both games**), but
+ * the mask is **FFX-2 only**: the blow-out was observed only on the FFX-2
+ * stages (Bevelle Underground, the Farplane, Chateau Leblanc, whose palettes
+ * bloom harder under white costumes: Yuna Gunner / White Mage, Leblanc), and
+ * the FFX stages measured their Yuna at her painting's own luminance without
+ * it. FFX palettes leave the field unset, which is 0: the live FFX look.
  */
 
 import {
@@ -62,6 +73,7 @@ const MASKED_HIGH_PASS = /* glsl */ `
   uniform float defaultOpacity;
   uniform float luminosityThreshold;
   uniform float smoothWidth;
+  uniform float figureMask;
   varying vec2 vUv;
   void main() {
     vec4 texel = texture2D( tDiffuse, vUv );
@@ -69,14 +81,21 @@ const MASKED_HIGH_PASS = /* glsl */ `
     vec4 outputColor = vec4( defaultColor.rgb, defaultOpacity );
     float alpha = smoothstep( luminosityThreshold, luminosityThreshold + smoothWidth, v );
     vec4 bright = mix( outputColor, texel, alpha );
-    gl_FragColor = vec4( bright.rgb * clamp( texel.a, 0.0, 1.0 ), bright.a );
+    gl_FragColor = vec4( bright.rgb * mix( 1.0, clamp( texel.a, 0.0, 1.0 ), figureMask ), bright.a );
   }
 `;
 
-/** Swap the bloom pass's bright-pass for the masked one. Idempotent. */
+/** Swap the bloom pass's bright-pass for the masked one (strength 0 until a palette sets it). Idempotent. */
 export function maskBloomHighPass(pass: UnrealBloomPass): void {
   const m = pass.materialHighPassFilter;
+  m.uniforms['figureMask'] ??= { value: 0 };
   if (m.fragmentShader === MASKED_HIGH_PASS) return;
   m.fragmentShader = MASKED_HIGH_PASS;
   m.needsUpdate = true;
+}
+
+/** How much of the figure mask the bright-pass applies, 0..1 (see the header). */
+export function setFigureBloomMask(pass: UnrealBloomPass, strength: number): void {
+  maskBloomHighPass(pass);
+  pass.materialHighPassFilter.uniforms['figureMask']!.value = Math.min(1, Math.max(0, strength));
 }
