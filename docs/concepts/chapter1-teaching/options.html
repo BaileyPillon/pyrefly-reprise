@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="kit-copy.css">
+<style>
+  html, body { margin: 0; padding: 0; }
+  .page {
+    position: relative;
+    width: 1600px; height: 900px;
+    background: #0b0a12;
+    overflow: hidden;
+    font-family: 'Exo 2', sans-serif;
+  }
+  .page::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 90% at 50% 0%, rgba(227,185,74,.06), transparent 60%);
+    pointer-events: none;
+  }
+  .hdr { position: absolute; left: 40px; top: 26px; right: 40px; }
+  .hdr .ig-eyebrow { font-size: 15px; letter-spacing: 0.28em; }
+  .hdr .ig-eyebrow::before { width: 46px; }
+  .hdr h1 {
+    font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+    color: var(--ig-paper); font-size: 34px; margin: 6px 0 2px;
+  }
+  .hdr p { color: #b9c6d6; font-size: 14.5px; margin: 0; font-family: var(--ig-font-text); }
+
+  .thumbs { position: absolute; left: 40px; top: 128px; display: flex; gap: 18px; }
+  .thumb { width: 486px; }
+  .thumb img { width: 486px; height: 302px; object-fit: cover; display: block; border: 1px solid #2a2f3d; }
+  .thumb .cap { margin-top: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 13.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ig-gold); }
+  .thumb .cap span { display: block; color: #b9c6d6; font-family: var(--ig-font-text); font-weight: 400;
+    letter-spacing: 0; text-transform: none; font-size: 13px; margin-top: 2px; }
+
+  .grid { position: absolute; left: 40px; top: 470px; right: 40px; bottom: 26px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card { background: var(--ig-paper); color: var(--ig-ink); padding: 14px 18px 16px;
+    box-shadow: 0 8px 18px rgba(0,0,0,.4); display: flex; flex-direction: column; }
+  .card h3 { font-family: var(--ig-font-display); font-weight: 700; font-size: 12.5px;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ig-gold-on-paper); margin: 0 0 6px; }
+  .card .opt { font-size: 13.6px; line-height: 1.32; margin: 0 0 8px; font-family: var(--ig-font-text); color: #221f2c; }
+  .card .opt b { color: var(--ig-blood); font-family: var(--ig-font-display); font-size: 11px; letter-spacing: .08em; display: block; margin-bottom: 2px; }
+  .card .num { font-family: var(--ig-font-numeral); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="page ig">
+  <div class="hdr">
+    <div class="ig-eyebrow">Chapter I &middot; Seymour Flux</div>
+    <h1>Teaching fixes, not balance fixes &mdash; wording options for Bailey</h1>
+    <p>PR-0007 (the Zombie&rarr;Full-Life window) + PR-0008 (the guide and the bar), built in one pass per the 2026-09-23 method-check reviews. FFX only. No boss stat, script or damage number changes.</p>
+  </div>
+
+  <div class="thumbs">
+    <div class="thumb">
+      <img src="panel-a.png" alt="Option A">
+      <div class="cap">(c) Option A &middot; inline strip<span>One new line under the move, blood-bordered like the shipped "buff before" note.</span></div>
+    </div>
+    <div class="thumb">
+      <img src="panel-b.png" alt="Option B">
+      <div class="cap">(c) Option B &middot; second badge<span>A "No window" / "Window: &lt;name&gt;" chip beside Scripted, replaces the status chip's spot.</span></div>
+    </div>
+    <div class="thumb">
+      <img src="panel-c.png" alt="Option C">
+      <div class="cap">(c) Option C &middot; extra bullet<span>Folded into the existing "If you attack" list as its first line.</span></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>(a) Guide rule 4 &mdash; corrected</h3>
+      <p class="opt"><b>Wording 1</b>Cross Cleave follows the Dispel with nothing in between &mdash; what stands through it is HP, Cheer and Auron's 3,410 HP, not Protect.</p>
+      <p class="opt"><b>Wording 2</b>Protect does not survive the Dispel. What does: full HP, five Cheer stacks, and Auron's own 3,410.</p>
+    </div>
+    <div class="card">
+      <h3>(a) Holy Water line &mdash; corrected</h3>
+      <p class="opt"><b>Wording 1</b>Holy Water a Zombie when you get the turn for it &mdash; about 3 fights in 8, the mount answers before anyone can.</p>
+      <p class="opt"><b>Wording 2</b>Cure a Zombie the moment you have a turn. Often you won't: the mount's Full-Life can land first.</p>
+    </div>
+    <div class="card">
+      <h3>(b) New honest-odds rule</h3>
+      <p class="opt"><b>Wording 1</b>Even played well, this fight is lost about 3 times in 8 &mdash; most often when Seymour moves first and a Zombie lands right before the mount acts. That is the fight, not a mistake: retry.</p>
+      <p class="opt"><b>Wording 2</b>A loss here usually means Seymour opened and Lance of Atrophy caught someone with no turn to answer it. Not a misplay &mdash; about 3 in 8 play out that way. Retry.</p>
+    </div>
+    <div class="card">
+      <h3>(d) The acceptance-bar question</h3>
+      <p class="opt">Re-baseline PR-0008's bar to at least <span class="num">95 of 160</span> wins across the four standard seed windows (measured <span class="num">100</span>) with at most <span class="num">2</span> losses before battle turn 10, in place of the critic's <span class="num">36 of 40</span> &mdash; yes or no?</p>
+      <p class="opt" style="color:#6b6f7a;">Parked, not part of this ask: Haste-on-Seymour's win effect is unsettled between the two probes (26&rarr;21 of 40 vs 99 vs 100 of 160).</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

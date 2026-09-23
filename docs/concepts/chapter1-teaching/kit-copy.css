@@ -1,0 +1,310 @@
+/*
+ * Ink & Gold, frozen for concept mockups.  DO NOT IMPORT PRODUCT CSS.
+ *
+ * Every value below is copied by hand from the approved spec
+ * (docs/handoff/presentation-ink-and-gold.md) and from src/ui/inkgold/
+ * tokens.css + slabs.css as they stood on 2026-09-18.  It is a *snapshot*:
+ * mockups must not break when another agent edits the live stylesheets, and
+ * the live stylesheets must not be reachable from a concept page.
+ *
+ * AUTHORING SCALE.  The spec is authored on a 1440x810 canvas.  This kit
+ * keeps those literal numbers: `.stage` is 1440x810 and is scaled by
+ * 1920/1440 = 1.3333 onto a 1920x1080 page.  So when the spec says
+ * "46px serif", you write 46px.  Nothing here uses the game's 640x360
+ * logical grid.
+ */
+
+/* ------------------------------------------------------------------ fonts */
+/* Self-hosted OFL faces, loaded straight off disk so a mockup renders the
+   same with no network.  Paths are relative to this file. */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2') format('woff2');
+  font-weight: 300 700; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2');
+  font-weight: 300 700; font-style: italic; font-display: block;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../../../public/fonts/chakra-petch/ChakraPetch-Regular-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../../../public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Exo 2';
+  src: url('../../../public/fonts/exo2/Exo2-Variable-wght.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: block;
+}
+
+/* ----------------------------------------------------------------- tokens */
+.ig {
+  --ig-ink: #0b0a12;
+  --ig-paper: #f4f1e8;
+  --ig-gold: #e3b94a;
+  --ig-gold-on-paper: #b8862a;
+  --ig-blood: #b02a2a;
+  --ig-spira-sky: #7fc6e8;
+  --ig-pyre-pink: #f7b6d9;
+
+  --ig-ink-panel: rgba(11, 10, 18, 0.84);
+  --ig-ink-acting: rgba(11, 10, 18, 0.94);
+  --ig-ink-chip: rgba(11, 10, 18, 0.62);
+
+  --ig-accent: var(--ig-gold);
+  --ig-accent-on-paper: var(--ig-gold-on-paper);
+
+  --ig-font-serif: 'Cormorant Garamond', 'Georgia', serif;
+  --ig-font-display: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  --ig-font-numeral: 'Rajdhani', 'Bahnschrift', sans-serif;
+  --ig-font-text: 'Exo 2', 'Segoe UI', sans-serif;
+
+  --ig-skew: -12deg;
+  --ig-skew-inverse: 12deg;
+  --ig-edge: 0;
+  --ig-wipe-angle: 19deg;
+}
+
+/* FFX-2 chapters: pink accent, mirrored chrome. */
+.ig--ffx2 {
+  --ig-accent: var(--ig-pyre-pink);
+  --ig-accent-on-paper: #b8437e;
+  --ig-skew: 12deg;
+  --ig-skew-inverse: -12deg;
+  --ig-edge: 1;
+  --ig-wipe-angle: -19deg;
+}
+
+[hidden] { display: none !important; }
+
+/* ------------------------------------------------------------------ stage */
+html, body { margin: 0; padding: 0; background: #000; }
+body { width: 1920px; height: 1080px; overflow: hidden; }
+
+.stage {
+  position: relative;
+  width: 1440px; height: 810px;
+  transform: scale(1.33333333);
+  transform-origin: 0 0;
+  overflow: hidden;
+  background: #05040a;
+}
+/* The painted frame underneath everything. */
+.stage__bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+/* Optional grade/vignette laid over the painting, before the interface. */
+.stage__grade { position: absolute; inset: 0; pointer-events: none; }
+
+/* -------------------------------------------------------------- CONCEPT tag */
+.concept-tag {
+  position: absolute; right: 18px; bottom: 14px;
+  padding: 5px 11px 6px;
+  background: rgba(11, 10, 18, 0.72);
+  border-left: 3px solid var(--ig-gold);
+  font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+  font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.86);
+  z-index: 99;
+}
+
+/* -------------------------------------------------------------- primitives */
+.ig-slab { position: relative; transform: skewX(var(--ig-skew)); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45); }
+.ig-slab__content { display: block; transform: skewX(var(--ig-skew-inverse)); }
+
+/* Action banner — top-left 48,40. */
+.ig-banner {
+  position: absolute; left: 48px; top: 40px;
+  display: flex; align-items: center; gap: 18px;
+  padding: 10px 34px 12px 28px;
+  background: var(--ig-paper); border-bottom: 4px solid var(--ig-accent);
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.ig-banner > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig--ffx2 .ig-banner { left: auto; right: 48px; }
+.ig-banner__name { font-family: var(--ig-font-serif); font-size: 46px; font-weight: 700; font-style: italic; color: var(--ig-ink); line-height: 1; }
+.ig-banner__chip {
+  padding: 7px 12px; background: var(--ig-ink); color: var(--ig-accent);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.26em; text-transform: uppercase;
+}
+
+/* Command cascade. */
+.ig-cmd-stack { position: absolute; display: flex; flex-direction: column; gap: 8px; --ig-cascade-step: 16px; }
+.ig-cmd-stack--lg { --ig-cascade-step: 22px; gap: 10px; }
+.ig-cmd {
+  display: flex; align-items: center; gap: 11px;
+  width: 342px; padding: 9px 16px 10px 14px;
+  background: var(--ig-paper); color: var(--ig-ink);
+  font-family: var(--ig-font-text); font-weight: 600; font-size: 19px;
+  letter-spacing: 0.02em;
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.42);
+}
+.ig-cmd > * { display: inline-block; transform: skewX(var(--ig-skew-inverse)); }
+.ig-cmd--selected { background: var(--ig-accent); }
+.ig-cmd--disabled { opacity: 0.42; }
+.ig-cmd--overdrive { background: var(--ig-ink); color: var(--ig-accent); border: 2px solid var(--ig-accent); }
+.ig-cmd__ready { margin-left: auto; font-size: 11px; letter-spacing: 0.2em; color: var(--ig-paper); }
+.ig-cmd__cursor { display: inline-block; width: 12px; height: 16px; transform: skewX(var(--ig-skew-inverse)); flex: none; }
+
+/* Party stat slabs — bottom-right stack in FFX, bottom-left in FFX-2. */
+.ig-stat-list { position: absolute; right: 52px; bottom: 34px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.ig--ffx2 .ig-stat-list { right: auto; left: 52px; align-items: flex-start; }
+.ig-stat {
+  display: flex; align-items: center; gap: 14px;
+  width: 430px; padding: 8px 18px 9px 6px;
+  background: var(--ig-ink-panel);
+  border-left: calc((1 - var(--ig-edge)) * 4px) solid transparent;
+  border-right: calc(var(--ig-edge) * 4px) solid transparent;
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+.ig-stat > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-stat--acting { border-left-color: var(--ig-accent); border-right-color: var(--ig-accent); background: var(--ig-ink-acting); }
+.ig-stat__face { position: relative; width: 62px; height: 62px; overflow: hidden; background: #1a1526; flex: none; margin-left: 6px; }
+.ig-stat__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+.ig-stat__name { width: 96px; font-family: var(--ig-font-serif); font-size: 24px; font-weight: 700; font-style: italic; color: var(--ig-paper); }
+.ig-stat--acting .ig-stat__name { color: var(--ig-accent); }
+.ig-stat__value { display: flex; align-items: baseline; gap: 3px; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 26px; line-height: 1; color: var(--ig-paper); }
+.ig-stat__value small { font-size: 13px; font-weight: 600; color: #9fb0c4; }
+.ig-stat__value--mp { color: var(--ig-spira-sky); }
+.ig-stat__od { position: relative; width: 120px; height: 8px; margin-left: auto; background: #2a3246; }
+.ig-stat__od i { position: absolute; inset: 0 auto 0 0; display: block; background: var(--ig-accent); }
+
+/* Target reticle. */
+.ig-reticle { position: absolute; }
+.ig-reticle__corner { position: absolute; width: 30px; height: 30px; border: 0 solid var(--ig-accent); filter: drop-shadow(0 0 4px rgba(227, 185, 74, 0.6)); }
+.ig-reticle__corner--tl { left: 0; top: 0; border-left-width: 3px; border-top-width: 3px; }
+.ig-reticle__corner--tr { right: 0; top: 0; border-right-width: 3px; border-top-width: 3px; }
+.ig-reticle__corner--bl { left: 0; bottom: 0; border-left-width: 3px; border-bottom-width: 3px; }
+.ig-reticle__corner--br { right: 0; bottom: 0; border-right-width: 3px; border-bottom-width: 3px; }
+.ig-reticle__name {
+  position: absolute; left: -18px; bottom: -34px;
+  padding: 4px 14px 5px 10px; background: var(--ig-ink-chip);
+  border-bottom: 2px solid var(--ig-accent);
+  transform: skewX(var(--ig-skew));
+}
+.ig--ffx2 .ig-reticle__name { left: auto; right: -18px; }
+.ig-reticle__name > * { display: inline-block; transform: skewX(var(--ig-skew-inverse)); }
+.ig-reticle__name-text { font-family: var(--ig-font-serif); font-size: 24px; font-weight: 700; font-style: italic; letter-spacing: 0.08em; color: var(--ig-paper); }
+
+/* Damage splash. */
+.ig-damage { position: absolute; }
+.ig-damage__splash { position: absolute; left: -46px; top: -34px; width: 380px; height: 190px; fill: var(--ig-accent); opacity: 0.94; }
+.ig-damage__value { position: relative; display: block; font-family: var(--ig-font-serif); font-size: 128px; font-weight: 700; font-style: italic; letter-spacing: -0.02em; line-height: 1; color: var(--ig-ink); }
+/* Default = damage dealt TO an enemy: ink numeral on the accent splash (spec).
+   `--on-party` is the inversion for damage the party takes: ivory numeral on an
+   ink splash. (`--enemy` is kept as an alias for that inversion — it means
+   "damage from an enemy" — because earlier mockups used it.) */
+.ig-damage--on-party .ig-damage__splash,
+.ig-damage--enemy .ig-damage__splash { fill: var(--ig-ink); }
+.ig-damage--on-party .ig-damage__value,
+.ig-damage--enemy .ig-damage__value { color: var(--ig-paper); }
+
+/* Paper info slab — the ivory panel used for prose, tips, results ledgers. */
+.ig-paper {
+  background: var(--ig-paper); color: var(--ig-ink);
+  padding: 24px 32px 26px;
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+.ig-paper > * { transform: skewX(var(--ig-skew-inverse)); }
+.ig-paper__label { font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ig-accent-on-paper); }
+.ig-paper__title { font-family: var(--ig-font-serif); font-size: 44px; font-weight: 700; font-style: italic; margin: 6px 0 10px; }
+.ig-paper__body { font-family: var(--ig-font-text); font-size: 19px; line-height: 1.45; color: #221f2c; }
+
+/* Rule + eyebrow, the screen-title mark used on title / select / prep. */
+.ig-eyebrow { display: flex; align-items: center; gap: 22px; font-family: var(--ig-font-display); font-weight: 700; font-size: 20px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ig-accent); }
+.ig-eyebrow::before { content: ''; width: 76px; height: 3px; background: var(--ig-accent); }
+
+/* Bottom control hint bar. */
+.ig-hint {
+  position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 18px;
+  padding: 8px 20px; background: rgba(11, 10, 18, 0.72);
+  border-left: 3px solid var(--ig-accent);
+  font-family: var(--ig-font-display); font-weight: 500; font-size: 15px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244, 241, 232, 0.72);
+}
+.ig-hint b { color: var(--ig-accent); font-weight: 700; }
+
+/* ------------------------------------------------------------- CTB queue */
+/* Right edge, top 112.  46px tiles with a 2px ivory border; the current tile
+   is 64px with a 3px gold border and a gold glow; enemy tiles use blood on
+   #2a0f12.  Each row is shifted 8px further left, which is what gives the
+   queue its diagonal.  Six rows visible. */
+.ig-ctb { position: absolute; right: 44px; top: 112px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.ig--ffx2 .ig-ctb { right: auto; left: 44px; align-items: flex-start; }
+.ig-ctb__row { display: flex; align-items: center; gap: 10px; }
+.ig-ctb__row:nth-child(1) { transform: translateX(0); }
+.ig-ctb__row:nth-child(2) { transform: translateX(-8px); }
+.ig-ctb__row:nth-child(3) { transform: translateX(-16px); }
+.ig-ctb__row:nth-child(4) { transform: translateX(-24px); }
+.ig-ctb__row:nth-child(5) { transform: translateX(-32px); }
+.ig-ctb__row:nth-child(6) { transform: translateX(-40px); }
+.ig--ffx2 .ig-ctb__row:nth-child(2) { transform: translateX(8px); }
+.ig--ffx2 .ig-ctb__row:nth-child(3) { transform: translateX(16px); }
+.ig--ffx2 .ig-ctb__row:nth-child(4) { transform: translateX(24px); }
+.ig--ffx2 .ig-ctb__row:nth-child(5) { transform: translateX(32px); }
+.ig--ffx2 .ig-ctb__row:nth-child(6) { transform: translateX(40px); }
+.ig-ctb__name {
+  padding: 3px 10px; background: var(--ig-ink-chip);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ig-paper);
+}
+.ig-ctb__tile {
+  position: relative; width: 46px; height: 46px; flex: none; overflow: hidden;
+  border: 2px solid var(--ig-paper); background: #1a1526;
+}
+.ig-ctb__tile img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%; display: block; }
+.ig-ctb__tile--current { width: 64px; height: 64px; border: 3px solid var(--ig-accent); box-shadow: 0 0 20px rgba(227, 185, 74, 0.6); }
+.ig-ctb__tile--enemy { border-color: var(--ig-blood); background: #2a0f12; }
+.ig-ctb__mono {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+  font-family: var(--ig-font-serif); font-size: 26px; font-weight: 700; font-style: italic;
+  color: var(--ig-blood);
+}
+
+/* ---------------------------------------------------------------- surface */
+/* The grain + vignette pass the spec puts over the whole frame, so chrome
+   never sits on raw paint.  Drop `<div class="ig-grain"></div>` last inside
+   the stage; add `.ig-vignette` beside it, or roll your own in
+   `.stage__grade`. */
+.ig-grain {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.13;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+}
+.ig-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(11, 10, 18, 0.45) 0%, rgba(11, 10, 18, 0) 18%,
+                    rgba(11, 10, 18, 0) 76%, rgba(11, 10, 18, 0.55) 100%),
+    radial-gradient(120% 90% at 55% 40%, rgba(11, 10, 18, 0) 45%, rgba(11, 10, 18, 0.55) 100%);
+}
