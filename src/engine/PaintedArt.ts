@@ -9,6 +9,7 @@ import {
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import type { AlphaBox, PoseFrame } from './PaintedScale.ts';
+import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
 
 // "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
 // there. It is deliberately not re-exported here: this file is already well
@@ -205,10 +206,12 @@ export async function loadPainted(
     // out of baseline fitting, because a hand-measured baseline says nothing
     // about how much empty canvas surrounds the figure.
     let content: AlphaBox | undefined;
+    let ground: GroundHull | undefined;
     if (pixels) {
       const measured = measureAlpha(pixels, width, height, fit === false ? {} : (fit ?? {}));
       if (fit !== false && measured.baselineY !== null) baselineY = measured.baselineY;
       if (measured.box) content = measured.box;
+      if (measured.ground) ground = measured.ground;
     }
 
     return {
@@ -227,6 +230,7 @@ export async function loadPainted(
         // `cast.png` can sit in an otherwise right-facing set).
         ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),
         ...(content ? { content } : {}),
+        ...(ground ? { ground } : {}),
       },
       placeholder: false,
       url,
@@ -326,7 +330,7 @@ export function measureAlpha(
   width: number,
   height: number,
   opts: BaselineFitOptions = {},
-): { baselineY: number | null; box: AlphaBox | null } {
+): { baselineY: number | null; box: AlphaBox | null; ground?: GroundHull | null } {
   const empty = { baselineY: null, box: null };
   const w = Math.max(1, Math.floor(width));
   const h = Math.max(1, Math.floor(height));
@@ -359,6 +363,9 @@ export function measureAlpha(
   let by0 = sh;
   let by1 = -1;
   const colRuns = new Int32Array(sw);
+  // Each column's lowest painted row, and the centroid: a prone pose rests on these (PaintedRest).
+  const bottoms = new Int32Array(sw).fill(-1);
+  let sumX = 0, sumY = 0, count = 0;
 
   for (let y = 0; y < sh; y++) {
     let run = 0;
@@ -366,6 +373,8 @@ export function measureAlpha(
       if (data[(y * sw + x) * 4 + 3]! >= cut) {
         run++;
         colRuns[x]!++;
+        bottoms[x] = y;
+        sumX += x; sumY += y; count++;
       }
     }
     if (run >= boxNeed) {
@@ -384,7 +393,9 @@ export function measureAlpha(
 
   const scaleX = w / sw;
   const scaleY = h / sh;
+  const ground = count ? groundHullFromBottoms(bottoms, { x: sumX / count + 0.5, y: sumY / count + 0.5 }, scaleX, scaleY) : null;
   return {
+    ground,
     // +1 so the baseline is the ground line *under* the last painted row.
     baselineY: baselineY === null ? null : Math.min(h, Math.round((baselineY + 1) * scaleY)),
     box:

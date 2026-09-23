@@ -42,6 +42,7 @@ import {
   type PoseMeta,
 } from './PaintedArt.ts';
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
+import { placePlane } from './PaintedRest.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
@@ -933,12 +934,11 @@ export class PaintedActor extends Group {
     slot.scale = scale;
 
     // The plane itself never rotates — mirroring is a negative scale.x, and the
-    // pose's own orientation is painted into the texture. A prone figure is a
-    // wide plane standing upright, not a tall plane tipped over. (The KO fall
+    // pose's own orientation is painted into the texture; a prone one is only
+    // rolled to rest on the floor (`PaintedRest.placePlane`, PR-0022). (The KO fall
     // tilts the *inner group*, which carries both planes together.)
-    slot.mesh.rotation.set(0, 0, 0);
     slot.mesh.scale.set(scale.width * this.mirrorOf(tex.meta), scale.height, 1);
-    slot.mesh.position.y = scale.offsetY;
+    this.placeSlot(slot);
     slot.material.uniforms['contactBand']!.value = contactBandFor(scale.height);
 
     if (scale.clamped) {
@@ -1246,11 +1246,11 @@ export class PaintedActor extends Group {
     // and the scale to land back in unit-plane coordinates.
     const sx = slot.mesh.scale.x;
     const sy = slot.mesh.scale.y || 1;
-    const lift = slot.mesh.position.y;
-    // `sx` is negative on a mirrored plane, which flips the box with it —
-    // exactly right, because the silhouette is flipped too.
-    const u0 = sx === 0 ? -0.5 : box.x0 / sx;
-    const u1 = sx === 0 ? 0.5 : box.x1 / sx;
+    const lift = slot.scale.offsetY;
+    // |sx|: the box is in the painting's own frame; a negative `sx` then mirrors it with the silhouette.
+    const ax = Math.abs(sx);
+    const u0 = ax === 0 ? -0.5 : box.x0 / ax;
+    const u1 = ax === 0 ? 0.5 : box.x1 / ax;
     const v0 = (box.y0 - lift) / sy;
     const v1 = (box.y1 - lift) / sy;
     corners[0].set(u0, v0, 0);
@@ -1599,9 +1599,14 @@ export class PaintedActor extends Group {
     return this.mirrorOf(this.slots[this.active]!.meta) === -1;
   }
 
+  private placeSlot(slot: PlaneSlot): void {
+    placePlane(slot.mesh, slot.scale, slot.meta);
+  }
+
   private applyMirror(): void {
     for (const slot of this.slots) {
       slot.mesh.scale.x = Math.abs(slot.mesh.scale.x) * this.mirrorOf(slot.meta);
+      this.placeSlot(slot);
     }
     // The rim direction is in the painting's own space, so it follows the
     // mirror, not the body: flipping the plane flips where its light comes from.

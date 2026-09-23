@@ -22,6 +22,8 @@
  * wide and low, which is what lying down looks like.
  */
 
+import type { GroundHull } from './PaintedRest.ts';
+
 /**
  * The tight box painted content occupies inside a PNG, in source pixels.
  *
@@ -50,6 +52,8 @@ export interface PoseFrame {
   baselineY: number;
   /** Tight alpha box, when it could be measured. See {@link AlphaBox}. */
   content?: AlphaBox;
+  /** The silhouette's underside, when measured: how a prone pose rests (`PaintedRest`). */
+  ground?: GroundHull;
   /**
    * Sidecar override: multiply the derived pixel scale. `1.1` = "this render
    * came out 10% small". Ignored when absent or not finite/positive.
