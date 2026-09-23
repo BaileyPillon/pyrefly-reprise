@@ -533,6 +533,38 @@
   display: none;
 }
 /*
+ * PR-0012 (round 09, FFX-2 only): the command menu never said what the
+ * highlighted row does. Reuses FFX's own slab design (`.ig-cutin__info`,
+ * `src/ui/ffx/ffx-hud.css`'s `.ffx-cmd-info`) rather than inventing a new one
+ * (rule 9) — right-anchored under the stack, mirroring how FFX parks its own
+ * copy above its bottom-left stack. `.ffx2hud__command`'s tallest measured
+ * box sits at `bottom: 116.44px`, so the gap below it (down to the frame's
+ * bottom edge) is genuinely empty in every chapter's HUD-mock capture; a
+ * player-facing collision (the party column, the advisor card) is a stop-and-
+ * screenshot per AGENTS.md rule 9, not a silent redesign, and none was found
+ * for chapters 4-6 at 1600x900.
+ */
+.ffx2-cmd-info {
+  position: absolute;
+  right: 12px;
+  bottom: 30px;
+  width: 129.78px; /* matches `.ig-cmd` / `.ffx2hud__command` */
+  max-width: none;
+  max-height: 33px;
+  padding: 3px 7px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ffx2-cmd-info .ig-cutin__info-desc {
+  font-style: normal;
+  font-size: 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+/*
  * The fold marks. The window above scrolls, and until this nothing on screen
  * said so: measured by the pass-2 critic at 1280x720 and 2560x1440 in both
  * chapters, `Item` runs 227 px into a 220 px box (Light Curtain below the

@@ -44,6 +44,7 @@ import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
 import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
+import { battleHelpOn } from '../coach/coachState.ts';
 
 /**
  * The FFX-2 battle HUD.
@@ -136,6 +137,8 @@ export class FFX2BattleHud implements HudPort {
   private enemyEl!: HTMLElement;
   private telegraphEl!: HTMLElement;
   private commandEl!: HTMLElement;
+  /** PR-0012: the highlighted row's help sentence — FFX's slab design, `battleHelpOn()`-gated. */
+  private commandInfoEl!: HTMLElement;
   private minigameEl!: HTMLElement;
   /** FFX-2's Active/Wait chip, shown while a target cursor is live. */
   private activeWaitEl: HTMLElement | null = null;
@@ -303,6 +306,7 @@ export class FFX2BattleHud implements HudPort {
       <div class="ig-banner ffx2hud__telegraph" hidden></div>
       <div class="ig-stat-list ffx2hud__party"></div>
       <div class="ffx2hud__command" hidden></div>
+      <div class="ig-cutin__info ffx2-cmd-info" hidden><div class="ig-cutin__info-desc" data-role="text"></div></div>
       <div class="ffx2hud__minigame"></div>
       <div class="ffx2-atbmode" hidden></div>
       <i class="ffx2hud__fence" data-fence="party-top"></i>
@@ -321,6 +325,7 @@ export class FFX2BattleHud implements HudPort {
     this.telegraphEl = this.stage.querySelector('.ffx2hud__telegraph') as HTMLElement;
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
+    this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
     this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
     // FFX-2 ONLY: the Active/Wait chip. FFX's CTB has no such Config entry.
     this.activeWaitEl = this.stage.querySelector('.ffx2-atbmode');
@@ -844,6 +849,7 @@ export class FFX2BattleHud implements HudPort {
         return this.lastState?.combatants[id]?.side === 'enemy' ? 'enemy' : 'ally';
       },
       onSelection: (sel) => this.applySelection(sel),
+      onHelp: (text) => this.setCommandHelp(text),
       actorName: actor?.name ?? actorId,
       onPreview: (preview) => {
         if (!isAtbSnapshot(preview) || !this.lastState) return;
@@ -863,6 +869,19 @@ export class FFX2BattleHud implements HudPort {
     this.resetAdvisorCap();
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     return command;
+  }
+
+  /**
+   * PR-0012: FFX's own help slab (`.ig-cutin__info`), mounted for FFX-2 and
+   * fed from `CommandMenu.ts`'s `onHelp`. Off entirely when the player has
+   * BATTLE HELP off in Config/pause OPTIONS (`battleHelpOn()`,
+   * `src/ui/coach/coachState.ts`) — the setting already exists and did
+   * nothing on this side of the game before this row.
+   */
+  private setCommandHelp(text: string): void {
+    const show = battleHelpOn() && text.length > 0;
+    this.commandInfoEl.hidden = !show;
+    if (show) this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {

@@ -40,6 +40,7 @@ import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../ffx/canc
 import { TargetCursor, type CursorSelection, type TargetEntry } from '../ffx/TargetCursor.ts';
 import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
+import { commandHelpText, groupHelpText } from './commandHelp.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
   attack: 'Attack',
@@ -167,6 +168,8 @@ export interface CommandMenuDeps {
   kindOf?: (id: CombatantId) => 'enemy' | 'ally' | 'self';
   /** Every change of selection, for the field's accent pool and quiet dim. */
   onSelection?: (sel: CursorSelection | null) => void;
+  /** PR-0012: fed the highlighted row's help sentence every time the selection changes; the FFX-2 HUD prints it in a slab, gated on the Battle Help setting. */
+  onHelp?: (text: string) => void;
   /** Fed the live preview every time the highlighted row changes. */
   onPreview: (preview: TurnPreview[] | AtbSnapshot) => void;
   actorName: string;
@@ -310,6 +313,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.container.removeEventListener('click', onClick);
       deps.container.classList.remove('ffx2cmd--more-above', 'ffx2cmd--more-below');
       deps.container.innerHTML = '';
+      deps.onHelp?.('');
       cursor.hide();
       cursor.dispose();
       cursor.el.remove();
@@ -331,6 +335,18 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function emitPreview(): void {
       deps.onPreview(deps.previewRank(currentLeaf()));
+    }
+
+    /** PR-0012: the highlighted row's own sentence, or a group's opener — `commandHelp.ts` has the derivation. */
+    function emitHelp(): void {
+      if (!deps.onHelp) return;
+      if (view === 'top') {
+        const row = topRows[topIdx];
+        deps.onHelp(row ? ('leaf' in row ? commandHelpText(row.leaf) : groupHelpText(groupLabel(row.group), row.items)) : '');
+        return;
+      }
+      const leaf = subItems[subIdx];
+      deps.onHelp(leaf ? commandHelpText(leaf) : '');
     }
 
     function rowClasses(selected: boolean, c: AvailableCommand, gate = false): string {
@@ -443,6 +459,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.container.innerHTML = `<div class="ig-cmd-stack">${rows}</div>`;
       markFold();
       emitPreview();
+      emitHelp();
     }
 
     function renderSub(title: string): void {
@@ -453,6 +470,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.container.innerHTML = `<div class="ffx2cmd__title">${title}</div><div class="ig-cmd-stack">${rows}</div>`;
       markFold();
       emitPreview();
+      emitHelp();
     }
 
     /** One candidate, with the display name, the letter tag and the accent. */
