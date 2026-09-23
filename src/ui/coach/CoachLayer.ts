@@ -64,6 +64,25 @@ import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
 import { markSeen, shouldShow } from './coachState.ts';
+import type { IntentSource } from '../common/EnemyIntent.ts';
+
+/**
+ * `setIntentSource` on purpose is not part of the typed `HudPort` interface
+ * (see `EnemyIntent.ts`'s own `IntentAwareHud`: one optional panel is not
+ * worth a shape change to the five-file contract set in `docs/CONTRACTS.md`),
+ * so `attachEnemyIntent` probes for it with `typeof h.setIntentSource ===
+ * 'function'` instead. `BattleScreen` always hands that function `this.hud`,
+ * which is always a `CoachedHud` (`withCoach` in `BattleScreenWiring.ts`),
+ * never the concrete `FFXBattleHud` / `FFX2BattleHud` directly. Before this,
+ * `CoachedHud` had no `setIntentSource` at all, so the duck-type probe failed
+ * silently and the real HUD's panel was never wired to an engine — PR-0090,
+ * both games, disclosed round 09. Duck-typed on this side too, same shape as
+ * `EnemyIntent.ts`, so this file does not have to import a type `HudPort`
+ * itself never declares.
+ */
+interface IntentAwareHud {
+  setIntentSource?(source: IntentSource | null): void;
+}
 
 export interface CoachLayerOptions {
   /** Drop the fades. Defaults to `Settings.reduceMotion`. */
@@ -170,6 +189,15 @@ class CoachedHud implements HudPort {
 
   setAtbMode(mode: 'wait' | 'active'): void {
     this.inner.setAtbMode?.(mode);
+  }
+
+  // PR-0090: forwards `attachEnemyIntent`'s duck-typed wiring to the real HUD.
+  // Always present (not `?.`-guarded on this side) so a HUD mock that lacks
+  // it still gets `undefined` from the inner call below, and so
+  // `attachEnemyIntent`'s own `typeof h.setIntentSource === 'function'` probe
+  // sees a real function on every `CoachedHud`, in both games.
+  setIntentSource(source: IntentSource | null): void {
+    (this.inner as IntentAwareHud).setIntentSource?.(source);
   }
 
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult> {
