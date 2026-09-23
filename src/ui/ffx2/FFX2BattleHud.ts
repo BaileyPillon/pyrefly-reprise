@@ -967,17 +967,14 @@ export class FFX2BattleHud implements HudPort {
   }
 
   /**
-   * The letter that tells one of Vegnagun's parts, or one of two identical
-   * fiends, from the next — read off the gauge snapshot the HUD last
-   * rendered, so the field plate and the boss gauge agree.
+   * FFX-2 never adds a positional letter of its own: its data already names
+   * duplicates (Node A/B/C, Right/Left Bulwark, Right/Left Redoubt — commit
+   * 10750586), so a positional tag here would relabel an already-named
+   * enemy (Dr. Goon showing "B") instead of disambiguating one. FFX's own
+   * lettering (`src/battle/ffx/turnQueue.ts#letterTags`) is unaffected.
    */
-  private letterTagOf(id: CombatantId): string | undefined {
-    const enemies = (this.lastState?.enemyIds ?? []).filter(
-      (e) => this.lastState?.combatants[e] && !this.lastState.combatants[e]!.removed,
-    );
-    if (enemies.length < 2) return undefined;
-    const i = enemies.indexOf(id);
-    return i >= 0 ? String.fromCharCode(65 + i) : undefined;
+  private letterTagOf(_id: CombatantId): string | undefined {
+    return undefined;
   }
 
   /**

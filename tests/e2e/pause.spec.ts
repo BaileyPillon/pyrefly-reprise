@@ -324,3 +324,30 @@ test('H hides the panels and shows them again, and Esc still resumes the fight',
   await page.waitForTimeout(300);
   expect((await look(page)).stack).not.toContain('pause');
 });
+
+// PR-0142 / round-10 R10-INT-01: a mouse click on the PAUSE chip used to
+// leave the chip holding DOM focus, so the next Enter — meant for the
+// command menu — fired the focused button's own default action instead and
+// re-opened the pause. Real mouse click, then a real key, per the round-10
+// entry's "Confirmer: the FFX chip-focus leak reproduced independently with
+// Playwright (PR-0142)".
+test('a mouse click on the PAUSE chip does not leave it stealing the next Enter (PR-0142)', async ({ page }) => {
+  await intoChapterOne(page);
+  await waitForCommandMenu(page);
+  expect((await look(page)).stack).not.toContain('pause');
+
+  await page.click('.battle-pause-chip');
+  await page.waitForTimeout(300);
+  expect((await look(page)).stack).toContain('pause');
+
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  expect((await look(page)).stack).not.toContain('pause');
+
+  // The regression: this Enter belongs to the command menu. If the chip
+  // still has focus, the browser treats it as another click on the chip and
+  // the pause reopens instead of the menu accepting the selection.
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(300);
+  expect((await look(page)).stack).not.toContain('pause');
+});

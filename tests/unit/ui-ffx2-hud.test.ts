@@ -68,6 +68,32 @@ function snapshotFor(fastRequired: number, slowRequired: number): AtbSnapshot {
   };
 }
 
+function goon(id: string, name: string): FFX2Combatant {
+  return {
+    id,
+    name,
+    side: 'enemy',
+    spriteKey: id,
+    stats: { hp: 500, mp: 0, str: 10, def: 10, mag: 10, mdef: 10, agi: 10, luck: 10, eva: 10, acc: 10, maxHp: 500, maxMp: 0 },
+    hp: 500,
+    mp: 0,
+    statuses: {},
+    affinities: {},
+    immunities: {},
+    immunityFlags: [],
+    controller: 'ai',
+    alive: true,
+    removed: false,
+    slot: 0,
+    flags: {},
+    level: 10,
+    atb: { ticks: 0, required: 16000, gauge: 0, charging: null, recovery: 0 },
+    accessories: [],
+    chainCount: 0,
+    chainWindowTicks: 0,
+  };
+}
+
 describe('FFX2BattleHud', () => {
   let root: HTMLElement;
   let hud: FFX2BattleHud;
@@ -160,6 +186,20 @@ describe('FFX2BattleHud', () => {
 
   it('rejects openMinigame for a kind FFX-2 does not own', async () => {
     await expect(hud.openMinigame('tidus-timing', {})).rejects.toThrow();
+  });
+
+  it('never letters a duplicate enemy — FFX-2 data already names them (PR-0013)', () => {
+    // Two placeholders sharing a display name, the shape that used to earn
+    // a positional "B" and mislabel the data name (Dr. Goon).
+    const state: BattleState = {
+      ...baseState(),
+      enemyIds: ['goon1', 'goon2'],
+      combatants: { ...baseState().combatants, goon1: goon('goon1', 'Dr. Goon'), goon2: goon('goon2', 'Dr. Goon') },
+    };
+    hud.sync(state, snapshotFor(16000, 16000));
+    const letterTagOf = (hud as unknown as { letterTagOf(id: string): string | undefined }).letterTagOf.bind(hud);
+    expect(letterTagOf('goon1')).toBeUndefined();
+    expect(letterTagOf('goon2')).toBeUndefined();
   });
 
   it('toggles visibility', () => {

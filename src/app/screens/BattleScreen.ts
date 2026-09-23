@@ -303,6 +303,13 @@ export class BattleScreen extends Screen {
     chip.dataset['action'] = 'pause:open';
     chip.textContent = 'PAUSE';
     chip.setAttribute('aria-label', 'Pause');
+    // A mouse click must not leave the chip holding keyboard focus: the
+    // browser focuses a clicked <button> by default, so after the pause
+    // closes (Esc) a later Enter on the command menu would fire this
+    // button's own default action (click) and re-open the pause instead of
+    // reaching the menu (PR-0142 / R10-INT-01). `preventDefault` on
+    // `mousedown` blocks the focus without blocking the `click` Input reads.
+    chip.addEventListener('mousedown', (e) => e.preventDefault());
     this.root.appendChild(chip);
     this.pauseChip = chip;
 

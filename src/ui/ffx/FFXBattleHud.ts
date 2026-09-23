@@ -27,6 +27,7 @@ import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
+import { widenForEvraeFarStreak } from './evraeFarStreakBounds.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
@@ -1377,11 +1378,17 @@ export class FFXBattleHud implements HudPort {
   private enemySpriteRects(): Rect[] {
     const state = this.lastState;
     if (!state) return [];
-    return this.spriteRects(state.enemyIds.filter((id) => state.combatants[id]?.alive !== false));
+    // Evrae's FAR streak is a long slender s-curve, not the roughly
+    // head-tall silhouette `spriteRects` was tuned on — see
+    // `evraeFarStreakBounds.ts` (`chapter-evrae-finish.md` item (c)). FFX only.
+    return this.spriteRects(
+      state.enemyIds.filter((id) => state.combatants[id]?.alive !== false),
+      (rect, id) => widenForEvraeFarStreak(rect, id, state),
+    );
   }
 
   /** The shared half of {@link partySpriteRects} and {@link enemySpriteRects}. */
-  private spriteRects(ids: readonly CombatantId[]): Rect[] {
+  private spriteRects(ids: readonly CombatantId[], adjust?: (rect: Rect, id: CombatantId) => Rect): Rect[] {
     if (!this.lastState) return [];
     const scale = this.hudScale();
     if (!scale) return [];
@@ -1403,7 +1410,8 @@ export class FFXBattleHud implements HudPort {
       // the measured margin so the rect covers what the player actually sees.
       const top = Math.min(headY, feetY) - span * SPRITE_TOP_MARGIN_RATIO;
       const bottom = Math.max(headY, feetY) + span * SPRITE_FOOT_MARGIN_RATIO;
-      out.push({ left: cx - half, right: cx + half, top, bottom });
+      const rect = { left: cx - half, right: cx + half, top, bottom };
+      out.push(adjust ? adjust(rect, id) : rect);
     }
     return out;
   }
