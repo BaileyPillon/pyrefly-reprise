@@ -1,0 +1,147 @@
+{
+ "tag": "ko.97426.fix",
+ "state": "ko",
+ "fixKey": "ko.r3",
+ "seed": 97426,
+ "method": "lora+openpose, then masked repaint (lora inpaint)",
+ "fixOf": "ko.97401.fix",
+ "judge": "face 6 (dark oval on the cheek) and marks 6 (brass ring on the sash), after the helmet fix 97401",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "cheek oval",
+   "crop": [
+    120,
+    540,
+    340,
+    720
+   ],
+   "size": [
+    1024,
+    840
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      229,
+      625,
+      18,
+      14
+     ]
+    }
+   ],
+   "minus": [],
+   "feather": 3,
+   "alpha": "keep",
+   "paste": null,
+   "denoise": 0.6,
+   "refs": [
+    "refs/idle-head.png"
+   ],
+   "refWeight": 0.4,
+   "positive": "logosX2, 1boy, solo, lying, on back, closed eyes, black hair, short hair, pale skin, thin grey chin strap, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, sunglasses, goggles, lens, eyepatch, bruise, text",
+   "whiteKey": false
+  },
+  {
+   "name": "sash ring (pre-filled, higher denoise for a crisp outline)",
+   "crop": [
+    400,
+    480,
+    656,
+    736
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      503,
+      565,
+      38,
+      18
+     ]
+    }
+   ],
+   "minus": [],
+   "feather": 3,
+   "alpha": "rembg",
+   "paste": null,
+   "denoise": 0.6,
+   "refs": [
+    "refs/idle-square.png"
+   ],
+   "refWeight": 0.25,
+   "positive": "logosX2, 1boy, solo, lying, on back, purple sash, blue robe, black outline, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, ring, brass ring, buckle, metal ring, belt buckle, jewelry, hoop",
+   "whiteKey": true
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "width": 1216,
+ "height": 832,
+ "composition": "prone",
+ "cutout": {
+  "width": 1159,
+  "height": 302,
+  "baselineY": 286,
+  "cropBox": [
+   49,
+   517,
+   1208,
+   819
+  ],
+  "contentBox": [
+   65,
+   533,
+   1192,
+   803
+  ],
+  "sourceWidth": 1216,
+  "sourceHeight": 832,
+  "model": "isnet-anime (installed cutout outside the fix masks)"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.953125,
+    "heightFraction": 0.3629807692307692,
+    "checked": false,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 205853,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.021068432327923325,
+    "largestRegionFraction": 0.007796825890319791,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "base": {
+  "tag": "ko.97401.fix"
+ },
+ "seconds": 24,
+ "generatedAt": "2026-09-23T08:36:26.109Z",
+ "refinishedAt": "2026-09-23T08:37:44.456Z"
+}

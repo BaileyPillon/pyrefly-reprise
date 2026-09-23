@@ -1,0 +1,163 @@
+{
+ "tag": "cast.97205.fix",
+ "state": "cast",
+ "seed": 97205,
+ "method": "lora+openpose, then masked repaint (lora inpaint)",
+ "fixOf": "cast.96201",
+ "judge": "weapon 6: the low revolver hangs from one finger while the fist closes on a grey stub",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "low hand",
+   "crop": [
+    290,
+    485,
+    610,
+    805
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "poly": [
+      [
+       420,
+       588
+      ],
+      [
+       492,
+       588
+      ],
+      [
+       502,
+       612
+      ],
+      [
+       500,
+       650
+      ],
+      [
+       470,
+       700
+      ],
+      [
+       440,
+       712
+      ],
+      [
+       398,
+       706
+      ],
+      [
+       396,
+       650
+      ],
+      [
+       412,
+       620
+      ]
+     ]
+    }
+   ],
+   "minus": [],
+   "feather": 5,
+   "alpha": "keep",
+   "paste": null,
+   "denoise": 0.78,
+   "refs": [
+    "refs/attack-grip.png"
+   ],
+   "refWeight": 0.3,
+   "positive": "logosX2, 1boy, solo, close-up, hand, holding gun, hand gripping revolver handle, fist around grip, index finger on trigger, gun pointing down, arm at side, silver revolver, black grip, pale skin, blue robe, dark blue hakama, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, open hand, finger in trigger guard, hanging gun, dangling gun, extra fingers, extra weapon, gun stub, fused fingers"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "width": 832,
+ "height": 1216,
+ "composition": "full",
+ "cutout": {
+  "width": 532,
+  "height": 1174,
+  "baselineY": 1158,
+  "cropBox": [
+   173,
+   22,
+   705,
+   1196
+  ],
+  "contentBox": [
+   189,
+   38,
+   689,
+   1180
+  ],
+  "sourceWidth": 832,
+  "sourceHeight": 1216,
+  "model": "isnet-anime (installed cutout outside the fix masks)"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.6394230769230769,
+    "heightFraction": 0.9654605263157895,
+    "checked": true,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 265450,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.011045394612921455,
+    "largestRegionFraction": 0.0022301751742324354,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "base": {
+  "tag": "cast.96201",
+  "positive": "logosX2, 1boy, solo, full body, from side, profile, facing left, standing, legs apart, arm up, holding gun, gun pointed up, revolver beside face, other hand holding gun, dual wielding, smirk, closed mouth, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, revolver, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, gun to head, pointing gun at self, both arms down, aiming",
+  "controlnet": {
+   "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+   "image": "docs/concepts/chapters/leblanc/lora/logos/poses/cast-pose.png",
+   "strength": 0.6,
+   "start": 0,
+   "end": 0.8
+  },
+  "ipadapter": {
+   "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+   "images": [
+    "refs/idle-square.png",
+    "refs/idle-head.png"
+   ],
+   "weight": 0.3,
+   "type": "ease in",
+   "start": 0.2,
+   "end": 0.6,
+   "combine": "concat",
+   "scaling": "K+V"
+  }
+ },
+ "seconds": 8,
+ "generatedAt": "2026-09-23T08:11:36.014Z"
+}

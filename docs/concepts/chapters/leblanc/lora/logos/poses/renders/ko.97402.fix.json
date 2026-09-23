@@ -1,0 +1,173 @@
+{
+ "tag": "ko.97402.fix",
+ "state": "ko",
+ "seed": 97402,
+ "method": "lora+openpose, then masked repaint (lora inpaint)",
+ "fixOf": "ko.96402.r2",
+ "judge": "helmet 5: a glyph-like engraved band reads as lettering; a dark oval on the cheek; a brass ring on the sash",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "helmet band + cheek",
+   "crop": [
+    40,
+    510,
+    360,
+    790
+   ],
+   "size": [
+    1024,
+    896
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      137,
+      588,
+      40,
+      60
+     ]
+    },
+    {
+     "ellipse": [
+      226,
+      628,
+      19,
+      14
+     ]
+    }
+   ],
+   "minus": [],
+   "feather": 4,
+   "alpha": "keep",
+   "paste": null,
+   "denoise": 0.55,
+   "refs": [
+    "refs/idle-head.png"
+   ],
+   "refWeight": 0.45,
+   "positive": "logosX2, 1boy, solo, lying, on back, closed eyes, silver helmet, ribbed helmet, smooth metal, plain helmet, thin grey chin strap, pale skin, black hair, short hair, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, text, letters, writing, runes, glyphs, engraving, symbol, emblem on helmet, sunglasses, goggles, eyepatch, bruise"
+  },
+  {
+   "name": "sash ring",
+   "crop": [
+    400,
+    480,
+    656,
+    736
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      502,
+      565,
+      33,
+      15
+     ]
+    }
+   ],
+   "minus": [],
+   "feather": 3,
+   "alpha": "rembg",
+   "paste": null,
+   "denoise": 0.85,
+   "refs": [
+    "refs/idle-square.png"
+   ],
+   "refWeight": 0.25,
+   "positive": "logosX2, 1boy, solo, lying, on back, purple sash, blue robe, black outline, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, ring, brass ring, buckle, metal ring, belt buckle, jewelry, hoop"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "width": 1216,
+ "height": 832,
+ "composition": "prone",
+ "cutout": {
+  "width": 1159,
+  "height": 302,
+  "baselineY": 286,
+  "cropBox": [
+   49,
+   517,
+   1208,
+   819
+  ],
+  "contentBox": [
+   65,
+   533,
+   1192,
+   803
+  ],
+  "sourceWidth": 1216,
+  "sourceHeight": 832,
+  "model": "isnet-anime (installed cutout outside the fix masks)"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.953125,
+    "heightFraction": 0.3629807692307692,
+    "checked": false,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 205853,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.021068432327923325,
+    "largestRegionFraction": 0.007796825890319791,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "base": {
+  "tag": "ko.96402.r2",
+  "positive": "logosX2, 1boy, solo, full body, from side, lying, on back, on ground, unconscious, closed eyes, arms at sides, gun on ground, dropped weapon, two guns, wearing helmet, (gun on ground:1.3), (two revolvers:1.2), revolver on floor, dropped gun, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, holding gun, standing, sitting, kneeling, no helmet, helmet removed, blood, double barrel, rifle, holding gun",
+  "controlnet": {
+   "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+   "image": "docs/concepts/chapters/leblanc/lora/logos/poses/ko-pose.png",
+   "strength": 0.6,
+   "start": 0,
+   "end": 0.8
+  },
+  "ipadapter": {
+   "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+   "images": [
+    "refs/idle-square.png",
+    "refs/idle-head.png"
+   ],
+   "weight": 0.3,
+   "type": "ease in",
+   "start": 0.2,
+   "end": 0.6,
+   "combine": "concat",
+   "scaling": "K+V"
+  }
+ },
+ "seconds": 24,
+ "generatedAt": "2026-09-23T08:17:53.986Z"
+}

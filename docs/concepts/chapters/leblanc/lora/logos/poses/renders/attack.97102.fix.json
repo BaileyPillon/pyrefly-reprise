@@ -1,0 +1,163 @@
+{
+ "tag": "attack.97102.fix",
+ "state": "attack",
+ "seed": 97102,
+ "method": "lora+openpose, then masked repaint (lora inpaint)",
+ "fixOf": "attack.96101",
+ "judge": "marks 6: the shoulder disc is a crosshatched mesh grille, not the idle's radial disc",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "emblem",
+   "crop": [
+    282,
+    248,
+    538,
+    504
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      410.5,
+      375.5,
+      23,
+      21
+     ]
+    }
+   ],
+   "minus": [
+    {
+     "ellipse": [
+      405,
+      387.5,
+      14,
+      10
+     ]
+    }
+   ],
+   "feather": 2,
+   "alpha": "keep",
+   "paste": {
+    "from": "public/art/characters/logos/idle.png",
+    "center": [
+     328,
+     259
+    ],
+    "r": 28,
+    "to": [
+     410.5,
+     375.5,
+     20.5,
+     19
+    ],
+    "keep": [
+     {
+      "ellipse": [
+       405,
+       387.5,
+       15,
+       11
+      ]
+     }
+    ]
+   },
+   "denoise": 0.3,
+   "refs": [
+    "refs/idle-emblem.png"
+   ],
+   "refWeight": 0.45,
+   "positive": "logosX2, 1boy, solo, close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, mesh, grille, grid, crosshatch, net pattern, speaker, text"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "width": 832,
+ "height": 1216,
+ "composition": "full",
+ "cutout": {
+  "width": 817,
+  "height": 1013,
+  "baselineY": 997,
+  "cropBox": [
+   15,
+   139,
+   832,
+   1152
+  ],
+  "contentBox": [
+   31,
+   155,
+   822,
+   1136
+  ],
+  "sourceWidth": 832,
+  "sourceHeight": 1216,
+  "model": "isnet-anime (installed cutout outside the fix masks)"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.9819711538461539,
+    "heightFraction": 0.8330592105263158,
+    "checked": true,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 269516,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.007739800234494427,
+    "largestRegionFraction": 0.0013283070392852373,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "base": {
+  "tag": "attack.96101",
+  "positive": "logosX2, 1boy, solo, full body, from side, profile, facing left, lunging, leaning forward, legs apart, one leg forward, aiming, arms forward, outstretched arms, holding gun, dual wielding, serious, v-shaped eyebrows, closed mouth, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, revolver, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, arms down, arm behind back, smile, standing still",
+  "controlnet": {
+   "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+   "image": "docs/concepts/chapters/leblanc/lora/logos/poses/attack-pose.png",
+   "strength": 0.6,
+   "start": 0,
+   "end": 0.8
+  },
+  "ipadapter": {
+   "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+   "images": [
+    "refs/idle-square.png",
+    "refs/idle-head.png"
+   ],
+   "weight": 0.3,
+   "type": "ease in",
+   "start": 0.2,
+   "end": 0.6,
+   "combine": "concat",
+   "scaling": "K+V"
+  }
+ },
+ "seconds": 7,
+ "generatedAt": "2026-09-23T08:09:26.473Z"
+}

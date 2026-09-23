@@ -18,7 +18,7 @@ ART = REPO / 'public/art/characters/logos'
 CROPS = json.loads((HERE / 'crops.json').read_text(encoding='utf-8'))
 H = 520
 BG = (236, 236, 236)
-LABEL = 26
+LABEL = 40
 
 
 def flat(im):
@@ -42,6 +42,10 @@ for state in ['idle', 'attack', 'cast', 'hurt', 'ko']:
              (f"{state} installed, seed {side.get('seed')}, {str(side.get('method', ''))[:24]}", fit(flat(im), whole_h)),
              ('1:1 face / helmet', flat(im.crop(tuple(c['face'])))),
              ('1:1 costume', flat(im.crop(tuple(c['costume']))))]
+    if 'fix' in c:
+        tiles.append(('1:1 local fix', flat(im.crop(tuple(c['fix'])))))
+    if side.get('bar'):
+        tiles[1] = (f"{state}: {side['renderTag']}, self-judged {side.get('selfScore')}\n{side['bar']}", tiles[1][1])
     rh = max(t.height for _, t in tiles) + LABEL
     rw = sum(t.width for _, t in tiles) + 16 * len(tiles)
     row = Image.new('RGB', (rw, rh), (70, 70, 70))
@@ -55,7 +59,7 @@ for state in ['idle', 'attack', 'cast', 'hurt', 'ko']:
 
 W = max(r.width for r in rows)
 sheet = Image.new('RGB', (W, sum(r.height for r in rows) + 10 * len(rows) + 30), (40, 40, 40))
-ImageDraw.Draw(sheet).text((8, 8), 'Logos (FFX-2, Chapter 6): LoRA logos-x2 step 2000 + OpenPose poses. ALL CANDIDATES, none approved. Crops are native 1:1.', fill=(255, 255, 255))
+ImageDraw.Draw(sheet).text((8, 8), 'Logos (FFX-2, Chapter 6): LoRA logos-x2 step 2000 + OpenPose poses, then masked local repaints (fix.md). ALL CANDIDATES, none approved. Crops are native 1:1.', fill=(255, 255, 255))
 y = 30
 for r in rows:
     sheet.paste(r, (0, y))

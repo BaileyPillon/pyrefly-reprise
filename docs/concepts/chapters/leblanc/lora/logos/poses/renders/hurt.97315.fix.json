@@ -1,0 +1,110 @@
+{
+ "tag": "hurt.97315.fix",
+ "state": "hurt",
+ "fixKey": "hurt.r2",
+ "seed": 97315,
+ "method": "lora+openpose, then masked repaint (lora inpaint)",
+ "fixOf": "hurt.97303.fix",
+ "judge": "helmet 6: an invented wing-shaped engraving on the helmet front (after the face fix 97303)",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "lora": {
+  "file": "logos-x2.safetensors",
+  "step": 2000,
+  "sha256": "2252538fe454340915711c9cf019cfe2a5252f7ecff316507a72811637b5a8d9",
+  "strength": 0.85
+ },
+ "passes": [
+  {
+   "name": "helmet front engraving",
+   "crop": [
+    480,
+    120,
+    800,
+    440
+   ],
+   "size": [
+    1024,
+    1024
+   ],
+   "mask": [
+    {
+     "ellipse": [
+      630,
+      262,
+      38,
+      24
+     ]
+    }
+   ],
+   "minus": [],
+   "feather": 4,
+   "alpha": "keep",
+   "paste": null,
+   "denoise": 0.66,
+   "refs": [
+    "refs/idle-head.png"
+   ],
+   "refWeight": 0.5,
+   "positive": "logosX2, 1boy, solo, from side, silver helmet, ribbed helmet, smooth metal, parallel grooves, visor, black hair, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, hat, brim, crest, fin, plume, feathers, horns, winged helmet, pauldrons, 1girl, long hair, gold trim, yellow sash, dark skin, tan, wings, feathers, winged helmet, engraving, emblem, symbol, text, letters, ornament"
+  }
+ ],
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "width": 832,
+ "height": 1216,
+ "composition": "full",
+ "cutout": {
+  "width": 667,
+  "height": 972,
+  "baselineY": 956,
+  "cropBox": [
+   165,
+   215,
+   832,
+   1187
+  ],
+  "contentBox": [
+   181,
+   231,
+   821,
+   1171
+  ],
+  "sourceWidth": 832,
+  "sourceHeight": 1216,
+  "model": "isnet-anime (installed cutout outside the fix masks)"
+ },
+ "cutoutGuard": {
+  "ok": true,
+  "reasons": [],
+  "measurements": {
+   "coverage": {
+    "widthFraction": 0.8016826923076923,
+    "heightFraction": 0.7993421052631579,
+    "checked": true,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 1,
+    "largestPixels": 229272,
+    "secondPixels": 0,
+    "secondRatio": 0,
+    "touchesLargest": null
+   },
+   "nearWhite": {
+    "fraction": 0.01261383858473778,
+    "largestRegionFraction": 0.0009333891622178024,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 0.03
+   }
+  }
+ },
+ "base": {
+  "tag": "hurt.97303.fix"
+ },
+ "seconds": 8,
+ "generatedAt": "2026-09-23T08:25:31.471Z"
+}

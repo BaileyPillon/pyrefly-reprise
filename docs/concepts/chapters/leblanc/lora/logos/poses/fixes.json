@@ -1,0 +1,867 @@
+{
+ "attack": {
+  "pick": "attack.96101",
+  "seed0": 97101,
+  "judge": "marks 6: the shoulder disc is a crosshatched mesh grille, not the idle's radial disc",
+  "passes": [
+   {
+    "name": "emblem",
+    "crop": [
+     282,
+     248,
+     538,
+     504
+    ],
+    "long": 1024,
+    "paste": {
+     "from": "public/art/characters/logos/idle.png",
+     "center": [
+      328,
+      259
+     ],
+     "r": 28,
+     "to": [
+      410.5,
+      375.5,
+      20.5,
+      19
+     ],
+     "keep": [
+      {
+       "ellipse": [
+        405,
+        387.5,
+        15,
+        11
+       ]
+      }
+     ]
+    },
+    "mask": [
+     {
+      "ellipse": [
+       410.5,
+       375.5,
+       23,
+       21
+      ]
+     }
+    ],
+    "minus": [
+     {
+      "ellipse": [
+       405,
+       387.5,
+       14,
+       10
+      ]
+     }
+    ],
+    "feather": 2,
+    "alpha": "keep",
+    "denoise": [
+     0.3,
+     0.3,
+     0.4,
+     0.4,
+     0.5,
+     0.5
+    ],
+    "refs": [
+     "refs/idle-emblem.png"
+    ],
+    "refWeight": 0.45,
+    "tags": "close-up, shoulder, white shoulder emblem, radial pattern, spokes, round emblem, blue robe, black shoulder strap, brass ring, cel shading",
+    "neg": "mesh, grille, grid, crosshatch, net pattern, speaker, text"
+   }
+  ]
+ },
+ "cast": {
+  "pick": "cast.96201",
+  "seed0": 97201,
+  "scale": 0.9,
+  "judge": "weapon 6: the low revolver hangs from one finger while the fist closes on a grey stub",
+  "passes": [
+   {
+    "name": "low hand",
+    "crop": [
+     290,
+     485,
+     610,
+     805
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "poly": [
+       [
+        420,
+        588
+       ],
+       [
+        492,
+        588
+       ],
+       [
+        502,
+        612
+       ],
+       [
+        500,
+        650
+       ],
+       [
+        470,
+        700
+       ],
+       [
+        440,
+        712
+       ],
+       [
+        398,
+        706
+       ],
+       [
+        396,
+        650
+       ],
+       [
+        412,
+        620
+       ]
+      ]
+     }
+    ],
+    "feather": 5,
+    "alpha": "keep",
+    "denoise": [
+     0.62,
+     0.62,
+     0.7,
+     0.7,
+     0.78,
+     0.78
+    ],
+    "refs": [
+     "refs/attack-grip.png"
+    ],
+    "refWeight": 0.3,
+    "tags": "close-up, hand, holding gun, hand gripping revolver handle, fist around grip, index finger on trigger, gun pointing down, arm at side, silver revolver, black grip, pale skin, blue robe, dark blue hakama",
+    "neg": "open hand, finger in trigger guard, hanging gun, dangling gun, extra fingers, extra weapon, gun stub, fused fingers"
+   }
+  ]
+ },
+ "hurt": {
+  "pick": "hurt.96303.r2",
+  "seed0": 97301,
+  "judge": "face 5: the head is thrown back so far the face is a blank white profile with no eye and no wince",
+  "passes": [
+   {
+    "name": "face",
+    "crop": [
+     480,
+     160,
+     800,
+     480
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "poly": [
+       [
+        572,
+        262
+       ],
+       [
+        640,
+        250
+       ],
+       [
+        662,
+        290
+       ],
+       [
+        664,
+        350
+       ],
+       [
+        640,
+        372
+       ],
+       [
+        596,
+        368
+       ],
+       [
+        566,
+        336
+       ],
+       [
+        560,
+        296
+       ]
+      ]
+     }
+    ],
+    "feather": 5,
+    "alpha": "rembg",
+    "denoise": [
+     0.66,
+     0.66,
+     0.74,
+     0.74,
+     0.8,
+     0.8
+    ],
+    "refs": [
+     "refs/idle-head.png"
+    ],
+    "refWeight": 0.4,
+    "tags": "portrait, from side, profile, facing left, looking ahead, head tilted back slightly, eye visible, v-shaped eyebrows, wince, pained expression, clenched teeth, black hair, short hair, silver helmet, visor, pale skin, black collar",
+    "neg": "smile, smirk, calm, blank face, no eyes, faceless, closed eyes, looking up, head back, wide open mouth, blood, text, engraving, wings"
+   }
+  ]
+ },
+ "ko": {
+  "pick": "ko.96402.r2",
+  "seed0": 97401,
+  "judge": "helmet 5: a glyph-like engraved band reads as lettering; a dark oval on the cheek; a brass ring on the sash",
+  "passes": [
+   {
+    "name": "helmet band + cheek",
+    "crop": [
+     40,
+     510,
+     360,
+     790
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       137,
+       588,
+       40,
+       60
+      ]
+     },
+     {
+      "ellipse": [
+       226,
+       628,
+       19,
+       14
+      ]
+     }
+    ],
+    "feather": 4,
+    "alpha": "keep",
+    "denoise": [
+     0.55,
+     0.55,
+     0.62,
+     0.62,
+     0.7,
+     0.7
+    ],
+    "refs": [
+     "refs/idle-head.png"
+    ],
+    "refWeight": 0.45,
+    "tags": "lying, on back, closed eyes, silver helmet, ribbed helmet, smooth metal, plain helmet, thin grey chin strap, pale skin, black hair, short hair",
+    "neg": "text, letters, writing, runes, glyphs, engraving, symbol, emblem on helmet, sunglasses, goggles, eyepatch, bruise"
+   },
+   {
+    "name": "sash ring",
+    "crop": [
+     400,
+     480,
+     656,
+     736
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       502,
+       565,
+       33,
+       15
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "rembg",
+    "denoise": [
+     0.85,
+     0.85,
+     0.85,
+     0.85,
+     0.85,
+     0.85
+    ],
+    "refs": [
+     "refs/idle-square.png"
+    ],
+    "refWeight": 0.25,
+    "tags": "lying, on back, purple sash, blue robe, black outline, white background",
+    "neg": "ring, brass ring, buckle, metal ring, belt buckle, jewelry, hoop"
+   }
+  ]
+ },
+ "cast.r2": {
+  "pick": "cast.96201",
+  "seed0": 97211,
+  "scale": 0.9,
+  "judge": "weapon 6: the low revolver hangs from one finger while the fist closes on a grey stub",
+  "passes": [
+   {
+    "name": "low hand, round 2 (stub pre-filled)",
+    "crop": [
+     290,
+     485,
+     610,
+     805
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "poly": [
+       [
+        418,
+        582
+       ],
+       [
+        500,
+        582
+       ],
+       [
+        510,
+        612
+       ],
+       [
+        505,
+        655
+       ],
+       [
+        475,
+        705
+       ],
+       [
+        440,
+        715
+       ],
+       [
+        396,
+        708
+       ],
+       [
+        394,
+        650
+       ],
+       [
+        410,
+        615
+       ]
+      ]
+     }
+    ],
+    "feather": 5,
+    "alpha": "keep",
+    "denoise": [
+     0.8,
+     0.8,
+     0.86,
+     0.86,
+     0.9,
+     0.9
+    ],
+    "refs": [
+     "refs/attack-grip.png"
+    ],
+    "refWeight": 0.3,
+    "tags": "close-up, hand, holding gun, fist, hand gripping revolver handle, revolver grip inside fist, index finger on trigger, gun pointing down, arm at side, silver revolver, black grip, pale skin, blue robe, dark blue hakama",
+    "neg": "open hand, finger in trigger guard, hanging gun, dangling gun, extra fingers, extra weapon, gun stub, fused fingers",
+    "prefill": [
+     {
+      "ellipse": [
+       481,
+       626,
+       12,
+       22
+      ],
+      "color": [
+       12,
+       12,
+       22
+      ]
+     }
+    ]
+   }
+  ],
+  "state": "cast"
+ },
+ "hurt.r2": {
+  "state": "hurt",
+  "pick": "hurt.97303.fix",
+  "seed0": 97311,
+  "judge": "helmet 6: an invented wing-shaped engraving on the helmet front (after the face fix 97303)",
+  "passes": [
+   {
+    "name": "helmet front engraving",
+    "crop": [
+     480,
+     120,
+     800,
+     440
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "ellipse": [
+       630,
+       262,
+       38,
+       24
+      ]
+     }
+    ],
+    "feather": 4,
+    "alpha": "keep",
+    "denoise": [
+     0.5,
+     0.5,
+     0.58,
+     0.58,
+     0.66,
+     0.66
+    ],
+    "refs": [
+     "refs/idle-head.png"
+    ],
+    "refWeight": 0.5,
+    "tags": "from side, silver helmet, ribbed helmet, smooth metal, parallel grooves, visor, black hair",
+    "neg": "wings, feathers, winged helmet, engraving, emblem, symbol, text, letters, ornament"
+   }
+  ]
+ },
+ "ko.r2": {
+  "state": "ko",
+  "pick": "ko.97401.fix",
+  "seed0": 97411,
+  "judge": "face 6 (dark oval on the cheek) and marks 6 (brass ring on the sash), after the helmet fix 97401",
+  "passes": [
+   {
+    "name": "cheek oval",
+    "crop": [
+     120,
+     540,
+     340,
+     720
+    ],
+    "long": 1024,
+    "prefill": [
+     {
+      "ellipse": [
+       229,
+       625,
+       14,
+       11
+      ],
+      "color": [
+       6,
+       5,
+       10
+      ]
+     }
+    ],
+    "mask": [
+     {
+      "ellipse": [
+       229,
+       625,
+       18,
+       14
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "denoise": [
+     0.4,
+     0.4,
+     0.5,
+     0.5,
+     0.6,
+     0.6
+    ],
+    "refs": [
+     "refs/idle-head.png"
+    ],
+    "refWeight": 0.4,
+    "tags": "lying, on back, closed eyes, black hair, short hair, pale skin, thin grey chin strap",
+    "neg": "sunglasses, goggles, lens, eyepatch, bruise, text"
+   },
+   {
+    "name": "sash ring",
+    "crop": [
+     400,
+     480,
+     656,
+     736
+    ],
+    "long": 1024,
+    "prefill": [
+     {
+      "poly": [
+       [
+        464,
+        546
+       ],
+       [
+        542,
+        546
+       ],
+       [
+        542,
+        561.5
+       ],
+       [
+        464,
+        566.5
+       ]
+      ],
+      "color": [
+       255,
+       255,
+       255
+      ]
+     },
+     {
+      "poly": [
+       [
+        464,
+        566.5
+       ],
+       [
+        542,
+        561.5
+       ],
+       [
+        542,
+        575
+       ],
+       [
+        464,
+        576
+       ]
+      ],
+      "color": [
+       4,
+       3,
+       9
+      ]
+     },
+     {
+      "poly": [
+       [
+        476,
+        575
+       ],
+       [
+        536,
+        575
+       ],
+       [
+        536,
+        581
+       ],
+       [
+        476,
+        581
+       ]
+      ],
+      "color": [
+       150,
+       82,
+       238
+      ]
+     }
+    ],
+    "mask": [
+     {
+      "ellipse": [
+       503,
+       565,
+       38,
+       18
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "rembg",
+    "denoise": [
+     0.3,
+     0.3,
+     0.35,
+     0.35,
+     0.4,
+     0.4
+    ],
+    "refs": [
+     "refs/idle-square.png"
+    ],
+    "refWeight": 0.25,
+    "tags": "lying, on back, purple sash, blue robe, black outline, white background",
+    "neg": "ring, brass ring, buckle, metal ring, belt buckle, jewelry, hoop",
+    "whiteKey": true,
+    "alphaGrow": 4
+   }
+  ]
+ },
+ "ko.r3": {
+  "state": "ko",
+  "pick": "ko.97401.fix",
+  "seed0": 97421,
+  "judge": "face 6 (dark oval on the cheek) and marks 6 (brass ring on the sash), after the helmet fix 97401",
+  "passes": [
+   {
+    "name": "cheek oval",
+    "crop": [
+     120,
+     540,
+     340,
+     720
+    ],
+    "long": 1024,
+    "prefill": [
+     {
+      "ellipse": [
+       229,
+       625,
+       14,
+       11
+      ],
+      "color": [
+       6,
+       5,
+       10
+      ]
+     }
+    ],
+    "mask": [
+     {
+      "ellipse": [
+       229,
+       625,
+       18,
+       14
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "keep",
+    "denoise": [
+     0.4,
+     0.4,
+     0.5,
+     0.5,
+     0.6,
+     0.6
+    ],
+    "refs": [
+     "refs/idle-head.png"
+    ],
+    "refWeight": 0.4,
+    "tags": "lying, on back, closed eyes, black hair, short hair, pale skin, thin grey chin strap",
+    "neg": "sunglasses, goggles, lens, eyepatch, bruise, text"
+   },
+   {
+    "name": "sash ring (pre-filled, higher denoise for a crisp outline)",
+    "crop": [
+     400,
+     480,
+     656,
+     736
+    ],
+    "long": 1024,
+    "prefill": [
+     {
+      "poly": [
+       [
+        464,
+        546
+       ],
+       [
+        542,
+        546
+       ],
+       [
+        542,
+        561.5
+       ],
+       [
+        464,
+        566.5
+       ]
+      ],
+      "color": [
+       255,
+       255,
+       255
+      ]
+     },
+     {
+      "poly": [
+       [
+        464,
+        566.5
+       ],
+       [
+        542,
+        561.5
+       ],
+       [
+        542,
+        575
+       ],
+       [
+        464,
+        576
+       ]
+      ],
+      "color": [
+       4,
+       3,
+       9
+      ]
+     },
+     {
+      "poly": [
+       [
+        476,
+        575
+       ],
+       [
+        536,
+        575
+       ],
+       [
+        536,
+        581
+       ],
+       [
+        476,
+        581
+       ]
+      ],
+      "color": [
+       150,
+       82,
+       238
+      ]
+     }
+    ],
+    "mask": [
+     {
+      "ellipse": [
+       503,
+       565,
+       38,
+       18
+      ]
+     }
+    ],
+    "feather": 3,
+    "alpha": "rembg",
+    "denoise": [
+     0.45,
+     0.45,
+     0.52,
+     0.52,
+     0.6,
+     0.6
+    ],
+    "refs": [
+     "refs/idle-square.png"
+    ],
+    "refWeight": 0.25,
+    "tags": "lying, on back, purple sash, blue robe, black outline, white background",
+    "neg": "ring, brass ring, buckle, metal ring, belt buckle, jewelry, hoop",
+    "whiteKey": true,
+    "alphaGrow": 4
+   }
+  ]
+ },
+ "hurt.r3": {
+  "state": "hurt",
+  "pick": "hurt.97314.fix",
+  "seed0": 97321,
+  "judge": "weapon 6: the near hand lays its fingers over the frame instead of around the grip (after the face and helmet fixes 97303 -> 97314)",
+  "passes": [
+   {
+    "name": "near-hand grip",
+    "crop": [
+     220,
+     420,
+     540,
+     740
+    ],
+    "long": 1024,
+    "mask": [
+     {
+      "poly": [
+       [
+        322,
+        520
+       ],
+       [
+        372,
+        512
+       ],
+       [
+        402,
+        528
+       ],
+       [
+        404,
+        576
+       ],
+       [
+        386,
+        600
+       ],
+       [
+        338,
+        600
+       ],
+       [
+        316,
+        576
+       ]
+      ]
+     }
+    ],
+    "feather": 4,
+    "alpha": "rembg",
+    "whiteKey": true,
+    "alphaGrow": 0,
+    "denoise": [
+     0.55,
+     0.55,
+     0.62,
+     0.62,
+     0.7,
+     0.7
+    ],
+    "refs": [
+     "refs/attack-grip.png"
+    ],
+    "refWeight": 0.3,
+    "tags": "close-up, hand, holding gun, hand gripping revolver handle, fist around grip, index finger on trigger, arm outstretched, revolver, black grip, pale skin, blue robe, white background",
+    "neg": "open hand, fingers over the gun, extra fingers, fused fingers, extra weapon, glove"
+   }
+  ]
+ }
+}
