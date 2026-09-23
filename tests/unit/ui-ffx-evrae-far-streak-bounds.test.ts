@@ -1,5 +1,10 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { EVRAE_FAR_STREAK_ASPECT, widenForEvraeFarStreak } from '../../src/ui/ffx/evraeFarStreakBounds.ts';
+import {
+  EVRAE_FAR_STREAK_ASPECT,
+  evraeFarStreakRect,
+  widenForEvraeFarStreak,
+} from '../../src/ui/ffx/evraeFarStreakBounds.ts';
 import { AIRSHIP_RANGE } from '../../src/battle/ffx/ai/evrae-rules.ts';
 import { EVRAE_ID } from '../../src/data/ffx/enemies/evrae.ts';
 import type { BattleState } from '../../src/battle/common/types.ts';
@@ -37,5 +42,39 @@ describe('widenForEvraeFarStreak', () => {
     // the streak aspect's want-width should be left alone.
     const tall = { left: 0, right: 100, top: 0, bottom: 10 };
     expect(widenForEvraeFarStreak(tall, EVRAE_ID, stateWithRange('far'))).toEqual(tall);
+  });
+});
+
+describe('evraeFarStreakRect', () => {
+  const identity = (x: number, y: number) => ({ x, y });
+
+  it('is null for anything but Evrae at FAR, or with no real rect', () => {
+    expect(evraeFarStreakRect('seymour', stateWithRange('far'), { x: 0, y: 0, w: 10, h: 10 }, identity)).toBeNull();
+    expect(evraeFarStreakRect(EVRAE_ID, stateWithRange('near'), { x: 0, y: 0, w: 10, h: 10 }, identity)).toBeNull();
+    expect(evraeFarStreakRect(EVRAE_ID, stateWithRange('far'), null, identity)).toBeNull();
+  });
+
+  it('converts the tight alpha-box rect through the grid transform exactly', () => {
+    const toGrid = (x: number, y: number) => ({ x: x / 2 - 5, y: y / 2 - 3 });
+    const got = evraeFarStreakRect(EVRAE_ID, stateWithRange('far'), { x: 40, y: 20, w: 100, h: 60 }, toGrid);
+    expect(got).toEqual({ left: 15, top: 7, right: 65, bottom: 37 });
+  });
+
+  /**
+   * Round-10 verifier (refuted item (c)): at 1600x900, decision d2, the
+   * aspect-only widen still overlapped Evrae's real silhouette by 9 413 px²,
+   * because it kept the humanoid estimate's height and vertical position and
+   * only widened the width. The verifier measured the true silhouette at
+   * `{ x: 856, y: 288, w: 234, h: 173 }` via `BattleScreen.stage.projectRect
+   * ('evrae')` (right 1090, bottom 461 — the exact numbers the report
+   * cites). The fix (`FFXBattleHud.enemySpriteRects`) now hands the advisor
+   * solver this measurement itself as the obstacle, instead of a
+   * reconstruction of it built from head/feet anchors, so the obstacle
+   * cannot itself be an under- or over-estimate of where Evrae actually is.
+   */
+  it('reproduces round-10 decision d2 exactly: the real silhouette the verifier measured', () => {
+    const real = { x: 856, y: 288, w: 234, h: 173 }; // right 1090, bottom 461
+    const got = evraeFarStreakRect(EVRAE_ID, stateWithRange('far'), real, identity)!;
+    expect(got).toEqual({ left: 856, top: 288, right: 1090, bottom: 461 });
   });
 });

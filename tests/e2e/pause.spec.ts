@@ -344,6 +344,21 @@ test('a mouse click on the PAUSE chip does not leave it stealing the next Enter 
   await page.waitForTimeout(300);
   expect((await look(page)).stack).not.toContain('pause');
 
+  // The mechanism the round-10 verifier confirmed (`docs/handoff/`): the leak
+  // is that `document.activeElement` stays the chip's own <button> after the
+  // click, so a later Enter is the browser's own default action on that
+  // focused button, not the command menu answering. Assert the element
+  // itself, not just the outcome, so a regression that changes *how* the
+  // pause reopens (rather than whether) still fails this test.
+  const activeIsChip = await page.evaluate(
+    () => document.activeElement?.classList.contains('battle-pause-chip') ?? false,
+  );
+  expect(activeIsChip, 'the PAUSE chip must not hold focus after a mouse click').toBe(false);
+
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(150);
+  expect((await look(page)).stack, 'ArrowDown belongs to the command menu, not the chip').not.toContain('pause');
+
   // The regression: this Enter belongs to the command menu. If the chip
   // still has focus, the browser treats it as another click on the chip and
   // the pause reopens instead of the menu accepting the selection.

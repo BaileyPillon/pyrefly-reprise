@@ -27,7 +27,7 @@ import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
-import { widenForEvraeFarStreak } from './evraeFarStreakBounds.ts';
+import { evraeFarStreakRect, widenForEvraeFarStreak } from './evraeFarStreakBounds.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
@@ -1383,18 +1383,26 @@ export class FFXBattleHud implements HudPort {
     // `evraeFarStreakBounds.ts` (`chapter-evrae-finish.md` item (c)). FFX only.
     return this.spriteRects(
       state.enemyIds.filter((id) => state.combatants[id]?.alive !== false),
-      (rect, id) => widenForEvraeFarStreak(rect, id, state),
+      (rect, id, toGrid) =>
+        evraeFarStreakRect(id, state, this.targeting?.rect(id) ?? null, toGrid) ??
+        widenForEvraeFarStreak(rect, id, state),
     );
   }
 
   /** The shared half of {@link partySpriteRects} and {@link enemySpriteRects}. */
-  private spriteRects(ids: readonly CombatantId[], adjust?: (rect: Rect, id: CombatantId) => Rect): Rect[] {
+  private spriteRects(
+    ids: readonly CombatantId[],
+    adjust?: (rect: Rect, id: CombatantId, toGrid: (x: number, y: number) => { x: number; y: number }) => Rect,
+  ): Rect[] {
     if (!this.lastState) return [];
     const scale = this.hudScale();
     if (!scale) return [];
     const host = this.el.getBoundingClientRect();
     const ox = host.left + (host.width - STAGE.width * scale) / 2;
     const oy = host.top + (host.height - STAGE.height * scale) / 2;
+    // Shared with `evraeFarStreakRect`: converts a viewport-CSS-px point (as
+    // `PaintedStage.projectRect` reports) into this method's own grid space.
+    const toGrid = (x: number, y: number): { x: number; y: number } => ({ x: (x - ox) / scale, y: (y - oy) / scale });
     const out: Rect[] = [];
     for (const id of ids) {
       const head = this.project(id, 'head');
@@ -1411,7 +1419,7 @@ export class FFXBattleHud implements HudPort {
       const top = Math.min(headY, feetY) - span * SPRITE_TOP_MARGIN_RATIO;
       const bottom = Math.max(headY, feetY) + span * SPRITE_FOOT_MARGIN_RATIO;
       const rect = { left: cx - half, right: cx + half, top, bottom };
-      out.push(adjust ? adjust(rect, id) : rect);
+      out.push(adjust ? adjust(rect, id, toGrid) : rect);
     }
     return out;
   }
