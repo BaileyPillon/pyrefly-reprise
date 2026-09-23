@@ -1,0 +1,1361 @@
+{
+ "port": 5460,
+ "browser": "gpu",
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "viewport": [
+  1600,
+  900
+ ],
+ "done": {
+  "outcome": "victory"
+ },
+ "elapsedS": 234,
+ "shots": {
+  "ormi-hurt": {
+   "t": 123638,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1448
+  },
+  "ormi-cast": {
+   "t": 126893,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 860
+  },
+  "logos-cast": {
+   "t": 161422,
+   "id": "logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/logos/cast.png",
+   "hp": 1432
+  },
+  "logos-hurt": {
+   "t": 162876,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 1232
+  },
+  "leblanc-cast": {
+   "t": 214200,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  "leblanc-hurt": {
+   "t": 336683,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1276
+  }
+ },
+ "summary": {
+  "ormi-entrance:idle->idle": 4,
+  "ormi-entrance:hurt->hurt": 10,
+  "ormi-entrance:cast->cast": 7,
+  "ormi-entrance:ko->ko": 1,
+  "ormi-logos-room:idle->idle": 11,
+  "logos-room:idle->idle": 9,
+  "logos-room:cast->cast": 2,
+  "logos-room:hurt->hurt": 7,
+  "ormi-logos-room:hurt->hurt": 10,
+  "ormi-logos-room:cast->cast": 8,
+  "logos-room:ko->ko": 1,
+  "ormi-logos-room:ko->ko": 1,
+  "leblanc:idle->idle": 16,
+  "logos:idle->idle": 10,
+  "ormi:idle->idle": 15,
+  "logos:hurt->hurt": 8,
+  "leblanc:cast->cast": 8,
+  "ormi:cast->cast": 4,
+  "logos:cast->cast": 2,
+  "logos:ko->ko": 1,
+  "ormi:hurt->hurt": 11,
+  "ormi:ko->ko": 1,
+  "leblanc:hurt->hurt": 8,
+  "leblanc:ko->ko": 1
+ },
+ "artRequests": 170,
+ "artBad": [],
+ "trioArtRequests": [
+  "200 /art/characters/ormi/idle.png",
+  "200 /art/characters/ormi/cast.png",
+  "200 /art/characters/ormi/cast.json",
+  "200 /art/characters/ormi/idle.json",
+  "200 /art/characters/logos/idle.json",
+  "200 /art/characters/logos/cast.json",
+  "200 /art/characters/logos/idle.png",
+  "200 /art/characters/logos/cast.png",
+  "200 /art/characters/leblanc/idle.png",
+  "200 /art/characters/leblanc/cast.png",
+  "200 /art/characters/leblanc/idle.json",
+  "200 /art/characters/leblanc/cast.json"
+ ],
+ "console": [
+  {
+   "type": "warning",
+   "text": "THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead."
+  }
+ ],
+ "events": [
+  {
+   "t": 114657,
+   "id": "ormi-entrance",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1640
+  },
+  {
+   "t": 123638,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1448
+  },
+  {
+   "t": 123945,
+   "id": "ormi-entrance",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1448
+  },
+  {
+   "t": 125027,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1148
+  },
+  {
+   "t": 125374,
+   "id": "ormi-entrance",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1148
+  },
+  {
+   "t": 126301,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 860
+  },
+  {
+   "t": 126633,
+   "id": "ormi-entrance",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 860
+  },
+  {
+   "t": 126893,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 860
+  },
+  {
+   "t": 128622,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 749
+  },
+  {
+   "t": 128968,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 749
+  },
+  {
+   "t": 130352,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 639
+  },
+  {
+   "t": 130706,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 639
+  },
+  {
+   "t": 130819,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 417
+  },
+  {
+   "t": 131167,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 417
+  },
+  {
+   "t": 132786,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 336
+  },
+  {
+   "t": 133133,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 336
+  },
+  {
+   "t": 134184,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 178
+  },
+  {
+   "t": 134534,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 178
+  },
+  {
+   "t": 135590,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 13
+  },
+  {
+   "t": 135932,
+   "id": "ormi-entrance",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 13
+  },
+  {
+   "t": 136621,
+   "id": "ormi-entrance",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 136878,
+   "id": "ormi-entrance",
+   "requested": "ko",
+   "pose": "ko",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 155952,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1840
+  },
+  {
+   "t": 156070,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 1432
+  },
+  {
+   "t": 161422,
+   "id": "logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/logos/cast.png",
+   "hp": 1432
+  },
+  {
+   "t": 162635,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 1432
+  },
+  {
+   "t": 162876,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 1232
+  },
+  {
+   "t": 163059,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1647
+  },
+  {
+   "t": 163215,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 1232
+  },
+  {
+   "t": 163400,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1647
+  },
+  {
+   "t": 163465,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 933
+  },
+  {
+   "t": 163669,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1369
+  },
+  {
+   "t": 163799,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 933
+  },
+  {
+   "t": 164018,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1369
+  },
+  {
+   "t": 164084,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 642
+  },
+  {
+   "t": 164284,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1078
+  },
+  {
+   "t": 164431,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 642
+  },
+  {
+   "t": 164632,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1078
+  },
+  {
+   "t": 164808,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 1078
+  },
+  {
+   "t": 165850,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1078
+  },
+  {
+   "t": 166403,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 518
+  },
+  {
+   "t": 166747,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 518
+  },
+  {
+   "t": 167186,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 354
+  },
+  {
+   "t": 167537,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 354
+  },
+  {
+   "t": 168035,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 5
+  },
+  {
+   "t": 168381,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 5
+  },
+  {
+   "t": 168601,
+   "id": "logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/logos/cast.png",
+   "hp": 5
+  },
+  {
+   "t": 169949,
+   "id": "logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 5
+  },
+  {
+   "t": 170484,
+   "id": "logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 170742,
+   "id": "logos-room",
+   "requested": "ko",
+   "pose": "ko",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 187795,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 1078
+  },
+  {
+   "t": 189515,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 975
+  },
+  {
+   "t": 189863,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 975
+  },
+  {
+   "t": 190882,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 785
+  },
+  {
+   "t": 191229,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 785
+  },
+  {
+   "t": 191898,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 656
+  },
+  {
+   "t": 192246,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 656
+  },
+  {
+   "t": 195497,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 656
+  },
+  {
+   "t": 195581,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 656
+  },
+  {
+   "t": 196629,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 656
+  },
+  {
+   "t": 200113,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 656
+  },
+  {
+   "t": 201163,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 656
+  },
+  {
+   "t": 201380,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 503
+  },
+  {
+   "t": 201730,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 503
+  },
+  {
+   "t": 203002,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 343
+  },
+  {
+   "t": 203346,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 343
+  },
+  {
+   "t": 203781,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 194
+  },
+  {
+   "t": 204129,
+   "id": "ormi-logos-room",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 194
+  },
+  {
+   "t": 205262,
+   "id": "ormi-logos-room",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 194
+  },
+  {
+   "t": 206080,
+   "id": "ormi-logos-room",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 206335,
+   "id": "ormi-logos-room",
+   "requested": "ko",
+   "pose": "ko",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 208712,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 208712,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 989
+  },
+  {
+   "t": 208712,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1344
+  },
+  {
+   "t": 212868,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 865
+  },
+  {
+   "t": 213211,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 865
+  },
+  {
+   "t": 213646,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 705
+  },
+  {
+   "t": 213996,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 705
+  },
+  {
+   "t": 214200,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 223362,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 359
+  },
+  {
+   "t": 223711,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 359
+  },
+  {
+   "t": 223919,
+   "id": "ormi",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 1344
+  },
+  {
+   "t": 224963,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1344
+  },
+  {
+   "t": 228382,
+   "id": "logos",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/logos/cast.png",
+   "hp": 359
+  },
+  {
+   "t": 229578,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 359
+  },
+  {
+   "t": 230962,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 296
+  },
+  {
+   "t": 231310,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 296
+  },
+  {
+   "t": 234247,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 214
+  },
+  {
+   "t": 234594,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 214
+  },
+  {
+   "t": 237028,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 78
+  },
+  {
+   "t": 237377,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 78
+  },
+  {
+   "t": 238328,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 238411,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 239495,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 240628,
+   "id": "ormi",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 1344
+  },
+  {
+   "t": 241677,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1344
+  },
+  {
+   "t": 245345,
+   "id": "logos",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/logos/cast.png",
+   "hp": 78
+  },
+  {
+   "t": 246543,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 78
+  },
+  {
+   "t": 253294,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 45
+  },
+  {
+   "t": 253644,
+   "id": "logos",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 45
+  },
+  {
+   "t": 256594,
+   "id": "logos",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 256849,
+   "id": "logos",
+   "requested": "ko",
+   "pose": "ko",
+   "url": "/art/characters/logos/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 268611,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 269982,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1254
+  },
+  {
+   "t": 270327,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1254
+  },
+  {
+   "t": 270460,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 275694,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1215
+  },
+  {
+   "t": 276043,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1215
+  },
+  {
+   "t": 279327,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1136
+  },
+  {
+   "t": 279677,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1136
+  },
+  {
+   "t": 284480,
+   "id": "ormi",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 1176
+  },
+  {
+   "t": 285543,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1176
+  },
+  {
+   "t": 286392,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 287425,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 290244,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1079
+  },
+  {
+   "t": 290592,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 1079
+  },
+  {
+   "t": 294811,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 937
+  },
+  {
+   "t": 295159,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 937
+  },
+  {
+   "t": 296910,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 856
+  },
+  {
+   "t": 297259,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 856
+  },
+  {
+   "t": 301024,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 302575,
+   "id": "ormi",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "hp": 896
+  },
+  {
+   "t": 303641,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 896
+  },
+  {
+   "t": 306792,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 778
+  },
+  {
+   "t": 307142,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 778
+  },
+  {
+   "t": 311092,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 625
+  },
+  {
+   "t": 311442,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 625
+  },
+  {
+   "t": 316259,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 287
+  },
+  {
+   "t": 316609,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 287
+  },
+  {
+   "t": 317441,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 69
+  },
+  {
+   "t": 317791,
+   "id": "ormi",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 69
+  },
+  {
+   "t": 318291,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 318392,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 319642,
+   "id": "ormi",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 319881,
+   "id": "ormi",
+   "requested": "ko",
+   "pose": "ko",
+   "url": "/art/characters/ormi/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 331891,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 332007,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 333057,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 334658,
+   "id": "leblanc",
+   "requested": "cast",
+   "pose": "cast",
+   "url": "/art/characters/leblanc/cast.png",
+   "hp": 1380
+  },
+  {
+   "t": 335675,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1380
+  },
+  {
+   "t": 336683,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1276
+  },
+  {
+   "t": 337024,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1276
+  },
+  {
+   "t": 337891,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1158
+  },
+  {
+   "t": 338241,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1158
+  },
+  {
+   "t": 338675,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1006
+  },
+  {
+   "t": 339023,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 1006
+  },
+  {
+   "t": 340042,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 663
+  },
+  {
+   "t": 340397,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 663
+  },
+  {
+   "t": 341043,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 466
+  },
+  {
+   "t": 341393,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 466
+  },
+  {
+   "t": 341847,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 301
+  },
+  {
+   "t": 342194,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 301
+  },
+  {
+   "t": 342649,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 88
+  },
+  {
+   "t": 342992,
+   "id": "leblanc",
+   "requested": "idle",
+   "pose": "idle",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 88
+  },
+  {
+   "t": 344009,
+   "id": "leblanc",
+   "requested": "hurt",
+   "pose": "hurt",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 0
+  },
+  {
+   "t": 344265,
+   "id": "leblanc",
+   "requested": "ko",
+   "pose": "ko",
+   "url": "/art/characters/leblanc/idle.png",
+   "hp": 0
+  }
+ ]
+}
