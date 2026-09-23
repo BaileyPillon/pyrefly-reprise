@@ -115,8 +115,20 @@
   gap: 0 11.56px; /* 0 26 */
   align-content: start;
 }
+/*
+ * PR-0127: the wrapper a scrolling column and its two cue overlays share.
+ * `position: relative` gives the cues (`position: absolute`) something to
+ * pin to that is *not* the scrolling column itself — see `.prepchap__cue`
+ * below for why that matters.
+ */
+.prepchap__colwrap {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
 .prepchap__col {
   min-width: 0;
+  height: 100%;
   /*
    * A scroller, not a clip.
    *
@@ -130,33 +142,49 @@
    */
   overflow-y: auto;
   overflow-x: hidden;
-  /*
-   * PR-0127: the scrollbar above was never a *visible* cue. This game is
-   * played with a pad or the keyboard as often as a mouse, Chromium's overlay
-   * scrollbar only appears on hover, and this column sits over the wash's
-   * near-opaque ivory (`.prepchap__wash`), which reads as a plain edge either
-   * way — measured at 1600x900, 1280x960 and 1280x720 in critic round 9: the
-   * TIP and the objectives ran past the band with nothing on screen saying
-   * more copy was one scroll away.
-   *
-   * The classic CSS-only "scroll shadow": two opaque covers that ride with
-   * the content (`background-attachment: local`) so they sit flush against
-   * whichever edge still has unscrolled copy behind it, and two ink shadows
-   * pinned to the viewport (`scroll`) that only peek out from under a cover
-   * when there is copy left to reveal — i.e. exactly when this column is not
-   * already scrolled to that edge. No script, no measuring: it disappears on
-   * its own the moment `scrollTop` reaches the end, which is also why it
-   * costs nothing when a column's copy already fits (both covers meet with
-   * nothing behind them to hide, so the ink shadows never show at all).
-   */
-  background-image: linear-gradient(rgba(244, 241, 232, 1) 40%, rgba(244, 241, 232, 0)),
-    linear-gradient(rgba(244, 241, 232, 0), rgba(244, 241, 232, 1) 60%),
-    linear-gradient(rgba(11, 10, 18, 0.32), rgba(11, 10, 18, 0)),
-    linear-gradient(rgba(11, 10, 18, 0), rgba(11, 10, 18, 0.32));
-  background-repeat: no-repeat;
-  background-size: 100% 8.89px, 100% 8.89px, 100% 4px, 100% 4px; /* 20 20 9 9 */
-  background-position: top, bottom, top, bottom;
-  background-attachment: local, local, scroll, scroll;
+}
+
+/*
+ * PR-0127: the *visible* half of the scroll cue the comment above promises.
+ * This game is played with a pad or the keyboard as often as a mouse,
+ * Chromium's overlay scrollbar only appears on hover, and the column sits
+ * over the wash's near-opaque ivory (`.prepchap__wash`), which reads as a
+ * plain edge either way — measured at 1600x900, 1280x960 and 1280x720 in
+ * critic round 9: the TIP and the objectives ran past the band with nothing
+ * on screen saying more copy was one scroll away.
+ *
+ * Round 9's first attempt was a `background-image` on `.prepchap__col`
+ * itself, in two attached layers (round-9 verification): a `background`
+ * always paints *under* an element's own children, so the thumbnail
+ * column's opaque photo tiles sat on top of the shadow and hid it outright
+ * (a pixel diff with and without those layers differed in only 22 of 271
+ * columns over the photo row). These are real elements instead, siblings of
+ * the scrolling column inside `.prepchap__colwrap` — later in the DOM, so
+ * they paint over the column's content regardless of what that content is,
+ * photos included — and `ChapterPanel.ts`'s `wireScrollCue` gives each one
+ * an `.is-visible` class exactly when its edge still has unscrolled copy
+ * behind it, using the one thing CSS alone cannot know here: whether the
+ * column is actually scrolled all the way to that edge.
+ */
+.prepchap__cue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8.89px; /* 20 */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+.prepchap__cue.is-visible {
+  opacity: 1;
+}
+.prepchap__cue--top {
+  top: 0;
+  background: linear-gradient(rgba(11, 10, 18, 0.32), rgba(11, 10, 18, 0));
+}
+.prepchap__cue--bottom {
+  bottom: 0;
+  background: linear-gradient(rgba(11, 10, 18, 0), rgba(11, 10, 18, 0.32));
 }
 
 /* The objectives column is a briefing, and sits a touch lower than the title

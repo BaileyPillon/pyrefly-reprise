@@ -45,6 +45,36 @@ import './chapter-panel-tab.css';
  * shipped portrait behind it shows through. One property, no JavaScript, and
  * no broken-image glyph either way.
  */
+/**
+ * Toggles `.is-visible` on a column's two `.prepchap__cue` siblings to say
+ * "there is more copy this way" — see the PR-0127 comment where this is
+ * called. A column only carries the cue when it is actually scrollable
+ * (`scrollHeight > clientHeight`), and only on the edge that still has
+ * unscrolled content, so a chapter whose copy already fits never shows one.
+ *
+ * Wired to `scroll` and to every image inside the column: the thumbnail
+ * column's own height can still change after this first runs, once a
+ * `cpanel__snap-img` finishes loading and claims its real box.
+ */
+function wireScrollCue(col: HTMLElement, wrap: HTMLElement): void {
+  const top = wrap.querySelector<HTMLElement>('.prepchap__cue--top');
+  const bottom = wrap.querySelector<HTMLElement>('.prepchap__cue--bottom');
+  const update = (): void => {
+    const scrollable = col.scrollHeight - col.clientHeight > 1;
+    top?.classList.toggle('is-visible', scrollable && col.scrollTop > 1);
+    bottom?.classList.toggle(
+      'is-visible',
+      scrollable && col.scrollTop + col.clientHeight < col.scrollHeight - 1,
+    );
+  };
+  col.addEventListener('scroll', update, { passive: true });
+  for (const img of col.querySelectorAll('img')) {
+    img.addEventListener('load', update, { once: true });
+  }
+  update();
+  window.requestAnimationFrame(update);
+}
+
 function heroBackground(chapterId: string): string {
   const meta = getChapterMeta(chapterId);
   if (!meta) return '';
@@ -88,20 +118,42 @@ export function makeChapterPanel(game: GameId): PrepPanel {
         <div class="prepchap__hero" style="background-image:${layers}"></div>
         <div class="prepchap__wash"></div>
         <div class="prepchap__cols cpanel cpanel--paper">
-          <div class="prepchap__col">
-            <div class="cpanel__eyebrow">${eyebrowHtml(meta)}</div>
-            <h2 class="cpanel__title">${escapeHtml(meta.title)}</h2>
-            <div class="cpanel__subtitle">${escapeHtml(meta.subtitle)}</div>
-            <div class="cpanel__where">${escapeHtml(meta.location)}</div>
-            <p class="cpanel__blurb">${escapeHtml(meta.blurb)}</p>
-            <div class="cpanel__snaps">${snapshotsHtml(meta)}</div>
+          <div class="prepchap__colwrap">
+            <div class="prepchap__col" data-scrollcol>
+              <div class="cpanel__eyebrow">${eyebrowHtml(meta)}</div>
+              <h2 class="cpanel__title">${escapeHtml(meta.title)}</h2>
+              <div class="cpanel__subtitle">${escapeHtml(meta.subtitle)}</div>
+              <div class="cpanel__where">${escapeHtml(meta.location)}</div>
+              <p class="cpanel__blurb">${escapeHtml(meta.blurb)}</p>
+              <div class="cpanel__snaps">${snapshotsHtml(meta)}</div>
+            </div>
+            <div class="prepchap__cue prepchap__cue--top" aria-hidden="true"></div>
+            <div class="prepchap__cue prepchap__cue--bottom" aria-hidden="true"></div>
           </div>
-          <div class="prepchap__col prepchap__col--brief">
-            ${objectivesHtml(meta)}
-            ${tipHtml(meta)}
+          <div class="prepchap__colwrap">
+            <div class="prepchap__col prepchap__col--brief" data-scrollcol>
+              ${objectivesHtml(meta)}
+              ${tipHtml(meta)}
+            </div>
+            <div class="prepchap__cue prepchap__cue--top" aria-hidden="true"></div>
+            <div class="prepchap__cue prepchap__cue--bottom" aria-hidden="true"></div>
           </div>
         </div>
       </div>`;
+
+    // PR-0127 (round 09): the old scroll cue was two extra `background-image`
+    // layers on `.prepchap__col` itself — which paints a background *under*
+    // an element's own children, so the thumbnail column's opaque photo
+    // tiles sat on top of it and hid it completely (measured: a pixel diff
+    // with and without the layers differed in 22 of 271 columns over the
+    // photo row). Real elements, laid out *after* the scrolling column
+    // inside a positioned wrapper, paint above it regardless of what the
+    // column's own content is — see `wireScrollCue` and the
+    // `.prepchap__cue` rules in `chapter-panel-tab.css`.
+    for (const wrap of root.querySelectorAll<HTMLElement>('.prepchap__colwrap')) {
+      const col = wrap.querySelector<HTMLElement>('[data-scrollcol]');
+      if (col) wireScrollCue(col, wrap);
+    }
 
     // Fix 3, pre-release pass: `heroBackground()` above only ever emits the
     // 1x plate (plus the .webp/fallback chain) — a CSS background cannot ask
