@@ -295,3 +295,29 @@ describe('H leaves the painting, and there are no panels to leave', () => {
     }
   });
 });
+
+describe('PR-0098 repair: a scrolled OPTIONS row past the fifth is a real row', () => {
+  it('keeps every settings row a flex row, never the bare div display the hiding rule left behind', () => {
+    // round 09's first pass beat `.pause__row { display: flex }` on
+    // specificity with `.pause__col[data-col='settings'] > div:nth-of-type(n
+    // + 6) { display: block }` — a plain `div` selector plus two classes and
+    // a pseudo-class outranks one class. ATB SPEED and BATTLE HELP rendered
+    // with the label and value glued together and the selection dot on its
+    // own line. `display: flex` matches `.pause__row`'s own display, so the
+    // override only ever restores visibility, never the layout.
+    const rule = /\.pause__col\[data-col='settings'\] > div:nth-of-type\(n \+ 6\) \{\s*display:\s*([a-z]+);/.exec(
+      SHEET,
+    );
+    expect(rule?.[1]).toBe('flex');
+  });
+
+  it('caps the settings column at exactly five rows, the same budget its sibling columns get', () => {
+    // The first pass's `calc(var(--pu-row) * 5.6 + 26px)` made the column
+    // taller than the five-row budget every other phone column has, which
+    // pushed THIS ENCOUNTER (the sibling column below it, `.pause__body`
+    // stacks them at this width) down into the objective line. Five rows,
+    // nothing extra, matches what the fight/stats columns already render.
+    const block = /\.pause__col\[data-col='settings'\] \{(.*?)\n\}/s.exec(SHEET)?.[1] ?? '';
+    expect(block).toMatch(/max-height:\s*calc\(var\(--pu-row\)\s*\*\s*5\)/);
+  });
+});

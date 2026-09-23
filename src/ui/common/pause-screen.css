@@ -836,17 +836,20 @@
   .pause__col > div:nth-of-type(n + 6) { display: none; }
   .pause__row--rule { display: none; }
 
-  /* PR-0098 (round 09): OPTIONS scrolls its own settings column instead of
-     the five-row cap above (ATB SPEED etc. were selectable but clipped, with
-     no cue). Fade says there is more; PauseView scrolls the selection in. */
-  .pause__col[data-col='settings'] > div:nth-of-type(n + 6) { display: block; }
+  /* PR-0098 (round 09, repaired): OPTIONS scrolls its own settings column
+     instead of the five-row cap above. `display: flex` matches `.pause__row`
+     itself — a bare `div` selector had out-specificity'd it and glued every
+     row past the fifth into a stacked label/value with a floating dot. The
+     five-row cap (not five-and-a-peek) matches the sibling columns' own
+     budget, so it no longer pushes THIS ENCOUNTER into the objective line. */
+  .pause__col[data-col='settings'] > div:nth-of-type(n + 6) { display: flex; }
   .pause__col[data-col='settings'] {
-    max-height: calc(var(--pu-row) * 5.6 + 26px);
+    max-height: calc(var(--pu-row) * 5);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 22px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 22px), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 10px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 10px), transparent 100%);
   }
   .pause__col[data-col='settings']::-webkit-scrollbar { display: none; }
 
