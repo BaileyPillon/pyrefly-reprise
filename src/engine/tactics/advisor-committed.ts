@@ -16,12 +16,21 @@
  *
  *  - {@link committedByAllies} simulates every **other** active girl's charging
  *    command on this board (the engine's own resolution, `simulate.ts`) and
- *    records which statuses it takes off whom, whom it stands back up, and how
- *    many of each item it will use;
- *  - {@link spentAlready} is true for a row that only repeats that — every cure
- *    it makes and every raise it makes is already on its way, and it does
- *    nothing else measurable — or that counts on stock a queued item has
- *    already spoken for.
+ *    records which statuses it takes off whom, which statuses it puts on
+ *    which ally, whom it stands back up, and how many of each item it will use;
+ *  - {@link spentAlready} is true for a row that only repeats that — every cure,
+ *    every ally status it grants and every raise it makes is already on its
+ *    way, and it does nothing else measurable — or that counts on stock a
+ *    queued item has already spoken for.
+ *
+ * **Party buffs count** (release 09 repair). A second Light or Lunar Curtain
+ * behind one already charging adds nothing: the first grants Protect (Shell)
+ * to all three, and the engine's `applyStatus` returns null for a status that
+ * is already there, so the second item is used up for no effect. The first
+ * cut of this module read only cures and raises and offered it anyway (18
+ * times over 20 Chapter 6 runs under Wait, the verifier's probe
+ * `critic/scratch/release-09-repair/probe-advisor-committed.test.ts`). HP
+ * healing is deliberately not "covered": a second Hi-Potion still adds HP.
  *
  * ## Which game
  *
@@ -53,6 +62,8 @@ export interface Committed {
   uses: Map<string, number>;
   /** `"<targetId>:<status>"` for every status a queued command takes off an ally. */
   cures: Set<string>;
+  /** `"<targetId>:<status>"` for every status a queued command puts on an ally (Protect from a Curtain). */
+  buffs: Set<string>;
   /** Everyone a queued command stands back up -> who is raising them, and with what. */
   revives: Map<CombatantId, IncomingRaise>;
 }
@@ -91,12 +102,12 @@ export function queuedFrom(options: CommittedOptions): readonly QueuedCommand[] 
 
 /** The reading for a board with nothing queued. */
 export function nothingCommitted(): Committed {
-  return { uses: new Map(), cures: new Set(), revives: new Map() };
+  return { uses: new Map(), cures: new Set(), buffs: new Set(), revives: new Map() };
 }
 
 /** True when {@link committedByAllies} found nothing, so the card can skip the check. */
 export function isEmpty(c: Committed): boolean {
-  return c.uses.size === 0 && c.cures.size === 0 && c.revives.size === 0;
+  return c.uses.size === 0 && c.cures.size === 0 && c.buffs.size === 0 && c.revives.size === 0;
 }
 
 function chargingCommand(state: Readonly<BattleState>, id: CombatantId): Command | null {
@@ -143,9 +154,8 @@ export function committedByAllies(
     }
     if (!sim) continue;
     for (const change of sim.statusChanges) {
-      if (change.applied) continue;
       if (state.combatants[change.targetId]?.side === 'enemy') continue;
-      out.cures.add(`${change.targetId}:${change.status}`);
+      (change.applied ? out.buffs : out.cures).add(`${change.targetId}:${change.status}`);
     }
     const name = sim.ability?.name ?? ('id' in command ? String(command.id) : command.kind);
     for (const raised of sim.revives) if (!out.revives.has(raised)) out.revives.set(raised, { by: id, name });
@@ -171,10 +181,11 @@ export function stockSpokenFor(
 }
 
 /**
- * True when everything this row would do is already on its way: it cures or
- * raises, every cure and every raise it makes is a queued command's, and it
- * does nothing else measurable (no damage, no status put on anyone, no HP back
- * for anybody it is not raising).
+ * True when everything this row would do is already on its way: it cures,
+ * grants an ally a status or raises; every cure, every ally status and every
+ * raise it makes is a queued command's; and it does nothing else measurable
+ * (no damage, no status put on an enemy, no HP back for anybody it is not
+ * raising).
  */
 export function repeatsCommitted(
   state: Readonly<BattleState>,
@@ -182,18 +193,19 @@ export function repeatsCommitted(
   committed: Committed,
 ): boolean {
   if (!outcome) return false;
-  const cures = outcome.statusChanges.filter(
-    (c) => !c.applied && state.combatants[c.targetId]?.side !== 'enemy',
-  );
-  if (cures.length === 0 && outcome.revives.length === 0) return false;
+  const ally = (c: { targetId: CombatantId }): boolean => state.combatants[c.targetId]?.side !== 'enemy';
+  const cures = outcome.statusChanges.filter((c) => !c.applied && ally(c));
+  const buffs = outcome.statusChanges.filter((c) => c.applied && ally(c));
+  if (cures.length === 0 && buffs.length === 0 && outcome.revives.length === 0) return false;
   if (outcome.damageToEnemies > 0) return false;
-  if (outcome.statusChanges.some((c) => c.applied)) return false;
+  if (outcome.statusChanges.some((c) => c.applied && !ally(c))) return false;
   const raised = new Set(outcome.revives);
   for (const [id, delta] of Object.entries(outcome.hpDelta)) {
     if (delta < 0 && !raised.has(id)) return false;
   }
   return (
     cures.every((c) => committed.cures.has(`${c.targetId}:${c.status}`)) &&
+    buffs.every((c) => committed.buffs.has(`${c.targetId}:${c.status}`)) &&
     outcome.revives.every((id) => committed.revives.has(id))
   );
 }

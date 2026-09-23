@@ -87,6 +87,7 @@ function fallback(commands: readonly AvailableCommand[]): Command | null {
  */
 function coverOf(state: Readonly<BattleState>, actorId: CombatantId, held: HeldCommand | null) {
   const cures = new Set<string>();
+  const buffs = new Set<string>();
   const revives = new Set<CombatantId>();
   const uses = new Map<string, number>();
   const pending: HeldCommand[] = held ? [held] : [];
@@ -99,13 +100,23 @@ function coverOf(state: Readonly<BattleState>, actorId: CombatantId, held: HeldC
     if (id === actorId) continue;
     if (queued.kind === 'item') uses.set(String(queued.id), (uses.get(String(queued.id)) ?? 0) + 1);
     const out = simulateFFX2Command(state, id, queued, { roll: 'mid', abilities, items });
-    for (const ch of out?.statusChanges ?? []) if (!ch.applied) cures.add(`${ch.targetId}:${ch.status}`);
+    for (const ch of out?.statusChanges ?? []) {
+      if (state.combatants[ch.targetId]?.side === 'enemy') continue;
+      (ch.applied ? buffs : cures).add(`${ch.targetId}:${ch.status}`);
+    }
     for (const r of out?.revives ?? []) revives.add(r);
   }
-  return { cures, revives, uses };
+  return { cures, buffs, revives, uses };
 }
 
-/** A pick that only repeats what an ally's charging command already does, or spends stock that is already spoken for. */
+/**
+ * A pick that only repeats what an ally's charging command already does, or
+ * spends stock that is already spoken for. "Repeats" covers a status taken off
+ * an ally, a body stood up, **and a status put on an ally** — a second Light
+ * Curtain behind one already charging adds no Protect, because the engine's
+ * `applyStatus` returns null for a status already there (release 09 repair,
+ * verifier probe: 18 such picks over 20 Chapter 6 runs under Wait).
+ */
 function doubleSpend(
   state: Readonly<BattleState>,
   actorId: CombatantId,
@@ -120,11 +131,14 @@ function doubleSpend(
   }
   const out = simulateFFX2Command(state, actorId, command, { roll: 'mid', abilities, items });
   if (!out) return null;
-  const cures = out.statusChanges.filter((c) => !c.applied && state.combatants[c.targetId]?.side !== 'enemy');
-  if (cures.length === 0 && out.revives.length === 0) return null;
-  if (out.damageToEnemies > 0 || out.statusChanges.some((c) => c.applied)) return null;
+  const ally = (c: { targetId: CombatantId }) => state.combatants[c.targetId]?.side !== 'enemy';
+  const cures = out.statusChanges.filter((c) => !c.applied && ally(c));
+  const buffs = out.statusChanges.filter((c) => c.applied && ally(c));
+  if (cures.length === 0 && buffs.length === 0 && out.revives.length === 0) return null;
+  if (out.damageToEnemies > 0 || out.statusChanges.some((c) => c.applied && !ally(c))) return null;
   const allCovered =
     cures.every((c) => cover.cures.has(`${c.targetId}:${c.status}`)) &&
+    buffs.every((c) => cover.buffs.has(`${c.targetId}:${c.status}`)) &&
     out.revives.every((r) => cover.revives.has(r));
   return allCovered ? `repeats a committed ${'id' in command ? String(command.id) : command.kind}` : null;
 }
@@ -215,7 +229,7 @@ const SEEDS = [1, 2, 3, 4, 5, 6] as const;
 
 describe('PR-0088: Chapter 6, card-follower, Wait — FFX-2', () => {
   for (const seed of SEEDS) {
-    it(`seed ${seed}: the card never repeats a cure or raise an ally's charging command already covers`, () => {
+    it(`seed ${seed}: the card never repeats a cure, raise or party buff an ally's charging command already covers`, () => {
       const run = cardFollower(seed);
       expect(run.doubles, run.doubles.slice(0, 5).join('\n')).toEqual([]);
       expect(run.wrongState).toBe(0);
@@ -232,7 +246,7 @@ describe('PR-0088: Chapter 6, card-follower, Wait — FFX-2', () => {
  * card is asked again.
  */
 describe('PR-0088: a held command is committed as well — FFX-2', () => {
-  it('Chapter 6, seeds 1-8: the card never repeats a held cure or raise, and says the raise is coming', () => {
+  it('Chapter 6, seeds 1-8: the card never repeats a held cure, raise or party buff, and says the raise is coming', () => {
     let exercised = 0;
     let told = 0;
     for (const seed of [1, 2, 3, 4, 5, 6, 7, 8]) {
@@ -258,7 +272,8 @@ describe('PR-0088: a held command is committed as well — FFX-2', () => {
           const top = view?.suggestions[0]?.command ?? fallback(d.commands);
           if (!top) break;
           const out = simulateFFX2Command(state, d.actorId, top, { roll: 'mid', abilities, items });
-          const cures = (out?.statusChanges ?? []).some((c) => !c.applied && state.combatants[c.targetId]?.side !== 'enemy');
+          // A cure, or a status put on an ally (a Curtain), both count as "covered" once queued.
+          const cures = (out?.statusChanges ?? []).some((c) => state.combatants[c.targetId]?.side !== 'enemy');
           const other = state.activeIds.find((id) => id !== d.actorId && state.combatants[id]?.alive);
           if (other && out && (cures || out.revives.length > 0) && !doubleSpend(state, d.actorId, top, null)) {
             const held: HeldCommand = { actorId: other, command: top };
@@ -289,6 +304,79 @@ describe('PR-0088: a held command is committed as well — FFX-2', () => {
   }, 180_000);
 });
 
+/**
+ * **A party buff already charging is spent too** (release 09 repair). The
+ * verifier's probe found the card offering Paine a Light Curtain while Yuna's
+ * Light Curtain was on its charge bar and nobody had Protect yet; Yuna's
+ * resolved (status-add protect on all three), Paine's added nothing, one item
+ * lost [critic/scratch/release-09-repair/probe-advisor-committed.test.ts,
+ * seed 1, Wait, Act II]. On every real Chapter 6 board where another girl has
+ * a Curtain charging, no row on the card may repeat it.
+ */
+describe("PR-0088: a Curtain on an ally's charge bar is not offered again — FFX-2", () => {
+  it('Chapter 6, Wait and Active, seeds 1-8: no card row repeats a charging party buff', () => {
+    let boards = 0;
+    for (const mode of ['wait', 'active'] as const) {
+      for (const seed of [1, 2, 3, 4, 5, 6, 7, 8]) {
+        const engine = engineFor();
+        const first = ffx2data.ENEMY_GROUPS_BY_ID[LEBLANC_CHAIN_ORDER[0]!]!;
+        let setup: BattleSetup = {
+          game: 'ffx2', party: chateauBuild, enemies: first, triggers: [], seed, condition: 'normal', canEscape: false,
+        };
+        engine.setSeed(seed);
+        engine.init(setup);
+        engine.setAtbMode(mode);
+        clearAdvisorCache();
+        let group: EnemyGroupDef = first;
+        for (let links = 0; ; links++) {
+          let outcome = 'unresolved';
+          for (let i = 0; i < MAX_DECISIONS; i++) {
+            let d = engine.nextDecision();
+            if (d.kind === 'battle-over') { outcome = d.result.outcome; break; }
+            if (d.kind === 'waiting') { engine.tick(Math.max(1, d.nextEventMs)); continue; }
+            if (d.kind !== 'player-input') continue;
+            if (mode === 'active') {
+              // A human's 1.5 s at the menu: the bars keep running under it.
+              engine.tick(1500);
+              d = engine.nextDecision();
+              if (d.kind !== 'player-input') continue;
+            }
+            const state = engine.state();
+            const held = engine.heldCommand();
+            const charging = state.activeIds.some((id) => {
+              if (id === d.actorId) return false;
+              const q = (state.combatants[id] as { atb?: { charging?: { commandRef: Command } | null } })?.atb?.charging?.commandRef;
+              return q?.kind === 'item' && /curtain/.test(String(q.id));
+            });
+            const view = buildAdvisorView(state, { actorId: d.actorId, commands: d.commands }, {
+              ...OPTIONS,
+              queued: () => (held ? [held] : []),
+            });
+            if (charging) {
+              boards += 1;
+              for (const s of view?.suggestions ?? []) {
+                const why = doubleSpend(state, d.actorId, s.command, held);
+                expect(why, `${mode} seed ${seed} link ${links} ${d.actorId}: ${JSON.stringify(s.command)}`).toBeNull();
+              }
+            }
+            const pick = view?.suggestions[0]?.command ?? fallback(d.commands);
+            if (!pick) break;
+            engine.submit(pick);
+          }
+          if (outcome !== 'victory' || !group.nextGroupId) break;
+          const next = ffx2data.ENEMY_GROUPS_BY_ID[group.nextGroupId]!;
+          setup = setupForNextLink(setup, next, engine.state(), seed + links + 1) as BattleSetup;
+          group = next;
+          engine.setSeed(setup.seed);
+          engine.init(setup);
+          engine.setAtbMode(mode);
+        }
+      }
+    }
+    expect(boards, "the walk must reach boards with an ally's Curtain charging").toBeGreaterThan(5);
+  }, 300_000);
+});
+
 describe('committedByAllies reads the charging bar, and only in FFX-2', () => {
   it('FFX: CTB has one actor at a time, so no board ever carries a committed command (no-op)', () => {
     const content = new FFXContentRegistry();
@@ -314,7 +402,7 @@ describe('committedByAllies reads the charging bar, and only in FFX-2', () => {
         if (d.kind === 'battle-over') break;
         if (d.kind !== 'player-input') continue;
         const state = engine.state();
-        expect(committedByAllies(state, d.actorId, OPTIONS)).toEqual({ uses: new Map(), cures: new Set(), revives: new Map() });
+        expect(committedByAllies(state, d.actorId, OPTIONS)).toEqual({ uses: new Map(), cures: new Set(), buffs: new Set(), revives: new Map() });
         seen += 1;
         const row = d.commands.find((c) => c.enabled && c.command.kind === 'attack') ?? d.commands.find((c) => c.enabled);
         if (!row) break;
