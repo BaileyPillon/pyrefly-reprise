@@ -71,11 +71,25 @@ function redoubt(id: string, name: string, slot: number, def: number, mdef: numb
     immunityFlags: [],
     forms: [{ name, spriteKey: 'vegnagun-redoubt', hp: 2500 }],
     aiScriptId: 'vegnagun-redoubt',
-    // §3.4 line 415 names a steal table — Phoenix Down / rare Mega Phoenix, 50% — but, unlike every other
-    // steal row in the document, prints no quantity for either slot. `ItemDrop.count` is required
-    // (`battle/common/types.ts`), so encoding a guessed count would invent a number [AGENTS.md hard rule 6].
-    // No `steal` field added; open question for Bailey (research §11, docs/handoff/NOW.md, 2026-09-21).
-    rewards: { ap: 10, apOverkill: 10, gil: 0, overkillThreshold: 0, exp: 0, drops: [] },
+    // §13.2 S1 [verified: 2 sources] — both Redoubts: common Phoenix Down x1, rare Mega Phoenix x1, steal
+    // byte 128 (50.2 %). FF Wiki *Redoubt* (rev 3990466) prints x1 for both slots; SinirothX prints
+    // "Phoenix Down/Mega Phoenix (50%)" and writes a count only above 1. Closes §11/§13 row 17.
+    // §13.2 S2 [verified: 2 sources] — Pilfer Gil 350 each.
+    rewards: {
+      ap: 10,
+      apOverkill: 10,
+      gil: 0,
+      overkillThreshold: 0,
+      exp: 0,
+      drops: [],
+      steal: {
+        baseChance: 50,
+        stealRate: 128,
+        common: { itemId: 'x2-phoenix-down', count: 1 },
+        rare: { itemId: 'x2-mega-phoenix', count: 1 },
+      },
+      stolenGil: 350,
+    },
     abilityIds:
       id === 'redoubt-r'
         ? ['x2-redoubt-right-lacrimosa', 'x2-redoubt-right-blind', 'x2-redoubt-right-break', 'x2-redoubt-right-flare', 'x2-redoubt-full-life']
@@ -142,7 +156,9 @@ export const vegnagunHeadGroup: EnemyGroupDef = {
         'Can revive both Redoubts. Whenever its HP drops it uses Nemo Ante Mortem Beatus, its strongest ability.',
     },
   ],
-  parts: [redoubt('redoubt-r', 'Redoubt', 1, 133, 0), redoubt('redoubt-l', 'Redoubt', 2, 0, 133)],
+// §13.2 S3 [verified: 2 sources] — the game names each part itself (SinirothX Monster's Name lines; FF Wiki infobox + bestiary
+  // #253/#254, *Redoubt* rev 3990466), so no FFX-2 lettering is needed (PR-0013).
+  parts: [redoubt('redoubt-r', 'Right Redoubt', 1, 133, 0), redoubt('redoubt-l', 'Left Redoubt', 2, 0, 133)],
   musicCues: [{ at: 'start', track: 'boss-vegnagun', fadeMs: 600 }],
 };
 

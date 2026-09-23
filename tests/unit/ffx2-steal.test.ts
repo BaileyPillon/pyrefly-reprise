@@ -172,3 +172,20 @@ describe('Pilfer Gil (FFX-2)', () => {
     }
   });
 });
+
+describe('Redoubt steal and stolen gil (FFX-2, ffx2-vegnagun-shuyin §13.2 S1-S2)', () => {
+  it('both Redoubts: Phoenix Down x1 / rare Mega Phoenix x1 at 128/255, Pilfer Gil 350', () => {
+    const redoubts = (data.ENEMY_GROUPS_BY_ID['vegnagun-head']!.parts ?? []).filter((e) => e.id.startsWith('redoubt'));
+    expect(redoubts).toHaveLength(2);
+    for (const r of redoubts) {
+      expect(r.rewards.steal).toEqual({
+        baseChance: 50,
+        stealRate: 128,
+        common: { itemId: 'x2-phoenix-down', count: 1 },
+        rare: { itemId: 'x2-mega-phoenix', count: 1 },
+      });
+      expect(stealByte(r.rewards.steal!)).toBe(128);
+      expect(r.rewards.stolenGil).toBe(350);
+    }
+  });
+});
