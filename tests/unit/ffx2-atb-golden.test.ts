@@ -27,6 +27,23 @@
  * the 11 chapter 4 seeds that had none were byte-identical to the old hashes, so the
  * only behaviour that moved is the friendly miss. After: zero friendly "evaded"
  * misses on every seed, and D=0 is still 20/20 in both chapters.
+ *
+ * **Re-pinned a second time, for the Leg's drop id** (commit 697c0380,
+ * 2026-09-23, `docs/handoff/fix-ffx2-vegnagun-facts.md`): the Vegnagun Leg's
+ * `rewards.drops` id changed from the unresolved `x2-mythril-bangle` to the
+ * accessory registry's own key `mythril-bangle`; `buildResult()` copies
+ * `rewards.drops` verbatim into the link's `victory` event
+ * (`src/battle/ffx2/results.ts`), so the id string is part of the logged event
+ * and the hash. Measured before re-pinning, full event-by-event diff of chapter
+ * 5 seeds 1 (D=0) and 2 (D=1500) against the pre-change engine: of 8,189 and
+ * 14,832 events respectively, **exactly one event differs**, and only the
+ * `drops[0].itemId` field inside it — same turn count, same tick and ms
+ * totals, same ap/exp/gil, every other event byte-identical. Chapter 4 never
+ * touches the Leg, so `CH4_D0` and `CH4_D1500` are unchanged (verified:
+ * recomputed and diffed equal to the arrays below). The steal tables added to
+ * the Head and Tail in the same commit are inert here — nothing under
+ * `src/battle/ffx2` reads `rewards.steal` (only the FFX-1 engine and two
+ * unrelated FFX-2 tactics files for Leblanc/Seymour do).
  */
 
 import { describe, expect, it } from 'vitest';
@@ -42,11 +59,12 @@ const CH4_D0 = [
   '6a153f98a05af5cf', '5764b43c5c6b9c94', '2649ce030cbd66bc', 'de6d7169d7f08905', '7b311b79d378648d',
 ];
 
+/** Re-pinned for the Leg's drop id (commit 697c0380); see the file doc comment. */
 const CH5_D0 = [
-  '5768c4da29cbb005', '2f6305d343ecd04f', '46b939d92205b0b1', 'af3aa760d6e49334', '566d0a98889bb960',
-  '3700fb016dec7c9b', 'dcffb12d092df765', 'b4070d9b40804b9f', '4215441079bc40dc', '6e62a395c64379ee',
-  'bad3d03e95722e68', 'cdfb2d39c051377d', '3aecc54139a8de33', '39546243805f0060', '9e8dbe70a76ab325',
-  '1341bcb1f1a2621c', '27020425d0dd3e92', '6eb7c2c7f1d16e49', 'dcf3a9e1589b6764', 'ba2a6f8c33e7cfbf',
+  '4060e4a504994063', 'd33a44317cede76e', '575152a11bb51f84', '1bf84d82749730e6', '51c9ee466cf972c6',
+  '595f91c4535f4404', '97b07648dda58a83', '645c967512a26409', 'ad14f28922cfdafd', 'd4937de1646a6724',
+  '0b3e5c50c402dea9', '61163b3e0e2a9eeb', 'f4e7d0a5cabdcd81', '2f1f597a16644f84', '935f83d4d32986e5',
+  'f286fa548be8d139', 'f499f3cd0d294b50', 'dce3a65478e9a1b6', 'e84edf58e2644b97', '728eec0cf1e60228',
 ];
 
 /** Recorded after the hold / owner fixes (commit 1 of the track), before the speed lever. */
@@ -54,9 +72,10 @@ const CH4_D1500 = [
   'f7184d7b87948e2c', 'e162970a86a2268f', 'fc6c4f4b8b7cb240', '7f9abbf856f2464a', '4439b76d4c54cc7d',
   '51f22c7af66239a8', 'd73d41236dc23eb0', '042fd279eda61cb1', '82058d0ebeeadaeb', '4ec0c1f9c35887d7',
 ];
+/** Re-pinned for the Leg's drop id (commit 697c0380); see the file doc comment. */
 const CH5_D1500 = [
-  'd9f15a6ad10a199f', '05ba836179afcebd', '4827ebd15aab9ddf', 'a70c9fdcaf9da8e1', 'bc1d1062c3d93496',
-  'bf11cdedc00e8d23', 'ff37f688300a472b', 'b70e3e0f01592f0c', '924faf301d1e8f50', '6c49eb62069b6105',
+  '42c0f14af18208fc', '8073b10b38c7f176', '7fbeccbf6e77cbcb', 'a70c9fdcaf9da8e1', '5b70805ce277e637',
+  '821d0a8767f86901', '61b47c12a565fe93', 'c836220858ca4677', 'af17a1e9675c1c38', '6323edf2656e86c4',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 
