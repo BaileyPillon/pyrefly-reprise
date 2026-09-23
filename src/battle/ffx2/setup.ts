@@ -62,6 +62,19 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   // §5.4]. Without it the researched loadouts are inert and Chapter 5's Tail
   // kills the White Mage from full on its first Noli Me Tangere.
   const stats: StatBlock = withAccessories(withStatBonus(base, equip), member.accessories);
+  // Carried across a chain seam (CONTRACT-CHANGES §6, `BattleScreenSetup.carryFfx2`)
+  // as a raw number on the build, with no maximum to check against until the
+  // dressphere's stats are derived, right above — so it is clamped here, not
+  // there. Critic round 09 PR-0124: a spherechange to a higher-MP dressphere in
+  // one link (Thief to White Mage) left the build's `currentDressphere`
+  // reverting to the one this member started the chapter on for the next link
+  // (whether the worn dressphere itself should carry across a seam is a
+  // separate, unsourced question — hard rule 6 — untouched here), so the
+  // carried MP (123) outlived the reverted dressphere's lower maximum (Thief's
+  // 106) and the row read "123/106". `applyCarriedState` below, the engine's
+  // own carry path for `options.carriedParty`, already clamps the same way.
+  const hp = clamp(member.hp ?? stats.maxHp, 0, stats.maxHp);
+  const mp = clamp(member.mp ?? stats.maxMp, 0, stats.maxMp);
 
   return {
     id: member.id,
@@ -70,14 +83,14 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
     spriteKey: member.spriteKey,
     portraitKey: member.portraitKey,
     stats,
-    hp: member.hp ?? stats.maxHp,
-    mp: member.mp ?? stats.maxMp,
+    hp,
+    mp,
     statuses: {},
     affinities: {},
     immunities: {},
     immunityFlags: [],
     controller: 'player',
-    alive: (member.hp ?? stats.maxHp) > 0,
+    alive: hp > 0,
     removed: false,
     slot,
     flags: {},
@@ -271,4 +284,8 @@ export function buildState(
   };
 
   return { state, units, gridNodes };
+}
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, v));
 }

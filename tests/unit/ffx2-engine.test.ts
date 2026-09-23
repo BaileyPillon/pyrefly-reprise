@@ -266,6 +266,33 @@ describe('battle end', () => {
     expect(carried?.statuses.poison).toBeDefined();
     expect(second.state().flags['chained']).toBe(true);
   });
+
+  it('clamps HP and MP that arrive above the dressphere the build reverts to (critic round 09 PR-0124)', () => {
+    // This is the *other* carry path: `BattleScreenSetup.carryFfx2` rewrites
+    // the next link's party build with the raw `hp`/`mp` a girl finished the
+    // previous link on, but not `currentDressphere` — whether the worn
+    // dressphere itself should carry across a seam is a separate, unsourced
+    // question for Bailey (hard rule 6). A build like that lands here as
+    // `party.members[].hp/mp` with no `carriedParty` option at all, so it is
+    // `buildMember` (`src/battle/ffx2/setup.ts`), not `applyCarriedState`,
+    // that has to clamp. Rikku changed Thief (Lv 50 max 123 MP, 1928 max HP
+    // [ffx2-vegnagun-shuyin §6.2]) to a dressphere with a higher ceiling
+    // mid-link; the build she starts the next link on still reads Thief, so
+    // the carried numbers must not outlive its lower maximum the way the live
+    // build's "123/106" row did.
+    const party = bevelleParty(50);
+    party.members[1] = { ...party.members[1], currentDressphere: 'thief', hp: 2600, mp: 219 };
+    const engine = new FFX2Engine({ minigames: false });
+    engine.init({ ...bahamutSetup(1), party });
+
+    const rikku = engine.state().combatants['rikku'];
+    expect(rikku).toBeDefined();
+    expect(rikku!.mp).toBeLessThanOrEqual(rikku!.stats.maxMp);
+    expect(rikku!.hp).toBeLessThanOrEqual(rikku!.stats.maxHp);
+    // Clamped to the maximum, not merely floored at zero.
+    expect(rikku!.mp).toBe(rikku!.stats.maxMp);
+    expect(rikku!.hp).toBe(rikku!.stats.maxHp);
+  });
 });
 
 describe('gaugeSnapshot', () => {
