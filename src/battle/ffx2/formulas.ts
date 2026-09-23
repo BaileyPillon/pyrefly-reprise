@@ -319,13 +319,17 @@ export function computeDamage(ctx: DamageContext): DamageResult {
   const capped = Math.abs(amount) > cap;
   if (capped) amount = Math.sign(amount) * cap;
 
-  // Step 20 — damage immunity.
+  // Step 20 — damage immunity. The fractional clause is an immunity to
+  // fractional *damage* ("fractional vs fractional-immune", §2.1 step 20), so a
+  // percentage heal (Leblanc's White Wind, 1/8 max HP) is not stopped by it
+  // [ffx2-leblanc-syndicate §4.4, §5.4 fact 3; PR-0086].
   const immune =
     (isPhysical && has(target, 'null-physical')) ||
     ((isMagical || isRecovery) && has(target, 'null-magic')) ||
     has(target, 'invincible') ||
     affinity === 'immune' ||
     (skipDefense &&
+      !heals &&
       ability.formula !== 'none' &&
       target.immunityFlags.includes('immune-to-percentage-damage') &&
       (ability.formula === 'fractional' ||

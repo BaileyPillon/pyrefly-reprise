@@ -16,6 +16,49 @@
 > (`docs/handoff/chapter-leblanc-engine.md`, `-guide.md`, `-scene.md`,
 > `-script.md`) into a playable chapter. No boss number was changed.
 
+## Round-09 repair, 2026-09-23: White Wind heals (PR-0086) and the Grenade conflict (PR-0087)
+
+**Game case: FFX-2 only** [AGENTS.md rule 14]: the fix is in the X-2 damage
+pipeline and only chapter 6's Syndicate carries the flag it touches.
+
+**PR-0086, fixed.** Leblanc's White Wind healed nothing and cured nothing:
+20 casts over seeds 1-20 gave 0 heals and 40 IMMUNE misses. White Wind is
+"Recovery, enemy party": 1/8 max HP plus a full cure
+(`research/ffx2-leblanc-syndicate.md` §4.4, §5.4 fact 3). The trio's
+"Gravity/fractional" immunity (§3.1-3.3) is an immunity to fractional *damage*
+(`research/ffx2-combat-core.md` §2.1 step 20, "Damage immunity"). Step 20 in
+`src/battle/ffx2/formulas.ts` now skips the fractional clause for a heal. The
+preflight is `docs/plans/ffx2-heal-immunity-review.md`, and the pin is
+`tests/unit/chapters/leblanc-white-wind.test.ts`: after the fix, every cast
+heals each living member, Darkness comes off, there are 0 IMMUNE misses, and
+fractional damage on the trio still reads IMMUNE. The heal passes the step-7
+randomiser like every other enemy action: Leblanc 161-182, Ormi 157-177, not
+an exact 172 / 168. Whether retail skips step 7 for fractional heals is not in
+`research/`.
+
+**PR-0087, NOT changed: the sources conflict. Bailey, please rule.** The
+shipped Grenade (`src/data/ffx2/items/effects-damage.ts`, `x2-item-grenade`)
+is `power 4` (200), `fixed`, `crit-eligible`, `bonusCrit 100`. It lands
+**375-423 per enemy** (the critic measured 376-423 over 30 seeds), before any
+Chain. Each number is sourced, but the sources disagree:
+
+| Reading | Per-enemy band | Where it comes from |
+|---|---|---|
+| A. Base 200, and "always critical" doubles it at step 9 (what ships) | **375-423** | combat-core §2.9.3 (Grenade power 4 = 200, pbirdman) + §5.5 ("187-212, always critical"; the bands are "the post-randomiser spread", which is step 7, before the step-9 crit ×2 of §2.5) |
+| B. Base 200, and the printed band is final damage | **187-211** | combat-core §5.5 read literally. Evidence for B: every §5.5 bomb band is `power × 50` through the randomiser with no ×2 (S-Bomb 350 → 328-370, M-Bomb 400 → 375-423, L-Bomb 450 → 421-476), even though each row says "always critical" |
+| C. Base 300, no crit | **281-317** | leblanc-syndicate §4.6 ("base 300 to every enemy", [verified: 2 sources for the Grenade figure]), §6.2 table, §7.6 |
+
+A and B share combat-core's base (200) and differ only on the crit.
+C is a different base from a different pair of sources. The engine matches
+none of the printed final figures. It matches A only if "always critical"
+means an extra ×2 on top of the step-7 band. Rule 6 says a conflict is
+reported, not resolved, so the data is unchanged. To settle it, pick A, B or C.
+B means dropping `bonusCrit`/`crit-eligible`. C means `power 6`, no crit. Then
+record the ruling in both research files, and pin the band in
+`tests/unit/chapters/leblanc-engine.test.ts`. It matters for play because
+`chateauBuild` carries 4 Grenades and the advisor opens Act I with them. Its
+card shows the same engine band ("1,150-1,268" over three enemies).
+
 ## Fix pass: the missing painted art
 
 **Root cause, found by reading source and curling a running dev server, not
