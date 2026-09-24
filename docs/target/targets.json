@@ -531,6 +531,32 @@
               "install still owed: public/art/characters/ffx2-{dr,fem}-goon/idle.png from picks.json's C entries, both facing right; one cast each or none per METHOD-CHECK.md row 3, not asked yet"
             ]
           }
+        },
+        {
+          "label": "Speaker portrait: Seymour, Chapter VII (FFX)",
+          "src": "docs/concepts/portraits/seymour-macalania/card-A.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "FFX only. Chapter VII (seymour-anima-macalania) currently borrows public/art/portraits/seymour.png, the Flux-era face from Chapter I; option A is a portrait rendered from the Chapter VII battle idle's own pixels instead (denoise 0.45, 3.8x), the only option of the three that holds that idle's identity exactly. Independent 1:1 judge, 2026-09-24: 7. docs/target/decisions.json D-065.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Bailey answered the Seymour Chapter VII portrait sheet together with the Yojimbo and living-portrait asks, 2026-09-24, taking the recommended option.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the idle's own sourced silhouette: light-blue loose hair, fringe, purple eye, rounded human ear, dark blue robe, red collar, red chest tattoo"
+            ],
+            "mustChange": [
+              "option A (the idle's own likeness, stern profile) — not B (tighter, colder glare, veins the research calls pronounced) or C (wider, crossed arms, a small studded collar not on the idle)",
+              "a new speaker id, seymour-macalania, for this chapter's 15 lines; Chapter I's seymour-flux.ts keeps speaking as 'seymour'"
+            ],
+            "undecided": [],
+            "inferred": [
+              "the style gap common to all three options (heavier black cel shadows, flatter skin than the approved portrait set) is disclosed, not fixed, by this pick — not asked of Bailey"
+            ]
+          }
         }
       ]
     },
@@ -667,6 +693,32 @@
           "note": "Not superseded — the paintings stand. The Until Dawn remake makes the per-member close-ups (public/art/pause/tidus, yuna, kimahri, auron, wakka, lulu, rikku, rikku-ffx2, paine, yuna-ffx2) the screen itself, one per tab.",
           "build": "Every pause painting that ships.",
           "hashes": "pause:plates"
+        },
+        {
+          "label": "Living portrait feel (both)",
+          "src": "docs/concepts/pause-until-dawn/prototype-v2/shots/v6-pilot/clip-A-measured.mp4",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: the rigged plate is Yuna X-2, but the pause portrait runtime (the parametric face rig, gaze and continuous expression) is shared plumbing (CHK-020) that every living portrait, whichever game's character, will run on.",
+          "note": "docs/plans/living-portrait-v6-method.md's options round: three 8s frontal clips from the v6 pilot rig — clip-A-measured.mp4 (Until Dawn's own numbers: idle drift, no idle saccades, the eyes leading the input), clip-B-livelier.mp4 (a glance every 3-6s, a small blink on a big one, more smiles) and clip-C-quiet.mp4 (smaller, slower). No build reaches the nine painted keys until this pick is exercised there (rule 9). docs/target/decisions.json D-064.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "The driver had given no recommendation among the three clips and told Bailey so before he answered; his 'All your recommendations' is recorded here as the driver's own choice of clip A, made under his words, not a preference he named himself — see decisions.json D-064.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "clip A, \"measured\" (Until Dawn's reference numbers) — a driver's-choice pick, not Bailey's own word, and open to revision the moment he reacts to the built keys"
+            ],
+            "undecided": [
+              "the state mapping (normal/determined/hurt) and how far the eyes lead the head — INFERRED, not asked (living-portrait-v6-method.md)"
+            ],
+            "inferred": [
+              "clip A over B or C: the driver picked it as the safer, more restrained baseline with nothing in Bailey's own words to go on"
+            ]
+          }
         }
       ]
     },
@@ -1122,6 +1174,145 @@
             "undecided": [
               "whether the shipped art3 Vegnagun part paintings (tail, leg, body, head) are themselves an approved reference — not asked by this pick, no hash pins them",
               "Redoubt C*'s Left Redoubt tusk position, a guess in the option (the painting shows one tusk, research describes two pairs)"
+            ],
+            "inferred": []
+          }
+        },
+        {
+          "label": "Yojimbo, Chapter IX (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/boss/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "gameNote": "FFX only: CTB, aeons, a boss Overdrive gauge and Ronso Rage Doom are all FFX conventions (research/ffx-yojimbo.md §0.3, 'None of these facts transfers across games'); the chapter registration in src/data/encounters.ts is shared plumbing (case 'both', CHK-020), and the FFX-2 Yojimbo (candidate C) belongs to the separate, unbuilt FFX-2 fallen-aeons chapter.",
+          "note": "Lady Ginnem's Yojimbo, last chamber of the Cavern of the Stolen Fayth, first Calm Lands visit, after Bevelle, before Gagazet (docs/plans/chapter-yojimbo-review.md, docs/target/decisions.json D-049 through D-058, D-062, D-063). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks. The existing public/art/characters/yojimbo/{idle,attack,overdrive}.png painting is NOT approved and is not this pick's boss (D-054); Yojimbo's new look, Daigoro and Lady Ginnem each have their own tile below.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "named": [
+              "I'll pick your recommendations plus Yojimbo. Let's add Yojimbo first please. He goes in next build!",
+              "All your recommendations"
+            ],
+            "how": "Bailey asked for Yojimbo by name (~00:50 EDT) ahead of the preflight; the preflight and the B1-B10/O-1..O-5 options round were sent together, and he answered all of it with one reply, taking the recommended option on each.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the story fight, Lady Ginnem's Yojimbo, not Dark Yojimbo or the FFX-2 Tourist Trap fight (B1, D-049)",
+              "Lady Ginnem and Daigoro both untargetable (B3, D-051)",
+              "no hiring or haggling this release (B4, D-052)",
+              "chapter title \"Yojimbo\", location \"Cavern of the Stolen Fayth\" (B5, D-053)",
+              "Threaten fails on him until sourced (B9, D-057)"
+            ],
+            "mustChange": [
+              "the unsourced gauge-band odds split evenly, labelled our own estimate, not invented weights (B2, D-050)",
+              "Kimahri arrives with Doom already learned and a full gauge (B8, D-056)",
+              "registered as Chapter IX; Seymour Natus becomes Chapter X (B10, D-058)",
+              "the battle music is a new original cue for the moment the game plays Lulu's Theme, auditioned by ear before it is built, not a reused FFX boss cue (B7, D-055)",
+              "the Zanmato gauge is a bar under his name with the 25/50/80 bands, plus a one-shot full-gauge banner (O-5, D-062)"
+            ],
+            "undecided": [],
+            "inferred": [
+              "the opening line-up Lulu, Kimahri, Yuna — the research itself calls 'Lulu leads' a presentation choice, not a rule; never put to Bailey",
+              "leaving out the Candle of Life (the item exists but no source places one in this party at this point); never put to Bailey",
+              "the four mid-battle callouts (gauge past 50%, \"Zanmato next turn\", Doom lands, an aeon takes Zanmato) are new perceivable content with no option sheet of their own; never put to Bailey",
+              "shipping the chapter registered and LOCKED as a coming card if the art picks arrive too late for the build (the Chapter VII/VIII precedent); never put to Bailey — the preflight says this must be asked before the cut, not defaulted"
+            ]
+          }
+        },
+        {
+          "label": "Yojimbo's look, boss's own painting (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/boss/a-new-frame.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "A NEW painting in the wiki's sourced gold/orange/purple, not the existing unapproved navy painting (B6, O-1, D-054). Needs a clean pass before final (it is a side profile with a second scabbard crossing behind him); nothing rendered or installed by this decision.",
+          "reactionOf": "Yojimbo, Chapter IX (FFX)",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered as one line of the Yojimbo B1-B10/O-1..O-5 sheet, 2026-09-24.",
+            "mustChange": [
+              "option A: a new render in gold-spiral pauldrons, jinbaori, gold-embossed jingasa, geta, fanged menpo, robes shading gold/orange/purple — not option B (existing navy painting as is) or C (existing painting recoloured, which cannot reach gold or orange)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
+        },
+        {
+          "label": "Daigoro (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/daigoro/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "Koma-inu lion-dog, option B, the name the game's own data gives him (O-2, D-059). Size is the research's own [estimate], about 0.4 of a party member.",
+          "reactionOf": "Yojimbo, Chapter IX (FFX)",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered as one line of the Yojimbo B1-B10/O-1..O-5 sheet, 2026-09-24.",
+            "mustChange": [
+              "option B: a koma-inu lion-dog — not A (a plain working dog) or C (a lean dark dog in Yojimbo's colours)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
+        },
+        {
+          "label": "Lady Ginnem, unsent (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/ginnem/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "The glowing unsent outline, option B, a pyrefly glow and motes on her outline (O-3, D-060): she reads as unsent without losing her face for Lulu's scene. The motes and fade are live particles and a shader, not paint, not yet built. Her render came out fair-haired with faint make-up, a disclosed gap against her sourced description (a Belgemine palette swap with white face make-up).",
+          "reactionOf": "Yojimbo, Chapter IX (FFX)",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered as one line of the Yojimbo B1-B10/O-1..O-5 sheet, 2026-09-24.",
+            "mustChange": [
+              "option B: a pyrefly glow and motes on her outline — not A (solid) or C (half-formed, pyreflies below the waist)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
+        },
+        {
+          "label": "The cold chamber, Cavern of the Stolen Fayth (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/chamber/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "Option A, cold grey-blue with a shaft of daylight (O-4, D-061): the most contrast against a gold-and-purple Yojimbo, and it suits Lulu's scene. Disclosed gaps: no plate carries the dormant teleport pad the research places at the room's centre (three render attempts failed), and the promised night-sakura arrival overlay was never made; both owed to the real scene build.",
+          "reactionOf": "Yojimbo, Chapter IX (FFX)",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered as one line of the Yojimbo B1-B10/O-1..O-5 sheet, 2026-09-24.",
+            "mustChange": [
+              "option A: cold grey-blue with a shaft of daylight — not B (violet dark, pyrefly motes) or C (warm amber lanterns); B's motes may still be added as live particles"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
+        },
+        {
+          "label": "The Zanmato gauge (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/gauge/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "Option A, a bar under his name with the 25/50/80 bands, plus option C's one-shot full-gauge \"Zanmato\" banner (O-5, D-062). Highest-risk pick in the chapter (plan risk R1): if the built widget's stills alone do not settle the feel, a small clickable prototype comes before it ships. The mockups shipped at 1600x900 only; a phone-width mockup is still owed before the real widget is built.",
+          "reactionOf": "Yojimbo, Chapter IX (FFX)",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered as one line of the Yojimbo B1-B10/O-1..O-5 sheet, 2026-09-24.",
+            "mustChange": [
+              "option A for the information (a bar under his name, the 25/50/80 bands) — not B (a ring round his CTB tile)",
+              "option C's full-gauge banner folded onto A when the gauge reaches 100%"
+            ],
+            "undecided": [
+              "whether the stills alone settle the feel, or a small clickable prototype is needed first (R1)"
             ],
             "inferred": []
           }
