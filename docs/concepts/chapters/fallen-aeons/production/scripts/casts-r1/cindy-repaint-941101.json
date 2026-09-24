@@ -1,0 +1,23 @@
+{
+ "seed": 941101,
+ "denoise": 0.5,
+ "prompt": "1girl, cindy \\(ff10\\), plump woman, side view, soft round belly, bare midriff, skin, red sash belt around the waist, blue apron skirt, dark blue sash ends hanging at the front, cel shading, soft shading, official art, white background, masterpiece, absurdres",
+ "negative": "lowres, bad anatomy, worst quality, low quality, blurry, jpeg artifacts, text, watermark, hands, fingers, glove, gauntlet, extra arms, armour on belly, blue block, white cloth, face, navel piercing",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 30,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "box": [
+  10,
+  270,
+  240,
+  530
+ ],
+ "upscaled": [
+  904,
+  1024
+ ],
+ "input": "work/cindy-guide.png",
+ "mask": "work/cindy-rmask.png",
+ "execSeconds": 6.99
+}

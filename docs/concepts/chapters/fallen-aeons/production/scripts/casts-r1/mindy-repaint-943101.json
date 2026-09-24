@@ -1,0 +1,23 @@
+{
+ "seed": 943101,
+ "denoise": 0.45,
+ "prompt": "1girl, mindy \\(ff10\\), petite girl, side view, black bodysuit, slim waist, thin orange trim at the waist, black leggings, cel shading, soft shading, official art, white background, masterpiece, absurdres",
+ "negative": "lowres, bad anatomy, worst quality, low quality, blurry, jpeg artifacts, text, watermark, hands, fingers, glove, extra arms, sleeve, book, belt buckle, button, gold, glow, sparkle, face",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 30,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "box": [
+  90,
+  390,
+  300,
+  640
+ ],
+ "upscaled": [
+  864,
+  1024
+ ],
+ "input": "work/mindy-guide.png",
+ "mask": "work/mindy-rmask.png",
+ "execSeconds": 6.393
+}
