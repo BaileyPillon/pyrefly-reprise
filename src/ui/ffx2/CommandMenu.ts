@@ -168,8 +168,12 @@ export interface CommandMenuDeps {
   kindOf?: (id: CombatantId) => 'enemy' | 'ally' | 'self';
   /** Every change of selection, for the field's accent pool and quiet dim. */
   onSelection?: (sel: CursorSelection | null) => void;
-  /** PR-0012: fed the highlighted row's help sentence every time the selection changes; the FFX-2 HUD prints it in a slab, gated on the Battle Help setting. */
-  onHelp?: (text: string) => void;
+  /**
+   * PR-0012: fed the highlighted row's label and help sentence every time the
+   * selection changes; the FFX-2 HUD prints them in the top-of-screen slab
+   * (D-040), gated on the Battle Help setting.
+   */
+  onHelp?: (label: string, text: string) => void;
   /** Fed the live preview every time the highlighted row changes. */
   onPreview: (preview: TurnPreview[] | AtbSnapshot) => void;
   actorName: string;
@@ -313,7 +317,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.container.removeEventListener('click', onClick);
       deps.container.classList.remove('ffx2cmd--more-above', 'ffx2cmd--more-below');
       deps.container.innerHTML = '';
-      deps.onHelp?.('');
+      deps.onHelp?.('', '');
       cursor.hide();
       cursor.dispose();
       cursor.el.remove();
@@ -337,16 +341,25 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.onPreview(deps.previewRank(currentLeaf()));
     }
 
-    /** PR-0012: the highlighted row's own sentence, or a group's opener — `commandHelp.ts` has the derivation. */
+    /** PR-0012: the highlighted row's own label and sentence, or a group's opener — `commandHelp.ts` has the derivation. */
     function emitHelp(): void {
       if (!deps.onHelp) return;
       if (view === 'top') {
         const row = topRows[topIdx];
-        deps.onHelp(row ? ('leaf' in row ? commandHelpText(row.leaf) : groupHelpText(groupLabel(row.group), row.items)) : '');
+        if (!row) {
+          deps.onHelp('', '');
+          return;
+        }
+        if ('leaf' in row) {
+          deps.onHelp(row.leaf.label, commandHelpText(row.leaf));
+        } else {
+          const label = groupLabel(row.group);
+          deps.onHelp(label, groupHelpText(label, row.items));
+        }
         return;
       }
       const leaf = subItems[subIdx];
-      deps.onHelp(leaf ? commandHelpText(leaf) : '');
+      deps.onHelp(leaf ? leaf.label : '', leaf ? commandHelpText(leaf) : '');
     }
 
     function rowClasses(selected: boolean, c: AvailableCommand, gate = false): string {

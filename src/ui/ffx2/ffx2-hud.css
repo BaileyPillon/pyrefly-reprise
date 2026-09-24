@@ -533,56 +533,62 @@
   display: none;
 }
 /*
- * PR-0012 (round 09, FFX-2 only; repaired round 10): the command menu never
- * said what the highlighted row does. Reuses FFX's own slab design
- * (`.ig-cutin__info`, `src/ui/ffx/ffx-hud.css`'s `.ffx-cmd-info`) rather than
- * inventing a new one (rule 9).
- *
- * Round 09's placement (`bottom: 30px` here) was picked to sit under
- * `.ffx2hud__command`'s tallest measured box (`bottom: 116.44px`) but was
- * never checked against `.ffx2hud .ig-stat-list`'s own FFX-2 override two
- * screens up in this file: the party column also moves to bottom-right for
- * FFX-2 (`right: 10px; bottom: 10px`, "the party panel moves to the bottom
- * right"), finishing "~100px up the 360px grid" per that rule's own comment
- * — i.e. spanning roughly `bottom: 10px` to `bottom: 100px`, which this
- * slab's `bottom: 30px .. 63px` sits **inside**, not below. An adversarial
- * verifier measured the real overlap live: ~21,920 CSS px² at 1600x900 in
- * Chapters 4-6, printing across a party row's HP/MP and ATB gauge. The
- * comment that follows was wrong; this one replaces it. `.ffx2-cmd-info`'s
- * geometry is left as-is (moving it without breaking something else it was
- * tuned against needs the same rule-9 pick as everywhere else it collides),
- * but `FFX2BattleHud.ts`'s `setCommandHelp` keeps the slab off
- * (`FFX2_COMMAND_HELP_PLACEMENT_RESOLVED`) until Bailey picks a placement —
- * see `docs/handoff/fix10b-repair-command-menus.md`.
+ * PR-0012 (round 09 built the description logic; round 10 gated the mount
+ * off over a measured collision; D-040 in `docs/target/decisions.json`
+ * picked the placement below — `docs/concepts/layout/pr-0012/README.md`
+ * option A, "a one-line slab at the top of the screen"). This is a fresh
+ * design, not FFX's own `.ffx-cmd-info` (`src/ui/ffx/ffx-hud.css`): that
+ * slab sits fixed beside the command window, which is exactly the cramped
+ * spot round 10 found colliding with `.ffx2hud__party`'s bottom-right
+ * column (21,920 CSS px² at 1600x900 in Chapters 4-6). A full-width band
+ * pinned to `top: 0` instead clears the party column (bottom-right),
+ * the enemy HP plates (top-left/top-right corners, never row 0) and the
+ * command window itself in every size checked; option A's own writeup
+ * has the details. This stage is a fixed 640x360 grid (`.ffx2hud__stage`
+ * above) that letterboxes to any real viewport, so all lengths below are
+ * that grid's units — a real-screen measurement (e.g. option A's mocked
+ * "52px band" at 1920x1080) divides by 3 to land here.
  */
 .ffx2-cmd-info {
   position: absolute;
-  right: 12px;
-  bottom: 30px;
-  width: 129.78px; /* matches `.ig-cmd` / `.ffx2hud__command` */
-  max-width: none;
-  max-height: 46px; /* round 10: 33px clipped Esuna's status list mid-word (CHK-009); see .ig-cutin__info-desc */
-  padding: 3px 7px;
-  overflow: hidden;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 17.33px; /* 52px @ 1920x1080 */
+  display: flex;
+  align-items: center;
+  gap: 6px; /* 18px */
+  padding: 0 9.33px; /* 28px */
+  background: rgba(11, 10, 18, 0.88);
+  border-bottom: 1px solid var(--ig-accent); /* 3px; --ig-accent is pyre pink under .ig--ffx2 */
   pointer-events: none;
-}
-.ffx2-cmd-info .ig-cutin__info-desc {
-  font-style: normal;
-  font-size: 8px;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  /* Round 09 clamped to 2 lines and ellipsised anything longer — Esuna's
-     status list ("Cures Berserk, Confuse, Curse, ... Slow, Stop") ran to a
-     third line and lost its second half on screen (round-10 verifier,
-     CHK-009). FFX's own slab (`ffx-hud.css`'s `.ffx-cmd-info`) does not clamp
-     at all, it just fixes the box width and lets the sentence wrap; FFX-2's
-     box is narrower (`.ffx2hud__command`'s own width, not FFX's wider one)
-     so a hard 3-line cap is the closer match rather than unbounded height,
-     which would grow into the party column this slab already collides with
-     (see the comment above `.ffx2-cmd-info`). */
-  -webkit-line-clamp: 3;
   overflow: hidden;
+}
+.ffx2-cmd-info[hidden] {
+  /* `display: flex` above is the same specificity as the UA's `[hidden]`
+     rule and wins by source order — same fix as `.ffx2hud__telegraph` and
+     the other slabs in this file. */
+  display: none;
+}
+.ffx2-cmd-info__label {
+  flex: none;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 4.67px; /* 14px */
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ig-accent);
+}
+.ffx2-cmd-info__desc {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--ig-font-text);
+  font-size: 6.33px; /* 19px */
+  line-height: 1.3;
+  color: var(--ig-paper);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /*
  * The fold marks. The window above scrolls, and until this nothing on screen

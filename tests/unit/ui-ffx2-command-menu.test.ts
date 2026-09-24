@@ -373,4 +373,37 @@ describe('FFX-2 command menu', () => {
     // Initial render highlights row 0 (Attack), a concrete leaf command.
     expect(seen[0]?.label).toBe('Attack');
   });
+
+  /**
+   * PR-0012 / D-040: the top-of-screen help slab prints the highlighted row's
+   * label alongside its description, so `onHelp` carries both — a single-row
+   * category (Attack) directly, a grouped category (Black Magic) by its own
+   * label and the group's opener sentence, and a disabled row (Blizzaga)
+   * still names itself even though its sentence leads with the reason.
+   */
+  it('feeds onHelp both the highlighted row\'s label and its help sentence', () => {
+    const seen: Array<[string, string]> = [];
+    openCommandMenu({
+      container,
+      targetLayer,
+      commands,
+      previewRank: () => EMPTY_SNAPSHOT,
+      project: () => null,
+      onPreview: () => {},
+      onHelp: (label, text) => seen.push([label, text]),
+      actorName: 'Yuna',
+    });
+    // Row 0, Attack, highlighted on open.
+    expect(seen.at(-1)?.[0]).toBe('Attack');
+    expect(seen.at(-1)?.[1].length).toBeGreaterThan(0);
+
+    key('ArrowDown'); // Black Magic (a group row)
+    expect(seen.at(-1)?.[0]).toBe('Black Magic');
+    expect(seen.at(-1)?.[1].length).toBeGreaterThan(0);
+
+    key('Enter'); // open the group
+    key('ArrowDown'); // Blizzaga, disabled ("Silenced")
+    expect(seen.at(-1)?.[0]).toBe('Blizzaga');
+    expect(seen.at(-1)?.[1]).toContain('Silenced');
+  });
 });

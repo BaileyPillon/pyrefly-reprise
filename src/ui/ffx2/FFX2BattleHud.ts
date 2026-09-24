@@ -47,23 +47,22 @@ import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 
 /**
- * PR-0012 repair (round 10, FFX-2 only): a verifier measured `.ffx2-cmd-info`
- * (below) overlapping `.ffx2hud__party` — 21,920 CSS px² at 1600x900 in
- * Chapters 4-6, printing across a party member's HP/MP and ATB gauge — a real
- * collision this HUD shipped switched on by default (`battleHelpOn()` reads
- * true for a player with no save yet). The description text itself is
- * correct and game-aware (`commandHelp.ts`); the mount point is not: no
- * placement inside `.ffx2hud__command`'s cramped right-hand column
- * (`ffx2-hud.css`'s own comment on `.ffx2-cmd-info`) clears the party column
- * without moving one of the two, which is a layout call for Bailey (AGENTS.md
- * rule 9), not a redesign to make unasked. Mounting is what this file owns,
- * so until that pick is made the slab stays off — the plumbing behind it
- * (this whole feature) ships switched off rather than with a known collision,
- * per the release rules' "the feature may ship switched off" allowance. Flip
- * this once `docs/target/decisions.json` records Bailey's placement pick.
- * See `docs/handoff/fix10b-repair-command-menus.md`.
+ * PR-0012 (round 09 built the description logic, round 10 gated the slab off
+ * over a measured collision, and D-040 in `docs/target/decisions.json` picked
+ * a placement — see `docs/concepts/layout/pr-0012/README.md` option A):
+ * a one-line band across the very top of the screen (`top: 0`, full width),
+ * not the old placement inside `.ffx2hud__command`'s cramped right-hand
+ * column that collided with `.ffx2hud__party` — 21,920 CSS px² at 1600x900
+ * in Chapters 4-6, printing across a party member's HP/MP and ATB gauge. The
+ * top band clears the party column, the enemy HP plates (top-left/top-right
+ * corners, never row 0) and the advisor card (`advisorLane.ts` starts it
+ * below `fenceTopEl`, the topmost party fighter's head, well under this
+ * band's height) in every screen size checked. The description text itself
+ * was always correct and game-aware (`commandHelp.ts`); this flag only
+ * gated the mount point. See `docs/handoff/fix10b-repair-command-menus.md`
+ * for the round-10 repair this replaces.
  */
-const FFX2_COMMAND_HELP_PLACEMENT_RESOLVED = false;
+const FFX2_COMMAND_HELP_PLACEMENT_RESOLVED = true;
 
 /**
  * The FFX-2 battle HUD.
@@ -156,7 +155,7 @@ export class FFX2BattleHud implements HudPort {
   private enemyEl!: HTMLElement;
   private telegraphEl!: HTMLElement;
   private commandEl!: HTMLElement;
-  /** PR-0012: the highlighted row's help sentence — FFX's slab design, `battleHelpOn()`-gated. */
+  /** PR-0012: the highlighted row's help sentence, a top-of-screen band (D-040), `battleHelpOn()`-gated. */
   private commandInfoEl!: HTMLElement;
   private minigameEl!: HTMLElement;
   /** FFX-2's Active/Wait chip, shown while a target cursor is live. */
@@ -325,7 +324,7 @@ export class FFX2BattleHud implements HudPort {
       <div class="ig-banner ffx2hud__telegraph" hidden></div>
       <div class="ig-stat-list ffx2hud__party"></div>
       <div class="ffx2hud__command" hidden></div>
-      <div class="ig-cutin__info ffx2-cmd-info" hidden><div class="ig-cutin__info-desc" data-role="text"></div></div>
+      <div class="ffx2-cmd-info" hidden><span class="ffx2-cmd-info__label" data-role="label"></span><span class="ffx2-cmd-info__desc" data-role="text"></span></div>
       <div class="ffx2hud__minigame"></div>
       <div class="ffx2-atbmode" hidden></div>
       <i class="ffx2hud__fence" data-fence="party-top"></i>
@@ -868,7 +867,7 @@ export class FFX2BattleHud implements HudPort {
         return this.lastState?.combatants[id]?.side === 'enemy' ? 'enemy' : 'ally';
       },
       onSelection: (sel) => this.applySelection(sel),
-      onHelp: (text) => this.setCommandHelp(text),
+      onHelp: (label, text) => this.setCommandHelp(label, text),
       actorName: actor?.name ?? actorId,
       onPreview: (preview) => {
         if (!isAtbSnapshot(preview) || !this.lastState) return;
@@ -891,16 +890,20 @@ export class FFX2BattleHud implements HudPort {
   }
 
   /**
-   * PR-0012: FFX's own help slab (`.ig-cutin__info`), mounted for FFX-2 and
+   * PR-0012: the FFX-2 command-help slab, a one-line band across the top of
+   * the screen (D-040, `docs/concepts/layout/pr-0012/README.md` option A),
    * fed from `CommandMenu.ts`'s `onHelp`. Off entirely when the player has
    * BATTLE HELP off in Config/pause OPTIONS (`battleHelpOn()`,
    * `src/ui/coach/coachState.ts`) — the setting already exists and did
    * nothing on this side of the game before this row.
    */
-  private setCommandHelp(text: string): void {
+  private setCommandHelp(label: string, text: string): void {
     const show = FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn() && text.length > 0;
     this.commandInfoEl.hidden = !show;
-    if (show) this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
+    if (show) {
+      this.commandInfoEl.querySelector('[data-role="label"]')!.textContent = label;
+      this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
+    }
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {

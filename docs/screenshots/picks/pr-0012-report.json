@@ -1,0 +1,470 @@
+[
+  {
+    "chapter": "ffx2-bahamut",
+    "size": "1280x720",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-bahamut-1280x720.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "size": "1600x900",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-bahamut-1600x900.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "size": "2000x1012",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-bahamut-2000x1012.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-bahamut",
+    "size": "390x844",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-bahamut-390x844.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "size": "1280x720",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-vegnagun-shuyin-1280x720.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "size": "1600x900",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-vegnagun-shuyin-1600x900.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "size": "2000x1012",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-vegnagun-shuyin-2000x1012.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "size": "390x844",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-vegnagun-shuyin-390x844.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "White Magic",
+          "text": "Open the White Magic menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-leblanc",
+    "size": "1280x720",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-leblanc-1280x720.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-leblanc",
+    "size": "1600x900",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-leblanc-1600x900.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-leblanc",
+    "size": "2000x1012",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-leblanc-2000x1012.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        }
+      ]
+    }
+  },
+  {
+    "chapter": "ffx2-leblanc",
+    "size": "390x844",
+    "out": "docs/screenshots/picks/pr-0012-ffx2-leblanc-390x844.png",
+    "overlapParty": false,
+    "overlapCommand": false,
+    "overlapEnemy": false,
+    "overlapAdvisor": false,
+    "emptyRows": 0,
+    "consoleErrors": 0,
+    "rows": {
+      "seenTop": [
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        },
+        {
+          "label": "Change",
+          "text": "Open the Change menu."
+        },
+        {
+          "label": "Item",
+          "text": "Open the Item menu."
+        },
+        {
+          "label": "Attack",
+          "text": "Physical damage"
+        },
+        {
+          "label": "Skill",
+          "text": "Open the Skill menu."
+        }
+      ]
+    }
+  }
+]
