@@ -78,6 +78,39 @@ The presenter half (hold the frame, keep the party in shot) is afb1657a / 56fecb
   build. `repair-before-*` and `repair-after-*` show the chapter 6 phone frame before and after,
   and the chapter 4 phone frame with the petals under the plates.
 
+## Repair pass 2 (after the second verifier)
+
+- **Refuted: the TARGET plate over the field's ALL ENEMIES label.** A whole-side command
+  (Rikku's Darkness and Demi in chapter 4; Darkness, Demi, Bio and Black Sky in chapter 5)
+  hangs the field cursor's group label (`.ffx-target__all`) over the top of the formation, on
+  the plates' own row, and the TARGET plate cut it in half (104x25 px at 1280x720, up to
+  152x17 px at 1600x900). `plateInputFromDom` already read the label, but only the hint used
+  it. Now `TargetPlates.layout` hands the same field rects to `plateRow`
+  (`targetPlateGeometry.ts`): the actor plate treats them as obstacles when it picks its corner,
+  and the TARGET plate takes the free spans of its row once the chip, the actor plate, a tall
+  command window, the banner and every field label or name plate are cut out. It stays centred
+  when that is clear, else goes to the clear spot nearest the centre at its natural width, else
+  shrinks into the widest span (never under `MIN_TARGET_W`), else hides. The actor plate also
+  gets a new fallback spot, just left of a label standing in the row: in chapter 5 the 13-row
+  Skill list already holds the corner, and in one 1600x900 run the label sat right where the
+  plate had moved to, so the plate hid. As with the hint, only the plates adapt. The field
+  label never moves for them.
+- **Rule 7:** the plate tests were split. The pure geometry tests (and the field-plate cases)
+  are in `tests/unit/ui-ffx2-target-plate-geometry.test.ts`; the HUD wiring, text, victory
+  close, type floor and FFX cases stay in `tests/unit/ui-ffx2-target-plates.test.ts`. Both are
+  under 400 lines. Six new cases cover the group label; with the field rects cut from
+  `plateRow`, four of them fail.
+- Browser proof. Real keys, GPU (ANGLE NVIDIA RTX 5070 Ti, D3D11), own vite with HMR off,
+  restarted after the last edit (a vite with `watch: null` keeps serving the module as it was
+  at start). The verifier's stress walk visits every targeting row of the first few turns'
+  submenus: Attack, White Magic, Rikku's Skill list with Darkness, Demi, Bio and Black Sky, and
+  chapter 6's Breaks and Gunner skills. It ran in chapters 4, 5 and 6 at 1280x720, 1600x900,
+  2000x1012 and 390x844 (12 runs, 272 measured frames). The in-page measure against the party
+  rows, help band, boss plates, command window, chip, telegraph, intent slab, advisor, guide,
+  PAUSE chip and the field's name plates and ALL ENEMIES label found 0 overlaps and 0 hidden
+  plates. `side-by-side-whole-side-*.jpg` sets the tile beside Darkness in chapter 4 (1280x720,
+  1600x900) and Black Sky in chapter 5 (1280x720, 1600x900, 2000x1012).
+
 ## Open
 
 - The tile's "Vegnagun — Head" is concept text. Every Vegnagun link's boss is named "Vegnagun"

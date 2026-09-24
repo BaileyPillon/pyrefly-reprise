@@ -77,6 +77,14 @@ export interface PlateRowInput {
   /** The plates' natural widths, in grid units. */
   targetW: number;
   actorW: number;
+  /**
+   * The field cursor's name plates and group label on the grid (see
+   * {@link HintInput.field}). A whole-side command's "ALL ENEMIES" label is
+   * hung over the top of the formation, which can be the plates' own row
+   * (verifier, PR-0150 repair 2: Darkness, Demi, Bio and Black Sky cut it in
+   * half); the plates step off it, it never moves for them.
+   */
+  field?: readonly GridRect[];
 }
 
 export interface PlacedPlate {
@@ -114,6 +122,8 @@ export function plateRow(input: PlateRowInput): PlateRowGeometry {
   if (input.command) obstacles.push(input.command);
   if (input.telegraph) obstacles.push(input.telegraph);
   if (input.chip) obstacles.push(input.chip);
+  const field = input.field ?? [];
+  obstacles.push(...field);
   const band: GridRect = { left: 0, top: 0, right: GRID_W, bottom: input.bandBottom };
   const free = (r: GridRect): boolean =>
     r.left >= 0 && r.right <= GRID_W && r.top >= 0 && !obstacles.some((o) => overlaps(r, o)) && !(input.bandBottom > 0 && overlaps(r, band));
@@ -121,6 +131,10 @@ export function plateRow(input: PlateRowInput): PlateRowGeometry {
   const w = Math.max(0, input.actorW);
   const rights = [RIGHT_EDGE];
   if (input.command) rights.push(input.command.left - GAP);
+  // Left of a field label or name plate that stands in the row (a whole-side
+  // label hung where a tall submenu has already pushed the plate), right-most first.
+  const rowTop: GridRect = { left: 0, top, right: GRID_W, bottom: top + ROW_HEIGHT };
+  for (const f of [...field].filter((f) => overlaps(f, rowTop)).sort((a, b) => b.left - a.left)) rights.push(f.left - GAP);
   const tops = [top];
   if (input.telegraph) tops.push(input.telegraph.bottom + GAP);
   let actor: PlacedPlate | null = null;
@@ -138,28 +152,55 @@ export function plateRow(input: PlateRowInput): PlateRowGeometry {
     }
   }
 
-  // The TARGET plate's span on its row: right of the chip, left of whatever
-  // else stands in the row (the actor plate, a tall command window, the banner).
+  // The TARGET plate's row, less everything that stands in it (the chip, the
+  // actor plate, a tall command window, the banner, a field label): the free
+  // spans between them. The plate goes centred on the grid as in the tile,
+  // else to the clear spot nearest the centre at its natural width, else
+  // shrinks into the widest span, else hides.
   const rowBox: GridRect = { left: 0, top, right: GRID_W, bottom: top + ROW_HEIGHT };
-  let spanL = input.chip && overlaps(input.chip, rowBox) ? input.chip.right + GAP : LEFT_EDGE;
-  let spanR = RIGHT_EDGE;
-  const walls: GridRect[] = [];
-  if (actor && overlaps(rectOf(actor, ROW_HEIGHT), rowBox)) walls.push(rectOf(actor, ROW_HEIGHT));
-  if (input.command && overlaps(input.command, rowBox)) walls.push(input.command);
-  if (input.telegraph && overlaps(input.telegraph, rowBox)) walls.push(input.telegraph);
-  for (const wall of walls) {
-    const mid = (wall.left + wall.right) / 2;
-    if (mid >= GRID_W / 2) spanR = Math.min(spanR, wall.left - GAP);
-    else spanL = Math.max(spanL, wall.right + GAP);
-  }
+  const blocks: GridRect[] = [...obstacles];
+  if (actor) blocks.push(rectOf(actor, ROW_HEIGHT));
+  const spans = freeSpans(
+    LEFT_EDGE,
+    RIGHT_EDGE,
+    blocks.filter((b) => overlaps(b, rowBox)),
+  );
   let target: PlacedPlate | null = null;
-  const room = spanR - spanL;
-  const tw = Math.min(Math.max(0, input.targetW), room);
-  if (input.targetW > 0 && tw >= Math.min(MIN_TARGET_W, input.targetW)) {
-    const left = Math.max(spanL, Math.min(spanR - tw, GRID_W / 2 - tw / 2));
-    target = { left, top, width: tw };
+  const want = Math.max(0, input.targetW);
+  if (want > 0) {
+    const centre = GRID_W / 2 - want / 2;
+    const fits = spans
+      .filter(([l, r]) => r - l >= want)
+      .map(([l, r]) => Math.max(l, Math.min(r - want, centre)))
+      .sort((a, b) => Math.abs(a - centre) - Math.abs(b - centre));
+    if (fits.length) {
+      target = { left: fits[0]!, top, width: want };
+    } else {
+      const widest = spans.reduce<[number, number] | null>((best, s) => (!best || s[1] - s[0] > best[1] - best[0] ? s : best), null);
+      const room = widest ? widest[1] - widest[0] : 0;
+      if (widest && room >= Math.min(MIN_TARGET_W, want)) target = { left: widest[0], top, width: room };
+    }
   }
   return { target, actor };
+}
+
+/**
+ * The free spans of `[from, to]` once every block's `[left - GAP, right + GAP]`
+ * is taken out, left to right.
+ */
+function freeSpans(from: number, to: number, blocks: readonly GridRect[]): Array<[number, number]> {
+  const cuts = blocks
+    .map((b) => [b.left - GAP, b.right + GAP] as [number, number])
+    .sort((a, b) => a[0] - b[0]);
+  const spans: Array<[number, number]> = [];
+  let at = from;
+  for (const [l, r] of cuts) {
+    if (l > at) spans.push([at, Math.min(l, to)]);
+    at = Math.max(at, r);
+    if (at >= to) break;
+  }
+  if (at < to) spans.push([at, to]);
+  return spans.filter(([l, r]) => r > l);
 }
 
 export interface HintInput {

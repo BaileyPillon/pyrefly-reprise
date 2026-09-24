@@ -86,7 +86,7 @@ export interface PlateLayoutInput {
   bandBarHeight: number;
   /** The party column's leftmost row edge on the grid. */
   partyLeft: number | null;
-  /** The field cursor's name plates and group label on the grid: the hint moves off them. */
+  /** The field cursor's name plates and group label on the grid: every plate moves off them. */
   field: GridRect[];
   /** The grid y of the viewport's bottom edge (how far the bar under a portrait stage reaches). */
   viewBottom: number;
@@ -300,6 +300,7 @@ export class TargetPlates {
       bandBottom: input.bandBottom,
       targetW: this.natural.target,
       actorW: this.natural.actor,
+      field: input.field,
     });
     place(this.target, row.target);
     place(this.actor, this.actor.hidden ? null : row.actor);
