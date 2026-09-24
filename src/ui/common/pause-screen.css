@@ -177,6 +177,9 @@
   filter: saturate(0.58) contrast(1.05) brightness(0.66) blur(3px);
 }
 
+/* An estimated framing settling on the measured one glides (PortraitStage, one move, never under reduce motion). */
+.pause__plate--reframe { transition: opacity 520ms ease, left 480ms ease-out, top 480ms ease-out, width 480ms ease-out, height 480ms ease-out; }
+
 @keyframes pause-push {
   from { transform: scale(1); }
   to { transform: scale(1.06); }

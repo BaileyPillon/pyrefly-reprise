@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { clearFace, FACE_BOXES, faceInFrame, faceOverlap, faceRectOn, type Rect } from '../../src/app/screens/pause/faceClear.ts';
 import { framePlate, PLATE_FRAMING } from '../../src/app/screens/pause/plates.ts';
+import { FaceFramer, scaleBlocks } from '../../src/app/screens/pause/faceFramer.ts';
 
 /** The two columns as measured at 1600x900 (left chrome), plus the objective line. */
 const LEFT_CHROME_1600: Rect[] = [
@@ -75,3 +76,61 @@ describe('clearFace', () => {
     expect(clearFace(base, f, FACE_BOXES['tidus'], 390, 844, all)).toBe(base);
   });
 });
+
+describe('fix12 verifier follow-ups', () => {
+  it('keeps the face on screen through the whole push-in, not only at rest', () => {
+    const wall: Rect[] = [{ left: 480, right: 1280, top: 0, bottom: 960 }];
+    for (const id of ['paine', 'yuna', 'kimahri']) {
+      const f = PLATE_FRAMING[id]!;
+      const face = FACE_BOXES[id]!;
+      const base = framePlate(f, 1280, 960);
+      const box = clearFace(base, f, face, 1280, 960, wall);
+      if (box === base) continue;
+      const r = faceRectOn(box, face, true);
+      expect(r.left, id).toBeGreaterThanOrEqual(0);
+      expect(r.right, id).toBeLessThanOrEqual(1280);
+    }
+  });
+
+  it('re-frames an approved framing whose face the push-in carries off screen', () => {
+    const f = PLATE_FRAMING['kimahri']!;
+    const face = FACE_BOXES['kimahri']!;
+    const base = framePlate(f, 1280, 960);
+    const far: Rect[] = [{ left: 1270, right: 1280, top: 0, bottom: 10 }];
+    const box = clearFace(base, f, face, 1280, 960, far);
+    expect(faceInFrame(box, face, 1280, 960)).toBe(true);
+  });
+});
+
+describe('FaceFramer', () => {
+  const f = PLATE_FRAMING['yuna-ffx2']!;
+  const chrome1600 = LEFT_CHROME_1600;
+
+  it('estimates from the last member chrome on a fixed-tab resize, then settles once measured', () => {
+    const framer = new FaceFramer();
+    const measured = framer.frame('yuna-ffx2', framePlate(f, 1600, 900), f, 1600, 900, chrome1600);
+    expect(measured.settled).toBe(false);
+    // A resize with no member chrome up: an estimate, not the uncleared approved framing.
+    const base1280 = framePlate(f, 1280, 960);
+    const est = framer.frame('yuna-ffx2', base1280, f, 1280, 960, null);
+    const scaled = scaleBlocks(chrome1600, 1600, 900, 1280, 960);
+    expect(faceOverlap(faceRectOn(est.box, FACE_BOXES['yuna-ffx2']!), scaled)).toBe(0);
+    // The fixed tab re-renders at the same size: the estimate holds.
+    expect(framer.frame('yuna-ffx2', base1280, f, 1280, 960, null).box).toBe(est.box);
+    // Back on the member: the real chrome is measured and the move is flagged to glide.
+    const real: Rect[] = [{ left: 40, right: 700, top: 280, bottom: 560 }];
+    const back = framer.frame('yuna-ffx2', base1280, f, 1280, 960, real);
+    expect(back.settled).toBe(sameOrNot(est.box, back.box));
+    expect(framer.frame('yuna-ffx2', base1280, f, 1280, 960, real).settled).toBe(false);
+  });
+
+  it('falls back to the approved framing when the plate has never had member chrome', () => {
+    const framer = new FaceFramer();
+    const base = framePlate(f, 1280, 960);
+    expect(framer.frame('yuna-ffx2', base, f, 1280, 960, null).box).toBe(base);
+  });
+});
+
+function sameOrNot(a: { left: number; width: number }, b: { left: number; width: number }): boolean {
+  return Math.abs(a.left - b.left) >= 0.5 || Math.abs(a.width - b.width) >= 0.5;
+}

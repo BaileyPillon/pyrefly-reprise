@@ -36,8 +36,9 @@
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { loadArtManifest, pause2xUrlFor, pauseStemOf } from '../../../engine/ArtManifest.ts';
 import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts';
-import { framePlate, framingFor, type PlateBox, type PlateFraming } from './plates.ts';
-import { clearFace, FACE_BOXES, type Rect } from './faceClear.ts';
+import { framePlate, framingFor, type PlateFraming } from './plates.ts';
+import type { Rect } from './faceClear.ts';
+import { FaceFramer } from './faceFramer.ts';
 
 /** The 1x plates the art fleet ships, and the width of their 2x masters. */
 const PLATE_1X_WIDTH = 1344;
@@ -45,6 +46,9 @@ const PLATE_2X_WIDTH = 2688;
 
 /** How long a member change takes. Slow on purpose; the reference lingers. */
 export const CROSSFADE_MS = 520;
+
+/** How long the glide lasts when a measured framing replaces an estimated one (`pause__plate--reframe`). */
+const REFRAME_MS = 480;
 
 /**
  * What a living-portrait implementation has to provide.
@@ -95,8 +99,8 @@ export class PortraitStage {
   /** Re-frames every plate when the window changes shape. */
   private resize: ResizeObserver | null = null;
   private readonly chrome: (() => Rect[] | null) | undefined;
-  /** The last face-cleared box per plate and window size, kept across fixed tabs. */
-  private readonly cleared = new Map<string, PlateBox>();
+  /** The face-cleared framing per plate and window size, kept across fixed tabs. */
+  private readonly framer = new FaceFramer();
 
   constructor(opts: PortraitStageOptions) {
     this.root = opts.root;
@@ -140,11 +144,12 @@ export class PortraitStage {
   /** The approved framing, then panned and scaled until the face clears the chrome. */
   private place(img: HTMLImageElement, id: string, w: number, h: number, live: boolean): void {
     const f = this.framingOf(id);
-    const key = `${id}@${Math.round(w)}x${Math.round(h)}`;
     const blocks = live && this.chrome ? this.chrome() : null;
-    let box = blocks ? clearFace(framePlate(f, w, h), f, FACE_BOXES[id], w, h, blocks) : this.cleared.get(key);
-    if (box) this.cleared.set(key, box);
-    else box = framePlate(f, w, h);
+    const { box, settled } = this.framer.frame(id, framePlate(f, w, h), f, w, h, blocks);
+    if (settled && !this.reduceMotion) {
+      img.classList.add('pause__plate--reframe');
+      setTimeout(() => img.classList.remove('pause__plate--reframe'), REFRAME_MS + 60);
+    }
     img.style.left = `${box.left.toFixed(1)}px`;
     img.style.top = `${box.top.toFixed(1)}px`;
     img.style.width = `${box.width.toFixed(1)}px`;

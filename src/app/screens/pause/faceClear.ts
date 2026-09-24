@@ -95,12 +95,14 @@ export function faceRectOn(box: Pick<PlateBox, 'left' | 'top' | 'width' | 'heigh
 }
 
 /**
- * Whether the face, at rest, is wholly inside the frame. Clearing the chrome
- * by pushing half a face off the edge of the screen is not clearing it: the
- * first run of this search framed Paine at 1280x960 as one eye and an ear.
+ * Whether the face is wholly inside the frame, at rest and at every end of the
+ * push-in. Clearing the chrome by pushing half a face off the edge of the
+ * screen is not clearing it: the first run of this search framed Paine at
+ * 1280x960 as one eye and an ear, and checking only at rest let the 26 s
+ * push-in carry Paine's nose and lip past x = 0 (fix12 verifier).
  */
-export function faceInFrame(box: Pick<PlateBox, 'left' | 'top' | 'width' | 'height'>, face: FaceBox, frameW: number, frameH: number): boolean {
-  const r = faceRectOn(box, face, false);
+export function faceInFrame(box: Pick<PlateBox, 'left' | 'top' | 'width' | 'height'>, face: FaceBox, frameW: number, frameH: number, push = true): boolean {
+  const r = faceRectOn(box, face, push);
   return r.left >= 0 && r.right <= frameW && r.top >= 0 && r.bottom <= frameH;
 }
 
@@ -116,7 +118,8 @@ export function faceOverlap(face: Rect, blocks: readonly Rect[], margin = FACE_M
 }
 
 /**
- * The framing to use: `base` when its face already clears the chrome;
+ * The framing to use: `base` when its face already clears the chrome and
+ * stays on screen through the push-in;
  * otherwise the largest zoom (closest to the approved head size) at which some
  * legal pan clears it with the whole face still on screen, panned as near to
  * the approved focal position as it can be; otherwise the approved framing
@@ -135,7 +138,7 @@ export function clearFace(
   blocks: readonly Rect[],
 ): PlateBox {
   if (!face || blocks.length === 0 || frameW < frameH) return base;
-  if (faceOverlap(faceRectOn(base, face), blocks) === 0) return base;
+  if (faceOverlap(faceRectOn(base, face), blocks) === 0 && faceInFrame(base, face, frameW, frameH)) return base;
 
   const coverW = Math.max(frameW, frameH * PLATE_ASPECT);
   const wantX = base.left + base.width * f.x;
