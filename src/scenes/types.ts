@@ -143,7 +143,9 @@ export interface SceneStaging {
    * A standing spot for a named enemy combatant, overriding its slot. The
    * formation solver and the relaxation leave it there. For a machine whose
    * parts are all figure-less, so it stands alone on a slot solved for a
-   * different figure (Vegnagun's body, Chapter 5 link 3).
+   * different figure (Vegnagun's body, Chapter 5 link 3), and for a boss a
+   * `holdParty` scene's relaxation can no longer part from the party
+   * (Yunalesca, Chapter 2: the spot live's relaxation settled her on).
    */
   readonly enemySpots?: Readonly<Record<string, [number, number, number]>>;
 }

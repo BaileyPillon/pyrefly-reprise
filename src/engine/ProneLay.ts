@@ -129,13 +129,20 @@ const laid = new WeakMap<PaintedActor, boolean>();
 /**
  * Called every frame by the stage. Cheap: it only does work on the frame a
  * figure's shown pose turns prone (or stops being prone).
+ *
+ * `pinned` figures (a scene's `enemySpots`) are never slid: their spot is the
+ * composition, measured where the painting is drawn. A wide standing painting
+ * (Vegnagun's body, Chapter 5) counts as prone by its shape, and a slide picked
+ * from whichever neighbours stand near it would move it off that spot.
  */
 export function layProneFigures(
   actors: readonly PaintedActor[],
   live: PerspectiveCamera,
   rigs?: BattleCamera,
+  pinned?: ReadonlySet<PaintedActor>,
 ): void {
   for (const a of actors) {
+    if (pinned?.has(a)) continue;
     const prone = a.isProne;
     if (prone === (laid.get(a) ?? false)) continue;
     laid.set(a, prone);

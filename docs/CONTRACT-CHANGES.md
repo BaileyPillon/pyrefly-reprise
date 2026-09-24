@@ -109,7 +109,12 @@ as plumbing, inert for every scene that sets neither new field. Additive and opt
   party slot tables are now solved against the fiends' settled places.
 - `enemySpots?: Record<combatantId, Spot>`: a named enemy's standing spot, overriding
   its slot; the formation solver and the relaxation leave it there. Set by the
-  Farplane (FFX-2 only, Chapter 5) for Vegnagun's body at link 3 (D-044).
+  Farplane (FFX-2 only, Chapter 5) for Vegnagun's body at link 3 (D-044), and by the
+  Zanarkand Dome (FFX only, Chapter 2) for Yunalesca, on the spot live's relaxation
+  settled her on (x 2.8), which `holdParty` would otherwise leave on Auron.
+  A pinned figure is never slid by `ProneLay` (a wide standing painting counts as
+  prone by its shape), so the spot is where its painting is drawn: Vegnagun's body
+  stands at x 7.15, the centre live drew it on (live stood it at ~5.8 and slid it +1.38).
 - Unchanged for everyone else: the relaxation's party-and-fiend rule is back to the
   shared step it had before 49789dd6 (that commit's "only the fiend gives way" moved
   fiends in Chapters 3, 7 and 8).

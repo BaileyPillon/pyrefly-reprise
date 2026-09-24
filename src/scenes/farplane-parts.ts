@@ -44,19 +44,21 @@ export const FARPLANE_PART_ANCHORS: PartAnchors = {
 };
 
 /**
- * Where Vegnagun's **body** stands at link 3 (combatant id `vegnagun-body`).
+ * Where Vegnagun's **body** is drawn at link 3 (combatant id `vegnagun-body`).
  *
  * With its Bulwarks figure-less (D-044) the body is the only figure the
  * formation holds, so it fell to `ENEMY_SLOTS[0]`, which is solved for the
  * tail: at 1600x900 (GPU, seed 1, first menu) it ran x 479..1124, right behind
  * Rikku and Paine, and the Right Bulwark's ring and bracket landed on the
- * party. This is the spot the live build (76f587c3) settled it on, measured
- * the same way, so link 3 frames as it did before the parts lost their figures.
+ * party. This spot is the live build's frame (76f587c3): live stood the body
+ * at x 5.75..5.82, z -10 and `ProneLay` slid its wide painting +1.38 along the
+ * floor, so the painting was drawn centred on x 7.13..7.20. A pinned figure is
+ * never slid (`layProneFigures`), so the spot is where the painting is drawn.
  * Where the Left Bulwark's ring should sit relative to the command window is
  * an open question for Bailey: `docs/concepts/layout/ch5-vegnagun-staging/`.
  */
 export const FARPLANE_ENEMY_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  'vegnagun-body': [5.75, 0, -10.0],
+  'vegnagun-body': [7.15, 0, -10.0],
 };
 
 /** What `buildFarplaneScene` publishes onto its `SceneBuild` (`SceneStaging`). */

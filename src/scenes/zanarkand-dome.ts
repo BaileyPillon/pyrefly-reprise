@@ -141,11 +141,8 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * of the arc is pinned by the boss — at +0.30 the front fighter's shoulder was
  * crowding the dais and the composition lost the gap between the party block
  * and the enemy block that makes an FFX frame readable. The arc's shape and its
- * quarter of the frame are unchanged.
- *
- * The arc keeps its shape and stays inside the command window's quarter of the
- * frame. The `party` and `victory` rigs moved with it (see {@link RIGS});
- * nothing else in the scene is keyed to these positions.
+ * quarter of the frame are unchanged; the `party` and `victory` rigs moved with
+ * it (see {@link RIGS}) and nothing else in the scene is keyed to these positions.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
   [0.1, 0, 1.8], // PR-0002 A (D-041, FFX only): slots 0 and 2 where live's settle left them,
@@ -169,13 +166,12 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * once `.ffxhud .ig-stat-list` came down to `bottom: 12px`, 0.684 before it —
  * is what a figure's feet may not sink far past.
  *
- * At `[2.95, 0, -2.9]` Yunalesca measured 0.581..0.803 x, 0.194..0.746 y — over
- * the queue's rail on one side and into the status panel on the other. The
- * 1.1 units of extra depth do both jobs at once: further away is further *left*
- * of the queue and further *up* the frame, so she lands at 0.550..0.744 and
- * 0.192..0.721 with no change to the rig. It costs 7% of her on-screen height,
- * which is the cheapest of the three ways out of the collision (the other two
- * are yawing the camera, which this scene's flat painting cannot afford — see
+ * At `[2.95, 0, -2.9]` Yunalesca measured 0.581..0.803 x, 0.194..0.746 y — over the queue's
+ * rail on one side and into the status panel on the other. The 1.1 units of extra depth do
+ * both jobs at once: further away is further *left* of the queue and further *up* the frame,
+ * so she lands at 0.550..0.744 and 0.192..0.721 with no change to the rig. It costs 7% of her
+ * on-screen height, which is the cheapest of the three ways out of the collision (the other
+ * two are yawing the camera, which this scene's flat painting cannot afford — see
  * {@link RIGS} — and narrowing the queue, which would ellipsise names).
  *
  * Slots 1 and 2 hold nothing in this chapter; they move with the boss so a
@@ -186,6 +182,8 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [3.9, 0, -7.4],
   [0.9, 0, -6.2],
 ];
+// PR-0002 A (FFX only): the party held on its slots; Yunalesca where live's relax left her in most runs (x 2.76-2.85), clear of Auron.
+const STAGING = { holdParty: true, enemySpots: { yunalesca: [2.8, 0, -4.0] as [number, number, number] } };
 
 /**
  * The scene's default cut-out protection for a painted actor parked on
@@ -224,6 +222,7 @@ export const ZANARKAND_DOME_SLOTS: SceneSlots = {
   enemy: ENEMY_SLOTS.map((s) => [...s] as [number, number, number]),
   partyHeight: ZANARKAND_DOME_HEIGHTS.party,
   enemyHeight: ZANARKAND_DOME_HEIGHTS.boss,
+  ...STAGING,
 };
 
 // ---------------------------------------------------------------------------
@@ -1302,7 +1301,8 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     particles,
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])), holdParty: true, // PR-0002 A
+    enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    ...STAGING,
     /**
      * The Zanarkand grade, solved against the painting that is on disk.
      *

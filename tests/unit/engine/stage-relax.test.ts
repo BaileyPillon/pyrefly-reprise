@@ -6,7 +6,12 @@
  */
 import { describe, expect, it } from 'vitest';
 import { PerspectiveCamera, Vector3 } from 'three';
-import { relaxField, type RelaxActor, type RelaxField } from '../../../src/engine/StageRelax.ts';
+import {
+  relaxActorsOf,
+  relaxField,
+  type RelaxActor,
+  type RelaxField,
+} from '../../../src/engine/StageRelax.ts';
 import type { DepthRect } from '../../../src/engine/ScreenRects.ts';
 import type { SceneSlots } from '../../../src/scenes/index.ts';
 
@@ -99,5 +104,21 @@ describe('relaxField', () => {
     relaxField(f, 14);
     expect(body.position.x).toBe(0.5);
     expect(paine.position.x).toBe(0.3);
+  });
+
+  it("relaxActorsOf marks figure-less parts and pinned fiends fixed, and keeps a part's machine", () => {
+    const staged = new Map([
+      ['tidus', { kind: 'party' as const, actor: at(0, 1) }],
+      ['body', { kind: 'enemy' as const, actor: at(7, -10), pinned: true }],
+      ['bulwark-l', { kind: 'enemy' as const, actor: at(8, -10), anchor: {}, parentId: 'body' }],
+      ['leg', { kind: 'enemy' as const, actor: at(3, -6), parentId: 'tail' }],
+    ]);
+    const out = relaxActorsOf(staged);
+    expect(out.get('tidus')).toEqual({ kind: 'party', actor: staged.get('tidus')!.actor, fixed: false });
+    expect(out.get('body')!.fixed).toBe(true);
+    expect(out.get('bulwark-l')!.fixed).toBe(true);
+    expect(out.get('bulwark-l')!.parentId).toBe('body');
+    expect(out.get('leg')).toMatchObject({ fixed: false, parentId: 'tail' });
+    expect(out.get('body')!.actor).toBe(staged.get('body')!.actor);
   });
 });

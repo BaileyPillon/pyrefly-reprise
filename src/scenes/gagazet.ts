@@ -123,8 +123,7 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * scene look like a sticker sheet.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  // PR-0002 A (D-041, FFX only): Yuna (slot 1) stood far left, 73-78% under the command stack;
-  // now front-right, clear of it and the floating pair. `holdParty` keeps all three exact.
+  // PR-0002 A (D-041, FFX only): Yuna (slot 1) was 73-78% under the command stack, now front-right; `holdParty` holds all three.
   [-1.31, 0, 1.55], // front (was -1.55; live settled here)
   [0.3, 0, 1.0], // Yuna: front-right (was [-2.95, 0, 0.25])
   [-0.61, 0, -1.05], // back (was -1.05; live settled here)
@@ -838,7 +837,8 @@ export const buildGagazetScene: SceneFactory = async (
     particles,
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])), holdParty: true, // PR-0002 A
+    enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    holdParty: true, // PARTY_SLOTS is the composition (PR-0002 A, D-041)
     palette: { ...PALETTE },
     update(dt: number): void {
       clock += dt;

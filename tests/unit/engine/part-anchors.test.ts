@@ -5,7 +5,7 @@
  *
  * GAME-AWARE: the anchor plumbing is both games and inert without a table; the
  * Farplane table is FFX-2 only (Chapter 5); the Leblanc lane is FFX-2 only
- * (Chapter 6); the Dream's End slots are FFX only (Chapter 3).
+ * (Chapter 6); the Dream's End and Zanarkand Dome tables are FFX only (Chapters 3 and 2).
  */
 import { describe, expect, it } from 'vitest';
 import { Group, PerspectiveCamera, Vector3 } from 'three';
@@ -135,6 +135,14 @@ describe('Chapter 6 lane pin (FFX-2 only)', () => {
 });
 
 describe("PR-0002 A: Yuna's slot (FFX only, Chapter 3)", () => {
+  it('keeps Tidus where live settled him and Auron between Tidus and Yuna', () => {
+    const [front, yuna, back] = DREAMS_END_SLOTS.party;
+    expect(front![0]).toBeGreaterThanOrEqual(-1.49);
+    expect(front![0]).toBeLessThanOrEqual(-1.45);
+    expect(back![0]).toBeGreaterThan(front![0]);
+    expect(back![0]).toBeLessThan(yuna![0]);
+  });
+
   it('stands Yuna front-right of Tidus and right of Auron, clear of the command stack side', () => {
     const [front, yuna, back] = DREAMS_END_SLOTS.party;
     // Right of both (the stack is on the left), between them in depth.
@@ -154,12 +162,23 @@ describe("PR-0002 A: Yuna's slot (FFX only, Chapter 2)", () => {
     expect(yuna![0]).toBeLessThan(front![0] - 0.8);
     expect(yuna![0]).toBeLessThan(back![0] - 1.5);
   });
+
+  it("holds the party and stands Yunalesca where live's relaxation settled her, off Auron", () => {
+    // With the party held nothing else parts her from Auron: live settled her at x 2.76-2.85.
+    expect(ZANARKAND_DOME_SLOTS.holdParty).toBe(true);
+    const spot = ZANARKAND_DOME_SLOTS.enemySpots?.['yunalesca'];
+    expect(spot).toEqual([2.8, 0, -4.0]);
+    expect(ZANARKAND_DOME_SLOTS.enemy[0]).toEqual([2.5, 0, -4.0]); // the dais stays on the slot
+  });
 });
 
 describe("Vegnagun's body stands on its own spot at link 3 (FFX-2 only)", () => {
-  it("is pinned on live's own spot (76f587c3), not the tail's slot, and published with the anchors", () => {
+  it("is pinned where live drew it (76f587c3), not the tail's slot, and published with the anchors", () => {
     const body = FARPLANE_ENEMY_SPOTS['vegnagun-body']!;
-    expect(body).toEqual([5.75, 0, -10.0]);
+    // Live stood it at x 5.75..5.82 and slid the wide painting +1.38 (ProneLay); a pin is never slid.
+    expect(body).toEqual([7.15, 0, -10.0]);
+    expect(body[0]).toBeGreaterThanOrEqual(5.75 + 1.38);
+    expect(body[0]).toBeLessThanOrEqual(5.82 + 1.38);
     // Well right of and behind the tail's slot [0.8, 0, -5.0], where it stood behind Rikku and Paine.
     expect(body[0]).toBeGreaterThan(0.8 + 4);
     expect(body[2]).toBeLessThan(-5.0 - 4);

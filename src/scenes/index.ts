@@ -314,9 +314,8 @@ export async function loadScene(key: string, camera: PerspectiveCamera): Promise
 /**
  * Publish a scene's own `partyHeight`/`enemyHeight` when its {@link SceneBuild}
  * provides them, falling back to the Gagazet-composition defaults otherwise
- * (PR-0093). `tests/unit/chapters/leblanc-scene.test.ts` checks it end to end
- * through {@link loadScene} under jsdom (the real factory and
- * `fromSceneBuild`), and this pure half on its own.
+ * (PR-0093). `tests/unit/chapters/leblanc-scene.test.ts` checks it end to end through
+ * {@link loadScene} under jsdom (the real factory and `fromSceneBuild`), and this half alone.
  */
 export function resolveSceneHeights(
   build: Pick<SceneBuild, 'partyHeight' | 'enemyHeight'>,
@@ -350,7 +349,8 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       // parking spots a switched-in character walks from.
       party: build.partySlots.slice(0, 3).map(toSpot),
       enemy: build.enemySlots.map(toSpot),
-      ...resolveSceneHeights(build), ...stagingOf(build),
+      ...resolveSceneHeights(build),
+      ...stagingOf(build),
     },
     update(dt): void {
       build.update(dt);

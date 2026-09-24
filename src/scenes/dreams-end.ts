@@ -148,12 +148,12 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 const PARTY_SLOTS: Array<[number, number, number]> = [
   // PR-0002 A (D-041, FFX only). Yuna (slot 1) stood far left, 72% of her
   // quad behind the approved command stack; she now stands front-right of
-  // Tidus, below and left of the aeon's feet, and Auron one step left so the
-  // three silhouettes stay apart. `holdParty` keeps all three exact. Measured
-  // on painted silhouettes, 2026-09-24 (GPU, seed 1, first menu, 1600x900 and
-  // 2000x1012): Yuna 0% under the stack, no overlap with the aeon.
-  [-1.44, 0, 1.6], // front (was -1.6; live settled here)
-  [0.15, 0, 1.4], // Yuna: front-right (was [-3.0, 0, 0.3])
+  // Tidus, below and left of the aeon's feet, Auron one step left between
+  // them. `holdParty` keeps all three exact. Measured on painted silhouettes
+  // (GPU, seed 1, first menu, 1600x900 and 2000x1012): Yuna 0% under the
+  // stack and 0-1% on the aeon; each party pair touches at most 1%.
+  [-1.47, 0, 1.6], // front (was -1.6; live settled -1.45..-1.49)
+  [0.22, 0, 1.55], // Yuna: front-right (was [-3.0, 0, 0.3])
   [-0.8, 0, -1.0], // back (was [-1.1, 0, -1.0])
   // reserve — outside every rig's frustum, including `victory`'s left swing
   [-11.8, 0, 2.6],

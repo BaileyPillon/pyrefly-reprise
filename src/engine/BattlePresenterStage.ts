@@ -20,7 +20,7 @@ import { HitEffects } from './VFX.ts';
 import type { SceneSlots } from '../scenes/index.ts';
 import { solveFormation, type FormationMember } from './Formation.ts';
 import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './ScreenRects.ts';
-import { laneFrom, relaxField, type RelaxActor } from './StageRelax.ts';
+import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
@@ -452,12 +452,15 @@ export class PaintedStage implements BattleStage {
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return false;
     if (this.actors.size < 2) return true;
-    const actors = new Map<CombatantId, RelaxActor>();
-    for (const [id, s] of this.actors) {
-      actors.set(id, { kind: s.kind, actor: s.actor, fixed: !!(s.anchor || s.pinned), ...(s.parentId ? { parentId: s.parentId } : {}) });
-    }
-    const { camera, slots } = this.opts;
-    return relaxField({ actors, rects: () => this.screenRects(), panels: this.panels, camera, canvasW: rect.width, slots }, passes);
+    const field = {
+      actors: relaxActorsOf(this.actors),
+      rects: () => this.screenRects(),
+      panels: this.panels,
+      camera: this.opts.camera,
+      canvasW: rect.width,
+      slots: this.opts.slots,
+    };
+    return relaxField(field, passes);
   }
 
   /** Swap a combatant's painting in place — form change, spherechange. */
@@ -635,7 +638,14 @@ export class PaintedStage implements BattleStage {
       },
       this.opts.camera,
     );
-    layProneFigures([...this.actors.values()].map((s) => s.actor), this.opts.camera, this.opts.battleCamera);
+    const figures = [...this.actors.values()];
+    const pinned = new Set(figures.filter((s) => s.pinned).map((s) => s.actor));
+    layProneFigures(
+      figures.map((s) => s.actor),
+      this.opts.camera,
+      this.opts.battleCamera,
+      pinned,
+    );
     this.hits.update(dt, this.opts.camera);
   }
 

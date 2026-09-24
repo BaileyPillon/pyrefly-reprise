@@ -53,6 +53,30 @@ export interface RelaxActor {
   fixed?: boolean;
 }
 
+/** What the stage keeps per figure that the relaxation reads (`PaintedStage`'s own record). */
+export interface StagedForRelax {
+  kind: 'party' | 'enemy';
+  actor: { position: Vector3 };
+  parentId?: CombatantId;
+  /** Set for a figure-less part (`PartAnchors.ts`). */
+  anchor?: unknown;
+  /** Stood on its scene's `enemySpots` entry. */
+  pinned?: boolean;
+}
+
+/** The stage's figures as the relaxation sees them: figure-less parts and pinned fiends are `fixed`. */
+export function relaxActorsOf(
+  staged: ReadonlyMap<CombatantId, StagedForRelax>,
+): Map<CombatantId, RelaxActor> {
+  const out = new Map<CombatantId, RelaxActor>();
+  for (const [id, s] of staged) {
+    const a: RelaxActor = { kind: s.kind, actor: s.actor, fixed: !!(s.anchor || s.pinned) };
+    if (s.parentId) a.parentId = s.parentId;
+    out.set(id, a);
+  }
+  return out;
+}
+
 export interface RelaxField {
   actors: ReadonlyMap<CombatantId, RelaxActor>;
   /** The live projected rectangles (`PaintedStage.screenRects`). */
