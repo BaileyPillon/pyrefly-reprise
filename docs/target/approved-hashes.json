@@ -575,6 +575,15 @@
     "sha256": "151b35dc0986738044641838fc61a58e2f8d4caa84a2ebba25eb471a2a99fc24",
     "mtime": "2026-09-24T04:32:34.141Z"
    }
+  },
+  "portrait:seymour-macalania:2026-09-24": {
+   "words": "All your recommendations",
+   "note": "Bailey, 2026-09-24, answering the driver's recommendation: Seymour's Chapter VII speaker portrait = option A (docs/concepts/portraits/seymour-macalania/options.jpg, judged 7), speaker id 'seymour-macalania'; Chapter I keeps 'seymour'. FFX only, Chapter VII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-seymour-macalania/.",
+   "public/art/portraits/seymour-macalania.png": {
+    "sha256": "eb72984ca6eef32682c3217eba0d6ebc4573ae9fb2ce2f7df885404a3a9e50d6",
+    "mtime": "2026-09-24T16:35:28.737Z",
+    "approved": "2026-09-24"
+   }
   }
  }
 }
