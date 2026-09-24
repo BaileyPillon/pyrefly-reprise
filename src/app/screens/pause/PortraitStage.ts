@@ -39,6 +39,8 @@ import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts
 import { framePlate, framingFor, type PlateFraming } from './plates.ts';
 import type { Rect } from './faceClear.ts';
 import { FaceFramer } from './faceFramer.ts';
+import { slideMask } from './faceSlide.ts';
+import '../../../ui/common/pause-slide.css';
 
 /** The 1x plates the art fleet ships, and the width of their 2x masters. */
 const PLATE_1X_WIDTH = 1344;
@@ -154,6 +156,11 @@ export class PortraitStage {
     img.style.top = `${box.top.toFixed(1)}px`;
     img.style.width = `${box.width.toFixed(1)}px`;
     img.style.height = `${box.height.toFixed(1)}px`;
+    // Option B (faceSlide): a plate slid under the falloff feathers the page it uncovers.
+    const mask = slideMask(box, w, h);
+    img.classList.toggle('pause__plate--slid', mask !== '');
+    if (mask) img.style.setProperty('--pu-slide-mask', mask);
+    else img.style.removeProperty('--pu-slide-mask');
   }
 
   /** The plate currently on screen, for tests and for the debug snapshot. */

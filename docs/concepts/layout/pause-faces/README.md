@@ -1,6 +1,6 @@
 # Pause faces: the plates the framing search cannot clear
 
-**Nothing here is built.** No file under `src/` was changed. These are the
+**Built 2026-09-24 (option B, see the end).** When written, nothing was built. These are the
 option frames for the three cases `docs/plans/pr-0079-method-check.md`
 ("Left for Bailey") hands to Bailey: **FFX-2 Rikku at every size**, **FFX
 Tidus**, and **FFX Auron at 1280x960** (IN THIS FIGHT beside his eye).
@@ -54,3 +54,37 @@ right only for Tidus at 1600x900 (1.12x, as the method check found).
 3. **Auron at 1280x960:** A, B, C or D? *Recommended: B.*
 4. If B: apply it to every plate the search cannot clear (one rule), or only
    to these three? *Recommended: one rule.*
+
+## Built (2026-09-24): Bailey picked B, as one rule
+
+Bailey, 24 Sep 2026: *"All your recommendations"* (B for Rikku, Tidus and
+Auron, and B as one rule for every plate the search cannot clear). Built in
+`src/app/screens/pause/faceSlide.ts` (`frameFace` = `clearFace`'s search, then
+the slide), the feather in `src/ui/common/pause-slide.css`, tests in
+`tests/unit/pause-face-slide.test.ts`. Game case: both.
+
+Two differences from the sheet, both forced by measuring through the whole
+push-in (the sheet's frames were held at 1.1 s; the plate then grows to 1.06x
+and stays there):
+
+- **The shrink floor is 0.8x at the end of the push-in** (0.8 / 1.06, about
+  0.755x at rest). At the sheet's 0.8x, Tidus's and Auron's faces run 20 to
+  35 px off the right edge at 1280x960 once the push-in finishes. Where the
+  full 16 px of air does not fit, it drops to 8 px (Tidus ch. 1, Auron ch. 2-3
+  at 1280x960), never to an overlap.
+- **A plate shorter than the frame is feathered at the bottom too**, so the
+  hard line under Rikku's plate in the 1280x960 B frame is gone.
+
+The rule also reaches one case the sheet did not show: FFX-2 Paine at
+1280x960 in chapters 5 and 6, where IN THIS FIGHT is wider and the search left
+her face under both columns (as it did before this change). The slide may go
+the same 0.8x below plain cover for a plate zoomed well past cover; she now
+clears (`docs/screenshots/pause-faces-b/paine-1280x960-ch5-build.jpg`).
+
+Measured with real Escape and E presses, Chromium on the RTX 5070 Ti (D3D11),
+all six chapters at 1280x960, 1600x900 and 2000x1012 (54 member tabs): every
+face clear of every chrome box at zero margin, at 1.1 s and over the whole
+push-in, and wholly on screen; every plate the search already cleared is the
+same framing as before, the CHAPTER tab is never slid, and the phone (390x844,
+both games) is approved frame (f) unchanged. Target beside build:
+`docs/screenshots/pause-faces-b/sheet-target-vs-build.jpg`.

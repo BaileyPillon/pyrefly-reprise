@@ -15,10 +15,14 @@
  * the member tab comes back and the real chrome is measured, `settled` tells
  * the stage to glide the last short distance instead of snapping.
  *
+ * The framing itself is `faceSlide.frameFace`: `faceClear`'s search, then
+ * option B (slide under the falloff) when that search cannot clear the face.
+ *
  * Game case: both (shared pause plumbing). Pure: no DOM.
  */
 
-import { clearFace, FACE_BOXES, type Rect } from './faceClear.ts';
+import { FACE_BOXES, type Rect } from './faceClear.ts';
+import { frameFace } from './faceSlide.ts';
 import type { PlateBox, PlateFraming } from './plates.ts';
 
 interface Measured {
@@ -55,7 +59,7 @@ export class FaceFramer {
     const key = `${id}@${Math.round(w)}x${Math.round(h)}`;
     const face = FACE_BOXES[id];
     if (blocks) {
-      const box = clearFace(base, f, face, w, h, blocks);
+      const box = frameFace(base, f, face, w, h, blocks);
       this.lastChrome.set(id, { w, h, blocks });
       const prev = this.cleared.get(key);
       const wasEstimate = this.estimated.delete(key);
@@ -66,7 +70,7 @@ export class FaceFramer {
     if (cached) return { box: cached, settled: false };
     const seen = this.lastChrome.get(id);
     if (!seen) return { box: base, settled: false };
-    const box = clearFace(base, f, face, w, h, scaleBlocks(seen.blocks, seen.w, seen.h, w, h));
+    const box = frameFace(base, f, face, w, h, scaleBlocks(seen.blocks, seen.w, seen.h, w, h));
     this.cleared.set(key, box);
     this.estimated.add(key);
     return { box, settled: false };

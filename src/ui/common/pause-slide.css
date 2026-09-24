@@ -1,0 +1,25 @@
+/*
+ * Pause faces, option B (Bailey, 24 Sep 2026, "All your recommendations";
+ * `docs/concepts/layout/pause-faces/README.md`): a plate whose face no legal
+ * framing can clear slides past its edge on the chrome side
+ * (`src/app/screens/pause/faceSlide.ts`). The page it uncovers sits under the
+ * columns, where the falloff is already near-black, and the plate's own edge
+ * fades into it: `--pu-slide-mask` (set by `PortraitStage`) holds one gradient
+ * per uncovered edge, intersected.
+ *
+ * Kept out of `pause-screen.css`, which is past the 400-line house rule.
+ * Game case: both (shared pause plumbing).
+ */
+.pause__plate--slid {
+  -webkit-mask-image: var(--pu-slide-mask);
+  mask-image: var(--pu-slide-mask);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* A fallback portrait is shown whole and never slid. */
+.pause__plate--slid[data-art='fallback'],
+.pause__plate--slid[data-art='missing'] {
+  -webkit-mask-image: none;
+  mask-image: none;
+}

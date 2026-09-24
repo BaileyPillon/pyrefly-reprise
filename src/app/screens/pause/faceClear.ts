@@ -66,7 +66,7 @@ export const FACE_MARGIN = 16;
  * plate to 1.06 about an origin that drifts between these two points, so a face
  * that clears at rest has to clear at the end of the push as well.
  */
-const PUSH_SCALE = 1.06;
+export const PUSH_SCALE = 1.06;
 const PUSH_ORIGINS: readonly (readonly [number, number])[] = [
   [0.48, 0.44],
   [0.54, 0.48],
@@ -124,7 +124,9 @@ export function faceOverlap(face: Rect, blocks: readonly Rect[], margin = FACE_M
  * legal pan clears it with the whole face still on screen, panned as near to
  * the approved focal position as it can be; otherwise the approved framing
  * untouched (a plate no framing can clear is a layout question, not a
- * framing one: see `docs/plans/pr-0079-method-check.md`).
+ * framing one: see `docs/plans/pr-0079-method-check.md`). For that case
+ * Bailey picked option B on 24 Sep 2026: `faceSlide.frameFace` runs this
+ * search and then slides the plate under the falloff.
  *
  * A portrait frame (the phone, approved frame f) is left alone: its chrome
  * stacks under the face by design.
