@@ -109,3 +109,67 @@ x2-shiva: PASS
 x2-anima: PASS
 road-to-the-farplane: PASS
 road-to-the-farplane-links: PASS
+
+## Re-judge: Cindy and Mindy cast r1 (commit 82df5a8f)
+
+**Game case (rule 14): FFX-2 only.** Judge: a separate sub-agent that made none of the r1 art, 2026-09-24.
+This covers only the two repaired casts. The idles, the aeons and the plates keep the verdicts above. These
+are a judge's verdicts, not Bailey's approval. Both files stay CANDIDATE.
+
+**Method.** I composited `public/art/characters/{cindy,mindy}/cast.png` (sha256 `d665fffb...` and
+`fe220447...`, which match the claims) over mid grey. I looked at each at 1:1 next to its locked idle and the
+failed r0 cast (backed up under `D:/Tools/pyrefly-art-backup/candidates/2026-09-24-chapters/`), at 2x on the
+torso and arm, and at 4x (nearest neighbour) on the seams: the glove, elbow, belt front and sash tails for
+Cindy, and the glove, wrist, sleeve and waist hem for Mindy. For game size I cropped the builder's flat
+composite `frames/sisters-cast-r1.jpg` (1600x900) and looked at it at 2x. I also ran my own pixel diff
+against each idle at the best alignment:
+- Cindy: idle at x+63. 95.5 percent of the pixels are identical. All changes sit inside x 0-161, y 273-500.
+- Mindy: idle at x+15. 95.7 percent of the pixels are identical. All changes sit inside x 13-249, y 374-609.
+
+Neither cast changes a pixel above y 250 or below y 700: the face, hair, wings, shell, stinger, legs and boots
+are the idle's own pixels. I made no in-engine capture, because the Road has no scene ground yet and
+`src/engine` and `src/scenes` belong to another agent.
+
+| Subject | State | Identity to pick | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall (mean) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `cindy` | cast r1 | 8.5 | 7 | 7 | 7.5 | 7 | 7 | 7.5 | 8 | **7.4** |
+| `mindy` | cast r1 | 8.5 | 6.5 | 7 | 7 | 6.5 | 7 | 7 | 7 | **7.1** |
+
+**`cindy` cast r1, PASS (7.4; was 5.4).** All three r0 defects are gone at 1:1:
+- There is no blue block at the belly.
+- There is no floating sash slab.
+- The bust line is whole behind the raised forearm.
+
+The belly roll under the arm reads as her own skin. The gauntlet and the elbow cap are the idle's pixels,
+with no seam at the lace band at 4x. At game size she clearly reaches forward at chest height.
+- **Worst:** the belt front and sash knot, x 70-200, y 390-500 on the cast canvas.
+  - At 2x the red belt folds over at its left end into a flap. The knot and the tails below it are a muddy
+    dark-blue mass without clear folds.
+  - At 4x the belt's outer edge and left edge carry a line of 1 px pale specks (fringe). On the Road's bright
+    lavender the fringe cannot be seen. On a dark plate it would show.
+- Hands: the glove's gold-striped fingers read as a clustered claw rather than separate fingers. Its
+  underside edge is slightly ragged at 4x. It passes at 1:1.
+- Record: the left alpha margin measures 14 px, not the 16 px the claim states. It is harmless.
+
+**`mindy` cast r1, PASS, narrowly (7.1; was 5.6).**
+- The slab is gone. The black glove is the idle's own glove turned into an open palm. Its thin orange outline
+  and the red fleck in the palm are both in the idle.
+- The sleeve no longer balloons: the puff keeps its own outline and seam highlights.
+- There is no grey scratch at the elbow.
+- **Worst:** the arm's anatomy and the waist hem.
+  - The elbow puff sits right under the shoulder pad, and the hand comes straight out of it. No forearm
+    shows, so the arm reads as sharply foreshortened toward the viewer.
+  - At 1600x900 the gesture is closer to "hand held at the chest" than to a thrust. It still reads as a cast,
+    but it is modest.
+  - The orange hem carried round the hip is a ruler-straight bar of flat colour with no shading. It stops
+    bluntly at the stinger join. At 1:1 it passes as a belt line. At 2x it looks pasted on.
+  - A glossy sliver of the idle's white wrist band shows between the glove and the puff at 2x.
+- Record: the left alpha margin measures 28 px, not the 30 px the claim states.
+- If she is repainted again: shade the hem bar and curve it with the hip, and consider a longer reach
+  (forearm visible past the puff).
+
+Follow-ups (Shiva's eye-glow spill and the aura edge alpha on the locked aeons): I did not re-judge them. The
+builder changed no locked file, and the earlier verdicts stand.
+
+CINDY-CAST: PASS
+MINDY-CAST: PASS
