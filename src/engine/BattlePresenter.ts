@@ -38,6 +38,7 @@ import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
 import { settleForMenu } from './BattlePresenterBeats.ts';
 import { playOpening } from './OpeningSkip.ts';
+import { playUnheld } from './TargetFrameHold.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -225,7 +226,7 @@ export class BattlePresenter {
 
       if (event.type === 'script-trigger') {
         this.phase = `script:${event.name}`;
-        await this.runScript(event.name);
+        await playUnheld(this.ctx.stage.camera, () => this.runScript(event.name)); // a beat's camera cues play under an FFX-2 menu too
         this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
         continue;
       }
@@ -240,6 +241,7 @@ export class BattlePresenter {
       this.presentVitals(event);
 
       this.phase = `play:${event.type}`;
+      if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       await playEvent(this.ctx, event);
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
 

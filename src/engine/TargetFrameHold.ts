@@ -27,6 +27,12 @@
  * and it settles back to the same composition. Releasing the hold leaves the
  * camera on `idle`; the next moment frames normally.
  *
+ * Two shots are never swallowed (verifier on afb1657a): the battle's end
+ * (`BattlePresenter.play` drops the hold before `victory` / `defeat`, which
+ * can land under an open Active menu from a poison tick or a charged command),
+ * and a mid-battle story beat's own camera cues ({@link playUnheld}, which
+ * re-engages the hold after the beat because the menu is still open).
+ *
  * ## Game case (AGENTS.md rule 14): FFX-2 only
  *
  * Only FFX-2's ATB can run an action under an open menu (Active mode: "time
@@ -116,5 +122,21 @@ export class HoldableCamera implements CameraPort {
 
   get rigName(): string {
     return this.inner.rigName;
+  }
+}
+
+/**
+ * Run a shot that must play whatever the menu is doing — a mid-battle story
+ * beat, whose camera cues are the scene's own — with the hold lifted, then
+ * re-engage it if it was engaged (the menu is still open, so its frame comes
+ * back). A no-op wrapper when no hold is engaged, which is every FFX battle.
+ */
+export async function playUnheld<T>(camera: CameraPort, run: () => Promise<T>): Promise<T> {
+  const was = camera.holding === true;
+  if (was) camera.hold?.(false);
+  try {
+    return await run();
+  } finally {
+    if (was) camera.hold?.(true);
   }
 }

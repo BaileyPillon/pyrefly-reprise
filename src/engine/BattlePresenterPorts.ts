@@ -88,6 +88,8 @@ export interface CameraPort {
    * `TargetFrameHold.ts`); the presenter holds it under an FFX-2 command menu.
    */
   hold?(on: boolean): void;
+  /** True while `hold(true)` is engaged. Optional and additive, as `hold`. */
+  readonly holding?: boolean;
   readonly rigNames: string[];
   readonly rigName: string;
 }
