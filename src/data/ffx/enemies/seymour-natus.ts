@@ -72,7 +72,7 @@ export const MORTIBODY_SCRIPT = 'mortibody';
 const natus: EnemyDef = {
   id: NATUS_ID,
   name: 'Seymour Natus',
-  spriteKey: 'seymour-natus', // no art exists (research §9); the stage falls back until O-1's pick is painted
+  spriteKey: 'seymour-natus', // candidate idle art installed (bfb4075f, not yet approved: research §9, O-1); the stage falls back without it
   slot: 0, // M1 — Mortibody's Cura and Mortibsorption rows target slot M1 = Natus [§3.2]
   stats: {
     hp: 36_000, // §1.1 [verified: 4 sources]
@@ -163,7 +163,7 @@ const natus: EnemyDef = {
 const mortibody: EnemyDef = {
   id: MORTIBODY_ID,
   name: 'Mortibody',
-  spriteKey: 'mortibody', // no art exists (research §9)
+  spriteKey: 'mortibody', // candidate idle art installed (bfb4075f, not yet approved: research §9)
   slot: 1, // M2 [§0 formations.json]
   stats: {
     hp: 4_000, // §2.1 [verified: 3 sources]

@@ -114,7 +114,7 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–9. */
+  /** Display order on the chapter-select screen, 1–10 (an unlisted chapter keeps its number). */
   number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   /** Card title. The encounter's name. */
   title: string;

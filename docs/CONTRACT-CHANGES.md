@@ -29,6 +29,16 @@ Only Natus's four Multi-ra rows carry it; every other record resolves through th
 single RNG pick as before (Chapters 1, 2, 3, 7, 8 and 9 event logs measured
 byte-identical over 72 seeded runs, before and after).
 
+Repair, same day (behaviour, not a listed contract): `targeting.ts#redirectTarget` no longer
+sends an action an enemy aims at **itself** to its provoker. Natus's 24,000 Protect counter is
+decompiled as "Counter Self" [ffx-seymour-natus-highbridge §2.1, verified: 3 sources]; before
+the repair a Provoked Natus put it on Tidus, or bounced it off a Reflected Tidus onto
+Mortibody. The general reading is ours. Every other targetable, Provoke-landable FFX enemy in
+our data is Braska's Final Aeon (the research lists him Provoke-immune: a Chapter III data gap,
+not changed here), whose only self row is the form-change cue; Chapters 1, 2, 3, 7, 8 and 9
+event logs measured byte-identical over 96 seeded runs, half of them with Provoke put on every enemy that
+can take it (`tests/unit/chapters/natus-provoke.test.ts` pins the reach).
+
 ## 2026-09-24 — `AvailableCommand.preferredTargets`: where the target cursor opens
 
 **Both games** [AGENTS.md hard rule 14]: shared plumbing, the same rule in each.

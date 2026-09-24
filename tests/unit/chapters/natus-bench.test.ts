@@ -26,6 +26,13 @@
  * - **poison-wait** — strategy 1: Kimahri hands his turn to Lulu, Lulu casts
  *   Bio until it lands, Yuna Shells the three, then the party only keeps
  *   itself alive and never hits Natus, so phase 1 lasts the whole fight.
+ * - **provoke-reflect** — strategy 2: Kimahri hands his turn to Rikku and Yuna
+ *   hers to Auron; Tidus Provokes Natus, Rikku keeps Reflect on Tidus, Tidus
+ *   and Auron (after Talk) hit Natus, items for upkeep (a Cura would bounce),
+ *   while Natus's single-target spells bounce off the provoker. No aeons.
+ * - **drain-farm** — strategy 6: Talk as in the intended line, then Tidus and
+ *   Auron (Kimahri's swap) kill Mortibody over and over, so each Mortibsorption
+ *   drains Natus for 4,000 / 3,000 / 2,000 / 1,000; Yuna Shells and heals.
  * - **credibly wrong** — Tidus Hastes all three (the habit the fight
  *   punishes: Desperado), then all three swing at Natus; no Talk, no aeon,
  *   the same upkeep as the others.
@@ -65,8 +72,10 @@ const content = new FFXContentRegistry();
 content.addAbilities(ALL_ABILITIES);
 content.addItems(Object.values(ITEMS));
 
-type Line = 'intended' | 'poison-wait' | 'wrong';
-interface Outcome { outcome: string; turns: number; phase: number; desperados: number; shatters: number; banishes: number; drains: number; poisoned: boolean; natusHp: number }
+type Line = 'intended' | 'poison-wait' | 'provoke-reflect' | 'drain-farm' | 'wrong';
+const LINES: readonly Line[] = ['intended', 'poison-wait', 'provoke-reflect', 'drain-farm', 'wrong'];
+const MORT = 'mortibody';
+interface Outcome { outcome: string; turns: number; phase: number; desperados: number; shatters: number; banishes: number; drains: number; bounced: number; poisoned: boolean; natusHp: number }
 
 const defend: Command = { kind: 'defend', targets: [] };
 
@@ -132,6 +141,7 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
   const st = engine.state();
   const natus = st.combatants[NATUS] as FFXCombatant;
 
+  if (line === 'provoke-reflect') return provokeReflect(engine, actorId, commands, natus);
   if (st.aeonId === actorId) {
     if (line === 'poison-wait') {
       // Stall without touching Natus: the phase must not move.
@@ -172,7 +182,7 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
     return talk(commands) ?? defend;
   }
 
-  // intended
+  // intended and drain-farm
   const t = talk(commands);
   if (t) return t;
   if (actorId === 'kimahri') return switchTo(commands, 'auron') ?? hit(commands);
@@ -183,7 +193,37 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
     if (hurt && row(commands, 'ability', 'cura')?.validTargets.includes(hurt.id)) return { kind: 'ability', id: 'cura', targets: [hurt.id] };
     return defend;
   }
+  if (line === 'drain-farm') {
+    return row(commands, 'attack')?.validTargets.includes(MORT) ? { kind: 'attack', targets: [MORT] } : hit(commands);
+  }
   return hit(commands);
+}
+
+/**
+ * Strategy 2 [research §6.3 #2, single source: GameFAQs]: Provoke on Natus,
+ * Reflect on the provoker, and the damage dealers keep hitting. Kimahri hands
+ * his turn to Rikku (the Reflect caster, B4), Yuna hers to Auron (Talk, then
+ * swing); Tidus Provokes, then swings too. Items only for upkeep: a Cura on the
+ * Reflected provoker would bounce.
+ */
+function provokeReflect(engine: BattleEngine, actorId: string, commands: readonly AvailableCommand[], natus: FFXCombatant): Command {
+  if (actorId === 'kimahri') return switchTo(commands, 'rikku') ?? defend;
+  if (actorId === 'yuna') return switchTo(commands, 'auron') ?? defend;
+  const tidus = engine.state().combatants['tidus'] as FFXCombatant;
+  const stone = party(engine).find((c) => c.statuses.petrify !== undefined);
+  if (stone && row(commands, 'item', 'soft')?.validTargets.includes(stone.id)) return { kind: 'item', id: 'soft', targets: [stone.id] };
+  const down = party(engine).find((c) => c.hp <= 0 && c.statuses.petrify === undefined);
+  if (down && row(commands, 'item', 'phoenix-down')?.validTargets.includes(down.id)) return { kind: 'item', id: 'phoenix-down', targets: [down.id] };
+  if (actorId === 'tidus' && natus.statuses.provoke === undefined && row(commands, 'ability', 'provoke')?.validTargets.includes(NATUS)) {
+    return { kind: 'ability', id: 'provoke', targets: [NATUS] };
+  }
+  if (actorId === 'rikku' && tidus.hp > 0 && tidus.statuses.reflect === undefined && row(commands, 'ability', 'reflect')?.validTargets.includes('tidus')) {
+    return { kind: 'ability', id: 'reflect', targets: ['tidus'] };
+  }
+  const low = party(engine).filter((c) => c.hp > 0 && c.hp < c.stats.maxHp * 0.45).sort((a, b) => a.hp / a.stats.maxHp - b.hp / b.stats.maxHp)[0];
+  if (low && row(commands, 'item', 'hi-potion')?.validTargets.includes(low.id)) return { kind: 'item', id: 'hi-potion', targets: [low.id] };
+  if (actorId === 'auron') return talk(commands) ?? hit(commands);
+  return actorId === 'rikku' ? defend : hit(commands);
 }
 
 function play(line: Line, seed: number, which: Party = 'preset'): Outcome {
@@ -208,6 +248,7 @@ function play(line: Line, seed: number, which: Party = 'preset'): Outcome {
     shatters: log.filter((e) => e.type === 'message' && e.text.endsWith(' shatters')).length,
     banishes: log.filter((e) => e.type === 'action-start' && e.abilityId === 'banish').length,
     drains: log.filter((e) => e.type === 'message' && e.text === 'Mortibody uses Mortibsorption').length,
+    bounced: log.filter((e) => e.type === 'damage' && e.sourceId === NATUS && e.targetId === NATUS).length,
     poisoned: log.some((e) => e.type === 'status-add' && e.targetId === NATUS && e.status === 'poison'),
     natusHp: (st.combatants[NATUS] as FFXCombatant).hp,
   };
@@ -223,12 +264,14 @@ interface Bench {
   banishes: number;
   drains: number;
   poisoned: number;
+  /** Natus's own spells that landed on him (bounced off a Reflected member), summed over the seeds. */
+  reflectedOntoNatus: number;
   meanNatusHp: number;
 }
 
 function bench(line: Line, which: Party = 'preset'): Bench {
   const outcomes: Record<string, number> = {};
-  let wins = 0, turns = 0, phase3 = 0, desperados = 0, shatters = 0, banishes = 0, drains = 0, poisoned = 0, natusHp = 0;
+  let wins = 0, turns = 0, phase3 = 0, desperados = 0, shatters = 0, banishes = 0, drains = 0, bounced = 0, poisoned = 0, natusHp = 0;
   for (let seed = 1; seed <= SEEDS; seed++) {
     const r = play(line, seed, which);
     outcomes[r.outcome] = (outcomes[r.outcome] ?? 0) + 1;
@@ -239,12 +282,13 @@ function bench(line: Line, which: Party = 'preset'): Bench {
     shatters += r.shatters;
     banishes += r.banishes;
     drains += r.drains;
+    bounced += r.bounced;
     if (r.poisoned) poisoned++;
     natusHp += r.natusHp;
   }
   return {
     wins, outcomes, meanTurns: turns / SEEDS, phase3, desperadoRate: desperados / SEEDS, shatterRate: shatters / SEEDS,
-    banishes, drains, poisoned, meanNatusHp: natusHp / SEEDS,
+    banishes, drains, poisoned, reflectedOntoNatus: bounced, meanNatusHp: natusHp / SEEDS,
   };
 }
 
@@ -252,8 +296,8 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
   let results: Record<Line, Bench>;
   let upper: Record<Line, Bench>;
   beforeAll(() => {
-    results = { intended: bench('intended'), 'poison-wait': bench('poison-wait'), wrong: bench('wrong') };
-    upper = { intended: bench('intended', 'upper'), 'poison-wait': bench('poison-wait', 'upper'), wrong: bench('wrong', 'upper') };
+    results = Object.fromEntries(LINES.map((l) => [l, bench(l)])) as Record<Line, Bench>;
+    upper = Object.fromEntries(LINES.map((l) => [l, bench(l, 'upper')])) as Record<Line, Bench>;
     // The report the chapter's review and Bailey read. Printed on every run.
     const rows: [string, Bench][] = [
       ...Object.entries(results).map(([k, v]) => [`preset ${k}`, v] as [string, Bench]),
@@ -265,7 +309,7 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
           ` outcomes ${JSON.stringify(r.outcomes)} mean turns ${r.meanTurns.toFixed(1)}` +
           ` reached phase 3 ${r.phase3} Desperados/battle ${r.desperadoRate.toFixed(2)}` +
           ` shatters/battle ${r.shatterRate.toFixed(2)} Banishes ${r.banishes} drains ${r.drains}` +
-          ` Natus poisoned ${r.poisoned} Natus HP left (mean) ${Math.round(r.meanNatusHp)}`,
+          ` bounced onto Natus ${r.reflectedOntoNatus} Natus poisoned ${r.poisoned} Natus HP left (mean) ${Math.round(r.meanNatusHp)}`,
       );
     }
   }, 300_000);
@@ -284,6 +328,12 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
   it('the intended line beats the credibly wrong one, on the shipped preset and at the upper bound', () => {
     expect(results.intended.wins).toBeGreaterThan(results.wrong.wins);
     expect(upper.intended.wins).toBeGreaterThan(upper.wrong.wins);
+  });
+
+  it('the two added sourced lines do what they say: Provoke + Reflect bounces his spells onto him, the farm drains him', () => {
+    expect(results['provoke-reflect'].reflectedOntoNatus).toBeGreaterThan(0);
+    expect(results['drain-farm'].drains).toBeGreaterThan(0);
+    expect(results['provoke-reflect'].desperadoRate).toBe(0);
   });
 
   it('the intended line summons Bahamut and Natus Banishes him after his one turn', () => {

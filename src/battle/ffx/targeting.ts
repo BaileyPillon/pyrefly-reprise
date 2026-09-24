@@ -270,7 +270,13 @@ export function redirectTarget(
       if (has(c, 'guard') || has(c, 'sentinel')) return c;
     }
   }
-  if (has(attacker, 'provoke')) {
+  // Provoke forces the enemy to target the provoker [ffx-combat-core §4.2]; an
+  // action it aims at **itself** targets no one on the other side, so it stays
+  // put. Sourced for Seymour Natus, whose 24,000 Protect counter is decompiled
+  // as "Counter Self" [ffx-seymour-natus-highbridge §2.1, verified: 3 sources];
+  // the general reading is ours. Every other Provoke-landable FFX enemy in our
+  // data is Braska's Final Aeon, whose only self action is the form-change cue.
+  if (has(attacker, 'provoke') && target.id !== attacker.id) {
     const inst = attacker.statuses['provoke'];
     const provoker = inst?.sourceId ? tryActor(ctx, inst.sourceId) : undefined;
     if (provoker && isAlive(provoker) && targetable(provoker)) return provoker;
