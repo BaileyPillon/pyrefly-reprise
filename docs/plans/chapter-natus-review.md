@@ -18,14 +18,11 @@ Underground scene in the tree is the FFX-2 Bahamut arena and is **not** this are
 AI, data and build live under `src/battle/ffx`, `src/data/ffx`. Registration in
 `src/data/encounters.ts` is shared plumbing, case "both" (CHK-020).
 
-**Read in full:** `research/ffx-seymour-natus-highbridge.md` (commit 0df4ba9e; "§n" below
-means its sections) and `docs/plans/chapter-yojimbo-review.md`. **Read in part:** the engine
-files named in §4, `research/writing-bible.md` §1.7, §1.9, `docs/audio/THEMES.md` §3,
-`docs/target/approved-hashes.json`, `docs/target/decisions.json`, `src/data/ffx/builds/`
-`{fahrenheit,gagazet}.ts`. Carry the research's tags verbatim into the data files.
-
-**Two corrections the research made to the brief stand:** Mortibody has **no Full-Life**
-(that is Mortiorchis, Chapter I); **Total Annihilation is not in this fight** (Flux's).
+**Read in full:** `research/ffx-seymour-natus-highbridge.md` (0df4ba9e; "§n" = its sections),
+`docs/plans/chapter-yojimbo-review.md`. **In part:** the engine files in §4, writing-bible §1.7,
+§1.9, THEMES.md §3, `docs/target/*.json`, builds `fahrenheit.ts`, `gagazet.ts`. Carry the
+research's tags verbatim. Its brief corrections stand: Mortibody has **no Full-Life**
+(Mortiorchis does); **Total Annihilation** is Flux's, not this fight's.
 
 ## 2. The encounter (summary only; the data files cite the research)
 
@@ -48,29 +45,23 @@ files named in §4, `research/writing-bible.md` §1.7, §1.9, `docs/audio/THEMES
 
 **The design fact (§1.1, `[derived]`):** DEF 0 and MDEF 0 behind 36,000 HP. Every point
 lands at full value; the wall is the HP pool, Cura, the phases and the shatter threat.
-**The thesis:** the fight punishes the obvious answers. Hitting him moves the phases
-(Poison does not); summoning is cut to one turn; Hasting everyone calls Desperado;
-Petrify plus Claw deletes a guardian. The sourced lines (§6.3) are Poison and wait,
-Provoke + Reflect, the aeon relay, brute force with Stone Ward and Esuna, Reflect on
-Natus in phase 3, farming Mortibsorption, and Hasting only two.
+**The thesis:** the fight punishes the obvious answers: hitting him moves the phases (Poison
+does not), aeons get one turn, Hasting everyone calls Desperado, Petrify plus Claw deletes a
+guardian. Sourced lines (§6.3): Poison and wait, Provoke + Reflect, the aeon relay, brute
+force (Stone Ward, Esuna), Reflect on Natus, farming Mortibsorption, Haste only two.
 
 ## 3. The party and builds
 
-- **Build point:** the Highbridge, after the Via Purifico, before Macalania Woods and the
-  Calm Lands. New file `src/data/ffx/builds/highbridge.ts`, derived **upward** from
-  `fahrenheit.ts` (Chapter VIII, six guardians, the lower bound) and **downward** from
-  `gagazet.ts` (the upper bound); Yuna from the lower half of the Gagazet row (§6.2).
-  Every stat cell `[estimate]`, as both presets label their own.
-- **Remove what Gagazet teaches:** Kimahri's Mighty Guard and White Wind (Biran and Yenke,
-  on Gagazet). Carry forward what Chapter VIII already gave: Rikku's Stone Ward bracer and
-  her Reflect (`fahrenheit.ts` C-14).
-- **Talk:** the `talk` marker on Tidus, Auron and Yuna. Auron starts on the bench under the
-  recommended line-up, so his Talk costs a switch: that is the point.
-- **Aeons:** Valefor, Ifrit, Ixion, Shiva, **Bahamut** (just obtained in Bevelle);
-  no Anima, Magus Sisters or Yojimbo (§6.2 `[verified: 2]`). Starting gauges: **B3**.
-- **Opening line-up:** **B2** (the formation byte says Tidus, Yuna, Kimahri).
-- **Yuna's Reflect:** **B4**. **Items and O'aka's stock:** **B5** (the research names the
-  shop but not its list; T4 sources the list before any quantity is written).
+- **Build point:** the Highbridge, before Macalania Woods and the Calm Lands. New
+  `src/data/ffx/builds/highbridge.ts`, derived up from `fahrenheit.ts` (Chapter VIII, the
+  lower bound) and down from `gagazet.ts` (the upper); Yuna from the lower half of the
+  Gagazet row (§6.2). Every stat cell `[estimate]`, as both presets label their own.
+- **Remove what Gagazet teaches** (Kimahri's Mighty Guard, White Wind); **carry forward**
+  Chapter VIII's Stone Ward bracer and Reflect on Rikku (`fahrenheit.ts` C-14).
+- **Talk** on Tidus, Auron, Yuna; Auron starts benched under B2, so his Talk costs a switch.
+- **Aeons:** Valefor, Ifrit, Ixion, Shiva, **Bahamut**; no Anima, Magus Sisters or Yojimbo
+  (§6.2 `[verified: 2]`). Starting gauges **B3**; line-up **B2**; Yuna's Reflect **B4**;
+  items **B5** (the research names O'aka's shop, not its list: T4 sources it first).
 
 ## 4. Engine capabilities, found by reading the engine
 
@@ -100,30 +91,26 @@ Natus in phase 3, farming Mortibsorption, and Hasting only two.
 ### 4.2 The real gaps (FFX only)
 
 - **N-G1: Mortibsorption is wired to Chapter I's ids.** `runMortibsorptionIfDown`
-  (`ai/reactions.ts:145`) looks up `mortiorchis` and `seymour-flux` by name. It also
-  **computes Seymour's threshold counters and then drops them** (`void command`, line 154).
-  Natus needs the drain to move his phase **and** fire the Protect counter (§4.4
-  pseudocode). Smallest seam: a mount → host table, with the counters returned to the
-  engine's counter queue for the Natus pair. **Chapter I's event logs stay byte-identical.**
-  Whether Chapter I's drop is itself a defect is **not** claimed here (rule 3): T1 runs the
-  Flux engine across a threshold by a drain and reports what happens.
+  (`ai/reactions.ts:145`) names `mortiorchis` and `seymour-flux`, and **computes Seymour's
+  threshold counters then drops them** (`void command`, line 154). Natus needs the drain to
+  move his phase **and** fire the Protect counter (§4.4). Seam: a mount → host table, the
+  counters returned to the queue for the Natus pair; Chapter I byte-identical. Whether
+  Chapter I's drop is a defect is **not** claimed (rule 3): T1 runs it and reports.
 - **N-G2: the phase is state, not HP.** Natus's AI must read a stored phase that only the
   action hook (and the drain) moves, as `seymour-flux.ts` stores `PHASE`. The collector
   returns early for an **enemy-side** attacker (the Yu Yevon rule), so Natus's own spells
   bounced back by Reflect (the Provoke + Reflect line) move nothing today: **B8**.
 - **N-G3: the combo.** Natus's Multi-ra reads **Mortibody's last element**: shared AI
   state between two actors (flags on the battle state). Small; T3.
-- **N-G4: "two different members".** Chapter VII types Multi-ra `random-enemy`, `hits: 2`:
-  two **independent** picks, which can land on one member twice (Macalania C-3). This
-  research says two party members and the wiki "two allies". T2 reads the target byte; if
-  it says distinct, add a `distinct-per-hit` flag (`AbilityFlag` is a contract file: one
-  `CONTRACT-CHANGES.md` entry) with a byte-identical guard on Chapter VII. Folded into **B7**.
+- **N-G4: "two different members".** Chapter VII's Multi-ra is `random-enemy`, `hits: 2`:
+  two **independent** picks (Macalania C-3); the wiki says "two allies". If the target byte
+  says distinct, add a `distinct-per-hit` flag (contract `AbilityFlag`, one entry), with a
+  byte-identical guard on Chapter VII. In **B7**.
 - **N-G5: Desperado's trigger** is a condition on Mortibody's own turn ("all three active
   members Hasted"), not a hit counter. A few lines in the AI; the ladder is **B6**.
-- **N-G6: the guide lookup leaks across games.** The Yojimbo review found
-  `engine/tactics/guide.ts#guideForState` picks the **FFX-2 Bahamut guide** when the party's
-  own Bahamut is on the field. Chapter X has Bahamut, so it needs its own guide and tactic
-  (T7) before it is listed; fixing the lookup is the Yojimbo track's, or a spawned task.
+- **N-G6: the guide leak.** `engine/tactics/guide.ts#guideForState` shows the **FFX-2
+  Bahamut guide** when the party's Bahamut is on the field (Yojimbo review). Chapter X
+  needs its own guide and tactic (T7) before it is listed.
 - **Threaten:** byte landable, wiki immune (N-3): ship immune until checked (**B10**).
 
 **Not needed:** a new `Side`, `BattleEvent` or damage type; a new shatter system; the
@@ -172,18 +159,16 @@ ability ids), perhaps `AbilityFlag` (N-G4); one `CONTRACT-CHANGES.md` entry.
 
 ### 6.2 Options rounds: six, cheap and broad; a pick approves only what Bailey names
 
-Method (`docs/plans/art-method-r3/METHOD-CHECK.md`): look at reference images before
-drawing (rule 6), keep the output original (rule 8), pilot one and look at 1:1 first.
-Only Seymour's face and hair may derive from approved pixels (the Macalania portrait), and
-only if O-1 shows the reuse reads right.
+Method (`art-method-r3/METHOD-CHECK.md`): reference images before drawing (rule 6), original
+output (rule 8), pilot one at 1:1 first. Only Seymour's face and hair may derive from approved
+pixels (the Macalania portrait), and only if O-1 shows it reads right.
 
 - **O-1 Seymour Natus:** 3 concepts at battle scale beside a party idle: (a) new paint in
   the house style, (b) the same with the face derived from the approved portrait, (c) a
   darker, more pyrefly-lit variant.
-- **O-2 Mortibody:** 2–3 options beside O-1's pick: how it hovers, how it reads at its
-  size, how its KO and revive look (one strip).
-- **O-3 The Highbridge:** 3 backdrop plates contrasting light (grey noon, storm dusk,
-  night with the city lit), the Main Gate behind, the bridge running away to the south.
+- **O-2 Mortibody:** 2–3 options beside O-1's pick, with a KO-and-revive strip.
+- **O-3 The Highbridge:** 3 plates contrasting light (grey noon, storm dusk, night with the
+  city lit), the Main Gate behind, the bridge running south.
 - **O-4 Reading the fight:** 2–3 mockups at 1600×900 **and** 390 px phone width of (i) the
   element combo telegraph, (ii) a Haste count warning before Desperado, (iii) a petrified
   member under threat of the Claw. One option is "intent text only". Bands and labels
@@ -199,12 +184,11 @@ The bible has no E-tag for this chapter; T6 adds the next free one. Voices: Seym
 courteous, "Lady Yuna", death as mercy (§1.9, "correct about the diagnosis, monstrous about
 the cure"); Kimahri 3–8 words, third person, after the silence (§1.7).
 
-- **Pre (under B11 = a):** (1) Tidus's past-tense narration: the steps, the kiss, Yuna's
-  leap on Valefor, the trial, the Via Purifico, in about six lines; it opens where Chapter
-  VIII's bells stop. (2) Live: the reunion on the bridge. (3) Seymour arrives; Kinoc is
-  told of, not shown; his argument (death as mercy, the next Sin). (4) **Kimahri's stand**:
-  one line, the spear. (5) Seymour becomes Natus. (6) Auron orders the retreat; Yuna stops;
-  Tidus: we are all guardians; they turn back together. `battleStart()`.
+- **Pre (B11 = a):** (1) Tidus's past-tense narration, about six lines: the steps, the kiss,
+  the leap on Valefor, the trial, the Via Purifico; it opens where Chapter VIII's bells stop.
+  (2) Live: the reunion. (3) Seymour arrives, Kinoc told of, not shown; death as mercy, the
+  next Sin. (4) **Kimahri's stand**, one line. (5) Natus. (6) Auron orders the retreat; Yuna
+  stops; Tidus: we are all guardians; they turn back together. `battleStart()`.
 - **Mid (B9):** the three Talk exchanges; the Protect counter at 24,000; the first Break;
   the first shatter; Natus's Banish line; the Haste warning.
 - **Post:** Tidus's narration at the Macalania Woods campsite: they escaped, Yuna's faith
@@ -242,31 +226,27 @@ LAST  integrator wiring commit · node tools/orphans.mjs · real-input win and l
 
 ## 9. Acceptance cases (T10)
 
-- **Mechanic units, each pinning a research row:** the combo uses Mortibody's element;
-  the Protect counter fires once at 24,000; a Poison tick across 24,000 moves nothing until
-  the next hit; a Mortibsorption across a line moves the phase and fires the counter; the
-  drain goes 4,000 / 3,000 / 2,000 / 1,000 / 1,000 and wins when lethal; Banish after one
-  aeon turn; Break then Claw shatters at 90 % and no Switch refills the slot; Desperado
-  after the third Haste, 468–529, strip list exact, Shell ignored; Talk exactly Tidus,
-  Auron (STR) and Yuna (MDEF); Cura bounces off a Reflected Natus; Break reflected misses
-  him; Delay lands on Mortibody and fails on Natus; Magic Break fails on both; Threaten
-  fails; Poison ticks 1,440.
-- **Absence tests (rule 14, CHK-021):** Chapter I's event logs byte-identical (N-G1),
-  Chapter VII's too if N-G4 lands; Chapters 1–3, 7, 8, 9 at fixed seeds; FFX-2 untouched.
-- **Measure, never tune:** win rate of each sourced line (Poison and wait, aeon relay,
-  Mortibsorption farming, Haste two, brute force) and of a credibly wrong one (Haste all
-  three and swing); the advisor's top row. If a line is unwinnable, bring Bailey measured
+- **Mechanic units, one per research row:** combo element; Protect counter once at 24,000;
+  a Poison tick across a line moves nothing until the next hit; a drain across a line moves
+  the phase and fires the counter; drain 4,000/3,000/2,000/1,000/1,000, lethal drain wins;
+  Banish after one aeon turn; Break + Claw shatters at 90 %, no Switch refills the slot;
+  Desperado after the third Haste, 468–529, exact strip list, Shell ignored; the Talk table;
+  Cura bounces off a Reflected Natus; reflected Break misses him; Delay lands only on
+  Mortibody; Magic Break and Threaten fail; Poison ticks 1,440.
+- **Absence (rule 14, CHK-021):** Chapters 1–3, 7, 8, 9 byte-identical at fixed seeds
+  (Chapter I for N-G1, VII for N-G4); FFX-2 untouched.
+- **Measure, never tune:** each sourced line and a credibly wrong one (Haste all three and
+  swing), plus the advisor's top row. If a line is unwinnable, bring Bailey measured
   options; **never weaken the boss**.
-- **Real input:** chapter select → prep → pre scene → win and loss → results; screenshots
-  under `docs/screenshots/chapters/natus-*`.
+- **Real input:** select → prep → pre scene → win and loss → results; screenshots
+  `docs/screenshots/chapters/natus-*`.
 
 ## 10. Review, risks, verdict
 
-`node tools/critic-plan.mjs --paths src/data/encounters.ts,src/battle/ffx/ai/reactions.ts,src/battle/ffx/engine.ts`
-returns **DEEP** (chapter registry, FFX CTB engine): focused before deploy, deep after, on
-live. Not save-data class unless the new `ChapterId` needs a `SaveData` migration (T1
-checks the Yojimbo precedent). **Deploy cap:** check NOW.md for owed deep reviews at the
-cut; a third deploy while one is owed needs Bailey's words.
+`critic-plan --paths` on `encounters.ts`, `ai/reactions.ts`, `engine.ts` returns **DEEP**
+(chapter registry, FFX CTB engine): focused before deploy, deep after on live; not save-data
+class unless the `ChapterId` needs a migration. **Deploy cap:** a third deploy while a deep
+review is owed needs Bailey's words.
 
 | # | Risk | Mitigation |
 |---:|---|---|
@@ -277,8 +257,6 @@ cut; a third deploy while one is owed needs Bailey's words.
 | R5 | Scope creep into the wedding, the trial, Isaaru, Evrae Altana | B11 = a, B14 = no |
 | R6 | Copyright pull toward "Run!!" and the original script | original cue and lines; the audition page and the draft say so |
 
-**Verdict: PROCEED.** Eighteen needed mechanics already work (§4.1), including the
-shatter that the research expected to be new; the new surface is the Mortibsorption seam,
-a stored phase, the combo and the Desperado trigger. Before the first perceivable line:
-Bailey answers B1–B16 and picks O-1 to O-6. *Preflight only; the only file this work
-commits is this one.*
+**Verdict: PROCEED.** Eighteen mechanics already work (§4.1), the shatter included; the new
+surface is the Mortibsorption seam, a stored phase, the combo and the Desperado trigger.
+Before the first perceivable line: B1–B16 answered, O-1 to O-6 picked. *Preflight only.*
