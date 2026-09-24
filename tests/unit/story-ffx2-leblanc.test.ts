@@ -40,7 +40,7 @@ const SPEAKER_IDS: readonly SpeakerId[] = [
   'seymour', 'yunalesca', 'jecht', 'braska', 'yu-yevon', 'fayth-boy',
   'zaon', 'young-auron', 'kelk', 'biran', 'yenke', 'wantz',
   'yuna-x2', 'rikku-x2', 'paine',
-  'brother', 'buddy', 'shinra',
+  'brother-x2', 'brother', 'buddy', 'shinra',
   'shuyin', 'lenne', 'nooj', 'baralai', 'gippal', 'leblanc', 'logos', 'ormi',
   'bahamut', 'narrator', 'none',
 ];
@@ -49,7 +49,7 @@ const SPEAKER_IDS: readonly SpeakerId[] = [
 const PRESENT: Record<string, readonly SpeakerId[]> = {
   // Upstairs and the corridor: the trio hand out duties, Leblanc is massaged,
   // and Brother is on the comm at full volume (beat 7 — that is the point).
-  pre: ['yuna-x2', 'rikku-x2', 'paine', 'leblanc', 'logos', 'ormi', 'brother'],
+  pre: ['yuna-x2', 'rikku-x2', 'paine', 'leblanc', 'logos', 'ormi', 'brother-x2'],
   // Logos' room. The Syndicate has run; only the girls are there.
   'mid:act-one-cleared': ['yuna-x2', 'rikku-x2', 'paine'],
   // The treasure room, before Leblanc is found. Still only the girls.

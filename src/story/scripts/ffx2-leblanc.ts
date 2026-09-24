@@ -4,7 +4,7 @@
  * **Game case: FFX-2 only** (AGENTS.md rule 14). Every beat, speaker and cue
  * here comes from `research/ffx2-leblanc-syndicate.md` §9 and §10.3 and from
  * `research/writing-bible.md` §1.14–1.16 / §2.2. Nothing in this file exists in
- * FFX: the speakers `leblanc` / `logos` / `ormi` / `brother` are FFX-2-only
+ * FFX: the speakers `leblanc` / `logos` / `ormi` / `brother-x2` are FFX-2-only
  * `SpeakerId`s, the cues are FFX-2-only music keys, and the absence test in
  * `tests/unit/story-ffx2-leblanc.test.ts` asserts that no FFX speaker and no
  * FFX chapter id appears anywhere in it.
@@ -218,11 +218,11 @@ export const ffx2LeblancScripts: ChapterScripts = {
 
     // --- Beat 7: Brother on the comm, at full volume. The cover is blown.
     sfx('machina-groan'),
-    say('brother', 'RIKKU! Rikku, do you copy? It is Brother!'),
+    say('brother-x2', 'RIKKU! Rikku, do you copy? It is Brother!'),
     say('rikku-x2', 'Shh! Shh shh shh!'),
-    say('brother', 'I CANNOT HEAR YOU! SPEAK UP!'),
+    say('brother-x2', 'I CANNOT HEAR YOU! SPEAK UP!'),
     say('rikku-x2', 'I said shush—'),
-    say('brother', 'YUNA! Are you massaging the enemy?!'),
+    say('brother-x2', 'YUNA! Are you massaging the enemy?!'),
     beat(1800),
     say('ormi', 'Wait. Wait, wait, wait. I know that voice.'),
     say('ormi', "That's — no. No! That's cheating, that is!", { emotion: 'angry' }),

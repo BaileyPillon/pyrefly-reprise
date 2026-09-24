@@ -71,6 +71,15 @@ export type SpeakerId =
   | 'rikku-x2'
   | 'paine'
   // --- FFX-2 airship crew (comm portraits only) ---------------------------
+  /**
+   * Brother on the *Celsius* comm. Every FFX-2 line uses this id, not `'brother'`,
+   * so the X-2 portrait (`portraits/brother-x2.png`, sourced from
+   * visual-bible §1.23.7) never lands on the FFX Evrae lines, whose look is
+   * unsourced. The name plate still reads "Brother": `DialogueBox.defaultName`
+   * strips the `-x2` suffix, as for `yuna-x2` and `rikku-x2`.
+   */
+  | 'brother-x2'
+  /** FFX Brother (the *Fahrenheit* pilot, Evrae chapter). No portrait. */
   | 'brother'
   | 'buddy'
   | 'shinra'

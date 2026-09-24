@@ -80,9 +80,23 @@
     "leblanc": { "fx": 0.52, "fy": 0.29, "ipd": 0.3, "px": [832, 1216], "note": "Extreme close-up (fan held near her chin); eye positions read by hand off tools/portraits/measure-face-crops.mjs probe leblanc — approximate, worth a follow-up probe pass before shipping a dialogue card." },
     "ormi": { "fx": 0.51, "fy": 0.325, "ipd": 0.25, "px": [832, 1216], "note": "Head-on close-up, brow furrowed low on the canvas. Eye positions read by hand off tools/portraits/measure-face-crops.mjs probe ormi — approximate." },
     "logos": { "fx": 0.5, "fy": 0.25, "ipd": 0.3, "px": [832, 1216], "tight": true, "note": "Near-symmetrical helmet close-up; eyes sit high in the frame. Eye positions read by hand off tools/portraits/measure-face-crops.mjs probe logos — approximate, ipd is close to the 0.34 tight threshold so re-probe before trusting the crop at small sizes." },
-    "cid": { "fx": 0.529, "fy": 0.322, "ipd": 0.317, "px": [832, 1216], "tight": true, "note": "Bald head fills the frame with goggles worn low over the eyes as a second lens on top of the forehead pair; pupils read by hand off tools/portraits/measure-face-crops.mjs probe cid at approximately (308, 393) and (572, 390) of the 832x1216 file. ipd is close to the 0.34 tight threshold, same case as logos." }
+    "cid": { "fx": 0.529, "fy": 0.322, "ipd": 0.317, "px": [832, 1216], "tight": true, "note": "Bald head fills the frame with goggles worn low over the eyes as a second lens on top of the forehead pair; pupils read by hand off tools/portraits/measure-face-crops.mjs probe cid at approximately (308, 393) and (572, 390) of the 832x1216 file. ipd is close to the 0.34 tight threshold, same case as logos." },
+    "nooj": { "fx": 0.468, "fy": 0.344, "ipd": 0.3, "px": [832, 1216], "note": "FFX-2 speaker portrait, Bailey's pick 2026-09-24 (Nooj C after one repair pass); head rolled, pupils behind blue lenses at (268, 449) and (510, 388), read off tools/portraits/measure-face-crops.mjs sheet nooj; ipd is the true diagonal separation" },
+    "brother-x2": { "fx": 0.532, "fy": 0.406, "ipd": 0.224, "px": [832, 1216], "note": "FFX-2 Brother, Bailey's pick 2026-09-24 (Brother A); straight-on, pupils at (349, 496) and (535, 493), read off tools/portraits/measure-face-crops.mjs sheet brother-x2" }
   },
   "dialogue": {
+    "nooj": {
+      "fx": 0.468,
+      "fy": 0.04,
+      "px": [832, 1216],
+      "note": "2026-09-24: the card shows 879 of the file's 1216 rows (cover on a 19.71vw x 20.83vw box), and the painting has no headroom (hair ink on row 0). The fallback fy 0.344 started the window at row 116, cutting the tops of both hair loops (the one feature only this option has). fy 0.04 shows rows 13 to 892: both loops, the glasses, the metal hand, the chin (about row 740) and the collar."
+    },
+    "brother-x2": {
+      "fx": 0.532,
+      "fy": 0.02,
+      "px": [832, 1216],
+      "note": "2026-09-24: mohawk ink starts on row 0, the shouting mouth ends near row 720 and the chin near row 755. The fallback fy 0.406 started the 879-row window at row 137 and cut the mohawk in half; fy 0.02 shows rows 7 to 886, the whole mohawk down to the collarbones."
+    },
     "jecht": {
       "fx": 0.5,
       "fy": 0.0543,

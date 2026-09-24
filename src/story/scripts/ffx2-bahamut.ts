@@ -134,8 +134,8 @@ export const ffx2BahamutScripts: ChapterScripts = {
     // End the chapter on Yuna's line; Brother plays over black.
     say('yuna-x2', 'The Calm. I can feel it coming apart.'),
     fade('black', 1400),
-    say('brother', 'Everyone back to the ship. Now!'),
-    say('brother', 'No arguing! This is a Brother order!'),
+    say('brother-x2', 'Everyone back to the ship. Now!'),
+    say('brother-x2', 'No arguing! This is a Brother order!'),
     wait(1400),
   ],
   /** Deliberately empty — Chapter 4 serves no victory quips [writing-bible §5.4]. */

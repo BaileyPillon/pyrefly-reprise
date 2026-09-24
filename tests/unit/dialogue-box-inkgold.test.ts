@@ -61,6 +61,13 @@ describe('dialogue role chip', () => {
     expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Rikku');
   });
 
+  it("names FFX-2 Brother 'Brother' (his X-2 portrait id is brother-x2), with no role chip", () => {
+    const { box } = mount();
+    void box.say(say('brother-x2', 'I CANNOT HEAR YOU! SPEAK UP!'));
+    expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Brother');
+    expect((box.el.querySelector('.dbox__role') as HTMLElement).hidden).toBe(true);
+  });
+
   it('lets a screen override the role for its own context', () => {
     const { box } = mount({ roleFor: () => 'Lady of Bevelle' });
     void box.say(say('yuna', 'I will do it.'));
@@ -99,7 +106,7 @@ describe('dialogue role chip', () => {
   });
 
   it('gives no role to the airship crew, who need no introduction', () => {
-    for (const who of ['brother', 'buddy', 'shinra'] as const) {
+    for (const who of ['brother', 'brother-x2', 'buddy', 'shinra'] as const) {
       expect(SPEAKER_ROLES[who]).toBeUndefined();
     }
   });

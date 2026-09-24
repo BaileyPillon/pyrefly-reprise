@@ -156,9 +156,9 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
     beat(1400),
     say('yuna-x2', "Is it okay if I don't say anything?"),
     say('paine', "It's encouraged."),
-    say('brother', 'YUNA!'),
-    say('brother', '...Yuna?'),
-    say('brother', 'Buddy, why is nobody yelling back at me?'),
+    say('brother-x2', 'YUNA!'),
+    say('brother-x2', '...Yuna?'),
+    say('brother-x2', 'Buddy, why is nobody yelling back at me?'),
     say('buddy', "Give 'em a minute, Brother."),
     say('buddy', 'Coordinates are holding.'),
 
@@ -355,7 +355,7 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
       music(null, 900),
       camera('idle', 900),
       say('shinra', "Vegnagun's dead. Something's still down there.", { auto: 900 }),
-      say('brother', 'YUNA! Come up now! I am ordering it!', { auto: 900 }),
+      say('brother-x2', 'YUNA! Come up now! I am ordering it!', { auto: 900 }),
       // Baralai drops to his knees. Something steps out of him and keeps
       // standing. Nooj and Gippal drag him clear, off to frame-left.
       beat(1400),

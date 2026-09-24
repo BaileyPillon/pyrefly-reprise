@@ -108,3 +108,35 @@ Two things apply to every Brother option:
    X-2 look, so whether his FFX look matches is **unsourced**. Should the FFX-2 portrait ship
    under a separate id (`brother-x2`, as `yuna-x2` and `rikku-x2` do), leaving the FFX lines on
    the text card until his FFX look is sourced?
+
+## Picked and installed (2026-09-24)
+
+Bailey, 2026-09-24: "I'll take all of your recommendations", which here means **Brother A**,
+**Nooj C with one repair pass**, and the speaker id **`brother-x2`** for every FFX-2 Brother line.
+
+- **Brother A** is installed unchanged (the braid clean-up above is its only edit) as
+  `public/art/portraits/brother-x2.png`. The repair items the judge listed for Brother (red in
+  the suspenders, tattoos, spiral pupils) were not part of the pick and were not done.
+- **Nooj C** got the judge's one repair pass, side by side in
+  [`nooj-c-repair.jpg`](nooj-c-repair.jpg) (left: the candidate, right: installed as
+  `public/art/portraits/nooj.png`):
+  - **Mouth:** one masked inpaint (`tools/gen/inpaint.mjs`, box 330,585,195,100, latent
+    refine at denoise 0.7, seed 5202) to a closed, flat mouth, which fits his chapter-5 beat,
+    "flat, resolved". It took two GPU prompts; the first gave a weaker line. One 8 px speck the
+    inpaint left on the cheek was filled from its surroundings.
+  - **Suit:** a deterministic hue shift of the purple suit to crimson. The fur stays purple, as
+    the source has it. No new pixels were generated for this.
+  - **Ink:** the line work was grown by 1 px and pulled toward black, with a small saturation and
+    contrast lift toward the house's inked poster look.
+  - Self-check at 1:1 and 2x by the agent that made the repair (not an independent judge): the
+    edges and anatomy are unchanged, the hair still reads brown, and the style is closer to the
+    approved set, though still softer than Rikku-x2. The agent's estimate is about 7.5.
+  - The candidate, the repaired file, the mask, the inpaint frame and the repair script are
+    backed up in `D:/Tools/pyrefly-art-backup/candidates/2026-09-24-picks/`.
+- **Dialogue crops:** `src/ui/common/face-crops.json` has measured `portraits` rows and
+  `dialogue` rows for both files. The card shows 879 of the 1216 rows, and both paintings put
+  hair on row 0, so the dialogue rows anchor near the top. Nooj uses fy 0.04, which shows his
+  hair loops through to his collar. Brother uses fy 0.02, which shows his whole mohawk down to
+  his collarbones. Real-key captures:
+  `docs/screenshots/picks/portrait-nooj-ch5-card.jpg` and
+  `docs/screenshots/picks/portrait-brother-ch6-card.jpg`.

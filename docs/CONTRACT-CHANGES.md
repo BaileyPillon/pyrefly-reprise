@@ -6,6 +6,23 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — `SpeakerId` gains `'brother-x2'`: FFX-2 Brother's own voice and portrait id
+
+**FFX-2 only** [AGENTS.md hard rule 14]: Brother's look is sourced only for X-2
+(`research/visual-bible.md` §1.23.7), so his painted portrait must not reach the FFX
+Evrae lines. **Additive, one union member** in `src/story/dsl.ts` `SpeakerId`:
+
+- `'brother-x2'` — every FFX-2 Brother line (chapter 4 `ffx2-bahamut.ts`, chapter 5
+  `ffx2-vegnagun-shuyin.ts`, chapter 6 `ffx2-leblanc.ts`) now uses it; the portrait is
+  `public/art/portraits/brother-x2.png`. The name plate still reads "Brother", because
+  `DialogueBox.defaultName` strips `-x2` as for `yuna-x2` / `rikku-x2`. No role chip
+  (the airship crew are untagged in `speaker-roles.ts`).
+- `'brother'` stays, unchanged, for the FFX Evrae lines (`evrae-airship.ts`), which keep
+  the text-only card until his FFX look is sourced.
+
+Why: Bailey's pick of 2026-09-24 ("I'll take all of your recommendations"), the
+speaker-id ruling in `docs/concepts/portraits/nooj-brother/JUDGE.md` §2.
+
 ## 2026-09-23 — `EnemyRewards.stolenGil` and `steal.stealRate`: FFX-2 Steal and Pilfer Gil work
 
 **FFX-2 only** [AGENTS.md hard rule 14]: the Thief's Steal and Pilfer Gil are FFX-2
