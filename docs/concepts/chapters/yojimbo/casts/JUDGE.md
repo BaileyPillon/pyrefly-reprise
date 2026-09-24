@@ -167,3 +167,44 @@ The wiring gap stands: the chapter data still names the aeon `yojimbo` painting,
   - Daigoro: 30 deg over 20 deg.
   - The wiring gap in the chapter data still stands.
   - Nothing here installs anything. Installing needs the usual approval.
+
+---
+
+# The longer blade: 1:1 check and in-battle frame (independent, 2026-09-24; FFX only)
+
+**Game case: FFX only** (Chapter IX, Lady Ginnem's Yojimbo). I made neither file. I judged `cast-r1-option-longer.png` at 1:1 and 2x on flat grey and at 4x on the tip and the extension, against the installed `public/art/characters/yojimbo-cavern/cast.png`. Then I captured both in a real 1600x900 Chapter IX battle. Bailey's word on the length is still owed: nothing was installed, and `public/art`, `src/` and the manifest are unchanged.
+
+- **Hashes.** The installed `cast.png` is `b67565f4...`, which is byte-identical to `cast-r1.png`. The option is `cc044fc0...`, and the idle is `bc8f5c1e...`. All three match their sidecars.
+- **Containment (my own diff against the installed cast).**
+  - 1,685 pixels changed, in the box x 6-177, y 64-252: the blade only, redrawn along its whole visible length.
+  - 577 pixels became opaque and none went transparent. The alpha is still binary.
+  - 1,188 of the changed colours are not exact idle colours, but all are within an RGB distance of 8.1 of one. This is the same quantised idle palette as r1, with no invented hue.
+
+## Scores
+
+| Candidate | Identity | Anatomy | Hands | Blade | Seams | Edges | Finish | Reads at game size | **Overall** | Verdict |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Yojimbo `cast-r1-option-longer.png` | 9 | 7 | 7 | 8 | 7 | 7.5 | 7 | 7 | **7.0** | **PASS**, at the bar and a little stronger than r1 |
+
+- **Identity.** Everything except the blade is the installed cast, pixel for pixel. The fist, the habaki and the glove are unchanged, so r1's weakest seam, the flat habaki, is still there.
+- **Proportion.** Measured in a straight line from the habaki to the tip, the blade grows from about 243 px to about 283 px. The visible red scabbard is about 263 px, and its mouth is hidden behind the sash. The blade now reads as the katana that fits that scabbard instead of a wakizashi. This is a visual judgement; no blade length is sourced.
+- **Edges and seams (4x).**
+  - The spine and edge ink runs unbroken across the old tip position, with no step, no kink and no width jump where the arc was continued.
+  - The kissaki and yokote are the same shape as r1's.
+  - The continued arc bends a little more in its top third. It reads as sori, not as a droop.
+- **Margins.**
+  - The tip now reaches x = 6, a 6 px margin against the 16 px cut-out convention (`tools/gen/comfy.mjs`). The top of the content, the hat, is still at y = 16.
+  - **The framing does not need to grow.** The canvas is still 730x1093 like the idle, so the scale, baseline and registration are unchanged. Columns 0 to 5 stay transparent, so the tip neither touches the canvas edge nor bleeds there.
+  - The alpha-measured content box moves 10 px left, which slightly widens the target bracket. The sidecar already records `contentBox` x0 = 6.
+  - If the 16 px convention is ever enforced, pad both sides by 10 px. Padding one side would shift the plane's centre off the idle.
+- **Read at game size.** See `longer-blade-in-battle.jpg`.
+  - The frames are 1600x900 on the RTX 5070 Ti GPU, seed 1, Chapter IX, with the Cavern idle and the cast served by request interception.
+  - The advisor card and the Sensor card are hidden, as they are on Yojimbo's real enemy turn.
+  - The chamber backdrop and the Zanmato gauge are visible.
+  - **In the enemy close-up** the longer blade is the clearer read: it is a long diagonal that balances the scabbard and holds against the cave blue. It is still thin and pale, so the gain is real but modest (6.5 to 7).
+  - **In the wide opening shot** both tips run up under the translucent gauge panel, so the extra length adds almost nothing there.
+- **Also seen (not the blade, both variants).** In the wide shot the Zanmato gauge panel covers the top of Yojimbo's hat and the blade tip. This is for whoever owns the gauge placement to weigh; nothing here changes it.
+
+**Verdict.** The option is clean at 1:1, 2x and 4x, keeps the idle's identity and framing, and is the better-proportioned figure at game size. I recommend it over the installed r1 once Bailey has seen the frame. Installing it needs the usual approval.
+
+LONGER-BLADE: PASS
