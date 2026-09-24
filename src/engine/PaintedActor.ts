@@ -148,6 +148,12 @@ export interface PaintedActorOptions {
    */
   edgeFade?: number;
   shadow?: false | PaintedActorShadowOptions;
+  /**
+   * Whether this figure writes the whole-frame bloom's figure mask
+   * (`BloomMask.ts`, PR-0097). Default `true`; the scene's palette strength
+   * decides how much the mask does. `false` blooms the figure unmasked.
+   */
+  bloomMask?: boolean;
   /** Subtle idle breathing. `false` disables. */
   breathe?: false | { amplitude?: number; speed?: number };
   /** Subtle idle sway (a fraction of a degree). `false` disables. */
@@ -319,6 +325,12 @@ const HURT_TINT = 0xff9f8e;
 
 /** How long the KO takes to tip over and hit the ground. */
 const FALL_MS = 300;
+/**
+ * How far {@link PaintedActor.lieDown} rolls a standing painting onto its back,
+ * radians: a little short of flat, so it reads as a body crumpled on the floor
+ * rather than a card laid on it.
+ */
+const LIE_ANGLE = 1.5;
 
 /** Stable per-name jitter so a party does not breathe, or cheer, in lockstep. */
 function beatOffsetFor(name: string): number {
@@ -430,6 +442,7 @@ export class PaintedActor extends Group {
   /** False for a figure-less actor ({@link PaintedActorOptions.figure}). */
   private readonly showFigure: boolean;
   private readonly shadowAlphaTest: number;
+  private readonly bloomMasked: boolean;
 
   // shared uniform cells (one object per uniform, referenced by both planes)
   private readonly u: {
@@ -479,6 +492,8 @@ export class PaintedActor extends Group {
   /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
   private fallTilt = 0;
   private fallDrop = 0;
+  /** 0 standing, 1 lying on its back ({@link lieDown}). */
+  private lieRoll = 0;
   private proneShift = 0;
   /** 0..1 damage tint, lerped from `baseTint` toward {@link HURT_TINT}. */
   private hurtTint = 0;
@@ -576,6 +591,7 @@ export class PaintedActor extends Group {
     this.castsShadow = opts.castShadow !== false;
     this.showFigure = opts.figure !== false;
     this.shadowAlphaTest = opts.shadowAlphaTest ?? 0.4;
+    this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
@@ -1415,6 +1431,49 @@ export class PaintedActor extends Group {
     void this.hop(this.worldHeight * 0.07, 520);
   }
 
+  /**
+   * Fall onto its back and stay there: the standing painting rolls in its own
+   * plane about the feet, away from the way it faces, and is lifted so no part
+   * of it sinks through the floor. For a figure whose defeat leaves a body but
+   * who has no painted `ko` (Seymour at Macalania, D-046; the departure is
+   * `'body'` in `BattlePresenterDepartures.ts`). `ms` 0 lies down at once
+   * (a field staged with the body already down). Both games' plumbing; only
+   * FFX's Seymour uses it today.
+   */
+  lieDown(ms = 520): Promise<void> {
+    if (ms <= 0) {
+      this.lieRoll = 1;
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      this.tweens.to(this.lieRoll, 1, {
+        durationMs: ms,
+        easing: 'quadIn',
+        onUpdate: (v) => {
+          this.lieRoll = v;
+        },
+        onComplete: () => {
+          void this.squash(260, 0.35);
+          this.shake(this.worldHeight * 0.012, 220);
+          resolve();
+        },
+      });
+    });
+  }
+
+  /** How far the rolled content box would sink below the feet, world units (0 standing). */
+  private lieLift(angle: number): number {
+    if (angle === 0) return 0;
+    const slot = this.slots[this.active]!;
+    const box = slot.scale.contentBox;
+    const xs = slot.mesh.scale.x < 0 ? [-box.x1, -box.x0] : [box.x0, box.x1];
+    const s = Math.sin(angle);
+    const c = Math.cos(angle);
+    let low = 0;
+    for (const x of xs) for (const y of [box.y0, box.y1]) low = Math.min(low, x * s + y * c);
+    return -low;
+  }
+
   /** A plain delay on the actor's own tween group, so `dispose` kills it. */
   private after(ms: number, fn: () => void): void {
     if (ms <= 0) {
@@ -1739,7 +1798,7 @@ export class PaintedActor extends Group {
   /** @param dt seconds. Must be called every frame. */
   update(dt: number): void {
     this.tweens.update(dt);
-    for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0);
+    for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
     // --- how much of what is on screen is a downed figure ------------------
@@ -1789,6 +1848,8 @@ export class PaintedActor extends Group {
       oy += Math.sin(this.shakePhase * 1.63) * this.shakeAmp * k * 0.42;
     }
 
+    const lie = this.lieRoll * LIE_ANGLE * this.facing;
+    oy += this.lieLift(lie);
     this.inner.position.set(ox, oy, 0);
     // Sway is a standing figure's weight shifting; rotating a body that is
     // already lying down just wobbles the whole painting, and on a wide plane
@@ -1799,8 +1860,9 @@ export class PaintedActor extends Group {
     // the fighter is turned, which is why it carries the facing and the sway
     // does not. Kept small, and faded out with the pose, because a wide plane
     // rotated far enough shows the corners of its own PNG.
+    const standing = 1 - this.lieRoll;
     const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
-    this.inner.rotation.z = sway + bodyTilt;
+    this.inner.rotation.z = (sway + bodyTilt) * standing + lie;
 
     // --- the interim turn --------------------------------------------------
     // The plane yawed toward the enemy, for art that has not been repainted

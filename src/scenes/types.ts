@@ -101,6 +101,13 @@ export interface SceneBuild {
    * and Nodes, D-044). Omitted everywhere else.
    */
   readonly partAnchors?: PartAnchors;
+  /**
+   * Optional: the only art ids the figure bloom mask covers on this stage
+   * (`src/engine/BloomMask.ts`); the rest bloom unmasked. Macalania names the
+   * Guado Guardian alone. Omitted everywhere else: every figure masked, at the
+   * palette's `figureBloomMask` strength.
+   */
+  readonly figureBloomMaskArt?: readonly string[];
 
   /** @param dt seconds. The caller must call this every frame. */
   update(dt: number): void;

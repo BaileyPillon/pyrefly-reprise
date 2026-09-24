@@ -131,9 +131,12 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   const side = ctx.stage.sideOf(id);
   cue(ctx, 'ko');
   if (side === 'enemy') {
-    // Evrae falls out of the sky; Leblanc, Logos and Ormi yield
+    // Evrae falls out of the sky; Leblanc, Logos, Ormi and the Guado
+    // Guardians yield; Seymour at Macalania falls and his body stays
     // (`BattlePresenterDepartures.ts`). Everyone else is sent.
-    if (await depart(ctx, id, actor)) {
+    const left = await depart(ctx, id, actor);
+    if (left === 'stays') return;
+    if (left === 'removed') {
       ctx.stage.removeCombatant(id);
       return;
     }

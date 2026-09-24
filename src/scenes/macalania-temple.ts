@@ -156,6 +156,21 @@ export const MACALANIA_TEMPLE_RIGS: Readonly<Record<string, CameraRig>> = RIGS;
 export const MACALANIA_TEMPLE_BACKDROP = BACKDROP;
 
 /**
+ * The figure bloom mask's strength here, for the one subject it covers: the
+ * Guado Guardian, whose approved r3 idle robe (16 percent of its opaque pixels
+ * over luma 0.9) the bloom haloed in battle. Measured at the first menu, GPU,
+ * seed 1, 1600x900, over each Guardian's silhouette against the PNG: at 0 the
+ * figures read 1.17x / 1.08x the painting's mean luma with 19.1 / 20.9 percent
+ * over 0.9; at 0.7, 1.00x / 0.82x with 14.1 / 13.9 percent (Guardian B stands
+ * in darker light), the halo gone (`docs/screenshots/phase2/ch7-guardian-bloom-mask-compare.png`).
+ * Every other figure on this stage blooms unmasked, as on every FFX stage
+ * (`BloomMask.ts`); FFX's Yuna and Tidus measured the same at 0, 0.7 and 1.
+ */
+export const MACALANIA_FIGURE_BLOOM_MASK = 0.7;
+/** The only art the mask covers on this stage. */
+export const MACALANIA_FIGURE_BLOOM_MASK_ART: readonly string[] = ['guado-guardian'];
+
+/**
  * Ice lit by fire: cold glacier shadows, warm brazier highlights. Its own grade,
  * deliberately not Gagazet's (plan §6.2: "Must not share a palette with
  * Gagazet"): the shadow tint is cyan-green (the "faint green core in thick
@@ -177,6 +192,8 @@ export const MACALANIA_TEMPLE_PALETTE: ScenePalette = {
   bloomThreshold: 0.8,
   bloomStrength: 0.7,
   bloomRadius: 0.62,
+  // Masks the Guado Guardian alone (`figureBloomMaskArt` below; FFX only, BloomMask.ts).
+  figureBloomMask: MACALANIA_FIGURE_BLOOM_MASK,
   tiltFocus: 0.42,
   tiltBandWidth: 0.16,
   tiltMaxBlur: 3.8,
@@ -340,6 +357,7 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     palette: { ...MACALANIA_TEMPLE_PALETTE },
+    figureBloomMaskArt: MACALANIA_FIGURE_BLOOM_MASK_ART,
     update(dt: number): void {
       backdrop.update(dt);
       lights.update(dt);

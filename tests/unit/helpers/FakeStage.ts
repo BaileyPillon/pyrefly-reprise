@@ -91,6 +91,9 @@ export class FakeActor implements ActorHandle {
     this.facing = dir;
   }
   setBrightness(): void {}
+  async lieDown(): Promise<void> {
+    this.note('lieDown');
+  }
   centerPoint(): Point3 {
     return origin();
   }

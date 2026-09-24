@@ -31,7 +31,41 @@ describe('departure kinds', () => {
     for (const id of ['dr-goon', 'fem-goon', 'seymour-flux', 'cid', 'yunalesca']) {
       expect(departureKindOf(id)).toBe('dissolve');
     }
-    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(7);
+    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(10);
+  });
+
+  // Chapter VII (FFX only, AGENTS.md rule 14): D-045 the Guado Guardians yield
+  // like the Syndicate; D-046 Seymour falls and stays down. Anima is recalled by
+  // her battle rule, never through this table.
+  it('names the Guado Guardians yields and Seymour at Macalania body; Anima keeps no kind', () => {
+    expect(departureKindOf('guado-guardian-a')).toBe('yields');
+    expect(departureKindOf('guado-guardian-b')).toBe('yields');
+    expect(departureKindOf('seymour-macalania')).toBe('body');
+    expect(departureKindOf('anima-macalania')).toBe('dissolve');
+  });
+
+  it('a Guado Guardian yields: idle, steps back and fades, never dissolved, then removed', async () => {
+    const { stage, play } = setup(['guado-guardian-a', 'seymour-macalania', 'guado-guardian-b']);
+    await play([{ type: 'ko', targetId: 'guado-guardian-a' }]);
+    expect(stage.calls).toContain('pose=idle:guado-guardian-a');
+    expect(stage.calls).toContain('moveTo:guado-guardian-a');
+    expect(stage.calls).toContain('fade=0:guado-guardian-a');
+    expect(stage.calls.some((c) => c.startsWith('dissolve') && c.endsWith(':guado-guardian-a'))).toBe(false);
+    expect(stage.calls).toContain('remove:guado-guardian-a');
+  });
+
+  it('Seymour falls and stays down: ko pose, no dissolve, no move, never removed; victory still plays', async () => {
+    const { stage, play } = setup(['seymour-macalania']);
+    await play([
+      { type: 'ko', targetId: 'seymour-macalania' },
+      { type: 'victory' } as Unsequenced<BattleEvent>,
+    ]);
+    expect(stage.calls).toContain('pose=ko:seymour-macalania');
+    expect(stage.calls).toContain('lieDown:seymour-macalania');
+    expect(stage.calls.some((c) => c.endsWith(':seymour-macalania') && /^(dissolve|moveTo|fade)/.test(c))).toBe(false);
+    expect(stage.calls).not.toContain('remove:seymour-macalania');
+    expect(stage.staged()).toContain('seymour-macalania');
+    expect(stage.calls).toContain('pose=victory:yuna');
   });
 
   it('Evrae falls: moved and faded out, never dissolved, then removed', async () => {

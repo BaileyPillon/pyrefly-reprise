@@ -29,8 +29,9 @@ import {
 } from './ScreenRects.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
-import { departurePoses } from './BattlePresenterDepartures.ts';
+import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { layProneFigures } from './ProneLay.ts';
+import { figureBloomMasked } from './BloomMask.ts';
 import { anchorFor, anchorPoint, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 
 export interface PaintedStageOptions {
@@ -226,6 +227,7 @@ export class PaintedStage implements BattleStage {
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },
       groundShade: 0.24,
+      bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
       shadow: anchor ? false : { radius: kind === 'party' ? 0.62 : 1.5, opacity: 0.48 },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
@@ -244,7 +246,11 @@ export class PaintedStage implements BattleStage {
     // Already down when the field is staged: snap to it. `immediate` is what
     // stops a party member who was KO'd before the battle opened from toppling
     // over on frame one.
-    if (!c.alive && c.side === 'party') actor.setPose('ko', { immediate: true });
+    // Seymour's body (D-046) is the one enemy that stays down on the field.
+    if (!c.alive && (c.side === 'party' || departureKindOf(c.id) === 'body')) {
+      actor.setPose('ko', { immediate: true });
+      if (c.side === 'enemy') void actor.lieDown(0);
+    }
 
     this.opts.scene.add(actor);
     this.actors.set(c.id, {

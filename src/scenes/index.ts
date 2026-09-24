@@ -64,6 +64,8 @@ export interface SceneSlots {
    * and Nodes, D-044). Omitted everywhere else.
    */
   partAnchors?: PartAnchors;
+  /** Optional: the only art ids the figure bloom mask covers here (`BloomMask.ts`). */
+  figureBloomMaskArt?: readonly string[];
 }
 
 /** One registered diorama. */
@@ -367,6 +369,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       ...resolveSceneHeights(build),
       ...(build.enemyLaneX ? { enemyLaneX: build.enemyLaneX } : {}),
       ...(build.partAnchors ? { partAnchors: build.partAnchors } : {}),
+      ...(build.figureBloomMaskArt ? { figureBloomMaskArt: build.figureBloomMaskArt } : {}),
     },
     update(dt): void {
       build.update(dt);

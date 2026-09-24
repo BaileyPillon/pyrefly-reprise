@@ -59,6 +59,8 @@ export interface ActorHandle {
   moveTo(pos: Point3, ms?: number): Promise<void>;
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
+  /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */
+  lieDown?(ms?: number): Promise<void>;
   centerPoint(): Point3;
   headPoint(): Point3;
 }

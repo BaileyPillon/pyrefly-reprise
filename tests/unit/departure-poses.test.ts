@@ -39,6 +39,11 @@ describe('departurePoses', () => {
     expect(departurePoses('tidus', fiend)).toBe(fiend);
   });
 
+  it("keeps Seymour's own ko painting if he ever has one: a body lies down (D-046)", () => {
+    const map = { idle: 's/idle.png', hurt: 's/hurt.png', ko: 's/ko.png' };
+    expect(departurePoses('seymour-macalania', map)).toBe(map);
+  });
+
   it('does not add a ko pose to a map that has none', () => {
     const map = { idle: 'e/idle.png', hurt: 'e/hurt.png' };
     expect(departurePoses('evrae', map)).toBe(map);

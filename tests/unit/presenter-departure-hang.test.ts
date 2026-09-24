@@ -43,6 +43,7 @@ async function victoryHeldMs(enemy: string): Promise<number> {
   a.moveTo = never;
   a.fadeTo = never;
   a.dissolveTo = never;
+  a.lieDown = never;
   const events = [
     { type: 'ko', targetId: enemy },
     { type: 'victory' },
@@ -69,5 +70,12 @@ describe('a hung departure', () => {
   it('Ormi (yields) holds victory at most the step back plus one grace', async () => {
     const held = await victoryHeldMs('ormi-logos-room');
     expect(held).toBeLessThanOrEqual(departureMs('yields') + ACTOR_ANIM_GRACE_MS);
+  });
+
+  // Chapter VII, FFX only (D-046): Seymour's body has no actor promise to hang,
+  // so victory waits only his one KO beat.
+  it('Seymour (body) holds victory at most his fall plus one grace', async () => {
+    const held = await victoryHeldMs('seymour-macalania');
+    expect(held).toBeLessThanOrEqual(departureMs('body') + ACTOR_ANIM_GRACE_MS);
   });
 });

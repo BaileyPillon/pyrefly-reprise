@@ -44,7 +44,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
 import { ACTOR_ANIM_GRACE_MS, type EventCtx } from './BattlePresenterEvents.ts';
 
-export type DepartureKind = 'dissolve' | 'falls-away' | 'yields';
+export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body';
 
 /** Who leaves the field some other way than being sent. Keyed by combatant id. */
 export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind>>> = {
@@ -57,6 +57,10 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   'ormi-entrance': 'yields',
   'ormi-logos-room': 'yields',
   'logos-room': 'yields',
+  // FFX, Chapter VII: D-045 / D-046, research/ffx-vs-ffx2-presentation.md lines 140 and 142.
+  'guado-guardian-a': 'yields',
+  'guado-guardian-b': 'yields',
+  'seymour-macalania': 'body',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {
@@ -73,7 +77,9 @@ export function departureKindOf(id: CombatantId): DepartureKind {
  */
 export function departurePoses(id: CombatantId, poses: Record<string, string>): Record<string, string> {
   const standing = poses['hurt'] ?? poses['idle'];
-  if (departureKindOf(id) === 'dissolve' || !('ko' in poses) || !standing) return poses;
+  const kind = departureKindOf(id);
+  // A body keeps whatever `ko` it has: lying down is exactly what it is for.
+  if (kind === 'dissolve' || kind === 'body' || !('ko' in poses) || !standing) return poses;
   return { ...poses, ko: standing };
 }
 
@@ -99,6 +105,11 @@ const FALL_SHRINK_STEPS = 12;
 
 /** Yielding, in milliseconds at timeScale 1: the dim, then the step back. */
 export const YIELD_MS = { dim: 360, step: 1000 } as const;
+/** Falling and staying down, in milliseconds at timeScale 1: one KO beat (`TIMING.ko` 620). */
+export const BODY_MS = 620;
+/** The roll onto his back inside {@link BODY_MS}; the rest is the landing. */
+export const BODY_LIE_MS = 460;
+
 /** How dim a yielding figure gets before it steps back (brightness multiplier). */
 export const YIELD_DIM = 0.45;
 /** The step back, world units: away from the party and deeper into the room. */
@@ -214,21 +225,47 @@ async function yields(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<voi
 }
 
 /**
- * Play `id`'s departure, if it has one other than the dissolve. Resolves
- * `false` for `'dissolve'` (the caller plays the send), `true` once a
- * falls-away or yields beat has finished (the caller removes the combatant).
+ * Seymour falls and stays down: the KO state at his own station (the actor's
+ * life layer drops the body, `PaintedActor.fall`), the plane rolled onto its
+ * back (`lieDown`, he has no painted `ko`), a dark flash as a downed party
+ * member gets, and no pyreflies. The roll races the departure's own budget.
  */
-export async function depart(ctx: EventCtx, id: CombatantId, actor: ActorHandle | undefined): Promise<boolean> {
+async function body(actor: ActorHandle, b: Budget): Promise<void> {
+  actor.setPose('ko', { force: true });
+  actor.flash(0x4a5a78, 320, 0.7);
+  actor.shake(0.12, 200);
+  // With no painted `ko` (D-045 option A), the standing plane itself goes over.
+  await Promise.all([b.guard(actor.lieDown?.(BODY_LIE_MS)), b.sleep(BODY_MS)]);
+}
+
+/**
+ * What a departure leaves behind: `'dissolve'` means none was played (the
+ * caller plays the send), `'removed'` that the figure has left and the caller
+ * removes the combatant, `'stays'` that a body lies on the field and stays.
+ */
+export type DepartureOutcome = 'dissolve' | 'removed' | 'stays';
+
+/** Play `id`'s departure, if it has one other than the dissolve. */
+export async function depart(
+  ctx: EventCtx,
+  id: CombatantId,
+  actor: ActorHandle | undefined,
+): Promise<DepartureOutcome> {
   const kind = departureKindOf(id);
-  if (kind === 'dissolve') return false;
-  if (!actor) return true;
+  if (kind === 'dissolve') return 'dissolve';
+  if (!actor) return kind === 'body' ? 'stays' : 'removed';
   const b = budget(ctx, departureMs(kind));
+  if (kind === 'body') {
+    await body(actor, b);
+    return 'stays';
+  }
   if (kind === 'falls-away') await fallsAway(actor, b);
   else await yields(ctx, actor, b);
-  return true;
+  return 'removed';
 }
 
 /** A departure's full length at timeScale 1, the outer guard's budget. */
 export function departureMs(kind: Exclude<DepartureKind, 'dissolve'>): number {
+  if (kind === 'body') return BODY_MS;
   return kind === 'falls-away' ? FALL_MS.lurch + FALL_MS.drop : YIELD_MS.dim + YIELD_MS.step;
 }

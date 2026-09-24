@@ -36,6 +36,16 @@
  * bloom harder under white costumes: Yuna Gunner / White Mage, Leblanc), and
  * the FFX stages measured their Yuna at her painting's own luminance without
  * it. FFX palettes leave the field unset, which is 0: the live FFX look.
+ *
+ * ## One subject on an FFX stage ({@link figureBloomMasked})
+ *
+ * A scene may name the art ids the mask covers (`SceneSlots.figureBloomMaskArt`);
+ * every other figure there draws with normal blending, so it blooms exactly as
+ * it does with no mask. Chapter VII (FFX only): the Guado Guardian's approved r3
+ * idle has 16 percent of its opaque pixels above luma 0.9 (white robe
+ * highlights), and Macalania's generous bloom (threshold 0.8, strength 0.7)
+ * haloed them in battle, while FFX's Yuna and Tidus's blade glow there stay as
+ * they are. So Macalania masks the Guardian alone.
  */
 
 import {
@@ -60,9 +70,12 @@ export const PAINTED_BLENDING = {
   blendDstAlpha: OneMinusSrcAlphaFactor,
 } as const;
 
-/** Mask on while the painting is whole; plain normal blending while it dissolves. */
-export function syncPaintedBloom(material: ShaderMaterial, dissolving: boolean): void {
-  const want = dissolving ? NormalBlending : CustomBlending;
+/**
+ * Mask on while the painting is whole; plain normal blending while it
+ * dissolves, or always for a figure the scene does not mask (`masked` false).
+ */
+export function syncPaintedBloom(material: ShaderMaterial, dissolving: boolean, masked = true): void {
+  const want = dissolving || !masked ? NormalBlending : CustomBlending;
   if (material.blending !== want) material.blending = want;
 }
 
@@ -98,4 +111,12 @@ export function maskBloomHighPass(pass: UnrealBloomPass): void {
 export function setFigureBloomMask(pass: UnrealBloomPass, strength: number): void {
   maskBloomHighPass(pass);
   pass.materialHighPassFilter.uniforms['figureMask']!.value = Math.min(1, Math.max(0, strength));
+}
+
+/**
+ * Whether a figure painted from `artId` writes the mask: every figure when the
+ * scene names none (`only` unset), otherwise only the named ones.
+ */
+export function figureBloomMasked(only: readonly string[] | undefined, artId: string): boolean {
+  return !only || only.includes(artId);
 }
