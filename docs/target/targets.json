@@ -719,6 +719,31 @@
               "clip A over B or C: the driver picked it as the safer, more restrained baseline with nothing in Bailey's own words to go on"
             ]
           }
+        },
+        {
+          "label": "Pause faces: cases the framing search cannot clear (both)",
+          "src": "docs/concepts/layout/pause-faces/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: the pause layout and plate-framing search are shared plumbing (CHK-020); the face boxes are per painting, but whatever Bailey picks applies to both games' pause screens.",
+          "note": "docs/concepts/layout/pause-faces/README.md's seven cases where clearFace's ordinary pan cannot clear the face box against src/app/screens/pause/faceClear.ts FACE_BOXES; option B (slide the plate under the falloff) is the only option that clears all seven. docs/target/decisions.json D-070. Not yet built.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered together with the PR-0127 phone card and three Yojimbo O-4/O-5/O-6 questions, one reply, 2026-09-24 ~13:35 EDT.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "FFX-2 Rikku at every size: option B, slide under the falloff",
+              "FFX Tidus: option B",
+              "FFX Auron at 1280x960: option B",
+              "one rule for every painting the current face-clear framing cannot clear, not a case-by-case pick"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
         }
       ]
     },
@@ -959,6 +984,29 @@
           "note": "The one screen with a phone layout so far.",
           "approved": "Bailey, 19 Sep 2026",
           "build": "Pause during chapter 1 at 390 x 844."
+        },
+        {
+          "label": "PR-0127 phone party-prep CHAPTER card (both)",
+          "src": "docs/concepts/layout/pr-0127-phone/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: the prep card is shared plumbing (src/ui/common chapter panel, FFX and FFX-2 prep shells); each game keeps its own accent (FFX gold, FFX-2 pink) and its own tabs.",
+          "note": "docs/concepts/layout/pr-0127-phone/README.md: at 390x844 the prep screen is today the 16:9 layout scaled to 0.61, and the CHAPTER card's type falls to 4-7px (baseline docs/screenshots/fix12/PR-0127-phone-ch6-baseline.png). docs/target/decisions.json D-071. Not yet built.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Answered together with the pause faces and three Yojimbo O-4/O-5/O-6 questions, one reply, 2026-09-24 ~13:35 EDT.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "option A: stacked cards that scroll — title strip, place, story, the three photos with captions, objectives, TIP, then the party, one column, START BATTLE pinned to the bottom",
+              "keep the three photos at phone width rather than dropping them to shorten the scroll"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
         }
       ]
     },
@@ -1212,6 +1260,7 @@
               "Kimahri arrives with Doom already learned and a full gauge (B8, D-056)",
               "registered as Chapter IX; Seymour Natus becomes Chapter X (B10, D-058)",
               "the battle music is a new original cue for the moment the game plays Lulu's Theme, auditioned by ear before it is built, not a reused FFX boss cue (B7, D-055)",
+              "the battle music is sketch A, \"The Summoner's Sorrow\" (docs/audio/sketches/2026-09-24/yojimbo-a-summoners-sorrow.mp3) — answered 2026-09-24 ~13:35 EDT, \"All your recommendations\"; he had the MP3s but this is not a scored ear verdict (AGENTS.md rule 13, docs/audio/OWNER-VERDICT.md) (O-6, D-063)",
               "the Zanmato gauge is a bar under his name with the 25/50/80 bands, plus a one-shot full-gauge banner (O-5, D-062)"
             ],
             "undecided": [],
@@ -1300,7 +1349,8 @@
             "disliked": [],
             "mustRemain": [],
             "mustChange": [
-              "option A: cold grey-blue with a shaft of daylight — not B (violet dark, pyrefly motes) or C (warm amber lanterns); B's motes may still be added as live particles"
+              "option A: cold grey-blue with a shaft of daylight — not B (violet dark, pyrefly motes) or C (warm amber lanterns); B's motes may still be added as live particles",
+              "the promised night-sakura arrival (docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg) plays at the start of the fight over this chamber, not merely as a later-available overlay — answered 2026-09-24 ~13:35 EDT, \"All your recommendations\" (O-4, D-072)"
             ],
             "undecided": [],
             "inferred": []
@@ -1323,7 +1373,8 @@
             "mustRemain": [],
             "mustChange": [
               "option A for the information (a bar under his name, the 25/50/80 bands) — not B (a ring round his CTB tile)",
-              "option C's full-gauge banner folded onto A when the gauge reaches 100%"
+              "option C's full-gauge banner folded onto A when the gauge reaches 100%",
+              "the phone layout ships as drawn (docs/concepts/chapters/yojimbo/gauge/sheet-phone.jpg) — answered 2026-09-24 ~13:35 EDT, \"All your recommendations\" (O-5, D-073)"
             ],
             "undecided": [
               "whether the stills alone settle the feel, or a small clickable prototype is needed first (R1)"

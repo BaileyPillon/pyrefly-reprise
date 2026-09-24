@@ -16,6 +16,27 @@ row.
 
 ---
 
+## 2026-09-24 — Yojimbo (Chapter IX) battle music O-6: accepted on recommendation, not by ear
+
+Bailey answered five items sent together, about 13:35 EDT:
+
+> All your recommendations
+
+**This is not an ear verdict on either O-6 sketch.** He had the MP3 files
+themselves (`docs/audio/sketches/2026-09-24/yojimbo-a-summoners-sorrow.mp3`
+and the second Lulu's-Theme-derived sketch) — unlike the Macalania pick below,
+nothing was withheld from him — but he gave no score, and the driver told him
+plainly it cannot hear (AGENTS.md hard rule 13). **No agent can hear**, so
+this file's own rule holds: do not record this as "approved", "passing" or
+any numeric score. CHK-B1 (audio judged by ear) stays **unverified** for this
+cue, whether or not Bailey played the files himself.
+
+What this applies to: the O-6 battle-music pick for Chapter IX (Lady Ginnem's
+Yojimbo) only — sketch A, "The Summoner's Sorrow," not a finished, composed
+or wired cue. Recorded in `docs/target/decisions.json` as D-063.
+
+---
+
 ## 2026-09-24 — Chapter VII (Macalania) battle mood: accepted on recommendation, not by ear
 
 Bailey answered the driver's recommendations together, about 00:30 EDT:
