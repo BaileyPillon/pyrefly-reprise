@@ -270,14 +270,27 @@ describe('FFXBattleHud mounts it and feeds it', () => {
 
 // ---------------------------------------------------------- the type floor
 
-describe('zanmato-gauge.css: CHK-003 type floor (12 px at 1600x900)', () => {
-  it('every landscape font-size clears 12 px once the 1440 frame is drawn at 1600x900', () => {
-    const sheet = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'ffx', 'zanmato-gauge.css'), 'utf8');
-    const landscape = sheet.split('/* -------------------------------------------------------------------- phone */')[0]!;
-    const sizes = [...landscape.matchAll(/font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1]));
-    expect(sizes.length).toBeGreaterThan(5);
-    // frame 1440 -> grid 640 (x 640/1440), grid -> 1600x900 (x 2.5)
-    for (const px of sizes) expect(px * (640 / 1440) * 2.5).toBeGreaterThanOrEqual(12);
+describe('zanmato-gauge.css: CHK-003 type floor at every checked viewport', () => {
+  const sheet = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'ffx', 'zanmato-gauge.css'), 'utf8');
+  const landscape = sheet.split('/* -------------------------------------------------------------------- phone */')[0]!;
+  const sizes = [...landscape.matchAll(/font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1]));
+  /** frame 1440 -> grid 640, then `LetterboxStage.ts`'s min(w / 640, h / 360). */
+  const effective = (px: number, w: number, h: number): number => px * (640 / 1440) * Math.min(w / 640, h / 360);
+
+  // The two viewports `ffx-hud-css-type-floor.test.ts` holds the in-stage HUD to 12 px at.
+  for (const [w, h] of [[1600, 900], [2000, 1012]] as const) {
+    it(`every landscape font-size clears 12 px at ${w}x${h}`, () => {
+      expect(sizes.length).toBeGreaterThan(5);
+      for (const px of sizes) expect(effective(px, w, h), `${px}px`).toBeGreaterThanOrEqual(12);
+    });
+  }
+
+  it('at 1280x720 nothing in the gauge is smaller than the smallest in-stage label the FFX HUD already ships', () => {
+    // The whole 640x360 HUD draws at 2x there, so 12 px is not its floor; parity is.
+    const hud = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'ffx', 'ffx-hud.css'), 'utf8');
+    const hudMin = Math.min(...[...hud.matchAll(/\.ffxhud [^{}]*\{[^{}]*font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1])));
+    expect(hudMin).toBeGreaterThan(0);
+    for (const px of sizes) expect(effective(px, 1280, 720), `${px}px`).toBeGreaterThanOrEqual(hudMin * 2);
   });
 
   it('every phone font-size is at least 12 CSS px', () => {

@@ -27,6 +27,7 @@ import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
+import { INTENT_AVOID_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
 import { evraeFarStreakRect, widenForEvraeFarStreak } from './evraeFarStreakBounds.ts';
 import type { CursorSelection } from './TargetCursor.ts';
@@ -1236,8 +1237,8 @@ export class FFXBattleHud implements HudPort {
       // card was printed 773 grid px² deep into Seymour Flux and 1 626 into
       // Braska's Final Aeon: the only fighters the solver had ever been told
       // about were the party's.
-      enemies: this.enemySpriteRects().map((r) => growToGrid(r, 4)!),
-      enemyGauge: this.zanmato.obstacleEls().flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []),
+      // Plus Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only): ink hung under his name, as solid as he is.
+      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...this.zanmato.obstacleEls().flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
     };
     const key = [
       this.advisorDecisionSeq,
@@ -1250,7 +1251,6 @@ export class FFXBattleHud implements HudPort {
       rectKey(input.intent),
       rectKey(input.intentChip),
       rectKey(input.ctb),
-      input.enemyGauge.map(rectKey).join(';'),
       // The cast's *positions* are deliberately absent — see below. Their
       // number is not: a KO or a switch changes it, and both are worth a fresh
       // solve on the frame they land.
@@ -1422,58 +1422,9 @@ export class FFXBattleHud implements HudPort {
   /** Countdown to the next panel re-measure. See `republishPanels`. */
   private panelPublishMs = 0;
 
-  /**
-   * The HUD panels the intent slab may not cover, in viewport pixels.
-   *
-   * The CTB list first and above all — the slab's whole claim is "this is what
-   * the actor at the top of that queue is about to do", and covering the queue
-   * with the answer is self-defeating. The command stack and its help card are
-   * here for the same reason the numerals dodge them, and `.ffx-sensor` joined
-   * them after a Chapter 1 capture caught the slab printed across the
-   * Mortiorchis's own scan card.
-   *
-   * `.ig-banner` is deliberately absent, for the reason `ffx/DamageNumbers.ts`
-   * gives about the telegraph: it is a transient band across the top of the
-   * field, and dodging it would move the slab at exactly the moment the boss is
-   * winding up and the player is reading it.
-   */
-  private intentAvoidRects(): Array<{ left: number; top: number; right: number; bottom: number }> {
-    const out: Array<{ left: number; top: number; right: number; bottom: number }> = [];
-    // The guide's rail and the advisor's chip joined the list with the fix-3
-    // round: both are opaque, both ship **on**, and at 1280x720 the slab is
-    // wide enough to reach the guide's column. Named by their solid children
-    // for the reason `ffx/DamageNumbers.ts` gives — `.sgd` and `.mad` are
-    // `inset: 0` wrappers, and listing those would fence off the whole field.
-    for (const selector of [
-      '.ig-ctb',
-      '.ig-cmd-stack',
-      '.ffx-cmd-info',
-      '.ig-stat-list',
-      '.ffx-sensor',
-      '.mad__card',
-      '.mad__toggle',
-      '.sgd__panel',
-      '.sgd__toggle',
-      // The reticles. Round 02 #14's repro at 1000x562 had *both* of them
-      // entirely inside the slab. Listing their boxes moves the slab and
-      // changes nothing about how a reticle is drawn or aimed, which is issue
-      // #08/#13's track, not this one.
-      '.ig-reticle',
-      '.ffx-zg__panel',
-      '.ffx-zg__banner',
-    ] as const) {
-      for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
-        // Size alone. `ffx/DamageNumbers.ts` gates on `el.hidden ||
-        // el.offsetParent === null` as well, which is redundant here: a zero-size
-        // box already means "not laid out", and it covers `[hidden]` (which
-        // `tokens.css` forces to `display: none`) and a hidden *ancestor* too.
-        const r = el.getBoundingClientRect();
-        if (r.width <= 0 || r.height <= 0) continue;
-        out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
-      }
-    }
-    out.push(...this.fighterViewportRects());
-    return out;
+  /** The HUD panels (`INTENT_AVOID_SELECTORS`, which says why each) and every fighter the intent slab may not cover, viewport px. */
+  private intentAvoidRects(): ViewportRect[] {
+    return [...rectsOf(this.el, INTENT_AVOID_SELECTORS), ...this.fighterViewportRects()];
   }
 
   /**
