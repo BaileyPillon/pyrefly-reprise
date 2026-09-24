@@ -81,3 +81,64 @@ seymour-natus-ring: PASS
 mortibody: PASS
 seymour-natus-portrait: PASS
 bevelle-highbridge: PASS
+
+---
+
+# Addendum 2026-09-24 (evening): independent 1:1 judge of the Natus hero cast (CANDIDATE)
+
+**Game case (rule 14): FFX only** (Chapter X, Highbridge). Judge: a sub-agent that made none of the cast.
+Subject: `public/art/characters/seymour-natus/cast.png` + `cast.json` (sha256 975fd8fd..., idle sha256
+c53d22c1... confirmed), builder's record [CAST.md](CAST.md), sheet [cast.jpg](cast.jpg), commit 0ad9e766.
+Picked by Bailey 2026-09-24 ~19:20 EDT: one hero cast painting (D-034 / D-045 precedent). Bar 7.
+This is a judge's opinion for the orchestrator, not Bailey's approval; the file stays CANDIDATE.
+
+## Method
+
+- Idle placed at x 73 in the widened 796 x 1165 canvas; cast and idle composited over the night tone
+  (28,26,40) and mid grey; looked at at 1:1 (top 700 rows), 2x (both wrists) and 4x (seams, idle | cast).
+- Measured on the PNGs: alpha islands, soft alpha, near-white opaque pockets (min channel > 235, alpha > 200),
+  enclosed holes, edge luminance and edge halo (edge pixel > 50 brighter than the 9 px interior mean).
+- Game size: the builder's real 1600 x 900 frames (`f-idle.png`, `f-cast.png`, `f-cast-hud.png`, Chapter X
+  on the Highbridge plate), side by side at half size and a 1:1 crop of the HUD frame.
+
+## Measurements
+
+- Soft alpha 0; binary matte like the idle. Opaque area 302,282 px against the idle's 302,377.
+- Alpha islands: main body, the idle's own 818 px skirt strip, and **one new 2 px speck** at (575,442)
+  beside the right forearm spikes. Enclosed holes: the idle's three, unchanged.
+- Near-white pockets: the idle's right-hand matte pocket (121 px at 628,533) is **gone**; every remaining
+  pocket is the idle's own (hair, chest, one wing highlight moved with the left crescent).
+- Edges: mean edge luminance 128.1 (idle 127.1), share of edge pixels > 200 is 9.0 % (idle 8.5 %).
+  Edge halo pixels up 7.5 % over the idle, concentrated at the right wrist (600,440 to 640,560).
+- Right-wrist box (590-650, 470-520): 1,836 transparent pixels against the idle's 1,389 (the notch below).
+
+## Scores (0 to 10; bar 7)
+
+| Subject | Identity | Anatomy | Hands | Ring | Seams | Edges | Finish | Reads as a cast at game size | Overall | Verdict |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `seymour-natus` cast | 9.5 | 7 | 6.5 | 8 | 6.5 | 7.5 | 7.5 | 6.5 | **7.4** | PASS |
+
+## Findings, worst named first
+
+- **Worst: the right-wrist seam (x 590-650, y 440-520).** The cuff's red band now tapers to a thin
+  lumpy loop instead of the idle's broad band, and a transparent notch opens between the cuff and the
+  wing's base, so the wing hangs off a narrow neck. It is one island (attached), invisible at 1600 x 900,
+  but plain at 2x. A 0.3 to 0.4 repaint of that neck, widening the band to the idle's width, would fix it.
+- **Game read is modest (6.5).** At battle size the change reads as "the wings open wider": the tips now
+  clear the ring's outer band, which helps, but the arms, body and face are the idle's, so nothing says
+  "spell" by itself. It reads as a cast only together with the engine's cast effects. The builder's own
+  note says the same; a larger turn or a raised arm is the stronger option, for Bailey to ask for.
+- **Left wrist: acceptable.** The grip and red strap bend plausibly with the hilt; the claw fingers turn with
+  the hand and still read. The newly exposed forearm contour carries a faint 1 px light rim at 4x
+  (the idle's own rim light, now bordering the night), not visible at 1:1.
+- **Hands (6.5):** the right hand is still fused into the wing with no fingers (inherited from the idle);
+  the idle's white matte pocket there is filled with the gauntlet's colour, which the first judge asked for.
+- **Identity 9.5:** face, hair, chest, armour, skirt and both crescents are the idle's own pixels; the
+  lattice glow and colours match exactly. Framing: same baseline 1148, facing front, and the body sits at
+  the same x in the engine frame as the idle (no jump between the two states).
+- **Ring 8:** the ring layer is the idle's; the flared tips overlap its outer band cleanly in the engine frame.
+- New 2 px speck at (575,442): trivial; clear it on the next touch.
+
+## Verdict
+
+seymour-natus-cast: PASS (7.4; worst: the right-wrist neck and band, then the modest game-size read)
