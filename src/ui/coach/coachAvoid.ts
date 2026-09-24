@@ -92,3 +92,88 @@ export function slideClearOf(mark: Rect, obstacle: Rect, card: Rect | null, stag
   if (card && overlaps(moved, card)) return null;
   return moved;
 }
+
+/** Box area two rects share, in px². */
+function sharedArea(a: Rect, b: Rect): number {
+  const w = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+  const h = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+  return w > 0 && h > 0 ? w * h : 0;
+}
+
+/**
+ * `r` grown by `gap` less 1 px on every side: a rect placed exactly `gap` clear
+ * (as `bandClearOf` and the candidates below place it) must not read as inside
+ * the margin because layout returned a fraction of a pixel less.
+ */
+function margin(r: Rect, gap: number): Rect {
+  const by = Math.max(0, gap - 1);
+  return { left: r.left - by, top: r.top - by, right: r.right + by, bottom: r.bottom + by };
+}
+
+/**
+ * Slide `mark` right past every `side` box it meets (the command stack, its
+ * help strip), as {@link slideClearOf} does for the stack alone, keeping its
+ * size and top. `null` when it meets none, or when the slid rect would leave
+ * `stage`, still meet a `side` box, or come within `gap` of a `hard` box.
+ */
+export function slidePast(
+  mark: Rect,
+  side: readonly Rect[],
+  hard: readonly Rect[],
+  stage: Rect,
+  gap = AVOID_GAP,
+): Rect | null {
+  const hit = side.filter((s) => overlaps(mark, s));
+  if (!hit.length) return null;
+  const left = Math.max(...hit.map((s) => s.right)) + gap;
+  const slid = { left, right: left + (mark.right - mark.left), top: mark.top, bottom: mark.bottom };
+  if (slid.right > stage.right) return null;
+  if (side.some((s) => overlaps(slid, s)) || hard.some((h) => overlaps(slid, margin(h, gap)))) return null;
+  return slid;
+}
+
+/**
+ * Yojimbo's Zanmato gauge (FFX, Chapter IX only; `ui/ffx/ZanmatoGauge.ts`) sits
+ * in the same top band the line's `top: 11%` was written against, and on a
+ * phone it fills the empty band the line's `top: 8%` uses. Move `mark` at least
+ * `gap` clear of every `hard` box (the gauge panel, its banner while up, the
+ * advisor card), keeping its size and, where it can, its column.
+ *
+ * Candidates are the mark's own top and its edges against every box, `gap`
+ * clear of each; one that meets a `side` box first slides right of it
+ * ({@link slidePast}). The winner clears every `hard` box by `gap` and shares
+ * the least area with `soft` and `side` (every other HUD panel); ties go to the
+ * smallest move, then to below. It is returned only when it is strictly better
+ * than where the mark already is (a mark on a `hard` box is worst), so a
+ * per-frame caller settles instead of hopping. `null` when nothing better
+ * exists; the caller only asks while the gauge is on screen, so every battle
+ * without it is untouched.
+ */
+export function clearOfPanels(
+  mark: Rect,
+  hard: readonly Rect[],
+  soft: readonly Rect[],
+  side: readonly Rect[],
+  stage: Rect,
+  gap = AVOID_GAP,
+): Rect | null {
+  const panels = [...soft, ...side];
+  const costOf = (r: Rect): number => panels.reduce((sum, p) => sum + sharedArea(r, p), 0);
+  const now = hard.some((h) => overlaps(mark, h)) ? Infinity : costOf(mark);
+  if (now === 0) return null;
+  const height = mark.bottom - mark.top;
+  const tops = new Set([mark.top, ...[...hard, ...panels].flatMap((e) => [e.bottom + gap, e.top - gap - height])]);
+  let best: { rect: Rect; cost: number; move: number } | null = null;
+  for (const top of tops) {
+    if (top < stage.top || top + height > stage.bottom) continue;
+    const upright: Rect = { left: mark.left, right: mark.right, top, bottom: top + height };
+    const rect = slidePast(upright, side, hard, stage, gap) ?? upright;
+    if (hard.some((h) => overlaps(rect, margin(h, gap)))) continue;
+    const cost = costOf(rect);
+    const move = Math.abs(top - mark.top);
+    const better =
+      !best || cost < best.cost || (cost === best.cost && (move < best.move || (move === best.move && top > best.rect.top)));
+    if (better) best = { rect, cost, move };
+  }
+  return best && best.cost < now ? best.rect : null;
+}

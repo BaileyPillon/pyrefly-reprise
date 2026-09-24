@@ -29,7 +29,8 @@ import './coach.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
-import { bandClearOf, slideClearOf } from './coachAvoid.ts';
+import { INTENT_AVOID_SELECTORS, rectsOf, ZANMATO_GAUGE_SELECTORS } from '../ffx/hudAvoidSelectors.ts';
+import { bandClearOf, clearOfPanels, slideClearOf } from './coachAvoid.ts';
 import { coachRunningBadge, type CoachMark as CoachMarkDef } from './coachCopy.ts';
 import { ffx2AtbMode } from './coachState.ts';
 
@@ -72,6 +73,13 @@ const MARK_GAME_FLAG = 'coachMarkGame';
  * purpose: not to act on a press, but to make sure nobody else does.
  */
 const CONFIRM_KEYS = new Set(['Enter', 'NumpadEnter', 'Space', 'KeyZ']);
+
+/** The command stack and its help strip: the line slides right of them, as `slideClearOf` does. */
+const SIDE_PANELS: readonly string[] = ['.ig-cmd-stack', '.ffx-cmd-info'];
+/** Every other panel the intent slab keeps off (`hudAvoidSelectors.ts`): the gauge solve's cost. */
+const SOFT_PANELS: readonly string[] = INTENT_AVOID_SELECTORS.filter(
+  (s) => s !== '.mad__card' && !SIDE_PANELS.includes(s) && !(ZANMATO_GAUGE_SELECTORS as readonly string[]).includes(s),
+);
 
 export class CoachMark {
   readonly el: HTMLElement;
@@ -251,7 +259,12 @@ export class CoachMark {
   private avoidAdvisorCard(): void {
     const host = this.opts.root.parentElement;
     const card = host?.querySelector<HTMLElement>('.mad__card');
-    if (!host || !card) return;
+    if (!host) return;
+    if (card) this.clearCard(host, card);
+    this.avoidZanmatoGauge(host);
+  }
+
+  private clearCard(host: HTMLElement, card: HTMLElement): void {
     const hostRect = host.getBoundingClientRect();
     const cardRect = card.getBoundingClientRect();
     const moved = bandClearOf(this.el.getBoundingClientRect(), cardRect, hostRect);
@@ -261,6 +274,28 @@ export class CoachMark {
     if (!stack || stack.hidden || stack.offsetWidth === 0) return;
     const slid = slideClearOf(this.el.getBoundingClientRect(), stack.getBoundingClientRect(), cardRect, hostRect);
     if (slid) this.el.style.left = `${slid.left - hostRect.left}px`;
+  }
+
+  /**
+   * FFX only, Chapter IX only: keep off Yojimbo's Zanmato gauge panel (and its
+   * banner while up) as well as the card, least on every other HUD panel
+   * (`clearOfPanels`). With no gauge on screen `rectsOf` finds nothing and this
+   * returns before touching the line, so every other battle places as before.
+   */
+  private avoidZanmatoGauge(host: HTMLElement): void {
+    const gauge = rectsOf(host, ZANMATO_GAUGE_SELECTORS);
+    if (!gauge.length) return;
+    const now = this.el.getBoundingClientRect();
+    const stage = host.getBoundingClientRect();
+    const hard = [...gauge, ...rectsOf(host, ['.mad__card'])];
+    // Asked every frame: the help strip and the advisor's chip move after the
+    // line goes up, and the solve only ever moves to a strictly clearer place.
+    const moved = clearOfPanels(now, hard, rectsOf(host, SOFT_PANELS), rectsOf(host, SIDE_PANELS), stage);
+    if (!moved) return;
+    // Deltas, not absolutes: the phone rule centres the line with a translate.
+    const style = getComputedStyle(this.el);
+    this.el.style.top = `${parseFloat(style.top) + moved.top - now.top}px`;
+    this.el.style.left = `${parseFloat(style.left) + moved.left - now.left}px`;
   }
 
   /** Take the line down now. Safe to call twice. */
