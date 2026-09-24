@@ -36,6 +36,8 @@ const h = vi.hoisted(() => ({
   bannerShows: 0,
   scenesDisposed: 0,
   sceneGate: null as null | Promise<void>,
+  /** Gates on the loads after the scene: the engine, the staging, the airship hook. */
+  gates: {} as Partial<Record<'engine' | 'stage' | 'airship', Promise<void>>>,
 }));
 
 const fakeState = {
@@ -69,7 +71,7 @@ vi.mock('../../src/scenes/index.ts', () => ({
 vi.mock('../../src/engine/BattlePresenterStage.ts', () => ({
   PaintedStage: class {
     highlight = { apply: () => undefined, clear: () => undefined };
-    stage = () => Promise.resolve();
+    stage = async () => void (await h.gates.stage);
     dispose = () => undefined;
     update = () => undefined;
     snapshot = () => [];
@@ -93,11 +95,19 @@ vi.mock('../../src/engine/BattlePresenterFallbacks.ts', () => ({
   uiPortsRegistered: () => ({ damageNumbers: true, messageBar: true }),
 }));
 vi.mock('../../src/app/screens/BattleScreenWiring.ts', () => ({
-  createEngine: async () => ({ state: () => fakeState }),
+  createEngine: async () => {
+    await h.gates.engine;
+    return { state: () => fakeState };
+  },
   createHud: () => null,
   applyAtbConfig: () => undefined,
 }));
-vi.mock('../../src/app/screens/BattleScreenAirship.ts', () => ({ attachAirshipBattle: async () => null }));
+vi.mock('../../src/app/screens/BattleScreenAirship.ts', () => ({
+  attachAirshipBattle: async () => {
+    await h.gates.airship;
+    return null;
+  },
+}));
 vi.mock('../../src/app/screens/BattleScreenCutscenes.ts', () => ({
   createMidBattleCutscenes: () => ({ dispose: () => undefined, update: () => undefined, handleInput: () => undefined }),
 }));
@@ -166,6 +176,7 @@ beforeEach(() => {
   h.bannerShows = 0;
   h.scenesDisposed = 0;
   h.sceneGate = null;
+  h.gates = {};
   keydownAdds = 0;
   keydownRemoves = 0;
   const add = window.addEventListener.bind(window);
@@ -235,4 +246,28 @@ describe('BattleScreen torn down before the fight starts', () => {
     expect(screen.root.childElementCount).toBe(0);
     expect((await screen.finished).outcome).toBe('aborted');
   });
+
+  it.each(['engine', 'stage', 'airship'] as const)(
+    'exit() while enter() awaits the %s load disposes what was built and starts nothing',
+    async (load) => {
+      const gate = deferred<void>();
+      h.gates[load] = gate.promise;
+      const screen = makeScreen();
+      const entering = screen.enter();
+      await flush();
+
+      screen.exit();
+      gate.resolve();
+      await entering;
+      await flush();
+
+      expect(h.presenters).toBe(0);
+      expect(h.bannerShows).toBe(0);
+      expect(h.runEncounterChain).not.toHaveBeenCalled();
+      expect(h.scenesDisposed).toBe(1); // exit() and enter() never both dispose the scene
+      expect(keydownAdds - keydownRemoves).toBeLessThanOrEqual(0);
+      expect(screen.root.childElementCount).toBe(0);
+      expect((await screen.finished).outcome).toBe('aborted');
+    },
+  );
 });

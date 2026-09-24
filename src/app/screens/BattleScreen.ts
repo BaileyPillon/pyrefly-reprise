@@ -52,6 +52,7 @@ import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '..
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
+import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -828,29 +829,7 @@ export class BattleScreen extends Screen {
       void this.closePause();
       return true;
     }
-    if (name === 'battle:fast') {
-      this.presenter?.setSpeed('fast');
-      return true;
-    }
-    if (name === 'battle:skip') {
-      this.presenter?.setSpeed('skip');
-      return true;
-    }
-    if (name === 'battle:normal') {
-      this.presenter?.setSpeed('normal');
-      return true;
-    }
-    if (name === 'hud:on' || name === 'hud:off') {
-      this.hud?.setVisible(name === 'hud:on');
-      return true;
-    }
-    if (name.startsWith('rig:')) {
-      const rig = name.slice(4);
-      if (!this.scene?.battleCamera.rigNames.includes(rig)) return false;
-      void this.scene.battleCamera.moveTo(rig, 700);
-      return true;
-    }
-    return this.scene?.trigger(name) ?? false;
+    return battleDebugTrigger(name, this.presenter, this.hud, this.scene);
   }
 
   /** The live engine, for the debug API's `forceCommand` / `snapshotState`. */
@@ -881,23 +860,7 @@ export class BattleScreen extends Screen {
       rig: this.scene?.battleCamera.rigName ?? null,
       actors: this.stage?.snapshot() ?? [],
       playback: this.presenter?.snapshot() ?? null,
-      battle: state
-        ? {
-            turn: state.turn,
-            ticks: state.ticks,
-            events: state.log.length,
-            result: state.result,
-            combatants: Object.values(state.combatants).map((c) => ({
-              id: c.id,
-              hp: c.hp,
-              maxHp: c.stats.maxHp,
-              mp: c.mp,
-              alive: c.alive,
-              side: c.side,
-              statuses: Object.keys(c.statuses),
-            })),
-          }
-        : null,
+      battle: battleStateSnapshot(state),
       /** The full ordered event log, which the e2e specs snapshot. */
       log: state?.log ?? [],
     };
