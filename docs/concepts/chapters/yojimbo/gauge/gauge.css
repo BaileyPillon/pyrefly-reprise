@@ -1,0 +1,92 @@
+/* Yojimbo Zanmato-gauge options (O-5). Authored in the kit's 1440x810 space,
+   delivered at 1600x900 (the Evrae widget precedent). Blood = enemy accent. */
+body { width: 1600px; height: 900px; }
+.stage { transform: scale(1.1111111); }
+.stage__bg { object-fit: cover; }
+
+.mk-tag { position: absolute; left: 0; top: 0; z-index: 90; display: flex; align-items: stretch;
+  font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; }
+.mk-tag b { padding: 9px 16px 10px; background: var(--ig-gold); color: #0b0a12; font-size: 15px; letter-spacing: 0.22em; }
+.mk-tag span { padding: 9px 18px 10px; background: rgba(11,10,18,0.82); color: rgba(244,241,232,0.92); font-size: 13px; }
+.ig-banner { top: 58px; }
+.mk-note { position: absolute; left: 48px; bottom: 5px; font-family: 'Chakra Petch', sans-serif; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,241,232,0.5); }
+
+/* ---------------- A: the bar under his name ---------------- */
+.mk-a { position: absolute; left: 440px; top: 26px; width: 430px; padding: 10px 22px 12px 18px;
+  background: rgba(11,10,18,0.84); border-left: 4px solid var(--ig-blood);
+  transform: skewX(var(--ig-skew)); box-shadow: 0 10px 26px rgba(0,0,0,0.5); }
+.mk-a > * { transform: skewX(var(--ig-skew-inverse)); }
+.mk-a__top { display: flex; align-items: baseline; gap: 14px; }
+.mk-a__name { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700; font-size: 30px; color: var(--ig-paper); }
+.mk-a__pct { margin-left: auto; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 24px; color: #e8a0a0; }
+.mk-a__chip { margin-left: auto; padding: 4px 10px 5px; background: var(--ig-blood); color: var(--ig-paper);
+  font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  box-shadow: 0 0 16px rgba(176,42,42,0.8); }
+.mk-a__hp { position: relative; height: 4px; margin: 4px 0 10px; background: rgba(244,241,232,0.14); }
+.mk-a__hp i { position: absolute; inset: 0 auto 0 0; display: block; background: rgba(244,241,232,0.7); }
+.mk-a__hp span { position: absolute; right: 0; top: 6px; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; color: rgba(244,241,232,0.6); letter-spacing: 0.06em; }
+.mk-a__bar { position: relative; height: 14px; margin-top: 16px; }
+.mk-a__seg { position: absolute; top: 0; height: 14px; display: block; background: rgba(176,42,42,0.16); border-right: 2px solid rgba(11,10,18,0.95); box-sizing: border-box; }
+.mk-a__seg b { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(to right, #7c1c1c, var(--ig-blood)); }
+.mk-a__seg span { position: absolute; left: 2px; top: 18px; white-space: nowrap; font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,241,232,0.62); }
+.mk-a__seg::before { content: ''; position: absolute; right: -2px; top: -5px; width: 2px; height: 24px; background: var(--ig-gold); opacity: 0.8; }
+.mk-a__seg:last-child::before { display: none; }
+.mk-a__now { margin-top: 26px; font-family: 'Exo 2', sans-serif; font-size: 14px; color: rgba(244,241,232,0.78); }
+.mk-a--full { border-left-color: #e04040; box-shadow: 0 0 0 1px rgba(224,64,64,0.6), 0 0 34px rgba(176,42,42,0.55); }
+.mk-a--full .mk-a__seg b { background: linear-gradient(to right, #c23232, #ff5a4a); box-shadow: 0 0 12px rgba(255,90,74,0.8); }
+.mk-a--full .mk-a__now { color: #ffb0a8; font-weight: 600; }
+
+/* ---------------- B: a ring on his CTB tile ---------------- */
+.mk-b { position: relative; width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.mk-b__ring { position: absolute; inset: 0; width: 60px; height: 60px; overflow: visible; }
+.mk-b__track { fill: none; stroke: rgba(176,42,42,0.25); stroke-width: 5; }
+.mk-b__fill { fill: none; stroke: var(--ig-blood); stroke-width: 5; filter: drop-shadow(0 0 3px rgba(176,42,42,0.9)); }
+.mk-b__tile { position: relative; z-index: 1; }
+.mk-b__tick { position: absolute; z-index: 2; width: 7px; height: 7px; background: var(--ig-gold); transform: translate(-50%, -50%) rotate(45deg); }
+.mk-b__tick--25 { left: 56.9px; top: 3.1px; }
+.mk-b__tick--50 { left: 56.9px; top: 56.9px; }
+.mk-b__tick--80 { left: 3.1px; top: 46.2px; }
+.mk-b--full .mk-b__fill { stroke: #ff4a3a; filter: drop-shadow(0 0 7px rgba(255,74,58,1)); }
+.mk-b--full .mk-b__tile { box-shadow: 0 0 22px rgba(255,74,58,0.8); }
+.mk-b__pct { align-self: center; padding: 3px 8px; background: rgba(11,10,18,0.86); font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 16px; color: #e8a0a0; }
+.mk-b__tag { align-self: center; padding: 5px 11px 6px; background: var(--ig-blood); color: var(--ig-paper);
+  font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  transform: skewX(var(--ig-skew)); box-shadow: 0 0 16px rgba(176,42,42,0.8); }
+.mk-b__legend { position: absolute; right: 150px; top: 30px; display: flex; flex-direction: column; gap: 2px; align-items: flex-end;
+  padding: 7px 14px 8px; background: rgba(11,10,18,0.78); border-right: 3px solid var(--ig-blood); }
+.mk-b__legend span { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(244,241,232,0.6); }
+.mk-b__legend b { font-family: 'Exo 2', sans-serif; font-size: 14px; font-weight: 600; color: var(--ig-paper); }
+.mk-b__legend em { font-style: normal; font-family: 'Chakra Petch', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ig-gold); }
+.mk-b__legend--full { border-right-color: #ff4a3a; box-shadow: 0 0 22px rgba(176,42,42,0.5); }
+.mk-b__legend--full b { color: #ffb0a8; }
+
+/* ---------------- C: the blade draws ---------------- */
+.mk-c { position: absolute; left: 820px; top: 444px; width: 360px; height: 60px; }
+.mk-c__saya { position: absolute; left: 44px; right: 0; top: 24px; height: 12px; border-radius: 2px 7px 7px 2px;
+  background: linear-gradient(to bottom, #2a1e30, #120c16); box-shadow: 0 3px 10px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.12); }
+.mk-c__blade { position: absolute; left: 44px; right: 0; top: 23px; height: 14px; }
+.mk-c__blade i { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--p) * 1%);
+  background: linear-gradient(to bottom, #f4f6fa 0%, #c9d0dc 45%, #8d96a6 100%);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 60%, calc(100% - 4px) 100%, 0 100%);
+  box-shadow: 0 0 8px rgba(255,255,255,0.35); }
+.mk-c__tsuba { position: absolute; left: 34px; top: 14px; width: 12px; height: 32px; border-radius: 3px; background: linear-gradient(#b8862a, #6a4a14); }
+.mk-c__tsuka { position: absolute; left: 0; top: 22px; width: 36px; height: 16px; border-radius: 3px 1px 1px 3px;
+  background: repeating-linear-gradient(135deg, #1b1420 0 5px, #3a2c44 5px 10px); }
+.mk-c__notches { position: absolute; left: 44px; right: 0; top: 0; height: 60px; }
+.mk-c__notch { position: absolute; top: 16px; width: 2px; height: 28px; background: var(--ig-gold); display: block; }
+.mk-c__notch span { position: absolute; left: -30px; top: -16px; width: 62px; text-align: center; font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244,241,232,0.8); text-shadow: 0 1px 3px #000; }
+.mk-c__label { position: absolute; right: 0; top: 44px; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: #e8a0a0; text-shadow: 0 1px 3px #000; }
+.mk-c--full .mk-c__blade i { box-shadow: 0 0 16px rgba(255,255,255,0.8), 0 0 36px rgba(255,74,58,0.7); }
+.mk-c--full .mk-c__label { color: #ffb0a8; }
+.mk-c__banner { position: absolute; left: 0; right: 0; top: 150px; text-align: center; pointer-events: none; }
+.mk-c__banner::before { content: ''; position: absolute; left: 12%; right: 12%; top: 32px; height: 2px;
+  background: linear-gradient(to right, rgba(176,42,42,0), rgba(255,74,58,0.9), rgba(176,42,42,0)); }
+.mk-c__banner span { position: relative; display: inline-block; padding: 6px 40px 8px; background: rgba(11,10,18,0.86);
+  font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700; font-size: 46px; color: var(--ig-paper);
+  border-bottom: 3px solid var(--ig-blood); }
+.mk-c__banner small { display: block; margin-top: 6px; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px;
+  letter-spacing: 0.26em; text-transform: uppercase; color: #ffb0a8; text-shadow: 0 1px 4px #000; }
