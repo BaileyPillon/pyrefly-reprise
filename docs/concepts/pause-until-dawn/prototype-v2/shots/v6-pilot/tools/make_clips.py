@@ -8,7 +8,7 @@ collar, identical in the three clips; the pilot has the frontal painting only, s
 turn. H.264 yuv420p, faststart, 60 fps.
 
     PY=D:/Tools/sd-scripts/.venv/Scripts/python.exe
-    $PY make_clips.py [A B C]     # writes ../clip-A-measured.mp4 ... and WORK/log-<name>.json
+    $PY make_clips.py [A B C] [--measure-only]     # ../clip-A2-measured.mp4 ..., WORK/log-<name>.json, WORK/gray-<name>.npz
 """
 import json
 import os
@@ -25,21 +25,29 @@ import rig6
 PAGE_W, PAGE_H = 720, 1200
 CAN_X, CAN_Y, CAN_W, CAN_H = 104, 228, 512, 748
 BG = 8 / 255.0
-NAMES = {"A": "clip-A-measured.mp4", "B": "clip-B-livelier.mp4", "C": "clip-C-quiet.mp4"}
+NAMES = {"A": "clip-A2-measured.mp4", "B": "clip-B2-livelier.mp4", "C": "clip-C2-quiet.mp4"}  # part 1's are at 9927c4b5
 FFMPEG = "D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe"
 
 _yy, _xx = np.mgrid[0:C.H, 0:C.W].astype(np.float32)
-_head_mask = (1 - rig6.smoothstep(560, 820, _yy)).astype(np.float32)  # the head above the collar
+# part 2: the head moves as one rigid piece down to the chin (y ~705) and eases into the body over the neck.
+# Part 1 eased it out from y 560, through the mouth (the mouth moved 0.7x the brows), so the stand-in sway
+# stretched the lower face every frame; the spec's regions are measured on a rigid head (its nose is the
+# rigid baseline), and a real head does not bend at the lips.
+NECK = (705.0, 830.0)
+_head_mask = (1 - rig6.smoothstep(NECK[0], NECK[1], _yy)).astype(np.float32)
+# the chest (breath and its lagged sway) moves below the collar and eases out towards the canvas's
+# bottom edge, which stays put (the frame cuts the body there)
+_chest_mask = (rig6.smoothstep(NECK[0], NECK[1], _yy) * (1 - rig6.smoothstep(1000, 1216, _yy))).astype(np.float32)
 
 
-def head_warp(img, hx, hy, roll_deg, pivot=(416.0, 760.0)):
+def head_warp(img, hx, hy, roll_deg, cx=0.0, cy=0.0, pivot=(416.0, 760.0)):
     th = np.deg2rad(roll_deg)
-    cx, cy = pivot
-    X, Y = _xx - cx, _yy - cy
+    px, py = pivot
+    X, Y = _xx - px, _yy - py
     rx = np.cos(th) * X - np.sin(th) * Y - X
     ry = np.sin(th) * X + np.cos(th) * Y - Y
-    mx = _xx - _head_mask * (hx + rx)
-    my = _yy - _head_mask * (hy + ry)
+    mx = _xx - _head_mask * (hx + rx) - _chest_mask * cx
+    my = _yy - _head_mask * (hy + ry) - _chest_mask * cy
     return C.remap(img, mx, my)
 
 
@@ -69,15 +77,17 @@ def params(R, fr):
             "browDraw": fr["browDraw"]}
 
 
-def page(R, fr):
-    """(720 x 1200 uint8 page, the canvas-resolution frame after head motion and post)."""
-    img = R.render(params(R, fr))
-    img = head_warp(img, fr["headX"], fr["headY"], fr["roll"])
+def page(R, fr, with_rig=False):
+    """(720 x 1200 uint8 page, the canvas-resolution frame after head motion and post[, the rig's own frame])."""
+    rig = R.render(params(R, fr))
+    img = head_warp(rig, fr["headX"], fr["headY"], fr["roll"], fr.get("chestX", 0.0), fr.get("chestY", 0.0))
     rgb = C.unpremul_on(img, (BG, BG, BG))
     rgb = post(rgb.astype(np.float32))
     small = cv2.resize(rgb, (CAN_W, CAN_H), interpolation=cv2.INTER_AREA)
     out = np.full((PAGE_H, PAGE_W, 3), BG, np.float32)
     out[CAN_Y:CAN_Y + CAN_H, CAN_X:CAN_X + CAN_W] = small
+    if with_rig:
+        return C.to_u8(out), rgb, rig, img
     return C.to_u8(out), rgb
 
 
@@ -92,22 +102,56 @@ def encode(frames_iter, dst, fps=drivers.FPS):
         raise SystemExit("ffmpeg failed")
 
 
-def main(names):
-    R = rig6.Rig()
-    for name in names:
-        tl = drivers.timeline(name)
-        (C.WORK / f"log-{name}.json").write_text(json.dumps(tl))
-        dst = C.OUTDIR / NAMES[name]
+# for pilot_still.py: the page's grey face crop per frame, and each part's frame change on the rig itself
+RIG_BOXES = {"mouth": (400, 595, 590, 670), "brow": (262, 318, 390, 352), "lids": (255, 350, 700, 470)}
+CHEST = (300, 880, 540, 1000)  # below the collar, after the body motion
 
-        def gen():
-            for i, fr in enumerate(tl):
-                pg, _ = page(R, fr)
-                if i % 60 == 0:
-                    print(name, i, flush=True)
-                yield pg
+
+def _grey(rgb_u8):
+    return (rgb_u8[..., 0] * 0.299 + rgb_u8[..., 1] * 0.587 + rgb_u8[..., 2] * 0.114).astype(np.float32)
+
+
+def render_clip(name, R=None, dst=None):
+    import pilot_still as PS
+    R = R or rig6.Rig()
+    tl = drivers.timeline(name)
+    (C.WORK / f"log-{name}.json").write_text(json.dumps(tl))
+    cx0, cy0, cx1, cy1 = PS.page_box(PS.CROP)
+    grey, steps, prev = [], {k: [] for k in (*RIG_BOXES, "chest")}, None
+
+    def gen():
+        nonlocal prev
+        for i, fr in enumerate(tl):
+            pg, _, rig, moved = page(R, fr, with_rig=True)
+            grey.append(np.clip(_grey(pg[cy0:cy1, cx0:cx1]) + 0.5, 0, 255).astype(np.uint8))
+            cur = {k: C.lum(rig[b[1]:b[3], b[0]:b[2], :3]) * 255 for k, b in RIG_BOXES.items()}
+            cur["chest"] = C.lum(moved[CHEST[1]:CHEST[3], CHEST[0]:CHEST[2], :3]) * 255
+            if prev is not None:
+                for k in cur:
+                    steps[k].append(float(np.abs(cur[k] - prev[k]).mean()))
+            prev = cur
+            if i % 60 == 0:
+                print(name, i, flush=True)
+            yield pg
+    if dst is None:
+        for _ in gen():
+            pass
+    else:
         encode(gen(), dst)
         print(dst, os.path.getsize(dst))
+    np.savez_compressed(C.WORK / f"gray-{name}.npz", page=np.stack(grey), **{f"rigs_{k}": np.array(v) for k, v in steps.items()})
+
+
+def main(names, encode_clip=True):
+    from concurrent.futures import ProcessPoolExecutor
+    with ProcessPoolExecutor(len(names)) as ex:
+        list(ex.map(_one, names, [encode_clip] * len(names)))
+
+
+def _one(name, encode_clip):
+    render_clip(name, dst=C.OUTDIR / NAMES[name] if encode_clip else None)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:] or ["A", "B", "C"])
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(args or ["A", "B", "C"], encode_clip="--measure-only" not in sys.argv)

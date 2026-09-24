@@ -1,4 +1,7 @@
-"""Living portrait v6 pilot (both): sheet.jpg - the parts at 1:1 and the three clips' moments.
+"""Living portrait v6 pilot (both): sheet-2.jpg - the parts at 1:1, the part-2 fixes and the three clips' moments.
+
+Part 1's sheet.jpg is at 9927c4b5; this one adds the never-still numbers (pilot_still.py), the brow fold
+before and after, and the measurement boxes, and shows clips A2 / B2 / C2.
 
     PY=D:/Tools/sd-scripts/.venv/Scripts/python.exe
     $PY make_sheet.py     # needs WORK/log-*.json (make_clips.py) and the pilot JSONs
@@ -49,7 +52,9 @@ def main():
     R = rig6.Rig()
     lg = json.loads((C.WORK / "pilot-lids-gaze.json").read_text())
     mo = json.loads((C.WORK / "pilot-mouth.json").read_text())
-    cl = json.loads((C.WORK / "pilot-clips.json").read_text())
+    st = json.loads((C.WORK / "pilot-still.json").read_text())
+    ref = st["reference"]
+    bf = st["browFolds"]
     worst = max(v["eyeBoxMAD"] for v in lg["lidsVsBaked"].values())
     lines = [
         "Living portrait v6 pilot - approach A on the plate (frontal), CPU only, one painting per pixel, nothing cross-faded",
@@ -58,8 +63,12 @@ def main():
         f"Gaze: +-16 x +-8 px, 0 escaped iris px over 9x5x4; revealed socket darker than sclera p5: v3 fill {lg['gazeGrid']['v3']['revealedDarkFrac']:.0%}, re-fill {lg['gazeGrid']['row']['revealedDarkFrac']:.0%}.",
         f"Mouth: smile (open + lattice) box MAD {mo['smile']['boxMAD_w1']} (plate {mo['smile']['boxMAD_neutral']}), det(J) {mo['smile']['detJ']}, step {mo['smile']['step']['maxOverMedian']}x median; "
         f"warp-only lattice {mo['literalWarpOnly']['smile']['boxMAD_w1']}. Press {mo['press']['boxMAD_w1']} (plate {mo['press']['boxMAD_neutral']}).",
-        "Clips (never still, mouth/nose frame change | brow/mouth): " + "   ".join(
-            f"{k} {v['neverStill']['mouthOverNose']} | {v['neverStill']['browOverMouth']}" for k, v in cl.items()),
+        "Part 2, never still (the spec's method: head-tracked, against frame 0; spec-shaped boxes), mouth/nose | brow/mouth:",
+        "   levels  " + "   ".join(f"{k}2 {st[k]['trackedSpec']['mouthOverNose']} | {st[k]['trackedSpec']['browOverMouth']}" for k in "ABC")
+        + "   (Until Dawn, same code: " + ", ".join(f"{w} {v['tracked']['mouthOverNose']} | {v['tracked']['browOverMouth']}" for w, v in ref.items()) + ")",
+        "   over contrast  " + "   ".join(f"{k}2 {st[k]['trackedSpec']['px']['mouthOverNose']} | {st[k]['trackedSpec']['px']['browOverMouth']}" for k in "ABC")
+        + "   (Until Dawn: " + ", ".join(f"{w} {v['tracked']['px']['mouthOverNose']} | {v['tracked']['px']['browOverMouth']}" for w, v in ref.items()) + ")",
+        f"Brow fold: raise + draw at 1 det(J) {bf['corners']['raise1_draw1']} (part 1: 0.386-2.184); whole 11x11 grid {bf['grid']}; raise lifts {bf['raiseMaxLiftPx']} px (part 1: 5.0)",
     ]
     blocks = [text_block(lines)]
     # lids at 1:1
@@ -92,9 +101,28 @@ def main():
     tgt = C.over(R.top, C.over(C.placed(C.load_rgba(P["smile"]["file"]), P["smile"]["box"]), C.over(R.iris, C.over(R.hc, R.below))))
     tiles.append(label(C.up(C.to_u8(tgt[mb[1]:mb[3], mb[0]:mb[2], :3]), 2), "painted smile (target)"))
     blocks.append(fit(row(tiles)))
+    # the brow fold, raise and draw both at 1, part 1's fields against part 2's, at 2x
+    bb = (250, 290, 710, 400)
+    tiles = []
+    for sig, lab in ((0.0, "part 1: raise 1 + draw 1 (fold)"), (rig6.BROW_SMOOTH, "part 2: raise 1 + draw 1"), (rig6.BROW_SMOOTH, "part 2: raise 1")):
+        keep = rig6.BROW_SMOOTH
+        rig6.BROW_SMOOTH = sig
+        Rb = rig6.Rig()
+        rig6.BROW_SMOOTH = keep
+        img = Rb.render({"browRaise": 1.0, "browDraw": 0.0 if lab.endswith("raise 1") else 1.0})
+        tiles.append(label(C.up(C.to_u8(img[bb[1]:bb[3], bb[0]:bb[2], :3]), 2), lab))
+    blocks.append(fit(row(tiles[:2])))
+    blocks.append(fit(row(tiles[2:])))
+    # the measurement boxes: part 1's (thin) and the spec-shaped ones (thick)
+    import pilot_still as PS
+    img = np.ascontiguousarray(C.to_u8(C.unpremul_on(R.render({})))[260:740, 220:740])
+    for bx, th in (((PS.MOUTH, PS.NOSE, PS.BROW), 1), ((PS.SPEC["mouth"], PS.SPEC["nose"], PS.SPEC["brow"]), 2)):
+        for b, col in zip(bx, ((255, 80, 80), (80, 255, 80), (80, 160, 255))):
+            cv2.rectangle(img, (b[0] - 220, b[1] - 260), (b[2] - 220, b[3] - 260), col, th)
+    blocks.append(fit(row([label(img, "boxes: part 1 (thin), spec-shaped (thick)")])))
     # the clips: 6 moments each, the face at 1:1
     face = (250, 300, 710, 700)
-    names = {"A": "A measured", "B": "B livelier", "C": "C quiet"}
+    names = {"A": "A2 measured", "B": "B2 livelier", "C": "C2 quiet"}
     for name in ("A", "B", "C"):
         tl = json.loads((C.WORK / f"log-{name}.json").read_text())
         tiles = []
@@ -103,7 +131,7 @@ def main():
             _, rgb = MC.page(R, fr)
             tiles.append(label(C.to_u8(rgb[face[1]:face[3], face[0]:face[2]]), f"{names[name]}  t={t:.1f}s"))
         blocks.append(fit(row(tiles)))
-    C.save_jpg(np.concatenate(blocks, 0), C.OUTDIR / "sheet.jpg", q=86)
+    C.save_jpg(np.concatenate(blocks, 0), C.OUTDIR / "sheet-2.jpg", q=86)
 
 
 if __name__ == "__main__":

@@ -4,8 +4,7 @@
     spec's blink closes in 3 frames and opens in 4)
   - gaze: travel reached, idle drift RMS, the fastest idle gaze step (spec: no idle saccade,
     0.49 IPD/s = 133 px/s on this plate)
-  - never still: the mouth box's mean frame-to-frame change over the nose box's (the rigid
-    baseline, it only rides the head sway), and the brow over the mouth (spec 0.3-0.5)
+  - (never still moved to pilot_still.py in part 2: part 1 measured it here on fixed boxes, frame to frame)
 
     PY=D:/Tools/sd-scripts/.venv/Scripts/python.exe
     $PY pilot_clips.py     # reads WORK/log-*.json, writes WORK/pilot-clips.json
@@ -15,23 +14,11 @@ import json
 import numpy as np
 
 import common as C
-import make_clips as MC
-import rig6
 
-MOUTH = (400, 595, 590, 670)
-NOSE = (440, 515, 510, 575)
-BROW = (262, 318, 390, 352)  # above the lids' reach
 IPD = 271.0
-STRIDE = 2
-
-
-def box(img, b):
-    x0, y0, x1, y1 = b
-    return img[y0:y1, x0:x1, :3]
 
 
 def main():
-    R = rig6.Rig()
     out = {}
     for name in ("A", "B", "C"):
         tl = json.loads((C.WORK / f"log-{name}.json").read_text())
@@ -65,20 +52,7 @@ def main():
         res["inputGazeMaxSpeedPxS"] = round(float(sp.max()), 1)
         hold = idle & (((t > 0.3) & (t < 2.0)) | ((t > 6.0)))
         res["idleDriftRmsPx"] = round(float(np.sqrt(((gx[hold] - gx[hold].mean()) ** 2 + (gy[hold] - gy[hold].mean()) ** 2).mean())), 2)
-        # never still, on the rendered canvas (after the head sway), every 2nd frame
-        prev = None
-        dm, dn, db = [], [], []
-        for f in tl[::STRIDE]:
-            img = R.render(MC.params(R, f))
-            img = MC.head_warp(img, f["headX"], f["headY"], f["roll"])
-            if prev is not None:
-                dm.append(np.abs(box(img, MOUTH) - box(prev, MOUTH)).mean() * 255)
-                dn.append(np.abs(box(img, NOSE) - box(prev, NOSE)).mean() * 255)
-                db.append(np.abs(box(img, BROW) - box(prev, BROW)).mean() * 255)
-            prev = img
-        dm, dn, db = (float(np.mean(v)) for v in (dm, dn, db))
-        res["neverStill"] = {"mouthOverNose": round(dm / max(dn, 1e-9), 2), "browOverMouth": round(db / max(dm, 1e-9), 2),
-                             "mouthStep": round(dm, 3), "noseStep": round(dn, 3), "browStep": round(db, 3)}
+        # never still: measured by pilot_still.py (part 2), the spec's own method
         out[name] = res
         print(name, json.dumps(res))
     (C.WORK / "pilot-clips.json").write_text(json.dumps(out, indent=1))

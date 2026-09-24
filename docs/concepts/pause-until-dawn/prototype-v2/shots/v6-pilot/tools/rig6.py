@@ -23,6 +23,20 @@ CATCH = 0.3                # the catchlight moves at 0.3x the iris (the plan)
 A_C = 0.08                 # below this the lash band eases into the a = 0 frame (the baked a00)
 
 
+BROW_SMOOTH = 5.0          # part 2: sigma (px) of the brow mask's edges along x (0 = part 1's fields)
+ERODE_K = 1.0              # the gap is eroded by ERODE_K * sigma before the blur
+
+
+def _smooth1d(v, sigma):
+    r = int(3 * sigma)
+    k = np.exp(-0.5 * (np.arange(-r, r + 1) / sigma) ** 2)
+    return np.convolve(np.pad(v, r, mode="edge"), k / k.sum(), mode="valid")
+
+
+def _erode1d(v, r):
+    return np.lib.stride_tricks.sliding_window_view(np.pad(v, r, mode="edge"), 2 * r + 1).min(-1)
+
+
 def smoothstep(e0, e1, x):
     t = np.clip((x - e0) / (e1 - e0), 0.0, 1.0)
     return t * t * (3 - 2 * t)
@@ -111,6 +125,13 @@ class Rig:
             d = self.lid[side]
             rim = np.interp(xx[0], d["ext"], d["r0"], left=d["r0"][0], right=d["r0"][-1])
             gap = np.maximum(rim - 4 - (bottom + 1), 3.0)
+            if BROW_SMOOTH:
+                # part 2 (the fold): the mask's edges followed the brow polygon and the rim column by column, so at
+                # the inner ends the ease-out changed by up to 1 px per column, and raise + draw summed there
+                # folded (det 0.39-2.18). The edges are now smooth along x: the gap is eroded first (it only ever
+                # shrinks, so the lashes still never move) and then blurred, like the brow's top and bottom.
+                top, bottom = _smooth1d(top, BROW_SMOOTH), _smooth1d(bottom, BROW_SMOOTH)
+                gap = np.maximum(_smooth1d(_erode1d(gap, int(ERODE_K * BROW_SMOOTH)), BROW_SMOOTH), 3.0)
             # per column: 1 on the brow, eased out over 14 px above it and over the gap below it;
             # across: eased out over 24 px past the brow's ends
             vy = smoothstep((top - 14)[None, :], top[None, :], yy) * (1 - smoothstep((bottom + 1)[None, :], (bottom + 1 + gap)[None, :], yy))
