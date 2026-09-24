@@ -1,0 +1,113 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-24T21:40:00.000Z",
+  "build": {
+    "mainSha": "dc2669ac",
+    "bundle": "CzzK-khs",
+    "artifactHash": "867f61412521207ee7ba4499336552c42a365c0a8a75e1dc912bfc79c3dea03e"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/dc2669ac.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/bcbdb483.json -> {result: PASS, liveManifest: match, checked: 47, mismatched: [], missing: [], wrongType: []}",
+        "Re-run with --full (pending marker's planned review is deep) -> {result: PASS, liveManifest: match, checked: 894, mismatched: [], missing: [], wrongType: []}",
+        "artifactHash 867f61412521207ee7ba4499336552c42a365c0a8a75e1dc912bfc79c3dea03e matches critic/artifacts/dc2669ac.json and critic/pending/dc2669ac.json's liveArtifact record"
+      ],
+      "game": "both",
+      "chapter": "all",
+      "state": "n/a (static asset identity)",
+      "automated": true,
+      "environment": "artifact-manifest.mjs against the public URL"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "window.__pyrefly.screen() polled and asserted before every screenshot and state-dependent action (title, chapter-select, battle, pause, results)",
+        "The hotfix's own regression reproduced correctly live: real ArrowDown+Enter into Paine's Skill menu, Power Break selected by default, real Enter opened the target cursor with data-actor-id=\"bahamut\" (ig-bosshp ffx2--targeted), not Yuna -- screenshot saved to the scratch dir (diag6-target.png)",
+        "Wait mode: battle.turn/battle.ticks unchanged across a 2s idle window at the top list",
+        "Cure (Yuna, White Magic) opened its target cursor on data-actor-id=\"yuna\" (ffx2--targeted-ally), confirmed with a real Enter",
+        "?wait=split: real gotoChapter under the flag reached battle and ran the auto strategy with 0 console/page errors; the focused review already carries this flag's 53-turn real-key run to outcome, not repeated here",
+        "FFX Chapter II Attack: target cursor opened (attackTargetOpened true); a real Escape from the cursor both cancelled the target and opened pause in the same press, which is the documented canPauseOnCancel behaviour for FFX's CTB engine, not a new defect",
+        "Chapter II pause CHAPTER tab reached after a real Attack was submitted; all three snapshot plates measured 104x78 inside a 104x119.375 plate, matching hotfix 12.1 and the previous live review",
+        "Pause/hide/restore/resume all real keys (Escape, H, H, Escape), done only after a command had been submitted",
+        "PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA GeForce RTX 5070 Ti confirmed via UNMASKED_RENDERER_WEBGL) for the whole run; no swiftshader fallback needed",
+        "The known pre-existing real-key-in-idle-battle crash (TypeError: Cannot read properties of null (reading 'syncHud'), battle aborts to chapter-select) reproduced twice while building this pass's script -- once on Escape, once on Enter, both on an idle battle before any command with the onboarding coach card open -- and was avoided in the reported run via ?coach=off and always submitting a command before the first pause; not re-filed, same issue as the bcbdb483 live review"
+      ],
+      "game": "both",
+      "chapter": "IV (ffx2-bahamut), II (yunalesca), VII (seymour-anima-macalania, locked)",
+      "state": "title, chapter-select, battle (idle/Wait, target cursor, split flag), pause (CHAPTER tab, hide/restore, resume), reload",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), 1600x900, fresh browser context per section, cache-busting query"
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": [
+        "Lightweight reload smoke: seed 7 auto-played run of Chapter I (seymour-flux) recorded to localStorage key pyrefly-reprise:save:v1 (attempts: 1); a real page.reload() of the live URL produced the byte-identical save blob back (survived: true).",
+        "Caveat, same as the previous live review: the runtime flag exercised (setMuted) is not itself stored in the save, so its own persistence was not proven -- only the save's own progress/settings fields were."
+      ],
+      "game": "both",
+      "chapter": "I (seymour-flux)",
+      "state": "battle (idle-abort end) -> reload",
+      "automated": true,
+      "environment": "Playwright, single tab, live URL, localStorage read before/after a real page.reload()"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact identity: full manifest (894 files) diffed against the live URL, 0 mismatches/missing/wrong-type",
+      "Title -> real double Enter -> chapter select: screen() === 'chapter-select'",
+      "Chapter VII (seymour-anima-macalania) confirmed still a locked COMING card via snapshotState().screenState.coming",
+      "FFX-2 Chapter IV Wait mode: clock holds at the top list while idle",
+      "The changed flow's own regression: Power Break's target cursor opens on Bahamut, not Yuna, with real keys on the live artifact",
+      "Cure targeting a party member (Yuna) with real keys",
+      "?wait=split reaches battle and runs clean (0 console/page errors) under auto play",
+      "FFX Chapter II plain Attack targeting, and the canPauseOnCancel real-key interaction on cancel",
+      "Chapter II pause CHAPTER tab snapshot plate sizes (104x78 in a 104x119.375 plate) after a real command was submitted",
+      "Pause/hide/restore/resume with real keys",
+      "Audio: prerendered manifest/sprite/spriteDecoded true, 24 cues, pause track actively playing while paused (sampled path, not synth fallback)",
+      "Console errors and network responses >= 400 counted across every browser context of both smoke runs: 0 and 0",
+      "CHK-024 lightweight reload smoke as described above"
+    ],
+    "reused": [
+      "critic/reviews/dc2669ac-focused.json's full live-vs-candidate command sweep (chapters 1, 2, 3, 8, 4, 5, 6) reused as evidence for every offensive/support row beyond Power Break and Cure, rather than re-run live",
+      "critic/artifacts/bcbdb483.json reused as the --changed-from baseline for the manifest diff rather than re-derived"
+    ],
+    "notTested": [
+      "Rikku's Drain specifically -- Power Break already reproduces the exact class of regression this hotfix fixes (a single-any offensive row defaulting onto an enemy instead of Yuna) and was treated as representative rather than repeating every row live",
+      "Dispel on an enemy and Phoenix Down on the party specifically in FFX -- covered by the focused review's sweep, not repeated live this pass",
+      "A real-key run of ?wait=split all the way to its results screen on the live URL -- the focused review already has a 53-turn real-key run to outcome; this pass confirmed the flag reaches battle and runs clean but hit its own harness timeout before a result screen",
+      "Chapters other than II and IV this pass -- I, III, V, VI, VIII were not re-verified live",
+      "The full save/settings upgrade matrix beyond the one lightweight reload smoke",
+      "Physical controller and Safari/real-device input",
+      "Combat correctness/balance beyond reaching real battles and submitting real commands"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 55,
+  "issues": [
+    {
+      "id": "NEW-coach-idle-syncHud-crash",
+      "severity": "critical-looking, out of scope for this candidate",
+      "summary": "A real key (Escape or Enter) pressed on an idle FFX-2 battle before any command has been submitted, while the onboarding coach card ('Auron's briefing') is open over the battle, throws TypeError: Cannot read properties of null (reading 'syncHud') and aborts the encounter to chapter-select.",
+      "evidence": "Reproduced twice while building this pass's Playwright script against ffx2-bahamut via the debug gotoChapter jump; avoided in the reported run with ?coach=off and by always submitting a command before the first pause. This is the same class of issue already on record from the bcbdb483 live review (NEW-syncHud-escape-crash), reproduced here via a slightly different trigger (Enter as well as Escape, with the coach card specifically open).",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "recommendation": "Same recommendation as before: worth a focused repro/fix session; does not block this deployment's verdict since it is pre-existing, not touched by this hotfix's changed files, and was worked around rather than hit in the reported evidence."
+    }
+  ]
+}
