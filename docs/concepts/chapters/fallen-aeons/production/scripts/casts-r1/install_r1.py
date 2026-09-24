@@ -36,7 +36,7 @@ for name, s in SPEC.items():
                  'method': M, 'derivedFrom': f'{name}/idle.png (same pixel scale; canvas' + (f' padded {s["pad"]} px on the left)' if s['pad'] else ' unchanged)'),
                  'repairs': s['repairs'], 'repaintSeed': int(s['repairs'][2].split('seed ')[1].split(',')[0]),
                  'gates': {'changedOutsideMaskAndMovedArm': g['changedOutsideMasks'], 'generatedPx': g['generatedPx'],
-                           'inventedColourSharePct': g['inventedSharePct'], 'cutoutMarginPx': 16},
+                           'inventedColourSharePct': g['inventedSharePct'], 'cutoutMarginPx': 'measured by margins_r1b.py'},  # was a hardcoded 16 (wrong for Cindy: 14 at alpha > 0)
                  'provenance': f'docs/concepts/chapters/fallen-aeons/production/provenance/{name}-cast-r1-provenance.png',
                  'replaced': f'{BK}/{name}/cast.png (sha256 {sha(bk + "/cast.png")[:16]}, judged 5.4/5.6 FAIL in production/JUDGE.md)',
                  'installedAt': now})

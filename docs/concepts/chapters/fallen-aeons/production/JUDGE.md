@@ -173,3 +173,29 @@ builder changed no locked file, and the earlier verdicts stand.
 
 CINDY-CAST: PASS
 MINDY-CAST: PASS
+
+### Builder record r1b (2026-09-24, after the r1 verdicts; FFX-2 only)
+
+These notes correct the record behind the two r1 verdicts. No painted pixel changed.
+
+- **Margins.** The r1 sidecars had `cutoutMarginPx: 16` hardcoded in `install_r1.py`, and `gates.py` measured
+  at alpha > 8. The cut-out convention (`tools/gen/comfy.mjs` cutout, margin 16) counts every non-zero alpha
+  pixel. Measured that way, Cindy's left margin was 14 px (faint antialiasing on the moved glove) and Mindy's
+  was 28 px. Cindy's canvas is now padded 2 px on the left: 451x1064, baselineY 1047, sha256 f6304c7ff362379b.
+  Every pixel of the judged file is kept at an offset of +2 px (asserted), so the judged content is unchanged.
+  Both sidecars now record the measured margins at alpha > 0 and alpha > 8: Cindy 16/16/16/16 (18 at alpha > 8
+  on the left), Mindy 28/16/16/16 (30 at alpha > 8). `scripts/casts-r1/margins_r1b.py` does this; `gates.py`
+  now prints both thresholds. Mindy's file is unchanged (fe2204472e2958e7).
+- **In-engine capture.** `scripts/casts-r1/capture_engine.mjs` ran the real game: Vite dev server, GPU
+  (RTX 5070 Ti, D3D11), 1600x900, real HUD, Chapter XI. It played the 'intended' strategy through Shiva and let
+  the Sisters link run unmodified. Shortcut: Shiva's live HP is set to 1 once she is staged, because at seed 1
+  the strategy loses the Shiva link ('defeat', links 1) and the debug API cannot start a later link. The run
+  caught both casts: Cindy casting Not-So-Mighty Guard and Mindy casting Thundaga (`frames/engine/*-natural-1.jpg`).
+  It also shot a forced cast/idle pair for both Sisters at the same moment (`frames/engine/engine-sisters-mid-*`).
+  The sheet is `frames/engine/engine-casts-r1b.jpg`. 0 page errors.
+  - What game size shows: both paintings load, and at 2x the cast differs clearly from the idle. Cindy's raised
+    forearm reads as an arm across her chest more than as a reach, and Sandy stands in front of her body in the
+    default formation. Mindy's gesture reads as "hand at the chest" (the judge said the same). Her head sits
+    under the enemy HP list panel at top left.
+  - Staging, not art: Sandy covering Cindy and Mindy's head under the HP panel are both staging. Those belong to
+    whoever owns `src/engine` and `src/scenes`.

@@ -28,8 +28,10 @@ tree = cKDTree(lab(ip.astype(np.float64)))
 gen = rm & ~armN & (new[..., 3] > 200)
 d, _ = tree.query(lab(new[gen][:, :3].astype(np.float64)))
 print(' generated px', int(gen.sum()), 'invented share (dE>10)', round(float((d > 10).mean()) * 100, 2), '%', 'median dE', round(float(np.median(d)), 2))
-a = new[..., 3]; ys, xs = np.nonzero(a > 8)
-print(' size', new.shape[1], new.shape[0], 'margins L T R B', xs.min(), ys.min(), new.shape[1] - 1 - xs.max(), new.shape[0] - 1 - ys.max())
+a = new[..., 3]
+for t in (0, 8):  # the cut-out convention counts every non-zero alpha pixel (t = 0); t = 8 is shown for reference
+    ys, xs = np.nonzero(a > t)
+    print(' size', new.shape[1], new.shape[0], f'margins at alpha>{t} L T R B', xs.min(), ys.min(), new.shape[1] - 1 - xs.max(), new.shape[0] - 1 - ys.max())
 # provenance: grey = idle unchanged, blue = idle pixels rotated (arm), magenta = generated inside the repaint mask
 pv = np.zeros(new.shape[:3], np.uint8); op = a > 8
 pv[op & ~changed] = [150, 150, 150, 255]
