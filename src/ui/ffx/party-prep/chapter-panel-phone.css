@@ -122,4 +122,21 @@
     margin-top: 12px;
     padding: 9px 12px;
   }
+
+  /* A chapter with no card meta (registered but unlisted, e.g. 9 and 10)
+     gets the shell's own title and blurb: at the page's own type sizes here,
+     not the scaled stage's 5.78 px. */
+  .prep[data-tab='chapter'] .prepchap__fallback {
+    padding: 20px 16px 16px;
+  }
+  .prep[data-tab='chapter'] .prepchap__fallback h2 {
+    font-size: 34px;
+    line-height: 1.05;
+  }
+  .prep[data-tab='chapter'] .prepchap__fallback p {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(11, 10, 18, 0.78);
+  }
 }

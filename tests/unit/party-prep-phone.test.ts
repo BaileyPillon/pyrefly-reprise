@@ -14,6 +14,7 @@ import { join } from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { InputSnapshot } from '../../src/app/Input.ts';
 import { CHAPTERS } from '../../src/data/encounters.ts';
+import { romanNumeral } from '../../src/ui/common/roman.ts';
 
 type ScreenModule = typeof import('../../src/app/screens/PartyPrepScreen.ts');
 type PanelModule = typeof import('../../src/ui/ffx/party-prep/ChapterPanel.ts');
@@ -67,6 +68,13 @@ describe('phoneWhereLabel', () => {
   it('names the game and the numeral, as the sheet draws the corner', () => {
     expect(phone.phoneWhereLabel({ game: 'ffx2', number: 6 })).toBe('FFX-2 · VI');
     expect(phone.phoneWhereLabel({ game: 'ffx', number: 1 })).toBe('FFX · I');
+  });
+  it('keeps the numeral past VIII for the registered but unlisted chapters 9 and 10', () => {
+    expect(phone.phoneWhereLabel({ game: 'ffx', number: 9 })).toBe('FFX · IX');
+    expect(phone.phoneWhereLabel({ game: 'ffx', number: 10 })).toBe('FFX · X');
+    expect(romanNumeral(4)).toBe('IV');
+    expect(romanNumeral(14)).toBe('XIV');
+    expect(romanNumeral(0)).toBe('0');
   });
 });
 
