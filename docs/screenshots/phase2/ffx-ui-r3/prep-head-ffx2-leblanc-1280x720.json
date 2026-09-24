@@ -1,0 +1,326 @@
+{
+ "tabs": [
+  "CHAPTER",
+  "DRESSPHERES",
+  "STATS",
+  "ACCESSORIES",
+  "ITEMS"
+ ],
+ "steps": [
+  [
+   "open",
+   {
+    "tab": "CHAPTER",
+    "cols": [
+     {
+      "top": 0,
+      "max": 46,
+      "rect": [
+       492,
+       150,
+       763,
+       354
+      ]
+     },
+     {
+      "top": 0,
+      "max": 47,
+      "rect": [
+       786,
+       150,
+       1027,
+       354
+      ]
+     }
+    ],
+    "tip": {
+     "cls": "cpanel__tip",
+     "rect": [
+      786,
+      290,
+      1027,
+      448
+     ],
+     "text": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's"
+    },
+    "tipFullyInCol": false,
+    "hint": {
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "rect": [
+      462,
+      427,
+      1068,
+      441
+     ],
+     "sw": 303,
+     "cw": 303,
+     "lh": "normal",
+     "h": 14,
+     "ws": "normal",
+     "ov": "visible",
+     "vis": "block"
+    },
+    "panelHint": "·  PG UP / PG DN SCROLL",
+    "start": [
+     986,
+     513,
+     1232,
+     562
+    ],
+    "vw": 1280
+   }
+  ],
+  [
+   "PageDown",
+   {
+    "tab": "CHAPTER",
+    "cols": [
+     {
+      "top": 46,
+      "max": 46,
+      "rect": [
+       492,
+       150,
+       763,
+       354
+      ]
+     },
+     {
+      "top": 47,
+      "max": 47,
+      "rect": [
+       786,
+       150,
+       1027,
+       354
+      ]
+     }
+    ],
+    "tip": {
+     "cls": "cpanel__tip",
+     "rect": [
+      786,
+      196,
+      1027,
+      354
+     ],
+     "text": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's"
+    },
+    "tipFullyInCol": true,
+    "hint": {
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "rect": [
+      462,
+      427,
+      1068,
+      441
+     ],
+     "sw": 303,
+     "cw": 303,
+     "lh": "normal",
+     "h": 14,
+     "ws": "normal",
+     "ov": "visible",
+     "vis": "block"
+    },
+    "panelHint": "·  PG UP / PG DN SCROLL",
+    "start": [
+     986,
+     513,
+     1232,
+     562
+    ],
+    "vw": 1280
+   }
+  ],
+  [
+   "PageUp",
+   {
+    "tab": "CHAPTER",
+    "cols": [
+     {
+      "top": 0,
+      "max": 46,
+      "rect": [
+       492,
+       150,
+       763,
+       354
+      ]
+     },
+     {
+      "top": 0,
+      "max": 47,
+      "rect": [
+       786,
+       150,
+       1027,
+       354
+      ]
+     }
+    ],
+    "tip": {
+     "cls": "cpanel__tip",
+     "rect": [
+      786,
+      290,
+      1027,
+      448
+     ],
+     "text": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's"
+    },
+    "tipFullyInCol": false,
+    "hint": {
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "rect": [
+      462,
+      427,
+      1068,
+      441
+     ],
+     "sw": 303,
+     "cw": 303,
+     "lh": "normal",
+     "h": 14,
+     "ws": "normal",
+     "ov": "visible",
+     "vis": "block"
+    },
+    "panelHint": "·  PG UP / PG DN SCROLL",
+    "start": [
+     986,
+     513,
+     1232,
+     562
+    ],
+    "vw": 1280
+   }
+  ],
+  [
+   "PageDown",
+   {
+    "tab": "CHAPTER",
+    "cols": [
+     {
+      "top": 46,
+      "max": 46,
+      "rect": [
+       492,
+       150,
+       763,
+       354
+      ]
+     },
+     {
+      "top": 47,
+      "max": 47,
+      "rect": [
+       786,
+       150,
+       1027,
+       354
+      ]
+     }
+    ],
+    "tip": {
+     "cls": "cpanel__tip",
+     "rect": [
+      786,
+      196,
+      1027,
+      354
+     ],
+     "text": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's"
+    },
+    "tipFullyInCol": true,
+    "hint": {
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "rect": [
+      462,
+      427,
+      1068,
+      441
+     ],
+     "sw": 303,
+     "cw": 303,
+     "lh": "normal",
+     "h": 14,
+     "ws": "normal",
+     "ov": "visible",
+     "vis": "block"
+    },
+    "panelHint": "·  PG UP / PG DN SCROLL",
+    "start": [
+     986,
+     513,
+     1232,
+     562
+    ],
+    "vw": 1280
+   }
+  ],
+  [
+   "KeyR",
+   {
+    "tab": "CHAPTER",
+    "cols": [
+     {
+      "top": 46,
+      "max": 46,
+      "rect": [
+       492,
+       150,
+       763,
+       354
+      ]
+     },
+     {
+      "top": 47,
+      "max": 47,
+      "rect": [
+       786,
+       150,
+       1027,
+       354
+      ]
+     }
+    ],
+    "tip": {
+     "cls": "cpanel__tip",
+     "rect": [
+      786,
+      196,
+      1027,
+      354
+     ],
+     "text": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's"
+    },
+    "tipFullyInCol": true,
+    "hint": {
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "rect": [
+      462,
+      427,
+      1068,
+      441
+     ],
+     "sw": 303,
+     "cw": 303,
+     "lh": "normal",
+     "h": 14,
+     "ws": "normal",
+     "ov": "visible",
+     "vis": "block"
+    },
+    "panelHint": "·  PG UP / PG DN SCROLL",
+    "start": [
+     986,
+     513,
+     1232,
+     562
+    ],
+    "vw": 1280
+   }
+  ]
+ ]
+}

@@ -1,0 +1,105 @@
+{
+ "log": [
+  [
+   "coach",
+   true
+  ],
+  [
+   "SEEK:Items",
+   "Items▸×15"
+  ],
+  [
+   "Enter",
+   "Hi-Potion"
+  ],
+  [
+   "SEEK:Al Bhed",
+   "Al Bhed Potion"
+  ],
+  [
+   "Enter",
+   "Al Bhed Potion"
+  ]
+ ],
+ "chip": {
+  "text": "ALL ALLIES",
+  "rect": [
+   504,
+   561,
+   641,
+   594
+  ],
+  "cls": "ffx-target__all ffx-target__all--ally ffx-target__all--row"
+ },
+ "selectedRow": {
+  "t": "Al Bhed Potion",
+  "r": [
+   105,
+   549,
+   497,
+   607
+  ]
+ },
+ "levelWith": [
+  "Al Bhed Potion"
+ ],
+ "rows": [
+  {
+   "t": "Hi-Potion",
+   "r": [
+    69,
+    416,
+    462,
+    474
+   ]
+  },
+  {
+   "t": "X-Potion",
+   "r": [
+    87,
+    482,
+    479,
+    540
+   ]
+  },
+  {
+   "t": "Al Bhed Potion",
+   "r": [
+    105,
+    549,
+    497,
+    607
+   ]
+  },
+  {
+   "t": "Phoenix Down",
+   "r": [
+    123,
+    616,
+    515,
+    673
+   ]
+  },
+  {
+   "t": "Mega Phoenix",
+   "r": [
+    141,
+    682,
+    533,
+    740
+   ]
+  },
+  {
+   "t": "Remedy",
+   "r": [
+    158,
+    749,
+    551,
+    807
+   ]
+  }
+ ],
+ "overlaps": {},
+ "help": "Restores HP and cures Petrify, Poison and Silence for the whole party. Hits the whole party.",
+ "vw": 1600
+}
