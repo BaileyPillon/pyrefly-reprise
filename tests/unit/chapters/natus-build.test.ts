@@ -39,19 +39,20 @@ describe('The Highbridge build and the chapter registration', () => {
     expect(highbridgeBuild.inventory).toEqual(fahrenheitBuild.inventory);
   });
 
-  it('Rule 1 (Bailey, 2026-09-24): every member carries the Gagazet preset’s stat cells, the upper bound Chapter IX ships; only the stats move', () => {
+  it('Rule 1 (Bailey, 2026-09-24): every member carries the Gagazet preset’s stat cells, the upper bound Chapter IX ships; only the stats move (Rikku’s MP is the pinned exception, see the next test)', () => {
     const grid = ['hp', 'mp', 'str', 'def', 'mag', 'mdef', 'agi', 'luck', 'eva', 'acc'] as const;
     for (const x of highbridgeBuild.members) {
       const top = gagazetBuild.members.find((g) => g.id === x.id)!;
       const cavern = yojimboCavernBuild.members.find((g) => g.id === x.id)!;
       for (const k of grid) {
+        if (x.id === 'rikku' && k === 'mp') continue; // pinned to Chapter VIII's 130, not Gagazet's copy
         expect(x.stats[k], `${x.id}.${k}`).toBe(top.stats[k]);
         expect(x.stats[k], `${x.id}.${k} vs Chapter IX`).toBe(cavern.stats[k]);
       }
       const hp10 = x.equipment.armor.autoAbilities.includes('hp-10');
       expect(x.stats.maxHp, x.id).toBe(hp10 ? Math.floor((top.stats.hp * 110) / 100) : top.stats.hp);
       expect(x.hp).toBe(x.stats.maxHp);
-      expect(x.stats.maxMp).toBe(top.stats.mp);
+      if (x.id !== 'rikku') expect(x.stats.maxMp).toBe(top.stats.mp);
       expect(x.mp).toBe(x.stats.maxMp);
       // Gear and gauges are the carried ones, not the mountain's (rules 3 and 4).
       const carried = (x.id === 'yuna' ? macalaniaBuild : fahrenheitBuild).members.find((g) => g.id === x.id)!;
@@ -63,7 +64,16 @@ describe('The Highbridge build and the chapter registration', () => {
     expect(highbridgeBuild.gil).toBe(fahrenheitBuild.gil);
   });
 
-  it('the one inverted cell, disclosed: Rikku’s MP is Gagazet’s 115, under Chapter VIII’s 130; every other carried cell is at or above Chapter VIII', () => {
+  it('Rikku’s MP is pinned to Chapter VIII’s 130, not the Gagazet copy’s 115 (Bailey, 2026-09-24 ~20:00 EDT, "I\'ll go with your recommendation"); no other cell inverts', () => {
+    const rikku = highbridgeBuild.members.find((x) => x.id === 'rikku')!;
+    const low = fahrenheitBuild.members.find((x) => x.id === 'rikku')!;
+    const high = gagazetBuild.members.find((x) => x.id === 'rikku')!;
+    expect(low.stats.mp).toBe(130);
+    expect(high.stats.mp).toBe(115); // the Gagazet cell commit 186f13dd found under Chapter VIII's bound
+    expect(rikku.stats.mp).toBe(130);
+    expect(rikku.stats.maxMp).toBe(130);
+    expect(rikku.mp).toBe(130);
+
     const inversions: string[] = [];
     for (const x of highbridgeBuild.members) {
       const lower = fahrenheitBuild.members.find((g) => g.id === x.id);
@@ -72,7 +82,7 @@ describe('The Highbridge build and the chapter registration', () => {
         if (x.stats[k] < lower.stats[k]) inversions.push(`${x.id}.${k} ${lower.stats[k]}->${x.stats[k]}`);
       }
     }
-    expect(inversions).toEqual(['rikku.mp 130->115']);
+    expect(inversions).toEqual([]);
   });
 
   it('Chapter X is registered by id, reachable, and not listed (no chapter-select card)', () => {

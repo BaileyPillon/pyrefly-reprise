@@ -28,11 +28,15 @@
  *    it** (`ffx-seymour-flux.md` §7.3, C-11). Yuna's earlier "lower half of the
  *    Gagazet row" rule (§6.2) is superseded by the same pick: the Gagazet row
  *    is its top end. Like Chapter IX, the party is, if anything, a little
- *    strong for this point, and the bench says so. **One cell inverts:**
- *    Rikku's MP (and max MP) is Gagazet's 115, below Chapter VIII's 130
- *    (`fahrenheit.ts`, the stated lower bound), so for that cell alone the
- *    "upper bound" sits under the lower one. Kept as copied (no source settles
- *    it; the pick was "the cells Chapter IX ships"), disclosed for Bailey.
+ *    strong for this point, and the bench says so. **One cell is pinned, not
+ *    copied: Rikku's MP.** Gagazet's cell is 115, below Chapter VIII's 130
+ *    (`fahrenheit.ts`, the stated lower bound) — the only cell where the
+ *    "upper bound" sits under the lower one. Commit 186f13dd disclosed and
+ *    pinned the inversion at Gagazet's 115; **Bailey, 2026-09-24 ~20:00 EDT
+ *    ("I'll go with your recommendation"), picked Chapter VIII's 130
+ *    instead**, so Rikku's MP and max MP are carried from `fahrenheit.ts`,
+ *    not copied from `gagazet.ts` (`pinRikkuMp`). Every other cell, for every
+ *    member, is still the Gagazet copy.
  * 2. **Only the stats move.** Lists, gear, gauges, line-up, aeons and bag stay
  *    what rules 3 and 4 and Bailey's B2 to B5 below make them; nothing Gagazet
  *    teaches or sells comes with the stats.
@@ -138,6 +142,22 @@ const party = (id: string): FFXMemberBuild => atTheTop(fahrenheitBuild, id);
 /** Yuna carries Chapter VII's kit: Chapter VIII had no Yuna (rules 3 and 4, B4). */
 const yuna = (): FFXMemberBuild => atTheTop(macalaniaBuild, 'yuna');
 
+/**
+ * Rule 1's one exception. `atTheTop` copies Rikku's MP from the Gagazet
+ * preset (115), which sits under Chapter VIII's 130 (`fahrenheit.ts`, the
+ * stated lower bound) — commit 186f13dd disclosed and pinned that inversion.
+ * Bailey, 2026-09-24 ~20:00 EDT ("I'll go with your recommendation"), picked
+ * Chapter VIII's 130 instead, so this carries it forward in place of the
+ * Gagazet copy. Every other stat cell is untouched.
+ */
+function pinRikkuMp(m: FFXMemberBuild): FFXMemberBuild {
+  const low = member(fahrenheitBuild, 'rikku');
+  m.stats.mp = low.stats.mp;
+  m.stats.maxMp = low.stats.mp;
+  m.mp = low.stats.mp;
+  return m;
+}
+
 function aeons(): FFXPartyBuild['aeons'] {
   const early = macalaniaBuild.aeons.map((a) => structuredClone(a));
   const bahamut = gagazetBuild.aeons.find((a) => a.id === 'bahamut');
@@ -147,8 +167,9 @@ function aeons(): FFXPartyBuild['aeons'] {
 
 export const highbridgeBuild: FFXPartyBuild = {
   game: 'ffx',
-  // Rule 1: every stat cell is the Gagazet preset's, `[estimate]` as there.
-  members: [party('tidus'), yuna(), party('kimahri'), party('auron'), party('wakka'), party('lulu'), party('rikku')],
+  // Rule 1: every stat cell is the Gagazet preset's, `[estimate]` as there,
+  // except Rikku's MP, pinned to Chapter VIII's 130 (`pinRikkuMp`, Bailey 2026-09-24).
+  members: [party('tidus'), yuna(), party('kimahri'), party('auron'), party('wakka'), party('lulu'), pinRikkuMp(party('rikku'))],
   // B2 = a: Tidus, Yuna, Kimahri (`forced_party "tyk"`, N-11).
   activeSlots: ['tidus', 'yuna', 'kimahri'],
   reserve: ['auron', 'wakka', 'lulu', 'rikku'],
