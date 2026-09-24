@@ -536,6 +536,33 @@
     "sha256": "521ca575c6de1288efef64a9059aa288ac217f75f3f569e0f22da8c2cfd5fe47",
     "mtime": "2026-09-23T18:12:09.947Z"
    }
+  },
+  "chapter:evrae:2026-09-23": {
+   "words": "I'll go with your recommendations let's get to work",
+   "public/art/backdrops/evrae-airship-deck.png": {
+    "sha256": "2679b8ef3cd92422cc0f5e4d90e8b36c9e84900637068459698afad1b9893ea7",
+    "mtime": "2026-09-23T16:36:03.868Z"
+   },
+   "public/art/characters/evrae/idle-near.png": {
+    "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
+    "mtime": "2026-09-22T20:39:50.756Z"
+   },
+   "public/art/characters/evrae/idle-far.png": {
+    "sha256": "108a32522361529ff12baa11bb1a1f63c049402fc6b6260421d8cea5a0588f3e",
+    "mtime": "2026-09-22T20:39:50.796Z"
+   },
+   "public/art/characters/evrae/breath-charge.png": {
+    "sha256": "55ce9c754a263db5a1e1d4dc871b57e914d872632f6383012b76c50786375934",
+    "mtime": "2026-09-23T18:09:30.554Z"
+   },
+   "public/art/characters/evrae/hurt.png": {
+    "sha256": "f66990126b12904a9812a78bd91d1d358b2b07db4dced2f2154b9784f7767529",
+    "mtime": "2026-09-23T17:17:20.930Z"
+   },
+   "public/art/characters/evrae/idle.png": {
+    "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
+    "mtime": "2026-09-22T20:39:50.946Z"
+   }
   }
  }
 }
