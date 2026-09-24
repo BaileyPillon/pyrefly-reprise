@@ -17,6 +17,7 @@ import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/type
 import { FFXEngine } from '../../battle/ffx/index.ts';
 import { FFX2Engine, type AtbMode, type AtbSpeed } from '../../battle/ffx2/index.ts';
 import { readSetting } from '../SaveData.ts';
+import { waitSplitFromUrl } from '../waitSplitSwitch.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { FFXBattleHud } from '../../ui/ffx/FFXBattleHud.ts';
 import { FFX2BattleHud } from '../../ui/ffx2/FFX2BattleHud.ts';
@@ -98,23 +99,8 @@ export function applyAtbMode(engine: BattleEngine | null): void {
   if (split !== null) x2?.setWaitSplit?.(split);
 }
 
-/**
- * `?wait=split` / `?wait=hold`: force Wait's faithful split (the clock runs at
- * the top-level command list, holds in a submenu or the target cursor;
- * `research/ffx2-combat-core.md` §1.5; the default since D-029 follow-up 2)
- * or the old whole-menu hold on any build, to compare the two. Anything else
- * (or no parameter) keeps the engine default, `DEFAULT_WAIT_SPLIT`. A URL
- * switch for a decision, not a setting: it is read at chapter start and at
- * every pause close, never saved. FFX-2 only (FFX has no `setWaitSplit`).
- */
-export function waitSplitFromUrl(search: string = globalThis.location?.search ?? ''): boolean | null {
-  try {
-    const v = new URLSearchParams(search).get('wait');
-    return v === 'split' ? true : v === 'hold' ? false : null;
-  } catch {
-    return null;
-  }
-}
+// `?wait=split` / `?wait=hold`: `app/waitSplitSwitch.ts` (the coach reads it too).
+export { waitSplitFromUrl };
 
 /** FFX-2's Config "ATB Mode and Speed", both halves: {@link applyAtbMode} and {@link applyAtbSpeed}. */
 export function applyAtbConfig(engine: BattleEngine | null): void {

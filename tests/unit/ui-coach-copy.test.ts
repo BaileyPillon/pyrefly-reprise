@@ -16,11 +16,14 @@ import {
   ALL_MARKS,
   BRIEFING_LINES,
   BRIEFING_MS,
+  BRIEFING_HOLD_LINE,
   BRIEFING_WAIT_LINE,
   COACH_RUNNING_BADGE_ACTIVE,
+  COACH_RUNNING_BADGE_HOLD,
   COACH_RUNNING_BADGE_WAIT,
   coachRunningBadge,
   FFX2_GAUGE_BODY_ACTIVE,
+  FFX2_GAUGE_BODY_HOLD,
   FFX2_GAUGE_BODY_WAIT,
   ffx2GaugeBody,
   FFX2_MARKS,
@@ -33,12 +36,13 @@ import {
 /** Every word a player can read in the whole feature. */
 function everyPlayerString(): string[] {
   const out: string[] = [];
-  for (const l of [...BRIEFING_LINES, BRIEFING_WAIT_LINE]) out.push(l.lead, l.strong, l.tail);
+  for (const l of [...BRIEFING_LINES, BRIEFING_WAIT_LINE, BRIEFING_HOLD_LINE]) out.push(l.lead, l.strong, l.tail);
   for (const m of ALL_MARKS) out.push(m.speaker, m.body);
-  out.push(FFX2_GAUGE_BODY_WAIT);
+  out.push(FFX2_GAUGE_BODY_WAIT, FFX2_GAUGE_BODY_HOLD); // hold: the ?wait=hold switch only
   // Strip the badges' HTML entities before the vocabulary grep (they are markup,
   // not player-facing spelling) but still catch a stray research id or acronym.
   out.push(COACH_RUNNING_BADGE_ACTIVE.replace(/&\w+;/g, ' '), COACH_RUNNING_BADGE_WAIT.replace(/&\w+;/g, ' '));
+  out.push(COACH_RUNNING_BADGE_HOLD.replace(/&\w+;/g, ' '));
   return out.filter((s) => s.length > 0);
 }
 

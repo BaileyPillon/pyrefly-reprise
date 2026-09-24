@@ -63,7 +63,7 @@ import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
-import { ffx2AtbMode, markSeen, shouldShow } from './coachState.ts';
+import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
 /**
@@ -95,11 +95,11 @@ export interface CoachLayerOptions {
   /**
    * FFX-2's ATB clock mode, for `ffx2-gauge`'s mode-aware body (see
    * `chooseCommand`'s `withResolvedBody`). Defaults to the save's own
-   * `ffx2AtbMode()`; injectable so a unit test can pick 'active' without
-   * constructing a `SaveStore` — this file's own tests assume `activeSave()`
-   * stays null throughout.
+   * `ffx2CoachClock()` ('hold' is `?wait=hold`); injectable so a unit test
+   * can pick 'active' without a `SaveStore` — this file's own tests assume
+   * `activeSave()` stays null throughout.
    */
-  ffx2AtbMode?: 'active' | 'wait';
+  ffx2AtbMode?: 'active' | 'wait' | 'hold';
 }
 
 /**
@@ -323,7 +323,7 @@ class CoachedHud implements HudPort {
    */
   private withResolvedBody(mark: CoachMarkDef): CoachMarkDef {
     if (mark.id !== 'ffx2-gauge') return mark;
-    return { ...mark, body: ffx2GaugeBody(this.opts.ffx2AtbMode ?? ffx2AtbMode()) };
+    return { ...mark, body: ffx2GaugeBody(this.opts.ffx2AtbMode ?? ffx2CoachClock()) };
   }
 
   /**

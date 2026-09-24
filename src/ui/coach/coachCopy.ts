@@ -110,9 +110,31 @@ export const BRIEFING_WAIT_LINE: BriefingLine = {
   tail: '. A list stops it.”',
 };
 
-/** The four lines for the player's X-2 clock: Bailey's words under Active, the Wait line under Wait. */
-export function briefingLines(ffx2Atb: 'active' | 'wait'): readonly BriefingLine[] {
-  return ffx2Atb === 'active' ? BRIEFING_LINES : [...BRIEFING_LINES.slice(0, 3), BRIEFING_WAIT_LINE];
+/**
+ * The X-2 clock the coach's words must be true of (`coachState.ffx2CoachClock`):
+ * Active, Wait's split (the default), or `'hold'`, Wait forced back to the old
+ * whole-menu hold by the `?wait=hold` comparison switch (`app/waitSplitSwitch.ts`).
+ * Bailey's three Wait lines (D-121) say the top-level list runs, which is false
+ * under the hold, so the hold shows the pre-split Wait lines, which were written
+ * for exactly that clock. Only a URL switch reaches `'hold'`; no player does.
+ */
+export type Ffx2CoachClock = 'active' | 'wait' | 'hold';
+
+/**
+ * The fourth line under `?wait=hold`: the Wait line this build shipped before the
+ * split (D-029 follow-up 3, the agent's draft, never Bailey's pick), true of the
+ * old hold, where nothing moves while any command menu is open.
+ */
+export const BRIEFING_HOLD_LINE: BriefingLine = {
+  lead: 'In hers, ',
+  strong: 'the clock holds while you choose',
+  tail: '.”',
+};
+
+/** The four lines for the player's X-2 clock: Bailey's words under Active, his Wait line under Wait. */
+export function briefingLines(clock: Ffx2CoachClock): readonly BriefingLine[] {
+  if (clock === 'active') return BRIEFING_LINES;
+  return [...BRIEFING_LINES.slice(0, 3), clock === 'hold' ? BRIEFING_HOLD_LINE : BRIEFING_WAIT_LINE];
 }
 
 /** How long the briefing runs if nobody touches anything, in milliseconds. */
@@ -141,10 +163,13 @@ export const BRIEFING_MS = 20_000;
  */
 export const COACH_RUNNING_BADGE_ACTIVE = 'Nothing paused &middot; gauges running';
 export const COACH_RUNNING_BADGE_WAIT = 'Gauges running &middot; a list holds them';
+/** Under `?wait=hold` only: the pre-split Wait badge (the agent's draft), true of the old hold. */
+export const COACH_RUNNING_BADGE_HOLD = 'Menu&rsquo;s up &middot; gauges holding';
 
-/** The FFX-2 running badge for the save's current clock mode. */
-export function coachRunningBadge(ffx2Atb: 'active' | 'wait'): string {
-  return ffx2Atb === 'active' ? COACH_RUNNING_BADGE_ACTIVE : COACH_RUNNING_BADGE_WAIT;
+/** The FFX-2 running badge for the clock in force ({@link Ffx2CoachClock}). */
+export function coachRunningBadge(clock: Ffx2CoachClock): string {
+  if (clock === 'active') return COACH_RUNNING_BADGE_ACTIVE;
+  return clock === 'hold' ? COACH_RUNNING_BADGE_HOLD : COACH_RUNNING_BADGE_WAIT;
 }
 
 /**
@@ -206,14 +231,21 @@ export const FFX_MARKS: readonly CoachMark[] = [
  */
 export const FFX2_GAUGE_BODY_ACTIVE = "“Bar's full, she's up — don't wait for me, we all go at once!”";
 export const FFX2_GAUGE_BODY_WAIT = "“Bar's full, she's up! Open a list and take your time, nobody moves.”";
+/**
+ * Under `?wait=hold` only: Bailey's D-030 Wait pick, verbatim, which he chose
+ * for the old whole-menu hold and which is true of it (nobody moves while any
+ * menu is open, the top-level list included).
+ */
+export const FFX2_GAUGE_BODY_HOLD = "“Bar's full, she's up! Take your time, nobody moves while you're picking.”";
 
 /**
  * `ffx2-gauge`'s body for the save's current clock mode — the only line in
  * the deck whose text itself changes with the mode; every other mark's body
  * is fixed. Mirrors {@link briefingLines} and {@link coachRunningBadge}.
  */
-export function ffx2GaugeBody(ffx2Atb: 'active' | 'wait'): string {
-  return ffx2Atb === 'active' ? FFX2_GAUGE_BODY_ACTIVE : FFX2_GAUGE_BODY_WAIT;
+export function ffx2GaugeBody(clock: Ffx2CoachClock): string {
+  if (clock === 'active') return FFX2_GAUGE_BODY_ACTIVE;
+  return clock === 'hold' ? FFX2_GAUGE_BODY_HOLD : FFX2_GAUGE_BODY_WAIT;
 }
 
 /**

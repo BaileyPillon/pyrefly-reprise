@@ -26,7 +26,8 @@
  */
 
 import { activeSave, readSetting } from '../../app/SaveData.ts';
-import { ALL_COACH_IDS, type CoachMarkId } from './coachCopy.ts';
+import { waitSplitInForce } from '../../app/waitSplitSwitch.ts';
+import { ALL_COACH_IDS, type CoachMarkId, type Ffx2CoachClock } from './coachCopy.ts';
 
 /**
  * Ids shown in this browsing session when there is no save file behind us.
@@ -148,6 +149,18 @@ export function battleHelpOn(): boolean {
  */
 export function ffx2AtbMode(): 'active' | 'wait' {
   return readSetting('ffx2Atb') === 'active' ? 'active' : 'wait';
+}
+
+/**
+ * Which of the three X-2 clocks the coach's words must be true of: `'active'`,
+ * `'wait'` (Wait's split, the default: the clock runs at the top-level list and
+ * holds in a list or while aiming) or `'hold'` (Wait with `?wait=hold`, the old
+ * whole-menu hold, where the top-level list holds too). Read at show time, like
+ * {@link ffx2AtbMode}. FFX-2 only in meaning.
+ */
+export function ffx2CoachClock(): Ffx2CoachClock {
+  if (ffx2AtbMode() === 'active') return 'active';
+  return waitSplitInForce() ? 'wait' : 'hold';
 }
 
 /** Write the player's own switch. Persists immediately. */

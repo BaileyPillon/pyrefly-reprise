@@ -51,7 +51,7 @@ import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
 import { BRIEFING_MS, BRIEFING_SPEAKER, briefingLines } from './coachCopy.ts';
-import { ffx2AtbMode, markSeen, setBattleHelp } from './coachState.ts';
+import { ffx2CoachClock, markSeen, setBattleHelp } from './coachState.ts';
 
 /** How the briefing ended. */
 export type BriefingOutcome = 'finished' | 'skipped' | 'never-again';
@@ -245,12 +245,13 @@ export class Briefing {
 
   /**
    * The four lines, for the X-2 clock the save holds **now** (D-029 follow-up 3):
-   * Bailey's approved fourth line under ACTIVE, the Wait line under WAIT.
+   * Bailey's approved fourth line under ACTIVE, his Wait line under WAIT (the
+   * pre-split line under the `?wait=hold` switch, `coachCopy.Ffx2CoachClock`).
    */
   private renderLines(): void {
     const box = this.el.querySelector<HTMLElement>('[data-role="coach-brief-lines"]');
     if (!box) return;
-    box.innerHTML = briefingLines(ffx2AtbMode())
+    box.innerHTML = briefingLines(ffx2CoachClock())
       .map(
         (l) =>
           `<div class="coach-brief__line">${escapeHtml(l.lead)}` +
