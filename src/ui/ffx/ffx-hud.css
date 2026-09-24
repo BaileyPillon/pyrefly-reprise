@@ -60,6 +60,23 @@
   z-index: 37;
 }
 
+/* Promoting the whole stage (above) is what lets it escape `.ffxhud`'s
+   context-less wrapper, but every other stage child rides along with it —
+   the guide rail (`.sgd`), the move advisor (`.mad`), the command
+   description (`.ffx-cmd-info`), the CTB list, party status, sensor panel
+   and telegraph banner all painted over the approved cut-in portrait (round
+   03 verifier, `docs/screenshots/phase2/verify-ui-story/cutin-*-A-hold.png`),
+   and the ones among them `.pf-mom` normally dims lost that veil entirely.
+   The approved mockup (`docs/concepts/layout/pr-0005-ffx/b-under.png`) shows
+   only the live command cascade redrawn on top, with everything else parked
+   under the slab as it already was pre-fix — so hide every other direct
+   child of the promoted stage for exactly the same lifetime the modifier is
+   on. `.ffx-cmd-area` is the one exemption: it is the cascade
+   (ATTACK/SPECIAL/WHITE MAGIC/ITEMS/FLEE, `FFXBattleHud.ts`'s `cmdArea`). */
+.ffxhud--cutin-below .ffxhud__stage > *:not(.ffx-cmd-area) {
+  visibility: hidden;
+}
+
 /* An unscaled sibling layer for screen-space elements (damage numbers, target
    cursors) positioned directly from the presenter's projector callback. */
 .ffxhud__overlay {

@@ -1,0 +1,36 @@
+{
+  "chapter": "seymour-flux",
+  "w": 1920,
+  "h": 1080,
+  "before": {
+    "hasModifier": true,
+    "cutinPresent": true,
+    "stageZ": "37",
+    "cmdVisibility": "visible",
+    "guideVisibility": "hidden",
+    "advisorVisibility": "hidden",
+    "infoVisibility": "hidden",
+    "selectedRow": null
+  },
+  "afterArrow": {
+    "hasModifier": true,
+    "cutinPresent": true,
+    "stageZ": "37",
+    "cmdVisibility": "visible",
+    "guideVisibility": "hidden",
+    "advisorVisibility": "hidden",
+    "infoVisibility": "hidden",
+    "selectedRow": null
+  },
+  "afterHold": {
+    "hasModifier": false,
+    "cutinPresent": false,
+    "stageZ": "auto",
+    "cmdVisibility": "visible",
+    "guideVisibility": "visible",
+    "advisorVisibility": "visible",
+    "infoVisibility": "visible",
+    "selectedRow": null
+  },
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}
