@@ -1,0 +1,186 @@
+/*
+ * PR-0150, the HUD half: the TARGET plate, the actor plate and the controls
+ * hint of the approved Targeting s3 tile
+ * (`docs/concepts/targeting/b-ring-and-dim/s3.png`). FFX-2 only; mounted by
+ * `TargetPlates.ts` into `.ffx2hud__plates`, so every length is on the 640x360
+ * grid (divide a 1920x1080 measurement off the tile by 3). Where the plates
+ * go is solved per frame in `targetPlateGeometry.ts`; this file only draws.
+ *
+ * `.ffx2hud__plates` is a second grid layer, transformed exactly like
+ * `.ffx2hud__stage` (`FFX2BattleHud.layout`) but stacked above the overlay, so
+ * the six-petal reticle (on the overlay) never paints over a plate.
+ */
+.ffx2hud__plates {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.ffx2-tplates {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 640px;
+  height: 0;
+  pointer-events: none;
+}
+.ffx2-tplates[hidden],
+.ffx2-ctlhint[hidden],
+.ffx2-tplate__tag[hidden],
+.ffx2-aplate[hidden],
+.ffx2-aplate__job[hidden],
+.ffx2-tplate--off {
+  display: none !important;
+}
+
+/* ---- the TARGET plate: paper slab, pink edge, `TARGET` / name / `PART` */
+.ffx2-tplate,
+.ffx2-aplate {
+  position: absolute;
+  top: 22px;
+  height: 17px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  background: var(--ig-paper, #f4f1e8);
+  color: var(--ig-ink, #0b0a12);
+  box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.45);
+  transform: skewX(var(--ig-skew, 12deg));
+}
+.ffx2-tplate > *,
+.ffx2-aplate > * {
+  transform: skewX(var(--ig-skew-inverse, -12deg));
+}
+.ffx2-tplate {
+  padding: 0 7px 0 8px;
+  border-left: 2px solid var(--ig-accent, #f7b6d9);
+}
+.ffx2-tplate__label {
+  flex: none;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5px; /* 14 @1080, the tile's */
+  letter-spacing: 0.24em;
+  color: var(--ig-accent-on-paper, #b8437e);
+}
+.ffx2-tplate__name,
+.ffx2-aplate__name {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.05;
+}
+.ffx2-tplate__name {
+  font-size: 10px; /* 30 @1080 */
+}
+.ffx2-tplate__tag,
+.ffx2-aplate__job {
+  flex: none;
+  padding: 1.5px 3px;
+  background: var(--ig-ink, #0b0a12);
+  color: var(--ig-accent, #f7b6d9);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5px;
+  letter-spacing: 0.22em;
+  line-height: 1;
+}
+
+/* ---- the actor plate: the girl whose command it is, and her dressphere */
+.ffx2-aplate {
+  padding: 0 6px 0 8px;
+  border-bottom: 1.5px solid var(--ig-accent, #f7b6d9);
+}
+.ffx2-aplate__name {
+  font-size: 11px;
+}
+
+/* ---- the controls hint: ink strip, bottom centre */
+.ffx2-ctlhint {
+  position: absolute;
+  top: 345px;
+  left: 0;
+  height: 12px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+  border-top: 1px solid rgba(247, 182, 217, 0.35);
+  font-family: var(--ig-font-display);
+  font-weight: 600;
+  font-size: 5px;
+  letter-spacing: 0.18em;
+  color: rgba(244, 241, 232, 0.62);
+  pointer-events: none;
+}
+.ffx2-ctlhint__key b {
+  font-weight: 700;
+  color: var(--ig-paper, #f4f1e8);
+}
+
+/* Measuring: natural widths with every placement constraint lifted. */
+.ffx2-tplates--measure .ffx2-tplate,
+.ffx2-tplates--measure .ffx2-aplate,
+.ffx2-ctlhint--measure {
+  width: max-content !important;
+  left: 0 !important;
+}
+
+/*
+ * A portrait letterbox (390x844 scales the grid by 0.61): the row moves into
+ * the bar above the stage, stacked on the help band (`--tp-above`, the band's
+ * height), and the hint into the bar below it; both zoomed back up by
+ * `--tp-zoom` so their smallest text is at least 11 real px. The same move the
+ * help band makes (`commandHelpBand.ts`), for the same reason.
+ */
+.ffx2-tplates--bar {
+  top: auto;
+  bottom: calc(100% + var(--tp-above, 0px));
+  width: calc(640px / var(--tp-zoom, 1));
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2px 6px;
+  padding: 0 4px 2px;
+  box-sizing: border-box;
+  transform: scale(var(--tp-zoom, 1));
+  transform-origin: bottom left;
+}
+.ffx2-tplates--bar .ffx2-tplate,
+.ffx2-tplates--bar .ffx2-aplate {
+  position: static;
+  max-width: 100%;
+}
+/* The tile keeps the actor plate on the right; when the row wraps, so does this. */
+.ffx2-tplates--bar .ffx2-aplate {
+  margin-left: auto;
+}
+.ffx2-ctlhint--bar {
+  top: calc(100% + 2px);
+  left: 0;
+  width: calc(640px / var(--tp-zoom, 1));
+  height: auto;
+  min-height: 12px;
+  flex-wrap: wrap;
+  row-gap: 1px;
+  padding: 2px 6px;
+  transform: scale(var(--tp-zoom, 1));
+  transform-origin: top left;
+}

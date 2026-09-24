@@ -45,7 +45,9 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
-import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, type BandInput } from './commandHelpBand.ts';
+import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
+import { TargetPlates, targetPlateText } from './TargetPlates.ts';
+import type { GridRect } from './targetPlateGeometry.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -139,6 +141,9 @@ const ADVISOR_BOTTOM = 26;
  */
 const SKEW_TANGENT = Math.tan((12 * Math.PI) / 180);
 
+/** PR-0150: the target-select plates, which the intent slab steers around with a margin. */
+const PLATE_SELECTORS: ReadonlySet<string> = new Set(['.ffx2-tplate', '.ffx2-aplate', '.ffx2-ctlhint']);
+
 function isAtbSnapshot(p: TurnPreview[] | AtbSnapshot): p is AtbSnapshot {
   return !Array.isArray(p);
 }
@@ -192,6 +197,10 @@ export class FFX2BattleHud implements HudPort {
    */
   private readonly revealed = new Set<CombatantId>();
   private readonly damage = new DamageLayer();
+  /** PR-0150: the s3 tile's TARGET plate, actor plate and controls hint (`TargetPlates.ts`). FFX-2 only. */
+  private readonly plates = new TargetPlates();
+  /** A second 640x360 layer over the overlay, so the reticle's petals never paint over the plates. */
+  private platesLayer!: HTMLElement;
   /**
    * The optional strategy guide (`src/ui/common/StrategyGuide.ts`).
    *
@@ -336,8 +345,12 @@ export class FFX2BattleHud implements HudPort {
     this.overlay = document.createElement('div');
     this.overlay.className = 'ffx2hud__overlay';
 
+    this.platesLayer = document.createElement('div');
+    this.platesLayer.className = 'ffx2hud__plates';
+
     this.el.appendChild(this.stage);
     this.el.appendChild(this.overlay);
+    this.el.appendChild(this.platesLayer);
     root.appendChild(this.el);
 
     this.enemyEl = this.stage.querySelector('.ffx2hud__enemies') as HTMLElement;
@@ -361,6 +374,7 @@ export class FFX2BattleHud implements HudPort {
     // chrome and its anchors' `offsetTop` are in the same 640x360 grid.
     this.guide.mount(this.stage);
     this.advisor.mount(this.stage);
+    this.plates.mount(this.platesLayer);
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.stageScale,
@@ -385,6 +399,7 @@ export class FFX2BattleHud implements HudPort {
     this.intent.unmount();
     // Nothing the cursor lit may outlive the HUD that lit it.
     this.applySelection(null);
+    this.plates.unmount();
     this.el.remove();
     this.mounted = false;
   }
@@ -392,6 +407,7 @@ export class FFX2BattleHud implements HudPort {
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
   update(dt: number): void {
     this.layoutFences();
+    this.layoutPlates();
     this.damage.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
@@ -477,6 +493,10 @@ export class FFX2BattleHud implements HudPort {
       '.sgd__panel',
       '.sgd__toggle',
       '.ffx2-chain-chip',
+      // PR-0150: the target-select plates (`TargetPlates.ts`).
+      '.ffx2-tplate',
+      '.ffx2-aplate',
+      '.ffx2-ctlhint',
       // Not `.ffx2sc`: the spherechange wheel is a modal sized to the whole
       // overlay, so listing it would make every placement "covered" and send
       // the solver hunting for a spot that does not exist. It is *meant* to be
@@ -491,7 +511,14 @@ export class FFX2BattleHud implements HudPort {
         // hidden ancestor too. See the FFX twin.
         const r = el.getBoundingClientRect();
         if (r.width <= 0 || r.height <= 0) continue;
-        out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
+        // The PR-0150 plates keep a gap, and reach down by the slab's `E HIDE`
+        // chip: the solver places the slab's own box, and the chip rides above
+        // that box's top-right corner, so a slab parked right under a plate
+        // wore its chip across the plate.
+        const plate = PLATE_SELECTORS.has(selector);
+        const pad = plate ? 3 * (this.stageScale || 1) : 0;
+        const below = plate ? pad + this.intentChipHeight() : 0;
+        out.push({ left: r.left - pad, top: r.top - pad, right: r.right + pad, bottom: r.bottom + below });
       }
     }
     for (const box of this.fighterBoxes()) out.push(box);
@@ -504,6 +531,12 @@ export class FFX2BattleHud implements HudPort {
       if (bar) out.push(bar);
     }
     return out;
+  }
+
+  /** The intent slab's `E HIDE` chip height while the slab is up, in viewport px. */
+  private intentChipHeight(): number {
+    if (!this.intent.isVisible) return 0;
+    return this.el.querySelector<HTMLElement>('.eint__toggle')?.getBoundingClientRect().height ?? 0;
   }
 
   /**
@@ -759,6 +792,8 @@ export class FFX2BattleHud implements HudPort {
     // side takes the same precaution in `FFXBattleHud.sync`
     // (AGENTS.md rule 14: shared plumbing behind a defect, critic CHK-020).
     if (state.result) this.applySelection(null);
+    // ...and a decided battle keeps no command menu or reticle either: see `onEvent`'s victory case.
+    if (state.result && this.closeMenu) this.closeCommandMenu();
     this.lastState = state;
     this.guide.sync(state);
     this.advisor.sync(state);
@@ -881,7 +916,7 @@ export class FFX2BattleHud implements HudPort {
         if (id === actorId) return 'self';
         return this.lastState?.combatants[id]?.side === 'enemy' ? 'enemy' : 'ally';
       },
-      onSelection: (sel) => this.applySelection(sel),
+      onSelection: (sel, candidates) => this.applySelection(sel, candidates),
       onHelp: (label, text) => this.setCommandHelp(label, text),
       actorName: actor?.name ?? actorId,
       onPreview: (preview) => {
@@ -923,6 +958,17 @@ export class FFX2BattleHud implements HudPort {
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {
+    // FFX-2 only: under Active ATB the clock runs under an open menu, so a
+    // charged spell, a Poison tick or an enemy's own blow can end the fight
+    // while a girl is still choosing. The presenter only tears that menu down
+    // after the whole burst has played (`runActivePump` -> `abandon`), so the
+    // command stack, the reticle and the target plates stood through the last
+    // KO and the victory shot. The engine has already decided the battle when
+    // the burst starts playing, so the menu goes with the deciding KO (or the
+    // victory/defeat event itself, whichever the HUD sees first).
+    if (this.closeMenu && (event.type === 'victory' || event.type === 'defeat' || (event.type === 'ko' && this.lastState?.result))) {
+      this.closeCommandMenu();
+    }
     switch (event.type) {
       case 'atb':
         this.lastSnapshot = event.snapshot;
@@ -1007,7 +1053,7 @@ export class FFX2BattleHud implements HudPort {
    * Active/Wait indicator below, which is a real FFX-2 Config entry and has no
    * FFX equivalent — FFX's CTB simply waits.
    */
-  private applySelection(sel: CursorSelection | null): void {
+  private applySelection(sel: CursorSelection | null, candidates = 0): void {
     const ids = new Set(sel?.ids ?? []);
     const kind = sel?.kind ?? 'enemy';
 
@@ -1039,6 +1085,41 @@ export class FFX2BattleHud implements HudPort {
     // but never freezes.
     this.el.classList.toggle('ffx2hud--targeting-enemy', !!sel && kind === 'enemy');
     this.setActiveWaitVisible(!!sel);
+    // PR-0150: the s3 tile's TARGET plate, actor plate and controls hint.
+    if (sel) this.plates.show(targetPlateText(sel, candidates, this.lastState, this.actingId));
+    else this.plates.hide();
+    this.layoutPlates();
+  }
+
+  /**
+   * PR-0150: place the target-select plates for this frame, clear of the
+   * Active/Wait chip, the command window, the telegraph, the help band and
+   * the party column (`targetPlateGeometry.ts`). FFX-2 only.
+   */
+  private layoutPlates(): void {
+    if (!this.mounted || !this.plates.visible) return;
+    const host = this.el.getBoundingClientRect();
+    const scale = this.stageScale || 1;
+    const grid = (el: HTMLElement | null): GridRect | null => {
+      const r = el?.getBoundingClientRect();
+      if (!r || r.width <= 0 || r.height <= 0) return null;
+      const x = host.left + this.stageX;
+      const y = host.top + this.stageY;
+      return { left: (r.left - x) / scale, top: (r.top - y) / scale, right: (r.right - x) / scale, bottom: (r.bottom - y) / scale };
+    };
+    const bandShown = !!this.commandInfoEl && !this.commandInfoEl.hidden;
+    const bandInBar = bandShown && this.commandInfoEl.classList.contains('ffx2-cmd-info--bar');
+    const partyLeft = parseFloat(this.fenceColumnEl?.style.left ?? '');
+    this.plates.layout({
+      scale,
+      stageY: host.top + this.stageY,
+      chip: grid(this.activeWaitEl),
+      command: grid(this.commandEl),
+      telegraph: grid(this.telegraphEl),
+      bandBottom: bandShown && !bandInBar ? BAND_GRID_HEIGHT : 0,
+      bandBarHeight: bandInBar ? this.commandInfoEl.getBoundingClientRect().height / scale : 0,
+      partyLeft: Number.isFinite(partyLeft) ? partyLeft : null,
+    });
   }
 
   /**
@@ -1107,6 +1188,7 @@ export class FFX2BattleHud implements HudPort {
     this.stageX = x;
     this.stageY = y;
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+    this.platesLayer.style.transform = this.stage.style.transform;
     this.layoutFences();
     if (this.commandInfoEl && !this.commandInfoEl.hidden) this.placeCommandBand();
   }

@@ -176,8 +176,13 @@ export interface CommandMenuDeps {
   letterTagOf?: (id: CombatantId) => string | undefined;
   /** Which side a target is on, for the accent: pink/gold enemy, green ally. */
   kindOf?: (id: CombatantId) => 'enemy' | 'ally' | 'self';
-  /** Every change of selection, for the field's accent pool and quiet dim. */
-  onSelection?: (sel: CursorSelection | null) => void;
+  /**
+   * Every change of selection, for the field's accent pool and quiet dim.
+   * `candidates` is how many targets the pending command offers, so the
+   * PR-0150 controls hint can drop "change target" when there is nothing to
+   * step to (`TargetPlates.ts`).
+   */
+  onSelection?: (sel: CursorSelection | null, candidates: number) => void;
   /**
    * PR-0012: fed the highlighted row's label and help sentence every time the
    * selection changes; the FFX-2 HUD prints them in the top-of-screen slab
@@ -307,7 +312,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       const pt = deps.project(id);
       return pt ? { x: pt.x, y: pt.y, w: 0, h: 0 } : null;
     });
-    cursor.setOnSelection((sel) => deps.onSelection?.(sel));
+    cursor.setOnSelection((sel) => deps.onSelection?.(sel, sel ? targetIds.length : 0));
     cursor.setOnClick((id) => {
       if (view === 'target' && pending) finish(pending, groupMode ? targetIds : [id]);
     });
