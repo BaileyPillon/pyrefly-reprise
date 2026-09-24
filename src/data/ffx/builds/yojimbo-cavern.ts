@@ -31,12 +31,16 @@
  *    `gagazet.ts` applies).
  * 3. **Two Mega-Potions and the mountain's gil come off.** `gagazet.ts`'s
  *    inventory "includes the two Mega-Potions found on the mountain" and its
- *    gil "includes the 20,000 found on the mountain" (§7.8 [estimate]); the
+ *    gil "includes the 20,000 found on the mountain" (`ffx-seymour-flux.md`
+ *    §7.8 [estimate]; the pickups themselves are listed at the end of §7.7.2
+ *    [single source: wiki Mt. Gagazet page]); the
  *    Cavern comes before the mountain, so both are subtracted.
- * 4. **No Talk.** The Talk trigger is Seymour Flux's own line (§4.7); it has
+ * 4. **No Talk.** The Talk trigger is Seymour Flux's own line
+ *    (`ffx-seymour-flux.md` §4.7); it has
  *    no effect here, so the row is not offered.
  * 5. **Opening line-up Lulu, Kimahri, Yuna** — `[estimate]`, INFERRED, not
- *    Bailey's call yet: the formation forces no party (§2.5 `[decompiled]`).
+ *    Bailey's call yet: the formation forces no party (`ffx-yojimbo.md` §2.5
+ *    `[decompiled]`).
  *    Magic (Magic Defense 0 against Defense 80, §2.1), Doom, and the summoner
  *    whose aeons can stand in front of Zanmato (§5.3). Lulu leads because the
  *    fight is hers in the story (§5.2), which the research itself calls a
@@ -57,9 +61,9 @@ const LEARNED_ON_GAGAZET: readonly string[] = ['mighty-guard', 'white-wind'];
 /** Seymour Flux's Trigger Command [ffx-seymour-flux §4.7]; nothing to say here. */
 const FLUX_ONLY: readonly string[] = ['talk'];
 
-/** §7.8: the two Mega-Potions found on the mountain. */
+/** The two Mega-Potions found on the mountain [ffx-seymour-flux §7.7.2, §7.8]. */
 const MEGA_POTIONS_FOUND_ON_GAGAZET = 2;
-/** §7.8: the 20,000 gil found on the mountain. */
+/** The 20,000 gil found on the mountain [ffx-seymour-flux §7.7.2, §7.8]. */
 const GIL_FOUND_ON_GAGAZET = 20_000;
 
 function atTheCavern(member: FFXMemberBuild): FFXMemberBuild {

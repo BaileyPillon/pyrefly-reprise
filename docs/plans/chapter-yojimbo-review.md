@@ -439,3 +439,19 @@ The verifier confirmed all twelve items and raised two rule breaks and three fin
   data still names the player's aeon painting `yojimbo` where the installed candidate is
   `yojimbo-cavern` (`docs/concepts/chapters/yojimbo/INSTALLED.md`), and Auron's generic tip reads
   "He moves after you". Each of these is perceivable, so it waits for the scene and art integration.
+
+### Repair pass 2 (2026-09-24, after the app restart)
+
+- **Every verifier item and rule break was already repaired at `b5a17ffa`**, re-checked at `6c9c9244`:
+  `tsc` clean; the four Yojimbo test files pass (63 tests); every `.ts` file the track touched in `src` is
+  under 400 lines (`encounters.ts` 399, `state.ts` 398, `setup.ts` 398, `execute.ts` 335). Bench unchanged:
+  intended 200/200 in 18.7 turns, magic race 143/200, wrong 0/200.
+- **Citation made explicit.** `src/data/ffx/builds/yojimbo-cavern.ts` cited a bare "§7.8" for the two
+  Mega-Potions and the 20,000 gil. That section is in `research/ffx-seymour-flux.md` (the inventory table),
+  and the pickups themselves are listed at the end of its §7.7.2 [single source: wiki Mt. Gagazet page].
+  The comments now name the file and both sections. The numbers did not change.
+- **The rule 14 guide leak, re-measured on the engine** (a scratch test through `registerBattleContent`,
+  `setupForChapter` and `FFXEngine`, seed 1): Chapter IX `yojimbo-cavern` gets `guideForState` =
+  `ffx2-bahamut` and `tacticFor` = `ffx2Bahamut`, and so does Chapter X `seymour-natus`. The party's
+  aeon `bahamut` is in `state.combatants` from `init`, and neither chapter has an entry of its own. Still
+  in `src/engine/tactics` (not this track's files) and still a blocker for listing either chapter.
