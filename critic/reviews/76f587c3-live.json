@@ -1,0 +1,88 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-24T06:55:00.000Z",
+  "build": {
+    "mainSha": "76f587c3",
+    "bundle": "81kxOXnv",
+    "artifactHash": "b1924762cdc2ab4467d61b6f39c97f26cc37ac1f28e8fd59787ee2824ecd6a2a"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/76f587c3.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/d9decadb.json -> {result: PASS, liveManifest: match, checked: 64, mismatched: [], missing: [], wrongType: [], errors: []}",
+        "artifactHash b1924762cdc2ab4467d61b6f39c97f26cc37ac1f28e8fd59787ee2824ecd6a2a matches critic/artifacts/76f587c3.json and critic/pending/76f587c3.json's liveArtifact record"
+      ],
+      "game": "both",
+      "chapter": "all",
+      "state": "n/a (static asset identity)",
+      "automated": true,
+      "environment": "artifact-manifest.mjs against the public URL"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "window.__pyrefly.screen() polled and asserted before every screenshot and state-dependent action (title, chapter-select, cutscene, battle, pause, results)",
+        "window.__pyrefly.snapshotState().screenState.actors and .battle.combatants read to confirm the fight was real (6 live combatants for Leblanc: yuna/rikku/paine vs ormi-entrance/dr-goon/fem-goon) before judging its appearance",
+        "Lesson applied mid-run: a screenshot taken ~500ms-1s after screen()==='battle' showed an apparently empty stage (party silhouettes, no enemies) because the presenter stages actors asynchronously; polling screenState.actors.length confirmed it reaches 6 only after ~3s. Recaptured after that settle time before drawing any visual conclusion, exactly the CHK-016 failure mode this check exists to catch (harness impatience, not a product defect) -- documented in coverage/notTested below rather than silently discarded",
+        "PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA GeForce RTX 5070 Ti confirmed via UNMASKED_RENDERER_WEBGL) used for the primary run; the browser process crashed (GPU contention from ~39 unrelated Chrome windows already on this shared machine, not a page error -- 0 console/page errors logged) partway through the pause and Chapter III passes, and a swiftshader fallback (--use-angle=swiftshader) was used once for those two remaining captures, as the task's fallback instruction allows; disclosed here rather than silently swapped in"
+      ],
+      "game": "both",
+      "chapter": "VI (Leblanc), V (Vegnagun/Shuyin), VIII (Evrae), II/III (aftermath)",
+      "state": "title, chapter-select, cutscene (dialogue), battle command menu, pause (tab cycle, hide/restore), results/aftermath",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti) for boot/chapter-select/Ch.VI/Ch.VIII/Ch.III; swiftshader fallback for the pause tabs and one Ch.III audio recheck after a GPU-contention crash, 1600x900, fresh browser context per section, cache-busting query"
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": [
+        "Lightweight reload smoke: seed 7 run of Chapter I (seymour-flux) recorded to the save (attempts: 1, playTimeMs: 5016.5, settings incl. ffx2Atb: wait / ffx2AtbMigrated: true) in localStorage key pyrefly-reprise:save:v1; a full page reload of the live URL produced the byte-identical save blob back (settingSurvived: true).",
+        "Caveat: the setting deliberately changed for this pass (window.__pyrefly.setMuted(true), a runtime-only audio flag) does not live in the save blob, so its own persistence was not exercised by this comparison -- the save's own settings/progress fields were what was proven to survive the reload, not the mute flag. Recorded honestly rather than claimed as a stronger result than it is."
+      ],
+      "game": "both",
+      "chapter": "1 (seymour-flux)",
+      "state": "battle end (seed 7) -> reload",
+      "automated": true,
+      "environment": "Playwright, single tab, live URL, localStorage read before/after a real page.reload()"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact identity: full manifest (64 files) diffed against the previous live build (d9decadb), 0 mismatches/missing/wrong-type",
+      "Title -> real double Enter -> chapter select: Chapter VII (Seymour and Anima at Macalania) is still a locked COMING card; Chapter VIII (Evrae) is not in the coming list (playable)",
+      "Chapter VI (Leblanc): Brother's FFX-2 comm portrait (art/portraits/brother-x2.png) shown and visible in the dialogue card during the real cutscene, stepped through with real Enter presses (falling back to the debug advanceCutscene() step only on lines a bare Enter did not advance); Dr. Goon, Fem-Goon and Ormi confirmed as painted battle actors (not silhouettes), facing the party, once the stage had settled (~3s after entering battle) -- see docs-equivalent evidence at D:/Tools/pyrefly-scratch/live12/13-ch6-after-waits.png; the command help band (top strip, 'ATTACK / Physical damage') and the party HP rows (bottom-right) occupy visually separate regions with no overlap in that same capture (visual check; a DOM bounding-box measurement was attempted but the selectors tried did not match this build's class names, so the overlap claim rests on the screenshot, not a measured rect -- see notTested)",
+      "Chapter V (Vegnagun/Shuyin): Nooj's dialogue portrait (art/portraits/nooj.png) shown and visible in the dialogue card during the real cutscene",
+      "Pause on FFX-2 (opened live, mid Chapter V battle) with a real Escape: screen() -> 'pause'; the Yuna and Paine tabs were reached with real ArrowRight presses and screenshotted at 1600x900 -- both show the stats/meta columns clear of the character's face (Yuna's face sits right of her columns, Paine's face sits left of hers; the layout mirrors chrome placement to the framing side, matching the plates.ts design intent read from source) -- D:/Tools/pyrefly-scratch/live12/06-pause-yuna.png, 07-pause-paine.png",
+      "Real H key hides all pause panels (screenshot shows only the 'H SHOW PANELS / ESC RESUME' hint remaining) and a second H restores them; real Escape resumes to 'battle'",
+      "Chapter VIII (Evrae): battle reached victory; network requests for */art/characters/*/ko.png were logged for the whole run and none named evrae -- only the party's own KO portraits (from members downed mid-fight) were requested, confirming Evrae's defeat never fetches or shows a KO painting, consistent with departurePoses() in src/engine/BattlePresenterDepartures.ts mapping evrae to 'falls-away'",
+      "Chapter III (Braska's Final Aeon) reached the post-battle scene (screen() -> 'cutscene', the real aftermath, cutscenes not skipped) with window.__pyrefly.audioDebug() read at that moment: playing === null and music.current === null -- no track, victory or otherwise, is sounding under the aftermath",
+      "Console errors and network responses >= 400 counted across every section of the consolidated run: 0 and 0",
+      "CHK-024 lightweight reload smoke as described above"
+    ],
+    "reused": [],
+    "notTested": [
+      "Chapters other than VI, V, VIII, III/I this pass -- Yunalesca, Bahamut were not re-verified live",
+      "A DOM-measured (as opposed to visual) bounding-box check that the FFX-2 command help band never overlaps the party rows across other states/resolutions; only the one Chapter VI capture was inspected, and by eye rather than by measured rects",
+      "The full save/settings upgrade matrix beyond the one lightweight reload smoke the task asked for; a setting that actually lives in the save (e.g. masterVolume) was not the one flipped, since setMuted() turned out to be a runtime-only flag -- a repeat with a save-backed setting (e.g. via the OPTIONS pause tab) would be a stronger CHK-024 pass",
+      "Physical controller and Safari/real-device input",
+      "Combat correctness/balance beyond reaching a real command menu and letting autoBattle resolve each fight",
+      "A photographic capture of Evrae's actual fall animation frame (only the KO-asset-never-requested evidence and the design source were checked, not a mid-fall screenshot)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 80,
+  "issues": []
+}
