@@ -287,6 +287,13 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * on a 65% line over forty samples does not flake it. Any regression toward
    * the coin-flip this used to be — **0** of 40 before the tactic existed —
    * fails here first.
+   *
+   * **The bar moves back 25 -> 22 on 2026-09-24 (combat-fixes-0924 (d), FFX only).** Poison carrying
+   * Seymour below 50 % no longer opens phase 2 [ffx-seymour-flux §4.3: "HP loss came from Poison |
+   * No threshold reaction, no pattern change"], so the free self-Flares the old HP-read phase handed
+   * the party are gone: 26 -> 23 of these forty (seeds 8, 11, 17 and 33 lost, 12 won), 227 -> 214 of
+   * seeds 1-400. Every changed seed is a Poison-crossing run. Bailey approved the fix knowing it moves
+   * difficulty; nothing on the boss was tuned (`docs/plans/combat-fixes-0924-review.md` §8).
    */
   it('wins the great majority of forty contiguous seeds', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
@@ -297,7 +304,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left at turn ${x.r.turns}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 1 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(25);
+    expect(wins, 'Chapter 1 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(22);
   }, 120_000);
 
   /**

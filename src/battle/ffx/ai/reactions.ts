@@ -15,7 +15,7 @@ import { type Ctx, isAlive, rtOf, tryActor } from '../state.ts';
 import { mortibsorption } from '../scripted.ts';
 import { activeScriptId } from './index.ts';
 import { aiContextFor } from './types.ts';
-import { seymourDelayCounter, seymourThresholdCounters } from './seymour-flux.ts';
+import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './seymour-flux.ts';
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { collectEvraeCounters } from './evrae-counters.ts';
 import { yunalescaCounter } from './yunalesca.ts';
@@ -83,6 +83,9 @@ export function collectBossCounters(
     const enemy = tryActor(ctx, id);
     if (!enemy || enemy.side !== 'enemy') continue;
     if (enemy.id === attacker.id) continue;
+    // Chapter I: a direct hit moves Seymour Flux's **stored** phase, Threatened
+    // or not; a Poison tick never reaches this collector [ffx-seymour-flux §4.3].
+    if (activeScriptId(enemy) === 'seymour-flux') stepFluxPhase(ctx);
     // **Threaten stops the counter, not just the turn** [ffx-combat-core §4.2:
     // "Target cannot act **or counterattack**"]. {@link canCounter} has always
     // encoded that sentence; until round 04 nothing called it, so a Threatened
@@ -168,6 +171,7 @@ export function runMortibsorptionIfDown(ctx: Ctx): boolean {
   // X's pair below: a `counter` event, then the command at no CTB cost. A later
   // player-side collector in the same action sees Protect/Reflect already up
   // and adds nothing, so nothing doubles.
+  stepFluxPhase(ctx);
   runDrainCounters(ctx, host, mount, seymourThresholdCounters(aiContextFor(ctx, host), false));
   return true;
 }

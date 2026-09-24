@@ -150,7 +150,7 @@ describe('Seymour Flux (§4)', () => {
 
   it('holds the Total Annihilation ladder while an aeon is on the field (§4.4.2)', () => {
     const { ctx } = seymourCtx();
-    at(ctx, 'seymour-flux').hp = 30000; // phase 2
+    at(ctx, 'seymour-flux').hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
     ctx.state.aeonId = 'valefor';
     ctx.state.flags['seymour.lastEnemyActor'] = 'seymour-flux';
     expect(chooseAiCommand(ctx, at(ctx, 'mortiorchis'))).toBeNull();
@@ -159,7 +159,7 @@ describe('Seymour Flux (§4)', () => {
 
   it('charges twice for the first Total Annihilation and once thereafter', () => {
     const { ctx, events } = seymourCtx();
-    at(ctx, 'seymour-flux').hp = 30000; // phase 2
+    at(ctx, 'seymour-flux').hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
     const mount = at(ctx, 'mortiorchis');
     const step = (): string => {
       ctx.state.flags['seymour.lastEnemyActor'] = 'seymour-flux';
@@ -200,7 +200,7 @@ describe('Seymour Flux (§4)', () => {
   it('loops Flare -> wait -> Flare while Reflect holds, and it is flare-self (§4.4.1)', () => {
     const { ctx } = seymourCtx();
     const seymour = at(ctx, 'seymour-flux');
-    seymour.hp = 30000;
+    seymour.hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
     applyStatus(ctx, undefined, seymour, { status: 'reflect', chance: 255, duration: 254 });
     const step = (): Command | null => {
       ctx.state.flags['seymour.lastEnemyActor'] = 'mortiorchis';

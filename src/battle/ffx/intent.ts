@@ -59,7 +59,7 @@ import type {
 import { SeededRng } from '../common/rng.ts';
 import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
-import { activeScriptId, chooseAiCommand } from './ai/index.ts';
+import { activeScriptId, chooseAiCommand, fluxPhase } from './ai/index.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
 import { type ActionEstimate, estimateCommand } from './estimate.ts';
@@ -367,7 +367,7 @@ export function countersFor(ctx: Ctx, enemy: FFXCombatant): string[] {
       if (host.hp * 4 >= host.stats.maxHp * 3) {
         out.push('Below 75% HP Seymour answers with Protect [ffx-seymour-flux §4.3]');
       }
-      if (host.hp * 2 >= host.stats.maxHp) {
+      if (host.hp * 2 >= host.stats.maxHp || fluxPhase(ctx) === 1) { // Poison below 50% leaves it pending [§4.3]
         out.push('Below 50% HP Seymour answers with Reflect and phase 2 opens [ffx-seymour-flux §4.3]');
       }
     }

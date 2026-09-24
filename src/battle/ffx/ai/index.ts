@@ -37,7 +37,7 @@ import './yojimbo.ts';
 import './seymour-natus.ts';
 
 export * from './types.ts';
-export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
+export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
 export { yunalescaCounter, yunalescaEntryAction } from './yunalesca.ts';
 export { bfaTalkCharges, consumeBfaTalk } from './braskas-final-aeon.ts';
 export { yuYevonCounter, YU_YEVON_CURAGA_THRESHOLD } from './yu-yevon.ts';

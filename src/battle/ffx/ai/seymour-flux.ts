@@ -56,14 +56,41 @@ function noteActed(ai: AiContext): void {
   ai.ctx.state.flags[LAST_ENEMY] = ai.self.id;
 }
 
-/** Phase 2 begins when Seymour drops below 50% and reacts with Reflect [§4.3]. */
+/**
+ * **The phase is state, not HP** [§4.3]. `seymour.phase` is stored, and only
+ * a real hit moves it: damage from a party-side action
+ * (`reactions.ts#collectBossCounters`) or a Mortibsorption drain
+ * (`reactions.ts#runMortibsorptionIfDown`), both through {@link stepFluxPhase}.
+ *
+ * §4.3's table: "HP loss came from **Poison** | **No threshold reaction, no
+ * pattern change** | The check only fires on direct attacks and on
+ * Mortibsorption" `[verified: 2 sources]`. Reading the phase from HP let a
+ * Poison tick carry him below 50% into phase 2 with no Reflect up, so his
+ * first Flare detonated on himself: 14 of 200 intended runs on the Gagazet
+ * build (`docs/plans/combat-fixes-0924-review.md` §5, §8). Now Poison below
+ * 50% leaves him in phase 1 until the next real hit, which fires the Reflect
+ * counter and opens phase 2 together, as §4.8's `onDamaged` does.
+ * FFX only (Chapter I) [AGENTS.md rule 14].
+ */
+export function fluxPhase(ctx: Ctx): 1 | 2 {
+  return ctx.state.flags[PHASE] === 2 ? 2 : 1;
+}
+
+/**
+ * A real hit on Seymour (an action's damage or the drain): below 50% it moves
+ * the stored phase to 2 [§4.3, §4.8 `onDamaged`]. The phase moves even when a
+ * Threatened Seymour cannot fire the Reflect counter itself (Threaten stops
+ * the counter, not the pattern: the phase change is not an action), which is
+ * what the engine did before this change and what Chapter X's stored phase
+ * does [`seymour-natus-rules.ts#stepNatusPhase`]. Never called for Poison.
+ */
+export function stepFluxPhase(ctx: Ctx): void {
+  const host = tryActor(ctx, HOST_ID);
+  if (host && host.hp * 2 < host.stats.maxHp) ctx.state.flags[PHASE] = 2;
+}
+
 function currentPhase(ai: AiContext): 1 | 2 {
-  const host = tryActor(ai.ctx, HOST_ID);
-  if (host && host.hp * 2 < host.stats.maxHp) {
-    setState(ai, PHASE, 2);
-    return 2;
-  }
-  return stateNum(ai, PHASE, 1) === 2 ? 2 : 1;
+  return fluxPhase(ai.ctx);
 }
 
 /** `p1Step` advances once per enemy action, so the two actors interleave [§4.2]. */

@@ -6,6 +6,9 @@ answers **DEEP** ("FFX-2 ATB engine is a shared system"; "FFX CTB engine is a sh
 chapters ffx2-bahamut, ffx2-vegnagun-shuyin, seymour-flux, yunalesca, braskas-final-aeon).
 Branch `combat-fixes-0924` in the worktree `D:/pyrefly-combat`, off main `300f87d2`.
 **Held for Bailey: these change difficulty; nothing merges to main from this track.**
+**Update 2026-09-24 ~19:20 EDT: Bailey took every recommendation ("I'll go with all your
+recommendations"): (a) and (b) are merged to main (cherry-picked with `-x`, section 8), (c) stays
+as it is (unsourced), and the Poison crossing of section 6 Q2 is built as (d) (section 8).**
 
 Written 2026-09-24. Numbers in section 5 were produced by running the engine (rule 3):
 `tests/unit/combat-fixes-bench.test.ts` (`PYREFLY_MEASURE=1`) on this branch, before and after.
@@ -234,3 +237,90 @@ What the numbers say:
 - `tests/unit/ffx2-atb-golden.test.ts` re-pins `CH5_D0` and `CH5_D1500` with the reason and the
   proof in its doc comment: with the roll still drawn and only the miss ignored, exactly the seeds
   with no evaded magic reproduce the old hashes. `CH4_*` unchanged.
+
+## 8. After Bailey's answers (2026-09-24 ~19:20 EDT): the merge, and (d) the Poison crossing
+
+Bailey, verbatim: "I'll go with all your recommendations". So: **Q1** (c) Braska's Final Aeon keeps
+Provoke as it is (unsourced, not built); **Q2** build the Poison-crossing fix; **Q3** (a) stays on
+both sides.
+
+### The merge
+
+Branch `combat-fixes-0924` cherry-picked onto main with `-x`, in order, with no conflict (main had
+since gained the Fallen Aeons engine in `src/battle/ffx2` and the Natus engine in `src/battle/ffx`;
+neither touches `hit.ts`, `gunner.ts` or the Chapter I branch of `reactions.ts`):
+`3cb97d9f` -> `92f60f02`, `3b7f0a2d` -> `881d4548`, `8bcb1e89` -> `617a45b8`, `e694fc3f` -> `a999d133`.
+Re-benched on main below: every section 5 number reproduces on the merged tree.
+
+### (d) Chapter I: Poison carrying Seymour below 50 % (FFX only)
+
+**Source.** `research/ffx-seymour-flux.md` §4.3's table: "HP loss came from **Poison** | **No
+threshold reaction, no pattern change** | The check only fires on direct attacks and on
+Mortibsorption", and "HP loss came from **Mortibsorption** | **Does** trigger threshold/pattern
+change" `[verified: 2 sources: wiki + independent web aggregation restating the same 75%/50%
+Protect/Reflect thresholds and the poison-exclusion rule verbatim]`. §4.8's pseudocode puts the
+Reflect counter and `enterPhase2()` in the same `onDamaged(source)` block, guarded by
+`source !== DamageSource.POISON`.
+
+**What was true (run, not grepped).** `seymour-flux.ts#currentPhase` returned phase 2 whenever
+Seymour's HP was below 50 %, whatever took it there. A Poison tick across 35,000 therefore opened
+the Flare loop with no Reflect up, and his first Flare hit himself (14 of 200 intended runs, §5).
+
+**The change.** The phase is state, not HP, the way Chapter X stores Natus's
+(`seymour-natus-rules.ts#stepNatusPhase`):
+
+- `seymour-flux.ts#fluxPhase` reads the stored `seymour.phase`; both scripts use it and never HP.
+- `seymour-flux.ts#stepFluxPhase` moves it to 2 when HP is below 50 %. Only two callers:
+  `reactions.ts#collectBossCounters` when a party-side action damaged Seymour, and
+  `reactions.ts#runMortibsorptionIfDown` after the drain. A Poison tick reaches neither (it is dealt
+  in `ticks.ts#onTurnEnd`, with no source), so Poison below 50 % leaves him in phase 1 until the
+  next real hit, which fires the Reflect counter and opens phase 2 together.
+- **Threaten:** a Threatened Seymour still cannot counter, but the hit still moves the stored phase
+  (the phase change is not an action). That is what the engine did before this change for a
+  Threatened hit, and what Chapter X does; the sources do not address the case. Disclosed, our reading.
+- The intent panel (`intent.ts#countersFor`) keeps showing "Below 50% HP Seymour answers with
+  Reflect and phase 2 opens" while the stored phase is still 1, so it stays true after a Poison
+  crossing.
+- Not covered: a party Counterattack / Magic Counter reaction does not call the collector, so it
+  would not move the phase. The Gagazet build carries neither ability (checked), so nothing plays
+  differently today.
+
+**Tests.** `tests/unit/chapters/seymour-flux-poison-crossing.test.ts`: on seeds 1-5 a Poison tick
+from 35,500 to 34,100 fires no counter and leaves the phase at 1; his next three casts are phase 1
+rows (Lance of Atrophy / Dispel), never a self-hitting Flare; the next direct hit fires exactly the
+Reflect counter, stores phase 2, and his Flare then bounces off him; a Threatened hit moves the
+phase without a counter; a hit on the Mortiorchis alone does not move it. Run against the merged
+tree without (d): the phase-1 and Mortiorchis cases fail.
+
+### Measured: 200 seeds, before and after, on main
+
+`PYREFLY_MEASURE=1`, `combat-fixes-bench.test.ts` plus the chapters' own benches
+(`yojimbo-bench`, `natus-bench`, `fallen-aeons-bench`). **Before** = main `a213e4cb` (no combat
+fix); **merged** = `a999d133` ((a) + (b)); **after** = `a999d133` + (d). Each column is its own clean
+worktree, so other tracks' commits do not enter it.
+
+| Chapter | Line | Before | Merged | After | Notes |
+|---|---|---:|---:|---:|---|
+| I Seymour Flux | intended | 116/200 | 116/200 | **112/200** | self-Flares on Seymour 110 / 107 / 83; counters off the drain 0 / 530 / 506 |
+| I Seymour Flux | drain-farm | 14/200 | 14/200 | 14/200 | counters off the drain 0 / 81 / 81 |
+| I Seymour Flux | wrong (mash Attack) | 0/200 | 0/200 | 0/200 | |
+| IV Bahamut | intended | 200/200 | 200/200 | 200/200 | |
+| IV Bahamut | wrong | 0/200 | 0/200 | 0/200 | |
+| V Vegnagun + Shuyin | intended | 191/200 | 187/200 | 187/200 | evaded magic 55+490 / 0 / 0 |
+| V Vegnagun + Shuyin | wrong | 0/200 | 0/200 | 0/200 | |
+| VI Leblanc | intended | 194/200 | 194/200 | 194/200 | |
+| VI Leblanc | wrong | 17/200 | 17/200 | 17/200 | |
+| IX Yojimbo (unlisted) | intended / magic-race / wrong | 200 / 143 / 0 | same | same | |
+| X Seymour Natus (unlisted) | upper: intended / poison-wait / provoke-reflect / drain-farm / wrong | 116 / 0 / 200 / 35 / 0 | same | same | midpoint rows also unchanged |
+| XI Fallen Aeons (unlisted) | Road intended (whole chain) | 51/200 | 51/200 | 51/200 | every link row identical; "Mindy first with Drain" ticks 172,169 -> 180,059 under (a), 0/200 throughout |
+
+**What (d) does to Chapter I.** Over 400 seeds of the intended line (1-400): **227 -> 214 wins**
+(116 -> 112 on 1-200, 111 -> 102 on 201-400). 104 of the 400 runs have a Poison tick carry Seymour
+across 50 %; **all 33 runs whose outcome changed are among them** (23 wins became losses, 10 losses
+became wins), and no other run moves. Mechanism: the bug handed the party free self-Flares
+(~1,700 each; 203 -> 134 over the 400 seeds), and the sourced rule takes them away. The chapter is
+about 3 % harder on its intended line; nothing on the boss was tuned.
+
+The shipped advisor (`src/engine/tactics/seymour-flux.ts`, owned by another track) still reads
+phase 2 from HP. Measured in a scratch copy only, making it read the stored phase instead is
+*worse* (214 -> 198 over 400 seeds: it holds the aeons longer), so no advisor change is proposed.
