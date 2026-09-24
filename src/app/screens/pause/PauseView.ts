@@ -25,6 +25,7 @@ import {
   type ObjectiveStatus,
 } from '../../../ui/common/chapterObjectives.ts';
 import { PortraitStage } from './PortraitStage.ts';
+import { memberChromeBoxes } from './chromeBoxes.ts';
 import { chromeSideForCombatant, plateIdFor } from './plates.ts';
 import { buildTabs, memberIdOf, type PauseTab } from './tabs.ts';
 import { memberColumns } from './meters.ts';
@@ -74,9 +75,11 @@ export class PauseView {
     this.root = root;
     this.deps = deps;
     root.innerHTML = this.frameHtml();
+    const art = this.q('art') ?? root;
     this.portrait = new PortraitStage({
-      root: this.q('art') ?? root,
+      root: art,
       reduceMotion: deps.save.settings.reduceMotion,
+      chrome: () => memberChromeBoxes(root, art),
     });
     this.tabs = buildTabs(deps.state());
   }
@@ -128,6 +131,8 @@ export class PauseView {
     this.renderPlate(tabId);
     const rowId = this.renderBody({ ...at, tabId });
     this.renderObjective();
+    // PR-0079: frame the face clear of the chrome this render just laid out.
+    this.portrait.layout();
     return { tabId, focus: at.focus, rowId };
   }
 

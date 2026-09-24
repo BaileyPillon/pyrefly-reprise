@@ -106,7 +106,7 @@ function focalAtXFor(side: ChromeSide, frameW: number): number {
   const t = (frameW - 1280) / (1600 - 1280);
   return at1280 + (at1600 - at1280) * t;
 }
-const FOCAL_AT_Y = 0.45;
+export const FOCAL_AT_Y = 0.45;
 
 export interface PlateBox {
   left: number;

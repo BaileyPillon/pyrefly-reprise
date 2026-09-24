@@ -36,7 +36,8 @@
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { loadArtManifest, pause2xUrlFor, pauseStemOf } from '../../../engine/ArtManifest.ts';
 import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts';
-import { framePlate, framingFor, type PlateFraming } from './plates.ts';
+import { framePlate, framingFor, type PlateBox, type PlateFraming } from './plates.ts';
+import { clearFace, FACE_BOXES, type Rect } from './faceClear.ts';
 
 /** The 1x plates the art fleet ships, and the width of their 2x masters. */
 const PLATE_1X_WIDTH = 1344;
@@ -70,6 +71,11 @@ export interface PortraitStageOptions {
   root: HTMLElement;
   /** Freeze the push-in and the drift. */
   reduceMotion: boolean;
+  /**
+   * The chrome's boxes relative to `root`, or `null` when no member chrome is
+   * up (PR-0079): the face is framed clear of whatever this returns.
+   */
+  chrome?: () => Rect[] | null;
 }
 
 export class PortraitStage {
@@ -88,9 +94,13 @@ export class PortraitStage {
   private disposed = false;
   /** Re-frames every plate when the window changes shape. */
   private resize: ResizeObserver | null = null;
+  private readonly chrome: (() => Rect[] | null) | undefined;
+  /** The last face-cleared box per plate and window size, kept across fixed tabs. */
+  private readonly cleared = new Map<string, PlateBox>();
 
   constructor(opts: PortraitStageOptions) {
     this.root = opts.root;
+    this.chrome = opts.chrome;
     this.reduceMotion = opts.reduceMotion;
     this.root.classList.toggle('pause__art--still', this.reduceMotion);
     if (typeof ResizeObserver === 'function') {
@@ -117,7 +127,7 @@ export class PortraitStage {
       if (!img) continue;
       const id = img.dataset['plate'];
       if (!id || img.dataset['art'] === 'fallback' || img.dataset['art'] === 'missing') continue;
-      this.place(img, this.framingOf(id), w, h);
+      this.place(img, id, w, h, img === this.current);
     }
   }
 
@@ -127,8 +137,14 @@ export class PortraitStage {
     return live ? { ...base, x: live.x, y: live.y } : base;
   }
 
-  private place(img: HTMLImageElement, f: PlateFraming, w: number, h: number): void {
-    const box = framePlate(f, w, h);
+  /** The approved framing, then panned and scaled until the face clears the chrome. */
+  private place(img: HTMLImageElement, id: string, w: number, h: number, live: boolean): void {
+    const f = this.framingOf(id);
+    const key = `${id}@${Math.round(w)}x${Math.round(h)}`;
+    const blocks = live && this.chrome ? this.chrome() : null;
+    let box = blocks ? clearFace(framePlate(f, w, h), f, FACE_BOXES[id], w, h, blocks) : this.cleared.get(key);
+    if (box) this.cleared.set(key, box);
+    else box = framePlate(f, w, h);
     img.style.left = `${box.left.toFixed(1)}px`;
     img.style.top = `${box.top.toFixed(1)}px`;
     img.style.width = `${box.width.toFixed(1)}px`;

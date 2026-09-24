@@ -94,7 +94,8 @@ precisely so the columns could stand beside her.
    and, at each zoom, every legal pan (no empty page at either edge); take the
    **largest zoom** at which some pan clears, and at that zoom the pan closest
    to the approved focal position.
-3. If nothing clears even at cover, take the least-covered framing.
+3. If nothing clears even at cover, keep the approved framing (see Result:
+   the first build took the least-covered framing, and that cropped faces).
 
 `PortraitStage` measures the chrome after every render and resize (through a
 callback the view hands it), and only on member tabs; a fixed tab (OPTIONS,
@@ -107,10 +108,10 @@ chrome stacks under the face by design.
 At 1600x900 frames (a) and (c) themselves put IN THIS FIGHT's value column
 inside the face box (in (a) "WARRIOR" ends at 810 px against Tidus's eye
 corner at about 815; in (c) the values end at 840 against Yuna's green eye at
-about 860). Clearing the face box by 16 px therefore moves those two faces
-right by about 100 px at 1600x900. Bailey named the rule (text on the empty
-side), not the exact pan, and a pick approves only what is named; the moved
-frames are reported target-versus-build so Bailey can see the difference.
+about 860). Bailey named the rule (text on the empty side), not the exact pan,
+and a pick approves only what is named. The search never zooms past the
+approved framing, so where clearing would need a *closer* crop (Tidus) it
+leaves the approved frame as it is.
 
 ## Acceptance
 
@@ -118,3 +119,44 @@ All six member tabs (chapter 1: Tidus, Yuna, Kimahri; chapter 4: Yuna, Rikku,
 Paine) at 1600x900, 1280x960 and 2000x1012: no chrome box intersects the face
 box at 1.1 s or at the end of the push-in. Composites under
 `docs/screenshots/fix12/`, looked at.
+
+## Result (built 2026-09-23, same day)
+
+A first run of the search cleared Paine at 1280x960 by pushing half her face
+off the left edge (one eye and an ear). The search now also requires the
+whole face box, at rest, on screen; where no framing satisfies both it keeps
+the approved framing untouched.
+
+Measured with real Escape and E presses, Chromium on the RTX 5070 Ti (D3D11):
+
+| plate | 1600x900 | 1280x960 | 2000x1012 |
+|---|---|---|---|
+| FFX Tidus | covered (approved frame (a) as is) | covered (as before) | covered (as before) |
+| FFX Yuna | clear, 19 px | clear, 21 px | clear, 27 px |
+| FFX Kimahri | clear, 18 px | clear, 47 px | clear, 41 px |
+| FFX-2 Yuna | clear, 69 px | clear, 49 px | clear, 53 px |
+| FFX-2 Rikku | covered (as before) | covered (as before) | covered (as before) |
+| FFX-2 Paine | clear, 27 px | clear, 24 px | clear, 30 px |
+
+The critic's own case (FFX-2 Yuna at 1280x960, WHITE MAGE / PROTECTION HALO
+on her green eye) is clear and now sits close to approved frame (c):
+`docs/screenshots/fix12/pr0079-target-c-vs-before-after-1600x900.png`
+(target, before, after). A fixed tab and H keep the member's framing (no jump),
+and a resize re-frames.
+
+### Left for Bailey (no approved frame decides these)
+
+- **FFX-2 Rikku, every size.** Her face is centred and a third of the plate
+  wide; beside ~700 to 800 px of columns there is no pan or zoom that clears it
+  with the whole face on screen (clearing needs 1.5x more zoom *and* crops her
+  cheek off the right edge). What would clear it is a layout or art change, not
+  a framing: (1) stack IN THIS FIGHT under BATTLE STATS on this plate, (2) let
+  the plate slide under the dark falloff on the chrome side (empty page behind
+  the columns), (3) a re-cropped or re-posed Rikku plate, (4) keep it as is.
+  Screenshots: `docs/screenshots/fix12/pr0079-after-ffx2-bahamut-rikku-ffx2-*.png`.
+- **FFX Tidus.** At 1600x900 the build is approved frame (a) pixel for pixel,
+  and (a) itself has IN THIS FIGHT touching his eye corner. Clearing it needs a
+  12% closer crop than (a) (face in frame, chin at 826 px); at 1280x960 no
+  framing clears it with his face on screen. Whether (a)'s own geometry is
+  acceptable, or a closer crop is wanted, is Bailey's call.
+  Screenshots: `docs/screenshots/fix12/pr0079-after-seymour-flux-tidus-*.png`.
