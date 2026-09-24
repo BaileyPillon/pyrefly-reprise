@@ -37,7 +37,7 @@ import { artUrl } from '../../../engine/PaintedArt.ts';
 import { loadArtManifest, pause2xUrlFor, pauseStemOf } from '../../../engine/ArtManifest.ts';
 import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts';
 import { framePlate, framingFor, type PlateFraming } from './plates.ts';
-import type { Rect } from './faceClear.ts';
+import { FACE_BOXES, type Rect } from './faceClear.ts';
 import { FaceFramer } from './faceFramer.ts';
 import { slideMask } from './faceSlide.ts';
 import '../../../ui/common/pause-slide.css';
@@ -156,8 +156,9 @@ export class PortraitStage {
     img.style.top = `${box.top.toFixed(1)}px`;
     img.style.width = `${box.width.toFixed(1)}px`;
     img.style.height = `${box.height.toFixed(1)}px`;
-    // Option B (faceSlide): a plate slid under the falloff feathers the page it uncovers.
-    const mask = slideMask(box, w, h);
+    // Option B (faceSlide): only a plate slid under the falloff feathers the page
+    // it uncovers, and never into its face.
+    const mask = box.slid ? slideMask(box, w, h, FACE_BOXES[id]) : '';
     img.classList.toggle('pause__plate--slid', mask !== '');
     if (mask) img.style.setProperty('--pu-slide-mask', mask);
     else img.style.removeProperty('--pu-slide-mask');

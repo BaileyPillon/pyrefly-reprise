@@ -17,14 +17,18 @@
  *   near-black, and the plate's own edge is feathered into it
  *   ({@link slideMask}), as the sheet's frames were.
  * - Only when the face would then leave the far edge of the screen does the
- *   plate shrink, and never below {@link SLIDE_MIN_SCALE} of the smaller of
- *   the approved framing and plain cover: the sheet's 0.8x, measured at the
- *   end of the push-in (see there). The search in `clearFace` may already zoom
- *   back to cover; the slide may go that 0.8x further and no more.
+ *   plate shrink, and never below {@link SLIDE_MIN_SCALE} of the approved
+ *   framing: the sheet's 0.8x, measured at the end of the push-in (see there).
  * - The whole face stays on screen at rest and through the push-in, as
  *   everywhere else in the pause (fix12). Where that leaves no room for the
- *   full {@link FACE_MARGIN} of air, the air shrinks ({@link SLIDE_MARGINS})
- *   before the face would touch a column.
+ *   full {@link FACE_MARGIN} of air, the air may drop to half of it
+ *   ({@link SLIDE_MARGINS}), never less.
+ * - Where option B as drawn (these bounds) cannot clear the face, the plate
+ *   keeps the approved framing, as before the pick: a smaller plate, a face
+ *   touching a column or a half-empty screen was never on the sheet
+ *   (repair of the verifier's 1024x768 and 844x390 findings, 24 Sep 2026).
+ * - Only a slid plate is feathered ({@link FramedBox.slid}); the feather never
+ *   reaches into the face ({@link slideMask}).
  *
  * The chrome, the meters and the two columns stay exactly as mocked: only the
  * painting moves. A portrait frame (the phone, approved frame f) is never
@@ -37,7 +41,7 @@
  */
 
 import { clearFace, FACE_MARGIN, faceInFrame, faceOverlap, faceRectOn, PUSH_SCALE, type FaceBox, type Rect } from './faceClear.ts';
-import { PLATE_ASPECT, type ChromeSide, type PlateBox, type PlateFraming } from './plates.ts';
+import { type ChromeSide, type PlateBox, type PlateFraming } from './plates.ts';
 
 /**
  * The smallest the plate may get while it slides.
@@ -51,14 +55,17 @@ import { PLATE_ASPECT, type ChromeSide, type PlateBox, type PlateFraming } from 
 export const SLIDE_MIN_SCALE = 0.8 / PUSH_SCALE;
 /**
  * The air kept between the face and the chrome while sliding, largest first:
- * the pause's own {@link FACE_MARGIN}, then half of it, then none (the face
- * still never overlaps a box). Tried in order, each down to the floor.
+ * the pause's own {@link FACE_MARGIN}, then half of it. Tried in order, each
+ * down to the floor. Never none: the sheet's B frames all kept 15 to 16 px.
  */
-export const SLIDE_MARGINS: readonly number[] = [FACE_MARGIN, FACE_MARGIN / 2, 0];
+export const SLIDE_MARGINS: readonly number[] = [FACE_MARGIN, FACE_MARGIN / 2];
 /** How finely the shrink is searched, as a fraction of the approved width. */
 const SCALE_STEP = 0.005;
 
 type Framing = Pick<PlateFraming, 'x' | 'y'> & { side?: ChromeSide };
+
+/** A plate box, flagged when it is option B's slide (only then is it feathered). */
+export type FramedBox = PlateBox & { readonly slid?: true };
 
 /**
  * The framing to use for one plate: `clearFace`'s, or, when that could not
@@ -72,11 +79,12 @@ export function frameFace(
   frameW: number,
   frameH: number,
   blocks: readonly Rect[],
-): PlateBox {
+): FramedBox {
   const box = clearFace(base, f, face, frameW, frameH, blocks);
   if (box !== base || !face || blocks.length === 0 || frameW < frameH) return box;
   if (faceOverlap(faceRectOn(base, face), blocks) === 0 && faceInFrame(base, face, frameW, frameH)) return base;
-  return slideFace(base, f, face, frameW, frameH, blocks) ?? base;
+  const slid = slideFace(base, f, face, frameW, frameH, blocks);
+  return slid ? { ...slid, slid: true } : base;
 }
 
 /** Which side the chrome is on: the plate's own, or read off where the face sits. */
@@ -99,18 +107,11 @@ export function slideFace(
 ): PlateBox | null {
   if (frameW < frameH || blocks.length === 0) return null;
   const side = chromeSideOf(base, f, frameW);
-  // First the sheet's own range (down to 0.8x of the approved framing at the end
-  // of the push-in), every margin; only then the further 0.8x below cover that a
-  // plate zoomed well past cover (Paine) may need.
-  const coverW = Math.max(frameW, frameH * PLATE_ASPECT);
-  const tiers: [number, number][] = [[1, SLIDE_MIN_SCALE]];
-  const deepest = SLIDE_MIN_SCALE * Math.min(1, coverW / base.width);
-  if (deepest < SLIDE_MIN_SCALE) tiers.push([SLIDE_MIN_SCALE, deepest]);
-  for (const [hi, lo] of tiers) {
-    for (const margin of SLIDE_MARGINS) {
-      const box = slideAt(base, side, face, frameW, frameH, blocks, margin, hi, lo);
-      if (box) return box;
-    }
+  // The sheet's own range only: down to 0.8x of the approved framing at the end
+  // of the push-in, the full margin first.
+  for (const margin of SLIDE_MARGINS) {
+    const box = slideAt(base, side, face, frameW, frameH, blocks, margin, 1, SLIDE_MIN_SCALE);
+    if (box) return box;
   }
   return null;
 }
@@ -183,15 +184,33 @@ export function slideFeather(frameW: number): number {
 
 /**
  * The CSS mask that feathers a slid plate's uncovered edges into the falloff,
- * or `''` when no page shows (every plate the framing search already clears).
- * One gradient per uncovered edge, intersected (`.pause__plate--slid`).
+ * or `''` when no page shows. One gradient per uncovered edge, intersected
+ * (`.pause__plate--slid`). The stage applies it to a slid plate only
+ * ({@link FramedBox.slid}): a plate the search framed is never masked, even
+ * where it leaves page uncovered for another reason (the 4K magnify cap).
+ *
+ * With `face`, each fade ends before the face begins (at rest; the push-in
+ * scales the mask with the plate), so the feather never dims an eye or a chin.
  */
-export function slideMask(box: Pick<PlateBox, 'left' | 'top' | 'width' | 'height'>, frameW: number, frameH: number): string {
+export function slideMask(
+  box: Pick<PlateBox, 'left' | 'top' | 'width' | 'height'>,
+  frameW: number,
+  frameH: number,
+  face?: FaceBox,
+): string {
   const edges = emptyEdges(box, frameW, frameH);
-  const feather = slideFeather(frameW);
+  const full = slideFeather(frameW);
+  const room: Record<keyof EmptyEdges, number> = face
+    ? {
+        left: box.width * face.x0,
+        right: box.width * (1 - face.x1),
+        top: box.height * face.y0,
+        bottom: box.height * (1 - face.y1),
+      }
+    : { left: full, right: full, top: full, bottom: full };
   const to: Record<keyof EmptyEdges, string> = { left: 'right', right: 'left', top: 'bottom', bottom: 'top' };
   const parts = (Object.keys(to) as (keyof EmptyEdges)[])
     .filter((edge) => edges[edge] > 0)
-    .map((edge) => `linear-gradient(to ${to[edge]}, transparent 0px, #000 ${feather}px)`);
+    .map((edge) => `linear-gradient(to ${to[edge]}, transparent 0px, #000 ${Math.max(0, Math.min(full, Math.floor(room[edge])))}px)`);
   return parts.join(', ');
 }

@@ -75,11 +75,9 @@ and stays there):
 - **A plate shorter than the frame is feathered at the bottom too**, so the
   hard line under Rikku's plate in the 1280x960 B frame is gone.
 
-The rule also reaches one case the sheet did not show: FFX-2 Paine at
-1280x960 in chapters 5 and 6, where IN THIS FIGHT is wider and the search left
-her face under both columns (as it did before this change). The slide may go
-the same 0.8x below plain cover for a plate zoomed well past cover; she now
-clears (`docs/screenshots/pause-faces-b/paine-1280x960-ch5-build.jpg`).
+The first build also slid FFX-2 Paine at 1280x960 in chapters 5 and 6 by
+letting the plate go a further 0.8x below plain cover (0.54x of her approved
+framing). The repair below took that out.
 
 Measured with real Escape and E presses, Chromium on the RTX 5070 Ti (D3D11),
 all six chapters at 1280x960, 1600x900 and 2000x1012 (54 member tabs): every
@@ -88,3 +86,51 @@ push-in, and wholly on screen; every plate the search already cleared is the
 same framing as before, the CHAPTER tab is never slid, and the phone (390x844,
 both games) is approved frame (f) unchanged. Target beside build:
 `docs/screenshots/pause-faces-b/sheet-target-vs-build.jpg`.
+
+### Repair (2026-09-24, after the independent verifier)
+
+The verifier refuted "plates that already cleared are unchanged" and found
+four regressions. What changed:
+
+- **Only a slid plate is feathered.** At 3840x2160, `framePlate`'s magnify cap
+  leaves every plate short of the frame, and the first build feathered all of
+  them, the CHAPTER tab too, 538 px deep into the faces. `frameFace` now flags
+  the slide (`FramedBox.slid`), and the stage masks only a flagged plate. 4K
+  looks as it did before B (`docs/screenshots/pause-faces-b/repair-tidus-3840x2160-no-feather.jpg`;
+  the short plate there is the existing CHK-002 defect, not B).
+- **The feather stops before the face** (`slideMask` with the face box), so it
+  never dims an eye or a chin, whatever the plate's size.
+- **B stays within the sheet's bounds**: at least 0.8x of the approved framing
+  at the end of the push-in, and at least 8 px of air (the sheet kept 15 to
+  16 px; the 0 px step is gone). The further 0.8x below cover is gone. Where B
+  as drawn cannot clear a face, the plate keeps the framing it had before
+  Bailey's pick. Measured cases that now stay as they were:
+  - **FFX-2 Paine at 1280x960 and 1280x720, chapters 5 and 6.** IN THIS FIGHT
+    is on her face, as before B
+    (`docs/screenshots/pause-faces-b/paine-1280x960-ch5-build.jpg`). Clearing
+    her needs about 0.54x, a much smaller head than any frame on the sheet.
+    **This is a question for Bailey** (option A, the stack, for this case?).
+  - **Every plate at 1024x768 except Kimahri**, and **every plate at 844x390**
+    (landscape phone). Both sizes are smaller than any size on the sheet.
+    FFX Kimahri at 1024x768 slides within the bounds (0.794x, 16 px). That frame
+    was not on the sheet
+    (`docs/screenshots/pause-faces-b/repair-kimahri-1024x768-slid.jpg`).
+- **A resize on a fixed tab** estimates the new chrome between plain stretching
+  and pixel-pinned columns (`faceFramer.estimateBlocks`). Over 270 measured
+  size pairs, the estimate misses by 67 px on average instead of 173, and
+  calls the slide wrongly 22 times instead of 55. Auron at 1600x900 on
+  OPTIONS is no longer slid by mistake. Going back to his tab at 2000 glides
+  about 30 px, down from about 130.
+
+Re-measured with real keys, GPU Chromium, port 5601. 54 member tabs at the
+brief's three sizes: the same boxes as the first build, and every face clear
+at 8 px or more through the whole push-in. The exceptions are Paine in
+chapters 5 and 6 at 1280x960, as above. At 3840x2160, 2560x1080, 1280x720 and
+1024x768 in chapters 1, 2, 4 and 5, no unslid plate has a mask, no slid plate
+is below the floor or has less than 8 px of air, and no feather reaches a
+face. The phone (390x844) is unchanged.
+
+**CHK-002 still needs an amendment.** Its live check requires the painting's
+box to equal the viewport, and a slid plate fails that by design. Owed to
+`critic/` by the driver.
+

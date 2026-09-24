@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { clearFace, FACE_BOXES, faceInFrame, faceOverlap, faceRectOn, type Rect } from '../../src/app/screens/pause/faceClear.ts';
 import { framePlate, PLATE_FRAMING } from '../../src/app/screens/pause/plates.ts';
-import { FaceFramer, scaleBlocks } from '../../src/app/screens/pause/faceFramer.ts';
+import { estimateBlocks, FaceFramer, scaleBlocks } from '../../src/app/screens/pause/faceFramer.ts';
 
 /** The two columns as measured at 1600x900 (left chrome), plus the objective line. */
 const LEFT_CHROME_1600: Rect[] = [
@@ -113,7 +113,7 @@ describe('FaceFramer', () => {
     // A resize with no member chrome up: an estimate, not the uncleared approved framing.
     const base1280 = framePlate(f, 1280, 960);
     const est = framer.frame('yuna-ffx2', base1280, f, 1280, 960, null);
-    const scaled = scaleBlocks(chrome1600, 1600, 900, 1280, 960);
+    const scaled = estimateBlocks(chrome1600, 1600, 900, 1280, 960);
     expect(faceOverlap(faceRectOn(est.box, FACE_BOXES['yuna-ffx2']!), scaled)).toBe(0);
     // The fixed tab re-renders at the same size: the estimate holds.
     expect(framer.frame('yuna-ffx2', base1280, f, 1280, 960, null).box).toBe(est.box);
@@ -122,6 +122,24 @@ describe('FaceFramer', () => {
     const back = framer.frame('yuna-ffx2', base1280, f, 1280, 960, real);
     expect(back.settled).toBe(sameOrNot(est.box, back.box));
     expect(framer.frame('yuna-ffx2', base1280, f, 1280, 960, real).settled).toBe(false);
+  });
+
+  it('estimates the chrome between plain stretching and pixel-pinned boxes (the columns have pixel floors)', () => {
+    const b: Rect[] = [
+      { left: 64, right: 382, top: 297, bottom: 519 },
+      { left: 1394, right: 1536, top: 826, bottom: 848 },
+    ];
+    const est = estimateBlocks(b, 1600, 900, 1280, 960);
+    const stretched = scaleBlocks(b, 1600, 900, 1280, 960);
+    // Left column: pinned to the left edge, between 64..382 px and the stretched box.
+    expect(est[0]!.left).toBeGreaterThan(stretched[0]!.left);
+    expect(est[0]!.left).toBeLessThan(64);
+    expect(est[0]!.right).toBeGreaterThan(stretched[0]!.right);
+    expect(est[0]!.right).toBeLessThan(382);
+    // The right-hand prompt: pinned to the right edge (1536 - 320 px), or stretched.
+    expect(est[1]!.right).toBeLessThan(stretched[1]!.right);
+    expect(est[1]!.right).toBeGreaterThan(1536 - 320);
+    expect(est[0]!.top).toBeCloseTo(stretched[0]!.top, 6);
   });
 
   it('falls back to the approved framing when the plate has never had member chrome', () => {

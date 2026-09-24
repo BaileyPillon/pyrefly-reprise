@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { clearFace, FACE_BOXES, FACE_MARGIN, faceInFrame, faceOverlap, faceRectOn, PUSH_SCALE, type Rect } from '../../src/app/screens/pause/faceClear.ts';
-import { emptyEdges, frameFace, SLIDE_MIN_SCALE, slideFace, slideFeather, slideMask } from '../../src/app/screens/pause/faceSlide.ts';
+import { emptyEdges, frameFace, SLIDE_MARGINS, SLIDE_MIN_SCALE, slideFace, slideFeather, slideMask } from '../../src/app/screens/pause/faceSlide.ts';
 import { FaceFramer } from '../../src/app/screens/pause/faceFramer.ts';
 import { framePlate, PLATE_FRAMING, type PlateBox } from '../../src/app/screens/pause/plates.ts';
 
@@ -124,7 +124,7 @@ describe('one rule for every plate', () => {
     expect(slideMask(box, 1280, 960)).toContain('to left');
   });
 
-  it('FFX-2 Paine at 1280x960 in chapter 5 (wide IN THIS FIGHT): slides left, below cover but within its 0.8x', () => {
+  it('FFX-2 Paine at 1280x960 in chapter 5 (wide IN THIS FIGHT): B as drawn cannot clear her, so she keeps the approved framing', () => {
     // Chromium's layout of chapter 5's mirrored chrome: IN THIS FIGHT reaches 481 px from the left.
     const right: Rect[] = [
       { left: 936, right: 1229, top: 317, bottom: 553 },
@@ -137,11 +137,39 @@ describe('one rule for every plate', () => {
     const f = PLATE_FRAMING['paine']!;
     const base = framePlate(f, 1280, 960);
     expect(clearFace(base, f, FACE_BOXES['paine'], 1280, 960, right)).toBe(base);
+    // Clearing her needs about 0.54x of the approved framing: well past the sheet's 0.8x.
+    expect(slideFace(base, f, FACE_BOXES['paine']!, 1280, 960, right)).toBeNull();
     const box = frameFace(base, f, FACE_BOXES['paine'], 1280, 960, right);
-    expect(clears(box, 'paine', 1280, 960, right)).toBe(true);
-    const cover = 960 * (2688 / 1536);
-    expect(box.width).toBeGreaterThanOrEqual(cover * SLIDE_MIN_SCALE - 0.5);
-    expect(box.left + box.width).toBeLessThan(1280);
+    expect(box).toBe(base);
+    expect(box.slid).toBeUndefined();
+  });
+
+  it('never shrinks past the floor, never keeps less than half the margin (1024x768, the deep review 4:3)', () => {
+    for (const [id, f] of Object.entries(PLATE_FRAMING)) {
+      const face = FACE_BOXES[id];
+      if (!face) continue;
+      const w = 1024;
+      const h = 768;
+      const chrome = f.side === 'left' ? scaleTo(LEFT_1280, w, h) : mirror(scaleTo(LEFT_1280, w, h), w);
+      const base = framePlate(f, w, h);
+      const box = frameFace(base, f, face, w, h, chrome);
+      if (!box.slid) continue;
+      expect(box.width, id).toBeGreaterThanOrEqual(base.width * SLIDE_MIN_SCALE - 0.5);
+      expect(faceOverlap(faceRectOn(box, face), chrome, Math.min(...SLIDE_MARGINS)), id).toBe(0);
+    }
+    expect(Math.min(...SLIDE_MARGINS)).toBe(FACE_MARGIN / 2);
+  });
+
+  it('flags only a slide: a framing the search cleared is never slid, even when it leaves page showing (the 4K cap)', () => {
+    const f = PLATE_FRAMING['tidus']!;
+    // framePlate caps the magnify, so at 3840x2160 the plate stops short of the frame.
+    const base = framePlate(f, 3840, 2160);
+    expect(emptyEdges(base, 3840, 2160)).not.toEqual({ left: 0, right: 0, top: 0, bottom: 0 });
+    const far: Rect[] = [{ left: 60, right: 400, top: 700, bottom: 1200 }];
+    const box = frameFace(base, f, FACE_BOXES['tidus'], 3840, 2160, far);
+    expect(box.slid).toBeUndefined();
+    const slid = frameFace(framePlate(f, 1280, 960), f, FACE_BOXES['tidus'], 1280, 960, LEFT_1280);
+    expect(slid.slid).toBe(true);
   });
 
   it('keeps the approved framing when not even the slide can clear', () => {
@@ -187,13 +215,27 @@ describe('the feather', () => {
     expect(mask).toContain('to top');
   });
 
+  it('never fades into the face', () => {
+    const face = FACE_BOXES['yuna']!; // x0 = 0.16: the face starts close to the plate's left edge
+    const box = { left: 300, top: 0, width: 900, height: 960 };
+    const mask = slideMask(box, 1280, 960, face);
+    const stop = Number(/#000 (\d+)px/.exec(mask)![1]);
+    expect(stop).toBeLessThanOrEqual(box.width * face.x0);
+    expect(stop).toBeLessThan(slideFeather(1280));
+    // Where the face is far from the edge, the sheet's full feather.
+    expect(slideMask({ left: 200, top: 0, width: 1600, height: 960 }, 1280, 960, FACE_BOXES['tidus'])).toBe(
+      'linear-gradient(to right, transparent 0px, #000 179px)',
+    );
+  });
+
   it('is drawn by its own stylesheet, which the stage imports', () => {
     const css = read('src', 'ui', 'common', 'pause-slide.css');
     expect(css).toMatch(/\.pause__plate--slid\s*\{[^}]*mask-image:\s*var\(--pu-slide-mask\)/);
     expect(css).toMatch(/mask-composite:\s*intersect/);
     const stage = read('src', 'app', 'screens', 'pause', 'PortraitStage.ts');
     expect(stage).toContain("import '../../../ui/common/pause-slide.css';");
-    expect(stage).toContain('slideMask(box, w, h)');
+    // Only a slid plate is masked, and its feather stops short of the face.
+    expect(stage).toContain('box.slid ? slideMask(box, w, h, FACE_BOXES[id]) :');
   });
 });
 
