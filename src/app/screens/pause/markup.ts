@@ -128,7 +128,12 @@ function snapsHtml(snaps: readonly { image: string; caption: string }[]): string
     snaps
       .map(
         (s) =>
-          `<figure class="pause__snap"><img alt="" loading="lazy" src="${escapeHtml(
+          // data-face-crop-manual: a snap may be a speaker portrait (Chapter II's
+          // Auron). Without it ui/common/portrait.ts adopts the <img> and gives it
+          // an absolute face crop sized for a clipped, positioned frame; this
+          // figure is neither, so it drew at 125% of the pause body (live bug,
+          // 2026-09-24). The snap frames itself: 4:3, object-fit cover (CSS).
+          `<figure class="pause__snap"><img alt="" loading="lazy" data-face-crop-manual="1" src="${escapeHtml(
             artUrl(`art/${s.image}`),
           )}"><figcaption>${escapeHtml(s.caption)}</figcaption></figure>`,
       )

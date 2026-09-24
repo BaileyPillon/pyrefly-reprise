@@ -16,6 +16,7 @@
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import faceCropData from './face-crops.json';
+import { canHostCrop } from './portraitHost.ts';
 
 /**
  * Skip an `<img>` for art the build-time manifest says is not there.
@@ -570,6 +571,7 @@ function portraitIdFromSrc(src: string): string | null {
 function adoptUntaggedPortraits(root: ParentNode): void {
   for (const img of root.querySelectorAll<HTMLImageElement>('img[src*="/art/portraits/"]:not([data-face-crop])')) {
     if (img.hasAttribute('data-body-id') || img.hasAttribute('data-face-body') || img.hasAttribute('data-face-crop-manual')) continue;
+    if (!canHostCrop(img)) continue;
     const id = portraitIdFromSrc(img.getAttribute('src') ?? '');
     if (!id) continue;
     img.setAttribute('data-face-crop', id);
@@ -625,6 +627,7 @@ if (typeof document !== 'undefined') {
       if (!target.hasAttribute('data-face-crop')) {
         // A portrait somebody else's module built; adopt it before correcting.
         if (target.hasAttribute('data-body-id')) return;
+        if (!canHostCrop(target)) return;
         const id = portraitIdFromSrc(target.getAttribute('src') ?? '');
         if (!id) return;
         target.setAttribute('data-face-crop', id);
