@@ -4,7 +4,9 @@
  *
  *   node tools/audio/scores/render-sketches.mjs
  *   node tools/audio/scores/render-sketches.mjs --only=leblanc-farce
- *   node tools/audio/scores/render-sketches.mjs --date=2026-09-24
+ *   node tools/audio/scores/render-sketches.mjs --date=2026-09-24 --only=natus-a-groom-unmasked
+ *
+ * `measurements.json` keeps the rows of any sketch a run skips (`--only`).
  *
  * These are SKETCHES, not cues. Nothing here is registered in
  * `src/audio/tracks/index.ts`, nothing lands in `public/audio/`, and nothing is
@@ -65,6 +67,10 @@ const ROUNDS = {
     'yojimbo-a-summoners-sorrow',
     'yojimbo-b-ronins-price',
     'yojimbo-c-unsent-lady',
+    /** Chapter X, Seymour Natus (FFX only): options round O-6 (B15 a). */
+    'natus-a-groom-unmasked',
+    'natus-b-highbridge-flight',
+    'natus-c-mortibody',
   ],
 };
 
@@ -224,5 +230,17 @@ for (const id of SKETCHES) {
   );
 }
 
-await writeFile(join(outDir, 'measurements.json'), `${JSON.stringify(rows, null, 2)}\n`);
+// Merge with the round's earlier rows, so `--only` does not drop the sketches it skipped.
+const measurementsPath = join(outDir, 'measurements.json');
+let previous = [];
+try {
+  previous = JSON.parse(await readFile(measurementsPath, 'utf8'));
+} catch {
+  previous = [];
+}
+const fresh = new Set(rows.map((r) => r.id));
+const merged = [...previous.filter((r) => !fresh.has(r.id)), ...rows].sort(
+  (a, b) => SKETCHES.indexOf(a.id) - SKETCHES.indexOf(b.id),
+);
+await writeFile(measurementsPath, `${JSON.stringify(merged, null, 2)}\n`);
 console.log(`\nWrote ${rows.length} sketch(es) to docs/audio/sketches/${DATE}/`);

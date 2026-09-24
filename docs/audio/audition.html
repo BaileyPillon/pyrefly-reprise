@@ -77,8 +77,76 @@
 <h1>Pyrefly Reprise — the score</h1>
 <p class="sub">Twenty-five cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
 
+<!-- natus:begin — Chapter X options round O-6, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
+<h2 style="margin-top:0">Chapter X, Seymour Natus: three sketches, pick one (new)</h2>
+<p class="group-note">
+  <strong>A new original cue for the Highbridge fight (your B15 pick). All three grow from this score&rsquo;s own Seymour motif, the six notes of &ldquo;Noble Rot&rdquo;, and quote nothing else</strong>:
+  not the game&rsquo;s Seymour battle music, not &ldquo;Run!!&rdquo;, and no other tune from the games. None of them uses the &ldquo;unmoored&rdquo; ending, which stays reserved for Chapter 1&rsquo;s final form.
+  They use the same instruments, the same hall and the same loudness (&minus;16 LUFS) as everything else on this page.
+  Nothing here is in the game; if none is picked in time, the chapter borrows Chapter VII&rsquo;s cue. <strong>I cannot hear any of this.</strong>
+  Every number below is a measurement, not a judgement. FFX only.
+</p>
+
+<article class="cue">
+  <h4>A &mdash; &ldquo;The Groom Unmasked&rdquo;</h4>
+  <p class="emotion">The wedding is over and the courtesy stops pretending.</p>
+  <p class="blurb">
+    Four wedding bells ring changes over the organ, which bows once. At <strong>0:11</strong> a processional: the motif in trombones climbing by minor thirds, its mirror in the horns.
+    At <strong>0:34</strong> the mask comes off: the motif slowed and in full brass, the quiet note of the bow now the loudest, the bells ringing a tritone against him.
+    At <strong>0:51</strong> the organ alone, composed again, and the motif sinks two notes lower than it ever has and stops, unresolved. C&sharp; minor, 84 bpm.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-24/natus-a-groom-unmasked.mp3"></audio>
+  <p class="stats"><span>1:04</span><span>0.91 MB</span><span>-16.00 LUFS</span><span>-3.50 dBTP</span><span>tilt -9.9 dB/band</span><span>all gates pass</span><span>398 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-natus="A — The Groom Unmasked"></label></p>
+</article>
+
+<article class="cue">
+  <h4>B &mdash; &ldquo;The Highbridge Flight&rdquo;</h4>
+  <p class="emotion">The party runs, and he is right behind them.</p>
+  <p class="blurb">
+    The running figure under everything is Seymour&rsquo;s own falling line, cut into quick strings. At <strong>0:06</strong> the horns take the party&rsquo;s line, which climbs.
+    At <strong>0:19</strong> he closes in: the figure climbs with his minor thirds and the motif enters in the trombones. At <strong>0:32</strong> the party gains ground and the violins take the line.
+    At <strong>0:44</strong> both at once, his motif at half speed underneath. At <strong>0:57</strong> one cut. No organ. C&sharp; minor, 152 bpm.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-24/natus-b-highbridge-flight.mp3"></audio>
+  <p class="stats"><span>1:03</span><span>0.92 MB</span><span>-16.00 LUFS</span><span>-1.92 dBTP</span><span>tilt -9.5 dB/band</span><span>all gates pass</span><span>835 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-natus="B — The Highbridge Flight"></label></p>
+</article>
+
+<article class="cue">
+  <h4>C &mdash; &ldquo;Mortibody&rdquo;</h4>
+  <p class="emotion">The machine and the corpse.</p>
+  <p class="blurb">
+    A clockwork of celesta and mallets that never varies, with bowed strings breathing in and out. At <strong>0:08</strong> a solo cello sings the motif, a bassoon answers with its mirror, and a heartbeat keeps skipping.
+    At <strong>0:25</strong> the machine takes the motif away: low brass, a drum on every beat, the organ underneath. At <strong>0:41</strong> everything stops, two breaths, a struck metal.
+    At <strong>0:50</strong> the clockwork starts again a semitone lower. C&sharp; minor, 116 bpm.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-24/natus-c-mortibody.mp3"></audio>
+  <p class="stats"><span>1:04</span><span>0.87 MB</span><span>-16.00 LUFS</span><span>-1.38 dBTP</span><span>tilt -11.3 dB/band</span><span>all gates pass</span><span>719 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-natus="C — Mortibody"></label></p>
+</article>
+
+<div class="check">
+  <p style="margin-top:0"><strong>When you have listened</strong>, press the button and send back the text. A pick is enough. A mix works too, for example &ldquo;A&rsquo;s bells, B&rsquo;s running&rdquo;.</p>
+  <p><button type="button" id="natus-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my Natus scores</button></p>
+  <textarea id="natus-out" rows="6" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your scores appear here."></textarea>
+  <p style="margin-bottom:0"><em>Nothing is saved or sent. The button only writes the text into the box.</em></p>
+</div>
+<script>
+  document.getElementById('natus-collect').addEventListener('click', function () {
+    var lines = ['Pyrefly Reprise — Chapter X, Seymour Natus battle music sketches, 2026-09-24', ''];
+    document.querySelectorAll('input[data-natus]').forEach(function (input) {
+      var v = input.value.trim();
+      lines.push(input.dataset.natus + ': ' + (v === '' ? '(not scored)' : v + '/10'));
+    });
+    lines.push('', 'Pick (A / B / C / a mix / none): ', 'Notes: ');
+    document.getElementById('natus-out').value = lines.join('\n');
+  });
+</script>
+<!-- natus:end -->
+
 <!-- yojimbo-cue:begin — Chapter IX's battle cue, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
-<h2 style="margin-top:0">Chapter IX, Yojimbo: the battle music (new)</h2>
+<h2>Chapter IX, Yojimbo: the battle music (new)</h2>
 <p class="group-note">
   <strong>You picked sketch A, &ldquo;The Summoner&rsquo;s Sorrow&rdquo;, and this is it grown into the fight&rsquo;s own music.</strong>
   Every part of the sketch is still here, note for note: the cello alone, the pulse joining, the climb, the crack, the return and the amen.

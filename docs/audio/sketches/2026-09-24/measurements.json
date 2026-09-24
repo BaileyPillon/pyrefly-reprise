@@ -46,5 +46,53 @@
       "truePeakDb": -1.38
     },
     "renderMs": 5240
+  },
+  {
+    "id": "natus-a-groom-unmasked",
+    "name": "sketch-natus-a",
+    "seconds": 63.5,
+    "bytes": 906051,
+    "notes": 398,
+    "lufs": -16,
+    "truePeakDb": -3.5,
+    "tiltDbPerBand": -9.9,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -3.5
+    },
+    "renderMs": 6675
+  },
+  {
+    "id": "natus-b-highbridge-flight",
+    "name": "sketch-natus-b",
+    "seconds": 62.5,
+    "bytes": 916804,
+    "notes": 835,
+    "lufs": -16,
+    "truePeakDb": -1.92,
+    "tiltDbPerBand": -9.48,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -1.92
+    },
+    "renderMs": 5314
+  },
+  {
+    "id": "natus-c-mortibody",
+    "name": "sketch-natus-c",
+    "seconds": 63.5,
+    "bytes": 873914,
+    "notes": 719,
+    "lufs": -16,
+    "truePeakDb": -1.38,
+    "tiltDbPerBand": -11.29,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -1.38
+    },
+    "renderMs": 4789
   }
 ]
