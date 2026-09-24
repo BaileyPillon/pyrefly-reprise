@@ -1,0 +1,167 @@
+{
+  "base": "http://127.0.0.1:5730/",
+  "tag": "repair-default",
+  "chapters": [
+    {
+      "chapter": 4,
+      "id": "ffx2-bahamut",
+      "checks": [
+        {
+          "step": "moment",
+          "seed": 7,
+          "chooser": "rikku",
+          "chose": "Skill",
+          "nextMenu": "paine",
+          "mode": "wait",
+          "split": false,
+          "level": "top",
+          "view": "top"
+        },
+        {
+          "step": "top list",
+          "ticks": "22490 -> 22490",
+          "ms": 13224,
+          "owner": "paine",
+          "level": "top",
+          "view": "top",
+          "menuStillUp": true,
+          "chooserStillCharging": true,
+          "chooserActionEnded": false,
+          "events": []
+        },
+        {
+          "step": "submenu 3 s",
+          "view": "sub",
+          "level": "deep",
+          "ticks": "22490 -> 22490",
+          "events": 0
+        },
+        {
+          "step": "target cursor 2 s",
+          "view": "target",
+          "level": "deep",
+          "chip": "WAIT — ATB HELD",
+          "ticks": "22490 -> 22490"
+        },
+        {
+          "step": "back at top 1.5 s",
+          "view": "top",
+          "level": "top",
+          "ticks": "22490 -> 22490",
+          "owner": "paine"
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "id": "ffx2-vegnagun-shuyin",
+      "checks": [
+        {
+          "step": "moment",
+          "seed": 7,
+          "chooser": "paine",
+          "chose": "Skill",
+          "nextMenu": "rikku",
+          "mode": "wait",
+          "split": false,
+          "level": "top",
+          "view": "top"
+        },
+        {
+          "step": "top list",
+          "ticks": "39023 -> 39023",
+          "ms": 13277,
+          "owner": "rikku",
+          "level": "top",
+          "view": "top",
+          "menuStillUp": true,
+          "chooserStillCharging": true,
+          "chooserActionEnded": false,
+          "events": []
+        },
+        {
+          "step": "submenu 3 s",
+          "view": "sub",
+          "level": "deep",
+          "ticks": "39023 -> 39023",
+          "events": 0
+        },
+        {
+          "step": "target cursor 2 s",
+          "view": "target",
+          "level": "deep",
+          "chip": "WAIT — ATB HELD",
+          "ticks": "39023 -> 39023"
+        },
+        {
+          "step": "back at top 1.5 s",
+          "view": "top",
+          "level": "top",
+          "ticks": "39023 -> 39023",
+          "owner": "rikku"
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "id": "ffx2-leblanc",
+      "checks": [
+        {
+          "step": "moment",
+          "seed": 7,
+          "chooser": "paine",
+          "chose": "Skill",
+          "nextMenu": "rikku",
+          "mode": "wait",
+          "split": false,
+          "level": "top",
+          "view": "top"
+        },
+        {
+          "step": "top list",
+          "ticks": "22606 -> 22606",
+          "ms": 13224,
+          "owner": "rikku",
+          "level": "top",
+          "view": "top",
+          "menuStillUp": true,
+          "chooserStillCharging": true,
+          "chooserActionEnded": false,
+          "events": []
+        },
+        {
+          "step": "submenu 3 s",
+          "view": "sub",
+          "level": "deep",
+          "ticks": "22606 -> 22606",
+          "events": 0
+        },
+        {
+          "step": "target cursor 2 s",
+          "view": "target",
+          "level": "deep",
+          "chip": "WAIT — ATB HELD",
+          "ticks": "22606 -> 22606"
+        },
+        {
+          "step": "back at top 1.5 s",
+          "view": "top",
+          "level": "top",
+          "ticks": "22606 -> 22606",
+          "owner": "rikku"
+        }
+      ]
+    }
+  ],
+  "failures": [
+    "ch4: ticks did not rise at the top list (22490 -> 22490)",
+    "ch4: rikku's Skill did not resolve while paine's top list was open",
+    "ch4: the clock did not resume at the top list",
+    "ch5: ticks did not rise at the top list (39023 -> 39023)",
+    "ch5: paine's Skill did not resolve while rikku's top list was open",
+    "ch5: the clock did not resume at the top list",
+    "ch6: ticks did not rise at the top list (22606 -> 22606)",
+    "ch6: paine's Skill did not resolve while rikku's top list was open",
+    "ch6: the clock did not resume at the top list"
+  ]
+}

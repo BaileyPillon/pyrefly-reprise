@@ -28,6 +28,7 @@ import type {
 } from '../../battle/common/types.ts';
 import { openCommandMenu } from './CommandMenu.ts';
 import { DEFAULT_ATB_MODE, type AtbMode } from '../../battle/ffx2/active.ts';
+import { MenuLevelRelay, paintAtbChip, type MenuLevel } from './atbClockChip.ts';
 import type { CursorSelection } from '../ffx/TargetCursor.ts';
 import { accentFor } from '../../engine/TargetHighlight.ts';
 import { mountTriggerHappy } from './TriggerHappy.ts';
@@ -150,9 +151,8 @@ export class FFX2BattleHud implements HudPort {
    * `'active'`, which put "ACTIVE — ATB RUNNING" over a held clock.
    */
   private atbMode: AtbMode = DEFAULT_ATB_MODE;
-  /** The open menu's cursor level (`HudPort.onMenuLevel`, Wait's split, §1.5); `null` with no menu up. */
-  private menuLevel: 'top' | 'deep' | null = null;
-  private levelListener: ((level: 'top' | 'deep') => void) | null = null;
+  /** The open menu's cursor level, relayed to the presenter (`HudPort.onMenuLevel`, Wait's split, §1.5). */
+  private readonly levels = new MenuLevelRelay();
   /** Tears the open command menu down from outside. Active ATB only. */
   private closeMenu: (() => void) | null = null;
   /** The painted field's targeting surface, when there is a field. */
@@ -743,7 +743,7 @@ export class FFX2BattleHud implements HudPort {
   closeCommandMenu(): void {
     const close = this.closeMenu;
     this.closeMenu = null;
-    this.menuLevel = null;
+    this.levels.closed();
     if (close) close();
     this.commandEl.hidden = true;
     this.actingId = null;
@@ -813,9 +813,9 @@ export class FFX2BattleHud implements HudPort {
       onOpen: (close) => {
         this.closeMenu = close;
       },
-      onLevel: (level) => this.reportLevel(level),
+      onLevel: (level) => this.levels.report(level),
     });
-    this.menuLevel = null;
+    this.levels.closed();
     this.closeMenu = null;
     this.commandEl.hidden = true;
     this.actingId = null;
@@ -1002,35 +1002,16 @@ export class FFX2BattleHud implements HudPort {
     );
   }
 
-  /**
-   * FFX-2's **Active / Wait** indicator, shown while a target cursor is live.
-   *
-   * FFX-2 ONLY. It is a real FFX-2 Config entry — the ATB either keeps
-   * counting while a menu is open (Active) or holds (Wait) — and it is in the
-   * approved frame for exactly that reason: an FFX-2 player aiming at
-   * Vegnagun needs to know whether the clock is still running. FFX's CTB has
-   * no such setting and gets no such indicator
-   * [research/ffx-vs-ffx2-presentation.md, the ATB/CTB rows].
-   */
+  /** FFX-2's **Active / Wait** indicator, shown while a target cursor is live (FFX-2 ONLY; `atbClockChip.ts`). */
   private setActiveWaitVisible(on: boolean): void {
     if (!this.activeWaitEl) return;
     this.activeWaitEl.hidden = !on;
     this.paintAtbMode();
   }
 
-  /** `HudPort.onMenuLevel`: one listener; a late one hears the open menu's level at once. */
-  onMenuLevel(listener: (level: 'top' | 'deep') => void): () => void {
-    this.levelListener = listener;
-    if (this.menuLevel) listener(this.menuLevel);
-    return () => {
-      if (this.levelListener === listener) this.levelListener = null;
-    };
-  }
-
-  private reportLevel(level: 'top' | 'deep'): void {
-    if (this.menuLevel === level) return;
-    this.menuLevel = level;
-    this.levelListener?.(level);
+  /** `HudPort.onMenuLevel` (Wait's split, §1.5): one listener; a late one hears the open menu's level at once. */
+  onMenuLevel(listener: (level: MenuLevel) => void): () => void {
+    return this.levels.subscribe(listener);
   }
 
   /**
@@ -1043,10 +1024,7 @@ export class FFX2BattleHud implements HudPort {
   }
 
   private paintAtbMode(): void {
-    if (!this.activeWaitEl) return;
-    const active = this.atbMode === 'active';
-    this.activeWaitEl.classList.toggle('ffx2-atbmode--wait', !active);
-    this.activeWaitEl.textContent = active ? 'ACTIVE — ATB RUNNING' : 'WAIT — ATB HELD';
+    paintAtbChip(this.activeWaitEl, this.atbMode);
   }
 
   /** HUD panels that genuinely cover the field, in viewport pixels. */

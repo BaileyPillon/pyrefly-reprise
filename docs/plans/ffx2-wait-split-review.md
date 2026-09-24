@@ -238,9 +238,10 @@ Attack (no charge) resolves on confirm, so the report is about skills, which is 
 hotfix):**
 1. Engine: `MenuLevel`, `waitSplit` option, `setMenuLevel` / `menuLevel` / `clockHeld`; the
    level resets to `'deep'` (held) with every new owner; `clockHeldByMenu(mode, owner, level,
-   split)`. **Default ON** (`DEFAULT_WAIT_SPLIT`), because the brief schedules it as the Wait
-   behaviour; one constant turns it off again (the dark launch the review above recommended)
-   if Bailey answers **B** after seeing section 4's numbers. Active is untouched.
+   split)`. ~~Default ON~~ **Default OFF after the repair pass** (see "Repair pass" at the end
+   of this file): the dark launch the review above recommended, until Bailey answers A or B.
+   `?wait=split` tries the split on any build; one constant (`DEFAULT_WAIT_SPLIT`) makes it the
+   default if he answers **A**. Active is untouched.
 2. Presenter: park or pump on `clockHeld()` (one truth, the engine's), wake on a level change
    through the existing `wakeMenuClock`. **Cut 1:** no exact edge timing; a submenu entered
    mid-step drops at most one pump step (<= 50 ms) of top-level time, never banks it
@@ -273,3 +274,32 @@ on the top list; Active at D = 1500 as the control; the table goes in the handof
 report. **Browser acceptance (real keys, own Vite 5720):** ch. 4 Wait: Yuna chooses a charged
 skill; with Rikku's top list open the ticks rise and Yuna's action plays; Rikku opens a
 submenu and the ticks stop; Esc back and they rise; ch. 5 and ch. 6 the same check once.
+
+## Repair pass (2026-09-24, after the verifier)
+
+The verifier confirmed every item and raised three regressions and two rule breaks. What changed:
+
+1. **Default OFF** (`DEFAULT_WAIT_SPLIT = false`), matching step 7 of section 11 and the
+   adversarial review: the measured cost (ch. 5 40/40 -> 32/40 with 0.5 s on the top list,
+   5/40 with all 1.5 s there; ch. 6 29/40 / 5/40) and the Wait copy that turns false at the
+   top list are Bailey's call, and he approved *building* the split, not that cost. Off, the
+   shipped behaviour is the live build's, byte for byte, so none of the copy is false and the
+   enemy-hit-on-an-open-menu path (Active's, below) stays unreachable under Wait.
+   **`?wait=split`** turns the split on for a try on any build (`?wait=hold` pins the hold),
+   read at chapter start and at every pause close, never saved
+   (`BattleScreenWiring.waitSplitFromUrl`). That lets Bailey feel A and B before he answers.
+2. **Target cursor = held is INFERRED** (the sources are silent; section 3). It is not stated
+   as fact to Bailey any more; it is one of his open questions, asked with the A/B.
+3. **Rule 7:** the four over-cap files end no longer than before the split
+   (`engine.ts` 649 -> 640, `BattlePresenter.ts` 653, `CommandMenu.ts` 639 -> 625,
+   `FFX2BattleHud.ts` 1259 -> 1258). The split's HUD pieces moved to `ui/ffx2/atbClockChip.ts`
+   (`MenuLevelRelay`, and the chip painter with its doc), the presenter's park/wake/epoch to
+   `BattlePresenterActive.MenuWaker`, the engine's pure `soonestEventTicks` / `nextEventTicks`
+   to `active.ts`, and `withTargets` to `ui/ffx2/withTargets.ts`. Behaviour is unchanged
+   (the golden and log-hash tests pass).
+4. Not repaired here, disclosed: the first confirm press on the first X-2 menu of a fresh
+   profile is swallowed (live too, pre-existing; costs no clock under the hold); and with the
+   split on, an enemy can hit the menu owner while her top list stays open, which is Active's
+   existing path (the research's Active note says the hit should close the menu and apply
+   Delay). Both are for the next batch.
+

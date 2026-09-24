@@ -1,0 +1,172 @@
+{
+  "base": "http://127.0.0.1:5730/?wait=split",
+  "tag": "repair-urlsplit",
+  "chapters": [
+    {
+      "chapter": 4,
+      "id": "ffx2-bahamut",
+      "checks": [
+        {
+          "step": "moment",
+          "seed": 7,
+          "chooser": "rikku",
+          "chose": "Skill",
+          "nextMenu": "paine",
+          "mode": "wait",
+          "split": true,
+          "level": "top",
+          "view": "top"
+        },
+        {
+          "step": "top list",
+          "ticks": "24496 -> 30290",
+          "ms": 3919,
+          "owner": "paine",
+          "level": "top",
+          "view": "top",
+          "menuStillUp": true,
+          "chooserStillCharging": false,
+          "chooserActionEnded": true,
+          "events": [
+            "damage:->rikku",
+            "damage:rikku->bahamut",
+            "action-end:rikku"
+          ]
+        },
+        {
+          "step": "submenu 3 s",
+          "view": "sub",
+          "level": "deep",
+          "ticks": "30470 -> 30470",
+          "events": 0
+        },
+        {
+          "step": "target cursor 2 s",
+          "view": "target",
+          "level": "deep",
+          "chip": "WAIT — ATB HELD",
+          "ticks": "30470 -> 30470"
+        },
+        {
+          "step": "back at top 1.5 s",
+          "view": "top",
+          "level": "top",
+          "ticks": "31142 -> 35636",
+          "owner": "paine"
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "id": "ffx2-vegnagun-shuyin",
+      "checks": [
+        {
+          "step": "moment",
+          "seed": 3,
+          "chooser": "paine",
+          "chose": "Skill",
+          "nextMenu": "yuna",
+          "mode": "wait",
+          "split": true,
+          "level": "top",
+          "view": "top"
+        },
+        {
+          "step": "top list",
+          "ticks": "21305 -> 25655",
+          "ms": 4291,
+          "owner": "yuna",
+          "level": "top",
+          "view": "top",
+          "menuStillUp": true,
+          "chooserStillCharging": false,
+          "chooserActionEnded": true,
+          "events": [
+            "action-start:rikku Darkness",
+            "action-start:vegnagun-tail Tail Beam",
+            "damage:vegnagun-tail->yuna",
+            "action-end:vegnagun-tail",
+            "damage:->paine",
+            "damage:paine->vegnagun-tail",
+            "action-end:paine"
+          ]
+        },
+        {
+          "step": "submenu 3 s",
+          "view": "sub",
+          "level": "deep",
+          "ticks": "25655 -> 25655",
+          "events": 0
+        },
+        {
+          "step": "target cursor 2 s",
+          "view": "target",
+          "level": "deep",
+          "chip": "WAIT — ATB HELD",
+          "ticks": "25655 -> 25655"
+        },
+        {
+          "step": "back at top 1.5 s",
+          "view": "top",
+          "level": "top",
+          "ticks": "26315 -> 30113",
+          "owner": "yuna"
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "id": "ffx2-leblanc",
+      "checks": [
+        {
+          "step": "moment",
+          "seed": 7,
+          "chooser": "paine",
+          "chose": "Skill",
+          "nextMenu": "rikku",
+          "mode": "wait",
+          "split": true,
+          "level": "top",
+          "view": "top"
+        },
+        {
+          "step": "top list",
+          "ticks": "64420 -> 65932",
+          "ms": 1082,
+          "owner": "rikku",
+          "level": "top",
+          "view": "top",
+          "menuStillUp": true,
+          "chooserStillCharging": false,
+          "chooserActionEnded": true,
+          "events": [
+            "damage:paine->ormi-entrance",
+            "action-end:paine"
+          ]
+        },
+        {
+          "step": "submenu 3 s",
+          "view": "sub",
+          "level": "deep",
+          "ticks": "66085 -> 66085",
+          "events": 0
+        },
+        {
+          "step": "target cursor 2 s",
+          "view": "target",
+          "level": "deep",
+          "chip": "WAIT — ATB HELD",
+          "ticks": "66085 -> 66085"
+        },
+        {
+          "step": "back at top 1.5 s",
+          "view": "top",
+          "level": "top",
+          "ticks": "66739 -> 68520",
+          "owner": "rikku"
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

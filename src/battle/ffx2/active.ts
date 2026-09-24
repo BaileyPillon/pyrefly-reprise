@@ -8,8 +8,9 @@
  * both modes, **Wait by default** ({@link AtbMode}). The mechanic is
  * `research/ffx2-combat-core.md` §1.5: Active *"Time never stops, including
  * while browsing the item list or a magic submenu"*; Wait freezes time in a
- * submenu (the reading built — the whole menu, top level included — and why:
- * `docs/plans/ffx2-wait-mode-review.md` §2). FFX is CTB and has no clock to run
+ * submenu (the reading shipped — the whole menu, top level included — and why:
+ * `docs/plans/ffx2-wait-mode-review.md` §2; the faithful top-level/submenu
+ * split is built behind {@link DEFAULT_WAIT_SPLIT}). FFX is CTB and has no clock to run
  * (`research/ffx-vs-ffx2-presentation.md` §4.3), so none of this reaches it —
  * `tests/unit/ffx-no-active-clock.test.ts` is the absence test (AGENTS.md
  * rule 14 / CHK-021).
@@ -24,10 +25,10 @@
 
 import type { AbilityDef, CombatantId, Command, Rng } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
-import { isActionLocked } from './chain.ts';
-import { isReady } from './gauges.ts';
+import { isActionLocked, ticksUntilChainBreak } from './chain.ts';
+import { isReady, ticksUntilNextEvent } from './gauges.ts';
 import { rollDefault } from './minigames.ts';
-import { canAct } from './statuses.ts';
+import { canAct, ticksUntilStatusEvent } from './statuses.ts';
 
 /**
  * FFX-2's Config "ATB Mode" (§1.5). `'wait'` is the default (D-029): the clock
@@ -50,14 +51,19 @@ export const DEFAULT_ATB_MODE: AtbMode = 'wait';
 export type MenuLevel = 'top' | 'deep';
 
 /**
- * **The Wait split is on by default** (D-029 follow-up 2, built 2026-09-24 after
- * Bailey's live report: *"none of the attacks/moves i select take place until
- * after i select moves for all 3 girls then all of them go at once? is it
- * supposed to be like that?"*). `false` restores the whole-menu hold, the dark
- * launch `docs/plans/ffx2-wait-split-review.md` recommended until he rules on
- * its measured cost (§4 there, and the build-pass table in the handoff).
+ * **The Wait split is built and switched off by default** (D-029 follow-up 2,
+ * built 2026-09-24 after Bailey's live report: *"none of the attacks/moves i
+ * select take place until after i select moves for all 3 girls then all of
+ * them go at once? is it supposed to be like that?"*). Off = the whole-menu
+ * hold the live build ships, the dark launch `docs/plans/ffx2-wait-split-review.md`
+ * recommends until Bailey answers A (faithful split) or B (keep the hold) with
+ * its measured cost in front of him (chapters 5 and 6 get harder for a player
+ * who thinks on the top list; the table is in `docs/handoff/ffx2-wait-mode.md`
+ * §10), and until the Wait copy that would turn false is ruled on. `true` is
+ * the one-constant switch for **A**; `?wait=split` tries it on any build
+ * (`BattleScreenWiring.applyAtbMode`).
  */
-export const DEFAULT_WAIT_SPLIT = true;
+export const DEFAULT_WAIT_SPLIT = false;
 
 /**
  * Whether the clock is held still by an open command menu: **Wait mode** with a
@@ -248,4 +254,27 @@ export function allTargetsGone(
 export function substepTicks(remaining: number, soonest: number): number {
   if (!Number.isFinite(soonest) || soonest <= 0) return remaining;
   return Math.min(remaining, soonest);
+}
+
+/**
+ * Ticks until the soonest scheduled state change anywhere on the field, or
+ * `Infinity` when nothing at all is scheduled. Only Active's sub-stepping
+ * reads the raw value ({@link substepTicks}); every other caller wants the
+ * clamped {@link nextEventTicks}. Moved out of `engine.ts` (400-line cap).
+ */
+export function soonestEventTicks(units: readonly Ffx2Unit[]): number {
+  let soonest = ticksUntilChainBreak(units);
+  for (const unit of units) {
+    if (!unit.alive && unit.side === 'party') continue;
+    if (isReady(unit)) continue;
+    soonest = Math.min(soonest, ticksUntilNextEvent(unit), ticksUntilStatusEvent(unit));
+  }
+  return soonest;
+}
+
+/** {@link soonestEventTicks}, floored at one tick so a step always advances. */
+export function nextEventTicks(units: readonly Ffx2Unit[]): number {
+  const soonest = soonestEventTicks(units);
+  if (!Number.isFinite(soonest) || soonest <= 0) return 1;
+  return soonest;
 }

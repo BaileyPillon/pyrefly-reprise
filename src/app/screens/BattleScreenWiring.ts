@@ -92,8 +92,28 @@ export function applyAtbSpeed(engine: BattleEngine | null): void {
  * this is a no-op there (AGENTS.md rule 14).
  */
 export function applyAtbMode(engine: BattleEngine | null): void {
-  const x2 = engine as (BattleEngine & { setAtbMode?: (m: AtbMode) => void }) | null;
+  const x2 = engine as (BattleEngine & { setAtbMode?: (m: AtbMode) => void; setWaitSplit?: (on: boolean) => void }) | null;
   x2?.setAtbMode?.(readSetting('ffx2Atb') === 'active' ? 'active' : 'wait');
+  const split = waitSplitFromUrl();
+  if (split !== null) x2?.setWaitSplit?.(split);
+}
+
+/**
+ * `?wait=split` / `?wait=hold`: try Wait's faithful split (the clock runs at
+ * the top-level command list, holds in a submenu or the target cursor;
+ * `research/ffx2-combat-core.md` §1.5) or the whole-menu hold on any build,
+ * so Bailey can feel both before he rules on D-029 follow-up 2. Anything else
+ * (or no parameter) keeps the engine default, `DEFAULT_WAIT_SPLIT`. A URL
+ * switch for a decision, not a setting: it is read at chapter start and at
+ * every pause close, never saved. FFX-2 only (FFX has no `setWaitSplit`).
+ */
+export function waitSplitFromUrl(search: string = globalThis.location?.search ?? ''): boolean | null {
+  try {
+    const v = new URLSearchParams(search).get('wait');
+    return v === 'split' ? true : v === 'hold' ? false : null;
+  } catch {
+    return null;
+  }
 }
 
 /** FFX-2's Config "ATB Mode and Speed", both halves: {@link applyAtbMode} and {@link applyAtbSpeed}. */

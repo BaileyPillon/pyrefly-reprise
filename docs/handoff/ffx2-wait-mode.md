@@ -235,15 +235,19 @@ with real keys, seed 7, in chapters 4, 5 and 6 (timestamps: `docs/plans/ffx2-wai
 
 | Where | What |
 |---|---|
-| `src/battle/ffx2/active.ts` | `MenuLevel` (`'top'` / `'deep'`), `DEFAULT_WAIT_SPLIT = true`, `clockHeldByMenu(mode, owner, level = 'deep', split = false)` |
+| `src/battle/ffx2/active.ts` | `MenuLevel` (`'top'` / `'deep'`), `DEFAULT_WAIT_SPLIT = false` (repair pass: shipped dark), `clockHeldByMenu(mode, owner, level = 'deep', split = false)` |
+| `src/app/screens/BattleScreenWiring.ts` | `?wait=split` / `?wait=hold` (`waitSplitFromUrl`), applied with the ATB mode at chapter start and every pause close; never saved |
 | `engine.ts`, `internal.ts`, `index.ts` | `Ffx2EngineOptions.waitSplit`; `setWaitSplit` / `waitSplit` / `setMenuLevel` / `menuLevel` / `clockHeld`; a new owner's menu starts `'deep'` (held) until the HUD reports its top list |
 | `BattlePresenterActive.ts` (property 8), `BattlePresenter.ts` | park or pump on `clockHeld()`; `followMenuLevel` wires the HUD's reports to the engine and wakes a parked menu; a pause-close epoch so a pump step spanning a pause ticks 0 ms (was up to 250 ms) |
 | `HudPort.ts`, `ui/ffx2/CommandMenu.ts`, `FFX2BattleHud.ts`, `ui/coach/CoachLayer.ts` | optional `onMenuLevel`; the menu reports `top` on the list, `deep` in a submenu or the target cursor; the coach wrapper forwards it |
 
 **Game case: FFX-2 only** (the plumbing is shared and inert for FFX: its engine has no `tick`, its
-HUD reports nothing). Active is unchanged. `waitSplit: false` (one constant) restores the
-whole-menu hold. The chip ("WAIT — ATB HELD") only shows over the target cursor, which holds,
-so it stays true.
+HUD reports nothing). Active is unchanged. **Shipped switched off** (repair pass, below): the
+default is the live whole-menu hold until Bailey answers A (faithful split) or B (keep the hold);
+`?wait=split` tries it, and `DEFAULT_WAIT_SPLIT = true` (one constant) makes it the default. The
+chip ("WAIT — ATB HELD") only shows over the target cursor, which holds, so it stays true.
+**The target cursor holding is INFERRED** (the sources say "submenu" and are silent on target
+selection); it is an open question for Bailey, not a sourced fact.
 
 **Measured** (`PYREFLY_MEASURE=1 npx vitest run tests/unit/ffx2-wait-split-measure.test.ts`,
 40 seeds, `intendedStrategy`; `T` = the part of the 1.5 s decision spent on the top list):
@@ -283,4 +287,14 @@ seed 3 Paine's skill lands under Yuna's top list, 21377 → 25607; ch. 6 seed 7 
 under Rikku's top list. In each: submenu 3 s and target cursor 2 s hold the ticks exactly (chip
 "WAIT — ATB HELD"), Esc back to the top list and they rise. Live, the same steps: ticks frozen
 at the top list for 12 s and the chooser still charging (ch. 4 17410, ch. 5 39023, ch. 6 46167).
+
+**Repair pass (2026-09-24).** Default flipped to off and `?wait=split` added (above); the four
+over-cap files the split had grown are back at or under their earlier length (`engine.ts` 640,
+`BattlePresenter.ts` 653, `CommandMenu.ts` 625, `FFX2BattleHud.ts` 1258) by moving the split's
+pieces and a few pure helpers into `ui/ffx2/atbClockChip.ts`, `ui/ffx2/withTargets.ts`,
+`BattlePresenterActive.MenuWaker` and `active.ts`. New tests: `ffx2-wait-split-switch.test.ts`.
+Open for Bailey: A or B; whether the target cursor holds under the split (inferred); the copy
+above if he picks A. Disclosed, not fixed: the swallowed first confirm on a fresh profile's first
+X-2 menu (live too), and, with the split on, an enemy hit on the menu owner leaving her top list
+open (Active's existing path; the research says the hit closes the menu with Delay).
 

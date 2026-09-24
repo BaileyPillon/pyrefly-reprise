@@ -301,24 +301,67 @@ export async function runMenuClock(deps: MenuClockDeps): Promise<MenuClockOutcom
 
 /**
  * Wire the HUD's menu-level reports to the engine for one FFX-2 menu (property
- * 8): each report is handed to the engine, then `wake` restarts a parked menu
- * so the clock can start the moment the cursor is back on the top list.
- * Returns the unsubscribe; a HUD without `onMenuLevel` leaves the menu held.
- * Call it **before** `HudPort.chooseCommand`, whose first render reports `'top'`.
+ * 8): each report is handed to the engine, then the waker restarts a parked
+ * menu so the clock can start the moment the cursor is back on the top list.
+ * Returns the menu's teardown: unsubscribe, and forget the waker's parked
+ * menu. A HUD without `onMenuLevel` leaves the menu held, and FFX (no clock
+ * engine, `null`) only gets the teardown. Call it **before**
+ * `HudPort.chooseCommand`, whose first render reports `'top'`.
  */
 export function followMenuLevel(
   hud: { onMenuLevel?(listener: (level: 'top' | 'deep') => void): () => void } | undefined,
-  engine: ActiveClockEngine,
-  wake: () => void,
+  engine: ActiveClockEngine | null,
+  waker: MenuWaker,
 ): () => void {
-  if (!hud?.onMenuLevel || !engine.setMenuLevel) return () => undefined;
+  const done = (off: () => void) => (): void => {
+    off();
+    waker.clear();
+  };
+  if (!hud?.onMenuLevel || !engine?.setMenuLevel) return done(() => undefined);
   try {
-    return hud.onMenuLevel((level) => {
-      engine.setMenuLevel?.(level);
-      wake();
-    });
+    return done(
+      hud.onMenuLevel((level) => {
+        engine.setMenuLevel?.(level);
+        waker.wake();
+      }),
+    );
   } catch (err) {
     console.warn('[presenter] HUD onMenuLevel threw', err);
-    return () => undefined;
+    return done(() => undefined);
+  }
+}
+
+/**
+ * Parks an FFX-2 menu in {@link runMenuClock} and wakes it: on a menu-level
+ * report ({@link followMenuLevel}), and on every pause close ({@link resumed},
+ * which also bumps the {@link epoch} that stops a pump step spanning the pause
+ * from handing its time to the clock, property 8). One per presenter.
+ */
+export class MenuWaker {
+  /** Bumped at every pause close (`ActivePumpDeps.epoch`). */
+  epoch = 0;
+  private wakeFn: (() => void) | null = null;
+
+  /** Resolves at the next {@link wake} (`MenuClockDeps.modeChanged`). */
+  park(): Promise<void> {
+    return new Promise<void>((wake) => (this.wakeFn = wake));
+  }
+
+  /** Restart a parked menu, if one is. */
+  wake(): void {
+    const wake = this.wakeFn;
+    this.wakeFn = null;
+    wake?.();
+  }
+
+  /** The pause closed (the Config mode may have changed): bump the epoch, then wake. */
+  resumed(): void {
+    this.epoch += 1;
+    this.wake();
+  }
+
+  /** The menu is over; forget its waker without calling it. */
+  clear(): void {
+    this.wakeFn = null;
   }
 }

@@ -172,7 +172,7 @@ export interface Ffx2EngineOptions {
   atbMode?: AtbMode;
   /**
    * Wait's faithful split (`active.ts` {@link DEFAULT_WAIT_SPLIT}, §1.5): the
-   * top-level command list runs the clock, a submenu holds it. Default on;
+   * top-level command list runs the clock, a submenu holds it. Default off (dark launch);
    * `false` is the whole-menu hold. Changeable with `FFX2Engine.setWaitSplit`.
    */
   waitSplit?: boolean;

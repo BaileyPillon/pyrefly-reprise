@@ -26,7 +26,7 @@ type Input = Extract<Decision, { kind: 'player-input' }>;
 function ch4(seed: number, extra: Parameters<typeof ffx2Options>[0] = {}): FFX2Engine {
   const group = data.ENEMY_GROUPS_BY_ID['ffx2-bahamut'];
   if (!group) throw new Error('ffx2-bahamut missing');
-  const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...extra }));
+  const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', waitSplit: true, ...extra }));
   engine.setSeed(seed);
   engine.init({ game: 'ffx2', party: bevelleBuild, enemies: group, triggers: [], seed, condition: 'normal', canEscape: false });
   return engine;
@@ -57,9 +57,10 @@ function pick(engine: FFX2Engine, d: Input): Command {
 }
 
 describe('the policy', () => {
-  it('the split is on by default, and clockHeldByMenu reads it', () => {
-    expect(DEFAULT_WAIT_SPLIT).toBe(true);
-    expect(new FFX2Engine().waitSplit()).toBe(true);
+  it('the split ships switched off (dark launch until Bailey answers A or B), and clockHeldByMenu reads it', () => {
+    expect(DEFAULT_WAIT_SPLIT).toBe(false);
+    expect(new FFX2Engine().waitSplit()).toBe(false);
+    expect(new FFX2Engine({ waitSplit: true }).waitSplit()).toBe(true);
     // Wait with a menu open: the top level runs only with the split; a submenu always holds.
     expect(clockHeldByMenu('wait', 'yuna', 'top', true)).toBe(false);
     expect(clockHeldByMenu('wait', 'yuna', 'deep', true)).toBe(true);

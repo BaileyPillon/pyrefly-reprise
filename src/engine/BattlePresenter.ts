@@ -33,7 +33,7 @@ import type {
 } from '../battle/common/types.ts';
 import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvents.ts';
-import { clockEngine, followMenuLevel, runMenuClock } from './BattlePresenterActive.ts';
+import { clockEngine, followMenuLevel, MenuWaker, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
 import { settleForMenu } from './BattlePresenterBeats.ts';
@@ -73,10 +73,8 @@ export class BattlePresenter {
    * battle. **FFX-2 only** — nothing sets it on an FFX fight.
    */
   private inputAbandoned = false;
-  /** Wakes an FFX-2 Wait menu parked in `runMenuClock` ({@link atbModeChanged}). */
-  private wakeMenuClock: (() => void) | null = null;
-  /** Bumped at every pause close; a pump step spanning one ticks nothing (BattlePresenterActive property 8). */
-  private resumeEpoch = 0;
+  /** Parks and wakes an FFX-2 Wait menu in `runMenuClock` ({@link atbModeChanged}, the menu level). */
+  private readonly menuWake = new MenuWaker();
 
   private speed: PlaybackSpeed = 'normal';
   private timeScale: number;
@@ -473,8 +471,7 @@ export class BattlePresenter {
     // FFX-2's ATB clock under this menu, Wait or Active (`runMenuClock`).
     // FFX gets `null` here and behaves exactly as it always has (rule 14).
     const clock = clockEngine(engine);
-    // Wait's split (§1.5): the HUD says top list or submenu; subscribed before the menu opens.
-    const unfollow = clock ? followMenuLevel(hud, clock, () => this.wakeMenu()) : () => undefined;
+    const unfollow = followMenuLevel(hud, clock, this.menuWake); // Wait's split: before the menu opens
     let settled = false;
     const decided = Promise.race([hud.chooseCommand(actorId, commands, previewRank), interrupt]).then(
       (command) => {
@@ -534,8 +531,8 @@ export class BattlePresenter {
         now: this.now,
         play: (events) => this.play(events),
         syncGauges: (snapshot) => this.syncGauges(snapshot),
-        modeChanged: () => new Promise<void>((wake) => (this.wakeMenuClock = wake)),
-        epoch: () => this.resumeEpoch,
+        modeChanged: () => this.menuWake.park(),
+        epoch: () => this.menuWake.epoch,
         showMode: (mode) => this.showAtbMode(mode),
       });
       if ('command' in outcome) return finish(outcome.command, outcome.ran);
@@ -552,7 +549,6 @@ export class BattlePresenter {
       unfollow();
       this.ctx.stage.camera.hold?.(false);
       this.pendingMenu = null;
-      this.wakeMenuClock = null;
     }
   }
 
@@ -563,15 +559,7 @@ export class BattlePresenter {
    * next one. A no-op when no menu is parked; FFX never parks one.
    */
   atbModeChanged(): void {
-    this.resumeEpoch += 1;
-    this.wakeMenu();
-  }
-
-  /** Restart a menu parked in `runMenuClock`, if one is. */
-  private wakeMenu(): void {
-    const wake = this.wakeMenuClock;
-    this.wakeMenuClock = null;
-    wake?.();
+    this.menuWake.resumed();
   }
 
   /** The HUD's mode chip (`HudPort.setAtbMode`). FFX-2 only; never throws. */

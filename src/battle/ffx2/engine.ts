@@ -54,17 +54,14 @@ import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { ATB_SPEED_MULTIPLIER, type AtbSpeed } from './constants.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
-import { advanceChainWindows, isActionLocked, ticksUntilChainBreak } from './chain.ts';
+import { advanceChainWindows, isActionLocked } from './chain.ts';
 import {
   advanceGauge,
   beginRecovery,
   buildSnapshot,
-  isReady,
   msToTicks,
   ticksToMs,
-  ticksUntilNextEvent,
 } from './gauges.ts';
-import { ticksUntilStatusEvent } from './statuses.ts';
 import type { ResolveContext } from './resolve.ts';
 import { buildCommands, type MenuContext } from './targeting.ts';
 import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, payStatusClocks } from './engineHooks.ts';
@@ -83,7 +80,9 @@ import {
   DEFAULT_WAIT_SPLIT,
   heldStillPending,
   inputStillValid,
+  nextEventTicks,
   ownsInput,
+  soonestEventTicks,
   substepTicks,
   withDefaultTimedInput,
   type AtbMode,
@@ -198,17 +197,12 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   atbMode(): AtbMode { return this.mode; }
 
-  /** Wait's split on or off (the engine option `waitSplit`). Survives `init`. */
+  /** Wait's split on/off (option `waitSplit`, survives `init`), the HUD's menu level
+   * (`HudPort.onMenuLevel`), and whether the clock is held now (`active.ts` {@link clockHeldByMenu}). */
   setWaitSplit(on: boolean): void { this.split = on; }
-
   waitSplit(): boolean { return this.split; }
-
-  /** The HUD's report of where the open menu's cursor is (`HudPort.onMenuLevel`). */
   setMenuLevel(level: MenuLevel): void { this.level = level; }
-
   menuLevel(): MenuLevel { return this.level; }
-
-  /** Whether an open menu holds the clock right now (`active.ts` {@link clockHeldByMenu}). */
   clockHeld(): boolean { return clockHeldByMenu(this.mode, this.inputOwner, this.level, this.split); }
 
   setSeed(n: number): void {
@@ -275,8 +269,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
         this.fireHeld(actor);
         return { kind: 'resolved', events: this.flush() };
       }
-      // Idempotent: the same girl, decision after decision, until she submits.
-      // A new owner's menu is held until the HUD reports its top list.
+      // Idempotent: the same girl, decision after decision, until she submits (a new owner is held until the HUD reports her top list).
       if (this.inputOwner !== actor.id) this.level = 'deep';
       this.inputOwner = actor.id;
       return {
@@ -292,7 +285,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     }
 
     // Real ms until the next event: game ticks over the Config rate (§1.2).
-    const ms = ticksToMs(this.nextEventTicks()) / this.atbRate;
+    const ms = ticksToMs(nextEventTicks(this.units)) / this.atbRate;
     return { kind: 'waiting', nextEventMs: Math.max(1, Math.round(ms)) };
   }
 
@@ -383,8 +376,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
     while (remaining > 0.0001 && guard++ < TICK_SUBSTEP_LIMIT) {
       const step = throughInput
-        ? substepTicks(remaining, this.soonestEventTicks())
-        : Math.min(remaining, Math.max(1, this.nextEventTicks()));
+        ? substepTicks(remaining, soonestEventTicks(this.units))
+        : Math.min(remaining, Math.max(1, nextEventTicks(this.units)));
       remaining -= step;
       this.elapsedMs += ticksToMs(step) / this.atbRate;
       this.battleState.ticks += step;
@@ -493,29 +486,6 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     const before = this.drafts.length;
     this.beginTurn(actor);
     performCommand(this.env(), actor, command, false, before);
-  }
-
-  /**
-   * Ticks until the soonest scheduled state change anywhere on the field, or
-   * `Infinity` when nothing at all is scheduled. Only Active's sub-stepping
-   * reads the raw value ({@link substepTicks}); every other caller wants the
-   * clamped {@link nextEventTicks}.
-   */
-  private soonestEventTicks(): number {
-    let soonest = ticksUntilChainBreak(this.units);
-    for (const unit of this.units) {
-      if (!unit.alive && unit.side === 'party') continue;
-      if (isReady(unit)) continue;
-      soonest = Math.min(soonest, ticksUntilNextEvent(unit), ticksUntilStatusEvent(unit));
-    }
-    return soonest;
-  }
-
-  /** {@link soonestEventTicks}, floored at one tick so a step always advances. */
-  private nextEventTicks(): number {
-    const soonest = this.soonestEventTicks();
-    if (!Number.isFinite(soonest) || soonest <= 0) return 1;
-    return soonest;
   }
 
   private resolveCtx(): ResolveContext {

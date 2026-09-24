@@ -41,6 +41,7 @@ import { TargetCursor, type CursorSelection, type TargetEntry } from '../ffx/Tar
 import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 import { commandHelpText, groupHelpText } from './commandHelp.ts';
+import { withTargets } from './withTargets.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
   attack: 'Attack',
@@ -205,31 +206,8 @@ export interface CommandMenuDeps {
    * working. Calling it twice, or after the menu resolved, is a no-op.
    */
   onOpen?: (close: () => void) => void;
-  /**
-   * Where the cursor is, on every view change: `'top'` on the top-level list,
-   * `'deep'` in a submenu or the target cursor. FFX-2 Wait's split
-   * (`research/ffx2-combat-core.md` §1.5) runs the clock only at the top.
-   */
+  /** The cursor's level at each view change: `'top'` list, `'deep'` submenu or target (Wait's split, ffx2-combat-core §1.5). */
   onLevel?: (level: 'top' | 'deep') => void;
-}
-
-/** Every variant of {@link Command} carries a `targets` array; fill it in without an `as any`. */
-function withTargets(command: Command, targets: CombatantId[]): Command {
-  switch (command.kind) {
-    case 'attack':
-    case 'ability':
-    case 'item':
-    case 'overdrive':
-    case 'trigger':
-      return { ...command, targets };
-    case 'summon':
-    case 'dismiss':
-    case 'switch':
-    case 'spherechange':
-    case 'escape':
-    case 'defend':
-      return { ...command, targets: [] };
-  }
 }
 
 /**
@@ -269,8 +247,6 @@ const KEY_CANCEL = new Set(['Escape', 'KeyX', 'Backspace']);
 /** The ink cursor triangle, FFX-2's mirror (points left, trails the label — see the module comment). */
 const CURSOR_SVG =
   '<svg class="ig-cmd__cursor" viewBox="0 0 12 16" aria-hidden="true"><path d="M11 1 L1 8 L11 15 Z" fill="#0B0A12"/></svg>';
-
-
 
 /** Opens the menu and resolves once the player has picked a command and (if needed) a target. */
 export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
