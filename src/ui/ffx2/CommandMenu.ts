@@ -205,6 +205,12 @@ export interface CommandMenuDeps {
    * working. Calling it twice, or after the menu resolved, is a no-op.
    */
   onOpen?: (close: () => void) => void;
+  /**
+   * Where the cursor is, on every view change: `'top'` on the top-level list,
+   * `'deep'` in a submenu or the target cursor. FFX-2 Wait's split
+   * (`research/ffx2-combat-core.md` §1.5) runs the clock only at the top.
+   */
+  onLevel?: (level: 'top' | 'deep') => void;
 }
 
 /** Every variant of {@link Command} carries a `targets` array; fill it in without an `as any`. */
@@ -475,6 +481,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderTop(fromCancel = false): void {
       view = 'top';
+      deps.onLevel?.('top');
       if (fromCancel) releaseCancelAfterPress();
       else releaseCancel();
       const rows = topRows
@@ -492,6 +499,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderSub(title: string): void {
       view = 'sub';
+      deps.onLevel?.('deep');
       claimCancel();
       subCategory = title;
       const rows = subItems.map((c, i) => leafRowHtml(c, i, i === subIdx)).join('');
@@ -517,6 +525,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
 
     function renderTargets(): void {
       view = 'target';
+      deps.onLevel?.('deep');
       claimCancel();
       const entries = targetIds.map(entryFor);
       if (groupMode) cursor.showGroup(entries);

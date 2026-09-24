@@ -209,3 +209,67 @@ Verdict: **sound. Keep the dark launch and put the A/B ask to Bailey.** Re-ran t
 - CONFIRMED: `MAX_STEP_MS = 250` (`BattlePresenterActive.ts:80`), so the 250 ms pause leak is plausible. Settle it with the section 11 step 2 test.
 - CONFIRMED: D-029 follow-up 2 is "deferred, build the split next release". The new A/B question is a new fact, correctly routed to Bailey (rule 10). The chip pairing is correctly INFERRED.
 - Builder: `CommandMenu.ts` (616) and `FFX2BattleHud.ts` (1225) are also over the cap, and `BattlePresenter.ts` is now 651. Put new logic in new or small files. Do not tune any boss.
+
+## Build pass preflight (2026-09-24, hotfix track `wait-split`, FFX-2 only)
+
+Trigger, Bailey on the live build (76f587c3, Wait, the default), verbatim: *"none of the
+attacks/moves i select take place until after i select moves for all 3 girls then all of them
+go at once? is it supposed to be like that?"* The orchestrator scheduled this build as D-029
+follow-up 2 (approved "build the split next release"). Paper, 5 to 10 minutes, before code.
+
+**Reproduced on the live site, real keys, seed 7, 1.5 s on each top list, then a skill**
+(`.wait-split-repro-tmp.mjs`, `repro-live-sub.json` in the scratch folder). Every FFX-2 skill
+and spell has a charge bar (`CT_SHORT` 16 / `CT_MEDIUM` 26 / `CT_LONG` 39; only Attack is
+`CT_INSTANT`), and a charge is clock. Under today's whole-menu hold the next girl's menu
+freezes the charge of the girl who just chose:
+- ch. 4: Yuna chooses Cure at 16.78 s (ticks 14765); Rikku's menu opens at 17.70 s and the
+  ticks stay 17410 for all of it; Yuna's Cure lands at 21.60 s, after Rikku confirms. Later
+  Rikku chooses Darkness at 37.17 s (ticks 44121) and Paine's menu opens at 38.10 s at
+  **44121**: zero ticks between them, so both resolve after Paine confirms (43.74 s).
+- ch. 5: Paine chooses Darkness at 32.80 s; Rikku's menu holds 39023 from 35.77 to 38.14 s;
+  Paine's lands at 40.41 s, Rikku's at 41.13 s, back to back.
+- ch. 6: Rikku chooses Steal at 31.02 s (ticks 23217); Paine's menu opens at 33.06 s at the
+  same 23217 and holds to 35.40 s.
+Attack (no charge) resolves on confirm, so the report is about skills, which is most of a turn.
+**Answer to his question: no.** FFX-2's Wait runs the clock at the top-level command window
+(§1.5); only a submenu freezes it. Our Wait froze the top level too.
+
+**What changes (the split as sections 3 and 5 to 7 describe, with three deliberate cuts for a
+hotfix):**
+1. Engine: `MenuLevel`, `waitSplit` option, `setMenuLevel` / `menuLevel` / `clockHeld`; the
+   level resets to `'deep'` (held) with every new owner; `clockHeldByMenu(mode, owner, level,
+   split)`. **Default ON** (`DEFAULT_WAIT_SPLIT`), because the brief schedules it as the Wait
+   behaviour; one constant turns it off again (the dark launch the review above recommended)
+   if Bailey answers **B** after seeing section 4's numbers. Active is untouched.
+2. Presenter: park or pump on `clockHeld()` (one truth, the engine's), wake on a level change
+   through the existing `wakeMenuClock`. **Cut 1:** no exact edge timing; a submenu entered
+   mid-step drops at most one pump step (<= 50 ms) of top-level time, never banks it
+   (forgiving, same direction as the hold). **Kept:** the pause epoch (section 8), because the
+   split makes the 250 ms leak reachable under the default.
+3. HUD: `CommandMenu` reports `top` / `deep` (sub and target); `FFX2BattleHud.onMenuLevel`;
+   `CoachedHud` forwards it (the wrapper hole bit twice). The chip only shows over a target
+   cursor, which is `deep` = held, so "WAIT — ATB HELD" stays true; no chip change.
+   **Cut 2:** the coach mark is not moved to the first submenu (section 7.1). Rule 9: the
+   lines that become false at the top level are listed for Bailey, word for word, not
+   reworded or re-timed here.
+4. **Cut 3:** no new bench under `critic/` (off-limits to this track): the 40-seed table is a
+   `PYREFLY_MEASURE=1` arm of a new unit file, driving the real split (`setMenuLevel`), not the
+   Active-at-T proxy, so the equivalence of section 4 is tested rather than assumed.
+
+**Tests (written first, seen red):** `tests/unit/ffx2-wait-split.test.ts` (engine: top runs,
+deep holds, reset per owner, split off = today, Active unchanged, equivalence hashes ch. 4/5
+seeds 1-5: split `(D 1500, T 500)` = Active `D 500`, split `T 0` = Wait);
+`tests/unit/ffx2-wait-split-presenter.test.ts` (real presenter, fake clock: a menu at top
+pumps, a submenu parks, back to top pumps again, the pause epoch hands 0 ms, split off parks at
+top); `tests/unit/ui-ffx2-menu-level.test.ts` (jsdom `CommandMenu` top/deep/top/deep/top,
+`FFX2BattleHud` and `withCoach` forward the listener). Re-run: the Wait, Active, golden,
+repair and coach suites, then the full suite once.
+
+**Difficulty, chapters 4 to 6:** section 4's table is the expectation (ch. 4 flat; ch. 5 and
+ch. 6 fall with top-list dwell). Nothing is tuned (rule 6, "boss-side fix needs measured
+options"). **Measurement plan:** 40 seeds, `intendedStrategy`, D = 0 and 1500 ms; before =
+Wait whole-menu hold (split off), after = split with T = 0, 500 and 1500 ms of the 1.5 s spent
+on the top list; Active at D = 1500 as the control; the table goes in the handoff and the
+report. **Browser acceptance (real keys, own Vite 5720):** ch. 4 Wait: Yuna chooses a charged
+skill; with Rikku's top list open the ticks rise and Yuna's action plays; Rikku opens a
+submenu and the ticks stop; Esc back and they rise; ch. 5 and ch. 6 the same check once.

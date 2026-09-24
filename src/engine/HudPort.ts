@@ -105,6 +105,19 @@ export interface HudPort {
    * the default (D-029; the verifier's ch. 4 seed 3 capture).
    */
   setAtbMode?(mode: 'wait' | 'active'): void;
+  /**
+   * Subscribe to where the open command menu's cursor is: `'top'` on the
+   * top-level command list, `'deep'` in a submenu or the target cursor. Returns
+   * the unsubscribe. A listener subscribed while a menu is open hears the
+   * current level at once.
+   *
+   * Optional and additive, **FFX-2 only**: FFX-2's Wait runs the clock at the
+   * top-level window and freezes it in a submenu (`research/ffx2-combat-core.md`
+   * §1.5), and only the HUD knows which one the player is in. The presenter
+   * subscribes for each FFX-2 menu (`BattlePresenterActive.ts` property 8).
+   * FFX's CTB implements nothing; a HUD that never reports leaves Wait held.
+   */
+  onMenuLevel?(listener: (level: 'top' | 'deep') => void): () => void;
   /** Called for every event before the presenter animates it; may show a transient (telegraph banner, chain popup) but must resolve within ~600 ms. */
   onEvent(event: BattleEvent): Promise<void> | void;
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult>;

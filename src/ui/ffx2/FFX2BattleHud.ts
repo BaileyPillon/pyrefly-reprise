@@ -150,6 +150,9 @@ export class FFX2BattleHud implements HudPort {
    * `'active'`, which put "ACTIVE — ATB RUNNING" over a held clock.
    */
   private atbMode: AtbMode = DEFAULT_ATB_MODE;
+  /** The open menu's cursor level (`HudPort.onMenuLevel`, Wait's split, §1.5); `null` with no menu up. */
+  private menuLevel: 'top' | 'deep' | null = null;
+  private levelListener: ((level: 'top' | 'deep') => void) | null = null;
   /** Tears the open command menu down from outside. Active ATB only. */
   private closeMenu: (() => void) | null = null;
   /** The painted field's targeting surface, when there is a field. */
@@ -740,6 +743,7 @@ export class FFX2BattleHud implements HudPort {
   closeCommandMenu(): void {
     const close = this.closeMenu;
     this.closeMenu = null;
+    this.menuLevel = null;
     if (close) close();
     this.commandEl.hidden = true;
     this.actingId = null;
@@ -809,7 +813,9 @@ export class FFX2BattleHud implements HudPort {
       onOpen: (close) => {
         this.closeMenu = close;
       },
+      onLevel: (level) => this.reportLevel(level),
     });
+    this.menuLevel = null;
     this.closeMenu = null;
     this.commandEl.hidden = true;
     this.actingId = null;
@@ -1010,6 +1016,21 @@ export class FFX2BattleHud implements HudPort {
     if (!this.activeWaitEl) return;
     this.activeWaitEl.hidden = !on;
     this.paintAtbMode();
+  }
+
+  /** `HudPort.onMenuLevel`: one listener; a late one hears the open menu's level at once. */
+  onMenuLevel(listener: (level: 'top' | 'deep') => void): () => void {
+    this.levelListener = listener;
+    if (this.menuLevel) listener(this.menuLevel);
+    return () => {
+      if (this.levelListener === listener) this.levelListener = null;
+    };
+  }
+
+  private reportLevel(level: 'top' | 'deep'): void {
+    if (this.menuLevel === level) return;
+    this.menuLevel = level;
+    this.levelListener?.(level);
   }
 
   /**

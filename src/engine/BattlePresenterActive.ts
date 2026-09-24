@@ -60,6 +60,17 @@
  *    told the mode at every one of these transitions (`HudPort.setAtbMode`).
  *    `tests/unit/ffx2-wait-mode.test.ts`, `ffx2-wait-mode-repair.test.ts`;
  *    `docs/plans/ffx2-wait-mode-review.md` §4.
+ * 8. **Wait's split (§1.5): the top list runs, a submenu holds.** Under Wait
+ *    the engine's own `clockHeld()` decides, not the mode: the HUD reports the
+ *    cursor's level (`HudPort.onMenuLevel`), the presenter tells the engine and
+ *    wakes a parked menu, and the pump runs at the top list exactly as it runs
+ *    under Active. A menu nobody reports on stays held. Going deeper mid-step
+ *    drops at most one step (<= {@link PUMP_MS}) of top-list time; nothing is
+ *    banked. And the pause's own time is never handed over: the pause-close hook
+ *    bumps an epoch, and a step that spans one ticks nothing (it used to hand
+ *    over the {@link MAX_STEP_MS} clamp, a leak the split makes reachable under
+ *    Wait). `tests/unit/ffx2-wait-split-presenter.test.ts`;
+ *    `docs/plans/ffx2-wait-split-review.md`.
  */
 
 import type { AtbSnapshot, BattleEvent, CombatantId, Command } from '../battle/common/types.ts';
@@ -89,6 +100,14 @@ export interface ActiveClockEngine {
    * `'active'`, the pump exactly as it was before Wait existed.
    */
   atbMode?(): 'wait' | 'active';
+  /**
+   * Whether an open menu holds the clock right now: the engine's one truth
+   * (Wait, and with the split only below the top list). Optional: an engine
+   * without it reads as "held whenever the mode is Wait", the pre-split rule.
+   */
+  clockHeld?(): boolean;
+  /** Where the open menu's cursor is, from the HUD (`HudPort.onMenuLevel`). */
+  setMenuLevel?(level: 'top' | 'deep'): void;
 }
 
 /**
@@ -124,6 +143,11 @@ export function modeOf(engine: ActiveClockEngine): 'wait' | 'active' {
   return engine.atbMode?.() === 'wait' ? 'wait' : 'active';
 }
 
+/** Whether the open menu holds the clock (property 8); the mode alone for an engine that cannot say. */
+export function clockHeldNow(engine: ActiveClockEngine): boolean {
+  return engine.clockHeld ? engine.clockHeld() : modeOf(engine) === 'wait';
+}
+
 /** Why the pump stopped. */
 export type PumpStop =
   /** The menu settled (a command was picked, or the loop was abandoned). */
@@ -139,8 +163,9 @@ export type PumpStop =
    */
   | 'invalidated'
   /**
-   * The engine was switched to **Wait** under the open menu (property 7). The
-   * menu is still open and still hers; the clock simply holds from here.
+   * The clock holds from here, the menu still open and still hers: the engine
+   * was switched to **Wait** under it (property 7), or the cursor went below
+   * the top list under Wait's split (property 8).
    */
   | 'held';
 
@@ -160,6 +185,12 @@ export interface ActivePumpDeps {
   play: (events: BattleEvent[]) => Promise<PlayResult>;
   /** Cheap gauge-only HUD refresh (never a full `sync`, which re-predicts intent). */
   syncGauges: (snapshot: AtbSnapshot) => void;
+  /**
+   * Bumped by the pause-close hook (`BattlePresenter.atbModeChanged`). A step
+   * whose wait spans a change ticks nothing (property 8). Optional: without it
+   * a pause hands over at most {@link MAX_STEP_MS}, as before.
+   */
+  epoch?: () => number;
 }
 
 /**
@@ -173,11 +204,19 @@ export async function runActivePump(deps: ActivePumpDeps): Promise<PumpStop> {
 
   for (;;) {
     if (deps.settled() || deps.aborted()) return 'settled';
+    const epoch = deps.epoch?.();
     await deps.sleep(PUMP_MS);
     if (deps.settled() || deps.aborted()) return 'settled';
 
-    // Property 7: switched to Wait mid-menu (D-029) — the clock holds from here.
-    if (modeOf(deps.engine) === 'wait') return 'held';
+    // Properties 7 and 8: switched to Wait mid-menu (D-029), or below the top
+    // list under Wait's split — the clock holds from here.
+    if (clockHeldNow(deps.engine)) return 'held';
+
+    // Property 8: the wait spanned a pause. Its time is not the fight's.
+    if (deps.epoch && deps.epoch() !== epoch) {
+      last = deps.now();
+      continue;
+    }
 
     const at = deps.now();
     const dt = Math.min(Math.max(0, at - last), MAX_STEP_MS);
@@ -212,8 +251,9 @@ export interface MenuClockDeps extends ActivePumpDeps {
   /** The menu's own answer (the HUD raced against the auto-play interrupt). */
   decided: Promise<Command>;
   /**
-   * Resolves the next time the Config mode may have changed — the pause
-   * closing (`BattlePresenter.atbModeChanged`) — or the presenter is torn down.
+   * Resolves the next time the clock may have to start: the Config mode may
+   * have changed (the pause closing, `BattlePresenter.atbModeChanged`), the
+   * cursor came back to the top list (property 8), or the presenter is torn down.
    */
   modeChanged: () => Promise<void>;
   /** Tell the HUD's mode chip the truth (`HudPort.setAtbMode`). Never throws. */
@@ -242,9 +282,8 @@ export async function runMenuClock(deps: MenuClockDeps): Promise<MenuClockOutcom
   let ran = false;
   const answered = deps.decided.then((command) => ({ command }) as const);
   for (;;) {
-    const mode = modeOf(deps.engine);
-    deps.showMode(mode);
-    if (mode === 'wait') {
+    deps.showMode(modeOf(deps.engine));
+    if (clockHeldNow(deps.engine)) {
       const woke = await Promise.race([answered, deps.modeChanged().then(() => null)]);
       if (woke) return { command: woke.command, ran };
       if (deps.aborted()) return { stop: 'settled' };
@@ -257,5 +296,29 @@ export async function runMenuClock(deps: MenuClockDeps): Promise<MenuClockOutcom
     const outcome = await Promise.race([answered, runActivePump(deps).then((stop) => ({ stop }) as const)]);
     if ('command' in outcome) return { command: outcome.command, ran };
     if (outcome.stop !== 'held') return { stop: outcome.stop };
+  }
+}
+
+/**
+ * Wire the HUD's menu-level reports to the engine for one FFX-2 menu (property
+ * 8): each report is handed to the engine, then `wake` restarts a parked menu
+ * so the clock can start the moment the cursor is back on the top list.
+ * Returns the unsubscribe; a HUD without `onMenuLevel` leaves the menu held.
+ * Call it **before** `HudPort.chooseCommand`, whose first render reports `'top'`.
+ */
+export function followMenuLevel(
+  hud: { onMenuLevel?(listener: (level: 'top' | 'deep') => void): () => void } | undefined,
+  engine: ActiveClockEngine,
+  wake: () => void,
+): () => void {
+  if (!hud?.onMenuLevel || !engine.setMenuLevel) return () => undefined;
+  try {
+    return hud.onMenuLevel((level) => {
+      engine.setMenuLevel?.(level);
+      wake();
+    });
+  } catch (err) {
+    console.warn('[presenter] HUD onMenuLevel threw', err);
+    return () => undefined;
   }
 }

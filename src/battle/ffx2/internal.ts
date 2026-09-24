@@ -170,6 +170,12 @@ export interface Ffx2EngineOptions {
    * Changeable mid-battle with `FFX2Engine.setAtbMode`.
    */
   atbMode?: AtbMode;
+  /**
+   * Wait's faithful split (`active.ts` {@link DEFAULT_WAIT_SPLIT}, §1.5): the
+   * top-level command list runs the clock, a submenu holds it. Default on;
+   * `false` is the whole-menu hold. Changeable with `FFX2Engine.setWaitSplit`.
+   */
+  waitSplit?: boolean;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

@@ -12,6 +12,12 @@
  * the engine's own default became Wait with D-029 (2026-09-22), and every
  * caller here measures what the clock does *under* a menu. Pass
  * `{ atbMode: 'wait' }` for the Wait arm (`docs/plans/ffx2-wait-mode-review.md`).
+ *
+ * **The Wait split** (`docs/plans/ffx2-wait-split-review.md`): pass `topMs` and
+ * the first `topMs` of each decision are spent on the top-level list (the engine
+ * is told `setMenuLevel('top')`), the rest inside a submenu (`'deep'`).
+ * Without `topMs` the engine is never told a level, which reads as held: the
+ * whole-menu Wait every existing golden was recorded under.
  */
 
 import { createHash } from 'node:crypto';
@@ -27,6 +33,8 @@ import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../../src/data/ffx2/builds/bevelle.ts';
 import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
+import { chateauBuild } from '../../../src/data/ffx2/builds/chateau.ts';
+import { LEBLANC_CHAIN_ORDER } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { VEGNAGUN_CHAIN_ORDER } from '../../../src/data/ffx2/ids.ts';
@@ -67,7 +75,7 @@ export interface DriveResult {
   held: number;
 }
 
-function runLink(engine: FFX2Engine, decisionMs: number, out: DriveResult): string | undefined {
+function runLink(engine: FFX2Engine, decisionMs: number, out: DriveResult, topMs?: number): string | undefined {
   for (let i = 0; i < MAX_DECISIONS; i++) {
     const d = engine.nextDecision();
     if (d.kind === 'battle-over') return d.result.outcome;
@@ -76,7 +84,20 @@ function runLink(engine: FFX2Engine, decisionMs: number, out: DriveResult): stri
       continue;
     }
     if (d.kind !== 'player-input') continue;
-    if (decisionMs > 0) {
+    if (topMs !== undefined) {
+      // The split: read the top list for `topMs`, then think inside a submenu.
+      const top = Math.min(topMs, decisionMs);
+      if (top > 0) {
+        engine.setMenuLevel('top');
+        engine.tick(top, { throughInput: true });
+        engine.setMenuLevel('deep');
+        if (!engine.inputValid(d.actorId)) {
+          out.invalidated += 1;
+          continue;
+        }
+      }
+      if (decisionMs - top > 0) engine.tick(decisionMs - top, { throughInput: true });
+    } else if (decisionMs > 0) {
       engine.tick(decisionMs, { throughInput: true });
       if (!engine.inputValid(d.actorId)) {
         out.invalidated += 1;
@@ -102,6 +123,7 @@ export function driveChapter4(
   decisionMs: number,
   extra: Partial<Ffx2EngineOptions> = {},
   prepare?: (engine: FFX2Engine) => void,
+  topMs?: number,
 ): DriveResult {
   const out = empty();
   const engine = new FFX2Engine(ffx2Options(extra));
@@ -110,7 +132,7 @@ export function driveChapter4(
   if (!group) throw new Error('ffx2-bahamut missing');
   engine.setSeed(seed);
   engine.init({ game: 'ffx2', party: bevelleBuild, enemies: group, triggers: [], seed, condition: 'normal', canEscape: false });
-  out.outcome = runLink(engine, decisionMs, out);
+  out.outcome = runLink(engine, decisionMs, out, topMs);
   out.logs.push([...engine.state().log]);
   out.ticks += engine.state().ticks;
   return out;
@@ -121,15 +143,39 @@ export function driveChapter5(
   decisionMs: number,
   extra: Partial<Ffx2EngineOptions> = {},
   prepare?: (engine: FFX2Engine) => void,
+  topMs?: number,
+): DriveResult {
+  return driveChain(VEGNAGUN_CHAIN_ORDER, farplaneBuild, seed, decisionMs, extra, prepare, topMs);
+}
+
+/** Chapter 6, the Leblanc Syndicate mission chain (the `chateau` build). */
+export function driveChapter6(
+  seed: number,
+  decisionMs: number,
+  extra: Partial<Ffx2EngineOptions> = {},
+  prepare?: (engine: FFX2Engine) => void,
+  topMs?: number,
+): DriveResult {
+  return driveChain(LEBLANC_CHAIN_ORDER, chateauBuild, seed, decisionMs, extra, prepare, topMs);
+}
+
+function driveChain(
+  order: readonly string[],
+  party: BattleSetup['party'],
+  seed: number,
+  decisionMs: number,
+  extra: Partial<Ffx2EngineOptions>,
+  prepare: ((engine: FFX2Engine) => void) | undefined,
+  topMs: number | undefined,
 ): DriveResult {
   const out = empty();
   const engine = new FFX2Engine(ffx2Options(extra));
   prepare?.(engine);
-  const first = data.ENEMY_GROUPS_BY_ID[VEGNAGUN_CHAIN_ORDER[0]!];
-  if (!first) throw new Error('the Vegnagun chain is missing');
+  const first = data.ENEMY_GROUPS_BY_ID[order[0]!];
+  if (!first) throw new Error(`the chain starting "${order[0]}" is missing`);
   let setup: BattleSetup = {
     game: 'ffx2',
-    party: farplaneBuild,
+    party,
     enemies: first,
     triggers: [],
     seed,
@@ -141,7 +187,7 @@ export function driveChapter5(
   let group: EnemyGroupDef = first;
   let links = 0;
   for (;;) {
-    const outcome = runLink(engine, decisionMs, out);
+    const outcome = runLink(engine, decisionMs, out, topMs);
     out.logs.push([...engine.state().log]);
     out.ticks += engine.state().ticks;
     links += 1;

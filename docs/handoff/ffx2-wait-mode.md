@@ -222,3 +222,65 @@ lives in its own module).
 
 **Release.** Save-data class: `critic-plan --paths src/app/SaveData.ts,...` says DEEP review
 of the candidate **before** deploy. Still open for Bailey: the Wait wording (INFERRED).
+
+## 10. The faithful split, built (2026-09-24, hotfix track `wait-split`, FFX-2 only)
+
+Bailey on the live build (76f587c3), verbatim: *"none of the attacks/moves i select take place
+until after i select moves for all 3 girls then all of them go at once? is it supposed to be like
+that?"* **No.** Every FFX-2 skill and spell has a charge bar (only Attack is instant), and our
+Wait froze the clock at the next girl's top-level menu, so a chosen skill could not finish until
+every ready girl had chosen. FFX-2's Wait (§1.5) freezes only inside a submenu. Reproduced live
+with real keys, seed 7, in chapters 4, 5 and 6 (timestamps: `docs/plans/ffx2-wait-split-review.md`,
+"Build pass preflight"). Built as D-029 follow-up 2, the item he deferred to this release.
+
+| Where | What |
+|---|---|
+| `src/battle/ffx2/active.ts` | `MenuLevel` (`'top'` / `'deep'`), `DEFAULT_WAIT_SPLIT = true`, `clockHeldByMenu(mode, owner, level = 'deep', split = false)` |
+| `engine.ts`, `internal.ts`, `index.ts` | `Ffx2EngineOptions.waitSplit`; `setWaitSplit` / `waitSplit` / `setMenuLevel` / `menuLevel` / `clockHeld`; a new owner's menu starts `'deep'` (held) until the HUD reports its top list |
+| `BattlePresenterActive.ts` (property 8), `BattlePresenter.ts` | park or pump on `clockHeld()`; `followMenuLevel` wires the HUD's reports to the engine and wakes a parked menu; a pause-close epoch so a pump step spanning a pause ticks 0 ms (was up to 250 ms) |
+| `HudPort.ts`, `ui/ffx2/CommandMenu.ts`, `FFX2BattleHud.ts`, `ui/coach/CoachLayer.ts` | optional `onMenuLevel`; the menu reports `top` on the list, `deep` in a submenu or the target cursor; the coach wrapper forwards it |
+
+**Game case: FFX-2 only** (the plumbing is shared and inert for FFX: its engine has no `tick`, its
+HUD reports nothing). Active is unchanged. `waitSplit: false` (one constant) restores the
+whole-menu hold. The chip ("WAIT — ATB HELD") only shows over the target cursor, which holds,
+so it stays true.
+
+**Measured** (`PYREFLY_MEASURE=1 npx vitest run tests/unit/ffx2-wait-split-measure.test.ts`,
+40 seeds, `intendedStrategy`; `T` = the part of the 1.5 s decision spent on the top list):
+
+| Arm | D | ch. 4 Bahamut | ch. 5 Vegnagun | ch. 6 Leblanc |
+|---|---|---|---|---|
+| before: Wait, whole-menu hold (live) | 0 | 40/40 | 40/40 | 40/40 |
+| before: Wait, whole-menu hold (live) | 1.5 s | 40/40 | 40/40 | 40/40 |
+| after: split, any `T` | 0 | 40/40 | 40/40 | 40/40 |
+| after: split, `T` 0 (reads inside a submenu) | 1.5 s | 40/40 | 40/40 | 40/40 |
+| after: split, `T` 0.5 s | 1.5 s | 40/40 | **32/40** | **29/40** |
+| after: split, `T` 1.5 s (reads on the top list) | 1.5 s | 40/40 | **5/40** | **5/40** |
+| control: Active | 1.5 s | 40/40 | 5/40 | 5/40 |
+
+Byte-for-byte: split `(D, T)` = Active at `T`; split `T = 0` = today's Wait (`ffx2-wait-split.test.ts`).
+Medians: ch. 5 379 s / 555 s / 836 s, ch. 6 126 s / 201 s / 238 s at `T` 0 / 0.5 / 1.5 s. So the
+split gives back, for a player who thinks on the top list, the chapter 5 cost D-029 was chosen
+to remove; one who opens a list and thinks inside it keeps today's Wait. Nothing tuned.
+
+**Lines that become false at the top list under the split (not reworded, Bailey's call):**
+`src/ui/coach/coachCopy.ts` `FFX2_GAUGE_BODY_WAIT` (his D-030 pick, shown when the menu opens)
+"Bar's full, she's up! Take your time, nobody moves while you're picking."; `BRIEFING_WAIT_LINE`
+(agent draft, INFERRED) "In hers, the clock holds while you choose."; `COACH_RUNNING_BADGE_WAIT`
+(agent draft, INFERRED) "Menu's up · gauges holding".
+
+**Tests** (written first, 18 of 20 seen red): `ffx2-wait-split.test.ts` (13),
+`ffx2-wait-split-presenter.test.ts` (4, through `withCoach`), `ui-ffx2-menu-level.test.ts` (3),
+`ffx2-wait-split-measure.test.ts` (1 always, 3 measured); helper `ffx2ChapterDrive.ts` gains `topMs`
+and `driveChapter6`. `npx tsc --noEmit` clean; full `npx vitest run` 306 files, 6152 passed, 5
+skipped; orphans 24 (unchanged).
+
+**Browser, real keys** (own Vite 5720, HMR off, `PYREFLY_BROWSER=gpu`, 1600x900, fresh profile,
+Wait by default; `.wait-split-accept-tmp.mjs`; reports and JPEGs in `docs/screenshots/hotfix/`,
+`wait-split-after-*` and the same script on the live site, `wait-split-live-before-*`):
+ch. 4 seed 7 Yuna's Cure lands (+474) under Rikku's open top list, ticks 18983 → 22478; ch. 5
+seed 3 Paine's skill lands under Yuna's top list, 21377 → 25607; ch. 6 seed 7 Paine's skill lands
+under Rikku's top list. In each: submenu 3 s and target cursor 2 s hold the ticks exactly (chip
+"WAIT — ATB HELD"), Esc back to the top list and they rise. Live, the same steps: ticks frozen
+at the top list for 12 s and the chooser still charging (ch. 4 17410, ch. 5 39023, ch. 6 46167).
+

@@ -19,7 +19,7 @@
  */
 
 export { FFX2Engine, makeFFX2Engine } from './engine.ts';
-export { DEFAULT_ATB_MODE, type AtbMode } from './active.ts';
+export { DEFAULT_ATB_MODE, DEFAULT_WAIT_SPLIT, clockHeldByMenu, type AtbMode, type MenuLevel } from './active.ts';
 
 export type {
   AbilityRegistry,

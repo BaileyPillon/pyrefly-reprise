@@ -182,7 +182,7 @@ class CoachedHud implements HudPort {
     this.inner.syncVitals?.(state);
   }
 
-  // The three optional FFX-2 clock methods. A wrapper that leaves an optional
+  // The optional FFX-2 clock methods (and `onMenuLevel` below). A wrapper that leaves an optional
   // `HudPort` method out hides it from the presenter: until the Wait-mode
   // repair pass the Active pump's `syncGauges` never reached the real HUD (the
   // bars stood still under an open menu while the clock ran), a torn-down
@@ -199,6 +199,11 @@ class CoachedHud implements HudPort {
 
   setAtbMode(mode: 'wait' | 'active'): void {
     this.inner.setAtbMode?.(mode);
+  }
+
+  // Wait's split (§1.5): the menu level, the same wrapper hole a third time.
+  onMenuLevel(listener: (level: 'top' | 'deep') => void): () => void {
+    return this.inner.onMenuLevel?.(listener) ?? (() => undefined);
   }
 
   // PR-0090: forwards `attachEnemyIntent`'s duck-typed wiring to the real HUD.

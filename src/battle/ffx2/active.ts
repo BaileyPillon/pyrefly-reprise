@@ -40,18 +40,47 @@ export type AtbMode = 'wait' | 'active';
 export const DEFAULT_ATB_MODE: AtbMode = 'wait';
 
 /**
- * Whether the clock is held still by an open command menu: **Wait mode** with a
- * `'player-input'` decision handed out and not yet answered. Then `tick` moves
- * nothing at all — no gauge, no charge, no status second, no chain window, no
- * enemy turn, nothing carried over — for as long as the menu is up, and the
- * clock resumes on confirm (`submit` clears the owner).
- * `docs/plans/ffx2-wait-mode-review.md` §3.
- *
- * Under Wait nothing can reach the owner while she chooses, so Active's
- * held-command and menu-owner rules (15385ab) are never exercised: harmless.
+ * Where the cursor of an open FFX-2 command menu is: the **top-level** command
+ * list, or anywhere below it (a submenu, the Change screen, the target cursor).
+ * Only the HUD knows; it reports through `HudPort.onMenuLevel` and the
+ * presenter tells the engine (`FFX2Engine.setMenuLevel`). A menu nobody has
+ * reported on reads as `'deep'`, held: a HUD or wrapper that never says
+ * degrades to the forgiving whole-menu hold, never to Active.
  */
-export function clockHeldByMenu(mode: AtbMode, inputOwner: CombatantId | null): boolean {
-  return mode === 'wait' && inputOwner !== null;
+export type MenuLevel = 'top' | 'deep';
+
+/**
+ * **The Wait split is on by default** (D-029 follow-up 2, built 2026-09-24 after
+ * Bailey's live report: *"none of the attacks/moves i select take place until
+ * after i select moves for all 3 girls then all of them go at once? is it
+ * supposed to be like that?"*). `false` restores the whole-menu hold, the dark
+ * launch `docs/plans/ffx2-wait-split-review.md` recommended until he rules on
+ * its measured cost (§4 there, and the build-pass table in the handoff).
+ */
+export const DEFAULT_WAIT_SPLIT = true;
+
+/**
+ * Whether the clock is held still by an open command menu: **Wait mode** with a
+ * `'player-input'` decision handed out and not yet answered, and — with the
+ * split (`research/ffx2-combat-core.md` §1.5, Wait: *"Time runs while the
+ * top-level Main Command Window is open, but freezes the moment any submenu is
+ * entered"*) — the cursor below the top-level list. Then `tick` moves nothing
+ * at all: no gauge, no charge, no status second, no chain window, no enemy turn,
+ * nothing carried over. On the top list under the split the clock runs exactly
+ * as Active's does (`throughInput`), so Active's held-command and menu-owner
+ * rules (15385ab, PR-0076/0080) are reachable under Wait too.
+ *
+ * `level` and `split` default to the whole-menu hold (the D-029 build,
+ * `docs/plans/ffx2-wait-mode-review.md` §3).
+ */
+export function clockHeldByMenu(
+  mode: AtbMode,
+  inputOwner: CombatantId | null,
+  level: MenuLevel = 'deep',
+  split = false,
+): boolean {
+  if (mode !== 'wait' || inputOwner === null) return false;
+  return !(split && level === 'top');
 }
 
 /** Options on {@link FFX2Engine.tick}. `throughInput` is Active mode's whole ask. */

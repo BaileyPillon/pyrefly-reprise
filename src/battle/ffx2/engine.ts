@@ -80,6 +80,7 @@ import {
   canTakeTurn,
   clockHeldByMenu,
   DEFAULT_ATB_MODE,
+  DEFAULT_WAIT_SPLIT,
   heldStillPending,
   inputStillValid,
   ownsInput,
@@ -87,6 +88,7 @@ import {
   withDefaultTimedInput,
   type AtbMode,
   type HeldCommand,
+  type MenuLevel,
   type TickOptions,
 } from './active.ts';
 
@@ -146,11 +148,15 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   private speed: AtbSpeed = 'normal';
   /** Config ATB mode (§1.5, `active.ts` {@link clockHeldByMenu}); Wait by default (D-029). */
   private mode: AtbMode = DEFAULT_ATB_MODE;
+  /** Wait's split (§1.5) and where the open menu's cursor is: `active.ts` {@link MenuLevel}. */
+  private split = DEFAULT_WAIT_SPLIT;
+  private level: MenuLevel = 'deep';
 
   constructor(options: Ffx2EngineOptions = {}) {
     this.options = options;
     this.setAtbSpeed(options.atbSpeed ?? 'normal');
     this.setAtbMode(options.atbMode ?? DEFAULT_ATB_MODE);
+    this.split = options.waitSplit ?? DEFAULT_WAIT_SPLIT;
     this.abilities = chainRegistries(options.abilities, defaultAbilities);
     this.dresspheres = options.dresspheres ?? defaultDresspheres;
     this.grids = options.garmentGrids ?? defaultGarmentGrids;
@@ -191,6 +197,19 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   setAtbMode(mode: AtbMode): void { this.mode = mode; }
 
   atbMode(): AtbMode { return this.mode; }
+
+  /** Wait's split on or off (the engine option `waitSplit`). Survives `init`. */
+  setWaitSplit(on: boolean): void { this.split = on; }
+
+  waitSplit(): boolean { return this.split; }
+
+  /** The HUD's report of where the open menu's cursor is (`HudPort.onMenuLevel`). */
+  setMenuLevel(level: MenuLevel): void { this.level = level; }
+
+  menuLevel(): MenuLevel { return this.level; }
+
+  /** Whether an open menu holds the clock right now (`active.ts` {@link clockHeldByMenu}). */
+  clockHeld(): boolean { return clockHeldByMenu(this.mode, this.inputOwner, this.level, this.split); }
 
   setSeed(n: number): void {
     this.rng.seed(n);
@@ -257,6 +276,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
         return { kind: 'resolved', events: this.flush() };
       }
       // Idempotent: the same girl, decision after decision, until she submits.
+      // A new owner's menu is held until the HUD reports its top list.
+      if (this.inputOwner !== actor.id) this.level = 'deep';
       this.inputOwner = actor.id;
       return {
         kind: 'player-input',
@@ -349,8 +370,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    */
   tick(ms: number, opts?: TickOptions): BattleEvent[] {
     if (this.battleState.result) return this.flush();
-    // Wait mode (D-029, `active.ts`): an open command menu holds the whole clock.
-    if (clockHeldByMenu(this.mode, this.inputOwner)) return this.flush();
+    // Wait (D-029, `active.ts`): an open menu holds the clock; with the split, below its top list only.
+    if (this.clockHeld()) return this.flush();
     const throughInput = opts?.throughInput === true;
     // Real ms become game ticks at the Config ATB speed (§1.2 `tickRate`).
     let remaining = msToTicks(Math.max(0, ms)) * this.atbRate;
