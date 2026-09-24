@@ -622,6 +622,82 @@
     "mtime": "2026-09-24T19:05:18.963Z",
     "approved": "2026-09-24"
    }
+  },
+  "chapter:natus:2026-09-24": {
+   "words": "I'll go with your recommendations for all",
+   "note": "Bailey, 2026-09-24 ~14:40 EDT, answering every Chapter X recommendation (O-1 A, O-2 A + KO-and-revive strip, O-3 C night with the city lit, O-5 A; Review corrections applied). Judge: docs/concepts/chapters/natus/production/JUDGE.md (10 subjects, bar 7; 5 Natus subjects PASS). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-natus/.",
+   "public/art/characters/seymour-natus/idle.png": {
+    "sha256": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4",
+    "mtime": "2026-09-24T18:49:37.328Z"
+   },
+   "public/art/characters/seymour-natus-ring/idle.png": {
+    "sha256": "bd6754303eb7c80abdbb96067786b44e7adefc73ed6e55490baa808890e6b87a",
+    "mtime": "2026-09-24T18:49:37.523Z"
+   },
+   "public/art/characters/mortibody/idle.png": {
+    "sha256": "20b012ade63e04802114b28e6ef025ecb1b28fbe74aab96ed302cc60e9b88416",
+    "mtime": "2026-09-24T18:49:37.660Z"
+   },
+   "public/art/backdrops/bevelle-highbridge.png": {
+    "sha256": "3c8aebf46c531b644cf59dd868742fa3548871a0f844adea6dd64e555b411a4e",
+    "mtime": "2026-09-24T18:49:40.290Z"
+   },
+   "public/art/portraits/seymour-natus.png": {
+    "sha256": "0980d552d487424b70900051c8e0fedb62bed15b3dc859fb9bc5e5b20fc36534",
+    "mtime": "2026-09-24T18:49:41.077Z"
+   }
+  },
+  "chapter:fallen-aeons:2026-09-24": {
+   "words": "I'll go with your recommendations for all",
+   "note": "Bailey, 2026-09-24 ~14:40 EDT, answering every Chapter XI recommendation (O-1 A armoured Sisters, O-2 B Ch.IV violet, O-3 A + B between-links shot, FA11 Anima approved on his word; Review corrections applied). Judge: docs/concepts/chapters/fallen-aeons/production/JUDGE.md (bar 7; sandy/x2-shiva/x2-anima/both road plates PASS, cindy and mindy cast paintings FAIL and excluded pending repaint). FFX-2 only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-fallen-aeons/.",
+   "public/art/characters/sandy/idle.png": {
+    "sha256": "80d6990c9ffd70392ab85db74846d8e65f5258653a47af490668e8657e43c037",
+    "mtime": "2026-09-24T19:06:26.968Z"
+   },
+   "public/art/characters/sandy/cast.png": {
+    "sha256": "85a695d47166a6c2f3d54d18d817cd7f541cd66ac1877eda9b2e8291397726fb",
+    "mtime": "2026-09-24T19:06:26.997Z"
+   },
+   "public/art/characters/x2-shiva/idle.png": {
+    "sha256": "5a48ce74aee2eae908362749551a422c36e91c181002a6a122c2efb56318a219",
+    "mtime": "2026-09-24T19:06:27.107Z"
+   },
+   "public/art/characters/x2-shiva/attack.png": {
+    "sha256": "85f90e2ab0f079d43650e465f955b61e66eef56ba932d2f0707fddad3c56547b",
+    "mtime": "2026-09-24T19:06:27.135Z"
+   },
+   "public/art/characters/x2-shiva/overdrive.png": {
+    "sha256": "2c12d3de1dd9b85528185b72350d6c40ac6fd38a82f7598ca0163ea850a56438",
+    "mtime": "2026-09-24T19:06:27.168Z"
+   },
+   "public/art/characters/x2-anima/idle.png": {
+    "sha256": "60d4e46a82cd9dc97d3c13e8a1662b7bcdecde522cae40be8dd403bb64e5082a",
+    "mtime": "2026-09-24T19:06:27.193Z"
+   },
+   "public/art/characters/x2-anima/attack.png": {
+    "sha256": "b84e67f3eca1bd61041d2b5ab3a6742a502211f40ccb1ea012f6efac22571d77",
+    "mtime": "2026-09-24T19:06:27.226Z"
+   },
+   "public/art/characters/x2-anima/overdrive.png": {
+    "sha256": "0ce67e776023eb89fcb16996519584cfc80c8d86e375cfd0896b2e2ac182f608",
+    "mtime": "2026-09-24T19:06:27.264Z"
+   },
+   "public/art/backdrops/road-to-the-farplane.png": {
+    "sha256": "9c254d5eef92f5b59fe51bf0f5c64bdf73b2b2db6a7917551a9a7f0e57346a16",
+    "mtime": "2026-09-24T19:06:27.306Z"
+   },
+   "public/art/backdrops/road-to-the-farplane-links.png": {
+    "sha256": "467e3d459b7b11d6860cfe5c821820ce52161cd6ce13320707cd158097a5746a",
+    "mtime": "2026-09-24T19:06:27.310Z"
+   }
+  },
+  "chapter:yojimbo-plate:2026-09-24": {
+   "words": "I'll go with your recommendations for all",
+   "note": "Bailey, 2026-09-24 ~14:40 EDT, picking hero plate option B (Yojimbo drawing Zanmato) for Chapter IX pause CHAPTER tab and party-prep card (docs/concepts/chapters/yojimbo/hero-plate/README.md). Installed as public/art/pause/ch9-yojimbo.png + .2x.webp + .json, same route as ch2-yunalesca.json (RealESRGAN_x4plus x4 -> lanczos 0.5, quality 88). No independent judge report for this plate (options round only). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-yojimbo-plate/.",
+   "public/art/pause/ch9-yojimbo.png": {
+    "sha256": "6cd24bfda4633285f933278cfd9adda8b99e54895a454d3724e663a762fd3423",
+    "mtime": "2026-09-24T19:48:20.732Z"
+   }
   }
  }
 }
