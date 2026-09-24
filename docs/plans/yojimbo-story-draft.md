@@ -26,7 +26,7 @@ and 10).
 
 ---
 
-## Pre-battle (beats 1 to 4, about 22 lines)
+## Pre-battle (beats 1 to 4, 19 lines)
 
 **Beat 1 — Gorge Bottom, under the bridge.**
 `[BEAT: the cave mouth. Wind off the Calm Lands. Lulu stops a step short of it.]`
@@ -98,7 +98,7 @@ picked together with the gauge widget (options round O-5). Each is 10 words or f
 
 ---
 
-## Post-battle (beat 5, about 12 lines)
+## Post-battle (beat 5, 13 lines)
 
 `[BEAT: Yojimbo falls to one knee and fades. The dog goes with him. Ginnem remains, still.]`
 `[BEAT: Yuna performs the sending. This time it holds. Ginnem dissolves into pyreflies.]`

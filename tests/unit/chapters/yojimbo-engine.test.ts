@@ -121,9 +121,14 @@ describe('Yojimbo — the stat block and the formation [research §2]', () => {
   const dog = group.enemies.find((e) => e.id === 'daigoro')!;
   const ginnem = group.enemies.find((e) => e.id === 'ginnem')!;
 
-  it('§2.5 — the formation is [Ginnem, Yojimbo, Daigoro] in slots M1-M3, and it cannot be fled', () => {
-    expect(group.enemies.map((e) => e.id)).toEqual(['ginnem', 'yojimbo', 'daigoro']);
-    expect(group.enemies.map((e) => e.slot)).toEqual([0, 1, 2]);
+  it('§2.5 — Ginnem, Yojimbo, Daigoro hold slots M1-M3, the boss is listed first, and it cannot be fled', () => {
+    // Listed boss-first so the battle-start card headlines Yojimbo (verifier,
+    // 2026-09-24: it read "Lady Ginnem"); the slots keep the formation.
+    expect(group.enemies.map((e) => e.id)).toEqual(['yojimbo', 'ginnem', 'daigoro']);
+    expect(group.enemies.map((e) => e.slot)).toEqual([1, 0, 2]);
+    expect(ginnem.slot).toBe(0);
+    expect(y.slot).toBe(1);
+    expect(dog.slot).toBe(2);
     expect(group.canEscape).toBe(false);
     expect(group.game).toBe('ffx');
   });
@@ -211,7 +216,7 @@ describe('Capability: a combatant on the field that takes no turns of its own', 
     expect(turns).not.toContain('ginnem');
     expect(turns).not.toContain('daigoro');
     // …and yet both are on the field.
-    expect(engine.state().enemyIds).toEqual(['ginnem', 'yojimbo', 'daigoro']);
+    expect(engine.state().enemyIds).toEqual(['yojimbo', 'ginnem', 'daigoro']);
     expect(engine.state().combatants['daigoro']?.alive).toBe(true);
   });
 

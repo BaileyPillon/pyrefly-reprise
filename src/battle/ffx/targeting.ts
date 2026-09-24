@@ -153,7 +153,9 @@ export function resolveTargets(
 ): FFXCombatant[] {
   const pickAll = (list: FFXCombatant[]): FFXCombatant[] => list;
   // Resolution honours the same gap the menu does, so an explicitly submitted
-  // target cannot cross a gap the menu refused to offer.
+  // target cannot cross a gap the menu refused to offer — nor land on a foe the
+  // menu never offers (`targetable`: untargetable or hidden, like Macalania's
+  // Seymour or Yojimbo's Ginnem and Daigoro). A same-side pick is unchanged.
   const crosses = reachesFoesAtRange(ctx, user, def);
   const foes = crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : [];
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && (def.flags.includes('can-target-dead') || isAlive(c)));
@@ -177,7 +179,10 @@ export function resolveTargets(
 
   const explicit = chosen
     .map((id) => tryActor(ctx, id))
-    .filter((c): c is FFXCombatant => c !== undefined && onField(c) && (crosses || c.side === user.side));
+    .filter(
+      (c): c is FFXCombatant =>
+        c !== undefined && onField(c) && (c.side === user.side || (crosses && targetable(c))),
+    );
   if (explicit.length > 0) return explicit.slice(0, 1);
 
   const fallback =

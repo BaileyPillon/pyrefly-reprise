@@ -238,7 +238,12 @@ export const yojimboGroup: EnemyGroupDef = {
   // §4.3 `[single source: wiki infobox]`, confirmed by the review: cannot
   // flee. The FFX engine reads `rt.canEscape`, which this sets false.
   canEscape: false,
-  enemies: [ginnem, yojimbo, daigoro],
+  // Boss first, the house order (`turnQueue.ts#tieBreakRank`: "boss-first then
+  // numbered ascending"), so every "first visible enemy" reader — the
+  // battle-start card's headline, the chapter card's art — names Yojimbo, not
+  // Lady Ginnem. The formation slots M1-M3 stay on each record's `slot`, which
+  // is what the stage places by and what the Daigoro row orders (§3.1).
+  enemies: [yojimbo, ginnem, daigoro],
   // No `musicCues`: the chapter's own cue ("Lulu's Theme" slot, research §6.4)
   // is not composed yet, so the chapter record's placeholder routing applies.
 };

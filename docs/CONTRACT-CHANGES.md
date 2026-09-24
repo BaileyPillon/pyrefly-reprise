@@ -6,6 +6,21 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — `encounters.ts`: `UNLISTED_CHAPTERS` moves to `chapters-unlisted.ts` (re-exported); FFX explicit targets must be `targetable`
+
+**FFX only** (Chapter IX, the Yojimbo repair pass). The contract surface does not change:
+`UNLISTED_CHAPTERS` moved to the new `src/data/chapters-unlisted.ts` for the house 400-line rule,
+and `src/data/encounters.ts` re-exports it under the same name and type (`getChapter` is unchanged).
+Two notes on the engine seams listed with the Chapter IX entry below:
+
+- `src/battle/ffx/targeting.ts#resolveTargets`: an explicitly submitted **cross-side** target must now
+  be `targetable` (not untargetable, not hidden), the same check `validTargets` offers the menu and the
+  one the FFX-2 engine already makes. An invalid pick falls back to the row's own rule. The FFX
+  engine only; same-side picks are unchanged. Listed chapters' event logs are byte-identical
+  (96 of 96 runs).
+- `src/battle/ffx/execute.ts`: `shapeOverdrive` moved verbatim to `src/battle/ffx/overdriveShape.ts`
+  (rule 7). Behaviour is unchanged.
+
 ## 2026-09-24 — Music key `boss-yojimbo` (Chapter IX); five runtime instrument stand-ins
 
 **The key: FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the

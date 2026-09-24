@@ -335,7 +335,7 @@ constant or one data field, labelled in the code, and changes with one edit when
 
 | # | Assumption (pending Bailey) | Where it lives |
 |---|---|---|
-| **B1** | The chapter is Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth (candidate A) | `src/data/ffx/enemies/yojimbo.ts` (formation `[ginnem, yojimbo, daigoro]`, research §2.5) |
+| **B1** | The chapter is Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth (candidate A) | `src/data/ffx/enemies/yojimbo.ts` (Ginnem, Yojimbo, Daigoro in slots M1-M3, research §2.5; listed boss-first since the repair pass) |
 | **B2** | The odds inside each gauge band are unsourced: an **even split**, labelled "our estimate"; the ≥80 "slightly likelier" nudge is **not modelled** (the band is exposed, it changes no odds); gauge starts at 0 and returns to 0 after Zanmato | `src/battle/ffx/ai/yojimbo-rules.ts` (`yojimboPool`, `YOJIMBO_GAUGE_START`, `YOJIMBO_GAUGE_AFTER_ZANMATO`, `YOJIMBO_ODDS_NOTE`, `YOJIMBO_ASSUMPTIONS`) |
 | **B3** | Lady Ginnem and Daigoro cannot be targeted; neither is a victory condition; neither owns a CTB turn | `flags.untargetable` in the data; `ActorRuntime.nonCombatant` + `ordersOnly` from the setup hook |
 | **B4** | No hiring or haggling | nothing built (research §7 stays unused) |
@@ -374,14 +374,19 @@ and Daigoro's stats the research does not give are 0 and never read.
 | Line | Wins | Mean turns | Zanmatos per battle | Doom kills |
 |---|---:|---:|---:|---:|
 | **Intended** (Kimahri's Doom first, Lulu's Fira, Yuna heals and summons in front of Zanmato at ≥80 %) | **200 / 200** | 18.7 | 0.00 | 200 |
-| Magic race (the same without Doom) | 139 / 200 (69.5 %) | 110.6 | 0.94 | 0 |
-| **Credibly wrong** (everyone swings Attack every turn, Yuna heals, no Doom, no aeon) | **0 / 200** | 52.9 | 0.99 | 0 |
+| Magic race (the same without Doom) | 143 / 200 (71.5 %) | 109.1 | 0.89 | 0 |
+| **Credibly wrong** (everyone swings Attack every turn, Yuna heals, no Doom, no aeon) | **0 / 200** | 53.0 | 0.98 | 0 |
 
 Read with care: the party is the upper bound and the odds are B2's even split. With B8 (Doom learned,
 full gauge) the Doom route is a **certain** win, as the sources describe it ("works only for this
 encounter"); without Doom the fight is a real race; the swing-at-it habit never survives the first
 Zanmato, because 9,999 to the whole party is fatal at every preset HP (research §3.3). Nobody tuned
 anything to get these numbers.
+
+Re-measured after the repair pass. The first run read magic race 139 / 200 and wrong 52.9 turns /
+0.99 Zanmatos. The shift comes from listing the boss first: `turnQueue.ts#seedInitialCtb` draws the
+opening counters in formation order, so Yojimbo now takes the first enemy draw instead of the second.
+No mechanic changed, and the intended line is identical.
 
 ### Proof
 
@@ -390,7 +395,7 @@ anything to get these numbers.
 - `tests/unit/chapters/yojimbo-engine.test.ts`: 29 mechanic, capability, data, registration and absence
   units. `node tools/orphans.mjs`: 24 orphans before and after, none of them new.
 - Browser (own Vite :5520, GPU, NVIDIA RTX 5070 Ti via ANGLE D3D11): the board shows no Yojimbo card;
-  `gotoChapter('yojimbo-cavern')` opens the battle with `[ginnem, yojimbo, daigoro]` and the gauge on
+  `gotoChapter('yojimbo-cavern')` opens the battle with `[ginnem, yojimbo, daigoro]` (`[yojimbo, ginnem, daigoro]` since the repair pass) and the gauge on
   state; a real Enter submits a command; in the live battle Yojimbo's orders made the dog bite (2 orders,
   2 bites, 0 dog turns).
 
@@ -404,3 +409,33 @@ anything to get these numbers.
 - Headless `autoBattle` stalls at `play:action-end` right after a party Overdrive, in Chapter VIII too
   (measured with the same script), so it is not Yojimbo's; `gotoChapter` from chapter select leaves the
   title card drawn under the battle HUD in both chapters.
+
+### Repair pass (2026-09-24, one cycle, FFX only)
+
+The verifier confirmed all twelve items and raised two rule breaks and three findings. What changed:
+
+- **Rule 7, `src/data/encounters.ts` at 411 lines.** `UNLISTED_CHAPTERS` and its doc moved to the new
+  `src/data/chapters-unlisted.ts`. `encounters.ts` re-exports it, so the contract surface is unchanged
+  (398 lines now). The same check found that the track had grown `src/battle/ffx/execute.ts` from 419 to
+  422 lines, a file already over the limit. `shapeOverdrive` moved verbatim to the new
+  `src/battle/ffx/overdriveShape.ts`, and `execute.ts` is now 335 lines.
+  `tests/unit/chapters/yojimbo-repair.test.ts` keeps every file this track touches under 400 lines.
+- **Battle-start card read "Lady Ginnem".** `BattleScreen.showBattleStart` names the first enemy that is
+  neither hidden nor a part. The formation is now listed boss-first, `[yojimbo, ginnem, daigoro]`, which is
+  the house order (`turnQueue.ts#tieBreakRank`: "boss-first"). Every record keeps its `slot` (M1-M3), which
+  is what the stage places by and what the Daigoro row orders. This fix touches only the data.
+- **An explicitly submitted untargetable target landed.** `submit({ kind: 'attack', targets: ['daigoro'] })`
+  KO'd the dog, because `targeting.ts#resolveTargets` checked an explicit cross-side pick with `onField`
+  only. It now also requires `targetable`, the check the menu's `validTargets` already made. The
+  FFX-2 engine already did this (`ffx2/targeting.ts#isTargetable`). The same gap applied to Macalania's
+  untargetable Seymour. Same-side picks are unchanged. A pinned test: Attack aimed at Ginnem or at
+  Daigoro strikes Yojimbo, on 20 seeds each.
+- **Proof that nothing else moved:** `state().log` sha-256 for all 8 listed chapters (FFX and FFX-2),
+  seeds 1 / 7 / 42 / 99 x attack / defend / seeded-random, through the app's own `registerBattleContent`
+  and `setupForChapter`. The runs used HEAD's `src` against HEAD plus this pass: 96 of 96 identical.
+- **Still open, not this track's files:** the FFX-2 Bahamut guide and tactic leak (`src/engine/tactics`,
+  rule 14). The fix is to match only the enemy side and the chapter's game. It must land before the
+  chapter is listed. The placeholder scene also stages the painted dog at the front of the field, the
+  data still names the player's aeon painting `yojimbo` where the installed candidate is
+  `yojimbo-cavern` (`docs/concepts/chapters/yojimbo/INSTALLED.md`), and Auron's generic tip reads
+  "He moves after you". Each of these is perceivable, so it waits for the scene and art integration.
