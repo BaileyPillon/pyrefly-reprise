@@ -1,0 +1,5551 @@
+{
+ "what": "PR-0012 repair acceptance: GPU Chromium, real page.keyboard ArrowDown/Enter/Escape, every top-level and submenu row of the first menu; rects in viewport px; overlapPx2 = band vs each chrome box, max over rows",
+ "script": "tools/zz-pr0012r-accept.tmp.mjs (agent scratch, not committed)",
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "runs": [
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "1280x720",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 20,
+    "shown": 20,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 13.006171875,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700
+     }
+    ],
+    "enemies": [
+     {
+      "left": 42.65625,
+      "top": 82,
+      "right": 516.625,
+      "bottom": 144
+     }
+    ],
+    "command": [
+     {
+      "left": 996.46875,
+      "top": 334.28125,
+      "right": 1256,
+      "bottom": 487.125
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 615.7681274414062,
+      "top": 489,
+      "right": 751.1381225585938,
+      "bottom": 510
+     }
+    ],
+    "intent": [
+     {
+      "left": 800.390625,
+      "top": 59.6875,
+      "right": 1100.390625,
+      "bottom": 244.84375
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1039.59375,
+      "top": 42.6875,
+      "right": 1100.4383544921875,
+      "bottom": 57.6875
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 42.65625,
+      "top": 176,
+      "right": 306.65625,
+      "bottom": 357.09375
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 40.424407958984375,
+      "top": 154,
+      "right": 158.73184204101562,
+      "bottom": 175
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "1600x900",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 20,
+    "shown": 20,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 16.25771484375,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875
+     }
+    ],
+    "enemies": [
+     {
+      "left": 53.3203125,
+      "top": 102.5,
+      "right": 645.78125,
+      "bottom": 180
+     }
+    ],
+    "command": [
+     {
+      "left": 1245.5859375,
+      "top": 417.8515625,
+      "right": 1570,
+      "bottom": 608.90625
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 772.4758911132812,
+      "top": 631.25,
+      "right": 914.9069213867188,
+      "bottom": 655
+     }
+    ],
+    "intent": [
+     {
+      "left": 998.796875,
+      "top": 74.59375,
+      "right": 1373.796875,
+      "bottom": 306.0390625
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1297.796875,
+      "top": 53.296875,
+      "right": 1373.8526611328125,
+      "bottom": 72.046875
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 53.3203125,
+      "top": 220,
+      "right": 383.3203125,
+      "bottom": 360
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 50.53050994873047,
+      "top": 192.5,
+      "right": 198.41478729248047,
+      "bottom": 218.75
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "2000x1012",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 20,
+    "shown": 20,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 18.28082576751709,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 1404.790283203125,
+      "top": 730.885986328125,
+      "right": 1871.43310546875,
+      "bottom": 983.885009765625
+     }
+    ],
+    "enemies": [
+     {
+      "left": 160.39549255371094,
+      "top": 115.25509643554688,
+      "right": 826.5822601318359,
+      "bottom": 202.39920043945312
+     }
+    ],
+    "command": [
+     {
+      "left": 1501.026611328125,
+      "top": 469.8489990234375,
+      "right": 1865.810791015625,
+      "bottom": 684.6785278320312
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 831.8964233398438,
+      "top": 749.1581420898438,
+      "right": 979.2607421875,
+      "bottom": 770.2413940429688
+     }
+    ],
+    "intent": [
+     {
+      "left": 1221.09375,
+      "top": 83.890625,
+      "right": 1642.7587890625,
+      "bottom": 344.1369934082031
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1557.1875,
+      "top": 60,
+      "right": 1642.7076416015625,
+      "bottom": 81.083251953125
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 160.39549255371094,
+      "top": 247.37680053710938,
+      "right": 531.4606781005859,
+      "bottom": 501.9131164550781
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 157.25852966308594,
+      "top": 216.45469665527344,
+      "right": 323.5455322265625,
+      "bottom": 245.97125244140625
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "390x844",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 20,
+    "shown": 20,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 11.301222267150878,
+    "modes": [
+     "bar"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 282.7615966796875,
+      "top": 470.7539978027344,
+      "right": 383.9219970703125,
+      "bottom": 525.5999755859375
+     }
+    ],
+    "enemies": [
+     {
+      "left": 12.997359275817871,
+      "top": 337.29541015625,
+      "right": 157.41563320159912,
+      "bottom": 356.1867980957031
+     }
+    ],
+    "command": [
+     {
+      "left": 303.6240234375,
+      "top": 414.1654968261719,
+      "right": 382.70318603515625,
+      "bottom": 460.73699951171875
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 140.1443634033203,
+      "top": 457.6518859863281,
+      "right": 256.60357666015625,
+      "bottom": 475.019775390625
+     }
+    ],
+    "intent": [
+     {
+      "left": 231.1875,
+      "top": 80.59375,
+      "right": 322.5975036621094,
+      "bottom": 137.0108642578125
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 304.09375,
+      "top": 75.390625,
+      "right": 322.6330871582031,
+      "bottom": 79.96112823486328
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 12.997359275817871,
+      "top": 365.93719482421875,
+      "right": 93.43815517425537,
+      "bottom": 377.51580810546875
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 12.317317008972168,
+      "top": 359.2337951660156,
+      "right": 48.36558818817139,
+      "bottom": 365.63250732421875
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 0,
+      "top": 259.4,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "size": "1280x720",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 34,
+    "shown": 34,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 13.006171875,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700
+     }
+    ],
+    "enemies": [
+     {
+      "left": 42.65625,
+      "top": 82,
+      "right": 520.59375,
+      "bottom": 144
+     }
+    ],
+    "command": [
+     {
+      "left": 996.46875,
+      "top": 334.28125,
+      "right": 1256,
+      "bottom": 487.125
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 611.7681274414062,
+      "top": 473,
+      "right": 747.1381225585938,
+      "bottom": 494
+     }
+    ],
+    "intent": [
+     {
+      "left": 745.296875,
+      "top": 59.6875,
+      "right": 1045.296875,
+      "bottom": 242.21875
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 984.390625,
+      "top": 42.6875,
+      "right": 1045.2352294921875,
+      "bottom": 57.6875
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 42.65625,
+      "top": 176,
+      "right": 306.65625,
+      "bottom": 340.03125
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 40.424407958984375,
+      "top": 154,
+      "right": 158.73184204101562,
+      "bottom": 175
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Pray",
+     "text": "Restores HP to the party",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Curaga",
+     "text": "Restores HP",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Reflect",
+     "text": "Grants Reflect to the party",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Regen",
+     "text": "Grants Regen",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Cure",
+     "text": "Restores HP · cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 2",
+     "text": "Passive: White Magic charge time −30%",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 3",
+     "text": "Passive: White Magic charge time −50%",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "X-Potion",
+     "text": "Recovers up to 9999 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega-Potion",
+     "text": "Restores 2000 HP to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Elixir",
+     "text": "Fully restores HP and MP for one ally.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Megalixir",
+     "text": "Fully restores HP and MP for the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Turbo Ether",
+     "text": "Recovers 500 MP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega Phoenix",
+     "text": "Revives up to two allies with 50% max HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Chocobo Feather",
+     "text": "Grants Haste to one ally.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "size": "1600x900",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 34,
+    "shown": 34,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 16.25771484375,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875
+     }
+    ],
+    "enemies": [
+     {
+      "left": 53.3203125,
+      "top": 102.5,
+      "right": 650.7421875,
+      "bottom": 180
+     }
+    ],
+    "command": [
+     {
+      "left": 1245.5859375,
+      "top": 417.8515625,
+      "right": 1570,
+      "bottom": 608.90625
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 592.4758911132812,
+      "top": 658.75,
+      "right": 734.9069213867188,
+      "bottom": 682.5
+     }
+    ],
+    "intent": [
+     {
+      "left": 930.6875,
+      "top": 74.59375,
+      "right": 1305.6875,
+      "bottom": 302.7578125
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1229.59375,
+      "top": 53.296875,
+      "right": 1305.6495361328125,
+      "bottom": 72.046875
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 53.3203125,
+      "top": 220,
+      "right": 383.3203125,
+      "bottom": 425.0390625
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 50.53050994873047,
+      "top": 192.5,
+      "right": 198.41478729248047,
+      "bottom": 218.75
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Pray",
+     "text": "Restores HP to the party",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Curaga",
+     "text": "Restores HP",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Reflect",
+     "text": "Grants Reflect to the party",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Regen",
+     "text": "Grants Regen",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Cure",
+     "text": "Restores HP · cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 2",
+     "text": "Passive: White Magic charge time −30%",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 3",
+     "text": "Passive: White Magic charge time −50%",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "X-Potion",
+     "text": "Recovers up to 9999 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega-Potion",
+     "text": "Restores 2000 HP to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Elixir",
+     "text": "Fully restores HP and MP for one ally.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Megalixir",
+     "text": "Fully restores HP and MP for the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Turbo Ether",
+     "text": "Recovers 500 MP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega Phoenix",
+     "text": "Revives up to two allies with 50% max HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Chocobo Feather",
+     "text": "Grants Haste to one ally.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "size": "2000x1012",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 34,
+    "shown": 34,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 18.28082576751709,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 1404.790283203125,
+      "top": 730.885986328125,
+      "right": 1871.43310546875,
+      "bottom": 983.885009765625
+     }
+    ],
+    "enemies": [
+     {
+      "left": 160.39549255371094,
+      "top": 115.25509643554688,
+      "right": 832.1605072021484,
+      "bottom": 202.39920043945312
+     }
+    ],
+    "command": [
+     {
+      "left": 1501.026611328125,
+      "top": 469.8489990234375,
+      "right": 1865.810791015625,
+      "bottom": 684.6785278320312
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 772.86328125,
+      "top": 749.1581420898438,
+      "right": 920.2276611328125,
+      "bottom": 770.2413940429688
+     }
+    ],
+    "intent": [
+     {
+      "left": 1146,
+      "top": 83.890625,
+      "right": 1567.6650390625,
+      "bottom": 340.4474182128906
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1482.09375,
+      "top": 60,
+      "right": 1567.6138916015625,
+      "bottom": 81.083251953125
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 160.39549255371094,
+      "top": 247.37680053710938,
+      "right": 531.4606781005859,
+      "bottom": 404.79840087890625
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 157.25852966308594,
+      "top": 216.45469665527344,
+      "right": 323.5455322265625,
+      "bottom": 245.97125244140625
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Pray",
+     "text": "Restores HP to the party",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Curaga",
+     "text": "Restores HP",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Reflect",
+     "text": "Grants Reflect to the party",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Regen",
+     "text": "Grants Regen",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Cure",
+     "text": "Restores HP · cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 2",
+     "text": "Passive: White Magic charge time −30%",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 3",
+     "text": "Passive: White Magic charge time −50%",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "X-Potion",
+     "text": "Recovers up to 9999 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega-Potion",
+     "text": "Restores 2000 HP to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Elixir",
+     "text": "Fully restores HP and MP for one ally.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Megalixir",
+     "text": "Fully restores HP and MP for the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Turbo Ether",
+     "text": "Recovers 500 MP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega Phoenix",
+     "text": "Revives up to two allies with 50% max HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Chocobo Feather",
+     "text": "Grants Haste to one ally.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "size": "390x844",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 34,
+    "shown": 34,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 11.301222267150878,
+    "modes": [
+     "bar"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 282.7615966796875,
+      "top": 470.7539978027344,
+      "right": 383.9219970703125,
+      "bottom": 525.5999755859375
+     }
+    ],
+    "enemies": [
+     {
+      "left": 12.997359275817871,
+      "top": 337.29541015625,
+      "right": 158.6249074935913,
+      "bottom": 356.1867980957031
+     }
+    ],
+    "command": [
+     {
+      "left": 303.6240234375,
+      "top": 414.1654968261719,
+      "right": 382.70318603515625,
+      "bottom": 460.73699951171875
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 142.58197021484375,
+      "top": 441.8074951171875,
+      "right": 259.04119873046875,
+      "bottom": 459.1753845214844
+     }
+    ],
+    "intent": [
+     {
+      "left": 163,
+      "top": 87.6875,
+      "right": 254.41000366210938,
+      "bottom": 143.30477905273438
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 235.890625,
+      "top": 82.5,
+      "right": 254.4299774169922,
+      "bottom": 87.07050323486328
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 12.997359275817871,
+      "top": 365.93719482421875,
+      "right": 93.43815517425537,
+      "bottom": 377.51580810546875
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 12.317317008972168,
+      "top": 359.2337951660156,
+      "right": 48.36558818817139,
+      "bottom": 365.63250732421875
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "White Magic",
+     "text": "Open the White Magic menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Pray",
+     "text": "Restores HP to the party",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Vigor",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Shell",
+     "text": "Grants Shell to the party",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Protect",
+     "text": "Grants Protect to the party",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cure",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cura",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Curaga",
+     "text": "Restores HP",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Esuna",
+     "text": "Cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 0,
+      "top": 259.4,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Dispel",
+     "text": "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Life",
+     "text": "Revives a fallen ally",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Reflect",
+     "text": "Grants Reflect to the party",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Regen",
+     "text": "Grants Regen",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Full-Cure",
+     "text": "Restores HP · cures Berserk, Confuse, Curse, Darkness, Itchy, Petrify, Pointless, Poison, Silence, Sleep, Slow, Stop",
+     "band": {
+      "left": 0,
+      "top": 259.4,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 2",
+     "text": "Passive: White Magic charge time −30%",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "White Magic Lv. 3",
+     "text": "Passive: White Magic charge time −50%",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Gunner",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Black Mage",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "X-Potion",
+     "text": "Recovers up to 9999 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega-Potion",
+     "text": "Restores 2000 HP to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Elixir",
+     "text": "Fully restores HP and MP for one ally.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Megalixir",
+     "text": "Fully restores HP and MP for the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Turbo Ether",
+     "text": "Recovers 500 MP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Mega Phoenix",
+     "text": "Revives up to two allies with 50% max HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Chocobo Feather",
+     "text": "Grants Haste to one ally.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-leblanc",
+   "size": "1280x720",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 21,
+    "shown": 21,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 13.006171875,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 928,
+      "top": 520,
+      "right": 1260,
+      "bottom": 700
+     }
+    ],
+    "enemies": [
+     {
+      "left": 42.65625,
+      "top": 82,
+      "right": 524.8125,
+      "bottom": 236
+     }
+    ],
+    "command": [
+     {
+      "left": 996.46875,
+      "top": 280.96875,
+      "right": 1256,
+      "bottom": 487.125
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 549.7681274414062,
+      "top": 489,
+      "right": 685.1381225585938,
+      "bottom": 510
+     }
+    ],
+    "intent": [
+     {
+      "left": 686.296875,
+      "top": 107.796875,
+      "right": 986.296875,
+      "bottom": 364.984375
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 925.5,
+      "top": 90.796875,
+      "right": 986.3446044921875,
+      "bottom": 105.796875
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 42.65625,
+      "top": 268,
+      "right": 306.65625,
+      "bottom": 380
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 40.424407958984375,
+      "top": 246,
+      "right": 158.73184204101562,
+      "bottom": 267
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "Attack",
+     "text": "Physical damage",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Skill",
+     "text": "Open the Skill menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Trigger Happy",
+     "text": "Physical damage · timed input",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cheap Shot",
+     "text": "Physical damage",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Songstress",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Thief",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Soft",
+     "text": "Cures Petrification.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Echo Screen",
+     "text": "Cures Silence.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Eye Drops",
+     "text": "Cures Darkness.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Antidote",
+     "text": "Cures Poison.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Grenade",
+     "text": "Physical damage to all enemies.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 68.2,
+      "top": 0,
+      "right": 1280,
+      "bottom": 34.7
+     },
+     "mode": "stage",
+     "textPx": 13,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-leblanc",
+   "size": "1600x900",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 21,
+    "shown": 21,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 16.25771484375,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 1160,
+      "top": 650,
+      "right": 1575,
+      "bottom": 875
+     }
+    ],
+    "enemies": [
+     {
+      "left": 53.3203125,
+      "top": 102.5,
+      "right": 656.015625,
+      "bottom": 295
+     }
+    ],
+    "command": [
+     {
+      "left": 1245.5859375,
+      "top": 351.2109375,
+      "right": 1570,
+      "bottom": 608.90625
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 684.9758911132812,
+      "top": 628.75,
+      "right": 827.4069213867188,
+      "bottom": 652.5
+     }
+    ],
+    "intent": [
+     {
+      "left": 856.59375,
+      "top": 134.6875,
+      "right": 1231.59375,
+      "bottom": 456.171875
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1155.5,
+      "top": 113.5,
+      "right": 1231.5557861328125,
+      "bottom": 132.25
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 53.3203125,
+      "top": 335,
+      "right": 383.3203125,
+      "bottom": 475
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 50.53050994873047,
+      "top": 307.5,
+      "right": 198.41478729248047,
+      "bottom": 333.75
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "Attack",
+     "text": "Physical damage",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Skill",
+     "text": "Open the Skill menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Trigger Happy",
+     "text": "Physical damage · timed input",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cheap Shot",
+     "text": "Physical damage",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Songstress",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Thief",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Soft",
+     "text": "Cures Petrification.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Echo Screen",
+     "text": "Cures Silence.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Eye Drops",
+     "text": "Cures Darkness.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Antidote",
+     "text": "Cures Poison.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Grenade",
+     "text": "Physical damage to all enemies.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 70.2,
+      "top": 0,
+      "right": 1600,
+      "bottom": 43.3
+     },
+     "mode": "stage",
+     "textPx": 16.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-leblanc",
+   "size": "2000x1012",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 21,
+    "shown": 21,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 18.28082576751709,
+    "modes": [
+     "stage"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 1404.790283203125,
+      "top": 730.885986328125,
+      "right": 1871.43310546875,
+      "bottom": 983.885009765625
+     }
+    ],
+    "enemies": [
+     {
+      "left": 160.39549255371094,
+      "top": 115.25509643554688,
+      "right": 838.0901947021484,
+      "bottom": 331.7098083496094
+     }
+    ],
+    "command": [
+     {
+      "left": 1501.026611328125,
+      "top": 394.9156188964844,
+      "right": 1865.810791015625,
+      "bottom": 684.6785278320312
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 871.2518310546875,
+      "top": 715.4249267578125,
+      "right": 1018.6161499023438,
+      "bottom": 736.5081787109375
+     }
+    ],
+    "intent": [
+     {
+      "left": 1063,
+      "top": 151.5,
+      "right": 1484.6650390625,
+      "bottom": 512.9898681640625
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 1399.1875,
+      "top": 127.59375,
+      "right": 1484.7076416015625,
+      "bottom": 148.677001953125
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 160.39549255371094,
+      "top": 376.6874084472656,
+      "right": 531.4606781005859,
+      "bottom": 534.1090087890625
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 157.25852966308594,
+      "top": 345.7652893066406,
+      "right": 323.5455322265625,
+      "bottom": 375.2818603515625
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "Attack",
+     "text": "Physical damage",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Skill",
+     "text": "Open the Skill menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Trigger Happy",
+     "text": "Physical damage · timed input",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cheap Shot",
+     "text": "Physical damage",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Songstress",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Thief",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Soft",
+     "text": "Cures Petrification.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Echo Screen",
+     "text": "Cures Silence.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Eye Drops",
+     "text": "Cures Darkness.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Antidote",
+     "text": "Cures Poison.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Grenade",
+     "text": "Physical damage to all enemies.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 100.4,
+      "top": 0,
+      "right": 1899.5,
+      "bottom": 48.7
+     },
+     "mode": "stage",
+     "textPx": 18.3,
+     "truncated": false
+    }
+   ]
+  },
+  {
+   "chapter": "ffx2-leblanc",
+   "size": "390x844",
+   "firstEnterIgnored": 1,
+   "pageErrors": [],
+   "summary": {
+    "rows": 21,
+    "shown": 21,
+    "empty": 0,
+    "truncated": 0,
+    "minTextPx": 11.301222267150878,
+    "modes": [
+     "bar"
+    ],
+    "overlapPx2": {
+     "party": 0,
+     "enemies": 0,
+     "command": 0,
+     "advisor": 0,
+     "advisorToggle": 0,
+     "intent": 0,
+     "intentToggle": 0,
+     "pauseChip": 0,
+     "atbMode": 0,
+     "guide": 0,
+     "guideToggle": 0
+    },
+    "centreHitsOutsideBand": [
+     "CANVAS"
+    ],
+    "rawIdLabels": [],
+    "labelEqualsText": []
+   },
+   "chromeRectsAtFirstRow": {
+    "party": [
+     {
+      "left": 282.7615966796875,
+      "top": 470.7539978027344,
+      "right": 383.9219970703125,
+      "bottom": 525.5999755859375
+     }
+    ],
+    "enemies": [
+     {
+      "left": 12.997359275817871,
+      "top": 337.29541015625,
+      "right": 159.9103536605835,
+      "bottom": 384.21917724609375
+     }
+    ],
+    "command": [
+     {
+      "left": 303.6240234375,
+      "top": 397.9211730957031,
+      "right": 382.70318603515625,
+      "bottom": 460.73699951171875
+     }
+    ],
+    "advisor": [],
+    "advisorToggle": [
+     {
+      "left": 99.92396545410156,
+      "top": 457.6518859863281,
+      "right": 216.38319396972656,
+      "bottom": 475.019775390625
+     }
+    ],
+    "intent": [
+     {
+      "left": 296.1875,
+      "top": 529.59375,
+      "right": 387.5975036621094,
+      "bottom": 645.0465087890625
+     }
+    ],
+    "intentToggle": [
+     {
+      "left": 369,
+      "top": 524.390625,
+      "right": 387.5393371582031,
+      "bottom": 528.9611206054688
+     }
+    ],
+    "pauseChip": [
+     {
+      "left": 0,
+      "top": 1,
+      "right": 60.203125,
+      "bottom": 22
+     }
+    ],
+    "atbMode": [],
+    "guide": [
+     {
+      "left": 12.997359275817871,
+      "top": 393.9696044921875,
+      "right": 93.43815517425537,
+      "bottom": 405.5481872558594
+     }
+    ],
+    "guideToggle": [
+     {
+      "left": 12.317317008972168,
+      "top": 387.2662048339844,
+      "right": 48.36558818817139,
+      "bottom": 393.6648864746094
+     }
+    ]
+   },
+   "rows": [
+    {
+     "where": "top",
+     "label": "Attack",
+     "text": "Physical damage",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Skill",
+     "text": "Open the Skill menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Trigger Happy",
+     "text": "Physical damage · timed input",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Cheap Shot",
+     "text": "Physical damage",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Change",
+     "text": "Open the Change menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Songstress",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Thief",
+     "text": "Changes into another dressphere; the destination spends the turn",
+     "band": {
+      "left": 0,
+      "top": 273.7,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "top",
+     "label": "Item",
+     "text": "Open the Item menu.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Potion",
+     "text": "Recovers 200 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Hi-Potion",
+     "text": "Recovers 1000 HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Phoenix Down",
+     "text": "Revives an ally with 25% max HP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Soft",
+     "text": "Cures Petrification.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Echo Screen",
+     "text": "Cures Silence.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Eye Drops",
+     "text": "Cures Darkness.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Holy Water",
+     "text": "Cures Curse, Pointless and Itchy.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Antidote",
+     "text": "Cures Poison.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Remedy",
+     "text": "Cures every negative status except KO and Doom.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Ether",
+     "text": "Recovers 100 MP.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Grenade",
+     "text": "Physical damage to all enemies.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Light Curtain",
+     "text": "Grants Protect to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    },
+    {
+     "where": "sub",
+     "label": "Lunar Curtain",
+     "text": "Grants Shell to the whole party.",
+     "band": {
+      "left": 0,
+      "top": 282.2,
+      "right": 390,
+      "bottom": 312.3
+     },
+     "mode": "bar",
+     "textPx": 11.3,
+     "truncated": false
+    }
+   ]
+  }
+ ]
+}

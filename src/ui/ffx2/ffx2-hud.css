@@ -551,7 +551,9 @@
  */
 .ffx2-cmd-info {
   position: absolute;
-  left: 0;
+  /* `--band-left` clears the PAUSE chip (`commandHelpBand.ts`): that chip is
+     mounted by `BattleScreen` over this row in device px, outside the stage. */
+  left: var(--band-left, 0px);
   right: 0;
   top: 0;
   height: 17.33px; /* 52px @ 1920x1080 */
@@ -589,6 +591,35 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+/*
+ * PR-0012 repair: a portrait letterbox (390x844 scales the grid by 0.61, so
+ * the band's text would render under 4 px). `commandHelpBand.ts` moves the
+ * band into the bar above the stage — `bottom: 100%` of the stage, which the
+ * 3D scene fills and no HUD chrome uses — and zooms it back up by
+ * `--band-zoom` so its text is at least 11 real px; the width is divided by
+ * the same zoom so the band still spans the stage, and the sentence may wrap
+ * instead of being cut off.
+ */
+.ffx2-cmd-info--bar {
+  top: auto;
+  bottom: 100%;
+  left: 0;
+  right: auto;
+  width: calc(640px / var(--band-zoom, 1));
+  height: auto;
+  min-height: 17.33px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 6px;
+  row-gap: 1px;
+  padding: 3px 9.33px;
+  transform: scale(var(--band-zoom, 1));
+  transform-origin: bottom left;
+}
+.ffx2-cmd-info--bar .ffx2-cmd-info__desc {
+  white-space: normal;
+  overflow: visible;
 }
 /*
  * The fold marks. The window above scrolls, and until this nothing on screen

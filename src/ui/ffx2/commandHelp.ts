@@ -51,9 +51,55 @@ export function commandEffectText(cmd: AvailableCommand): string {
       // gate-preview line (`GRANTS: …`) on the row itself; the highlighted-row
       // slab says what Change fundamentally is, not that fact again.
       return 'Changes into another dressphere; the destination spends the turn';
-    default:
-      return describeAbility(defFor(cmd), cmd, cmd.command);
+    default: {
+      const def = defFor(cmd);
+      return refineForFfx2(describeAbility(def, cmd, cmd.command), def);
+    }
   }
+}
+
+/**
+ * The statuses FFX-2's own data hands to the party as protection rather than
+ * as harm — the same five the boss-side wipe moves strip
+ * (`battle/ffx2/abilities-core.ts` `BUFF_WIPE`), plus Auto-Life. A move whose
+ * every status is on this list "grants" rather than "inflicts".
+ */
+const FFX2_BUFFS: ReadonlySet<string> = new Set(['shell', 'protect', 'reflect', 'regen', 'haste', 'auto-life']);
+
+/** `white-magic-cast-time` -> `White Magic`. */
+function passiveSchool(passive: string): string {
+  return passive
+    .replace(/-cast-time$/, '')
+    .split('-')
+    .map((w) => (w ? w[0]!.toUpperCase() + w.slice(1) : w))
+    .join(' ');
+}
+
+/**
+ * PR-0012 repair (FFX-2 only): two wordings `describeAbility` (shared with
+ * FFX, `engine/tactics/advisor.ts`, not this track's file) gets wrong for
+ * FFX-2's own records, fixed on this side only:
+ *
+ * - The Lv. 2 / Lv. 3 passives (`x2-white-mage-lv2` etc.) have no formula,
+ *   power or status, so the shared fallback printed the row's own name as its
+ *   description. Their record carries the effect in `extra`
+ *   (`{ passive: 'white-magic-cast-time', percent: 30 }`), sourced in
+ *   `research/ffx2-combat-core.md` ("White Magic charge time -30%").
+ * - Shell, Protect, Reflect and Regen read "Inflicts Shell". They are gifts to
+ *   the party, so they read "Grants Shell to the party".
+ */
+export function refineForFfx2(text: string, def: AbilityDef | null): string {
+  if (!def) return text;
+  const extra = def.extra as { passive?: unknown; percent?: unknown } | undefined;
+  if (typeof extra?.passive === 'string' && /-cast-time$/.test(extra.passive) && typeof extra.percent === 'number') {
+    return `Passive: ${passiveSchool(extra.passive)} charge time −${extra.percent}%`;
+  }
+  const buffsOnly = def.statusEffects.length > 0 && def.statusEffects.every((s) => FFX2_BUFFS.has(s.status));
+  if (!buffsOnly) return text;
+  const scope = def.targeting === 'all-allies' ? ' to the party' : '';
+  return text
+    .replace(/^Inflicts ([^·]+?)(\s*·|$)/, (_m, what: string, tail: string) => `Grants ${what.trim()}${scope}${tail}`)
+    .replace(/· inflicts /g, '· grants ');
 }
 
 /** What the slab prints: the effect, with the disabled reason in front of it when disabled. */

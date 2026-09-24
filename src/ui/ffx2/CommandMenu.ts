@@ -139,6 +139,16 @@ function spherechangeLabel(c: AvailableCommand): string {
   return cmd.extra.specialDressUp ? `${dressphereLabel(cmd.extra.toDressphere)} (Special)` : dressphereLabel(cmd.extra.toDressphere);
 }
 
+/**
+ * The name the help band prints for a leaf: the same name the row itself
+ * shows. A Change row's engine `label` is the raw dressphere id
+ * (`black-mage`), so it goes through {@link spherechangeLabel} exactly as
+ * `leafRowHtml` does (PR-0012 repair, FFX-2 only).
+ */
+export function helpLabel(c: AvailableCommand): string {
+  return isSpherechange(c) ? spherechangeLabel(c) : c.label;
+}
+
 /** `GRANTS: …` for a link that crosses a gate — §4.5.4's gate-preview line, carried by `targeting.ts` as `help`. */
 function spherechangeHelp(c: AvailableCommand): string {
   const cmd = c.command;
@@ -351,7 +361,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
           return;
         }
         if ('leaf' in row) {
-          deps.onHelp(row.leaf.label, commandHelpText(row.leaf));
+          deps.onHelp(helpLabel(row.leaf), commandHelpText(row.leaf));
         } else {
           const label = groupLabel(row.group);
           deps.onHelp(label, groupHelpText(label, row.items));
@@ -359,7 +369,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         return;
       }
       const leaf = subItems[subIdx];
-      deps.onHelp(leaf ? leaf.label : '', leaf ? commandHelpText(leaf) : '');
+      deps.onHelp(leaf ? helpLabel(leaf) : '', leaf ? commandHelpText(leaf) : '');
     }
 
     function rowClasses(selected: boolean, c: AvailableCommand, gate = false): string {

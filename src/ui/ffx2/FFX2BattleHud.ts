@@ -45,6 +45,7 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
+import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, type BandInput } from './commandHelpBand.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -494,6 +495,14 @@ export class FFX2BattleHud implements HudPort {
       }
     }
     for (const box of this.fighterBoxes()) out.push(box);
+    // PR-0012: in a portrait letterbox the help band sits in the bar above the
+    // stage, outside the headroom `solveIntentPlacement` reserves; name it.
+    if (battleHelpOn()) {
+      const bandIn = this.bandInput();
+      const shown = this.commandInfoEl?.hidden === false ? this.commandInfoEl.getBoundingClientRect().height : 0;
+      const bar = bandBarRect(bandGeometry(bandIn), bandIn, shown || 60);
+      if (bar) out.push(bar);
+    }
     return out;
   }
 
@@ -536,7 +545,13 @@ export class FFX2BattleHud implements HudPort {
     // The chip rides the panel's top-right corner and is clamped into the
     // frame, so a slab flush with the top edge wears its own `E HIDE` across
     // its first line. Reserve the chip's band while the panel is up.
-    const headroom = this.intent.isVisible ? (chip?.getBoundingClientRect().height ?? 8 * scale) + scale : 0;
+    const chipRoom = this.intent.isVisible ? (chip?.getBoundingClientRect().height ?? 8 * scale) + scale : 0;
+    // PR-0012: while BATTLE HELP is on, the top band owns the stage's first
+    // 17.33 grid rows whenever a menu is open; the slab (and its chip) start
+    // under it at all times, so opening a menu never makes the slab jump.
+    const bandIn = this.bandInput();
+    const bandTop = battleHelpOn() ? bandReserve(bandGeometry(bandIn), bandIn) : 0;
+    const headroom = chipRoom + Math.max(0, bandTop - layer.top);
 
     const edge = INTENT_EDGE_MARGIN * scale;
     const cx = head.x - layer.left;
@@ -901,6 +916,7 @@ export class FFX2BattleHud implements HudPort {
     const show = FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn() && text.length > 0;
     this.commandInfoEl.hidden = !show;
     if (show) {
+      this.placeCommandBand();
       this.commandInfoEl.querySelector('[data-role="label"]')!.textContent = label;
       this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
     }
@@ -1092,6 +1108,24 @@ export class FFX2BattleHud implements HudPort {
     this.stageY = y;
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
     this.layoutFences();
+    if (this.commandInfoEl && !this.commandInfoEl.hidden) this.placeCommandBand();
+  }
+
+  /** PR-0012: what `commandHelpBand.ts` needs to place the band on this screen. */
+  private bandInput(): BandInput {
+    const chip = this.el.ownerDocument.querySelector<HTMLElement>('.battle-pause-chip');
+    const host = this.el.getBoundingClientRect();
+    return {
+      scale: this.stageScale || 1,
+      stageX: host.left + this.stageX,
+      stageY: host.top + this.stageY,
+      pauseChip: chip?.getBoundingClientRect() ?? null,
+    };
+  }
+
+  /** PR-0012: park the band clear of the PAUSE chip, or in the bar above a portrait letterbox. */
+  private placeCommandBand(): void {
+    applyBandGeometry(this.commandInfoEl, bandGeometry(this.bandInput()));
   }
 
   private renderParty(state: BattleState, snapshot: AtbSnapshot): void {
