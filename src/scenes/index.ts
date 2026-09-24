@@ -18,7 +18,6 @@
 
 import { Scene, Vector3, type PerspectiveCamera } from 'three';
 import { BattleCamera } from '../engine/BattleCamera.ts';
-import type { PartAnchors } from '../engine/PartAnchors.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { buildDemoScene, type PaintedScene } from './demo.ts';
 import {
@@ -36,14 +35,14 @@ import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farp
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
-import { mountScene, type SceneBuild, type SceneFactory } from './types.ts';
+import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
 /** A field position in world units. */
 export type Spot = [number, number, number];
 
-/** Where a scene puts fighters. Party faces `+x`, enemies face `-x`. */
-export interface SceneSlots {
+/** Where a scene puts fighters (party faces `+x`, enemies `-x`), plus its staging switches. */
+export interface SceneSlots extends SceneStaging {
   /** Party slots 0..2, left to right as the CTB list numbers them. */
   party: Spot[];
   /** Enemy slots in formation order. Longer than any formation we ship. */
@@ -51,21 +50,6 @@ export interface SceneSlots {
   /** World height for a human party member. Bosses scale from `enemyHeight`. */
   partyHeight?: number;
   enemyHeight?: number;
-  /**
-   * Optional: the enemy lane's left and right edge in x, overriding the one
-   * the stage derives from `enemy`'s extent. For a location whose formation
-   * solver would otherwise spread a fiend onto the party (Chapter 6, Dr. Goon
-   * beside Paine). Omitted everywhere else, which keeps the derived lane.
-   */
-  enemyLaneX?: [left: number, right: number];
-  /**
-   * Optional: destructible parts drawn with no figure of their own, keyed by
-   * combatant id (`src/engine/PartAnchors.ts`; Vegnagun's Bulwarks, Redoubts
-   * and Nodes, D-044). Omitted everywhere else.
-   */
-  partAnchors?: PartAnchors;
-  /** Optional: the only art ids the figure bloom mask covers here (`BloomMask.ts`). */
-  figureBloomMaskArt?: readonly string[];
 }
 
 /** One registered diorama. */
@@ -366,10 +350,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       // parking spots a switched-in character walks from.
       party: build.partySlots.slice(0, 3).map(toSpot),
       enemy: build.enemySlots.map(toSpot),
-      ...resolveSceneHeights(build),
-      ...(build.enemyLaneX ? { enemyLaneX: build.enemyLaneX } : {}),
-      ...(build.partAnchors ? { partAnchors: build.partAnchors } : {}),
-      ...(build.figureBloomMaskArt ? { figureBloomMaskArt: build.figureBloomMaskArt } : {}),
+      ...resolveSceneHeights(build), ...stagingOf(build),
     },
     update(dt): void {
       build.update(dt);

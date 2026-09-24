@@ -31,7 +31,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { paintBossSilhouette, radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import { HitEffects } from '../engine/VFX.ts';
-import type { PartAnchors } from '../engine/PartAnchors.ts';
+import { FARPLANE_STAGING } from './farplane-parts.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { AssetReport, PaintedScene } from './demo.ts';
 import {
@@ -124,11 +124,8 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * is the shot; what changed is that it now *ends* inside the frame, so the tail
  * reads as a tail rather than as a wall.
  *
- * **There are four slots, not three.** `vegnagun-leg` fields three Nodes on
- * slots 1-3 (`src/data/ffx2/enemies/vegnagun-leg.ts`), and
- * `BattlePresenterStage.add` clamps a slot index to the last published slot —
- * so with three slots Node C was parked exactly on top of Node B, two
- * separately targetable parts sharing one silhouette.
+ * Four slots: `vegnagun-leg` fields three Nodes on slots 1-3. They are
+ * figure-less now (`farplane-parts.ts`, D-044), so only the count matters.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
   [0.8, 0, -5.0], // boss -> x 0.303..0.713, y 0.135..0.633 at `idle`
@@ -136,42 +133,6 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [-0.5, 0, -6.6],
   [1.0, 0, -9.4],
 ];
-
-/**
- * Vegnagun's figure-less parts (FFX-2 only, Chapter 5). Bailey picked Bulwark
- * C*, Redoubt C* and Node C on 2026-09-24 (D-044): no painting of their own,
- * so no hooded-cone placeholder (PR-0095). Plan and pixel sources:
- * `docs/plans/vegnagun-parts-wiring.md` §3-§4; `src/engine/PartAnchors.ts`.
- *
- * - **Bulwarks**: ground rings on the body painting's own feet
- *   (`vegnagun-body/idle.png`, 1213x827, baselineY 811, contentTop 7). Right
- *   is the near foreleg's foot at (160, 811), Left the far leg's at (1110, 811);
- *   both aim the cursor at the chest point (170, 560).
- * - **Redoubts**: upright rings on the head painting (`vegnagun-head/idle.png`,
- *   1216x832, baselineY 830, contentTop 0): Right on the tusk at (330, 510),
- *   Left on the jaw at (560, 680). The Left one is a guess; the painting shows
- *   one tusk.
- * - **Nodes**: research §2 says only "Nodes hang far overhead". The offsets from
- *   the leg's feet are staging, not game data (research open issue 14 calls the
- *   §4.3 geometry unsourced): y 9 / 10.5 / 9 from §4.3.2's own design, dx and dz
- *   chosen here. All three project above the top edge at every rig; the HUD's
- *   edge markers (`src/ui/ffx2`) are what show them.
- *
- * Right and Left are told apart by combatant id, as `vegnagun-body.ts` and
- * `vegnagun-head.ts` name them, never by slot.
- */
-const BODY_PAINT = { width: 1213, height: 827, baselineY: 811, contentTop: 7 } as const;
-const HEAD_PAINT = { width: 1216, height: 832, baselineY: 830, contentTop: 0 } as const;
-
-export const FARPLANE_PART_ANCHORS: PartAnchors = {
-  'bulwark-r': { mode: 'onParent', px: [160, 811], chestPx: [170, 560], paint: BODY_PAINT, ring: { radius: 0.55, ground: true } },
-  'bulwark-l': { mode: 'onParent', px: [1110, 811], chestPx: [1110, 560], paint: BODY_PAINT, ring: { radius: 0.55, ground: true } },
-  'redoubt-r': { mode: 'onParent', px: [330, 510], paint: HEAD_PAINT, ring: { radius: 0.42, ground: false } },
-  'redoubt-l': { mode: 'onParent', px: [560, 680], paint: HEAD_PAINT, ring: { radius: 0.36, ground: false } },
-  'node-a': { mode: 'overhead', offset: [2.0, 9.0, -1.5] },
-  'node-b': { mode: 'overhead', offset: [3.0, 10.5, 0.0] },
-  'node-c': { mode: 'overhead', offset: [2.0, 9.0, 1.5] },
-};
 
 /** Canonical world heights for the figures the preview stages. */
 export const FARPLANE_ACTOR_HEIGHTS = {
@@ -889,8 +850,7 @@ export const buildFarplaneScene: SceneFactory = async (
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    // Vegnagun's Bulwarks, Redoubts and Nodes: rings and overhead points, no figures (D-044).
-    partAnchors: FARPLANE_PART_ANCHORS,
+    ...FARPLANE_STAGING, // Vegnagun's figure-less parts and the body's own spot (D-044)
     /**
      * The shared Farplane grade, pulled back.
      *

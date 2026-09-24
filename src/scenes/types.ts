@@ -22,7 +22,7 @@ import type { ScenePalette } from '../engine/Renderer.ts';
  *
  * See `docs/ENGINE-API.md#scene-builder-contract`.
  */
-export interface SceneBuild {
+export interface SceneBuild extends SceneStaging {
   /**
    * Everything the scene owns, under one node. The caller adds this to its
    * `Scene`; the scene never touches the `Scene` itself except through
@@ -88,26 +88,6 @@ export interface SceneBuild {
    */
   readonly partyHeight?: number;
   readonly enemyHeight?: number;
-  /**
-   * Optional: the enemy lane's left and right edge in x, overriding the one
-   * the stage derives from `enemy`'s extent. For a location whose formation
-   * solver would otherwise spread a fiend onto the party (Chapter 6, Dr. Goon
-   * beside Paine). Omitted everywhere else, which keeps the derived lane.
-   */
-  readonly enemyLaneX?: [left: number, right: number];
-  /**
-   * Optional: destructible parts drawn with no figure of their own, keyed by
-   * combatant id (`src/engine/PartAnchors.ts`; Vegnagun's Bulwarks, Redoubts
-   * and Nodes, D-044). Omitted everywhere else.
-   */
-  readonly partAnchors?: PartAnchors;
-  /**
-   * Optional: the only art ids the figure bloom mask covers on this stage
-   * (`src/engine/BloomMask.ts`); the rest bloom unmasked. Macalania names the
-   * Guado Guardian alone. Omitted everywhere else: every figure masked, at the
-   * palette's `figureBloomMask` strength.
-   */
-  readonly figureBloomMaskArt?: readonly string[];
 
   /** @param dt seconds. The caller must call this every frame. */
   update(dt: number): void;
@@ -124,6 +104,61 @@ export interface SceneBuild {
 }
 
 /** The rigs every scene must publish. */
+/**
+ * Optional per-location staging switches, published by a {@link SceneBuild}
+ * and passed through unchanged onto `SceneSlots` (`src/scenes/index.ts`). Each
+ * is omitted everywhere a location does not need it, which keeps the stage's
+ * default behaviour there.
+ */
+export interface SceneStaging {
+  /**
+   * The enemy lane's left and right edge in x, overriding the one the stage
+   * derives from the enemy slots' extent. For a location whose formation
+   * solver would otherwise spread a fiend onto the party (Chapter 6, Dr. Goon
+   * beside Paine).
+   */
+  readonly enemyLaneX?: [left: number, right: number];
+  /**
+   * Destructible parts drawn with no figure of their own, keyed by combatant
+   * id (`src/engine/PartAnchors.ts`; Vegnagun's Bulwarks, Redoubts and Nodes,
+   * D-044).
+   */
+  readonly partAnchors?: PartAnchors;
+  /**
+   * The only art ids the figure bloom mask covers on this stage
+   * (`src/engine/BloomMask.ts`); the rest bloom unmasked. Macalania names the
+   * Guado Guardian alone. Omitted: every figure masked, at the palette's
+   * `figureBloomMask` strength.
+   */
+  readonly figureBloomMaskArt?: readonly string[];
+  /**
+   * The party stands exactly on its slot table: the stage's measured
+   * relaxation (`src/engine/StageRelax.ts`) never moves a party member, and a
+   * party member overlapping a fiend moves neither. For a location whose slot
+   * table is solved against the fiends' settled places (Chapters 1-3,
+   * PR-0002 A, D-041).
+   */
+  readonly holdParty?: boolean;
+  /**
+   * A standing spot for a named enemy combatant, overriding its slot. The
+   * formation solver and the relaxation leave it there. For a machine whose
+   * parts are all figure-less, so it stands alone on a slot solved for a
+   * different figure (Vegnagun's body, Chapter 5 link 3).
+   */
+  readonly enemySpots?: Readonly<Record<string, [number, number, number]>>;
+}
+
+/** The staging switches a build set, and only those. */
+export function stagingOf(build: SceneStaging): SceneStaging {
+  const out: { -readonly [K in keyof SceneStaging]: SceneStaging[K] } = {};
+  if (build.enemyLaneX) out.enemyLaneX = build.enemyLaneX;
+  if (build.partAnchors) out.partAnchors = build.partAnchors;
+  if (build.figureBloomMaskArt) out.figureBloomMaskArt = build.figureBloomMaskArt;
+  if (build.holdParty) out.holdParty = true;
+  if (build.enemySpots) out.enemySpots = build.enemySpots;
+  return out;
+}
+
 export type SceneRigName = 'intro' | 'idle' | 'action' | 'victory';
 
 export interface SceneBuildOptions {

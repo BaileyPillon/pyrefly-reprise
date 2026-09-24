@@ -125,25 +125,14 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * Pushed in for an ability beat. Solved so the attacker (slot 0, and x ≈ 1.4
    * mid-lunge) and the boss (x 2.9) are both well inside the frame — an action
    * rig framed on the target alone turns every attack into a shot of the thing
-   * being hit — while the swing right leaves party slot 1 whole at the left
-   * edge.
-   *
-   * "Whole" is the change. At `[0.25, …, 0.98]` the view axis crossed slot 1's
-   * depth (z 0.3, 8.8 units along the axis) at x = 0.87, and at fov 32 on a
-   * 16:9 frame the half-width there is 4.48 — a left edge at x = -3.61 against
-   * a slot at -3.0 whose figure is ~0.45 wide and whose staff reaches further
-   * still. That is 0.16 units of margin before `sway` spends any of it, and the
-   * captures show exactly what it buys: Yuna cut off through the sleeve.
-   *
-   * Sliding the eye and the target left by the same 0.16–0.18 rotates nothing
-   * and re-frames nothing — the axis lands on 0.69 instead, the left edge on
-   * -3.79, and the margin roughly doubles to 0.34 with the boss's right side
-   * still 2.2 units inside the opposite edge at his own greater depth.
+   * being hit. It was slid 0.16-0.18 left to keep party slot 1 (then at
+   * x -3.0) whole at the left edge; since PR-0002 A that slot stands
+   * front-right, so every party slot is well inside this frame.
    */
   action: { position: [0.08, 2.55, 9.1], lookAt: [0.8, 1.95, -1.2], fov: 32, sway: 0.7 },
-  party: { position: [-0.35, 2.15, 6.8], lookAt: [-1.25, 1.6, 0.5], fov: 32, sway: 0.7 },
+  party: { position: [0.0, 2.15, 8.0], lookAt: [-0.8, 1.25, 0.5], fov: 32, sway: 0.7 },
   enemy: { position: [1.4, 2.7, 5.9], lookAt: [2.9, 2.1, -2.3], fov: 32, sway: 0.7 },
-  victory: { position: [-0.55, 2.1, 7.2], lookAt: [-1.25, 1.6, 0.9], fov: 32, sway: 1.2 },
+  victory: { position: [-0.2, 2.1, 8.2], lookAt: [-0.8, 1.3, 0.9], fov: 32, sway: 1.2 },
 };
 
 /**
@@ -157,16 +146,15 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * scene look like a sticker sheet.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  // PR-0002 option A (Bailey, D-041; FFX only). The old arc stood Yuna (slot 1,
-  // the build's activeSlots[1]) at the far left, where the approved 5-row
-  // command stack covered 70-90% of her projected quad at 1600x900. She now
-  // stands right of Auron, clear of the stack. Slots 0 and 2 are written at
-  // the spots the old arc's formation settle used to push them to (Yuna's
-  // overlap nudged them right); without her there to push, the table says it
-  // directly, so the front figure stays about 30% behind the stack as before.
-  [-1.3, 0, 1.6], // front (was -1.6)
-  [0.8, 0, 0.0], // middle: Yuna, right of the back slot (was [-3.0, 0, 0.3])
-  [-0.75, 0, -1.65], // back, stepped in again (was [-1.1, 0, -1.0])
+  // PR-0002 A (D-041, FFX only). Yuna (slot 1) stood far left, 72% of her
+  // quad behind the approved command stack; she now stands front-right of
+  // Tidus, below and left of the aeon's feet, and Auron one step left so the
+  // three silhouettes stay apart. `holdParty` keeps all three exact. Measured
+  // on painted silhouettes, 2026-09-24 (GPU, seed 1, first menu, 1600x900 and
+  // 2000x1012): Yuna 0% under the stack, no overlap with the aeon.
+  [-1.44, 0, 1.6], // front (was -1.6; live settled here)
+  [0.15, 0, 1.4], // Yuna: front-right (was [-3.0, 0, 0.3])
+  [-0.8, 0, -1.0], // back (was [-1.1, 0, -1.0])
   // reserve — outside every rig's frustum, including `victory`'s left swing
   [-11.8, 0, 2.6],
   [-12.7, 0, 1.0],
@@ -1642,6 +1630,7 @@ export const buildDreamsEndScene: SceneFactory = async (
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    holdParty: true, // PARTY_SLOTS is the composition (PR-0002 A, D-041)
     palette: { ...PALETTE },
     update(dt: number): void {
       clock += dt;

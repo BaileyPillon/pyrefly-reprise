@@ -148,10 +148,9 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * nothing else in the scene is keyed to these positions.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [0.28, 0, 1.8],
-  [-0.67, 0, 0.75],
-  [0.63, 0, -0.75],
-  // reserve
+  [0.1, 0, 1.8], // PR-0002 A (D-041, FFX only): slots 0 and 2 where live's settle left them,
+  [-0.9, 0, 0.75], // Yuna 0.23 right of that settle, 13-14% of her quad under the stack
+  [1.3, 0, -0.75], // (was 31-34%); `holdParty` keeps all three exact. Reserve below:
   [-11.6, 0, 2.8],
   [-12.5, 0, 1.2],
   [-13.4, 0, -0.4],
@@ -1303,7 +1302,7 @@ export const buildZanarkandDomeScene: SceneFactory = async (
     particles,
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])), holdParty: true, // PR-0002 A
     /**
      * The Zanarkand grade, solved against the painting that is on disk.
      *

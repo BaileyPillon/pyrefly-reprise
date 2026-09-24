@@ -6,6 +6,26 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — Scene staging switches move to `SceneStaging`; gain `holdParty` and `enemySpots`
+
+Not a listed contract file; recorded for the same reason as the entry below. **Both games**
+as plumbing, inert for every scene that sets neither new field. Additive and optional:
+
+- `SceneStaging` (`src/scenes/types.ts`) now holds the optional per-location switches
+  (`enemyLaneX`, `partAnchors`, `figureBloomMaskArt`, and the two below). `SceneBuild`
+  and `SceneSlots` both extend it, so every existing field keeps its name and type;
+  `stagingOf(build)` copies the ones a build set onto its slots.
+- `holdParty?: boolean`: the stage's measured relaxation (`src/engine/StageRelax.ts`)
+  never moves a party member, and a party member overlapping a fiend moves neither.
+  Set by Mt. Gagazet, the Zanarkand Dome and Dream's End (FFX only, Chapters 1-3, PR-0002 A), whose
+  party slot tables are now solved against the fiends' settled places.
+- `enemySpots?: Record<combatantId, Spot>`: a named enemy's standing spot, overriding
+  its slot; the formation solver and the relaxation leave it there. Set by the
+  Farplane (FFX-2 only, Chapter 5) for Vegnagun's body at link 3 (D-044).
+- Unchanged for everyone else: the relaxation's party-and-fiend rule is back to the
+  shared step it had before 49789dd6 (that commit's "only the fiend gives way" moved
+  fiends in Chapters 3, 7 and 8).
+
 ## 2026-09-24 — `encounters.ts`: `UNLISTED_CHAPTERS` moves to `chapters-unlisted.ts` (re-exported); FFX explicit targets must be `targetable`
 
 **FFX only** (Chapter IX, the Yojimbo repair pass). The contract surface does not change:

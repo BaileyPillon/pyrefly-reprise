@@ -19,20 +19,15 @@ import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts'
 import { HitEffects } from './VFX.ts';
 import type { SceneSlots } from '../scenes/index.ts';
 import { solveFormation, type FormationMember } from './Formation.ts';
-import {
-  occludersOf,
-  visibleFraction,
-  visibilityOf,
-  worstPanelFor,
-  type DepthRect,
-  type ScreenRect,
-} from './ScreenRects.ts';
+import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './ScreenRects.ts';
+import { laneFrom, relaxField, type RelaxActor } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { figureBloomMasked } from './BloomMask.ts';
-import { anchorFor, anchorPoint, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
+import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
+import * as SA from './StageAnchors.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -61,31 +56,9 @@ interface StagedActor {
   parentId?: CombatantId;
   /** Set for a figure-less part placed on its parent (`PartAnchors.ts`); the solver never moves it. */
   anchor?: PartAnchor;
+  /** Stood on its scene's `enemySpots` entry; the solver and the relaxation leave it there. */
+  pinned?: boolean;
 }
-
-/**
- * How much of a combatant has to be in the clear before the field stops
- * shuffling.
- *
- * A little above the 0.75 the targeting checks assert, so a figure that only
- * just passes today does not fail tomorrow on a frame where the camera has
- * eased a few pixels further in.
- */
-const CLEAR_ENOUGH = 0.8;
-
-/**
- * How much of a **targetable enemy** has to be clear of the HUD's own panels.
- *
- * The task's requirement B(1) caps panel coverage at 25%; this is 22%, so the
- * lane settles with a little margin rather than exactly on the line. Measured
- * live before this clause existed, `yu-pagoda-right` sat 36% under the turn
- * list at 1280x720 and 40% at 2000x1000 — the gold bracket, the hand and the
- * name plate all drawn beneath the queue's tiles.
- */
-const PANEL_CLEAR = 0.78;
-
-/** How far a destructible part may stray from its machine, in world units. */
-const PART_LEASH = 3.2;
 
 /** Colour a VFX key plays in. Unknown keys fall through to the generic impact. */
 const VFX_COLOURS: Readonly<Record<string, number>> = {
@@ -208,13 +181,13 @@ export class PaintedStage implements BattleStage {
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
     const actor = await PaintedActor.create({
       name: c.id,
-      ...(anchor ? anchoredActorOptions(anchor) : {}),
+      ...(anchor ? SA.anchoredActorOptions(anchor) : {}),
       // The *body's* facing, from the side — party and aeons turn toward +x,
       // enemies toward -x. Whether the painting is mirrored is a separate
       // question, answered by each pose's sidecar; art painted to the contract
       // (party faces right, enemies face left) is drawn exactly as painted.
       side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
-      worldHeight: anchor ? anchoredHeight(anchor) : (worldHeight ?? worldHeightFor(c, heights)),
+      worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? worldHeightFor(c, heights)),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
       placeholder:
@@ -235,13 +208,14 @@ export class PaintedStage implements BattleStage {
       // fiend, so whose turn it is reads even in a screenshot.
       turnRing: {
         color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
-        radius: anchor ? anchoredRingRadius(anchor) : kind === 'party' ? 0.78 : 1.7,
+        radius: anchor ? SA.anchoredRingRadius(anchor) : kind === 'party' ? 0.78 : 1.7,
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
     });
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
-    const spot = spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
+    const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
+    const spot = pin ?? spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
     // Already down when the field is staged: snap to it. `immediate` is what
     // stops a party member who was KO'd before the battle opened from toppling
@@ -264,6 +238,7 @@ export class PaintedStage implements BattleStage {
       ...(c.flags.isPart ? { isPart: true } : {}),
       ...(c.flags.partOf ? { parentId: c.flags.partOf } : {}),
       ...(anchor ? { anchor } : {}),
+      ...(pin ? { pinned: true } : {}),
     });
     if (anchor) {
       this.partRings.add(c.id, anchor);
@@ -297,11 +272,8 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged) return null;
     const parent = staged.anchor ? this.parentPose(staged) : undefined;
-    if (staged.anchor && parent) {
-      // A figure-less part aims at its anchor: the ring for 'feet', the chest point otherwise.
-      const [x, y, z] = anchorPoint(staged.anchor, parent, anchor === 'feet' ? 'ring' : 'chest');
-      this.scratch.set(x, y + (anchor === 'head' ? anchoredRingRadius(staged.anchor) : 0), z);
-    } else if (anchor === 'chest') staged.actor.centerPoint(this.scratch);
+    if (staged.anchor && parent) SA.anchoredAim(staged.anchor, parent, anchor, this.scratch);
+    else if (anchor === 'chest') staged.actor.centerPoint(this.scratch);
     else if (anchor === 'feet') this.scratch.copy(staged.actor.position);
     else staged.actor.headPoint(this.scratch);
     this.scratch.project(this.opts.camera);
@@ -446,7 +418,7 @@ export class PaintedStage implements BattleStage {
     const members: FormationMember[] = [];
     for (const [id, staged] of this.actors) {
       // A figure-less part stands on its parent's painting, not in the lane (D-044).
-      if (staged.kind !== 'enemy' || staged.anchor) continue;
+      if (staged.kind !== 'enemy' || staged.anchor || staged.pinned) continue;
       const m: FormationMember = { id, height: staged.actor.height };
       if (staged.isPart) {
         m.isPart = true;
@@ -467,176 +439,25 @@ export class PaintedStage implements BattleStage {
   }
 
   /**
-   * Push the fiends apart until their **projected** silhouettes clear.
-   *
-   * {@link applyFormation} lays the lane out in world space, and world space is
-   * not what the player sees. Measured live in Chapter 3, the world-space
-   * layout put Braska's Final Aeon at x 2.03, z -8 and the two Yu Pagodas at
-   * x 1.27 and x 3.33 — a clean spread on the ground, and on screen the aeon's
-   * rectangle ran 771..1152 while the Pagodas sat at 838..989 and 1035..1176,
-   * both inside it. The aeon is four units tall and three back; the Pagodas are
-   * two units tall and three forward. Perspective undoes in the frame what the
-   * ground plan got right.
-   *
-   * So finish the job against the camera. Each pass measures the real screen
-   * rectangles, finds the pairs that still overlap horizontally, and pushes
-   * both along **world x** by the deficit converted back through that actor's
-   * own screen-pixels-per-world-unit — which is what makes a near fiend move a
-   * little and a far one move a lot, exactly as it should. It converges in a
-   * handful of passes and then stops.
-   *
-   * Runs while the field is being staged, **never while a command is live**:
-   * moving enemies when the player has already opened a menu was option D's
-   * idea, and Bailey did not pick it.
+   * Push the fiends apart until their **projected** silhouettes clear
+   * (`StageRelax.ts`). Runs while the field is being staged, **never while a
+   * command is live**: moving enemies when the player has already opened a
+   * menu was option D's idea, and Bailey did not pick it.
    *
    * Returns true only when the field is **settled**: nothing moved on this
    * call. False means "call me again" — either nothing could be measured yet
-   * (no canvas), or the passes ran out before it converged. Measured live,
-   * Chapter 3 needed one more call than Chapter 1 did, and a caller that
-   * stopped after the camera stilled left Auron two thirds behind Tidus.
+   * (no canvas), or the passes ran out before it converged.
    */
   relaxFormation(passes = 14): boolean {
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return false;
     if (this.actors.size < 2) return true;
-
-    const lanes = {
-      // A pinned lane keeps its left edge nearly shut: that edge is the party side.
-      enemy: this.opts.slots.enemyLaneX
-        ? { x: [this.opts.slots.enemyLaneX[0] - 0.3, this.opts.slots.enemyLaneX[1] + 2.2] as [number, number] }
-        : widen(laneFrom(this.opts.slots.enemy), 2.2),
-      party: widen(laneFrom(this.opts.slots.party), 0.9),
-    };
-
-    for (let pass = 0; pass < passes; pass++) {
-      const rects = this.screenRects();
-      // A figure-less part has no silhouette to clear, and it must not be shoved off its anchor.
-      for (const [rid, staged] of this.actors) if (staged.anchor) rects.delete(rid);
-      if (rects.size < 2) return false;
-      // Panels included: the lane has to be clear of the turn list and the
-      // command stack, not only of the other fiends.
-      const vis = visibilityOf(rects, this.panels);
-
-      let moved = false;
-      for (const [id, fraction] of vis) {
-        if (fraction >= CLEAR_ENOUGH) continue;
-        const mine = rects.get(id);
-        if (!mine) continue;
-        for (const otherId of occludersOf(id, rects)) {
-          const theirs = rects.get(otherId);
-          if (!theirs) continue;
-          // How far they have to come apart horizontally to stop overlapping,
-          // taken a third at a time so the pass converges instead of
-          // oscillating between two figures shoving each other.
-          const overlap =
-            Math.min(mine.x + mine.w, theirs.x + theirs.w) - Math.max(mine.x, theirs.x);
-          if (overlap <= 0) continue;
-          const step = overlap * 0.34 + 3;
-          const dir = mine.x + mine.w / 2 <= theirs.x + theirs.w / 2 ? -1 : 1;
-          // A party member and a fiend: only the fiend gives way. The party
-          // arc is the scene's own composition (see `applyFormation`), and
-          // letting a fiend shove a party member sideways cascades down the
-          // arc — measured in Chapter 3 after PR-0002 A (D-041), a Yu Pagoda
-          // pushed Yuna into Auron and Auron into Tidus, walking Tidus under
-          // the command stack (33% to 52% covered). Two party members, or two
-          // fiends, still share the step as before.
-          const mineParty = this.actors.get(id)?.kind === 'party';
-          const theirsParty = this.actors.get(otherId)?.kind === 'party';
-          if (mineParty !== theirsParty) {
-            const fiend = mineParty ? otherId : id;
-            const away = mineParty ? -dir : dir;
-            if (this.nudgeIn(fiend, away * step, lanes, rect.width)) moved = true;
-            continue;
-          }
-          if (this.nudgeIn(id, (dir * step) / 2, lanes, rect.width)) moved = true;
-          if (this.nudgeIn(otherId, (-dir * step) / 2, lanes, rect.width)) moved = true;
-        }
-      }
-
-      // Second clause: the HUD's own panels.
-      //
-      // This is the half that was written down and never ran. `occludersOf`
-      // above only knows about combatants, so a fiend standing squarely under
-      // the turn list matched `fraction < CLEAR_ENOUGH`, found no combatant to
-      // move away from, and stayed exactly where it was. (And until
-      // `solidPanelRects` landed the panel rectangles were two full-viewport
-      // transparent wrappers, so *every* fiend was below the threshold and
-      // none of it meant anything.)
-      //
-      // Enemies only, deliberately. The approved frame
-      // `docs/concepts/targeting/b-ring-and-dim/s1.png` draws the command list
-      // across the party's legs on purpose — measured off the mockup itself,
-      // Yuna is ~48% behind it there — so the party arc is the picked look and
-      // is not restaged here. Requirement B(1)'s 25% cap is about targetable
-      // enemies, and that is what this enforces.
-      if (this.panels.length) {
-        for (const [id, mine] of rects) {
-          if (this.actors.get(id)?.kind !== 'enemy') continue;
-          if (visibleFraction(mine, this.panels) >= PANEL_CLEAR) continue;
-          const worst = worstPanelFor(mine, this.panels);
-          if (!worst) continue;
-          const overlap =
-            Math.min(mine.x + mine.w, worst.x + worst.w) - Math.max(mine.x, worst.x);
-          if (overlap <= 0) continue;
-          // Away from the panel, along the axis the lane actually allows.
-          const dir = mine.x + mine.w / 2 <= worst.x + worst.w / 2 ? -1 : 1;
-          if (this.nudgeIn(id, dir * (overlap * 0.4 + 3), lanes, rect.width)) moved = true;
-        }
-      }
-
-      if (!moved) return true;
+    const actors = new Map<CombatantId, RelaxActor>();
+    for (const [id, s] of this.actors) {
+      actors.set(id, { kind: s.kind, actor: s.actor, fixed: !!(s.anchor || s.pinned), ...(s.parentId ? { parentId: s.parentId } : {}) });
     }
-    // Ran out of passes with figures still moving: not settled yet.
-    return false;
-  }
-
-  /** {@link nudge}, into whichever lane this combatant belongs to. */
-  private nudgeIn(
-    id: CombatantId,
-    dxPx: number,
-    lanes: { enemy: { x: [number, number] }; party: { x: [number, number] } },
-    canvasW: number,
-  ): boolean {
-    const staged = this.actors.get(id);
-    if (!staged) return false;
-    const lane = staged.kind === 'enemy' ? lanes.enemy : lanes.party;
-    let lo = lane.x[0];
-    let hi = lane.x[1];
-    // A part stays on its machine. Vegnagun's leg may shuffle clear of its own
-    // tail; it may not walk across the field and stand beside the party.
-    const host = staged.parentId ? this.actors.get(staged.parentId) : undefined;
-    if (host) {
-      lo = Math.max(lo, host.actor.position.x - PART_LEASH);
-      hi = Math.min(hi, host.actor.position.x + PART_LEASH);
-    }
-    return this.nudge(id, dxPx, lo, hi, canvasW);
-  }
-
-  /**
-   * Move one actor `dxPx` screen pixels along world x, clamped to the lane.
-   *
-   * The conversion is measured rather than assumed: project the actor's
-   * position and the same point one world unit to the right, and the distance
-   * between them is this actor's own pixels-per-unit at its own depth.
-   */
-  private nudge(id: CombatantId, dxPx: number, xLo: number, xHi: number, canvasW: number): boolean {
-    const staged = this.actors.get(id);
-    if (!staged) return false;
-    const here = this.scratch.copy(staged.actor.position).project(this.opts.camera).x;
-    const there = new Vector3(
-      staged.actor.position.x + 1,
-      staged.actor.position.y,
-      staged.actor.position.z,
-    )
-      .project(this.opts.camera).x;
-    // NDC spans 2 across the canvas, so `(there - here) / 2 * width` is pixels.
-    const pxPerUnit = ((there - here) / 2) * canvasW;
-    if (!Number.isFinite(pxPerUnit) || Math.abs(pxPerUnit) < 1) return false;
-    const want = staged.actor.position.x + dxPx / pxPerUnit;
-    const next = Math.max(xLo, Math.min(xHi, want));
-    if (Math.abs(next - staged.actor.position.x) < 0.01) return false;
-    staged.actor.position.x = next;
-    return true;
+    const { camera, slots } = this.opts;
+    return relaxField({ actors, rects: () => this.screenRects(), panels: this.panels, camera, canvasW: rect.width, slots }, passes);
   }
 
   /** Swap a combatant's painting in place — form change, spherechange. */
@@ -756,51 +577,20 @@ export class PaintedStage implements BattleStage {
   /** The live parent of an anchored part, as the anchor math reads it. */
   private parentPose(staged: StagedActor): ParentPose | undefined {
     const parent = staged.parentId ? this.actors.get(staged.parentId)?.actor : undefined;
-    if (!parent) return undefined;
-    return {
-      x: parent.position.x,
-      y: parent.position.y,
-      z: parent.position.z,
-      height: parent.height,
-      mirrored: parent.mirrored,
-      toWorld: (u, t) => {
-        const w = parent.paintPoint(u, t, this.paintScratch);
-        return [w.x, w.y, w.z];
-      },
-    };
+    return parent ? SA.parentPoseOf(parent, this.paintScratch) : undefined;
   }
 
-  /**
-   * Put a figure-less part where its anchor says, every frame, so the parent's
-   * hop or lunge carries it. An upright ring's actor is centred on the point
-   * (its selection halo draws at mid-height); a ground ring's stands on it.
-   */
+  /** Put a figure-less part where its anchor says, every frame, so the parent's hop or lunge carries it. */
   private placeAnchored(id: CombatantId): void {
     const staged = this.actors.get(id);
-    if (!staged?.anchor) return;
-    const parent = this.parentPose(staged);
-    if (!parent) return;
-    const [x, y, z] = anchorPoint(staged.anchor, parent);
-    const a = staged.anchor;
-    const upright = a.mode === 'onParent' && !a.ring.ground;
-    const lift = upright ? y - staged.actor.height * 0.5 - ANCHOR_HOVER : a.mode === 'overhead' ? y : parent.y;
-    staged.actor.position.set(x, lift, z);
+    const parent = staged?.anchor ? this.parentPose(staged) : undefined;
+    if (!staged?.anchor || !parent) return;
+    staged.actor.position.set(...SA.anchoredSpot(staged.anchor, parent, staged.actor.height));
   }
 
-  /** A box round the anchor; a Bulwark's runs from the foot up to its chest point. */
   private anchoredQuad(staged: StagedActor): [Vector3, Vector3, Vector3, Vector3] {
-    const a = staged.anchor!;
     const p = staged.actor.position;
-    const parent = this.parentPose(staged) ?? { x: p.x, y: p.y, z: p.z, height: 1 };
-    const [x, y, z] = anchorPoint(a, parent, 'ring');
-    const r = anchoredRingRadius(a);
-    const top = a.mode === 'onParent' && a.chestPx ? anchorPoint(a, parent, 'chest')[1] + r * 0.5 : y + r;
-    const bottom = a.mode === 'onParent' && a.ring.ground ? parent.y : y - r;
-    this.quad[0].set(x - r, bottom, z);
-    this.quad[1].set(x + r, bottom, z);
-    this.quad[2].set(x + r, top, z);
-    this.quad[3].set(x - r, top, z);
-    return this.quad;
+    return SA.anchoredQuad(staged.anchor!, this.parentPose(staged) ?? { x: p.x, y: p.y, z: p.z, height: 1 }, this.quad);
   }
 
   /** The part rings' state, for the debug surface and the tests. */
@@ -894,39 +684,6 @@ function rank(side: Side): number {
   return side === 'party' ? 0 : side === 'aeon' ? 1 : 2;
 }
 
-/**
- * The lane a scene's own enemy slots describe — its x and z extent, widened a
- * little so the solver may spread past the exact spots the table lists.
- *
- * Reading it off the table rather than hard-coding one keeps each location in
- * charge of where its fiends may stand: Dream's End's plain is wide and the
- * Farplane's is not, and a formation solver that ignored that would walk
- * figures into the backdrop.
- */
-/** A lane with `pad` world units of extra room on each side. */
-function widen(lane: { x: [number, number]; z: [number, number] }, pad: number): { x: [number, number] } {
-  return { x: [lane.x[0] - pad, lane.x[1] + pad] };
-}
-
-function laneFrom(spots: readonly [number, number, number][]): {
-  x: [number, number];
-  z: [number, number];
-} {
-  if (!spots.length) return { x: [0.4, 5.8], z: [-1.6, -5.4] };
-  const xs = spots.map((s) => s[0]);
-  const zs = spots.map((s) => s[2]);
-  const xLo = Math.min(...xs);
-  const xHi = Math.max(...xs);
-  const zLo = Math.min(...zs);
-  const zHi = Math.max(...zs);
-  // A one-slot table gives a degenerate lane; give it room either side rather
-  // than piling every fiend on one spot.
-  const padX = Math.max(1.4, (xHi - xLo) * 0.22);
-  const padZ = Math.max(0.6, (zHi - zLo) * 0.12);
-  return { x: [xLo - padX, xHi + padX], z: [zHi + padZ, zLo - padZ] };
-}
-
-/** The enemy-slot height `HitEffects`' bloom size was chosen against. */
 const BOSS_HEIGHT = 4.1;
 
 /**
@@ -941,29 +698,6 @@ const BOSS_HEIGHT = 4.1;
 function bloomScale(worldHeight: number): number {
   const ratio = Math.max(0.1, worldHeight) / BOSS_HEIGHT;
   return Math.min(1.15, Math.max(0.34, Math.sqrt(ratio)));
-}
-
-/** The hover that turns an upright ring's selection accent into a halo (`PaintedActor.levitates`). */
-const ANCHOR_HOVER = 0.06;
-
-/** The ring radius a figure-less part is marked with. */
-function anchoredRingRadius(a: PartAnchor): number {
-  return a.mode === 'onParent' ? a.ring.radius : 0.9;
-}
-
-/** A figure-less actor is sized to its ring, so its accent and turn ring match it. */
-function anchoredHeight(a: PartAnchor): number {
-  return anchoredRingRadius(a) * 2;
-}
-
-/** The options that make a part figure-less; an upright ring hovers so its accent is a halo. */
-function anchoredActorOptions(a: PartAnchor): {
-  figure: false;
-  castShadow: false;
-  hover?: { height: number; bobAmplitude: number };
-} {
-  const upright = a.mode === 'onParent' && !a.ring.ground;
-  return { figure: false, castShadow: false, ...(upright ? { hover: { height: ANCHOR_HOVER, bobAmplitude: 0 } } : {}) };
 }
 
 /** Stable per-id seed so a placeholder figure looks the same every boot. */

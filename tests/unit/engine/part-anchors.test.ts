@@ -11,8 +11,9 @@ import { describe, expect, it } from 'vitest';
 import { Group, PerspectiveCamera, Vector3 } from 'three';
 import { anchorFor, anchorPoint, PartRings, RING_FORWARD, type PartAnchor } from '../../../src/engine/PartAnchors.ts';
 import { solveFormation, type FormationMember } from '../../../src/engine/Formation.ts';
-import { FARPLANE_PART_ANCHORS } from '../../../src/scenes/farplane.ts';
+import { FARPLANE_ENEMY_SPOTS, FARPLANE_PART_ANCHORS, FARPLANE_STAGING } from '../../../src/scenes/farplane-parts.ts';
 import { DREAMS_END_SLOTS } from '../../../src/scenes/dreams-end.ts';
+import { ZANARKAND_DOME_SLOTS } from '../../../src/scenes/zanarkand-dome.ts';
 
 const parent = { x: 1, y: 0, z: -5, height: 4 };
 
@@ -134,12 +135,37 @@ describe('Chapter 6 lane pin (FFX-2 only)', () => {
 });
 
 describe("PR-0002 A: Yuna's slot (FFX only, Chapter 3)", () => {
-  it('stands Yuna right of the other two, clear of the command stack side', () => {
+  it('stands Yuna front-right of Tidus and right of Auron, clear of the command stack side', () => {
     const [front, yuna, back] = DREAMS_END_SLOTS.party;
+    // Right of both (the stack is on the left), between them in depth.
     expect(yuna![0]).toBeGreaterThan(front![0] + 1.5);
-    expect(yuna![0]).toBeGreaterThan(back![0] + 1.5);
-    // Not stacked on anyone: offset in both x and z from each neighbour.
-    expect(Math.abs(yuna![2] - front![2])).toBeGreaterThan(0.5);
-    expect(Math.abs(yuna![2] - back![2])).toBeGreaterThan(0.5);
+    expect(yuna![0]).toBeGreaterThan(back![0] + 0.9);
+    expect(yuna![2]).toBeLessThan(front![2]);
+    expect(yuna![2]).toBeGreaterThan(back![2]);
+    // Not stacked on anyone: well right of Tidus, and two units in front of Auron.
+    expect(Math.abs(yuna![2] - back![2])).toBeGreaterThan(1.5);
+  });
+});
+
+describe("PR-0002 A: Yuna's slot (FFX only, Chapter 2)", () => {
+  it('stands Yuna right of where the old settle pushed her (-1.14), still left of Tidus', () => {
+    const [front, yuna, back] = ZANARKAND_DOME_SLOTS.party;
+    expect(yuna![0]).toBeGreaterThan(-1.0);
+    expect(yuna![0]).toBeLessThan(front![0] - 0.8);
+    expect(yuna![0]).toBeLessThan(back![0] - 1.5);
+  });
+});
+
+describe("Vegnagun's body stands on its own spot at link 3 (FFX-2 only)", () => {
+  it("is pinned on live's own spot (76f587c3), not the tail's slot, and published with the anchors", () => {
+    const body = FARPLANE_ENEMY_SPOTS['vegnagun-body']!;
+    expect(body).toEqual([5.75, 0, -10.0]);
+    // Well right of and behind the tail's slot [0.8, 0, -5.0], where it stood behind Rikku and Paine.
+    expect(body[0]).toBeGreaterThan(0.8 + 4);
+    expect(body[2]).toBeLessThan(-5.0 - 4);
+    expect(FARPLANE_STAGING.enemySpots).toBe(FARPLANE_ENEMY_SPOTS);
+    expect(FARPLANE_STAGING.partAnchors).toBe(FARPLANE_PART_ANCHORS);
+    // Pinned by combatant id, never by an anchored part's id.
+    for (const id of Object.keys(FARPLANE_ENEMY_SPOTS)) expect(FARPLANE_PART_ANCHORS[id]).toBeUndefined();
   });
 });
