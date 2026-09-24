@@ -1,0 +1,111 @@
+--- prototype-v2/src/compose.ts
++++ v51-scratch/src/compose.ts
+@@ -218,9 +218,9 @@
+    * A dissolve between two keys already warped onto the same pose: back
+    * halves, the body once, front halves; each pair mixed by coverage.
+    */
+-  drawDissolve(from: RigKey, to: RigKey, w: number, mFrom: Meshes, mTo: Meshes, face: FaceFrame, m: Motions, gain: number, targets: FrameBufferTarget[], td: TasselDraw | null = null): void {
++  drawDissolve(from: RigKey, to: RigKey, w: number, mFrom: Meshes, mTo: Meshes, face: FaceFrame, m: Motions, gain: number, targets: FrameBufferTarget[], td: TasselDraw | null = null, bodyW?: number): void {
+     const [scene, ta, tb] = targets as [FrameBufferTarget, FrameBufferTarget, FrameBufferTarget];
+-    const turned = (from.id !== 'frontal' ? 1 - w : 0) + (to.id !== 'frontal' ? w : 0);
++    const turned = bodyW ?? (from.id !== 'frontal' ? 1 - w : 0) + (to.id !== 'frontal' ? w : 0);
+     this.bind(scene, 'bg');
+     for (const part of ['back', 'front'] as const) {
+       this.bind(ta, 'clear');
+--- prototype-v2/src/driver.ts
++++ v51-scratch/src/driver.ts
+@@ -222,8 +222,8 @@
+   }
+ 
+   /** Debug/verification aid, not part of the `PortraitDriver` seam. */
+-  forceMouthEvent(patch?: 'parted' | 'slightSmile' | 'smile' | 'pressed'): void {
+-    this.state.forceMouthEvent(patch);
++  forceMouthEvent(patch?: 'parted' | 'slightSmile' | 'smile' | 'pressed', replace = false): void {
++    this.state.forceMouthEvent(patch, replace);
+   }
+ 
+   /** Debug/verification aid (v4), not part of the `PortraitDriver` seam. */
+--- prototype-v2/src/face.ts
++++ v51-scratch/src/face.ts
+@@ -168,9 +168,9 @@
+     return Math.exp(-(ageS - onsetS) / RIG_CONSTANTS.expression.decayS);
+   }
+ 
+-  /** Debug/verification aid: starts a mouth event now, unless one is already running. */
+-  forceMouthEvent(patch: MouthPatch = 'smile'): void {
+-    if (!this.mouthEvent) this.mouthEvent = { patch, startedAt: this.t };
++  /** Debug/verification aid: starts a mouth event now, unless one is already running (v5.1 scratch: `replace` ends it). */
++  forceMouthEvent(patch: MouthPatch = 'smile', replace = false): void {
++    if (!this.mouthEvent || replace) this.mouthEvent = { patch, startedAt: this.t };
+   }
+ 
+   /** Debug/verification aid (v4): starts a brow event now, unless one is already running. */
+--- prototype-v2/src/main.ts
++++ v51-scratch/src/main.ts
+@@ -24,7 +24,8 @@
+ 
+   const driver = new LivingPortraitDriver({
+     assetBaseUrl: './art/',
+-    rigUrl: './art/rig.json',
++    // v5 pilot scratch: ?rig=<name> loads ./art/rig-<name>.json (the v4.1 rig under the same hard cut: ?rig=v41cut)
++    rigUrl: ((r) => (r ? `./art/rig-${r}.json` : './art/rig.json'))(new URLSearchParams(location.search).get('rig')),
+     debugTimeScale,
+     debugNoPost: new URLSearchParams(location.search).get('post') === '0',
+     debugNoWarp: new URLSearchParams(location.search).get('warp') === '0',
+--- prototype-v2/src/paint.ts
++++ v51-scratch/src/paint.ts
+@@ -46,7 +46,8 @@
+  * with hysteresis; with the keys registered feature by feature, the swap can
+  * be quick: 0.2 s, or 5 degrees of a fast turn.
+  */
+-export const WARP_PAINT = { hysteresisDeg: 3, dissolveS: 0.2, dissolveDeg: 5 } as const;
++/** v5 pilot: a HARD CUT (dissolveS 0: progress jumps to 1 on the swap frame; dissolveDeg is then unused). */
++export const WARP_PAINT = { hysteresisDeg: 3, dissolveS: 0, dissolveDeg: 5 } as const;
+ 
+ function smoothstep(x: number): number {
+   const t = Math.max(0, Math.min(1, x));
+--- prototype-v2/src/renderer.ts
++++ v51-scratch/src/renderer.ts
+@@ -153,9 +153,8 @@
+   }
+ 
+   private yawNorm(yawDeg: number): number {
+-    const min = this.keysByYaw[0]?.yawDeg ?? -RIG_CONSTANTS.yaw.maxDeg;
+-    const max = this.keysByYaw.at(-1)?.yawDeg ?? RIG_CONSTANTS.yaw.maxDeg;
+-    return yawNormFor(yawDeg, min, max);
++    // v5 pilot: the v4.1 rig's range (+-85), so the irises, strands and relight move per degree exactly as in v4.1
++    return yawNormFor(yawDeg, -85, 85);
+   }
+ 
+   /** `bg`: the opaque backdrop; `clear`: transparent (a premultiplied head pass); `keep`: draw on top. */
+@@ -267,12 +266,14 @@
+     const td = this.tasselFor(frame.yawDeg, head, loose.earring);
+     const from = paint.from && paint.w < 1 - KEY_EPS ? this.keyById(paint.from) : null;
+     const mFrom = from ? (this.meshes(from, pose, moving) ?? this.meshes(from, this.nearestPose(from, pose), moving)) : null;
++    // v5 pilot: the pinned body is not part of the paint; plate body -> turned body (they differ only in the
++    // tassel's footprint) follows the geometry over the first 10 degrees, so the hard cut never swaps it
++    const bodyW = Math.min(1, Math.abs(frame.yawDeg) / 10);
+     if (!from || !mFrom) {
+-      this.bindTarget(scene);
+-      C.drawKey(to, frame, m, gain, mTo, 'all', td);
++      C.drawDissolve(to, to, 1, mTo, mTo, frame, m, gain, this.targets, td, bodyW);
+       return;
+     }
+-    C.drawDissolve(from, to, paint.w, mFrom, mTo, frame, m, gain, this.targets, td);
++    C.drawDissolve(from, to, paint.w, mFrom, mTo, frame, m, gain, this.targets, td, bodyW);
+   }
+ 
+   /**
+--- prototype-v2/src/state.ts
++++ v51-scratch/src/state.ts
+@@ -106,8 +106,8 @@
+   }
+ 
+   /** Debug/verification aid — see `ExpressionScheduler.forceMouthEvent`. */
+-  forceMouthEvent(patch?: MouthPatch): void {
+-    this.exprScheduler.forceMouthEvent(patch);
++  forceMouthEvent(patch?: MouthPatch, replace = false): void {
++    this.exprScheduler.forceMouthEvent(patch, replace);
+   }
+ 
+   /** Debug/verification aid (v4) — see `ExpressionScheduler.forceBrowEvent`. */
