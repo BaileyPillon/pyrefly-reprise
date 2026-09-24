@@ -517,6 +517,7 @@ export class BattlePresenter {
 
     try {
       if (!clock) return await decided;
+      this.ctx.stage.camera.hold?.(true); // PR-0150: FFX-2 holds the menu/target frame (TargetFrameHold.ts)
       const outcome = await runMenuClock({
         engine: clock,
         actorId,
@@ -541,6 +542,7 @@ export class BattlePresenter {
       console.warn('[presenter] command menu failed; falling back', err);
       return firstEnabled(commands);
     } finally {
+      this.ctx.stage.camera.hold?.(false);
       this.pendingMenu = null;
       this.wakeMenuClock = null;
     }

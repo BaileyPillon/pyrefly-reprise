@@ -82,6 +82,12 @@ export interface CameraPort {
   release?(ms?: number): Promise<void>;
   /** Kick the horizon over by `deg` and let it fall back level. */
   roll?(deg?: number, ms?: number): Promise<void>;
+  /**
+   * Hold (`true`) or release the wide `idle` frame: while held, rig moves, cuts,
+   * push, roll and punch are swallowed. Optional and additive (PR-0150,
+   * `TargetFrameHold.ts`); the presenter holds it under an FFX-2 command menu.
+   */
+  hold?(on: boolean): void;
   readonly rigNames: string[];
   readonly rigName: string;
 }

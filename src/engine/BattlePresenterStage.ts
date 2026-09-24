@@ -11,7 +11,7 @@
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
 import { artIdFor, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
-import type { ArrivalClock, BattleStage, CameraPort, Point2, VfxPort } from './BattlePresenterPorts.ts';
+import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
@@ -28,6 +28,7 @@ import {
   type ScreenRect,
 } from './ScreenRects.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
+import { HoldableCamera } from './TargetFrameHold.ts';
 import { layProneFigures } from './ProneLay.ts';
 
 export interface PaintedStageOptions {
@@ -98,7 +99,8 @@ const VFX_COLOURS: Readonly<Record<string, number>> = {
 };
 
 export class PaintedStage implements BattleStage {
-  readonly camera: CameraPort;
+  /** The battle camera behind the FFX-2 target-frame hold (`TargetFrameHold.ts`, PR-0150). */
+  readonly camera: HoldableCamera;
   readonly vfx: VfxPort;
   /**
    * The selection marks on the field — the accent pool and the quiet dim of
@@ -135,7 +137,7 @@ export class PaintedStage implements BattleStage {
       actor: (id) => this.actor(id),
       staged: () => this.staged(),
     });
-    this.camera = opts.battleCamera;
+    this.camera = new HoldableCamera(opts.battleCamera);
     this.hits = new HitEffects(
       { size: 4.2, coreColor: 0xffffff, edgeColor: 0x9fd8ff, arc: 2.45, thickness: 0.075 },
       { count: 110, speed: 6.4, life: 0.5, size: 10, bias: [0.4, 0.45, 0.2], focus: 0.5 },
