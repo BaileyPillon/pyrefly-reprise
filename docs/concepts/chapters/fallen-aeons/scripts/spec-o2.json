@@ -1,0 +1,88 @@
+{
+ "title": "Fallen Aeons - O-2 The possessed look (FFX-2 only)",
+ "subtitle": "Derived from approved pixels, no repaint, no GPU. B: grade + rim + eye glow + aura. C: untouched pixels + rim and motes. No source says the aeons are recoloured (F-12).",
+ "width": 2400,
+ "rows": [
+  {
+   "label": "Shiva on Road plate A, real HUD",
+   "items": [
+    {
+     "key": "A",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-a-none-frame-road.jpg",
+     "cap": "A  none: the approved painting as it is"
+    },
+    {
+     "key": "B",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-b-chapter4-violet-frame-road.jpg",
+     "cap": "B  Chapter IV violet: violet eyes, rim and aura"
+    },
+    {
+     "key": "C",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-c-pyrefly-edge-frame-road.jpg",
+     "cap": "C  pyrefly edge: pale rim, motes on the outline"
+    }
+   ]
+  },
+  {
+   "label": "Anima, the same three treatments (follows the Shiva pick)",
+   "items": [
+    {
+     "key": "A",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/anima-a-none-frame-road.jpg",
+     "cap": "A  none (red eye as painted)"
+    },
+    {
+     "key": "B",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/anima-b-chapter4-violet-frame-road.jpg",
+     "cap": "B  the red eye turns violet"
+    },
+    {
+     "key": "C",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/anima-c-pyrefly-edge-frame-road.jpg",
+     "cap": "C  motes; would be live particles in game"
+    }
+   ]
+  },
+  {
+   "label": "Contrast check: the same Shiva on the approved Farplane, where violet on violet nearly vanishes",
+   "items": [
+    {
+     "key": "A",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-a-none-frame-farplane.jpg",
+     "cap": "A on the Farplane"
+    },
+    {
+     "key": "B",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-b-chapter4-violet-frame-farplane.jpg",
+     "cap": "B: the aura is lost against the field"
+    },
+    {
+     "key": "C",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-c-pyrefly-edge-frame-farplane.jpg",
+     "cap": "C on the Farplane"
+    }
+   ]
+  },
+  {
+   "label": "Close up (cards on grey)",
+   "cellH": 620,
+   "items": [
+    {
+     "key": "A",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-a-none-card.jpg",
+     "cap": "approved pixels"
+    },
+    {
+     "key": "B",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-b-chapter4-violet-card.jpg",
+     "cap": "line work and shapes identical to A"
+    },
+    {
+     "key": "C",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o2-possessed/shiva-c-pyrefly-edge-card.jpg",
+     "cap": "figure pixels identical to A"
+    }
+   ]
+  }
+ ]
+}

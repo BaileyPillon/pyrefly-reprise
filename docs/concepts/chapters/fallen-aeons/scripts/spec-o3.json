@@ -1,0 +1,47 @@
+{
+ "title": "Fallen Aeons - O-3 The Road to the Farplane (FFX-2 only)",
+ "subtitle": "From the approved Farplane: sky, spire and cliffs kept pixel for pixel; only the flower field repainted (one masked render kept). B and C made from A's pixels.",
+ "width": 2400,
+ "rows": [
+  {
+   "label": "The full plates (2688x1536, shown reduced)",
+   "items": [
+    {
+     "key": "A",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o3-road/a-one-platform-plate.jpg",
+     "cap": "A  one platform over a bright void"
+    },
+    {
+     "key": "B",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o3-road/b-three-platforms-plate.jpg",
+     "cap": "B  A plus platforms 2 and 3 receding to the spire"
+    },
+    {
+     "key": "C",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o3-road/c-dimmed-plate.jpg",
+     "cap": "C  A under a dimmed Farplane (a grade)"
+    }
+   ]
+  },
+  {
+   "label": "In battle: the party on the platform, Shiva (approved, untreated), real HUD",
+   "items": [
+    {
+     "key": "A",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o3-road/a-one-platform-frame.jpg",
+     "cap": "the brightest; violet reads best here"
+    },
+    {
+     "key": "B",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o3-road/b-three-platforms-frame.jpg",
+     "cap": "tells you where the next two fights are"
+    },
+    {
+     "key": "C",
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o3-road/c-dimmed-frame.jpg",
+     "cap": "mournful; lowest contrast for the party"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,58 @@
+{
+ "title": "Fallen Aeons - O-4 Between the links (storyboards, FFX-2 presentation)",
+ "subtitle": "Three ways from one platform to the next. Stills only; the motion is under each panel. C also shows FA2 = b (full restore at a Save Sphere).",
+ "width": 2400,
+ "rows": [
+  {
+   "label": "A  Title-card cut",
+   "items": [
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/a-1.jpg",
+     "cap": "1  Shiva falls into pyreflies (the engine's dissolve)"
+    },
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/a-2.jpg",
+     "cap": "2  hard cut to an Ink & Gold card, ~1.5 s"
+    },
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/a-3.jpg",
+     "cap": "3  cut in on the Sisters' platform"
+    }
+   ]
+  },
+  {
+   "label": "B  Pan up the Road",
+   "items": [
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/b-1.jpg",
+     "cap": "1  Shiva falls"
+    },
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/b-2.jpg",
+     "cap": "2  wide shot of plate B, camera glides 1 to 2 (~2 s)"
+    },
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/b-3.jpg",
+     "cap": "3  settle on the Sisters' platform"
+    }
+   ]
+  },
+  {
+   "label": "C  Save Sphere fade",
+   "items": [
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/c-1.jpg",
+     "cap": "1  Shiva falls"
+    },
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/c-2.jpg",
+     "cap": "2  fade to white, Save Sphere, 'HP and MP restored'"
+    },
+    {
+     "img": "D:/Final Fantasy/docs/concepts/chapters/fallen-aeons/o4-transitions/c-3.jpg",
+     "cap": "3  fade in on the Sisters' platform"
+    }
+   ]
+  }
+ ]
+}
