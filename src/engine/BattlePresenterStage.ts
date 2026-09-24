@@ -31,6 +31,7 @@ import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
 import { departurePoses } from './BattlePresenterDepartures.ts';
 import { layProneFigures } from './ProneLay.ts';
+import { anchorFor, anchorPoint, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -57,6 +58,8 @@ interface StagedActor {
   isPart?: boolean;
   /** The machine this is a part of, when `isPart`. */
   parentId?: CombatantId;
+  /** Set for a figure-less part placed on its parent (`PartAnchors.ts`); the solver never moves it. */
+  anchor?: PartAnchor;
 }
 
 /**
@@ -113,6 +116,7 @@ export class PaintedStage implements BattleStage {
   private readonly actors = new Map<CombatantId, StagedActor>();
   private readonly hits: HitEffects;
   private readonly scratch = new Vector3();
+  private readonly paintScratch = new Vector3();
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [
     new Vector3(),
     new Vector3(),
@@ -130,9 +134,12 @@ export class PaintedStage implements BattleStage {
   private readonly arrivals: ArrivalDirectors;
   /** What each arrival left on the field, undone when that figure leaves it. */
   private readonly arrivalCleanups = new Map<CombatantId, ArrivalCleanup>();
+  /** The rings a figure-less part wears on its parent (Vegnagun's Bulwarks and Redoubts, D-044). */
+  private readonly partRings: PartRings;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
+    this.partRings = new PartRings(opts.scene);
     this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({
       actor: (id) => this.actor(id),
@@ -197,14 +204,16 @@ export class PaintedStage implements BattleStage {
       enemy: this.opts.slots.enemyHeight ?? 4.1,
     };
 
+    const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
     const actor = await PaintedActor.create({
       name: c.id,
+      ...(anchor ? anchoredActorOptions(anchor) : {}),
       // The *body's* facing, from the side — party and aeons turn toward +x,
       // enemies toward -x. Whether the painting is mirrored is a separate
       // question, answered by each pose's sidecar; art painted to the contract
       // (party faces right, enemies face left) is drawn exactly as painted.
       side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
-      worldHeight: worldHeight ?? worldHeightFor(c, heights),
+      worldHeight: anchor ? anchoredHeight(anchor) : (worldHeight ?? worldHeightFor(c, heights)),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
       placeholder:
@@ -217,14 +226,14 @@ export class PaintedStage implements BattleStage {
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },
       groundShade: 0.24,
-      shadow: { radius: kind === 'party' ? 0.62 : 1.5, opacity: 0.48 },
+      shadow: anchor ? false : { radius: kind === 'party' ? 0.62 : 1.5, opacity: 0.48 },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
       // fiend, so whose turn it is reads even in a screenshot.
       turnRing: {
         color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
-        radius: kind === 'party' ? 0.78 : 1.7,
+        radius: anchor ? anchoredRingRadius(anchor) : kind === 'party' ? 0.78 : 1.7,
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
     });
@@ -248,7 +257,12 @@ export class PaintedStage implements BattleStage {
       // lane of its own — Vegnagun's leg is not a fourth fiend.
       ...(c.flags.isPart ? { isPart: true } : {}),
       ...(c.flags.partOf ? { parentId: c.flags.partOf } : {}),
+      ...(anchor ? { anchor } : {}),
     });
+    if (anchor) {
+      this.partRings.add(c.id, anchor);
+      this.placeAnchored(c.id);
+    }
     return actor;
   }
 
@@ -276,7 +290,12 @@ export class PaintedStage implements BattleStage {
   project(id: CombatantId, anchor: 'head' | 'chest' | 'feet' = 'head'): Point2 | null {
     const staged = this.actors.get(id);
     if (!staged) return null;
-    if (anchor === 'chest') staged.actor.centerPoint(this.scratch);
+    const parent = staged.anchor ? this.parentPose(staged) : undefined;
+    if (staged.anchor && parent) {
+      // A figure-less part aims at its anchor: the ring for 'feet', the chest point otherwise.
+      const [x, y, z] = anchorPoint(staged.anchor, parent, anchor === 'feet' ? 'ring' : 'chest');
+      this.scratch.set(x, y + (anchor === 'head' ? anchoredRingRadius(staged.anchor) : 0), z);
+    } else if (anchor === 'chest') staged.actor.centerPoint(this.scratch);
     else if (anchor === 'feet') this.scratch.copy(staged.actor.position);
     else staged.actor.headPoint(this.scratch);
     this.scratch.project(this.opts.camera);
@@ -307,7 +326,7 @@ export class PaintedStage implements BattleStage {
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return null;
 
-    const corners = staged.actor.contentQuad(this.quad);
+    const corners = staged.anchor ? this.anchoredQuad(staged) : staged.actor.contentQuad(this.quad);
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
@@ -396,7 +415,10 @@ export class PaintedStage implements BattleStage {
    * yet. Pass `null` to restore the field.
    */
   xray(id: CombatantId | null, alpha = 0.35): void {
-    const cover = id ? new Set(this.occluders(id)) : new Set<CombatantId>();
+    // A figure-less part is drawn on its parent's painting: fading the parent
+    // to show the part would erase the very thing the ring marks (D-044).
+    const anchored = id ? !!this.actors.get(id)?.anchor : false;
+    const cover = id && !anchored ? new Set(this.occluders(id)) : new Set<CombatantId>();
     for (const [otherId, staged] of this.actors) {
       const wanted = cover.has(otherId) ? alpha : 1;
       if (Math.abs(staged.actor.alpha - wanted) > 0.01) void staged.actor.fadeTo(wanted, 140);
@@ -417,7 +439,8 @@ export class PaintedStage implements BattleStage {
   applyFormation(): void {
     const members: FormationMember[] = [];
     for (const [id, staged] of this.actors) {
-      if (staged.kind !== 'enemy') continue;
+      // A figure-less part stands on its parent's painting, not in the lane (D-044).
+      if (staged.kind !== 'enemy' || staged.anchor) continue;
       const m: FormationMember = { id, height: staged.actor.height };
       if (staged.isPart) {
         m.isPart = true;
@@ -428,6 +451,8 @@ export class PaintedStage implements BattleStage {
     if (members.length < 2) return;
 
     const lane = laneFrom(this.opts.slots.enemy);
+    // A scene may pin the lane's x (Chapter 6: keep the Syndicate off Paine).
+    if (this.opts.slots.enemyLaneX) lane.x = [...this.opts.slots.enemyLaneX];
     for (const slot of solveFormation(members, lane)) {
       const staged = this.actors.get(slot.id);
       if (!staged) continue;
@@ -470,12 +495,17 @@ export class PaintedStage implements BattleStage {
     if (this.actors.size < 2) return true;
 
     const lanes = {
-      enemy: widen(laneFrom(this.opts.slots.enemy), 2.2),
+      // A pinned lane keeps its left edge nearly shut: that edge is the party side.
+      enemy: this.opts.slots.enemyLaneX
+        ? { x: [this.opts.slots.enemyLaneX[0] - 0.3, this.opts.slots.enemyLaneX[1] + 2.2] as [number, number] }
+        : widen(laneFrom(this.opts.slots.enemy), 2.2),
       party: widen(laneFrom(this.opts.slots.party), 0.9),
     };
 
     for (let pass = 0; pass < passes; pass++) {
       const rects = this.screenRects();
+      // A figure-less part has no silhouette to clear, and it must not be shoved off its anchor.
+      for (const [rid, staged] of this.actors) if (staged.anchor) rects.delete(rid);
       if (rects.size < 2) return false;
       // Panels included: the lane has to be clear of the turn list and the
       // command stack, not only of the other fiends.
@@ -497,6 +527,21 @@ export class PaintedStage implements BattleStage {
           if (overlap <= 0) continue;
           const step = overlap * 0.34 + 3;
           const dir = mine.x + mine.w / 2 <= theirs.x + theirs.w / 2 ? -1 : 1;
+          // A party member and a fiend: only the fiend gives way. The party
+          // arc is the scene's own composition (see `applyFormation`), and
+          // letting a fiend shove a party member sideways cascades down the
+          // arc — measured in Chapter 3 after PR-0002 A (D-041), a Yu Pagoda
+          // pushed Yuna into Auron and Auron into Tidus, walking Tidus under
+          // the command stack (33% to 52% covered). Two party members, or two
+          // fiends, still share the step as before.
+          const mineParty = this.actors.get(id)?.kind === 'party';
+          const theirsParty = this.actors.get(otherId)?.kind === 'party';
+          if (mineParty !== theirsParty) {
+            const fiend = mineParty ? otherId : id;
+            const away = mineParty ? -dir : dir;
+            if (this.nudgeIn(fiend, away * step, lanes, rect.width)) moved = true;
+            continue;
+          }
           if (this.nudgeIn(id, (dir * step) / 2, lanes, rect.width)) moved = true;
           if (this.nudgeIn(otherId, (-dir * step) / 2, lanes, rect.width)) moved = true;
         }
@@ -656,6 +701,7 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged) return;
     this.actors.delete(id);
+    this.partRings.remove(id);
     staged.actor.dispose();
   }
 
@@ -699,6 +745,63 @@ export class PaintedStage implements BattleStage {
     };
   }
 
+  // ------------------------------------------------------- anchored parts
+
+  /** The live parent of an anchored part, as the anchor math reads it. */
+  private parentPose(staged: StagedActor): ParentPose | undefined {
+    const parent = staged.parentId ? this.actors.get(staged.parentId)?.actor : undefined;
+    if (!parent) return undefined;
+    return {
+      x: parent.position.x,
+      y: parent.position.y,
+      z: parent.position.z,
+      height: parent.height,
+      mirrored: parent.mirrored,
+      toWorld: (u, t) => {
+        const w = parent.paintPoint(u, t, this.paintScratch);
+        return [w.x, w.y, w.z];
+      },
+    };
+  }
+
+  /**
+   * Put a figure-less part where its anchor says, every frame, so the parent's
+   * hop or lunge carries it. An upright ring's actor is centred on the point
+   * (its selection halo draws at mid-height); a ground ring's stands on it.
+   */
+  private placeAnchored(id: CombatantId): void {
+    const staged = this.actors.get(id);
+    if (!staged?.anchor) return;
+    const parent = this.parentPose(staged);
+    if (!parent) return;
+    const [x, y, z] = anchorPoint(staged.anchor, parent);
+    const a = staged.anchor;
+    const upright = a.mode === 'onParent' && !a.ring.ground;
+    const lift = upright ? y - staged.actor.height * 0.5 - ANCHOR_HOVER : a.mode === 'overhead' ? y : parent.y;
+    staged.actor.position.set(x, lift, z);
+  }
+
+  /** A box round the anchor; a Bulwark's runs from the foot up to its chest point. */
+  private anchoredQuad(staged: StagedActor): [Vector3, Vector3, Vector3, Vector3] {
+    const a = staged.anchor!;
+    const p = staged.actor.position;
+    const parent = this.parentPose(staged) ?? { x: p.x, y: p.y, z: p.z, height: 1 };
+    const [x, y, z] = anchorPoint(a, parent, 'ring');
+    const r = anchoredRingRadius(a);
+    const top = a.mode === 'onParent' && a.chestPx ? anchorPoint(a, parent, 'chest')[1] + r * 0.5 : y + r;
+    const bottom = a.mode === 'onParent' && a.ring.ground ? parent.y : y - r;
+    this.quad[0].set(x - r, bottom, z);
+    this.quad[1].set(x + r, bottom, z);
+    this.quad[2].set(x + r, top, z);
+    this.quad[3].set(x - r, top, z);
+    return this.quad;
+  }
+
+  /** The part rings' state, for the debug surface and the tests. */
+  partRingSnapshot(): ReturnType<PartRings['snapshot']> {
+    return this.partRings.snapshot();
+  }
+
   /** A full-screen colour wash. No-ops when the screen gave us no overlay. */
   screenFlash(colour = '#ffffff', ms = 220): void {
     const root = this.opts.overlayRoot;
@@ -724,7 +827,18 @@ export class PaintedStage implements BattleStage {
 
   /** @param dt seconds. Drive from the screen's update loop. */
   update(dt: number): void {
+    for (const id of this.actors.keys()) this.placeAnchored(id);
     for (const { actor } of this.actors.values()) actor.update(dt);
+    this.partRings.update(
+      dt,
+      (id) => {
+        const staged = this.actors.get(id);
+        if (!staged) return undefined;
+        this.partRings.setAlive(id, this.lastState?.combatants[id]?.alive !== false);
+        return this.parentPose(staged);
+      },
+      this.opts.camera,
+    );
     layProneFigures([...this.actors.values()].map((s) => s.actor), this.opts.camera, this.opts.battleCamera);
     this.hits.update(dt, this.opts.camera);
   }
@@ -763,6 +877,7 @@ export class PaintedStage implements BattleStage {
     this.arrivalCleanups.clear();
     for (const { actor } of this.actors.values()) actor.dispose();
     this.actors.clear();
+    this.partRings.dispose();
     this.hits.dispose();
     this.flashEl?.remove();
     this.flashEl = null;
@@ -820,6 +935,29 @@ const BOSS_HEIGHT = 4.1;
 function bloomScale(worldHeight: number): number {
   const ratio = Math.max(0.1, worldHeight) / BOSS_HEIGHT;
   return Math.min(1.15, Math.max(0.34, Math.sqrt(ratio)));
+}
+
+/** The hover that turns an upright ring's selection accent into a halo (`PaintedActor.levitates`). */
+const ANCHOR_HOVER = 0.06;
+
+/** The ring radius a figure-less part is marked with. */
+function anchoredRingRadius(a: PartAnchor): number {
+  return a.mode === 'onParent' ? a.ring.radius : 0.9;
+}
+
+/** A figure-less actor is sized to its ring, so its accent and turn ring match it. */
+function anchoredHeight(a: PartAnchor): number {
+  return anchoredRingRadius(a) * 2;
+}
+
+/** The options that make a part figure-less; an upright ring hovers so its accent is a halo. */
+function anchoredActorOptions(a: PartAnchor): {
+  figure: false;
+  castShadow: false;
+  hover?: { height: number; bobAmplitude: number };
+} {
+  const upright = a.mode === 'onParent' && !a.ring.ground;
+  return { figure: false, castShadow: false, ...(upright ? { hover: { height: ANCHOR_HOVER, bobAmplitude: 0 } } : {}) };
 }
 
 /** Stable per-id seed so a placeholder figure looks the same every boot. */

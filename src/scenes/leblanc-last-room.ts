@@ -110,6 +110,20 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [-0.3, 0, -3.8], // Ormi — short and stout, flanks left and closer to camera
 ];
 
+/**
+ * The enemy lane's x edges (FFX-2 only, Chapter 6). The lane the stage derives
+ * from `ENEMY_SLOTS` runs from x -1.7, and the formation solver spreads a
+ * three-figure act across it centre-out, so in Act I Dr. Goon (the left flank)
+ * stood at x -0.39: on screen at x 648..707 of 1600, one step right of Paine
+ * (552..632), the Syndicate side crowding the party. Pinning the lane to 0.0..2.4
+ * packs the row and moves it right: measured at 1600x900 (GPU, seed 1, first
+ * menu), Dr. Goon stands at 729..786, about 100 px clear of Paine; Ormi at
+ * 804..867 stays just left of the enemy-intent card (868); Fem-Goon ends at
+ * 989, inside the FFX-2 HUD rail (0.72 of the canvas, 1152). Staging only,
+ * not game data.
+ */
+const ENEMY_LANE_X: [number, number] = [0.0, 2.4];
+
 /** Canonical world heights for the cast that fights here (presentation estimates, not sourced game data — see AGENTS.md rule 6; the stat block in `leblanc-syndicate.ts` carries no physical height). */
 export const LEBLANC_LAST_ROOM_ACTOR_HEIGHTS = {
   yuna: 1.68,
@@ -319,6 +333,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     // a per-slot height table, which is out of this fix's scope.
     partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
+    enemyLaneX: ENEMY_LANE_X,
     palette: {
       ...ScenePalettes.chateauLeblanc,
     } satisfies ScenePalette,

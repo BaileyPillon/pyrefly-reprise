@@ -120,6 +120,14 @@ export interface PaintedActorOptions {
    */
   turnRing?: false | true | { color?: number | string; radius?: number; opacity?: number };
   /**
+   * `false` stages the actor with **no painted figure**: the planes are never
+   * drawn, while the group, the turn ring, the selection accent and every
+   * projection point still work. For a destructible part that is a ring on its
+   * parent's painting rather than a figure of its own (Vegnagun's Bulwarks,
+   * Redoubts and Nodes, D-044; `src/engine/PartAnchors.ts`). Default `true`.
+   */
+  figure?: boolean;
+  /**
    * The life layer: breathing weight, the ready step, the guard brace, the KO
    * fall, the victory hop. `false` leaves `setPose` a plain texture swap, which
    * is what hand-animated scene demos want.
@@ -419,6 +427,8 @@ export class PaintedActor extends Group {
   private _alpha = 1;
   private baseBrightness: number;
   private readonly castsShadow: boolean;
+  /** False for a figure-less actor ({@link PaintedActorOptions.figure}). */
+  private readonly showFigure: boolean;
   private readonly shadowAlphaTest: number;
 
   // shared uniform cells (one object per uniform, referenced by both planes)
@@ -564,6 +574,7 @@ export class PaintedActor extends Group {
 
     const renderOrder = opts.renderOrder ?? 10;
     this.castsShadow = opts.castShadow !== false;
+    this.showFigure = opts.figure !== false;
     this.shadowAlphaTest = opts.shadowAlphaTest ?? 0.4;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
     for (const s of this.slots) this.inner.add(s.mesh);
@@ -920,7 +931,7 @@ export class PaintedActor extends Group {
       1 / Math.max(1, tex.meta.width),
       1 / Math.max(1, tex.meta.height),
     );
-    slot.mesh.visible = true;
+    slot.mesh.visible = this.showFigure;
     if (slot.depth) {
       slot.depth.map = tex.texture;
       slot.depth.needsUpdate = true;
@@ -994,7 +1005,7 @@ export class PaintedActor extends Group {
     for (const slot of this.slots) {
       const o = slot.fade * this._alpha;
       slot.material.uniforms['opacity']!.value = o;
-      slot.mesh.visible = o > 0.001;
+      slot.mesh.visible = this.showFigure && o > 0.001;
       // Only the dominant plane casts, so a crossfade never doubles the shadow.
       if (this.castsShadow) slot.mesh.castShadow = slot.fade > 0.5 && this._alpha > 0.3;
     }
@@ -1655,6 +1666,18 @@ export class PaintedActor extends Group {
   /** World-space point at the top of the figure — VFX and damage numbers. */
   headPoint(out = new Vector3()): Vector3 {
     return out.set(this.position.x, this.position.y + this.aimHeight * 0.92, this.position.z);
+  }
+
+  /**
+   * World point of a spot on the painting on screen, through the live plane:
+   * `u` across from the painting's left edge, `t` down from its top, both 0..1.
+   * The plane's offset, mirror, lunge, KO tilt and bob all come with it. Used
+   * to pin a figure-less part to its parent's painting (`PartAnchors.ts`).
+   */
+  paintPoint(u: number, t: number, out = new Vector3()): Vector3 {
+    const slot = this.slots[this.active]!;
+    slot.mesh.updateWorldMatrix(true, false);
+    return out.set(u - 0.5, 0.5 - t, 0).applyMatrix4(slot.mesh.matrixWorld);
   }
 
   /** World-space point at mid-torso. */

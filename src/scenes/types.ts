@@ -1,4 +1,5 @@
 import type { ArrivalDirectors } from '../engine/StageArrivals.ts';
+import type { PartAnchors } from '../engine/PartAnchors.ts';
 import type { Group, Scene, Vector3 } from 'three';
 import type { Backdrop } from '../engine/Backdrop.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
@@ -87,6 +88,19 @@ export interface SceneBuild {
    */
   readonly partyHeight?: number;
   readonly enemyHeight?: number;
+  /**
+   * Optional: the enemy lane's left and right edge in x, overriding the one
+   * the stage derives from `enemy`'s extent. For a location whose formation
+   * solver would otherwise spread a fiend onto the party (Chapter 6, Dr. Goon
+   * beside Paine). Omitted everywhere else, which keeps the derived lane.
+   */
+  readonly enemyLaneX?: [left: number, right: number];
+  /**
+   * Optional: destructible parts drawn with no figure of their own, keyed by
+   * combatant id (`src/engine/PartAnchors.ts`; Vegnagun's Bulwarks, Redoubts
+   * and Nodes, D-044). Omitted everywhere else.
+   */
+  readonly partAnchors?: PartAnchors;
 
   /** @param dt seconds. The caller must call this every frame. */
   update(dt: number): void;

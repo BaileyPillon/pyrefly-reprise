@@ -18,6 +18,7 @@
 
 import { Scene, Vector3, type PerspectiveCamera } from 'three';
 import { BattleCamera } from '../engine/BattleCamera.ts';
+import type { PartAnchors } from '../engine/PartAnchors.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { buildDemoScene, type PaintedScene } from './demo.ts';
 import {
@@ -50,6 +51,19 @@ export interface SceneSlots {
   /** World height for a human party member. Bosses scale from `enemyHeight`. */
   partyHeight?: number;
   enemyHeight?: number;
+  /**
+   * Optional: the enemy lane's left and right edge in x, overriding the one
+   * the stage derives from `enemy`'s extent. For a location whose formation
+   * solver would otherwise spread a fiend onto the party (Chapter 6, Dr. Goon
+   * beside Paine). Omitted everywhere else, which keeps the derived lane.
+   */
+  enemyLaneX?: [left: number, right: number];
+  /**
+   * Optional: destructible parts drawn with no figure of their own, keyed by
+   * combatant id (`src/engine/PartAnchors.ts`; Vegnagun's Bulwarks, Redoubts
+   * and Nodes, D-044). Omitted everywhere else.
+   */
+  partAnchors?: PartAnchors;
 }
 
 /** One registered diorama. */
@@ -351,6 +365,8 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       party: build.partySlots.slice(0, 3).map(toSpot),
       enemy: build.enemySlots.map(toSpot),
       ...resolveSceneHeights(build),
+      ...(build.enemyLaneX ? { enemyLaneX: build.enemyLaneX } : {}),
+      ...(build.partAnchors ? { partAnchors: build.partAnchors } : {}),
     },
     update(dt): void {
       build.update(dt);

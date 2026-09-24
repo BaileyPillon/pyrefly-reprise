@@ -109,9 +109,9 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * glowing sliver reads as a rendering fault, not as framing.
    */
   action: { position: [0.25, 2.8, 8.85], lookAt: [1.15, 1.45, -1.1], fov: 32, sway: 0.7 },
-  party: { position: [-1.6, 2.2, 6.5], lookAt: [-2.5, 1.15, 0.45], fov: 32, sway: 0.7 },
+  party: { position: [-0.45, 2.2, 6.5], lookAt: [-1.35, 1.15, 0.45], fov: 32, sway: 0.7 },
   enemy: { position: [1.5, 2.9, 5.9], lookAt: [2.9, 1.6, -2.2], fov: 32, sway: 0.7 },
-  victory: { position: [-1.9, 2.05, 6.9], lookAt: [-2.75, 1.15, 0.9], fov: 32, sway: 1.2 },
+  victory: { position: [-0.5, 2.05, 6.9], lookAt: [-1.35, 1.15, 0.9], fov: 32, sway: 1.2 },
 };
 
 /**
@@ -125,9 +125,16 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * scene look like a sticker sheet.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [-1.55, 0, 1.55], // front
-  [-2.95, 0, 0.25], // middle, further left and back
-  [-1.05, 0, -1.05], // back, stepped in again
+  // PR-0002 option A (Bailey, D-041; FFX only). The old arc stood Yuna (slot 1,
+  // the build's activeSlots[1]) at the far left, where the approved 5-row
+  // command stack covered 70-90% of her projected quad at 1600x900. She now
+  // stands right of Kimahri, clear of the stack. Slots 0 and 2 are written at
+  // the spots the old arc's formation settle used to push them to (Yuna's
+  // overlap nudged them right); without her there to push, the table says it
+  // directly, so the front figure stays about 30% behind the stack as before.
+  [-1.25, 0, 1.55], // front (was -1.55)
+  [0.85, 0, 0.0], // middle: Yuna, right of the back slot (was [-2.95, 0, 0.25])
+  [-0.7, 0, -1.7], // back, stepped in again (was [-1.05, 0, -1.05])
   // reserve — outside every rig's frustum, including `victory`'s left swing
   [-11.6, 0, 2.6],
   [-12.5, 0, 1.0],

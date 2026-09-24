@@ -6,6 +6,23 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — Scene slots gain `enemyLaneX` and `partAnchors`; `PaintedActor` gains `figure: false` and `paintPoint`
+
+Not a listed contract file. It is recorded here because `SceneSlots` (`src/scenes/index.ts`)
+and `SceneBuild` (`src/scenes/types.ts`) are what every scene and the stage build against,
+and `docs/plans/vegnagun-parts-wiring.md` §2 asked for this note. **Both games** as
+plumbing, and inert for every scene that sets neither field. Additive and optional:
+
+- `enemyLaneX?: [left, right]` pins the enemy lane's x for the formation solver
+  instead of deriving it from `enemy`. Only the Leblanc Last Room sets it (FFX-2 only,
+  Chapter 6), to move Dr. Goon off Paine.
+- `partAnchors?: PartAnchors` (`src/engine/PartAnchors.ts`), keyed by combatant id: a
+  part staged with no figure, placed on its parent's painting or overhead, and kept out
+  of the formation solver and the overlap pass. Only the Farplane sets it (FFX-2 only,
+  Chapter 5), for Vegnagun's Bulwarks, Redoubts and Nodes (D-044).
+- `PaintedActorOptions.figure?: boolean` (default true) and
+  `PaintedActor.paintPoint(u, t)`, the world point of a spot on the live painting.
+
 ## 2026-09-24 — Music key `boss-seymour-macalania` (Chapter VII); four runtime instrument stand-ins
 
 **The key: FFX only** [AGENTS.md hard rule 14]: Seymour and the Guado Guardians at
