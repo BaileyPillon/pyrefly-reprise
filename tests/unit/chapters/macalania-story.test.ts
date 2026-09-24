@@ -265,11 +265,13 @@ describe('macalania story — structure', () => {
       .filter((s) => s.type === 'music')
       .map((s) => (s.type === 'music' ? s.track : null));
     expect(tracks).toEqual(['scene-gagazet', 'boss-seymour']);
-    // `post` stops the music and lets the results screen own the fanfare.
+    // `post` stops the music, lets the results screen own the fanfare, then
+    // cuts it again right after results() so victory-ffx doesn't bleed
+    // through the flat, anticlimactic kill §9.7 needs (dbd48ed7).
     const postTracks = chapter.post
       .filter((s) => s.type === 'music')
       .map((s) => (s.type === 'music' ? s.track : 'x'));
-    expect(postTracks).toEqual([null]);
+    expect(postTracks).toEqual([null, null]);
   });
 });
 
