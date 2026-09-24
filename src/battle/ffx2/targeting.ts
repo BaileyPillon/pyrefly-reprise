@@ -22,7 +22,7 @@ import type {
   ItemRegistry,
 } from './internal.ts';
 import { adjacentNodes } from './garment-grids.ts';
-import { withAim } from './aim.ts';
+import { aimer } from './aim.ts';
 
 /** `aeon` never appears in X-2; party and enemy are the only two sides in play. */
 function isFriendly(a: Side, b: Side): boolean {
@@ -223,8 +223,7 @@ export interface MenuContext {
  * 'attack'` reader sees, which is `src/engine/tactics/**`'s territory, not
  * this menu-building function's — `tests/unit/strategy-ffx2-vegnagun-shuyin
  * .test.ts`'s node-targeting harness catches exactly that if it is tried).
- * Mascot (§3.14) has no ability table yet [data gap, not fixed here] and
- * never had a duplicate to begin with.
+ * Mascot (§3.14) has no ability table yet [data gap] and never had a duplicate.
  */
 export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableCommand[] {
   const out: AvailableCommand[] = [];
@@ -232,10 +231,11 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
   const sphere = ctx.dresspheres.get(sphereId);
   const berserked = Boolean(actor.statuses.berserk);
   const itchy = Boolean(actor.statuses.itchy);
+  const aim = aimer(ctx.units, actor);
 
   const attack = ctx.abilities.get('attack');
   if (attack && (sphere?.hasAttack ?? true) && !itchy) {
-    out.push(withAim(ctx.units, actor, attack, {
+    out.push(aim(attack, {
       command: { kind: 'attack', targets: [] },
       label: 'Attack',
       category: 'attack',
@@ -270,7 +270,7 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
       if (id === `x2-${sphereId}-attack`) continue;
       const mpCost = effectiveMpCost(actor, ability);
       const reason = disabledReason(actor, ability, mpCost);
-      out.push(withAim(ctx.units, actor, ability, {
+      out.push(aim(ability, {
         command: { kind: 'ability', id, targets: [] },
         label: ability.name,
         category: ability.category,
@@ -333,7 +333,7 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
       // is `single-ally` even though its effect revives, and `can-target-dead`
       // rides along from the effect so a KO'd girl stays selectable.
       const targets = validTargetIds(ctx.units, actor, { targeting: item.targeting, flags: effect.flags });
-      out.push(withAim(ctx.units, actor, effect, {
+      out.push(aim(effect, {
         command: { kind: 'item', id: itemId, targets: [] },
         label: item.name,
         category: 'item',

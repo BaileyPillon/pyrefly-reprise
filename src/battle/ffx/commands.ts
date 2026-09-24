@@ -51,6 +51,7 @@ function markerCommand(def: AbilityDef): Command | null {
  * share the rule; this is FFX's half of it.
  */
 function withAim(ctx: Ctx, user: FFXCombatant, def: AimDef, row: AvailableCommand): AvailableCommand {
+  if (row.validTargets.length < 2) return row; // nothing to narrow
   const candidates = row.validTargets.flatMap((id) => {
     const c = ctx.state.combatants[id];
     return c ? [c] : [];

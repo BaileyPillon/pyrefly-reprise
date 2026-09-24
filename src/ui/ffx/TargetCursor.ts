@@ -201,18 +201,11 @@ export class TargetCursor {
   }
 
   /**
-   * Open the cursor on a set of candidates.
-   *
-   * `startAt` counts from the **left of the screen**, not into `entries` — the
-   * engine hands candidates in its own order (slot, then id), and opening on
-   * "the first one the engine listed" is how the cursor used to land on the
-   * aeon in the middle of the field while the player's eye was at the left
-   * edge. Pass 0 for the leftmost, which is what every caller wants.
-   *
-   * `prefer` (the row's `AvailableCommand.preferredTargets`) opens on the
-   * leftmost of those ids instead, so an attack that may also point at the
-   * party opens on an enemy and a revive on a fallen ally; the arrows still
-   * walk every entry left to right. Ignored when none of them is listed.
+   * Open the cursor on a set of candidates. `startAt` counts from the **left of
+   * the screen**, not into `entries` (the engine's slot-then-id order once
+   * opened on the aeon mid-field); pass 0 for the leftmost. `prefer` (the row's
+   * `AvailableCommand.preferredTargets`) opens on the leftmost of those ids
+   * when any is listed; the arrows still walk every entry left to right.
    */
   showSingle(entries: TargetEntry[], startAt = 0, prefer?: readonly CombatantId[]): void {
     this.entries = entries;

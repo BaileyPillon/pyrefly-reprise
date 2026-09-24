@@ -538,11 +538,10 @@ export class CommandMenu {
     }
 
     this.groupTargets = null;
-    // `showSingle` counts from the LEFT OF THE SCREEN, not into `entries`:
-    // the engine's order is slot-then-id, and opening on "the first one it
-    // listed" put the cursor on the aeon in the middle of the field while the
-    // player's eye was at the left edge. A row that may also point at the
-    // party opens on the side the engine prefers (`preferredTargets`).
+    // `showSingle` counts from the LEFT OF THE SCREEN, not into `entries` (the
+    // engine's slot-then-id order once opened on the aeon mid-field, away from
+    // the player's eye). A row that may also point at the party opens on the
+    // side the engine prefers (`preferredTargets`).
     this.targetCursor.showSingle(entries, 0, cmd.preferredTargets);
     this.syncTargetSurfaces();
   }
