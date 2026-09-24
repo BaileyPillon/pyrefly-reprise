@@ -1,0 +1,67 @@
+{
+ "picked": "Cheer",
+ "chip": [
+  376,
+  469,
+  513,
+  502
+ ],
+ "chipText": "ALL ALLIES",
+ "selected": [
+  56,
+  462,
+  369,
+  509
+ ],
+ "selectedText": "Cheer",
+ "rows": [
+  {
+   "t": "Cheer",
+   "r": [
+    56,
+    462,
+    369,
+    509
+   ],
+   "sel": true
+  },
+  {
+   "t": "Provoke4MP",
+   "r": [
+    70,
+    516,
+    384,
+    562
+   ],
+   "sel": false
+  },
+  {
+   "t": "Delay Attack8MP",
+   "r": [
+    84,
+    569,
+    398,
+    615
+   ],
+   "sel": false
+  },
+  {
+   "t": "Delay Buster18MP",
+   "r": [
+    98,
+    622,
+    412,
+    668
+   ],
+   "sel": false
+  }
+ ],
+ "info": [
+  56,
+  270,
+  384,
+  308
+ ],
+ "infoHidden": false,
+ "stackHidden": false
+}

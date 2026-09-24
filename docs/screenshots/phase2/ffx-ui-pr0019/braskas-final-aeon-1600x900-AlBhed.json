@@ -1,0 +1,87 @@
+{
+ "picked": "Al Bhed Potion",
+ "chip": [
+  504,
+  561,
+  641,
+  594
+ ],
+ "chipText": "ALL ALLIES",
+ "selected": [
+  105,
+  549,
+  497,
+  607
+ ],
+ "selectedText": "Al Bhed Potion",
+ "rows": [
+  {
+   "t": "Hi-Potion",
+   "r": [
+    69,
+    416,
+    462,
+    474
+   ],
+   "sel": false
+  },
+  {
+   "t": "X-Potion",
+   "r": [
+    87,
+    482,
+    479,
+    540
+   ],
+   "sel": false
+  },
+  {
+   "t": "Al Bhed Potion",
+   "r": [
+    105,
+    549,
+    497,
+    607
+   ],
+   "sel": true
+  },
+  {
+   "t": "Phoenix Down",
+   "r": [
+    123,
+    616,
+    515,
+    673
+   ],
+   "sel": false
+  },
+  {
+   "t": "Mega Phoenix",
+   "r": [
+    141,
+    682,
+    533,
+    740
+   ],
+   "sel": false
+  },
+  {
+   "t": "Remedy",
+   "r": [
+    158,
+    749,
+    551,
+    807
+   ],
+   "sel": false
+  }
+ ],
+ "info": [
+  68,
+  311,
+  483,
+  385
+ ],
+ "infoHidden": false,
+ "stackHidden": false
+}

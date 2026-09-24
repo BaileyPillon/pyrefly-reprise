@@ -844,6 +844,10 @@
   background: var(--ig-ink, #0b0a12);
   border-bottom: 2px solid var(--ffx-all-mark, #f2c21e);
 }
+/* PR-0019 (FFX only): hung beside the chosen list row rather than over the
+   group (`targetChipClear.ts` `anchorChipToRow`): left edge at the anchor,
+   centred on the row's height. */
+.ffx-target__all--row { transform: translate(0, -50%) skewX(var(--ig-skew, -12deg)); }
 .ffx-target__all--ally { --ffx-all-mark: #7ee8b0; }
 .ffx-target__all--enemy { --ffx-all-mark: #f2c21e; }
 .ffx-target__all span {

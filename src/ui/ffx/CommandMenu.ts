@@ -293,6 +293,13 @@ export class CommandMenu {
     // already reported the end. This is the FFX side adopting the same rule,
     // not a second implementation.
     this.targetCursor.setOnSelection((sel) => this.opts?.onSelection?.(sel));
+    // PR-0019 (FFX only): a whole-party or whole-field row (Al Bhed Potion,
+    // Cheer...) keeps its list open while the player confirms, so the "ALL
+    // ALLIES" / "ALL ENEMIES" chip hangs off the row that was chosen instead
+    // of floating level with whichever row sits at the party's head height.
+    this.targetCursor.setGroupAnchorRow(() =>
+      this.stackEl.hidden ? null : this.stackEl.querySelector<HTMLElement>('.ig-cmd--selected'),
+    );
   }
 
   setProjector(project: RectProjector): void {

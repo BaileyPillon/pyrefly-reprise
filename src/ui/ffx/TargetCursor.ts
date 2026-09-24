@@ -1,5 +1,5 @@
 import type { CombatantId } from '../../battle/common/types.ts';
-import { clearChipOfSlab } from './targetChipClear.ts';
+import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
 
 export type ReticleKind = 'enemy' | 'ally' | 'self';
 
@@ -119,6 +119,8 @@ export class TargetCursor {
   private panels: TargetRect[] = [];
   /** FFX only: the command help slab, so the group chip can clear it (PR-0019). */
   private cmdInfoEl: HTMLElement | null = null;
+  /** FFX only: the menu row a group command was chosen from (PR-0019). */
+  private groupAnchorRow: (() => HTMLElement | null) | null = null;
 
   constructor() {
     this.el = document.createElement('div');
@@ -184,6 +186,15 @@ export class TargetCursor {
   /** FFX only: wire the command help slab so the group chip clears it (PR-0019). */
   setCmdInfoElement(el: HTMLElement | null): void {
     this.cmdInfoEl = el;
+  }
+
+  /**
+   * FFX only (PR-0019): where the "ALL ALLIES" / "ALL ENEMIES" chip hangs.
+   * While the provider answers with a visible row, the chip sits beside that
+   * row; with none (no list open) it keeps its place over the group.
+   */
+  setGroupAnchorRow(provider: (() => HTMLElement | null) | null): void {
+    this.groupAnchorRow = provider;
   }
 
   /**
@@ -398,7 +409,8 @@ export class TargetCursor {
     this.el.innerHTML = parts.join('');
     if (group) {
       const chip = this.el.querySelector<HTMLElement>('.ffx-target__all');
-      if (chip) clearChipOfSlab(chip, this.cmdInfoEl);
+      const row = this.groupAnchorRow?.() ?? null;
+      if (chip && !(row && anchorChipToRow(chip, row, this.el))) clearChipOfSlab(chip, this.cmdInfoEl);
     }
   }
 

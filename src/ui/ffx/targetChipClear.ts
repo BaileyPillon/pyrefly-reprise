@@ -47,3 +47,25 @@ export function clearChipOfSlab(chip: HTMLElement, slab: HTMLElement | null): vo
   const currentTop = parseFloat(chip.style.top || '0');
   chip.style.top = `${currentTop + shift}px`;
 }
+
+/**
+ * PR-0019 remainder (FFX only). With a whole-party item or skill chosen from
+ * an open list (Chapter 3, Al Bhed Potion, 1600x900), the chip centred over
+ * the party's heads came out level with the list's **top** row, so it read as
+ * belonging to HI-POTION rather than the item actually chosen. While a list
+ * row is on screen the chip hangs off that row instead: just right of its
+ * right edge, centred on its height (`.ffx-target__all--row` drops the
+ * over-the-group offset). The help slab sits above the stack, so a chip
+ * beside a row cannot land on it. Returns false (and leaves the chip where it
+ * was) when the row has no box, e.g. the stack is hidden.
+ */
+export function anchorChipToRow(chip: HTMLElement, row: HTMLElement, root: HTMLElement): boolean {
+  const rowBox = row.getBoundingClientRect();
+  if (rowBox.width === 0 || rowBox.height === 0) return false;
+  const rootBox = root.getBoundingClientRect();
+  const gap = 10;
+  chip.classList.add('ffx-target__all--row');
+  chip.style.left = `${rowBox.right - rootBox.left + gap}px`;
+  chip.style.top = `${(rowBox.top + rowBox.bottom) / 2 - rootBox.top}px`;
+  return true;
+}

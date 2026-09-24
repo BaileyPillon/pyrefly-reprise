@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { clearChipOfSlab } from '../../src/ui/ffx/targetChipClear.ts';
+import { anchorChipToRow, clearChipOfSlab } from '../../src/ui/ffx/targetChipClear.ts';
+import { TargetCursor, type TargetEntry } from '../../src/ui/ffx/TargetCursor.ts';
 
 /**
  * PR-0019 (FFX only): the "ALL ALLIES"/"ALL ENEMIES" chip must clear the
@@ -79,5 +80,75 @@ describe('clearChipOfSlab', () => {
 
     clearChipOfSlab(chip, null);
     expect(chip.style.top).toBe('10px');
+  });
+});
+
+/**
+ * PR-0019 remainder (FFX only): Chapter 3 at 1600x900 with Al Bhed Potion
+ * chosen from the item list, the chip landed level with the list's top row
+ * (HI-POTION, y 416..474) rather than the chosen one (y 549..607). Boxes are
+ * the live GPU measurements (docs/screenshots/phase2/ffx-ui-pr0019/).
+ */
+describe('anchorChipToRow', () => {
+  it('hangs the chip just right of the chosen row, centred on its height', () => {
+    const root = rectEl({ top: 0, left: 0, width: 1600, height: 900 });
+    const row = rectEl({ top: 549, left: 105, width: 392, height: 58 });
+    const chip = rectEl({ top: 406, left: 606, width: 137, height: 33 });
+    expect(anchorChipToRow(chip, row, root)).toBe(true);
+    expect(chip.classList.contains('ffx-target__all--row')).toBe(true);
+    expect(parseFloat(chip.style.left)).toBe(507);
+    expect(parseFloat(chip.style.top)).toBe(578);
+  });
+
+  it('works in root-relative coordinates when the root is offset', () => {
+    const root = rectEl({ top: 20, left: 40, width: 1280, height: 720 });
+    const row = rectEl({ top: 120, left: 100, width: 300, height: 40 });
+    const chip = rectEl({ top: 0, left: 0, width: 100, height: 20 });
+    anchorChipToRow(chip, row, root);
+    expect(parseFloat(chip.style.left)).toBe(400 - 40 + 10);
+    expect(parseFloat(chip.style.top)).toBe(140 - 20);
+  });
+
+  it('refuses a row with no box and leaves the chip alone', () => {
+    const root = rectEl({ top: 0, left: 0, width: 1600, height: 900 });
+    const chip = rectEl({ top: 10, left: 10, width: 80, height: 20 });
+    chip.style.top = '10px';
+    expect(anchorChipToRow(chip, rectEl({ top: 0, left: 0, width: 0, height: 0 }), root)).toBe(false);
+    expect(chip.style.top).toBe('10px');
+    expect(chip.classList.contains('ffx-target__all--row')).toBe(false);
+  });
+});
+
+describe('TargetCursor group chip follows the anchor row (FFX only)', () => {
+  const PARTY: TargetEntry[] = [
+    { id: 'tidus', name: 'Tidus', kind: 'self' },
+    { id: 'yuna', name: 'Yuna', kind: 'ally' },
+    { id: 'auron', name: 'Auron', kind: 'ally' },
+  ];
+  const cursor = (): TargetCursor => {
+    document.body.innerHTML = '';
+    const c = new TargetCursor();
+    c.setProjector(() => ({ x: 600, y: 470, w: 120, h: 300 }));
+    document.body.append(c.el);
+    return c;
+  };
+
+  it('with a visible chosen row, the chip sits beside that row', () => {
+    const c = cursor();
+    const row = rectEl({ top: 549, left: 105, width: 392, height: 58 });
+    c.setGroupAnchorRow(() => row);
+    c.showGroup(PARTY);
+    const chip = c.el.querySelector<HTMLElement>('.ffx-target__all')!;
+    expect(chip.classList.contains('ffx-target__all--row')).toBe(true);
+    expect(parseFloat(chip.style.top)).toBe(578);
+  });
+
+  it('with no row (list closed, or FFX-2 which never wires one) it keeps its place over the group', () => {
+    const c = cursor();
+    c.setGroupAnchorRow(() => null);
+    c.showGroup(PARTY);
+    const chip = c.el.querySelector<HTMLElement>('.ffx-target__all')!;
+    expect(chip.classList.contains('ffx-target__all--row')).toBe(false);
+    expect(parseFloat(chip.style.top)).toBe(470);
   });
 });
