@@ -332,3 +332,35 @@ next-turn odds) is presentation, not data.
 **Review verdict: PROCEED**, with four corrections folded in before T1 and T3 start (the
 phase edge, the sourced distinct targets, the revive-HP reading, a separate element-step key)
 and the O-4 Claw chip and "90 %" label fixed before the sheet goes to Bailey.
+
+## Decisions
+
+### D-natus-preset: the party sits at the Gagazet upper bound (Bailey, 2026-09-24, FFX only)
+
+Bailey, verbatim: *"I'll go with all your recommendations"*, answering the recommendation to
+raise Chapter X's party preset to the Gagazet upper bound, the stat cells Chapter IX ships at,
+because the midpoint preset measured the intended line at 8/200. **The boss is never tuned.**
+
+**Built** in `src/data/ffx/builds/highbridge.ts`: every member's ten Sphere Grid stats (Yuna
+included) are the Gagazet preset's cells, copied, each `[estimate]` as `gagazet.ts` labels it
+(`ffx-seymour-flux.md` §7.3, C-11; `ffx-yojimbo.md` §5.2 "as the upper bound"). **Only the
+stats move:** gear, gauges, lists, line-up, aeons and bag stay Chapter VIII's (Yuna Chapter
+VII's) and B2 to B5 as picked; `maxHp` applies the carried armour's `hp-10`. Yuna's "lower
+half of the Gagazet row" rule (research §6.2) is superseded by this pick. Guarded by
+`tests/unit/chapters/natus-build.test.ts` (each cell equals Gagazet's and Chapter IX's).
+
+**Bench, 200 seeds** (`tests/unit/chapters/natus-bench.test.ts`, seeds 1 to 200, real engine
+and data; `mid` = the midpoint preset first shipped, kept as the comparison row):
+
+| Line | Upper bound (shipped) | Midpoint (old) | Mean turns (upper) | Phase 3 reached (upper) | Notes (upper) |
+|---|---:|---:|---:|---:|---|
+| Intended (Talk, Shell, Bahamut, Tidus + Auron swing) | **116/200 (58.0 %)** | 8/200 (4.0 %) | 94.8 | 137 | 0.71 shatters a battle; Natus HP left, mean 6,192 |
+| Provoke + Reflect | **200/200 (100 %)** | 200/200 | 73.7 | 200 | 884 of his spells bounced onto him; 256 drains |
+| Poison and wait | **0/200** | 0/200 | 68.1 | 0 | Bio lands every seed; he never leaves phase 1; HP left 20,131 |
+| Haste all three and swing (credibly wrong) | **0/200** | 0/200 | 54.7 | 0 | 2.00 Desperados a battle |
+| Mortibsorption farm | **35/200 (17.5 %)** | 0/200 | 99.3 | 47 | 2,974 drains; HP left 19,556 |
+
+Read-outs for Bailey, measured and not acted on: Provoke + Reflect wins every seed at either
+preset with no shatter; Poison and wait loses every seed with this bench's upkeep (Natus left
+at 20,131 HP on average). The causes are not claimed here (rule 3: a cause is proved by a
+run, not read off a table). Neither is a reason to touch the boss.

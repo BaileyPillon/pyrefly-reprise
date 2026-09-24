@@ -9,9 +9,12 @@
  * unwinnable, the answer is measured options for Bailey, never a weaker boss.
  *
  * What every number rests on, said out loud:
- * - **The party is `[estimate]`** by construction: the midpoint of the Evrae
- *   and Gagazet presets, Yuna from the lower half of the Gagazet row
- *   (highbridge.ts rules 1-4).
+ * - **The party is `[estimate]`** by construction: the Gagazet preset's stat
+ *   cells, the research's upper bound and the cells Chapter IX ships (Bailey,
+ *   2026-09-24), on the carried Highbridge kit (highbridge.ts rules 1-4).
+ * - **The old midpoint party is measured beside it** (`mid` rows): the
+ *   preset this chapter first shipped, kept so the report shows what the
+ *   pick changed. It is not a shipped party.
  * - **B2-B5 as Bailey picked them:** Tidus / Yuna / Kimahri open, Bahamut
  *   full and the other aeons partial, no Reflect on Yuna, Chapter VIII's bag.
  * - **The element order and Natus-moves-first are our reading** (N-1, N-2).
@@ -46,27 +49,45 @@ import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/ind
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { highbridgeBuild } from '../../../src/data/ffx/builds/highbridge.ts';
 import { gagazetBuild } from '../../../src/data/ffx/builds/gagazet.ts';
+import { fahrenheitBuild } from '../../../src/data/ffx/builds/fahrenheit.ts';
 import type { FFXPartyBuild } from '../../../src/battle/common/types.ts';
 
 const SEEDS = 200;
 
 /**
- * **A measured option, not the shipped party.** The same Highbridge kit (lists,
- * gear, bag, aeons, line-up) with every member's Sphere Grid stats raised to
- * the research's **upper bound**, the Gagazet preset — the bound the Yojimbo
- * chapter ships at. Measured so Bailey can see what the preset choice costs;
- * nothing here changes the boss (the `boss-side-fix-needs-measured-options`
- * rule).
+ * **A measured comparison, not the shipped party:** the midpoint preset this
+ * chapter first shipped (before Bailey's 2026-09-24 pick), rebuilt here from
+ * its own rules. The same Highbridge kit (lists, gear, bag, aeons, line-up);
+ * the six Chapter VIII members at the rounded midpoint of the Evrae and
+ * Gagazet presets, Yuna a quarter of the way up the Gagazet ranges
+ * (`ffx-seymour-flux.md` §7.3; Luck 17 is a point value). Nothing here changes
+ * the boss (the `boss-side-fix-needs-measured-options` rule).
  */
-const upperBound: FFXPartyBuild = {
+const GRID = ['hp', 'mp', 'str', 'def', 'mag', 'mdef', 'agi', 'luck', 'eva', 'acc'] as const;
+const YUNA_RANGES: Record<(typeof GRID)[number], readonly [number, number]> = {
+  hp: [1_200, 1_800], mp: [220, 320], str: [12, 18], def: [10, 16], mag: [32, 42],
+  mdef: [34, 44], agi: [12, 18], luck: [17, 17], eva: [30, 36], acc: [8, 14],
+};
+const midpoint: FFXPartyBuild = {
   ...highbridgeBuild,
   members: highbridgeBuild.members.map((m) => {
-    const top = gagazetBuild.members.find((g) => g.id === m.id)!;
-    const hp = m.equipment.armor.autoAbilities.includes('hp-10') ? Math.floor((top.stats.hp * 110) / 100) : top.stats.hp;
-    return { ...m, stats: { ...top.stats, maxHp: hp, maxMp: top.stats.mp }, hp, mp: top.stats.mp };
+    const stats = { ...m.stats };
+    for (const k of GRID) {
+      if (m.id === 'yuna') {
+        const [lo, hi] = YUNA_RANGES[k];
+        stats[k] = Math.round(lo + (hi - lo) / 4);
+      } else {
+        const low = fahrenheitBuild.members.find((g) => g.id === m.id)!.stats[k];
+        const high = gagazetBuild.members.find((g) => g.id === m.id)!.stats[k];
+        stats[k] = Math.round((low + high) / 2);
+      }
+    }
+    stats.maxHp = m.equipment.armor.autoAbilities.includes('hp-10') ? Math.floor((stats.hp * 110) / 100) : stats.hp;
+    stats.maxMp = stats.mp;
+    return { ...m, stats, hp: stats.maxHp, mp: stats.maxMp };
   }),
 };
-type Party = 'preset' | 'upper';
+type Party = 'preset' | 'mid';
 const NATUS = 'seymour-natus';
 const content = new FFXContentRegistry();
 content.addAbilities(ALL_ABILITIES);
@@ -229,7 +250,7 @@ function provokeReflect(engine: BattleEngine, actorId: string, commands: readonl
 function play(line: Line, seed: number, which: Party = 'preset'): Outcome {
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
   engine.init({
-    game: 'ffx', party: which === 'upper' ? upperBound : highbridgeBuild, enemies: ENEMY_GROUPS_BY_ID['seymour-natus']!,
+    game: 'ffx', party: which === 'mid' ? midpoint : highbridgeBuild, enemies: ENEMY_GROUPS_BY_ID['seymour-natus']!,
     triggers: [], seed, condition: 'normal', canEscape: false,
   });
   for (let i = 0; i < 8000; i++) {
@@ -294,14 +315,14 @@ function bench(line: Line, which: Party = 'preset'): Bench {
 
 describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned)`, () => {
   let results: Record<Line, Bench>;
-  let upper: Record<Line, Bench>;
+  let mid: Record<Line, Bench>;
   beforeAll(() => {
     results = Object.fromEntries(LINES.map((l) => [l, bench(l)])) as Record<Line, Bench>;
-    upper = Object.fromEntries(LINES.map((l) => [l, bench(l, 'upper')])) as Record<Line, Bench>;
+    mid = Object.fromEntries(LINES.map((l) => [l, bench(l, 'mid')])) as Record<Line, Bench>;
     // The report the chapter's review and Bailey read. Printed on every run.
     const rows: [string, Bench][] = [
       ...Object.entries(results).map(([k, v]) => [`preset ${k}`, v] as [string, Bench]),
-      ...Object.entries(upper).map(([k, v]) => [`upper  ${k}`, v] as [string, Bench]),
+      ...Object.entries(mid).map(([k, v]) => [`mid    ${k}`, v] as [string, Bench]),
     ];
     for (const [line, r] of rows) {
       console.log(
@@ -315,7 +336,7 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
   }, 300_000);
 
   it('every battle ends (no runaway loop)', () => {
-    for (const r of [...Object.values(results), ...Object.values(upper)]) expect(r.outcomes['unfinished'] ?? 0).toBe(0);
+    for (const r of [...Object.values(results), ...Object.values(mid)]) expect(r.outcomes['unfinished'] ?? 0).toBe(0);
   });
 
   it('the wrong line is the one that calls Desperado; Poison-and-wait never leaves phase 1 by its own hand', () => {
@@ -325,9 +346,9 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
     expect(results['poison-wait'].phase3).toBe(0);
   });
 
-  it('the intended line beats the credibly wrong one, on the shipped preset and at the upper bound', () => {
+  it('the intended line beats the credibly wrong one, on the shipped preset and at the old midpoint', () => {
     expect(results.intended.wins).toBeGreaterThan(results.wrong.wins);
-    expect(upper.intended.wins).toBeGreaterThan(upper.wrong.wins);
+    expect(mid.intended.wins).toBeGreaterThan(mid.wrong.wins);
   });
 
   it('the two added sourced lines do what they say: Provoke + Reflect bounces his spells onto him, the farm drains him', () => {

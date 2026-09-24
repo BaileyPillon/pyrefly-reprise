@@ -27,8 +27,7 @@ import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/
 import * as data from '../../../src/data/ffx/enemies/seymour-natus.ts';
 import * as rows from '../../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 import { highbridgeBuild } from '../../../src/data/ffx/builds/highbridge.ts';
-import { fahrenheitBuild } from '../../../src/data/ffx/builds/fahrenheit.ts';
-import { CHAPTERS, CHAPTER_IDS, UNLISTED_CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
+import { CHAPTERS } from '../../../src/data/encounters.ts';
 import { ALL_ABILITIES as FFX2_ABILITIES } from '../../../src/data/ffx2/index.ts';
 
 const GROUP_ID = 'seymour-natus';
@@ -586,43 +585,6 @@ describe('Banish, Desperado and Talk [§4.3, §6.2]', () => {
     expect(actor(engine, NATUS).statuses.threaten).toBeUndefined();
     expect(actor(engine, NATUS).statuses['magic-break']).toBeUndefined();
     expect(engine.state().result).toBeNull();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// The build and the registration
-// ---------------------------------------------------------------------------
-
-describe('The Highbridge build and the chapter registration', () => {
-  it('B2-B5: Tidus/Yuna/Kimahri open; Bahamut full, the rest partial; Yuna has no Reflect, Rikku does; Chapter VIII’s bag', () => {
-    expect(highbridgeBuild.activeSlots).toEqual(['tidus', 'yuna', 'kimahri']);
-    expect(highbridgeBuild.reserve).toEqual(['auron', 'wakka', 'lulu', 'rikku']);
-    expect(highbridgeBuild.aeons.map((a) => a.id)).toEqual(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']);
-    const gauges = Object.fromEntries(highbridgeBuild.aeons.map((a) => [a.id, a.overdriveGauge]));
-    expect(gauges['bahamut']).toBe(100);
-    for (const id of ['valefor', 'ifrit', 'ixion', 'shiva']) expect(gauges[id]).toBeLessThan(100);
-    const m = (id: string) => highbridgeBuild.members.find((x) => x.id === id)!;
-    expect(m('yuna').learnedAbilityIds).not.toContain('reflect');
-    expect(m('rikku').learnedAbilityIds).toContain('reflect');
-    expect(m('rikku').equipment.armor.autoAbilities).toContain('stone-ward');
-    for (const id of ['tidus', 'auron', 'yuna']) expect(m(id).learnedAbilityIds).toContain('talk');
-    for (const id of ['kimahri', 'wakka', 'lulu', 'rikku']) expect(m(id).learnedAbilityIds).not.toContain('talk');
-    for (const x of highbridgeBuild.members) expect(x.learnedAbilityIds).not.toContain('pull-back');
-    expect(highbridgeBuild.inventory).toEqual(fahrenheitBuild.inventory);
-    // Rule 1: the six sit between the two presets.
-    expect(m('tidus').stats.str).toBe(Math.round((22 + 31) / 2));
-  });
-
-  it('Chapter X is registered by id, reachable, and not listed (no chapter-select card)', () => {
-    const ch = getChapter('seymour-natus');
-    expect(ch).toMatchObject({ game: 'ffx', number: 10, title: 'Seymour Natus', location: 'Highbridge of Bevelle — before the Main Gate' });
-    expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('seymour-natus');
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('seymour-natus');
-    expect(CHAPTER_IDS).not.toContain('seymour-natus');
-    expect(ch?.sceneKey).not.toBe('bevelle-underground'); // the FFX-2 arena (research §0.3)
-    expect(ch?.scriptsRef.pre).toEqual([{ type: 'battleStart' }]);
-    expect(ch?.scriptsRef.post).toEqual([{ type: 'results' }]);
   });
 });
 

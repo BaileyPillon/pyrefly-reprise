@@ -10,16 +10,28 @@
  * No source gives stats for this point (`research/ffx-seymour-natus-highbridge.md`
  * §6.2). The research names the bounds: **the Evrae preset below**
  * (`./fahrenheit.ts`, Chapter VIII, the fight just before) and **the Gagazet
- * preset above** (`./gagazet.ts`, Chapter I). The plan (§3) says derive between
- * them, so every stat cell here is computed by one stated rule and **every
- * cell is `[estimate]`**, as both presets label their own:
+ * preset above** (`./gagazet.ts`, Chapter I, `ffx-seymour-flux.md` §7.3).
  *
- * 1. **The six Chapter VIII members:** each Sphere Grid stat is the **midpoint**
- *    of the two presets, rounded (`midway`). No cell is hand-set.
- * 2. **Yuna** is missing from the Evrae table; §6.2 says take her "from the
- *    lower half of the Gagazet row" (`ffx-seymour-flux.md` §7.3). Each cell is
- *    the middle of that lower half — a quarter of the way up the range
- *    (`lowerHalf`), rounded.
+ * **Bailey, 2026-09-24 ("I'll go with all your recommendations"): the party
+ * sits at the upper bound**: the Gagazet preset's stat cells, the same cells
+ * Chapter IX ships (`./yojimbo-cavern.ts`, `research/ffx-yojimbo.md` §5.2
+ * "as the upper bound").
+ * The midpoint first built here measured the intended line at 8/200 wins; the
+ * upper bound measured it at 116/200 (`docs/plans/chapter-natus-review.md`,
+ * "Decisions"). **The boss is never tuned**; only the party estimate moved,
+ * inside the range the research gives.
+ *
+ * 1. **All seven members, Yuna included:** every Sphere Grid stat (HP, MP,
+ *    Strength, Defense, Magic, Magic Defense, Agility, Luck, Evasion, Accuracy)
+ *    is the Gagazet preset's own cell, copied (`atTheTop`). No cell is
+ *    hand-set, and **every cell keeps the `[estimate]` label `gagazet.ts` gives
+ *    it** (`ffx-seymour-flux.md` §7.3, C-11). Yuna's earlier "lower half of the
+ *    Gagazet row" rule (§6.2) is superseded by the same pick: the Gagazet row
+ *    is its top end. Like Chapter IX, the party is, if anything, a little
+ *    strong for this point, and the bench says so.
+ * 2. **Only the stats move.** Lists, gear, gauges, line-up, aeons and bag stay
+ *    what rules 3 and 4 and Bailey's B2 to B5 below make them; nothing Gagazet
+ *    teaches or sells comes with the stats.
  * 3. **Equipment is Chapter VIII's, carried forward** — Rin's gear, not the
  *    Gagazet shop's (Wantz sells on the mountain, §7.7). That carries **Rikku's
  *    Stone Ward** (fahrenheit.ts C-14; the plan's §3 "carry forward",
@@ -80,7 +92,7 @@ const TALKERS: readonly string[] = ['tidus', 'auron', 'yuna'];
 /** B3 = b: Bahamut arrives full from the Isaaru duel [§6.2]. */
 const BAHAMUT_GAUGE = 100;
 
-/** The Sphere Grid stats the midpoint rule covers (luck, eva and acc included). */
+/** The Sphere Grid stats rule 1 copies (luck, eva and acc included). */
 const GRID_STATS = ['hp', 'mp', 'str', 'def', 'mag', 'mdef', 'agi', 'luck', 'eva', 'acc'] as const;
 
 function member(build: FFXPartyBuild, id: string): FFXMemberBuild {
@@ -94,56 +106,33 @@ function geared(hp: number, m: FFXMemberBuild): number {
   return m.equipment.armor.autoAbilities.includes('hp-10') ? Math.floor((hp * 110) / 100) : hp;
 }
 
-/** Rule 1: the midpoint of the Evrae and Gagazet presets, per stat. */
-function midway(id: string): FFXMemberBuild {
-  const low = member(fahrenheitBuild, id);
+/**
+ * Rule 1: the Gagazet preset's Sphere Grid stats, copied cell for cell (each
+ * `[estimate]` in `gagazet.ts`), on this member's own Chapter VIII (Yuna:
+ * Chapter VII) gear, lists and gauge. `maxHp` applies the carried armour's
+ * `hp-10`, as both presets do.
+ */
+function atTheTop(carried: FFXPartyBuild, id: string): FFXMemberBuild {
+  const m = structuredClone(member(carried, id));
   const high = member(gagazetBuild, id);
-  const m = structuredClone(low);
   const stats = { ...m.stats } as StatBlock;
-  for (const k of GRID_STATS) stats[k] = Math.round((low.stats[k] + high.stats[k]) / 2);
+  for (const k of GRID_STATS) stats[k] = high.stats[k];
   stats.maxHp = geared(stats.hp, m);
   stats.maxMp = stats.mp;
   m.stats = stats;
   m.hp = stats.maxHp;
   m.mp = stats.maxMp;
   m.learnedAbilityIds = m.learnedAbilityIds.filter((a) => !AIRSHIP_ONLY.includes(a));
+  // B4 = b: no Reflect on Yuna. Chapter VII's list already has none; asserted by the test.
+  if (id === 'yuna') m.learnedAbilityIds = m.learnedAbilityIds.filter((a) => a !== 'reflect');
   if (TALKERS.includes(id) && !m.learnedAbilityIds.includes('talk')) m.learnedAbilityIds.push('talk');
   return m;
 }
 
-/**
- * Rule 2: Yuna from the lower half of the Gagazet row (`ffx-seymour-flux.md`
- * §7.3): each cell is `lo + (hi - lo) / 4`, rounded — HP 1,200-1,800 → 1,350,
- * MP 220-320 → 245, STR 12-18 → 14, DEF 10-16 → 12, MAG 32-42 → 35,
- * MDEF 34-44 → 37, AGI 12-18 → 14, Luck 17 (a point value), EVA 30-36 → 32,
- * ACC 8-14 → 10. Gear, gauge and list from Chapter VII (rules 3 and 4, B4).
- */
-function yuna(): FFXMemberBuild {
-  const m = structuredClone(member(macalaniaBuild, 'yuna'));
-  const lowerHalf = (lo: number, hi: number): number => Math.round(lo + (hi - lo) / 4);
-  const hp = lowerHalf(1_200, 1_800);
-  const mp = lowerHalf(220, 320);
-  m.stats = {
-    hp,
-    mp,
-    str: lowerHalf(12, 18),
-    def: lowerHalf(10, 16),
-    mag: lowerHalf(32, 42),
-    mdef: lowerHalf(34, 44),
-    agi: lowerHalf(12, 18),
-    luck: 17,
-    eva: lowerHalf(30, 36),
-    acc: lowerHalf(8, 14),
-    maxHp: geared(hp, m),
-    maxMp: mp,
-  };
-  m.hp = m.stats.maxHp;
-  m.mp = m.stats.maxMp;
-  // B4 = b: no Reflect. Chapter VII's list already has none; asserted by the test.
-  m.learnedAbilityIds = m.learnedAbilityIds.filter((a) => a !== 'reflect');
-  if (!m.learnedAbilityIds.includes('talk')) m.learnedAbilityIds.push('talk');
-  return m;
-}
+/** The six Chapter VIII members carry Chapter VIII's kit (rules 3 and 4). */
+const party = (id: string): FFXMemberBuild => atTheTop(fahrenheitBuild, id);
+/** Yuna carries Chapter VII's kit: Chapter VIII had no Yuna (rules 3 and 4, B4). */
+const yuna = (): FFXMemberBuild => atTheTop(macalaniaBuild, 'yuna');
 
 function aeons(): FFXPartyBuild['aeons'] {
   const early = macalaniaBuild.aeons.map((a) => structuredClone(a));
@@ -154,7 +143,8 @@ function aeons(): FFXPartyBuild['aeons'] {
 
 export const highbridgeBuild: FFXPartyBuild = {
   game: 'ffx',
-  members: [midway('tidus'), yuna(), midway('kimahri'), midway('auron'), midway('wakka'), midway('lulu'), midway('rikku')],
+  // Rule 1: every stat cell is the Gagazet preset's, `[estimate]` as there.
+  members: [party('tidus'), yuna(), party('kimahri'), party('auron'), party('wakka'), party('lulu'), party('rikku')],
   // B2 = a: Tidus, Yuna, Kimahri (`forced_party "tyk"`, N-11).
   activeSlots: ['tidus', 'yuna', 'kimahri'],
   reserve: ['auron', 'wakka', 'lulu', 'rikku'],
