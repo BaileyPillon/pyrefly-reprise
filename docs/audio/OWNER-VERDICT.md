@@ -16,6 +16,27 @@ row.
 
 ---
 
+## 2026-09-24 — Chapter VII (Macalania) battle mood: accepted on recommendation, not by ear
+
+Bailey answered the driver's recommendations together, about 00:30 EDT:
+
+> All your recommendations
+
+**This is not an ear verdict on either Macalania sketch.** He had both mood
+sketches (`docs/audio/sketches/2026-09-21/macalania-a-court-dance.mp3` and
+`-b-processional.mp3`) since 2026-09-23 about 12:46 EDT but gave no score
+before accepting mood A, "The Courtesy," on the driver's recommendation — the
+driver told him plainly it could not hear the sketches either. **No agent can
+hear** (AGENTS.md hard rule 13), so this file's own rule holds: do not record
+this as "approved", "passing" or any numeric score. CHK-B1 (audio judged by
+ear) stays **unverified** for this cue.
+
+What this applies to: the battle-mood pick for Chapter VII (Seymour, the Guado
+Guardians, Macalania Temple) only — the sketch's mood, not a finished,
+composed or wired cue. Recorded in `docs/target/decisions.json` as D-048.
+
+---
+
 ## 2026-09-23 — Chapter VIII (Evrae) cues: accepted on recommendation, not by ear
 
 Bailey answered the driver's three Chapter VIII recommendations (title, art,

@@ -510,6 +510,31 @@
               "options B and C were not picked; nothing on record says Bailey disliked any part of them"
             ]
           }
+        },
+        {
+          "label": "Dr. Goon and Fem-Goon, battle idle (FFX-2)",
+          "src": "docs/concepts/chapters/leblanc/goons/options.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "note": "FFX-2 only. The goons fight only in the Chateau Leblanc mission (Act I); the game still shows the round-09 PR-0092 silhouette placeholder. Independent judge 815314a. docs/target/decisions.json D-047.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "All your recommendations",
+            "how": "Bailey answered the driver's recommendations together, 2026-09-24 ~00:30 EDT, taking the recommended option on each.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the sourced suit colours and the heart (research/ffx2-leblanc-syndicate.md §10.1, §4.6) on both goons"
+            ],
+            "mustChange": [
+              "Dr. Goon: option C, black domino mask, face shown, cocky grin (render 72324), not A (full balaclava) or B (hood and cloth mask)",
+              "Fem-Goon: option C, brown bob under a pink domino mask, closed fan (render 73323), not A (full balaclava) or B (hood and cloth mask)"
+            ],
+            "undecided": [],
+            "inferred": [
+              "install still owed: public/art/characters/ffx2-{dr,fem}-goon/idle.png from picks.json's C entries, both facing right; one cast each or none per METHOD-CHECK.md row 3, not asked yet"
+            ]
+          }
         }
       ]
     },
@@ -909,22 +934,27 @@
           "build": "Registered as Chapter 7 (seymour-anima-macalania) and playable through window.__pyrefly.gotoChapter, but LOCKED as a COMING card on chapter select until Bailey approves the art (one line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS; docs/handoff/chapter-macalania.md). Real-flow stills: docs/screenshots/chapters/macalania-flow-1-select-locked.png, -2-prep.png, -3-battle-menu.png, -4-results-win.png; the scene alone beside backdrop A: docs/screenshots/chapters/macalania-scene-target-vs-build.jpg. Every Macalania painting installed under public/art is CANDIDATE.",
           "note": "Three acts: Guado Guardians, Anima against Yuna’s new Shiva, Seymour cycling elemental spells. New art: the guardians, the temple. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop A (docs/concepts/chapters/macalania/renders/backdrop-a.png, warm brazier gold), Seymour human-form B (renders/seymour-b.png, arms crossed, warm brazier rim light), Guado Guardian A (renders/guardian-a.png, the on-canon reroll), Anima reuses the board-approved public/art/characters/anima/idle.png at the Macalania scale rather than a new render (docs/plans/chapter-macalania-review.md §6.1 cast_anima). Preflight recommendations accepted: docs/target/decisions.json D-019.",
           "reaction": {
-            "date": "2026-09-21",
-            "words": "Yes to all recommendations but the title screen needs to match the target. / Yes to these too.",
+            "date": "2026-09-24",
+            "words": "All your recommendations",
             "named": [
               "Yes to all recommendations but the title screen needs to match the target.",
-              "Yes to these too."
+              "Yes to these too.",
+              "All your recommendations"
             ],
-            "how": "Bailey answered the chapter-macalania-review.md §5/§6.4 preflight recommendations and the concept-sheet options (docs/concepts/chapters/macalania/options.json) together, then separately confirmed the art-direction picks named in the follow-up message.",
+            "how": "Bailey answered the chapter-macalania-review.md §5/§6.4 preflight recommendations and the concept-sheet options (docs/concepts/chapters/macalania/options.json) together, then separately confirmed the art-direction picks named in the follow-up message. On 2026-09-24 ~00:30 EDT he answered the Chapter VII decision sheets (docs/concepts/chapters/macalania/decisions/README.md, decision-1-paintings.png, decision-2-exit.png) and the Macalania battle-mood sketches the same way: all recommendations. Recorded as D-045 (Decision 1: fewest paintings), D-046 (Decision 2: Guardians Yields, Seymour body), D-048 (battle mood A) in docs/target/decisions.json.",
             "liked": [],
             "disliked": [],
             "mustRemain": [
               "Guado Guardian A (the on-canon reroll) — face and pointed ears visible for the steal-a-potion gag",
-              "Anima reuses the approved aeon painting; no new Anima render"
+              "Anima reuses the approved aeon painting; no new Anima render",
+              "Anima is out of scope for Decision 1 and unchanged by Decision 2: she reuses the approved aeon idle and her removal stays the scripted recall (macalania-rules.ts), never the departure-kind table"
             ],
             "mustChange": [
               "backdrop: A (warm brazier gold dominant), not B or C",
-              "Seymour human form: B (arms crossed, warm brazier rim light), not A or C"
+              "Seymour human form: B (arms crossed, warm brazier rim light), not A or C",
+              "Chapter VII paintings: option A, fewest — Seymour and each Guado Guardian keep idle plus one hero cast, no attack painting (D-045)",
+              "Chapter VII exit: the Guado Guardians get 'Yields' like the Syndicate (extends D-035); Seymour gets the new 'body' departure (falls and stays down), not Yields — build owed to the presenter pass that also owes D-035 and D-031 (D-046)",
+              "Chapter VII battle mood: A, 'The Courtesy' — accepted on the driver's recommendation, not judged by ear; no score given (D-048, docs/audio/OWNER-VERDICT.md 2026-09-24)"
             ],
             "undecided": [
               "whether public/art/portraits/seymour.png is human-form Seymour or Seymour Flux (NEW-1) — must be opened before the portrait is called reuse or new",
@@ -932,8 +962,7 @@
             ],
             "inferred": [
               "Anima’s arrival: built to the driver’s recommendation A + B’s tag, awaiting Bailey (its own tile below)",
-              "chapter number 7, by display order after Leblanc (the D-018 rule), not asked",
-              "music: Chapter 1’s scene-gagazet and boss-seymour stand in until the chapter’s own two cues (preflight §6.3) are composed and picked by ear"
+              "chapter number 7, by display order after Leblanc (the D-018 rule), not asked"
             ]
           }
         },
