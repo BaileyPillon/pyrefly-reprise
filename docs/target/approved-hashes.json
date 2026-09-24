@@ -691,6 +691,18 @@
     "mtime": "2026-09-24T19:06:27.310Z"
    }
   },
+  "chapter:fallen-aeons-casts:2026-09-24": {
+   "words": "I'll go with your recommendations for all",
+   "note": "Bailey, 2026-09-24 ~14:40 EDT, picking FA13 (one idle and one cast per Magus Sister) as part of every Chapter XI recommendation. The chapter:fallen-aeons:2026-09-24 set locked sandy/x2-shiva/x2-anima/both road plates the same day and excluded cindy's and mindy's cast paintings, FAIL in the judge's first pass. Both were repaired (r1, commit 82df5a8f; r1b margin fix, commit ac36ef64) and re-judged PASS: cindy 7.4, mindy 7.1 (docs/concepts/chapters/fallen-aeons/production/JUDGE.md, 'Re-judge: Cindy and Mindy cast r1' section). Cindy's file was padded 2 px on the left after that judgement (r1b) so the cut-out margin measures 16 px; every judged pixel is kept at a +2 px offset, asserted unchanged. FFX-2 only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-fallen-aeons-casts/.",
+   "public/art/characters/cindy/cast.png": {
+    "sha256": "f6304c7ff362379b5da45fbb432170ddcf4acbf606636daab2ae19d98a0fa271",
+    "mtime": "2026-09-24T22:16:43.542Z"
+   },
+   "public/art/characters/mindy/cast.png": {
+    "sha256": "fe2204472e2958e7ef2fc2134df8e957a0d5567c83b368d9df386fd7f77f1339",
+    "mtime": "2026-09-24T21:01:28.462Z"
+   }
+  },
   "chapter:yojimbo-plate:2026-09-24": {
    "words": "I'll go with your recommendations for all",
    "note": "Bailey, 2026-09-24 ~14:40 EDT, picking hero plate option B (Yojimbo drawing Zanmato) for Chapter IX pause CHAPTER tab and party-prep card (docs/concepts/chapters/yojimbo/hero-plate/README.md). Installed as public/art/pause/ch9-yojimbo.png + .2x.webp + .json, same route as ch2-yunalesca.json (RealESRGAN_x4plus x4 -> lanczos 0.5, quality 88). No independent judge report for this plate (options round only). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-yojimbo-plate/.",
