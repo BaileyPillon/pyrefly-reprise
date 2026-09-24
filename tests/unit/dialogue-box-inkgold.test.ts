@@ -68,6 +68,13 @@ describe('dialogue role chip', () => {
     expect((box.el.querySelector('.dbox__role') as HTMLElement).hidden).toBe(true);
   });
 
+  it("names Chapter VII's Seymour 'Seymour' (his portrait id is seymour-macalania), still a Maester", () => {
+    const { box } = mount();
+    void box.say(say('seymour-macalania', 'Guardians. You are early.'));
+    expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Seymour');
+    expect(box.el.querySelector('.dbox__role')?.textContent).toBe('Maester');
+  });
+
   it('lets a screen override the role for its own context', () => {
     const { box } = mount({ roleFor: () => 'Lady of Bevelle' });
     void box.say(say('yuna', 'I will do it.'));

@@ -39,6 +39,14 @@ export type SpeakerId =
   | 'rikku'
   // --- FFX antagonists and the dead ---------------------------------------
   | 'seymour'
+  /**
+   * Seymour in Chapter VII (Macalania Temple). Its own portrait
+   * (`portraits/seymour-macalania.png`, Bailey's pick 2026-09-24, option A, drawn from
+   * the Chapter VII battle idle) so the Flux-era face stays on Chapter I's `'seymour'`
+   * lines. The name plate still reads "Seymour": `DialogueBox.defaultName` strips the
+   * `-macalania` suffix, as it strips `-x2`.
+   */
+  | 'seymour-macalania'
   | 'yunalesca'
   | 'jecht'
   | 'braska'

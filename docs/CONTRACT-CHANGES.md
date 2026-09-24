@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — `SpeakerId` gains `'seymour-macalania'`
+
+`src/story/dsl.ts`, additive. **FFX only** (Chapter VII, Macalania Temple): Bailey picked
+portrait option A for Chapter VII's Seymour on 2026-09-24 ("All your recommendations";
+`docs/concepts/portraits/seymour-macalania/`). The 15 lines in
+`src/story/scripts/seymour-anima-macalania.ts` now speak as `'seymour-macalania'` and show
+`public/art/portraits/seymour-macalania.png`; Chapter I (`seymour-flux.ts`) and every other
+`'seymour'` line keep the Flux-era portrait. The name plate still reads "Seymour"
+(`DialogueBox.defaultName` strips `-macalania`) and the role chip still reads "Maester"
+(`speaker-roles.ts`). Actor ids (`showActor('seymour', ...)`) are unchanged.
+
 ## 2026-09-24 — Scene slots gain `enemyLaneX` and `partAnchors`; `PaintedActor` gains `figure: false` and `paintPoint`
 
 Not a listed contract file. It is recorded here because `SceneSlots` (`src/scenes/index.ts`)

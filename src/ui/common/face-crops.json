@@ -54,6 +54,13 @@
       "px": [832, 1216],
       "note": "three-quarter facing left; eyes at (221, 392) and (353, 452). The row this replaces put fx at 0.67, which framed his ear and clipped both eyes off the left edge."
     },
+    "seymour-macalania": {
+      "fx": 0.3095,
+      "fy": 0.3631,
+      "ipd": 0.1307,
+      "px": [832, 1216],
+      "note": "FFX Chapter VII Seymour, Bailey's pick 2026-09-24 (option A, 'All your recommendations'); stern near-profile facing left, both eyes on the painting: pupils at (307, 419) and (208, 464), read off a 25-px file grid; ipd is the true diagonal (99 x 45 px)"
+    },
     "yunalesca": {
       "fx": 0.3834,
       "fy": 0.3643,
@@ -90,6 +97,12 @@
       "fy": 0.04,
       "px": [832, 1216],
       "note": "2026-09-24: the card shows 879 of the file's 1216 rows (cover on a 19.71vw x 20.83vw box), and the painting has no headroom (hair ink on row 0). The fallback fy 0.344 started the window at row 116, cutting the tops of both hair loops (the one feature only this option has). fy 0.04 shows rows 13 to 892: both loops, the glasses, the metal hand, the chin (about row 740) and the collar."
+    },
+    "seymour-macalania": {
+      "fx": 0.3095,
+      "fy": 0.3631,
+      "px": [832, 1216],
+      "note": "2026-09-24: the card shows 879 of the file's 1216 rows. Hair ink starts on row 170 (the cut-out's top), the eyes sit on rows 419 to 464, the chin near row 660 and the red collar from about row 1100. fy 0.3631 (the eye midpoint) starts the window at row 122: 48 rows of air above the hair, the whole head, the collar and the chest tattoo; the width is shown whole, so fx does not move the crop."
     },
     "brother-x2": {
       "fx": 0.532,

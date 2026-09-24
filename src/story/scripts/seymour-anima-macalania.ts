@@ -139,28 +139,28 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
 
     // §9.6 beat 5 — he does not enter. He was already waiting.
     showActor('seymour', { at: { slot: 0, side: 'enemy' }, ms: 900, facing: -1 }),
-    say('seymour', 'Guardians. You are early.'),
-    say('seymour', 'She is still in the Chamber. Shall we wait?'),
+    say('seymour-macalania', 'Guardians. You are early.'),
+    say('seymour-macalania', 'She is still in the Chamber. Shall we wait?'),
 
     say('tidus', 'You killed your father.', { emotion: 'angry' }),
     beat(1800), // He does not deny it. He considers the phrasing.
 
     // §9.6 beat 6 — he explains it, in a level voice, and it is coherent.
-    say('seymour', 'Yes. In the spring. It took some time.'),
-    say('seymour', 'He meant to die apologising to Spira.'),
-    say('seymour', 'I would not let him leave like that.'),
+    say('seymour-macalania', 'Yes. In the spring. It took some time.'),
+    say('seymour-macalania', 'He meant to die apologising to Spira.'),
+    say('seymour-macalania', 'I would not let him leave like that.'),
     say('wakka', "Don't you sound reasonable. Not about that."),
     say('auron', 'Say nothing. Let him finish.'),
 
     // §9.6 beat 6, second half — he works out what she meant to do and hands
     // it to them, because taking it from her costs him nothing.
-    say('seymour', 'She accepted me. It surprised her guardians.'),
-    say('seymour', 'It did not surprise me.'),
+    say('seymour-macalania', 'She accepted me. It surprised her guardians.'),
+    say('seymour-macalania', 'It did not surprise me.'),
     beat(1400),
-    say('seymour', 'She came to be alone in a room with me.'),
+    say('seymour-macalania', 'She came to be alone in a room with me.'),
     say('lulu', "Don't.", { emotion: 'angry' }),
-    say('seymour', 'A summoner, a staff, and no witnesses.'),
-    say('seymour', 'I admire it. Truly.'),
+    say('seymour-macalania', 'A summoner, a staff, and no witnesses.'),
+    say('seymour-macalania', 'I admire it. Truly.'),
 
     // §9.6 beat 7 — she comes out of the Chamber. She has just received Shiva
     // and the seal is still on her. The mark is OUR mark, not the canon glyph
@@ -171,18 +171,18 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     fx('shiva-seal', 'yuna'),
     beat(1600),
     say('yuna', 'Maester Seymour.'), // The honorific, held one last time.
-    say('seymour', 'Lady Yuna. They have told you what they think.'),
+    say('seymour-macalania', 'Lady Yuna. They have told you what they think.'),
     beat(1400),
-    say('seymour', 'Tell them they are wrong. I will wait.'),
+    say('seymour-macalania', 'Tell them they are wrong. I will wait.'),
     beat(2000), // She does not. That silence is the answer.
 
     // The climax: understate, then one unguarded line, then cut [§2.1].
-    say('seymour', 'You came here to kill me.'),
+    say('seymour-macalania', 'You came here to kill me.'),
     beat(1800),
     say('yuna', 'Yes.'), // The "Yes." beat — once per encounter, unqualified.
     beat(2000),
 
-    say('seymour', 'Thank you. That was the last honest thing.'),
+    say('seymour-macalania', 'Thank you. That was the last honest thing.'),
 
     // He stops pretending. The two retainers were always in the room.
     // The chapter's own theme (§9.8, "The Courtesy") — landed 2026-09-24,
@@ -316,7 +316,7 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
       // Anima — Yuna does not own her yet, and §8.4's irony is that the
       // Destruction Sphere in THIS temple is one of the prerequisites.
       say('yuna', 'An aeon. He is summoning an aeon.', { auto: 1300 }),
-      say('seymour', 'She has waited a long time for this.', { auto: 1400 }),
+      say('seymour-macalania', 'She has waited a long time for this.', { auto: 1400 }),
       camera('idle', 400),
     ],
     'mac-first-boost': [

@@ -54,8 +54,10 @@ function defaultName(who: SpeakerId): string {
   if (who === 'none' || who === 'narrator') return '';
   // `yuna-x2` / `rikku-x2` are the FFX-2 voice and portrait sets of Yuna and
   // Rikku (dsl.ts); the suffix is an internal id, never part of her name.
+  // `seymour-macalania` is Chapter VII's portrait of Seymour; the plate reads "Seymour".
   return who
     .replace(/-x2$/, '')
+    .replace(/-macalania$/, '')
     .split('-')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
