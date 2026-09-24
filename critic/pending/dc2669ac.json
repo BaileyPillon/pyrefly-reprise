@@ -1,0 +1,132 @@
+{
+  "mainSha": "dc2669ac",
+  "bundle": "CzzK-khs",
+  "deployedAt": "2026-09-24T20:27:32.633Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 582,
+  "policyVersion": 2,
+  "artifactHash": "867f61412521207ee7ba4499336552c42a365c0a8a75e1dc912bfc79c3dea03e",
+  "review": "deep",
+  "reasons": [
+    "src/battle/common/aim.ts: shared combat core is a shared system",
+    "src/battle/common/types.ts: shared combat core is a shared system",
+    "src/battle/ffx/commands.ts: FFX CTB engine is a shared system",
+    "src/battle/ffx2/active.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/aim.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/engine.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/index.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/internal.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/targeting.ts: FFX-2 ATB engine is a shared system",
+    "src/engine/BattlePresenter.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterActive.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/HudPort.ts: battle presenter and lifecycle is a shared system",
+    "src/ui/coach/CoachLayer.ts: unclassified product path is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system",
+    "public/audio/manifest.json: asset loader and manifests is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-BoldItalic-700.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-Regular-400.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2: unclassified product path is a shared system",
+    "public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2: unclassified product path is a shared system",
+    "public/fonts/cormorant-garamond/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/exo2/Exo2-Italic-400.woff2: unclassified product path is a shared system",
+    "public/fonts/exo2/Exo2-Variable-wght.woff2: unclassified product path is a shared system",
+    "public/fonts/exo2/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/rajdhani/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-Bold-700.woff2: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-Medium-500.woff2: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-Regular-400.woff2: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2: unclassified product path is a shared system",
+    "public/fonts/silkscreen/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/silkscreen/Silkscreen-Bold-700.woff2: unclassified product path is a shared system",
+    "public/fonts/silkscreen/Silkscreen-Regular-400.woff2: unclassified product path is a shared system",
+    "no artifact manifest exists for the previous build, so changed art and audio could not be listed: treat shipped media as unverified until the live check"
+  ],
+  "systems": [
+    "FFX CTB engine",
+    "FFX HUD",
+    "FFX-2 ATB engine",
+    "FFX-2 HUD",
+    "asset loader and manifests",
+    "battle presenter and lifecycle",
+    "music and sound files",
+    "painted artwork",
+    "shared combat core",
+    "title, chapter select, prep, pause and results screens",
+    "unclassified product path"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin"
+  ],
+  "checks": [
+    "CHK-001",
+    "CHK-002",
+    "CHK-003",
+    "CHK-004",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-012",
+    "CHK-013",
+    "CHK-014",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-022",
+    "CHK-023",
+    "CHK-B1"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 47,
+    "at": "2026-09-24T20:27:32.633Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "PASS",
+      "settledBy": "critic/reviews/dc2669ac-focused.json",
+      "settledAt": "2026-09-24T20:25:00Z"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "ship the hotfixes",
+    "date": "2026-09-24T20:27:32.633Z",
+    "report": "critic/reviews/dc2669ac-focused.json",
+    "changedArea": null
+  }
+}

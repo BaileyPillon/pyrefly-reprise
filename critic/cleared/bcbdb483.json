@@ -91,7 +91,7 @@
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "carried",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "fd0ae96",
@@ -101,7 +101,9 @@
         "5348c2e3",
         "d9decadb",
         "76f587c3"
-      ]
+      ],
+      "carriedTo": "dc2669ac",
+      "at": "2026-09-24T20:27:32.633Z"
     }
   ],
   "ownerOverride": {
@@ -109,5 +111,6 @@
     "date": "2026-09-24T17:52:00.647Z",
     "report": "critic/reviews/bcbdb483-focused.json",
     "changedArea": null
-  }
+  },
+  "supersededBy": "dc2669ac"
 }
