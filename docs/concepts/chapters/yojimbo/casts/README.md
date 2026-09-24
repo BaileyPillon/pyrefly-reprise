@@ -40,3 +40,20 @@ The in-battle frames are 1600x900 with `PYREFLY_BROWSER=gpu` on an RTX 5070 Ti, 
 The chapter data still gives Yojimbo `spriteKey: 'yojimbo'`, which is the aeon painting (`src/data/ffx/enemies/yojimbo.ts`). The Cavern idle is not wired. The captures served the Cavern files under that key.
 
 GPU use: 16 prompts, 2.9 minutes against the 60-minute cap. No black frames.
+
+## r1 pixel repairs (after JUDGE.md, commit 01dc52f9)
+
+**Game case: FFX only.** These are pixel work only. No GPU was used, nothing was installed, and nothing was downloaded. Each file is saved beside its parent with its own sidecar. The masks are in `provenance/r1/`. MAD against the parent is 0 outside the mask, and the invented-colour share inside the mask is 0.0 % (every colour comes from the locked idle palette).
+
+- **Yojimbo `cast-r1.png`** (`scripts/yoj_r1.py`):
+  - The blade is redrawn on the same arc with the same tip. **It is not lengthened.**
+  - It is inked on the spine and on the edge at the idle's line weight (2 to 3 px), with a brighter flat, a shinogi line and a pointed kissaki with its yokote.
+  - The ragged black root is now a gold habaki collar at the tsuba, and the red fringe outside the tsuba rim is peeled.
+  - The glove's front edge is smoothed, its lavender fringe is peeled, and the edge is inked with a tapered line.
+- **Daigoro `cast-r1.png`** (30 degrees, `scripts/dg_r1.py`):
+  - The magenta fringe under the jaw is inpainted from the fur.
+  - The lower lip is one smooth tapered line, so the kinks are gone.
+  - The four teeth between the front fang and the canine are removed.
+- **OPTION ONLY: `cast-r1-option-longer.png`.** The same arc is continued 40 px, from about 243 px to about 283 px. This is a visual option, not a sourced length. It needs Bailey's yes, and it is not part of r1.
+- **Sheet:** `sheet.jpg` rows 5 to 9, built by `scripts/sheet_r1.py`. The in-battle frames are 1600x900 from `scripts/ingame_r1.mjs`, which ran its own Vite on 5860 (stopped by PID) with request interception. The advisor card is hidden for the enemy-turn read.
+- **Not judged yet.** r1 still needs an independent judge.
