@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PR-0012 — where does the FFX-2 command help slab go?</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<style>
+  body { width: 1600px; height: 900px; background: #0b0a12; }
+  .sheet { position: relative; width: 1600px; height: 900px; background: #0b0a12; }
+  .sheet__head { padding: 24px 34px 12px; }
+  .sheet__title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700; font-size: 38px; color: #f4f1e8; margin: 0; }
+  .sheet__sub { font-family: 'Chakra Petch', sans-serif; font-weight: 500; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: #f7b6d9; margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 16px; padding: 0 34px; }
+  .cell { position: relative; }
+  .cell .shot { position: relative; }
+  .cell img { display: block; width: 100%; height: auto; border: 1px solid rgba(247,182,217,0.45); }
+  .cell figcaption { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,241,232,0.85); margin: 7px 0 0; }
+  .cell figcaption em { font-style: normal; color: #f7b6d9; }
+  .cell .cell__note { font-family: 'Exo 2', sans-serif; font-weight: 400; font-size: 13px; color: rgba(244,241,232,0.6); margin: 3px 0 0; text-transform: none; letter-spacing: 0; }
+  .cell.recommended img { border-color: #e3b94a; border-width: 2px; }
+  .cell .rec-tag {
+    position: absolute; bottom: 8px; left: 8px;
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.16em; text-transform: uppercase; color: #0b0a12;
+    background: #e3b94a; padding: 3px 10px;
+  }
+</style></head>
+<body>
+<div class="sheet ig ig--ffx2">
+  <div class="sheet__head">
+    <h1 class="sheet__title">PR-0012 — where does the FFX-2 command help slab go?</h1>
+    <div class="sheet__sub">Battle Help Config · 4 options · built off, gated on this pick · nothing built</div>
+  </div>
+  <div class="grid">
+    <figure class="cell recommended">
+      <div class="shot"><div class="rec-tag">Recommended</div><img src="a.png" alt=""></div>
+      <figcaption><em>A</em>&nbsp; One-line slab at the top of the screen</figcaption>
+      <p class="cell__note">Full-width band above the field, FFX-2's own canon spot for Battle Help. Clears the command window and the party rows completely; costs a thin strip of the top of the frame at all times.</p>
+    </figure>
+    <figure class="cell">
+      <img src="b.png" alt="">
+      <figcaption><em>B</em>&nbsp; Inside the command window, under the rows</figcaption>
+      <p class="cell__note">This is the placement 100abe95 shipped and 194fa87 switched off: the slab lands on the party HP/MP rows (dashed box), which anchor `bottom:10px..100px` in the same corner. No repositioning clears both without moving one of the two.</p>
+    </figure>
+    <figure class="cell">
+      <img src="c.png" alt="">
+      <figcaption><em>C</em>&nbsp; Tooltip beside the highlighted row</figcaption>
+      <p class="cell__note">Floats left of the cascade at the row's height, clear of the party column. Costs battlefield real estate over whatever stands there — here it sits over Bahamut's body, which will vary by encounter and camera.</p>
+    </figure>
+    <figure class="cell">
+      <img src="d.png" alt="">
+      <figcaption><em>D</em>&nbsp; Keep it off</figcaption>
+      <p class="cell__note">Today's shipped state. commandHelp.ts's description logic is correct and unused; the player still gets no read on what a highlighted row does.</p>
+    </figure>
+  </div>
+  <div class="concept-tag">Concept</div>
+</div>
+</body></html>

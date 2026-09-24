@@ -1,0 +1,70 @@
+/* Shared look for the PR-0012 help-slab options. Ink & Gold tokens only
+   (docs/concepts/polish/_kit/kit.css), no product CSS. Composited straight
+   onto a real 1920x1080 capture, so all positions below are raw screen
+   pixels, not the kit's 1440-space. */
+@import url('../../polish/_kit/kit.css');
+
+html, body { margin: 0; padding: 0; background: #000; width: 1920px; height: 1080px; overflow: hidden; }
+.frame { position: relative; width: 1920px; height: 1080px; }
+.frame__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.help {
+  position: absolute;
+  background: rgba(11, 10, 18, 0.86);
+  border-left: 4px solid var(--ig-pyre-pink);
+  color: var(--ig-paper);
+  font-family: var(--ig-font-text);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+}
+.help__label {
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ig-pyre-pink);
+  margin: 0 0 4px;
+}
+.help__body { font-family: var(--ig-font-text); font-size: 18px; line-height: 1.35; color: var(--ig-paper); margin: 0; }
+
+/* A — one-line slab across the top of the screen. */
+.help--top {
+  left: 0; right: 0; top: 0; height: 52px;
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 28px; border-left: none; border-bottom: 3px solid var(--ig-pyre-pink);
+  background: rgba(11, 10, 18, 0.88);
+}
+.help--top .help__label { margin: 0; }
+.help--top .help__body { font-size: 19px; }
+
+/* B — inside the command window, under the rows (the collision this PR is about). */
+.help--under {
+  right: 36px; width: 389px; bottom: 150px;
+  padding: 14px 18px;
+}
+
+/* C — beside the highlighted row, tooltip-style. */
+.help--beside {
+  right: 448px; width: 420px; top: 424px;
+  padding: 14px 18px;
+}
+.help--beside::after {
+  content: ''; position: absolute; right: -10px; top: 32px;
+  width: 0; height: 0;
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+  border-left: 10px solid rgba(11, 10, 18, 0.86);
+}
+
+.collide {
+  position: absolute; right: 30px; bottom: 30px; width: 474px; height: 270px;
+  border: 2px dashed var(--ig-blood);
+  pointer-events: none;
+}
+.collide__tag {
+  position: absolute; left: 8px; top: -30px;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--ig-blood);
+  background: rgba(11,10,18,0.86); padding: 3px 10px;
+}
+
+.concept-tag {
+  position: absolute; right: 18px; bottom: 14px;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,241,232,0.55);
+}
