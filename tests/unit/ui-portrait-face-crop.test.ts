@@ -270,6 +270,10 @@ describe('the regressions this round fixed stay fixed', () => {
 describe('the correction pass reaches portraits this module did not build', () => {
   it('adopts an untagged portrait img and leaves a body layer alone', () => {
     const host = document.createElement('div');
+    // The tile frame is positioned, as the real one is: the markup below is
+    // already absolutely placed. An unpositioned parent is refused on purpose
+    // (`portraitHost.canHostCrop`, the pause snap bug of 2026-09-24).
+    host.style.position = 'relative';
     // What `ui/ffx/portraits.ts` emits for the FFX HUD's CTB tile: the measured
     // style, but no `data-face-crop`, so the refinement pass never saw it.
     host.innerHTML =
