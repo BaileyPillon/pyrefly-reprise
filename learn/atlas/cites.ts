@@ -45,6 +45,7 @@ import { leblancAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../src/data/ffx/enemies/seymour-anima-macalania-abilities.ts';
 import { EVRAE_ABILITIES } from '../../src/data/ffx/enemies/evrae-abilities.ts';
 import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.ts';
+import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -113,6 +114,11 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     yojimbo: 'research/ffx-yojimbo.md §2.1 (src/data/ffx/enemies/yojimbo.ts)',
     daigoro: 'research/ffx-yojimbo.md §2.5 (src/data/ffx/enemies/yojimbo.ts)',
   },
+  // Chapter X, registered but unlisted like Chapter IX.
+  'seymour-natus': {
+    'seymour-natus': 'research/ffx-seymour-natus-highbridge.md §1 (src/data/ffx/enemies/seymour-natus.ts)',
+    mortibody: 'research/ffx-seymour-natus-highbridge.md §2 (src/data/ffx/enemies/seymour-natus.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -175,6 +181,9 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
   'yojimbo-cavern': [
     fileCite(YOJIMBO_ABILITIES, 'research/ffx-yojimbo.md §3.1 (src/data/ffx/enemies/yojimbo-abilities.ts)'),
   ],
+  'seymour-natus': [
+    fileCite(SEYMOUR_NATUS_ABILITIES, 'research/ffx-seymour-natus-highbridge.md §3 (src/data/ffx/enemies/seymour-natus-abilities.ts)'),
+  ],
 };
 
 /**
@@ -216,6 +225,11 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   // Every Yojimbo and Daigoro ability id is `yojimbo-`/`daigoro-`-prefixed and
   // defined in the chapter's own ability file (no shared player-catalog reuse).
   'yojimbo-cavern': {},
+  'seymour-natus': {
+    banish: 'research/ffx-seymour-natus-highbridge.md §3.1 (src/data/ffx/enemies/seymour-natus.ts, reusing Chapter I’s Banish)',
+    protect: 'research/ffx-seymour-natus-highbridge.md §3.1 (src/data/ffx/enemies/seymour-natus.ts, reusing the shared Protect)',
+    mortibsorption: 'research/ffx-seymour-natus-highbridge.md §3.2, §4.4 (src/data/ffx/enemies/seymour-natus.ts, reusing Chapter I’s Mortibsorption)',
+  },
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

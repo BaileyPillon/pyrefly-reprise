@@ -494,7 +494,7 @@ describe('The Cavern build and the chapter registration', () => {
     expect(ch).toBeDefined();
     expect(ch).toMatchObject({ game: 'ffx', number: 9, title: 'Yojimbo' });
     expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toEqual(['yojimbo-cavern']);
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('yojimbo-cavern'); // Chapter X joined the list on 2026-09-24
     expect(CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
     expect(CHAPTER_IDS).not.toContain('yojimbo-cavern');
     // Placeholder story: opens the battle, shows results, says nothing.

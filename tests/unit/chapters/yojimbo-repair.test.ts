@@ -127,6 +127,6 @@ describe('Repair 3 — house rule 7: every file this track touches is under 400 
   }
 
   it('encounters.ts still re-exports the unlisted list, with Yojimbo on it', () => {
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toEqual(['yojimbo-cavern']);
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('yojimbo-cavern'); // Chapter X joined the list on 2026-09-24
   });
 });

@@ -20,6 +20,8 @@ import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima
 import { collectEvraeCounters } from './evrae-counters.ts';
 import { yunalescaCounter } from './yunalesca.ts';
 import { yuYevonCounter } from './yu-yevon.ts';
+import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
+import { executeCommand } from '../execute.ts';
 
 /** One queued free action. */
 export interface BossCounter {
@@ -52,6 +54,15 @@ export function collectBossCounters(
 ): BossCounter[] {
   const out: BossCounter[] = [];
   if (def.flags.includes('is-counter')) return out;
+
+  // **Chapter X, Seymour Natus** (FFX only): his stored phase moves on damage
+  // from *any* action — B8 = a, our estimate, so his own spells bounced back
+  // by Reflect count too — which is why this runs above the player-side guard
+  // below. Empty unless the action damaged Natus, so every other battle is
+  // untouched [docs/plans/chapter-natus-review.md N-G2, B8].
+  for (const c of natusActionCounters(ctx, damagedEnemyIds)) {
+    if (canCounter(ctx, c.actorId)) out.push(c);
+  }
 
   // **Only a player-side action provokes a counter.**
   //
@@ -143,6 +154,7 @@ export function collectBossCounters(
  * drain is lethal to Seymour.
  */
 export function runMortibsorptionIfDown(ctx: Ctx): boolean {
+  if (runNatusMortibsorption(ctx)) return true;
   const mount = tryActor(ctx, 'mortiorchis');
   const host = tryActor(ctx, 'seymour-flux');
   if (!mount || !host) return false;
@@ -152,6 +164,40 @@ export function runMortibsorptionIfDown(ctx: Ctx): boolean {
   const ai = aiContextFor(ctx, host);
   for (const command of seymourThresholdCounters(ai, false)) {
     void command;
+  }
+  return true;
+}
+
+/**
+ * **Mortibody's** death trigger — Chapter X's own pair, not Chapter I's
+ * (`docs/plans/chapter-natus-review.md` N-G1). The same drain
+ * (`scripted.ts#mortibsorption`: its current max HP into Natus, back at the
+ * next 1,000 down, floor 1,000; it fires even when the drain is lethal)
+ * [ffx-seymour-natus-highbridge §4.4, verified: 4 sources].
+ *
+ * Unlike Chapter I's branch above, the counters the drain owes are **run**,
+ * not dropped: Mortibsorption moves Natus's stored phase and, on the first
+ * crossing of 24,000, fires his Protect counter [§4.2, single source: wiki].
+ * Executed here, as the engine's counter loop does (a `counter` event, then
+ * the command at no CTB cost), so `engine.ts` does not grow. A no-op in every
+ * other battle.
+ */
+function runNatusMortibsorption(ctx: Ctx): boolean {
+  const mount = tryActor(ctx, MORTIBODY_ID);
+  const host = tryActor(ctx, NATUS_ID);
+  if (!mount || !host) return false;
+  if (mount.hp > 0 && isAlive(mount)) return false;
+  mortibsorption(ctx, mount, host);
+  for (const command of stepNatusPhase(ctx)) {
+    if (!canCounter(ctx, host.id)) continue;
+    ctx.emit({
+      type: 'counter',
+      actorId: host.id,
+      targetId: mount.id,
+      abilityId: command.kind === 'ability' ? command.id : 'attack',
+      cause: 'script',
+    });
+    executeCommand(ctx, host, command, true);
   }
   return true;
 }

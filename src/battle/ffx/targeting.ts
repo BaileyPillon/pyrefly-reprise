@@ -190,6 +190,34 @@ export function resolveTargets(
   return fallback.length > 0 ? [ctx.rng.pick(fallback)] : [];
 }
 
+/**
+ * The target of hit `h` of a per-hit-random action.
+ *
+ * Identical to `resolveTargets(ctx, user, def, [])` — the same single RNG pick
+ * from the same pool — for every record **without** `extra.distinctTargetsPerHit`.
+ * With it, a hit after the first avoids the member the previous hit picked
+ * when anyone else is standing, and falls back to the full pool when nobody
+ * is: Seymour Natus's Multi-ra "targeting two different party members if
+ * possible" [ffx-seymour-natus-highbridge §3.1, the preflight review's
+ * correction, single source: wiki]. FFX only; Chapter VII's Multi-ra has no
+ * such key and keeps its two independent picks (Macalania C-3).
+ */
+export function nextHitTargets(
+  ctx: Ctx,
+  user: FFXCombatant,
+  def: AbilityDef,
+  hit: number,
+  previous: readonly FFXCombatant[],
+): FFXCombatant[] {
+  if (hit > 0 && def.extra?.['distinctTargetsPerHit'] === true && def.targeting === 'random-enemy') {
+    const crosses = reachesFoesAtRange(ctx, user, def);
+    const foes = crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : [];
+    const fresh = foes.filter((c) => !previous.some((p) => p.id === c.id));
+    if (fresh.length > 0) return [ctx.rng.pick(fresh)];
+  }
+  return resolveTargets(ctx, user, def, []);
+}
+
 /** True for the action class that either side's Cover intercepts. */
 function coverable(def: AbilityDef): boolean {
   return def.damageType === 'physical' && def.targeting === 'single-enemy';

@@ -116,6 +116,10 @@ import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from './enemies/seymour-anima-macal
 import { EVRAE_ABILITIES } from './enemies/evrae-abilities.ts';
 // Chapter IX, Yojimbo in the Cavern of the Stolen Fayth (FFX only) — registered but unlisted.
 import { YOJIMBO_ABILITIES } from './enemies/yojimbo-abilities.ts';
+// Chapter X, Seymour Natus on the Highbridge (FFX only) — registered but unlisted.
+import { SEYMOUR_NATUS_ABILITIES } from './enemies/seymour-natus-abilities.ts';
+import { seymourNatusGroup } from './enemies/seymour-natus.ts';
+import { highbridgeBuild } from './builds/highbridge.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
@@ -238,6 +242,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(SEYMOUR_ANIMA_MACALANIA_ABILITIES),
   ...Object.values(EVRAE_ABILITIES),
   ...Object.values(YOJIMBO_ABILITIES),
+  ...Object.values(SEYMOUR_NATUS_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -296,6 +301,9 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // registered by id but UNLISTED: not on chapter select until Bailey picks
   // its art, story and gauge widget [docs/plans/chapter-yojimbo-review.md].
   [yojimboGroup.id]: yojimboGroup,
+  // Chapter X (`seymour-natus`, src/data/chapter-seymour-natus.ts), registered
+  // by id but UNLISTED, the Chapter IX precedent [docs/plans/chapter-natus-review.md].
+  [seymourNatusGroup.id]: seymourNatusGroup,
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -323,6 +331,7 @@ export {
   macalaniaBuild,
   fahrenheitBuild,
   yojimboCavernBuild,
+  highbridgeBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

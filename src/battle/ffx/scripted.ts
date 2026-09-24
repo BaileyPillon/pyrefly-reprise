@@ -16,6 +16,7 @@
  * | `deathChance` | number | raw instant-death chance byte, rolled on the `ko` path |
  * | `ignoresAllResistance` | boolean | that roll ignores the target's resistance byte |
  * | `stealRoll` | string | the ability makes §7.8.1's item-steal roll (`steal.ts`) |
+ * | `distinctTargetsPerHit` | boolean | a `random-enemy` hit after the first avoids the previous pick when it can (`targeting.ts#nextHitTargets`; Natus's Multi-ra) |
  *
  * Deliberately **not** here: Mega Death. "Kills everything not Zombie" falls
  * straight out of the generic status model, because a living Zombie's

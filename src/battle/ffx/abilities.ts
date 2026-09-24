@@ -26,7 +26,7 @@ import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, koActor, revive
 import { banishAeon } from './aeons.ts';
 import { applyStatus, bouncesOffReflect, consumeNulCharges, removeStatus, removeStatuses, rollStatus } from './statuses.ts';
 import { applyDelay } from './turnQueue.ts';
-import { isPerHitRandom, redirectTarget, reflectBounceTarget, resolveTargets } from './targeting.ts';
+import { isPerHitRandom, nextHitTargets, redirectTarget, reflectBounceTarget, resolveTargets } from './targeting.ts';
 import {
   onDamageDealt,
   onDamageTaken,
@@ -140,7 +140,7 @@ export function resolveAbility(
   let hitIndex = 0;
 
   for (let h = 0; h < hitCount; h++) {
-    if (perHitRandom) targets = resolveTargets(ctx, user, def, []);
+    if (perHitRandom) targets = nextHitTargets(ctx, user, def, h, targets);
     for (const rawTarget of targets) {
       let target = redirectTarget(ctx, user, rawTarget, def);
 

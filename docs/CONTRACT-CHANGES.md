@@ -6,6 +6,29 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — Chapter X, Seymour Natus: `ChapterId` gains `'seymour-natus'`, `Chapter.number` widens to 10
+
+**FFX only** [AGENTS.md hard rule 14] (research `ffx-seymour-natus-highbridge.md` §0.3:
+FFX-2 has no Natus, no Mortibody and no Highbridge boss); the registration itself is
+shared plumbing. Bailey, 2026-09-24: "I'll go with your recommendations for all".
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'seymour-natus'`;
+`Chapter.number` widens from `1 … 9` to `1 … 10`. The record lives in
+`src/data/chapter-seymour-natus.ts` and sits in `UNLISTED_CHAPTERS`
+(`src/data/chapters-unlisted.ts`), the Chapter IX precedent: `getChapter` and
+`window.__pyrefly.gotoChapter` reach it, `CHAPTERS` / `CHAPTER_IDS` and chapter select
+do not. Every `Record<ChapterId, …>` gains the key (`learn/atlas/cites.ts`,
+`tests/unit/learn-atlas-data.test.ts`). No save migration: a save only holds ids it has
+seen, and nothing lists this one yet.
+
+Not a listed contract file, recorded for the same reason as the entries below:
+`AbilityDef.extra` gains one documented key, `distinctTargetsPerHit: true`
+(`src/battle/ffx/scripted.ts` table): a `random-enemy` hit after the first avoids the
+member the previous hit picked when anyone else stands (`targeting.ts#nextHitTargets`).
+Only Natus's four Multi-ra rows carry it; every other record resolves through the same
+single RNG pick as before (Chapters 1, 2, 3, 7, 8 and 9 event logs measured
+byte-identical over 72 seeded runs, before and after).
+
 ## 2026-09-24 — `AvailableCommand.preferredTargets`: where the target cursor opens
 
 **Both games** [AGENTS.md hard rule 14]: shared plumbing, the same rule in each.

@@ -19,6 +19,7 @@ import {
   consumeMacalaniaTalk,
   macalaniaTalkAvailable,
 } from './seymour-anima-macalania.ts';
+import { consumeNatusTalk, isNatusScript, natusTalkAvailable } from './seymour-natus-rules.ts';
 import {
   ORDER_CLOSE_IN,
   ORDER_PULL_BACK,
@@ -33,6 +34,7 @@ import './yu-yevon.ts';
 import './seymour-anima-macalania.ts';
 import './evrae.ts';
 import './yojimbo.ts';
+import './seymour-natus.ts';
 
 export * from './types.ts';
 export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
@@ -55,6 +57,7 @@ export {
 } from './seymour-anima-macalania.ts';
 export * from './evrae.ts';
 export * from './yojimbo.ts';
+export * from './seymour-natus.ts';
 
 /** True for any of the three actors in the Macalania formation. */
 function isMacalaniaScript(script: string): boolean {
@@ -97,6 +100,9 @@ export function applyTalkTrigger(ctx: Ctx, talker: FFXCombatant): boolean {
   // a shared table a major defect; the Trigger Command master table lists a
   // different set for every Seymour form.
   if (isMacalaniaScript(script)) return consumeMacalaniaTalk(ctx, talker);
+  // **Natus has its own table too** — Tidus / Auron +10 Strength, Yuna +10
+  // Magic Defense [ffx-seymour-natus-highbridge §6.2, verified: 4 sources].
+  if (isNatusScript(script)) return consumeNatusTalk(ctx, talker);
   if (script.startsWith('bfa') || script === 'braskas-final-aeon') {
     return consumeBfaTalk(aiContextFor(ctx, boss));
   }
@@ -110,6 +116,7 @@ export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
   const script = activeScriptId(boss) ?? boss.id;
   if (script === 'seymour-flux' || script === 'mortiorchis') return seymourTalkAvailable(ctx, talker.id);
   if (isMacalaniaScript(script)) return macalaniaTalkAvailable(ctx, talker.id);
+  if (isNatusScript(script)) return natusTalkAvailable(ctx, talker.id);
   if (script.startsWith('bfa') || script === 'braskas-final-aeon') {
     const used = ctx.state.flags['bfa.talkUsed'];
     return typeof used === 'number' ? used < 2 : true;
