@@ -63,6 +63,18 @@ describe('The Highbridge build and the chapter registration', () => {
     expect(highbridgeBuild.gil).toBe(fahrenheitBuild.gil);
   });
 
+  it('the one inverted cell, disclosed: Rikku’s MP is Gagazet’s 115, under Chapter VIII’s 130; every other carried cell is at or above Chapter VIII', () => {
+    const inversions: string[] = [];
+    for (const x of highbridgeBuild.members) {
+      const lower = fahrenheitBuild.members.find((g) => g.id === x.id);
+      if (!lower) continue; // Yuna: no Chapter VIII row
+      for (const k of ['hp', 'mp', 'str', 'def', 'mag', 'mdef', 'agi', 'luck', 'eva', 'acc'] as const) {
+        if (x.stats[k] < lower.stats[k]) inversions.push(`${x.id}.${k} ${lower.stats[k]}->${x.stats[k]}`);
+      }
+    }
+    expect(inversions).toEqual(['rikku.mp 130->115']);
+  });
+
   it('Chapter X is registered by id, reachable, and not listed (no chapter-select card)', () => {
     const ch = getChapter('seymour-natus');
     expect(ch).toMatchObject({ game: 'ffx', number: 10, title: 'Seymour Natus', location: 'Highbridge of Bevelle — before the Main Gate' });

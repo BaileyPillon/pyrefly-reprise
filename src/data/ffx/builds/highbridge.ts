@@ -28,7 +28,11 @@
  *    it** (`ffx-seymour-flux.md` §7.3, C-11). Yuna's earlier "lower half of the
  *    Gagazet row" rule (§6.2) is superseded by the same pick: the Gagazet row
  *    is its top end. Like Chapter IX, the party is, if anything, a little
- *    strong for this point, and the bench says so.
+ *    strong for this point, and the bench says so. **One cell inverts:**
+ *    Rikku's MP (and max MP) is Gagazet's 115, below Chapter VIII's 130
+ *    (`fahrenheit.ts`, the stated lower bound), so for that cell alone the
+ *    "upper bound" sits under the lower one. Kept as copied (no source settles
+ *    it; the pick was "the cells Chapter IX ships"), disclosed for Bailey.
  * 2. **Only the stats move.** Lists, gear, gauges, line-up, aeons and bag stay
  *    what rules 3 and 4 and Bailey's B2 to B5 below make them; nothing Gagazet
  *    teaches or sells comes with the stats.

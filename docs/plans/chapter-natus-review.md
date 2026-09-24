@@ -349,6 +349,13 @@ VII's) and B2 to B5 as picked; `maxHp` applies the carried armour's `hp-10`. Yun
 half of the Gagazet row" rule (research §6.2) is superseded by this pick. Guarded by
 `tests/unit/chapters/natus-build.test.ts` (each cell equals Gagazet's and Chapter IX's).
 
+**One inverted cell, for Bailey:** Rikku's MP (and max MP) goes *down*, from Chapter VIII's
+130 (`fahrenheit.ts`, the research's stated lower bound, §6.2) to Gagazet's 115. For that
+one cell the "upper bound" sits under the lower bound. It is the only inversion among the
+six members with a Chapter VIII row (Yuna has none), measured by the build test that pins
+it. Kept as copied, because the pick was "the cells Chapter IX ships" and no source settles
+Rikku's MP at this point; if Bailey prefers, the fix is to keep 130 for that cell alone.
+
 **Bench, 200 seeds** (`tests/unit/chapters/natus-bench.test.ts`, seeds 1 to 200, real engine
 and data; `mid` = the midpoint preset first shipped, kept as the comparison row):
 
