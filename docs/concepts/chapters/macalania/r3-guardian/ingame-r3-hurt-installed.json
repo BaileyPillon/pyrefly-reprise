@@ -1,0 +1,106 @@
+{
+ "url": "http://127.0.0.1:5520/",
+ "browser": "gpu",
+ "at": "2026-09-24T03:30:22.216Z",
+ "variants": {
+  "r3": {
+   "guardians": [
+    {
+     "id": "guado-guardian-a",
+     "pose": 0,
+     "rect": {
+      "x": 597.3641751956287,
+      "y": 354.9229905302546,
+      "w": 227.33860457934168,
+      "h": 319.8082373944214,
+      "depth": 14.189146647388492
+     },
+     "facing": "left",
+     "facingDir": -1,
+     "planeScaleX": 2.0849780123131043,
+     "worldHeight": 2.910386983289358
+    },
+    {
+     "id": "guado-guardian-b",
+     "pose": 0,
+     "rect": {
+      "x": 1027.503858319833,
+      "y": 346.2789720131881,
+      "w": 260.4212644584179,
+      "h": 371.80875098412025,
+      "depth": 12.381420873562718
+     },
+     "facing": "left",
+     "facingDir": -1,
+     "planeScaleX": 2.0849780123131043,
+     "worldHeight": 2.910386983289358
+    }
+   ],
+   "seymour": {
+    "id": "seymour-macalania",
+    "pose": 0,
+    "rect": {
+     "x": 767.3287222527972,
+     "y": 252.46413049069716,
+     "w": 260.5191797232053,
+     "h": 386.3246707367416,
+     "depth": 16.51344980196687
+    },
+    "facing": "left",
+    "facingDir": -1,
+    "planeScaleX": 2.805446808510638,
+    "worldHeight": 4.155829787234042
+   }
+  },
+  "hurt-installed": {
+   "guardians": [
+    {
+     "id": "guado-guardian-a",
+     "pose": 0,
+     "rect": {
+      "x": 665.3417271600041,
+      "y": 429.16194284225253,
+      "w": 138.61751550876136,
+      "h": 273.4469889721777,
+      "depth": 17.405861525530753
+     },
+     "facing": "left",
+     "facingDir": -1,
+     "planeScaleX": 1.4855889939810831,
+     "worldHeight": 2.909484092863284
+    },
+    {
+     "id": "guado-guardian-b",
+     "pose": 0,
+     "rect": {
+      "x": 971.65680820934,
+      "y": 426.66107979544296,
+      "w": 157.5392878649683,
+      "h": 314.72287861548665,
+      "depth": 15.39191930184178
+     },
+     "facing": "left",
+     "facingDir": -1,
+     "planeScaleX": 1.4855889939810831,
+     "worldHeight": 2.909484092863284
+    }
+   ],
+   "seymour": {
+    "id": "seymour-macalania",
+    "pose": 0,
+    "rect": {
+     "x": 801.0972041930247,
+     "y": 338.8713532690666,
+     "w": 231.93184728737083,
+     "h": 341.5022182662582,
+     "depth": 19.698277357896707
+    },
+    "facing": "left",
+    "facingDir": -1,
+    "planeScaleX": 2.7147234042553188,
+    "worldHeight": 3.9883404255319146
+   }
+  }
+ },
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}
