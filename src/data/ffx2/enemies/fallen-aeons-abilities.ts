@@ -87,6 +87,10 @@ export const x2ShivaAbilities: AbilityDef[] = [
     damageType: 'other',
     element: ['none'],
     targeting: 'single-enemy',
+    // Stop at chance 30 through the linear Status 1 formula (combat-core §2.6a), Shiva Lv 41:
+    // 41x5 + 30 - 5 x the girl's level. With the Chapter V preset's levels (our
+    // [estimate]) it lands on Yuna (Lv 46) about 5 % and never on Rikku (48) or Paine (50).
+    // Measured over 2000 seeds, 2026-09-24; not tuned (rule 6). The Stop puzzle rarely shows.
     statusEffects: [{ status: 'stop', chance: 30, duration: 0 }],
     canMiss: false,
     extra: { mpFractionOfCurrent: 8 },
@@ -121,7 +125,9 @@ export const x2AnimaAbilities: AbilityDef[] = [
     damageType: 'magical',
     element: ['none'],
     targeting: 'single-enemy',
-    statusEffects: [{ status: 'poison', chance: 25, duration: 0 }], // Poison at chance 25
+    // Poison at chance 25, Anima Lv 43: 43x5 + 25 - 5 x level lands on Yuna (46) about 10 %,
+    // never on Rikku (48) or Paine (50) with the Chapter V preset. Measured, not tuned.
+    statusEffects: [{ status: 'poison', chance: 25, duration: 0 }],
     canMiss: false,
     messageTemplate: 'Anima stares at {target}',
   },
@@ -159,8 +165,13 @@ export const x2AnimaAbilities: AbilityDef[] = [
     power: 5, // DC 5 x16 [SinirothX]; about 600 to all observed (Split_Infinity)
     formula: 'strength',
     // F-7 [conflict]: SinirothX says physical; Split_Infinity and GamerGuides treat it as
-    // magical (Shell advice). Plan FA9: physical (SinirothX), tagged. Physical, so it rolls.
+    // magical (Shell advice). Plan FA9: physical (SinirothX), tagged, so Protect reduces it.
     damageType: 'physical',
+    // Hard rule 5: every Overdrive always hits, and Oblivion is Anima's action-counter
+    // Overdrive (§4, "fires the aeon's Overdrive at 100"). Physical decides the damage
+    // and defence only; no source says a blow can miss. Diamond Dust and Delta Attack
+    // are `canMiss: false` for the same reason.
+    canMiss: false,
     element: ['none'], // the wiki: non-elemental
     targeting: 'random-enemy', // 16 hits on random party members
     hits: 16,

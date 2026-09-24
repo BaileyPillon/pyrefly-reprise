@@ -76,7 +76,7 @@ export const x2Shiva: EnemyDef = {
     overkillThreshold: 0,
     drops: [{ itemId: 'crystal-gloves', count: 1 }], // rare: Regal Crown (no rate published)
     steal: {
-      baseChance: 50,
+      baseChance: 50, // no source gives it (only the rate below): the house default, `[estimate]`
       stealRate: 128, // Snow Ring (both), steal rate 128 [SinirothX + wiki]
       common: { itemId: 'snow-ring', count: 1 },
       rare: { itemId: 'snow-ring', count: 1 },
@@ -131,7 +131,7 @@ export const x2Anima: EnemyDef = {
     overkillThreshold: 0,
     drops: [{ itemId: 'tetra-band', count: 1 }], // SinirothX + wiki + FFExodus
     steal: {
-      baseChance: 50,
+      baseChance: 50, // no source gives it (only the rate below): the house default, `[estimate]`
       stealRate: 128, // Fury Shock, steal rate 128
       common: { itemId: 'x2-fury-shock', count: 1 },
       rare: { itemId: 'x2-fury-shock', count: 1 },

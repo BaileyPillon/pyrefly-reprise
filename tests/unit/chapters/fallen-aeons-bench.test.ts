@@ -49,6 +49,7 @@ describe('Chapter XI benches (200 seeds, bench speed, Wait)', () => {
     ['1 Shiva', ROAD_SHIVA, 'wrong: all-out (no cures, no Remedy)', LINES.shivaAllOut],
     ['2 Sisters', ROAD_SISTERS, 'intended: Darkness x2 + Dispel + heals (3-guide clear)', LINES.sistersDarknessDispel],
     ['2 Sisters', ROAD_SISTERS, 'alternative: kill Mindy first with Attack + Dispel', LINES.sistersMindyFirst],
+    ['2 Sisters', ROAD_SISTERS, 'alternative: kill Mindy first with Drain + Dispel', LINES.sistersMindyFirstDrain],
     ['2 Sisters', ROAD_SISTERS, 'wrong: Darkness spam, no Dispel', LINES.sistersDarknessSpam],
     ['3 Anima', ROAD_ANIMA, 'intended: Shell+Protect, Darkness x2, heals, Remedy after Pain', LINES.animaIntended],
     ['3 Anima', ROAD_ANIMA, 'wrong: no Shell, no Remedy', LINES.animaNoAnswers],

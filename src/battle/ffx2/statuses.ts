@@ -243,7 +243,13 @@ export function ticksUntilStatusEvent(c: Ffx2Unit): number {
  * Returns the signed HP delta to apply (positive = damage), so the caller owns
  * KO handling and event ordering.
  */
-export function advanceStatuses(c: Ffx2Unit, ticks: number, emit: Emit): number {
+export function advanceStatuses(
+  c: Ffx2Unit,
+  ticks: number,
+  emit: Emit,
+  /** Called once per Regen payout, in order, with that payout's HP (Chapter XI's Sisters count them). */
+  onRegenPayout?: (amount: number) => void,
+): number {
   if (ticks <= 0 || !c.alive) return 0;
   const rate = durationRate(c);
 
@@ -270,7 +276,11 @@ export function advanceStatuses(c: Ffx2Unit, ticks: number, emit: Emit): number 
   while (c.statusTickAccumulator >= STATUS_TICK_INTERVAL_TICKS) {
     c.statusTickAccumulator -= STATUS_TICK_INTERVAL_TICKS;
     if (c.statuses.poison) delta += Math.max(1, Math.floor(c.stats.maxHp * POISON_FRACTION));
-    if (c.statuses.regen) delta -= Math.max(1, Math.floor(c.stats.maxHp * REGEN_FRACTION));
+    if (c.statuses.regen) {
+      const regen = Math.max(1, Math.floor(c.stats.maxHp * REGEN_FRACTION));
+      delta -= regen;
+      onRegenPayout?.(regen);
+    }
   }
   return delta;
 }

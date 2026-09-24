@@ -170,6 +170,10 @@ export const magusSistersAbilities: AbilityDef[] = [
     // F-6 [conflict]: SinirothX "1/16 of remaining HP, 15 times"; the wiki "reduces HP
     // by 15/16"; Split_Infinity and GamerGuides "81.5% of current HP". All agree it
     // cannot kill. Plan FA9: SinirothX's 15 x 1/16 of current HP, tagged.
+    // Measured (2026-09-24, not tuned): each of the 15 hits also builds the FFX-2 chain
+    // bonus, so on the Chapter V preset it takes 80.8 to 82.7 % of current HP (median
+    // 81.8 %), not the 37.9 % that 15 plain 1/16 hits would leave. That lands on
+    // Split_Infinity's and GamerGuides' observed 81.5 %; F-6 stays open (research §9).
     power: 1,
     formula: 'percent-current',
     damageType: 'other',

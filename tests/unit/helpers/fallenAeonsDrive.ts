@@ -23,8 +23,12 @@ type Input = Extract<Decision, { kind: 'player-input' }>;
 type Unit = { id: string; side: string; hp: number; mp: number; alive: boolean; removed?: boolean; stats: { maxHp: number; maxMp: number }; statuses: Record<string, unknown> };
 
 export interface LineOptions {
-  /** What the Dark Knights do: Darkness on all, or Attack on one named enemy while it lives. */
-  dk: 'darkness' | { focus: string };
+  /**
+   * What the Dark Knights do: Darkness on all, or one named enemy while it lives,
+   * by Attack (physical, rolls against Evasion) or by Drain (magic, never misses;
+   * Attack once the MP runs out).
+   */
+  dk: 'darkness' | { focus: string; via?: 'attack' | 'drain' };
   /** The White Mage: cure Stop with a Remedy. */
   remedyStop: boolean;
   /** The White Mage: Remedy a girl carrying Pain's Silence or Darkness. */
@@ -44,6 +48,11 @@ export const LINES = {
   shivaAllOut: { dk: 'darkness', remedyStop: false, remedyPain: false, dispel: false, guardEarly: false, heal: false },
   /** Sisters, the guides' line: Protect + Shell, kill Mindy first, Dispel the guard, heal. */
   sistersMindyFirst: { dk: { focus: 'mindy' }, remedyStop: false, remedyPain: false, dispel: true, guardEarly: true, heal: true },
+  /**
+   * Sisters, "kill Mindy first" by the preset's one single-target spell: Drain
+   * never misses, so Mindy's Evasion 76 stops mattering (verifier 2026-09-24).
+   */
+  sistersMindyFirstDrain: { dk: { focus: 'mindy', via: 'drain' }, remedyStop: false, remedyPain: false, dispel: true, guardEarly: true, heal: true },
   /** Sisters, the 3-guide clear: Protect + Shell, Darkness x2, Dispel the guard, heal. */
   sistersDarknessDispel: { dk: 'darkness', remedyStop: false, remedyPain: false, dispel: true, guardEarly: true, heal: true },
   /** Sisters, credibly wrong (plan §9): Darkness spam, no Dispel (guard and heals kept). */
@@ -153,6 +162,10 @@ function knightTurn(d: Input, engine: FFX2Engine, line: LineOptions): Command | 
   }
   if (typeof line.dk === 'object') {
     const focus = units(engine).find((u) => u.id === (line.dk as { focus: string }).focus && u.alive);
+    if (focus && line.dk.via === 'drain') {
+      const drain = use(d, 'ability', 'x2-dark-knight-drain', [focus.id]);
+      if (drain) return drain;
+    }
     if (focus) {
       const attack = d.commands.find((c) => c.enabled && c.command.kind === 'attack') ??
         rowFor(d, 'ability', 'x2-dark-knight-attack');
