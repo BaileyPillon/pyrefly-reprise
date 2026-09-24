@@ -1,0 +1,110 @@
+{
+  "mainSha": "76f587c3",
+  "bundle": "81kxOXnv",
+  "deployedAt": "2026-09-24T05:36:35.655Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 586,
+  "policyVersion": 2,
+  "artifactHash": "b1924762cdc2ab4467d61b6f39c97f26cc37ac1f28e8fd59787ee2824ecd6a2a",
+  "review": "deep",
+  "reasons": [
+    "public/audio/manifest.json: asset loader and manifests is a shared system",
+    "src/audio/tracks/index.ts: audio routing is a shared system",
+    "src/data/chapter-meta-seymour-anima-macalania.ts: unclassified product path is a shared system",
+    "src/data/chapter-seymour-anima-macalania.ts: unclassified product path is a shared system",
+    "src/engine/BattlePresenter.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterDepartures.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterPorts.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterStage.ts: battle presenter and lifecycle is a shared system",
+    "src/story/dsl.ts: scene runner and transitions is a shared system",
+    "src/ui/common/face-crops.json: global layout, input and boot is a shared system",
+    "src/ui/common/pause-screen.css: global layout, input and boot is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system"
+  ],
+  "systems": [
+    "FFX HUD",
+    "FFX game data",
+    "FFX-2 HUD",
+    "asset loader and manifests",
+    "audio routing",
+    "battle presenter and lifecycle",
+    "cutscene scripts",
+    "effects, lighting and sprites",
+    "global layout, input and boot",
+    "move advisor and enemy intent",
+    "music and sound files",
+    "painted artwork",
+    "scene runner and transitions",
+    "strategy guide",
+    "title, chapter select, prep, pause and results screens",
+    "unclassified product path"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin"
+  ],
+  "checks": [
+    "CHK-001",
+    "CHK-002",
+    "CHK-003",
+    "CHK-004",
+    "CHK-005",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-012",
+    "CHK-013",
+    "CHK-014",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-022",
+    "CHK-023",
+    "CHK-B1"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 64,
+    "at": "2026-09-24T05:36:35.655Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "pending",
+      "requires": "acceptance of the changed area"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "You have my go ahead! Let's do it.",
+    "date": "2026-09-24T05:36:35.655Z",
+    "report": null,
+    "changedArea": null
+  }
+}
