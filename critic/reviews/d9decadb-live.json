@@ -1,0 +1,98 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-24T04:40:00.000Z",
+  "build": {
+    "mainSha": "d9decadb",
+    "bundle": "B4_kxWCJ",
+    "artifactHash": "47e7bf045756f6270a964e20c631a7390779c1655be9e3146e8dd858fda7a4a4"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/d9decadb.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/5348c2e3.json -> {result: PASS, liveManifest: match, checked: 48, mismatched: [], missing: [], wrongType: [], errors: []}",
+        "artifactHash 47e7bf045756f6270a964e20c631a7390779c1655be9e3146e8dd858fda7a4a4 matches critic/artifacts/d9decadb.json and critic/pending/d9decadb.json"
+      ],
+      "game": "both",
+      "chapter": "all",
+      "state": "n/a (static asset identity)",
+      "automated": true,
+      "environment": "artifact-manifest.mjs against the public URL"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "window.__pyrefly.screen() polled and asserted (title, chapter-select, party-prep, battle, pause) before every screenshot and before every state-dependent action",
+        "window.__pyrefly.battle().snapshot().playback.awaitingMenu polled to confirm the first real command menu before pressing Escape or clicking a command, not a fixed wait",
+        "DOM text assertions (.fe-card aria-label / --coming class, .ffx-cmd--trigger__label rows) used alongside the debug getters, not screenshots alone"
+      ],
+      "game": "FFX",
+      "chapter": "8 (Evrae)",
+      "state": "title, chapter-select, party-prep, scene, battle command menu, pause, chapter-select again",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti confirmed via UNMASKED_RENDERER_WEBGL), 1600x900, fresh browser context, cache-busting query"
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": [
+        "Lightweight reload smoke (single tab): the in-progress save blob in localStorage before and after a full page reload was read and found identical (attempts/playTimeMs recorded during the run survived).",
+        "TARGETED SAVE CHECK A (two tabs, same origin/localStorage): tab 1 driven into a live battle; tab 2 driven into its own battle, paused with a real Escape at the first command menu (screen()==='pause' confirmed), navigated to the OPTIONS tab and the MASTER VOLUME row with real Tab/ArrowDown, lowered with 5 real ArrowLeft presses (0.8 -> 0.3, confirmed via the in-memory SaveStore and via localStorage, since SaveData.ts's setSettings() calls save() synchronously). After a 12s wait (concurrent with tab 1's own play-time autosave) and a reload of tab 2, the volume read 0.3 again -- unchanged. Evidence: docs/screenshots/d9decadb-live/12-savecheckA-volume-changed.png, 13-savecheckA-after-reload.png.",
+        "TARGETED SAVE CHECK B (fresh profile, release-08-format save): a save.SAVE_VERSION=1 blob shaped like git show 1b33971:src/app/SaveData.ts (no ffx2AtbMigrated field, ffx2Atb: 'active', one cleared chapter, masterVolume 0.35) was written to localStorage and the page reloaded. window.__pyrefly.app.save.value (the in-memory, migrated truth -- SaveStore.load() migrates on every read but only rewrites the on-disk blob on the next save()) showed chapters['seymour-flux'].cleared === true, settings.masterVolume === 0.35, and the one-time Wait flip: ffx2Atb === 'wait' with ffx2AtbMigrated === true. A second reload from the same still-unwritten raw blob produced the identical result (migration is idempotent, does not re-decide). Evidence: docs/screenshots/d9decadb-live/14-savecheckB-after-migrate.png."
+      ],
+      "game": "both",
+      "chapter": "1 (seymour-flux, used for both save checks)",
+      "state": "battle -> pause OPTIONS -> reload; fresh profile -> reload -> reload",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu, 1280x800, two same-context tabs for check A, a separate fresh context for check B"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact identity, full manifest (48 files) diffed against the previous live build",
+      "Title -> real Enter -> chapter select: Chapter VIII (Evrae) is a playable card (not COMING), Chapter VII (Seymour and Anima) is still a locked COMING card, both before and after a full round trip through a battle and back",
+      "Real ArrowRight navigation to the Evrae card, real Enter into party prep, a real click on the prep screen's begin control, real skip past the opening cutscene, to the first command menu",
+      "One real Orders command: a real mouse click on 'Orders' then on 'Pull back' in the actual DOM command menu (not a debug-forced command) -- confirmed via a new battleLog entry and lastCommand === {kind: 'trigger', id: 'pull-back'}",
+      "Escape opens pause at the first command menu (screen() -> 'pause', canPauseOnCancel true at the top row); H hides and restores the pause panels (two real KeyH presses, screenshots both states); P was pressed twice while already paused and the battle stayed paused both times (see issue below -- not established as a working resume path)",
+      "Pause -> OPTIONS tab -> 'Chapter select' row -> real Enter: returns to the board with no black canvas sample (8x8 downsample, all channels <=8 would have failed it) and Chapter VII still COMING",
+      "Prerendered music confirmed: window.__pyrefly.audioDebug().prerendered.manifest === true, the current track's source === 'prerendered' (not the synth fallback), and a live network request for audio/music/title.mp3 returned 200",
+      "Console errors and network 404s counted across the entire run (one boot, two save-check tabs, one save-check-B context): 0 and 0",
+      "CHK-024 lightweight reload smoke plus both of the task's targeted save checks (A: two-tab settings-change survival; B: release-08-format upgrade, progress/volume kept, one-time ATB Wait migration)"
+    ],
+    "reused": [],
+    "notTested": [
+      "Chapters other than VIII (Evrae) and, for the save checks, chapter 1 -- reachability of Yunalesca, Braska's Final Aeon, Bahamut, Vegnagun, Leblanc was not re-verified this pass",
+      "The full save/settings upgrade matrix beyond the two targeted checks the task asked for",
+      "Combat correctness/balance beyond reaching and issuing one command",
+      "Physical controller and Safari/real-device input",
+      "Whether P reliably resumes an already-open pause screen (observed: it did not close it in this pass; not conclusively a defect, see issue below)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 47,
+  "issues": [
+    {
+      "id": "LIVE-D9-1",
+      "severity": "polish",
+      "summary": "Pressing P while the pause screen is already open (reached via Escape) did not resume the battle in this pass; only Escape reliably resumed.",
+      "expected": "Unclear from the task brief whether P is meant to resume as well as open the pause screen; flagging for a decision rather than asserting a defect, matching the same observation already on file from release fd0ae96 (LIVE-A2-2).",
+      "observed": "window.__pyrefly.battle().snapshot().paused stayed true across two consecutive real KeyP presses while already on the pause screen.",
+      "evidence": ["session transcript key-press sequence and battle().snapshot().paused readings"],
+      "confidence": "low",
+      "verification": "reproduced in automation only; not checked by a human with a real keyboard",
+      "suspectedCause": "suspected: by design (BattleScreen.ts's P/start handler only ever requests opening the pause; PauseScreen.ts binds resume to the cancel/Escape action only) -- same suspected cause already recorded for LIVE-A2-2, not re-diagnosed this pass"
+    }
+  ]
+}
