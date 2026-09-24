@@ -132,7 +132,8 @@ describe('#11 Charon costs the caster the battle [ffx2-combat-core §2.3, §3.12
       expect(run.survivedOwnCast, `seed ${seed}: a Charon caster walked away from it`).toBe(0);
     }
     expect(casts, 'the line has to actually reach Charon for this to prove anything').toBeGreaterThan(0);
-  });
+    // A seeded 5-battle bench, not a unit test: ~2.2s alone, over budget under a loaded full-suite run.
+  }, 30_000);
 
   it('stops being the free answer to Chapter 4', () => {
     const results = Array.from({ length: 15 }, (_, i) => runCharonLine(i + 1));
@@ -147,5 +148,6 @@ describe('#11 Charon costs the caster the battle [ffx2-combat-core §2.3, §3.12
     // that; the ability is still real and still enormous, it simply costs what
     // §3.12 says it costs.
     expect(wins, 'spamming Charon must not be the chapter').toBeLessThan(15);
-  });
+    // A seeded 15-battle bench, not a unit test: ~5.2s alone, over vitest's 5000ms default under load.
+  }, 30_000);
 });
