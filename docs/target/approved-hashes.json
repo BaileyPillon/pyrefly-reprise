@@ -611,11 +611,16 @@
   },
   "chapter:yojimbo-casts:2026-09-24": {
    "words": "I'll go with your recommendations for all",
-   "note": "Bailey's paintings pick A (docs/target/decisions.json), answered for r1 pixel repairs: Yojimbo's drawn blade and Daigoro's 30-degree bite, each judged 7.0 PASS at the bar in the re-judge appended to docs/concepts/chapters/yojimbo/casts/JUDGE.md (commit edec1037). FFX only, Chapter IX. Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/<subject>/cast-r1.png (never cast-r1-option-longer.png, which needs a separate yes). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/.",
+   "note": "Bailey's paintings pick A (docs/target/decisions.json), answered for r1 pixel repairs: Yojimbo's drawn blade and Daigoro's 30-degree bite, each judged 7.0 PASS at the bar in the re-judge appended to docs/concepts/chapters/yojimbo/casts/JUDGE.md (commit edec1037). FFX only, Chapter IX. Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/<subject>/cast-r1.png (never cast-r1-option-longer.png, which needs a separate yes). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/. UPDATE 2026-09-24 ~20:00 EDT: Bailey, verbatim, answering (1) \"Yes install please\" (2) \"I'll go with your recommendation\" — the longer blade replaces the drawn-blade r1 for yojimbo-cavern/cast.png, judged LONGER-BLADE: PASS (docs/concepts/chapters/yojimbo/casts/JUDGE.md, 'The longer blade: 1:1 check and in-battle frame'; frame docs/concepts/chapters/yojimbo/casts/longer-blade-in-battle.jpg). Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/yojimbo-cavern/cast-r1-option-longer.png. The superseded r1 hash (b67565f47e90fa58a53096e8156af2c695c02ae30e3e874937e8ec1509a9ac3f, approved 2026-09-24) is kept, not deleted, at D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/. Daigoro's cast.png (r1, 30-degree bite) is untouched by this update.",
    "public/art/characters/yojimbo-cavern/cast.png": {
-    "sha256": "b67565f47e90fa58a53096e8156af2c695c02ae30e3e874937e8ec1509a9ac3f",
-    "mtime": "2026-09-24T19:05:18.890Z",
-    "approved": "2026-09-24"
+    "sha256": "cc044fc04ab9cd93fe86bb7b2856a948d2377a9853fa49f63db6a89be17bd695",
+    "mtime": "2026-09-24T20:00:00.000Z",
+    "approved": "2026-09-24",
+    "supersedes": {
+     "sha256": "b67565f47e90fa58a53096e8156af2c695c02ae30e3e874937e8ec1509a9ac3f",
+     "approved": "2026-09-24",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/cast.png"
+    }
    },
    "public/art/characters/daigoro/cast.png": {
     "sha256": "97a32c4f2d6c39d7bbb569b2cdeb74f7514a0799b845b90a9ada7c04dda5ba60",
