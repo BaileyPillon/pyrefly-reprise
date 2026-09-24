@@ -202,6 +202,15 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     beat(1400),
     results(),
 
+    // `showResults()` (`src/app/screens/BattleScreenFlow.ts`) starts
+    // `victory-ffx` on its own once the tally shows, and the `music(null,
+    // 900)` above only reaches the results() marker — the fanfare it starts
+    // then bled uncut through the flat, anticlimactic kill this chapter needs
+    // (§9.7: "the party wins cleanly and loses completely"), the same bug as
+    // Chapter VIII's beat 9 (fixed in 80672bf) and Chapter 2's aftermath. Cut
+    // it again here, right as the scene resumes past the tally.
+    music(null, 300),
+
     // §9.7 beat 9 — he is properly dead. Flat, anticlimactic, no speech, no
     // pyreflies. Flux dissolves; this one just stops.
     setPose(SEYMOUR, 'kneel'),

@@ -53,6 +53,16 @@ export interface GuideHintMatch {
   bossBelowHp?: number;
   /** Only while the chapter's primary boss is above this fraction of its max HP. */
   bossAboveHp?: number;
+  /**
+   * Only while `BattleState.flags` holds every one of these key/value pairs —
+   * an AI script's or a story trigger's own encounter-scoped state
+   * (`EnemyFields`/`Tactic` read the same map), for a hint that depends on
+   * something no menu label captures. `evrae.ts`'s "holds a breath and the
+   * ship is FAR" line is the reason this exists: the label a `harmlessTurn()`
+   * pick lands on (Potion / Eye Drops / Echo Screen) is the same whether or
+   * not a breath is actually charged, so the label alone over-fires.
+   */
+  flags?: Readonly<Record<string, number | string | boolean>>;
 }
 
 /**

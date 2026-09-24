@@ -82,4 +82,18 @@ describe('EVRAE_GUIDE', () => {
     const reflectSensitive = EVRAE_GUIDE.hints.filter((h) => h.when.labels?.includes('Slow'));
     for (const h of reflectSensitive) expect(h.text).toMatch(/reflect/i);
   });
+
+  it('keys the "holds a breath and the ship is FAR" hint on that state, not the label alone', () => {
+    // `harmlessTurn()` (`src/engine/tactics/evrae-quiet.ts`) can land on the
+    // same three item labels from its end-of-line fallback too (nothing
+    // reaches, no bench swap applies), which is not the breath dodge this
+    // line describes — see the comment on the hint itself and
+    // `tests/unit/guide-hint-flags.test.ts` for the matcher this depends on.
+    const spareItemHint = EVRAE_GUIDE.hints.find((h) => h.when.labels?.includes('Eye Drops'));
+    expect(spareItemHint).toBeDefined();
+    expect(spareItemHint!.when.flags).toEqual({
+      'airship.breathCharged': true,
+      'airship.range': 'far',
+    });
+  });
 });

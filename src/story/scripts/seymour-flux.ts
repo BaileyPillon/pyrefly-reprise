@@ -149,6 +149,15 @@ export const seymourFluxScripts: ChapterScripts = {
     beat(1200),
     results(),
 
+    // `showResults()` (`src/app/screens/BattleScreenFlow.ts`) starts
+    // `victory-ffx` on its own once the tally shows, and the `music(null,
+    // 800)` above only reaches the results() marker — the fanfare it starts
+    // then bled uncut through the failed sending and the "Sin is Jecht"
+    // reveal (same bug as Chapter VIII's beat 9, fixed in 80672bf, and
+    // Chapter 2's aftermath). Cut it again here, right as the scene resumes
+    // past the tally.
+    music(null, 300),
+
     // --- Scene A — the sending that fails [§3 E1 post 1–12] ---------------
     setPose('seymour', 'kneel'),
     fx('pyreflies-stalled', 'seymour'),

@@ -139,6 +139,15 @@ export const yunalescaScripts: ChapterScripts = {
     beat(1200),
     results(),
 
+    // `showResults()` (`src/app/screens/BattleScreenFlow.ts`) starts
+    // `victory-ffx` on its own, outside this script, once the tally shows —
+    // the `music(null, 1000)` above only reaches the results() marker itself,
+    // and the fanfare it starts then bled uncut through "thins like frost"
+    // and every line after (Chapter VIII's beat 9 had the identical bug,
+    // fixed in 80672bf). Cut it again here, the same way, right as the scene
+    // resumes past the tally.
+    music(null, 300),
+
     // She does not fall. She thins, like frost in sun.
     camera('idle', 900),
     fx('yunalesca-thinning', 'yunalesca'),

@@ -110,8 +110,16 @@ export const EVRAE_GUIDE: ChapterGuide = {
     },
     {
       // FFX's window has no Defend row, so the quiet turn is a spare item on an
-      // ally (`src/engine/tactics/evrae-quiet.ts#spareItem`).
-      when: { labels: ['Potion', 'Eye Drops', 'Echo Screen'] },
+      // ally (`src/engine/tactics/evrae-quiet.ts#spareItem`). The same three
+      // labels also come up from `harmlessTurn()`'s end-of-line fallback (§10
+      // in `evrae.ts`'s tactic — nothing reaches and no bench swap applies),
+      // which is not the breath dodge this line describes, so the hint is
+      // keyed on the state that actually makes it true (`F_BREATH`/`F_RANGE`
+      // in `evrae.ts`) rather than firing on the label alone.
+      when: {
+        labels: ['Potion', 'Eye Drops', 'Echo Screen'],
+        flags: { 'airship.breathCharged': true, 'airship.range': 'far' },
+      },
       text: 'A turn spent on an ally names no enemy. It is the dodge whenever Evrae holds a breath with the ship FAR, because naming Evrae then makes it Swoop in and breathe anyway',
       cite: 'ffx-evrae-airship §4.5',
     },

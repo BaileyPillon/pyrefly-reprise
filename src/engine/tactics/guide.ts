@@ -255,7 +255,8 @@ function has(c: AnyCombatant | undefined, status: string): boolean {
   return c !== undefined && (c.statuses as Record<string, unknown>)[status] !== undefined;
 }
 
-function hintMatches(
+/** Exported for `tests/unit/guide-hint-flags.test.ts` — the matcher rules are worth unit-testing directly. */
+export function hintMatches(
   hint: GuideHint,
   ctx: {
     label: string;
@@ -281,6 +282,11 @@ function hintMatches(
     const frac = hpFraction(boss);
     if (w.bossBelowHp !== undefined && frac > w.bossBelowHp) return false;
     if (w.bossAboveHp !== undefined && frac <= w.bossAboveHp) return false;
+  }
+  if (w.flags) {
+    for (const [key, value] of Object.entries(w.flags)) {
+      if (ctx.state.flags[key] !== value) return false;
+    }
   }
   return true;
 }
