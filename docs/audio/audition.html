@@ -77,8 +77,76 @@
 <h1>Pyrefly Reprise — the score</h1>
 <p class="sub">Twenty-four cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
 
+<!-- yojimbo:begin — Chapter IX options round O-6, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
+<h2 style="margin-top:0">Chapter IX, Yojimbo: three sketches, pick one (new)</h2>
+<p class="group-note">
+  <strong>In the game this fight plays Lulu&rsquo;s own theme. These three sketches are original and quote nothing</strong>:
+  not Lulu&rsquo;s theme, and no other tune from the games. Each one starts from a different person in the room.
+  They use the same instruments, the same hall and the same loudness (&minus;16 LUFS) as everything else on this page.
+  Nothing here is in the game, and nothing gets built until you pick. <strong>I cannot hear any of this.</strong>
+  Every number below is a measurement, not a judgement. FFX only.
+</p>
+
+<article class="cue">
+  <h4>A &mdash; &ldquo;The Summoner&rsquo;s Sorrow&rdquo;</h4>
+  <p class="emotion">Lulu first: grief, kept under control, and it cracks once.</p>
+  <p class="blurb">
+    Solo cello over felt piano. At <strong>0:15</strong> the battle pulse (bowed strings, taiko) joins and the violin takes the tune.
+    At <strong>0:40</strong> the crack: one full chord, then only the piano. At <strong>0:44</strong> control returns, and it ends on the score&rsquo;s amen.
+    C minor, 132 bpm.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-24/yojimbo-a-summoners-sorrow.mp3"></audio>
+  <p class="stats"><span>1:03</span><span>0.89 MB</span><span>-16.05 LUFS</span><span>-1.36 dBTP</span><span>tilt -10.3 dB/band</span><span>all gates pass</span><span>496 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-yojimbo="A — The Summoner's Sorrow"></label></p>
+</article>
+
+<article class="cue">
+  <h4>B &mdash; &ldquo;The Ronin&rsquo;s Price&rdquo;</h4>
+  <p class="emotion">Yojimbo first: cold, patient, and the Zanmato gauge is the form.</p>
+  <p class="blurb">
+    It opens with a low drone, one drum and an alto flute. It gains one layer at each gauge threshold:
+    pizzicato counting at <strong>0:14</strong> (25&nbsp;%), trombones at <strong>0:28</strong> (50&nbsp;%),
+    brass cuts at <strong>0:44</strong> (80&nbsp;%). At <strong>0:55</strong> one cut, then silence and a gong (Zanmato). F# minor, 104 bpm.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-24/yojimbo-b-ronins-price.mp3"></audio>
+  <p class="stats"><span>1:03</span><span>0.87 MB</span><span>-16.01 LUFS</span><span>-1.39 dBTP</span><span>tilt -11.1 dB/band</span><span>all gates pass</span><span>408 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-yojimbo="B — The Ronin's Price"></label></p>
+</article>
+
+<article class="cue">
+  <h4>C &mdash; &ldquo;The Unsent Lady&rdquo;</h4>
+  <p class="emotion">Lady Ginnem first: a ghost who has not been sent.</p>
+  <p class="blurb">
+    A distant wordless soprano, harp chords drifting in fourths, and celesta pyreflies. There is no beat at the start.
+    At <strong>0:17</strong> a pizzicato heartbeat arrives and she sings the score&rsquo;s own &ldquo;sending&rdquo; phrase.
+    At <strong>0:34</strong> the fight: bowed strings, taiko, horns. At <strong>0:51</strong> she fades out on a question with no cadence. E&flat; minor, 112 bpm.
+  </p>
+  <audio controls preload="none" src="sketches/2026-09-24/yojimbo-c-unsent-lady.mp3"></audio>
+  <p class="stats"><span>1:04</span><span>0.91 MB</span><span>-16.16 LUFS</span><span>-1.38 dBTP</span><span>tilt -11.2 dB/band</span><span>all gates pass</span><span>365 notes</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-yojimbo="C — The Unsent Lady"></label></p>
+</article>
+
+<div class="check">
+  <p style="margin-top:0"><strong>When you have listened</strong>, press the button and send back the text. A pick is enough. A mix works too, for example &ldquo;A&rsquo;s opening, B&rsquo;s ending&rdquo;.</p>
+  <p><button type="button" id="yojimbo-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my Yojimbo scores</button></p>
+  <textarea id="yojimbo-out" rows="6" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your scores appear here."></textarea>
+  <p style="margin-bottom:0"><em>Nothing is saved or sent. The button only writes the text into the box.</em></p>
+</div>
+<script>
+  document.getElementById('yojimbo-collect').addEventListener('click', function () {
+    var lines = ['Pyrefly Reprise — Chapter IX, Yojimbo battle music sketches, 2026-09-24', ''];
+    document.querySelectorAll('input[data-yojimbo]').forEach(function (input) {
+      var v = input.value.trim();
+      lines.push(input.dataset.yojimbo + ': ' + (v === '' ? '(not scored)' : v + '/10'));
+    });
+    lines.push('', 'Pick (A / B / C / a mix / none): ', 'Notes: ');
+    document.getElementById('yojimbo-out').value = lines.join('\n');
+  });
+</script>
+<!-- yojimbo:end -->
+
 <!-- macalania:begin — Chapter VII's battle cue, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
-<h2 style="margin-top:0">Chapter VII, Seymour at Macalania (new)</h2>
+<h2>Chapter VII, Seymour at Macalania (new)</h2>
 <p class="group-note">
   <strong>You picked sketch A, &ldquo;The Courtesy&rdquo;, and this is it grown into the fight&rsquo;s own music.</strong>
   It already plays in the game when the battle starts (until today the chapter borrowed Chapter 1&rsquo;s Seymour

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "yojimbo-a-summoners-sorrow",
+    "name": "sketch-yojimbo-a",
+    "seconds": 63.18,
+    "bytes": 887810,
+    "notes": 496,
+    "lufs": -16.05,
+    "truePeakDb": -1.36,
+    "tiltDbPerBand": -10.3,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16.05,
+      "truePeakDb": -1.36
+    },
+    "renderMs": 6479
+  },
+  {
+    "id": "yojimbo-b-ronins-price",
+    "name": "sketch-yojimbo-b",
+    "seconds": 63,
+    "bytes": 870268,
+    "notes": 408,
+    "lufs": -16.01,
+    "truePeakDb": -1.39,
+    "tiltDbPerBand": -11.07,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16.01,
+      "truePeakDb": -1.39
+    },
+    "renderMs": 5418
+  },
+  {
+    "id": "yojimbo-c-unsent-lady",
+    "name": "sketch-yojimbo-c",
+    "seconds": 64,
+    "bytes": 912104,
+    "notes": 365,
+    "lufs": -16.16,
+    "truePeakDb": -1.38,
+    "tiltDbPerBand": -11.16,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16.16,
+      "truePeakDb": -1.38
+    },
+    "renderMs": 5240
+  }
+]

@@ -4,6 +4,7 @@
  *
  *   node tools/audio/scores/render-sketches.mjs
  *   node tools/audio/scores/render-sketches.mjs --only=leblanc-farce
+ *   node tools/audio/scores/render-sketches.mjs --date=2026-09-24
  *
  * These are SKETCHES, not cues. Nothing here is registered in
  * `src/audio/tracks/index.ts`, nothing lands in `public/audio/`, and nothing is
@@ -45,17 +46,28 @@ const { masterToTarget } = await import('../master.mjs');
 const { measureLufs, measureTruePeak, measureSpectrum, checkSpectralBalance } =
   await import('../measure.mjs');
 
-/** The sketch set, in the order Bailey should hear them. */
-const SKETCHES = [
-  'macalania-a-court-dance',
-  'macalania-b-processional',
-  'evrae-battle',
-  'evrae-approach',
-  'leblanc-farce',
-  'leblanc-disquiet',
-];
+/**
+ * The sketch sets, one per round, each in the order Bailey should hear them.
+ * `--date=<round>` picks one; the default is the first round, so the original
+ * command still renders exactly what it always did.
+ */
+const ROUNDS = {
+  '2026-09-21': [
+    'macalania-a-court-dance',
+    'macalania-b-processional',
+    'evrae-battle',
+    'evrae-approach',
+    'leblanc-farce',
+    'leblanc-disquiet',
+  ],
+  /** Chapter IX, Yojimbo (FFX only): options round O-6. */
+  '2026-09-24': [
+    'yojimbo-a-summoners-sorrow',
+    'yojimbo-b-ronins-price',
+    'yojimbo-c-unsent-lady',
+  ],
+};
 
-const DATE = '2026-09-21';
 const SAMPLE_RATE = 44100;
 
 const flags = new Map();
@@ -65,6 +77,11 @@ for (const arg of process.argv.slice(2)) {
   flags.set(k, v ?? 'true');
 }
 const only = flags.get('only')?.split(',').map((s) => s.trim());
+const DATE = flags.get('date') ?? '2026-09-21';
+const SKETCHES = ROUNDS[DATE];
+if (!SKETCHES) {
+  throw new Error(`No sketch round "${DATE}". Known: ${Object.keys(ROUNDS).join(', ')}`);
+}
 
 // --------------------------------------------------------------- pipeline
 
