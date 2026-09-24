@@ -43,12 +43,13 @@
  * that is the `wait(2000)` under the opening `fade('clear')`.
  *
  * `music()` steps: the preflight names two new cues (§6.3),
- * `scene-macalania-temple` and `boss-seymour-macalania`. Neither track exists
- * yet — Bailey judges by ear (hard rule 13) — and an unregistered cue throws
- * in the cutscene runner (`tests/unit/audio-story-cues.test.ts`), so the
- * integrator routed Chapter 1's `scene-gagazet` / `boss-seymour` in their
- * place. When the real cues land, swap the two calls back (and the chapter's
- * `music` and the formation's `musicCues`).
+ * `scene-macalania-temple` and `boss-seymour-macalania`. `boss-seymour-macalania`
+ * ("The Courtesy") landed 2026-09-24 (`ac0c61f`, `docs/handoff/chapter-macalania-music.md`)
+ * and plays before `battleStart()` below, same as the chapter data's
+ * `music.battle` and the formation's start `musicCue`. `scene-macalania-temple`
+ * still does not exist — an unregistered cue throws in the cutscene runner
+ * (`tests/unit/audio-story-cues.test.ts`) — so the establishing `music()` call
+ * stays routed to Chapter 1's `scene-gagazet` until that cue lands too.
  *
  * The pre-battle **Trigger Commands** (Talk: Tidus +10 STR, Yuna +10 MDef,
  * Wakka +10 MDef, §9.6 beat 8) are `TriggerCommand`s fired from the battle
@@ -184,9 +185,9 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     say('seymour', 'Thank you. That was the last honest thing.'),
 
     // He stops pretending. The two retainers were always in the room.
-    // Integrator: `boss-seymour-macalania` (§9.8, its own theme) does not
-    // exist yet; Chapter 1's `boss-seymour` stands in, recorded as a stopgap.
-    music('boss-seymour', 1000),
+    // The chapter's own theme (§9.8, "The Courtesy") — landed 2026-09-24,
+    // `ac0c61f` — replaces Chapter 1's `boss-seymour` stopgap.
+    music('boss-seymour-macalania', 1000),
     showActor(GUARDIAN_A, { at: { slot: 1, side: 'enemy' }, ms: 600, facing: -1 }),
     showActor(GUARDIAN_B, { at: { slot: 2, side: 'enemy' }, ms: 600, facing: -1 }),
     setPose('yuna', 'ready'),

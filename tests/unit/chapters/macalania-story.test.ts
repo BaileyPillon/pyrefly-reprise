@@ -257,14 +257,16 @@ describe('macalania story — structure', () => {
     }
   });
 
-  it('routes Chapter 1’s cues as the recorded stopgap for the two unbuilt ones [plan §6.3]', () => {
-    // The preflight's own `scene-macalania-temple` / `boss-seymour-macalania`
-    // do not exist yet; the integrator routed Chapter 1's pair in their place
-    // (docs/handoff/chapter-macalania.md). Swap both when the real cues land.
+  it('plays the chapter’s own battle cue and Chapter 1’s stopgap for the scene cue still unbuilt [plan §6.3]', () => {
+    // `boss-seymour-macalania` ("The Courtesy") landed 2026-09-24 (`ac0c61f`,
+    // docs/handoff/chapter-macalania-music.md) and plays before battleStart().
+    // `scene-macalania-temple` still does not exist, so the establishing cue
+    // stays routed to Chapter 1's `scene-gagazet` (docs/handoff/chapter-macalania.md)
+    // until that one lands too.
     const tracks = chapter.pre
       .filter((s) => s.type === 'music')
       .map((s) => (s.type === 'music' ? s.track : null));
-    expect(tracks).toEqual(['scene-gagazet', 'boss-seymour']);
+    expect(tracks).toEqual(['scene-gagazet', 'boss-seymour-macalania']);
     // `post` stops the music, lets the results screen own the fanfare, then
     // cuts it again right after results() so victory-ffx doesn't bleed
     // through the flat, anticlimactic kill §9.7 needs (dbd48ed7).
