@@ -689,8 +689,10 @@ export class CommandMenu {
         return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${localI})" data-ui-action="${i}">${cursor}${face}<span class="ffx-cmd__label">${escapeHtml(vm.label)}</span>${chevron}${badgeHtml(vm.badge)}</div>`;
       })
       .join('');
-    const moreAbove = start > 0 ? '<div class="ffx-cmd-more">▲</div>' : '';
-    const moreBelow = end < vms.length ? '<div class="ffx-cmd-more">▼</div>' : '';
+    // Out of flow (`ffx-hud.css`): the arrows never grow the stack, so the
+    // breadcrumb above it stays clear of the help slab in every scroll state.
+    const moreAbove = start > 0 ? '<div class="ffx-cmd-more ffx-cmd-more--up">▲</div>' : '';
+    const moreBelow = end < vms.length ? '<div class="ffx-cmd-more ffx-cmd-more--down">▼</div>' : '';
     this.stackEl.innerHTML = moreAbove + rows + moreBelow;
     wirePortraitFallbacks(this.stackEl);
   }

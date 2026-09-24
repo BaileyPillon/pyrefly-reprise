@@ -312,15 +312,28 @@
    owner normally anchors it directly with left/right/bottom) -- that takes
    it out of flow entirely, so our column-reverse stacking above never sees
    it and the info/breadcrumb end up overlapping it. Putting it back in flow
-   here is what makes the shared anchor work as a flex item instead. */
-.ffx-cmd-area .ig-cmd-stack { position: static; }
+   here is what makes the shared anchor work as a flex item instead.
+   `relative`, not `static`: still in flow, and the containing block of the
+   out-of-flow scroll arrows below. */
+.ffx-cmd-area .ig-cmd-stack { position: relative; }
 .ffx-cmd-breadcrumb {
   font-family: var(--ig-font-display); font-weight: 700; font-size: 8px;
   letter-spacing: 0.3em; color: var(--ig-accent); text-transform: uppercase;
 }
+/* The scroll arrows are **out of flow** (the stack is their containing block).
+   In flow, a scrolled six-row list (the Items list in Chapter 3) grew the
+   stack by 23 grid px, which pushed the breadcrumb ("ITEMS") up under the help
+   slab (`.ffx-cmd-info`, y 121..154): 25 screen px of it covered at 1600x900.
+   Now the rows stand where an unscrolled list puts them; the up arrow sits on
+   the breadcrumb's line (the crumb is left-aligned, the arrow centred), and
+   the down arrow in the stage's bottom margin under the last row. */
 .ffx-cmd-more {
-  align-self: center; color: var(--ig-gold-on-paper); font-size: 8px; line-height: 1;
+  position: absolute; left: 50%; transform: translateX(-50%);
+  color: var(--ig-gold-on-paper); font-size: 8px; line-height: 1;
+  pointer-events: none;
 }
+.ffx-cmd-more--up { bottom: calc(100% + 3.56px); }
+.ffx-cmd-more--down { top: calc(100% + 3.56px); }
 .ffxhud .ig-cmd-stack--shake,
 .ffx-cmd-stack--shake { animation: ffx-shake 0.2s linear; }
 @keyframes ffx-shake {

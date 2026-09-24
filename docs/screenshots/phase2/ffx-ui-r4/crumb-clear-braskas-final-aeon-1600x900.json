@@ -1,0 +1,541 @@
+{
+ "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "res": [
+  {
+   "menu": "Items",
+   "up": null,
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": null,
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Restores a moderate amount of HP to one ally.",
+   "item": "Hi-Potion"
+  },
+  {
+   "menu": "Items",
+   "up": null,
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": null,
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Fully restores HP to one ally.",
+   "item": "X-Potion"
+  },
+  {
+   "menu": "Items",
+   "up": null,
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": null,
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    68,
+    311,
+    483,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Restores HP and cures Petrify, Poison and Silence for the whole party.",
+   "item": "Al Bhed Potion"
+  },
+  {
+   "menu": "Items",
+   "up": null,
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": null,
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Revives a fallen ally with a little HP.",
+   "item": "Phoenix Down"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Revives all fallen allies at full HP.",
+   "item": "Mega Phoenix"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Cures most negative statuses at once.",
+   "item": "Remedy"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Cures Petrification.",
+   "item": "Soft"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Cures Zombie and Curse.",
+   "item": "Holy Water"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Restores a small amount of MP to one ally.",
+   "item": "Ether"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Restores a large amount of MP to one ally.",
+   "item": "Turbo Ether"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Fully restores HP and MP to one ally.",
+   "item": "Elixir"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": [
+    301,
+    844,
+    319,
+    864
+   ],
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": "CANVAS>DIV>DIV",
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Grants Protect to one ally.",
+   "item": "Light Curtain"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": null,
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": null,
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Grants Shell to one ally.",
+   "item": "Lunar Curtain"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": null,
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": null,
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    68,
+    311,
+    483,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Doubles the whole party's maximum HP for the rest of the battle.",
+   "item": "Stamina Tonic"
+  },
+  {
+   "menu": "Items",
+   "up": [
+    301,
+    416,
+    319,
+    436
+   ],
+   "down": null,
+   "upHit": "CANVAS>DIV>DIV",
+   "downHit": null,
+   "upCrumb": false,
+   "bottomClip": false,
+   "scale": 2.5,
+   "info": [
+    70,
+    337,
+    481,
+    385
+   ],
+   "crumb": [
+    76,
+    405,
+    164,
+    430
+   ],
+   "crumbText": "Items",
+   "rowsTop": 445,
+   "crumbOverlapPx": 0,
+   "rowOverlapPx": 0,
+   "help": "Inflicts Doom on an enemy.",
+   "item": "Candle of Life"
+  }
+ ],
+ "errs": []
+}
