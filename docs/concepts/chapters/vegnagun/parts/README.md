@@ -1,7 +1,7 @@
 # Vegnagun parts: options for the placeholder Bulwarks, Redoubts and Nodes
 
 **Game case: FFX-2 only** (Chapter 5, Vegnagun). This fixes round-09/10 **PR-0095**: the Bulwark, Redoubt and Node are drawn as hooded cones. It also covers **PR-0015**, the green tail tip.
-**State:** options only. Nothing under `src/`, `public/art` or `docs/target/` was changed. Bailey picks per row (AGENTS.md rule 9).
+**State:** picked 2026-09-24 (Bailey: "I'll take all of your recommendations"): Bulwark C\*, Redoubt C\*, Node C, Tail A. Tail A is installed locally as `CANDIDATE-picked` (`installed.jpg`); the C and C\* parts need wiring only, planned in [docs/plans/vegnagun-parts-wiring.md](../../../../plans/vegnagun-parts-wiring.md).
 
 - `options.jpg` is the sheet. It has one row per part and four columns: Now, A, B and C.
 - `assets.jpg` shows the part cut-outs on their own.
