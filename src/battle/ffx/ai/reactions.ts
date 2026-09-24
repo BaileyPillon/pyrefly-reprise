@@ -160,12 +160,31 @@ export function runMortibsorptionIfDown(ctx: Ctx): boolean {
   if (!mount || !host) return false;
   if (mount.hp > 0 && isAlive(mount)) return false;
   mortibsorption(ctx, mount, host);
-  // Mortibsorption damage DOES trigger Seymour's HP-threshold reactions.
-  const ai = aiContextFor(ctx, host);
-  for (const command of seymourThresholdCounters(ai, false)) {
-    void command;
-  }
+  // Mortibsorption damage DOES trigger Seymour's HP-threshold reactions
+  // [ffx-seymour-flux §2.2, §4.3, verified: 2 sources], and they are **run**,
+  // not dropped (combat-fixes-0924 (b), FFX only). Computing them and then
+  // discarding them left the phase flag at 2 with no Reflect up, so his next
+  // Flare detonated on himself (1,639 on seed 3). Executed exactly as Chapter
+  // X's pair below: a `counter` event, then the command at no CTB cost. A later
+  // player-side collector in the same action sees Protect/Reflect already up
+  // and adds nothing, so nothing doubles.
+  runDrainCounters(ctx, host, mount, seymourThresholdCounters(aiContextFor(ctx, host), false));
   return true;
+}
+
+/** Run the counters a Mortibsorption drain owes its host, each at no CTB cost. */
+function runDrainCounters(ctx: Ctx, host: FFXCombatant, mount: FFXCombatant, commands: readonly Command[]): void {
+  for (const command of commands) {
+    if (!canCounter(ctx, host.id)) continue;
+    ctx.emit({
+      type: 'counter',
+      actorId: host.id,
+      targetId: mount.id,
+      abilityId: command.kind === 'ability' ? command.id : 'attack',
+      cause: 'script',
+    });
+    executeCommand(ctx, host, command, true);
+  }
 }
 
 /**
@@ -175,7 +194,7 @@ export function runMortibsorptionIfDown(ctx: Ctx): boolean {
  * next 1,000 down, floor 1,000; it fires even when the drain is lethal)
  * [ffx-seymour-natus-highbridge §4.4, verified: 4 sources].
  *
- * Unlike Chapter I's branch above, the counters the drain owes are **run**,
+ * As in Chapter I's branch above, the counters the drain owes are **run**,
  * not dropped: Mortibsorption moves Natus's stored phase and, on the first
  * crossing of 24,000, fires his Protect counter [§4.2, single source: wiki].
  * Executed here, as the engine's counter loop does (a `counter` event, then
@@ -188,17 +207,7 @@ function runNatusMortibsorption(ctx: Ctx): boolean {
   if (!mount || !host) return false;
   if (mount.hp > 0 && isAlive(mount)) return false;
   mortibsorption(ctx, mount, host);
-  for (const command of stepNatusPhase(ctx)) {
-    if (!canCounter(ctx, host.id)) continue;
-    ctx.emit({
-      type: 'counter',
-      actorId: host.id,
-      targetId: mount.id,
-      abilityId: command.kind === 'ability' ? command.id : 'attack',
-      cause: 'script',
-    });
-    executeCommand(ctx, host, command, true);
-  }
+  runDrainCounters(ctx, host, mount, stepNatusPhase(ctx));
   return true;
 }
 
