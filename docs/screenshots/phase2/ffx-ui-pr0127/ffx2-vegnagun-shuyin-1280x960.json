@@ -1,0 +1,68 @@
+{
+ "before": {
+  "cols": [
+   {
+    "sh": 129,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 139,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPTwo Dark Knights spamming Darkness ignore every part’s Defense, hit every target at once, and cost HP a Mega-Potion undoes.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   410,
+   547
+  ],
+  "colRect": [
+   270,
+   474
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+  "cues": [
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom is-visible",
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom is-visible"
+  ]
+ },
+ "after1-PageDown": {
+  "cols": [
+   {
+    "sh": 129,
+    "ch": 102,
+    "st": 27,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 139,
+    "ch": 102,
+    "st": 37,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPTwo Dark Knights spamming Darkness ignore every part’s Defense, hit every target at once, and cost HP a Mega-Potion undoes.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   336,
+   473
+  ],
+  "colRect": [
+   270,
+   474
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+  "cues": [
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom",
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom"
+  ]
+ }
+}

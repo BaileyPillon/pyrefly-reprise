@@ -70,6 +70,13 @@ export interface PrepPanel {
    * player switches to it. Composing panels only.
    */
   selectMember?(memberId: string): void;
+  /**
+   * A control the open tab adds to the shell's hint line right now, or null
+   * for none (PR-0127: the CHAPTER tab's PG UP / PG DN scroll, shown only
+   * while one of its columns has more copy). Read after every input frame and
+   * tab change; the line is rewritten only when the answer changes.
+   */
+  hint?(): { keys: string; label: string } | null;
 }
 
 /** What a panel is told when it mounts. */
@@ -166,7 +173,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
       <div class="prep__hint">
         <b>&#9650; &#9660;</b> PARTY &nbsp;&middot;&nbsp; <b>&#9664; &#9654;</b> TABS
         &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:begin" role="button" tabindex="0"><b>ENTER</b> BEGINS THE BATTLE</span>
-        &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:back" role="button" tabindex="0"><b>ESC</b> BACK</span>
+        &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:back" role="button" tabindex="0"><b>ESC</b> BACK</span><span data-role="panel-hint"></span>
       </div>
 
       <div class="prep__start" data-action="prep:begin">
@@ -180,6 +187,18 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
     this.renderTabs();
     this.renderBody();
     void this.app.fade('clear', 400);
+  }
+
+  /** The open tab's own control on the hint line (see {@link PrepPanel.hint}). */
+  private panelHintHtml = '';
+  private renderPanelHint(): void {
+    const slot = this.root.querySelector<HTMLElement>('[data-role="panel-hint"]');
+    if (!slot) return;
+    const h = this.tabs[this.index]?.hint?.() ?? null;
+    const html = h ? ` &nbsp;&middot;&nbsp; <b>${escapeHtml(h.keys)}</b> ${escapeHtml(h.label)}` : '';
+    if (html === this.panelHintHtml) return;
+    this.panelHintHtml = html;
+    slot.innerHTML = html;
   }
 
   /**
@@ -264,7 +283,9 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
 
   override handleInput(input: InputSnapshot): void {
     const panel = this.tabs[this.index];
-    if (panel?.handleInput?.(input)) return;
+    const consumed = panel?.handleInput?.(input) ?? false;
+    this.renderPanelHint();
+    if (consumed) return;
 
     // Clicks and taps on the frame arrive as `data-action` names, which are
     // exactly this screen's trigger names (START BATTLE, a roster row, a tab).
@@ -298,6 +319,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
     audio.playSfx('cursor-move');
     this.renderTabs();
     this.renderBody();
+    this.renderPanelHint();
   }
 
   /** Move the roster cursor and repoint the sheet at whoever it lands on. */

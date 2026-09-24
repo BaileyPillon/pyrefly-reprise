@@ -1,0 +1,101 @@
+{
+ "before": {
+  "cols": [
+   {
+    "sh": 138,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 139,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPBio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   290,
+   427
+  ],
+  "colRect": [
+   150,
+   354
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+  "cues": [
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom is-visible",
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom is-visible"
+  ]
+ },
+ "after1-PageDown": {
+  "cols": [
+   {
+    "sh": 138,
+    "ch": 102,
+    "st": 36,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 139,
+    "ch": 102,
+    "st": 37,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPBio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   216,
+   353
+  ],
+  "colRect": [
+   150,
+   354
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+  "cues": [
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom",
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom"
+  ]
+ },
+ "after2-ArrowRight": {
+  "cols": [
+   {
+    "sh": 0,
+    "ch": 0,
+    "st": 0,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 0,
+    "ch": 0,
+    "st": 0,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPBio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   0,
+   0
+  ],
+  "colRect": [
+   0,
+   0
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+  "cues": [
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom",
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom"
+  ]
+ }
+}

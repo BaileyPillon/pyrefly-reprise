@@ -1,0 +1,68 @@
+{
+ "before": {
+  "cols": [
+   {
+    "sh": 102,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 102,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPKill both Pagodas the same turn — a lone survivor turns aggressive, and a live Power Wave heals him 1,500 and fuels his Overdrive by 20%.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   380,
+   493
+  ],
+  "colRect": [
+   225,
+   531
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+  "cues": [
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom",
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom"
+  ]
+ },
+ "after1-PageDown": {
+  "cols": [
+   {
+    "sh": 102,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 102,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPKill both Pagodas the same turn — a lone survivor turns aggressive, and a live Power Wave heals him 1,500 and fuels his Overdrive by 20%.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   380,
+   493
+  ],
+  "colRect": [
+   225,
+   531
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+  "cues": [
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom",
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom"
+  ]
+ }
+}

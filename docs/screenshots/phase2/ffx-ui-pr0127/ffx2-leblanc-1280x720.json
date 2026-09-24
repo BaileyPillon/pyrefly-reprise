@@ -1,0 +1,68 @@
+{
+ "before": {
+  "cols": [
+   {
+    "sh": 148,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 149,
+    "ch": 102,
+    "st": 0,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's Protect, Shell and Regen on all three at once, and it comes back roughly every 21 seconds if you let it.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   290,
+   448
+  ],
+  "colRect": [
+   150,
+   354
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+  "cues": [
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom is-visible",
+   "prepchap__cue prepchap__cue--top",
+   "prepchap__cue prepchap__cue--bottom is-visible"
+  ]
+ },
+ "after1-PageDown": {
+  "cols": [
+   {
+    "sh": 148,
+    "ch": 102,
+    "st": 46,
+    "cls": "prepchap__col"
+   },
+   {
+    "sh": 149,
+    "ch": 102,
+    "st": 47,
+    "cls": "prepchap__col prepchap__col--brief"
+   }
+  ],
+  "tipText": "TIPDispel her Not-So-Mighty Guard the moment it lands — it's Protect, Shell and Regen on all three at once, and it comes back roughly every 21 seconds if you let it.",
+  "tipCls": "cpanel__tip",
+  "tipRect": [
+   196,
+   354
+  ],
+  "colRect": [
+   150,
+   354
+  ],
+  "hint": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+  "cues": [
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom",
+   "prepchap__cue prepchap__cue--top is-visible",
+   "prepchap__cue prepchap__cue--bottom"
+  ]
+ }
+}

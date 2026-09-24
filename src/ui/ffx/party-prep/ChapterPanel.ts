@@ -21,6 +21,7 @@
 
 import type { GameId } from '../../../battle/common/types.ts';
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
+import type { InputSnapshot } from '../../../app/Input.ts';
 import { getChapterMeta } from '../../../data/chapter-meta.ts';
 import { escapeHtml } from '../../common/html.ts';
 import {
@@ -73,6 +74,39 @@ function wireScrollCue(col: HTMLElement, wrap: HTMLElement): void {
   }
   update();
   window.requestAnimationFrame(update);
+}
+
+/**
+ * PR-0127 (both games; the prep card is shared): the columns scrolled only
+ * under a mouse wheel, so at 1280x720 Chapter 6's TIP stayed cut mid-sentence
+ * for a keyboard or pad player. The shell binds neither shoulder button, so
+ * L1 / R1 (PageUp / PageDown, F / R, pad LB / RB) page **both** columns
+ * together, each within its own range: one press is most of a column, which at
+ * 1280x720 is enough to bring every chapter's TIP fully into view.
+ */
+const PAGE_FRACTION = 0.8;
+
+/** The columns that currently hold more copy than they show. */
+function scrollableCols(root: HTMLElement | null): HTMLElement[] {
+  if (!root) return [];
+  return [...root.querySelectorAll<HTMLElement>('[data-scrollcol]')].filter(
+    (c) => c.scrollHeight - c.clientHeight > 1,
+  );
+}
+
+/** Page every scrollable column by `dir`; true when any of them moved. */
+export function pageChapterColumns(root: HTMLElement | null, dir: 1 | -1): boolean {
+  let moved = false;
+  for (const col of scrollableCols(root)) {
+    const max = col.scrollHeight - col.clientHeight;
+    const next = Math.max(0, Math.min(max, col.scrollTop + dir * Math.max(12, col.clientHeight * PAGE_FRACTION)));
+    if (Math.abs(next - col.scrollTop) < 0.5) continue;
+    col.scrollTop = next;
+    // `scroll` fires asynchronously; the cue should not wait a frame for it.
+    col.dispatchEvent(new Event('scroll'));
+    moved = true;
+  }
+  return moved;
 }
 
 function heroBackground(chapterId: string): string {
@@ -180,6 +214,15 @@ export function makeChapterPanel(game: GameId): PrepPanel {
     },
     unmount(): void {
       root = null;
+    },
+    handleInput(input: InputSnapshot): boolean {
+      if (input.consume('r1')) pageChapterColumns(root, 1);
+      if (input.consume('l1')) pageChapterColumns(root, -1);
+      return false;
+    },
+    hint() {
+      const visible = !!root && !root.hidden && root.isConnected;
+      return visible && scrollableCols(root).length ? { keys: 'PG UP / PG DN', label: 'SCROLL' } : null;
     },
   };
 }
