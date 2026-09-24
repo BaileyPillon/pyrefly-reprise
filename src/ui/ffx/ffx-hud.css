@@ -42,39 +42,34 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* PR-0005 option B (FFX only, Bailey's D-042): while the turn cut-in slab
-   (`ui/common/transitions/TurnCutInLayer.ts`) is on screen it toggles this
-   modifier on `.ffxhud` for exactly its own lifetime. `LetterboxStage`'s
-   inline `transform` already makes `.ffxhud__stage` its own stacking
-   context (see the `.ffx-cmd-info` note below), so giving that context an
-   explicit `z-index` here lets it escape `.ffxhud` — which has none of its
-   own — straight to the root the battle screen also mounts `.pf-mom` in
-   (`transitions.css`, `z-index: 36`), and paint above it there. Scoped to
-   the modifier rather than applied unconditionally, because raising the
-   stage at all times would put every other moment `.pf-mom` ever shows
-   (reveal/Overdrive/telegraph bars and vignette) *underneath* the stage's
-   own content -- the exact regression `targetChipClear.ts` documents
-   rejecting for `.ffx-targeting`. The cut-in never plays alongside one of
-   those, so this is safe for the one window it is active. */
-.ffxhud--cutin-below .ffxhud__stage {
+/* PR-0005 option B (FFX only, Bailey's D-042,
+   `docs/concepts/layout/pr-0005-ffx/b-under.png`). `.ffxhud__lift` is an
+   empty twin of the stage (same letterbox transform, `FFXBattleHud.layout`).
+   For exactly the turn cut-in's lifetime `ui/ffx/cutInLift.ts` moves the
+   command cascade (`.ffx-cmd-area`) into it and sets the modifier below, and
+   only this layer is raised past `.pf-mom` (`transitions.css`, 36), the root
+   the cut-in slab is mounted in. Everything else stays in `.ffxhud__stage`,
+   under the slab and the veil, as the mockup draws it: the CTB list, party
+   status and Sensor panel beside the slab, the guide rail, advisor and
+   command help covered by it. Two earlier builds got this wrong: promoting
+   the whole stage painted the rail and advisor over the portrait, and hiding
+   every other stage child (5846f4e0) took the CTB list, party status, Sensor
+   panel, telegraph banner and stage-2 border off the screen for the hold.
+   `.ffxhud__stage` itself never gets a z-index: raising it would put every
+   other `.pf-mom` moment underneath the HUD (see `targetChipClear.ts`). */
+.ffxhud__lift {
+  pointer-events: none;
+}
+.ffxhud--cutin-below .ffxhud__lift {
   z-index: 37;
 }
-
-/* Promoting the whole stage (above) is what lets it escape `.ffxhud`'s
-   context-less wrapper, but every other stage child rides along with it —
-   the guide rail (`.sgd`), the move advisor (`.mad`), the command
-   description (`.ffx-cmd-info`), the CTB list, party status, sensor panel
-   and telegraph banner all painted over the approved cut-in portrait (round
-   03 verifier, `docs/screenshots/phase2/verify-ui-story/cutin-*-A-hold.png`),
-   and the ones among them `.pf-mom` normally dims lost that veil entirely.
-   The approved mockup (`docs/concepts/layout/pr-0005-ffx/b-under.png`) shows
-   only the live command cascade redrawn on top, with everything else parked
-   under the slab as it already was pre-fix — so hide every other direct
-   child of the promoted stage for exactly the same lifetime the modifier is
-   on. `.ffx-cmd-area` is the one exemption: it is the cascade
-   (ATTACK/SPECIAL/WHITE MAGIC/ITEMS/FLEE, `FFXBattleHud.ts`'s `cmdArea`). */
-.ffxhud--cutin-below .ffxhud__stage > *:not(.ffx-cmd-area) {
-  visibility: hidden;
+/* The mockup draws the frame's grain and vignette (z 41) above the menu
+   layer (z 40). `.ig-surface` has no stacking context of its own, so its two
+   layers can be raised past the lifted menu directly, and only while the
+   modifier is on. */
+.ffxhud--cutin-below .ig-surface__grain,
+.ffxhud--cutin-below .ig-surface__vignette {
+  z-index: 38;
 }
 
 /* An unscaled sibling layer for screen-space elements (damage numbers, target

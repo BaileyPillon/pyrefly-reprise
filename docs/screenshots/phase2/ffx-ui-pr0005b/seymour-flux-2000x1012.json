@@ -1,0 +1,448 @@
+{
+ "chapter": "seymour-flux",
+ "size": "2000x1012",
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "A": {
+  "modifier": true,
+  "cutIn": true,
+  "actor": "tidus",
+  "cmdAreaParent": "ffxhud__stage ffxhud__lift",
+  "liftZ": "37",
+  "stageZ": "auto",
+  "selectedRow": "Attack",
+  "rows": [
+   "Talk",
+   "Attack",
+   "Special\u00e2\u2013\u00b8\u00c3\u20144",
+   "White Magic\u00e2\u2013\u00b8\u00c3\u20143",
+   "Items\u00e2\u2013\u00b8\u00c3\u201427",
+   "Flee"
+  ],
+  "slab": [
+   -129,
+   -37,
+   879,
+   1062
+  ],
+  "parts": {
+   ".ig-ctb": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1640,
+     140,
+     1845,
+     563
+    ]
+   },
+   ".ig-stat-list": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1232,
+     726,
+     1835,
+     978
+    ]
+   },
+   ".ffx-sensor": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1300,
+     467,
+     1633,
+     714
+    ]
+   },
+   ".ffx-telegraph": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     918,
+     79,
+     1082,
+     112
+    ]
+   },
+   ".sgd": {
+    "vis": "visible",
+    "z": "3",
+    "rect": [
+     100,
+     0,
+     1900,
+     1012
+    ]
+   },
+   ".mad": {
+    "vis": "visible",
+    "z": "4",
+    "rect": [
+     100,
+     0,
+     1900,
+     1012
+    ]
+   },
+   ".ffx-cmd-info": {
+    "vis": "visible",
+    "z": "2",
+    "rect": [
+     180,
+     379,
+     641,
+     433
+    ]
+   },
+   ".ffx-cmd-area": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     185,
+     467,
+     713,
+     940
+    ]
+   },
+   ".ig-surface__vignette": {
+    "vis": "visible",
+    "z": "38",
+    "rect": [
+     0,
+     0,
+     2000,
+     1012
+    ]
+   }
+  },
+  "topAtMenu": "ffx-cmd__label",
+  "msAfterAppear": 164,
+  "shotDoneMs": 237
+ },
+ "B": {
+  "modifier": true,
+  "cutIn": true,
+  "actor": "tidus",
+  "cmdAreaParent": "ffxhud__stage ffxhud__lift",
+  "liftZ": "37",
+  "stageZ": "auto",
+  "selectedRow": "Special\u00e2\u2013\u00b8\u00c3\u20144",
+  "rows": [
+   "Talk",
+   "Attack",
+   "Special\u00e2\u2013\u00b8\u00c3\u20144",
+   "White Magic\u00e2\u2013\u00b8\u00c3\u20143",
+   "Items\u00e2\u2013\u00b8\u00c3\u201427",
+   "Flee"
+  ],
+  "slab": [
+   -129,
+   -37,
+   879,
+   1062
+  ],
+  "parts": {
+   ".ig-ctb": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1640,
+     140,
+     1845,
+     563
+    ]
+   },
+   ".ig-stat-list": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1232,
+     726,
+     1835,
+     978
+    ]
+   },
+   ".ffx-sensor": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1300,
+     467,
+     1633,
+     714
+    ]
+   },
+   ".ffx-telegraph": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     918,
+     79,
+     1082,
+     112
+    ]
+   },
+   ".sgd": {
+    "vis": "visible",
+    "z": "3",
+    "rect": [
+     100,
+     0,
+     1900,
+     1012
+    ]
+   },
+   ".mad": {
+    "vis": "visible",
+    "z": "4",
+    "rect": [
+     100,
+     0,
+     1900,
+     1012
+    ]
+   },
+   ".ffx-cmd-info": {
+    "vis": "visible",
+    "z": "2",
+    "rect": [
+     180,
+     379,
+     641,
+     433
+    ]
+   },
+   ".ffx-cmd-area": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     185,
+     467,
+     713,
+     940
+    ]
+   },
+   ".ig-surface__vignette": {
+    "vis": "visible",
+    "z": "38",
+    "rect": [
+     0,
+     0,
+     2000,
+     1012
+    ]
+   }
+  },
+  "topAtMenu": "ffx-cmd__label",
+  "msAfterAppear": 450,
+  "shotDoneMs": 534
+ },
+ "C": {
+  "modifier": false,
+  "cutIn": false,
+  "actor": null,
+  "cmdAreaParent": "ffxhud__stage",
+  "liftZ": "auto",
+  "stageZ": "auto",
+  "selectedRow": "Special\u00e2\u2013\u00b8\u00c3\u20144",
+  "rows": [
+   "Talk",
+   "Attack",
+   "Special\u00e2\u2013\u00b8\u00c3\u20144",
+   "White Magic\u00e2\u2013\u00b8\u00c3\u20143",
+   "Items\u00e2\u2013\u00b8\u00c3\u201427",
+   "Flee"
+  ],
+  "slab": null,
+  "parts": {
+   ".ig-ctb": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1640,
+     140,
+     1845,
+     563
+    ]
+   },
+   ".ig-stat-list": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1232,
+     726,
+     1835,
+     978
+    ]
+   },
+   ".ffx-sensor": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     1300,
+     467,
+     1633,
+     714
+    ]
+   },
+   ".ffx-telegraph": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     918,
+     79,
+     1082,
+     112
+    ]
+   },
+   ".sgd": {
+    "vis": "visible",
+    "z": "3",
+    "rect": [
+     100,
+     0,
+     1900,
+     1012
+    ]
+   },
+   ".mad": {
+    "vis": "visible",
+    "z": "4",
+    "rect": [
+     100,
+     0,
+     1900,
+     1012
+    ]
+   },
+   ".ffx-cmd-info": {
+    "vis": "visible",
+    "z": "2",
+    "rect": [
+     180,
+     379,
+     641,
+     433
+    ]
+   },
+   ".ffx-cmd-area": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     185,
+     467,
+     713,
+     940
+    ]
+   },
+   ".ig-surface__vignette": {
+    "vis": "visible",
+    "z": "auto",
+    "rect": [
+     0,
+     0,
+     2000,
+     1012
+    ]
+   }
+  },
+  "topAtMenu": "ffx-cmd__label"
+ },
+ "holdMs": 859,
+ "hiddenFramesDuringCut": 0,
+ "frames": 37,
+ "logFrames": 37,
+ "logSample": [
+  {
+   "t": 10978,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11123,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11189,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11253,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11322,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11388,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11454,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11703,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11773,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 11837,
+   "cut": true,
+   "mod": true,
+   "areaInLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  }
+ ]
+}

@@ -141,6 +141,8 @@ export function intentChipDockAt(
 export class FFXBattleHud implements HudPort {
   readonly el: HTMLElement;
   private readonly stage: HTMLElement;
+  /** PR-0005 B: the empty layer the command cascade rides in during a turn cut-in (`cutInLift.ts`). */
+  private readonly lift: HTMLElement;
   private readonly overlay: HTMLElement;
   private readonly bannerEl: HTMLElement;
   private readonly infoEl: HTMLElement;
@@ -290,6 +292,8 @@ export class FFXBattleHud implements HudPort {
 
     this.stage = document.createElement('div');
     this.stage.className = 'ffxhud__stage';
+    this.lift = document.createElement('div');
+    this.lift.className = 'ffxhud__stage ffxhud__lift';
     this.overlay = document.createElement('div');
     this.overlay.className = 'ffxhud__overlay';
 
@@ -359,7 +363,7 @@ export class FFXBattleHud implements HudPort {
     surface.className = 'ig-surface';
     surface.innerHTML = '<div class="ig-surface__grain"></div><div class="ig-surface__vignette"></div>';
 
-    this.el.append(this.stage, this.overlay, surface);
+    this.el.append(this.stage, this.lift, this.overlay, surface);
   }
 
   // -------------------------------------------------------------- HudPort
@@ -1590,6 +1594,7 @@ export class FFXBattleHud implements HudPort {
     const scale = Math.min(w / 640, h / 360);
     const [x, y] = [(w - 640 * scale) / 2, (h - 360 * scale) / 2];
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+    this.lift.style.transform = this.stage.style.transform;
     this.el.style.setProperty('--lb-scale', scale.toFixed(4)); // FOC-06: move-advisor.css's type floor divides by it
   }
 }

@@ -20,21 +20,18 @@
  * PR-0005 option B (FFX only, `docs/concepts/layout/pr-0005-ffx/README.md`,
  * Bailey's D-042): this layer is a child of `MomentOverlay`'s `.pf-mom`
  * (`transitions.css`, `z-index: 36`), so for as long as it is mounted here it
- * covers the FFX command cascade the HUD draws underneath
- * (`ffx-hud.css`'s `.ffxhud__stage` has no `z-index` of its own). Rather than
- * raise the whole stage above every other moment `.pf-mom` ever shows — the
- * fix `targetChipClear.ts` rejected for the same reason, a real regression to
- * everything else the stage draws — this toggles a modifier class on the FFX
- * HUD root (`data-role="ffx-battle-hud"`, `FFXBattleHud.ts`) for exactly the
- * cut-in's own lifetime, so `ffx-hud.css` can promote just the stage, and
- * only while nothing else competes for that space (the cut-in never plays
- * alongside a reveal, Overdrive or telegraph moment).
+ * covers the FFX command cascade the HUD draws underneath. For exactly the
+ * cut-in's own lifetime it hands the FFX HUD (`data-role="ffx-battle-hud"`)
+ * to `ui/ffx/cutInLift.ts`, which moves only the command cascade into a layer
+ * above the slab and leaves every other part of the HUD under the slab and
+ * the veil, as the approved `b-under.png` draws it.
  */
 
 import { showTurnCutIn } from '../../inkgold/cutin.ts';
 import { manifestKnowsAssetNow } from '../../../engine/ArtManifest.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { confirmPress } from './confirmPress.ts';
+import { liftCommandArea } from '../../ffx/cutInLift.ts';
 
 export interface TurnCutInRequest {
   actorId: string;
@@ -57,9 +54,6 @@ function portraitFor(actorId: string, game: 'ffx' | 'ffx2'): string {
   }
   return artUrl(`art/portraits/${actorId}.png`);
 }
-
-/** The FFX HUD's cut-in-below modifier — see the file header, PR-0005 B. */
-const FFX_HUD_CUTIN_BELOW = 'ffxhud--cutin-below';
 
 /** Show the cut-in inside `host`; resolves once it has left the screen. */
 export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): Promise<void> {
@@ -90,7 +84,7 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
     `width:${FRAME_W}px;height:${FRAME_H}px;transform:scale(${k});transform-origin:0 0;`;
   layer.append(veil, frame);
   host.appendChild(layer);
-  hudEl?.classList.add(FFX_HUD_CUTIN_BELOW);
+  const unlift = hudEl ? liftCommandArea(hudEl) : null;
   void veil.getBoundingClientRect();
   veil.style.opacity = '1';
 
@@ -113,6 +107,6 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
     await handle.dismiss();
     layer.remove();
   } finally {
-    hudEl?.classList.remove(FFX_HUD_CUTIN_BELOW);
+    unlift?.();
   }
 }
