@@ -64,7 +64,7 @@ import {
 } from './gauges.ts';
 import type { ResolveContext } from './resolve.ts';
 import { buildCommands, type MenuContext } from './targeting.ts';
-import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, payStatusClocks } from './engineHooks.ts';
+import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, notifyEnemiesTargeted, payStatusClocks } from './engineHooks.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
@@ -424,7 +424,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   /** Regen and Poison payouts plus status expiries, for one sub-step. */
   private advanceStatusClocks(step: number): void {
-    payStatusClocks(this.units, step, (e) => this.emit(e), this.resolveCtx());
+    payStatusClocks(this.units, step, (e) => this.emit(e), this.resolveCtx(), (u) => this.aiContext(u));
   }
 
   /**
@@ -588,6 +588,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   /** Tell every enemy this action hit that it was hit (`notifyEnemiesDamaged`). */
   private notifyDamaged(startedAt: number, actor: Ffx2Unit): void {
     notifyEnemiesDamaged(this.drafts.slice(startedAt), actor, this.units, (u) => this.aiContext(u));
+    notifyEnemiesTargeted(this.drafts.slice(startedAt), actor, this.units, (u) => this.aiContext(u));
   }
 
   /** Post-action bookkeeping: AI hooks, then story triggers and battle end. */

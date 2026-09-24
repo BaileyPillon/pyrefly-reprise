@@ -228,6 +228,14 @@ export interface AiScript {
   onTurnResolved?(ctx: AiContext, actor: Ffx2Unit): void;
   /** Optional hook run when `self` takes damage (counter-attack scripts). */
   onDamaged?(ctx: AiContext, sourceId: CombatantId | undefined, amount: number): void;
+  /**
+   * Optional hook run once per party action that was aimed at `self`, hit, miss,
+   * immune or status-only alike (`engineHooks.ts#notifyEnemiesTargeted`). The
+   * fallen aeons' "+5 when attacked" reading FA8 a [ffx2-fallen-aeons §4].
+   */
+  onTargeted?(ctx: AiContext, sourceId: CombatantId): void;
+  /** Optional hook run when a Regen tick heals `self` (the Magus Sisters' +5, §4.2). */
+  onRegen?(ctx: AiContext, amount: number): void;
 }
 
 /** Read or write a numeric AI memory slot. */

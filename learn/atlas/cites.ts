@@ -46,6 +46,8 @@ import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../src/data/ffx/enemies/se
 import { EVRAE_ABILITIES } from '../../src/data/ffx/enemies/evrae-abilities.ts';
 import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.ts';
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
+import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
+import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -119,6 +121,14 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     'seymour-natus': 'research/ffx-seymour-natus-highbridge.md §1 (src/data/ffx/enemies/seymour-natus.ts)',
     mortibody: 'research/ffx-seymour-natus-highbridge.md §2 (src/data/ffx/enemies/seymour-natus.ts)',
   },
+  // Chapter XI (FFX-2), registered but unlisted like Chapters IX and X.
+  'ffx2-fallen-aeons': {
+    'x2-shiva': 'research/ffx2-fallen-aeons.md §3.1 (src/data/ffx2/enemies/fallen-aeons-road.ts)',
+    sandy: 'research/ffx2-fallen-aeons.md §3.2 (src/data/ffx2/enemies/magus-sisters.ts)',
+    cindy: 'research/ffx2-fallen-aeons.md §3.2 (src/data/ffx2/enemies/magus-sisters.ts)',
+    mindy: 'research/ffx2-fallen-aeons.md §3.2 (src/data/ffx2/enemies/magus-sisters.ts)',
+    'x2-anima': 'research/ffx2-fallen-aeons.md §3.3 (src/data/ffx2/enemies/fallen-aeons-road.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -184,6 +194,11 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
   'seymour-natus': [
     fileCite(SEYMOUR_NATUS_ABILITIES, 'research/ffx-seymour-natus-highbridge.md §3 (src/data/ffx/enemies/seymour-natus-abilities.ts)'),
   ],
+  'ffx2-fallen-aeons': [
+    fileCite(x2ShivaAbilities, 'research/ffx2-fallen-aeons.md §4.1 (src/data/ffx2/enemies/fallen-aeons-abilities.ts)'),
+    fileCite(magusSistersAbilities, 'research/ffx2-fallen-aeons.md §4.2 (src/data/ffx2/enemies/magus-sisters-abilities.ts)'),
+    fileCite(x2AnimaAbilities, 'research/ffx2-fallen-aeons.md §4.3 (src/data/ffx2/enemies/fallen-aeons-abilities.ts)'),
+  ],
 };
 
 /**
@@ -230,6 +245,8 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
     protect: 'research/ffx-seymour-natus-highbridge.md §3.1 (src/data/ffx/enemies/seymour-natus.ts, reusing the shared Protect)',
     mortibsorption: 'research/ffx-seymour-natus-highbridge.md §3.2, §4.4 (src/data/ffx/enemies/seymour-natus.ts, reusing Chapter I’s Mortibsorption)',
   },
+  // Every Chapter XI ability id is `x2-`-prefixed and defined in the chapter's own ability files.
+  'ffx2-fallen-aeons': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

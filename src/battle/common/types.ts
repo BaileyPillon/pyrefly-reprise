@@ -2565,4 +2565,14 @@ export interface EnemyGroupDef {
    * party-wide self-petrification — is unaffected, because Petrify is not a KO.
    */
   grantsPermanentAutoLife?: boolean;
+  /**
+   * **FFX-2, a chained link that opens after a Save Sphere** (Chapter XI, the
+   * Road to the Farplane; `docs/plans/chapter-fallen-aeons-review.md` FA2 = b,
+   * a sourced `[conflict]`: GamerGuides (HD) has Save Spheres between the
+   * platforms, FFExodus (PS2) has none). The party enters this link at full HP
+   * and MP, and a girl KO'd in the previous link stands up. Items spent stay
+   * spent. It also marks the link as the retry checkpoint (FA3 = b), for the
+   * flow to read. Absent everywhere else, so no other chain changes.
+   */
+  restoresPartyOnEntry?: boolean;
 }

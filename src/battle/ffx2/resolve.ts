@@ -21,6 +21,7 @@ import { resolveSensor, sensorKind } from './sensor.ts';
 import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
 import { hpCostFor, resolveTargets } from './targeting.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
+import { applyMpFraction, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
@@ -287,6 +288,13 @@ export function resolveAbility(
         : false;
       const randomRoll = randomiserRoll(ctx.rng);
 
+      // Delta Attack's "to 1 HP, 0 MP" (`aeon-effects.ts`, FFX-2 Chapter XI only).
+      if (setsPoolsTo(ability)) {
+        total += resolveSetTo(ctx, user, target, ability, index, hitCount);
+        index += 1;
+        continue;
+      }
+
       if (ability.formula === 'none') {
         applyRiders(ctx, user, target, ability);
         index += 1;
@@ -378,6 +386,7 @@ export function resolveAbility(
         }
       }
 
+      applyMpFraction(ctx, user, target, ability); // Heavenly Strike, Absorb (`aeon-effects.ts`)
       applyRiders(ctx, user, target, ability);
       index += 1;
     }

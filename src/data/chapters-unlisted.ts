@@ -18,9 +18,15 @@
 import type { Chapter } from './encounters.ts';
 import { YOJIMBO_CAVERN } from './chapter-yojimbo-cavern.ts';
 import { SEYMOUR_NATUS } from './chapter-seymour-natus.ts';
+import { FFX2_FALLEN_AEONS } from './chapter-ffx2-fallen-aeons.ts';
 
 /**
  * Chapter IX, Yojimbo (FFX only) — `./chapter-yojimbo-cavern.ts`.
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
+ * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [YOJIMBO_CAVERN, SEYMOUR_NATUS] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [
+  YOJIMBO_CAVERN,
+  SEYMOUR_NATUS,
+  FFX2_FALLEN_AEONS,
+] as const;

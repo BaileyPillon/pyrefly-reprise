@@ -172,6 +172,19 @@ function applyCarriedState(unit: Ffx2Unit, carried: CarriedPartyState): void {
 }
 
 /**
+ * A Save Sphere before this link (`EnemyGroupDef.restoresPartyOnEntry`, FA2 = b):
+ * full HP and MP, and a KO'd girl stands up. Statuses are left as they arrive
+ * (the app's chain carries none today); whether a Save Sphere clears them is
+ * unsourced (plan Review R4 item 4), so nothing is invented here.
+ */
+function restoreAtSaveSphere(unit: Ffx2Unit): void {
+  unit.hp = unit.stats.maxHp;
+  unit.mp = unit.stats.maxMp;
+  unit.alive = true;
+  delete unit.statuses.ko;
+}
+
+/**
  * Opening ATB fill. §1.6: normal battles start every bar at a randomised level;
  * a pre-emptive strike fills the party's, an ambush fills the enemies'.
  */
@@ -249,6 +262,7 @@ export function buildState(
     const grid = grids.get(member.garmentGrid.id);
     gridNodes[unit.id] = gridNodeContents(member, grid?.nodes ?? 6);
     if (options.carriedParty) applyCarriedState(unit, options.carriedParty);
+    if (enemies.restoresPartyOnEntry) restoreAtSaveSphere(unit);
     units.push(unit);
   });
 

@@ -22,6 +22,9 @@ import { vegnagunHeadScript, vegnagunRedoubtScript } from './vegnagun-head.ts';
 // debug API — but the scripts have to be in this table or an enemy the tests
 // field falls back to `idleScript` and the fight does not happen.
 import { leblancSyndicateScripts } from './leblanc-syndicate.ts';
+// Chapter XI, the fallen aeons on the Road to the Farplane (registered, unlisted).
+import { x2AnimaScript, x2ShivaScript } from './fallen-aeons.ts';
+import { magusSistersScript } from './magus-sisters.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -50,6 +53,9 @@ const SCRIPTS: readonly AiScript[] = [
   vegnagunRedoubtScript,
   shuyinScript,
   ...leblancSyndicateScripts,
+  x2ShivaScript,
+  magusSistersScript,
+  x2AnimaScript,
   idleScript,
   basicAttackScript,
 ];

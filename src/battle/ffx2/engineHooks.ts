@@ -15,7 +15,13 @@ import { aiScriptFor } from './ai/index.ts';
 type Emit = (draft: EventDraft) => void;
 
 /** Regen and Poison payouts plus status expiries, for one sub-step. */
-export function payStatusClocks(units: Ffx2Unit[], step: number, emit: Emit, ctx: ResolveContext): void {
+export function payStatusClocks(
+  units: Ffx2Unit[],
+  step: number,
+  emit: Emit,
+  ctx: ResolveContext,
+  aiContext?: (unit: Ffx2Unit) => AiContext,
+): void {
   for (const unit of units) {
     if (!unit.alive) continue;
     const delta = advanceStatuses(unit, step, emit);
@@ -32,6 +38,8 @@ export function payStatusClocks(units: Ffx2Unit[], step: number, emit: Emit, ctx
       applyHpDelta(ctx, unit, delta);
     } else if (delta < 0) {
       heal(ctx, unit, -delta, 'regen');
+      // Only a script that defines `onRegen` reacts (Chapter XI's Sisters).
+      if (unit.side === 'enemy' && aiContext) aiScriptFor(unit.enemy?.aiScriptId).onRegen?.(aiContext(unit), -delta);
     }
   }
 }
@@ -120,5 +128,41 @@ export function notifyEnemiesDamaged(
     const unit = units.find((u) => u.id === targetId);
     if (!unit || unit.side !== 'enemy') continue;
     aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(aiContext(unit), actor.id, amount);
+  }
+}
+
+/**
+ * Tell every enemy a party action was **aimed at** that it was attacked: once
+ * per enemy per action, whatever the outcome — damage, a miss, an immune hit,
+ * an absorbed element, a status landing or a Dispel. Read off the drafts this
+ * action produced, like {@link notifyEnemiesDamaged}.
+ *
+ * Only scripts that define `onTargeted` react, and before Chapter XI none did,
+ * so every earlier chapter's event log is unchanged. FFX-2 only. The reading is
+ * the plan's FA8 a (`docs/plans/chapter-fallen-aeons-review.md`), a sourced
+ * `[conflict]`: the wiki's Cindy and Mindy pages say "targeted", Sandy's and
+ * Anima's say "receives damage".
+ */
+export function notifyEnemiesTargeted(
+  produced: EventDraft[],
+  actor: Ffx2Unit,
+  units: Ffx2Unit[],
+  aiContext: (unit: Ffx2Unit) => AiContext,
+): void {
+  if (actor.side !== 'party') return;
+  const aimed = new Set<CombatantId>();
+  for (const draft of produced) {
+    const d = draft as { type: string; targetId?: CombatantId; sourceId?: CombatantId; reason?: string };
+    if (!d.targetId) continue;
+    const hostile =
+      ((d.type === 'damage' || d.type === 'miss' || d.type === 'status-add' || d.type === 'mp-damage') &&
+        d.sourceId === actor.id) ||
+      (d.type === 'status-remove' && d.reason === 'dispelled');
+    if (hostile) aimed.add(d.targetId);
+  }
+  for (const targetId of aimed) {
+    const unit = units.find((u) => u.id === targetId);
+    if (!unit || unit.side !== 'enemy') continue;
+    aiScriptFor(unit.enemy?.aiScriptId).onTargeted?.(aiContext(unit), actor.id);
   }
 }

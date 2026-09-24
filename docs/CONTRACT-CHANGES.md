@@ -6,6 +6,38 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — Chapter XI, Fallen Aeons: `ChapterId` gains `'ffx2-fallen-aeons'`, `Chapter.number` widens to 11, `EnemyGroupDef.restoresPartyOnEntry`
+
+**FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-fallen-aeons.md` §0: ATB,
+dresspheres and the aeons' action counter; none of it transfers to the FFX aeons); the
+registration itself is shared plumbing. Bailey, 2026-09-24: "I'll go with your
+recommendations for all" (FA1-FA19 and O-1..O-4 on `docs/plans/chapter-fallen-aeons-review.md`).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'ffx2-fallen-aeons'`;
+`Chapter.number` widens from `1 … 10` to `1 … 11`. The record lives in
+`src/data/chapter-ffx2-fallen-aeons.ts` and sits in `UNLISTED_CHAPTERS`, the Chapter IX and
+X precedent. Every `Record<ChapterId, …>` gains the key (`learn/atlas/cites.ts`,
+`tests/unit/learn-atlas-data.test.ts`). No save migration: nothing lists this id yet.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.restoresPartyOnEntry?: boolean`
+(FA2 b, a sourced `[conflict]`: GamerGuides has Save Spheres between the platforms, FFExodus
+has none). The FFX-2 setup (`src/battle/ffx2/setup.ts#restoreAtSaveSphere`) gives the party
+full HP and MP on entry and stands a KO'd girl up; items stay spent. It also marks the link
+as the FA3 retry checkpoint for the flow to read (**not wired yet**: the flow still retries a
+lost chapter from link 1). Set only on the Road's links 2 and 3.
+
+Not listed contract files, recorded for the same reason as the entries below (FFX-2 only;
+no FFX code path reads any of them):
+- `AbilityDef.extra` gains `setHpTo` / `setMpTo` (Delta Attack: exactly 1 HP and 0 MP) and
+  `mpFractionOfCurrent` (Heavenly Strike's MP half, Absorb's MP drain), documented in
+  `src/battle/ffx2/aeon-effects.ts`.
+- `AiScript` (`src/battle/ffx2/internal.ts`) gains `onTargeted` (once per party action aimed
+  at the enemy, hit, miss, immune or status-only: FA8 a) and `onRegen` (a Regen tick healed
+  it). Called from `engineHooks.ts#notifyEnemiesTargeted` and `#payStatusClocks`.
+Chapters 4, 5 and 6 event logs measured byte-identical before and after over 120 seeded runs
+(20 seeds each, Wait at 0 ms and Active at 700 ms a menu), against a detached worktree of
+`bc188dd5`.
+
 ## 2026-09-24 — Chapter X, Seymour Natus: `ChapterId` gains `'seymour-natus'`, `Chapter.number` widens to 10
 
 **FFX only** [AGENTS.md hard rule 14] (research `ffx-seymour-natus-highbridge.md` §0.3:

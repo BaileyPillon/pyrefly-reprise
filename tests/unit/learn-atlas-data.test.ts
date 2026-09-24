@@ -44,6 +44,7 @@ describe('buildChapterSpecimen', () => {
       // Registered but unlisted (not in CHAPTER_IDS); FFX, so gold the day it is listed.
       'yojimbo-cavern': 'gold',
       'seymour-natus': 'gold',
+      'ffx2-fallen-aeons': 'pink', // Chapter XI, FFX-2, unlisted
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);

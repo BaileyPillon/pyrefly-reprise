@@ -55,7 +55,7 @@ import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
 /**
  * Every registered chapter id. Also the keys used in `SaveData.chapters`.
- * `'yojimbo-cavern'` and `'seymour-natus'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
+ * `'yojimbo-cavern'`, `'seymour-natus'` and `'ffx2-fallen-aeons'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
  */
 export type ChapterId =
   | 'seymour-flux'
@@ -67,7 +67,7 @@ export type ChapterId =
   | 'seymour-anima-macalania'
   | 'evrae-airship'
   | 'yojimbo-cavern'
-  | 'seymour-natus';
+  | 'seymour-natus' | 'ffx2-fallen-aeons';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -114,8 +114,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–10 (an unlisted chapter keeps its number). */
-  number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  /** Display order on the chapter-select screen, 1–11 (an unlisted chapter keeps its number). */
+  number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
   /** Card title. The encounter's name. */
   title: string;
   /** Card subtitle. One clause, no period. */
