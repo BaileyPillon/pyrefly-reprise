@@ -1381,6 +1381,120 @@
             ],
             "inferred": []
           }
+        },
+        {
+          "label": "Yojimbo's hero plate (FFX)",
+          "src": "docs/concepts/chapters/yojimbo/hero-plate/b-plate.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "note": "Three options at chapter-card, plate and pause scale (docs/concepts/chapters/yojimbo/hero-plate/README.md); nothing installed or wired by this pick. docs/target/decisions.json D-074.",
+          "reactionOf": "Yojimbo, Chapter IX (FFX)",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll go with your recommendations for all",
+            "how": "Answered together with the Yojimbo paintings and exit questions and the Natus and Fallen Aeons sheets, one reply, 2026-09-24 ~14:40 EDT.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "option B: Yojimbo drawing Zanmato, not A (idle stance) or C (mid-swing) — the plate, chapter-card and pause-scale renders all follow B (D-074)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
+        },
+        {
+          "label": "Seymour Natus, Chapter X (FFX)",
+          "src": "docs/concepts/chapters/natus/natus/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx",
+          "gameNote": "FFX only: CTB, aeons, Trigger Commands and the FFX status set (research/ffx-seymour-natus-highbridge.md §0.3; docs/plans/chapter-natus-review.md §1). Chapter registration in src/data/encounters.ts is shared plumbing, case 'both' (CHK-020).",
+          "note": "Seymour Natus + Mortibody, north end of the Highbridge of Bevelle, before the Main Gate, straight after the Via Purifico (docs/plans/chapter-natus-review.md, docs/target/decisions.json D-077 through D-097). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks; PROCEED on engine, data, AI and story (the plan's own verdict), HOLD everything Bailey sees or hears until this pick lands.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll go with your recommendations for all",
+            "how": "Bailey answered the whole preflight sheet (Yojimbo's hero-plate/paintings/exit questions, Natus B1-B16/O-1..O-5, Fallen Aeons FA1-FA19/O-1..O-4) with one reply, 2026-09-24 ~14:40 EDT, taking the recommended option on every item; docs/target/decisions.json D-074 through D-120.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "chapter title \"Seymour Natus\", location \"Highbridge of Bevelle — before the Main Gate\", number X already settled (B1, D-077)",
+              "opening line-up Tidus/Yuna/Kimahri, every switch legal from turn one (B2, D-078)",
+              "Yuna does not know Reflect; Rikku keeps hers (B4, D-080)",
+              "Threaten fails on Natus (B10, D-086)",
+              "the wedding is told through Tidus's past-tense narration; the Highbridge itself is staged live, no new Kinoc/Mika portraits (B11, D-087)",
+              "the painted party and aeons without a separate verdict ship as Chapters I, VII and VIII already use them (B13, D-089)",
+              "no staged Isaaru duel or Evrae Altana, narration only (B14, D-090)",
+              "ship registered and LOCKED if the art picks are late, not held (B16, D-092)"
+            ],
+            "mustChange": [
+              "Aeon Overdrive gauges at start: Bahamut full, the other four at an [estimate] partial value (B3, D-079)",
+              "items: the Chapter VIII inventory carried forward plus an [estimate] Softs count (B5, D-081)",
+              "Desperado's buff ladder: Haste-on-all-three only, the wiki's 4-7 buff ladder disclosed as unsourced, not built (B6, D-082)",
+              "unsourced AI built as: element order Ice -> Thunder -> Water -> Fire, current-element rotation, Multi-ra on two different members, each labelled our estimate (B7, D-083)",
+              "Natus's own reflected spells move his phase, labelled estimate (B8, D-084)",
+              "mid-battle callouts are in (the Protect counter below 24,000 and below 12,000 per the Review correction, the first Break, the first shatter, the Banish line, three Talk exchanges, the third-Haste warning), shown in a story draft first (B9, D-085)",
+              "Seymour's dialogue face: the Macalania portrait until he transforms, then a Natus portrait from O-1 if it lands in time, otherwise the Macalania portrait throughout (B12, D-088)",
+              "music: a new original \"Noble Rot\"-family cue (SEYMOUR_UNMOORED), auditioned, with Chapter VII's boss-seymour-macalania as the fallback (B15, D-091)",
+              "O-1 Seymour Natus painting: option A, new paint at battle scale, ring rotation, 1.3x scale (D-093)",
+              "O-2 Mortibody: option A beside O-1, with the KO-and-revive strip reading \"back weaker, max 3,000\" per the engine, not the wiki sentence (D-094)",
+              "O-3 the Highbridge: option C, night with the city lit, over the more literally sourced option B, with the gate-facade gap disclosed (D-095)",
+              "O-4 reading the fight: option B's HUD-row chips with option A's one-line text kept, and the Review's corrections applied — the Claw chip never names a target it picks at random, no FLEE control, no leftover \"Physical damage\" label, Mortibody stays visible at phone width (D-096)",
+              "O-5 Natus's portrait: option A, used only if B12 lands as its conditional b (D-097)"
+            ],
+            "undecided": [
+              "whether B12 actually resolves to b (Natus portrait) or falls back to a, which depends on whether O-1 lands in time"
+            ],
+            "inferred": []
+          }
+        },
+        {
+          "label": "Fallen Aeons, Chapter XI (FFX-2)",
+          "src": "docs/concepts/chapters/fallen-aeons/o1-sisters/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "ffx2",
+          "gameNote": "FFX-2 only: the Road to the Farplane gauntlet (Shiva, then the Magus Sisters, then Anima) is an FFX-2 encounter chain with no FFX counterpart (docs/plans/chapter-fallen-aeons-review.md §1). FFX-2 setup ignores EnemyGroupDef.aiScriptId: the Sisters get one shared per-enemy script, like Vegnagun (Review correction 1).",
+          "note": "Three links — Shiva, Magus Sisters, Anima — with a Save Sphere full restore between them (docs/plans/chapter-fallen-aeons-review.md, docs/target/decisions.json D-098 through D-120). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll go with your recommendations for all",
+            "how": "Bailey answered the whole preflight sheet (Yojimbo's hero-plate/paintings/exit questions, Natus B1-B16/O-1..O-5, Fallen Aeons FA1-FA19/O-1..O-4) with one reply, 2026-09-24 ~14:40 EDT, taking the recommended option on every item; docs/target/decisions.json D-074 through D-120.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the chapter is the Road gauntlet, Shiva -> Magus Sisters -> Anima (FA1, D-098)",
+              "line-up and dresspheres: the Chapter V preset as is, 2 Dark Knights + White Mage (FA4, D-101)",
+              "items and gil: the Chapter V inventory as is, not trimmed (FA5, D-102)",
+              "no Stop-protection accessory modelling; Remedy already cures Stop (FA6, D-103)",
+              "leave Remedy as is, no added stat-loss cure (FA10, D-107)",
+              "the Anima painting counts as approved on Bailey's own word, no options round needed (FA11, D-108: \"yes; he confirms\")",
+              "scope of the Sisters' art: one idle and one hero-cast painting each, hurt = idle under the flinch (FA13, D-110)",
+              "title \"Fallen Aeons\", Chapter XI, location \"Road to the Farplane\" (FA17, D-114)",
+              "ship registered and LOCKED if the art is late, not held (FA18, D-115)",
+              "no X-2 Yojimbo as an optional fourth link (FA19, D-116)"
+            ],
+            "mustChange": [
+              "between links: full restore (HP, MP, status) at a Save Sphere beat, not carried over (FA2, D-099)",
+              "retry point after a loss: from the lost link, not the whole chapter (FA3, D-100)",
+              "Darkness-vs-Mindy miss chance: T0 measures and finds the sources first, changed only on 2+ sources, as its own deep-reviewed FFX-2 data change (FA7, D-104)",
+              "what raises Mindy's counter: every hostile action aimed at her, hit or miss, tagged [conflict] (not a plain estimate, per the Review correction) (FA8, D-105)",
+              "the data conflicts (F-4 through F-9) ship as listed, each tagged [conflict] or [single source], no invented percentages (FA9, D-106)",
+              "the possessed look: the Chapter IV Bahamut violet (FA12, D-109)",
+              "the arena: a Road variant derived from the approved Farplane backdrop's own pixels (FA14, D-111)",
+              "music: boss-ffx2-aeon on all three links, field bed scene-farplane (FA15, D-112)",
+              "callouts: Yuna's opening line per link plus four callouts, no Farplane voices (FA16, D-113)",
+              "O-1 the Magus Sisters: option A armoured trio, with Cindy corrected to red spots on BLUE per the visual bible (the sheet's own note was wrong) (D-117)",
+              "O-2 the possessed treatment: option B, the Chapter IV violet on the Road plate (D-118)",
+              "O-3 the Road: option A (single platform, foreground) as the primary plate, option B (all three platforms) as the between-links shot (D-119)",
+              "O-4 link transitions: the Save Sphere fade with the HP/MP restore shown (D-120)"
+            ],
+            "undecided": [
+              "whether statuses (Stop, Pain's stacks, Itchy) also clear at the Save Sphere, or only HP/MP — no source says either way (carried with FA2)"
+            ],
+            "inferred": []
+          }
         }
       ]
     },
