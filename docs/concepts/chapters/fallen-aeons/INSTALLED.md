@@ -10,6 +10,16 @@ still match. Nothing is wired into the game: no enemy data, scene or encounter p
 `public/art/` is gitignored, so the files are only on this disk (mirror them to
 `D:/Tools/pyrefly-art-backup` when they are approved).
 
+**Update (2026-09-24, later the same day).** Cindy's and Mindy's `cast.png` below describe the
+withdrawn r0 paintings, which the judge failed (`production/JUDGE.md`: blue belly block and a floating
+sash slab on Cindy, a glove on a black slab and a ballooned sleeve on Mindy). Both were repaired as r1
+(commit 82df5a8f) and, for Cindy's cut-out margin, r1b (commit ac36ef64), then re-judged PASS (Cindy
+7.4, Mindy 7.1; `production/JUDGE.md` "Re-judge: Cindy and Mindy cast r1"). The two repaired files are
+now approved in `docs/target/approved-hashes.json` under `chapter:fallen-aeons-casts:2026-09-24` and
+backed up to `D:/Tools/pyrefly-art-backup/approved/2026-09-24-fallen-aeons-casts/`. Everything else in
+this chapter (both idles, x2-shiva, x2-anima, both road plates) is unchanged and stays CANDIDATE under
+the original `chapter:fallen-aeons:2026-09-24` set. Nothing new is wired into the game.
+
 Sheet: `production/sheet.jpg`. Single 1600x900 frames for a phone: `production/frames/`. The
 before/after close-ups are in `production/cards/`. Every frame is a flat composite of the plate, the
 paintings and the real Chapter V HUD layer captured on 2026-09-24. None is an engine capture, because
@@ -20,8 +30,8 @@ the Road needs its own scene ground (T5).
 | Subject id | Files | Derived from | What changed |
 |---|---|---|---|
 | `sandy` | `public/art/characters/sandy/idle.png`, `cast.png` | O-1 A render `sandy-a3` (seed 911103) | Idle: the render's own floating scythe scaled 0.70 and set on her forearm (a pixel transplant, no GPU). Cast: the forearm and scythe rotated 100 degrees about the elbow, blade raised; only the elbow seam was repainted (seed 931201, denoise 0.45) |
-| `cindy` | `public/art/characters/cindy/idle.png`, `cast.png` | O-1 A render `cindy-a2` (seed 912102) | Idle: the pale dots were removed, so the shell reads as **red spots on blue** (visual bible §1.22.6, as the review corrected). 3,556 px changed, no GPU. Cast: the near forearm raised; the belly and sash were repainted inside a mask (seed 932201) |
-| `mindy` | `public/art/characters/mindy/idle.png`, `cast.png` | O-1 A render `mindy-a2` (seed 913102) | Idle: her own striped abdomen was moved **behind** her and given a stinger. The hips were repainted as black leggings inside a mask (seed 925101), and the notch closed (seed 925201). Cast: the near forearm thrust forward; the bodice was repainted inside a mask (seed 933201) |
+| `cindy` | `public/art/characters/cindy/idle.png`, `cast.png` | O-1 A render `cindy-a2` (seed 912102) | Idle: the pale dots were removed, so the shell reads as **red spots on blue** (visual bible §1.22.6, as the review corrected). 3,556 px changed, no GPU. Cast: **r0** (seed 932201) failed the judge (blue block at the belly, a floating sash slab, cut bust). **r1/r1b** (2026-09-24, commits 82df5a8f, ac36ef64): the forearm re-derived as the idle's own pixels rotated as a rigid layer, the vacated belly and sash repainted inside a mask (seed 941101), then the canvas padded 2 px left so the cut-out margin measures 16 px. Re-judged PASS 7.4; approved, `chapter:fallen-aeons-casts:2026-09-24` |
+| `mindy` | `public/art/characters/mindy/idle.png`, `cast.png` | O-1 A render `mindy-a2` (seed 913102) | Idle: her own striped abdomen was moved **behind** her and given a stinger. The hips were repainted as black leggings inside a mask (seed 925101), and the notch closed (seed 925201). Cast: **r0** (seed 933201) failed the judge (glove pressed on a black slab, a ballooned sleeve, a grey scratch at the elbow). **r1** (2026-09-24, commit 82df5a8f): the forearm and glove re-derived as the idle's own pixels rotated as a rigid layer, the vacated waist and hem repainted inside a mask (seed 943101); file unchanged by r1b. Re-judged PASS 7.1; approved, `chapter:fallen-aeons-casts:2026-09-24` |
 | `x2-shiva` | `public/art/characters/x2-shiva/idle.png`, `attack.png`, `overdrive.png` | approved `shiva/*` (hashed) | O-2 B violet: a grade, a rim, an eye glow and an aura. Line work and shapes are identical. The aura alpha is capped at 0.33, so the engine's 0.35 alpha measure never moves the feet. There is a 70 px pad, and the idle sidecar `scale` restores the approved pixels per world unit |
 | `x2-anima` | `public/art/characters/x2-anima/idle.png`, `attack.png`, `overdrive.png` | `anima/*` (FA11 yes) | The same O-2 B treatment. `anima/hurt` and `anima/ko` are still CANDIDATES and were **not** derived; hurt falls back to idle |
 | `road-to-the-farplane` | `public/art/backdrops/road-to-the-farplane.png` (+ `.json`) | approved `farplane.png` | O-3 A: 65 % of the pixels (every row above 827 of 1536) are the approved plate's exactly |
@@ -41,8 +51,9 @@ the Road needs its own scene ground (T5).
   red with black spots, Mindy lost her abdomen, and all three Sandy renders came out as texture noise.
   Those renders are in `production/cards/withdrawn-fresh-casts.jpg`. So each cast is its idle's own
   pixels with one forearm rotated, and only the vacated area and the joint are repainted. Identity is
-  exact. The gesture is modest. Cindy's cast has a known defect: at 1:1 her far hand reads as a blue
-  block at the belly.
+  exact. The gesture is modest. **Superseded 2026-09-24:** this paragraph describes the withdrawn r0
+  casts, including Cindy's blue-block belly defect. Both Sisters' casts were repaired (r1/r1b) and
+  passed the re-judge; see the update note near the top of this file and the table above.
 - **Inferred, not named by Bailey** (rule 15, `inferred`): where the scythe sits, how the abdomen is
   placed and its stinger, each cast gesture, and the size the aura was capped at.
 
