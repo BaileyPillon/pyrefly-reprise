@@ -113,6 +113,10 @@ describe('macalania story — speakers', () => {
     // Tidus, Yuna, Auron, Wakka, Lulu, Kimahri, Rikku, Seymour — plus
     // `narrator` (Tidus retrospective) and `none` (Tromell, who has no
     // portrait and therefore no name plate; see the script header).
+    // Seymour speaks as `seymour-macalania`, his own Chapter VII speaker
+    // portrait id (Bailey's pick D-065, commit 6d69a9ce): all 15 of this
+    // chapter's Seymour lines were switched to it, so the shared `seymour`
+    // id no longer appears here.
     const cast = new Set([
       'tidus',
       'yuna',
@@ -121,7 +125,7 @@ describe('macalania story — speakers', () => {
       'lulu',
       'kimahri',
       'rikku',
-      'seymour',
+      'seymour-macalania',
       'narrator',
       'none',
     ]);
