@@ -45,3 +45,18 @@ The sheet, with 1:1 crops of every repair and of the untouched parts, is `produc
 - **World heights and positions** belong to the chapter's data and stage, in the other track. The numbers above are the visual bible's estimates. The options frames showed Yojimbo at about twice party height.
 - **No state other than idle** was made. Under the r3 state map, an enemy's cast is the only other painting worth making, and hurt, attack and ko fall back to the idle.
 - **Ginnem's live unsent effect** (motes, and possibly the translucency) belongs to the engine.
+
+## Backdrop: the Cavern of the Stolen Fayth (CANDIDATE, 2026-09-24)
+
+**Game case: FFX only.**
+
+- **File:** `public/art/backdrops/cavern-stolen-fayth.png` + `.json`, 2688x1536. It is new, so nothing was replaced or backed up. sha256 `cfdfe552…93a3`.
+- **Source:** from the picked O-4 A "cold" plate by method r3, with 1.42 % of the pixels changed.
+  - A dormant teleport pad was added in the middle of the floor (research §6.1).
+  - A floating rock was removed.
+- **For the scene wiring:**
+  - The pad's centre is at plate (1540, 1394), for a glow after the battle.
+  - The painted floor fills the bottom ~20 % of the plate.
+- **Manifest:** `public/art/manifest.json` was regenerated and now lists 11 backdrops.
+- **Not wired:** the scene factory entry waits for the `src/scenes` owner.
+- **Details:** `production/chamber.md`; sheet `production/chamber.jpg`.

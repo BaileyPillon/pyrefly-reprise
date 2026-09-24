@@ -1,0 +1,24 @@
+{
+  "source": "D:/Tools/pyrefly-scratch/yojimbo-chamber/pad-crop2.png",
+  "box": [
+    240,
+    300,
+    545,
+    165
+  ],
+  "pad": 60,
+  "feather": 8,
+  "growMask": 6,
+  "seed": 930201,
+  "denoise": 0.36,
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "encode": "VAEEncode+SetLatentNoiseMask",
+  "mask": "D:/Tools/pyrefly-scratch/yojimbo-chamber/pad-mask2.png",
+  "prompt": "no humans, scenery, final fantasy x, natural cave interior, rocky cave floor, a round carved stone teleport pad set flush into the cave floor, circular stone disc, engraved concentric rings, weathered grey stone, dormant, unlit, painterly, detailed background, cinematic lighting, soft daylight from above, muted cold colors, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, character, people, person, glowing, glow, magic circle, light beam, runes glowing, water, text, metal, machine, sci-fi",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "generatedAt": "2026-09-24T16:47:16.101Z"
+}

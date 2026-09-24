@@ -1,0 +1,53 @@
+{
+  "seed": 901103,
+  "prompt": "no humans, scenery, final fantasy x, natural cave, huge cavern chamber deep underground at the bottom of a gorge, rough natural rock walls, rock ceiling with stalactites, uneven rocky cave floor in the foreground, a low round stone dais in the middle of the cave floor, dais dark and dormant, cold blue grey light, a faint shaft of daylight falling from a crack high above, low mist on the ground, quiet, eerie, deep perspective, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, water, waterfall, river, lake, ice, snow, outdoors, sky, corridor, tunnel, architecture, pillars, doorway, arch, monolith, glowing runes",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "method": "r3-derive",
+  "methodNote": "Concept A 'cold' (backdrop-a3, seed 901103) at its own 2688x1536 pixels. Two repairs only: (1) the floating diamond-shaped rock at left (x 338-402, y 430-560) removed by a harmonic fill from the surrounding wall plus the wall's own grain, no GPU; (2) the dormant teleport pad research 6.1 places 'in the middle' of the room, painted by hand from the floor's own colour and grain, then one masked latent inpaint at denoise 0.36 on a 1024x512 crop (x 1028, y 1024), pasted back through the feathered mask only. 1.42 percent of the pixels changed; everything else is the picked concept's.",
+  "pad": {
+    "source": "research/ffx-yojimbo.md 6.1: 'a large open cave room with a teleport pad in the middle (dormant until after the battle)' [verified: 2 sources]",
+    "centre": [
+      1540,
+      1394
+    ],
+    "radii": [
+      225,
+      44
+    ],
+    "rim": 12,
+    "note": "plate pixels; dormant, unlit. A post-battle glow belongs to the scene (an additive ellipse at this centre), not to the paint.",
+    "inpaint": {
+      "seed": 930201,
+      "denoise": 0.36,
+      "prompt": "no humans, scenery, final fantasy x, natural cave interior, rocky cave floor, a round carved stone teleport pad set flush into the cave floor, circular stone disc, engraved concentric rings, weathered grey stone, dormant, unlit, painterly, detailed background, cinematic lighting, soft daylight from above, muted cold colors, masterpiece, high score, great score, absurdres",
+      "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, character, people, person, glowing, glow, magic circle, light beam, runes glowing, water, text, metal, machine, sci-fi",
+      "encode": "VAEEncode+SetLatentNoiseMask",
+      "crop": [
+        1028,
+        1024,
+        1024,
+        512
+      ]
+    }
+  },
+  "floor": {
+    "note": "painted floor occupies roughly the bottom 20 percent (its far edge near y 1240, 0.81 of the height); the daylit patch is x 1260-1780, y 1340-1440"
+  },
+  "pickedFrom": "chamber option A 'cold' (O-4), Bailey 2026-09-24 'All your recommendations', docs/concepts/chapters/yojimbo/README.md",
+  "candidateSource": "D:/Tools/pyrefly-scratch/yojimbo/renders/backdrop-a3.png",
+  "sha256": "cfdfe552d083bb05828a9d9fae8ea5400ae3cb2e106845b60418b8cda81b93a3",
+  "production": "docs/concepts/chapters/yojimbo/production/chamber.md",
+  "installedAt": "2026-09-24T16:48:33.196394Z"
+}
