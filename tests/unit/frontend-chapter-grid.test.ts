@@ -31,18 +31,17 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds eight cards: six playable chapters (Leblanc now landed) and two still coming', () => {
+  it('holds eight cards: seven playable chapters (Leblanc and Evrae now landed) and one still coming', () => {
     const tiles = buildChapterTiles(save);
-    // Leblanc's own COMING_CHAPTERS row is filtered out by id now that the
-    // real chapter is registered, so the raw `COMING_CHAPTERS.length` (3)
-    // overcounts by one — this asserts what the board actually shows.
-    // Macalania (Chapter 7) and Evrae (Chapter 8) are registered but LOCKED,
-    // so each real tile is withheld and its COMING row stays.
+    // Leblanc's and Evrae's own COMING_CHAPTERS rows are filtered out by id
+    // now that their real chapters are registered and unlocked, so the raw
+    // `COMING_CHAPTERS.length` (3) overcounts by two — this asserts what the
+    // board actually shows. Macalania (Chapter 7) is registered but still
+    // LOCKED, so its real tile is withheld and its COMING row stays.
     expect(tiles).toHaveLength(8);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
-      'Evrae',
     ]);
   });
 
@@ -51,8 +50,8 @@ describe('the board', () => {
     expect(groups.map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
-    // Five FFX cards (3 built + 2 coming), three FFX-2 (3 built, Leblanc's
-    // coming row now dropped).
+    // Five FFX cards (4 built — Evrae now landed — + 1 still coming,
+    // Macalania), three FFX-2 (3 built, Leblanc's coming row now dropped).
     expect(groups[0]!.tiles).toHaveLength(5);
     expect(groups[1]!.tiles).toHaveLength(3);
     for (const group of groups) {
@@ -65,13 +64,14 @@ describe('the board', () => {
 
   it('never invents a chapter: every still-coming id is absent from the registry', () => {
     const live = new Set(CHAPTERS.map((c) => c.id as string));
-    // Leblanc's row is the one deliberate exception: its id now matches the
-    // real, landed chapter on purpose, which is what drops it off the board
-    // automatically (see `comingChapters.ts`'s own comment on that row).
-    // Macalania is the other: registered as Chapter 7, but its row stays
-    // on the board while `LOCKED_CHAPTER_IDS` holds it.
+    // Leblanc's and Evrae's rows are the deliberate exceptions: their ids
+    // now match real, landed (and, for Evrae, unlocked) chapters on purpose,
+    // which is what drops each off the board automatically (see
+    // `comingChapters.ts`'s own comment on those rows). Macalania is the
+    // other: registered as Chapter 7, but its row stays on the board while
+    // `LOCKED_CHAPTER_IDS` holds it.
     for (const row of COMING_CHAPTERS) {
-      if (row.id === 'ffx2-leblanc' || LOCKED_CHAPTER_IDS.has(row.id)) {
+      if (row.id === 'ffx2-leblanc' || row.id === 'evrae-airship' || LOCKED_CHAPTER_IDS.has(row.id)) {
         expect(live.has(row.id)).toBe(true);
       } else {
         expect(live.has(row.id)).toBe(false);
@@ -124,23 +124,25 @@ describe('the board', () => {
     expect(unlocked.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
   });
 
-  it('keeps Chapter 8 (Evrae) as its COMING card while LOCKED, and unlocks it with its one line', () => {
+  it('Chapter 8 (Evrae) is UNLOCKED by Bailey\'s word and shows as a playable card; Chapter 7 (Macalania) stays LOCKED', () => {
     expect(CHAPTERS.find((c) => c.id === 'evrae-airship'), 'Chapter 8 is registered').toBeDefined();
-    expect(LOCKED_CHAPTER_IDS.has('evrae-airship')).toBe(true);
+    expect(LOCKED_CHAPTER_IDS.has('evrae-airship')).toBe(false);
+    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(true);
 
-    const card = buildChapterTiles(save).filter((t) => t.id === 'evrae-airship');
-    expect(card).toHaveLength(1);
-    expect(card[0]!.kind).toBe('coming');
-    expect(card[0]!.playable).toBe(false);
-
-    // The unlock: every lock line but Evrae's kept.
-    const locked = new Set([...LOCKED_CHAPTER_IDS].filter((id) => id !== 'evrae-airship'));
-    const live = buildChapterTiles(save, { locked }).filter((t) => t.id === 'evrae-airship');
+    const live = buildChapterTiles(save).filter((t) => t.id === 'evrae-airship');
     expect(live).toHaveLength(1);
     expect(live[0]!.kind).toBe('chapter');
     expect(live[0]!.playable).toBe(true);
     expect(live[0]!.numeral).toBe('VIII');
     expect(live[0]!.silhouetteKeys).toEqual(['evrae']);
+
+    // Re-locking it (the state before Bailey's word) still works — the
+    // COMING row it leaves behind is the one this file pins for Macalania.
+    const relocked = new Set([...LOCKED_CHAPTER_IDS, 'evrae-airship']);
+    const card = buildChapterTiles(save, { locked: relocked }).filter((t) => t.id === 'evrae-airship');
+    expect(card).toHaveLength(1);
+    expect(card[0]!.kind).toBe('coming');
+    expect(card[0]!.playable).toBe(false);
   });
 
   it('drops a coming row matched by title alone, whatever id the chapter lands under', () => {
@@ -156,11 +158,12 @@ describe('the board', () => {
   });
 
   it('passing the real registries through explicitly matches the default board', () => {
-    // Leblanc really has landed now, so its own coming row is still dropped
-    // here too — this pins that passing the real registries explicitly
-    // behaves exactly like the defaults, not that nothing has landed.
+    // Leblanc and Evrae have both really landed (and Evrae is unlocked) now,
+    // so their own coming rows are still dropped here too — this pins that
+    // passing the real registries explicitly behaves exactly like the
+    // defaults, not that nothing has landed.
     const tiles = buildChapterTiles(save, { chapters: CHAPTERS, coming: COMING_CHAPTERS, locked: LOCKED_CHAPTER_IDS });
-    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length - 1);
+    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length - 2);
     expect(tiles).toEqual(buildChapterTiles(save));
   });
 
@@ -189,8 +192,9 @@ describe('the cursor', () => {
 
   it('skips the COMING cards rather than landing on one', () => {
     const tiles = buildChapterTiles(save);
-    // Index 2 is the last built FFX chapter; +1 must jump the two coming ones.
-    const fromLastFfx = tiles.findIndex((t) => t.id === 'braskas-final-aeon');
+    // Evrae (Chapter 8) is unlocked now and is the last built FFX chapter;
+    // +1 must jump the one still-coming card (Macalania).
+    const fromLastFfx = tiles.findIndex((t) => t.id === 'evrae-airship');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one
     // — Leblanc now, since it landed as the sixth chapter.

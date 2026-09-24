@@ -82,10 +82,10 @@ describe('the board on screen', () => {
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
   });
 
-  it('labels the two remaining approved-but-unbuilt chapters COMING and makes them inert', () => {
+  it('labels the one remaining approved-but-unbuilt chapter COMING and makes it inert', () => {
     const { root } = mount();
     const coming = [...root.querySelectorAll('.fe-card--coming')];
-    expect(coming).toHaveLength(2);
+    expect(coming).toHaveLength(1);
     for (const card of coming) {
       expect(card.querySelector('.fe-card__coming')?.textContent).toBe('Coming');
       expect(card.getAttribute('data-action')).toBeNull();
@@ -126,7 +126,10 @@ describe('the keyboard', () => {
     expect(selectedId(rig)).toBe('yunalesca');
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('braskas-final-aeon');
-    // Macalania and Evrae sit between here and FFX-2, and are stepped over.
+    // Evrae is unlocked now and playable, so it is not skipped.
+    rig.key('ArrowRight');
+    expect(selectedId(rig)).toBe('evrae-airship');
+    // Macalania sits between here and FFX-2, and is stepped over.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('ffx2-bahamut');
   });
@@ -168,9 +171,15 @@ describe('what a card can and cannot start', () => {
   it('never resolves a COMING chapter, even if its action is forged', () => {
     const picked: string[] = [];
     const rig = mount({ onSelect: (id) => picked.push(id) });
-    expect(rig.screen.trigger('select:evrae-airship')).toBe(false);
     expect(rig.screen.trigger('select:seymour-anima-macalania')).toBe(false);
     expect(picked).toEqual([]);
+  });
+
+  it('Evrae now resolves too, having landed and unlocked on Bailey\'s word', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    expect(rig.screen.trigger('select:evrae-airship')).toBe(true);
+    expect(picked).toEqual(['evrae-airship']);
   });
 
   it('still jumps straight into a built chapter by id, for the debug API', () => {

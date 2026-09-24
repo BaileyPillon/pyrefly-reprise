@@ -15,29 +15,33 @@ wired Leblanc and `62b4927` wired Macalania: engine and data (`dc1979f`,
 `chapter-evrae-guide.md`), and the scene with the NEAR/FAR switch (`84dccf9`,
 `chapter-evrae-scene.md`).
 
-## Status: registered, playable, LOCKED as Coming
+## Status: registered, playable, UNLOCKED on Bailey's word
 
 `evrae-airship` is **Chapter 8** in `src/data/encounters.ts` (display order
 after the seven registered; the D-018 rule). `window.__pyrefly.gotoChapter`,
 party prep, the cutscene, the battle (with the NEAR/FAR re-staging and the
 order widget), the guide, the tactic, the pause meta and the results screen
-all reach it. **Chapter select shows it as a locked COMING card**: every Evrae
-painting is CANDIDATE, and the widget and the staging are built to the
-driver's recommendation, not a pick.
+all reach it. **Chapter select now shows it as a playable card**, numeral
+VIII, Evrae's painting as its silhouette.
 
-### The one-line unlock
+Bailey, 2026-09-23 ("I'll go with your recommendations let's get to work"),
+accepted the driver's three recommendations and unlocked the chapter: (1) the
+title stays "Evrae" (Q11 settled — this supersedes D-020's "the airship
+names the chapter" for the title only; the airship still names the location,
+the mechanic and the music brief); (2) the Evrae art is approved as shown on
+`docs/concepts/chapters/evrae/r3/sheet.jpg` (the backdrop and all four
+character paintings; the breath-charge glow colour is unsourced, chosen by
+the team); (3) the two music cues (`scene-fahrenheit`, `boss-evrae`) ship on
+the driver's recommendation, not judged by ear (CHK-B1 stays unverified), and
+the aftermath keeps its scripted silence from beat 9.
 
-Delete this line from `LOCKED_CHAPTER_IDS` in
-`src/app/screens/frontend/comingChapters.ts`:
+### The one-line unlock (done)
 
-```ts
-  'evrae-airship',
-```
-
-The COMING row then drops off by itself (its id is the chapter's) and the
-playable card takes its place, numeral VIII, Evrae's painting as its
-silhouette. `frontend-chapter-grid.test.ts` pins both states ("keeps Chapter 8
-(Evrae) as its COMING card while LOCKED, and unlocks it with its one line").
+`'evrae-airship'` was deleted from `LOCKED_CHAPTER_IDS` in
+`src/app/screens/frontend/comingChapters.ts`. The COMING row dropped off by
+itself (its id is the chapter's) and the playable card took its place.
+`frontend-chapter-grid.test.ts` and `frontend-chapter-select-screen.test.ts`
+pin both the unlocked default and the re-locked state.
 
 ## What this pass changed
 
@@ -200,9 +204,14 @@ exactly) and added the Evrae case; the stale version is kept at
 - The order widget options round (A/B/C or a mix). Built: A's widget with C's
   staging, recorded INFERRED on the widget tile, plus one more inferred entry
   for this pass's "Orders" fold.
-- Q11: the chapter's name (Evrae or the airship).
-- The Evrae art (CANDIDATE throughout; the backdrop is darker than concept B).
-- The music (two new cues, by ear).
+- ~~Q11: the chapter's name (Evrae or the airship).~~ Settled 2026-09-23:
+  "Evrae" (see Status above).
+- ~~The Evrae art (CANDIDATE throughout; the backdrop is darker than concept
+  B).~~ Approved 2026-09-23 on the driver's recommendation (see Status
+  above); the backdrop-vs-concept-B note above is unresolved as a separate
+  disclosure, not reopened by this approval.
+- ~~The music (two new cues, by ear).~~ Shipped 2026-09-23 on the driver's
+  recommendation, not judged by ear (CHK-B1 stays unverified).
 
 ---
 

@@ -7,7 +7,9 @@
  * Leblanc (FFX-2, the canonical three-act Chapter 2 mission). The approved
  * showpiece board (`docs/concepts/polish/showpiece-frontend/after.png`) shows
  * the chapter grid as the board of *the whole game*, so the front end has to
- * hold eight cards today and light three of them up the day their data lands.
+ * hold eight cards today and light three of them up the day their data
+ * lands, or Bailey unlocks them (`LOCKED_CHAPTER_IDS` below). Leblanc and
+ * Evrae have both landed and unlocked; only Macalania is still locked.
  *
  * **These are not chapters.** Nothing here is a `Chapter`, nothing here is
  * importable from `src/data`, and nothing here carries a stat, a party, a
@@ -81,12 +83,12 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
     // while that id is in `LOCKED_CHAPTER_IDS` below.
     id: 'evrae-airship',
     game: 'ffx',
-    // Q11 (preflight docs/plans/chapter-evrae-review.md, adopted D-020):
-    // the airship should name the chapter, but the exact display string is
-    // unsourced and unpicked (docs/plans/chapter-evrae-finish.md item f).
-    // REVERTED from a prior pass's bare 'Fahrenheit' (a design choice no
-    // tile/decision makes, AGENTS.md rule 9) back to 'Evrae' pending
-    // Bailey's pick; see docs/screenshots/fix10c/evrae-title-options.png.
+    // Q11 settled by Bailey, 2026-09-23 ("I'll go with your
+    // recommendations let's get to work"): the chapter keeps the title
+    // "Evrae" (this supersedes D-020's "the airship names the chapter" for
+    // the title only — the airship still names the location, the mechanic
+    // and the music brief). This row is dropped from the board automatically
+    // once its id matches the now-unlocked real chapter.
     title: 'Evrae',
     location: 'Deck of the Fahrenheit — the approach to Bevelle',
     silhouetteKeys: [],
@@ -121,8 +123,7 @@ export const LOCKED_CHAPTER_IDS: ReadonlySet<string> = new Set<string>([
   // Chapter 7, Macalania (FFX only): every painting CANDIDATE, Anima's arrival
   // INFERRED (docs/target/targets.json), docs/handoff/chapter-macalania.md.
   'seymour-anima-macalania',
-  // Chapter 8, Evrae (FFX only): every painting CANDIDATE, the order widget
-  // and the NEAR/FAR staging INFERRED (docs/target/targets.json),
-  // docs/handoff/chapter-evrae.md.
-  'evrae-airship',
+  // Chapter 8, Evrae (FFX only): UNLOCKED on Bailey's word, 2026-09-23
+  // ("I'll go with your recommendations let's get to work" — accepting the
+  // title, art and music recommendations). docs/handoff/chapter-evrae.md.
 ]);
